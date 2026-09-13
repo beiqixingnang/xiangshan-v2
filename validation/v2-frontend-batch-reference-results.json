@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_FRONTEND_BPU_RVC_REFERENCE_DIFFERENTIAL",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "batch_id": "V2-P1-C-FRONTEND-BPU-RVC",
+  "reference_artifact": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+  "reference_module": "RVCExpander",
+  "status": "V2_REFERENCE_MATCHED",
+  "results": {
+    "RvcExpander": {
+      "status": "PASS",
+      "returncode": 0,
+      "trace_sha256": "4348721bf0cf11513ef23fdf0b3ab5dbe703d5b3d8084abcd979f7278e105117",
+      "trace_lines": 5,
+      "stdout_tail": "RVC_EXHAUSTIVE_PASS 65536\n- tb.sv:1203: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 131ns; walltime 0.016 s; speed 8.063 us/s\n- Verilator: cpu 0.016 s on 1 threads; alloced 152 MB\n",
+      "stderr_tail": ""
+    }
+  },
+  "source_level": {
+    "CompareMatrix": {
+      "path": "upstream/src/main/scala/xiangshan/backend/dispatch/NewDispatch.scala",
+      "needle": "compareMatrix",
+      "occurrences": 8,
+      "source_sha256": "8bfe46e43ac9a238c1059d89fe80294958295637cb28559e0899a5ddb9a0e581",
+      "evidence_sha256": "001aca659cec7abb08b6b1b3a7a510918fc2d7f3a87c13f6aa04caa0fce5ec4f",
+      "reference_mode": "SOURCE_LEVEL_PARENT_CLOSURE"
+    },
+    "FallThroughPredictor": {
+      "path": "upstream/src/main/scala/xiangshan/frontend/BPU.scala",
+      "needle": "getFallThroughAddr",
+      "occurrences": 1,
+      "source_sha256": "7c53657547b6b456fa530cdf5f82023c738e3b527c29a0c71247e15f5f0cba8b",
+      "evidence_sha256": "31a7410194e6697906367e112964cf00da7b16d8ea7ef87cddb6396f2a1f1711",
+      "reference_mode": "SOURCE_LEVEL_PARENT_CLOSURE"
+    },
+    "SaturateCounter": {
+      "path": "upstream/src/main/scala/xiangshan/frontend/BPU.scala",
+      "needle": "satUpdate",
+      "occurrences": 1,
+      "source_sha256": "7c53657547b6b456fa530cdf5f82023c738e3b527c29a0c71247e15f5f0cba8b",
+      "evidence_sha256": "8b9d9d0133371ac7a72be7a046b478813eb7d19ac72dd87b1b87c462d9864cb7",
+      "reference_mode": "SOURCE_LEVEL_PARENT_CLOSURE"
+    },
+    "SignedSaturateCounter": {
+      "path": "upstream/src/main/scala/xiangshan/frontend/BPU.scala",
+      "needle": "signedSatUpdate",
+      "occurrences": 1,
+      "source_sha256": "7c53657547b6b456fa530cdf5f82023c738e3b527c29a0c71247e15f5f0cba8b",
+      "evidence_sha256": "7c6cb0b8e3dce46864d50f483d628391f1f6f5398a8404003ce8d12150f563b2",
+      "reference_mode": "SOURCE_LEVEL_PARENT_CLOSURE"
+    }
+  },
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PASS",
+    "PARENT_CLOSURE_MATCHED": "PENDING",
+    "UHSC_LOCALIZED": "PENDING_EXTERNAL_WRAPPER",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "unclosed": [
+    "CompareMatrix/FallThroughPredictor/counters have no standalone module in XSTop; source-level parent closure remains required.",
+    "External UHSC wrapper and license review remain outside this reference leaf."
+  ]
+}

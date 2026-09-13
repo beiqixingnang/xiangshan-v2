@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_FRONTEND_BPU_RVC_COVERAGE",
+  "batch_id": "V2-P1-C-FRONTEND-BPU-RVC",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "closure_roots": ["core.frontend.bpu", "core.frontend", "core.frontend.ifu"],
+  "locked_reference": {
+    "path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "bytes": 228590583
+  },
+  "targets": [
+    {
+      "candidate": "CompareMatrix",
+      "python_path": "python/ported/frontend/bpu/CompareMatrix-Hardware.py",
+      "family_id": "core.frontend.bpu.compare",
+      "v2_sources": ["upstream/src/main/scala/xiangshan/backend/dispatch/NewDispatch.scala"],
+      "classification": "SPLIT",
+      "covered_children": ["compareMatrix", "IQSort", "minIQSel"],
+      "observation_points": ["pairwise count ordering", "tie priority", "IQSort rank one-hot", "minIQSel mapping"],
+      "reference_mode": "SOURCE_LEVEL_PARENT_CLOSURE",
+      "standalone_reference_module": false,
+      "status": "PENDING_COORDINATOR_REVIEW"
+    },
+    {
+      "candidate": "FallThroughPredictor",
+      "python_path": "python/ported/frontend/bpu/FallThroughPredictor-Hardware.py",
+      "family_id": "core.frontend.ftb",
+      "v2_sources": [
+        "upstream/src/main/scala/xiangshan/frontend/BPU.scala",
+        "upstream/src/main/scala/xiangshan/frontend/FTB.scala",
+        "upstream/src/main/scala/xiangshan/frontend/FrontendBundle.scala",
+        "upstream/src/main/scala/xiangshan/frontend/NewFtq.scala"
+      ],
+      "classification": "SPLIT",
+      "covered_children": ["BPUUtils.getFallThroughAddr", "FTBEntry.getFallThrough", "FullBranchPrediction.fromFtbEntry"],
+      "observation_points": ["fall-through address", "carry", "fall-through error", "sequential fallback", "s0-to-s1 staging"],
+      "reference_mode": "SOURCE_LEVEL_PARENT_CLOSURE",
+      "standalone_reference_module": false,
+      "status": "PENDING_COORDINATOR_REVIEW"
+    },
+    {
+      "candidate": "SaturateCounter",
+      "python_path": "python/ported/frontend/bpu/SaturateCounter-Hardware.py",
+      "family_id": "core.frontend.bpu.counters",
+      "v2_sources": [
+        "upstream/src/main/scala/xiangshan/frontend/BPU.scala",
+        "upstream/src/main/scala/xiangshan/frontend/Tage.scala",
+        "upstream/src/main/scala/xiangshan/frontend/SC.scala"
+      ],
+      "classification": "SPLIT",
+      "covered_children": ["BPUUtils.satUpdate", "BIM counter update", "TAGE counter update", "SC threshold update"],
+      "observation_points": ["zero saturation", "maximum saturation", "taken increment", "not-taken decrement"],
+      "reference_mode": "SOURCE_LEVEL_PARENT_CLOSURE",
+      "standalone_reference_module": false,
+      "status": "PENDING_COORDINATOR_REVIEW"
+    },
+    {
+      "candidate": "SignedSaturateCounter",
+      "python_path": "python/ported/frontend/bpu/SignedSaturateCounter-Hardware.py",
+      "family_id": "core.frontend.bpu.counters",
+      "v2_sources": [
+        "upstream/src/main/scala/xiangshan/frontend/BPU.scala",
+        "upstream/src/main/scala/xiangshan/frontend/SC.scala"
+      ],
+      "classification": "SPLIT",
+      "covered_children": ["BPUUtils.signedSatUpdate", "SC.ctrUpdate"],
+      "observation_points": ["signed minimum", "signed maximum", "positive update", "negative update"],
+      "reference_mode": "SOURCE_LEVEL_PARENT_CLOSURE",
+      "standalone_reference_module": false,
+      "status": "PENDING_COORDINATOR_REVIEW"
+    },
+    {
+      "candidate": "RvcExpander",
+      "python_path": "python/ported/frontend/ifu/RvcExpander-Hardware.py",
+      "family_id": "core.frontend.ifu.rvc",
+      "v2_sources": [
+        "upstream/src/main/scala/xiangshan/frontend/PreDecode.scala",
+        "upstream/rocket-chip/src/main/scala/rocket/RVC.scala"
+      ],
+      "classification": "RELOCATED",
+      "covered_children": ["RVCDecoder.q0", "RVCDecoder.q1", "RVCDecoder.q2", "RVCDecoder.q3", "RVCDecoder.ill"],
+      "observation_points": ["all 65536 compressed encodings", "fsIsOff", "RV32/RV64/RV128 legality", "Zcb/Zcmop", "passthrough"],
+      "reference_mode": "EXTRACTED_REFERENCE_MODULE",
+      "standalone_reference_module": true,
+      "reference_module": "RVCExpander",
+      "status": "PENDING_COORDINATOR_REVIEW"
+    }
+  ],
+  "excluded_children": [
+    "PreDecode parent pipeline (requires PredictWidth-wide closure)",
+    "FTB/FullBranchPrediction parent state and SRAM closure",
+    "BPU/TAGE/SC SRAM and history closures",
+    "NewDispatch complete dispatch/rename closure"
+  ],
+  "uhsc_naming_mapping": [
+    {
+      "source_name": "XSTop",
+      "local_name": "UHSCTop",
+      "visibility": "project-owned external HDL wrapper",
+      "reason": "Only external wrapper localization; locked reference module names remain unchanged",
+      "status": "PLANNED"
+    },
+    {
+      "source_name": "XiangShan / XS / KMHV2",
+      "local_name": "UHSC",
+      "visibility": "project-owned external product identity",
+      "reason": "Localize product-facing identity without renaming internal source/protocol names",
+      "status": "PLANNED"
+    }
+  ],
+  "acceptance_eligible": false
+}

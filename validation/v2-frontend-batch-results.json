@@ -1,0 +1,318 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_FRONTEND_BPU_RVC_BATCH",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "batch_id": "V2-P1-C-FRONTEND-BPU-RVC",
+  "source_paths": {
+    "CompareMatrix": [
+      "upstream/src/main/scala/xiangshan/backend/dispatch/NewDispatch.scala"
+    ],
+    "FallThroughPredictor": [
+      "upstream/src/main/scala/xiangshan/frontend/BPU.scala",
+      "upstream/src/main/scala/xiangshan/frontend/FTB.scala",
+      "upstream/src/main/scala/xiangshan/frontend/FrontendBundle.scala",
+      "upstream/src/main/scala/xiangshan/frontend/NewFtq.scala"
+    ],
+    "SaturateCounter": [
+      "upstream/src/main/scala/xiangshan/frontend/BPU.scala",
+      "upstream/src/main/scala/xiangshan/frontend/Tage.scala",
+      "upstream/src/main/scala/xiangshan/frontend/SC.scala"
+    ],
+    "SignedSaturateCounter": [
+      "upstream/src/main/scala/xiangshan/frontend/BPU.scala",
+      "upstream/src/main/scala/xiangshan/frontend/SC.scala"
+    ],
+    "RvcExpander": [
+      "upstream/src/main/scala/xiangshan/frontend/PreDecode.scala",
+      "upstream/rocket-chip/src/main/scala/rocket/RVC.scala"
+    ]
+  },
+  "observation_points": [
+    "counter saturation",
+    "signed update",
+    "fall-through target/error",
+    "RVC expansion",
+    "dispatch ordering"
+  ],
+  "commands": [
+    "python validation/v2_frontend_batch_direct.py",
+    "python validation/v2_frontend_batch_reference.py"
+  ],
+  "coverage_manifest": "validation/v2-frontend-bpu-rvc-coverage-manifest.json",
+  "status": "DIRECT_TEST_PASS_BOUNDED",
+  "targets": {
+    "CompareMatrix": {
+      "random_vectors": 256,
+      "deterministic_vectors": 8,
+      "verilog_sha256": "d9ba69119a5517eb8a3f33228b138fa1eae668aded2aca2a319dd24d9e9fd57e"
+    },
+    "FallThroughPredictor": {
+      "random_vectors": 512,
+      "deterministic_vectors": 3,
+      "verilog_sha256": "1296c062e7e27344869bc6b25191986e1e24073b5e89d8a5fca85a4892090dfd"
+    },
+    "SaturateCounter": {
+      "vectors": 32,
+      "verilog_sha256": "a2e88ead6a380240dc372640051acdbc4127b15336c15bf07be9e6d020890f2a"
+    },
+    "SignedSaturateCounter": {
+      "vectors": 64,
+      "verilog_sha256": "c693f33e72161e1590b96934fd3784f51dd0045092ce936f8c10eec3d5bc2121"
+    },
+    "RvcExpander": {
+      "pure_vectors": 2570,
+      "sim_vectors": 512,
+      "verilog_sha256": "a22e461b60cb066e04d1c64755304b557d34d31e36779844a98be52090f13930"
+    }
+  },
+  "audits": {
+    "CompareMatrix": {
+      "zones": [
+        "Module Contract",
+        "Configuration",
+        "Implementation",
+        "Public Adapter",
+        "Direct Entry"
+      ],
+      "functions": [
+        "__init__",
+        "__post_init__",
+        "build_verilog",
+        "compare_order",
+        "effective_count_width",
+        "effective_exu_indices",
+        "effective_issue_queue_num",
+        "elaborate",
+        "main",
+        "positions",
+        "sort_one_hot"
+      ],
+      "utf8_lf": true,
+      "sha256": "3fb135981841d7f137cfdbf89c2d91f03e344d3a22c709c18f1608d99d35305c"
+    },
+    "FallThroughPredictor": {
+      "zones": [
+        "Module Contract",
+        "Configuration",
+        "Implementation",
+        "Public Adapter",
+        "Direct Entry"
+      ],
+      "functions": [
+        "__init__",
+        "__post_init__",
+        "build_verilog",
+        "cat_align",
+        "effective_cfi_position_width",
+        "effective_page_offset_bits",
+        "effective_vaddr_bits",
+        "elaborate",
+        "fall_through_address",
+        "fall_through_error",
+        "fall_through_target",
+        "last_inst_position",
+        "lower_width",
+        "main",
+        "pft_width"
+      ],
+      "utf8_lf": true,
+      "sha256": "da2952d50ed3731867e7b5b2e96822369562b4670fb8e4c111c95f77a2165b7a"
+    },
+    "SaturateCounter": {
+      "zones": [
+        "Module Contract",
+        "Configuration",
+        "Implementation",
+        "Public Adapter",
+        "Direct Entry"
+      ],
+      "functions": [
+        "__init__",
+        "__init__",
+        "__post_init__",
+        "build_verilog",
+        "elaborate",
+        "get_decreased_value",
+        "get_increased_value",
+        "get_updated_value",
+        "is_mid",
+        "is_negative",
+        "is_positive",
+        "is_saturate",
+        "is_saturate_negative",
+        "is_saturate_positive",
+        "is_weak",
+        "is_weak_negative",
+        "is_weak_positive",
+        "main",
+        "sat_update",
+        "saturate_negative",
+        "saturate_positive",
+        "should_hold",
+        "weak_negative",
+        "weak_positive"
+      ],
+      "utf8_lf": true,
+      "sha256": "07c72abb950858390cbc3bcb2a5caaed242b77c5756041d3adbbf7c93be4fed2"
+    },
+    "SignedSaturateCounter": {
+      "zones": [
+        "Module Contract",
+        "Configuration",
+        "Implementation",
+        "Public Adapter",
+        "Direct Entry"
+      ],
+      "functions": [
+        "__init__",
+        "__init__",
+        "__post_init__",
+        "build_verilog",
+        "elaborate",
+        "get_decreased_value",
+        "get_increased_value",
+        "get_updated_value",
+        "is_mid",
+        "is_negative",
+        "is_positive",
+        "is_saturate",
+        "is_saturate_negative",
+        "is_saturate_positive",
+        "is_weak",
+        "is_weak_negative",
+        "is_weak_positive",
+        "main",
+        "saturate_negative",
+        "saturate_positive",
+        "should_hold",
+        "signed_sat_update",
+        "weak_negative",
+        "weak_positive"
+      ],
+      "utf8_lf": true,
+      "sha256": "c855214e46b6f4c7fbae09d311515df09daacf3e3ddd3bf23636458a3c50dd05"
+    },
+    "RvcExpander": {
+      "zones": [
+        "Module Contract",
+        "Configuration",
+        "Implementation",
+        "Public Adapter",
+        "Direct Entry"
+      ],
+      "functions": [
+        "__init__",
+        "__post_init__",
+        "b_type_expr",
+        "bit_field",
+        "btype",
+        "build_verilog",
+        "cat_high",
+        "cat_integer",
+        "decode_rvc",
+        "elaborate",
+        "expanded_integer",
+        "field_expr",
+        "fit_width",
+        "i_type_expr",
+        "itype",
+        "j_type_expr",
+        "jtype",
+        "main",
+        "r_type_expr",
+        "rtype",
+        "s_type_expr",
+        "select_expr",
+        "sign_extend",
+        "sign_extend_expr",
+        "stype"
+      ],
+      "utf8_lf": true,
+      "sha256": "63a13f8b15b5c7107ea46e6e4b93ed22bf831d91b383d0eb2694ebbc6b400827"
+    }
+  },
+  "verilator": {
+    "CompareMatrix": {
+      "status": "PASS",
+      "returncode": 0,
+      "stderr_tail": "_frontend_batch_qiwrebtu/CompareMatrix.sv:545:26: Operator ADD expects 6 bits on the RHS, but RHS's VARREF '$167' generates 1 bits.\n                                                                                                               : ... note: In instance 'CompareMatrix'\n  545 |   assign \\$168  = \\$165  + \\$167 ;\n      |                          ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_batch_qiwrebtu/CompareMatrix.sv:546:26: Operator ADD expects 7 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits.\n                                                                                                               : ... note: In instance 'CompareMatrix'\n  546 |   assign \\$169  = \\$168  + 1'h0;\n      |                          ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_batch_qiwrebtu/CompareMatrix.sv:547:19: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF '$169' generates 7 bits.\n                                                                                                              : ... note: In instance 'CompareMatrix'\n  547 |   assign \\$170  = ! \\$169 ;\n      |                   ^\n"
+    },
+    "FallThroughPredictor": {
+      "status": "PASS",
+      "returncode": 0,
+      "stderr_tail": "29: Operator ADD expects 6 bits on the LHS, but LHS's SEL generates 4 bits.\n                                                                                                                     : ... note: In instance 'FallThroughPredictor'\n   97 |   assign \\$18  = s1_pc[4:1] + 5'h10;\n      |                             ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_batch_qiwrebtu/FallThroughPredictor.sv:98:24: Operator GT expects 8 bits on the RHS, but RHS's VARREF '$18' generates 6 bits.\n                                                                                                                     : ... note: In instance 'FallThroughPredictor'\n   98 |   assign \\$19  = \\$17  > \\$18 ;\n      |                        ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_batch_qiwrebtu/FallThroughPredictor.sv:104:24: Operator ADD expects 40 bits on the RHS, but RHS's CONST '6'h20' generates 6 bits.\n                                                                                                                      : ... note: In instance 'FallThroughPredictor'\n  104 |   assign \\$25  = s1_pc + 6'h20;\n      |                        ^\n"
+    },
+    "SaturateCounter": {
+      "status": "PASS",
+      "returncode": 0,
+      "stderr_tail": "%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_batch_qiwrebtu/SaturateCounter.sv:40:17: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'value' generates 2 bits.\n                                                                                                               : ... note: In instance 'SaturateCounter'\n   40 |   assign \\$4  = ! value;\n      |                 ^\n                     ... For warning description see https://verilator.org/warn/WIDTHTRUNC?v=5.032\n                     ... Use \"/* verilator lint_off WIDTHTRUNC */\" and lint_on around source to disable this message.\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_batch_qiwrebtu/SaturateCounter.sv:50:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'value' generates 2 bits.\n                                                                                                               : ... note: In instance 'SaturateCounter'\n   50 |   assign \\$13  = ! value;\n      |                  ^\n"
+    },
+    "SignedSaturateCounter": {
+      "status": "PASS",
+      "returncode": 0,
+      "stderr_tail": "generates 2 bits.\n                                                                                                                      : ... note: In instance 'SignedSaturateCounter'\n   47 |   assign \\$10  = $signed(value) - $signed(2'h1);\n      |                                 ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_batch_qiwrebtu/SignedSaturateCounter.sv:50:39: Operator GTES expects 6 bits on the RHS, but RHS's SIGNED generates 1 bits.\n                                                                                                                      : ... note: In instance 'SignedSaturateCounter'\n   50 |   assign is_positive = $signed(value) >= $signed(1'h0);\n      |                                       ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_batch_qiwrebtu/SignedSaturateCounter.sv:51:24: Operator EQ expects 6 bits on the RHS, but RHS's CONST '5'h1f' generates 5 bits.\n                                                                                                                      : ... note: In instance 'SignedSaturateCounter'\n   51 |   assign \\$13  = value == 5'h1f;\n      |                        ^~\n"
+    },
+    "RvcExpander": {
+      "status": "PASS",
+      "returncode": 0,
+      "stderr_tail": "_frontend_batch_qiwrebtu/RvcExpander.sv:798:32: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                             : ... note: In instance 'RVCExpander'\n  798 |   assign \\$394  = io_in[15:13] == 2'h2;\n      |                                ^~\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_batch_qiwrebtu/RvcExpander.sv:799:19: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 5 bits.\n                                                                                                            : ... note: In instance 'RVCExpander'\n  799 |   assign \\$395  = ! io_in[11:7];\n      |                   ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_batch_qiwrebtu/RvcExpander.sv:800:32: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                             : ... note: In instance 'RVCExpander'\n  800 |   assign \\$396  = io_in[15:13] == 1'h1;\n      |                                ^~\n"
+    }
+  },
+  "yosys": {
+    "CompareMatrix": {
+      "status": "PASS",
+      "returncode": 0,
+      "stderr_tail": ""
+    },
+    "FallThroughPredictor": {
+      "status": "PASS",
+      "returncode": 0,
+      "stderr_tail": ""
+    },
+    "SaturateCounter": {
+      "status": "PASS",
+      "returncode": 0,
+      "stderr_tail": ""
+    },
+    "SignedSaturateCounter": {
+      "status": "PASS",
+      "returncode": 0,
+      "stderr_tail": ""
+    },
+    "RvcExpander": {
+      "status": "PASS",
+      "returncode": 0,
+      "stderr_tail": ""
+    }
+  },
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PENDING_COORDINATOR_REVIEW",
+    "UHSC_LOCALIZED": "PENDING_EXTERNAL_WRAPPER",
+    "PARENT_CLOSURE_MATCHED": "PENDING",
+    "LICENSE_REVIEW": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "uhsc_naming_mapping": [
+    {
+      "source_name": "XSTop",
+      "local_name": "UHSCTop",
+      "visibility": "project-owned external HDL wrapper",
+      "reason": "External localization only; locked reference names remain unchanged",
+      "status": "PLANNED"
+    },
+    {
+      "source_name": "XiangShan / XS / KMHV2",
+      "local_name": "UHSC",
+      "visibility": "project-owned external product identity",
+      "reason": "Product-facing identity localization without internal protocol renaming",
+      "status": "PLANNED"
+    }
+  ],
+  "unclosed": [
+    "RVC extracted-SV differential is run by the companion reference script.",
+    "Non-extractable CompareMatrix/FallThroughPredictor/counter behavior remains source-level and parent-closure evidence.",
+    "External UHSC wrapper and parent closure are outside this leaf batch."
+  ]
+}
