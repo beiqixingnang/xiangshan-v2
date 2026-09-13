@@ -404,6 +404,8 @@ def main() -> int:
         "reference_differential": "PENDING",
         "parent_closure": "PENDING",
         "license_gate": "PENDING",
+        "gates": {"ACCEPTED": "NOT_ALLOWED", "reference": "PENDING",
+                  "parent_closure": "PENDING", "license": "PENDING"},
         "uhsc_localization": {"status": "NO_PROJECT_FACING_RENAME", "manifest": "UHSC-Naming-Manifest.json"},
         "acceptance_eligible": False,
     }
