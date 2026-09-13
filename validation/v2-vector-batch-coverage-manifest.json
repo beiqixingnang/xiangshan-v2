@@ -1,0 +1,192 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_VECTOR_CHILD_COVERAGE",
+  "batch_id": "V2-P1-E-VECTOR-MASK",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "closure_root": "core.fu.vector",
+  "targets": [
+    {
+      "candidate": "ByteMaskTailGen",
+      "python_path": "python/ported/backend/fu/vector/ByteMaskTailGen-Hardware.py",
+      "v2_sources": [
+        "upstream/src/main/scala/xiangshan/backend/fu/vector/ByteMaskTailGen.scala"
+      ],
+      "covered_children": [
+        "ByteMaskTailGen",
+        "MaskExtractor",
+        "UIntToContLow0s",
+        "UIntToContLow1s"
+      ],
+      "observation_points": [
+        "start/end byte scaling",
+        "body/tail",
+        "vdIdx lookup",
+        "mask agnostic",
+        "tail agnostic"
+      ],
+      "reference_surface": "ByteMaskTailGen",
+      "direct": "PASS_BOUNDED_DIRECT",
+      "differential": "PASS_BOUNDED_REFERENCE",
+      "status": "PENDING_COORDINATOR_REVIEW"
+    },
+    {
+      "candidate": "DstMgu",
+      "python_path": "python/ported/backend/fu/vector/DstMgu-Hardware.py",
+      "v2_sources": [
+        "upstream/src/main/scala/xiangshan/backend/fu/vector/Mgu.scala"
+      ],
+      "covered_children": [
+        "Mgu dstMask path"
+      ],
+      "observation_points": [
+        "splitVdMask",
+        "ma fallback",
+        "eew/vdIdx splice"
+      ],
+      "reference_surface": "Mgu parent closure",
+      "direct": "PASS_BOUNDED_DIRECT",
+      "differential": "PASS_BOUNDED_PARENT",
+      "status": "PENDING_COORDINATOR_REVIEW"
+    },
+    {
+      "candidate": "Mgtu",
+      "python_path": "python/ported/backend/fu/vector/Mgtu-Hardware.py",
+      "v2_sources": [
+        "upstream/src/main/scala/xiangshan/backend/fu/vector/Mgtu.scala"
+      ],
+      "covered_children": [
+        "Mgtu"
+      ],
+      "observation_points": [
+        "vl=0",
+        "vl=1",
+        "vl=127",
+        "vl=128",
+        "vl>vlen"
+      ],
+      "reference_surface": "Mgtu",
+      "direct": "PASS_BOUNDED_DIRECT",
+      "differential": "PASS_BOUNDED_REFERENCE",
+      "status": "PENDING_COORDINATOR_REVIEW"
+    },
+    {
+      "candidate": "NewMgu",
+      "python_path": "python/ported/backend/fu/vector/NewMgu-Hardware.py",
+      "v2_sources": [
+        "upstream/src/main/scala/xiangshan/backend/fu/vector/Mgu.scala"
+      ],
+      "covered_children": [
+        "Mgu maskTailGen",
+        "VldMgu specialization"
+      ],
+      "observation_points": [
+        "realEw",
+        "mask chunk",
+        "vstart/vl",
+        "indexed and normal"
+      ],
+      "reference_surface": "Mgu/VldMgu parent closure",
+      "direct": "PASS_BOUNDED_DIRECT",
+      "differential": "PASS_BOUNDED_PARENT",
+      "status": "PENDING_COORDINATOR_REVIEW"
+    },
+    {
+      "candidate": "MaskExtrator",
+      "python_path": "python/ported/backend/fu/vector/utils/MaskExtrator-Hardware.py",
+      "v2_sources": [
+        "upstream/src/main/scala/xiangshan/backend/fu/vector/utils/MaskExtrator.scala"
+      ],
+      "covered_children": [
+        "MaskExtractor"
+      ],
+      "observation_points": [
+        "e8",
+        "e16",
+        "e32",
+        "e64"
+      ],
+      "reference_surface": "MaskExtractor",
+      "direct": "PASS_BOUNDED_DIRECT",
+      "differential": "PASS_BOUNDED_REFERENCE",
+      "status": "PENDING_COORDINATOR_REVIEW"
+    },
+    {
+      "candidate": "ScalaDupToVector",
+      "python_path": "python/ported/backend/fu/vector/utils/ScalaDupToVector-Hardware.py",
+      "v2_sources": [
+        "upstream/src/main/scala/xiangshan/backend/fu/vector/utils/ScalaDupToVector.scala"
+      ],
+      "covered_children": [
+        "ScalaDupToVector source equations"
+      ],
+      "observation_points": [
+        "scalar low 8/16/32/64",
+        "VecInit packing"
+      ],
+      "reference_surface": "source-level",
+      "direct": "PASS_BOUNDED_DIRECT",
+      "differential": "PASS_BOUNDED_SOURCE",
+      "status": "PENDING_COORDINATOR_REVIEW"
+    },
+    {
+      "candidate": "UIntToCont0s",
+      "python_path": "python/ported/backend/fu/vector/utils/UIntToCont0s-Hardware.py",
+      "v2_sources": [
+        "upstream/src/main/scala/xiangshan/backend/fu/vector/utils/UIntToCont0s.scala"
+      ],
+      "covered_children": [
+        "UIntToContLow0s"
+      ],
+      "observation_points": [
+        "all 256 count values"
+      ],
+      "reference_surface": "UIntToContLow0s",
+      "direct": "PASS_BOUNDED_DIRECT",
+      "differential": "PASS_BOUNDED_REFERENCE",
+      "status": "PENDING_COORDINATOR_REVIEW"
+    },
+    {
+      "candidate": "UIntToCont1s",
+      "python_path": "python/ported/backend/fu/vector/utils/UIntToCont1s-Hardware.py",
+      "v2_sources": [
+        "upstream/src/main/scala/xiangshan/backend/fu/vector/utils/UIntToCont1s.scala"
+      ],
+      "covered_children": [
+        "UIntToContLow1s"
+      ],
+      "observation_points": [
+        "all 256 count values"
+      ],
+      "reference_surface": "UIntToContLow1s",
+      "direct": "PASS_BOUNDED_DIRECT",
+      "differential": "PASS_BOUNDED_REFERENCE",
+      "status": "PENDING_COORDINATOR_REVIEW"
+    },
+    {
+      "candidate": "VecDataSplitModule",
+      "python_path": "python/ported/backend/fu/vector/utils/VecDataSplitModule-Hardware.py",
+      "v2_sources": [
+        "upstream/src/main/scala/xiangshan/backend/fu/vector/utils/VecDataSplitModule.scala"
+      ],
+      "covered_children": [
+        "VecDataSplitModule"
+      ],
+      "observation_points": [
+        "8/16/32/64-bit slices"
+      ],
+      "reference_surface": "VecDataSplitModule",
+      "direct": "PASS_BOUNDED_DIRECT",
+      "differential": "PASS_BOUNDED_REFERENCE",
+      "status": "PENDING_COORDINATOR_REVIEW"
+    }
+  ],
+  "locked_reference": {
+    "path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "bytes": 228590583
+  },
+  "parent_closure": "PASS_BOUNDED_PARENT",
+  "license_review": "PENDING",
+  "uhsc_localization": "PENDING_EXTERNAL_WRAPPER",
+  "acceptance_eligible": false
+}

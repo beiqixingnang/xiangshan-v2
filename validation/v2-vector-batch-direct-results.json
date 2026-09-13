@@ -1,0 +1,314 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_VECTOR_BATCH_DIRECT_TESTS",
+  "batch_id": "V2-P1-E-VECTOR-MASK",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "source_authority": "canonical V2 Scala under upstream/src/main/scala",
+  "status": "PASS_BOUNDED",
+  "targets": {
+    "ByteMaskTailGen": {
+      "vectors": 4101,
+      "corner_vectors": 5,
+      "trace_sha256": "a008f3c3f31e09745c17aa38be66a904da9e72bc03d24ce5d59fd92f22ef9b07"
+    },
+    "DstMgu": {
+      "vectors": 4096,
+      "eew_modes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "trace_sha256": "931194fc4916eb9ca8fb75221023db39429f072a85b129f407cc7913e35aae78"
+    },
+    "Mgtu": {
+      "vectors": 1024,
+      "vl_boundaries": [
+        0,
+        1,
+        127,
+        128,
+        255
+      ],
+      "trace_sha256": "3599a14806af3dda41080716e318d5db935c38410825ad956350f347bc40dddd"
+    },
+    "NewMgu": {
+      "vectors": 4096,
+      "indexed_modes": [
+        0,
+        1
+      ],
+      "trace_sha256": "079c3543336eb2e6f403b1602b03a8da4664b8f41178159f2f032c692c129b77"
+    },
+    "MaskExtrator": {
+      "vectors": 1024,
+      "sew_values": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "trace_sha256": "f0f14162165fff8c84552b33e62d842eecfbeacba522894e1fa1f08e6468bf19"
+    },
+    "ScalaDupToVector": {
+      "vectors": 24,
+      "trace_sha256": "0ee3a37ab49d0cfaec881b84e484820c1dfa80ac6edb0b43e6c36ab3e2d5f9d5"
+    },
+    "UIntToCont0s": {
+      "vectors": 8,
+      "boundary_values": [
+        0,
+        1,
+        7
+      ],
+      "trace_sha256": "bbb29491061a01700c61fd749b13f2d8755bb5a0e51c43568319fa99354759e8"
+    },
+    "UIntToCont1s": {
+      "vectors": 8,
+      "boundary_values": [
+        0,
+        1,
+        7
+      ],
+      "trace_sha256": "279cf82a10fa27a30c066d69205d8b972ef479ab2c084327d97212fdf6ab44c2"
+    },
+    "VecDataSplitModule": {
+      "vectors": 256,
+      "trace_sha256": "8cd61812848359d39b99b536814934c8cfce7128bb5d7e22d85c1053bd506267"
+    }
+  },
+  "adapters": {
+    "ByteMaskTailGen": {
+      "bytes": 39498,
+      "sha256": "aff8ded5eb8ac37a3ce85e1762c603251d1882105dc5dab3be472a63f7bcb57b",
+      "contains_module": true
+    },
+    "DstMgu": {
+      "bytes": 17459,
+      "sha256": "4c9898385f98f0c612f46f52102e9e39fae87abc5fb3e87591f78e2f8ccfdfe3",
+      "contains_module": true
+    },
+    "Mgtu": {
+      "bytes": 18851,
+      "sha256": "3706af2bc012f15e517afbaebb98231eb68648037b125bbaa5acd6749f42bbb1",
+      "contains_module": true
+    },
+    "NewMgu": {
+      "bytes": 44569,
+      "sha256": "66778eea8447bff3bad2506f0f81bd4fc818f519c9c476693ffb36ee3a9b0a31",
+      "contains_module": true
+    },
+    "MaskExtrator": {
+      "bytes": 1235,
+      "sha256": "27e14d9e0367a4af0c25815b89d2d5a930bb50d8cc0413f3162f9834fd007b24",
+      "contains_module": true
+    },
+    "ScalaDupToVector": {
+      "bytes": 1346,
+      "sha256": "954cb1ca581e3fc6fa964c758a6c968ec6a3aa522b17cf4df193ce44b40466ef",
+      "contains_module": true
+    },
+    "UIntToCont0s": {
+      "bytes": 29306,
+      "sha256": "e7578fcb001c7667955f34fa92523f8a568996d16f6400406759a99249db47cd",
+      "contains_module": true
+    },
+    "UIntToCont1s": {
+      "bytes": 29306,
+      "sha256": "fe41cedb1b0d26996c3114648c965947b75d1caa012979cf0ade1ffb3c9ebca2",
+      "contains_module": true
+    },
+    "VecDataSplitModule": {
+      "bytes": 3928,
+      "sha256": "afbaf2c4f645f285f589e67f5824415f23299d45787c502deca10276ee8e5d5c",
+      "contains_module": true
+    }
+  },
+  "contract_audit": {
+    "status": "PASS",
+    "rows": {
+      "ByteMaskTailGen": {
+        "path": "python/ported/backend/fu/vector/ByteMaskTailGen-Hardware.py",
+        "bytes": 7484,
+        "sha256": "aea747c9365ab50cf0739d20c8aca389cf3e2bac282207ef2af2f488ee92ebb2",
+        "utf8": true,
+        "bom": false,
+        "lf_only": true,
+        "ast": true,
+        "bilingual_docstring": true,
+        "zones": true,
+        "adapter_args": [
+          "configuration",
+          "injected_dependencies"
+        ],
+        "adapter_exact": true,
+        "function_comment_errors": [],
+        "forbidden_imports": [],
+        "explicit_all": true
+      },
+      "DstMgu": {
+        "path": "python/ported/backend/fu/vector/DstMgu-Hardware.py",
+        "bytes": 7794,
+        "sha256": "8707881859aa92f1a443e0e50aba59f83689d117b316c2298f19aacd6f5bc6b0",
+        "utf8": true,
+        "bom": false,
+        "lf_only": true,
+        "ast": true,
+        "bilingual_docstring": true,
+        "zones": true,
+        "adapter_args": [
+          "configuration",
+          "injected_dependencies"
+        ],
+        "adapter_exact": true,
+        "function_comment_errors": [],
+        "forbidden_imports": [],
+        "explicit_all": true
+      },
+      "Mgtu": {
+        "path": "python/ported/backend/fu/vector/Mgtu-Hardware.py",
+        "bytes": 3932,
+        "sha256": "bea6ecb89db6b96ff9ed2bbd26cf7a76b26a37978085ce5d375a868a81a90abe",
+        "utf8": true,
+        "bom": false,
+        "lf_only": true,
+        "ast": true,
+        "bilingual_docstring": true,
+        "zones": true,
+        "adapter_args": [
+          "configuration",
+          "injected_dependencies"
+        ],
+        "adapter_exact": true,
+        "function_comment_errors": [],
+        "forbidden_imports": [],
+        "explicit_all": true
+      },
+      "NewMgu": {
+        "path": "python/ported/backend/fu/vector/NewMgu-Hardware.py",
+        "bytes": 8435,
+        "sha256": "2d5f9a3f36817d0469940de44b278595d5955e1a7b001cce86a387b74d07a828",
+        "utf8": true,
+        "bom": false,
+        "lf_only": true,
+        "ast": true,
+        "bilingual_docstring": true,
+        "zones": true,
+        "adapter_args": [
+          "configuration",
+          "injected_dependencies"
+        ],
+        "adapter_exact": true,
+        "function_comment_errors": [],
+        "forbidden_imports": [],
+        "explicit_all": true
+      },
+      "MaskExtrator": {
+        "path": "python/ported/backend/fu/vector/utils/MaskExtrator-Hardware.py",
+        "bytes": 4468,
+        "sha256": "7cb4af710177ca4b4fcd106639202d3c6365d50b4f66df9ecf9c46df084c81b3",
+        "utf8": true,
+        "bom": false,
+        "lf_only": true,
+        "ast": true,
+        "bilingual_docstring": true,
+        "zones": true,
+        "adapter_args": [
+          "configuration",
+          "injected_dependencies"
+        ],
+        "adapter_exact": true,
+        "function_comment_errors": [],
+        "forbidden_imports": [],
+        "explicit_all": true
+      },
+      "ScalaDupToVector": {
+        "path": "python/ported/backend/fu/vector/utils/ScalaDupToVector-Hardware.py",
+        "bytes": 4531,
+        "sha256": "becc1587d85474fbcb453448e3b489015f335594dd2d78d96f636cccbd2db68f",
+        "utf8": true,
+        "bom": false,
+        "lf_only": true,
+        "ast": true,
+        "bilingual_docstring": true,
+        "zones": true,
+        "adapter_args": [
+          "configuration",
+          "injected_dependencies"
+        ],
+        "adapter_exact": true,
+        "function_comment_errors": [],
+        "forbidden_imports": [],
+        "explicit_all": true
+      },
+      "UIntToCont0s": {
+        "path": "python/ported/backend/fu/vector/utils/UIntToCont0s-Hardware.py",
+        "bytes": 4838,
+        "sha256": "1037ba24025b834d1b531d20ffa71112458532a93ce2751652fecd5fff3c8346",
+        "utf8": true,
+        "bom": false,
+        "lf_only": true,
+        "ast": true,
+        "bilingual_docstring": true,
+        "zones": true,
+        "adapter_args": [
+          "configuration",
+          "injected_dependencies"
+        ],
+        "adapter_exact": true,
+        "function_comment_errors": [],
+        "forbidden_imports": [],
+        "explicit_all": true
+      },
+      "UIntToCont1s": {
+        "path": "python/ported/backend/fu/vector/utils/UIntToCont1s-Hardware.py",
+        "bytes": 4832,
+        "sha256": "faa2112798bd9320ba63022d376323c3d53921b424b64702e2b6e31c15d080d9",
+        "utf8": true,
+        "bom": false,
+        "lf_only": true,
+        "ast": true,
+        "bilingual_docstring": true,
+        "zones": true,
+        "adapter_args": [
+          "configuration",
+          "injected_dependencies"
+        ],
+        "adapter_exact": true,
+        "function_comment_errors": [],
+        "forbidden_imports": [],
+        "explicit_all": true
+      },
+      "VecDataSplitModule": {
+        "path": "python/ported/backend/fu/vector/utils/VecDataSplitModule-Hardware.py",
+        "bytes": 4671,
+        "sha256": "5082cc307d47c4680f71b0a0ad22c4ed6705921ebf510324818eb0e9dc81552c",
+        "utf8": true,
+        "bom": false,
+        "lf_only": true,
+        "ast": true,
+        "bilingual_docstring": true,
+        "zones": true,
+        "adapter_args": [
+          "configuration",
+          "injected_dependencies"
+        ],
+        "adapter_exact": true,
+        "function_comment_errors": [],
+        "forbidden_imports": [],
+        "explicit_all": true
+      }
+    }
+  },
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PENDING_DIFFERENTIAL_RUN",
+    "PARENT_CLOSURE": "PENDING_DIFFERENTIAL_RUN",
+    "VERILATOR": "PENDING_DIFFERENTIAL_RUN",
+    "YOSYS": "PENDING_DIFFERENTIAL_RUN",
+    "UHSC_LOCALIZED": "PENDING_EXTERNAL_WRAPPER",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "acceptance_eligible": false
+}

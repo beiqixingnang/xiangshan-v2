@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "kind": "UHSC_VECTOR_BATCH_NAMING_MAP",
+  "batch_id": "V2-P1-E-VECTOR-MASK",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "reference_names_unchanged": true,
+  "status": "PENDING_COORDINATOR_REVIEW",
+  "entries": [
+    {
+      "source_name": "XSTop",
+      "local_name": "UHSCTop",
+      "visibility": "project-owned external HDL wrapper",
+      "reason": "No child target renames locked reference modules."
+    },
+    {
+      "source_name": "XiangShan / XS / KMHV2",
+      "local_name": "UHSC",
+      "visibility": "project-owned external product identity",
+      "reason": "Localization remains deferred to external wrapper."
+    }
+  ],
+  "targets": [
+    "ByteMaskTailGen",
+    "DstMgu",
+    "Mgtu",
+    "NewMgu",
+    "MaskExtrator",
+    "ScalaDupToVector",
+    "UIntToCont0s",
+    "UIntToCont1s",
+    "VecDataSplitModule"
+  ],
+  "gates": {
+    "UHSC_LOCALIZED": "PENDING_EXTERNAL_WRAPPER",
+    "ACCEPTED": "NOT_ALLOWED"
+  }
+}

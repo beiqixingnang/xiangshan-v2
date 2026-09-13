@@ -1,29 +1,26 @@
-"""ByteMaskTailGen computes active and agnostic vector byte masks.
-
-按 vstart/vl/vma/vta 和 vsew 生成逐字节 active/agnostic 掩码。
+"""Generate active and agnostic byte enables for a vector destination.
+为向量目的生成 active 与 agnostic 字节使能。
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 
-from amaranth import Cat, Elaboratable, Module, Mux, Signal
+from amaranth import Cat, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
 
 
 # =============================================================================
 # Module Contract
 # =============================================================================
-# Public symbols / 公开符号:
-#   - ByteMaskTailGenConfig, ByteMaskTailGen, build_verilog, main
-# Real logic / 真实逻辑:
-#   - Convert element indices to byte indices using vsew, construct body/tail
-#     masks, select one 16-byte destination by vdIdx, and expand maskUsed by
-#     element width. This mirrors ByteMaskTailGen.scala and MaskExtractor.scala.
-#   / 将元素索引按 vsew 转为字节索引，生成 body/tail 掩码，按 vdIdx 选取
-#     16 字节目标，并按元素宽度扩展 maskUsed，与 Scala 源一致。
-# Status / 状态: PYTHON_PRESENT_UNVERIFIED (targeted phase-2 repair)
-__all__ = ["ByteMaskTailGenConfig", "ByteMaskTailGen", "build_verilog", "main"]
+# ByteMaskTailGen.scala maps element begin/end to byte positions, forms the
+# [begin,end) body and >=end tail masks over maxVLMAX=128 bytes, selects one
+# 16-byte destination by vdIdx, expands maskUsed by EEW, and applies vma/vta.
+# The guard begin>=end clears both outputs.  V2 ByteMaskTailGen.scala 将元素
+# begin/end 映射到字节位置，在 128 字节范围构造 [begin,end) body 与 >=end tail，
+# 按 vdIdx 选择 16 字节目的，按 EEW 展开 maskUsed，并应用 vma/vta；begin>=end
+# 时两个输出均清零。 Ports below are the flattened locked-reference ports.
+__all__ = ["ByteMaskTailGenConfig", "VSew", "ByteMaskTailGen", "byte_mask_model", "build_verilog", "main"]
 
 
 # =============================================================================
@@ -31,147 +28,154 @@ __all__ = ["ByteMaskTailGenConfig", "ByteMaskTailGen", "build_verilog", "main"]
 # =============================================================================
 @dataclass(frozen=True)
 class ByteMaskTailGenConfig:
-    """Vector length configuration / 向量长度配置。"""
+    """Geometry of the canonical V2 instance. / 标准 V2 实例的几何参数。"""
 
     vlen: int = 128
+    max_vlmax: int = 128
+    index_width: int = 8
+
+    # Validate the fixed V2 closure geometry. / 校验固定 V2 闭包几何。
+    def __post_init__(self) -> None:
+        if self.vlen != 128 or self.max_vlmax != 128:
+            raise ValueError("V2 ByteMaskTailGen requires vlen=max_vlmax=128")
+        if self.index_width != 8:
+            raise ValueError("V2 element index width is 8")
 
 
 class VSew:
-    """Closed element-width encodings / 封闭元素宽度编码。"""
+    """Canonical two-bit V2 element-width encodings. / V2 两位元素宽度编码。"""
 
-    e8 = 0b000
-    e16 = 0b001
-    e32 = 0b010
-    e64 = 0b011
+    e8 = 0
+    e16 = 1
+    e32 = 2
+    e64 = 3
+
+
+# Compute the integer contract used by direct and differential tests. / 计算 direct 与差分测试使用的整数合同。
+def byte_mask_model(
+    begin: int,
+    end: int,
+    vma: bool,
+    vta: bool,
+    vsew: int,
+    mask_used: int,
+    vd_idx: int,
+) -> tuple[int, int]:
+    if vsew not in (VSew.e8, VSew.e16, VSew.e32, VSew.e64):
+        return (0, 0)
+    begin &= 0xFF
+    end &= 0xFF
+    start_bytes = (begin << vsew) & 0xFF
+    vl_bytes = (end << vsew) & 0xFF
+    base = (vd_idx & 0x7) * 16
+    active = 0
+    agnostic = 0
+    for lane in range(16):
+        position = base + lane
+        body = start_bytes <= position < vl_bytes
+        tail = position >= vl_bytes
+        source = (lane >> vsew) if vsew < 4 else 0
+        mask_bit = (mask_used >> source) & 1
+        if begin < end and body and mask_bit:
+            active |= 1 << lane
+        if begin < end and ((vma and body and not mask_bit) or (vta and tail)):
+            agnostic |= 1 << lane
+    return active, agnostic
 
 
 # =============================================================================
 # Implementation
 # =============================================================================
 class ByteMaskTailGen(Elaboratable):
-    """Generate the 128-bit destination masks / 生成 128 位目标掩码。"""
+    """Combinational V2 byte-enable generator. / V2 组合式字节使能生成器。"""
 
-    # Create the explicit component ports / 创建显式组件端口
-    def __init__(self, cfg: ByteMaskTailGenConfig | None = None):
-        config = cfg or ByteMaskTailGenConfig()
-        if config.vlen != 128:
-            raise ValueError("ByteMaskTailGen currently requires vlen=128")
-        self.cfg = config
-        num_bytes = config.vlen // 8
-        self.io_in_begin = Signal(8, name="io_in_begin")
-        self.io_in_end = Signal(8, name="io_in_end")
-        self.io_in_vma = Signal(name="io_in_vma")
-        self.io_in_vta = Signal(name="io_in_vta")
-        self.io_in_vsew = Signal(3, name="io_in_vsew")
-        self.io_in_maskUsed = Signal(num_bytes, name="io_in_maskUsed")
-        self.io_in_vdIdx = Signal(3, name="io_in_vdIdx")
-        self.io_out_activeEn = Signal(num_bytes, name="io_out_activeEn")
-        self.io_out_agnosticEn = Signal(num_bytes, name="io_out_agnosticEn")
-        self.in_begin = self.io_in_begin
-        self.in_end = self.io_in_end
-        self.in_vma = self.io_in_vma
-        self.in_vta = self.io_in_vta
-        self.in_vsew = self.io_in_vsew
-        self.in_maskUsed = self.io_in_maskUsed
-        self.in_vdIdx = self.io_in_vdIdx
-        self.out_activeEn = self.io_out_activeEn
-        self.out_agnosticEn = self.io_out_agnosticEn
+    # Declare the flattened locked-reference ports. / 声明锁定参考扁平端口。
+    def __init__(self, configuration: ByteMaskTailGenConfig | None = None):
+        config = configuration or ByteMaskTailGenConfig()
+        self.config = config
+        self.in_begin = Signal(8, name="io_in_begin")
+        self.in_end = Signal(8, name="io_in_end")
+        self.in_vma = Signal(name="io_in_vma")
+        self.in_vta = Signal(name="io_in_vta")
+        self.in_vsew = Signal(2, name="io_in_vsew")
+        self.in_maskUsed = Signal(16, name="io_in_maskUsed")
+        self.in_vdIdx = Signal(3, name="io_in_vdIdx")
+        self.out_activeEn = Signal(16, name="io_out_activeEn")
+        self.out_agnosticEn = Signal(16, name="io_out_agnosticEn")
 
-    # Elaborate byte mask and agnostic semantics / 展开字节掩码与不可知语义
+    # Elaborate byte masks, destination lookup, and agnostic policy. / 展开字节掩码、目的查找与 agnostic 策略。
     def elaborate(self, platform):
-        m = Module()
-        num_bytes = self.cfg.vlen // 8
-        width = num_bytes * 8
-
-        # Mux1H in the reference yields zero for unsupported vsew values;
-        # shifts remain eight-bit values, so overflow is naturally truncated.
+        del platform
+        module = Module()
+        full_width = self.config.max_vlmax
         start_bytes = Signal(8, name="startBytes")
         vl_bytes = Signal(8, name="vlBytes")
-        m.d.comb += [
-            start_bytes.eq(Mux(self.in_vsew == VSew.e8, self.in_begin,
-                               Mux(self.in_vsew == VSew.e16, self.in_begin << 1,
-                                   Mux(self.in_vsew == VSew.e32, self.in_begin << 2,
-                                       Mux(self.in_vsew == VSew.e64, self.in_begin << 3, 0))))),
-            vl_bytes.eq(Mux(self.in_vsew == VSew.e8, self.in_end,
-                            Mux(self.in_vsew == VSew.e16, self.in_end << 1,
-                                Mux(self.in_vsew == VSew.e32, self.in_end << 2,
-                                    Mux(self.in_vsew == VSew.e64, self.in_end << 3, 0))))),
+        module.d.comb += [
+            start_bytes.eq(self.in_begin << self.in_vsew),
+            vl_bytes.eq(self.in_end << self.in_vsew),
         ]
 
-        body_mask = Signal(width, name="bodyMask")
-        tail_mask = Signal(width, name="tailMask")
-        # UIntToContLow0s(start) & UIntToContLow1s(vl): [start, vl).
-        m.d.comb += body_mask.eq(Cat(*[
-            (start_bytes <= byte_index) & (byte_index < vl_bytes)
-            for byte_index in range(width)
-        ]))
-        m.d.comb += tail_mask.eq(Cat(*[
-            vl_bytes <= byte_index for byte_index in range(width)
-        ]))
+        body = Signal(full_width, name="bodyEn")
+        tail = Signal(full_width, name="tailEn")
+        for index in range(full_width):
+            module.d.comb += [
+                body[index].eq((start_bytes <= index) & (index < vl_bytes)),
+                tail[index].eq(vl_bytes <= index),
+            ]
 
-        # Inline the MaskExtractor contract to keep this Build self-contained.
-        mask_en = Signal(num_bytes, name="maskEn")
-        e16 = Cat(*[self.in_maskUsed[index] for index in range(8)
-                    for _ in range(2)])
-        e32 = Cat(*[self.in_maskUsed[index] for index in range(4)
-                    for _ in range(4)])
-        e64 = Cat(*[self.in_maskUsed[index] for index in range(2)
-                    for _ in range(8)])
-        m.d.comb += mask_en.eq(Mux(self.in_vsew == VSew.e8, self.in_maskUsed,
-                                   Mux(self.in_vsew == VSew.e16, e16,
-                                       Mux(self.in_vsew == VSew.e32, e32,
-                                           Mux(self.in_vsew == VSew.e64, e64, 0)))))
+        body_selected = body[:16]
+        tail_selected = tail[:16]
+        for index in range(1, 8):
+            body_selected = Mux(self.in_vdIdx == index, body[index * 16:(index + 1) * 16], body_selected)
+            tail_selected = Mux(self.in_vdIdx == index, tail[index * 16:(index + 1) * 16], tail_selected)
 
-        selected_body = Signal(num_bytes, name="bodyEnInVd")
-        selected_tail = Signal(num_bytes, name="tailEnInVd")
-        selected_body_expr = body_mask[112:128]
-        selected_tail_expr = tail_mask[112:128]
-        for index in range(6, -1, -1):
-            selected_body_expr = Mux(
-                self.in_vdIdx == index,
-                body_mask[index * num_bytes:(index + 1) * num_bytes],
-                selected_body_expr,
-            )
-            selected_tail_expr = Mux(
-                self.in_vdIdx == index,
-                tail_mask[index * num_bytes:(index + 1) * num_bytes],
-                selected_tail_expr,
-            )
-        m.d.comb += [selected_body.eq(selected_body_expr),
-                     selected_tail.eq(selected_tail_expr)]
+        # Expand one mask bit over 1/2/4/8 byte lanes, matching MaskExtractor.
+        # 按 1/2/4/8 字节通道展开一个掩码位，与 MaskExtractor 一致。
+        expanded = Signal(16, name="maskEn")
+        arms = [
+            self.in_maskUsed,
+            Cat(*[self.in_maskUsed[index] for index in range(8) for _ in range(2)]),
+            Cat(*[self.in_maskUsed[index] for index in range(4) for _ in range(4)]),
+            Cat(*[self.in_maskUsed[index] for index in range(2) for _ in range(8)]),
+        ]
+        expanded_expr = arms[3]
+        for index in range(2, -1, -1):
+            expanded_expr = Mux(self.in_vsew == index, arms[index], expanded_expr)
+        module.d.comb += expanded.eq(expanded_expr)
 
         valid_range = self.in_begin < self.in_end
-        active = Mux(valid_range, selected_body & mask_en, 0)
-        mask_agnostic = Mux(self.in_vma, (~mask_en) & selected_body, 0)
-        tail_agnostic = Mux(self.in_vta, selected_tail, 0)
-        m.d.comb += [
-            self.out_activeEn.eq(active),
-            self.out_agnosticEn.eq(Mux(valid_range,
-                                       mask_agnostic | tail_agnostic, 0)),
-        ]
-        return m
+        active = Mux(valid_range, body_selected & expanded, Const(0, 16))
+        agnostic = Mux(
+            valid_range,
+            ((~expanded) & body_selected & Mux(self.in_vma, Const(0xFFFF, 16), Const(0, 16)))
+            | (tail_selected & Mux(self.in_vta, Const(0xFFFF, 16), Const(0, 16))),
+            Const(0, 16),
+        )
+        module.d.comb += [self.out_activeEn.eq(active), self.out_agnosticEn.eq(agnostic)]
+        return module
 
 
 # =============================================================================
 # Public Adapter
 # =============================================================================
-# Generate deterministic Verilog / 生成确定性 Verilog
-def build_verilog(configuration: ByteMaskTailGenConfig | None = None,
-                  injected_dependencies: dict | None = None,
-                  name: str = "ByteMaskTailGen") -> str:
+# Emit deterministic V2-compatible Verilog. / 输出确定性的 V2 兼容 Verilog。
+def build_verilog(configuration, injected_dependencies) -> str:
+    del injected_dependencies
     top = ByteMaskTailGen(configuration)
-    ports = [top.io_in_begin, top.io_in_end, top.io_in_vma, top.io_in_vta,
-             top.io_in_vsew, top.io_in_maskUsed, top.io_in_vdIdx,
-             top.io_out_activeEn, top.io_out_agnosticEn]
-    return verilog.convert(top, name=name, ports=ports, emit_src=False)
+    return verilog.convert(
+        top, name="ByteMaskTailGen",
+        ports=[top.in_begin, top.in_end, top.in_vma, top.in_vta,
+               top.in_vsew, top.in_maskUsed, top.in_vdIdx,
+               top.out_activeEn, top.out_agnosticEn], emit_src=False,
+    )
 
 
 # =============================================================================
 # Direct Entry
 # =============================================================================
-# Emit the direct-entry Verilog / 输出直接入口 Verilog
+# Print the default standalone helper. / 直接打印默认独立辅助器。
 def main() -> None:
-    print(build_verilog())
+    print(build_verilog(None, {}))
 
 
 if __name__ == "__main__":

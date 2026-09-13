@@ -1,22 +1,23 @@
-"""UInt to a low-contiguous-one mask.
-
-Amaranth port of ``UIntToContLow1s`` from the pinned XiangShan snapshot.
+"""Generate contiguous low-one masks from an unsigned count.
+从无符号计数生成低位连续一掩码。
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, cast
+from typing import Any
 
 from amaranth import Cat, Const, Elaboratable, Module, Mux, Signal
+from amaranth.back import verilog
 
 
 # =============================================================================
 # Module Contract
 # =============================================================================
-# ``UIntToContLow1s`` returns (2**uintWidth - 1) bits. For input ``n`` the low
-# ``n`` bits are one and all higher bits are zero; zero yields all zeros and
-# the maximum input yields all ones. ``UIntToContHigh1s`` reverses the bits.
+# The V2 UIntToContLow1s module emits 2**uintWidth-1 bits; bit j is one exactly
+# when j is below the unsigned input value.  The high form is a bit reversal.
+# V2 UIntToContLow1s 输出 2**uintWidth-1 位；当位索引 j 小于输入值时该位为一，
+# 高位形式是其逐位反转。 The implementation keeps source-visible names.
 __all__ = [
     "UIntToContConfig",
     "UIntToContLow1s",
@@ -31,110 +32,90 @@ __all__ = [
 # =============================================================================
 @dataclass(frozen=True)
 class UIntToContConfig:
-    """Width of the unsigned priority input / 无符号优先编码输入宽度。"""
+    """Input width for the contiguous-mask helper. / 连续掩码输入宽度。"""
 
     uintWidth: int = 8
+
+    # Validate the finite V2 parameter range. / 校验有限的 V2 参数范围。
+    def __post_init__(self) -> None:
+        if self.uintWidth < 1:
+            raise ValueError("uintWidth must be positive")
 
 
 # =============================================================================
 # Implementation
 # =============================================================================
-def bit_view(value: Any, index: int) -> Any:
-    """Return one bit while keeping Amaranth's view type out of Pyright."""
-
-    return cast(Any, value.bit_select(index, 1))
-
-
-def ones_constant(width: int) -> Any:
-    """Create a width-sized all-one constant / 创建指定宽度全一常量。"""
-
-    return cast(Any, Const((1 << width) - 1, width))
+# Build one low-contiguous-one expression with Scala bit ordering. / 按 Scala 位序构造低位连续一表达式。
+def contiguous_low_ones(data: Any, output_width: int) -> Any:
+    if output_width < 1:
+        raise ValueError("output_width must be positive")
+    return Cat(*[
+        Mux(index < data, Const(1, 1), Const(0, 1))
+        for index in range(output_width)
+    ])
 
 
-def zeros_constant(width: int) -> Any:
-    """Create a width-sized all-zero constant / 创建指定宽度全零常量。"""
-
-    return cast(Any, Const(0, width))
-
-
+# Reverse a value in the same least-significant-first order as Chisel Reverse. / 按与 Chisel Reverse 相同的最低位优先顺序反转值。
 def reverse_value(value: Any, width: int) -> Any:
-    """Reverse bit order, matching Chisel ``Reverse``."""
-
-    return cast(Any, Cat(*[bit_view(value, width - 1 - index)
-                           for index in range(width)]))
-
-
-def contiguous_low1s(data: Any) -> Any:
-    """Recursively build the low-contiguous-one mask."""
-
-    width = data.shape().width
     if width < 1:
-        raise ValueError("data width must be positive")
-    if width == 1:
-        return cast(Any, Mux(bit_view(data, 0), ones_constant(1),
-                             zeros_constant(1)))
-
-    half = 1 << (width - 1)
-    low = contiguous_low1s(data.bit_select(0, width - 1))
-    # Chisel's two branches place the helper on opposite sides of the
-    # constant. Account for Amaranth's least-significant-first Cat order.
-    return cast(Any, Mux(
-        bit_view(data, width - 1),
-        Cat(ones_constant(half), low),
-        Cat(low, zeros_constant(half)),
-    ))
+        raise ValueError("width must be positive")
+    return Cat(*[value[width - 1 - index] for index in range(width)])
 
 
 class UIntToContLow1s(Elaboratable):
-    """Generate ``2**uintWidth - 1`` low-contiguous-one bits."""
+    """Emit a low-contiguous-one mask. / 输出低位连续一掩码。"""
 
+    # Construct the exact V2 input/output ports. / 构造精确的 V2 输入输出端口。
     def __init__(self, configuration: UIntToContConfig | None = None):
         config = configuration or UIntToContConfig()
-        if config.uintWidth < 1:
-            raise ValueError("uintWidth must be positive")
         self.config = config
         self.outWidth = (1 << config.uintWidth) - 1
         self.dataIn = Signal(config.uintWidth, name="io_dataIn")
         self.dataOut = Signal(self.outWidth, name="io_dataOut")
 
+    # Elaborate the combinational contiguous mask. / 展开组合连续掩码。
     def elaborate(self, platform):
+        del platform
         module = Module()
-        module.d.comb += self.dataOut.eq(contiguous_low1s(self.dataIn))
+        module.d.comb += self.dataOut.eq(
+            contiguous_low_ones(self.dataIn, self.outWidth)
+        )
         return module
 
 
-def UIntToContHigh1s(uint: Any) -> Any:
-    """Return the bit-reversed low-one mask for an existing value."""
-
-    width = uint.shape().width
-    return reverse_value(contiguous_low1s(uint), (1 << width) - 1)
+# Return a high-contiguous-one expression for an existing Amaranth value. / 为已有 Amaranth 值返回高位连续一表达式。
+def UIntToContHigh1s(uint: Any, width: int | None = None) -> Any:
+    input_width = uint.shape().width
+    base_width = (1 << input_width) - 1
+    requested_width = base_width if width is None else width
+    if requested_width < 1:
+        raise ValueError("width must be positive")
+    low = contiguous_low_ones(uint, base_width)
+    if requested_width <= base_width:
+        selected = low[:requested_width]
+    else:
+        selected = Cat(low, Const(0, requested_width - base_width))
+    return reverse_value(selected, requested_width)
 
 
 # =============================================================================
 # Public Adapter
 # =============================================================================
-def build_verilog(
-    configuration: UIntToContConfig | None = None,
-    injected_dependencies: dict | None = None,
-    name: str = "UIntToContLow1s",
-) -> str:
-    """Emit deterministic Verilog for the low-one implementation."""
-
+# Emit deterministic Verilog with the required two-argument adapter. / 使用规定的双参数适配器输出确定性 Verilog。
+def build_verilog(configuration, injected_dependencies) -> str:
     del injected_dependencies
-    from amaranth.back import verilog
-
     top = UIntToContLow1s(configuration)
-    return verilog.convert(top, name=name,
-                           ports=[top.dataIn, top.dataOut], emit_src=False)
+    return verilog.convert(
+        top, name="UIntToContLow1s", ports=[top.dataIn, top.dataOut], emit_src=False
+    )
 
 
 # =============================================================================
 # Direct Entry
 # =============================================================================
+# Print the default V2 module for direct command-line use. / 直接打印默认 V2 模块。
 def main() -> None:
-    """Print the default generated Verilog / 输出默认生成的 Verilog。"""
-
-    print(build_verilog())
+    print(build_verilog(None, {}))
 
 
 if __name__ == "__main__":

@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_VECTOR_REFERENCE_MODULE_INDEX",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "reference_artifact": {
+    "path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "bytes": 228590583
+  },
+  "extractable_reference_modules": [
+    "VecDataSplitModule",
+    "UIntToContLow1s",
+    "UIntToContLow0s",
+    "MaskExtractor",
+    "ByteMaskTailGen",
+    "Mgtu"
+  ],
+  "parent_closure_reference_modules": {
+    "NewMgu": "Mgu/VldMgu",
+    "DstMgu": "Mgu"
+  },
+  "non_extractable_carried_surfaces": {
+    "ScalaDupToVector": "not instantiated in locked XSTop; source-level evidence"
+  },
+  "extracted": {
+    "VecDataSplitModule": {
+      "path": "validation/.work/v2-vector-batch/reference-VecDataSplitModule.sv",
+      "sha256": "864a5affad82b02d577aa937863ab0e6aa3b224ec016a5451d28738af3903a42",
+      "bytes": 9301
+    },
+    "UIntToContLow1s": {
+      "path": "validation/.work/v2-vector-batch/reference-UIntToContLow1s.sv",
+      "sha256": "c21ab9c1aaf0492bf04647c2ea10e96cbed0d021e5be33c433fe58c0e1803e1a",
+      "bytes": 18235
+    },
+    "UIntToContLow0s": {
+      "path": "validation/.work/v2-vector-batch/reference-UIntToContLow0s.sv",
+      "sha256": "4ef0cfd85989be5d9909555b117d1d20d0a783db855434ed479ead58cb5696eb",
+      "bytes": 17110
+    },
+    "MaskExtractor": {
+      "path": "validation/.work/v2-vector-batch/reference-MaskExtractor.sv",
+      "sha256": "9bb2c7a1c2598e9efa7b564d3a77d90bf3fad68378fbdae2ef976c4de82f6ec3",
+      "bytes": 1330
+    },
+    "ByteMaskTailGen": {
+      "path": "validation/.work/v2-vector-batch/reference-ByteMaskTailGen.sv",
+      "sha256": "c5d5d63441b57a9efda7eb07e045ad25e77e277ae572ba28f258427fb88da650",
+      "bytes": 10398
+    },
+    "Mgtu": {
+      "path": "validation/.work/v2-vector-batch/reference-Mgtu.sv",
+      "sha256": "34e0d999703970300216c70c4d44d4b518107d3cf3f5d5c471abca5f3095a4ac",
+      "bytes": 5487
+    },
+    "Mgu": {
+      "path": "validation/.work/v2-vector-batch/reference-Mgu.sv",
+      "sha256": "ebe68639a343b31daede26b281bb45bd89a008c80eaac17c36827654b5c883da",
+      "bytes": 32749
+    },
+    "VldMgu": {
+      "path": "validation/.work/v2-vector-batch/reference-VldMgu.sv",
+      "sha256": "3cfecb3924696970109e2572e5fde8097d06e423a8a56dd9d3f87e2c7f243c4d",
+      "bytes": 4923
+    }
+  },
+  "extraction_rule": "Complete module body is extracted from the locked XSTop artifact; parent closures name every child.",
+  "acceptance_claim": false
+}

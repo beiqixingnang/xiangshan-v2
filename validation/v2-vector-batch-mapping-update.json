@@ -1,0 +1,171 @@
+{
+  "schema_version": 1,
+  "kind": "V2_P1_E_VECTOR_MAPPING_UPDATE",
+  "batch_id": "V2-P1-E-VECTOR-MASK",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "locked_reference": {
+    "path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "bytes": 228590583
+  },
+  "entries": [
+    {
+      "id": "ByteMaskTailGen",
+      "classification": "EXACT",
+      "v2_source": [
+        "upstream/src/main/scala/xiangshan/backend/fu/vector/ByteMaskTailGen.scala"
+      ],
+      "target": "python/ported/backend/fu/vector/ByteMaskTailGen-Hardware.py",
+      "reference_mode": "EXTRACTED_MODULE",
+      "status": "DIFFERENTIAL_MATCHED_BOUNDED",
+      "covered_children": [
+        "canonical V2 implementation",
+        "standalone module"
+      ]
+    },
+    {
+      "id": "DstMgu",
+      "classification": "REWRITTEN",
+      "v2_source": [
+        "upstream/src/main/scala/xiangshan/backend/fu/vector/Mgu.scala"
+      ],
+      "target": "python/ported/backend/fu/vector/DstMgu-Hardware.py",
+      "reference_mode": "Mgu_PARENT_CLOSURE",
+      "status": "DIFFERENTIAL_MATCHED_BOUNDED",
+      "covered_children": [
+        "canonical V2 implementation",
+        "parent closure"
+      ]
+    },
+    {
+      "id": "Mgtu",
+      "classification": "REWRITTEN",
+      "v2_source": [
+        "upstream/src/main/scala/xiangshan/backend/fu/vector/Mgtu.scala"
+      ],
+      "target": "python/ported/backend/fu/vector/Mgtu-Hardware.py",
+      "reference_mode": "EXTRACTED_MODULE",
+      "status": "DIFFERENTIAL_MATCHED_BOUNDED",
+      "covered_children": [
+        "canonical V2 implementation",
+        "standalone module"
+      ]
+    },
+    {
+      "id": "NewMgu",
+      "classification": "REWRITTEN",
+      "v2_source": [
+        "upstream/src/main/scala/xiangshan/backend/fu/vector/Mgu.scala"
+      ],
+      "target": "python/ported/backend/fu/vector/NewMgu-Hardware.py",
+      "reference_mode": "Mgu_VldMgu_PARENT_CLOSURE",
+      "status": "DIFFERENTIAL_MATCHED_BOUNDED",
+      "covered_children": [
+        "canonical V2 implementation",
+        "parent closure"
+      ]
+    },
+    {
+      "id": "MaskExtrator",
+      "classification": "EXACT",
+      "v2_source": [
+        "upstream/src/main/scala/xiangshan/backend/fu/vector/utils/MaskExtrator.scala"
+      ],
+      "target": "python/ported/backend/fu/vector/utils/MaskExtrator-Hardware.py",
+      "reference_mode": "EXTRACTED_MODULE",
+      "status": "DIFFERENTIAL_MATCHED_BOUNDED",
+      "covered_children": [
+        "canonical V2 implementation",
+        "standalone module"
+      ]
+    },
+    {
+      "id": "ScalaDupToVector",
+      "classification": "EXACT",
+      "v2_source": [
+        "upstream/src/main/scala/xiangshan/backend/fu/vector/utils/ScalaDupToVector.scala"
+      ],
+      "target": "python/ported/backend/fu/vector/utils/ScalaDupToVector-Hardware.py",
+      "reference_mode": "SOURCE_LEVEL_PARENT_CLOSURE",
+      "status": "SOURCE_MATCHED_BOUNDED",
+      "covered_children": [
+        "canonical V2 implementation",
+        "source-level equation"
+      ]
+    },
+    {
+      "id": "UIntToCont0s",
+      "classification": "REWRITTEN",
+      "v2_source": [
+        "upstream/src/main/scala/xiangshan/backend/fu/vector/utils/UIntToCont0s.scala"
+      ],
+      "target": "python/ported/backend/fu/vector/utils/UIntToCont0s-Hardware.py",
+      "reference_mode": "EXTRACTED_MODULE",
+      "status": "DIFFERENTIAL_MATCHED_BOUNDED",
+      "covered_children": [
+        "canonical V2 implementation",
+        "standalone module"
+      ]
+    },
+    {
+      "id": "UIntToCont1s",
+      "classification": "REWRITTEN",
+      "v2_source": [
+        "upstream/src/main/scala/xiangshan/backend/fu/vector/utils/UIntToCont1s.scala"
+      ],
+      "target": "python/ported/backend/fu/vector/utils/UIntToCont1s-Hardware.py",
+      "reference_mode": "EXTRACTED_MODULE",
+      "status": "DIFFERENTIAL_MATCHED_BOUNDED",
+      "covered_children": [
+        "canonical V2 implementation",
+        "standalone module"
+      ]
+    },
+    {
+      "id": "VecDataSplitModule",
+      "classification": "EXACT",
+      "v2_source": [
+        "upstream/src/main/scala/xiangshan/backend/fu/vector/utils/VecDataSplitModule.scala"
+      ],
+      "target": "python/ported/backend/fu/vector/utils/VecDataSplitModule-Hardware.py",
+      "reference_mode": "EXTRACTED_MODULE",
+      "status": "DIFFERENTIAL_MATCHED_BOUNDED",
+      "covered_children": [
+        "canonical V2 implementation",
+        "standalone module"
+      ]
+    }
+  ],
+  "localization_map": {
+    "manifest": "UHSC-Naming-Manifest.json",
+    "status": "NO_PROJECT_FACING_RENAME",
+    "locked_names_unchanged": true,
+    "entries": [
+      {
+        "source_name": "XSTop",
+        "local_name": "UHSCTop",
+        "visibility": "project-owned external wrapper",
+        "reason": "Vector child batch leaves locked reference names unchanged.",
+        "status": "PLANNED"
+      },
+      {
+        "source_name": "XiangShan/XS/KMHV2",
+        "local_name": "UHSC",
+        "visibility": "project-owned external identity",
+        "reason": "No product-facing rename introduced.",
+        "status": "NOT_APPLIED"
+      }
+    ]
+  },
+  "gates": {
+    "contract": "PASS",
+    "direct": "PASS_BOUNDED",
+    "reference": "PASS_BOUNDED_REFERENCE",
+    "parent_closure": "PASS_BOUNDED_PARENT",
+    "source_level": "PASS_BOUNDED_SOURCE",
+    "verilator": "PASS",
+    "yosys": "PASS",
+    "license": "PENDING"
+  },
+  "acceptance_eligible": false
+}

@@ -1,33 +1,25 @@
-"""DstMgu: two-stage mask-destination merge (S0 gather, S1 spliced write). / DstMgu：两级掩码目的合并（S0 采集、S1 拼接写入）。"""
+"""Implement the V2 destination-mask merge folded into Mgu.scala.
+实现折叠在 Mgu.scala 中的 V2 目的掩码合并逻辑。
+"""
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 
-from amaranth import Array, Cat, ClockDomain, ClockSignal, Module, Mux, Signal
-from amaranth.lib.wiring import Component, In, Out
+from amaranth import Cat, Const, Elaboratable, Module, Mux, Signal
+from amaranth.back import verilog
 
 
 # =============================================================================
 # Module Contract
 # =============================================================================
-# Public symbols / 公开符号:
-#   - DstMguConfig, DstMgu, build_verilog, main
-# Port contract / 端口契约 (DstMguIO):
-#   - in.valid, in.oldVd, in.mask, in.ma, in.eew(3), in.vdIdx(3),
-#     in.toS1{vd(numBytes), oldVdS1, eewS1(3), vdIdxS1(3)}; out.vd (vlen)
-# Real logic / 真实逻辑 (verbatim):
-#   - S0: maskMaOrOldVdBits[i] = Mux(ma, 1, maskOldVdBits[i]) registered at
-#     valid, together with maskBits (splitVdMask slice)
-#   - S1: maskVecByte[i] = Mux(maskBitsS1[i], vdS1[i], maskMaOrOldVdBitsS1[i])
-#     and the result spliced into oldVdS1 at eewS1 granularity
-# CONTRACT: the allPossibleResBit splice table and splitVdMask partitioning
-#   are stage-2 refinements; this port keeps the registered two-stage
-#   structure and the byte-lane merge.
-# / 契约：allPossibleResBit 拼接表与 splitVdMask 划分属阶段二细化；此处保留
-#   两级寄存结构与字节通路合并。
-# Status / 状态: PYTHON_PRESENT_UNVERIFIED (phase-1 bulk port / 阶段一批量重写)
-__all__ = ["DstMguConfig", "DstMgu", "build_verilog", "main"]
+# V2 has no standalone DstMgu.scala: Mgu.scala computes maskOldVdBits and
+# maskBits with splitVdMask, builds maskVd from the low mask element bits, then
+# splices those bits into oldVd for dstMask operations.  This boundary exposes
+# exactly that combinational closure; the V3 valid/S1 register interface is not
+# carried forward. V2 没有独立 DstMgu.scala：Mgu.scala 用 splitVdMask 计算掩码，
+# 从 maskVd 取低元素位并写回 oldVd。此边界只暴露该组合闭包，不保留 V3 的寄存器接口。
+__all__ = ["DstMguConfig", "VSew", "DstMgu", "dst_mgu_model", "build_verilog", "main"]
 
 
 # =============================================================================
@@ -35,132 +27,151 @@ __all__ = ["DstMguConfig", "DstMgu", "build_verilog", "main"]
 # =============================================================================
 @dataclass(frozen=True)
 class DstMguConfig:
-    # frozen config / 冻结配置
-    # Reference DefaultConfig uses a 128-bit vector destination for this unit.
+    """Geometry of the folded V2 destination path. / 折叠 V2 目的通路几何。"""
+
     vlen: int = 128
+
+    # Validate the V2 vector geometry. / 校验 V2 向量几何。
+    def __post_init__(self) -> None:
+        if self.vlen != 128:
+            raise ValueError("V2 DstMgu closure requires vlen=128")
+
+
+class VSew:
+    """Canonical two-bit V2 element-width encodings. / V2 两位元素宽度编码。"""
+
+    e8 = 0
+    e16 = 1
+    e32 = 2
+    e64 = 3
+
+
+# Return one V2 splitVdMask 16-bit chunk. / 返回 V2 splitVdMask 的一个 16 位块。
+def split_mask_chunk(value: int, eew: int, vd_idx: int) -> int:
+    if eew not in (0, 1, 2, 3):
+        return 0
+    span = 16 >> eew
+    return (value >> ((vd_idx & 7) * span)) & ((1 << span) - 1)
+
+
+# Compute the folded V2 destination-mask result in integer form. / 以整数形式计算折叠的 V2 目的掩码结果。
+def dst_mgu_model(vd: int, old_vd: int, mask: int, ma: bool, eew: int, vd_idx: int) -> int:
+    if eew not in (0, 1, 2, 3):
+        return old_vd & ((1 << 128) - 1)
+    old_mask = split_mask_chunk(old_vd, eew, vd_idx)
+    mask_bits = split_mask_chunk(mask, eew, vd_idx)
+    mask_vd = 0
+    for lane in range(16):
+        bit = ((vd >> lane) & 1) if ((mask_bits >> lane) & 1) else (1 if ma else ((old_mask >> lane) & 1))
+        mask_vd |= bit << lane
+    width = (16, 8, 4, 2)[eew]
+    shift = width * (vd_idx & 7)
+    field_mask = ((1 << width) - 1) << shift
+    return ((old_vd & ((1 << 128) - 1)) & ~field_mask) | ((mask_vd & ((1 << width) - 1)) << shift)
 
 
 # =============================================================================
 # Implementation
 # =============================================================================
-class DstMgu(Component):
-    # two-stage mask-destination merge unit / 两级掩码目的合并单元
-    def __init__(self, cfg: DstMguConfig | None = None):
-        c = cfg or DstMguConfig()
-        self.cfg = c
-        numBytes = c.vlen // 8
-        super().__init__({
-            "clock": In(1),
-            "io_in_valid": In(1),
-            "io_in_oldVd": In(c.vlen),
-            "io_in_mask": In(c.vlen),
-            "io_in_ma": In(1),
-            "io_in_eew": In(3),
-            "io_in_vdIdx": In(3),
-            "io_in_toS1_vd": In(numBytes),
-            "io_in_toS1_oldVdS1": In(c.vlen),
-            "io_in_toS1_eewS1": In(3),
-            "io_in_toS1_vdIdxS1": In(3),
-            "io_out_vd": Out(c.vlen),
-        })
-        self.in_valid = self.io_in_valid
-        self.in_oldVd = self.io_in_oldVd
-        self.in_mask = self.io_in_mask
-        self.in_ma = self.io_in_ma
-        self.in_eew = self.io_in_eew
-        self.in_vdIdx = self.io_in_vdIdx
-        self.in_toS1_vd = self.io_in_toS1_vd
-        self.in_toS1_oldVdS1 = self.io_in_toS1_oldVdS1
-        self.in_toS1_eewS1 = self.io_in_toS1_eewS1
-        self.in_toS1_vdIdxS1 = self.io_in_toS1_vdIdxS1
-        self.out_vd = self.io_out_vd
-        self.maskMaOrOldVdBitsS1 = Signal(numBytes, name="maskMaOrOldVdBitsS1")
-        self.maskBitsS1 = Signal(numBytes, name="maskBitsS1")
+class DstMgu(Elaboratable):
+    """Combinational folded destination-mask merge. / 折叠的组合式目的掩码合并。"""
 
+    # Declare the source-level V2 Mgu destination inputs. / 声明 V2 Mgu 目的输入。
+    def __init__(self, configuration: DstMguConfig | None = None):
+        config = configuration or DstMguConfig()
+        self.config = config
+        self.in_vd = Signal(128, name="io_in_vd")
+        self.in_oldVd = Signal(128, name="io_in_oldVd")
+        self.in_mask = Signal(128, name="io_in_mask")
+        self.in_info_ma = Signal(name="io_in_info_ma")
+        self.in_info_eew = Signal(2, name="io_in_info_eew")
+        self.in_info_vdIdx = Signal(3, name="io_in_info_vdIdx")
+        self.out_vd = Signal(128, name="io_out_vd")
+
+    # Elaborate splitVdMask, maskVd, and allPossibleResBit selection. / 展开 splitVdMask、maskVd 与结果选择。
     def elaborate(self, platform):
-        # S0 register, S1 merge, and eew/vdIdx splice selection / S0 寄存、S1 合并及 eew/vdIdx 拼接选择
-        m = Module()
-        # DstMgu has no explicit reset in the reference IO contract.
-        m.domains.sync = ClockDomain("sync", reset_less=True)
-        m.d.comb += ClockSignal().eq(self.clock)
-        numBytes = self.cfg.vlen // 8
-        max_vd_idx = 8
-        meaningful_bits = (16, 8, 4, 2)
+        del platform
+        module = Module()
+        old_chunks: list[object] = []
+        mask_chunks: list[object] = []
+        for eew in range(4):
+            span = 16 >> eew
+            old_values: list[object] = []
+            mask_values: list[object] = []
+            for vd_idx in range(8):
+                base = vd_idx * span
+                old_values.append(self.in_oldVd[base:base + span] if span == 16 else
+                                  Cat(self.in_oldVd[base:base + span], Const(0, 16 - span)))
+                mask_values.append(self.in_mask[base:base + span] if span == 16 else
+                                   Cat(self.in_mask[base:base + span], Const(0, 16 - span)))
+            old_selected: object = old_values[0]
+            mask_selected: object = mask_values[0]
+            for vd_idx in range(1, 8):
+                old_selected = Mux(self.in_info_vdIdx == vd_idx, old_values[vd_idx], old_selected)
+                mask_selected = Mux(self.in_info_vdIdx == vd_idx, mask_values[vd_idx], mask_selected)
+            old_chunks.append(old_selected)
+            mask_chunks.append(mask_selected)
 
-        # splitVdMask from DstMgu.scala: each eew selects one mask group and
-        # zero-extends narrower element masks to the byte-lane width.
-        # / 对应 DstMgu.scala 的 splitVdMask：按 eew 选择掩码组，并将窄元素掩码零扩展到字节通路宽度。
-        selected_old_groups = []
-        selected_mask_groups = []
-        for sew, element_bits in enumerate(meaningful_bits):
-            lanes_per_group = numBytes // (1 << sew)
-            for vd_idx in range(max_vd_idx):
-                base = vd_idx * lanes_per_group
-                old_lanes = [
-                    self.in_oldVd[base + lane] if lane < lanes_per_group else 0
-                    for lane in range(numBytes)
-                ]
-                mask_lanes = [
-                    self.in_mask[base + lane] if lane < lanes_per_group else 0
-                    for lane in range(numBytes)
-                ]
-                selected_old_groups.append(Cat(*old_lanes))
-                selected_mask_groups.append(Cat(*mask_lanes))
+        old_mask = Signal(16, name="maskOldVdBits")
+        mask_bits = Signal(16, name="maskBits")
+        old_expr = old_chunks[3]
+        mask_expr = mask_chunks[3]
+        for eew in range(2, -1, -1):
+            old_expr = Mux(self.in_info_eew == eew, old_chunks[eew], old_expr)
+            mask_expr = Mux(self.in_info_eew == eew, mask_chunks[eew], mask_expr)
+        module.d.comb += [old_mask.eq(old_expr), mask_bits.eq(mask_expr)]
 
-        group_index = Cat(self.in_vdIdx, self.in_eew[:2])
-        selected_old = Array(selected_old_groups)[group_index]
-        selected_mask = Array(selected_mask_groups)[group_index]
-        with m.If(self.in_valid):
-            for lane in range(numBytes):
-                m.d.sync += self.maskMaOrOldVdBitsS1[lane].eq(
-                    Mux(self.in_ma, 1, selected_old[lane]))
-                m.d.sync += self.maskBitsS1[lane].eq(selected_mask[lane])
+        mask_vd = Signal(16, name="maskVd")
+        for lane in range(16):
+            module.d.comb += mask_vd[lane].eq(
+                Mux(mask_bits[lane], self.in_vd[lane], Mux(self.in_info_ma, 1, old_mask[lane]))
+            )
 
-        mask_vd = Signal(numBytes, name="maskVd")
-        for lane in range(numBytes):
-            m.d.comb += mask_vd[lane].eq(
-                Mux(self.maskBitsS1[lane], self.in_toS1_vd[lane],
-                    self.maskMaOrOldVdBitsS1[lane]))
-
-        # Build the allPossibleResBit table from the reference implementation.
-        # / 构造参考实现中的 allPossibleResBit 拼接表。
-        candidates = []
-        for element_bits in meaningful_bits:
-            for vd_idx in range(max_vd_idx):
-                start = element_bits * vd_idx
+        candidates: list[list[object]] = []
+        widths = (16, 8, 4, 2)
+        for width in widths:
+            row: list[object] = []
+            for vd_idx in range(8):
+                shift = width * vd_idx
                 parts = []
-                if start:
-                    parts.append(self.in_toS1_oldVdS1[:start])
-                parts.append(mask_vd[:element_bits])
-                if start + element_bits < self.cfg.vlen:
-                    parts.append(self.in_toS1_oldVdS1[start + element_bits:])
-                candidates.append(Cat(*parts))
-        result_index = Cat(self.in_toS1_vdIdxS1, self.in_toS1_eewS1[:2])
-        m.d.comb += self.out_vd.eq(Array(candidates)[result_index])
-        return m
+                if shift:
+                    parts.append(self.in_oldVd[:shift])
+                parts.append(mask_vd[:width])
+                if shift + width < 128:
+                    parts.append(self.in_oldVd[shift + width:128])
+                row.append(Cat(*parts))
+            candidates.append(row)
+        selected_row: object = candidates[3][0]
+        for vd_idx in range(1, 8):
+            selected_row = Mux(self.in_info_vdIdx == vd_idx, candidates[3][vd_idx], selected_row)
+        for eew in range(2, -1, -1):
+            row_expr: object = candidates[eew][0]
+            for vd_idx in range(1, 8):
+                row_expr = Mux(self.in_info_vdIdx == vd_idx, candidates[eew][vd_idx], row_expr)
+            selected_row = Mux(self.in_info_eew == eew, row_expr, selected_row)
+        module.d.comb += self.out_vd.eq(selected_row)
+        return module
 
 
 # =============================================================================
 # Public Adapter
 # =============================================================================
-def build_verilog(config: DstMguConfig | None = None,
-                  name: str = "DstMgu") -> str:
-    # Export only the Scala-visible ports; Component's implicit reset is not
-    # part of DstMguIO and must not leak into the structural contract.
-    from amaranth.back import verilog
-    top = DstMgu(config)
-    ports = [top.clock, top.in_valid, top.in_oldVd, top.in_mask, top.in_ma,
-             top.in_eew, top.in_vdIdx, top.in_toS1_vd, top.in_toS1_oldVdS1,
-             top.in_toS1_eewS1, top.in_toS1_vdIdxS1, top.out_vd]
-    return verilog.convert(top, name=name, ports=ports)
+# Emit deterministic V2 closure Verilog. / 输出确定性的 V2 闭包 Verilog。
+def build_verilog(configuration, injected_dependencies) -> str:
+    del injected_dependencies
+    top = DstMgu(configuration)
+    return verilog.convert(
+        top, name="DstMgu", ports=[top.in_vd, top.in_oldVd, top.in_mask,
+        top.in_info_ma, top.in_info_eew, top.in_info_vdIdx, top.out_vd], emit_src=False,
+    )
 
 
 # =============================================================================
 # Direct Entry
 # =============================================================================
+# Print the default folded closure helper. / 直接打印默认折叠闭包辅助器。
 def main() -> None:
-    # direct elaboration entry / 直接入口
-    print(build_verilog())
+    print(build_verilog(None, {}))
 
 
 if __name__ == "__main__":

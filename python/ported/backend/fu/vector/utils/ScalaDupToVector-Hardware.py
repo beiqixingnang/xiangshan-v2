@@ -1,4 +1,6 @@
-"""ScalaDupToVector hardware mirror. / ScalaDupToVector 硬件镜像。"""
+"""Duplicate a scalar value across vector elements selected by VSew.
+按 VSew 选定元素宽度将标量值复制到向量各元素。
+"""
 
 from __future__ import annotations
 
@@ -11,16 +13,13 @@ from amaranth.back import verilog
 # =============================================================================
 # Module Contract
 # =============================================================================
-# The pinned XiangShan source (0ff31c2d) takes one 64-bit scalar and duplicates
-# its low SEW bits into every element of a VLEN-wide vector. VSew encodings are
-# e8=0, e16=1, e32=2 and e64=3; Mux1H has no selected arm for other encodings,
-# therefore unsupported values produce zero. Vec.asUInt preserves element
-# zero in the least-significant slice, which is the ordering used by Cat below.
-# 固定 XiangShan 源码（0ff31c2d）将 64 位标量的低 SEW 位复制到 VLEN 向量的
-# 每个元素。VSew 编码为 e8=0、e16=1、e32=2、e64=3；其他编码没有 Mux1H
-# 分支，因此输出为零。Vec.asUInt 使元素 0 位于最低切片，下面 Cat 保持该顺序。
-__all__ = ["ScalaDupToVectorConfig", "VSew", "ScalaDupToVector",
-           "build_verilog", "main"]
+# ScalaDupToVector.scala constructs four VecInit values from the low 8/16/32/
+# 64 bits of scalaData and selects one with Mux1H.  VSew is two bits in V2;
+# therefore every code is defined and no default arm is needed.  The packed
+# Vec.asUInt ordering places element zero in the least-significant slice.
+# ScalaDupToVector.scala 用 scalaData 低 8/16/32/64 位构造四个 VecInit，再以
+# Mux1H 选择；V2 的 VSew 为两位，因此四个编码均有定义。Vec.asUInt 的元素零在低位。
+__all__ = ["ScalaDupToVectorConfig", "VSew", "ScalaDupToVector", "build_verilog", "main"]
 
 
 # =============================================================================
@@ -28,57 +27,60 @@ __all__ = ["ScalaDupToVectorConfig", "VSew", "ScalaDupToVector",
 # =============================================================================
 @dataclass(frozen=True)
 class ScalaDupToVectorConfig:
-    """Vector geometry for one ScalaDupToVector instance. / 向量几何配置。"""
+    """Vector geometry for the V2 helper. / V2 辅助器的向量几何配置。"""
 
     vlen: int = 128
 
-    # Validate configuration geometry / 校验配置几何约束
+    # Validate that all four element views are integral. / 校验四种元素视图均为整数。
     def __post_init__(self) -> None:
         if self.vlen < 64 or self.vlen % 64:
             raise ValueError("vlen must be a positive multiple of 64")
 
 
 class VSew:
-    """XiangShan vector element-width encodings. / 香山向量元素宽度编码。"""
+    """Canonical V2 element-width encodings. / V2 标准元素宽度编码。"""
 
-    e8 = 0b000
-    e16 = 0b001
-    e32 = 0b010
-    e64 = 0b011
+    e8 = 0
+    e16 = 1
+    e32 = 2
+    e64 = 3
 
 
 # =============================================================================
 # Implementation
 # =============================================================================
-class ScalaDupToVector(Elaboratable):
-    """Duplicate scalar low-SEW bits over a VLEN-wide vector. / 复制标量。"""
+# Build repeated low bits in the packed Vec.asUInt ordering. / 按打包 Vec.asUInt 顺序构造重复的低位数据。
+def repeated_slice(scalar: Signal, element_width: int, vlen: int) -> object:
+    return Cat(*[scalar[:element_width] for _ in range(vlen // element_width)])
 
-    # Create the scalar, SEW and vector ports / 创建标量、SEW 与向量端口
+
+class ScalaDupToVector(Elaboratable):
+    """Replicate scalar low bits over a VLEN vector. / 在 VLEN 向量上复制标量低位。"""
+
+    # Declare the flattened source-compatible V2 ports. / 声明扁平化的 V2 兼容端口。
     def __init__(self, configuration: ScalaDupToVectorConfig | None = None):
         config = configuration or ScalaDupToVectorConfig()
         self.config = config
-        self.in_scalaData = Signal(64, name="sdv_scala")
-        self.in_vsew = Signal(3, name="sdv_vsew")
-        self.out_vecData = Signal(config.vlen, name="sdv_out")
+        self.in_scalaData = Signal(64, name="io_in_scalaData")
+        self.in_vsew = Signal(2, name="io_in_vsew")
+        self.out_vecData = Signal(config.vlen, name="io_out_vecData")
 
-    # Elaborate the four Chisel VecInit/asUInt branches / 展开四个 Chisel 分支
+    # Elaborate the four Mux1H arms from the canonical Scala. / 展开 Scala 的四个 Mux1H 分支。
     def elaborate(self, platform):
         del platform
         module = Module()
-        scalar = self.in_scalaData
         width = self.config.vlen
-        e8 = Cat(*[scalar[:8] for _ in range(width // 8)])
-        e16 = Cat(*[scalar[:16] for _ in range(width // 16)])
-        e32 = Cat(*[scalar[:32] for _ in range(width // 32)])
-        e64 = Cat(*[scalar[:64] for _ in range(width // 64)])
+        e8 = repeated_slice(self.in_scalaData, 8, width)
+        e16 = repeated_slice(self.in_scalaData, 16, width)
+        e32 = repeated_slice(self.in_scalaData, 32, width)
+        e64 = repeated_slice(self.in_scalaData, 64, width)
         selected = Mux(
             self.in_vsew == VSew.e8,
             e8,
             Mux(
                 self.in_vsew == VSew.e16,
                 e16,
-                Mux(self.in_vsew == VSew.e32, e32,
-                    Mux(self.in_vsew == VSew.e64, e64, Const(0, width))),
+                Mux(self.in_vsew == VSew.e32, e32, e64),
             ),
         )
         module.d.comb += self.out_vecData.eq(selected)
@@ -88,24 +90,22 @@ class ScalaDupToVector(Elaboratable):
 # =============================================================================
 # Public Adapter
 # =============================================================================
-# Generate deterministic RTL for the requested geometry / 生成确定性 RTL
-def build_verilog(configuration: ScalaDupToVectorConfig | None = None,
-                  injected_dependencies: dict | None = None,
-                  name: str = "ScalaDupToVector") -> str:
-    """Emit the Amaranth representation with no implicit dependencies. / 输出。"""
-
+# Emit deterministic V2-compatible Verilog. / 输出确定性的 V2 兼容 Verilog。
+def build_verilog(configuration, injected_dependencies) -> str:
     del injected_dependencies
     top = ScalaDupToVector(configuration)
-    ports = [top.in_scalaData, top.in_vsew, top.out_vecData]
-    return verilog.convert(top, name=name, ports=ports, emit_src=False)
+    return verilog.convert(
+        top, name="ScalaDupToVector",
+        ports=[top.in_scalaData, top.in_vsew, top.out_vecData], emit_src=False,
+    )
 
 
 # =============================================================================
 # Direct Entry
 # =============================================================================
-# Print a default 128-bit instance for command-line checks / 打印默认实例
+# Print the default standalone helper. / 直接打印默认独立辅助器。
 def main() -> None:
-    print(build_verilog())
+    print(build_verilog(None, {}))
 
 
 if __name__ == "__main__":
