@@ -2,6 +2,25 @@
   "schema_version": 1,
   "kind": "XIANGSHAN_KUNMINGHU_V2_DECODE_ARITHMETIC_BATCH",
   "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "batch": [
+    "Instructions",
+    "RiscvInst",
+    "FliTable",
+    "CSA",
+    "SstcInterruptGen"
+  ],
+  "source_paths": {
+    "Instructions": "upstream/src/main/scala/xiangshan/backend/decode/Instructions.scala",
+    "RiscvInst": "upstream/src/main/scala/xiangshan/backend/decode/isa/bitfield/RiscvInst.scala",
+    "FliTable": "upstream/src/main/scala/xiangshan/backend/fu/fpu/FliTable.scala",
+    "CSA": "upstream/src/main/scala/xiangshan/backend/fu/util/CSA.scala",
+    "SstcInterruptGen": "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/SstcInterruptGen.scala"
+  },
+  "commands": [
+    "python validation/v2_decode_batch_direct.py",
+    "python validation/v2_decode_batch_reference.py"
+  ],
+  "reference_differential_evidence": "validation/v2-decode-batch-reference-results.json",
   "status": "DIRECT_TEST_PASS_BOUNDED",
   "targets": {
     "Instructions": {
@@ -148,17 +167,44 @@
     "Instructions": {
       "status": "PASS",
       "returncode": 0,
-      "stderr_tail": "stance 'Instructions'\n   72 |   assign zvbb_vror_vi = \\$11  == 31'h50003057;\n      |                               ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_decode_batch_3awwyin_/Instructions.sv:73:31: Operator EQ expects 32 bits on the RHS, but RHS's CONST '31'h50000057' generates 31 bits.\n                                                                                                           : ... note: In instance 'Instructions'\n   73 |   assign zvbb_vror_vv = \\$12  == 31'h50000057;\n      |                               ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_decode_batch_3awwyin_/Instructions.sv:74:31: Operator EQ expects 32 bits on the RHS, but RHS's CONST '31'h50004057' generates 31 bits.\n                                                                                                           : ... note: In instance 'Instructions'\n   74 |   assign zvbb_vror_vx = \\$13  == 31'h50004057;\n      |                               ^~\n"
+      "stderr_tail": "stance 'Instructions'\n   72 |   assign zvbb_vror_vi = \\$11  == 31'h50003057;\n      |                               ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_decode_batch_tn0dn0uc/Instructions.sv:73:31: Operator EQ expects 32 bits on the RHS, but RHS's CONST '31'h50000057' generates 31 bits.\n                                                                                                           : ... note: In instance 'Instructions'\n   73 |   assign zvbb_vror_vv = \\$12  == 31'h50000057;\n      |                               ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_decode_batch_tn0dn0uc/Instructions.sv:74:31: Operator EQ expects 32 bits on the RHS, but RHS's CONST '31'h50004057' generates 31 bits.\n                                                                                                           : ... note: In instance 'Instructions'\n   74 |   assign zvbb_vror_vx = \\$13  == 31'h50004057;\n      |                               ^~\n"
     },
     "RiscvInst": {
       "status": "PASS",
       "returncode": 0,
-      "stderr_tail": "                                                      : ... note: In instance 'RiscvInst'\n   90 |   assign \\$15  = inst[14:12] == 1'h1;\n      |                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_decode_batch_3awwyin_/RiscvInst.sv:93:30: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                        : ... note: In instance 'RiscvInst'\n   93 |   assign \\$17  = inst[14:12] == 2'h2;\n      |                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_decode_batch_3awwyin_/RiscvInst.sv:96:30: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                                                                                        : ... note: In instance 'RiscvInst'\n   96 |   assign \\$19  = inst[14:12] == 2'h3;\n      |                              ^~\n"
+      "stderr_tail": "                                                      : ... note: In instance 'RiscvInst'\n   90 |   assign \\$15  = inst[14:12] == 1'h1;\n      |                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_decode_batch_tn0dn0uc/RiscvInst.sv:93:30: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                        : ... note: In instance 'RiscvInst'\n   93 |   assign \\$17  = inst[14:12] == 2'h2;\n      |                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_decode_batch_tn0dn0uc/RiscvInst.sv:96:30: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                                                                                        : ... note: In instance 'RiscvInst'\n   96 |   assign \\$19  = inst[14:12] == 2'h3;\n      |                              ^~\n"
     },
     "FliTable": {
       "status": "PASS",
       "returncode": 0,
-      "stderr_tail": "s.\n                                                                                                        : ... note: In instance 'FliTable'\n  130 |   assign \\$30  = src == 2'h2;\n      |                      ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_decode_batch_3awwyin_/FliTable.sv:131:22: Operator EQ expects 5 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                        : ... note: In instance 'FliTable'\n  131 |   assign \\$31  = src == 1'h1;\n      |                      ^~\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_decode_batch_3awwyin_/FliTable.sv:132:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'src' generates 5 bits.\n                                                                                                       : ... note: In instance 'FliTable'\n  132 |   assign \\$32  = ! src;\n      |                  ^\n"
+      "stderr_tail": "s.\n                                                                                                        : ... note: In instance 'FliTable'\n  130 |   assign \\$30  = src == 2'h2;\n      |                      ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_decode_batch_tn0dn0uc/FliTable.sv:131:22: Operator EQ expects 5 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                        : ... note: In instance 'FliTable'\n  131 |   assign \\$31  = src == 1'h1;\n      |                      ^~\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_decode_batch_tn0dn0uc/FliTable.sv:132:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'src' generates 5 bits.\n                                                                                                       : ... note: In instance 'FliTable'\n  132 |   assign \\$32  = ! src;\n      |                  ^\n"
+    },
+    "CSA": {
+      "status": "PASS",
+      "returncode": 0,
+      "stderr_tail": ""
+    },
+    "SstcInterruptGen": {
+      "status": "PASS",
+      "returncode": 0,
+      "stderr_tail": ""
+    }
+  },
+  "yosys": {
+    "Instructions": {
+      "status": "PASS",
+      "returncode": 0,
+      "stderr_tail": ""
+    },
+    "RiscvInst": {
+      "status": "PASS",
+      "returncode": 0,
+      "stderr_tail": ""
+    },
+    "FliTable": {
+      "status": "PASS",
+      "returncode": 0,
+      "stderr_tail": ""
     },
     "CSA": {
       "status": "PASS",

@@ -280,6 +280,35 @@ def lint_generated_verilog(loaded: dict[str, Any]) -> dict[str, Any]:
     return outcomes
 
 
+# Run Yosys synthesis parsing on generated leaves / 用 Yosys 解析合成生成叶子。
+def yosys_check(loaded: dict[str, Any]) -> dict[str, Any]:
+    """Parse and optimize each generated module with Yosys. / 用 Yosys 检查模块。"""
+
+    temp_dir = Path(tempfile.mkdtemp(prefix="v2_decode_yosys_"))
+    outcomes: dict[str, Any] = {}
+    try:
+        for name, module in loaded.items():
+            target = temp_dir / f"{name}.sv"
+            target.write_text(module.build_verilog(None, {}), encoding="utf-8", newline="\n")
+            path_probe = subprocess.run(["wsl.exe", "-e", "wslpath", "-a", str(target)],
+                                        capture_output=True, text=True, check=False)
+            if path_probe.returncode != 0:
+                outcomes[name] = {"status": "SKIP", "reason": "wslpath unavailable"}
+                continue
+            wsl_path = path_probe.stdout.strip()
+            top_name = "CSA3_2" if name == "CSA" else name
+            command = (f"yosys -Q -p 'read_verilog -sv {wsl_path}; "
+                       f"hierarchy -top {top_name}; proc; opt; stat'")
+            run = subprocess.run(["wsl.exe", "-e", "bash", "-lc", command],
+                                 capture_output=True, text=True, check=False)
+            outcomes[name] = {"status": "PASS" if run.returncode == 0 else "FAIL",
+                              "returncode": run.returncode,
+                              "stderr_tail": run.stderr[-1000:]}
+    finally:
+        shutil.rmtree(temp_dir, ignore_errors=True)
+    return outcomes
+
+
 # Run the batch and write machine-readable evidence / 运行批次并写入机器证据。
 def main() -> int:
     """Execute direct checks and persist pending-gate evidence. / 执行检查并持久化证据。"""
@@ -304,10 +333,24 @@ def main() -> int:
         "schema_version": 1,
         "kind": "XIANGSHAN_KUNMINGHU_V2_DECODE_ARITHMETIC_BATCH",
         "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+        "batch": ["Instructions", "RiscvInst", "FliTable", "CSA", "SstcInterruptGen"],
+        "source_paths": {
+            "Instructions": "upstream/src/main/scala/xiangshan/backend/decode/Instructions.scala",
+            "RiscvInst": "upstream/src/main/scala/xiangshan/backend/decode/isa/bitfield/RiscvInst.scala",
+            "FliTable": "upstream/src/main/scala/xiangshan/backend/fu/fpu/FliTable.scala",
+            "CSA": "upstream/src/main/scala/xiangshan/backend/fu/util/CSA.scala",
+            "SstcInterruptGen": "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/SstcInterruptGen.scala",
+        },
+        "commands": [
+            "python validation/v2_decode_batch_direct.py",
+            "python validation/v2_decode_batch_reference.py",
+        ],
+        "reference_differential_evidence": "validation/v2-decode-batch-reference-results.json",
         "status": "DIRECT_TEST_PASS_BOUNDED",
         "targets": results,
         "audits": audits,
         "verilator": lint_generated_verilog(loaded),
+        "yosys": yosys_check(loaded),
         "reference": inspect_reference(),
         "gates": {
             "PYTHON_PRESENT": "PASS",
