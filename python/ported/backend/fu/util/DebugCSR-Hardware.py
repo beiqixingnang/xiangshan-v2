@@ -117,6 +117,7 @@ class DcsrStruct(Elaboratable):
 
     # Return the source DcsrStruct reset value. / 返回源 DcsrStruct 复位值。
     @staticmethod
+    # Return the reset encoding / 返回复位编码。
     def init() -> int:
         return (DEBUGVER_SPEC << 28) | MODE_M
 

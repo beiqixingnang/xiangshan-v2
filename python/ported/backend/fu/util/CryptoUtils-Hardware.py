@@ -54,6 +54,7 @@ def is_integer(value: Any) -> bool:
 
 # Evaluate a compact one-bit equation graph for both integers and Amaranth Values.
 # 为整数与 Amaranth Value 求值紧凑的一位方程图。
+# Evaluate the named output equations / 求值命名输出方程。
 def evaluate_bit_network(inputs: Sequence[Any], equations: dict[str, tuple[Any, ...]],
                          outputs: Sequence[str]) -> list[Any]:
     values: dict[str, Any] = {f"i{index}": value for index, value in enumerate(inputs)}

@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_CRYPTO_DEBUG_DIRECT_TESTS",
+  "batch_id": "V2-P1-F-CRYPTO-DEBUG",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "status": "PASS_BOUNDED",
+  "targets": {
+    "CryptoUtils": {
+      "sbox_vectors": 768,
+      "inverse_vectors": 256,
+      "shift_vectors": 10,
+      "mix_vectors": 4096,
+      "probe": {
+        "vectors": 4,
+        "trace_sha256": "b213aa44fe8a57cbcea6ed06fb5257b57f18c60d4364cff6ec595810c6fac744"
+      },
+      "verilog_bytes": 572279,
+      "verilog_sha256": "039628ab5c8189d89d247488a0a24d7ee64f9e5cbedfd6789a0b95f6e7b4aeb8"
+    },
+    "DebugCSR": {
+      "field_vectors": 5,
+      "field_count": 17,
+      "trace_sha256": "0409a630e42334f57ad375902aaa0b75f5ece730ffd88268550532471f00bddb",
+      "verilog_bytes": 1404,
+      "verilog_sha256": "a3daa6cf634943b471731f4db8f1bfe8d83972d8aec05175bb0bf0c390a34e12"
+    }
+  },
+  "audits": {
+    "CryptoUtils": {
+      "path": "python/ported/backend/fu/util/CryptoUtils-Hardware.py",
+      "bytes": 33598,
+      "sha256": "d2d879cfa6684b58b824c93186cf28bf3a61cdf351d2cf0d8c70945efca85ebd",
+      "utf8": true,
+      "bom": false,
+      "lf_only": true,
+      "ast": true,
+      "zones": true,
+      "adapter_args": [
+        "configuration",
+        "injected_dependencies"
+      ],
+      "adapter_exact": true,
+      "function_comment_errors": [],
+      "forbidden_imports": []
+    },
+    "DebugCSR": {
+      "path": "python/ported/backend/fu/util/DebugCSR-Hardware.py",
+      "bytes": 6912,
+      "sha256": "c5137e15b7544c17faed7d4e1f78c296cb4476ff11ac696244476dcd7632f023",
+      "utf8": true,
+      "bom": false,
+      "lf_only": true,
+      "ast": true,
+      "zones": true,
+      "adapter_args": [
+        "configuration",
+        "injected_dependencies"
+      ],
+      "adapter_exact": true,
+      "function_comment_errors": [],
+      "forbidden_imports": []
+    }
+  },
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "ACCEPTED": "NOT_ALLOWED"
+  }
+}

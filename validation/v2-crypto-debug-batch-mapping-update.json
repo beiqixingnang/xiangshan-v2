@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_CRYPTO_DEBUG_MAPPING_UPDATE",
+  "batch_id": "V2-P1-F-CRYPTO-DEBUG",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "entries": [
+    {
+      "id": "CryptoUtils",
+      "classification": "EXACT",
+      "disposition": "REUSED",
+      "v2_sources": [
+        "upstream/src/main/scala/xiangshan/backend/fu/util/CryptoUtils.scala"
+      ],
+      "python_path": "python/ported/backend/fu/util/CryptoUtils-Hardware.py",
+      "status": "DIFFERENTIAL_MATCHED_BOUNDED"
+    },
+    {
+      "id": "DebugCSR",
+      "classification": "EXACT",
+      "disposition": "REUSED",
+      "v2_sources": [
+        "upstream/src/main/scala/xiangshan/backend/fu/util/DebugCSR.scala"
+      ],
+      "python_path": "python/ported/backend/fu/util/DebugCSR-Hardware.py",
+      "status": "SOURCE_LEVEL_MATCHED_BOUNDED"
+    },
+    {
+      "id": "ShiftUtils",
+      "classification": "RETIRED",
+      "disposition": "RETIRED",
+      "v2_sources": [],
+      "python_path": "python/ported/backend/fu/util/ShiftUtils-Hardware.py",
+      "status": "RETIRED",
+      "reason": "No V2 authoritative ShiftUtils.scala or equivalent public helper surface; V2 ALU/BKU use local operators and CryptoUtils."
+    }
+  ],
+  "uhsc_localization": {
+    "status": "PENDING_EXTERNAL_WRAPPER",
+    "locked_names_unchanged": true,
+    "manifest": "UHSC-Naming-Manifest.json"
+  },
+  "gates": {
+    "contract": "PASS",
+    "direct": "PASS_BOUNDED",
+    "reference": "PASS_BOUNDED",
+    "parent_closure": "PENDING",
+    "license": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "acceptance_eligible": false
+}

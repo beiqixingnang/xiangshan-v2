@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_CRYPTO_DEBUG_REFERENCE_DIFFERENTIAL",
+  "batch_id": "V2-P1-F-CRYPTO-DEBUG",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "reference_artifact": {
+    "path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "present": true,
+    "bytes": 228590583,
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "expected_bytes": 228590583,
+    "expected_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "verified": true
+  },
+  "parent_closure": {
+    "status": "PASS",
+    "returncode": 0,
+    "stdout_tail": "CRYPTO_PARENT_AES_PASS\n- tb.sv:34: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 2ns; walltime 0.002 s; speed 819.828 ns/s\n- Verilator: cpu 0.003 s on 1 threads; alloced 153 MB\n",
+    "stderr_tail": "",
+    "extraction": {
+      "module": "BlockCipherModule",
+      "status": "PASS",
+      "returncode": 0,
+      "bytes": 562517,
+      "sha256": "d38f0c17fc3083b780e1eab23a27fdbee6dd8b8122cb744738f3551a91fc7679"
+    },
+    "target_bytes": 572279,
+    "target_sha256": "fcb6f90a63103dd5ea05d1bb194297705095263a9374a35a13430007e3cd9f40",
+    "observations": [
+      "AES64ES all 256 uniform-byte vectors",
+      "AES64DS all 256 uniform-byte vectors"
+    ]
+  },
+  "source_level": {
+    "CryptoUtils": {
+      "path": "upstream/src/main/scala/xiangshan/backend/fu/util/CryptoUtils.scala",
+      "sha256": "abc617cd2724a431a083fe4984cef6c0b66bb32a6bd8be146696870a2e1e3187",
+      "bytes": 12701,
+      "required_tokens": {
+        "object SHR32": true,
+        "object SHR64": true,
+        "object ROR32": true,
+        "object ROR64": true,
+        "object ForwardShiftRows": true,
+        "object InverseShiftRows": true,
+        "object SboxAesTop": true,
+        "object SboxIaesTop": true,
+        "object SboxSm4Top": true,
+        "object SboxInv": true,
+        "object SboxAesOut": true,
+        "object SboxIaesOut": true,
+        "object SboxSm4Out": true,
+        "object XtN": true,
+        "object ByteEnc": true,
+        "object ByteDec": true,
+        "object MixFwd": true,
+        "object MixInv": true
+      },
+      "status": "PASS"
+    },
+    "DebugCSR": {
+      "path": "upstream/src/main/scala/xiangshan/backend/fu/util/DebugCSR.scala",
+      "sha256": "642823f744c9466ba56569f183ee8dd7b7872f26842b4e420c1595b44da4699f",
+      "bytes": 2139,
+      "required_tokens": {
+        "class DcsrStruct": true,
+        "val debugver": true,
+        "val ebreakm": true,
+        "val ebreaks": true,
+        "val ebreaku": true,
+        "val cause": true,
+        "val prv": true,
+        "def init": true,
+        "DEBUGVER_SPEC": true,
+        "ModeM": true
+      },
+      "status": "PASS"
+    },
+    "CryptoParentClosure": {
+      "path": "upstream/src/main/scala/xiangshan/backend/fu/Bku.scala",
+      "sha256": "a5433042801f6b21d820b65bd7ee04e60f8d9db0039bbb8e727a40f557c3f96d",
+      "required_tokens": {
+        "class HashModule": true,
+        "class BlockCipherModule": true,
+        "class CryptoModule": true,
+        "SboxAesTop": true,
+        "MixFwd": true,
+        "MixInv": true,
+        "SHR32": true,
+        "ROR64": true
+      },
+      "status": "PASS"
+    },
+    "DebugParentClosure": {
+      "path": "upstream/src/main/scala/xiangshan/backend/fu/CSR.scala",
+      "sha256": "3425ead507f1b5726efa32de2d2390ab0d7187e1872e3ea6b20c52d1045764b9",
+      "required_tokens": {
+        "DcsrStruct.init": true,
+        "asTypeOf(new DcsrStruct)": true,
+        "dcsrMask": true,
+        "dcsrUpdateSideEffect": true
+      },
+      "status": "PASS"
+    },
+    "ShiftUtils": {
+      "candidate": "python/ported/backend/fu/util/ShiftUtils-Hardware.py",
+      "v2_source": null,
+      "classification": "RETIRED",
+      "disposition": "RETIRED",
+      "source_present": false,
+      "remaining_references": [],
+      "reason": "No V2 authoritative ShiftUtils.scala or equivalent public helper surface; V2 ALU/BKU use local operators and CryptoUtils.",
+      "status": "RETIRED"
+    }
+  },
+  "status": "V2_REFERENCE_MATCHED",
+  "gates": {
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED",
+    "PARENT_CLOSURE_MATCHED": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "unclosed": [
+    "Full Bku/CSR integration parent closure remains coordinator-owned.",
+    "UHSC external wrapper and license review remain open."
+  ]
+}
