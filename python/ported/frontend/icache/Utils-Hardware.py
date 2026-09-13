@@ -1,201 +1,220 @@
-"""XiangShan ICache utility modules rewritten in amaranth.
-香山 ICache 工具模块（DeMultiplexer / MuxBundle / FIFOReg）的 amaranth 重写。
+"""V2 ICache decoupled utility modules in Amaranth.
+香山 V2 指令缓存解耦工具模块的 Amaranth 重写。
 """
 from __future__ import annotations
-
-from typing import Any, cast
 
 from amaranth import Array, Elaboratable, Module, Mux, Signal
 
 
 # Module Contract
 # ---------------------------------------------------------------------------
-# Public symbols:
-#   - DeMultiplexer : 1-producer to n-consumer decoupled demux, priority to
-#     lower index (used by MissUnit to dispatch fetch/prefetch reqs to MSHRs)
-#   - MuxBundle     : n-input decoupled mux selected by `sel`
-#   - FIFOReg       : circular FIFO of `entries` registers with optional flush
-# Ports: each module exposes `in_*` / `out_*` decoupled signal groups created
-# in __init__; connect by assigning .valid/.ready/.bits attributes.
+# This family covers the exact V2 DeMultiplexer and MuxBundle declarations in
+# ICacheMissUnit.scala plus FIFOReg in FIFO.scala.  Payloads are intentionally
+# scalarized at this boundary; callers choose the packed width of their bundle.
 __all__ = ["DeMultiplexer", "MuxBundle", "FIFOReg"]
 
 
 # Configuration
 # ---------------------------------------------------------------------------
-# no dataclass config needed; widths passed via constructor / 位宽由构造参数传入
+# Width and entry parameters are explicit constructor values; no host probing
+# or sibling-module imports are used.
 
 
 # Implementation
 # ---------------------------------------------------------------------------
 class DeMultiplexer(Elaboratable):
-    """Decoupled 1->n demux with lower-index priority. / 低索引优先的 1->n 解复用器。"""
+    """Priority 1-to-n decoupled demultiplexer. / 低索引优先的一对多解复用器。"""
 
-    # construct ports / 构造端口
+    # Construct the producer and consumer channels. / 构造生产者和消费者通道。
     def __init__(self, bits_width: int, n: int) -> None:
-        assert n >= 2
-        self.n = n
-        self.in_valid = Signal(name="in_valid")
-        self.in_ready = Signal(name="in_ready")
-        self.in_bits = Signal(bits_width, name="in_bits")
-        self.out_valid = [Signal(name=f"out_valid_{i}") for i in range(n)]
-        self.out_ready = [Signal(name=f"out_ready_{i}") for i in range(n)]
-        self.out_bits = [Signal(bits_width, name=f"out_bits_{i}") for i in range(n)]
-        self.chosen = Signal(max(1, (n - 1).bit_length()), name="chosen")
+        if bits_width < 1 or n < 2:
+            raise ValueError("bits_width must be positive and n must be >= 2")
+        self.bits_width = int(bits_width)
+        self.n = int(n)
+        self.in_valid = Signal(name="io_in_valid")
+        self.in_ready = Signal(name="io_in_ready")
+        self.in_bits = Signal(bits_width, name="io_in_bits")
+        self.out_valid = [Signal(name=f"io_out_{i}_valid") for i in range(n)]
+        self.out_ready = [Signal(name=f"io_out_{i}_ready") for i in range(n)]
+        self.out_bits = [Signal(bits_width, name=f"io_out_{i}_bits") for i in range(n)]
+        self.chosen = Signal(max(1, (n - 1).bit_length()), name="io_chosen")
 
-    # route input to first ready output / 将输入路由到首个就绪输出
+    # Elaborate ready-priority routing and chosen encoding. / 实例化 ready 优先路由及 chosen 编码。
     def elaborate(self, platform) -> Module:
+        del platform
         m = Module()
-        grant = []
-        for i in range(self.n):
-            if i == 0:
-                grant.append(0)
-            else:
-                g = self.out_ready[0]
-                for j in range(1, i):
-                    g = g | self.out_ready[j]
-                grant.append(g)
-        for i in range(self.n):
+        prior_ready = 0
+        for index in range(self.n):
             m.d.comb += [
-                self.out_bits[i].eq(self.in_bits),
-                self.out_valid[i].eq(~grant[i] & self.in_valid),
+                self.out_bits[index].eq(self.in_bits),
+                self.out_valid[index].eq(self.in_valid & ~prior_ready),
             ]
-        m.d.comb += self.in_ready.eq(grant[-1] | self.out_ready[-1])
-        # chosen = low-index priority encoder of out_ready / chosen 为就绪向量的低位优先编码
-        # Chisel PriorityEncoder selects the first asserted bit.  Its generated
-        # n=10 reference uses the final legal index for an all-zero vector, so
-        # preserve that deterministic fallback instead of inventing a new one.
-        chosen_val = self.n - 1
-        for i in range(self.n - 1, -1, -1):
-            chosen_val = Mux(self.out_ready[i], i, chosen_val)
-        m.d.comb += self.chosen.eq(chosen_val)
+            prior_ready = prior_ready | self.out_ready[index]
+        m.d.comb += self.in_ready.eq(prior_ready)
+
+        # Chisel PriorityEncoder's generated n=10 specialization has the last
+        # legal index as the all-zero fallback; preserve that deterministic V2
+        # behavior while selecting the lowest asserted ready bit.
+        chosen_value = self.n - 1
+        for index in range(self.n - 1, -1, -1):
+            chosen_value = Mux(self.out_ready[index], index, chosen_value)
+        m.d.comb += self.chosen.eq(chosen_value)
         return m
 
 
 class MuxBundle(Elaboratable):
-    """Decoupled n->1 mux selected by sel. / 由 sel 选择的 n->1 复用器。"""
+    """Selector-based n-to-1 decoupled mux. / 按选择信号工作的多对一解耦复用器。"""
 
-    # construct ports / 构造端口
+    # Construct the selected input and output channels. / 构造输入及输出通道。
     def __init__(self, bits_width: int, n: int) -> None:
-        assert n >= 2
-        self.n = n
-        self.sel = Signal(max(1, (n - 1).bit_length()), name="sel")
-        self.in_valid = [Signal(name=f"in_valid_{i}") for i in range(n)]
-        self.in_ready = [Signal(name=f"in_ready_{i}") for i in range(n)]
-        self.in_bits = [Signal(bits_width, name=f"in_bits_{i}") for i in range(n)]
-        self.out_valid = Signal(name="out_valid")
-        self.out_ready = Signal(name="out_ready")
-        self.out_bits = Signal(bits_width, name="out_bits")
+        if bits_width < 1 or n < 2:
+            raise ValueError("bits_width must be positive and n must be >= 2")
+        self.bits_width = int(bits_width)
+        self.n = int(n)
+        self.sel = Signal(max(1, (n - 1).bit_length()), name="io_sel")
+        self.in_valid = [Signal(name=f"io_in_{i}_valid") for i in range(n)]
+        self.in_ready = [Signal(name=f"io_in_{i}_ready") for i in range(n)]
+        self.in_bits = [Signal(bits_width, name=f"io_in_{i}_bits") for i in range(n)]
+        self.out_valid = Signal(name="io_out_valid")
+        self.out_ready = Signal(name="io_out_ready")
+        self.out_bits = Signal(bits_width, name="io_out_bits")
 
-    # select input by sel / 按 sel 选择输入
+    # Elaborate selector routing and ready gating. / 实例化选择路由及 ready 门控。
     def elaborate(self, platform) -> Module:
+        del platform
         m = Module()
-        # Chisel's ``io.out <> DontCare`` leaves input zero as the generated
-        # fallback for an out-of-range selector.  Seed both outputs from input
-        # zero, then override only valid selector encodings.
-        out_v = self.in_valid[0]
-        out_b = self.in_bits[0]
+        out_valid = self.in_valid[0]
+        out_bits = self.in_bits[0]
         m.d.comb += self.in_ready[0].eq((self.sel == 0) & self.out_ready)
-        for i in range(1, self.n):
-            hit = self.sel == i
-            out_v = Mux(hit, self.in_valid[i], out_v)
-            out_b = Mux(hit, self.in_bits[i], out_b)
-            m.d.comb += self.in_ready[i].eq(hit & self.out_ready)
-        m.d.comb += [
-            self.out_valid.eq(out_v),
-            self.out_bits.eq(out_b),
-        ]
+        for index in range(1, self.n):
+            selected = self.sel == index
+            out_valid = Mux(selected, self.in_valid[index], out_valid)
+            out_bits = Mux(selected, self.in_bits[index], out_bits)
+            m.d.comb += self.in_ready[index].eq(selected & self.out_ready)
+        m.d.comb += [self.out_valid.eq(out_valid), self.out_bits.eq(out_bits)]
         return m
 
 
 class FIFOReg(Elaboratable):
-    """Register-file FIFO with circular pointers. / 环形指针寄存器堆 FIFO。"""
+    """Register-file circular FIFO with V2 flush semantics.
+    带 V2 flush 语义的寄存器文件环形 FIFO。
+    """
 
-    # construct ports / 构造端口
-    def __init__(self, bits_width: int, entries: int, has_flush: bool = True) -> None:
-        assert entries > 0
-        self.bits_width = bits_width
-        self.entries = entries
-        self.enq_valid = Signal(name="enq_valid")
-        self.enq_ready = Signal(name="enq_ready")
-        self.enq_bits = Signal(bits_width, name="enq_bits")
-        self.deq_valid = Signal(name="deq_valid")
-        self.deq_ready = Signal(name="deq_ready")
-        self.deq_bits = Signal(bits_width, name="deq_bits")
-        self.flush = Signal(name="flush") if has_flush else None
+    # Construct FIFO channels and optional controls. / 构造 FIFO 通道及可选控制。
+    def __init__(
+        self,
+        bits_width: int,
+        entries: int,
+        pipe: bool = False,
+        has_flush: bool = False,
+    ) -> None:
+        if bits_width < 1 or entries < 1:
+            raise ValueError("bits_width and entries must be positive")
+        self.bits_width = int(bits_width)
+        self.entries = int(entries)
+        self.pipe = bool(pipe)
+        self.has_flush = bool(has_flush)
+        self.enq_valid = Signal(name="io_enq_valid")
+        self.enq_ready = Signal(name="io_enq_ready")
+        self.enq_bits = Signal(bits_width, name="io_enq_bits")
+        self.deq_valid = Signal(name="io_deq_valid")
+        self.deq_ready = Signal(name="io_deq_ready")
+        self.deq_bits = Signal(bits_width, name="io_deq_bits")
+        self.flush = Signal(name="io_flush") if has_flush else None
 
-    # circular FIFO logic / 环形 FIFO 逻辑
+    # Elaborate circular pointers, storage, and flush priority. / 实例化环形指针、存储及 flush 优先级逻辑。
     def elaborate(self, platform) -> Module:
+        del platform
         m = Module()
         ptr_bits = max(1, (self.entries - 1).bit_length())
-        regs = Array(Signal(self.bits_width, name=f"fifo_reg_{i}") for i in range(self.entries))
-        enq_val = Signal(ptr_bits, name="enq_ptr_val")
+        regs = Array(
+            Signal(self.bits_width, name=f"fifo_reg_{index}")
+            for index in range(self.entries)
+        )
+        enq_value = Signal(ptr_bits, name="enq_ptr_value")
         enq_flag = Signal(name="enq_ptr_flag")
-        deq_val = Signal(ptr_bits, name="deq_ptr_val")
+        deq_value = Signal(ptr_bits, name="deq_ptr_value")
         deq_flag = Signal(name="deq_ptr_flag")
-        empty = (enq_val == deq_val) & (enq_flag == deq_flag)
-        full = (enq_val == deq_val) & (enq_flag != deq_flag)
 
+        empty = (enq_value == deq_value) & (enq_flag == deq_flag)
+        full = (enq_value == deq_value) & (enq_flag != deq_flag)
+        m.d.comb += [
+            self.deq_bits.eq(regs[deq_value]),
+            self.deq_valid.eq(~empty),
+            self.enq_ready.eq(~full | (self.pipe & self.deq_ready)),
+        ]
         enq_fire = self.enq_valid & self.enq_ready
         deq_fire = self.deq_valid & self.deq_ready
 
-        # The Scala source writes the register file independently of flush;
-        # flush has priority only over pointer updates.
-        with cast(Any, m.If(enq_fire)):
-            m.d.sync += regs[enq_val].eq(self.enq_bits)
-
-        if self.flush is not None:
-            with cast(Any, m.If(self.flush)):
-                m.d.sync += [enq_val.eq(0), enq_flag.eq(0), deq_val.eq(0), deq_flag.eq(0)]
-            with cast(Any, m.Else()):
-                self.emit_pointer_updates(m, enq_val, enq_flag, deq_val, deq_flag,
-                                          enq_fire, deq_fire)
-        else:
-            self.emit_pointer_updates(m, enq_val, enq_flag, deq_val, deq_flag,
-                                      enq_fire, deq_fire)
-
-        m.d.comb += [
-            self.deq_bits.eq(regs[deq_val]),
-            self.deq_valid.eq(~empty),
-            self.enq_ready.eq(~full),
-        ]
-        return m
-
-    def emit_pointer_updates(self, m, enq_val, enq_flag, deq_val, deq_flag,
-                             enq_fire, deq_fire):
-        """Emit pointer updates for one non-flush cycle."""
+        # The V2 source writes a register independently; flush only wins over
+        # pointer updates, so an enqueue during flush still updates storage.
         with m.If(enq_fire):
-            nv, nf = self.increment_pointer(enq_val, enq_flag)
-            m.d.sync += [enq_val.eq(nv), enq_flag.eq(nf)]
-        with m.If(deq_fire):
-            nv, nf = self.increment_pointer(deq_val, deq_flag)
-            m.d.sync += [deq_val.eq(nv), deq_flag.eq(nf)]
+            m.d.sync += regs[enq_value].eq(self.enq_bits)
 
-    def increment_pointer(self, value, flag):
-        """Advance a circular pointer and toggle its wrap flag."""
-        next_value = Mux(value == self.entries - 1, 0, value + 1)
-        next_flag = Mux(value == self.entries - 1, ~flag, flag)
-        return next_value, next_flag
+        flush = self.flush if self.flush is not None else 0
+        with m.If(flush):
+            m.d.sync += [
+                enq_value.eq(0),
+                enq_flag.eq(0),
+                deq_value.eq(0),
+                deq_flag.eq(0),
+            ]
+        with m.If(~flush):
+            with m.If(enq_fire):
+                next_value = Mux(enq_value == self.entries - 1, 0, enq_value + 1)
+                next_flag = Mux(enq_value == self.entries - 1, ~enq_flag, enq_flag)
+                m.d.sync += [enq_value.eq(next_value), enq_flag.eq(next_flag)]
+            with m.If(deq_fire):
+                next_value = Mux(deq_value == self.entries - 1, 0, deq_value + 1)
+                next_flag = Mux(deq_value == self.entries - 1, ~deq_flag, deq_flag)
+                m.d.sync += [deq_value.eq(next_value), deq_flag.eq(next_flag)]
+        return m
 
 
 # Public Adapter
 # ---------------------------------------------------------------------------
-# build verilog for the utility modules / 生成工具模块的 Verilog
-def build_verilog(width: int = 8, n: int = 4, entries: int = 4) -> str:
+# Export one selected utility deterministically. / 确定性导出所选工具模块。
+def build_verilog(configuration, injected_dependencies):
+    """Return Verilog for a configured utility. / 返回配置工具模块的 Verilog。"""
     from amaranth.back import verilog
 
-    top = FIFOReg(width, entries)
-    ports = [top.enq_valid, top.enq_ready, top.enq_bits,
-             top.deq_valid, top.deq_ready, top.deq_bits]
-    if top.flush is not None:
-        ports.append(top.flush)
-    return verilog.convert(top, ports=ports)
+    del injected_dependencies
+    config = configuration if isinstance(configuration, dict) else {}
+    module_name = str(config.get("module", "FIFOReg"))
+    if module_name == "DeMultiplexer":
+        top = DeMultiplexer(int(config.get("bits_width", 50)), int(config.get("n", 4)))
+        ports = [top.in_valid, top.in_ready, top.in_bits, top.chosen]
+        ports += top.out_valid + top.out_ready + top.out_bits
+    elif module_name == "MuxBundle":
+        top = MuxBundle(int(config.get("bits_width", 50)), int(config.get("n", 10)))
+        ports = [top.sel, top.out_valid, top.out_ready, top.out_bits]
+        ports += top.in_valid + top.in_ready + top.in_bits
+    else:
+        top = FIFOReg(
+            int(config.get("bits_width", 4)),
+            int(config.get("entries", 10)),
+            bool(config.get("pipe", False)),
+            bool(config.get("has_flush", True)),
+        )
+        ports = [
+            top.enq_valid,
+            top.enq_ready,
+            top.enq_bits,
+            top.deq_valid,
+            top.deq_ready,
+            top.deq_bits,
+        ]
+        if top.flush is not None:
+            ports.append(top.flush)
+    return verilog.convert(top, ports=ports, name=module_name)
 
 
 # Direct Entry
 # ---------------------------------------------------------------------------
-# cli entry to emit verilog / 命令行入口：输出 Verilog
+# Print the default FIFO export when invoked directly. / 直接调用时打印默认 FIFO 导出结果。
 def main() -> None:
-    print(build_verilog())
+    """Print the default utility Verilog. / 打印默认工具 Verilog。"""
+    print(build_verilog(None, None))
 
 
 if __name__ == "__main__":

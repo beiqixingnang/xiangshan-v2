@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "kind": "V2_P1_B_ICACHE_DIRECT_EVIDENCE",
+  "status": "PASS_BOUNDED_DIRECT",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "families": [
+    {
+      "module": "DeMultiplexer",
+      "variant": "n4",
+      "vectors": 128,
+      "trace_sha256": "15c763c7689c2b17905783b0f9bfd57f49871028f364521ef7ae5a20338dc775"
+    },
+    {
+      "module": "DeMultiplexer",
+      "variant": "n10",
+      "vectors": 8192,
+      "trace_sha256": "975c6c0aaf0f9e08a59c5c63cfa655aad790b4eba68610f61ad6e0b5af9ce2d1"
+    },
+    {
+      "module": "MuxBundle",
+      "variant": "n10",
+      "vectors": 65536,
+      "trace_sha256": "aa286668a39ee0e7e79e19e384427a3356359b6cd732150d25d6117ce04653b1"
+    },
+    {
+      "module": "FIFOReg",
+      "variant": "entries10-flush",
+      "vectors": 527,
+      "trace_sha256": "c1e99a4b0eb6661fe1f233b7902d28ca26ef89ed02937e6740c4e86334210570"
+    },
+    {
+      "module": "ICacheReplacer",
+      "variant": "setplru-256x4-port2",
+      "vectors": 320,
+      "trace_sha256": "178ec6de33412d1f672787f73fe153b344afa478ee69251244ca7556e8dadd99"
+    },
+    {
+      "module": "ICacheMSHR",
+      "variant": "fetch-id0",
+      "vectors": 320,
+      "trace_sha256": "3a501773bf0d5a88b53d8535329586b60046305b30520e18e7cd63d3ad086450"
+    },
+    {
+      "module": "ICacheMSHR",
+      "variant": "prefetch-id4",
+      "vectors": 320,
+      "trace_sha256": "fe399c65b899e9fb3bf5b13d4e653183d0e820429f09048214addc297c314719"
+    }
+  ],
+  "target_paths": {
+    "ICacheMSHR": "python/ported/frontend/icache/ICacheMshr-Hardware.py",
+    "ICacheReplacer": "python/ported/frontend/icache/ICacheReplacer-Hardware.py",
+    "Utils": "python/ported/frontend/icache/Utils-Hardware.py"
+  },
+  "target_sha256": {
+    "ICacheMSHR": "c177908462d5ed635af3a50f026e6e25ef3d4410002ae53f1f2474ed22cf338a",
+    "ICacheReplacer": "30bf7a38f7612456447e8a880061ca5192250c18152a75a7bbba9a3952dfda44",
+    "Utils": "66623cc0ee057732c3b51612e8afcc67c108e10b808ea52046a6df7ec517d2b6"
+  },
+  "source_paths": {
+    "mshr": "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala",
+    "replacer": "upstream/src/main/scala/xiangshan/frontend/icache/ICache.scala",
+    "utility": "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala",
+    "fifo": "upstream/src/main/scala/xiangshan/frontend/icache/FIFO.scala"
+  },
+  "source_sha256": {
+    "mshr": "12489d704c86b65f6d4bc15e64b659bb2fa94f236eb93350d9dee012a22ba926",
+    "replacer": "ce4dbbc64b3e133fdc689eae954a3dca6fa3c001357725bc4baded8d2c812fcb",
+    "utility": "12489d704c86b65f6d4bc15e64b659bb2fa94f236eb93350d9dee012a22ba926",
+    "fifo": "31ab7a1ae4a86834bf6fb6d120c19b835111a9e83c49a53d41ec911ea32e9cd1"
+  },
+  "acceptance_eligible": false,
+  "reference_differential": "PENDING",
+  "parent_closure": "PENDING",
+  "uhsc_localization": {
+    "status": "NO_PROJECT_FACING_RENAME",
+    "manifest": "UHSC-Naming-Manifest.json"
+  }
+}

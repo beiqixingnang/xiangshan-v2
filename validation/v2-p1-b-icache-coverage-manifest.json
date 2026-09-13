@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "kind": "V2_P1_B_ICACHE_CHILD_COVERAGE",
+  "batch_id": "V2-P1-B-ICACHE",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "closure_root": "core.frontend.icache",
+  "children": [
+    {
+      "name": "ICacheMSHR",
+      "family_id": "core.frontend.icache.mshr",
+      "source": "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala",
+      "reference": "ICacheMSHR/ICacheMSHR_4",
+      "variants": [
+        "fetch-id0",
+        "prefetch-id4"
+      ]
+    },
+    {
+      "name": "ICacheReplacer",
+      "family_id": "core.frontend.icache.replacer",
+      "source": "upstream/src/main/scala/xiangshan/frontend/icache/ICache.scala",
+      "reference": "ICacheReplacer",
+      "variants": [
+        "setplru-256x4-port2"
+      ]
+    },
+    {
+      "name": "DeMultiplexer",
+      "family_id": "core.frontend.icache.utility",
+      "source": "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala",
+      "reference": "DeMultiplexer/DeMultiplexer_1",
+      "variants": [
+        "n4",
+        "n10"
+      ]
+    },
+    {
+      "name": "MuxBundle",
+      "family_id": "core.frontend.icache.utility",
+      "source": "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala",
+      "reference": "MuxBundle",
+      "variants": [
+        "n10"
+      ]
+    },
+    {
+      "name": "FIFOReg",
+      "family_id": "core.frontend.icache.utility",
+      "source": "upstream/src/main/scala/xiangshan/frontend/icache/FIFO.scala",
+      "reference": "FIFOReg",
+      "variants": [
+        "entries10-flush"
+      ]
+    }
+  ],
+  "observation_points": [
+    "miss allocation",
+    "refill/kill",
+    "replacement choice",
+    "FIFO ready-valid",
+    "flush/reset"
+  ],
+  "direct": "PASS_BOUNDED_DIRECT",
+  "differential": "PASS_BOUNDED_REFERENCE",
+  "parent_closure": "PENDING",
+  "license_review": "PENDING",
+  "acceptance_eligible": false
+}

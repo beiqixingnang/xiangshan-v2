@@ -1,0 +1,1104 @@
+{
+  "schema_version": 1,
+  "kind": "V2_P1_B_ICACHE_DIFFERENTIAL_EVIDENCE",
+  "batch_id": "V2-P1-B-ICACHE",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "reference_snapshot": {
+    "canonical_path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "bytes": 228590583
+  },
+  "source_paths": {
+    "ICacheMSHR": "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala",
+    "ICacheReplacer": "upstream/src/main/scala/xiangshan/frontend/icache/ICache.scala",
+    "DeMultiplexer": "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala",
+    "MuxBundle": "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala",
+    "FIFOReg": "upstream/src/main/scala/xiangshan/frontend/icache/FIFO.scala"
+  },
+  "reference_index": "validation/v2-p1-b-icache-reference-index.json",
+  "direct_evidence": {
+    "path": "validation/v2-p1-b-icache-direct-results.json",
+    "sha256": "a1859cf0ee1bc33f16345336c94fc41ceebf610217e7fa88ee8cc4a870fedfb3",
+    "status": "PASS_BOUNDED_DIRECT"
+  },
+  "comparisons": [
+    {
+      "name": "demux4",
+      "comparison": "PASS",
+      "behavioral_equivalence": true,
+      "target_vectors": 128,
+      "reference_vectors": 128,
+      "target_trace_sha256": "9cdcca110ba64c39ea2a1730aaeb8127dcd3ebd013873e36e101f715a883bcb9",
+      "reference_trace_sha256": "9cdcca110ba64c39ea2a1730aaeb8127dcd3ebd013873e36e101f715a883bcb9",
+      "first_mismatch": null
+    },
+    {
+      "name": "demux10",
+      "comparison": "PASS",
+      "behavioral_equivalence": true,
+      "target_vectors": 8192,
+      "reference_vectors": 8192,
+      "target_trace_sha256": "975c6c0aaf0f9e08a59c5c63cfa655aad790b4eba68610f61ad6e0b5af9ce2d1",
+      "reference_trace_sha256": "975c6c0aaf0f9e08a59c5c63cfa655aad790b4eba68610f61ad6e0b5af9ce2d1",
+      "first_mismatch": null
+    },
+    {
+      "name": "mux",
+      "comparison": "PASS",
+      "behavioral_equivalence": true,
+      "target_vectors": 65536,
+      "reference_vectors": 65536,
+      "target_trace_sha256": "fd87355949150f09b2da35e49b68908e2cb2bbfa1c36dca00810b61d86a1aeac",
+      "reference_trace_sha256": "fd87355949150f09b2da35e49b68908e2cb2bbfa1c36dca00810b61d86a1aeac",
+      "first_mismatch": null
+    },
+    {
+      "name": "fifo",
+      "comparison": "PASS",
+      "behavioral_equivalence": true,
+      "target_vectors": 527,
+      "reference_vectors": 527,
+      "target_trace_sha256": "c1e99a4b0eb6661fe1f233b7902d28ca26ef89ed02937e6740c4e86334210570",
+      "reference_trace_sha256": "c1e99a4b0eb6661fe1f233b7902d28ca26ef89ed02937e6740c4e86334210570",
+      "first_mismatch": null
+    },
+    {
+      "name": "replacer",
+      "comparison": "PASS",
+      "behavioral_equivalence": true,
+      "target_vectors": 320,
+      "reference_vectors": 320,
+      "target_trace_sha256": "178ec6de33412d1f672787f73fe153b344afa478ee69251244ca7556e8dadd99",
+      "reference_trace_sha256": "178ec6de33412d1f672787f73fe153b344afa478ee69251244ca7556e8dadd99",
+      "first_mismatch": null
+    },
+    {
+      "name": "mshr-fetch",
+      "comparison": "PASS",
+      "behavioral_equivalence": true,
+      "target_vectors": 320,
+      "reference_vectors": 320,
+      "target_trace_sha256": "f3131cd9c3a3ec93c2a608ddeb23bd991f06a781a7a22ae521882cd47390be1d",
+      "reference_trace_sha256": "f3131cd9c3a3ec93c2a608ddeb23bd991f06a781a7a22ae521882cd47390be1d",
+      "first_mismatch": null
+    },
+    {
+      "name": "mshr-prefetch",
+      "comparison": "PASS",
+      "behavioral_equivalence": true,
+      "target_vectors": 320,
+      "reference_vectors": 320,
+      "target_trace_sha256": "5cccbfad335f6fef610e22aaa9b0c304942a35012d84b9d8ffab0a4f7d0f9d9d",
+      "reference_trace_sha256": "5cccbfad335f6fef610e22aaa9b0c304942a35012d84b9d8ffab0a4f7d0f9d9d",
+      "first_mismatch": null
+    }
+  ],
+  "behavioral_equivalence": true,
+  "target_backend_gates": {
+    "DeMultiplexer_n4": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "--Wno-fatal",
+          "--top-module",
+          "DeMultiplexer",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/demux4-target.sv"
+        ],
+        "returncode": 0,
+        "result": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.032 MB sources in 2 modules, into 0.018 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.016 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.262 MB\n",
+        "output_sha256": "63ce2674dcada2bda840f7ad408952d8cdc49c051544447b2f7c3b268a585355"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/demux4-target.sv; hierarchy -top DeMultiplexer; proc; check"
+        ],
+        "returncode": 0,
+        "result": "PASS",
+        "output_tail": "---------------------------------------------------------------------------/\n Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\n\n-- Running command `read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/demux4-target.sv; hierarchy -top DeMultiplexer; proc; check' --\n\n1. Executing Verilog-2005 frontend: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/demux4-target.sv\nParsing SystemVerilog input from `/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/demux4-target.sv' to AST representation.\nGenerating RTLIL representation for module `\\DeMultiplexer'.\nSuccessfully finished Verilog frontend.\n\n2. Executing HIERARCHY pass (managing design hierarchy).\n\n2.1. Analyzing design hierarchy..\nTop module:  \\DeMultiplexer\n\n2.2. Analyzing design hierarchy..\nTop module:  \\DeMultiplexer\nRemoved 0 unused modules.\n\n3. Executing PROC pass (convert processes to netlists).\n\n3.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DeMultiplexer.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module DeMultiplexer...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: f46e74e6ce, CPU: user 0.00s system 0.01s, MEM: 11.41 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 66% 2x read_verilog (0 sec), 13% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "8cb896b0fb530c698362c80cdd1da4a1c6efdc554c3b1d622c7bd576c357bec3"
+      }
+    },
+    "DeMultiplexer_n10": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "--Wno-fatal",
+          "--top-module",
+          "DeMultiplexer",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/demux10-target.sv"
+        ],
+        "returncode": 0,
+        "result": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.058 MB sources in 2 modules, into 0.021 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.021 s (elab=0.001, cvt=0.002, bld=0.000); cpu 0.007 s on 1 threads; alloced 9.543 MB\n",
+        "output_sha256": "040a69edae16c1f40ab967f0456ee8cbe8ea5dc08756312054390b01db781e79"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/demux10-target.sv; hierarchy -top DeMultiplexer; proc; check"
+        ],
+        "returncode": 0,
+        "result": "PASS",
+        "output_tail": "-------------------------------------------------------------------------/\n Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\n\n-- Running command `read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/demux10-target.sv; hierarchy -top DeMultiplexer; proc; check' --\n\n1. Executing Verilog-2005 frontend: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/demux10-target.sv\nParsing SystemVerilog input from `/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/demux10-target.sv' to AST representation.\nGenerating RTLIL representation for module `\\DeMultiplexer'.\nSuccessfully finished Verilog frontend.\n\n2. Executing HIERARCHY pass (managing design hierarchy).\n\n2.1. Analyzing design hierarchy..\nTop module:  \\DeMultiplexer\n\n2.2. Analyzing design hierarchy..\nTop module:  \\DeMultiplexer\nRemoved 0 unused modules.\n\n3. Executing PROC pass (convert processes to netlists).\n\n3.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DeMultiplexer.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module DeMultiplexer...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 3de6705554, CPU: user 0.01s system 0.01s, MEM: 12.19 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 78% 2x read_verilog (0 sec), 8% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "ca3a146053d162458e2ac3984f41f27e9158728b2a34923b94d625a3e899c57b"
+      }
+    },
+    "MuxBundle_n10": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "--Wno-fatal",
+          "--top-module",
+          "MuxBundle",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/mux-target.sv"
+        ],
+        "returncode": 0,
+        "result": "PASS",
+        "output_tail": "d\\\\frontend\\\\icache\\\\Utils-Hardware.py:90\" *) 3'h4;\n      |                         ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/mux-target.sv:199:25: Operator EQ expects 4 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                                                                                                                              : ... note: In instance 'MuxBundle'\n  199 |   assign \\$34  = io_sel == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\ported\\\\frontend\\\\icache\\\\Utils-Hardware.py:90\" *) 2'h3;\n      |                         ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/mux-target.sv:200:25: Operator EQ expects 4 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                                              : ... note: In instance 'MuxBundle'\n  200 |   assign \\$35  = io_sel == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\ported\\\\frontend\\\\icache\\\\Utils-Hardware.py:90\" *) 2'h2;\n      |                         ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/mux-target.sv:201:25: Operator EQ expects 4 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                              : ... note: In instance 'MuxBundle'\n  201 |   assign \\$36  = io_sel == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\ported\\\\frontend\\\\icache\\\\Utils-Hardware.py:90\" *) 1'h1;\n      |                         ^~\n",
+        "output_sha256": "99a2ac7b54c07d0a0bc9e5645389c22ebe60ccfd3f3c3d79e629471af817e0d6"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/mux-target.sv; hierarchy -top MuxBundle; proc; check"
+        ],
+        "returncode": 0,
+        "result": "PASS",
+        "output_tail": " \"license\" to see terms        |\n \\----------------------------------------------------------------------------/\n Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\n\n-- Running command `read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/mux-target.sv; hierarchy -top MuxBundle; proc; check' --\n\n1. Executing Verilog-2005 frontend: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/mux-target.sv\nParsing SystemVerilog input from `/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/mux-target.sv' to AST representation.\nGenerating RTLIL representation for module `\\MuxBundle'.\nSuccessfully finished Verilog frontend.\n\n2. Executing HIERARCHY pass (managing design hierarchy).\n\n2.1. Analyzing design hierarchy..\nTop module:  \\MuxBundle\n\n2.2. Analyzing design hierarchy..\nTop module:  \\MuxBundle\nRemoved 0 unused modules.\n\n3. Executing PROC pass (convert processes to netlists).\n\n3.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module MuxBundle.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module MuxBundle...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 4e239e0f6c, CPU: user 0.02s system 0.00s, MEM: 12.34 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 60% 2x read_verilog (0 sec), 17% 1x check (0 sec), ...\n",
+        "output_sha256": "89e040a1d7553da0756edaad6f59119e68fdeb0e3170cc88fe728151090c9639"
+      }
+    },
+    "FIFOReg_entries10": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "--Wno-fatal",
+          "--top-module",
+          "FIFOReg",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/fifo-target.sv"
+        ],
+        "returncode": 0,
+        "result": "PASS",
+        "output_tail": "v2/validation/.work/v2-p1-b-icache/fifo-target.sv:197:7: Case values incompletely covered (example pattern 0x1)\n  197 |       casez (enq_ptr_value)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/fifo-target.sv:210:7: Case values incompletely covered (example pattern 0x2)\n  210 |       casez (enq_ptr_value)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/fifo-target.sv:225:7: Case values incompletely covered (example pattern 0x3)\n  225 |       casez (enq_ptr_value)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/fifo-target.sv:242:7: Case values incompletely covered (example pattern 0x4)\n  242 |       casez (enq_ptr_value)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/fifo-target.sv:261:7: Case values incompletely covered (example pattern 0x5)\n  261 |       casez (enq_ptr_value)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/fifo-target.sv:282:7: Case values incompletely covered (example pattern 0x6)\n  282 |       casez (enq_ptr_value)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/fifo-target.sv:305:7: Case values incompletely covered (example pattern 0x7)\n  305 |       casez (enq_ptr_value)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/fifo-target.sv:330:7: Case values incompletely covered (example pattern 0x8)\n  330 |       casez (enq_ptr_value)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/fifo-target.sv:357:7: Case values incompletely covered (example pattern 0x9)\n  357 |       casez (enq_ptr_value)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/fifo-target.sv:386:7: Case values incompletely covered (example pattern 0xa)\n  386 |       casez (enq_ptr_value)\n      |       ^~~~~\n",
+        "output_sha256": "043724b2bc490b501a7b5a293def41d487e69dc51b23f5f8048adbba10e6edfd"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/fifo-target.sv; hierarchy -top FIFOReg; proc; check"
+        ],
+        "returncode": 0,
+        "result": "PASS",
+        "output_tail": "ving empty process `FIFOReg.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/fifo-target.sv:153$34'.\nRemoving empty process `FIFOReg.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/fifo-target.sv:150$33'.\nRemoving empty process `FIFOReg.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/fifo-target.sv:147$32'.\nRemoving empty process `FIFOReg.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/fifo-target.sv:144$31'.\nRemoving empty process `FIFOReg.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/fifo-target.sv:141$30'.\nRemoving empty process `FIFOReg.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/fifo-target.sv:138$29'.\nRemoving empty process `FIFOReg.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/fifo-target.sv:135$28'.\nRemoving empty process `FIFOReg.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/fifo-target.sv:132$27'.\nRemoving empty process `FIFOReg.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/fifo-target.sv:129$26'.\nRemoving empty process `FIFOReg.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/fifo-target.sv:126$25'.\nCleaned up 47 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FIFOReg.\n<suppressed ~10 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module FIFOReg...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 4671115286, CPU: user 0.01s system 0.01s, MEM: 13.28 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 64% 2x read_verilog (0 sec), 9% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "8ba472710f8c0d3fd30d0016ae0acbabff2466be5eaebc1da99a92d9b0dd5c31"
+      }
+    },
+    "ICacheReplacer": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "--Wno-fatal",
+          "--top-module",
+          "ICacheReplacer",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/replacer-target.sv"
+        ],
+        "returncode": 0,
+        "result": "PASS",
+        "output_tail": "n-v2/validation/.work/v2-p1-b-icache/replacer-target.sv:9009:32: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3f' generates 6 bits.\n                                                                                                                                                    : ... note: In instance 'ICacheReplacer.replacer_0'\n 9009 |   assign \\$2530  = touch_set_0 == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\ported\\\\frontend\\\\icache\\\\ICacheReplacer-Hardware.py:175\" *) 6'h3f;\n      |                                ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/replacer-target.sv:9021:32: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3f' generates 6 bits.\n                                                                                                                                                    : ... note: In instance 'ICacheReplacer.replacer_0'\n 9021 |   assign \\$2542  = touch_set_0 == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\ported\\\\frontend\\\\icache\\\\ICacheReplacer-Hardware.py:175\" *) 6'h3f;\n      |                                ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/replacer-target.sv:9034:32: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3f' generates 6 bits.\n                                                                                                                                                    : ... note: In instance 'ICacheReplacer.replacer_0'\n 9034 |   assign \\$2555  = touch_set_0 == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\ported\\\\frontend\\\\icache\\\\ICacheReplacer-Hardware.py:175\" *) 6'h3f;\n      |                                ^~\n",
+        "output_sha256": "e26a330a929f1569da19c223b4164cc93eee0df6f018fd872b4ff2314bf65011"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/replacer-target.sv; hierarchy -top ICacheReplacer; proc; check"
+        ],
+        "returncode": 0,
+        "result": "PASS",
+        "output_tail": "replacer-target.sv:157$22'.\nRemoving empty process `ICacheReplacer.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/replacer-target.sv:157$22'.\nFound and cleaned up 2 empty switches in `\\ICacheReplacer.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/replacer-target.sv:147$18'.\nRemoving empty process `ICacheReplacer.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/replacer-target.sv:147$18'.\nFound and cleaned up 2 empty switches in `\\ICacheReplacer.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/replacer-target.sv:137$14'.\nRemoving empty process `ICacheReplacer.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/replacer-target.sv:137$14'.\nRemoving empty process `ICacheReplacer.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/replacer-target.sv:107$13'.\nRemoving empty process `ICacheReplacer.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/replacer-target.sv:104$12'.\nRemoving empty process `ICacheReplacer.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/replacer-target.sv:101$11'.\nCleaned up 269 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ICacheReplacer.replacer_1.\n<suppressed ~4 debug messages>\nOptimizing module ICacheReplacer.replacer_0.\n<suppressed ~4 debug messages>\nOptimizing module ICacheReplacer.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module ICacheReplacer.replacer_1...\nChecking module ICacheReplacer.replacer_0...\nChecking module ICacheReplacer...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 55eb8f3560, CPU: user 0.95s system 0.08s, MEM: 201.85 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 80% 2x read_verilog (0 sec), 7% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "32617aafb1ca6cdd66ce9f2dff9d2343227f4219d046e7849e007f3354d39dca"
+      }
+    },
+    "ICacheMSHR_fetch": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "--Wno-fatal",
+          "--top-module",
+          "ICacheMSHR",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/mshr-fetch-target.sv"
+        ],
+        "returncode": 0,
+        "result": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.054 MB sources in 2 modules, into 0.034 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.020 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.008 s on 1 threads; alloced 9.496 MB\n",
+        "output_sha256": "cb57f5ff5f8d48083d142b57113e8845e03e95de4dfa4e312c7c696974328a60"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/mshr-fetch-target.sv; hierarchy -top ICacheMSHR; proc; check"
+        ],
+        "returncode": 0,
+        "result": "PASS",
+        "output_tail": "Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/mshr-fetch-target.sv:236$45'.\nRemoving empty process `ICacheMSHR.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/mshr-fetch-target.sv:236$45'.\nRemoving empty process `ICacheMSHR.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/mshr-fetch-target.sv:234$44'.\nRemoving empty process `ICacheMSHR.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/mshr-fetch-target.sv:231$43'.\nRemoving empty process `ICacheMSHR.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/mshr-fetch-target.sv:228$42'.\nRemoving empty process `ICacheMSHR.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/mshr-fetch-target.sv:189$5'.\nRemoving empty process `ICacheMSHR.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/mshr-fetch-target.sv:186$4'.\nRemoving empty process `ICacheMSHR.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/mshr-fetch-target.sv:183$3'.\nRemoving empty process `ICacheMSHR.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/mshr-fetch-target.sv:180$2'.\nRemoving empty process `ICacheMSHR.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/mshr-fetch-target.sv:177$1'.\nCleaned up 23 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ICacheMSHR.\n<suppressed ~1 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module ICacheMSHR...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 8d946ff349, CPU: user 0.02s system 0.00s, MEM: 12.97 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 66% 2x read_verilog (0 sec), 9% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "05f9e6c9614793184da4e4803c9aa034e3d7fd08a3e5d59f9248ad403aff9aa9"
+      }
+    },
+    "ICacheMSHR_prefetch": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "--Wno-fatal",
+          "--top-module",
+          "ICacheMSHR",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/mshr-prefetch-target.sv"
+        ],
+        "returncode": 0,
+        "result": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.055 MB sources in 2 modules, into 0.035 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.020 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.008 s on 1 threads; alloced 9.504 MB\n",
+        "output_sha256": "cb2b1793f74aca3d2f7d315eafd2b98ee241a78772a54b83b679381adcbbe869"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/mshr-prefetch-target.sv; hierarchy -top ICacheMSHR; proc; check"
+        ],
+        "returncode": 0,
+        "result": "PASS",
+        "output_tail": "s/xiangshan-v2/validation/.work/v2-p1-b-icache/mshr-prefetch-target.sv:241$50'.\nRemoving empty process `ICacheMSHR.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/mshr-prefetch-target.sv:241$50'.\nRemoving empty process `ICacheMSHR.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/mshr-prefetch-target.sv:239$49'.\nRemoving empty process `ICacheMSHR.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/mshr-prefetch-target.sv:236$48'.\nRemoving empty process `ICacheMSHR.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/mshr-prefetch-target.sv:233$47'.\nRemoving empty process `ICacheMSHR.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/mshr-prefetch-target.sv:189$5'.\nRemoving empty process `ICacheMSHR.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/mshr-prefetch-target.sv:186$4'.\nRemoving empty process `ICacheMSHR.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/mshr-prefetch-target.sv:183$3'.\nRemoving empty process `ICacheMSHR.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/mshr-prefetch-target.sv:180$2'.\nRemoving empty process `ICacheMSHR.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/mshr-prefetch-target.sv:177$1'.\nCleaned up 23 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ICacheMSHR.\n<suppressed ~1 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module ICacheMSHR...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 65a8fca4b6, CPU: user 0.01s system 0.01s, MEM: 13.12 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 66% 2x read_verilog (0 sec), 9% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "0821962e7c589858ec055a06e4581c958dee4a37d3ce8f451581bd7d1dd0a069"
+      }
+    }
+  },
+  "reference_backend_gates": {
+    "DeMultiplexer_n4": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "--Wno-fatal",
+          "--top-module",
+          "DeMultiplexer",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/DeMultiplexer.sv"
+        ],
+        "returncode": 0,
+        "result": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.022 MB sources in 2 modules, into 0.018 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.016 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.086 MB\n",
+        "output_sha256": "1641661fce168bf7f10e2f7e3c83fbef6e62cf2130a0776fe8e8e155b1f53f5b"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/DeMultiplexer.sv; hierarchy -top DeMultiplexer; proc; check"
+        ],
+        "returncode": 0,
+        "result": "PASS",
+        "output_tail": " |\n \\----------------------------------------------------------------------------/\n Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\n\n-- Running command `read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/DeMultiplexer.sv; hierarchy -top DeMultiplexer; proc; check' --\n\n1. Executing Verilog-2005 frontend: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/DeMultiplexer.sv\nParsing SystemVerilog input from `/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/DeMultiplexer.sv' to AST representation.\nGenerating RTLIL representation for module `\\DeMultiplexer'.\nSuccessfully finished Verilog frontend.\n\n2. Executing HIERARCHY pass (managing design hierarchy).\n\n2.1. Analyzing design hierarchy..\nTop module:  \\DeMultiplexer\n\n2.2. Analyzing design hierarchy..\nTop module:  \\DeMultiplexer\nRemoved 0 unused modules.\n\n3. Executing PROC pass (convert processes to netlists).\n\n3.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DeMultiplexer.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module DeMultiplexer...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 5c1c920b58, CPU: user 0.00s system 0.01s, MEM: 11.09 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 48% 2x read_verilog (0 sec), 22% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "2be08217e9653f00c21d75faf37172a9215fd6211432155e3a74285d9f3dbc3d"
+      }
+    },
+    "DeMultiplexer_n10": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "--Wno-fatal",
+          "--top-module",
+          "DeMultiplexer_1",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/DeMultiplexer_1.sv"
+        ],
+        "returncode": 0,
+        "result": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.025 MB sources in 2 modules, into 0.022 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.015 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.227 MB\n",
+        "output_sha256": "44a0c06c9dd23475e4eb91908287234ba52e8898e3b83c9ce77be6dcf974f5d0"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/DeMultiplexer_1.sv; hierarchy -top DeMultiplexer_1; proc; check"
+        ],
+        "returncode": 0,
+        "result": "PASS",
+        "output_tail": "---------------------------------------------------------------/\n Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\n\n-- Running command `read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/DeMultiplexer_1.sv; hierarchy -top DeMultiplexer_1; proc; check' --\n\n1. Executing Verilog-2005 frontend: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/DeMultiplexer_1.sv\nParsing SystemVerilog input from `/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/DeMultiplexer_1.sv' to AST representation.\nGenerating RTLIL representation for module `\\DeMultiplexer_1'.\nSuccessfully finished Verilog frontend.\n\n2. Executing HIERARCHY pass (managing design hierarchy).\n\n2.1. Analyzing design hierarchy..\nTop module:  \\DeMultiplexer_1\n\n2.2. Analyzing design hierarchy..\nTop module:  \\DeMultiplexer_1\nRemoved 0 unused modules.\n\n3. Executing PROC pass (convert processes to netlists).\n\n3.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DeMultiplexer_1.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module DeMultiplexer_1...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 0ac6804c16, CPU: user 0.00s system 0.01s, MEM: 11.09 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 68% 2x read_verilog (0 sec), 12% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "455cce7b45d5b5ccaeee07feb65718c0b313c13a2d7f30747e66b90f1a95accb"
+      }
+    },
+    "MuxBundle_n10": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "--Wno-fatal",
+          "--top-module",
+          "MuxBundle",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/MuxBundle.sv"
+        ],
+        "returncode": 0,
+        "result": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.026 MB sources in 2 modules, into 0.025 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.017 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.262 MB\n",
+        "output_sha256": "6986379fa79c17b416f7238c8bc581fe830cce65fabd78bcf2da50d4f9101cf2"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/MuxBundle.sv; hierarchy -top MuxBundle; proc; check"
+        ],
+        "returncode": 0,
+        "result": "PASS",
+        "output_tail": "s        |\n \\----------------------------------------------------------------------------/\n Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\n\n-- Running command `read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/MuxBundle.sv; hierarchy -top MuxBundle; proc; check' --\n\n1. Executing Verilog-2005 frontend: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/MuxBundle.sv\nParsing SystemVerilog input from `/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/MuxBundle.sv' to AST representation.\nGenerating RTLIL representation for module `\\MuxBundle'.\nSuccessfully finished Verilog frontend.\n\n2. Executing HIERARCHY pass (managing design hierarchy).\n\n2.1. Analyzing design hierarchy..\nTop module:  \\MuxBundle\n\n2.2. Analyzing design hierarchy..\nTop module:  \\MuxBundle\nRemoved 0 unused modules.\n\n3. Executing PROC pass (convert processes to netlists).\n\n3.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module MuxBundle.\n<suppressed ~1 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module MuxBundle...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: bc6bb97d63, CPU: user 0.01s system 0.01s, MEM: 11.88 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 44% 2x read_verilog (0 sec), 22% 1x check (0 sec), ...\n",
+        "output_sha256": "8e4ae09d7133b96d316970fd06b292c90ce8bc18eb9b4ca5de01e05584101bc1"
+      }
+    },
+    "FIFOReg_entries10": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "--Wno-fatal",
+          "--top-module",
+          "FIFOReg",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/FIFOReg.sv"
+        ],
+        "returncode": 0,
+        "result": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.025 MB sources in 2 modules, into 0.026 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.017 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.246 MB\n",
+        "output_sha256": "3348a728e48a3d46a1ea341a9b813f29d7a21d4f8a642d1b6d63661bbda50443"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/FIFOReg.sv; hierarchy -top FIFOReg; proc; check"
+        ],
+        "returncode": 1,
+        "result": "FAIL",
+        "output_tail": "\n /----------------------------------------------------------------------------\\\n |  yosys -- Yosys Open SYnthesis Suite                                       |\n |  Copyright (C) 2012 - 2025  Claire Xenia Wolf <claire@yosyshq.com>         |\n |  Distributed under an ISC-like license, type \"license\" to see terms        |\n \\----------------------------------------------------------------------------/\n Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\n\n-- Running command `read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/FIFOReg.sv; hierarchy -top FIFOReg; proc; check' --\n\n1. Executing Verilog-2005 frontend: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/FIFOReg.sv\n/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/FIFOReg.sv:65: ERROR: syntax error, unexpected TOK_AUTOMATIC\n",
+        "output_sha256": "4433305d2087125f9020b6188d28b709e1308130f62fe5d50111e080cdb38dfb"
+      }
+    },
+    "ICacheReplacer": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "--Wno-fatal",
+          "--top-module",
+          "ICacheReplacer",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/ICacheReplacer.sv"
+        ],
+        "returncode": 0,
+        "result": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.381 MB sources in 2 modules, into 1.306 MB in 6 C++ files needing 0.000 MB\n- Verilator: Walltime 0.454 s (elab=0.030, cvt=0.353, bld=0.000); cpu 0.434 s on 1 threads; alloced 31.074 MB\n",
+        "output_sha256": "f19148337bd109cdc3339efd5a8526fdd98a9fadd2bcb75fa3391f55601312f7"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/ICacheReplacer.sv; hierarchy -top ICacheReplacer; proc; check"
+        ],
+        "returncode": 1,
+        "result": "FAIL",
+        "output_tail": "\n /----------------------------------------------------------------------------\\\n |  yosys -- Yosys Open SYnthesis Suite                                       |\n |  Copyright (C) 2012 - 2025  Claire Xenia Wolf <claire@yosyshq.com>         |\n |  Distributed under an ISC-like license, type \"license\" to see terms        |\n \\----------------------------------------------------------------------------/\n Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\n\n-- Running command `read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/ICacheReplacer.sv; hierarchy -top ICacheReplacer; proc; check' --\n\n1. Executing Verilog-2005 frontend: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/ICacheReplacer.sv\n/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/ICacheReplacer.sv:801: ERROR: syntax error, unexpected TOK_AUTOMATIC\n",
+        "output_sha256": "0f6832fffbc605dc70932019847eacde51de9838d46f51e9ea9a07e46a69c0ec"
+      }
+    },
+    "ICacheMSHR_fetch": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "--Wno-fatal",
+          "--top-module",
+          "ICacheMSHR",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/ICacheMSHR.sv"
+        ],
+        "returncode": 0,
+        "result": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.024 MB sources in 2 modules, into 0.026 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.017 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.223 MB\n",
+        "output_sha256": "56871a6d1bf59339bd7f2a82e3cd8896a32a3701a79a1dcdd6986d7951302be3"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/ICacheMSHR.sv; hierarchy -top ICacheMSHR; proc; check"
+        ],
+        "returncode": 1,
+        "result": "FAIL",
+        "output_tail": "\n /----------------------------------------------------------------------------\\\n |  yosys -- Yosys Open SYnthesis Suite                                       |\n |  Copyright (C) 2012 - 2025  Claire Xenia Wolf <claire@yosyshq.com>         |\n |  Distributed under an ISC-like license, type \"license\" to see terms        |\n \\----------------------------------------------------------------------------/\n Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\n\n-- Running command `read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/ICacheMSHR.sv; hierarchy -top ICacheMSHR; proc; check' --\n\n1. Executing Verilog-2005 frontend: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/ICacheMSHR.sv\n/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/ICacheMSHR.sv:49: ERROR: syntax error, unexpected TOK_AUTOMATIC\n",
+        "output_sha256": "5b264f3e473f827ce39823322e12484f35ba0b062526bbb6f82055dbada4055a"
+      }
+    },
+    "ICacheMSHR_prefetch": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "--Wno-fatal",
+          "--top-module",
+          "ICacheMSHR_4",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/ICacheMSHR_4.sv"
+        ],
+        "returncode": 0,
+        "result": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.024 MB sources in 2 modules, into 0.028 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.016 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.234 MB\n",
+        "output_sha256": "83da0011a61299df04bdddfb714e87bf596d35ad0f801075932367344a96bbf5"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/ICacheMSHR_4.sv; hierarchy -top ICacheMSHR_4; proc; check"
+        ],
+        "returncode": 1,
+        "result": "FAIL",
+        "output_tail": "\n /----------------------------------------------------------------------------\\\n |  yosys -- Yosys Open SYnthesis Suite                                       |\n |  Copyright (C) 2012 - 2025  Claire Xenia Wolf <claire@yosyshq.com>         |\n |  Distributed under an ISC-like license, type \"license\" to see terms        |\n \\----------------------------------------------------------------------------/\n Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\n\n-- Running command `read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/ICacheMSHR_4.sv; hierarchy -top ICacheMSHR_4; proc; check' --\n\n1. Executing Verilog-2005 frontend: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/ICacheMSHR_4.sv\n/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/ICacheMSHR_4.sv:51: ERROR: syntax error, unexpected TOK_AUTOMATIC\n",
+        "output_sha256": "bd232838ba24064bd85bc5334de49d493718a8195081b9768f488f001d3da6e0"
+      }
+    }
+  },
+  "contract_audit": {
+    "result": "PASS",
+    "rows": [
+      {
+        "path": "python/ported/frontend/icache/ICacheMshr-Hardware.py",
+        "utf8": true,
+        "bom": false,
+        "lf_only": true,
+        "ast": true,
+        "zones": true,
+        "adapter_exact": true,
+        "missing_bilingual_comments": []
+      },
+      {
+        "path": "python/ported/frontend/icache/ICacheReplacer-Hardware.py",
+        "utf8": true,
+        "bom": false,
+        "lf_only": true,
+        "ast": true,
+        "zones": true,
+        "adapter_exact": true,
+        "missing_bilingual_comments": []
+      },
+      {
+        "path": "python/ported/frontend/icache/Utils-Hardware.py",
+        "utf8": true,
+        "bom": false,
+        "lf_only": true,
+        "ast": true,
+        "zones": true,
+        "adapter_exact": true,
+        "missing_bilingual_comments": []
+      }
+    ]
+  },
+  "trace_artifacts": {
+    "demux4": {
+      "target": {
+        "build": {
+          "command": [
+            "verilator",
+            "--cc",
+            "--exe",
+            "--build",
+            "--Wno-fatal",
+            "--top-module",
+            "DeMultiplexer",
+            "--Mdir",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/obj-target-demux4",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/demux4-target.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/icache_demux_v2_diff_tb.cpp",
+            "-CFLAGS",
+            "-DTARGET"
+          ],
+          "returncode": 0,
+          "result": "PASS",
+          "output_tail": "-DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DTARGET   -c -o verilated.o /usr/share/verilator/include/verilated.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DTARGET   -c -o verilated_threads.o /usr/share/verilator/include/verilated_threads.cpp\npython3 /usr/share/verilator/bin/verilator_includer -DVL_INCLUDE_OPT=include VDeMultiplexer.cpp VDeMultiplexer___024root__DepSet_hc528e699__0.cpp VDeMultiplexer___024root__DepSet_hdc5d3e0c__0.cpp VDeMultiplexer___024root__Slow.cpp VDeMultiplexer___024root__DepSet_hc528e699__0__Slow.cpp VDeMultiplexer___024root__DepSet_hdc5d3e0c__0__Slow.cpp VDeMultiplexer__Syms.cpp > VDeMultiplexer__ALL.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DTARGET   -c -o VDeMultiplexer__ALL.o VDeMultiplexer__ALL.cpp\necho \"\" > VDeMultiplexer__ALL.verilator_deplist.tmp\ng++    icache_demux_v2_diff_tb.o verilated.o verilated_threads.o VDeMultiplexer__ALL.a    -pthread -lpthread -latomic   -o VDeMultiplexer\nrm VDeMultiplexer__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/obj-target-demux4'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.032 MB sources in 2 modules, into 0.032 MB in 7 C++ files needing 0.000 MB\n- Verilator: Walltime 5.495 s (elab=0.000, cvt=0.043, bld=5.332); cpu 0.015 s on 1 threads; alloced 9.262 MB\n",
+          "output_sha256": "81435b1fef54b8567ffd56d35a1091aeae4eebe4475a39b42d6e4cd03a53a0bb"
+        },
+        "run": {
+          "command": [
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/obj-target-demux4/VDeMultiplexer"
+          ],
+          "returncode": 0,
+          "result": "PASS",
+          "output_tail": "lid\":0}\n{\"bits\":1125899906842623,\"ready\":15,\"valid\":1,\"in_ready\":1,\"out_valid\":1}\n{\"bits\":740122813761963,\"ready\":0,\"valid\":0,\"in_ready\":0,\"out_valid\":0}\n{\"bits\":740122813761963,\"ready\":0,\"valid\":1,\"in_ready\":0,\"out_valid\":15}\n{\"bits\":740122813761963,\"ready\":1,\"valid\":0,\"in_ready\":1,\"out_valid\":0}\n{\"bits\":740122813761963,\"ready\":1,\"valid\":1,\"in_ready\":1,\"out_valid\":1}\n{\"bits\":740122813761963,\"ready\":2,\"valid\":0,\"in_ready\":1,\"out_valid\":0}\n{\"bits\":740122813761963,\"ready\":2,\"valid\":1,\"in_ready\":1,\"out_valid\":3}\n{\"bits\":740122813761963,\"ready\":3,\"valid\":0,\"in_ready\":1,\"out_valid\":0}\n{\"bits\":740122813761963,\"ready\":3,\"valid\":1,\"in_ready\":1,\"out_valid\":1}\n{\"bits\":740122813761963,\"ready\":4,\"valid\":0,\"in_ready\":1,\"out_valid\":0}\n{\"bits\":740122813761963,\"ready\":4,\"valid\":1,\"in_ready\":1,\"out_valid\":7}\n{\"bits\":740122813761963,\"ready\":5,\"valid\":0,\"in_ready\":1,\"out_valid\":0}\n{\"bits\":740122813761963,\"ready\":5,\"valid\":1,\"in_ready\":1,\"out_valid\":1}\n{\"bits\":740122813761963,\"ready\":6,\"valid\":0,\"in_ready\":1,\"out_valid\":0}\n{\"bits\":740122813761963,\"ready\":6,\"valid\":1,\"in_ready\":1,\"out_valid\":3}\n{\"bits\":740122813761963,\"ready\":7,\"valid\":0,\"in_ready\":1,\"out_valid\":0}\n{\"bits\":740122813761963,\"ready\":7,\"valid\":1,\"in_ready\":1,\"out_valid\":1}\n{\"bits\":740122813761963,\"ready\":8,\"valid\":0,\"in_ready\":1,\"out_valid\":0}\n{\"bits\":740122813761963,\"ready\":8,\"valid\":1,\"in_ready\":1,\"out_valid\":15}\n{\"bits\":740122813761963,\"ready\":9,\"valid\":0,\"in_ready\":1,\"out_valid\":0}\n{\"bits\":740122813761963,\"ready\":9,\"valid\":1,\"in_ready\":1,\"out_valid\":1}\n{\"bits\":740122813761963,\"ready\":10,\"valid\":0,\"in_ready\":1,\"out_valid\":0}\n{\"bits\":740122813761963,\"ready\":10,\"valid\":1,\"in_ready\":1,\"out_valid\":3}\n{\"bits\":740122813761963,\"ready\":11,\"valid\":0,\"in_ready\":1,\"out_valid\":0}\n{\"bits\":740122813761963,\"ready\":11,\"valid\":1,\"in_ready\":1,\"out_valid\":1}\n{\"bits\":740122813761963,\"ready\":12,\"valid\":0,\"in_ready\":1,\"out_valid\":0}\n{\"bits\":740122813761963,\"ready\":12,\"valid\":1,\"in_ready\":1,\"out_valid\":7}\n{\"bits\":740122813761963,\"ready\":13,\"valid\":0,\"in_ready\":1,\"out_valid\":0}\n{\"bits\":740122813761963,\"ready\":13,\"valid\":1,\"in_ready\":1,\"out_valid\":1}\n{\"bits\":740122813761963,\"ready\":14,\"valid\":0,\"in_ready\":1,\"out_valid\":0}\n{\"bits\":740122813761963,\"ready\":14,\"valid\":1,\"in_ready\":1,\"out_valid\":3}\n{\"bits\":740122813761963,\"ready\":15,\"valid\":0,\"in_ready\":1,\"out_valid\":0}\n{\"bits\":740122813761963,\"ready\":15,\"valid\":1,\"in_ready\":1,\"out_valid\":1}\n",
+          "output_sha256": "4e55dfa86ca5f6bd6c07dca08c30125fc7fdab3a7e2bee71157e608b203d4636",
+          "full_returncode": 0,
+          "full_output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "trace": {
+          "path": "validation/.work/v2-p1-b-icache/target-demux4.jsonl",
+          "sha256": "4e55dfa86ca5f6bd6c07dca08c30125fc7fdab3a7e2bee71157e608b203d4636",
+          "vectors": 128
+        }
+      },
+      "reference": {
+        "build": {
+          "command": [
+            "verilator",
+            "--cc",
+            "--exe",
+            "--build",
+            "--Wno-fatal",
+            "--top-module",
+            "DeMultiplexer",
+            "--Mdir",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/obj-reference-demux4",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/DeMultiplexer.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/icache_demux_v2_diff_tb.cpp"
+          ],
+          "returncode": 0,
+          "result": "PASS",
+          "output_tail": "VM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -c -o verilated.o /usr/share/verilator/include/verilated.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -c -o verilated_threads.o /usr/share/verilator/include/verilated_threads.cpp\npython3 /usr/share/verilator/bin/verilator_includer -DVL_INCLUDE_OPT=include VDeMultiplexer.cpp VDeMultiplexer___024root__DepSet_hc528e699__0.cpp VDeMultiplexer___024root__DepSet_hdc5d3e0c__0.cpp VDeMultiplexer___024root__Slow.cpp VDeMultiplexer___024root__DepSet_hc528e699__0__Slow.cpp VDeMultiplexer___024root__DepSet_hdc5d3e0c__0__Slow.cpp VDeMultiplexer__Syms.cpp > VDeMultiplexer__ALL.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -c -o VDeMultiplexer__ALL.o VDeMultiplexer__ALL.cpp\necho \"\" > VDeMultiplexer__ALL.verilator_deplist.tmp\ng++    icache_demux_v2_diff_tb.o verilated.o verilated_threads.o VDeMultiplexer__ALL.a    -pthread -lpthread -latomic   -o VDeMultiplexer\nrm VDeMultiplexer__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/obj-reference-demux4'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.022 MB sources in 2 modules, into 0.033 MB in 7 C++ files needing 0.000 MB\n- Verilator: Walltime 5.330 s (elab=0.000, cvt=0.049, bld=5.179); cpu 0.011 s on 1 threads; alloced 9.082 MB\n",
+          "output_sha256": "85d2c220ed896a96efa214806fad97944d2654abf2847c3354e7eb84fba12151"
+        },
+        "run": {
+          "command": [
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/obj-reference-demux4/VDeMultiplexer"
+          ],
+          "returncode": 0,
+          "result": "PASS",
+          "output_tail": "lid\":0}\n{\"bits\":1125899906842623,\"ready\":15,\"valid\":1,\"in_ready\":1,\"out_valid\":1}\n{\"bits\":740122813761963,\"ready\":0,\"valid\":0,\"in_ready\":0,\"out_valid\":0}\n{\"bits\":740122813761963,\"ready\":0,\"valid\":1,\"in_ready\":0,\"out_valid\":15}\n{\"bits\":740122813761963,\"ready\":1,\"valid\":0,\"in_ready\":1,\"out_valid\":0}\n{\"bits\":740122813761963,\"ready\":1,\"valid\":1,\"in_ready\":1,\"out_valid\":1}\n{\"bits\":740122813761963,\"ready\":2,\"valid\":0,\"in_ready\":1,\"out_valid\":0}\n{\"bits\":740122813761963,\"ready\":2,\"valid\":1,\"in_ready\":1,\"out_valid\":3}\n{\"bits\":740122813761963,\"ready\":3,\"valid\":0,\"in_ready\":1,\"out_valid\":0}\n{\"bits\":740122813761963,\"ready\":3,\"valid\":1,\"in_ready\":1,\"out_valid\":1}\n{\"bits\":740122813761963,\"ready\":4,\"valid\":0,\"in_ready\":1,\"out_valid\":0}\n{\"bits\":740122813761963,\"ready\":4,\"valid\":1,\"in_ready\":1,\"out_valid\":7}\n{\"bits\":740122813761963,\"ready\":5,\"valid\":0,\"in_ready\":1,\"out_valid\":0}\n{\"bits\":740122813761963,\"ready\":5,\"valid\":1,\"in_ready\":1,\"out_valid\":1}\n{\"bits\":740122813761963,\"ready\":6,\"valid\":0,\"in_ready\":1,\"out_valid\":0}\n{\"bits\":740122813761963,\"ready\":6,\"valid\":1,\"in_ready\":1,\"out_valid\":3}\n{\"bits\":740122813761963,\"ready\":7,\"valid\":0,\"in_ready\":1,\"out_valid\":0}\n{\"bits\":740122813761963,\"ready\":7,\"valid\":1,\"in_ready\":1,\"out_valid\":1}\n{\"bits\":740122813761963,\"ready\":8,\"valid\":0,\"in_ready\":1,\"out_valid\":0}\n{\"bits\":740122813761963,\"ready\":8,\"valid\":1,\"in_ready\":1,\"out_valid\":15}\n{\"bits\":740122813761963,\"ready\":9,\"valid\":0,\"in_ready\":1,\"out_valid\":0}\n{\"bits\":740122813761963,\"ready\":9,\"valid\":1,\"in_ready\":1,\"out_valid\":1}\n{\"bits\":740122813761963,\"ready\":10,\"valid\":0,\"in_ready\":1,\"out_valid\":0}\n{\"bits\":740122813761963,\"ready\":10,\"valid\":1,\"in_ready\":1,\"out_valid\":3}\n{\"bits\":740122813761963,\"ready\":11,\"valid\":0,\"in_ready\":1,\"out_valid\":0}\n{\"bits\":740122813761963,\"ready\":11,\"valid\":1,\"in_ready\":1,\"out_valid\":1}\n{\"bits\":740122813761963,\"ready\":12,\"valid\":0,\"in_ready\":1,\"out_valid\":0}\n{\"bits\":740122813761963,\"ready\":12,\"valid\":1,\"in_ready\":1,\"out_valid\":7}\n{\"bits\":740122813761963,\"ready\":13,\"valid\":0,\"in_ready\":1,\"out_valid\":0}\n{\"bits\":740122813761963,\"ready\":13,\"valid\":1,\"in_ready\":1,\"out_valid\":1}\n{\"bits\":740122813761963,\"ready\":14,\"valid\":0,\"in_ready\":1,\"out_valid\":0}\n{\"bits\":740122813761963,\"ready\":14,\"valid\":1,\"in_ready\":1,\"out_valid\":3}\n{\"bits\":740122813761963,\"ready\":15,\"valid\":0,\"in_ready\":1,\"out_valid\":0}\n{\"bits\":740122813761963,\"ready\":15,\"valid\":1,\"in_ready\":1,\"out_valid\":1}\n",
+          "output_sha256": "4e55dfa86ca5f6bd6c07dca08c30125fc7fdab3a7e2bee71157e608b203d4636",
+          "full_returncode": 0,
+          "full_output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "trace": {
+          "path": "validation/.work/v2-p1-b-icache/reference-demux4.jsonl",
+          "sha256": "4e55dfa86ca5f6bd6c07dca08c30125fc7fdab3a7e2bee71157e608b203d4636",
+          "vectors": 128
+        }
+      },
+      "target_sha256": "507135a36c8dc1a0e97df0889038f5be5a14505d619720c22d2c7ec0bb4d17c5",
+      "reference_sha256": "2aaf079cf50c8fe4043b7d82b3cabc204b118f32aeef9087d73dd856b6569264"
+    },
+    "demux10": {
+      "target": {
+        "build": {
+          "command": [
+            "verilator",
+            "--cc",
+            "--exe",
+            "--build",
+            "--Wno-fatal",
+            "--top-module",
+            "DeMultiplexer",
+            "--Mdir",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/obj-target-demux10",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/demux10-target.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/icache_demux_v2_diff_tb.cpp",
+            "-CFLAGS",
+            "-DTARGET -DN10"
+          ],
+          "returncode": 0,
+          "result": "PASS",
+          "output_tail": "TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DTARGET -DN10   -c -o verilated.o /usr/share/verilator/include/verilated.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DTARGET -DN10   -c -o verilated_threads.o /usr/share/verilator/include/verilated_threads.cpp\npython3 /usr/share/verilator/bin/verilator_includer -DVL_INCLUDE_OPT=include VDeMultiplexer.cpp VDeMultiplexer___024root__DepSet_hc528e699__0.cpp VDeMultiplexer___024root__DepSet_hdc5d3e0c__0.cpp VDeMultiplexer___024root__Slow.cpp VDeMultiplexer___024root__DepSet_hc528e699__0__Slow.cpp VDeMultiplexer___024root__DepSet_hdc5d3e0c__0__Slow.cpp VDeMultiplexer__Syms.cpp > VDeMultiplexer__ALL.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DTARGET -DN10   -c -o VDeMultiplexer__ALL.o VDeMultiplexer__ALL.cpp\necho \"\" > VDeMultiplexer__ALL.verilator_deplist.tmp\ng++    icache_demux_v2_diff_tb.o verilated.o verilated_threads.o VDeMultiplexer__ALL.a    -pthread -lpthread -latomic   -o VDeMultiplexer\nrm VDeMultiplexer__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/obj-target-demux10'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.058 MB sources in 2 modules, into 0.039 MB in 7 C++ files needing 0.000 MB\n- Verilator: Walltime 5.395 s (elab=0.001, cvt=0.041, bld=5.256); cpu 0.013 s on 1 threads; alloced 9.543 MB\n",
+          "output_sha256": "ba535ef01ff0727d5010a3acd70f56562b9815d25e9f145a0e72c5563a75f54c"
+        },
+        "run": {
+          "command": [
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/obj-target-demux10/VDeMultiplexer"
+          ],
+          "returncode": 0,
+          "result": "PASS",
+          "output_tail": "40122813761963,\"ready\":1010,\"valid\":0,\"in_ready\":1,\"out_valid\":0,\"chosen\":1}\n{\"bits\":740122813761963,\"ready\":1010,\"valid\":1,\"in_ready\":1,\"out_valid\":3,\"chosen\":1}\n{\"bits\":740122813761963,\"ready\":1011,\"valid\":0,\"in_ready\":1,\"out_valid\":0,\"chosen\":0}\n{\"bits\":740122813761963,\"ready\":1011,\"valid\":1,\"in_ready\":1,\"out_valid\":1,\"chosen\":0}\n{\"bits\":740122813761963,\"ready\":1012,\"valid\":0,\"in_ready\":1,\"out_valid\":0,\"chosen\":2}\n{\"bits\":740122813761963,\"ready\":1012,\"valid\":1,\"in_ready\":1,\"out_valid\":7,\"chosen\":2}\n{\"bits\":740122813761963,\"ready\":1013,\"valid\":0,\"in_ready\":1,\"out_valid\":0,\"chosen\":0}\n{\"bits\":740122813761963,\"ready\":1013,\"valid\":1,\"in_ready\":1,\"out_valid\":1,\"chosen\":0}\n{\"bits\":740122813761963,\"ready\":1014,\"valid\":0,\"in_ready\":1,\"out_valid\":0,\"chosen\":1}\n{\"bits\":740122813761963,\"ready\":1014,\"valid\":1,\"in_ready\":1,\"out_valid\":3,\"chosen\":1}\n{\"bits\":740122813761963,\"ready\":1015,\"valid\":0,\"in_ready\":1,\"out_valid\":0,\"chosen\":0}\n{\"bits\":740122813761963,\"ready\":1015,\"valid\":1,\"in_ready\":1,\"out_valid\":1,\"chosen\":0}\n{\"bits\":740122813761963,\"ready\":1016,\"valid\":0,\"in_ready\":1,\"out_valid\":0,\"chosen\":3}\n{\"bits\":740122813761963,\"ready\":1016,\"valid\":1,\"in_ready\":1,\"out_valid\":15,\"chosen\":3}\n{\"bits\":740122813761963,\"ready\":1017,\"valid\":0,\"in_ready\":1,\"out_valid\":0,\"chosen\":0}\n{\"bits\":740122813761963,\"ready\":1017,\"valid\":1,\"in_ready\":1,\"out_valid\":1,\"chosen\":0}\n{\"bits\":740122813761963,\"ready\":1018,\"valid\":0,\"in_ready\":1,\"out_valid\":0,\"chosen\":1}\n{\"bits\":740122813761963,\"ready\":1018,\"valid\":1,\"in_ready\":1,\"out_valid\":3,\"chosen\":1}\n{\"bits\":740122813761963,\"ready\":1019,\"valid\":0,\"in_ready\":1,\"out_valid\":0,\"chosen\":0}\n{\"bits\":740122813761963,\"ready\":1019,\"valid\":1,\"in_ready\":1,\"out_valid\":1,\"chosen\":0}\n{\"bits\":740122813761963,\"ready\":1020,\"valid\":0,\"in_ready\":1,\"out_valid\":0,\"chosen\":2}\n{\"bits\":740122813761963,\"ready\":1020,\"valid\":1,\"in_ready\":1,\"out_valid\":7,\"chosen\":2}\n{\"bits\":740122813761963,\"ready\":1021,\"valid\":0,\"in_ready\":1,\"out_valid\":0,\"chosen\":0}\n{\"bits\":740122813761963,\"ready\":1021,\"valid\":1,\"in_ready\":1,\"out_valid\":1,\"chosen\":0}\n{\"bits\":740122813761963,\"ready\":1022,\"valid\":0,\"in_ready\":1,\"out_valid\":0,\"chosen\":1}\n{\"bits\":740122813761963,\"ready\":1022,\"valid\":1,\"in_ready\":1,\"out_valid\":3,\"chosen\":1}\n{\"bits\":740122813761963,\"ready\":1023,\"valid\":0,\"in_ready\":1,\"out_valid\":0,\"chosen\":0}\n{\"bits\":740122813761963,\"ready\":1023,\"valid\":1,\"in_ready\":1,\"out_valid\":1,\"chosen\":0}\n",
+          "output_sha256": "2b612139e6c350f640c1fe9bad846b821b7e74b01e04f701c5a4b7fe238fa1b8",
+          "full_returncode": 0,
+          "full_output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "trace": {
+          "path": "validation/.work/v2-p1-b-icache/target-demux10.jsonl",
+          "sha256": "2b612139e6c350f640c1fe9bad846b821b7e74b01e04f701c5a4b7fe238fa1b8",
+          "vectors": 8192
+        }
+      },
+      "reference": {
+        "build": {
+          "command": [
+            "verilator",
+            "--cc",
+            "--exe",
+            "--build",
+            "--Wno-fatal",
+            "--top-module",
+            "DeMultiplexer_1",
+            "--Mdir",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/obj-reference-demux10",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/DeMultiplexer_1.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/icache_demux_v2_diff_tb.cpp",
+            "-CFLAGS",
+            "-DN10"
+          ],
+          "returncode": 0,
+          "result": "PASS",
+          "output_tail": "E=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DN10   -c -o verilated.o /usr/share/verilator/include/verilated.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DN10   -c -o verilated_threads.o /usr/share/verilator/include/verilated_threads.cpp\npython3 /usr/share/verilator/bin/verilator_includer -DVL_INCLUDE_OPT=include VDeMultiplexer_1.cpp VDeMultiplexer_1___024root__DepSet_ha3c72f71__0.cpp VDeMultiplexer_1___024root__DepSet_hab28d779__0.cpp VDeMultiplexer_1___024root__Slow.cpp VDeMultiplexer_1___024root__DepSet_ha3c72f71__0__Slow.cpp VDeMultiplexer_1___024root__DepSet_hab28d779__0__Slow.cpp VDeMultiplexer_1__Syms.cpp > VDeMultiplexer_1__ALL.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DN10   -c -o VDeMultiplexer_1__ALL.o VDeMultiplexer_1__ALL.cpp\necho \"\" > VDeMultiplexer_1__ALL.verilator_deplist.tmp\ng++    icache_demux_v2_diff_tb.o verilated.o verilated_threads.o VDeMultiplexer_1__ALL.a    -pthread -lpthread -latomic   -o VDeMultiplexer_1\nrm VDeMultiplexer_1__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/obj-reference-demux10'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.025 MB sources in 2 modules, into 0.043 MB in 7 C++ files needing 0.000 MB\n- Verilator: Walltime 5.471 s (elab=0.000, cvt=0.044, bld=5.317); cpu 0.013 s on 1 threads; alloced 9.230 MB\n",
+          "output_sha256": "7ea00eafecea352d2559ad42da8b2a4b6fadec605519a0c095772bb3fa218e79"
+        },
+        "run": {
+          "command": [
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/obj-reference-demux10/VDeMultiplexer_1"
+          ],
+          "returncode": 0,
+          "result": "PASS",
+          "output_tail": "40122813761963,\"ready\":1010,\"valid\":0,\"in_ready\":1,\"out_valid\":0,\"chosen\":1}\n{\"bits\":740122813761963,\"ready\":1010,\"valid\":1,\"in_ready\":1,\"out_valid\":3,\"chosen\":1}\n{\"bits\":740122813761963,\"ready\":1011,\"valid\":0,\"in_ready\":1,\"out_valid\":0,\"chosen\":0}\n{\"bits\":740122813761963,\"ready\":1011,\"valid\":1,\"in_ready\":1,\"out_valid\":1,\"chosen\":0}\n{\"bits\":740122813761963,\"ready\":1012,\"valid\":0,\"in_ready\":1,\"out_valid\":0,\"chosen\":2}\n{\"bits\":740122813761963,\"ready\":1012,\"valid\":1,\"in_ready\":1,\"out_valid\":7,\"chosen\":2}\n{\"bits\":740122813761963,\"ready\":1013,\"valid\":0,\"in_ready\":1,\"out_valid\":0,\"chosen\":0}\n{\"bits\":740122813761963,\"ready\":1013,\"valid\":1,\"in_ready\":1,\"out_valid\":1,\"chosen\":0}\n{\"bits\":740122813761963,\"ready\":1014,\"valid\":0,\"in_ready\":1,\"out_valid\":0,\"chosen\":1}\n{\"bits\":740122813761963,\"ready\":1014,\"valid\":1,\"in_ready\":1,\"out_valid\":3,\"chosen\":1}\n{\"bits\":740122813761963,\"ready\":1015,\"valid\":0,\"in_ready\":1,\"out_valid\":0,\"chosen\":0}\n{\"bits\":740122813761963,\"ready\":1015,\"valid\":1,\"in_ready\":1,\"out_valid\":1,\"chosen\":0}\n{\"bits\":740122813761963,\"ready\":1016,\"valid\":0,\"in_ready\":1,\"out_valid\":0,\"chosen\":3}\n{\"bits\":740122813761963,\"ready\":1016,\"valid\":1,\"in_ready\":1,\"out_valid\":15,\"chosen\":3}\n{\"bits\":740122813761963,\"ready\":1017,\"valid\":0,\"in_ready\":1,\"out_valid\":0,\"chosen\":0}\n{\"bits\":740122813761963,\"ready\":1017,\"valid\":1,\"in_ready\":1,\"out_valid\":1,\"chosen\":0}\n{\"bits\":740122813761963,\"ready\":1018,\"valid\":0,\"in_ready\":1,\"out_valid\":0,\"chosen\":1}\n{\"bits\":740122813761963,\"ready\":1018,\"valid\":1,\"in_ready\":1,\"out_valid\":3,\"chosen\":1}\n{\"bits\":740122813761963,\"ready\":1019,\"valid\":0,\"in_ready\":1,\"out_valid\":0,\"chosen\":0}\n{\"bits\":740122813761963,\"ready\":1019,\"valid\":1,\"in_ready\":1,\"out_valid\":1,\"chosen\":0}\n{\"bits\":740122813761963,\"ready\":1020,\"valid\":0,\"in_ready\":1,\"out_valid\":0,\"chosen\":2}\n{\"bits\":740122813761963,\"ready\":1020,\"valid\":1,\"in_ready\":1,\"out_valid\":7,\"chosen\":2}\n{\"bits\":740122813761963,\"ready\":1021,\"valid\":0,\"in_ready\":1,\"out_valid\":0,\"chosen\":0}\n{\"bits\":740122813761963,\"ready\":1021,\"valid\":1,\"in_ready\":1,\"out_valid\":1,\"chosen\":0}\n{\"bits\":740122813761963,\"ready\":1022,\"valid\":0,\"in_ready\":1,\"out_valid\":0,\"chosen\":1}\n{\"bits\":740122813761963,\"ready\":1022,\"valid\":1,\"in_ready\":1,\"out_valid\":3,\"chosen\":1}\n{\"bits\":740122813761963,\"ready\":1023,\"valid\":0,\"in_ready\":1,\"out_valid\":0,\"chosen\":0}\n{\"bits\":740122813761963,\"ready\":1023,\"valid\":1,\"in_ready\":1,\"out_valid\":1,\"chosen\":0}\n",
+          "output_sha256": "2b612139e6c350f640c1fe9bad846b821b7e74b01e04f701c5a4b7fe238fa1b8",
+          "full_returncode": 0,
+          "full_output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "trace": {
+          "path": "validation/.work/v2-p1-b-icache/reference-demux10.jsonl",
+          "sha256": "2b612139e6c350f640c1fe9bad846b821b7e74b01e04f701c5a4b7fe238fa1b8",
+          "vectors": 8192
+        }
+      },
+      "target_sha256": "11afb304d819c94d1caf61e3205c294e455ece56435a011afaf7f4962a6196fa",
+      "reference_sha256": "71f94459f54714ad7e4b37e5cd8a96cfd24ea2b1eec7a4ffbb0c6c2a1446e67d"
+    },
+    "mux": {
+      "target": {
+        "build": {
+          "command": [
+            "verilator",
+            "--cc",
+            "--exe",
+            "--build",
+            "--Wno-fatal",
+            "--top-module",
+            "MuxBundle",
+            "--Mdir",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/obj-target-mux",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/mux-target.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/icache_mux_v2_diff_tb.cpp",
+            "-CFLAGS",
+            "-DTARGET"
+          ],
+          "returncode": 0,
+          "result": "PASS",
+          "output_tail": "d\\\\frontend\\\\icache\\\\Utils-Hardware.py:90\" *) 3'h4;\n      |                         ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/mux-target.sv:199:25: Operator EQ expects 4 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                                                                                                                              : ... note: In instance 'MuxBundle'\n  199 |   assign \\$34  = io_sel == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\ported\\\\frontend\\\\icache\\\\Utils-Hardware.py:90\" *) 2'h3;\n      |                         ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/mux-target.sv:200:25: Operator EQ expects 4 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                                              : ... note: In instance 'MuxBundle'\n  200 |   assign \\$35  = io_sel == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\ported\\\\frontend\\\\icache\\\\Utils-Hardware.py:90\" *) 2'h2;\n      |                         ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/mux-target.sv:201:25: Operator EQ expects 4 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                              : ... note: In instance 'MuxBundle'\n  201 |   assign \\$36  = io_sel == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\ported\\\\frontend\\\\icache\\\\Utils-Hardware.py:90\" *) 1'h1;\n      |                         ^~\n",
+          "output_sha256": "85a5d69043e97f6dd9e42eafa470b76412f3b08419be854153bcc2528e4a027c"
+        },
+        "run": {
+          "command": [
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/obj-target-mux/VMuxBundle"
+          ],
+          "returncode": 0,
+          "result": "PASS",
+          "output_tail": "\"in_ready\":16,\"out_valid\":1,\"out_bits\":1000119374759657544}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":5,\"ready\":0,\"in_ready\":0,\"out_valid\":1,\"out_bits\":1004622974387028057}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":5,\"ready\":1,\"in_ready\":32,\"out_valid\":1,\"out_bits\":1004622974387028057}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":6,\"ready\":0,\"in_ready\":0,\"out_valid\":1,\"out_bits\":1009126574014398570}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":6,\"ready\":1,\"in_ready\":64,\"out_valid\":1,\"out_bits\":1009126574014398570}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":7,\"ready\":0,\"in_ready\":0,\"out_valid\":1,\"out_bits\":1013630173641769083}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":7,\"ready\":1,\"in_ready\":128,\"out_valid\":1,\"out_bits\":1013630173641769083}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":8,\"ready\":0,\"in_ready\":0,\"out_valid\":1,\"out_bits\":1018133773269139596}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":8,\"ready\":1,\"in_ready\":256,\"out_valid\":1,\"out_bits\":1018133773269139596}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":9,\"ready\":0,\"in_ready\":0,\"out_valid\":1,\"out_bits\":1022637372896510109}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":9,\"ready\":1,\"in_ready\":512,\"out_valid\":1,\"out_bits\":1022637372896510109}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":10,\"ready\":0,\"in_ready\":0,\"out_valid\":1,\"out_bits\":982104976250175492}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":10,\"ready\":1,\"in_ready\":0,\"out_valid\":1,\"out_bits\":982104976250175492}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":11,\"ready\":0,\"in_ready\":0,\"out_valid\":1,\"out_bits\":982104976250175492}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":11,\"ready\":1,\"in_ready\":0,\"out_valid\":1,\"out_bits\":982104976250175492}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":12,\"ready\":0,\"in_ready\":0,\"out_valid\":1,\"out_bits\":982104976250175492}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":12,\"ready\":1,\"in_ready\":0,\"out_valid\":1,\"out_bits\":982104976250175492}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":13,\"ready\":0,\"in_ready\":0,\"out_valid\":1,\"out_bits\":982104976250175492}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":13,\"ready\":1,\"in_ready\":0,\"out_valid\":1,\"out_bits\":982104976250175492}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":14,\"ready\":0,\"in_ready\":0,\"out_valid\":1,\"out_bits\":982104976250175492}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":14,\"ready\":1,\"in_ready\":0,\"out_valid\":1,\"out_bits\":982104976250175492}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":15,\"ready\":0,\"in_ready\":0,\"out_valid\":1,\"out_bits\":982104976250175492}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":15,\"ready\":1,\"in_ready\":0,\"out_valid\":1,\"out_bits\":982104976250175492}\n",
+          "output_sha256": "2a1a50e90712823e7ae603e3f1f7eb00c410f1e29f102c7162a22c16a3daf363",
+          "full_returncode": 0,
+          "full_output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "trace": {
+          "path": "validation/.work/v2-p1-b-icache/target-mux.jsonl",
+          "sha256": "2a1a50e90712823e7ae603e3f1f7eb00c410f1e29f102c7162a22c16a3daf363",
+          "vectors": 65536
+        }
+      },
+      "reference": {
+        "build": {
+          "command": [
+            "verilator",
+            "--cc",
+            "--exe",
+            "--build",
+            "--Wno-fatal",
+            "--top-module",
+            "MuxBundle",
+            "--Mdir",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/obj-reference-mux",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/MuxBundle.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/icache_mux_v2_diff_tb.cpp"
+          ],
+          "returncode": 0,
+          "result": "PASS",
+          "output_tail": "re/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -c -o verilated.o /usr/share/verilator/include/verilated.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -c -o verilated_threads.o /usr/share/verilator/include/verilated_threads.cpp\npython3 /usr/share/verilator/bin/verilator_includer -DVL_INCLUDE_OPT=include VMuxBundle.cpp VMuxBundle___024root__DepSet_h791b6792__0.cpp VMuxBundle___024root__DepSet_h202919d9__0.cpp VMuxBundle___024root__Slow.cpp VMuxBundle___024root__DepSet_h791b6792__0__Slow.cpp VMuxBundle___024root__DepSet_h202919d9__0__Slow.cpp VMuxBundle__Syms.cpp > VMuxBundle__ALL.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -c -o VMuxBundle__ALL.o VMuxBundle__ALL.cpp\necho \"\" > VMuxBundle__ALL.verilator_deplist.tmp\ng++    icache_mux_v2_diff_tb.o verilated.o verilated_threads.o VMuxBundle__ALL.a    -pthread -lpthread -latomic   -o VMuxBundle\nrm VMuxBundle__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/obj-reference-mux'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.026 MB sources in 2 modules, into 0.042 MB in 7 C++ files needing 0.000 MB\n- Verilator: Walltime 5.393 s (elab=0.000, cvt=0.044, bld=5.222); cpu 0.016 s on 1 threads; alloced 9.375 MB\n",
+          "output_sha256": "178e2252c38a3b3d8d3955e82f3624a1f122fad9e1c6712c6932842e39fb1bf1"
+        },
+        "run": {
+          "command": [
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/obj-reference-mux/VMuxBundle"
+          ],
+          "returncode": 0,
+          "result": "PASS",
+          "output_tail": "\"in_ready\":16,\"out_valid\":1,\"out_bits\":1000119374759657544}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":5,\"ready\":0,\"in_ready\":0,\"out_valid\":1,\"out_bits\":1004622974387028057}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":5,\"ready\":1,\"in_ready\":32,\"out_valid\":1,\"out_bits\":1004622974387028057}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":6,\"ready\":0,\"in_ready\":0,\"out_valid\":1,\"out_bits\":1009126574014398570}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":6,\"ready\":1,\"in_ready\":64,\"out_valid\":1,\"out_bits\":1009126574014398570}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":7,\"ready\":0,\"in_ready\":0,\"out_valid\":1,\"out_bits\":1013630173641769083}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":7,\"ready\":1,\"in_ready\":128,\"out_valid\":1,\"out_bits\":1013630173641769083}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":8,\"ready\":0,\"in_ready\":0,\"out_valid\":1,\"out_bits\":1018133773269139596}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":8,\"ready\":1,\"in_ready\":256,\"out_valid\":1,\"out_bits\":1018133773269139596}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":9,\"ready\":0,\"in_ready\":0,\"out_valid\":1,\"out_bits\":1022637372896510109}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":9,\"ready\":1,\"in_ready\":512,\"out_valid\":1,\"out_bits\":1022637372896510109}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":10,\"ready\":0,\"in_ready\":0,\"out_valid\":1,\"out_bits\":982104976250175492}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":10,\"ready\":1,\"in_ready\":0,\"out_valid\":1,\"out_bits\":982104976250175492}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":11,\"ready\":0,\"in_ready\":0,\"out_valid\":1,\"out_bits\":982104976250175492}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":11,\"ready\":1,\"in_ready\":0,\"out_valid\":1,\"out_bits\":982104976250175492}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":12,\"ready\":0,\"in_ready\":0,\"out_valid\":1,\"out_bits\":982104976250175492}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":12,\"ready\":1,\"in_ready\":0,\"out_valid\":1,\"out_bits\":982104976250175492}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":13,\"ready\":0,\"in_ready\":0,\"out_valid\":1,\"out_bits\":982104976250175492}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":13,\"ready\":1,\"in_ready\":0,\"out_valid\":1,\"out_bits\":982104976250175492}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":14,\"ready\":0,\"in_ready\":0,\"out_valid\":1,\"out_bits\":982104976250175492}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":14,\"ready\":1,\"in_ready\":0,\"out_valid\":1,\"out_bits\":982104976250175492}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":15,\"ready\":0,\"in_ready\":0,\"out_valid\":1,\"out_bits\":982104976250175492}\n{\"seed\":90,\"valid_mask\":1023,\"sel\":15,\"ready\":1,\"in_ready\":0,\"out_valid\":1,\"out_bits\":982104976250175492}\n",
+          "output_sha256": "2a1a50e90712823e7ae603e3f1f7eb00c410f1e29f102c7162a22c16a3daf363",
+          "full_returncode": 0,
+          "full_output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "trace": {
+          "path": "validation/.work/v2-p1-b-icache/reference-mux.jsonl",
+          "sha256": "2a1a50e90712823e7ae603e3f1f7eb00c410f1e29f102c7162a22c16a3daf363",
+          "vectors": 65536
+        }
+      },
+      "target_sha256": "e80cdaff0539cfdd0fd6f3ae2e33e3ed74f89e35b3f4aa06e7e3f49a1f2c8bca",
+      "reference_sha256": "1df9431d5ecc0715c9db3d78e729458cb9a8fd04e7de1f6b84149cb36aa99a71"
+    },
+    "fifo": {
+      "target": {
+        "build": {
+          "command": [
+            "verilator",
+            "--cc",
+            "--exe",
+            "--build",
+            "--Wno-fatal",
+            "--top-module",
+            "FIFOReg",
+            "--Mdir",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/obj-target-fifo",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/fifo-target.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/icache_fifo_v2_diff_tb.cpp",
+            "-CFLAGS",
+            "-DTARGET"
+          ],
+          "returncode": 0,
+          "result": "PASS",
+          "output_tail": "v2/validation/.work/v2-p1-b-icache/fifo-target.sv:197:7: Case values incompletely covered (example pattern 0x1)\n  197 |       casez (enq_ptr_value)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/fifo-target.sv:210:7: Case values incompletely covered (example pattern 0x2)\n  210 |       casez (enq_ptr_value)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/fifo-target.sv:225:7: Case values incompletely covered (example pattern 0x3)\n  225 |       casez (enq_ptr_value)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/fifo-target.sv:242:7: Case values incompletely covered (example pattern 0x4)\n  242 |       casez (enq_ptr_value)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/fifo-target.sv:261:7: Case values incompletely covered (example pattern 0x5)\n  261 |       casez (enq_ptr_value)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/fifo-target.sv:282:7: Case values incompletely covered (example pattern 0x6)\n  282 |       casez (enq_ptr_value)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/fifo-target.sv:305:7: Case values incompletely covered (example pattern 0x7)\n  305 |       casez (enq_ptr_value)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/fifo-target.sv:330:7: Case values incompletely covered (example pattern 0x8)\n  330 |       casez (enq_ptr_value)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/fifo-target.sv:357:7: Case values incompletely covered (example pattern 0x9)\n  357 |       casez (enq_ptr_value)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/fifo-target.sv:386:7: Case values incompletely covered (example pattern 0xa)\n  386 |       casez (enq_ptr_value)\n      |       ^~~~~\n",
+          "output_sha256": "c272f0906b3c30ce0687cf944c52df246966b78b12fa815f6105b4816efa2f5b"
+        },
+        "run": {
+          "command": [
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/obj-target-fifo/VFIFOReg"
+          ],
+          "returncode": 0,
+          "result": "PASS",
+          "output_tail": "\":1,\"deq_valid\":1,\"deq_bits\":13}\n{\"cycle\":501,\"enq\":1,\"bits\":11,\"deq\":1,\"flush\":1,\"enq_ready\":1,\"deq_valid\":1,\"deq_bits\":8}\n{\"cycle\":502,\"enq\":0,\"bits\":2,\"deq\":1,\"flush\":1,\"enq_ready\":1,\"deq_valid\":0,\"deq_bits\":13}\n{\"cycle\":503,\"enq\":0,\"bits\":2,\"deq\":1,\"flush\":1,\"enq_ready\":1,\"deq_valid\":0,\"deq_bits\":13}\n{\"cycle\":504,\"enq\":0,\"bits\":14,\"deq\":1,\"flush\":0,\"enq_ready\":1,\"deq_valid\":0,\"deq_bits\":13}\n{\"cycle\":505,\"enq\":1,\"bits\":10,\"deq\":0,\"flush\":1,\"enq_ready\":1,\"deq_valid\":0,\"deq_bits\":13}\n{\"cycle\":506,\"enq\":1,\"bits\":11,\"deq\":0,\"flush\":1,\"enq_ready\":1,\"deq_valid\":0,\"deq_bits\":10}\n{\"cycle\":507,\"enq\":1,\"bits\":13,\"deq\":0,\"flush\":0,\"enq_ready\":1,\"deq_valid\":0,\"deq_bits\":11}\n{\"cycle\":508,\"enq\":0,\"bits\":13,\"deq\":0,\"flush\":1,\"enq_ready\":1,\"deq_valid\":1,\"deq_bits\":13}\n{\"cycle\":509,\"enq\":0,\"bits\":7,\"deq\":1,\"flush\":0,\"enq_ready\":1,\"deq_valid\":0,\"deq_bits\":13}\n{\"cycle\":510,\"enq\":1,\"bits\":12,\"deq\":0,\"flush\":0,\"enq_ready\":1,\"deq_valid\":0,\"deq_bits\":13}\n{\"cycle\":511,\"enq\":0,\"bits\":9,\"deq\":0,\"flush\":1,\"enq_ready\":1,\"deq_valid\":1,\"deq_bits\":12}\n{\"cycle\":512,\"enq\":0,\"bits\":8,\"deq\":1,\"flush\":1,\"enq_ready\":1,\"deq_valid\":0,\"deq_bits\":12}\n{\"cycle\":513,\"enq\":0,\"bits\":13,\"deq\":0,\"flush\":0,\"enq_ready\":1,\"deq_valid\":0,\"deq_bits\":12}\n{\"cycle\":514,\"enq\":0,\"bits\":7,\"deq\":0,\"flush\":0,\"enq_ready\":1,\"deq_valid\":0,\"deq_bits\":12}\n{\"cycle\":515,\"enq\":1,\"bits\":11,\"deq\":0,\"flush\":1,\"enq_ready\":1,\"deq_valid\":0,\"deq_bits\":12}\n{\"cycle\":516,\"enq\":1,\"bits\":9,\"deq\":0,\"flush\":1,\"enq_ready\":1,\"deq_valid\":0,\"deq_bits\":11}\n{\"cycle\":517,\"enq\":1,\"bits\":11,\"deq\":0,\"flush\":1,\"enq_ready\":1,\"deq_valid\":0,\"deq_bits\":9}\n{\"cycle\":518,\"enq\":1,\"bits\":7,\"deq\":1,\"flush\":0,\"enq_ready\":1,\"deq_valid\":0,\"deq_bits\":11}\n{\"cycle\":519,\"enq\":1,\"bits\":3,\"deq\":0,\"flush\":1,\"enq_ready\":1,\"deq_valid\":1,\"deq_bits\":7}\n{\"cycle\":520,\"enq\":1,\"bits\":0,\"deq\":0,\"flush\":0,\"enq_ready\":1,\"deq_valid\":0,\"deq_bits\":7}\n{\"cycle\":521,\"enq\":0,\"bits\":1,\"deq\":0,\"flush\":1,\"enq_ready\":1,\"deq_valid\":1,\"deq_bits\":0}\n{\"cycle\":522,\"enq\":0,\"bits\":8,\"deq\":0,\"flush\":1,\"enq_ready\":1,\"deq_valid\":0,\"deq_bits\":0}\n{\"cycle\":523,\"enq\":0,\"bits\":0,\"deq\":0,\"flush\":1,\"enq_ready\":1,\"deq_valid\":0,\"deq_bits\":0}\n{\"cycle\":524,\"enq\":1,\"bits\":8,\"deq\":1,\"flush\":0,\"enq_ready\":1,\"deq_valid\":0,\"deq_bits\":0}\n{\"cycle\":525,\"enq\":1,\"bits\":15,\"deq\":0,\"flush\":0,\"enq_ready\":1,\"deq_valid\":1,\"deq_bits\":8}\n{\"cycle\":526,\"enq\":0,\"bits\":7,\"deq\":0,\"flush\":1,\"enq_ready\":1,\"deq_valid\":1,\"deq_bits\":8}\n",
+          "output_sha256": "10f6e4e5ee365dcf2b2617cad93c956c2a62c9c7a5e9759a125fe3899b947283",
+          "full_returncode": 0,
+          "full_output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "trace": {
+          "path": "validation/.work/v2-p1-b-icache/target-fifo.jsonl",
+          "sha256": "10f6e4e5ee365dcf2b2617cad93c956c2a62c9c7a5e9759a125fe3899b947283",
+          "vectors": 527
+        }
+      },
+      "reference": {
+        "build": {
+          "command": [
+            "verilator",
+            "--cc",
+            "--exe",
+            "--build",
+            "--Wno-fatal",
+            "--top-module",
+            "FIFOReg",
+            "--Mdir",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/obj-reference-fifo",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/FIFOReg.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/icache_fifo_v2_diff_tb.cpp"
+          ],
+          "returncode": 0,
+          "result": "PASS",
+          "output_tail": " -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -c -o verilated.o /usr/share/verilator/include/verilated.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -c -o verilated_threads.o /usr/share/verilator/include/verilated_threads.cpp\npython3 /usr/share/verilator/bin/verilator_includer -DVL_INCLUDE_OPT=include VFIFOReg.cpp VFIFOReg___024root__DepSet_h8aea02d2__0.cpp VFIFOReg___024root__DepSet_hfa791238__0.cpp VFIFOReg___024root__Slow.cpp VFIFOReg___024root__DepSet_h8aea02d2__0__Slow.cpp VFIFOReg___024root__DepSet_hfa791238__0__Slow.cpp VFIFOReg__Syms.cpp > VFIFOReg__ALL.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -c -o VFIFOReg__ALL.o VFIFOReg__ALL.cpp\necho \"\" > VFIFOReg__ALL.verilator_deplist.tmp\ng++    icache_fifo_v2_diff_tb.o verilated.o verilated_threads.o VFIFOReg__ALL.a    -pthread -lpthread -latomic   -o VFIFOReg\nrm VFIFOReg__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/obj-reference-fifo'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.025 MB sources in 2 modules, into 0.044 MB in 7 C++ files needing 0.000 MB\n- Verilator: Walltime 5.274 s (elab=0.000, cvt=0.054, bld=5.089); cpu 0.016 s on 1 threads; alloced 9.246 MB\n",
+          "output_sha256": "8f5839fca4fc88b00816267aaacad079dbf729636da874dd1dd9296411a8f157"
+        },
+        "run": {
+          "command": [
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/obj-reference-fifo/VFIFOReg"
+          ],
+          "returncode": 0,
+          "result": "PASS",
+          "output_tail": "\":1,\"deq_valid\":1,\"deq_bits\":13}\n{\"cycle\":501,\"enq\":1,\"bits\":11,\"deq\":1,\"flush\":1,\"enq_ready\":1,\"deq_valid\":1,\"deq_bits\":8}\n{\"cycle\":502,\"enq\":0,\"bits\":2,\"deq\":1,\"flush\":1,\"enq_ready\":1,\"deq_valid\":0,\"deq_bits\":13}\n{\"cycle\":503,\"enq\":0,\"bits\":2,\"deq\":1,\"flush\":1,\"enq_ready\":1,\"deq_valid\":0,\"deq_bits\":13}\n{\"cycle\":504,\"enq\":0,\"bits\":14,\"deq\":1,\"flush\":0,\"enq_ready\":1,\"deq_valid\":0,\"deq_bits\":13}\n{\"cycle\":505,\"enq\":1,\"bits\":10,\"deq\":0,\"flush\":1,\"enq_ready\":1,\"deq_valid\":0,\"deq_bits\":13}\n{\"cycle\":506,\"enq\":1,\"bits\":11,\"deq\":0,\"flush\":1,\"enq_ready\":1,\"deq_valid\":0,\"deq_bits\":10}\n{\"cycle\":507,\"enq\":1,\"bits\":13,\"deq\":0,\"flush\":0,\"enq_ready\":1,\"deq_valid\":0,\"deq_bits\":11}\n{\"cycle\":508,\"enq\":0,\"bits\":13,\"deq\":0,\"flush\":1,\"enq_ready\":1,\"deq_valid\":1,\"deq_bits\":13}\n{\"cycle\":509,\"enq\":0,\"bits\":7,\"deq\":1,\"flush\":0,\"enq_ready\":1,\"deq_valid\":0,\"deq_bits\":13}\n{\"cycle\":510,\"enq\":1,\"bits\":12,\"deq\":0,\"flush\":0,\"enq_ready\":1,\"deq_valid\":0,\"deq_bits\":13}\n{\"cycle\":511,\"enq\":0,\"bits\":9,\"deq\":0,\"flush\":1,\"enq_ready\":1,\"deq_valid\":1,\"deq_bits\":12}\n{\"cycle\":512,\"enq\":0,\"bits\":8,\"deq\":1,\"flush\":1,\"enq_ready\":1,\"deq_valid\":0,\"deq_bits\":12}\n{\"cycle\":513,\"enq\":0,\"bits\":13,\"deq\":0,\"flush\":0,\"enq_ready\":1,\"deq_valid\":0,\"deq_bits\":12}\n{\"cycle\":514,\"enq\":0,\"bits\":7,\"deq\":0,\"flush\":0,\"enq_ready\":1,\"deq_valid\":0,\"deq_bits\":12}\n{\"cycle\":515,\"enq\":1,\"bits\":11,\"deq\":0,\"flush\":1,\"enq_ready\":1,\"deq_valid\":0,\"deq_bits\":12}\n{\"cycle\":516,\"enq\":1,\"bits\":9,\"deq\":0,\"flush\":1,\"enq_ready\":1,\"deq_valid\":0,\"deq_bits\":11}\n{\"cycle\":517,\"enq\":1,\"bits\":11,\"deq\":0,\"flush\":1,\"enq_ready\":1,\"deq_valid\":0,\"deq_bits\":9}\n{\"cycle\":518,\"enq\":1,\"bits\":7,\"deq\":1,\"flush\":0,\"enq_ready\":1,\"deq_valid\":0,\"deq_bits\":11}\n{\"cycle\":519,\"enq\":1,\"bits\":3,\"deq\":0,\"flush\":1,\"enq_ready\":1,\"deq_valid\":1,\"deq_bits\":7}\n{\"cycle\":520,\"enq\":1,\"bits\":0,\"deq\":0,\"flush\":0,\"enq_ready\":1,\"deq_valid\":0,\"deq_bits\":7}\n{\"cycle\":521,\"enq\":0,\"bits\":1,\"deq\":0,\"flush\":1,\"enq_ready\":1,\"deq_valid\":1,\"deq_bits\":0}\n{\"cycle\":522,\"enq\":0,\"bits\":8,\"deq\":0,\"flush\":1,\"enq_ready\":1,\"deq_valid\":0,\"deq_bits\":0}\n{\"cycle\":523,\"enq\":0,\"bits\":0,\"deq\":0,\"flush\":1,\"enq_ready\":1,\"deq_valid\":0,\"deq_bits\":0}\n{\"cycle\":524,\"enq\":1,\"bits\":8,\"deq\":1,\"flush\":0,\"enq_ready\":1,\"deq_valid\":0,\"deq_bits\":0}\n{\"cycle\":525,\"enq\":1,\"bits\":15,\"deq\":0,\"flush\":0,\"enq_ready\":1,\"deq_valid\":1,\"deq_bits\":8}\n{\"cycle\":526,\"enq\":0,\"bits\":7,\"deq\":0,\"flush\":1,\"enq_ready\":1,\"deq_valid\":1,\"deq_bits\":8}\n",
+          "output_sha256": "10f6e4e5ee365dcf2b2617cad93c956c2a62c9c7a5e9759a125fe3899b947283",
+          "full_returncode": 0,
+          "full_output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "trace": {
+          "path": "validation/.work/v2-p1-b-icache/reference-fifo.jsonl",
+          "sha256": "10f6e4e5ee365dcf2b2617cad93c956c2a62c9c7a5e9759a125fe3899b947283",
+          "vectors": 527
+        }
+      },
+      "target_sha256": "db10fdb23dd9cd568a94182eec5e67fcf09e793a29652be8a0d90d15bf06ac43",
+      "reference_sha256": "a61b102f34a59c06c7c9a93d836fdeaed083ebfae2438defb2f4db9a90360329"
+    },
+    "replacer": {
+      "target": {
+        "build": {
+          "command": [
+            "verilator",
+            "--cc",
+            "--exe",
+            "--build",
+            "--Wno-fatal",
+            "--top-module",
+            "ICacheReplacer",
+            "--Mdir",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/obj-target-replacer",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/replacer-target.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/icache_replacer_v2_diff_tb.cpp",
+            "-CFLAGS",
+            "-DTARGET"
+          ],
+          "returncode": 0,
+          "result": "PASS",
+          "output_tail": "n-v2/validation/.work/v2-p1-b-icache/replacer-target.sv:9009:32: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3f' generates 6 bits.\n                                                                                                                                                    : ... note: In instance 'ICacheReplacer.replacer_0'\n 9009 |   assign \\$2530  = touch_set_0 == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\ported\\\\frontend\\\\icache\\\\ICacheReplacer-Hardware.py:175\" *) 6'h3f;\n      |                                ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/replacer-target.sv:9021:32: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3f' generates 6 bits.\n                                                                                                                                                    : ... note: In instance 'ICacheReplacer.replacer_0'\n 9021 |   assign \\$2542  = touch_set_0 == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\ported\\\\frontend\\\\icache\\\\ICacheReplacer-Hardware.py:175\" *) 6'h3f;\n      |                                ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/replacer-target.sv:9034:32: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3f' generates 6 bits.\n                                                                                                                                                    : ... note: In instance 'ICacheReplacer.replacer_0'\n 9034 |   assign \\$2555  = touch_set_0 == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\ported\\\\frontend\\\\icache\\\\ICacheReplacer-Hardware.py:175\" *) 6'h3f;\n      |                                ^~\n",
+          "output_sha256": "f52e8d31fbe3d72b63c06dce9a979be318bcadc7d60933efab3cfef24ca4853a"
+        },
+        "run": {
+          "command": [
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/obj-target-replacer/VICacheReplacer"
+          ],
+          "returncode": 0,
+          "result": "PASS",
+          "output_tail": "way\":0}\n{\"cycle\":295,\"tv0\":0,\"ts0\":76,\"tw0\":0,\"tv1\":1,\"ts1\":9,\"tw1\":2,\"vv\":1,\"vs\":216,\"victim_way\":2}\n{\"cycle\":296,\"tv0\":1,\"ts0\":128,\"tw0\":1,\"tv1\":0,\"ts1\":116,\"tw1\":0,\"vv\":0,\"vs\":34,\"victim_way\":0}\n{\"cycle\":297,\"tv0\":0,\"ts0\":249,\"tw0\":0,\"tv1\":1,\"ts1\":202,\"tw1\":0,\"vv\":0,\"vs\":171,\"victim_way\":1}\n{\"cycle\":298,\"tv0\":1,\"ts0\":101,\"tw0\":2,\"tv1\":1,\"ts1\":59,\"tw1\":2,\"vv\":1,\"vs\":173,\"victim_way\":2}\n{\"cycle\":299,\"tv0\":0,\"ts0\":91,\"tw0\":1,\"tv1\":0,\"ts1\":176,\"tw1\":2,\"vv\":0,\"vs\":28,\"victim_way\":2}\n{\"cycle\":300,\"tv0\":0,\"ts0\":68,\"tw0\":2,\"tv1\":0,\"ts1\":176,\"tw1\":0,\"vv\":1,\"vs\":67,\"victim_way\":1}\n{\"cycle\":301,\"tv0\":1,\"ts0\":66,\"tw0\":0,\"tv1\":0,\"ts1\":234,\"tw1\":1,\"vv\":0,\"vs\":212,\"victim_way\":0}\n{\"cycle\":302,\"tv0\":0,\"ts0\":225,\"tw0\":3,\"tv1\":1,\"ts1\":90,\"tw1\":0,\"vv\":1,\"vs\":255,\"victim_way\":0}\n{\"cycle\":303,\"tv0\":0,\"ts0\":174,\"tw0\":0,\"tv1\":0,\"ts1\":205,\"tw1\":0,\"vv\":0,\"vs\":27,\"victim_way\":0}\n{\"cycle\":304,\"tv0\":1,\"ts0\":183,\"tw0\":1,\"tv1\":1,\"ts1\":192,\"tw1\":0,\"vv\":1,\"vs\":198,\"victim_way\":0}\n{\"cycle\":305,\"tv0\":1,\"ts0\":207,\"tw0\":2,\"tv1\":0,\"ts1\":169,\"tw1\":1,\"vv\":0,\"vs\":76,\"victim_way\":1}\n{\"cycle\":306,\"tv0\":1,\"ts0\":85,\"tw0\":3,\"tv1\":0,\"ts1\":11,\"tw1\":0,\"vv\":0,\"vs\":195,\"victim_way\":1}\n{\"cycle\":307,\"tv0\":1,\"ts0\":144,\"tw0\":2,\"tv1\":1,\"ts1\":0,\"tw1\":2,\"vv\":1,\"vs\":59,\"victim_way\":0}\n{\"cycle\":308,\"tv0\":1,\"ts0\":177,\"tw0\":1,\"tv1\":0,\"ts1\":4,\"tw1\":0,\"vv\":1,\"vs\":41,\"victim_way\":3}\n{\"cycle\":309,\"tv0\":1,\"ts0\":202,\"tw0\":1,\"tv1\":1,\"ts1\":28,\"tw1\":2,\"vv\":0,\"vs\":18,\"victim_way\":0}\n{\"cycle\":310,\"tv0\":0,\"ts0\":30,\"tw0\":2,\"tv1\":0,\"ts1\":208,\"tw1\":3,\"vv\":0,\"vs\":116,\"victim_way\":0}\n{\"cycle\":311,\"tv0\":1,\"ts0\":160,\"tw0\":2,\"tv1\":0,\"ts1\":62,\"tw1\":2,\"vv\":1,\"vs\":155,\"victim_way\":1}\n{\"cycle\":312,\"tv0\":0,\"ts0\":178,\"tw0\":0,\"tv1\":0,\"ts1\":130,\"tw1\":3,\"vv\":0,\"vs\":48,\"victim_way\":0}\n{\"cycle\":313,\"tv0\":0,\"ts0\":87,\"tw0\":1,\"tv1\":0,\"ts1\":144,\"tw1\":0,\"vv\":0,\"vs\":61,\"victim_way\":1}\n{\"cycle\":314,\"tv0\":0,\"ts0\":224,\"tw0\":2,\"tv1\":0,\"ts1\":118,\"tw1\":0,\"vv\":1,\"vs\":202,\"victim_way\":2}\n{\"cycle\":315,\"tv0\":1,\"ts0\":111,\"tw0\":3,\"tv1\":0,\"ts1\":52,\"tw1\":1,\"vv\":0,\"vs\":108,\"victim_way\":1}\n{\"cycle\":316,\"tv0\":1,\"ts0\":109,\"tw0\":3,\"tv1\":1,\"ts1\":155,\"tw1\":1,\"vv\":1,\"vs\":15,\"victim_way\":2}\n{\"cycle\":317,\"tv0\":0,\"ts0\":205,\"tw0\":2,\"tv1\":1,\"ts1\":37,\"tw1\":1,\"vv\":1,\"vs\":96,\"victim_way\":1}\n{\"cycle\":318,\"tv0\":0,\"ts0\":149,\"tw0\":2,\"tv1\":1,\"ts1\":214,\"tw1\":0,\"vv\":1,\"vs\":15,\"victim_way\":0}\n{\"cycle\":319,\"tv0\":0,\"ts0\":239,\"tw0\":1,\"tv1\":1,\"ts1\":243,\"tw1\":2,\"vv\":1,\"vs\":206,\"victim_way\":1}\n",
+          "output_sha256": "b6775240886066d968ce9bcaa9c442f5cdbf03a5e91f57c09ef2c3e8d319c3d5",
+          "full_returncode": 0,
+          "full_output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "trace": {
+          "path": "validation/.work/v2-p1-b-icache/target-replacer.jsonl",
+          "sha256": "b6775240886066d968ce9bcaa9c442f5cdbf03a5e91f57c09ef2c3e8d319c3d5",
+          "vectors": 320
+        }
+      },
+      "reference": {
+        "build": {
+          "command": [
+            "verilator",
+            "--cc",
+            "--exe",
+            "--build",
+            "--Wno-fatal",
+            "--top-module",
+            "ICacheReplacer",
+            "--Mdir",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/obj-reference-replacer",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/ICacheReplacer.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/icache_replacer_v2_diff_tb.cpp"
+          ],
+          "returncode": 0,
+          "result": "PASS",
+          "output_tail": "_pch.h.slow -c -o VICacheReplacer___024root__Slow.o VICacheReplacer___024root__Slow.cpp\ng++   -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -include VICacheReplacer__pch.h.slow -c -o VICacheReplacer___024root__DepSet_he7c09d43__0__Slow.o VICacheReplacer___024root__DepSet_he7c09d43__0__Slow.cpp\ng++   -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -include VICacheReplacer__pch.h.slow -c -o VICacheReplacer___024root__DepSet_h97bb9465__0__Slow.o VICacheReplacer___024root__DepSet_h97bb9465__0__Slow.cpp\ng++   -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -include VICacheReplacer__pch.h.slow -c -o VICacheReplacer__Syms.o VICacheReplacer__Syms.cpp\necho \"\" > VICacheReplacer__ALL.verilator_deplist.tmp\ng++    icache_replacer_v2_diff_tb.o verilated.o verilated_threads.o VICacheReplacer__ALL.a    -pthread -lpthread -latomic   -o VICacheReplacer\nrm VICacheReplacer__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/obj-reference-replacer'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.381 MB sources in 2 modules, into 1.663 MB in 8 C++ files needing 0.001 MB\n- Verilator: Walltime 25.353 s (elab=0.030, cvt=0.445, bld=24.683); cpu 0.495 s on 1 threads; alloced 31.078 MB\n",
+          "output_sha256": "3852c7fee66aa589161cd5f775d59cc6cf52ec14f05e99c01522bd64748c7a56"
+        },
+        "run": {
+          "command": [
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/obj-reference-replacer/VICacheReplacer"
+          ],
+          "returncode": 0,
+          "result": "PASS",
+          "output_tail": "way\":0}\n{\"cycle\":295,\"tv0\":0,\"ts0\":76,\"tw0\":0,\"tv1\":1,\"ts1\":9,\"tw1\":2,\"vv\":1,\"vs\":216,\"victim_way\":2}\n{\"cycle\":296,\"tv0\":1,\"ts0\":128,\"tw0\":1,\"tv1\":0,\"ts1\":116,\"tw1\":0,\"vv\":0,\"vs\":34,\"victim_way\":0}\n{\"cycle\":297,\"tv0\":0,\"ts0\":249,\"tw0\":0,\"tv1\":1,\"ts1\":202,\"tw1\":0,\"vv\":0,\"vs\":171,\"victim_way\":1}\n{\"cycle\":298,\"tv0\":1,\"ts0\":101,\"tw0\":2,\"tv1\":1,\"ts1\":59,\"tw1\":2,\"vv\":1,\"vs\":173,\"victim_way\":2}\n{\"cycle\":299,\"tv0\":0,\"ts0\":91,\"tw0\":1,\"tv1\":0,\"ts1\":176,\"tw1\":2,\"vv\":0,\"vs\":28,\"victim_way\":2}\n{\"cycle\":300,\"tv0\":0,\"ts0\":68,\"tw0\":2,\"tv1\":0,\"ts1\":176,\"tw1\":0,\"vv\":1,\"vs\":67,\"victim_way\":1}\n{\"cycle\":301,\"tv0\":1,\"ts0\":66,\"tw0\":0,\"tv1\":0,\"ts1\":234,\"tw1\":1,\"vv\":0,\"vs\":212,\"victim_way\":0}\n{\"cycle\":302,\"tv0\":0,\"ts0\":225,\"tw0\":3,\"tv1\":1,\"ts1\":90,\"tw1\":0,\"vv\":1,\"vs\":255,\"victim_way\":0}\n{\"cycle\":303,\"tv0\":0,\"ts0\":174,\"tw0\":0,\"tv1\":0,\"ts1\":205,\"tw1\":0,\"vv\":0,\"vs\":27,\"victim_way\":0}\n{\"cycle\":304,\"tv0\":1,\"ts0\":183,\"tw0\":1,\"tv1\":1,\"ts1\":192,\"tw1\":0,\"vv\":1,\"vs\":198,\"victim_way\":0}\n{\"cycle\":305,\"tv0\":1,\"ts0\":207,\"tw0\":2,\"tv1\":0,\"ts1\":169,\"tw1\":1,\"vv\":0,\"vs\":76,\"victim_way\":1}\n{\"cycle\":306,\"tv0\":1,\"ts0\":85,\"tw0\":3,\"tv1\":0,\"ts1\":11,\"tw1\":0,\"vv\":0,\"vs\":195,\"victim_way\":1}\n{\"cycle\":307,\"tv0\":1,\"ts0\":144,\"tw0\":2,\"tv1\":1,\"ts1\":0,\"tw1\":2,\"vv\":1,\"vs\":59,\"victim_way\":0}\n{\"cycle\":308,\"tv0\":1,\"ts0\":177,\"tw0\":1,\"tv1\":0,\"ts1\":4,\"tw1\":0,\"vv\":1,\"vs\":41,\"victim_way\":3}\n{\"cycle\":309,\"tv0\":1,\"ts0\":202,\"tw0\":1,\"tv1\":1,\"ts1\":28,\"tw1\":2,\"vv\":0,\"vs\":18,\"victim_way\":0}\n{\"cycle\":310,\"tv0\":0,\"ts0\":30,\"tw0\":2,\"tv1\":0,\"ts1\":208,\"tw1\":3,\"vv\":0,\"vs\":116,\"victim_way\":0}\n{\"cycle\":311,\"tv0\":1,\"ts0\":160,\"tw0\":2,\"tv1\":0,\"ts1\":62,\"tw1\":2,\"vv\":1,\"vs\":155,\"victim_way\":1}\n{\"cycle\":312,\"tv0\":0,\"ts0\":178,\"tw0\":0,\"tv1\":0,\"ts1\":130,\"tw1\":3,\"vv\":0,\"vs\":48,\"victim_way\":0}\n{\"cycle\":313,\"tv0\":0,\"ts0\":87,\"tw0\":1,\"tv1\":0,\"ts1\":144,\"tw1\":0,\"vv\":0,\"vs\":61,\"victim_way\":1}\n{\"cycle\":314,\"tv0\":0,\"ts0\":224,\"tw0\":2,\"tv1\":0,\"ts1\":118,\"tw1\":0,\"vv\":1,\"vs\":202,\"victim_way\":2}\n{\"cycle\":315,\"tv0\":1,\"ts0\":111,\"tw0\":3,\"tv1\":0,\"ts1\":52,\"tw1\":1,\"vv\":0,\"vs\":108,\"victim_way\":1}\n{\"cycle\":316,\"tv0\":1,\"ts0\":109,\"tw0\":3,\"tv1\":1,\"ts1\":155,\"tw1\":1,\"vv\":1,\"vs\":15,\"victim_way\":2}\n{\"cycle\":317,\"tv0\":0,\"ts0\":205,\"tw0\":2,\"tv1\":1,\"ts1\":37,\"tw1\":1,\"vv\":1,\"vs\":96,\"victim_way\":1}\n{\"cycle\":318,\"tv0\":0,\"ts0\":149,\"tw0\":2,\"tv1\":1,\"ts1\":214,\"tw1\":0,\"vv\":1,\"vs\":15,\"victim_way\":0}\n{\"cycle\":319,\"tv0\":0,\"ts0\":239,\"tw0\":1,\"tv1\":1,\"ts1\":243,\"tw1\":2,\"vv\":1,\"vs\":206,\"victim_way\":1}\n",
+          "output_sha256": "b6775240886066d968ce9bcaa9c442f5cdbf03a5e91f57c09ef2c3e8d319c3d5",
+          "full_returncode": 0,
+          "full_output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "trace": {
+          "path": "validation/.work/v2-p1-b-icache/reference-replacer.jsonl",
+          "sha256": "b6775240886066d968ce9bcaa9c442f5cdbf03a5e91f57c09ef2c3e8d319c3d5",
+          "vectors": 320
+        }
+      },
+      "target_sha256": "0f69a42ecaae684503d2890648d3e6f8e254d9a6648a75b3caed08b1e54a63f3",
+      "reference_sha256": "01a8894d0399d429f3d50ed987333494b36072bf7cd569c3ce091a797ffcae6b"
+    },
+    "mshr-fetch": {
+      "target": {
+        "build": {
+          "command": [
+            "verilator",
+            "--cc",
+            "--exe",
+            "--build",
+            "--Wno-fatal",
+            "--top-module",
+            "ICacheMSHR",
+            "--Mdir",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/obj-target-mshr-fetch",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/mshr-fetch-target.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/icache_mshr_v2_diff_tb.cpp",
+            "-CFLAGS",
+            "-DTARGET"
+          ],
+          "returncode": 0,
+          "result": "PASS",
+          "output_tail": "clude/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DTARGET   -c -o verilated.o /usr/share/verilator/include/verilated.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DTARGET   -c -o verilated_threads.o /usr/share/verilator/include/verilated_threads.cpp\npython3 /usr/share/verilator/bin/verilator_includer -DVL_INCLUDE_OPT=include VICacheMSHR.cpp VICacheMSHR___024root__DepSet_h071f9eb1__0.cpp VICacheMSHR___024root__DepSet_he539ecce__0.cpp VICacheMSHR___024root__Slow.cpp VICacheMSHR___024root__DepSet_h071f9eb1__0__Slow.cpp VICacheMSHR___024root__DepSet_he539ecce__0__Slow.cpp VICacheMSHR__Syms.cpp > VICacheMSHR__ALL.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DTARGET   -c -o VICacheMSHR__ALL.o VICacheMSHR__ALL.cpp\necho \"\" > VICacheMSHR__ALL.verilator_deplist.tmp\ng++    icache_mshr_v2_diff_tb.o verilated.o verilated_threads.o VICacheMSHR__ALL.a    -pthread -lpthread -latomic   -o VICacheMSHR\nrm VICacheMSHR__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/obj-target-mshr-fetch'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.054 MB sources in 2 modules, into 0.053 MB in 7 C++ files needing 0.000 MB\n- Verilator: Walltime 5.406 s (elab=0.001, cvt=0.043, bld=5.262); cpu 0.016 s on 1 threads; alloced 9.496 MB\n",
+          "output_sha256": "fd5a9a95b143d329ac596d13c792915c29207e27a90dcce27e865c9a9cc706f0"
+        },
+        "run": {
+          "command": [
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/obj-target-mshr-fetch/VICacheMSHR"
+          ],
+          "returncode": 0,
+          "result": "PASS",
+          "output_tail": "re_v_set_idx\":154,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":236578483,\"info_v_set_idx\":154,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":314,\"fencei\":1,\"flush\":0,\"wfi\":0,\"req\":0,\"blk\":46473425,\"set\":131,\"lk0_blk\":181536,\"lk0_set\":20,\"lk1_blk\":709,\"lk1_set\":11,\"acq_ready\":1,\"victim\":2,\"invalid\":0,\"req_ready\":0,\"acquire_valid\":0,\"acquire_address\":15974412992,\"acquire_v_set_idx\":99,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":249600203,\"info_v_set_idx\":99,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":315,\"fencei\":1,\"flush\":0,\"wfi\":0,\"req\":1,\"blk\":222278248,\"set\":201,\"lk0_blk\":868274,\"lk0_set\":254,\"lk1_blk\":3391,\"lk1_set\":52,\"acq_ready\":0,\"victim\":1,\"invalid\":1,\"req_ready\":0,\"acquire_valid\":0,\"acquire_address\":15974412992,\"acquire_v_set_idx\":99,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":249600203,\"info_v_set_idx\":99,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":316,\"fencei\":0,\"flush\":0,\"wfi\":1,\"req\":1,\"blk\":86416365,\"set\":111,\"lk0_blk\":337563,\"lk0_set\":154,\"lk1_blk\":1318,\"lk1_set\":20,\"acq_ready\":0,\"victim\":1,\"invalid\":1,\"req_ready\":1,\"acquire_valid\":0,\"acquire_address\":15974412992,\"acquire_v_set_idx\":99,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":249600203,\"info_v_set_idx\":99,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":317,\"fencei\":1,\"flush\":0,\"wfi\":1,\"req\":0,\"blk\":222280910,\"set\":243,\"lk0_blk\":868284,\"lk0_set\":254,\"lk1_blk\":3391,\"lk1_set\":52,\"acq_ready\":0,\"victim\":1,\"invalid\":1,\"req_ready\":0,\"acquire_valid\":0,\"acquire_address\":5530647360,\"acquire_v_set_idx\":111,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":86416365,\"info_v_set_idx\":111,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":318,\"fencei\":0,\"flush\":0,\"wfi\":1,\"req\":0,\"blk\":241730613,\"set\":16,\"lk0_blk\":944260,\"lk0_set\":162,\"lk1_blk\":3688,\"lk1_set\":57,\"acq_ready\":0,\"victim\":2,\"invalid\":1,\"req_ready\":1,\"acquire_valid\":0,\"acquire_address\":5530647360,\"acquire_v_set_idx\":111,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":86416365,\"info_v_set_idx\":111,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":319,\"fencei\":1,\"flush\":0,\"wfi\":1,\"req\":0,\"blk\":53166856,\"set\":12,\"lk0_blk\":207683,\"lk0_set\":173,\"lk1_blk\":811,\"lk1_set\":12,\"acq_ready\":0,\"victim\":3,\"invalid\":0,\"req_ready\":0,\"acquire_valid\":0,\"acquire_address\":5530647360,\"acquire_v_set_idx\":111,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":86416365,\"info_v_set_idx\":111,\"info_way\":3,\"wfi_safe\":1}\n",
+          "output_sha256": "f5911c4e028a4960aded84094438ca2044f6e7fd917134f4e36dbe527bd27d07",
+          "full_returncode": 0,
+          "full_output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "trace": {
+          "path": "validation/.work/v2-p1-b-icache/target-mshr-fetch.jsonl",
+          "sha256": "f5911c4e028a4960aded84094438ca2044f6e7fd917134f4e36dbe527bd27d07",
+          "vectors": 320
+        }
+      },
+      "reference": {
+        "build": {
+          "command": [
+            "verilator",
+            "--cc",
+            "--exe",
+            "--build",
+            "--Wno-fatal",
+            "--top-module",
+            "ICacheMSHR",
+            "--Mdir",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/obj-reference-mshr-fetch",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/ICacheMSHR.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/icache_mshr_v2_diff_tb.cpp"
+          ],
+          "returncode": 0,
+          "result": "PASS",
+          "output_tail": "I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -c -o verilated.o /usr/share/verilator/include/verilated.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -c -o verilated_threads.o /usr/share/verilator/include/verilated_threads.cpp\npython3 /usr/share/verilator/bin/verilator_includer -DVL_INCLUDE_OPT=include VICacheMSHR.cpp VICacheMSHR___024root__DepSet_h071f9eb1__0.cpp VICacheMSHR___024root__DepSet_he539ecce__0.cpp VICacheMSHR___024root__Slow.cpp VICacheMSHR___024root__DepSet_h071f9eb1__0__Slow.cpp VICacheMSHR___024root__DepSet_he539ecce__0__Slow.cpp VICacheMSHR__Syms.cpp > VICacheMSHR__ALL.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -c -o VICacheMSHR__ALL.o VICacheMSHR__ALL.cpp\necho \"\" > VICacheMSHR__ALL.verilator_deplist.tmp\ng++    icache_mshr_v2_diff_tb.o verilated.o verilated_threads.o VICacheMSHR__ALL.a    -pthread -lpthread -latomic   -o VICacheMSHR\nrm VICacheMSHR__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/obj-reference-mshr-fetch'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.024 MB sources in 2 modules, into 0.045 MB in 7 C++ files needing 0.000 MB\n- Verilator: Walltime 5.382 s (elab=0.000, cvt=0.034, bld=5.240); cpu 0.017 s on 1 threads; alloced 9.227 MB\n",
+          "output_sha256": "9f298f1dd19b9caffdc2fb8ffda941cafcdeed55ddd0995119fc042f9dbc6e1e"
+        },
+        "run": {
+          "command": [
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/obj-reference-mshr-fetch/VICacheMSHR"
+          ],
+          "returncode": 0,
+          "result": "PASS",
+          "output_tail": "re_v_set_idx\":154,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":236578483,\"info_v_set_idx\":154,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":314,\"fencei\":1,\"flush\":0,\"wfi\":0,\"req\":0,\"blk\":46473425,\"set\":131,\"lk0_blk\":181536,\"lk0_set\":20,\"lk1_blk\":709,\"lk1_set\":11,\"acq_ready\":1,\"victim\":2,\"invalid\":0,\"req_ready\":0,\"acquire_valid\":0,\"acquire_address\":15974412992,\"acquire_v_set_idx\":99,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":249600203,\"info_v_set_idx\":99,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":315,\"fencei\":1,\"flush\":0,\"wfi\":0,\"req\":1,\"blk\":222278248,\"set\":201,\"lk0_blk\":868274,\"lk0_set\":254,\"lk1_blk\":3391,\"lk1_set\":52,\"acq_ready\":0,\"victim\":1,\"invalid\":1,\"req_ready\":0,\"acquire_valid\":0,\"acquire_address\":15974412992,\"acquire_v_set_idx\":99,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":249600203,\"info_v_set_idx\":99,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":316,\"fencei\":0,\"flush\":0,\"wfi\":1,\"req\":1,\"blk\":86416365,\"set\":111,\"lk0_blk\":337563,\"lk0_set\":154,\"lk1_blk\":1318,\"lk1_set\":20,\"acq_ready\":0,\"victim\":1,\"invalid\":1,\"req_ready\":1,\"acquire_valid\":0,\"acquire_address\":15974412992,\"acquire_v_set_idx\":99,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":249600203,\"info_v_set_idx\":99,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":317,\"fencei\":1,\"flush\":0,\"wfi\":1,\"req\":0,\"blk\":222280910,\"set\":243,\"lk0_blk\":868284,\"lk0_set\":254,\"lk1_blk\":3391,\"lk1_set\":52,\"acq_ready\":0,\"victim\":1,\"invalid\":1,\"req_ready\":0,\"acquire_valid\":0,\"acquire_address\":5530647360,\"acquire_v_set_idx\":111,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":86416365,\"info_v_set_idx\":111,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":318,\"fencei\":0,\"flush\":0,\"wfi\":1,\"req\":0,\"blk\":241730613,\"set\":16,\"lk0_blk\":944260,\"lk0_set\":162,\"lk1_blk\":3688,\"lk1_set\":57,\"acq_ready\":0,\"victim\":2,\"invalid\":1,\"req_ready\":1,\"acquire_valid\":0,\"acquire_address\":5530647360,\"acquire_v_set_idx\":111,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":86416365,\"info_v_set_idx\":111,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":319,\"fencei\":1,\"flush\":0,\"wfi\":1,\"req\":0,\"blk\":53166856,\"set\":12,\"lk0_blk\":207683,\"lk0_set\":173,\"lk1_blk\":811,\"lk1_set\":12,\"acq_ready\":0,\"victim\":3,\"invalid\":0,\"req_ready\":0,\"acquire_valid\":0,\"acquire_address\":5530647360,\"acquire_v_set_idx\":111,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":86416365,\"info_v_set_idx\":111,\"info_way\":3,\"wfi_safe\":1}\n",
+          "output_sha256": "f5911c4e028a4960aded84094438ca2044f6e7fd917134f4e36dbe527bd27d07",
+          "full_returncode": 0,
+          "full_output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "trace": {
+          "path": "validation/.work/v2-p1-b-icache/reference-mshr-fetch.jsonl",
+          "sha256": "f5911c4e028a4960aded84094438ca2044f6e7fd917134f4e36dbe527bd27d07",
+          "vectors": 320
+        }
+      },
+      "target_sha256": "ccb05b702fe004556356fcea981103e706a17a00bb90ed312c1ce867094a53f5",
+      "reference_sha256": "1982609dddae0f551033bffe4570a3438dfb6e7699f4cde1688dcbb98603f460"
+    },
+    "mshr-prefetch": {
+      "target": {
+        "build": {
+          "command": [
+            "verilator",
+            "--cc",
+            "--exe",
+            "--build",
+            "--Wno-fatal",
+            "--top-module",
+            "ICacheMSHR",
+            "--Mdir",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/obj-target-mshr-prefetch",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/mshr-prefetch-target.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/icache_mshr_v2_diff_tb.cpp",
+            "-CFLAGS",
+            "-DTARGET -DPREFETCH"
+          ],
+          "returncode": 0,
+          "result": "PASS",
+          "output_tail": "=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DTARGET -DPREFETCH   -c -o verilated.o /usr/share/verilator/include/verilated.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DTARGET -DPREFETCH   -c -o verilated_threads.o /usr/share/verilator/include/verilated_threads.cpp\npython3 /usr/share/verilator/bin/verilator_includer -DVL_INCLUDE_OPT=include VICacheMSHR.cpp VICacheMSHR___024root__DepSet_h071f9eb1__0.cpp VICacheMSHR___024root__DepSet_he539ecce__0.cpp VICacheMSHR___024root__Slow.cpp VICacheMSHR___024root__DepSet_h071f9eb1__0__Slow.cpp VICacheMSHR___024root__DepSet_he539ecce__0__Slow.cpp VICacheMSHR__Syms.cpp > VICacheMSHR__ALL.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DTARGET -DPREFETCH   -c -o VICacheMSHR__ALL.o VICacheMSHR__ALL.cpp\necho \"\" > VICacheMSHR__ALL.verilator_deplist.tmp\ng++    icache_mshr_v2_diff_tb.o verilated.o verilated_threads.o VICacheMSHR__ALL.a    -pthread -lpthread -latomic   -o VICacheMSHR\nrm VICacheMSHR__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/obj-target-mshr-prefetch'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.055 MB sources in 2 modules, into 0.054 MB in 7 C++ files needing 0.000 MB\n- Verilator: Walltime 5.559 s (elab=0.001, cvt=0.053, bld=5.386); cpu 0.015 s on 1 threads; alloced 9.504 MB\n",
+          "output_sha256": "7aabdf78852430ebb6c94b587854d4afb49a7cb972cf4c59375a27b32d666bee"
+        },
+        "run": {
+          "command": [
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/obj-target-mshr-prefetch/VICacheMSHR"
+          ],
+          "returncode": 0,
+          "result": "PASS",
+          "output_tail": "re_v_set_idx\":154,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":236578483,\"info_v_set_idx\":154,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":314,\"fencei\":1,\"flush\":1,\"wfi\":0,\"req\":0,\"blk\":46473425,\"set\":131,\"lk0_blk\":181536,\"lk0_set\":20,\"lk1_blk\":709,\"lk1_set\":11,\"acq_ready\":1,\"victim\":2,\"invalid\":0,\"req_ready\":0,\"acquire_valid\":0,\"acquire_address\":15974412992,\"acquire_v_set_idx\":99,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":249600203,\"info_v_set_idx\":99,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":315,\"fencei\":1,\"flush\":1,\"wfi\":0,\"req\":1,\"blk\":222278248,\"set\":201,\"lk0_blk\":868274,\"lk0_set\":254,\"lk1_blk\":3391,\"lk1_set\":52,\"acq_ready\":0,\"victim\":1,\"invalid\":1,\"req_ready\":0,\"acquire_valid\":0,\"acquire_address\":15974412992,\"acquire_v_set_idx\":99,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":249600203,\"info_v_set_idx\":99,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":316,\"fencei\":0,\"flush\":1,\"wfi\":1,\"req\":1,\"blk\":86416365,\"set\":111,\"lk0_blk\":337563,\"lk0_set\":154,\"lk1_blk\":1318,\"lk1_set\":20,\"acq_ready\":0,\"victim\":1,\"invalid\":1,\"req_ready\":0,\"acquire_valid\":0,\"acquire_address\":15974412992,\"acquire_v_set_idx\":99,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":249600203,\"info_v_set_idx\":99,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":317,\"fencei\":1,\"flush\":1,\"wfi\":1,\"req\":0,\"blk\":222280910,\"set\":243,\"lk0_blk\":868284,\"lk0_set\":254,\"lk1_blk\":3391,\"lk1_set\":52,\"acq_ready\":0,\"victim\":1,\"invalid\":1,\"req_ready\":0,\"acquire_valid\":0,\"acquire_address\":15974412992,\"acquire_v_set_idx\":99,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":249600203,\"info_v_set_idx\":99,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":318,\"fencei\":0,\"flush\":0,\"wfi\":1,\"req\":0,\"blk\":241730613,\"set\":16,\"lk0_blk\":944260,\"lk0_set\":162,\"lk1_blk\":3688,\"lk1_set\":57,\"acq_ready\":0,\"victim\":2,\"invalid\":1,\"req_ready\":1,\"acquire_valid\":0,\"acquire_address\":15974412992,\"acquire_v_set_idx\":99,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":249600203,\"info_v_set_idx\":99,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":319,\"fencei\":1,\"flush\":0,\"wfi\":1,\"req\":0,\"blk\":53166856,\"set\":12,\"lk0_blk\":207683,\"lk0_set\":173,\"lk1_blk\":811,\"lk1_set\":12,\"acq_ready\":0,\"victim\":3,\"invalid\":0,\"req_ready\":0,\"acquire_valid\":0,\"acquire_address\":15974412992,\"acquire_v_set_idx\":99,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":249600203,\"info_v_set_idx\":99,\"info_way\":3,\"wfi_safe\":1}\n",
+          "output_sha256": "f6d7f42a09b7b1214d73db5cb39bd297273edc68779d19671af6051dfc86dde1",
+          "full_returncode": 0,
+          "full_output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "trace": {
+          "path": "validation/.work/v2-p1-b-icache/target-mshr-prefetch.jsonl",
+          "sha256": "f6d7f42a09b7b1214d73db5cb39bd297273edc68779d19671af6051dfc86dde1",
+          "vectors": 320
+        }
+      },
+      "reference": {
+        "build": {
+          "command": [
+            "verilator",
+            "--cc",
+            "--exe",
+            "--build",
+            "--Wno-fatal",
+            "--top-module",
+            "ICacheMSHR_4",
+            "--Mdir",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/obj-reference-mshr-prefetch",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/ICacheMSHR_4.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/icache_mshr_v2_diff_tb.cpp",
+            "-CFLAGS",
+            "-DPREFETCH"
+          ],
+          "returncode": 0,
+          "result": "PASS",
+          "output_tail": "DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DPREFETCH   -c -o verilated.o /usr/share/verilator/include/verilated.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DPREFETCH   -c -o verilated_threads.o /usr/share/verilator/include/verilated_threads.cpp\npython3 /usr/share/verilator/bin/verilator_includer -DVL_INCLUDE_OPT=include VICacheMSHR_4.cpp VICacheMSHR_4___024root__DepSet_hdc12b324__0.cpp VICacheMSHR_4___024root__DepSet_hcbe912f8__0.cpp VICacheMSHR_4___024root__Slow.cpp VICacheMSHR_4___024root__DepSet_hdc12b324__0__Slow.cpp VICacheMSHR_4___024root__DepSet_hcbe912f8__0__Slow.cpp VICacheMSHR_4__Syms.cpp > VICacheMSHR_4__ALL.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DPREFETCH   -c -o VICacheMSHR_4__ALL.o VICacheMSHR_4__ALL.cpp\necho \"\" > VICacheMSHR_4__ALL.verilator_deplist.tmp\ng++    icache_mshr_v2_diff_tb.o verilated.o verilated_threads.o VICacheMSHR_4__ALL.a    -pthread -lpthread -latomic   -o VICacheMSHR_4\nrm VICacheMSHR_4__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/obj-reference-mshr-prefetch'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.024 MB sources in 2 modules, into 0.047 MB in 7 C++ files needing 0.000 MB\n- Verilator: Walltime 5.320 s (elab=0.000, cvt=0.032, bld=5.181); cpu 0.013 s on 1 threads; alloced 9.238 MB\n",
+          "output_sha256": "69e6052d329848178fac467c2fc0703757dd48ed520950c783f4d065307cb65d"
+        },
+        "run": {
+          "command": [
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-p1-b-icache/obj-reference-mshr-prefetch/VICacheMSHR_4"
+          ],
+          "returncode": 0,
+          "result": "PASS",
+          "output_tail": "re_v_set_idx\":154,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":236578483,\"info_v_set_idx\":154,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":314,\"fencei\":1,\"flush\":1,\"wfi\":0,\"req\":0,\"blk\":46473425,\"set\":131,\"lk0_blk\":181536,\"lk0_set\":20,\"lk1_blk\":709,\"lk1_set\":11,\"acq_ready\":1,\"victim\":2,\"invalid\":0,\"req_ready\":0,\"acquire_valid\":0,\"acquire_address\":15974412992,\"acquire_v_set_idx\":99,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":249600203,\"info_v_set_idx\":99,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":315,\"fencei\":1,\"flush\":1,\"wfi\":0,\"req\":1,\"blk\":222278248,\"set\":201,\"lk0_blk\":868274,\"lk0_set\":254,\"lk1_blk\":3391,\"lk1_set\":52,\"acq_ready\":0,\"victim\":1,\"invalid\":1,\"req_ready\":0,\"acquire_valid\":0,\"acquire_address\":15974412992,\"acquire_v_set_idx\":99,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":249600203,\"info_v_set_idx\":99,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":316,\"fencei\":0,\"flush\":1,\"wfi\":1,\"req\":1,\"blk\":86416365,\"set\":111,\"lk0_blk\":337563,\"lk0_set\":154,\"lk1_blk\":1318,\"lk1_set\":20,\"acq_ready\":0,\"victim\":1,\"invalid\":1,\"req_ready\":0,\"acquire_valid\":0,\"acquire_address\":15974412992,\"acquire_v_set_idx\":99,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":249600203,\"info_v_set_idx\":99,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":317,\"fencei\":1,\"flush\":1,\"wfi\":1,\"req\":0,\"blk\":222280910,\"set\":243,\"lk0_blk\":868284,\"lk0_set\":254,\"lk1_blk\":3391,\"lk1_set\":52,\"acq_ready\":0,\"victim\":1,\"invalid\":1,\"req_ready\":0,\"acquire_valid\":0,\"acquire_address\":15974412992,\"acquire_v_set_idx\":99,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":249600203,\"info_v_set_idx\":99,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":318,\"fencei\":0,\"flush\":0,\"wfi\":1,\"req\":0,\"blk\":241730613,\"set\":16,\"lk0_blk\":944260,\"lk0_set\":162,\"lk1_blk\":3688,\"lk1_set\":57,\"acq_ready\":0,\"victim\":2,\"invalid\":1,\"req_ready\":1,\"acquire_valid\":0,\"acquire_address\":15974412992,\"acquire_v_set_idx\":99,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":249600203,\"info_v_set_idx\":99,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":319,\"fencei\":1,\"flush\":0,\"wfi\":1,\"req\":0,\"blk\":53166856,\"set\":12,\"lk0_blk\":207683,\"lk0_set\":173,\"lk1_blk\":811,\"lk1_set\":12,\"acq_ready\":0,\"victim\":3,\"invalid\":0,\"req_ready\":0,\"acquire_valid\":0,\"acquire_address\":15974412992,\"acquire_v_set_idx\":99,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":249600203,\"info_v_set_idx\":99,\"info_way\":3,\"wfi_safe\":1}\n",
+          "output_sha256": "f6d7f42a09b7b1214d73db5cb39bd297273edc68779d19671af6051dfc86dde1",
+          "full_returncode": 0,
+          "full_output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "trace": {
+          "path": "validation/.work/v2-p1-b-icache/reference-mshr-prefetch.jsonl",
+          "sha256": "f6d7f42a09b7b1214d73db5cb39bd297273edc68779d19671af6051dfc86dde1",
+          "vectors": 320
+        }
+      },
+      "target_sha256": "43925f1db90e1249fbe980a2293820298ec08bc1288fedcc9b364a3e02b4535f",
+      "reference_sha256": "56b1d45ec63d098ac3163524e32ded28d2d4bb6dc34e165ca46f1ffe0eca1424"
+    }
+  },
+  "covered_children": [
+    "ICacheMSHR",
+    "ICacheReplacer",
+    "DeMultiplexer",
+    "MuxBundle",
+    "FIFOReg"
+  ],
+  "observation_points": [
+    "miss allocation",
+    "refill/kill",
+    "replacement choice",
+    "FIFO ready-valid",
+    "flush/reset"
+  ],
+  "uhsc_localization": {
+    "status": "NO_PROJECT_FACING_RENAME",
+    "manifest": "UHSC-Naming-Manifest.json",
+    "locked_reference_names_unchanged": true
+  },
+  "parent_closure": "PENDING",
+  "license_gate": "PENDING_REVIEW",
+  "v2_status": "DIFFERENTIAL_MATCHED",
+  "acceptance_eligible": false,
+  "notes": "Reference Yosys failures, when present, are recorded as generated-Chisel automatic-logic/tool-version limits; no reference or locked source was edited."
+}
