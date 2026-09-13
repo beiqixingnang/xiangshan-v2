@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_VECTOR_PARENT_DIRECT",
+  "batch_id": "V2-PARENT-VECTOR-001",
+  "rules": "V2-Python-Amaranth-Rules.md",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "source_authority": {
+    "path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "bytes": 228590583
+  },
+  "target": {
+    "path": "validation/v2_vector_parent_harness.py",
+    "sha256": "9f9972ebbc4fb3f4a038d12ef905662798e47a49bc661d7ad8c7266bf58bfc0d"
+  },
+  "leaf_targets": {
+    "NewMgu": "python/ported/backend/fu/vector/NewMgu-Hardware.py",
+    "WbArbiter": "python/ported/backend/datapath/WbArbiter-Hardware.py"
+  },
+  "static_audit": {
+    "path": "validation/v2_vector_parent_harness.py",
+    "sha256": "9f9972ebbc4fb3f4a038d12ef905662798e47a49bc661d7ad8c7266bf58bfc0d",
+    "bytes": 14376,
+    "utf8": true,
+    "bom": false,
+    "lf_only": true,
+    "ast_parse": true,
+    "zones": true,
+    "adapter_args": [
+      "configuration",
+      "injected_dependencies"
+    ],
+    "adapter_exact": true,
+    "function_comment_errors": [],
+    "forbidden_imports": [],
+    "status": "PASS"
+  },
+  "py_compile": {
+    "returncode": 0,
+    "status": "PASS"
+  },
+  "vectors": {
+    "status": "PASS",
+    "vectors": 512,
+    "trace_sha256": "1d56eca804bf87682088af61833513e5dbd27886f3bcf274dccea899b4e0d28f",
+    "trace_head": [
+      {
+        "cycle": 0,
+        "valid": 1,
+        "data": 1512366075204170929049582354406559215,
+        "pdest": 3,
+        "vec_wen": 1,
+        "v0_wen": 0,
+        "vl_wen": 0
+      },
+      {
+        "cycle": 1,
+        "valid": 1,
+        "data": 340282366920938463463374607431768211455,
+        "pdest": 7,
+        "vec_wen": 1,
+        "v0_wen": 0,
+        "vl_wen": 0
+      }
+    ],
+    "trace_tail": [
+      {
+        "cycle": 510,
+        "valid": 0,
+        "data": 5768680428297832795245,
+        "pdest": 12,
+        "vec_wen": 1,
+        "v0_wen": 0,
+        "vl_wen": 0
+      },
+      {
+        "cycle": 511,
+        "valid": 1,
+        "data": 5791644541995008259139,
+        "pdest": 46,
+        "vec_wen": 1,
+        "v0_wen": 1,
+        "vl_wen": 0
+      }
+    ]
+  },
+  "acceptance_eligible": false,
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "ACCEPTED": "NOT_ALLOWED"
+  }
+}

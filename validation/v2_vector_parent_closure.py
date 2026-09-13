@@ -61,7 +61,7 @@ COLLISION_REFERENCE = ROOT / "validation" / "reference-closures" / "RealWBCollid
 # Implementation
 # =============================================================================
 # Hash exact bytes, preserving the authority artifact's line endings.
-# 对精确字节计算摘要，保留权威产物的原始换行。
+# 对精确字节计算摘要，保留权威产物的原始换行。/
 def digest_bytes(value: bytes) -> str:
     return hashlib.sha256(value).hexdigest()
 
@@ -83,7 +83,7 @@ def load_exact(path: Path, module_name: str) -> Any:
 
 
 # Check the five-zone and import contract for the maintained parent harness.
-# 检查维护中的父级 harness 五区及导入合同。
+# 检查维护中的父级 harness 五区及导入合同。/
 def static_audit(path: Path) -> dict[str, Any]:
     raw = path.read_bytes()
     source = raw.decode("utf-8")
@@ -128,7 +128,7 @@ def static_audit(path: Path) -> dict[str, Any]:
 
 
 # Extract one complete emitted module from the locked reference text.
-# 从锁定参考文本提取一个完整的发射模块。
+# 从锁定参考文本提取一个完整的发射模块。/
 def extract_module(reference: str, name: str) -> str:
     import re
 
@@ -158,7 +158,7 @@ def wsl_path(path: Path) -> str:
 
 
 # Run a bounded WSL command and retain a reproducible output digest.
-# 运行有界 WSL 命令并保留可复现的输出摘要。
+# 运行有界 WSL 命令并保留可复现的输出摘要。/
 def run_wsl(command: list[str], timeout: int = 240) -> dict[str, Any]:
     rendered = " ".join(shell_quote(item) for item in command)
     try:
@@ -181,13 +181,13 @@ def run_wsl(command: list[str], timeout: int = 240) -> dict[str, Any]:
 
 
 # Ensure the validation tree has the stable WSL alias used by every gate.
-# 确保验证树具有所有门禁共用的稳定 WSL 别名。
+# 确保验证树具有所有门禁共用的稳定 WSL 别名。/
 def prepare_wsl_alias() -> dict[str, Any]:
     return run_wsl(["bash", "-lc", "ln -sfn /mnt/d/*/Unifier-Hardware-System/.agents/xiangshan-v2 /tmp/uhsc-v2"])
 
 
 # Run Verilator lint and Yosys check on an exact RTL closure.
-# 对精确 RTL 闭包运行 Verilator lint 与 Yosys check。
+# 对精确 RTL 闭包运行 Verilator lint 与 Yosys check。/
 def backend_gates(files: list[Path], top: str) -> dict[str, Any]:
     ver = run_wsl(["verilator", "--lint-only", "--Wno-fatal", "--top-module", top,
                    *[wsl_path(item) for item in files]])
@@ -198,7 +198,7 @@ def backend_gates(files: list[Path], top: str) -> dict[str, Any]:
 
 
 # Compile and execute one generated SystemVerilog testbench.
-# 编译并执行一个生成的 SystemVerilog 测试台。
+# 编译并执行一个生成的 SystemVerilog 测试台。/
 def run_harness(source: str, label: str) -> dict[str, Any]:
     WORK.mkdir(parents=True, exist_ok=True)
     source_path = WORK / f"{label}.sv"
@@ -278,7 +278,7 @@ def sv_lit(value: int, width: int) -> str:
 
 
 # Build an SV parent comparison using one shared transaction stream.
-# 构造使用共享事务流的 SV 父级比较。
+# 构造使用共享事务流的 SV 父级比较。/
 def parent_sv(reference_modules: str, target_module: str, vectors: list[dict[str, int]]) -> str:
     lines: list[str] = [reference_modules, target_module, "module tb;",
                         "  logic clock;",
@@ -323,6 +323,7 @@ def parent_sv(reference_modules: str, target_module: str, vectors: list[dict[str
                         "    .io_writebackAfterMerge_bits_v0Wen(dut_v0), .io_writebackAfterMerge_bits_vlWen(dut_vl));",
                         "  integer i; initial begin clock = 1'b0;"]
     for index, vector in enumerate(vectors):
+        # Append one sized assignment to the generated testbench. / 向生成测试台追加定宽赋值。
         def assign(name: str, width: int, key: str) -> None:
             lines.append(f"    {name} = {sv_lit(vector[key], width)};")
         assign("wb_data", 128, "data"); assign("wb_pdest", 7, "pdest")
@@ -348,7 +349,7 @@ def parent_sv(reference_modules: str, target_module: str, vectors: list[dict[str
 
 
 # Build a compact collision-child comparison against the locked extracted lane.
-# 构造与锁定提取冲突子通路的紧凑比较。
+# 构造与锁定提取冲突子通路的紧凑比较。/
 def collision_sv(reference: str, target: str, vectors: int = 256) -> str:
     # The target has explicit extra write-enable fields; the reference closure
     # exposes only the common rfWen/pdest/data fields.  Unused target fields are
@@ -406,7 +407,7 @@ def collision_sv(reference: str, target: str, vectors: int = 256) -> str:
 
 
 # Run direct Amaranth parent vectors against the executable Python oracle.
-# 用可执行 Python oracle 运行 Amaranth 父级 direct 向量。
+# 用可执行 Python oracle 运行 Amaranth 父级 direct 向量。/
 def direct_parent(module: Any, vectors: list[dict[str, int]]) -> dict[str, Any]:
     leaf = load_exact(NEW_MGU_TARGET, "v2_parent_direct_new_mgu")
     child = leaf.NewMgu(leaf.NewMguConfig())
@@ -426,6 +427,7 @@ def direct_parent(module: Any, vectors: list[dict[str, int]]) -> dict[str, Any]:
     }
     expected_module = module
 
+    # Drive one parent transaction per clock and compare its observable tuple. / 每拍驱动一个父事务并比较可观察元组。
     async def bench(ctx: Any) -> None:
         for index, vector in enumerate(vectors):
             for key, signal in signals.items():

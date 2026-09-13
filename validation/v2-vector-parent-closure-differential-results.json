@@ -1,0 +1,257 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_VECTOR_PARENT_DIFFERENTIAL",
+  "batch_id": "V2-PARENT-VECTOR-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "reference_snapshot": {
+    "canonical_path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "bytes": 228590583
+  },
+  "target_parent": {
+    "path": "validation/v2_vector_parent_harness.py",
+    "sha256": "9f9972ebbc4fb3f4a038d12ef905662798e47a49bc661d7ad8c7266bf58bfc0d"
+  },
+  "target_leaf": {
+    "NewMgu": {
+      "path": "python/ported/backend/fu/vector/NewMgu-Hardware.py",
+      "sha256": "2d5f9a3f36817d0469940de44b278595d5955e1a7b001cce86a387b74d07a828"
+    },
+    "WbArbiter": {
+      "path": "python/ported/backend/datapath/WbArbiter-Hardware.py",
+      "sha256": "7353cfb702ee3b9550917e7c7bdeb41a5b3470585628c37473f47392e7228bf0"
+    }
+  },
+  "comparisons": {
+    "VldMergeUnit_parent": {
+      "status": "FAIL_RUN",
+      "compile": {
+        "command": [
+          "verilator",
+          "--binary",
+          "--timing",
+          "-Wno-fatal",
+          "--top-module",
+          "tb",
+          "--Mdir",
+          "/tmp/uhsc-v2/validation/.work/v2-vector-parent/obj-vld-merge-parent",
+          "/tmp/uhsc-v2/validation/.work/v2-vector-parent/vld-merge-parent.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "                 : ... note: In instance 'tb.dut_i.mask_generator'\n 2837 |   assign \\$360  = \\$62 [7:0] <= 7'h4a;\n      |                              ^~\n%Warning-WIDTHEXPAND: /tmp/uhsc-v2/validation/.work/v2-vector-parent/vld-merge-parent.sv:2838:30: Operator GT expects 8 bits on the RHS, but RHS's CONST '7'h4a' generates 7 bits.\n                                                                                                : ... note: In instance 'tb.dut_i.mask_generator'\n 2838 |   assign \\$361  = \\$63 [7:0] > 7'h4a;\n      |                              ^\n%Warning-WIDTHEXPAND: /tmp/uhsc-v2/validation/.work/v2-vector-parent/vld-merge-parent.sv:2840:30: Operator LTE expects 8 bits on the RHS, but RHS's CONST '7'h4a' generates 7 bits.\n                                                                                                : ... note: In instance 'tb.dut_i.mask_generator'\n 2840 |   assign \\$363  = \\$63 [7:0] <= 7'h4a;\n      |                              ^~\n%Warning-WIDTHEXPAND: /tmp/uhsc-v2/validation/.work/v2-vector-parent/vld-merge-parent.sv:2841:30: Operator LTE expects 8 bits on the RHS, but RHS's CONST '7'h4b' generates 7 bits.\n                                                                                                : ... note: In instance 'tb.dut_i.mask_generator'\n 2841 |   assign \\$364  = \\$62 [7:0] <= 7'h4b;\n      |                              ^~\n%Warning-WIDTHEXPAND: /tmp/uhsc-v2/validation/.work/v2-vector-parent/vld-merge-parent.sv:2842:30: Operator GT expects 8 bits on the RHS, but RHS's CONST '7'h4b' generates 7 bits.\n                                                                                                : ... note: In instance 'tb.dut_i.mask_generator'\n 2842 |   assign \\$365  = \\$63 [7:0] > 7'h4b;\n      |                              ^\n",
+        "output_sha256": "3bba55ce43db4fc5d332fe90508beb11a7e863fa943a0cc19916581a576717c1"
+      },
+      "run": {
+        "command": [
+          "/tmp/uhsc-v2/validation/.work/v2-vector-parent/obj-vld-merge-parent/Vtb"
+        ],
+        "returncode": 6,
+        "status": "FAIL",
+        "output_tail": "b2d1615f4bd12d\nP 62 1 000000000000002477ea48a7df815538 000000000000002477ea48a7df815538\nP 63 1 00000000000000251423c21e5cded903 00000000000000251423c21e5cded903\nP 64 1 0000000000000025b21b4454dd145cee 0000000000000025b21b4454dd145cee\nP 65 1 0000000000000026504c3f8b5da1c0f9 0000000000000026504c3f8b5da1c0f9\nP 66 1 0000000000000026ee85b1c1daff44c4 0000000000000026ee85b1c1daff44c4\nP 67 1 ffffffffffffffff8cfd2b385b34c8af ffffffffffffffff8cfd2b385b34c8af\nP 68 1 00000000000000282d36ad7ed8424cba 00000000000000282d36ad7ed8424cba\nP 69 1 0000000000000028cb6e24b558983085 0000000000000028cb6e24b558983085\nP 70 1 000000000000002969a79eebd9d5b490 000000000000002969a79eebd9d5b490\nP 71 1 000000000000002a079f10224663387b 000000000000002a079f10224663387b\nP 72 1 000000000000002aa5d08b98c6b8bc46 000000000000002aa5d08b98c6b8bc46\nP 73 0 000000000000002aa5d08b98c6b8bc46 000000000000002aa5d08b98c6b8bc46\nP 74 1 000000000000002be0418715c403a43c 000000000000002be0418715c403a43c\nP 75 1 000000000000002c7eb9794c45592807 000000000000002c7eb9794c45592807\nP 76 1 000000000000002d1cf2f082c596ac12 000000000000002d1cf2f082c596ac12\nP 77 1 000000000000002dbd2a6af9422c13fd 000000000000002dbd2a6af9422c13fd\nP 78 1 000000000000002e5b63ec3fc37997c8 000000000000002e5b63ec3fc37997c8\nP 79 1 000000000000002ef95b667643b71bd3 000000000000002ef95b667643b71bd3\nP 80 1 000000000000002f978cd9acc0cc9fbe 000000000000002f978cd9acc0cc9fbe\nP 81 1 000000000000003035c453e3411a0389 000000000000003035c453e3411a0389\nP 82 1 0000000000000030d23dd559ce578794 0000000000000030d23dd559ce578794\n[334] %Fatal: vld-merge-parent.sv:5494: Assertion failed in tb: PARENT_DATA 83 ffffffffffffffffffffffffffffffff 0000000000000031ffffffffffffffff\n%Error: /tmp/uhsc-v2/validation/.work/v2-vector-parent/vld-merge-parent.sv:5494: Verilog $stop\nAborting...\n",
+        "output_sha256": "7e561c9f3d2525d3e682a55bffd1d24885962a904d2109f38922e3e44234d402"
+      },
+      "trace_sha256": "7e561c9f3d2525d3e682a55bffd1d24885962a904d2109f38922e3e44234d402",
+      "trace_lines": 25,
+      "trace_tail": "b2d1615f4bd12d\nP 62 1 000000000000002477ea48a7df815538 000000000000002477ea48a7df815538\nP 63 1 00000000000000251423c21e5cded903 00000000000000251423c21e5cded903\nP 64 1 0000000000000025b21b4454dd145cee 0000000000000025b21b4454dd145cee\nP 65 1 0000000000000026504c3f8b5da1c0f9 0000000000000026504c3f8b5da1c0f9\nP 66 1 0000000000000026ee85b1c1daff44c4 0000000000000026ee85b1c1daff44c4\nP 67 1 ffffffffffffffff8cfd2b385b34c8af ffffffffffffffff8cfd2b385b34c8af\nP 68 1 00000000000000282d36ad7ed8424cba 00000000000000282d36ad7ed8424cba\nP 69 1 0000000000000028cb6e24b558983085 0000000000000028cb6e24b558983085\nP 70 1 000000000000002969a79eebd9d5b490 000000000000002969a79eebd9d5b490\nP 71 1 000000000000002a079f10224663387b 000000000000002a079f10224663387b\nP 72 1 000000000000002aa5d08b98c6b8bc46 000000000000002aa5d08b98c6b8bc46\nP 73 0 000000000000002aa5d08b98c6b8bc46 000000000000002aa5d08b98c6b8bc46\nP 74 1 000000000000002be0418715c403a43c 000000000000002be0418715c403a43c\nP 75 1 000000000000002c7eb9794c45592807 000000000000002c7eb9794c45592807\nP 76 1 000000000000002d1cf2f082c596ac12 000000000000002d1cf2f082c596ac12\nP 77 1 000000000000002dbd2a6af9422c13fd 000000000000002dbd2a6af9422c13fd\nP 78 1 000000000000002e5b63ec3fc37997c8 000000000000002e5b63ec3fc37997c8\nP 79 1 000000000000002ef95b667643b71bd3 000000000000002ef95b667643b71bd3\nP 80 1 000000000000002f978cd9acc0cc9fbe 000000000000002f978cd9acc0cc9fbe\nP 81 1 000000000000003035c453e3411a0389 000000000000003035c453e3411a0389\nP 82 1 0000000000000030d23dd559ce578794 0000000000000030d23dd559ce578794\n[334] %Fatal: vld-merge-parent.sv:5494: Assertion failed in tb: PARENT_DATA 83 ffffffffffffffffffffffffffffffff 0000000000000031ffffffffffffffff\n%Error: /tmp/uhsc-v2/validation/.work/v2-vector-parent/vld-merge-parent.sv:5494: Verilog $stop\nAborting...\n"
+    },
+    "RealWBCollideChecker_child": {
+      "status": "FAIL_RUN",
+      "compile": {
+        "command": [
+          "verilator",
+          "--binary",
+          "--timing",
+          "-Wno-fatal",
+          "--top-module",
+          "tb",
+          "--Mdir",
+          "/tmp/uhsc-v2/validation/.work/v2-vector-parent/obj-vld-merge-collision",
+          "/tmp/uhsc-v2/validation/.work/v2-vector-parent/vld-merge-collision.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "ng-WIDTHEXPAND: /tmp/uhsc-v2/validation/.work/v2-vector-parent/vld-merge-collision.sv:2821:118: Operator ADD expects 64 bits on the LHS, but LHS's VARREF 'i' generates 32 bits.\n                                                                                                    : ... note: In instance 'tb'\n 2821 |       for (j = 0; j < 15; j = j + 1) begin pdest[j] = (i * 13 + j * 7) & 8'hff; data[j] = (64'h9e3779b97f4a7c15 * (i + j + 1)) ^ (64'h100 + j); end\n      |                                                                                                                      ^\n%Warning-WIDTHEXPAND: /tmp/uhsc-v2/validation/.work/v2-vector-parent/vld-merge-collision.sv:2821:118: Operator ADD expects 64 bits on the RHS, but RHS's VARREF 'j' generates 32 bits.\n                                                                                                    : ... note: In instance 'tb'\n 2821 |       for (j = 0; j < 15; j = j + 1) begin pdest[j] = (i * 13 + j * 7) & 8'hff; data[j] = (64'h9e3779b97f4a7c15 * (i + j + 1)) ^ (64'h100 + j); end\n      |                                                                                                                      ^\n%Warning-WIDTHEXPAND: /tmp/uhsc-v2/validation/.work/v2-vector-parent/vld-merge-collision.sv:2821:139: Operator ADD expects 64 bits on the RHS, but RHS's VARREF 'j' generates 32 bits.\n                                                                                                    : ... note: In instance 'tb'\n 2821 |       for (j = 0; j < 15; j = j + 1) begin pdest[j] = (i * 13 + j * 7) & 8'hff; data[j] = (64'h9e3779b97f4a7c15 * (i + j + 1)) ^ (64'h100 + j); end\n      |                                                                                                                                           ^\n",
+        "output_sha256": "f1acd221ccd6a4a9589f0f86608f58d9c2fc4da65f070d05feb7025a4a763a4d"
+      },
+      "run": {
+        "command": [
+          "/tmp/uhsc-v2/validation/.work/v2-vector-parent/obj-vld-merge-collision/Vtb"
+        ],
+        "returncode": 6,
+        "status": "FAIL",
+        "output_tail": "[1] %Fatal: vld-merge-collision.sv:2823: Assertion failed in tb: COLLISION 0/2\n%Error: /tmp/uhsc-v2/validation/.work/v2-vector-parent/vld-merge-collision.sv:2823: Verilog $stop\nAborting...\n",
+        "output_sha256": "27b0e4528ccbbfd567d1cd13f4f87caabdb54053096e521fa03f4c22c9fb1c36"
+      },
+      "trace_sha256": "27b0e4528ccbbfd567d1cd13f4f87caabdb54053096e521fa03f4c22c9fb1c36",
+      "trace_lines": 3,
+      "trace_tail": "[1] %Fatal: vld-merge-collision.sv:2823: Assertion failed in tb: COLLISION 0/2\n%Error: /tmp/uhsc-v2/validation/.work/v2-vector-parent/vld-merge-collision.sv:2823: Verilog $stop\nAborting...\n"
+    }
+  },
+  "backend_gates": {
+    "parent_target": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "--Wno-fatal",
+          "--top-module",
+          "VldMergeUnitParent",
+          "/tmp/uhsc-v2/validation/.work/v2-vector-parent/target-VldMergeUnitParent.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": ";\n      |                              ^~\n%Warning-WIDTHEXPAND: /tmp/uhsc-v2/validation/.work/v2-vector-parent/target-VldMergeUnitParent.sv:1699:30: Operator GT expects 8 bits on the RHS, but RHS's CONST '7'h4a' generates 7 bits.\n                                                                                                         : ... note: In instance 'VldMergeUnitParent.mask_generator'\n 1699 |   assign \\$361  = \\$63 [7:0] > 7'h4a;\n      |                              ^\n%Warning-WIDTHEXPAND: /tmp/uhsc-v2/validation/.work/v2-vector-parent/target-VldMergeUnitParent.sv:1701:30: Operator LTE expects 8 bits on the RHS, but RHS's CONST '7'h4a' generates 7 bits.\n                                                                                                         : ... note: In instance 'VldMergeUnitParent.mask_generator'\n 1701 |   assign \\$363  = \\$63 [7:0] <= 7'h4a;\n      |                              ^~\n%Warning-WIDTHEXPAND: /tmp/uhsc-v2/validation/.work/v2-vector-parent/target-VldMergeUnitParent.sv:1702:30: Operator LTE expects 8 bits on the RHS, but RHS's CONST '7'h4b' generates 7 bits.\n                                                                                                         : ... note: In instance 'VldMergeUnitParent.mask_generator'\n 1702 |   assign \\$364  = \\$62 [7:0] <= 7'h4b;\n      |                              ^~\n%Warning-WIDTHEXPAND: /tmp/uhsc-v2/validation/.work/v2-vector-parent/target-VldMergeUnitParent.sv:1703:30: Operator GT expects 8 bits on the RHS, but RHS's CONST '7'h4b' generates 7 bits.\n                                                                                                         : ... note: In instance 'VldMergeUnitParent.mask_generator'\n 1703 |   assign \\$365  = \\$63 [7:0] > 7'h4b;\n      |                              ^\n",
+        "output_sha256": "346e8317e82faca6345b86c58dc28e2c4a814faf7faed3d1b550072c92e741c5"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-p",
+          "read_verilog -sv /tmp/uhsc-v2/validation/.work/v2-vector-parent/target-VldMergeUnitParent.sv; hierarchy -top VldMergeUnitParent; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "itParent.sv:191$14'.\nRemoving empty process `VldMergeUnitParent.$proc$/tmp/uhsc-v2/validation/.work/v2-vector-parent/target-VldMergeUnitParent.sv:189$13'.\nRemoving empty process `VldMergeUnitParent.$proc$/tmp/uhsc-v2/validation/.work/v2-vector-parent/target-VldMergeUnitParent.sv:187$12'.\nRemoving empty process `VldMergeUnitParent.$proc$/tmp/uhsc-v2/validation/.work/v2-vector-parent/target-VldMergeUnitParent.sv:185$11'.\nRemoving empty process `VldMergeUnitParent.$proc$/tmp/uhsc-v2/validation/.work/v2-vector-parent/target-VldMergeUnitParent.sv:183$10'.\nRemoving empty process `VldMergeUnitParent.$proc$/tmp/uhsc-v2/validation/.work/v2-vector-parent/target-VldMergeUnitParent.sv:181$9'.\nRemoving empty process `VldMergeUnitParent.$proc$/tmp/uhsc-v2/validation/.work/v2-vector-parent/target-VldMergeUnitParent.sv:179$8'.\nRemoving empty process `VldMergeUnitParent.$proc$/tmp/uhsc-v2/validation/.work/v2-vector-parent/target-VldMergeUnitParent.sv:177$7'.\nRemoving empty process `VldMergeUnitParent.$proc$/tmp/uhsc-v2/validation/.work/v2-vector-parent/target-VldMergeUnitParent.sv:175$6'.\nRemoving empty process `VldMergeUnitParent.$proc$/tmp/uhsc-v2/validation/.work/v2-vector-parent/target-VldMergeUnitParent.sv:173$5'.\nCleaned up 18 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module VldMergeUnitParent.mask_generator.\nOptimizing module VldMergeUnitParent.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module VldMergeUnitParent.mask_generator...\nChecking module VldMergeUnitParent...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: fc26ed0a53, CPU: user 0.04s system 0.01s, MEM: 20.62 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 70% 2x read_verilog (0 sec), 11% 1x check (0 sec), ...\n",
+        "output_sha256": "33ab2d07cd817c07065954accf0f026ce2d0990b3607b757bc2b0c405dfe73d1"
+      },
+      "status": "PASS"
+    },
+    "parent_reference": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "--Wno-fatal",
+          "--top-module",
+          "VldMergeUnit",
+          "/tmp/uhsc-v2/validation/.work/v2-vector-parent/reference-VldMergeUnit-closure.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.067 MB sources in 7 modules, into 0.126 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.038 s (elab=0.003, cvt=0.008, bld=0.000); cpu 0.019 s on 1 threads; alloced 11.043 MB\n",
+        "output_sha256": "59409c79ec0140cec783402ae7668a39d2af80b5f33a3e44c9c3f0e065421dc0"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-p",
+          "read_verilog -sv /tmp/uhsc-v2/validation/.work/v2-vector-parent/reference-VldMergeUnit-closure.sv; hierarchy -top VldMergeUnit; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "ting register for signal `\\VldMergeUnit.\\wbReg_bits_vls_isIndexed' using process `\\VldMergeUnit.$proc$/tmp/uhsc-v2/validation/.work/v2-vector-parent/reference-VldMergeUnit-closure.sv:1038$510'.\n  created $dff cell `$procdff$570' with positive edge clock.\nCreating register for signal `\\VldMergeUnit.\\wbReg_bits_vls_isMasked' using process `\\VldMergeUnit.$proc$/tmp/uhsc-v2/validation/.work/v2-vector-parent/reference-VldMergeUnit-closure.sv:1038$510'.\n  created $dff cell `$procdff$571' with positive edge clock.\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nFound and cleaned up 1 empty switch in `\\VldMergeUnit.$proc$/tmp/uhsc-v2/validation/.work/v2-vector-parent/reference-VldMergeUnit-closure.sv:1038$510'.\nRemoving empty process `VldMergeUnit.$proc$/tmp/uhsc-v2/validation/.work/v2-vector-parent/reference-VldMergeUnit-closure.sv:1038$510'.\nCleaned up 1 empty switch.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module VldMergeUnit.\nOptimizing module VldMgu.\nOptimizing module ByteMaskTailGen.\n<suppressed ~2 debug messages>\nOptimizing module MaskExtractor.\n<suppressed ~1 debug messages>\nOptimizing module UIntToContLow0s.\nOptimizing module UIntToContLow1s.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module VldMergeUnit...\nChecking module VldMgu...\nChecking module ByteMaskTailGen...\nChecking module MaskExtractor...\nChecking module UIntToContLow0s...\nChecking module UIntToContLow1s...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 8f7426de02, CPU: user 0.03s system 0.02s, MEM: 16.72 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 49% 2x read_verilog (0 sec), 24% 1x check (0 sec), ...\n",
+        "output_sha256": "fd7fa79a6174622d570008a7a422305fa8e5261e586fd7193ff9a91afb747ade"
+      },
+      "status": "PASS"
+    },
+    "collision_target": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "--Wno-fatal",
+          "--top-module",
+          "RealWBCollideChecker_DUT",
+          "/tmp/uhsc-v2/validation/.work/v2-vector-parent/target-RealWBCollideChecker.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.309 MB sources in 10 modules, into 0.031 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.040 s (elab=0.003, cvt=0.007, bld=0.000); cpu 0.022 s on 1 threads; alloced 12.363 MB\n",
+        "output_sha256": "1d7f36e3d21ae2bf19dad801e59244bb7d8b1723020537efa591acd5dc800370"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-p",
+          "read_verilog -sv /tmp/uhsc-v2/validation/.work/v2-vector-parent/target-RealWBCollideChecker.sv; hierarchy -top RealWBCollideChecker_DUT; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "ents to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RealWBCollideChecker.arb_7.\nOptimizing module RealWBCollideChecker.arb_6.\nOptimizing module RealWBCollideChecker.arb_5.\nOptimizing module RealWBCollideChecker.arb_4.\nOptimizing module RealWBCollideChecker.arb_3.\nOptimizing module RealWBCollideChecker.arb_2.\nOptimizing module RealWBCollideChecker.arb_1.\nOptimizing module RealWBCollideChecker.arb_0.\nOptimizing module RealWBCollideChecker_DUT.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module RealWBCollideChecker.arb_7...\nChecking module RealWBCollideChecker.arb_6...\nChecking module RealWBCollideChecker.arb_5...\nChecking module RealWBCollideChecker.arb_4...\nChecking module RealWBCollideChecker.arb_3...\nChecking module RealWBCollideChecker.arb_2...\nChecking module RealWBCollideChecker.arb_1...\nChecking module RealWBCollideChecker.arb_0...\nChecking module RealWBCollideChecker_DUT...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 349b09dc24, CPU: user 0.04s system 0.01s, MEM: 18.77 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 81% 2x read_verilog (0 sec), 4% 1x check (0 sec), ...\n",
+        "output_sha256": "de09b3f3aed53918780e798ed06ae1cf5b76e41283ac87ef153779cfa0742965"
+      },
+      "status": "PASS"
+    },
+    "collision_reference": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "--Wno-fatal",
+          "--top-module",
+          "RealWBCollideChecker",
+          "/tmp/uhsc-v2/validation/.work/v2-vector-parent/reference-RealWBCollideChecker-closure.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.035 MB sources in 6 modules, into 0.025 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.025 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.008 s on 1 threads; alloced 9.727 MB\n",
+        "output_sha256": "4a556591fd353cdaa4f828519ba471190684b96a49faf5b81b4efed1e886f8af"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-p",
+          "read_verilog -sv /tmp/uhsc-v2/validation/.work/v2-vector-parent/reference-RealWBCollideChecker-closure.sv; hierarchy -top RealWBCollideChecker; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "biter_1\nUsed module:     \\RealWBArbiter\nRemoved 0 unused modules.\n\n3. Executing PROC pass (convert processes to netlists).\n\n3.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RealWBCollideChecker.\nOptimizing module RealWBArbiter_3.\nOptimizing module RealWBArbiter_2.\nOptimizing module RealWBArbiter_1.\nOptimizing module RealWBArbiter.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module RealWBCollideChecker...\nChecking module RealWBArbiter_3...\nChecking module RealWBArbiter_2...\nChecking module RealWBArbiter_1...\nChecking module RealWBArbiter...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: f1f6896f2b, CPU: user 0.01s system 0.01s, MEM: 12.03 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 51% 2x read_verilog (0 sec), 18% 1x check (0 sec), ...\n",
+        "output_sha256": "6ffa6c7f234bb7b4c930360c672c69525bc2312ad4f39c96d7ec49577c7ec921"
+      },
+      "status": "PASS"
+    }
+  },
+  "locked_closure_modules": [
+    "VldMergeUnit",
+    "VldMgu",
+    "Mgu",
+    "ByteMaskTailGen",
+    "MaskExtractor",
+    "UIntToContLow0s",
+    "UIntToContLow1s"
+  ],
+  "observed_points": [
+    "writeback valid capture",
+    "ROB redirect kill",
+    "VLWen bypass",
+    "vstart/vl/eew/vsew mask merge",
+    "tail/mask agnostic bytes",
+    "physical destination metadata",
+    "RealWBCollideChecker priority lane"
+  ],
+  "behavioral_equivalence": false,
+  "status": "CONTRACT_ONLY",
+  "full_wbdatapath_integration": "PENDING_BACKEND_PARENT",
+  "license_gate": "PENDING",
+  "uhsc_localization": "PENDING_EXTERNAL_WRAPPER",
+  "acceptance_eligible": false,
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "FAIL",
+    "PARENT_CLOSURE_MATCHED": "FAIL",
+    "WBDATAPATH_FULL_PARENT": "PENDING_BACKEND_PARENT",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "LICENSE": "PENDING",
+    "UHSC_LOCALIZED": "PENDING_EXTERNAL_WRAPPER",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "blockers": [
+    "Reduced closure intentionally excludes the full 861-port WbDataPath/Backend integration.",
+    "License review and project-facing UHSC wrapper localization remain open.",
+    "XSTop is used only as an immutable reference slice; no top-level acceptance is claimed."
+  ],
+  "alias_gate": {
+    "command": [
+      "bash",
+      "-lc",
+      "ln -sfn /mnt/d/*/Unifier-Hardware-System/.agents/xiangshan-v2 /tmp/uhsc-v2"
+    ],
+    "returncode": 0,
+    "status": "PASS",
+    "output_tail": "",
+    "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

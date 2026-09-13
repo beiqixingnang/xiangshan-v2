@@ -61,13 +61,13 @@ class VldMergeUnitParentConfig:
 # Implementation
 # =============================================================================
 # Return the V2 circular ROB ordering relation used by RobPtr.needFlush.
-# 返回 RobPtr.needFlush 使用的 V2 环形 ROB 顺序关系。
+# 返回 RobPtr.needFlush 使用的 V2 环形 ROB 顺序关系。/
 def rob_is_after(value: int, flag: int, flush_value: int, flush_flag: int) -> bool:
     return bool((flag & 1) ^ (flush_flag & 1) ^ int((value & 0xFF) > (flush_value & 0xFF)))
 
 
 # Return the exact redirect kill predicate from RobPtr.needFlush.
-# 返回 RobPtr.needFlush 的精确 redirect kill 谓词。
+# 返回 RobPtr.needFlush 的精确 redirect kill 谓词。/
 def rob_need_flush(
     value: int,
     flag: int,
@@ -84,7 +84,7 @@ def rob_need_flush(
 
 
 # Compute the V2 parent output for one cycle, including its registered valid.
-# 计算包含寄存有效位的单周期 V2 父级输出。
+# 计算包含寄存有效位的单周期 V2 父级输出。/
 def vld_merge_model(
     data: int,
     pdest: int,
@@ -191,7 +191,7 @@ class VldMergeUnitParent(Elaboratable):
         self.out_vl_wen = Signal(name="io_writebackAfterMerge_bits_vlWen")
 
     # Elaborate parent registers, redirect kill, and injected mask child.
-    # 展开父级寄存器、redirect kill 以及注入的掩码子模块。
+    # 展开父级寄存器、redirect kill 以及注入的掩码子模块。/
     def elaborate(self, platform):
         del platform
         if self.mask_generator is None:
@@ -268,8 +268,11 @@ class VldMergeUnitParent(Elaboratable):
         return module
 
 
+# =============================================================================
+# Public Adapter
+# =============================================================================
 # Emit deterministic Verilog for the injected V2 parent closure.
-# 为注入的 V2 父级闭包输出确定性 Verilog。
+# 为注入的 V2 父级闭包输出确定性 Verilog。/
 def build_verilog(configuration, injected_dependencies):
     dependencies = injected_dependencies if isinstance(injected_dependencies, dict) else {}
     top = VldMergeUnitParent(configuration, dependencies)
@@ -288,5 +291,8 @@ def build_verilog(configuration, injected_dependencies):
     return verilog.convert(top, name="VldMergeUnitParent", ports=ports, emit_src=False)
 
 
+# =============================================================================
+# Direct Entry
+# =============================================================================
 # The parent harness is imported by the validation runner, not executed as a
 # product module.  / 父级 harness 由验证运行器导入，不作为产品模块执行。

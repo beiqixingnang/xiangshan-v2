@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "kind": "V2_VECTOR_PARENT_MAPPING_UPDATE",
+  "batch_id": "V2-PARENT-VECTOR-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "entries": [
+    {
+      "id": "VldMergeUnit",
+      "classification": "NEW_AUXILIARY_PARENT_HARNESS",
+      "v2_source": "upstream/src/main/scala/xiangshan/backend/datapath/VldMergeUnit.scala",
+      "target": "validation/v2_vector_parent_harness.py",
+      "closure_root": "core.fu.vector",
+      "reference_mode": "EXTRACTED_LOCKED_XSTOP_PARENT",
+      "status": "CONTRACT_ONLY"
+    },
+    {
+      "id": "VldMergeUnit.mgu",
+      "classification": "INJECTED_EXISTING_LEAF",
+      "v2_source": "upstream/src/main/scala/xiangshan/backend/fu/vector/Mgu.scala",
+      "target": "python/ported/backend/fu/vector/NewMgu-Hardware.py",
+      "reference_mode": "VldMgu_PARENT_CLOSURE",
+      "status": "FAIL"
+    },
+    {
+      "id": "VldMergeUnit.writeback_collision_lane",
+      "classification": "REDUCED_CHILD_BOUNDARY",
+      "v2_source": "upstream/src/main/scala/xiangshan/backend/datapath/WbArbiter.scala",
+      "target": "python/ported/backend/datapath/WbArbiter-Hardware.py",
+      "reference_mode": "EXTRACTED_REALWBCOLLIDECHECKER",
+      "status": "FAIL",
+      "full_parent_status": "PENDING_BACKEND_PARENT"
+    }
+  ],
+  "source_authority": {
+    "canonical_path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "bytes": 228590583
+  },
+  "gates": {
+    "contract": "PASS",
+    "direct": "PASS",
+    "reference": "FAIL",
+    "parent_closure": "FAIL",
+    "verilator": "PASS",
+    "yosys": "PASS",
+    "license": "PENDING",
+    "UHSC_LOCALIZED": "PENDING_EXTERNAL_WRAPPER",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "acceptance_eligible": false
+}

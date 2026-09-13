@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_VECTOR_PARENT_COVERAGE",
+  "batch_id": "V2-PARENT-VECTOR-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "readiness_source": "validation/v2-parent-closure-readiness.json",
+  "readiness_sha256": "de2d7f3804af36d013b9788d3031ae1cb50c131cf4bb8f36ff57ee51fae3675b",
+  "closure_id": "vector",
+  "root_module": "VldMergeUnit",
+  "root_source": "upstream/src/main/scala/xiangshan/backend/datapath/VldMergeUnit.scala",
+  "reference_snapshot": {
+    "path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "bytes": 228590583
+  },
+  "children": [
+    {
+      "instance": "VldMergeUnit.mgu",
+      "source": "upstream/src/main/scala/xiangshan/backend/fu/vector/Mgu.scala",
+      "emitted_module": "VldMgu",
+      "target": "NewMgu-Hardware.py",
+      "observation_points": [
+        "active/agnostic byte enables",
+        "indexed realEw selection"
+      ],
+      "evidence": "VldMergeUnit_parent differential"
+    },
+    {
+      "instance": "VldMgu.maskTailGen",
+      "source": "upstream/src/main/scala/xiangshan/backend/fu/vector/ByteMaskTailGen.scala",
+      "emitted_module": "ByteMaskTailGen",
+      "target": "ByteMaskTailGen-Hardware.py",
+      "observation_points": [
+        "vstart/vl byte range",
+        "vma/vta policy",
+        "mask expansion"
+      ],
+      "evidence": "existing v2-vector-batch differential plus parent trace"
+    },
+    {
+      "instance": "ByteMaskTailGen.maskEn",
+      "source": "upstream/src/main/scala/xiangshan/backend/fu/vector/utils/MaskExtrator.scala",
+      "emitted_module": "MaskExtractor",
+      "target": "MaskExtrator-Hardware.py",
+      "observation_points": [
+        "e8/e16/e32/e64 expansion"
+      ],
+      "evidence": "existing leaf differential"
+    },
+    {
+      "instance": "VldMergeUnit.writeback_collision_lane",
+      "source": "upstream/src/main/scala/xiangshan/backend/datapath/WbArbiter.scala",
+      "emitted_module": "RealWBCollideChecker",
+      "target": "WbArbiter-Hardware.py",
+      "observation_points": [
+        "15 input lanes",
+        "8 output priority lanes"
+      ],
+      "evidence": "reduced collision child differential",
+      "full_parent_status": "PENDING_BACKEND_PARENT"
+    }
+  ],
+  "vectors": {
+    "parent": 512,
+    "collision": 256
+  },
+  "status": "CONTRACT_ONLY",
+  "license_review": "PENDING",
+  "uhsc_localization": "PENDING_EXTERNAL_WRAPPER",
+  "acceptance_eligible": false,
+  "gates": {
+    "DIRECT": "PASS",
+    "REFERENCE": "FAIL",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "FULL_WBDATAPATH": "PENDING_BACKEND_PARENT",
+    "ACCEPTED": "NOT_ALLOWED"
+  }
+}
