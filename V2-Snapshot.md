@@ -5,6 +5,11 @@ XiangShan Kunminghu V2 line. The upstream checkout is kept under `upstream/`
 and is pinned to an immutable commit; its submodule SHAs are recorded in
 `V2-Snapshot.json`.
 
+The outer repository stores `upstream/` as a Git submodule rather than
+vendoring the roughly 500 MB Scala/dependency tree. A fresh checkout therefore
+needs network access once to initialize that pinned submodule; after that,
+source, nested dependencies, compilation, and RTL generation are local.
+
 The checkout was validated in WSL on the Linux ext4 mirror
 `/home/lishuo/xs-v2-local`, because compiling the Scala tree from `/mnt/d`
 can fail on case-sensitive paths. Generated SystemVerilog is intentionally not
