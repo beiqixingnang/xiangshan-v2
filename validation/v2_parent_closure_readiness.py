@@ -750,13 +750,13 @@ PARENT_SPECS: list[dict[str, Any]] = [
 
 FAMILY_EVIDENCE: dict[str, list[str]] = {
     "core.decode.isa": ["validation/v2-decode-batch-results.json", "validation/v2-decode-batch-reference-results.json"],
-    "core.decode.csr": ["validation/v2-decode-batch-results.json", "validation/v2-decode-batch-reference-results.json"],
-    "core.csr.timer": ["validation/v2-decode-batch-results.json", "validation/v2-decode-batch-reference-results.json"],
-    "core.fu.divider": [],
+    "core.decode.csr": ["validation/v2-decode-batch-results.json", "validation/v2-decode-batch-reference-results.json", "validation/v2-csr-divider-direct-results.json", "validation/v2-csr-divider-differential-results.json"],
+    "core.csr.timer": ["validation/v2-decode-batch-results.json", "validation/v2-decode-batch-reference-results.json", "validation/v2-csr-divider-differential-results.json"],
+    "core.fu.divider": ["validation/v2-csr-divider-direct-results.json", "validation/v2-csr-divider-differential-results.json", "validation/v2-csr-divider-coverage-manifest.json"],
     "core.fu.fpu": ["validation/v2-decode-batch-results.json", "validation/v2-decode-batch-reference-results.json"],
     "core.fu.arithmetic.csa": ["validation/v2-decode-batch-results.json", "validation/v2-decode-batch-reference-results.json"],
-    "core.fu.crypto": [],
-    "core.fu.debug": [],
+    "core.fu.crypto": ["validation/v2-crypto-debug-batch-results.json", "validation/v2-crypto-debug-batch-direct-results.json", "validation/v2-crypto-debug-batch-reference-results.json", "validation/v2-crypto-debug-batch-differential-results.json"],
+    "core.fu.debug": ["validation/v2-crypto-debug-batch-results.json", "validation/v2-crypto-debug-batch-direct-results.json", "validation/v2-crypto-debug-batch-reference-results.json", "validation/v2-crypto-debug-batch-differential-results.json"],
     "core.fu.shift": [],
     "core.fu.vector.mask": ["validation/v2-vector-batch-direct-results.json", "validation/v2-vector-batch-differential-results.json", "validation/v2-vector-batch-coverage-manifest.json"],
     "core.fu.vector.mgu": ["validation/v2-vector-batch-direct-results.json", "validation/v2-vector-batch-differential-results.json", "validation/v2-vector-batch-coverage-manifest.json"],
