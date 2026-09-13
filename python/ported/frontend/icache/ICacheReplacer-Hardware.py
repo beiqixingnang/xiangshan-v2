@@ -76,7 +76,7 @@ class SetAssocPolicy(Elaboratable):
         self.victim_way = Signal(cfg.way_bits, name="victim_way")
 
     # Return a PLRU victim expression for one packed tree. / 返回一个打包树的 PLRU victim 表达式。
-    def _plru_victim(self, state, tree_ways: int, offset: int = 0):
+    def plru_victim_expr(self, state, tree_ways: int, offset: int = 0):
         if tree_ways <= 1:
             return Signal(1, init=0)
         if tree_ways == 2:
@@ -84,14 +84,14 @@ class SetAssocPolicy(Elaboratable):
         right_ways = tree_ways // 2
         left_ways = tree_ways - right_ways
         root = state[offset + tree_ways - 2]
-        left = self._plru_victim(state, left_ways, offset + right_ways - 1)
-        right = self._plru_victim(state, right_ways, offset)
+        left = self.plru_victim_expr(state, left_ways, offset + right_ways - 1)
+        right = self.plru_victim_expr(state, right_ways, offset)
         child_width = max(1, (right_ways - 1).bit_length())
         del child_width
         return Cat(Mux(root, left, right), root)
 
     # Return a PLRU next-state expression for one touch. / 返回一次触摸后的 PLRU 状态表达式。
-    def _plru_next(self, state, touch_way, tree_ways: int, offset: int = 0):
+    def plru_next_expr(self, state, touch_way, tree_ways: int, offset: int = 0):
         if tree_ways <= 1:
             return 0
         if tree_ways == 2:
@@ -107,14 +107,14 @@ class SetAssocPolicy(Elaboratable):
         right_state = state[right_start:right_end]
         left_touch = touch_way[: max(1, left_ways.bit_length() - 1)]
         right_touch = touch_way[: max(1, right_ways.bit_length() - 1)]
-        left_next = self._plru_next(left_state, left_touch, left_ways, 0)
-        right_next = self._plru_next(right_state, right_touch, right_ways, 0)
+        left_next = self.plru_next_expr(left_state, left_touch, left_ways, 0)
+        right_next = self.plru_next_expr(right_state, right_touch, right_ways, 0)
         left_result = Mux(root_new, left_state, left_next)
         right_result = Mux(root_new, right_next, right_state)
         return Cat(right_result, left_result, root_new)
 
     # Return an LRU victim expression from the triangular relation matrix. / 返回三角关系矩阵对应的 LRU victim 表达式。
-    def _lru_victim(self, state):
+    def lru_victim_expr(self, state):
         n = self.cfg.n_ways
         candidates = []
         for candidate in range(n):
@@ -135,7 +135,7 @@ class SetAssocPolicy(Elaboratable):
         return result
 
     # Return an LRU next-state expression for one touch. / 返回一次触摸后的 LRU 状态表达式。
-    def _lru_next(self, state, touch_way):
+    def lru_next_expr(self, state, touch_way):
         n = self.cfg.n_ways
         terms = []
         bit_index = 0
@@ -163,9 +163,9 @@ class SetAssocPolicy(Elaboratable):
 
         victim_state = state[self.victim_set]
         if c.policy.lower() == "setlru":
-            m.d.comb += self.victim_way.eq(self._lru_victim(victim_state))
+            m.d.comb += self.victim_way.eq(self.lru_victim_expr(victim_state))
         else:
-            m.d.comb += self.victim_way.eq(self._plru_victim(victim_state, c.n_ways))
+            m.d.comb += self.victim_way.eq(self.plru_victim_expr(victim_state, c.n_ways))
 
         # V2's SetAssocLRU folds valid touches in array order for each set.
         for set_index in range(self.half_sets):
@@ -174,9 +174,9 @@ class SetAssocPolicy(Elaboratable):
             for slot in range(2):
                 hit_set = self.touch_set[slot] == set_index
                 update_state = (
-                    self._lru_next(next_state, self.touch_way[slot])
+                    self.lru_next_expr(next_state, self.touch_way[slot])
                     if c.policy.lower() == "setlru"
-                    else self._plru_next(next_state, self.touch_way[slot], c.n_ways)
+                    else self.plru_next_expr(next_state, self.touch_way[slot], c.n_ways)
                 )
                 next_state = Mux(self.touch_valid[slot] & hit_set, update_state, next_state)
             m.d.sync += current.eq(next_state)
