@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_DECODE_ARITHMETIC_REFERENCE_DIFFERENTIAL",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "reference_artifact": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+  "status": "V2_REFERENCE_MATCHED",
+  "results": {
+    "FliTable": {
+      "status": "PASS",
+      "returncode": 0,
+      "stdout_tail": "- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: end at 32ps; walltime 0.001 s; speed 18.394 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n",
+      "stderr_tail": ""
+    },
+    "CSA": {
+      "status": "PASS",
+      "returncode": 0,
+      "stdout_tail": "- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: end at 8ps; walltime 0.001 s; speed 4.927 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 152 MB\n",
+      "stderr_tail": ""
+    },
+    "SstcInterruptGen": {
+      "status": "PASS",
+      "returncode": 0,
+      "stdout_tail": "- tb.sv:162: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 7ps; walltime 0.001 s; speed 5.047 ns/s\n- Verilator: cpu 0.001 s on 1 threads; alloced 152 MB\n",
+      "stderr_tail": ""
+    }
+  },
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PASS",
+    "UHSC_LOCALIZED": "PENDING_EXTERNAL_WRAPPER",
+    "PARENT_CLOSURE_MATCHED": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "unclosed": [
+    "Instructions and RiscvInst have no standalone module in XSTop.sv; source-level field differential remains bounded only.",
+    "Parent closure and external UHSC localization gates remain open."
+  ]
+}

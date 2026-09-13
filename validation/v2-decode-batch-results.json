@@ -1,0 +1,198 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_DECODE_ARITHMETIC_BATCH",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "status": "DIRECT_TEST_PASS_BOUNDED",
+  "targets": {
+    "Instructions": {
+      "vectors": 4644,
+      "verilog_sha256": "67cc7c554198b8d4d80c48e0d35bcc74f291f26c93bf9b56cf999aaf6fe1a8e0"
+    },
+    "RiscvInst": {
+      "vectors": 512,
+      "verilog_sha256": "2d81c55463492cad2cc2d39794b169d637481dbbd21be008706f78212e5f9cb7"
+    },
+    "FliTable": {
+      "entries": 96,
+      "verilog_sha256": "a5f5bdfdee41584ed84817c4736c92cb1c03745f1c9aba5dcc394c4fbc6dcf81"
+    },
+    "CSA": {
+      "vectors": 4096,
+      "verilog_sha256": "ac80ac2f7f95b69c941c65057dca822f08e91944eb894137c7f6f7747f5bc2c5"
+    },
+    "SstcInterruptGen": {
+      "cycles": 2,
+      "verilog_sha256": "1c8b5d1960be2b36030166214947e380ca083afac6cdcf018c0bbd632b1cd964"
+    }
+  },
+  "audits": {
+    "Instructions": {
+      "zones": [
+        "Module Contract",
+        "Configuration",
+        "Implementation",
+        "Public Adapter",
+        "Direct Entry"
+      ],
+      "functions": [
+        "__init__",
+        "build_verilog",
+        "elaborate",
+        "main",
+        "match32",
+        "pattern_mask_expected"
+      ],
+      "utf8_lf": true
+    },
+    "RiscvInst": {
+      "zones": [
+        "Module Contract",
+        "Configuration",
+        "Implementation",
+        "Public Adapter",
+        "Direct Entry"
+      ],
+      "functions": [
+        "__init__",
+        "__init__",
+        "bit_value",
+        "build_verilog",
+        "elaborate",
+        "field",
+        "get_inst_vtype",
+        "inst_field",
+        "isAMOCAS",
+        "isOPFVF",
+        "isOPFVV",
+        "isOPIVI",
+        "isOPIVV",
+        "isOPIVX",
+        "isOPMVV",
+        "isOPMVX",
+        "isVecArith",
+        "isVecLoad",
+        "isVecStore",
+        "is_rnum_illegal",
+        "main",
+        "vec_arith_funct3"
+      ],
+      "utf8_lf": true
+    },
+    "FliTable": {
+      "zones": [
+        "Module Contract",
+        "Configuration",
+        "Implementation",
+        "Public Adapter",
+        "Direct Entry"
+      ],
+      "functions": [
+        "__init__",
+        "__init__",
+        "__init__",
+        "__init__",
+        "__post_init__",
+        "build_verilog",
+        "decode_fli",
+        "elaborate",
+        "main"
+      ],
+      "utf8_lf": true
+    },
+    "CSA": {
+      "zones": [
+        "Module Contract",
+        "Configuration",
+        "Implementation",
+        "Public Adapter",
+        "Direct Entry"
+      ],
+      "functions": [
+        "__init__",
+        "__init__",
+        "__init__",
+        "__init__",
+        "__init__",
+        "__init__",
+        "__init__",
+        "__post_init__",
+        "build_verilog",
+        "csa2_2",
+        "csa3_2",
+        "csa5_3",
+        "elaborate",
+        "elaborate",
+        "elaborate",
+        "main"
+      ],
+      "utf8_lf": true
+    },
+    "SstcInterruptGen": {
+      "zones": [
+        "Module Contract",
+        "Configuration",
+        "Implementation",
+        "Public Adapter",
+        "Direct Entry"
+      ],
+      "functions": [
+        "__init__",
+        "build_verilog",
+        "elaborate",
+        "main"
+      ],
+      "utf8_lf": true
+    }
+  },
+  "verilator": {
+    "Instructions": {
+      "status": "PASS",
+      "returncode": 0,
+      "stderr_tail": "stance 'Instructions'\n   72 |   assign zvbb_vror_vi = \\$11  == 31'h50003057;\n      |                               ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_decode_batch_o0dqitug/Instructions.sv:73:31: Operator EQ expects 32 bits on the RHS, but RHS's CONST '31'h50000057' generates 31 bits.\n                                                                                                           : ... note: In instance 'Instructions'\n   73 |   assign zvbb_vror_vv = \\$12  == 31'h50000057;\n      |                               ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_decode_batch_o0dqitug/Instructions.sv:74:31: Operator EQ expects 32 bits on the RHS, but RHS's CONST '31'h50004057' generates 31 bits.\n                                                                                                           : ... note: In instance 'Instructions'\n   74 |   assign zvbb_vror_vx = \\$13  == 31'h50004057;\n      |                               ^~\n"
+    },
+    "RiscvInst": {
+      "status": "PASS",
+      "returncode": 0,
+      "stderr_tail": "                                                      : ... note: In instance 'RiscvInst'\n   90 |   assign \\$15  = inst[14:12] == 1'h1;\n      |                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_decode_batch_o0dqitug/RiscvInst.sv:93:30: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                        : ... note: In instance 'RiscvInst'\n   93 |   assign \\$17  = inst[14:12] == 2'h2;\n      |                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_decode_batch_o0dqitug/RiscvInst.sv:96:30: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                                                                                        : ... note: In instance 'RiscvInst'\n   96 |   assign \\$19  = inst[14:12] == 2'h3;\n      |                              ^~\n"
+    },
+    "FliTable": {
+      "status": "PASS",
+      "returncode": 0,
+      "stderr_tail": "s.\n                                                                                                        : ... note: In instance 'FliTable'\n  130 |   assign \\$30  = src == 2'h2;\n      |                      ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_decode_batch_o0dqitug/FliTable.sv:131:22: Operator EQ expects 5 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                        : ... note: In instance 'FliTable'\n  131 |   assign \\$31  = src == 1'h1;\n      |                      ^~\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_decode_batch_o0dqitug/FliTable.sv:132:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'src' generates 5 bits.\n                                                                                                       : ... note: In instance 'FliTable'\n  132 |   assign \\$32  = ! src;\n      |                  ^\n"
+    },
+    "CSA": {
+      "status": "PASS",
+      "returncode": 0,
+      "stderr_tail": ""
+    },
+    "SstcInterruptGen": {
+      "status": "PASS",
+      "returncode": 0,
+      "stderr_tail": ""
+    }
+  },
+  "reference": {
+    "path": "\\home\\lishuo\\xs-v2-local\\build\\rtl\\XSTop.sv",
+    "present": true,
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "modules": [
+      "CSA3_2",
+      "FliDTable",
+      "FliHTable",
+      "FliSTable",
+      "SstcInterruptGen"
+    ]
+  },
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PENDING_COORDINATOR_REVIEW",
+    "UHSC_LOCALIZED": "NOT_APPLICABLE_FOR_INTERNAL_LEAVES",
+    "PARENT_CLOSURE_MATCHED": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "unclosed": [
+    "Independent Amaranth-vs-extracted-SV transaction differential must be rerun by coordinator in WSL.",
+    "Parent closure and UHSC external wrapper evidence are not part of this leaf batch."
+  ]
+}

@@ -11,3 +11,11 @@ See [V2-Snapshot.md](V2-Snapshot.md),
 [V2R2-Comparison.md](V2R2-Comparison.md), and
 [V2-Python-Rewrite-Strategy.md](V2-Python-Rewrite-Strategy.md), and
 [`python/ported/V2-Ported-Candidates.json`](python/ported/V2-Ported-Candidates.json).
+
+Phase 0 source classification, dependency/license inventory, contract audit,
+and UHSC rename planning are authoritative in:
+
+- [`V2-Phase0-Mapping-Manifest.json`](V2-Phase0-Mapping-Manifest.json)
+- [`V2-Dependency-License-Inventory.json`](V2-Dependency-License-Inventory.json)
+- [`V2-Ported-Contract-Audit.json`](V2-Ported-Contract-Audit.json)
+- [`UHSC-Naming-Manifest.json`](UHSC-Naming-Manifest.json)

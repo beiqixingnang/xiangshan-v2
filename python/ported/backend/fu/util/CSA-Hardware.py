@@ -1,30 +1,34 @@
-"""CSA (carry-save adders: CSA2_2/CSA3_2/CSA5_3 and 1-bit C22/C32/C53). / 进位保存加法器（2:2/3:2/5:3 及 1 位压缩器）。"""
+"""V2 carry-save adders. / V2 进位保存加法器。"""
 
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, cast
+from typing import Any
 
-from amaranth import Cat, Const, Elaboratable, Module, Signal
+from amaranth import Cat, Elaboratable, Module, Signal
 
 
 # =============================================================================
 # Module Contract
 # =============================================================================
-# Public symbols / 公开符号:
-#   - CSA2_2, CSA3_2, CSA5_3, C22, C32, C53 : carry-save adders
-#   - build_verilog, main
-# Real logic: per-bit compressors. CSA2_2 (a,b)->(sum=a^b, cout=a&b);
-# CSA3_2 (a,b,cin)->(sum=a^b^cin, cout=a&b | (a^b)&cin) full adder;
-# CSA5_3 two cascaded full adders on 5 inputs -> 3 outputs (sum, c0, c1).
-# Wide variants iterate the 1-bit compressor across `len` bits, outputs are
-# little-endian (amaranth Cat low-first, matching Chisel Cat reversed).
-# / 真实逻辑：逐位压缩器。CSA2_2 (a,b)->(sum=a^b, cout=a&b)；CSA3_2 全加器；
-# CSA5_3 两级级联全加器，5 入 3 出。宽位变体逐位迭代，输出小端
-# （amaranth Cat 低位在前，对应 Chisel Cat 反转）。
-# Status / 状态: PYTHON_PRESENT_UNVERIFIED (phase-1 bulk port / 阶段一批量重写)
-__all__ = ["CSA2_2", "CSA3_2", "CSA5_3", "C22", "C32", "C53",
-           "build_verilog", "main"]
+# CSA.scala defines bit-parallel 2:2, 3:2, and 5:3 compressors.  Each output
+# vector keeps the source bit index, so integer reference models are exact.
+# CSA.scala 定义逐位并行 2:2、3:2、5:3 压缩器；输出向量保持位索引。
+__all__ = [
+    "CSAConfig",
+    "CarrySaveAdderMToN",
+    "CSA2_2",
+    "CSA3_2",
+    "CSA5_3",
+    "C22",
+    "C32",
+    "C53",
+    "csa2_2",
+    "csa3_2",
+    "csa5_3",
+    "build_verilog",
+    "main",
+]
 
 
 # =============================================================================
@@ -32,134 +36,225 @@ __all__ = ["CSA2_2", "CSA3_2", "CSA5_3", "C22", "C32", "C53",
 # =============================================================================
 @dataclass(frozen=True)
 class CSAConfig:
-    length: int = 8
+    """Width for one compressor family. / 一个压缩器族的位宽。"""
+
+    length: int = 10
+
+    # Validate the compressor width / 校验压缩器位宽。
+    def __post_init__(self) -> None:
+        """Reject non-positive widths. / 拒绝非正位宽。"""
+
+        if self.length < 1:
+            raise ValueError("CSA length must be positive")
 
 
 # =============================================================================
 # Implementation
 # =============================================================================
+# Compute a 2:2 compressor in the integer reference domain / 计算整数 2:2 压缩器。
+def csa2_2(a: int, b: int, length: int) -> tuple[int, int]:
+    """Return sum and carry vectors for two operands. / 返回两输入和与进位。"""
+
+    limit = (1 << length) - 1
+    return (a ^ b) & limit, (a & b) & limit
+
+
+# Compute a 3:2 full-adder compressor / 计算三输入全加器压缩结果。
+def csa3_2(a: int, b: int, cin: int, length: int) -> tuple[int, int]:
+    """Return bitwise sum and carry vectors. / 返回逐位和与进位向量。"""
+
+    limit = (1 << length) - 1
+    xor_value = (a ^ b) & limit
+    return ((xor_value ^ cin) & limit,
+            ((a & b) | (xor_value & cin)) & limit)
+
+
+# Compute the two-stage 5:3 compressor / 计算两级五输入三输出压缩器。
+def csa5_3(a: int, b: int, c: int, d: int, e: int,
+           length: int) -> tuple[int, int, int]:
+    """Return the CSA5_3 output tuple. / 返回 CSA5_3 输出元组。"""
+
+    first_sum, first_carry = csa3_2(a, b, c, length)
+    second_sum, second_carry = csa3_2(first_sum, d, e, length)
+    return second_sum, first_carry, second_carry
+
+
 class CarrySaveAdderMToN(Elaboratable):
-    # base m->n carry-save adder / 基类 m->n 进位保存加法器
-    def __init__(self, m, n, length):
-        self.m, self.n, self.length = m, n, length
-        self.in_ = [Signal(length, name=f"io_in_{i}") for i in range(m)]
-        self.out = [Signal(length, name=f"io_out_{i}") for i in range(n)]
+    """Base M-to-N bit-parallel compressor. / M 到 N 位并行压缩器基类。"""
 
+    # Declare vector input and output ports / 声明向量输入输出端口。
+    def __init__(self, input_count: int, output_count: int,
+                 length: int) -> None:
+        """Create validated compressor vectors. / 创建经过校验的压缩器向量。"""
 
-# Cast a one-bit Amaranth view for static analysis / 为静态分析标注单比特视图
-def bit_view(signal: Signal, index: int) -> Any:
-    return cast(Any, signal.bit_select(index, 1))
+        if input_count < 1 or output_count < 1 or length < 1:
+            raise ValueError("CSA geometry must be positive")
+        self.input_count = input_count
+        self.output_count = output_count
+        self.length = length
+        self.inputs = [
+            Signal(length, name=f"io_in_{index}")
+            for index in range(input_count)
+        ]
+        self.outputs = [
+            Signal(length, name=f"io_out_{index}")
+            for index in range(output_count)
+        ]
+        # Compatibility aliases matching the Chisel ``io.in``/``io.out`` view.
+        self.in_ = self.inputs
+        self.out = self.outputs
 
 
 class CSA2_2(CarrySaveAdderMToN):
-    def __init__(self, length):
+    """Two-input carry-save compressor. / 双输入进位保存压缩器。"""
+
+    # Configure the 2:2 geometry / 配置 2:2 几何结构。
+    def __init__(self, length: int) -> None:
+        """Create a width-``length`` 2:2 compressor. / 创建指定宽度压缩器。"""
+
         super().__init__(2, 2, length)
 
-    def elaborate(self, platform):
-        m = Module()
-        length = self.length
-        a, b = self.in_[0], self.in_[1]
-        sums = []
-        couts = []
-        for i in range(length):
-            ai = bit_view(a, i)
-            bi = bit_view(b, i)
-            sums.append(ai ^ bi)
-            couts.append(ai & bi)
-        # Chisel Cat(temp.reverse) => LSB-first Cat / 小端拼接
-        m.d.comb += self.out[0].eq(Cat(*sums))
-        m.d.comb += self.out[1].eq(Cat(*couts))
-        return m
+    # Elaborate 2:2 bit equations / 展开 2:2 逐位方程。
+    def elaborate(self, platform: Any) -> Module:
+        """Connect sum and carry outputs. / 连接和与进位输出。"""
+
+        del platform
+        module = Module()
+        sums = [self.inputs[0][index] ^ self.inputs[1][index]
+                for index in range(self.length)]
+        carries = [self.inputs[0][index] & self.inputs[1][index]
+                   for index in range(self.length)]
+        module.d.comb += [self.outputs[0].eq(Cat(*sums)),
+                          self.outputs[1].eq(Cat(*carries))]
+        return module
 
 
 class CSA3_2(CarrySaveAdderMToN):
-    def __init__(self, length):
+    """Three-input full-adder compressor. / 三输入全加器压缩器。"""
+
+    # Configure the 3:2 geometry / 配置 3:2 几何结构。
+    def __init__(self, length: int) -> None:
+        """Create a width-``length`` 3:2 compressor. / 创建指定宽度压缩器。"""
+
         super().__init__(3, 2, length)
 
-    def elaborate(self, platform):
-        m = Module()
-        length = self.length
-        a, b, cin = self.in_[0], self.in_[1], self.in_[2]
+    # Elaborate 3:2 bit equations / 展开 3:2 逐位方程。
+    def elaborate(self, platform: Any) -> Module:
+        """Connect full-adder sum and carry outputs. / 连接全加器输出。"""
+
+        del platform
+        module = Module()
         sums = []
-        couts = []
-        for i in range(length):
-            ai = bit_view(a, i)
-            bi = bit_view(b, i)
-            ci = bit_view(cin, i)
-            axb = ai ^ bi
-            sums.append(axb ^ ci)
-            couts.append((ai & bi) | (axb & ci))
-        m.d.comb += self.out[0].eq(Cat(*sums))
-        m.d.comb += self.out[1].eq(Cat(*couts))
-        return m
+        carries = []
+        for index in range(self.length):
+            first_xor = self.inputs[0][index] ^ self.inputs[1][index]
+            sums.append(first_xor ^ self.inputs[2][index])
+            carries.append((self.inputs[0][index] & self.inputs[1][index]) |
+                           (first_xor & self.inputs[2][index]))
+        module.d.comb += [self.outputs[0].eq(Cat(*sums)),
+                          self.outputs[1].eq(Cat(*carries))]
+        return module
 
 
 class CSA5_3(CarrySaveAdderMToN):
-    def __init__(self, length):
+    """Five-input, three-output compressor. / 五输入三输出压缩器。"""
+
+    # Configure the 5:3 geometry / 配置 5:3 几何结构。
+    def __init__(self, length: int) -> None:
+        """Create a width-``length`` 5:3 compressor. / 创建指定宽度压缩器。"""
+
         super().__init__(5, 3, length)
 
-    def elaborate(self, platform):
-        m = Module()
-        length = self.length
-        # FA1 on (in0,in1,in2) -> (s0,c0); FA2 on (s0,in3,in4) -> (s1,c1)
-        # out = (s1, c0, c1) / 两级级联全加器
-        s0 = Signal(length, name="csa53_s0")
-        c0 = Signal(length, name="csa53_c0")
-        for i in range(length):
-            i0 = bit_view(self.in_[0], i)
-            i1 = bit_view(self.in_[1], i)
-            i2 = bit_view(self.in_[2], i)
-            axb = i0 ^ i1
-            m.d.comb += bit_view(s0, i).eq(axb ^ i2)
-            m.d.comb += bit_view(c0, i).eq((i0 & i1) | (axb & i2))
-        s1 = Signal(length, name="csa53_s1")
-        c1 = Signal(length, name="csa53_c1")
-        for i in range(length):
-            s0i = bit_view(s0, i)
-            i3 = bit_view(self.in_[3], i)
-            i4 = bit_view(self.in_[4], i)
-            axb = s0i ^ i3
-            m.d.comb += bit_view(s1, i).eq(axb ^ i4)
-            m.d.comb += bit_view(c1, i).eq((s0i & i3) | (axb & i4))
-        m.d.comb += self.out[0].eq(s1)
-        m.d.comb += self.out[1].eq(c0)
-        m.d.comb += self.out[2].eq(c1)
-        return m
+    # Elaborate the two cascaded full-adder stages / 展开两级全加器。
+    def elaborate(self, platform: Any) -> Module:
+        """Connect CSA5_3 outputs in source order. / 按源顺序连接输出。"""
+
+        del platform
+        module = Module()
+        first_sum = Signal(self.length, name="csa53_first_sum")
+        first_carry = Signal(self.length, name="csa53_first_carry")
+        second_sum = Signal(self.length, name="csa53_second_sum")
+        second_carry = Signal(self.length, name="csa53_second_carry")
+        module.submodules.first = first = CSA3_2(self.length)
+        module.submodules.second = second = CSA3_2(self.length)
+        module.d.comb += [
+            first.inputs[0].eq(self.inputs[0]),
+            first.inputs[1].eq(self.inputs[1]),
+            first.inputs[2].eq(self.inputs[2]),
+            first_sum.eq(first.outputs[0]),
+            first_carry.eq(first.outputs[1]),
+            second.inputs[0].eq(first_sum),
+            second.inputs[1].eq(self.inputs[3]),
+            second.inputs[2].eq(self.inputs[4]),
+            second_sum.eq(second.outputs[0]),
+            second_carry.eq(second.outputs[1]),
+            self.outputs[0].eq(second_sum),
+            self.outputs[1].eq(first_carry),
+            self.outputs[2].eq(second_carry),
+        ]
+        return module
 
 
 class C22(CSA2_2):
-    def __init__(self):
+    """One-bit 2:2 compressor. / 一位 2:2 压缩器。"""
+
+    # Configure one-bit width / 配置一位宽度。
+    def __init__(self) -> None:
+        """Create the one-bit C22. / 创建一位 C22。"""
+
         super().__init__(1)
 
 
 class C32(CSA3_2):
-    def __init__(self):
+    """One-bit 3:2 compressor. / 一位 3:2 压缩器。"""
+
+    # Configure one-bit width / 配置一位宽度。
+    def __init__(self) -> None:
+        """Create the one-bit C32. / 创建一位 C32。"""
+
         super().__init__(1)
 
 
 class C53(CSA5_3):
-    def __init__(self):
+    """One-bit 5:3 compressor. / 一位 5:3 压缩器。"""
+
+    # Configure one-bit width / 配置一位宽度。
+    def __init__(self) -> None:
+        """Create the one-bit C53. / 创建一位 C53。"""
+
         super().__init__(1)
 
 
 # =============================================================================
 # Public Adapter
 # =============================================================================
-def build_verilog(config=None, name: str = "CSA3_2") -> str:
+# =============================================================================
+# Emit a deterministic CSA3_2 module / 输出确定性的 CSA3_2 模块。
+def build_verilog(configuration: CSAConfig | None = None,
+                  injected_dependencies: dict[str, Any] | None = None) -> str:
+    """Build the default CSA3_2 adapter. / 构建默认 CSA3_2 适配器。"""
+
+    del injected_dependencies
     from amaranth.back import verilog
-    if config is None:
-        # The pinned reference CSA3_2 instance is ten bits wide.
-        config = CSAConfig(length=10)
+
+    config = configuration or CSAConfig()
     top = CSA3_2(config.length)
-    ports = top.in_ + top.out
-    return verilog.convert(top, name=name, ports=ports)
+    return verilog.convert(
+        top,
+        name="CSA3_2",
+        ports=[*top.inputs, *top.outputs],
+        emit_src=False,
+    )
 
 
 # =============================================================================
 # Direct Entry
 # =============================================================================
+# Print the direct-entry Verilog / 打印直接入口 Verilog。
 def main() -> None:
-    print(build_verilog())
+    """Print generated CSA Verilog. / 打印生成的 CSA Verilog。"""
+
+    print(build_verilog(None, {}))
 
 
 if __name__ == "__main__":
