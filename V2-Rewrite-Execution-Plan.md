@@ -28,7 +28,10 @@ entry per dependency source file. Each entry contains `family_id`,
 `direct_test`, `reference_evidence`, `differential_evidence`, and
 `localization_map`. Build a source inventory and dependency DAG, classify
 source files as core, hardware dependency, test/workload, generated support,
-or non-target metadata, and freeze the UHSC rename map.
+or non-target metadata, and freeze the UHSC rename map. The first Phase 0
+deliverable also compares all 35 carried V3 candidates with V2 and records
+exact `REUSED`, `REWRITTEN`, `RETIRED`, `SPLIT`, or `RELOCATED` outcomes; no
+candidate is copied into a V2 closure solely because its old path still exists.
 
 ## Phase 1 — XiangShan core closures
 
@@ -84,6 +87,11 @@ protocol names stay stable.
   events, conflict resolution, and pushes.
 - Workers use Terra with maximum reasoning. They must return a commit hash,
   changed paths, evidence paths, exact commands, and unclosed gates.
+- Existing carried candidates may contain V3-era contract debt (missing
+  bilingual function comments, leading-underscore helpers, compatibility
+  aliases, or imports outside the allowed band). Workers must repair that debt
+  before treating a candidate as a V2 target; they must not silently inherit
+  those violations.
 - No worker may modify the locked V2 source, the main hardware product tree,
   or another worker's family.
 

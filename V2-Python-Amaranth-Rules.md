@@ -17,6 +17,10 @@ V2 acceptance oracle.
   reference-SV evidence, differential behavior, and a traceable commit.
 - V3 evidence may justify prioritization or reuse, but every reused target is
   revalidated against V2.
+- Before coding a reused candidate, compare its V3 source path with V2. A V2
+  deletion, split, merge, or relocation is recorded as `RETIRED`, `SPLIT`, or
+  `RELOCATED` in the mapping manifest; it is never hidden by preserving an old
+  filename.
 - External dependencies are represented by family/closure mappings, not by
   mechanically creating one Python file for every Scala file. A family may
   cover several source files only when its boundary, parameters, and
@@ -83,15 +87,17 @@ dynamic loader.
 ## 4. UHSC localization and naming
 
 The Scala source and locked reference names remain unchanged. Localization is
-performed only in project-owned Python, generated local HDL wrappers, manifests,
-and external product-facing adapters:
+performed only in project-owned generated HDL wrappers, manifests, and
+external product-facing adapters. Existing source-traceable Python basenames
+are not mechanically renamed before their family boundary is frozen:
 
 - The external processor identity is `UHSC` (Unifier Hardware System CPU).
-- Project-owned top-level generated HDL names use `UHSC` instead of `XS` or
-  `XSTop`; the canonical local top is `UHSCTop`.
-- Project-owned CPU/difftest identity strings use `UHSC`; `XIANGSHAN`,
-  `XiangShan`, `KMHV2`, and `XS` are retained only in source provenance,
-  reference paths, comments, or explicit compatibility metadata.
+- The only default external HDL prefix is `UHSC` (Unifier Hardware System
+  CPU); the canonical local top wrapper is `UHSCTop`.
+- Project-owned CPU/difftest identity strings may use `UHSC`; `XIANGSHAN`,
+  `XiangShan`, `KMHV2`, and `XS` remain in source provenance, reference paths,
+  comments, or explicit compatibility metadata. This is a localized external
+  naming exception, not a change to the global product naming contract.
 - Internal signal names, protocol field names, and standard external names
   (RISC-V, AXI, TileLink, CHI, JTAG, Rocket-Chip, Amaranth) are not renamed
   unless the user explicitly authorizes it or an external interface requires
