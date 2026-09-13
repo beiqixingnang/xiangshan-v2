@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_CSR_DIVIDER_MAPPING_UPDATE",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "status": "PENDING_COORDINATOR_REVIEW",
+  "entries": [
+    {
+      "id": "CSRs",
+      "classification": "SPLIT",
+      "disposition": "SPLIT",
+      "v2_sources": [
+        "upstream/rocket-chip/src/main/scala/rocket/Instructions.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/util/CSRConst.scala"
+      ],
+      "python_path": "python/ported/backend/decode/isa/CSRs-Hardware.py",
+      "status": "SOURCE_LEVEL_ONLY",
+      "reason": "V2 supplies standard CSRs from rocket Instructions.scala and custom values from CSRConst.scala; no standalone CSRs.scala."
+    },
+    {
+      "id": "SstcInterruptGen",
+      "classification": "EXACT",
+      "disposition": "REUSED",
+      "v2_sources": [
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/SstcInterruptGen.scala"
+      ],
+      "python_path": "python/ported/backend/fu/NewCSR/SstcInterruptGen-Hardware.py",
+      "status": "MAPPING_ONLY"
+    },
+    {
+      "id": "SRT16Divider",
+      "classification": "REWRITTEN",
+      "disposition": "REWRITTEN",
+      "v2_sources": [
+        "upstream/src/main/scala/xiangshan/backend/fu/SRT16Divider.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/SRT4Divider.scala"
+      ],
+      "python_path": "python/ported/backend/fu/SRT16Divider-Hardware.py",
+      "covered_children": [
+        "RightShifter",
+        "CSA3_2"
+      ],
+      "status": "MAPPING_ONLY"
+    },
+    {
+      "id": "FliTable",
+      "classification": "EXACT",
+      "disposition": "REUSED",
+      "v2_sources": [
+        "upstream/src/main/scala/xiangshan/backend/fu/fpu/FliTable.scala"
+      ],
+      "python_path": "python/ported/backend/fu/fpu/FliTable-Hardware.py",
+      "status": "MAPPING_ONLY"
+    },
+    {
+      "id": "CSA",
+      "classification": "EXACT",
+      "disposition": "REUSED",
+      "v2_sources": [
+        "upstream/src/main/scala/xiangshan/backend/fu/util/CSA.scala"
+      ],
+      "python_path": "python/ported/backend/fu/util/CSA-Hardware.py",
+      "status": "MAPPING_ONLY"
+    }
+  ],
+  "localization_map": "NO_PROJECT_FACING_RENAME",
+  "gates": {
+    "ACCEPTED": "NOT_ALLOWED",
+    "parent_closure": "PENDING",
+    "license": "PENDING"
+  }
+}

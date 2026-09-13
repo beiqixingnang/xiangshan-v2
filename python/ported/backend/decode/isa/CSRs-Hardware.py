@@ -32,6 +32,12 @@ from amaranth import Elaboratable, Module, Signal
 # Status / 状态: PYTHON_PRESENT_UNVERIFIED (phase-1 bulk port / 阶段一批量重写)
 __all__ = [
     "CSRs",
+    "CSRConst",
+    "CSRProbe",
+    "csr_access_permission_check",
+    "perfcnt_permission_check",
+    "dcsr_permission_check",
+    "trigger_permission_check",
     "build_verilog",
     "main",
 ]
@@ -53,7 +59,6 @@ class CSRs:
     vxsat = 0x9
     vxrm = 0xa
     vcsr = 0xf
-    ssp = 0x11
     seed = 0x15
     jvt = 0x17
     cycle = 0xc00
@@ -92,6 +97,8 @@ class CSRs:
     vtype = 0xc21
     vlenb = 0xc22
     sstatus = 0x100
+    sedeleg = 0x102
+    sideleg = 0x103
     sie = 0x104
     stvec = 0x105
     scounteren = 0x106
@@ -100,15 +107,12 @@ class CSRs:
     sstateen1 = 0x10d
     sstateen2 = 0x10e
     sstateen3 = 0x10f
-    scountinhibit = 0x120
     sscratch = 0x140
     sepc = 0x141
     scause = 0x142
     stval = 0x143
     sip = 0x144
     stimecmp = 0x14d
-    sctrctl = 0x14e
-    sctrstatus = 0x14f
     siselect = 0x150
     sireg = 0x151
     sireg2 = 0x152
@@ -117,9 +121,7 @@ class CSRs:
     sireg5 = 0x156
     sireg6 = 0x157
     stopei = 0x15c
-    sctrdepth = 0x15f
     satp = 0x180
-    srmcfg = 0x181
     scontext = 0x5a8
     vsstatus = 0x200
     vsie = 0x204
@@ -130,7 +132,6 @@ class CSRs:
     vstval = 0x243
     vsip = 0x244
     vstimecmp = 0x24d
-    vsctrctl = 0x24e
     vsiselect = 0x250
     vsireg = 0x251
     vsireg2 = 0x252
@@ -203,7 +204,6 @@ class CSRs:
     mip = 0x344
     mtinst = 0x34a
     mtval2 = 0x34b
-    mctrctl = 0x34e
     miselect = 0x350
     mireg = 0x351
     mireg2 = 0x352
@@ -336,8 +336,6 @@ class CSRs:
     mhpmcounter29 = 0xb1d
     mhpmcounter30 = 0xb1e
     mhpmcounter31 = 0xb1f
-    mcyclecfg = 0x321
-    minstretcfg = 0x322
     mhpmevent3 = 0x323
     mhpmevent4 = 0x324
     mhpmevent5 = 0x325
@@ -379,7 +377,6 @@ class CSRs:
     vsieh = 0x214
     vsiph = 0x254
     vstimecmph = 0x25d
-    hedelegh = 0x612
     htimedeltah = 0x615
     hidelegh = 0x613
     hvienh = 0x618
@@ -434,8 +431,6 @@ class CSRs:
     mstateen2h = 0x31e
     mstateen3h = 0x31f
     miph = 0x354
-    mcyclecfgh = 0x721
-    minstretcfgh = 0x722
     mhpmevent3h = 0x723
     mhpmevent4h = 0x724
     mhpmevent5h = 0x725
@@ -504,33 +499,192 @@ class CSRs:
 
 
 # =============================================================================
+# V2 custom CSR constants and permission helpers. / V2 自定义 CSR 常量与权限辅助函数。
+class CSRConst:
+    """Expose XiangShan's V2 CSRConst trait as pure Python values. / 以纯 Python 值暴露 V2 CSRConst trait。"""
+
+    Sbpctl = 0x5C0
+    Spfctl = 0x5C1
+    Slvpredctl = 0x5C2
+    Smblockctl = 0x5C3
+    Srnctl = 0x5C4
+    Scachebase = 0x5C5
+    PmacfgBase = 0x7C0
+    PmaaddrBase = 0x7C8
+    Mbmc = 0xBC2
+
+    Hgatp_Mode_len = 4
+    Hgatp_Vmid_len = 16
+    Hgatp_Addr_len = 44
+    Satp_Mode_len = 4
+    Satp_Asid_len = 16
+    Satp_Addr_len = 44
+
+    IRQ_USIP = 0
+    IRQ_SSIP = 1
+    IRQ_VSSIP = 2
+    IRQ_MSIP = 3
+    IRQ_UTIP = 4
+    IRQ_STIP = 5
+    IRQ_VSTIP = 6
+    IRQ_MTIP = 7
+    IRQ_UEIP = 8
+    IRQ_SEIP = 9
+    IRQ_VSEIP = 10
+    IRQ_MEIP = 11
+    IRQ_SGEIP = 12
+    IRQ_DEBUG = 17
+
+    ModeM = 0x3
+    ModeH = 0x2
+    ModeS = 0x1
+    ModeU = 0x0
+    IntPriority = (
+        IRQ_DEBUG, IRQ_MEIP, IRQ_MSIP, IRQ_MTIP,
+        IRQ_SEIP, IRQ_SSIP, IRQ_STIP, IRQ_UEIP, IRQ_USIP, IRQ_UTIP,
+        IRQ_VSEIP, IRQ_VSSIP, IRQ_VSTIP, IRQ_SGEIP,
+    )
+
+    # Compute a SATP/PMA width mask. / 计算 SATP/PMA 位宽掩码。
+    @staticmethod
+    # Compute the width mask / 计算位宽掩码
+    def satp_part_wmask(max_length: int, length: int) -> int:
+        """Return the low ``length`` bits of a ``max_length`` mask. / 返回 max_length 掩码的低 length 位。"""
+
+        if not 0 < length <= max_length:
+            raise ValueError("length must be in (0, max_length]")
+        return (1 << length) - 1
+
+    # Check architectural CSR access permissions. / 检查架构 CSR 访问权限。
+    @staticmethod
+    # Check architectural CSR access / 检查架构 CSR 访问
+    def csrAccessPermissionCheck(addr: int, wen: bool, mode: int,
+                                 virt: bool, hasH: bool) -> int:
+        """Return 0 normal, 1 illegal, or 2 virtual instruction. / 返回 0 正常、1 非法或 2 虚拟指令。"""
+
+        read_only = ((addr >> 10) & 0x3) == 0x3
+        lowest = (addr >> 8) & 0x3
+        privilege = CSRConst.ModeH if mode == CSRConst.ModeS else mode
+        if lowest == CSRConst.ModeH and not hasH:
+            return 1
+        if read_only and wen:
+            return 1
+        if privilege < lowest:
+            return 2 if virt and lowest <= CSRConst.ModeH else 1
+        return 0
+
+    # Check performance-counter permissions. / 检查性能计数器权限。
+    @staticmethod
+    # Check performance-counter access / 检查性能计数器访问
+    def perfcntPermissionCheck(addr: int, mode: int,
+                               mmask: int, smask: int) -> bool:
+        """Return whether the selected counter is accessible. / 返回选定计数器是否可访问。"""
+
+        index = 1 << (addr & 31)
+        if mode == CSRConst.ModeM:
+            return True
+        if mode == CSRConst.ModeS:
+            return bool(index & mmask)
+        return bool(index & mmask & smask)
+
+    # Check debug CSR permissions. / 检查调试 CSR 权限。
+    @staticmethod
+    # Check debug access / 检查调试访问
+    def dcsrPermissionCheck(addr: int, mModeCanWrite: bool,
+                            debug: bool) -> bool:
+        """Return whether a DCSR access is permitted. / 返回 DCSR 访问是否允许。"""
+
+        is_debug_reg = ((addr >> 4) & 0xFF) == 0x7B
+        return bool(mModeCanWrite or not is_debug_reg or debug)
+
+    # Check trigger CSR permissions. / 检查触发器 CSR 权限。
+    @staticmethod
+    # Check trigger access / 检查触发器访问
+    def triggerPermissionCheck(addr: int, mModeCanWrite: bool,
+                               debug: bool) -> bool:
+        """Return whether a trigger access is permitted. / 返回触发器访问是否允许。"""
+
+        is_trigger_reg = ((addr >> 4) & 0xFF) == 0x7A
+        return bool(mModeCanWrite or not is_trigger_reg or debug)
+
+
+# Provide snake-case spellings for Python callers. / 为 Python 调用者提供下划线拼写。
+# Alias wrappers retain the source semantics without importing sibling modules.
+# Provide the snake-case CSR access spelling / 提供下划线 CSR 访问拼写
+def csr_access_permission_check(addr: int, wen: bool, mode: int,
+                                virt: bool, has_h: bool) -> int:
+    """Call the V2 CSR permission checker. / 调用 V2 CSR 权限检查器。"""
+
+    return CSRConst.csrAccessPermissionCheck(addr, wen, mode, virt, has_h)
+
+
+# Check a performance counter through CSRConst. / 通过 CSRConst 检查性能计数器。
+def perfcnt_permission_check(addr: int, mode: int,
+                             mmask: int, smask: int) -> bool:
+    """Call the V2 performance-counter checker. / 调用 V2 性能计数器检查器。"""
+
+    return CSRConst.perfcntPermissionCheck(addr, mode, mmask, smask)
+
+
+# Check debug access through CSRConst. / 通过 CSRConst 检查调试访问。
+def dcsr_permission_check(addr: int, m_mode_can_write: bool,
+                          debug: bool) -> bool:
+    """Call the V2 debug permission checker. / 调用 V2 调试权限检查器。"""
+
+    return CSRConst.dcsrPermissionCheck(addr, m_mode_can_write, debug)
+
+
+# Check trigger access through CSRConst. / 通过 CSRConst 检查触发器访问。
+def trigger_permission_check(addr: int, m_mode_can_write: bool,
+                             debug: bool) -> bool:
+    """Call the V2 trigger permission checker. / 调用 V2 触发器权限检查器。"""
+
+    return CSRConst.triggerPermissionCheck(addr, m_mode_can_write, debug)
+
+
+# Emit a tiny deterministic probe for the constant-only closure. / 为常量闭包输出微型确定性探针。
+class CSRProbe(Elaboratable):
+    """Expose a constant marker for Verilog contract checks. / 暴露用于 Verilog 契约检查的常量标记。"""
+
+    # Declare the marker port. / 声明标记端口。
+    def __init__(self) -> None:
+        """Create the marker signal. / 创建标记信号。"""
+
+        self.marker = Signal(name="marker")
+
+    # Drive the marker in combinational logic. / 以组合逻辑驱动标记。
+    def elaborate(self, platform: Any) -> Module:
+        """Return the constant probe module. / 返回常量探针模块。"""
+
+        del platform
+        module = Module()
+        module.d.comb += self.marker.eq(1)
+        return module
+
+
 # =============================================================================
-# build_verilog implementation / build_verilog 实现。
-def build_verilog(name: str = "CSRs") -> str:
-    # Convert probe to verilog / 转换探针为 Verilog
+# Public Adapter
+# =============================================================================
+# Build a deterministic constant-table probe. / 构建确定性的常量表探针。
+def build_verilog(configuration: Any = None,
+                  injected_dependencies: dict[str, Any] | None = None) -> str:
+    """Emit a probe while keeping CSR values available in Python. / 输出探针并保留 Python CSR 值。"""
+
+    del configuration, injected_dependencies
     from amaranth.back import verilog
 
-    class Probe(Elaboratable):
-        # Constant-table probe / 常量表探针
-        def __init__(self):
-            self.marker = Signal()
-
-        # elaborate implementation / elaborate 实现。
-        def elaborate(self, platform):
-            # Drive constant / 驱动常量
-            m = Module()
-            m.d.comb += self.marker.eq(1)
-            return m
-
-    return verilog.convert(Probe(), name=name, ports=[Probe().marker])
+    top = CSRProbe()
+    return verilog.convert(top, name="CSRs", ports=[top.marker], emit_src=False)
 
 
 # =============================================================================
+# Direct Entry
 # =============================================================================
-# main implementation / main 实现。
+# Print generated constant-table probe. / 打印生成的常量表探针。
 def main() -> None:
-    # Entry point / 入口
-    print(build_verilog())
+    """Print deterministic Verilog output. / 打印确定性的 Verilog 输出。"""
+
+    print(build_verilog(None, {}))
 
 
 if __name__ == "__main__":

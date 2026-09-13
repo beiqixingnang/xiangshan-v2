@@ -1,8 +1,9 @@
-"""SRT16Divider (radix-4 SRT divide data module with 7-state FSM). / SRT16 除法器（基 4 SRT 除法数据模块，7 状态机）。"""
+"""V2 radix-4 integer divider data path. / V2 基4整数除法数据通路。"""
 
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Any, Iterable
 
 from amaranth import Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 
@@ -10,25 +11,21 @@ from amaranth import Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 # =============================================================================
 # Module Contract
 # =============================================================================
-# Public symbols / 公开符号:
-#   - SRT16DividerConfig, SRT16DividerDataModule, RightShifter
-#   - mLookUpTable2 : SRT -m selection tables (4×8)
-#   - build_verilog, main
-# Real logic: faithful port of SRT16DividerDataModule. 7-state one-hot FSM
-# (idle→pre_0→pre_1→iter→post_0→post_1→finish), LZC normalization, SRT radix-4
-# digit selection via -m lookup tables + CSA3_2 compressors + DetectSign,
-# speculative qNext2, on-the-fly quotient conversion (OTFC), remainder
-# correction + RightShifter, special-case handling (d=1/-1/0, a too small).
-# CSA3_2(len) = 3:2 carry-save adder (full adder per bit). PriorityEncoder
-# finds the MSB-most zero (reverse-bit priority). m tables mirrored verbatim.
-# / 真实逻辑：SRT16DividerDataModule 的忠实移植。7 状态独热机（idle→pre_0→
-# pre_1→iter→post_0→post_1→finish）、LZC 归一化、SRT 基 4 数位选择（-m 查表
-# +CSA3_2 压缩器+DetectSign）、推测 qNext2、商即时转换 OTFC、余数修正+
-# RightShifter、特殊情形处理（d=1/-1/0、a 过小）。CSA3_2(len) 为 3:2 进位
-# 保存加法器（逐位全加器）。PriorityEncoder 反位序优先编码。m 表原样镜像。
-# Status / 状态: PYTHON_PRESENT_UNVERIFIED (phase-1 bulk port / 阶段一批量重写)
-__all__ = ["SRT16DividerConfig", "SRT16DividerDataModule", "RightShifter",
-           "mLookUpTable2", "build_verilog", "main"]
+# This module follows the pinned V2 SRT16DividerDataModule interface and its
+# seven one-hot state sequence.  Arithmetic is a sequential radix-four
+# recurrence with the same signed special-result rules and finish handshake.
+# 本模块遵循锁定 V2 SRT16DividerDataModule 接口及七个独热状态序列；算术采用
+# 时序基四递推，并保持相同的有符号特殊结果规则与 finish 握手。
+__all__ = [
+    "SRT16DividerConfig",
+    "SRT16DividerDataModule",
+    "SRT16DividerReferenceAdapter",
+    "RightShifter",
+    "mLookUpTable2",
+    "csa3_2",
+    "build_verilog",
+    "main",
+]
 
 
 # =============================================================================
@@ -36,436 +33,195 @@ __all__ = ["SRT16DividerConfig", "SRT16DividerDataModule", "RightShifter",
 # =============================================================================
 @dataclass(frozen=True)
 class SRT16DividerConfig:
+    """Describe one legal V2 divider width. / 描述一个合法的 V2 除法器位宽。"""
+
     len: int = 64
+
+    # Validate the source width and preserve V2's supported specializations.
+    # Validate width / 校验源位宽并保留 V2 支持的特化位宽。
+    def __post_init__(self) -> None:
+        """Reject unsupported widths. / 拒绝不支持的位宽。"""
+
+        if self.len not in (32, 64):
+            raise ValueError("SRT16Divider V2 supports len=32 or len=64")
+
+
+# V2's four seven-bit negative-m lookup rows. / V2 的四行七位负 m 查找表。
+_MINUS_M_ROWS: tuple[tuple[tuple[int, int], ...], ...] = (
+    tuple(enumerate((0b0011010, 0b0011110, 0b0100000, 0b0100100,
+                     0b0100110, 0b0101010, 0b0101100, 0b0110000))),
+    tuple(enumerate((0b0000100, 0b0000110, 0b0000110, 0b0000110,
+                     0b0001000, 0b0001000, 0b0001000, 0b0001000))),
+    tuple(enumerate((0b1111101, 0b1111100, 0b1111100, 0b1111100,
+                     0b1111011, 0b1111010, 0b1111010, 0b1111010))),
+    tuple(enumerate((0b01101000, 0b01100100, 0b01100010, 0b01011110,
+                     0b01011100, 0b01011000, 0b01010110, 0b01010010))),
+)
+
+
+class mLookUpTable2:
+    """Expose the source SRT negative-m rows. / 暴露源代码中的 SRT 负 m 表。"""
+
+    minus_m = _MINUS_M_ROWS
 
 
 # =============================================================================
 # Implementation
 # =============================================================================
-def csa3_2(a, b, cin, w):
-    # 3:2 carry-save adder (full adder per bit) / 3:2 进位保存加法器
-    axb = a ^ b
-    s = axb ^ cin
-    c = (a & b) | (axb & cin)
-    return (s.bit_select(0, w), c.bit_select(0, w))
+# Mask an integer helper value or truncate an Amaranth expression. / 截取整数辅助值或 Amaranth 表达式。
+def mask_value(value: Any, width: int) -> Any:
+    """Apply a fixed-width mask. / 应用固定位宽掩码。"""
+
+    if isinstance(value, int):
+        return value & ((1 << width) - 1)
+    return value.bit_select(0, width)
 
 
-# Find the first asserted bit from the MSB side / 从最高位侧查找首个置位位
-def priority_encoder(bits, w):
-    # PriorityEncoder of reversed bits -> MSB-first zero / 反位序优先编码
-    idx = Const(0, w)
-    for i in range(w):
-        idx = Mux(bits.bit_select(w - 1 - i, 1), Const(i, w), idx)
-    return idx
+# Compute one carry-save compressor. / 计算一个进位保存压缩器。
+def csa3_2(a: Any, b: Any, cin: Any, width: int) -> tuple[Any, Any]:
+    """Return sum and carry vectors. / 返回和与进位向量。"""
+
+    return mask_value(a ^ b ^ cin, width), mask_value(
+        (a & b) | ((a ^ b) & cin), width)
 
 
-# Sign extend an expression to a target width / 将表达式符号扩展到目标位宽
-def sign_ext(v, vw, tw):
-    if tw <= vw:
-        return v.bit_select(0, tw)
-    s = v.bit_select(vw - 1, 1)
-    return Cat(v, *[s for _ in range(tw - vw)])
+# Compute a fixed-width two's-complement value. / 计算固定位宽二进制补码值。
+def twos_complement(value: Any, width: int) -> Any:
+    """Negate and truncate a value. / 求反并截断一个值。"""
+
+    if isinstance(value, int):
+        return (-value) & ((1 << width) - 1)
+    return (-value).bit_select(0, width)
 
 
-# Select a constant from an indexed lookup table / 按索引从常量查找表选择
-def mux_lookup(idx, default, table, w):
-    # MuxLookup(idx, default)(table) / 查表
-    res = Const(default, w)
-    for k, v in table:
-        res = Mux(idx == k, Const(v, w), res)
-    return res
+# Replicate a one-bit expression. / 复制一个单比特表达式。
+def replicate(bit: Any, width: int) -> Any:
+    """Return ``width`` copies of ``bit``. / 返回 bit 的 width 份复制。"""
+
+    return Cat(*[bit for _ in range(width)])
 
 
-# Multiplex values under one-hot selectors / 在独热选择信号下复用值
-def mux1h(sels, vals):
-    # Mux1H over one-hot selectors / 独热选择
-    res = vals[0] & Cat(*[sels[0] for _ in range(vals[0].shape().width)]) \
-        if False else (vals[0] & replicate(sels[0], vals[0].shape().width))
-    for i in range(1, len(sels)):
-        res = res | (vals[i] & replicate(sels[i], vals[i].shape().width))
-    return res
+# Return a source-compatible MSB-first leading-zero count. / 返回兼容源代码的最高位优先前导零计数。
+def priority_encoder(value: Any, width: int) -> Any:
+    """Return the first-one index, or width for zero. / 返回首个一位索引，零返回 width。"""
+
+    count_width = max(1, width.bit_length())
+    result: Any = Const(width, count_width)
+    found: Any = Const(0, 1)
+    for index in range(width):
+        bit = value.bit_select(width - index - 1, 1)
+        first = (~found) & bit
+        result = Mux(first, Const(index, count_width), result)
+        found = found | bit
+    return result
 
 
-# Replicate a one-bit expression / 复制单比特表达式
-def replicate(bit, w):
-    return Cat(*[bit for _ in range(w)])
+# Sign-extend an expression to a target width. / 将表达式符号扩展到目标位宽。
+def sign_ext(value: Any, value_width: int, target_width: int) -> Any:
+    """Return a width-limited sign extension. / 返回限定位宽的符号扩展。"""
+
+    if target_width <= value_width:
+        return value.bit_select(0, target_width)
+    sign = value.bit_select(value_width - 1, 1)
+    return Cat(value, replicate(sign, target_width - value_width))
 
 
-class mLookUpTable2:
-    # SRT -m selection tables (4 sets × 8 entries) / SRT -m 选择表
-    minus_m = [
-        # -m[-1] / 索引 0
-        [(0, 0b00_11010), (1, 0b00_11110), (2, 0b01_00000), (3, 0b01_00100),
-         (4, 0b01_00110), (5, 0b01_01010), (6, 0b01_01100), (7, 0b01_10000)],
-        # -m[0] / 索引 1
-        [(0, 0b000_0100), (1, 0b000_0110), (2, 0b000_0110), (3, 0b000_0110),
-         (4, 0b000_1000), (5, 0b000_1000), (6, 0b000_1000), (7, 0b000_1000)],
-        # -m[1] / 索引 2
-        [(0, 0b111_1101), (1, 0b111_1100), (2, 0b111_1100), (3, 0b111_1100),
-         (4, 0b111_1011), (5, 0b111_1010), (6, 0b111_1010), (7, 0b111_1010)],
-        # -m[2] / 索引 3
-        [(0, 0b11_01000), (1, 0b11_00100), (2, 0b11_00010), (3, 0b10_11110),
-         (4, 0b10_11100), (5, 0b10_11000), (6, 0b10_10110), (7, 0b10_10010)],
-    ]
+# Select a constant from a small lookup row. / 从小型查找行选择常量。
+def mux_lookup(index: Any, default: int,
+               row: Iterable[tuple[int, int]], width: int) -> Any:
+    """Build a deterministic priority lookup mux. / 构建确定性的优先查找复用器。"""
+
+    result: Any = Const(default, width)
+    for key, value in row:
+        result = Mux(index == key, Const(value, width), result)
+    return result
+
+
+# Select one value under a one-hot vector. / 在独热向量下选择一个值。
+def mux1h(selectors: Any, values: list[Any]) -> Any:
+    """Return the OR of one-hot selected values. / 返回独热选择值的或结果。"""
+
+    width = values[0].shape().width
+    result: Any = Const(0, width)
+    for index, value in enumerate(values):
+        result = result | (value & replicate(selectors.bit_select(index, 1), width))
+    return result
+
+
+# Build a bounded barrel left shift. / 构建有界桶形左移器。
+def barrel_lsh(value: Any, shift: Any, width: int) -> Any:
+    """Shift left and fill with zeros. / 左移并以零填充。"""
+
+    result = value
+    shift_width = shift.shape().width
+    for bit in range(shift_width):
+        amount = 1 << bit
+        if amount >= width:
+            break
+        result = Mux(shift.bit_select(bit, 1),
+                     Cat(Const(0, amount), result.bit_select(0, width - amount)),
+                     result)
+    return result
 
 
 class RightShifter(Elaboratable):
-    # barrel right shifter with msb fill / 带 msb 填充的桶形右移
-    def __init__(self, length, lzc_width):
+    """Replicate the V2 sign-filled right shifter. / 复现 V2 符号填充右移器。"""
+
+    # Declare source-compatible shifter ports. / 声明与源代码兼容的移位器端口。
+    def __init__(self, length: int, lzc_width: int) -> None:
+        """Create a fixed-width shifter. / 创建固定宽度移位器。"""
+
+        if length not in (32, 64):
+            raise ValueError("RightShifter V2 supports len=32 or len=64")
         self.length = length
         self.lzc_width = lzc_width
-        self.shiftNum = Signal(lzc_width, name="rs_shiftNum")
-        self.in_ = Signal(length, name="rs_in")
-        self.msb = Signal(name="rs_msb")
-        self.out = Signal(length, name="rs_out")
+        self.shiftNum = Signal(lzc_width, name="io_shiftNum")
+        self.in_ = Signal(length, name="io_in")
+        self.msb = Signal(name="io_msb")
+        self.out = Signal(length, name="io_out")
 
-    # Elaborate the right-shifter combinational network / 展开右移器组合网络
-    def elaborate(self, platform):
-        m = Module()
-        length = self.length
-        shift = self.shiftNum
-        msb = self.msb
-        s = self.in_
-        for bit in range(min(self.lzc_width, 6)):
-            amt = 1 << bit
-            if amt >= length:
+    # Elaborate source's staged barrel network. / 展开源代码的分级桶形网络。
+    def elaborate(self, platform: Any) -> Module:
+        """Connect each sign-filled shift stage. / 连接每个符号填充移位级。"""
+
+        del platform
+        module = Module()
+        shifted: Any = self.in_
+        for bit in range(self.lzc_width):
+            amount = 1 << bit
+            if amount >= self.length:
                 break
-            padded = Cat(*[msb for _ in range(amt)], s.bit_select(amt, length - amt))
-            s = Mux(shift.bit_select(bit, 1), padded, s)
-        m.d.comb += self.out.eq(s)
-        return m
+            # Cat places its first operand in the low bits: retain the old
+            # high slice as low bits and put the fill bits above it.
+            # Cat 的第一个操作数位于低位：保留旧高位片段为低位，并将填充值置于高位。
+            filled = Cat(shifted.bit_select(amount, self.length - amount),
+                         replicate(self.msb, amount))
+            shifted = Mux(self.shiftNum.bit_select(bit, 1), filled, shifted)
+        module.d.comb += self.out.eq(shifted)
+        return module
 
 
 class SRT16DividerDataModule(Elaboratable):
-    # radix-4 SRT divider / 基 4 SRT 除法器
-    def __init__(self, config):
-        self.config = config
-        c = config
-        ln = c.len
-        self.src = [Signal(ln, name=f"srt_src{i}") for i in range(2)]
-        self.valid = Signal(name="srt_valid")
-        self.sign = Signal(name="srt_sign")
-        self.kill_w = Signal(name="srt_kill_w")
-        self.kill_r = Signal(name="srt_kill_r")
-        self.isHi = Signal(name="srt_isHi")
-        self.isW = Signal(name="srt_isW")
-        self.in_ready = Signal(name="srt_in_ready")
-        self.out_valid = Signal(name="srt_out_valid")
-        self.out_validNext = Signal(name="srt_out_validNext")
-        self.out_data = Signal(ln, name="srt_out_data")
-        self.out_ready = Signal(name="srt_out_ready")
-        self.outValidAhead3Cycle = Signal(name="srt_outValidAhead3Cycle")
+    """V2 seven-state SRT16 divider closure. / V2 七状态 SRT16 除法器闭包。"""
 
-    # Elaborate the iterative SRT divider datapath / 展开迭代式 SRT 除法数据通路
-    def elaborate(self, platform):
-        m = Module()
-        c = self.config
-        ln = c.len
-        lzc_width = max(1, (ln - 1).bit_length())
-        itn_len = 1 + ln + 2 + 1
-        a, d = self.src[0], self.src[1]
-        sign, valid, kill_w, kill_r, isHi, isW = (
-            self.sign, self.valid, self.kill_w, self.kill_r, self.isHi, self.isW)
-        in_fire = valid & self.in_ready
+    # Declare exact source IO and compatibility aliases. / 声明精确源接口及兼容别名。
+    def __init__(self, configuration: SRT16DividerConfig | int | None = None,
+                 *, len: int | None = None) -> None:
+        """Create divider ports and state registers. / 创建除法器端口与状态寄存器。"""
 
-        # states one-hot / 状态独热
-        S_IDLE, S_PRE0, S_PRE1, S_ITER, S_POST0, S_POST1, S_FINISH = range(7)
-        state = Signal(7, name="srt_state", reset=(1 << S_IDLE))
+        if len is not None:
+            if configuration is not None:
+                raise TypeError("provide configuration or len, not both")
+            configuration = len
+        if configuration is None:
+            configuration = SRT16DividerConfig()
+        elif isinstance(configuration, int):
+            configuration = SRT16DividerConfig(configuration)
+        self.configuration = configuration
+        self.config = configuration
+        self.width = configuration.len
+        width = self.width
 
-        # quotient digit OH / 商数位独热
-        Q_N2, Q_N1, Q_0, Q_P1, Q_P2 = range(5)
-
-        # regs / 寄存器
-        quotIterReg = Signal(ln, name="srt_quotIterReg")
-        quotM1IterReg = Signal(ln, name="srt_quotM1IterReg")
-        specialReg = Signal(name="srt_specialReg", reset=0)
-        aReg = Signal(ln, name="srt_aReg")
-        dSignReg = Signal(name="srt_dSignReg")
-        aAbsReg = Signal(ln, name="srt_aAbsReg")
-        dAbsReg = Signal(ln, name="srt_dAbsReg")
-        aNormReg = Signal(ln, name="srt_aNormReg")
-        dNormReg = Signal(ln, name="srt_dNormReg")
-        aLZCReg = Signal(lzc_width + 1, name="srt_aLZCReg")
-        dLZCReg = Signal(lzc_width + 1, name="srt_dLZCReg")
-        quotSpecialReg = Signal(ln, name="srt_quotSpecialReg")
-        remSpecialReg = Signal(ln, name="srt_remSpecialReg")
-        quotSignReg = Signal(name="srt_quotSignReg")
-        rSignReg = Signal(name="srt_rSignReg")
-        iterNumReg = Signal(max(1, lzc_width - 2), name="srt_iterNumReg")
-        udNegReg = [Signal(itn_len, name=f"srt_udNegReg_{i}") for i in range(5)]
-        rudPmNegReg = [[Signal(10, name=f"srt_rudPmNegReg_{i}_{j}") for j in range(4)]
-                       for i in range(5)]
-        r2udPmNegReg = [[Signal(13, name=f"srt_r2udPmNegReg_{i}_{j}") for j in range(4)]
-                        for i in range(5)]
-        qPrevReg = Signal(5, name="srt_qPrevReg")
-        rSumReg = Signal(itn_len, name="srt_rSumReg")
-        rCarryReg = Signal(itn_len, name="srt_rCarryReg")
-        rNextReg = Signal(ln, name="srt_rNextReg")
-        rNextPdReg = Signal(ln, name="srt_rNextPdReg")
-        rFinal = Signal(ln, name="srt_rFinal")
-        qFinal = Signal(ln, name="srt_qFinal")
-        aTooSmallStorage = Signal(name="srt_aTooSmall_storage")
-
-        # wires / 连线
-        quotIter = Signal(ln, name="srt_quotIter")
-        quotM1Iter = Signal(ln, name="srt_quotM1Iter")
-        aLZC = Signal(lzc_width + 1, name="srt_aLZC")
-        dLZC = Signal(lzc_width + 1, name="srt_dLZC")
-        rNext = Signal(itn_len, name="srt_rNext")
-        rNextPd = Signal(itn_len, name="srt_rNextPd")
-        finalIter = Signal(name="srt_finalIter")
-        special = Signal(name="srt_special")
-
-        # aInverter/dInverter / 反相器
-        aInverter = (-Mux(state.bit_select(S_IDLE, 1), a, quotIterReg)).bit_select(0, ln)
-        dInverter = (-Mux(state.bit_select(S_IDLE, 1), d, quotM1IterReg)).bit_select(0, ln)
-        aSign = sign & a.bit_select(ln - 1, 1)
-        dSign = sign & d.bit_select(ln - 1, 1)
-        aAbs = Mux(aSign, aInverter, a)
-        dAbs = Mux(dSign, dInverter, d)
-        aNorm = barrel_lsh(aAbsReg, aLZCReg.bit_select(0, lzc_width), ln)
-        dNorm = barrel_lsh(dAbsReg, dLZCReg.bit_select(0, lzc_width), ln)
-        # LZC / 前导零检测
-        m.d.comb += aLZC.eq(priority_encoder(aAbsReg, ln))
-        m.d.comb += dLZC.eq(priority_encoder(dAbsReg, ln))
-        lzcWireDiff = (Cat(Const(0, 1), dLZCReg.bit_select(0, lzc_width))
-                       - Cat(Const(0, 1), aLZC.bit_select(0, lzc_width)))
-        lzcRegDiff = (Cat(Const(0, 1), dLZCReg.bit_select(0, lzc_width))
-                      - Cat(Const(0, 1), aLZCReg.bit_select(0, lzc_width)))
-        # special / 特殊
-        dIsOne = and_reduce(dLZC.bit_select(0, lzc_width), lzc_width)
-        dIsZero = ~or_reduce(dNormReg, ln)
-        aTooSmall = aLZC.bit_select(lzc_width, 1)
-        m.d.comb += special.eq(dIsOne | dIsZero | aTooSmall)
-        quotSpecial = Mux(dIsZero, Const(-1, ln),
-                          Mux(aTooSmall, Const(0, ln),
-                              Mux(dSignReg, (-aReg).bit_select(0, ln), aReg)))
-        remSpecial = Mux(dIsZero | aTooSmall, aReg, Const(0, ln))
-        # signs / 符号
-        quotSign = Mux(state.bit_select(S_IDLE, 1), aSign ^ dSign, Const(1, 1))
-        rSign = aSign
-        rShift = lzcRegDiff.bit_select(0, 1)
-        oddIter = lzcRegDiff.bit_select(1, 1) ^ lzcRegDiff.bit_select(0, 1)
-        iterNum = Signal(max(1, lzc_width - 2), name="srt_iterNum")
-        iterNumNext = Mux(state.bit_select(S_PRE1, 1),
-                          (Cat(Const(0, 1), lzcRegDiff.bit_select(0, lzc_width)) + 1).bit_select(2, max(1, lzc_width - 2)),
-                          (iterNumReg - 1).bit_select(0, max(1, lzc_width - 2)))
-        m.d.comb += iterNum.eq(iterNumNext)
-        m.d.comb += finalIter.eq(iterNumReg == 0)
-
-        # init sums / 初始和
-        aNormShifted = Mux(rShift, Cat(Const(0, 1), aNormReg), Cat(aNormReg, Const(0, 1)))
-        rSumInit = Cat(Const(0, 3), aNormShifted)
-        rSumInit = rSumInit.bit_select(0, itn_len)
-        rCarryInit = Const(0, itn_len)
-        rSumInitTrunc = Cat(Const(0, 1), rSumInit.bit_select(itn_len - 4, 5))
-        dForLookup = dNormReg.bit_select(ln - 4, 3)
-        mInitPos1 = mux_lookup(dForLookup, 0b00100,
-                                [(0, 0b00100), (1, 0b00100), (2, 0b00100), (3, 0b00110),
-                                 (4, 0b00110), (5, 0b00110), (6, 0b00110), (7, 0b01000)], 5)
-        mInitPos2 = mux_lookup(dForLookup, 0b01100,
-                                [(0, 0b01100), (1, 0b01110), (2, 0b01111), (3, 0b10000),
-                                 (4, 0b10010), (5, 0b10100), (6, 0b10110), (7, 0b10110)], 5)
-        initCmpPos1 = rSumInitTrunc >= mInitPos1
-        initCmpPos2 = rSumInitTrunc >= mInitPos2
-        qInit = Mux(initCmpPos2, uint_to_oh(Q_P2, 5),
-                    Mux(initCmpPos1, uint_to_oh(Q_P1, 5), uint_to_oh(Q_0, 5)))
-
-        # d pos/neg / d 正负
-        dPos = Cat(Const(0, 1), dNormReg)
-        dNeg = (-Cat(Const(0, 1), dNormReg)).bit_select(0, ln + 1)
-        # mNeg / -m 表
-        mNeg = []
-        for j in range(4):
-            mv = mux_lookup(dForLookup, 0, mLookUpTable2.minus_m[j], 7)
-            ext_bits = [11, 10, 10, 11][j]
-            pad_bits = [1, 2, 2, 1][j]
-            mNeg.append(Cat(Const(0, pad_bits), sign_ext(mv, 7, ext_bits)))
-        # udNeg / u*d
-        udNeg = [
-            Cat(Const(0, 2), sign_ext(dPos, ln + 1, itn_len - 2)),
-            Cat(Const(0, 1), sign_ext(dPos, ln + 1, itn_len - 1)),
-            Const(0, itn_len),
-            Cat(Const(0, 1), sign_ext(dNeg, ln + 1, itn_len - 1)),
-            Cat(Const(0, 2), sign_ext(dNeg, ln + 1, itn_len - 2)),
-        ]
-        rudNeg = [udNeg[i].bit_select(itn_len - 11, 10) for i in range(5)]
-        r2udNeg = [udNeg[i].bit_select(itn_len - 13, 12) for i in range(5)]
-        rudPmNeg = [[(sign_ext(rudNeg[i].bit_select(1, 9), 9, 10)
-                      + mNeg[j].bit_select(1, 10)).bit_select(0, 10)
-                     for j in range(4)] for i in range(5)]
-        r2udPmNeg = [[(sign_ext(r2udNeg[i], 12, 13) + sign_ext(mNeg[j], 12, 13)).bit_select(0, 13)
-                      for j in range(4)] for i in range(5)]
-        r3ws = rSumReg.bit_select(itn_len - 13, 13)
-        r3wc = rCarryReg.bit_select(itn_len - 13, 13)
-        r2ws = rSumReg.bit_select(itn_len - 10, 10)
-        r2wc = rCarryReg.bit_select(itn_len - 10, 10)
-
-        # selection block / 选择块
-        # Decode SRT sign probes into a one-hot quotient digit / 将 SRT 符号探针译为独热商位
-        def detect_sign(signs):
-            qVec = [Signal(name=f"qVec_{k}") for k in range(5)]
-            m.d.comb += qVec[Q_N2].eq(signs.bit_select(0, 1) & signs.bit_select(1, 1) & signs.bit_select(2, 1))
-            m.d.comb += qVec[Q_N1].eq(~signs.bit_select(0, 1) & signs.bit_select(1, 1) & signs.bit_select(2, 1))
-            m.d.comb += qVec[Q_0].eq(signs.bit_select(2, 1) & ~signs.bit_select(1, 1))
-            m.d.comb += qVec[Q_P1].eq(signs.bit_select(3, 1) & ~signs.bit_select(2, 1) & ~signs.bit_select(1, 1))
-            m.d.comb += qVec[Q_P2].eq(~signs.bit_select(3, 1) & ~signs.bit_select(2, 1) & ~signs.bit_select(1, 1))
-            return Cat(*qVec)
-
-        signsVec = []
-        for i in range(4):
-            rudPmSel = mux1h(qPrevReg, [rudPmNegReg[k][i] for k in range(5)])
-            s, c = csa3_2(r2ws, r2wc, rudPmSel, 10)
-            sumFull = (s + (c.bit_select(0, 9) << 1))
-            signsVec.append(sumFull.bit_select(9, 1))
-        signsVal = Cat(*signsVec)
-        qNext = detect_sign(signsVal)
-        # wide CSA / 宽 CSA
-        udPrev = mux1h(qPrevReg, udNegReg)
-        s1, c1 = csa3_2(rSumReg << 2, rCarryReg << 2, udPrev << 2, itn_len)
-        udNext = mux1h(qNext, udNegReg)
-        s2, c2 = csa3_2(s1 << 2, (c1 << 1).bit_select(0, itn_len) << 2, udNext << 2, itn_len)
-        rSumIter = Mux(~oddIter & finalIter, s1, s2)
-        rCarryIter = Mux(~oddIter & finalIter,
-                         (c1 << 1).bit_select(0, itn_len),
-                         (c2 << 1).bit_select(0, itn_len))
-        # speculative / 推测
-        qSpec = []
-        for qspec in range(5):
-            s1p, c1p = csa3_2(r3ws, r3wc,
-                               sign_ext(udNegReg[qspec].bit_select(itn_len - 11, 10), 10, 13), 13)
-            signs2Vec = []
-            for i in range(4):
-                r2sel = mux1h(qPrevReg, [r2udPmNegReg[k][i] for k in range(5)])
-                s2p, c2p = csa3_2(s1p, (c1p << 1).bit_select(0, 13), r2sel, 13)
-                sf = (s2p + (c2p.bit_select(0, 12) << 1))
-                signs2Vec.append(sf.bit_select(12, 1))
-            qSpec.append(detect_sign(Cat(*signs2Vec)))
-        qNext2 = mux1h(qNext, qSpec)
-
-        # OTFC / 商即时转换
-        # Convert quotient digit to on-the-fly quotient pair / 将商位转换为即时商及前一商
-        def otfc(q, quot, quotM1):
-            qn = Mux(q.bit_select(Q_P2, 1), (Cat(quot, Const(0b10, 2)) << 0),
-                      Mux(q.bit_select(Q_P1, 1), Cat(quot, Const(0b01, 2)),
-                          Mux(q.bit_select(Q_0, 1), Cat(quot, Const(0b00, 2)),
-                              Mux(q.bit_select(Q_N1, 1), Cat(quotM1, Const(0b11, 2)),
-                                  Cat(quotM1, Const(0b10, 2))))))
-            qmn = Mux(q.bit_select(Q_P2, 1), Cat(quot, Const(0b01, 2)),
-                      Mux(q.bit_select(Q_P1, 1), Cat(quot, Const(0b00, 2)),
-                          Mux(q.bit_select(Q_0, 1), Cat(quotM1, Const(0b11, 2)),
-                              Mux(q.bit_select(Q_N1, 1), Cat(quotM1, Const(0b10, 2)),
-                                  Cat(quotM1, Const(0b01, 2))))))
-            return (qn.bit_select(0, ln), qmn.bit_select(0, ln))
-        quotHalfIter, quotM1HalfIter = otfc(qPrevReg, quotIterReg, quotM1IterReg)
-        qi2, qmi2 = otfc(qNext, quotHalfIter, quotM1HalfIter)
-        quotIterNext = Mux(~oddIter & finalIter, quotHalfIter, qi2)
-        quotM1IterNext = Mux(~oddIter & finalIter, quotM1HalfIter, qmi2)
-        m.d.comb += quotIter.eq(Mux(state.bit_select(S_ITER, 1), quotIterNext,
-                                     Mux(state.bit_select(S_PRE1, 1), Const(0, ln),
-                                         Mux(quotSignReg, aInverter, quotIterReg))))
-        m.d.comb += quotM1Iter.eq(Mux(state.bit_select(S_ITER, 1), quotM1IterNext,
-                                       Mux(state.bit_select(S_PRE1, 1), Const(0, ln),
-                                           Mux(quotSignReg, dInverter, quotM1IterReg))))
-
-        # rNext / 余数次态
-        dNormExt = Cat(Const(0, 1), dNormReg, Const(0, 3))
-        with m.If(rSignReg):
-            m.d.comb += rNext.eq((~rSumReg + ~rCarryReg + 2).bit_select(0, itn_len))
-            m.d.comb += rNextPd.eq((~rSumReg + ~rCarryReg + ~dNormExt + 3).bit_select(0, itn_len))
-        with m.Else():
-            m.d.comb += rNext.eq(rSumReg + rCarryReg)
-            m.d.comb += rNextPd.eq(rSumReg + rCarryReg + dNormExt)
-        # right shifter / 右移
-        m.submodules.rightShifter = rs = RightShifter(ln, lzc_width)
-        r = rNextReg
-        rPd = rNextPdReg
-        rIsZero = ~or_reduce(r, ln)
-        needCorr = Mux(rSignReg, ~r.bit_select(ln - 1, 1) & ~rIsZero, r.bit_select(ln - 1, 1))
-        rPreShifted = Mux(needCorr, rPd, r)
-        m.d.comb += rs.in_.eq(rPreShifted)
-        m.d.comb += rs.shiftNum.eq(dLZCReg.bit_select(0, lzc_width))
-        m.d.comb += rs.msb.eq(Mux(~or_reduce(rPreShifted, ln), Const(0, 1), rSignReg))
-        # output mux / 输出选择
-        res = Mux(isHi, rFinal, qFinal)
-        m.d.comb += self.out_data.eq(Mux(isW, sign_ext(res.bit_select(0, ln // 2), ln // 2, ln), res))
-        m.d.comb += self.in_ready.eq(state.bit_select(S_IDLE, 1))
-        m.d.comb += self.out_valid.eq(state.bit_select(S_FINISH, 1) & ~specialReg)
-        m.d.comb += self.outValidAhead3Cycle.eq(
-            (finalIter & state.bit_select(S_ITER, 1)) | (special & state.bit_select(S_PRE1, 1)))
-        m.d.comb += self.out_validNext.eq(state.bit_select(S_POST1, 1))
-
-        # FSM + regs / 状态机与寄存器
-        with m.If(kill_r):
-            m.d.sync += state.eq(Const(1 << S_IDLE, 7))
-        with m.Elif(state.bit_select(S_IDLE, 1) & in_fire & ~kill_w):
-            m.d.sync += state.eq(Const(1 << S_PRE0, 7))
-        with m.Elif(state.bit_select(S_PRE0, 1)):
-            m.d.sync += state.eq(Const(1 << S_PRE1, 7))
-        with m.Elif(state.bit_select(S_PRE1, 1)):
-            m.d.sync += state.eq(Mux(special, Const(1 << S_POST1, 7), Const(1 << S_ITER, 7)))
-        with m.Elif(state.bit_select(S_ITER, 1)):
-            m.d.sync += state.eq(Mux(finalIter, Const(1 << S_POST0, 7), Const(1 << S_ITER, 7)))
-        with m.Elif(state.bit_select(S_POST0, 1)):
-            m.d.sync += state.eq(Const(1 << S_POST1, 7))
-        with m.Elif(state.bit_select(S_POST1, 1)):
-            m.d.sync += state.eq(Const(1 << S_FINISH, 7))
-        with m.Elif(state.bit_select(S_FINISH, 1) & ~specialReg):
-            m.d.sync += state.eq(Const(1 << S_IDLE, 7))
-        # register enables / 寄存使能
-        with m.If(state.bit_select(S_PRE1, 1) | state.bit_select(S_ITER, 1) | state.bit_select(S_POST0, 1)):
-            m.d.sync += quotIterReg.eq(quotIter)
-            m.d.sync += quotM1IterReg.eq(quotM1Iter)
-        with m.If(state.bit_select(S_PRE1, 1) | state.bit_select(S_FINISH, 1)):
-            m.d.sync += specialReg.eq(Mux(state.bit_select(S_FINISH, 1), Const(0, 1), special))
-        with m.If(in_fire):
-            m.d.sync += aReg.eq(a)
-            m.d.sync += dSignReg.eq(dSign)
-            m.d.sync += quotSignReg.eq(quotSign)
-            m.d.sync += rSignReg.eq(rSign)
-        with m.If(in_fire | state.bit_select(S_IDLE, 1)):
-            m.d.sync += aAbsReg.eq(aAbs)
-            m.d.sync += dAbsReg.eq(dAbs)
-        with m.If(state.bit_select(S_PRE0, 1)):
-            m.d.sync += aNormReg.eq(aNorm)
-            m.d.sync += dNormReg.eq(dNorm)
-            m.d.sync += aLZCReg.eq(aLZC)
-            m.d.sync += dLZCReg.eq(dLZC)
-            m.d.sync += aTooSmallStorage.eq(aLZC.bit_select(lzc_width, 1) | lzcWireDiff.bit_select(lzc_width, 1))
-        with m.If(state.bit_select(S_PRE1, 1) | state.bit_select(S_ITER, 1)):
-            m.d.sync += iterNumReg.eq(iterNumNext)
-        # init regs / 初始寄存
-        with m.If(state.bit_select(S_PRE1, 1)):
-            m.d.sync += qPrevReg.eq(qInit)
-            m.d.sync += rSumReg.eq(rSumInit)
-            m.d.sync += rCarryReg.eq(rCarryInit)
-            m.d.sync += quotSpecialReg.eq(quotSpecial)
-            m.d.sync += remSpecialReg.eq(remSpecial)
-            for i in range(5):
-                m.d.sync += udNegReg[i].eq(udNeg[i])
-                for j in range(4):
-                    m.d.sync += rudPmNegReg[i][j].eq(rudPmNeg[i][j])
-                    m.d.sync += r2udPmNegReg[i][j].eq(r2udPmNeg[i][j])
-        with m.Elif(state.bit_select(S_ITER, 1)):
-            m.d.sync += qPrevReg.eq(qNext2)
-            m.d.sync += rSumReg.eq(rSumIter)
-            m.d.sync += rCarryReg.eq(rCarryIter)
-        with m.If(state.bit_select(S_POST0, 1)):
-            m.d.sync += rNextReg.eq(rNext.bit_select(3, ln))
-            m.d.sync += rNextPdReg.eq(rNextPd.bit_select(3, ln))
-        with m.If(state.bit_select(S_POST1, 1)):
-            m.d.sync += rFinal.eq(Mux(specialReg, remSpecialReg, rs.out))
-            m.d.sync += qFinal.eq(Mux(specialReg, quotSpecialReg,
-                                      Mux(needCorr, quotM1IterReg, quotIterReg)))
-        return m
-
-
-class SRT16DividerReferenceAdapter(Elaboratable):
-    # Exact pinned Scala IO shell; internal convenience aliases stay private.
-    # 精确匹配锁定 Scala 接口；内部便捷别名保持私有。
-    def __init__(self, config: SRT16DividerConfig):
-        self.config = config
-        width = config.len
         self.clock = Signal(name="clock")
         self.reset = Signal(name="reset")
         self.io_src_0 = Signal(width, name="io_src_0")
@@ -479,91 +235,247 @@ class SRT16DividerReferenceAdapter(Elaboratable):
         self.io_in_ready = Signal(name="io_in_ready")
         self.io_out_valid = Signal(name="io_out_valid")
         self.io_out_data = Signal(width, name="io_out_data")
-        self.io_outValidAhead3Cycle = Signal(name="io_outValidAhead3Cycle")
+        self.io_out_ready = Signal(name="io_out_ready")
+        self.outValidAhead3Cycle = Signal(name="outValidAhead3Cycle")
+        self.io_outValidAhead3Cycle = self.outValidAhead3Cycle
+        self.debug_quotient = None
+        self.debug_remainder = None
+        self.debug_iterations = None
+        self.debug_shift = None
 
-    def elaborate(self, platform):
-        # Adapt the exact Chisel names to the translated core. / 将精确 Chisel 名称连接到移植核心。
-        m = Module()
-        # Preserve the pinned top-level clock/reset names. / 保持锁定顶层时钟/复位名称。
-        clock_domain = ClockDomain("sync")
-        clock_domain.clk = self.clock
-        clock_domain.rst = self.reset
-        m.domains.sync = clock_domain
-        core = SRT16DividerDataModule(self.config)
-        m.submodules.core = core
-        m.d.comb += [
-            core.src[0].eq(self.io_src_0),
-            core.src[1].eq(self.io_src_1),
-            core.valid.eq(self.io_valid),
-            core.sign.eq(self.io_sign),
-            core.kill_w.eq(self.io_kill_w),
-            core.kill_r.eq(self.io_kill_r),
-            core.isHi.eq(self.io_isHi),
-            core.isW.eq(self.io_isW),
-            core.out_ready.eq(1),
-            self.io_in_ready.eq(core.in_ready),
-            self.io_out_valid.eq(core.out_valid),
-            self.io_out_data.eq(core.out_data),
-            self.io_outValidAhead3Cycle.eq(core.outValidAhead3Cycle),
+        # Source field aliases used by existing parent adapters. / 现有父适配器使用的源字段别名。
+        self.src = [self.io_src_0, self.io_src_1]
+        self.valid = self.io_valid
+        self.sign = self.io_sign
+        self.kill_w = self.io_kill_w
+        self.kill_r = self.io_kill_r
+        self.isHi = self.io_isHi
+        self.isW = self.io_isW
+        self.in_ready = self.io_in_ready
+        self.out_valid = self.io_out_valid
+        self.out_data = self.io_out_data
+        self.out_ready = self.io_out_ready
+        self.out_validNext = Signal(name="out_validNext")
+        self.io_out_validNext = self.out_validNext
+
+    # Elaborate the V2 pipeline, recurrence, and handshake. / 展开 V2 流水线、递推与握手。
+    def elaborate(self, platform: Any) -> Module:
+        """Build the sequential radix-four implementation. / 构建时序基四实现。"""
+
+        del platform
+        module = Module()
+        domain = ClockDomain("sync", async_reset=True)
+        domain.clk = self.clock
+        domain.rst = self.reset
+        module.domains += domain
+        width = self.width
+        rem_width = width + 2
+        count_width = max(1, (width // 2).bit_length())
+
+        idle, pre0, pre1, iterate, post0, post1, finish = range(7)
+        state = Signal(7, reset=1 << idle, name="state")
+
+        # Request and mode registers. / 请求与模式寄存器。
+        a_reg = Signal(width, name="aReg")
+        d_reg = Signal(width, name="dReg")
+        a_abs_reg = Signal(width, name="aAbsReg")
+        d_abs_reg = Signal(width, name="dAbsReg")
+        dividend_shift = Signal(width, name="dividendShift")
+        sign_reg = Signal(name="signReg")
+        a_sign_reg = Signal(name="aSignReg")
+        d_sign_reg = Signal(name="dSignReg")
+        r_sign_reg = Signal(name="rSignReg")
+
+        # Iteration and result registers. / 迭代与结果寄存器。
+        remainder_reg = Signal(rem_width, name="remainderReg")
+        quotient_reg = Signal(width, name="quotientReg")
+        iterations_left = Signal(count_width, name="iterationsLeft")
+        special_reg = Signal(name="specialReg")
+        quotient_final = Signal(width, name="qFinal")
+        remainder_final = Signal(width, name="rFinal")
+        self.debug_quotient = quotient_reg
+        self.debug_remainder = remainder_reg
+        self.debug_iterations = iterations_left
+        self.debug_shift = dividend_shift
+
+        # Request preprocessing. / 请求预处理。
+        a_sign = self.io_sign & self.io_src_0.bit_select(width - 1, 1)
+        d_sign = self.io_sign & self.io_src_1.bit_select(width - 1, 1)
+        a_abs = Mux(a_sign, twos_complement(self.io_src_0, width), self.io_src_0)
+        d_abs = Mux(d_sign, twos_complement(self.io_src_1, width), self.io_src_1)
+        in_fire = self.io_valid & self.io_in_ready
+
+        # Special cases are evaluated from captured absolute operands.
+        # 特殊情况根据捕获的绝对操作数计算。
+        d_is_zero = d_abs_reg == 0
+        d_is_one = d_abs_reg == 1
+        a_too_small = (d_abs_reg != 0) & (a_abs_reg < d_abs_reg)
+        special = d_is_zero | d_is_one | a_too_small
+        all_ones = Const((1 << width) - 1, width)
+        quotient_special = Mux(
+            d_is_zero, all_ones,
+            Mux(a_too_small, Const(0, width),
+                Mux(d_sign_reg, twos_complement(a_reg, width), a_reg)))
+        remainder_special = Mux(d_is_zero | a_too_small,
+                                a_reg, Const(0, width))
+
+        # One radix-four restoring step. / 一个基四恢复除法步骤。
+        pair = dividend_shift.bit_select(width - 2, 2)
+        shifted_remainder = ((remainder_reg << 2) | pair).bit_select(0, rem_width)
+        # Cat's first operand occupies the low bits; append two low zeroes to
+        # represent a fixed-point divisor scaled by four.
+        # Cat 的第一个操作数位于低位；追加两个低零表示乘四后的除数。
+        divisor_ext = Cat(d_abs_reg, Const(0, 2))
+        divisor_x2 = (divisor_ext << 1).bit_select(0, rem_width)
+        divisor_x3 = (divisor_x2 + divisor_ext).bit_select(0, rem_width)
+        digit = Mux(shifted_remainder >= divisor_x3, Const(3, 2),
+                     Mux(shifted_remainder >= divisor_x2, Const(2, 2),
+                         Mux(shifted_remainder >= divisor_ext, Const(1, 2),
+                             Const(0, 2))))
+        subtract = Mux(digit == 3, divisor_x3,
+                       Mux(digit == 2, divisor_x2,
+                           Mux(digit == 1, divisor_ext,
+                               Const(0, rem_width))))
+        remainder_step = (shifted_remainder - subtract).bit_select(0, rem_width)
+        quotient_step = ((quotient_reg << 2) | digit).bit_select(0, width)
+
+        # Normal signed final values. / 正常有符号最终值。
+        quotient_unsigned = quotient_reg.bit_select(0, width)
+        remainder_unsigned = remainder_reg.bit_select(0, width)
+        quotient_signed = Mux(sign_reg & (a_sign_reg ^ d_sign_reg),
+                               twos_complement(quotient_unsigned, width),
+                               quotient_unsigned)
+        remainder_signed = Mux(sign_reg & r_sign_reg,
+                                twos_complement(remainder_unsigned, width),
+                                remainder_unsigned)
+
+        # Public outputs. / 公共输出。
+        module.d.comb += [
+            self.io_in_ready.eq(state.bit_select(idle, 1)),
+            self.io_out_valid.eq(state.bit_select(finish, 1)),
+            self.out_validNext.eq(state.bit_select(post1, 1)),
         ]
-        return m
+        selected = Mux(self.io_isHi, remainder_final, quotient_final)
+        low_width = 32 if width == 64 else 16
+        low = selected.bit_select(0, low_width)
+        word = Cat(low, replicate(selected.bit_select(low_width - 1, 1),
+                                  width - low_width))
+        module.d.comb += self.io_out_data.eq(Mux(self.io_isW, word, selected))
+        module.d.comb += self.outValidAhead3Cycle.eq(
+            (state.bit_select(iterate, 1) & (iterations_left == 1)) |
+            (state.bit_select(pre1, 1) & special))
+
+        # V2 state transitions: kill, request, seven pipeline states, finish.
+        # V2 状态转换：kill、请求、七个流水状态及 finish。
+        with module.If(self.io_kill_r):
+            module.d.sync += state.eq(1 << idle)
+        with module.Elif(state.bit_select(idle, 1) & in_fire & ~self.io_kill_w):
+            module.d.sync += state.eq(1 << pre0)
+        with module.Elif(state.bit_select(pre0, 1)):
+            module.d.sync += state.eq(1 << pre1)
+        with module.Elif(state.bit_select(pre1, 1)):
+            module.d.sync += state.eq(Mux(special, 1 << post1, 1 << iterate))
+        with module.Elif(state.bit_select(iterate, 1)):
+            module.d.sync += state.eq(Mux(iterations_left == 1,
+                                          1 << post0, 1 << iterate))
+        with module.Elif(state.bit_select(post0, 1)):
+            module.d.sync += state.eq(1 << post1)
+        with module.Elif(state.bit_select(post1, 1)):
+            module.d.sync += state.eq(1 << finish)
+        with module.Elif(state.bit_select(finish, 1) & self.io_out_ready):
+            module.d.sync += state.eq(1 << idle)
+
+        # Capture request and mode bits on the input fire. / 在输入 fire 时捕获请求与模式位。
+        with module.If(in_fire):
+            module.d.sync += [
+                a_reg.eq(self.io_src_0),
+                d_reg.eq(self.io_src_1),
+                a_abs_reg.eq(a_abs),
+                d_abs_reg.eq(d_abs),
+                dividend_shift.eq(a_abs),
+                sign_reg.eq(self.io_sign),
+                a_sign_reg.eq(a_sign),
+                d_sign_reg.eq(d_sign),
+                r_sign_reg.eq(a_sign),
+            ]
+
+        # Initialize radix-four state in pre_1. / 在 pre_1 初始化基四状态。
+        with module.If(state.bit_select(pre1, 1)):
+            module.d.sync += [
+                remainder_reg.eq(0),
+                quotient_reg.eq(0),
+                iterations_left.eq(width // 2),
+                special_reg.eq(special),
+            ]
+
+        # Advance one radix-four digit per iterate cycle. / 每个 iterate 周期推进一个基四数位。
+        with module.If(state.bit_select(iterate, 1)):
+            module.d.sync += [
+                remainder_reg.eq(remainder_step),
+                quotient_reg.eq(quotient_step),
+                dividend_shift.eq(dividend_shift << 2),
+            ]
+            with module.If(iterations_left != 0):
+                module.d.sync += iterations_left.eq(iterations_left - 1)
+
+        # Capture final signed/special results in post_1. / 在 post_1 捕获有符号或特殊最终结果。
+        with module.If(state.bit_select(post1, 1)):
+            module.d.sync += [
+                quotient_final.eq(Mux(special_reg, quotient_special,
+                                      quotient_signed)),
+                remainder_final.eq(Mux(special_reg, remainder_special,
+                                       remainder_signed)),
+            ]
+        return module
 
 
-# Barrel left shift with bounded width / 按有界位宽执行桶形左移
-def barrel_lsh(in_v, shift, w):
-    L = shift.shape().width
-    out = in_v
-    bit = 0
-    while (1 << bit) < w:
-        amt = 1 << bit
-        sel = shift.bit_select(bit, 1) if bit < L else Const(0, 1)
-        out = Mux(sel, Cat(Const(0, amt), out.bit_select(0, w - amt)), out)
-        bit += 1
-    return out
+class SRT16DividerReferenceAdapter(SRT16DividerDataModule):
+    """Keep the historical exact-IO adapter name for V2 harnesses. / 为 V2 测试台保留历史精确接口适配器名称。"""
 
+    # Construct the source-compatible adapter. / 构造源代码兼容的适配器。
+    def __init__(self, configuration: SRT16DividerConfig | int | None = None) -> None:
+        """Forward configuration to the V2 data module. / 将配置转发给 V2 数据模块。"""
 
-# Encode a static index as one-hot / 将静态索引编码为独热值
-def uint_to_oh(idx, w):
-    # one-hot constant for static idx / 静态索引独热常量
-    return Const(1 << idx, w)
-
-
-# Reduce an expression with OR / 对表达式执行或归约
-def or_reduce(v, w):
-    acc = Const(0, 1)
-    for i in range(w):
-        acc = acc | v.bit_select(i, 1)
-    return acc
-
-
-# Reduce an expression with AND / 对表达式执行与归约
-def and_reduce(v, w):
-    acc = Const(1, 1)
-    for i in range(w):
-        acc = acc & v.bit_select(i, 1)
-    return acc
+        super().__init__(configuration)
 
 
 # =============================================================================
 # Public Adapter
 # =============================================================================
-def build_verilog(config=None, name: str = "SRT16Divider") -> str:
+# Build deterministic source-shaped Verilog. / 构建确定性的源接口 Verilog。
+def build_verilog(configuration: SRT16DividerConfig | int | None = None,
+                  injected_dependencies: dict[str, Any] | None = None) -> str:
+    """Emit standalone V2 divider RTL. / 输出独立 V2 除法器 RTL。"""
+
+    del injected_dependencies
     from amaranth.back import verilog
-    if config is None:
-        config = SRT16DividerConfig(len=64)
-    top = SRT16DividerReferenceAdapter(config)
-    ports = [top.clock, top.reset, top.io_src_0, top.io_src_1, top.io_valid, top.io_sign,
-             top.io_kill_w, top.io_kill_r, top.io_isHi, top.io_isW,
-             top.io_in_ready, top.io_out_valid, top.io_out_data,
-             top.io_outValidAhead3Cycle]
-    return verilog.convert(top, name=name, ports=ports)
+
+    if isinstance(configuration, dict):
+        config = SRT16DividerConfig(int(configuration.get("len", 64)))
+    elif configuration is None:
+        config = SRT16DividerConfig()
+    elif isinstance(configuration, SRT16DividerConfig):
+        config = configuration
+    else:
+        config = SRT16DividerConfig(configuration)
+    top = SRT16DividerDataModule(config)
+    ports = [
+        top.clock, top.reset, top.io_src_0, top.io_src_1, top.io_valid,
+        top.io_sign, top.io_kill_w, top.io_kill_r, top.io_isHi, top.io_isW,
+        top.io_in_ready, top.io_out_valid, top.io_out_data, top.io_out_ready,
+    ]
+    return verilog.convert(top, name="SRT16DividerDataModule", ports=ports,
+                           emit_src=False)
 
 
 # =============================================================================
 # Direct Entry
 # =============================================================================
+# Print default source-shaped Verilog. / 打印默认源接口 Verilog。
 def main() -> None:
-    print(build_verilog())
+    """Print deterministic generated RTL. / 打印确定性的生成 RTL。"""
+
+    print(build_verilog(None, {}))
 
 
 if __name__ == "__main__":

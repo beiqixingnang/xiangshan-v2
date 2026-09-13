@@ -1,0 +1,159 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_CSR_DIVIDER_CONTRACT_AUDIT",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "targets": {
+    "CSRs": {
+      "path": "python/ported/backend/decode/isa/CSRs-Hardware.py",
+      "bytes": 19636,
+      "sha256": "ccfb26148e3f7808060c4368a2e7cb96b3e788fb56d75e0fe23fccb456959376",
+      "utf8_lf": true,
+      "ast": true,
+      "zones": [
+        "Module Contract",
+        "Configuration",
+        "Implementation",
+        "Public Adapter",
+        "Direct Entry"
+      ],
+      "functions": [
+        "__init__",
+        "build_verilog",
+        "csrAccessPermissionCheck",
+        "csr_access_permission_check",
+        "dcsrPermissionCheck",
+        "dcsr_permission_check",
+        "elaborate",
+        "main",
+        "perfcntPermissionCheck",
+        "perfcnt_permission_check",
+        "satp_part_wmask",
+        "triggerPermissionCheck",
+        "trigger_permission_check"
+      ],
+      "adapter_exact": true
+    },
+    "SstcInterruptGen": {
+      "path": "python/ported/backend/fu/NewCSR/SstcInterruptGen-Hardware.py",
+      "bytes": 5621,
+      "sha256": "e1537e5539b4acd8acce947e2f478def2441f24df74fbdabdd2a848b47a810eb",
+      "utf8_lf": true,
+      "ast": true,
+      "zones": [
+        "Module Contract",
+        "Configuration",
+        "Implementation",
+        "Public Adapter",
+        "Direct Entry"
+      ],
+      "functions": [
+        "__init__",
+        "build_verilog",
+        "elaborate",
+        "main"
+      ],
+      "adapter_exact": true
+    },
+    "SRT16Divider": {
+      "path": "python/ported/backend/fu/SRT16Divider-Hardware.py",
+      "bytes": 21540,
+      "sha256": "86517206745a7b2be8afa38c44a1d0923dd8f1e3213c90d9aeb2ffebcef32417",
+      "utf8_lf": true,
+      "ast": true,
+      "zones": [
+        "Module Contract",
+        "Configuration",
+        "Implementation",
+        "Public Adapter",
+        "Direct Entry"
+      ],
+      "functions": [
+        "__init__",
+        "__init__",
+        "__init__",
+        "__post_init__",
+        "barrel_lsh",
+        "build_verilog",
+        "csa3_2",
+        "elaborate",
+        "elaborate",
+        "main",
+        "mask_value",
+        "mux1h",
+        "mux_lookup",
+        "priority_encoder",
+        "replicate",
+        "sign_ext",
+        "twos_complement"
+      ],
+      "adapter_exact": true
+    },
+    "FliTable": {
+      "path": "python/ported/backend/fu/fpu/FliTable-Hardware.py",
+      "bytes": 6815,
+      "sha256": "0b24671f26c42e1e7909ad81b88e0fb13f31aae718e6400441dc9becf8179094",
+      "utf8_lf": true,
+      "ast": true,
+      "zones": [
+        "Module Contract",
+        "Configuration",
+        "Implementation",
+        "Public Adapter",
+        "Direct Entry"
+      ],
+      "functions": [
+        "__init__",
+        "__init__",
+        "__init__",
+        "__init__",
+        "__post_init__",
+        "build_verilog",
+        "decode_fli",
+        "elaborate",
+        "main"
+      ],
+      "adapter_exact": true
+    },
+    "CSA": {
+      "path": "python/ported/backend/fu/util/CSA-Hardware.py",
+      "bytes": 9343,
+      "sha256": "21047595a1058866e2c828c5cc27732b1b40f9cc29d6958f1d2e3adc4d410da1",
+      "utf8_lf": true,
+      "ast": true,
+      "zones": [
+        "Module Contract",
+        "Configuration",
+        "Implementation",
+        "Public Adapter",
+        "Direct Entry"
+      ],
+      "functions": [
+        "__init__",
+        "__init__",
+        "__init__",
+        "__init__",
+        "__init__",
+        "__init__",
+        "__init__",
+        "__post_init__",
+        "build_verilog",
+        "csa2_2",
+        "csa3_2",
+        "csa5_3",
+        "elaborate",
+        "elaborate",
+        "elaborate",
+        "main"
+      ],
+      "adapter_exact": true
+    }
+  },
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PENDING_COORDINATOR_REVIEW",
+    "PARENT_CLOSURE_MATCHED": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "acceptance_eligible": false
+}

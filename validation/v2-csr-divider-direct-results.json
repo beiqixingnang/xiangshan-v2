@@ -1,0 +1,283 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_CSR_DIVIDER_FAMILY_DIRECT",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "targets": [
+    "CSRs",
+    "SstcInterruptGen",
+    "SRT16Divider",
+    "FliTable",
+    "CSA"
+  ],
+  "source_paths": {
+    "CSRs": [
+      "upstream/rocket-chip/src/main/scala/rocket/Instructions.scala",
+      "upstream/src/main/scala/xiangshan/backend/fu/util/CSRConst.scala"
+    ],
+    "SstcInterruptGen": "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/SstcInterruptGen.scala",
+    "SRT16Divider": [
+      "upstream/src/main/scala/xiangshan/backend/fu/SRT16Divider.scala",
+      "upstream/src/main/scala/xiangshan/backend/fu/SRT4Divider.scala"
+    ],
+    "FliTable": "upstream/src/main/scala/xiangshan/backend/fu/fpu/FliTable.scala",
+    "CSA": "upstream/src/main/scala/xiangshan/backend/fu/util/CSA.scala"
+  },
+  "commands": [
+    "python validation/v2_csr_divider_batch.py",
+    "python validation/v2_csr_divider_reference.py"
+  ],
+  "status": "DIRECT_TEST_PASS_BOUNDED",
+  "targets_results": {
+    "CSRs": {
+      "constants": 444,
+      "helper_checks": 11,
+      "verilog_sha256": "77f7e3270d60be8e2c1687465b922b3684f5200dd165721f4cecacec8b130ca9"
+    },
+    "SstcInterruptGen": {
+      "cycles": 2,
+      "verilog_sha256": "1c8b5d1960be2b36030166214947e380ca083afac6cdcf018c0bbd632b1cd964"
+    },
+    "SRT16Divider": {
+      "transactions": 170,
+      "max_latency_cycles": 36,
+      "verilog_sha256": "852ca1670b4a0aa4180c859e78ec8a12d09b943b3e1e8dc74609a363baa6ea86"
+    },
+    "FliTable": {
+      "entries": 96,
+      "verilog_sha256": "a5f5bdfdee41584ed84817c4736c92cb1c03745f1c9aba5dcc394c4fbc6dcf81"
+    },
+    "CSA": {
+      "vectors": 4099,
+      "verilog_sha256": "ac80ac2f7f95b69c941c65057dca822f08e91944eb894137c7f6f7747f5bc2c5"
+    }
+  },
+  "audits": {
+    "CSRs": {
+      "path": "python/ported/backend/decode/isa/CSRs-Hardware.py",
+      "bytes": 19636,
+      "sha256": "ccfb26148e3f7808060c4368a2e7cb96b3e788fb56d75e0fe23fccb456959376",
+      "utf8_lf": true,
+      "ast": true,
+      "zones": [
+        "Module Contract",
+        "Configuration",
+        "Implementation",
+        "Public Adapter",
+        "Direct Entry"
+      ],
+      "functions": [
+        "__init__",
+        "build_verilog",
+        "csrAccessPermissionCheck",
+        "csr_access_permission_check",
+        "dcsrPermissionCheck",
+        "dcsr_permission_check",
+        "elaborate",
+        "main",
+        "perfcntPermissionCheck",
+        "perfcnt_permission_check",
+        "satp_part_wmask",
+        "triggerPermissionCheck",
+        "trigger_permission_check"
+      ],
+      "adapter_exact": true
+    },
+    "SstcInterruptGen": {
+      "path": "python/ported/backend/fu/NewCSR/SstcInterruptGen-Hardware.py",
+      "bytes": 5621,
+      "sha256": "e1537e5539b4acd8acce947e2f478def2441f24df74fbdabdd2a848b47a810eb",
+      "utf8_lf": true,
+      "ast": true,
+      "zones": [
+        "Module Contract",
+        "Configuration",
+        "Implementation",
+        "Public Adapter",
+        "Direct Entry"
+      ],
+      "functions": [
+        "__init__",
+        "build_verilog",
+        "elaborate",
+        "main"
+      ],
+      "adapter_exact": true
+    },
+    "SRT16Divider": {
+      "path": "python/ported/backend/fu/SRT16Divider-Hardware.py",
+      "bytes": 21540,
+      "sha256": "86517206745a7b2be8afa38c44a1d0923dd8f1e3213c90d9aeb2ffebcef32417",
+      "utf8_lf": true,
+      "ast": true,
+      "zones": [
+        "Module Contract",
+        "Configuration",
+        "Implementation",
+        "Public Adapter",
+        "Direct Entry"
+      ],
+      "functions": [
+        "__init__",
+        "__init__",
+        "__init__",
+        "__post_init__",
+        "barrel_lsh",
+        "build_verilog",
+        "csa3_2",
+        "elaborate",
+        "elaborate",
+        "main",
+        "mask_value",
+        "mux1h",
+        "mux_lookup",
+        "priority_encoder",
+        "replicate",
+        "sign_ext",
+        "twos_complement"
+      ],
+      "adapter_exact": true
+    },
+    "FliTable": {
+      "path": "python/ported/backend/fu/fpu/FliTable-Hardware.py",
+      "bytes": 6815,
+      "sha256": "0b24671f26c42e1e7909ad81b88e0fb13f31aae718e6400441dc9becf8179094",
+      "utf8_lf": true,
+      "ast": true,
+      "zones": [
+        "Module Contract",
+        "Configuration",
+        "Implementation",
+        "Public Adapter",
+        "Direct Entry"
+      ],
+      "functions": [
+        "__init__",
+        "__init__",
+        "__init__",
+        "__init__",
+        "__post_init__",
+        "build_verilog",
+        "decode_fli",
+        "elaborate",
+        "main"
+      ],
+      "adapter_exact": true
+    },
+    "CSA": {
+      "path": "python/ported/backend/fu/util/CSA-Hardware.py",
+      "bytes": 9343,
+      "sha256": "21047595a1058866e2c828c5cc27732b1b40f9cc29d6958f1d2e3adc4d410da1",
+      "utf8_lf": true,
+      "ast": true,
+      "zones": [
+        "Module Contract",
+        "Configuration",
+        "Implementation",
+        "Public Adapter",
+        "Direct Entry"
+      ],
+      "functions": [
+        "__init__",
+        "__init__",
+        "__init__",
+        "__init__",
+        "__init__",
+        "__init__",
+        "__init__",
+        "__post_init__",
+        "build_verilog",
+        "csa2_2",
+        "csa3_2",
+        "csa5_3",
+        "elaborate",
+        "elaborate",
+        "elaborate",
+        "main"
+      ],
+      "adapter_exact": true
+    }
+  },
+  "synthesis": {
+    "CSRs": {
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": ""
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": ""
+      }
+    },
+    "SstcInterruptGen": {
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": ""
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": ""
+      }
+    },
+    "SRT16Divider": {
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": "          : ... note: In instance 'SRT16DividerDataModule'\n  374 |   assign \\$149  = \\$148 [65:0] >= dAbsReg;\n      |                                ^~\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_csr_divider_58skgwfj/SRT16Divider.sv:381:19: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'dAbsReg' generates 64 bits.\n                                                                                                          : ... note: In instance 'SRT16DividerDataModule'\n  381 |   assign \\$157  = ! dAbsReg;\n      |                   ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_csr_divider_58skgwfj/SRT16Divider.sv:394:19: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'dAbsReg' generates 64 bits.\n                                                                                                          : ... note: In instance 'SRT16DividerDataModule'\n  394 |   assign \\$170  = ! dAbsReg;\n      |                   ^\n"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": ""
+      }
+    },
+    "FliTable": {
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": "2 bits.\n                                                                                                       : ... note: In instance 'FliTable'\n  130 |   assign \\$30  = src == 2'h2;\n      |                      ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_csr_divider_58skgwfj/FliTable.sv:131:22: Operator EQ expects 5 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                       : ... note: In instance 'FliTable'\n  131 |   assign \\$31  = src == 1'h1;\n      |                      ^~\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_csr_divider_58skgwfj/FliTable.sv:132:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'src' generates 5 bits.\n                                                                                                      : ... note: In instance 'FliTable'\n  132 |   assign \\$32  = ! src;\n      |                  ^\n"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": ""
+      }
+    },
+    "CSA": {
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": ""
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": ""
+      }
+    }
+  },
+  "reference": {
+    "path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "bytes": 228590583,
+    "independent_extraction": "validation/v2_csr_divider_reference.py"
+  },
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "V2_REFERENCE_MATCHED": "PENDING_COORDINATOR_REVIEW",
+    "UHSC_LOCALIZED": "NOT_APPLICABLE_FOR_INTERNAL_LEAVES",
+    "PARENT_CLOSURE_MATCHED": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "unclosed": [
+    "CSRs has no standalone module in XSTop.sv; source-level split comparison is required.",
+    "SRT16Divider reference differential and parent closure require coordinator review.",
+    "Internal leaves have no project-facing UHSC wrapper in this batch."
+  ]
+}

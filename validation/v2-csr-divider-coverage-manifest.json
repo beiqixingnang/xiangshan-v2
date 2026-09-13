@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_CSR_DIVIDER_COVERAGE",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "family_id": "core.csr.divider",
+  "closure_root": "core.csr.divider",
+  "status": "PENDING_COORDINATOR_REVIEW",
+  "targets": [
+    {
+      "candidate": "CSRs",
+      "python_path": "python/ported/backend/decode/isa/CSRs-Hardware.py",
+      "v2_sources": [
+        "upstream/rocket-chip/src/main/scala/rocket/Instructions.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/util/CSRConst.scala"
+      ],
+      "covered_children": [
+        "rocket.CSRs",
+        "CSRConst"
+      ],
+      "observation_points": [
+        "444 standard addresses",
+        "CSRConst custom addresses",
+        "permission helpers"
+      ],
+      "reference_surface": "source-level split; no standalone CSRs module"
+    },
+    {
+      "candidate": "SstcInterruptGen",
+      "python_path": "python/ported/backend/fu/NewCSR/SstcInterruptGen-Hardware.py",
+      "v2_sources": [
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/SstcInterruptGen.scala"
+      ],
+      "covered_children": [],
+      "observation_points": [
+        "async reset",
+        "STIP compare",
+        "VSTIP compare",
+        "enable hold"
+      ],
+      "reference_surface": "SstcInterruptGen"
+    },
+    {
+      "candidate": "SRT16Divider",
+      "python_path": "python/ported/backend/fu/SRT16Divider-Hardware.py",
+      "v2_sources": [
+        "upstream/src/main/scala/xiangshan/backend/fu/SRT16Divider.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/SRT4Divider.scala"
+      ],
+      "covered_children": [
+        "RightShifter",
+        "CSA3_2"
+      ],
+      "observation_points": [
+        "input fire",
+        "kill priority",
+        "special d=0/+-1",
+        "signed quotient/remainder",
+        "finish/ready"
+      ],
+      "reference_surface": "SRT16DividerDataModule"
+    },
+    {
+      "candidate": "FliTable",
+      "python_path": "python/ported/backend/fu/fpu/FliTable-Hardware.py",
+      "v2_sources": [
+        "upstream/src/main/scala/xiangshan/backend/fu/fpu/FliTable.scala"
+      ],
+      "covered_children": [
+        "FliHTable",
+        "FliSTable",
+        "FliDTable"
+      ],
+      "observation_points": [
+        "all 32 source entries per table"
+      ],
+      "reference_surface": "FliHTable/FliSTable/FliDTable"
+    },
+    {
+      "candidate": "CSA",
+      "python_path": "python/ported/backend/fu/util/CSA-Hardware.py",
+      "v2_sources": [
+        "upstream/src/main/scala/xiangshan/backend/fu/util/CSA.scala"
+      ],
+      "covered_children": [
+        "CSA2_2",
+        "CSA3_2",
+        "CSA5_3"
+      ],
+      "observation_points": [
+        "bitwise sum",
+        "carry",
+        "5:3 cascade"
+      ],
+      "reference_surface": "CSA3_2"
+    }
+  ],
+  "locked_reference": {
+    "path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "bytes": 228590583
+  },
+  "gates": {
+    "ACCEPTED": "NOT_ALLOWED",
+    "parent_closure": "PENDING",
+    "license": "PENDING"
+  }
+}

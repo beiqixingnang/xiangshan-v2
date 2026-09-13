@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_CSR_DIVIDER_REFERENCE_DIFFERENTIAL",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "reference_artifact": {
+    "path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "bytes": 228590583
+  },
+  "results": {
+    "CSRs": {
+      "status": "SOURCE_LEVEL_MATCHED",
+      "standard_constants": 444,
+      "custom_constants": 9,
+      "standard_match": true,
+      "custom_match": true,
+      "rocket_sha256": "bea0fde45e413236a4f5b3970ba3f87eaa4385a633fa74b112be5acb0ccb9dff",
+      "custom_sha256": "24d621ced4fa71c4bd52fd0925f364d74307297313540b7e90a07468e601a418",
+      "note": "No standalone CSRs module is present in XSTop.sv; this is source-level evidence, not RTL acceptance."
+    },
+    "SstcInterruptGen": {
+      "status": "PASS",
+      "returncode": 0,
+      "stdout_tail": "PASS_SSTC\n- tb.sv:162: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 7ps; walltime 0.001 s; speed 5.345 ns/s\n- Verilator: cpu 0.001 s on 1 threads; alloced 152 MB\n",
+      "stderr_tail": "",
+      "source_sha256": "22a34397d6fed2c05aa737ddd4df3f7b1cf90dc6f40784e083235aa5d7a7ecf9",
+      "vectors": 2
+    },
+    "SRT16Divider": {
+      "status": "PASS",
+      "returncode": 0,
+      "stdout_tail": "PASS_SRT\n- tb.sv:2232: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 520ps; walltime 0.004 s; speed 131.912 ns/s\n- Verilator: cpu 0.004 s on 1 threads; alloced 153 MB\n",
+      "stderr_tail": "",
+      "source_sha256": "db5d347e082f794d60c9f12d9775f67854202a570558d2da4d530e63501925e8"
+    },
+    "FliTable": {
+      "status": "PASS",
+      "returncode": 0,
+      "stdout_tail": "- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: end at 32ps; walltime 0.001 s; speed 22.023 ns/s\n- Verilator: cpu 0.001 s on 1 threads; alloced 153 MB\n",
+      "stderr_tail": "",
+      "source_sha256": "37199077cd20c5d0b1ff0bb7b38f21c8ccd3fe932223e96dcd7b9c991878e4ef",
+      "vectors": 96
+    },
+    "CSA": {
+      "status": "PASS",
+      "returncode": 0,
+      "stdout_tail": "PASS_CSA\n- tb.sv:54: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 8ps; walltime 0.002 s; speed 3.036 ns/s\n- Verilator: cpu 0.003 s on 1 threads; alloced 152 MB\n",
+      "stderr_tail": "",
+      "source_sha256": "b28bd1faa64fb12aaafc32e86fb1a17691997808ef2adabfdf6ed066f2e679be",
+      "vectors": 8
+    }
+  },
+  "status": "V2_REFERENCE_MATCHED_BOUNDED",
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED",
+    "CSRs_REFERENCE_MODE": "SOURCE_LEVEL_ONLY",
+    "UHSC_LOCALIZED": "PENDING_EXTERNAL_WRAPPER",
+    "PARENT_CLOSURE_MATCHED": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "unclosed": [
+    "CSRs has no standalone generated module; source-level evidence cannot promote an RTL gate.",
+    "Parent closure, integration, and license gates remain open."
+  ]
+}
