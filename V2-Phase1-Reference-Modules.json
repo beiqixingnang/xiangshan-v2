@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_PHASE1_REFERENCE_MODULE_INDEX",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "reference_artifact": {
+    "path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "bytes": 228590583
+  },
+  "extractable_reference_modules": {
+    "replacement": [],
+    "icache": ["ICacheMissUnit", "ICacheMSHR", "ICacheReplacer", "ICache", "FIFOReg", "DeMultiplexer", "MuxBundle"],
+    "frontend_bpu_rvc": ["RVCExpander", "PreDecode", "FTB", "FauFTB", "FauFTBWay", "Predictor", "FTBEntryGen"],
+    "decode_arithmetic": ["CSA3_2", "FliHTable", "FliSTable", "FliDTable", "SstcInterruptGen"]
+  },
+  "non_extractable_carried_surfaces": {
+    "CompareMatrix": "V2 ordering is inlined in NewDispatch issue-queue sorting; use source-level and parent closure evidence.",
+    "FallThroughPredictor": "V2 behavior is distributed across BPU/FTB/FrontendBundle/NewFtq; use a parent closure.",
+    "SaturateCounter": "V2 update logic is distributed across BPU/Tage/SC; use a counter parent closure.",
+    "SignedSaturateCounter": "V2 signed update logic is distributed across BPU/SC; use a counter parent closure.",
+    "LruStateGen": "V2 replacement policy is shared utility/rocket Replacement; extract or wrap the actual policy instance.",
+    "PlruStateGen": "V2 replacement policy is shared utility/rocket Replacement; extract or wrap the actual policy instance.",
+    "ReplacerState": "V2 state is embedded in SetAssocLRU policy; verify through replacement closure rather than old standalone port.",
+    "Instructions": "No standalone Instructions module in XSTop; source-level BitPat differential only.",
+    "RiscvInst": "No standalone RiscvInst module in XSTop; source-level field differential only."
+  },
+  "extraction_rule": "A reference module name is usable only when its complete dependency closure is extracted from the same locked XSTop artifact and its ports/parameters are recorded.",
+  "acceptance_claim": false
+}
