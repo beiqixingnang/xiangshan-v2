@@ -19,6 +19,9 @@ INDEX = ROOT / "validation" / "v2-backend-datapath-reference-index.json"
 
 MODULES = {
     "RealWBArbiter": "RealWBArbiter-v2.sv",
+    "RealWBArbiter_1": "RealWBArbiter_1-v2.sv",
+    "RealWBArbiter_2": "RealWBArbiter_2-v2.sv",
+    "RealWBArbiter_3": "RealWBArbiter_3-v2.sv",
     "RealWBCollideChecker": "RealWBCollideChecker-v2.sv",
     # Specialization _25 retains the full ready/valid boundary while V2's
     # isOlder input is optimized to its default false at this parent site.
@@ -82,7 +85,7 @@ def main() -> int:
             "xstop_line_start": first,
             "xstop_line_end": last,
             "source_scala": "upstream/src/main/scala/xiangshan/backend/datapath/" + (
-                "RFWBConflictChecker.scala" if module == "RealWBArbiter" else
+                "RFWBConflictChecker.scala" if module.startswith("RealWBArbiter") else
                 "WbArbiter.scala" if module == "RealWBCollideChecker" else
                 "NewPipelineConnect.scala"
             ),

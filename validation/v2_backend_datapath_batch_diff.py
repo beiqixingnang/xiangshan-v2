@@ -330,7 +330,8 @@ def main() -> int:
         "RealWBCollideChecker_target": backend_gates(targets["wb-collide-target"], "RealWBCollideChecker"),
         "RealWBCollideChecker_reference": backend_gates(
             REF_DIR / "RealWBCollideChecker-v2.sv", "RealWBCollideChecker",
-            [REF_DIR / "RealWBArbiter-v2.sv"]),
+            [REF_DIR / "RealWBArbiter-v2.sv", REF_DIR / "RealWBArbiter_1-v2.sv",
+             REF_DIR / "RealWBArbiter_2-v2.sv", REF_DIR / "RealWBArbiter_3-v2.sv"]),
         "WbDataPath_target": backend_gates(targets["wb-datapath-target"], "WbDataPath"),
     }
     direct_payload = json.loads(DIRECT.read_text(encoding="utf-8"))
