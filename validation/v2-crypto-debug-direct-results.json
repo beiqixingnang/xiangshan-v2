@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_CRYPTO_DEBUG_DIRECT",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "targets": {
+    "CryptoUtils": {
+      "aes_vectors": 5,
+      "sm4_vectors": 4,
+      "mix_vectors": 2,
+      "verilog_sha256": "039628ab5c8189d89d247488a0a24d7ee64f9e5cbedfd6789a0b95f6e7b4aeb8",
+      "verilog_bytes": 572279
+    },
+    "DebugCSR": {
+      "field_vectors": 2,
+      "verilog_sha256": "a3daa6cf634943b471731f4db8f1bfe8d83972d8aec05175bb0bf0c390a34e12",
+      "verilog_bytes": 1404
+    }
+  },
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "SOURCE_LEVEL_PENDING_COORDINATOR_REVIEW",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "UHSC_LOCALIZED": "PENDING_EXTERNAL_WRAPPER",
+    "PARENT_CLOSURE_MATCHED": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "reference": {
+    "crypto_source": "upstream/src/main/scala/xiangshan/backend/fu/util/CryptoUtils.scala",
+    "debug_source": "upstream/src/main/scala/xiangshan/backend/fu/util/DebugCSR.scala",
+    "locked_xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "mode": "SOURCE_LEVEL_AND_DETERMINISTIC_TABLES"
+  },
+  "unclosed": [
+    "CryptoUtils and DebugCSR are internal leaves; no project-facing UHSC wrapper in this batch.",
+    "Parent closure, full locked-XSTop extraction and license review remain coordinator gates."
+  ],
+  "acceptance_eligible": false
+}
