@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "kind": "V2_P1_E_DCACHE_DIRECT_EVIDENCE",
+  "status": "PASS_BOUNDED_DIRECT",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "targets": {
+    "AMOALU": {
+      "vectors": 8512,
+      "widths": [
+        32,
+        64,
+        128
+      ],
+      "commands": 32
+    },
+    "TagArray": {
+      "vectors": 15,
+      "small_config": {
+        "nSets": 4,
+        "nWays": 4,
+        "tagBits": 8,
+        "tagECCBits": 2
+      }
+    }
+  },
+  "structural_audit": {
+    "AMOALU": {
+      "path": "python/ported/cache/dcache/mainpipe/AMOALU-Hardware.py",
+      "bytes": 8692,
+      "sha256": "f549858c7c003490e507ac9b592a6830a52b2936b7d5a427ffdd323a6ca09eeb",
+      "utf8_lf": true,
+      "ast": true,
+      "zones": [
+        "Module Contract",
+        "Configuration",
+        "Implementation",
+        "Public Adapter",
+        "Direct Entry"
+      ],
+      "adapter_exact": true,
+      "functions": [
+        "__init__",
+        "__post_init__",
+        "build_verilog",
+        "cmd_eq",
+        "elaborate",
+        "less_signed",
+        "less_unsigned",
+        "main"
+      ]
+    },
+    "TagArray": {
+      "path": "python/ported/cache/dcache/meta/TagArray-Hardware.py",
+      "bytes": 8478,
+      "sha256": "3e7fb5ed90ff3dbc83afe05f21121a8f79ca33872634e65dada7586fe47259f8",
+      "utf8_lf": true,
+      "ast": true,
+      "zones": [
+        "Module Contract",
+        "Configuration",
+        "Implementation",
+        "Public Adapter",
+        "Direct Entry"
+      ],
+      "adapter_exact": true,
+      "functions": [
+        "__init__",
+        "__post_init__",
+        "build_verilog",
+        "elaborate",
+        "main"
+      ]
+    }
+  },
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "ACCEPTED": "NOT_ALLOWED"
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "kind": "V2_P1_E_DCACHE_REFERENCE_DIFFERENTIAL",
+  "status": "PASS_BOUNDED",
+  "reference": {
+    "path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "bytes": 228590583,
+    "verified": {
+      "status": "PASS",
+      "path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+      "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+      "bytes": 228590583,
+      "expected_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+      "expected_bytes": 228590583
+    },
+    "modules": {
+      "AMOALU": {
+        "path": "validation/reference-closures/AMOALU-dcache-v2.sv",
+        "sha256": "f7bb49ef88b9ab6ecec70f4fa9f1a92de32640a4b13f923813d42a6e80d171ba",
+        "bytes": 2912
+      },
+      "array_256x86": {
+        "path": "validation/reference-closures/array_256x86-dcache-v2.sv",
+        "sha256": "f517411331c3701b613e1cb4de1a262ca71fcaeaa1b04aabcf839104b11b4fea",
+        "bytes": 4100
+      },
+      "sram_array_1p256x86m43s1h0l1b_dcsh_tag": {
+        "path": "validation/reference-closures/sram_array_1p256x86m43s1h0l1b_dcsh_tag-dcache-v2.sv",
+        "sha256": "914c8f355a4421a825b980803107b44e595c9a1126072d2d4bc29e1a46e81cf5",
+        "bytes": 2316
+      },
+      "ClockGate": {
+        "path": "validation/reference-closures/ClockGate-dcache-v2.sv",
+        "sha256": "b4e6a1a11579276193dc18d2b56d24b04ba79879a32804456ce0116cbe878c97",
+        "bytes": 185
+      },
+      "MbistClockGateCell": {
+        "path": "validation/reference-closures/MbistClockGateCell-dcache-v2.sv",
+        "sha256": "b4763f90e3eac5cc80939910617e838f2c65c06a5e5ee22725f9319cd99190aa",
+        "bytes": 1262
+      },
+      "SRAMTemplate_116": {
+        "path": "validation/reference-closures/SRAMTemplate_116-dcache-v2.sv",
+        "sha256": "d8b6b39391baff329601dc3f818ac776fc08800aa2a2033911c4823cd422125f",
+        "bytes": 13357
+      },
+      "TagSRAMBank": {
+        "path": "validation/reference-closures/TagSRAMBank-dcache-v2.sv",
+        "sha256": "4ce9ac456a2591005d293363b2a44ec174cfcce1a0b14e310a18fdf865f455ed",
+        "bytes": 9763
+      },
+      "TagArray": {
+        "path": "validation/reference-closures/TagArray-dcache-v2.sv",
+        "sha256": "24d984641c94512391a2b3b405a8554d580f91ca6355e774e03f3bdcc9eb4faa",
+        "bytes": 10235
+      }
+    }
+  },
+  "results": {
+    "AMOALU": {
+      "status": "PASS",
+      "returncode": 0,
+      "stdout_tail": "PASS_AMOALU_REFERENCE\n- /mnt/c/Users/lishuo/AppData/Local/Temp/v2_amo_ref_qg_xfx92/tb.sv:628: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 320ps; walltime 0.001 s; speed 223.068 ns/s\n- Verilator: cpu 0.001 s on 1 threads; alloced 153 MB\n",
+      "stderr_tail": "",
+      "module": "AMOALU",
+      "vectors": 320,
+      "observations": [
+        "mask merge",
+        "add carry partition",
+        "logic decode",
+        "signed/unsigned min-max"
+      ]
+    },
+    "TagArray": {
+      "status": "PASS",
+      "returncode": 0,
+      "stdout_tail": "PASS_TAGARRAY_REFERENCE\n- /mnt/c/Users/lishuo/AppData/Local/Temp/v2_tag_ref_ev8g77du/tb.sv:1830: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 823ps; walltime 0.001 s; speed 536.142 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n",
+      "stderr_tail": "",
+      "module": "TagArray",
+      "vectors": 24,
+      "observations": [
+        "reset clear",
+        "read ready",
+        "masked write",
+        "one-cycle SRAM read",
+        "write/read collision"
+      ]
+    }
+  },
+  "gates": {
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED",
+    "PARENT_CLOSURE_MATCHED": "PASS_BOUNDED",
+    "ACCEPTED": "NOT_ALLOWED"
+  }
+}

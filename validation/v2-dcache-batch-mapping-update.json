@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "kind": "V2_P1_E_DCACHE_MAPPING_UPDATE",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "status": "PENDING_COORDINATOR_REVIEW",
+  "entries": [
+    {
+      "id": "AMOALU",
+      "classification": "REWRITTEN",
+      "disposition": "REWRITTEN",
+      "v2_sources": [
+        "upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/AMOALU.scala"
+      ],
+      "python_path": "python/ported/cache/dcache/mainpipe/AMOALU-Hardware.py",
+      "status": "MAPPING_ONLY"
+    },
+    {
+      "id": "TagArray",
+      "classification": "REWRITTEN",
+      "disposition": "REWRITTEN",
+      "v2_sources": [
+        "upstream/src/main/scala/xiangshan/cache/dcache/meta/TagArray.scala"
+      ],
+      "python_path": "python/ported/cache/dcache/meta/TagArray-Hardware.py",
+      "status": "MAPPING_ONLY"
+    }
+  ],
+  "uhsc_localization": "NO_PROJECT_FACING_RENAME",
+  "gates": {
+    "ACCEPTED": "NOT_ALLOWED",
+    "parent_closure": "PENDING",
+    "license": "PENDING"
+  }
+}

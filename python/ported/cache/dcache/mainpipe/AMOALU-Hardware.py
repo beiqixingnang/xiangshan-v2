@@ -1,4 +1,4 @@
-"""AMOALU: AMO arithmetic unit (add/logic/min-max with byte lanes). / AMOALU：AMO 运算单元（按字节通道的加/逻辑/最值）。"""
+"""V2 AMO arithmetic/logic unit. / V2 AMO 算术逻辑单元。"""
 
 from __future__ import annotations
 
@@ -37,22 +37,24 @@ M_XA_MINU, M_XA_MAXU = 0b01110, 0b01111
 class AMOALUConfig:
     # frozen config / 冻结配置
     operandBits: int = 64
-    minWidth: int = 8
-    comparatorLeafWidth: int = 32
+    minXLen: int = 32
+
+    # Validate the widths used by the V2 AMOALU implementation. / 校验 V2 AMOALU 使用的位宽。
+    def __post_init__(self) -> None:
+        if self.operandBits < self.minXLen:
+            raise ValueError("operandBits must be at least minXLen")
+        if self.minXLen != 32:
+            raise ValueError("V2 AMOALU has a fixed 32-bit minimum XLEN")
+        if self.operandBits % self.minXLen:
+            raise ValueError("operandBits must be a multiple of minXLen")
+        ratio = self.operandBits // self.minXLen
+        if ratio & (ratio - 1):
+            raise ValueError("operandBits/minXLen must be a power of two")
 
 
 # =============================================================================
 # Implementation
 # =============================================================================
-def _interleave_mask(mask: int, operand_bits: int) -> int:
-    # FillInterleaved(8): byte mask to bit mask / 字节掩码展开为位掩码
-    out = 0
-    for i in range(operand_bits // 8):
-        if (mask >> i) & 1:
-            out |= 0xFF << (8 * i)
-    return out
-
-
 class AMOALU(Component):
     # AMO arithmetic-logic unit / AMO 运算逻辑单元
     def __init__(self, cfg: AMOALUConfig | None = None):
@@ -73,6 +75,7 @@ class AMOALU(Component):
         self.out = self.io_out
         self.out_unmasked = self.io_out_unmasked
 
+    # Elaborate the V2 command decoder and masked arithmetic datapath. / 展开 V2 命令译码与按掩码算术数据通路。
     def elaborate(self, platform):
         # verbatim AMO result selection / 逐字对应 AMO 结果选择
         m = Module()
@@ -81,52 +84,57 @@ class AMOALU(Component):
         lhs = self.lhs
         rhs = self.rhs
         cmd = self.cmd
-        isMax = (cmd == M_XA_MAX) | (cmd == M_XA_MAXU)
-        isMin = (cmd == M_XA_MIN) | (cmd == M_XA_MINU)
-        isAdd = cmd == M_XA_ADD
-        logicAnd = (cmd == M_XA_OR) | (cmd == M_XA_AND)
-        logicXor = (cmd == M_XA_XOR) | (cmd == M_XA_OR)
-        signed = (cmd == M_XA_MIN) | (cmd == M_XA_MAX)
-        byte_count = Const(0, max(1, (bits // 8 + 1).bit_length()))
-        for lane in range(bits // 8):
-            byte_count = byte_count + self.mask[lane]
-        lane_add8 = Cat(*[
-            (lhs.word_select(lane, 8) + rhs.word_select(lane, 8))[:8]
-            for lane in range(bits // 8)
-        ])
-        lane_add16 = Cat(*[
-            (lhs.word_select(lane, 16) + rhs.word_select(lane, 16))[:16]
-            for lane in range(bits // 16)
-        ])
-        # The wide path cuts the carry at the 32-bit boundary when the
-        # corresponding mask byte is not active, matching AMOALU.scala.
-        # / 宽通路在对应掩码字节未激活时于 32 位边界切断进位，与 AMOALU.scala 一致。
-        carry_cut = Mux(self.mask[3], (1 << bits) - 1, ((1 << bits) - 1) ^ (1 << 31))
-        wide_add = (lhs & carry_cut) + (rhs & carry_cut)
-        narrow_add = Mux(byte_count == 1, lane_add8,
-                         Mux(byte_count == 2, lane_add16, 0))
-        adderOut = Mux(byte_count < 4, narrow_add, wide_add)
+
+        # Compare command constants at the full five-bit width. / 以完整五位宽度比较命令常量。
+        def cmd_eq(value: int):
+            # Return a width-safe command equality expression. / 返回宽度安全的命令相等表达式。
+            return cmd == Const(value, 5)
+
+        isMax = cmd_eq(M_XA_MAX) | cmd_eq(M_XA_MAXU)
+        isMin = cmd_eq(M_XA_MIN) | cmd_eq(M_XA_MINU)
+        isAdd = cmd_eq(M_XA_ADD)
+        logicAnd = cmd_eq(M_XA_OR) | cmd_eq(M_XA_AND)
+        logicXor = cmd_eq(M_XA_XOR) | cmd_eq(M_XA_OR)
+        signed = (cmd & Const(0b10, 5)) == Const(M_XA_MIN & 0b10, 5)
+
+        # Partition carries only at V2's XLEN boundaries. / 仅在 V2 XLEN 边界切断进位。
+        cut_bits = Const(0, bits)
+        widths = [self.cfg.minXLen << index
+                  for index in range((bits // self.cfg.minXLen).bit_length())]
+        for width in widths[:-1]:
+            boundary_mask_bit = width // 8 - 1
+            cut_bits = cut_bits | Mux(
+                self.mask[boundary_mask_bit],
+                Const(0, bits),
+                Const(1 << (width - 1), bits),
+            )
+        adder_mask = ~cut_bits
+        adderOut = (lhs & adder_mask) + (rhs & adder_mask)
         logic = Mux(logicAnd, lhs & rhs, 0) | Mux(logicXor, lhs ^ rhs, 0)
-        # signed/unsigned hierarchical lane compare / 有符号/无符号分层通道比较
-        def less_for_width(left, right, width):
-            # Match AMOALU's sign-aware hierarchical comparator / 匹配 AMOALU 的有符号分层比较器
-            unsigned_less = left[:width] < right[:width]
-            return Mux(left[width - 1] == right[width - 1], unsigned_less,
+
+        # Build the source's recursive unsigned comparator. / 构造源代码的递归无符号比较器。
+        def less_unsigned(left, right, width):
+            # Compare high halves before low halves, matching Chisel CSE structure. / 先比较高半部再比较低半部，匹配 Chisel 结构。
+            if width == self.cfg.minXLen:
+                return left[:width] < right[:width]
+            half = width // 2
+            high_less = left[half:width] < right[half:width]
+            high_equal = left[half:width] == right[half:width]
+            return high_less | (high_equal & less_unsigned(left, right, half))
+
+        # Apply signedness only when the operand sign bits differ. / 仅在操作数符号位不同时应用有符号规则。
+        def less_signed(left, right, width):
+            # Match AMOALU.isLess exactly for signed and unsigned commands. / 精确匹配 AMOALU.isLess 的有符号与无符号命令。
+            return Mux(left[width - 1] == right[width - 1],
+                       less_unsigned(left, right, width),
                        Mux(signed, left[width - 1], right[width - 1]))
 
-        narrow_less8 = Const(0, 1)
-        for lane in range(bits // 8):
-            narrow_less8 = narrow_less8 | (self.mask[lane] & less_for_width(
-                lhs.word_select(lane, 8), rhs.word_select(lane, 8), 8))
-        narrow_less16 = Const(0, 1)
-        for lane in range(bits // 16):
-            narrow_less16 = narrow_less16 | (self.mask[lane * 2] & less_for_width(
-                lhs.word_select(lane, 16), rhs.word_select(lane, 16), 16))
-        narrow_less = Mux(byte_count == 1, narrow_less8,
-                          Mux(byte_count == 2, narrow_less16, 0))
-        wide_less = Mux(self.mask[bits // 16], less_for_width(lhs, rhs, bits),
-                        Mux(self.mask[bits // 32], less_for_width(lhs, rhs, 32), 0))
-        less = Mux(byte_count < 4, narrow_less, wide_less)
+        # PriorityMux(widths.reverse) gives the largest enabled operation width. / PriorityMux(widths.reverse) 选择启用的最大操作宽度。
+        # Chisel PriorityMux defaults to its final (smallest-width) value. / Chisel PriorityMux 在无选择时默认最后一个（最小宽度）值。
+        less = less_signed(lhs, rhs, widths[0])
+        for width in widths[1:]:
+            less = Mux(self.mask[width // 8 // 2],
+                       less_signed(lhs, rhs, width), less)
         minmax = Mux(Mux(less, isMin, isMax), lhs, rhs)
         out = Mux(isAdd, adderOut, Mux(logicAnd | logicXor, logic, minmax))
         # Expand each byte-lane mask in hardware; the Python helper above is
@@ -140,12 +148,26 @@ class AMOALU(Component):
 # =============================================================================
 # Public Adapter
 # =============================================================================
-def build_verilog(config: AMOALUConfig | None = None,
-                  name: str = "AMOALU") -> str:
+# Build deterministic AMOALU Verilog for the requested configuration. / 为请求配置构建确定性 AMOALU Verilog。
+def build_verilog(configuration, injected_dependencies):
     # Export only the reference top-level ports; out_unmasked is optimized away
     # by the pinned Chisel design because no enclosing module observes it.
     # / 仅导出参考顶层端口；钉定 Chisel 设计未使用 out_unmasked，因此该端口被优化掉。
     from amaranth.back import verilog
+    del injected_dependencies
+    if configuration is None:
+        config = AMOALUConfig()
+        name = "AMOALU"
+    elif isinstance(configuration, AMOALUConfig):
+        config = configuration
+        name = "AMOALU"
+    elif isinstance(configuration, dict):
+        values = {key: value for key, value in configuration.items()
+                  if key in {"operandBits", "minXLen"}}
+        config = AMOALUConfig(**values)
+        name = str(configuration.get("name", "AMOALU"))
+    else:
+        raise TypeError("configuration must be AMOALUConfig, dict, or None")
     top = AMOALU(config)
     ports = [top.mask, top.cmd, top.lhs, top.rhs, top.out]
     return verilog.convert(top, name=name, ports=ports)
@@ -154,9 +176,10 @@ def build_verilog(config: AMOALUConfig | None = None,
 # =============================================================================
 # Direct Entry
 # =============================================================================
+# Print the default deterministic AMOALU export. / 打印默认确定性 AMOALU 导出。
 def main() -> None:
     # direct elaboration entry / 直接入口
-    print(build_verilog())
+    print(build_verilog(None, None))
 
 
 if __name__ == "__main__":

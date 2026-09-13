@@ -1,0 +1,254 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_DCACHE_BATCH",
+  "batch_id": "V2-P1-E-DCACHE",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "family_ids": [
+    "core.cache.dcache.amo",
+    "core.cache.dcache.tag"
+  ],
+  "closure_roots": [
+    "core.cache.dcache"
+  ],
+  "candidates": [
+    "AMOALU",
+    "TagArray"
+  ],
+  "source_paths": {
+    "AMOALU": [
+      "upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/AMOALU.scala"
+    ],
+    "TagArray": [
+      "upstream/src/main/scala/xiangshan/cache/dcache/meta/TagArray.scala"
+    ]
+  },
+  "source_hashes": {
+    "AMOALU": [
+      {
+        "path": "upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/AMOALU.scala",
+        "sha256": "4d67206b88f9b3baf88d816cb90c2c4bdd70ff04509b9a60a9b4aab98a9f45fd",
+        "bytes": 3008
+      }
+    ],
+    "TagArray": [
+      {
+        "path": "upstream/src/main/scala/xiangshan/cache/dcache/meta/TagArray.scala",
+        "sha256": "b1ec43dbbe10505b6037cae7c8dd2f16d4ea21c491ed8b076ed58ba8162a4ce4",
+        "bytes": 5735
+      }
+    ]
+  },
+  "target_paths": {
+    "AMOALU": "python/ported/cache/dcache/mainpipe/AMOALU-Hardware.py",
+    "TagArray": "python/ported/cache/dcache/meta/TagArray-Hardware.py"
+  },
+  "target_hashes": {
+    "AMOALU": "f549858c7c003490e507ac9b592a6830a52b2936b7d5a427ffdd323a6ca09eeb",
+    "TagArray": "3e7fb5ed90ff3dbc83afe05f21121a8f79ca33872634e65dada7586fe47259f8"
+  },
+  "reference_artifact": {
+    "path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "bytes": 228590583,
+    "verified": {
+      "status": "PASS",
+      "path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+      "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+      "bytes": 228590583,
+      "expected_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+      "expected_bytes": 228590583
+    },
+    "modules": {
+      "AMOALU": {
+        "path": "validation/reference-closures/AMOALU-dcache-v2.sv",
+        "sha256": "f7bb49ef88b9ab6ecec70f4fa9f1a92de32640a4b13f923813d42a6e80d171ba",
+        "bytes": 2912
+      },
+      "array_256x86": {
+        "path": "validation/reference-closures/array_256x86-dcache-v2.sv",
+        "sha256": "f517411331c3701b613e1cb4de1a262ca71fcaeaa1b04aabcf839104b11b4fea",
+        "bytes": 4100
+      },
+      "sram_array_1p256x86m43s1h0l1b_dcsh_tag": {
+        "path": "validation/reference-closures/sram_array_1p256x86m43s1h0l1b_dcsh_tag-dcache-v2.sv",
+        "sha256": "914c8f355a4421a825b980803107b44e595c9a1126072d2d4bc29e1a46e81cf5",
+        "bytes": 2316
+      },
+      "ClockGate": {
+        "path": "validation/reference-closures/ClockGate-dcache-v2.sv",
+        "sha256": "b4e6a1a11579276193dc18d2b56d24b04ba79879a32804456ce0116cbe878c97",
+        "bytes": 185
+      },
+      "MbistClockGateCell": {
+        "path": "validation/reference-closures/MbistClockGateCell-dcache-v2.sv",
+        "sha256": "b4763f90e3eac5cc80939910617e838f2c65c06a5e5ee22725f9319cd99190aa",
+        "bytes": 1262
+      },
+      "SRAMTemplate_116": {
+        "path": "validation/reference-closures/SRAMTemplate_116-dcache-v2.sv",
+        "sha256": "d8b6b39391baff329601dc3f818ac776fc08800aa2a2033911c4823cd422125f",
+        "bytes": 13357
+      },
+      "TagSRAMBank": {
+        "path": "validation/reference-closures/TagSRAMBank-dcache-v2.sv",
+        "sha256": "4ce9ac456a2591005d293363b2a44ec174cfcce1a0b14e310a18fdf865f455ed",
+        "bytes": 9763
+      },
+      "TagArray": {
+        "path": "validation/reference-closures/TagArray-dcache-v2.sv",
+        "sha256": "24d984641c94512391a2b3b405a8554d580f91ca6355e774e03f3bdcc9eb4faa",
+        "bytes": 10235
+      }
+    }
+  },
+  "direct_tests": {
+    "AMOALU": {
+      "vectors": 8512,
+      "widths": [
+        32,
+        64,
+        128
+      ],
+      "commands": 32
+    },
+    "TagArray": {
+      "vectors": 15,
+      "small_config": {
+        "nSets": 4,
+        "nWays": 4,
+        "tagBits": 8,
+        "tagECCBits": 2
+      }
+    }
+  },
+  "structural_audit": {
+    "AMOALU": {
+      "path": "python/ported/cache/dcache/mainpipe/AMOALU-Hardware.py",
+      "bytes": 8692,
+      "sha256": "f549858c7c003490e507ac9b592a6830a52b2936b7d5a427ffdd323a6ca09eeb",
+      "utf8_lf": true,
+      "ast": true,
+      "zones": [
+        "Module Contract",
+        "Configuration",
+        "Implementation",
+        "Public Adapter",
+        "Direct Entry"
+      ],
+      "adapter_exact": true,
+      "functions": [
+        "__init__",
+        "__post_init__",
+        "build_verilog",
+        "cmd_eq",
+        "elaborate",
+        "less_signed",
+        "less_unsigned",
+        "main"
+      ]
+    },
+    "TagArray": {
+      "path": "python/ported/cache/dcache/meta/TagArray-Hardware.py",
+      "bytes": 8478,
+      "sha256": "3e7fb5ed90ff3dbc83afe05f21121a8f79ca33872634e65dada7586fe47259f8",
+      "utf8_lf": true,
+      "ast": true,
+      "zones": [
+        "Module Contract",
+        "Configuration",
+        "Implementation",
+        "Public Adapter",
+        "Direct Entry"
+      ],
+      "adapter_exact": true,
+      "functions": [
+        "__init__",
+        "__post_init__",
+        "build_verilog",
+        "elaborate",
+        "main"
+      ]
+    }
+  },
+  "generated": {
+    "AMOALU": {
+      "sha256": "60f8ea7db440da441bfd51707e668d31da54776651f42cbdbe43b87efcf2f2ce",
+      "bytes": 43469,
+      "module": "AMOALU",
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": "                                                                        : ... note: In instance 'AMOALU'\n  237 |   assign \\$108  = io_cmd == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\ported\\\\cache\\\\dcache\\\\mainpipe\\\\AMOALU-Hardware.py:91\" *) 4'hd;\n      |                          ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_dcache_lint_gajoai2g/AMOALU.sv:238:26: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'hf' generates 4 bits.\n                                                                                                     : ... note: In instance 'AMOALU'\n  238 |   assign \\$109  = io_cmd == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\ported\\\\cache\\\\dcache\\\\mainpipe\\\\AMOALU-Hardware.py:91\" *) 4'hf;\n      |                          ^~\n"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": ""
+      }
+    },
+    "TagArray": {
+      "sha256": "b7f69471e12c04ef0cff6a5121ea555e5654274e452d7f8be90c075c2cb5060a",
+      "bytes": 41597,
+      "module": "TagArray",
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": ""
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": ""
+      }
+    }
+  },
+  "reference_differential": {
+    "AMOALU": {
+      "status": "PASS",
+      "returncode": 0,
+      "stdout_tail": "PASS_AMOALU_REFERENCE\n- /mnt/c/Users/lishuo/AppData/Local/Temp/v2_amo_ref_qg_xfx92/tb.sv:628: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 320ps; walltime 0.001 s; speed 223.068 ns/s\n- Verilator: cpu 0.001 s on 1 threads; alloced 153 MB\n",
+      "stderr_tail": "",
+      "module": "AMOALU",
+      "vectors": 320,
+      "observations": [
+        "mask merge",
+        "add carry partition",
+        "logic decode",
+        "signed/unsigned min-max"
+      ]
+    },
+    "TagArray": {
+      "status": "PASS",
+      "returncode": 0,
+      "stdout_tail": "PASS_TAGARRAY_REFERENCE\n- /mnt/c/Users/lishuo/AppData/Local/Temp/v2_tag_ref_ev8g77du/tb.sv:1830: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 823ps; walltime 0.001 s; speed 536.142 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n",
+      "stderr_tail": "",
+      "module": "TagArray",
+      "vectors": 24,
+      "observations": [
+        "reset clear",
+        "read ready",
+        "masked write",
+        "one-cycle SRAM read",
+        "write/read collision"
+      ]
+    }
+  },
+  "status": "PENDING_COORDINATOR_REVIEW",
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "PARENT_CLOSURE_MATCHED": "PASS_BOUNDED",
+    "UHSC_LOCALIZED": "NO_PROJECT_FACING_RENAME",
+    "LICENSE_REVIEW": "PENDING_COORDINATOR_REVIEW",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "acceptance_eligible": false,
+  "unclosed": [
+    "Coordinator review and parent integration remain required.",
+    "MBIST/DFT controls are represented by the locked reference closure and are not promoted at this leaf.",
+    "Mixed dependency license review remains outside this batch."
+  ]
+}

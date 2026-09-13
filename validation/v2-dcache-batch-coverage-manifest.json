@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "kind": "V2_P1_E_DCACHE_COVERAGE",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "family_id": "core.cache.dcache",
+  "closure_root": "core.cache.dcache",
+  "status": "PENDING_COORDINATOR_REVIEW",
+  "targets": [
+    {
+      "candidate": "AMOALU",
+      "python_path": "python/ported/cache/dcache/mainpipe/AMOALU-Hardware.py",
+      "v2_sources": [
+        "upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/AMOALU.scala"
+      ],
+      "covered_children": [],
+      "observation_points": [
+        "mask merge",
+        "carry partition",
+        "logic/min/max decode"
+      ],
+      "reference_surface": "standalone AMOALU"
+    },
+    {
+      "candidate": "TagArray",
+      "python_path": "python/ported/cache/dcache/meta/TagArray-Hardware.py",
+      "v2_sources": [
+        "upstream/src/main/scala/xiangshan/cache/dcache/meta/TagArray.scala"
+      ],
+      "covered_children": [
+        "TagSRAMBank",
+        "SRAMTemplate_116"
+      ],
+      "observation_points": [
+        "reset clear",
+        "ready",
+        "masked write",
+        "synchronous read"
+      ],
+      "reference_surface": "TagArray -> TagSRAMBank -> SRAMTemplate_116"
+    }
+  ],
+  "locked_reference": {
+    "path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "bytes": 228590583
+  },
+  "gates": {
+    "ACCEPTED": "NOT_ALLOWED",
+    "parent_closure": "PENDING",
+    "license": "PENDING"
+  }
+}
