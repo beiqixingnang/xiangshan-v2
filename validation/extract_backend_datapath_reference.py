@@ -107,6 +107,8 @@ def main() -> int:
         ],
         "extraction": "PASS",
         "locked_input_unchanged": True,
+        "gates": {"ACCEPTED": "NOT_ALLOWED", "parent_closure": "PENDING",
+                  "license": "PENDING"},
         "acceptance_eligible": False,
     }
     INDEX.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n",

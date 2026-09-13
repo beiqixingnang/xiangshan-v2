@@ -319,6 +319,8 @@ def main() -> int:
         "rules": "V2-Python-Amaranth-Rules.md",
         "result": audit["result"],
         "rows": audit["rows"],
+        "gates": {"ACCEPTED": "NOT_ALLOWED", "parent_closure": "PENDING",
+                  "license": "PENDING"},
         "acceptance_eligible": False,
     }, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     backend = {
@@ -363,6 +365,8 @@ def main() -> int:
                                "memory EXU inclusion", "uncertain-latency backpressure"],
         "parent_closure": "PENDING_COORDINATOR_REVIEW",
         "license_gate": "PENDING_REVIEW",
+        "gates": {"ACCEPTED": "NOT_ALLOWED", "parent_closure": "PENDING",
+                  "license": "PENDING"},
         "uhsc_localization": {"status": "NO_PROJECT_FACING_RENAME",
                                "manifest": "UHSC-Naming-Manifest.json",
                                "locked_reference_names_unchanged": True},
@@ -406,6 +410,8 @@ def main() -> int:
         "differential": "PASS_BOUNDED_REFERENCE" if all_equivalent else "CONTRACT_ONLY",
         "parent_closure": "PENDING",
         "license_review": "PENDING",
+        "gates": {"ACCEPTED": "NOT_ALLOWED", "parent_closure": "PENDING",
+                  "license": "PENDING"},
         "acceptance_eligible": False,
     }
     COVERAGE.write_text(json.dumps(coverage, ensure_ascii=False, indent=2) + "\n",
@@ -449,7 +455,7 @@ def main() -> int:
                                    "reason": "No product-facing rename introduced in this child batch.",
                                    "status": "NOT_APPLIED"},
                               ]},
-        "gates": {"contract": audit["result"],
+        "gates": {"contract": audit["result"], "ACCEPTED": "NOT_ALLOWED",
                   "direct": direct_payload.get("status"),
                   "reference": "PASS_BOUNDED_REFERENCE" if all_equivalent else "CONTRACT_ONLY",
                   "parent_closure": "PENDING", "license": "PENDING"},
