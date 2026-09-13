@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "kind": "UHSC_LOCALIZATION_NAMING_MANIFEST",
+  "status": "FROZEN_BEFORE_RENAME",
+  "source_authority": "upstream kunminghu-v2@d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "scope": "project-owned Python, local HDL wrappers, manifests, and external product adapters only",
+  "reference_names_unchanged": true,
+  "default_external_identity": "UHSC",
+  "canonical_local_top": "UHSCTop",
+  "rules": [
+    {
+      "source_name": "XSTop",
+      "local_name": "UHSCTop",
+      "visibility": "project-owned external wrapper",
+      "reason": "replace XiangShan-specific external CPU identity",
+      "scope": "generated local HDL wrapper and product-facing adapter"
+    },
+    {
+      "source_name": "XIANGSHAN_KMHV2 / XiangShan / XS",
+      "local_name": "UHSC",
+      "visibility": "project-owned external identity",
+      "reason": "localize CPU identity without changing locked reference or internal protocol names",
+      "scope": "manifest and external adapter only"
+    }
+  ],
+  "prohibited_implicit_changes": [
+    "locked Scala source names",
+    "locked reference SystemVerilog names",
+    "AXI, TileLink, CHI, JTAG, RISC-V, Amaranth, Rocket-Chip protocol names",
+    "internal signal and field names unless a later explicit mapping entry exists"
+  ],
+  "entries": []
+}
