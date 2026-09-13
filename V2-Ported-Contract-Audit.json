@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_PORTED_PYTHON_PHASE0_CONTRACT_AUDIT",
+  "scope": "35 carried Python/Amaranth candidates under python/ported",
+  "source_authority": {
+    "v2_source_ref": "kunminghu-v2",
+    "v2_source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+    "candidate_manifest": "python/ported/V2-Ported-Candidates.json",
+    "contract_rules": "V2-Python-Amaranth-Rules.md"
+  },
+  "method": {
+    "checks": ["UTF-8/BOM", "LF line endings", "AST parse", "bilingual module docstring", "bilingual definition comments", "leading-underscore helpers", "compatibility aliases", "UHSC localization strings", "build_verilog(configuration, injected_dependencies) signature"],
+    "read_only": true,
+    "acceptance_claim": false,
+    "hash_policy": "The five worker-owned paths were changing during this audit; file hashes for those paths are intentionally deferred until the worker commit. Other findings are structural observations only.",
+    "deferred_worker_paths": ["backend/decode/Instructions-Hardware.py", "backend/decode/isa/bitfield/RiscvInst-Hardware.py", "backend/fu/NewCSR/SstcInterruptGen-Hardware.py", "backend/fu/fpu/FliTable-Hardware.py", "backend/fu/util/CSA-Hardware.py"]
+  },
+  "issue_definitions": {
+    "BUILD_SIGNATURE_NOT_EXACT": "The public adapter does not begin with configuration and injected_dependencies as required by the V2 contract.",
+    "MISSING_BILINGUAL_DEF_COMMENTS": "At least one function or method lacks an immediately preceding bilingual responsibility comment.",
+    "DOCSTRING_NOT_BILINGUAL": "The module docstring is not both English and Chinese.",
+    "LEADING_UNDERSCORE_HELPER": "A non-data-model helper begins with an underscore and needs a manifest exception or rename.",
+    "ALIASES": "A compatibility-style attribute alias is present; aliases cannot survive a frozen local boundary without an explicit mapping.",
+    "XS_OR_XIANGSHAN_STRINGS": "XiangShan/XS/XSTop provenance or external identity text is present; provenance is allowed, product-facing text needs UHSC mapping.",
+    "DEFERRED_WORKER_MODIFICATION": "The file was being edited by the V2 decode/arithmetic worker and requires a post-commit rescan."
+  },
+  "summary": {
+    "file_count": 35,
+    "audited_structurally": 30,
+    "deferred_worker_files": 5,
+    "clean_at_observation": 1,
+    "files_with_any_debt_observed": 34,
+    "issue_file_counts_observed": {
+      "BUILD_SIGNATURE_NOT_EXACT": 21,
+      "MISSING_BILINGUAL_DEF_COMMENTS": 19,
+      "DOCSTRING_NOT_BILINGUAL": 5,
+      "LEADING_UNDERSCORE_HELPER": 1,
+      "ALIASES": 5,
+      "XS_OR_XIANGSHAN_STRINGS": 14,
+      "CRLF": 2
+    },
+    "v2_status": "MAPPING_ONLY",
+    "accepted": 0
+  },
+  "files": [
+    {"path":"backend/datapath/DataSource-Hardware.py","issues":["BUILD_SIGNATURE_NOT_EXACT"]},
+    {"path":"backend/datapath/NewPipelineConnect-Hardware.py","issues":["BUILD_SIGNATURE_NOT_EXACT"]},
+    {"path":"backend/datapath/WbArbiter-Hardware.py","issues":["BUILD_SIGNATURE_NOT_EXACT"]},
+    {"path":"backend/decode/Instructions-Hardware.py","issues":["XS_OR_XIANGSHAN_STRINGS","DEFERRED_WORKER_MODIFICATION"],"notes":"Current worker rewrite intentionally removed V3 Zabha surface; rescan after commit."},
+    {"path":"backend/decode/isa/bitfield/RiscvInst-Hardware.py","issues":["DEFERRED_WORKER_MODIFICATION"],"notes":"Current worker rewrite is contract-clean in the provisional scan; rescan after commit."},
+    {"path":"backend/decode/isa/CSRs-Hardware.py","issues":["BUILD_SIGNATURE_NOT_EXACT"]},
+    {"path":"backend/fu/fpu/FliTable-Hardware.py","issues":["DEFERRED_WORKER_MODIFICATION"],"notes":"Current worker rewrite is contract-clean in the provisional scan; rescan after commit."},
+    {"path":"backend/fu/NewCSR/SstcInterruptGen-Hardware.py","issues":["MISSING_BILINGUAL_DEF_COMMENTS","DEFERRED_WORKER_MODIFICATION"],"notes":"Current worker rewrite still has constructor/elaborate comment debt in the provisional scan."},
+    {"path":"backend/fu/SRT16Divider-Hardware.py","issues":["BUILD_SIGNATURE_NOT_EXACT","MISSING_BILINGUAL_DEF_COMMENTS"]},
+    {"path":"backend/fu/util/CryptoUtils-Hardware.py","issues":["BUILD_SIGNATURE_NOT_EXACT","MISSING_BILINGUAL_DEF_COMMENTS","CRLF"]},
+    {"path":"backend/fu/util/CSA-Hardware.py","issues":["ALIASES","MISSING_BILINGUAL_DEF_COMMENTS","DEFERRED_WORKER_MODIFICATION"],"notes":"Current worker rewrite leaves two input/output compatibility aliases in the provisional scan."},
+    {"path":"backend/fu/util/DebugCSR-Hardware.py","issues":["BUILD_SIGNATURE_NOT_EXACT"]},
+    {"path":"backend/fu/util/ShiftUtils-Hardware.py","issues":["BUILD_SIGNATURE_NOT_EXACT","MISSING_BILINGUAL_DEF_COMMENTS","CRLF"]},
+    {"path":"backend/fu/vector/ByteMaskTailGen-Hardware.py","issues":["ALIASES"],"notes":"Nine self.io_* compatibility aliases observed."},
+    {"path":"backend/fu/vector/DstMgu-Hardware.py","issues":["ALIASES","BUILD_SIGNATURE_NOT_EXACT","MISSING_BILINGUAL_DEF_COMMENTS"]},
+    {"path":"backend/fu/vector/Mgtu-Hardware.py","issues":["DOCSTRING_NOT_BILINGUAL","MISSING_BILINGUAL_DEF_COMMENTS"]},
+    {"path":"backend/fu/vector/NewMgu-Hardware.py","issues":["ALIASES","BUILD_SIGNATURE_NOT_EXACT","MISSING_BILINGUAL_DEF_COMMENTS"]},
+    {"path":"backend/fu/vector/utils/MaskExtrator-Hardware.py","issues":["XS_OR_XIANGSHAN_STRINGS"],"notes":"One provenance comment contains XiangShan; allowed only as source provenance."},
+    {"path":"backend/fu/vector/utils/ScalaDupToVector-Hardware.py","issues":["XS_OR_XIANGSHAN_STRINGS"],"notes":"Three provenance occurrences contain XiangShan; localize only product-facing names."},
+    {"path":"backend/fu/vector/utils/UIntToCont0s-Hardware.py","issues":["DOCSTRING_NOT_BILINGUAL","MISSING_BILINGUAL_DEF_COMMENTS","XS_OR_XIANGSHAN_STRINGS"]},
+    {"path":"backend/fu/vector/utils/UIntToCont1s-Hardware.py","issues":["DOCSTRING_NOT_BILINGUAL","MISSING_BILINGUAL_DEF_COMMENTS","XS_OR_XIANGSHAN_STRINGS"]},
+    {"path":"backend/fu/vector/utils/VecDataSplitModule-Hardware.py","issues":["DOCSTRING_NOT_BILINGUAL","MISSING_BILINGUAL_DEF_COMMENTS"]},
+    {"path":"cache/dcache/mainpipe/AMOALU-Hardware.py","issues":["ALIASES","BUILD_SIGNATURE_NOT_EXACT","LEADING_UNDERSCORE_HELPER","MISSING_BILINGUAL_DEF_COMMENTS"],"notes":"_interleave_mask plus six self.io_* aliases observed."},
+    {"path":"cache/dcache/meta/TagArray-Hardware.py","issues":["BUILD_SIGNATURE_NOT_EXACT","MISSING_BILINGUAL_DEF_COMMENTS"]},
+    {"path":"frontend/bpu/CompareMatrix-Hardware.py","issues":["BUILD_SIGNATURE_NOT_EXACT","XS_OR_XIANGSHAN_STRINGS"]},
+    {"path":"frontend/bpu/FallThroughPredictor-Hardware.py","issues":["BUILD_SIGNATURE_NOT_EXACT","XS_OR_XIANGSHAN_STRINGS"]},
+    {"path":"frontend/bpu/replacer/LruStateGen-Hardware.py","issues":["BUILD_SIGNATURE_NOT_EXACT","MISSING_BILINGUAL_DEF_COMMENTS","XS_OR_XIANGSHAN_STRINGS"]},
+    {"path":"frontend/bpu/replacer/PlruStateGen-Hardware.py","issues":["BUILD_SIGNATURE_NOT_EXACT","MISSING_BILINGUAL_DEF_COMMENTS","XS_OR_XIANGSHAN_STRINGS"]},
+    {"path":"frontend/bpu/replacer/ReplacerState-Hardware.py","issues":["DOCSTRING_NOT_BILINGUAL","MISSING_BILINGUAL_DEF_COMMENTS"]},
+    {"path":"frontend/bpu/SaturateCounter-Hardware.py","issues":["BUILD_SIGNATURE_NOT_EXACT","MISSING_BILINGUAL_DEF_COMMENTS","XS_OR_XIANGSHAN_STRINGS"]},
+    {"path":"frontend/bpu/SignedSaturateCounter-Hardware.py","issues":["BUILD_SIGNATURE_NOT_EXACT","MISSING_BILINGUAL_DEF_COMMENTS","XS_OR_XIANGSHAN_STRINGS"]},
+    {"path":"frontend/icache/ICacheMshr-Hardware.py","issues":["BUILD_SIGNATURE_NOT_EXACT","XS_OR_XIANGSHAN_STRINGS"]},
+    {"path":"frontend/icache/ICacheReplacer-Hardware.py","issues":["XS_OR_XIANGSHAN_STRINGS"]},
+    {"path":"frontend/icache/Utils-Hardware.py","issues":["BUILD_SIGNATURE_NOT_EXACT","MISSING_BILINGUAL_DEF_COMMENTS","XS_OR_XIANGSHAN_STRINGS"]},
+    {"path":"frontend/ifu/RvcExpander-Hardware.py","issues":["BUILD_SIGNATURE_NOT_EXACT"]}
+  ],
+  "required_follow_up": [
+    "Rescan the five deferred worker files after their commit and update this audit with immutable hashes.",
+    "Repair adapter signatures and bilingual comments before any direct-test promotion.",
+    "Remove or explicitly map compatibility aliases before a family boundary is frozen.",
+    "Keep XiangShan strings in provenance only; map project-owned external names through UHSC-Naming-Manifest.json.",
+    "Run AST/py_compile, exact-path import, direct test, V2 reference comparison, and differential evidence before changing MAPPING_ONLY."
+  ]
+}

@@ -29,5 +29,38 @@
     "AXI, TileLink, CHI, JTAG, RISC-V, Amaranth, Rocket-Chip protocol names",
     "internal signal and field names unless a later explicit mapping entry exists"
   ],
-  "entries": []
+  "entries": [
+    {
+      "source_name": "XSTop",
+      "local_name": "UHSCTop",
+      "visibility": "project-owned external HDL wrapper",
+      "reason": "Expose the selected CPU closure under the Unifier Hardware System identity.",
+      "status": "PLANNED",
+      "references_updated_atomically": false
+    },
+    {
+      "source_name": "XiangShan",
+      "local_name": "UHSC",
+      "visibility": "project-owned external product identity",
+      "reason": "Localize the product-facing processor name while retaining source provenance.",
+      "status": "PLANNED",
+      "references_updated_atomically": false
+    },
+    {
+      "source_name": "XS",
+      "local_name": "UHSC",
+      "visibility": "project-owned external product identity",
+      "reason": "Short-form external identity is localized only at the wrapper/adapter boundary.",
+      "status": "PLANNED",
+      "references_updated_atomically": false
+    },
+    {
+      "source_name": "KMHV2",
+      "local_name": "UHSC",
+      "visibility": "project-owned external product identity",
+      "reason": "Baseline codename remains in provenance; external adapters use UHSC.",
+      "status": "PLANNED",
+      "references_updated_atomically": false
+    }
+  ]
 }
