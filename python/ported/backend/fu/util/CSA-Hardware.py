@@ -100,9 +100,6 @@ class CarrySaveAdderMToN(Elaboratable):
             Signal(length, name=f"io_out_{index}")
             for index in range(output_count)
         ]
-        # Compatibility aliases matching the Chisel ``io.in``/``io.out`` view.
-        self.in_ = self.inputs
-        self.out = self.outputs
 
 
 class CSA2_2(CarrySaveAdderMToN):
