@@ -183,7 +183,11 @@ def run_wsl(command: list[str], timeout: int = 240) -> dict[str, Any]:
 # Ensure the validation tree has the stable WSL alias used by every gate.
 # 确保验证树具有所有门禁共用的稳定 WSL 别名。/
 def prepare_wsl_alias() -> dict[str, Any]:
-    return run_wsl(["bash", "-lc", "ln -sfn /mnt/d/*/Unifier-Hardware-System/.agents/xiangshan-v2 /tmp/uhsc-v2"])
+    # Avoid a wildcard here: multiple D: drive directories can make ``ln``
+    # create a directory of links rather than the intended single alias.
+    return run_wsl(["ln", "-sfn",
+                    "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2",
+                    "/tmp/uhsc-v2"])
 
 
 # Run Verilator lint and Yosys check on an exact RTL closure.
@@ -362,7 +366,13 @@ def collision_sv(reference: str, target: str, vectors: int = 256) -> str:
              "  RealWBCollideChecker ref_i("]
     ref_names = set()
     import re
-    header = reference.split(");", 1)[0]
+    # The full closure is prefixed with RealWBArbiter variants.  Select the
+    # actual parent header so all fifteen parent input lanes are connected.
+    header_match = re.search(r"module RealWBCollideChecker\(.*?\);", reference,
+                             re.MULTILINE | re.DOTALL)
+    if header_match is None:
+        raise RuntimeError("RealWBCollideChecker header missing from reference closure")
+    header = header_match.group(0)
     ref_names.update(re.findall(r"\b(io_[A-Za-z0-9_]+)\b", header))
     conns: list[str] = []
     for lane in range(15):

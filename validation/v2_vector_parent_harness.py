@@ -125,8 +125,9 @@ def vld_merge_model(
         real_eew = vsew if is_indexed else veew
         if real_eew in (0, 1, 2, 3):
             span = 16 >> real_eew
-            selected_chunk = ((0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF if vm else vmask) >>
-                              ((vd_idx & 7) * span)) & ((1 << span) - 1)
+            # VldMgu overrides Mgu.maskUsed with the low mask chunk, while
+            # ByteMaskTailGen still selects the destination by vdIdx.
+            selected_chunk = (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF if vm else vmask) & ((1 << span) - 1)
             start_bytes = ((vstart & 0xFF) << real_eew) & 0xFF
             end_bytes = ((vl & 0xFF) << real_eew) & 0xFF
             base = (vd_idx & 7) * 16
@@ -240,8 +241,33 @@ class VldMergeUnitParent(Elaboratable):
 
         child = self.mask_generator
         module.submodules.mask_generator = child
+        # NewMgu is the carried Mgu surface and selects maskUsed by vdIdx;
+        # VldMgu in the locked parent instead exposes mask[15:0].  Place that
+        # low chunk into the selected destination slot before injecting it.
+        real_eew = Mux(wb_is_indexed, wb_vsew, wb_veew)
+        mask_arms: list[Any] = []
+        for eew in range(4):
+            span = 16 >> eew
+            row: list[Any] = []
+            for vd_idx in range(8):
+                left = vd_idx * span
+                right = 128 - left - span
+                pieces: list[Any] = []
+                if left:
+                    pieces.append(Const(0, left))
+                pieces.append(wb_vmask[:span])
+                if right:
+                    pieces.append(Const(0, right))
+                row.append(Cat(*pieces))
+            selected: Any = row[0]
+            for vd_idx in range(1, 8):
+                selected = Mux(wb_vd_idx == vd_idx, row[vd_idx], selected)
+            mask_arms.append(selected)
+        mask_expr: Any = mask_arms[3]
+        for eew in range(2, -1, -1):
+            mask_expr = Mux(real_eew == eew, mask_arms[eew], mask_expr)
         module.d.comb += [
-            child.in_mask.eq(Mux(wb_vm, Const((1 << 128) - 1, 128), wb_vmask)),
+            child.in_mask.eq(Mux(wb_vm, mask_expr | Const((1 << 128) - 1, 128), mask_expr)),
             child.in_info_ta.eq(wb_is_masked | wb_vta),
             child.in_info_ma.eq(wb_vma),
             child.in_info_vstart.eq(wb_vstart),
