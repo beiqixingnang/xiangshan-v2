@@ -6,6 +6,7 @@ import ast
 import hashlib
 import importlib.util
 import json
+import py_compile
 import shutil
 import subprocess
 import sys
@@ -384,6 +385,13 @@ def main() -> int:
                     "ln -sfn /mnt/d/*/Unifier-Hardware-System/.agents/xiangshan-v2 /tmp/uhsc-v2"],
                    check=True, capture_output=True)
     modules = {name: load_target(f"v2_crypto_debug_{name}", path) for name, path in TARGETS.items()}
+    py_compile_status: dict[str, Any] = {}
+    for name, path in TARGETS.items():
+        try:
+            py_compile.compile(str(path), doraise=True)
+            py_compile_status[name] = {"status": "PASS", "command": f"python -m py_compile {path.relative_to(ROOT).as_posix()}"}
+        except py_compile.PyCompileError as error:
+            py_compile_status[name] = {"status": "FAIL", "error": str(error)}
     audits = {name: audit_target(path) for name, path in TARGETS.items()}
     contract_pass = all(row["utf8"] and not row["bom"] and row["lf_only"] and row["ast"] and row["zones"]
                         and row["adapter_exact"] and not row["function_comment_errors"] and not row["forbidden_imports"]
@@ -403,6 +411,7 @@ def main() -> int:
     source_pass = all(item.get("status") in ("PASS", "RETIRED") for item in source.values())
     direct_payload = {"schema_version": 1, "kind": "XIANGSHAN_KUNMINGHU_V2_CRYPTO_DEBUG_DIRECT_TESTS", "batch_id": "V2-P1-F-CRYPTO-DEBUG",
                       "source_commit": SOURCE_COMMIT, "status": "PASS_BOUNDED", "targets": direct, "audits": audits,
+                      "py_compile": py_compile_status,
                       "gates": {"PYTHON_PRESENT": "PASS", "DIRECT_TEST_PASS_BOUNDED": "PASS", "ACCEPTED": "NOT_ALLOWED"}}
     write_json(DIRECT_OUT, direct_payload)
     ref_payload = {"schema_version": 1, "kind": "XIANGSHAN_KUNMINGHU_V2_CRYPTO_DEBUG_REFERENCE_DIFFERENTIAL",
@@ -463,13 +472,13 @@ def main() -> int:
                  "direct_evidence": DIRECT_OUT.relative_to(ROOT).as_posix(), "reference_evidence": REFERENCE_OUT.relative_to(ROOT).as_posix(),
                  "differential_evidence": DIFF_OUT.relative_to(ROOT).as_posix(), "contract_audit": CONTRACT_OUT.relative_to(ROOT).as_posix(),
                  "coverage_manifest": COVERAGE_OUT.relative_to(ROOT).as_posix(), "mapping_update": MAPPING_OUT.relative_to(ROOT).as_posix(),
-                 "generated_gates": generated_gates, "source_checks": source, "reference": reference_info,
+                 "generated_gates": generated_gates, "py_compile": py_compile_status, "source_checks": source, "reference": reference_info,
                  "status": "PENDING_COORDINATOR_REVIEW", "gates": diff_payload["gates"], "acceptance_eligible": False,
                  "unclosed": ["Parent Bku/CSR integration closure", "UHSC external wrapper", "license review"]}
     write_json(RESULT_OUT, aggregate)
     print(json.dumps({"contract": contract_payload["result"], "parent": parent.get("status"), "retired": source["ShiftUtils"]["status"],
                       "verilator": diff_payload["gates"]["verilator"], "yosys": diff_payload["gates"]["yosys"]}, sort_keys=True))
-    return 0 if contract_pass and parent.get("status") == "PASS" and source["ShiftUtils"]["status"] == "RETIRED" else 1
+    return 0 if contract_pass and all(item["status"] == "PASS" for item in py_compile_status.values()) and parent.get("status") == "PASS" and source["ShiftUtils"]["status"] == "RETIRED" else 1
 
 
 if __name__ == "__main__":
