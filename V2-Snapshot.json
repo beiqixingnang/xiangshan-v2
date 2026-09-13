@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_LOCAL_SNAPSHOT",
+  "source_repository": "https://github.com/OpenXiangShan/XiangShan.git",
+  "source_ref": "kunminghu-v2",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "checkout_path": "upstream",
+  "generation": {
+    "status": "PASS",
+    "worktree": "/home/lishuo/xs-v2-local",
+    "target": "systemverilog",
+    "config": "DefaultConfig",
+    "issue": "E.b",
+    "num_cores": 1,
+    "fpga_platform": true,
+    "script": "scripts/generate-v2-systemverilog.sh",
+    "output": "/home/lishuo/xs-v2-local/build/rtl",
+    "complete_xstop_hash": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "complete_xstop_bytes": 228590583
+  },
+  "toolchain": {
+    "wsl_distribution": "Debian GNU/Linux 13",
+    "java": "OpenJDK 21",
+    "mill_version": "0.12.3",
+    "jvm_xmx": "8G",
+    "jvm_xss": "256m"
+  },
+  "dependency_policy": {
+    "top_level_submodules_initialized": true,
+    "official_makefile_init_boundary": [
+      "top-level submodules",
+      "rocket-chip/{cde,hardfloat}",
+      "openLLC/openNCB"
+    ],
+    "nested_third_party_test_repositories": "not recursively duplicated unless required by the selected target"
+  }
+}

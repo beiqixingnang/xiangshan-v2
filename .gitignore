@@ -1,0 +1,33 @@
+# Local upstream checkout and its nested dependency working trees.
+# The commit and submodule SHAs are recorded in manifests; source is restored
+# with the documented clone/init command rather than duplicated in this repo.
+upstream/.git/
+upstream/**/.git/
+
+# Generated RTL and Mill/Scala build products are reproducible and large.
+upstream/build/
+upstream/out/
+upstream/systemverilog/
+upstream/**/build/
+upstream/**/out/
+upstream/**/.bsp/
+upstream/**/.idea/
+upstream/**/.metals/
+upstream/**/.vscode/
+upstream/**/target/
+upstream/**/project/target/
+
+# Local WSL mirror, logs, and temporary caches.
+local-wsl/
+*.log
+*.vcd
+*.fst
+*.class
+*.jar
+**/__pycache__/
+**/*.py[cod]
+
+# OS/editor artifacts.
+Thumbs.db
+desktop.ini
+.DS_Store
