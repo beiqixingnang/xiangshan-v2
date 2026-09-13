@@ -1,0 +1,327 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_V2_PORTED_CORE_CANDIDATES",
+  "source_repository": "https://github.com/OpenXiangShan/XiangShan.git",
+  "source_ref": "kunminghu-v3",
+  "source_commit": "0ff31c2dd83eb47660dc54a3175956f8faaf5cc7",
+  "selection_rule": "V3 Migration-Backlog status ACCEPTED or BEHAVIOR_MATCHED, path under scala/src/main/scala/xiangshan",
+  "v2_acceptance_note": "These candidates are copied for reuse only; V2 acceptance requires V2 reference SV, direct test, differential evidence, and a traceable V2 commit.",
+  "count": 35,
+  "modules": [
+    {
+      "source_scala": "scala/src/main/scala/xiangshan/backend/decode/Instructions.scala",
+      "source_python": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Decode.Instructions-Hardware.py",
+      "destination": "python/ported/backend/decode/Instructions-Hardware.py",
+      "prior_v3_status": "ACCEPTED",
+      "v2_status": "CANDIDATE_V2_REUSE",
+      "v2_reference": "NOT_GENERATED",
+      "v2_direct_test": "NOT_RUN"
+    },
+    {
+      "source_scala": "scala/src/main/scala/xiangshan/backend/decode/isa/CSRs.scala",
+      "source_python": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Decode.Isa.CSRs-Hardware.py",
+      "destination": "python/ported/backend/decode/isa/CSRs-Hardware.py",
+      "prior_v3_status": "BEHAVIOR_MATCHED",
+      "v2_status": "CANDIDATE_V2_REUSE",
+      "v2_reference": "NOT_GENERATED",
+      "v2_direct_test": "NOT_RUN"
+    },
+    {
+      "source_scala": "scala/src/main/scala/xiangshan/backend/decode/isa/bitfield/RiscvInst.scala",
+      "source_python": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Decode.Isa.Bitfield.RiscvInst-Hardware.py",
+      "destination": "python/ported/backend/decode/isa/bitfield/RiscvInst-Hardware.py",
+      "prior_v3_status": "ACCEPTED",
+      "v2_status": "CANDIDATE_V2_REUSE",
+      "v2_reference": "NOT_GENERATED",
+      "v2_direct_test": "NOT_RUN"
+    },
+    {
+      "source_scala": "scala/src/main/scala/xiangshan/backend/fu/NewCSR/SstcInterruptGen.scala",
+      "source_python": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.NewCSR.SstcInterruptGen-Hardware.py",
+      "destination": "python/ported/backend/fu/NewCSR/SstcInterruptGen-Hardware.py",
+      "prior_v3_status": "BEHAVIOR_MATCHED",
+      "v2_status": "CANDIDATE_V2_REUSE",
+      "v2_reference": "NOT_GENERATED",
+      "v2_direct_test": "NOT_RUN"
+    },
+    {
+      "source_scala": "scala/src/main/scala/xiangshan/backend/fu/SRT16Divider.scala",
+      "source_python": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.SRT16Divider-Hardware.py",
+      "destination": "python/ported/backend/fu/SRT16Divider-Hardware.py",
+      "prior_v3_status": "BEHAVIOR_MATCHED",
+      "v2_status": "CANDIDATE_V2_REUSE",
+      "v2_reference": "NOT_GENERATED",
+      "v2_direct_test": "NOT_RUN"
+    },
+    {
+      "source_scala": "scala/src/main/scala/xiangshan/backend/fu/fpu/FliTable.scala",
+      "source_python": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Fpu.FliTable-Hardware.py",
+      "destination": "python/ported/backend/fu/fpu/FliTable-Hardware.py",
+      "prior_v3_status": "ACCEPTED",
+      "v2_status": "CANDIDATE_V2_REUSE",
+      "v2_reference": "NOT_GENERATED",
+      "v2_direct_test": "NOT_RUN"
+    },
+    {
+      "source_scala": "scala/src/main/scala/xiangshan/backend/fu/util/CSA.scala",
+      "source_python": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Util.CSA-Hardware.py",
+      "destination": "python/ported/backend/fu/util/CSA-Hardware.py",
+      "prior_v3_status": "BEHAVIOR_MATCHED",
+      "v2_status": "CANDIDATE_V2_REUSE",
+      "v2_reference": "NOT_GENERATED",
+      "v2_direct_test": "NOT_RUN"
+    },
+    {
+      "source_scala": "scala/src/main/scala/xiangshan/backend/fu/util/CryptoUtils.scala",
+      "source_python": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Util.CryptoUtils-Hardware.py",
+      "destination": "python/ported/backend/fu/util/CryptoUtils-Hardware.py",
+      "prior_v3_status": "BEHAVIOR_MATCHED",
+      "v2_status": "CANDIDATE_V2_REUSE",
+      "v2_reference": "NOT_GENERATED",
+      "v2_direct_test": "NOT_RUN"
+    },
+    {
+      "source_scala": "scala/src/main/scala/xiangshan/backend/fu/util/DebugCSR.scala",
+      "source_python": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Util.DebugCSR-Hardware.py",
+      "destination": "python/ported/backend/fu/util/DebugCSR-Hardware.py",
+      "prior_v3_status": "BEHAVIOR_MATCHED",
+      "v2_status": "CANDIDATE_V2_REUSE",
+      "v2_reference": "NOT_GENERATED",
+      "v2_direct_test": "NOT_RUN"
+    },
+    {
+      "source_scala": "scala/src/main/scala/xiangshan/backend/fu/util/ShiftUtils.scala",
+      "source_python": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Util.ShiftUtils-Hardware.py",
+      "destination": "python/ported/backend/fu/util/ShiftUtils-Hardware.py",
+      "prior_v3_status": "ACCEPTED",
+      "v2_status": "CANDIDATE_V2_REUSE",
+      "v2_reference": "NOT_GENERATED",
+      "v2_direct_test": "NOT_RUN"
+    },
+    {
+      "source_scala": "scala/src/main/scala/xiangshan/backend/fu/vector/ByteMaskTailGen.scala",
+      "source_python": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Vector.ByteMaskTailGen-Hardware.py",
+      "destination": "python/ported/backend/fu/vector/ByteMaskTailGen-Hardware.py",
+      "prior_v3_status": "BEHAVIOR_MATCHED",
+      "v2_status": "CANDIDATE_V2_REUSE",
+      "v2_reference": "NOT_GENERATED",
+      "v2_direct_test": "NOT_RUN"
+    },
+    {
+      "source_scala": "scala/src/main/scala/xiangshan/backend/fu/vector/DstMgu.scala",
+      "source_python": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Vector.DstMgu-Hardware.py",
+      "destination": "python/ported/backend/fu/vector/DstMgu-Hardware.py",
+      "prior_v3_status": "BEHAVIOR_MATCHED",
+      "v2_status": "CANDIDATE_V2_REUSE",
+      "v2_reference": "NOT_GENERATED",
+      "v2_direct_test": "NOT_RUN"
+    },
+    {
+      "source_scala": "scala/src/main/scala/xiangshan/backend/fu/vector/Mgtu.scala",
+      "source_python": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Vector.Mgtu-Hardware.py",
+      "destination": "python/ported/backend/fu/vector/Mgtu-Hardware.py",
+      "prior_v3_status": "BEHAVIOR_MATCHED",
+      "v2_status": "CANDIDATE_V2_REUSE",
+      "v2_reference": "NOT_GENERATED",
+      "v2_direct_test": "NOT_RUN"
+    },
+    {
+      "source_scala": "scala/src/main/scala/xiangshan/backend/fu/vector/NewMgu.scala",
+      "source_python": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Vector.NewMgu-Hardware.py",
+      "destination": "python/ported/backend/fu/vector/NewMgu-Hardware.py",
+      "prior_v3_status": "BEHAVIOR_MATCHED",
+      "v2_status": "CANDIDATE_V2_REUSE",
+      "v2_reference": "NOT_GENERATED",
+      "v2_direct_test": "NOT_RUN"
+    },
+    {
+      "source_scala": "scala/src/main/scala/xiangshan/backend/fu/vector/utils/MaskExtrator.scala",
+      "source_python": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Vector.Utils.MaskExtrator-Hardware.py",
+      "destination": "python/ported/backend/fu/vector/utils/MaskExtrator-Hardware.py",
+      "prior_v3_status": "ACCEPTED",
+      "v2_status": "CANDIDATE_V2_REUSE",
+      "v2_reference": "NOT_GENERATED",
+      "v2_direct_test": "NOT_RUN"
+    },
+    {
+      "source_scala": "scala/src/main/scala/xiangshan/backend/fu/vector/utils/ScalaDupToVector.scala",
+      "source_python": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Vector.Utils.ScalaDupToVector-Hardware.py",
+      "destination": "python/ported/backend/fu/vector/utils/ScalaDupToVector-Hardware.py",
+      "prior_v3_status": "BEHAVIOR_MATCHED",
+      "v2_status": "CANDIDATE_V2_REUSE",
+      "v2_reference": "NOT_GENERATED",
+      "v2_direct_test": "NOT_RUN"
+    },
+    {
+      "source_scala": "scala/src/main/scala/xiangshan/backend/fu/vector/utils/UIntToCont0s.scala",
+      "source_python": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Vector.Utils.UIntToCont0s-Hardware.py",
+      "destination": "python/ported/backend/fu/vector/utils/UIntToCont0s-Hardware.py",
+      "prior_v3_status": "ACCEPTED",
+      "v2_status": "CANDIDATE_V2_REUSE",
+      "v2_reference": "NOT_GENERATED",
+      "v2_direct_test": "NOT_RUN"
+    },
+    {
+      "source_scala": "scala/src/main/scala/xiangshan/backend/fu/vector/utils/UIntToCont1s.scala",
+      "source_python": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Vector.Utils.UIntToCont1s-Hardware.py",
+      "destination": "python/ported/backend/fu/vector/utils/UIntToCont1s-Hardware.py",
+      "prior_v3_status": "ACCEPTED",
+      "v2_status": "CANDIDATE_V2_REUSE",
+      "v2_reference": "NOT_GENERATED",
+      "v2_direct_test": "NOT_RUN"
+    },
+    {
+      "source_scala": "scala/src/main/scala/xiangshan/backend/fu/vector/utils/VecDataSplitModule.scala",
+      "source_python": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Vector.Utils.VecDataSplitModule-Hardware.py",
+      "destination": "python/ported/backend/fu/vector/utils/VecDataSplitModule-Hardware.py",
+      "prior_v3_status": "BEHAVIOR_MATCHED",
+      "v2_status": "CANDIDATE_V2_REUSE",
+      "v2_reference": "NOT_GENERATED",
+      "v2_direct_test": "NOT_RUN"
+    },
+    {
+      "source_scala": "scala/src/main/scala/xiangshan/cache/dcache/mainpipe/AMOALU.scala",
+      "source_python": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Cache.Dcache.Mainpipe.AMOALU-Hardware.py",
+      "destination": "python/ported/cache/dcache/mainpipe/AMOALU-Hardware.py",
+      "prior_v3_status": "BEHAVIOR_MATCHED",
+      "v2_status": "CANDIDATE_V2_REUSE",
+      "v2_reference": "NOT_GENERATED",
+      "v2_direct_test": "NOT_RUN"
+    },
+    {
+      "source_scala": "scala/src/main/scala/xiangshan/cache/dcache/meta/TagArray.scala",
+      "source_python": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Cache.Dcache.Meta.TagArray-Hardware.py",
+      "destination": "python/ported/cache/dcache/meta/TagArray-Hardware.py",
+      "prior_v3_status": "BEHAVIOR_MATCHED",
+      "v2_status": "CANDIDATE_V2_REUSE",
+      "v2_reference": "NOT_GENERATED",
+      "v2_direct_test": "NOT_RUN"
+    },
+    {
+      "source_scala": "scala/src/main/scala/xiangshan/frontend/bpu/CompareMatrix.scala",
+      "source_python": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.CompareMatrix-Hardware.py",
+      "destination": "python/ported/frontend/bpu/CompareMatrix-Hardware.py",
+      "prior_v3_status": "ACCEPTED",
+      "v2_status": "CANDIDATE_V2_REUSE",
+      "v2_reference": "NOT_GENERATED",
+      "v2_direct_test": "NOT_RUN"
+    },
+    {
+      "source_scala": "scala/src/main/scala/xiangshan/frontend/bpu/FallThroughPredictor.scala",
+      "source_python": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.FallThroughPredictor-Hardware.py",
+      "destination": "python/ported/frontend/bpu/FallThroughPredictor-Hardware.py",
+      "prior_v3_status": "BEHAVIOR_MATCHED",
+      "v2_status": "CANDIDATE_V2_REUSE",
+      "v2_reference": "NOT_GENERATED",
+      "v2_direct_test": "NOT_RUN"
+    },
+    {
+      "source_scala": "scala/src/main/scala/xiangshan/frontend/bpu/SaturateCounter.scala",
+      "source_python": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.SaturateCounter-Hardware.py",
+      "destination": "python/ported/frontend/bpu/SaturateCounter-Hardware.py",
+      "prior_v3_status": "ACCEPTED",
+      "v2_status": "CANDIDATE_V2_REUSE",
+      "v2_reference": "NOT_GENERATED",
+      "v2_direct_test": "NOT_RUN"
+    },
+    {
+      "source_scala": "scala/src/main/scala/xiangshan/frontend/bpu/SignedSaturateCounter.scala",
+      "source_python": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.SignedSaturateCounter-Hardware.py",
+      "destination": "python/ported/frontend/bpu/SignedSaturateCounter-Hardware.py",
+      "prior_v3_status": "ACCEPTED",
+      "v2_status": "CANDIDATE_V2_REUSE",
+      "v2_reference": "NOT_GENERATED",
+      "v2_direct_test": "NOT_RUN"
+    },
+    {
+      "source_scala": "scala/src/main/scala/xiangshan/frontend/bpu/replacer/LruStateGen.scala",
+      "source_python": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.LruStateGen-Hardware.py",
+      "destination": "python/ported/frontend/bpu/replacer/LruStateGen-Hardware.py",
+      "prior_v3_status": "ACCEPTED",
+      "v2_status": "CANDIDATE_V2_REUSE",
+      "v2_reference": "NOT_GENERATED",
+      "v2_direct_test": "NOT_RUN"
+    },
+    {
+      "source_scala": "scala/src/main/scala/xiangshan/frontend/bpu/replacer/PlruStateGen.scala",
+      "source_python": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.PlruStateGen-Hardware.py",
+      "destination": "python/ported/frontend/bpu/replacer/PlruStateGen-Hardware.py",
+      "prior_v3_status": "ACCEPTED",
+      "v2_status": "CANDIDATE_V2_REUSE",
+      "v2_reference": "NOT_GENERATED",
+      "v2_direct_test": "NOT_RUN"
+    },
+    {
+      "source_scala": "scala/src/main/scala/xiangshan/frontend/bpu/replacer/ReplacerState.scala",
+      "source_python": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.ReplacerState-Hardware.py",
+      "destination": "python/ported/frontend/bpu/replacer/ReplacerState-Hardware.py",
+      "prior_v3_status": "BEHAVIOR_MATCHED",
+      "v2_status": "CANDIDATE_V2_REUSE",
+      "v2_reference": "NOT_GENERATED",
+      "v2_direct_test": "NOT_RUN"
+    },
+    {
+      "source_scala": "scala/src/main/scala/xiangshan/frontend/icache/ICacheMshr.scala",
+      "source_python": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.ICacheMshr-Hardware.py",
+      "destination": "python/ported/frontend/icache/ICacheMshr-Hardware.py",
+      "prior_v3_status": "BEHAVIOR_MATCHED",
+      "v2_status": "CANDIDATE_V2_REUSE",
+      "v2_reference": "NOT_GENERATED",
+      "v2_direct_test": "NOT_RUN"
+    },
+    {
+      "source_scala": "scala/src/main/scala/xiangshan/frontend/icache/ICacheReplacer.scala",
+      "source_python": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.ICacheReplacer-Hardware.py",
+      "destination": "python/ported/frontend/icache/ICacheReplacer-Hardware.py",
+      "prior_v3_status": "BEHAVIOR_MATCHED",
+      "v2_status": "CANDIDATE_V2_REUSE",
+      "v2_reference": "NOT_GENERATED",
+      "v2_direct_test": "NOT_RUN"
+    },
+    {
+      "source_scala": "scala/src/main/scala/xiangshan/frontend/icache/Utils.scala",
+      "source_python": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.Utils-Hardware.py",
+      "destination": "python/ported/frontend/icache/Utils-Hardware.py",
+      "prior_v3_status": "BEHAVIOR_MATCHED",
+      "v2_status": "CANDIDATE_V2_REUSE",
+      "v2_reference": "NOT_GENERATED",
+      "v2_direct_test": "NOT_RUN"
+    },
+    {
+      "source_scala": "scala/src/main/scala/xiangshan/frontend/ifu/RvcExpander.scala",
+      "source_python": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Ifu.RvcExpander-Hardware.py",
+      "destination": "python/ported/frontend/ifu/RvcExpander-Hardware.py",
+      "prior_v3_status": "BEHAVIOR_MATCHED",
+      "v2_status": "CANDIDATE_V2_REUSE",
+      "v2_reference": "NOT_GENERATED",
+      "v2_direct_test": "NOT_RUN"
+    },
+    {
+      "source_scala": "scala/src/main/scala/xiangshan/backend/datapath/DataSource.scala",
+      "source_python": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Datapath.DataSource-Hardware.py",
+      "destination": "python/ported/backend/datapath/DataSource-Hardware.py",
+      "prior_v3_status": "ACCEPTED",
+      "v2_status": "CANDIDATE_V2_REUSE",
+      "v2_reference": "NOT_GENERATED",
+      "v2_direct_test": "NOT_RUN"
+    },
+    {
+      "source_scala": "scala/src/main/scala/xiangshan/backend/datapath/NewPipelineConnect.scala",
+      "source_python": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Datapath.NewPipelineConnect-Hardware.py",
+      "destination": "python/ported/backend/datapath/NewPipelineConnect-Hardware.py",
+      "prior_v3_status": "BEHAVIOR_MATCHED",
+      "v2_status": "CANDIDATE_V2_REUSE",
+      "v2_reference": "NOT_GENERATED",
+      "v2_direct_test": "NOT_RUN"
+    },
+    {
+      "source_scala": "scala/src/main/scala/xiangshan/backend/datapath/WbArbiter.scala",
+      "source_python": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Datapath.WbArbiter-Hardware.py",
+      "destination": "python/ported/backend/datapath/WbArbiter-Hardware.py",
+      "prior_v3_status": "BEHAVIOR_MATCHED",
+      "v2_status": "CANDIDATE_V2_REUSE",
+      "v2_reference": "NOT_GENERATED",
+      "v2_direct_test": "NOT_RUN"
+    }
+  ]
+}

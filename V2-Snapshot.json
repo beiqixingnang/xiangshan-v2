@@ -5,6 +5,8 @@
   "source_ref": "kunminghu-v2",
   "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
   "checkout_path": "upstream",
+  "source_layout": "vendored_full_source",
+  "network_required_after_clone": false,
   "submodules": [
     {"path": "ChiselAIA", "commit": "c8be865e4fa60d40831ff29e0a30d4269f5ff5b9"},
     {"path": "ChiselIOPMP", "commit": "09def1a7efa4707a74b7f31fe0a1c254b0940b78"},
@@ -33,6 +35,13 @@
     "fpga_platform": true,
     "script": "scripts/generate-v2-systemverilog.sh",
     "output": "/home/lishuo/xs-v2-local/build/rtl",
+    "offline_probe": {
+      "status": "ARTIFACT_PASS_COMMAND_FAILED_MISSING_NOOP_HOME",
+      "output": "/home/lishuo/xs-v2-local/build/rtl-offline",
+      "artifact_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+      "artifact_bytes": 228590583,
+      "failure": "difftest.common.FileControl requires NOOP_HOME; fixed in current generator"
+    },
     "complete_xstop_hash": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
     "complete_xstop_bytes": 228590583
   },

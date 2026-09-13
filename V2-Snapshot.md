@@ -1,14 +1,13 @@
 # XiangShan Kunminghu V2 snapshot
 
 This repository records a reproducible, local-first snapshot of the official
-XiangShan Kunminghu V2 line. The upstream checkout is kept under `upstream/`
-and is pinned to an immutable commit; its submodule SHAs are recorded in
-`V2-Snapshot.json`.
+XiangShan Kunminghu V2 line. The complete upstream Scala/dependency source tree
+is vendored under `upstream/` and pinned to an immutable commit; its submodule
+SHAs are recorded in `V2-Snapshot.json`.
 
-The outer repository stores `upstream/` as a Git submodule rather than
-vendoring the roughly 500 MB Scala/dependency tree. A fresh checkout therefore
-needs network access once to initialize that pinned submodule; after that,
-source, nested dependencies, compilation, and RTL generation are local.
+The repository intentionally excludes only Git metadata and generated build
+products. A fresh checkout therefore contains the source and nested
+dependencies without requiring a network fetch.
 
 The checkout was validated in WSL on the Linux ext4 mirror
 `/home/lishuo/xs-v2-local`, because compiling the Scala tree from `/mnt/d`
@@ -21,26 +20,36 @@ hash/size are recorded in `V2-Snapshot.json` after a successful run.
 ```bash
 git clone https://github.com/beiqixingnang/xiangshan-v2.git
 cd xiangshan-v2
-git submodule update --init upstream
-cd upstream
-git checkout d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af
-git submodule update --init
-make init
+# The complete source/dependency tree is already present under upstream/.
+# No network fetch or submodule initialization is required.
 ```
 
-The official V2 `Makefile` initialization boundary is used: top-level
-submodules, `rocket-chip/{cde,hardfloat}`, and `openLLC/openNCB`. Nested
-third-party test repositories are not recursively duplicated unless the build
-reports that a particular target needs them.
+The official V2 initialization boundary was used before vendoring: all
+top-level submodules plus `rocket-chip/{cde,hardfloat}` and
+`openLLC/openNCB`. Their exact revisions are recorded in `V2-Snapshot.json`.
+Nested third-party test repositories are included only when needed by the
+selected target.
 
 ## Generate the complete V2 SystemVerilog snapshot
 
-Run the provided script from WSL. It copies the source checkout to a Linux
+Run the provided script from WSL. It copies the vendored source checkout to a Linux
 ext4 worktree, compiles the Scala/Mill graph, and invokes the official
 `top.TopMain` SystemVerilog lowering with `DefaultConfig`, one core, and issue
 `E.b`. The output is written to the local WSL mirror, not committed to Git.
+On a fresh WSL worktree the script creates disposable local Git metadata for
+Mill's source-version annotation; it never contacts a remote.
+It also sets `NOOP_HOME` to the WSL worktree so difftest file-control metadata
+is emitted locally rather than depending on a host environment variable.
 
 The result is a complete generated `XSTop.sv` for the selected V2 commit; no
 Python rewrite is involved in this bootstrap step. The script fails if that
 expected non-empty artifact is not produced and prints its byte count and
 SHA-256 digest for independent verification.
+
+To require cached dependencies and fail instead of resolving anything from the
+network, use `OFFLINE=1`:
+
+```bash
+OFFLINE=1 XIANGSHAN_V2_WSL_RTL=/home/lishuo/xs-v2-local/build/rtl-offline \
+  bash scripts/generate-v2-systemverilog.sh
+```

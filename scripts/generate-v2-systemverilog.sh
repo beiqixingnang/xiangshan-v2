@@ -10,8 +10,8 @@ issue="${ISSUE:-E.b}"
 num_cores="${NUM_CORES:-1}"
 jvm_xmx="${JVM_XMX:-8G}"
 
-if [[ ! -d "$source_dir/.git" ]]; then
-  echo "missing upstream checkout: $source_dir" >&2
+if [[ ! -f "$source_dir/build.sc" || ! -f "$source_dir/.mill-version" ]]; then
+  echo "missing vendored XiangShan source checkout: $source_dir" >&2
   exit 2
 fi
 
@@ -24,9 +24,28 @@ fi
 # Nested submodule gitdir pointer files refer to the Windows superproject and
 # are not needed by Mill.  Keep only the WSL mirror's top-level .git metadata so
 # the VCS plugin can query the selected V2 commit without broken nested paths.
+# Nested git metadata is not needed by Mill and can contain host-specific
+# gitdir pointers when the source was prepared on Windows.
 find "$work_dir" -mindepth 2 -type f -name .git -delete
 
+# Mill's source-version annotation expects a Git worktree.  A fresh checkout
+# of this repository has vendored source but no nested .git directory, so make
+# a local, disposable metadata repository without contacting any remote.
+if ! git -C "$work_dir" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  git -C "$work_dir" init -q
+  git -C "$work_dir" config user.name "XiangShan V2 Local"
+  git -C "$work_dir" config user.email "local@xiangshan.invalid"
+  git -C "$work_dir" add -A
+  git -C "$work_dir" commit -q -m "vendored XiangShan V2 source"
+fi
+
 cd "$work_dir"
+export NOOP_HOME="$work_dir"
+if [[ "${OFFLINE:-0}" == "1" ]]; then
+  export COURSIER_MODE=offline
+  export COURSIER_OFFLINE=true
+fi
+
 MILL_WORKSPACE_ROOT="$work_dir" mill -i -Djvm-xmx="$jvm_xmx" -Djvm-xss=256m \
   xiangshan.runMain top.TopMain \
   --target-dir "$target_dir" \
