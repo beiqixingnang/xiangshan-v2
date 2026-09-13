@@ -122,8 +122,10 @@ class ICacheMSHR(Elaboratable):
         way = Signal(c.way_bits, name="way")
         latency = Signal(c.latency_bits, name="perf_latency_reg")
 
-        # Fetch MSHRs receive a parent-tied-low flush in the V2 closure.
-        effective_flush = self.flush & (0 if self.is_fetch else 1)
+        # The parent ties fetch flush low, but the standalone V2 class still
+        # honors its declared flush input; this preserves the source contract
+        # for both fetch and prefetch specializations.
+        effective_flush = self.flush
 
         # Compare both lookup payloads in the same cycle as the request.
         for index in range(2):
