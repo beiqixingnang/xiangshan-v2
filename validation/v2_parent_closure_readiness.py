@@ -287,6 +287,209 @@ def evidence_summary(paths: Iterable[str]) -> dict[str, Any]:
     }
 
 
+def candidate_aliases(candidate: str) -> set[str]:
+    """Return V2 emitted names that identify one carried candidate.
+    返回用于识别某个候选项的 V2 生成名称集合。
+    """
+
+    aliases = {candidate}
+    alias = {
+        "ICacheMshr": "ICacheMSHR",
+        "Utils": "DeMultiplexer",
+        "LruStateGen": "TrueLRU",
+        "PlruStateGen": "PseudoLRU",
+        "ReplacerState": "SetAssocLRU",
+        "DstMgu": "Mgu",
+        "NewMgu": "Mgu",
+        "MaskExtrator": "MaskExtractor",
+        "UIntToCont0s": "UIntToContLow0s",
+        "UIntToCont1s": "UIntToContLow1s",
+        "DataSource": "DataSource",
+        "NewPipelineConnect": "NewPipelineConnectPipe",
+        "WbArbiter": "WbDataPath",
+        "RvcExpander": "RVCExpander",
+        "SRT16Divider": "SRT16DividerDataModule",
+    }.get(candidate)
+    if alias:
+        aliases.add(alias)
+    return aliases
+
+
+def matching_nodes(value: Any, aliases: set[str]) -> list[Any]:
+    """Find evidence rows whose key or identity field names a candidate.
+    查找键名或 identity 字段指向候选项的证据行。
+    """
+
+    matches: list[Any] = []
+
+    def visit(node: Any) -> None:
+        if isinstance(node, dict):
+            for key, child in node.items():
+                key_text = str(key)
+                identity = ""
+                if key_text in aliases:
+                    # Keep the containing mapping as well as the scalar child;
+                    # aggregate evidence (for example ``comparisons``) often
+                    # lives beside the identity key.
+                    matches.append(node)
+                    matches.append(child)
+                if key_text in {"candidate", "module", "name", "target", "surface"} and isinstance(child, str):
+                    identity = child
+                if identity and any(alias in identity for alias in aliases):
+                    matches.append(node)
+                visit(child)
+        elif isinstance(node, list):
+            for child in node:
+                visit(child)
+
+    visit(value)
+    # De-duplicate by object identity while preserving traversal order.
+    unique: list[Any] = []
+    seen: set[int] = set()
+    for item in matches:
+        marker = id(item)
+        if marker not in seen:
+            unique.append(item)
+            seen.add(marker)
+    return unique
+
+
+def status_strings(value: Any) -> list[str]:
+    """Collect status-like strings from one candidate evidence row.
+    收集候选证据行中的状态字符串。
+    """
+
+    found: list[str] = []
+    for _key, child in flatten_values(value):
+        if isinstance(child, str):
+            upper = child.upper()
+            if upper in STATUS_PASS or "PENDING" in upper or upper in {"NOT_RUN", "NOT_GENERATED"}:
+                found.append(child)
+    return found
+
+
+def candidate_evidence(candidate: str, paths: Iterable[str]) -> dict[str, Any]:
+    """Compute direct/reference signals for one candidate, not its siblings.
+    仅针对一个候选计算 direct/reference 信号，避免把兄弟项的通过结果串入。
+    """
+
+    aliases = candidate_aliases(candidate)
+    rows: list[dict[str, Any]] = []
+    direct_pass = False
+    reference_pass = False
+    source_level = False
+    parent_pass = False
+    pending = False
+    for rel in paths:
+        path = ROOT / rel
+        payload = load_json(path)
+        if payload is None:
+            continue
+        matches = matching_nodes(payload, aliases)
+        replacement_parent_file = (
+            candidate in {"LruStateGen", "PlruStateGen", "ReplacerState"}
+            and isinstance(payload, dict)
+            and payload.get("parent_closure") == "ICacheReplacer"
+        )
+        if not matches and not replacement_parent_file:
+            continue
+        filename = path.name.lower()
+        kind = str(payload.get("kind", "")).lower() if isinstance(payload, dict) else ""
+        if any(token in filename or token in kind for token in ("reference", "differential", "coverage")):
+            role = "reference"
+        elif "direct" in filename or "direct" in kind:
+            role = "direct"
+        else:
+            role = "combined"
+        row_statuses = sorted(set(s for node in matches for s in status_strings(node)))
+        mode_strings = [
+            s
+            for node in matches
+            for _key, s in flatten_values(node)
+            if isinstance(s, str) and "SOURCE_LEVEL" in s.upper()
+        ]
+        if mode_strings:
+            source_level = True
+        payload_statuses = status_strings(payload)
+        row_has_explicit_pass = any(
+            s.upper() in STATUS_PASS or "PASS_BOUNDED" in s.upper() for s in row_statuses
+        )
+        payload_has_pass = any(
+            s.upper() in STATUS_PASS or "PASS_BOUNDED" in s.upper() for s in payload_statuses
+        )
+        if row_has_explicit_pass or (role in {"direct", "combined"} and payload_has_pass):
+            if role in {"direct", "combined"}:
+                direct_pass = True
+            # A reference-level pass must be tied to this candidate row.  A
+            # source-level parent summary alone does not establish a leaf SV
+            # differential, so it is handled by ``source_level`` below.
+            if role == "reference" and row_has_explicit_pass:
+                reference_pass = True
+        # ICache/backend differential files identify children in a path map,
+        # while their PASS rows are kept in a sibling ``comparisons`` list.
+        # Tie that aggregate only when this candidate is explicitly named in
+        # the payload; source-level-only rows remain non-equivalence evidence.
+        if role == "reference" and not source_level and matches:
+            comparisons = payload.get("comparisons") if isinstance(payload, dict) else None
+            if isinstance(comparisons, list) and comparisons and all(
+                isinstance(item, dict)
+                and str(item.get("comparison", item.get("status", ""))).upper().startswith("PASS")
+                for item in comparisons
+            ):
+                reference_pass = True
+            # A few manifests put the parent gate at document scope rather
+            # than on each child row.  Attribute that bounded signal only
+            # after this payload explicitly named the candidate above.
+            for key, value in flatten_values(payload):
+                if not isinstance(value, str):
+                    continue
+                key_text = str(key or "").upper()
+                value_text = value.upper()
+                if "PARENT" in key_text or "CLOSURE" in key_text:
+                    if "PASS" in value_text or "MATCHED" in value_text:
+                        parent_pass = True
+        # Replacement policy has one extracted ICacheReplacer parent result
+        # covering the three relocated candidates; retain it as bounded
+        # parent/reference evidence without implying standalone modules.
+        if role == "reference" and candidate in {"LruStateGen", "PlruStateGen", "ReplacerState"}:
+            if isinstance(payload, dict) and payload.get("parent_closure") == "ICacheReplacer":
+                result = payload.get("result", {})
+                if isinstance(result, dict) and str(result.get("status", "")).upper().startswith("PASS"):
+                    reference_pass = True
+                    parent_pass = True
+        if any("PARENT_CLOSURE" in s.upper() and ("PASS" in s.upper() or "MATCHED" in s.upper()) for s in row_statuses):
+            parent_pass = True
+        if any("PENDING" in s.upper() or s.upper() in {"NOT_RUN", "NOT_GENERATED"} for s in row_statuses):
+            pending = True
+        rows.append({
+            "path": rel,
+            "sha256": sha256_file(path),
+            "role": role,
+            "matched_aliases": sorted(alias for alias in aliases if alias in path.read_text(encoding="utf-8", errors="replace")),
+            "statuses": row_statuses,
+            "source_level": bool(mode_strings),
+        })
+    if not direct_pass:
+        direct = "PENDING" if pending else "NOT_RUN"
+    else:
+        direct = "PASS_BOUNDED"
+    if reference_pass:
+        reference = "PASS_BOUNDED_REFERENCE"
+    elif source_level:
+        reference = "SOURCE_LEVEL_BOUNDED"
+    elif pending:
+        reference = "PENDING"
+    else:
+        reference = "NOT_RUN"
+    return {
+        "files": rows,
+        "direct": direct,
+        "reference": reference,
+        "differential": "PASS_BOUNDED" if reference_pass else "SOURCE_LEVEL_BOUNDED" if source_level else "PENDING" if pending else "NOT_RUN",
+        "parent_closure": "PASS_BOUNDED" if parent_pass else "PENDING",
+    }
+
+
 # These are parent boundaries, not a claim that all children have already been
 # localized.  Names mirror the actual V2 source hierarchy and generated SV.
 PARENT_SPECS: list[dict[str, Any]] = [
@@ -558,8 +761,8 @@ FAMILY_EVIDENCE: dict[str, list[str]] = {
     "core.fu.vector.mask": ["validation/v2-vector-batch-direct-results.json", "validation/v2-vector-batch-differential-results.json", "validation/v2-vector-batch-coverage-manifest.json"],
     "core.fu.vector.mgu": ["validation/v2-vector-batch-direct-results.json", "validation/v2-vector-batch-differential-results.json", "validation/v2-vector-batch-coverage-manifest.json"],
     "core.fu.vector.compare": ["validation/v2-vector-batch-direct-results.json", "validation/v2-vector-batch-differential-results.json", "validation/v2-vector-batch-coverage-manifest.json"],
-    "core.cache.dcache.atomic": ["validation/v2-dcache-batch-results.json", "validation/v2-dcache-batch-differential-results.json"],
-    "core.cache.dcache.meta": ["validation/v2-dcache-batch-results.json", "validation/v2-dcache-batch-differential-results.json"],
+    "core.cache.dcache.atomic": ["validation/v2-dcache-batch-direct-results.json", "validation/v2-dcache-batch-results.json", "validation/v2-dcache-batch-differential-results.json"],
+    "core.cache.dcache.meta": ["validation/v2-dcache-batch-direct-results.json", "validation/v2-dcache-batch-results.json", "validation/v2-dcache-batch-differential-results.json"],
     "core.frontend.bpu.compare": ["validation/v2-frontend-batch-results.json", "validation/v2-frontend-batch-reference-results.json", "validation/v2-frontend-bpu-rvc-coverage-manifest.json"],
     "core.frontend.ftb": ["validation/v2-frontend-batch-results.json", "validation/v2-frontend-batch-reference-results.json", "validation/v2-frontend-bpu-rvc-coverage-manifest.json"],
     "core.frontend.bpu.counters": ["validation/v2-frontend-batch-results.json", "validation/v2-frontend-batch-reference-results.json", "validation/v2-frontend-bpu-rvc-coverage-manifest.json"],
@@ -570,6 +773,48 @@ FAMILY_EVIDENCE: dict[str, list[str]] = {
     "core.frontend.ifu.rvc": ["validation/v2-frontend-batch-results.json", "validation/v2-frontend-batch-reference-results.json", "validation/v2-frontend-bpu-rvc-coverage-manifest.json"],
     "core.backend.datapath": ["validation/v2-backend-datapath-direct-results.json", "validation/v2-backend-datapath-differential-results.json", "validation/v2-backend-datapath-coverage-manifest.json"],
     "core.backend.datapath.writeback": ["validation/v2-backend-datapath-direct-results.json", "validation/v2-backend-datapath-differential-results.json", "validation/v2-backend-datapath-coverage-manifest.json"],
+}
+
+
+# Generated module names observed in the locked XSTop.  Empty lists are
+# intentional: those V2 surfaces are inlined, split, or retired and therefore
+# require source-level/parent evidence rather than a fabricated standalone SV.
+REFERENCE_SURFACES: dict[str, dict[str, Any]] = {
+    "Instructions": {"mode": "SOURCE_LEVEL", "modules": [], "note": "BitPat table is inlined into DecodeUnit/DecodeUnitComp."},
+    "CSRs": {"mode": "SPLIT_SOURCE_LEVEL", "modules": [], "note": "Rocket CSRs plus XiangShan CSRConst; no standalone candidate module."},
+    "RiscvInst": {"mode": "SOURCE_LEVEL", "modules": [], "note": "Bitfield bundle is elaborated into decode parents."},
+    "SstcInterruptGen": {"mode": "EXTRACTED_STANDALONE", "modules": ["SstcInterruptGen"]},
+    "SRT16Divider": {"mode": "EXTRACTED_CHILD", "modules": ["SRT16DividerDataModule"]},
+    "FliTable": {"mode": "EXTRACTED_CHILDREN", "modules": ["FliHTable", "FliSTable", "FliDTable"]},
+    "CSA": {"mode": "EXTRACTED_CHILD", "modules": ["CSA3_2"]},
+    "CryptoUtils": {"mode": "PARENT_INLINED", "modules": ["CryptoModule"], "note": "CryptoUtils equations are consumed by Bku/CryptoModule."},
+    "DebugCSR": {"mode": "PARENT_INLINED", "modules": ["CSR", "Debug"]},
+    "ShiftUtils": {"mode": "RETIRED", "modules": [], "note": "Phase-0 found no V2 authoritative public helper surface."},
+    "ByteMaskTailGen": {"mode": "EXTRACTED_STANDALONE", "modules": ["ByteMaskTailGen"]},
+    "DstMgu": {"mode": "EXTRACTED_PARENT", "modules": ["Mgu", "VldMgu"]},
+    "Mgtu": {"mode": "EXTRACTED_STANDALONE", "modules": ["Mgtu"]},
+    "NewMgu": {"mode": "EXTRACTED_PARENT", "modules": ["Mgu", "VldMgu"]},
+    "MaskExtrator": {"mode": "EXTRACTED_STANDALONE", "modules": ["MaskExtractor"]},
+    "ScalaDupToVector": {"mode": "PARENT_INLINED", "modules": [], "note": "Packing helper is inlined at vector FU call sites."},
+    "UIntToCont0s": {"mode": "EXTRACTED_STANDALONE", "modules": ["UIntToContLow0s"]},
+    "UIntToCont1s": {"mode": "EXTRACTED_STANDALONE", "modules": ["UIntToContLow1s"]},
+    "VecDataSplitModule": {"mode": "EXTRACTED_STANDALONE", "modules": ["VecDataSplitModule"]},
+    "AMOALU": {"mode": "EXTRACTED_STANDALONE", "modules": ["AMOALU"]},
+    "TagArray": {"mode": "EXTRACTED_CLOSURE", "modules": ["TagArray", "TagSRAMBank"]},
+    "CompareMatrix": {"mode": "SOURCE_LEVEL_PARENT", "modules": [], "note": "Pairwise ordering is inlined in NewDispatch."},
+    "FallThroughPredictor": {"mode": "SOURCE_LEVEL_PARENT", "modules": [], "note": "Fall-through logic is distributed across BPU/FTB/FrontendBundle/NewFtq."},
+    "SaturateCounter": {"mode": "SOURCE_LEVEL_PARENT", "modules": [], "note": "satUpdate is shared by BPU/TAGE/SC."},
+    "SignedSaturateCounter": {"mode": "SOURCE_LEVEL_PARENT", "modules": [], "note": "signedSatUpdate is shared by BPU/SC."},
+    "LruStateGen": {"mode": "EXTRACTED_PARENT", "modules": ["ICacheReplacer"]},
+    "PlruStateGen": {"mode": "EXTRACTED_PARENT", "modules": ["ICacheReplacer"]},
+    "ReplacerState": {"mode": "EXTRACTED_PARENT", "modules": ["ICacheReplacer"]},
+    "ICacheMshr": {"mode": "EXTRACTED_STANDALONE", "modules": ["ICacheMSHR", "ICacheMissUnit"]},
+    "ICacheReplacer": {"mode": "EXTRACTED_STANDALONE", "modules": ["ICacheReplacer", "ICache"]},
+    "Utils": {"mode": "EXTRACTED_CHILDREN", "modules": ["DeMultiplexer", "MuxBundle", "FIFOReg"]},
+    "RvcExpander": {"mode": "EXTRACTED_STANDALONE", "modules": ["RVCExpander", "PreDecode"]},
+    "DataSource": {"mode": "SOURCE_LEVEL_PARENT", "modules": ["DataPath"], "note": "Bundle equations are inlined in DataPath."},
+    "NewPipelineConnect": {"mode": "EXTRACTED_CHILD", "modules": ["NewPipelineConnectPipe"]},
+    "WbArbiter": {"mode": "EXTRACTED_CLOSURE", "modules": ["WbDataPath", "RealWBCollideChecker"]},
 }
 
 
@@ -588,6 +833,35 @@ def gate_for_family(family_id: str, summary: dict[str, Any], gate_name: str) -> 
     return "PENDING"
 
 
+FAMILY_REACHABILITY_HINTS: dict[str, set[str]] = {
+    "core.frontend.bpu.compare": {"Frontend", "FTB"},
+    "core.frontend.ftb": {"Frontend", "FTB", "FTBEntryGen"},
+    "core.frontend.bpu.counters": {"Frontend", "FTB"},
+    "core.frontend.icache.mshr": {"ICache", "ICacheMissUnit"},
+    "core.frontend.icache.replacer": {"ICache", "ICacheReplacer"},
+    "core.frontend.icache.utility": {"ICache", "ICacheMissUnit", "FIFOReg"},
+    "core.frontend.ifu.rvc": {"Frontend", "PreDecode", "RVCExpander"},
+    "core.replacement": {"ICache", "ICacheReplacer"},
+    "core.backend.datapath": {"Backend", "DataPath"},
+    "core.backend.datapath.writeback": {"Backend", "WbDataPath", "RealWBCollideChecker"},
+    "core.cache.dcache.atomic": {"MemBlock", "DCacheWrapper", "DCache", "MainPipe", "AMOALU"},
+    "core.cache.dcache.meta": {"MemBlock", "DCacheWrapper", "DCache", "TagArray"},
+    "core.fu.vector": {"Backend", "VldMergeUnit", "Mgu", "VldMgu"},
+    "core.fu.vector.mask": {"Backend", "VldMergeUnit", "Mgu", "ByteMaskTailGen"},
+    "core.fu.vector.mgu": {"Backend", "VldMergeUnit", "Mgu", "VldMgu"},
+    "core.fu.vector.compare": {"Backend", "Mgtu"},
+    "core.decode.isa": {"Backend", "DecodeUnit", "DecodeStage"},
+    "core.decode.csr": {"Backend", "DecodeUnit", "DecodeStage"},
+    "core.csr.timer": {"Backend", "SstcInterruptGen"},
+    "core.fu.divider": {"Backend", "DivUnit", "SRT16DividerDataModule"},
+    "core.fu.fpu": {"Backend", "FliHTable", "FliSTable", "FliDTable"},
+    "core.fu.arithmetic.csa": {"Backend", "CSA3_2"},
+    "core.fu.crypto": {"Backend", "CryptoModule"},
+    "core.fu.debug": {"Backend", "CSR", "Debug"},
+    "core.fu.shift": {"Backend"},
+}
+
+
 def family_parent_state(family_id: str, parent_rows: list[dict[str, Any]]) -> str:
     """Classify parent reachability independently from leaf pass signals.
     独立于 leaf 通过信号分类父级可达性。
@@ -596,12 +870,39 @@ def family_parent_state(family_id: str, parent_rows: list[dict[str, Any]]) -> st
     rows = [row for row in parent_rows if family_id in row["family_ids"]]
     if not rows:
         return "UNMAPPED_PARENT"
-    if any(row["root_present"] and row["reachable_child_count"] > 0 for row in rows):
-        # A module can be reachable while the complete closure is still open.
-        return "PARENT_MODULE_REACHABLE_CLOSURE_OPEN"
+    hints = FAMILY_REACHABILITY_HINTS.get(family_id, set())
+    for row in rows:
+        if not row["root_present"]:
+            continue
+        observed = {
+            child["name"]
+            for child in row["children"]
+            if child["reachability"]
+            in {"DIRECT_MODULE_REFERENCE", "INDIRECT_OR_INLINED_CHILD", "MODULE_PRESENT_NOT_LEXICALLY_REFERENCED"}
+        }
+        if hints.intersection(observed | {row["root_module"]}):
+            # A module can be reachable while the complete closure is still
+            # open; this is deliberately not a MATCHED/ACCEPTED state.
+            return "PARENT_MODULE_REACHABLE_CLOSURE_OPEN"
+        return "PARENT_MODULE_PRESENT_DISTRIBUTED"
     if any(row["root_present"] for row in rows):
         return "PARENT_MODULE_PRESENT_CHILD_BINDING_OPEN"
     return "PARENT_REFERENCE_MISSING"
+
+
+def aggregate_candidate_gate(rows: list[dict[str, Any]], gate: str) -> str:
+    """Aggregate a gate while preserving partial coverage explicitly.
+    聚合门禁并显式保留部分覆盖状态。
+    """
+
+    values = [str(row["leaf_evidence"].get(gate, "NOT_RUN")) for row in rows]
+    if values and all(value.startswith("PASS") for value in values):
+        return "PASS_BOUNDED" if gate != "reference" else "PASS_BOUNDED_REFERENCE"
+    if any(value.startswith("PASS") or value.startswith("SOURCE_LEVEL") for value in values):
+        return "PARTIAL_BOUNDED"
+    if any(value == "PENDING" for value in values):
+        return "PENDING"
+    return "NOT_RUN"
 
 
 def build_report() -> dict[str, Any]:
@@ -625,6 +926,8 @@ def build_report() -> dict[str, Any]:
     wanted_modules = {spec["root_module"] for spec in PARENT_SPECS}
     for spec in PARENT_SPECS:
         wanted_modules.update(spec["children"])
+    for surface in REFERENCE_SURFACES.values():
+        wanted_modules.update(surface.get("modules", []))
     records = read_module_records(XSTOP, wanted_modules) if xstop_present else {}
 
     parent_rows: list[dict[str, Any]] = []
@@ -702,7 +1005,20 @@ def build_report() -> dict[str, Any]:
         family_id = mapping.get("family_id", "")
         family_files = FAMILY_EVIDENCE.get(family_id, [])
         summary = evidence_summary(family_files)
+        candidate_summary = candidate_evidence(candidate_id, family_files)
         parents = [row for row in parent_rows if family_id in row["family_ids"]]
+        surface = REFERENCE_SURFACES.get(
+            candidate_id,
+            {"mode": "UNCLASSIFIED", "modules": [], "note": "No generated surface mapping recorded."},
+        )
+        surface_modules = [
+            {
+                "name": module_name,
+                "present_in_xstop": module_name in records,
+                "metadata": records[module_name].metadata() if module_name in records else None,
+            }
+            for module_name in surface.get("modules", [])
+        ]
         candidate_rows.append(
             {
                 "candidate": candidate_id,
@@ -719,13 +1035,23 @@ def build_report() -> dict[str, Any]:
                 ],
                 "family_id": family_id,
                 "closure_root": mapping.get("closure_root"),
-                "parent_state": family_parent_state(family_id, parent_rows),
+                "reference_surface": {
+                    "mode": surface.get("mode"),
+                    "modules": surface_modules,
+                    "note": surface.get("note"),
+                },
+                "parent_state": (
+                    "RETIRED_NO_AUTHORITATIVE_V2_SURFACE"
+                    if mapping.get("classification") == "RETIRED"
+                    else family_parent_state(family_id, parent_rows)
+                ),
                 "parent_closure_ids": [row["closure_id"] for row in parents],
                 "leaf_evidence": {
-                    "files": summary["files"],
-                    "direct": gate_for_family(family_id, summary, "direct"),
-                    "reference": gate_for_family(family_id, summary, "reference"),
-                    "differential": "PRESENT_BOUNDED" if summary["pass_signal_count"] else "PENDING",
+                    "files": candidate_summary["files"],
+                    "direct": candidate_summary["direct"],
+                    "reference": candidate_summary["reference"],
+                    "differential": candidate_summary["differential"],
+                    "parent_closure": candidate_summary["parent_closure"],
                 },
                 "promotion": "BLOCKED_ACCEPTED_NOT_ALLOWED",
             }
@@ -740,16 +1066,23 @@ def build_report() -> dict[str, Any]:
         files = sorted({f for row in rows for f in [item["path"] for item in row["leaf_evidence"]["files"]]})
         summary = evidence_summary(files)
         parent_ids = sorted({pid for row in rows for pid in row["parent_closure_ids"]})
+        classifications = [str(row.get("classification")) for row in rows]
+        family_parent = (
+            "RETIRED_NO_AUTHORITATIVE_V2_SURFACE"
+            if classifications and all(value == "RETIRED" for value in classifications)
+            else family_parent_state(family_id, parent_rows)
+        )
         family_rows.append(
             {
                 "family_id": family_id,
                 "candidate_count": len(rows),
                 "candidates": [row["candidate"] for row in rows],
+                "classification_counts": dict(Counter(str(row.get("classification")) for row in rows)),
                 "parent_closure_ids": parent_ids,
-                "parent_state": family_parent_state(family_id, parent_rows),
-                "direct": gate_for_family(family_id, summary, "direct"),
-                "reference": gate_for_family(family_id, summary, "reference"),
-                "differential": "PRESENT_BOUNDED" if summary["pass_signal_count"] else "PENDING",
+                "parent_state": family_parent,
+                "direct": aggregate_candidate_gate(rows, "direct"),
+                "reference": aggregate_candidate_gate(rows, "reference"),
+                "differential": aggregate_candidate_gate(rows, "differential"),
                 "evidence_files": files,
                 "evidence_present": summary["all_present"],
                 "next_gate": "PARENT_CLOSURE_MATCHED",
