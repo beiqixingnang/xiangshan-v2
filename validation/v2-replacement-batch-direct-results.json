@@ -1,0 +1,218 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_REPLACEMENT_DIRECT_TESTS",
+  "batch_id": "V2-P1-A-REPLACEMENT",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "status": "PASS_BOUNDED",
+  "targets": {
+    "LruStateGen": {
+      "vectors": 8489,
+      "boundary_ways": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "PlruStateGen": {
+      "vectors": 1977,
+      "boundary_ways": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ]
+    },
+    "ReplacerState": {
+      "checks": 26,
+      "policies": {
+        "lru": {
+          "checks": 13
+        },
+        "plru": {
+          "checks": 13
+        }
+      }
+    }
+  },
+  "structural_audit": {
+    "LruStateGen": {
+      "path": "python/ported/frontend/bpu/replacer/LruStateGen-Hardware.py",
+      "bytes": 11114,
+      "sha256": "dc5ce5ac757c1beb1731c5975e0dc1fe0fdcf6b98d2511f5e03075976f1969ef",
+      "utf8_lf": true,
+      "bilingual_docstring": true,
+      "zones": [
+        "Module Contract",
+        "Configuration",
+        "Implementation",
+        "Public Adapter",
+        "Direct Entry"
+      ],
+      "functions": [
+        "__init__",
+        "__init__",
+        "__post_init__",
+        "build_verilog",
+        "elaborate",
+        "extract_mru_rows",
+        "get_next_state",
+        "get_replace_way",
+        "lru_next_state",
+        "lru_victim",
+        "main",
+        "next_single",
+        "normalize_configuration",
+        "pack_rows",
+        "pair_offset",
+        "stateWidth",
+        "victim_expr",
+        "wayWidth"
+      ]
+    },
+    "PlruStateGen": {
+      "path": "python/ported/frontend/bpu/replacer/PlruStateGen-Hardware.py",
+      "bytes": 13123,
+      "sha256": "9abb1e75c35cd4e846681d7a48427bca6499c2d40348dc067c4742ef844e9c02",
+      "utf8_lf": true,
+      "bilingual_docstring": true,
+      "zones": [
+        "Module Contract",
+        "Configuration",
+        "Implementation",
+        "Public Adapter",
+        "Direct Entry"
+      ],
+      "functions": [
+        "__init__",
+        "__init__",
+        "__post_init__",
+        "build_verilog",
+        "ceil_log2",
+        "ceil_log2",
+        "elaborate",
+        "get_next_state",
+        "get_replace_way",
+        "main",
+        "next_tree",
+        "normalize_configuration",
+        "plru_next_state",
+        "plru_victim",
+        "recurse",
+        "recurse",
+        "split_state",
+        "stateWidth",
+        "state_slice",
+        "touch_slice",
+        "victim_tree",
+        "wayWidth"
+      ]
+    },
+    "ReplacerState": {
+      "path": "python/ported/frontend/bpu/replacer/ReplacerState-Hardware.py",
+      "bytes": 22697,
+      "sha256": "4d04ed552e84cd2ff8658877a5f18a0664ac1354bea96b85234df42679111641",
+      "utf8_lf": true,
+      "bilingual_docstring": true,
+      "zones": [
+        "Module Contract",
+        "Configuration",
+        "Implementation",
+        "Public Adapter",
+        "Direct Entry"
+      ],
+      "functions": [
+        "__init__",
+        "__init__",
+        "__init__",
+        "__post_init__",
+        "build_verilog",
+        "ceil_log2",
+        "elaborate",
+        "get_next_state",
+        "get_replace_way",
+        "main",
+        "next_state_for_touch",
+        "normalize_configuration",
+        "pair_offset",
+        "policyName",
+        "policy_next_state",
+        "policy_victim",
+        "pseudo_lru_next",
+        "pseudo_lru_next_tree",
+        "pseudo_lru_victim",
+        "pseudo_lru_victim_tree",
+        "recurse",
+        "recurse",
+        "select_state",
+        "setWidth",
+        "stateWidth",
+        "true_lru_next",
+        "true_lru_next_expr",
+        "true_lru_victim",
+        "true_lru_victim_expr",
+        "victim_for_state",
+        "wayWidth"
+      ]
+    }
+  },
+  "generated": {
+    "LruStateGen": {
+      "sha256": "95c1e553ac3759f40d6d908267c5b6f08839755e1cbd8413767a9397a9111257",
+      "bytes": 13742,
+      "module": "LruStateGen",
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": "ator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'io_touches_0_bits' generates 2 bits.\n                                                                                                              : ... note: In instance 'LruStateGen'\n  422 |   assign \\$183  = ! io_touches_0_bits;\n      |                   ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_replacement_lint_a6zp8oek/LruStateGen.sv:426:37: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                               : ... note: In instance 'LruStateGen'\n  426 |   assign \\$187  = io_touches_0_bits == 1'h1;\n      |                                     ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_replacement_lint_a6zp8oek/LruStateGen.sv:430:37: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                               : ... note: In instance 'LruStateGen'\n  430 |   assign \\$191  = io_touches_0_bits == 1'h1;\n      |                                     ^~\n"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": ""
+      }
+    },
+    "PlruStateGen": {
+      "sha256": "501d19c72ba59d59fc705bd520278c853ba1ee6de1f5924fefa7d130bdea11f1",
+      "bytes": 2817,
+      "module": "PlruStateGen",
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": ""
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": ""
+      }
+    },
+    "ReplacerState": {
+      "sha256": "bd8bd4e5694485534d20427ec8d25e69d38d1a274822fd084015585cd8676301",
+      "bytes": 16888,
+      "module": "ReplacerState",
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": " expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                 : ... note: In instance 'ReplacerState'\n  300 |   assign \\$60  = io_access_0_set == 1'h1;\n      |                                  ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_replacement_lint_a6zp8oek/ReplacerState.sv:312:34: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                 : ... note: In instance 'ReplacerState'\n  312 |   assign \\$72  = io_access_0_set == 1'h1;\n      |                                  ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_replacement_lint_a6zp8oek/ReplacerState.sv:325:34: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                 : ... note: In instance 'ReplacerState'\n  325 |   assign \\$85  = io_access_0_set == 1'h1;\n      |                                  ^~\n"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": ""
+      }
+    }
+  },
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "ACCEPTED": "NOT_ALLOWED"
+  }
+}

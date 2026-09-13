@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_REPLACEMENT_COVERAGE",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "dependency_commits": {
+    "utility": "2f0743f1f3ee1889049841926fa382cd0b32d8e2",
+    "rocket-chip": "46f1efefa1ff431bffe3262e4830bc50316842f4"
+  },
+  "family_id": "core.replacement",
+  "closure_root": "core.replacement",
+  "targets": [
+    {
+      "candidate": "LruStateGen",
+      "python_path": "python/ported/frontend/bpu/replacer/LruStateGen-Hardware.py",
+      "legacy_v3_surface": "scala/src/main/scala/xiangshan/frontend/bpu/replacer/LruStateGen.scala",
+      "v2_sources": [
+        "upstream/utility/src/main/scala/utility/Replacement.scala",
+        "upstream/rocket-chip/src/main/scala/util/Replacement.scala"
+      ],
+      "covered_children": [
+        "TrueLRU",
+        "PseudoLRU",
+        "SetAssocLRU"
+      ],
+      "classification": "RELOCATED",
+      "observation_points": [
+        "reset state",
+        "victim selection",
+        "touch/update",
+        "way count boundaries"
+      ],
+      "reference_surface": "ICacheReplacer parent closure; no standalone replacement module in XSTop",
+      "status": "PENDING_COORDINATOR_REVIEW"
+    },
+    {
+      "candidate": "PlruStateGen",
+      "python_path": "python/ported/frontend/bpu/replacer/PlruStateGen-Hardware.py",
+      "legacy_v3_surface": "scala/src/main/scala/xiangshan/frontend/bpu/replacer/PlruStateGen.scala",
+      "v2_sources": [
+        "upstream/utility/src/main/scala/utility/Replacement.scala",
+        "upstream/rocket-chip/src/main/scala/util/Replacement.scala"
+      ],
+      "covered_children": [
+        "TrueLRU",
+        "PseudoLRU",
+        "SetAssocLRU"
+      ],
+      "classification": "RELOCATED",
+      "observation_points": [
+        "reset state",
+        "victim selection",
+        "touch/update",
+        "way count boundaries"
+      ],
+      "reference_surface": "ICacheReplacer parent closure; no standalone replacement module in XSTop",
+      "status": "PENDING_COORDINATOR_REVIEW"
+    },
+    {
+      "candidate": "ReplacerState",
+      "python_path": "python/ported/frontend/bpu/replacer/ReplacerState-Hardware.py",
+      "legacy_v3_surface": "scala/src/main/scala/xiangshan/frontend/bpu/replacer/ReplacerState.scala",
+      "v2_sources": [
+        "upstream/utility/src/main/scala/utility/Replacement.scala",
+        "upstream/rocket-chip/src/main/scala/util/Replacement.scala"
+      ],
+      "covered_children": [
+        "TrueLRU",
+        "PseudoLRU",
+        "SetAssocLRU"
+      ],
+      "classification": "REWRITTEN",
+      "observation_points": [
+        "reset state",
+        "victim selection",
+        "touch/update",
+        "way count boundaries"
+      ],
+      "reference_surface": "ICacheReplacer parent closure; no standalone replacement module in XSTop",
+      "status": "PENDING_COORDINATOR_REVIEW"
+    }
+  ],
+  "locked_inputs": {
+    "reference": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "reference_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "reference_bytes": 228590583
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_REPLACEMENT_REFERENCE_DIFFERENTIAL",
+  "batch_id": "V2-P1-A-REPLACEMENT",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "reference_artifact": {
+    "path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "bytes": 228590583
+  },
+  "status": "PASS_BOUNDED",
+  "result": {
+    "status": "PASS",
+    "returncode": 0,
+    "stdout_tail": "- tb.sv:22782: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 197ps; walltime 0.002 s; speed 105.302 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n",
+    "stderr_tail": "",
+    "mode": "PARENT_CLOSURE_EXTRACTED",
+    "module": "ICacheReplacer",
+    "extracted_sha256": "01a8894d0399d429f3d50ed987333494b36072bf7cd569c3ce091a797ffcae6b",
+    "extracted_bytes": 1100303,
+    "observations": [
+      "reset state",
+      "victim selection",
+      "touch/update",
+      "way count=4"
+    ]
+  },
+  "standalone_replacement_modules": [],
+  "parent_closure": "ICacheReplacer",
+  "gates": {
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED",
+    "PARENT_CLOSURE_MATCHED": "PASS_BOUNDED",
+    "UHSC_LOCALIZED": "PENDING_EXTERNAL_WRAPPER",
+    "ACCEPTED": "NOT_ALLOWED"
+  }
+}

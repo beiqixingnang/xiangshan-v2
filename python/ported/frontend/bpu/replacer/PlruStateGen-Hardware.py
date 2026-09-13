@@ -1,84 +1,190 @@
-"""Tree pseudo-LRU state generator. / 二叉树伪 LRU 状态生成器。"""
+"""V2 tree pseudo-LRU state transform and victim decoder. / V2 二叉树伪 LRU 状态变换与受害路译码器。"""
 
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Any
 
 from amaranth import Cat, Const, Elaboratable, Module, Mux, Signal
 
 
-# =============================================================================
-# Module Contract
-# =============================================================================
-# Public symbols / 公开符号:
-#   - PlruStateGenConfig, PlruStateGen, build_verilog, main
-# Port contract / 端口契约:
-#   - state: NumWays-1 tree bits
-#   - touches_i_valid/touches_i_bits: valid way touches, applied in order
-#   - nextState: tree state after all valid touches
-#   - victim: encoded way selected by the tree (retained on the Python object)
-# This is the recursive tree algorithm from XiangShan's PlruStateGen, with no
-# per-set storage or clocked state in this helper.
-# Status / 状态: PYTHON_PRESENT_UNVERIFIED (phase-2 structural alignment)
-__all__ = ["PlruStateGenConfig", "PlruStateGen", "build_verilog", "main"]
+# Module Contract / 模块契约
+# State bit tree_nways-2 is the root; lower bits contain the right (lower-way)
+# subtree followed by the left (higher-way) subtree, matching
+# freechips.rocketchip.util.PseudoLRU.  A root value of one selects the left
+# subtree as older.  Multi-touch updates are folded in input order.
+# 状态树根位为最高位，触碰按输入顺序依次折叠，端口保持源协议语义。
+__all__ = [
+    "PlruStateGenConfig",
+    "PlruStateGen",
+    "PseudoLRU",
+    "plru_next_state",
+    "plru_victim",
+    "build_verilog",
+    "main",
+]
 
 
-# =============================================================================
-# Configuration
-# =============================================================================
+# Configuration / 配置
 @dataclass(frozen=True)
 class PlruStateGenConfig:
-    # PLRU geometry / PLRU 几何配置
+    """Geometry of one V2 PseudoLRU policy instance. / 单个 V2 伪 LRU 策略实例的几何参数。"""
+
     numWays: int = 4
-    numSets: int = 256  # retained for compatibility; this unit is per-set
+    numSets: int = 256
     accessSize: int = 1
-    fixedTouchWays: bool = False  # adapter specialization may tie way constants
+    fixedTouchWays: bool = False
+
+    # Validate policy geometry / 校验策略几何参数
+    def __post_init__(self) -> None:
+        if self.numWays < 1:
+            raise ValueError("numWays must be positive")
+        if self.numSets < 1:
+            raise ValueError("numSets must be positive")
+        if self.accessSize < 1:
+            raise ValueError("accessSize must be positive")
 
     @property
+    # Return the packed tree state width / 返回树状态打包位宽
     def stateWidth(self) -> int:
-        # One direction bit per internal tree node / 每个树节点一个方向位
         return max(1, self.numWays - 1)
 
     @property
+    # Return the encoded way width / 返回路编号编码位宽
     def wayWidth(self) -> int:
-        # Encoded way width / 路编号编码位宽
         return max(1, (self.numWays - 1).bit_length())
 
 
-# =============================================================================
-# Implementation
-# =============================================================================
+# Normalize adapter configuration mappings / 规范化适配器配置映射
+def normalize_configuration(configuration: Any) -> PlruStateGenConfig:
+    if configuration is None:
+        return PlruStateGenConfig()
+    if isinstance(configuration, PlruStateGenConfig):
+        return configuration
+    if isinstance(configuration, dict):
+        values = dict(configuration)
+        for source, target in (("n_ways", "numWays"),
+                               ("n_sets", "numSets"),
+                               ("access_size", "accessSize"),
+                               ("fixed_touch_ways", "fixedTouchWays")):
+            if source in values and target not in values:
+                values[target] = values.pop(source)
+        return PlruStateGenConfig(**values)
+    raise TypeError("configuration must be PlruStateGenConfig, dict, or None")
+
+
+# Return mathematical ceil(log2(value)) / 返回数学上的 ceil(log2(value))
+def ceil_log2(value: int) -> int:
+    if value < 1:
+        raise ValueError("value must be positive")
+    return (value - 1).bit_length()
+
+
+# Compute one V2 PseudoLRU state transition independently / 独立计算一次 V2 伪 LRU 状态变换
+def plru_next_state(state: int, touch_way: int, num_ways: int) -> int:
+    if num_ways < 1:
+        raise ValueError("num_ways must be positive")
+    if num_ways == 1:
+        return 0
+    width = num_ways - 1
+    state &= (1 << width) - 1
+
+    # Recurse through one integer PLRU tree / 递归处理整数伪 LRU 树
+    def recurse(current: int, touch: int, ways: int) -> int:
+        if ways <= 1:
+            return 0
+        if ways == 2:
+            return 1 ^ (touch & 1)
+        bits = ceil_log2(ways)
+        right_ways = 1 << (bits - 1)
+        left_ways = ways - right_ways
+        right_width = right_ways - 1
+        left_width = left_ways - 1
+        root = 1 ^ ((touch >> (bits - 1)) & 1)
+        right_state = current & ((1 << right_width) - 1)
+        left_state = (current >> right_width) & ((1 << left_width) - 1)
+        right_touch = touch & ((1 << ceil_log2(right_ways)) - 1)
+        right_next = recurse(right_state, right_touch, right_ways)
+        if left_ways > 1:
+            left_touch = touch & ((1 << ceil_log2(left_ways)) - 1)
+            left_next = recurse(left_state, left_touch, left_ways)
+            left_result = left_state if root else left_next
+            right_result = right_next if root else right_state
+            return (right_result | (left_result << right_width) |
+                    (root << (right_width + left_width)))
+        right_result = right_next if root else right_state
+        return right_result | (root << right_width)
+
+    return recurse(state, touch_way, num_ways)
+
+
+# Compute one V2 PseudoLRU victim independently / 独立计算一次 V2 伪 LRU 受害路
+def plru_victim(state: int, num_ways: int) -> int:
+    if num_ways < 1:
+        raise ValueError("num_ways must be positive")
+    if num_ways == 1:
+        return 0
+    state &= (1 << (num_ways - 1)) - 1
+
+    # Recurse through one integer victim tree / 递归处理整数受害路树
+    def recurse(current: int, ways: int) -> int:
+        if ways <= 1:
+            return 0
+        if ways == 2:
+            return current & 1
+        bits = ceil_log2(ways)
+        right_ways = 1 << (bits - 1)
+        left_ways = ways - right_ways
+        right_width = right_ways - 1
+        left_width = left_ways - 1
+        root = (current >> (right_width + left_width)) & 1
+        right_state = current & ((1 << right_width) - 1)
+        left_state = (current >> right_width) & ((1 << left_width) - 1)
+        if root:
+            child = recurse(left_state, left_ways) if left_ways > 1 else 0
+        else:
+            child = recurse(right_state, right_ways)
+        return child | (root << (bits - 1))
+
+    return recurse(state, num_ways)
+
+
+# Implementation / 实现
 class PlruStateGen(Elaboratable):
-    # Combinational tree-PLRU generator / 组合树形伪 LRU 生成器
-    def __init__(self, cfg: PlruStateGenConfig | None = None):
-        c = cfg or PlruStateGenConfig()
-        if c.numWays < 2:
-            raise ValueError("PlruStateGen requires at least two ways")
-        if c.accessSize < 1:
-            raise ValueError("PlruStateGen accessSize must be positive")
-        self.cfg = c
-        self.state = Signal(c.stateWidth, name="io_state")
-        self.touches = []
-        self.touches_valid = []
-        self.touches_bits = []
-        for i in range(c.accessSize):
-            valid = Signal(name=f"io_touches_{i}_valid")
-            bits = Signal(c.wayWidth, name=f"io_touches_{i}_bits")
-            self.touches.append({"valid": valid, "bits": bits})
-            self.touches_valid.append(valid)
-            self.touches_bits.append(bits)
-        self.nextState = Signal(c.stateWidth, name="io_nextState")
-        self.victim = Signal(c.wayWidth, name="io_victim")
+    """Combinational PseudoLRU transform matching Rocket-Chip V2. / 匹配 V2 Rocket-Chip 的组合伪 LRU 变换器。"""
 
+    # Construct the state and touch ports / 构造状态与触碰端口
+    def __init__(self, configuration: PlruStateGenConfig | dict | None = None) -> None:
+        config = normalize_configuration(configuration)
+        self.config = config
+        self.cfg = config
+        self.state = Signal(config.stateWidth, name="io_state")
+        self.touches_valid = [
+            Signal(name=f"io_touches_{index}_valid")
+            for index in range(config.accessSize)
+        ]
+        self.touches_bits = [
+            Signal(config.wayWidth, name=f"io_touches_{index}_bits")
+            for index in range(config.accessSize)
+        ]
+        self.touches = [
+            {"valid": valid, "bits": bits}
+            for valid, bits in zip(self.touches_valid, self.touches_bits)
+        ]
+        self.nextState = Signal(config.stateWidth, name="io_nextState")
+        self.victim = Signal(config.wayWidth, name="io_victim")
+        self.touch_valid = self.touches_valid[0]
+        self.touch_way = self.touches_bits[0]
+
+    # Expose the source ceil-log2 helper / 暴露源实现的 ceil-log2 辅助函数
     def ceil_log2(self, value: int) -> int:
-        # Return the minimum encoded width / 求最小编码位宽
-        return max(1, (value - 1).bit_length())
+        return ceil_log2(value)
 
-    def split_state(self, state, tree_ways: int):
-        # Split root, left subtree, and right subtree / 分解根、左右子树状态
+    # Split one source-style tree state / 分解一个源风格树状态
+    def split_state(self, state: Any, tree_ways: int) -> tuple[Any, Any, Any]:
         if tree_ways <= 2:
             return None, None, None
-        right_ways = 1 << (self.ceil_log2(tree_ways) - 1)
+        right_ways = 1 << (ceil_log2(tree_ways) - 1)
         left_ways = tree_ways - right_ways
         right_width = right_ways - 1
         left_width = left_ways - 1
@@ -87,36 +193,71 @@ class PlruStateGen(Elaboratable):
         left_state = state[right_width:right_width + left_width]
         return root, left_state, right_state
 
-    def next_tree(self, state, touch, tree_ways: int):
-        # Recursively update one tree with a way touch / 递归更新一次路触碰
+    # Slice and zero-extend a touch path / 截取并零扩展触碰路径
+    def touch_slice(self, touch: Any, width: int) -> Any:
+        if width <= 0:
+            return Const(0, 1)
+        available = len(touch)
+        if available >= width:
+            return touch[:width]
+        return Cat(touch, Const(0, width - available))
+
+    # Slice a subtree state with a non-zero width / 截取非零宽度的子树状态
+    def state_slice(self, state: Any, start: int, width: int) -> Any:
+        if width <= 0:
+            return Const(0, 1)
+        return state[start:start + width]
+
+    # Recursively build one hardware state transition / 递归构造一次硬件状态变换
+    def next_tree(self, state: Any, touch_way: Any, tree_ways: int) -> Any:
+        if isinstance(state, int):
+            state = Const(state, max(1, tree_ways - 1))
+        if isinstance(touch_way, int):
+            touch_way = Const(touch_way, max(1, ceil_log2(tree_ways)))
         if tree_ways <= 1:
             return Const(0, 1)
         if tree_ways == 2:
-            return ~(touch[0])
-        root, left_state, right_state = self.split_state(state, tree_ways)
-        right_ways = 1 << (self.ceil_log2(tree_ways) - 1)
+            return ~touch_way[0]
+        bits = ceil_log2(tree_ways)
+        right_ways = 1 << (bits - 1)
         left_ways = tree_ways - right_ways
-        set_left_older = ~touch[self.ceil_log2(tree_ways) - 1]
-        right_touch = touch[:self.ceil_log2(right_ways)]
+        right_width = right_ways - 1
+        left_width = left_ways - 1
+        root = ~touch_way[bits - 1]
+        right_state = self.state_slice(state, 0, right_width)
+        left_state = self.state_slice(state, right_width, left_width)
+        right_touch = self.touch_slice(touch_way, ceil_log2(right_ways))
         right_next = self.next_tree(right_state, right_touch, right_ways)
         if left_ways > 1:
-            left_touch = touch[:self.ceil_log2(left_ways)]
+            left_touch = self.touch_slice(touch_way, ceil_log2(left_ways))
             left_next = self.next_tree(left_state, left_touch, left_ways)
-            left_result = Mux(set_left_older, left_state, left_next)
-            right_result = Mux(set_left_older, right_next, right_state)
-            return Cat(right_result, left_result, set_left_older)
-        right_result = Mux(set_left_older, right_next, right_state)
-        return Cat(right_result, set_left_older)
+            left_result = Mux(root, left_state, left_next)
+            right_result = Mux(root, right_next, right_state)
+            # Amaranth Cat is least-significant-first; root must be the MSB.
+            return Cat(right_result, left_result, root)
+        right_result = Mux(root, right_next, right_state)
+        return Cat(right_result, root)
 
-    def victim_tree(self, state, tree_ways: int):
-        # Recursively select the tree's victim way / 递归选择树形受害路
+    # Expose the Rocket-Chip transition name / 暴露 Rocket-Chip 状态变换名称
+    def get_next_state(self, state: Any, touch_way: Any) -> Any:
+        return self.next_tree(state, touch_way, self.config.numWays)
+
+    # Recursively build one hardware victim expression / 递归构造一次硬件受害路表达式
+    def victim_tree(self, state: Any, tree_ways: int) -> Any:
+        if isinstance(state, int):
+            state = Const(state, max(1, tree_ways - 1))
         if tree_ways <= 1:
             return Const(0, 1)
         if tree_ways == 2:
             return state[0]
-        root, left_state, right_state = self.split_state(state, tree_ways)
-        right_ways = 1 << (self.ceil_log2(tree_ways) - 1)
+        bits = ceil_log2(tree_ways)
+        right_ways = 1 << (bits - 1)
         left_ways = tree_ways - right_ways
+        right_width = right_ways - 1
+        left_width = left_ways - 1
+        root = state[right_width + left_width]
+        right_state = self.state_slice(state, 0, right_width)
+        left_state = self.state_slice(state, right_width, left_width)
         right_victim = self.victim_tree(right_state, right_ways)
         if left_ways > 1:
             left_victim = self.victim_tree(left_state, left_ways)
@@ -125,51 +266,53 @@ class PlruStateGen(Elaboratable):
             chosen = Mux(root, Const(0, 1), right_victim)
         return Cat(chosen, root)
 
-    def elaborate(self, platform):
-        # Fold touches and decode current victim / 折叠触碰并解码当前受害路
-        m = Module()
-        if self.cfg.fixedTouchWays:
-            # The reference MainBTB specialization wires four touches to
-            # constant way indices and exposes only their valid bits.
-            for i, bits in enumerate(self.touches_bits):
-                m.d.comb += bits.eq(i)
+    # Expose the Rocket-Chip victim name / 暴露 Rocket-Chip 受害路名称
+    def get_replace_way(self, state: Any) -> Any:
+        return self.victim_tree(state, self.config.numWays)
+
+    # Elaborate folded touches and victim decode / 展开折叠触碰与受害路译码
+    def elaborate(self, platform: Any) -> Module:
+        del platform
+        module = Module()
+        if self.config.fixedTouchWays:
+            for index, bits in enumerate(self.touches_bits):
+                module.d.comb += bits.eq(index)
         folded = self.state
         for valid, bits in zip(self.touches_valid, self.touches_bits):
-            folded = Mux(valid, self.next_tree(folded, bits, self.cfg.numWays), folded)
-        m.d.comb += [self.nextState.eq(folded),
-                     self.victim.eq(self.victim_tree(self.state, self.cfg.numWays))]
-        return m
+            folded = Mux(valid, self.next_tree(folded, bits, self.config.numWays), folded)
+        module.d.comb += [
+            self.nextState.eq(folded),
+            self.victim.eq(self.victim_tree(self.state, self.config.numWays)),
+        ]
+        return module
 
 
-# =============================================================================
-# Public Adapter
-# =============================================================================
-def build_verilog(config: PlruStateGenConfig | None = None,
-                  name: str = "PlruStateGen") -> str:
-    # Convert the real state generator to Verilog / 导出真实状态生成器
+# Explicit V2 policy surface / 显式 V2 策略表面
+class PseudoLRU(PlruStateGen):
+    """Named PseudoLRU policy adapter. / 具名伪 LRU 策略适配器。"""
+
+    # Construct a PseudoLRU policy with source-style arguments / 用源风格参数构造伪 LRU 策略
+    def __init__(self, n_ways: int = 4, access_size: int = 1) -> None:
+        super().__init__(PlruStateGenConfig(numWays=n_ways, accessSize=access_size))
+
+
+# Public Adapter / 公共适配器
+# Export deterministic Verilog for the configured combinational policy. / 导出配置化组合策略的确定性 Verilog。
+def build_verilog(configuration: Any = None, injected_dependencies: Any = None) -> str:
+    del injected_dependencies
     from amaranth.back import verilog
-    # Match the pinned four-way specialization: valid-only touches represent
-    # fixed ways 0..3; explicit configs retain the generic touch-bit surface.
-    export_config = config or PlruStateGenConfig(numWays=4, accessSize=4,
-                                                  fixedTouchWays=True)
-    top = PlruStateGen(export_config)
-    ports = [top.state]
-    for item in top.touches:
-        ports.append(item["valid"])
-        if not export_config.fixedTouchWays:
-            ports.append(item["bits"])
-    ports.append(top.nextState)
-    if not export_config.fixedTouchWays:
-        ports.append(top.victim)
-    return verilog.convert(top, name=name, ports=ports)
+
+    config = normalize_configuration(configuration)
+    top = PlruStateGen(config)
+    ports = [top.state, *top.touches_valid, *top.touches_bits,
+             top.nextState, top.victim]
+    return verilog.convert(top, name="PlruStateGen", ports=ports, emit_src=False)
 
 
-# =============================================================================
-# Direct Entry
-# =============================================================================
+# Direct Entry / 直接入口
+# Print the default generated policy for command-line inspection. / 打印默认生成策略供命令行检查。
 def main() -> None:
-    # Direct elaboration entry / 直接入口
-    print(build_verilog())
+    print(build_verilog(None, {}))
 
 
 if __name__ == "__main__":

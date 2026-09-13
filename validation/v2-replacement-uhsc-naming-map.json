@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "kind": "UHSC_REPLACEMENT_BATCH_NAMING_MAP",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "reference_names_unchanged": true,
+  "status": "PENDING_COORDINATOR_REVIEW",
+  "entries": [
+    {
+      "source_name": "XSTop",
+      "local_name": "UHSCTop",
+      "visibility": "project-owned external HDL wrapper",
+      "reason": "External top identity is localized only by a later wrapper; no locked SV text is renamed."
+    },
+    {
+      "source_name": "XiangShan / XS / KMHV2",
+      "local_name": "UHSC",
+      "visibility": "project-owned external product identity",
+      "reason": "Source provenance and protocol names remain unchanged; only product-facing identity is UHSC."
+    }
+  ],
+  "targets": [
+    "LruStateGen",
+    "PlruStateGen",
+    "ReplacerState"
+  ],
+  "gates": {
+    "UHSC_LOCALIZED": "PENDING_EXTERNAL_WRAPPER",
+    "ACCEPTED": "NOT_ALLOWED"
+  }
+}
