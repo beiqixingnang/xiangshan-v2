@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_PHASE1_WORKER_QUEUE",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "authority_manifest": "V2-Phase0-Mapping-Manifest.json",
+  "worker_model": "gpt-5.6-terra",
+  "reasoning_effort": "max",
+  "rules": {
+    "disjoint_family_ownership": true,
+    "rewrite_direct_reference_localize_in_one_batch": true,
+    "target_imports": "stdlib + amaranth only",
+    "required_adapter": "build_verilog(configuration, injected_dependencies)",
+    "accepted_promotion": "forbidden until V2 reference, differential, parent closure and license gates pass",
+    "locked_inputs": ["upstream/", "V2-Snapshot.json", "XSTop.sv reference hash"]
+  },
+  "batches": [
+    {
+      "batch_id": "V2-P1-A-REPLACEMENT",
+      "family_ids": ["core.replacement"],
+      "closure_roots": ["core.replacement"],
+      "candidates": ["LruStateGen", "PlruStateGen", "ReplacerState"],
+      "v2_sources": ["upstream/utility/src/main/scala/utility/Replacement.scala", "upstream/rocket-chip/src/main/scala/util/Replacement.scala"],
+      "work": "Implement parameterized V2 TrueLRU/PseudoLRU/SetAssocLRU state and explicit adapters; classify old standalone surfaces as relocated/rewritten.",
+      "observation_points": ["reset state", "victim selection", "touch/update", "way count boundaries"],
+      "required_evidence": ["direct vectors", "V2 extracted/reference closure", "Verilator", "Yosys", "trace hash", "coverage manifest"]
+    },
+    {
+      "batch_id": "V2-P1-B-ICACHE",
+      "family_ids": ["core.frontend.icache.mshr", "core.frontend.icache.replacer", "core.frontend.icache.utility"],
+      "closure_roots": ["core.frontend.icache"],
+      "candidates": ["ICacheMshr", "ICacheReplacer", "Utils"],
+      "v2_sources": ["upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala", "upstream/src/main/scala/xiangshan/frontend/icache/ICache.scala", "upstream/src/main/scala/xiangshan/frontend/icache/FIFO.scala"],
+      "work": "Rewrite V2 ICacheMSHR/ICacheReplacer and DeMultiplexer/MuxBundle/FIFO from actual V2 locations; do not use V3 standalone filenames as authority.",
+      "observation_points": ["miss allocation", "refill/kill", "replacement choice", "FIFO ready-valid", "flush/reset"],
+      "required_evidence": ["direct transactions", "V2 extracted/reference closure", "Verilator", "Yosys", "trace hash", "child coverage manifest"]
+    },
+    {
+      "batch_id": "V2-P1-C-FRONTEND-BPU-RVC",
+      "family_ids": ["core.frontend.bpu.compare", "core.frontend.bpu.counters", "core.frontend.ftb", "core.frontend.ifu.rvc"],
+      "closure_roots": ["core.frontend.bpu", "core.frontend", "core.frontend.ifu"],
+      "candidates": ["CompareMatrix", "FallThroughPredictor", "SaturateCounter", "SignedSaturateCounter", "RvcExpander"],
+      "v2_sources": ["upstream/src/main/scala/xiangshan/backend/dispatch/NewDispatch.scala", "upstream/src/main/scala/xiangshan/frontend/BPU.scala", "upstream/src/main/scala/xiangshan/frontend/FTB.scala", "upstream/src/main/scala/xiangshan/frontend/FrontendBundle.scala", "upstream/src/main/scala/xiangshan/frontend/NewFtq.scala", "upstream/src/main/scala/xiangshan/frontend/PreDecode.scala", "upstream/rocket-chip/src/main/scala/rocket/RVC.scala"],
+      "work": "Replace V3 standalone BPU assumptions with V2 inlined/distributed logic and record excluded children.",
+      "observation_points": ["counter saturation", "signed update", "fall-through target/error", "RVC expansion", "dispatch ordering"],
+      "required_evidence": ["direct vectors", "V2 source-level or extracted closure reference", "Verilator", "Yosys", "trace hash", "parent coverage manifest"]
+    }
+  ],
+  "queue_status": "READY_FOR_TERRA_WORKERS",
+  "accepted_count": 0,
+  "unclosed": ["worker assignment/commit", "V2 differential evidence", "parent closure", "UHSC wrapper", "license review"]
+}
