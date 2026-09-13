@@ -51,6 +51,17 @@ SCALA = {
     "UIntToCont1s": ROOT / "upstream" / "src/main/scala/xiangshan/backend/fu/vector/utils/UIntToCont1s.scala",
     "VecDataSplitModule": ROOT / "upstream" / "src/main/scala/xiangshan/backend/fu/vector/utils/VecDataSplitModule.scala",
 }
+FAMILY = {
+    "ByteMaskTailGen": "core.fu.vector.mask",
+    "DstMgu": "core.fu.vector.mgu",
+    "Mgtu": "core.fu.vector.compare",
+    "NewMgu": "core.fu.vector.mgu",
+    "MaskExtrator": "core.fu.vector.mask",
+    "ScalaDupToVector": "core.fu.vector.mask",
+    "UIntToCont0s": "core.fu.vector.mask",
+    "UIntToCont1s": "core.fu.vector.mask",
+    "VecDataSplitModule": "core.fu.vector.mask",
+}
 
 
 # Hash exact bytes. / 对精确字节计算摘要。
@@ -497,6 +508,7 @@ def main() -> int:
         "extractable_reference_modules": ["VecDataSplitModule", "UIntToContLow1s", "UIntToContLow0s",
                                            "MaskExtractor", "ByteMaskTailGen", "Mgtu"],
         "parent_closure_reference_modules": {"NewMgu": "Mgu/VldMgu", "DstMgu": "Mgu"},
+        "families": {name: {"family_id": FAMILY[name], "closure_root": "core.fu.vector"} for name in TARGETS},
         "non_extractable_carried_surfaces": {"ScalaDupToVector": "not instantiated in locked XSTop; source-level evidence"},
         "extracted": {name: {"path": path.relative_to(ROOT).as_posix(), "sha256": digest(path), "bytes": len(path.read_bytes())}
                       for name, path in refs.items()},
@@ -533,7 +545,8 @@ def main() -> int:
         "source_commit": SOURCE_COMMIT,
         "closure_root": "core.fu.vector",
         "targets": [
-            {"candidate": name, "python_path": TARGETS[name][0].relative_to(ROOT).as_posix(),
+            {"candidate": name, "family_id": FAMILY[name], "closure_root": "core.fu.vector",
+             "python_path": TARGETS[name][0].relative_to(ROOT).as_posix(),
              "v2_sources": sources, "covered_children": children, "observation_points": points,
              "reference_surface": reference, "direct": "PASS_BOUNDED_DIRECT",
              "differential": differential, "status": "PENDING_COORDINATOR_REVIEW"}
@@ -560,7 +573,8 @@ def main() -> int:
         "source_commit": SOURCE_COMMIT,
         "locked_reference": {"path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv", "sha256": ref_hash, "bytes": len(raw_ref)},
         "entries": [
-            {"id": name, "classification": classifications[name], "v2_source": [path.relative_to(ROOT).as_posix() for path in ([SCALA[name]] if name not in ("DstMgu", "NewMgu") else [SCALA[name]])],
+            {"id": name, "family_id": FAMILY[name], "closure_root": "core.fu.vector",
+             "classification": classifications[name], "v2_source": [path.relative_to(ROOT).as_posix() for path in ([SCALA[name]] if name not in ("DstMgu", "NewMgu") else [SCALA[name]])],
              "target": TARGETS[name][0].relative_to(ROOT).as_posix(),
              "reference_mode": ("EXTRACTED_MODULE" if name in ("ByteMaskTailGen", "Mgtu", "MaskExtrator", "UIntToCont0s", "UIntToCont1s", "VecDataSplitModule") else ("Mgu_VldMgu_PARENT_CLOSURE" if name == "NewMgu" else ("Mgu_PARENT_CLOSURE" if name == "DstMgu" else "SOURCE_LEVEL_PARENT_CLOSURE"))),
              "status": ("DIFFERENTIAL_MATCHED_BOUNDED" if name != "ScalaDupToVector" else "SOURCE_MATCHED_BOUNDED"),

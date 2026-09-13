@@ -33,6 +33,17 @@ TARGETS = {
     "UIntToCont1s": TARGET_ROOT / "utils" / "UIntToCont1s-Hardware.py",
     "VecDataSplitModule": TARGET_ROOT / "utils" / "VecDataSplitModule-Hardware.py",
 }
+FAMILY = {
+    "ByteMaskTailGen": "core.fu.vector.mask",
+    "DstMgu": "core.fu.vector.mgu",
+    "Mgtu": "core.fu.vector.compare",
+    "NewMgu": "core.fu.vector.mgu",
+    "MaskExtrator": "core.fu.vector.mask",
+    "ScalaDupToVector": "core.fu.vector.mask",
+    "UIntToCont0s": "core.fu.vector.mask",
+    "UIntToCont1s": "core.fu.vector.mask",
+    "VecDataSplitModule": "core.fu.vector.mask",
+}
 
 
 # Return a SHA-256 digest over exact bytes. / 对原始字节计算 SHA-256 摘要。
@@ -315,6 +326,9 @@ def main() -> int:
         "UIntToCont1s": test_contiguous_ones(modules["UIntToCont1s"]),
         "VecDataSplitModule": test_split(modules["VecDataSplitModule"]),
     }
+    for name, row in tests.items():
+        row["family_id"] = FAMILY[name]
+        row["closure_root"] = "core.fu.vector"
     adapters: dict[str, Any] = {}
     for name, module in modules.items():
         builder = module.build_verilog
