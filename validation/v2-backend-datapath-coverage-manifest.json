@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "kind": "V2_P1_D_BACKEND_DATAPATH_CHILD_COVERAGE",
+  "batch_id": "V2-P1-D-BACKEND-DATAPATH",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "closure_root": "core.backend.datapath",
+  "children": [
+    {
+      "name": "DataSource",
+      "family_id": "core.backend.datapath",
+      "source": "upstream/src/main/scala/xiangshan/backend/datapath/DataSource.scala",
+      "reference": "XSTop source equations",
+      "variants": [
+        "all 16 selector values"
+      ],
+      "direct": "PASS_BOUNDED_DIRECT",
+      "differential": "PASS_BOUNDED_SOURCE"
+    },
+    {
+      "name": "NewPipelineConnectPipe",
+      "family_id": "core.backend.datapath",
+      "source": "upstream/src/main/scala/xiangshan/backend/datapath/NewPipelineConnect.scala",
+      "reference": "NewPipelineConnectPipe_25-v2 + scalar wrapper",
+      "variants": [
+        "64-bit scalar adapter",
+        "isOlder=false extracted parent"
+      ],
+      "direct": "PASS_BOUNDED_DIRECT",
+      "differential": "PASS_BOUNDED_REFERENCE"
+    },
+    {
+      "name": "RealWBArbiter",
+      "family_id": "core.backend.datapath.writeback",
+      "source": "upstream/src/main/scala/xiangshan/backend/datapath/RFWBConflictChecker.scala",
+      "reference": "RealWBArbiter-v2",
+      "variants": [
+        "n=3",
+        "ready=1 common interface"
+      ],
+      "direct": "PASS_BOUNDED_DIRECT",
+      "differential": "PASS_BOUNDED_REFERENCE"
+    },
+    {
+      "name": "RealWBCollideChecker",
+      "family_id": "core.backend.datapath.writeback",
+      "source": "upstream/src/main/scala/xiangshan/backend/datapath/WbArbiter.scala",
+      "reference": "RealWBCollideChecker-v2",
+      "variants": [
+        "ports 0/0/1 and NoWB"
+      ],
+      "direct": "PASS_BOUNDED_DIRECT",
+      "differential": "PENDING_PARENT_INTEGRATION"
+    },
+    {
+      "name": "WbDataPath",
+      "family_id": "core.backend.datapath.writeback",
+      "source": "upstream/src/main/scala/xiangshan/backend/datapath/WbArbiter.scala",
+      "reference": "locked V2 source parent closure",
+      "variants": [
+        "int/fp/vf/v0/vl",
+        "memory EXU"
+      ],
+      "direct": "PASS_BOUNDED_DIRECT",
+      "differential": "PASS_BOUNDED_SOURCE"
+    }
+  ],
+  "observation_points": [
+    "selector predicates",
+    "pipeline ready/valid",
+    "flush/reset",
+    "older override",
+    "writeback priority",
+    "five register-file classes",
+    "memory EXU inclusion",
+    "uncertain-latency backpressure"
+  ],
+  "direct": "PASS_BOUNDED_DIRECT",
+  "differential": "PASS_BOUNDED_REFERENCE",
+  "parent_closure": "PENDING",
+  "license_review": "PENDING",
+  "acceptance_eligible": false
+}

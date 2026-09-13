@@ -1,0 +1,583 @@
+{
+  "schema_version": 1,
+  "kind": "V2_P1_D_BACKEND_DATAPATH_DIFFERENTIAL_EVIDENCE",
+  "batch_id": "V2-P1-D-BACKEND-DATAPATH",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "reference_snapshot": {
+    "canonical_path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "bytes": 228590583
+  },
+  "source_paths": {
+    "DataSource": "upstream/src/main/scala/xiangshan/backend/datapath/DataSource.scala",
+    "NewPipelineConnect": "upstream/src/main/scala/xiangshan/backend/datapath/NewPipelineConnect.scala",
+    "WbArbiter": "upstream/src/main/scala/xiangshan/backend/datapath/WbArbiter.scala"
+  },
+  "target_paths": {
+    "DataSource": "python/ported/backend/datapath/DataSource-Hardware.py",
+    "NewPipelineConnect": "python/ported/backend/datapath/NewPipelineConnect-Hardware.py",
+    "WbArbiter": "python/ported/backend/datapath/WbArbiter-Hardware.py"
+  },
+  "target_sha256": {
+    "DataSource": "3a27f22bba8a1ca98289f20eea066de0d3972d64ced81784a24e40d93076023a",
+    "NewPipelineConnect": "11b817bb9f993da0f440b66f21183204fd27f3651dd809c1da34bd201ba3e85b",
+    "WbArbiter": "7353cfb702ee3b9550917e7c7bdeb41a5b3470585628c37473f47392e7228bf0"
+  },
+  "source_sha256": {
+    "DataSource": "342069020acee225f1a4d10cfecdf308c31718cd86c50979e1a52d4b76b8bd5f",
+    "NewPipelineConnect": "5f69b6f1f5987a6b1a34be7108ec835521451efa9e7874a4039f05a4d25d4dd0",
+    "WbArbiter": "083d5c7c30d9aca4f13d24e9bae5958dfb160fbe4952629f1b19b40b3fe2cdaa"
+  },
+  "direct_evidence": {
+    "path": "validation/v2-backend-datapath-direct-results.json",
+    "sha256": "2de377272be3b436d78a5845111cb6fbbc890e1984fa7a7c07f8fe4e59c104c3",
+    "status": "PASS_BOUNDED_DIRECT"
+  },
+  "reference_index": "validation/v2-backend-datapath-reference-index.json",
+  "comparisons": [
+    {
+      "name": "RealWBArbiter-ready1",
+      "comparison": "PASS",
+      "behavioral_equivalence": true,
+      "target_vectors": 8,
+      "reference_vectors": 8,
+      "target_trace_sha256": "e5bbbfbbac98cba9eed54e5d81d5863c3f191232b61adf24e7974448e5e3c27e",
+      "reference_trace_sha256": "e5bbbfbbac98cba9eed54e5d81d5863c3f191232b61adf24e7974448e5e3c27e",
+      "first_mismatch": null,
+      "ignored_fields": [
+        "chosen"
+      ]
+    },
+    {
+      "name": "NewPipelineConnectPipe",
+      "comparison": "PASS",
+      "behavioral_equivalence": true,
+      "target_vectors": 12,
+      "reference_vectors": 12,
+      "target_trace_sha256": "27a7d441349b65d6e246f4f7a9fa7730faf7c877aa20440002f399fcb2c6840a",
+      "reference_trace_sha256": "27a7d441349b65d6e246f4f7a9fa7730faf7c877aa20440002f399fcb2c6840a",
+      "first_mismatch": null,
+      "ignored_fields": []
+    },
+    {
+      "name": "DataSource-source-equations",
+      "comparison": "PASS",
+      "behavioral_equivalence": true,
+      "target_vectors": 16,
+      "reference_vectors": 16,
+      "target_trace_sha256": "f062f5427f9ba3e13afcfc4ec1c83a867507c6ca333bef1ec0ecc1cba7adfad2",
+      "reference_trace_sha256": "f062f5427f9ba3e13afcfc4ec1c83a867507c6ca333bef1ec0ecc1cba7adfad2",
+      "reference_mode": "locked_xstop_source_equation",
+      "first_mismatch": null
+    },
+    {
+      "name": "WbDataPath-source-closure",
+      "comparison": "PASS",
+      "behavioral_equivalence": true,
+      "target_vectors": 4,
+      "reference_vectors": 4,
+      "target_trace_sha256": "d459c1f3c0b102008cee82c51dc30b8891c2aa7a92f340606b618cc03c60060a",
+      "reference_trace_sha256": null,
+      "reference_mode": "locked_v2_source_parent_closure",
+      "first_mismatch": null
+    }
+  ],
+  "behavioral_equivalence": true,
+  "contract_audit": {
+    "result": "PASS",
+    "rows": [
+      {
+        "name": "DataSource",
+        "path": "python/ported/backend/datapath/DataSource-Hardware.py",
+        "sha256": "3a27f22bba8a1ca98289f20eea066de0d3972d64ced81784a24e40d93076023a",
+        "bytes": 7965,
+        "bom": false,
+        "lf_only": true,
+        "ast": true,
+        "zones": true,
+        "adapter_exact": true,
+        "missing_bilingual_comments": []
+      },
+      {
+        "name": "NewPipelineConnect",
+        "path": "python/ported/backend/datapath/NewPipelineConnect-Hardware.py",
+        "sha256": "11b817bb9f993da0f440b66f21183204fd27f3651dd809c1da34bd201ba3e85b",
+        "bytes": 7476,
+        "bom": false,
+        "lf_only": true,
+        "ast": true,
+        "zones": true,
+        "adapter_exact": true,
+        "missing_bilingual_comments": []
+      },
+      {
+        "name": "WbArbiter",
+        "path": "python/ported/backend/datapath/WbArbiter-Hardware.py",
+        "sha256": "7353cfb702ee3b9550917e7c7bdeb41a5b3470585628c37473f47392e7228bf0",
+        "bytes": 30092,
+        "bom": false,
+        "lf_only": true,
+        "ast": true,
+        "zones": true,
+        "adapter_exact": true,
+        "missing_bilingual_comments": []
+      }
+    ]
+  },
+  "backend_gates": {
+    "RealWBArbiter_target": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "--Wno-fatal",
+          "--top-module",
+          "RealWBArbiter",
+          "/tmp/uhsc-v2/validation/.work/v2-backend-datapath/wb-target.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.045 MB sources in 2 modules, into 0.019 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.021 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.270 MB\n",
+        "output_sha256": "1fa039382289b99137b536043602b9b41d15af1c26c68601d99e8933e647a046"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-p",
+          "read_verilog -sv /tmp/uhsc-v2/validation/.work/v2-backend-datapath/wb-target.sv; hierarchy -top RealWBArbiter; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "\n /----------------------------------------------------------------------------\\\n |  yosys -- Yosys Open SYnthesis Suite                                       |\n |  Copyright (C) 2012 - 2025  Claire Xenia Wolf <claire@yosyshq.com>         |\n |  Distributed under an ISC-like license, type \"license\" to see terms        |\n \\----------------------------------------------------------------------------/\n Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\n\n-- Running command `read_verilog -sv /tmp/uhsc-v2/validation/.work/v2-backend-datapath/wb-target.sv; hierarchy -top RealWBArbiter; proc; check' --\n\n1. Executing Verilog-2005 frontend: /tmp/uhsc-v2/validation/.work/v2-backend-datapath/wb-target.sv\nParsing SystemVerilog input from `/tmp/uhsc-v2/validation/.work/v2-backend-datapath/wb-target.sv' to AST representation.\nGenerating RTLIL representation for module `\\RealWBArbiter'.\nSuccessfully finished Verilog frontend.\n\n2. Executing HIERARCHY pass (managing design hierarchy).\n\n2.1. Analyzing design hierarchy..\nTop module:  \\RealWBArbiter\n\n2.2. Analyzing design hierarchy..\nTop module:  \\RealWBArbiter\nRemoved 0 unused modules.\n\n3. Executing PROC pass (convert processes to netlists).\n\n3.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RealWBArbiter.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module RealWBArbiter...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 72faa4aaf8, CPU: user 0.01s system 0.01s, MEM: 11.25 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 73% 2x read_verilog (0 sec), 9% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "dcddc4cd326cf36aa8c5b4894e9ad1e2cc0e7727df51481c20b4a0481a9b3c42"
+      }
+    },
+    "RealWBArbiter_reference": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "--Wno-fatal",
+          "--top-module",
+          "RealWBArbiter",
+          "/tmp/uhsc-v2/validation/reference-closures/RealWBArbiter-v2.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.022 MB sources in 2 modules, into 0.018 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.016 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.004 s on 1 threads; alloced 9.191 MB\n",
+        "output_sha256": "41f833530cc1fd3ddb308f1fd9230c7ae0b0338c3ecd9b984b31928f9ab84ef3"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-p",
+          "read_verilog -sv /tmp/uhsc-v2/validation/reference-closures/RealWBArbiter-v2.sv; hierarchy -top RealWBArbiter; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "\n /----------------------------------------------------------------------------\\\n |  yosys -- Yosys Open SYnthesis Suite                                       |\n |  Copyright (C) 2012 - 2025  Claire Xenia Wolf <claire@yosyshq.com>         |\n |  Distributed under an ISC-like license, type \"license\" to see terms        |\n \\----------------------------------------------------------------------------/\n Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\n\n-- Running command `read_verilog -sv /tmp/uhsc-v2/validation/reference-closures/RealWBArbiter-v2.sv; hierarchy -top RealWBArbiter; proc; check' --\n\n1. Executing Verilog-2005 frontend: /tmp/uhsc-v2/validation/reference-closures/RealWBArbiter-v2.sv\nParsing SystemVerilog input from `/tmp/uhsc-v2/validation/reference-closures/RealWBArbiter-v2.sv' to AST representation.\nGenerating RTLIL representation for module `\\RealWBArbiter'.\nSuccessfully finished Verilog frontend.\n\n2. Executing HIERARCHY pass (managing design hierarchy).\n\n2.1. Analyzing design hierarchy..\nTop module:  \\RealWBArbiter\n\n2.2. Analyzing design hierarchy..\nTop module:  \\RealWBArbiter\nRemoved 0 unused modules.\n\n3. Executing PROC pass (convert processes to netlists).\n\n3.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RealWBArbiter.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module RealWBArbiter...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: c6e77d8d4e, CPU: user 0.01s system 0.00s, MEM: 11.09 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 46% 2x read_verilog (0 sec), 16% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "e0af97b1af9e5359f234c99a0afb1ad2fbff6b04156c9e37bef6fc1721ecac15"
+      }
+    },
+    "NewPipelineConnect_target": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "--Wno-fatal",
+          "--top-module",
+          "NewPipelineConnectPipe",
+          "/tmp/uhsc-v2/validation/.work/v2-backend-datapath/npc-target.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.030 MB sources in 2 modules, into 0.022 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.018 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.246 MB\n",
+        "output_sha256": "cf48e6e337b50f9b7ec4e0ec278c972da2e62e6d4fcdff541e5de712467a0b81"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-p",
+          "read_verilog -sv /tmp/uhsc-v2/validation/.work/v2-backend-datapath/npc-target.sv; hierarchy -top NewPipelineConnectPipe; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "apath/npc-target.sv:75$12'.\n     1/1: $1\\$9[63:0]$14\nCreating decoders for process `\\NewPipelineConnectPipe.$proc$/tmp/uhsc-v2/validation/.work/v2-backend-datapath/npc-target.sv:72$11'.\n     1/1: $0\\io_out_bits[63:0]\nCreating decoders for process `\\NewPipelineConnectPipe.$proc$/tmp/uhsc-v2/validation/.work/v2-backend-datapath/npc-target.sv:68$10'.\n     1/1: $0\\io_out_valid[0:0]\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\nNo latch inferred for signal `\\NewPipelineConnectPipe.\\$auto$verilog_backend.cc:2355:dump_module$1' from process `\\NewPipelineConnectPipe.$proc$/tmp/uhsc-v2/validation/.work/v2-backend-datapath/npc-target.sv:7$15'.\nNo latch inferred for signal `\\NewPipelineConnectPipe.\\$9' from process `\\NewPipelineConnectPipe.$proc$/tmp/uhsc-v2/validation/.work/v2-backend-datapath/npc-target.sv:75$12'.\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\nCreating register for signal `\\NewPipelineConnectPipe.\\io_out_bits' using process `\\NewPipelineConnectPipe.$proc$/tmp/uhsc-v2/validation/.work/v2-backend-datapath/npc-target.sv:72$11'.\n  created $adff cell `$procdff$24' with positive edge clock and positive level reset.\nCreating register for signal `\\NewPipelineConnectPipe.\\io_out_valid' using process `\\NewPipelineConnectPipe.$proc$/tmp/uhsc-v2/validation/.work/v2-backend-datapath/npc-target.sv:68$10'.\n  created $adff cell `$procdff$27' with positive edge clock and positive level reset.\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nRemoving empty process `NewPipelineConnectPipe.$proc$/tmp/uhsc-v2/validation/.work/v2-backend-datapath/npc-target.sv:43$18'.\nRemoving empty process `NewPipelineConnectPipe.$proc$/tmp/uhsc-v2/validation/.work/v2-backend-datapath/npc-target.sv:37$17'.\nRemoving empty process `NewPipelineConnectPipe.$proc$/tmp/uhsc-v2/validation/.work/v2-backend-datapath/npc-target.sv:7$15'.\nFound and cleaned up 1 empty switch in `\\NewPipelineConnectPipe.$proc$/tmp/uhsc-v2/validation/.work/v2-backend-datapath/npc-target.sv:75$12'.\nRemoving empty process `NewPipelineConnectPipe.$proc$/tmp/uhsc-v2/validation/.work/v2-backend-datapath/npc-target.sv:75$12'.\nRemoving empty process `NewPipelineConnectPipe.$proc$/tmp/uhsc-v2/validation/.work/v2-backend-datapath/npc-target.sv:72$11'.\nRemoving empty process `NewPipelineConnectPipe.$proc$/tmp/uhsc-v2/validation/.work/v2-backend-datapath/npc-target.sv:68$10'.\nCleaned up 1 empty switch.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module NewPipelineConnectPipe.\n<suppressed ~2 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module NewPipelineConnectPipe...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 75d48197e8, CPU: user 0.01s system 0.01s, MEM: 11.88 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 56% 2x read_verilog (0 sec), 15% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "2598392b8bbee5e4a06bc96ae42332be5b105fe2edb11915dc51239664b398e1"
+      }
+    },
+    "NewPipelineConnect_reference": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "--Wno-fatal",
+          "--top-module",
+          "NewPipelineConnectPipe",
+          "/tmp/uhsc-v2/validation/.work/v2-backend-datapath/npc-reference-combined.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.024 MB sources in 3 modules, into 0.023 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.021 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.297 MB\n",
+        "output_sha256": "36d7eaee48086ec61be8f5b9e8e6e1c9d91e2dfb14786ac31be8c76134a0e56b"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-p",
+          "read_verilog -sv /tmp/uhsc-v2/validation/.work/v2-backend-datapath/npc-reference-combined.sv; hierarchy -top NewPipelineConnectPipe; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "nnectPipe_25.$proc$/tmp/uhsc-v2/validation/.work/v2-backend-datapath/npc-reference-combined.sv:42$10'.\n  created $dff cell `$procdff$27' with positive edge clock.\nCreating register for signal `\\NewPipelineConnectPipe_25.\\data_src_0' using process `\\NewPipelineConnectPipe_25.$proc$/tmp/uhsc-v2/validation/.work/v2-backend-datapath/npc-reference-combined.sv:42$10'.\n  created $dff cell `$procdff$28' with positive edge clock.\nCreating register for signal `\\NewPipelineConnectPipe_25.\\data_robIdx_flag' using process `\\NewPipelineConnectPipe_25.$proc$/tmp/uhsc-v2/validation/.work/v2-backend-datapath/npc-reference-combined.sv:42$10'.\n  created $dff cell `$procdff$29' with positive edge clock.\nCreating register for signal `\\NewPipelineConnectPipe_25.\\data_robIdx_value' using process `\\NewPipelineConnectPipe_25.$proc$/tmp/uhsc-v2/validation/.work/v2-backend-datapath/npc-reference-combined.sv:42$10'.\n  created $dff cell `$procdff$30' with positive edge clock.\nCreating register for signal `\\NewPipelineConnectPipe_25.\\data_sqIdx_flag' using process `\\NewPipelineConnectPipe_25.$proc$/tmp/uhsc-v2/validation/.work/v2-backend-datapath/npc-reference-combined.sv:42$10'.\n  created $dff cell `$procdff$31' with positive edge clock.\nCreating register for signal `\\NewPipelineConnectPipe_25.\\data_sqIdx_value' using process `\\NewPipelineConnectPipe_25.$proc$/tmp/uhsc-v2/validation/.work/v2-backend-datapath/npc-reference-combined.sv:42$10'.\n  created $dff cell `$procdff$32' with positive edge clock.\nCreating register for signal `\\NewPipelineConnectPipe_25.\\valid' using process `\\NewPipelineConnectPipe_25.$proc$/tmp/uhsc-v2/validation/.work/v2-backend-datapath/npc-reference-combined.sv:36$4'.\n  created $adff cell `$procdff$35' with positive edge clock and positive level reset.\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nFound and cleaned up 1 empty switch in `\\NewPipelineConnectPipe_25.$proc$/tmp/uhsc-v2/validation/.work/v2-backend-datapath/npc-reference-combined.sv:42$10'.\nRemoving empty process `NewPipelineConnectPipe_25.$proc$/tmp/uhsc-v2/validation/.work/v2-backend-datapath/npc-reference-combined.sv:42$10'.\nRemoving empty process `NewPipelineConnectPipe_25.$proc$/tmp/uhsc-v2/validation/.work/v2-backend-datapath/npc-reference-combined.sv:36$4'.\nCleaned up 1 empty switch.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module NewPipelineConnectPipe.\n<suppressed ~1 debug messages>\nOptimizing module NewPipelineConnectPipe_25.\n<suppressed ~1 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module NewPipelineConnectPipe...\nChecking module NewPipelineConnectPipe_25...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 4ac1e248aa, CPU: user 0.02s system 0.00s, MEM: 12.03 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 46% 2x read_verilog (0 sec), 21% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "f3990be4d736d8a4f9820d799b1d35a0b31ecef3e55463059807baf363ed8821"
+      }
+    },
+    "DataSource_target": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "--Wno-fatal",
+          "--top-module",
+          "DataSource",
+          "/tmp/uhsc-v2/validation/.work/v2-backend-datapath/datasource-target.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "xiangshan-v2\\\\python\\\\ported\\\\backend\\\\datapath\\\\DataSource-Hardware.py:62\" *) io_value;\n      |                        ^\n%Warning-WIDTHEXPAND: /tmp/uhsc-v2/validation/.work/v2-backend-datapath/datasource-target.sv:41:36: Operator EQ expects 4 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                  : ... note: In instance 'DataSource'\n   41 |   assign io_readForward = io_value == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\ported\\\\backend\\\\datapath\\\\DataSource-Hardware.py:66\" *) 1'h1;\n      |                                    ^~\n%Warning-WIDTHEXPAND: /tmp/uhsc-v2/validation/.work/v2-backend-datapath/datasource-target.sv:42:35: Operator EQ expects 4 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                  : ... note: In instance 'DataSource'\n   42 |   assign io_readBypass = io_value == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\ported\\\\backend\\\\datapath\\\\DataSource-Hardware.py:70\" *) 2'h2;\n      |                                   ^~\n%Warning-WIDTHEXPAND: /tmp/uhsc-v2/validation/.work/v2-backend-datapath/datasource-target.sv:43:36: Operator EQ expects 4 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                                                                                  : ... note: In instance 'DataSource'\n   43 |   assign io_readBypass2 = io_value == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\ported\\\\backend\\\\datapath\\\\DataSource-Hardware.py:74\" *) 2'h3;\n      |                                    ^~\n%Warning-WIDTHEXPAND: /tmp/uhsc-v2/validation/.work/v2-backend-datapath/datasource-target.sv:44:32: Operator EQ expects 4 bits on the RHS, but RHS's CONST '3'h4' generates 3 bits.\n                                                                                                  : ... note: In instance 'DataSource'\n   44 |   assign io_readImm = io_value == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\ported\\\\backend\\\\datapath\\\\DataSource-Hardware.py:78\" *) 3'h4;\n      |                                ^~\n",
+        "output_sha256": "70bbe2f7d1985e1da5e72e52fa57bdc7c557e6bd7f433f59693f1f4502daa838"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-p",
+          "read_verilog -sv /tmp/uhsc-v2/validation/.work/v2-backend-datapath/datasource-target.sv; hierarchy -top DataSource; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "\n /----------------------------------------------------------------------------\\\n |  yosys -- Yosys Open SYnthesis Suite                                       |\n |  Copyright (C) 2012 - 2025  Claire Xenia Wolf <claire@yosyshq.com>         |\n |  Distributed under an ISC-like license, type \"license\" to see terms        |\n \\----------------------------------------------------------------------------/\n Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\n\n-- Running command `read_verilog -sv /tmp/uhsc-v2/validation/.work/v2-backend-datapath/datasource-target.sv; hierarchy -top DataSource; proc; check' --\n\n1. Executing Verilog-2005 frontend: /tmp/uhsc-v2/validation/.work/v2-backend-datapath/datasource-target.sv\nParsing SystemVerilog input from `/tmp/uhsc-v2/validation/.work/v2-backend-datapath/datasource-target.sv' to AST representation.\nGenerating RTLIL representation for module `\\DataSource'.\nSuccessfully finished Verilog frontend.\n\n2. Executing HIERARCHY pass (managing design hierarchy).\n\n2.1. Analyzing design hierarchy..\nTop module:  \\DataSource\n\n2.2. Analyzing design hierarchy..\nTop module:  \\DataSource\nRemoved 0 unused modules.\n\n3. Executing PROC pass (convert processes to netlists).\n\n3.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DataSource.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module DataSource...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 06ecd622d8, CPU: user 0.01s system 0.00s, MEM: 11.09 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 63% 2x read_verilog (0 sec), 17% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "33e109b8ff1d12937e24706036f9a36bc49b70e84110595442c917d493b1bde1"
+      }
+    },
+    "RealWBCollideChecker_target": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "--Wno-fatal",
+          "--top-module",
+          "RealWBCollideChecker",
+          "/tmp/uhsc-v2/validation/.work/v2-backend-datapath/wb-collide-target.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.081 MB sources in 4 modules, into 0.020 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.024 s (elab=0.001, cvt=0.002, bld=0.000); cpu 0.008 s on 1 threads; alloced 9.668 MB\n",
+        "output_sha256": "567af2861f4c5a0b12d127b2ffca719e34648999016f8234c0b9d8c1bfea6348"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-p",
+          "read_verilog -sv /tmp/uhsc-v2/validation/.work/v2-backend-datapath/wb-collide-target.sv; hierarchy -top RealWBCollideChecker; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "right (C) 2012 - 2025  Claire Xenia Wolf <claire@yosyshq.com>         |\n |  Distributed under an ISC-like license, type \"license\" to see terms        |\n \\----------------------------------------------------------------------------/\n Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\n\n-- Running command `read_verilog -sv /tmp/uhsc-v2/validation/.work/v2-backend-datapath/wb-collide-target.sv; hierarchy -top RealWBCollideChecker; proc; check' --\n\n1. Executing Verilog-2005 frontend: /tmp/uhsc-v2/validation/.work/v2-backend-datapath/wb-collide-target.sv\nParsing SystemVerilog input from `/tmp/uhsc-v2/validation/.work/v2-backend-datapath/wb-collide-target.sv' to AST representation.\nGenerating RTLIL representation for module `\\RealWBCollideChecker'.\nGenerating RTLIL representation for module `\\RealWBCollideChecker.arb_0'.\nGenerating RTLIL representation for module `\\RealWBCollideChecker.arb_1'.\nSuccessfully finished Verilog frontend.\n\n2. Executing HIERARCHY pass (managing design hierarchy).\n\n2.1. Analyzing design hierarchy..\nTop module:  \\RealWBCollideChecker\nUsed module:     \\RealWBCollideChecker.arb_1\nUsed module:     \\RealWBCollideChecker.arb_0\n\n2.2. Analyzing design hierarchy..\nTop module:  \\RealWBCollideChecker\nUsed module:     \\RealWBCollideChecker.arb_1\nUsed module:     \\RealWBCollideChecker.arb_0\nRemoved 0 unused modules.\n\n3. Executing PROC pass (convert processes to netlists).\n\n3.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RealWBCollideChecker.arb_1.\nOptimizing module RealWBCollideChecker.arb_0.\nOptimizing module RealWBCollideChecker.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module RealWBCollideChecker.arb_1...\nChecking module RealWBCollideChecker.arb_0...\nChecking module RealWBCollideChecker...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 5a64deabc8, CPU: user 0.01s system 0.01s, MEM: 12.19 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 79% 2x read_verilog (0 sec), 7% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "dabba873cbff305efa8612b7aeb4dfe1afe4b5c16ee87e2586bdf1bd78f37430"
+      }
+    },
+    "RealWBCollideChecker_reference": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "--Wno-fatal",
+          "--top-module",
+          "RealWBCollideChecker",
+          "/tmp/uhsc-v2/validation/reference-closures/RealWBCollideChecker-v2.sv",
+          "/tmp/uhsc-v2/validation/reference-closures/RealWBArbiter-v2.sv"
+        ],
+        "returncode": 1,
+        "status": "FAIL",
+        "output_tail": "%Error: /tmp/uhsc-v2/validation/reference-closures/RealWBCollideChecker-v2.sv:133:3: Cannot find file containing module: 'RealWBArbiter_1'\n  133 |   RealWBArbiter_1 arbiters_1 (  \n      |   ^~~~~~~~~~~~~~~\n%Error: /tmp/uhsc-v2/validation/reference-closures/RealWBCollideChecker-v2.sv:133:3: This may be because there's no search path specified with -I<dir>.\n  133 |   RealWBArbiter_1 arbiters_1 (  \n      |   ^~~~~~~~~~~~~~~\n        ... Looked in:\n             RealWBArbiter_1\n             RealWBArbiter_1.v\n             RealWBArbiter_1.sv\n             obj_dir/RealWBArbiter_1\n             obj_dir/RealWBArbiter_1.v\n             obj_dir/RealWBArbiter_1.sv\n%Error: /tmp/uhsc-v2/validation/reference-closures/RealWBCollideChecker-v2.sv:159:3: Cannot find file containing module: 'RealWBArbiter_2'\n  159 |   RealWBArbiter_2 arbiters_2 (  \n      |   ^~~~~~~~~~~~~~~\n%Error: /tmp/uhsc-v2/validation/reference-closures/RealWBCollideChecker-v2.sv:178:3: Cannot find file containing module: 'RealWBArbiter_3'\n  178 |   RealWBArbiter_3 arbiters_3 (  \n      |   ^~~~~~~~~~~~~~~\n%Error: /tmp/uhsc-v2/validation/reference-closures/RealWBCollideChecker-v2.sv:190:3: Cannot find file containing module: 'RealWBArbiter_2'\n  190 |   RealWBArbiter_2 arbiters_4 (  \n      |   ^~~~~~~~~~~~~~~\n%Error: /tmp/uhsc-v2/validation/reference-closures/RealWBCollideChecker-v2.sv:209:3: Cannot find file containing module: 'RealWBArbiter_3'\n  209 |   RealWBArbiter_3 arbiters_5 (  \n      |   ^~~~~~~~~~~~~~~\n%Error: /tmp/uhsc-v2/validation/reference-closures/RealWBCollideChecker-v2.sv:221:3: Cannot find file containing module: 'RealWBArbiter_3'\n  221 |   RealWBArbiter_3 arbiters_6 (  \n      |   ^~~~~~~~~~~~~~~\n%Error: /tmp/uhsc-v2/validation/reference-closures/RealWBCollideChecker-v2.sv:233:3: Cannot find file containing module: 'RealWBArbiter_3'\n  233 |   RealWBArbiter_3 arbiters_7 (  \n      |   ^~~~~~~~~~~~~~~\n%Error: Exiting due to 8 error(s)\n",
+        "output_sha256": "2dd63aa530a3a3f43c89923f1d0a1c8b42350a132c8afce23d52b197691ce5d9"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-p",
+          "read_verilog -sv /tmp/uhsc-v2/validation/reference-closures/RealWBCollideChecker-v2.sv /tmp/uhsc-v2/validation/reference-closures/RealWBArbiter-v2.sv; hierarchy -top RealWBCollideChecker; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "ut has no driver.\nWarning: Wire RealWBCollideChecker.\\io_out_1_bits_data [30] is used but has no driver.\nWarning: Wire RealWBCollideChecker.\\io_out_1_bits_data [29] is used but has no driver.\nWarning: Wire RealWBCollideChecker.\\io_out_1_bits_data [28] is used but has no driver.\nWarning: Wire RealWBCollideChecker.\\io_out_1_bits_data [27] is used but has no driver.\nWarning: Wire RealWBCollideChecker.\\io_out_1_bits_data [26] is used but has no driver.\nWarning: Wire RealWBCollideChecker.\\io_out_1_bits_data [25] is used but has no driver.\nWarning: Wire RealWBCollideChecker.\\io_out_1_bits_data [24] is used but has no driver.\nWarning: Wire RealWBCollideChecker.\\io_out_1_bits_data [23] is used but has no driver.\nWarning: Wire RealWBCollideChecker.\\io_out_1_bits_data [22] is used but has no driver.\nWarning: Wire RealWBCollideChecker.\\io_out_1_bits_data [21] is used but has no driver.\nWarning: Wire RealWBCollideChecker.\\io_out_1_bits_data [20] is used but has no driver.\nWarning: Wire RealWBCollideChecker.\\io_out_1_bits_data [19] is used but has no driver.\nWarning: Wire RealWBCollideChecker.\\io_out_1_bits_data [18] is used but has no driver.\nWarning: Wire RealWBCollideChecker.\\io_out_1_bits_data [17] is used but has no driver.\nWarning: Wire RealWBCollideChecker.\\io_out_1_bits_data [16] is used but has no driver.\nWarning: Wire RealWBCollideChecker.\\io_out_1_bits_data [15] is used but has no driver.\nWarning: Wire RealWBCollideChecker.\\io_out_1_bits_data [14] is used but has no driver.\nWarning: Wire RealWBCollideChecker.\\io_out_1_bits_data [13] is used but has no driver.\nWarning: Wire RealWBCollideChecker.\\io_out_1_bits_data [12] is used but has no driver.\nWarning: Wire RealWBCollideChecker.\\io_out_1_bits_data [11] is used but has no driver.\nWarning: Wire RealWBCollideChecker.\\io_out_1_bits_data [10] is used but has no driver.\nWarning: Wire RealWBCollideChecker.\\io_out_1_bits_data [9] is used but has no driver.\nWarning: Wire RealWBCollideChecker.\\io_out_1_bits_data [8] is used but has no driver.\nWarning: Wire RealWBCollideChecker.\\io_out_1_bits_data [7] is used but has no driver.\nWarning: Wire RealWBCollideChecker.\\io_out_1_bits_data [6] is used but has no driver.\nWarning: Wire RealWBCollideChecker.\\io_out_1_bits_data [5] is used but has no driver.\nWarning: Wire RealWBCollideChecker.\\io_out_1_bits_data [4] is used but has no driver.\nWarning: Wire RealWBCollideChecker.\\io_out_1_bits_data [3] is used but has no driver.\nWarning: Wire RealWBCollideChecker.\\io_out_1_bits_data [2] is used but has no driver.\nWarning: Wire RealWBCollideChecker.\\io_out_1_bits_data [1] is used but has no driver.\nWarning: Wire RealWBCollideChecker.\\io_out_1_bits_data [0] is used but has no driver.\nFound and reported 526 problems.\n\nWarnings: 526 unique messages, 526 total\nEnd of script. Logfile hash: 237055cf6c, CPU: user 0.01s system 0.01s, MEM: 11.56 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 56% 3x read_verilog (0 sec), 23% 1x check (0 sec), ...\n",
+        "output_sha256": "880b81cb12e47407d4939ef31e9ad3969d4d83818d9f1d63ef9923fc8b23f51b"
+      }
+    },
+    "WbDataPath_target": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "--Wno-fatal",
+          "--top-module",
+          "WbDataPath",
+          "/tmp/uhsc-v2/validation/.work/v2-backend-datapath/wb-datapath-target.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.066 MB sources in 4 modules, into 0.018 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.022 s (elab=0.001, cvt=0.002, bld=0.000); cpu 0.007 s on 1 threads; alloced 9.621 MB\n",
+        "output_sha256": "852cd5393c1b0ca2b6da6d5bc4429f5236b6ceb3fecab9a0b0243d30c2d8e188"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-p",
+          "read_verilog -sv /tmp/uhsc-v2/validation/.work/v2-backend-datapath/wb-datapath-target.sv; hierarchy -top WbDataPath; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "-------------------\\\n |  yosys -- Yosys Open SYnthesis Suite                                       |\n |  Copyright (C) 2012 - 2025  Claire Xenia Wolf <claire@yosyshq.com>         |\n |  Distributed under an ISC-like license, type \"license\" to see terms        |\n \\----------------------------------------------------------------------------/\n Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\n\n-- Running command `read_verilog -sv /tmp/uhsc-v2/validation/.work/v2-backend-datapath/wb-datapath-target.sv; hierarchy -top WbDataPath; proc; check' --\n\n1. Executing Verilog-2005 frontend: /tmp/uhsc-v2/validation/.work/v2-backend-datapath/wb-datapath-target.sv\nParsing SystemVerilog input from `/tmp/uhsc-v2/validation/.work/v2-backend-datapath/wb-datapath-target.sv' to AST representation.\nGenerating RTLIL representation for module `\\WbDataPath'.\nGenerating RTLIL representation for module `\\WbDataPath.int_wb'.\nGenerating RTLIL representation for module `\\WbDataPath.int_wb.arb_0'.\nSuccessfully finished Verilog frontend.\n\n2. Executing HIERARCHY pass (managing design hierarchy).\n\n2.1. Analyzing design hierarchy..\nTop module:  \\WbDataPath\nUsed module:     \\WbDataPath.int_wb\nUsed module:         \\WbDataPath.int_wb.arb_0\n\n2.2. Analyzing design hierarchy..\nTop module:  \\WbDataPath\nUsed module:     \\WbDataPath.int_wb\nUsed module:         \\WbDataPath.int_wb.arb_0\nRemoved 0 unused modules.\n\n3. Executing PROC pass (convert processes to netlists).\n\n3.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module WbDataPath.int_wb.arb_0.\nOptimizing module WbDataPath.int_wb.\nOptimizing module WbDataPath.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module WbDataPath.int_wb.arb_0...\nChecking module WbDataPath.int_wb...\nChecking module WbDataPath...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: e19457d3d1, CPU: user 0.01s system 0.01s, MEM: 12.03 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 77% 2x read_verilog (0 sec), 8% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "0aea3741710e7733add664d03d1400ad0432087848171f32ba7220965d468a24"
+      }
+    }
+  },
+  "source_closure_checks": {
+    "DataSource": {
+      "source_sha256": "342069020acee225f1a4d10cfecdf308c31718cd86c50979e1a52d4b76b8bd5f",
+      "required_tokens": {
+        "readReg": true,
+        "readRegOH": true,
+        "readRegCache": true,
+        "readV0": true,
+        "readZero": true,
+        "readForward": true,
+        "readBypass": true,
+        "readBypass2": true,
+        "readImm": true
+      },
+      "xstop_literal_occurrences": {
+        "4'h8": 2448,
+        "4'h6": 1295,
+        "4'h5": 1552,
+        "4'h0": 23476,
+        "4'h1": 4470,
+        "4'h2": 2318,
+        "4'h3": 1176,
+        "4'h4": 2070
+      },
+      "status": "PASS_BOUNDED_SOURCE"
+    },
+    "WbDataPath": {
+      "source_sha256": "083d5c7c30d9aca4f13d24e9bae5958dfb160fbe4952629f1b19b40b3fe2cdaa",
+      "required_tokens": {
+        "fromMemExu": true,
+        "vldMgu": true,
+        "intWbArbiter": true,
+        "fpWbArbiter": true,
+        "vfWbArbiter": true,
+        "v0WbArbiter": true,
+        "vlWbArbiter": true,
+        "hasUncertainLatency": true,
+        "isHighestWBPriority": true
+      },
+      "status": "PASS_BOUNDED_SOURCE"
+    }
+  },
+  "trace_artifacts": {
+    "RealWBArbiter": {
+      "target": {
+        "build": {
+          "command": [
+            "verilator",
+            "--cc",
+            "--exe",
+            "--build",
+            "--Wno-fatal",
+            "--top-module",
+            "RealWBArbiter",
+            "--Mdir",
+            "/tmp/uhsc-v2/validation/.work/v2-backend-datapath/obj-wb-target",
+            "/tmp/uhsc-v2/validation/.work/v2-backend-datapath/wb-target.sv",
+            "/tmp/uhsc-v2/validation/real_wb_arbiter_v2_diff_tb.cpp",
+            "-CFLAGS",
+            "-DTARGET"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "rilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DTARGET   -Os  -c -o real_wb_arbiter_v2_diff_tb.o /tmp/uhsc-v2/validation/real_wb_arbiter_v2_diff_tb.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DTARGET   -c -o verilated.o /usr/share/verilator/include/verilated.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DTARGET   -c -o verilated_threads.o /usr/share/verilator/include/verilated_threads.cpp\npython3 /usr/share/verilator/bin/verilator_includer -DVL_INCLUDE_OPT=include VRealWBArbiter.cpp VRealWBArbiter___024root__DepSet_h728b2f23__0.cpp VRealWBArbiter___024root__DepSet_hdc9e5fc1__0.cpp VRealWBArbiter___024root__Slow.cpp VRealWBArbiter___024root__DepSet_h728b2f23__0__Slow.cpp VRealWBArbiter___024root__DepSet_hdc9e5fc1__0__Slow.cpp VRealWBArbiter__Syms.cpp > VRealWBArbiter__ALL.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DTARGET   -c -o VRealWBArbiter__ALL.o VRealWBArbiter__ALL.cpp\necho \"\" > VRealWBArbiter__ALL.verilator_deplist.tmp\ng++    real_wb_arbiter_v2_diff_tb.o verilated.o verilated_threads.o VRealWBArbiter__ALL.a    -pthread -lpthread -latomic   -o VRealWBArbiter\nrm VRealWBArbiter__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-datapath/obj-wb-target'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.045 MB sources in 2 modules, into 0.038 MB in 7 C++ files needing 0.000 MB\n- Verilator: Walltime 5.624 s (elab=0.000, cvt=0.038, bld=5.397); cpu 0.019 s on 1 threads; alloced 9.398 MB\n",
+          "output_sha256": "3c0b0d78ef39fa3b9618f789abb1b7c1e79d413183825cc8ffabb459085e46eb"
+        },
+        "run": {
+          "command": [
+            "/tmp/uhsc-v2/validation/.work/v2-backend-datapath/obj-wb-target/VRealWBArbiter"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "{\"index\":0,\"ready\":0,\"mask\":0,\"out_valid\":0,\"data\":3612487381101453858,\"pdest\":74,\"rfWen\":0,\"in_ready\":[0,0,0],\"chosen\":2}\n{\"index\":1,\"ready\":0,\"mask\":1,\"out_valid\":1,\"data\":1152921504606846977,\"pdest\":3,\"rfWen\":1,\"in_ready\":[0,0,0],\"chosen\":0}\n{\"index\":2,\"ready\":0,\"mask\":2,\"out_valid\":1,\"data\":2382704442854150419,\"pdest\":43,\"rfWen\":1,\"in_ready\":[0,0,0],\"chosen\":1}\n{\"index\":3,\"ready\":0,\"mask\":3,\"out_valid\":1,\"data\":1152921504606846979,\"pdest\":9,\"rfWen\":1,\"in_ready\":[0,0,0],\"chosen\":0}\n{\"index\":4,\"ready\":0,\"mask\":4,\"out_valid\":1,\"data\":3612487381101453862,\"pdest\":86,\"rfWen\":0,\"in_ready\":[0,0,0],\"chosen\":2}\n{\"index\":5,\"ready\":0,\"mask\":5,\"out_valid\":1,\"data\":1152921504606846981,\"pdest\":15,\"rfWen\":1,\"in_ready\":[0,0,0],\"chosen\":0}\n{\"index\":6,\"ready\":0,\"mask\":6,\"out_valid\":1,\"data\":2382704442854150423,\"pdest\":55,\"rfWen\":1,\"in_ready\":[0,0,0],\"chosen\":1}\n{\"index\":7,\"ready\":0,\"mask\":7,\"out_valid\":1,\"data\":1152921504606846983,\"pdest\":21,\"rfWen\":1,\"in_ready\":[0,0,0],\"chosen\":0}\n{\"index\":8,\"ready\":1,\"mask\":0,\"out_valid\":0,\"data\":3612487381101453858,\"pdest\":74,\"rfWen\":0,\"in_ready\":[1,1,1],\"chosen\":2}\n{\"index\":9,\"ready\":1,\"mask\":1,\"out_valid\":1,\"data\":1152921504606846977,\"pdest\":3,\"rfWen\":1,\"in_ready\":[1,1,1],\"chosen\":0}\n{\"index\":10,\"ready\":1,\"mask\":2,\"out_valid\":1,\"data\":2382704442854150419,\"pdest\":43,\"rfWen\":1,\"in_ready\":[1,1,1],\"chosen\":1}\n{\"index\":11,\"ready\":1,\"mask\":3,\"out_valid\":1,\"data\":1152921504606846979,\"pdest\":9,\"rfWen\":1,\"in_ready\":[1,0,1],\"chosen\":0}\n{\"index\":12,\"ready\":1,\"mask\":4,\"out_valid\":1,\"data\":3612487381101453862,\"pdest\":86,\"rfWen\":0,\"in_ready\":[1,1,1],\"chosen\":2}\n{\"index\":13,\"ready\":1,\"mask\":5,\"out_valid\":1,\"data\":1152921504606846981,\"pdest\":15,\"rfWen\":1,\"in_ready\":[1,1,0],\"chosen\":0}\n{\"index\":14,\"ready\":1,\"mask\":6,\"out_valid\":1,\"data\":2382704442854150423,\"pdest\":55,\"rfWen\":1,\"in_ready\":[1,1,0],\"chosen\":1}\n{\"index\":15,\"ready\":1,\"mask\":7,\"out_valid\":1,\"data\":1152921504606846983,\"pdest\":21,\"rfWen\":1,\"in_ready\":[1,0,0],\"chosen\":0}\n",
+          "output_sha256": "e9c9bc1e42cbfb16e799a91bbf87268bcef196260e7ab1aceaa1a43032acedb6",
+          "full_returncode": 0
+        },
+        "trace": {
+          "path": "validation/.work/v2-backend-datapath/wb-target.jsonl",
+          "sha256": "e9c9bc1e42cbfb16e799a91bbf87268bcef196260e7ab1aceaa1a43032acedb6",
+          "vectors": 16
+        }
+      },
+      "reference": {
+        "build": {
+          "command": [
+            "verilator",
+            "--cc",
+            "--exe",
+            "--build",
+            "--Wno-fatal",
+            "--top-module",
+            "RealWBArbiter",
+            "--Mdir",
+            "/tmp/uhsc-v2/validation/.work/v2-backend-datapath/obj-wb-reference",
+            "/tmp/uhsc-v2/validation/reference-closures/RealWBArbiter-v2.sv",
+            "/tmp/uhsc-v2/validation/real_wb_arbiter_v2_diff_tb.cpp"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "make: Entering directory '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-datapath/obj-wb-reference'\nmake: Nothing to be done for 'default'.\nmake: Leaving directory '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-datapath/obj-wb-reference'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.000 MB sources in 0 modules, into 0.000 MB in 0 C++ files needing 0.000 MB\n- Verilator: Walltime 0.104 s (elab=0.000, cvt=0.000, bld=0.058); cpu 0.004 s on 1 threads; alloced 8.305 MB\n",
+          "output_sha256": "65cec3013cb395d29ae0841bcaf00f58f335793bdb088e020baa25a1b57e749e"
+        },
+        "run": {
+          "command": [
+            "/tmp/uhsc-v2/validation/.work/v2-backend-datapath/obj-wb-reference/VRealWBArbiter"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "{\"index\":0,\"ready\":0,\"mask\":0,\"out_valid\":0,\"data\":3612487381101453858,\"pdest\":74,\"rfWen\":0,\"in_ready\":[1,1,1]}\n{\"index\":1,\"ready\":0,\"mask\":1,\"out_valid\":1,\"data\":1152921504606846977,\"pdest\":3,\"rfWen\":1,\"in_ready\":[1,1,1]}\n{\"index\":2,\"ready\":0,\"mask\":2,\"out_valid\":1,\"data\":2382704442854150419,\"pdest\":43,\"rfWen\":1,\"in_ready\":[1,1,1]}\n{\"index\":3,\"ready\":0,\"mask\":3,\"out_valid\":1,\"data\":1152921504606846979,\"pdest\":9,\"rfWen\":1,\"in_ready\":[1,0,1]}\n{\"index\":4,\"ready\":0,\"mask\":4,\"out_valid\":1,\"data\":3612487381101453862,\"pdest\":86,\"rfWen\":0,\"in_ready\":[1,1,1]}\n{\"index\":5,\"ready\":0,\"mask\":5,\"out_valid\":1,\"data\":1152921504606846981,\"pdest\":15,\"rfWen\":1,\"in_ready\":[1,1,0]}\n{\"index\":6,\"ready\":0,\"mask\":6,\"out_valid\":1,\"data\":2382704442854150423,\"pdest\":55,\"rfWen\":1,\"in_ready\":[1,1,0]}\n{\"index\":7,\"ready\":0,\"mask\":7,\"out_valid\":1,\"data\":1152921504606846983,\"pdest\":21,\"rfWen\":1,\"in_ready\":[1,0,0]}\n{\"index\":8,\"ready\":1,\"mask\":0,\"out_valid\":0,\"data\":3612487381101453858,\"pdest\":74,\"rfWen\":0,\"in_ready\":[1,1,1]}\n{\"index\":9,\"ready\":1,\"mask\":1,\"out_valid\":1,\"data\":1152921504606846977,\"pdest\":3,\"rfWen\":1,\"in_ready\":[1,1,1]}\n{\"index\":10,\"ready\":1,\"mask\":2,\"out_valid\":1,\"data\":2382704442854150419,\"pdest\":43,\"rfWen\":1,\"in_ready\":[1,1,1]}\n{\"index\":11,\"ready\":1,\"mask\":3,\"out_valid\":1,\"data\":1152921504606846979,\"pdest\":9,\"rfWen\":1,\"in_ready\":[1,0,1]}\n{\"index\":12,\"ready\":1,\"mask\":4,\"out_valid\":1,\"data\":3612487381101453862,\"pdest\":86,\"rfWen\":0,\"in_ready\":[1,1,1]}\n{\"index\":13,\"ready\":1,\"mask\":5,\"out_valid\":1,\"data\":1152921504606846981,\"pdest\":15,\"rfWen\":1,\"in_ready\":[1,1,0]}\n{\"index\":14,\"ready\":1,\"mask\":6,\"out_valid\":1,\"data\":2382704442854150423,\"pdest\":55,\"rfWen\":1,\"in_ready\":[1,1,0]}\n{\"index\":15,\"ready\":1,\"mask\":7,\"out_valid\":1,\"data\":1152921504606846983,\"pdest\":21,\"rfWen\":1,\"in_ready\":[1,0,0]}\n",
+          "output_sha256": "eda8fe678aecc67ac72239497e224729811bfa1ffcc47e051ab8669a6bd817c0",
+          "full_returncode": 0
+        },
+        "trace": {
+          "path": "validation/.work/v2-backend-datapath/wb-reference.jsonl",
+          "sha256": "eda8fe678aecc67ac72239497e224729811bfa1ffcc47e051ab8669a6bd817c0",
+          "vectors": 16
+        }
+      }
+    },
+    "NewPipelineConnect": {
+      "target": {
+        "build": {
+          "command": [
+            "verilator",
+            "--cc",
+            "--exe",
+            "--build",
+            "--Wno-fatal",
+            "--top-module",
+            "NewPipelineConnectPipe",
+            "--Mdir",
+            "/tmp/uhsc-v2/validation/.work/v2-backend-datapath/obj-npc-target",
+            "/tmp/uhsc-v2/validation/.work/v2-backend-datapath/npc-target.sv",
+            "/tmp/uhsc-v2/validation/new_pipeline_target_tb.cpp"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": " -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -Os  -c -o new_pipeline_target_tb.o /tmp/uhsc-v2/validation/new_pipeline_target_tb.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -c -o verilated.o /usr/share/verilator/include/verilated.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -c -o verilated_threads.o /usr/share/verilator/include/verilated_threads.cpp\npython3 /usr/share/verilator/bin/verilator_includer -DVL_INCLUDE_OPT=include VNewPipelineConnectPipe.cpp VNewPipelineConnectPipe___024root__DepSet_ha5c89250__0.cpp VNewPipelineConnectPipe___024root__DepSet_h5ccc40b4__0.cpp VNewPipelineConnectPipe___024root__Slow.cpp VNewPipelineConnectPipe___024root__DepSet_ha5c89250__0__Slow.cpp VNewPipelineConnectPipe___024root__DepSet_h5ccc40b4__0__Slow.cpp VNewPipelineConnectPipe__Syms.cpp > VNewPipelineConnectPipe__ALL.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -c -o VNewPipelineConnectPipe__ALL.o VNewPipelineConnectPipe__ALL.cpp\necho \"\" > VNewPipelineConnectPipe__ALL.verilator_deplist.tmp\ng++    new_pipeline_target_tb.o verilated.o verilated_threads.o VNewPipelineConnectPipe__ALL.a    -pthread -lpthread -latomic   -o VNewPipelineConnectPipe\nrm VNewPipelineConnectPipe__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-datapath/obj-npc-target'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.030 MB sources in 2 modules, into 0.037 MB in 7 C++ files needing 0.000 MB\n- Verilator: Walltime 5.261 s (elab=0.000, cvt=0.038, bld=5.116); cpu 0.013 s on 1 threads; alloced 9.246 MB\n",
+          "output_sha256": "3af2f8fca5632b3248b360fd0e1c5ce3d220d53b82a9070423cb9e59ad4a6140"
+        },
+        "run": {
+          "command": [
+            "/tmp/uhsc-v2/validation/.work/v2-backend-datapath/obj-npc-target/VNewPipelineConnectPipe"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "{\"index\":0,\"in_valid\":1,\"bits\":17,\"out_ready\":0,\"right\":0,\"flush\":0,\"in_ready\":1,\"out_valid\":0,\"out_bits\":0}\n{\"index\":1,\"in_valid\":1,\"bits\":34,\"out_ready\":0,\"right\":0,\"flush\":0,\"in_ready\":0,\"out_valid\":1,\"out_bits\":17}\n{\"index\":2,\"in_valid\":0,\"bits\":0,\"out_ready\":1,\"right\":0,\"flush\":0,\"in_ready\":1,\"out_valid\":1,\"out_bits\":17}\n{\"index\":3,\"in_valid\":1,\"bits\":51,\"out_ready\":1,\"right\":0,\"flush\":0,\"in_ready\":1,\"out_valid\":1,\"out_bits\":17}\n{\"index\":4,\"in_valid\":1,\"bits\":68,\"out_ready\":0,\"right\":1,\"flush\":0,\"in_ready\":0,\"out_valid\":1,\"out_bits\":51}\n{\"index\":5,\"in_valid\":1,\"bits\":85,\"out_ready\":1,\"right\":0,\"flush\":0,\"in_ready\":1,\"out_valid\":0,\"out_bits\":51}\n{\"index\":6,\"in_valid\":0,\"bits\":0,\"out_ready\":1,\"right\":0,\"flush\":0,\"in_ready\":1,\"out_valid\":1,\"out_bits\":85}\n{\"index\":7,\"in_valid\":1,\"bits\":102,\"out_ready\":1,\"right\":0,\"flush\":0,\"in_ready\":1,\"out_valid\":1,\"out_bits\":85}\n{\"index\":8,\"in_valid\":1,\"bits\":119,\"out_ready\":1,\"right\":0,\"flush\":1,\"in_ready\":1,\"out_valid\":1,\"out_bits\":102}\n{\"index\":9,\"in_valid\":1,\"bits\":136,\"out_ready\":1,\"right\":0,\"flush\":0,\"in_ready\":1,\"out_valid\":0,\"out_bits\":119}\n{\"index\":10,\"in_valid\":0,\"bits\":0,\"out_ready\":1,\"right\":1,\"flush\":0,\"in_ready\":1,\"out_valid\":1,\"out_bits\":136}\n{\"index\":11,\"in_valid\":1,\"bits\":153,\"out_ready\":1,\"right\":0,\"flush\":0,\"in_ready\":1,\"out_valid\":0,\"out_bits\":136}\n",
+          "output_sha256": "756e525d9737308e5debf48aa969fe1b720ac691498954e4d0d06fbdc13de928",
+          "full_returncode": 0
+        },
+        "trace": {
+          "path": "validation/.work/v2-backend-datapath/npc-target.jsonl",
+          "sha256": "756e525d9737308e5debf48aa969fe1b720ac691498954e4d0d06fbdc13de928",
+          "vectors": 12
+        }
+      },
+      "reference": {
+        "build": {
+          "command": [
+            "verilator",
+            "--cc",
+            "--exe",
+            "--build",
+            "--Wno-fatal",
+            "--top-module",
+            "NewPipelineConnectPipe",
+            "--Mdir",
+            "/tmp/uhsc-v2/validation/.work/v2-backend-datapath/obj-npc-reference",
+            "/tmp/uhsc-v2/validation/.work/v2-backend-datapath/npc-reference-combined.sv",
+            "/tmp/uhsc-v2/validation/new_pipeline_reference_tb.cpp"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -Os  -c -o new_pipeline_reference_tb.o /tmp/uhsc-v2/validation/new_pipeline_reference_tb.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -c -o verilated.o /usr/share/verilator/include/verilated.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -c -o verilated_threads.o /usr/share/verilator/include/verilated_threads.cpp\npython3 /usr/share/verilator/bin/verilator_includer -DVL_INCLUDE_OPT=include VNewPipelineConnectPipe.cpp VNewPipelineConnectPipe___024root__DepSet_ha5c89250__0.cpp VNewPipelineConnectPipe___024root__DepSet_h5ccc40b4__0.cpp VNewPipelineConnectPipe___024root__Slow.cpp VNewPipelineConnectPipe___024root__DepSet_ha5c89250__0__Slow.cpp VNewPipelineConnectPipe___024root__DepSet_h5ccc40b4__0__Slow.cpp VNewPipelineConnectPipe__Syms.cpp > VNewPipelineConnectPipe__ALL.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -c -o VNewPipelineConnectPipe__ALL.o VNewPipelineConnectPipe__ALL.cpp\necho \"\" > VNewPipelineConnectPipe__ALL.verilator_deplist.tmp\ng++    new_pipeline_reference_tb.o verilated.o verilated_threads.o VNewPipelineConnectPipe__ALL.a    -pthread -lpthread -latomic   -o VNewPipelineConnectPipe\nrm VNewPipelineConnectPipe__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-datapath/obj-npc-reference'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.024 MB sources in 3 modules, into 0.037 MB in 7 C++ files needing 0.000 MB\n- Verilator: Walltime 5.298 s (elab=0.001, cvt=0.033, bld=5.150); cpu 0.015 s on 1 threads; alloced 9.293 MB\n",
+          "output_sha256": "42eaddb8bd3a500d985dd5d4ff14bb6970c17b70864111d2ccdc4864b081f8d3"
+        },
+        "run": {
+          "command": [
+            "/tmp/uhsc-v2/validation/.work/v2-backend-datapath/obj-npc-reference/VNewPipelineConnectPipe"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "{\"index\":0,\"in_valid\":1,\"bits\":17,\"out_ready\":0,\"right\":0,\"flush\":0,\"in_ready\":1,\"out_valid\":0,\"out_bits\":0}\n{\"index\":1,\"in_valid\":1,\"bits\":34,\"out_ready\":0,\"right\":0,\"flush\":0,\"in_ready\":0,\"out_valid\":1,\"out_bits\":17}\n{\"index\":2,\"in_valid\":0,\"bits\":0,\"out_ready\":1,\"right\":0,\"flush\":0,\"in_ready\":1,\"out_valid\":1,\"out_bits\":17}\n{\"index\":3,\"in_valid\":1,\"bits\":51,\"out_ready\":1,\"right\":0,\"flush\":0,\"in_ready\":1,\"out_valid\":1,\"out_bits\":17}\n{\"index\":4,\"in_valid\":1,\"bits\":68,\"out_ready\":0,\"right\":1,\"flush\":0,\"in_ready\":0,\"out_valid\":1,\"out_bits\":51}\n{\"index\":5,\"in_valid\":1,\"bits\":85,\"out_ready\":1,\"right\":0,\"flush\":0,\"in_ready\":1,\"out_valid\":0,\"out_bits\":51}\n{\"index\":6,\"in_valid\":0,\"bits\":0,\"out_ready\":1,\"right\":0,\"flush\":0,\"in_ready\":1,\"out_valid\":1,\"out_bits\":85}\n{\"index\":7,\"in_valid\":1,\"bits\":102,\"out_ready\":1,\"right\":0,\"flush\":0,\"in_ready\":1,\"out_valid\":1,\"out_bits\":85}\n{\"index\":8,\"in_valid\":1,\"bits\":119,\"out_ready\":1,\"right\":0,\"flush\":1,\"in_ready\":1,\"out_valid\":1,\"out_bits\":102}\n{\"index\":9,\"in_valid\":1,\"bits\":136,\"out_ready\":1,\"right\":0,\"flush\":0,\"in_ready\":1,\"out_valid\":0,\"out_bits\":119}\n{\"index\":10,\"in_valid\":0,\"bits\":0,\"out_ready\":1,\"right\":1,\"flush\":0,\"in_ready\":1,\"out_valid\":1,\"out_bits\":136}\n{\"index\":11,\"in_valid\":1,\"bits\":153,\"out_ready\":1,\"right\":0,\"flush\":0,\"in_ready\":1,\"out_valid\":0,\"out_bits\":136}\n",
+          "output_sha256": "756e525d9737308e5debf48aa969fe1b720ac691498954e4d0d06fbdc13de928",
+          "full_returncode": 0
+        },
+        "trace": {
+          "path": "validation/.work/v2-backend-datapath/npc-reference.jsonl",
+          "sha256": "756e525d9737308e5debf48aa969fe1b720ac691498954e4d0d06fbdc13de928",
+          "vectors": 12
+        }
+      },
+      "reference_core": "fa382847c50251e726378b7d0f544d0e29864dcf046ba6542e684f0070ec2b3f",
+      "wrapper": "40b4b1ee6f586be6548d7bd59c335bf6e86fe081e65b12a57f23bb7d2cc4c55f"
+    },
+    "DataSource": {
+      "mode": "source_equation_locked_xstop",
+      "xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+      "literal_occurrences": {
+        "4'h8": 2448,
+        "4'h6": 1295,
+        "4'h5": 1552,
+        "4'h0": 23476,
+        "4'h1": 4470,
+        "4'h2": 2318,
+        "4'h3": 1176,
+        "4'h4": 2070
+      }
+    }
+  },
+  "covered_children": [
+    "DataSource",
+    "NewPipelineConnectPipe",
+    "RealWBArbiter",
+    "RealWBCollideChecker",
+    "WbDataPath",
+    "memory-exu-inputs"
+  ],
+  "observation_points": [
+    "selector predicates",
+    "pipeline ready/valid",
+    "flush/reset",
+    "older override",
+    "writeback priority",
+    "five register-file classes",
+    "memory EXU inclusion",
+    "uncertain-latency backpressure"
+  ],
+  "parent_closure": "PENDING_COORDINATOR_REVIEW",
+  "license_gate": "PENDING_REVIEW",
+  "uhsc_localization": {
+    "status": "NO_PROJECT_FACING_RENAME",
+    "manifest": "UHSC-Naming-Manifest.json",
+    "locked_reference_names_unchanged": true
+  },
+  "v2_status": "DIFFERENTIAL_MATCHED_BOUNDED",
+  "acceptance_eligible": false
+}

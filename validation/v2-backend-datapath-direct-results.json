@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "kind": "V2_P1_BACKEND_DATAPATH_DIRECT_EVIDENCE",
+  "batch_id": "V2-P1-D-BACKEND-DATAPATH",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "status": "PASS_BOUNDED_DIRECT",
+  "target_paths": {
+    "DataSource": "python/ported/backend/datapath/DataSource-Hardware.py",
+    "NewPipelineConnect": "python/ported/backend/datapath/NewPipelineConnect-Hardware.py",
+    "WbArbiter": "python/ported/backend/datapath/WbArbiter-Hardware.py"
+  },
+  "target_sha256": {
+    "DataSource": "3a27f22bba8a1ca98289f20eea066de0d3972d64ced81784a24e40d93076023a",
+    "NewPipelineConnect": "11b817bb9f993da0f440b66f21183204fd27f3651dd809c1da34bd201ba3e85b",
+    "WbArbiter": "7353cfb702ee3b9550917e7c7bdeb41a5b3470585628c37473f47392e7228bf0"
+  },
+  "source_paths": {
+    "DataSource": "upstream/src/main/scala/xiangshan/backend/datapath/DataSource.scala",
+    "NewPipelineConnect": "upstream/src/main/scala/xiangshan/backend/datapath/NewPipelineConnect.scala",
+    "WbArbiter": "upstream/src/main/scala/xiangshan/backend/datapath/WbArbiter.scala"
+  },
+  "source_sha256": {
+    "DataSource": "342069020acee225f1a4d10cfecdf308c31718cd86c50979e1a52d4b76b8bd5f",
+    "NewPipelineConnect": "5f69b6f1f5987a6b1a34be7108ec835521451efa9e7874a4039f05a4d25d4dd0",
+    "WbArbiter": "083d5c7c30d9aca4f13d24e9bae5958dfb160fbe4952629f1b19b40b3fe2cdaa"
+  },
+  "static_audit": {
+    "DataSource": {
+      "path": "python/ported/backend/datapath/DataSource-Hardware.py",
+      "sha256": "3a27f22bba8a1ca98289f20eea066de0d3972d64ced81784a24e40d93076023a",
+      "bytes": 7965,
+      "utf8": true,
+      "bom": false,
+      "lf_only": true,
+      "ast": true,
+      "zones": true,
+      "adapter_exact": true,
+      "function_comment_errors": [],
+      "forbidden_imports": []
+    },
+    "NewPipelineConnect": {
+      "path": "python/ported/backend/datapath/NewPipelineConnect-Hardware.py",
+      "sha256": "11b817bb9f993da0f440b66f21183204fd27f3651dd809c1da34bd201ba3e85b",
+      "bytes": 7476,
+      "utf8": true,
+      "bom": false,
+      "lf_only": true,
+      "ast": true,
+      "zones": true,
+      "adapter_exact": true,
+      "function_comment_errors": [],
+      "forbidden_imports": []
+    },
+    "WbArbiter": {
+      "path": "python/ported/backend/datapath/WbArbiter-Hardware.py",
+      "sha256": "7353cfb702ee3b9550917e7c7bdeb41a5b3470585628c37473f47392e7228bf0",
+      "bytes": 30092,
+      "utf8": true,
+      "bom": false,
+      "lf_only": true,
+      "ast": true,
+      "zones": true,
+      "adapter_exact": true,
+      "function_comment_errors": [],
+      "forbidden_imports": []
+    }
+  },
+  "adapter_smoke": {
+    "DataSource": {
+      "signature": "(configuration, injected_dependencies)",
+      "bytes": 7010,
+      "sha256": "1b73cb34ee74bc69375e2c2ee456d5a81c4e62f4db9fccfbce8329d2c088f4f3"
+    },
+    "NewPipelineConnect": {
+      "signature": "(configuration, injected_dependencies)",
+      "bytes": 10220,
+      "sha256": "b027a8eac1f7cfa3b1f0aabb22eba840d7fac71a4ec823163b03f1def25e6779"
+    },
+    "WbArbiterDispatcher": {
+      "signature": "(configuration, injected_dependencies)",
+      "bytes": 15222,
+      "sha256": "47f892c0ad2106113830b710335ba5109e4e1946b031bcc67e28829fe97ffd36"
+    },
+    "RealWBArbiter": {
+      "signature": "(configuration, injected_dependencies)",
+      "bytes": 26380,
+      "sha256": "83f9304fed535ee62f28940a8be2c6c9a2edf85687de0ee52aa9001b07955a09"
+    },
+    "RealWBCollideChecker": {
+      "signature": "(configuration, injected_dependencies)",
+      "bytes": 63600,
+      "sha256": "dd4849375f7156b9d93ef106d7adb1e7cb2fb22c081fcaca5a65d3256fa999ee"
+    }
+  },
+  "checks": {
+    "DataSource": {
+      "vectors": 16,
+      "trace_sha256": "f062f5427f9ba3e13afcfc4ec1c83a867507c6ca333bef1ec0ecc1cba7adfad2"
+    },
+    "NewPipelineConnect": {
+      "vectors": 7,
+      "trace_sha256": "4fd0c949388a94fec27cbe03b8b93a7551e1e0e942e781f4c822da84e3c0648b"
+    },
+    "RealWBArbiter": {
+      "vectors": 32,
+      "trace_sha256": "09931f913cb2553d68463ca6cb248bd38a15e50c64aa2dded58d0f6f47e62f27"
+    },
+    "WbArbiterDispatcher": {
+      "vectors": 512,
+      "trace_sha256": "719865f4a552c3fcf9011d16cb4b2a39c34e6438bf6f74485715a84ab3496440"
+    },
+    "RealWBCollideChecker": {
+      "vectors": 32,
+      "trace_sha256": "e9fb42a63c69e5cc14437b5be128985835f5f5844b164d6b318bb25af5049804"
+    },
+    "WbDataPath": {
+      "vectors": 4,
+      "trace_sha256": "d459c1f3c0b102008cee82c51dc30b8891c2aa7a92f340606b618cc03c60060a"
+    }
+  },
+  "reference_differential": "PENDING",
+  "parent_closure": "PENDING",
+  "license_gate": "PENDING",
+  "uhsc_localization": {
+    "status": "NO_PROJECT_FACING_RENAME",
+    "manifest": "UHSC-Naming-Manifest.json"
+  },
+  "acceptance_eligible": false
+}

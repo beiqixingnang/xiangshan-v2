@@ -1,115 +1,207 @@
-"""NewPipelineConnect (decoupled pipeline register with flush/older override). / 流水线寄存器（带冲刷与更老覆盖）。"""
+"""V2 decoupled pipeline register with flush and age override.
+V2 带冲刷与年龄覆盖的解耦流水线寄存器。
+"""
 
 from __future__ import annotations
 
-from amaranth import Cat, Const, Elaboratable, Module, Mux, Signal
-from amaranth.lib import data
+from dataclasses import dataclass
+from typing import Any
+
+from amaranth import ClockDomain, ClockSignal, Elaboratable, Module, Mux, ResetSignal, Signal
 
 
 # =============================================================================
 # Module Contract
 # =============================================================================
-# Public symbols / 公开符号:
-#   - NewPipelineConnectPipe : one-stage pipeline register module
-#   - NewPipelineConnect.connect : inline connect helper (builds the regs)
-# Ports / 端口:
-#   in_{valid,ready,bits} (Decoupled); out_{valid,ready,bits} (Decoupled);
-#   rightOutFire, isFlush, isOlder (in).
-# Real logic: a valid register plus a RegEnable data register; left.ready is
-# right.ready || !valid || isOlder; valid cleared on rightOutFire/isFlush and
-# set on left.fire. / 真实逻辑：有效寄存器加 RegEnable 数据寄存器；左就绪
-# 为 右就绪或无效或更老；有效在右出火/冲刷时清、左出火时置。
-# Status / 状态: PYTHON_PRESENT_UNVERIFIED (phase-1 bulk port / 阶段一批量重写)
-__all__ = ["NewPipelineConnectPipe", "NewPipelineConnect", "build_verilog", "main"]
+# NewPipelineConnect.scala stores one payload and one valid bit.  The input is
+# accepted when the output is ready, the stage is empty, or isOlder is true;
+# rightOutFire clears the stage unless a same-cycle input fire replaces it.
+# NewPipelineConnect.scala 保存一个载荷和一个有效位；输出就绪、级为空或
+# isOlder 为真时接受输入；rightOutFire 清除级，但同周期输入出火可替换它。
+__all__ = [
+    "NewPipelineConnectConfig",
+    "NewPipelineConnectPipe",
+    "NewPipelineConnect",
+    "connect",
+    "build_verilog",
+    "main",
+]
 
 
 # =============================================================================
 # Configuration
 # =============================================================================
-# (no parameters; data width passed at construction) / 无参数，数据宽度构造时给定
+@dataclass(frozen=True)
+class NewPipelineConnectConfig:
+    """Serializable pipeline geometry. / 可序列化的流水线几何配置。"""
+
+    data_width: int = 64
+
+    # Validate the payload width used by the generated Bundle. / 校验生成 Bundle 使用的载荷位宽。
+    def __post_init__(self) -> None:
+        if self.data_width < 1:
+            raise ValueError("data_width must be positive")
 
 
 # =============================================================================
 # Implementation
 # =============================================================================
-# connect responsibility. / connect 函数职责。
-def connect(m, leftValid, leftReady, leftBits, rightValid, rightReady,
-            rightBits, rightOutFire, isFlush, isOlder):
-    # inline pipeline-connect (mirrors Scala NewPipelineConnect.connect) /
-    # 内联流水线连接（镜像 Scala connect）
-    valid = Signal(name="npc_valid", reset=0)
-    dataReg = Signal.like(leftBits, name="npc_data")
-    m.d.comb += leftReady.eq(rightReady | ~valid | isOlder)
-    with m.If(leftValid & leftReady):
-        m.d.sync += dataReg.eq(leftBits)
-    with m.If(rightOutFire):
-        m.d.sync += valid.eq(0)
-    with m.If(leftValid & leftReady):
-        m.d.sync += valid.eq(1)
-    with m.If(isFlush):
-        m.d.sync += valid.eq(0)
-    m.d.comb += rightBits.eq(dataReg)
-    m.d.comb += rightValid.eq(valid)
-    return dataReg
+# Connect one pair of decoupled channels in-place. / 原地连接一对解耦通道。
+def connect(
+    module: Module,
+    leftValid: Signal,
+    leftReady: Signal,
+    leftBits: Signal,
+    rightValid: Signal,
+    rightReady: Signal,
+    rightBits: Signal,
+    rightOutFire: Signal,
+    isFlush: Signal,
+    isOlder: Signal,
+    reset: Signal | None = None,
+) -> Signal:
+    """Implement the V2 ``NewPipelineConnect.connect`` equations.
+    实现 V2 ``NewPipelineConnect.connect`` 方程。
+    """
+    valid_reg = Signal(name="npc_valid", reset=0)
+    data_reg = Signal.like(leftBits, name="npc_data")
+    left_fire = leftValid & leftReady
+    module.d.comb += [
+        leftReady.eq(rightReady | ~valid_reg | isOlder),
+        rightValid.eq(valid_reg),
+        rightBits.eq(data_reg),
+    ]
+
+    # Chisel's source order is rightOutFire, left.fire, then isFlush.  The
+    # nested priority below preserves that ordering (flush wins over both).
+    # Build one priority expression: reset/flush dominate, then input fire
+    # replaces a consumed item, otherwise rightOutFire clears the stage.
+    next_valid: Any = Mux(rightOutFire, 0, valid_reg)
+    next_valid = Mux(left_fire, 1, next_valid)
+    next_valid = Mux(isFlush, 0, next_valid)
+    if reset is not None:
+        next_valid = Mux(reset, 0, next_valid)
+    module.d.sync += valid_reg.eq(next_valid)
+    with module.If(left_fire):
+        module.d.sync += data_reg.eq(leftBits)
+    return data_reg
 
 
 class NewPipelineConnectPipe(Elaboratable):
-    # one-stage decoupled pipeline register / 单级 Decoupled 流水线寄存器
-    def __init__(self, dataWidth=64):
-        self.dataWidth = dataWidth
-        self.in_valid = Signal(name="in_valid")
-        self.in_ready = Signal(name="in_ready")
-        self.in_bits = Signal(dataWidth, name="in_bits")
-        self.out_valid = Signal(name="out_valid")
-        self.out_ready = Signal(name="out_ready")
-        self.out_bits = Signal(dataWidth, name="out_bits")
-        self.rightOutFire = Signal(name="rightOutFire")
-        self.isFlush = Signal(name="isFlush")
-        self.isOlder = Signal(name="isOlder")
+    """One V2 pipeline stage. / 一个 V2 流水线级。"""
 
-    # elaborate responsibility. / elaborate 函数职责。
-    def elaborate(self, platform):
-        # build the pipeline register / 构建流水线寄存器
-        m = Module()
-        connect(m, self.in_valid, self.in_ready, self.in_bits,
-                self.out_valid, self.out_ready, self.out_bits,
-                self.rightOutFire, self.isFlush, self.isOlder)
-        return m
+    # Construct the explicit decoupled and control ports. / 构造显式解耦与控制端口。
+    def __init__(self, dataWidth: int = 64) -> None:
+        if int(dataWidth) < 1:
+            raise ValueError("dataWidth must be positive")
+        self.data_width = int(dataWidth)
+        self.clock = ClockSignal("sync")
+        # Explicit reset observation mirroring the Chisel Module reset port.
+        self.reset = Signal(name="reset")
+        self.in_valid = Signal(name="io_in_valid")
+        self.in_ready = Signal(name="io_in_ready")
+        self.in_bits = Signal(self.data_width, name="io_in_bits")
+        self.out_valid = Signal(name="io_out_valid")
+        self.out_ready = Signal(name="io_out_ready")
+        self.out_bits = Signal(self.data_width, name="io_out_bits")
+        self.rightOutFire = Signal(name="io_rightOutFire")
+        self.isFlush = Signal(name="io_isFlush")
+        self.isOlder = Signal(name="io_isOlder")
+
+    # Elaborate the registered valid/payload path. / 展开寄存有效位与载荷通路。
+    def elaborate(self, platform) -> Module:
+        del platform
+        module = Module()
+        # Match Chisel's asynchronous Module reset on the valid register.
+        module.domains.sync = ClockDomain(async_reset=True)
+        module.d.comb += ResetSignal("sync").eq(self.reset)
+        connect(
+            module,
+            self.in_valid,
+            self.in_ready,
+            self.in_bits,
+            self.out_valid,
+            self.out_ready,
+            self.out_bits,
+            self.rightOutFire,
+            self.isFlush,
+            self.isOlder,
+            self.reset,
+        )
+        return module
 
 
 class NewPipelineConnect:
-    # static facade mirroring the Scala object / 静态门面（镜像 Scala object）
-    @staticmethod
-    # connect responsibility. / connect 函数职责。
-    def connect(m, leftValid, leftReady, leftBits, rightValid, rightReady,
-                rightBits, rightOutFire, isFlush, isOlder):
-        # inline connect (no submodule) / 内联连接（无子模块）
-        return connect(m, leftValid, leftReady, leftBits, rightValid, rightReady,
-                       rightBits, rightOutFire, isFlush, isOlder)
+    """Static facade matching the V2 Scala object. / 匹配 V2 Scala 对象的静态门面。"""
 
+    @staticmethod
+    # Delegate the inline connection operation. / 委托原地连接操作。
+    def connect(
+        module: Module,
+        leftValid: Signal,
+        leftReady: Signal,
+        leftBits: Signal,
+        rightValid: Signal,
+        rightReady: Signal,
+        rightBits: Signal,
+        rightOutFire: Signal,
+        isFlush: Signal,
+        isOlder: Signal,
+        reset: Signal | None = None,
+    ) -> Signal:
+        return connect(
+            module,
+            leftValid,
+            leftReady,
+            leftBits,
+            rightValid,
+            rightReady,
+            rightBits,
+            rightOutFire,
+            isFlush,
+            isOlder,
+            reset,
+        )
 
 # =============================================================================
 # Public Adapter
 # =============================================================================
-# build_verilog responsibility. / build_verilog 函数职责。
-def build_verilog(dataWidth: int = 64, name: str = "NewPipelineConnectPipe") -> str:
-    # Convert pipeline to verilog / 转换流水线为 Verilog
+# Export a deterministic configured pipeline stage. / 导出确定性配置流水线级。
+def build_verilog(configuration, injected_dependencies):
+    """Return Verilog for the configured V2 pipeline stage. / 返回配置 V2 流水线级的 Verilog。"""
     from amaranth.back import verilog
 
-    top = NewPipelineConnectPipe(dataWidth)
-    ports = [top.in_valid, top.in_ready, top.in_bits, top.out_valid,
-             top.out_ready, top.out_bits, top.rightOutFire, top.isFlush,
-             top.isOlder]
+    del injected_dependencies
+    config: dict[str, Any] = configuration if isinstance(configuration, dict) else {}
+    raw = config.get("data_width", config.get("width", 64))
+    if isinstance(configuration, NewPipelineConnectConfig):
+        width = configuration.data_width
+    else:
+        width = int(raw)
+    name = str(config.get("name", config.get("module", "NewPipelineConnectPipe")))
+    top = NewPipelineConnectPipe(width)
+    ports = [
+        top.clock,
+        top.reset,
+        top.in_valid,
+        top.in_ready,
+        top.in_bits,
+        top.out_valid,
+        top.out_ready,
+        top.out_bits,
+        top.rightOutFire,
+        top.isFlush,
+        top.isOlder,
+    ]
     return verilog.convert(top, name=name, ports=ports)
 
 
 # =============================================================================
 # Direct Entry
 # =============================================================================
-# main responsibility. / main 函数职责。
+# Print the default deterministic export. / 打印默认确定性导出结果。
 def main() -> None:
-    # Entry point / 入口
-    print(build_verilog())
+    print(build_verilog(None, None))
 
 
 if __name__ == "__main__":

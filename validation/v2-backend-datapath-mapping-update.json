@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "kind": "V2_P1_D_BACKEND_DATAPATH_MAPPING_UPDATE",
+  "batch_id": "V2-P1-D-BACKEND-DATAPATH",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "locked_reference": {
+    "path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "bytes": 228590583
+  },
+  "entries": [
+    {
+      "id": "DataSource",
+      "classification": "EXACT",
+      "v2_source": "upstream/src/main/scala/xiangshan/backend/datapath/DataSource.scala",
+      "target": "python/ported/backend/datapath/DataSource-Hardware.py",
+      "covered_children": [
+        "DataSource",
+        "selector predicates"
+      ],
+      "status": "DIFFERENTIAL_MATCHED_BOUNDED",
+      "reference_mode": "source_equation_locked_xstop"
+    },
+    {
+      "id": "NewPipelineConnect",
+      "classification": "EXACT",
+      "v2_source": "upstream/src/main/scala/xiangshan/backend/datapath/NewPipelineConnect.scala",
+      "target": "python/ported/backend/datapath/NewPipelineConnect-Hardware.py",
+      "covered_children": [
+        "NewPipelineConnectPipe",
+        "valid register",
+        "payload RegEnable"
+      ],
+      "status": "DIFFERENTIAL_MATCHED_BOUNDED",
+      "reference_mode": "NewPipelineConnectPipe_25_wrapper"
+    },
+    {
+      "id": "WbArbiter",
+      "classification": "REWRITTEN",
+      "v2_source": "upstream/src/main/scala/xiangshan/backend/datapath/WbArbiter.scala",
+      "target": "python/ported/backend/datapath/WbArbiter-Hardware.py",
+      "covered_children": [
+        "WbArbiterDispatcher",
+        "RealWBCollideChecker",
+        "WbDataPath",
+        "RealWBArbiter",
+        "memory EXU inputs",
+        "five RF outputs"
+      ],
+      "status": "DIFFERENTIAL_MATCHED_BOUNDED",
+      "reference_mode": "RealWBCollideChecker_v2 + source_parent_closure"
+    }
+  ],
+  "localization_map": {
+    "manifest": "UHSC-Naming-Manifest.json",
+    "status": "NO_PROJECT_FACING_RENAME",
+    "locked_names_unchanged": true,
+    "entries": [
+      {
+        "source_name": "XSTop",
+        "local_name": "UHSCTop",
+        "visibility": "project-owned external wrapper",
+        "reason": "Child batch has no top-level wrapper; reserve localization for Phase 3.",
+        "status": "PLANNED"
+      },
+      {
+        "source_name": "XiangShan/XS/KMHV2",
+        "local_name": "UHSC",
+        "visibility": "project-owned external identity",
+        "reason": "No product-facing rename introduced in this child batch.",
+        "status": "NOT_APPLIED"
+      }
+    ]
+  },
+  "gates": {
+    "contract": "PASS",
+    "direct": "PASS_BOUNDED_DIRECT",
+    "reference": "PASS_BOUNDED_REFERENCE",
+    "parent_closure": "PENDING",
+    "license": "PENDING"
+  },
+  "acceptance_eligible": false
+}

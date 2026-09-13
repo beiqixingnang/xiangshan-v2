@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "kind": "V2_P1_D_BACKEND_DATAPATH_REFERENCE_EXTRACTION",
+  "batch_id": "V2-P1-D-BACKEND-DATAPATH",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "xstop": {
+    "canonical_path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "local_access_path": "\\\\wsl$\\Debian\\home\\lishuo\\xs-v2-local\\build\\rtl\\XSTop.sv",
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "bytes": 228590583
+  },
+  "modules": [
+    {
+      "module": "RealWBArbiter",
+      "path": "validation/reference-closures/RealWBArbiter-v2.sv",
+      "sha256": "34c468d3f94ee6c8ab137f29e580ebdb6307de19da478dd57693f7365570f9d6",
+      "bytes": 4353,
+      "xstop_line_start": 1340669,
+      "xstop_line_end": 1340708,
+      "source_scala": "upstream/src/main/scala/xiangshan/backend/datapath/RFWBConflictChecker.scala",
+      "interface_mode": "extractable_module"
+    },
+    {
+      "module": "RealWBCollideChecker",
+      "path": "validation/reference-closures/RealWBCollideChecker-v2.sv",
+      "sha256": "fd01824542ced753c6f5f5092c6c0f322e5dffdb6c85d16de2e4dcbe0657a20d",
+      "bytes": 20206,
+      "xstop_line_start": 1340813,
+      "xstop_line_end": 1341057,
+      "source_scala": "upstream/src/main/scala/xiangshan/backend/datapath/WbArbiter.scala",
+      "interface_mode": "extractable_module"
+    },
+    {
+      "module": "NewPipelineConnectPipe_25",
+      "path": "validation/reference-closures/NewPipelineConnectPipe_25-v2.sv",
+      "sha256": "fa382847c50251e726378b7d0f544d0e29864dcf046ba6542e684f0070ec2b3f",
+      "bytes": 11280,
+      "xstop_line_start": 1348101,
+      "xstop_line_end": 1348191,
+      "source_scala": "upstream/src/main/scala/xiangshan/backend/datapath/NewPipelineConnect.scala",
+      "interface_mode": "extractable_module"
+    }
+  ],
+  "source_level_surfaces": [
+    {
+      "module": "DataSource",
+      "source": "upstream/src/main/scala/xiangshan/backend/datapath/DataSource.scala",
+      "mode": "source_equation_parent_closure",
+      "observation_points": [
+        "value[3]",
+        "eight selector equalities"
+      ]
+    },
+    {
+      "module": "WbDataPath",
+      "source": "upstream/src/main/scala/xiangshan/backend/datapath/WbArbiter.scala",
+      "mode": "source_parent_closure",
+      "observation_points": [
+        "int/fp/vf/v0/vl arbitration",
+        "memory EXU inclusion",
+        "uncertain-latency ready"
+      ]
+    }
+  ],
+  "extraction": "PASS",
+  "locked_input_unchanged": true,
+  "acceptance_eligible": false
+}
