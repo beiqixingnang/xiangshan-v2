@@ -14,7 +14,7 @@ from amaranth import Elaboratable, Module, Signal
 # Module Contract
 # =============================================================================
 # DataSource.scala is a four-bit Bundle.  The values are kept as source
-# traceable integers here; no external XiangShan/Scala import is needed.
+# traceable integers here; no external source-tree import is needed.
 # DataSource.scala 是四位 Bundle；这里保留可追溯的整数编码，不导入外部 Scala。
 __all__ = ["DataSourceConfig", "DataSource", "DataSourceProbe", "build_verilog", "main"]
 
