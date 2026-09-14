@@ -242,7 +242,7 @@
     {
       "family_id": "dependency.utility",
       "kind": "dependency",
-      "plan_build_file": "Build-Cpu.Dependency.Utility-Hardware.py",
+      "plan_build_file": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Utility-Hardware.py",
       "source_roots": [
         "utility/src/main/scala"
       ],
@@ -312,9 +312,11 @@
       ],
       "reachability": null,
       "boundary": null,
-      "status": "INVENTORY_ONLY",
+      "status": "PASS_BOUNDED_FAMILY",
       "reachability_status": "REACHABLE_SELECTED_OR_CONDITIONAL",
-      "implementation_eligibility": "PLANNED_AFTER_CORE_PARENT"
+      "implementation_eligibility": "VALIDATED_BOUNDED",
+      "evidence": "validation/v2-utility-family-results.json",
+      "commit": "f34bf40"
     },
     {
       "family_id": "dependency.fudian.fpu",
