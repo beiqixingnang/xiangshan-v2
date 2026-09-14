@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_MEMBLOCK_PARENT_DIRECT",
+  "batch_id": "V2-PARENT-MEMBLOCK-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.MemBlock-Hardware.py",
+    "sha256": "6dfa754ca19d64b840fef4e1b819e6e4bcd4258025cc2077304d566dbfaf6ec7"
+  },
+  "static_audit": {
+    "status": "PASS",
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.MemBlock-Hardware.py",
+    "bytes": 31408,
+    "sha256": "6dfa754ca19d64b840fef4e1b819e6e4bcd4258025cc2077304d566dbfaf6ec7",
+    "zones": [
+      "Module Contract",
+      "Configuration",
+      "Implementation",
+      "Public Adapter",
+      "Direct Entry"
+    ],
+    "adapter_exact": true,
+    "required_symbols": [
+      "UHSCMemoryMemBlock",
+      "UHSCDCacheWrapper",
+      "UHSCCacheMainPipe",
+      "MemBlock"
+    ],
+    "sibling_imports": [],
+    "uhsc_default": true
+  },
+  "direct": {
+    "status": "PASS",
+    "vectors": 37,
+    "checks": 38,
+    "trace_sha256": "3ac50519d160134a576e3c2074a2649d090b87b83035486652fb651442e3994d",
+    "trace_head": [
+      {
+        "cycle": 0,
+        "load_ready": 1,
+        "store_ready": 1,
+        "atomic_ready": 1,
+        "tl_a_valid": 0,
+        "writeback_valid": 1,
+        "writeback_data": 15770787659254150155,
+        "writeback_id": 0,
+        "writeback_miss": 0,
+        "icache_req_ready": 1,
+        "icache_resp_valid": 0,
+        "icache_resp_data": 324508639
+      },
+      {
+        "cycle": 1,
+        "load_ready": 1,
+        "store_ready": 1,
+        "atomic_ready": 1,
+        "tl_a_valid": 0,
+        "writeback_valid": 1,
+        "writeback_data": 4312945889014031828,
+        "writeback_id": 1,
+        "writeback_miss": 0,
+        "icache_req_ready": 1,
+        "icache_resp_valid": 0,
+        "icache_resp_data": 324508639
+      }
+    ],
+    "trace_tail": [
+      {
+        "cycle": 36,
+        "load_ready": 1,
+        "store_ready": 1,
+        "atomic_ready": 1,
+        "tl_a_valid": 0,
+        "writeback_valid": 1,
+        "writeback_data": 14627333965257922168,
+        "writeback_id": 40,
+        "writeback_miss": 1,
+        "icache_req_ready": 1,
+        "icache_resp_valid": 0,
+        "icache_resp_data": 324508639
+      },
+      {
+        "frontend": 324504043
+      }
+    ]
+  },
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "UHSC_LOCALIZED": "PASS_BOUNDED_PARENT_LOCAL_NAME",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "acceptance_eligible": false
+}

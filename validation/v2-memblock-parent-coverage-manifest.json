@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_MEMBLOCK_PARENT_COVERAGE",
+  "batch_id": "V2-PARENT-MEMBLOCK-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "readiness_source": "validation/v2-parent-closure-readiness.json",
+  "closure_root": "core.cache.dcache",
+  "root_module": "MemBlock",
+  "root_source": "upstream/src/main/scala/xiangshan/mem/MemBlock.scala",
+  "children": [
+    {
+      "instance": "MemBlock.dcache",
+      "source": "upstream/src/main/scala/xiangshan/cache/dcache/DCacheWrapper.scala",
+      "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.MemBlock-Hardware.py",
+      "status": "PASS_BOUNDED"
+    },
+    {
+      "instance": "DCache.mainpipe",
+      "source": "upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/MainPipe.scala",
+      "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.MemBlock-Hardware.py",
+      "status": "PASS_BOUNDED"
+    },
+    {
+      "instance": "MainPipe.amoalu",
+      "source": "upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/AMOALU.scala",
+      "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Cache.Dcache.Mainpipe.AMOALU-Hardware.py",
+      "status": "PASS_REFERENCE_CHILD"
+    },
+    {
+      "instance": "MainPipe.tag_array",
+      "source": "upstream/src/main/scala/xiangshan/cache/dcache/meta/TagArray.scala",
+      "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Cache.Dcache.Meta.TagArray-Hardware.py",
+      "status": "PASS_REFERENCE_CHILD"
+    },
+    {
+      "instance": "MemBlock.frontendBridge",
+      "source": "upstream/src/main/scala/xiangshan/mem/MemBlock.scala",
+      "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.MemBlock-Hardware.py",
+      "status": "PASS_BOUNDED"
+    }
+  ],
+  "observation_points": [
+    "issue priority",
+    "miss A channel",
+    "refill/writeback",
+    "AMO mask merge",
+    "tag reset/read/write",
+    "frontend bridge",
+    "flush ordering",
+    "MMU/LSU/MBIST stubs"
+  ],
+  "reference_snapshot": {
+    "status": "PASS",
+    "canonical_path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "bytes": 228590583,
+    "expected_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "expected_bytes": 228590583
+  },
+  "status": "PASS_BOUNDED_PARENT",
+  "uhsc_localization": {
+    "status": "PASS_BOUNDED_PARENT_LOCAL_NAME",
+    "local_name": "UHSCMemoryMemBlock",
+    "manifest": "UHSC-Naming-Manifest.json",
+    "manifest_sha256": "805d920a8b8e7b4e545739033a3fe7c0b4dcbe36efc217c3134f54b56c3182f6",
+    "locked_names_unchanged": true
+  },
+  "license_review": "PENDING",
+  "acceptance_eligible": false,
+  "gates": {
+    "DIRECT": "PASS",
+    "REFERENCE": "PASS_BOUNDED",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "ACCEPTED": "NOT_ALLOWED"
+  }
+}

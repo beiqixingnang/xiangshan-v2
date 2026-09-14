@@ -123,7 +123,8 @@
       "status": "IN_PROGRESS",
       "active_reduced_batches": [
         "V2-PARENT-VECTOR-001",
-        "V2-PARENT-CACHE-001"
+        "V2-PARENT-FRONTEND-001",
+        "V2-PARENT-BACKEND-001"
       ],
       "completed_reduced_batches": [
         {
@@ -132,6 +133,25 @@
           "commit": "b40dfed",
           "evidence": "validation/v2-vector-parent-closure-differential-results.json",
           "full_parent_status": "PENDING_BACKEND_PARENT"
+        },
+        {
+          "batch_id": "V2-PARENT-MEMBLOCK-001",
+          "status": "PASS_BOUNDED_REDUCED",
+          "commit": "PENDING_COORDINATOR_COMMIT",
+          "evidence": "validation/v2-memblock-parent-differential-results.json",
+          "full_parent_status": "PENDING_FULL_DIPLOMACY_CLOSURE",
+          "vectors": 32
+        }
+      ],
+      "failed_validation_attempts": [
+        {
+          "batch_id": "V2-PARENT-CACHE-001",
+          "status": "REPAIR_REQUIRED",
+          "phase": "reference_compile",
+          "reason": "reference shell connected child output io_*_issue_ready ports directly to variables",
+          "direct": "PASS",
+          "verilator_target": "PASS",
+          "yosys_target": "PASS"
         }
       ]
     },

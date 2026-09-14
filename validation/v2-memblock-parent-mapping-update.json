@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "kind": "V2_MEMBLOCK_PARENT_MAPPING_UPDATE",
+  "batch_id": "V2-PARENT-MEMBLOCK-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "entries": [
+    {
+      "id": "MemBlock",
+      "classification": "NEW_AUXILIARY_PARENT_HARNESS",
+      "disposition": "PARENT_BOUNDARY_REDUCED",
+      "v2_source": "upstream/src/main/scala/xiangshan/mem/MemBlock.scala",
+      "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.MemBlock-Hardware.py",
+      "local_name": "UHSCMemoryMemBlock",
+      "status": "PASS_BOUNDED"
+    },
+    {
+      "id": "DCacheWrapper",
+      "classification": "INLINED_PARENT_CHILD",
+      "v2_source": "upstream/src/main/scala/xiangshan/cache/dcache/DCacheWrapper.scala",
+      "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.MemBlock-Hardware.py",
+      "status": "PASS_BOUNDED"
+    },
+    {
+      "id": "MainPipe",
+      "classification": "INLINED_PARENT_CHILD",
+      "v2_source": "upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/MainPipe.scala",
+      "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.MemBlock-Hardware.py",
+      "status": "PASS_BOUNDED"
+    }
+  ],
+  "source_authority": {
+    "status": "PASS",
+    "canonical_path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "bytes": 228590583,
+    "expected_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "expected_bytes": 228590583
+  },
+  "uhsc_manifest": "UHSC-Naming-Manifest.json",
+  "gates": {
+    "contract": "PASS",
+    "direct": "PASS",
+    "reference": "PASS_BOUNDED",
+    "parent_closure": "PASS_BOUNDED_REDUCED",
+    "license": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "acceptance_eligible": false
+}

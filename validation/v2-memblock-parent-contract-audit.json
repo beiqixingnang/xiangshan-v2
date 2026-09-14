@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_MEMBLOCK_PARENT_CONTRACT_AUDIT",
+  "result": "PASS",
+  "target": {
+    "status": "PASS",
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.MemBlock-Hardware.py",
+    "bytes": 31408,
+    "sha256": "6dfa754ca19d64b840fef4e1b819e6e4bcd4258025cc2077304d566dbfaf6ec7",
+    "zones": [
+      "Module Contract",
+      "Configuration",
+      "Implementation",
+      "Public Adapter",
+      "Direct Entry"
+    ],
+    "adapter_exact": true,
+    "required_symbols": [
+      "UHSCMemoryMemBlock",
+      "UHSCDCacheWrapper",
+      "UHSCCacheMainPipe",
+      "MemBlock"
+    ],
+    "sibling_imports": [],
+    "uhsc_default": true
+  },
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "child_contracts": {
+    "AMOALU": "injected named dependency",
+    "TagArray": "injected named dependency",
+    "TileLink": "explicit A/D transaction ports",
+    "MMU": "ready stub",
+    "LSU": "ready stub",
+    "MBIST": "enable/done stub"
+  },
+  "gates": {
+    "contract": "PASS",
+    "direct": "PASS",
+    "reference": "PASS_BOUNDED",
+    "verilator": "PASS",
+    "yosys": "PASS",
+    "license": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "acceptance_eligible": false
+}

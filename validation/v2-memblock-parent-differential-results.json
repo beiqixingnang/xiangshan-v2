@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_MEMBLOCK_PARENT_DIFFERENTIAL",
+  "batch_id": "V2-PARENT-MEMBLOCK-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "reference_snapshot": {
+    "status": "PASS",
+    "canonical_path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "bytes": 228590583,
+    "expected_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "expected_bytes": 228590583
+  },
+  "reference_modules": {
+    "AMOALU": {
+      "sha256": "f7bb49ef88b9ab6ecec70f4fa9f1a92de32640a4b13f923813d42a6e80d171ba",
+      "bytes": 2912,
+      "source": "locked XSTop module slice"
+    },
+    "MainPipe": {
+      "boundary": "1463120-1466301",
+      "sha256": "e6fad9aee4d15291bca82a1c12a4023e9374ad330ee6f4860b350eeeaff5ad53"
+    },
+    "DCache": {
+      "boundary": "1479248-1506359",
+      "sha256": "f323f52616e51fb65e73b986db54177b29af7a0fcdb5591a9648217304f88e19"
+    },
+    "DCacheWrapper": {
+      "boundary": "1506360-1508232",
+      "sha256": "1d85fad72188aaea8cb61f4f41ef45eff3a54fbc142f80512650399ea76b8f23"
+    },
+    "MemBlock": {
+      "boundary": "1979904-2011084",
+      "sha256": "f6f5d104187494a3a0a73225992173ca7c4bc0ab2c9cbb82ddebd39878b23aa6"
+    }
+  },
+  "target_parent": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.MemBlock-Hardware.py",
+    "sha256": "6dfa754ca19d64b840fef4e1b819e6e4bcd4258025cc2077304d566dbfaf6ec7"
+  },
+  "comparison": {
+    "status": "PASS",
+    "returncode": 0,
+    "stdout_tail": "PASS_MEMBLOCK_REFERENCE 32\n- /mnt/c/Users/lishuo/AppData/Local/Temp/memblock-parent-diff-aos1kobf/tb.sv:1740: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 149ps; walltime 0.001 s; speed 109.535 ns/s\n- Verilator: cpu 0.001 s on 1 threads; alloced 153 MB\n",
+    "stderr_tail": "",
+    "vectors": 32,
+    "reference_modules": [
+      "AMOALU",
+      "MainPipe",
+      "DCache",
+      "DCacheWrapper",
+      "MemBlock"
+    ],
+    "comparison": "reduced parent handshake/miss/refill/frontend surface"
+  },
+  "backend_gates": {
+    "verilator": {
+      "status": "PASS",
+      "returncode": 0,
+      "stderr_tail": "System/.agents/xiangshan-v2/validation/.work/v2-memblock-parent/target-parent.sv:996:25: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'hd' generates 4 bits.\n                                                                                                                                                     : ... note: In instance 'UHSCMemoryMemBlock.dcache.mainpipe.amo'\n  996 |   assign \\$64  = io_cmd == 4'hd;\n      |                         ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memblock-parent/target-parent.sv:997:25: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'hf' generates 4 bits.\n                                                                                                                                                     : ... note: In instance 'UHSCMemoryMemBlock.dcache.mainpipe.amo'\n  997 |   assign \\$65  = io_cmd == 4'hf;\n      |                         ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memblock-parent/target-parent.sv:346:41: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                     : ... note: In instance 'UHSCMemoryMemBlock.dcache'\n  346 |   assign \\$1  = io_miss_req_bits_source == 1'h1;\n      |                                         ^~\n"
+    },
+    "yosys": {
+      "status": "PASS",
+      "returncode": 0,
+      "stderr_tail": ""
+    }
+  },
+  "behavioral_equivalence": true,
+  "status": "DIFFERENTIAL_MATCHED_BOUNDED",
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED",
+    "PARENT_CLOSURE_MATCHED": "PASS_BOUNDED_REDUCED",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "UHSC_LOCALIZED": "PASS_BOUNDED_PARENT_LOCAL_NAME",
+    "LICENSE_REVIEW": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "acceptance_eligible": false,
+  "unclosed": [
+    "Full 669-port MemBlock/Diplomacy closure remains outside this bounded batch.",
+    "MMU/LSU/TileLink/MBIST dependencies are explicit stubs; mixed-license review remains pending."
+  ]
+}
