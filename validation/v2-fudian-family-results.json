@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_FUDIAN_FPU_ARITHMETIC_FAMILY",
+  "batch_id": "V2-DEPENDENCY-FUDIAN-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "source_scala_file_count": {
+    "fpu": 15,
+    "arithmetic": 5
+  },
+  "targets": {
+    "fpu": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Fudian.Fpu-Hardware.py",
+      "sha256": "e6d67b4b12ed9e5b177f9ecbe0151256819d4a20f9257b0566f046ddaf5ff9c5"
+    },
+    "arithmetic": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Fudian.Arithmetic-Hardware.py",
+      "sha256": "b28cbfba739096f7c2d7dfc2c737d658cac208f75c90efd77a3ae0bf553f8522"
+    }
+  },
+  "static": {
+    "fpu": {
+      "status": "PASS",
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Fudian.Fpu-Hardware.py",
+      "sha256": "e6d67b4b12ed9e5b177f9ecbe0151256819d4a20f9257b0566f046ddaf5ff9c5",
+      "bytes": 6592,
+      "zones": [
+        588,
+        3141,
+        5145
+      ],
+      "adapter_args": [
+        "configuration",
+        "injected_dependencies"
+      ],
+      "function_comment_errors": []
+    },
+    "arithmetic": {
+      "status": "PASS",
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Fudian.Arithmetic-Hardware.py",
+      "sha256": "b28cbfba739096f7c2d7dfc2c737d658cac208f75c90efd77a3ae0bf553f8522",
+      "bytes": 6935,
+      "zones": [
+        598,
+        2389,
+        5323
+      ],
+      "adapter_args": [
+        "configuration",
+        "injected_dependencies"
+      ],
+      "function_comment_errors": []
+    }
+  },
+  "direct": {
+    "fpu": {
+      "status": "PASS",
+      "vectors": 266
+    },
+    "arithmetic": {
+      "status": "PASS",
+      "vectors": 355
+    }
+  },
+  "backend": {
+    "fpu": {
+      "verilator": "PASS",
+      "yosys": "PASS",
+      "rtl_sha256": "1507983174982ee1d521e631592bdc0ea9ec3981c167f1b06bd27084ef497cd7",
+      "rtl_bytes": 1191
+    },
+    "arithmetic": {
+      "verilator": "PASS",
+      "yosys": "PASS",
+      "rtl_sha256": "abee81493de18056690c9d48569d087960a82d3e29b24ee031d148e598eeccfd",
+      "rtl_bytes": 8939
+    }
+  },
+  "license": {
+    "status": "PENDING",
+    "files": [],
+    "note": "Fudian license review remains pending before ACCEPTED."
+  },
+  "reference_mode": "LOCKED_XSTOP_FUDIAN_SCALAR_EQUATIONS",
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED_FUDIAN_EQUATIONS",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "UHSC_LOCALIZED": "PASS_BOUNDED_FAMILY_LOCAL_NAME",
+    "LICENSE_REVIEW": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "acceptance_eligible": false
+}
