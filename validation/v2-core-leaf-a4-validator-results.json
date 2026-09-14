@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_CORE_LEAF_A4_VALIDATOR",
+  "batch_id": "V2-SCAN-A4-CORE-FU-BUSY",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.FuBusyTableRead-Hardware.py",
+    "sha256": "b810549f7676a4614a3c3d29d58eb917e3e90fe7cdec7b7a9bc5ecaedd676c4d"
+  },
+  "source": {
+    "path": "upstream/src/main/scala/xiangshan/backend/issue/FuBusyTableRead.scala",
+    "sha256": "4c1ac56ddd26b3dff8db5362017c462ef8c8dcf0a46ffe31fff733c15a272c49"
+  },
+  "direct": {
+    "vectors": 4,
+    "results": [
+      0,
+      1,
+      3,
+      10
+    ],
+    "pass": true
+  },
+  "generated": {
+    "bytes": 24765,
+    "sha256": "f0228c889d009296a885756da1167a58452fd22783840ad468111344e831ed7d",
+    "module_decl": true
+  },
+  "tools": {
+    "verilator": "PASS",
+    "yosys": "PASS"
+  },
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "SOURCE_LEVEL_PENDING",
+    "PARENT_CLOSURE_MATCHED": "PENDING",
+    "UHSC_LOCALIZED": "NO_PROJECT_FACING_RENAME",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "VALIDATOR_PASS_BOUNDED",
+  "acceptance_eligible": false
+}
