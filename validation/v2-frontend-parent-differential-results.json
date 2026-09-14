@@ -1887,7 +1887,7 @@
   },
   "target": {
     "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Top-Hardware.py",
-    "sha256": "505b8e1493fd8ecc3defd93c818b00dc2b45abf99325149190abd17d24d559ff"
+    "sha256": "39b8e587da47fea6c65aaedefc60c2f15c9dd5ad1ed62924b1f75324889bcb1b"
   },
   "port_inventory": {
     "status": "PASS",
@@ -1896,6 +1896,8 @@
     "count_match": true,
     "target_port_names_sha256": "bdc07e090006255a2e341314f775af508ae87cdab22b14a4d5f26839f4c02f56",
     "locked_port_names_sha256": "cb1e528665c21781a9a18655573883c7b609be0f046ef943c79d1363c5a18654",
+    "requested_port_names_sha256": "cb1e528665c21781a9a18655573883c7b609be0f046ef943c79d1363c5a18654",
+    "requested_order_matches_locked": true,
     "target_port_set_sha256": "17a908574aada209a607086b48bdd72e5b40d5bb550091f4d3cf5f1ccaa63290",
     "locked_port_set_sha256": "17a908574aada209a607086b48bdd72e5b40d5bb550091f4d3cf5f1ccaa63290",
     "name_order_match": false,
@@ -1906,11 +1908,35 @@
     "full_rtl_sha256": "9fb16705a45383a05b0f0b77356b6dbc98e60d7afb785bdea4c51706a98c8f32",
     "full_rtl_bytes": 75788
   },
+  "injected_child_probe": {
+    "status": "PASS",
+    "children": [
+      "RvcExpander",
+      "FallThroughPredictor",
+      "ICacheMSHR",
+      "ICacheReplacer"
+    ],
+    "target_rtl": {
+      "path": "validation/.work/v2-frontend-parent/UHSCTop-injected-children.sv",
+      "sha256": "ca49b325456eaca52d4e671492155de540d48347442b051cec62b97d93670fcb",
+      "bytes": 821258
+    },
+    "verilator": {
+      "status": "PASS",
+      "returncode": 0,
+      "stderr_tail": "/uhsc-v2/validation/.work/v2-frontend-parent/UHSCTop-injected-children.sv:1341:29: Operator ADD expects 6 bits on the LHS, but LHS's SEL generates 4 bits.\n                                                                                                           : ... note: In instance 'UHSCTop.bpu'\n 1341 |   assign \\$18  = s1_pc[4:1] + 5'h10;\n      |                             ^\n%Warning-WIDTHEXPAND: /tmp/uhsc-v2/validation/.work/v2-frontend-parent/UHSCTop-injected-children.sv:1342:24: Operator GT expects 8 bits on the RHS, but RHS's VARREF '$18' generates 6 bits.\n                                                                                                           : ... note: In instance 'UHSCTop.bpu'\n 1342 |   assign \\$19  = \\$17  > \\$18 ;\n      |                        ^\n%Warning-WIDTHEXPAND: /tmp/uhsc-v2/validation/.work/v2-frontend-parent/UHSCTop-injected-children.sv:1348:24: Operator ADD expects 40 bits on the RHS, but RHS's CONST '6'h20' generates 6 bits.\n                                                                                                           : ... note: In instance 'UHSCTop.bpu'\n 1348 |   assign \\$25  = s1_pc + 6'h20;\n      |                        ^\n"
+    },
+    "yosys": {
+      "status": "PASS",
+      "returncode": 0,
+      "stderr_tail": ""
+    }
+  },
   "comparison": {
     "status": "PASS",
     "returncode": 0,
-    "stdout_tail": "FRONTEND_PARENT_DIFFERENTIAL_PASS 96\n- /tmp/uhsc-v2/validation/.work/v2-frontend-parent/frontend-parent-diff.sv:2665: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 385ps; walltime 0.002 s; speed 277.163 ns/s\n- Verilator: cpu 0.001 s on 1 threads; alloced 153 MB\n",
-    "trace_sha256": "b0d5100bbb1c56fa3071b88e36a2ec3a5ad910463adbce2b8942ae11681ac2a7",
+    "stdout_tail": "FRONTEND_PARENT_DIFFERENTIAL_PASS 96\n- /tmp/uhsc-v2/validation/.work/v2-frontend-parent/frontend-parent-diff.sv:2665: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 385ps; walltime 0.002 s; speed 265.721 ns/s\n- Verilator: cpu 0.001 s on 1 threads; alloced 153 MB\n",
+    "trace_sha256": "3fcd20b3ffa5b7b54fe6a8e844ac9bf6b56ee742c25784e4ddedd79685b6e500",
     "trace_lines": 5,
     "source_sha256": "12aae609dbcd3a0c8c0f63f8a1f9204084144a552509dde225b1f90f3a8c40bc"
   },

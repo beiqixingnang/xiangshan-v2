@@ -609,9 +609,60 @@ def backend_gates(rtl: str) -> dict[str, Any]:
     }
 
 
+def injected_child_probe(target_module: Any) -> dict[str, Any]:
+    """Elaborate the parent with the available RVC/BPU/ICache leaves. / 使用现有 RVC/BPU/ICache 叶子展开父级。"""
+
+    build_root = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Core"
+    child_specs = {
+        "rvc": (build_root / "Build-Cpu.Frontend.Ifu.RvcExpander-Hardware.py", "RvcExpander"),
+        "bpu": (build_root / "Build-Cpu.Frontend.Bpu.FallThroughPredictor-Hardware.py", "FallThroughPredictor"),
+        "icache_mshr": (build_root / "Build-Cpu.Frontend.Icache.ICacheMshr-Hardware.py", "ICacheMSHR"),
+        "icache_replacer": (build_root / "Build-Cpu.Frontend.Icache.ICacheReplacer-Hardware.py", "ICacheReplacer"),
+    }
+    dependencies: dict[str, Any] = {}
+    loaded: list[str] = []
+    for key, (path, class_name) in child_specs.items():
+        if not path.is_file():
+            return {"status": "BLOCKED_CHILD_MISSING", "missing": str(path.relative_to(ROOT)).replace("\\", "/")}
+        child_module = load_target(path, f"v2_frontend_child_{key}")
+        constructor = getattr(child_module, class_name, None)
+        if constructor is None:
+            return {"status": "BLOCKED_CHILD_CLASS_MISSING", "child": class_name}
+        dependencies[key] = constructor()
+        loaded.append(class_name)
+    rtl = target_module.build_verilog({"module": "UHSCTop", "locked_io": True}, dependencies)
+    WORK.mkdir(parents=True, exist_ok=True)
+    artifact = WORK / "UHSCTop-injected-children.sv"
+    artifact.write_text(rtl, encoding="utf-8", newline="\n")
+    root_wsl = subprocess.run(["wsl.exe", "-e", "wslpath", "-a", str(ROOT)],
+                              capture_output=True, text=True, encoding="utf-8", errors="replace", check=True).stdout.strip()
+    subprocess.run(["wsl.exe", "-e", "bash", "-lc", f"ln -sfn '{root_wsl}' /tmp/uhsc-v2"],
+                   capture_output=True, text=True, encoding="utf-8", errors="replace", check=True)
+    wsl_artifact = "/tmp/uhsc-v2/validation/.work/v2-frontend-parent/UHSCTop-injected-children.sv"
+    ver = subprocess.run(["wsl.exe", "-e", "bash", "-lc",
+                          f"verilator --lint-only -Wno-fatal --top-module UHSCTop {wsl_artifact}"],
+                         capture_output=True, check=False, timeout=180)
+    yos = subprocess.run(["wsl.exe", "-e", "bash", "-lc",
+                          f"yosys -Q -p 'read_verilog -sv {wsl_artifact}; hierarchy -top UHSCTop; proc; check'"],
+                         capture_output=True, check=False, timeout=180)
+    ver_tail = ver.stderr.decode("utf-8", "replace")[-1200:]
+    yos_tail = yos.stderr.decode("utf-8", "replace")[-1200:]
+    return {
+        "status": "PASS" if ver.returncode == 0 and yos.returncode == 0 else "FAIL",
+        "children": loaded,
+        "target_rtl": {"path": artifact.relative_to(ROOT).as_posix(), "sha256": digest(artifact),
+                        "bytes": artifact.stat().st_size},
+        "verilator": {"status": "PASS" if ver.returncode == 0 else "FAIL", "returncode": ver.returncode,
+                      "stderr_tail": ver_tail},
+        "yosys": {"status": "PASS" if yos.returncode == 0 else "FAIL", "returncode": yos.returncode,
+                  "stderr_tail": yos_tail},
+    }
+
+
 def write_evidence(static: dict[str, Any], reference: dict[str, Any], direct: dict[str, Any],
                    differential: dict[str, Any], backend: dict[str, Any], vectors: list[dict[str, int]],
-                   source_hash: str, projection_hash: str, inventory: dict[str, Any] | None = None) -> None:
+                   source_hash: str, projection_hash: str, inventory: dict[str, Any] | None = None,
+                   child_probe: dict[str, Any] | None = None) -> None:
     """Persist all bounded parent evidence files. / 持久化所有精简父级证据文件。"""
     diff_pass = differential.get("status") == "PASS"
     backend_pass = backend.get("status") == "PASS"
@@ -644,6 +695,7 @@ def write_evidence(static: dict[str, Any], reference: dict[str, Any], direct: di
                                  "provenance": ["Frontend.scala:68-71", "Frontend.scala:224", "Frontend.scala:445"]},
         "target": {"path": static["path"], "sha256": static["sha256"]},
         "port_inventory": inventory or {"status": "PENDING"},
+        "injected_child_probe": child_probe or {"status": "NOT_RUN"},
         "comparison": differential, "backend_gates": backend,
         "behavioral_equivalence": diff_pass, "status": "DIFFERENTIAL_MATCHED_BOUNDED" if diff_pass else "FAIL",
         "gates": gates, "acceptance_eligible": False,
@@ -668,6 +720,7 @@ def write_evidence(static: dict[str, Any], reference: dict[str, Any], direct: di
         },
         "projection": {"module": "LockedFrontendProjection", "sha256": projection_hash},
         "port_inventory": inventory or {"status": "PENDING"},
+        "injected_child_probe": child_probe or {"status": "NOT_RUN"},
         "gates": gates, "acceptance_eligible": False,
     }
     CONTRACT_RESULT.write_text(json.dumps(contract_payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
@@ -677,6 +730,7 @@ def write_evidence(static: dict[str, Any], reference: dict[str, Any], direct: di
         "closure_root": "core.frontend", "root_module": "Frontend",
         "root_source": SOURCE.relative_to(ROOT).as_posix(), "reference_snapshot": reference,
         "port_inventory": inventory or {"status": "PENDING"},
+        "injected_child_probe": child_probe or {"status": "NOT_RUN"},
         "children": [
             {"instance": "Frontend.icache", "source": "upstream/src/main/scala/xiangshan/frontend/icache/ICache.scala", "status": "INJECTED_BOUNDARY"},
             {"instance": "Frontend.instrUncache", "source": "upstream/src/main/scala/xiangshan/frontend/icache/InstrUncache.scala", "status": "INJECTED_BOUNDARY"},
@@ -734,9 +788,12 @@ def main() -> int:
     rtl_full = target_module.build_verilog({"module": "UHSCTop", "locked_io": True}, {})
     backend = backend_gates(rtl_full)
     differential, projection_hash = differential_check(rtl_compact, vectors)
+    child_probe = injected_child_probe(target_module)
     source_hash = digest(SOURCE)
     target_ports, target_declarations = target_port_declarations(rtl_full)
     target_names_hash = digest_bytes("\n".join(target_ports).encode("utf-8"))
+    requested_names = [name for name, _direction, _width in target_module.frontend_port_specs()]
+    requested_names_hash = digest_bytes("\n".join(requested_names).encode("utf-8"))
     target_set_hash = digest_bytes("\n".join(sorted(target_ports)).encode("utf-8"))
     locked_names = [port["name"] for port in reference["ports"]]
     locked_set_hash = digest_bytes("\n".join(sorted(locked_names)).encode("utf-8"))
@@ -750,6 +807,8 @@ def main() -> int:
                  "count_match": len(target_ports) == reference["port_count"],
                  "target_port_names_sha256": target_names_hash,
                  "locked_port_names_sha256": reference["port_names_sha256"],
+                 "requested_port_names_sha256": requested_names_hash,
+                 "requested_order_matches_locked": requested_names_hash == reference["port_names_sha256"],
                  "target_port_set_sha256": target_set_hash,
                  "locked_port_set_sha256": locked_set_hash,
                  "name_order_match": target_names_hash == reference["port_names_sha256"],
@@ -759,7 +818,7 @@ def main() -> int:
                  "target_output_count": sum(1 for name in target_ports if target_declarations[name][0] == "output"),
                  "full_rtl_sha256": digest_bytes(rtl_full.encode("utf-8")),
                  "full_rtl_bytes": len(rtl_full.encode("utf-8"))}
-    write_evidence(static, reference, direct, differential, backend, vectors, source_hash, projection_hash, inventory)
+    write_evidence(static, reference, direct, differential, backend, vectors, source_hash, projection_hash, inventory, child_probe)
     overall = static["status"] == "PASS" and compile_result.returncode == 0 and direct["status"] == "PASS" and differential["status"] == "PASS" and backend["status"] == "PASS"
     print(json.dumps({"status": "PASS_BOUNDED_PARENT" if overall else "FAIL", "direct": direct["status"],
                       "differential": differential["status"], "verilator": backend["verilator"]["status"],

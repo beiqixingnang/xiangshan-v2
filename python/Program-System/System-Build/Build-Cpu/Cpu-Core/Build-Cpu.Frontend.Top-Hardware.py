@@ -772,7 +772,7 @@ def build_verilog(configuration, injected_dependencies):
         options = {}
         cfg = FrontendTopConfig()
     top = UHSCTop(cfg, dependencies,
-                  locked_io=bool(options.get("locked_io", options.get("full", False))))
+                  locked_io=bool(options.get("locked_io", options.get("full", True))))
     if top.locked_io:
         # Export the exact locked Frontend port order; compact auxiliary
         # signals remain internal implementation observables. / 输出锁定
