@@ -341,13 +341,19 @@ class CoupledL2Slice(Elaboratable):
             valid_mem.append(valid); dirty_mem.append(dirty); tag_mem.append(tags); data_mem.append(data)
             vr = valid.read_port(domain="comb"); dr = dirty.read_port(domain="comb")
             tr = tags.read_port(domain="comb"); xr = data.read_port(domain="comb")
-            vw = valid.write_port(); dw = dirty.write_port(); tw = tags.write_port(); xw = data.write_port()
+            vw = valid.write_port(domain="coupled_l2"); dw = dirty.write_port(domain="coupled_l2")
+            tw = tags.write_port(domain="coupled_l2"); xw = data.write_port(domain="coupled_l2")
             m.submodules[f"valid_r_{way}"] = vr; m.submodules[f"dirty_r_{way}"] = dr
             m.submodules[f"tag_r_{way}"] = tr; m.submodules[f"data_r_{way}"] = xr
             m.submodules[f"valid_w_{way}"] = vw; m.submodules[f"dirty_w_{way}"] = dw
             m.submodules[f"tag_w_{way}"] = tw; m.submodules[f"data_w_{way}"] = xw
             valid_reads.append(vr); dirty_reads.append(dr); tag_reads.append(tr); data_reads.append(xr)
             valid_writes.append(vw); dirty_writes.append(dw); tag_writes.append(tw); data_writes.append(xw)
+        # Retain non-port debug handles for the independent simulator only. /
+        # 仅为独立模拟器保留非端口调试句柄。
+        self._debug_valid_reads = valid_reads
+        self._debug_tag_reads = tag_reads
+        self._debug_state = None
 
         req_set = self.in_a_bits_address[c.offset_bits + c.bank_bits:c.offset_bits + c.bank_bits + c.set_bits]
         req_tag = self.in_a_bits_address[c.offset_bits + c.bank_bits + c.set_bits:c.address_bits]
@@ -357,6 +363,11 @@ class CoupledL2Slice(Elaboratable):
                 m.d.comb += read.addr.eq(req_set)
 
         hit_vec = [valid_reads[way].data & (tag_reads[way].data == req_tag) for way in range(c.ways)]
+        # Keep combinational hit terms available to the validator without
+        # exposing extra product ports. / 为验证器保留组合命中项，但不增加产品端口。
+        self._debug_hit_vec = hit_vec
+        self._debug_req_tag = req_tag
+        self._debug_req_set = req_set
         hit_any: Any = 0
         hit_way: Any = 0
         for way in range(c.ways):
@@ -372,6 +383,7 @@ class CoupledL2Slice(Elaboratable):
 
         # Main transaction registers. / 主事务寄存器。
         state = Signal(3, name="slice_state")
+        self._debug_state = state
         # 0 idle, 1 response, 2 miss request, 3 eviction, 4 refill, 5 probe.
         pending_opcode = Signal(4, name="pending_opcode")
         pending_param = Signal(3, name="pending_param")
@@ -389,6 +401,9 @@ class CoupledL2Slice(Elaboratable):
         pending_tag = Signal(c.tag_bits, name="pending_tag")
         pending_dirty = Signal(name="pending_dirty")
         pending_hit = Signal(name="pending_hit")
+        self._debug_pending_tag = pending_tag
+        self._debug_pending_set = pending_set
+        self._debug_pending_hit = pending_hit
         pending_from_prefetch = Signal(name="pending_from_prefetch")
         refill_data = Signal(c.line_bits, name="refill_line")
         refill_beat = Signal(c.beat_index_bits, name="refill_beat")

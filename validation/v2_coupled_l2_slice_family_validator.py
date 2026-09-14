@@ -197,6 +197,25 @@ def direct_bench(module: ModuleType) -> dict[str, object]:
         if int(ctx.get(outputs["in_d_bits_opcode"])) != 1:
             raise AssertionError("Get refill response opcode mismatch")
         await ctx.tick("coupled_l2")
+        # Allow the synchronous write port and asynchronous read view to settle
+        # before issuing the next request. / 等待同步写端口及异步读视图稳定后再发起下一请求。
+        await ctx.tick("coupled_l2")
+        # The refill must be observable as a hit on the next request. / 回填后下一次请求必须可观察为命中。
+        ctx.set(signals["in_a_valid"], 1)
+        ctx.set(signals["in_a_bits_opcode"], 4)
+        ctx.set(signals["in_a_bits_size"], 6)
+        ctx.set(signals["in_a_bits_source"], 1)
+        ctx.set(signals["in_a_bits_address"], 0x120)
+        ctx.set(signals["in_a_bits_mask"], 0xFF)
+        await ctx.delay(1e-9)
+        if int(ctx.get(outputs["in_a_ready"])) != 1:
+            raise AssertionError("slice was not idle before hit request")
+        await ctx.tick("coupled_l2")
+        if int(ctx.get(outputs["in_d_valid"])) != 1 or int(ctx.get(outputs["in_d_bits_opcode"])) != 1:
+            raise AssertionError("refilled line did not hit")
+        observations.append({"hit_response": int(ctx.get(outputs["in_d_bits_data"]))})
+        ctx.set(signals["in_a_valid"], 0)
+        await ctx.tick("coupled_l2")
         # C release is accepted and produces ReleaseAck-style response. / C release 被接受并产生 ReleaseAck 响应。
         ctx.set(signals["in_c_valid"], 1)
         ctx.set(signals["in_c_bits_opcode"], 6)
@@ -208,6 +227,17 @@ def direct_bench(module: ModuleType) -> dict[str, object]:
             raise AssertionError("C release response mismatch")
         observations.append({"release_response": int(ctx.get(outputs["in_d_bits_opcode"]))})
         ctx.set(signals["in_c_valid"], 0)
+        await ctx.tick("coupled_l2")
+        # A downstream probe is queued and acknowledged with the same address. / 下游 probe 排队后以相同地址确认。
+        ctx.set(signals["out_b_valid"], 1)
+        ctx.set(signals["out_b_bits_address"], 0x120)
+        ctx.set(signals["out_b_bits_size"], 6)
+        ctx.set(signals["out_b_bits_source"], 1)
+        await ctx.tick("coupled_l2")
+        ctx.set(signals["out_b_valid"], 0)
+        if int(ctx.get(outputs["in_b_valid"])) != 1:
+            raise AssertionError("probe acknowledgement was not presented")
+        observations.append({"probe_ack": int(ctx.get(outputs["in_b_valid"]))})
         await ctx.tick("coupled_l2")
         # Flush cancellation must suppress all active outputs. / flush 取消必须屏蔽所有活动输出。
         ctx.set(signals["flush"], 1)
