@@ -415,65 +415,148 @@ class YunSuanVIntAdder64b(Elaboratable):
     def elaborate(self, platform: Any) -> Module:
         del platform
         m = Module()
-        # The V2 selected closure uses the ordinary 8-bit lane path at this
-        # boundary; wider element carry grouping is represented by the
-        # explicit ``sew`` input and is covered by the pure model below.
-        # 选定 V2 闭包在该边界使用普通 8 位元素路径；更宽元素的进位分组
-        # 由显式 sew 输入表示，并由下方纯模型覆盖。
-        byte_values: list[Any] = []
-        byte_carries: list[Any] = []
-        for index in range(8):
-            left = self.vs1[index * 8:(index + 1) * 8]
-            right = self.vs2[index * 8:(index + 1) * 8]
-            carry_in = self.is_sub | ((self.opcode >= VADC) & (self.opcode <= VMSBC) &
-                                      (self.vm | self.vmask[index]))
-            left_adjusted = left ^ self.is_sub.replicate(8)
-            wide = Cat(Const(0), left_adjusted, carry_in) + Cat(Const(0), right, carry_in)
-            byte_values.append(wide[1:9])
-            byte_carries.append(wide[9])
-        sum_result = Cat(*byte_values)
-        equal = [self.vs1[index * 8:(index + 1) * 8] == self.vs2[index * 8:(index + 1) * 8] for index in range(8)]
-        # VIntAdder64b derives signed comparison mode from the source type;
-        # use its low source-type bit at this aggregate boundary.
-        signed_mode = self.src_type_1[0]
-        less = [Mux(signed_mode, (self.vs2[index * 8 + 7] ^ (self.vs1[index * 8 + 7] ^ self.is_sub)) ^ byte_carries[index], ~byte_carries[index]) for index in range(8)]
-        cmp_eq = Cat(*equal)
-        cmp_less = Cat(*less)
-        # Group equality/less-than bits by the selected source element width.
-        grouped_eq = cmp_eq
-        grouped_less = cmp_less
-        for code, eq_value, less_value in (
-                (1, Cat(equal[7] & equal[6], equal[5] & equal[4], equal[3] & equal[2], equal[1] & equal[0]),
-                 Cat(less[7], less[5], less[3], less[1])),
-                (2, Cat(equal[7] & equal[6] & equal[5] & equal[4], equal[3] & equal[2] & equal[1] & equal[0]),
-                 Cat(less[7], less[3])),
-                (3, equal[7], less[7])):
-            grouped_eq = Mux(self.vd_type[:2] == code, eq_value.replicate(1 << code), grouped_eq)
-            grouped_less = Mux(self.vd_type[:2] == code, less_value.replicate(1 << code), grouped_less)
-        cmp_value = grouped_eq
-        for operation, expression in ((VMSGT, ~(cmp_less | cmp_eq)),
-                                      (VMSLE, grouped_less | grouped_eq), (VMSLT, grouped_less),
-                                      (VMSNE, ~grouped_eq), (VMSEQ, grouped_eq)):
-            cmp_value = Mux(self.opcode == operation, expression, cmp_value)
-        minmax_bytes = []
-        for index in range(8):
-            minmax_bytes.append(Mux(less[index] == (self.opcode == VMAX),
-                                    self.vs1[index * 8:(index + 1) * 8],
-                                    self.vs2[index * 8:(index + 1) * 8]))
-        minmax = Cat(*minmax_bytes)
-        result = sum_result
-        for operation, expression in ((VMAX, minmax), (VMIN, minmax)):
-            result = Mux(self.opcode == operation, expression, result)
-        cmp_raw = Mux(self.opcode == VMSBC, ~Cat(*byte_carries), cmp_value)
-        cmp_out = cmp_raw
-        for width_code, selected_cmp in ((3, Cat(Const(0, 7), cmp_raw[7])),
-                                          (2, Cat(Const(0, 6), cmp_raw[7], cmp_raw[3])),
-                                          (1, Cat(Const(0, 4), cmp_raw[7], cmp_raw[5], cmp_raw[3], cmp_raw[1]))):
-            cmp_out = Mux(self.vd_type[:2] == width_code, selected_cmp, cmp_out)
-        masked_cmp = Cat(*[Mux(self.vm | self.vmask[index], cmp_out[index],
-                               Mux(self.ma, Const(1), self.old_vd[index])) for index in range(8)])
+        # Mirror the Scala width/sign controls and the eight chained adders.
+        # 对齐 Scala 的位宽/符号控制及八级字节加法器链。
+        sew_vs1 = self.src_type_1[:2]
+        sew_vd = self.vd_type[:2]
+        signed = self.src_type_1[2:4] == 1
         add_with_carry = (self.opcode >= VADC) & (self.opcode <= VMSBC)
-        m.d.comb += [self.vd.eq(result), self.cmp_out.eq(Mux(add_with_carry, cmp_out, masked_cmp))]
+        vs1_half = Signal(32, name="vs1_half")
+        vs2_half = Signal(32, name="vs2_half")
+        m.d.comb += [vs1_half.eq(Mux(self.uop_idx[0], self.vs1[32:64], self.vs1[:32])),
+                     vs2_half.eq(Mux(self.uop_idx[0], self.vs2[32:64], self.vs2[:32]))]
+
+        # Build the source's sign/zero-extended half-word forms. / 构造源代码的符号/零扩展半字形式。
+        def widen_half(half: Any, name: str) -> Signal:
+            """Extend one selected 32-bit half. / 扩展选中的 32 位半片。"""
+
+            e8 = Signal(64, name=f"{name}_e8")
+            e16 = Signal(64, name=f"{name}_e16")
+            e32 = Signal(64, name=f"{name}_e32")
+            out = Signal(64, name=name)
+            m.d.comb += [
+                e8.eq(Cat(*[Cat(half[index:index + 8], (half[index + 7] & signed).replicate(8))
+                             for index in (0, 8, 16, 24)])),
+                e16.eq(Cat(*[Cat(half[index:index + 16], (half[index + 15] & signed).replicate(16))
+                              for index in (0, 16)])),
+                e32.eq(Cat(half, (half[31] & signed).replicate(32))),
+                out.eq(Mux(sew_vs1 == 0, e8,
+                           Mux(sew_vs1 == 1, e16,
+                               Mux(sew_vs1 == 2, e32, Const(0, 64)))))
+            ]
+            return out
+
+        vs1_widen = widen_half(vs1_half, "vs1_widen")
+        vs2_widen = widen_half(vs2_half, "vs2_widen")
+        vs1_adjust = Signal(64, name="vs1_adjust")
+        vs2_adjust = Signal(64, name="vs2_adjust")
+        m.d.comb += [vs1_adjust.eq(Mux(self.widen, vs1_widen, self.vs1) ^ self.is_sub.replicate(64)),
+                     vs2_adjust.eq(Mux(self.widen_vs2, vs2_widen, self.vs2))]
+
+        # Expand mask bits at e16/e32 boundaries exactly as VIntAdder64b.
+        # 按 VIntAdder64b 的 e16/e32 边界精确展开掩码位。
+        vmask_adjust = Signal(8, name="vmask_adjust")
+        m.d.comb += vmask_adjust.eq(Mux(sew_vs1 == 1,
+                                        Cat(self.vmask[0], Const(0), self.vmask[1], Const(0),
+                                            self.vmask[2], Const(0), self.vmask[3], Const(0)),
+                                        Mux(sew_vs1 == 2,
+                                            Cat(self.vmask[0], Const(0, 3), self.vmask[1], Const(0, 3)),
+                                            self.vmask)))
+        eew_cin = Signal(2, name="eew_cin")
+        m.d.comb += eew_cin.eq(Mux((self.opcode == VADD) | (self.opcode == VSUB), sew_vd, sew_vs1))
+        byte_values: list[Signal] = [Signal(8, name=f"byte_value_{i}") for i in range(8)]
+        byte_carries: list[Signal] = [Signal(name=f"byte_carry_{i}") for i in range(8)]
+        cin_signals: list[Signal] = [Signal(name=f"cin_{i}") for i in range(8)]
+        carry_inputs: list[Signal] = [Signal(name=f"carry_in_{i}") for i in range(8)]
+        for index in range(8):
+            m.d.comb += carry_inputs[index].eq(Mux(add_with_carry,
+                                                    Mux(self.vm, self.is_sub,
+                                                        vmask_adjust[index] ^ self.is_sub),
+                                                    self.is_sub))
+            if index == 0:
+                cin_expr = carry_inputs[index]
+            elif index == 4:
+                cin_expr = Mux(eew_cin == 3, byte_carries[index - 1], carry_inputs[index])
+            elif index % 2 == 0:
+                cin_expr = Mux((eew_cin == 3) | (eew_cin == 2),
+                               byte_carries[index - 1], carry_inputs[index])
+            else:
+                cin_expr = Mux(eew_cin == 0, carry_inputs[index], byte_carries[index - 1])
+            left = vs1_adjust[index * 8:(index + 1) * 8]
+            right = vs2_adjust[index * 8:(index + 1) * 8]
+            wide = Signal(10, name=f"adder_wide_{index}")
+            m.d.comb += [cin_signals[index].eq(cin_expr),
+                         # Amaranth Cat places its first argument at the low
+                         # end; reverse the Chisel Cat(0, lane, cin) order.
+                         # Amaranth Cat 首参数在低位，因此反转 Chisel 的 Cat 顺序。
+                         wide.eq(Cat(cin_signals[index], left, Const(0)) +
+                                 Cat(cin_signals[index], right, Const(0))),
+                         byte_values[index].eq(wide[1:9]),
+                         byte_carries[index].eq(wide[9])]
+        sum_result = Signal(64, name="sum_result")
+        m.d.comb += sum_result.eq(Cat(*byte_values))
+
+        # Element-wise compare and min/max reduction. / 元素级比较及最小/最大值归约。
+        equal: list[Signal] = [Signal(name=f"equal_{i}") for i in range(8)]
+        less: list[Signal] = [Signal(name=f"less_{i}") for i in range(8)]
+        for index in range(8):
+            m.d.comb += [equal[index].eq(self.vs1[index * 8:(index + 1) * 8] ==
+                                         self.vs2[index * 8:(index + 1) * 8]),
+                         less[index].eq(Mux(signed,
+                                            (self.vs2[index * 8 + 7] ^ vs1_adjust[index * 8 + 7]) ^ byte_carries[index],
+                                            ~byte_carries[index]))]
+        equal_raw = Signal(8, name="equal_raw")
+        less_raw = Signal(8, name="less_raw")
+        m.d.comb += [equal_raw.eq(Cat(*equal)), less_raw.eq(Cat(*less))]
+        cmp_eq = Signal(8, name="cmp_eq")
+        m.d.comb += cmp_eq.eq(Mux(sew_vs1 == 0, equal_raw,
+                                  Mux(sew_vs1 == 1,
+                                      Cat((equal[1] & equal[0]).replicate(2),
+                                          (equal[3] & equal[2]).replicate(2),
+                                          (equal[5] & equal[4]).replicate(2),
+                                          (equal[7] & equal[6]).replicate(2)),
+                                      Mux(sew_vs1 == 2,
+                                          Cat((equal[3] & equal[2] & equal[1] & equal[0]).replicate(4),
+                                              (equal[7] & equal[6] & equal[5] & equal[4]).replicate(4)),
+                                          (equal[7] & equal[6] & equal[5] & equal[4] & equal[3] & equal[2] & equal[1] & equal[0]).replicate(8)))))
+        cmp_result = Signal(8, name="cmp_result")
+        cmp_expr: Any = Const(0, 8)
+        for operation, expression in ((VMSEQ, cmp_eq), (VMSNE, ~cmp_eq),
+                                      (VMSLT, less_raw), (VMSLE, less_raw | cmp_eq),
+                                      (VMSGT, ~(less_raw | cmp_eq))):
+            cmp_expr = Mux(self.opcode == operation, expression, cmp_expr)
+        m.d.comb += cmp_result.eq(cmp_expr)
+        minmax_bytes: list[Signal] = [Signal(8, name=f"minmax_byte_{i}") for i in range(8)]
+        for index in range(8):
+            high_less = Mux(sew_vs1 == 0, less[index],
+                            Mux(sew_vs1 == 1, less[(index // 2) * 2 + 1],
+                                Mux(sew_vs1 == 2, less[(index // 4) * 4 + 3], less[7])))
+            m.d.comb += minmax_bytes[index].eq(Mux(high_less == (self.opcode == VMAX),
+                                                   self.vs1[index * 8:(index + 1) * 8],
+                                                   self.vs2[index * 8:(index + 1) * 8]))
+        minmax = Signal(64, name="minmax")
+        m.d.comb += minmax.eq(Cat(*minmax_bytes))
+        m.d.comb += self.vd.eq(Mux((self.opcode == VMAX) | (self.opcode == VMIN), minmax, sum_result))
+
+        # Compare/carry output and masked inactive lanes. / 比较/进位输出及非活动元素掩码。
+        cout_vector = Signal(8, name="cout_vector")
+        cmp_raw = Signal(8, name="cmp_raw")
+        m.d.comb += [cout_vector.eq(Cat(*byte_carries)),
+                     cmp_raw.eq(Mux(add_with_carry,
+                                    Mux(self.opcode == VMSBC, ~cout_vector, cout_vector),
+                                    cmp_result))]
+        cmp_out_adjust = Signal(8, name="cmp_out_adjust")
+        m.d.comb += cmp_out_adjust.eq(Mux(sew_vs1 == 0, cmp_raw,
+                                          Mux(sew_vs1 == 1,
+                                              Cat(cmp_raw[1], cmp_raw[3], cmp_raw[5], cmp_raw[7], Const(0xF, 4)),
+                                              Mux(sew_vs1 == 2,
+                                                  Cat(cmp_raw[3], cmp_raw[7], Const(0x3F, 6)),
+                                                  Cat(cmp_raw[7], Const(0x7F, 7))))))
+        masked_cmp = Signal(8, name="masked_cmp")
+        m.d.comb += masked_cmp.eq(Cat(*[Mux(self.vm | self.vmask[index], cmp_out_adjust[index],
+                                            Mux(self.ma, Const(1), self.old_vd[index]))
+                                       for index in range(8)]))
+        m.d.comb += self.cmp_out.eq(Mux(add_with_carry, cmp_out_adjust, masked_cmp))
         for index in range(8):
             m.d.comb += [self.tofix_cout[index].eq(byte_carries[index]),
                          self.tofix_vd[index].eq(byte_values[index]),

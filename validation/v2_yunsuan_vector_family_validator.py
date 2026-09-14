@@ -200,55 +200,76 @@ def backend_checks(module: dict[str, Any]) -> dict[str, Any]:
 
 # Compare concrete child modules with locked XSTop modules. / 将具体子项与锁定 XSTop 模块比较。
 def reference_differential(module: dict[str, Any]) -> dict[str, Any]:
-    """Run integer primitive differentials and record open closures. / 运行整数 primitive 差分并记录未闭合闭包。"""
+    """Run a real VIntAdder64b differential against locked V2 RTL. / 将 VIntAdder64b 与锁定 V2 RTL 做真实差分。"""
 
     WORK.mkdir(parents=True, exist_ok=True)
+    extraction_base = wsl_path(WORK)
     extract_script = ("python3 - <<'PY'\n"
                       "import re\n"
                       f"s=open('{REFERENCE_WSL}').read()\n"
                       "names=['VIntAdder64b','VIntMisc64b','VFixPoint64b','VIntFixpAlu64b','VIMac64b','VMask','Reduction','Permutation','VectorIdiv','VectorFloatAdder','VectorFloatDivider','VectorFloatFMA','CVT64','CVT32','CVT16']\n"
-                      "o=open('/tmp/uhsc-v2/validation/.work/yunsuan-vector-validator/reference_modules.sv','w')\n"
+                      f"base='{extraction_base}/'\n"
+                      "allout=open(base+'reference_modules.sv','w')\n"
                       "for n in names:\n"
                       " m=re.search(r'^module '+re.escape(n)+r'\\(.*?^endmodule\\s*',s,re.M|re.S)\n"
-                      " if m:o.write(m.group(0)+'\\n')\n"
-                      "o.close()\nPY")
+                      " if m:\n"
+                      "  block=m.group(0)+'\\n'; allout.write(block)\n"
+                      "  if n=='VIntAdder64b': open(base+'ref_iadd.sv','w').write(block)\n"
+                      "allout.close()\nPY")
     extraction = subprocess.run(["wsl.exe", "-e", "bash", "-lc", extract_script], capture_output=True, check=False)
     if extraction.returncode != 0:
         return {"status": "BLOCKED_REFERENCE_UNAVAILABLE", "reason": extraction.stderr.decode("utf-8", "replace")[-500:]}
-    target = module["build_verilog"]({"mode": "primitive", "module": "UHSCYunSuanVectorPrimitive"}, {})
-    target_path = WORK / "primitive_target.sv"
+    target = module["build_verilog"]({"mode": "int_adder", "module": "UHSCYunSuanVIntAdder64b"}, {})
+    target_path = WORK / "int_adder_target.sv"
     target_path.write_text(target, encoding="utf-8", newline="\n")
-    target_wsl = wsl_path(target_path)
-    reference = WORK / "reference_modules.sv"
-    tb = WORK / "primitive_compare_tb.sv"
+    reference = WORK / "ref_iadd.sv"
+    if not reference.exists() or reference.stat().st_size == 0:
+        return {"status": "BLOCKED_REFERENCE_UNAVAILABLE", "reason": "VIntAdder64b module was not extracted"}
+    # The LFSR-like state updates make this differential deterministic across
+    # Verilator versions and avoid relying on simulator-specific $urandom seeds.
+    tb = WORK / "int_adder_compare_tb.sv"
     tb.write_text("""module tb;
-logic [127:0] a,b; logic [5:0] op; logic [1:0] sew; logic sg;
- wire [127:0] target_result, reference_result;
-UHSCYunSuanVectorPrimitive target(.io_vs1(a),.io_vs2(b),.io_opcode(op),.io_sew(sew),.io_signed(sg),.io_result(target_result));
- /* The locked V2 VIntAdder64b has a narrower, lane-oriented contract.  The
-   primitive comparison therefore uses the source-level oracle and only the
-   compatible add path; parent closure remains explicitly open. */
-integer n;
-initial begin a=0;b=0;op=0;sew=0;sg=0;#1;
- for(n=0;n<4096;n=n+1) begin a={$urandom,$urandom,$urandom,$urandom};b={$urandom,$urandom,$urandom,$urandom};op=0;sew=n[1:0];sg=n[2];#1; end
- $display("PRIMITIVE_SOURCE_PASS %0d",n);$finish;end
+logic [5:0] op; logic vm,ma; logic [5:0] idx; logic [3:0] st,vdtype;
+logic [63:0] a,b; logic [7:0] mask,old; logic sub,widen,widen2;
+wire [63:0] target_vd, reference_vd; wire [7:0] target_cmp, reference_cmp;
+wire tc0,tc1,tc2,tc3,tc4,tc5,tc6,tc7, rc0,rc1,rc2,rc3,rc4,rc5,rc6,rc7;
+wire [7:0] tv0,tv1,tv2,tv3,tv4,tv5,tv6,tv7, rv0,rv1,rv2,rv3,rv4,rv5,rv6,rv7;
+wire th20,th21,th22,th23,th24,th25,th26,th27, rh20,rh21,rh22,rh23,rh24,rh25,rh26,rh27;
+wire th10,th11,th12,th13,th14,th15,th16,th17, rh10,rh11,rh12,rh13,rh14,rh15,rh16,rh17;
+UHSCYunSuanVIntAdder64b target(.io_opcode_op(op),.io_info_vm(vm),.io_info_ma(ma),.io_info_uopIdx(idx),.io_srcType_1(st),.io_vdType(vdtype),.io_vs1(a),.io_vs2(b),.io_vmask(mask),.io_oldVd(old),.io_isSub(sub),.io_widen(widen),.io_widen_vs2(widen2),.io_vd(target_vd),.io_cmpOut(target_cmp),.io_toFixP_cout_0(tc0),.io_toFixP_cout_1(tc1),.io_toFixP_cout_2(tc2),.io_toFixP_cout_3(tc3),.io_toFixP_cout_4(tc4),.io_toFixP_cout_5(tc5),.io_toFixP_cout_6(tc6),.io_toFixP_cout_7(tc7),.io_toFixP_vd_0(tv0),.io_toFixP_vd_1(tv1),.io_toFixP_vd_2(tv2),.io_toFixP_vd_3(tv3),.io_toFixP_vd_4(tv4),.io_toFixP_vd_5(tv5),.io_toFixP_vd_6(tv6),.io_toFixP_vd_7(tv7),.io_toFixP_vs2H_0(th20),.io_toFixP_vs2H_1(th21),.io_toFixP_vs2H_2(th22),.io_toFixP_vs2H_3(th23),.io_toFixP_vs2H_4(th24),.io_toFixP_vs2H_5(th25),.io_toFixP_vs2H_6(th26),.io_toFixP_vs2H_7(th27),.io_toFixP_vs1H_0(th10),.io_toFixP_vs1H_1(th11),.io_toFixP_vs1H_2(th12),.io_toFixP_vs1H_3(th13),.io_toFixP_vs1H_4(th14),.io_toFixP_vs1H_5(th15),.io_toFixP_vs1H_6(th16),.io_toFixP_vs1H_7(th17));
+VIntAdder64b reference(.io_opcode_op(op),.io_info_vm(vm),.io_info_ma(ma),.io_info_uopIdx(idx),.io_srcType_1(st),.io_vdType(vdtype),.io_vs1(a),.io_vs2(b),.io_vmask(mask),.io_oldVd(old),.io_isSub(sub),.io_widen(widen),.io_widen_vs2(widen2),.io_vd(reference_vd),.io_cmpOut(reference_cmp),.io_toFixP_cout_0(rc0),.io_toFixP_cout_1(rc1),.io_toFixP_cout_2(rc2),.io_toFixP_cout_3(rc3),.io_toFixP_cout_4(rc4),.io_toFixP_cout_5(rc5),.io_toFixP_cout_6(rc6),.io_toFixP_cout_7(rc7),.io_toFixP_vd_0(rv0),.io_toFixP_vd_1(rv1),.io_toFixP_vd_2(rv2),.io_toFixP_vd_3(rv3),.io_toFixP_vd_4(rv4),.io_toFixP_vd_5(rv5),.io_toFixP_vd_6(rv6),.io_toFixP_vd_7(rv7),.io_toFixP_vs2H_0(rh20),.io_toFixP_vs2H_1(rh21),.io_toFixP_vs2H_2(rh22),.io_toFixP_vs2H_3(rh23),.io_toFixP_vs2H_4(rh24),.io_toFixP_vs2H_5(rh25),.io_toFixP_vs2H_6(rh26),.io_toFixP_vs2H_7(rh27),.io_toFixP_vs1H_0(rh10),.io_toFixP_vs1H_1(rh11),.io_toFixP_vs1H_2(rh12),.io_toFixP_vs1H_3(rh13),.io_toFixP_vs1H_4(rh14),.io_toFixP_vs1H_5(rh15),.io_toFixP_vs1H_6(rh16),.io_toFixP_vs1H_7(rh17));
+wire [7:0] target_cout={tc7,tc6,tc5,tc4,tc3,tc2,tc1,tc0}; wire [7:0] reference_cout={rc7,rc6,rc5,rc4,rc3,rc2,rc1,rc0};
+wire [63:0] target_fixvd={tv7,tv6,tv5,tv4,tv3,tv2,tv1,tv0}; wire [63:0] reference_fixvd={rv7,rv6,rv5,rv4,rv3,rv2,rv1,rv0};
+integer n; reg [31:0] state;
+initial begin state=32'h1d872b41; op=0;vm=1;ma=0;idx=0;st=0;vdtype=0;a=0;b=0;mask=8'hff;old=0;sub=0;widen=0;widen2=0;#1;
+ for(n=0;n<50000;n=n+1) begin
+  state=state*32'h0019660d+32'h3c6ef35f; a={state,state^32'ha5a5a5a5};
+  state=state*32'h0019660d+32'h3c6ef35f; b={state^32'h5a5a5a5a,state};
+  state=state*32'h0019660d+32'h3c6ef35f; mask=state[7:0]; old=state[15:8];
+  op=n%25; st=((n*13)^(state>>4))&15; vdtype=((n*7)^(state>>9))&15; idx=n[5:0]; vm=state[0]; ma=state[1]; sub=state[2]; widen=state[3]; widen2=state[4]; #1;
+  if(target_vd!==reference_vd || target_cmp!==reference_cmp || target_cout!==reference_cout || target_fixvd!==reference_fixvd) begin
+    $display("IADD_REF_FAIL n=%0d op=%0d st=%h vdtype=%h a=%h b=%h target_vd=%h reference_vd=%h target_cmp=%h reference_cmp=%h",n,op,st,vdtype,a,b,target_vd,reference_vd,target_cmp,reference_cmp); $fatal(1);
+  end
+ end
+ $display("IADD_REF_PASS %0d",n); $finish;
+end
 endmodule
 """, encoding="utf-8", newline="\n")
-    combined = WORK / "primitive_compare.sv"
-    combined.write_text(target + "\n" + tb.read_text(encoding="utf-8"), encoding="utf-8", newline="\n")
+    combined = WORK / "int_adder_compare.sv"
+    combined.write_text(target + "\n" + reference.read_text(encoding="utf-8") + "\n" + tb.read_text(encoding="utf-8"), encoding="utf-8", newline="\n")
     combined_wsl = wsl_path(combined)
     command = (f"ln -sfn '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2' /tmp/uhsc-v2; "
-               f"cd '{wsl_path(WORK)}'; rm -rf obj-primitive; verilator --binary --timing -Wno-fatal --top-module tb --Mdir obj-primitive '{combined_wsl}' >/tmp/yunsuan_vector_primitive.log 2>&1 && ./obj-primitive/Vtb")
+               f"cd '{wsl_path(WORK)}'; rm -rf obj-int-adder; verilator --binary --timing -Wno-fatal --top-module tb --Mdir obj-int-adder '{combined_wsl}' >/tmp/yunsuan_vector_int_adder.log 2>&1 && ./obj-int-adder/Vtb")
     run = subprocess.run(["wsl.exe", "-e", "bash", "-lc", command], capture_output=True, check=False)
     output = (run.stdout + run.stderr).decode("utf-8", "replace")
-    passed = run.returncode == 0 and "PRIMITIVE_SOURCE_PASS" in output
+    passed = run.returncode == 0 and "IADD_REF_PASS" in output
     return {"status": "PASS" if passed else "FAIL", "source_artifact": {"path": REFERENCE_WSL,
             "sha256": REFERENCE_SHA256, "bytes": REFERENCE_BYTES},
-            "compatible_child": "YunSuanVectorPrimitive", "vectors": 4096,
-            "pass_marker": "PRIMITIVE_SOURCE_PASS" if passed else "MISSING",
+            "compatible_child": "YunSuanVIntAdder64b", "vectors": 50000,
+            "pass_marker": "IADD_REF_PASS" if passed else "MISSING",
             "output_tail": output[-1200:],
             "open_children": ["VectorFloatAdder", "VectorFloatDivider", "VectorFloatFMA", "CVT64", "CVT32", "CVT16", "VMask full parent timing", "Reduction full parent timing", "Permutation full parent timing", "VIMac64b iterative Wallace pipeline"],
-            "note": "Primitive add-path source differential and all bounded child exports are checked; full parent differential remains open until vector parent contracts close."}
+            "note": "VIntAdder64b is compared against the locked generated V2 module across arithmetic, carry, compare, mask, widening, and toFixP outputs; larger vector-parent closures remain open."}
 
 
 # Persist evidence and status. / 持久化证据及状态。
@@ -273,7 +294,7 @@ def main() -> int:
                "target": target, "static": static, "direct": direct, "reference_differential": differential,
                "backend": backend, "open_gates": open_gates,
                "gates": {"PYTHON_PRESENT": static["status"], "DIRECT_TEST_PASS_BOUNDED": direct["status"],
-                         "V2_REFERENCE_MATCHED": "PASS_BOUNDED_PRIMITIVE_SOURCE" if differential["status"] == "PASS" else differential["status"],
+                         "V2_REFERENCE_MATCHED": "PASS_BOUNDED_VINTADDER64B" if differential["status"] == "PASS" else differential["status"],
                          "VERILATOR": backend["status"], "YOSYS": backend["status"], "UHSC_LOCALIZED": "PASS_BOUNDED_FAMILY_LOCAL_NAME",
                          "PARENT_CLOSURE_MATCHED": "NOT_READY_VECTOR_PARENTS_OPEN", "LICENSE_REVIEW": "PENDING", "ACCEPTED": "NOT_ALLOWED"},
                "acceptance_eligible": False}
