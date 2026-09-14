@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_FRONTEND_BPU_STATE_FAMILY_REFERENCE",
+  "batch_id": "V2-SEMANTIC-FRONTEND-BPU-STATE-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "locked_reference": {
+    "path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "bytes": 228590583,
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "locked": true,
+    "modules": {
+      "NewDispatch": {
+        "present": true,
+        "line_start": 643669,
+        "line_end": 663622,
+        "module_sha256": "1a4c4dfe45b03f5a3d34fe38d205abf1dea11933c3dc678961fc740693becb9a"
+      },
+      "FTB": {
+        "present": true,
+        "line_start": 119745,
+        "line_end": 122709,
+        "module_sha256": "9bc9f1e45d2f325555a78f43d9d48561fa3d5e7d293e9697a5f9aaafe8b35cbe"
+      },
+      "Frontend": {
+        "present": true,
+        "line_start": 412063,
+        "line_end": 420892,
+        "module_sha256": "cfbf74ad47178af622fb7d257741dcd42344e1d6e4e4912d6da0c2a2115d9a76"
+      },
+      "SCTable": {
+        "present": true,
+        "line_start": 137229,
+        "line_end": 137596,
+        "module_sha256": "d417b94ed02e07651ccbc03b500f2fd53282013abe8ec4b791bea19cff351d89"
+      },
+      "TageTable": {
+        "present": true,
+        "line_start": 130569,
+        "line_end": 131418,
+        "module_sha256": "1026c66569be784fed11518a8d7d398bb07bbd9d5f3a563a8564b904b2632075"
+      },
+      "Tage_SC": {
+        "present": true,
+        "line_start": 139152,
+        "line_end": 146767,
+        "module_sha256": "cc493b51859715aef2e9f64a7e1a0fe9ed5a2c1490dbba52ead61d4e8ec5a88a"
+      },
+      "ICacheReplacer": {
+        "present": true,
+        "line_start": 96586,
+        "line_end": 104742,
+        "module_sha256": "7ce79928334369ef208a5e4e6f859edc4bfab231a25aa74997364a8965081502"
+      }
+    }
+  },
+  "reference_differential": {
+    "CompareMatrix": {
+      "status": "PASS_BOUNDED_LOCKED_NEW_DISPATCH",
+      "locked_module": "NewDispatch",
+      "observation": "compareMatrix/IQSort/minIQSel",
+      "standalone_module": false,
+      "differential": {
+        "status": "PASS",
+        "returncode": 0,
+        "vectors": 132,
+        "modules": [
+          "NewDispatch",
+          "RegCacheTagTable",
+          "RegCacheTagModule",
+          "RegCacheTagModule_1",
+          "BusyTable",
+          "BusyTable_1",
+          "BusyTable_2",
+          "BusyTable_3",
+          "VlBusyTable",
+          "LsqEnqCtrl"
+        ],
+        "trace_sha256": "9d925bc7cac40fb99aaaaf02a9f2fa373e640410026523352aba97b6cb03f6c9",
+        "stdout_tail": "COMPARE_MATRIX_LOCKED_PASS 132\n- tb.sv:681: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 268ps; walltime 0.001 s; speed 181.691 ns/s\n- Verilator: cpu 0.001 s on 1 threads; alloced 153 MB\n"
+      }
+    },
+    "FallThroughPredictor": {
+      "status": "SOURCE_EQUATION_BOUNDED",
+      "locked_modules": [
+        "FTB",
+        "Frontend"
+      ],
+      "observation": "getFallThroughAddr/fallThroughErr",
+      "standalone_module": false
+    },
+    "SaturateCounter": {
+      "status": "SOURCE_EQUATION_BOUNDED",
+      "locked_modules": [
+        "SCTable",
+        "TageTable",
+        "Tage_SC"
+      ],
+      "observation": "satUpdate",
+      "standalone_module": false
+    },
+    "SignedSaturateCounter": {
+      "status": "SOURCE_EQUATION_BOUNDED",
+      "locked_modules": [
+        "SCTable",
+        "Tage_SC"
+      ],
+      "observation": "signedSatUpdate",
+      "standalone_module": false
+    },
+    "Replacement": {
+      "status": "PASS",
+      "returncode": 0,
+      "stdout_tail": "- tb.sv:22782: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 197ps; walltime 0.002 s; speed 104.214 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n",
+      "stderr_tail": "",
+      "mode": "PARENT_CLOSURE_EXTRACTED",
+      "module": "ICacheReplacer",
+      "extracted_sha256": "01a8894d0399d429f3d50ed987333494b36072bf7cd569c3ce091a797ffcae6b",
+      "extracted_bytes": 1100303,
+      "observations": [
+        "reset state",
+        "victim selection",
+        "touch/update",
+        "way count=4"
+      ]
+    }
+  },
+  "status": "PASS_BOUNDED_SOURCE_EQUATION_ONLY",
+  "acceptance_eligible": false
+}

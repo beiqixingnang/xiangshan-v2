@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_FRONTEND_BPU_STATE_FAMILY_DIRECT",
+  "batch_id": "V2-SEMANTIC-FRONTEND-BPU-STATE-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "direct": {
+    "CompareMatrix": {
+      "pure_vectors": 340,
+      "hardware_vectors": 131,
+      "checks": 1310
+    },
+    "FallThroughPredictor": {
+      "pure_vectors": 2048,
+      "staged_vectors": 5,
+      "checks": 20
+    },
+    "SaturateCounter": {
+      "expression_vectors": 2040
+    },
+    "SignedSaturateCounter": {
+      "expression_vectors": 2032
+    },
+    "Replacement": {
+      "lru_vectors": 11944,
+      "plru_vectors": 1976,
+      "state_bank_checks": 30
+    }
+  },
+  "status": "PASS_BOUNDED"
+}

@@ -7,6 +7,7 @@ import hashlib
 import importlib.util
 import itertools
 import json
+import re
 import random
 import subprocess
 import sys
@@ -21,6 +22,9 @@ from amaranth.sim import Simulator
 ROOT = Path(__file__).resolve().parents[1]
 BUILD = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core"
 RESULT = ROOT / "validation/v2-frontend-bpu-state-family-results.json"
+DIRECT_RESULT = ROOT / "validation/v2-frontend-bpu-state-family-direct-results.json"
+REFERENCE_RESULT = ROOT / "validation/v2-frontend-bpu-state-family-reference-results.json"
+CONTRACT_RESULT = ROOT / "validation/v2-frontend-bpu-state-family-contract-audit.json"
 SOURCE_COMMIT = "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af"
 LOCKED_REFERENCE = Path(r"\\wsl$\Debian\home\lishuo\xs-v2-local\build\rtl\XSTop.sv")
 LOCKED_CANONICAL = "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv"
@@ -524,7 +528,8 @@ def test_replacement(modules: dict[str, Any]) -> dict[str, int]:
 # Convert a host path to an absolute WSL path. / 将主机路径转换为绝对 WSL 路径。
 def wsl_path(path: Path) -> str:
     probe = subprocess.run(["wsl.exe", "-e", "wslpath", "-a", str(path)],
-                           capture_output=True, text=True, check=True)
+                           capture_output=True, text=True, encoding="utf-8",
+                           errors="replace", check=True)
     return probe.stdout.strip()
 
 
@@ -535,10 +540,12 @@ def backend_gate(name: str, source: str, directory: Path) -> dict[str, Any]:
     wpath = wsl_path(path)
     verilator = subprocess.run(["wsl.exe", "-e", "bash", "-lc",
                                 f"verilator --lint-only -Wno-fatal {wpath}"],
-                               capture_output=True, text=True, check=False)
+                               capture_output=True, text=True, encoding="utf-8",
+                               errors="replace", check=False)
     yosys = subprocess.run(["wsl.exe", "-e", "bash", "-lc",
                             f"yosys -Q -p 'read_verilog -sv {wpath}; hierarchy -top {name}; proc; opt; check; stat'"],
-                           capture_output=True, text=True, check=False)
+                           capture_output=True, text=True, encoding="utf-8",
+                           errors="replace", check=False)
     return {
         "verilator": {"status": "PASS" if verilator.returncode == 0 else "FAIL",
                        "returncode": verilator.returncode,
@@ -577,6 +584,109 @@ def locked_reference_info() -> dict[str, Any]:
                          if end >= 0 else None}
     return {"path": LOCKED_CANONICAL, "bytes": len(raw), "sha256": digest(raw),
             "locked": True, "modules": modules}
+
+
+# Compare the registered CompareMatrix closure with the locked NewDispatch RTL.
+# 将寄存器化 CompareMatrix 闭包与锁定 NewDispatch RTL 做差分。
+def compare_matrix_locked(module: Any) -> dict[str, Any]:
+    """Run a focused differential against NewDispatch's ALU ordering matrix.
+
+    NewDispatch is a large parent with six unrelated child families.  The
+    locked generated module is nevertheless self-contained once its ten
+    instantiated child definitions and preamble are extracted.  Only the four
+    ALU issue queues (0, 2, 4, 6) and the registered IQSort bits are observed;
+    all other parent inputs are intentionally left at their Verilog default.
+    """
+
+    work = ROOT / "validation/.work/v2-bpu-state-newdispatch"
+    work.mkdir(parents=True, exist_ok=True)
+    try:
+        locked_text = LOCKED_REFERENCE.read_text(encoding="utf-8", errors="replace")
+        module_match = re.search(r"(?m)^module\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(", locked_text)
+        if module_match is None:
+            raise RuntimeError("locked reference has no module declarations")
+        preamble = locked_text[:module_match.start()]
+        names = ["NewDispatch", "RegCacheTagTable", "RegCacheTagModule",
+                 "RegCacheTagModule_1", "BusyTable", "BusyTable_1", "BusyTable_2",
+                 "BusyTable_3", "VlBusyTable", "LsqEnqCtrl"]
+        pieces = [preamble]
+        for name in names:
+            found = re.search(rf"(?ms)^module\s+{re.escape(name)}\s*\(.*?^endmodule\s*", locked_text)
+            if found is None:
+                raise RuntimeError(f"locked reference child missing: {name}")
+            pieces.append(found.group(0))
+        cfg = module.CompareMatrixConfig(n=4, position_width=5,
+                                         issue_queue_num=7,
+                                         exu_indices=(0, 2, 4, 6), rename_width=2)
+        target = module.build_verilog(cfg, {})
+        target = target.replace("module CompareMatrix(", "module UHSC_CompareMatrix(", 1)
+        pieces.append(target)
+        rng = random.Random(0xB002)
+        vectors = [(0, 0, 0, 0), (31, 31, 31, 31), (0, 31, 1, 30),
+                   (31, 0, 30, 1)]
+        vectors += [tuple(rng.randrange(32) for _ in range(4)) for _ in range(128)]
+        lines = [
+            "module tb;",
+            "  reg clock, reset;",
+            "  reg [4:0] c0, c1, c2, c3;",
+            "  wire [3:0] dut_sort0, dut_sort1, dut_sort2, dut_sort3;",
+            "  wire [6:0] dut_min0, dut_min1;",
+            "  UHSC_CompareMatrix dut(.clk(clock), .rst(reset),",
+            "    .issue_queue_count_0(c0), .issue_queue_count_1(5'd0),",
+            "    .issue_queue_count_2(c1), .issue_queue_count_3(5'd0),",
+            "    .issue_queue_count_4(c2), .issue_queue_count_5(5'd0),",
+            "    .issue_queue_count_6(c3), .valid(4'hf),",
+            "    .compare_matrix_0(), .compare_matrix_1(), .compare_matrix_2(), .compare_matrix_3(),",
+            "    .iq_sort_0(dut_sort0), .iq_sort_1(dut_sort1), .iq_sort_2(dut_sort2), .iq_sort_3(dut_sort3),",
+            "    .min_iq_sel_0(dut_min0), .min_iq_sel_1(dut_min1),",
+            "    .lower_element_mask(), .least_element_oh(), .greatest_element_oh());",
+            "  NewDispatch ref_inst(.clock(clock), .reset(reset),",
+            "    .io_IQValidNumVec_0(c0), .io_IQValidNumVec_2(c1),",
+            "    .io_IQValidNumVec_4(c2), .io_IQValidNumVec_6(c3));",
+            "  always #1 clock = ~clock;",
+            "  initial begin clock=0; reset=1; c0=0; c1=0; c2=0; c3=0; #3; reset=0;",
+        ]
+        for index, values in enumerate(vectors):
+            c0, c1, c2, c3 = values
+            lines.append(f"    c0=5'd{c0}; c1=5'd{c1}; c2=5'd{c2}; c3=5'd{c3}; #2;")
+            expected_rows = []
+            for rank in range(4):
+                bits = []
+                for row in range(4):
+                    count = sum(0 if row == col else
+                                int(values[row] < values[col]) if row < col else
+                                1 - int(values[col] < values[row])
+                                for col in range(4))
+                    bits.append(int(count == 3 - rank))
+                expected_rows.append(bits)
+            for rank in range(4):
+                mask = sum(bit << row for row, bit in enumerate(expected_rows[rank]))
+                lines.append(f"    if (dut_sort{rank} !== 4'h{mask:x} || ref_inst.IQSort_alu_{rank}_0 !== 1'b{expected_rows[rank][0]} || ref_inst.IQSort_alu_{rank}_1 !== 1'b{expected_rows[rank][1]} || ref_inst.IQSort_alu_{rank}_2 !== 1'b{expected_rows[rank][2]} || ref_inst.IQSort_alu_{rank}_3 !== 1'b{expected_rows[rank][3]}) $fatal(1, \"CompareMatrix locked mismatch {index} rank {rank}\");")
+        lines += ["    $display(\"COMPARE_MATRIX_LOCKED_PASS %0d\", 132);", "    $finish;", "  end", "endmodule"]
+        wrapper = work / "tb.sv"
+        wrapper.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
+        for index, content in enumerate(pieces):
+            (work / f"source_{index}.sv").write_text(content, encoding="utf-8", newline="\n")
+        compile_dir = wsl_path(work)
+        command = (f"cd {compile_dir} && verilator --binary --timing -Wno-fatal "
+                   f"--top-module tb *.sv")
+        compiled = subprocess.run(["wsl.exe", "-e", "bash", "-lc", command],
+                                  capture_output=True, text=True, encoding="utf-8",
+                                  errors="replace", check=False)
+        if compiled.returncode != 0:
+            return {"status": "FAIL_COMPILE", "vectors": len(vectors),
+                    "modules": names, "stderr_tail": compiled.stderr[-4000:]}
+        binary = work / "obj_dir" / "Vtb"
+        ran = subprocess.run(["wsl.exe", "-e", "bash", "-lc", wsl_path(binary)],
+                             capture_output=True, text=True, encoding="utf-8",
+                             errors="replace", check=False)
+        output = (ran.stdout or "") + (ran.stderr or "")
+        return {"status": "PASS" if ran.returncode == 0 and "COMPARE_MATRIX_LOCKED_PASS" in output else "FAIL_RUN",
+                "returncode": ran.returncode, "vectors": len(vectors),
+                "modules": names, "trace_sha256": digest(output.encode()),
+                "stdout_tail": output[-2000:]}
+    except Exception as error:
+        return {"status": "ERROR", "error": str(error)}
 
 
 # Collect exact source hashes and equation occurrence evidence. / 收集精确源哈希及方程出现证据。
@@ -632,6 +742,7 @@ def main() -> int:
                 raise AssertionError(f"non-deterministic export: {name}")
             generated[name] = backend_gate(name, rtl, directory)
     locked = locked_reference_info()
+    compare_reference = compare_matrix_locked(modules["CompareMatrix"])
     replacement_reference = {"status": "UNRUN"}
     replacement_script = ROOT / "validation/v2_replacement_batch_direct.py"
     spec = importlib.util.spec_from_file_location("v2_existing_replacement_validator", replacement_script)
@@ -653,14 +764,16 @@ def main() -> int:
         "source_paths": SOURCE_PATHS,
         "source_evidence": source_evidence(),
         "locked_reference": locked,
+        "locked_differential": {"CompareMatrix": compare_reference},
         "direct": direct,
         "structural_audit": audits,
         "generated": generated,
         "reference_differential": {
-            "CompareMatrix": {"status": "SOURCE_EQUATION_BOUNDED",
+            "CompareMatrix": {"status": "PASS_BOUNDED_LOCKED_NEW_DISPATCH" if compare_reference.get("status") == "PASS" else "SOURCE_EQUATION_BOUNDED",
                               "locked_module": "NewDispatch",
                               "observation": "compareMatrix/IQSort/minIQSel",
-                              "standalone_module": False},
+                              "standalone_module": False,
+                              "differential": compare_reference},
             "FallThroughPredictor": {"status": "SOURCE_EQUATION_BOUNDED",
                                       "locked_modules": ["FTB", "Frontend"],
                                       "observation": "getFallThroughAddr/fallThroughErr",
@@ -682,7 +795,7 @@ def main() -> int:
         "gates": {
             "PYTHON_PRESENT": "PASS",
             "DIRECT_TEST_PASS_BOUNDED": "PASS",
-            "V2_REFERENCE_MATCHED": "PASS_BOUNDED_SOURCE_EQUATION_ONLY",
+            "V2_REFERENCE_MATCHED": "PASS_BOUNDED_LOCKED_OR_SOURCE_EQUATION",
             "VERILATOR": "PASS" if lint_pass else "FAIL",
             "YOSYS": "PASS" if lint_pass else "FAIL",
             "UHSC_LOCALIZED": "PENDING_EXTERNAL_WRAPPER",
@@ -717,6 +830,37 @@ def main() -> int:
     }
     RESULT.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
                       encoding="utf-8", newline="\n")
+    # Keep stage-specific evidence files so the coordinator can review direct,
+    # reference, and contract gates independently.  分开保存各门禁证据便于协调者复核。
+    DIRECT_RESULT.write_text(json.dumps({
+        "schema_version": 1,
+        "kind": "XIANGSHAN_KUNMINGHU_V2_FRONTEND_BPU_STATE_FAMILY_DIRECT",
+        "batch_id": "V2-SEMANTIC-FRONTEND-BPU-STATE-001",
+        "source_commit": SOURCE_COMMIT,
+        "direct": direct,
+        "status": "PASS_BOUNDED",
+    }, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
+    REFERENCE_RESULT.write_text(json.dumps({
+        "schema_version": 1,
+        "kind": "XIANGSHAN_KUNMINGHU_V2_FRONTEND_BPU_STATE_FAMILY_REFERENCE",
+        "batch_id": "V2-SEMANTIC-FRONTEND-BPU-STATE-001",
+        "source_commit": SOURCE_COMMIT,
+        "locked_reference": locked,
+        "reference_differential": payload["reference_differential"],
+        "status": "PASS_BOUNDED_SOURCE_EQUATION_ONLY",
+        "acceptance_eligible": False,
+    }, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
+    CONTRACT_RESULT.write_text(json.dumps({
+        "schema_version": 1,
+        "kind": "XIANGSHAN_KUNMINGHU_V2_FRONTEND_BPU_STATE_FAMILY_CONTRACT",
+        "batch_id": "V2-SEMANTIC-FRONTEND-BPU-STATE-001",
+        "source_commit": SOURCE_COMMIT,
+        "targets": audits,
+        "status": "PASS",
+        "license_review": "PENDING_COORDINATOR_REVIEW",
+        "uhsc_localized": "PENDING_EXTERNAL_WRAPPER",
+        "accepted": "NOT_ALLOWED",
+    }, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     print(json.dumps({"status": payload["status"], "direct": direct,
                       "verilator": payload["gates"]["VERILATOR"],
                       "yosys": payload["gates"]["YOSYS"],
