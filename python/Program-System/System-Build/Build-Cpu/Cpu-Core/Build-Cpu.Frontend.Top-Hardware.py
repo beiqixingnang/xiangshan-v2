@@ -14,7 +14,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
-from amaranth import ClockDomain, Elaboratable, Module, Mux, Signal
+from amaranth import Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
 
 
@@ -71,6 +71,180 @@ class FrontendTopConfig:
             raise ValueError("error/performance widths must be positive")
         if self.soft_prefetch_count != 3:
             raise ValueError("V2 Frontend exposes three soft-prefetch lanes")
+
+
+# Return the exact locked V2 Frontend port order. / 返回锁定 V2 Frontend 的精确端口顺序。
+def frontend_port_specs() -> tuple[tuple[str, str, int], ...]:
+    """Describe all 371 generated Frontend ports. / 描述生成的全部 371 个 Frontend 端口。"""
+
+    specs: list[tuple[str, str, int]] = [
+        ("clock", "input", 1), ("reset", "input", 1),
+        ("auto_inner_icache_ctrlUnitOpt_in_a_ready", "output", 1),
+        ("auto_inner_icache_ctrlUnitOpt_in_a_valid", "input", 1),
+        ("auto_inner_icache_ctrlUnitOpt_in_a_bits_opcode", "input", 4),
+        ("auto_inner_icache_ctrlUnitOpt_in_a_bits_size", "input", 2),
+        ("auto_inner_icache_ctrlUnitOpt_in_a_bits_source", "input", 5),
+        ("auto_inner_icache_ctrlUnitOpt_in_a_bits_address", "input", 30),
+        ("auto_inner_icache_ctrlUnitOpt_in_a_bits_mask", "input", 8),
+        ("auto_inner_icache_ctrlUnitOpt_in_a_bits_data", "input", 64),
+        ("auto_inner_icache_ctrlUnitOpt_in_d_ready", "input", 1),
+        ("auto_inner_icache_ctrlUnitOpt_in_d_valid", "output", 1),
+        ("auto_inner_icache_ctrlUnitOpt_in_d_bits_opcode", "output", 4),
+        ("auto_inner_icache_ctrlUnitOpt_in_d_bits_size", "output", 2),
+        ("auto_inner_icache_ctrlUnitOpt_in_d_bits_source", "output", 5),
+        ("auto_inner_icache_ctrlUnitOpt_in_d_bits_data", "output", 64),
+        ("auto_inner_icache_client_out_a_ready", "input", 1),
+        ("auto_inner_icache_client_out_a_valid", "output", 1),
+        ("auto_inner_icache_client_out_a_bits_source", "output", 4),
+        ("auto_inner_icache_client_out_a_bits_address", "output", 48),
+        ("auto_inner_icache_client_out_d_valid", "input", 1),
+        ("auto_inner_icache_client_out_d_bits_opcode", "input", 4),
+        ("auto_inner_icache_client_out_d_bits_size", "input", 3),
+        ("auto_inner_icache_client_out_d_bits_source", "input", 4),
+        ("auto_inner_icache_client_out_d_bits_data", "input", 256),
+        ("auto_inner_icache_client_out_d_bits_corrupt", "input", 1),
+        ("auto_inner_instrUncache_client_out_a_ready", "input", 1),
+        ("auto_inner_instrUncache_client_out_a_valid", "output", 1),
+        ("auto_inner_instrUncache_client_out_a_bits_address", "output", 48),
+        ("auto_inner_instrUncache_client_out_d_valid", "input", 1),
+        ("auto_inner_instrUncache_client_out_d_bits_source", "input", 1),
+        ("auto_inner_instrUncache_client_out_d_bits_data", "input", 64),
+        ("auto_inner_instrUncache_client_out_d_bits_corrupt", "input", 1),
+        ("io_reset_vector", "input", 48), ("io_fencei", "input", 1),
+        ("io_ptw_req_0_ready", "input", 1), ("io_ptw_req_0_valid", "output", 1),
+        ("io_ptw_req_0_bits_vpn", "output", 38), ("io_ptw_req_0_bits_s2xlate", "output", 2),
+        ("io_ptw_resp_ready", "output", 1), ("io_ptw_resp_valid", "input", 1),
+        ("io_ptw_resp_bits_s2xlate", "input", 2), ("io_ptw_resp_bits_s1_entry_tag", "input", 35),
+        ("io_ptw_resp_bits_s1_entry_asid", "input", 16), ("io_ptw_resp_bits_s1_entry_vmid", "input", 14),
+        ("io_ptw_resp_bits_s1_entry_n", "input", 1), ("io_ptw_resp_bits_s1_entry_pbmt", "input", 2),
+        ("io_ptw_resp_bits_s1_entry_perm_d", "input", 1), ("io_ptw_resp_bits_s1_entry_perm_a", "input", 1),
+        ("io_ptw_resp_bits_s1_entry_perm_g", "input", 1), ("io_ptw_resp_bits_s1_entry_perm_u", "input", 1),
+        ("io_ptw_resp_bits_s1_entry_perm_x", "input", 1), ("io_ptw_resp_bits_s1_entry_perm_w", "input", 1),
+        ("io_ptw_resp_bits_s1_entry_perm_r", "input", 1), ("io_ptw_resp_bits_s1_entry_level", "input", 2),
+        ("io_ptw_resp_bits_s1_entry_v", "input", 1), ("io_ptw_resp_bits_s1_entry_ppn", "input", 41),
+        ("io_ptw_resp_bits_s1_addr_low", "input", 3),
+    ]
+    specs.extend((f"io_ptw_resp_bits_s1_ppn_low_{index}", "input", 3) for index in range(8))
+    specs.extend((f"io_ptw_resp_bits_s1_valididx_{index}", "input", 1) for index in range(8))
+    specs.extend((f"io_ptw_resp_bits_s1_pteidx_{index}", "input", 1) for index in range(8))
+    specs.extend([
+        ("io_ptw_resp_bits_s1_pf", "input", 1), ("io_ptw_resp_bits_s1_af", "input", 1),
+        ("io_ptw_resp_bits_s2_entry_tag", "input", 38), ("io_ptw_resp_bits_s2_entry_vmid", "input", 14),
+        ("io_ptw_resp_bits_s2_entry_n", "input", 1), ("io_ptw_resp_bits_s2_entry_pbmt", "input", 2),
+        ("io_ptw_resp_bits_s2_entry_ppn", "input", 38), ("io_ptw_resp_bits_s2_entry_perm_d", "input", 1),
+        ("io_ptw_resp_bits_s2_entry_perm_a", "input", 1), ("io_ptw_resp_bits_s2_entry_perm_g", "input", 1),
+        ("io_ptw_resp_bits_s2_entry_perm_u", "input", 1), ("io_ptw_resp_bits_s2_entry_perm_x", "input", 1),
+        ("io_ptw_resp_bits_s2_entry_perm_w", "input", 1), ("io_ptw_resp_bits_s2_entry_perm_r", "input", 1),
+        ("io_ptw_resp_bits_s2_entry_level", "input", 2), ("io_ptw_resp_bits_s2_gpf", "input", 1),
+        ("io_ptw_resp_bits_s2_gaf", "input", 1),
+    ])
+    cf_fields = (
+        ("valid", 1), ("bits_instr", 32), ("bits_exceptionVec_1", 1),
+        ("bits_exceptionVec_2", 1), ("bits_exceptionVec_12", 1), ("bits_exceptionVec_20", 1),
+        ("bits_backendException", 1), ("bits_satpFlushFirstFetchFault", 1),
+        ("bits_trigger", 4), ("bits_pd_isRVC", 1), ("bits_pd_brType", 2),
+        ("bits_pred_taken", 1), ("bits_crossPageIPFFix", 1), ("bits_ftqPtr_flag", 1),
+        ("bits_ftqPtr_value", 6), ("bits_ftqOffset", 4), ("bits_isLastInFtqEntry", 1),
+    )
+    for lane in range(6):
+        specs.extend((f"io_backend_cfVec_{lane}_{suffix}", "output", width) for suffix, width in cf_fields)
+    specs.extend([
+        ("io_backend_fromFtq_pc_mem_wen", "output", 1), ("io_backend_fromFtq_pc_mem_waddr", "output", 6),
+        ("io_backend_fromFtq_pc_mem_wdata_startAddr", "output", 50),
+        ("io_backend_fromFtq_newest_entry_en", "output", 1), ("io_backend_fromFtq_newest_entry_target", "output", 50),
+        ("io_backend_fromFtq_newest_entry_ptr_value", "output", 6),
+        ("io_backend_fromIfu_gpaddrMem_wen", "output", 1), ("io_backend_fromIfu_gpaddrMem_waddr", "output", 6),
+        ("io_backend_fromIfu_gpaddrMem_wdata_gpaddr", "output", 56),
+        ("io_backend_fromIfu_gpaddrMem_wdata_isForVSnonLeafPTE", "output", 1),
+    ])
+    rob_fields = (("valid", 1), ("bits_commitType", 3), ("bits_ftqIdx_flag", 1),
+                  ("bits_ftqIdx_value", 6), ("bits_ftqOffset", 4))
+    for lane in range(8):
+        specs.extend((f"io_backend_toFtq_rob_commits_{lane}_{suffix}", "input", width)
+                      for suffix, width in rob_fields)
+    specs.extend([
+        ("io_backend_toFtq_redirect_valid", "input", 1),
+        ("io_backend_toFtq_redirect_bits_ftqIdx_flag", "input", 1),
+        ("io_backend_toFtq_redirect_bits_ftqIdx_value", "input", 6),
+        ("io_backend_toFtq_redirect_bits_ftqOffset", "input", 4),
+        ("io_backend_toFtq_redirect_bits_level", "input", 1),
+        ("io_backend_toFtq_redirect_bits_cfiUpdate_pc", "input", 50),
+        ("io_backend_toFtq_redirect_bits_cfiUpdate_target", "input", 50),
+        ("io_backend_toFtq_redirect_bits_cfiUpdate_taken", "input", 1),
+        ("io_backend_toFtq_redirect_bits_cfiUpdate_isMisPred", "input", 1),
+        ("io_backend_toFtq_redirect_bits_cfiUpdate_backendIGPF", "input", 1),
+        ("io_backend_toFtq_redirect_bits_cfiUpdate_backendIPF", "input", 1),
+        ("io_backend_toFtq_redirect_bits_cfiUpdate_backendIAF", "input", 1),
+        ("io_backend_toFtq_redirect_bits_satpFlush", "input", 1),
+        ("io_backend_toFtq_ftqIdxAhead_0_valid", "input", 1),
+        ("io_backend_toFtq_ftqIdxAhead_0_bits_value", "input", 6),
+        ("io_backend_toFtq_ftqIdxSelOH_bits", "input", 3),
+        ("io_backend_canAccept", "input", 1), ("io_backend_wfi_wfiReq", "input", 1),
+        ("io_backend_wfi_wfiSafe", "output", 1),
+    ])
+    for lane in range(3):
+        specs.extend([(f"io_softPrefetch_{lane}_valid", "input", 1),
+                       (f"io_softPrefetch_{lane}_bits_vaddr", "input", 50)])
+    specs.extend([
+        ("io_sfence_valid", "input", 1), ("io_sfence_bits_rs1", "input", 1),
+        ("io_sfence_bits_rs2", "input", 1), ("io_sfence_bits_addr", "input", 50),
+        ("io_sfence_bits_id", "input", 16), ("io_sfence_bits_flushPipe", "input", 1),
+        ("io_sfence_bits_hv", "input", 1), ("io_sfence_bits_hg", "input", 1),
+        ("io_tlbCsr_satp_mode", "input", 4), ("io_tlbCsr_satp_asid", "input", 16),
+        ("io_tlbCsr_satp_changed", "input", 1), ("io_tlbCsr_vsatp_mode", "input", 4),
+        ("io_tlbCsr_vsatp_asid", "input", 16), ("io_tlbCsr_vsatp_changed", "input", 1),
+        ("io_tlbCsr_hgatp_mode", "input", 4), ("io_tlbCsr_hgatp_vmid", "input", 16),
+        ("io_tlbCsr_hgatp_changed", "input", 1), ("io_tlbCsr_mbmc_BME", "input", 1),
+        ("io_tlbCsr_mbmc_CMODE", "input", 1), ("io_tlbCsr_priv_mxr", "input", 1),
+        ("io_tlbCsr_priv_sum", "input", 1), ("io_tlbCsr_priv_vmxr", "input", 1),
+        ("io_tlbCsr_priv_vsum", "input", 1), ("io_tlbCsr_priv_virt", "input", 1),
+        ("io_tlbCsr_priv_virt_changed", "input", 1), ("io_tlbCsr_priv_spvp", "input", 1),
+        ("io_tlbCsr_priv_imode", "input", 2), ("io_tlbCsr_priv_dmode", "input", 2),
+        ("io_tlbCsr_priv_debug", "input", 1), ("io_tlbCsr_pmm_mseccfg", "input", 2),
+        ("io_tlbCsr_pmm_menvcfg", "input", 2), ("io_tlbCsr_pmm_henvcfg", "input", 2),
+        ("io_tlbCsr_pmm_hstatus", "input", 2), ("io_tlbCsr_pmm_senvcfg", "input", 2),
+        ("io_csrCtrl_pf_ctrl_l1I_pf_enable", "input", 1), ("io_csrCtrl_bp_ctrl_ubtb_enable", "input", 1),
+        ("io_csrCtrl_bp_ctrl_btb_enable", "input", 1), ("io_csrCtrl_bp_ctrl_tage_enable", "input", 1),
+        ("io_csrCtrl_bp_ctrl_sc_enable", "input", 1), ("io_csrCtrl_bp_ctrl_ras_enable", "input", 1),
+        ("io_csrCtrl_sbuffer_timeout", "input", 22), ("io_csrCtrl_ldld_vio_check_enable", "input", 1),
+        ("io_csrCtrl_cache_error_enable", "input", 1), ("io_csrCtrl_hd_misalign_st_enable", "input", 1),
+        ("io_csrCtrl_hd_misalign_ld_enable", "input", 1), ("io_csrCtrl_distribute_csr_w_valid", "input", 1),
+        ("io_csrCtrl_distribute_csr_w_bits_addr", "input", 12), ("io_csrCtrl_distribute_csr_w_bits_data", "input", 64),
+        ("io_csrCtrl_frontend_trigger_tUpdate_valid", "input", 1), ("io_csrCtrl_frontend_trigger_tUpdate_bits_addr", "input", 2),
+        ("io_csrCtrl_frontend_trigger_tUpdate_bits_tdata_matchType", "input", 2),
+        ("io_csrCtrl_frontend_trigger_tUpdate_bits_tdata_select", "input", 1),
+        ("io_csrCtrl_frontend_trigger_tUpdate_bits_tdata_action", "input", 4),
+        ("io_csrCtrl_frontend_trigger_tUpdate_bits_tdata_chain", "input", 1),
+        ("io_csrCtrl_frontend_trigger_tUpdate_bits_tdata_tdata2", "input", 64),
+    ])
+    specs.extend((f"io_csrCtrl_frontend_trigger_tEnableVec_{index}", "input", 1) for index in range(4))
+    specs.extend([
+        ("io_csrCtrl_frontend_trigger_debugMode", "input", 1),
+        ("io_csrCtrl_frontend_trigger_triggerCanRaiseBpExp", "input", 1),
+        ("io_csrCtrl_mem_trigger_tUpdate_valid", "input", 1), ("io_csrCtrl_mem_trigger_tUpdate_bits_addr", "input", 2),
+        ("io_csrCtrl_mem_trigger_tUpdate_bits_tdata_matchType", "input", 2),
+        ("io_csrCtrl_mem_trigger_tUpdate_bits_tdata_select", "input", 1),
+        ("io_csrCtrl_mem_trigger_tUpdate_bits_tdata_action", "input", 4),
+        ("io_csrCtrl_mem_trigger_tUpdate_bits_tdata_chain", "input", 1),
+        ("io_csrCtrl_mem_trigger_tUpdate_bits_tdata_store", "input", 1),
+        ("io_csrCtrl_mem_trigger_tUpdate_bits_tdata_load", "input", 1),
+        ("io_csrCtrl_mem_trigger_tUpdate_bits_tdata_tdata2", "input", 64),
+    ])
+    specs.extend((f"io_csrCtrl_mem_trigger_tEnableVec_{index}", "input", 1) for index in range(4))
+    specs.extend([
+        ("io_csrCtrl_mem_trigger_debugMode", "input", 1),
+        ("io_csrCtrl_mem_trigger_triggerCanRaiseBpExp", "input", 1),
+        ("io_csrCtrl_fsIsOff", "input", 1), ("io_error_ecc_error_valid", "output", 1),
+        ("io_error_ecc_error_bits", "output", 48), ("io_resetInFrontend", "output", 1),
+        ("io_dft_ram_hold", "input", 1), ("io_dft_ram_bypass", "input", 1),
+        ("io_dft_ram_bp_clken", "input", 1), ("io_dft_ram_aux_clk", "input", 1),
+        ("io_dft_ram_aux_ckbp", "input", 1), ("io_dft_ram_mcp_hold", "input", 1),
+        ("io_dft_cgen", "input", 1),
+    ])
+    specs.extend((f"io_perf_{index}_value", "output", 6) for index in range(8))
+    if len(specs) != 371:
+        raise AssertionError(f"locked Frontend port inventory has {len(specs)} entries")
+    return tuple(specs)
 
 
 # =============================================================================
@@ -154,7 +328,8 @@ class FrontendParent(Elaboratable):
 
     # Construct parent controls, child boundaries, and observable frontend lanes. / 构造父级控制、子级边界及可观察前端通道。
     def __init__(self, configuration: FrontendTopConfig | dict[str, Any] | None = None,
-                 injected_dependencies: dict[str, Any] | None = None) -> None:
+                 injected_dependencies: dict[str, Any] | None = None,
+                 locked_io: bool = False) -> None:
         if configuration is None:
             self.configuration = FrontendTopConfig()
         elif isinstance(configuration, FrontendTopConfig):
@@ -166,10 +341,19 @@ class FrontendParent(Elaboratable):
         cfg = self.configuration
         dependencies = injected_dependencies if isinstance(injected_dependencies, dict) else {}
         self.injected_dependencies = dependencies
+        self.locked_io = bool(locked_io)
         self.icache = dependencies.get("icache") or dependencies.get("ICache") or FrontendChildBoundary(cfg, "icache")
         self.instr_uncache = (dependencies.get("instr_uncache") or dependencies.get("InstrUncache")
                               or FrontendChildBoundary(cfg, "instr_uncache"))
         self.pipeline = dependencies.get("pipeline") or dependencies.get("FrontendPipeline")
+        # Optional leaf children are injected by the family-level validator or
+        # by a later full integration.  They are never imported dynamically,
+        # preserving the single-file Build contract.  可选叶子子级由 family
+        # 验证器或后续完整集成注入；不进行动态导入，保持单文件 Build 契约。
+        self.rvc = dependencies.get("rvc") or dependencies.get("RVCExpander")
+        self.bpu = dependencies.get("bpu") or dependencies.get("BPU")
+        self.icache_replacer = dependencies.get("icache_replacer") or dependencies.get("ICacheReplacer")
+        self.icache_mshr = dependencies.get("icache_mshr") or dependencies.get("ICacheMSHR")
 
         # Clock/reset and source-level Frontend.scala controls. / 时钟、复位及 Frontend.scala 源级控制。
         self.clock = Signal(name="clock")
@@ -247,60 +431,17 @@ class FrontendParent(Elaboratable):
         self.ptw_resp_ready = Signal(name="io_ptw_resp_ready")
         self.perf = [Signal(cfg.perf_bits, name=f"io_perf_{index}_value") for index in range(cfg.perf_count)]
 
-        # Full locked-XSTop diplomacy/PTW/CF inventory ports. / 锁定 XSTop 中完整 Diplomacy/PTW/CF 端口清单。
-        # These ports are explicit parent IO even when a reduced child is injected; unimplemented
-        # outputs are tied off in ``elaborate`` while inputs remain available for future children.
+        # Materialize the exact 371-port XSTop inventory. / 实例化与 XSTop 完全一致的 371 个端口清单。
+        self.frontend_port_specs = frontend_port_specs()
+        self.frontend_ports: dict[str, Signal] = {}
         self.inventory_inputs: list[Signal] = []
         self.inventory_outputs: list[Signal] = []
-        input_specs = {
-            "auto_inner_icache_ctrlUnitOpt_in_a_valid": 1, "auto_inner_icache_ctrlUnitOpt_in_a_bits_opcode": 4,
-            "auto_inner_icache_ctrlUnitOpt_in_a_bits_size": 2, "auto_inner_icache_ctrlUnitOpt_in_a_bits_source": 5,
-            "auto_inner_icache_ctrlUnitOpt_in_a_bits_address": 30, "auto_inner_icache_ctrlUnitOpt_in_a_bits_mask": 8,
-            "auto_inner_icache_ctrlUnitOpt_in_a_bits_data": 64, "auto_inner_icache_ctrlUnitOpt_in_d_ready": 1,
-            "auto_inner_icache_client_out_a_ready": 1, "auto_inner_icache_client_out_d_valid": 1,
-            "auto_inner_icache_client_out_d_bits_opcode": 4, "auto_inner_icache_client_out_d_bits_size": 3,
-            "auto_inner_icache_client_out_d_bits_source": 4, "auto_inner_icache_client_out_d_bits_data": 256,
-            "auto_inner_icache_client_out_d_bits_corrupt": 1, "auto_inner_instrUncache_client_out_a_ready": 1,
-            "auto_inner_instrUncache_client_out_d_valid": 1, "auto_inner_instrUncache_client_out_d_bits_source": 4,
-            "auto_inner_instrUncache_client_out_d_bits_data": 64, "auto_inner_instrUncache_client_out_d_bits_corrupt": 1,
-            "io_ptw_req_0_ready": 1, "io_ptw_resp_valid": 1, "io_ptw_resp_bits_s2xlate": 2,
-            "io_ptw_resp_bits_s1_entry_tag": 35, "io_ptw_resp_bits_s1_entry_asid": 16,
-            "io_ptw_resp_bits_s1_entry_vmid": 14, "io_ptw_resp_bits_s1_entry_n": 1,
-            "io_ptw_resp_bits_s1_entry_pbmt": 2, "io_ptw_resp_bits_s1_entry_perm_d": 1,
-            "io_ptw_resp_bits_s1_entry_perm_a": 1, "io_ptw_resp_bits_s1_entry_perm_g": 1,
-            "io_ptw_resp_bits_s1_entry_perm_u": 1, "io_ptw_resp_bits_s1_entry_perm_x": 1,
-            "io_ptw_resp_bits_s1_entry_perm_w": 1, "io_ptw_resp_bits_s1_entry_perm_r": 1,
-            "io_ptw_resp_bits_s1_entry_level": 2, "io_ptw_resp_bits_s1_entry_v": 1,
-            "io_ptw_resp_bits_s1_entry_ppn": 41, "io_ptw_resp_bits_s1_addr_low": 3,
-            "io_ptw_resp_bits_s2_entry_tag": 38, "io_ptw_resp_bits_s2_entry_vmid": 14,
-            "io_ptw_resp_bits_s2_entry_n": 1, "io_ptw_resp_bits_s2_entry_pbmt": 2,
-            "io_ptw_resp_bits_s2_entry_ppn": 38, "io_ptw_resp_bits_s2_entry_perm_d": 1,
-            "io_ptw_resp_bits_s2_entry_perm_a": 1, "io_ptw_resp_bits_s2_entry_perm_g": 1,
-            "io_ptw_resp_bits_s2_entry_perm_u": 1, "io_ptw_resp_bits_s2_entry_perm_x": 1,
-            "io_ptw_resp_bits_s2_entry_perm_w": 1, "io_ptw_resp_bits_s2_entry_perm_r": 1,
-            "io_ptw_resp_bits_s2_entry_level": 2, "io_ptw_resp_bits_s2_gpf": 1, "io_ptw_resp_bits_s2_gaf": 1,
-        }
-        output_specs = {
-            "auto_inner_icache_ctrlUnitOpt_in_a_ready": 1, "auto_inner_icache_ctrlUnitOpt_in_d_valid": 1,
-            "auto_inner_icache_ctrlUnitOpt_in_d_bits_opcode": 4, "auto_inner_icache_ctrlUnitOpt_in_d_bits_size": 2,
-            "auto_inner_icache_ctrlUnitOpt_in_d_bits_source": 5, "auto_inner_icache_ctrlUnitOpt_in_d_bits_data": 64,
-            "auto_inner_icache_client_out_a_valid": 1, "auto_inner_icache_client_out_a_bits_source": 4,
-            "auto_inner_icache_client_out_a_bits_address": 48, "auto_inner_instrUncache_client_out_a_valid": 1,
-            "auto_inner_instrUncache_client_out_a_bits_address": 48, "io_ptw_req_0_valid": 1,
-            "io_ptw_req_0_bits_vpn": 38, "io_ptw_req_0_bits_s2xlate": 2,
-        }
-        for port_name, port_width in input_specs.items():
-            signal = Signal(port_width, name=port_name); setattr(self, port_name, signal); self.inventory_inputs.append(signal)
-        for port_name, port_width in output_specs.items():
-            signal = Signal(port_width, name=port_name); setattr(self, port_name, signal); self.inventory_outputs.append(signal)
-        # Deterministic placeholders preserve the locked Frontend's 371-port
-        # parent envelope while child-specific bundles are incrementally bound.
-        # 确定性占位端口维持锁定 Frontend 的 371 端口父级包络，供子级逐步绑定。
-        current_count = 73 + len(self.inventory_inputs) + len(self.inventory_outputs)
-        for index in range(max(0, 371 - current_count)):
-            signal = Signal(name=f"frontend_inventory_{index:03d}")
-            setattr(self, f"frontend_inventory_{index:03d}", signal)
-            self.inventory_outputs.append(signal)
+        for port_name, direction, port_width in self.frontend_port_specs:
+            existing = getattr(self, port_name, None)
+            signal = existing if existing is not None and len(existing) == port_width else Signal(port_width, name=port_name)
+            setattr(self, port_name, signal)
+            self.frontend_ports[port_name] = signal
+            (self.inventory_inputs if direction == "input" else self.inventory_outputs).append(signal)
 
     # Connect a child signal when the injected object implements the named contract. / 当注入对象实现命名合同时连接子级信号。
     def connect_child_signal(self, module: Module, child: Any, child_name: str,
@@ -323,6 +464,38 @@ class FrontendParent(Elaboratable):
         module.submodules.instr_uncache = self.instr_uncache
         if self.pipeline is not None:
             module.submodules.pipeline = self.pipeline
+        if self.rvc is not None:
+            module.submodules.rvc = self.rvc
+        if self.bpu is not None:
+            module.submodules.bpu = self.bpu
+        if self.icache_replacer is not None:
+            module.submodules.icache_replacer = self.icache_replacer
+        if self.icache_mshr is not None:
+            module.submodules.icache_mshr = self.icache_mshr
+
+        # In full locked-I/O mode, bridge the exact generated Frontend names
+        # into the compact internal equations below.  The reduced validator
+        # keeps driving the compact signals directly, so these assignments are
+        # deliberately conditional.  在完整锁定 I/O 模式下，将精确生成端口
+        # 接入下方紧凑方程；精简验证器直接驱动紧凑信号，因此条件化连接。
+        if self.locked_io:
+            module.d.comb += [
+                self.reset_vector.eq(self.io_reset_vector),
+                self.fencei.eq(self.io_fencei),
+                self.redirect_valid.eq(self.io_backend_toFtq_redirect_valid),
+                self.redirect_debug_ctrl.eq(self.io_backend_toFtq_redirect_bits_cfiUpdate_isMisPred),
+                self.redirect_debug_memvio.eq(self.io_backend_toFtq_redirect_bits_cfiUpdate_backendIPF),
+                self.backend_can_accept.eq(self.io_backend_canAccept),
+                self.wfi_req.eq(self.io_backend_wfi_wfiReq),
+                self.csr_pf_enable.eq(self.io_csrCtrl_pf_ctrl_l1I_pf_enable),
+                self.csr_fs_off.eq(self.io_csrCtrl_fsIsOff),
+                self.csr_bp_enable.eq(Cat(self.io_csrCtrl_bp_ctrl_ubtb_enable,
+                                          self.io_csrCtrl_bp_ctrl_btb_enable,
+                                          self.io_csrCtrl_bp_ctrl_tage_enable,
+                                          self.io_csrCtrl_bp_ctrl_sc_enable,
+                                          self.io_csrCtrl_bp_ctrl_ras_enable)),
+                self.sfence_valid.eq(self.io_sfence_valid),
+            ]
 
         # Child request/status wiring is intentionally attribute-based so a
         # future full child can be injected without importing a sibling Build.
@@ -345,6 +518,32 @@ class FrontendParent(Elaboratable):
             self.connect_child_signal(module, child, name, "req_addr", addr)
             self.connect_child_signal(module, child, name, "req_nextline", nextline)
 
+        # Bind optional RVC/BPU/ICache leaf contracts when their canonical
+        # signals are present.  This keeps the parent usable with the already
+        # rewritten children without a sibling import.  若注入子级提供标准
+        # 信号，则在父级直接绑定 RVC/BPU/ICache 叶子合同。
+        if self.rvc is not None:
+            self.connect_child_signal(module, self.rvc, "rvc", "in_", self.fetch_resp_data[:32])
+            self.connect_child_signal(module, self.rvc, "rvc", "fsIsOff", self.ifu_fs_off)
+            rvc_out = getattr(self.rvc, "out_bits", None)
+            rvc_ill = getattr(self.rvc, "ill", None)
+            if rvc_out is not None:
+                module.d.comb += self.cf_instr[:cfg.instr_bits].eq(rvc_out)
+            if rvc_ill is not None:
+                module.d.comb += self.cf_exception[0].eq(rvc_ill)
+        if self.bpu is not None:
+            self.connect_child_signal(module, self.bpu, "bpu", "enable", self.bpu_enable)
+            self.connect_child_signal(module, self.bpu, "bpu", "reset_vector", self.reset_vector)
+            bpu_taken = getattr(self.bpu, "pred_taken", None)
+            if bpu_taken is not None:
+                module.d.comb += self.cf_pred_taken[0].eq(bpu_taken)
+        for child, name in ((self.icache_replacer, "icache_replacer"), (self.icache_mshr, "icache_mshr")):
+            if child is None:
+                continue
+            self.connect_child_signal(module, child, name, "flush", self.need_flush)
+            self.connect_child_signal(module, child, name, "fencei", self.icache_fencei)
+            self.connect_child_signal(module, child, name, "wfi_req", self.icache_wfi_req)
+
         child_icache_ready = getattr(self.icache, "req_ready", self.fetch_req_ready)
         child_uncache_ready = getattr(self.instr_uncache, "req_ready", self.uncache_req_ready)
         child_fetch_resp_valid = getattr(self.icache, "resp_valid", self.fetch_resp_valid)
@@ -363,10 +562,53 @@ class FrontendParent(Elaboratable):
             self.uncache_resp_data.eq(child_uncache_resp_data[:len(self.uncache_resp_data)]),
             self.uncache_resp_error.eq(child_uncache_resp_error),
         ]
-        # Deterministic tie-offs for inventory outputs until full child closures are injected.
-        for signal in self.inventory_outputs:
-            module.d.comb += signal.eq(0)
-        module.d.comb += [self.io_ptw_req_0_valid.eq(self.ptw_req_valid), self.io_ptw_req_0_bits_vpn.eq(self.ptw_req_vpn), self.io_ptw_req_0_bits_s2xlate.eq(0)]
+        # Deterministic tie-offs for unbound full-inventory outputs. / 对尚未绑定的完整清单输出确定性置零。
+        if self.locked_io:
+            mapped_outputs = {
+                "auto_inner_icache_ctrlUnitOpt_in_a_ready", "auto_inner_icache_ctrlUnitOpt_in_d_valid",
+                "auto_inner_icache_ctrlUnitOpt_in_d_bits_opcode", "auto_inner_icache_ctrlUnitOpt_in_d_bits_size",
+                "auto_inner_icache_ctrlUnitOpt_in_d_bits_source", "auto_inner_icache_ctrlUnitOpt_in_d_bits_data",
+                "auto_inner_icache_client_out_a_valid", "auto_inner_icache_client_out_a_bits_source",
+                "auto_inner_icache_client_out_a_bits_address", "auto_inner_instrUncache_client_out_a_valid",
+                "auto_inner_instrUncache_client_out_a_bits_address", "io_ptw_req_0_valid",
+                "io_ptw_req_0_bits_vpn", "io_ptw_req_0_bits_s2xlate", "io_ptw_resp_ready",
+                "io_backend_wfi_wfiSafe", "io_error_ecc_error_valid", "io_error_ecc_error_bits",
+                "io_resetInFrontend", *[f"io_perf_{index}_value" for index in range(cfg.perf_count)],
+                *[f"io_backend_cfVec_{lane}_{suffix}" for lane in range(cfg.fetch_width)
+                  for suffix, _width in (("valid", 1), ("bits_instr", 32), ("bits_exceptionVec_1", 1),
+                                         ("bits_exceptionVec_2", 1), ("bits_exceptionVec_12", 1),
+                                         ("bits_exceptionVec_20", 1), ("bits_backendException", 1),
+                                         ("bits_satpFlushFirstFetchFault", 1), ("bits_trigger", 4),
+                                         ("bits_pd_isRVC", 1), ("bits_pd_brType", 2), ("bits_pred_taken", 1),
+                                         ("bits_crossPageIPFFix", 1), ("bits_ftqPtr_flag", 1),
+                                         ("bits_ftqPtr_value", 6), ("bits_ftqOffset", 4),
+                                         ("bits_isLastInFtqEntry", 1))],
+            }
+            for port_name, _direction, _width in self.frontend_port_specs:
+                if _direction == "output" and port_name not in mapped_outputs:
+                    module.d.comb += self.frontend_ports[port_name].eq(0)
+            module.d.comb += [
+                self.io_ptw_req_0_valid.eq(self.ptw_req_valid),
+                self.io_ptw_req_0_bits_vpn.eq(self.ptw_req_vpn),
+                self.io_ptw_req_0_bits_s2xlate.eq(0),
+                self.io_ptw_resp_ready.eq(self.ptw_resp_ready),
+                self.io_backend_wfi_wfiSafe.eq(self.wfi_safe),
+                self.io_error_ecc_error_valid.eq(self.error_valid),
+                self.io_error_ecc_error_bits.eq(self.error_bits),
+                self.io_resetInFrontend.eq(self.reset_in_frontend),
+            ]
+            for index in range(cfg.perf_count):
+                module.d.comb += self.frontend_ports[f"io_perf_{index}_value"].eq(self.perf[index])
+            # Expand the compact CF vectors into the six generated bundle lanes.
+            for lane in range(cfg.fetch_width):
+                prefix = f"io_backend_cfVec_{lane}_"
+                module.d.comb += [
+                    self.frontend_ports[prefix + "valid"].eq(self.cf_valid[lane]),
+                    self.frontend_ports[prefix + "bits_instr"].eq(self.cf_instr[lane * cfg.instr_bits:(lane + 1) * cfg.instr_bits]),
+                    self.frontend_ports[prefix + "bits_pd_isRVC"].eq(self.cf_is_rvc[lane]),
+                    self.frontend_ports[prefix + "bits_pred_taken"].eq(self.cf_pred_taken[lane]),
+                    self.frontend_ports[prefix + "bits_exceptionVec_1"].eq(self.cf_exception[lane]),
+                ]
 
         # Source Frontend.scala uses RegNext for redirect/fence and DelayN(1)
         # for WFI, then a second DelayN(1) for the returned safe indication.
@@ -485,30 +727,12 @@ def build_verilog(configuration, injected_dependencies):
     else:
         options = {}
         cfg = FrontendTopConfig()
-    top = UHSCTop(cfg, dependencies)
-    ports: list[Any] = [
-        top.clock, top.reset, top.reset_vector, top.fencei, top.redirect_valid,
-        top.redirect_ftq_idx, top.redirect_ftq_offset, top.redirect_level,
-        top.redirect_pc, top.redirect_cfi_taken, top.redirect_debug_ctrl,
-        top.redirect_debug_memvio, top.backend_can_accept, top.wfi_req,
-        top.csr_pf_enable, top.csr_fs_off, top.csr_bp_enable, top.sfence_valid,
-        top.fetch_req_valid, top.fetch_req_addr, top.fetch_req_nextline,
-        top.fetch_req_ready, top.fetch_resp_valid, top.fetch_resp_data,
-        top.fetch_resp_error, top.uncache_req_valid, top.uncache_req_addr,
-        top.uncache_req_ready, top.uncache_resp_valid, top.uncache_resp_data,
-        top.uncache_resp_error, top.icache_wfi_safe, top.instr_uncache_wfi_safe,
-        top.icache_error_valid, top.icache_error_bits, top.ibuffer_full_in,
-        top.bp_right_in, top.bp_wrong_in, top.need_flush,
-        top.flush_control_redirect, top.flush_mem_vio_redirect, top.icache_fencei,
-        top.icache_pf_enable, top.ifu_fs_off, top.bpu_enable, top.itlb_sfence,
-        top.icache_flush, top.icache_wfi_req, top.instr_uncache_wfi_req,
-        top.wfi_safe, top.error_valid, top.error_bits, top.reset_in_frontend,
-        top.frontend_info_ibuf_full, top.frontend_info_bp_right,
-        top.frontend_info_bp_wrong, top.cf_valid, top.cf_instr, top.cf_pc,
-        top.cf_is_rvc, top.cf_pred_taken, top.cf_exception, top.ptw_req_valid,
-        top.ptw_req_vpn, top.ptw_resp_ready,
-    ] + top.perf
-    ports += top.inventory_inputs + top.inventory_outputs
+    top = UHSCTop(cfg, dependencies, locked_io=bool(options.get("locked_io", True)))
+    # Export the exact locked Frontend port order; compact auxiliary signals
+    # remain internal implementation observables and are never added to the
+    # project-facing boundary.  输出锁定 Frontend 的精确端口顺序；紧凑辅助信号
+    # 保留为内部观测点，不加入项目侧边界。
+    ports: list[Any] = [top.frontend_ports[name] for name, _direction, _width in top.frontend_port_specs]
     name = str(options.get("module", options.get("name", "UHSCTop")))
     return verilog.convert(top, name=name, ports=ports, emit_src=False)
 

@@ -355,57 +355,11 @@ class UHSCDCacheWrapper(Elaboratable):
         self.error_valid = Signal(name="io_error_valid")
         self.mbist_enable = Signal(name="io_mbist_enable")
         self.mbist_done = Signal(name="io_mbist_done")
-
-        # Install an optional frozen XSTop inventory supplied by the
-        # coordinator.  The target never scans files or imports generated SV;
-        # every inventory signal is created from explicit injected metadata.
-        # 由协调器注入可选的冻结 XSTop 清单。目标不扫描文件、不导入生成 SV，
-        # 每个清单信号都依据显式注入元数据创建。
-        self.full_port_specs: tuple[Mapping[str, Any], ...] = tuple(
-            item for item in deps.get("full_port_specs", ())
-            if isinstance(item, Mapping) and item.get("name")
-        )
-        self.full_inventory_inputs: list[Signal] = []
-        self.full_inventory_outputs: list[Signal] = []
-        self.full_inventory: dict[str, Signal] = {}
-        self._full_inventory_new_ids: set[int] = set()
-        self._install_full_inventory(self.full_port_specs)
-
-    # Create exact-name inventory signals without reading external files. / 不读取外部文件地创建精确名称清单信号。
-    def _install_full_inventory(self, specs: Iterable[Mapping[str, Any]]) -> None:
-        """Install frozen parent port metadata. / 安装冻结父级端口元数据。"""
-
-        existing: dict[str, Signal] = {}
-        for value in self.__dict__.values():
-            if isinstance(value, Signal) and value.name:
-                existing.setdefault(value.name, value)
-        for spec in specs:
-            name = str(spec.get("name", ""))
-            if not name or name in self.full_inventory:
-                continue
-            direction = str(spec.get("direction", "input")).lower()
-            width_value = spec.get("width", 1)
-            if isinstance(width_value, str):
-                text = width_value.strip()
-                if text.startswith("[") and ":" in text and text.endswith("]"):
-                    high, low = text[1:-1].split(":", 1)
-                    width = abs(int(high) - int(low)) + 1
-                else:
-                    width = 1
-            else:
-                width = int(width_value or 1)
-            signal = existing.get(name)
-            if signal is None:
-                signal = Signal(max(1, width), name=name)
-                setattr(self, f"_full_inventory_{len(self.full_inventory):04d}", signal)
-                self._full_inventory_new_ids.add(id(signal))
-            elif len(signal) != max(1, width):
-                raise ValueError(f"injected inventory width mismatch for {name}")
-            self.full_inventory[name] = signal
-            if direction == "output":
-                self.full_inventory_outputs.append(signal)
-            else:
-                self.full_inventory_inputs.append(signal)
+        # ``flush`` is a real wrapper boundary signal.  Full XSTop inventory
+        # metadata belongs to ``UHSCMemoryMemBlock`` (the locked parent), not
+        # to this reduced child.  Keeping the declaration here makes the
+        # wrapper usable both standalone and when the parent is exported with
+        # an injected full inventory.
         self.flush = Signal(name="io_flush")
 
     # Elaborate TileLink A/D mapping and explicit MBIST/DFT pass-through. / 展开 TileLink A/D 映射及显式 MBIST/DFT 直通。
@@ -496,12 +450,22 @@ class UHSCMemoryMemBlock(Elaboratable):
         )
         self.full_inventory_inputs: list[Signal] = []
         self.full_inventory_outputs: list[Signal] = []
+        self.full_inventory_ports: list[Signal] = []
         self.full_inventory: dict[str, Signal] = {}
         self._full_inventory_new_ids: set[int] = set()
         self._install_full_inventory(self.full_port_specs)
 
     def _install_full_inventory(self, specs: Iterable[Mapping[str, Any]]) -> None:
         """Install explicit inventory signals without scanning reference files."""
+        # Reuse reduced boundary signals when their exact source name is in
+        # the frozen inventory (notably ``clock`` and ``reset``).  Creating a
+        # second same-named Signal would leave the functional child clocked by
+        # an unexported internal net and would make the full envelope look
+        # complete while disconnecting its sequential behavior.
+        existing: dict[str, Signal] = {}
+        for value in self.__dict__.values():
+            if isinstance(value, Signal) and value.name:
+                existing.setdefault(value.name, value)
         for spec in specs:
             name = str(spec.get("name", ""))
             if not name or name in self.full_inventory:
@@ -518,10 +482,16 @@ class UHSCMemoryMemBlock(Elaboratable):
                     width = int(width_value or 1)
                 except (ValueError, TypeError):
                     width = 1
-            signal = Signal(max(1, width), name=name)
-            setattr(self, f"_full_inventory_{len(self.full_inventory):04d}", signal)
-            self._full_inventory_new_ids.add(id(signal))
+            width = max(1, width)
+            signal = existing.get(name)
+            if signal is None:
+                signal = Signal(width, name=name)
+                setattr(self, f"_full_inventory_{len(self.full_inventory):04d}", signal)
+                self._full_inventory_new_ids.add(id(signal))
+            elif len(signal) != width:
+                raise ValueError(f"injected inventory width mismatch for {name}")
             self.full_inventory[name] = signal
+            self.full_inventory_ports.append(signal)
             if str(spec.get("direction", "input")).lower() == "output":
                 self.full_inventory_outputs.append(signal)
             else:
@@ -613,7 +583,7 @@ def build_verilog(configuration, injected_dependencies):
     deps = injected_dependencies if isinstance(injected_dependencies, dict) else {}
     top = UHSCMemoryMemBlock(config, deps)
     module_name = str(config_value.get("module", "UHSCMemoryMemBlock"))
-    ports = [
+    reduced_ports = [
         top.clock, top.reset,
         top.load_valid, top.store_valid, top.atomic_valid,
         top.issue_source, top.issue_cmd, top.issue_vaddr, top.issue_addr,
@@ -628,12 +598,12 @@ def build_verilog(configuration, injected_dependencies):
         top.icache_resp_valid, top.icache_resp_data, top.flush,
         top.mmu_ready, top.lsu_ready, top.mbist_enable, top.mbist_done,
     ]
-    # Append the frozen parent inventory in its declared order, omitting
-    # aliases already present in the reduced observable surface. / 按冻结父级
-    # 清单声明顺序追加端口，并省略精简观测表面中已存在的别名。
-    known = {id(signal) for signal in ports}
-    ports.extend(signal for signal in (*top.full_inventory_inputs, *top.full_inventory_outputs)
-                 if id(signal) not in known)
+    # When a frozen parent inventory is injected, emit exactly that envelope
+    # (1326 ports for the locked V2 MemBlock), in its declared order.  The
+    # reduced probe remains the default when no metadata is supplied.  This
+    # avoids silently adding local probe aliases to the source-compatible full
+    # module while preserving the bounded direct/differential target.
+    ports = list(top.full_inventory_ports) if top.full_port_specs else reduced_ports
     return verilog.convert(top, name=module_name, ports=ports, emit_src=False)
 
 
