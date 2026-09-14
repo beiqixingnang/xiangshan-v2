@@ -1078,7 +1078,7 @@ class TL2CHICoupledL2(Elaboratable):
 
         # Link, ready/valid, response, and flit outputs. / 链路、ready/valid、响应和 flit 输出。
         m.d.comb += [
-            self.auto_mmioBridge_mmio_in_a_ready.eq(parent_idle & ~self.auto_in_a_valid),
+            self.auto_mmioBridge_mmio_in_a_ready.eq(parent_idle & ~self.auto_in_a_valid & link_up),
             self.auto_in_a_ready.eq(parent_idle & ~self.auto_mmioBridge_mmio_in_a_valid & link_up),
             self.auto_in_c_ready.eq(parent_idle & link_up),
             self.auto_in_b_valid.eq(0), self.auto_in_b_bits_opcode.eq(0), self.auto_in_b_bits_param.eq(0),
@@ -1098,8 +1098,8 @@ class TL2CHICoupledL2(Elaboratable):
             self.io_chi_tx_req_flitpend.eq(tx_req_valid), self.io_chi_tx_req_flitv.eq(tx_req_valid), self.io_chi_tx_req_flit.eq(req_flit),
             self.io_chi_tx_rsp_flitpend.eq(tx_rsp_valid), self.io_chi_tx_rsp_flitv.eq(tx_rsp_valid), self.io_chi_tx_rsp_flit.eq(rsp_flit),
             self.io_chi_tx_dat_flitpend.eq(tx_dat_valid), self.io_chi_tx_dat_flitv.eq(tx_dat_valid), self.io_chi_tx_dat_flit.eq(dat_flit),
-            self.io_chi_rx_rsp_lcrdv.eq(self.io_chi_rx_rsp_flitv), self.io_chi_rx_dat_lcrdv.eq(self.io_chi_rx_dat_flitv),
-            self.io_chi_rx_snp_lcrdv.eq(self.io_chi_rx_snp_flitv), self.io_l2_hint_valid.eq(0), self.io_l2_hint_bits_sourceId.eq(0),
+            self.io_chi_rx_rsp_lcrdv.eq(link_up), self.io_chi_rx_dat_lcrdv.eq(link_up),
+            self.io_chi_rx_snp_lcrdv.eq(link_up), self.io_l2_hint_valid.eq(0), self.io_l2_hint_bits_sourceId.eq(0),
             self.io_l2_hint_bits_isKeyword.eq(0), self.io_l2_tlb_req_req_valid.eq(0), self.io_l2_tlb_req_req_bits_vaddr.eq(0),
             self.io_l2_tlb_req_req_bits_cmd.eq(0), self.io_l2_tlb_req_req_bits_isPrefetch.eq(0), self.io_l2_tlb_req_req_bits_size.eq(0),
             self.io_l2_tlb_req_req_bits_kill.eq(0), self.io_l2_tlb_req_req_bits_no_translate.eq(0), self.io_l2_tlb_req_req_kill.eq(0),
