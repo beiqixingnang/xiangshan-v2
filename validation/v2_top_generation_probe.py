@@ -24,10 +24,14 @@ from amaranth.sim import Settle, Simulator
 ROOT = Path(__file__).resolve().parents[1]
 BUILD_ROOT = ROOT / "python/Program-System/System-Build/Build-Cpu"
 TOP_FILE = BUILD_ROOT / "Cpu-Core/Build-Cpu.Top.UHSCTop-GenerationProbe-Hardware.py"
+ROOTS_FILE = BUILD_ROOT / "Cpu-Core/Build-Cpu.Top.XiangShan-Roots-Hardware.py"
 WORK_DIR = ROOT / "validation/.work"
 RTL_FILE = WORK_DIR / "uhsc-top-probe.sv"
 INTEGRATED_RTL_FILE = WORK_DIR / "uhsc-top-integrated-probe.sv"
+ROOT_ENVELOPE_RTL_FILE = WORK_DIR / "uhsc-xstop-envelope.sv"
 EVIDENCE = ROOT / "validation/v2-top-generation-probe-results.json"
+XSTOP_INVENTORY = ROOT / "validation/v2-xstop-port-inventory.json"
+ROOT_INVENTORIES = ROOT / "validation/v2-root-port-inventories.json"
 EXPECTED_REFERENCE = "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d"
 EXPECTED_SOURCE = "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af"
 
@@ -82,7 +86,44 @@ def module_names(text: str) -> list[str]:
     return sorted(set(names))
 
 
-def run_lint(tool: str, rtl_path: Path) -> str:
+def generated_port_schema(text: str, module_name: str) -> dict[str, tuple[str, int]]:
+    """Read one generated module's ANSI direction/width declarations."""
+    start = text.index(f"module {module_name}(")
+    end = text.index("endmodule", start)
+    result: dict[str, tuple[str, int]] = {}
+    for line in text[start:end].splitlines():
+        match = re.match(r"\s*(input|output|inout)(?:\s+\[(\d+):0\])?\s+(.+);\s*$", line)
+        if match is None:
+            continue
+        direction, high, names = match.groups()
+        width = int(high) + 1 if high is not None else 1
+        for name in names.split(","):
+            clean = name.strip().replace("\\", "").strip()
+            if clean:
+                result[clean] = (direction, width)
+    return result
+
+
+def inventory_schema(specs: list[dict[str, object]]) -> dict[str, tuple[str, int]]:
+    """Normalize frozen inventory rows for exact structural comparison."""
+    result: dict[str, tuple[str, int]] = {}
+    for spec in specs:
+        name = str(spec.get("name", ""))
+        if not name:
+            continue
+        raw_width = str(spec.get("width", "")).strip()
+        width = 1
+        if raw_width.startswith("[") and raw_width.endswith("]") and ":" in raw_width:
+            high, low = raw_width[1:-1].split(":", 1)
+            try:
+                width = abs(int(high) - int(low)) + 1
+            except ValueError:
+                width = 1
+        result[name] = (str(spec.get("direction", "input")).lower(), max(1, width))
+    return result
+
+
+def run_lint(tool: str, rtl_path: Path, top_name: str = "UHSCTopIntegratedProbe") -> str:
     """Run a host or WSL lint tool, preserving unavailable as an explicit state.
     在主机或 WSL 中运行 lint 工具；不可用时明确记录 UNAVAILABLE。
     """
@@ -92,7 +133,7 @@ def run_lint(tool: str, rtl_path: Path) -> str:
         if tool == "verilator":
             command = [host, "--lint-only", "--Wno-fatal", str(rtl_path)]
         else:
-            command = [host, "-p", f"read_verilog -sv {rtl_path}; hierarchy -check -top UHSCTopIntegratedProbe"]
+            command = [host, "-p", f"read_verilog -sv {rtl_path}; hierarchy -check -top {top_name}"]
         return "PASS" if subprocess.run(command, capture_output=True, check=False).returncode == 0 else "FAIL"
     wsl = shutil.which("wsl.exe")
     if not wsl:
@@ -103,7 +144,7 @@ def run_lint(tool: str, rtl_path: Path) -> str:
     if tool == "verilator":
         shell = f"verilator --lint-only --Wno-fatal '{posix_path}'"
     else:
-        shell = f"yosys -p 'read_verilog -sv \"{posix_path}\"; hierarchy -check -top UHSCTopIntegratedProbe'"
+        shell = f"yosys -p 'read_verilog -sv \"{posix_path}\"; hierarchy -check -top {top_name}'"
     result = subprocess.run([wsl, "-e", "bash", "-lc", shell], capture_output=True, check=False)
     return "PASS" if result.returncode == 0 else "FAIL"
 
@@ -124,6 +165,7 @@ def main() -> int:
     backend_mod = load_module(BUILD_ROOT / "Cpu-Core/Build-Cpu.Backend.Top-Hardware.py", "v2_backend_top")
     mem_mod = load_module(BUILD_ROOT / "Cpu-Memory/Build-Cpu.Memory.MemBlock-Hardware.py", "v2_memblock")
     l2_mod = load_module(BUILD_ROOT / "Cpu-Memory/Build-Cpu.Dependency.CoupledL2.Slice-Hardware.py", "v2_coupled_l2")
+    roots_mod = load_module(BUILD_ROOT / "Cpu-Core/Build-Cpu.Top.XiangShan-Roots-Hardware.py", "v2_roots")
     deps = {
         "frontend": frontend_mod.FrontendParent(),
         "backend": backend_mod.BackendTop(),
@@ -165,7 +207,76 @@ def main() -> int:
             "rtl_sha256": hashlib.sha256(mem_full.encode("utf-8")).hexdigest(),
             "path": str(mem_path.relative_to(ROOT)).replace("\\", "/"),
         }
-    frontend_full = frontend_mod.build_verilog({"module": "UHSCFrontendEnvelope"}, {})
+    # Pass exact root inventories as explicit metadata to the source-named
+    # root adapter; no root target reads these files.
+    root_specs_by_name: dict[str, list[dict[str, object]]] = {}
+    if ROOT_INVENTORIES.is_file():
+        root_payload = json.loads(ROOT_INVENTORIES.read_text(encoding="utf-8"))
+        if (root_payload.get("source_commit") != EXPECTED_SOURCE
+                or root_payload.get("reference_sha256") != EXPECTED_REFERENCE):
+            raise RuntimeError("root inventory baseline mismatch")
+        for name, metadata in root_payload.get("modules", {}).items():
+            ports = metadata.get("ports", []) if isinstance(metadata, dict) else []
+            if name in {"XSCore", "L2Top", "XSTile", "XSTop"} and isinstance(ports, list):
+                root_specs_by_name[name] = ports
+    # Cross-check the separately versioned XSTop inventory against the root
+    # inventory bundle;
+    # a mismatch is a hard structural failure rather than silently choosing a
+    # different snapshot.
+    if XSTOP_INVENTORY.is_file():
+        xstop_payload = json.loads(XSTOP_INVENTORY.read_text(encoding="utf-8"))
+        if (xstop_payload.get("source_commit") != EXPECTED_SOURCE
+                or xstop_payload.get("reference_sha256") != EXPECTED_REFERENCE):
+            raise RuntimeError("XSTop inventory baseline mismatch")
+        xstop_specs = xstop_payload.get("ports", [])
+        if xstop_payload.get("module") != "XSTop" or len(xstop_specs) != 204:
+            raise RuntimeError("XSTop inventory schema/count mismatch")
+        if "XSTop" in root_specs_by_name and root_specs_by_name["XSTop"] != xstop_specs:
+            raise RuntimeError("XSTop inventory disagrees with root inventory bundle")
+        root_specs_by_name["XSTop"] = xstop_specs
+    root_types = ("XSCore", "L2Top", "XSTile", "XSTop")
+    for root_name in root_types:
+        root_specs = root_specs_by_name.get(root_name)
+        if root_specs is None:
+            # Keep absent root inventories explicit instead of inventing port
+            # names; a later root-closure batch can supply them through the
+            # same metadata channel.
+            full_parent_envelopes[root_name] = {
+                "inventory_count": 0,
+                "generated_ports": 0,
+                "status": "PENDING_ROOT_INVENTORY",
+            }
+            continue
+        module_name = f"UHSC{root_name}Envelope"
+        root_full = roots_mod.build_verilog(
+            {"root": root_name, "module": module_name},
+            {"full_port_specs": root_specs},
+        )
+        root_path = WORK_DIR / f"uhsc-{root_name.lower()}-envelope.sv"
+        root_path.write_text(root_full, encoding="utf-8", newline="\n")
+        root_actual = generated_port_schema(root_full, module_name)
+        root_expected = inventory_schema(root_specs)
+        root_missing = sorted(set(root_expected) - set(root_actual))
+        root_extra = sorted(set(root_actual) - set(root_expected))
+        root_mismatches = [name for name in sorted(set(root_expected) & set(root_actual))
+                           if root_expected[name] != root_actual[name]]
+        root_verilator = run_lint("verilator", root_path, module_name)
+        root_yosys = run_lint("yosys", root_path, module_name)
+        full_parent_envelopes[root_name] = {
+            "inventory_count": len(root_specs),
+            "generated_ports": len(root_actual),
+            "missing": root_missing,
+            "extra": root_extra,
+            "direction_width_mismatches": root_mismatches,
+            "rtl_bytes": len(root_full.encode("utf-8")),
+            "rtl_sha256": hashlib.sha256(root_full.encode("utf-8")).hexdigest(),
+            "path": str(root_path.relative_to(ROOT)).replace("\\", "/"),
+            "status": "PASS" if len(root_actual) == len(root_expected) == len(root_specs)
+            and not root_missing and not root_extra and not root_mismatches else "FAIL",
+            "verilator": root_verilator,
+            "yosys": root_yosys,
+        }
+    frontend_full = frontend_mod.build_verilog({"module": "UHSCFrontendEnvelope", "locked_io": True}, {})
     frontend_path = WORK_DIR / "uhsc-frontend-envelope.sv"
     frontend_path.write_text(frontend_full, encoding="utf-8", newline="\n")
     full_parent_envelopes["Frontend"] = {
@@ -242,7 +353,18 @@ def main() -> int:
             "reference_xstop_sha256": EXPECTED_REFERENCE,
             "reference_immutable": True,
         },
-        "tool_gates": {"verilator_lint": verilator_status, "yosys_integrated_hierarchy": yosys_status},
+        "tool_gates": {
+            "verilator_lint": verilator_status,
+            "yosys_integrated_hierarchy": yosys_status,
+            "root_envelope_verilator": {
+                name: full_parent_envelopes[name].get("verilator", "PENDING")
+                for name in required_roots
+            },
+            "root_envelope_yosys": {
+                name: full_parent_envelopes[name].get("yosys", "PENDING")
+                for name in required_roots
+            },
+        },
         "blocking_reasons": [
             "source-named XSCore/L2Top/XSTile/XSTop roots are reduced boundaries, not complete closures",
             "probe drives quiescent outputs and asserts io_closure_missing",

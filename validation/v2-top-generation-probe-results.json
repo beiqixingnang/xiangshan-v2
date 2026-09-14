@@ -124,10 +124,62 @@
       "rtl_sha256": "bc2660c2e8cdc3531ff1735046f8ff5feb39db30ced420befe62a5b51240dfc2",
       "path": "validation/.work/uhsc-memblock-envelope.sv"
     },
+    "XSCore": {
+      "inventory_count": 308,
+      "generated_ports": 308,
+      "missing": [],
+      "extra": [],
+      "direction_width_mismatches": [],
+      "rtl_bytes": 55946,
+      "rtl_sha256": "1470b264da797d0dda05432e536d3eb5a029a90b021bb478e008bc3551d654ac",
+      "path": "validation/.work/uhsc-xscore-envelope.sv",
+      "status": "PASS",
+      "verilator": "PASS",
+      "yosys": "PASS"
+    },
+    "L2Top": {
+      "inventory_count": 441,
+      "generated_ports": 441,
+      "missing": [],
+      "extra": [],
+      "direction_width_mismatches": [],
+      "rtl_bytes": 72962,
+      "rtl_sha256": "424cedda34352f8d88c62ff5c386d1ac58afb8daf174d2f9a7c7e901b46d105d",
+      "path": "validation/.work/uhsc-l2top-envelope.sv",
+      "status": "PASS",
+      "verilator": "PASS",
+      "yosys": "PASS"
+    },
+    "XSTile": {
+      "inventory_count": 153,
+      "generated_ports": 153,
+      "missing": [],
+      "extra": [],
+      "direction_width_mismatches": [],
+      "rtl_bytes": 29624,
+      "rtl_sha256": "f0d4b1e6a0254a111134aade3a898a6ec5f71210805d787bad27ab485d246e42",
+      "path": "validation/.work/uhsc-xstile-envelope.sv",
+      "status": "PASS",
+      "verilator": "PASS",
+      "yosys": "PASS"
+    },
+    "XSTop": {
+      "inventory_count": 204,
+      "generated_ports": 204,
+      "missing": [],
+      "extra": [],
+      "direction_width_mismatches": [],
+      "rtl_bytes": 21141,
+      "rtl_sha256": "bd12b39e84e08d2bca8365b918f05660f9c21568eab8269f65aa5c918348bacd",
+      "path": "validation/.work/uhsc-xstop-envelope.sv",
+      "status": "PASS",
+      "verilator": "PASS",
+      "yosys": "PASS"
+    },
     "Frontend": {
       "inventory_count": 371,
-      "rtl_bytes": 23580,
-      "rtl_sha256": "f9413708bb774940d45dd63636a02a5262af41bd5945c505ebba8c0c966d9f37",
+      "rtl_bytes": 75879,
+      "rtl_sha256": "fd4818d2325edd4d37c69f089026a4fd833bacc52105976a410ab1c72d4ce27a",
       "path": "validation/.work/uhsc-frontend-envelope.sv"
     }
   },
@@ -254,7 +306,19 @@
   },
   "tool_gates": {
     "verilator_lint": "PASS",
-    "yosys_integrated_hierarchy": "PASS"
+    "yosys_integrated_hierarchy": "PASS",
+    "root_envelope_verilator": {
+      "XSCore": "PASS",
+      "L2Top": "PASS",
+      "XSTile": "PASS",
+      "XSTop": "PASS"
+    },
+    "root_envelope_yosys": {
+      "XSCore": "PASS",
+      "L2Top": "PASS",
+      "XSTile": "PASS",
+      "XSTop": "PASS"
+    }
   },
   "blocking_reasons": [
     "source-named XSCore/L2Top/XSTile/XSTop roots are reduced boundaries, not complete closures",

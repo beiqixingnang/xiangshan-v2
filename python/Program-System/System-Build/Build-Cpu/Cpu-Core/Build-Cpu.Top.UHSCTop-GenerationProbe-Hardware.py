@@ -12,7 +12,7 @@ children are bound and the full XSTop inventory is matched.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Iterable, Mapping
 
 from amaranth import Elaboratable, Module, Signal
 from amaranth.back import verilog
@@ -77,6 +77,13 @@ class UHSCTop(Elaboratable):
         self.backend = self.injected_dependencies.get("backend")
         self.mem_block = self.injected_dependencies.get("mem_block") or self.injected_dependencies.get("memblock")
         self.coupled_l2 = self.injected_dependencies.get("coupled_l2") or self.injected_dependencies.get("coupledL2")
+        self.root_children = tuple(
+            child for child in (
+                self.injected_dependencies.get("xs_core"),
+                self.injected_dependencies.get("l2_top"),
+                self.injected_dependencies.get("xs_tile"),
+            ) if child is not None
+        )
         cfg = self.config
 
         self.clock = Signal(name="clock")
@@ -116,6 +123,54 @@ class UHSCTop(Elaboratable):
         self.closure_missing_count = Signal(3, name="io_closure_missing_count")
         self.closure_complete = Signal(name="io_closure_complete")
 
+        # Optional exact XSTop inventory supplied by the coordinator.  The
+        # Build file never scans the locked SV; validators inject versioned
+        # metadata and this adapter materializes the deterministic envelope.
+        self.full_port_specs: tuple[Mapping[str, Any], ...] = tuple(
+            item for item in self.injected_dependencies.get("full_port_specs", ())
+            if isinstance(item, Mapping) and item.get("name")
+        )
+        self.full_inventory_inputs: list[Signal] = []
+        self.full_inventory_outputs: list[Signal] = []
+        self.full_inventory_ports: list[Signal] = []
+        self.full_inventory: dict[str, Signal] = {}
+        self._full_inventory_new_ids: set[int] = set()
+        self._install_full_inventory(self.full_port_specs)
+
+    def _install_full_inventory(self, specs: Iterable[Mapping[str, Any]]) -> None:
+        """Materialize exact-name top ports from explicit frozen metadata."""
+        existing = {value.name: value for value in self.__dict__.values()
+                    if isinstance(value, Signal) and value.name}
+        for spec in specs:
+            name = str(spec.get("name", ""))
+            if not name or name in self.full_inventory:
+                continue
+            width_value = spec.get("width", "")
+            if isinstance(width_value, str) and ":" in width_value:
+                try:
+                    high, low = width_value.strip("[]").split(":", 1)
+                    width = abs(int(high) - int(low)) + 1
+                except (TypeError, ValueError):
+                    width = 1
+            else:
+                try:
+                    width = int(width_value or 1)
+                except (TypeError, ValueError):
+                    width = 1
+            signal = existing.get(name)
+            if signal is None:
+                signal = Signal(max(1, width), name=name)
+                setattr(self, f"_full_inventory_{len(self.full_inventory):04d}", signal)
+                self._full_inventory_new_ids.add(id(signal))
+            elif len(signal) != max(1, width):
+                raise ValueError(f"injected inventory width mismatch for {name}")
+            self.full_inventory[name] = signal
+            self.full_inventory_ports.append(signal)
+            if str(spec.get("direction", "input")).lower() == "output":
+                self.full_inventory_outputs.append(signal)
+            else:
+                self.full_inventory_inputs.append(signal)
+
     def elaborate(self, platform: Any) -> Module:
         del platform
         m = Module()
@@ -134,6 +189,8 @@ class UHSCTop(Elaboratable):
         for name, child in children.items():
             if child is not None:
                 setattr(m.submodules, name, child)
+        for index, child in enumerate(self.root_children):
+            setattr(m.submodules, f"root_child_{index}", child)
 
         def wire(dst: Any, src: Any) -> None:
             """Connect compatible Amaranth signals with source-width adaptation.
@@ -234,6 +291,9 @@ class UHSCTop(Elaboratable):
             ),
             self.closure_complete.eq(0),
         ]
+        for signal in self.full_inventory_outputs:
+            if id(signal) in self._full_inventory_new_ids:
+                m.d.comb += signal.eq(0)
         if self.frontend is None:
             m.d.comb += [self.cf_valid.eq(0), self.cf_instr.eq(0), self.cf_pc.eq(0)]
         if self.backend is None:
@@ -282,6 +342,9 @@ def build_verilog(
         top.closure_missing_count,
         top.closure_complete,
     ]
+    known = {id(signal) for signal in ports}
+    ports.extend(signal for signal in (*top.full_inventory_inputs, *top.full_inventory_outputs)
+                 if id(signal) not in known)
     options = configuration if isinstance(configuration, dict) else {}
     module_name = str(options.get("module", options.get("name", "UHSCTop")))
     return verilog.convert(top, name=module_name, ports=ports, emit_src=False)
