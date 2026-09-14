@@ -30,6 +30,7 @@ __all__ = [
     "RUP",
     "RMM",
     "FType",
+    "FloatPoint",
     "FPUConfig",
     "YunSuanScalarConfig",
     "YunSuanFPU",
@@ -47,6 +48,8 @@ __all__ = [
     "lza_value",
     "sign_extend",
     "zero_extend",
+    "SignExt",
+    "ZeroExt",
     "float_box",
     "int_to_float_bits",
     "fp_convert_bits",
@@ -98,6 +101,21 @@ class FType:
     def max_norm_exp(self) -> int:
         return (1 << self.exp_width) - 2
 
+    @property
+    # Expose the source camel-case exponent name for adapters. / 为适配器暴露源码驼峰式指数名称。
+    def expWidth(self) -> int:
+        return self.exp_width
+
+    @property
+    # Expose the source significant-width name for adapters. / 为适配器暴露源码有效位宽名称。
+    def sigWidth(self) -> int:
+        return self.frac_width
+
+    @property
+    # Expose the source total-length name for adapters. / 为适配器暴露源码总长度名称。
+    def len(self) -> int:
+        return self.width
+
 
 @dataclass(frozen=True)
 class FPUConfig:
@@ -109,6 +127,24 @@ class FPUConfig:
     def __post_init__(self) -> None:
         if self.xlen != 64:
             raise ValueError("Kunminghu V2 scalar FPU requires XLEN=64")
+
+
+class FloatPoint:
+    """Source-compatible floating exponent helpers. / 源码兼容的浮点指数辅助器。"""
+
+    @staticmethod
+    # Return the exponent bias for a format width. / 返回格式位宽对应的指数偏置。
+    def expBias(exp_width: int) -> int:
+        if exp_width < 2:
+            raise ValueError("exponent width must be at least two")
+        return (1 << (exp_width - 1)) - 1
+
+    @staticmethod
+    # Return the largest finite biased exponent. / 返回最大有限偏置指数。
+    def maxNormExp(exp_width: int) -> int:
+        if exp_width < 2:
+            raise ValueError("exponent width must be at least two")
+        return (1 << exp_width) - 2
 
 
 @dataclass(frozen=True)
@@ -141,6 +177,13 @@ class YunSuanFPU:
     """Scalar FPU format constants matching FPU.scala. / 匹配 FPU.scala 的标量 FPU 格式常量。"""
 
     config: FPUConfig = FPUConfig()
+    f16: FType = FType(5, 11)
+    f32: FType = FType(8, 24)
+    f64: FType = FType(11, 53)
+    ftypes: tuple[FType, FType, FType] = (FType(5, 11), FType(8, 24), FType(11, 53))
+    H: int = 0
+    S: int = 1
+    D: int = 2
 
     # Return the half-precision descriptor. / 返回半精度描述。
     @staticmethod
@@ -189,6 +232,22 @@ def zero_extend(value: int, source_width: int, target_width: int) -> int:
     if source_width < 1 or target_width < 1:
         raise ValueError("widths must be positive")
     return value & ((1 << min(source_width, target_width)) - 1)
+
+
+# Provide the source helper spelling for standalone integer adapters. / 为独立整数适配器提供源码辅助器拼写。
+def SignExt(value: int, target_width: int, source_width: int | None = None) -> int:
+    """Source-compatible sign extension with optional source width. / 带可选源位宽的源码兼容符号扩展。"""
+
+    width = source_width if source_width is not None else max(1, int(value).bit_length())
+    return sign_extend(value, width, target_width)
+
+
+# Provide the source helper spelling for standalone zero-extension adapters. / 为独立零扩展适配器提供源码辅助器拼写。
+def ZeroExt(value: int, target_width: int, source_width: int | None = None) -> int:
+    """Source-compatible zero extension with optional source width. / 带可选源位宽的源码兼容零扩展。"""
+
+    width = source_width if source_width is not None else max(1, int(value).bit_length())
+    return zero_extend(value, width, target_width)
 
 
 # Compute the scalar CLZ convention used by Chisel PriorityEncoder. / 计算 Chisel PriorityEncoder 使用的标量 CLZ 约定。
@@ -478,9 +537,10 @@ class YunSuanCLZ(Elaboratable):
     """PriorityEncoder-based leading-zero count. / 基于 PriorityEncoder 的前导零计数器。"""
 
     # Construct CLZ ports. / 构造 CLZ 端口。
-    def __init__(self, width: int = 64) -> None:
+    def __init__(self, width: int = 64, zero: bool = True) -> None:
         if width < 1:
             raise ValueError("CLZ width must be positive")
+        del zero
         self.width = width
         self.input = Signal(width, name="io_in")
         self.output = Signal(max(1, (width - 1).bit_length()), name="io_out")
