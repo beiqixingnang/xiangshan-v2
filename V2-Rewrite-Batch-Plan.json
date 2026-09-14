@@ -207,6 +207,15 @@
       "active_family_batches": [
     "V2-DEPENDENCY-ROCKET-REPLACEMENT-RVC-001"
   ],
+      "failed_family_attempts": [
+        {
+          "batch_id": "V2-DEPENDENCY-ROCKET-REPLACEMENT-RVC-001",
+          "status": "REPAIR_REQUIRED",
+          "reason": "RVC exhaustive differential passes, but ICacheReplacer parent differential diverges at cycle 304; direct and synthesis gates pass.",
+          "evidence": "validation/v2-rocket-replacement-rvc-family-results.json",
+          "accepted": "NOT_ALLOWED"
+        }
+      ],
       "completed_family_batches": [
     {
       "batch_id": "V2-DEPENDENCY-UTILITY-001",
@@ -277,7 +286,7 @@
     "bounded_leaf_pass_count": 12,
     "bounded_parent_pass_count": 4,
     "bounded_dependency_family_pass_count": 2,
-    "validated_batch_count": 18,
+    "validated_batch_count": 19,
     "planned_build_file_count": 78,
     "parent_closures_matched": 0,
     "accepted_count": 0,

@@ -1,0 +1,472 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_ROCKET_REPLACEMENT_RVC_FAMILY",
+  "batch_id": "V2-DEPENDENCY-ROCKET-REPLACEMENT-RVC-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "dependency_commits": {
+    "rocket-chip": "46f1efefa1ff431bffe3262e4830bc50316842f4",
+    "utility": "2f0743f1f3ee1889049841926fa382cd0b32d8e2"
+  },
+  "aggregation": {
+    "disposition": "SATISFIED_BY_CORE_FAMILY",
+    "additional_build_files": 0,
+    "reason": "Both dependency surfaces are already covered by final core Build-Cpu files; a duplicate aggregate would overlap the core closure."
+  },
+  "source_hashes": {
+    "rocket_replacement": {
+      "path": "upstream/rocket-chip/src/main/scala/util/Replacement.scala",
+      "sha256": "811d0fa0fff97d66edc513b4385a5ee821859594282c95f972f5f4b483fac373",
+      "expected_sha256": "811d0fa0fff97d66edc513b4385a5ee821859594282c95f972f5f4b483fac373",
+      "status": "PASS",
+      "bytes": 44895
+    },
+    "rocket_rvc": {
+      "path": "upstream/rocket-chip/src/main/scala/rocket/RVC.scala",
+      "sha256": "76b2a895ee9d29a1d65d5e14be267c6ebbc8c9c4d315acc9d0665e9944503db8",
+      "expected_sha256": "76b2a895ee9d29a1d65d5e14be267c6ebbc8c9c4d315acc9d0665e9944503db8",
+      "status": "PASS",
+      "bytes": 11252
+    },
+    "utility_replacement_support": {
+      "path": "upstream/utility/src/main/scala/utility/Replacement.scala",
+      "sha256": "ec8dcaab0a5bf90b9bb86452f4d4f9290dc29761ee6d0d38f6855937d27ea296",
+      "expected_sha256": "ec8dcaab0a5bf90b9bb86452f4d4f9290dc29761ee6d0d38f6855937d27ea296",
+      "status": "PASS",
+      "bytes": 2507
+    }
+  },
+  "reference_artifact": {
+    "status": "PASS",
+    "returncode": 0,
+    "stdout_tail": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d  /home/lishuo/xs-v2-local/build/rtl/XSTop.sv\n228590583\n",
+    "stderr_tail": "",
+    "stdout_sha256": "7174aedaf3989a8903e8c581d17ba9f62a354e4a52d5c73c78274b1f9a5a2cab",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "bytes": 228590583,
+    "expected_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "expected_bytes": 228590583,
+    "identity_status": "PASS"
+  },
+  "targets": {
+    "replacement": {
+      "files": {
+        "LruStateGen": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.LruStateGen-Hardware.py",
+        "PlruStateGen": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.PlruStateGen-Hardware.py",
+        "ReplacerState": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.ReplacerState-Hardware.py"
+      },
+      "covered_children": [
+        "ReplacementPolicy",
+        "RandomReplacement",
+        "TrueLRU",
+        "PseudoLRU",
+        "ValidPseudoLRU",
+        "SeqRandom",
+        "SeqPLRU",
+        "SetAssocLRU"
+      ],
+      "pure_exhaustive": {
+        "lru_transition_checks": 235880,
+        "lru_victim_checks": 33867,
+        "plru_transition_checks": 2048,
+        "plru_victim_checks": 255
+      },
+      "reference_differential": {
+        "status": "FAIL_RUN",
+        "reference_module": "ICacheReplacer",
+        "vectors": 512,
+        "compile": {
+          "status": "PASS",
+          "returncode": 0,
+          "stdout_tail": "none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -include Vtb__pch.h.slow -c -o Vtb_ReplacerState__Slow.o Vtb_ReplacerState__Slow.cpp\ng++   -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -include Vtb__pch.h.slow -c -o Vtb_ReplacerState__DepSet_h17d64781__0__Slow.o Vtb_ReplacerState__DepSet_h17d64781__0__Slow.cpp\ng++   -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -include Vtb__pch.h.slow -c -o Vtb__Syms.o Vtb__Syms.cpp\necho \"\" > Vtb__ALL.verilator_deplist.tmp\ng++    verilated.o verilated_timing.o verilated_threads.o Vtb__ALL.a    -pthread -lpthread -latomic   -o Vtb\nrm Vtb__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/c/Users/lishuo/AppData/Local/Temp/v2_rocket_family_synth_r60ajis1/replacement_reference/obj_dir'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.988 MB sources in 5 modules, into 3.333 MB in 14 C++ files needing 0.001 MB\n- Verilator: Walltime 40.004 s (elab=0.233, cvt=1.045, bld=38.405); cpu 1.406 s on 1 threads; alloced 61.414 MB\n",
+          "stderr_tail": "                 ^~\n%Warning-WIDTHEXPAND: replacement_tb.sv:19216:43: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3d' generates 6 bits.\n19216 |   assign \\$2814  = io_write_0_bits_setIdx == 6'h3d;\n      |                                           ^~\n%Warning-WIDTHEXPAND: replacement_tb.sv:19218:36: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3d' generates 6 bits.\n19218 |   assign \\$2816  = io_access_1_set == 6'h3d;\n      |                                    ^~\n%Warning-WIDTHEXPAND: replacement_tb.sv:19222:36: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3d' generates 6 bits.\n19222 |   assign \\$2820  = io_access_0_set == 6'h3d;\n      |                                    ^~\n%Warning-WIDTHEXPAND: replacement_tb.sv:19234:36: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3d' generates 6 bits.\n19234 |   assign \\$2832  = io_access_0_set == 6'h3d;\n      |                                    ^~\n%Warning-WIDTHEXPAND: replacement_tb.sv:19247:36: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3d' generates 6 bits.\n19247 |   assign \\$2845  = io_access_0_set == 6'h3d;\n      |                                    ^~\n%Warning-WIDTHEXPAND: replacement_tb.sv:19260:43: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3e' generates 6 bits.\n19260 |   assign \\$2858  = io_write_1_bits_setIdx == 6'h3e;\n      |                                           ^~\n%Warning-WIDTHEXPAND: replacement_tb.sv:19262:43: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3e' generates 6 bits.\n19262 |   assign \\$2860  = io_write_0_bits_setIdx == 6'h3e;\n      |                                           ^~\n%Warning-WIDTHEXPAND: replacement_tb.sv:19264:36: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3e' generates 6 bits.\n19264 |   assign \\$2862  = io_access_1_set == 6'h3e;\n      |                                    ^~\n%Warning-WIDTHEXPAND: replacement_tb.sv:19268:36: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3e' generates 6 bits.\n19268 |   assign \\$2866  = io_access_0_set == 6'h3e;\n      |                                    ^~\n%Warning-WIDTHEXPAND: replacement_tb.sv:19280:36: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3e' generates 6 bits.\n19280 |   assign \\$2878  = io_access_0_set == 6'h3e;\n      |                                    ^~\n%Warning-WIDTHEXPAND: replacement_tb.sv:19293:36: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3e' generates 6 bits.\n19293 |   assign \\$2891  = io_access_0_set == 6'h3e;\n      |                                    ^~\n%Warning-WIDTHEXPAND: replacement_tb.sv:19306:43: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3f' generates 6 bits.\n19306 |   assign \\$2904  = io_write_1_bits_setIdx == 6'h3f;\n      |                                           ^~\n%Warning-WIDTHEXPAND: replacement_tb.sv:19308:43: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3f' generates 6 bits.\n19308 |   assign \\$2906  = io_write_0_bits_setIdx == 6'h3f;\n      |                                           ^~\n%Warning-WIDTHEXPAND: replacement_tb.sv:19310:36: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3f' generates 6 bits.\n19310 |   assign \\$2908  = io_access_1_set == 6'h3f;\n      |                                    ^~\n%Warning-WIDTHEXPAND: replacement_tb.sv:19314:36: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3f' generates 6 bits.\n19314 |   assign \\$2912  = io_access_0_set == 6'h3f;\n      |                                    ^~\n%Warning-WIDTHEXPAND: replacement_tb.sv:19326:36: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3f' generates 6 bits.\n19326 |   assign \\$2924  = io_access_0_set == 6'h3f;\n      |                                    ^~\n%Warning-WIDTHEXPAND: replacement_tb.sv:19339:36: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3f' generates 6 bits.\n19339 |   assign \\$2937  = io_access_0_set == 6'h3f;\n      |                                    ^~\n",
+          "stdout_sha256": "7315f197d8c677decd0ff04aeb636f948f6828db742f57d27377dddaf54dd144",
+          "stderr_sha256": "aec1eeb8c805f74216e3828547c87b611b2ef5fd7478e61dadd1018292eaa1f2"
+        },
+        "run": {
+          "status": "FAIL",
+          "returncode": 6,
+          "stdout_tail": "[614] %Fatal: replacement_tb.sv:22990: Assertion failed in tb: replacement differential cycle 304\n%Error: replacement_tb.sv:22990: Verilog $stop\nAborting...\n",
+          "stderr_tail": "",
+          "stdout_sha256": "4e61fa7a648ac19164fbd7acfa89b28be1e8faeafcc15094511b4ec7e9f6525a",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reference_sha256": "01a8894d0399d429f3d50ed987333494b36072bf7cd569c3ce091a797ffcae6b",
+        "reference_bytes": 1100303,
+        "coverage": [
+          "reset",
+          "victim selection",
+          "touch/update",
+          "all 128 virtual sets",
+          "way values 0..3"
+        ]
+      }
+    },
+    "rvc": {
+      "file": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Ifu.RvcExpander-Hardware.py",
+      "covered_children": [
+        "RVCDecoder",
+        "RVCExpander"
+      ],
+      "pure_exhaustive": {
+        "vectors": 131072,
+        "fs_modes": 2,
+        "encodings_per_mode": 65536
+      },
+      "reference_differential": {
+        "status": "PASS",
+        "reference_module": "RVCExpander",
+        "vectors": 131072,
+        "compile": {
+          "status": "PASS",
+          "returncode": 0,
+          "stdout_tail": "oroutines -c -o verilated_timing.o /usr/share/verilator/include/verilated_timing.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -c -o verilated_threads.o /usr/share/verilator/include/verilated_threads.cpp\npython3 /usr/share/verilator/bin/verilator_includer -DVL_INCLUDE_OPT=include Vtb.cpp Vtb___024root__DepSet_hfe20aad3__0.cpp Vtb___024root__DepSet_ha183790c__0.cpp Vtb__main.cpp Vtb___024root__Slow.cpp Vtb___024root__DepSet_hfe20aad3__0__Slow.cpp Vtb___024root__DepSet_ha183790c__0__Slow.cpp Vtb__Syms.cpp > Vtb__ALL.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -c -o Vtb__ALL.o Vtb__ALL.cpp\necho \"\" > Vtb__ALL.verilator_deplist.tmp\ng++    verilated.o verilated_timing.o verilated_threads.o Vtb__ALL.a    -pthread -lpthread -latomic   -o Vtb\nrm Vtb__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/c/Users/lishuo/AppData/Local/Temp/v2_rocket_family_synth_r60ajis1/rvc_reference/obj_dir'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.064 MB sources in 4 modules, into 0.153 MB in 8 C++ files needing 0.001 MB\n- Verilator: Walltime 5.772 s (elab=0.006, cvt=0.042, bld=5.639); cpu 0.035 s on 1 threads; alloced 11.879 MB\n",
+          "stderr_tail": "5:13] == 1'h1;\n      |                                ^~\n%Warning-WIDTHTRUNC: rvc_tb.sv:1078:19: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 2 bits.\n                                      : ... note: In instance 'tb.dut_inst'\n 1078 |   assign \\$339  = ! io_in[1:0];\n      |                   ^\n%Warning-WIDTHEXPAND: rvc_tb.sv:1086:32: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                       : ... note: In instance 'tb.dut_inst'\n 1086 |   assign \\$347  = io_in[15:13] == 2'h3;\n      |                                ^~\n%Warning-WIDTHEXPAND: rvc_tb.sv:1087:32: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                       : ... note: In instance 'tb.dut_inst'\n 1087 |   assign \\$348  = io_in[15:13] == 2'h2;\n      |                                ^~\n%Warning-WIDTHEXPAND: rvc_tb.sv:1088:32: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                       : ... note: In instance 'tb.dut_inst'\n 1088 |   assign \\$349  = io_in[15:13] == 1'h1;\n      |                                ^~\n%Warning-WIDTHEXPAND: rvc_tb.sv:1098:30: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                       : ... note: In instance 'tb.dut_inst'\n 1098 |   assign \\$359  = io_in[1:0] == 1'h1;\n      |                              ^~\n%Warning-WIDTHEXPAND: rvc_tb.sv:1106:32: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                       : ... note: In instance 'tb.dut_inst'\n 1106 |   assign \\$367  = io_in[15:13] == 2'h3;\n      |                                ^~\n%Warning-WIDTHEXPAND: rvc_tb.sv:1114:32: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                       : ... note: In instance 'tb.dut_inst'\n 1114 |   assign \\$375  = io_in[15:13] == 2'h2;\n      |                                ^~\n%Warning-WIDTHEXPAND: rvc_tb.sv:1115:32: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                       : ... note: In instance 'tb.dut_inst'\n 1115 |   assign \\$376  = io_in[15:13] == 1'h1;\n      |                                ^~\n%Warning-WIDTHTRUNC: rvc_tb.sv:1116:19: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 5 bits.\n                                      : ... note: In instance 'tb.dut_inst'\n 1116 |   assign \\$377  = ! io_in[11:7];\n      |                   ^\n%Warning-WIDTHEXPAND: rvc_tb.sv:1130:32: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                       : ... note: In instance 'tb.dut_inst'\n 1130 |   assign \\$392  = io_in[15:13] == 2'h3;\n      |                                ^~\n%Warning-WIDTHTRUNC: rvc_tb.sv:1131:19: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 5 bits.\n                                      : ... note: In instance 'tb.dut_inst'\n 1131 |   assign \\$393  = ! io_in[11:7];\n      |                   ^\n%Warning-WIDTHEXPAND: rvc_tb.sv:1132:32: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                       : ... note: In instance 'tb.dut_inst'\n 1132 |   assign \\$394  = io_in[15:13] == 2'h2;\n      |                                ^~\n%Warning-WIDTHTRUNC: rvc_tb.sv:1133:19: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 5 bits.\n                                      : ... note: In instance 'tb.dut_inst'\n 1133 |   assign \\$395  = ! io_in[11:7];\n      |                   ^\n%Warning-WIDTHEXPAND: rvc_tb.sv:1134:32: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                       : ... note: In instance 'tb.dut_inst'\n 1134 |   assign \\$396  = io_in[15:13] == 1'h1;\n      |                                ^~\n",
+          "stdout_sha256": "098ec8bb8704e00b54551198b479b9e1e554acebdfd1b74d8e42f7ddbd0bc80d",
+          "stderr_sha256": "849129fed0f8b67c212257ce932911180779abb37d2c996be4a95fa47d2afecc"
+        },
+        "run": {
+          "status": "PASS",
+          "returncode": 0,
+          "stdout_tail": "RVC_EXHAUSTIVE_PASS 65536\n- rvc_tb.sv:1206: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 131ns; walltime 0.015 s; speed 8.340 us/s\n- Verilator: cpu 0.016 s on 1 threads; alloced 152 MB\n",
+          "stderr_tail": "",
+          "stdout_sha256": "65a5598cb199c61d3019bd8083f5e2308a8d878c48317b2b1b58070ef187747c",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reference_sha256": "11d6c98439476ecd2f420c531464b025275e4c4615c33ed1485e4d5107d3355f",
+        "reference_bytes": 19508
+      }
+    }
+  },
+  "contract_audit": {
+    "LruStateGen": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.LruStateGen-Hardware.py",
+      "bytes": 11114,
+      "sha256": "dc5ce5ac757c1beb1731c5975e0dc1fe0fdcf6b98d2511f5e03075976f1969ef",
+      "utf8_lf": true,
+      "bilingual_docstring": true,
+      "zones": [
+        "Module Contract",
+        "Configuration",
+        "Implementation",
+        "Public Adapter",
+        "Direct Entry"
+      ],
+      "functions": [
+        "__init__",
+        "__init__",
+        "__post_init__",
+        "build_verilog",
+        "elaborate",
+        "extract_mru_rows",
+        "get_next_state",
+        "get_replace_way",
+        "lru_next_state",
+        "lru_victim",
+        "main",
+        "next_single",
+        "normalize_configuration",
+        "pack_rows",
+        "pair_offset",
+        "stateWidth",
+        "victim_expr",
+        "wayWidth"
+      ],
+      "build_verilog_signature": [
+        "configuration",
+        "injected_dependencies"
+      ],
+      "forbidden_imports": []
+    },
+    "PlruStateGen": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.PlruStateGen-Hardware.py",
+      "bytes": 13123,
+      "sha256": "9abb1e75c35cd4e846681d7a48427bca6499c2d40348dc067c4742ef844e9c02",
+      "utf8_lf": true,
+      "bilingual_docstring": true,
+      "zones": [
+        "Module Contract",
+        "Configuration",
+        "Implementation",
+        "Public Adapter",
+        "Direct Entry"
+      ],
+      "functions": [
+        "__init__",
+        "__init__",
+        "__post_init__",
+        "build_verilog",
+        "ceil_log2",
+        "ceil_log2",
+        "elaborate",
+        "get_next_state",
+        "get_replace_way",
+        "main",
+        "next_tree",
+        "normalize_configuration",
+        "plru_next_state",
+        "plru_victim",
+        "recurse",
+        "recurse",
+        "split_state",
+        "stateWidth",
+        "state_slice",
+        "touch_slice",
+        "victim_tree",
+        "wayWidth"
+      ],
+      "build_verilog_signature": [
+        "configuration",
+        "injected_dependencies"
+      ],
+      "forbidden_imports": []
+    },
+    "ReplacerState": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.ReplacerState-Hardware.py",
+      "bytes": 22697,
+      "sha256": "4d04ed552e84cd2ff8658877a5f18a0664ac1354bea96b85234df42679111641",
+      "utf8_lf": true,
+      "bilingual_docstring": true,
+      "zones": [
+        "Module Contract",
+        "Configuration",
+        "Implementation",
+        "Public Adapter",
+        "Direct Entry"
+      ],
+      "functions": [
+        "__init__",
+        "__init__",
+        "__init__",
+        "__post_init__",
+        "build_verilog",
+        "ceil_log2",
+        "elaborate",
+        "get_next_state",
+        "get_replace_way",
+        "main",
+        "next_state_for_touch",
+        "normalize_configuration",
+        "pair_offset",
+        "policyName",
+        "policy_next_state",
+        "policy_victim",
+        "pseudo_lru_next",
+        "pseudo_lru_next_tree",
+        "pseudo_lru_victim",
+        "pseudo_lru_victim_tree",
+        "recurse",
+        "recurse",
+        "select_state",
+        "setWidth",
+        "stateWidth",
+        "true_lru_next",
+        "true_lru_next_expr",
+        "true_lru_victim",
+        "true_lru_victim_expr",
+        "victim_for_state",
+        "wayWidth"
+      ],
+      "build_verilog_signature": [
+        "configuration",
+        "injected_dependencies"
+      ],
+      "forbidden_imports": []
+    },
+    "RvcExpander": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Ifu.RvcExpander-Hardware.py",
+      "bytes": 36604,
+      "sha256": "63a13f8b15b5c7107ea46e6e4b93ed22bf831d91b383d0eb2694ebbc6b400827",
+      "utf8_lf": true,
+      "bilingual_docstring": true,
+      "zones": [
+        "Module Contract",
+        "Configuration",
+        "Implementation",
+        "Public Adapter",
+        "Direct Entry"
+      ],
+      "functions": [
+        "__init__",
+        "__post_init__",
+        "b_type_expr",
+        "bit_field",
+        "btype",
+        "build_verilog",
+        "cat_high",
+        "cat_integer",
+        "decode_rvc",
+        "elaborate",
+        "expanded_integer",
+        "field_expr",
+        "fit_width",
+        "i_type_expr",
+        "itype",
+        "j_type_expr",
+        "jtype",
+        "main",
+        "r_type_expr",
+        "rtype",
+        "s_type_expr",
+        "select_expr",
+        "sign_extend",
+        "sign_extend_expr",
+        "stype"
+      ],
+      "build_verilog_signature": [
+        "configuration",
+        "injected_dependencies"
+      ],
+      "forbidden_imports": []
+    }
+  },
+  "generated": {
+    "LruStateGen": {
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "stdout_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.023 MB sources in 2 modules, into 0.020 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.035 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.258 MB\n",
+        "stderr_tail": "%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_rocket_family_synth_r60ajis1/LruStateGen.sv:61:17: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'io_touches_0_bits' generates 2 bits.\n                                                                                                                : ... note: In instance 'LruStateGen'\n   61 |   assign \\$1  = ! io_touches_0_bits;\n      |                 ^\n                     ... For warning description see https://verilator.org/warn/WIDTHTRUNC?v=5.032\n                     ... Use \"/* verilator lint_off WIDTHTRUNC */\" and lint_on around source to disable this message.\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_rocket_family_synth_r60ajis1/LruStateGen.sv:62:35: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                 : ... note: In instance 'LruStateGen'\n   62 |   assign \\$2  = io_touches_0_bits == 1'h1;\n      |                                   ^~\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_rocket_family_synth_r60ajis1/LruStateGen.sv:65:17: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'io_touches_0_bits' generates 2 bits.\n                                                                                                                : ... note: In instance 'LruStateGen'\n   65 |   assign \\$5  = ! io_touches_0_bits;\n      |                 ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_rocket_family_synth_r60ajis1/LruStateGen.sv:69:17: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'io_touches_0_bits' generates 2 bits.\n                                                                                                                : ... note: In instance 'LruStateGen'\n   69 |   assign \\$9  = ! io_touches_0_bits;\n      |                 ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_rocket_family_synth_r60ajis1/LruStateGen.sv:73:36: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                 : ... note: In instance 'LruStateGen'\n   73 |   assign \\$13  = io_touches_0_bits == 1'h1;\n      |                                    ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_rocket_family_synth_r60ajis1/LruStateGen.sv:77:36: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                 : ... note: In instance 'LruStateGen'\n   77 |   assign \\$17  = io_touches_0_bits == 1'h1;\n      |                                    ^~\n",
+        "stdout_sha256": "ce2687f5a82d6d63b5770cefd9d15c4b04483b93057f6d942f50692a197b1fea",
+        "stderr_sha256": "c356a20d2ff477b6a34a81e26aa800bc8ab4a11122c0fd0dbe9403c6ccc9582c"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "stdout_tail": "Removed 0 unused cells and 43 unused wires.\n<suppressed ~1 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module LruStateGen.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\LruStateGen..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\LruStateGen.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\LruStateGen'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\LruStateGen..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module LruStateGen.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Printing statistics.\n\n=== LruStateGen ===\n\n   Number of wires:                 50\n   Number of wire bits:             65\n   Number of public wires:          50\n   Number of public wire bits:      65\n   Number of ports:                  5\n   Number of port bits:             17\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                 35\n     $and                            8\n     $eq                             3\n     $logic_not                      1\n     $mux                           17\n     $not                            6\n\nEnd of script. Logfile hash: 86c1557fd6, CPU: user 0.01s system 0.01s, MEM: 12.19 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 28% 4x opt_expr (0 sec), 27% 2x read_verilog (0 sec), ...\n",
+        "stderr_tail": "",
+        "stdout_sha256": "6f01ca5cb6fcb70dbd80334b8c9f2056306066ccf0dfd9984130e8dce508b542",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "rtl_bytes": 2986,
+      "rtl_sha256": "8846a6415c001c201574a4bae28b6766622762a4a1eed3648364e9fcd10ac2b7"
+    },
+    "PlruStateGen": {
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "stdout_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.018 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.033 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.172 MB\n",
+        "stderr_tail": "",
+        "stdout_sha256": "9295954a234f0672b1e39f998ad5de3da8ee45c9736b91a8c4d79f151b4d75d8",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "stdout_tail": "cuting OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\PlruStateGen..\nRemoved 0 unused cells and 9 unused wires.\n<suppressed ~1 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module PlruStateGen.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\PlruStateGen..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\PlruStateGen.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\PlruStateGen'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\PlruStateGen..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module PlruStateGen.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Printing statistics.\n\n=== PlruStateGen ===\n\n   Number of wires:                 13\n   Number of wire bits:             19\n   Number of public wires:          13\n   Number of public wire bits:      19\n   Number of ports:                  5\n   Number of port bits:             11\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                  6\n     $mux                            4\n     $not                            2\n\nEnd of script. Logfile hash: 65e161cc57, CPU: user 0.01s system 0.01s, MEM: 11.88 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 31% 4x opt_expr (0 sec), 22% 2x read_verilog (0 sec), ...\n",
+        "stderr_tail": "",
+        "stdout_sha256": "69d95335e2803b38509f4cad7d2be28b12da0ce1c235cd3bac4f0455e33d08c4",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "rtl_bytes": 1112,
+      "rtl_sha256": "40b5c5be7f25d19a3a817754733af04f424a2508a9e12e3e4b39b62b5b21b723"
+    },
+    "ReplacerState": {
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "stdout_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.466 MB sources in 2 modules, into 1.704 MB in 6 C++ files needing 0.000 MB\n- Verilator: Walltime 0.424 s (elab=0.137, cvt=0.198, bld=0.000); cpu 0.405 s on 1 threads; alloced 41.164 MB\n",
+        "stderr_tail": "    |                                    ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_rocket_family_synth_r60ajis1/ReplacerState.sv:11088:36: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3d' generates 6 bits.\n11088 |   assign \\$2845  = io_access_0_set == 6'h3d;\n      |                                    ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_rocket_family_synth_r60ajis1/ReplacerState.sv:11101:43: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3e' generates 6 bits.\n11101 |   assign \\$2858  = io_write_1_bits_setIdx == 6'h3e;\n      |                                           ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_rocket_family_synth_r60ajis1/ReplacerState.sv:11103:43: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3e' generates 6 bits.\n11103 |   assign \\$2860  = io_write_0_bits_setIdx == 6'h3e;\n      |                                           ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_rocket_family_synth_r60ajis1/ReplacerState.sv:11105:36: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3e' generates 6 bits.\n11105 |   assign \\$2862  = io_access_1_set == 6'h3e;\n      |                                    ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_rocket_family_synth_r60ajis1/ReplacerState.sv:11109:36: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3e' generates 6 bits.\n11109 |   assign \\$2866  = io_access_0_set == 6'h3e;\n      |                                    ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_rocket_family_synth_r60ajis1/ReplacerState.sv:11121:36: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3e' generates 6 bits.\n11121 |   assign \\$2878  = io_access_0_set == 6'h3e;\n      |                                    ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_rocket_family_synth_r60ajis1/ReplacerState.sv:11134:36: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3e' generates 6 bits.\n11134 |   assign \\$2891  = io_access_0_set == 6'h3e;\n      |                                    ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_rocket_family_synth_r60ajis1/ReplacerState.sv:11147:43: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3f' generates 6 bits.\n11147 |   assign \\$2904  = io_write_1_bits_setIdx == 6'h3f;\n      |                                           ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_rocket_family_synth_r60ajis1/ReplacerState.sv:11149:43: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3f' generates 6 bits.\n11149 |   assign \\$2906  = io_write_0_bits_setIdx == 6'h3f;\n      |                                           ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_rocket_family_synth_r60ajis1/ReplacerState.sv:11151:36: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3f' generates 6 bits.\n11151 |   assign \\$2908  = io_access_1_set == 6'h3f;\n      |                                    ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_rocket_family_synth_r60ajis1/ReplacerState.sv:11155:36: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3f' generates 6 bits.\n11155 |   assign \\$2912  = io_access_0_set == 6'h3f;\n      |                                    ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_rocket_family_synth_r60ajis1/ReplacerState.sv:11167:36: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3f' generates 6 bits.\n11167 |   assign \\$2924  = io_access_0_set == 6'h3f;\n      |                                    ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_rocket_family_synth_r60ajis1/ReplacerState.sv:11180:36: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3f' generates 6 bits.\n11180 |   assign \\$2937  = io_access_0_set == 6'h3f;\n      |                                    ^~\n",
+        "stdout_sha256": "f262bc16e1a117ae5a4e461a90de6d8e23ca71a2d35e8f87ef1801d2b821d279",
+        "stderr_sha256": "ad06e7e19ddfe3405be83810de083ac6c591536efbab966d779135e7f8ba75c4"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "stdout_tail": "unning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\ReplacerState..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~261 debug messages>\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\ReplacerState.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ReplacerState'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\ReplacerState..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ReplacerState.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Printing statistics.\n\n=== ReplacerState ===\n\n   Number of wires:               6556\n   Number of wire bits:           8405\n   Number of public wires:        6044\n   Number of public wire bits:    7893\n   Number of ports:                 22\n   Number of port bits:             79\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:               2827\n     $adff                         128\n     $adffe                        128\n     $and                          512\n     $eq                           889\n     $logic_not                      7\n     $mux                         1025\n     $not                            4\n     $pmux                           6\n     $reduce_bool                  128\n\nEnd of script. Logfile hash: 0a811a4eb9, CPU: user 0.72s system 0.05s, MEM: 80.24 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 37% 2x read_verilog (0 sec), 18% 4x opt_expr (0 sec), ...\n",
+        "stderr_tail": "",
+        "stdout_sha256": "25200e376fe0ea670c6ad43528a94f189cc27a9333dec66853bd0520b2727a7b",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "rtl_bytes": 467600,
+      "rtl_sha256": "e052a2d45ecbef56eab07c370ed8d2a7047f54adb881d0ea9cb94d2d9a7ddc09"
+    },
+    "RvcExpander": {
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "stdout_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.046 MB sources in 2 modules, into 0.125 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.039 s (elab=0.006, cvt=0.008, bld=0.000); cpu 0.022 s on 1 threads; alloced 11.414 MB\n",
+        "stderr_tail": ".. note: In instance 'RVCExpander'\n  764 |   assign \\$359  = io_in[1:0] == 1'h1;\n      |                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_rocket_family_synth_r60ajis1/RVCExpander.sv:772:32: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                                                                                                  : ... note: In instance 'RVCExpander'\n  772 |   assign \\$367  = io_in[15:13] == 2'h3;\n      |                                ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_rocket_family_synth_r60ajis1/RVCExpander.sv:780:32: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                  : ... note: In instance 'RVCExpander'\n  780 |   assign \\$375  = io_in[15:13] == 2'h2;\n      |                                ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_rocket_family_synth_r60ajis1/RVCExpander.sv:781:32: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                  : ... note: In instance 'RVCExpander'\n  781 |   assign \\$376  = io_in[15:13] == 1'h1;\n      |                                ^~\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_rocket_family_synth_r60ajis1/RVCExpander.sv:782:19: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 5 bits.\n                                                                                                                 : ... note: In instance 'RVCExpander'\n  782 |   assign \\$377  = ! io_in[11:7];\n      |                   ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_rocket_family_synth_r60ajis1/RVCExpander.sv:796:32: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                                                                                                  : ... note: In instance 'RVCExpander'\n  796 |   assign \\$392  = io_in[15:13] == 2'h3;\n      |                                ^~\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_rocket_family_synth_r60ajis1/RVCExpander.sv:797:19: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 5 bits.\n                                                                                                                 : ... note: In instance 'RVCExpander'\n  797 |   assign \\$393  = ! io_in[11:7];\n      |                   ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_rocket_family_synth_r60ajis1/RVCExpander.sv:798:32: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                  : ... note: In instance 'RVCExpander'\n  798 |   assign \\$394  = io_in[15:13] == 2'h2;\n      |                                ^~\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_rocket_family_synth_r60ajis1/RVCExpander.sv:799:19: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 5 bits.\n                                                                                                                 : ... note: In instance 'RVCExpander'\n  799 |   assign \\$395  = ! io_in[11:7];\n      |                   ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_rocket_family_synth_r60ajis1/RVCExpander.sv:800:32: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                  : ... note: In instance 'RVCExpander'\n  800 |   assign \\$396  = io_in[15:13] == 1'h1;\n      |                                ^~\n",
+        "stdout_sha256": "2440c76421ca87459982b420e76a91ee9c1ea81c8674151a66c6d313d49501dc",
+        "stderr_sha256": "868dbeabc2375d9de2fc646a78338459ae40e5a8de2d7cff09fce772887c1322"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "stdout_tail": "er.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\RVCExpander..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~14 debug messages>\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\RVCExpander.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\RVCExpander'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\RVCExpander..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RVCExpander.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Printing statistics.\n\n=== RVCExpander ===\n\n   Number of wires:                410\n   Number of wire bits:           2605\n   Number of public wires:         410\n   Number of public wire bits:    2605\n   Number of ports:                  8\n   Number of port bits:             86\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                211\n     $and                            7\n     $eq                            27\n     $logic_not                      3\n     $mux                          154\n     $ne                             1\n     $not                            7\n     $or                             4\n     $reduce_and                     2\n     $reduce_or                      6\n\nEnd of script. Logfile hash: 15fdd6f4bf, CPU: user 0.06s system 0.00s, MEM: 17.48 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 32% 2x read_verilog (0 sec), 17% 4x opt_expr (0 sec), ...\n",
+        "stderr_tail": "",
+        "stdout_sha256": "5907024fa16756be6afb565278b661d1c9646052ec540e00ac5f462e1e4734d1",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "rtl_bytes": 27171,
+      "rtl_sha256": "a22e461b60cb066e04d1c64755304b557d34d31e36779844a98be52090f13930"
+    }
+  },
+  "license": {
+    "inventory": "V2-Dependency-License-Inventory.json",
+    "packages": [
+      "rocket-chip",
+      "utility"
+    ],
+    "rocket_chip": {
+      "commit": "46f1efefa1ff431bffe3262e4830bc50316842f4",
+      "license_files": [
+        "upstream/rocket-chip/LICENSE",
+        "upstream/rocket-chip/LICENSE.Berkeley",
+        "upstream/rocket-chip/LICENSE.SiFive",
+        "upstream/rocket-chip/LICENSE.jtag"
+      ],
+      "observed_licenses": [
+        "Apache-2.0",
+        "BSD-3-Clause (Berkeley)",
+        "SiFive license terms",
+        "chisel-jtag license terms"
+      ],
+      "license_review_required": true
+    },
+    "status": "PENDING_COORDINATOR_REVIEW",
+    "reason": "Rocket-Chip and utility sources have mixed/per-file notices; preserve notices before promotion."
+  },
+  "naming": {
+    "status": "PASS_BOUNDED_FAMILY_LOCAL_NAME",
+    "map": [
+      {
+        "source_name": "XSTop",
+        "local_name": "UHSCTop",
+        "visibility": "project-owned external wrapper",
+        "reason": "External boundary only; locked reference remains XSTop"
+      },
+      {
+        "source_name": "XiangShan / XS / KMHV2",
+        "local_name": "UHSC",
+        "visibility": "project-owned product identity",
+        "reason": "Internal Rocket protocol names remain unchanged"
+      }
+    ]
+  },
+  "commands": [
+    "python validation/v2_rocket_replacement_rvc_family_validator.py",
+    "verilator --binary --timing exhaustive RVCExpander differential",
+    "verilator --binary --timing ICacheReplacer parent differential",
+    "verilator --lint-only and yosys read_verilog/proc/opt/stat for four generated targets"
+  ],
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "FAIL",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "UHSC_LOCALIZED": "PASS_BOUNDED_FAMILY_LOCAL_NAME",
+    "PARENT_CLOSURE_MATCHED": "PENDING",
+    "LICENSE_REVIEW": "PENDING_COORDINATOR_REVIEW",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "VALIDATOR_FAILED",
+  "acceptance_eligible": false,
+  "unclosed": [
+    "Full UHSC top integration and user approval remain outside this family.",
+    "Mixed Rocket-Chip/utility license review remains pending coordinator review.",
+    "Parent differential is bounded to the extracted ICacheReplacer surface; full CPU closure remains pending."
+  ]
+}
