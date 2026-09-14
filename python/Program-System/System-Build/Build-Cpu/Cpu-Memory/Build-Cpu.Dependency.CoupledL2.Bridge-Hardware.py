@@ -984,10 +984,10 @@ class TL2CHICoupledL2(Elaboratable):
         c = self.configuration
         iw = issue_widths(c.issue)
         bridge_cfg = c.bridge_configuration()
-        req_widths = chi_layout_widths(bridge_cfg)["req"]
-        rsp_widths = chi_layout_widths(bridge_cfg)["rsp"]
-        dat_widths = chi_layout_widths(bridge_cfg)["dat"]
-        snp_widths = chi_layout_widths(bridge_cfg)["snp"]
+        req_widths = _chi_layout_raw(bridge_cfg)["req"]
+        rsp_widths = _chi_layout_raw(bridge_cfg)["rsp"]
+        dat_widths = _chi_layout_raw(bridge_cfg)["dat"]
+        snp_widths = _chi_layout_raw(bridge_cfg)["snp"]
         m = Module()
         domain = ClockDomain("tl2chi_parent", async_reset=True)
         domain.clk = self.clock
@@ -1050,12 +1050,12 @@ class TL2CHICoupledL2(Elaboratable):
                 return Cat(value, Const(0, width - len(value)))
             return value[:width]
 
-        # Fill an issue-specific field vector without indexing absent optional fields. /
-        # 填充 issue 专用字段向量，避免索引不存在的可选字段。
+        # Fill an issue-specific field vector without indexing absent optional fields. / 填充 issue 专用字段向量，避免索引不存在的可选字段。
         def fields_with(widths: Sequence[int], values: Mapping[int, Any]) -> Any:
             """Build a packed field vector with safe optional indices. / 安全构造含可选索引的打包字段向量。"""
 
-            return Cat(*[values.get(index, Const(0, width)) for index, width in enumerate(widths)])
+            fields = [values.get(index, Const(0, width)) for index, width in enumerate(widths) if width > 0]
+            return Cat(*fields) if fields else Const(0, 1)
 
         req_flit = fields_with(req_widths, {
             1: extend(self.io_nodeID, req_widths[1]), 2: extend(self.io_nodeID, req_widths[2]), 3: request_txn,
