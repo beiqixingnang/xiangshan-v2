@@ -211,7 +211,7 @@
         {
           "batch_id": "V2-DEPENDENCY-ROCKET-REPLACEMENT-RVC-001",
           "status": "REPAIRED_AND_PASS",
-          "reason": "RVC exhaustive differential passes, but ICacheReplacer parent differential diverges at cycle 304; direct and synthesis gates pass.",
+          "reason": "Initial ICacheReplacer differential diverged at cycle 304; the repaired rerun passed.",
           "evidence": "validation/v2-rocket-replacement-rvc-family-results.json",
           "accepted": "NOT_ALLOWED",
           "repair_commit": "58ecfe5"
@@ -241,13 +241,13 @@
       "evidence": "validation/v2-rocket-replacement-rvc-family-results.json",
       "source_file_count": 2,
       "additional_build_files": 0,
-      "direct_vectors": 237857,
+      "direct_vectors": 403122,
       "reference_vectors": 131584
     },
     {
       "batch_id": "V2-DEPENDENCY-HUANCUN-CACHE-001",
       "status": "PASS_BOUNDED_FAMILY",
-      "commit": "PENDING_COORDINATOR_COMMIT",
+      "commit": "af7cb70",
       "evidence": "validation/v2-huancun-cache-family-results.json",
       "source_file_count": 43,
       "vectors": 3
@@ -255,7 +255,7 @@
     {
       "batch_id": "V2-DEPENDENCY-HUANCUN-MSHR-001",
       "status": "PASS_BOUNDED_FAMILY",
-      "commit": "PENDING_COORDINATOR_COMMIT",
+      "commit": "2aee0d6",
       "evidence": "validation/v2-huancun-mshr-family-results.json",
       "source_file_count": 3,
       "vectors": 3
@@ -263,7 +263,7 @@
     {
       "batch_id": "V2-DEPENDENCY-HUANCUN-BRIDGE-001",
       "status": "PASS_BOUNDED_FAMILY",
-      "commit": "PENDING_COORDINATOR_COMMIT",
+      "commit": "c56e1d8",
       "evidence": "validation/v2-huancun-bridge-family-results.json",
       "source_file_count": 5,
       "vectors": 32
