@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_COUPLEDL2_BRIDGE_COVERAGE",
+  "batch_id": "V2-DEPENDENCY-COUPLEDL2-BRIDGE-001",
+  "source_scala_file_count": 19,
+  "covered_children": [
+    "Bundle",
+    "Message",
+    "Opcode",
+    "LinkLayer",
+    "NetworkLayer",
+    "AsyncBridge",
+    "MMIOBridge",
+    "TXREQ",
+    "TXRSP",
+    "TXDAT",
+    "RXRSP",
+    "RXDAT",
+    "RXSNP",
+    "MainPipe boundary",
+    "MSHR boundary",
+    "MSHRCtl boundary",
+    "Slice boundary",
+    "TL2CHICoupledL2 boundary"
+  ],
+  "equation_vectors": 3424,
+  "direct_checks": 4,
+  "backend": {
+    "verilator": "PASS",
+    "yosys": "PASS"
+  },
+  "reference_selection": "CONDITIONAL_UNREACHED_DEFAULT_CONFIG",
+  "status": "PASS_BOUNDED_FAMILY",
+  "acceptance_eligible": false
+}
