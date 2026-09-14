@@ -411,6 +411,7 @@ class FrontendParent(Elaboratable):
         self.bpu = dependencies.get("bpu") or dependencies.get("BPU") or FrontendBpuBoundary(cfg)
         self.icache_replacer = dependencies.get("icache_replacer") or dependencies.get("ICacheReplacer")
         self.icache_mshr = dependencies.get("icache_mshr") or dependencies.get("ICacheMSHR")
+        self.wr_bypass = dependencies.get("wr_bypass") or dependencies.get("WrBypass")
 
         # Clock/reset and source-level Frontend.scala controls. / 时钟、复位及 Frontend.scala 源级控制。
         self.clock = Signal(name="clock")
@@ -521,6 +522,8 @@ class FrontendParent(Elaboratable):
         module.submodules.instr_uncache = self.instr_uncache
         if self.pipeline is not None:
             module.submodules.pipeline = self.pipeline
+        if self.wr_bypass is not None:
+            module.submodules.wr_bypass = self.wr_bypass
         if self.rvc is not None:
             module.submodules.rvc = self.rvc
         if self.bpu is not None:
