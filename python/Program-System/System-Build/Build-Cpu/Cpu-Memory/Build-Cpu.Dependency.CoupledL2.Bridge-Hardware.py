@@ -12,7 +12,6 @@ conditional family until a CHI-enabled top is selected and compared.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from math import ceil, log2
 from typing import Any, Iterable, Mapping, Sequence
 
 from amaranth import Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
@@ -51,6 +50,7 @@ __all__ = [
     "CHI_ORDER",
     "issue_widths",
     "chi_layout_widths",
+    "chi_layout_raw",
     "pack_fields",
     "unpack_fields",
     "pack_chi_request",
@@ -307,7 +307,7 @@ def chi_layout_widths(configuration: CoupledL2BridgeConfig | None = None) -> dic
 
 
 # Return raw issue layouts while retaining zero-width optional field slots. / 返回保留零宽可选字段槽位的原始 issue 布局。
-def _chi_layout_raw(configuration: CoupledL2BridgeConfig | None = None) -> dict[str, tuple[int, ...]]:
+def chi_layout_raw(configuration: CoupledL2BridgeConfig | None = None) -> dict[str, tuple[int, ...]]:
     """Build raw CHI field positions for hardware slicing. / 为硬件切片构造原始 CHI 字段位置。"""
 
     cfg = configuration or CoupledL2BridgeConfig()
@@ -865,7 +865,7 @@ def parent_port_contract(configuration: CoupledL2ParentConfig | None = None) -> 
     iw = issue_widths(cfg.issue)
     req_width = sum(chi_layout_widths(cfg.bridge_configuration())["req"])
     rsp_width = sum(chi_layout_widths(cfg.bridge_configuration())["rsp"])
-    dat_width = sum(chi_layout_widths(cfg.bridge_configuration())["dat"])
+    dat_width = sum(chi_layout_raw(cfg.bridge_configuration())["dat"])
     snp_width = sum(chi_layout_widths(cfg.bridge_configuration())["snp"])
     entries: list[dict[str, Any]] = []
 
@@ -984,10 +984,10 @@ class TL2CHICoupledL2(Elaboratable):
         c = self.configuration
         iw = issue_widths(c.issue)
         bridge_cfg = c.bridge_configuration()
-        req_widths = _chi_layout_raw(bridge_cfg)["req"]
-        rsp_widths = _chi_layout_raw(bridge_cfg)["rsp"]
-        dat_widths = _chi_layout_raw(bridge_cfg)["dat"]
-        snp_widths = _chi_layout_raw(bridge_cfg)["snp"]
+        req_widths = chi_layout_raw(bridge_cfg)["req"]
+        rsp_widths = chi_layout_raw(bridge_cfg)["rsp"]
+        dat_widths = chi_layout_raw(bridge_cfg)["dat"]
+        snp_widths = chi_layout_raw(bridge_cfg)["snp"]
         m = Module()
         domain = ClockDomain("tl2chi_parent", async_reset=True)
         domain.clk = self.clock
