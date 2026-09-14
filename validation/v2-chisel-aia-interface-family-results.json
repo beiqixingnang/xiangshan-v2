@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_CHISELAIA_INTERFACE_FAMILY",
+  "batch_id": "V2-DEPENDENCY-AIA-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "source_scala_file_count": 6,
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.ChiselAIA.Interface-Hardware.py",
+    "sha256": "da23bd58d8c275d4324a63a05dbde39392eaaaaf8d56411ca98bd54e5850d159"
+  },
+  "direct": {
+    "status": "PASS",
+    "vectors": 4,
+    "observations": [
+      {
+        "pending": 2,
+        "interrupt": 0,
+        "claim": 0
+      }
+    ]
+  },
+  "backend": {
+    "verilator": "PASS",
+    "yosys": "PASS",
+    "rtl_bytes": 7984,
+    "rtl_sha256": "8dd69d338167cf2f6c0911c012e1cec27b60fe435427676302af59d02f3b52d4"
+  },
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED_AIA_EQUATIONS",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "UHSC_LOCALIZED": "PASS_BOUNDED_FAMILY_LOCAL_NAME",
+    "PARENT_CLOSURE_MATCHED": "PENDING_SYSTEM_TOP_AIA_PARENT",
+    "LICENSE_REVIEW": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "VALIDATOR_PASS_BOUNDED",
+  "acceptance_eligible": false,
+  "unclosed": [
+    "Full AIA/SoC parent and locked XSTop differential remain pending.",
+    "License review and user approval remain pending."
+  ]
+}
