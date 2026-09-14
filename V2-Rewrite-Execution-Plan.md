@@ -164,3 +164,16 @@ direct/reference/differential gates, and records `VALIDATOR_PASS` or an explicit
 failure. Only the coordinator pushes the batch and updates the main preview
 plan. Bounded passes remain bounded until parent, license, UHSC wrapper, and
 user-approval gates close.
+
+## Full Kunminghu V2 generation gate
+
+Reduced family and parent passes are intermediate evidence only. Before this
+goal can be completed, the auxiliary repository must emit a complete
+Python/Amaranth-generated Kunminghu V2 top hierarchy from the frozen closure:
+all selected core parents, selected dependency families, and the UHSC top
+adapter must elaborate into one reproducible SystemVerilog artifact. The final
+gate must compare the generated hierarchy/module and port inventory against
+the locked V2 XSTop snapshot, run Verilator/Yosys on the complete artifact,
+and record any intentionally omitted conditional or inlined source with an
+explicit rationale. A reduced parent wrapper, a set of independent family
+files, or a successful syntax-only smoke test does not satisfy this gate.
