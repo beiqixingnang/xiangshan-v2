@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_DIFFTEST_INTERFACE_FAMILY",
+  "batch_id": "V2-DEPENDENCY-DIFFTEST-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "source_scala_file_count": 35,
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Difftest.Interface-Hardware.py",
+    "sha256": "e37a598c8e1c3ff6ac88636ff615fdef2fddc281ef77fe1a2aa70c501f68c922"
+  },
+  "direct": {
+    "status": "PASS",
+    "vectors": 3,
+    "observations": [
+      {
+        "commit_ready": 1,
+        "trace_count": 1
+      },
+      {
+        "commit_ready": 0,
+        "trace_count": 2
+      },
+      {
+        "trace_valid": 1,
+        "trace_pc": 4096
+      }
+    ]
+  },
+  "backend": {
+    "verilator": "PASS",
+    "yosys": "PASS",
+    "rtl_bytes": 8244,
+    "rtl_sha256": "f4649041d42156b8f5ce5cb62192999bea44b162f4ee521a1bd3960580193a6f"
+  },
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED_TRACE_AXI_EQUATIONS",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "UHSC_LOCALIZED": "PASS_BOUNDED_FAMILY_LOCAL_NAME",
+    "PARENT_CLOSURE_MATCHED": "PENDING_XSCORE_DIFFTEST_PARENT",
+    "LICENSE_REVIEW": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "VALIDATOR_PASS_BOUNDED",
+  "acceptance_eligible": false,
+  "unclosed": [
+    "Full Difftest parent and locked XSTop differential remain pending.",
+    "License review and user approval remain pending."
+  ]
+}
