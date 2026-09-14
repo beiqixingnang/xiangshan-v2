@@ -122,7 +122,7 @@
       "validator": "v2-independent-validator",
       "status": "IN_PROGRESS",
       "active_reduced_batches": [
-          "V2-PARENT-FRONTEND-001"
+          "V2-DEPENDENCY-UTILITY-001"
       ],
       "completed_reduced_batches": [
         {
@@ -149,6 +149,14 @@
           "evidence": "validation/v2-backend-parent-results.json",
           "vectors": 256,
           "full_parent_status": "PENDING_FULL_1165_PORT_BACKEND"
+        },
+        {
+          "batch_id": "V2-PARENT-FRONTEND-001",
+          "status": "PASS_BOUNDED_PARENT",
+          "commit": "9e8db8b",
+          "evidence": "validation/v2-frontend-parent-differential-results.json",
+          "vectors": 96,
+          "full_parent_status": "PENDING_FULL_371_PORT_FRONTEND"
         }
       ],
       "failed_validation_attempts": [

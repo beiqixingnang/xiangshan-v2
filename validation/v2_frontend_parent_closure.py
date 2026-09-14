@@ -152,14 +152,14 @@ def reference_snapshot() -> dict[str, Any]:
     if match is None:
         raise RuntimeError("locked Frontend module is absent")
     module_text = match.group(0)
-    header = module_text.split(");", 1)[0] + ");"
+    header = module_text.split("\n);", 1)[0] + "\n);"
     # Chisel emits one direction/width followed by comma-separated continuation
     # names.  Parse those continuations instead of counting only lines that
     # repeat ``input``/``output`` (the locked Frontend has 371 ports).
     ports: list[str] = []
     current_direction = ""
-    for segment in header.replace("\r", "").replace("\n", " ").split(","):
-        segment = segment.split("//", 1)[0].strip()
+    header_no_comments = " ".join(line.split("//", 1)[0] for line in header.splitlines())
+    for segment in header_no_comments.split(","):
         if not segment:
             continue
         declaration = re.search(r"\b(input|output)\b\s*(?:\[[^]]+\])?\s*([A-Za-z_][A-Za-z0-9_]*)", segment)
