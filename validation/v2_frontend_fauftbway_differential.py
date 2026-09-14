@@ -178,7 +178,19 @@ def trace(source: Path, label: str) -> tuple[dict[str, Any], list[dict[str, Any]
         run = run_wsl([wsl_path(binary)])
         full = run_wsl(["bash", "-lc", f"{shlex.quote(wsl_path(binary))} > {shlex.quote(wsl_path(raw_output))}"])
         raw = raw_output.read_text(encoding="utf-8", errors="replace") if full["returncode"] == 0 and raw_output.is_file() else ""
-        rows = [json.loads(line) for line in raw.splitlines() if line.strip().startswith("{")]
+        rows = []
+        malformed_lines = 0
+        for line in raw.splitlines():
+            candidate = line.strip()
+            if not candidate.startswith("{"):
+                continue
+            try:
+                rows.append(json.loads(candidate))
+            except json.JSONDecodeError:
+                # Tool banners or interleaved diagnostics are not trace rows;
+                # retain a count in the per-trace evidence instead of
+                # aborting the entire differential transaction.
+                malformed_lines += 1
         WORK.mkdir(parents=True, exist_ok=True)
         output.write_text("\n".join(json.dumps(row, sort_keys=True, separators=(",", ":")) for row in rows) + "\n", encoding="utf-8", newline="\n")
     return {
@@ -186,7 +198,7 @@ def trace(source: Path, label: str) -> tuple[dict[str, Any], list[dict[str, Any]
         "source_sha256": digest_bytes(source.read_bytes()),
         "build": build,
         "run": run,
-        "trace": {"path": str(output.relative_to(ROOT)).replace("\\", "/") if output.is_file() else None, "vectors": len(rows), "sha256": digest_bytes(output.read_bytes()) if output.is_file() else None},
+        "trace": {"path": str(output.relative_to(ROOT)).replace("\\", "/") if output.is_file() else None, "vectors": len(rows), "sha256": digest_bytes(output.read_bytes()) if output.is_file() else None, "malformed_json_lines": malformed_lines if 'malformed_lines' in locals() else 0},
     }, rows
 
 
