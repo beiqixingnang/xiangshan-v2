@@ -479,7 +479,7 @@
     {
       "family_id": "dependency.huancun.cache",
       "kind": "dependency",
-      "plan_build_file": "Build-Cpu.Dependency.HuanCun.Cache-Hardware.py",
+      "plan_build_file": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.HuanCun.Cache-Hardware.py",
       "source_roots": [
         "huancun/src/main/scala/huancun"
       ],
@@ -531,9 +531,11 @@
       ],
       "reachability": null,
       "boundary": null,
-      "status": "INVENTORY_ONLY",
+      "status": "PASS_BOUNDED_FAMILY",
       "reachability_status": "REACHABLE_SELECTED_OR_CONDITIONAL",
-      "implementation_eligibility": "PLANNED_AFTER_CORE_PARENT"
+      "implementation_eligibility": "VALIDATED_BOUNDED",
+      "evidence": "validation/v2-huancun-cache-family-results.json",
+      "commit": "PENDING_COORDINATOR_COMMIT"
     },
     {
       "family_id": "dependency.huancun.mshr",

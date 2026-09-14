@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_HUANCUN_CACHE_FAMILY",
+  "batch_id": "V2-DEPENDENCY-HUANCUN-CACHE-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "source_scala_file_count": 43,
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.HuanCun.Cache-Hardware.py",
+    "sha256": "a5e2bd922002cbd2dbea78144f8bb31e4598b9aa86177d45578aff0ab313fedb"
+  },
+  "static": {
+    "status": "PASS",
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.HuanCun.Cache-Hardware.py",
+    "sha256": "a5e2bd922002cbd2dbea78144f8bb31e4598b9aa86177d45578aff0ab313fedb",
+    "bytes": 8626,
+    "zones": [
+      740,
+      1125,
+      2163,
+      6570,
+      8107
+    ],
+    "adapter_args": [
+      "configuration",
+      "injected_dependencies"
+    ],
+    "errors": []
+  },
+  "direct": {
+    "status": "PASS",
+    "vectors": 3,
+    "observations": [
+      {
+        "hit": 1,
+        "resp": 2748,
+        "source": 3
+      }
+    ]
+  },
+  "backend": {
+    "verilator": "PASS",
+    "yosys": "PASS",
+    "rtl_bytes": 7744,
+    "rtl_sha256": "360afe970052995323aa724dae04e1f5337582793bb57c72d6881573421bbfc4"
+  },
+  "reference_mode": "LOCKED_XSTOP_HUANCUN_CACHE_BOUNDARY",
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED_CACHE_EQUATIONS",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "UHSC_LOCALIZED": "PASS_BOUNDED_FAMILY_LOCAL_NAME",
+    "LICENSE_REVIEW": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "acceptance_eligible": false
+}
