@@ -40,7 +40,6 @@ class CompareMatrixConfig:
     issue_queue_num: int | None = None
     rename_width: int = 2
     exu_indices: tuple[int, ...] | None = None
-    register_sort: bool = True
 
     # Validate matrix dimensions and static index mapping. / 校验矩阵尺寸与索引映射。
     def __post_init__(self) -> None:
@@ -181,7 +180,8 @@ class CompareMatrix(Elaboratable):
                 row_sum = Const(0, sum_width)
                 for col in range(cfg.n):
                     bit = matrix_expr[row][col]
-                    row_sum = (row_sum + Cat(bit, Const(0, sum_width - 1)))[:sum_width]
+                    row_sum = (row_sum + Mux(bit, Const(1, sum_width),
+                                             Const(0, sum_width)))[:sum_width]
                 next_row.append(row_sum == Const(cfg.n - 1 - rank, sum_width))
             next_sort.append(next_row)
         module.d.sync += [
