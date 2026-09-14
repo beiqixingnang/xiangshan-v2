@@ -5,7 +5,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from amaranth import Elaboratable, Module, Signal
+from amaranth import ClockDomain, Const, Elaboratable, Module, Signal
 
 
 # Module Contract
@@ -69,6 +69,11 @@ class ICacheMSHR(Elaboratable):
         self.is_fetch = bool(is_fetch)
         c = self.cfg
 
+        # Keep explicit clock/reset handles so the generated standalone
+        # module has the same ``clk``/``rst`` boundary as locked Chisel RTL.
+        self.clock = Signal(name="clk")
+        self.reset = Signal(name="rst")
+
         self.fencei = Signal(name="io_fencei")
         self.flush = Signal(name="io_flush")
         self.wfi_req = Signal(name="io_wfi_wfiReq")
@@ -111,6 +116,13 @@ class ICacheMSHR(Elaboratable):
     def elaborate(self, platform) -> Module:
         del platform
         m = Module()
+        # Chisel ``RegInit`` in the locked V2 reference uses an active-high
+        # asynchronous reset.  Declare the same reset topology explicitly so
+        # reset assertion between clock edges cannot diverge from XSTop.
+        domain = ClockDomain("sync", async_reset=True)
+        domain.clk = self.clock
+        domain.rst = self.reset
+        m.domains.sync = domain
         c = self.cfg
 
         valid = Signal(name="valid")
@@ -125,7 +137,11 @@ class ICacheMSHR(Elaboratable):
         # The parent ties fetch flush low, but the standalone V2 class still
         # honors its declared flush input; this preserves the source contract
         # for both fetch and prefetch specializations.
-        effective_flush = self.flush
+        # Fetch entries are wired to ``false.B`` by ICacheMissUnit while
+        # prefetch entries receive the parent flush input.  Keep the same
+        # specialization in the standalone candidate even though the
+        # compatibility boundary exposes ``io_flush`` for both variants.
+        effective_flush = self.flush if not self.is_fetch else Const(0)
 
         # Compare both lookup payloads in the same cycle as the request.
         for index in range(2):
@@ -239,6 +255,8 @@ def build_verilog(configuration, injected_dependencies):
         cfg=cfg,
     )
     ports = [
+        top.clock,
+        top.reset,
         top.fencei,
         top.flush,
         top.wfi_req,
