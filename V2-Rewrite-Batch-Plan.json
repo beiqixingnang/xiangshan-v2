@@ -207,13 +207,21 @@
   "active_family_batches": [
     "V2-DEPENDENCY-ROCKET-REPLACEMENT-RVC-001"
   ],
-  "completed_family_batches": [
+      "completed_family_batches": [
     {
       "batch_id": "V2-DEPENDENCY-UTILITY-001",
       "status": "PASS_BOUNDED_FAMILY",
       "commit": "f34bf40",
       "evidence": "validation/v2-utility-family-results.json",
       "source_file_count": 61,
+        "vectors": 128
+    },
+    {
+      "batch_id": "V2-DEPENDENCY-ROCKET-PROTOCOL-001",
+      "status": "PASS_BOUNDED_FAMILY",
+      "commit": "PENDING_COORDINATOR_COMMIT",
+      "evidence": "validation/v2-rocket-protocol-family-results.json",
+      "source_file_count": 120,
       "vectors": 128
     }
   ]
@@ -268,8 +276,8 @@
     "bounded_validator_pass_count": 16,
     "bounded_leaf_pass_count": 12,
     "bounded_parent_pass_count": 4,
-    "bounded_dependency_family_pass_count": 1,
-    "validated_batch_count": 17,
+    "bounded_dependency_family_pass_count": 2,
+    "validated_batch_count": 18,
     "planned_build_file_count": 78,
     "parent_closures_matched": 0,
     "accepted_count": 0,

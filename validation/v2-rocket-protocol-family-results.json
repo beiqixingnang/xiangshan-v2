@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_ROCKET_PROTOCOL_FAMILY",
+  "batch_id": "V2-DEPENDENCY-ROCKET-PROTOCOL-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Rocket.Protocol-Hardware.py",
+    "sha256": "66f16256fc9862d65e79c930d94164352f03400de138e6be150eb03af14b18af"
+  },
+  "source_scala_file_count": 120,
+  "static": {
+    "status": "PASS",
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Rocket.Protocol-Hardware.py",
+    "sha256": "66f16256fc9862d65e79c930d94164352f03400de138e6be150eb03af14b18af",
+    "bytes": 7762,
+    "zones": [
+      743,
+      1208,
+      1975,
+      5757,
+      7271
+    ],
+    "adapter_args": [
+      "configuration",
+      "injected_dependencies"
+    ],
+    "function_comment_errors": []
+  },
+  "direct": {
+    "status": "PASS",
+    "vectors": 128,
+    "trace_sha256": "1a98e2365f912e4ecfe02f2f250a8b08ba6e23ab1f582dc4f012e7a53899bcc2",
+    "trace_head": [
+      {
+        "index": 0,
+        "source": 0,
+        "data": 42240
+      },
+      {
+        "index": 1,
+        "source": 1,
+        "data": 42241
+      }
+    ],
+    "trace_tail": [
+      {
+        "index": 126,
+        "source": 14,
+        "data": 42366
+      },
+      {
+        "index": 127,
+        "source": 15,
+        "data": 42367
+      }
+    ]
+  },
+  "backend": {
+    "verilator": "PASS",
+    "yosys": "PASS",
+    "rtl_sha256": "b7291e98f4720d9eaab70d9edfdf9af58c208c1c8388e3500bb4aa869ed7598c",
+    "rtl_bytes": 5715
+  },
+  "reference_mode": "LOCKED_XSTOP_PROTOCOL_BOUNDARY",
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED_PROTOCOL_EQUATIONS",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "UHSC_LOCALIZED": "PASS_BOUNDED_FAMILY_LOCAL_NAME",
+    "LICENSE_REVIEW": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "acceptance_eligible": false
+}
