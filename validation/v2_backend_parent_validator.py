@@ -97,17 +97,6 @@ def static_audit(path: Path) -> dict[str, Any]:
         and not comment_errors
         and not forbidden
     )
-    # Chisel emits a direction only at the start of a continuation group, so
-    # counting direction keywords understates the actual port count.  Strip
-    # comments and count each comma-separated identifier in the ANSI header.
-    header_text = re.sub(rb"//[^\n]*", b"", header)
-    body = header_text[header_text.find(b"(") + 1:header_text.rfind(b");")]
-    names: list[str] = []
-    for part in body.split(b","):
-        tokens = re.findall(rb"[A-Za-z_][A-Za-z0-9_$]*", part)
-        if not tokens:
-            continue
-        names.append(tokens[-1].decode("ascii", "replace"))
     return {
         "path": path.relative_to(ROOT).as_posix(),
         "sha256": digest(path),
@@ -447,6 +436,16 @@ def locked_reference_info() -> dict[str, Any]:
     module = match.group(0)
     header_end = module.find(b");")
     header = module if header_end < 0 else module[:header_end + 2]
+    # Chisel emits a direction only at the start of a continuation group, so
+    # counting direction keywords understates the actual port count.  Strip
+    # comments and count each comma-separated identifier in the ANSI header.
+    header_text = re.sub(rb"//[^\n]*", b"", header)
+    body = header_text[header_text.find(b"(") + 1:header_text.rfind(b");")]
+    names: list[str] = []
+    for part in body.split(b","):
+        tokens = re.findall(rb"[A-Za-z_][A-Za-z0-9_$]*", part)
+        if tokens:
+            names.append(tokens[-1].decode("ascii", "replace"))
     return {
         "canonical_path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
         "sha256": digest_bytes(raw), "bytes": len(raw), "source_commit": SOURCE_COMMIT,

@@ -122,9 +122,7 @@
       "validator": "v2-independent-validator",
       "status": "IN_PROGRESS",
       "active_reduced_batches": [
-        "V2-PARENT-VECTOR-001",
-        "V2-PARENT-FRONTEND-001",
-        "V2-PARENT-BACKEND-001"
+          "V2-PARENT-FRONTEND-001"
       ],
       "completed_reduced_batches": [
         {
@@ -143,6 +141,14 @@
           "vectors": 32,
           "direct_checks": 37,
           "validator": "v2_memblock_parent_closure.py"
+        },
+        {
+          "batch_id": "V2-PARENT-BACKEND-001",
+          "status": "PASS_BOUNDED_PARENT",
+          "commit": "14c585a",
+          "evidence": "validation/v2-backend-parent-results.json",
+          "vectors": 256,
+          "full_parent_status": "PENDING_FULL_1165_PORT_BACKEND"
         }
       ],
       "failed_validation_attempts": [
