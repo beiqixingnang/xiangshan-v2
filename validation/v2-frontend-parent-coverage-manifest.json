@@ -18,13 +18,1881 @@
     "module_bytes": 863131,
     "module_sha256": "baa3f8a94a0e15f3c6bcab9444acd2c5d7a712c8fec3dc400527db59798d0fd5",
     "port_count": 371,
+    "ports": [
+      {
+        "name": "clock",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "reset",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "auto_inner_icache_ctrlUnitOpt_in_a_ready",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "auto_inner_icache_ctrlUnitOpt_in_a_valid",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "auto_inner_icache_ctrlUnitOpt_in_a_bits_opcode",
+        "direction": "input",
+        "width": 4
+      },
+      {
+        "name": "auto_inner_icache_ctrlUnitOpt_in_a_bits_size",
+        "direction": "input",
+        "width": 2
+      },
+      {
+        "name": "auto_inner_icache_ctrlUnitOpt_in_a_bits_source",
+        "direction": "input",
+        "width": 5
+      },
+      {
+        "name": "auto_inner_icache_ctrlUnitOpt_in_a_bits_address",
+        "direction": "input",
+        "width": 30
+      },
+      {
+        "name": "auto_inner_icache_ctrlUnitOpt_in_a_bits_mask",
+        "direction": "input",
+        "width": 8
+      },
+      {
+        "name": "auto_inner_icache_ctrlUnitOpt_in_a_bits_data",
+        "direction": "input",
+        "width": 64
+      },
+      {
+        "name": "auto_inner_icache_ctrlUnitOpt_in_d_ready",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "auto_inner_icache_ctrlUnitOpt_in_d_valid",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "auto_inner_icache_ctrlUnitOpt_in_d_bits_opcode",
+        "direction": "output",
+        "width": 4
+      },
+      {
+        "name": "auto_inner_icache_ctrlUnitOpt_in_d_bits_size",
+        "direction": "output",
+        "width": 2
+      },
+      {
+        "name": "auto_inner_icache_ctrlUnitOpt_in_d_bits_source",
+        "direction": "output",
+        "width": 5
+      },
+      {
+        "name": "auto_inner_icache_ctrlUnitOpt_in_d_bits_data",
+        "direction": "output",
+        "width": 64
+      },
+      {
+        "name": "auto_inner_icache_client_out_a_ready",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "auto_inner_icache_client_out_a_valid",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "auto_inner_icache_client_out_a_bits_source",
+        "direction": "output",
+        "width": 4
+      },
+      {
+        "name": "auto_inner_icache_client_out_a_bits_address",
+        "direction": "output",
+        "width": 48
+      },
+      {
+        "name": "auto_inner_icache_client_out_d_valid",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "auto_inner_icache_client_out_d_bits_opcode",
+        "direction": "input",
+        "width": 4
+      },
+      {
+        "name": "auto_inner_icache_client_out_d_bits_size",
+        "direction": "input",
+        "width": 3
+      },
+      {
+        "name": "auto_inner_icache_client_out_d_bits_source",
+        "direction": "input",
+        "width": 4
+      },
+      {
+        "name": "auto_inner_icache_client_out_d_bits_data",
+        "direction": "input",
+        "width": 256
+      },
+      {
+        "name": "auto_inner_icache_client_out_d_bits_corrupt",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "auto_inner_instrUncache_client_out_a_ready",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "auto_inner_instrUncache_client_out_a_valid",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "auto_inner_instrUncache_client_out_a_bits_address",
+        "direction": "output",
+        "width": 48
+      },
+      {
+        "name": "auto_inner_instrUncache_client_out_d_valid",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "auto_inner_instrUncache_client_out_d_bits_source",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "auto_inner_instrUncache_client_out_d_bits_data",
+        "direction": "input",
+        "width": 64
+      },
+      {
+        "name": "auto_inner_instrUncache_client_out_d_bits_corrupt",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_reset_vector",
+        "direction": "input",
+        "width": 48
+      },
+      {
+        "name": "io_fencei",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_ptw_req_0_ready",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_ptw_req_0_valid",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_ptw_req_0_bits_vpn",
+        "direction": "output",
+        "width": 38
+      },
+      {
+        "name": "io_ptw_req_0_bits_s2xlate",
+        "direction": "output",
+        "width": 2
+      },
+      {
+        "name": "io_ptw_resp_ready",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_ptw_resp_valid",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_ptw_resp_bits_s2xlate",
+        "direction": "input",
+        "width": 2
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_entry_tag",
+        "direction": "input",
+        "width": 35
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_entry_asid",
+        "direction": "input",
+        "width": 16
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_entry_vmid",
+        "direction": "input",
+        "width": 14
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_entry_n",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_entry_pbmt",
+        "direction": "input",
+        "width": 2
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_entry_perm_d",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_entry_perm_a",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_entry_perm_g",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_entry_perm_u",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_entry_perm_x",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_entry_perm_w",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_entry_perm_r",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_entry_level",
+        "direction": "input",
+        "width": 2
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_entry_v",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_entry_ppn",
+        "direction": "input",
+        "width": 41
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_addr_low",
+        "direction": "input",
+        "width": 3
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_ppn_low_0",
+        "direction": "input",
+        "width": 3
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_ppn_low_1",
+        "direction": "input",
+        "width": 3
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_ppn_low_2",
+        "direction": "input",
+        "width": 3
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_ppn_low_3",
+        "direction": "input",
+        "width": 3
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_ppn_low_4",
+        "direction": "input",
+        "width": 3
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_ppn_low_5",
+        "direction": "input",
+        "width": 3
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_ppn_low_6",
+        "direction": "input",
+        "width": 3
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_ppn_low_7",
+        "direction": "input",
+        "width": 3
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_valididx_0",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_valididx_1",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_valididx_2",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_valididx_3",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_valididx_4",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_valididx_5",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_valididx_6",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_valididx_7",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_pteidx_0",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_pteidx_1",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_pteidx_2",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_pteidx_3",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_pteidx_4",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_pteidx_5",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_pteidx_6",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_pteidx_7",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_pf",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_ptw_resp_bits_s1_af",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_ptw_resp_bits_s2_entry_tag",
+        "direction": "input",
+        "width": 38
+      },
+      {
+        "name": "io_ptw_resp_bits_s2_entry_vmid",
+        "direction": "input",
+        "width": 14
+      },
+      {
+        "name": "io_ptw_resp_bits_s2_entry_n",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_ptw_resp_bits_s2_entry_pbmt",
+        "direction": "input",
+        "width": 2
+      },
+      {
+        "name": "io_ptw_resp_bits_s2_entry_ppn",
+        "direction": "input",
+        "width": 38
+      },
+      {
+        "name": "io_ptw_resp_bits_s2_entry_perm_d",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_ptw_resp_bits_s2_entry_perm_a",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_ptw_resp_bits_s2_entry_perm_g",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_ptw_resp_bits_s2_entry_perm_u",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_ptw_resp_bits_s2_entry_perm_x",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_ptw_resp_bits_s2_entry_perm_w",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_ptw_resp_bits_s2_entry_perm_r",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_ptw_resp_bits_s2_entry_level",
+        "direction": "input",
+        "width": 2
+      },
+      {
+        "name": "io_ptw_resp_bits_s2_gpf",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_ptw_resp_bits_s2_gaf",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_0_valid",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_0_bits_instr",
+        "direction": "output",
+        "width": 32
+      },
+      {
+        "name": "io_backend_cfVec_0_bits_exceptionVec_1",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_0_bits_exceptionVec_2",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_0_bits_exceptionVec_12",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_0_bits_exceptionVec_20",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_0_bits_backendException",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_0_bits_satpFlushFirstFetchFault",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_0_bits_trigger",
+        "direction": "output",
+        "width": 4
+      },
+      {
+        "name": "io_backend_cfVec_0_bits_pd_isRVC",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_0_bits_pd_brType",
+        "direction": "output",
+        "width": 2
+      },
+      {
+        "name": "io_backend_cfVec_0_bits_pred_taken",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_0_bits_crossPageIPFFix",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_0_bits_ftqPtr_flag",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_0_bits_ftqPtr_value",
+        "direction": "output",
+        "width": 6
+      },
+      {
+        "name": "io_backend_cfVec_0_bits_ftqOffset",
+        "direction": "output",
+        "width": 4
+      },
+      {
+        "name": "io_backend_cfVec_0_bits_isLastInFtqEntry",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_1_valid",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_1_bits_instr",
+        "direction": "output",
+        "width": 32
+      },
+      {
+        "name": "io_backend_cfVec_1_bits_exceptionVec_1",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_1_bits_exceptionVec_2",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_1_bits_exceptionVec_12",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_1_bits_exceptionVec_20",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_1_bits_backendException",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_1_bits_satpFlushFirstFetchFault",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_1_bits_trigger",
+        "direction": "output",
+        "width": 4
+      },
+      {
+        "name": "io_backend_cfVec_1_bits_pd_isRVC",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_1_bits_pd_brType",
+        "direction": "output",
+        "width": 2
+      },
+      {
+        "name": "io_backend_cfVec_1_bits_pred_taken",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_1_bits_crossPageIPFFix",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_1_bits_ftqPtr_flag",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_1_bits_ftqPtr_value",
+        "direction": "output",
+        "width": 6
+      },
+      {
+        "name": "io_backend_cfVec_1_bits_ftqOffset",
+        "direction": "output",
+        "width": 4
+      },
+      {
+        "name": "io_backend_cfVec_1_bits_isLastInFtqEntry",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_2_valid",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_2_bits_instr",
+        "direction": "output",
+        "width": 32
+      },
+      {
+        "name": "io_backend_cfVec_2_bits_exceptionVec_1",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_2_bits_exceptionVec_2",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_2_bits_exceptionVec_12",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_2_bits_exceptionVec_20",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_2_bits_backendException",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_2_bits_satpFlushFirstFetchFault",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_2_bits_trigger",
+        "direction": "output",
+        "width": 4
+      },
+      {
+        "name": "io_backend_cfVec_2_bits_pd_isRVC",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_2_bits_pd_brType",
+        "direction": "output",
+        "width": 2
+      },
+      {
+        "name": "io_backend_cfVec_2_bits_pred_taken",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_2_bits_crossPageIPFFix",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_2_bits_ftqPtr_flag",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_2_bits_ftqPtr_value",
+        "direction": "output",
+        "width": 6
+      },
+      {
+        "name": "io_backend_cfVec_2_bits_ftqOffset",
+        "direction": "output",
+        "width": 4
+      },
+      {
+        "name": "io_backend_cfVec_2_bits_isLastInFtqEntry",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_3_valid",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_3_bits_instr",
+        "direction": "output",
+        "width": 32
+      },
+      {
+        "name": "io_backend_cfVec_3_bits_exceptionVec_1",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_3_bits_exceptionVec_2",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_3_bits_exceptionVec_12",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_3_bits_exceptionVec_20",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_3_bits_backendException",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_3_bits_satpFlushFirstFetchFault",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_3_bits_trigger",
+        "direction": "output",
+        "width": 4
+      },
+      {
+        "name": "io_backend_cfVec_3_bits_pd_isRVC",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_3_bits_pd_brType",
+        "direction": "output",
+        "width": 2
+      },
+      {
+        "name": "io_backend_cfVec_3_bits_pred_taken",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_3_bits_crossPageIPFFix",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_3_bits_ftqPtr_flag",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_3_bits_ftqPtr_value",
+        "direction": "output",
+        "width": 6
+      },
+      {
+        "name": "io_backend_cfVec_3_bits_ftqOffset",
+        "direction": "output",
+        "width": 4
+      },
+      {
+        "name": "io_backend_cfVec_3_bits_isLastInFtqEntry",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_4_valid",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_4_bits_instr",
+        "direction": "output",
+        "width": 32
+      },
+      {
+        "name": "io_backend_cfVec_4_bits_exceptionVec_1",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_4_bits_exceptionVec_2",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_4_bits_exceptionVec_12",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_4_bits_exceptionVec_20",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_4_bits_backendException",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_4_bits_satpFlushFirstFetchFault",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_4_bits_trigger",
+        "direction": "output",
+        "width": 4
+      },
+      {
+        "name": "io_backend_cfVec_4_bits_pd_isRVC",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_4_bits_pd_brType",
+        "direction": "output",
+        "width": 2
+      },
+      {
+        "name": "io_backend_cfVec_4_bits_pred_taken",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_4_bits_crossPageIPFFix",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_4_bits_ftqPtr_flag",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_4_bits_ftqPtr_value",
+        "direction": "output",
+        "width": 6
+      },
+      {
+        "name": "io_backend_cfVec_4_bits_ftqOffset",
+        "direction": "output",
+        "width": 4
+      },
+      {
+        "name": "io_backend_cfVec_4_bits_isLastInFtqEntry",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_5_valid",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_5_bits_instr",
+        "direction": "output",
+        "width": 32
+      },
+      {
+        "name": "io_backend_cfVec_5_bits_exceptionVec_1",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_5_bits_exceptionVec_2",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_5_bits_exceptionVec_12",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_5_bits_exceptionVec_20",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_5_bits_backendException",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_5_bits_satpFlushFirstFetchFault",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_5_bits_trigger",
+        "direction": "output",
+        "width": 4
+      },
+      {
+        "name": "io_backend_cfVec_5_bits_pd_isRVC",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_5_bits_pd_brType",
+        "direction": "output",
+        "width": 2
+      },
+      {
+        "name": "io_backend_cfVec_5_bits_pred_taken",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_5_bits_crossPageIPFFix",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_5_bits_ftqPtr_flag",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_cfVec_5_bits_ftqPtr_value",
+        "direction": "output",
+        "width": 6
+      },
+      {
+        "name": "io_backend_cfVec_5_bits_ftqOffset",
+        "direction": "output",
+        "width": 4
+      },
+      {
+        "name": "io_backend_cfVec_5_bits_isLastInFtqEntry",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_fromFtq_pc_mem_wen",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_fromFtq_pc_mem_waddr",
+        "direction": "output",
+        "width": 6
+      },
+      {
+        "name": "io_backend_fromFtq_pc_mem_wdata_startAddr",
+        "direction": "output",
+        "width": 50
+      },
+      {
+        "name": "io_backend_fromFtq_newest_entry_en",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_fromFtq_newest_entry_target",
+        "direction": "output",
+        "width": 50
+      },
+      {
+        "name": "io_backend_fromFtq_newest_entry_ptr_value",
+        "direction": "output",
+        "width": 6
+      },
+      {
+        "name": "io_backend_fromIfu_gpaddrMem_wen",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_fromIfu_gpaddrMem_waddr",
+        "direction": "output",
+        "width": 6
+      },
+      {
+        "name": "io_backend_fromIfu_gpaddrMem_wdata_gpaddr",
+        "direction": "output",
+        "width": 56
+      },
+      {
+        "name": "io_backend_fromIfu_gpaddrMem_wdata_isForVSnonLeafPTE",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_backend_toFtq_rob_commits_0_valid",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_backend_toFtq_rob_commits_0_bits_commitType",
+        "direction": "input",
+        "width": 3
+      },
+      {
+        "name": "io_backend_toFtq_rob_commits_0_bits_ftqIdx_flag",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_backend_toFtq_rob_commits_0_bits_ftqIdx_value",
+        "direction": "input",
+        "width": 6
+      },
+      {
+        "name": "io_backend_toFtq_rob_commits_0_bits_ftqOffset",
+        "direction": "input",
+        "width": 4
+      },
+      {
+        "name": "io_backend_toFtq_rob_commits_1_valid",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_backend_toFtq_rob_commits_1_bits_commitType",
+        "direction": "input",
+        "width": 3
+      },
+      {
+        "name": "io_backend_toFtq_rob_commits_1_bits_ftqIdx_flag",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_backend_toFtq_rob_commits_1_bits_ftqIdx_value",
+        "direction": "input",
+        "width": 6
+      },
+      {
+        "name": "io_backend_toFtq_rob_commits_1_bits_ftqOffset",
+        "direction": "input",
+        "width": 4
+      },
+      {
+        "name": "io_backend_toFtq_rob_commits_2_valid",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_backend_toFtq_rob_commits_2_bits_commitType",
+        "direction": "input",
+        "width": 3
+      },
+      {
+        "name": "io_backend_toFtq_rob_commits_2_bits_ftqIdx_flag",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_backend_toFtq_rob_commits_2_bits_ftqIdx_value",
+        "direction": "input",
+        "width": 6
+      },
+      {
+        "name": "io_backend_toFtq_rob_commits_2_bits_ftqOffset",
+        "direction": "input",
+        "width": 4
+      },
+      {
+        "name": "io_backend_toFtq_rob_commits_3_valid",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_backend_toFtq_rob_commits_3_bits_commitType",
+        "direction": "input",
+        "width": 3
+      },
+      {
+        "name": "io_backend_toFtq_rob_commits_3_bits_ftqIdx_flag",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_backend_toFtq_rob_commits_3_bits_ftqIdx_value",
+        "direction": "input",
+        "width": 6
+      },
+      {
+        "name": "io_backend_toFtq_rob_commits_3_bits_ftqOffset",
+        "direction": "input",
+        "width": 4
+      },
+      {
+        "name": "io_backend_toFtq_rob_commits_4_valid",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_backend_toFtq_rob_commits_4_bits_commitType",
+        "direction": "input",
+        "width": 3
+      },
+      {
+        "name": "io_backend_toFtq_rob_commits_4_bits_ftqIdx_flag",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_backend_toFtq_rob_commits_4_bits_ftqIdx_value",
+        "direction": "input",
+        "width": 6
+      },
+      {
+        "name": "io_backend_toFtq_rob_commits_4_bits_ftqOffset",
+        "direction": "input",
+        "width": 4
+      },
+      {
+        "name": "io_backend_toFtq_rob_commits_5_valid",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_backend_toFtq_rob_commits_5_bits_commitType",
+        "direction": "input",
+        "width": 3
+      },
+      {
+        "name": "io_backend_toFtq_rob_commits_5_bits_ftqIdx_flag",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_backend_toFtq_rob_commits_5_bits_ftqIdx_value",
+        "direction": "input",
+        "width": 6
+      },
+      {
+        "name": "io_backend_toFtq_rob_commits_5_bits_ftqOffset",
+        "direction": "input",
+        "width": 4
+      },
+      {
+        "name": "io_backend_toFtq_rob_commits_6_valid",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_backend_toFtq_rob_commits_6_bits_commitType",
+        "direction": "input",
+        "width": 3
+      },
+      {
+        "name": "io_backend_toFtq_rob_commits_6_bits_ftqIdx_flag",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_backend_toFtq_rob_commits_6_bits_ftqIdx_value",
+        "direction": "input",
+        "width": 6
+      },
+      {
+        "name": "io_backend_toFtq_rob_commits_6_bits_ftqOffset",
+        "direction": "input",
+        "width": 4
+      },
+      {
+        "name": "io_backend_toFtq_rob_commits_7_valid",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_backend_toFtq_rob_commits_7_bits_commitType",
+        "direction": "input",
+        "width": 3
+      },
+      {
+        "name": "io_backend_toFtq_rob_commits_7_bits_ftqIdx_flag",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_backend_toFtq_rob_commits_7_bits_ftqIdx_value",
+        "direction": "input",
+        "width": 6
+      },
+      {
+        "name": "io_backend_toFtq_rob_commits_7_bits_ftqOffset",
+        "direction": "input",
+        "width": 4
+      },
+      {
+        "name": "io_backend_toFtq_redirect_valid",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_backend_toFtq_redirect_bits_ftqIdx_flag",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_backend_toFtq_redirect_bits_ftqIdx_value",
+        "direction": "input",
+        "width": 6
+      },
+      {
+        "name": "io_backend_toFtq_redirect_bits_ftqOffset",
+        "direction": "input",
+        "width": 4
+      },
+      {
+        "name": "io_backend_toFtq_redirect_bits_level",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_backend_toFtq_redirect_bits_cfiUpdate_pc",
+        "direction": "input",
+        "width": 50
+      },
+      {
+        "name": "io_backend_toFtq_redirect_bits_cfiUpdate_target",
+        "direction": "input",
+        "width": 50
+      },
+      {
+        "name": "io_backend_toFtq_redirect_bits_cfiUpdate_taken",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_backend_toFtq_redirect_bits_cfiUpdate_isMisPred",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_backend_toFtq_redirect_bits_cfiUpdate_backendIGPF",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_backend_toFtq_redirect_bits_cfiUpdate_backendIPF",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_backend_toFtq_redirect_bits_cfiUpdate_backendIAF",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_backend_toFtq_redirect_bits_satpFlush",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_backend_toFtq_ftqIdxAhead_0_valid",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_backend_toFtq_ftqIdxAhead_0_bits_value",
+        "direction": "input",
+        "width": 6
+      },
+      {
+        "name": "io_backend_toFtq_ftqIdxSelOH_bits",
+        "direction": "input",
+        "width": 3
+      },
+      {
+        "name": "io_backend_canAccept",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_backend_wfi_wfiReq",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_backend_wfi_wfiSafe",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_softPrefetch_0_valid",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_softPrefetch_0_bits_vaddr",
+        "direction": "input",
+        "width": 50
+      },
+      {
+        "name": "io_softPrefetch_1_valid",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_softPrefetch_1_bits_vaddr",
+        "direction": "input",
+        "width": 50
+      },
+      {
+        "name": "io_softPrefetch_2_valid",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_softPrefetch_2_bits_vaddr",
+        "direction": "input",
+        "width": 50
+      },
+      {
+        "name": "io_sfence_valid",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_sfence_bits_rs1",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_sfence_bits_rs2",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_sfence_bits_addr",
+        "direction": "input",
+        "width": 50
+      },
+      {
+        "name": "io_sfence_bits_id",
+        "direction": "input",
+        "width": 16
+      },
+      {
+        "name": "io_sfence_bits_flushPipe",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_sfence_bits_hv",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_sfence_bits_hg",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_tlbCsr_satp_mode",
+        "direction": "input",
+        "width": 4
+      },
+      {
+        "name": "io_tlbCsr_satp_asid",
+        "direction": "input",
+        "width": 16
+      },
+      {
+        "name": "io_tlbCsr_satp_changed",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_tlbCsr_vsatp_mode",
+        "direction": "input",
+        "width": 4
+      },
+      {
+        "name": "io_tlbCsr_vsatp_asid",
+        "direction": "input",
+        "width": 16
+      },
+      {
+        "name": "io_tlbCsr_vsatp_changed",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_tlbCsr_hgatp_mode",
+        "direction": "input",
+        "width": 4
+      },
+      {
+        "name": "io_tlbCsr_hgatp_vmid",
+        "direction": "input",
+        "width": 16
+      },
+      {
+        "name": "io_tlbCsr_hgatp_changed",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_tlbCsr_mbmc_BME",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_tlbCsr_mbmc_CMODE",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_tlbCsr_priv_mxr",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_tlbCsr_priv_sum",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_tlbCsr_priv_vmxr",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_tlbCsr_priv_vsum",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_tlbCsr_priv_virt",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_tlbCsr_priv_virt_changed",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_tlbCsr_priv_spvp",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_tlbCsr_priv_imode",
+        "direction": "input",
+        "width": 2
+      },
+      {
+        "name": "io_tlbCsr_priv_dmode",
+        "direction": "input",
+        "width": 2
+      },
+      {
+        "name": "io_tlbCsr_priv_debug",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_tlbCsr_pmm_mseccfg",
+        "direction": "input",
+        "width": 2
+      },
+      {
+        "name": "io_tlbCsr_pmm_menvcfg",
+        "direction": "input",
+        "width": 2
+      },
+      {
+        "name": "io_tlbCsr_pmm_henvcfg",
+        "direction": "input",
+        "width": 2
+      },
+      {
+        "name": "io_tlbCsr_pmm_hstatus",
+        "direction": "input",
+        "width": 2
+      },
+      {
+        "name": "io_tlbCsr_pmm_senvcfg",
+        "direction": "input",
+        "width": 2
+      },
+      {
+        "name": "io_csrCtrl_pf_ctrl_l1I_pf_enable",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_csrCtrl_bp_ctrl_ubtb_enable",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_csrCtrl_bp_ctrl_btb_enable",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_csrCtrl_bp_ctrl_tage_enable",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_csrCtrl_bp_ctrl_sc_enable",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_csrCtrl_bp_ctrl_ras_enable",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_csrCtrl_sbuffer_timeout",
+        "direction": "input",
+        "width": 22
+      },
+      {
+        "name": "io_csrCtrl_ldld_vio_check_enable",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_csrCtrl_cache_error_enable",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_csrCtrl_hd_misalign_st_enable",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_csrCtrl_hd_misalign_ld_enable",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_csrCtrl_distribute_csr_w_valid",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_csrCtrl_distribute_csr_w_bits_addr",
+        "direction": "input",
+        "width": 12
+      },
+      {
+        "name": "io_csrCtrl_distribute_csr_w_bits_data",
+        "direction": "input",
+        "width": 64
+      },
+      {
+        "name": "io_csrCtrl_frontend_trigger_tUpdate_valid",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_csrCtrl_frontend_trigger_tUpdate_bits_addr",
+        "direction": "input",
+        "width": 2
+      },
+      {
+        "name": "io_csrCtrl_frontend_trigger_tUpdate_bits_tdata_matchType",
+        "direction": "input",
+        "width": 2
+      },
+      {
+        "name": "io_csrCtrl_frontend_trigger_tUpdate_bits_tdata_select",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_csrCtrl_frontend_trigger_tUpdate_bits_tdata_action",
+        "direction": "input",
+        "width": 4
+      },
+      {
+        "name": "io_csrCtrl_frontend_trigger_tUpdate_bits_tdata_chain",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_csrCtrl_frontend_trigger_tUpdate_bits_tdata_tdata2",
+        "direction": "input",
+        "width": 64
+      },
+      {
+        "name": "io_csrCtrl_frontend_trigger_tEnableVec_0",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_csrCtrl_frontend_trigger_tEnableVec_1",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_csrCtrl_frontend_trigger_tEnableVec_2",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_csrCtrl_frontend_trigger_tEnableVec_3",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_csrCtrl_frontend_trigger_debugMode",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_csrCtrl_frontend_trigger_triggerCanRaiseBpExp",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_csrCtrl_mem_trigger_tUpdate_valid",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_csrCtrl_mem_trigger_tUpdate_bits_addr",
+        "direction": "input",
+        "width": 2
+      },
+      {
+        "name": "io_csrCtrl_mem_trigger_tUpdate_bits_tdata_matchType",
+        "direction": "input",
+        "width": 2
+      },
+      {
+        "name": "io_csrCtrl_mem_trigger_tUpdate_bits_tdata_select",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_csrCtrl_mem_trigger_tUpdate_bits_tdata_action",
+        "direction": "input",
+        "width": 4
+      },
+      {
+        "name": "io_csrCtrl_mem_trigger_tUpdate_bits_tdata_chain",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_csrCtrl_mem_trigger_tUpdate_bits_tdata_store",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_csrCtrl_mem_trigger_tUpdate_bits_tdata_load",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_csrCtrl_mem_trigger_tUpdate_bits_tdata_tdata2",
+        "direction": "input",
+        "width": 64
+      },
+      {
+        "name": "io_csrCtrl_mem_trigger_tEnableVec_0",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_csrCtrl_mem_trigger_tEnableVec_1",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_csrCtrl_mem_trigger_tEnableVec_2",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_csrCtrl_mem_trigger_tEnableVec_3",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_csrCtrl_mem_trigger_debugMode",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_csrCtrl_mem_trigger_triggerCanRaiseBpExp",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_csrCtrl_fsIsOff",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_error_ecc_error_valid",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_error_ecc_error_bits",
+        "direction": "output",
+        "width": 48
+      },
+      {
+        "name": "io_resetInFrontend",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "io_dft_ram_hold",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_dft_ram_bypass",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_dft_ram_bp_clken",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_dft_ram_aux_clk",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_dft_ram_aux_ckbp",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_dft_ram_mcp_hold",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_dft_cgen",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "io_perf_0_value",
+        "direction": "output",
+        "width": 6
+      },
+      {
+        "name": "io_perf_1_value",
+        "direction": "output",
+        "width": 6
+      },
+      {
+        "name": "io_perf_2_value",
+        "direction": "output",
+        "width": 6
+      },
+      {
+        "name": "io_perf_3_value",
+        "direction": "output",
+        "width": 6
+      },
+      {
+        "name": "io_perf_4_value",
+        "direction": "output",
+        "width": 6
+      },
+      {
+        "name": "io_perf_5_value",
+        "direction": "output",
+        "width": 6
+      },
+      {
+        "name": "io_perf_6_value",
+        "direction": "output",
+        "width": 6
+      },
+      {
+        "name": "io_perf_7_value",
+        "direction": "output",
+        "width": 6
+      }
+    ],
     "port_names_sha256": "cb1e528665c21781a9a18655573883c7b609be0f046ef943c79d1363c5a18654"
   },
   "port_inventory": {
-    "status": "FAIL",
-    "target_port_count": 73,
+    "status": "PASS",
+    "target_port_count": 371,
     "locked_port_count": 371,
-    "count_match": false
+    "count_match": true,
+    "target_port_names_sha256": "bdc07e090006255a2e341314f775af508ae87cdab22b14a4d5f26839f4c02f56",
+    "locked_port_names_sha256": "cb1e528665c21781a9a18655573883c7b609be0f046ef943c79d1363c5a18654",
+    "target_port_set_sha256": "17a908574aada209a607086b48bdd72e5b40d5bb550091f4d3cf5f1ccaa63290",
+    "locked_port_set_sha256": "17a908574aada209a607086b48bdd72e5b40d5bb550091f4d3cf5f1ccaa63290",
+    "name_order_match": false,
+    "name_set_match": true,
+    "direction_width_match": true,
+    "target_input_count": 232,
+    "target_output_count": 139,
+    "full_rtl_sha256": "9fb16705a45383a05b0f0b77356b6dbc98e60d7afb785bdea4c51706a98c8f32",
+    "full_rtl_bytes": 75788
   },
   "children": [
     {
@@ -40,7 +1908,22 @@
     {
       "instance": "Frontend.bpu",
       "source": "upstream/src/main/scala/xiangshan/frontend/BPU.scala",
-      "status": "PENDING_FULL_CHILD"
+      "status": "INJECTABLE_CANONICAL_BOUNDARY"
+    },
+    {
+      "instance": "Frontend.rvc",
+      "source": "upstream/src/main/scala/xiangshan/frontend/PreDecode.scala",
+      "status": "INJECTABLE_CANONICAL_BOUNDARY"
+    },
+    {
+      "instance": "Frontend.icacheReplacer",
+      "source": "upstream/src/main/scala/xiangshan/frontend/icache/ICache.scala",
+      "status": "OPTIONAL_CHILD_BOUNDARY"
+    },
+    {
+      "instance": "Frontend.icacheMshr",
+      "source": "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala",
+      "status": "OPTIONAL_CHILD_BOUNDARY"
     },
     {
       "instance": "Frontend.ifu",

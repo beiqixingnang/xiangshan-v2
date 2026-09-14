@@ -159,21 +159,24 @@ def reference_snapshot() -> dict[str, Any]:
     # Chisel emits one direction/width followed by comma-separated continuation
     # names.  Parse those continuations instead of counting only lines that
     # repeat ``input``/``output`` (the locked Frontend has 371 ports).
-    ports: list[str] = []
+    ports: list[tuple[str, str, int]] = []
     current_direction = ""
+    current_width = 1
     header_no_comments = " ".join(line.split("//", 1)[0] for line in header.splitlines())
     for segment in header_no_comments.split(","):
         if not segment:
             continue
-        declaration = re.search(r"\b(input|output)\b\s*(?:\[[^]]+\])?\s*([A-Za-z_][A-Za-z0-9_]*)", segment)
+        declaration = re.search(r"\b(input|output)\b\s*(?:\[([^]]+)\])?\s*([A-Za-z_][A-Za-z0-9_]*)", segment)
         if declaration:
             current_direction = declaration.group(1)
-            ports.append(declaration.group(2))
+            width_match = re.findall(r"\d+", declaration.group(2) or "")
+            current_width = abs(int(width_match[0]) - int(width_match[1])) + 1 if len(width_match) == 2 else 1
+            ports.append((declaration.group(3), current_direction, current_width))
             continue
         if current_direction:
             continuation = re.search(r"\b([A-Za-z_][A-Za-z0-9_]*)\b", segment)
             if continuation:
-                ports.append(continuation.group(1))
+                ports.append((continuation.group(1), current_direction, current_width))
     return {
         "canonical_path": REFERENCE_CANONICAL,
         "local_access_path": str(REFERENCE),
@@ -186,7 +189,8 @@ def reference_snapshot() -> dict[str, Any]:
         "module_bytes": len(module_text.encode("utf-8")),
         "module_sha256": digest_bytes(module_text.encode("utf-8")),
         "port_count": len(ports),
-        "port_names_sha256": digest_bytes("\n".join(ports).encode("utf-8")),
+        "ports": [{"name": name, "direction": direction, "width": width} for name, direction, width in ports],
+        "port_names_sha256": digest_bytes("\n".join(name for name, _direction, _width in ports).encode("utf-8")),
     }
 
 
@@ -733,13 +737,24 @@ def main() -> int:
     source_hash = digest(SOURCE)
     target_ports, target_declarations = target_port_declarations(rtl_full)
     target_names_hash = digest_bytes("\n".join(target_ports).encode("utf-8"))
-    inventory = {"status": "PASS" if len(target_ports) == reference["port_count"] and
-                 target_names_hash == reference["port_names_sha256"] else "FAIL",
+    target_set_hash = digest_bytes("\n".join(sorted(target_ports)).encode("utf-8"))
+    locked_names = [port["name"] for port in reference["ports"]]
+    locked_set_hash = digest_bytes("\n".join(sorted(locked_names)).encode("utf-8"))
+    locked_declarations = {}
+    for port in reference["ports"]:
+        locked_declarations[port["name"]] = (port["direction"], int(port["width"]))
+    declaration_match = (set(target_ports) == set(locked_names) and
+                         all(target_declarations.get(name) == locked_declarations.get(name) for name in locked_names))
+    inventory = {"status": "PASS" if len(target_ports) == reference["port_count"] and declaration_match else "FAIL",
                  "target_port_count": len(target_ports), "locked_port_count": reference["port_count"],
                  "count_match": len(target_ports) == reference["port_count"],
                  "target_port_names_sha256": target_names_hash,
                  "locked_port_names_sha256": reference["port_names_sha256"],
+                 "target_port_set_sha256": target_set_hash,
+                 "locked_port_set_sha256": locked_set_hash,
                  "name_order_match": target_names_hash == reference["port_names_sha256"],
+                 "name_set_match": target_set_hash == locked_set_hash,
+                 "direction_width_match": declaration_match,
                  "target_input_count": sum(1 for name in target_ports if target_declarations[name][0] == "input"),
                  "target_output_count": sum(1 for name in target_ports if target_declarations[name][0] == "output"),
                  "full_rtl_sha256": digest_bytes(rtl_full.encode("utf-8")),

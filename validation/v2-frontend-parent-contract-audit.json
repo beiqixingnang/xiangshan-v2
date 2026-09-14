@@ -32,17 +32,31 @@
     "ICache": "named injected dependency: request/response, fencei/flush, WFI/error",
     "InstrUncache": "named injected dependency: request/response and WFI",
     "FrontendPipeline": "optional named injected dependency for CF vector/perf",
-    "BPU/FTQ/IFU/IBuffer/ITLB/PMP": "explicitly unimplemented reduced boundary"
+    "RVC": "canonical injected decoder contract (io_in/io_fsIsOff/io_out_bits/io_ill)",
+    "BPU": "canonical injected prediction contract (enable/reset_vector/pred_taken)",
+    "ICacheReplacer/ICacheMSHR": "optional canonical flush/fencei/WFI child contracts",
+    "BPU/FTQ/IFU/IBuffer/ITLB/PMP": "full behavioral closure remains pending"
   },
   "projection": {
     "module": "LockedFrontendProjection",
     "sha256": "0c07d1fff195283470f8e16e43deb548e42c504aca092f7f61700efbdcfccdd0"
   },
   "port_inventory": {
-    "status": "FAIL",
-    "target_port_count": 73,
+    "status": "PASS",
+    "target_port_count": 371,
     "locked_port_count": 371,
-    "count_match": false
+    "count_match": true,
+    "target_port_names_sha256": "bdc07e090006255a2e341314f775af508ae87cdab22b14a4d5f26839f4c02f56",
+    "locked_port_names_sha256": "cb1e528665c21781a9a18655573883c7b609be0f046ef943c79d1363c5a18654",
+    "target_port_set_sha256": "17a908574aada209a607086b48bdd72e5b40d5bb550091f4d3cf5f1ccaa63290",
+    "locked_port_set_sha256": "17a908574aada209a607086b48bdd72e5b40d5bb550091f4d3cf5f1ccaa63290",
+    "name_order_match": false,
+    "name_set_match": true,
+    "direction_width_match": true,
+    "target_input_count": 232,
+    "target_output_count": 139,
+    "full_rtl_sha256": "9fb16705a45383a05b0f0b77356b6dbc98e60d7afb785bdea4c51706a98c8f32",
+    "full_rtl_bytes": 75788
   },
   "gates": {
     "PYTHON_PRESENT": "PASS",
