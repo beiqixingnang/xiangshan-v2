@@ -14,7 +14,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Iterable, Mapping, Sequence
 
-from amaranth import Cat, ClockDomain, Elaboratable, Module, Mux, Signal
+from amaranth import Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
 
 
@@ -230,6 +230,7 @@ class CoupledL2BridgeConfig:
     source_id: int = 0
     target_id: int = 0
     enable_async: bool = False
+    tx_source_ready: bool = False
 
     # Validate V2 widths and credit geometry. / 校验 V2 位宽与信用几何参数。
     def __post_init__(self) -> None:
@@ -611,9 +612,10 @@ class CoupledL2Bridge(Elaboratable):
 
         # Credit pools reset full because the asynchronous CHI link starts with
         # the receiver's advertised pool. / 信用池复位为满池，因为异步 CHI 链路以接收端公布的池容量启动。
-        tx_req_credit = Signal(range(c.credit_num + 1), reset=c.credit_num, name="tx_req_credit")
-        tx_rsp_credit = Signal(range(c.credit_num + 1), reset=c.credit_num, name="tx_rsp_credit")
-        tx_dat_credit = Signal(range(c.credit_num + 1), reset=c.credit_num, name="tx_dat_credit")
+        credit_reset = c.credit_num if c.tx_source_ready else 0
+        tx_req_credit = Signal(range(c.credit_num + 1), reset=credit_reset, name="tx_req_credit")
+        tx_rsp_credit = Signal(range(c.credit_num + 1), reset=credit_reset, name="tx_rsp_credit")
+        tx_dat_credit = Signal(range(c.credit_num + 1), reset=credit_reset, name="tx_dat_credit")
         tx_state_r = Signal(2, name="tx_state_r")
         rx_state_r = Signal(2, name="rx_state_r")
 
@@ -626,6 +628,9 @@ class CoupledL2Bridge(Elaboratable):
 
         tx_run = tx_state_r == LINK_RUN
         rx_run = rx_state_r == LINK_RUN
+        tx_req_credit_ok = Const(1) if c.tx_source_ready else (tx_req_credit != 0)
+        tx_rsp_credit_ok = Const(1) if c.tx_source_ready else (tx_rsp_credit != 0)
+        tx_dat_credit_ok = Const(1) if c.tx_source_ready else (tx_dat_credit != 0)
         m.d.comb += [
             self.tx_linkactivereq.eq(~self.flush),
             self.rx_linkactiveack.eq(self.rx_linkactivereq & ~self.flush),
@@ -636,20 +641,20 @@ class CoupledL2Bridge(Elaboratable):
             self.busy.eq(pending | response_pending | snp_pending),
             self.l2_miss.eq(pending & ~req_mmio & (req_opcode == TL_OPCODE_GET)),
             self.flush_done.eq(self.flush & ~pending & ~response_pending & ~snp_pending),
-            self.tx_req_valid.eq(pending & ~req_sent & ~pcrd_wait & tx_run & (tx_req_credit != 0)),
+            self.tx_req_valid.eq(pending & ~req_sent & ~pcrd_wait & tx_run & tx_req_credit_ok),
             self.tx_req_qos.eq(0), self.tx_req_tgt_id.eq(c.target_id), self.tx_req_src_id.eq(c.source_id),
             self.tx_req_txn_id.eq(req_txn), self.tx_req_size.eq(req_size),
             self.tx_req_address.eq(req_address), self.tx_req_allow_retry.eq(1),
             self.tx_req_order.eq(CHI_ORDER["EndpointOrder"] if c.issue != "B" else CHI_ORDER["RequestOrder"]),
             self.tx_req_pcrd_type.eq(0), self.tx_req_mem_attr.eq(0), self.tx_req_data.eq(req_data),
             self.tx_req_mask.eq(req_mask),
-            self.tx_dat_valid.eq(write_data_sent & ~self.flush & tx_run & (tx_dat_credit != 0)),
+            self.tx_dat_valid.eq(write_data_sent & ~self.flush & tx_run & tx_dat_credit_ok),
             self.tx_dat_tgt_id.eq(c.target_id), self.tx_dat_src_id.eq(c.source_id),
             self.tx_dat_txn_id.eq(req_txn), self.tx_dat_db_id.eq(req_dbid),
             self.tx_dat_data_id.eq(0), self.tx_dat_resp.eq(CHI_COHERENCE_STATES["I"]),
             self.tx_dat_resp_err.eq(CHI_RESP_ERR["OK"]), self.tx_dat_be.eq(req_mask), self.tx_dat_data.eq(req_data),
             self.tx_dat_opcode.eq(CHI_DAT_OPCODES["NonCopyBackWrData"]),
-            self.tx_rsp_valid.eq(snp_pending & ~self.flush & rx_run & (tx_rsp_credit != 0)),
+            self.tx_rsp_valid.eq(snp_pending & ~self.flush & rx_run & tx_rsp_credit_ok),
             self.tx_rsp_tgt_id.eq(snp_src), self.tx_rsp_src_id.eq(c.source_id), self.tx_rsp_txn_id.eq(snp_txn),
             self.tx_rsp_opcode.eq(Mux(
                 (self.rx_snp_opcode == CHI_SNP_OPCODES["SnpSharedFwd"]) |
@@ -666,8 +671,8 @@ class CoupledL2Bridge(Elaboratable):
             self.tl_resp_data.eq(response_data), self.tl_resp_denied.eq(response_denied), self.tl_resp_corrupt.eq(response_corrupt),
             self.pcrd_query_valid.eq(pcrd_wait), self.pcrd_query_type.eq(self.rx_rsp_pcrd_type),
             self.pcrd_query_src_id.eq(self.rx_rsp_src_id),
-            self.tx_req_credit_available.eq(tx_req_credit != 0), self.tx_rsp_credit_available.eq(tx_rsp_credit != 0),
-            self.tx_dat_credit_available.eq(tx_dat_credit != 0),
+            self.tx_req_credit_available.eq(tx_req_credit_ok), self.tx_rsp_credit_available.eq(tx_rsp_credit_ok),
+            self.tx_dat_credit_available.eq(tx_dat_credit_ok),
         ]
 
         # Derive the request opcode in a combinational expression to keep the
@@ -683,31 +688,32 @@ class CoupledL2Bridge(Elaboratable):
             m.d.coupled_l2_bridge += [pending.eq(0), req_sent.eq(0), write_data_sent.eq(0), response_pending.eq(0),
                                        response_opcode.eq(0), response_data.eq(0), response_source.eq(0),
                                        response_denied.eq(0), response_corrupt.eq(0), pcrd_wait.eq(0), snp_pending.eq(0),
-                                       tx_req_credit.eq(c.credit_num), tx_rsp_credit.eq(c.credit_num),
-                                       tx_dat_credit.eq(c.credit_num), tx_state_r.eq(LINK_STOP), rx_state_r.eq(LINK_STOP)]
+                                       tx_req_credit.eq(credit_reset), tx_rsp_credit.eq(credit_reset),
+                                       tx_dat_credit.eq(credit_reset), tx_state_r.eq(LINK_STOP), rx_state_r.eq(LINK_STOP)]
         with m.Else():
             m.d.coupled_l2_bridge += [tx_state_r.eq(link_next(self.tx_linkactivereq, self.tx_linkactiveack)),
                                        rx_state_r.eq(link_next(self.rx_linkactivereq, self.rx_linkactiveack))]
 
             # Return credits and consume one credit per accepted flit. / 每次 flit 握手返还或消耗一个信用。
-            with m.If(self.tx_req_credit_return & ~self.tx_req_valid):
-                with m.If(tx_req_credit < c.credit_num):
-                    m.d.coupled_l2_bridge += tx_req_credit.eq(tx_req_credit + 1)
-            with m.Elif(self.tx_req_valid & self.tx_req_ready):
-                with m.If(tx_req_credit != 0):
-                    m.d.coupled_l2_bridge += tx_req_credit.eq(tx_req_credit - 1)
-            with m.If(self.tx_rsp_credit_return & ~self.tx_rsp_valid):
-                with m.If(tx_rsp_credit < c.credit_num):
-                    m.d.coupled_l2_bridge += tx_rsp_credit.eq(tx_rsp_credit + 1)
-            with m.Elif(self.tx_rsp_valid & self.tx_rsp_ready):
-                with m.If(tx_rsp_credit != 0):
-                    m.d.coupled_l2_bridge += tx_rsp_credit.eq(tx_rsp_credit - 1)
-            with m.If(self.tx_dat_credit_return & ~self.tx_dat_valid):
-                with m.If(tx_dat_credit < c.credit_num):
-                    m.d.coupled_l2_bridge += tx_dat_credit.eq(tx_dat_credit + 1)
-            with m.Elif(self.tx_dat_valid & self.tx_dat_ready):
-                with m.If(tx_dat_credit != 0):
-                    m.d.coupled_l2_bridge += tx_dat_credit.eq(tx_dat_credit - 1)
+            if not c.tx_source_ready:
+                with m.If(self.tx_req_credit_return & ~self.tx_req_valid):
+                    with m.If(tx_req_credit < c.credit_num):
+                        m.d.coupled_l2_bridge += tx_req_credit.eq(tx_req_credit + 1)
+                with m.Elif(self.tx_req_valid & self.tx_req_ready):
+                    with m.If(tx_req_credit != 0):
+                        m.d.coupled_l2_bridge += tx_req_credit.eq(tx_req_credit - 1)
+                with m.If(self.tx_rsp_credit_return & ~self.tx_rsp_valid):
+                    with m.If(tx_rsp_credit < c.credit_num):
+                        m.d.coupled_l2_bridge += tx_rsp_credit.eq(tx_rsp_credit + 1)
+                with m.Elif(self.tx_rsp_valid & self.tx_rsp_ready):
+                    with m.If(tx_rsp_credit != 0):
+                        m.d.coupled_l2_bridge += tx_rsp_credit.eq(tx_rsp_credit - 1)
+                with m.If(self.tx_dat_credit_return & ~self.tx_dat_valid):
+                    with m.If(tx_dat_credit < c.credit_num):
+                        m.d.coupled_l2_bridge += tx_dat_credit.eq(tx_dat_credit + 1)
+                with m.Elif(self.tx_dat_valid & self.tx_dat_ready):
+                    with m.If(tx_dat_credit != 0):
+                        m.d.coupled_l2_bridge += tx_dat_credit.eq(tx_dat_credit - 1)
 
             with m.If(self.tl_req_valid & self.tl_req_ready):
                 m.d.coupled_l2_bridge += [pending.eq(1), req_sent.eq(0), write_data_sent.eq(0), response_pending.eq(0),

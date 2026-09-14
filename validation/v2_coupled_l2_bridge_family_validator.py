@@ -264,7 +264,10 @@ def equation_vectors(module: ModuleType) -> dict[str, Any]:
 def direct_bench(module: ModuleType) -> dict[str, Any]:
     """Run an executable Amaranth transaction bench. / 运行可执行 Amaranth 事务 bench。"""
 
-    top = module.CoupledL2Bridge(module.CoupledL2BridgeConfig())
+    # Exercise the source-ready variant here so the transaction path can be
+    # observed without an external credit bootstrap; the default credit-gated
+    # variant is covered separately by ``credit_mode_bench`` below.
+    top = module.CoupledL2Bridge(module.CoupledL2BridgeConfig(tx_source_ready=True))
     simulator = Simulator(top)
     simulator.add_clock(1e-6, domain="coupled_l2_bridge")
     inputs = (
@@ -391,6 +394,57 @@ def direct_bench(module: ModuleType) -> dict[str, Any]:
             "trace_sha256": hashlib.sha256(trace).hexdigest()}
 
 
+# Verify the default credit-gated link does not emit before an L-Credit return. / 验证默认信用门控链路在收到 L-Credit 前不会发送 flit。
+def credit_mode_bench(module: ModuleType) -> dict[str, Any]:
+    """Exercise Decoupled2LCredit-style bootstrap and consumption. / 测试 Decoupled2LCredit 风格的启动与消耗。"""
+
+    top = module.CoupledL2Bridge(module.CoupledL2BridgeConfig(tx_source_ready=False, credit_num=4))
+    simulator = Simulator(top)
+    simulator.add_clock(1e-6, domain="coupled_l2_bridge")
+    inputs = (
+        "reset", "flush", "tl_req_valid", "tl_req_opcode", "tl_req_size", "tl_req_source", "tl_req_address",
+        "tl_req_data", "tl_req_mask", "tl_req_mmio", "tl_req_corrupt", "tx_req_ready", "tx_rsp_ready",
+        "tx_dat_ready", "rx_rsp_valid", "rx_dat_valid", "rx_snp_valid", "tx_linkactiveack", "rx_linkactivereq",
+        "tx_req_credit_return", "tx_rsp_credit_return", "tx_dat_credit_return", "tl_resp_ready",
+    )
+
+    async def bench(ctx: Any) -> None:
+        for name in inputs:
+            ctx.set(getattr(top, name), 0)
+        for name in ("tx_req_ready", "tx_rsp_ready", "tx_dat_ready", "tl_resp_ready", "tx_linkactiveack", "rx_linkactivereq"):
+            ctx.set(getattr(top, name), 1)
+        ctx.set(top.reset, 1)
+        await ctx.tick("coupled_l2_bridge")
+        ctx.set(top.reset, 0)
+        await ctx.tick("coupled_l2_bridge")
+        ctx.set(top.tx_req_ready, 0)
+        ctx.set(top.tl_req_valid, 1)
+        ctx.set(top.tl_req_opcode, module.TL_OPCODE_GET)
+        ctx.set(top.tl_req_size, 3)
+        ctx.set(top.tl_req_source, 1)
+        ctx.set(top.tl_req_address, 0x300)
+        await ctx.tick("coupled_l2_bridge")
+        ctx.set(top.tl_req_valid, 0)
+        await ctx.delay(1e-9)
+        if int(ctx.get(top.tx_req_credit_available)) or int(ctx.get(top.tx_req_valid)):
+            raise AssertionError("credit-gated TXREQ emitted without a returned credit")
+        ctx.set(top.tx_req_credit_return, 1)
+        await ctx.tick("coupled_l2_bridge")
+        ctx.set(top.tx_req_credit_return, 0)
+        await ctx.delay(1e-9)
+        if not int(ctx.get(top.tx_req_credit_available)) or not int(ctx.get(top.tx_req_valid)):
+            raise AssertionError("returned credit did not release TXREQ")
+        ctx.set(top.tx_req_ready, 1)
+        await ctx.tick("coupled_l2_bridge")
+        await ctx.delay(1e-9)
+        if int(ctx.get(top.tx_req_credit_available)):
+            raise AssertionError("accepted TXREQ did not consume its credit")
+
+    simulator.add_testbench(bench)
+    simulator.run()
+    return {"status": "PASS", "checks": 3, "mode": "credit_gated_default"}
+
+
 # Check the generated aggregate with Verilator and Yosys. / 使用 Verilator 与 Yosys 检查生成的聚合 RTL。
 def backend_gates(module: ModuleType) -> dict[str, Any]:
     """Run deterministic export and HDL lint gates. / 运行确定性导出及 HDL lint 门禁。"""
@@ -407,12 +461,17 @@ def backend_gates(module: ModuleType) -> dict[str, Any]:
         yosys = subprocess.run(["wsl.exe", "-e", "bash", "-lc",
                                 f"yosys -Q -p 'read_verilog -sv {converted}; hierarchy -top UHSCCoupledL2Bridge; proc; opt; check'"],
                                capture_output=True, text=True, encoding="utf-8", errors="replace", check=False)
+    def stable_tail(text: str) -> str:
+        """Remove temporary path names from tool diagnostics. / 移除工具诊断中的临时路径名。"""
+
+        return re.sub(r"(?:/mnt/[^\s:]*/Temp|[A-Za-z]:\\[^\s:]*)/v2_coupled_l2_bridge_[^/\\\s]+", "<temp>", text[-800:])
+
     return {"verilator": "PASS" if verilator.returncode == 0 else "FAIL",
             "yosys": "PASS" if yosys.returncode == 0 else "FAIL", "rtl_bytes": len(rtl.encode()),
             "rtl_sha256": hashlib.sha256(rtl.encode()).hexdigest(),
             "verilator_returncode": verilator.returncode, "yosys_returncode": yosys.returncode,
-            "verilator_tail": (verilator.stderr or verilator.stdout)[-800:],
-            "yosys_tail": (yosys.stderr or yosys.stdout)[-800:]}
+            "verilator_tail": stable_tail(verilator.stderr or verilator.stdout),
+            "yosys_tail": stable_tail(yosys.stderr or yosys.stdout)}
 
 
 # Verify retained coupledL2 license notices without claiming legal acceptance. / 验证保留 coupledL2 许可证声明但不宣称法律接受。
@@ -461,11 +520,13 @@ def main() -> int:
     source_diff = source_contract_differential(module)
     equations = equation_vectors(module)
     direct = direct_bench(module)
+    credit_mode = credit_mode_bench(module)
     backend = backend_gates(module)
     license_result = license_audit()
     reference = reference_probe()
     passed = all((static["status"] == "PASS", inventory["status"] == "PASS", source_diff["status"] == "PASS",
-                  equations["status"] == "PASS", direct["status"] == "PASS", backend["verilator"] == "PASS",
+                  equations["status"] == "PASS", direct["status"] == "PASS", credit_mode["status"] == "PASS",
+                  backend["verilator"] == "PASS",
                   backend["yosys"] == "PASS", reference["status"] == "PASS"))
     gates = {
         "PYTHON_PRESENT": static["status"],
@@ -484,7 +545,7 @@ def main() -> int:
         "source_root": "upstream/coupledL2/src/main/scala/coupledL2/tl2chi",
         "target": {"path": static["path"], "sha256": static["sha256"]},
         "static": static, "source_inventory": inventory, "source_differential": source_diff,
-        "equations": equations, "direct": direct, "backend": backend, "license": license_result,
+        "equations": equations, "direct": direct, "credit_mode": credit_mode, "backend": backend, "license": license_result,
         "reference": reference, "reference_mode": "LOCKED_XSTOP_TL2CHI_CONDITIONAL_BOUNDARY",
         "gates": gates,
         "unclosed": [
@@ -503,7 +564,7 @@ def main() -> int:
                               "MMIOBridge", "TXREQ", "TXRSP", "TXDAT", "RXRSP", "RXDAT", "RXSNP",
                               "MainPipe boundary", "MSHR boundary", "MSHRCtl boundary", "Slice boundary",
                               "TL2CHICoupledL2 boundary"],
-        "equation_vectors": equations["vectors"], "direct_checks": direct["checks"],
+        "equation_vectors": equations["vectors"], "direct_checks": direct["checks"], "credit_mode_checks": credit_mode["checks"],
         "backend": {"verilator": backend["verilator"], "yosys": backend["yosys"]},
         "reference_selection": reference["selection"], "status": "PASS_BOUNDED_FAMILY" if passed else "FAIL",
         "acceptance_eligible": False,
