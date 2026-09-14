@@ -222,6 +222,10 @@ class FrontendParent(Elaboratable):
         self.flush_control_redirect = Signal(name="io_flushControlRedirect")
         self.flush_mem_vio_redirect = Signal(name="io_flushMemVioRedirect")
         self.icache_fencei = Signal(name="io_icache_fencei")
+        self.icache_pf_enable = Signal(name="io_icache_pf_enable")
+        self.ifu_fs_off = Signal(name="io_ifu_fsIsOff")
+        self.bpu_enable = Signal(5, name="io_bpu_enable")
+        self.itlb_sfence = Signal(name="io_itlb_sfence")
         self.icache_flush = Signal(name="io_icache_flush")
         self.icache_wfi_req = Signal(name="io_icache_wfiReq")
         self.instr_uncache_wfi_req = Signal(name="io_instrUncache_wfiReq")
@@ -276,6 +280,10 @@ class FrontendParent(Elaboratable):
             self.connect_child_signal(module, child, name, "reset", self.reset)
             self.connect_child_signal(module, child, name, "flush", self.need_flush)
             self.connect_child_signal(module, child, name, "fencei", self.icache_fencei)
+            self.connect_child_signal(module, child, name, "pf_enable", self.icache_pf_enable)
+            self.connect_child_signal(module, child, name, "fs_is_off", self.ifu_fs_off)
+            self.connect_child_signal(module, child, name, "bp_enable", self.bpu_enable)
+            self.connect_child_signal(module, child, name, "sfence", self.itlb_sfence)
             self.connect_child_signal(module, child, name, "wfi_req",
                                       self.icache_wfi_req if name == "icache" else self.instr_uncache_wfi_req)
             self.connect_child_signal(module, child, name, "req_valid", valid)
@@ -353,6 +361,10 @@ class FrontendParent(Elaboratable):
             self.flush_control_redirect.eq(control_redirect_reg),
             self.flush_mem_vio_redirect.eq(mem_vio_redirect_reg),
             self.icache_fencei.eq(fencei_reg),
+            self.icache_pf_enable.eq(csr_pf_reg_2),
+            self.ifu_fs_off.eq(csr_fs_reg_2),
+            self.bpu_enable.eq(csr_bp_reg_2),
+            self.itlb_sfence.eq(sfence_reg_2),
             self.icache_flush.eq(need_flush_reg),
             self.icache_wfi_req.eq(wfi_req_reg),
             self.instr_uncache_wfi_req.eq(wfi_req_reg),
@@ -429,6 +441,7 @@ def build_verilog(configuration, injected_dependencies):
         top.icache_error_valid, top.icache_error_bits, top.ibuffer_full_in,
         top.bp_right_in, top.bp_wrong_in, top.need_flush,
         top.flush_control_redirect, top.flush_mem_vio_redirect, top.icache_fencei,
+        top.icache_pf_enable, top.ifu_fs_off, top.bpu_enable, top.itlb_sfence,
         top.icache_flush, top.icache_wfi_req, top.instr_uncache_wfi_req,
         top.wfi_safe, top.error_valid, top.error_bits, top.reset_in_frontend,
         top.frontend_info_ibuf_full, top.frontend_info_bp_right,

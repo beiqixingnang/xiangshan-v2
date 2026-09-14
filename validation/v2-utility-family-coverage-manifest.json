@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_UTILITY_COVERAGE",
+  "batch_id": "V2-DEPENDENCY-UTILITY-001",
+  "source_file_count": 61,
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Utility-Hardware.py",
+    "sha256": "5f5836ab08e3adac32339b98dc07d1ce34539ec9dc5b81fc71c17784fa8efe81"
+  },
+  "observed_operations": [
+    "PriorityMuxDefault",
+    "CircularQueuePtr",
+    "ECC parity",
+    "CriticalErrorUtils",
+    "PerfCounterUtils"
+  ],
+  "direct_vectors": 128,
+  "differential_vectors": 64,
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PASS",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "UHSC_LOCALIZED": "PASS_BOUNDED_FAMILY_LOCAL_NAME",
+    "LICENSE_REVIEW": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "acceptance_eligible": false
+}

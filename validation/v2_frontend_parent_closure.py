@@ -253,6 +253,10 @@ def expected_step(state: dict[str, int], vector: dict[str, int], cfg: Any) -> di
         "debug_ctrl": state["debug_ctrl"],
         "debug_memvio": state["debug_memvio"],
         "fencei": state["fencei_reg"],
+        "pf_enable": state["pf2"],
+        "fs_off": state["fs2"],
+        "bp_enable": state["bp2"],
+        "sfence": state["sf2"],
         "icache_flush": state["need_flush"],
         "wfi_req": state["wfi_reg"],
         "wfi_safe": state["safe2"],
@@ -309,6 +313,10 @@ def direct_check(module: Any, vectors: list[dict[str, int]]) -> dict[str, Any]:
                 "debug_ctrl": int(ctx.get(top.flush_control_redirect)),
                 "debug_memvio": int(ctx.get(top.flush_mem_vio_redirect)),
                 "fencei": int(ctx.get(top.icache_fencei)),
+                "pf_enable": int(ctx.get(top.icache_pf_enable)),
+                "fs_off": int(ctx.get(top.ifu_fs_off)),
+                "bp_enable": int(ctx.get(top.bpu_enable)),
+                "sfence": int(ctx.get(top.itlb_sfence)),
                 "icache_flush": int(ctx.get(top.icache_flush)),
                 "wfi_req": int(ctx.get(top.icache_wfi_req)),
                 "wfi_safe": int(ctx.get(top.wfi_safe)),
@@ -376,6 +384,8 @@ module LockedFrontendProjection(
   input io_icache_error_valid, input [47:0] io_icache_error_bits,
   output reg io_needFlush, output reg io_flushControlRedirect,
   output reg io_flushMemVioRedirect, output reg io_icache_fencei,
+  output io_icache_pf_enable, output io_ifu_fsIsOff,
+  output [4:0] io_bpu_enable, output io_itlb_sfence,
   output io_icache_flush, output reg io_icache_wfiReq,
   output reg io_instrUncache_wfiReq, output io_backend_wfi_wfiSafe,
   output io_error_ecc_error_valid, output [47:0] io_error_ecc_error_bits,
@@ -425,6 +435,10 @@ module LockedFrontendProjection(
     end
   end
   assign io_icache_flush = io_needFlush;
+  assign io_icache_pf_enable = pf2;
+  assign io_ifu_fsIsOff = fs2;
+  assign io_bpu_enable = bp2;
+  assign io_itlb_sfence = sf2;
   assign io_backend_wfi_wfiSafe = safe2;
   assign io_error_ecc_error_valid = errv2;
   assign io_error_ecc_error_bits = errb2;
@@ -470,6 +484,7 @@ def shell_for_target(target_rtl: str, vectors: list[dict[str, int]]) -> str:
             lines.append(f"  reg {sv_width(width)}{name}_ref;")
     compare_names = [
         "io_needFlush", "io_flushControlRedirect", "io_flushMemVioRedirect", "io_icache_fencei",
+        "io_icache_pf_enable", "io_ifu_fsIsOff", "io_bpu_enable", "io_itlb_sfence",
         "io_icache_flush", "io_icache_wfiReq", "io_instrUncache_wfiReq", "io_backend_wfi_wfiSafe",
         "io_error_ecc_error_valid", "io_error_ecc_error_bits", "io_resetInFrontend", "io_ptw_req_valid",
         "io_ptw_req_vpn", "io_ptw_resp_ready", "io_fetch_req_ready", "io_uncache_req_ready",
