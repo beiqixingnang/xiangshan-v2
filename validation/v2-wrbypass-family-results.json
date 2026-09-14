@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_WRBYPASS_FAMILY",
+  "batch_id": "V2-DEPENDENCY-WRBYPASS-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "source_scala_files": [
+    "upstream/src/main/scala/xiangshan/frontend/WrBypass.scala",
+    "upstream/src/main/scala/xiangshan/frontend/Bim.scala",
+    "upstream/src/main/scala/xiangshan/frontend/Tage.scala",
+    "upstream/src/main/scala/xiangshan/frontend/SC.scala"
+  ],
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.WrBypass-Hardware.py",
+    "sha256": "358a92457ba753f3719b0caa92a9b3fe6dffb6914e60923e7dd27ad2b9b710f6"
+  },
+  "direct": {
+    "status": "PASS",
+    "vectors": 520,
+    "entries": [
+      [
+        31,
+        2
+      ],
+      [
+        8,
+        4
+      ],
+      [
+        19,
+        7
+      ],
+      [
+        5,
+        7
+      ],
+      [
+        27,
+        2
+      ],
+      [
+        22,
+        6
+      ],
+      [
+        28,
+        0
+      ],
+      [
+        6,
+        0
+      ]
+    ],
+    "plru_state": 45
+  },
+  "backend": {
+    "status": "PASS",
+    "verilator": "PASS",
+    "yosys": "PASS",
+    "rtl_bytes": 959751,
+    "rtl_sha256": "cc4195f9f494411596d15f1a7cfdc9720df9a1420537fb4ac33714330416f7b8"
+  },
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED_PLRU_CAM_EQUATIONS",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "PARENT_CLOSURE_MATCHED": "PENDING_FRONTEND_BPU_PARENT",
+    "LICENSE_REVIEW": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "VALIDATOR_PASS_BOUNDED",
+  "acceptance_eligible": false,
+  "unclosed": [
+    "Full BPU/TAGE/SC parent closure and locked XSTop behavioral differential remain pending.",
+    "License review and user approval remain pending."
+  ]
+}

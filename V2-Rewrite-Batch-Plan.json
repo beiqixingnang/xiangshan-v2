@@ -437,7 +437,7 @@
     "validated_batch_count": 34,
     "count_reconciliation": "12 leaf + 4 reduced parent + 17 dependency family = 33 bounded validators; +1 top generation probe = 34 validated records",
     "planned_build_file_count": 78,
-    "current_build_file_count": 68,
+    "current_build_file_count": 70,
     "exact_parent_envelopes": {
       "Frontend": {"ports": 371, "status": "STRUCTURAL_PASS_BOUNDED"},
       "Backend": {"ports": 1165, "inputs": 478, "outputs": 687, "status": "STRUCTURAL_PASS_BOUNDED"},
@@ -456,6 +456,10 @@
       "Frontend": {"status": "PASS_BOUNDED", "direct_vectors": 32, "equation_vectors": 96, "child_probe": "PASS"},
       "Backend": {"status": "PASS_BOUNDED", "direct_vectors": 256, "equation_vectors": 256, "child_boundary_vectors": 64},
       "MemBlock": {"status": "PASS_BOUNDED", "full_envelope": "PASS", "behavioral_closure": "PENDING"}
+    },
+    "new_family_probes": {
+      "FrontendBridge": {"status": "PASS_BOUNDED", "direct_vectors": 7, "verilator": "PASS", "yosys": "PASS"},
+      "WrBypass": {"status": "PASS_BOUNDED", "direct_checks": 520, "verilator": "PASS", "yosys": "PASS"}
     },
     "locked_module_inventory": {
       "reference_modules": 1976,

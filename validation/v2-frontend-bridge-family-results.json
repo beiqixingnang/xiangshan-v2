@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_FRONTEND_BRIDGE_FAMILY",
+  "batch_id": "V2-DEPENDENCY-FRONTEND-BRIDGE-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "source_scala_files": [
+    "upstream/src/main/scala/xiangshan/cache/mem/FrontendBridge.scala",
+    "upstream/rocket-chip/src/main/scala/diplomacy/Buffer.scala"
+  ],
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.FrontendBridge-Hardware.py",
+    "sha256": "4d8193740a95ee20b41edd20ee0aa66bc2c1d4203165da0ce801da04ae234bc3"
+  },
+  "direct": {
+    "status": "PASS",
+    "vectors": 7,
+    "accepted_sources": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "observed_sources": [
+      1,
+      2,
+      3
+    ]
+  },
+  "backend": {
+    "verilator": "PASS",
+    "yosys": "PASS",
+    "rtl_bytes": 241105,
+    "rtl_sha256": "5a0500a7a5b47bfc0c2b3810b28b385f1b020b754c5ff5f0136355a26f0617cd",
+    "status": "PASS"
+  },
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED_BUFFER_EQUATIONS",
+    "PARENT_CLOSURE_MATCHED": "PENDING_MEMBLOCK_FRONTENDBRIDGE_PARENT",
+    "LICENSE_REVIEW": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "VALIDATOR_PASS_BOUNDED",
+  "acceptance_eligible": false,
+  "unclosed": [
+    "Full MemBlock FrontendBridge child closure and locked XSTop differential remain pending.",
+    "License review and user approval remain pending."
+  ]
+}
