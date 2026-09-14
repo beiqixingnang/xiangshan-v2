@@ -1,0 +1,359 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_COUPLEDL2_PARENT_BOUNDARY",
+  "batch_id": "V2-SEMANTIC-COUPLEDL2-PARENT-BOUNDARY-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "source_scala_file_count": 19,
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.CoupledL2.Bridge-Hardware.py",
+    "sha256": "cfd3ddae63b17d16fcb808bba04e268f8707ac5039fde80b04503e5aaf766ce6"
+  },
+  "static": {
+    "status": "PASS",
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.CoupledL2.Bridge-Hardware.py",
+    "sha256": "cfd3ddae63b17d16fcb808bba04e268f8707ac5039fde80b04503e5aaf766ce6",
+    "bytes": 71676,
+    "zones": [
+      "Module Contract",
+      "Configuration",
+      "Implementation",
+      "Public Adapter",
+      "Direct Entry"
+    ],
+    "adapter_signatures": {
+      "build_verilog": [
+        "configuration",
+        "injected_dependencies"
+      ],
+      "build_parent_verilog": [
+        "configuration",
+        "injected_dependencies"
+      ]
+    },
+    "function_comment_errors": [],
+    "forbidden_imports": []
+  },
+  "source_inventory": {
+    "status": "PASS",
+    "count": 19,
+    "missing": [],
+    "entries": [
+      {
+        "path": "upstream/coupledL2/src/main/scala/coupledL2/tl2chi/Bundle.scala",
+        "sha256": "43fd979e5f85c34e6fa125f55c5bc5f092dc2c183b0ad589eef35ef9086815ba",
+        "bytes": 1763,
+        "lines": 51
+      },
+      {
+        "path": "upstream/coupledL2/src/main/scala/coupledL2/tl2chi/chi/AsyncBridge.scala",
+        "sha256": "7ba938a294e3bfa0f01681d128157993117d46a00626a4a768ff19b3bcfc7b9f",
+        "bytes": 21475,
+        "lines": 475
+      },
+      {
+        "path": "upstream/coupledL2/src/main/scala/coupledL2/tl2chi/chi/CHILogger.scala",
+        "sha256": "c5d233eeb886efcc837dfffe82cddc266a43673e6ced071b76559529ac48d9fb",
+        "bytes": 8434,
+        "lines": 196
+      },
+      {
+        "path": "upstream/coupledL2/src/main/scala/coupledL2/tl2chi/chi/LinkLayer.scala",
+        "sha256": "f2af13c98140cfb0b660ec77a96e214ff67306f400a4e4ce8d942cea1172b09e",
+        "bytes": 14952,
+        "lines": 439
+      },
+      {
+        "path": "upstream/coupledL2/src/main/scala/coupledL2/tl2chi/chi/Message.scala",
+        "sha256": "5689bd5b7fdc01f959daa80cd7199e58ae0ec352175588f0de01e2f525167d53",
+        "bytes": 21548,
+        "lines": 583
+      },
+      {
+        "path": "upstream/coupledL2/src/main/scala/coupledL2/tl2chi/chi/NetworkLayer.scala",
+        "sha256": "1eaf33e3f38aef64344af4d2fe82d759701d0f5f7532e1a54ddfcb621a16c313",
+        "bytes": 1570,
+        "lines": 43
+      },
+      {
+        "path": "upstream/coupledL2/src/main/scala/coupledL2/tl2chi/chi/Opcode.scala",
+        "sha256": "ed0d7b9e475aaf3ebd432af794682a9f98c4834e59c22a87fb32bf8b291366fe",
+        "bytes": 10233,
+        "lines": 259
+      },
+      {
+        "path": "upstream/coupledL2/src/main/scala/coupledL2/tl2chi/MainPipe.scala",
+        "sha256": "0fa8d2ace63de9459f7c33355dbb73663ebc9f7816535cf4688382143933af4e",
+        "bytes": 55278,
+        "lines": 1170
+      },
+      {
+        "path": "upstream/coupledL2/src/main/scala/coupledL2/tl2chi/MMIOBridge.scala",
+        "sha256": "781b740a0fae9299be04572f66e6ca10fad99bb8c53f8ccc3445e4476b346186",
+        "bytes": 15399,
+        "lines": 410
+      },
+      {
+        "path": "upstream/coupledL2/src/main/scala/coupledL2/tl2chi/MSHR.scala",
+        "sha256": "5329499b91329acc730d96af96b5e9bd9540fedd4541e9f236199a1e3778670d",
+        "bytes": 63144,
+        "lines": 1481
+      },
+      {
+        "path": "upstream/coupledL2/src/main/scala/coupledL2/tl2chi/MSHRCtl.scala",
+        "sha256": "5899946a12db721dd66cd38d279d4111ab410bc049cff203673924c6bc61dee6",
+        "bytes": 11198,
+        "lines": 270
+      },
+      {
+        "path": "upstream/coupledL2/src/main/scala/coupledL2/tl2chi/RXDAT.scala",
+        "sha256": "7ddbe140b7706bada21f0df8cf7a7643f22d06c08bb15d3b1b84736d1f849f74",
+        "bytes": 3610,
+        "lines": 88
+      },
+      {
+        "path": "upstream/coupledL2/src/main/scala/coupledL2/tl2chi/RXRSP.scala",
+        "sha256": "4b359f3f1652447a1b4e68dbf874b505bda44bc4321e8fc07c4cc229673cd296",
+        "bytes": 1992,
+        "lines": 56
+      },
+      {
+        "path": "upstream/coupledL2/src/main/scala/coupledL2/tl2chi/RXSNP.scala",
+        "sha256": "3c362ec10d5cd9740c4207503bbaa14f746807160e23dab7cbb00b9067d86c2f",
+        "bytes": 8430,
+        "lines": 185
+      },
+      {
+        "path": "upstream/coupledL2/src/main/scala/coupledL2/tl2chi/Slice.scala",
+        "sha256": "3c9dc96bfd43b6503bb35722fffd8f03af459b96753fb8ac8ada581654d34df6",
+        "bytes": 9491,
+        "lines": 232
+      },
+      {
+        "path": "upstream/coupledL2/src/main/scala/coupledL2/tl2chi/TL2CHICoupledL2.scala",
+        "sha256": "452c4710f840b764a8eeac3cd60ae514244c65b15459fbba5d14e65850f31f6c",
+        "bytes": 12083,
+        "lines": 292
+      },
+      {
+        "path": "upstream/coupledL2/src/main/scala/coupledL2/tl2chi/TXDAT.scala",
+        "sha256": "899e584b4c4b1626b14bf1b1bc2c7db35609bf5b93e9dd1b744f06f2e0783986",
+        "bytes": 7374,
+        "lines": 185
+      },
+      {
+        "path": "upstream/coupledL2/src/main/scala/coupledL2/tl2chi/TXREQ.scala",
+        "sha256": "018c59b7f59beec68dd9c29eb6af56c26cc9213d33c44752fd71475e9ced3573",
+        "bytes": 3406,
+        "lines": 82
+      },
+      {
+        "path": "upstream/coupledL2/src/main/scala/coupledL2/tl2chi/TXRSP.scala",
+        "sha256": "124a725d7f301415b1e9a943971a43b32f708aed9b51b799f5d8e5cb492e9be8",
+        "bytes": 3965,
+        "lines": 96
+      }
+    ]
+  },
+  "contract_differential": {
+    "status": "PASS",
+    "target_count": 137,
+    "reference_count": 137,
+    "mismatches": [],
+    "reference_sha256": "3c1f8da19e8cc4e81dd49ae874378acb36d23c7400035ab0ba50dbed2383dcd0",
+    "reference_bytes": 223826,
+    "chi_widths": {
+      "req": 162,
+      "rsp": 73,
+      "dat": 422,
+      "snp": 115
+    }
+  },
+  "direct": {
+    "status": "PASS",
+    "checks": 4,
+    "trace": [
+      {
+        "phase": "reset",
+        "cycle": 0,
+        "auto_in_a_ready": 1,
+        "auto_in_d_valid": 0,
+        "io_chi_txsactive": 0,
+        "io_chi_syscoreq": 0,
+        "io_chi_tx_linkactivereq": 0,
+        "io_chi_rx_linkactiveack": 0,
+        "io_chi_tx_req_flitpend": 0,
+        "io_chi_tx_req_flitv": 0,
+        "io_chi_tx_rsp_flitv": 0,
+        "io_l2Miss": 0
+      },
+      {
+        "phase": "reset",
+        "cycle": 1,
+        "auto_in_a_ready": 1,
+        "auto_in_d_valid": 0,
+        "io_chi_txsactive": 0,
+        "io_chi_syscoreq": 0,
+        "io_chi_tx_linkactivereq": 0,
+        "io_chi_rx_linkactiveack": 0,
+        "io_chi_tx_req_flitpend": 0,
+        "io_chi_tx_req_flitv": 0,
+        "io_chi_tx_rsp_flitv": 0,
+        "io_l2Miss": 0
+      },
+      {
+        "phase": "reset",
+        "cycle": 2,
+        "auto_in_a_ready": 1,
+        "auto_in_d_valid": 0,
+        "io_chi_txsactive": 0,
+        "io_chi_syscoreq": 0,
+        "io_chi_tx_linkactivereq": 0,
+        "io_chi_rx_linkactiveack": 0,
+        "io_chi_tx_req_flitpend": 0,
+        "io_chi_tx_req_flitv": 0,
+        "io_chi_tx_rsp_flitv": 0,
+        "io_l2Miss": 0
+      },
+      {
+        "phase": "reset",
+        "cycle": 3,
+        "auto_in_a_ready": 1,
+        "auto_in_d_valid": 0,
+        "io_chi_txsactive": 0,
+        "io_chi_syscoreq": 0,
+        "io_chi_tx_linkactivereq": 0,
+        "io_chi_rx_linkactiveack": 0,
+        "io_chi_tx_req_flitpend": 0,
+        "io_chi_tx_req_flitv": 0,
+        "io_chi_tx_rsp_flitv": 0,
+        "io_l2Miss": 0
+      },
+      {
+        "phase": "idle",
+        "cycle": 0,
+        "auto_in_a_ready": 1,
+        "auto_in_d_valid": 0,
+        "io_chi_txsactive": 1,
+        "io_chi_syscoreq": 1,
+        "io_chi_tx_linkactivereq": 1,
+        "io_chi_rx_linkactiveack": 1,
+        "io_chi_tx_req_flitpend": 1,
+        "io_chi_tx_req_flitv": 0,
+        "io_chi_tx_rsp_flitv": 0,
+        "io_l2Miss": 0
+      },
+      {
+        "phase": "idle",
+        "cycle": 1,
+        "auto_in_a_ready": 1,
+        "auto_in_d_valid": 0,
+        "io_chi_txsactive": 1,
+        "io_chi_syscoreq": 1,
+        "io_chi_tx_linkactivereq": 1,
+        "io_chi_rx_linkactiveack": 1,
+        "io_chi_tx_req_flitpend": 1,
+        "io_chi_tx_req_flitv": 0,
+        "io_chi_tx_rsp_flitv": 0,
+        "io_l2Miss": 0
+      },
+      {
+        "phase": "idle",
+        "cycle": 2,
+        "auto_in_a_ready": 1,
+        "auto_in_d_valid": 0,
+        "io_chi_txsactive": 1,
+        "io_chi_syscoreq": 1,
+        "io_chi_tx_linkactivereq": 1,
+        "io_chi_rx_linkactiveack": 1,
+        "io_chi_tx_req_flitpend": 1,
+        "io_chi_tx_req_flitv": 0,
+        "io_chi_tx_rsp_flitv": 0,
+        "io_l2Miss": 0
+      },
+      {
+        "phase": "idle",
+        "cycle": 3,
+        "auto_in_a_ready": 1,
+        "auto_in_d_valid": 0,
+        "io_chi_txsactive": 1,
+        "io_chi_syscoreq": 1,
+        "io_chi_tx_linkactivereq": 1,
+        "io_chi_rx_linkactiveack": 1,
+        "io_chi_tx_req_flitpend": 1,
+        "io_chi_tx_req_flitv": 0,
+        "io_chi_tx_rsp_flitv": 0,
+        "io_l2Miss": 0
+      },
+      {
+        "phase": "idle",
+        "cycle": 4,
+        "auto_in_a_ready": 1,
+        "auto_in_d_valid": 0,
+        "io_chi_txsactive": 1,
+        "io_chi_syscoreq": 1,
+        "io_chi_tx_linkactivereq": 1,
+        "io_chi_rx_linkactiveack": 1,
+        "io_chi_tx_req_flitpend": 1,
+        "io_chi_tx_req_flitv": 0,
+        "io_chi_tx_rsp_flitv": 0,
+        "io_l2Miss": 0
+      },
+      {
+        "phase": "idle",
+        "cycle": 5,
+        "auto_in_a_ready": 1,
+        "auto_in_d_valid": 0,
+        "io_chi_txsactive": 1,
+        "io_chi_syscoreq": 1,
+        "io_chi_tx_linkactivereq": 1,
+        "io_chi_rx_linkactiveack": 1,
+        "io_chi_tx_req_flitpend": 1,
+        "io_chi_tx_req_flitv": 0,
+        "io_chi_tx_rsp_flitv": 0,
+        "io_l2Miss": 0
+      },
+      {
+        "phase": "transactions",
+        "tl_accept": 1,
+        "read_opcode": 4,
+        "comp_data": 1193046,
+        "snoop_response": 1
+      }
+    ],
+    "trace_sha256": "4ada6fbe712a9468b8510cf4b3001c430f77ff87e269fa8c717091df8570c271"
+  },
+  "backend": {
+    "verilator": "PASS",
+    "yosys": "PASS",
+    "rtl_bytes": 51341,
+    "rtl_sha256": "e6f72ca317a3d0f3e604f59ab11f87d4e26e10bd8e58a29d163c09db280baded",
+    "verilator_returncode": 0,
+    "yosys_returncode": 0
+  },
+  "reference": {
+    "path": "validation/reference-closures/TL2CHICoupledL2-Eb.sv",
+    "sha256": "3c1f8da19e8cc4e81dd49ae874378acb36d23c7400035ab0ba50dbed2383dcd0",
+    "expected_sha256": "3c1f8da19e8cc4e81dd49ae874378acb36d23c7400035ab0ba50dbed2383dcd0",
+    "locked_xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "generation": "CoupledL2.test.runMain coupledL2.TestTop_CHIL2 --issue E.b --core 1 --tl-ul 0 --bank 1 --chiseldb 0 --tllog 0 --chilog 0 --etime 0 --vtime 0 --fpga 0 --target systemverilog --split-verilog",
+    "selection": "LOCAL_GENERATED_TESTTOP_CHIL2_PARENT"
+  },
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED_PARENT_PORT_AND_RESET_LINK",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "UHSC_LOCALIZED": "PASS_BOUNDED_UHSC_PARENT_ADAPTER",
+    "PARENT_CLOSURE_MATCHED": "PENDING_FULL_SLICE_MSHR_SRAM_DIPLOMACY_CHILDREN",
+    "LICENSE_REVIEW": "PENDING_COORDINATOR_REVIEW",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "VALIDATOR_PASS_BOUNDED",
+  "acceptance_eligible": false,
+  "unclosed": [
+    "Full Slice/MSHR/SRAM/prefetch/diplomacy behavioral closure remains pending.",
+    "Locked XSTop default is TL2TL; this CHI parent uses a separately generated TestTop_CHIL2 reference.",
+    "Coordinator/license review and user approval remain pending."
+  ]
+}
