@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_ROCKET_DIPLOMACY_FAMILY",
+  "batch_id": "V2-DEPENDENCY-ROCKET-DIPLOMACY-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "source_scala_file_count": 18,
+  "source_root": "upstream/rocket-chip/src/main/scala/diplomacy",
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Rocket.Diplomacy-Hardware.py",
+    "sha256": "406e5083378c8fc4e575593bf9854b04342f4b544a86b53d74330eb7e2fbcc9f"
+  },
+  "static": {
+    "status": "PASS",
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Rocket.Diplomacy-Hardware.py",
+    "sha256": "406e5083378c8fc4e575593bf9854b04342f4b544a86b53d74330eb7e2fbcc9f",
+    "bytes": 18800,
+    "zones": [
+      760,
+      1357,
+      10766,
+      13313,
+      16188
+    ],
+    "adapter_args": [
+      "configuration",
+      "injected_dependencies"
+    ],
+    "function_comment_errors": []
+  },
+  "direct": {
+    "contracts": {
+      "status": "PASS",
+      "vectors": 256,
+      "topological_order": [
+        "source",
+        "adapter",
+        "sink"
+      ]
+    },
+    "router": {
+      "status": "PASS",
+      "vectors": 128
+    }
+  },
+  "backend": {
+    "verilator": "PASS",
+    "yosys": "PASS",
+    "rtl_sha256": "35a4a76e3c0c34d15df6600210f51ed12f93da538fa7eaf3db023eb6ba0c7858",
+    "rtl_bytes": 4148,
+    "verilator_tail": "\n%Warning-WIDTHTRUNC: /tmp/uhsc-v2/validation/.work/v2-rocket-diplomacy/UHSCRocketDiplomacy.sv:70:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF '$26' generates 16 bits.\n                                                                                                   : ... note: In instance 'UHSCRocketDiplomacy'\n   70 |   assign \\$27  = ! \\$26 ;\n      |                  ^\n",
+    "yosys_tail": ""
+  },
+  "license": {
+    "status": "PENDING",
+    "required": [
+      "LICENSE",
+      "LICENSE.Berkeley",
+      "LICENSE.SiFive",
+      "LICENSE.jtag"
+    ],
+    "present": [
+      "LICENSE.Berkeley",
+      "LICENSE.SiFive",
+      "LICENSE.jtag"
+    ],
+    "note": "Mixed Rocket-chip notices retained; legal review remains pending before ACCEPTED."
+  },
+  "reference_mode": "LOCKED_XSTOP_DIPLOMACY_ADDRESS_ROUTER_EQUATIONS",
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED_DIPLOMACY_EQUATIONS",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "UHSC_LOCALIZED": "PASS_BOUNDED_FAMILY_LOCAL_NAME",
+    "LICENSE_REVIEW": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "acceptance_eligible": false
+}
