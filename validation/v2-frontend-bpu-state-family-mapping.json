@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_FRONTEND_BPU_STATE_FAMILY_MAPPING",
+  "batch_id": "V2-SEMANTIC-FRONTEND-BPU-STATE-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "closure_root": "core.frontend.bpu",
+  "entries": [
+    {
+      "id": "CompareMatrix",
+      "classification": "SPLIT",
+      "source_paths": ["upstream/src/main/scala/xiangshan/backend/dispatch/NewDispatch.scala"],
+      "target_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.CompareMatrix-Hardware.py",
+      "covered_children": ["compareMatrix", "IQSort", "minIQSel"],
+      "observation_points": ["strict less-than comparison", "tie priority", "registered IQSort", "minIQSel queue mapping"],
+      "reference_mode": "LOCKED_XSTOP_NEW_DISPATCH_SOURCE_EQUATION",
+      "status": "VALIDATOR_PASS_BOUNDED"
+    },
+    {
+      "id": "FallThroughPredictor",
+      "classification": "SPLIT",
+      "source_paths": [
+        "upstream/src/main/scala/xiangshan/frontend/BPU.scala",
+        "upstream/src/main/scala/xiangshan/frontend/FTB.scala",
+        "upstream/src/main/scala/xiangshan/frontend/FrontendBundle.scala",
+        "upstream/src/main/scala/xiangshan/frontend/NewFtq.scala"
+      ],
+      "target_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.FallThroughPredictor-Hardware.py",
+      "covered_children": ["BPUUtils.getFallThroughAddr", "FTBEntry.getFallThrough", "FullBranchPrediction.fromFtbEntry"],
+      "observation_points": ["fall-through address", "carry", "fall-through error", "sequential fallback", "s0-to-s1 staging"],
+      "reference_mode": "LOCKED_XSTOP_FTB_FRONTEND_SOURCE_EQUATION",
+      "status": "VALIDATOR_PASS_BOUNDED"
+    },
+    {
+      "id": "SaturateCounter",
+      "classification": "SPLIT",
+      "source_paths": [
+        "upstream/src/main/scala/xiangshan/frontend/BPU.scala",
+        "upstream/src/main/scala/xiangshan/frontend/Bim.scala",
+        "upstream/src/main/scala/xiangshan/frontend/Tage.scala",
+        "upstream/src/main/scala/xiangshan/frontend/SC.scala"
+      ],
+      "target_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.SaturateCounter-Hardware.py",
+      "covered_children": ["BPUUtils.satUpdate", "BIM counter update", "TAGE counter update", "SC threshold counter"],
+      "observation_points": ["zero saturation", "maximum saturation", "taken increment", "not-taken decrement", "enable hold"],
+      "reference_mode": "LOCKED_XSTOP_SOURCE_EQUATION",
+      "status": "VALIDATOR_PASS_BOUNDED"
+    },
+    {
+      "id": "SignedSaturateCounter",
+      "classification": "SPLIT",
+      "source_paths": [
+        "upstream/src/main/scala/xiangshan/frontend/BPU.scala",
+        "upstream/src/main/scala/xiangshan/frontend/SC.scala"
+      ],
+      "target_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.SignedSaturateCounter-Hardware.py",
+      "covered_children": ["BPUUtils.signedSatUpdate", "SC.ctrUpdate"],
+      "observation_points": ["signed minimum", "signed maximum", "positive update", "negative update", "enable hold"],
+      "reference_mode": "LOCKED_XSTOP_SOURCE_EQUATION",
+      "status": "VALIDATOR_PASS_BOUNDED"
+    },
+    {
+      "id": "LruStateGen",
+      "classification": "MOVED",
+      "source_paths": [
+        "upstream/utility/src/main/scala/utility/Replacement.scala",
+        "upstream/rocket-chip/src/main/scala/util/Replacement.scala"
+      ],
+      "target_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.LruStateGen-Hardware.py",
+      "covered_children": ["TrueLRU", "ReplacementPolicy.get_next_state", "ReplacementPolicy.get_replace_way"],
+      "observation_points": ["triangular state transition", "victim decode", "multi-touch order"],
+      "reference_mode": "ROCKET_CHIP_SOURCE_AND_ICACHE_REPLACER_PARENT",
+      "status": "VALIDATOR_PASS_BOUNDED"
+    },
+    {
+      "id": "PlruStateGen",
+      "classification": "MOVED",
+      "source_paths": [
+        "upstream/utility/src/main/scala/utility/Replacement.scala",
+        "upstream/rocket-chip/src/main/scala/util/Replacement.scala"
+      ],
+      "target_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.PlruStateGen-Hardware.py",
+      "covered_children": ["PseudoLRU", "unbalanced binary tree transition", "unbalanced victim decode"],
+      "observation_points": ["tree root direction", "non-power-of-two ways", "multi-touch order"],
+      "reference_mode": "ROCKET_CHIP_SOURCE_AND_ICACHE_REPLACER_PARENT",
+      "status": "VALIDATOR_PASS_BOUNDED"
+    },
+    {
+      "id": "ReplacerState",
+      "classification": "REWRITTEN",
+      "source_paths": [
+        "upstream/utility/src/main/scala/utility/Replacement.scala",
+        "upstream/rocket-chip/src/main/scala/util/Replacement.scala"
+      ],
+      "target_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.ReplacerState-Hardware.py",
+      "covered_children": ["SetAssocLRU", "per-set state vector", "ordered touches", "diagnostic reads/writes"],
+      "observation_points": ["async reset", "set-index selection", "ordered state update", "victim way"],
+      "reference_mode": "LOCKED_XSTOP_ICACHE_REPLACER_PARENT",
+      "status": "VALIDATOR_PASS_BOUNDED"
+    }
+  ],
+  "localization": {
+    "reference_names_unchanged": true,
+    "project_facing_external_name": "UHSC",
+    "top_wrapper_name": "UHSCTop",
+    "status": "PENDING_EXTERNAL_WRAPPER"
+  },
+  "gates": {
+    "direct": "PASS_BOUNDED",
+    "reference": "PASS_BOUNDED_OR_SOURCE_EQUATION",
+    "verilator": "PASS",
+    "yosys": "PASS",
+    "parent_closure": "PENDING_FULL_FRONTEND_BPU",
+    "license": "PENDING_COORDINATOR_REVIEW",
+    "accepted": "NOT_ALLOWED"
+  },
+  "acceptance_eligible": false
+}

@@ -29,7 +29,11 @@ __all__ = [
     "CoupledL2Directory",
     "Directory",
     "directory_reference_step",
+    "TL2TLCoupledL2ParentConfig",
+    "TL2TLCoupledL2Parent",
+    "tl2tl_parent_port_contract",
     "build_verilog",
+    "build_parent_verilog",
     "main",
 ]
 
@@ -741,6 +745,392 @@ Directory = CompactCoupledL2Directory
 
 
 # =============================================================================
+# TL2TL parent boundary
+# =============================================================================
+# The locked DefaultConfig instantiates TL2TLCoupledL2 rather than the
+# conditional CHI bridge.  Keep its four-bank Diplomacy envelope in this
+# aggregate so the selected top has one source-shaped parent target.
+# 锁定的 DefaultConfig 实例化 TL2TLCoupledL2，而不是条件式 CHI bridge；在
+# 本聚合中保留四 bank Diplomacy 包络，使选定顶层具有一个源形状父级目标。
+@dataclass(frozen=True)
+class TL2TLCoupledL2ParentConfig:
+    """Locked V2 TL2TL parent geometry. / 锁定 V2 TL2TL 父级几何参数。"""
+
+    banks: int = 4
+    address_bits: int = 48
+    data_bits: int = 256
+    inner_source_bits: int = 7
+    outer_source_bits: int = 8
+    inner_sink_bits: int = 8
+    outer_sink_bits: int = 6
+    req_source_bits: int = 5
+    vaddr_bits: int = 44
+    perf_count: int = 68
+
+    # Validate the generated TL2TLCoupledL2 dimensions. / 校验生成 TL2TLCoupledL2 的尺寸。
+    def __post_init__(self) -> None:
+        if self.banks != 4:
+            raise ValueError("locked Kunminghu V2 TL2TL parent uses four banks")
+        if self.address_bits != 48 or self.data_bits != 256:
+            raise ValueError("locked Kunminghu V2 TL2TL parent uses 48/256-bit addresses/data")
+        if self.inner_source_bits != 7 or self.outer_source_bits != 8:
+            raise ValueError("locked TL2TL source widths are 7 and 8 bits")
+        if self.inner_sink_bits != 8 or self.outer_sink_bits != 6:
+            raise ValueError("locked TL2TL sink widths are 8 and 6 bits")
+        if self.req_source_bits != 5 or self.vaddr_bits != 44:
+            raise ValueError("locked TL2TL request metadata widths are 5 and 44 bits")
+        if self.perf_count != 68:
+            raise ValueError("locked TL2TL parent exposes 68 performance counters")
+
+
+# Return the exact ordered 540-port TL2TL parent contract. / 返回精确有序的 540 端口 TL2TL 父级契约。
+def tl2tl_parent_port_contract(configuration: TL2TLCoupledL2ParentConfig | None = None) -> tuple[dict[str, Any], ...]:
+    """Describe the locked TL2TLCoupledL2 ANSI envelope. / 描述锁定 TL2TLCoupledL2 ANSI 包络。"""
+
+    cfg = configuration or TL2TLCoupledL2ParentConfig()
+    entries: list[dict[str, Any]] = []
+
+    # Append one source-shaped declaration while preserving generator order. / 追加源形状声明并保持生成器顺序。
+    def add(name: str, width: int, direction: str) -> None:
+        """Append a normalized port row. / 追加规范化端口行。"""
+
+        entries.append({"name": name, "width": max(1, int(width)), "direction": direction})
+
+    add("clock", 1, "input")
+    add("reset", 1, "input")
+    # Temporal-prefetch metadata bridge (one Valid input and one Decoupled output). /
+    # Temporal-prefetch 元数据桥（一个 Valid 输入和一个 Decoupled 输出）。
+    for name, width, direction in (
+        ("auto_tpmeta_sink_in_valid", 1, "input"),
+        ("auto_tpmeta_sink_in_bits_hartid", 6, "input"),
+    ):
+        add(name, width, direction)
+    for index in range(12):
+        add(f"auto_tpmeta_sink_in_bits_rawData_{index}", 42, "input")
+    add("auto_tpmeta_source_out_ready", 1, "input")
+    for name, width in (
+        ("auto_tpmeta_source_out_valid", 1),
+        ("auto_tpmeta_source_out_bits_hartid", 6),
+        ("auto_tpmeta_source_out_bits_set", 10),
+        ("auto_tpmeta_source_out_bits_way", 4),
+        ("auto_tpmeta_source_out_bits_wmode", 1),
+    ):
+        add(name, width, "output")
+    for index in range(12):
+        add(f"auto_tpmeta_source_out_bits_rawData_{index}", 42, "output")
+
+    # Four inner (L1-facing) TileLink ports. / 四个内侧（面向 L1）的 TileLink 端口。
+    for bank in reversed(range(cfg.banks)):
+        prefix = f"auto_in_{bank}_"
+        rows = (
+            ("a_ready", 1, "output"), ("a_valid", 1, "input"),
+            ("a_bits_opcode", 4, "input"), ("a_bits_param", 3, "input"),
+            ("a_bits_size", 3, "input"), ("a_bits_source", cfg.inner_source_bits, "input"),
+            ("a_bits_address", cfg.address_bits, "input"), ("a_bits_user_reqSource", cfg.req_source_bits, "input"),
+            ("a_bits_user_alias", 2, "input"), ("a_bits_user_vaddr", cfg.vaddr_bits, "input"),
+            ("a_bits_user_needHint", 1, "input"), ("a_bits_echo_isKeyword", 1, "input"),
+            ("a_bits_mask", cfg.data_bits // 8, "input"), ("a_bits_data", cfg.data_bits, "input"),
+            ("a_bits_corrupt", 1, "input"), ("b_ready", 1, "input"), ("b_valid", 1, "output"),
+            ("b_bits_opcode", 3, "output"), ("b_bits_param", 2, "output"), ("b_bits_size", 3, "output"),
+            ("b_bits_source", cfg.inner_source_bits, "output"), ("b_bits_address", cfg.address_bits, "output"),
+            ("b_bits_mask", cfg.data_bits // 8, "output"), ("b_bits_data", cfg.data_bits, "output"),
+            ("b_bits_corrupt", 1, "output"), ("c_ready", 1, "output"), ("c_valid", 1, "input"),
+            ("c_bits_opcode", 3, "input"), ("c_bits_param", 3, "input"), ("c_bits_size", 3, "input"),
+            ("c_bits_source", cfg.inner_source_bits, "input"), ("c_bits_address", cfg.address_bits, "input"),
+            ("c_bits_user_reqSource", cfg.req_source_bits, "input"), ("c_bits_user_alias", 2, "input"),
+            ("c_bits_user_vaddr", cfg.vaddr_bits, "input"), ("c_bits_user_needHint", 1, "input"),
+            ("c_bits_echo_isKeyword", 1, "input"), ("c_bits_data", cfg.data_bits, "input"),
+            ("c_bits_corrupt", 1, "input"), ("d_ready", 1, "input"), ("d_valid", 1, "output"),
+            ("d_bits_opcode", 4, "output"), ("d_bits_param", 2, "output"), ("d_bits_size", 3, "output"),
+            ("d_bits_source", cfg.inner_source_bits, "output"), ("d_bits_sink", cfg.inner_sink_bits, "output"),
+            ("d_bits_denied", 1, "output"), ("d_bits_echo_isKeyword", 1, "output"),
+            ("d_bits_data", cfg.data_bits, "output"), ("d_bits_corrupt", 1, "output"),
+            ("e_ready", 1, "output"), ("e_valid", 1, "input"), ("e_bits_sink", cfg.inner_sink_bits, "input"),
+        )
+        for suffix, width, direction in rows:
+            add(prefix + suffix, width, direction)
+
+    # Four outer (memory-facing) TileLink ports. / 四个外侧（面向内存）的 TileLink 端口。
+    for bank in reversed(range(cfg.banks)):
+        prefix = f"auto_out_{bank}_"
+        rows = (
+            ("a_ready", 1, "input"), ("a_valid", 1, "output"),
+            ("a_bits_opcode", 4, "output"), ("a_bits_param", 3, "output"),
+            ("a_bits_size", 3, "output"), ("a_bits_source", cfg.outer_source_bits, "output"),
+            ("a_bits_address", cfg.address_bits, "output"), ("a_bits_user_reqSource", cfg.req_source_bits, "output"),
+            ("a_bits_echo_blockisdirty", 1, "output"), ("a_bits_mask", cfg.data_bits // 8, "output"),
+            ("a_bits_data", cfg.data_bits, "output"), ("a_bits_corrupt", 1, "output"),
+            ("b_ready", 1, "output"), ("b_valid", 1, "input"), ("b_bits_opcode", 3, "input"),
+            ("b_bits_param", 2, "input"), ("b_bits_size", 3, "input"), ("b_bits_source", cfg.outer_source_bits, "input"),
+            ("b_bits_address", cfg.address_bits, "input"), ("b_bits_mask", cfg.data_bits // 8, "input"),
+            ("b_bits_data", cfg.data_bits, "input"), ("b_bits_corrupt", 1, "input"),
+            ("c_ready", 1, "input"), ("c_valid", 1, "output"), ("c_bits_opcode", 3, "output"),
+            ("c_bits_param", 3, "output"), ("c_bits_size", 3, "output"), ("c_bits_source", cfg.outer_source_bits, "output"),
+            ("c_bits_address", cfg.address_bits, "output"), ("c_bits_user_reqSource", cfg.req_source_bits, "output"),
+            ("c_bits_echo_blockisdirty", 1, "output"), ("c_bits_data", cfg.data_bits, "output"),
+            ("c_bits_corrupt", 1, "output"), ("d_ready", 1, "output"), ("d_valid", 1, "input"),
+            ("d_bits_opcode", 4, "input"), ("d_bits_param", 2, "input"), ("d_bits_size", 3, "input"),
+            ("d_bits_source", cfg.outer_source_bits, "input"), ("d_bits_sink", cfg.outer_sink_bits, "input"),
+            ("d_bits_denied", 1, "input"), ("d_bits_echo_blockisdirty", 1, "input"),
+            ("d_bits_data", cfg.data_bits, "input"), ("d_bits_corrupt", 1, "input"),
+            ("e_ready", 1, "input"), ("e_valid", 1, "output"), ("e_bits_sink", cfg.outer_sink_bits, "output"),
+        )
+        for suffix, width, direction in rows:
+            add(prefix + suffix, width, direction)
+
+    for name, width in (("auto_pf_recv_in_addr", 64), ("auto_pf_recv_in_pf_source", 5), ("auto_pf_recv_in_addr_valid", 1)):
+        add(name, width, "input")
+    for name, width, direction in (
+        ("io_hartId", 6, "input"), ("io_pfCtrlFromCore_l2_pf_master_en", 1, "input"),
+        ("io_pfCtrlFromCore_l2_pf_recv_en", 1, "input"), ("io_pfCtrlFromCore_l2_pbop_en", 1, "input"),
+        ("io_pfCtrlFromCore_l2_vbop_en", 1, "input"), ("io_pfCtrlFromCore_l2_tp_en", 1, "input"),
+        ("io_pfCtrlFromCore_l2_pf_delay_latency", 10, "input"), ("io_l2_hint_valid", 1, "output"),
+        ("io_l2_hint_bits_sourceId", 32, "output"), ("io_l2_hint_bits_isKeyword", 1, "output"),
+        ("io_l2_tlb_req_req_valid", 1, "output"), ("io_l2_tlb_req_req_bits_vaddr", 50, "output"),
+        ("io_l2_tlb_req_req_bits_cmd", 3, "output"), ("io_l2_tlb_req_req_bits_isPrefetch", 1, "output"),
+        ("io_l2_tlb_req_req_bits_kill", 1, "output"), ("io_l2_tlb_req_req_bits_no_translate", 1, "output"),
+        ("io_l2_tlb_req_resp_valid", 1, "input"), ("io_l2_tlb_req_resp_bits_paddr_0", 48, "input"),
+        ("io_l2_tlb_req_resp_bits_pbmt", 2, "input"), ("io_l2_tlb_req_resp_bits_miss", 1, "input"),
+        ("io_l2_tlb_req_resp_bits_excp_0_gpf_ld", 1, "input"), ("io_l2_tlb_req_resp_bits_excp_0_pf_ld", 1, "input"),
+        ("io_l2_tlb_req_resp_bits_excp_0_af_ld", 1, "input"), ("io_l2_tlb_req_pmp_resp_ld", 1, "input"),
+        ("io_l2_tlb_req_pmp_resp_mmio", 1, "input"), ("io_l2Miss", 1, "output"),
+        ("io_error_valid", 1, "output"), ("io_error_address", 46, "output"),
+        ("io_dft_ram_hold", 1, "input"), ("io_dft_ram_bypass", 1, "input"),
+        ("io_dft_ram_bp_clken", 1, "input"), ("io_dft_ram_aux_clk", 1, "input"),
+        ("io_dft_ram_aux_ckbp", 1, "input"), ("io_dft_ram_mcp_hold", 1, "input"),
+        ("io_dft_cgen", 1, "input"),
+    ):
+        add(name, width, direction)
+    for index in range(1, cfg.perf_count + 1):
+        add(f"io_perf_{index}_value", 6, "output")
+    return tuple(entries)
+
+
+class TL2TLCoupledL2Parent(Elaboratable):
+    """Bounded four-bank TL2TL parent with exact V2 ports. / 具有精确 V2 端口的有界四 bank TL2TL 父级。"""
+
+    # Construct all source-shaped parent signals in generated order. / 按生成顺序构造全部源形状父级信号。
+    def __init__(self, configuration: TL2TLCoupledL2ParentConfig | None = None,
+                 injected_dependencies: dict[str, Any] | None = None) -> None:
+        del injected_dependencies
+        self.configuration = configuration or TL2TLCoupledL2ParentConfig()
+        self._ports: list[Signal] = []
+        self._inputs: list[Signal] = []
+        self._outputs: list[Signal] = []
+        self._by_name: dict[str, Signal] = {}
+        for spec in tl2tl_parent_port_contract(self.configuration):
+            signal = Signal(spec["width"], name=spec["name"])
+            setattr(self, spec["name"], signal)
+            self._ports.append(signal)
+            self._by_name[spec["name"]] = signal
+            (self._inputs if spec["direction"] == "input" else self._outputs).append(signal)
+
+    # Return the exact ordered parent ports for deterministic conversion. / 返回用于确定性转换的精确有序父级端口。
+    def public_ports(self) -> tuple[Signal, ...]:
+        """Return the source-shaped port tuple. / 返回源形状端口元组。"""
+
+        return tuple(self._ports)
+
+    # Elaborate a bounded TL2TL transaction relay and metadata bridge. / 展开有界 TL2TL 事务中继和元数据桥。
+    def elaborate(self, platform: Any) -> Module:
+        """Build reset, A/B/C/D/E, prefetch, and TLB boundary behavior. / 构造复位、A/B/C/D/E、预取和 TLB 边界行为。"""
+
+        del platform
+        c = self.configuration
+        m = Module()
+        domain = ClockDomain("tl2tl_parent", async_reset=True)
+        domain.clk = self.clock
+        domain.rst = self.reset
+        m.domains.tl2tl_parent = domain
+
+        # Per-bank relay state: idle -> outer A -> outer D -> inner D. / 每 bank 中继状态：空闲→外侧 A→外侧 D→内侧 D。
+        state = [Signal(2, reset=0, name=f"tl2tl_bank_{bank}_state") for bank in range(c.banks)]
+        req_opcode = [Signal(4, name=f"tl2tl_bank_{bank}_opcode") for bank in range(c.banks)]
+        req_param = [Signal(3, name=f"tl2tl_bank_{bank}_param") for bank in range(c.banks)]
+        req_size = [Signal(3, name=f"tl2tl_bank_{bank}_size") for bank in range(c.banks)]
+        req_source = [Signal(c.inner_source_bits, name=f"tl2tl_bank_{bank}_source") for bank in range(c.banks)]
+        req_address = [Signal(c.address_bits, name=f"tl2tl_bank_{bank}_address") for bank in range(c.banks)]
+        req_req_source = [Signal(c.req_source_bits, name=f"tl2tl_bank_{bank}_req_source") for bank in range(c.banks)]
+        req_data = [Signal(c.data_bits, name=f"tl2tl_bank_{bank}_data") for bank in range(c.banks)]
+        req_mask = [Signal(c.data_bits // 8, name=f"tl2tl_bank_{bank}_mask") for bank in range(c.banks)]
+        req_keyword = [Signal(name=f"tl2tl_bank_{bank}_keyword") for bank in range(c.banks)]
+        resp_opcode = [Signal(4, name=f"tl2tl_bank_{bank}_resp_opcode") for bank in range(c.banks)]
+        resp_param = [Signal(2, name=f"tl2tl_bank_{bank}_resp_param") for bank in range(c.banks)]
+        resp_size = [Signal(3, name=f"tl2tl_bank_{bank}_resp_size") for bank in range(c.banks)]
+        resp_source = [Signal(c.inner_source_bits, name=f"tl2tl_bank_{bank}_resp_source") for bank in range(c.banks)]
+        resp_sink = [Signal(c.inner_sink_bits, name=f"tl2tl_bank_{bank}_resp_sink") for bank in range(c.banks)]
+        resp_data = [Signal(c.data_bits, name=f"tl2tl_bank_{bank}_resp_data") for bank in range(c.banks)]
+        resp_denied = [Signal(name=f"tl2tl_bank_{bank}_resp_denied") for bank in range(c.banks)]
+        resp_corrupt = [Signal(name=f"tl2tl_bank_{bank}_resp_corrupt") for bank in range(c.banks)]
+        # C-channel release relay state and payload. / C 通道 release 中继状态及载荷。
+        c_pending = [Signal(name=f"tl2tl_bank_{bank}_c_pending") for bank in range(c.banks)]
+        c_opcode = [Signal(3, name=f"tl2tl_bank_{bank}_c_opcode") for bank in range(c.banks)]
+        c_param = [Signal(3, name=f"tl2tl_bank_{bank}_c_param") for bank in range(c.banks)]
+        c_size = [Signal(3, name=f"tl2tl_bank_{bank}_c_size") for bank in range(c.banks)]
+        c_source = [Signal(c.inner_source_bits, name=f"tl2tl_bank_{bank}_c_source") for bank in range(c.banks)]
+        c_address = [Signal(c.address_bits, name=f"tl2tl_bank_{bank}_c_address") for bank in range(c.banks)]
+        c_data = [Signal(c.data_bits, name=f"tl2tl_bank_{bank}_c_data") for bank in range(c.banks)]
+        c_corrupt = [Signal(name=f"tl2tl_bank_{bank}_c_corrupt") for bank in range(c.banks)]
+        b_pending = [Signal(name=f"tl2tl_bank_{bank}_b_pending") for bank in range(c.banks)]
+        b_opcode = [Signal(3, name=f"tl2tl_bank_{bank}_b_opcode") for bank in range(c.banks)]
+        b_param = [Signal(2, name=f"tl2tl_bank_{bank}_b_param") for bank in range(c.banks)]
+        b_size = [Signal(3, name=f"tl2tl_bank_{bank}_b_size") for bank in range(c.banks)]
+        b_source = [Signal(c.outer_source_bits, name=f"tl2tl_bank_{bank}_b_source") for bank in range(c.banks)]
+        b_address = [Signal(c.address_bits, name=f"tl2tl_bank_{bank}_b_address") for bank in range(c.banks)]
+        b_mask = [Signal(c.data_bits // 8, name=f"tl2tl_bank_{bank}_b_mask") for bank in range(c.banks)]
+        b_data = [Signal(c.data_bits, name=f"tl2tl_bank_{bank}_b_data") for bank in range(c.banks)]
+        b_corrupt = [Signal(name=f"tl2tl_bank_{bank}_b_corrupt") for bank in range(c.banks)]
+
+        # Drive every output to a defined reset-safe value before overrides. / 先将所有输出驱动到确定的复位安全值。
+        for signal in self._outputs:
+            m.d.comb += signal.eq(0)
+        for index, signal in enumerate(self._inputs):
+            sink = Signal(len(signal), name=f"tl2tl_input_sink_{index}")
+            m.d.comb += sink.eq(signal)
+
+        # Temporal metadata is a one-entry ready/valid relay. / Temporal 元数据采用单项 ready/valid 中继。
+        tp_pending = Signal(name="tl2tl_tp_pending")
+        tp_hartid = Signal(6, name="tl2tl_tp_hartid")
+        tp_raw = [Signal(42, name=f"tl2tl_tp_raw_{index}") for index in range(12)]
+        tp_in_fire = self.auto_tpmeta_sink_in_valid & ~tp_pending
+        tp_out_valid = tp_pending
+        m.d.comb += [
+            self.auto_tpmeta_source_out_valid.eq(tp_out_valid),
+            self.auto_tpmeta_source_out_bits_hartid.eq(tp_hartid),
+        ]
+        # Assign all raw-data lanes explicitly (the compact loop above keeps
+        # the generated names stable without relying on dynamic attributes).
+        for index, signal in enumerate(tp_raw):
+            m.d.comb += getattr(self, f"auto_tpmeta_source_out_bits_rawData_{index}").eq(signal)
+        with m.If(self.reset):
+            m.d.tl2tl_parent += [tp_pending.eq(0), tp_hartid.eq(0)]
+            for signal in tp_raw:
+                m.d.tl2tl_parent += signal.eq(0)
+        with m.Else():
+            with m.If(tp_in_fire):
+                m.d.tl2tl_parent += [tp_pending.eq(1), tp_hartid.eq(self.auto_tpmeta_sink_in_bits_hartid)]
+                for index, signal in enumerate(tp_raw):
+                    m.d.tl2tl_parent += signal.eq(getattr(self, f"auto_tpmeta_sink_in_bits_rawData_{index}"))
+            with m.Elif(tp_pending & self.auto_tpmeta_source_out_ready):
+                m.d.tl2tl_parent += tp_pending.eq(0)
+
+        # Per-bank ready/valid relay. / 每 bank ready/valid 中继。
+        for bank in range(c.banks):
+            inner = f"auto_in_{bank}_"
+            outer = f"auto_out_{bank}_"
+            # Use one-bit Boolean equations instead of logical operators on
+            # the two-bit state register; this keeps generated RTL width-clean.
+            # 使用单比特布尔方程而不是对两位状态寄存器做逻辑运算，确保生成 RTL 位宽干净。
+            idle = ~(state[bank][0] | state[bank][1])
+            outer_a = state[bank][0] & ~state[bank][1]
+            outer_d = ~state[bank][0] & state[bank][1]
+            inner_d = state[bank][0] & state[bank][1]
+            inner_a_fire = getattr(self, inner + "a_valid") & getattr(self, inner + "a_ready")
+            inner_c_fire = getattr(self, inner + "c_valid") & getattr(self, inner + "c_ready")
+            outer_a_fire = getattr(self, outer + "a_valid") & getattr(self, outer + "a_ready")
+            outer_d_fire = getattr(self, outer + "d_valid") & getattr(self, outer + "d_ready")
+            inner_d_fire = getattr(self, inner + "d_valid") & getattr(self, inner + "d_ready")
+            # Inner A accepts only while this bank is idle and no release is pending. /
+            # 仅当 bank 空闲且没有 release 等待时接受内侧 A。
+            m.d.comb += [
+                getattr(self, inner + "a_ready").eq(idle & ~c_pending[bank]),
+                getattr(self, inner + "c_ready").eq(idle & ~c_pending[bank]),
+                getattr(self, inner + "e_ready").eq(1),
+                getattr(self, outer + "a_valid").eq(outer_a),
+                getattr(self, outer + "a_bits_opcode").eq(req_opcode[bank]),
+                getattr(self, outer + "a_bits_param").eq(req_param[bank]),
+                getattr(self, outer + "a_bits_size").eq(req_size[bank]),
+                getattr(self, outer + "a_bits_source").eq(req_source[bank]),
+                getattr(self, outer + "a_bits_address").eq(req_address[bank]),
+                getattr(self, outer + "a_bits_user_reqSource").eq(req_req_source[bank]),
+                getattr(self, outer + "a_bits_echo_blockisdirty").eq(0),
+                getattr(self, outer + "a_bits_mask").eq(req_mask[bank]),
+                getattr(self, outer + "a_bits_data").eq(req_data[bank]),
+                getattr(self, outer + "a_bits_corrupt").eq(0),
+                getattr(self, outer + "d_ready").eq(outer_d),
+                getattr(self, inner + "d_valid").eq(inner_d),
+                getattr(self, inner + "d_bits_opcode").eq(resp_opcode[bank]),
+                getattr(self, inner + "d_bits_param").eq(resp_param[bank]),
+                getattr(self, inner + "d_bits_size").eq(resp_size[bank]),
+                getattr(self, inner + "d_bits_source").eq(resp_source[bank]),
+                getattr(self, inner + "d_bits_sink").eq(resp_sink[bank]),
+                getattr(self, inner + "d_bits_denied").eq(resp_denied[bank]),
+                getattr(self, inner + "d_bits_echo_isKeyword").eq(req_keyword[bank]),
+                getattr(self, inner + "d_bits_data").eq(resp_data[bank]),
+                getattr(self, inner + "d_bits_corrupt").eq(resp_corrupt[bank]),
+                getattr(self, outer + "c_valid").eq(c_pending[bank]),
+                getattr(self, outer + "c_bits_opcode").eq(c_opcode[bank]),
+                getattr(self, outer + "c_bits_param").eq(c_param[bank]),
+                getattr(self, outer + "c_bits_size").eq(c_size[bank]),
+                getattr(self, outer + "c_bits_source").eq(c_source[bank]),
+                getattr(self, outer + "c_bits_address").eq(c_address[bank]),
+                getattr(self, outer + "c_bits_user_reqSource").eq(0),
+                getattr(self, outer + "c_bits_echo_blockisdirty").eq(0),
+                getattr(self, outer + "c_bits_data").eq(c_data[bank]),
+                getattr(self, outer + "c_bits_corrupt").eq(c_corrupt[bank]),
+                getattr(self, outer + "b_ready").eq(~b_pending[bank]),
+                getattr(self, inner + "b_valid").eq(b_pending[bank]),
+                getattr(self, inner + "b_bits_opcode").eq(b_opcode[bank]),
+                getattr(self, inner + "b_bits_param").eq(b_param[bank]),
+                getattr(self, inner + "b_bits_size").eq(b_size[bank]),
+                getattr(self, inner + "b_bits_source").eq(b_source[bank][:c.inner_source_bits]),
+                getattr(self, inner + "b_bits_address").eq(b_address[bank]),
+                getattr(self, inner + "b_bits_mask").eq(b_mask[bank]),
+                getattr(self, inner + "b_bits_data").eq(b_data[bank]),
+                getattr(self, inner + "b_bits_corrupt").eq(b_corrupt[bank]),
+                getattr(self, outer + "e_valid").eq(getattr(self, inner + "e_valid")),
+                getattr(self, outer + "e_bits_sink").eq(getattr(self, inner + "e_bits_sink")[:c.outer_sink_bits]),
+            ]
+            with m.If(self.reset):
+                m.d.tl2tl_parent += [state[bank].eq(0), c_pending[bank].eq(0), b_pending[bank].eq(0)]
+            with m.Else():
+                with m.If(inner_a_fire):
+                    m.d.tl2tl_parent += [state[bank].eq(1), req_opcode[bank].eq(getattr(self, inner + "a_bits_opcode")),
+                                         req_param[bank].eq(getattr(self, inner + "a_bits_param")), req_size[bank].eq(getattr(self, inner + "a_bits_size")),
+                                         req_source[bank].eq(getattr(self, inner + "a_bits_source")), req_address[bank].eq(getattr(self, inner + "a_bits_address")),
+                                         req_req_source[bank].eq(getattr(self, inner + "a_bits_user_reqSource")), req_data[bank].eq(getattr(self, inner + "a_bits_data")),
+                                         req_mask[bank].eq(getattr(self, inner + "a_bits_mask")), req_keyword[bank].eq(getattr(self, inner + "a_bits_echo_isKeyword"))]
+                with m.Elif(outer_a_fire):
+                    m.d.tl2tl_parent += state[bank].eq(2)
+                with m.Elif(outer_d_fire):
+                    m.d.tl2tl_parent += [state[bank].eq(3), resp_opcode[bank].eq(getattr(self, outer + "d_bits_opcode")),
+                                         resp_param[bank].eq(getattr(self, outer + "d_bits_param")), resp_size[bank].eq(getattr(self, outer + "d_bits_size")),
+                                         resp_source[bank].eq(getattr(self, outer + "d_bits_source")[:c.inner_source_bits]), resp_sink[bank].eq(getattr(self, outer + "d_bits_sink")[:c.inner_sink_bits]),
+                                         resp_data[bank].eq(getattr(self, outer + "d_bits_data")), resp_denied[bank].eq(getattr(self, outer + "d_bits_denied")),
+                                         resp_corrupt[bank].eq(getattr(self, outer + "d_bits_corrupt"))]
+                with m.Elif(inner_d_fire):
+                    m.d.tl2tl_parent += state[bank].eq(0)
+                with m.If(inner_c_fire):
+                    m.d.tl2tl_parent += [c_pending[bank].eq(1), c_opcode[bank].eq(getattr(self, inner + "c_bits_opcode")),
+                                         c_param[bank].eq(getattr(self, inner + "c_bits_param")), c_size[bank].eq(getattr(self, inner + "c_bits_size")),
+                                         c_source[bank].eq(getattr(self, inner + "c_bits_source")), c_address[bank].eq(getattr(self, inner + "c_bits_address")),
+                                         c_data[bank].eq(getattr(self, inner + "c_bits_data")), c_corrupt[bank].eq(getattr(self, inner + "c_bits_corrupt"))]
+                with m.If(c_pending[bank] & getattr(self, outer + "c_ready")):
+                    m.d.tl2tl_parent += [c_pending[bank].eq(0), state[bank].eq(0)]
+                with m.If(getattr(self, outer + "b_valid") & getattr(self, outer + "b_ready")):
+                    m.d.tl2tl_parent += [b_pending[bank].eq(1), b_opcode[bank].eq(getattr(self, outer + "b_bits_opcode")),
+                                         b_param[bank].eq(getattr(self, outer + "b_bits_param")), b_size[bank].eq(getattr(self, outer + "b_bits_size")),
+                                         b_source[bank].eq(getattr(self, outer + "b_bits_source")), b_address[bank].eq(getattr(self, outer + "b_bits_address")),
+                                         b_mask[bank].eq(getattr(self, outer + "b_bits_mask")), b_data[bank].eq(getattr(self, outer + "b_bits_data")),
+                                         b_corrupt[bank].eq(getattr(self, outer + "b_bits_corrupt"))]
+                with m.If(b_pending[bank] & getattr(self, inner + "b_ready")):
+                    m.d.tl2tl_parent += b_pending[bank].eq(0)
+
+        # Prefetch/TLB/error/performance outputs are explicit quiescent values. /
+        # 预取/TLB/错误/性能输出保持显式静默值。
+        m.d.comb += [
+            self.io_l2_hint_valid.eq(self.auto_pf_recv_in_addr_valid & self.io_pfCtrlFromCore_l2_pf_master_en),
+            self.io_l2_hint_bits_sourceId.eq(self.auto_pf_recv_in_pf_source),
+            self.io_l2_hint_bits_isKeyword.eq(0), self.io_l2_tlb_req_req_valid.eq(0),
+            self.io_l2_tlb_req_req_bits_vaddr.eq(0), self.io_l2_tlb_req_req_bits_cmd.eq(0),
+            self.io_l2_tlb_req_req_bits_isPrefetch.eq(0), self.io_l2_tlb_req_req_bits_kill.eq(0),
+            self.io_l2_tlb_req_req_bits_no_translate.eq(0), self.io_l2Miss.eq(0), self.io_error_valid.eq(0),
+            self.io_error_address.eq(0),
+        ]
+        return m
+
+
+# =============================================================================
 # Public Adapter
 # =============================================================================
 # Convert the aggregate directory to deterministic SystemVerilog. / 将聚合目录转换为确定性 SystemVerilog。
@@ -783,6 +1173,26 @@ def build_verilog(configuration, injected_dependencies):
         top.mshr_block_refill, top.mshr_dir_hit, top.mshr_will_free,
     ]
     return verilog.convert(top, name=name, ports=ports, emit_src=False)
+
+
+# Export the selected-top TL2TL parent with its exact frozen port envelope. /
+# 导出带有精确冻结端口包络的选定顶层 TL2TL 父级。/
+def build_parent_verilog(configuration, injected_dependencies):
+    """Return deterministic TL2TLCoupledL2 parent Verilog. / 返回确定性的 TL2TLCoupledL2 父级 Verilog。"""
+
+    del injected_dependencies
+    if isinstance(configuration, TL2TLCoupledL2ParentConfig):
+        cfg, name = configuration, "UHSCTL2TLCoupledL2"
+    elif isinstance(configuration, dict):
+        fields = TL2TLCoupledL2ParentConfig.__dataclass_fields__
+        cfg = TL2TLCoupledL2ParentConfig(**{key: value for key, value in configuration.items() if key in fields})
+        name = str(configuration.get("module", configuration.get("name", "UHSCTL2TLCoupledL2")))
+    elif configuration is None:
+        cfg, name = TL2TLCoupledL2ParentConfig(), "UHSCTL2TLCoupledL2"
+    else:
+        raise TypeError("configuration must be TL2TLCoupledL2ParentConfig, dict, or None")
+    top = TL2TLCoupledL2Parent(cfg)
+    return verilog.convert(top, name=name, ports=list(top.public_ports()), emit_src=False)
 
 
 # =============================================================================

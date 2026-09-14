@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_COUPLEDL2_TL2TL_PARENT_COVERAGE",
+  "batch_id": "V2-DEPENDENCY-COUPLEDL2-TL2TL-PARENT-001",
+  "source_scala_file_count": 11,
+  "reference_port_count": 540,
+  "generated_port_count": 540,
+  "contract_status": "PASS",
+  "direct_checks": 6,
+  "backend": {
+    "verilator": "PASS",
+    "yosys": "PASS"
+  },
+  "covered": [
+    "reset",
+    "inner A to outer A",
+    "outer D to inner D",
+    "inner C to outer C",
+    "outer B to inner B",
+    "E sink relay",
+    "TPMeta one-entry relay"
+  ],
+  "parent_closure": "PENDING_FULL_CHILD_BEHAVIOR",
+  "acceptance_eligible": false
+}

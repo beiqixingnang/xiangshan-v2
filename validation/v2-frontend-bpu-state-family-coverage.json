@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_FRONTEND_BPU_STATE_FAMILY_COVERAGE",
+  "batch_id": "V2-SEMANTIC-FRONTEND-BPU-STATE-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "locked_reference": {
+    "path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "bytes": 228590583,
+    "modules": ["NewDispatch", "FTB", "Frontend", "SCTable", "TageTable", "Tage_SC", "ICacheReplacer"]
+  },
+  "targets": [
+    {"id": "CompareMatrix", "direct_vectors": 340, "hardware_checks": 1310, "reference": "source-equation-bounded"},
+    {"id": "FallThroughPredictor", "direct_vectors": 2048, "hardware_checks": 20, "reference": "source-equation-bounded"},
+    {"id": "SaturateCounter", "direct_vectors": 2040, "reference": "source-equation-bounded"},
+    {"id": "SignedSaturateCounter", "direct_vectors": 2032, "reference": "source-equation-bounded"},
+    {"id": "LruStateGen", "direct_vectors": 11944, "reference": "ICacheReplacer-parent"},
+    {"id": "PlruStateGen", "direct_vectors": 1976, "reference": "ICacheReplacer-parent"},
+    {"id": "ReplacerState", "direct_vectors": 30, "reference": "ICacheReplacer-parent"}
+  ],
+  "backend": {"verilator": "PASS", "yosys": "PASS"},
+  "parent_closure": "PENDING_FULL_FRONTEND_BPU_FTB_TAGE_SC_FTQ",
+  "license_review": "PENDING_COORDINATOR_REVIEW",
+  "accepted": "NOT_ALLOWED",
+  "acceptance_eligible": false
+}

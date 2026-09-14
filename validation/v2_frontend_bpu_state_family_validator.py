@@ -682,11 +682,11 @@ def main() -> int:
         "gates": {
             "PYTHON_PRESENT": "PASS",
             "DIRECT_TEST_PASS_BOUNDED": "PASS",
-            "V2_REFERENCE_MATCHED": "PASS_BOUNDED_SOURCE_EQUATION" if reference_pass else "PASS_BOUNDED_SOURCE_EQUATION_ONLY",
+            "V2_REFERENCE_MATCHED": "PASS_BOUNDED_SOURCE_EQUATION_ONLY",
             "VERILATOR": "PASS" if lint_pass else "FAIL",
             "YOSYS": "PASS" if lint_pass else "FAIL",
             "UHSC_LOCALIZED": "PENDING_EXTERNAL_WRAPPER",
-            "PARENT_CLOSURE_MATCHED": "PASS_BOUNDED" if reference_pass else "PENDING",
+            "PARENT_CLOSURE_MATCHED": "PENDING_FULL_FRONTEND_BPU",
             "LICENSE_REVIEW": "PENDING_COORDINATOR_REVIEW",
             "ACCEPTED": "NOT_ALLOWED",
         },
