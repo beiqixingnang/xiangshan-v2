@@ -57,6 +57,32 @@
     "expected_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
     "expected_bytes": 228590583
   },
+  "full_port_envelope": {
+    "status": "PASS",
+    "module": "UHSCMemoryMemBlockFull",
+    "inventory_path": "validation/v2-memblock-port-inventory.json",
+    "inventory_sha256": "3acf1461907103e097eda6b8ef3c567310e3f17d1358d8365dda69c31a151c37",
+    "expected_port_count": 1326,
+    "actual_port_count": 1326,
+    "missing": [],
+    "extra": [],
+    "direction_width_mismatches": [],
+    "ordered_inventory_sha256": "86f2a6829e11529fddbc91ec630a89f8004620a07eef82d3f0899b999fd27722",
+    "rtl_sha256": "8404b3cf3a891492c98e344011c97ec1cd3b4e70c31160b04aee0766e04692e4",
+    "rtl_bytes": 274772
+  },
+  "full_backend_gates": {
+    "verilator": {
+      "status": "PASS",
+      "returncode": 0,
+      "stderr_tail": "ent/full-parent-envelope.sv:4183:25: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'hd' generates 4 bits.\n                                                                                                                                                             : ... note: In instance 'UHSCMemoryMemBlockFull.dcache.mainpipe.amo'\n 4183 |   assign \\$64  = io_cmd == 4'hd;\n      |                         ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memblock-parent/full-parent-envelope.sv:4184:25: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'hf' generates 4 bits.\n                                                                                                                                                             : ... note: In instance 'UHSCMemoryMemBlockFull.dcache.mainpipe.amo'\n 4184 |   assign \\$65  = io_cmd == 4'hf;\n      |                         ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memblock-parent/full-parent-envelope.sv:3586:41: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                             : ... note: In instance 'UHSCMemoryMemBlockFull.dcache'\n 3586 |   assign \\$1  = io_miss_req_bits_source == 1'h1;\n      |                                         ^~\n"
+    },
+    "yosys": {
+      "status": "PASS",
+      "returncode": 0,
+      "stderr_tail": ""
+    }
+  },
   "status": "PASS_BOUNDED_PARENT",
   "uhsc_localization": {
     "status": "PASS_BOUNDED_PARENT_LOCAL_NAME",
@@ -72,6 +98,9 @@
     "REFERENCE": "PASS_BOUNDED",
     "VERILATOR": "PASS",
     "YOSYS": "PASS",
+    "FULL_PORT_ENVELOPE": "PASS",
+    "FULL_VERILATOR": "PASS",
+    "FULL_YOSYS": "PASS",
     "ACCEPTED": "NOT_ALLOWED"
   }
 }

@@ -37,11 +37,28 @@
     "expected_bytes": 228590583
   },
   "uhsc_manifest": "UHSC-Naming-Manifest.json",
+  "full_port_envelope": {
+    "status": "PASS",
+    "module": "UHSCMemoryMemBlockFull",
+    "inventory_path": "validation/v2-memblock-port-inventory.json",
+    "inventory_sha256": "3acf1461907103e097eda6b8ef3c567310e3f17d1358d8365dda69c31a151c37",
+    "expected_port_count": 1326,
+    "actual_port_count": 1326,
+    "missing": [],
+    "extra": [],
+    "direction_width_mismatches": [],
+    "ordered_inventory_sha256": "86f2a6829e11529fddbc91ec630a89f8004620a07eef82d3f0899b999fd27722",
+    "rtl_sha256": "8404b3cf3a891492c98e344011c97ec1cd3b4e70c31160b04aee0766e04692e4",
+    "rtl_bytes": 274772
+  },
   "gates": {
     "contract": "PASS",
     "direct": "PASS",
     "reference": "PASS_BOUNDED",
     "parent_closure": "PASS_BOUNDED_REDUCED",
+    "full_port_envelope": "PASS",
+    "full_verilator": "PASS",
+    "full_yosys": "PASS",
     "license": "PENDING",
     "ACCEPTED": "NOT_ALLOWED"
   },

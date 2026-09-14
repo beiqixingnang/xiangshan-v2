@@ -144,13 +144,40 @@ def run_wsl(command: list[str], timeout: int = 240) -> dict[str, Any]:
                 "output_sha256": digest_bytes(text.encode())}
 
 
-def backend_gates(rtl: Path) -> dict[str, Any]:
+def backend_gates(rtl: Path, top_name: str = "UHSCBackendTop") -> dict[str, Any]:
     """Run Verilator and Yosys on the generated parent RTL. / 对生成父级 RTL 运行 Verilator 与 Yosys。"""
-    ver = run_wsl(["verilator", "--lint-only", "--Wno-fatal", "--top-module", "UHSCBackendTop", wsl_path(rtl)])
-    yosys_script = f"read_verilog -sv {wsl_path(rtl)}; hierarchy -top UHSCBackendTop; proc; check"
+    ver = run_wsl(["verilator", "--lint-only", "--Wno-fatal", "--top-module", top_name, wsl_path(rtl)])
+    yosys_script = f"read_verilog -sv {wsl_path(rtl)}; hierarchy -top {top_name}; proc; check"
     yosys = run_wsl(["yosys", "-p", yosys_script])
     return {"verilator": ver, "yosys": yosys,
             "status": "PASS" if ver["status"] == "PASS" and yosys["status"] == "PASS" else "FAIL"}
+
+
+def full_inventory_probe(module: Any) -> dict[str, Any]:
+    """Check the opt-in locked 1165-port Backend envelope.
+
+    The probe is structural only: it verifies exact names/counts and runs
+    Verilator/Yosys on the emitted envelope.  Behavioral closure remains
+    bounded until Decode/Issue/Rename/CSR/EXU children are integrated.
+    """
+    expected = module.full_backend_port_schema()
+    rtl_text = module.build_full_verilog({"module": "UHSCBackend"}, None)
+    match = re.search(r"module\s+UHSCBackend\((.*?)\);", rtl_text, re.S)
+    names = [item.strip() for item in match.group(1).replace("\n", " ").split(",") if item.strip()] if match else []
+    rtl_path = WORK / "backend-full-inventory.sv"
+    rtl_path.write_text(rtl_text, encoding="utf-8", newline="\n")
+    gates = backend_gates(rtl_path, "UHSCBackend")
+    expected_names = [name for _direction, name, _width in expected]
+    # Amaranth legally reorders ports by signal reachability; the locked
+    # contract is order-independent but requires exact names and cardinality.
+    exact_names = len(names) == len(expected_names) and set(names) == set(expected_names)
+    return {"status": "PASS" if exact_names and gates["status"] == "PASS" else "FAIL",
+            "port_count": len(names), "expected_port_count": len(expected),
+            "input_count": sum(direction == "input" for direction, _name, _width in expected),
+            "output_count": sum(direction == "output" for direction, _name, _width in expected),
+            "exact_ordered_names": exact_names, "rtl_bytes": len(rtl_text.encode("utf-8")),
+            "rtl_sha256": digest_bytes(rtl_text.encode("utf-8")), "backend_gates": gates,
+            "behavioral_status": "PENDING_FULL_CHILD_CLOSURE"}
 
 
 def make_vectors(count: int = 256) -> list[dict[str, Any]]:
@@ -414,11 +441,14 @@ def differential_sv(target_rtl: Path, vectors: list[dict[str, Any]]) -> dict[str
     lines.append("  end")
     lines.append("endmodule")
     tb_path.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
+    # Use a dedicated deterministic build directory so concurrent validators
+    # cannot invalidate Verilator's generated PCH artifacts.
+    diff_obj = WORK / "obj-diff"
     compile_result = run_wsl(["verilator", "--binary", "--timing", "-Wno-fatal", "--top-module", "tb",
-                              "--Mdir", wsl_path(WORK / "obj"), wsl_path(target_rtl), wsl_path(ref_path), wsl_path(tb_path)], timeout=360)
+                              "--Mdir", wsl_path(diff_obj), wsl_path(target_rtl), wsl_path(ref_path), wsl_path(tb_path)], timeout=360)
     if compile_result["status"] != "PASS":
         return {"status": "FAIL_COMPILE", "compile": compile_result, "vectors": len(vectors)}
-    run_result = run_wsl([wsl_path(WORK / "obj/Vtb")], timeout=120)
+    run_result = run_wsl([wsl_path(diff_obj / "Vtb")], timeout=120)
     passed = run_result["status"] == "PASS" and "BACKEND_PARENT_DIFF_PASS" in run_result.get("output_tail", "")
     return {"status": "PASS" if passed else "FAIL_RUN", "compile": compile_result, "run": run_result,
             "vectors": len(vectors), "reference_mode": "independent_sv_parent_equations",
@@ -484,7 +514,8 @@ def source_info() -> dict[str, Any]:
 
 
 def write_evidence(static: dict[str, Any], direct: dict[str, Any], differential: dict[str, Any],
-                   backend: dict[str, Any], reference: dict[str, Any], source: dict[str, Any]) -> None:
+                   backend: dict[str, Any], reference: dict[str, Any], source: dict[str, Any],
+                   inventory: dict[str, Any]) -> None:
     """Write batch evidence while keeping promotion closed. / 写入批次证据并保持晋级关闭。"""
     target_rel = TARGET.relative_to(ROOT).as_posix()
     common = {"schema_version": 1, "batch_id": "V2-PARENT-BACKEND-001", "source_commit": SOURCE_COMMIT,
@@ -494,10 +525,12 @@ def write_evidence(static: dict[str, Any], direct: dict[str, Any], differential:
               "PARENT_CLOSURE_MATCHED": "PENDING_FULL_1165_PORT_BACKEND", "UHSC_LOCALIZED": "PASS_BOUNDED_PARENT_LOCAL_NAME",
               "LICENSE_REVIEW": "PENDING", "ACCEPTED": "NOT_ALLOWED"}, "acceptance_eligible": False}
     DIRECT_RESULT.write_text(json.dumps({**common, "kind": "XIANGSHAN_KUNMINGHU_V2_BACKEND_PARENT_DIRECT",
-                                          "static_audit": static, "direct": direct, "backend_gates": backend},
+                                          "static_audit": static, "direct": direct, "backend_gates": backend,
+                                          "full_inventory_probe": inventory},
                                          ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     DIFF_RESULT.write_text(json.dumps({**common, "kind": "XIANGSHAN_KUNMINGHU_V2_BACKEND_PARENT_DIFFERENTIAL",
                                        "differential": differential, "backend_gates": backend,
+                                       "full_inventory_probe": inventory,
                                        "behavioral_equivalence": differential["status"] == "PASS",
                                        "reference_mode": "independent_sv_parent_equations_plus_locked_xstop_provenance",
                                        "unclosed": ["Full generated Backend has 1165 ports and requires Decode/Issue/Rename/CSR/Exu child closure.",
@@ -508,6 +541,7 @@ def write_evidence(static: dict[str, Any], direct: dict[str, Any], differential:
                                            "batch_id": "V2-PARENT-BACKEND-001", "target": static,
                                            "injected_dependencies": ["control/dispatch", "datapath", "writeback", "memory", "csr"],
                                            "source_authority": reference, "source_paths": source,
+                                           "full_inventory_probe": inventory,
                                            "result": static["status"], "gates": common["gates"], "acceptance_eligible": False},
                                           ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     COVERAGE_RESULT.write_text(json.dumps({"schema_version": 1, "kind": "XIANGSHAN_KUNMINGHU_V2_BACKEND_PARENT_COVERAGE",
@@ -520,6 +554,7 @@ def write_evidence(static: dict[str, Any], direct: dict[str, Any], differential:
                                            "observation_points": ["frontend ready/valid", "dispatch ordering", "writeback class/port priority",
                                                                   "writeback backpressure", "flush cancellation", "redirect/error", "MSI acknowledge"],
                                            "direct": direct, "differential": differential,
+                                           "full_inventory_probe": inventory,
                                            "status": "PASS_BOUNDED_PARENT" if differential["status"] == "PASS" else "FAIL",
                                            "gates": common["gates"], "acceptance_eligible": False},
                                           ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
@@ -531,12 +566,14 @@ def write_evidence(static: dict[str, Any], direct: dict[str, Any], differential:
                                                        "target": target_rel, "local_name": "UHSCBackendTop",
                                                        "covered_children": ["DataPath", "WbDataPath", "dispatch", "redirect"],
                                                        "status": "PASS_BOUNDED" if differential["status"] == "PASS" else "FAIL"}],
-                                          "reference_snapshot": reference, "gates": common["gates"], "acceptance_eligible": False},
+                                          "reference_snapshot": reference, "gates": common["gates"],
+                                          "full_inventory_probe": inventory, "acceptance_eligible": False},
                                          ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     SUMMARY_RESULT.write_text(json.dumps({"schema_version": 1, "kind": "V2_BACKEND_PARENT_BATCH_SUMMARY",
                                           "batch_id": "V2-PARENT-BACKEND-001", "static": static, "direct": direct,
                                           "differential": differential, "backend": backend, "reference": reference,
                                           "status": "PASS_BOUNDED_PARENT" if static["status"] == "PASS" and direct["status"] == "PASS" and differential["status"] == "PASS" and backend["status"] == "PASS" else "FAIL",
+                                          "full_inventory_probe": inventory,
                                           "acceptance_eligible": False, "ACCEPTED": "NOT_ALLOWED"},
                                          ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
 
@@ -559,12 +596,15 @@ def main() -> int:
     rtl_path.write_text(rtl_text, encoding="utf-8", newline="\n")
     backend = backend_gates(rtl_path)
     differential = differential_sv(rtl_path, vectors)
+    inventory = full_inventory_probe(module)
     reference = locked_reference_info()
     source = source_info()
-    write_evidence(static, direct, differential, backend, reference, source)
+    write_evidence(static, direct, differential, backend, reference, source, inventory)
     status = "PASS_BOUNDED_PARENT" if static["status"] == "PASS" and direct["status"] == "PASS" and differential["status"] == "PASS" and backend["status"] == "PASS" else "FAIL"
     print(json.dumps({"status": status, "vectors": len(vectors), "direct": direct["status"],
-                      "differential": differential["status"], "verilator": backend["verilator"]["status"],
+                      "differential": differential["status"], "full_inventory": inventory["status"],
+                      "full_inventory_ports": inventory["port_count"],
+                      "verilator": backend["verilator"]["status"],
                       "yosys": backend["yosys"]["status"], "ACCEPTED": "NOT_ALLOWED"}, sort_keys=True))
     return 0 if status == "PASS_BOUNDED_PARENT" else 1
 

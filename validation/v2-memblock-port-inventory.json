@@ -1,0 +1,6641 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_MEMBLOCK_PORT_INVENTORY",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "reference_path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+  "reference_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+  "module": "MemBlock",
+  "port_count": 1326,
+  "ports": [
+    {
+      "name": "clock",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "reset",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_buffers_out_a_ready",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_buffers_out_a_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_buffers_out_a_bits_opcode",
+      "direction": "output",
+      "width": "[3:0]"
+    },
+    {
+      "name": "auto_inner_buffers_out_a_bits_param",
+      "direction": "output",
+      "width": "[2:0]"
+    },
+    {
+      "name": "auto_inner_buffers_out_a_bits_size",
+      "direction": "output",
+      "width": "[2:0]"
+    },
+    {
+      "name": "auto_inner_buffers_out_a_bits_source",
+      "direction": "output",
+      "width": "[3:0]"
+    },
+    {
+      "name": "auto_inner_buffers_out_a_bits_address",
+      "direction": "output",
+      "width": "[47:0]"
+    },
+    {
+      "name": "auto_inner_buffers_out_a_bits_mask",
+      "direction": "output",
+      "width": "[7:0]"
+    },
+    {
+      "name": "auto_inner_buffers_out_a_bits_data",
+      "direction": "output",
+      "width": "[63:0]"
+    },
+    {
+      "name": "auto_inner_buffers_out_a_bits_corrupt",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_buffers_out_d_ready",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_buffers_out_d_valid",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_buffers_out_d_bits_opcode",
+      "direction": "input",
+      "width": "[3:0]"
+    },
+    {
+      "name": "auto_inner_buffers_out_d_bits_param",
+      "direction": "input",
+      "width": "[1:0]"
+    },
+    {
+      "name": "auto_inner_buffers_out_d_bits_size",
+      "direction": "input",
+      "width": "[2:0]"
+    },
+    {
+      "name": "auto_inner_buffers_out_d_bits_source",
+      "direction": "input",
+      "width": "[3:0]"
+    },
+    {
+      "name": "auto_inner_buffers_out_d_bits_sink",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_buffers_out_d_bits_denied",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_buffers_out_d_bits_data",
+      "direction": "input",
+      "width": "[63:0]"
+    },
+    {
+      "name": "auto_inner_buffers_out_d_bits_corrupt",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_frontendBridge_instr_uncache_in_a_ready",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_frontendBridge_instr_uncache_in_a_valid",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_frontendBridge_instr_uncache_in_a_bits_address",
+      "direction": "input",
+      "width": "[47:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_instr_uncache_in_d_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_frontendBridge_instr_uncache_in_d_bits_source",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_frontendBridge_instr_uncache_in_d_bits_data",
+      "direction": "output",
+      "width": "[63:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_instr_uncache_in_d_bits_corrupt",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_frontendBridge_instr_uncache_out_a_ready",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_frontendBridge_instr_uncache_out_a_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_frontendBridge_instr_uncache_out_a_bits_param",
+      "direction": "output",
+      "width": "[2:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_instr_uncache_out_a_bits_address",
+      "direction": "output",
+      "width": "[47:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_instr_uncache_out_a_bits_corrupt",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_frontendBridge_instr_uncache_out_d_ready",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_frontendBridge_instr_uncache_out_d_valid",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_frontendBridge_instr_uncache_out_d_bits_opcode",
+      "direction": "input",
+      "width": "[3:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_instr_uncache_out_d_bits_param",
+      "direction": "input",
+      "width": "[1:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_instr_uncache_out_d_bits_size",
+      "direction": "input",
+      "width": "[2:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_instr_uncache_out_d_bits_source",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_frontendBridge_instr_uncache_out_d_bits_sink",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_frontendBridge_instr_uncache_out_d_bits_denied",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_frontendBridge_instr_uncache_out_d_bits_data",
+      "direction": "input",
+      "width": "[63:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_instr_uncache_out_d_bits_corrupt",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_frontendBridge_icachectrl_in_a_ready",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_frontendBridge_icachectrl_in_a_valid",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_frontendBridge_icachectrl_in_a_bits_opcode",
+      "direction": "input",
+      "width": "[3:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icachectrl_in_a_bits_param",
+      "direction": "input",
+      "width": "[2:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icachectrl_in_a_bits_size",
+      "direction": "input",
+      "width": "[1:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icachectrl_in_a_bits_source",
+      "direction": "input",
+      "width": "[4:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icachectrl_in_a_bits_address",
+      "direction": "input",
+      "width": "[29:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icachectrl_in_a_bits_mask",
+      "direction": "input",
+      "width": "[7:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icachectrl_in_a_bits_data",
+      "direction": "input",
+      "width": "[63:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icachectrl_in_a_bits_corrupt",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_frontendBridge_icachectrl_in_d_ready",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_frontendBridge_icachectrl_in_d_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_frontendBridge_icachectrl_in_d_bits_opcode",
+      "direction": "output",
+      "width": "[3:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icachectrl_in_d_bits_param",
+      "direction": "output",
+      "width": "[1:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icachectrl_in_d_bits_size",
+      "direction": "output",
+      "width": "[1:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icachectrl_in_d_bits_source",
+      "direction": "output",
+      "width": "[4:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icachectrl_in_d_bits_sink",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_frontendBridge_icachectrl_in_d_bits_denied",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_frontendBridge_icachectrl_in_d_bits_data",
+      "direction": "output",
+      "width": "[63:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icachectrl_in_d_bits_corrupt",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_frontendBridge_icachectrl_out_a_ready",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_frontendBridge_icachectrl_out_a_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_frontendBridge_icachectrl_out_a_bits_opcode",
+      "direction": "output",
+      "width": "[3:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icachectrl_out_a_bits_size",
+      "direction": "output",
+      "width": "[1:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icachectrl_out_a_bits_source",
+      "direction": "output",
+      "width": "[4:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icachectrl_out_a_bits_address",
+      "direction": "output",
+      "width": "[29:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icachectrl_out_a_bits_mask",
+      "direction": "output",
+      "width": "[7:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icachectrl_out_a_bits_data",
+      "direction": "output",
+      "width": "[63:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icachectrl_out_d_ready",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_frontendBridge_icachectrl_out_d_valid",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_frontendBridge_icachectrl_out_d_bits_opcode",
+      "direction": "input",
+      "width": "[3:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icachectrl_out_d_bits_size",
+      "direction": "input",
+      "width": "[1:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icachectrl_out_d_bits_source",
+      "direction": "input",
+      "width": "[4:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icachectrl_out_d_bits_data",
+      "direction": "input",
+      "width": "[63:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icache_in_a_ready",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_frontendBridge_icache_in_a_valid",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_frontendBridge_icache_in_a_bits_source",
+      "direction": "input",
+      "width": "[3:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icache_in_a_bits_address",
+      "direction": "input",
+      "width": "[47:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icache_in_d_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_frontendBridge_icache_in_d_bits_opcode",
+      "direction": "output",
+      "width": "[3:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icache_in_d_bits_size",
+      "direction": "output",
+      "width": "[2:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icache_in_d_bits_source",
+      "direction": "output",
+      "width": "[3:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icache_in_d_bits_data",
+      "direction": "output",
+      "width": "[255:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icache_in_d_bits_corrupt",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_frontendBridge_icache_out_a_ready",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_frontendBridge_icache_out_a_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_frontendBridge_icache_out_a_bits_opcode",
+      "direction": "output",
+      "width": "[3:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icache_out_a_bits_param",
+      "direction": "output",
+      "width": "[2:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icache_out_a_bits_size",
+      "direction": "output",
+      "width": "[2:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icache_out_a_bits_source",
+      "direction": "output",
+      "width": "[3:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icache_out_a_bits_address",
+      "direction": "output",
+      "width": "[47:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icache_out_a_bits_user_alias",
+      "direction": "output",
+      "width": "[1:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icache_out_a_bits_user_reqSource",
+      "direction": "output",
+      "width": "[4:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icache_out_a_bits_user_needHint",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_frontendBridge_icache_out_a_bits_mask",
+      "direction": "output",
+      "width": "[31:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icache_out_a_bits_data",
+      "direction": "output",
+      "width": "[255:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icache_out_a_bits_corrupt",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_frontendBridge_icache_out_d_ready",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_frontendBridge_icache_out_d_valid",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_frontendBridge_icache_out_d_bits_opcode",
+      "direction": "input",
+      "width": "[3:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icache_out_d_bits_param",
+      "direction": "input",
+      "width": "[1:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icache_out_d_bits_size",
+      "direction": "input",
+      "width": "[2:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icache_out_d_bits_source",
+      "direction": "input",
+      "width": "[3:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icache_out_d_bits_sink",
+      "direction": "input",
+      "width": "[9:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icache_out_d_bits_denied",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_frontendBridge_icache_out_d_bits_data",
+      "direction": "input",
+      "width": "[255:0]"
+    },
+    {
+      "name": "auto_inner_frontendBridge_icache_out_d_bits_corrupt",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_ptw_to_l2_buffer_out_a_ready",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_ptw_to_l2_buffer_out_a_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_ptw_to_l2_buffer_out_a_bits_opcode",
+      "direction": "output",
+      "width": "[3:0]"
+    },
+    {
+      "name": "auto_inner_ptw_to_l2_buffer_out_a_bits_param",
+      "direction": "output",
+      "width": "[2:0]"
+    },
+    {
+      "name": "auto_inner_ptw_to_l2_buffer_out_a_bits_size",
+      "direction": "output",
+      "width": "[2:0]"
+    },
+    {
+      "name": "auto_inner_ptw_to_l2_buffer_out_a_bits_source",
+      "direction": "output",
+      "width": "[3:0]"
+    },
+    {
+      "name": "auto_inner_ptw_to_l2_buffer_out_a_bits_address",
+      "direction": "output",
+      "width": "[47:0]"
+    },
+    {
+      "name": "auto_inner_ptw_to_l2_buffer_out_a_bits_user_reqSource",
+      "direction": "output",
+      "width": "[4:0]"
+    },
+    {
+      "name": "auto_inner_ptw_to_l2_buffer_out_a_bits_mask",
+      "direction": "output",
+      "width": "[31:0]"
+    },
+    {
+      "name": "auto_inner_ptw_to_l2_buffer_out_a_bits_data",
+      "direction": "output",
+      "width": "[255:0]"
+    },
+    {
+      "name": "auto_inner_ptw_to_l2_buffer_out_a_bits_corrupt",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_ptw_to_l2_buffer_out_d_ready",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_ptw_to_l2_buffer_out_d_valid",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_ptw_to_l2_buffer_out_d_bits_opcode",
+      "direction": "input",
+      "width": "[3:0]"
+    },
+    {
+      "name": "auto_inner_ptw_to_l2_buffer_out_d_bits_param",
+      "direction": "input",
+      "width": "[1:0]"
+    },
+    {
+      "name": "auto_inner_ptw_to_l2_buffer_out_d_bits_size",
+      "direction": "input",
+      "width": "[2:0]"
+    },
+    {
+      "name": "auto_inner_ptw_to_l2_buffer_out_d_bits_source",
+      "direction": "input",
+      "width": "[3:0]"
+    },
+    {
+      "name": "auto_inner_ptw_to_l2_buffer_out_d_bits_sink",
+      "direction": "input",
+      "width": "[9:0]"
+    },
+    {
+      "name": "auto_inner_ptw_to_l2_buffer_out_d_bits_denied",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_ptw_to_l2_buffer_out_d_bits_data",
+      "direction": "input",
+      "width": "[255:0]"
+    },
+    {
+      "name": "auto_inner_ptw_to_l2_buffer_out_d_bits_corrupt",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_beu_local_int_sink_in_0",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_nmi_int_sink_in_0",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_nmi_int_sink_in_1",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_plic_int_sink_in_1_0",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_plic_int_sink_in_0_0",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_debug_int_sink_in_0",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_clint_int_sink_in_0",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_clint_int_sink_in_1",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_l3_pf_sender_out_addr",
+      "direction": "output",
+      "width": "[63:0]"
+    },
+    {
+      "name": "auto_inner_l3_pf_sender_out_addr_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_l2_pf_sender_out_addr",
+      "direction": "output",
+      "width": "[63:0]"
+    },
+    {
+      "name": "auto_inner_l2_pf_sender_out_pf_source",
+      "direction": "output",
+      "width": "[4:0]"
+    },
+    {
+      "name": "auto_inner_l2_pf_sender_out_addr_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_dcache_client_out_a_ready",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_dcache_client_out_a_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_dcache_client_out_a_bits_opcode",
+      "direction": "output",
+      "width": "[3:0]"
+    },
+    {
+      "name": "auto_inner_dcache_client_out_a_bits_param",
+      "direction": "output",
+      "width": "[2:0]"
+    },
+    {
+      "name": "auto_inner_dcache_client_out_a_bits_size",
+      "direction": "output",
+      "width": "[2:0]"
+    },
+    {
+      "name": "auto_inner_dcache_client_out_a_bits_source",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "auto_inner_dcache_client_out_a_bits_address",
+      "direction": "output",
+      "width": "[47:0]"
+    },
+    {
+      "name": "auto_inner_dcache_client_out_a_bits_user_alias",
+      "direction": "output",
+      "width": "[1:0]"
+    },
+    {
+      "name": "auto_inner_dcache_client_out_a_bits_user_vaddr",
+      "direction": "output",
+      "width": "[43:0]"
+    },
+    {
+      "name": "auto_inner_dcache_client_out_a_bits_user_reqSource",
+      "direction": "output",
+      "width": "[4:0]"
+    },
+    {
+      "name": "auto_inner_dcache_client_out_a_bits_user_needHint",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_dcache_client_out_a_bits_echo_isKeyword",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_dcache_client_out_a_bits_mask",
+      "direction": "output",
+      "width": "[31:0]"
+    },
+    {
+      "name": "auto_inner_dcache_client_out_a_bits_data",
+      "direction": "output",
+      "width": "[255:0]"
+    },
+    {
+      "name": "auto_inner_dcache_client_out_a_bits_corrupt",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_dcache_client_out_b_ready",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_dcache_client_out_b_valid",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_dcache_client_out_b_bits_opcode",
+      "direction": "input",
+      "width": "[2:0]"
+    },
+    {
+      "name": "auto_inner_dcache_client_out_b_bits_param",
+      "direction": "input",
+      "width": "[1:0]"
+    },
+    {
+      "name": "auto_inner_dcache_client_out_b_bits_size",
+      "direction": "input",
+      "width": "[2:0]"
+    },
+    {
+      "name": "auto_inner_dcache_client_out_b_bits_source",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "auto_inner_dcache_client_out_b_bits_address",
+      "direction": "input",
+      "width": "[47:0]"
+    },
+    {
+      "name": "auto_inner_dcache_client_out_b_bits_mask",
+      "direction": "input",
+      "width": "[31:0]"
+    },
+    {
+      "name": "auto_inner_dcache_client_out_b_bits_data",
+      "direction": "input",
+      "width": "[255:0]"
+    },
+    {
+      "name": "auto_inner_dcache_client_out_b_bits_corrupt",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_dcache_client_out_c_ready",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_dcache_client_out_c_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_dcache_client_out_c_bits_opcode",
+      "direction": "output",
+      "width": "[2:0]"
+    },
+    {
+      "name": "auto_inner_dcache_client_out_c_bits_param",
+      "direction": "output",
+      "width": "[2:0]"
+    },
+    {
+      "name": "auto_inner_dcache_client_out_c_bits_size",
+      "direction": "output",
+      "width": "[2:0]"
+    },
+    {
+      "name": "auto_inner_dcache_client_out_c_bits_source",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "auto_inner_dcache_client_out_c_bits_address",
+      "direction": "output",
+      "width": "[47:0]"
+    },
+    {
+      "name": "auto_inner_dcache_client_out_c_bits_user_alias",
+      "direction": "output",
+      "width": "[1:0]"
+    },
+    {
+      "name": "auto_inner_dcache_client_out_c_bits_user_vaddr",
+      "direction": "output",
+      "width": "[43:0]"
+    },
+    {
+      "name": "auto_inner_dcache_client_out_c_bits_user_reqSource",
+      "direction": "output",
+      "width": "[4:0]"
+    },
+    {
+      "name": "auto_inner_dcache_client_out_c_bits_user_needHint",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_dcache_client_out_c_bits_echo_isKeyword",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_dcache_client_out_c_bits_data",
+      "direction": "output",
+      "width": "[255:0]"
+    },
+    {
+      "name": "auto_inner_dcache_client_out_c_bits_corrupt",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_dcache_client_out_d_ready",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_dcache_client_out_d_valid",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_dcache_client_out_d_bits_opcode",
+      "direction": "input",
+      "width": "[3:0]"
+    },
+    {
+      "name": "auto_inner_dcache_client_out_d_bits_param",
+      "direction": "input",
+      "width": "[1:0]"
+    },
+    {
+      "name": "auto_inner_dcache_client_out_d_bits_size",
+      "direction": "input",
+      "width": "[2:0]"
+    },
+    {
+      "name": "auto_inner_dcache_client_out_d_bits_source",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "auto_inner_dcache_client_out_d_bits_sink",
+      "direction": "input",
+      "width": "[9:0]"
+    },
+    {
+      "name": "auto_inner_dcache_client_out_d_bits_denied",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_dcache_client_out_d_bits_echo_isKeyword",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_dcache_client_out_d_bits_data",
+      "direction": "input",
+      "width": "[255:0]"
+    },
+    {
+      "name": "auto_inner_dcache_client_out_d_bits_corrupt",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_dcache_client_out_e_ready",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_dcache_client_out_e_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "auto_inner_dcache_client_out_e_bits_sink",
+      "direction": "output",
+      "width": "[9:0]"
+    },
+    {
+      "name": "io_hartId",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_redirect_valid",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_redirect_bits_robIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_redirect_bits_robIdx_value",
+      "direction": "input",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_redirect_bits_level",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_redirect_bits_isVlsException",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_backendToTopBypass_cpuHalted",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_backendToTopBypass_cpuCriticalError",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_backendToTopBypass_msiAck",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_sfence_valid",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_sfence_bits_rs1",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_sfence_bits_rs2",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_sfence_bits_addr",
+      "direction": "input",
+      "width": "[49:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_sfence_bits_id",
+      "direction": "input",
+      "width": "[15:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_sfence_bits_flushPipe",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_sfence_bits_hv",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_sfence_bits_hg",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_tlbCsr_satp_mode",
+      "direction": "input",
+      "width": "[3:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_tlbCsr_satp_asid",
+      "direction": "input",
+      "width": "[15:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_tlbCsr_satp_ppn",
+      "direction": "input",
+      "width": "[43:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_tlbCsr_satp_changed",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_tlbCsr_vsatp_mode",
+      "direction": "input",
+      "width": "[3:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_tlbCsr_vsatp_asid",
+      "direction": "input",
+      "width": "[15:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_tlbCsr_vsatp_ppn",
+      "direction": "input",
+      "width": "[43:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_tlbCsr_vsatp_changed",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_tlbCsr_hgatp_mode",
+      "direction": "input",
+      "width": "[3:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_tlbCsr_hgatp_vmid",
+      "direction": "input",
+      "width": "[15:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_tlbCsr_hgatp_ppn",
+      "direction": "input",
+      "width": "[43:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_tlbCsr_hgatp_changed",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_tlbCsr_mbmc_BME",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_tlbCsr_mbmc_CMODE",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_tlbCsr_mbmc_BCLEAR",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_tlbCsr_mbmc_BMA",
+      "direction": "input",
+      "width": "[57:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_tlbCsr_priv_mxr",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_tlbCsr_priv_sum",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_tlbCsr_priv_vmxr",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_tlbCsr_priv_vsum",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_tlbCsr_priv_virt",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_tlbCsr_priv_virt_changed",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_tlbCsr_priv_spvp",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_tlbCsr_priv_imode",
+      "direction": "input",
+      "width": "[1:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_tlbCsr_priv_dmode",
+      "direction": "input",
+      "width": "[1:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_tlbCsr_priv_debug",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_tlbCsr_mPBMTE",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_tlbCsr_hPBMTE",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_tlbCsr_pmm_mseccfg",
+      "direction": "input",
+      "width": "[1:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_tlbCsr_pmm_menvcfg",
+      "direction": "input",
+      "width": "[1:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_tlbCsr_pmm_henvcfg",
+      "direction": "input",
+      "width": "[1:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_tlbCsr_pmm_hstatus",
+      "direction": "input",
+      "width": "[1:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_tlbCsr_pmm_senvcfg",
+      "direction": "input",
+      "width": "[1:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_lsqio_scommit",
+      "direction": "input",
+      "width": "[3:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_lsqio_pendingMMIOld",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_lsqio_pendingst",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_lsqio_pendingPtr_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_lsqio_pendingPtr_value",
+      "direction": "input",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_isStoreException",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_pf_ctrl_l1I_pf_enable",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_pf_ctrl_l2_pf_enable",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_pf_ctrl_l1D_pf_enable",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_pf_ctrl_l1D_pf_train_on_hit",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_pf_ctrl_l1D_pf_enable_agt",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_pf_ctrl_l1D_pf_enable_pht",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_pf_ctrl_l1D_pf_active_threshold",
+      "direction": "input",
+      "width": "[3:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_pf_ctrl_l1D_pf_active_stride",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_pf_ctrl_l1D_pf_enable_stride",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_pf_ctrl_l2_pf_store_only",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_pf_ctrl_l2_pf_recv_enable",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_pf_ctrl_l2_pf_pbop_enable",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_pf_ctrl_l2_pf_vbop_enable",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_pf_ctrl_l2_pf_tp_enable",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_pf_ctrl_l2_pf_delay_latency",
+      "direction": "input",
+      "width": "[9:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_bp_ctrl_ubtb_enable",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_bp_ctrl_btb_enable",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_bp_ctrl_tage_enable",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_bp_ctrl_sc_enable",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_bp_ctrl_ras_enable",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_sbuffer_timeout",
+      "direction": "input",
+      "width": "[21:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_ldld_vio_check_enable",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_cache_error_enable",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_uncache_write_outstanding_enable",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_hd_misalign_st_enable",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_hd_misalign_ld_enable",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_power_down_enable",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_flush_l2_enable",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_distribute_csr_w_valid",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_distribute_csr_w_bits_addr",
+      "direction": "input",
+      "width": "[11:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_distribute_csr_w_bits_data",
+      "direction": "input",
+      "width": "[63:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_frontend_trigger_tUpdate_valid",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_frontend_trigger_tUpdate_bits_addr",
+      "direction": "input",
+      "width": "[1:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_frontend_trigger_tUpdate_bits_tdata_matchType",
+      "direction": "input",
+      "width": "[1:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_frontend_trigger_tUpdate_bits_tdata_select",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_frontend_trigger_tUpdate_bits_tdata_action",
+      "direction": "input",
+      "width": "[3:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_frontend_trigger_tUpdate_bits_tdata_chain",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_frontend_trigger_tUpdate_bits_tdata_tdata2",
+      "direction": "input",
+      "width": "[63:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_frontend_trigger_tEnableVec_0",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_frontend_trigger_tEnableVec_1",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_frontend_trigger_tEnableVec_2",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_frontend_trigger_tEnableVec_3",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_frontend_trigger_debugMode",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_frontend_trigger_triggerCanRaiseBpExp",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_mem_trigger_tUpdate_valid",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_mem_trigger_tUpdate_bits_addr",
+      "direction": "input",
+      "width": "[1:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_mem_trigger_tUpdate_bits_tdata_matchType",
+      "direction": "input",
+      "width": "[1:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_mem_trigger_tUpdate_bits_tdata_select",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_mem_trigger_tUpdate_bits_tdata_action",
+      "direction": "input",
+      "width": "[3:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_mem_trigger_tUpdate_bits_tdata_chain",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_mem_trigger_tUpdate_bits_tdata_store",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_mem_trigger_tUpdate_bits_tdata_load",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_mem_trigger_tUpdate_bits_tdata_tdata2",
+      "direction": "input",
+      "width": "[63:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_mem_trigger_tEnableVec_0",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_mem_trigger_tEnableVec_1",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_mem_trigger_tEnableVec_2",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_mem_trigger_tEnableVec_3",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_mem_trigger_debugMode",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_mem_trigger_triggerCanRaiseBpExp",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_csrCtrl_fsIsOff",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_needAlloc_0",
+      "direction": "input",
+      "width": "[1:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_needAlloc_1",
+      "direction": "input",
+      "width": "[1:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_needAlloc_2",
+      "direction": "input",
+      "width": "[1:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_needAlloc_3",
+      "direction": "input",
+      "width": "[1:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_needAlloc_4",
+      "direction": "input",
+      "width": "[1:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_needAlloc_5",
+      "direction": "input",
+      "width": "[1:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_0_valid",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_0_bits_exceptionVec_0",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_0_bits_exceptionVec_1",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_0_bits_exceptionVec_2",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_0_bits_exceptionVec_3",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_0_bits_exceptionVec_4",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_0_bits_exceptionVec_5",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_0_bits_exceptionVec_6",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_0_bits_exceptionVec_7",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_0_bits_exceptionVec_8",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_0_bits_exceptionVec_9",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_0_bits_exceptionVec_10",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_0_bits_exceptionVec_11",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_0_bits_exceptionVec_12",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_0_bits_exceptionVec_13",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_0_bits_exceptionVec_14",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_0_bits_exceptionVec_15",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_0_bits_exceptionVec_16",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_0_bits_exceptionVec_17",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_0_bits_exceptionVec_18",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_0_bits_exceptionVec_19",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_0_bits_exceptionVec_20",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_0_bits_exceptionVec_21",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_0_bits_exceptionVec_22",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_0_bits_exceptionVec_23",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_0_bits_trigger",
+      "direction": "input",
+      "width": "[3:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_0_bits_fuType",
+      "direction": "input",
+      "width": "[34:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_0_bits_fuOpType",
+      "direction": "input",
+      "width": "[8:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_0_bits_flushPipe",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_0_bits_uopIdx",
+      "direction": "input",
+      "width": "[6:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_0_bits_lastUop",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_0_bits_robIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_0_bits_robIdx_value",
+      "direction": "input",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_0_bits_lqIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_0_bits_lqIdx_value",
+      "direction": "input",
+      "width": "[6:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_0_bits_sqIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_0_bits_sqIdx_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_0_bits_numLsElem",
+      "direction": "input",
+      "width": "[4:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_1_valid",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_1_bits_exceptionVec_0",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_1_bits_exceptionVec_1",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_1_bits_exceptionVec_2",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_1_bits_exceptionVec_3",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_1_bits_exceptionVec_4",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_1_bits_exceptionVec_5",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_1_bits_exceptionVec_6",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_1_bits_exceptionVec_7",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_1_bits_exceptionVec_8",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_1_bits_exceptionVec_9",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_1_bits_exceptionVec_10",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_1_bits_exceptionVec_11",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_1_bits_exceptionVec_12",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_1_bits_exceptionVec_13",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_1_bits_exceptionVec_14",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_1_bits_exceptionVec_15",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_1_bits_exceptionVec_16",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_1_bits_exceptionVec_17",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_1_bits_exceptionVec_18",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_1_bits_exceptionVec_19",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_1_bits_exceptionVec_20",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_1_bits_exceptionVec_21",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_1_bits_exceptionVec_22",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_1_bits_exceptionVec_23",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_1_bits_trigger",
+      "direction": "input",
+      "width": "[3:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_1_bits_fuType",
+      "direction": "input",
+      "width": "[34:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_1_bits_fuOpType",
+      "direction": "input",
+      "width": "[8:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_1_bits_flushPipe",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_1_bits_uopIdx",
+      "direction": "input",
+      "width": "[6:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_1_bits_lastUop",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_1_bits_robIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_1_bits_robIdx_value",
+      "direction": "input",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_1_bits_lqIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_1_bits_lqIdx_value",
+      "direction": "input",
+      "width": "[6:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_1_bits_sqIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_1_bits_sqIdx_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_1_bits_numLsElem",
+      "direction": "input",
+      "width": "[4:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_2_valid",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_2_bits_exceptionVec_0",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_2_bits_exceptionVec_1",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_2_bits_exceptionVec_2",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_2_bits_exceptionVec_3",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_2_bits_exceptionVec_4",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_2_bits_exceptionVec_5",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_2_bits_exceptionVec_6",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_2_bits_exceptionVec_7",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_2_bits_exceptionVec_8",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_2_bits_exceptionVec_9",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_2_bits_exceptionVec_10",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_2_bits_exceptionVec_11",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_2_bits_exceptionVec_12",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_2_bits_exceptionVec_13",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_2_bits_exceptionVec_14",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_2_bits_exceptionVec_15",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_2_bits_exceptionVec_16",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_2_bits_exceptionVec_17",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_2_bits_exceptionVec_18",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_2_bits_exceptionVec_19",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_2_bits_exceptionVec_20",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_2_bits_exceptionVec_21",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_2_bits_exceptionVec_22",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_2_bits_exceptionVec_23",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_2_bits_trigger",
+      "direction": "input",
+      "width": "[3:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_2_bits_fuType",
+      "direction": "input",
+      "width": "[34:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_2_bits_fuOpType",
+      "direction": "input",
+      "width": "[8:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_2_bits_flushPipe",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_2_bits_uopIdx",
+      "direction": "input",
+      "width": "[6:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_2_bits_lastUop",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_2_bits_robIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_2_bits_robIdx_value",
+      "direction": "input",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_2_bits_lqIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_2_bits_lqIdx_value",
+      "direction": "input",
+      "width": "[6:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_2_bits_sqIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_2_bits_sqIdx_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_2_bits_numLsElem",
+      "direction": "input",
+      "width": "[4:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_3_valid",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_3_bits_exceptionVec_0",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_3_bits_exceptionVec_1",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_3_bits_exceptionVec_2",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_3_bits_exceptionVec_3",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_3_bits_exceptionVec_4",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_3_bits_exceptionVec_5",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_3_bits_exceptionVec_6",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_3_bits_exceptionVec_7",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_3_bits_exceptionVec_8",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_3_bits_exceptionVec_9",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_3_bits_exceptionVec_10",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_3_bits_exceptionVec_11",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_3_bits_exceptionVec_12",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_3_bits_exceptionVec_13",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_3_bits_exceptionVec_14",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_3_bits_exceptionVec_15",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_3_bits_exceptionVec_16",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_3_bits_exceptionVec_17",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_3_bits_exceptionVec_18",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_3_bits_exceptionVec_19",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_3_bits_exceptionVec_20",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_3_bits_exceptionVec_21",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_3_bits_exceptionVec_22",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_3_bits_exceptionVec_23",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_3_bits_trigger",
+      "direction": "input",
+      "width": "[3:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_3_bits_fuType",
+      "direction": "input",
+      "width": "[34:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_3_bits_fuOpType",
+      "direction": "input",
+      "width": "[8:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_3_bits_flushPipe",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_3_bits_uopIdx",
+      "direction": "input",
+      "width": "[6:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_3_bits_lastUop",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_3_bits_robIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_3_bits_robIdx_value",
+      "direction": "input",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_3_bits_lqIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_3_bits_lqIdx_value",
+      "direction": "input",
+      "width": "[6:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_3_bits_sqIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_3_bits_sqIdx_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_3_bits_numLsElem",
+      "direction": "input",
+      "width": "[4:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_4_valid",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_4_bits_exceptionVec_0",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_4_bits_exceptionVec_1",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_4_bits_exceptionVec_2",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_4_bits_exceptionVec_3",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_4_bits_exceptionVec_4",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_4_bits_exceptionVec_5",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_4_bits_exceptionVec_6",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_4_bits_exceptionVec_7",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_4_bits_exceptionVec_8",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_4_bits_exceptionVec_9",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_4_bits_exceptionVec_10",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_4_bits_exceptionVec_11",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_4_bits_exceptionVec_12",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_4_bits_exceptionVec_13",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_4_bits_exceptionVec_14",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_4_bits_exceptionVec_15",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_4_bits_exceptionVec_16",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_4_bits_exceptionVec_17",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_4_bits_exceptionVec_18",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_4_bits_exceptionVec_19",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_4_bits_exceptionVec_20",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_4_bits_exceptionVec_21",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_4_bits_exceptionVec_22",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_4_bits_exceptionVec_23",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_4_bits_trigger",
+      "direction": "input",
+      "width": "[3:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_4_bits_fuType",
+      "direction": "input",
+      "width": "[34:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_4_bits_fuOpType",
+      "direction": "input",
+      "width": "[8:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_4_bits_flushPipe",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_4_bits_uopIdx",
+      "direction": "input",
+      "width": "[6:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_4_bits_lastUop",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_4_bits_robIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_4_bits_robIdx_value",
+      "direction": "input",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_4_bits_lqIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_4_bits_lqIdx_value",
+      "direction": "input",
+      "width": "[6:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_4_bits_sqIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_4_bits_sqIdx_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_4_bits_numLsElem",
+      "direction": "input",
+      "width": "[4:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_5_valid",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_5_bits_exceptionVec_0",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_5_bits_exceptionVec_1",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_5_bits_exceptionVec_2",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_5_bits_exceptionVec_3",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_5_bits_exceptionVec_4",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_5_bits_exceptionVec_5",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_5_bits_exceptionVec_6",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_5_bits_exceptionVec_7",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_5_bits_exceptionVec_8",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_5_bits_exceptionVec_9",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_5_bits_exceptionVec_10",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_5_bits_exceptionVec_11",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_5_bits_exceptionVec_12",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_5_bits_exceptionVec_13",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_5_bits_exceptionVec_14",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_5_bits_exceptionVec_15",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_5_bits_exceptionVec_16",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_5_bits_exceptionVec_17",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_5_bits_exceptionVec_18",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_5_bits_exceptionVec_19",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_5_bits_exceptionVec_20",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_5_bits_exceptionVec_21",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_5_bits_exceptionVec_22",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_5_bits_exceptionVec_23",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_5_bits_trigger",
+      "direction": "input",
+      "width": "[3:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_5_bits_fuType",
+      "direction": "input",
+      "width": "[34:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_5_bits_fuOpType",
+      "direction": "input",
+      "width": "[8:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_5_bits_flushPipe",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_5_bits_uopIdx",
+      "direction": "input",
+      "width": "[6:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_5_bits_lastUop",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_5_bits_robIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_5_bits_robIdx_value",
+      "direction": "input",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_5_bits_lqIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_5_bits_lqIdx_value",
+      "direction": "input",
+      "width": "[6:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_5_bits_sqIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_5_bits_sqIdx_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_enqLsq_req_5_bits_numLsElem",
+      "direction": "input",
+      "width": "[4:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_flushSb",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_2_ready",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_2_valid",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_2_bits_uop_pc",
+      "direction": "input",
+      "width": "[49:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_2_bits_uop_preDecodeInfo_isRVC",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_2_bits_uop_ftqPtr_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_2_bits_uop_ftqPtr_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_2_bits_uop_ftqOffset",
+      "direction": "input",
+      "width": "[3:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_2_bits_uop_fuOpType",
+      "direction": "input",
+      "width": "[8:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_2_bits_uop_rfWen",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_2_bits_uop_fpWen",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_2_bits_uop_imm",
+      "direction": "input",
+      "width": "[31:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_2_bits_uop_pdest",
+      "direction": "input",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_2_bits_uop_robIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_2_bits_uop_robIdx_value",
+      "direction": "input",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_2_bits_uop_storeSetHit",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_2_bits_uop_waitForRobIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_2_bits_uop_waitForRobIdx_value",
+      "direction": "input",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_2_bits_uop_loadWaitBit",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_2_bits_uop_loadWaitStrict",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_2_bits_uop_lqIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_2_bits_uop_lqIdx_value",
+      "direction": "input",
+      "width": "[6:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_2_bits_uop_sqIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_2_bits_uop_sqIdx_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_2_bits_src_0",
+      "direction": "input",
+      "width": "[63:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_1_ready",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_1_valid",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_1_bits_uop_pc",
+      "direction": "input",
+      "width": "[49:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_1_bits_uop_preDecodeInfo_isRVC",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_1_bits_uop_ftqPtr_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_1_bits_uop_ftqPtr_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_1_bits_uop_ftqOffset",
+      "direction": "input",
+      "width": "[3:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_1_bits_uop_fuOpType",
+      "direction": "input",
+      "width": "[8:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_1_bits_uop_rfWen",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_1_bits_uop_fpWen",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_1_bits_uop_imm",
+      "direction": "input",
+      "width": "[31:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_1_bits_uop_pdest",
+      "direction": "input",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_1_bits_uop_robIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_1_bits_uop_robIdx_value",
+      "direction": "input",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_1_bits_uop_storeSetHit",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_1_bits_uop_waitForRobIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_1_bits_uop_waitForRobIdx_value",
+      "direction": "input",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_1_bits_uop_loadWaitBit",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_1_bits_uop_loadWaitStrict",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_1_bits_uop_lqIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_1_bits_uop_lqIdx_value",
+      "direction": "input",
+      "width": "[6:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_1_bits_uop_sqIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_1_bits_uop_sqIdx_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_1_bits_src_0",
+      "direction": "input",
+      "width": "[63:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_0_ready",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_0_valid",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_0_bits_uop_pc",
+      "direction": "input",
+      "width": "[49:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_0_bits_uop_preDecodeInfo_isRVC",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_0_bits_uop_ftqPtr_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_0_bits_uop_ftqPtr_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_0_bits_uop_ftqOffset",
+      "direction": "input",
+      "width": "[3:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_0_bits_uop_fuOpType",
+      "direction": "input",
+      "width": "[8:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_0_bits_uop_rfWen",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_0_bits_uop_fpWen",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_0_bits_uop_imm",
+      "direction": "input",
+      "width": "[31:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_0_bits_uop_pdest",
+      "direction": "input",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_0_bits_uop_robIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_0_bits_uop_robIdx_value",
+      "direction": "input",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_0_bits_uop_storeSetHit",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_0_bits_uop_waitForRobIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_0_bits_uop_waitForRobIdx_value",
+      "direction": "input",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_0_bits_uop_loadWaitBit",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_0_bits_uop_loadWaitStrict",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_0_bits_uop_lqIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_0_bits_uop_lqIdx_value",
+      "direction": "input",
+      "width": "[6:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_0_bits_uop_sqIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_0_bits_uop_sqIdx_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueLda_0_bits_src_0",
+      "direction": "input",
+      "width": "[63:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueSta_1_ready",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueSta_1_valid",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueSta_1_bits_uop_fuType",
+      "direction": "input",
+      "width": "[34:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueSta_1_bits_uop_fuOpType",
+      "direction": "input",
+      "width": "[8:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueSta_1_bits_uop_rfWen",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueSta_1_bits_uop_imm",
+      "direction": "input",
+      "width": "[31:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueSta_1_bits_uop_pdest",
+      "direction": "input",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueSta_1_bits_uop_robIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueSta_1_bits_uop_robIdx_value",
+      "direction": "input",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueSta_1_bits_uop_sqIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueSta_1_bits_uop_sqIdx_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueSta_1_bits_src_0",
+      "direction": "input",
+      "width": "[63:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueSta_0_ready",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueSta_0_valid",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueSta_0_bits_uop_fuType",
+      "direction": "input",
+      "width": "[34:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueSta_0_bits_uop_fuOpType",
+      "direction": "input",
+      "width": "[8:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueSta_0_bits_uop_rfWen",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueSta_0_bits_uop_imm",
+      "direction": "input",
+      "width": "[31:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueSta_0_bits_uop_pdest",
+      "direction": "input",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueSta_0_bits_uop_robIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueSta_0_bits_uop_robIdx_value",
+      "direction": "input",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueSta_0_bits_uop_sqIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueSta_0_bits_uop_sqIdx_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueSta_0_bits_src_0",
+      "direction": "input",
+      "width": "[63:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueStd_1_ready",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueStd_1_valid",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueStd_1_bits_uop_fuType",
+      "direction": "input",
+      "width": "[34:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueStd_1_bits_uop_fuOpType",
+      "direction": "input",
+      "width": "[8:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueStd_1_bits_uop_robIdx_value",
+      "direction": "input",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueStd_1_bits_uop_sqIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueStd_1_bits_uop_sqIdx_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueStd_1_bits_src_0",
+      "direction": "input",
+      "width": "[63:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueStd_0_ready",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueStd_0_valid",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueStd_0_bits_uop_fuType",
+      "direction": "input",
+      "width": "[34:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueStd_0_bits_uop_fuOpType",
+      "direction": "input",
+      "width": "[8:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueStd_0_bits_uop_robIdx_value",
+      "direction": "input",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueStd_0_bits_uop_sqIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueStd_0_bits_uop_sqIdx_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueStd_0_bits_src_0",
+      "direction": "input",
+      "width": "[63:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_1_ready",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_1_valid",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_1_bits_uop_ftqPtr_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_1_bits_uop_ftqPtr_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_1_bits_uop_ftqOffset",
+      "direction": "input",
+      "width": "[3:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_1_bits_uop_fuOpType",
+      "direction": "input",
+      "width": "[8:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_1_bits_uop_vecWen",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_1_bits_uop_v0Wen",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_1_bits_uop_vlWen",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_1_bits_uop_vpu_vma",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_1_bits_uop_vpu_vta",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_1_bits_uop_vpu_vsew",
+      "direction": "input",
+      "width": "[1:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_1_bits_uop_vpu_vlmul",
+      "direction": "input",
+      "width": "[2:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_1_bits_uop_vpu_vm",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_1_bits_uop_vpu_vstart",
+      "direction": "input",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_1_bits_uop_vpu_vuopIdx",
+      "direction": "input",
+      "width": "[6:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_1_bits_uop_vpu_lastUop",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_1_bits_uop_vpu_vmask",
+      "direction": "input",
+      "width": "[127:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_1_bits_uop_vpu_nf",
+      "direction": "input",
+      "width": "[2:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_1_bits_uop_vpu_veew",
+      "direction": "input",
+      "width": "[1:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_1_bits_uop_vpu_isVleff",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_1_bits_uop_pdest",
+      "direction": "input",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_1_bits_uop_robIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_1_bits_uop_robIdx_value",
+      "direction": "input",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_1_bits_uop_lqIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_1_bits_uop_lqIdx_value",
+      "direction": "input",
+      "width": "[6:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_1_bits_uop_sqIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_1_bits_uop_sqIdx_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_1_bits_src_0",
+      "direction": "input",
+      "width": "[127:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_1_bits_src_1",
+      "direction": "input",
+      "width": "[127:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_1_bits_src_2",
+      "direction": "input",
+      "width": "[127:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_1_bits_src_3",
+      "direction": "input",
+      "width": "[127:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_1_bits_src_4",
+      "direction": "input",
+      "width": "[127:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_1_bits_flowNum",
+      "direction": "input",
+      "width": "[4:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_1_bits_isVecPartReplay",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_1_bits_vecReplayMask",
+      "direction": "input",
+      "width": "[15:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_1_bits_vecReplayMbIdx",
+      "direction": "input",
+      "width": "[3:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_0_ready",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_0_valid",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_0_bits_uop_ftqPtr_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_0_bits_uop_ftqPtr_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_0_bits_uop_ftqOffset",
+      "direction": "input",
+      "width": "[3:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_0_bits_uop_fuType",
+      "direction": "input",
+      "width": "[34:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_0_bits_uop_fuOpType",
+      "direction": "input",
+      "width": "[8:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_0_bits_uop_vecWen",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_0_bits_uop_v0Wen",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_0_bits_uop_vlWen",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_0_bits_uop_vpu_vma",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_0_bits_uop_vpu_vta",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_0_bits_uop_vpu_vsew",
+      "direction": "input",
+      "width": "[1:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_0_bits_uop_vpu_vlmul",
+      "direction": "input",
+      "width": "[2:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_0_bits_uop_vpu_vm",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_0_bits_uop_vpu_vstart",
+      "direction": "input",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_0_bits_uop_vpu_vuopIdx",
+      "direction": "input",
+      "width": "[6:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_0_bits_uop_vpu_lastUop",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_0_bits_uop_vpu_vmask",
+      "direction": "input",
+      "width": "[127:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_0_bits_uop_vpu_nf",
+      "direction": "input",
+      "width": "[2:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_0_bits_uop_vpu_veew",
+      "direction": "input",
+      "width": "[1:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_0_bits_uop_vpu_isVleff",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_0_bits_uop_pdest",
+      "direction": "input",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_0_bits_uop_robIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_0_bits_uop_robIdx_value",
+      "direction": "input",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_0_bits_uop_lqIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_0_bits_uop_lqIdx_value",
+      "direction": "input",
+      "width": "[6:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_0_bits_uop_sqIdx_flag",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_0_bits_uop_sqIdx_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_0_bits_src_0",
+      "direction": "input",
+      "width": "[127:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_0_bits_src_1",
+      "direction": "input",
+      "width": "[127:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_0_bits_src_2",
+      "direction": "input",
+      "width": "[127:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_0_bits_src_3",
+      "direction": "input",
+      "width": "[127:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_0_bits_src_4",
+      "direction": "input",
+      "width": "[127:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_0_bits_flowNum",
+      "direction": "input",
+      "width": "[4:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_0_bits_isVecPartReplay",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_0_bits_vecReplayMask",
+      "direction": "input",
+      "width": "[15:0]"
+    },
+    {
+      "name": "io_ooo_to_mem_issueVldu_0_bits_vecReplayMbIdx",
+      "direction": "input",
+      "width": "[3:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_topToBackendBypass_hartId",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_topToBackendBypass_externalInterrupt_mtip",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_topToBackendBypass_externalInterrupt_msip",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_topToBackendBypass_externalInterrupt_meip",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_topToBackendBypass_externalInterrupt_seip",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_topToBackendBypass_externalInterrupt_debug",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_topToBackendBypass_externalInterrupt_nmi_nmi_31",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_topToBackendBypass_externalInterrupt_nmi_nmi_43",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_topToBackendBypass_msiInfo_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_topToBackendBypass_msiInfo_bits",
+      "direction": "output",
+      "width": "[11:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_topToBackendBypass_clintTime_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_topToBackendBypass_clintTime_bits",
+      "direction": "output",
+      "width": "[63:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_topToBackendBypass_l2FlushDone",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_lqCancelCnt",
+      "direction": "output",
+      "width": "[6:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_sqCancelCnt",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_sqDeq",
+      "direction": "output",
+      "width": "[1:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_lqDeq",
+      "direction": "output",
+      "width": "[3:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_lqDeqPtr_flag",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_lqDeqPtr_value",
+      "direction": "output",
+      "width": "[6:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_memoryViolation_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_memoryViolation_bits_isRVC",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_memoryViolation_bits_robIdx_flag",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_memoryViolation_bits_robIdx_value",
+      "direction": "output",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_memoryViolation_bits_ftqIdx_flag",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_memoryViolation_bits_ftqIdx_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_memoryViolation_bits_ftqOffset",
+      "direction": "output",
+      "width": "[3:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_memoryViolation_bits_level",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_sbIsEmpty",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_lsqio_vaddr",
+      "direction": "output",
+      "width": "[63:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_lsqio_gpaddr",
+      "direction": "output",
+      "width": "[63:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_lsqio_isForVSnonLeafPTE",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_lsqio_loadMmio_0",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_lsqio_loadMmio_1",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_lsqio_loadMmio_2",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_lsqio_loadMmioUop_0_robIdx_value",
+      "direction": "output",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_lsqio_loadMmioUop_1_robIdx_value",
+      "direction": "output",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_lsqio_loadMmioUop_2_robIdx_value",
+      "direction": "output",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_lsqio_storeMmio",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_lsqio_storeMmioUop_robIdx_value",
+      "direction": "output",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_0_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_0_bits_uop_exceptionVec_3",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_0_bits_uop_exceptionVec_4",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_0_bits_uop_exceptionVec_5",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_0_bits_uop_exceptionVec_6",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_0_bits_uop_exceptionVec_7",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_0_bits_uop_exceptionVec_13",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_0_bits_uop_exceptionVec_15",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_0_bits_uop_exceptionVec_19",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_0_bits_uop_exceptionVec_21",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_0_bits_uop_exceptionVec_23",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_0_bits_uop_trigger",
+      "direction": "output",
+      "width": "[3:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_0_bits_uop_rfWen",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_0_bits_uop_fpWen",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_0_bits_uop_flushPipe",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_0_bits_uop_pdest",
+      "direction": "output",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_0_bits_uop_robIdx_flag",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_0_bits_uop_robIdx_value",
+      "direction": "output",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_0_bits_uop_replayInst",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_0_bits_data",
+      "direction": "output",
+      "width": "[63:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_0_bits_isFromLoadUnit",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_0_bits_debug_isMMIO",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_0_bits_debug_isNCIO",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_0_bits_debug_isPerfCnt",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_1_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_1_bits_uop_exceptionVec_3",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_1_bits_uop_exceptionVec_4",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_1_bits_uop_exceptionVec_5",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_1_bits_uop_exceptionVec_13",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_1_bits_uop_exceptionVec_19",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_1_bits_uop_exceptionVec_21",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_1_bits_uop_trigger",
+      "direction": "output",
+      "width": "[3:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_1_bits_uop_rfWen",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_1_bits_uop_fpWen",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_1_bits_uop_flushPipe",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_1_bits_uop_pdest",
+      "direction": "output",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_1_bits_uop_robIdx_flag",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_1_bits_uop_robIdx_value",
+      "direction": "output",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_1_bits_uop_replayInst",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_1_bits_data",
+      "direction": "output",
+      "width": "[63:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_1_bits_debug_isMMIO",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_1_bits_debug_isNCIO",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_1_bits_debug_isPerfCnt",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_2_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_2_bits_uop_exceptionVec_3",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_2_bits_uop_exceptionVec_4",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_2_bits_uop_exceptionVec_5",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_2_bits_uop_exceptionVec_13",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_2_bits_uop_exceptionVec_19",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_2_bits_uop_exceptionVec_21",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_2_bits_uop_trigger",
+      "direction": "output",
+      "width": "[3:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_2_bits_uop_rfWen",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_2_bits_uop_fpWen",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_2_bits_uop_flushPipe",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_2_bits_uop_pdest",
+      "direction": "output",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_2_bits_uop_robIdx_flag",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_2_bits_uop_robIdx_value",
+      "direction": "output",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_2_bits_uop_replayInst",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_2_bits_data",
+      "direction": "output",
+      "width": "[63:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_2_bits_debug_isMMIO",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_2_bits_debug_isNCIO",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackLda_2_bits_debug_isPerfCnt",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_0_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_0_bits_uop_exceptionVec_0",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_0_bits_uop_exceptionVec_1",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_0_bits_uop_exceptionVec_2",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_0_bits_uop_exceptionVec_3",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_0_bits_uop_exceptionVec_4",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_0_bits_uop_exceptionVec_5",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_0_bits_uop_exceptionVec_6",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_0_bits_uop_exceptionVec_7",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_0_bits_uop_exceptionVec_8",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_0_bits_uop_exceptionVec_9",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_0_bits_uop_exceptionVec_10",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_0_bits_uop_exceptionVec_11",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_0_bits_uop_exceptionVec_12",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_0_bits_uop_exceptionVec_13",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_0_bits_uop_exceptionVec_14",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_0_bits_uop_exceptionVec_15",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_0_bits_uop_exceptionVec_16",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_0_bits_uop_exceptionVec_17",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_0_bits_uop_exceptionVec_18",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_0_bits_uop_exceptionVec_19",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_0_bits_uop_exceptionVec_20",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_0_bits_uop_exceptionVec_21",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_0_bits_uop_exceptionVec_22",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_0_bits_uop_exceptionVec_23",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_0_bits_uop_trigger",
+      "direction": "output",
+      "width": "[3:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_0_bits_uop_flushPipe",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_0_bits_uop_robIdx_flag",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_0_bits_uop_robIdx_value",
+      "direction": "output",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_0_bits_debug_isMMIO",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_0_bits_debug_isNCIO",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_1_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_1_bits_uop_exceptionVec_3",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_1_bits_uop_exceptionVec_6",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_1_bits_uop_exceptionVec_7",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_1_bits_uop_exceptionVec_15",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_1_bits_uop_exceptionVec_19",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_1_bits_uop_exceptionVec_23",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_1_bits_uop_trigger",
+      "direction": "output",
+      "width": "[3:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_1_bits_uop_robIdx_flag",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_1_bits_uop_robIdx_value",
+      "direction": "output",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_1_bits_debug_isMMIO",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackSta_1_bits_debug_isNCIO",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackStd_0_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackStd_0_bits_uop_robIdx_value",
+      "direction": "output",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackStd_1_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackStd_1_bits_uop_robIdx_value",
+      "direction": "output",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_0_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_0_bits_uop_exceptionVec_3",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_0_bits_uop_exceptionVec_4",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_0_bits_uop_exceptionVec_5",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_0_bits_uop_exceptionVec_6",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_0_bits_uop_exceptionVec_7",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_0_bits_uop_exceptionVec_13",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_0_bits_uop_exceptionVec_15",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_0_bits_uop_exceptionVec_19",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_0_bits_uop_exceptionVec_21",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_0_bits_uop_exceptionVec_23",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_0_bits_uop_trigger",
+      "direction": "output",
+      "width": "[3:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_0_bits_uop_fuOpType",
+      "direction": "output",
+      "width": "[8:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_0_bits_uop_vecWen",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_0_bits_uop_v0Wen",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_0_bits_uop_vlWen",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_0_bits_uop_flushPipe",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_0_bits_uop_vpu_vma",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_0_bits_uop_vpu_vta",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_0_bits_uop_vpu_vsew",
+      "direction": "output",
+      "width": "[1:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_0_bits_uop_vpu_vlmul",
+      "direction": "output",
+      "width": "[2:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_0_bits_uop_vpu_vm",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_0_bits_uop_vpu_vstart",
+      "direction": "output",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_0_bits_uop_vpu_vuopIdx",
+      "direction": "output",
+      "width": "[6:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_0_bits_uop_vpu_vmask",
+      "direction": "output",
+      "width": "[127:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_0_bits_uop_vpu_vl",
+      "direction": "output",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_0_bits_uop_vpu_nf",
+      "direction": "output",
+      "width": "[2:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_0_bits_uop_vpu_veew",
+      "direction": "output",
+      "width": "[1:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_0_bits_uop_pdest",
+      "direction": "output",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_0_bits_uop_robIdx_flag",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_0_bits_uop_robIdx_value",
+      "direction": "output",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_0_bits_uop_replayInst",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_0_bits_data",
+      "direction": "output",
+      "width": "[127:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_0_bits_vdIdxInField",
+      "direction": "output",
+      "width": "[2:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_0_bits_debug_isMMIO",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_0_bits_debug_isNCIO",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_0_bits_debug_isPerfCnt",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_1_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_1_bits_uop_exceptionVec_3",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_1_bits_uop_exceptionVec_4",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_1_bits_uop_exceptionVec_5",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_1_bits_uop_exceptionVec_6",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_1_bits_uop_exceptionVec_7",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_1_bits_uop_exceptionVec_13",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_1_bits_uop_exceptionVec_15",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_1_bits_uop_exceptionVec_19",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_1_bits_uop_exceptionVec_21",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_1_bits_uop_exceptionVec_23",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_1_bits_uop_trigger",
+      "direction": "output",
+      "width": "[3:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_1_bits_uop_fuOpType",
+      "direction": "output",
+      "width": "[8:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_1_bits_uop_vecWen",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_1_bits_uop_v0Wen",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_1_bits_uop_vlWen",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_1_bits_uop_flushPipe",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_1_bits_uop_vpu_vma",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_1_bits_uop_vpu_vta",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_1_bits_uop_vpu_vsew",
+      "direction": "output",
+      "width": "[1:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_1_bits_uop_vpu_vlmul",
+      "direction": "output",
+      "width": "[2:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_1_bits_uop_vpu_vm",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_1_bits_uop_vpu_vstart",
+      "direction": "output",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_1_bits_uop_vpu_vuopIdx",
+      "direction": "output",
+      "width": "[6:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_1_bits_uop_vpu_vmask",
+      "direction": "output",
+      "width": "[127:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_1_bits_uop_vpu_vl",
+      "direction": "output",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_1_bits_uop_vpu_nf",
+      "direction": "output",
+      "width": "[2:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_1_bits_uop_vpu_veew",
+      "direction": "output",
+      "width": "[1:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_1_bits_uop_pdest",
+      "direction": "output",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_1_bits_uop_robIdx_flag",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_1_bits_uop_robIdx_value",
+      "direction": "output",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_1_bits_uop_replayInst",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_1_bits_data",
+      "direction": "output",
+      "width": "[127:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_writebackVldu_1_bits_vdIdxInField",
+      "direction": "output",
+      "width": "[2:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_staIqFeedback_0_feedbackSlow_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_staIqFeedback_0_feedbackSlow_bits_hit",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_staIqFeedback_0_feedbackSlow_bits_sqIdx_flag",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_staIqFeedback_0_feedbackSlow_bits_sqIdx_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_staIqFeedback_1_feedbackSlow_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_staIqFeedback_1_feedbackSlow_bits_hit",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_staIqFeedback_1_feedbackSlow_bits_sqIdx_flag",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_staIqFeedback_1_feedbackSlow_bits_sqIdx_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_vstuIqFeedback_0_feedbackSlow_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_vstuIqFeedback_0_feedbackSlow_bits_hit",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_vstuIqFeedback_0_feedbackSlow_bits_sqIdx_flag",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_vstuIqFeedback_0_feedbackSlow_bits_sqIdx_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_vstuIqFeedback_0_feedbackSlow_bits_lqIdx_flag",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_vstuIqFeedback_0_feedbackSlow_bits_lqIdx_value",
+      "direction": "output",
+      "width": "[6:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_vstuIqFeedback_0_feedbackSlow_bits_isVecPartReplay",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_vstuIqFeedback_0_feedbackSlow_bits_vecReplayMask",
+      "direction": "output",
+      "width": "[15:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_vstuIqFeedback_0_feedbackSlow_bits_vecReplayMbIdx",
+      "direction": "output",
+      "width": "[3:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_vstuIqFeedback_1_feedbackSlow_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_vstuIqFeedback_1_feedbackSlow_bits_hit",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_vstuIqFeedback_1_feedbackSlow_bits_sqIdx_flag",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_vstuIqFeedback_1_feedbackSlow_bits_sqIdx_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_vstuIqFeedback_1_feedbackSlow_bits_lqIdx_flag",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_vstuIqFeedback_1_feedbackSlow_bits_lqIdx_value",
+      "direction": "output",
+      "width": "[6:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_vstuIqFeedback_1_feedbackSlow_bits_isVecPartReplay",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_vstuIqFeedback_1_feedbackSlow_bits_vecReplayMask",
+      "direction": "output",
+      "width": "[15:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_vstuIqFeedback_1_feedbackSlow_bits_vecReplayMbIdx",
+      "direction": "output",
+      "width": "[3:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_ldCancel_0_ld2Cancel",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_ldCancel_1_ld2Cancel",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_ldCancel_2_ld2Cancel",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_wakeup_0_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_wakeup_0_bits_rfWen",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_wakeup_0_bits_fpWen",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_wakeup_0_bits_pdest",
+      "direction": "output",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_wakeup_1_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_wakeup_1_bits_rfWen",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_wakeup_1_bits_fpWen",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_wakeup_1_bits_pdest",
+      "direction": "output",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_mem_to_ooo_wakeup_2_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_wakeup_2_bits_rfWen",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_wakeup_2_bits_fpWen",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_mem_to_ooo_wakeup_2_bits_pdest",
+      "direction": "output",
+      "width": "[7:0]"
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_req_0_ready",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_req_0_valid",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_req_0_bits_vpn",
+      "direction": "input",
+      "width": "[37:0]"
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_req_0_bits_s2xlate",
+      "direction": "input",
+      "width": "[1:0]"
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_ready",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s2xlate",
+      "direction": "output",
+      "width": "[1:0]"
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_entry_tag",
+      "direction": "output",
+      "width": "[34:0]"
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_entry_asid",
+      "direction": "output",
+      "width": "[15:0]"
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_entry_vmid",
+      "direction": "output",
+      "width": "[13:0]"
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_entry_n",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_entry_pbmt",
+      "direction": "output",
+      "width": "[1:0]"
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_entry_perm_d",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_entry_perm_a",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_entry_perm_g",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_entry_perm_u",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_entry_perm_x",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_entry_perm_w",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_entry_perm_r",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_entry_level",
+      "direction": "output",
+      "width": "[1:0]"
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_entry_v",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_entry_ppn",
+      "direction": "output",
+      "width": "[40:0]"
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_addr_low",
+      "direction": "output",
+      "width": "[2:0]"
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_ppn_low_0",
+      "direction": "output",
+      "width": "[2:0]"
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_ppn_low_1",
+      "direction": "output",
+      "width": "[2:0]"
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_ppn_low_2",
+      "direction": "output",
+      "width": "[2:0]"
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_ppn_low_3",
+      "direction": "output",
+      "width": "[2:0]"
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_ppn_low_4",
+      "direction": "output",
+      "width": "[2:0]"
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_ppn_low_5",
+      "direction": "output",
+      "width": "[2:0]"
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_ppn_low_6",
+      "direction": "output",
+      "width": "[2:0]"
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_ppn_low_7",
+      "direction": "output",
+      "width": "[2:0]"
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_valididx_0",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_valididx_1",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_valididx_2",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_valididx_3",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_valididx_4",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_valididx_5",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_valididx_6",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_valididx_7",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_pteidx_0",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_pteidx_1",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_pteidx_2",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_pteidx_3",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_pteidx_4",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_pteidx_5",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_pteidx_6",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_pteidx_7",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_pf",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s1_af",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s2_entry_tag",
+      "direction": "output",
+      "width": "[37:0]"
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s2_entry_vmid",
+      "direction": "output",
+      "width": "[13:0]"
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s2_entry_n",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s2_entry_pbmt",
+      "direction": "output",
+      "width": "[1:0]"
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s2_entry_ppn",
+      "direction": "output",
+      "width": "[37:0]"
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s2_entry_perm_d",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s2_entry_perm_a",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s2_entry_perm_g",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s2_entry_perm_u",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s2_entry_perm_x",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s2_entry_perm_w",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s2_entry_perm_r",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s2_entry_level",
+      "direction": "output",
+      "width": "[1:0]"
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s2_gpf",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_fetch_to_mem_itlb_resp_bits_s2_gaf",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_ifetchPrefetch_0_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_ifetchPrefetch_0_bits_vaddr",
+      "direction": "output",
+      "width": "[49:0]"
+    },
+    {
+      "name": "io_ifetchPrefetch_1_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_ifetchPrefetch_1_bits_vaddr",
+      "direction": "output",
+      "width": "[49:0]"
+    },
+    {
+      "name": "io_ifetchPrefetch_2_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_ifetchPrefetch_2_bits_vaddr",
+      "direction": "output",
+      "width": "[49:0]"
+    },
+    {
+      "name": "io_dcacheError_ecc_error_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_dcacheError_ecc_error_bits",
+      "direction": "output",
+      "width": "[47:0]"
+    },
+    {
+      "name": "io_uncacheError_ecc_error_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_uncacheError_ecc_error_bits",
+      "direction": "output",
+      "width": "[47:0]"
+    },
+    {
+      "name": "io_l2_hint_valid",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_l2_hint_bits_sourceId",
+      "direction": "input",
+      "width": "[3:0]"
+    },
+    {
+      "name": "io_l2_hint_bits_isKeyword",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_l2_tlb_req_req_valid",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_l2_tlb_req_req_bits_vaddr",
+      "direction": "input",
+      "width": "[49:0]"
+    },
+    {
+      "name": "io_l2_tlb_req_req_bits_cmd",
+      "direction": "input",
+      "width": "[2:0]"
+    },
+    {
+      "name": "io_l2_tlb_req_req_bits_kill",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_l2_tlb_req_req_bits_isPrefetch",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_l2_tlb_req_req_bits_no_translate",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_l2_tlb_req_resp_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_l2_tlb_req_resp_bits_paddr_0",
+      "direction": "output",
+      "width": "[47:0]"
+    },
+    {
+      "name": "io_l2_tlb_req_resp_bits_pbmt_0",
+      "direction": "output",
+      "width": "[1:0]"
+    },
+    {
+      "name": "io_l2_tlb_req_resp_bits_miss",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_l2_tlb_req_resp_bits_excp_0_gpf_ld",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_l2_tlb_req_resp_bits_excp_0_pf_ld",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_l2_tlb_req_resp_bits_excp_0_af_ld",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_l2_pmp_resp_ld",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_l2_pmp_resp_mmio",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_l2_flush_done",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_fromTopToBackend_msiInfo_valid",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_fromTopToBackend_msiInfo_bits",
+      "direction": "input",
+      "width": "[11:0]"
+    },
+    {
+      "name": "io_fromTopToBackend_clintTime_valid",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_fromTopToBackend_clintTime_bits",
+      "direction": "input",
+      "width": "[63:0]"
+    },
+    {
+      "name": "io_inner_reset_vector",
+      "direction": "output",
+      "width": "[47:0]"
+    },
+    {
+      "name": "io_outer_reset_vector",
+      "direction": "input",
+      "width": "[47:0]"
+    },
+    {
+      "name": "io_outer_cpu_halt",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_outer_l2_flush_en",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_outer_power_down_en",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_outer_cpu_critical_error",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_outer_msi_ack",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_inner_beu_errors_icache_ecc_error_valid",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_inner_beu_errors_icache_ecc_error_bits",
+      "direction": "input",
+      "width": "[47:0]"
+    },
+    {
+      "name": "io_outer_beu_errors_icache_ecc_error_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_outer_beu_errors_icache_ecc_error_bits",
+      "direction": "output",
+      "width": "[47:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_0_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_1_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_2_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_3_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_4_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_5_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_6_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_7_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_8_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_9_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_10_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_11_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_12_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_13_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_14_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_15_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_16_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_17_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_18_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_19_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_20_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_21_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_22_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_23_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_24_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_25_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_26_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_27_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_28_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_29_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_30_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_31_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_32_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_33_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_34_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_35_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_36_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_37_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_38_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_39_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_40_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_41_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_42_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_43_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_44_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_45_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_46_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_47_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_48_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_49_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_50_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_51_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_52_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_53_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_54_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_55_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_56_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_57_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_58_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_59_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_60_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_61_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_62_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_63_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_64_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_65_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_66_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_inner_hc_perfEvents_67_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_1_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_2_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_3_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_4_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_5_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_6_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_7_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_8_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_9_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_10_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_11_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_12_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_13_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_14_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_15_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_16_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_17_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_18_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_19_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_20_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_21_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_22_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_23_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_24_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_25_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_26_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_27_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_28_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_29_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_30_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_31_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_32_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_33_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_34_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_35_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_36_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_37_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_38_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_39_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_40_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_41_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_42_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_43_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_44_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_45_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_46_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_47_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_48_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_49_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_50_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_51_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_52_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_53_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_54_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_55_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_56_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_57_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_58_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_59_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_60_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_61_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_62_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_63_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_64_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_65_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_66_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_67_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_hc_perfEvents_68_value",
+      "direction": "input",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_outer_l2PfCtrl_l2_pf_master_en",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_outer_l2PfCtrl_l2_pf_recv_en",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_outer_l2PfCtrl_l2_pbop_en",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_outer_l2PfCtrl_l2_vbop_en",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_outer_l2PfCtrl_l2_tp_en",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_outer_l2PfCtrl_l2_pf_delay_latency",
+      "direction": "output",
+      "width": "[9:0]"
+    },
+    {
+      "name": "io_resetInFrontendBypass_fromFrontend",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_resetInFrontendBypass_toL2Top",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_fromBackend_fromEncoder_enable",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_fromBackend_fromEncoder_stall",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_fromBackend_toEncoder_priv",
+      "direction": "input",
+      "width": "[2:0]"
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_fromBackend_toEncoder_mstatus",
+      "direction": "input",
+      "width": "[63:0]"
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_fromBackend_toEncoder_trap_cause",
+      "direction": "input",
+      "width": "[63:0]"
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_fromBackend_toEncoder_trap_tval",
+      "direction": "input",
+      "width": "[49:0]"
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_fromBackend_toEncoder_groups_0_valid",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_fromBackend_toEncoder_groups_0_bits_iaddr",
+      "direction": "input",
+      "width": "[49:0]"
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_fromBackend_toEncoder_groups_0_bits_ftqOffset",
+      "direction": "input",
+      "width": "[3:0]"
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_fromBackend_toEncoder_groups_0_bits_itype",
+      "direction": "input",
+      "width": "[3:0]"
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_fromBackend_toEncoder_groups_0_bits_iretire",
+      "direction": "input",
+      "width": "[6:0]"
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_fromBackend_toEncoder_groups_0_bits_ilastsize",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_fromBackend_toEncoder_groups_1_valid",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_fromBackend_toEncoder_groups_1_bits_iaddr",
+      "direction": "input",
+      "width": "[49:0]"
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_fromBackend_toEncoder_groups_1_bits_ftqOffset",
+      "direction": "input",
+      "width": "[3:0]"
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_fromBackend_toEncoder_groups_1_bits_itype",
+      "direction": "input",
+      "width": "[3:0]"
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_fromBackend_toEncoder_groups_1_bits_iretire",
+      "direction": "input",
+      "width": "[6:0]"
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_fromBackend_toEncoder_groups_1_bits_ilastsize",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_fromBackend_toEncoder_groups_2_valid",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_fromBackend_toEncoder_groups_2_bits_iaddr",
+      "direction": "input",
+      "width": "[49:0]"
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_fromBackend_toEncoder_groups_2_bits_ftqOffset",
+      "direction": "input",
+      "width": "[3:0]"
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_fromBackend_toEncoder_groups_2_bits_itype",
+      "direction": "input",
+      "width": "[3:0]"
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_fromBackend_toEncoder_groups_2_bits_iretire",
+      "direction": "input",
+      "width": "[6:0]"
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_fromBackend_toEncoder_groups_2_bits_ilastsize",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_toL2Top_fromEncoder_enable",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_toL2Top_fromEncoder_stall",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_toL2Top_toEncoder_priv",
+      "direction": "output",
+      "width": "[2:0]"
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_toL2Top_toEncoder_mstatus",
+      "direction": "output",
+      "width": "[63:0]"
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_toL2Top_toEncoder_trap_cause",
+      "direction": "output",
+      "width": "[63:0]"
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_toL2Top_toEncoder_trap_tval",
+      "direction": "output",
+      "width": "[49:0]"
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_toL2Top_toEncoder_groups_0_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_toL2Top_toEncoder_groups_0_bits_iaddr",
+      "direction": "output",
+      "width": "[49:0]"
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_toL2Top_toEncoder_groups_0_bits_itype",
+      "direction": "output",
+      "width": "[3:0]"
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_toL2Top_toEncoder_groups_0_bits_iretire",
+      "direction": "output",
+      "width": "[6:0]"
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_toL2Top_toEncoder_groups_0_bits_ilastsize",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_toL2Top_toEncoder_groups_1_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_toL2Top_toEncoder_groups_1_bits_iaddr",
+      "direction": "output",
+      "width": "[49:0]"
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_toL2Top_toEncoder_groups_1_bits_itype",
+      "direction": "output",
+      "width": "[3:0]"
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_toL2Top_toEncoder_groups_1_bits_iretire",
+      "direction": "output",
+      "width": "[6:0]"
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_toL2Top_toEncoder_groups_1_bits_ilastsize",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_toL2Top_toEncoder_groups_2_valid",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_toL2Top_toEncoder_groups_2_bits_iaddr",
+      "direction": "output",
+      "width": "[49:0]"
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_toL2Top_toEncoder_groups_2_bits_itype",
+      "direction": "output",
+      "width": "[3:0]"
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_toL2Top_toEncoder_groups_2_bits_iretire",
+      "direction": "output",
+      "width": "[6:0]"
+    },
+    {
+      "name": "io_traceCoreInterfaceBypass_toL2Top_toEncoder_groups_2_bits_ilastsize",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_wfi_wfiReq",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_wfi_wfiSafe",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_topDownInfo_fromL2Top_l2Miss",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_topDownInfo_fromL2Top_l3Miss",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_topDownInfo_toBackend_replayAllocate",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_topDownInfo_toBackend_sqFull",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_topDownInfo_toBackend_sbFull",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_topDownInfo_toBackend_l1Miss",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_topDownInfo_toBackend_l2TopMiss_l2Miss",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_topDownInfo_toBackend_l2TopMiss_l3Miss",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_dft_ram_hold",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_dft_ram_bypass",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_dft_ram_bp_clken",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_dft_ram_aux_clk",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_dft_ram_aux_ckbp",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_dft_ram_mcp_hold",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_dft_cgen",
+      "direction": "input",
+      "width": ""
+    },
+    {
+      "name": "io_dft_frnt_ram_hold",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_dft_frnt_ram_bypass",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_dft_frnt_ram_bp_clken",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_dft_frnt_ram_aux_clk",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_dft_frnt_ram_aux_ckbp",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_dft_frnt_ram_mcp_hold",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_dft_frnt_cgen",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_dft_bcknd_cgen",
+      "direction": "output",
+      "width": ""
+    },
+    {
+      "name": "io_perf_0_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_perf_1_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_perf_2_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_perf_3_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_perf_4_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_perf_5_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_perf_6_value",
+      "direction": "output",
+      "width": "[5:0]"
+    },
+    {
+      "name": "io_perf_7_value",
+      "direction": "output",
+      "width": "[5:0]"
+    }
+  ]
+}

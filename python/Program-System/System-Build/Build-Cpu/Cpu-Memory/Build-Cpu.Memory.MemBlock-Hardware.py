@@ -34,7 +34,7 @@ from amaranth.back import verilog
 #     TileLink A/D, and MemBlock bridges the I-cache and issue boundaries.
 #   - ``injected_dependencies`` is the only child binding mechanism.  No
 #     sibling Build-Cpu module is imported by this file.
-# Status / 状态: PASS_BOUNDED_PARENT (full 669-port Diplomacy closure remains open)
+# Status / 状态: PASS_BOUNDED_PARENT (full 1326-port Diplomacy behavior remains open)
 __all__ = [
     "MemBlockParentConfig",
     "UHSCCacheMainPipe",

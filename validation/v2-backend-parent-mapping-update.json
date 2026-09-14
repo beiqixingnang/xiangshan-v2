@@ -45,5 +45,44 @@
     "LICENSE_REVIEW": "PENDING",
     "ACCEPTED": "NOT_ALLOWED"
   },
+  "full_inventory_probe": {
+    "status": "PASS",
+    "port_count": 1165,
+    "expected_port_count": 1165,
+    "input_count": 478,
+    "output_count": 687,
+    "exact_ordered_names": true,
+    "rtl_bytes": 2118275,
+    "rtl_sha256": "b56c5b1dd0639ade29823178caddc4e87af8712f67ce48f58b3e5dc4e0282904",
+    "backend_gates": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "--Wno-fatal",
+          "--top-module",
+          "UHSCBackend",
+          "/tmp/uhsc-v2/validation/.work/v2-backend-parent/backend-full-inventory.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 2.040 MB sources in 2 modules, into 0.055 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 1.162 s (elab=0.210, cvt=0.756, bld=0.000); cpu 1.132 s on 1 threads; alloced 137.422 MB\n",
+        "output_sha256": "bc8368a6e261393747af4c85626222b8ce7b515597b314801dd009d2ac9285ea"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-p",
+          "read_verilog -sv /tmp/uhsc-v2/validation/.work/v2-backend-parent/backend-full-inventory.sv; hierarchy -top UHSCBackend; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "-backend-parent/backend-full-inventory.sv:37985$21'.\n  created $adff cell `$procdff$40' with positive edge clock and positive level reset.\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nRemoving empty process `UHSCBackend.$proc$/tmp/uhsc-v2/validation/.work/v2-backend-parent/backend-full-inventory.sv:37799$28'.\nRemoving empty process `UHSCBackend.$proc$/tmp/uhsc-v2/validation/.work/v2-backend-parent/backend-full-inventory.sv:37797$27'.\nRemoving empty process `UHSCBackend.$proc$/tmp/uhsc-v2/validation/.work/v2-backend-parent/backend-full-inventory.sv:37795$26'.\nRemoving empty process `UHSCBackend.$proc$/tmp/uhsc-v2/validation/.work/v2-backend-parent/backend-full-inventory.sv:37793$25'.\nRemoving empty process `UHSCBackend.$proc$/tmp/uhsc-v2/validation/.work/v2-backend-parent/backend-full-inventory.sv:37997$24'.\nRemoving empty process `UHSCBackend.$proc$/tmp/uhsc-v2/validation/.work/v2-backend-parent/backend-full-inventory.sv:37993$23'.\nRemoving empty process `UHSCBackend.$proc$/tmp/uhsc-v2/validation/.work/v2-backend-parent/backend-full-inventory.sv:37989$22'.\nRemoving empty process `UHSCBackend.$proc$/tmp/uhsc-v2/validation/.work/v2-backend-parent/backend-full-inventory.sv:37985$21'.\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module UHSCBackend.\n<suppressed ~4 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module UHSCBackend...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 40f61c42ee, CPU: user 0.54s system 0.08s, MEM: 168.52 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 95% 2x read_verilog (0 sec), 1% 1x hierarchy (0 sec), ...\n",
+        "output_sha256": "16cf6d7965f824046e982d97b402a090907bbf2efa713a170fe996f0e2ea4077"
+      },
+      "status": "PASS"
+    },
+    "behavioral_status": "PENDING_FULL_CHILD_CLOSURE"
+  },
   "acceptance_eligible": false
 }

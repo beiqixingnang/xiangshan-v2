@@ -91,7 +91,7 @@ BACKEND_REFERENCE_OUTPUT_COUNT = 687
 # Load the exact locked Backend port names and widths. / 加载锁定 Backend 端口名称与位宽。
 def full_backend_port_schema() -> tuple[tuple[str, str, int], ...]:
     """Return the deterministic 1165-port Backend schema. / 返回确定性的 1165 端口 Backend 模式。"""
-    root = Path(__file__).resolve().parents[6]
+    root = Path(__file__).resolve().parents[5]
     path = root / "validation" / "backend-port-specs.json"
     if path.is_file():
         try:
@@ -207,17 +207,27 @@ class BackendTop(Elaboratable):
         # bounded adapter below exports only its executable 134-port surface;
         # ``build_full_verilog`` exports this exact 1165-port envelope.
         self.locked_port_specs = full_backend_port_schema()
+        self._locked_new_ids: set[int] = set()
         existing_names = {signal.name for value in vars(self).values()
                           for signal in (value if isinstance(value, list) else [value])
                           if hasattr(signal, "name")}
         self.locked_ports: list[tuple[str, Signal]] = []
         for direction, name, width in self.locked_port_specs:
+            # ClockSignal("sync") is intentionally kept for the reduced
+            # simulator contract; the locked ANSI header uses a distinct
+            # externally named ``clock`` input.
+            if name == "clock":
+                signal = Signal(width, name="clock")
+                setattr(self, "locked_clock", signal)
+                self.locked_ports.append((direction, signal))
+                continue
             signal = next((value for value in vars(self).values()
                            for value in (value if isinstance(value, list) else [value])
                            if getattr(value, "name", None) == name), None)
             if signal is None:
                 signal = Signal(width, name=name)
                 setattr(self, f"locked_{name}", signal)
+                self._locked_new_ids.add(id(signal))
             self.locked_ports.append((direction, signal))
 
     # Elaborate the explicit dispatch register and five-class writeback network. / 展开显式 dispatch 寄存器及五类写回网络。
@@ -350,10 +360,11 @@ class BackendTop(Elaboratable):
         # Locked output ports are explicit tie-offs until their corresponding
         # Decode/Issue/Rename/CSR/EXU child closures are implemented.
         for direction, signal in self.locked_ports:
-            if direction == "output" and signal.name not in {
-                "io_toTop_cpuHalted", "io_toTop_cpuCriticalError", "io_toTop_msiAck",
-                "io_fenceio_fencei", "io_fenceio_sbuffer_flushSb",
-            }:
+            # Only tie off newly-created envelope signals.  Existing
+            # executable parent signals keep their reduced behavioral
+            # equations, preventing the full envelope from overriding direct
+            # validator observations.
+            if direction == "output" and id(signal) in self._locked_new_ids:
                 module.d.comb += signal.eq(0)
         return module
 
@@ -465,7 +476,7 @@ def build_verilog(configuration, injected_dependencies):
 
 
 # Emit the exact 1165-port locked Backend envelope with deterministic ties.
-# 以确定性 tie-off 导出锁定的精确 1165 端口 Backend 包络。
+# 以确定性 tie-off 导出锁定的精确 1165 端口 Backend 包络。 /
 def build_full_verilog(configuration=None, injected_dependencies=None):
     """Return a full-inventory Backend RTL envelope.
 

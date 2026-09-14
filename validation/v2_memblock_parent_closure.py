@@ -5,8 +5,10 @@ The runner is deliberately batch-local.  It loads the final Build-Cpu parent
 by exact path, injects the already audited AMOALU and TagArray leaves, checks
 the direct transaction model, and compares the generated parent against a
 small reference shell containing the immutable AMOALU module sliced from the
-locked XSTop artifact.  This is a bounded parent result, never a claim that
-the 669-port Diplomacy MemBlock is complete.
+locked XSTop artifact.  The runner also emits and audits an exact 1326-port
+MemBlock envelope from an explicit frozen inventory.  This remains a bounded
+parent result: an exact envelope is not a claim of complete Diplomacy/MMU/LSU
+behavior.
 """
 
 from __future__ import annotations
@@ -59,6 +61,7 @@ DIFF_RESULT = ROOT / "validation" / "v2-memblock-parent-differential-results.jso
 CONTRACT_RESULT = ROOT / "validation" / "v2-memblock-parent-contract-audit.json"
 COVERAGE_RESULT = ROOT / "validation" / "v2-memblock-parent-coverage-manifest.json"
 MAPPING_RESULT = ROOT / "validation" / "v2-memblock-parent-mapping-update.json"
+PORT_INVENTORY = ROOT / "validation" / "v2-memblock-port-inventory.json"
 
 
 # Load a target through its exact path without importing sibling Build files. / 通过精确路径加载目标且不导入同级 Build 文件。
@@ -80,6 +83,94 @@ def digest_bytes(value: bytes) -> str:
 # Hash one local path. / 计算本地路径摘要。
 def digest(path: Path) -> str:
     return digest_bytes(path.read_bytes())
+
+
+def _inventory_width(value: Any) -> int:
+    """Normalize a frozen Verilog width to a positive integer."""
+    if isinstance(value, str):
+        text = value.strip()
+        if text.startswith("[") and text.endswith("]") and ":" in text:
+            high, low = text[1:-1].split(":", 1)
+            try:
+                return max(1, abs(int(high) - int(low)) + 1)
+            except ValueError:
+                return 1
+        return 1
+    try:
+        return max(1, int(value or 1))
+    except (TypeError, ValueError):
+        return 1
+
+
+def parse_generated_port_declarations(source: str, module_name: str) -> dict[str, tuple[str, int]]:
+    """Parse one generated module's direction/width declarations."""
+    match = re.search(r"^module\s+" + re.escape(module_name) + r"\s*\(.*?^endmodule\b",
+                      source, re.MULTILINE | re.DOTALL)
+    if match is None:
+        raise AssertionError(f"generated module {module_name} is missing")
+    declarations: dict[str, tuple[str, int]] = {}
+    for line in match.group(0).splitlines():
+        item = re.match(r"\s*(input|output|inout)(?:\s+\[(\d+):0\])?\s+(.+);\s*$", line)
+        if item is None:
+            continue
+        direction, high, names = item.groups()
+        width = int(high) + 1 if high is not None else 1
+        for name in names.split(","):
+            clean = name.strip().replace("\\", "").strip()
+            if clean:
+                declarations[clean] = (direction, width)
+    return declarations
+
+
+def full_inventory_export(target_module: ModuleType) -> tuple[str, dict[str, Any]]:
+    """Generate and audit the exact frozen V2 MemBlock port envelope."""
+    if not PORT_INVENTORY.is_file():
+        raise AssertionError(f"missing explicit port inventory: {PORT_INVENTORY}")
+    payload = json.loads(PORT_INVENTORY.read_text(encoding="utf-8"))
+    specs = payload.get("ports")
+    if payload.get("module") != "MemBlock" or not isinstance(specs, list):
+        raise AssertionError("invalid MemBlock inventory schema")
+    if len(specs) != int(payload.get("port_count", 0)):
+        raise AssertionError("inventory count metadata mismatch")
+    # The coordinator passes frozen metadata as data.  The Build target does
+    # not open the inventory or the reference itself.
+    rtl = target_module.build_verilog(
+        {"module": "UHSCMemoryMemBlockFull"},
+        {"full_port_specs": specs},
+    )
+    actual = parse_generated_port_declarations(rtl, "UHSCMemoryMemBlockFull")
+    expected = {
+        str(spec["name"]): (str(spec.get("direction", "input")).lower(),
+                             _inventory_width(spec.get("width", "")))
+        for spec in specs
+        if isinstance(spec, dict) and spec.get("name")
+    }
+    missing = sorted(set(expected) - set(actual))
+    extra = sorted(set(actual) - set(expected))
+    mismatches = [
+        {"name": name, "expected": expected[name], "actual": actual[name]}
+        for name in sorted(set(expected) & set(actual))
+        if expected[name] != actual[name]
+    ]
+    audit = {
+        "status": "PASS" if len(actual) == len(expected) == len(specs)
+        and not missing and not extra and not mismatches else "FAIL",
+        "module": "UHSCMemoryMemBlockFull",
+        "inventory_path": PORT_INVENTORY.relative_to(ROOT).as_posix(),
+        "inventory_sha256": digest(PORT_INVENTORY),
+        "expected_port_count": len(specs),
+        "actual_port_count": len(actual),
+        "missing": missing,
+        "extra": extra,
+        "direction_width_mismatches": mismatches,
+        "ordered_inventory_sha256": digest_bytes(
+            "\n".join(str(spec["name"]) for spec in specs).encode("utf-8")),
+        "rtl_sha256": digest_bytes(rtl.encode("utf-8")),
+        "rtl_bytes": len(rtl.encode("utf-8")),
+    }
+    if audit["status"] != "PASS":
+        raise AssertionError(f"full MemBlock inventory mismatch: {audit}")
+    return rtl, audit
 
 
 # Audit the final Build-Cpu five-zone and import contract. / 审计最终 Build-Cpu 五分区及导入契约。
@@ -523,7 +614,8 @@ def run_verilator(source: str, stem: str) -> dict[str, Any]:
 
 # Persist all batch-local evidence while keeping acceptance explicitly closed. / 持久化批次证据并明确保持不可接受状态。
 def write_evidence(static: dict[str, Any], direct: dict[str, Any], reference: dict[str, Any],
-                   backend: dict[str, Any], differential_result: dict[str, Any], refs: dict[str, Any]) -> None:
+                   backend: dict[str, Any], differential_result: dict[str, Any], refs: dict[str, Any],
+                   full_envelope: dict[str, Any], full_backend: dict[str, Any]) -> None:
     target_hash = digest(TARGET)
     manifest_hash = digest(MANIFEST)
     pass_backend = all(backend.get(zone, {}).get("status") == "PASS" for zone in ("verilator", "yosys"))
@@ -533,7 +625,11 @@ def write_evidence(static: dict[str, Any], direct: dict[str, Any], reference: di
                       "target": {"path": static["path"], "sha256": target_hash}, "static_audit": static,
                       "direct": direct, "gates": {"PYTHON_PRESENT": "PASS", "DIRECT_TEST_PASS_BOUNDED": direct["status"],
                       "VERILATOR": "PASS" if pass_backend else "FAIL", "YOSYS": "PASS" if pass_backend else "FAIL",
+                      "FULL_PORT_ENVELOPE": full_envelope["status"],
+                      "FULL_VERILATOR": full_backend.get("verilator", {}).get("status", "FAIL"),
+                      "FULL_YOSYS": full_backend.get("yosys", {}).get("status", "FAIL"),
                       "UHSC_LOCALIZED": "PASS_BOUNDED_PARENT_LOCAL_NAME", "ACCEPTED": "NOT_ALLOWED"},
+                      "full_envelope": full_envelope, "full_backend_gates": full_backend,
                       "acceptance_eligible": False}
     DIRECT_RESULT.write_text(json.dumps(direct_payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     diff_payload = {"schema_version": 1, "kind": "XIANGSHAN_KUNMINGHU_V2_MEMBLOCK_PARENT_DIFFERENTIAL",
@@ -541,22 +637,30 @@ def write_evidence(static: dict[str, Any], direct: dict[str, Any], reference: di
                     "reference_snapshot": reference, "reference_modules": refs,
                     "target_parent": {"path": static["path"], "sha256": target_hash},
                     "comparison": differential_result, "backend_gates": backend,
+                    "full_envelope": full_envelope, "full_backend_gates": full_backend,
                     "behavioral_equivalence": diff_pass, "status": "DIFFERENTIAL_MATCHED_BOUNDED" if diff_pass else "FAIL",
                     "gates": {"PYTHON_PRESENT": "PASS", "DIRECT_TEST_PASS_BOUNDED": direct["status"],
                               "V2_REFERENCE_MATCHED": "PASS_BOUNDED" if diff_pass else "FAIL",
                               "PARENT_CLOSURE_MATCHED": "PASS_BOUNDED_REDUCED" if diff_pass else "FAIL",
+                              "FULL_PORT_ENVELOPE": full_envelope["status"],
+                              "FULL_VERILATOR": full_backend.get("verilator", {}).get("status", "FAIL"),
+                              "FULL_YOSYS": full_backend.get("yosys", {}).get("status", "FAIL"),
                               "VERILATOR": "PASS" if pass_backend else "FAIL", "YOSYS": "PASS" if pass_backend else "FAIL",
                               "UHSC_LOCALIZED": "PASS_BOUNDED_PARENT_LOCAL_NAME", "LICENSE_REVIEW": "PENDING",
                               "ACCEPTED": "NOT_ALLOWED"}, "acceptance_eligible": False,
-                    "unclosed": ["Full 669-port MemBlock/Diplomacy closure remains outside this bounded batch.",
-                                 "MMU/LSU/TileLink/MBIST dependencies are explicit stubs; mixed-license review remains pending."]}
+                    "unclosed": ["The exact 1326-port envelope is emitted, but most ports are deterministic tie-offs until the DCache/MMU/LSU/Diplomacy child closures are implemented.",
+                                 "Full MemBlock behavioral differential against the locked XSTop has not run; mixed-license review remains pending."]}
     DIFF_RESULT.write_text(json.dumps(diff_payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     contract = {"schema_version": 1, "kind": "XIANGSHAN_KUNMINGHU_V2_MEMBLOCK_PARENT_CONTRACT_AUDIT",
                 "result": "PASS", "target": static, "source_commit": SOURCE_COMMIT,
                 "child_contracts": {"AMOALU": "injected named dependency", "TagArray": "injected named dependency",
-                                    "TileLink": "explicit A/D transaction ports", "MMU": "ready stub", "LSU": "ready stub", "MBIST": "enable/done stub"},
+                                    "TileLink": "explicit A/D transaction ports", "MMU": "ready stub", "LSU": "ready stub", "MBIST": "enable/done stub",
+                                    "full_port_envelope": "exact 1326-port inventory export (behavior pending)"},
                 "gates": {"contract": "PASS", "direct": direct["status"], "reference": "PASS_BOUNDED" if diff_pass else "FAIL",
                           "verilator": "PASS" if pass_backend else "FAIL", "yosys": "PASS" if pass_backend else "FAIL",
+                          "full_port_envelope": full_envelope["status"],
+                          "full_verilator": full_backend.get("verilator", {}).get("status", "FAIL"),
+                          "full_yosys": full_backend.get("yosys", {}).get("status", "FAIL"),
                           "license": "PENDING", "ACCEPTED": "NOT_ALLOWED"}, "acceptance_eligible": False}
     CONTRACT_RESULT.write_text(json.dumps(contract, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     coverage = {"schema_version": 1, "kind": "XIANGSHAN_KUNMINGHU_V2_MEMBLOCK_PARENT_COVERAGE",
@@ -570,16 +674,23 @@ def write_evidence(static: dict[str, Any], direct: dict[str, Any], reference: di
                              {"instance": "MainPipe.tag_array", "source": "upstream/src/main/scala/xiangshan/cache/dcache/meta/TagArray.scala", "target": TAG_TARGET.relative_to(ROOT).as_posix(), "status": "PASS_REFERENCE_CHILD"},
                              {"instance": "MemBlock.frontendBridge", "source": "upstream/src/main/scala/xiangshan/mem/MemBlock.scala", "target": static["path"], "status": "PASS_BOUNDED"}],
                 "observation_points": ["issue priority", "miss A channel", "refill/writeback", "AMO mask merge", "tag reset/read/write", "frontend bridge", "flush ordering", "MMU/LSU/MBIST stubs"],
-                "reference_snapshot": reference, "status": "PASS_BOUNDED_PARENT" if diff_pass else "FAIL",
+                "reference_snapshot": reference, "full_port_envelope": full_envelope,
+                "full_backend_gates": full_backend,
+                "status": "PASS_BOUNDED_PARENT" if diff_pass else "FAIL",
                 "uhsc_localization": {"status": "PASS_BOUNDED_PARENT_LOCAL_NAME", "local_name": "UHSCMemoryMemBlock", "manifest": "UHSC-Naming-Manifest.json", "manifest_sha256": manifest_hash, "locked_names_unchanged": True},
                 "license_review": "PENDING", "acceptance_eligible": False,
-                "gates": {"DIRECT": direct["status"], "REFERENCE": "PASS_BOUNDED" if diff_pass else "FAIL", "VERILATOR": "PASS" if pass_backend else "FAIL", "YOSYS": "PASS" if pass_backend else "FAIL", "ACCEPTED": "NOT_ALLOWED"}}
+                "gates": {"DIRECT": direct["status"], "REFERENCE": "PASS_BOUNDED" if diff_pass else "FAIL", "VERILATOR": "PASS" if pass_backend else "FAIL", "YOSYS": "PASS" if pass_backend else "FAIL",
+                          "FULL_PORT_ENVELOPE": full_envelope["status"],
+                          "FULL_VERILATOR": full_backend.get("verilator", {}).get("status", "FAIL"),
+                          "FULL_YOSYS": full_backend.get("yosys", {}).get("status", "FAIL"), "ACCEPTED": "NOT_ALLOWED"}}
     COVERAGE_RESULT.write_text(json.dumps(coverage, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     mapping = {"schema_version": 1, "kind": "V2_MEMBLOCK_PARENT_MAPPING_UPDATE", "batch_id": "V2-PARENT-MEMBLOCK-001", "source_commit": SOURCE_COMMIT,
                "entries": [{"id": "MemBlock", "classification": "NEW_AUXILIARY_PARENT_HARNESS", "disposition": "PARENT_BOUNDARY_REDUCED", "v2_source": "upstream/src/main/scala/xiangshan/mem/MemBlock.scala", "target": static["path"], "local_name": "UHSCMemoryMemBlock", "status": "PASS_BOUNDED" if diff_pass else "FAIL"},
                            {"id": "DCacheWrapper", "classification": "INLINED_PARENT_CHILD", "v2_source": "upstream/src/main/scala/xiangshan/cache/dcache/DCacheWrapper.scala", "target": static["path"], "status": "PASS_BOUNDED" if diff_pass else "FAIL"},
                            {"id": "MainPipe", "classification": "INLINED_PARENT_CHILD", "v2_source": "upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/MainPipe.scala", "target": static["path"], "status": "PASS_BOUNDED" if diff_pass else "FAIL"}],
-               "source_authority": reference, "uhsc_manifest": "UHSC-Naming-Manifest.json", "gates": {"contract": "PASS", "direct": direct["status"], "reference": "PASS_BOUNDED" if diff_pass else "FAIL", "parent_closure": "PASS_BOUNDED_REDUCED" if diff_pass else "FAIL", "license": "PENDING", "ACCEPTED": "NOT_ALLOWED"}, "acceptance_eligible": False}
+               "source_authority": reference, "uhsc_manifest": "UHSC-Naming-Manifest.json", "full_port_envelope": full_envelope,
+               "gates": {"contract": "PASS", "direct": direct["status"], "reference": "PASS_BOUNDED" if diff_pass else "FAIL", "parent_closure": "PASS_BOUNDED_REDUCED" if diff_pass else "FAIL",
+                         "full_port_envelope": full_envelope["status"], "full_verilator": full_backend.get("verilator", {}).get("status", "FAIL"), "full_yosys": full_backend.get("yosys", {}).get("status", "FAIL"), "license": "PENDING", "ACCEPTED": "NOT_ALLOWED"}, "acceptance_eligible": False}
     MAPPING_RESULT.write_text(json.dumps(mapping, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
 
 
@@ -604,12 +715,30 @@ def main() -> int:
             "MemBlock": {"boundary": "1979904-2011084", "sha256": "f6f5d104187494a3a0a73225992173ca7c4bc0ab2c9cbb82ddebd39878b23aa6"}}
     target_module_for_diff = load_exact(TARGET, "v2_memblock_parent_diff_target")
     diff = differential(target_module_for_diff, amo_module, amo_bytes)
-    # Lint the final target with fallback dependencies; differential target is separately compiled in the harness.
+    # Lint the reduced target with fallback dependencies; differential target
+    # is separately compiled in the harness.
     rtl = parent_module.build_verilog({"module": "UHSCMemoryMemBlock", "tag_sets": 4, "tag_ways": 4}, {})
     backend = backend_gates(rtl, "UHSCMemoryMemBlock", "target-parent")
-    write_evidence(static, direct, reference, backend, diff, refs)
-    result = {"status": "PASS_BOUNDED_PARENT" if direct["status"] == "PASS" and diff["status"] == "PASS" and backend["verilator"]["status"] == "PASS" and backend["yosys"]["status"] == "PASS" else "FAIL",
-              "direct": direct["status"], "differential": diff["status"], "verilator": backend["verilator"]["status"], "yosys": backend["yosys"]["status"]}
+    # In parallel with the reduced behavioral checks, emit the exact frozen
+    # 1326-port parent envelope and run syntax/hierarchy gates on it.  These
+    # gates establish generation compatibility only; they do not promote the
+    # tie-off shell to behavioral equivalence.
+    full_rtl, full_envelope = full_inventory_export(parent_module)
+    full_backend = backend_gates(full_rtl, "UHSCMemoryMemBlockFull", "full-parent-envelope")
+    write_evidence(static, direct, reference, backend, diff, refs, full_envelope, full_backend)
+    reduced_pass = (direct["status"] == "PASS" and diff["status"] == "PASS"
+                    and backend["verilator"]["status"] == "PASS"
+                    and backend["yosys"]["status"] == "PASS")
+    full_pass = (full_envelope["status"] == "PASS"
+                 and full_backend["verilator"]["status"] == "PASS"
+                 and full_backend["yosys"]["status"] == "PASS")
+    result = {"status": "PASS_BOUNDED_PARENT" if reduced_pass and full_pass else "FAIL",
+              "direct": direct["status"], "differential": diff["status"],
+              "verilator": backend["verilator"]["status"], "yosys": backend["yosys"]["status"],
+              "full_port_envelope": full_envelope["status"],
+              "full_port_count": full_envelope["actual_port_count"],
+              "full_verilator": full_backend["verilator"]["status"],
+              "full_yosys": full_backend["yosys"]["status"]}
     print(json.dumps(result, sort_keys=True))
     return 0 if result["status"] == "PASS_BOUNDED_PARENT" else 1
 

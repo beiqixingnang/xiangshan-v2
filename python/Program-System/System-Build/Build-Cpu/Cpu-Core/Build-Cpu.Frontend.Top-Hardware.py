@@ -31,9 +31,12 @@ from amaranth.back import verilog
 __all__ = [
     "FrontendTopConfig",
     "FrontendChildBoundary",
+    "FrontendRvcBoundary",
+    "FrontendBpuBoundary",
     "FrontendParent",
     "UHSCTop",
     "Frontend",
+    "frontend_port_specs",
     "build_verilog",
     "main",
 ]
@@ -323,6 +326,60 @@ class FrontendChildBoundary(Elaboratable):
         return module
 
 
+class FrontendRvcBoundary(Elaboratable):
+    """Fallback RVC child matching the validated decoder surface. / 与已验证解码器表面匹配的 RVC 回退子级。"""
+
+    # Construct a compact decoder contract that accepts an injected full RVC
+    # implementation without a sibling import. / 构造可替换完整 RVC 实现的紧凑解码器合同。
+    def __init__(self, configuration: FrontendTopConfig | None = None) -> None:
+        del configuration
+        self.clock = Signal(name="rvc_clock")
+        self.reset = Signal(name="rvc_reset")
+        self.in_ = Signal(32, name="io_in")
+        self.fsIsOff = Signal(name="io_fsIsOff")
+        self.out_bits = Signal(32, name="io_out_bits")
+        self.out_rd = Signal(5, name="io_out_rd")
+        self.out_rs1 = Signal(5, name="io_out_rs1")
+        self.out_rs2 = Signal(5, name="io_out_rs2")
+        self.out_rs3 = Signal(5, name="io_out_rs3")
+        self.ill = Signal(name="io_ill")
+
+    # Keep a deterministic legal pass-through for standalone parent use. / 独立父级使用时保持确定性合法直通。
+    def elaborate(self, platform: Any) -> Module:
+        del platform
+        module = Module()
+        module.d.comb += [self.out_bits.eq(self.in_), self.out_rd.eq(self.in_[7:12]),
+                          self.out_rs1.eq(self.in_[15:20]), self.out_rs2.eq(self.in_[20:25]),
+                          self.out_rs3.eq(self.in_[27:32]), self.ill.eq(0)]
+        return module
+
+
+class FrontendBpuBoundary(Elaboratable):
+    """Fallback BPU child with a sequential-PC prediction. / 提供顺序 PC 预测的 BPU 回退子级。"""
+
+    # Construct the parent-visible BPU control and prediction ports. / 构造父级可见的 BPU 控制与预测端口。
+    def __init__(self, configuration: FrontendTopConfig | None = None) -> None:
+        cfg = configuration or FrontendTopConfig()
+        self.clock = Signal(name="bpu_clock")
+        self.reset = Signal(name="bpu_reset")
+        self.enable = Signal(5, name="io_enable")
+        self.reset_vector = Signal(cfg.paddr_bits, name="io_reset_vector")
+        self.pc = Signal(cfg.vaddr_bits, name="io_pc")
+        self.pred_taken = Signal(name="io_pred_taken")
+        self.pred_target = Signal(cfg.vaddr_bits, name="io_pred_target")
+        self.pred_cfi_position = Signal(4, name="io_pred_cfi_position")
+        self.bp_right = Signal(32, name="io_bpRight")
+        self.bp_wrong = Signal(32, name="io_bpWrong")
+
+    # Emit a no-taken sequential prediction until a full BPU is injected. / 在注入完整 BPU 前输出不跳转顺序预测。
+    def elaborate(self, platform: Any) -> Module:
+        del platform
+        module = Module()
+        module.d.comb += [self.pred_taken.eq(0), self.pred_target.eq(self.pc + 4),
+                          self.pred_cfi_position.eq(0), self.bp_right.eq(0), self.bp_wrong.eq(0)]
+        return module
+
+
 class FrontendParent(Elaboratable):
     """Reduced executable V2 Frontend parent closure. / 可执行的精简 V2 前端父级闭包。"""
 
@@ -350,8 +407,8 @@ class FrontendParent(Elaboratable):
         # by a later full integration.  They are never imported dynamically,
         # preserving the single-file Build contract.  可选叶子子级由 family
         # 验证器或后续完整集成注入；不进行动态导入，保持单文件 Build 契约。
-        self.rvc = dependencies.get("rvc") or dependencies.get("RVCExpander")
-        self.bpu = dependencies.get("bpu") or dependencies.get("BPU")
+        self.rvc = dependencies.get("rvc") or dependencies.get("RVCExpander") or FrontendRvcBoundary(cfg)
+        self.bpu = dependencies.get("bpu") or dependencies.get("BPU") or FrontendBpuBoundary(cfg)
         self.icache_replacer = dependencies.get("icache_replacer") or dependencies.get("ICacheReplacer")
         self.icache_mshr = dependencies.get("icache_mshr") or dependencies.get("ICacheMSHR")
 
@@ -565,24 +622,11 @@ class FrontendParent(Elaboratable):
         # Deterministic tie-offs for unbound full-inventory outputs. / 对尚未绑定的完整清单输出确定性置零。
         if self.locked_io:
             mapped_outputs = {
-                "auto_inner_icache_ctrlUnitOpt_in_a_ready", "auto_inner_icache_ctrlUnitOpt_in_d_valid",
-                "auto_inner_icache_ctrlUnitOpt_in_d_bits_opcode", "auto_inner_icache_ctrlUnitOpt_in_d_bits_size",
-                "auto_inner_icache_ctrlUnitOpt_in_d_bits_source", "auto_inner_icache_ctrlUnitOpt_in_d_bits_data",
-                "auto_inner_icache_client_out_a_valid", "auto_inner_icache_client_out_a_bits_source",
-                "auto_inner_icache_client_out_a_bits_address", "auto_inner_instrUncache_client_out_a_valid",
-                "auto_inner_instrUncache_client_out_a_bits_address", "io_ptw_req_0_valid",
-                "io_ptw_req_0_bits_vpn", "io_ptw_req_0_bits_s2xlate", "io_ptw_resp_ready",
+                "io_ptw_req_0_valid", "io_ptw_req_0_bits_vpn", "io_ptw_req_0_bits_s2xlate", "io_ptw_resp_ready",
                 "io_backend_wfi_wfiSafe", "io_error_ecc_error_valid", "io_error_ecc_error_bits",
                 "io_resetInFrontend", *[f"io_perf_{index}_value" for index in range(cfg.perf_count)],
                 *[f"io_backend_cfVec_{lane}_{suffix}" for lane in range(cfg.fetch_width)
-                  for suffix, _width in (("valid", 1), ("bits_instr", 32), ("bits_exceptionVec_1", 1),
-                                         ("bits_exceptionVec_2", 1), ("bits_exceptionVec_12", 1),
-                                         ("bits_exceptionVec_20", 1), ("bits_backendException", 1),
-                                         ("bits_satpFlushFirstFetchFault", 1), ("bits_trigger", 4),
-                                         ("bits_pd_isRVC", 1), ("bits_pd_brType", 2), ("bits_pred_taken", 1),
-                                         ("bits_crossPageIPFFix", 1), ("bits_ftqPtr_flag", 1),
-                                         ("bits_ftqPtr_value", 6), ("bits_ftqOffset", 4),
-                                         ("bits_isLastInFtqEntry", 1))],
+                  for suffix in ("valid", "bits_instr", "bits_exceptionVec_1", "bits_pd_isRVC", "bits_pred_taken")],
             }
             for port_name, _direction, _width in self.frontend_port_specs:
                 if _direction == "output" and port_name not in mapped_outputs:
@@ -727,12 +771,38 @@ def build_verilog(configuration, injected_dependencies):
     else:
         options = {}
         cfg = FrontendTopConfig()
-    top = UHSCTop(cfg, dependencies, locked_io=bool(options.get("locked_io", True)))
-    # Export the exact locked Frontend port order; compact auxiliary signals
-    # remain internal implementation observables and are never added to the
-    # project-facing boundary.  输出锁定 Frontend 的精确端口顺序；紧凑辅助信号
-    # 保留为内部观测点，不加入项目侧边界。
-    ports: list[Any] = [top.frontend_ports[name] for name, _direction, _width in top.frontend_port_specs]
+    top = UHSCTop(cfg, dependencies,
+                  locked_io=bool(options.get("locked_io", options.get("full", False))))
+    if top.locked_io:
+        # Export the exact locked Frontend port order; compact auxiliary
+        # signals remain internal implementation observables. / 输出锁定
+        # Frontend 精确端口顺序；紧凑辅助信号保留为内部观测点。
+        ports: list[Any] = [top.frontend_ports[name] for name, _direction, _width in top.frontend_port_specs]
+    else:
+        # Preserve the compact parent adapter used by earlier leaf validators.
+        # 保留早期叶子验证器使用的紧凑父级适配器。
+        ports = [
+            top.clock, top.reset, top.reset_vector, top.fencei, top.redirect_valid,
+            top.redirect_ftq_idx, top.redirect_ftq_offset, top.redirect_level,
+            top.redirect_pc, top.redirect_cfi_taken, top.redirect_debug_ctrl,
+            top.redirect_debug_memvio, top.backend_can_accept, top.wfi_req,
+            top.csr_pf_enable, top.csr_fs_off, top.csr_bp_enable, top.sfence_valid,
+            top.fetch_req_valid, top.fetch_req_addr, top.fetch_req_nextline,
+            top.fetch_req_ready, top.fetch_resp_valid, top.fetch_resp_data,
+            top.fetch_resp_error, top.uncache_req_valid, top.uncache_req_addr,
+            top.uncache_req_ready, top.uncache_resp_valid, top.uncache_resp_data,
+            top.uncache_resp_error, top.icache_wfi_safe, top.instr_uncache_wfi_safe,
+            top.icache_error_valid, top.icache_error_bits, top.ibuffer_full_in,
+            top.bp_right_in, top.bp_wrong_in, top.need_flush,
+            top.flush_control_redirect, top.flush_mem_vio_redirect, top.icache_fencei,
+            top.icache_pf_enable, top.ifu_fs_off, top.bpu_enable, top.itlb_sfence,
+            top.icache_flush, top.icache_wfi_req, top.instr_uncache_wfi_req,
+            top.wfi_safe, top.error_valid, top.error_bits, top.reset_in_frontend,
+            top.frontend_info_ibuf_full, top.frontend_info_bp_right,
+            top.frontend_info_bp_wrong, top.cf_valid, top.cf_instr, top.cf_pc,
+            top.cf_is_rvc, top.cf_pred_taken, top.cf_exception, top.ptw_req_valid,
+            top.ptw_req_vpn, top.ptw_resp_ready,
+        ] + top.perf
     name = str(options.get("module", options.get("name", "UHSCTop")))
     return verilog.convert(top, name=name, ports=ports, emit_src=False)
 

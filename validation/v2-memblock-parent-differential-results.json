@@ -36,12 +36,12 @@
   },
   "target_parent": {
     "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.MemBlock-Hardware.py",
-    "sha256": "6dfa754ca19d64b840fef4e1b819e6e4bcd4258025cc2077304d566dbfaf6ec7"
+    "sha256": "7ecfad15b88a23124185a9915f5c3eb5169ba795b85e1284d6972139dd147733"
   },
   "comparison": {
     "status": "PASS",
     "returncode": 0,
-    "stdout_tail": "PASS_MEMBLOCK_REFERENCE 32\n- /mnt/c/Users/lishuo/AppData/Local/Temp/memblock-parent-diff-aos1kobf/tb.sv:1740: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 149ps; walltime 0.001 s; speed 109.535 ns/s\n- Verilator: cpu 0.001 s on 1 threads; alloced 153 MB\n",
+    "stdout_tail": "PASS_MEMBLOCK_REFERENCE 32\n- /mnt/c/Users/lishuo/AppData/Local/Temp/memblock-parent-diff-we2n_tum/tb.sv:1740: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 149ps; walltime 0.001 s; speed 83.431 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n",
     "stderr_tail": "",
     "vectors": 32,
     "reference_modules": [
@@ -65,6 +65,32 @@
       "stderr_tail": ""
     }
   },
+  "full_envelope": {
+    "status": "PASS",
+    "module": "UHSCMemoryMemBlockFull",
+    "inventory_path": "validation/v2-memblock-port-inventory.json",
+    "inventory_sha256": "3acf1461907103e097eda6b8ef3c567310e3f17d1358d8365dda69c31a151c37",
+    "expected_port_count": 1326,
+    "actual_port_count": 1326,
+    "missing": [],
+    "extra": [],
+    "direction_width_mismatches": [],
+    "ordered_inventory_sha256": "86f2a6829e11529fddbc91ec630a89f8004620a07eef82d3f0899b999fd27722",
+    "rtl_sha256": "8404b3cf3a891492c98e344011c97ec1cd3b4e70c31160b04aee0766e04692e4",
+    "rtl_bytes": 274772
+  },
+  "full_backend_gates": {
+    "verilator": {
+      "status": "PASS",
+      "returncode": 0,
+      "stderr_tail": "ent/full-parent-envelope.sv:4183:25: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'hd' generates 4 bits.\n                                                                                                                                                             : ... note: In instance 'UHSCMemoryMemBlockFull.dcache.mainpipe.amo'\n 4183 |   assign \\$64  = io_cmd == 4'hd;\n      |                         ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memblock-parent/full-parent-envelope.sv:4184:25: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'hf' generates 4 bits.\n                                                                                                                                                             : ... note: In instance 'UHSCMemoryMemBlockFull.dcache.mainpipe.amo'\n 4184 |   assign \\$65  = io_cmd == 4'hf;\n      |                         ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memblock-parent/full-parent-envelope.sv:3586:41: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                             : ... note: In instance 'UHSCMemoryMemBlockFull.dcache'\n 3586 |   assign \\$1  = io_miss_req_bits_source == 1'h1;\n      |                                         ^~\n"
+    },
+    "yosys": {
+      "status": "PASS",
+      "returncode": 0,
+      "stderr_tail": ""
+    }
+  },
   "behavioral_equivalence": true,
   "status": "DIFFERENTIAL_MATCHED_BOUNDED",
   "gates": {
@@ -72,6 +98,9 @@
     "DIRECT_TEST_PASS_BOUNDED": "PASS",
     "V2_REFERENCE_MATCHED": "PASS_BOUNDED",
     "PARENT_CLOSURE_MATCHED": "PASS_BOUNDED_REDUCED",
+    "FULL_PORT_ENVELOPE": "PASS",
+    "FULL_VERILATOR": "PASS",
+    "FULL_YOSYS": "PASS",
     "VERILATOR": "PASS",
     "YOSYS": "PASS",
     "UHSC_LOCALIZED": "PASS_BOUNDED_PARENT_LOCAL_NAME",
@@ -80,7 +109,7 @@
   },
   "acceptance_eligible": false,
   "unclosed": [
-    "Full 669-port MemBlock/Diplomacy closure remains outside this bounded batch.",
-    "MMU/LSU/TileLink/MBIST dependencies are explicit stubs; mixed-license review remains pending."
+    "The exact 1326-port envelope is emitted, but most ports are deterministic tie-offs until the DCache/MMU/LSU/Diplomacy child closures are implemented.",
+    "Full MemBlock behavioral differential against the locked XSTop has not run; mixed-license review remains pending."
   ]
 }
