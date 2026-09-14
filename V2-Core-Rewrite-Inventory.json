@@ -8,11 +8,11 @@
   },
   "scan_counts": {
     "xiangshan_scala_files": 325,
-    "existing_candidate_entries": 46,
-    "retained_build_files": 45,
+    "existing_candidate_entries": 47,
+    "retained_build_files": 46,
     "retired_or_excluded": 1,
-    "planned_core_build_files": 45,
-    "families": 34,
+    "planned_core_build_files": 46,
+    "families": 35,
     "parent_closures": 4
   },
   "classification_counts": {
@@ -641,8 +641,25 @@
         "FuBusyTableRead",
         "FuBusyTableReadIO"
       ]
+    },
+    {
+      "id": "RobPtrWrappers",
+      "source_scala": [
+        "scala/src/main/scala/xiangshan/backend/rob/RobEnqPtrWrapper.scala",
+        "scala/src/main/scala/xiangshan/backend/rob/RobDeqPtrWrapper.scala"
+      ],
+      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Rob.PtrWrappers-Hardware.py",
+      "family_id": "core.backend.rob.ptr",
+      "closure_root": "core.backend.rob",
+      "classification": "REWRITTEN",
+      "disposition": "REWRITTEN",
+      "v2_status": "VALIDATOR_PASS_BOUNDED",
+      "reference_surface": [
+        "RobEnqPtrWrapper",
+        "NewRobDeqPtrWrapper"
+      ]
     }
   ],
-  "status": "IMPLEMENTATION_BATCH_A4_VALIDATED_BOUNDED",
+  "status": "IMPLEMENTATION_BATCH_A5_VALIDATED_BOUNDED",
   "acceptance_eligible": false
 }

@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_CORE_LEAF_A5_VALIDATOR",
+  "batch_id": "V2-SCAN-A5-CORE-ROB-PTR",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Rob.PtrWrappers-Hardware.py",
+    "sha256": "fa8092e96cf7028b761b065cf44a5253c5968e7881dc81f149636da72c27515d"
+  },
+  "sources": [
+    {
+      "path": "upstream/src/main/scala/xiangshan/backend/rob/RobEnqPtrWrapper.scala",
+      "sha256": "861553cb548410dd6bdbbfceb00800cdaa825d23af3d3824d554dc5c31f27daa"
+    },
+    {
+      "path": "upstream/src/main/scala/xiangshan/backend/rob/RobDeqPtrWrapper.scala",
+      "sha256": "a910fb08d3aefb3a54020e0c7af4704608c591008a21a8b36ff0c040af1d3d38"
+    }
+  ],
+  "direct": {
+    "enqueue_increment": {
+      "result": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "expected": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "pass": true
+    },
+    "enqueue_redirect": {
+      "result": [
+        8,
+        9,
+        10,
+        11
+      ],
+      "expected": [
+        8,
+        9,
+        10,
+        11
+      ],
+      "pass": true
+    },
+    "dequeue_contiguous": {
+      "result": [
+        [
+          2,
+          3,
+          4,
+          5
+        ],
+        2,
+        true
+      ],
+      "expected_count": 2,
+      "pass": true
+    }
+  },
+  "generated": {
+    "bytes": 784280,
+    "sha256": "dd614ce428de16c3283cbce845597e084758e5d42d6f078756d436abd7394322",
+    "module_decl": true
+  },
+  "tools": {
+    "verilator": "PASS",
+    "yosys": "PASS"
+  },
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "SOURCE_LEVEL_PENDING",
+    "PARENT_CLOSURE_MATCHED": "PENDING",
+    "UHSC_LOCALIZED": "NO_PROJECT_FACING_RENAME",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "VALIDATOR_PASS_BOUNDED",
+  "acceptance_eligible": false
+}
