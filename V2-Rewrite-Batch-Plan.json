@@ -137,21 +137,24 @@
         {
           "batch_id": "V2-PARENT-MEMBLOCK-001",
           "status": "PASS_BOUNDED_REDUCED",
-          "commit": "PENDING_COORDINATOR_COMMIT",
+          "commit": "7b87818",
           "evidence": "validation/v2-memblock-parent-differential-results.json",
           "full_parent_status": "PENDING_FULL_DIPLOMACY_CLOSURE",
-          "vectors": 32
+          "vectors": 32,
+          "direct_checks": 37,
+          "validator": "v2_memblock_parent_closure.py"
         }
       ],
       "failed_validation_attempts": [
         {
           "batch_id": "V2-PARENT-CACHE-001",
-          "status": "REPAIR_REQUIRED",
+          "status": "REPAIRED_AND_PASS",
           "phase": "reference_compile",
           "reason": "reference shell connected child output io_*_issue_ready ports directly to variables",
           "direct": "PASS",
           "verilator_target": "PASS",
-          "yosys_target": "PASS"
+          "yosys_target": "PASS",
+          "repair_commit": "7b87818"
         }
       ]
     },
@@ -238,10 +241,10 @@
     "parent_closures_matched": 0,
     "accepted_count": 0,
     "next_batches": [
-      "V2-PARENT-VECTOR-CLOSURE",
-      "V2-PARENT-CACHE-CLOSURE",
       "V2-PARENT-FRONTEND-CLOSURE",
-      "V2-PARENT-BACKEND-CLOSURE"
+      "V2-PARENT-BACKEND-CLOSURE",
+      "V2-DEPENDENCY-FAMILY-CLOSURE",
+      "V2-UHSC-TOP-INTEGRATION"
     ]
   },
   "accepted_count": 0,
