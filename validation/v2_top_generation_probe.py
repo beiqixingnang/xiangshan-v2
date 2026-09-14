@@ -86,6 +86,40 @@ def module_names(text: str) -> list[str]:
     return sorted(set(names))
 
 
+def reachable_reference_modules(text: str, root: str = "XSTop") -> list[str]:
+    """Resolve instantiated module names reachable from the locked root.
+    从锁定根模块递归解析实际实例化的模块名称。
+    """
+    spans = {match.group(1).lstrip("\\"): match.group(0) for match in re.finditer(
+        r"^module\s+(?:\\)?([A-Za-z_][A-Za-z0-9_$.]*)\s*\(.*?^endmodule\s*",
+        text, re.MULTILINE | re.DOTALL,
+    )}
+    names = set(spans)
+    # ANSI/Chisel output uses ``Child instance (``; filtering declarations and
+    # language keywords keeps this lexical closure deterministic.
+    keywords = {"module", "wire", "reg", "input", "output", "assign", "always", "if", "else", "for", "case"}
+    reachable: set[str] = set()
+    pending = [root]
+    while pending:
+        current = pending.pop()
+        if current in reachable or current not in spans:
+            continue
+        reachable.add(current)
+        body = spans[current]
+        # Instance discovery must ignore comments and string literals.  The
+        # generated Chisel SV contains source-path comments which frequently
+        # look like ``Foo bar (`` and otherwise make every definition appear
+        # reachable.  Keep line structure so the anchored instance grammar is
+        # deterministic while removing lexical noise.
+        body = re.sub(r"//[^\n]*|/\*.*?\*/", " ", body, flags=re.S)
+        body = re.sub(r'"(?:\\.|[^"\\])*"', '""', body)
+        for match in re.finditer(r"(?:^|\n)\s*(?!module\b|endmodule\b|assign\b|wire\b|reg\b|input\b|output\b|parameter\b|localparam\b|always\b|if\b|else\b|for\b|case\b)(?:\\)?([A-Za-z_][A-Za-z0-9_$.]*)\s+(?:\\)?[A-Za-z_][A-Za-z0-9_$.]*\s*\(", body):
+            child = match.group(1).lstrip("\\")
+            if child in names and child not in keywords and child not in reachable:
+                pending.append(child)
+    return sorted(reachable)
+
+
 def generated_port_schema(text: str, module_name: str) -> dict[str, tuple[str, int]]:
     """Read one generated module's ANSI direction/width declarations."""
     start = text.index(f"module {module_name}(")
@@ -313,6 +347,7 @@ def main() -> int:
             encoding="utf-8", errors="replace"
         )
         locked_modules = module_names(locked_text)
+        reachable_modules = reachable_reference_modules(locked_text)
         generated_modules = module_names(full_hierarchy_rtl)
         missing_modules = sorted(set(locked_modules) - set(generated_modules))
         extra_modules = sorted(set(generated_modules) - set(locked_modules))
@@ -324,6 +359,12 @@ def main() -> int:
             "extra_module_count": len(extra_modules),
             "missing_modules_sample": missing_modules[:50],
             "extra_modules_sample": extra_modules[:50],
+            "reachable_reference_module_count": len(reachable_modules),
+            "reachable_reference_modules_sha256": hashlib.sha256(
+                "\n".join(reachable_modules).encode("utf-8")
+            ).hexdigest(),
+            "reachable_missing_module_count": len(set(reachable_modules) - set(generated_modules)),
+            "reachable_missing_modules_sample": sorted(set(reachable_modules) - set(generated_modules))[:50],
             "reference_sha256": EXPECTED_REFERENCE,
             "semantic_status": "PENDING_FULL_CHILD_BEHAVIORAL_DIFFERENTIAL",
         }
