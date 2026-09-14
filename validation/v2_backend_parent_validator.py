@@ -404,14 +404,14 @@ def child_boundary_differential(module: Any) -> dict[str, Any]:
           "wire dut_issue_selected_valid, ref_issue_selected_valid, dut_writeback_active, ref_writeback_active;",
           "wire dut_w0,dut_w1,dut_w2,dut_w3,dut_w4,ref_w0,ref_w1,ref_w2,ref_w3,ref_w4;",
           "UHSCBackendChildBoundary dut(.io_frontend_cfVec_instr(instr),.io_child_issue_freeSlots(free_slots),.io_child_decode_instruction(dut_decode_instruction),.io_child_decode_matches(dut_decode_matches),.io_child_decode_active(dut_decode_active),.io_child_issue_active(dut_issue_active),.io_child_issue_canEnq(dut_issue_can_enq),.io_child_issue_selected_valid(dut_issue_selected_valid),.io_child_issue_selected_bits(dut_issue_selected_bits),.io_child_writeback_active(dut_writeback_active),.io_child_writeback_0_valid(dut_w0),.io_child_writeback_1_valid(dut_w1),.io_child_writeback_2_valid(dut_w2),.io_child_writeback_3_valid(dut_w3),.io_child_writeback_4_valid(dut_w4));",
-          "BackendChildReference ref(.io_frontend_cfVec_instr(instr),.io_child_issue_freeSlots(free_slots),.io_child_decode_instruction(ref_decode_instruction),.io_child_decode_matches(ref_decode_matches),.io_child_decode_active(ref_decode_active),.io_child_issue_active(ref_issue_active),.io_child_issue_canEnq(ref_issue_can_enq),.io_child_issue_selected_valid(ref_issue_selected_valid),.io_child_issue_selected_bits(ref_issue_selected_bits),.io_child_writeback_active(ref_writeback_active),.io_child_writeback_0_valid(ref_w0),.io_child_writeback_1_valid(ref_w1),.io_child_writeback_2_valid(ref_w2),.io_child_writeback_3_valid(ref_w3),.io_child_writeback_4_valid(ref_w4));",
+          "BackendChildReference ref_i(.io_frontend_cfVec_instr(instr),.io_child_issue_freeSlots(free_slots),.io_child_decode_instruction(ref_decode_instruction),.io_child_decode_matches(ref_decode_matches),.io_child_decode_active(ref_decode_active),.io_child_issue_active(ref_issue_active),.io_child_issue_canEnq(ref_issue_can_enq),.io_child_issue_selected_valid(ref_issue_selected_valid),.io_child_issue_selected_bits(ref_issue_selected_bits),.io_child_writeback_active(ref_writeback_active),.io_child_writeback_0_valid(ref_w0),.io_child_writeback_1_valid(ref_w1),.io_child_writeback_2_valid(ref_w2),.io_child_writeback_3_valid(ref_w3),.io_child_writeback_4_valid(ref_w4));",
           "initial begin"]
     for index, vector in enumerate(vectors):
         tb.append(f"instr=192'h{vector['instruction']:048x}; free_slots=22'h{vector['free_slots']:06x}; #1;")
         tb.append(f"if (dut_decode_instruction!==ref_decode_instruction || dut_decode_matches!==ref_decode_matches || dut_decode_active!==ref_decode_active || dut_issue_active!==ref_issue_active || dut_issue_can_enq!==ref_issue_can_enq || dut_issue_selected_valid!==ref_issue_selected_valid || dut_issue_selected_bits!==ref_issue_selected_bits || dut_writeback_active!==ref_writeback_active) begin $display(\"CHILD_MISMATCH {index}\"); $fatal(1); end")
     tb.extend([f'$display("BACKEND_CHILD_DIFF_PASS {len(vectors)}"); $finish;', "end endmodule\n"])
     tb_path.write_text("\n".join(tb), encoding="utf-8", newline="\n")
-    compile_result = run_wsl(["verilator", "--binary", "--timing", "-Wno-fatal", "--top-module", "tb",
+    compile_result = run_wsl(["verilator", "--binary", "--timing", "-Wno-fatal", "-Wno-WIDTHEXPAND", "-Wno-WIDTHTRUNC", "--top-module", "tb",
                               "--Mdir", wsl_path(WORK / "obj-child"), wsl_path(rtl_path), wsl_path(ref_path), wsl_path(tb_path)], timeout=360)
     if compile_result["status"] != "PASS":
         return {"status": "FAIL_COMPILE", "direct": direct, "compile": compile_result, "vectors": len(vectors)}
@@ -642,7 +642,7 @@ def source_info() -> dict[str, Any]:
 
 def write_evidence(static: dict[str, Any], direct: dict[str, Any], differential: dict[str, Any],
                    backend: dict[str, Any], reference: dict[str, Any], source: dict[str, Any],
-                   inventory: dict[str, Any]) -> None:
+                   inventory: dict[str, Any], child_boundary: dict[str, Any]) -> None:
     """Write batch evidence while keeping promotion closed. / 写入批次证据并保持晋级关闭。"""
     target_rel = TARGET.relative_to(ROOT).as_posix()
     common = {"schema_version": 1, "batch_id": "V2-PARENT-BACKEND-001", "source_commit": SOURCE_COMMIT,
@@ -653,11 +653,11 @@ def write_evidence(static: dict[str, Any], direct: dict[str, Any], differential:
               "LICENSE_REVIEW": "PENDING", "ACCEPTED": "NOT_ALLOWED"}, "acceptance_eligible": False}
     DIRECT_RESULT.write_text(json.dumps({**common, "kind": "XIANGSHAN_KUNMINGHU_V2_BACKEND_PARENT_DIRECT",
                                           "static_audit": static, "direct": direct, "backend_gates": backend,
-                                          "full_inventory_probe": inventory},
+                                          "full_inventory_probe": inventory, "child_boundary": child_boundary},
                                          ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     DIFF_RESULT.write_text(json.dumps({**common, "kind": "XIANGSHAN_KUNMINGHU_V2_BACKEND_PARENT_DIFFERENTIAL",
                                        "differential": differential, "backend_gates": backend,
-                                       "full_inventory_probe": inventory,
+                                       "full_inventory_probe": inventory, "child_boundary": child_boundary,
                                        "behavioral_equivalence": differential["status"] == "PASS",
                                        "reference_mode": "independent_sv_parent_equations_plus_locked_xstop_provenance",
                                        "unclosed": ["Full generated Backend has 1165 ports and requires Decode/Issue/Rename/CSR/Exu child closure.",
@@ -668,7 +668,7 @@ def write_evidence(static: dict[str, Any], direct: dict[str, Any], differential:
                                            "batch_id": "V2-PARENT-BACKEND-001", "target": static,
                                            "injected_dependencies": ["control/dispatch", "datapath", "writeback", "memory", "csr"],
                                            "source_authority": reference, "source_paths": source,
-                                           "full_inventory_probe": inventory,
+                                           "full_inventory_probe": inventory, "child_boundary": child_boundary,
                                            "result": static["status"], "gates": common["gates"], "acceptance_eligible": False},
                                           ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     COVERAGE_RESULT.write_text(json.dumps({"schema_version": 1, "kind": "XIANGSHAN_KUNMINGHU_V2_BACKEND_PARENT_COVERAGE",
@@ -681,7 +681,7 @@ def write_evidence(static: dict[str, Any], direct: dict[str, Any], differential:
                                            "observation_points": ["frontend ready/valid", "dispatch ordering", "writeback class/port priority",
                                                                   "writeback backpressure", "flush cancellation", "redirect/error", "MSI acknowledge"],
                                            "direct": direct, "differential": differential,
-                                           "full_inventory_probe": inventory,
+                                           "full_inventory_probe": inventory, "child_boundary": child_boundary,
                                            "status": "PASS_BOUNDED_PARENT" if differential["status"] == "PASS" else "FAIL",
                                            "gates": common["gates"], "acceptance_eligible": False},
                                           ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
@@ -694,13 +694,14 @@ def write_evidence(static: dict[str, Any], direct: dict[str, Any], differential:
                                                        "covered_children": ["DataPath", "WbDataPath", "dispatch", "redirect"],
                                                        "status": "PASS_BOUNDED" if differential["status"] == "PASS" else "FAIL"}],
                                           "reference_snapshot": reference, "gates": common["gates"],
-                                          "full_inventory_probe": inventory, "acceptance_eligible": False},
+                                          "full_inventory_probe": inventory, "child_boundary": child_boundary,
+                                          "acceptance_eligible": False},
                                          ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     SUMMARY_RESULT.write_text(json.dumps({"schema_version": 1, "kind": "V2_BACKEND_PARENT_BATCH_SUMMARY",
                                           "batch_id": "V2-PARENT-BACKEND-001", "static": static, "direct": direct,
                                           "differential": differential, "backend": backend, "reference": reference,
                                           "status": "PASS_BOUNDED_PARENT" if static["status"] == "PASS" and direct["status"] == "PASS" and differential["status"] == "PASS" and backend["status"] == "PASS" else "FAIL",
-                                          "full_inventory_probe": inventory,
+                                          "full_inventory_probe": inventory, "child_boundary": child_boundary,
                                           "acceptance_eligible": False, "ACCEPTED": "NOT_ALLOWED"},
                                          ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
 
@@ -724,13 +725,16 @@ def main() -> int:
     backend = backend_gates(rtl_path)
     differential = differential_sv(rtl_path, vectors)
     inventory = full_inventory_probe(module)
+    child_boundary = child_boundary_differential(module)
     reference = locked_reference_info()
     source = source_info()
-    write_evidence(static, direct, differential, backend, reference, source, inventory)
+    write_evidence(static, direct, differential, backend, reference, source, inventory, child_boundary)
     status = "PASS_BOUNDED_PARENT" if static["status"] == "PASS" and direct["status"] == "PASS" and differential["status"] == "PASS" and backend["status"] == "PASS" else "FAIL"
     print(json.dumps({"status": status, "vectors": len(vectors), "direct": direct["status"],
                       "differential": differential["status"], "full_inventory": inventory["status"],
                       "full_inventory_ports": inventory["port_count"],
+                      "child_boundary": child_boundary["status"],
+                      "child_boundary_vectors": child_boundary["vectors"],
                       "verilator": backend["verilator"]["status"],
                       "yosys": backend["yosys"]["status"], "ACCEPTED": "NOT_ALLOWED"}, sort_keys=True))
     return 0 if status == "PASS_BOUNDED_PARENT" else 1
