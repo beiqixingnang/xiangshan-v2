@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "kind": "V2_FRONTEND_FAUFTBWAY_MAPPING_UPDATE",
+  "batch_id": "V2-SEMANTIC-FRONTEND-FAUFTBWAY",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "closure_root": "core.frontend.bpu.fauftb",
+  "entries": [
+    {
+      "id": "FauFTBWay",
+      "classification": "REWRITTEN",
+      "source_scala": "upstream/src/main/scala/xiangshan/frontend/FauFTB.scala",
+      "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.FauFTBWay-Hardware.py",
+      "reference_modules": [
+        "FauFTBWay"
+      ],
+      "observation_points": [
+        "registered entry",
+        "request-tag hit",
+        "update-tag write bypass",
+        "async reset valid clear"
+      ],
+      "status": "DIFFERENTIAL_MATCHED_BOUNDED"
+    }
+  ],
+  "localization_map": {
+    "status": "NO_PROJECT_FACING_RENAME",
+    "locked_names_unchanged": true
+  },
+  "gates": {
+    "direct": "PASS_BOUNDED",
+    "reference": "PASS_BOUNDED",
+    "parent_closure": "PENDING",
+    "license": "PENDING_COORDINATOR_REVIEW",
+    "accepted": "NOT_ALLOWED"
+  },
+  "acceptance_eligible": false
+}

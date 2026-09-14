@@ -1,0 +1,193 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_FRONTEND_FAUFTBWAY_DIFFERENTIAL",
+  "batch_id": "V2-SEMANTIC-FRONTEND-FAUFTBWAY",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "locked_reference": {
+    "schema_version": 1,
+    "kind": "XIANGSHAN_KUNMINGHU_V2_FRONTEND_FAUFTBWAY_REFERENCE_EXTRACTION",
+    "batch_id": "V2-SEMANTIC-FRONTEND-FAUFTBWAY",
+    "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+    "xstop": {
+      "canonical_path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+      "local_access_path": "\\\\wsl$\\Debian\\home\\lishuo\\xs-v2-local\\build\\rtl\\XSTop.sv",
+      "bytes": 228590583,
+      "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d"
+    },
+    "reference": {
+      "module": "FauFTBWay",
+      "path": "validation/reference-closures/FauFTBWay.sv",
+      "bytes": 19166,
+      "sha256": "5bb9be2dc0cd27246b275f621eded9e28203028be17b0ddb1ad957bbef665451",
+      "xstop_line_start": 122711,
+      "xstop_line_end": 122875
+    },
+    "extraction": "PASS",
+    "locked_input_unchanged": true,
+    "acceptance_eligible": false
+  },
+  "target": {
+    "source": "validation/.work/v2-frontend-fauftbway/FauFTBWay-target.sv",
+    "source_sha256": "d1d38e8c6fdc6b5b71b54cd03227a80e02ad33f70c6dca2777601d9db4d4f082",
+    "build": {
+      "command": [
+        "verilator",
+        "--cc",
+        "--exe",
+        "--build",
+        "--Wno-fatal",
+        "--top-module",
+        "FauFTBWay",
+        "--Mdir",
+        "/mnt/c/Temp/v2-frontend-fauftbway-tools/obj-target",
+        "/mnt/c/Temp/v2-frontend-fauftbway-tools/target.sv",
+        "/mnt/c/Temp/v2-frontend-fauftbway-tools/target-tb.cpp"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "output_tail": "    -Os  -c -o target-tb.o /mnt/c/Temp/v2-frontend-fauftbway-tools/target-tb.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -c -o verilated.o /usr/share/verilator/include/verilated.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -c -o verilated_threads.o /usr/share/verilator/include/verilated_threads.cpp\npython3 /usr/share/verilator/bin/verilator_includer -DVL_INCLUDE_OPT=include VFauFTBWay.cpp VFauFTBWay___024root__DepSet_h35944d12__0.cpp VFauFTBWay___024root__DepSet_h0a51da1c__0.cpp VFauFTBWay___024root__Slow.cpp VFauFTBWay___024root__DepSet_h35944d12__0__Slow.cpp VFauFTBWay___024root__DepSet_h0a51da1c__0__Slow.cpp VFauFTBWay__Syms.cpp > VFauFTBWay__ALL.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -c -o VFauFTBWay__ALL.o VFauFTBWay__ALL.cpp\necho \"\" > VFauFTBWay__ALL.verilator_deplist.tmp\ng++    target-tb.o verilated.o verilated_threads.o VFauFTBWay__ALL.a    -pthread -lpthread -latomic   -o VFauFTBWay\nmake: Leaving directory '/mnt/c/Temp/v2-frontend-fauftbway-tools/obj-target'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.067 MB sources in 2 modules, into 0.054 MB in 7 C++ files needing 0.000 MB\n- Verilator: Walltime 5.170 s (elab=0.001, cvt=0.023, bld=5.092); cpu 0.011 s on 1 threads; alloced 9.648 MB\n",
+      "output_sha256": "435f86242c5df64a980783c3e88a8c3142b57a1b85aadfcbe0e0ce3ffb674c90"
+    },
+    "run": {
+      "command": [
+        "/mnt/c/Temp/v2-frontend-fauftbway-tools/obj-target/VFauFTBWay"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "output_tail": "71,\"req_tag\":27789,\"update_tag\":42155,\"write_valid\":1,\"write_tag\":54421,\"resp_hit\":0,\"update_hit\":0,\"resp_pack\":95055366855249379}\n{\"cycle\":372,\"req_tag\":29022,\"update_tag\":23938,\"write_valid\":1,\"write_tag\":60336,\"resp_hit\":0,\"update_hit\":0,\"resp_pack\":904459742254608622}\n{\"cycle\":373,\"req_tag\":25075,\"update_tag\":46525,\"write_valid\":1,\"write_tag\":14007,\"resp_hit\":0,\"update_hit\":0,\"resp_pack\":98721871719678653}\n{\"cycle\":374,\"req_tag\":55993,\"update_tag\":54730,\"write_valid\":1,\"write_tag\":55993,\"resp_hit\":0,\"update_hit\":0,\"resp_pack\":140574193694806722}\n{\"cycle\":375,\"req_tag\":26508,\"update_tag\":52398,\"write_valid\":1,\"write_tag\":52398,\"resp_hit\":0,\"update_hit\":1,\"resp_pack\":1089215341351588396}\n{\"cycle\":376,\"req_tag\":9422,\"update_tag\":8805,\"write_valid\":1,\"write_tag\":58444,\"resp_hit\":0,\"update_hit\":0,\"resp_pack\":544032731206234971}\n{\"cycle\":377,\"req_tag\":26297,\"update_tag\":38752,\"write_valid\":1,\"write_tag\":37612,\"resp_hit\":0,\"update_hit\":0,\"resp_pack\":346289858865085811}\n{\"cycle\":378,\"req_tag\":12100,\"update_tag\":24744,\"write_valid\":1,\"write_tag\":19477,\"resp_hit\":0,\"update_hit\":0,\"resp_pack\":484469845552682872}\n{\"cycle\":379,\"req_tag\":40546,\"update_tag\":62227,\"write_valid\":1,\"write_tag\":40546,\"resp_hit\":0,\"update_hit\":0,\"resp_pack\":1100216765598906600}\n{\"cycle\":380,\"req_tag\":43487,\"update_tag\":56076,\"write_valid\":1,\"write_tag\":64353,\"resp_hit\":0,\"update_hit\":0,\"resp_pack\":772901865251577759}\n{\"cycle\":381,\"req_tag\":48271,\"update_tag\":54699,\"write_valid\":1,\"write_tag\":64181,\"resp_hit\":0,\"update_hit\":0,\"resp_pack\":711487481281302433}\n{\"cycle\":382,\"req_tag\":30028,\"update_tag\":52146,\"write_valid\":1,\"write_tag\":52146,\"resp_hit\":0,\"update_hit\":1,\"resp_pack\":905130436562834159}\n{\"cycle\":383,\"req_tag\":42785,\"update_tag\":34328,\"write_valid\":1,\"write_tag\":4291,\"resp_hit\":0,\"update_hit\":0,\"resp_pack\":381885835663622813}\n{\"cycle\":384,\"req_tag\":59952,\"update_tag\":20865,\"write_valid\":1,\"write_tag\":59952,\"resp_hit\":0,\"update_hit\":0,\"resp_pack\":513705233752683913}\n{\"cycle\":385,\"req_tag\":17406,\"update_tag\":16714,\"write_valid\":0,\"write_tag\":59433,\"resp_hit\":0,\"update_hit\":0,\"resp_pack\":166249472970054330}\n{\"cycle\":386,\"req_tag\":58917,\"update_tag\":37249,\"write_valid\":1,\"write_tag\":21040,\"resp_hit\":0,\"update_hit\":0,\"resp_pack\":166249472970054330}\n{\"cycle\":387,\"req_tag\":2797,\"update_tag\":33552,\"write_valid\":0,\"write_tag\":53346,\"resp_hit\":0,\"update_hit\":0,\"resp_pack\":442798631877237435}\n",
+      "output_sha256": "ad4bb9ca35272de23c836417cc1da5e718c192c4a2e455c77469e9d3ae009318"
+    },
+    "trace": {
+      "path": "validation/.work/v2-frontend-fauftbway/target.jsonl",
+      "vectors": 388,
+      "sha256": "1dd4a97c70883459d305797d797cf1f8a65f1ea6e054313e216d71c2b56abbff"
+    }
+  },
+  "reference": {
+    "source": "validation/reference-closures/FauFTBWay.sv",
+    "source_sha256": "5bb9be2dc0cd27246b275f621eded9e28203028be17b0ddb1ad957bbef665451",
+    "build": {
+      "command": [
+        "verilator",
+        "--cc",
+        "--exe",
+        "--build",
+        "--Wno-fatal",
+        "--top-module",
+        "FauFTBWay",
+        "--Mdir",
+        "/mnt/c/Temp/v2-frontend-fauftbway-tools/obj-reference",
+        "/mnt/c/Temp/v2-frontend-fauftbway-tools/reference.sv",
+        "/mnt/c/Temp/v2-frontend-fauftbway-tools/reference-tb.cpp"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "output_tail": "-fauftbway-tools/reference-tb.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -c -o verilated.o /usr/share/verilator/include/verilated.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -c -o verilated_threads.o /usr/share/verilator/include/verilated_threads.cpp\npython3 /usr/share/verilator/bin/verilator_includer -DVL_INCLUDE_OPT=include VFauFTBWay.cpp VFauFTBWay___024root__DepSet_h35944d12__0.cpp VFauFTBWay___024root__DepSet_h0a51da1c__0.cpp VFauFTBWay___024root__Slow.cpp VFauFTBWay___024root__DepSet_h35944d12__0__Slow.cpp VFauFTBWay___024root__DepSet_h0a51da1c__0__Slow.cpp VFauFTBWay__Syms.cpp > VFauFTBWay__ALL.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -c -o VFauFTBWay__ALL.o VFauFTBWay__ALL.cpp\necho \"\" > VFauFTBWay__ALL.verilator_deplist.tmp\ng++    reference-tb.o verilated.o verilated_threads.o VFauFTBWay__ALL.a    -pthread -lpthread -latomic   -o VFauFTBWay\nrm VFauFTBWay__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/c/Temp/v2-frontend-fauftbway-tools/obj-reference'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.026 MB sources in 2 modules, into 0.050 MB in 7 C++ files needing 0.000 MB\n- Verilator: Walltime 4.658 s (elab=0.000, cvt=0.032, bld=4.538); cpu 0.012 s on 1 threads; alloced 9.461 MB\n",
+      "output_sha256": "a27c6fba8c753d0af557ddc2a800c337c6e57e4d349b30a748c38859a506ea8f"
+    },
+    "run": {
+      "command": [
+        "/mnt/c/Temp/v2-frontend-fauftbway-tools/obj-reference/VFauFTBWay"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "output_tail": "71,\"req_tag\":27789,\"update_tag\":42155,\"write_valid\":1,\"write_tag\":54421,\"resp_hit\":0,\"update_hit\":0,\"resp_pack\":95055366855249379}\n{\"cycle\":372,\"req_tag\":29022,\"update_tag\":23938,\"write_valid\":1,\"write_tag\":60336,\"resp_hit\":0,\"update_hit\":0,\"resp_pack\":904459742254608622}\n{\"cycle\":373,\"req_tag\":25075,\"update_tag\":46525,\"write_valid\":1,\"write_tag\":14007,\"resp_hit\":0,\"update_hit\":0,\"resp_pack\":98721871719678653}\n{\"cycle\":374,\"req_tag\":55993,\"update_tag\":54730,\"write_valid\":1,\"write_tag\":55993,\"resp_hit\":0,\"update_hit\":0,\"resp_pack\":140574193694806722}\n{\"cycle\":375,\"req_tag\":26508,\"update_tag\":52398,\"write_valid\":1,\"write_tag\":52398,\"resp_hit\":0,\"update_hit\":1,\"resp_pack\":1089215341351588396}\n{\"cycle\":376,\"req_tag\":9422,\"update_tag\":8805,\"write_valid\":1,\"write_tag\":58444,\"resp_hit\":0,\"update_hit\":0,\"resp_pack\":544032731206234971}\n{\"cycle\":377,\"req_tag\":26297,\"update_tag\":38752,\"write_valid\":1,\"write_tag\":37612,\"resp_hit\":0,\"update_hit\":0,\"resp_pack\":346289858865085811}\n{\"cycle\":378,\"req_tag\":12100,\"update_tag\":24744,\"write_valid\":1,\"write_tag\":19477,\"resp_hit\":0,\"update_hit\":0,\"resp_pack\":484469845552682872}\n{\"cycle\":379,\"req_tag\":40546,\"update_tag\":62227,\"write_valid\":1,\"write_tag\":40546,\"resp_hit\":0,\"update_hit\":0,\"resp_pack\":1100216765598906600}\n{\"cycle\":380,\"req_tag\":43487,\"update_tag\":56076,\"write_valid\":1,\"write_tag\":64353,\"resp_hit\":0,\"update_hit\":0,\"resp_pack\":772901865251577759}\n{\"cycle\":381,\"req_tag\":48271,\"update_tag\":54699,\"write_valid\":1,\"write_tag\":64181,\"resp_hit\":0,\"update_hit\":0,\"resp_pack\":711487481281302433}\n{\"cycle\":382,\"req_tag\":30028,\"update_tag\":52146,\"write_valid\":1,\"write_tag\":52146,\"resp_hit\":0,\"update_hit\":1,\"resp_pack\":905130436562834159}\n{\"cycle\":383,\"req_tag\":42785,\"update_tag\":34328,\"write_valid\":1,\"write_tag\":4291,\"resp_hit\":0,\"update_hit\":0,\"resp_pack\":381885835663622813}\n{\"cycle\":384,\"req_tag\":59952,\"update_tag\":20865,\"write_valid\":1,\"write_tag\":59952,\"resp_hit\":0,\"update_hit\":0,\"resp_pack\":513705233752683913}\n{\"cycle\":385,\"req_tag\":17406,\"update_tag\":16714,\"write_valid\":0,\"write_tag\":59433,\"resp_hit\":0,\"update_hit\":0,\"resp_pack\":166249472970054330}\n{\"cycle\":386,\"req_tag\":58917,\"update_tag\":37249,\"write_valid\":1,\"write_tag\":21040,\"resp_hit\":0,\"update_hit\":0,\"resp_pack\":166249472970054330}\n{\"cycle\":387,\"req_tag\":2797,\"update_tag\":33552,\"write_valid\":0,\"write_tag\":53346,\"resp_hit\":0,\"update_hit\":0,\"resp_pack\":442798631877237435}\n",
+      "output_sha256": "ad4bb9ca35272de23c836417cc1da5e718c192c4a2e455c77469e9d3ae009318"
+    },
+    "trace": {
+      "path": "validation/.work/v2-frontend-fauftbway/reference.jsonl",
+      "vectors": 388,
+      "sha256": "1dd4a97c70883459d305797d797cf1f8a65f1ea6e054313e216d71c2b56abbff"
+    }
+  },
+  "comparison": {
+    "comparison": "PASS",
+    "behavioral_equivalence": true,
+    "target_vectors": 388,
+    "reference_vectors": 388,
+    "target_trace_sha256": "8ee58396a08ceee91a165162c261b00144eba8ee4937d3b529cf09d511b5a72c",
+    "reference_trace_sha256": "8ee58396a08ceee91a165162c261b00144eba8ee4937d3b529cf09d511b5a72c",
+    "first_mismatch": null
+  },
+  "backend": {
+    "target": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "--Wno-fatal",
+          "--top-module",
+          "FauFTBWay",
+          "/mnt/c/Temp/v2-frontend-fauftbway-tools/backend-target.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.067 MB sources in 2 modules, into 0.030 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.019 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.008 s on 1 threads; alloced 9.652 MB\n",
+        "output_sha256": "c38a2c313002dbf9315870c0408c3ed0ac744cdb82b82de98bc0dfd196fe59ee"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Temp/v2-frontend-fauftbway-tools/backend-target.sv; hierarchy -top FauFTBWay; proc; opt; check; stat"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": " signal on $procdff$209 ($adff) from module FauFTBWay (D = \\io_write_entry_tailSlot_valid, Q = \\io_resp_tailSlot_valid).\nAdding EN signal on $procdff$227 ($adff) from module FauFTBWay (D = \\io_write_entry_brSlots_0_sharing, Q = \\io_resp_brSlots_0_sharing).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\FauFTBWay..\nRemoved 21 unused cells and 178 unused wires.\n<suppressed ~43 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FauFTBWay.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\FauFTBWay..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\FauFTBWay.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\FauFTBWay'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\FauFTBWay..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FauFTBWay.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module FauFTBWay...\nFound and reported 0 problems.\n\n6. Printing statistics.\n\n=== FauFTBWay ===\n\n   Number of wires:                 75\n   Number of wire bits:            258\n   Number of public wires:          75\n   Number of public wire bits:     258\n   Number of ports:                 46\n   Number of port bits:            173\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                 30\n     $adffe                         21\n     $and                            4\n     $eq                             3\n     $not                            1\n     $or                             1\n\nEnd of script. Logfile hash: 74633d15b9, CPU: user 0.02s system 0.00s, MEM: 14.38 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 48% 2x read_verilog (0 sec), 14% 4x opt_expr (0 sec), ...\n",
+        "output_sha256": "0d7a71417e7fafe2a29a558ef18bdb9143563f14441416eed8b809e3a8a12e4a"
+      }
+    },
+    "reference": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "--Wno-fatal",
+          "--top-module",
+          "FauFTBWay",
+          "/mnt/c/Temp/v2-frontend-fauftbway-tools/backend-reference.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.026 MB sources in 2 modules, into 0.025 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.024 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.453 MB\n",
+        "output_sha256": "764fb701223850441b30c01e7fa96cedff87fd817e1454ec956738c42b013ea6"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Temp/v2-frontend-fauftbway-tools/backend-reference.sv; hierarchy -top FauFTBWay; proc; opt; check; stat"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "f$73 ($dff) from module FauFTBWay (D = \\io_write_entry_strong_bias_0, Q = \\data_strong_bias_0).\nAdding EN signal on $procdff$74 ($dff) from module FauFTBWay (D = \\io_write_entry_strong_bias_1, Q = \\data_strong_bias_1).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\FauFTBWay..\nRemoved 20 unused cells and 64 unused wires.\n<suppressed ~21 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FauFTBWay.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\FauFTBWay..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\FauFTBWay.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\FauFTBWay'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\FauFTBWay..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FauFTBWay.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module FauFTBWay...\nFound and reported 0 problems.\n\n6. Printing statistics.\n\n=== FauFTBWay ===\n\n   Number of wires:                 75\n   Number of wire bits:            258\n   Number of public wires:          67\n   Number of public wire bits:     250\n   Number of ports:                 46\n   Number of port bits:            173\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                 31\n     $adff                           1\n     $and                            4\n     $dffe                          20\n     $eq                             3\n     $not                            1\n     $or                             2\n\nEnd of script. Logfile hash: 57c59de6d1, CPU: user 0.01s system 0.01s, MEM: 12.66 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 27% 4x opt_expr (0 sec), 20% 2x read_verilog (0 sec), ...\n",
+        "output_sha256": "dac23a640e49cb8314f2e2c2e059ef2efbe5cdc035efe5a58004e892be9218e4"
+      }
+    }
+  },
+  "direct": {
+    "returncode": 0,
+    "status": "PASS",
+    "stdout_tail": "{\"observations\": 122, \"status\": \"DIRECT_PASS_BOUNDED\", \"vectors\": 96}\n",
+    "stderr_tail": "D:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\v2_frontend_fauftbway_direct.py:198: DeprecationWarning: The `Settle` command is deprecated per RFC 27. Use `add_testbench` to write testbenches; there, an equivalent of `yield Settle()` is performed automatically after each `ctx.set()`.\n  yield Settle()\nD:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\v2_frontend_fauftbway_direct.py:216: DeprecationWarning: The `Settle` command is deprecated per RFC 27. Use `add_testbench` to write testbenches; there, an equivalent of `yield Settle()` is performed automatically after each `ctx.set()`.\n  yield Settle()\n"
+  },
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "UHSC_LOCALIZED": "NO_PROJECT_FACING_RENAME",
+    "PARENT_CLOSURE_MATCHED": "PENDING",
+    "LICENSE_REVIEW": "PENDING_COORDINATOR_REVIEW",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "PENDING_COORDINATOR_REVIEW",
+  "acceptance_eligible": false,
+  "unclosed": [
+    "Full FauFTB/FTB/BPU parent integration and UHSC wrapper remain pending.",
+    "Coordinator review, license review, and user approval remain pending."
+  ]
+}

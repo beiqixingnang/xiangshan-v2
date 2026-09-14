@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_FRONTEND_FAUFTBWAY_DIRECT",
+  "batch_id": "V2-SEMANTIC-FRONTEND-FAUFTBWAY",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.FauFTBWay-Hardware.py",
+    "audit": {
+      "utf8": true,
+      "bom": false,
+      "lf_only": true,
+      "ast_parse": true,
+      "zones": [
+        "Module Contract",
+        "Configuration",
+        "Implementation",
+        "Public Adapter",
+        "Direct Entry"
+      ],
+      "functions": [
+        "__init__",
+        "__post_init__",
+        "build_verilog",
+        "elaborate",
+        "main"
+      ],
+      "bytes": 12645,
+      "sha256": "17beb2a38e052e68eaa18809e72bbe9875a0647406f1f982c918451b5466b7c3"
+    }
+  },
+  "source": {
+    "path": "upstream/src/main/scala/xiangshan/frontend/FauFTB.scala",
+    "sha256": "05960e23660ebb2b44c1b7273c935f1afae39e381e283e2560c222d667d16580"
+  },
+  "direct": {
+    "vectors": 96,
+    "observations": 122,
+    "checks": 244,
+    "trace_sha256": "79fd0c2708e2b49aba4822cdbba387bf05b3cd81accd7a0e7213f1459b7f8d17",
+    "pass": true
+  },
+  "generated": {
+    "module": "FauFTBWay",
+    "bytes": 49107,
+    "sha256": "d1d38e8c6fdc6b5b71b54cd03227a80e02ad33f70c6dca2777601d9db4d4f082",
+    "module_decl": true
+  },
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PENDING_COORDINATOR_REVIEW",
+    "UHSC_LOCALIZED": "NO_PROJECT_FACING_RENAME",
+    "PARENT_CLOSURE_MATCHED": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "DIRECT_PASS_BOUNDED",
+  "acceptance_eligible": false,
+  "unclosed": [
+    "Locked XSTop differential and independent validator review remain required.",
+    "Full FTB/BPU parent closure, UHSC wrapper, and license review remain pending."
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_FRONTEND_FAUFTBWAY_CHILD_COVERAGE",
+  "batch_id": "V2-SEMANTIC-FRONTEND-FAUFTBWAY",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "closure_root": "core.frontend.bpu.fauftb",
+  "children": [
+    {
+      "name": "FauFTBWay",
+      "source": "upstream/src/main/scala/xiangshan/frontend/FauFTB.scala",
+      "reference": "FauFTBWay",
+      "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.FauFTBWay-Hardware.py",
+      "observation_points": [
+        "entry capture",
+        "request-tag hit",
+        "update-tag write bypass",
+        "valid reset and sticky set"
+      ]
+    }
+  ],
+  "direct": "PASS_BOUNDED",
+  "locked_sv_differential": "PASS_BOUNDED",
+  "verilator": "PASS",
+  "yosys": "PASS",
+  "parent_closure": "PENDING",
+  "license_review": "PENDING_COORDINATOR_REVIEW",
+  "acceptance_eligible": false
+}
