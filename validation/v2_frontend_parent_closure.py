@@ -635,6 +635,7 @@ def write_evidence(static: dict[str, Any], reference: dict[str, Any], direct: di
         "batch_id": "V2-PARENT-FRONTEND-001", "source_commit": SOURCE_COMMIT,
         "reference_snapshot": reference,
         "reference_mode": "LOCKED_XSTOP_FRONTEND_SOURCE_EQUATION_PROJECTION",
+        "differential_target_mode": "COMPACT_PARENT_ADAPTER",
         "reference_projection": {"module": "LockedFrontendProjection", "sha256": projection_hash,
                                  "provenance": ["Frontend.scala:68-71", "Frontend.scala:224", "Frontend.scala:445"]},
         "target": {"path": static["path"], "sha256": static["sha256"]},
@@ -656,7 +657,10 @@ def write_evidence(static: dict[str, Any], reference: dict[str, Any], direct: di
             "ICache": "named injected dependency: request/response, fencei/flush, WFI/error",
             "InstrUncache": "named injected dependency: request/response and WFI",
             "FrontendPipeline": "optional named injected dependency for CF vector/perf",
-            "BPU/FTQ/IFU/IBuffer/ITLB/PMP": "explicitly unimplemented reduced boundary",
+            "RVC": "canonical injected decoder contract (io_in/io_fsIsOff/io_out_bits/io_ill)",
+            "BPU": "canonical injected prediction contract (enable/reset_vector/pred_taken)",
+            "ICacheReplacer/ICacheMSHR": "optional canonical flush/fencei/WFI child contracts",
+            "BPU/FTQ/IFU/IBuffer/ITLB/PMP": "full behavioral closure remains pending",
         },
         "projection": {"module": "LockedFrontendProjection", "sha256": projection_hash},
         "port_inventory": inventory or {"status": "PENDING"},
@@ -672,7 +676,10 @@ def write_evidence(static: dict[str, Any], reference: dict[str, Any], direct: di
         "children": [
             {"instance": "Frontend.icache", "source": "upstream/src/main/scala/xiangshan/frontend/icache/ICache.scala", "status": "INJECTED_BOUNDARY"},
             {"instance": "Frontend.instrUncache", "source": "upstream/src/main/scala/xiangshan/frontend/icache/InstrUncache.scala", "status": "INJECTED_BOUNDARY"},
-            {"instance": "Frontend.bpu", "source": "upstream/src/main/scala/xiangshan/frontend/BPU.scala", "status": "PENDING_FULL_CHILD"},
+            {"instance": "Frontend.bpu", "source": "upstream/src/main/scala/xiangshan/frontend/BPU.scala", "status": "INJECTABLE_CANONICAL_BOUNDARY"},
+            {"instance": "Frontend.rvc", "source": "upstream/src/main/scala/xiangshan/frontend/PreDecode.scala", "status": "INJECTABLE_CANONICAL_BOUNDARY"},
+            {"instance": "Frontend.icacheReplacer", "source": "upstream/src/main/scala/xiangshan/frontend/icache/ICache.scala", "status": "OPTIONAL_CHILD_BOUNDARY"},
+            {"instance": "Frontend.icacheMshr", "source": "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala", "status": "OPTIONAL_CHILD_BOUNDARY"},
             {"instance": "Frontend.ifu", "source": "upstream/src/main/scala/xiangshan/frontend/IFU.scala", "status": "PENDING_FULL_CHILD"},
             {"instance": "Frontend.ibuffer", "source": "upstream/src/main/scala/xiangshan/frontend/IBuffer.scala", "status": "PENDING_FULL_CHILD"},
             {"instance": "Frontend.ftq", "source": "upstream/src/main/scala/xiangshan/frontend/NewFtq.scala", "status": "PENDING_FULL_CHILD"},
@@ -716,14 +723,27 @@ def main() -> int:
     compile_result = subprocess.run([sys.executable, "-m", "py_compile", str(TARGET)], capture_output=True, check=False)
     vectors = frontend_vectors()
     direct = direct_check(target_module, vectors)
-    rtl = target_module.build_verilog({"module": "UHSCTop"}, {})
-    backend = backend_gates(rtl)
-    differential, projection_hash = differential_check(rtl, vectors)
+    # Keep the compact parent for equation differential; generate a second
+    # exact-I/O artifact for full Frontend inventory and backend gates.  保留
+    # 紧凑父级用于方程差分，同时生成精确 I/O 产物用于清单和后端门禁。
+    rtl_compact = target_module.build_verilog({"module": "UHSCTop", "locked_io": False}, {})
+    rtl_full = target_module.build_verilog({"module": "UHSCTop", "locked_io": True}, {})
+    backend = backend_gates(rtl_full)
+    differential, projection_hash = differential_check(rtl_compact, vectors)
     source_hash = digest(SOURCE)
-    target_ports, _target_declarations = target_port_declarations(rtl)
-    inventory = {"status": "PASS" if len(target_ports) == reference["port_count"] else "FAIL",
+    target_ports, target_declarations = target_port_declarations(rtl_full)
+    target_names_hash = digest_bytes("\n".join(target_ports).encode("utf-8"))
+    inventory = {"status": "PASS" if len(target_ports) == reference["port_count"] and
+                 target_names_hash == reference["port_names_sha256"] else "FAIL",
                  "target_port_count": len(target_ports), "locked_port_count": reference["port_count"],
-                 "count_match": len(target_ports) == reference["port_count"]}
+                 "count_match": len(target_ports) == reference["port_count"],
+                 "target_port_names_sha256": target_names_hash,
+                 "locked_port_names_sha256": reference["port_names_sha256"],
+                 "name_order_match": target_names_hash == reference["port_names_sha256"],
+                 "target_input_count": sum(1 for name in target_ports if target_declarations[name][0] == "input"),
+                 "target_output_count": sum(1 for name in target_ports if target_declarations[name][0] == "output"),
+                 "full_rtl_sha256": digest_bytes(rtl_full.encode("utf-8")),
+                 "full_rtl_bytes": len(rtl_full.encode("utf-8"))}
     write_evidence(static, reference, direct, differential, backend, vectors, source_hash, projection_hash, inventory)
     overall = static["status"] == "PASS" and compile_result.returncode == 0 and direct["status"] == "PASS" and differential["status"] == "PASS" and backend["status"] == "PASS"
     print(json.dumps({"status": "PASS_BOUNDED_PARENT" if overall else "FAIL", "direct": direct["status"],
