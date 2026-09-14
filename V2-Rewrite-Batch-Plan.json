@@ -452,6 +452,11 @@
     "exact_envelope_count": 7,
     "exact_envelope_status": "ALL_STRUCTURAL_PORT_DIRECTION_WIDTH_GATES_PASS",
     "single_hierarchy_status": "PASS_STRUCTURAL_2_9MB_VERILATOR_YOSYS",
+    "semantic_boundary_probes": {
+      "Frontend": {"status": "PASS_BOUNDED", "direct_vectors": 32, "equation_vectors": 96, "child_probe": "PASS"},
+      "Backend": {"status": "PASS_BOUNDED", "direct_vectors": 256, "equation_vectors": 256, "child_boundary_vectors": 64},
+      "MemBlock": {"status": "PASS_BOUNDED", "full_envelope": "PASS", "behavioral_closure": "PENDING"}
+    },
     "locked_module_inventory": {
       "reference_modules": 1976,
       "generated_modules": 15,
