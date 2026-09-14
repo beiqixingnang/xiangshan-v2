@@ -123,10 +123,7 @@ def reverse_bytes_bits(value, width: int):
         byte = value[byte_index * 8:(byte_index + 1) * 8]
         bits = [byte[7 - bit] for bit in range(8)]
         bytes_out.append(Cat(*bits))
-    result = bytes_out[0]
-    for byte in bytes_out[1:]:
-        result = Cat(byte, result)
-    return result
+    return Cat(*bytes_out)
 
 
 # Compute a pure integer ALU result for the differential oracle. / 计算纯整数 ALU 结果作为差分预言机。
@@ -380,7 +377,7 @@ class AluDataModule(Elaboratable):
                 any_bit = any_bit | byte[bit_index]
             orcb_bytes.append(replicate(any_bit, 8))
         orcb = Cat(*orcb_bytes)
-        orh48 = Cat(src0[8:64], Const(0, 8)) | src1
+        orh48 = Cat(Const(0, 8), src0[8:64]) | src1
         sextb = sign_extend(src0[:8], width)
         packh = Cat(src0[:8], src1[:8], Const(0, 48))
         sexth = sign_extend(src0[:16], width)
