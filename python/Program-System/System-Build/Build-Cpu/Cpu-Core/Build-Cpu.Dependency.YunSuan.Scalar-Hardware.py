@@ -43,6 +43,13 @@ __all__ = [
     "YunSuanINT2FP",
     "YunSuanFPCVT",
     "YunSuanScalarBoundary",
+    "FPU",
+    "RoundingUnit",
+    "LZA",
+    "CLZ",
+    "IntToFP",
+    "INT2FP",
+    "FPCVT",
     "rounding_decision",
     "leading_zero_count",
     "lza_value",
@@ -795,11 +802,60 @@ class YunSuanFPCVT(Elaboratable):
         # 精确按 Convert.scala 的 one-hot PLA 译码源/目标宽度。
         widen = self.op_type[3] & ~self.op_type[4]
         narrow = self.op_type[4] & ~self.op_type[3]
-        input_width = Mux(widen | narrow, Mux(self.sew == 0, 8, Mux(self.sew == 1, 16, 32)),
-                          Mux(self.sew == 0, 0, Mux(self.sew == 1, 16, Mux(self.sew == 2, 32, 64))))
-        output_width = Mux(widen, Mux(self.sew == 0, 16, Mux(self.sew == 1, 32, 64)),
-                           Mux(narrow, Mux(self.sew == 0, 8, Mux(self.sew == 1, 16, 32)),
-                               Mux(self.sew == 0, 8, Mux(self.sew == 1, 16, Mux(self.sew == 2, 32, 64)))))
+        input_width = Signal(7, name="input_width")
+        output_width = Signal(7, name="output_width")
+        relation_sew = (self.op_type[4] << 3) | (self.op_type[3] << 2) | self.sew
+        m.d.comb += [input_width.eq(0), output_width.eq(0)]
+        # Input one-hot decoder table copied from Convert.scala. /
+        # 复制自 Convert.scala 的输入宽度译码表。
+        with m.Switch(relation_sew):
+            with m.Case(0b0001):
+                m.d.comb += input_width.eq(16)
+            with m.Case(0b0010):
+                m.d.comb += input_width.eq(32)
+            with m.Case(0b0011):
+                m.d.comb += input_width.eq(64)
+            with m.Case(0b0100):
+                m.d.comb += input_width.eq(8)
+            with m.Case(0b0101):
+                m.d.comb += input_width.eq(16)
+            with m.Case(0b0110):
+                m.d.comb += input_width.eq(32)
+            with m.Case(0b1000):
+                m.d.comb += input_width.eq(16)
+            with m.Case(0b1001):
+                m.d.comb += input_width.eq(32)
+            with m.Case(0b1010):
+                m.d.comb += input_width.eq(64)
+            with m.Case(0b1101):
+                m.d.comb += input_width.eq(16)
+            with m.Case(0b1111):
+                m.d.comb += input_width.eq(64)
+        # Output one-hot decoder table copied from Convert.scala. /
+        # 复制自 Convert.scala 的输出宽度译码表。
+        with m.Switch(relation_sew):
+            with m.Case(0b0001):
+                m.d.comb += output_width.eq(16)
+            with m.Case(0b0010):
+                m.d.comb += output_width.eq(32)
+            with m.Case(0b0011):
+                m.d.comb += output_width.eq(64)
+            with m.Case(0b0100):
+                m.d.comb += output_width.eq(16)
+            with m.Case(0b0101):
+                m.d.comb += output_width.eq(32)
+            with m.Case(0b0110):
+                m.d.comb += output_width.eq(64)
+            with m.Case(0b1000):
+                m.d.comb += output_width.eq(8)
+            with m.Case(0b1001):
+                m.d.comb += output_width.eq(16)
+            with m.Case(0b1010):
+                m.d.comb += output_width.eq(32)
+            with m.Case(0b1101):
+                m.d.comb += output_width.eq(64)
+            with m.Case(0b1111):
+                m.d.comb += output_width.eq(16)
         in_is_fp = self.op_type[7]
         out_is_fp = self.op_type[6]
         # Common finite conversion paths use the f32/f64 payloads.  Unsupported
@@ -877,22 +933,37 @@ class YunSuanFPConvert(Elaboratable):
             normal_frac = frac << (dst_frac_width - src_frac_width)
             normal = (sign << (self.target_width - 1)) | (normal_exp << dst_frac_width) | normal_frac
             inf = (sign << (self.target_width - 1)) | (((1 << self.target_exp) - 1) << dst_frac_width)
-            nan = inf | (Const(1, self.target_width) << (dst_frac_width - 1))
+            nan_payload = (frac << (dst_frac_width - src_frac_width)) | Const(1, self.target_width) << (dst_frac_width - 1)
+            nan = (sign << (self.target_width - 1)) | (((1 << self.target_exp) - 1) << dst_frac_width) | nan_payload
             zero = Const(0, self.target_width)
             output = Mux(is_nan, nan, Mux(is_inf, inf, Mux(is_zero, sign << (self.target_width - 1), normal)))
-            m.d.comb += [self.output.eq(output), self.flags.eq((is_nan & ~frac[src_frac_width - 1]).replicate(5))]
+            m.d.comb += [self.output.eq(output),
+                         self.flags.eq(Mux(is_nan & ~frac[src_frac_width - 1], 16, 0))]
         else:
             # Narrowing uses truncation with a sticky guard and preserves the
             # directed overflow choice.  / 窄化使用带粘滞位的截断并保留定向溢出选择。
             bias_delta = ((1 << (self.source_exp - 1)) - 1) - ((1 << (self.target_exp - 1)) - 1)
-            narrowed_exp = Mux(exp > bias_delta, exp - bias_delta, 0)
-            narrowed_frac = frac >> (src_frac_width - dst_frac_width)
+            narrow_rounder = YunSuanRoundingUnit(dst_frac_width)
+            m.submodules.narrow_rounder = narrow_rounder
+            narrow_input = frac[src_frac_width - dst_frac_width:src_frac_width]
+            narrow_guard = frac[src_frac_width - dst_frac_width - 1]
+            narrow_sticky = frac[:src_frac_width - dst_frac_width - 1].any()
+            m.d.comb += [narrow_rounder.input.eq(narrow_input),
+                         narrow_rounder.round_in.eq(narrow_guard),
+                         narrow_rounder.sticky_in.eq(narrow_sticky),
+                         narrow_rounder.sign_in.eq(sign), narrow_rounder.rm.eq(self.rm)]
+            narrowed_exp = Mux(exp > bias_delta, exp - bias_delta + narrow_rounder.carry_out, 0)
+            narrowed_frac = narrow_rounder.output
             normal = (sign << (self.target_width - 1)) | (narrowed_exp << dst_frac_width) | narrowed_frac
             inf = (sign << (self.target_width - 1)) | (((1 << self.target_exp) - 1) << dst_frac_width)
-            nan = inf | (Const(1, self.target_width) << (dst_frac_width - 1))
+            nan_payload = (frac >> (src_frac_width - dst_frac_width)) | Const(1, self.target_width) << (dst_frac_width - 1)
+            nan = (sign << (self.target_width - 1)) | (((1 << self.target_exp) - 1) << dst_frac_width) | nan_payload
             zero = sign << (self.target_width - 1)
             output = Mux(is_nan, nan, Mux(is_inf, inf, Mux(is_zero, zero, normal)))
-            m.d.comb += [self.output.eq(output), self.flags.eq(0)]
+            overflow = (~is_nan) & (~is_inf) & (narrowed_exp >= (1 << self.target_exp) - 1)
+            narrow_flags = Mux(is_nan, Mux(~frac[src_frac_width - 1], 16, 0),
+                               Mux(is_inf, 0, (overflow << 2) | (overflow | narrow_rounder.inexact)))
+            m.d.comb += [self.output.eq(Mux(overflow, inf, output)), self.flags.eq(narrow_flags)]
         return m
 
 
@@ -925,6 +996,15 @@ class YunSuanScalarBoundary(Elaboratable):
         self.int_long = Signal(name="io_long")
         self.int_result = Signal(64, name="io_int_result")
         self.int_flags = Signal(5, name="io_int_fflags")
+        self.int2fp_src = Signal(64, name="io_int2fp_src")
+        self.int2fp_op_type = Signal(5, name="io_int2fp_opType")
+        self.int2fp_rm = Signal(3, name="io_int2fp_rm")
+        self.int2fp_wflags = Signal(name="io_int2fp_wflags")
+        self.int2fp_rm_inst = Signal(3, name="io_int2fp_rmInst")
+        self.int2fp_reg_enables = [Signal(name=f"io_int2fp_regEnables_{index}")
+                                   for index in range(c.int2fp_latency)]
+        self.int2fp_result = Signal(64, name="io_int2fp_result")
+        self.int2fp_flags = Signal(5, name="io_int2fp_fflags")
         self.fcvt_src = Signal(64, name="io_fcvt_src")
         self.fcvt_op_type = Signal(8, name="io_fcvt_opType")
         self.fcvt_sew = Signal(2, name="io_fcvt_sew")
@@ -940,11 +1020,13 @@ class YunSuanScalarBoundary(Elaboratable):
         lza = YunSuanLZA(64)
         clz = YunSuanCLZ(64)
         integer = YunSuanIntToFP(c.default_exp_width, c.default_precision)
+        int2fp = YunSuanINT2FP(c.int2fp_latency, c.xlen)
         fpcvt = YunSuanFPCVT(c.xlen)
         m.submodules.rounding = rounding
         m.submodules.lza = lza
         m.submodules.clz = clz
         m.submodules.integer = integer
+        m.submodules.int2fp = int2fp
         m.submodules.fpcvt = fpcvt
         boxed_integer = integer.result
         # The aggregate integer port is a 64-bit staging payload; boxing is
@@ -959,6 +1041,11 @@ class YunSuanScalarBoundary(Elaboratable):
                      integer.input.eq(self.int_input), integer.signed.eq(self.int_signed),
                      integer.long.eq(self.int_long), integer.rm.eq(self.rm),
                      self.int_result.eq(boxed_integer), self.int_flags.eq(integer.fflags),
+                     int2fp.clock.eq(self.clock), int2fp.reset.eq(self.reset),
+                     int2fp.src.eq(self.int2fp_src), int2fp.op_type.eq(self.int2fp_op_type),
+                     int2fp.rm.eq(self.int2fp_rm), int2fp.wflags.eq(self.int2fp_wflags),
+                     int2fp.rm_inst.eq(self.int2fp_rm_inst),
+                     self.int2fp_result.eq(int2fp.result), self.int2fp_flags.eq(int2fp.fflags),
                      fpcvt.clock.eq(self.clock), fpcvt.reset.eq(self.reset), fpcvt.fire.eq(self.fire),
                      fpcvt.src.eq(self.fcvt_src), fpcvt.op_type.eq(self.fcvt_op_type),
                      fpcvt.sew.eq(self.fcvt_sew), fpcvt.rm.eq(self.rm),
@@ -1027,7 +1114,9 @@ def build_verilog(configuration, injected_dependencies):
                  top.sticky_in, top.sign_in, top.rm, top.round_output, top.round_inexact,
                  top.round_carry, top.lza_a, top.lza_b, top.lza_output, top.clz_input,
                  top.clz_output, top.int_input, top.int_signed, top.int_long, top.int_result,
-                 top.int_flags, top.fcvt_src, top.fcvt_op_type, top.fcvt_sew,
+                 top.int_flags, top.int2fp_src, top.int2fp_op_type, top.int2fp_rm,
+                 top.int2fp_wflags, top.int2fp_rm_inst, *top.int2fp_reg_enables,
+                 top.int2fp_result, top.int2fp_flags, top.fcvt_src, top.fcvt_op_type, top.fcvt_sew,
                  top.fcvt_result, top.fcvt_flags]
     return verilog.convert(top, name=name, ports=ports, emit_src=False)
 

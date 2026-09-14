@@ -21,21 +21,21 @@
   },
   "target": {
     "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.YunSuan.Scalar-Hardware.py",
-    "sha256": "e4f7efc3edb355f8a2a86e157c71a7fa6dc72c8c680dba85a52bf9581d887fc5",
-    "bytes": 49122
+    "sha256": "e2bffda3a88488070fd94d78430353ecc3f934e6836055d713c1bf2d8bbb8f70",
+    "bytes": 53670
   },
   "static": {
     "status": "PASS",
     "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.YunSuan.Scalar-Hardware.py",
-    "bytes": 49122,
-    "sha256": "e4f7efc3edb355f8a2a86e157c71a7fa6dc72c8c680dba85a52bf9581d887fc5",
+    "bytes": 53670,
+    "sha256": "e2bffda3a88488070fd94d78430353ecc3f934e6836055d713c1bf2d8bbb8f70",
     "utf8_lf": true,
     "zones": [
       546,
-      1820,
-      5115,
-      43393,
-      46285
+      1915,
+      5210,
+      47707,
+      50785
     ],
     "adapter_args": [
       "configuration",
@@ -189,21 +189,21 @@
       {
         "mode": "fpcvt",
         "module": "UHSCYunSuanFPCVT",
-        "rtl_bytes": 19605,
-        "rtl_sha256": "d697a1cbf0c51787f75eb6df86bb66a65e05726fa6b3b9f21d8b43c2fdcb9f9b",
+        "rtl_bytes": 20138,
+        "rtl_sha256": "8e71c9925006b29d28b03c981d7df1caa85c2abab9821aa7e47f5ed87a01b853",
         "verilator": "PASS",
         "yosys": "PASS",
-        "verilator_tail": "DTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/yunsuan-scalar-validator/UHSCYunSuanFPCVT.sv:386:26: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h20' generates 6 bits.\n                                                                                                                                                              : ... note: In instance 'UHSCYunSuanFPCVT'\n  386 |   assign \\$165  = \\$164  == 6'h20;\n      |                          ^~\n",
+        "verilator_tail": "%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/yunsuan-scalar-validator/UHSCYunSuanFPCVT.sv:140:5: Case values incompletely covered (example pattern 0x0)\n  140 |     casez (\\$4 )\n      |     ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/yunsuan-scalar-validator/UHSCYunSuanFPCVT.sv:168:5: Case values incompletely covered (example pattern 0x0)\n  168 |     casez (\\$8 )\n      |     ^~~~~\n",
         "yosys_tail": ""
       },
       {
         "mode": "aggregate",
         "module": "UHSCYunSuanScalar",
-        "rtl_bytes": 159105,
-        "rtl_sha256": "7245ab89a87882ffaf34d2450535a8dca35cb8e5498976996caf2f04f39c1ba5",
+        "rtl_bytes": 462761,
+        "rtl_sha256": "d0165e9602ea0572216c205bd9f57b2ea92ee5097d4a9ef55b100c9b23039360",
         "verilator": "PASS",
         "yosys": "PASS",
-        "verilator_tail": ": /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/yunsuan-scalar-validator/UHSCYunSuanScalar.sv:763:26: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h20' generates 6 bits.\n                                                                                                                                                               : ... note: In instance 'UHSCYunSuanScalar.fpcvt'\n  763 |   assign \\$165  = \\$164  == 6'h20;\n      |                          ^~\n",
+        "verilator_tail": "arning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/yunsuan-scalar-validator/UHSCYunSuanScalar.sv:564:5: Case values incompletely covered (example pattern 0x0)\n  564 |     casez (\\$4 )\n      |     ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/yunsuan-scalar-validator/UHSCYunSuanScalar.sv:592:5: Case values incompletely covered (example pattern 0x0)\n  592 |     casez (\\$8 )\n      |     ^~~~~\n",
         "yosys_tail": ""
       }
     ]
