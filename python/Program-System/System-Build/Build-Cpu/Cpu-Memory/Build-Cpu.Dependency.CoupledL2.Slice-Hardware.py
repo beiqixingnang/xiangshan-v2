@@ -159,8 +159,12 @@ def restore_address(tag: int, index: int, offset: int = 0, bank: int = 0,
 def restore_address_expr(tag: Any, index: Any, offset: Any, bank: Any,
                          configuration: CoupledL2SliceConfig) -> Any:
     if configuration.bank_bits:
-        return Cat(tag, index, bank, offset)
-    return Cat(tag, index, offset)
+        # Amaranth's Cat places its first operand in the least-significant
+        # bits, matching the Scala address layout offset→bank→set→tag.
+        # Amaranth 的 Cat 将第一个操作数放在最低位，正好对应 Scala 的
+        # offset→bank→set→tag 地址布局。
+        return Cat(offset, bank, index, tag)
+    return Cat(offset, index, tag)
 
 
 # Compute the bounded V2 response equation for a single request. / 计算单笔请求的有界 V2 响应方程。
@@ -425,7 +429,7 @@ class CoupledL2Slice(Elaboratable):
         # 将完整 edge 地址转换为 slice 本地地址；CoupledL2 父级重连外部网络时恢复 bank 位。
         def local_address_expr(address: Any) -> Any:
             if c.bank_bits:
-                return Cat(Const(0, c.bank_bits), address[c.offset_bits + c.bank_bits:], address[:c.offset_bits])
+                return Cat(address[:c.offset_bits], address[c.offset_bits + c.bank_bits:], Const(0, c.bank_bits))
             return address
 
         # Combinational channel defaults and output payloads. / 组合通道默认值及输出载荷。
