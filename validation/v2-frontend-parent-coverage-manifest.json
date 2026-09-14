@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_FRONTEND_PARENT_COVERAGE",
+  "batch_id": "V2-PARENT-FRONTEND-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "closure_root": "core.frontend",
+  "root_module": "Frontend",
+  "root_source": "upstream/src/main/scala/xiangshan/frontend/Frontend.scala",
+  "reference_snapshot": {
+    "canonical_path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "local_access_path": "\\\\wsl$\\Debian\\home\\lishuo\\xs-v2-local\\build\\rtl\\XSTop.sv",
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "bytes": 228590583,
+    "locked": true,
+    "module": "Frontend",
+    "module_line_start": 412063,
+    "module_line_end": 420893,
+    "module_bytes": 863132,
+    "module_sha256": "2bd6b805cc9db1c569cfbdddd5092d2c67c0a8a20884adc78ade548052f0e66c",
+    "port_count": 0,
+    "port_names_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "children": [
+    {
+      "instance": "Frontend.icache",
+      "source": "upstream/src/main/scala/xiangshan/frontend/icache/ICache.scala",
+      "status": "INJECTED_BOUNDARY"
+    },
+    {
+      "instance": "Frontend.instrUncache",
+      "source": "upstream/src/main/scala/xiangshan/frontend/icache/InstrUncache.scala",
+      "status": "INJECTED_BOUNDARY"
+    },
+    {
+      "instance": "Frontend.bpu",
+      "source": "upstream/src/main/scala/xiangshan/frontend/BPU.scala",
+      "status": "PENDING_FULL_CHILD"
+    },
+    {
+      "instance": "Frontend.ifu",
+      "source": "upstream/src/main/scala/xiangshan/frontend/IFU.scala",
+      "status": "PENDING_FULL_CHILD"
+    },
+    {
+      "instance": "Frontend.ibuffer",
+      "source": "upstream/src/main/scala/xiangshan/frontend/IBuffer.scala",
+      "status": "PENDING_FULL_CHILD"
+    },
+    {
+      "instance": "Frontend.ftq",
+      "source": "upstream/src/main/scala/xiangshan/frontend/NewFtq.scala",
+      "status": "PENDING_FULL_CHILD"
+    },
+    {
+      "instance": "Frontend.itlb",
+      "source": "upstream/src/main/scala/xiangshan/cache/mmu/TLB.scala",
+      "status": "PENDING_FULL_CHILD"
+    }
+  ],
+  "observation_points": [
+    "RegNext redirect/fencei",
+    "DelayN WFI",
+    "WFI safe join",
+    "error double register",
+    "fetch/uncache ready-valid",
+    "PTW ready/VPN",
+    "CF-vector zero/injected boundary",
+    "perf lanes"
+  ],
+  "vectors": 96,
+  "status": "PASS_BOUNDED_PARENT",
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED",
+    "PARENT_CLOSURE_MATCHED": "PASS_BOUNDED_REDUCED",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "UHSC_LOCALIZED": "PASS_BOUNDED_PARENT_LOCAL_NAME",
+    "LICENSE_REVIEW": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "uhsc_localization": {
+    "status": "PASS_BOUNDED_PARENT_LOCAL_NAME",
+    "source_name": "Frontend",
+    "local_name": "UHSCTop",
+    "locked_names_unchanged": true
+  },
+  "license_review": "PENDING",
+  "acceptance_eligible": false
+}

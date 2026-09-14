@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_FRONTEND_PARENT_DIRECT",
+  "batch_id": "V2-PARENT-FRONTEND-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Top-Hardware.py",
+    "sha256": "6414a0cffe6fd82b9d919bcce795c9bf8515f6a109f7c0e17d07c75f71af9d0c",
+    "bytes": 25669,
+    "utf8": true,
+    "lf_only": true,
+    "bom": false,
+    "ast_parse": true,
+    "zones": {
+      "Module Contract": 787,
+      "Configuration": 1546,
+      "Implementation": 3002,
+      "Public Adapter": 21995,
+      "Direct Entry": 24542
+    },
+    "adapter_args": [
+      "configuration",
+      "injected_dependencies"
+    ],
+    "function_comment_errors": [],
+    "forbidden_imports": [],
+    "cross_build_imports": [],
+    "dynamic_imports": [],
+    "status": "PASS"
+  },
+  "source": {
+    "path": "upstream/src/main/scala/xiangshan/frontend/Frontend.scala",
+    "sha256": "7dc067d218ae710579fa3c68311b5ff083dc334a9b17b28f6a58b202c4606476"
+  },
+  "direct": {
+    "status": "PASS",
+    "vectors": 96,
+    "trace_sha256": "c24757ab63a155c8f7987b99d319614a405d7ea2b5722ffe6f678d8ea0d256d5",
+    "mismatches": [],
+    "checks": 1632
+  },
+  "vectors": 96,
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED",
+    "PARENT_CLOSURE_MATCHED": "PASS_BOUNDED_REDUCED",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "UHSC_LOCALIZED": "PASS_BOUNDED_PARENT_LOCAL_NAME",
+    "LICENSE_REVIEW": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "acceptance_eligible": false
+}

@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_FRONTEND_PARENT_DIFFERENTIAL",
+  "batch_id": "V2-PARENT-FRONTEND-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "reference_snapshot": {
+    "canonical_path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "local_access_path": "\\\\wsl$\\Debian\\home\\lishuo\\xs-v2-local\\build\\rtl\\XSTop.sv",
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "bytes": 228590583,
+    "locked": true,
+    "module": "Frontend",
+    "module_line_start": 412063,
+    "module_line_end": 420893,
+    "module_bytes": 863132,
+    "module_sha256": "2bd6b805cc9db1c569cfbdddd5092d2c67c0a8a20884adc78ade548052f0e66c",
+    "port_count": 0,
+    "port_names_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "reference_mode": "LOCKED_XSTOP_FRONTEND_SOURCE_EQUATION_PROJECTION",
+  "reference_projection": {
+    "module": "LockedFrontendProjection",
+    "sha256": "488e604de75fae00f8871fdd5be9bc3bc9a1f4c517ec82ca06c7e7b46bfe9f8c",
+    "provenance": [
+      "Frontend.scala:68-71",
+      "Frontend.scala:224",
+      "Frontend.scala:445"
+    ]
+  },
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Top-Hardware.py",
+    "sha256": "6414a0cffe6fd82b9d919bcce795c9bf8515f6a109f7c0e17d07c75f71af9d0c"
+  },
+  "comparison": {
+    "status": "PASS",
+    "returncode": 0,
+    "stdout_tail": "FRONTEND_PARENT_DIFFERENTIAL_PASS 96\n- /tmp/uhsc-v2/validation/.work/v2-frontend-parent/frontend-parent-diff.sv:2599: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 385ps; walltime 0.002 s; speed 246.718 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n",
+    "trace_sha256": "5364bb0807418e1894ad526e5b3a046fe36465e8b13209ffd7256fc6eb91274d",
+    "trace_lines": 5,
+    "source_sha256": "f8868eb7c8e661690896a6d10cd56801013843fcb8825dcd35a71316e0931696"
+  },
+  "backend_gates": {
+    "verilator": {
+      "status": "PASS",
+      "returncode": 0,
+      "stderr_tail": ""
+    },
+    "yosys": {
+      "status": "PASS",
+      "returncode": 0,
+      "stderr_tail": ""
+    },
+    "status": "PASS",
+    "rtl_sha256": "3352b59e0010ce2fd690b4d9e498b9aa1d770e01d46a3803c515857189d4fc17",
+    "rtl_bytes": 21996
+  },
+  "behavioral_equivalence": true,
+  "status": "DIFFERENTIAL_MATCHED_BOUNDED",
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED",
+    "PARENT_CLOSURE_MATCHED": "PASS_BOUNDED_REDUCED",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "UHSC_LOCALIZED": "PASS_BOUNDED_PARENT_LOCAL_NAME",
+    "LICENSE_REVIEW": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "acceptance_eligible": false,
+  "unclosed": [
+    "Full 371-port Frontend child closure (BPU/FTQ/IFU/IBuffer/ICache/ITLB/PMP) remains outside this reduced batch.",
+    "Projection compares locked Frontend parent equations; full child-level differential remains pending.",
+    "License review and user approval remain open; ACCEPTED is not allowed."
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_FRONTEND_PARENT_CONTRACT_AUDIT",
+  "batch_id": "V2-PARENT-FRONTEND-001",
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Top-Hardware.py",
+    "sha256": "6414a0cffe6fd82b9d919bcce795c9bf8515f6a109f7c0e17d07c75f71af9d0c",
+    "bytes": 25669,
+    "utf8": true,
+    "lf_only": true,
+    "bom": false,
+    "ast_parse": true,
+    "zones": {
+      "Module Contract": 787,
+      "Configuration": 1546,
+      "Implementation": 3002,
+      "Public Adapter": 21995,
+      "Direct Entry": 24542
+    },
+    "adapter_args": [
+      "configuration",
+      "injected_dependencies"
+    ],
+    "function_comment_errors": [],
+    "forbidden_imports": [],
+    "cross_build_imports": [],
+    "dynamic_imports": [],
+    "status": "PASS"
+  },
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "child_contracts": {
+    "ICache": "named injected dependency: request/response, fencei/flush, WFI/error",
+    "InstrUncache": "named injected dependency: request/response and WFI",
+    "FrontendPipeline": "optional named injected dependency for CF vector/perf",
+    "BPU/FTQ/IFU/IBuffer/ITLB/PMP": "explicitly unimplemented reduced boundary"
+  },
+  "projection": {
+    "module": "LockedFrontendProjection",
+    "sha256": "488e604de75fae00f8871fdd5be9bc3bc9a1f4c517ec82ca06c7e7b46bfe9f8c"
+  },
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED",
+    "PARENT_CLOSURE_MATCHED": "PASS_BOUNDED_REDUCED",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "UHSC_LOCALIZED": "PASS_BOUNDED_PARENT_LOCAL_NAME",
+    "LICENSE_REVIEW": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "acceptance_eligible": false
+}
