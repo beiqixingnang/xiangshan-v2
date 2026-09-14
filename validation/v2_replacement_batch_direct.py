@@ -18,7 +18,7 @@ from amaranth.sim import Simulator
 
 
 ROOT = Path(__file__).resolve().parents[1]
-PORTED = ROOT / "python" / "ported"
+BUILD_CORE = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Core"
 EVIDENCE = ROOT / "validation" / "v2-replacement-batch-results.json"
 DIRECT_EVIDENCE = ROOT / "validation" / "v2-replacement-batch-direct-results.json"
 REFERENCE_EVIDENCE = ROOT / "validation" / "v2-replacement-batch-reference-results.json"
@@ -34,9 +34,9 @@ DEPENDENCY_COMMITS = {
 }
 
 TARGET_PATHS = {
-    "LruStateGen": PORTED / "frontend" / "bpu" / "replacer" / "LruStateGen-Hardware.py",
-    "PlruStateGen": PORTED / "frontend" / "bpu" / "replacer" / "PlruStateGen-Hardware.py",
-    "ReplacerState": PORTED / "frontend" / "bpu" / "replacer" / "ReplacerState-Hardware.py",
+    "LruStateGen": BUILD_CORE / "Build-Cpu.Frontend.Bpu.Replacer.LruStateGen-Hardware.py",
+    "PlruStateGen": BUILD_CORE / "Build-Cpu.Frontend.Bpu.Replacer.PlruStateGen-Hardware.py",
+    "ReplacerState": BUILD_CORE / "Build-Cpu.Frontend.Bpu.Replacer.ReplacerState-Hardware.py",
 }
 
 

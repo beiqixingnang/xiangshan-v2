@@ -18,7 +18,7 @@ from amaranth.sim import Simulator
 
 
 ROOT = Path(__file__).resolve().parents[1]
-PORTED = ROOT / "python" / "ported"
+BUILD_CORE = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Core"
 EVIDENCE = ROOT / "validation" / "v2-decode-batch-results.json"
 REFERENCE_SV = Path("/home/lishuo/xs-v2-local/build/rtl/XSTop.sv")
 
@@ -314,11 +314,11 @@ def main() -> int:
     """Execute direct checks and persist pending-gate evidence. / 执行检查并持久化证据。"""
 
     targets = {
-        "Instructions": PORTED / "backend" / "decode" / "Instructions-Hardware.py",
-        "RiscvInst": PORTED / "backend" / "decode" / "isa" / "bitfield" / "RiscvInst-Hardware.py",
-        "FliTable": PORTED / "backend" / "fu" / "fpu" / "FliTable-Hardware.py",
-        "CSA": PORTED / "backend" / "fu" / "util" / "CSA-Hardware.py",
-        "SstcInterruptGen": PORTED / "backend" / "fu" / "NewCSR" / "SstcInterruptGen-Hardware.py",
+        "Instructions": BUILD_CORE / "Build-Cpu.Backend.Decode.Instructions-Hardware.py",
+        "RiscvInst": BUILD_CORE / "Build-Cpu.Backend.Decode.Isa.Bitfield.RiscvInst-Hardware.py",
+        "FliTable": BUILD_CORE / "Build-Cpu.Backend.Fu.Fpu.FliTable-Hardware.py",
+        "CSA": BUILD_CORE / "Build-Cpu.Backend.Fu.Util.CSA-Hardware.py",
+        "SstcInterruptGen": BUILD_CORE / "Build-Cpu.Backend.Fu.NewCSR.SstcInterruptGen-Hardware.py",
     }
     loaded = {name: load_target(f"v2_batch_{name}", path) for name, path in targets.items()}
     audits = {name: audit_target(path) for name, path in targets.items()}

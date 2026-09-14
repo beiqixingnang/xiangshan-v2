@@ -20,14 +20,14 @@ from amaranth.sim import Simulator
 
 
 ROOT = Path(__file__).resolve().parents[1]
-PORTED = ROOT / "python" / "ported"
+BUILD_MEMORY = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Memory"
 REFERENCE = Path(r"\\wsl$\Debian\home\lishuo\xs-v2-local\build\rtl\XSTop.sv")
 REFERENCE_SHA256 = "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d"
 REFERENCE_BYTES = 228590583
 SOURCE_COMMIT = "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af"
 TARGETS = {
-    "AMOALU": PORTED / "cache" / "dcache" / "mainpipe" / "AMOALU-Hardware.py",
-    "TagArray": PORTED / "cache" / "dcache" / "meta" / "TagArray-Hardware.py",
+    "AMOALU": BUILD_MEMORY / "Build-Cpu.Cache.Dcache.Mainpipe.AMOALU-Hardware.py",
+    "TagArray": BUILD_MEMORY / "Build-Cpu.Cache.Dcache.Meta.TagArray-Hardware.py",
 }
 SOURCE_PATHS = {
     "AMOALU": ["upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/AMOALU.scala"],

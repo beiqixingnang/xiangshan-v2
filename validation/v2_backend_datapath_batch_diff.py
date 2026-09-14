@@ -17,7 +17,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 WORK = ROOT / "validation" / ".work" / "v2-backend-datapath"
-TARGET_DIR = ROOT / "python" / "ported" / "backend" / "datapath"
+TARGET_DIR = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Core"
 REF_DIR = ROOT / "validation" / "reference-closures"
 DIRECT = ROOT / "validation" / "v2-backend-datapath-direct-results.json"
 RESULT = ROOT / "validation" / "v2-backend-datapath-differential-results.json"
@@ -30,9 +30,9 @@ XSTOP_SHA256 = "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d
 XSTOP_BYTES = 228590583
 
 TARGETS = {
-    "DataSource": TARGET_DIR / "DataSource-Hardware.py",
-    "NewPipelineConnect": TARGET_DIR / "NewPipelineConnect-Hardware.py",
-    "WbArbiter": TARGET_DIR / "WbArbiter-Hardware.py",
+    "DataSource": TARGET_DIR / "Build-Cpu.Backend.Datapath.DataSource-Hardware.py",
+    "NewPipelineConnect": TARGET_DIR / "Build-Cpu.Backend.Datapath.NewPipelineConnect-Hardware.py",
+    "WbArbiter": TARGET_DIR / "Build-Cpu.Backend.Datapath.WbArbiter-Hardware.py",
 }
 SCALA = {
     "DataSource": ROOT / "upstream/src/main/scala/xiangshan/backend/datapath/DataSource.scala",

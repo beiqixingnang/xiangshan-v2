@@ -14,7 +14,7 @@ from amaranth.sim import Settle, Simulator, Tick
 
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET_DIR = ROOT / "python/ported/frontend/icache"
+TARGET_DIR = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Core"
 RESULT = ROOT / "validation/v2-p1-b-icache-direct-results.json"
 SCALA = {
     "mshr": ROOT / "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala",
@@ -363,9 +363,9 @@ def run_mshr(module: Any, is_fetch: bool) -> dict[str, Any]:
 # Run every family and persist machine-readable bounded evidence.
 # 运行每个族并写入机器可读的有界证据。
 def main() -> None:
-    mshr = load_target("ICacheMshr-Hardware.py", "v2_icache_mshr_direct")
-    replacer = load_target("ICacheReplacer-Hardware.py", "v2_icache_replacer_direct")
-    utility = load_target("Utils-Hardware.py", "v2_icache_utils_direct")
+    mshr = load_target("Build-Cpu.Frontend.Icache.ICacheMshr-Hardware.py", "v2_icache_mshr_direct")
+    replacer = load_target("Build-Cpu.Frontend.Icache.ICacheReplacer-Hardware.py", "v2_icache_replacer_direct")
+    utility = load_target("Build-Cpu.Frontend.Icache.Utils-Hardware.py", "v2_icache_utils_direct")
     records = [run_demux(utility, 4), run_demux(utility, 10), run_mux(utility), run_fifo(utility),
                run_replacer(replacer), run_mshr(mshr, True), run_mshr(mshr, False)]
     payload = {
@@ -375,14 +375,14 @@ def main() -> None:
         "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "families": records,
         "target_paths": {key: path.relative_to(ROOT).as_posix() for key, path in {
-            "ICacheMSHR": TARGET_DIR / "ICacheMshr-Hardware.py",
-            "ICacheReplacer": TARGET_DIR / "ICacheReplacer-Hardware.py",
-            "Utils": TARGET_DIR / "Utils-Hardware.py",
+            "ICacheMSHR": TARGET_DIR / "Build-Cpu.Frontend.Icache.ICacheMshr-Hardware.py",
+            "ICacheReplacer": TARGET_DIR / "Build-Cpu.Frontend.Icache.ICacheReplacer-Hardware.py",
+            "Utils": TARGET_DIR / "Build-Cpu.Frontend.Icache.Utils-Hardware.py",
         }.items()},
         "target_sha256": {key: sha256(path) for key, path in {
-            "ICacheMSHR": TARGET_DIR / "ICacheMshr-Hardware.py",
-            "ICacheReplacer": TARGET_DIR / "ICacheReplacer-Hardware.py",
-            "Utils": TARGET_DIR / "Utils-Hardware.py",
+            "ICacheMSHR": TARGET_DIR / "Build-Cpu.Frontend.Icache.ICacheMshr-Hardware.py",
+            "ICacheReplacer": TARGET_DIR / "Build-Cpu.Frontend.Icache.ICacheReplacer-Hardware.py",
+            "Utils": TARGET_DIR / "Build-Cpu.Frontend.Icache.Utils-Hardware.py",
         }.items()},
         "source_paths": {key: path.relative_to(ROOT).as_posix() for key, path in SCALA.items()},
         "source_sha256": {key: sha256(path) for key, path in SCALA.items()},

@@ -14,15 +14,20 @@ does not require a one-to-one Scala/Python mapping for external dependencies.
 - Reference artifact: `XSTop.sv`, SHA-256
   `8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d`,
   228590583 bytes.
-- Existing V3-derived candidates: 35 files under `python/ported/`; all are
-  `CANDIDATE_V2_REUSE` until revalidated.
+- Existing V3-derived candidates: 35 manifest entries, of which 34 retained
+  files are under `python/Program-System/System-Build/Build-Cpu/` and one is
+  explicitly retired; retained files remain `CANDIDATE_V2_REUSE` until
+  revalidated.
 - Source and reference are immutable inputs. V2R2-S and V2R2-L are separate
   baselines and must not be mixed into this plan.
 
 ## Phase 0 — manifests and naming freeze
 
 Create a V2 mapping manifest with one entry per V2 behavioral closure, not one
-entry per dependency source file. Each entry contains `family_id`,
+entry per dependency source file. Core XiangShan entries must use the final
+staging path under `python/Program-System/System-Build/` and a
+`Build-<hardware ID>-Hardware.py` basename so a verified file can be copied
+to the main repository without a second rewrite. Each entry contains `family_id`,
 `closure_root`, `source_paths`, `target_paths`, `source_commit`,
 `covered_children`, `parameters`, `observation_points`, `v2_status`,
 `direct_test`, `reference_evidence`, `differential_evidence`, and
@@ -111,7 +116,9 @@ acceptance. Blocked or missing-reference closures remain explicitly blocked.
    with the V2 baseline correction.
 2. Start Phase 0 inventory and naming manifest.
 3. Delegate Phase 1 batches; each worker completes rewrite + verification +
-   localization together, then the coordinator reviews and pushes.
+   final Build-path relocation in one transaction, then the coordinator
+   reviews and pushes. No validated core target may remain only under
+   `python/Program-System/System-Build/Build-Cpu/`.
 4. Expand to Phase 2 dependency families after core closure evidence exists.
 5. Run Phase 3 integration and present a merge-ready preview branch for user
    approval. Existing future plans (OpenC910 replacement, Vortex validation,

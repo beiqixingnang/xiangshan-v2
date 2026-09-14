@@ -17,7 +17,7 @@ from amaranth.sim import Simulator
 
 
 ROOT = Path(__file__).resolve().parents[1]
-PORTED = ROOT / "python" / "ported"
+BUILD_CORE = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Core"
 EVIDENCE = ROOT / "validation" / "v2-frontend-batch-results.json"
 SOURCE_COMMIT = "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af"
 
@@ -284,11 +284,11 @@ def synth_checks(loaded: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]
 # Execute the batch and persist machine-readable evidence. / 执行批次并写入机器证据。
 def main() -> int:
     targets = {
-        "CompareMatrix": PORTED / "frontend/bpu/CompareMatrix-Hardware.py",
-        "FallThroughPredictor": PORTED / "frontend/bpu/FallThroughPredictor-Hardware.py",
-        "SaturateCounter": PORTED / "frontend/bpu/SaturateCounter-Hardware.py",
-        "SignedSaturateCounter": PORTED / "frontend/bpu/SignedSaturateCounter-Hardware.py",
-        "RvcExpander": PORTED / "frontend/ifu/RvcExpander-Hardware.py",
+        "CompareMatrix": BUILD_CORE / "Build-Cpu.Frontend.Bpu.CompareMatrix-Hardware.py",
+        "FallThroughPredictor": BUILD_CORE / "Build-Cpu.Frontend.Bpu.FallThroughPredictor-Hardware.py",
+        "SaturateCounter": BUILD_CORE / "Build-Cpu.Frontend.Bpu.SaturateCounter-Hardware.py",
+        "SignedSaturateCounter": BUILD_CORE / "Build-Cpu.Frontend.Bpu.SignedSaturateCounter-Hardware.py",
+        "RvcExpander": BUILD_CORE / "Build-Cpu.Frontend.Ifu.RvcExpander-Hardware.py",
     }
     loaded = {name: load_target(f"v2_frontend_{name}", path) for name, path in targets.items()}
     audits = {name: audit_target(path) for name, path in targets.items()}

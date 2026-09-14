@@ -25,7 +25,7 @@ XSTOP = Path(r"\\wsl$\Debian\home\lishuo\xs-v2-local\build\rtl\XSTop.sv")
 EXPECTED_SOURCE_COMMIT = "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af"
 EXPECTED_XSTOP_SHA256 = "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d"
 EXPECTED_XSTOP_BYTES = 228590583
-CANDIDATE_MANIFEST = ROOT / "python/ported/V2-Ported-Candidates.json"
+CANDIDATE_MANIFEST = ROOT / "V2-Ported-Candidates.json"
 MAPPING_MANIFEST = ROOT / "V2-Phase0-Mapping-Manifest.json"
 OUTPUT = ROOT / "validation/v2-parent-closure-readiness.json"
 
@@ -1024,7 +1024,7 @@ def build_report() -> dict[str, Any]:
                 "candidate": candidate_id,
                 "source_scala_v3": source,
                 "target": candidate.get("destination"),
-                "target_present": (ROOT / candidate.get("destination", "")).is_file(),
+                "target_present": bool(candidate.get("destination")) and (ROOT / candidate["destination"]).is_file(),
                 "prior_v3_status": candidate.get("prior_v3_status"),
                 "v2_status": candidate.get("v2_status"),
                 "classification": mapping.get("classification"),

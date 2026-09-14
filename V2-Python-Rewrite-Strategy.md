@@ -2,10 +2,13 @@
 
 ## What was moved
 
-`python/ported/` contains 35 XiangShan-core candidates selected from the V3
+`python/Program-System/System-Build/Build-Cpu/` contains 34 retained
+XiangShan-core Build targets selected from the V3
 backlog. The selection is limited to `scala/src/main/scala/xiangshan/**` and
 requires the previous V3 status to be `ACCEPTED` or `BEHAVIOR_MATCHED`. The
-machine-readable mapping is in `V2-Ported-Candidates.json`.
+machine-readable mapping is in `V2-Ported-Candidates.json`; the retired
+candidate has no target path. The relocation transaction is in
+`V2-Build-Relocation-Manifest.json`.
 
 Those statuses are provenance only. They were established against the V3
 reference commit (`0ff31c2...`), not this V2 snapshot. Every candidate remains

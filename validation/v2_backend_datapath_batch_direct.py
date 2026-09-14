@@ -17,13 +17,13 @@ from amaranth.sim import Simulator
 
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET_DIR = ROOT / "python" / "ported" / "backend" / "datapath"
+TARGET_DIR = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Core"
 RESULT = ROOT / "validation" / "v2-backend-datapath-direct-results.json"
 SOURCE_COMMIT = "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af"
 TARGETS = {
-    "DataSource": TARGET_DIR / "DataSource-Hardware.py",
-    "NewPipelineConnect": TARGET_DIR / "NewPipelineConnect-Hardware.py",
-    "WbArbiter": TARGET_DIR / "WbArbiter-Hardware.py",
+    "DataSource": TARGET_DIR / "Build-Cpu.Backend.Datapath.DataSource-Hardware.py",
+    "NewPipelineConnect": TARGET_DIR / "Build-Cpu.Backend.Datapath.NewPipelineConnect-Hardware.py",
+    "WbArbiter": TARGET_DIR / "Build-Cpu.Backend.Datapath.WbArbiter-Hardware.py",
 }
 SCALA = {
     "DataSource": ROOT / "upstream/src/main/scala/xiangshan/backend/datapath/DataSource.scala",

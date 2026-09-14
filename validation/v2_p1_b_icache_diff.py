@@ -25,9 +25,9 @@ CONTRACT_RESULT = ROOT / "validation/v2-p1-b-icache-contract-audit.json"
 COVERAGE_RESULT = ROOT / "validation/v2-p1-b-icache-coverage-manifest.json"
 MAPPING_RESULT = ROOT / "validation/v2-p1-b-icache-mapping-update.json"
 TARGETS = {
-    "mshr": ROOT / "python/ported/frontend/icache/ICacheMshr-Hardware.py",
-    "replacer": ROOT / "python/ported/frontend/icache/ICacheReplacer-Hardware.py",
-    "utility": ROOT / "python/ported/frontend/icache/Utils-Hardware.py",
+    "mshr": ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.ICacheMshr-Hardware.py",
+    "replacer": ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.ICacheReplacer-Hardware.py",
+    "utility": ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.Utils-Hardware.py",
 }
 HARNESS = {
     "demux": ROOT / "validation/icache_demux_v2_diff_tb.cpp",
@@ -292,9 +292,9 @@ def main() -> int:
         "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "locked_reference": {"path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv", "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d", "bytes": 228590583},
         "entries": [
-            {"id": "ICacheMshr", "classification": "REWRITTEN", "v2_source": "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala", "target": "python/ported/frontend/icache/ICacheMshr-Hardware.py", "covered_children": ["ICacheMSHR"], "status": "DIFFERENTIAL_MATCHED"},
-            {"id": "ICacheReplacer", "classification": "RELOCATED", "v2_source": "upstream/src/main/scala/xiangshan/frontend/icache/ICache.scala", "target": "python/ported/frontend/icache/ICacheReplacer-Hardware.py", "covered_children": ["ICacheReplacer", "SetAssocLRU/PseudoLRU"], "status": "DIFFERENTIAL_MATCHED"},
-            {"id": "Utils", "classification": "SPLIT", "v2_source": ["upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala", "upstream/src/main/scala/xiangshan/frontend/icache/FIFO.scala"], "target": "python/ported/frontend/icache/Utils-Hardware.py", "covered_children": ["DeMultiplexer", "MuxBundle", "FIFOReg"], "status": "DIFFERENTIAL_MATCHED"},
+            {"id": "ICacheMshr", "classification": "REWRITTEN", "v2_source": "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala", "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.ICacheMshr-Hardware.py", "covered_children": ["ICacheMSHR"], "status": "DIFFERENTIAL_MATCHED"},
+            {"id": "ICacheReplacer", "classification": "RELOCATED", "v2_source": "upstream/src/main/scala/xiangshan/frontend/icache/ICache.scala", "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.ICacheReplacer-Hardware.py", "covered_children": ["ICacheReplacer", "SetAssocLRU/PseudoLRU"], "status": "DIFFERENTIAL_MATCHED"},
+            {"id": "Utils", "classification": "SPLIT", "v2_source": ["upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala", "upstream/src/main/scala/xiangshan/frontend/icache/FIFO.scala"], "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.Utils-Hardware.py", "covered_children": ["DeMultiplexer", "MuxBundle", "FIFOReg"], "status": "DIFFERENTIAL_MATCHED"},
         ],
         "localization_map": {
             "manifest": "UHSC-Naming-Manifest.json",

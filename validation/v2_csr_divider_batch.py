@@ -17,7 +17,7 @@ from amaranth.sim import Simulator
 
 
 ROOT = Path(__file__).resolve().parents[1]
-PORTED = ROOT / "python" / "ported"
+BUILD_CORE = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Core"
 EVIDENCE = ROOT / "validation" / "v2-csr-divider-direct-results.json"
 CONTRACT_EVIDENCE = ROOT / "validation" / "v2-csr-divider-contract-audit.json"
 COVERAGE_EVIDENCE = ROOT / "validation" / "v2-csr-divider-coverage-manifest.json"
@@ -27,11 +27,11 @@ REFERENCE_SHA256 = "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4
 REFERENCE_BYTES = 228590583
 
 TARGETS = {
-    "CSRs": PORTED / "backend/decode/isa/CSRs-Hardware.py",
-    "SstcInterruptGen": PORTED / "backend/fu/NewCSR/SstcInterruptGen-Hardware.py",
-    "SRT16Divider": PORTED / "backend/fu/SRT16Divider-Hardware.py",
-    "FliTable": PORTED / "backend/fu/fpu/FliTable-Hardware.py",
-    "CSA": PORTED / "backend/fu/util/CSA-Hardware.py",
+    "CSRs": BUILD_CORE / "Build-Cpu.Backend.Decode.Isa.CSRs-Hardware.py",
+    "SstcInterruptGen": BUILD_CORE / "Build-Cpu.Backend.Fu.NewCSR.SstcInterruptGen-Hardware.py",
+    "SRT16Divider": BUILD_CORE / "Build-Cpu.Backend.Fu.SRT16Divider-Hardware.py",
+    "FliTable": BUILD_CORE / "Build-Cpu.Backend.Fu.Fpu.FliTable-Hardware.py",
+    "CSA": BUILD_CORE / "Build-Cpu.Backend.Fu.Util.CSA-Hardware.py",
 }
 
 

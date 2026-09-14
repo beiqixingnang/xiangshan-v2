@@ -88,8 +88,12 @@ dynamic loader.
 
 The Scala source and locked reference names remain unchanged. Localization is
 performed only in project-owned generated HDL wrappers, manifests, and
-external product-facing adapters. Existing source-traceable Python basenames
-are not mechanically renamed before their family boundary is frozen:
+external product-facing adapters. The auxiliary repository is also the
+staging area for files that will later be copied into the main repository, so
+core XiangShan targets use the final `Build-<hardware ID>-Hardware.py` naming
+and directory layout from the moment they are created. External dependency
+families may still use one family Build file with an explicit child manifest,
+instead of one file per Scala source:
 
 - The external processor identity is `UHSC` (Unifier Hardware System CPU).
 - The only default external HDL prefix is `UHSC` (Unifier Hardware System
@@ -105,11 +109,13 @@ are not mechanically renamed before their family boundary is frozen:
 - No blind textual replacement is allowed. Every renamed symbol gets a
   `source_name`, `local_name`, `visibility`, and `reason` entry in the naming
   manifest, and all references are updated atomically.
-- File basenames in the auxiliary rewrite tree remain source-traceable until
-  their family reaches a stable local boundary; then project-owned externally
-  visible files follow the repository two-segment naming contract. No old
-  alias, wrapper, or symlink is retained after the localized boundary is
-  accepted.
+- Core auxiliary paths follow `python/Program-System/System-Build/Build-Cpu/`
+  and the corresponding source-traceable Build basename, for example
+  `Build-Cpu.Backend.Fu.SRT16Divider-Hardware.py`.
+- A temporary path under `python/ported/` is allowed only during an active
+  relocation transaction. It must be removed in the same commit as the Build
+  path creation, and all evidence/manifests must point to the Build path.
+- No old alias, wrapper, or symlink is retained after the relocation commit.
 
 ## 5. Verification and commit discipline
 

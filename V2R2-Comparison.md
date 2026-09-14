@@ -51,7 +51,7 @@ V2R2 address map. V2R2-S store fixes likewise require their own reference and
 differential evidence.
 
 For Python reuse, modules whose Scala semantics are unchanged can start from
-the 35 candidates in `python/ported/`. SoC/address decode, AXI4Memory,
+the 35 candidates in `python/Program-System/System-Build/Build-Cpu/`. SoC/address decode, AXI4Memory,
 Parameters, timer/UART, cache-control ranges, and other map-sensitive modules
 must remain parameterized or be rewritten against the selected V2/V2R2
 reference. A prior V3 `ACCEPTED` or `BEHAVIOR_MATCHED` status is only a reuse

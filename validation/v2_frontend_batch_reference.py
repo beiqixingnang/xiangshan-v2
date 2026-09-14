@@ -15,7 +15,7 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
-PORTED = ROOT / "python" / "ported"
+BUILD_CORE = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Core"
 RESULT_PATH = ROOT / "validation" / "v2-frontend-batch-reference-results.json"
 REFERENCE = "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv"
 SOURCE_COMMIT = "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af"
@@ -162,7 +162,7 @@ def source_evidence() -> dict[str, Any]:
 # Run reference extraction and persist machine-readable evidence. / 运行参考提取并持久化机器证据。
 def main() -> int:
     module = load_target("v2_frontend_reference_rvc",
-                         PORTED / "frontend/ifu/RvcExpander-Hardware.py")
+                         BUILD_CORE / "Build-Cpu.Frontend.Ifu.RvcExpander-Hardware.py")
     temp = Path(tempfile.mkdtemp(prefix="v2_frontend_ref_"))
     try:
         rvc_result = compare_rvc(module, temp / "rvc")

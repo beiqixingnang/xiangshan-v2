@@ -19,19 +19,19 @@ from amaranth.sim import Simulator
 
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET_ROOT = ROOT / "python" / "ported" / "backend" / "fu" / "vector"
+TARGET_ROOT = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Core"
 RESULT = ROOT / "validation" / "v2-vector-batch-direct-results.json"
 SOURCE_COMMIT = "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af"
 TARGETS = {
-    "ByteMaskTailGen": TARGET_ROOT / "ByteMaskTailGen-Hardware.py",
-    "DstMgu": TARGET_ROOT / "DstMgu-Hardware.py",
-    "Mgtu": TARGET_ROOT / "Mgtu-Hardware.py",
-    "NewMgu": TARGET_ROOT / "NewMgu-Hardware.py",
-    "MaskExtrator": TARGET_ROOT / "utils" / "MaskExtrator-Hardware.py",
-    "ScalaDupToVector": TARGET_ROOT / "utils" / "ScalaDupToVector-Hardware.py",
-    "UIntToCont0s": TARGET_ROOT / "utils" / "UIntToCont0s-Hardware.py",
-    "UIntToCont1s": TARGET_ROOT / "utils" / "UIntToCont1s-Hardware.py",
-    "VecDataSplitModule": TARGET_ROOT / "utils" / "VecDataSplitModule-Hardware.py",
+    "ByteMaskTailGen": TARGET_ROOT / "Build-Cpu.Backend.Fu.Vector.ByteMaskTailGen-Hardware.py",
+    "DstMgu": TARGET_ROOT / "Build-Cpu.Backend.Fu.Vector.DstMgu-Hardware.py",
+    "Mgtu": TARGET_ROOT / "Build-Cpu.Backend.Fu.Vector.Mgtu-Hardware.py",
+    "NewMgu": TARGET_ROOT / "Build-Cpu.Backend.Fu.Vector.NewMgu-Hardware.py",
+    "MaskExtrator": TARGET_ROOT / "Build-Cpu.Backend.Fu.Vector.Utils.MaskExtrator-Hardware.py",
+    "ScalaDupToVector": TARGET_ROOT / "Build-Cpu.Backend.Fu.Vector.Utils.ScalaDupToVector-Hardware.py",
+    "UIntToCont0s": TARGET_ROOT / "Build-Cpu.Backend.Fu.Vector.Utils.UIntToCont0s-Hardware.py",
+    "UIntToCont1s": TARGET_ROOT / "Build-Cpu.Backend.Fu.Vector.Utils.UIntToCont1s-Hardware.py",
+    "VecDataSplitModule": TARGET_ROOT / "Build-Cpu.Backend.Fu.Vector.Utils.VecDataSplitModule-Hardware.py",
 }
 FAMILY = {
     "ByteMaskTailGen": "core.fu.vector.mask",

@@ -19,10 +19,10 @@ from amaranth.sim import Simulator
 
 
 ROOT = Path(__file__).resolve().parents[1]
-PORTED = ROOT / "python" / "ported" / "backend" / "fu" / "util"
+BUILD_CORE = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Core"
 TARGETS = {
-    "CryptoUtils": PORTED / "CryptoUtils-Hardware.py",
-    "DebugCSR": PORTED / "DebugCSR-Hardware.py",
+    "CryptoUtils": BUILD_CORE / "Build-Cpu.Backend.Fu.Util.CryptoUtils-Hardware.py",
+    "DebugCSR": BUILD_CORE / "Build-Cpu.Backend.Fu.Util.DebugCSR-Hardware.py",
 }
 SOURCES = {
     "CryptoUtils": ROOT / "upstream/src/main/scala/xiangshan/backend/fu/util/CryptoUtils.scala",
@@ -366,7 +366,7 @@ def source_checks() -> dict[str, Any]:
         "DebugParentClosure": {"path": "upstream/src/main/scala/xiangshan/backend/fu/CSR.scala",
                                "sha256": digest(ROOT / "upstream/src/main/scala/xiangshan/backend/fu/CSR.scala"),
                                "required_tokens": csr_tokens, "status": "PASS" if all(csr_tokens.values()) else "FAIL"},
-        "ShiftUtils": {"candidate": "python/ported/backend/fu/util/ShiftUtils-Hardware.py",
+        "ShiftUtils": {"candidate": None,
                        "v2_source": None, "classification": "RETIRED", "disposition": "RETIRED",
                        "source_present": shift_present, "remaining_references": shift_refs,
                        "reason": "No V2 authoritative ShiftUtils.scala or equivalent public helper surface; V2 ALU/BKU use local operators and CryptoUtils.",
@@ -461,7 +461,7 @@ def main() -> int:
                        "entries": [
                            {"id": "CryptoUtils", "classification": "EXACT", "disposition": "REUSED", "v2_sources": [SOURCES["CryptoUtils"].relative_to(ROOT).as_posix()], "python_path": TARGETS["CryptoUtils"].relative_to(ROOT).as_posix(), "status": "DIFFERENTIAL_MATCHED_BOUNDED" if parent.get("status") == "PASS" else "CONTRACT_ONLY"},
                            {"id": "DebugCSR", "classification": "EXACT", "disposition": "REUSED", "v2_sources": [SOURCES["DebugCSR"].relative_to(ROOT).as_posix()], "python_path": TARGETS["DebugCSR"].relative_to(ROOT).as_posix(), "status": "SOURCE_LEVEL_MATCHED_BOUNDED"},
-                           {"id": "ShiftUtils", "classification": "RETIRED", "disposition": "RETIRED", "v2_sources": [], "python_path": "python/ported/backend/fu/util/ShiftUtils-Hardware.py", "status": "RETIRED", "reason": source["ShiftUtils"]["reason"]},
+                           {"id": "ShiftUtils", "classification": "RETIRED", "disposition": "RETIRED", "v2_sources": [], "python_path": None, "status": "RETIRED", "reason": source["ShiftUtils"]["reason"]},
                        ],
                        "uhsc_localization": {"status": "PENDING_EXTERNAL_WRAPPER", "locked_names_unchanged": True, "manifest": "UHSC-Naming-Manifest.json"},
                        "gates": {"contract": "PASS" if contract_pass else "FAIL", "direct": "PASS_BOUNDED", "reference": "PASS_BOUNDED" if parent.get("status") == "PASS" else "PENDING", "parent_closure": "PENDING", "license": "PENDING", "ACCEPTED": "NOT_ALLOWED"},

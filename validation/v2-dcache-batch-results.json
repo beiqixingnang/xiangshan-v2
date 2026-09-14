@@ -39,8 +39,8 @@
     ]
   },
   "target_paths": {
-    "AMOALU": "python/ported/cache/dcache/mainpipe/AMOALU-Hardware.py",
-    "TagArray": "python/ported/cache/dcache/meta/TagArray-Hardware.py"
+    "AMOALU": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Cache.Dcache.Mainpipe.AMOALU-Hardware.py",
+    "TagArray": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Cache.Dcache.Meta.TagArray-Hardware.py"
   },
   "target_hashes": {
     "AMOALU": "f549858c7c003490e507ac9b592a6830a52b2936b7d5a427ffdd323a6ca09eeb",
@@ -123,7 +123,7 @@
   },
   "structural_audit": {
     "AMOALU": {
-      "path": "python/ported/cache/dcache/mainpipe/AMOALU-Hardware.py",
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Cache.Dcache.Mainpipe.AMOALU-Hardware.py",
       "bytes": 8692,
       "sha256": "f549858c7c003490e507ac9b592a6830a52b2936b7d5a427ffdd323a6ca09eeb",
       "utf8_lf": true,
@@ -148,7 +148,7 @@
       ]
     },
     "TagArray": {
-      "path": "python/ported/cache/dcache/meta/TagArray-Hardware.py",
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Cache.Dcache.Meta.TagArray-Hardware.py",
       "bytes": 8478,
       "sha256": "3e7fb5ed90ff3dbc83afe05f21121a8f79ca33872634e65dada7586fe47259f8",
       "utf8_lf": true,
@@ -172,13 +172,13 @@
   },
   "generated": {
     "AMOALU": {
-      "sha256": "60f8ea7db440da441bfd51707e668d31da54776651f42cbdbe43b87efcf2f2ce",
-      "bytes": 43469,
+      "sha256": "d8c1c9363756b27a42af7f3c6b0446df5ce019a087a61824cfbb4988980df362",
+      "bytes": 49345,
       "module": "AMOALU",
       "verilator": {
         "status": "PASS",
         "returncode": 0,
-        "stderr_tail": "                                                                        : ... note: In instance 'AMOALU'\n  237 |   assign \\$108  = io_cmd == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\ported\\\\cache\\\\dcache\\\\mainpipe\\\\AMOALU-Hardware.py:91\" *) 4'hd;\n      |                          ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_dcache_lint_gajoai2g/AMOALU.sv:238:26: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'hf' generates 4 bits.\n                                                                                                     : ... note: In instance 'AMOALU'\n  238 |   assign \\$109  = io_cmd == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\ported\\\\cache\\\\dcache\\\\mainpipe\\\\AMOALU-Hardware.py:91\" *) 4'hf;\n      |                          ^~\n"
+        "stderr_tail": "\n  237 |   assign \\$108  = io_cmd == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Memory\\\\Build-Cpu.Cache.Dcache.Mainpipe.AMOALU-Hardware.py:91\" *) 4'hd;\n      |                          ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_dcache_lint_0bt6svmm/AMOALU.sv:238:26: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'hf' generates 4 bits.\n                                                                                                     : ... note: In instance 'AMOALU'\n  238 |   assign \\$109  = io_cmd == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Memory\\\\Build-Cpu.Cache.Dcache.Mainpipe.AMOALU-Hardware.py:91\" *) 4'hf;\n      |                          ^~\n"
       },
       "yosys": {
         "status": "PASS",
@@ -206,7 +206,7 @@
     "AMOALU": {
       "status": "PASS",
       "returncode": 0,
-      "stdout_tail": "PASS_AMOALU_REFERENCE\n- /mnt/c/Users/lishuo/AppData/Local/Temp/v2_amo_ref_qg_xfx92/tb.sv:628: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 320ps; walltime 0.001 s; speed 223.068 ns/s\n- Verilator: cpu 0.001 s on 1 threads; alloced 153 MB\n",
+      "stdout_tail": "PASS_AMOALU_REFERENCE\n- /mnt/c/Users/lishuo/AppData/Local/Temp/v2_amo_ref_s66esed2/tb.sv:628: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 320ps; walltime 0.001 s; speed 185.554 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n",
       "stderr_tail": "",
       "module": "AMOALU",
       "vectors": 320,
@@ -220,7 +220,7 @@
     "TagArray": {
       "status": "PASS",
       "returncode": 0,
-      "stdout_tail": "PASS_TAGARRAY_REFERENCE\n- /mnt/c/Users/lishuo/AppData/Local/Temp/v2_tag_ref_ev8g77du/tb.sv:1830: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 823ps; walltime 0.001 s; speed 536.142 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n",
+      "stdout_tail": "PASS_TAGARRAY_REFERENCE\n- /mnt/c/Users/lishuo/AppData/Local/Temp/v2_tag_ref_brhetzrq/tb.sv:1830: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 823ps; walltime 0.001 s; speed 541.083 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n",
       "stderr_tail": "",
       "module": "TagArray",
       "vectors": 24,

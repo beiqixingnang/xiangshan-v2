@@ -42,7 +42,7 @@
   },
   "structural_audit": {
     "LruStateGen": {
-      "path": "python/ported/frontend/bpu/replacer/LruStateGen-Hardware.py",
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.LruStateGen-Hardware.py",
       "bytes": 11114,
       "sha256": "dc5ce5ac757c1beb1731c5975e0dc1fe0fdcf6b98d2511f5e03075976f1969ef",
       "utf8_lf": true,
@@ -76,7 +76,7 @@
       ]
     },
     "PlruStateGen": {
-      "path": "python/ported/frontend/bpu/replacer/PlruStateGen-Hardware.py",
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.PlruStateGen-Hardware.py",
       "bytes": 13123,
       "sha256": "9abb1e75c35cd4e846681d7a48427bca6499c2d40348dc067c4742ef844e9c02",
       "utf8_lf": true,
@@ -114,7 +114,7 @@
       ]
     },
     "ReplacerState": {
-      "path": "python/ported/frontend/bpu/replacer/ReplacerState-Hardware.py",
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.ReplacerState-Hardware.py",
       "bytes": 22697,
       "sha256": "4d04ed552e84cd2ff8658877a5f18a0664ac1354bea96b85234df42679111641",
       "utf8_lf": true,
@@ -169,7 +169,7 @@
       "verilator": {
         "status": "PASS",
         "returncode": 0,
-        "stderr_tail": "ator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'io_touches_0_bits' generates 2 bits.\n                                                                                                              : ... note: In instance 'LruStateGen'\n  422 |   assign \\$183  = ! io_touches_0_bits;\n      |                   ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_replacement_lint_a6zp8oek/LruStateGen.sv:426:37: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                               : ... note: In instance 'LruStateGen'\n  426 |   assign \\$187  = io_touches_0_bits == 1'h1;\n      |                                     ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_replacement_lint_a6zp8oek/LruStateGen.sv:430:37: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                               : ... note: In instance 'LruStateGen'\n  430 |   assign \\$191  = io_touches_0_bits == 1'h1;\n      |                                     ^~\n"
+        "stderr_tail": "ator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'io_touches_0_bits' generates 2 bits.\n                                                                                                              : ... note: In instance 'LruStateGen'\n  422 |   assign \\$183  = ! io_touches_0_bits;\n      |                   ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_replacement_lint_k9m9593w/LruStateGen.sv:426:37: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                               : ... note: In instance 'LruStateGen'\n  426 |   assign \\$187  = io_touches_0_bits == 1'h1;\n      |                                     ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_replacement_lint_k9m9593w/LruStateGen.sv:430:37: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                               : ... note: In instance 'LruStateGen'\n  430 |   assign \\$191  = io_touches_0_bits == 1'h1;\n      |                                     ^~\n"
       },
       "yosys": {
         "status": "PASS",
@@ -199,7 +199,7 @@
       "verilator": {
         "status": "PASS",
         "returncode": 0,
-        "stderr_tail": " expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                 : ... note: In instance 'ReplacerState'\n  300 |   assign \\$60  = io_access_0_set == 1'h1;\n      |                                  ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_replacement_lint_a6zp8oek/ReplacerState.sv:312:34: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                 : ... note: In instance 'ReplacerState'\n  312 |   assign \\$72  = io_access_0_set == 1'h1;\n      |                                  ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_replacement_lint_a6zp8oek/ReplacerState.sv:325:34: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                 : ... note: In instance 'ReplacerState'\n  325 |   assign \\$85  = io_access_0_set == 1'h1;\n      |                                  ^~\n"
+        "stderr_tail": " expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                 : ... note: In instance 'ReplacerState'\n  300 |   assign \\$60  = io_access_0_set == 1'h1;\n      |                                  ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_replacement_lint_k9m9593w/ReplacerState.sv:312:34: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                 : ... note: In instance 'ReplacerState'\n  312 |   assign \\$72  = io_access_0_set == 1'h1;\n      |                                  ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_replacement_lint_k9m9593w/ReplacerState.sv:325:34: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                 : ... note: In instance 'ReplacerState'\n  325 |   assign \\$85  = io_access_0_set == 1'h1;\n      |                                  ^~\n"
       },
       "yosys": {
         "status": "PASS",

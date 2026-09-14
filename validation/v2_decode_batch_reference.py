@@ -14,7 +14,7 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
-PORTED = ROOT / "python" / "ported"
+BUILD_CORE = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Core"
 REFERENCE = "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv"
 RESULT_PATH = ROOT / "validation" / "v2-decode-batch-reference-results.json"
 
@@ -191,9 +191,9 @@ def main() -> int:
     """Generate wrappers and report pass/fail facts. / 生成包装器并报告结果。"""
 
     modules = {
-        "FliTable": load_target("ref_fli", PORTED / "backend/fu/fpu/FliTable-Hardware.py"),
-        "CSA": load_target("ref_csa", PORTED / "backend/fu/util/CSA-Hardware.py"),
-        "SstcInterruptGen": load_target("ref_sstc", PORTED / "backend/fu/NewCSR/SstcInterruptGen-Hardware.py"),
+        "FliTable": load_target("ref_fli", BUILD_CORE / "Build-Cpu.Backend.Fu.Fpu.FliTable-Hardware.py"),
+        "CSA": load_target("ref_csa", BUILD_CORE / "Build-Cpu.Backend.Fu.Util.CSA-Hardware.py"),
+        "SstcInterruptGen": load_target("ref_sstc", BUILD_CORE / "Build-Cpu.Backend.Fu.NewCSR.SstcInterruptGen-Hardware.py"),
     }
     temp = Path(tempfile.mkdtemp(prefix="v2_ref_diff_"))
     try:
