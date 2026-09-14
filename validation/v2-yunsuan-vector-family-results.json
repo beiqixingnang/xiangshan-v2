@@ -117,21 +117,21 @@
   },
   "target": {
     "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.YunSuan.Vector-Hardware.py",
-    "sha256": "2c139278a39d4658c80e6fca70fcc7f51529ed417f26f440e536411e3e2f50da",
-    "bytes": 46379
+    "sha256": "8736d45bed8634fcbb72f3b35474c216bade0d85a71d739acaeac6318ba5318e",
+    "bytes": 51639
   },
   "static": {
     "status": "PASS",
     "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.YunSuan.Vector-Hardware.py",
-    "bytes": 46379,
-    "sha256": "2c139278a39d4658c80e6fca70fcc7f51529ed417f26f440e536411e3e2f50da",
+    "bytes": 51639,
+    "sha256": "8736d45bed8634fcbb72f3b35474c216bade0d85a71d739acaeac6318ba5318e",
     "utf8_lf": true,
     "zones": [
       765,
       2861,
       4515,
-      41478,
-      44354
+      46628,
+      49504
     ],
     "adapter_args": [
       "configuration",
@@ -532,10 +532,10 @@
       "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
       "bytes": 228590583
     },
-    "compatible_child": "YunSuanVectorPrimitive",
-    "vectors": 4096,
-    "pass_marker": "PRIMITIVE_SOURCE_PASS",
-    "output_tail": "PRIMITIVE_SOURCE_PASS 4096\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/yunsuan-vector-validator/primitive_compare.sv:15002: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 4ns; walltime 0.002 s; speed 2.124 us/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 152 MB\n",
+    "compatible_child": "YunSuanVIntAdder64b",
+    "vectors": 50000,
+    "pass_marker": "IADD_REF_PASS",
+    "output_tail": "IADD_REF_PASS 50000\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/yunsuan-vector-validator/int_adder_compare.sv:2095: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 50ns; walltime 0.012 s; speed 4.077 us/s\n- Verilator: cpu 0.012 s on 1 threads; alloced 152 MB\n",
     "open_children": [
       "VectorFloatAdder",
       "VectorFloatDivider",
@@ -548,7 +548,7 @@
       "Permutation full parent timing",
       "VIMac64b iterative Wallace pipeline"
     ],
-    "note": "Primitive add-path source differential and all bounded child exports are checked; full parent differential remains open until vector parent contracts close."
+    "note": "VIntAdder64b is compared against the locked generated V2 module across arithmetic, carry, compare, mask, widening, and toFixP outputs; larger vector-parent closures remain open."
   },
   "backend": {
     "status": "PASS",
@@ -566,11 +566,11 @@
       {
         "mode": "int_adder",
         "module": "UHSCYunSuanVIntAdder64b",
-        "rtl_bytes": 14747907,
-        "rtl_sha256": "81dd8fb27b39430ddee1416a9bfcdeaba2460ce0469a225053e33d7d839fc670",
+        "rtl_bytes": 56147,
+        "rtl_sha256": "7b05f36a91fbbc296e071097a77abefe5e4f28dc69efd808ee1ce59229e9df89",
         "verilator": "PASS",
         "yosys": "PASS",
-        "verilator_tail": "                   ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/yunsuan-vector-validator/UHSCYunSuanVIntAdder64b.sv:424441:35: Operator GTE expects 6 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n424441 |   assign \\$212166  = io_opcode_op >= 2'h3;\n       |                                   ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/yunsuan-vector-validator/UHSCYunSuanVIntAdder64b.sv:424442:35: Operator LTE expects 6 bits on the RHS, but RHS's CONST '3'h6' generates 3 bits.\n424442 |   assign \\$212167  = io_opcode_op <= 3'h6;\n       |                                   ^~\n",
+        "verilator_tail": ". note: In instance 'UHSCYunSuanVIntAdder64b'\n 1638 |   assign \\$290  = io_srcType_1[3:2] == 1'h1;\n      |                                     ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/yunsuan-vector-validator/UHSCYunSuanVIntAdder64b.sv:1640:37: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                                      : ... note: In instance 'UHSCYunSuanVIntAdder64b'\n 1640 |   assign \\$292  = io_srcType_1[3:2] == 1'h1;\n      |                                     ^~\n",
         "yosys_tail": ""
       },
       {
@@ -643,7 +643,7 @@
   "gates": {
     "PYTHON_PRESENT": "PASS",
     "DIRECT_TEST_PASS_BOUNDED": "PASS",
-    "V2_REFERENCE_MATCHED": "PASS_BOUNDED_PRIMITIVE_SOURCE",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED_VINTADDER64B",
     "VERILATOR": "PASS",
     "YOSYS": "PASS",
     "UHSC_LOCALIZED": "PASS_BOUNDED_FAMILY_LOCAL_NAME",
