@@ -5,8 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
-from amaranth import (Array, Cat, ClockDomain, ClockSignal, Const,
-                      Elaboratable, Module, Mux, ResetSignal, Signal)
+from amaranth import Cat, ClockDomain, ClockSignal, Const, Elaboratable, Module, Mux, ResetSignal, Signal
 
 
 # Module Contract / 模块契约
@@ -320,9 +319,13 @@ class ReplacerState(Elaboratable):
 
     # Return a selected state with deterministic out-of-range fallback / 返回选定状态并确定性处理越界索引
     def select_state(self, index: Any) -> Any:
-        # Array indexing emits a balanced mux and returns zero for an encoded
-        # index outside numSets, matching a bounded Vec access.
-        return Array(self.state_vec)[index]
+        # Explicitly decode the index so an out-of-range encoded value has a
+        # deterministic zero fallback, matching a bounded Chisel Vec access.
+        # 显式译码索引，越界编码确定返回零，与有界 Chisel Vec 一致。
+        result = Const(0, self.config.stateWidth)
+        for set_index in range(self.config.numSets - 1, -1, -1):
+            result = Mux(index == set_index, self.state_vec[set_index], result)
+        return result
 
     # Build one hardware TrueLRU transition / 构造一次硬件真 LRU 状态变换
     def true_lru_next_expr(self, state: Any, touch_way: Any) -> Any:
@@ -440,9 +443,9 @@ class ReplacerState(Elaboratable):
         module = Module()
         module.domains.sync = ClockDomain(async_reset=True)
         selected = self.select_state(self.victim_set)
+        next_states: list[Any] = []
         module.d.comb += [
             self.state_read.eq(selected),
-            self.state_next.eq(selected),
             self.victim_way.eq(self.victim_for_state(selected)),
         ]
         for index, read_index in enumerate(self.read_setIdx):
@@ -464,7 +467,13 @@ class ReplacerState(Elaboratable):
                                                        self.write_state):
                 condition = valid & (set_signal == set_index)
                 next_value = Mux(condition, state_signal, next_value)
+            next_states.append(next_value)
             module.d.sync += current.eq(next_value)
+        next_selected = Const(0, self.config.stateWidth)
+        for set_index in range(self.config.numSets - 1, -1, -1):
+            next_selected = Mux(self.victim_set == set_index,
+                                next_states[set_index], next_selected)
+        module.d.comb += self.state_next.eq(next_selected)
         return module
 
 
