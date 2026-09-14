@@ -9,7 +9,7 @@
   ],
   "target": {
     "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.FrontendBridge-Hardware.py",
-    "sha256": "4d8193740a95ee20b41edd20ee0aa66bc2c1d4203165da0ce801da04ae234bc3"
+    "sha256": "08f30001d64a77563d5d1658bed7093eee801464c66caaf080be1142bc0e18fc"
   },
   "direct": {
     "status": "PASS",
@@ -29,16 +29,46 @@
   "backend": {
     "verilator": "PASS",
     "yosys": "PASS",
-    "rtl_bytes": 241105,
-    "rtl_sha256": "5a0500a7a5b47bfc0c2b3810b28b385f1b020b754c5ff5f0136355a26f0617cd",
+    "rtl_bytes": 232801,
+    "rtl_sha256": "016ae0f3f8ad41c45dfe9a401a4d92a5dc38542321e090f42231bd08af552f90",
     "status": "PASS"
+  },
+  "reference_differential": {
+    "status": "PASS",
+    "vectors": 24,
+    "reference": {
+      "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+      "bytes": 228590583,
+      "modules": [
+        "FrontendBridge",
+        "ICacheBuffer",
+        "ICacheCtrlBuffer",
+        "InstrUncacheBuffer",
+        "Queue2_TLBundleA_22",
+        "Queue2_TLBundleD_23",
+        "Queue2_TLBundleA_16",
+        "Queue2_TLBundleD_19",
+        "Queue2_TLBundleA_26",
+        "Queue2_TLBundleD_29",
+        "ram_2x359",
+        "ram_2x281",
+        "ram_2x117",
+        "ram_2x80",
+        "ram_2x132",
+        "ram_2x77"
+      ]
+    },
+    "compile_returncode": 0,
+    "run_returncode": 0,
+    "run_tail": "FRONTEND_BRIDGE_REFERENCE_PASS 24\n- /tmp/uhsc-v2/validation/.work/v2-frontend-bridge/frontend-bridge-diff-tb.sv:2374: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 56ps; walltime 0.002 s; speed 35.922 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n",
+    "trace_sha256": "aa3ca26367f4fbf1455ba9efb0942f3a3c18f89855c2c018d205d0929095b3f6"
   },
   "gates": {
     "PYTHON_PRESENT": "PASS",
     "DIRECT_TEST_PASS_BOUNDED": "PASS",
     "VERILATOR": "PASS",
     "YOSYS": "PASS",
-    "V2_REFERENCE_MATCHED": "PASS_BOUNDED_BUFFER_EQUATIONS",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED_REFERENCE_DIFFERENTIAL",
     "PARENT_CLOSURE_MATCHED": "PENDING_MEMBLOCK_FRONTENDBRIDGE_PARENT",
     "LICENSE_REVIEW": "PENDING",
     "ACCEPTED": "NOT_ALLOWED"

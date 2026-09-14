@@ -78,8 +78,11 @@ class TwoEntryQueue(Elaboratable):
         count = Signal(2, name=f"{self.prefix}_count")
         valid = count != 0
         pop = valid & self.deq_ready
-        push = self.enq_valid & ((count < 2) | pop)
-        m.d.comb += [self.enq_ready.eq((count < 2) | pop),
+        # Chisel ``Queue(2)`` exposes ``~full`` on enqueue; it does not
+        # advertise a same-cycle replacement when both slots are occupied.
+        # This detail is observable at the FrontendBridge boundary.
+        push = self.enq_valid & (count < 2)
+        m.d.comb += [self.enq_ready.eq(count < 2),
                      self.deq_valid.eq(valid)]
         # The two data registers keep payload widths explicit and deterministic.
         data0 = [Signal(width, name=f"{self.prefix}_data0_{index}")
@@ -215,7 +218,9 @@ class ICacheBuffer(Elaboratable):
                      self.a_edge.in_bits[0].eq(4), self.a_edge.in_bits[1].eq(0),
                      self.a_edge.in_bits[2].eq(6), self.a_edge.in_bits[3].eq(self.in_a_source),
                      self.a_edge.in_bits[4].eq(self.in_a_address), self.a_edge.in_bits[5].eq(0),
-                     self.a_edge.in_bits[6].eq(0), self.a_edge.in_bits[7].eq(0),
+                     # ``ICacheBuffer`` tags requests with reqSource=1 in the
+                     # V2 MemBlock bridge (the reference emits 5'h1).
+                     self.a_edge.in_bits[6].eq(1), self.a_edge.in_bits[7].eq(0),
                      self.a_edge.in_bits[8].eq((1 << 32) - 1), self.a_edge.in_bits[9].eq(0),
                      self.a_edge.in_bits[10].eq(0),
                      self.out_a_opcode.eq(self.a_edge.out_bits[0]), self.out_a_param.eq(self.a_edge.out_bits[1]),
