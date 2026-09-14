@@ -288,11 +288,14 @@ VldMergeUnit = UHSCCoreVldMergeUnit
 # 使用 UHSC 面向产品的默认顶层名称输出确定性 Verilog。/
 def build_verilog(configuration, injected_dependencies):
     config_value = configuration if isinstance(configuration, dict) else {}
-    geometry = UHSCCoreVldMergeUnitConfig(
-        vlen=int(config_value.get("vlen", 128)),
-        rob_value_width=int(config_value.get("rob_value_width", config_value.get("robValueWidth", 8))),
-        pdest_width=int(config_value.get("pdest_width", config_value.get("pdestWidth", 7))),
-    )
+    if isinstance(configuration, UHSCCoreVldMergeUnitConfig):
+        geometry = configuration
+    else:
+        geometry = UHSCCoreVldMergeUnitConfig(
+            vlen=int(config_value.get("vlen", 128)),
+            rob_value_width=int(config_value.get("rob_value_width", config_value.get("robValueWidth", 8))),
+            pdest_width=int(config_value.get("pdest_width", config_value.get("pdestWidth", 7))),
+        )
     dependencies = injected_dependencies if isinstance(injected_dependencies, dict) else {}
     top = UHSCCoreVldMergeUnit(geometry, dependencies)
     module_name = str(config_value.get("module", "UHSCCoreVldMergeUnit"))
