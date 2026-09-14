@@ -38,7 +38,7 @@
     {
       "family_id": "dependency.rocket.protocol",
       "kind": "dependency",
-      "plan_build_file": "Build-Cpu.Dependency.Rocket.Protocol-Hardware.py",
+      "plan_build_file": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Rocket.Protocol-Hardware.py",
       "source_roots": [
         "rocket-chip/src/main/scala"
       ],
@@ -167,9 +167,11 @@
       ],
       "reachability": null,
       "boundary": null,
-      "status": "INVENTORY_ONLY",
+      "status": "PASS_BOUNDED_FAMILY",
       "reachability_status": "REACHABLE_SELECTED_OR_CONDITIONAL",
-      "implementation_eligibility": "PLANNED_AFTER_CORE_PARENT"
+      "implementation_eligibility": "VALIDATED_BOUNDED",
+      "evidence": "validation/v2-rocket-protocol-family-results.json",
+      "commit": "a9799a5"
     },
     {
       "family_id": "dependency.rocket.replacement",
