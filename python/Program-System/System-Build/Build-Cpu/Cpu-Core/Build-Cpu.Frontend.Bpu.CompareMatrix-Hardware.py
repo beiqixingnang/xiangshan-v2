@@ -5,8 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Sequence
 
-from amaranth import (Cat, ClockDomain, ClockSignal, Const, Elaboratable,
-                      Module, Mux, ResetSignal, Signal)
+from amaranth import Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
 
 
@@ -182,7 +181,7 @@ class CompareMatrix(Elaboratable):
                 row_sum = Const(0, sum_width)
                 for col in range(cfg.n):
                     bit = matrix_expr[row][col]
-                    row_sum = row_sum + Cat(bit, Const(0, sum_width - 1))
+                    row_sum = (row_sum + Cat(bit, Const(0, sum_width - 1)))[:sum_width]
                 next_row.append(row_sum == Const(cfg.n - 1 - rank, sum_width))
             next_sort.append(next_row)
         module.d.sync += [
