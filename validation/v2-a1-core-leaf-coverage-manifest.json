@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_A1_CORE_LEAF_COVERAGE",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "batch_id": "V2-SCAN-A1-CORE-DECODE-ARITH-LEAVES",
+  "targets": {
+    "ImmExtractor": {
+      "source_paths": [
+        "upstream/src/main/scala/xiangshan/backend/issue/ImmExtractor.scala"
+      ],
+      "reference_modules": [
+        "ImmExtractor",
+        "ImmExtractor_2",
+        "ImmExtractor_12",
+        "ImmExtractor_37",
+        "ImmExtractor_57"
+      ]
+    },
+    "AluDataModule": {
+      "source_paths": [
+        "upstream/src/main/scala/xiangshan/backend/fu/Alu.scala"
+      ],
+      "reference_modules": [
+        "AluDataModule",
+        "AddModule",
+        "SubModule",
+        "LeftShiftModule",
+        "RightShiftModule",
+        "LeftShiftWordModule",
+        "RightShiftWordModule",
+        "ShiftResultSelect",
+        "MiscResultSelect",
+        "ConditionalZeroModule",
+        "WordResultSelect",
+        "AluResSel"
+      ]
+    },
+    "CommitStuckCounter": {
+      "source_paths": [
+        "upstream/src/main/scala/xiangshan/backend/rob/CommitStuckCounter.scala"
+      ],
+      "reference_modules": [
+        "CommitStuckCounter"
+      ]
+    },
+    "EnqPolicy": {
+      "source_paths": [
+        "upstream/src/main/scala/xiangshan/backend/issue/EnqPolicy.scala",
+        "upstream/utility/src/main/scala/utility/BitUtils.scala#CircSelectOne"
+      ],
+      "reference_modules": [
+        "EnqPolicy"
+      ]
+    },
+    "AgeDetector": {
+      "source_paths": [
+        "upstream/src/main/scala/xiangshan/backend/issue/AgeDetector.scala"
+      ],
+      "reference_modules": [
+        "AgeDetector"
+      ]
+    },
+    "PreDecodeInst": {
+      "source_paths": [
+        "upstream/src/main/scala/xiangshan/backend/decode/isa/predecode/predecode.scala"
+      ],
+      "reference_modules": [],
+      "source_level": true
+    }
+  },
+  "status": "PASS_BOUNDED"
+}

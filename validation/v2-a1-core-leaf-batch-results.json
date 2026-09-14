@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_A1_CORE_LEAF_BATCH",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "reference_artifact": {
+    "path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d"
+  },
+  "batch_id": "V2-SCAN-A1-CORE-DECODE-ARITH-LEAVES",
+  "targets": [
+    "ImmExtractor",
+    "AluDataModule",
+    "CommitStuckCounter",
+    "EnqPolicy",
+    "AgeDetector",
+    "PreDecodeInst"
+  ],
+  "counts": {
+    "targets": 6,
+    "build_files": 6,
+    "reference_modules": 17
+  },
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED",
+    "UHSC_LOCALIZED": "NOT_APPLICABLE_INTERNAL_LEAVES",
+    "PARENT_CLOSURE_MATCHED": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "PENDING_COORDINATOR_REVIEW",
+  "unclosed": [
+    "Independent validator rerun is required.",
+    "Parent closure, license, UHSC top, and user approval remain open."
+  ]
+}

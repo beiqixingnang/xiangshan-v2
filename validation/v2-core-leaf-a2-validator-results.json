@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_CORE_LEAF_A2_VALIDATOR",
+  "batch_id": "V2-SCAN-A2-CORE-CONTROLFLOW",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "targets": {
+    "BranchModule": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.BranchModule-Hardware.py",
+      "sha256": "6d27f2e2ca1cc567854f45439581ce86bcbc10ca4bdb6a57cb27ca38bd54f666"
+    },
+    "JumpDataModule": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.JumpDataModule-Hardware.py",
+      "sha256": "a79bf0d175c1ee257ca0480195d0cbea7a4e0e0e658f7f86f867e97185126fdc"
+    }
+  },
+  "sources": {
+    "BranchModule": {
+      "path": "upstream/src/main/scala/xiangshan/backend/fu/Branch.scala",
+      "sha256": "2553218c21dc4eb5368ae122c47a42b8d3873e326c5f381119a3651998508953"
+    },
+    "JumpDataModule": {
+      "path": "upstream/src/main/scala/xiangshan/backend/fu/Jump.scala",
+      "sha256": "bb2fe1c0bab138197879413d2b1f7c7459a4950db0bbf991a117a0553759b8f5"
+    }
+  },
+  "direct": {
+    "BranchModule": {
+      "vectors": 4,
+      "pass": true
+    },
+    "JumpDataModule": {
+      "vectors": 3,
+      "pass": true
+    }
+  },
+  "generated": {
+    "BranchModule": {
+      "bytes": 7476,
+      "sha256": "cd6a063678701e2eb656fff1168c3ffe866d1840f31ccc5dd310481c7d945616",
+      "module_decl": true,
+      "tools": {
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_returncode": 0,
+        "yosys_returncode": 0,
+        "stderr_tail": "tes 2 bits.\n                                                                                                           : ... note: In instance 'BranchModule'\n   36 |   assign \\$3  = io_func[3:1] == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Fu.BranchModule-Hardware.py:90\" *) 2'h2;\n      |                              ^~\n"
+      }
+    },
+    "JumpDataModule": {
+      "bytes": 7352,
+      "sha256": "a98d1904c7aeb9d2dd631751a992897b6f8a450e5f11acd05be2dccf755abe29",
+      "module_decl": true,
+      "tools": {
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_returncode": 0,
+        "yosys_returncode": 0,
+        "stderr_tail": "7' generates 10 bits.\n                                                                                                             : ... note: In instance 'JumpDataModule'\n   46 |   assign \\$8  = io_pc + (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Fu.JumpDataModule-Hardware.py:95\" *) \\$7 ;\n      |                       ^\n"
+      }
+    }
+  },
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "SOURCE_LEVEL_PENDING",
+    "PARENT_CLOSURE_MATCHED": "PENDING",
+    "UHSC_LOCALIZED": "NO_PROJECT_FACING_RENAME",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "VALIDATOR_PASS_BOUNDED",
+  "acceptance_eligible": false
+}

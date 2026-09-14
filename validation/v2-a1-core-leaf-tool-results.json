@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_A1_VERILATOR_YOSYS",
+  "targets": {
+    "ImmExtractor": {
+      "status": "PASS",
+      "bytes": 19809,
+      "sha256": "7ca0242bd036276b9e68ea4f78011b2cac063eec833fccc2c3870153b9b280ba",
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": "                                                                                                                                                    : ... note: In instance 'ImmExtractor'\n   52 |   assign \\$12  = io_in_immType == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Issue.ImmExtractor-Hardware.py:189\" *) 2'h2;\n      |                                ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-a1-core-leaves/lint/ImmExtractor.sv:53:32: Operator EQ expects 4 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                       : ... note: In instance 'ImmExtractor'\n   53 |   assign \\$13  = io_in_immType == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Issue.ImmExtractor-Hardware.py:189\" *) 1'h1;\n      |                                ^~\n"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": ""
+      }
+    },
+    "AluDataModule": {
+      "status": "PASS",
+      "bytes": 7573049,
+      "sha256": "67765f6c97bb4f4454ca48f3a545b867d9858efed183e3ce02ebf01cf85857c8",
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": "AluDataModule.sv:104971:34: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n104971 |   assign \\$47493  = io_func[6:4] == 1'h1;\n       |                                  ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-a1-core-leaves/lint/AluDataModule.sv:104972:34: Operator EQ expects 4 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n104972 |   assign \\$47494  = io_func[3:0] == 1'h1;\n       |                                  ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-a1-core-leaves/lint/AluDataModule.sv:104977:34: Operator EQ expects 4 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n104977 |   assign \\$47499  = io_func[3:0] == 2'h3;\n       |                                  ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-a1-core-leaves/lint/AluDataModule.sv:104980:34: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n104980 |   assign \\$47502  = io_func[6:4] == 1'h1;\n       |                                  ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-a1-core-leaves/lint/AluDataModule.sv:104981:34: Operator EQ expects 4 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n104981 |   assign \\$47503  = io_func[3:0] == 2'h3;\n       |                                  ^~\n"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": ""
+      }
+    },
+    "CommitStuckCounter": {
+      "status": "PASS",
+      "bytes": 5927,
+      "sha256": "b947de55574abaa8738c7f6ae306d6c5790b7f005717a1eb6868b095a8a27075",
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": ""
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": ""
+      }
+    },
+    "EnqPolicy": {
+      "status": "PASS",
+      "bytes": 269644,
+      "sha256": "1964cdfa8d594f1ccacacea038b0fd4034d1621609690ea27b902abb6f78a7d4",
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": "ut RHS's SEL generates 1 bits.\n                                                                                                                                                      : ... note: In instance 'EnqPolicy'\n 1296 |   assign \\$359  = \\$358  + (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Issue.EnqPolicy-Hardware.py:105\" *) io_canEnq[3];\n      |                          ^\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-a1-core-leaves/lint/EnqPolicy.sv:1297:26: Operator ADD expects 25 bits on the RHS, but RHS's SEL generates 1 bits.\n                                                                                                                                                      : ... note: In instance 'EnqPolicy'\n 1297 |   assign \\$360  = \\$359  + (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Issue.EnqPolicy-Hardware.py:105\" *) io_canEnq[2];\n      |                          ^\n"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": ""
+      }
+    },
+    "AgeDetector": {
+      "status": "PASS",
+      "bytes": 279973,
+      "sha256": "657c066a3fa6cafb4c2abb3f59981f1bf84b2f1a0d9144a4de13a3b37e9d7f02",
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": ""
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": ""
+      }
+    },
+    "PreDecodeInst": {
+      "status": "PASS",
+      "bytes": 85492,
+      "sha256": "87713e7d73ddc229918c8b163bc4ac28fd9c15bb96faae84b7a5e4f39e2d495f",
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": "                                                                                                                                                          : ... note: In instance 'PreDecodeInstProbe'\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-a1-core-leaves/lint/PreDecodeInstProbe.sv:406:26: Operator EQ expects 32 bits on the RHS, but RHS's CONST '7'h63' generates 7 bits.\n                                                                                                                                                              : ... note: In instance 'PreDecodeInstProbe'\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-a1-core-leaves/lint/PreDecodeInstProbe.sv:418:26: Operator EQ expects 5 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                              : ... note: In instance 'PreDecodeInstProbe'\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-a1-core-leaves/lint/PreDecodeInstProbe.sv:421:26: Operator EQ expects 5 bits on the RHS, but RHS's CONST '3'h5' generates 3 bits.\n                                                                                                                                                              : ... note: In instance 'PreDecodeInstProbe'\n"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": ""
+      }
+    }
+  },
+  "status": "PASS"
+}

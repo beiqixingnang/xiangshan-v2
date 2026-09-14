@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_A1_DIRECT_TESTS",
+  "targets": {
+    "ImmExtractor": {
+      "status": "PASS",
+      "vectors": 96
+    },
+    "AluDataModule": {
+      "status": "PASS",
+      "vectors": 5
+    },
+    "CommitStuckCounter": {
+      "status": "PASS",
+      "vectors": 2
+    },
+    "EnqPolicy": {
+      "status": "PASS",
+      "vectors": 8192
+    },
+    "AgeDetector": {
+      "status": "PASS",
+      "vectors": 2
+    },
+    "PreDecodeInst": {
+      "status": "PASS",
+      "scala_pattern_literals_match": true,
+      "scala_branch_table_order": [
+        "C_EBREAK",
+        "C_J",
+        "C_JALR",
+        "C_BRANCH",
+        "JAL",
+        "JALR",
+        "BRANCH"
+      ],
+      "sample_results": {
+        "JAL": {
+          "matched": "JAL",
+          "branch_type": 2,
+          "is_rvc": false,
+          "is_call": false,
+          "is_ret": false
+        },
+        "JALR": {
+          "matched": "JALR",
+          "branch_type": 3,
+          "is_rvc": false,
+          "is_call": false,
+          "is_ret": false
+        },
+        "BRANCH": {
+          "matched": "BRANCH",
+          "branch_type": 1,
+          "is_rvc": false,
+          "is_call": false,
+          "is_ret": false
+        },
+        "C_J": {
+          "matched": "C_J",
+          "branch_type": 2,
+          "is_rvc": true,
+          "is_call": false,
+          "is_ret": false
+        },
+        "C_JALR": {
+          "matched": "C_JALR",
+          "branch_type": 3,
+          "is_rvc": true,
+          "is_call": true,
+          "is_ret": false
+        },
+        "C_EBREAK": {
+          "matched": "C_EBREAK",
+          "branch_type": 0,
+          "is_rvc": true,
+          "is_call": false,
+          "is_ret": false
+        }
+      },
+      "sample_branch_types_expected": {
+        "JAL": 2,
+        "JALR": 3,
+        "BRANCH": 1,
+        "C_J": 2,
+        "C_JALR": 3,
+        "C_EBREAK": 0
+      },
+      "sample_branch_types_pass": true
+    }
+  },
+  "status": "PASS"
+}

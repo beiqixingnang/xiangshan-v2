@@ -8,11 +8,11 @@
   },
   "scan_counts": {
     "xiangshan_scala_files": 325,
-    "existing_candidate_entries": 41,
-    "retained_build_files": 40,
+    "existing_candidate_entries": 43,
+    "retained_build_files": 42,
     "retired_or_excluded": 1,
-    "planned_core_build_files": 40,
-    "families": 30,
+    "planned_core_build_files": 42,
+    "families": 31,
     "parent_closures": 4
   },
   "classification_counts": {
@@ -574,8 +574,34 @@
       "reference_surface": [
         "PreDecode"
       ]
+    },
+    {
+      "id": "BranchModule",
+      "source_scala": "scala/src/main/scala/xiangshan/backend/fu/Branch.scala",
+      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.BranchModule-Hardware.py",
+      "family_id": "core.fu.controlflow",
+      "closure_root": "core.fu",
+      "classification": "REWRITTEN",
+      "disposition": "REWRITTEN",
+      "v2_status": "VALIDATOR_PASS_BOUNDED",
+      "reference_surface": [
+        "BranchModule"
+      ]
+    },
+    {
+      "id": "JumpDataModule",
+      "source_scala": "scala/src/main/scala/xiangshan/backend/fu/Jump.scala",
+      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.JumpDataModule-Hardware.py",
+      "family_id": "core.fu.controlflow",
+      "closure_root": "core.fu",
+      "classification": "REWRITTEN",
+      "disposition": "REWRITTEN",
+      "v2_status": "VALIDATOR_PASS_BOUNDED",
+      "reference_surface": [
+        "JumpDataModule"
+      ]
     }
   ],
-  "status": "IMPLEMENTATION_BATCH_A1_VALIDATED_BOUNDED",
+  "status": "IMPLEMENTATION_BATCH_A2_VALIDATED_BOUNDED",
   "acceptance_eligible": false
 }

@@ -136,145 +136,116 @@ def alu_reference(src0: int, src1: int, func: int, xlen: int = 64) -> int:
     src0 &= mask
     src1 &= mask
     func &= 0x1FF
+    signed_value = lambda value, bits: value - (1 << bits) if value & (1 << (bits - 1)) else value
+    sext = lambda value, bits: signed_value(value & ((1 << bits) - 1), bits) & mask
+    low32 = src0 & 0xFFFFFFFF
     shamt = src1 & 0x3F
     shamt5 = src1 & 0x1F
-    signed = lambda value, bits: value - (1 << bits) if value & (1 << (bits - 1)) else value
-    sext = lambda value, bits: signed(value & ((1 << bits) - 1), bits) & mask
-    zext = lambda value, bits: value & ((1 << bits) - 1)
-    low32 = src0 & 0xFFFFFFFF
-    src1_low32 = src1 & 0xFFFFFFFF
-    # Shift family. / 移位族。
-    sll_src = src0 if (func & 1) else low32
-    sll = (sll_src << shamt) & mask
     bit_shift = (1 << shamt) & mask
-    srl = src0 >> shamt
-    sra = (signed(src0, xlen) >> shamt) & mask
-    rol = ((src0 << shamt) | (src0 >> ((xlen - shamt) & (xlen - 1)))) & mask
-    ror = ((src0 >> shamt) | (src0 << ((xlen - shamt) & (xlen - 1)))) & mask
-    # Widen/add family. / 字宽与加法族。
-    f3, f2, f1, f0 = (func >> 3) & 1, (func >> 2) & 1, (func >> 1) & 1, func & 1
-    word_mask = src0 if f0 else low32
-    odd_src = src0 & 1
-    lui_src1 = sext(src1 & 0xFFF, 12)
-    lui_src2 = src1 & ~0xFFF
-    addw_src1 = src0 if ((not f3 and not f2 and not f0) or f2) else (odd_src if (not f3 and not f2 and f0 and not f1) else lui_src1)
-    # The explicit source predicates are clearer for the four low opcodes.
-    if (func >> 4) & 0x7 == 1 and (func & 0xF) == 1:
-        addw_src1 = odd_src
-    elif (func >> 4) & 0x7 == 1 and (func & 0xF) == 3:
-        addw_src1 = lui_src1
-    elif (func >> 4) & 0x7 == 1:
-        addw_src1 = src0
-    addw_src2 = lui_src2 if (func & 0xF) == 3 else src1
-    addw_half = (addw_src1 + addw_src2) & 0xFFFFFFFF
-    addw_all = [addw_half & 1, addw_half & 0xFF, addw_half & 0xFFFF, sext(addw_half, 16)]
-    addw = addw_all[(func >> 1) & 3] if f2 else sext(addw_half, 32)
-    sub_full = (src0 - src1) & ((1 << (xlen + 1)) - 1)
-    subw = sub_full & 0xFFFFFFFF
-    sllw = (low32 << shamt5) & 0xFFFFFFFF
-    srlw = low32 >> shamt5
-    sraw = (signed(low32, 32) >> shamt5) & 0xFFFFFFFF
-    rolw32 = ((low32 << shamt5) | (low32 >> ((32 - shamt5) & 31))) & 0xFFFFFFFF
-    rorw32 = ((low32 >> shamt5) | (low32 << ((32 - shamt5) & 31))) & 0xFFFFFFFF
-    # Add-op family. / 加法操作族。
-    add_src1 = word_mask
-    if f1:
-        add_src1 = sext(src1 & 0xFFF, 12) if f0 else odd_src
-    if f2:
-        sr_sources = [src0 >> 29, src0 >> 30, src0 >> 31, src0 >> 32]
-        add_src1 = sr_sources[func & 3] if not f3 else add_src1
-    if f3:
-        shmask = src0 if f0 else low32
-        add_src1 = (shmask << (1 << ((func >> 1) & 3))) & mask
-    add_src2 = lui_src2 if (func & 0xF) == 3 else src1
-    add = (add_src1 + add_src2) & mask
-    sradd = (add_src1 + src1) & mask
-    shadd = (add_src1 + src1) & mask
-    # Comparison family. / 比较族。
-    sub_signed = signed(src0, xlen) - signed(src1, xlen)
-    sltu = 1 if src0 >= src1 else 0
-    slt = 1 if signed(src0, xlen) < signed(src1, xlen) else 0
-    maxmin = src1 if (slt ^ f0) else src0
-    maxminu = src1 if (sltu ^ f0) else src0
-    compare = sub_full & mask
-    if f2:
-        compare = maxmin if f1 else maxminu
-    elif f1:
-        compare = slt
-    elif f0:
-        compare = sltu
-    # Misc family. / 杂项族。
-    logic_src1 = src1 ^ (mask if ((not ((func >> 5) & 1)) and f0) else 0)
-    and_v, or_v, xor_v = src0 & logic_src1, src0 | logic_src1, src0 ^ logic_src1
-    orcb = 0
-    for index in range(8):
-        byte = (src0 >> (index * 8)) & 0xFF
-        orcb |= (0xFF if byte else 0) << (index * 8)
-    orh48 = (src0 & ~0xFF) | src1
-    sextb = sext(src0, 8)
-    packh = ((src1 & 0xFF) << 8) | (src0 & 0xFF)
-    sexth = sext(src0, 16)
-    packw = sext(((src1 & 0xFFFF) << 16) | (src0 & 0xFFFF), 32)
-    revb = 0
-    for index in range(8):
-        byte = (src0 >> (index * 8)) & 0xFF
-        revb |= int(f"{byte:08b}"[::-1], 2) << (index * 8)
-    rev8 = int.from_bytes(src0.to_bytes(8, "little"), "big")
-    pack = ((src1 & 0xFFFFFFFF) << 32) | (src0 & 0xFFFFFFFF)
-    logic_vec = [and_v, or_v, xor_v, orcb]
-    pair_vec = [sextb, packh, sexth, packw]
-    rev_vec = [revb, rev8, pack, orh48]
-    custom_vec = [(src0 & 0xFFFFFFFF) << 1, (src0 & 0xFFFFFFFF) << 2,
-                  (src0 & 0xFFFFFFFF) << 3, (src0 >> 8) & 0xFF]
-    misc_logic = logic_vec[(func >> 1) & 3]
-    misc = pair_vec[func & 3] if f3 else misc_logic
-    if (func >> 4) & 1:
-        misc = custom_vec[func & 3] if f3 else rev_vec[func & 3]
-    if (func >> 5) & 1:
-        misc = (misc_logic & (0xFFFF if f0 else 1)) & 0xFFFF
-    # Final AluResSel group. / 最终 AluResSel 分组选择。
-    group = (func >> 4) & 7
-    if group == 0:
-        result = sll if not f3 else (sllw if not f0 else 0)
-        if f3:
-            result = rolw32 if (f2 and not f0) else (rorw32 if (f2 and f0) else (sraw if f1 else (srlw if f0 else sllw)))
-            result = sext(result, 32)
-        elif f0:
-            result = sll
-    elif group == 1:
-        result = sext(addw_half, 32)
-        if f2:
-            result = addw
-        elif f3:
-            result = sext(rolw32 if not f0 else rorw32, 32)
-        elif f2:
-            result = sext(subw, 32)
-    elif group == 2:
-        result = shadd if f3 else (sradd if f2 else add)
-    elif group == 3:
-        result = compare
-    elif group in (4, 5, 6):
-        result = misc
-    elif group == 7:
-        condition_zero = src1 == 0
-        result = 0 if ((not f1 and condition_zero) or (f1 and not condition_zero)) else src0
-    else:
-        result = 0
-    # Exact named word cases override the compact group expression.
-    # 精确命名字宽操作覆盖紧凑分组表达式。
+    if func == ALU_OPCODES["slliuw"]:
+        return (low32 << shamt) & mask
+    if func == ALU_OPCODES["sll"]:
+        return (src0 << shamt) & mask
+    if func == ALU_OPCODES["bclr"]:
+        return src0 & ~bit_shift & mask
+    if func == ALU_OPCODES["bset"]:
+        return src0 | bit_shift
+    if func == ALU_OPCODES["binv"]:
+        return src0 ^ bit_shift
+    if func == ALU_OPCODES["srl"]:
+        return src0 >> shamt
+    if func == ALU_OPCODES["bext"]:
+        return (src0 >> shamt) & 1
+    if func == ALU_OPCODES["sra"]:
+        return (signed_value(src0, xlen) >> shamt) & mask
+    if func == ALU_OPCODES["rol"]:
+        return ((src0 << shamt) | (src0 >> ((xlen - shamt) & (xlen - 1)))) & mask
+    if func == ALU_OPCODES["ror"]:
+        return ((src0 >> shamt) | (src0 << ((xlen - shamt) & (xlen - 1)))) & mask
+    addw = (src0 + src1) & 0xFFFFFFFF
+    if func == ALU_OPCODES["addw"]:
+        return sext(addw, 32)
+    if func == ALU_OPCODES["oddaddw"]:
+        return sext(((src0 & 1) + src1) & 0xFFFFFFFF, 32)
     if func == ALU_OPCODES["subw"]:
-        result = sext(subw, 32)
-    elif func == ALU_OPCODES["sllw"]:
-        result = sext(sllw, 32)
-    elif func == ALU_OPCODES["srlw"]:
-        result = sext(srlw, 32)
-    elif func == ALU_OPCODES["sraw"]:
-        result = sext(sraw, 32)
-    elif func == ALU_OPCODES["rolw"]:
-        result = sext(rolw32, 32)
-    elif func == ALU_OPCODES["rorw"]:
-        result = sext(rorw32, 32)
-    return result & mask
+        return sext((src0 - src1) & 0xFFFFFFFF, 32)
+    if func == ALU_OPCODES["lui32addw"]:
+        return sext((signed_value(src1 & 0xFFF, 12) + (src1 & 0xFFFFF000)) & 0xFFFFFFFF, 32)
+    if func == ALU_OPCODES["addwbit"]:
+        return addw & 1
+    if func == ALU_OPCODES["addwbyte"]:
+        return addw & 0xFF
+    if func == ALU_OPCODES["addwzexth"]:
+        return addw & 0xFFFF
+    if func == ALU_OPCODES["addwsexth"]:
+        return sext(addw, 16)
+    if func == ALU_OPCODES["sllw"]:
+        return sext(low32 << shamt5, 32)
+    if func == ALU_OPCODES["srlw"]:
+        return sext(low32 >> shamt5, 32)
+    if func == ALU_OPCODES["sraw"]:
+        return sext(signed_value(low32, 32) >> shamt5, 32)
+    if func == ALU_OPCODES["rolw"]:
+        return sext((low32 << shamt5) | (low32 >> ((32 - shamt5) & 31)), 32)
+    if func == ALU_OPCODES["rorw"]:
+        return sext((low32 >> shamt5) | (low32 << ((32 - shamt5) & 31)), 32)
+    if func == ALU_OPCODES["adduw"]:
+        return (low32 + src1) & mask
+    if func == ALU_OPCODES["add"]:
+        return (src0 + src1) & mask
+    if func == ALU_OPCODES["oddadd"]:
+        return ((src0 & 1) + src1) & mask
+    if func == ALU_OPCODES["lui32add"]:
+        return (signed_value(src1 & 0xFFF, 12) + (src1 & ~0xFFF)) & mask
+    if func in (ALU_OPCODES["sr29add"], ALU_OPCODES["sr30add"], ALU_OPCODES["sr31add"], ALU_OPCODES["sr32add"]):
+        shift = {ALU_OPCODES["sr29add"]: 29, ALU_OPCODES["sr30add"]: 30, ALU_OPCODES["sr31add"]: 31, ALU_OPCODES["sr32add"]: 32}[func]
+        return ((src0 >> shift) + src1) & mask
+    if func in (ALU_OPCODES["sh1adduw"], ALU_OPCODES["sh2adduw"], ALU_OPCODES["sh3adduw"]):
+        shift = {ALU_OPCODES["sh1adduw"]: 1, ALU_OPCODES["sh2adduw"]: 2, ALU_OPCODES["sh3adduw"]: 3}[func]
+        return ((low32 << shift) + src1) & mask
+    if func in (ALU_OPCODES["sh1add"], ALU_OPCODES["sh2add"], ALU_OPCODES["sh3add"], ALU_OPCODES["sh4add"]):
+        shift = {ALU_OPCODES["sh1add"]: 1, ALU_OPCODES["sh2add"]: 2, ALU_OPCODES["sh3add"]: 3, ALU_OPCODES["sh4add"]: 4}[func]
+        return ((src0 << shift) + src1) & mask
+    if func == ALU_OPCODES["sub"]:
+        return (src0 - src1) & mask
+    if func == ALU_OPCODES["sltu"]:
+        return int(src0 < src1)
+    if func == ALU_OPCODES["slt"]:
+        return int(signed_value(src0, xlen) < signed_value(src1, xlen))
+    if func in (ALU_OPCODES["maxu"], ALU_OPCODES["minu"]):
+        return max(src0, src1) if func == ALU_OPCODES["maxu"] else min(src0, src1)
+    if func in (ALU_OPCODES["max"], ALU_OPCODES["min"]):
+        a, b = signed_value(src0, xlen), signed_value(src1, xlen)
+        return (src0 if a >= b else src1) if func == ALU_OPCODES["max"] else (src0 if a <= b else src1)
+    logic = {
+        ALU_OPCODES["and"]: src0 & src1, ALU_OPCODES["andn"]: src0 & ~src1,
+        ALU_OPCODES["or"]: src0 | src1, ALU_OPCODES["orn"]: src0 | ~src1,
+        ALU_OPCODES["xor"]: src0 ^ src1, ALU_OPCODES["xnor"]: ~(src0 ^ src1),
+    }
+    if func in logic:
+        return logic[func] & mask
+    if func == ALU_OPCODES["orcb"]:
+        return sum((0xFF if ((src0 >> (8 * i)) & 0xFF) else 0) << (8 * i) for i in range(8))
+    if func == ALU_OPCODES["sextb"]:
+        return sext(src0, 8)
+    if func == ALU_OPCODES["packh"]:
+        return ((src1 & 0xFF) << 8) | (src0 & 0xFF)
+    if func == ALU_OPCODES["sexth"]:
+        return sext(src0, 16)
+    if func == ALU_OPCODES["packw"]:
+        return sext(((src1 & 0xFFFF) << 16) | (src0 & 0xFFFF), 32)
+    if func == ALU_OPCODES["revb"]:
+        return sum(int(f"{(src0 >> (8 * i)) & 0xFF:08b}"[::-1], 2) << (8 * i) for i in range(8))
+    if func == ALU_OPCODES["rev8"]:
+        return int.from_bytes(src0.to_bytes(8, "little"), "big")
+    if func == ALU_OPCODES["pack"]:
+        return ((src1 & 0xFFFFFFFF) << 32) | (src0 & 0xFFFFFFFF)
+    if func == ALU_OPCODES["orh48"]:
+        return (src0 & ~0xFF) | src1
+    if func in (ALU_OPCODES["czero_eqz"], ALU_OPCODES["czero_nez"]):
+        zero = src1 == 0
+        return 0 if (zero == (func == ALU_OPCODES["czero_eqz"])) else src0
+    return 0
 
 
 class AluDataModule(Elaboratable):
