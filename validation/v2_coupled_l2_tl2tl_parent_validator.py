@@ -38,6 +38,7 @@ from amaranth.sim import Simulator
 # =============================================================================
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.CoupledL2.Directory-Hardware.py"
+SLICE_TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.CoupledL2.Slice-Hardware.py"
 REFERENCE = Path(r"\\wsl$\Debian\home\lishuo\xs-v2-local\build\rtl\XSTop.sv")
 OUT = ROOT / "validation/v2-coupledL2-tl2tl-parent-results.json"
 COVERAGE = ROOT / "validation/v2-coupledL2-tl2tl-parent-coverage-manifest.json"
@@ -77,6 +78,19 @@ def load_target() -> ModuleType:
     spec = importlib.util.spec_from_file_location("v2_tl2tl_parent_target", TARGET)
     if spec is None or spec.loader is None:
         raise RuntimeError(f"cannot load target: {TARGET}")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+# Load one explicitly selected child for validator-only injection. / 仅为验证器注入显式选定的一个 child。
+def load_child(path: Path, name: str) -> ModuleType:
+    """Import a child Build file without changing target source imports. / 导入 child Build 文件且不改变目标源导入。"""
+
+    spec = importlib.util.spec_from_file_location(name, path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"cannot load child: {path}")
     module = importlib.util.module_from_spec(spec)
     sys.modules[spec.name] = module
     spec.loader.exec_module(module)
@@ -351,6 +365,38 @@ def direct_bench(module: ModuleType) -> dict[str, Any]:
             "trace_sha256": hashlib.sha256(canonical).hexdigest()}
 
 
+# Elaborate four real slice children through the selected parent boundary. /
+# 将四个真实 slice child 通过选定父级边界展开。
+def child_integration(module: ModuleType) -> dict[str, Any]:
+    """Check injected child hierarchy and parent port preservation. / 检查注入 child 层级并确认父级端口保持。"""
+
+    child_module = load_child(SLICE_TARGET, "v2_tl2tl_parent_slice_child")
+    children = [child_module.CoupledL2Slice() for _ in range(4)]
+    rtl = module.build_parent_verilog({"module": "UHSCTL2TLCoupledL2"}, {"slices": children})
+    parent_schema = generated_schema(rtl, "UHSCTL2TLCoupledL2")
+    module_names = sorted(set(re.findall(r"^module\s+([^ (]+)\s*\(", rtl, re.MULTILINE)))
+    with tempfile.TemporaryDirectory(prefix="v2_tl2tl_parent_children_") as directory:
+        path = Path(directory) / "UHSCTL2TLCoupledL2-children.sv"
+        path.write_text(rtl, encoding="utf-8", newline="\n")
+        converted = subprocess.run(["wsl.exe", "-e", "wslpath", "-a", str(path)], capture_output=True,
+                                   text=True, encoding="utf-8", errors="replace", check=True).stdout.strip()
+        verilator = subprocess.run(["wsl.exe", "-e", "bash", "-lc",
+                                    f"verilator --lint-only -Wno-fatal --top-module UHSCTL2TLCoupledL2 '{converted}'"],
+                                   capture_output=True, text=True, encoding="utf-8", errors="replace", check=False)
+        yosys = subprocess.run(["wsl.exe", "-e", "bash", "-lc",
+                                f"yosys -Q -p 'read_verilog -sv {converted}; hierarchy -top UHSCTL2TLCoupledL2; proc; opt; check'"],
+                               capture_output=True, text=True, encoding="utf-8", errors="replace", check=False)
+    expected_count = len(module.tl2tl_parent_port_contract(module.TL2TLCoupledL2ParentConfig()))
+    child_modules = [name for name in module_names if "tl2tl_slice_" in name]
+    passed = len(parent_schema) == expected_count and len(child_modules) == 4 and verilator.returncode == 0 and yosys.returncode == 0
+    return {"status": "PASS" if passed else "FAIL", "parent_ports": len(parent_schema),
+            "expected_parent_ports": expected_count, "child_module_count": len(child_modules),
+            "modules": module_names, "verilator": "PASS" if verilator.returncode == 0 else "FAIL",
+            "yosys": "PASS" if yosys.returncode == 0 else "FAIL", "rtl_bytes": len(rtl.encode()),
+            "rtl_sha256": hashlib.sha256(rtl.encode()).hexdigest(),
+            "verilator_returncode": verilator.returncode, "yosys_returncode": yosys.returncode}
+
+
 # Run Verilator/Yosys on the generated parent. / 对生成父级运行 Verilator/Yosys。
 def backend_gates(module: ModuleType) -> dict[str, Any]:
     """Return HDL backend evidence. / 返回 HDL 后端证据。"""
@@ -404,9 +450,11 @@ def main() -> int:
     source = source_inventory()
     contract = contract_differential(module)
     direct = direct_bench(module)
+    children = child_integration(module)
     backend = backend_gates(module)
     passed = all((static["status"] == "PASS", source["status"] == "PASS", contract["status"] == "PASS",
-                  direct["status"] == "PASS", backend["verilator"] == "PASS", backend["yosys"] == "PASS"))
+                  direct["status"] == "PASS", children["status"] == "PASS",
+                  backend["verilator"] == "PASS", backend["yosys"] == "PASS"))
     payload = {
         "schema_version": 1,
         "kind": "XIANGSHAN_KUNMINGHU_V2_COUPLEDL2_TL2TL_PARENT",
@@ -415,7 +463,7 @@ def main() -> int:
         "source_scala_file_count": len(SCALA_SOURCES),
         "target": {"path": static["path"], "sha256": static["sha256"]},
         "static": static, "source_inventory": source, "contract_differential": contract,
-        "direct": direct, "backend": backend,
+        "direct": direct, "child_integration": children, "backend": backend,
         "reference": {"path": str(REFERENCE), "expected_sha256": REFERENCE_SHA256,
                        "observed_sha256": contract["reference"].get("sha256"),
                        "module": "TL2TLCoupledL2", "selected_top": contract["reference"].get("selected_top"),
@@ -442,6 +490,7 @@ def main() -> int:
         "batch_id": payload["batch_id"], "source_scala_file_count": len(SCALA_SOURCES),
         "reference_port_count": contract["reference_count"], "generated_port_count": contract["generated_count"],
         "contract_status": contract["status"], "direct_checks": direct["checks"],
+        "child_integration": children,
         "backend": {"verilator": backend["verilator"], "yosys": backend["yosys"]},
         "covered": ["reset", "inner A to outer A", "outer D to inner D", "inner C to outer C",
                     "outer B to inner B", "E sink relay", "TPMeta one-entry relay"],
@@ -450,7 +499,7 @@ def main() -> int:
     AUDIT.write_text(json.dumps({
         "schema_version": 1, "kind": "XIANGSHAN_KUNMINGHU_V2_COUPLEDL2_TL2TL_PARENT_CONTRACT_AUDIT",
         "batch_id": payload["batch_id"], "static": static["status"], "source_inventory": source["status"],
-        "contract_differential": contract["status"], "direct": direct["status"], "backend": backend,
+        "contract_differential": contract["status"], "direct": direct["status"], "child_integration": children["status"], "backend": backend,
         "selected_top": contract["reference"].get("selected_top"),
         "parent_closure": "PENDING_FULL_MSHR_SRAM_PREFETCH_DIPLOMACY_BEHAVIOR",
         "accepted": "NOT_ALLOWED", "acceptance_eligible": False,

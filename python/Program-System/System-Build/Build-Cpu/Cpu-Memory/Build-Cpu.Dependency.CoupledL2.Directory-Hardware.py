@@ -758,6 +758,8 @@ class TL2TLCoupledL2ParentConfig:
 
     banks: int = 4
     address_bits: int = 48
+    bank_bits: int = 2
+    offset_bits: int = 6
     data_bits: int = 256
     inner_source_bits: int = 7
     outer_source_bits: int = 8
@@ -771,7 +773,7 @@ class TL2TLCoupledL2ParentConfig:
     def __post_init__(self) -> None:
         if self.banks != 4:
             raise ValueError("locked Kunminghu V2 TL2TL parent uses four banks")
-        if self.address_bits != 48 or self.data_bits != 256:
+        if self.address_bits != 48 or self.bank_bits != 2 or self.offset_bits != 6 or self.data_bits != 256:
             raise ValueError("locked Kunminghu V2 TL2TL parent uses 48/256-bit addresses/data")
         if self.inner_source_bits != 7 or self.outer_source_bits != 8:
             raise ValueError("locked TL2TL source widths are 7 and 8 bits")
@@ -912,8 +914,15 @@ class TL2TLCoupledL2Parent(Elaboratable):
     # Construct all source-shaped parent signals in generated order. / 按生成顺序构造全部源形状父级信号。
     def __init__(self, configuration: TL2TLCoupledL2ParentConfig | None = None,
                  injected_dependencies: dict[str, Any] | None = None) -> None:
-        del injected_dependencies
         self.configuration = configuration or TL2TLCoupledL2ParentConfig()
+        dependencies = injected_dependencies if isinstance(injected_dependencies, dict) else {}
+        supplied_slices = dependencies.get("slices", dependencies.get("slice_children", ()))
+        if supplied_slices is None:
+            supplied_slices = ()
+        if not isinstance(supplied_slices, (tuple, list)):
+            supplied_slices = (supplied_slices,)
+        self.child_slices = tuple(supplied_slices)
+        self.child_dependencies = dict(dependencies)
         self._ports: list[Signal] = []
         self._inputs: list[Signal] = []
         self._outputs: list[Signal] = []
@@ -992,6 +1001,9 @@ class TL2TLCoupledL2Parent(Elaboratable):
         tp_pending = Signal(name="tl2tl_tp_pending")
         tp_hartid = Signal(6, name="tl2tl_tp_hartid")
         tp_raw = [Signal(42, name=f"tl2tl_tp_raw_{index}") for index in range(12)]
+        child_miss_terms: list[Any] = []
+        child_hint_terms: list[Any] = []
+        child_error_terms: list[Any] = []
         tp_in_fire = self.auto_tpmeta_sink_in_valid & ~tp_pending
         tp_out_valid = tp_pending
         m.d.comb += [
@@ -1018,6 +1030,91 @@ class TL2TLCoupledL2Parent(Elaboratable):
         for bank in range(c.banks):
             inner = f"auto_in_{bank}_"
             outer = f"auto_out_{bank}_"
+            child = self.child_slices[bank] if bank < len(self.child_slices) else None
+            if child is not None:
+                # A supplied slice is an explicit dependency injection.  The
+                # parent owns the bank-qualified outer address, while the
+                # child keeps the slice-local address and cache state.
+                # 注入的 slice 是显式依赖；父级负责 bank 地址限定，child
+                # 保留 slice-local 地址和缓存状态。
+                m.submodules[f"tl2tl_slice_{bank}"] = child
+                child_clock = getattr(child, "clock", None)
+                child_reset = getattr(child, "reset", None)
+                child_flush = getattr(child, "flush", None)
+                child_slice_id = getattr(child, "slice_id", None)
+                if child_clock is not None:
+                    m.d.comb += child_clock.eq(self.clock)
+                if child_reset is not None:
+                    m.d.comb += child_reset.eq(self.reset)
+                if child_flush is not None:
+                    m.d.comb += child_flush.eq(0)
+                if child_slice_id is not None:
+                    m.d.comb += child_slice_id.eq(bank)
+
+                # Direction is fixed by the TileLink channel role. /
+                # 方向由 TileLink 通道角色固定决定。
+                channel_inputs = {
+                    "in_a": ("valid", "bits_opcode", "bits_param", "bits_size", "bits_source", "bits_address",
+                              "bits_user_reqSource", "bits_user_alias", "bits_user_vaddr", "bits_user_needHint",
+                              "bits_echo_isKeyword", "bits_mask", "bits_data", "bits_corrupt"),
+                    "in_b": ("ready",),
+                    "in_c": ("valid", "bits_opcode", "bits_param", "bits_size", "bits_source", "bits_address",
+                              "bits_user_reqSource", "bits_user_alias", "bits_user_vaddr", "bits_user_needHint",
+                              "bits_echo_isKeyword", "bits_data", "bits_corrupt"),
+                    "in_d": ("ready",),
+                    "in_e": ("valid", "bits_sink"),
+                    "out_a": ("ready",),
+                    "out_b": ("valid", "bits_opcode", "bits_param", "bits_size", "bits_source", "bits_address",
+                               "bits_mask", "bits_data", "bits_corrupt"),
+                    "out_c": ("ready",),
+                    "out_d": ("valid", "bits_opcode", "bits_param", "bits_size", "bits_source", "bits_sink",
+                               "bits_denied", "bits_echo_blockisdirty", "bits_data", "bits_corrupt"),
+                    "out_e": ("ready",),
+                }
+                for channel, fields in channel_inputs.items():
+                    parent_prefix = (inner if channel.startswith("in_") else outer) + (channel[3:] if channel.startswith("in_") else channel[4:]) + "_"
+                    child_prefix = channel + "_"
+                    for field_name in fields:
+                        parent_signal = getattr(self, parent_prefix + field_name)
+                        child_signal = getattr(child, child_prefix + field_name)
+                        m.d.comb += child_signal.eq(parent_signal)
+                    # Every field not listed above is an output of the child
+                    # and is copied back to the source-shaped parent port.
+                    output_fields = {
+                        "in_a": ("ready",),
+                        "in_b": ("valid", "bits_opcode", "bits_param", "bits_size", "bits_source", "bits_address", "bits_mask", "bits_data", "bits_corrupt"),
+                        "in_c": ("ready",),
+                        "in_d": ("valid", "bits_opcode", "bits_param", "bits_size", "bits_source", "bits_sink", "bits_denied", "bits_echo_isKeyword", "bits_data", "bits_corrupt"),
+                        "in_e": ("ready",),
+                        "out_a": ("valid", "bits_opcode", "bits_param", "bits_size", "bits_source", "bits_address", "bits_user_reqSource", "bits_echo_blockisdirty", "bits_mask", "bits_data", "bits_corrupt"),
+                        "out_b": ("ready",),
+                        "out_c": ("valid", "bits_opcode", "bits_param", "bits_size", "bits_source", "bits_address", "bits_user_reqSource", "bits_echo_blockisdirty", "bits_data", "bits_corrupt"),
+                        "out_d": ("ready",),
+                        "out_e": ("valid", "bits_sink"),
+                    }[channel]
+                    for field_name in output_fields:
+                        parent_signal = getattr(self, parent_prefix + field_name)
+                        child_signal = getattr(child, child_prefix + field_name)
+                        if field_name == "bits_address" and channel in {"out_a", "out_c"} and c.bank_bits:
+                            # Restore bank bits between local slice and parent.
+                            # 在 slice-local 地址与父级之间恢复 bank 位。
+                            local_address = child_signal
+                            high = local_address[c.offset_bits:]
+                            low = local_address[:c.offset_bits]
+                            parent_value = (high << (c.bank_bits + c.offset_bits)) | (bank << c.offset_bits) | low
+                            m.d.comb += parent_signal.eq(parent_value)
+                        else:
+                            m.d.comb += parent_signal.eq(child_signal)
+                for name in ("prefetch_req_valid", "prefetch_resp_ready", "l1Hint_ready"):
+                    if hasattr(child, name):
+                        m.d.comb += getattr(child, name).eq(0 if name == "prefetch_req_valid" else 1)
+                if hasattr(child, "l2Miss"):
+                    child_miss_terms.append(child.l2Miss)
+                if hasattr(child, "l1Hint_valid"):
+                    child_hint_terms.append(child.l1Hint_valid)
+                if hasattr(child, "error_valid"):
+                    child_error_terms.append(child.error_valid)
+                continue
             # Use one-bit Boolean equations instead of logical operators on
             # the two-bit state register; this keeps generated RTL width-clean.
             # 使用单比特布尔方程而不是对两位状态寄存器做逻辑运算，确保生成 RTL 位宽干净。
@@ -1118,13 +1215,22 @@ class TL2TLCoupledL2Parent(Elaboratable):
 
         # Prefetch/TLB/error/performance outputs are explicit quiescent values. /
         # 预取/TLB/错误/性能输出保持显式静默值。
+        child_miss = child_miss_terms[0] if child_miss_terms else 0
+        child_hint = child_hint_terms[0] if child_hint_terms else 0
+        child_error = child_error_terms[0] if child_error_terms else 0
+        for term in child_miss_terms[1:]:
+            child_miss = child_miss | term
+        for term in child_hint_terms[1:]:
+            child_hint = child_hint | term
+        for term in child_error_terms[1:]:
+            child_error = child_error | term
         m.d.comb += [
-            self.io_l2_hint_valid.eq(self.auto_pf_recv_in_addr_valid & self.io_pfCtrlFromCore_l2_pf_master_en),
+            self.io_l2_hint_valid.eq(child_hint | (self.auto_pf_recv_in_addr_valid & self.io_pfCtrlFromCore_l2_pf_master_en)),
             self.io_l2_hint_bits_sourceId.eq(self.auto_pf_recv_in_pf_source),
             self.io_l2_hint_bits_isKeyword.eq(0), self.io_l2_tlb_req_req_valid.eq(0),
             self.io_l2_tlb_req_req_bits_vaddr.eq(0), self.io_l2_tlb_req_req_bits_cmd.eq(0),
             self.io_l2_tlb_req_req_bits_isPrefetch.eq(0), self.io_l2_tlb_req_req_bits_kill.eq(0),
-            self.io_l2_tlb_req_req_bits_no_translate.eq(0), self.io_l2Miss.eq(0), self.io_error_valid.eq(0),
+            self.io_l2_tlb_req_req_bits_no_translate.eq(0), self.io_l2Miss.eq(child_miss), self.io_error_valid.eq(child_error),
             self.io_error_address.eq(0),
         ]
         return m
@@ -1180,7 +1286,7 @@ def build_verilog(configuration, injected_dependencies):
 def build_parent_verilog(configuration, injected_dependencies):
     """Return deterministic TL2TLCoupledL2 parent Verilog. / 返回确定性的 TL2TLCoupledL2 父级 Verilog。"""
 
-    del injected_dependencies
+    dependencies = injected_dependencies if isinstance(injected_dependencies, dict) else {}
     if isinstance(configuration, TL2TLCoupledL2ParentConfig):
         cfg, name = configuration, "UHSCTL2TLCoupledL2"
     elif isinstance(configuration, dict):
@@ -1191,7 +1297,7 @@ def build_parent_verilog(configuration, injected_dependencies):
         cfg, name = TL2TLCoupledL2ParentConfig(), "UHSCTL2TLCoupledL2"
     else:
         raise TypeError("configuration must be TL2TLCoupledL2ParentConfig, dict, or None")
-    top = TL2TLCoupledL2Parent(cfg)
+    top = TL2TLCoupledL2Parent(cfg, dependencies)
     return verilog.convert(top, name=name, ports=list(top.public_ports()), emit_src=False)
 
 
