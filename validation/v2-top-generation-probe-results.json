@@ -4,7 +4,7 @@
   "status": "GENERATION_PROBE_PASS_REDUCED",
   "complete_gate": "BLOCKED_MISSING_CLOSURES",
   "accepted": "NOT_ALLOWED",
-  "build_file_count": 59,
+  "build_file_count": 60,
   "build_files": [
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Datapath.DataSource-Hardware.py",
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Datapath.NewPipelineConnect-Hardware.py",
@@ -58,6 +58,7 @@
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Ifu.RvcExpander-Hardware.py",
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Top-Hardware.py",
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Top.UHSCTop-GenerationProbe-Hardware.py",
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Top.XiangShan-Roots-Hardware.py",
     "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Cache.Dcache.Mainpipe.AMOALU-Hardware.py",
     "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Cache.Dcache.Meta.TagArray-Hardware.py",
     "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.CoupledL2.Slice-Hardware.py",
@@ -77,8 +78,8 @@
   },
   "integrated_reduced_hierarchy": {
     "path": "validation/.work/uhsc-top-integrated-probe.sv",
-    "sha256": "515d53a81eace3d4893686f7f5f618bb9de81090a43fbb47b5a7b57fdc67d902",
-    "bytes": 2779135,
+    "sha256": "7ef2e8276ee8b82d34a90f876f87891aea8b3428e911d7c9068dbdb095dd34f4",
+    "bytes": 2779699,
     "modules": [
       "UHSCTopIntegratedProbe",
       "UHSCTopIntegratedProbe.backend",
@@ -203,14 +204,19 @@
       ]
     }
   },
-  "defined_build_classes": [],
-  "missing_build_roots": [
+  "defined_build_classes": [
+    "L2Top",
+    "XSCore",
+    "XSTile",
+    "XSTop"
+  ],
+  "missing_build_roots": [],
+  "reduced_boundary_roots": [
     "XSCore",
     "L2Top",
     "XSTile",
     "XSTop"
   ],
-  "reduced_boundary_roots": [],
   "locked_baseline": {
     "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
     "reference_xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",

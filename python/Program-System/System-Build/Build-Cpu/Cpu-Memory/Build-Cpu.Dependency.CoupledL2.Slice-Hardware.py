@@ -16,7 +16,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
-from amaranth import Array, Cat, ClockDomain, Elaboratable, Memory, Module, Mux, Signal
+from amaranth import Array, Cat, ClockDomain, Const, Elaboratable, Memory, Module, Mux, Signal
 from amaranth.back import verilog
 
 
@@ -389,6 +389,7 @@ class CoupledL2Slice(Elaboratable):
         pending_param = Signal(3, name="pending_param")
         pending_size = Signal(3, name="pending_size")
         pending_source = Signal(c.source_bits, name="pending_source")
+        pending_outer_source = Signal(c.sink_bits, name="pending_outer_source")
         pending_address = Signal(c.address_bits, name="pending_address")
         pending_req_source = Signal(c.req_source_bits, name="pending_req_source")
         pending_alias = Signal(c.alias_bits, name="pending_alias")
@@ -419,9 +420,17 @@ class CoupledL2Slice(Elaboratable):
         l2_miss_pulse = Signal(name="l2_miss_pulse")
         hint_pending = Signal(name="hint_pending")
 
+        # Convert a full edge address to the local slice address.  CoupledL2's
+        # parent restores bank bits when it reconnects the outer network.
+        # 将完整 edge 地址转换为 slice 本地地址；CoupledL2 父级重连外部网络时恢复 bank 位。
+        def local_address_expr(address: Any) -> Any:
+            if c.bank_bits:
+                return Cat(Const(0, c.bank_bits), address[c.offset_bits + c.bank_bits:], address[:c.offset_bits])
+            return address
+
         # Combinational channel defaults and output payloads. / 组合通道默认值及输出载荷。
         m.d.comb += [
-            self.in_a_ready.eq((state == 0) & ~self.flush & (req_bank == self.slice_id if c.bank_bits else 1)),
+            self.in_a_ready.eq((state == 0) & ~self.flush),
             self.in_c_ready.eq((state == 0) & ~self.flush),
             self.in_e_ready.eq(1),
             self.in_d_valid.eq(state == 1), self.in_d_bits_opcode.eq(response_opcode),
@@ -430,17 +439,17 @@ class CoupledL2Slice(Elaboratable):
             self.in_d_bits_denied.eq(response_denied), self.in_d_bits_echo_isKeyword.eq(pending_keyword),
             self.in_d_bits_data.eq(response_data), self.in_d_bits_corrupt.eq(response_corrupt),
             self.out_a_valid.eq(state == 2), self.out_a_bits_opcode.eq(6), self.out_a_bits_param.eq(0),
-            self.out_a_bits_size.eq(pending_size), self.out_a_bits_source.eq(pending_source),
+            self.out_a_bits_size.eq(pending_size), self.out_a_bits_source.eq(pending_outer_source),
             self.out_a_bits_address.eq(pending_address), self.out_a_bits_user_reqSource.eq(pending_req_source),
             self.out_a_bits_echo_blockisdirty.eq(pending_dirty), self.out_a_bits_mask.eq((1 << c.mask_bits) - 1),
             self.out_a_bits_data.eq(pending_data), self.out_a_bits_corrupt.eq(0),
             self.out_c_valid.eq(outer_c_pending), self.out_c_bits_opcode.eq(7), self.out_c_bits_param.eq(0),
-            self.out_c_bits_size.eq(pending_size), self.out_c_bits_source.eq(pending_source),
+            self.out_c_bits_size.eq(pending_size), self.out_c_bits_source.eq(pending_outer_source),
             self.out_c_bits_address.eq(pending_address), self.out_c_bits_user_reqSource.eq(pending_req_source),
             self.out_c_bits_echo_blockisdirty.eq(1), self.out_c_bits_data.eq(Array([x.data for x in data_reads])[pending_way][:c.data_bits]),
             self.out_c_bits_corrupt.eq(0),
             self.in_b_valid.eq(outer_b_pending), self.in_b_bits_opcode.eq(6), self.in_b_bits_param.eq(0),
-            self.in_b_bits_size.eq(pending_size), self.in_b_bits_source.eq(pending_source),
+            self.in_b_bits_size.eq(pending_size), self.in_b_bits_source.eq(0),
             self.in_b_bits_address.eq(pending_address), self.in_b_bits_mask.eq((1 << c.mask_bits) - 1),
             self.in_b_bits_data.eq(0), self.in_b_bits_corrupt.eq(0),
             self.out_d_ready.eq((state == 4) & ~self.flush), self.out_e_valid.eq(0),
@@ -529,10 +538,11 @@ class CoupledL2Slice(Elaboratable):
             m.d.coupled_l2 += [l2_miss_pulse.eq(0), hint_pending.eq(0)]
             with m.If(state == 0):
                 with m.If(probe_fire):
-                    m.d.coupled_l2 += [pending_address.eq(self.out_b_bits_address), pending_size.eq(self.out_b_bits_size),
-                                       pending_source.eq(self.out_b_bits_source), outer_b_pending.eq(1), state.eq(5)]
+                    m.d.coupled_l2 += [pending_address.eq(local_address_expr(self.out_b_bits_address)), pending_size.eq(self.out_b_bits_size),
+                                       pending_source.eq(self.out_b_bits_source), pending_outer_source.eq(0),
+                                       outer_b_pending.eq(1), state.eq(5)]
                 with m.Elif(release_fire):
-                    m.d.coupled_l2 += [pending_address.eq(self.in_c_bits_address), pending_source.eq(self.in_c_bits_source),
+                    m.d.coupled_l2 += [pending_address.eq(local_address_expr(self.in_c_bits_address)), pending_source.eq(self.in_c_bits_source), pending_outer_source.eq(0),
                                        pending_size.eq(self.in_c_bits_size), pending_data.eq(self.in_c_bits_data),
                                        pending_opcode.eq(self.in_c_bits_opcode), state.eq(1), response_opcode.eq(6),
                                        response_source.eq(self.in_c_bits_source), response_size.eq(self.in_c_bits_size),
@@ -545,7 +555,7 @@ class CoupledL2Slice(Elaboratable):
                                        pending_param.eq(Mux(request_fire, self.in_a_bits_param, 0)),
                                        pending_size.eq(Mux(request_fire, self.in_a_bits_size, c.offset_bits)),
                                        pending_source.eq(Mux(request_fire, self.in_a_bits_source, self.prefetch_req_bits_source)),
-                                       pending_address.eq(Mux(request_fire, self.in_a_bits_address,
+                                       pending_address.eq(Mux(request_fire, local_address_expr(self.in_a_bits_address),
                                                               restore_address_expr(self.prefetch_req_bits_tag, self.prefetch_req_bits_set,
                                                                                    0, self.slice_id, c))),
                                        pending_req_source.eq(Mux(request_fire, self.in_a_bits_user_reqSource, self.prefetch_req_bits_pfSource)),
@@ -556,7 +566,7 @@ class CoupledL2Slice(Elaboratable):
                                        pending_mask.eq(Mux(request_fire, self.in_a_bits_mask, 0)),
                                        pending_set.eq(req_set), pending_tag.eq(req_tag), pending_way.eq(Mux(hit_any, hit_way, victim_way)),
                                        pending_dirty.eq(Array([x.data for x in dirty_reads])[Mux(hit_any, hit_way, victim_way)]),
-                                       pending_hit.eq(hit_any), pending_from_prefetch.eq(~request_fire)]
+                                       pending_hit.eq(hit_any), pending_from_prefetch.eq(~request_fire), pending_outer_source.eq(0)]
                     with m.If(hit_any):
                         m.d.coupled_l2 += [state.eq(1), response_source.eq(Mux(request_fire, self.in_a_bits_source, self.prefetch_req_bits_source)),
                                            response_size.eq(Mux(request_fire, self.in_a_bits_size, c.offset_bits)),
