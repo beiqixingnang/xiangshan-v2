@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_CORE_LEAF_A3_VALIDATOR",
+  "batch_id": "V2-SCAN-A3-CORE-ISSUE-DATA",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "targets": {
+    "DeqPolicy": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.DeqPolicy-Hardware.py",
+      "sha256": "8268843c490f85890ecf7b56761f2412b7c725ca23aa300f3615880942605d3c"
+    },
+    "DataArray": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.DataArray-Hardware.py",
+      "sha256": "25d7f22ba41573fe8d2ce24e059542d8b1f0e0ff8223c38721879d57edca95e5"
+    }
+  },
+  "sources": {
+    "DeqPolicy": {
+      "path": "upstream/src/main/scala/xiangshan/backend/issue/DeqPolicy.scala",
+      "sha256": "85d3d2400a737a7be75e6cbe67c9cda226b6a1a0fd7f3b0ae841c164dfd43959"
+    },
+    "DataArray": {
+      "path": "upstream/src/main/scala/xiangshan/backend/issue/DataArray.scala",
+      "sha256": "b2bc92f17671747761cea3e2cf6c3bbbe93493945ddf10d7eb20105561f787fe"
+    }
+  },
+  "direct": {
+    "DeqPolicy": {
+      "vectors": 12,
+      "pass": true
+    },
+    "DataArray": {
+      "vectors": 1,
+      "pass": true
+    }
+  },
+  "generated": {
+    "DeqPolicy": {
+      "bytes": 290229,
+      "sha256": "0b71ec4887809ebe5aaacc157e74710edb0b3c2a07b9891af1a16c73e359bd33",
+      "module_decl": true,
+      "tools": {
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_returncode": 0,
+        "yosys_returncode": 0,
+        "stderr_tail": "                           : ... note: In instance 'DeqPolicy'\n 1410 |   assign \\$298  = 1'h0 + (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Issue.DeqPolicy-Hardware.py:78\" *) io_request[0];\n      |                        ^\n"
+      }
+    },
+    "DataArray": {
+      "bytes": 38615,
+      "sha256": "660681d5496054064528cc18af51316b6973b4e691868420ffa7bdf8d3d87c33",
+      "module_decl": true,
+      "tools": {
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_returncode": 0,
+        "yosys_returncode": 0,
+        "stderr_tail": "              : ... note: In instance 'DataArray'\n  209 |   assign \\$31  = io_write_0_addr == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Issue.DataArray-Hardware.py:83\" *) 2'h2;\n      |                                  ^~\n"
+      }
+    }
+  },
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "SOURCE_LEVEL_PENDING",
+    "PARENT_CLOSURE_MATCHED": "PENDING",
+    "UHSC_LOCALIZED": "NO_PROJECT_FACING_RENAME",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "VALIDATOR_PASS_BOUNDED",
+  "acceptance_eligible": false
+}

@@ -8,11 +8,11 @@
   },
   "scan_counts": {
     "xiangshan_scala_files": 325,
-    "existing_candidate_entries": 43,
-    "retained_build_files": 42,
+    "existing_candidate_entries": 45,
+    "retained_build_files": 44,
     "retired_or_excluded": 1,
-    "planned_core_build_files": 42,
-    "families": 31,
+    "planned_core_build_files": 44,
+    "families": 33,
     "parent_closures": 4
   },
   "classification_counts": {
@@ -600,8 +600,35 @@
       "reference_surface": [
         "JumpDataModule"
       ]
+    },
+    {
+      "id": "DeqPolicy",
+      "source_scala": "scala/src/main/scala/xiangshan/backend/issue/DeqPolicy.scala",
+      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.DeqPolicy-Hardware.py",
+      "family_id": "core.backend.issue.deq",
+      "closure_root": "core.backend.issue",
+      "classification": "REWRITTEN",
+      "disposition": "REWRITTEN",
+      "v2_status": "VALIDATOR_PASS_BOUNDED",
+      "reference_surface": [
+        "DeqPolicy"
+      ]
+    },
+    {
+      "id": "DataArray",
+      "source_scala": "scala/src/main/scala/xiangshan/backend/issue/DataArray.scala",
+      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.DataArray-Hardware.py",
+      "family_id": "core.backend.issue.data",
+      "closure_root": "core.backend.issue",
+      "classification": "REWRITTEN",
+      "disposition": "REWRITTEN",
+      "v2_status": "VALIDATOR_PASS_BOUNDED",
+      "reference_surface": [
+        "DataArray",
+        "AsyncRawDataModuleTemplate"
+      ]
     }
   ],
-  "status": "IMPLEMENTATION_BATCH_A2_VALIDATED_BOUNDED",
+  "status": "IMPLEMENTATION_BATCH_A3_VALIDATED_BOUNDED",
   "acceptance_eligible": false
 }
