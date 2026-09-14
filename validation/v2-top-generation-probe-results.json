@@ -4,7 +4,7 @@
   "status": "GENERATION_PROBE_PASS_REDUCED",
   "complete_gate": "BLOCKED_MISSING_CLOSURES",
   "accepted": "NOT_ALLOWED",
-  "build_file_count": 58,
+  "build_file_count": 59,
   "build_files": [
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Datapath.DataSource-Hardware.py",
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Datapath.NewPipelineConnect-Hardware.py",
@@ -44,6 +44,7 @@
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Rocket.Protocol-Hardware.py",
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Utility-Hardware.py",
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.YunSuan.Scalar-Hardware.py",
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.YunSuan.Vector-Hardware.py",
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.CompareMatrix-Hardware.py",
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.FallThroughPredictor-Hardware.py",
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.LruStateGen-Hardware.py",
@@ -67,12 +68,43 @@
   ],
   "generated_artifact": {
     "path": "validation/.work/uhsc-top-probe.sv",
-    "sha256": "1195c4131c476e4130ef7be180e719fbdfdc390f161c775349842f0d25c512c8",
-    "bytes": 3937,
+    "sha256": "2ebb0244f80fa93b603976888acb76ee706bbb42396609c01f6ca492113b063f",
+    "bytes": 4020,
     "modules": [
       "UHSCTop"
     ],
     "top_module": "UHSCTop"
+  },
+  "integrated_reduced_hierarchy": {
+    "path": "validation/.work/uhsc-top-integrated-probe.sv",
+    "sha256": "515d53a81eace3d4893686f7f5f618bb9de81090a43fbb47b5a7b57fdc67d902",
+    "bytes": 2779135,
+    "modules": [
+      "UHSCTopIntegratedProbe",
+      "UHSCTopIntegratedProbe.backend",
+      "UHSCTopIntegratedProbe.coupled_l2",
+      "UHSCTopIntegratedProbe.frontend",
+      "UHSCTopIntegratedProbe.frontend.icache",
+      "UHSCTopIntegratedProbe.frontend.instr_uncache",
+      "UHSCTopIntegratedProbe.mem_block",
+      "UHSCTopIntegratedProbe.mem_block.dcache",
+      "UHSCTopIntegratedProbe.mem_block.dcache.mainpipe",
+      "UHSCTopIntegratedProbe.mem_block.dcache.mainpipe.amo",
+      "UHSCTopIntegratedProbe.mem_block.dcache.mainpipe.tag"
+    ],
+    "bound_children": [
+      "backend",
+      "coupled_l2",
+      "frontend",
+      "mem_block"
+    ],
+    "status": "ELABORATED_REDUCED_ONLY"
+  },
+  "direct_probe_observation": {
+    "closure_missing": 1,
+    "closure_missing_count": 4,
+    "closure_complete": 0,
+    "cpu_halted": 1
   },
   "required_hierarchy_roots": [
     "XSCore",
@@ -80,6 +112,97 @@
     "XSTile",
     "XSTop"
   ],
+  "locked_reference_hierarchy": {
+    "Frontend": {
+      "ports": 371,
+      "children": [
+        "Ftq",
+        "IBuffer",
+        "ICache",
+        "InstrUncache",
+        "NewIFU",
+        "Predictor",
+        "TLB",
+        "PMP",
+        "PMPChecker_2",
+        "PTWFilter",
+        "PTWRepeaterNB"
+      ]
+    },
+    "Backend": {
+      "ports": 1165,
+      "children": [
+        "BypassNetwork",
+        "CtrlBlock",
+        "DataPath",
+        "ExuBlock",
+        "Scheduler",
+        "WbDataPath",
+        "WbFuBusyTable",
+        "Og2ForVector",
+        "VecExcpDataMergeModule"
+      ]
+    },
+    "MemBlock": {
+      "ports": 1326,
+      "children": [
+        "DCacheWrapper",
+        "AtomicsUnit",
+        "LoadUnit",
+        "StoreUnit",
+        "LsqWrapper",
+        "L2TLBWrapper",
+        "FrontendBridge",
+        "Uncache",
+        "TLXbar_6",
+        "TLBuffer_20",
+        "TLBuffer_21",
+        "TLBuffer_22",
+        "TLBuffer_23"
+      ]
+    },
+    "XSCore": {
+      "ports": 308,
+      "children": [
+        "Frontend",
+        "Backend",
+        "MemBlock"
+      ]
+    },
+    "L2Top": {
+      "ports": 441,
+      "children": [
+        "TL2TLCoupledL2",
+        "BusErrorUnit",
+        "TLClientsMerger_1",
+        "TLXbar_7",
+        "TLXbar_8",
+        "TLXbar_9"
+      ]
+    },
+    "XSTile": {
+      "ports": 153,
+      "children": [
+        "XSCore",
+        "L2Top",
+        "IntBuffer",
+        "IntBuffer_1",
+        "IntBuffer_2"
+      ]
+    },
+    "XSTop": {
+      "ports": 204,
+      "children": [
+        "XSTile",
+        "HuanCun",
+        "SoCMisc",
+        "ResetGen",
+        "TLToAXI4_2",
+        "AXI4Map",
+        "imsic_bus_top"
+      ]
+    }
+  },
   "defined_build_classes": [],
   "missing_build_roots": [
     "XSCore",
@@ -87,16 +210,18 @@
     "XSTile",
     "XSTop"
   ],
+  "reduced_boundary_roots": [],
   "locked_baseline": {
     "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
     "reference_xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
     "reference_immutable": true
   },
   "tool_gates": {
-    "verilator_lint": "UNAVAILABLE"
+    "verilator_lint": "UNAVAILABLE",
+    "yosys_integrated_hierarchy": "UNAVAILABLE"
   },
   "blocking_reasons": [
-    "XSCore, L2Top, XSTile and source-named XSTop Build closures are not present",
+    "source-named XSCore/L2Top/XSTile/XSTop roots are reduced boundaries, not complete closures",
     "probe drives quiescent outputs and asserts io_closure_missing",
     "complete XSTop module/port inventory differential has not run"
   ]

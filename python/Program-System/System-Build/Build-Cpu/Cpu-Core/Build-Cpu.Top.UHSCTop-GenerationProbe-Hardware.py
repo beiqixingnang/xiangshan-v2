@@ -14,7 +14,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
-from amaranth import ClockDomain, Elaboratable, Module, Signal
+from amaranth import Elaboratable, Module, Signal
 from amaranth.back import verilog
 
 
@@ -73,6 +73,10 @@ class UHSCTop(Elaboratable):
         # Dependency objects are metadata only at the probe stage.  The
         # eventual closure binder will connect these names to real children.
         self.injected_dependencies = dict(injected_dependencies or {})
+        self.frontend = self.injected_dependencies.get("frontend")
+        self.backend = self.injected_dependencies.get("backend")
+        self.mem_block = self.injected_dependencies.get("mem_block") or self.injected_dependencies.get("memblock")
+        self.coupled_l2 = self.injected_dependencies.get("coupled_l2") or self.injected_dependencies.get("coupledL2")
         cfg = self.config
 
         self.clock = Signal(name="clock")
@@ -110,14 +114,91 @@ class UHSCTop(Elaboratable):
         self.critical_error = Signal(name="io_critical_error")
         self.closure_missing = Signal(name="io_closure_missing")
         self.closure_missing_count = Signal(3, name="io_closure_missing_count")
+        self.closure_complete = Signal(name="io_closure_complete")
 
     def elaborate(self, platform: Any) -> Module:
         del platform
         m = Module()
-        domain = ClockDomain("sync", async_reset=True)
-        domain.clk = self.clock
-        domain.rst = self.reset
-        m.domains.sync = domain
+
+        # Bind supplied parent/family closures into one hierarchy.  The top
+        # file does not import sibling Build files (the rewrite rules forbid
+        # that); validators load those files and inject the Elaboratable
+        # instances explicitly.  A missing child therefore remains visible as
+        # a diagnostic instead of being silently replaced by a fake module.
+        children = {
+            "frontend": self.frontend,
+            "backend": self.backend,
+            "mem_block": self.mem_block,
+            "coupled_l2": self.coupled_l2,
+        }
+        for name, child in children.items():
+            if child is not None:
+                setattr(m.submodules, name, child)
+
+        def wire(dst: Any, src: Any) -> None:
+            """Connect compatible Amaranth signals with source-width adaptation.
+            连接兼容的 Amaranth 信号并自动适配位宽。
+            """
+
+            if dst is None or src is None:
+                return
+            try:
+                m.d.comb += dst.eq(src)
+            except (AttributeError, TypeError, ValueError):
+                # A boundary may intentionally omit an optional lane; leave
+                # the omission for the closure audit rather than failing
+                # elaboration of the probe itself.
+                return
+
+        def sig(obj: Any, name: str) -> Any:
+            return getattr(obj, name, None) if obj is not None else None
+
+        # Clock/reset fanout and Frontend <-> Backend control/data path.
+        for child in (self.frontend, self.backend, self.mem_block, self.coupled_l2):
+            wire(sig(child, "clock"), self.clock)
+            wire(sig(child, "reset"), self.reset)
+        f, b, mem, l2 = self.frontend, self.backend, self.mem_block, self.coupled_l2
+        for top_name, child_name in (("reset_vector", "reset_vector"), ("fencei", "fencei")):
+            wire(sig(f, child_name), sig(self, top_name))
+        wire(sig(b, "backend_can_accept"), self.backend_can_accept)
+        # Backend receives the Frontend control-flow vector and returns
+        # redirects/admission.  Width adaptation is intentional for the
+        # bounded exception/metadata surfaces.
+        for child_name, src_name in (("frontend_valid", "cf_valid"), ("frontend_instr", "cf_instr"),
+                                     ("frontend_pc", "cf_pc"), ("frontend_exception", "cf_valid")):
+            wire(sig(b, child_name), sig(f, src_name))
+        wire(sig(f, "backend_can_accept"), sig(b, "frontend_can_accept"))
+        wire(sig(f, "redirect_valid"), sig(b, "redirect_valid"))
+        wire(sig(f, "redirect_pc"), sig(b, "redirect_pc"))
+        wire(sig(self, "cf_valid"), sig(f, "cf_valid"))
+        wire(sig(self, "cf_instr"), sig(f, "cf_instr"))
+        wire(sig(self, "cf_pc"), sig(f, "cf_pc"))
+        wire(sig(self, "redirect_valid"), sig(b, "redirect_valid"))
+        wire(sig(self, "redirect_pc"), sig(b, "redirect_pc"))
+        wire(self.cpu_halted, sig(b, "cpu_halted"))
+        wire(self.critical_error, sig(b, "cpu_critical_error"))
+
+        # MemBlock <-> CoupledL2 A/D transaction bridge.  The bridge keeps the
+        # reduced TileLink channels executable while preserving explicit
+        # injection points for the still-open Diplomacy closure.
+        if mem is not None and l2 is not None:
+            for suffix in ("valid", "opcode", "source", "address", "data", "mask"):
+                wire(sig(l2, f"in_a_{'bits_' if suffix not in {'valid'} else ''}{suffix}"),
+                     sig(mem, f"tl_a_{suffix}"))
+            wire(sig(mem, "tl_a_ready"), sig(l2, "in_a_ready"))
+            # External D response enters through UHSCTop and is forwarded to
+            # both the MemBlock and CoupledL2 input boundary.  MemBlock has no
+            # separate tl_d_ready lane, so the top-level ready is sourced from
+            # the slice's in_d_ready observation.
+            wire(sig(mem, "tl_d_valid"), self.mem_d_valid)
+            wire(sig(mem, "tl_d_data"), self.mem_d_data)
+            for suffix in ("valid", "opcode", "source", "address", "data", "mask"):
+                wire(sig(self, f"mem_a_{'valid' if suffix == 'valid' else suffix}"),
+                     sig(l2, f"out_a_{'bits_' if suffix != 'valid' else ''}{suffix}"))
+            wire(sig(l2, "out_a_ready"), self.mem_a_ready)
+            # The external D response is an input; only ready is driven by the
+            # localized hierarchy.  Outgoing slice D fields remain internal
+            # until the complete XSTile/L2Top adapter is available.
 
         # Consume every boundary input through a private sink so Amaranth
         # preserves its input direction in the generated ANSI port list.
@@ -146,19 +227,18 @@ class UHSCTop(Elaboratable):
         # represented as a fake datapath; the missing-closure flag remains
         # asserted until XSCore, L2Top, and XSTile are bound.
         m.d.comb += [
-            self.cf_valid.eq(0),
-            self.cf_instr.eq(0),
-            self.cf_pc.eq(0),
-            self.redirect_valid.eq(0),
-            self.redirect_pc.eq(0),
-            self.backend_can_accept.eq(0),
-            self.mem_a_ready.eq(0),
             self.mem_d_ready.eq(0),
-            self.cpu_halted.eq(1),
-            self.critical_error.eq(0),
             self.closure_missing.eq(1),
-            self.closure_missing_count.eq(3),
+            self.closure_missing_count.eq(
+                sum(1 for child in children.values() if child is None)
+            ),
+            self.closure_complete.eq(0),
         ]
+        if self.frontend is None:
+            m.d.comb += [self.cf_valid.eq(0), self.cf_instr.eq(0), self.cf_pc.eq(0)]
+        if self.backend is None:
+            m.d.comb += [self.redirect_valid.eq(0), self.redirect_pc.eq(0), self.backend_can_accept.eq(0),
+                         self.cpu_halted.eq(1), self.critical_error.eq(0)]
         return m
 
 
@@ -200,8 +280,11 @@ def build_verilog(
         top.critical_error,
         top.closure_missing,
         top.closure_missing_count,
+        top.closure_complete,
     ]
-    return verilog.convert(top, name="UHSCTop", ports=ports, emit_src=False)
+    options = configuration if isinstance(configuration, dict) else {}
+    module_name = str(options.get("module", options.get("name", "UHSCTop")))
+    return verilog.convert(top, name=module_name, ports=ports, emit_src=False)
 
 
 def main() -> None:
