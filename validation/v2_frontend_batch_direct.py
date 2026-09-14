@@ -13,6 +13,7 @@ import tempfile
 from pathlib import Path
 from typing import Any
 
+from amaranth import Const, Module, Signal, signed
 from amaranth.sim import Simulator
 
 
@@ -84,25 +85,61 @@ def simulate_vectors(top: Any, input_signal: Any, output_signals: list[Any],
 
 # Exercise V2 unsigned satUpdate boundaries and random states. / 检查无符号 satUpdate 边界与随机状态。
 def test_saturate(module: Any) -> dict[str, Any]:
+    # Check the pure V2 recurrence exhaustively for every legal state and
+    # independently exercise the generated combinational expression, including
+    # the enable/hold boundary.  V2 对所有合法状态穷举检查，并独立验证生成表达式。
+    expression_checks = 0
+    for width in range(1, 9):
+        old = Signal(width, name=f"sat_old_{width}")
+        taken = Signal(name=f"sat_taken_{width}")
+        enable = Signal(name=f"sat_enable_{width}")
+        updated = Signal(width, name=f"sat_updated_{width}")
+        probe = Module()
+        counter = module.SaturateCounter(width, old)
+        probe.d.comb += updated.eq(counter.get_updated_value(taken, enable))
+
+        async def expression_bench(ctx: Any, width_value: int = width,
+                                   old_signal: Any = old,
+                                   taken_signal: Any = taken,
+                                   enable_signal: Any = enable,
+                                   updated_signal: Any = updated) -> None:
+            nonlocal expression_checks
+            for old_value in range(1 << width_value):
+                for taken_value in (0, 1):
+                    for enable_value in (0, 1):
+                        ctx.set(old_signal, old_value)
+                        ctx.set(taken_signal, taken_value)
+                        ctx.set(enable_signal, enable_value)
+                        await ctx.delay(1e-9)
+                        expected_value = (module.sat_update(old_value, width_value,
+                                                             bool(taken_value))
+                                          if enable_value else old_value)
+                        assert int(ctx.get(updated_signal)) == expected_value
+                        expression_checks += 1
+
+        simulator = Simulator(probe)
+        simulator.add_testbench(expression_bench)
+        simulator.run()
+
     width = 4
-    vectors = [(old, taken) for old in range(1 << width) for taken in (0, 1)]
-    state = 0
-    expected: list[int] = []
-    for _, taken in vectors:
-        state = module.sat_update(state, width, bool(taken))
-        expected.append(state)
+    sequence = [(old, taken) for old in range(1 << width) for taken in (0, 1)]
     top = module.SaturateCounterReg(module.SaturateCounterConfig(width=width, reset_value=0))
     # The registered harness is checked cycle-by-cycle with a software oracle.
     observed: list[int] = []
+    expected: list[int] = []
+    state = 0
 
     async def bench(ctx: Any) -> None:
+        nonlocal state
         ctx.set(top.en, 0)
         ctx.set(top.increase, 0)
         await ctx.tick()
-        for _, taken in vectors:
+        for _, taken in sequence:
             ctx.set(top.en, 1)
             ctx.set(top.increase, taken)
             await ctx.tick()
+            state = module.sat_update(state, width, bool(taken))
+            expected.append(state)
             observed.append(int(ctx.get(top.value)))
 
     simulator = Simulator(top)
@@ -112,33 +149,78 @@ def test_saturate(module: Any) -> dict[str, Any]:
     assert observed == expected
     rtl = module.build_verilog(None, {})
     assert "module SaturateCounter" in rtl
-    return {"vectors": len(vectors), "verilog_sha256": hashlib.sha256(rtl.encode()).hexdigest()}
+    return {"expression_vectors": expression_checks,
+            "registered_vectors": len(sequence),
+            "verilog_sha256": hashlib.sha256(rtl.encode()).hexdigest()}
 
 
 # Exercise V2 signedSatUpdate boundaries and random states. / 检查有符号 satUpdate 边界与随机状态。
 def test_signed(module: Any) -> dict[str, Any]:
+    # Exercise every signed state for widths 2..8 in the pure and hardware
+    # recurrence, with enable disabled as a hold check.  覆盖所有有符号状态及保持边界。
+    expression_checks = 0
+    for width in range(2, 9):
+        old = Signal(signed(width), name=f"signed_old_{width}")
+        taken = Signal(name=f"signed_taken_{width}")
+        enable = Signal(name=f"signed_enable_{width}")
+        updated = Signal(signed(width), name=f"signed_updated_{width}")
+        probe = Module()
+        counter = module.SignedSaturateCounter(width, old)
+        probe.d.comb += updated.eq(counter.get_updated_value(taken, enable))
+
+        async def expression_bench(ctx: Any, width_value: int = width,
+                                   old_signal: Any = old,
+                                   taken_signal: Any = taken,
+                                   enable_signal: Any = enable,
+                                   updated_signal: Any = updated) -> None:
+            nonlocal expression_checks
+            lower_value = -(1 << (width_value - 1))
+            upper_value = (1 << (width_value - 1)) - 1
+            modulus = 1 << width_value
+            for old_value in range(lower_value, upper_value + 1):
+                for taken_value in (0, 1):
+                    for enable_value in (0, 1):
+                        ctx.set(old_signal, old_value)
+                        ctx.set(taken_signal, taken_value)
+                        ctx.set(enable_signal, enable_value)
+                        await ctx.delay(1e-9)
+                        expected_value = (module.signed_sat_update(old_value, width_value,
+                                                                   bool(taken_value))
+                                          if enable_value else old_value)
+                        raw = int(ctx.get(updated_signal))
+                        # Signed Amaranth signals are returned as Python
+                        # negatives; unsigned backend representations need
+                        # two's-complement decoding.
+                        observed_value = raw if raw < 0 else (raw - modulus if raw & (1 << (width_value - 1)) else raw)
+                        assert observed_value == expected_value, (width_value, old_value, taken_value, enable_value, observed_value, expected_value, raw)
+                        expression_checks += 1
+
+        simulator = Simulator(probe)
+        simulator.add_testbench(expression_bench)
+        simulator.run()
+
     width = 5
     lower = -(1 << (width - 1))
     upper = (1 << (width - 1)) - 1
-    values = list(range(lower, upper + 1))
-    vectors = [(old, taken) for old in values for taken in (0, 1)]
-    state = 0
-    expected: list[int] = []
-    for _, taken in vectors:
-        state = module.signed_sat_update(state, width, bool(taken))
-        expected.append(state)
+    sequence = [(old, taken) for old in range(lower, upper + 1) for taken in (0, 1)]
     top = module.SignedSaturateCounterReg(module.SignedSaturateCounterConfig(width=width, reset_value=0))
     observed: list[int] = []
+    expected: list[int] = []
+    state = 0
 
     async def bench(ctx: Any) -> None:
+        nonlocal state
         ctx.set(top.en, 0)
         ctx.set(top.positive, 0)
         await ctx.tick()
-        for _, taken in vectors:
+        for _, taken in sequence:
             ctx.set(top.en, 1)
             ctx.set(top.positive, taken)
             await ctx.tick()
-            observed.append(int(ctx.get(top.value)))
+            state = module.signed_sat_update(state, width, bool(taken))
+            expected.append(state)
+            raw = int(ctx.get(top.value)) & ((1 << width) - 1)
+            observed.append(raw - (1 << width) if raw & (1 << (width - 1)) else raw)
 
     simulator = Simulator(top)
     simulator.add_clock(1e-6)
@@ -147,7 +229,9 @@ def test_signed(module: Any) -> dict[str, Any]:
     assert observed == expected
     rtl = module.build_verilog(None, {})
     assert "module SignedSaturateCounter" in rtl
-    return {"vectors": len(vectors), "verilog_sha256": hashlib.sha256(rtl.encode()).hexdigest()}
+    return {"expression_vectors": expression_checks,
+            "registered_vectors": len(sequence),
+            "verilog_sha256": hashlib.sha256(rtl.encode()).hexdigest()}
 
 
 # Exercise NewDispatch's tie-breaking matrix and IQSort rows. / 检查 NewDispatch 平局矩阵与 IQSort。
