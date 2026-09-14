@@ -123,3 +123,44 @@ acceptance. Blocked or missing-reference closures remain explicitly blocked.
 5. Run Phase 3 integration and present a merge-ready preview branch for user
    approval. Existing future plans (OpenC910 replacement, Vortex validation,
    graphics completion, and other RISC-V64 controller work) remain unchanged.
+
+## Phase 0 freeze addendum — scan before implementation
+
+Implementation does not begin until these read-only inventories are committed
+and reviewed:
+
+1. `V2-Core-Rewrite-Inventory.json` — every reachable V2 XiangShan hardware
+   closure, final `Build-*-Hardware.py` path, source Scala paths, closure root,
+   children, parameters, observation points, and status.
+2. `V2-Dependency-Family-Inventory.json` — every reachable external hardware
+   dependency family, covered Scala children, proposed aggregate Build file,
+   protocol boundary, and exclusion rationale for test-only or unreachable
+   files.
+3. `V2-Rewrite-Batch-Plan.json` — disjoint implementation batches, owner,
+   dependency order, expected file count, and the single validator assigned to
+   each batch.
+
+These inventories are authoritative for the rewrite count. A child Scala file
+covered by an aggregate family is not counted as an additional Python file.
+Counts must distinguish `core_files`, `dependency_family_files`,
+`retired_or_excluded`, and `total_planned_build_files`.
+
+## One-transaction worker contract
+
+Each implementation worker receives one disjoint batch and performs, in one
+transaction and one commit: V2 implementation at the final Build path, UHSC
+project-facing naming, direct vectors, independent V2 reference-SV/source-level
+differential, Verilator/Yosys, UTF-8/LF/AST/five-zone/forbidden-import audits,
+and machine-readable evidence/mapping updates. Workers may not leave targets
+under `python/ported`, borrow another family, modify `upstream/` or the main
+repository, or mark `ACCEPTED`.
+
+## Independent validator contract
+
+Implementation workers do not validate one another concurrently. After a worker
+reports its commit, one dedicated validator runs the exact manifest commands
+serially, checks changed paths and source/reference hashes, reruns focused
+direct/reference/differential gates, and records `VALIDATOR_PASS` or an explicit
+failure. Only the coordinator pushes the batch and updates the main preview
+plan. Bounded passes remain bounded until parent, license, UHSC wrapper, and
+user-approval gates close.
