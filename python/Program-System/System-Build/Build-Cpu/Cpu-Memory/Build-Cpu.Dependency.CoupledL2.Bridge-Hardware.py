@@ -306,6 +306,32 @@ def chi_layout_widths(configuration: CoupledL2BridgeConfig | None = None) -> dic
             "dat": tuple(x for x in dat if x > 0), "snp": tuple(x for x in snp if x > 0)}
 
 
+# Return raw issue layouts while retaining zero-width optional field slots. / 返回保留零宽可选字段槽位的原始 issue 布局。
+def _chi_layout_raw(configuration: CoupledL2BridgeConfig | None = None) -> dict[str, tuple[int, ...]]:
+    """Build raw CHI field positions for hardware slicing. / 为硬件切片构造原始 CHI 字段位置。"""
+
+    cfg = configuration or CoupledL2BridgeConfig()
+    iw = issue_widths(cfg.issue)
+    return {
+        "req": (cfg.qos_bits, iw["node_id"], iw["node_id"], iw["txn_id"], iw["node_id"], 1,
+                iw["txn_id"], iw["req_opcode"], cfg.size_bits, cfg.address_bits, 1, 1, 1,
+                cfg.order_bits, cfg.pcrd_type_bits, cfg.mem_attr_bits, 1, iw["lpid"], 1, 1,
+                2 if cfg.issue == "E.b" else 0, 1, 11 if cfg.issue == "E.b" else 0, 4),
+        "rsp": (cfg.qos_bits, iw["node_id"], iw["node_id"], iw["txn_id"], iw["rsp_opcode"],
+                cfg.resp_err_bits, cfg.response_bits, cfg.fwd_state_bits, 3 if cfg.issue == "E.b" else 0,
+                iw["txn_id"], cfg.pcrd_type_bits, 2 if cfg.issue == "E.b" else 0, 1),
+        "dat": (cfg.qos_bits, iw["node_id"], iw["node_id"], iw["txn_id"], iw["node_id"],
+                iw["dat_opcode"], cfg.resp_err_bits, cfg.response_bits, iw["data_source"],
+                3 if cfg.issue == "E.b" else 0, iw["txn_id"], 2, 2, 2 if cfg.issue == "E.b" else 0,
+                cfg.data_bits // 32 if cfg.issue == "E.b" else 0,
+                cfg.data_bits // 128 if cfg.issue == "E.b" else 0, 1, 4, cfg.data_bits // 8, cfg.data_bits,
+                cfg.data_bits // 8 if cfg.enable_data_check else 0,
+                cfg.data_bits // 64 if cfg.enable_poison else 0),
+        "snp": (cfg.qos_bits, iw["node_id"], iw["txn_id"], iw["node_id"], iw["txn_id"],
+                iw["snp_opcode"], cfg.address_bits - 3, 1, 1, 1, 1, 11 if cfg.issue == "E.b" else 0),
+    }
+
+
 # =============================================================================
 # Implementation
 # =============================================================================
@@ -831,8 +857,7 @@ class CoupledL2ParentConfig:
         )
 
 
-# Return the source-shaped CHI parent port contract for a selected issue. /
-# 返回所选 issue 的源代码形状 CHI 父级端口契约。
+# Return the source-shaped CHI parent port contract for a selected issue. / 返回所选 issue 的源代码形状 CHI 父级端口契约。
 def parent_port_contract(configuration: CoupledL2ParentConfig | None = None) -> tuple[dict[str, Any], ...]:
     """Describe parent port names, directions, and widths deterministically. / 确定性描述父级端口名、方向和位宽。"""
 
@@ -855,7 +880,7 @@ def parent_port_contract(configuration: CoupledL2ParentConfig | None = None) -> 
     mmio_in = {
         "a_ready": (1, "output"), "a_valid": (1, "input"), "a_bits_opcode": (4, "input"),
         "a_bits_param": (3, "input"), "a_bits_size": (2, "input"), "a_bits_source": (cfg.mmio_source_bits, "input"),
-        "a_bits_address": (cfg.address_bits, "input"), "a_bits_mask": (cfg.data_bits // 8, "input"),
+        "a_bits_address": (cfg.address_bits, "input"), "a_bits_mask": (8, "input"),
         "a_bits_data": (64, "input"), "a_bits_corrupt": (1, "input"), "d_ready": (1, "input"),
         "d_valid": (1, "output"), "d_bits_opcode": (4, "output"), "d_bits_param": (2, "output"),
         "d_bits_size": (2, "output"), "d_bits_source": (cfg.mmio_source_bits, "output"),
@@ -894,6 +919,13 @@ def parent_port_contract(configuration: CoupledL2ParentConfig | None = None) -> 
         "l2_tlb_req_req_kill": (1, "output"), "l2_tlb_req_resp_ready": (1, "output"),
         "l2_tlb_req_resp_valid": (1, "input"), "l2_tlb_req_resp_bits_paddr_0": (cfg.address_bits, "input"),
         "l2_tlb_req_resp_bits_pbmt": (2, "input"), "l2_tlb_req_resp_bits_miss": (1, "input"),
+        "l2_tlb_req_resp_bits_excp_0_gpf_ld": (1, "input"), "l2_tlb_req_resp_bits_excp_0_gpf_st": (1, "input"),
+        "l2_tlb_req_resp_bits_excp_0_gpf_instr": (1, "input"), "l2_tlb_req_resp_bits_excp_0_pf_ld": (1, "input"),
+        "l2_tlb_req_resp_bits_excp_0_pf_st": (1, "input"), "l2_tlb_req_resp_bits_excp_0_pf_instr": (1, "input"),
+        "l2_tlb_req_resp_bits_excp_0_af_ld": (1, "input"), "l2_tlb_req_resp_bits_excp_0_af_st": (1, "input"),
+        "l2_tlb_req_resp_bits_excp_0_af_instr": (1, "input"), "l2_tlb_req_pmp_resp_ld": (1, "input"),
+        "l2_tlb_req_pmp_resp_st": (1, "input"), "l2_tlb_req_pmp_resp_instr": (1, "input"),
+        "l2_tlb_req_pmp_resp_mmio": (1, "input"), "l2_tlb_req_pmp_resp_atomic": (1, "input"),
         "debugTopDown_robTrueCommit": (64, "input"), "debugTopDown_robHeadPaddr_valid": (1, "input"),
         "debugTopDown_robHeadPaddr_bits": (36, "input"), "debugTopDown_l2MissMatch": (1, "output"),
         "l2Miss": (1, "output"), "error_valid": (1, "output"), "error_address": (cfg.address_bits, "output"),
@@ -1008,6 +1040,7 @@ class TL2CHICoupledL2(Elaboratable):
             width = widths[index]
             return value[low:low + width]
 
+        # Adapt a packed value to the selected parent width. / 将打包值适配到所选父级位宽。
         def extend(value: Any, width: int) -> Any:
             """Zero-extend or truncate a signal to a requested width. / 将信号零扩展或截断到指定宽度。"""
 
@@ -1017,35 +1050,31 @@ class TL2CHICoupledL2(Elaboratable):
                 return Cat(value, Const(0, width - len(value)))
             return value[:width]
 
-        req_flit_values = [
-            Const(0, req_widths[0]), extend(self.io_nodeID, req_widths[1]), extend(self.io_nodeID, req_widths[2]),
-            request_txn, extend(self.io_nodeID, req_widths[4]), Const(0, req_widths[5]), request_txn,
-            extend(request_opcode, req_widths[7]), extend(request_size, req_widths[8]), request_address,
-            Const(0, req_widths[10]), Const(0, req_widths[11]), Const(1, req_widths[12]),
-            Const(CHI_ORDER["EndpointOrder"] if c.issue != "B" else CHI_ORDER["RequestOrder"], req_widths[13]),
-            Const(0, req_widths[14]), Const(0, req_widths[15]), Const(0, req_widths[16]), Const(0, req_widths[17]),
-            Const(0, req_widths[18]), Const(1, req_widths[19]),
-        ]
-        # Optional issue-specific request fields. / issue 专用可选请求字段。
-        while len(req_flit_values) < len(req_widths):
-            req_flit_values.append(Const(0, req_widths[len(req_flit_values)]))
-        req_flit = Cat(*req_flit_values)
-        rsp_flit = Cat(
-            Const(0, rsp_widths[0]), extend(snoop_src, rsp_widths[1]), extend(self.io_nodeID, rsp_widths[2]),
-            snoop_txn, Const(CHI_RSP_OPCODES["SnpResp"], rsp_widths[4]), Const(CHI_RESP_ERR["OK"], rsp_widths[5]),
-            Const(CHI_COHERENCE_STATES["UC"], rsp_widths[6]), Const(0, rsp_widths[7]),
-            *[Const(0, width) for width in rsp_widths[8:]],
-        )
-        dat_flit_values = [
-            Const(0, dat_widths[0]), extend(self.io_nodeID, dat_widths[1]), extend(self.io_nodeID, dat_widths[2]),
-            request_txn, extend(self.io_nodeID, dat_widths[4]), Const(CHI_DAT_OPCODES["NonCopyBackWrData"], dat_widths[5]),
-            Const(CHI_RESP_ERR["OK"], dat_widths[6]), Const(CHI_COHERENCE_STATES["I"], dat_widths[7]),
-            Const(0, dat_widths[8]), *[Const(0, width) for width in dat_widths[9:10]], request_dbid,
-            *[Const(0, width) for width in dat_widths[11:19]], request_mask, request_data,
-        ]
-        while len(dat_flit_values) < len(dat_widths):
-            dat_flit_values.append(Const(0, dat_widths[len(dat_flit_values)]))
-        dat_flit = Cat(*dat_flit_values)
+        # Fill an issue-specific field vector without indexing absent optional fields. /
+        # 填充 issue 专用字段向量，避免索引不存在的可选字段。
+        def fields_with(widths: Sequence[int], values: Mapping[int, Any]) -> Any:
+            """Build a packed field vector with safe optional indices. / 安全构造含可选索引的打包字段向量。"""
+
+            return Cat(*[values.get(index, Const(0, width)) for index, width in enumerate(widths)])
+
+        req_flit = fields_with(req_widths, {
+            1: extend(self.io_nodeID, req_widths[1]), 2: extend(self.io_nodeID, req_widths[2]), 3: request_txn,
+            4: extend(self.io_nodeID, req_widths[4]), 6: request_txn, 7: extend(request_opcode, req_widths[7]),
+            8: extend(request_size, req_widths[8]), 9: request_address, 12: Const(1, req_widths[12]),
+            13: Const(CHI_ORDER["EndpointOrder"] if c.issue != "B" else CHI_ORDER["RequestOrder"], req_widths[13]),
+            19: Const(1, req_widths[19]),
+        })
+        rsp_flit = fields_with(rsp_widths, {
+            1: extend(snoop_src, rsp_widths[1]), 2: extend(self.io_nodeID, rsp_widths[2]), 3: snoop_txn,
+            4: Const(CHI_RSP_OPCODES["SnpResp"], rsp_widths[4]), 5: Const(CHI_RESP_ERR["OK"], rsp_widths[5]),
+            6: Const(CHI_COHERENCE_STATES["UC"], rsp_widths[6]),
+        })
+        dat_flit = fields_with(dat_widths, {
+            1: extend(self.io_nodeID, dat_widths[1]), 2: extend(self.io_nodeID, dat_widths[2]), 3: request_txn,
+            4: extend(self.io_nodeID, dat_widths[4]), 5: Const(CHI_DAT_OPCODES["NonCopyBackWrData"], dat_widths[5]),
+            6: Const(CHI_RESP_ERR["OK"], dat_widths[6]), 7: Const(CHI_COHERENCE_STATES["I"], dat_widths[7]),
+            10: request_dbid, 18: request_mask, 19: request_data,
+        })
 
         # Link, ready/valid, response, and flit outputs. / 链路、ready/valid、响应和 flit 输出。
         m.d.comb += [
@@ -1196,8 +1225,7 @@ def build_verilog(configuration, injected_dependencies):
     return verilog.convert(top, name=name, ports=list(top.public_ports()), emit_src=False)
 
 
-# Export the source-shaped CHI parent boundary for parent-closure validation. /
-# 为父级闭环验证导出源代码形状的 CHI 父级边界。
+# Export the source-shaped CHI parent boundary for parent-closure validation. / 为父级闭环验证导出源代码形状的 CHI 父级边界。
 def build_parent_verilog(configuration, injected_dependencies):
     """Return deterministic Verilog for the CHI-enabled parent. / 返回 CHI 父级的确定性 Verilog。"""
 
