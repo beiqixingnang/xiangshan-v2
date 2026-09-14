@@ -120,7 +120,20 @@
         "V2-SCAN-A-CORE-LEAVES"
       ],
       "validator": "v2-independent-validator",
-      "status": "PLANNED"
+      "status": "IN_PROGRESS",
+      "active_reduced_batches": [
+        "V2-PARENT-VECTOR-001",
+        "V2-PARENT-CACHE-001"
+      ],
+      "completed_reduced_batches": [
+        {
+          "batch_id": "V2-PARENT-VECTOR-001",
+          "status": "PASS_BOUNDED_REDUCED",
+          "commit": "b40dfed",
+          "evidence": "validation/v2-vector-parent-closure-differential-results.json",
+          "full_parent_status": "PENDING_BACKEND_PARENT"
+        }
+      ]
     },
     {
       "batch_id": "V2-SCAN-C-DEPENDENCY-FAMILIES",
