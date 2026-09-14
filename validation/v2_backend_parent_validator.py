@@ -24,6 +24,7 @@ from pathlib import Path
 from typing import Any
 
 from amaranth.sim import Simulator
+from amaranth.back import verilog
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -295,6 +296,132 @@ def direct_parent(module: Any, vectors: list[dict[str, Any]]) -> dict[str, Any]:
     encoded = json.dumps(observed, sort_keys=True, separators=(",", ":")).encode()
     return {"status": "PASS", "vectors": len(vectors), "trace_sha256": digest_bytes(encoded),
             "trace_head": observed[:2], "trace_tail": observed[-2:]}
+
+
+def child_boundary_differential(module: Any) -> dict[str, Any]:
+    """Exercise injected Decode/Issue/WB families through BackendTop.
+
+    The target is compared against an independent equation-level SV model for
+    64 deterministic instructions and issue masks.  This proves child
+    attachment and signal flow without promoting the incomplete full parent.
+    """
+    decode_path = TARGET.parent / "Build-Cpu.Backend.Decode.Instructions-Hardware.py"
+    issue_path = TARGET.parent / "Build-Cpu.Backend.Issue.EnqPolicy-Hardware.py"
+    wb_path = TARGET.parent / "Build-Cpu.Backend.Datapath.WbArbiter-Hardware.py"
+    decode = load_exact(decode_path, "v2_backend_child_decode")
+    issue = load_exact(issue_path, "v2_backend_child_issue")
+    writeback = load_exact(wb_path, "v2_backend_child_wb")
+    dependencies = {
+        "decode": decode.InstructionPatternProbe(),
+        "issue": issue.EnqPolicy(),
+        "writeback": writeback.WbDataPath(),
+    }
+    top = module.BackendTop(injected_dependencies=dependencies)
+    probe_ports = [top.frontend_instr, top.child_issue_free_slots,
+                   top.child_decode_instruction, top.child_decode_matches,
+                   top.child_decode_active, top.child_issue_active,
+                   top.child_issue_can_enq, top.child_issue_selected_valid,
+                   top.child_issue_selected_bits, top.child_writeback_active,
+                   *top.child_writeback_valid, *top.child_writeback_data,
+                   *top.child_writeback_pdest]
+    rtl_text = verilog.convert(top, name="UHSCBackendChildBoundary", ports=probe_ports, emit_src=False)
+    rtl_path = WORK / "backend-child-boundary.sv"
+    rtl_path.write_text(rtl_text, encoding="utf-8", newline="\n")
+
+    rng = random.Random(0xC1D_2026)
+    vectors = [{"instruction": rng.getrandbits(32), "free_slots": rng.randrange(1 << 22)} for _ in range(64)]
+    observed: list[dict[str, Any]] = []
+
+    async def bench(ctx: Any) -> None:
+        for index, vector in enumerate(vectors):
+            ctx.set(top.frontend_instr, vector["instruction"])
+            ctx.set(top.child_issue_free_slots, vector["free_slots"])
+            await ctx.delay(1e-9)
+            got = {
+                "cycle": index,
+                "decode_instruction": int(ctx.get(top.child_decode_instruction)),
+                "decode_matches": int(ctx.get(top.child_decode_matches)),
+                "decode_active": int(ctx.get(top.child_decode_active)),
+                "issue_active": int(ctx.get(top.child_issue_active)),
+                "issue_can_enq": int(ctx.get(top.child_issue_can_enq)),
+                "issue_selected_valid": int(ctx.get(top.child_issue_selected_valid)),
+                "issue_selected_bits": int(ctx.get(top.child_issue_selected_bits)),
+                "writeback_active": int(ctx.get(top.child_writeback_active)),
+            }
+            expected_matches = sum((int(decode.match32(pattern, vector["instruction"])) << bit)
+                                   for bit, pattern in enumerate(decode.PATTERNS.values()))
+            expected_bits = vector["free_slots"] & (-vector["free_slots"])
+            expected = {"decode_instruction": vector["instruction"], "decode_matches": expected_matches,
+                        "decode_active": 1, "issue_active": 1,
+                        "issue_can_enq": vector["free_slots"],
+                        "issue_selected_valid": int(bool(vector["free_slots"])),
+                        "issue_selected_bits": expected_bits, "writeback_active": 1}
+            if any(got[key] != value for key, value in expected.items()):
+                raise AssertionError((index, got, expected))
+            observed.append(got)
+
+    simulator = Simulator(top)
+    simulator.add_clock(1e-6, domain="sync")
+    simulator.add_testbench(bench)
+    simulator.run()
+    direct = {"status": "PASS", "vectors": len(vectors),
+              "trace_sha256": digest_bytes(json.dumps(observed, sort_keys=True, separators=(",", ":")).encode())}
+
+    pattern_expr = []
+    for bit, pattern in enumerate(decode.PATTERNS.values()):
+        mask, expected = decode.pattern_mask_expected(pattern)
+        pattern_expr.append(f"((io_frontend_cfVec_instr[31:0] & 32'h{mask:08x}) == 32'h{expected:08x}) << {bit}")
+    lines = ["module BackendChildReference(",
+             "  io_frontend_cfVec_instr, io_child_issue_freeSlots, io_child_decode_instruction,",
+             "  io_child_decode_matches, io_child_decode_active, io_child_issue_active,",
+             "  io_child_issue_canEnq, io_child_issue_selected_valid, io_child_issue_selected_bits,",
+             "  io_child_writeback_active, io_child_writeback_0_valid, io_child_writeback_1_valid,",
+             "  io_child_writeback_2_valid, io_child_writeback_3_valid, io_child_writeback_4_valid);",
+             "input [191:0] io_frontend_cfVec_instr; input [21:0] io_child_issue_freeSlots;",
+             "output [31:0] io_child_decode_instruction; output [31:0] io_child_decode_matches;",
+             "output io_child_decode_active, io_child_issue_active; output [21:0] io_child_issue_canEnq;",
+             "output io_child_issue_selected_valid; output [21:0] io_child_issue_selected_bits;",
+             "output io_child_writeback_active;",
+             "output io_child_writeback_0_valid, io_child_writeback_1_valid, io_child_writeback_2_valid, io_child_writeback_3_valid, io_child_writeback_4_valid;",
+             "assign io_child_decode_instruction = io_frontend_cfVec_instr[31:0];",
+             "assign io_child_decode_matches = " + " | ".join(
+                 f"(({expr.split(' << ')[0]}) ? (32'h1 << {bit}) : 32'h0)"
+                 for bit, expr in enumerate(pattern_expr)) + ";",
+             "assign io_child_decode_active = 1'b1; assign io_child_issue_active = 1'b1;",
+             "assign io_child_issue_canEnq = io_child_issue_freeSlots;",
+             "assign io_child_issue_selected_valid = |io_child_issue_freeSlots;",
+             "assign io_child_issue_selected_bits = io_child_issue_freeSlots & (~io_child_issue_freeSlots + 22'd1);",
+             "assign io_child_writeback_active = 1'b1;",
+             "assign io_child_writeback_0_valid = 1'b0, io_child_writeback_1_valid = 1'b0, io_child_writeback_2_valid = 1'b0, io_child_writeback_3_valid = 1'b0, io_child_writeback_4_valid = 1'b0;",
+             "endmodule\n"]
+    ref_path = WORK / "BackendChildReference.sv"
+    ref_path.write_text("\n".join(lines), encoding="utf-8", newline="\n")
+    tb_path = WORK / "backend-child-diff.sv"
+    tb = ["module tb; reg [191:0] instr; reg [21:0] free_slots;",
+          "wire [31:0] dut_decode_instruction, ref_decode_instruction, dut_decode_matches, ref_decode_matches;",
+          "wire dut_decode_active, ref_decode_active, dut_issue_active, ref_issue_active;",
+          "wire [21:0] dut_issue_can_enq, ref_issue_can_enq, dut_issue_selected_bits, ref_issue_selected_bits;",
+          "wire dut_issue_selected_valid, ref_issue_selected_valid, dut_writeback_active, ref_writeback_active;",
+          "wire dut_w0,dut_w1,dut_w2,dut_w3,dut_w4,ref_w0,ref_w1,ref_w2,ref_w3,ref_w4;",
+          "UHSCBackendChildBoundary dut(.io_frontend_cfVec_instr(instr),.io_child_issue_freeSlots(free_slots),.io_child_decode_instruction(dut_decode_instruction),.io_child_decode_matches(dut_decode_matches),.io_child_decode_active(dut_decode_active),.io_child_issue_active(dut_issue_active),.io_child_issue_canEnq(dut_issue_can_enq),.io_child_issue_selected_valid(dut_issue_selected_valid),.io_child_issue_selected_bits(dut_issue_selected_bits),.io_child_writeback_active(dut_writeback_active),.io_child_writeback_0_valid(dut_w0),.io_child_writeback_1_valid(dut_w1),.io_child_writeback_2_valid(dut_w2),.io_child_writeback_3_valid(dut_w3),.io_child_writeback_4_valid(dut_w4));",
+          "BackendChildReference ref(.io_frontend_cfVec_instr(instr),.io_child_issue_freeSlots(free_slots),.io_child_decode_instruction(ref_decode_instruction),.io_child_decode_matches(ref_decode_matches),.io_child_decode_active(ref_decode_active),.io_child_issue_active(ref_issue_active),.io_child_issue_canEnq(ref_issue_can_enq),.io_child_issue_selected_valid(ref_issue_selected_valid),.io_child_issue_selected_bits(ref_issue_selected_bits),.io_child_writeback_active(ref_writeback_active),.io_child_writeback_0_valid(ref_w0),.io_child_writeback_1_valid(ref_w1),.io_child_writeback_2_valid(ref_w2),.io_child_writeback_3_valid(ref_w3),.io_child_writeback_4_valid(ref_w4));",
+          "initial begin"]
+    for index, vector in enumerate(vectors):
+        tb.append(f"instr=192'h{vector['instruction']:048x}; free_slots=22'h{vector['free_slots']:06x}; #1;")
+        tb.append(f"if (dut_decode_instruction!==ref_decode_instruction || dut_decode_matches!==ref_decode_matches || dut_decode_active!==ref_decode_active || dut_issue_active!==ref_issue_active || dut_issue_can_enq!==ref_issue_can_enq || dut_issue_selected_valid!==ref_issue_selected_valid || dut_issue_selected_bits!==ref_issue_selected_bits || dut_writeback_active!==ref_writeback_active) begin $display(\"CHILD_MISMATCH {index}\"); $fatal(1); end")
+    tb.extend([f'$display("BACKEND_CHILD_DIFF_PASS {len(vectors)}"); $finish;', "end endmodule\n"])
+    tb_path.write_text("\n".join(tb), encoding="utf-8", newline="\n")
+    compile_result = run_wsl(["verilator", "--binary", "--timing", "-Wno-fatal", "--top-module", "tb",
+                              "--Mdir", wsl_path(WORK / "obj-child"), wsl_path(rtl_path), wsl_path(ref_path), wsl_path(tb_path)], timeout=360)
+    if compile_result["status"] != "PASS":
+        return {"status": "FAIL_COMPILE", "direct": direct, "compile": compile_result, "vectors": len(vectors)}
+    run_result = run_wsl([wsl_path(WORK / "obj-child/Vtb")], timeout=120)
+    passed = run_result["status"] == "PASS" and "BACKEND_CHILD_DIFF_PASS" in run_result.get("output_tail", "")
+    return {"status": "PASS" if passed else "FAIL_RUN", "direct": direct,
+            "differential": {"status": "PASS" if passed else "FAIL", "compile": compile_result,
+                             "run": run_result, "vectors": len(vectors)},
+            "vectors": len(vectors), "bound_children": ["Decode.Instructions", "Issue.EnqPolicy", "Backend.Datapath.WbDataPath"],
+            "semantic_status": "BOUNDED_CHILD_SIGNAL_FLOW"}
 
 
 def sv_decl(direction: str, width: int, name: str) -> str:

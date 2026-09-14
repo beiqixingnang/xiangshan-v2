@@ -26,6 +26,8 @@
     "parent_closure_count": 4,
     "bounded_parent_ready": [
       "frontend",
+      "backend",
+      "cache",
       "vector"
     ],
     "accepted_count": 0
@@ -8405,7 +8407,7 @@
       "parent_wrapper_evidence": {
         "present": true,
         "path": "validation/v2-frontend-parent-differential-results.json",
-        "sha256": "1b847fda992fdb6725b9ff4d68d59d29bb6654809f5b4010885ec07ed81793e3",
+        "sha256": "195c4052e3766a5c57a2af7e2d1b3c2b080ce16bd39f446f81cede347c604fbc",
         "full_io_envelope": true,
         "bounded_parent_equations": "PASS",
         "injected_children": [
@@ -33565,9 +33567,16 @@
           "status"
         ]
       },
-      "parent_wrapper_evidence": null,
-      "readiness": "PARENT_BOUNDARY_IDENTIFIED_CLOSURE_OPEN",
-      "next_action": "Bind DataPath and WbDataPath first with explicit injected register-file/memory stubs; defer full Backend until decode, issue, rename, and CSR ports are covered."
+      "parent_wrapper_evidence": {
+        "present": true,
+        "path": "validation/v2-backend-parent-results.json",
+        "full_io_envelope": true,
+        "inventory_count": 1165,
+        "status": "FULL_IO_BOUNDARY_VALIDATED_CHILD_CLOSURE_OPEN",
+        "behavioral_status": "PENDING_FULL_CHILD_CLOSURE"
+      },
+      "readiness": "FULL_IO_BOUNDARY_VALIDATED_CHILD_CLOSURE_OPEN",
+      "next_action": "Complete the reachable BPU/FTQ/IFU/IBuffer/ICache/ITLB/PMP behavioral closure and a full child-level reference differential before PARENT_CLOSURE_MATCHED."
     },
     {
       "closure_id": "cache",
@@ -49929,7 +49938,7 @@
           {
             "path": "validation/v2-dcache-batch-results.json",
             "present": true,
-            "sha256": "3210afa8eb66eab1378397a7229d463ccd071c97f4aada1d158e362c0ac23f60",
+            "sha256": "1bba6cc1c86e64f975806d429f600278c22be960363637c6f04190e9b4080882",
             "bytes": 9518,
             "pass_statuses": [
               "PASS",
@@ -49939,7 +49948,7 @@
           {
             "path": "validation/v2-dcache-batch-differential-results.json",
             "present": true,
-            "sha256": "83e55974cfde3f83945e1cc7e59153beb2ffca28bbfcb18e82950daedce56b1c",
+            "sha256": "bdce6b2dc5464c1449c66ac598e6d8e24d6d2a4d807c2cd4ca28c4d75b40bd0b",
             "bytes": 3841,
             "pass_statuses": [
               "PASS",
@@ -49986,9 +49995,16 @@
           "status"
         ]
       },
-      "parent_wrapper_evidence": null,
-      "readiness": "PARENT_BOUNDARY_IDENTIFIED_CLOSURE_OPEN",
-      "next_action": "Use the already matched AMOALU/TagArray closures to create a reduced DCache MainPipe parent harness; keep TileLink and MBIST/DFT dependencies injected and explicit."
+      "parent_wrapper_evidence": {
+        "present": true,
+        "path": "validation/v2-memblock-parent-differential-results.json",
+        "full_io_envelope": true,
+        "inventory_count": 1326,
+        "status": "FULL_IO_BOUNDARY_VALIDATED_CHILD_CLOSURE_OPEN",
+        "behavioral_status": "PENDING_FULL_CHILD_CLOSURE"
+      },
+      "readiness": "FULL_IO_BOUNDARY_VALIDATED_CHILD_CLOSURE_OPEN",
+      "next_action": "Complete the reachable BPU/FTQ/IFU/IBuffer/ICache/ITLB/PMP behavioral closure and a full child-level reference differential before PARENT_CLOSURE_MATCHED."
     },
     {
       "closure_id": "vector",
@@ -60451,7 +60467,7 @@
           },
           {
             "path": "validation/v2-dcache-batch-results.json",
-            "sha256": "3210afa8eb66eab1378397a7229d463ccd071c97f4aada1d158e362c0ac23f60",
+            "sha256": "1bba6cc1c86e64f975806d429f600278c22be960363637c6f04190e9b4080882",
             "role": "combined",
             "matched_aliases": [
               "AMOALU"
@@ -60463,7 +60479,7 @@
           },
           {
             "path": "validation/v2-dcache-batch-differential-results.json",
-            "sha256": "83e55974cfde3f83945e1cc7e59153beb2ffca28bbfcb18e82950daedce56b1c",
+            "sha256": "bdce6b2dc5464c1449c66ac598e6d8e24d6d2a4d807c2cd4ca28c4d75b40bd0b",
             "role": "reference",
             "matched_aliases": [
               "AMOALU"
@@ -60941,7 +60957,7 @@
           },
           {
             "path": "validation/v2-dcache-batch-results.json",
-            "sha256": "3210afa8eb66eab1378397a7229d463ccd071c97f4aada1d158e362c0ac23f60",
+            "sha256": "1bba6cc1c86e64f975806d429f600278c22be960363637c6f04190e9b4080882",
             "role": "combined",
             "matched_aliases": [
               "TagArray"
@@ -60953,7 +60969,7 @@
           },
           {
             "path": "validation/v2-dcache-batch-differential-results.json",
-            "sha256": "83e55974cfde3f83945e1cc7e59153beb2ffca28bbfcb18e82950daedce56b1c",
+            "sha256": "bdce6b2dc5464c1449c66ac598e6d8e24d6d2a4d807c2cd4ca28c4d75b40bd0b",
             "role": "reference",
             "matched_aliases": [
               "TagArray"

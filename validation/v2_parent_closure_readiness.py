@@ -29,6 +29,8 @@ CANDIDATE_MANIFEST = ROOT / "V2-Ported-Candidates.json"
 MAPPING_MANIFEST = ROOT / "V2-Phase0-Mapping-Manifest.json"
 OUTPUT = ROOT / "validation/v2-parent-closure-readiness.json"
 FRONTEND_PARENT_EVIDENCE = ROOT / "validation/v2-frontend-parent-differential-results.json"
+BACKEND_PARENT_EVIDENCE = ROOT / "validation/v2-backend-parent-results.json"
+MEMBLOCK_PARENT_EVIDENCE = ROOT / "validation/v2-memblock-parent-differential-results.json"
 
 
 MODULE_LINE = re.compile(rb"^module\s+(?P<name>[A-Za-z_][A-Za-z0-9_$]*)\s*\(")
@@ -263,6 +265,31 @@ def frontend_parent_wrapper_evidence() -> dict[str, Any]:
         "parent_closure_gate": gates.get("PARENT_CLOSURE_MATCHED", "NOT_RUN"),
         "status": "FULL_IO_BOUNDARY_VALIDATED_CHILD_CLOSURE_OPEN" if full_io and bounded_parent
         else "PRESENT_NOT_READY",
+    }
+
+
+def structural_parent_wrapper_evidence(path: Path, expected_ports: int) -> dict[str, Any]:
+    """Summarize a parent full-I/O envelope without promoting behavior.
+    汇总父级完整 I/O 包络，但不提升为行为等价。
+    """
+    payload = load_json(path) if path.is_file() else {}
+    if not isinstance(payload, dict):
+        return {"present": False, "status": "NOT_RUN"}
+    full = payload.get("full_inventory", payload.get("full_inventory_probe", payload.get("full_envelope", {})))
+    if not isinstance(full, dict):
+        full = {}
+    count = int(full.get("ports", full.get("port_count", full.get("generated_ports", full.get("actual_port_count", 0)))) or 0)
+    status = str(full.get("status", ""))
+    if not status and full.get("actual_port_count") == expected_ports and not full.get("missing") and not full.get("extra"):
+        status = "PASS"
+    validated = status == "PASS" and count == expected_ports
+    return {
+        "present": True,
+        "path": str(path.relative_to(ROOT)).replace("\\", "/"),
+        "full_io_envelope": validated,
+        "inventory_count": count,
+        "status": "FULL_IO_BOUNDARY_VALIDATED_CHILD_CLOSURE_OPEN" if validated else "PRESENT_NOT_READY",
+        "behavioral_status": payload.get("behavioral_status", "PENDING_FULL_CHILD_CLOSURE"),
     }
 
 
@@ -961,6 +988,8 @@ def build_report() -> dict[str, Any]:
         wanted_modules.update(surface.get("modules", []))
     records = read_module_records(XSTOP, wanted_modules) if xstop_present else {}
     frontend_wrapper = frontend_parent_wrapper_evidence()
+    backend_wrapper = structural_parent_wrapper_evidence(BACKEND_PARENT_EVIDENCE, 1165)
+    memblock_wrapper = structural_parent_wrapper_evidence(MEMBLOCK_PARENT_EVIDENCE, 1326)
 
     parent_rows: list[dict[str, Any]] = []
     for spec in PARENT_SPECS:
@@ -1001,7 +1030,11 @@ def build_report() -> dict[str, Any]:
             if row["reachability"] in {"INDIRECT_OR_INLINED_CHILD", "INLINED_OR_GENERATED_ALIAS"}
         ]
         missing = [row for row in child_rows if row["reachability"] == "NOT_OBSERVED_IN_ROOT_BODY"]
-        wrapper_evidence = frontend_wrapper if spec["closure_id"] == "frontend" else None
+        wrapper_evidence = (
+            frontend_wrapper if spec["closure_id"] == "frontend" else
+            backend_wrapper if spec["closure_id"] == "backend" else
+            memblock_wrapper if spec["closure_id"] == "cache" else None
+        )
         readiness = (
             "FULL_IO_BOUNDARY_VALIDATED_CHILD_CLOSURE_OPEN"
             if wrapper_evidence and wrapper_evidence.get("status") == "FULL_IO_BOUNDARY_VALIDATED_CHILD_CLOSURE_OPEN"

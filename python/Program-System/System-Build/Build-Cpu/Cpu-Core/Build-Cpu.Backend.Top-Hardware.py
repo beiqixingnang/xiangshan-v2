@@ -194,6 +194,22 @@ class BackendTop(Elaboratable):
         self.sbuffer_flush = Signal(name="io_fenceio_sbuffer_flushSb")
         self.frontend_reset = Signal(name="io_frontendReset")
 
+        # Reusable child-boundary observation signals.  These make Decode,
+        # Issue, and Writeback attachment visible in generated RTL while
+        # preserving the bounded parent contract and acceptance gate.
+        self.child_decode_active = Signal(name="io_child_decode_active")
+        self.child_decode_instruction = Signal(32, name="io_child_decode_instruction")
+        self.child_decode_matches = Signal(32, name="io_child_decode_matches")
+        self.child_issue_active = Signal(name="io_child_issue_active")
+        self.child_issue_free_slots = Signal(22, name="io_child_issue_freeSlots")
+        self.child_issue_can_enq = Signal(22, name="io_child_issue_canEnq")
+        self.child_issue_selected_valid = Signal(name="io_child_issue_selected_valid")
+        self.child_issue_selected_bits = Signal(22, name="io_child_issue_selected_bits")
+        self.child_writeback_active = Signal(name="io_child_writeback_active")
+        self.child_writeback_valid = [Signal(name=f"io_child_writeback_{i}_valid") for i in range(5)]
+        self.child_writeback_data = [Signal(cfg.data_width, name=f"io_child_writeback_{i}_data") for i in range(5)]
+        self.child_writeback_pdest = [Signal(cfg.pdest_width, name=f"io_child_writeback_{i}_pdest") for i in range(5)]
+
         # Explicit child closure injection points.  Existing leaf/family
         # implementations are connected by attribute contract when supplied;
         # absent children remain deterministic tie-offs in this parent.
@@ -356,6 +372,80 @@ class BackendTop(Elaboratable):
             child_flush = getattr(self.writeback, "flush", None)
             if child_flush is not None:
                 module.d.comb += child_flush.eq(self.flush)
+            # WbDataPath's existing reusable contract exposes flattened EXU
+            # channels.  Attach matching lanes/classes when present, while
+            # leaving a differently-shaped injected child untouched.
+            wb_lanes = min(
+                len(getattr(self.writeback, "fromExu_valid", ())),
+                len(getattr(self.writeback, "fromExu_bits", ())),
+                len(getattr(self.writeback, "fromExu_pdest", ())), exu_count,
+            )
+            for index in range(wb_lanes):
+                module.d.comb += [
+                    self.writeback.fromExu_valid[index].eq(self.exu_valid[index]),
+                    self.writeback.fromExu_bits[index].eq(self.exu_data[index]),
+                    self.writeback.fromExu_pdest[index].eq(self.exu_pdest[index]),
+                ]
+                for attr_name, class_index in (("toIntRf", 0), ("toFpRf", 1), ("toVecRf", 2),
+                                               ("toV0Rf", 3), ("toVlRf", 4)):
+                    signals = getattr(self.writeback, attr_name, ())
+                    if index < len(signals):
+                        module.d.comb += signals[index].eq(self.exu_class[index] == class_index)
+
+        # Default child observability is quiescent; injected families override
+        # only signals they explicitly implement.  This avoids hidden imports
+        # and keeps missing closures machine-readable in simulation.
+        module.d.comb += [
+            self.child_decode_active.eq(0),
+            self.child_decode_instruction.eq(self.frontend_instr[:32]),
+            self.child_decode_matches.eq(0),
+            self.child_issue_active.eq(0),
+            self.child_issue_can_enq.eq(0),
+            self.child_issue_selected_valid.eq(0),
+            self.child_issue_selected_bits.eq(0),
+            self.child_writeback_active.eq(0),
+        ]
+        for signal in (*self.child_writeback_valid, *self.child_writeback_data, *self.child_writeback_pdest):
+            module.d.comb += signal.eq(0)
+        if self.decode is not None:
+            module.submodules.decode = self.decode
+            child_instruction = getattr(self.decode, "instruction", None)
+            child_matches = getattr(self.decode, "matches", None)
+            if child_instruction is not None:
+                module.d.comb += [self.child_decode_active.eq(1), child_instruction.eq(self.child_decode_instruction)]
+                if isinstance(child_matches, dict):
+                    for index, signal in enumerate(child_matches.values()):
+                        if index >= 32:
+                            break
+                        module.d.comb += self.child_decode_matches[index].eq(signal)
+        if self.issue is not None:
+            module.submodules.issue = self.issue
+            child_can_enq = getattr(self.issue, "can_enq", None)
+            if child_can_enq is not None:
+                module.d.comb += [self.child_issue_active.eq(1), child_can_enq.eq(self.child_issue_free_slots),
+                                  self.child_issue_can_enq.eq(child_can_enq)]
+                selected_valid = getattr(self.issue, "selection_valid", None)
+                selected_bits = getattr(self.issue, "selection_bits", None)
+                if isinstance(selected_valid, (list, tuple)) and selected_valid:
+                    module.d.comb += self.child_issue_selected_valid.eq(selected_valid[0])
+                if isinstance(selected_bits, (list, tuple)) and selected_bits:
+                    module.d.comb += self.child_issue_selected_bits.eq(selected_bits[0])
+        if self.writeback is not None:
+            valid_groups = [getattr(self.writeback, name, None) for name in (
+                "toIntPreg_valid", "toFpPreg_valid", "toVfPreg_valid", "toV0Preg_valid", "toVlPreg_valid")]
+            data_groups = [getattr(self.writeback, name, None) for name in (
+                "toIntPreg_bits", "toFpPreg_bits", "toVfPreg_bits", "toV0Preg_bits", "toVlPreg_bits")]
+            pdest_groups = [getattr(self.writeback, name, None) for name in (
+                "toIntPreg_pdest", "toFpPreg_pdest", "toVfPreg_pdest", "toV0Preg_pdest", "toVlPreg_pdest")]
+            if any(group is not None for group in (*valid_groups, *data_groups, *pdest_groups)):
+                module.d.comb += self.child_writeback_active.eq(1)
+                for index in range(5):
+                    if isinstance(valid_groups[index], (list, tuple)) and valid_groups[index]:
+                        module.d.comb += self.child_writeback_valid[index].eq(valid_groups[index][0])
+                    if isinstance(data_groups[index], (list, tuple)) and data_groups[index]:
+                        module.d.comb += self.child_writeback_data[index].eq(data_groups[index][0])
+                    if isinstance(pdest_groups[index], (list, tuple)) and pdest_groups[index]:
+                        module.d.comb += self.child_writeback_pdest[index].eq(pdest_groups[index][0])
 
         # Locked output ports are explicit tie-offs until their corresponding
         # Decode/Issue/Rename/CSR/EXU child closures are implemented.
@@ -471,6 +561,10 @@ def build_verilog(configuration, injected_dependencies):
     ports += top.exu_valid + top.exu_ready + top.exu_data + top.exu_pdest
     ports += top.exu_class + top.exu_port + top.exu_uncertain + top.exu_no_data + top.exu_redirect
     ports += top.wb_ready + top.wb_valid + top.wb_data + top.wb_pdest + top.wb_class + top.wb_fire
+    ports += [top.child_decode_active, top.child_decode_instruction, top.child_decode_matches,
+              top.child_issue_active, top.child_issue_free_slots, top.child_issue_can_enq,
+              top.child_issue_selected_valid, top.child_issue_selected_bits,
+              top.child_writeback_active] + top.child_writeback_valid + top.child_writeback_data + top.child_writeback_pdest
     name = str(config.get("name", config.get("module", "UHSCBackendTop")))
     return verilog.convert(top, name=name, ports=ports)
 
