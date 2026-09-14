@@ -46,7 +46,7 @@
   },
   "direct": {
     "status": "PASS",
-    "vectors": 82323,
+    "vectors": 82324,
     "rounding_observations": [
       {
         "rm": 0,
@@ -79,6 +79,10 @@
         "output": 255
       }
     ],
+    "fpcvt_observation": {
+      "result": 4609434218613702656,
+      "fflags": 0
+    },
     "trace_sha256": "e38da41d95d54c821180dec616378ad81fda13f355e619ddc3ea435883eadc82"
   },
   "reference_differential": {
@@ -101,7 +105,7 @@
         "status": "PASS",
         "target": "UHSCYunSuanRounding",
         "reference": "RoundingUnit_1",
-        "output_tail": "PASS_ROUNDING 100000\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/yunsuan-scalar-validator/compare_rounding.sv:732: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 100ns; walltime 0.011 s; speed 8.811 us/s\n- Verilator: cpu 0.011 s on 1 threads; alloced 152 MB\n"
+        "pass_marker": "PASS_ROUNDING"
       },
       {
         "kind": "lza",
@@ -109,7 +113,7 @@
         "status": "PASS",
         "target": "UHSCYunSuanLZA",
         "reference": "LZA",
-        "output_tail": "PASS_LZA 20000\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/yunsuan-scalar-validator/compare_lza.sv:1621: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 20ns; walltime 0.004 s; speed 4.244 us/s\n- Verilator: cpu 0.005 s on 1 threads; alloced 152 MB\n"
+        "pass_marker": "PASS_LZA"
       },
       {
         "kind": "clz",
@@ -117,7 +121,7 @@
         "status": "PASS",
         "target": "UHSCYunSuanCLZ",
         "reference": "CLZ",
-        "output_tail": "PASS_CLZ 20000\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/yunsuan-scalar-validator/compare_clz.sv:828: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 20ns; walltime 0.009 s; speed 2.055 us/s\n- Verilator: cpu 0.010 s on 1 threads; alloced 152 MB\n"
+        "pass_marker": "PASS_CLZ"
       },
       {
         "kind": "int",
@@ -125,7 +129,7 @@
         "status": "PASS",
         "target": "UHSCYunSuanIntToFP",
         "reference": "IntToFP_1",
-        "output_tail": "PASS_INT 20000\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/yunsuan-scalar-validator/compare_int.sv:3871: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 20ns; walltime 0.018 s; speed 1.049 us/s\n- Verilator: cpu 0.019 s on 1 threads; alloced 153 MB\n"
+        "pass_marker": "PASS_INT"
       }
     ]
   },

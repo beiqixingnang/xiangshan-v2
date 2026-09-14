@@ -173,10 +173,42 @@ def direct_checks(module: dict[str, Any]) -> dict[str, Any]:
     sim.add_testbench(rounding_bench)
     sim.run()
     vectors += len(observations)
+    # Exercise the closed f32-to-f64 FPCVT path and its two-cycle boundary. /
+    # 测试已闭合的 f32 到 f64 FPCVT 路径及其两周期边界。
+    fpcvt = module["YunSuanFPCVT"]()
+    fpcvt_sim = Simulator(fpcvt)
+    fpcvt_sim.add_clock(1e-6, domain="scalar_fpcvt")
+    fpcvt_observation: dict[str, int] = {}
+
+    async def fpcvt_bench(ctx: Any) -> None:
+        for signal in (fpcvt.reset, fpcvt.fire, fpcvt.src, fpcvt.op_type,
+                       fpcvt.sew, fpcvt.rm, fpcvt.is_fround, fpcvt.is_fcvtmod):
+            ctx.set(signal, 0)
+        ctx.set(fpcvt.reset, 1)
+        await ctx.tick("scalar_fpcvt")
+        ctx.set(fpcvt.reset, 0)
+        ctx.set(fpcvt.src, 0x3FC00000)
+        ctx.set(fpcvt.op_type, 0xC8)
+        ctx.set(fpcvt.sew, 2)
+        ctx.set(fpcvt.rm, 0)
+        ctx.set(fpcvt.fire, 1)
+        await ctx.tick("scalar_fpcvt")
+        ctx.set(fpcvt.fire, 0)
+        await ctx.tick("scalar_fpcvt")
+        await ctx.delay(1e-9)
+        fpcvt_observation["result"] = int(ctx.get(fpcvt.result))
+        fpcvt_observation["fflags"] = int(ctx.get(fpcvt.fflags))
+        if fpcvt_observation["result"] != 0x3FF8000000000000 or fpcvt_observation["fflags"] != 0:
+            raise AssertionError(("fpcvt_f32_f64", fpcvt_observation))
+
+    fpcvt_sim.add_testbench(fpcvt_bench)
+    fpcvt_sim.run()
+    vectors += 1
     return {
         "status": "PASS",
         "vectors": vectors,
         "rounding_observations": observations[:3] + observations[-3:],
+        "fpcvt_observation": fpcvt_observation,
         "trace_sha256": hashlib.sha256(json.dumps(observations, sort_keys=True).encode()).hexdigest(),
     }
 
@@ -299,7 +331,7 @@ def reference_differential(module: dict[str, Any]) -> dict[str, Any]:
         passed = run.returncode == 0 and f"PASS_{kind.upper()}" in output
         rows.append({"kind": kind, "vectors": count, "status": "PASS" if passed else "FAIL",
                      "target": target_name, "reference": reference_name,
-                     "output_tail": output[-1000:]})
+                     "pass_marker": f"PASS_{kind.upper()}" if passed else "MISSING"})
         if not passed:
             break
     return {
@@ -330,6 +362,7 @@ def main() -> int:
     ]
     payload = {
         "schema_version": 1,
+        "status": "VALIDATOR_PASS_BOUNDED",
         "kind": "XIANGSHAN_KUNMINGHU_V2_YUNSUAN_SCALAR_FAMILY",
         "batch_id": "V2-DEPENDENCY-YUNSUAN-SCALAR-001",
         "source_commit": SOURCE_COMMIT,
