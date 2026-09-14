@@ -25,6 +25,7 @@
     "family_count": 24,
     "parent_closure_count": 4,
     "bounded_parent_ready": [
+      "frontend",
       "vector"
     ],
     "accepted_count": 0
@@ -8401,8 +8402,24 @@
           "status"
         ]
       },
-      "readiness": "PARENT_BOUNDARY_IDENTIFIED_CLOSURE_OPEN",
-      "next_action": "Build a reduced Frontend parent harness around the generated Frontend boundary; first bind ICache and RVC, then add source-level BPU/FTB/counter probes."
+      "parent_wrapper_evidence": {
+        "present": true,
+        "path": "validation/v2-frontend-parent-differential-results.json",
+        "sha256": "1b847fda992fdb6725b9ff4d68d59d29bb6654809f5b4010885ec07ed81793e3",
+        "full_io_envelope": true,
+        "bounded_parent_equations": "PASS",
+        "injected_children": [
+          "RvcExpander",
+          "FallThroughPredictor",
+          "ICacheMSHR",
+          "ICacheReplacer"
+        ],
+        "injected_child_probe": "PASS",
+        "parent_closure_gate": "PENDING_FULL_CHILD_CLOSURE",
+        "status": "FULL_IO_BOUNDARY_VALIDATED_CHILD_CLOSURE_OPEN"
+      },
+      "readiness": "FULL_IO_BOUNDARY_VALIDATED_CHILD_CLOSURE_OPEN",
+      "next_action": "Complete the reachable BPU/FTQ/IFU/IBuffer/ICache/ITLB/PMP behavioral closure and a full child-level reference differential before PARENT_CLOSURE_MATCHED."
     },
     {
       "closure_id": "backend",
@@ -33548,6 +33565,7 @@
           "status"
         ]
       },
+      "parent_wrapper_evidence": null,
       "readiness": "PARENT_BOUNDARY_IDENTIFIED_CLOSURE_OPEN",
       "next_action": "Bind DataPath and WbDataPath first with explicit injected register-file/memory stubs; defer full Backend until decode, issue, rename, and CSR ports are covered."
     },
@@ -49968,6 +49986,7 @@
           "status"
         ]
       },
+      "parent_wrapper_evidence": null,
       "readiness": "PARENT_BOUNDARY_IDENTIFIED_CLOSURE_OPEN",
       "next_action": "Use the already matched AMOALU/TagArray closures to create a reduced DCache MainPipe parent harness; keep TileLink and MBIST/DFT dependencies injected and explicit."
     },
@@ -55370,6 +55389,7 @@
           "uhsc_localization"
         ]
       },
+      "parent_wrapper_evidence": null,
       "readiness": "READY_FOR_REDUCED_PARENT_HARNESS",
       "next_action": "Start here: exercise VldMergeUnit with the existing vector child models and WbDataPath collision boundary; this is the smallest executable parent closure."
     }
@@ -79344,14 +79364,14 @@
     "ACCEPTED": "NOT_ALLOWED"
   },
   "blockers": [
-    "No full Frontend/Backend/Cache top-level parent wrapper exists in this auxiliary tree.",
+    "Frontend has a verified full-I/O envelope, but its complete reachable child behavioral closure remains open; Backend and Cache parent closures remain incomplete.",
     "Several V2 surfaces are inlined or distributed (BPU/FTB/counters, decode, and cache internals); lexical leaf presence is not parent equivalence.",
     "License review and external UHSC wrapper localization remain open for every family.",
     "The generated XSTop is a locked reference input; no candidate may be promoted from this scan."
   ],
   "unclosed_gates": [
     "Coordinator must execute and review the reduced vector parent harness.",
-    "Frontend, Backend, and Cache full parent wrappers are planned but not implemented in this scan.",
+    "Frontend full-I/O envelope exists, but Frontend/Backend/Cache complete reachable behavioral closures are not yet matched.",
     "Inlined/distributed children need explicit coverage entries before parent closure can be matched.",
     "License and UHSC external wrapper gates remain open."
   ]

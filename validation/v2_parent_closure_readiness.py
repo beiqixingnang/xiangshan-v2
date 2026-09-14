@@ -28,6 +28,7 @@ EXPECTED_XSTOP_BYTES = 228590583
 CANDIDATE_MANIFEST = ROOT / "V2-Ported-Candidates.json"
 MAPPING_MANIFEST = ROOT / "V2-Phase0-Mapping-Manifest.json"
 OUTPUT = ROOT / "validation/v2-parent-closure-readiness.json"
+FRONTEND_PARENT_EVIDENCE = ROOT / "validation/v2-frontend-parent-differential-results.json"
 
 
 MODULE_LINE = re.compile(rb"^module\s+(?P<name>[A-Za-z_][A-Za-z0-9_$]*)\s*\(")
@@ -233,6 +234,36 @@ def load_json(path: Path) -> Any:
     if not path.is_file():
         return None
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def frontend_parent_wrapper_evidence() -> dict[str, Any]:
+    """Summarize the full-I/O Frontend wrapper without promoting acceptance.
+    汇总完整 I/O Frontend 包装器，但不提升验收状态。
+    """
+
+    payload = load_json(FRONTEND_PARENT_EVIDENCE)
+    if not isinstance(payload, dict):
+        return {"present": False, "status": "NOT_RUN"}
+    inventory = payload.get("port_inventory", {})
+    child_probe = payload.get("injected_child_probe", {})
+    gates = payload.get("gates", {})
+    reference = payload.get("comparison", {})
+    full_io = (inventory.get("status") == "PASS" and inventory.get("count_match") is True
+               and inventory.get("name_set_match") is True
+               and inventory.get("direction_width_match") is True)
+    bounded_parent = reference.get("status") == "PASS" and child_probe.get("status") == "PASS"
+    return {
+        "present": True,
+        "path": str(FRONTEND_PARENT_EVIDENCE.relative_to(ROOT)).replace("\\", "/"),
+        "sha256": sha256_file(FRONTEND_PARENT_EVIDENCE),
+        "full_io_envelope": full_io,
+        "bounded_parent_equations": reference.get("status"),
+        "injected_children": child_probe.get("children", []),
+        "injected_child_probe": child_probe.get("status", "NOT_RUN"),
+        "parent_closure_gate": gates.get("PARENT_CLOSURE_MATCHED", "NOT_RUN"),
+        "status": "FULL_IO_BOUNDARY_VALIDATED_CHILD_CLOSURE_OPEN" if full_io and bounded_parent
+        else "PRESENT_NOT_READY",
+    }
 
 
 def flatten_values(value: Any, key: str | None = None) -> Iterable[tuple[str | None, Any]]:
@@ -929,6 +960,7 @@ def build_report() -> dict[str, Any]:
     for surface in REFERENCE_SURFACES.values():
         wanted_modules.update(surface.get("modules", []))
     records = read_module_records(XSTOP, wanted_modules) if xstop_present else {}
+    frontend_wrapper = frontend_parent_wrapper_evidence()
 
     parent_rows: list[dict[str, Any]] = []
     for spec in PARENT_SPECS:
@@ -969,6 +1001,21 @@ def build_report() -> dict[str, Any]:
             if row["reachability"] in {"INDIRECT_OR_INLINED_CHILD", "INLINED_OR_GENERATED_ALIAS"}
         ]
         missing = [row for row in child_rows if row["reachability"] == "NOT_OBSERVED_IN_ROOT_BODY"]
+        wrapper_evidence = frontend_wrapper if spec["closure_id"] == "frontend" else None
+        readiness = (
+            "FULL_IO_BOUNDARY_VALIDATED_CHILD_CLOSURE_OPEN"
+            if wrapper_evidence and wrapper_evidence.get("status") == "FULL_IO_BOUNDARY_VALIDATED_CHILD_CLOSURE_OPEN"
+            else "READY_FOR_REDUCED_PARENT_HARNESS"
+            if root is not None and len(reachable) > 0 and spec["closure_id"] == "vector"
+            else "PARENT_BOUNDARY_IDENTIFIED_CLOSURE_OPEN"
+            if root is not None
+            else "BLOCKED_REFERENCE_MODULE_MISSING"
+        )
+        next_action = (
+            "Complete the reachable BPU/FTQ/IFU/IBuffer/ICache/ITLB/PMP behavioral closure and a full child-level reference differential before PARENT_CLOSURE_MATCHED."
+            if wrapper_evidence and wrapper_evidence.get("status") == "FULL_IO_BOUNDARY_VALIDATED_CHILD_CLOSURE_OPEN"
+            else spec["next_action"]
+        )
         parent_rows.append(
             {
                 "closure_id": spec["closure_id"],
@@ -985,14 +1032,9 @@ def build_report() -> dict[str, Any]:
                 "family_ids": spec["family_ids"],
                 "observation_points": spec["observation_points"],
                 "evidence": evidence_summary(spec["evidence"]),
-                "readiness": (
-                    "READY_FOR_REDUCED_PARENT_HARNESS"
-                    if root is not None and len(reachable) > 0 and spec["closure_id"] == "vector"
-                    else "PARENT_BOUNDARY_IDENTIFIED_CLOSURE_OPEN"
-                    if root is not None
-                    else "BLOCKED_REFERENCE_MODULE_MISSING"
-                ),
-                "next_action": spec["next_action"],
+                "parent_wrapper_evidence": wrapper_evidence,
+                "readiness": readiness,
+                "next_action": next_action,
             }
         )
 
@@ -1092,10 +1134,11 @@ def build_report() -> dict[str, Any]:
     complete_or_bounded = [
         row["closure_id"]
         for row in parent_rows
-        if row["readiness"] == "READY_FOR_REDUCED_PARENT_HARNESS"
+        if row["readiness"] in {"READY_FOR_REDUCED_PARENT_HARNESS",
+                                 "FULL_IO_BOUNDARY_VALIDATED_CHILD_CLOSURE_OPEN"}
     ]
     blockers = [
-        "No full Frontend/Backend/Cache top-level parent wrapper exists in this auxiliary tree.",
+        "Frontend has a verified full-I/O envelope, but its complete reachable child behavioral closure remains open; Backend and Cache parent closures remain incomplete.",
         "Several V2 surfaces are inlined or distributed (BPU/FTB/counters, decode, and cache internals); lexical leaf presence is not parent equivalence.",
         "License review and external UHSC wrapper localization remain open for every family.",
         "The generated XSTop is a locked reference input; no candidate may be promoted from this scan.",
@@ -1171,7 +1214,7 @@ def build_report() -> dict[str, Any]:
         "blockers": blockers,
         "unclosed_gates": [
             "Coordinator must execute and review the reduced vector parent harness.",
-            "Frontend, Backend, and Cache full parent wrappers are planned but not implemented in this scan.",
+            "Frontend full-I/O envelope exists, but Frontend/Backend/Cache complete reachable behavioral closures are not yet matched.",
             "Inlined/distributed children need explicit coverage entries before parent closure can be matched.",
             "License and UHSC external wrapper gates remain open.",
         ],

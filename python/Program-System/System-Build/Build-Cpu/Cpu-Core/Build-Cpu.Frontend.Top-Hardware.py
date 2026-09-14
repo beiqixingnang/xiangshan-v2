@@ -552,6 +552,14 @@ class FrontendParent(Elaboratable):
                                           self.io_csrCtrl_bp_ctrl_sc_enable,
                                           self.io_csrCtrl_bp_ctrl_ras_enable)),
                 self.sfence_valid.eq(self.io_sfence_valid),
+                # The first soft-prefetch lane is the compact parent request
+                # source in the full envelope.  完整包络中用首个 soft-prefetch
+                # 通道作为紧凑取指请求源。
+                self.fetch_req_valid.eq(self.io_softPrefetch_0_valid),
+                self.fetch_req_addr.eq(self.io_softPrefetch_0_bits_vaddr),
+                self.fetch_req_nextline.eq(self.io_softPrefetch_0_bits_vaddr + 64),
+                self.uncache_req_valid.eq(0),
+                self.uncache_req_addr.eq(0),
             ]
 
         # Child request/status wiring is intentionally attribute-based so a
@@ -609,20 +617,64 @@ class FrontendParent(Elaboratable):
         child_uncache_resp_valid = getattr(self.instr_uncache, "resp_valid", self.uncache_resp_valid)
         child_uncache_resp_data = getattr(self.instr_uncache, "resp_data", self.uncache_resp_data)
         child_uncache_resp_error = getattr(self.instr_uncache, "resp_error", self.uncache_resp_error)
-        module.d.comb += [
-            self.fetch_req_ready.eq(child_icache_ready),
-            self.fetch_resp_valid.eq(child_fetch_resp_valid),
-            self.fetch_resp_data.eq(child_fetch_resp_data[:len(self.fetch_resp_data)]),
-            self.fetch_resp_error.eq(child_fetch_resp_error),
-            self.uncache_req_ready.eq(child_uncache_ready),
-            self.uncache_resp_valid.eq(child_uncache_resp_valid),
-            self.uncache_resp_data.eq(child_uncache_resp_data[:len(self.uncache_resp_data)]),
-            self.uncache_resp_error.eq(child_uncache_resp_error),
-        ]
+        if self.locked_io:
+            # In the exact envelope, external TileLink D beats are the
+            # response source; the injected child remains responsible for
+            # request readiness.  精确包络中外部 TileLink D beat 作为响应源，
+            # 注入子级继续负责请求就绪。
+            module.d.comb += [
+                self.fetch_req_ready.eq(child_icache_ready),
+                self.fetch_resp_valid.eq(self.auto_inner_icache_client_out_d_valid),
+                self.fetch_resp_data.eq(Cat(self.auto_inner_icache_client_out_d_bits_data, Const(0, 256))),
+                self.fetch_resp_error.eq(self.auto_inner_icache_client_out_d_bits_corrupt),
+                self.uncache_req_ready.eq(child_uncache_ready),
+                self.uncache_resp_valid.eq(self.auto_inner_instrUncache_client_out_d_valid),
+                self.uncache_resp_data.eq(self.auto_inner_instrUncache_client_out_d_bits_data),
+                self.uncache_resp_error.eq(self.auto_inner_instrUncache_client_out_d_bits_corrupt),
+            ]
+        else:
+            module.d.comb += [
+                self.fetch_req_ready.eq(child_icache_ready),
+                self.fetch_resp_valid.eq(child_fetch_resp_valid),
+                self.fetch_resp_data.eq(child_fetch_resp_data[:len(self.fetch_resp_data)]),
+                self.fetch_resp_error.eq(child_fetch_resp_error),
+                self.uncache_req_ready.eq(child_uncache_ready),
+                self.uncache_resp_valid.eq(child_uncache_resp_valid),
+                self.uncache_resp_data.eq(child_uncache_resp_data[:len(self.uncache_resp_data)]),
+                self.uncache_resp_error.eq(child_uncache_resp_error),
+            ]
+        if self.locked_io:
+            # Child status is authoritative when the injected child exposes
+            # it; fallback boundaries remain safe while idle.  若注入子级
+            # 暴露状态，则以其为准；回退边界空闲时保持安全。
+            child_wfi_safe = getattr(self.icache, "wfi_safe", None)
+            child_uncache_safe = getattr(self.instr_uncache, "wfi_safe", None)
+            child_error_valid = getattr(self.icache, "error_valid", None)
+            child_error_bits = getattr(self.icache, "error_bits", None)
+            child_ibuf_full = getattr(self.icache, "ibuffer_full", None)
+            child_bp_right = getattr(self.icache, "bp_right", None)
+            child_bp_wrong = getattr(self.icache, "bp_wrong", None)
+            if child_wfi_safe is not None:
+                module.d.comb += self.icache_wfi_safe.eq(child_wfi_safe)
+            if child_uncache_safe is not None:
+                module.d.comb += self.instr_uncache_wfi_safe.eq(child_uncache_safe)
+            if child_error_valid is not None:
+                module.d.comb += self.icache_error_valid.eq(child_error_valid)
+            if child_error_bits is not None:
+                module.d.comb += self.icache_error_bits.eq(child_error_bits)
+            if child_ibuf_full is not None:
+                module.d.comb += self.ibuffer_full_in.eq(child_ibuf_full)
+            if child_bp_right is not None:
+                module.d.comb += self.bp_right_in.eq(child_bp_right)
+            if child_bp_wrong is not None:
+                module.d.comb += self.bp_wrong_in.eq(child_bp_wrong)
         # Deterministic tie-offs for unbound full-inventory outputs. / 对尚未绑定的完整清单输出确定性置零。
         if self.locked_io:
             mapped_outputs = {
-                "io_ptw_req_0_valid", "io_ptw_req_0_bits_vpn", "io_ptw_req_0_bits_s2xlate", "io_ptw_resp_ready",
+                "auto_inner_icache_client_out_a_valid", "auto_inner_icache_client_out_a_bits_source",
+                "auto_inner_icache_client_out_a_bits_address", "auto_inner_instrUncache_client_out_a_valid",
+                "auto_inner_instrUncache_client_out_a_bits_address", "io_ptw_req_0_valid",
+                "io_ptw_req_0_bits_vpn", "io_ptw_req_0_bits_s2xlate", "io_ptw_resp_ready",
                 "io_backend_wfi_wfiSafe", "io_error_ecc_error_valid", "io_error_ecc_error_bits",
                 "io_resetInFrontend", *[f"io_perf_{index}_value" for index in range(cfg.perf_count)],
                 *[f"io_backend_cfVec_{lane}_{suffix}" for lane in range(cfg.fetch_width)
@@ -632,6 +684,11 @@ class FrontendParent(Elaboratable):
                 if _direction == "output" and port_name not in mapped_outputs:
                     module.d.comb += self.frontend_ports[port_name].eq(0)
             module.d.comb += [
+                self.auto_inner_icache_client_out_a_valid.eq(self.fetch_req_valid & self.fetch_req_ready),
+                self.auto_inner_icache_client_out_a_bits_source.eq(0),
+                self.auto_inner_icache_client_out_a_bits_address.eq(self.fetch_req_addr[:48]),
+                self.auto_inner_instrUncache_client_out_a_valid.eq(self.uncache_req_valid & self.uncache_req_ready),
+                self.auto_inner_instrUncache_client_out_a_bits_address.eq(self.uncache_req_addr[:48]),
                 self.io_ptw_req_0_valid.eq(self.ptw_req_valid),
                 self.io_ptw_req_0_bits_vpn.eq(self.ptw_req_vpn),
                 self.io_ptw_req_0_bits_s2xlate.eq(0),

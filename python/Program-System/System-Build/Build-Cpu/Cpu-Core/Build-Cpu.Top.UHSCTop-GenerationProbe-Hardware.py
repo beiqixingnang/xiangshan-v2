@@ -191,6 +191,12 @@ class UHSCTop(Elaboratable):
                 setattr(m.submodules, name, child)
         for index, child in enumerate(self.root_children):
             setattr(m.submodules, f"root_child_{index}", child)
+            child_clock = getattr(child, "clock", None)
+            child_reset = getattr(child, "reset", None)
+            if child_clock is not None:
+                m.d.comb += child_clock.eq(self.clock)
+            if child_reset is not None:
+                m.d.comb += child_reset.eq(self.reset)
 
         def wire(dst: Any, src: Any) -> None:
             """Connect compatible Amaranth signals with source-width adaptation.
@@ -342,9 +348,11 @@ def build_verilog(
         top.closure_missing_count,
         top.closure_complete,
     ]
-    known = {id(signal) for signal in ports}
-    ports.extend(signal for signal in (*top.full_inventory_inputs, *top.full_inventory_outputs)
-                 if id(signal) not in known)
+    # An injected frozen XSTop inventory selects the exact source envelope;
+    # do not append the reduced probe aliases in that mode.  The default
+    # no-metadata path remains the compact UHSCTop diagnostic surface.
+    if top.full_port_specs:
+        ports = list(top.full_inventory_ports)
     options = configuration if isinstance(configuration, dict) else {}
     module_name = str(options.get("module", options.get("name", "UHSCTop")))
     return verilog.convert(top, name=module_name, ports=ports, emit_src=False)

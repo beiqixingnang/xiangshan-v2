@@ -4,8 +4,8 @@
   "batch_id": "V2-PARENT-FRONTEND-001",
   "target": {
     "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Top-Hardware.py",
-    "sha256": "39b8e587da47fea6c65aaedefc60c2f15c9dd5ad1ed62924b1f75324889bcb1b",
-    "bytes": 50372,
+    "sha256": "27b620c95aa98f0450578fb7cfc880338ba868345c7b3ec9b2cb51cfc2c7eceb",
+    "bytes": 54404,
     "utf8": true,
     "lf_only": true,
     "bom": false,
@@ -14,8 +14,8 @@
       "Module Contract": 799,
       "Configuration": 1639,
       "Implementation": 15561,
-      "Public Adapter": 45409,
-      "Direct Entry": 48635
+      "Public Adapter": 49293,
+      "Direct Entry": 52519
     },
     "adapter_args": [
       "configuration",
@@ -57,8 +57,8 @@
     "direction_width_match": true,
     "target_input_count": 232,
     "target_output_count": 139,
-    "full_rtl_sha256": "9fb16705a45383a05b0f0b77356b6dbc98e60d7afb785bdea4c51706a98c8f32",
-    "full_rtl_bytes": 75788
+    "full_rtl_sha256": "ee46538101b3bf4b413239495af5c7231b3b1f32233405bff60fff4c7a34e420",
+    "full_rtl_bytes": 76209
   },
   "injected_child_probe": {
     "status": "PASS",
@@ -70,13 +70,13 @@
     ],
     "target_rtl": {
       "path": "validation/.work/v2-frontend-parent/UHSCTop-injected-children.sv",
-      "sha256": "ca49b325456eaca52d4e671492155de540d48347442b051cec62b97d93670fcb",
-      "bytes": 821258
+      "sha256": "6c11f96d159fecf7353029727b0ccd9ad4991451ee7da9c58410f5db60930548",
+      "bytes": 830892
     },
     "verilator": {
       "status": "PASS",
       "returncode": 0,
-      "stderr_tail": "/uhsc-v2/validation/.work/v2-frontend-parent/UHSCTop-injected-children.sv:1341:29: Operator ADD expects 6 bits on the LHS, but LHS's SEL generates 4 bits.\n                                                                                                           : ... note: In instance 'UHSCTop.bpu'\n 1341 |   assign \\$18  = s1_pc[4:1] + 5'h10;\n      |                             ^\n%Warning-WIDTHEXPAND: /tmp/uhsc-v2/validation/.work/v2-frontend-parent/UHSCTop-injected-children.sv:1342:24: Operator GT expects 8 bits on the RHS, but RHS's VARREF '$18' generates 6 bits.\n                                                                                                           : ... note: In instance 'UHSCTop.bpu'\n 1342 |   assign \\$19  = \\$17  > \\$18 ;\n      |                        ^\n%Warning-WIDTHEXPAND: /tmp/uhsc-v2/validation/.work/v2-frontend-parent/UHSCTop-injected-children.sv:1348:24: Operator ADD expects 40 bits on the RHS, but RHS's CONST '6'h20' generates 6 bits.\n                                                                                                           : ... note: In instance 'UHSCTop.bpu'\n 1348 |   assign \\$25  = s1_pc + 6'h20;\n      |                        ^\n"
+      "stderr_tail": "arent/UHSCTop-injected-children.sv:1349:24: Operator GT expects 8 bits on the RHS, but RHS's VARREF '$18' generates 6 bits.\n                                                                                                           : ... note: In instance 'UHSCTop.bpu'\n 1349 |   assign \\$19  = \\$17  > \\$18 ;\n      |                        ^\n%Warning-WIDTHEXPAND: /tmp/uhsc-v2/validation/.work/v2-frontend-parent/UHSCTop-injected-children.sv:1355:24: Operator ADD expects 40 bits on the RHS, but RHS's CONST '6'h20' generates 6 bits.\n                                                                                                           : ... note: In instance 'UHSCTop.bpu'\n 1355 |   assign \\$25  = s1_pc + 6'h20;\n      |                        ^\n%Warning-WIDTHEXPAND: /tmp/uhsc-v2/validation/.work/v2-frontend-parent/UHSCTop-injected-children.sv:992:46: Operator ADD expects 51 bits on the RHS, but RHS's CONST '7'h40' generates 7 bits.\n                                                                                                          : ... note: In instance 'UHSCTop'\n  992 |   assign \\$1  = io_softPrefetch_0_bits_vaddr + 7'h40;\n      |                                              ^\n"
     },
     "yosys": {
       "status": "PASS",
@@ -88,7 +88,7 @@
     "PYTHON_PRESENT": "PASS",
     "DIRECT_TEST_PASS_BOUNDED": "PASS",
     "V2_REFERENCE_MATCHED": "PASS_BOUNDED",
-    "PARENT_CLOSURE_MATCHED": "PASS_BOUNDED_REDUCED",
+    "PARENT_CLOSURE_MATCHED": "PENDING_FULL_CHILD_CLOSURE",
     "VERILATOR": "PASS",
     "YOSYS": "PASS",
     "UHSC_LOCALIZED": "PASS_BOUNDED_PARENT_LOCAL_NAME",

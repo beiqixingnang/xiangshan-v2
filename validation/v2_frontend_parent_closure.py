@@ -671,7 +671,12 @@ def write_evidence(static: dict[str, Any], reference: dict[str, Any], direct: di
         "PYTHON_PRESENT": "PASS",
         "DIRECT_TEST_PASS_BOUNDED": direct.get("status", "FAIL"),
         "V2_REFERENCE_MATCHED": "PASS_BOUNDED" if diff_pass else "FAIL",
-        "PARENT_CLOSURE_MATCHED": "PASS_BOUNDED_REDUCED" if diff_pass else "FAIL",
+        # Full port identity and bounded parent equations are verified below,
+        # but BPU/FTQ/IFU/IBuffer/ITLB/PMP behavior is not yet a complete
+        # reachable closure.  Never promote this gate from envelope evidence.
+        # 完整端口身份与有限父级方程已验证，但 BPU/FTQ/IFU/IBuffer/ITLB/PMP
+        # 尚未构成完整可达闭包；绝不因包络证据提升此门禁。
+        "PARENT_CLOSURE_MATCHED": "PENDING_FULL_CHILD_CLOSURE" if diff_pass else "FAIL",
         "VERILATOR": backend.get("verilator", {}).get("status", "FAIL"),
         "YOSYS": backend.get("yosys", {}).get("status", "FAIL"),
         "UHSC_LOCALIZED": "PASS_BOUNDED_PARENT_LOCAL_NAME",
@@ -700,8 +705,8 @@ def write_evidence(static: dict[str, Any], reference: dict[str, Any], direct: di
         "behavioral_equivalence": diff_pass, "status": "DIFFERENTIAL_MATCHED_BOUNDED" if diff_pass else "FAIL",
         "gates": gates, "acceptance_eligible": False,
         "unclosed": [
-            "Full 371-port Frontend child closure (BPU/FTQ/IFU/IBuffer/ICache/ITLB/PMP) remains outside this reduced batch.",
-            "Projection compares locked Frontend parent equations; full child-level differential remains pending.",
+            "The exact 371-port Frontend envelope is generated and audited, but BPU/FTQ/IFU/IBuffer/ICache/ITLB/PMP are not yet one complete reachable behavioral closure.",
+            "Projection compares locked Frontend parent equations; a full child-level differential remains pending.",
             "License review and user approval remain open; ACCEPTED is not allowed.",
         ],
     }
@@ -753,7 +758,7 @@ def write_evidence(static: dict[str, Any], reference: dict[str, Any], direct: di
     mapping_payload = {
         "schema_version": 1, "kind": "V2_FRONTEND_PARENT_MAPPING_UPDATE", "batch_id": "V2-PARENT-FRONTEND-001",
         "source_commit": SOURCE_COMMIT,
-        "entries": [{"id": "Frontend", "classification": "NEW_AUXILIARY_PARENT_HARNESS", "disposition": "PARENT_BOUNDARY_REDUCED",
+        "entries": [{"id": "Frontend", "classification": "NEW_AUXILIARY_PARENT_HARNESS", "disposition": "FULL_IO_ENVELOPE_CHILD_CLOSURE_OPEN",
                       "v2_source": SOURCE.relative_to(ROOT).as_posix(), "target": static["path"], "source_name": "Frontend",
                       "local_name": "UHSCTop", "status": status, "reference_mode": "LOCKED_XSTOP_FRONTEND_SOURCE_EQUATION_PROJECTION"}],
         "source_authority": reference, "gates": gates, "acceptance_eligible": False,

@@ -290,7 +290,11 @@ def main() -> int:
             "xs_tile": roots_mod.XSTile(injected_dependencies={"full_port_specs": root_specs_by_name["XSTile"]}),
         }
         full_deps = {
-            "frontend": frontend_mod.FrontendParent(locked_io=True),
+            # Use the compact Frontend child for the single-hierarchy bind;
+            # its exact 371-port envelope is generated and audited above as a
+            # separate boundary, avoiding duplicate top/child driver names in
+            # one Amaranth fragment.
+            "frontend": frontend_mod.FrontendParent(locked_io=False),
             "backend": backend_mod.BackendTop(),
             "mem_block": mem_mod.UHSCMemoryMemBlock(),
             "coupled_l2": l2_mod.CoupledL2Slice(),
