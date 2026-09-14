@@ -171,7 +171,46 @@
       "status": "PLANNED"
     }
   ],
-  "status": "INVENTORY_ONLY",
+  "status": "SCAN_COMPLETE_IMPLEMENTATION_ACTIVE",
+  "scan_freeze": {
+    "status": "PASS",
+    "core_scala_files": 325,
+    "reachable_sv_modules": 1976,
+    "dependency_scoped_scala_paths": 612,
+    "dependency_unique_scala_paths": 557,
+    "reference_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+    "frozen_at": "2026-09-14"
+  },
+  "implementation_policy": {
+    "aggregation": "family_or_parent_closure; do_not_map_one_scala_to_one_python",
+    "worker": "gpt-5.6-terra",
+    "worker_reasoning_effort": "max",
+    "validator": "gpt-5.6-terra",
+    "validator_reasoning_effort": "max",
+    "parallelism": "non-overlapping workers; one serial independent validator",
+    "per_batch_done_definition": [
+      "final Build-Cpu path implementation",
+      "UHSC external-name localization",
+      "direct and locked-XSTop reference differential",
+      "Verilator and Yosys gates",
+      "contract/license evidence",
+      "independent validator commit"
+    ],
+    "promotion_rule": "ACCEPTED remains NOT_ALLOWED until parent closure, license, UHSC and user approval gates pass"
+  },
+  "execution_state": {
+    "bounded_validator_pass_count": 12,
+    "planned_build_file_count": 78,
+    "parent_closures_matched": 0,
+    "accepted_count": 0,
+    "next_batches": [
+      "V2-PARENT-VECTOR-CLOSURE",
+      "V2-PARENT-CACHE-CLOSURE",
+      "V2-PARENT-FRONTEND-CLOSURE",
+      "V2-PARENT-BACKEND-CLOSURE"
+    ]
+  },
   "accepted_count": 0,
   "acceptance_eligible": false
 }
