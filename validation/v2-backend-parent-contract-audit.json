@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_BACKEND_PARENT_CONTRACT_AUDIT",
+  "batch_id": "V2-PARENT-BACKEND-001",
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Top-Hardware.py",
+    "sha256": "1ca1a5f67fa589e8b83a9ed3d176298a9bda60fb89b08899355713f5a5ebf166",
+    "bytes": 20056,
+    "utf8": true,
+    "bom": false,
+    "lf_only": true,
+    "ast_parse": true,
+    "zones": true,
+    "adapter_args": [
+      "configuration",
+      "injected_dependencies"
+    ],
+    "adapter_exact": true,
+    "function_comment_errors": [],
+    "forbidden_imports": [],
+    "status": "PASS"
+  },
+  "injected_dependencies": [
+    "control/dispatch",
+    "datapath",
+    "writeback",
+    "memory",
+    "csr"
+  ],
+  "source_authority": {
+    "canonical_path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "bytes": 228590583,
+    "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+    "backend_module": {
+      "sha256": "eebcd211ebd6313cffbf6e35da622e8d7ca39742b586a89e708d73b0db7e9c64",
+      "bytes": 2853145,
+      "header_sha256": "acf8e33def8e3beb94814a2c76cb9ba5750455431239ca00ab844763a6181a55",
+      "port_count": 570,
+      "line_start": 1349508,
+      "line_end": 1380323,
+      "expected_header_sha256": "acf8e33def8e3beb94814a2c76cb9ba5750455431239ca00ab844763a6181a55"
+    }
+  },
+  "source_paths": {
+    "Backend": {
+      "path": "upstream/src/main/scala/xiangshan/backend/Backend.scala",
+      "sha256": "a7419e1b080c4189ee3fd61e925276bc72ceca44a98ae273997e9d90fccf914b",
+      "bytes": 56967,
+      "anchors": {
+        "class Backend": 7,
+        "new DataPath": 1,
+        "new WbDataPath": 1,
+        "new ExuBlock": 3
+      }
+    },
+    "DataPath": {
+      "path": "upstream/src/main/scala/xiangshan/backend/datapath/DataPath.scala",
+      "sha256": "f6eb984b14969576ff9a700305b5e07e0f8a41b4fac33926eeacdeabfd021207",
+      "bytes": 52438,
+      "anchors": {
+        "class DataPath": 3,
+        "DataSource": 7,
+        "IntRFWBCollideChecker": 1
+      }
+    },
+    "DataSource": {
+      "path": "upstream/src/main/scala/xiangshan/backend/datapath/DataSource.scala",
+      "sha256": "342069020acee225f1a4d10cfecdf308c31718cd86c50979e1a52d4b76b8bd5f",
+      "bytes": 947,
+      "anchors": {}
+    },
+    "WbArbiter": {
+      "path": "upstream/src/main/scala/xiangshan/backend/datapath/WbArbiter.scala",
+      "sha256": "083d5c7c30d9aca4f13d24e9bae5958dfb160fbe4952629f1b19b40b3fe2cdaa",
+      "bytes": 19003,
+      "anchors": {
+        "class RealWBCollideChecker": 1,
+        "class WbDataPath": 2,
+        "hasUncertainLatency": 2
+      }
+    },
+    "DecodeUnit": {
+      "path": "upstream/src/main/scala/xiangshan/backend/decode/DecodeUnit.scala",
+      "sha256": "b9508c9bc768f6966208a39d03eda73571b209de88611ddea02fef1bb83c2ecf",
+      "bytes": 72328,
+      "anchors": {
+        "class DecodeUnit": 4,
+        "Instructions": 6
+      }
+    },
+    "DecodeStage": {
+      "path": "upstream/src/main/scala/xiangshan/backend/decode/DecodeStage.scala",
+      "sha256": "1fa0821ab5dbd6ba2ab3967db75378571c39b124f17226a10bab55275e836f41",
+      "bytes": 16716,
+      "anchors": {
+        "class DecodeStage": 2,
+        "DecodeUnit": 2
+      }
+    }
+  },
+  "result": "PASS",
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED_EQUATIONS",
+    "PARENT_CLOSURE_MATCHED": "PENDING_FULL_1165_PORT_BACKEND",
+    "UHSC_LOCALIZED": "PASS_BOUNDED_PARENT_LOCAL_NAME",
+    "LICENSE_REVIEW": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "acceptance_eligible": false
+}

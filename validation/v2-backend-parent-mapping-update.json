@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "kind": "V2_BACKEND_PARENT_MAPPING_UPDATE",
+  "batch_id": "V2-PARENT-BACKEND-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "entries": [
+    {
+      "id": "Backend",
+      "classification": "NEW_REDUCED_PARENT_BOUNDARY",
+      "disposition": "PARENT_BOUNDARY_REDUCED",
+      "v2_source": "upstream/src/main/scala/xiangshan/backend/Backend.scala",
+      "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Top-Hardware.py",
+      "local_name": "UHSCBackendTop",
+      "covered_children": [
+        "DataPath",
+        "WbDataPath",
+        "dispatch",
+        "redirect"
+      ],
+      "status": "PASS_BOUNDED"
+    }
+  ],
+  "reference_snapshot": {
+    "canonical_path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "bytes": 228590583,
+    "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+    "backend_module": {
+      "sha256": "eebcd211ebd6313cffbf6e35da622e8d7ca39742b586a89e708d73b0db7e9c64",
+      "bytes": 2853145,
+      "header_sha256": "acf8e33def8e3beb94814a2c76cb9ba5750455431239ca00ab844763a6181a55",
+      "port_count": 570,
+      "line_start": 1349508,
+      "line_end": 1380323,
+      "expected_header_sha256": "acf8e33def8e3beb94814a2c76cb9ba5750455431239ca00ab844763a6181a55"
+    }
+  },
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED_EQUATIONS",
+    "PARENT_CLOSURE_MATCHED": "PENDING_FULL_1165_PORT_BACKEND",
+    "UHSC_LOCALIZED": "PASS_BOUNDED_PARENT_LOCAL_NAME",
+    "LICENSE_REVIEW": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "acceptance_eligible": false
+}
