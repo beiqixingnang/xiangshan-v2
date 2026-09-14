@@ -43,7 +43,10 @@ SOURCE_COMMIT = "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af"
 REFERENCE_SHA256 = "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d"
 REFERENCE_BYTES = 228590583
 WORK = ROOT / "validation" / ".work" / "v2-vector-parent"
-PARENT_TARGET = ROOT / "validation" / "v2_vector_parent_harness.py"
+# Validate the搬运-ready Build-Cpu parent, not the historical validation-only
+# harness.  The harness remains available as provenance but is not a target.
+# 验证可搬运的 Build-Cpu 父级，而不是历史 validation-only harness；后者仅作溯源。
+PARENT_TARGET = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Core" / "Build-Cpu.Backend.Datapath.VldMergeUnit-Hardware.py"
 NEW_MGU_TARGET = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Core" / "Build-Cpu.Backend.Fu.Vector.NewMgu-Hardware.py"
 WB_TARGET = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Core" / "Build-Cpu.Backend.Datapath.WbArbiter-Hardware.py"
 READINESS = ROOT / "validation" / "v2-parent-closure-readiness.json"
@@ -53,6 +56,7 @@ DIRECT_RESULT = ROOT / "validation" / "v2-vector-parent-closure-direct-results.j
 DIFF_RESULT = ROOT / "validation" / "v2-vector-parent-closure-differential-results.json"
 COVERAGE_RESULT = ROOT / "validation" / "v2-vector-parent-closure-coverage-manifest.json"
 MAPPING_RESULT = ROOT / "validation" / "v2-vector-parent-closure-mapping-update.json"
+CONTRACT_RESULT = ROOT / "validation" / "v2-vector-parent-closure-contract-audit.json"
 
 
 # =============================================================================
@@ -479,10 +483,36 @@ def main() -> int:
     reference_text = reference_bytes.decode("utf-8", "replace")
     vectors = parent_vectors()
 
-    parent_module = load_exact(PARENT_TARGET, "v2_vector_parent_harness_runner")
+    parent_module = load_exact(PARENT_TARGET, "v2_vector_parent_build_runner")
     static = static_audit(PARENT_TARGET)
     compile_result = subprocess.run([sys.executable, "-m", "py_compile", str(PARENT_TARGET)],
                                     capture_output=True, check=False)
+    contract_payload = {
+        "schema_version": 1,
+        "kind": "XIANGSHAN_KUNMINGHU_V2_VECTOR_PARENT_CONTRACT_AUDIT",
+        "batch_id": "V2-PARENT-VECTOR-001",
+        "rules": "V2-Python-Amaranth-Rules.md",
+        "target": {"path": PARENT_TARGET.relative_to(ROOT).as_posix(), "sha256": digest(PARENT_TARGET)},
+        "static_audit": static,
+        "py_compile": {"returncode": compile_result.returncode,
+                        "status": "PASS" if compile_result.returncode == 0 else "FAIL"},
+        "injected_dependency_boundary": {"name": "mask_generator", "required_ports": [
+            "in_mask", "in_info_ta", "in_info_ma", "in_info_vstart", "in_info_vl",
+            "in_info_eew", "in_info_vsew", "in_info_vdIdx", "in_isIndexedVls",
+            "out_activeEn", "out_agnosticEn"], "sibling_imports": "NONE"},
+        "source_provenance": [
+            "upstream/src/main/scala/xiangshan/backend/datapath/VldMergeUnit.scala",
+            "upstream/src/main/scala/xiangshan/backend/fu/vector/Mgu.scala",
+            "upstream/src/main/scala/xiangshan/backend/datapath/WbArbiter.scala"],
+        "license_inventory": "V2-Dependency-License-Inventory.json",
+        "license_gate": "PENDING_PER_FILE_REVIEW",
+        "status": "PASS" if static["status"] == "PASS" and compile_result.returncode == 0 else "FAIL",
+        "gates": {"PYTHON_PRESENT": "PASS", "CONTRACT": static["status"],
+                  "LICENSE": "PENDING_PER_FILE_REVIEW", "ACCEPTED": "NOT_ALLOWED"},
+        "acceptance_eligible": False,
+    }
+    CONTRACT_RESULT.write_text(json.dumps(contract_payload, ensure_ascii=False, indent=2) + "\n",
+                               encoding="utf-8", newline="\n")
     direct = direct_parent(parent_module, vectors)
     direct_payload = {
         "schema_version": 1, "kind": "XIANGSHAN_KUNMINGHU_V2_VECTOR_PARENT_DIRECT",
@@ -504,9 +534,20 @@ def main() -> int:
 
     # Build target parent RTL and reference closure in ignored work storage.
     leaf = load_exact(NEW_MGU_TARGET, "v2_vector_parent_new_mgu_export")
-    target_parent = parent_module.build_verilog(None, {"mask_generator": leaf.NewMgu(leaf.NewMguConfig())})
+    # Use the source-compatible declaration only for differential wiring; the
+    # Build target's default product-facing name remains UHSCCoreVldMergeUnit.
+    # 差分连线仅使用源兼容声明；Build 目标默认产品名称仍为 UHSCCoreVldMergeUnit。
+    target_parent = parent_module.build_verilog(
+        {"module": "VldMergeUnitParent"},
+        {"mask_generator": leaf.NewMgu(leaf.NewMguConfig())},
+    )
     target_parent_path = WORK / "target-VldMergeUnitParent.sv"
     target_parent_path.write_text(target_parent, encoding="utf-8", newline="\n")
+    localized_parent = parent_module.build_verilog(
+        None, {"mask_generator": leaf.NewMgu(leaf.NewMguConfig())}
+    )
+    localized_parent_path = WORK / "target-UHSCCoreVldMergeUnit.sv"
+    localized_parent_path.write_text(localized_parent, encoding="utf-8", newline="\n")
     reference_parent = "\n".join(extract_module(reference_text, name) for name in
                                    ("UIntToContLow1s", "UIntToContLow0s", "MaskExtractor",
                                     "ByteMaskTailGen", "VldMgu", "VldMergeUnit"))
@@ -515,6 +556,7 @@ def main() -> int:
     renamed_parent = rename_module(target_parent, "VldMergeUnitParent", "VldMergeUnitParent")
     parent_sv_result = run_harness(parent_sv(reference_parent, renamed_parent, vectors), "vld-merge-parent")
     parent_backend = backend_gates([target_parent_path], "VldMergeUnitParent")
+    localized_parent_backend = backend_gates([localized_parent_path], "UHSCCoreVldMergeUnit")
     reference_backend = backend_gates([reference_parent_path], "VldMergeUnit")
 
     # Reuse the existing locked RealWBCollideChecker closure as an explicit
@@ -540,7 +582,8 @@ def main() -> int:
     collision_backend_reference = backend_gates([collision_ref_path], "RealWBCollideChecker")
 
     backend_pass = all(item["status"] == "PASS" for item in
-                       (parent_backend, reference_backend, collision_backend_target, collision_backend_reference))
+                       (parent_backend, localized_parent_backend, reference_backend,
+                        collision_backend_target, collision_backend_reference))
     differential_pass = parent_sv_result["status"] == "PASS" and collision_result["status"] == "PASS"
     overall = direct["status"] == "PASS" and differential_pass and backend_pass and static["status"] == "PASS" and compile_result.returncode == 0
 
@@ -548,13 +591,19 @@ def main() -> int:
         "schema_version": 1, "kind": "XIANGSHAN_KUNMINGHU_V2_VECTOR_PARENT_DIFFERENTIAL",
         "batch_id": "V2-PARENT-VECTOR-001", "source_commit": SOURCE_COMMIT,
         "reference_snapshot": {"canonical_path": REFERENCE_CANONICAL, "sha256": reference_hash, "bytes": len(reference_bytes)},
-        "target_parent": {"path": PARENT_TARGET.relative_to(ROOT).as_posix(), "sha256": digest(PARENT_TARGET)},
+        "target_parent": {"path": PARENT_TARGET.relative_to(ROOT).as_posix(), "sha256": digest(PARENT_TARGET),
+                          "source_compatibility_top": "VldMergeUnitParent",
+                          "product_facing_top": "UHSCCoreVldMergeUnit",
+                          "product_facing_sv_sha256": digest(localized_parent_path)},
         "target_leaf": {"NewMgu": {"path": NEW_MGU_TARGET.relative_to(ROOT).as_posix(), "sha256": digest(NEW_MGU_TARGET)},
                         "WbArbiter": {"path": WB_TARGET.relative_to(ROOT).as_posix(), "sha256": digest(WB_TARGET)}},
         "leaf_evidence": {"direct": {"path": LEAF_DIRECT.relative_to(ROOT).as_posix(), "sha256": digest(LEAF_DIRECT)},
                           "differential": {"path": LEAF_DIFF.relative_to(ROOT).as_posix(), "sha256": digest(LEAF_DIFF)}},
+        "contract_evidence": {"path": CONTRACT_RESULT.relative_to(ROOT).as_posix(), "sha256": digest(CONTRACT_RESULT)},
         "comparisons": {"VldMergeUnit_parent": parent_sv_result, "RealWBCollideChecker_child": collision_result},
-        "backend_gates": {"parent_target": parent_backend, "parent_reference": reference_backend,
+        "backend_gates": {"parent_target": parent_backend,
+                           "parent_localized_target": localized_parent_backend,
+                           "parent_reference": reference_backend,
                            "collision_target": collision_backend_target, "collision_reference": collision_backend_reference},
         "locked_closure_modules": ["VldMergeUnit", "VldMgu", "Mgu", "ByteMaskTailGen",
                                     "MaskExtractor", "UIntToContLow0s", "UIntToContLow1s"],
@@ -563,16 +612,21 @@ def main() -> int:
                             "physical destination metadata", "RealWBCollideChecker priority lane"],
         "behavioral_equivalence": overall, "status": "DIFFERENTIAL_MATCHED_BOUNDED" if overall else "CONTRACT_ONLY",
         "full_wbdatapath_integration": "PENDING_BACKEND_PARENT",
-        "license_gate": "PENDING", "uhsc_localization": "PENDING_EXTERNAL_WRAPPER",
+        "license_gate": "PENDING",
+        "uhsc_localization": {"status": "PASS_BOUNDED_PARENT_LOCAL_NAME",
+                              "source_name": "VldMergeUnitParent",
+                              "local_name": "UHSCCoreVldMergeUnit",
+                              "protocol_names_unchanged": True,
+                              "external_top_wrapper": "PENDING_PHASE_3"},
         "acceptance_eligible": False,
         "gates": {"PYTHON_PRESENT": "PASS", "DIRECT_TEST_PASS_BOUNDED": direct["status"],
                   "V2_REFERENCE_MATCHED": "PASS_BOUNDED" if parent_sv_result["status"] == "PASS" else "FAIL",
                   "PARENT_CLOSURE_MATCHED": "PASS_BOUNDED_REDUCED" if differential_pass else "FAIL",
                   "WBDATAPATH_FULL_PARENT": "PENDING_BACKEND_PARENT", "VERILATOR": "PASS" if backend_pass else "FAIL",
                   "YOSYS": "PASS" if backend_pass else "FAIL", "LICENSE": "PENDING",
-                  "UHSC_LOCALIZED": "PENDING_EXTERNAL_WRAPPER", "ACCEPTED": "NOT_ALLOWED"},
+                  "UHSC_LOCALIZED": "PASS_BOUNDED_PARENT_LOCAL_NAME", "ACCEPTED": "NOT_ALLOWED"},
         "blockers": ["Reduced closure intentionally excludes the full 861-port WbDataPath/Backend integration.",
-                     "License review and project-facing UHSC wrapper localization remain open.",
+                     "License review and the Phase-3 top-level UHSC wrapper remain open; this parent local name is bounded.",
                      "XSTop is used only as an immutable reference slice; no top-level acceptance is claimed."],
         "alias_gate": alias,
     }
@@ -584,6 +638,7 @@ def main() -> int:
         "batch_id": "V2-PARENT-VECTOR-001", "source_commit": SOURCE_COMMIT,
         "readiness_source": "validation/v2-parent-closure-readiness.json",
         "readiness_sha256": digest(READINESS) if READINESS.is_file() else None,
+        "contract_evidence": {"path": CONTRACT_RESULT.relative_to(ROOT).as_posix(), "sha256": digest(CONTRACT_RESULT)},
         "closure_id": "vector", "root_module": "VldMergeUnit",
         "root_source": "upstream/src/main/scala/xiangshan/backend/datapath/VldMergeUnit.scala",
         "reference_snapshot": {"path": REFERENCE_CANONICAL, "sha256": reference_hash, "bytes": len(reference_bytes)},
@@ -606,11 +661,17 @@ def main() -> int:
         ],
         "vectors": {"parent": len(vectors), "collision": 256},
         "status": "PASS_BOUNDED_PARENT" if overall else "CONTRACT_ONLY",
-        "license_review": "PENDING", "uhsc_localization": "PENDING_EXTERNAL_WRAPPER",
+        "license_review": "PENDING",
+        "uhsc_localization": {"status": "PASS_BOUNDED_PARENT_LOCAL_NAME",
+                              "source_name": "VldMergeUnitParent",
+                              "local_name": "UHSCCoreVldMergeUnit",
+                              "protocol_names_unchanged": True,
+                              "external_top_wrapper": "PENDING_PHASE_3"},
         "acceptance_eligible": False,
         "gates": {"DIRECT": direct["status"], "REFERENCE": "PASS_BOUNDED" if differential_pass else "FAIL",
                   "VERILATOR": "PASS" if backend_pass else "FAIL", "YOSYS": "PASS" if backend_pass else "FAIL",
-                  "FULL_WBDATAPATH": "PENDING_BACKEND_PARENT", "ACCEPTED": "NOT_ALLOWED"},
+                  "FULL_WBDATAPATH": "PENDING_BACKEND_PARENT",
+                  "UHSC_LOCALIZED": "PASS_BOUNDED_PARENT_LOCAL_NAME", "ACCEPTED": "NOT_ALLOWED"},
     }
     COVERAGE_RESULT.write_text(json.dumps(coverage, ensure_ascii=False, indent=2) + "\n",
                                encoding="utf-8", newline="\n")
@@ -622,7 +683,9 @@ def main() -> int:
             {"id": "VldMergeUnit", "classification": "NEW_AUXILIARY_PARENT_HARNESS",
              "v2_source": "upstream/src/main/scala/xiangshan/backend/datapath/VldMergeUnit.scala",
              "target": PARENT_TARGET.relative_to(ROOT).as_posix(), "closure_root": "core.fu.vector",
-             "reference_mode": "EXTRACTED_LOCKED_XSTOP_PARENT", "status": coverage["status"]},
+             "reference_mode": "EXTRACTED_LOCKED_XSTOP_PARENT", "status": coverage["status"],
+             "localization": {"source_name": "VldMergeUnitParent", "local_name": "UHSCCoreVldMergeUnit",
+                               "protocol_names_unchanged": True, "external_top_wrapper": "PENDING_PHASE_3"}},
             {"id": "VldMergeUnit.mgu", "classification": "INJECTED_EXISTING_LEAF",
              "v2_source": "upstream/src/main/scala/xiangshan/backend/fu/vector/Mgu.scala",
              "target": NEW_MGU_TARGET.relative_to(ROOT).as_posix(), "reference_mode": "VldMgu_PARENT_CLOSURE",
@@ -634,11 +697,12 @@ def main() -> int:
              "full_parent_status": "PENDING_BACKEND_PARENT"},
         ],
         "source_authority": {"canonical_path": REFERENCE_CANONICAL, "sha256": reference_hash, "bytes": len(reference_bytes)},
+        "contract_evidence": {"path": CONTRACT_RESULT.relative_to(ROOT).as_posix(), "sha256": digest(CONTRACT_RESULT)},
         "gates": {"contract": static["status"], "direct": direct["status"],
                   "reference": "PASS_BOUNDED" if differential_pass else "FAIL",
                   "parent_closure": "PASS_BOUNDED_REDUCED" if differential_pass else "FAIL",
                   "verilator": "PASS" if backend_pass else "FAIL", "yosys": "PASS" if backend_pass else "FAIL",
-                  "license": "PENDING", "UHSC_LOCALIZED": "PENDING_EXTERNAL_WRAPPER",
+                  "license": "PENDING", "UHSC_LOCALIZED": "PASS_BOUNDED_PARENT_LOCAL_NAME",
                   "ACCEPTED": "NOT_ALLOWED"},
         "acceptance_eligible": False,
     }

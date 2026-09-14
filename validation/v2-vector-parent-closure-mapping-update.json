@@ -8,10 +8,16 @@
       "id": "VldMergeUnit",
       "classification": "NEW_AUXILIARY_PARENT_HARNESS",
       "v2_source": "upstream/src/main/scala/xiangshan/backend/datapath/VldMergeUnit.scala",
-      "target": "validation/v2_vector_parent_harness.py",
+      "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Datapath.VldMergeUnit-Hardware.py",
       "closure_root": "core.fu.vector",
       "reference_mode": "EXTRACTED_LOCKED_XSTOP_PARENT",
-      "status": "PASS_BOUNDED_PARENT"
+      "status": "PASS_BOUNDED_PARENT",
+      "localization": {
+        "source_name": "VldMergeUnitParent",
+        "local_name": "UHSCCoreVldMergeUnit",
+        "protocol_names_unchanged": true,
+        "external_top_wrapper": "PENDING_PHASE_3"
+      }
     },
     {
       "id": "VldMergeUnit.mgu",
@@ -36,6 +42,10 @@
     "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
     "bytes": 228590583
   },
+  "contract_evidence": {
+    "path": "validation/v2-vector-parent-closure-contract-audit.json",
+    "sha256": "83eaaeb2a8d2bafb22be9b9c3eb268c996fe80ec610cf5a6ebd5988fd8451114"
+  },
   "gates": {
     "contract": "PASS",
     "direct": "PASS",
@@ -44,7 +54,7 @@
     "verilator": "PASS",
     "yosys": "PASS",
     "license": "PENDING",
-    "UHSC_LOCALIZED": "PENDING_EXTERNAL_WRAPPER",
+    "UHSC_LOCALIZED": "PASS_BOUNDED_PARENT_LOCAL_NAME",
     "ACCEPTED": "NOT_ALLOWED"
   },
   "acceptance_eligible": false

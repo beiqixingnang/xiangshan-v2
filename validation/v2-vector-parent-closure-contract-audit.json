@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_VECTOR_PARENT_CONTRACT_AUDIT",
+  "batch_id": "V2-PARENT-VECTOR-001",
+  "rules": "V2-Python-Amaranth-Rules.md",
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Datapath.VldMergeUnit-Hardware.py",
+    "sha256": "b28a4a7020541ebab897c59d114992e4ab54b1c4c633b07298fc89a12156d729"
+  },
+  "static_audit": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Datapath.VldMergeUnit-Hardware.py",
+    "sha256": "b28a4a7020541ebab897c59d114992e4ab54b1c4c633b07298fc89a12156d729",
+    "bytes": 15560,
+    "utf8": true,
+    "bom": false,
+    "lf_only": true,
+    "ast_parse": true,
+    "zones": true,
+    "adapter_args": [
+      "configuration",
+      "injected_dependencies"
+    ],
+    "adapter_exact": true,
+    "function_comment_errors": [],
+    "forbidden_imports": [],
+    "status": "PASS"
+  },
+  "py_compile": {
+    "returncode": 0,
+    "status": "PASS"
+  },
+  "injected_dependency_boundary": {
+    "name": "mask_generator",
+    "required_ports": [
+      "in_mask",
+      "in_info_ta",
+      "in_info_ma",
+      "in_info_vstart",
+      "in_info_vl",
+      "in_info_eew",
+      "in_info_vsew",
+      "in_info_vdIdx",
+      "in_isIndexedVls",
+      "out_activeEn",
+      "out_agnosticEn"
+    ],
+    "sibling_imports": "NONE"
+  },
+  "source_provenance": [
+    "upstream/src/main/scala/xiangshan/backend/datapath/VldMergeUnit.scala",
+    "upstream/src/main/scala/xiangshan/backend/fu/vector/Mgu.scala",
+    "upstream/src/main/scala/xiangshan/backend/datapath/WbArbiter.scala"
+  ],
+  "license_inventory": "V2-Dependency-License-Inventory.json",
+  "license_gate": "PENDING_PER_FILE_REVIEW",
+  "status": "PASS",
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "CONTRACT": "PASS",
+    "LICENSE": "PENDING_PER_FILE_REVIEW",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "acceptance_eligible": false
+}

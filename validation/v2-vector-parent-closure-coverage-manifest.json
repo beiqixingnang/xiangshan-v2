@@ -5,6 +5,10 @@
   "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
   "readiness_source": "validation/v2-parent-closure-readiness.json",
   "readiness_sha256": "d569c894ed64d7e0794f27e392ab579dc16659b05f79adb34fa694a6361abcac",
+  "contract_evidence": {
+    "path": "validation/v2-vector-parent-closure-contract-audit.json",
+    "sha256": "83eaaeb2a8d2bafb22be9b9c3eb268c996fe80ec610cf5a6ebd5988fd8451114"
+  },
   "closure_id": "vector",
   "root_module": "VldMergeUnit",
   "root_source": "upstream/src/main/scala/xiangshan/backend/datapath/VldMergeUnit.scala",
@@ -66,7 +70,13 @@
   },
   "status": "PASS_BOUNDED_PARENT",
   "license_review": "PENDING",
-  "uhsc_localization": "PENDING_EXTERNAL_WRAPPER",
+  "uhsc_localization": {
+    "status": "PASS_BOUNDED_PARENT_LOCAL_NAME",
+    "source_name": "VldMergeUnitParent",
+    "local_name": "UHSCCoreVldMergeUnit",
+    "protocol_names_unchanged": true,
+    "external_top_wrapper": "PENDING_PHASE_3"
+  },
   "acceptance_eligible": false,
   "gates": {
     "DIRECT": "PASS",
@@ -74,6 +84,7 @@
     "VERILATOR": "PASS",
     "YOSYS": "PASS",
     "FULL_WBDATAPATH": "PENDING_BACKEND_PARENT",
+    "UHSC_LOCALIZED": "PASS_BOUNDED_PARENT_LOCAL_NAME",
     "ACCEPTED": "NOT_ALLOWED"
   }
 }
