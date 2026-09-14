@@ -119,14 +119,17 @@ def arbiterCtrl(request: Iterable[Any]) -> list[Any]:
     values = list(request)
     if not values:
         return []
-    if len(values) == 1:
-        return [Const(1, 1)]
-    scanned: list[Any] = [values[0]]
-    current = values[0]
-    for item in values[1:-1]:
-        current = current | item
-        scanned.append(current)
-    return [values[0]] + [~item for item in scanned]
+    # Rocket's WBArbiter grants the first slot unconditionally and each later
+    # slot only when every earlier slot is invalid.  The old mirror omitted the
+    # final grant for n>2 and incorrectly gated slot zero by its request.
+    # Rocket WBArbiter 的写回仲裁将首槽无条件置为 ready，后续槽仅在所有
+    # 更高优先级槽无效时 ready；旧镜像在 n>2 时漏掉末槽且错误门控首槽。
+    grants: list[Any] = [Const(1, 1)]
+    prefix = values[0]
+    for item in values[1:]:
+        grants.append(~prefix)
+        prefix = prefix | item
+    return grants
 
 
 class RealWBArbiter(Elaboratable):

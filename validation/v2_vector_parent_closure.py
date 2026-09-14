@@ -15,7 +15,6 @@ import ast
 import hashlib
 import importlib.util
 import json
-import random
 import subprocess
 import sys
 from pathlib import Path
@@ -54,7 +53,6 @@ DIRECT_RESULT = ROOT / "validation" / "v2-vector-parent-closure-direct-results.j
 DIFF_RESULT = ROOT / "validation" / "v2-vector-parent-closure-differential-results.json"
 COVERAGE_RESULT = ROOT / "validation" / "v2-vector-parent-closure-coverage-manifest.json"
 MAPPING_RESULT = ROOT / "validation" / "v2-vector-parent-closure-mapping-update.json"
-COLLISION_REFERENCE = ROOT / "validation" / "reference-closures" / "RealWBCollideChecker-v2.sv"
 
 
 # =============================================================================
@@ -246,7 +244,6 @@ def parent_vectors(count: int = 512) -> list[dict[str, int]]:
          "is_masked": 1, "flush_valid": 1, "flush_flag": 1, "flush_value": 3, "flush_level": 1, "writeback_valid": 1},
     ]
     vectors.extend(corners)
-    rng = random.Random(0xD2A5)
     for index in range(max(0, count - len(vectors))):
         vectors.append({
             "data": ((0x9E3779B97F4A7C15 * (index + 1)) ^ 0x0123456789ABCDEF) & ((1 << 128) - 1),
@@ -266,10 +263,6 @@ def parent_vectors(count: int = 512) -> list[dict[str, int]]:
             "flush_level": (index >> 1) & 1,
             "writeback_valid": 0 if index % 23 == 0 else 1,
         })
-    # Keep this local PRNG use explicit so future edits cannot accidentally
-    # make the sequence depend on process/hash randomization.
-    if rng.random() < -1:  # pragma: no cover - deterministic dead guard
-        raise AssertionError("unreachable")
     return vectors[:count]
 
 
@@ -345,7 +338,7 @@ def parent_sv(reference_modules: str, target_module: str, vectors: list[dict[str
             assign(name, width, key)
         lines.extend(["    #1; clock = 1'b1; #1;",
                       f"    if (ref_valid !== dut_valid) $fatal(1, \"PARENT_VALID {index}\");",
-                      f"    if (ref_valid && (ref_data !== dut_data || ref_pdest !== dut_pdest || ref_vec !== dut_vec || ref_v0 !== dut_v0 || ref_vl !== dut_vl)) $fatal(1, \"PARENT_DATA {index} %h %h\", ref_data, dut_data);",
+                      f"    if (ref_data !== dut_data || ref_pdest !== dut_pdest || ref_vec !== dut_vec || ref_v0 !== dut_v0 || ref_vl !== dut_vl) $fatal(1, \"PARENT_DATA {index} %h %h\", ref_data, dut_data);",
                       f"    $display(\"P %0d %b %h %h\", {index}, ref_valid, ref_data, dut_data);",
                       "    #1; clock = 1'b0; #1;"])
     lines.extend([f'    $display("VLD_MERGE_PARENT_PASS {len(vectors)}"); $finish;', "  end", "endmodule"])
@@ -494,6 +487,7 @@ def main() -> int:
     direct_payload = {
         "schema_version": 1, "kind": "XIANGSHAN_KUNMINGHU_V2_VECTOR_PARENT_DIRECT",
         "batch_id": "V2-PARENT-VECTOR-001", "rules": "V2-Python-Amaranth-Rules.md",
+        "status": direct["status"],
         "source_commit": SOURCE_COMMIT, "source_authority": {"path": REFERENCE_CANONICAL,
         "sha256": reference_hash, "bytes": len(reference_bytes)},
         "target": {"path": PARENT_TARGET.relative_to(ROOT).as_posix(), "sha256": digest(PARENT_TARGET)},
@@ -534,7 +528,7 @@ def main() -> int:
                                      "RealWBCollideChecker", "RealWBCollideChecker_DUT")
     target_collision_path = WORK / "target-RealWBCollideChecker.sv"
     target_collision_path.write_text(target_collision, encoding="utf-8", newline="\n")
-    collision_reference = COLLISION_REFERENCE.read_text(encoding="utf-8")
+    collision_reference = extract_module(reference_text, "RealWBCollideChecker")
     collision_ref_path = WORK / "reference-RealWBCollideChecker-closure.sv"
     # Include the four arbiter variants required by the existing parent slice.
     collision_reference_full = "\n".join(extract_module(reference_text, name) for name in
@@ -557,6 +551,8 @@ def main() -> int:
         "target_parent": {"path": PARENT_TARGET.relative_to(ROOT).as_posix(), "sha256": digest(PARENT_TARGET)},
         "target_leaf": {"NewMgu": {"path": NEW_MGU_TARGET.relative_to(ROOT).as_posix(), "sha256": digest(NEW_MGU_TARGET)},
                         "WbArbiter": {"path": WB_TARGET.relative_to(ROOT).as_posix(), "sha256": digest(WB_TARGET)}},
+        "leaf_evidence": {"direct": {"path": LEAF_DIRECT.relative_to(ROOT).as_posix(), "sha256": digest(LEAF_DIRECT)},
+                          "differential": {"path": LEAF_DIFF.relative_to(ROOT).as_posix(), "sha256": digest(LEAF_DIFF)}},
         "comparisons": {"VldMergeUnit_parent": parent_sv_result, "RealWBCollideChecker_child": collision_result},
         "backend_gates": {"parent_target": parent_backend, "parent_reference": reference_backend,
                            "collision_target": collision_backend_target, "collision_reference": collision_backend_reference},

@@ -11,7 +11,7 @@
       "target": "validation/v2_vector_parent_harness.py",
       "closure_root": "core.fu.vector",
       "reference_mode": "EXTRACTED_LOCKED_XSTOP_PARENT",
-      "status": "CONTRACT_ONLY"
+      "status": "PASS_BOUNDED_PARENT"
     },
     {
       "id": "VldMergeUnit.mgu",
@@ -27,7 +27,7 @@
       "v2_source": "upstream/src/main/scala/xiangshan/backend/datapath/WbArbiter.scala",
       "target": "python/ported/backend/datapath/WbArbiter-Hardware.py",
       "reference_mode": "EXTRACTED_REALWBCOLLIDECHECKER",
-      "status": "FAIL",
+      "status": "PASS_BOUNDED_REFERENCE",
       "full_parent_status": "PENDING_BACKEND_PARENT"
     }
   ],
@@ -39,8 +39,8 @@
   "gates": {
     "contract": "PASS",
     "direct": "PASS",
-    "reference": "FAIL",
-    "parent_closure": "FAIL",
+    "reference": "PASS_BOUNDED",
+    "parent_closure": "PASS_BOUNDED_REDUCED",
     "verilator": "PASS",
     "yosys": "PASS",
     "license": "PENDING",
