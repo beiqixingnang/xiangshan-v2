@@ -464,7 +464,12 @@ def backend_gates(module: ModuleType) -> dict[str, Any]:
     def stable_tail(text: str) -> str:
         """Remove temporary path names from tool diagnostics. / 移除工具诊断中的临时路径名。"""
 
-        return re.sub(r"(?:/mnt/[^\s:]*/Temp|[A-Za-z]:\\[^\s:]*)/v2_coupled_l2_bridge_[^/\\\s]+", "<temp>", text[-800:])
+        cleaned = re.sub(r"(?:/mnt/[^\s:]*/Temp|[A-Za-z]:\\[^\s:]*)/v2_coupled_l2_bridge_[^/\\\s]+", "<temp>", text[-1200:])
+        # Yosys appends a process-dependent logfile hash, timing, and memory;
+        # these are run metadata, not behavioral evidence. / Yosys 追加的日志哈希、计时和内存依赖进程，过滤掉。
+        kept = [line for line in cleaned.splitlines()
+                if "Logfile hash:" not in line and "CPU:" not in line and "MEM:" not in line and "Time spent:" not in line]
+        return "\n".join(kept)[-800:]
 
     return {"verilator": "PASS" if verilator.returncode == 0 else "FAIL",
             "yosys": "PASS" if yosys.returncode == 0 else "FAIL", "rtl_bytes": len(rtl.encode()),
