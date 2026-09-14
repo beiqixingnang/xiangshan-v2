@@ -1030,7 +1030,10 @@ class TL2CHICoupledL2(Elaboratable):
         tx_req_valid = pending & ~req_sent & ~retry_wait & link_up & (tx_req_credit != 0)
         tx_rsp_valid = snoop_pending & link_up & (tx_rsp_credit != 0)
         tx_dat_valid = pending_write_data & link_up & (tx_dat_credit != 0)
-        parent_idle = ~pending & ~response_pending & ~snoop_pending & ~self.reset
+        # The generated TL manager keeps its ready envelope asserted during reset;
+        # stateful acceptance remains blocked by the reset branch below. /
+        # 生成的 TL manager 在复位期间仍保持 ready 包络；状态接受仍由下方复位分支阻断。
+        parent_idle = ~pending & ~response_pending & ~snoop_pending
 
         # Source-shaped CHI flit field helper. / 源代码形状 CHI flit 字段辅助函数。
         def field(value: Any, widths: Sequence[int], index: int) -> Any:
@@ -1078,8 +1081,8 @@ class TL2CHICoupledL2(Elaboratable):
 
         # Link, ready/valid, response, and flit outputs. / 链路、ready/valid、响应和 flit 输出。
         m.d.comb += [
-            self.auto_mmioBridge_mmio_in_a_ready.eq(parent_idle & ~self.auto_in_a_valid & link_up),
-            self.auto_in_a_ready.eq(parent_idle & ~self.auto_mmioBridge_mmio_in_a_valid & link_up),
+            self.auto_mmioBridge_mmio_in_a_ready.eq(parent_idle & ~self.auto_in_a_valid),
+            self.auto_in_a_ready.eq(parent_idle & ~self.auto_mmioBridge_mmio_in_a_valid),
             self.auto_in_c_ready.eq(parent_idle & link_up),
             self.auto_in_b_valid.eq(0), self.auto_in_b_bits_opcode.eq(0), self.auto_in_b_bits_param.eq(0),
             self.auto_in_b_bits_address.eq(0), self.auto_in_b_bits_data.eq(0),
@@ -1095,9 +1098,9 @@ class TL2CHICoupledL2(Elaboratable):
             self.auto_mmioBridge_mmio_in_d_bits_data.eq(response_data[:64]), self.auto_mmioBridge_mmio_in_d_bits_corrupt.eq(response_corrupt),
             self.io_chi_txsactive.eq(tx_run), self.io_chi_syscoreq.eq(link_up),
             self.io_chi_tx_linkactivereq.eq(~self.reset), self.io_chi_rx_linkactiveack.eq(self.io_chi_rx_linkactivereq & ~self.reset),
-            self.io_chi_tx_req_flitpend.eq(tx_req_valid), self.io_chi_tx_req_flitv.eq(tx_req_valid), self.io_chi_tx_req_flit.eq(req_flit),
-            self.io_chi_tx_rsp_flitpend.eq(tx_rsp_valid), self.io_chi_tx_rsp_flitv.eq(tx_rsp_valid), self.io_chi_tx_rsp_flit.eq(rsp_flit),
-            self.io_chi_tx_dat_flitpend.eq(tx_dat_valid), self.io_chi_tx_dat_flitv.eq(tx_dat_valid), self.io_chi_tx_dat_flit.eq(dat_flit),
+            self.io_chi_tx_req_flitpend.eq(link_up), self.io_chi_tx_req_flitv.eq(tx_req_valid), self.io_chi_tx_req_flit.eq(req_flit),
+            self.io_chi_tx_rsp_flitpend.eq(link_up), self.io_chi_tx_rsp_flitv.eq(tx_rsp_valid), self.io_chi_tx_rsp_flit.eq(rsp_flit),
+            self.io_chi_tx_dat_flitpend.eq(link_up), self.io_chi_tx_dat_flitv.eq(tx_dat_valid), self.io_chi_tx_dat_flit.eq(dat_flit),
             self.io_chi_rx_rsp_lcrdv.eq(link_up), self.io_chi_rx_dat_lcrdv.eq(link_up),
             self.io_chi_rx_snp_lcrdv.eq(link_up), self.io_l2_hint_valid.eq(0), self.io_l2_hint_bits_sourceId.eq(0),
             self.io_l2_hint_bits_isKeyword.eq(0), self.io_l2_tlb_req_req_valid.eq(0), self.io_l2_tlb_req_req_bits_vaddr.eq(0),
