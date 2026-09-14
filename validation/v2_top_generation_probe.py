@@ -134,6 +134,47 @@ def main() -> int:
     INTEGRATED_RTL_FILE.write_text(integrated_rtl, encoding="utf-8", newline="\n")
     integrated_modules = module_names(integrated_rtl)
 
+    # Generate the exact parent envelopes independently before attempting the
+    # top-level bind.  This keeps the structural gate honest: each envelope
+    # must elaborate from versioned inventory metadata, while the integrated
+    # hierarchy remains explicitly reduced until child behavior is complete.
+    backend_specs_path = ROOT / "validation/backend-port-specs.json"
+    mem_specs_path = ROOT / "validation/v2-memblock-port-inventory.json"
+    full_parent_envelopes: dict[str, object] = {}
+    if backend_specs_path.is_file():
+        backend_specs = json.loads(backend_specs_path.read_text(encoding="utf-8"))["ports"]
+        backend_full = backend_mod.build_full_verilog({"module": "UHSCBackendEnvelope"}, {})
+        backend_path = WORK_DIR / "uhsc-backend-envelope.sv"
+        backend_path.write_text(backend_full, encoding="utf-8", newline="\n")
+        full_parent_envelopes["Backend"] = {
+            "inventory_count": len(backend_specs),
+            "generated_ports": len(backend_mod.full_backend_port_schema()),
+            "rtl_bytes": len(backend_full.encode("utf-8")),
+            "rtl_sha256": hashlib.sha256(backend_full.encode("utf-8")).hexdigest(),
+            "path": str(backend_path.relative_to(ROOT)).replace("\\", "/"),
+        }
+    if mem_specs_path.is_file():
+        mem_payload = json.loads(mem_specs_path.read_text(encoding="utf-8"))
+        mem_specs = mem_payload.get("ports", [])
+        mem_full = mem_mod.build_verilog({"module": "UHSCMemBlockEnvelope"}, {"full_port_specs": mem_specs})
+        mem_path = WORK_DIR / "uhsc-memblock-envelope.sv"
+        mem_path.write_text(mem_full, encoding="utf-8", newline="\n")
+        full_parent_envelopes["MemBlock"] = {
+            "inventory_count": len(mem_specs),
+            "rtl_bytes": len(mem_full.encode("utf-8")),
+            "rtl_sha256": hashlib.sha256(mem_full.encode("utf-8")).hexdigest(),
+            "path": str(mem_path.relative_to(ROOT)).replace("\\", "/"),
+        }
+    frontend_full = frontend_mod.build_verilog({"module": "UHSCFrontendEnvelope"}, {})
+    frontend_path = WORK_DIR / "uhsc-frontend-envelope.sv"
+    frontend_path.write_text(frontend_full, encoding="utf-8", newline="\n")
+    full_parent_envelopes["Frontend"] = {
+        "inventory_count": len(frontend_mod.frontend_port_specs()),
+        "rtl_bytes": len(frontend_full.encode("utf-8")),
+        "rtl_sha256": hashlib.sha256(frontend_full.encode("utf-8")).hexdigest(),
+        "path": str(frontend_path.relative_to(ROOT)).replace("\\", "/"),
+    }
+
     # Direct quiescent-probe contract: no injected closures must advertise
     # four missing hierarchy roots and never claim completion.
     direct_top = top.UHSCTop()
@@ -189,6 +230,7 @@ def main() -> int:
             "bound_children": sorted(deps),
             "status": "ELABORATED_REDUCED_ONLY",
         },
+        "full_parent_envelopes": full_parent_envelopes,
         "direct_probe_observation": direct_observed,
         "required_hierarchy_roots": required_roots,
         "locked_reference_hierarchy": REFERENCE_HIERARCHY,
