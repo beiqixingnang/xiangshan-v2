@@ -100,8 +100,7 @@ def decode_immediate(imm_bits: int, imm_type: int, data_bits: int = 64) -> int:
 
     imm_bits &= 0xFFFFFFFF
 
-    # Return a signed value represented in an unsigned data-width word.
-    # 返回以无符号数据宽度字表示的有符号值。
+    # Return a signed value in an unsigned data-width word. / 返回无符号数据宽度字中的有符号值。
     def signed(value: int, bits: int) -> int:
         value &= (1 << bits) - 1
         if value & (1 << (bits - 1)):
