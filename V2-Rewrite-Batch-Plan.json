@@ -120,10 +120,8 @@
         "V2-SCAN-A-CORE-LEAVES"
       ],
       "validator": "v2-independent-validator",
-      "status": "IN_PROGRESS",
-      "active_reduced_batches": [
-          "V2-DEPENDENCY-UTILITY-001"
-      ],
+  "status": "REDUCED_PARENT_BATCHES_COMPLETE_FULL_CLOSURE_PENDING",
+      "active_reduced_batches": [],
       "completed_reduced_batches": [
         {
           "batch_id": "V2-PARENT-VECTOR-001",
@@ -205,7 +203,20 @@
         "V2-SCAN-B-CORE-PARENTS"
       ],
       "validator": "v2-independent-validator",
-      "status": "PLANNED"
+  "status": "IN_PROGRESS",
+  "active_family_batches": [
+    "V2-DEPENDENCY-UTILITY-001"
+  ],
+  "completed_family_batches": [
+    {
+      "batch_id": "V2-DEPENDENCY-UTILITY-001",
+      "status": "PASS_BOUNDED_FAMILY",
+      "commit": "PENDING_COORDINATOR_COMMIT",
+      "evidence": "validation/v2-utility-family-results.json",
+      "source_file_count": 61,
+      "vectors": 128
+    }
+  ]
     },
     {
       "batch_id": "V2-SCAN-D-UHSC-TOP",
@@ -250,7 +261,11 @@
     "promotion_rule": "ACCEPTED remains NOT_ALLOWED until parent closure, license, UHSC and user approval gates pass"
   },
   "execution_state": {
-    "bounded_validator_pass_count": 12,
+    "bounded_validator_pass_count": 16,
+    "bounded_leaf_pass_count": 12,
+    "bounded_parent_pass_count": 4,
+    "bounded_dependency_family_pass_count": 1,
+    "validated_batch_count": 17,
     "planned_build_file_count": 78,
     "parent_closures_matched": 0,
     "accepted_count": 0,
