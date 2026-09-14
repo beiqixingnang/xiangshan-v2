@@ -283,6 +283,7 @@ def main() -> int:
     # deterministic ties), but unlike separate wrappers it exercises one
     # Amaranth elaboration path end-to-end.
     single_hierarchy: dict[str, object] = {"status": "PENDING"}
+    module_inventory: dict[str, object] = {"status": "PENDING"}
     if "XSTop" in root_specs_by_name:
         root_children = {
             "xs_core": roots_mod.XSCore(injected_dependencies={"full_port_specs": root_specs_by_name["XSCore"]}),
@@ -308,6 +309,24 @@ def main() -> int:
         hierarchy_path.write_text(full_hierarchy_rtl, encoding="utf-8", newline="\n")
         hierarchy_schema = generated_port_schema(full_hierarchy_rtl, "UHSCFullKunminghuV2")
         hierarchy_expected = inventory_schema(root_specs_by_name["XSTop"])
+        locked_text = Path(r"\\wsl$\Debian\home\lishuo\xs-v2-local\build\rtl\XSTop.sv").read_text(
+            encoding="utf-8", errors="replace"
+        )
+        locked_modules = module_names(locked_text)
+        generated_modules = module_names(full_hierarchy_rtl)
+        missing_modules = sorted(set(locked_modules) - set(generated_modules))
+        extra_modules = sorted(set(generated_modules) - set(locked_modules))
+        module_inventory = {
+            "status": "PASS" if not missing_modules and not extra_modules else "INCOMPLETE",
+            "locked_module_count": len(locked_modules),
+            "generated_module_count": len(generated_modules),
+            "missing_module_count": len(missing_modules),
+            "extra_module_count": len(extra_modules),
+            "missing_modules_sample": missing_modules[:50],
+            "extra_modules_sample": extra_modules[:50],
+            "reference_sha256": EXPECTED_REFERENCE,
+            "semantic_status": "PENDING_FULL_CHILD_BEHAVIORAL_DIFFERENTIAL",
+        }
         single_hierarchy = {
             "status": "PASS" if set(hierarchy_schema) == set(hierarchy_expected)
             and all(hierarchy_schema[name] == hierarchy_expected[name] for name in hierarchy_expected)
@@ -425,6 +444,7 @@ def main() -> int:
         },
         "full_parent_envelopes": full_parent_envelopes,
         "single_full_hierarchy": single_hierarchy,
+        "locked_module_inventory": module_inventory,
         "direct_probe_observation": direct_observed,
         "required_hierarchy_roots": required_roots,
         "locked_reference_hierarchy": REFERENCE_HIERARCHY,
