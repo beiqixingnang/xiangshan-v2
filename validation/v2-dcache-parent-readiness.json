@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_DCACHE_PARENT_READINESS",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "reference": {
+    "path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "bytes": 228590583,
+    "locked_input_unchanged": true
+  },
+  "boundaries": [
+    {
+      "module": "MainPipe",
+      "source": "upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/MainPipe.scala",
+      "xstop_lines": [
+        1463120,
+        1466301
+      ],
+      "ports": 399,
+      "bytes": 432787,
+      "sha256": "e6fad9aee4d15291bca82a1c12a4023e9374ad330ee6f4860b350eeeaff5ad53",
+      "covered_children": [
+        "AMOALU",
+        "TagArray",
+        "MainPipe"
+      ],
+      "status": "BOUNDARY_INDEXED",
+      "next_action": "Bind AMOALU and TagArray through explicit transaction stubs."
+    },
+    {
+      "module": "DCache",
+      "source": "upstream/src/main/scala/xiangshan/cache/dcache/DCacheWrapper.scala",
+      "xstop_lines": [
+        1479248,
+        1506359
+      ],
+      "ports": 191,
+      "bytes": 2965177,
+      "sha256": "f323f52616e51fb65e73b986db54177b29af7a0fcdb5591a9648217304f88e19",
+      "covered_children": [
+        "MainPipe",
+        "TagArray",
+        "AMOALU",
+        "TreeArbiter",
+        "MissReadyGen"
+      ],
+      "status": "BOUNDARY_INDEXED",
+      "next_action": "Add request/miss/refill parent observations after MainPipe."
+    },
+    {
+      "module": "DCacheWrapper",
+      "source": "upstream/src/main/scala/xiangshan/cache/dcache/DCacheWrapper.scala",
+      "xstop_lines": [
+        1506360,
+        1508232
+      ],
+      "ports": 191,
+      "bytes": 197880,
+      "sha256": "1d85fad72188aaea8cb61f4f41ef45eff3a54fbc142f80512650399ea76b8f23",
+      "covered_children": [
+        "DCache",
+        "TLBundleA",
+        "TLBundleD",
+        "Mbist"
+      ],
+      "status": "BOUNDARY_INDEXED",
+      "next_action": "Keep TileLink and MBIST/DFT dependencies injected."
+    },
+    {
+      "module": "MemBlock",
+      "source": "upstream/src/main/scala/xiangshan/mem/MemBlock.scala",
+      "xstop_lines": [
+        1979904,
+        2011084
+      ],
+      "ports": 669,
+      "bytes": 3315615,
+      "sha256": "f6f5d104187494a3a0a73225992173ca7c4bc0ab2c9cbb82ddebd39878b23aa6",
+      "covered_children": [
+        "DCacheWrapper",
+        "ICache",
+        "MMU",
+        "LSU"
+      ],
+      "status": "BOUNDARY_INDEXED",
+      "next_action": "Defer full MemBlock until DCache and ICache contracts are complete."
+    }
+  ],
+  "existing_leaf_evidence": {
+    "AMOALU": "validation/v2-dcache-batch-differential-results.json",
+    "TagArray": "validation/v2-dcache-batch-differential-results.json"
+  },
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PRESENT_LEAVES",
+    "V2_REFERENCE_MATCHED": "PRESENT_LEAVES",
+    "PARENT_CLOSURE_MATCHED": "PENDING_REDUCED_MAINPIPE_HARNESS",
+    "UHSC_LOCALIZED": "PENDING_EXTERNAL_WRAPPER",
+    "LICENSE_REVIEW": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "blockers": [
+    "MainPipe/DCache/DCacheWrapper/MemBlock are large parent boundaries; leaf evidence is not full-parent equivalence.",
+    "TileLink, MBIST/DFT, MMU, LSU, and refill/miss dependencies require explicit injected contracts."
+  ],
+  "acceptance_eligible": false
+}
