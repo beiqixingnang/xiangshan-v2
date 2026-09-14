@@ -181,11 +181,21 @@ def direct_bench(module: ModuleType) -> dict[str, object]:
         ctx.set(signals["in_a_valid"], 0)
         if int(ctx.get(outputs["l2Miss"])) != 1 and int(ctx.get(outputs["out_a_valid"])) != 1:
             raise AssertionError("miss was not exposed")
+        # The A request is held until the outer sink accepts it. / A 请求保持到外部 sink 接收。
+        if int(ctx.get(outputs["out_a_valid"])) != 1:
+            raise AssertionError("outer A request was not presented")
+        await ctx.tick("coupled_l2")
+        if int(ctx.get(outputs["out_a_valid"])) != 0:
+            raise AssertionError("outer A request did not retire")
         ctx.set(signals["out_d_valid"], 1)
         ctx.set(signals["out_d_bits_data"], 0xCAFE)
         ctx.set(signals["out_d_bits_size"], 6)
         await ctx.tick("coupled_l2")
         ctx.set(signals["out_d_valid"], 0)
+        if int(ctx.get(outputs["in_d_valid"])) != 1:
+            raise AssertionError("refill did not produce a D response")
+        if int(ctx.get(outputs["in_d_bits_opcode"])) != 1:
+            raise AssertionError("Get refill response opcode mismatch")
         await ctx.tick("coupled_l2")
         # C release is accepted and produces ReleaseAck-style response. / C release 被接受并产生 ReleaseAck 响应。
         ctx.set(signals["in_c_valid"], 1)
@@ -194,9 +204,11 @@ def direct_bench(module: ModuleType) -> dict[str, object]:
         ctx.set(signals["in_c_bits_source"], 2)
         ctx.set(signals["in_c_bits_address"], 0x120)
         await ctx.tick("coupled_l2")
+        if int(ctx.get(outputs["in_d_valid"])) != 1 or int(ctx.get(outputs["in_d_bits_opcode"])) != 6:
+            raise AssertionError("C release response mismatch")
+        observations.append({"release_response": int(ctx.get(outputs["in_d_bits_opcode"]))})
         ctx.set(signals["in_c_valid"], 0)
         await ctx.tick("coupled_l2")
-        observations.append({"release_response": int(ctx.get(outputs["in_d_bits_opcode"]))})
         # Flush cancellation must suppress all active outputs. / flush 取消必须屏蔽所有活动输出。
         ctx.set(signals["flush"], 1)
         await ctx.tick("coupled_l2")

@@ -112,6 +112,21 @@ class CoupledL2SliceConfig:
     def beat_index_bits(self) -> int:
         return max(1, (self.line_beats - 1).bit_length())
 
+    @property
+    # Return the full tag width before bank selection. / 返回 bank 选择前的完整标签位宽。
+    def full_tag_bits(self) -> int:
+        return self.address_bits - self.offset_bits - self.set_bits
+
+    @property
+    # Return the outer TileLink sink width used by the locked V2 edge. / 返回锁定 V2 edge 使用的外部 TileLink sink 位宽。
+    def outer_sink_bits(self) -> int:
+        return max(1, self.sink_bits - 2)
+
+    @property
+    # Return the ECC/error address width exposed by the selected V2 slice. / 返回选定 V2 slice 暴露的 ECC/错误地址位宽。
+    def error_address_bits(self) -> int:
+        return max(1, self.address_bits - 2)
+
 
 # Return the V2 slice-local tag, set, and byte offset fields. / 返回 V2 slice 本地标签、组及字节偏移字段。
 def parse_address(address: int, configuration: CoupledL2SliceConfig | None = None) -> tuple[int, int, int, int]:
@@ -257,7 +272,7 @@ class CoupledL2Slice(Elaboratable):
             "out_c_bits_user_reqSource": c.req_source_bits, "out_c_bits_echo_blockisdirty": 1,
             "out_c_bits_data": c.data_bits, "out_c_bits_corrupt": 1,
             "out_d_valid": 1, "out_d_ready": 1, "out_d_bits_opcode": 4, "out_d_bits_param": 2,
-            "out_d_bits_size": 3, "out_d_bits_source": c.sink_bits, "out_d_bits_sink": c.sink_bits,
+            "out_d_bits_size": 3, "out_d_bits_source": c.sink_bits, "out_d_bits_sink": c.outer_sink_bits,
             "out_d_bits_denied": 1, "out_d_bits_echo_blockisdirty": 1, "out_d_bits_data": c.data_bits,
             "out_d_bits_corrupt": 1, "out_e_valid": 1, "out_e_ready": 1, "out_e_bits_sink": c.sink_bits,
         }.items():
@@ -267,16 +282,16 @@ class CoupledL2Slice(Elaboratable):
         # Prefetch, hint, error, and parent-observable status. / 预取、提示、错误及父级可观测状态。
         for name, width in {
             "l1Hint_valid": 1, "l1Hint_ready": 1, "l1Hint_bits_sourceId": 32, "l1Hint_bits_isKeyword": 1,
-            "prefetch_train_valid": 1, "prefetch_train_bits_tag": c.tag_bits, "prefetch_train_bits_set": c.set_bits,
+            "prefetch_train_valid": 1, "prefetch_train_bits_tag": c.full_tag_bits, "prefetch_train_bits_set": c.set_bits,
             "prefetch_train_bits_needT": 1, "prefetch_train_bits_source": c.source_bits,
             "prefetch_train_bits_vaddr": c.vaddr_bits, "prefetch_train_bits_hit": 1,
             "prefetch_train_bits_prefetched": 1, "prefetch_train_bits_pfsource": 3,
             "prefetch_train_bits_reqsource": c.req_source_bits, "prefetch_req_valid": 1,
-            "prefetch_req_ready": 1, "prefetch_req_bits_tag": c.tag_bits, "prefetch_req_bits_set": c.set_bits,
+            "prefetch_req_ready": 1, "prefetch_req_bits_tag": c.full_tag_bits, "prefetch_req_bits_set": c.set_bits,
             "prefetch_req_bits_vaddr": c.vaddr_bits, "prefetch_req_bits_needT": 1,
             "prefetch_req_bits_source": c.source_bits, "prefetch_req_bits_pfSource": c.req_source_bits,
             "prefetch_resp_valid": 1, "prefetch_resp_ready": 1, "error_valid": 1,
-            "error_bits_valid": 1, "error_bits_address": c.address_bits, "l2Miss": 1,
+            "error_bits_valid": 1, "error_bits_address": c.error_address_bits, "l2Miss": 1,
             "l2FlushDone": 1,
         }.items():
             signal = port(name, width)
@@ -418,7 +433,7 @@ class CoupledL2Slice(Elaboratable):
             self.l1Hint_valid.eq(hint_pending), self.l1Hint_bits_sourceId.eq(pending_source),
             self.l1Hint_bits_isKeyword.eq(pending_keyword), self.prefetch_req_ready.eq((state == 0) & ~self.flush),
             self.prefetch_resp_valid.eq(0), self.prefetch_train_valid.eq(0), self.error_valid.eq(0),
-            self.error_bits_valid.eq(0), self.error_bits_address.eq(pending_address),
+            self.error_bits_valid.eq(0), self.error_bits_address.eq(pending_address[:c.error_address_bits]),
             self.l2Miss.eq(l2_miss_pulse), self.l2FlushDone.eq(self.flush & (state == 0)),
         ]
         for signal in self.perf:
