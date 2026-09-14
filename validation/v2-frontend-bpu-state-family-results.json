@@ -1,0 +1,593 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_FRONTEND_BPU_STATE_FAMILY",
+  "batch_id": "V2-SEMANTIC-FRONTEND-BPU-STATE-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "targets": {
+    "CompareMatrix": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.CompareMatrix-Hardware.py",
+    "FallThroughPredictor": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.FallThroughPredictor-Hardware.py",
+    "SaturateCounter": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.SaturateCounter-Hardware.py",
+    "SignedSaturateCounter": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.SignedSaturateCounter-Hardware.py",
+    "LruStateGen": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.LruStateGen-Hardware.py",
+    "PlruStateGen": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.PlruStateGen-Hardware.py",
+    "ReplacerState": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.ReplacerState-Hardware.py"
+  },
+  "source_paths": {
+    "CompareMatrix": [
+      "upstream/src/main/scala/xiangshan/backend/dispatch/NewDispatch.scala"
+    ],
+    "FallThroughPredictor": [
+      "upstream/src/main/scala/xiangshan/frontend/BPU.scala",
+      "upstream/src/main/scala/xiangshan/frontend/FTB.scala",
+      "upstream/src/main/scala/xiangshan/frontend/FrontendBundle.scala",
+      "upstream/src/main/scala/xiangshan/frontend/NewFtq.scala"
+    ],
+    "SaturateCounter": [
+      "upstream/src/main/scala/xiangshan/frontend/BPU.scala",
+      "upstream/src/main/scala/xiangshan/frontend/Bim.scala",
+      "upstream/src/main/scala/xiangshan/frontend/Tage.scala",
+      "upstream/src/main/scala/xiangshan/frontend/SC.scala"
+    ],
+    "SignedSaturateCounter": [
+      "upstream/src/main/scala/xiangshan/frontend/BPU.scala",
+      "upstream/src/main/scala/xiangshan/frontend/SC.scala"
+    ],
+    "LruStateGen": [
+      "upstream/utility/src/main/scala/utility/Replacement.scala",
+      "upstream/rocket-chip/src/main/scala/util/Replacement.scala"
+    ],
+    "PlruStateGen": [
+      "upstream/utility/src/main/scala/utility/Replacement.scala",
+      "upstream/rocket-chip/src/main/scala/util/Replacement.scala"
+    ],
+    "ReplacerState": [
+      "upstream/utility/src/main/scala/utility/Replacement.scala",
+      "upstream/rocket-chip/src/main/scala/util/Replacement.scala"
+    ]
+  },
+  "source_evidence": {
+    "CompareMatrix": [
+      {
+        "path": "upstream/src/main/scala/xiangshan/backend/dispatch/NewDispatch.scala",
+        "bytes": 48971,
+        "sha256": "32e83552f8df1168217b0f763b8f1bb4e529faf8d3d7466716240469528224e8",
+        "needle": "compareMatrix",
+        "occurrences": 8
+      }
+    ],
+    "FallThroughPredictor": [
+      {
+        "path": "upstream/src/main/scala/xiangshan/frontend/BPU.scala",
+        "bytes": 54853,
+        "sha256": "57105a2d7f8c3d96e202c2c52f93139ea1ede46907934d9fa90a988a3b6799bb",
+        "needle": "getFallThroughAddr",
+        "occurrences": 1
+      },
+      {
+        "path": "upstream/src/main/scala/xiangshan/frontend/FTB.scala",
+        "bytes": 38497,
+        "sha256": "0eac898d5455d481ef2135a7682d0f564ff240fecd8957ce5337cd41b322828f",
+        "needle": "getFallThroughAddr",
+        "occurrences": 2
+      },
+      {
+        "path": "upstream/src/main/scala/xiangshan/frontend/FrontendBundle.scala",
+        "bytes": 34544,
+        "sha256": "53fbfa923e1b8eff7f975cb1249c03bef9237e4d2a878802c5bc7f440270d6c6",
+        "needle": "getFallThroughAddr",
+        "occurrences": 0
+      },
+      {
+        "path": "upstream/src/main/scala/xiangshan/frontend/NewFtq.scala",
+        "bytes": 85131,
+        "sha256": "c4b442406e933416cde923d64b94139d3f2e84b979118e3fe58055a1193e843b",
+        "needle": "getFallThroughAddr",
+        "occurrences": 0
+      }
+    ],
+    "SaturateCounter": [
+      {
+        "path": "upstream/src/main/scala/xiangshan/frontend/BPU.scala",
+        "bytes": 54853,
+        "sha256": "57105a2d7f8c3d96e202c2c52f93139ea1ede46907934d9fa90a988a3b6799bb",
+        "needle": "satUpdate",
+        "occurrences": 1
+      },
+      {
+        "path": "upstream/src/main/scala/xiangshan/frontend/Bim.scala",
+        "bytes": 4347,
+        "sha256": "ba5ce2b2c7098bafedc30c898466447cd3c3362f74ef0b3909ebad4087329995",
+        "needle": "satUpdate",
+        "occurrences": 1
+      },
+      {
+        "path": "upstream/src/main/scala/xiangshan/frontend/Tage.scala",
+        "bytes": 45009,
+        "sha256": "97e049a70061c0fa6e88cb3576e339441ee15a2884d3ea5aa5784d8fa981c2f7",
+        "needle": "satUpdate",
+        "occurrences": 4
+      },
+      {
+        "path": "upstream/src/main/scala/xiangshan/frontend/SC.scala",
+        "bytes": 20379,
+        "sha256": "74a2cc8557beab27f40a149708163798c7600d6ac7bf58dd1dc931be1c653200",
+        "needle": "satUpdate",
+        "occurrences": 1
+      }
+    ],
+    "SignedSaturateCounter": [
+      {
+        "path": "upstream/src/main/scala/xiangshan/frontend/BPU.scala",
+        "bytes": 54853,
+        "sha256": "57105a2d7f8c3d96e202c2c52f93139ea1ede46907934d9fa90a988a3b6799bb",
+        "needle": "signedSatUpdate",
+        "occurrences": 1
+      },
+      {
+        "path": "upstream/src/main/scala/xiangshan/frontend/SC.scala",
+        "bytes": 20379,
+        "sha256": "74a2cc8557beab27f40a149708163798c7600d6ac7bf58dd1dc931be1c653200",
+        "needle": "signedSatUpdate",
+        "occurrences": 1
+      }
+    ],
+    "LruStateGen": [
+      {
+        "path": "upstream/utility/src/main/scala/utility/Replacement.scala",
+        "bytes": 2507,
+        "sha256": "ec8dcaab0a5bf90b9bb86452f4d4f9290dc29761ee6d0d38f6855937d27ea296",
+        "needle": "class TrueLRU",
+        "occurrences": 0
+      },
+      {
+        "path": "upstream/rocket-chip/src/main/scala/util/Replacement.scala",
+        "bytes": 44895,
+        "sha256": "811d0fa0fff97d66edc513b4385a5ee821859594282c95f972f5f4b483fac373",
+        "needle": "class TrueLRU",
+        "occurrences": 1
+      }
+    ],
+    "PlruStateGen": [
+      {
+        "path": "upstream/utility/src/main/scala/utility/Replacement.scala",
+        "bytes": 2507,
+        "sha256": "ec8dcaab0a5bf90b9bb86452f4d4f9290dc29761ee6d0d38f6855937d27ea296",
+        "needle": "class PseudoLRU",
+        "occurrences": 0
+      },
+      {
+        "path": "upstream/rocket-chip/src/main/scala/util/Replacement.scala",
+        "bytes": 44895,
+        "sha256": "811d0fa0fff97d66edc513b4385a5ee821859594282c95f972f5f4b483fac373",
+        "needle": "class PseudoLRU",
+        "occurrences": 1
+      }
+    ],
+    "ReplacerState": [
+      {
+        "path": "upstream/utility/src/main/scala/utility/Replacement.scala",
+        "bytes": 2507,
+        "sha256": "ec8dcaab0a5bf90b9bb86452f4d4f9290dc29761ee6d0d38f6855937d27ea296",
+        "needle": "class SetAssocLRU",
+        "occurrences": 0
+      },
+      {
+        "path": "upstream/rocket-chip/src/main/scala/util/Replacement.scala",
+        "bytes": 44895,
+        "sha256": "811d0fa0fff97d66edc513b4385a5ee821859594282c95f972f5f4b483fac373",
+        "needle": "class SetAssocLRU",
+        "occurrences": 1
+      }
+    ]
+  },
+  "locked_reference": {
+    "path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "bytes": 228590583,
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "locked": true,
+    "modules": {
+      "NewDispatch": {
+        "present": true,
+        "line_start": 643669,
+        "line_end": 663622,
+        "module_sha256": "1a4c4dfe45b03f5a3d34fe38d205abf1dea11933c3dc678961fc740693becb9a"
+      },
+      "FTB": {
+        "present": true,
+        "line_start": 119745,
+        "line_end": 122709,
+        "module_sha256": "9bc9f1e45d2f325555a78f43d9d48561fa3d5e7d293e9697a5f9aaafe8b35cbe"
+      },
+      "Frontend": {
+        "present": true,
+        "line_start": 412063,
+        "line_end": 420892,
+        "module_sha256": "cfbf74ad47178af622fb7d257741dcd42344e1d6e4e4912d6da0c2a2115d9a76"
+      },
+      "SCTable": {
+        "present": true,
+        "line_start": 137229,
+        "line_end": 137596,
+        "module_sha256": "d417b94ed02e07651ccbc03b500f2fd53282013abe8ec4b791bea19cff351d89"
+      },
+      "TageTable": {
+        "present": true,
+        "line_start": 130569,
+        "line_end": 131418,
+        "module_sha256": "1026c66569be784fed11518a8d7d398bb07bbd9d5f3a563a8564b904b2632075"
+      },
+      "Tage_SC": {
+        "present": true,
+        "line_start": 139152,
+        "line_end": 146767,
+        "module_sha256": "cc493b51859715aef2e9f64a7e1a0fe9ed5a2c1490dbba52ead61d4e8ec5a88a"
+      },
+      "ICacheReplacer": {
+        "present": true,
+        "line_start": 96586,
+        "line_end": 104742,
+        "module_sha256": "7ce79928334369ef208a5e4e6f859edc4bfab231a25aa74997364a8965081502"
+      }
+    }
+  },
+  "direct": {
+    "CompareMatrix": {
+      "pure_vectors": 340,
+      "hardware_vectors": 131,
+      "checks": 1310
+    },
+    "FallThroughPredictor": {
+      "pure_vectors": 2048,
+      "staged_vectors": 5,
+      "checks": 20
+    },
+    "SaturateCounter": {
+      "expression_vectors": 2040
+    },
+    "SignedSaturateCounter": {
+      "expression_vectors": 2032
+    },
+    "Replacement": {
+      "lru_vectors": 11944,
+      "plru_vectors": 1976,
+      "state_bank_checks": 30
+    }
+  },
+  "structural_audit": {
+    "CompareMatrix": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.CompareMatrix-Hardware.py",
+      "bytes": 11262,
+      "sha256": "812239137b4ccd2dada0d9a0cded41fa5306ee55762e43ca179554fc9bc096b7",
+      "utf8_lf": true,
+      "ast_parse": true,
+      "bilingual_docstring": true,
+      "zones": [
+        "Module Contract",
+        "Configuration",
+        "Implementation",
+        "Public Adapter",
+        "Direct Entry"
+      ],
+      "adapter_signature": [
+        "configuration",
+        "injected_dependencies"
+      ]
+    },
+    "FallThroughPredictor": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.FallThroughPredictor-Hardware.py",
+      "bytes": 12608,
+      "sha256": "efe05eaf4c47ec9ca7af7cb231538d42393cd83a78527e3f5c8eeec43e7b1116",
+      "utf8_lf": true,
+      "ast_parse": true,
+      "bilingual_docstring": true,
+      "zones": [
+        "Module Contract",
+        "Configuration",
+        "Implementation",
+        "Public Adapter",
+        "Direct Entry"
+      ],
+      "adapter_signature": [
+        "configuration",
+        "injected_dependencies"
+      ]
+    },
+    "SaturateCounter": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.SaturateCounter-Hardware.py",
+      "bytes": 9598,
+      "sha256": "a0ed3b24d1b7cf664f7b4e6deda3139eee98e41db5b655d3dd6484acd26f6b1a",
+      "utf8_lf": true,
+      "ast_parse": true,
+      "bilingual_docstring": true,
+      "zones": [
+        "Module Contract",
+        "Configuration",
+        "Implementation",
+        "Public Adapter",
+        "Direct Entry"
+      ],
+      "adapter_signature": [
+        "configuration",
+        "injected_dependencies"
+      ]
+    },
+    "SignedSaturateCounter": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.SignedSaturateCounter-Hardware.py",
+      "bytes": 9962,
+      "sha256": "8b0523a2f3f973bdc028a73ddb57ee6a0cdcabf65030f657f482a45ab94fa6d5",
+      "utf8_lf": true,
+      "ast_parse": true,
+      "bilingual_docstring": true,
+      "zones": [
+        "Module Contract",
+        "Configuration",
+        "Implementation",
+        "Public Adapter",
+        "Direct Entry"
+      ],
+      "adapter_signature": [
+        "configuration",
+        "injected_dependencies"
+      ]
+    },
+    "LruStateGen": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.LruStateGen-Hardware.py",
+      "bytes": 11083,
+      "sha256": "bea5c2cf53df4291c041c1ef8c85122a1f3778848724059bb81eec95a6752bbb",
+      "utf8_lf": true,
+      "ast_parse": true,
+      "bilingual_docstring": true,
+      "zones": [
+        "Module Contract",
+        "Configuration",
+        "Implementation",
+        "Public Adapter",
+        "Direct Entry"
+      ],
+      "adapter_signature": [
+        "configuration",
+        "injected_dependencies"
+      ]
+    },
+    "PlruStateGen": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.PlruStateGen-Hardware.py",
+      "bytes": 13092,
+      "sha256": "aa30777732cd21bb1ad326d706f55b5d466dbf14bedb4d95313f172e964c6347",
+      "utf8_lf": true,
+      "ast_parse": true,
+      "bilingual_docstring": true,
+      "zones": [
+        "Module Contract",
+        "Configuration",
+        "Implementation",
+        "Public Adapter",
+        "Direct Entry"
+      ],
+      "adapter_signature": [
+        "configuration",
+        "injected_dependencies"
+      ]
+    },
+    "ReplacerState": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.ReplacerState-Hardware.py",
+      "bytes": 22666,
+      "sha256": "500de92e1da7dff6dbe8d88255d605d01d27c74c22146f967c7b4ba693e30730",
+      "utf8_lf": true,
+      "ast_parse": true,
+      "bilingual_docstring": true,
+      "zones": [
+        "Module Contract",
+        "Configuration",
+        "Implementation",
+        "Public Adapter",
+        "Direct Entry"
+      ],
+      "adapter_signature": [
+        "configuration",
+        "injected_dependencies"
+      ]
+    }
+  },
+  "generated": {
+    "CompareMatrix": {
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": "ata/Local/Temp/v2_bpu_state_lint_252opf3i/CompareMatrix.sv:811:19: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 3 bits.\n                                                                                                              : ... note: In instance 'CompareMatrix'\n  811 |   assign \\$389  = ! \\$388 [2:0];\n      |                   ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_bpu_state_lint_252opf3i/CompareMatrix.sv:815:24: Operator ADD expects 4 bits on the LHS, but LHS's CONST '1'h0' generates 1 bits.\n                                                                                                               : ... note: In instance 'CompareMatrix'\n  815 |   assign \\$393  = 1'h0 + \\$392 ;\n      |                        ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_bpu_state_lint_252opf3i/CompareMatrix.sv:825:19: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 3 bits.\n                                                                                                              : ... note: In instance 'CompareMatrix'\n  825 |   assign \\$404  = ! \\$403 [2:0];\n      |                   ^\n"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": ""
+      },
+      "rtl_bytes": 26762,
+      "rtl_sha256": "fde3e3e1b00976c83440c0b80ec5752b9ca193dc53807b9027af80a139ad1c4c"
+    },
+    "FallThroughPredictor": {
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": "29: Operator ADD expects 6 bits on the LHS, but LHS's SEL generates 4 bits.\n                                                                                                                     : ... note: In instance 'FallThroughPredictor'\n   97 |   assign \\$18  = s1_pc[4:1] + 5'h10;\n      |                             ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_bpu_state_lint_252opf3i/FallThroughPredictor.sv:98:24: Operator GT expects 8 bits on the RHS, but RHS's VARREF '$18' generates 6 bits.\n                                                                                                                     : ... note: In instance 'FallThroughPredictor'\n   98 |   assign \\$19  = \\$17  > \\$18 ;\n      |                        ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_bpu_state_lint_252opf3i/FallThroughPredictor.sv:104:24: Operator ADD expects 40 bits on the RHS, but RHS's CONST '6'h20' generates 6 bits.\n                                                                                                                      : ... note: In instance 'FallThroughPredictor'\n  104 |   assign \\$25  = s1_pc + 6'h20;\n      |                        ^\n"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": ""
+      },
+      "rtl_bytes": 4933,
+      "rtl_sha256": "1296c062e7e27344869bc6b25191986e1e24073b5e89d8a5fca85a4892090dfd"
+    },
+    "SaturateCounter": {
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": "%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_bpu_state_lint_252opf3i/SaturateCounter.sv:40:17: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'value' generates 2 bits.\n                                                                                                               : ... note: In instance 'SaturateCounter'\n   40 |   assign \\$4  = ! value;\n      |                 ^\n                     ... For warning description see https://verilator.org/warn/WIDTHTRUNC?v=5.032\n                     ... Use \"/* verilator lint_off WIDTHTRUNC */\" and lint_on around source to disable this message.\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_bpu_state_lint_252opf3i/SaturateCounter.sv:50:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'value' generates 2 bits.\n                                                                                                               : ... note: In instance 'SaturateCounter'\n   50 |   assign \\$13  = ! value;\n      |                  ^\n"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": ""
+      },
+      "rtl_bytes": 1493,
+      "rtl_sha256": "a2e88ead6a380240dc372640051acdbc4127b15336c15bf07be9e6d020890f2a"
+    },
+    "SignedSaturateCounter": {
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": "generates 2 bits.\n                                                                                                                      : ... note: In instance 'SignedSaturateCounter'\n   47 |   assign \\$10  = $signed(value) - $signed(2'h1);\n      |                                 ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_bpu_state_lint_252opf3i/SignedSaturateCounter.sv:50:39: Operator GTES expects 6 bits on the RHS, but RHS's SIGNED generates 1 bits.\n                                                                                                                      : ... note: In instance 'SignedSaturateCounter'\n   50 |   assign is_positive = $signed(value) >= $signed(1'h0);\n      |                                       ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_bpu_state_lint_252opf3i/SignedSaturateCounter.sv:51:24: Operator EQ expects 6 bits on the RHS, but RHS's CONST '5'h1f' generates 5 bits.\n                                                                                                                      : ... note: In instance 'SignedSaturateCounter'\n   51 |   assign \\$13  = value == 5'h1f;\n      |                        ^~\n"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": ""
+      },
+      "rtl_bytes": 1649,
+      "rtl_sha256": "c693f33e72161e1590b96934fd3784f51dd0045092ce936f8c10eec3d5bc2121"
+    },
+    "LruStateGen": {
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": "gical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'io_touches_0_bits' generates 2 bits.\n                                                                                                            : ... note: In instance 'LruStateGen'\n  422 |   assign \\$183  = ! io_touches_0_bits;\n      |                   ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_bpu_state_lint_252opf3i/LruStateGen.sv:426:37: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                             : ... note: In instance 'LruStateGen'\n  426 |   assign \\$187  = io_touches_0_bits == 1'h1;\n      |                                     ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_bpu_state_lint_252opf3i/LruStateGen.sv:430:37: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                             : ... note: In instance 'LruStateGen'\n  430 |   assign \\$191  = io_touches_0_bits == 1'h1;\n      |                                     ^~\n"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": ""
+      },
+      "rtl_bytes": 13742,
+      "rtl_sha256": "95c1e553ac3759f40d6d908267c5b6f08839755e1cbd8413767a9397a9111257"
+    },
+    "PlruStateGen": {
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": ""
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": ""
+      },
+      "rtl_bytes": 2817,
+      "rtl_sha256": "501d19c72ba59d59fc705bd520278c853ba1ee6de1f5924fefa7d130bdea11f1"
+    },
+    "ReplacerState": {
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": "perator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                               : ... note: In instance 'ReplacerState'\n  300 |   assign \\$60  = io_access_0_set == 1'h1;\n      |                                  ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_bpu_state_lint_252opf3i/ReplacerState.sv:312:34: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                               : ... note: In instance 'ReplacerState'\n  312 |   assign \\$72  = io_access_0_set == 1'h1;\n      |                                  ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_bpu_state_lint_252opf3i/ReplacerState.sv:325:34: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                               : ... note: In instance 'ReplacerState'\n  325 |   assign \\$85  = io_access_0_set == 1'h1;\n      |                                  ^~\n"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "stderr_tail": ""
+      },
+      "rtl_bytes": 16888,
+      "rtl_sha256": "bd8bd4e5694485534d20427ec8d25e69d38d1a274822fd084015585cd8676301"
+    }
+  },
+  "reference_differential": {
+    "CompareMatrix": {
+      "status": "SOURCE_EQUATION_BOUNDED",
+      "locked_module": "NewDispatch",
+      "observation": "compareMatrix/IQSort/minIQSel",
+      "standalone_module": false
+    },
+    "FallThroughPredictor": {
+      "status": "SOURCE_EQUATION_BOUNDED",
+      "locked_modules": [
+        "FTB",
+        "Frontend"
+      ],
+      "observation": "getFallThroughAddr/fallThroughErr",
+      "standalone_module": false
+    },
+    "SaturateCounter": {
+      "status": "SOURCE_EQUATION_BOUNDED",
+      "locked_modules": [
+        "SCTable",
+        "TageTable",
+        "Tage_SC"
+      ],
+      "observation": "satUpdate",
+      "standalone_module": false
+    },
+    "SignedSaturateCounter": {
+      "status": "SOURCE_EQUATION_BOUNDED",
+      "locked_modules": [
+        "SCTable",
+        "Tage_SC"
+      ],
+      "observation": "signedSatUpdate",
+      "standalone_module": false
+    },
+    "Replacement": {
+      "status": "PASS",
+      "returncode": 0,
+      "stdout_tail": "- tb.sv:22782: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 197ps; walltime 0.002 s; speed 119.293 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n",
+      "stderr_tail": "",
+      "mode": "PARENT_CLOSURE_EXTRACTED",
+      "module": "ICacheReplacer",
+      "extracted_sha256": "01a8894d0399d429f3d50ed987333494b36072bf7cd569c3ce091a797ffcae6b",
+      "extracted_bytes": 1100303,
+      "observations": [
+        "reset state",
+        "victim selection",
+        "touch/update",
+        "way count=4"
+      ]
+    }
+  },
+  "commands": [
+    "python -m py_compile <seven Build targets>",
+    "python validation/v2_frontend_bpu_state_family_validator.py",
+    "verilator --lint-only (seven generated targets)",
+    "yosys read_verilog/proc/opt/check/stat (seven generated targets)"
+  ],
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED_SOURCE_EQUATION",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "UHSC_LOCALIZED": "PENDING_EXTERNAL_WRAPPER",
+    "PARENT_CLOSURE_MATCHED": "PASS_BOUNDED",
+    "LICENSE_REVIEW": "PENDING_COORDINATOR_REVIEW",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "VALIDATOR_PASS_BOUNDED",
+  "acceptance_eligible": false,
+  "uhsc_naming": {
+    "status": "PENDING_EXTERNAL_WRAPPER",
+    "reference_names_unchanged": true,
+    "entries": [
+      {
+        "source_name": "XSTop",
+        "local_name": "UHSCTop",
+        "visibility": "project-owned external HDL wrapper",
+        "reason": "Only the later external wrapper is localized."
+      },
+      {
+        "source_name": "XiangShan / XS / KMHV2",
+        "local_name": "UHSC",
+        "visibility": "project-owned product identity",
+        "reason": "Source provenance and protocol names remain unchanged."
+      }
+    ]
+  },
+  "license": {
+    "inventory": "V2-Dependency-License-Inventory.json",
+    "families": [
+      "utility",
+      "rocket-chip"
+    ],
+    "status": "PENDING_COORDINATOR_REVIEW"
+  },
+  "unclosed": [
+    "CompareMatrix, FallThroughPredictor, and counters have no standalone module in locked XSTop; source-equation and parent closure remain required.",
+    "Full Frontend BPU/FTB/TAGE/SC/FTQ behavioral closure remains pending.",
+    "External UHSC wrapper, license review, coordinator review, and user approval remain pending."
+  ]
+}
