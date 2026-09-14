@@ -11,13 +11,13 @@
   ],
   "target": {
     "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.CoupledL2.Directory-Hardware.py",
-    "sha256": "890a229ad1d5a8a88e1c42578082eee807da0dc6a65cfe6b70436e7453d1a8e2"
+    "sha256": "d8bd460d2dda8c5af398e7a56b7206d77c07c4d90fe945fbbdf23a15b023b7fa"
   },
   "static": {
     "status": "PASS",
     "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.CoupledL2.Directory-Hardware.py",
-    "bytes": 31124,
-    "sha256": "890a229ad1d5a8a88e1c42578082eee807da0dc6a65cfe6b70436e7453d1a8e2",
+    "bytes": 47266,
+    "sha256": "d8bd460d2dda8c5af398e7a56b7206d77c07c4d90fe945fbbdf23a15b023b7fa",
     "zones": [
       "Module Contract",
       "Configuration",
@@ -29,7 +29,8 @@
       "CoupledL2DirectoryConfig",
       "CoupledL2Directory",
       "build_verilog"
-    ]
+    ],
+    "function_comment_errors": []
   },
   "equations": {
     "status": "PASS",
@@ -60,12 +61,12 @@
   "backend": {
     "verilator": "PASS",
     "yosys": "PASS",
-    "rtl_bytes": 1116174,
-    "rtl_sha256": "d910222d6512bfed0a49a66f0945ff05b918c46e1744a144e23d8811f6900358",
+    "rtl_bytes": 991280,
+    "rtl_sha256": "4d3e3263a4b845e8ac274b4c00a8f9968e8a1c4520f5985b71bae04a6cff0f29",
     "verilator_returncode": 0,
     "yosys_returncode": 0,
-    "verilator_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 1.080 MB sources in 2 modules, into 1.946 MB in 6 C++ files needing 0.000 MB\n- Verilator: Walltime 4.815 s (elab=0.898, cvt=0.884, bld=0.000); cpu 4.690 s on 1 threads; alloced 76.730 MB\n",
-    "yosys_tail": "tmp/uhsc-v2/validation/.work/v2-coupled-l2-directory/UHSCCoupledL2Directory.sv:28889$12705'.\nRemoving empty process `UHSCCoupledL2Directory.$proc$/tmp/uhsc-v2/validation/.work/v2-coupled-l2-directory/UHSCCoupledL2Directory.sv:28886$12704'.\nRemoving empty process `UHSCCoupledL2Directory.$proc$/tmp/uhsc-v2/validation/.work/v2-coupled-l2-directory/UHSCCoupledL2Directory.sv:28883$12703'.\nRemoving empty process `UHSCCoupledL2Directory.$proc$/tmp/uhsc-v2/validation/.work/v2-coupled-l2-directory/UHSCCoupledL2Directory.sv:28880$12702'.\nRemoving empty process `UHSCCoupledL2Directory.$proc$/tmp/uhsc-v2/validation/.work/v2-coupled-l2-directory/UHSCCoupledL2Directory.sv:28877$12701'.\nCleaned up 471 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module UHSCCoupledL2Directory.\n<suppressed ~322 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module UHSCCoupledL2Directory...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: dbf6506031, CPU: user 3.00s system 0.39s, MEM: 161.20 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 64% 2x read_verilog (2 sec), 11% 1x proc_arst (0 sec), ...\n"
+    "verilator_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.966 MB sources in 2 modules, into 0.094 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.718 s (elab=0.318, cvt=0.268, bld=0.000); cpu 0.693 s on 1 threads; alloced 68.969 MB\n",
+    "yosys_tail": "idation/.work/v2-coupled-l2-directory/UHSCCoupledL2Directory.sv:15852$41'.\nFound and cleaned up 1 empty switch in `\\UHSCCoupledL2Directory.$proc$/tmp/uhsc-v2/validation/.work/v2-coupled-l2-directory/UHSCCoupledL2Directory.sv:15836$33'.\nRemoving empty process `UHSCCoupledL2Directory.$proc$/tmp/uhsc-v2/validation/.work/v2-coupled-l2-directory/UHSCCoupledL2Directory.sv:15836$33'.\nFound and cleaned up 1 empty switch in `\\UHSCCoupledL2Directory.$proc$/tmp/uhsc-v2/validation/.work/v2-coupled-l2-directory/UHSCCoupledL2Directory.sv:15823$24'.\nRemoving empty process `UHSCCoupledL2Directory.$proc$/tmp/uhsc-v2/validation/.work/v2-coupled-l2-directory/UHSCCoupledL2Directory.sv:15823$24'.\nCleaned up 30 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module UHSCCoupledL2Directory.\n<suppressed ~57 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module UHSCCoupledL2Directory...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 9aecaa9d7a, CPU: user 0.78s system 0.04s, MEM: 150.51 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 75% 2x read_verilog (0 sec), 9% 1x opt_expr (0 sec), ...\n"
   },
   "reference": {
     "reference_path": "\\home\\lishuo\\xs-v2-local\\build\\rtl\\XSTop.sv",
@@ -74,6 +75,11 @@
     "locked_unchanged": true,
     "reference_mode": "LOCKED_XSTOP_DIRECTORY_BOUNDARY_PENDING_TL2_PARENT",
     "differential": "PENDING_FULL_PARENT"
+  },
+  "evidence": {
+    "contract_audit": "validation/v2-coupledL2-directory-family-contract-audit.json",
+    "coverage_manifest": "validation/v2-coupledL2-directory-family-coverage-manifest.json",
+    "mapping_update": "validation/v2-coupledL2-directory-family-mapping-update.json"
   },
   "gates": {
     "PYTHON_PRESENT": "PASS",

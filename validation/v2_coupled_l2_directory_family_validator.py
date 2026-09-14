@@ -88,7 +88,20 @@ def static_audit() -> dict[str, Any]:
     missing = [name for name in required if name not in source]
     if missing:
         raise AssertionError(f"missing symbols: {missing}")
-    return {"status": "PASS", "path": TARGET.relative_to(ROOT).as_posix(), "bytes": len(raw), "sha256": digest(TARGET), "zones": list(zones), "required_symbols": list(required)}
+    comment_errors: list[str] = []
+    lines = source.splitlines()
+    for node in ast.walk(tree):
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            if any(isinstance(decorator, ast.Name) and decorator.id == "property" for decorator in node.decorator_list):
+                continue
+            prior = lines[node.lineno - 2].strip() if node.lineno > 1 else ""
+            if isinstance(node, ast.FunctionDef) and node.lineno > 1 and lines[node.lineno - 2].strip().startswith("#"):
+                pass
+            if not prior.startswith("#") or "/" not in prior:
+                comment_errors.append(f"{node.name}:{node.lineno}")
+    if comment_errors:
+        raise AssertionError(f"missing bilingual function comments: {comment_errors}")
+    return {"status": "PASS", "path": TARGET.relative_to(ROOT).as_posix(), "bytes": len(raw), "sha256": digest(TARGET), "zones": list(zones), "required_symbols": list(required), "function_comment_errors": comment_errors}
 
 
 # Compare deterministic Python equations against independent expectations. / 将确定性 Python 方程与独立期望比较。
@@ -269,7 +282,7 @@ def main() -> int:
     backend = backend_gates(module)
     reference = reference_provenance()
     gates = {"PYTHON_PRESENT": static["status"], "DIRECT_TEST_PASS_BOUNDED": direct["status"], "V2_REFERENCE_MATCHED": "PASS_BOUNDED_DIRECTORY_EQUATIONS", "VERILATOR": backend["verilator"], "YOSYS": backend["yosys"], "UHSC_LOCALIZED": "PASS_BOUNDED_FAMILY_LOCAL_NAME", "PARENT_CLOSURE_MATCHED": "PENDING_TL2TLCoupledL2_PARENT", "LICENSE_REVIEW": "PENDING", "ACCEPTED": "NOT_ALLOWED"}
-    payload = {"schema_version": 1, "kind": "XIANGSHAN_KUNMINGHU_V2_COUPLEDL2_DIRECTORY_FAMILY", "batch_id": "V2-DEPENDENCY-COUPLEDL2-DIRECTORY-001", "source_commit": SOURCE_COMMIT, "source_scala": ["upstream/coupledL2/src/main/scala/coupledL2/Directory.scala", "upstream/coupledL2/src/main/scala/coupledL2/Common.scala", "upstream/coupledL2/src/main/scala/coupledL2/Consts.scala", "upstream/coupledL2/src/main/scala/coupledL2/L2Param.scala"], "target": {"path": TARGET.relative_to(ROOT).as_posix(), "sha256": digest(TARGET)}, "static": static, "equations": equations, "direct": direct, "backend": backend, "reference": reference, "gates": gates, "status": "VALIDATOR_PASS_BOUNDED", "acceptance_eligible": False, "unclosed": ["Full Directory port differential against locked XSTop remains pending.", "TL2TLCoupledL2 parent/CHI bridge closure remains pending.", "License review and user approval remain pending."]}
+    payload = {"schema_version": 1, "kind": "XIANGSHAN_KUNMINGHU_V2_COUPLEDL2_DIRECTORY_FAMILY", "batch_id": "V2-DEPENDENCY-COUPLEDL2-DIRECTORY-001", "source_commit": SOURCE_COMMIT, "source_scala": ["upstream/coupledL2/src/main/scala/coupledL2/Directory.scala", "upstream/coupledL2/src/main/scala/coupledL2/Common.scala", "upstream/coupledL2/src/main/scala/coupledL2/Consts.scala", "upstream/coupledL2/src/main/scala/coupledL2/L2Param.scala"], "target": {"path": TARGET.relative_to(ROOT).as_posix(), "sha256": digest(TARGET)}, "static": static, "equations": equations, "direct": direct, "backend": backend, "reference": reference, "evidence": {"contract_audit": "validation/v2-coupledL2-directory-family-contract-audit.json", "coverage_manifest": "validation/v2-coupledL2-directory-family-coverage-manifest.json", "mapping_update": "validation/v2-coupledL2-directory-family-mapping-update.json"}, "gates": gates, "status": "VALIDATOR_PASS_BOUNDED", "acceptance_eligible": False, "unclosed": ["Full Directory port differential against locked XSTop remains pending.", "TL2TLCoupledL2 parent/CHI bridge closure remains pending.", "License review and user approval remain pending."]}
     OUT.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     print(json.dumps({"status": payload["status"], "direct": direct["status"], "equations": equations["status"], "verilator": backend["verilator"], "yosys": backend["yosys"]}, sort_keys=True))
     return 0 if all(value == "PASS" for value in (static["status"], equations["status"], direct["status"], backend["verilator"], backend["yosys"])) else 1

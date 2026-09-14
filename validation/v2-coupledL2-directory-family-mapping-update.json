@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_COUPLEDL2_DIRECTORY_MAPPING_UPDATE",
+  "family_id": "dependency.coupledL2.directory",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "source_paths": [
+    "upstream/coupledL2/src/main/scala/coupledL2/Directory.scala",
+    "upstream/coupledL2/src/main/scala/coupledL2/Common.scala",
+    "upstream/coupledL2/src/main/scala/coupledL2/Consts.scala",
+    "upstream/coupledL2/src/main/scala/coupledL2/L2Param.scala"
+  ],
+  "target_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.CoupledL2.Directory-Hardware.py",
+  "classification": "AGGREGATED_REWRITE",
+  "covered_children": ["MetaEntry", "DirRead", "DirResult", "ReplacerResult", "MetaWrite", "TagWrite", "Directory"],
+  "localization": {
+    "source_name": "Directory",
+    "local_name": "UHSCCoupledL2Directory",
+    "visibility": "project_owned_generated_hdl",
+    "reason": "UHSC external family wrapper; locked Scala/SV names remain unchanged"
+  },
+  "evidence": "validation/v2-coupledL2-directory-family-results.json",
+  "status": "VALIDATOR_PASS_BOUNDED",
+  "parent_closure": "PENDING_TL2TLCoupledL2_PARENT",
+  "accepted": "NOT_ALLOWED"
+}

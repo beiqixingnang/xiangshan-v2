@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_COUPLEDL2_DIRECTORY_CONTRACT_AUDIT",
+  "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.CoupledL2.Directory-Hardware.py",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "status": "PASS",
+  "contract": {
+    "five_zones": "PASS",
+    "utf8_lf_no_bom": "PASS",
+    "ast_parse": "PASS",
+    "adapter_signature": "build_verilog(configuration, injected_dependencies)",
+    "forbidden_imports": "PASS",
+    "public_symbols": [
+      "CoupledL2DirectoryConfig",
+      "CoupledL2Directory",
+      "Directory",
+      "directory_reference_step",
+      "build_verilog",
+      "main"
+    ]
+  },
+  "reference": {
+    "source_scala": [
+      "upstream/coupledL2/src/main/scala/coupledL2/Directory.scala",
+      "upstream/coupledL2/src/main/scala/coupledL2/Common.scala",
+      "upstream/coupledL2/src/main/scala/coupledL2/Consts.scala",
+      "upstream/coupledL2/src/main/scala/coupledL2/L2Param.scala"
+    ],
+    "locked_xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "reference_mode": "LOCKED_XSTOP_DIRECTORY_BOUNDARY_PENDING_TL2_PARENT"
+  },
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED_DIRECTORY_EQUATIONS",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "PARENT_CLOSURE_MATCHED": "PENDING_TL2TLCoupledL2_PARENT",
+    "LICENSE_REVIEW": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  }
+}

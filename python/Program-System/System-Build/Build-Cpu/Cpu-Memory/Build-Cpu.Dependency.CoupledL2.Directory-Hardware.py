@@ -13,7 +13,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
-from amaranth import Array, ClockDomain, Elaboratable, Module, Mux, Signal
+from amaranth import Array, ClockDomain, Elaboratable, Memory, Module, Mux, Signal
 from amaranth.back import verilog
 
 
@@ -87,6 +87,7 @@ class CoupledL2DirectoryConfig:
 # =============================================================================
 # Implementation
 # =============================================================================
+# Compute the deterministic Directory.scala way equations. / 计算确定性的 Directory.scala 路选择方程。
 def directory_reference_step(
     request_tag: int,
     tags: list[int],
@@ -232,17 +233,39 @@ class CoupledL2Directory(Elaboratable):
         m.domains.coupled_l2_directory = domain
 
         depth = c.sets * c.ways
-        tags = [Signal(c.tag_bits, name=f"directory_tag_{index}") for index in range(depth)]
-        dirty = [Signal(name=f"directory_dirty_{index}") for index in range(depth)]
-        states = [Signal(c.state_bits, name=f"directory_state_{index}") for index in range(depth)]
-        clients = [Signal(c.client_bits, name=f"directory_clients_{index}") for index in range(depth)]
-        aliases = [Signal(max(1, c.alias_bits), name=f"directory_alias_{index}") for index in range(depth)]
-        prefetch = [Signal(name=f"directory_prefetch_{index}") for index in range(depth)]
-        prefetch_src = [Signal(max(1, c.prefetch_src_bits), name=f"directory_prefetch_src_{index}") for index in range(depth)]
-        accessed = [Signal(name=f"directory_accessed_{index}") for index in range(depth)]
-        tag_err = [Signal(name=f"directory_tag_err_{index}") for index in range(depth)]
-        data_err = [Signal(name=f"directory_data_err_{index}") for index in range(depth)]
-        replacement = [Signal(c.way_bits, name=f"directory_replacement_{index}") for index in range(c.sets)]
+        # Use synthesizable memories rather than one Signal per set/way.  The
+        # former emits compact $mem cells and keeps default V2 generation
+        # tractable (512 sets × 8 ways), while retaining synchronous writes
+        # and asynchronous read ports expected by the directory pipeline.
+        # 使用可综合存储器而不是每组/每路一个 Signal；前者生成紧凑的
+        # $mem 单元，使默认 V2 生成可行，同时保留目录流水线所需的同步写
+        # 与异步读端口。
+        field_specs = (
+            ("tag", c.tag_bits), ("dirty", 1), ("state", c.state_bits),
+            ("clients", c.client_bits), ("alias", max(1, c.alias_bits)),
+            ("prefetch", 1), ("prefetch_src", max(1, c.prefetch_src_bits)),
+            ("accessed", 1), ("tag_err", 1), ("data_err", 1),
+        )
+        memories: dict[str, Any] = {}
+        read_ports: dict[str, list[Any]] = {}
+        write_ports: dict[str, Any] = {}
+        for field, width in field_specs:
+            memory = Memory(width=width, depth=depth, init=[0] * depth, name=f"directory_{field}")
+            memories[field] = memory
+            write_port = memory.write_port(domain="coupled_l2")
+            write_ports[field] = write_port
+            m.submodules[f"{field}_write"] = write_port
+            reads: list[Any] = []
+            for way in range(c.ways):
+                read_port = memory.read_port(domain="comb")
+                m.submodules[f"{field}_read_{way}"] = read_port
+                reads.append(read_port)
+            read_ports[field] = reads
+        replacement_mem = Memory(width=c.way_bits, depth=c.sets, init=[0] * c.sets, name="directory_replacement")
+        replacement_read = replacement_mem.read_port(domain="comb")
+        replacement_write = replacement_mem.write_port(domain="coupled_l2")
+        m.submodules.replacement_read = replacement_read
+        m.submodules.replacement_write = replacement_write
 
         # Decode the flattened MSHR context for the current set. / 解码当前组的展平 MSHR 上下文。
         occupied_mask: Any = 0
@@ -262,24 +285,25 @@ class CoupledL2Directory(Elaboratable):
         # 写入为同步操作并阻塞同周期读取，符合 V2 SRAM 路径。
         read_fire = self.read_valid & self.read_ready
         m.d.comb += self.read_ready.eq(~self.reset & ~self.meta_write_valid & ~self.tag_write_valid)
-        write_index = self.meta_write_set * c.ways + self.tag_write_way
         meta_base = self.meta_write_set * c.ways
+        write_way: Any = 0
+        write_way_valid: Any = 0
         for way in range(c.ways):
-            meta_index = meta_base + way
-            with m.If(self.meta_write_valid & self.meta_write_way_oh[way]):
-                m.d.coupled_l2_directory += [
-                    Array(dirty)[meta_index].eq(self.meta_write_dirty),
-                    Array(states)[meta_index].eq(self.meta_write_state),
-                    Array(clients)[meta_index].eq(self.meta_write_clients),
-                    Array(aliases)[meta_index].eq(self.meta_write_alias),
-                    Array(prefetch)[meta_index].eq(self.meta_write_prefetch),
-                    Array(prefetch_src)[meta_index].eq(self.meta_write_prefetch_src),
-                    Array(accessed)[meta_index].eq(self.meta_write_accessed),
-                    Array(tag_err)[meta_index].eq(self.meta_write_tag_err),
-                    Array(data_err)[meta_index].eq(self.meta_write_data_err),
-                ]
-        with m.If(self.tag_write_valid):
-            m.d.coupled_l2_directory += Array(tags)[write_index].eq(self.tag_write_tag)
+            take = self.meta_write_way_oh[way] & ~write_way_valid
+            write_way = Mux(take, way, write_way)
+            write_way_valid = write_way_valid | self.meta_write_way_oh[way]
+        meta_write_index = meta_base + write_way
+        for field, value in (
+            ("dirty", self.meta_write_dirty), ("state", self.meta_write_state),
+            ("clients", self.meta_write_clients), ("alias", self.meta_write_alias),
+            ("prefetch", self.meta_write_prefetch), ("prefetch_src", self.meta_write_prefetch_src),
+            ("accessed", self.meta_write_accessed), ("tag_err", self.meta_write_tag_err),
+            ("data_err", self.meta_write_data_err),
+        ):
+            port = write_ports[field]
+            m.d.comb += [port.addr.eq(meta_write_index), port.data.eq(value), port.en.eq(self.meta_write_valid & write_way_valid)]
+        tag_port = write_ports["tag"]
+        m.d.comb += [tag_port.addr.eq(self.tag_write_set * c.ways + self.tag_write_way), tag_port.data.eq(self.tag_write_tag), tag_port.en.eq(self.tag_write_valid)]
 
         # Stage one captures all ways and request metadata at the read edge. / 一级在读取边沿捕获所有路及请求元数据。
         req1_valid = Signal(name="directory_req1_valid")
@@ -356,19 +380,21 @@ class CoupledL2Directory(Elaboratable):
             req2_req_source.eq(req1_req_source),
             req2_refill_prefetch.eq(req1_refill_prefetch),
         ]
+        read_index = self.read_set * c.ways
+        m.d.comb += replacement_read.addr.eq(self.read_set)
         for way in range(c.ways):
-            index_expr = self.read_set * c.ways + way
+            index_expr = read_index + way
+            for field, stage1 in (
+                ("tag", tags1[way]), ("dirty", dirty1[way]), ("state", states1[way]),
+                ("clients", clients1[way]), ("alias", aliases1[way]),
+                ("prefetch", prefetch1[way]), ("prefetch_src", prefetch_src1[way]),
+                ("accessed", accessed1[way]), ("tag_err", tag_err1[way]),
+                ("data_err", data_err1[way]),
+            ):
+                read_port = read_ports[field][way]
+                m.d.comb += read_port.addr.eq(index_expr)
+                m.d.coupled_l2_directory += stage1.eq(read_port.data)
             m.d.coupled_l2_directory += [
-                tags1[way].eq(Array(tags)[index_expr]),
-                dirty1[way].eq(Array(dirty)[index_expr]),
-                states1[way].eq(Array(states)[index_expr]),
-                clients1[way].eq(Array(clients)[index_expr]),
-                aliases1[way].eq(Array(aliases)[index_expr]),
-                prefetch1[way].eq(Array(prefetch)[index_expr]),
-                prefetch_src1[way].eq(Array(prefetch_src)[index_expr]),
-                accessed1[way].eq(Array(accessed)[index_expr]),
-                tag_err1[way].eq(Array(tag_err)[index_expr]),
-                data_err1[way].eq(Array(data_err)[index_expr]),
                 tags2[way].eq(tags1[way]),
                 dirty2[way].eq(dirty1[way]),
                 states2[way].eq(states1[way]),
@@ -400,8 +426,7 @@ class CoupledL2Directory(Elaboratable):
             take = invalid_vec[way] & ~invalid_seen
             invalid_way = Mux(take, way, invalid_way)
             invalid_seen = invalid_seen | invalid_vec[way]
-        repl_index = req2_set
-        repl_way = Array(replacement)[repl_index]
+        repl_way = replacement_read.data
         free_mask = (~occupied_mask) & ((1 << c.ways) - 1)
         selected_way: Any = repl_way
         selected_way = Mux(invalid_seen, invalid_way, selected_way)
@@ -468,18 +493,235 @@ class CoupledL2Directory(Elaboratable):
 
         # Round-robin update is a deterministic bounded stand-in for V2 PLRU/DRRIP state.
         # 轮询更新是 V2 PLRU/DRRIP 状态的确定性有界实现。
+        replacement_update = req2_valid & (hit_any | (req2_refill & ~retry))
+        m.d.comb += [
+            replacement_write.addr.eq(req2_set),
+            replacement_write.data.eq(selected_way + 1),
+            replacement_write.en.eq(replacement_update & ~self.reset),
+        ]
         with m.If(self.reset):
             m.d.coupled_l2_directory += [req1_valid.eq(0), req2_valid.eq(0)]
-            for pointer in replacement:
-                m.d.coupled_l2_directory += pointer.eq(0)
-        with m.Elif(req2_valid & (hit_any | (req2_refill & ~retry))):
-            m.d.coupled_l2_directory += Array(replacement)[req2_set].eq(selected_way + 1)
 
         return m
 
 
-# Source-oriented alias retained for the Scala family name. / 保留源导向别名以对应 Scala family 名称。
-Directory = CoupledL2Directory
+# Compact memory-backed implementation used by the public adapter.  The
+# original class above documents the direct signal form; this implementation
+# keeps identical ports while avoiding a per-entry mux tree at default V2
+# geometry. / 公共适配器使用紧凑的存储器实现；上方类保留直接信号形式的
+# 溯源文档，本实现保持相同端口并避免默认几何下逐项多路树。
+_LegacyCoupledL2Directory = CoupledL2Directory
+
+
+class CompactCoupledL2Directory(Elaboratable):
+    """Packed-memory CoupledL2 Directory implementation. / 打包存储器 CoupledL2 目录实现。"""
+
+    # Construct the same public boundary as CoupledL2Directory. / 构造与 CoupledL2Directory 相同的公共边界。
+    def __init__(self, configuration: CoupledL2DirectoryConfig | None = None) -> None:
+        # Reuse the public port declaration without elaborating the legacy body. / 复用公共端口声明但不展开旧实现主体。
+        # Invoke the declarative port constructor on a plain object so the
+        # legacy Elaboratable is not registered as an unused instance.
+        # 在普通对象上调用声明式端口构造器，避免将旧 Elaboratable 注册为未使用实例。
+        template = type("_DirectoryPortTemplate", (), {})()
+        _LegacyCoupledL2Directory.__init__(template, configuration)
+        self.__dict__.update(template.__dict__)
+        self.configuration = configuration or CoupledL2DirectoryConfig()
+
+    # Elaborate packed tag/meta memories and the two-stage directory equations. / 展开打包标签/元数据存储及两级目录方程。
+    def elaborate(self, platform: Any) -> Module:
+        del platform
+        c = self.configuration
+        m = Module()
+        domain = ClockDomain("coupled_l2_directory", async_reset=True)
+        domain.clk = self.clock
+        domain.rst = self.reset
+        m.domains.coupled_l2_directory = domain
+        depth = c.sets * c.ways
+        alias_width = max(1, c.alias_bits)
+        prefetch_width = max(1, c.prefetch_src_bits)
+        offsets = {"dirty": 0, "state": 1, "clients": 1 + c.state_bits,
+                   "alias": 1 + c.state_bits + c.client_bits}
+        offsets["prefetch"] = offsets["alias"] + alias_width
+        offsets["prefetch_src"] = offsets["prefetch"] + 1
+        offsets["accessed"] = offsets["prefetch_src"] + prefetch_width
+        offsets["tag_err"] = offsets["accessed"] + 1
+        offsets["data_err"] = offsets["tag_err"] + 1
+        meta_width = offsets["data_err"] + 1
+        # Memory initialization mirrors Directory reset invalidation. / 存储初始化对应 Directory 复位无效化。
+        tag_mem = Memory(width=c.tag_bits, depth=depth, init=[0] * depth, name="directory_tag")
+        meta_mem = Memory(width=meta_width, depth=depth, init=[0] * depth, name="directory_meta")
+        replacement_mem = Memory(width=c.way_bits, depth=c.sets, init=[0] * c.sets, name="directory_replacement")
+        tag_write = tag_mem.write_port(domain="coupled_l2_directory")
+        meta_write = meta_mem.write_port(domain="coupled_l2_directory")
+        replacement_read = replacement_mem.read_port(domain="comb")
+        replacement_write = replacement_mem.write_port(domain="coupled_l2_directory")
+        m.submodules.tag_write = tag_write
+        m.submodules.meta_write = meta_write
+        m.submodules.replacement_read = replacement_read
+        m.submodules.replacement_write = replacement_write
+        tag_reads = []
+        meta_reads = []
+        for way in range(c.ways):
+            tag_read = tag_mem.read_port(domain="comb")
+            meta_read = meta_mem.read_port(domain="comb")
+            m.submodules[f"tag_read_{way}"] = tag_read
+            m.submodules[f"meta_read_{way}"] = meta_read
+            tag_reads.append(tag_read)
+            meta_reads.append(meta_read)
+
+        # Build the MSHR way occupancy mask for the requested set. / 构造请求组的 MSHR 路占用掩码。
+        occupied_mask: Any = 0
+        for index in range(c.mshr_entries):
+            set_lo = index * c.set_bits
+            way_lo = index * c.way_bits
+            same_set = self.mshr_set[set_lo:set_lo + c.set_bits] == self.read_set
+            active = self.mshr_valid[index] & ~self.mshr_will_free[index]
+            occupies = active & same_set & (self.mshr_block_refill[index] | self.mshr_dir_hit[index])
+            way_value = self.mshr_way[way_lo:way_lo + c.way_bits]
+            way_one_hot: Any = 0
+            for way in range(c.ways):
+                way_one_hot = way_one_hot | Mux(way_value == way, 1 << way, 0)
+            occupied_mask = occupied_mask | Mux(occupies, way_one_hot, 0)
+
+        # Select the first asserted metadata write way. / 选择首个置位的元数据写路。
+        write_way: Any = 0
+        write_way_valid: Any = 0
+        for way in range(c.ways):
+            take = self.meta_write_way_oh[way] & ~write_way_valid
+            write_way = Mux(take, way, write_way)
+            write_way_valid = write_way_valid | self.meta_write_way_oh[way]
+        write_index = self.meta_write_set * c.ways + write_way
+        payload = Signal(meta_width, name="directory_meta_write_payload")
+        m.d.comb += [
+            payload.eq(0), payload[offsets["dirty"]].eq(self.meta_write_dirty),
+            payload[offsets["state"]:offsets["state"] + c.state_bits].eq(self.meta_write_state),
+            payload[offsets["clients"]:offsets["clients"] + c.client_bits].eq(self.meta_write_clients),
+            payload[offsets["alias"]:offsets["alias"] + alias_width].eq(self.meta_write_alias),
+            payload[offsets["prefetch"]].eq(self.meta_write_prefetch),
+            payload[offsets["prefetch_src"]:offsets["prefetch_src"] + prefetch_width].eq(self.meta_write_prefetch_src),
+            payload[offsets["accessed"]].eq(self.meta_write_accessed),
+            payload[offsets["tag_err"]].eq(self.meta_write_tag_err),
+            payload[offsets["data_err"]].eq(self.meta_write_data_err),
+            meta_write.addr.eq(write_index), meta_write.data.eq(payload),
+            meta_write.en.eq(self.meta_write_valid & write_way_valid & ~self.reset),
+            tag_write.addr.eq(self.tag_write_set * c.ways + self.tag_write_way),
+            tag_write.data.eq(self.tag_write_tag), tag_write.en.eq(self.tag_write_valid & ~self.reset),
+            replacement_read.addr.eq(self.read_set),
+        ]
+
+        # Request and memory-data pipeline registers. / 请求及存储数据流水寄存器。
+        req1_valid = Signal(name="directory_req1_valid")
+        req1_tag = Signal(c.tag_bits, name="directory_req1_tag")
+        req1_set = Signal(c.set_bits, name="directory_req1_set")
+        req1_way_mask = Signal(c.ways, name="directory_req1_way_mask")
+        req1_refill = Signal(name="directory_req1_refill")
+        req1_mshr_id = Signal(c.mshr_id_bits, name="directory_req1_mshr_id")
+        req1_cmo_all = Signal(name="directory_req1_cmo_all")
+        req1_cmo_way = Signal(c.way_bits, name="directory_req1_cmo_way")
+        req1_channel = Signal(3, name="directory_req1_channel")
+        req1_opcode = Signal(3, name="directory_req1_opcode")
+        req1_req_source = Signal(c.req_source_bits, name="directory_req1_req_source")
+        req1_refill_prefetch = Signal(name="directory_req1_refill_prefetch")
+        req2_valid = Signal(name="directory_req2_valid")
+        req2_tag = Signal(c.tag_bits, name="directory_req2_tag")
+        req2_set = Signal(c.set_bits, name="directory_req2_set")
+        req2_way_mask = Signal(c.ways, name="directory_req2_way_mask")
+        req2_refill = Signal(name="directory_req2_refill")
+        req2_mshr_id = Signal(c.mshr_id_bits, name="directory_req2_mshr_id")
+        req2_cmo_all = Signal(name="directory_req2_cmo_all")
+        req2_cmo_way = Signal(c.way_bits, name="directory_req2_cmo_way")
+        req2_channel = Signal(3, name="directory_req2_channel")
+        req2_opcode = Signal(3, name="directory_req2_opcode")
+        req2_req_source = Signal(c.req_source_bits, name="directory_req2_req_source")
+        req2_refill_prefetch = Signal(name="directory_req2_refill_prefetch")
+        meta1 = [Signal(meta_width, name=f"directory_meta1_{way}") for way in range(c.ways)]
+        tag1 = [Signal(c.tag_bits, name=f"directory_tag1_{way}") for way in range(c.ways)]
+        meta2 = [Signal(meta_width, name=f"directory_meta2_{way}") for way in range(c.ways)]
+        tag2 = [Signal(c.tag_bits, name=f"directory_tag2_{way}") for way in range(c.ways)]
+        read_fire = self.read_valid & self.read_ready
+        m.d.comb += self.read_ready.eq(~self.reset & ~self.meta_write_valid & ~self.tag_write_valid)
+        m.d.coupled_l2_directory += [
+            req1_valid.eq(read_fire), req1_tag.eq(self.read_tag), req1_set.eq(self.read_set),
+            req1_way_mask.eq(self.read_way_mask), req1_refill.eq(self.read_refill),
+            req1_mshr_id.eq(self.read_mshr_id), req1_cmo_all.eq(self.read_cmo_all), req1_cmo_way.eq(self.read_cmo_way),
+            req1_channel.eq(self.read_replacer_channel), req1_opcode.eq(self.read_replacer_opcode),
+            req1_req_source.eq(self.read_replacer_req_source), req1_refill_prefetch.eq(self.read_replacer_refill_prefetch),
+            req2_valid.eq(req1_valid), req2_tag.eq(req1_tag), req2_set.eq(req1_set), req2_way_mask.eq(req1_way_mask),
+            req2_refill.eq(req1_refill), req2_mshr_id.eq(req1_mshr_id), req2_cmo_all.eq(req1_cmo_all), req2_cmo_way.eq(req1_cmo_way),
+            req2_channel.eq(req1_channel), req2_opcode.eq(req1_opcode), req2_req_source.eq(req1_req_source), req2_refill_prefetch.eq(req1_refill_prefetch),
+        ]
+        read_index = self.read_set * c.ways
+        for way in range(c.ways):
+            m.d.comb += [tag_reads[way].addr.eq(read_index + way), meta_reads[way].addr.eq(read_index + way)]
+            m.d.coupled_l2_directory += [tag1[way].eq(tag_reads[way].data), meta1[way].eq(meta_reads[way].data), tag2[way].eq(tag1[way]), meta2[way].eq(meta1[way])]
+
+        # Calculate hit, invalid-way, free-way, and response metadata. / 计算命中、无效路、空闲路及响应元数据。
+        valid_vec = [meta2[way][offsets["state"]:offsets["state"] + c.state_bits] != 0 for way in range(c.ways)]
+        hit_vec = [valid_vec[way] & (tag2[way] == req2_tag) for way in range(c.ways)]
+        hit_count = sum(hit_vec)
+        multi_hit = hit_count > 1
+        hit_any = (hit_count == 1) & ~multi_hit
+        hit_way: Any = 0
+        invalid_way: Any = 0
+        invalid_seen: Any = 0
+        for way in range(c.ways):
+            hit_way = Mux(hit_vec[way], way, hit_way)
+            take = ~valid_vec[way] & ~invalid_seen
+            invalid_way = Mux(take, way, invalid_way)
+            invalid_seen = invalid_seen | ~valid_vec[way]
+        free_mask = (~occupied_mask) & ((1 << c.ways) - 1)
+        selected_way: Any = replacement_read.data
+        selected_way = Mux(invalid_seen, invalid_way, selected_way)
+        selected_way = Mux(hit_any, hit_way, selected_way)
+        selected_way = Mux(req2_cmo_all, req2_cmo_way, selected_way)
+        free_selected = free_mask.bit_select(selected_way, 1)
+        first_free: Any = 0
+        first_free_seen: Any = 0
+        for way in range(c.ways):
+            take = free_mask[way] & ~first_free_seen
+            first_free = Mux(take, way, first_free)
+            first_free_seen = first_free_seen | take
+        selected_way = Mux(~free_selected, first_free, selected_way)
+        masked_selected = req2_way_mask.bit_select(selected_way, 1)
+        first_masked: Any = 0
+        first_masked_seen: Any = 0
+        for way in range(c.ways):
+            take = req2_way_mask[way] & free_mask[way] & ~first_masked_seen
+            first_masked = Mux(take, way, first_masked)
+            first_masked_seen = first_masked_seen | take
+        selected_way = Mux(~masked_selected & (req2_way_mask != 0), first_masked, selected_way)
+        retry = ~free_mask.any()
+        selected_tag = Array(tag2)[selected_way]
+        selected_meta = Array(meta2)[selected_way]
+        selected_state = selected_meta[offsets["state"]:offsets["state"] + c.state_bits]
+        selected_alias = selected_meta[offsets["alias"]:offsets["alias"] + alias_width]
+        selected_prefetch_src = selected_meta[offsets["prefetch_src"]:offsets["prefetch_src"] + prefetch_width]
+        m.d.comb += [
+            self.resp_valid.eq(req2_valid), self.resp_hit.eq((hit_any | (req2_cmo_all & Array(valid_vec)[req2_cmo_way])) & ~multi_hit),
+            self.resp_tag.eq(selected_tag), self.resp_set.eq(req2_set), self.resp_way.eq(selected_way),
+            self.resp_meta_dirty.eq(selected_meta[offsets["dirty"]]), self.resp_meta_state.eq(selected_state),
+            self.resp_meta_clients.eq(selected_meta[offsets["clients"]:offsets["clients"] + c.client_bits]), self.resp_meta_alias.eq(selected_alias),
+            self.resp_meta_prefetch.eq(selected_meta[offsets["prefetch"]]), self.resp_meta_prefetch_src.eq(selected_prefetch_src),
+            self.resp_meta_accessed.eq(selected_meta[offsets["accessed"]]), self.resp_meta_tag_err.eq(selected_meta[offsets["tag_err"]]),
+            self.resp_meta_data_err.eq(selected_meta[offsets["data_err"]]), self.resp_error.eq((selected_meta[offsets["tag_err"]] | selected_meta[offsets["data_err"]] | multi_hit) & req2_valid),
+            self.resp_replacer_channel.eq(req2_channel), self.resp_replacer_opcode.eq(req2_opcode), self.resp_replacer_req_source.eq(req2_req_source), self.resp_replacer_refill_prefetch.eq(req2_refill_prefetch),
+            self.repl_resp_valid.eq(req2_valid & req2_refill), self.repl_resp_tag.eq(selected_tag), self.repl_resp_set.eq(req2_set), self.repl_resp_way.eq(selected_way),
+            self.repl_resp_meta_dirty.eq(selected_meta[offsets["dirty"]]), self.repl_resp_meta_state.eq(selected_state), self.repl_resp_meta_clients.eq(selected_meta[offsets["clients"]:offsets["clients"] + c.client_bits]), self.repl_resp_meta_alias.eq(selected_alias),
+            self.repl_resp_meta_prefetch.eq(selected_meta[offsets["prefetch"]]), self.repl_resp_meta_prefetch_src.eq(selected_prefetch_src), self.repl_resp_meta_accessed.eq(selected_meta[offsets["accessed"]]), self.repl_resp_meta_tag_err.eq(selected_meta[offsets["tag_err"]]), self.repl_resp_meta_data_err.eq(selected_meta[offsets["data_err"]]),
+            self.repl_resp_mshr_id.eq(req2_mshr_id), self.repl_resp_retry.eq(retry & req2_refill), self.repl_resp_error.eq((selected_meta[offsets["tag_err"]] | selected_meta[offsets["data_err"]] | multi_hit) & req2_valid),
+        ]
+        replacement_update = req2_valid & (hit_any | (req2_refill & ~retry))
+        m.d.comb += [replacement_write.addr.eq(req2_set), replacement_write.data.eq(selected_way + 1), replacement_write.en.eq(replacement_update & ~self.reset)]
+        with m.If(self.reset):
+            m.d.coupled_l2_directory += [req1_valid.eq(0), req2_valid.eq(0)]
+        return m
+
+
+# Public names select the compact implementation while retaining the Scala
+# family alias expected by downstream manifests. / 公共名称选择紧凑实现，
+# 同时保留下游台账所需的 Scala family 别名。
+CoupledL2Directory = CompactCoupledL2Directory
+Directory = CompactCoupledL2Directory
 
 
 # =============================================================================
