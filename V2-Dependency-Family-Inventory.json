@@ -1,0 +1,283 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_DEPENDENCY_FAMILY_INVENTORY",
+  "authority": {
+    "repository": "https://github.com/OpenXiangShan/XiangShan.git",
+    "source_ref": "kunminghu-v2",
+    "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+    "snapshot_manifest": "V2-Snapshot.json"
+  },
+  "policy": {
+    "core": "Rewrite reachable XiangShan hardware closures against V2.",
+    "hardware_dependency": "Retain an explicit family boundary and interface contract; do not create one Python file per Scala file.",
+    "toolchain_support": "Use for local compilation only unless a hardware closure reaches it.",
+    "test_workload": "Reference inputs and harnesses, not a Python hardware rewrite target."
+  },
+  "scan_counts": {
+    "upstream_scala_files": 1214,
+    "external_packages": 15,
+    "proposed_dependency_family_files": 30,
+    "non_target_roots": 3
+  },
+  "families": [
+    {
+      "family_id": "core.decode",
+      "package_id": "xiangshan-core",
+      "root": "upstream/src",
+      "role": "core",
+      "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+      "license_review_required": false
+    },
+    {
+      "family_id": "core.frontend",
+      "package_id": "xiangshan-core",
+      "root": "upstream/src",
+      "role": "core",
+      "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+      "license_review_required": false
+    },
+    {
+      "family_id": "core.backend",
+      "package_id": "xiangshan-core",
+      "root": "upstream/src",
+      "role": "core",
+      "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+      "license_review_required": false
+    },
+    {
+      "family_id": "core.cache",
+      "package_id": "xiangshan-core",
+      "root": "upstream/src",
+      "role": "core",
+      "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+      "license_review_required": false
+    },
+    {
+      "family_id": "core.fu",
+      "package_id": "xiangshan-core",
+      "root": "upstream/src",
+      "role": "core",
+      "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+      "license_review_required": false
+    },
+    {
+      "family_id": "core.csr",
+      "package_id": "xiangshan-core",
+      "root": "upstream/src",
+      "role": "core",
+      "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+      "license_review_required": false
+    },
+    {
+      "family_id": "core.replacement",
+      "package_id": "utility",
+      "root": "upstream/utility",
+      "role": "hardware_dependency",
+      "source_commit": "2f0743f1f3ee1889049841926fa382cd0b32d8e2",
+      "license_review_required": true
+    },
+    {
+      "family_id": "dependency.utility",
+      "package_id": "utility",
+      "root": "upstream/utility",
+      "role": "hardware_dependency",
+      "source_commit": "2f0743f1f3ee1889049841926fa382cd0b32d8e2",
+      "license_review_required": true
+    },
+    {
+      "family_id": "dependency.rocket.protocol",
+      "package_id": "rocket-chip",
+      "root": "upstream/rocket-chip",
+      "role": "hardware_dependency",
+      "source_commit": "46f1efefa1ff431bffe3262e4830bc50316842f4",
+      "license_review_required": true
+    },
+    {
+      "family_id": "dependency.rocket.replacement",
+      "package_id": "rocket-chip",
+      "root": "upstream/rocket-chip",
+      "role": "hardware_dependency",
+      "source_commit": "46f1efefa1ff431bffe3262e4830bc50316842f4",
+      "license_review_required": true
+    },
+    {
+      "family_id": "dependency.rocket.rvc",
+      "package_id": "rocket-chip",
+      "root": "upstream/rocket-chip",
+      "role": "hardware_dependency",
+      "source_commit": "46f1efefa1ff431bffe3262e4830bc50316842f4",
+      "license_review_required": true
+    },
+    {
+      "family_id": "dependency.rocket.diplomacy",
+      "package_id": "rocket-chip",
+      "root": "upstream/rocket-chip",
+      "role": "hardware_dependency",
+      "source_commit": "46f1efefa1ff431bffe3262e4830bc50316842f4",
+      "license_review_required": true
+    },
+    {
+      "family_id": "dependency.difftest.interface",
+      "package_id": "difftest",
+      "root": "upstream/difftest",
+      "role": "hardware_dependency",
+      "source_commit": "2e146c604dc10e58f4ad29ab4803c17dcad1dfe2",
+      "license_review_required": false
+    },
+    {
+      "family_id": "dependency.huancun.cache",
+      "package_id": "huancun",
+      "root": "upstream/huancun",
+      "role": "hardware_dependency",
+      "source_commit": "65ef077373ecf398b4cecdea06b65ef9b8d79044",
+      "license_review_required": true
+    },
+    {
+      "family_id": "dependency.huancun.mshr",
+      "package_id": "huancun",
+      "root": "upstream/huancun",
+      "role": "hardware_dependency",
+      "source_commit": "65ef077373ecf398b4cecdea06b65ef9b8d79044",
+      "license_review_required": true
+    },
+    {
+      "family_id": "dependency.huancun.bridge",
+      "package_id": "huancun",
+      "root": "upstream/huancun",
+      "role": "hardware_dependency",
+      "source_commit": "65ef077373ecf398b4cecdea06b65ef9b8d79044",
+      "license_review_required": true
+    },
+    {
+      "family_id": "dependency.fudian.fpu",
+      "package_id": "fudian",
+      "root": "upstream/fudian",
+      "role": "hardware_dependency",
+      "source_commit": "e1bd4695ca7beb36a5ce7357e9527ad9e95b9ec1",
+      "license_review_required": true
+    },
+    {
+      "family_id": "dependency.fudian.arithmetic",
+      "package_id": "fudian",
+      "root": "upstream/fudian",
+      "role": "hardware_dependency",
+      "source_commit": "e1bd4695ca7beb36a5ce7357e9527ad9e95b9ec1",
+      "license_review_required": true
+    },
+    {
+      "family_id": "dependency.yunsuan.scalar",
+      "package_id": "yunsuan",
+      "root": "upstream/yunsuan",
+      "role": "hardware_dependency",
+      "source_commit": "955921186e34bb8915806582a238181a6dc3435c",
+      "license_review_required": true
+    },
+    {
+      "family_id": "dependency.yunsuan.vector",
+      "package_id": "yunsuan",
+      "root": "upstream/yunsuan",
+      "role": "hardware_dependency",
+      "source_commit": "955921186e34bb8915806582a238181a6dc3435c",
+      "license_review_required": true
+    },
+    {
+      "family_id": "dependency.coupledL2.slice",
+      "package_id": "coupledL2",
+      "root": "upstream/coupledL2",
+      "role": "hardware_dependency",
+      "source_commit": "fb5469838c8902b6cb33992c0a30ee3d446e4453",
+      "license_review_required": true
+    },
+    {
+      "family_id": "dependency.coupledL2.directory",
+      "package_id": "coupledL2",
+      "root": "upstream/coupledL2",
+      "role": "hardware_dependency",
+      "source_commit": "fb5469838c8902b6cb33992c0a30ee3d446e4453",
+      "license_review_required": true
+    },
+    {
+      "family_id": "dependency.coupledL2.bridge",
+      "package_id": "coupledL2",
+      "root": "upstream/coupledL2",
+      "role": "hardware_dependency",
+      "source_commit": "fb5469838c8902b6cb33992c0a30ee3d446e4453",
+      "license_review_required": true
+    },
+    {
+      "family_id": "dependency.openLLC.cache",
+      "package_id": "openLLC",
+      "root": "upstream/openLLC",
+      "role": "hardware_dependency",
+      "source_commit": "9e6f78209b2f215fb9f6a8f0de250995ff3ab63d",
+      "license_review_required": true
+    },
+    {
+      "family_id": "dependency.openLLC.sram",
+      "package_id": "openLLC",
+      "root": "upstream/openLLC",
+      "role": "hardware_dependency",
+      "source_commit": "9e6f78209b2f215fb9f6a8f0de250995ff3ab63d",
+      "license_review_required": true
+    },
+    {
+      "family_id": "dependency.openLLC.bridge",
+      "package_id": "openLLC",
+      "root": "upstream/openLLC",
+      "role": "hardware_dependency",
+      "source_commit": "9e6f78209b2f215fb9f6a8f0de250995ff3ab63d",
+      "license_review_required": true
+    },
+    {
+      "family_id": "dependency.aia.interface",
+      "package_id": "ChiselAIA",
+      "root": "upstream/ChiselAIA",
+      "role": "hardware_dependency",
+      "source_commit": "c8be865e4fa60d40831ff29e0a30d4269f5ff5b9",
+      "license_review_required": false
+    },
+    {
+      "family_id": "dependency.iopmp.interface",
+      "package_id": "ChiselIOPMP",
+      "root": "upstream/ChiselIOPMP",
+      "role": "hardware_dependency",
+      "source_commit": "09def1a7efa4707a74b7f31fe0a1c254b0940b78",
+      "license_review_required": false
+    },
+    {
+      "family_id": "dependency.hardfloat",
+      "package_id": "rocket-chip-hardfloat",
+      "root": "upstream/rocket-chip/hardfloat",
+      "role": "hardware_dependency",
+      "source_commit": "d93aa570806013dea479a92ba9bb33d1f2d4f69f",
+      "license_review_required": true
+    },
+    {
+      "family_id": "dependency.openLLC.ncb",
+      "package_id": "openLLC-openNCB",
+      "root": "upstream/openLLC/openNCB",
+      "role": "hardware_dependency",
+      "source_commit": "5073e2c2efe19d71d11003df00425492067c4934",
+      "license_review_required": true
+    }
+  ],
+  "non_target_roots": [
+    {
+      "root": "upstream/debug",
+      "role": "toolchain_support",
+      "reason": "debug scripts and support files; include only if selected hardware closure reaches them"
+    },
+    {
+      "root": "upstream/tools",
+      "role": "toolchain_support",
+      "reason": "generator/tool support, not a Python hardware family by default"
+    },
+    {
+      "root": "upstream/ready-to-run",
+      "role": "test_workload",
+      "reason": "workloads and test inputs, not hardware rewrite targets"
+    }
+  ],
+  "status": "INVENTORY_ONLY",
+  "acceptance_eligible": false
+}

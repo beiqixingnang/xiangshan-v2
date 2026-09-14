@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_REWRITE_BATCH_PLAN",
+  "authority": "V2-Core-Rewrite-Inventory.json + V2-Dependency-Family-Inventory.json",
+  "worker_model": "gpt-5.6-terra",
+  "reasoning_effort": "max",
+  "validator_model": "gpt-5.6-terra",
+  "validator_reasoning_effort": "max",
+  "counts": {
+    "core_leaf_build_files": 34,
+    "core_parent_build_files": 8,
+    "dependency_family_build_files": 23,
+    "uhsc_integration_build_files": 1,
+    "retired_or_excluded": 1,
+    "total_planned_build_files": 66
+  },
+  "batches": [
+    {
+      "batch_id": "V2-SCAN-A-CORE-LEAVES",
+      "scope": "core",
+      "family_ids": [
+        "core.decode",
+        "core.fu",
+        "core.csr",
+        "core.frontend.leaves",
+        "core.backend.leaves"
+      ],
+      "expected_build_files": 34,
+      "depends_on": [],
+      "validator": "v2-independent-validator",
+      "status": "READY_FOR_IMPLEMENTATION"
+    },
+    {
+      "batch_id": "V2-SCAN-B-CORE-PARENTS",
+      "scope": "core-parent",
+      "family_ids": [
+        "core.frontend.parent",
+        "core.backend.parent",
+        "core.cache.parent",
+        "core.mem.parent",
+        "core.top"
+      ],
+      "expected_build_files": 8,
+      "depends_on": [
+        "V2-SCAN-A-CORE-LEAVES"
+      ],
+      "validator": "v2-independent-validator",
+      "status": "PLANNED"
+    },
+    {
+      "batch_id": "V2-SCAN-C-DEPENDENCY-FAMILIES",
+      "scope": "external",
+      "family_ids": [
+        "dependency.utility",
+        "dependency.rocket.protocol",
+        "dependency.rocket.replacement",
+        "dependency.rocket.rvc",
+        "dependency.rocket.diplomacy",
+        "dependency.hardfloat",
+        "dependency.fudian.fpu",
+        "dependency.fudian.arithmetic",
+        "dependency.yunsuan.scalar",
+        "dependency.yunsuan.vector",
+        "dependency.huancun.cache",
+        "dependency.huancun.mshr",
+        "dependency.huancun.bridge",
+        "dependency.coupledL2.slice",
+        "dependency.coupledL2.directory",
+        "dependency.coupledL2.bridge",
+        "dependency.openLLC.cache",
+        "dependency.openLLC.sram",
+        "dependency.openLLC.bridge",
+        "dependency.openLLC.ncb",
+        "dependency.difftest.interface",
+        "dependency.aia.interface",
+        "dependency.iopmp.interface"
+      ],
+      "expected_build_files": 23,
+      "depends_on": [
+        "V2-SCAN-B-CORE-PARENTS"
+      ],
+      "validator": "v2-independent-validator",
+      "status": "PLANNED"
+    },
+    {
+      "batch_id": "V2-SCAN-D-UHSC-TOP",
+      "scope": "integration",
+      "family_ids": [
+        "integration.uhsc.top"
+      ],
+      "expected_build_files": 1,
+      "depends_on": [
+        "V2-SCAN-C-DEPENDENCY-FAMILIES"
+      ],
+      "validator": "v2-independent-validator",
+      "status": "PLANNED"
+    }
+  ],
+  "status": "INVENTORY_ONLY",
+  "accepted_count": 0,
+  "acceptance_eligible": false
+}
