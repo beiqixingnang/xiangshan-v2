@@ -380,7 +380,7 @@ class CoupledL2Directory(Elaboratable):
             req2_req_source.eq(req1_req_source),
             req2_refill_prefetch.eq(req1_refill_prefetch),
         ]
-        read_index = self.read_set * c.ways
+        read_index = self.read_set
         m.d.comb += replacement_read.addr.eq(self.read_set)
         for way in range(c.ways):
             index_expr = read_index + way
@@ -547,27 +547,37 @@ class CompactCoupledL2Directory(Elaboratable):
         offsets["tag_err"] = offsets["accessed"] + 1
         offsets["data_err"] = offsets["tag_err"] + 1
         meta_width = offsets["data_err"] + 1
-        # Memory initialization mirrors Directory reset invalidation. / 存储初始化对应 Directory 复位无效化。
-        tag_mem = Memory(width=c.tag_bits, depth=depth, init=[0] * depth, name="directory_tag")
-        meta_mem = Memory(width=meta_width, depth=depth, init=[0] * depth, name="directory_meta")
+        # Bank memories by way, matching Directory.scala's one SRAM bank per
+        # way and avoiding a flattened set×way address mux. / 按路分 bank，
+        # 对应 Directory.scala 每路一个 SRAM bank，并避免扁平组×路地址多路器。
+        tag_mem = [Memory(width=c.tag_bits, depth=c.sets, init=[0] * c.sets, name=f"directory_tag_{way}") for way in range(c.ways)]
+        meta_mem = [Memory(width=meta_width, depth=c.sets, init=[0] * c.sets, name=f"directory_meta_{way}") for way in range(c.ways)]
         replacement_mem = Memory(width=c.way_bits, depth=c.sets, init=[0] * c.sets, name="directory_replacement")
-        tag_write = tag_mem.write_port(domain="coupled_l2_directory")
-        meta_write = meta_mem.write_port(domain="coupled_l2_directory")
         replacement_read = replacement_mem.read_port(domain="comb")
         replacement_write = replacement_mem.write_port(domain="coupled_l2_directory")
-        m.submodules.tag_write = tag_write
-        m.submodules.meta_write = meta_write
         m.submodules.replacement_read = replacement_read
         m.submodules.replacement_write = replacement_write
         tag_reads = []
         meta_reads = []
+        tag_writes = []
+        meta_writes = []
         for way in range(c.ways):
-            tag_read = tag_mem.read_port(domain="comb")
-            meta_read = meta_mem.read_port(domain="comb")
+            tag_read = tag_mem[way].read_port(domain="comb")
+            meta_read = meta_mem[way].read_port(domain="comb")
+            tag_write = tag_mem[way].write_port(domain="coupled_l2_directory")
+            meta_write = meta_mem[way].write_port(domain="coupled_l2_directory")
             m.submodules[f"tag_read_{way}"] = tag_read
             m.submodules[f"meta_read_{way}"] = meta_read
+            m.submodules[f"tag_write_{way}"] = tag_write
+            m.submodules[f"meta_write_{way}"] = meta_write
             tag_reads.append(tag_read)
             meta_reads.append(meta_read)
+            tag_writes.append(tag_write)
+            meta_writes.append(meta_write)
+        self._debug_tag_reads = tag_reads
+        self._debug_meta_reads = meta_reads
+        self._debug_tag_writes = tag_writes
+        self._debug_meta_writes = meta_writes
 
         # Build the MSHR way occupancy mask for the requested set. / 构造请求组的 MSHR 路占用掩码。
         occupied_mask: Any = 0
@@ -590,8 +600,9 @@ class CompactCoupledL2Directory(Elaboratable):
             take = self.meta_write_way_oh[way] & ~write_way_valid
             write_way = Mux(take, way, write_way)
             write_way_valid = write_way_valid | self.meta_write_way_oh[way]
-        write_index = self.meta_write_set * c.ways + write_way
+        write_index = self.meta_write_set
         payload = Signal(meta_width, name="directory_meta_write_payload")
+        self._debug_meta_payload = payload
         m.d.comb += [
             payload.eq(0), payload[offsets["dirty"]].eq(self.meta_write_dirty),
             payload[offsets["state"]:offsets["state"] + c.state_bits].eq(self.meta_write_state),
@@ -602,12 +613,15 @@ class CompactCoupledL2Directory(Elaboratable):
             payload[offsets["accessed"]].eq(self.meta_write_accessed),
             payload[offsets["tag_err"]].eq(self.meta_write_tag_err),
             payload[offsets["data_err"]].eq(self.meta_write_data_err),
-            meta_write.addr.eq(write_index), meta_write.data.eq(payload),
-            meta_write.en.eq(self.meta_write_valid & write_way_valid & ~self.reset),
-            tag_write.addr.eq(self.tag_write_set * c.ways + self.tag_write_way),
-            tag_write.data.eq(self.tag_write_tag), tag_write.en.eq(self.tag_write_valid & ~self.reset),
             replacement_read.addr.eq(self.read_set),
         ]
+        for way in range(c.ways):
+            m.d.comb += [
+                meta_writes[way].addr.eq(write_index), meta_writes[way].data.eq(payload),
+                meta_writes[way].en.eq(self.meta_write_valid & write_way_valid & (write_way == way) & ~self.reset),
+                tag_writes[way].addr.eq(self.tag_write_set), tag_writes[way].data.eq(self.tag_write_tag),
+                tag_writes[way].en.eq(self.tag_write_valid & (self.tag_write_way == way) & ~self.reset),
+            ]
 
         # Request and memory-data pipeline registers. / 请求及存储数据流水寄存器。
         req1_valid = Signal(name="directory_req1_valid")
@@ -638,6 +652,8 @@ class CompactCoupledL2Directory(Elaboratable):
         tag1 = [Signal(c.tag_bits, name=f"directory_tag1_{way}") for way in range(c.ways)]
         meta2 = [Signal(meta_width, name=f"directory_meta2_{way}") for way in range(c.ways)]
         tag2 = [Signal(c.tag_bits, name=f"directory_tag2_{way}") for way in range(c.ways)]
+        self._debug_tag2 = tag2
+        self._debug_meta2 = meta2
         read_fire = self.read_valid & self.read_ready
         m.d.comb += self.read_ready.eq(~self.reset & ~self.meta_write_valid & ~self.tag_write_valid)
         m.d.coupled_l2_directory += [
@@ -650,9 +666,9 @@ class CompactCoupledL2Directory(Elaboratable):
             req2_refill.eq(req1_refill), req2_mshr_id.eq(req1_mshr_id), req2_cmo_all.eq(req1_cmo_all), req2_cmo_way.eq(req1_cmo_way),
             req2_channel.eq(req1_channel), req2_opcode.eq(req1_opcode), req2_req_source.eq(req1_req_source), req2_refill_prefetch.eq(req1_refill_prefetch),
         ]
-        read_index = self.read_set * c.ways
+        read_index = self.read_set
         for way in range(c.ways):
-            m.d.comb += [tag_reads[way].addr.eq(read_index + way), meta_reads[way].addr.eq(read_index + way)]
+            m.d.comb += [tag_reads[way].addr.eq(read_index), meta_reads[way].addr.eq(read_index)]
             m.d.coupled_l2_directory += [tag1[way].eq(tag_reads[way].data), meta1[way].eq(meta_reads[way].data), tag2[way].eq(tag1[way]), meta2[way].eq(meta1[way])]
 
         # Calculate hit, invalid-way, free-way, and response metadata. / 计算命中、无效路、空闲路及响应元数据。
