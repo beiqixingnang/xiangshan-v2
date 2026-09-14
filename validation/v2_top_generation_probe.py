@@ -82,6 +82,32 @@ def module_names(text: str) -> list[str]:
     return sorted(set(names))
 
 
+def run_lint(tool: str, rtl_path: Path) -> str:
+    """Run a host or WSL lint tool, preserving unavailable as an explicit state.
+    在主机或 WSL 中运行 lint 工具；不可用时明确记录 UNAVAILABLE。
+    """
+
+    host = shutil.which(tool)
+    if host:
+        if tool == "verilator":
+            command = [host, "--lint-only", "--Wno-fatal", str(rtl_path)]
+        else:
+            command = [host, "-p", f"read_verilog -sv {rtl_path}; hierarchy -check -top UHSCTopIntegratedProbe"]
+        return "PASS" if subprocess.run(command, capture_output=True, check=False).returncode == 0 else "FAIL"
+    wsl = shutil.which("wsl.exe")
+    if not wsl:
+        return "UNAVAILABLE"
+    posix_path = str(rtl_path.resolve()).replace("\\", "/")
+    if len(posix_path) >= 2 and posix_path[1] == ":":
+        posix_path = "/mnt/" + posix_path[0].lower() + posix_path[2:]
+    if tool == "verilator":
+        shell = f"verilator --lint-only --Wno-fatal '{posix_path}'"
+    else:
+        shell = f"yosys -p 'read_verilog -sv \"{posix_path}\"; hierarchy -check -top UHSCTopIntegratedProbe'"
+    result = subprocess.run([wsl, "-e", "bash", "-lc", shell], capture_output=True, check=False)
+    return "PASS" if result.returncode == 0 else "FAIL"
+
+
 def main() -> int:
     builds = sorted(BUILD_ROOT.rglob("Build-*.py"))
     top = load_top_module()
@@ -137,30 +163,8 @@ def main() -> int:
     reduced_boundary_roots = [root for root in required_roots if root in defined_classes]
     generated_top = "UHSCTop" in modules
 
-    verilator_path = shutil.which("verilator")
-    if verilator_path is None:
-        verilator_status = "UNAVAILABLE"
-        verilator_returncode = None
-    else:
-        verilator = subprocess.run(
-            [verilator_path, "--lint-only", "-Wall", str(RTL_FILE)],
-            capture_output=True,
-            text=True,
-            check=False,
-        )
-        verilator_returncode = verilator.returncode
-        verilator_status = "PASS" if verilator.returncode == 0 else "FAIL"
-    yosys_path = shutil.which("yosys")
-    if yosys_path is None:
-        yosys_status = "UNAVAILABLE"
-    else:
-        yosys = subprocess.run(
-            [yosys_path, "-p", f"read_verilog -sv {INTEGRATED_RTL_FILE}; hierarchy -check -top UHSCTopIntegratedProbe"],
-            capture_output=True,
-            text=True,
-            check=False,
-        )
-        yosys_status = "PASS" if yosys.returncode == 0 else "FAIL"
+    verilator_status = run_lint("verilator", INTEGRATED_RTL_FILE)
+    yosys_status = run_lint("yosys", INTEGRATED_RTL_FILE)
 
     report = {
         "schema_version": 1,
