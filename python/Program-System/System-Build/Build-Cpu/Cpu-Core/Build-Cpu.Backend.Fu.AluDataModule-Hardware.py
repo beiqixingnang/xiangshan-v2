@@ -276,11 +276,17 @@ class AluDataModule(Elaboratable):
         sll_src = Mux(f0, src0, zero_extend(low32, width))
         sll = (sll_src << shamt)[:width]
         bit_shift = (Const(1, width) << shamt)[:width]
+        rev_shamt = (~shamt + 1)[:6]
         srl = src0 >> shamt
         sra = (src0.as_signed() >> shamt.as_unsigned())[:width]
         bext = srl[:1]
-        rol = rotate_left(src0, shamt, width)
-        ror = rotate_right(src0, shamt, width)
+        rev_sll = (Cat(sll_src, Const(0, width - 1)) << rev_shamt)[:width]
+        rev_srl = src0 >> rev_shamt
+        # The source forms rotates from the two independently widened shifts;
+        # this matters for masked low-word slliuw encodings.
+        # 源码用两个独立扩展移位构成旋转；这对掩码低字 slliuw 编码至关重要。
+        rol = rev_srl | sll
+        ror = srl | rev_sll
         bclr, bset, binv = src0 & ~bit_shift, src0 | bit_shift, src0 ^ bit_shift
 
         # Widen/word arithmetic. / 字宽与扩展算术。
@@ -308,8 +314,11 @@ class AluDataModule(Elaboratable):
         sllw = (low32 << shamt5)[:32]
         srlw = low32 >> shamt5
         sraw = (low32.as_signed() >> shamt5.as_unsigned())[:32]
-        rolw = rotate_left(low32, shamt5, 32)
-        rorw = rotate_right(low32, shamt5, 32)
+        rev_shamt5 = (~shamt5 + 1)[:5]
+        rev_sllw = (Cat(low32, Const(0, 31)) << rev_shamt5)[:32]
+        rev_srlw = low32 >> rev_shamt5
+        rolw = rev_srlw | sllw
+        rorw = srlw | rev_sllw
 
         # Add-op sources and results. / 加法操作源与结果。
         sr_sources = [zero_extend(src0[29:64], width), zero_extend(src0[30:64], width),
