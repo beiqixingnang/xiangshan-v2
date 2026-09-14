@@ -151,7 +151,10 @@ def reference_snapshot() -> dict[str, Any]:
     match = re.search(r"^module Frontend\(.*?^endmodule\s*", text, re.MULTILINE | re.DOTALL)
     if match is None:
         raise RuntimeError("locked Frontend module is absent")
-    module_text = match.group(0)
+    # Keep the exact line-bounded slice used by the readiness inventory:
+    # through the ``endmodule`` line and its single terminating LF, excluding
+    # the blank separator before the next generated module.
+    module_text = match.group(0).rstrip("\n") + "\n"
     header = module_text.split("\n);", 1)[0] + "\n);"
     # Chisel emits one direction/width followed by comma-separated continuation
     # names.  Parse those continuations instead of counting only lines that
@@ -179,7 +182,7 @@ def reference_snapshot() -> dict[str, Any]:
         "locked": len(raw) == REFERENCE_BYTES and digest_bytes(raw) == REFERENCE_SHA256,
         "module": "Frontend",
         "module_line_start": text[:match.start()].count("\n") + 1,
-        "module_line_end": text[:match.end()].count("\n"),
+        "module_line_end": text[:match.start() + len(module_text)].count("\n"),
         "module_bytes": len(module_text.encode("utf-8")),
         "module_sha256": digest_bytes(module_text.encode("utf-8")),
         "port_count": len(ports),
