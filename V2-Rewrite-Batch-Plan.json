@@ -205,15 +205,16 @@
       "validator": "v2-independent-validator",
   "status": "IN_PROGRESS",
       "active_family_batches": [
-    "V2-DEPENDENCY-ROCKET-REPLACEMENT-RVC-001"
+    "V2-DEPENDENCY-HUANCUN-001"
   ],
       "failed_family_attempts": [
         {
           "batch_id": "V2-DEPENDENCY-ROCKET-REPLACEMENT-RVC-001",
-          "status": "REPAIR_REQUIRED",
+          "status": "REPAIRED_AND_PASS",
           "reason": "RVC exhaustive differential passes, but ICacheReplacer parent differential diverges at cycle 304; direct and synthesis gates pass.",
           "evidence": "validation/v2-rocket-replacement-rvc-family-results.json",
-          "accepted": "NOT_ALLOWED"
+          "accepted": "NOT_ALLOWED",
+          "repair_commit": "58ecfe5"
         }
       ],
       "completed_family_batches": [
@@ -232,6 +233,16 @@
       "evidence": "validation/v2-rocket-protocol-family-results.json",
       "source_file_count": 120,
       "vectors": 128
+    },
+    {
+      "batch_id": "V2-DEPENDENCY-ROCKET-REPLACEMENT-RVC-001",
+      "status": "PASS_BOUNDED_FAMILY",
+      "commit": "58ecfe5",
+      "evidence": "validation/v2-rocket-replacement-rvc-family-results.json",
+      "source_file_count": 2,
+      "additional_build_files": 0,
+      "direct_vectors": 237857,
+      "reference_vectors": 131584
     }
   ]
     },
@@ -285,8 +296,8 @@
     "bounded_validator_pass_count": 16,
     "bounded_leaf_pass_count": 12,
     "bounded_parent_pass_count": 4,
-    "bounded_dependency_family_pass_count": 2,
-    "validated_batch_count": 19,
+    "bounded_dependency_family_pass_count": 3,
+    "validated_batch_count": 20,
     "planned_build_file_count": 78,
     "parent_closures_matched": 0,
     "accepted_count": 0,
