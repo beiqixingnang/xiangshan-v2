@@ -37,14 +37,16 @@ class BranchConfig:
     """V2 branch geometry. / V2 分支几何配置。"""
 
     xlen: int = 64
-    func_width: int = 7
+    # Locked Kunminghu V2 BranchModule exposes a nine-bit FuOpType field.
+    # The predicate consumes bits [3:0]; upper bits remain source-visible.
+    func_width: int = 9
 
     # Validate the V2 XLEN and FuOpType width. / 校验 V2 XLEN 和 FuOpType 位宽。
     def __post_init__(self) -> None:
         if self.xlen not in (32, 64):
             raise ValueError("V2 branch XLEN must be 32 or 64")
-        if self.func_width < 4:
-            raise ValueError("V2 branch func width must expose bits 3:0")
+        if self.func_width < 9:
+            raise ValueError("V2 branch func width must expose locked nine-bit FuOpType")
 
 
 # =============================================================================

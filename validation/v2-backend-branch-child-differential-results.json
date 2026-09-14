@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_BACKEND_BRANCH_CHILD_DIFFERENTIAL",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.BranchModule-Hardware.py",
+    "sha256": "d95127c09e3f1f319ecc8660afc875f6e5f521a07485153c06fa8fa52e3fbef3"
+  },
+  "locked_reference": {
+    "canonical_path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "immutable": true,
+    "extracted_reference": {
+      "branch_bytes": 1940,
+      "submodule_bytes": 589,
+      "module_payload_sha256": "ea5860bf681126b3019b9fcb33cdebb2d20f6952b937fb64f01b1f1f425f6d34"
+    }
+  },
+  "direct": {
+    "status": "PASS",
+    "vectors": 2048,
+    "checks": 2048
+  },
+  "differential": {
+    "status": "PASS",
+    "vectors": 2048,
+    "compile": {
+      "command": [
+        "verilator",
+        "--binary",
+        "--timing",
+        "-Wno-fatal",
+        "--top-module",
+        "tb",
+        "--Mdir",
+        "/tmp/uhsc-v2/validation/.work/v2-backend-branch-child/obj",
+        "/tmp/uhsc-v2/validation/.work/v2-backend-branch-child/BranchModule-target.sv",
+        "/tmp/uhsc-v2/validation/.work/v2-backend-branch-child/BranchModule-reference.sv",
+        "/tmp/uhsc-v2/validation/.work/v2-backend-branch-child/branch-child-tb.sv"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "output_tail": "OGNOT expects 1 bit on the LHS, but LHS's SEL generates 3 bits.\n                                                                                                       : ... note: In instance 'tb.t'\n   34 |   assign \\$1  = ! (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Fu.BranchModule-Hardware.py:92\" *) io_func[3:1];\n      |                 ^\n                     ... For warning description see https://verilator.org/warn/WIDTHTRUNC?v=5.032\n                     ... Use \"/* verilator lint_off WIDTHTRUNC */\" and lint_on around source to disable this message.\n%Warning-WIDTHEXPAND: /tmp/uhsc-v2/validation/.work/v2-backend-branch-child/BranchModule-target.sv:36:30: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                        : ... note: In instance 'tb.t'\n   36 |   assign \\$3  = io_func[3:1] == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Fu.BranchModule-Hardware.py:92\" *) 2'h2;\n      |                              ^~\n",
+      "output_sha256": "fec161f15174d46fe358e6dc0b87ba9f9ff523872d6bda327123ce29faf58224"
+    },
+    "run": {
+      "command": [
+        "/tmp/uhsc-v2/validation/.work/v2-backend-branch-child/obj/Vtb"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "output_tail": "BACKEND_BRANCH_CHILD_DIFF_PASS 2048\n- /tmp/uhsc-v2/validation/.work/v2-backend-branch-child/branch-child-tb.sv:2053: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 2ns; walltime 0.006 s; speed 956.993 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n",
+      "output_sha256": "ab2b6c9a90419ce9482851e9a6a9cd97f566e27ad6f2c3f08f8878696f8c3ffd"
+    }
+  },
+  "tool_gates": {
+    "verilator": {
+      "command": [
+        "verilator",
+        "--lint-only",
+        "-Wno-fatal",
+        "/tmp/uhsc-v2/validation/.work/v2-backend-branch-child/BranchModule-target.sv"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "output_tail": "bit on the LHS, but LHS's SEL generates 3 bits.\n                                                                                                       : ... note: In instance 'BranchModule'\n   34 |   assign \\$1  = ! (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Fu.BranchModule-Hardware.py:92\" *) io_func[3:1];\n      |                 ^\n                     ... For warning description see https://verilator.org/warn/WIDTHTRUNC?v=5.032\n                     ... Use \"/* verilator lint_off WIDTHTRUNC */\" and lint_on around source to disable this message.\n%Warning-WIDTHEXPAND: /tmp/uhsc-v2/validation/.work/v2-backend-branch-child/BranchModule-target.sv:36:30: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                        : ... note: In instance 'BranchModule'\n   36 |   assign \\$3  = io_func[3:1] == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Fu.BranchModule-Hardware.py:92\" *) 2'h2;\n      |                              ^~\n",
+      "output_sha256": "3b65a3972ff371f8252b3c7a329397db909ec96dc7ebe40753d3f8641a1a40b5"
+    },
+    "yosys": {
+      "command": [
+        "yosys",
+        "-Q",
+        "-p",
+        "read_verilog -sv /tmp/uhsc-v2/validation/.work/v2-backend-branch-child/BranchModule-target.sv; hierarchy -top BranchModule; proc; check; stat"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "output_tail": ".\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BranchModule.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module BranchModule...\nFound and reported 0 problems.\n\n5. Printing statistics.\n\n=== BranchModule ===\n\n   Number of wires:                 26\n   Number of wire bits:            160\n   Number of public wires:          15\n   Number of public wire bits:     149\n   Number of ports:                  6\n   Number of port bits:            140\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                 11\n     $eq                             3\n     $logic_not                      1\n     $lt                             2\n     $mux                            3\n     $xor                            2\n\nEnd of script. Logfile hash: 5b39260c36, CPU: user 0.01s system 0.01s, MEM: 11.25 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 56% 2x read_verilog (0 sec), 17% 1x opt_expr (0 sec), ...\n",
+      "output_sha256": "bed052706d6fb82f354e4542b24874e7d833da2fc385b08f5f3a9af25e94adad"
+    }
+  },
+  "gates": {
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "PARENT_CLOSURE_MATCHED": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "PASS_BOUNDED_BRANCH_CHILD",
+  "acceptance_eligible": false,
+  "unclosed": [
+    "BranchUnit/Backend ExuBlock parent integration remains pending.",
+    "Full Backend semantic closure and license/user review remain pending."
+  ]
+}
