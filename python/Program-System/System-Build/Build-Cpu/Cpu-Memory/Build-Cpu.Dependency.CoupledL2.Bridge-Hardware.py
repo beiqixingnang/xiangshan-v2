@@ -12,6 +12,7 @@ conditional family until a CHI-enabled top is selected and compared.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from math import ceil, log2
 from typing import Any, Iterable, Mapping, Sequence
 
 from amaranth import Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
@@ -65,9 +66,12 @@ __all__ = [
     "sam_lookup",
     "snoop_response",
     "CoupledL2Bridge",
+    "CoupledL2ParentConfig",
+    "TL2CHICoupledL2",
     "TL2CHIBridge",
     "TL2CHICoupledL2Bridge",
     "build_verilog",
+    "build_parent_verilog",
     "main",
 ]
 
@@ -231,6 +235,8 @@ class CoupledL2BridgeConfig:
     target_id: int = 0
     enable_async: bool = False
     tx_source_ready: bool = False
+    enable_data_check: bool = False
+    enable_poison: bool = False
 
     # Validate V2 widths and credit geometry. / 校验 V2 位宽与信用几何参数。
     def __post_init__(self) -> None:
@@ -250,6 +256,10 @@ class CoupledL2BridgeConfig:
             raise ValueError("invalid bank geometry")
         if self.banks > 1 and (1 << self.bank_bits) < self.banks:
             raise ValueError("bank_bits cannot encode all banks")
+        if self.enable_data_check and self.data_bits < 8:
+            raise ValueError("data-check width requires at least one byte")
+        if self.enable_poison and self.data_bits < 64:
+            raise ValueError("poison width requires at least one 64-bit lane")
 
 
 # Return issue-specific opcode field widths from Message.scala. / 返回 Message.scala 的 issue 专用 opcode 位宽。
@@ -287,7 +297,9 @@ def chi_layout_widths(configuration: CoupledL2BridgeConfig | None = None) -> dic
            iw["dat_opcode"], cfg.resp_err_bits, cfg.response_bits, iw["data_source"],
            3 if cfg.issue == "E.b" else 0, iw["txn_id"], 2, 2, tag_op,
            cfg.data_bits // 32 if cfg.issue == "E.b" else 0,
-           cfg.data_bits // 128 if cfg.issue == "E.b" else 0, 1, 4, cfg.data_bits // 8, cfg.data_bits)
+           cfg.data_bits // 128 if cfg.issue == "E.b" else 0, 1, 4, cfg.data_bits // 8, cfg.data_bits,
+           cfg.data_bits // 8 if cfg.enable_data_check else 0,
+           cfg.data_bits // 64 if cfg.enable_poison else 0)
     snp = (cfg.qos_bits, iw["node_id"], iw["txn_id"], iw["node_id"], iw["txn_id"],
            iw["snp_opcode"], cfg.address_bits - 3, 1, 1, 1, 1, mpam)
     return {"req": tuple(x for x in req if x > 0), "rsp": tuple(x for x in rsp if x > 0),
@@ -766,6 +778,393 @@ class CoupledL2Bridge(Elaboratable):
         return m
 
 
+# =============================================================================
+# Parent closure boundary
+# =============================================================================
+# Keep the CHI-enabled TL2 parent in the same aggregate while exposing a
+# separately testable, source-shaped boundary. / 在同一聚合文件中保留启用 CHI
+# 的 TL2 父级，同时暴露可独立测试且与源代码形状一致的边界。
+@dataclass(frozen=True)
+class CoupledL2ParentConfig:
+    """Configuration for the CHI-enabled CoupledL2 parent boundary. / CHI CoupledL2 父级边界配置。"""
+
+    issue: str = "E.b"
+    address_bits: int = 48
+    data_bits: int = 256
+    slices: int = 1
+    source_bits: int = 6
+    mmio_source_bits: int = 4
+    credit_num: int = 4
+    enable_data_check: bool = True
+    enable_poison: bool = True
+    target_id: int = 0
+
+    # Validate the generated TestTop_CHIL2 geometry. / 校验生成 TestTop_CHIL2 的几何参数。
+    def __post_init__(self) -> None:
+        if self.issue not in ("B", "C", "E.b"):
+            raise ValueError("issue must be B, C, or E.b")
+        if self.address_bits < 44 or self.address_bits > 52:
+            raise ValueError("CHI address width must be in [44, 52]")
+        if self.data_bits < 8 or self.data_bits % 8:
+            raise ValueError("data width must be a positive byte multiple")
+        if self.slices < 1 or self.slices > 16:
+            raise ValueError("slices must be in the range 1..16")
+        if self.source_bits < 1 or self.mmio_source_bits < 1 or self.credit_num < 1 or self.credit_num > 15:
+            raise ValueError("invalid parent source or credit geometry")
+        if self.enable_poison and self.data_bits < 64:
+            raise ValueError("poison width requires at least one 64-bit lane")
+
+    # Return the CHI child configuration represented by this parent. / 返回该父级所代表的 CHI 子配置。
+    def bridge_configuration(self) -> CoupledL2BridgeConfig:
+        """Build an immutable child bridge configuration. / 构造不可变子 bridge 配置。"""
+
+        return CoupledL2BridgeConfig(
+            issue=self.issue,
+            address_bits=self.address_bits,
+            data_bits=self.data_bits,
+            banks=self.slices,
+            bank_bits=max(0, (self.slices - 1).bit_length()),
+            credit_num=self.credit_num,
+            enable_data_check=self.enable_data_check,
+            enable_poison=self.enable_poison,
+            target_id=self.target_id,
+        )
+
+
+# Return the source-shaped CHI parent port contract for a selected issue. /
+# 返回所选 issue 的源代码形状 CHI 父级端口契约。
+def parent_port_contract(configuration: CoupledL2ParentConfig | None = None) -> tuple[dict[str, Any], ...]:
+    """Describe parent port names, directions, and widths deterministically. / 确定性描述父级端口名、方向和位宽。"""
+
+    cfg = configuration or CoupledL2ParentConfig()
+    iw = issue_widths(cfg.issue)
+    req_width = sum(chi_layout_widths(cfg.bridge_configuration())["req"])
+    rsp_width = sum(chi_layout_widths(cfg.bridge_configuration())["rsp"])
+    dat_width = sum(chi_layout_widths(cfg.bridge_configuration())["dat"])
+    snp_width = sum(chi_layout_widths(cfg.bridge_configuration())["snp"])
+    entries: list[dict[str, Any]] = []
+
+    # Append one source-shaped port entry. / 追加一个源代码形状端口项。
+    def add(name: str, width: int, direction: str) -> None:
+        """Append a normalized port description. / 追加规范化端口描述。"""
+
+        entries.append({"name": name, "width": max(1, int(width)), "direction": direction})
+
+    add("clock", 1, "input")
+    add("reset", 1, "input")
+    mmio_in = {
+        "a_ready": (1, "output"), "a_valid": (1, "input"), "a_bits_opcode": (4, "input"),
+        "a_bits_param": (3, "input"), "a_bits_size": (2, "input"), "a_bits_source": (cfg.mmio_source_bits, "input"),
+        "a_bits_address": (cfg.address_bits, "input"), "a_bits_mask": (cfg.data_bits // 8, "input"),
+        "a_bits_data": (64, "input"), "a_bits_corrupt": (1, "input"), "d_ready": (1, "input"),
+        "d_valid": (1, "output"), "d_bits_opcode": (4, "output"), "d_bits_param": (2, "output"),
+        "d_bits_size": (2, "output"), "d_bits_source": (cfg.mmio_source_bits, "output"),
+        "d_bits_sink": (1, "output"), "d_bits_denied": (1, "output"), "d_bits_data": (64, "output"),
+        "d_bits_corrupt": (1, "output"),
+    }
+    for suffix, (width, direction) in mmio_in.items():
+        add(f"auto_mmioBridge_mmio_in_{suffix}", width, direction)
+    tl = {
+        "a_ready": (1, "output"), "a_valid": (1, "input"), "a_bits_opcode": (4, "input"),
+        "a_bits_param": (3, "input"), "a_bits_size": (3, "input"), "a_bits_source": (cfg.source_bits, "input"),
+        "a_bits_address": (cfg.address_bits, "input"), "a_bits_user_vaddr": (36, "input"),
+        "a_bits_user_needHint": (1, "input"), "a_bits_user_alias": (2, "input"), "a_bits_corrupt": (1, "input"),
+        "b_ready": (1, "input"), "b_valid": (1, "output"), "b_bits_opcode": (3, "output"),
+        "b_bits_param": (2, "output"), "b_bits_address": (cfg.address_bits, "output"), "b_bits_data": (cfg.data_bits, "output"),
+        "c_ready": (1, "output"), "c_valid": (1, "input"), "c_bits_opcode": (3, "input"),
+        "c_bits_param": (3, "input"), "c_bits_size": (3, "input"), "c_bits_source": (cfg.source_bits, "input"),
+        "c_bits_address": (cfg.address_bits, "input"), "c_bits_data": (cfg.data_bits, "input"), "c_bits_corrupt": (1, "input"),
+        "d_ready": (1, "input"), "d_valid": (1, "output"), "d_bits_opcode": (4, "output"),
+        "d_bits_param": (2, "output"), "d_bits_source": (cfg.source_bits, "output"), "d_bits_sink": (8, "output"),
+        "d_bits_denied": (1, "output"), "d_bits_data": (cfg.data_bits, "output"), "d_bits_corrupt": (1, "output"),
+        "e_valid": (1, "input"), "e_bits_sink": (8, "input"),
+    }
+    for suffix, (width, direction) in tl.items():
+        add(f"auto_in_{suffix}", width, direction)
+    core = {
+        "hartId": (1, "input"), "pfCtrlFromCore_l2_pf_master_en": (1, "input"),
+        "pfCtrlFromCore_l2_pf_recv_en": (1, "input"), "pfCtrlFromCore_l2_pbop_en": (1, "input"),
+        "pfCtrlFromCore_l2_vbop_en": (1, "input"), "pfCtrlFromCore_l2_tp_en": (1, "input"),
+        "pfCtrlFromCore_l2_pf_delay_latency": (10, "input"), "l2_hint_valid": (1, "output"),
+        "l2_hint_bits_sourceId": (32, "output"), "l2_hint_bits_isKeyword": (1, "output"),
+        "l2_tlb_req_req_ready": (1, "input"), "l2_tlb_req_req_valid": (1, "output"),
+        "l2_tlb_req_req_bits_vaddr": (42, "output"), "l2_tlb_req_req_bits_cmd": (3, "output"),
+        "l2_tlb_req_req_bits_isPrefetch": (1, "output"), "l2_tlb_req_req_bits_size": (2, "output"),
+        "l2_tlb_req_req_bits_kill": (1, "output"), "l2_tlb_req_req_bits_no_translate": (1, "output"),
+        "l2_tlb_req_req_kill": (1, "output"), "l2_tlb_req_resp_ready": (1, "output"),
+        "l2_tlb_req_resp_valid": (1, "input"), "l2_tlb_req_resp_bits_paddr_0": (cfg.address_bits, "input"),
+        "l2_tlb_req_resp_bits_pbmt": (2, "input"), "l2_tlb_req_resp_bits_miss": (1, "input"),
+        "debugTopDown_robTrueCommit": (64, "input"), "debugTopDown_robHeadPaddr_valid": (1, "input"),
+        "debugTopDown_robHeadPaddr_bits": (36, "input"), "debugTopDown_l2MissMatch": (1, "output"),
+        "l2Miss": (1, "output"), "error_valid": (1, "output"), "error_address": (cfg.address_bits, "output"),
+    }
+    for suffix, (width, direction) in core.items():
+        add(f"io_{suffix}", width, direction)
+    chi = {
+        "txsactive": (1, "output"), "rxsactive": (1, "input"), "syscoreq": (1, "output"), "syscoack": (1, "input"),
+        "tx_linkactivereq": (1, "output"), "tx_linkactiveack": (1, "input"), "tx_req_flitpend": (1, "output"),
+        "tx_req_flitv": (1, "output"), "tx_req_flit": (req_width, "output"), "tx_req_lcrdv": (1, "input"),
+        "tx_rsp_flitpend": (1, "output"), "tx_rsp_flitv": (1, "output"), "tx_rsp_flit": (rsp_width, "output"),
+        "tx_rsp_lcrdv": (1, "input"), "tx_dat_flitpend": (1, "output"), "tx_dat_flitv": (1, "output"),
+        "tx_dat_flit": (dat_width, "output"), "tx_dat_lcrdv": (1, "input"), "rx_linkactivereq": (1, "input"),
+        "rx_linkactiveack": (1, "output"), "rx_rsp_flitpend": (1, "input"), "rx_rsp_flitv": (1, "input"),
+        "rx_rsp_flit": (rsp_width, "input"), "rx_rsp_lcrdv": (1, "output"), "rx_dat_flitpend": (1, "input"),
+        "rx_dat_flitv": (1, "input"), "rx_dat_flit": (dat_width, "input"), "rx_dat_lcrdv": (1, "output"),
+        "rx_snp_flitpend": (1, "input"), "rx_snp_flitv": (1, "input"), "rx_snp_flit": (snp_width, "input"),
+        "rx_snp_lcrdv": (1, "output"),
+    }
+    for suffix, (width, direction) in chi.items():
+        add(f"io_chi_{suffix}", width, direction)
+    add("io_nodeID", iw["node_id"], "input")
+    return tuple(entries)
+
+
+class TL2CHICoupledL2(Elaboratable):
+    """Source-shaped CHI parent boundary with explicit transaction routing. / 源代码形状且显式事务路由的 CHI 父级边界。"""
+
+    # Construct the flattened parent boundary. / 构造扁平化父级边界。
+    def __init__(self, configuration: CoupledL2ParentConfig | None = None,
+                 injected_dependencies: Mapping[str, Any] | None = None) -> None:
+        self.configuration = configuration or CoupledL2ParentConfig()
+        self.injected_dependencies = dict(injected_dependencies or {})
+        self._ports: list[Signal] = []
+        self._inputs: list[Signal] = []
+        self._outputs: list[Signal] = []
+        self._by_name: dict[str, Signal] = {}
+        for spec in parent_port_contract(self.configuration):
+            signal = Signal(spec["width"], name=spec["name"])
+            setattr(self, spec["name"], signal)
+            self._ports.append(signal)
+            self._by_name[spec["name"]] = signal
+            (self._inputs if spec["direction"] == "input" else self._outputs).append(signal)
+
+    # Return all source-shaped parent ports in stable order. / 按稳定顺序返回所有源代码形状父级端口。
+    def public_ports(self) -> tuple[Signal, ...]:
+        """Return the deterministic parent port tuple. / 返回确定性的父级端口元组。"""
+
+        return tuple(self._ports)
+
+    # Build the parent routing and CHI link state machine. / 构造父级路由和 CHI 链路状态机。
+    def elaborate(self, platform: Any) -> Module:
+        """Elaborate explicit TL/CHI parent behavior. / 展开显式 TL/CHI 父级行为。"""
+
+        del platform
+        c = self.configuration
+        iw = issue_widths(c.issue)
+        bridge_cfg = c.bridge_configuration()
+        req_widths = chi_layout_widths(bridge_cfg)["req"]
+        rsp_widths = chi_layout_widths(bridge_cfg)["rsp"]
+        dat_widths = chi_layout_widths(bridge_cfg)["dat"]
+        snp_widths = chi_layout_widths(bridge_cfg)["snp"]
+        m = Module()
+        domain = ClockDomain("tl2chi_parent", async_reset=True)
+        domain.clk = self.clock
+        domain.rst = self.reset
+        m.domains.tl2chi_parent = domain
+
+        pending = Signal(name="parent_pending")
+        req_sent = Signal(name="parent_req_sent")
+        pending_mmio = Signal(name="parent_pending_mmio")
+        pending_write_data = Signal(name="parent_pending_write_data")
+        response_pending = Signal(name="parent_response_pending")
+        response_opcode = Signal(4, name="parent_response_opcode")
+        response_data = Signal(c.data_bits, name="parent_response_data")
+        response_source = Signal(c.source_bits, name="parent_response_source")
+        response_denied = Signal(name="parent_response_denied")
+        response_corrupt = Signal(name="parent_response_corrupt")
+        request_opcode = Signal(4, name="parent_request_opcode")
+        request_size = Signal(3, name="parent_request_size")
+        request_source = Signal(c.source_bits, name="parent_request_source")
+        request_address = Signal(c.address_bits, name="parent_request_address")
+        request_data = Signal(c.data_bits, name="parent_request_data")
+        request_mask = Signal(c.data_bits // 8, name="parent_request_mask")
+        request_txn = Signal(iw["txn_id"], name="parent_request_txn")
+        request_dbid = Signal(iw["txn_id"], name="parent_request_dbid")
+        retry_wait = Signal(name="parent_retry_wait")
+        snoop_pending = Signal(name="parent_snoop_pending")
+        snoop_txn = Signal(iw["txn_id"], name="parent_snoop_txn")
+        snoop_src = Signal(iw["node_id"], name="parent_snoop_src")
+        tx_req_credit = Signal(range(c.credit_num + 1), reset=0, name="parent_tx_req_credit")
+        tx_rsp_credit = Signal(range(c.credit_num + 1), reset=0, name="parent_tx_rsp_credit")
+        tx_dat_credit = Signal(range(c.credit_num + 1), reset=0, name="parent_tx_dat_credit")
+        tx_state = Signal(2, reset=LINK_STOP, name="parent_tx_state")
+        rx_state = Signal(2, reset=LINK_STOP, name="parent_rx_state")
+
+        tx_run = tx_state == LINK_RUN
+        rx_run = rx_state == LINK_RUN
+        link_up = tx_run & rx_run
+        mmio_a_fire = self.auto_mmioBridge_mmio_in_a_valid & self.auto_mmioBridge_mmio_in_a_ready
+        tl_a_fire = self.auto_in_a_valid & self.auto_in_a_ready
+        tx_req_valid = pending & ~req_sent & ~retry_wait & link_up & (tx_req_credit != 0)
+        tx_rsp_valid = snoop_pending & link_up & (tx_rsp_credit != 0)
+        tx_dat_valid = pending_write_data & link_up & (tx_dat_credit != 0)
+        parent_idle = ~pending & ~response_pending & ~snoop_pending & ~self.reset
+
+        # Source-shaped CHI flit field helper. / 源代码形状 CHI flit 字段辅助函数。
+        def field(value: Any, widths: Sequence[int], index: int) -> Any:
+            """Select one packed field from an LSB-first flit. / 从 LSB-first flit 选择一个字段。"""
+
+            low = sum(widths[:index])
+            width = widths[index]
+            return value[low:low + width]
+
+        def extend(value: Any, width: int) -> Any:
+            """Zero-extend or truncate a signal to a requested width. / 将信号零扩展或截断到指定宽度。"""
+
+            if len(value) == width:
+                return value
+            if len(value) < width:
+                return Cat(value, Const(0, width - len(value)))
+            return value[:width]
+
+        req_flit_values = [
+            Const(0, req_widths[0]), extend(self.io_nodeID, req_widths[1]), extend(self.io_nodeID, req_widths[2]),
+            request_txn, extend(self.io_nodeID, req_widths[4]), Const(0, req_widths[5]), request_txn,
+            extend(request_opcode, req_widths[7]), extend(request_size, req_widths[8]), request_address,
+            Const(0, req_widths[10]), Const(0, req_widths[11]), Const(1, req_widths[12]),
+            Const(CHI_ORDER["EndpointOrder"] if c.issue != "B" else CHI_ORDER["RequestOrder"], req_widths[13]),
+            Const(0, req_widths[14]), Const(0, req_widths[15]), Const(0, req_widths[16]), Const(0, req_widths[17]),
+            Const(0, req_widths[18]), Const(1, req_widths[19]),
+        ]
+        # Optional issue-specific request fields. / issue 专用可选请求字段。
+        while len(req_flit_values) < len(req_widths):
+            req_flit_values.append(Const(0, req_widths[len(req_flit_values)]))
+        req_flit = Cat(*req_flit_values)
+        rsp_flit = Cat(
+            Const(0, rsp_widths[0]), extend(snoop_src, rsp_widths[1]), extend(self.io_nodeID, rsp_widths[2]),
+            snoop_txn, Const(CHI_RSP_OPCODES["SnpResp"], rsp_widths[4]), Const(CHI_RESP_ERR["OK"], rsp_widths[5]),
+            Const(CHI_COHERENCE_STATES["UC"], rsp_widths[6]), Const(0, rsp_widths[7]),
+            *[Const(0, width) for width in rsp_widths[8:]],
+        )
+        dat_flit_values = [
+            Const(0, dat_widths[0]), extend(self.io_nodeID, dat_widths[1]), extend(self.io_nodeID, dat_widths[2]),
+            request_txn, extend(self.io_nodeID, dat_widths[4]), Const(CHI_DAT_OPCODES["NonCopyBackWrData"], dat_widths[5]),
+            Const(CHI_RESP_ERR["OK"], dat_widths[6]), Const(CHI_COHERENCE_STATES["I"], dat_widths[7]),
+            Const(0, dat_widths[8]), *[Const(0, width) for width in dat_widths[9:10]], request_dbid,
+            *[Const(0, width) for width in dat_widths[11:19]], request_mask, request_data,
+        ]
+        while len(dat_flit_values) < len(dat_widths):
+            dat_flit_values.append(Const(0, dat_widths[len(dat_flit_values)]))
+        dat_flit = Cat(*dat_flit_values)
+
+        # Link, ready/valid, response, and flit outputs. / 链路、ready/valid、响应和 flit 输出。
+        m.d.comb += [
+            self.auto_mmioBridge_mmio_in_a_ready.eq(parent_idle & ~self.auto_in_a_valid),
+            self.auto_in_a_ready.eq(parent_idle & ~self.auto_mmioBridge_mmio_in_a_valid & link_up),
+            self.auto_in_c_ready.eq(parent_idle & link_up),
+            self.auto_in_b_valid.eq(0), self.auto_in_b_bits_opcode.eq(0), self.auto_in_b_bits_param.eq(0),
+            self.auto_in_b_bits_address.eq(0), self.auto_in_b_bits_data.eq(0),
+            self.auto_in_d_valid.eq(response_pending & ~pending_mmio), self.auto_in_d_bits_opcode.eq(response_opcode),
+            self.auto_in_d_bits_param.eq(0), self.auto_in_d_bits_source.eq(response_source), self.auto_in_d_bits_sink.eq(0),
+            self.auto_in_d_bits_denied.eq(response_denied), self.auto_in_d_bits_data.eq(response_data),
+            self.auto_in_d_bits_corrupt.eq(response_corrupt),
+            self.auto_mmioBridge_mmio_in_d_valid.eq(response_pending & pending_mmio),
+            self.auto_mmioBridge_mmio_in_d_bits_opcode.eq(response_opcode), self.auto_mmioBridge_mmio_in_d_bits_param.eq(0),
+            self.auto_mmioBridge_mmio_in_d_bits_size.eq(request_size[:2]),
+            self.auto_mmioBridge_mmio_in_d_bits_source.eq(response_source[:c.mmio_source_bits]),
+            self.auto_mmioBridge_mmio_in_d_bits_sink.eq(0), self.auto_mmioBridge_mmio_in_d_bits_denied.eq(response_denied),
+            self.auto_mmioBridge_mmio_in_d_bits_data.eq(response_data[:64]), self.auto_mmioBridge_mmio_in_d_bits_corrupt.eq(response_corrupt),
+            self.io_chi_txsactive.eq(tx_run), self.io_chi_syscoreq.eq(link_up),
+            self.io_chi_tx_linkactivereq.eq(~self.reset), self.io_chi_rx_linkactiveack.eq(self.io_chi_rx_linkactivereq & ~self.reset),
+            self.io_chi_tx_req_flitpend.eq(tx_req_valid), self.io_chi_tx_req_flitv.eq(tx_req_valid), self.io_chi_tx_req_flit.eq(req_flit),
+            self.io_chi_tx_rsp_flitpend.eq(tx_rsp_valid), self.io_chi_tx_rsp_flitv.eq(tx_rsp_valid), self.io_chi_tx_rsp_flit.eq(rsp_flit),
+            self.io_chi_tx_dat_flitpend.eq(tx_dat_valid), self.io_chi_tx_dat_flitv.eq(tx_dat_valid), self.io_chi_tx_dat_flit.eq(dat_flit),
+            self.io_chi_rx_rsp_lcrdv.eq(self.io_chi_rx_rsp_flitv), self.io_chi_rx_dat_lcrdv.eq(self.io_chi_rx_dat_flitv),
+            self.io_chi_rx_snp_lcrdv.eq(self.io_chi_rx_snp_flitv), self.io_l2_hint_valid.eq(0), self.io_l2_hint_bits_sourceId.eq(0),
+            self.io_l2_hint_bits_isKeyword.eq(0), self.io_l2_tlb_req_req_valid.eq(0), self.io_l2_tlb_req_req_bits_vaddr.eq(0),
+            self.io_l2_tlb_req_req_bits_cmd.eq(0), self.io_l2_tlb_req_req_bits_isPrefetch.eq(0), self.io_l2_tlb_req_req_bits_size.eq(0),
+            self.io_l2_tlb_req_req_bits_kill.eq(0), self.io_l2_tlb_req_req_bits_no_translate.eq(0), self.io_l2_tlb_req_req_kill.eq(0),
+            self.io_l2_tlb_req_resp_ready.eq(0), self.io_debugTopDown_l2MissMatch.eq(0), self.io_l2Miss.eq(pending & ~pending_mmio),
+            self.io_error_valid.eq(0), self.io_error_address.eq(request_address),
+        ]
+        # Consume source inputs that are not otherwise used. / 消耗其余未使用的源输入。
+        for index, signal in enumerate(self._inputs):
+            sink = Signal(len(signal), name=f"parent_input_sink_{index}")
+            m.d.comb += sink.eq(signal)
+
+        # Advance links, credits, requests, responses, and snoops. / 推进链路、信用、请求、响应和 snoop 状态。
+        def next_link(active_request: Any, active_ack: Any) -> Any:
+            """Return the four-state link transition. / 返回四态链路转换。"""
+
+            return Mux(active_request, Mux(active_ack, LINK_RUN, LINK_ACTIVATE),
+                       Mux(active_ack, LINK_DEACTIVATE, LINK_STOP))
+
+        rx_rsp_valid = self.io_chi_rx_rsp_flitv | self.io_chi_rx_rsp_flitpend
+        rx_dat_valid = self.io_chi_rx_dat_flitv | self.io_chi_rx_dat_flitpend
+        rx_snp_valid = self.io_chi_rx_snp_flitv | self.io_chi_rx_snp_flitpend
+        rx_rsp_opcode = field(self.io_chi_rx_rsp_flit, rsp_widths, 4)
+        rx_rsp_txn = field(self.io_chi_rx_rsp_flit, rsp_widths, 3)
+        rx_rsp_err = field(self.io_chi_rx_rsp_flit, rsp_widths, 5)
+        rx_dat_opcode = field(self.io_chi_rx_dat_flit, dat_widths, 5)
+        rx_dat_data = field(self.io_chi_rx_dat_flit, dat_widths, 19)
+        rx_dat_txn = field(self.io_chi_rx_dat_flit, dat_widths, 3)
+        rx_snp_txn = field(self.io_chi_rx_snp_flit, snp_widths, 2)
+        rx_snp_src = field(self.io_chi_rx_snp_flit, snp_widths, 1)
+        selected_opcode = Mux(mmio_a_fire, self.auto_mmioBridge_mmio_in_a_bits_opcode, self.auto_in_a_bits_opcode)
+        selected_size = Mux(mmio_a_fire, extend(self.auto_mmioBridge_mmio_in_a_bits_size, 3), self.auto_in_a_bits_size)
+        selected_source = Mux(mmio_a_fire, extend(self.auto_mmioBridge_mmio_in_a_bits_source, c.source_bits), self.auto_in_a_bits_source)
+        selected_address = Mux(mmio_a_fire, self.auto_mmioBridge_mmio_in_a_bits_address, self.auto_in_a_bits_address)
+        selected_data = Mux(mmio_a_fire, extend(self.auto_mmioBridge_mmio_in_a_bits_data, c.data_bits), Const(0, c.data_bits))
+        selected_mask = Mux(mmio_a_fire, extend(self.auto_mmioBridge_mmio_in_a_bits_mask, c.data_bits // 8), Const((1 << (c.data_bits // 8)) - 1, c.data_bits // 8))
+        selected_txn = Cat(mmio_a_fire, selected_source[:iw["txn_id"] - 1])
+        with m.If(self.reset):
+            m.d.tl2chi_parent += [pending.eq(0), req_sent.eq(0), pending_mmio.eq(0), pending_write_data.eq(0),
+                                   response_pending.eq(0), response_opcode.eq(0), response_data.eq(0), response_source.eq(0),
+                                   response_denied.eq(0), response_corrupt.eq(0), request_opcode.eq(0), request_size.eq(0),
+                                   request_source.eq(0), request_address.eq(0), request_data.eq(0), request_mask.eq(0),
+                                   request_txn.eq(0), request_dbid.eq(0), retry_wait.eq(0), snoop_pending.eq(0),
+                                   tx_req_credit.eq(0), tx_rsp_credit.eq(0), tx_dat_credit.eq(0), tx_state.eq(LINK_STOP), rx_state.eq(LINK_STOP)]
+        with m.Else():
+            m.d.tl2chi_parent += [tx_state.eq(next_link(self.io_chi_tx_linkactivereq, self.io_chi_tx_linkactiveack)),
+                                   rx_state.eq(next_link(self.io_chi_rx_linkactivereq, self.io_chi_rx_linkactiveack))]
+            with m.If(self.io_chi_tx_req_lcrdv & ~tx_req_valid):
+                with m.If(tx_req_credit < c.credit_num):
+                    m.d.tl2chi_parent += tx_req_credit.eq(tx_req_credit + 1)
+            with m.Elif(tx_req_valid):
+                m.d.tl2chi_parent += tx_req_credit.eq(tx_req_credit - 1)
+            with m.If(self.io_chi_tx_rsp_lcrdv & ~tx_rsp_valid):
+                with m.If(tx_rsp_credit < c.credit_num):
+                    m.d.tl2chi_parent += tx_rsp_credit.eq(tx_rsp_credit + 1)
+            with m.Elif(tx_rsp_valid):
+                m.d.tl2chi_parent += tx_rsp_credit.eq(tx_rsp_credit - 1)
+            with m.If(self.io_chi_tx_dat_lcrdv & ~tx_dat_valid):
+                with m.If(tx_dat_credit < c.credit_num):
+                    m.d.tl2chi_parent += tx_dat_credit.eq(tx_dat_credit + 1)
+            with m.Elif(tx_dat_valid):
+                m.d.tl2chi_parent += tx_dat_credit.eq(tx_dat_credit - 1)
+            with m.If(mmio_a_fire | tl_a_fire):
+                m.d.tl2chi_parent += [pending.eq(1), req_sent.eq(0), pending_mmio.eq(mmio_a_fire), pending_write_data.eq(0),
+                                       request_opcode.eq(selected_opcode), request_size.eq(selected_size),
+                                       request_source.eq(selected_source), response_source.eq(selected_source),
+                                       request_address.eq(selected_address), request_data.eq(selected_data),
+                                       request_mask.eq(selected_mask), request_txn.eq(selected_txn)]
+            with m.If(tx_req_valid):
+                m.d.tl2chi_parent += req_sent.eq(1)
+            with m.If(rx_rsp_valid & (rx_rsp_opcode == CHI_RSP_OPCODES["RetryAck"])):
+                m.d.tl2chi_parent += [req_sent.eq(0), retry_wait.eq(1)]
+            with m.If(rx_rsp_valid & (rx_rsp_opcode == CHI_RSP_OPCODES["PCrdGrant"])):
+                m.d.tl2chi_parent += retry_wait.eq(0)
+            with m.If(rx_rsp_valid & ((rx_rsp_opcode == CHI_RSP_OPCODES["DBIDResp"]) | (rx_rsp_opcode == CHI_RSP_OPCODES["CompDBIDResp"]))):
+                m.d.tl2chi_parent += request_dbid.eq(rx_rsp_txn)
+                with m.If(pending_mmio | (request_opcode == TL_OPCODE_PUTFULL) | (request_opcode == TL_OPCODE_PUTPARTIAL)):
+                    m.d.tl2chi_parent += pending_write_data.eq(1)
+                with m.If(rx_rsp_opcode == CHI_RSP_OPCODES["CompDBIDResp"]):
+                    m.d.tl2chi_parent += [response_pending.eq(1), response_opcode.eq(0), response_denied.eq(rx_rsp_err == CHI_RESP_ERR["NDERR"]), response_corrupt.eq(rx_rsp_err != CHI_RESP_ERR["OK"])]
+            with m.If(rx_rsp_valid & ((rx_rsp_opcode == CHI_RSP_OPCODES["Comp"]) | (rx_rsp_opcode == CHI_RSP_OPCODES["CompAck"]))):
+                m.d.tl2chi_parent += [response_pending.eq(1), response_opcode.eq(0), response_denied.eq(rx_rsp_err == CHI_RESP_ERR["NDERR"]), response_corrupt.eq(rx_rsp_err != CHI_RESP_ERR["OK"])]
+            with m.If(rx_dat_valid):
+                m.d.tl2chi_parent += [response_pending.eq(1), response_opcode.eq(1), response_data.eq(rx_dat_data), response_denied.eq(0), response_corrupt.eq(0)]
+            with m.If(tx_dat_valid):
+                m.d.tl2chi_parent += pending_write_data.eq(0)
+            with m.If((self.auto_in_d_valid & self.auto_in_d_ready) | (self.auto_mmioBridge_mmio_in_d_valid & self.auto_mmioBridge_mmio_in_d_ready)):
+                m.d.tl2chi_parent += [response_pending.eq(0), pending.eq(0), req_sent.eq(0)]
+            with m.If(rx_snp_valid & ~snoop_pending):
+                m.d.tl2chi_parent += [snoop_pending.eq(1), snoop_txn.eq(rx_snp_txn), snoop_src.eq(rx_snp_src)]
+            with m.If(tx_rsp_valid):
+                m.d.tl2chi_parent += snoop_pending.eq(0)
+        return m
+
+
 # Compatibility names retain the Scala family concepts without changing the
 # project-facing UHSC generated module name. / 兼容名称保留 Scala family 概念，同时不改变 UHSC 生成模块名。
 TL2CHIBridge = CoupledL2Bridge
@@ -794,6 +1193,29 @@ def build_verilog(configuration, injected_dependencies):
     else:
         raise TypeError("configuration must be CoupledL2BridgeConfig, dict, or None")
     top = CoupledL2Bridge(cfg)
+    return verilog.convert(top, name=name, ports=list(top.public_ports()), emit_src=False)
+
+
+# Export the source-shaped CHI parent boundary for parent-closure validation. /
+# 为父级闭环验证导出源代码形状的 CHI 父级边界。
+def build_parent_verilog(configuration, injected_dependencies):
+    """Return deterministic Verilog for the CHI-enabled parent. / 返回 CHI 父级的确定性 Verilog。"""
+
+    del injected_dependencies
+    if isinstance(configuration, CoupledL2ParentConfig):
+        cfg = configuration
+        name = "UHSCCoupledL2"
+    elif isinstance(configuration, dict):
+        fields = CoupledL2ParentConfig.__dataclass_fields__
+        values = {key: value for key, value in configuration.items() if key in fields}
+        cfg = CoupledL2ParentConfig(**values)
+        name = str(configuration.get("module", configuration.get("name", "UHSCCoupledL2")))
+    elif configuration is None:
+        cfg = CoupledL2ParentConfig()
+        name = "UHSCCoupledL2"
+    else:
+        raise TypeError("configuration must be CoupledL2ParentConfig, dict, or None")
+    top = TL2CHICoupledL2(cfg)
     return verilog.convert(top, name=name, ports=list(top.public_ports()), emit_src=False)
 
 

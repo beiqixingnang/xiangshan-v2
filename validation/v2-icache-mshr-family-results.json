@@ -1,0 +1,377 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_ICACHE_MSHR_FAMILY",
+  "batch_id": "V2-SEMANTIC-FRONTEND-ICACHE-MSHR",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "locked_reference": {
+    "path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d"
+  },
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.ICacheMshr-Hardware.py",
+    "sha256": "2eada3e839b2734523082559abde453ac4b5eb8ced991c0419d537cebd158e45"
+  },
+  "source": {
+    "path": "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala",
+    "sha256": "12489d704c86b65f6d4bc15e64b659bb2fa94f236eb93350d9dee012a22ba926"
+  },
+  "contract": {
+    "utf8": true,
+    "bom": false,
+    "lf_only": true,
+    "ast_parse": true,
+    "five_zone_order": [
+      238,
+      684,
+      2069,
+      9508,
+      11405
+    ],
+    "zones_ordered": true,
+    "adapter_args": [
+      "configuration",
+      "injected_dependencies"
+    ],
+    "adapter_exact": true,
+    "missing_bilingual_comments": [],
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.ICacheMshr-Hardware.py",
+    "bytes": 12074,
+    "sha256": "2eada3e839b2734523082559abde453ac4b5eb8ced991c0419d537cebd158e45",
+    "status": "PASS"
+  },
+  "direct": [
+    {
+      "status": "PASS",
+      "variant": "fetch-id0",
+      "vectors": 1024,
+      "observation_points": [
+        "async reset",
+        "miss allocation",
+        "lookup hit",
+        "acquire backpressure",
+        "flush",
+        "invalid"
+      ]
+    },
+    {
+      "status": "PASS",
+      "variant": "prefetch-id4",
+      "vectors": 1024,
+      "observation_points": [
+        "async reset",
+        "miss allocation",
+        "lookup hit",
+        "acquire backpressure",
+        "flush",
+        "invalid"
+      ]
+    }
+  ],
+  "comparisons": [
+    {
+      "name": "fetch-id0",
+      "comparison": "PASS",
+      "behavioral_equivalence": true,
+      "target_vectors": 2059,
+      "reference_vectors": 2059,
+      "target_trace_sha256": "579868f032b2de7b519af46d104a5d00659e6282781e167f6fa687798f90e93b",
+      "reference_trace_sha256": "579868f032b2de7b519af46d104a5d00659e6282781e167f6fa687798f90e93b",
+      "first_mismatch": null
+    },
+    {
+      "name": "prefetch-id4",
+      "comparison": "PASS",
+      "behavioral_equivalence": true,
+      "target_vectors": 2059,
+      "reference_vectors": 2059,
+      "target_trace_sha256": "e5275014b64b5ff383eeab5d8631c6f57b84a76129cc9ed5cb7da4e0b54f6b22",
+      "reference_trace_sha256": "e5275014b64b5ff383eeab5d8631c6f57b84a76129cc9ed5cb7da4e0b54f6b22",
+      "first_mismatch": null
+    }
+  ],
+  "target_backend": {
+    "fetch-id0": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "--Wno-fatal",
+          "--top-module",
+          "ICacheMSHR",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-icache-mshr-full/ICacheMSHR-fetch-target.sv"
+        ],
+        "returncode": 0,
+        "result": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.058 MB sources in 2 modules, into 0.033 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.022 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.008 s on 1 threads; alloced 9.500 MB\n",
+        "output_sha256": "38d722e7e643d079027bb1f32f30a5e0cdb8404ac2791fcc89af8ac241528f73"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-icache-mshr-full/ICacheMSHR-fetch-target.sv; hierarchy -top ICacheMSHR; proc; check"
+        ],
+        "returncode": 0,
+        "result": "PASS",
+        "output_tail": "5'.\nRemoving empty process `ICacheMSHR.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-icache-mshr-full/ICacheMSHR-fetch-target.sv:241$45'.\nRemoving empty process `ICacheMSHR.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-icache-mshr-full/ICacheMSHR-fetch-target.sv:238$44'.\nRemoving empty process `ICacheMSHR.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-icache-mshr-full/ICacheMSHR-fetch-target.sv:234$43'.\nRemoving empty process `ICacheMSHR.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-icache-mshr-full/ICacheMSHR-fetch-target.sv:230$42'.\nRemoving empty process `ICacheMSHR.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-icache-mshr-full/ICacheMSHR-fetch-target.sv:226$41'.\nRemoving empty process `ICacheMSHR.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-icache-mshr-full/ICacheMSHR-fetch-target.sv:222$40'.\nRemoving empty process `ICacheMSHR.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-icache-mshr-full/ICacheMSHR-fetch-target.sv:218$39'.\nRemoving empty process `ICacheMSHR.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-icache-mshr-full/ICacheMSHR-fetch-target.sv:178$2'.\nRemoving empty process `ICacheMSHR.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-icache-mshr-full/ICacheMSHR-fetch-target.sv:174$1'.\nCleaned up 15 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ICacheMSHR.\n<suppressed ~9 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module ICacheMSHR...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 3b0f04699f, CPU: user 0.02s system 0.01s, MEM: 12.97 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 70% 2x read_verilog (0 sec), 10% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "977d577258dd955f5491b850d89f6893ca5b827776ba840bd12705680075c1f4"
+      }
+    },
+    "prefetch-id4": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "--Wno-fatal",
+          "--top-module",
+          "ICacheMSHR",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-icache-mshr-full/ICacheMSHR-prefetch-target.sv"
+        ],
+        "returncode": 0,
+        "result": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.060 MB sources in 2 modules, into 0.034 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.028 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.008 s on 1 threads; alloced 9.512 MB\n",
+        "output_sha256": "321894293d0b54c8a609461af8f3f39f51333fb7894561e4fa35b97522f7f668"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-icache-mshr-full/ICacheMSHR-prefetch-target.sv; hierarchy -top ICacheMSHR; proc; check"
+        ],
+        "returncode": 0,
+        "result": "PASS",
+        "output_tail": " `ICacheMSHR.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-icache-mshr-full/ICacheMSHR-prefetch-target.sv:246$50'.\nRemoving empty process `ICacheMSHR.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-icache-mshr-full/ICacheMSHR-prefetch-target.sv:243$49'.\nRemoving empty process `ICacheMSHR.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-icache-mshr-full/ICacheMSHR-prefetch-target.sv:239$48'.\nRemoving empty process `ICacheMSHR.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-icache-mshr-full/ICacheMSHR-prefetch-target.sv:235$47'.\nRemoving empty process `ICacheMSHR.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-icache-mshr-full/ICacheMSHR-prefetch-target.sv:231$46'.\nRemoving empty process `ICacheMSHR.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-icache-mshr-full/ICacheMSHR-prefetch-target.sv:227$45'.\nRemoving empty process `ICacheMSHR.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-icache-mshr-full/ICacheMSHR-prefetch-target.sv:223$44'.\nRemoving empty process `ICacheMSHR.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-icache-mshr-full/ICacheMSHR-prefetch-target.sv:178$2'.\nRemoving empty process `ICacheMSHR.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-icache-mshr-full/ICacheMSHR-prefetch-target.sv:174$1'.\nCleaned up 15 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ICacheMSHR.\n<suppressed ~9 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module ICacheMSHR...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 2209d34689, CPU: user 0.01s system 0.01s, MEM: 13.12 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 72% 2x read_verilog (0 sec), 8% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "0229877813bbe9f89203c67f901e8ab35a7d5d0886a7d3b3b0e0f6cce3f77283"
+      }
+    }
+  },
+  "reference_backend": {
+    "fetch-id0": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "--Wno-fatal",
+          "--top-module",
+          "ICacheMSHR",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/ICacheMSHR.sv"
+        ],
+        "returncode": 0,
+        "result": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.024 MB sources in 2 modules, into 0.026 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.019 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.227 MB\n",
+        "output_sha256": "2e5effcc41c6fa5d23430f9e4ac402350f1cf06f7b5783665a85c55858333fb2"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/ICacheMSHR.sv; hierarchy -top ICacheMSHR; proc; check"
+        ],
+        "returncode": 1,
+        "result": "FAIL",
+        "output_tail": "\n /----------------------------------------------------------------------------\\\n |  yosys -- Yosys Open SYnthesis Suite                                       |\n |  Copyright (C) 2012 - 2025  Claire Xenia Wolf <claire@yosyshq.com>         |\n |  Distributed under an ISC-like license, type \"license\" to see terms        |\n \\----------------------------------------------------------------------------/\n Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\n\n-- Running command `read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/ICacheMSHR.sv; hierarchy -top ICacheMSHR; proc; check' --\n\n1. Executing Verilog-2005 frontend: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/ICacheMSHR.sv\n/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/ICacheMSHR.sv:49: ERROR: syntax error, unexpected TOK_AUTOMATIC\n",
+        "output_sha256": "5b264f3e473f827ce39823322e12484f35ba0b062526bbb6f82055dbada4055a"
+      }
+    },
+    "prefetch-id4": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "--Wno-fatal",
+          "--top-module",
+          "ICacheMSHR_4",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/ICacheMSHR_4.sv"
+        ],
+        "returncode": 0,
+        "result": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.024 MB sources in 2 modules, into 0.028 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.020 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.234 MB\n",
+        "output_sha256": "0137b6af94b8028343d3e38da9ed05cfbbb1dba0ed25392f82ec182ca8afdb14"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/ICacheMSHR_4.sv; hierarchy -top ICacheMSHR_4; proc; check"
+        ],
+        "returncode": 1,
+        "result": "FAIL",
+        "output_tail": "\n /----------------------------------------------------------------------------\\\n |  yosys -- Yosys Open SYnthesis Suite                                       |\n |  Copyright (C) 2012 - 2025  Claire Xenia Wolf <claire@yosyshq.com>         |\n |  Distributed under an ISC-like license, type \"license\" to see terms        |\n \\----------------------------------------------------------------------------/\n Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\n\n-- Running command `read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/ICacheMSHR_4.sv; hierarchy -top ICacheMSHR_4; proc; check' --\n\n1. Executing Verilog-2005 frontend: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/ICacheMSHR_4.sv\n/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/ICacheMSHR_4.sv:51: ERROR: syntax error, unexpected TOK_AUTOMATIC\n",
+        "output_sha256": "bd232838ba24064bd85bc5334de49d493718a8195081b9768f488f001d3da6e0"
+      }
+    }
+  },
+  "trace_artifacts": {
+    "fetch_target": {
+      "build": {
+        "command": [
+          "verilator",
+          "--cc",
+          "--exe",
+          "--build",
+          "--Wno-fatal",
+          "--top-module",
+          "ICacheMSHR",
+          "--Mdir",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-icache-mshr-full/obj-target-fetch",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-icache-mshr-full/ICacheMSHR-fetch-target.sv",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/icache_mshr_full_diff_tb.cpp",
+          "-CFLAGS",
+          "-DTARGET"
+        ],
+        "returncode": 0,
+        "result": "PASS",
+        "output_tail": "ude/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DTARGET   -c -o verilated.o /usr/share/verilator/include/verilated.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DTARGET   -c -o verilated_threads.o /usr/share/verilator/include/verilated_threads.cpp\npython3 /usr/share/verilator/bin/verilator_includer -DVL_INCLUDE_OPT=include VICacheMSHR.cpp VICacheMSHR___024root__DepSet_h071f9eb1__0.cpp VICacheMSHR___024root__DepSet_he539ecce__0.cpp VICacheMSHR___024root__Slow.cpp VICacheMSHR___024root__DepSet_h071f9eb1__0__Slow.cpp VICacheMSHR___024root__DepSet_he539ecce__0__Slow.cpp VICacheMSHR__Syms.cpp > VICacheMSHR__ALL.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DTARGET   -c -o VICacheMSHR__ALL.o VICacheMSHR__ALL.cpp\necho \"\" > VICacheMSHR__ALL.verilator_deplist.tmp\ng++    icache_mshr_full_diff_tb.o verilated.o verilated_threads.o VICacheMSHR__ALL.a    -pthread -lpthread -latomic   -o VICacheMSHR\nrm VICacheMSHR__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-icache-mshr-full/obj-target-fetch'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.058 MB sources in 2 modules, into 0.053 MB in 7 C++ files needing 0.000 MB\n- Verilator: Walltime 4.833 s (elab=0.001, cvt=0.035, bld=4.725); cpu 0.014 s on 1 threads; alloced 9.488 MB\n",
+        "output_sha256": "292150824d57dc03a0287add2838146e1a34e0970fd3f61ad903fee678a0ee3e"
+      },
+      "run": {
+        "command": [
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-icache-mshr-full/obj-target-fetch/VICacheMSHR"
+        ],
+        "returncode": 0,
+        "result": "PASS",
+        "output_tail": "_paddr\":201489660,\"info_v_set_idx\":243,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":2053,\"reset\":0,\"fencei\":1,\"flush\":1,\"wfi\":1,\"req\":1,\"blk\":20440041,\"set\":143,\"lk0_blk\":79843,\"lk0_set\":223,\"lk1_blk\":311,\"lk1_set\":4,\"acq_ready\":0,\"victim\":1,\"invalid\":0,\"req_ready\":0,\"acquire_valid\":0,\"acquire_address\":12895338240,\"acquire_v_set_idx\":243,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":201489660,\"info_v_set_idx\":243,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":2054,\"reset\":0,\"fencei\":1,\"flush\":0,\"wfi\":0,\"req\":1,\"blk\":68268766,\"set\":203,\"lk0_blk\":266674,\"lk0_set\":70,\"lk1_blk\":1041,\"lk1_set\":16,\"acq_ready\":0,\"victim\":0,\"invalid\":1,\"req_ready\":0,\"acquire_valid\":0,\"acquire_address\":12895338240,\"acquire_v_set_idx\":243,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":201489660,\"info_v_set_idx\":243,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":2055,\"reset\":0,\"fencei\":0,\"flush\":1,\"wfi\":0,\"req\":1,\"blk\":184966799,\"set\":122,\"lk0_blk\":722526,\"lk0_set\":25,\"lk1_blk\":2822,\"lk1_set\":44,\"acq_ready\":0,\"victim\":3,\"invalid\":0,\"req_ready\":1,\"acquire_valid\":0,\"acquire_address\":12895338240,\"acquire_v_set_idx\":243,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":201489660,\"info_v_set_idx\":243,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":2056,\"reset\":0,\"fencei\":1,\"flush\":1,\"wfi\":1,\"req\":0,\"blk\":170063466,\"set\":217,\"lk0_blk\":664310,\"lk0_set\":139,\"lk1_blk\":2594,\"lk1_set\":40,\"acq_ready\":0,\"victim\":2,\"invalid\":0,\"req_ready\":0,\"acquire_valid\":0,\"acquire_address\":11837875136,\"acquire_v_set_idx\":122,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":1,\"info_blk_paddr\":184966799,\"info_v_set_idx\":122,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":2057,\"reset\":0,\"fencei\":0,\"flush\":1,\"wfi\":0,\"req\":1,\"blk\":152631721,\"set\":230,\"lk0_blk\":596217,\"lk0_set\":99,\"lk1_blk\":2328,\"lk1_set\":36,\"acq_ready\":0,\"victim\":1,\"invalid\":0,\"req_ready\":1,\"acquire_valid\":0,\"acquire_address\":11837875136,\"acquire_v_set_idx\":122,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":184966799,\"info_v_set_idx\":122,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":2058,\"reset\":0,\"fencei\":0,\"flush\":0,\"wfi\":1,\"req\":0,\"blk\":60037463,\"set\":101,\"lk0_blk\":234521,\"lk0_set\":80,\"lk1_blk\":916,\"lk1_set\":14,\"acq_ready\":1,\"victim\":3,\"invalid\":0,\"req_ready\":0,\"acquire_valid\":0,\"acquire_address\":9768430144,\"acquire_v_set_idx\":230,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":1,\"info_blk_paddr\":152631721,\"info_v_set_idx\":230,\"info_way\":3,\"wfi_safe\":1}\n",
+        "output_sha256": "0bdfa82399b4ee22eee1f379b9561ac9d8824b2179193eacbcc15b16b3ac260f",
+        "full_returncode": 0,
+        "full_output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "trace": {
+        "path": "validation/.work/v2-icache-mshr-full/target-fetch.jsonl",
+        "sha256": "0bdfa82399b4ee22eee1f379b9561ac9d8824b2179193eacbcc15b16b3ac260f",
+        "vectors": 2059
+      }
+    },
+    "fetch_reference": {
+      "build": {
+        "command": [
+          "verilator",
+          "--cc",
+          "--exe",
+          "--build",
+          "--Wno-fatal",
+          "--top-module",
+          "ICacheMSHR",
+          "--Mdir",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-icache-mshr-full/obj-reference-fetch",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/ICacheMSHR.sv",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/icache_mshr_full_diff_tb.cpp"
+        ],
+        "returncode": 0,
+        "result": "PASS",
+        "output_tail": "usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -c -o verilated.o /usr/share/verilator/include/verilated.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -c -o verilated_threads.o /usr/share/verilator/include/verilated_threads.cpp\npython3 /usr/share/verilator/bin/verilator_includer -DVL_INCLUDE_OPT=include VICacheMSHR.cpp VICacheMSHR___024root__DepSet_h071f9eb1__0.cpp VICacheMSHR___024root__DepSet_he539ecce__0.cpp VICacheMSHR___024root__Slow.cpp VICacheMSHR___024root__DepSet_h071f9eb1__0__Slow.cpp VICacheMSHR___024root__DepSet_he539ecce__0__Slow.cpp VICacheMSHR__Syms.cpp > VICacheMSHR__ALL.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -c -o VICacheMSHR__ALL.o VICacheMSHR__ALL.cpp\necho \"\" > VICacheMSHR__ALL.verilator_deplist.tmp\ng++    icache_mshr_full_diff_tb.o verilated.o verilated_threads.o VICacheMSHR__ALL.a    -pthread -lpthread -latomic   -o VICacheMSHR\nrm VICacheMSHR__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-icache-mshr-full/obj-reference-fetch'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.024 MB sources in 2 modules, into 0.045 MB in 7 C++ files needing 0.000 MB\n- Verilator: Walltime 4.587 s (elab=0.000, cvt=0.025, bld=4.483); cpu 0.013 s on 1 threads; alloced 9.223 MB\n",
+        "output_sha256": "d5ccb4cfd7fd3eaffbc1aea348ba8e1c653bc59e5306e9e3b405830ee57417a1"
+      },
+      "run": {
+        "command": [
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-icache-mshr-full/obj-reference-fetch/VICacheMSHR"
+        ],
+        "returncode": 0,
+        "result": "PASS",
+        "output_tail": "_paddr\":201489660,\"info_v_set_idx\":243,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":2053,\"reset\":0,\"fencei\":1,\"flush\":1,\"wfi\":1,\"req\":1,\"blk\":20440041,\"set\":143,\"lk0_blk\":79843,\"lk0_set\":223,\"lk1_blk\":311,\"lk1_set\":4,\"acq_ready\":0,\"victim\":1,\"invalid\":0,\"req_ready\":0,\"acquire_valid\":0,\"acquire_address\":12895338240,\"acquire_v_set_idx\":243,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":201489660,\"info_v_set_idx\":243,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":2054,\"reset\":0,\"fencei\":1,\"flush\":0,\"wfi\":0,\"req\":1,\"blk\":68268766,\"set\":203,\"lk0_blk\":266674,\"lk0_set\":70,\"lk1_blk\":1041,\"lk1_set\":16,\"acq_ready\":0,\"victim\":0,\"invalid\":1,\"req_ready\":0,\"acquire_valid\":0,\"acquire_address\":12895338240,\"acquire_v_set_idx\":243,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":201489660,\"info_v_set_idx\":243,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":2055,\"reset\":0,\"fencei\":0,\"flush\":1,\"wfi\":0,\"req\":1,\"blk\":184966799,\"set\":122,\"lk0_blk\":722526,\"lk0_set\":25,\"lk1_blk\":2822,\"lk1_set\":44,\"acq_ready\":0,\"victim\":3,\"invalid\":0,\"req_ready\":1,\"acquire_valid\":0,\"acquire_address\":12895338240,\"acquire_v_set_idx\":243,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":201489660,\"info_v_set_idx\":243,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":2056,\"reset\":0,\"fencei\":1,\"flush\":1,\"wfi\":1,\"req\":0,\"blk\":170063466,\"set\":217,\"lk0_blk\":664310,\"lk0_set\":139,\"lk1_blk\":2594,\"lk1_set\":40,\"acq_ready\":0,\"victim\":2,\"invalid\":0,\"req_ready\":0,\"acquire_valid\":0,\"acquire_address\":11837875136,\"acquire_v_set_idx\":122,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":1,\"info_blk_paddr\":184966799,\"info_v_set_idx\":122,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":2057,\"reset\":0,\"fencei\":0,\"flush\":1,\"wfi\":0,\"req\":1,\"blk\":152631721,\"set\":230,\"lk0_blk\":596217,\"lk0_set\":99,\"lk1_blk\":2328,\"lk1_set\":36,\"acq_ready\":0,\"victim\":1,\"invalid\":0,\"req_ready\":1,\"acquire_valid\":0,\"acquire_address\":11837875136,\"acquire_v_set_idx\":122,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":184966799,\"info_v_set_idx\":122,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":2058,\"reset\":0,\"fencei\":0,\"flush\":0,\"wfi\":1,\"req\":0,\"blk\":60037463,\"set\":101,\"lk0_blk\":234521,\"lk0_set\":80,\"lk1_blk\":916,\"lk1_set\":14,\"acq_ready\":1,\"victim\":3,\"invalid\":0,\"req_ready\":0,\"acquire_valid\":0,\"acquire_address\":9768430144,\"acquire_v_set_idx\":230,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":1,\"info_blk_paddr\":152631721,\"info_v_set_idx\":230,\"info_way\":3,\"wfi_safe\":1}\n",
+        "output_sha256": "0bdfa82399b4ee22eee1f379b9561ac9d8824b2179193eacbcc15b16b3ac260f",
+        "full_returncode": 0,
+        "full_output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "trace": {
+        "path": "validation/.work/v2-icache-mshr-full/reference-fetch.jsonl",
+        "sha256": "0bdfa82399b4ee22eee1f379b9561ac9d8824b2179193eacbcc15b16b3ac260f",
+        "vectors": 2059
+      }
+    },
+    "prefetch_target": {
+      "build": {
+        "command": [
+          "verilator",
+          "--cc",
+          "--exe",
+          "--build",
+          "--Wno-fatal",
+          "--top-module",
+          "ICacheMSHR",
+          "--Mdir",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-icache-mshr-full/obj-target-prefetch",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-icache-mshr-full/ICacheMSHR-prefetch-target.sv",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/icache_mshr_full_diff_tb.cpp",
+          "-CFLAGS",
+          "-DTARGET -DPREFETCH"
+        ],
+        "returncode": 0,
+        "result": "PASS",
+        "output_tail": " -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DTARGET -DPREFETCH   -c -o verilated.o /usr/share/verilator/include/verilated.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DTARGET -DPREFETCH   -c -o verilated_threads.o /usr/share/verilator/include/verilated_threads.cpp\npython3 /usr/share/verilator/bin/verilator_includer -DVL_INCLUDE_OPT=include VICacheMSHR.cpp VICacheMSHR___024root__DepSet_h071f9eb1__0.cpp VICacheMSHR___024root__DepSet_he539ecce__0.cpp VICacheMSHR___024root__Slow.cpp VICacheMSHR___024root__DepSet_h071f9eb1__0__Slow.cpp VICacheMSHR___024root__DepSet_he539ecce__0__Slow.cpp VICacheMSHR__Syms.cpp > VICacheMSHR__ALL.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DTARGET -DPREFETCH   -c -o VICacheMSHR__ALL.o VICacheMSHR__ALL.cpp\necho \"\" > VICacheMSHR__ALL.verilator_deplist.tmp\ng++    icache_mshr_full_diff_tb.o verilated.o verilated_threads.o VICacheMSHR__ALL.a    -pthread -lpthread -latomic   -o VICacheMSHR\nrm VICacheMSHR__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-icache-mshr-full/obj-target-prefetch'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.060 MB sources in 2 modules, into 0.054 MB in 7 C++ files needing 0.000 MB\n- Verilator: Walltime 5.230 s (elab=0.001, cvt=0.042, bld=5.095); cpu 0.014 s on 1 threads; alloced 9.508 MB\n",
+        "output_sha256": "1657d2e23280ba3c2cd0832deeba4f6d0977fa9386d6b828e1fb71867f90a5e0"
+      },
+      "run": {
+        "command": [
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-icache-mshr-full/obj-target-prefetch/VICacheMSHR"
+        ],
+        "returncode": 0,
+        "result": "PASS",
+        "output_tail": ":0,\"info_blk_paddr\":220809576,\"info_v_set_idx\":37,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":2053,\"reset\":0,\"fencei\":1,\"flush\":1,\"wfi\":1,\"req\":1,\"blk\":20440041,\"set\":143,\"lk0_blk\":79843,\"lk0_set\":223,\"lk1_blk\":311,\"lk1_set\":4,\"acq_ready\":0,\"victim\":1,\"invalid\":0,\"req_ready\":0,\"acquire_valid\":0,\"acquire_address\":14131812864,\"acquire_v_set_idx\":37,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":220809576,\"info_v_set_idx\":37,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":2054,\"reset\":0,\"fencei\":1,\"flush\":0,\"wfi\":0,\"req\":1,\"blk\":68268766,\"set\":203,\"lk0_blk\":266674,\"lk0_set\":70,\"lk1_blk\":1041,\"lk1_set\":16,\"acq_ready\":0,\"victim\":0,\"invalid\":1,\"req_ready\":0,\"acquire_valid\":0,\"acquire_address\":14131812864,\"acquire_v_set_idx\":37,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":220809576,\"info_v_set_idx\":37,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":2055,\"reset\":0,\"fencei\":0,\"flush\":1,\"wfi\":0,\"req\":1,\"blk\":184966799,\"set\":122,\"lk0_blk\":722526,\"lk0_set\":25,\"lk1_blk\":2822,\"lk1_set\":44,\"acq_ready\":0,\"victim\":3,\"invalid\":0,\"req_ready\":0,\"acquire_valid\":0,\"acquire_address\":14131812864,\"acquire_v_set_idx\":37,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":220809576,\"info_v_set_idx\":37,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":2056,\"reset\":0,\"fencei\":1,\"flush\":1,\"wfi\":1,\"req\":0,\"blk\":170063466,\"set\":217,\"lk0_blk\":664310,\"lk0_set\":139,\"lk1_blk\":2594,\"lk1_set\":40,\"acq_ready\":0,\"victim\":2,\"invalid\":0,\"req_ready\":0,\"acquire_valid\":0,\"acquire_address\":14131812864,\"acquire_v_set_idx\":37,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":220809576,\"info_v_set_idx\":37,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":2057,\"reset\":0,\"fencei\":0,\"flush\":1,\"wfi\":0,\"req\":1,\"blk\":152631721,\"set\":230,\"lk0_blk\":596217,\"lk0_set\":99,\"lk1_blk\":2328,\"lk1_set\":36,\"acq_ready\":0,\"victim\":1,\"invalid\":0,\"req_ready\":0,\"acquire_valid\":0,\"acquire_address\":14131812864,\"acquire_v_set_idx\":37,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":220809576,\"info_v_set_idx\":37,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":2058,\"reset\":0,\"fencei\":0,\"flush\":0,\"wfi\":1,\"req\":0,\"blk\":60037463,\"set\":101,\"lk0_blk\":234521,\"lk0_set\":80,\"lk1_blk\":916,\"lk1_set\":14,\"acq_ready\":1,\"victim\":3,\"invalid\":0,\"req_ready\":1,\"acquire_valid\":0,\"acquire_address\":14131812864,\"acquire_v_set_idx\":37,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":220809576,\"info_v_set_idx\":37,\"info_way\":3,\"wfi_safe\":1}\n",
+        "output_sha256": "b7c933b5b74d0e9024766def4eb76e0aa882ce66cca25200cc4f72d313941c40",
+        "full_returncode": 0,
+        "full_output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "trace": {
+        "path": "validation/.work/v2-icache-mshr-full/target-prefetch.jsonl",
+        "sha256": "b7c933b5b74d0e9024766def4eb76e0aa882ce66cca25200cc4f72d313941c40",
+        "vectors": 2059
+      }
+    },
+    "prefetch_reference": {
+      "build": {
+        "command": [
+          "verilator",
+          "--cc",
+          "--exe",
+          "--build",
+          "--Wno-fatal",
+          "--top-module",
+          "ICacheMSHR_4",
+          "--Mdir",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-icache-mshr-full/obj-reference-prefetch",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-closures/ICacheMSHR_4.sv",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/icache_mshr_full_diff_tb.cpp",
+          "-CFLAGS",
+          "-DPREFETCH"
+        ],
+        "returncode": 0,
+        "result": "PASS",
+        "output_tail": "M_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DPREFETCH   -c -o verilated.o /usr/share/verilator/include/verilated.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DPREFETCH   -c -o verilated_threads.o /usr/share/verilator/include/verilated_threads.cpp\npython3 /usr/share/verilator/bin/verilator_includer -DVL_INCLUDE_OPT=include VICacheMSHR_4.cpp VICacheMSHR_4___024root__DepSet_hdc12b324__0.cpp VICacheMSHR_4___024root__DepSet_hcbe912f8__0.cpp VICacheMSHR_4___024root__Slow.cpp VICacheMSHR_4___024root__DepSet_hdc12b324__0__Slow.cpp VICacheMSHR_4___024root__DepSet_hcbe912f8__0__Slow.cpp VICacheMSHR_4__Syms.cpp > VICacheMSHR_4__ALL.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DPREFETCH   -c -o VICacheMSHR_4__ALL.o VICacheMSHR_4__ALL.cpp\necho \"\" > VICacheMSHR_4__ALL.verilator_deplist.tmp\ng++    icache_mshr_full_diff_tb.o verilated.o verilated_threads.o VICacheMSHR_4__ALL.a    -pthread -lpthread -latomic   -o VICacheMSHR_4\nrm VICacheMSHR_4__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-icache-mshr-full/obj-reference-prefetch'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.024 MB sources in 2 modules, into 0.047 MB in 7 C++ files needing 0.000 MB\n- Verilator: Walltime 4.817 s (elab=0.000, cvt=0.035, bld=4.673); cpu 0.014 s on 1 threads; alloced 9.242 MB\n",
+        "output_sha256": "4830ab49f14f5fdd1966df3ff3dce07e3c7914cc77847ad993a7d99235e61112"
+      },
+      "run": {
+        "command": [
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-icache-mshr-full/obj-reference-prefetch/VICacheMSHR_4"
+        ],
+        "returncode": 0,
+        "result": "PASS",
+        "output_tail": ":0,\"info_blk_paddr\":220809576,\"info_v_set_idx\":37,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":2053,\"reset\":0,\"fencei\":1,\"flush\":1,\"wfi\":1,\"req\":1,\"blk\":20440041,\"set\":143,\"lk0_blk\":79843,\"lk0_set\":223,\"lk1_blk\":311,\"lk1_set\":4,\"acq_ready\":0,\"victim\":1,\"invalid\":0,\"req_ready\":0,\"acquire_valid\":0,\"acquire_address\":14131812864,\"acquire_v_set_idx\":37,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":220809576,\"info_v_set_idx\":37,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":2054,\"reset\":0,\"fencei\":1,\"flush\":0,\"wfi\":0,\"req\":1,\"blk\":68268766,\"set\":203,\"lk0_blk\":266674,\"lk0_set\":70,\"lk1_blk\":1041,\"lk1_set\":16,\"acq_ready\":0,\"victim\":0,\"invalid\":1,\"req_ready\":0,\"acquire_valid\":0,\"acquire_address\":14131812864,\"acquire_v_set_idx\":37,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":220809576,\"info_v_set_idx\":37,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":2055,\"reset\":0,\"fencei\":0,\"flush\":1,\"wfi\":0,\"req\":1,\"blk\":184966799,\"set\":122,\"lk0_blk\":722526,\"lk0_set\":25,\"lk1_blk\":2822,\"lk1_set\":44,\"acq_ready\":0,\"victim\":3,\"invalid\":0,\"req_ready\":0,\"acquire_valid\":0,\"acquire_address\":14131812864,\"acquire_v_set_idx\":37,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":220809576,\"info_v_set_idx\":37,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":2056,\"reset\":0,\"fencei\":1,\"flush\":1,\"wfi\":1,\"req\":0,\"blk\":170063466,\"set\":217,\"lk0_blk\":664310,\"lk0_set\":139,\"lk1_blk\":2594,\"lk1_set\":40,\"acq_ready\":0,\"victim\":2,\"invalid\":0,\"req_ready\":0,\"acquire_valid\":0,\"acquire_address\":14131812864,\"acquire_v_set_idx\":37,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":220809576,\"info_v_set_idx\":37,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":2057,\"reset\":0,\"fencei\":0,\"flush\":1,\"wfi\":0,\"req\":1,\"blk\":152631721,\"set\":230,\"lk0_blk\":596217,\"lk0_set\":99,\"lk1_blk\":2328,\"lk1_set\":36,\"acq_ready\":0,\"victim\":1,\"invalid\":0,\"req_ready\":0,\"acquire_valid\":0,\"acquire_address\":14131812864,\"acquire_v_set_idx\":37,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":220809576,\"info_v_set_idx\":37,\"info_way\":3,\"wfi_safe\":1}\n{\"cycle\":2058,\"reset\":0,\"fencei\":0,\"flush\":0,\"wfi\":1,\"req\":0,\"blk\":60037463,\"set\":101,\"lk0_blk\":234521,\"lk0_set\":80,\"lk1_blk\":916,\"lk1_set\":14,\"acq_ready\":1,\"victim\":3,\"invalid\":0,\"req_ready\":1,\"acquire_valid\":0,\"acquire_address\":14131812864,\"acquire_v_set_idx\":37,\"lookup_hit0\":0,\"lookup_hit1\":0,\"info_valid\":0,\"info_blk_paddr\":220809576,\"info_v_set_idx\":37,\"info_way\":3,\"wfi_safe\":1}\n",
+        "output_sha256": "b7c933b5b74d0e9024766def4eb76e0aa882ce66cca25200cc4f72d313941c40",
+        "full_returncode": 0,
+        "full_output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "trace": {
+        "path": "validation/.work/v2-icache-mshr-full/reference-prefetch.jsonl",
+        "sha256": "b7c933b5b74d0e9024766def4eb76e0aa882ce66cca25200cc4f72d313941c40",
+        "vectors": 2059
+      }
+    }
+  },
+  "uhsc_localization": {
+    "manifest": "UHSC-Naming-Manifest.json",
+    "sha256": "805d920a8b8e7b4e545739033a3fe7c0b4dcbe36efc217c3134f54b56c3182f6",
+    "status": "NO_PROJECT_FACING_RENAME",
+    "locked_reference_names_unchanged": true,
+    "entries": []
+  },
+  "parent_closure": "PENDING_FRONTEND_ICACHE_PARENT",
+  "license_gate": "PENDING_REVIEW",
+  "status": "VALIDATOR_PASS_BOUNDED",
+  "acceptance_eligible": false,
+  "gates": {
+    "ACCEPTED": "NOT_ALLOWED",
+    "parent_closure": "PENDING",
+    "license": "PENDING"
+  },
+  "notes": "Reference Yosys is recorded verbatim; generated Chisel references use automatic logic unsupported by the installed Yosys frontend. This does not alter or normalize the locked reference."
+}

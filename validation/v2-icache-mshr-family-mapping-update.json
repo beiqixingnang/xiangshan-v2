@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_ICACHE_MSHR_MAPPING_UPDATE",
+  "batch_id": "V2-SEMANTIC-FRONTEND-ICACHE-MSHR",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "entries": [
+    {
+      "source": "ICacheMSHR(edge, isFetch, ID)",
+      "source_path": "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala",
+      "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.ICacheMshr-Hardware.py",
+      "classification": "REWRITTEN_FAMILY",
+      "covered_specializations": [
+        "fetch-id0",
+        "prefetch-id4"
+      ],
+      "status": "DIFFERENTIAL_MATCHED"
+    }
+  ],
+  "localization": {
+    "manifest": "UHSC-Naming-Manifest.json",
+    "sha256": "805d920a8b8e7b4e545739033a3fe7c0b4dcbe36efc217c3134f54b56c3182f6",
+    "status": "NO_PROJECT_FACING_RENAME",
+    "locked_reference_names_unchanged": true,
+    "entries": []
+  },
+  "gates": {
+    "direct": "PASS_BOUNDED_DIRECT",
+    "reference": "PASS_BOUNDED",
+    "parent_closure": "PENDING",
+    "license": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "acceptance_eligible": false
+}

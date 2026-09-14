@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_ICACHE_MSHR_CHILD_COVERAGE",
+  "batch_id": "V2-SEMANTIC-FRONTEND-ICACHE-MSHR",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "closure_root": "core.frontend.icache.mshr",
+  "children": [
+    {
+      "name": "ICacheMSHR",
+      "source": "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala",
+      "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.ICacheMshr-Hardware.py",
+      "references": [
+        "ICacheMSHR",
+        "ICacheMSHR_4"
+      ],
+      "variants": [
+        "fetch-id0",
+        "prefetch-id4"
+      ],
+      "observation_points": [
+        "async reset",
+        "miss allocation",
+        "lookup hit",
+        "acquire valid/ready",
+        "victim way",
+        "response valid",
+        "flush/fencei",
+        "invalidation",
+        "WFI safety"
+      ]
+    }
+  ],
+  "direct": "PASS_BOUNDED_DIRECT",
+  "locked_sv_differential": "PASS_BOUNDED",
+  "verilator_target": "PASS",
+  "yosys_target": "PASS",
+  "parent_closure": "PENDING_FRONTEND_ICACHE_PARENT",
+  "license_review": "PENDING_COORDINATOR_REVIEW",
+  "acceptance_eligible": false
+}
