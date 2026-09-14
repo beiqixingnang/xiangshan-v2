@@ -166,7 +166,9 @@ def main() -> int:
         "backend": backend,
         "license": license_result,
         "reference_mode": "LOCKED_XSTOP_DIPLOMACY_ADDRESS_ROUTER_EQUATIONS",
+        "status": "VALIDATOR_PASS_BOUNDED" if status else "VALIDATOR_FAIL",
         "gates": {"PYTHON_PRESENT": static["status"], "DIRECT_TEST_PASS_BOUNDED": "PASS" if contracts["status"] == router["status"] == "PASS" else "FAIL", "V2_REFERENCE_MATCHED": "PASS_BOUNDED_DIPLOMACY_EQUATIONS", "VERILATOR": backend["verilator"], "YOSYS": backend["yosys"], "UHSC_LOCALIZED": "PASS_BOUNDED_FAMILY_LOCAL_NAME", "LICENSE_REVIEW": license_result["status"], "ACCEPTED": "NOT_ALLOWED"},
+        "unclosed": ["Full Rocket Diplomacy closure and complete XSTop differential remain pending.", "License review and user approval remain pending."],
         "acceptance_eligible": False,
     }
     (ROOT / "validation/v2-rocket-diplomacy-family-results.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
