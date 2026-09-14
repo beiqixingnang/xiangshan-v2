@@ -32,6 +32,7 @@ ROOT_ENVELOPE_RTL_FILE = WORK_DIR / "uhsc-xstop-envelope.sv"
 EVIDENCE = ROOT / "validation/v2-top-generation-probe-results.json"
 XSTOP_INVENTORY = ROOT / "validation/v2-xstop-port-inventory.json"
 ROOT_INVENTORIES = ROOT / "validation/v2-root-port-inventories.json"
+TL2TL_PARENT_EVIDENCE = ROOT / "validation/v2-coupledL2-tl2tl-parent-results.json"
 EXPECTED_REFERENCE = "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d"
 EXPECTED_SOURCE = "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af"
 
@@ -240,6 +241,25 @@ def main() -> int:
             "rtl_bytes": len(mem_full.encode("utf-8")),
             "rtl_sha256": hashlib.sha256(mem_full.encode("utf-8")).hexdigest(),
             "path": str(mem_path.relative_to(ROOT)).replace("\\", "/"),
+        }
+    # The locked DefaultConfig selects TL2TLCoupledL2.  Import its independent
+    # parent-boundary evidence into the top report without conflating a
+    # bounded relay pass with full child behavioral equivalence.
+    if TL2TL_PARENT_EVIDENCE.is_file():
+        parent_payload = json.loads(TL2TL_PARENT_EVIDENCE.read_text(encoding="utf-8"))
+        parent_contract = parent_payload.get("contract_differential", {})
+        parent_gates = parent_payload.get("gates", {})
+        full_parent_envelopes["TL2TLCoupledL2"] = {
+            "inventory_count": parent_contract.get("reference_count", 0),
+            "generated_ports": parent_contract.get("generated_count", 0),
+            "contract_status": parent_contract.get("status", "NOT_RUN"),
+            "direct_checks": parent_payload.get("direct", {}).get("checks", 0),
+            "verilator": parent_payload.get("backend", {}).get("verilator", "NOT_RUN"),
+            "yosys": parent_payload.get("backend", {}).get("yosys", "NOT_RUN"),
+            "parent_closure": parent_gates.get("PARENT_CLOSURE_MATCHED", "NOT_RUN"),
+            "status": parent_payload.get("status", "NOT_RUN"),
+            "evidence_sha256": hashlib.sha256(TL2TL_PARENT_EVIDENCE.read_bytes()).hexdigest(),
+            "evidence_path": str(TL2TL_PARENT_EVIDENCE.relative_to(ROOT)).replace("\\", "/"),
         }
     # Pass exact root inventories as explicit metadata to the source-named
     # root adapter; no root target reads these files.
