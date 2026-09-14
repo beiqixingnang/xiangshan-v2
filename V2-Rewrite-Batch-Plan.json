@@ -301,7 +301,21 @@
         "V2-SCAN-C-DEPENDENCY-FAMILIES"
       ],
       "validator": "v2-independent-validator",
-      "status": "PLANNED"
+      "status": "GENERATION_PROBE_PASS_REDUCED_FULL_CLOSURE_PENDING",
+      "evidence": "validation/v2-top-generation-probe-results.json",
+      "probe_build_files": 2,
+      "integrated_children": ["frontend", "backend", "mem_block", "coupled_l2"],
+      "reference_named_port_counts": {
+        "Frontend": 371,
+        "Backend": 1165,
+        "MemBlock": 1326,
+        "XSCore": 308,
+        "L2Top": 441,
+        "XSTile": 153,
+        "XSTop": 204
+      },
+      "complete_gate": "BLOCKED_MISSING_INTERNAL_CLOSURES",
+      "accepted": "NOT_ALLOWED"
     }
   ],
   "status": "SCAN_COMPLETE_IMPLEMENTATION_ACTIVE",
