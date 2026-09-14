@@ -584,7 +584,7 @@
     {
       "family_id": "dependency.coupledL2.slice",
       "kind": "dependency",
-      "plan_build_file": "Build-Cpu.Dependency.CoupledL2.Slice-Hardware.py",
+      "plan_build_file": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.CoupledL2.Slice-Hardware.py",
       "source_roots": [
         "coupledL2/src/main/scala/coupledL2"
       ],
@@ -653,9 +653,12 @@
       ],
       "reachability": null,
       "boundary": null,
-      "status": "INVENTORY_ONLY",
       "reachability_status": "REACHABLE_SELECTED_OR_CONDITIONAL",
-      "implementation_eligibility": "PLANNED_AFTER_CORE_PARENT"
+      "status": "IMPLEMENTED_BOUNDED_PENDING_VALIDATOR",
+      "implementation_eligibility": "IMPLEMENTED_BOUNDED",
+      "evidence": "validation/v2-coupledL2-slice-family-results.json",
+      "commit": "dd9bd36",
+      "target_sha256": "b50a865921bcc52c069cdddf9a3a57faab8b818dd8a043cc74b28797764498cd"
     },
     {
       "family_id": "dependency.coupledL2.directory",
@@ -680,9 +683,11 @@
       ],
       "reachability": null,
       "boundary": null,
-      "status": "INVENTORY_ONLY",
+      "status": "PASS_BOUNDED_FAMILY",
       "reachability_status": "REACHABLE_SELECTED_OR_CONDITIONAL",
-      "implementation_eligibility": "PLANNED_AFTER_CORE_PARENT"
+      "implementation_eligibility": "VALIDATED_BOUNDED",
+      "evidence": "validation/v2-coupledL2-slice-family-results.json",
+      "commit": "f33f323"
     },
     {
       "family_id": "dependency.coupledL2.bridge",
@@ -1057,6 +1062,6 @@
       "reason": "workloads and test inputs, not hardware rewrite targets"
     }
   ],
-  "status": "INVENTORY_ONLY",
-  "acceptance_eligible": false
+  "acceptance_eligible": false,
+  "status": "IMPLEMENTATION_ACTIVE"
 }
