@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_COUPLEDL2_DIRECTORY_FAMILY",
+  "batch_id": "V2-DEPENDENCY-COUPLEDL2-DIRECTORY-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "source_scala": [
+    "upstream/coupledL2/src/main/scala/coupledL2/Directory.scala",
+    "upstream/coupledL2/src/main/scala/coupledL2/Common.scala",
+    "upstream/coupledL2/src/main/scala/coupledL2/Consts.scala",
+    "upstream/coupledL2/src/main/scala/coupledL2/L2Param.scala"
+  ],
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.CoupledL2.Directory-Hardware.py",
+    "sha256": "890a229ad1d5a8a88e1c42578082eee807da0dc6a65cfe6b70436e7453d1a8e2"
+  },
+  "static": {
+    "status": "PASS",
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.CoupledL2.Directory-Hardware.py",
+    "bytes": 31124,
+    "sha256": "890a229ad1d5a8a88e1c42578082eee807da0dc6a65cfe6b70436e7453d1a8e2",
+    "zones": [
+      "Module Contract",
+      "Configuration",
+      "Implementation",
+      "Public Adapter",
+      "Direct Entry"
+    ],
+    "required_symbols": [
+      "CoupledL2DirectoryConfig",
+      "CoupledL2Directory",
+      "build_verilog"
+    ]
+  },
+  "equations": {
+    "status": "PASS",
+    "vectors": 257
+  },
+  "direct": {
+    "status": "PASS",
+    "checks": 4,
+    "trace": [
+      {
+        "hit": 1,
+        "way": 0,
+        "state": 2
+      },
+      {
+        "refill_retry": 0
+      },
+      {
+        "full_retry": 1
+      },
+      {
+        "cmo_hit": 1,
+        "cmo_way": 0
+      }
+    ],
+    "trace_sha256": "bc36382d7c68ff48c7c980d41015d40d11638c9add142090b92ba4609b7bcd52"
+  },
+  "backend": {
+    "verilator": "PASS",
+    "yosys": "PASS",
+    "rtl_bytes": 1116174,
+    "rtl_sha256": "d910222d6512bfed0a49a66f0945ff05b918c46e1744a144e23d8811f6900358",
+    "verilator_returncode": 0,
+    "yosys_returncode": 0,
+    "verilator_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 1.080 MB sources in 2 modules, into 1.946 MB in 6 C++ files needing 0.000 MB\n- Verilator: Walltime 4.815 s (elab=0.898, cvt=0.884, bld=0.000); cpu 4.690 s on 1 threads; alloced 76.730 MB\n",
+    "yosys_tail": "tmp/uhsc-v2/validation/.work/v2-coupled-l2-directory/UHSCCoupledL2Directory.sv:28889$12705'.\nRemoving empty process `UHSCCoupledL2Directory.$proc$/tmp/uhsc-v2/validation/.work/v2-coupled-l2-directory/UHSCCoupledL2Directory.sv:28886$12704'.\nRemoving empty process `UHSCCoupledL2Directory.$proc$/tmp/uhsc-v2/validation/.work/v2-coupled-l2-directory/UHSCCoupledL2Directory.sv:28883$12703'.\nRemoving empty process `UHSCCoupledL2Directory.$proc$/tmp/uhsc-v2/validation/.work/v2-coupled-l2-directory/UHSCCoupledL2Directory.sv:28880$12702'.\nRemoving empty process `UHSCCoupledL2Directory.$proc$/tmp/uhsc-v2/validation/.work/v2-coupled-l2-directory/UHSCCoupledL2Directory.sv:28877$12701'.\nCleaned up 471 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module UHSCCoupledL2Directory.\n<suppressed ~322 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module UHSCCoupledL2Directory...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: dbf6506031, CPU: user 3.00s system 0.39s, MEM: 161.20 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 64% 2x read_verilog (2 sec), 11% 1x proc_arst (0 sec), ...\n"
+  },
+  "reference": {
+    "reference_path": "\\home\\lishuo\\xs-v2-local\\build\\rtl\\XSTop.sv",
+    "reference_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "expected_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "locked_unchanged": true,
+    "reference_mode": "LOCKED_XSTOP_DIRECTORY_BOUNDARY_PENDING_TL2_PARENT",
+    "differential": "PENDING_FULL_PARENT"
+  },
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED_DIRECTORY_EQUATIONS",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "UHSC_LOCALIZED": "PASS_BOUNDED_FAMILY_LOCAL_NAME",
+    "PARENT_CLOSURE_MATCHED": "PENDING_TL2TLCoupledL2_PARENT",
+    "LICENSE_REVIEW": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "VALIDATOR_PASS_BOUNDED",
+  "acceptance_eligible": false,
+  "unclosed": [
+    "Full Directory port differential against locked XSTop remains pending.",
+    "TL2TLCoupledL2 parent/CHI bridge closure remains pending.",
+    "License review and user approval remain pending."
+  ]
+}
