@@ -258,7 +258,7 @@ class TrueLRU(LruStateGen):
 
 # Public Adapter / 公共适配器
 # Export deterministic Verilog for the configured combinational policy. / 导出配置化组合策略的确定性 Verilog。
-def build_verilog(configuration: Any = None, injected_dependencies: Any = None) -> str:
+def build_verilog(configuration, injected_dependencies):
     del injected_dependencies
     from amaranth.back import verilog
 

@@ -208,8 +208,7 @@ class SignedSaturateCounterReg(Elaboratable):
 # Public Adapter
 # =============================================================================
 # Emit deterministic RTL for the signed registered counter. / 输出有符号计数器 RTL。
-def build_verilog(configuration: SignedSaturateCounterConfig | None = None,
-                  injected_dependencies: dict[str, Any] | None = None) -> str:
+def build_verilog(configuration, injected_dependencies):
     del injected_dependencies
     top = SignedSaturateCounterReg(configuration)
     return verilog.convert(

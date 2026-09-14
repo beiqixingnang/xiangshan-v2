@@ -168,14 +168,20 @@ def test_compare(module: Any) -> dict[str, Any]:
     observed: list[tuple[int, ...]] = []
 
     async def bench(ctx: Any) -> None:
+        ctx.set(top.reset, 1)
+        await ctx.tick("sync")
+        ctx.set(top.reset, 0)
         for counts in vectors:
             for signal, value in zip(top.issue_queue_counts, counts):
                 ctx.set(signal, value)
             ctx.set(top.valid, 0xF)
-            await ctx.delay(1e-9)
+            # NewDispatch declares IQSort as Reg, so observe it after the
+            # active edge that captures the current comparison matrix.
+            await ctx.tick("sync")
             observed.append(tuple(int(ctx.get(row)) for row in top.iq_sort))
 
     simulator = Simulator(top)
+    simulator.add_clock(1e-6, domain="sync")
     simulator.add_testbench(bench)
     simulator.run()
     for counts, rows in zip(vectors, observed):

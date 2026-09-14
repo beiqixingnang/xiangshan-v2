@@ -44,7 +44,7 @@
     "CompareMatrix": {
       "random_vectors": 256,
       "deterministic_vectors": 8,
-      "verilog_sha256": "d9ba69119a5517eb8a3f33228b138fa1eae668aded2aca2a319dd24d9e9fd57e"
+      "verilog_sha256": "935fb5ebc5e159cb1291e31d7aab23bc3bbdfcd8337daa798d87aa288cbaa043"
     },
     "FallThroughPredictor": {
       "random_vectors": 512,
@@ -88,7 +88,7 @@
         "sort_one_hot"
       ],
       "utf8_lf": true,
-      "sha256": "3fb135981841d7f137cfdbf89c2d91f03e344d3a22c709c18f1608d99d35305c"
+      "sha256": "e5a7b7330a910921141cd5afcb42996febcc3ebe3c3023530984c06d4ba432d2"
     },
     "FallThroughPredictor": {
       "zones": [
@@ -116,7 +116,7 @@
         "pft_width"
       ],
       "utf8_lf": true,
-      "sha256": "da2952d50ed3731867e7b5b2e96822369562b4670fb8e4c111c95f77a2165b7a"
+      "sha256": "efe05eaf4c47ec9ca7af7cb231538d42393cd83a78527e3f5c8eeec43e7b1116"
     },
     "SaturateCounter": {
       "zones": [
@@ -153,7 +153,7 @@
         "weak_positive"
       ],
       "utf8_lf": true,
-      "sha256": "07c72abb950858390cbc3bcb2a5caaed242b77c5756041d3adbbf7c93be4fed2"
+      "sha256": "a0ed3b24d1b7cf664f7b4e6deda3139eee98e41db5b655d3dd6484acd26f6b1a"
     },
     "SignedSaturateCounter": {
       "zones": [
@@ -190,7 +190,7 @@
         "weak_positive"
       ],
       "utf8_lf": true,
-      "sha256": "c855214e46b6f4c7fbae09d311515df09daacf3e3ddd3bf23636458a3c50dd05"
+      "sha256": "8b0523a2f3f973bdc028a73ddb57ee6a0cdcabf65030f657f482a45ab94fa6d5"
     },
     "RvcExpander": {
       "zones": [
@@ -235,27 +235,27 @@
     "CompareMatrix": {
       "status": "PASS",
       "returncode": 0,
-      "stderr_tail": "_frontend_batch_wiq9nc1_/CompareMatrix.sv:545:26: Operator ADD expects 6 bits on the RHS, but RHS's VARREF '$167' generates 1 bits.\n                                                                                                               : ... note: In instance 'CompareMatrix'\n  545 |   assign \\$168  = \\$165  + \\$167 ;\n      |                          ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_batch_wiq9nc1_/CompareMatrix.sv:546:26: Operator ADD expects 7 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits.\n                                                                                                               : ... note: In instance 'CompareMatrix'\n  546 |   assign \\$169  = \\$168  + 1'h0;\n      |                          ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_batch_wiq9nc1_/CompareMatrix.sv:547:19: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF '$169' generates 7 bits.\n                                                                                                              : ... note: In instance 'CompareMatrix'\n  547 |   assign \\$170  = ! \\$169 ;\n      |                   ^\n"
+      "stderr_tail": "_frontend_batch_5z6nhfht/CompareMatrix.sv:711:26: Operator ADD expects 6 bits on the RHS, but RHS's VARREF '$337' generates 1 bits.\n                                                                                                               : ... note: In instance 'CompareMatrix'\n  711 |   assign \\$338  = \\$335  + \\$337 ;\n      |                          ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_batch_5z6nhfht/CompareMatrix.sv:712:26: Operator ADD expects 7 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits.\n                                                                                                               : ... note: In instance 'CompareMatrix'\n  712 |   assign \\$339  = \\$338  + 1'h0;\n      |                          ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_batch_5z6nhfht/CompareMatrix.sv:713:19: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF '$339' generates 7 bits.\n                                                                                                              : ... note: In instance 'CompareMatrix'\n  713 |   assign \\$340  = ! \\$339 ;\n      |                   ^\n"
     },
     "FallThroughPredictor": {
       "status": "PASS",
       "returncode": 0,
-      "stderr_tail": "29: Operator ADD expects 6 bits on the LHS, but LHS's SEL generates 4 bits.\n                                                                                                                     : ... note: In instance 'FallThroughPredictor'\n   97 |   assign \\$18  = s1_pc[4:1] + 5'h10;\n      |                             ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_batch_wiq9nc1_/FallThroughPredictor.sv:98:24: Operator GT expects 8 bits on the RHS, but RHS's VARREF '$18' generates 6 bits.\n                                                                                                                     : ... note: In instance 'FallThroughPredictor'\n   98 |   assign \\$19  = \\$17  > \\$18 ;\n      |                        ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_batch_wiq9nc1_/FallThroughPredictor.sv:104:24: Operator ADD expects 40 bits on the RHS, but RHS's CONST '6'h20' generates 6 bits.\n                                                                                                                      : ... note: In instance 'FallThroughPredictor'\n  104 |   assign \\$25  = s1_pc + 6'h20;\n      |                        ^\n"
+      "stderr_tail": "29: Operator ADD expects 6 bits on the LHS, but LHS's SEL generates 4 bits.\n                                                                                                                     : ... note: In instance 'FallThroughPredictor'\n   97 |   assign \\$18  = s1_pc[4:1] + 5'h10;\n      |                             ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_batch_5z6nhfht/FallThroughPredictor.sv:98:24: Operator GT expects 8 bits on the RHS, but RHS's VARREF '$18' generates 6 bits.\n                                                                                                                     : ... note: In instance 'FallThroughPredictor'\n   98 |   assign \\$19  = \\$17  > \\$18 ;\n      |                        ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_batch_5z6nhfht/FallThroughPredictor.sv:104:24: Operator ADD expects 40 bits on the RHS, but RHS's CONST '6'h20' generates 6 bits.\n                                                                                                                      : ... note: In instance 'FallThroughPredictor'\n  104 |   assign \\$25  = s1_pc + 6'h20;\n      |                        ^\n"
     },
     "SaturateCounter": {
       "status": "PASS",
       "returncode": 0,
-      "stderr_tail": "%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_batch_wiq9nc1_/SaturateCounter.sv:40:17: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'value' generates 2 bits.\n                                                                                                               : ... note: In instance 'SaturateCounter'\n   40 |   assign \\$4  = ! value;\n      |                 ^\n                     ... For warning description see https://verilator.org/warn/WIDTHTRUNC?v=5.032\n                     ... Use \"/* verilator lint_off WIDTHTRUNC */\" and lint_on around source to disable this message.\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_batch_wiq9nc1_/SaturateCounter.sv:50:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'value' generates 2 bits.\n                                                                                                               : ... note: In instance 'SaturateCounter'\n   50 |   assign \\$13  = ! value;\n      |                  ^\n"
+      "stderr_tail": "%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_batch_5z6nhfht/SaturateCounter.sv:40:17: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'value' generates 2 bits.\n                                                                                                               : ... note: In instance 'SaturateCounter'\n   40 |   assign \\$4  = ! value;\n      |                 ^\n                     ... For warning description see https://verilator.org/warn/WIDTHTRUNC?v=5.032\n                     ... Use \"/* verilator lint_off WIDTHTRUNC */\" and lint_on around source to disable this message.\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_batch_5z6nhfht/SaturateCounter.sv:50:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'value' generates 2 bits.\n                                                                                                               : ... note: In instance 'SaturateCounter'\n   50 |   assign \\$13  = ! value;\n      |                  ^\n"
     },
     "SignedSaturateCounter": {
       "status": "PASS",
       "returncode": 0,
-      "stderr_tail": "generates 2 bits.\n                                                                                                                      : ... note: In instance 'SignedSaturateCounter'\n   47 |   assign \\$10  = $signed(value) - $signed(2'h1);\n      |                                 ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_batch_wiq9nc1_/SignedSaturateCounter.sv:50:39: Operator GTES expects 6 bits on the RHS, but RHS's SIGNED generates 1 bits.\n                                                                                                                      : ... note: In instance 'SignedSaturateCounter'\n   50 |   assign is_positive = $signed(value) >= $signed(1'h0);\n      |                                       ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_batch_wiq9nc1_/SignedSaturateCounter.sv:51:24: Operator EQ expects 6 bits on the RHS, but RHS's CONST '5'h1f' generates 5 bits.\n                                                                                                                      : ... note: In instance 'SignedSaturateCounter'\n   51 |   assign \\$13  = value == 5'h1f;\n      |                        ^~\n"
+      "stderr_tail": "generates 2 bits.\n                                                                                                                      : ... note: In instance 'SignedSaturateCounter'\n   47 |   assign \\$10  = $signed(value) - $signed(2'h1);\n      |                                 ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_batch_5z6nhfht/SignedSaturateCounter.sv:50:39: Operator GTES expects 6 bits on the RHS, but RHS's SIGNED generates 1 bits.\n                                                                                                                      : ... note: In instance 'SignedSaturateCounter'\n   50 |   assign is_positive = $signed(value) >= $signed(1'h0);\n      |                                       ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_batch_5z6nhfht/SignedSaturateCounter.sv:51:24: Operator EQ expects 6 bits on the RHS, but RHS's CONST '5'h1f' generates 5 bits.\n                                                                                                                      : ... note: In instance 'SignedSaturateCounter'\n   51 |   assign \\$13  = value == 5'h1f;\n      |                        ^~\n"
     },
     "RvcExpander": {
       "status": "PASS",
       "returncode": 0,
-      "stderr_tail": "_frontend_batch_wiq9nc1_/RvcExpander.sv:798:32: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                             : ... note: In instance 'RVCExpander'\n  798 |   assign \\$394  = io_in[15:13] == 2'h2;\n      |                                ^~\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_batch_wiq9nc1_/RvcExpander.sv:799:19: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 5 bits.\n                                                                                                            : ... note: In instance 'RVCExpander'\n  799 |   assign \\$395  = ! io_in[11:7];\n      |                   ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_batch_wiq9nc1_/RvcExpander.sv:800:32: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                             : ... note: In instance 'RVCExpander'\n  800 |   assign \\$396  = io_in[15:13] == 1'h1;\n      |                                ^~\n"
+      "stderr_tail": "_frontend_batch_5z6nhfht/RvcExpander.sv:798:32: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                             : ... note: In instance 'RVCExpander'\n  798 |   assign \\$394  = io_in[15:13] == 2'h2;\n      |                                ^~\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_batch_5z6nhfht/RvcExpander.sv:799:19: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 5 bits.\n                                                                                                            : ... note: In instance 'RVCExpander'\n  799 |   assign \\$395  = ! io_in[11:7];\n      |                   ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_batch_5z6nhfht/RvcExpander.sv:800:32: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                             : ... note: In instance 'RVCExpander'\n  800 |   assign \\$396  = io_in[15:13] == 1'h1;\n      |                                ^~\n"
     }
   },
   "yosys": {

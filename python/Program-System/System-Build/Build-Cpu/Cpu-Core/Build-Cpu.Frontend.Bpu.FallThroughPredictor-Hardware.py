@@ -244,8 +244,7 @@ class FallThroughPredictor(Elaboratable):
 # Public Adapter
 # =============================================================================
 # Emit deterministic RTL for the fall-through closure. / 输出顺序地址闭包 RTL。
-def build_verilog(configuration: FallThroughConfig | None = None,
-                  injected_dependencies: dict[str, Any] | None = None) -> str:
+def build_verilog(configuration, injected_dependencies):
     del injected_dependencies
     top = FallThroughPredictor(configuration)
     return verilog.convert(

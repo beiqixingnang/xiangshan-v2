@@ -490,7 +490,7 @@ class ReplacerStateGen(ReplacerState):
 
 # Public Adapter / 公共适配器
 # Export deterministic Verilog for the configured sequential policy bank. / 导出配置化时序策略组的确定性 Verilog。
-def build_verilog(configuration: Any = None, injected_dependencies: Any = None) -> str:
+def build_verilog(configuration, injected_dependencies):
     del injected_dependencies
     from amaranth.back import verilog
 

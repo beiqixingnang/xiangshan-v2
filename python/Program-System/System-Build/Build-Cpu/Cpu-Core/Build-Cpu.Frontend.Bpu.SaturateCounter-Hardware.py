@@ -204,8 +204,7 @@ class SaturateCounterReg(Elaboratable):
 # Public Adapter
 # =============================================================================
 # Emit deterministic RTL for the registered counter. / 输出确定性的寄存器计数器 RTL。
-def build_verilog(configuration: SaturateCounterConfig | None = None,
-                  injected_dependencies: dict[str, Any] | None = None) -> str:
+def build_verilog(configuration, injected_dependencies):
     del injected_dependencies
     top = SaturateCounterReg(configuration)
     return verilog.convert(

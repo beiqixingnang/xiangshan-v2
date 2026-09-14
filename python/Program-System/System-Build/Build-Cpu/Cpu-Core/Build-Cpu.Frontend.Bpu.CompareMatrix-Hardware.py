@@ -5,7 +5,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Sequence
 
-from amaranth import Const, Elaboratable, Module, Mux, Signal
+from amaranth import (Cat, ClockDomain, ClockSignal, Const, Elaboratable,
+                      Module, Mux, ResetSignal, Signal)
 from amaranth.back import verilog
 
 
@@ -40,6 +41,7 @@ class CompareMatrixConfig:
     issue_queue_num: int | None = None
     rename_width: int = 2
     exu_indices: tuple[int, ...] | None = None
+    register_sort: bool = True
 
     # Validate matrix dimensions and static index mapping. / 校验矩阵尺寸与索引映射。
     def __post_init__(self) -> None:
@@ -122,6 +124,9 @@ class CompareMatrix(Elaboratable):
     def __init__(self, configuration: CompareMatrixConfig | None = None) -> None:
         self.configuration = configuration or CompareMatrixConfig()
         cfg = self.configuration
+        self.clock_domain = ClockDomain("sync", async_reset=True)
+        self.clock = self.clock_domain.clk
+        self.reset = self.clock_domain.rst
         width = cfg.effective_count_width
         queue_num = cfg.effective_issue_queue_num
         self.issue_queue_counts = [
@@ -150,6 +155,7 @@ class CompareMatrix(Elaboratable):
         del platform
         cfg = self.configuration
         module = Module()
+        module.domains.sync = self.clock_domain
         indices = cfg.effective_exu_indices
         queue_num = cfg.effective_issue_queue_num
         count_expr = [self.issue_queue_counts[index] for index in indices]
@@ -165,14 +171,24 @@ class CompareMatrix(Elaboratable):
                     matrix_expr[i][j] = ~(count_expr[j] < count_expr[i])
                 module.d.comb += self.compare_matrix[i][j].eq(matrix_expr[i][j])
 
+        # NewDispatch stores IQSort in a register; preserve that one-cycle
+        # boundary instead of exposing the combinational next value directly.
+        # NewDispatch 将 IQSort 存入寄存器，保留该一级时序边界。
+        next_sort: list[list[Any]] = []
+        sum_width = (cfg.n + 1).bit_length()
         for rank in range(cfg.n):
+            next_row: list[Any] = []
             for row in range(cfg.n):
-                row_sum = Const(0, (cfg.n + 1).bit_length())
+                row_sum = Const(0, sum_width)
                 for col in range(cfg.n):
-                    row_sum = row_sum + matrix_expr[row][col]
-                module.d.comb += self.iq_sort[rank][row].eq(
-                    row_sum == Const(cfg.n - 1 - rank, (cfg.n + 1).bit_length())
-                )
+                    bit = matrix_expr[row][col]
+                    row_sum = row_sum + Cat(bit, Const(0, sum_width - 1))
+                next_row.append(row_sum == Const(cfg.n - 1 - rank, sum_width))
+            next_sort.append(next_row)
+        module.d.sync += [
+            self.iq_sort[rank][row].eq(next_sort[rank][row])
+            for rank in range(cfg.n) for row in range(cfg.n)
+        ]
 
         for slot in range(cfg.rename_width):
             rank = slot % cfg.n
@@ -212,11 +228,10 @@ class CompareMatrix(Elaboratable):
 # Public Adapter
 # =============================================================================
 # Emit deterministic RTL for the ordering closure. / 输出确定性的排序闭包 RTL。
-def build_verilog(configuration: CompareMatrixConfig | None = None,
-                  injected_dependencies: dict[str, Any] | None = None) -> str:
+def build_verilog(configuration, injected_dependencies):
     del injected_dependencies
     top = CompareMatrix(configuration)
-    ports: list[Any] = [*top.issue_queue_counts, top.valid]
+    ports: list[Any] = [top.clock, top.reset, *top.issue_queue_counts, top.valid]
     ports.extend(top.compare_matrix)
     ports.extend(top.iq_sort)
     ports.extend(top.min_iq_sel)
