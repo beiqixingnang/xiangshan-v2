@@ -350,6 +350,62 @@ def direct_check(module: Any, vectors: list[dict[str, int]]) -> dict[str, Any]:
             "checks": len(observed) * len(expected[0]) if expected else 0}
 
 
+def full_io_direct_check(module: Any, vectors: list[dict[str, int]]) -> dict[str, Any]:
+    """Smoke the exact 371-port wrapper with locked-name inputs. / 使用锁定名称输入对精确 371 端口包装器做 smoke。"""
+
+    cfg = module.FrontendTopConfig()
+    top = module.UHSCTop(cfg, {}, locked_io=True)
+    observed: list[dict[str, int]] = []
+
+    async def bench(ctx: Any) -> None:
+        for vector in vectors[:32]:
+            ctx.set(top.reset, vector["reset"])
+            ctx.set(top.io_fencei, vector["fencei"])
+            ctx.set(top.io_backend_toFtq_redirect_valid, vector["redirect"])
+            ctx.set(top.io_backend_toFtq_redirect_bits_cfiUpdate_isMisPred, vector["debug_ctrl"])
+            ctx.set(top.io_backend_toFtq_redirect_bits_cfiUpdate_backendIPF, vector["debug_memvio"])
+            ctx.set(top.io_backend_canAccept, vector["backend_accept"])
+            ctx.set(top.io_backend_wfi_wfiReq, vector["wfi"])
+            ctx.set(top.io_csrCtrl_pf_ctrl_l1I_pf_enable, vector["pf_enable"])
+            ctx.set(top.io_csrCtrl_fsIsOff, vector["fs_off"])
+            ctx.set(top.io_csrCtrl_bp_ctrl_ubtb_enable, vector["bp_enable"] & 1)
+            ctx.set(top.io_csrCtrl_bp_ctrl_btb_enable, (vector["bp_enable"] >> 1) & 1)
+            ctx.set(top.io_csrCtrl_bp_ctrl_tage_enable, (vector["bp_enable"] >> 2) & 1)
+            ctx.set(top.io_csrCtrl_bp_ctrl_sc_enable, (vector["bp_enable"] >> 3) & 1)
+            ctx.set(top.io_csrCtrl_bp_ctrl_ras_enable, (vector["bp_enable"] >> 4) & 1)
+            ctx.set(top.io_sfence_valid, vector["sfence"])
+            ctx.set(top.io_softPrefetch_0_valid, vector["fetch_valid"])
+            ctx.set(top.io_softPrefetch_0_bits_vaddr, vector["fetch_addr"])
+            ctx.set(top.auto_inner_icache_client_out_d_valid, 0)
+            ctx.set(top.auto_inner_icache_client_out_d_bits_data, 0)
+            ctx.set(top.auto_inner_icache_client_out_d_bits_corrupt, 0)
+            ctx.set(top.auto_inner_instrUncache_client_out_d_valid, 0)
+            ctx.set(top.auto_inner_instrUncache_client_out_d_bits_data, 0)
+            ctx.set(top.auto_inner_instrUncache_client_out_d_bits_corrupt, 0)
+            await ctx.tick("frontend_sync")
+            row = {
+                "reset": int(ctx.get(top.io_resetInFrontend)),
+                "ptw_valid": int(ctx.get(top.io_ptw_req_0_valid)),
+                "wfi_safe": int(ctx.get(top.io_backend_wfi_wfiSafe)),
+                "icache_a_valid": int(ctx.get(top.auto_inner_icache_client_out_a_valid)),
+                "uncache_a_valid": int(ctx.get(top.auto_inner_instrUncache_client_out_a_valid)),
+                "error_valid": int(ctx.get(top.io_error_ecc_error_valid)),
+            }
+            if any(value not in (0, 1) for key, value in row.items() if key != "reset"):
+                raise AssertionError(("full_io_unknown", row))
+            if row["reset"] != vector["reset"]:
+                raise AssertionError(("full_io_reset", row, vector))
+            observed.append(row)
+
+    simulator = Simulator(top)
+    simulator.add_clock(1e-6, domain="frontend_sync")
+    simulator.add_testbench(bench)
+    simulator.run()
+    trace = json.dumps(observed, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    return {"status": "PASS", "vectors": len(observed), "checks": len(observed) * 6,
+            "trace_sha256": digest_bytes(trace), "observations": observed[:4]}
+
+
 def target_port_declarations(rtl: str) -> tuple[list[str], dict[str, tuple[str, int]]]:
     """Parse generated target ports for a named ``.*`` differential wrapper. / 解析目标端口以生成命名差分包装器。"""
     match = re.search(r"module UHSCTop\((.*?)\);", rtl, re.DOTALL)
@@ -786,6 +842,7 @@ def main() -> int:
     compile_result = subprocess.run([sys.executable, "-m", "py_compile", str(TARGET)], capture_output=True, check=False)
     vectors = frontend_vectors()
     direct = direct_check(target_module, vectors)
+    full_io_direct = full_io_direct_check(target_module, vectors)
     # Keep the compact parent for equation differential; generate a second
     # exact-I/O artifact for full Frontend inventory and backend gates.  保留
     # 紧凑父级用于方程差分，同时生成精确 I/O 产物用于清单和后端门禁。
@@ -824,7 +881,16 @@ def main() -> int:
                  "full_rtl_sha256": digest_bytes(rtl_full.encode("utf-8")),
                  "full_rtl_bytes": len(rtl_full.encode("utf-8"))}
     write_evidence(static, reference, direct, differential, backend, vectors, source_hash, projection_hash, inventory, child_probe)
-    overall = static["status"] == "PASS" and compile_result.returncode == 0 and direct["status"] == "PASS" and differential["status"] == "PASS" and backend["status"] == "PASS"
+    # Add the exact-I/O direct result after the common evidence writer so the
+    # parent artifacts retain both compact equation and locked-envelope tests.
+    for path in (DIRECT_RESULT, DIFF_RESULT, CONTRACT_RESULT, COVERAGE_RESULT):
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        payload["full_io_direct"] = full_io_direct
+        path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
+    overall = (static["status"] == "PASS" and compile_result.returncode == 0 and
+               direct["status"] == "PASS" and full_io_direct["status"] == "PASS" and
+               differential["status"] == "PASS" and backend["status"] == "PASS" and
+               child_probe.get("status") == "PASS")
     print(json.dumps({"status": "PASS_BOUNDED_PARENT" if overall else "FAIL", "direct": direct["status"],
                       "differential": differential["status"], "verilator": backend["verilator"]["status"],
                       "yosys": backend["yosys"]["status"], "vectors": len(vectors),

@@ -1935,8 +1935,8 @@
   "comparison": {
     "status": "PASS",
     "returncode": 0,
-    "stdout_tail": "FRONTEND_PARENT_DIFFERENTIAL_PASS 96\n- /tmp/uhsc-v2/validation/.work/v2-frontend-parent/frontend-parent-diff.sv:2665: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 385ps; walltime 0.002 s; speed 256.512 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n",
-    "trace_sha256": "f3ebfc1007f6509c40bea9af8f075434d2509690faf7543074054fef8863d507",
+    "stdout_tail": "FRONTEND_PARENT_DIFFERENTIAL_PASS 96\n- /tmp/uhsc-v2/validation/.work/v2-frontend-parent/frontend-parent-diff.sv:2665: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 385ps; walltime 0.002 s; speed 242.128 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n",
+    "trace_sha256": "f42ed34dd2059490ea6623e358fd688bf316f2ea56ce983d221270e1148130f6",
     "trace_lines": 5,
     "source_sha256": "12aae609dbcd3a0c8c0f63f8a1f9204084144a552509dde225b1f90f3a8c40bc"
   },
@@ -1973,5 +1973,45 @@
     "The exact 371-port Frontend envelope is generated and audited, but BPU/FTQ/IFU/IBuffer/ICache/ITLB/PMP are not yet one complete reachable behavioral closure.",
     "Projection compares locked Frontend parent equations; a full child-level differential remains pending.",
     "License review and user approval remain open; ACCEPTED is not allowed."
-  ]
+  ],
+  "full_io_direct": {
+    "status": "PASS",
+    "vectors": 32,
+    "checks": 192,
+    "trace_sha256": "637b9a9436929bbbfd56ece2044defc41deda4afc3f1a4de34d9d1ba291d2071",
+    "observations": [
+      {
+        "reset": 1,
+        "ptw_valid": 0,
+        "wfi_safe": 0,
+        "icache_a_valid": 0,
+        "uncache_a_valid": 0,
+        "error_valid": 0
+      },
+      {
+        "reset": 1,
+        "ptw_valid": 0,
+        "wfi_safe": 0,
+        "icache_a_valid": 1,
+        "uncache_a_valid": 0,
+        "error_valid": 0
+      },
+      {
+        "reset": 1,
+        "ptw_valid": 0,
+        "wfi_safe": 0,
+        "icache_a_valid": 1,
+        "uncache_a_valid": 0,
+        "error_valid": 0
+      },
+      {
+        "reset": 0,
+        "ptw_valid": 0,
+        "wfi_safe": 0,
+        "icache_a_valid": 0,
+        "uncache_a_valid": 0,
+        "error_valid": 0
+      }
+    ]
+  }
 }
