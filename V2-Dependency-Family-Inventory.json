@@ -174,7 +174,7 @@
     {
       "family_id": "dependency.rocket.replacement",
       "kind": "dependency",
-      "plan_build_file": "Build-Cpu.Dependency.Rocket.Replacement-Hardware.py",
+      "plan_build_file": null,
       "source_roots": [
         "rocket-chip/src/main/scala/util/Replacement.scala"
       ],
@@ -184,14 +184,20 @@
       ],
       "reachability": null,
       "boundary": null,
-      "status": "INVENTORY_ONLY",
+      "status": "SATISFIED_BY_CORE_FAMILY",
       "reachability_status": "REACHABLE_SELECTED_OR_CONDITIONAL",
-      "implementation_eligibility": "PLANNED_AFTER_CORE_PARENT"
+      "implementation_eligibility": "REUSED_BOUNDED",
+      "satisfied_by_existing_build_files": [
+        "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.LruStateGen-Hardware.py",
+        "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.PlruStateGen-Hardware.py",
+        "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.ReplacerState-Hardware.py"
+      ],
+      "evidence": "validation/v2-replacement-batch-results.json"
     },
     {
       "family_id": "dependency.rocket.rvc",
       "kind": "dependency",
-      "plan_build_file": "Build-Cpu.Dependency.Rocket.Rvc-Hardware.py",
+      "plan_build_file": null,
       "source_roots": [
         "rocket-chip/src/main/scala/rocket/RVC.scala"
       ],
@@ -201,9 +207,13 @@
       ],
       "reachability": null,
       "boundary": null,
-      "status": "INVENTORY_ONLY",
+      "status": "SATISFIED_BY_CORE_FAMILY",
       "reachability_status": "REACHABLE_SELECTED_OR_CONDITIONAL",
-      "implementation_eligibility": "PLANNED_AFTER_CORE_PARENT"
+      "implementation_eligibility": "REUSED_BOUNDED",
+      "satisfied_by_existing_build_files": [
+        "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Ifu.RvcExpander-Hardware.py"
+      ],
+      "evidence": "validation/v2-frontend-batch-results.json"
     },
     {
       "family_id": "dependency.rocket.diplomacy",
