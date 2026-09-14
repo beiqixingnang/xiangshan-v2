@@ -8,17 +8,17 @@
   },
   "scan_counts": {
     "xiangshan_scala_files": 325,
-    "existing_candidate_entries": 35,
-    "retained_build_files": 34,
+    "existing_candidate_entries": 41,
+    "retained_build_files": 40,
     "retired_or_excluded": 1,
-    "planned_core_build_files": 34,
-    "families": 24,
+    "planned_core_build_files": 40,
+    "families": 30,
     "parent_closures": 4
   },
   "classification_counts": {
     "EXACT": 12,
     "MOVED": 4,
-    "REWRITTEN": 12,
+    "REWRITTEN": 18,
     "SPLIT": 6,
     "RETIRED": 1
   },
@@ -488,8 +488,94 @@
       "reference_surface": [
         "upstream/src/main/scala/xiangshan/backend/datapath/WbArbiter.scala"
       ]
+    },
+    {
+      "id": "ImmExtractor",
+      "source_scala": "scala/src/main/scala/xiangshan/backend/issue/ImmExtractor.scala",
+      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.ImmExtractor-Hardware.py",
+      "family_id": "core.backend.issue.imm",
+      "closure_root": "core.backend.issue",
+      "classification": "REWRITTEN",
+      "disposition": "REWRITTEN",
+      "v2_status": "VALIDATOR_PASS_BOUNDED",
+      "reference_surface": [
+        "ImmExtractor",
+        "ImmExtractor_2",
+        "ImmExtractor_12",
+        "ImmExtractor_37",
+        "ImmExtractor_57"
+      ]
+    },
+    {
+      "id": "AluDataModule",
+      "source_scala": "scala/src/main/scala/xiangshan/backend/fu/Alu.scala",
+      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.AluDataModule-Hardware.py",
+      "family_id": "core.fu.alu",
+      "closure_root": "core.fu",
+      "classification": "REWRITTEN",
+      "disposition": "REWRITTEN",
+      "v2_status": "VALIDATOR_PASS_BOUNDED",
+      "reference_surface": [
+        "AluDataModule",
+        "AddModule",
+        "SubModule",
+        "LeftShiftModule",
+        "RightShiftModule"
+      ]
+    },
+    {
+      "id": "CommitStuckCounter",
+      "source_scala": "scala/src/main/scala/xiangshan/backend/rob/CommitStuckCounter.scala",
+      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Rob.CommitStuckCounter-Hardware.py",
+      "family_id": "core.backend.rob.commit",
+      "closure_root": "core.backend.rob",
+      "classification": "REWRITTEN",
+      "disposition": "REWRITTEN",
+      "v2_status": "VALIDATOR_PASS_BOUNDED",
+      "reference_surface": [
+        "CommitStuckCounter"
+      ]
+    },
+    {
+      "id": "EnqPolicy",
+      "source_scala": "scala/src/main/scala/xiangshan/backend/issue/EnqPolicy.scala",
+      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.EnqPolicy-Hardware.py",
+      "family_id": "core.backend.issue.enq",
+      "closure_root": "core.backend.issue",
+      "classification": "REWRITTEN",
+      "disposition": "REWRITTEN",
+      "v2_status": "VALIDATOR_PASS_BOUNDED",
+      "reference_surface": [
+        "EnqPolicy"
+      ]
+    },
+    {
+      "id": "AgeDetector",
+      "source_scala": "scala/src/main/scala/xiangshan/backend/issue/AgeDetector.scala",
+      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.AgeDetector-Hardware.py",
+      "family_id": "core.backend.issue.age",
+      "closure_root": "core.backend.issue",
+      "classification": "REWRITTEN",
+      "disposition": "REWRITTEN",
+      "v2_status": "VALIDATOR_PASS_BOUNDED",
+      "reference_surface": [
+        "AgeDetector"
+      ]
+    },
+    {
+      "id": "PreDecodeInst",
+      "source_scala": "scala/src/main/scala/xiangshan/backend/decode/isa/predecode/predecode.scala",
+      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Decode.Isa.Predecode.PreDecodeInst-Hardware.py",
+      "family_id": "core.decode.predecode",
+      "closure_root": "core.decode",
+      "classification": "REWRITTEN",
+      "disposition": "REWRITTEN",
+      "v2_status": "VALIDATOR_PASS_BOUNDED",
+      "reference_surface": [
+        "PreDecode"
+      ]
     }
   ],
-  "status": "INVENTORY_ONLY",
+  "status": "IMPLEMENTATION_BATCH_A1_VALIDATED_BOUNDED",
   "acceptance_eligible": false
 }

@@ -7,12 +7,12 @@
   "validator_model": "gpt-5.6-terra",
   "validator_reasoning_effort": "max",
   "counts": {
-    "core_leaf_build_files": 34,
+    "core_leaf_build_files": 40,
     "core_parent_build_files": 8,
     "dependency_family_build_files": 23,
     "uhsc_integration_build_files": 1,
     "retired_or_excluded": 1,
-    "total_planned_build_files": 66,
+    "total_planned_build_files": 72,
     "inventory_note": "The 23 dependency families cover 612 scoped Scala paths (557 unique after nested parent/child overlap); counts are closure views and are not additive. Locked DefaultConfig XSTop instantiates HuanCun/TL2TLCoupledL2; CHI/OpenLLC/OpenNCB/HardFloat/IOPMP families remain conditional or inlined until selected-top evidence is produced."
   },
   "batches": [
@@ -26,10 +26,30 @@
         "core.frontend.leaves",
         "core.backend.leaves"
       ],
-      "expected_build_files": 34,
+      "expected_build_files": 40,
       "depends_on": [],
       "validator": "v2-independent-validator",
-      "status": "READY_FOR_IMPLEMENTATION"
+      "status": "VALIDATOR_PASS_BOUNDED",
+      "sub_batches": [
+        {
+          "batch_id": "V2-SCAN-A1-CORE-DECODE-ARITH-LEAVES",
+          "scope": "core.decode-arithmetic-issue",
+          "targets": [
+            "ImmExtractor",
+            "AluDataModule",
+            "CommitStuckCounter",
+            "EnqPolicy",
+            "AgeDetector",
+            "PreDecodeInst"
+          ],
+          "expected_build_files": 6,
+          "build_root": "python/Program-System/System-Build/Build-Cpu/Cpu-Core",
+          "validator": "v2-independent-validator",
+          "status": "VALIDATOR_PASS_BOUNDED",
+          "evidence": "validation/v2-core-leaf-a1-validator-results.json",
+          "commit": "pending_coordinator_commit"
+        }
+      ]
     },
     {
       "batch_id": "V2-SCAN-B-CORE-PARENTS",

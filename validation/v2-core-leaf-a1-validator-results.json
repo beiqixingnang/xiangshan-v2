@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_CORE_LEAF_A1_INDEPENDENT_VALIDATOR",
+  "batch_id": "V2-SCAN-A1-CORE-DECODE-ARITH-LEAVES",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "targets": {
+    "ImmExtractor": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.ImmExtractor-Hardware.py",
+      "sha256": "e4422d8bfb720878e82f13310e2b4841a672efb74aeeabfbd99c3968fb11a750",
+      "present": true
+    },
+    "AluDataModule": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.AluDataModule-Hardware.py",
+      "sha256": "65b2061e60e1ea21d56f32bab7c672789c82b1968bef031b1332e6d34cdc6dad",
+      "present": true
+    },
+    "CommitStuckCounter": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Rob.CommitStuckCounter-Hardware.py",
+      "sha256": "7a3d1fc3d07930598d376e3f258a3372b6a444c25556f18f590ca1fdf80f2ceb",
+      "present": true
+    },
+    "EnqPolicy": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.EnqPolicy-Hardware.py",
+      "sha256": "5f01b8c4ec58c53879b4ed8da4cc620f30599aca97f13a6df063f30e9e003378",
+      "present": true
+    },
+    "AgeDetector": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.AgeDetector-Hardware.py",
+      "sha256": "beeb4152e8f4f92b26168e0458c141863298b47c0b129d09f58c49f128c4a5eb",
+      "present": true
+    },
+    "PreDecodeInst": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Decode.Isa.Predecode.PreDecodeInst-Hardware.py",
+      "sha256": "5ad2b807cdebf284f6228c5704d98fbaa23de08c1d44a5adbced03362c477298",
+      "present": true
+    }
+  },
+  "sources": {
+    "ImmExtractor": {
+      "path": "upstream/src/main/scala/xiangshan/backend/issue/ImmExtractor.scala",
+      "sha256": "553ec41a4fdd3624808559025a94105f83eb91d3cfe6a1515a64db2d8bc04c1c",
+      "present": true
+    },
+    "AluDataModule": {
+      "path": "upstream/src/main/scala/xiangshan/backend/fu/Alu.scala",
+      "sha256": "7f4e7f5f2f463216330efa02c5b8a0d42e02a2345e339bca4d2a633e374ee287",
+      "present": true
+    },
+    "CommitStuckCounter": {
+      "path": "upstream/src/main/scala/xiangshan/backend/rob/CommitStuckCounter.scala",
+      "sha256": "0f19beedb1d73d4eccc04550a4c42e394f34f2adecde88ed0d65c7e98c8777db",
+      "present": true
+    },
+    "EnqPolicy": {
+      "path": "upstream/src/main/scala/xiangshan/backend/issue/EnqPolicy.scala",
+      "sha256": "e0218e99d01c9073f38ba8d039ea611c98bf25c83bceb560415e044fc8789caf",
+      "present": true
+    },
+    "AgeDetector": {
+      "path": "upstream/src/main/scala/xiangshan/backend/issue/AgeDetector.scala",
+      "sha256": "d15d687194badf8ef1ec1b6bb06a2239b5cacf1d38fdd86b34de6cea8c446921",
+      "present": true
+    },
+    "PreDecodeInst": {
+      "path": "upstream/src/main/scala/xiangshan/backend/decode/isa/predecode/predecode.scala",
+      "sha256": "84fcdbb2c6e91e0aef77305da40f43aaf92e3188dfb4902b3e3fe561cf8044fd",
+      "present": true
+    }
+  },
+  "helper_checks": {
+    "ImmExtractor": {
+      "vectors": 4,
+      "pass": true
+    },
+    "AluDataModule": {
+      "vectors": 4,
+      "pass": true
+    },
+    "EnqPolicy": {
+      "vectors": 3,
+      "pass": true
+    },
+    "AgeDetector": {
+      "vectors": 1,
+      "pass": true
+    },
+    "PreDecodeInst": {
+      "vectors": 3,
+      "pass": true
+    },
+    "CommitStuckCounter": {
+      "vectors": 0,
+      "pass": true,
+      "note": "stateful smoke is covered by emitted RTL and source contract"
+    }
+  },
+  "generated": {
+    "ImmExtractor": {
+      "bytes": 20063,
+      "sha256": "6fe73e78a220f3a073b521a3b9abfb70bb609bf84ddb81b6f0503b57435726e3",
+      "module_decl": true,
+      "tools": {
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_returncode": 0,
+        "yosys_returncode": 0,
+        "stderr_tail": "1\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Issue.ImmExtractor-Hardware.py:204\" *) 2'h2;\n      |                                ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_a1_validator_2au48r23/ImmExtractor.sv:53:32: Operator EQ expects 4 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                           : ... note: In instance 'ImmExtractor'\n   53 |   assign \\$13  = io_in_immType == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Issue.ImmExtractor-Hardware.py:204\" *) 1'h1;\n      |                                ^~\n"
+      }
+    },
+    "AluDataModule": {
+      "bytes": 7568603,
+      "sha256": "6ada6a9c79d15689c5b38d8838288704e923ace781552099894db6447456da51",
+      "module_decl": true,
+      "tools": {
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_returncode": 0,
+        "yosys_returncode": 0,
+        "stderr_tail": "'s CONST '1'h1' generates 1 bits.\n104826 |   assign \\$47576  = io_func[3:0] == 1'h1;\n       |                                  ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_a1_validator_2au48r23/AluDataModule.sv:104831:34: Operator EQ expects 4 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n104831 |   assign \\$47581  = io_func[3:0] == 2'h3;\n       |                                  ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_a1_validator_2au48r23/AluDataModule.sv:104834:34: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n104834 |   assign \\$47584  = io_func[6:4] == 1'h1;\n       |                                  ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_a1_validator_2au48r23/AluDataModule.sv:104835:34: Operator EQ expects 4 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n104835 |   assign \\$47585  = io_func[3:0] == 2'h3;\n       |                                  ^~\n"
+      }
+    },
+    "CommitStuckCounter": {
+      "bytes": 5927,
+      "sha256": "b947de55574abaa8738c7f6ae306d6c5790b7f005717a1eb6868b095a8a27075",
+      "module_decl": true,
+      "tools": {
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_returncode": 0,
+        "yosys_returncode": 0,
+        "stderr_tail": ""
+      }
+    },
+    "EnqPolicy": {
+      "bytes": 269644,
+      "sha256": "1964cdfa8d594f1ccacacea038b0fd4034d1621609690ea27b902abb6f78a7d4",
+      "module_decl": true,
+      "tools": {
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_returncode": 0,
+        "yosys_returncode": 0,
+        "stderr_tail": "\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Issue.EnqPolicy-Hardware.py:105\" *) io_canEnq[3];\n      |                          ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_a1_validator_2au48r23/EnqPolicy.sv:1297:26: Operator ADD expects 25 bits on the RHS, but RHS's SEL generates 1 bits.\n                                                                                                          : ... note: In instance 'EnqPolicy'\n 1297 |   assign \\$360  = \\$359  + (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Issue.EnqPolicy-Hardware.py:105\" *) io_canEnq[2];\n      |                          ^\n"
+      }
+    },
+    "AgeDetector": {
+      "bytes": 279973,
+      "sha256": "657c066a3fa6cafb4c2abb3f59981f1bf84b2f1a0d9144a4de13a3b37e9d7f02",
+      "module_decl": true,
+      "tools": {
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_returncode": 0,
+        "yosys_returncode": 0,
+        "stderr_tail": ""
+      }
+    },
+    "PreDecodeInst": {
+      "bytes": 85492,
+      "sha256": "87713e7d73ddc229918c8b163bc4ac28fd9c15bb96faae84b7a5e4f39e2d495f",
+      "module_decl": true,
+      "tools": {
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_returncode": 0,
+        "yosys_returncode": 0,
+        "stderr_tail": "validator_2au48r23/PreDecodeInstProbe.sv:406:26: Operator EQ expects 32 bits on the RHS, but RHS's CONST '7'h63' generates 7 bits.\n                                                                                                                  : ... note: In instance 'PreDecodeInstProbe'\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_a1_validator_2au48r23/PreDecodeInstProbe.sv:418:26: Operator EQ expects 5 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                  : ... note: In instance 'PreDecodeInstProbe'\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_a1_validator_2au48r23/PreDecodeInstProbe.sv:421:26: Operator EQ expects 5 bits on the RHS, but RHS's CONST '3'h5' generates 3 bits.\n                                                                                                                  : ... note: In instance 'PreDecodeInstProbe'\n"
+      }
+    }
+  },
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "SOURCE_LEVEL_PENDING",
+    "PARENT_CLOSURE_MATCHED": "PENDING",
+    "UHSC_LOCALIZED": "NO_PROJECT_FACING_RENAME",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "VALIDATOR_PASS_BOUNDED",
+  "acceptance_eligible": false,
+  "unclosed": [
+    "Independent validator confirms leaf Build emission/tool gates; extracted V2 parent differential and parent closure remain required."
+  ]
+}
