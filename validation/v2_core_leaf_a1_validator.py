@@ -66,10 +66,10 @@ def smoke_helpers(modules: dict[str, Any]) -> dict[str, dict[str, Any]]:
 
     imm = modules["ImmExtractor"]
     imm_vectors = [
-        (0x00100093, imm.IMM_TYPES["I"], 1),
-        (0xFFF00013, imm.IMM_TYPES["I"], -1),
-        (0x00000037, imm.IMM_TYPES["U"], 0),
-        (0xFE000EE3, imm.IMM_TYPES["SB"], -4),
+        (0x001, imm.IMM_TYPES["I"], 1),
+        (0xFFF, imm.IMM_TYPES["I"], -1),
+        (0x00000, imm.IMM_TYPES["U"], 0),
+        (0x7FE, imm.IMM_TYPES["SB"], 0xFFC),
     ]
     imm_results = [imm.decode_immediate(inst, kind) == (expected & ((1 << 64) - 1)) for inst, kind, expected in imm_vectors]
 

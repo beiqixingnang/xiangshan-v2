@@ -13,9 +13,9 @@ from amaranth import Cat, Const, Elaboratable, Module, Mux, Signal
 # =============================================================================
 # Module Contract
 # =============================================================================
-# ImmExtractor.scala selects one ImmUnion encoding from a 32-bit instruction
-# fragment and sign/zero extends it to the configured integer data width.
-# ImmExtractor.scala 从 32 位指令片段选择 ImmUnion 编码，并扩展到数据宽度。
+# ImmExtractor.scala selects one ImmUnion encoding from the packed ``imm``
+# field (the decoder has already gathered instruction bits) and extends it.
+# ImmExtractor.scala 从已由译码器聚合的 ``imm`` 字段选择编码并完成扩展。
 __all__ = [
     "IMM_TYPES",
     "ImmExtractorConfig",
@@ -93,12 +93,12 @@ def zero_extend(value, width: int):
 
 
 # Extract one immediate union from a Python integer. / 从 Python 整数提取一种立即数联合编码。
-def decode_immediate(instruction: int, imm_type: int, data_bits: int = 64) -> int:
+def decode_immediate(imm_bits: int, imm_type: int, data_bits: int = 64) -> int:
     """Model the V2 ``ImmUnion`` table for deterministic tests.
     为确定性测试建模 V2 ``ImmUnion`` 表。
     """
 
-    instruction &= 0xFFFFFFFF
+    imm_bits &= 0xFFFFFFFF
 
     # Return a signed value represented in an unsigned data-width word.
     # 返回以无符号数据宽度字表示的有符号值。
@@ -113,51 +113,31 @@ def decode_immediate(instruction: int, imm_type: int, data_bits: int = 64) -> in
         return value & ((1 << bits) - 1)
 
     if imm_type == IMM_TYPES["I"]:
-        return signed(instruction >> 20, 12)
+        return signed(imm_bits, 12)
     if imm_type == IMM_TYPES["S"]:
-        value = ((instruction >> 25) << 5) | ((instruction >> 7) & 0x1F)
-        return signed(value, 12)
+        return signed(imm_bits, 12)
     if imm_type == IMM_TYPES["SB"]:
-        value = (
-            ((instruction >> 31) & 1) << 11
-            | ((instruction >> 7) & 1) << 10
-            | ((instruction >> 25) & 0x3F) << 4
-            | ((instruction >> 8) & 0xF) << 0
-        ) << 1
-        return signed(value, 13)
+        return signed(imm_bits << 1, 13)
     if imm_type == IMM_TYPES["U"]:
-        return signed(instruction & 0xFFFFF000, 32)
+        return signed(imm_bits << 12, 32)
     if imm_type == IMM_TYPES["UJ"]:
-        value = (
-            ((instruction >> 31) & 1) << 19
-            | ((instruction >> 12) & 0xFF) << 11
-            | ((instruction >> 20) & 1) << 10
-            | ((instruction >> 25) & 0x3F) << 4
-            | ((instruction >> 21) & 0xF) << 0
-        ) << 1
-        return signed(value, 21)
+        return signed(imm_bits << 1, 21)
     if imm_type == IMM_TYPES["Z"]:
-        value = ((instruction >> 7) & 0x1F) << 17
-        value |= ((instruction >> 15) & 0x1F) << 12
-        value |= (instruction >> 20) & 0xFFF
-        return signed(value, 22)
+        return signed(imm_bits, 22)
     if imm_type == IMM_TYPES["B6"]:
-        return unsigned(instruction >> 20, 6)
+        return unsigned(imm_bits, 6)
     if imm_type == IMM_TYPES["OPIVIS"]:
-        return signed(instruction >> 15, 5)
+        return signed(imm_bits, 5)
     if imm_type == IMM_TYPES["OPIVIU"]:
-        return unsigned(instruction >> 15, 5)
+        return unsigned(imm_bits, 5)
     if imm_type == IMM_TYPES["VSETVLI"]:
-        return signed(instruction >> 20, 11)
+        return signed(imm_bits, 11)
     if imm_type == IMM_TYPES["VSETIVLI"]:
-        value = ((instruction >> 15) & 0x1F) << 10
-        value |= (instruction >> 20) & 0x3FF
-        return signed(value, 15)
+        return signed(imm_bits, 15)
     if imm_type == IMM_TYPES["LUI32"]:
-        return signed(instruction, 32)
+        return signed(imm_bits, 32)
     if imm_type == IMM_TYPES["VRORVI"]:
-        value = (((instruction >> 26) & 1) << 5) | ((instruction >> 15) & 0x1F)
-        return unsigned(value, 6)
+        return unsigned(imm_bits, 6)
     return 0
 
 
@@ -177,26 +157,32 @@ class ImmExtractor(Elaboratable):
         m = Module()
         c = self.configuration
         inst = self.instruction
+        base_width = min(c.data_bits, 64)
+
+        # Scala first extends to IntData().dataWidth (64), then widens a
+        # larger vector output; preserve the zero-filled upper half seen in
+        # ImmExtractor_12/37 reference instances.
+        # Scala 先扩展到 IntData().dataWidth（64），再扩大更宽输出；保留
+        # ImmExtractor_12/37 参考实例中高半字的零填充。
+        def fit(value):
+            """Fit a 64-bit intermediate into the configured output. / 将 64 位中间值适配到配置输出。"""
+
+            return zero_extend(value, c.data_bits) if c.data_bits > base_width else value
+
         values = {
-            IMM_TYPES["I"]: sign_extend(inst[20:32], c.data_bits),
-            IMM_TYPES["S"]: sign_extend(Cat(inst[7:12], inst[25:32]), c.data_bits),
-            IMM_TYPES["SB"]: sign_extend(
-                Cat(Const(0, 1), inst[8:12], inst[25:31], inst[7], inst[31]),
-                c.data_bits,
-            ),
-            IMM_TYPES["U"]: sign_extend(Cat(Const(0, 12), inst[12:32]), c.data_bits),
-            IMM_TYPES["UJ"]: sign_extend(
-                Cat(Const(0, 1), inst[21:25], inst[25:31], inst[20], inst[12:20], inst[31]),
-                c.data_bits,
-            ),
-            IMM_TYPES["Z"]: sign_extend(Cat(inst[20:32], inst[15:20], inst[7:12]), c.data_bits),
-            IMM_TYPES["B6"]: zero_extend(inst[20:26], c.data_bits),
-            IMM_TYPES["OPIVIS"]: sign_extend(inst[15:20], c.data_bits),
-            IMM_TYPES["OPIVIU"]: zero_extend(inst[15:20], c.data_bits),
-            IMM_TYPES["VSETVLI"]: sign_extend(inst[20:31], c.data_bits),
-            IMM_TYPES["VSETIVLI"]: sign_extend(Cat(inst[20:30], inst[15:20]), c.data_bits),
-            IMM_TYPES["LUI32"]: sign_extend(inst, c.data_bits),
-            IMM_TYPES["VRORVI"]: zero_extend(Cat(inst[15:20], inst[26]), c.data_bits),
+            IMM_TYPES["I"]: fit(sign_extend(inst[:12], base_width)),
+            IMM_TYPES["S"]: fit(sign_extend(inst[:12], base_width)),
+            IMM_TYPES["SB"]: fit(sign_extend(Cat(Const(0, 1), inst[:12]), base_width)),
+            IMM_TYPES["U"]: fit(sign_extend(Cat(Const(0, 12), inst[:20]), base_width)),
+            IMM_TYPES["UJ"]: fit(sign_extend(Cat(Const(0, 1), inst[:20]), base_width)),
+            IMM_TYPES["Z"]: fit(sign_extend(inst[:22], base_width)),
+            IMM_TYPES["B6"]: fit(zero_extend(inst[:6], base_width)),
+            IMM_TYPES["OPIVIS"]: fit(sign_extend(inst[:5], base_width)),
+            IMM_TYPES["OPIVIU"]: fit(zero_extend(inst[:5], base_width)),
+            IMM_TYPES["VSETVLI"]: fit(sign_extend(inst[:11], base_width)),
+            IMM_TYPES["VSETIVLI"]: fit(sign_extend(inst[:15], base_width)),
+            IMM_TYPES["LUI32"]: fit(sign_extend(inst[:32], base_width)),
+            IMM_TYPES["VRORVI"]: fit(zero_extend(inst[:6], base_width)),
         }
         result = Const(0, c.data_bits)
         for selector in sorted(c.imm_type_set):
