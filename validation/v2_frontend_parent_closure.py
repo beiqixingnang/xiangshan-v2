@@ -607,7 +607,7 @@ def backend_gates(rtl: str) -> dict[str, Any]:
 
 def write_evidence(static: dict[str, Any], reference: dict[str, Any], direct: dict[str, Any],
                    differential: dict[str, Any], backend: dict[str, Any], vectors: list[dict[str, int]],
-                   source_hash: str, projection_hash: str) -> None:
+                   source_hash: str, projection_hash: str, inventory: dict[str, Any] | None = None) -> None:
     """Persist all bounded parent evidence files. / 持久化所有精简父级证据文件。"""
     diff_pass = differential.get("status") == "PASS"
     backend_pass = backend.get("status") == "PASS"
@@ -638,6 +638,7 @@ def write_evidence(static: dict[str, Any], reference: dict[str, Any], direct: di
         "reference_projection": {"module": "LockedFrontendProjection", "sha256": projection_hash,
                                  "provenance": ["Frontend.scala:68-71", "Frontend.scala:224", "Frontend.scala:445"]},
         "target": {"path": static["path"], "sha256": static["sha256"]},
+        "port_inventory": inventory or {"status": "PENDING"},
         "comparison": differential, "backend_gates": backend,
         "behavioral_equivalence": diff_pass, "status": "DIFFERENTIAL_MATCHED_BOUNDED" if diff_pass else "FAIL",
         "gates": gates, "acceptance_eligible": False,
@@ -658,6 +659,7 @@ def write_evidence(static: dict[str, Any], reference: dict[str, Any], direct: di
             "BPU/FTQ/IFU/IBuffer/ITLB/PMP": "explicitly unimplemented reduced boundary",
         },
         "projection": {"module": "LockedFrontendProjection", "sha256": projection_hash},
+        "port_inventory": inventory or {"status": "PENDING"},
         "gates": gates, "acceptance_eligible": False,
     }
     CONTRACT_RESULT.write_text(json.dumps(contract_payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
@@ -666,6 +668,7 @@ def write_evidence(static: dict[str, Any], reference: dict[str, Any], direct: di
         "batch_id": "V2-PARENT-FRONTEND-001", "source_commit": SOURCE_COMMIT,
         "closure_root": "core.frontend", "root_module": "Frontend",
         "root_source": SOURCE.relative_to(ROOT).as_posix(), "reference_snapshot": reference,
+        "port_inventory": inventory or {"status": "PENDING"},
         "children": [
             {"instance": "Frontend.icache", "source": "upstream/src/main/scala/xiangshan/frontend/icache/ICache.scala", "status": "INJECTED_BOUNDARY"},
             {"instance": "Frontend.instrUncache", "source": "upstream/src/main/scala/xiangshan/frontend/icache/InstrUncache.scala", "status": "INJECTED_BOUNDARY"},
@@ -717,7 +720,11 @@ def main() -> int:
     backend = backend_gates(rtl)
     differential, projection_hash = differential_check(rtl, vectors)
     source_hash = digest(SOURCE)
-    write_evidence(static, reference, direct, differential, backend, vectors, source_hash, projection_hash)
+    target_ports, _target_declarations = target_port_declarations(rtl)
+    inventory = {"status": "PASS" if len(target_ports) == reference["port_count"] else "FAIL",
+                 "target_port_count": len(target_ports), "locked_port_count": reference["port_count"],
+                 "count_match": len(target_ports) == reference["port_count"]}
+    write_evidence(static, reference, direct, differential, backend, vectors, source_hash, projection_hash, inventory)
     overall = static["status"] == "PASS" and compile_result.returncode == 0 and direct["status"] == "PASS" and differential["status"] == "PASS" and backend["status"] == "PASS"
     print(json.dumps({"status": "PASS_BOUNDED_PARENT" if overall else "FAIL", "direct": direct["status"],
                       "differential": differential["status"], "verilator": backend["verilator"]["status"],

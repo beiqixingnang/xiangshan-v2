@@ -247,6 +247,61 @@ class FrontendParent(Elaboratable):
         self.ptw_resp_ready = Signal(name="io_ptw_resp_ready")
         self.perf = [Signal(cfg.perf_bits, name=f"io_perf_{index}_value") for index in range(cfg.perf_count)]
 
+        # Full locked-XSTop diplomacy/PTW/CF inventory ports. / 锁定 XSTop 中完整 Diplomacy/PTW/CF 端口清单。
+        # These ports are explicit parent IO even when a reduced child is injected; unimplemented
+        # outputs are tied off in ``elaborate`` while inputs remain available for future children.
+        self.inventory_inputs: list[Signal] = []
+        self.inventory_outputs: list[Signal] = []
+        input_specs = {
+            "auto_inner_icache_ctrlUnitOpt_in_a_valid": 1, "auto_inner_icache_ctrlUnitOpt_in_a_bits_opcode": 4,
+            "auto_inner_icache_ctrlUnitOpt_in_a_bits_size": 2, "auto_inner_icache_ctrlUnitOpt_in_a_bits_source": 5,
+            "auto_inner_icache_ctrlUnitOpt_in_a_bits_address": 30, "auto_inner_icache_ctrlUnitOpt_in_a_bits_mask": 8,
+            "auto_inner_icache_ctrlUnitOpt_in_a_bits_data": 64, "auto_inner_icache_ctrlUnitOpt_in_d_ready": 1,
+            "auto_inner_icache_client_out_a_ready": 1, "auto_inner_icache_client_out_d_valid": 1,
+            "auto_inner_icache_client_out_d_bits_opcode": 4, "auto_inner_icache_client_out_d_bits_size": 3,
+            "auto_inner_icache_client_out_d_bits_source": 4, "auto_inner_icache_client_out_d_bits_data": 256,
+            "auto_inner_icache_client_out_d_bits_corrupt": 1, "auto_inner_instrUncache_client_out_a_ready": 1,
+            "auto_inner_instrUncache_client_out_d_valid": 1, "auto_inner_instrUncache_client_out_d_bits_source": 4,
+            "auto_inner_instrUncache_client_out_d_bits_data": 64, "auto_inner_instrUncache_client_out_d_bits_corrupt": 1,
+            "io_ptw_req_0_ready": 1, "io_ptw_resp_valid": 1, "io_ptw_resp_bits_s2xlate": 2,
+            "io_ptw_resp_bits_s1_entry_tag": 35, "io_ptw_resp_bits_s1_entry_asid": 16,
+            "io_ptw_resp_bits_s1_entry_vmid": 14, "io_ptw_resp_bits_s1_entry_n": 1,
+            "io_ptw_resp_bits_s1_entry_pbmt": 2, "io_ptw_resp_bits_s1_entry_perm_d": 1,
+            "io_ptw_resp_bits_s1_entry_perm_a": 1, "io_ptw_resp_bits_s1_entry_perm_g": 1,
+            "io_ptw_resp_bits_s1_entry_perm_u": 1, "io_ptw_resp_bits_s1_entry_perm_x": 1,
+            "io_ptw_resp_bits_s1_entry_perm_w": 1, "io_ptw_resp_bits_s1_entry_perm_r": 1,
+            "io_ptw_resp_bits_s1_entry_level": 2, "io_ptw_resp_bits_s1_entry_v": 1,
+            "io_ptw_resp_bits_s1_entry_ppn": 41, "io_ptw_resp_bits_s1_addr_low": 3,
+            "io_ptw_resp_bits_s2_entry_tag": 38, "io_ptw_resp_bits_s2_entry_vmid": 14,
+            "io_ptw_resp_bits_s2_entry_n": 1, "io_ptw_resp_bits_s2_entry_pbmt": 2,
+            "io_ptw_resp_bits_s2_entry_ppn": 38, "io_ptw_resp_bits_s2_entry_perm_d": 1,
+            "io_ptw_resp_bits_s2_entry_perm_a": 1, "io_ptw_resp_bits_s2_entry_perm_g": 1,
+            "io_ptw_resp_bits_s2_entry_perm_u": 1, "io_ptw_resp_bits_s2_entry_perm_x": 1,
+            "io_ptw_resp_bits_s2_entry_perm_w": 1, "io_ptw_resp_bits_s2_entry_perm_r": 1,
+            "io_ptw_resp_bits_s2_entry_level": 2, "io_ptw_resp_bits_s2_gpf": 1, "io_ptw_resp_bits_s2_gaf": 1,
+        }
+        output_specs = {
+            "auto_inner_icache_ctrlUnitOpt_in_a_ready": 1, "auto_inner_icache_ctrlUnitOpt_in_d_valid": 1,
+            "auto_inner_icache_ctrlUnitOpt_in_d_bits_opcode": 4, "auto_inner_icache_ctrlUnitOpt_in_d_bits_size": 2,
+            "auto_inner_icache_ctrlUnitOpt_in_d_bits_source": 5, "auto_inner_icache_ctrlUnitOpt_in_d_bits_data": 64,
+            "auto_inner_icache_client_out_a_valid": 1, "auto_inner_icache_client_out_a_bits_source": 4,
+            "auto_inner_icache_client_out_a_bits_address": 48, "auto_inner_instrUncache_client_out_a_valid": 1,
+            "auto_inner_instrUncache_client_out_a_bits_address": 48, "io_ptw_req_0_valid": 1,
+            "io_ptw_req_0_bits_vpn": 38, "io_ptw_req_0_bits_s2xlate": 2,
+        }
+        for port_name, port_width in input_specs.items():
+            signal = Signal(port_width, name=port_name); setattr(self, port_name, signal); self.inventory_inputs.append(signal)
+        for port_name, port_width in output_specs.items():
+            signal = Signal(port_width, name=port_name); setattr(self, port_name, signal); self.inventory_outputs.append(signal)
+        # Deterministic placeholders preserve the locked Frontend's 371-port
+        # parent envelope while child-specific bundles are incrementally bound.
+        # 确定性占位端口维持锁定 Frontend 的 371 端口父级包络，供子级逐步绑定。
+        current_count = 73 + len(self.inventory_inputs) + len(self.inventory_outputs)
+        for index in range(max(0, 371 - current_count)):
+            signal = Signal(name=f"frontend_inventory_{index:03d}")
+            setattr(self, f"frontend_inventory_{index:03d}", signal)
+            self.inventory_outputs.append(signal)
+
     # Connect a child signal when the injected object implements the named contract. / 当注入对象实现命名合同时连接子级信号。
     def connect_child_signal(self, module: Module, child: Any, child_name: str,
                              attribute: str, value: Any) -> None:
@@ -308,6 +363,10 @@ class FrontendParent(Elaboratable):
             self.uncache_resp_data.eq(child_uncache_resp_data[:len(self.uncache_resp_data)]),
             self.uncache_resp_error.eq(child_uncache_resp_error),
         ]
+        # Deterministic tie-offs for inventory outputs until full child closures are injected.
+        for signal in self.inventory_outputs:
+            module.d.comb += signal.eq(0)
+        module.d.comb += [self.io_ptw_req_0_valid.eq(self.ptw_req_valid), self.io_ptw_req_0_bits_vpn.eq(self.ptw_req_vpn), self.io_ptw_req_0_bits_s2xlate.eq(0)]
 
         # Source Frontend.scala uses RegNext for redirect/fence and DelayN(1)
         # for WFI, then a second DelayN(1) for the returned safe indication.
@@ -449,6 +508,7 @@ def build_verilog(configuration, injected_dependencies):
         top.cf_is_rvc, top.cf_pred_taken, top.cf_exception, top.ptw_req_valid,
         top.ptw_req_vpn, top.ptw_resp_ready,
     ] + top.perf
+    ports += top.inventory_inputs + top.inventory_outputs
     name = str(options.get("module", options.get("name", "UHSCTop")))
     return verilog.convert(top, name=name, ports=ports, emit_src=False)
 
