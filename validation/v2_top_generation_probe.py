@@ -276,6 +276,84 @@ def main() -> int:
             "verilator": root_verilator,
             "yosys": root_yosys,
         }
+
+    # Emit one reproducible hierarchy that binds the executable parent
+    # adapters and all four source-named root boundaries beneath a single
+    # UHSCTop envelope.  This is still structurally bounded (child outputs are
+    # deterministic ties), but unlike separate wrappers it exercises one
+    # Amaranth elaboration path end-to-end.
+    single_hierarchy: dict[str, object] = {"status": "PENDING"}
+    if "XSTop" in root_specs_by_name:
+        root_children = {
+            "xs_core": roots_mod.XSCore(injected_dependencies={"full_port_specs": root_specs_by_name["XSCore"]}),
+            "l2_top": roots_mod.L2Top(injected_dependencies={"full_port_specs": root_specs_by_name["L2Top"]}),
+            "xs_tile": roots_mod.XSTile(injected_dependencies={"full_port_specs": root_specs_by_name["XSTile"]}),
+        }
+        full_deps = {
+            "frontend": frontend_mod.FrontendParent(locked_io=True),
+            "backend": backend_mod.BackendTop(),
+            "mem_block": mem_mod.UHSCMemoryMemBlock(),
+            "coupled_l2": l2_mod.CoupledL2Slice(),
+            **root_children,
+            "full_port_specs": root_specs_by_name["XSTop"],
+        }
+        full_hierarchy_rtl = top.build_verilog(
+            {"module": "UHSCFullKunminghuV2"}, full_deps
+        )
+        hierarchy_path = WORK_DIR / "uhsc-full-kunminghu-v2.sv"
+        hierarchy_path.write_text(full_hierarchy_rtl, encoding="utf-8", newline="\n")
+        hierarchy_schema = generated_port_schema(full_hierarchy_rtl, "UHSCFullKunminghuV2")
+        hierarchy_expected = inventory_schema(root_specs_by_name["XSTop"])
+        single_hierarchy = {
+            "status": "PASS" if set(hierarchy_schema) == set(hierarchy_expected)
+            and all(hierarchy_schema[name] == hierarchy_expected[name] for name in hierarchy_expected)
+            else "FAIL",
+            "top_module": "UHSCFullKunminghuV2",
+            "inventory_count": len(hierarchy_expected),
+            "generated_ports": len(hierarchy_schema),
+            "missing": sorted(set(hierarchy_expected) - set(hierarchy_schema)),
+            "extra": sorted(set(hierarchy_schema) - set(hierarchy_expected)),
+            "rtl_bytes": len(full_hierarchy_rtl.encode("utf-8")),
+            "rtl_sha256": hashlib.sha256(full_hierarchy_rtl.encode("utf-8")).hexdigest(),
+            "path": str(hierarchy_path.relative_to(ROOT)).replace("\\", "/"),
+            "verilator": run_lint("verilator", hierarchy_path, "UHSCFullKunminghuV2"),
+            "yosys": run_lint("yosys", hierarchy_path, "UHSCFullKunminghuV2"),
+            "bound_children": ["Frontend", "Backend", "MemBlock", "CoupledL2", "XSCore", "L2Top", "XSTile"],
+            "semantic_status": "PENDING_FULL_CHILD_BEHAVIORAL_DIFFERENTIAL",
+        }
+    # The localized UHSCTop adapter must expose the same exact XSTop envelope
+    # when the coordinator supplies the frozen port metadata.  Keep this as a
+    # separate record from the source-named XSTop boundary so a passing root
+    # shell cannot be mistaken for a passing localized top.
+    top_specs = root_specs_by_name.get("XSTop", [])
+    top_full = top.build_verilog(
+        {"module": "UHSCTopEnvelope"},
+        {"full_port_specs": top_specs},
+    )
+    top_envelope_path = WORK_DIR / "uhsc-top-envelope.sv"
+    top_envelope_path.write_text(top_full, encoding="utf-8", newline="\n")
+    top_actual = generated_port_schema(top_full, "UHSCTopEnvelope")
+    top_expected = inventory_schema(top_specs)
+    top_missing = sorted(set(top_expected) - set(top_actual))
+    top_extra = sorted(set(top_actual) - set(top_expected))
+    top_mismatches = [name for name in sorted(set(top_expected) & set(top_actual))
+                      if top_expected[name] != top_actual[name]]
+    top_verilator = run_lint("verilator", top_envelope_path, "UHSCTopEnvelope")
+    top_yosys = run_lint("yosys", top_envelope_path, "UHSCTopEnvelope")
+    full_parent_envelopes["UHSCTop"] = {
+        "inventory_count": len(top_specs),
+        "generated_ports": len(top_actual),
+        "missing": top_missing,
+        "extra": top_extra,
+        "direction_width_mismatches": top_mismatches,
+        "rtl_bytes": len(top_full.encode("utf-8")),
+        "rtl_sha256": hashlib.sha256(top_full.encode("utf-8")).hexdigest(),
+        "path": str(top_envelope_path.relative_to(ROOT)).replace("\\", "/"),
+        "status": "PASS" if len(top_actual) == len(top_expected) == len(top_specs)
+        and not top_missing and not top_extra and not top_mismatches else "FAIL",
+        "verilator": top_verilator,
+        "yosys": top_yosys,
+    }
     frontend_full = frontend_mod.build_verilog({"module": "UHSCFrontendEnvelope", "locked_io": True}, {})
     frontend_path = WORK_DIR / "uhsc-frontend-envelope.sv"
     frontend_path.write_text(frontend_full, encoding="utf-8", newline="\n")
@@ -342,6 +420,7 @@ def main() -> int:
             "status": "ELABORATED_REDUCED_ONLY",
         },
         "full_parent_envelopes": full_parent_envelopes,
+        "single_full_hierarchy": single_hierarchy,
         "direct_probe_observation": direct_observed,
         "required_hierarchy_roots": required_roots,
         "locked_reference_hierarchy": REFERENCE_HIERARCHY,
