@@ -1,0 +1,225 @@
+{
+  "schema_version": 1,
+  "status": "VALIDATOR_PASS_BOUNDED",
+  "kind": "XIANGSHAN_KUNMINGHU_V2_YUNSUAN_SCALAR_FAMILY",
+  "batch_id": "V2-DEPENDENCY-YUNSUAN-SCALAR-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "source_scala_file_count": 5,
+  "source_paths": [
+    "yunsuan/src/main/scala/yunsuan/scalar/Convert.scala",
+    "yunsuan/src/main/scala/yunsuan/scalar/FPU.scala",
+    "yunsuan/src/main/scala/yunsuan/scalar/IntToFP.scala",
+    "yunsuan/src/main/scala/yunsuan/scalar/RoundingUnit.scala",
+    "yunsuan/src/main/scala/yunsuan/scalar/utils.scala"
+  ],
+  "source_hashes": {
+    "yunsuan/src/main/scala/yunsuan/scalar/Convert.scala": "f6a0e1ed516ae6d7daf492106404ac6aaadc80b5a5fbe5a0796b2ae282da492c",
+    "yunsuan/src/main/scala/yunsuan/scalar/FPU.scala": "4c89689cd2d8e3424b935609d3086fa7a1c2f21543347595ef98bd14b4cd94c7",
+    "yunsuan/src/main/scala/yunsuan/scalar/IntToFP.scala": "5fe899d8ac71072539a4f6e7f3744cf1f444e1a1f9da5b216dd420601cb1297d",
+    "yunsuan/src/main/scala/yunsuan/scalar/RoundingUnit.scala": "fb7c8263a646beed7d070d7c53a81db26d85284dde1516171544a6962dca6ad9",
+    "yunsuan/src/main/scala/yunsuan/scalar/utils.scala": "bc4a04a0fe55ac6fd9bbded04569b44cb55228402c897162d7c5e776a66af07b"
+  },
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.YunSuan.Scalar-Hardware.py",
+    "sha256": "475c60cd2d14dfc6c6af4972cccfac12032038016bd9ed5d1161fd9b00d1acdb",
+    "bytes": 46627
+  },
+  "static": {
+    "status": "PASS",
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.YunSuan.Scalar-Hardware.py",
+    "bytes": 46627,
+    "sha256": "475c60cd2d14dfc6c6af4972cccfac12032038016bd9ed5d1161fd9b00d1acdb",
+    "utf8_lf": true,
+    "zones": [
+      546,
+      1772,
+      4004,
+      41200,
+      44092
+    ],
+    "adapter_args": [
+      "configuration",
+      "injected_dependencies"
+    ],
+    "forbidden_imports": [],
+    "function_comment_errors": []
+  },
+  "direct": {
+    "status": "PASS",
+    "vectors": 82323,
+    "rounding_observations": [
+      {
+        "rm": 0,
+        "value": 0,
+        "output": 0
+      },
+      {
+        "rm": 0,
+        "value": 0,
+        "output": 0
+      },
+      {
+        "rm": 0,
+        "value": 0,
+        "output": 0
+      },
+      {
+        "rm": 7,
+        "value": 255,
+        "output": 255
+      },
+      {
+        "rm": 7,
+        "value": 255,
+        "output": 255
+      },
+      {
+        "rm": 7,
+        "value": 255,
+        "output": 255
+      }
+    ],
+    "trace_sha256": "e38da41d95d54c821180dec616378ad81fda13f355e619ddc3ea435883eadc82"
+  },
+  "reference_differential": {
+    "status": "PASS",
+    "source_artifact": {
+      "path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+      "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+      "bytes": 228590583
+    },
+    "module_source_lines": {
+      "LZA": "1199661-1199730",
+      "CLZ": "1199733-1199865",
+      "IntToFP": "1199867-1200066",
+      "RoundingUnit": "1199972-1199995"
+    },
+    "cases": [
+      {
+        "kind": "rounding",
+        "vectors": 100000,
+        "status": "PASS",
+        "target": "UHSCYunSuanRounding",
+        "reference": "RoundingUnit_1",
+        "output_tail": "PASS_ROUNDING 100000\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/yunsuan-scalar-validator/compare_rounding.sv:732: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 100ns; walltime 0.011 s; speed 8.811 us/s\n- Verilator: cpu 0.011 s on 1 threads; alloced 152 MB\n"
+      },
+      {
+        "kind": "lza",
+        "vectors": 20000,
+        "status": "PASS",
+        "target": "UHSCYunSuanLZA",
+        "reference": "LZA",
+        "output_tail": "PASS_LZA 20000\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/yunsuan-scalar-validator/compare_lza.sv:1621: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 20ns; walltime 0.004 s; speed 4.244 us/s\n- Verilator: cpu 0.005 s on 1 threads; alloced 152 MB\n"
+      },
+      {
+        "kind": "clz",
+        "vectors": 20000,
+        "status": "PASS",
+        "target": "UHSCYunSuanCLZ",
+        "reference": "CLZ",
+        "output_tail": "PASS_CLZ 20000\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/yunsuan-scalar-validator/compare_clz.sv:828: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 20ns; walltime 0.009 s; speed 2.055 us/s\n- Verilator: cpu 0.010 s on 1 threads; alloced 152 MB\n"
+      },
+      {
+        "kind": "int",
+        "vectors": 20000,
+        "status": "PASS",
+        "target": "UHSCYunSuanIntToFP",
+        "reference": "IntToFP_1",
+        "output_tail": "PASS_INT 20000\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/yunsuan-scalar-validator/compare_int.sv:3871: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 20ns; walltime 0.018 s; speed 1.049 us/s\n- Verilator: cpu 0.019 s on 1 threads; alloced 153 MB\n"
+      }
+    ]
+  },
+  "backend": {
+    "status": "PASS",
+    "modes": [
+      {
+        "mode": "rounding",
+        "module": "UHSCYunSuanRounding",
+        "rtl_bytes": 3500,
+        "rtl_sha256": "c9a47b11dc848735d2c4be94054a64db01630a7cec192086c7b3e94c69984c47",
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_tail": "EXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/yunsuan-scalar-validator/UHSCYunSuanRounding.sv:131:24: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                                                                                                                                                 : ... note: In instance 'UHSCYunSuanRounding'\n  131 |   assign \\$43  = io_rm == 2'h3;\n      |                        ^~\n",
+        "yosys_tail": ""
+      },
+      {
+        "mode": "lza",
+        "module": "UHSCYunSuanLZA",
+        "rtl_bytes": 27013,
+        "rtl_sha256": "e52d8568630f2608fd99b8444881b2ded83e407c958374e98f9fc828d1fde034",
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_tail": "",
+        "yosys_tail": ""
+      },
+      {
+        "mode": "clz",
+        "module": "UHSCYunSuanCLZ",
+        "rtl_bytes": 7093,
+        "rtl_sha256": "2e759231d64dd8bfc99df35eddeab8f77c035e4e1f6bc71426b1ff0ec9215004",
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_tail": "perator LOGNOT expects 1 bit on the LHS, but LHS's REPLICATE generates 64 bits.\n                                                                                                                                                          : ... note: In instance 'UHSCYunSuanCLZ.encoder'\n                     ... For warning description see https://verilator.org/warn/WIDTHTRUNC?v=5.032\n                     ... Use \"/* verilator lint_off WIDTHTRUNC */\" and lint_on around source to disable this message.\n",
+        "yosys_tail": ""
+      },
+      {
+        "mode": "int_to_fp",
+        "module": "UHSCYunSuanIntToFP",
+        "rtl_bytes": 97063,
+        "rtl_sha256": "911ac800f5c584de844fe99f193be2b8f4de8449dcebb2707d77f907f34037c7",
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_tail": "r-Hardware-System/.agents/xiangshan-v2/validation/.work/yunsuan-scalar-validator/UHSCYunSuanIntToFP.sv:148:33: Operator GTS expects 13 bits on the RHS, but RHS's SIGNED generates 12 bits.\n                                                                                                                                                                : ... note: In instance 'UHSCYunSuanIntToFP.post'\n  148 |   assign \\$30  = $signed(\\$29 ) > $signed(12'h7fe);\n      |                                 ^\n",
+        "yosys_tail": ""
+      },
+      {
+        "mode": "int2fp",
+        "module": "UHSCYunSuanINT2FP",
+        "rtl_bytes": 301804,
+        "rtl_sha256": "7f0613f524245b4f9b14302b8c2cc6474fb760910562e37d61d6931670f9d73f",
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_tail": "THEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/yunsuan-scalar-validator/UHSCYunSuanINT2FP.sv:119:26: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                               : ... note: In instance 'UHSCYunSuanINT2FP'\n  119 |   assign \\$19  = tag_reg == 1'h1;\n      |                          ^~\n",
+        "yosys_tail": ""
+      },
+      {
+        "mode": "fpcvt",
+        "module": "UHSCYunSuanFPCVT",
+        "rtl_bytes": 19605,
+        "rtl_sha256": "d697a1cbf0c51787f75eb6df86bb66a65e05726fa6b3b9f21d8b43c2fdcb9f9b",
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_tail": "DTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/yunsuan-scalar-validator/UHSCYunSuanFPCVT.sv:386:26: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h20' generates 6 bits.\n                                                                                                                                                              : ... note: In instance 'UHSCYunSuanFPCVT'\n  386 |   assign \\$165  = \\$164  == 6'h20;\n      |                          ^~\n",
+        "yosys_tail": ""
+      },
+      {
+        "mode": "aggregate",
+        "module": "UHSCYunSuanScalar",
+        "rtl_bytes": 159105,
+        "rtl_sha256": "7245ab89a87882ffaf34d2450535a8dca35cb8e5498976996caf2f04f39c1ba5",
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_tail": ": /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/yunsuan-scalar-validator/UHSCYunSuanScalar.sv:763:26: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h20' generates 6 bits.\n                                                                                                                                                               : ... note: In instance 'UHSCYunSuanScalar.fpcvt'\n  763 |   assign \\$165  = \\$164  == 6'h20;\n      |                          ^~\n",
+        "yosys_tail": ""
+      }
+    ]
+  },
+  "reference_mode": "LOCKED_XSTOP_PRIMITIVE_AND_INT_TO_FP_DIFFERENTIAL; FPCVT_CLOSURE_OPEN",
+  "closure_open": [
+    "FPCVT's full FP_INCVT behavior depends on the separately inventoried vector CVT64 closure.",
+    "FPCVT hardware currently closes deterministic f32/f64 widening/narrowing paths; f16, FP-to-int, fround and fcvtmod remain parent-closure work.",
+    "Mixed dependency license review remains open; source notices are retained and ACCEPTED is prohibited."
+  ],
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED_PRIMITIVE_INT_TO_FP",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "UHSC_LOCALIZED": "PASS_BOUNDED_FAMILY_LOCAL_NAME",
+    "PARENT_CLOSURE_MATCHED": "NOT_READY_FPCVT_VECTOR_CVT64_OPEN",
+    "LICENSE_REVIEW": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "acceptance_eligible": false
+}

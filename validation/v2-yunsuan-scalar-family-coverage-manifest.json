@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "batch_id": "V2-DEPENDENCY-YUNSUAN-SCALAR-001",
+  "family_id": "dependency.yunsuan.scalar",
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.YunSuan.Scalar-Hardware.py",
+    "sha256": "475c60cd2d14dfc6c6af4972cccfac12032038016bd9ed5d1161fd9b00d1acdb",
+    "bytes": 46627
+  },
+  "covered_children": [
+    {
+      "source": "yunsuan/src/main/scala/yunsuan/scalar/Convert.scala",
+      "apis": [
+        "I2fCvtIO",
+        "INT2FP",
+        "FpCvtIO",
+        "FPCVT"
+      ]
+    },
+    {
+      "source": "yunsuan/src/main/scala/yunsuan/scalar/FPU.scala",
+      "apis": [
+        "FType",
+        "FPU.box"
+      ]
+    },
+    {
+      "source": "yunsuan/src/main/scala/yunsuan/scalar/IntToFP.scala",
+      "apis": [
+        "IntToFP_prenorm",
+        "IntToFP_postnorm",
+        "IntToFP"
+      ]
+    },
+    {
+      "source": "yunsuan/src/main/scala/yunsuan/scalar/RoundingUnit.scala",
+      "apis": [
+        "RoundingUnit"
+      ]
+    },
+    {
+      "source": "yunsuan/src/main/scala/yunsuan/scalar/utils.scala",
+      "apis": [
+        "FloatPoint",
+        "SignExt",
+        "ZeroExt",
+        "LZA",
+        "CLZ"
+      ]
+    }
+  ],
+  "closure_open": [
+    "FPCVT's full FP_INCVT behavior depends on the separately inventoried vector CVT64 closure.",
+    "FPCVT hardware currently closes deterministic f32/f64 widening/narrowing paths; f16, FP-to-int, fround and fcvtmod remain parent-closure work.",
+    "Mixed dependency license review remains open; source notices are retained and ACCEPTED is prohibited."
+  ]
+}
