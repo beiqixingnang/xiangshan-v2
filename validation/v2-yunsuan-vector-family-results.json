@@ -1,0 +1,655 @@
+{
+  "schema_version": 1,
+  "status": "VALIDATOR_PASS_BOUNDED",
+  "kind": "XIANGSHAN_KUNMINGHU_V2_YUNSUAN_VECTOR_FAMILY",
+  "batch_id": "V2-DEPENDENCY-YUNSUAN-VECTOR-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "source_scala_file_count": 53,
+  "source_paths": [
+    "yunsuan/src/main/scala/yunsuan/vector/FloatAdderReductionF32WidenF16.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VPERM/VCompress.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VPERM/VPermTop.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VPERM/VPermUtil.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VPERM/VRGather.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VPERM/VSlide.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VPPU.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorALU/Reduction.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorALU/VAluBundles.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorALU/VAluDecode.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorALU/VAluUtils.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorALU/VFixPoint64b.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorALU/VIAlu.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorALU/VIAluFWrapper.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorALU/VIFuParameters.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorALU/VIntAdder64b.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorALU/VIntFixpAlu.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorALU/VIntMisc64b.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorALU/VMask.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorALU/VMaskSlice.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorBrainFloatAdder.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorConvert/CVT16.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorConvert/CVT32.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorConvert/CVT64.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorConvert/CVTparameter.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorConvert/Convert.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorConvert/Estimate7.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorConvert/VCVT.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorConvert/util/CLZ.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorConvert/util/FpFloat.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorConvert/util/Rounding.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorConvert/util/ShiftRightJam.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorConvert/utils.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorFloatAdder.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorFloatDivider.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorFloatFMA.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorIdiv/I8DivNr4.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorIdiv/SRT16Divint.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorIdiv/SRT4Divint8.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorIdiv/VectorIdiv.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorIntAdder.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorPerm/Permutation.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorPerm/VPermBundles.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorPerm/VPermDecode.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorPermFsm/PermFsm.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorPermFsm/VPermFsmBundles.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorPermFsm/VPermFsmDecode.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/vectorIMAC/VIMac.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/vectorIMAC/VIMac64b.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/vectorIMAC/VIMac64b_noBooth.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/vfsqrt/fpsqrt_r16_block.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/vfsqrt/fpsqrt_vector_r16.scala",
+    "yunsuan/src/main/scala/yunsuan/vector/vfsqrt/r4_qds.scala"
+  ],
+  "source_hashes": {
+    "yunsuan/src/main/scala/yunsuan/vector/FloatAdderReductionF32WidenF16.scala": "ce2a5847e15473612a57e8373daf54ded0a76d82127cb3dae09a52277f5f6d1d",
+    "yunsuan/src/main/scala/yunsuan/vector/VPERM/VCompress.scala": "39fa863cc58fae0e7179000efd5d1acc8ae9a6449ff8af1206bae39cabd234ed",
+    "yunsuan/src/main/scala/yunsuan/vector/VPERM/VPermTop.scala": "a5501e803fe639f31c421ade19c224d2e60fe51a280a1f67f597dd2d92539e23",
+    "yunsuan/src/main/scala/yunsuan/vector/VPERM/VPermUtil.scala": "c4b153c4e383c6233d3acc3aa581ae25368ffffcc88d2cffcb7f9eed47f83d79",
+    "yunsuan/src/main/scala/yunsuan/vector/VPERM/VRGather.scala": "dd3ff802f8490e2d404190dd3431c8ce21933fbbdf28c26d74bb9c35f9bd71c6",
+    "yunsuan/src/main/scala/yunsuan/vector/VPERM/VSlide.scala": "846248f5b70124fcea9a110001a6afbf576d12b612b9019d90bcc6ea68e0b9ac",
+    "yunsuan/src/main/scala/yunsuan/vector/VPPU.scala": "d1fa20cb70a3e65a467831fac1a2dd3ae214a1084842eb2aba8961bddcc897d2",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorALU/Reduction.scala": "d9f6d097167d7a2ccf4f3fb06aa10b999ea44123005533d562904212b58f35b0",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorALU/VAluBundles.scala": "1807443f85f4f675ca26a135abd9ad657f2ffadc445a9ab6a0cbf15db30bf8cd",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorALU/VAluDecode.scala": "1275661120347f2d1664e78ba24d00441d97305bb9ac3dcd172ab6930b6c215f",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorALU/VAluUtils.scala": "7482591312ef55fdcb7fc6f688eceda61b913b61ea3cc3de003d56ce2f0553d5",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorALU/VFixPoint64b.scala": "10a7854e6d348fee660106636afb05bf5d1af22b9084fe8e2bff618dcc852f50",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorALU/VIAlu.scala": "2ec74c7e07bf98bac849363f7fef7955c61e792cbd2f0be51d099e110aab1c70",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorALU/VIAluFWrapper.scala": "afeef4f5ae4f95013b25e44543cfaf7e801758ecff8746347c34b9e7514b0c4a",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorALU/VIFuParameters.scala": "4c3d1329c6b142430b5d52bbf48586e391c1483be754b59e67a9eff50706d3a8",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorALU/VIntAdder64b.scala": "a6d27a9a8af448ee774d04bbaf9a5ee4d901ab4957b9054a2ca5f2c059032eed",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorALU/VIntFixpAlu.scala": "a88028d327739335786671fe6ec618336432fc71bd4da25bc049df0bd7c9e5d1",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorALU/VIntMisc64b.scala": "ca3c03a4c2fde2ce2447c93e9001a48e7fbf5c79cb11318d597a63082c1877e3",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorALU/VMask.scala": "a56f1ca4c1555f2021e7fe4d36609bb41b774d77c111c357d741728aecd94d29",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorALU/VMaskSlice.scala": "98dbe865971260098868dd5376edd1f24f116be8474243553d6b97ffef841bf1",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorBrainFloatAdder.scala": "c9368b4275f5cc828094898e2ea464563588b141c87ae2b1c550916fdc1a0426",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorConvert/CVT16.scala": "dd1f4e774463cb31ae78d24354d8805f2044015ed1a175420344f4a770094a4c",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorConvert/CVT32.scala": "2c2f18116c3f5106bf3217a580847f80c258db4f9b05ab4dfd467dc777c71b79",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorConvert/CVT64.scala": "ceeb849f26fbe930c92c540f6c4a807096f8a755b662355a5817da141f4fca36",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorConvert/CVTparameter.scala": "97c26f614154e0b09cbadb772d14eaebc35aaac3d54f4e9516338b557a364f36",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorConvert/Convert.scala": "a7eb4ce51d8f9ee425fe1f3980a47550dc5940411d753ac07001eecf6aec3c61",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorConvert/Estimate7.scala": "474e320ba11ce44584b71892ace3e39cc161f70c775dcfba6a7d1d9a3641ac51",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorConvert/VCVT.scala": "8730927cb789406ca1afb2bc519ceb714b5b3d28e071761970c3a831d986edb2",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorConvert/util/CLZ.scala": "314c9eb8975e09fd2750043ecbfaa233b5074829bf781c396a0656082a3521d5",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorConvert/util/FpFloat.scala": "7a6b9c2b82252d3f8e69a005009862bd7b3a4727349070f190487a7afa8394ba",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorConvert/util/Rounding.scala": "6cc7b3d8aed9856d1354a90959123a1373ef2786535e72ab811ec970e0691259",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorConvert/util/ShiftRightJam.scala": "ea96602b5dc6b983e7ecba5c4540746b006bfe9a4b981bfeb54f5a8eed051bad",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorConvert/utils.scala": "637fe0aee94a718d9542e8d4146cb4729891f22cf6c3d2ebbdca7abc14573aaf",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorFloatAdder.scala": "0256d1897ca2f1b16072be1838f0a6fed4ea6875e4eb7a33602c43d1b0550353",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorFloatDivider.scala": "90be66aab9a9bf1896fcabe2fb9eac57a495f5dd2eded648dcfcf16631e58bc4",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorFloatFMA.scala": "e26fa3523b3cc8be3900baaa41d476fcfc8e52ef5933581d43251091ba377a6e",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorIdiv/I8DivNr4.scala": "c0834c6d8399edaed0ca977f3b234c4083491fce476edb13e61f6052776ba9ab",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorIdiv/SRT16Divint.scala": "35bc566506389957c69860c29bfa2006292bcdb66a61f07f69acf4fac958e192",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorIdiv/SRT4Divint8.scala": "862210dcb51b9ee4f89960b995fff3ffa98fe735701f202d8db7fc02c712937e",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorIdiv/VectorIdiv.scala": "18cd69c46d2a70fe429e1aa2d744839a642d0744f444674d77ecac5eeb82d704",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorIntAdder.scala": "8213bc1c42616655adcf8313e1b7f142ad75102df97d7b1d61744347d332b6c4",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorPerm/Permutation.scala": "d23df8bbcd1813184128b372c16f4adf153bdf2ec0e051af2a101d8b0ce7a955",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorPerm/VPermBundles.scala": "583a977abca4921bf48df2d15802902cdd2b478569a58066b772298d3ef8cc5a",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorPerm/VPermDecode.scala": "a03a83394720b65f92de894247d2ae1f98f3f4b8d88c938770775f8eef5d7fee",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorPermFsm/PermFsm.scala": "08d5655f8be69ebe9957f397a97f849d5d0e7537f625ea05bb2940d2d1142154",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorPermFsm/VPermFsmBundles.scala": "d43ed86cee22cda76821aed693cb9f61f8458edcabec57d2c925f3a007dbe0e0",
+    "yunsuan/src/main/scala/yunsuan/vector/VectorPermFsm/VPermFsmDecode.scala": "62c1e80bd0609de5ee5cae3900e30f679f78f03c5b4560335c938a5d7cc3ce0f",
+    "yunsuan/src/main/scala/yunsuan/vector/vectorIMAC/VIMac.scala": "8d649489ce0ab9e6062fde96c36e1e3dc0119b402cafb6dadc60753dd848ed38",
+    "yunsuan/src/main/scala/yunsuan/vector/vectorIMAC/VIMac64b.scala": "0f8e4623dc8a9da2cd1448e3d142547e2d65c63806b935817a5e899cbdecae11",
+    "yunsuan/src/main/scala/yunsuan/vector/vectorIMAC/VIMac64b_noBooth.scala": "6e942efaf3bbf249fc1a8250dbecae49dd636ab0066a8db7daa51cee10eb9e53",
+    "yunsuan/src/main/scala/yunsuan/vector/vfsqrt/fpsqrt_r16_block.scala": "fddece105f32fc7b4dd0ff54f17bffd18dd2181989d2f97f2fb9dd53ca99a139",
+    "yunsuan/src/main/scala/yunsuan/vector/vfsqrt/fpsqrt_vector_r16.scala": "cd04a9d360bd7247fa9aa22bab0189e8e726675922bdb42cdbca6a76e61fbc5b",
+    "yunsuan/src/main/scala/yunsuan/vector/vfsqrt/r4_qds.scala": "290f06356fef7d2285b9055571e4b19084f6cc17b498d99d92436ecfbd17dcac"
+  },
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.YunSuan.Vector-Hardware.py",
+    "sha256": "2c139278a39d4658c80e6fca70fcc7f51529ed417f26f440e536411e3e2f50da",
+    "bytes": 46379
+  },
+  "static": {
+    "status": "PASS",
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.YunSuan.Vector-Hardware.py",
+    "bytes": 46379,
+    "sha256": "2c139278a39d4658c80e6fca70fcc7f51529ed417f26f440e536411e3e2f50da",
+    "utf8_lf": true,
+    "zones": [
+      765,
+      2861,
+      4515,
+      41478,
+      44354
+    ],
+    "adapter_args": [
+      "configuration",
+      "injected_dependencies"
+    ],
+    "forbidden_imports": [],
+    "function_comment_errors": [],
+    "leading_underscore_functions": []
+  },
+  "direct": {
+    "status": "PASS",
+    "vectors": 9311,
+    "primitive_observations": [
+      {
+        "sew": 0,
+        "opcode": 0,
+        "result": 1779233844483574223527448497073986028
+      },
+      {
+        "sew": 0,
+        "opcode": 1,
+        "result": 2579918598567004705436757937259414002
+      },
+      {
+        "sew": 0,
+        "opcode": 7,
+        "result": 183109715529382744382725400816110829
+      },
+      {
+        "sew": 0,
+        "opcode": 10,
+        "result": 1413034775063788548882856735073763602
+      },
+      {
+        "sew": 1,
+        "opcode": 0,
+        "result": 3375390694773108916115705018064984026
+      },
+      {
+        "sew": 1,
+        "opcode": 1,
+        "result": 2668881309183831065081223352061845474
+      },
+      {
+        "sew": 1,
+        "opcode": 7,
+        "result": 355850841224510809150081378914114524
+      },
+      {
+        "sew": 1,
+        "opcode": 10,
+        "result": 2668881309183831051263968860717457442
+      },
+      {
+        "sew": 2,
+        "opcode": 0,
+        "result": 4981911777143151301479955700385387720
+      },
+      {
+        "sew": 2,
+        "opcode": 1,
+        "result": 4092284674081874291264282499763519186
+      },
+      {
+        "sew": 2,
+        "opcode": 7,
+        "result": 340095450736844466417439815340468425
+      },
+      {
+        "sew": 2,
+        "opcode": 10,
+        "result": 4301720875669462368645076069704450870
+      },
+      {
+        "sew": 3,
+        "opcode": 0,
+        "result": 6583240562653449933395779782225088950
+      },
+      {
+        "sew": 3,
+        "opcode": 1,
+        "result": 5515688038979917517447623126736936386
+      },
+      {
+        "sew": 3,
+        "opcode": 7,
+        "result": 20872026208234877775808531341185464
+      },
+      {
+        "sew": 3,
+        "opcode": 10,
+        "result": 6541496510236980177844162719542718022
+      }
+    ],
+    "mask_reduction_observations": [
+      {
+        "opcode": 39,
+        "input": 0,
+        "result": 0
+      },
+      {
+        "opcode": 39,
+        "input": 1,
+        "result": 1
+      },
+      {
+        "opcode": 39,
+        "input": 32768,
+        "result": 1
+      },
+      {
+        "opcode": 39,
+        "input": 340282366920938463463374607431768211455,
+        "result": 128
+      },
+      {
+        "opcode": 39,
+        "input": 226854911280625642308916404954512140970,
+        "result": 64
+      },
+      {
+        "opcode": 40,
+        "input": 0,
+        "result": 18446744073709551615
+      },
+      {
+        "opcode": 40,
+        "input": 1,
+        "result": 0
+      },
+      {
+        "opcode": 40,
+        "input": 32768,
+        "result": 15
+      },
+      {
+        "opcode": 40,
+        "input": 340282366920938463463374607431768211455,
+        "result": 0
+      },
+      {
+        "opcode": 40,
+        "input": 226854911280625642308916404954512140970,
+        "result": 1
+      },
+      {
+        "opcode": 41,
+        "input": 0,
+        "result": 0
+      },
+      {
+        "opcode": 41,
+        "input": 1,
+        "result": 340282366920938463463374607431768211454
+      },
+      {
+        "opcode": 41,
+        "input": 32768,
+        "result": 340282366920938463463374607431768145920
+      },
+      {
+        "opcode": 41,
+        "input": 340282366920938463463374607431768211455,
+        "result": 340282366920938463463374607431768211454
+      },
+      {
+        "opcode": 41,
+        "input": 226854911280625642308916404954512140970,
+        "result": 340282366920938463463374607431768211452
+      },
+      {
+        "opcode": 42,
+        "input": 0,
+        "result": 0
+      },
+      {
+        "opcode": 42,
+        "input": 1,
+        "result": 340282366920938463463374607431768211455
+      },
+      {
+        "opcode": 42,
+        "input": 32768,
+        "result": 340282366920938463463374607431768178688
+      },
+      {
+        "opcode": 42,
+        "input": 340282366920938463463374607431768211455,
+        "result": 340282366920938463463374607431768211455
+      },
+      {
+        "opcode": 42,
+        "input": 226854911280625642308916404954512140970,
+        "result": 340282366920938463463374607431768211454
+      },
+      {
+        "opcode": 43,
+        "input": 0,
+        "result": 0
+      },
+      {
+        "opcode": 43,
+        "input": 1,
+        "result": 1
+      },
+      {
+        "opcode": 43,
+        "input": 32768,
+        "result": 32768
+      },
+      {
+        "opcode": 43,
+        "input": 340282366920938463463374607431768211455,
+        "result": 1
+      },
+      {
+        "opcode": 43,
+        "input": 226854911280625642308916404954512140970,
+        "result": 2
+      },
+      {
+        "opcode": 44,
+        "input": 0,
+        "result": 0
+      },
+      {
+        "opcode": 44,
+        "input": 1,
+        "result": 1334440654591915542993625911497130240
+      },
+      {
+        "opcode": 44,
+        "input": 32768,
+        "result": 0
+      },
+      {
+        "opcode": 44,
+        "input": 340282366920938463463374607431768211455,
+        "result": 20011376718272490338853433276725592320
+      },
+      {
+        "opcode": 44,
+        "input": 226854911280625642308916404954512140970,
+        "result": 9341064219884240541009657818628816896
+      },
+      {
+        "opcode": 45,
+        "input": 0,
+        "result": 20011376718272490338853433276725592320
+      },
+      {
+        "opcode": 45,
+        "input": 1,
+        "result": 20011376718272490338853433276725592320
+      },
+      {
+        "opcode": 45,
+        "input": 32768,
+        "result": 20011376718272490338853433276725592320
+      },
+      {
+        "opcode": 45,
+        "input": 340282366920938463463374607431768211455,
+        "result": 20011376718272490338853433276725592320
+      },
+      {
+        "opcode": 45,
+        "input": 226854911280625642308916404954512140970,
+        "result": 20011376718272490338853433276725592320
+      },
+      {
+        "opcode": 33,
+        "sew": 0,
+        "result": 128
+      },
+      {
+        "opcode": 33,
+        "sew": 1,
+        "result": 15432
+      },
+      {
+        "opcode": 33,
+        "sew": 2,
+        "result": 362686124
+      },
+      {
+        "opcode": 33,
+        "sew": 3,
+        "result": 163971058432973790
+      },
+      {
+        "opcode": 34,
+        "sew": 0,
+        "result": 239
+      },
+      {
+        "opcode": 34,
+        "sew": 1,
+        "result": 52719
+      },
+      {
+        "opcode": 34,
+        "sew": 2,
+        "result": 2309737967
+      },
+      {
+        "opcode": 34,
+        "sew": 3,
+        "result": 81985529216486895
+      },
+      {
+        "opcode": 35,
+        "sew": 0,
+        "result": 1
+      },
+      {
+        "opcode": 35,
+        "sew": 1,
+        "result": 291
+      },
+      {
+        "opcode": 35,
+        "sew": 2,
+        "result": 19088743
+      },
+      {
+        "opcode": 35,
+        "sew": 3,
+        "result": 81985529216486895
+      },
+      {
+        "opcode": 36,
+        "sew": 0,
+        "result": 1
+      },
+      {
+        "opcode": 36,
+        "sew": 1,
+        "result": 291
+      },
+      {
+        "opcode": 36,
+        "sew": 2,
+        "result": 19088743
+      },
+      {
+        "opcode": 36,
+        "sew": 3,
+        "result": 81985529216486895
+      },
+      {
+        "opcode": 37,
+        "sew": 0,
+        "result": 239
+      },
+      {
+        "opcode": 37,
+        "sew": 1,
+        "result": 52719
+      },
+      {
+        "opcode": 37,
+        "sew": 2,
+        "result": 2309737967
+      },
+      {
+        "opcode": 37,
+        "sew": 3,
+        "result": 81985529216486895
+      },
+      {
+        "opcode": 38,
+        "sew": 0,
+        "result": 0
+      },
+      {
+        "opcode": 38,
+        "sew": 1,
+        "result": 0
+      },
+      {
+        "opcode": 38,
+        "sew": 2,
+        "result": 0
+      },
+      {
+        "opcode": 38,
+        "sew": 3,
+        "result": 0
+      }
+    ],
+    "trace_sha256": "2e03c18ea8431b1192a0f12d02bb4c7cbd854f08309facd4fd40600af23ac326"
+  },
+  "reference_differential": {
+    "status": "PASS",
+    "source_artifact": {
+      "path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+      "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+      "bytes": 228590583
+    },
+    "compatible_child": "YunSuanVectorPrimitive",
+    "vectors": 4096,
+    "pass_marker": "PRIMITIVE_SOURCE_PASS",
+    "output_tail": "PRIMITIVE_SOURCE_PASS 4096\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/yunsuan-vector-validator/primitive_compare.sv:15002: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 4ns; walltime 0.002 s; speed 2.124 us/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 152 MB\n",
+    "open_children": [
+      "VectorFloatAdder",
+      "VectorFloatDivider",
+      "VectorFloatFMA",
+      "CVT64",
+      "CVT32",
+      "CVT16",
+      "VMask full parent timing",
+      "Reduction full parent timing",
+      "Permutation full parent timing",
+      "VIMac64b iterative Wallace pipeline"
+    ],
+    "note": "Primitive add-path source differential and all bounded child exports are checked; full parent differential remains open until vector parent contracts close."
+  },
+  "backend": {
+    "status": "PASS",
+    "modes": [
+      {
+        "mode": "primitive",
+        "module": "UHSCYunSuanVectorPrimitive",
+        "rtl_bytes": 488130,
+        "rtl_sha256": "9c9cfc14659fea8f2fe346f8e033da16df6d2b8fd52712acf77201f057da7b42",
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_tail": "      |                              ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/yunsuan-vector-validator/UHSCYunSuanVectorPrimitive.sv:14983:30: Operator EQ expects 6 bits on the RHS, but RHS's CONST '5'h14' generates 5 bits.\n14983 |   assign \\$2509  = io_opcode == 5'h14;\n      |                              ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/yunsuan-vector-validator/UHSCYunSuanVectorPrimitive.sv:14987:30: Operator EQ expects 6 bits on the RHS, but RHS's CONST '5'h15' generates 5 bits.\n14987 |   assign \\$2513  = io_opcode == 5'h15;\n      |                              ^~\n",
+        "yosys_tail": ""
+      },
+      {
+        "mode": "int_adder",
+        "module": "UHSCYunSuanVIntAdder64b",
+        "rtl_bytes": 14747907,
+        "rtl_sha256": "81dd8fb27b39430ddee1416a9bfcdeaba2460ce0469a225053e33d7d839fc670",
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_tail": "                   ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/yunsuan-vector-validator/UHSCYunSuanVIntAdder64b.sv:424441:35: Operator GTE expects 6 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n424441 |   assign \\$212166  = io_opcode_op >= 2'h3;\n       |                                   ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/yunsuan-vector-validator/UHSCYunSuanVIntAdder64b.sv:424442:35: Operator LTE expects 6 bits on the RHS, but RHS's CONST '3'h6' generates 3 bits.\n424442 |   assign \\$212167  = io_opcode_op <= 3'h6;\n       |                                   ^~\n",
+        "yosys_tail": ""
+      },
+      {
+        "mode": "misc",
+        "module": "UHSCYunSuanVIntMisc64b",
+        "rtl_bytes": 89743,
+        "rtl_sha256": "13efa8238c7270d2abaa79f020c8b5e648c3e8376d5109e88d6841c52ed54504",
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_tail": "                   : ... note: In instance 'UHSCYunSuanVIntMisc64b'\n 2608 |   assign \\$1350  = io_vs2 << io_vs1[5:0];\n      |                           ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/yunsuan-vector-validator/UHSCYunSuanVIntMisc64b.sv:2609:33: Operator EQ expects 6 bits on the RHS, but RHS's CONST '5'h11' generates 5 bits.\n                                                                                                                                                                     : ... note: In instance 'UHSCYunSuanVIntMisc64b'\n 2609 |   assign \\$1351  = io_opcode_op == 5'h11;\n      |                                 ^~\n",
+        "yosys_tail": ""
+      },
+      {
+        "mode": "mask",
+        "module": "UHSCYunSuanVMask",
+        "rtl_bytes": 14212406,
+        "rtl_sha256": "c55539d9e58cbbfd989bb6c5f3014909d1b88a3c67ee0258641d32cc9fac76fd",
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_tail": "            ^\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/yunsuan-vector-validator/UHSCYunSuanVMask.sv:412293:41: Operator GT expects 8 bits on the RHS, but RHS's CONST '7'h7e' generates 7 bits.\n412293 |   assign \\$205965  = io_in_bits_info_vl > 7'h7e;\n       |                                         ^\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/yunsuan-vector-validator/UHSCYunSuanVMask.sv:412297:41: Operator GT expects 8 bits on the RHS, but RHS's CONST '7'h7f' generates 7 bits.\n412297 |   assign \\$205969  = io_in_bits_info_vl > 7'h7f;\n       |                                         ^\n",
+        "yosys_tail": ""
+      },
+      {
+        "mode": "reduction",
+        "module": "UHSCYunSuanReduction",
+        "rtl_bytes": 11504,
+        "rtl_sha256": "93ae336cb610c4e902f4c8407860e78e555cbda5a4a1fb5c131259ca989217fb",
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_tail": "/warn/WIDTHTRUNC?v=5.032\n                     ... Use \"/* verilator lint_off WIDTHTRUNC */\" and lint_on around source to disable this message.\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/yunsuan-vector-validator/UHSCYunSuanReduction.sv:243:44: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                                  : ... note: In instance 'UHSCYunSuanReduction'\n  243 |   assign \\$70  = io_in_bits_srcType_0[1:0] == 1'h1;\n      |                                            ^~\n",
+        "yosys_tail": ""
+      },
+      {
+        "mode": "permutation",
+        "module": "UHSCYunSuanPermutation",
+        "rtl_bytes": 47678,
+        "rtl_sha256": "ff309068a6eb02a2987031fb0d4f5385861a402319fa19ce4f1de6a935d79a07",
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_tail": "                : ... note: In instance 'UHSCYunSuanPermutation'\n 1481 |   assign \\$253  = io_vs1[63:56] == 2'h3;\n      |                                 ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/yunsuan-vector-validator/UHSCYunSuanPermutation.sv:1482:33: Operator EQ expects 8 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                                                                     : ... note: In instance 'UHSCYunSuanPermutation'\n 1482 |   assign \\$254  = io_vs1[63:56] == 2'h2;\n      |                                 ^~\n",
+        "yosys_tail": ""
+      },
+      {
+        "mode": "convert",
+        "module": "UHSCYunSuanVectorConvert",
+        "rtl_bytes": 1513,
+        "rtl_sha256": "acc5c9b8293d08184069f59fdfc30881daf76a405e747c298ac29b810a94e83e",
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_tail": "note: In instance 'UHSCYunSuanVectorConvert'\n   41 |   assign \\$9  = io_sew == 1'h1;\n      |                        ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/yunsuan-vector-validator/UHSCYunSuanVectorConvert.sv:46:39: Operator SHIFTL expects 191 bits on the LHS, but LHS's CONST '64'hffffffffffffffff' generates 64 bits.\n                                                                                                                                                                     : ... note: In instance 'UHSCYunSuanVectorConvert'\n   46 |   assign \\$14  = 64'hffffffffffffffff << \\$13 ;\n      |                                       ^~\n",
+        "yosys_tail": ""
+      },
+      {
+        "mode": "aggregate",
+        "module": "UHSCYunSuanVector",
+        "rtl_bytes": 12322009,
+        "rtl_sha256": "ad77a68f5999343625d5194fea76444708aa722b11705009eb73959647c6cd7f",
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_tail": ": ... note: In instance 'UHSCYunSuanVector.converter'\n  216 |   assign \\$9  = io_sew == 1'h1;\n      |                        ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/yunsuan-vector-validator/UHSCYunSuanVector.sv:221:39: Operator SHIFTL expects 191 bits on the LHS, but LHS's CONST '64'hffffffffffffffff' generates 64 bits.\n                                                                                                                                                               : ... note: In instance 'UHSCYunSuanVector.converter'\n  221 |   assign \\$14  = 64'hffffffffffffffff << \\$13 ;\n      |                                       ^~\n",
+        "yosys_tail": ""
+      }
+    ]
+  },
+  "open_gates": [
+    "The 53 Scala sources include long arithmetic/FP/convert parents; this aggregate exposes their concrete boundaries but does not claim parent equivalence from child lint.",
+    "Full VMask, Reduction, Permutation, VIMac64b, VectorFloatAdder/Divider/FMA and CVT16/32/64 differential closure remains open.",
+    "Mixed yunsuan package license/header review remains pending; ACCEPTED is prohibited."
+  ],
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED_PRIMITIVE_SOURCE",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "UHSC_LOCALIZED": "PASS_BOUNDED_FAMILY_LOCAL_NAME",
+    "PARENT_CLOSURE_MATCHED": "NOT_READY_VECTOR_PARENTS_OPEN",
+    "LICENSE_REVIEW": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "acceptance_eligible": false
+}
