@@ -430,12 +430,12 @@
     "full_generation_gate": "single reproducible Python/Amaranth-generated Kunminghu V2 hierarchy must elaborate and pass complete XSTop module/port inventory plus Verilator/Yosys; reduced wrappers are intermediate only"
   },
   "execution_state": {
-    "bounded_validator_pass_count": 41,
+    "bounded_validator_pass_count": 40,
     "bounded_leaf_pass_count": 12,
     "bounded_parent_pass_count": 4,
     "bounded_dependency_family_pass_count": 17,
     "validated_batch_count": 42,
-    "count_reconciliation": "12 leaf + 4 reduced parent + 17 dependency family + 8 semantic/family closure records = 41 bounded validators; +1 top generation probe = 42 validated records",
+    "count_reconciliation": "12 leaf + 4 reduced parent + 17 dependency family + 7 semantic/family closure records = 40 bounded validators; +1 top generation probe +1 direct/source-level BPU record = 42 verification records",
     "planned_build_file_count": 78,
     "current_build_file_count": 71,
     "exact_parent_envelopes": {
@@ -470,7 +470,7 @@
       {"batch_id": "V2-SEMANTIC-FRONTEND-ICACHE-MSHR", "status": "PASS_BOUNDED", "commit": "7d1e5ae", "direct_vectors": 2048, "differential_variants": 2, "parent_closure": "PENDING"}
       ,{"batch_id": "V2-SEMANTIC-COUPLEDL2-PARENT", "status": "PASS_BOUNDED_BOUNDARY", "commit": "d1ad38e", "ports": 137, "generated_bytes": 53678, "verilator": "PASS", "yosys": "PASS", "parent_differential": "PENDING"},
       {"batch_id": "V2-SEMANTIC-COUPLEDL2-PARENT-BOUNDARY-001", "status": "PASS_BOUNDED", "commit": "e8a2975", "ports": 137, "direct_checks": 4, "reference": "TL2CHICoupledL2-Eb", "verilator": "PASS", "yosys": "PASS", "parent_closure": "PENDING_FULL_CHILD_CLOSURE"},
-      {"batch_id": "V2-P1-C-FRONTEND-BPU-RVC", "status": "PASS_BOUNDED", "commit": "05f3d17", "direct_vectors": {"CompareMatrix": 264, "FallThroughPredictor": 515, "SaturateCounter": 2072, "SignedSaturateCounter": 2096, "RvcExpander": 3082}, "reference": "RVC_65536_PLUS_SOURCE_LEVEL", "parent_closure": "PENDING_BPU_PARENT"}
+      {"batch_id": "V2-P1-C-FRONTEND-BPU-RVC", "status": "DIRECT_PASS_SOURCE_LEVEL", "commit": "05f3d17", "direct_vectors": {"CompareMatrix": 264, "FallThroughPredictor": 515, "SaturateCounter": 2072, "SignedSaturateCounter": 2096, "RvcExpander": 3082}, "reference": "RVC_65536_PLUS_SOURCE_LEVEL", "independent_validator": "PENDING", "parent_closure": "PENDING_BPU_PARENT"}
     ],
     "locked_module_inventory": {
       "reference_modules": 1976,
