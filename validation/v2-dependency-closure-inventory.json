@@ -20,7 +20,9 @@
       "group by explicit closure boundary"
     ],
     "reachability_rule": "A dependency is hardware-reachable only if selected top/import/instantiation closure references its package; vendored presence alone is not reachability.",
-    "source_count_rule": "Counts are tracked src/main/scala files in the family scope; tests/docs/build outputs excluded."
+    "source_count_rule": "Counts are tracked src/main/scala files in the family scope; tests/docs/build outputs excluded.",
+    "nested_family_policy": "Parent cache families intentionally include child files; child counts are non-additive closure views. Use source_paths, not summed family counts, to derive unique source coverage.",
+    "conditional_branch_policy": "Both CHI and TileLink branches are inventoried because configuration selects one at elaboration; a branch is not promoted to a product Build until its selected-top evidence is available."
   },
   "family_count": 23,
   "dependency_family_count": 23,
@@ -1203,9 +1205,10 @@
       "family_id": "core.decode.csr",
       "kind": "core",
       "plan_build_file": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Decode.Isa.CSRs-Hardware.py",
-      "scala_source_count": 1,
+      "scala_source_count": 2,
       "source_paths": [
-        "src/main/scala/xiangshan/backend/decode/isa/CSRs.scala"
+        "rocket-chip/src/main/scala/rocket/Instructions.scala",
+        "src/main/scala/xiangshan/backend/fu/util/CSRConst.scala"
       ],
       "planned_existing_build_files": [
         "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Decode.Isa.CSRs-Hardware.py"
@@ -1245,7 +1248,7 @@
       "plan_build_file": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.CompareMatrix-Hardware.py",
       "scala_source_count": 1,
       "source_paths": [
-        "src/main/scala/xiangshan/frontend/bpu/CompareMatrix.scala"
+        "src/main/scala/xiangshan/backend/dispatch/NewDispatch.scala"
       ],
       "planned_existing_build_files": [
         "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.CompareMatrix-Hardware.py"
@@ -1262,10 +1265,11 @@
       "family_id": "core.frontend.bpu.counters",
       "kind": "core",
       "plan_build_file": "PLAN:core.frontend.bpu.counters",
-      "scala_source_count": 2,
+      "scala_source_count": 3,
       "source_paths": [
-        "src/main/scala/xiangshan/frontend/bpu/SaturateCounter.scala",
-        "src/main/scala/xiangshan/frontend/bpu/SignedSaturateCounter.scala"
+        "src/main/scala/xiangshan/frontend/BPU.scala",
+        "src/main/scala/xiangshan/frontend/SC.scala",
+        "src/main/scala/xiangshan/frontend/Tage.scala"
       ],
       "planned_existing_build_files": [
         "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.SaturateCounter-Hardware.py",
@@ -1283,9 +1287,12 @@
       "family_id": "core.frontend.ftb",
       "kind": "core",
       "plan_build_file": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.FallThroughPredictor-Hardware.py",
-      "scala_source_count": 1,
+      "scala_source_count": 4,
       "source_paths": [
-        "src/main/scala/xiangshan/frontend/bpu/FallThroughPredictor.scala"
+        "src/main/scala/xiangshan/frontend/BPU.scala",
+        "src/main/scala/xiangshan/frontend/FTB.scala",
+        "src/main/scala/xiangshan/frontend/FrontendBundle.scala",
+        "src/main/scala/xiangshan/frontend/NewFtq.scala"
       ],
       "planned_existing_build_files": [
         "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.FallThroughPredictor-Hardware.py"
@@ -1304,7 +1311,7 @@
       "plan_build_file": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.ICacheMshr-Hardware.py",
       "scala_source_count": 1,
       "source_paths": [
-        "src/main/scala/xiangshan/frontend/icache/ICacheMshr.scala"
+        "src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala"
       ],
       "planned_existing_build_files": [
         "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.ICacheMshr-Hardware.py"
@@ -1323,7 +1330,7 @@
       "plan_build_file": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.ICacheReplacer-Hardware.py",
       "scala_source_count": 1,
       "source_paths": [
-        "src/main/scala/xiangshan/frontend/icache/ICacheReplacer.scala"
+        "src/main/scala/xiangshan/frontend/icache/ICache.scala"
       ],
       "planned_existing_build_files": [
         "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.ICacheReplacer-Hardware.py"
@@ -1340,9 +1347,10 @@
       "family_id": "core.frontend.icache.utility",
       "kind": "core",
       "plan_build_file": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.Utils-Hardware.py",
-      "scala_source_count": 1,
+      "scala_source_count": 2,
       "source_paths": [
-        "src/main/scala/xiangshan/frontend/icache/Utils.scala"
+        "src/main/scala/xiangshan/frontend/icache/FIFO.scala",
+        "src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala"
       ],
       "planned_existing_build_files": [
         "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.Utils-Hardware.py"
@@ -1359,9 +1367,10 @@
       "family_id": "core.frontend.ifu.rvc",
       "kind": "core",
       "plan_build_file": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Ifu.RvcExpander-Hardware.py",
-      "scala_source_count": 1,
+      "scala_source_count": 2,
       "source_paths": [
-        "src/main/scala/xiangshan/frontend/ifu/RvcExpander.scala"
+        "rocket-chip/src/main/scala/rocket/RVC.scala",
+        "src/main/scala/xiangshan/frontend/PreDecode.scala"
       ],
       "planned_existing_build_files": [
         "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Ifu.RvcExpander-Hardware.py"
@@ -1435,9 +1444,10 @@
       "family_id": "core.fu.divider",
       "kind": "core",
       "plan_build_file": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.SRT16Divider-Hardware.py",
-      "scala_source_count": 1,
+      "scala_source_count": 2,
       "source_paths": [
-        "src/main/scala/xiangshan/backend/fu/SRT16Divider.scala"
+        "src/main/scala/xiangshan/backend/fu/SRT16Divider.scala",
+        "src/main/scala/xiangshan/backend/fu/SRT4Divider.scala"
       ],
       "planned_existing_build_files": [
         "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.SRT16Divider-Hardware.py"
@@ -1521,10 +1531,9 @@
       "family_id": "core.fu.vector.mgu",
       "kind": "core",
       "plan_build_file": "PLAN:core.fu.vector.mgu",
-      "scala_source_count": 2,
+      "scala_source_count": 1,
       "source_paths": [
-        "src/main/scala/xiangshan/backend/fu/vector/DstMgu.scala",
-        "src/main/scala/xiangshan/backend/fu/vector/NewMgu.scala"
+        "src/main/scala/xiangshan/backend/fu/vector/Mgu.scala"
       ],
       "planned_existing_build_files": [
         "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Vector.DstMgu-Hardware.py",
@@ -1542,11 +1551,10 @@
       "family_id": "core.replacement",
       "kind": "core",
       "plan_build_file": "PLAN:core.replacement",
-      "scala_source_count": 3,
+      "scala_source_count": 2,
       "source_paths": [
-        "src/main/scala/xiangshan/frontend/bpu/replacer/LruStateGen.scala",
-        "src/main/scala/xiangshan/frontend/bpu/replacer/PlruStateGen.scala",
-        "src/main/scala/xiangshan/frontend/bpu/replacer/ReplacerState.scala"
+        "rocket-chip/src/main/scala/util/Replacement.scala",
+        "utility/src/main/scala/utility/Replacement.scala"
       ],
       "planned_existing_build_files": [
         "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.LruStateGen-Hardware.py",
