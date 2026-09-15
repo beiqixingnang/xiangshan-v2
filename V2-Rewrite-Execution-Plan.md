@@ -145,6 +145,11 @@ basic-gate pass is not a behavior pass. The worker records the basic result and
 mapping with the implementation batch; it does not run a fresh full-top
 Verilator/Yosys compile for every leaf.
 
+The Pyright check is strict: file-level directives that disable diagnostic
+classes are not accepted as a freeze result. Dynamic Amaranth boundaries must
+be repaired with narrow, documented typing or protocol annotations, and any
+non-zero diagnostic count keeps the target outside `STRUCTURE_VERIFIED`.
+
 The final product placement is deliberately separate from migration tooling.
 Build files are staged at their final `python/Program-System/System-Build/`
 paths in this auxiliary repository. Migration-only reference extractors,
