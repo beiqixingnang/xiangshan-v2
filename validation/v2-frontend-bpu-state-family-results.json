@@ -247,8 +247,8 @@
         "VlBusyTable",
         "LsqEnqCtrl"
       ],
-      "trace_sha256": "9d925bc7cac40fb99aaaaf02a9f2fa373e640410026523352aba97b6cb03f6c9",
-      "stdout_tail": "COMPARE_MATRIX_LOCKED_PASS 132\n- tb.sv:681: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 268ps; walltime 0.001 s; speed 181.691 ns/s\n- Verilator: cpu 0.001 s on 1 threads; alloced 153 MB\n"
+      "trace_sha256": "9e9aad688faddcb4bd7785d90610de4f153cc3581772c364b6e8dbc410047ad9",
+      "stdout_tail": "COMPARE_MATRIX_LOCKED_PASS 132\n- tb.sv:681: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 268ps; walltime 0.003 s; speed 93.026 ns/s\n- Verilator: cpu 0.003 s on 1 threads; alloced 153 MB\n"
     }
   },
   "direct": {
@@ -277,8 +277,8 @@
   "structural_audit": {
     "CompareMatrix": {
       "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.CompareMatrix-Hardware.py",
-      "bytes": 11262,
-      "sha256": "812239137b4ccd2dada0d9a0cded41fa5306ee55762e43ca179554fc9bc096b7",
+      "bytes": 11526,
+      "sha256": "4ab1b4664c802600dbe4317b29d0ce6ae016ffbc802ce9c5dc344444f8065122",
       "utf8_lf": true,
       "ast_parse": true,
       "bilingual_docstring": true,
@@ -296,8 +296,8 @@
     },
     "FallThroughPredictor": {
       "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.FallThroughPredictor-Hardware.py",
-      "bytes": 12608,
-      "sha256": "efe05eaf4c47ec9ca7af7cb231538d42393cd83a78527e3f5c8eeec43e7b1116",
+      "bytes": 12761,
+      "sha256": "ce57e0d25d0214a640e82033863f75d93bdcc8a49e28bd8895a06597dd50e8b6",
       "utf8_lf": true,
       "ast_parse": true,
       "bilingual_docstring": true,
@@ -315,8 +315,8 @@
     },
     "SaturateCounter": {
       "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.SaturateCounter-Hardware.py",
-      "bytes": 9598,
-      "sha256": "a0ed3b24d1b7cf664f7b4e6deda3139eee98e41db5b655d3dd6484acd26f6b1a",
+      "bytes": 9696,
+      "sha256": "10a905b3098dc352944fcc18dee9a6541d76b943b630bdf9c2ec610457a9101c",
       "utf8_lf": true,
       "ast_parse": true,
       "bilingual_docstring": true,
@@ -391,8 +391,8 @@
     },
     "ReplacerState": {
       "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.ReplacerState-Hardware.py",
-      "bytes": 22666,
-      "sha256": "500de92e1da7dff6dbe8d88255d605d01d27c74c22146f967c7b4ba693e30730",
+      "bytes": 23263,
+      "sha256": "8643fbff85c65914b4f42673f10d8eb479c4464d774ba96743d2837b31b379ab",
       "utf8_lf": true,
       "ast_parse": true,
       "bilingual_docstring": true,
@@ -414,7 +414,7 @@
       "verilator": {
         "status": "PASS",
         "returncode": 0,
-        "stderr_tail": "ata/Local/Temp/v2_bpu_state_lint_5b8jxnkb/CompareMatrix.sv:811:19: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 3 bits.\n                                                                                                              : ... note: In instance 'CompareMatrix'\n  811 |   assign \\$389  = ! \\$388 [2:0];\n      |                   ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_bpu_state_lint_5b8jxnkb/CompareMatrix.sv:815:24: Operator ADD expects 4 bits on the LHS, but LHS's CONST '1'h0' generates 1 bits.\n                                                                                                               : ... note: In instance 'CompareMatrix'\n  815 |   assign \\$393  = 1'h0 + \\$392 ;\n      |                        ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_bpu_state_lint_5b8jxnkb/CompareMatrix.sv:825:19: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 3 bits.\n                                                                                                              : ... note: In instance 'CompareMatrix'\n  825 |   assign \\$404  = ! \\$403 [2:0];\n      |                   ^\n"
+        "stderr_tail": "ata/Local/Temp/v2_bpu_state_lint_cmt_sb0y/CompareMatrix.sv:811:19: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 3 bits.\n                                                                                                              : ... note: In instance 'CompareMatrix'\n  811 |   assign \\$389  = ! \\$388 [2:0];\n      |                   ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_bpu_state_lint_cmt_sb0y/CompareMatrix.sv:815:24: Operator ADD expects 4 bits on the LHS, but LHS's CONST '1'h0' generates 1 bits.\n                                                                                                               : ... note: In instance 'CompareMatrix'\n  815 |   assign \\$393  = 1'h0 + \\$392 ;\n      |                        ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_bpu_state_lint_cmt_sb0y/CompareMatrix.sv:825:19: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 3 bits.\n                                                                                                              : ... note: In instance 'CompareMatrix'\n  825 |   assign \\$404  = ! \\$403 [2:0];\n      |                   ^\n"
       },
       "yosys": {
         "status": "PASS",
@@ -428,7 +428,7 @@
       "verilator": {
         "status": "PASS",
         "returncode": 0,
-        "stderr_tail": "29: Operator ADD expects 6 bits on the LHS, but LHS's SEL generates 4 bits.\n                                                                                                                     : ... note: In instance 'FallThroughPredictor'\n   97 |   assign \\$18  = s1_pc[4:1] + 5'h10;\n      |                             ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_bpu_state_lint_5b8jxnkb/FallThroughPredictor.sv:98:24: Operator GT expects 8 bits on the RHS, but RHS's VARREF '$18' generates 6 bits.\n                                                                                                                     : ... note: In instance 'FallThroughPredictor'\n   98 |   assign \\$19  = \\$17  > \\$18 ;\n      |                        ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_bpu_state_lint_5b8jxnkb/FallThroughPredictor.sv:104:24: Operator ADD expects 40 bits on the RHS, but RHS's CONST '6'h20' generates 6 bits.\n                                                                                                                      : ... note: In instance 'FallThroughPredictor'\n  104 |   assign \\$25  = s1_pc + 6'h20;\n      |                        ^\n"
+        "stderr_tail": "29: Operator ADD expects 6 bits on the LHS, but LHS's SEL generates 4 bits.\n                                                                                                                     : ... note: In instance 'FallThroughPredictor'\n   97 |   assign \\$18  = s1_pc[4:1] + 5'h10;\n      |                             ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_bpu_state_lint_cmt_sb0y/FallThroughPredictor.sv:98:24: Operator GT expects 8 bits on the RHS, but RHS's VARREF '$18' generates 6 bits.\n                                                                                                                     : ... note: In instance 'FallThroughPredictor'\n   98 |   assign \\$19  = \\$17  > \\$18 ;\n      |                        ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_bpu_state_lint_cmt_sb0y/FallThroughPredictor.sv:104:24: Operator ADD expects 40 bits on the RHS, but RHS's CONST '6'h20' generates 6 bits.\n                                                                                                                      : ... note: In instance 'FallThroughPredictor'\n  104 |   assign \\$25  = s1_pc + 6'h20;\n      |                        ^\n"
       },
       "yosys": {
         "status": "PASS",
@@ -442,7 +442,7 @@
       "verilator": {
         "status": "PASS",
         "returncode": 0,
-        "stderr_tail": "%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_bpu_state_lint_5b8jxnkb/SaturateCounter.sv:40:17: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'value' generates 2 bits.\n                                                                                                               : ... note: In instance 'SaturateCounter'\n   40 |   assign \\$4  = ! value;\n      |                 ^\n                     ... For warning description see https://verilator.org/warn/WIDTHTRUNC?v=5.032\n                     ... Use \"/* verilator lint_off WIDTHTRUNC */\" and lint_on around source to disable this message.\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_bpu_state_lint_5b8jxnkb/SaturateCounter.sv:50:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'value' generates 2 bits.\n                                                                                                               : ... note: In instance 'SaturateCounter'\n   50 |   assign \\$13  = ! value;\n      |                  ^\n"
+        "stderr_tail": "%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_bpu_state_lint_cmt_sb0y/SaturateCounter.sv:40:17: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'value' generates 2 bits.\n                                                                                                               : ... note: In instance 'SaturateCounter'\n   40 |   assign \\$4  = ! value;\n      |                 ^\n                     ... For warning description see https://verilator.org/warn/WIDTHTRUNC?v=5.032\n                     ... Use \"/* verilator lint_off WIDTHTRUNC */\" and lint_on around source to disable this message.\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_bpu_state_lint_cmt_sb0y/SaturateCounter.sv:50:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'value' generates 2 bits.\n                                                                                                               : ... note: In instance 'SaturateCounter'\n   50 |   assign \\$13  = ! value;\n      |                  ^\n"
       },
       "yosys": {
         "status": "PASS",
@@ -456,7 +456,7 @@
       "verilator": {
         "status": "PASS",
         "returncode": 0,
-        "stderr_tail": "generates 2 bits.\n                                                                                                                      : ... note: In instance 'SignedSaturateCounter'\n   47 |   assign \\$10  = $signed(value) - $signed(2'h1);\n      |                                 ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_bpu_state_lint_5b8jxnkb/SignedSaturateCounter.sv:50:39: Operator GTES expects 6 bits on the RHS, but RHS's SIGNED generates 1 bits.\n                                                                                                                      : ... note: In instance 'SignedSaturateCounter'\n   50 |   assign is_positive = $signed(value) >= $signed(1'h0);\n      |                                       ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_bpu_state_lint_5b8jxnkb/SignedSaturateCounter.sv:51:24: Operator EQ expects 6 bits on the RHS, but RHS's CONST '5'h1f' generates 5 bits.\n                                                                                                                      : ... note: In instance 'SignedSaturateCounter'\n   51 |   assign \\$13  = value == 5'h1f;\n      |                        ^~\n"
+        "stderr_tail": "generates 2 bits.\n                                                                                                                      : ... note: In instance 'SignedSaturateCounter'\n   47 |   assign \\$10  = $signed(value) - $signed(2'h1);\n      |                                 ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_bpu_state_lint_cmt_sb0y/SignedSaturateCounter.sv:50:39: Operator GTES expects 6 bits on the RHS, but RHS's SIGNED generates 1 bits.\n                                                                                                                      : ... note: In instance 'SignedSaturateCounter'\n   50 |   assign is_positive = $signed(value) >= $signed(1'h0);\n      |                                       ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_bpu_state_lint_cmt_sb0y/SignedSaturateCounter.sv:51:24: Operator EQ expects 6 bits on the RHS, but RHS's CONST '5'h1f' generates 5 bits.\n                                                                                                                      : ... note: In instance 'SignedSaturateCounter'\n   51 |   assign \\$13  = value == 5'h1f;\n      |                        ^~\n"
       },
       "yosys": {
         "status": "PASS",
@@ -470,7 +470,7 @@
       "verilator": {
         "status": "PASS",
         "returncode": 0,
-        "stderr_tail": "gical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'io_touches_0_bits' generates 2 bits.\n                                                                                                            : ... note: In instance 'LruStateGen'\n  422 |   assign \\$183  = ! io_touches_0_bits;\n      |                   ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_bpu_state_lint_5b8jxnkb/LruStateGen.sv:426:37: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                             : ... note: In instance 'LruStateGen'\n  426 |   assign \\$187  = io_touches_0_bits == 1'h1;\n      |                                     ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_bpu_state_lint_5b8jxnkb/LruStateGen.sv:430:37: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                             : ... note: In instance 'LruStateGen'\n  430 |   assign \\$191  = io_touches_0_bits == 1'h1;\n      |                                     ^~\n"
+        "stderr_tail": "gical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'io_touches_0_bits' generates 2 bits.\n                                                                                                            : ... note: In instance 'LruStateGen'\n  422 |   assign \\$183  = ! io_touches_0_bits;\n      |                   ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_bpu_state_lint_cmt_sb0y/LruStateGen.sv:426:37: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                             : ... note: In instance 'LruStateGen'\n  426 |   assign \\$187  = io_touches_0_bits == 1'h1;\n      |                                     ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_bpu_state_lint_cmt_sb0y/LruStateGen.sv:430:37: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                             : ... note: In instance 'LruStateGen'\n  430 |   assign \\$191  = io_touches_0_bits == 1'h1;\n      |                                     ^~\n"
       },
       "yosys": {
         "status": "PASS",
@@ -498,15 +498,15 @@
       "verilator": {
         "status": "PASS",
         "returncode": 0,
-        "stderr_tail": "perator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                               : ... note: In instance 'ReplacerState'\n  300 |   assign \\$60  = io_access_0_set == 1'h1;\n      |                                  ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_bpu_state_lint_5b8jxnkb/ReplacerState.sv:312:34: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                               : ... note: In instance 'ReplacerState'\n  312 |   assign \\$72  = io_access_0_set == 1'h1;\n      |                                  ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_bpu_state_lint_5b8jxnkb/ReplacerState.sv:325:34: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                               : ... note: In instance 'ReplacerState'\n  325 |   assign \\$85  = io_access_0_set == 1'h1;\n      |                                  ^~\n"
+        "stderr_tail": "r EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                               : ... note: In instance 'ReplacerState'\n  787 |   assign \\$300  = io_access_0_set == 1'h1;\n      |                                   ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_bpu_state_lint_cmt_sb0y/ReplacerState.sv:799:35: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                               : ... note: In instance 'ReplacerState'\n  799 |   assign \\$312  = io_access_0_set == 1'h1;\n      |                                   ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_bpu_state_lint_cmt_sb0y/ReplacerState.sv:812:35: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                               : ... note: In instance 'ReplacerState'\n  812 |   assign \\$325  = io_access_0_set == 1'h1;\n      |                                   ^~\n"
       },
       "yosys": {
         "status": "PASS",
         "returncode": 0,
         "stderr_tail": ""
       },
-      "rtl_bytes": 16888,
-      "rtl_sha256": "bd8bd4e5694485534d20427ec8d25e69d38d1a274822fd084015585cd8676301"
+      "rtl_bytes": 29713,
+      "rtl_sha256": "c9ceee3feeb349d019b53fa2c65c7eb3b38c761aa08dd7fa86e566edcf49d4aa"
     }
   },
   "reference_differential": {
@@ -531,8 +531,8 @@
           "VlBusyTable",
           "LsqEnqCtrl"
         ],
-        "trace_sha256": "9d925bc7cac40fb99aaaaf02a9f2fa373e640410026523352aba97b6cb03f6c9",
-        "stdout_tail": "COMPARE_MATRIX_LOCKED_PASS 132\n- tb.sv:681: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 268ps; walltime 0.001 s; speed 181.691 ns/s\n- Verilator: cpu 0.001 s on 1 threads; alloced 153 MB\n"
+        "trace_sha256": "9e9aad688faddcb4bd7785d90610de4f153cc3581772c364b6e8dbc410047ad9",
+        "stdout_tail": "COMPARE_MATRIX_LOCKED_PASS 132\n- tb.sv:681: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 268ps; walltime 0.003 s; speed 93.026 ns/s\n- Verilator: cpu 0.003 s on 1 threads; alloced 153 MB\n"
       }
     },
     "FallThroughPredictor": {
@@ -566,7 +566,7 @@
     "Replacement": {
       "status": "PASS",
       "returncode": 0,
-      "stdout_tail": "- tb.sv:22782: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 197ps; walltime 0.002 s; speed 104.214 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n",
+      "stdout_tail": "- tb.sv:36549: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 197ps; walltime 0.002 s; speed 104.199 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n",
       "stderr_tail": "",
       "mode": "PARENT_CLOSURE_EXTRACTED",
       "module": "ICacheReplacer",
