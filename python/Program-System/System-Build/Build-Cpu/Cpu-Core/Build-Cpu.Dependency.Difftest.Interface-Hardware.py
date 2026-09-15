@@ -114,27 +114,45 @@ class UHSCDifftestInterface(Elaboratable):
         inst_mem = Array(Signal(32, name=f"trace_inst_{i}") for i in range(c.trace_depth))
         rd_mem = Array(Signal(5, name=f"trace_rd_{i}") for i in range(c.trace_depth))
         data_mem = Array(Signal(c.xlen, name=f"trace_data_{i}") for i in range(c.trace_depth))
+        priv_mem = Array(Signal(2, name=f"trace_priv_{i}") for i in range(c.trace_depth))
+        wen_mem = Array(Signal(name=f"trace_wen_{i}") for i in range(c.trace_depth))
+        write_pending = Signal(name="axi_write_pending")
+        read_pending = Signal(name="axi_read_pending")
+        read_data = Signal(c.axi_data_bits, name="axi_read_data")
+        push = self.commit_valid & self.commit_ready
+        pop = self.trace_valid & self.trace_ready
         m.d.comb += [
             self.commit_ready.eq(count < c.trace_depth),
             self.trace_valid.eq(count != 0),
             self.trace_pc.eq(pc_mem[0]), self.trace_inst.eq(inst_mem[0]),
-            self.trace_priv.eq(self.commit_priv), self.trace_wen.eq(self.commit_wen),
+            self.trace_priv.eq(priv_mem[0]), self.trace_wen.eq(wen_mem[0]),
             self.trace_rd.eq(rd_mem[0]), self.trace_data.eq(data_mem[0]),
-            self.axi_aw_ready.eq(~self.axi_b_valid), self.axi_w_ready.eq(~self.axi_b_valid),
-            self.axi_b_valid.eq(self.axi_aw_valid & self.axi_w_valid),
-            self.axi_ar_ready.eq(~self.axi_r_valid), self.axi_r_valid.eq(self.axi_ar_valid),
-            self.axi_r_data.eq(self.trace_count), self.halted.eq(0), self.error.eq(0),
+            self.axi_aw_ready.eq(~write_pending), self.axi_w_ready.eq(~write_pending),
+            self.axi_b_valid.eq(write_pending),
+            self.axi_ar_ready.eq(~read_pending), self.axi_r_valid.eq(read_pending),
+            self.axi_r_data.eq(read_data), self.halted.eq(0), self.error.eq(count == c.trace_depth),
             self.trace_count.eq(count),
         ]
         with amaranth_if(m, self.reset):
             m.d.difftest += count.eq(0)
         with amaranth_else(m):
-            with amaranth_if(m, self.commit_valid & self.commit_ready):
-                m.d.difftest += [count.eq(count + 1), pc_mem[count].eq(self.commit_pc),
+            with amaranth_if(m, push):
+                m.d.difftest += [pc_mem[count].eq(self.commit_pc),
                                  inst_mem[count].eq(self.commit_inst), rd_mem[count].eq(self.commit_rd),
-                                 data_mem[count].eq(self.commit_data)]
-            with amaranth_if(m, self.trace_valid & self.trace_ready):
+                                 data_mem[count].eq(self.commit_data), priv_mem[count].eq(self.commit_priv),
+                                 wen_mem[count].eq(self.commit_wen)]
+            with amaranth_if(m, push & ~pop):
+                m.d.difftest += count.eq(count + 1)
+            with amaranth_if(m, pop & ~push):
                 m.d.difftest += count.eq(count - 1)
+            with amaranth_if(m, self.axi_aw_valid & self.axi_w_valid & self.axi_aw_ready & self.axi_w_ready):
+                m.d.difftest += write_pending.eq(1)
+            with amaranth_if(m, self.axi_b_valid & self.axi_b_ready):
+                m.d.difftest += write_pending.eq(0)
+            with amaranth_if(m, self.axi_ar_valid & self.axi_ar_ready):
+                m.d.difftest += [read_pending.eq(1), read_data.eq(self.trace_count)]
+            with amaranth_if(m, self.axi_r_valid & self.axi_r_ready):
+                m.d.difftest += read_pending.eq(0)
         return m
 
 
