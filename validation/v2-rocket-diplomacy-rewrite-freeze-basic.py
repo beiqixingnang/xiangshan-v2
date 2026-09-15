@@ -424,11 +424,11 @@ def mapping_record(result: Mapping[str, Any]) -> dict[str, Any]:
                 "UHSC-localized combinational address-route RTL boundary",
             ],
             "source_backed_metadata": [
-                "AddressDecoder.scala", "AddressRange.scala", "ClockDomain.scala", "JSON.scala",
+                "AddressDecoder.scala", "AddressRange.scala", "ClockDomain.scala",
                 "LazyModule.scala", "Nodes.scala", "package.scala", "Parameters.scala", "Resources.scala",
             ],
             "explicitly_deferred_chisel_elaboration": [
-                "BundleBridge.scala", "Clone.scala", "CloneModule.scala", "DeviceTree.scala",
+                "BundleBridge.scala", "Clone.scala", "CloneModule.scala", "DeviceTree.scala", "JSON.scala",
                 "FixedClockResource.scala", "Main.scala", "SRAM.scala", "Unreachable.scala", "ValName.scala",
             ],
             "deferred_reason": "These files require Chisel elaboration, generated device-tree emission, or selected-parent wiring; they are not silently substituted by the Build boundary.",
