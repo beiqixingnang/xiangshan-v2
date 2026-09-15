@@ -4,7 +4,7 @@
   "status": "GENERATION_PROBE_PASS_REDUCED",
   "complete_gate": "BLOCKED_MISSING_CLOSURES",
   "accepted": "NOT_ALLOWED",
-  "build_file_count": 72,
+  "build_file_count": 80,
   "build_files": [
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Datapath.DataSource-Hardware.py",
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Datapath.NewPipelineConnect-Hardware.py",
@@ -42,6 +42,7 @@
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Rob.PtrWrappers-Hardware.py",
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Top-Hardware.py",
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.ChiselAIA.Interface-Hardware.py",
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.ChiselIOPMP.Interface-Hardware.py",
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Difftest.Interface-Hardware.py",
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Fudian.Arithmetic-Hardware.py",
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Fudian.Fpu-Hardware.py",
@@ -55,6 +56,7 @@
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.FallThroughPredictor-Hardware.py",
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.FauFTBWay-Hardware.py",
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.FTBEntryGen-Hardware.py",
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Parent-Hardware.py",
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.LruStateGen-Hardware.py",
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.PlruStateGen-Hardware.py",
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.ReplacerState-Hardware.py",
@@ -63,6 +65,8 @@
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.WrBypass-Hardware.py",
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.ICacheMshr-Hardware.py",
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.ICacheReplacer-Hardware.py",
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.InstrMMIOEntry-Hardware.py",
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.InstrUncache-Hardware.py",
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.Utils-Hardware.py",
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Ifu.RvcExpander-Hardware.py",
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Top-Hardware.py",
@@ -76,6 +80,10 @@
     "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.HuanCun.Cache-Hardware.py",
     "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.HuanCun.Inclusive-Mshr-Hardware.py",
     "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.HuanCun.Noninclusive-Bridge-Hardware.py",
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.OpenLLC.Bridge-Hardware.py",
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.OpenLLC.Cache-Hardware.py",
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.OpenLLC.OpenNCB-Hardware.py",
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.OpenLLC.Sram-Hardware.py",
     "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.FrontendBridge-Hardware.py",
     "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.MemBlock-Hardware.py"
   ],
@@ -90,8 +98,8 @@
   },
   "integrated_reduced_hierarchy": {
     "path": "validation/.work/uhsc-top-integrated-probe.sv",
-    "sha256": "865ba6f60cf52960dfb97b184b8691e701f29547901f586d71749275804da67e",
-    "bytes": 2938841,
+    "sha256": "f228fef9521edf8af11340aaae9c1c928723fbb02d6fc17bb5cc2d407f3ed408",
+    "bytes": 2950580,
     "modules": [
       "UHSCTopIntegratedProbe",
       "UHSCTopIntegratedProbe.backend",
@@ -122,8 +130,8 @@
     "Backend": {
       "inventory_count": 1165,
       "generated_ports": 1165,
-      "rtl_bytes": 2128239,
-      "rtl_sha256": "05e2e52f2c28977be18f91e86febfc74374880e883d18ae1e0e180304a0da343",
+      "rtl_bytes": 2140529,
+      "rtl_sha256": "5a9ba2b8e170e61b10983e3b2d0eb0480822447c97ee96eb5d825acadcc0a3bf",
       "path": "validation/.work/uhsc-backend-envelope.sv"
     },
     "MemBlock": {
@@ -135,13 +143,13 @@
     "TL2TLCoupledL2": {
       "inventory_count": 540,
       "generated_ports": 540,
-      "contract_status": "PASS",
+      "contract_status": "FAIL",
       "direct_checks": 6,
       "verilator": "PASS",
       "yosys": "PASS",
       "parent_closure": "PENDING_FULL_MSHR_SRAM_PREFETCH_DIPLOMACY_BEHAVIOR",
-      "status": "VALIDATOR_PASS_BOUNDED",
-      "evidence_sha256": "6107202cea910f409aa2e00a68904d4cd55ca4a86100e6f2fc4e3212f4fc25f3",
+      "status": "VALIDATOR_FAIL",
+      "evidence_sha256": "3cf6deeaddd58f9e8e59c4c4595b2380109a9d2f827b5b6ca9496eded3d422ab",
       "evidence_path": "validation/v2-coupledL2-tl2tl-parent-results.json"
     },
     "XSCore": {
@@ -211,8 +219,8 @@
     },
     "Frontend": {
       "inventory_count": 371,
-      "rtl_bytes": 76300,
-      "rtl_sha256": "ca952b9767bf7e63ce084a82f6e5bae467035d3ba5c22bf2840f92adbdce1039",
+      "rtl_bytes": 76644,
+      "rtl_sha256": "c0b57e79870e868fd840cbd4228a8079184d5ccfc53a40b7b8a372c420266313",
       "path": "validation/.work/uhsc-frontend-envelope.sv"
     }
   },
@@ -223,8 +231,8 @@
     "generated_ports": 204,
     "missing": [],
     "extra": [],
-    "rtl_bytes": 2986523,
-    "rtl_sha256": "bb53089e554934f6321b90e7aaabd48a4700203f24bdcba9fc64f44ac5b92f3d",
+    "rtl_bytes": 2998262,
+    "rtl_sha256": "ecb9e5551d459a4d4aa3e16564a244c1c36e41ca91552239a85a8d9ad5182bd9",
     "path": "validation/.work/uhsc-full-kunminghu-v2.sv",
     "verilator": "PASS",
     "yosys": "PASS",
