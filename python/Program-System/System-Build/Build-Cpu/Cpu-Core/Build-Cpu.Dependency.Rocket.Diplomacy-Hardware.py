@@ -13,7 +13,7 @@ from __future__ import annotations
 import json
 from dataclasses import dataclass, field
 from functools import total_ordering
-from typing import Any, ClassVar, Iterable, Mapping, Sequence
+from typing import Any, ClassVar, Iterable, Mapping, Sequence, cast
 
 from amaranth import ClockDomain, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
@@ -577,12 +577,17 @@ class AddressMapEntry:
 class ResourceAddress:
     """Address resource attached to a diplomacy node."""
 
-    address: tuple[AddressSet, ...]
+    address: tuple[AddressSet, ...] | AddressSet | Sequence[AddressSet] | int
     permissions: ResourcePermissions = field(default_factory=ResourcePermissions)
 
     # Normalize and validate address resources. / 规范化并校验地址资源。
     def __post_init__(self) -> None:
-        addresses = tuple(self.address)
+        if isinstance(self.address, int):
+            addresses = (AddressSet(self.address, 0),)
+        elif isinstance(self.address, AddressSet):
+            addresses = (self.address,)
+        else:
+            addresses = tuple(self.address)
         if not addresses or not all(isinstance(item, AddressSet) for item in addresses):
             raise ValueError("resource address must contain at least one AddressSet")
         object.__setattr__(self, "address", addresses)
@@ -607,8 +612,9 @@ class ResourceAddress:
     # Return a globally shifted resource without mutating this value. / 返回全局偏移
     # 后的资源，同时保持当前值不可变。 /
     def shifted(self, offset: int) -> "ResourceAddress":
+        address_sets = cast(tuple[AddressSet, ...], self.address)
         return ResourceAddress(
-            tuple(AddressSet(item.base + offset, item.mask) for item in self.address),
+            tuple(AddressSet(item.base + offset, item.mask) for item in address_sets),
             self.permissions,
         )
 
