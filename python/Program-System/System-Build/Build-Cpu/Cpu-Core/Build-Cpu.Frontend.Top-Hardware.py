@@ -39,7 +39,26 @@ __all__ = [
     "frontend_port_specs",
     "build_verilog",
     "main",
+    "FRONTEND_PARENT_SOURCE_PATHS",
+    "FRONTEND_PARENT_SOURCE_FILE_COUNT",
 ]
+
+
+# Frozen V2 source closure represented by this parent aggregate. /
+# 此父级聚合所表示的冻结 V2 源闭包。
+FRONTEND_PARENT_SOURCE_PATHS: tuple[str, ...] = (
+    "upstream/src/main/scala/xiangshan/frontend/Frontend.scala",
+    "upstream/src/main/scala/xiangshan/frontend/BPU.scala",
+    "upstream/src/main/scala/xiangshan/frontend/IBuffer.scala",
+    "upstream/src/main/scala/xiangshan/frontend/IFU.scala",
+    "upstream/src/main/scala/xiangshan/frontend/NewFtq.scala",
+    "upstream/src/main/scala/xiangshan/frontend/PreDecode.scala",
+    "upstream/src/main/scala/xiangshan/frontend/icache/ICache.scala",
+    "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala",
+    "upstream/src/main/scala/xiangshan/frontend/icache/InstrUncache.scala",
+    "upstream/src/main/scala/xiangshan/cache/mmu/TLB.scala",
+)
+FRONTEND_PARENT_SOURCE_FILE_COUNT = len(FRONTEND_PARENT_SOURCE_PATHS)
 
 
 # =============================================================================
