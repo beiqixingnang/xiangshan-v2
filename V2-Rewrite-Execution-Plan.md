@@ -251,3 +251,20 @@ the locked V2 XSTop snapshot, run Verilator/Yosys on the complete artifact,
 and record any intentionally omitted conditional or inlined source with an
 explicit rationale. A reduced parent wrapper, a set of independent family
 files, or a successful syntax-only smoke test does not satisfy this gate.
+
+## Throughput wave amendment (2026-09-16)
+
+The rewrite phase is implementation-first and proceeds in waves. A wave must
+land a complete aggregate family or parent closure before its evidence is
+refreshed; evidence-only or hash-only commits do not count as rewrite
+progress. Each worker owns a disjoint batch of at least three dependency
+families or one complete core parent (roughly 30--40 covered Scala modules,
+where the closure permits) and may reuse already landed leaf modules.
+
+At most one focused protocol harness repair may run alongside two implementation
+workers. When a worker reports its commit, the coordinator records its file,
+line, family, and Scala-path deltas immediately and releases the slot for the
+next wave. Leaf workers run static checks and direct Amaranth tests; Verilator
+and Yosys are reserved for family/parent checkpoints or a failed spot-check.
+This keeps the implementation lane moving while preserving the existing
+evidence and acceptance gates.
