@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_COUPLEDL2_TL2TL_PARENT_LOCKED_DIFFERENTIAL_MAPPING",
+  "batch_id": "V2-DEPENDENCY-COUPLEDL2-TL2TL-PARENT-LOCKED-DIFF-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "locked_reference": {
+    "canonical_path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "module": "TL2TLCoupledL2",
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "reachable_module_count": 148,
+    "reachable_closure_mode": "single_pass_module_index"
+  },
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.CoupledL2.Directory-Hardware.py",
+    "local_name": "UHSCTL2TLCoupledL2",
+    "injected_children": {
+      "slice_count": 4,
+      "slice_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.CoupledL2.Slice-Hardware.py",
+      "nested_children": ["CoupledL2MSHR", "CoupledL2MSHRCtl", "CoupledL2ProbeQueue", "CoupledL2RefillUnit"]
+    }
+  },
+  "differential": {
+    "validator": "validation/v2_coupled_l2_tl2tl_parent_locked_differential.py",
+    "vectors": 3,
+    "compared_outputs": 285,
+    "scope": ["reset/quiescent protocol outputs", "TPMeta one-entry relay"],
+    "status": "PASS_BOUNDED_LOCKED_XSTOP_DIFF"
+  },
+  "gates": {
+    "STRUCTURE_VERIFIED": "PASS_BOUNDED",
+    "BEHAVIOR_VERIFIED_COUPLEDL2_TL2TL": "PASS_BOUNDED_LOCKED_XSTOP_DIFF",
+    "PARENT_CLOSURE_MATCHED": "PENDING_FULL_COUPLEDL2_BEHAVIOR",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "acceptance_eligible": false
+}
