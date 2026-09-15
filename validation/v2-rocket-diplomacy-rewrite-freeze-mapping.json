@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_ROCKET_DIPLOMACY_REWRITE_FREEZE_MAPPING",
+  "phase": "REWRITE_FREEZE",
+  "batch_id": "V2-DEPENDENCY-ROCKET-DIPLOMACY-001",
+  "family_id": "dependency.rocket.diplomacy",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "source_root": "upstream/rocket-chip/src/main/scala/diplomacy",
+  "source_scala_file_count": 18,
+  "source_paths": [
+    "rocket-chip/src/main/scala/diplomacy/AddressDecoder.scala",
+    "rocket-chip/src/main/scala/diplomacy/AddressRange.scala",
+    "rocket-chip/src/main/scala/diplomacy/BundleBridge.scala",
+    "rocket-chip/src/main/scala/diplomacy/ClockDomain.scala",
+    "rocket-chip/src/main/scala/diplomacy/Clone.scala",
+    "rocket-chip/src/main/scala/diplomacy/CloneModule.scala",
+    "rocket-chip/src/main/scala/diplomacy/DeviceTree.scala",
+    "rocket-chip/src/main/scala/diplomacy/FixedClockResource.scala",
+    "rocket-chip/src/main/scala/diplomacy/JSON.scala",
+    "rocket-chip/src/main/scala/diplomacy/LazyModule.scala",
+    "rocket-chip/src/main/scala/diplomacy/Main.scala",
+    "rocket-chip/src/main/scala/diplomacy/Nodes.scala",
+    "rocket-chip/src/main/scala/diplomacy/package.scala",
+    "rocket-chip/src/main/scala/diplomacy/Parameters.scala",
+    "rocket-chip/src/main/scala/diplomacy/Resources.scala",
+    "rocket-chip/src/main/scala/diplomacy/SRAM.scala",
+    "rocket-chip/src/main/scala/diplomacy/Unreachable.scala",
+    "rocket-chip/src/main/scala/diplomacy/ValName.scala"
+  ],
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Rocket.Diplomacy-Hardware.py",
+    "sha256": "64be5d179738d9fd174ecf2362ce43fcbfc7f77ff882d56fdc0706377f63c918"
+  },
+  "disposition": "AGGREGATED_FAMILY_BOUNDARY",
+  "boundary": {
+    "implemented_contracts": [
+      "AddressRange/AddressSet arithmetic and AddressDecoder-compatible route selection",
+      "IdRange, TransferSizes, resource bindings, and clock-crossing metadata",
+      "deterministic LazyModule-style graph topology resolution",
+      "UHSC-localized combinational address-route RTL boundary"
+    ],
+    "source_backed_metadata": [
+      "AddressDecoder.scala",
+      "AddressRange.scala",
+      "ClockDomain.scala",
+      "JSON.scala",
+      "LazyModule.scala",
+      "Nodes.scala",
+      "package.scala",
+      "Parameters.scala",
+      "Resources.scala"
+    ],
+    "explicitly_deferred_chisel_elaboration": [
+      "BundleBridge.scala",
+      "Clone.scala",
+      "CloneModule.scala",
+      "DeviceTree.scala",
+      "FixedClockResource.scala",
+      "Main.scala",
+      "SRAM.scala",
+      "Unreachable.scala",
+      "ValName.scala"
+    ],
+    "deferred_reason": "These files require Chisel elaboration, generated device-tree emission, or selected-parent wiring; they are not silently substituted by the Build boundary."
+  },
+  "localization": [
+    {
+      "source_name": "AddressDecoder.apply",
+      "local_name": "UHSCRocketDiplomacy",
+      "visibility": "generated HDL top",
+      "reason": "UHSC project-facing deterministic route-boundary export"
+    }
+  ],
+  "evidence": {
+    "rewrite_freeze_basic": "validation/v2-rocket-diplomacy-rewrite-freeze-basic-results.json",
+    "bounded_family_validation": "validation/v2-rocket-diplomacy-family-results.json"
+  },
+  "gates": {
+    "UTF8_LF": "PASS",
+    "FIVE_ZONE_BILINGUAL_AUDIT": "PASS",
+    "AST": "PASS",
+    "PY_COMPILE": "PASS",
+    "EXACT_PATH_IMPORT_NO_SIDE_EFFECTS": "PASS",
+    "PYRIGHT": "PASS",
+    "DETERMINISTIC_SAME_NAME_BUILD_VERILOG": "PASS",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "REWRITE_FREEZE_BASIC": "PASS",
+    "STRUCTURE_VERIFIED": "PASS",
+    "BEHAVIOR_VERIFIED_dependency.rocket.diplomacy": "PENDING_BATCH_VALIDATION",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "structure_status": "PASS",
+  "behavior_status": "PENDING_BATCH_VALIDATION",
+  "unclosed": [
+    "Complete Rocket Diplomacy Chisel/LazyModule elaboration remains outside this aggregate boundary.",
+    "Locked XSTop parent-level diplomacy differential remains pending.",
+    "License review, complete parent closure, UHSC integration, and user approval remain pending."
+  ],
+  "accepted": false,
+  "acceptance_eligible": false
+}

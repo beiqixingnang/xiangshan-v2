@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_ROCKET_DIPLOMACY_REWRITE_FREEZE_BASIC",
+  "phase": "REWRITE_FREEZE",
+  "batch_id": "V2-DEPENDENCY-ROCKET-DIPLOMACY-001",
+  "family_id": "dependency.rocket.diplomacy",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Rocket.Diplomacy-Hardware.py",
+    "sha256": "64be5d179738d9fd174ecf2362ce43fcbfc7f77ff882d56fdc0706377f63c918"
+  },
+  "static": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Rocket.Diplomacy-Hardware.py",
+    "sha256": "64be5d179738d9fd174ecf2362ce43fcbfc7f77ff882d56fdc0706377f63c918",
+    "bytes": 45712,
+    "utf8_lf": true,
+    "ast": true,
+    "five_zone_order": true,
+    "bilingual_function_comments": true,
+    "function_comment_errors": [],
+    "forbidden_imports": [],
+    "zones": {
+      "Module Contract": 847,
+      "Configuration": 1696,
+      "Implementation": 30549,
+      "Public Adapter": 40637,
+      "Direct Entry": 42247
+    },
+    "pass": true
+  },
+  "py_compile": {
+    "status": "PASS",
+    "bytecode_bytes": 61122
+  },
+  "exact_path_import": {
+    "status": "PASS",
+    "stdout_bytes": 0,
+    "stderr_bytes": 0,
+    "cwd_unchanged": true,
+    "environment_unchanged": true,
+    "sys_path_unchanged": true,
+    "target_directory_unchanged": true,
+    "foreign_modules": []
+  },
+  "pyright": {
+    "status": "PASS",
+    "version": "1.1.411",
+    "error_count": 0,
+    "warning_count": 0
+  },
+  "build_verilog": {
+    "status": "PASS",
+    "configuration": {
+      "module": "UHSCRocketDiplomacy",
+      "address_bits": 16,
+      "route_bases": [
+        0,
+        16384,
+        32768,
+        49152
+      ],
+      "route_masks": [
+        16383,
+        16383,
+        16383,
+        16383
+      ]
+    },
+    "same_name": "UHSCRocketDiplomacy",
+    "module_name": "UHSCRocketDiplomacy",
+    "deterministic_export": true,
+    "rtl_bytes": 3867,
+    "rtl_sha256": "a5c47cec4e471993470a46205c6a913a1855c14787c29ea91926c13c53a8f910"
+  },
+  "verilog_syntax": {
+    "status": "PASS",
+    "cache": "HIT_REUSED",
+    "cache_key": "84ad9b3a50771bd3de6bad925eeb9bd65cb9ebf09665d529b7f807a287b43274",
+    "verilator": {
+      "status": "PASS",
+      "returncode": 0,
+      "output_sha256": "5eb14a36ed6034a638ee1f386e4aa33234423e78f054280dbd44aa8c8d024b25",
+      "output_tail": "1 bit on the LHS, but LHS's VARREF '$23' generates 16 bits.\n                                                                                                                                                                                                        : ... note: In instance 'UHSCRocketDiplomacy'\n   69 |   assign \\$24  = ! \\$23 ;\n      |                  ^\n%Warning-WIDTHTRUNC: <RTL>:70:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF '$26' generates 16 bits.\n                                                                                                                                                                                                        : ... note: In instance 'UHSCRocketDiplomacy'\n   70 |   assign \\$27  = ! \\$26 ;\n      |                  ^\n"
+    },
+    "yosys": {
+      "status": "PASS",
+      "returncode": 0,
+      "output_sha256": "c27d49f6db45bf5b70bd82a3359ad95308f8a5bb922e678497cb50288b3969c7",
+      "output_tail": "onvert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module UHSCRocketDiplomacy.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module UHSCRocketDiplomacy...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 21e5cf7954, CPU: user 0.01s system 0.00s, MEM: 11.41 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 73% 2x read_verilog (0 sec), 10% 1x opt_expr (0 sec), ...\n"
+    }
+  },
+  "gates": {
+    "UTF8_LF": "PASS",
+    "FIVE_ZONE_BILINGUAL_AUDIT": "PASS",
+    "AST": "PASS",
+    "PY_COMPILE": "PASS",
+    "EXACT_PATH_IMPORT_NO_SIDE_EFFECTS": "PASS",
+    "PYRIGHT": "PASS",
+    "DETERMINISTIC_SAME_NAME_BUILD_VERILOG": "PASS",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "REWRITE_FREEZE_BASIC": "PASS",
+    "STRUCTURE_VERIFIED": "PASS",
+    "BEHAVIOR_VERIFIED_dependency.rocket.diplomacy": "PENDING_BATCH_VALIDATION",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "REWRITE_FREEZE_BASIC_PASS",
+  "unclosed": [
+    "Full Rocket Diplomacy behavioral closure is not established by this structural freeze gate.",
+    "Locked XSTop differential and parent integration remain pending.",
+    "License review and user approval remain pending."
+  ],
+  "acceptance_eligible": false
+}

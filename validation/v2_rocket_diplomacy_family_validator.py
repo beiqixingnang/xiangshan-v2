@@ -171,7 +171,7 @@ def main() -> int:
         "unclosed": ["Full Rocket Diplomacy closure and complete XSTop differential remain pending.", "License review and user approval remain pending."],
         "acceptance_eligible": False,
     }
-    (ROOT / "validation/v2-rocket-diplomacy-family-results.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    (ROOT / "validation/v2-rocket-diplomacy-family-results.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     print(json.dumps({"status": "PASS_BOUNDED_FAMILY" if status else "FAIL", "contracts": contracts["status"], "router": router["status"], "verilator": backend["verilator"], "yosys": backend["yosys"]}, sort_keys=True))
     return 0 if status else 1
 
