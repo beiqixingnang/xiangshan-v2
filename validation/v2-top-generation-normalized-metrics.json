@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_TOP_GENERATION_NORMALIZED_METRICS",
+  "source_probe": "validation/v2-top-generation-probe-results.json",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "locked_reference_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+  "legacy_flat_module_comparison": {
+    "reference_modules": 1976,
+    "generated_modules": 19,
+    "raw_missing_modules": 1976,
+    "interpretation": "NON_COMPARABLE_WITHOUT_INSTANCE_NORMALIZATION"
+  },
+  "port_envelope_coverage": {
+    "planned_roots": 7,
+    "matched_roots": 7,
+    "coverage": "7/7",
+    "matched": [
+      "Frontend",
+      "Backend",
+      "MemBlock",
+      "XSCore",
+      "L2Top",
+      "XSTile",
+      "XSTop"
+    ],
+    "pending": [],
+    "status": "PASS_STRUCTURAL_PORT_ENVELOPE"
+  },
+  "family_closure_coverage": {
+    "planned_families": 23,
+    "structure_landed_or_satisfied": 23,
+    "structure_coverage": "23/23",
+    "behavior_verified_bounded": 7,
+    "behavior_coverage": "7/23",
+    "full_behavior_verified": 0,
+    "status": "STRUCTURE_COMPLETE_BEHAVIOR_PENDING"
+  },
+  "leaf_behavioral_coverage": {
+    "planned_leaves": 46,
+    "behavior_verified_bounded": 12,
+    "behavior_coverage": "12/46",
+    "full_behavior_verified": 0,
+    "status": "BOUNDED_ONLY"
+  },
+  "full_top_behavior": "PENDING_FULL_CHILD_BEHAVIORAL_DIFFERENTIAL",
+  "accepted": false,
+  "acceptance_eligible": false
+}
