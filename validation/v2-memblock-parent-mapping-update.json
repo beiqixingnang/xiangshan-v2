@@ -26,6 +26,13 @@
       "v2_source": "upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/MainPipe.scala",
       "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.MemBlock-Hardware.py",
       "status": "PASS_BOUNDED"
+    },
+    {
+      "id": "FrontendBridge",
+      "classification": "INJECTED_PARENT_CHILD",
+      "v2_source": "upstream/src/main/scala/xiangshan/mem/MemBlock.scala",
+      "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.FrontendBridge-Hardware.py",
+      "status": "PASS_REFERENCE_PARENT_WIRING"
     }
   ],
   "source_authority": {
@@ -48,8 +55,8 @@
     "extra": [],
     "direction_width_mismatches": [],
     "ordered_inventory_sha256": "86f2a6829e11529fddbc91ec630a89f8004620a07eef82d3f0899b999fd27722",
-    "rtl_sha256": "8404b3cf3a891492c98e344011c97ec1cd3b4e70c31160b04aee0766e04692e4",
-    "rtl_bytes": 274772
+    "rtl_sha256": "5d348ac564df39208e38fc1504441321d55586349687901d203acfa7d4fd46b3",
+    "rtl_bytes": 523374
   },
   "gates": {
     "contract": "PASS",
@@ -59,6 +66,7 @@
     "full_port_envelope": "PASS",
     "full_verilator": "PASS",
     "full_yosys": "PASS",
+    "frontend_parent_reference": "PASS",
     "license": "PENDING",
     "ACCEPTED": "NOT_ALLOWED"
   },

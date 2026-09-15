@@ -49,6 +49,7 @@ ROOT = Path(__file__).resolve().parents[1]
 TARGET = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Memory" / "Build-Cpu.Memory.MemBlock-Hardware.py"
 AMO_TARGET = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Memory" / "Build-Cpu.Cache.Dcache.Mainpipe.AMOALU-Hardware.py"
 TAG_TARGET = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Memory" / "Build-Cpu.Cache.Dcache.Meta.TagArray-Hardware.py"
+FRONTEND_TARGET = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Memory" / "Build-Cpu.Memory.FrontendBridge-Hardware.py"
 REFERENCE = Path(r"\\wsl$\Debian\home\lishuo\xs-v2-local\build\rtl\XSTop.sv")
 REFERENCE_CANONICAL = "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv"
 REFERENCE_SHA256 = "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d"
@@ -62,6 +63,16 @@ CONTRACT_RESULT = ROOT / "validation" / "v2-memblock-parent-contract-audit.json"
 COVERAGE_RESULT = ROOT / "validation" / "v2-memblock-parent-coverage-manifest.json"
 MAPPING_RESULT = ROOT / "validation" / "v2-memblock-parent-mapping-update.json"
 PORT_INVENTORY = ROOT / "validation" / "v2-memblock-port-inventory.json"
+
+# The MemBlock child is a complete three-edge FrontendBridge closure.  Keep
+# the immutable reference dependency set explicit so parent wiring can be
+# checked without importing the sibling Build file.
+FRONTEND_REFERENCE_MODULES = (
+    "FrontendBridge", "ICacheBuffer", "ICacheCtrlBuffer", "InstrUncacheBuffer",
+    "Queue2_TLBundleA_22", "Queue2_TLBundleD_23", "Queue2_TLBundleA_16",
+    "Queue2_TLBundleD_19", "Queue2_TLBundleA_26", "Queue2_TLBundleD_29",
+    "ram_2x359", "ram_2x281", "ram_2x117", "ram_2x80", "ram_2x132", "ram_2x77",
+)
 
 
 # Load a target through its exact path without importing sibling Build files. / 通过精确路径加载目标且不导入同级 Build 文件。
@@ -122,7 +133,8 @@ def parse_generated_port_declarations(source: str, module_name: str) -> dict[str
     return declarations
 
 
-def full_inventory_export(target_module: ModuleType) -> tuple[str, dict[str, Any]]:
+def full_inventory_export(target_module: ModuleType,
+                          frontend_module: ModuleType | None = None) -> tuple[str, dict[str, Any]]:
     """Generate and audit the exact frozen V2 MemBlock port envelope."""
     if not PORT_INVENTORY.is_file():
         raise AssertionError(f"missing explicit port inventory: {PORT_INVENTORY}")
@@ -134,10 +146,10 @@ def full_inventory_export(target_module: ModuleType) -> tuple[str, dict[str, Any
         raise AssertionError("inventory count metadata mismatch")
     # The coordinator passes frozen metadata as data.  The Build target does
     # not open the inventory or the reference itself.
-    rtl = target_module.build_verilog(
-        {"module": "UHSCMemoryMemBlockFull"},
-        {"full_port_specs": specs},
-    )
+    deps: dict[str, Any] = {"full_port_specs": specs}
+    if frontend_module is not None:
+        deps["frontend_bridge"] = frontend_module.FrontendBridge()
+    rtl = target_module.build_verilog({"module": "UHSCMemoryMemBlockFull"}, deps)
     actual = parse_generated_port_declarations(rtl, "UHSCMemoryMemBlockFull")
     expected = {
         str(spec["name"]): (str(spec.get("direction", "input")).lower(),
@@ -431,6 +443,135 @@ def extract_module(name: str) -> bytes:
     raise RuntimeError(f"locked module not found: {name}")
 
 
+def parse_ansi_ports(module_text: bytes, module_name: str) -> list[tuple[str, str, int]]:
+    """Parse grouped ANSI ports from one locked module header."""
+    match = re.search(rb"^module\s+" + re.escape(module_name.encode("ascii"))
+                      + rb"\s*\((.*?)\);", module_text, re.M | re.S)
+    if match is None:
+        raise RuntimeError(f"{module_name} header missing")
+    body = re.sub(rb"//[^\n]*", b"", match.group(1))
+    rows: list[tuple[str, str, int]] = []
+    direction: str | None = None
+    width = 1
+    # The generated Chisel header groups consecutive names under one
+    # direction/width declaration (e.g. ``input [3:0] a, b``).
+    for raw in body.split(b","):
+        token = b" ".join(raw.split())
+        if not token:
+            continue
+        declared = re.match(rb"(input|output|inout)\s*(?:\[(\d+):(\d+)\])?\s*(.*)$", token)
+        if declared is not None:
+            direction = declared.group(1).decode("ascii")
+            high, low = declared.group(2), declared.group(3)
+            width = abs(int(high) - int(low)) + 1 if high is not None else 1
+            rest = declared.group(4)
+        else:
+            rest = token
+        name = rest.strip().decode("ascii", "replace")
+        if direction is None or not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_$]*", name):
+            continue
+        rows.append((name, direction, width))
+    return rows
+
+
+def frontend_parent_differential(target_module: ModuleType,
+                                 frontend_module: ModuleType) -> dict[str, Any]:
+    """Compare injected FrontendBridge wiring inside the full MemBlock envelope.
+
+    All 1,326 parent ports are instantiated, while the randomized stimulus is
+    restricted to the three FrontendBridge edges.  This proves that the full
+    parent's prefix adaptation is behaviorally equivalent to the locked child,
+    rather than only checking a reduced FrontendBridge in isolation.
+    """
+    inventory = json.loads(PORT_INVENTORY.read_text(encoding="utf-8"))["ports"]
+    ref_modules = {name: extract_module(name) for name in FRONTEND_REFERENCE_MODULES}
+    renamed_front = rename_module(ref_modules["FrontendBridge"], "FrontendBridge", "REF_FrontendBridge")
+    closure = b"\n\n".join(
+        renamed_front if name == "FrontendBridge" else ref_modules[name]
+        for name in FRONTEND_REFERENCE_MODULES
+    ) + b"\n"
+    frontend_ports = parse_ansi_ports(ref_modules["FrontendBridge"], "FrontendBridge")
+    target_rtl = target_module.build_verilog(
+        {"module": "UHSCMemoryMemBlockFull"},
+        {"full_port_specs": inventory, "frontend_bridge": frontend_module.FrontendBridge()},
+    )
+    lines = [target_rtl, closure.decode("utf-8", "replace"), "module tb;"]
+    # Parent envelope signals: inputs are regs, outputs are DUT wires.
+    for spec in inventory:
+        name = str(spec["name"])
+        width = _inventory_width(spec.get("width", ""))
+        direction = str(spec.get("direction", "input")).lower()
+        if name in {"clock", "reset"}:
+            lines.append(f"reg {name};")
+        elif direction == "output":
+            lines.append(f"wire {('[' + str(width - 1) + ':0] ') if width > 1 else ''}dut_{name};")
+        else:
+            lines.append(f"reg {('[' + str(width - 1) + ':0] ') if width > 1 else ''}{name};")
+    # Child output observations and mapping prefix.
+    frontend_outputs: list[str] = []
+    for name, direction, width in frontend_ports:
+        if name in {"clock", "reset"}:
+            continue
+        if direction == "output":
+            frontend_outputs.append(name)
+            lines.append(f"wire {('[' + str(width - 1) + ':0] ') if width > 1 else ''}ref_{name};")
+    dut_connections = []
+    for spec in inventory:
+        name = str(spec["name"])
+        direction = str(spec.get("direction", "input")).lower()
+        dut_connections.append(f".{name}({name if direction != 'output' or name in {'clock','reset'} else 'dut_' + name})")
+    ref_connections = []
+    for name, direction, _width in frontend_ports:
+        if name in {"clock", "reset"}:
+            ref_connections.append(f".{name}({name})")
+            continue
+        parent_name = "auto_inner_frontendBridge_" + (name[5:] if name.startswith("auto_") else name)
+        # Every FrontendBridge child port is represented in the frozen parent
+        # inventory.  Fail loudly if a future snapshot changes that contract.
+        if not any(str(spec["name"]) == parent_name for spec in inventory):
+            raise AssertionError(f"parent inventory missing FrontendBridge port {parent_name}")
+        signal = parent_name if direction == "input" else "ref_" + name
+        ref_connections.append(f".{name}({signal})")
+    lines.extend([
+        "UHSCMemoryMemBlockFull dut_i(" + ",".join(dut_connections) + ");",
+        "REF_FrontendBridge ref_i(" + ",".join(ref_connections) + ");",
+        "always #1 clock=~clock; integer cycle;", "initial begin", "clock=0; reset=1; cycle=0;",
+    ])
+    for spec in inventory:
+        name = str(spec["name"])
+        if name not in {"clock", "reset"} and str(spec.get("direction", "input")).lower() != "output":
+            lines.append(f"{name}=0;")
+    lines.append("repeat(4) @(posedge clock); reset=0;")
+    rng = random.Random(0x4D454D46)
+    input_specs = [(str(s["name"]), _inventory_width(s.get("width", "")), str(s.get("direction", "input")).lower())
+                   for s in inventory if str(s.get("direction", "input")).lower() != "output" and str(s["name"]) not in {"clock", "reset"}]
+    vectors = 96
+    for cycle in range(vectors):
+        lines.append(f"@(negedge clock); cycle={cycle};")
+        for name, width, _direction in input_specs:
+            # Exercise all frontend payloads and handshake combinations while
+            # leaving unrelated MemBlock inputs at deterministic zero.
+            if name.startswith("auto_inner_frontendBridge_"):
+                child_name = name[len("auto_inner_frontendBridge_"):]
+                value = (rng.getrandbits(width) if not (child_name.endswith("_valid") or child_name.endswith("_ready"))
+                         else ((cycle * 7 + len(child_name)) % 5 != 0))
+            else:
+                value = 0
+            lines.append(f"{name}={width}'h{value & ((1 << width)-1):x};")
+        lines.append("@(posedge clock); #0.2;")
+        for name in frontend_outputs:
+            parent_suffix = name[5:] if name.startswith("auto_") else name
+            marker = name.split("_bits_", 1)[0] + "_valid" if "_bits_" in name else None
+            guard = f"ref_{marker} && " if marker in frontend_outputs else ""
+            lines.append(f"if ({guard}dut_auto_inner_frontendBridge_{parent_suffix} !== ref_{name}) begin $display(\"FRONTEND_PARENT_MISMATCH {name} cycle=%0d dut=%h ref=%h\", cycle, dut_auto_inner_frontendBridge_{parent_suffix}, ref_{name}); $fatal(1, \"frontend parent mismatch\"); end")
+    lines.append(f'$display("FRONTEND_PARENT_REFERENCE_PASS %0d",{vectors}); $finish; end endmodule')
+    result = run_verilator("\n".join(lines), "memblock-frontend-parent-diff")
+    result.update({"vectors": vectors, "checked_outputs": len(frontend_outputs),
+                   "reference_modules": list(FRONTEND_REFERENCE_MODULES),
+                   "comparison": "full MemBlock 1326-port envelope FrontendBridge child wiring"})
+    return result
+
+
 # Rename a single module declaration for collision-free differential wiring. / 重命名单个模块声明以避免差分连线冲突。
 def rename_module(text: bytes, old: str, new: str) -> bytes:
     return re.sub(rb"^module\s+" + re.escape(old.encode("ascii")) + rb"\s*\(",
@@ -615,7 +756,8 @@ def run_verilator(source: str, stem: str) -> dict[str, Any]:
 # Persist all batch-local evidence while keeping acceptance explicitly closed. / 持久化批次证据并明确保持不可接受状态。
 def write_evidence(static: dict[str, Any], direct: dict[str, Any], reference: dict[str, Any],
                    backend: dict[str, Any], differential_result: dict[str, Any], refs: dict[str, Any],
-                   full_envelope: dict[str, Any], full_backend: dict[str, Any]) -> None:
+                   full_envelope: dict[str, Any], full_backend: dict[str, Any],
+                   frontend_parent: dict[str, Any]) -> None:
     target_hash = digest(TARGET)
     manifest_hash = digest(MANIFEST)
     pass_backend = all(backend.get(zone, {}).get("status") == "PASS" for zone in ("verilator", "yosys"))
@@ -628,8 +770,10 @@ def write_evidence(static: dict[str, Any], direct: dict[str, Any], reference: di
                       "FULL_PORT_ENVELOPE": full_envelope["status"],
                       "FULL_VERILATOR": full_backend.get("verilator", {}).get("status", "FAIL"),
                       "FULL_YOSYS": full_backend.get("yosys", {}).get("status", "FAIL"),
+                      "FRONTEND_PARENT_REFERENCE": frontend_parent.get("status", "FAIL"),
                       "UHSC_LOCALIZED": "PASS_BOUNDED_PARENT_LOCAL_NAME", "ACCEPTED": "NOT_ALLOWED"},
                       "full_envelope": full_envelope, "full_backend_gates": full_backend,
+                      "frontend_parent_differential": frontend_parent,
                       "acceptance_eligible": False}
     DIRECT_RESULT.write_text(json.dumps(direct_payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     diff_payload = {"schema_version": 1, "kind": "XIANGSHAN_KUNMINGHU_V2_MEMBLOCK_PARENT_DIFFERENTIAL",
@@ -638,6 +782,7 @@ def write_evidence(static: dict[str, Any], direct: dict[str, Any], reference: di
                     "target_parent": {"path": static["path"], "sha256": target_hash},
                     "comparison": differential_result, "backend_gates": backend,
                     "full_envelope": full_envelope, "full_backend_gates": full_backend,
+                    "frontend_parent_differential": frontend_parent,
                     "behavioral_equivalence": diff_pass, "status": "DIFFERENTIAL_MATCHED_BOUNDED" if diff_pass else "FAIL",
                     "gates": {"PYTHON_PRESENT": "PASS", "DIRECT_TEST_PASS_BOUNDED": direct["status"],
                               "V2_REFERENCE_MATCHED": "PASS_BOUNDED" if diff_pass else "FAIL",
@@ -645,6 +790,7 @@ def write_evidence(static: dict[str, Any], direct: dict[str, Any], reference: di
                               "FULL_PORT_ENVELOPE": full_envelope["status"],
                               "FULL_VERILATOR": full_backend.get("verilator", {}).get("status", "FAIL"),
                               "FULL_YOSYS": full_backend.get("yosys", {}).get("status", "FAIL"),
+                              "FRONTEND_PARENT_REFERENCE": frontend_parent.get("status", "FAIL"),
                               "VERILATOR": "PASS" if pass_backend else "FAIL", "YOSYS": "PASS" if pass_backend else "FAIL",
                               "UHSC_LOCALIZED": "PASS_BOUNDED_PARENT_LOCAL_NAME", "LICENSE_REVIEW": "PENDING",
                               "ACCEPTED": "NOT_ALLOWED"}, "acceptance_eligible": False,
@@ -655,12 +801,14 @@ def write_evidence(static: dict[str, Any], direct: dict[str, Any], reference: di
                 "result": "PASS", "target": static, "source_commit": SOURCE_COMMIT,
                 "child_contracts": {"AMOALU": "injected named dependency", "TagArray": "injected named dependency",
                                     "TileLink": "explicit A/D transaction ports", "MMU": "ready stub", "LSU": "ready stub", "MBIST": "enable/done stub",
-                                    "full_port_envelope": "exact 1326-port inventory export (behavior pending)"},
+                                    "FrontendBridge": "injected 91-port behavioral child on frozen parent wiring",
+                                    "full_port_envelope": "exact 1326-port inventory export (remaining behavior pending)"},
                 "gates": {"contract": "PASS", "direct": direct["status"], "reference": "PASS_BOUNDED" if diff_pass else "FAIL",
                           "verilator": "PASS" if pass_backend else "FAIL", "yosys": "PASS" if pass_backend else "FAIL",
                           "full_port_envelope": full_envelope["status"],
                           "full_verilator": full_backend.get("verilator", {}).get("status", "FAIL"),
                           "full_yosys": full_backend.get("yosys", {}).get("status", "FAIL"),
+                          "frontend_parent_reference": frontend_parent.get("status", "FAIL"),
                           "license": "PENDING", "ACCEPTED": "NOT_ALLOWED"}, "acceptance_eligible": False}
     CONTRACT_RESULT.write_text(json.dumps(contract, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     coverage = {"schema_version": 1, "kind": "XIANGSHAN_KUNMINGHU_V2_MEMBLOCK_PARENT_COVERAGE",
@@ -672,25 +820,27 @@ def write_evidence(static: dict[str, Any], direct: dict[str, Any], reference: di
                              {"instance": "DCache.mainpipe", "source": "upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/MainPipe.scala", "target": static["path"], "status": "PASS_BOUNDED"},
                              {"instance": "MainPipe.amoalu", "source": "upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/AMOALU.scala", "target": AMO_TARGET.relative_to(ROOT).as_posix(), "status": "PASS_REFERENCE_CHILD"},
                              {"instance": "MainPipe.tag_array", "source": "upstream/src/main/scala/xiangshan/cache/dcache/meta/TagArray.scala", "target": TAG_TARGET.relative_to(ROOT).as_posix(), "status": "PASS_REFERENCE_CHILD"},
-                             {"instance": "MemBlock.frontendBridge", "source": "upstream/src/main/scala/xiangshan/mem/MemBlock.scala", "target": static["path"], "status": "PASS_BOUNDED"}],
+                             {"instance": "MemBlock.frontendBridge", "source": "upstream/src/main/scala/xiangshan/mem/MemBlock.scala", "target": FRONTEND_TARGET.relative_to(ROOT).as_posix(), "status": "PASS_REFERENCE_PARENT_WIRING" if frontend_parent.get("status") == "PASS" else "FAIL"}],
                 "observation_points": ["issue priority", "miss A channel", "refill/writeback", "AMO mask merge", "tag reset/read/write", "frontend bridge", "flush ordering", "MMU/LSU/MBIST stubs"],
                 "reference_snapshot": reference, "full_port_envelope": full_envelope,
-                "full_backend_gates": full_backend,
+                "full_backend_gates": full_backend, "frontend_parent_differential": frontend_parent,
                 "status": "PASS_BOUNDED_PARENT" if diff_pass else "FAIL",
                 "uhsc_localization": {"status": "PASS_BOUNDED_PARENT_LOCAL_NAME", "local_name": "UHSCMemoryMemBlock", "manifest": "UHSC-Naming-Manifest.json", "manifest_sha256": manifest_hash, "locked_names_unchanged": True},
                 "license_review": "PENDING", "acceptance_eligible": False,
                 "gates": {"DIRECT": direct["status"], "REFERENCE": "PASS_BOUNDED" if diff_pass else "FAIL", "VERILATOR": "PASS" if pass_backend else "FAIL", "YOSYS": "PASS" if pass_backend else "FAIL",
                           "FULL_PORT_ENVELOPE": full_envelope["status"],
                           "FULL_VERILATOR": full_backend.get("verilator", {}).get("status", "FAIL"),
-                          "FULL_YOSYS": full_backend.get("yosys", {}).get("status", "FAIL"), "ACCEPTED": "NOT_ALLOWED"}}
+                          "FULL_YOSYS": full_backend.get("yosys", {}).get("status", "FAIL"),
+                          "FRONTEND_PARENT_REFERENCE": frontend_parent.get("status", "FAIL"), "ACCEPTED": "NOT_ALLOWED"}}
     COVERAGE_RESULT.write_text(json.dumps(coverage, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     mapping = {"schema_version": 1, "kind": "V2_MEMBLOCK_PARENT_MAPPING_UPDATE", "batch_id": "V2-PARENT-MEMBLOCK-001", "source_commit": SOURCE_COMMIT,
                "entries": [{"id": "MemBlock", "classification": "NEW_AUXILIARY_PARENT_HARNESS", "disposition": "PARENT_BOUNDARY_REDUCED", "v2_source": "upstream/src/main/scala/xiangshan/mem/MemBlock.scala", "target": static["path"], "local_name": "UHSCMemoryMemBlock", "status": "PASS_BOUNDED" if diff_pass else "FAIL"},
                            {"id": "DCacheWrapper", "classification": "INLINED_PARENT_CHILD", "v2_source": "upstream/src/main/scala/xiangshan/cache/dcache/DCacheWrapper.scala", "target": static["path"], "status": "PASS_BOUNDED" if diff_pass else "FAIL"},
-                           {"id": "MainPipe", "classification": "INLINED_PARENT_CHILD", "v2_source": "upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/MainPipe.scala", "target": static["path"], "status": "PASS_BOUNDED" if diff_pass else "FAIL"}],
+                           {"id": "MainPipe", "classification": "INLINED_PARENT_CHILD", "v2_source": "upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/MainPipe.scala", "target": static["path"], "status": "PASS_BOUNDED" if diff_pass else "FAIL"},
+                           {"id": "FrontendBridge", "classification": "INJECTED_PARENT_CHILD", "v2_source": "upstream/src/main/scala/xiangshan/mem/MemBlock.scala", "target": FRONTEND_TARGET.relative_to(ROOT).as_posix(), "status": "PASS_REFERENCE_PARENT_WIRING" if frontend_parent.get("status") == "PASS" else "FAIL"}],
                "source_authority": reference, "uhsc_manifest": "UHSC-Naming-Manifest.json", "full_port_envelope": full_envelope,
                "gates": {"contract": "PASS", "direct": direct["status"], "reference": "PASS_BOUNDED" if diff_pass else "FAIL", "parent_closure": "PASS_BOUNDED_REDUCED" if diff_pass else "FAIL",
-                         "full_port_envelope": full_envelope["status"], "full_verilator": full_backend.get("verilator", {}).get("status", "FAIL"), "full_yosys": full_backend.get("yosys", {}).get("status", "FAIL"), "license": "PENDING", "ACCEPTED": "NOT_ALLOWED"}, "acceptance_eligible": False}
+                         "full_port_envelope": full_envelope["status"], "full_verilator": full_backend.get("verilator", {}).get("status", "FAIL"), "full_yosys": full_backend.get("yosys", {}).get("status", "FAIL"), "frontend_parent_reference": frontend_parent.get("status", "FAIL"), "license": "PENDING", "ACCEPTED": "NOT_ALLOWED"}, "acceptance_eligible": False}
     MAPPING_RESULT.write_text(json.dumps(mapping, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
 
 
@@ -700,6 +850,7 @@ def main() -> int:
     parent_module = load_exact(TARGET, "v2_memblock_parent_target")
     amo_module = load_exact(AMO_TARGET, "v2_memblock_parent_amo")
     tag_module = load_exact(TAG_TARGET, "v2_memblock_parent_tag")
+    frontend_module = load_exact(FRONTEND_TARGET, "v2_memblock_parent_frontend")
     compile_result = subprocess.run([sys.executable, "-m", "py_compile", str(TARGET)], capture_output=True, check=False)
     if compile_result.returncode != 0:
         raise RuntimeError(compile_result.stderr.decode("utf-8", "replace"))
@@ -723,9 +874,10 @@ def main() -> int:
     # 1326-port parent envelope and run syntax/hierarchy gates on it.  These
     # gates establish generation compatibility only; they do not promote the
     # tie-off shell to behavioral equivalence.
-    full_rtl, full_envelope = full_inventory_export(parent_module)
+    full_rtl, full_envelope = full_inventory_export(parent_module, frontend_module)
     full_backend = backend_gates(full_rtl, "UHSCMemoryMemBlockFull", "full-parent-envelope")
-    write_evidence(static, direct, reference, backend, diff, refs, full_envelope, full_backend)
+    frontend_parent = frontend_parent_differential(parent_module, frontend_module)
+    write_evidence(static, direct, reference, backend, diff, refs, full_envelope, full_backend, frontend_parent)
     reduced_pass = (direct["status"] == "PASS" and diff["status"] == "PASS"
                     and backend["verilator"]["status"] == "PASS"
                     and backend["yosys"]["status"] == "PASS")
@@ -738,7 +890,8 @@ def main() -> int:
               "full_port_envelope": full_envelope["status"],
               "full_port_count": full_envelope["actual_port_count"],
               "full_verilator": full_backend["verilator"]["status"],
-              "full_yosys": full_backend["yosys"]["status"]}
+              "full_yosys": full_backend["yosys"]["status"],
+              "frontend_parent_reference": frontend_parent["status"]}
     print(json.dumps(result, sort_keys=True))
     return 0 if result["status"] == "PASS_BOUNDED_PARENT" else 1
 

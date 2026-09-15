@@ -397,6 +397,11 @@ class UHSCMemoryMemBlock(Elaboratable):
         deps = injected_dependencies if isinstance(injected_dependencies, dict) else {}
         child = deps.get("dcache") or deps.get("DCacheWrapper") or deps.get("dcache_wrapper")
         self.dcache = child or UHSCDCacheWrapper(self.config, deps)
+        # Optional full parent child.  It is deliberately injection-only so
+        # this Build file remains standalone and cannot import sibling files.
+        # 可选完整父级子模块仅允许显式注入，保持 Build 文件独立且不导入兄弟文件。
+        self.frontend_bridge = (deps.get("frontend_bridge") or deps.get("FrontendBridge")
+                                or deps.get("frontendBridge"))
         c = self.config
         self.clock = Signal(name="clock")
         self.reset = Signal(name="reset")
@@ -453,6 +458,10 @@ class UHSCMemoryMemBlock(Elaboratable):
         self.full_inventory_ports: list[Signal] = []
         self.full_inventory: dict[str, Signal] = {}
         self._full_inventory_new_ids: set[int] = set()
+        # IDs of frozen-envelope outputs driven by an injected behavioral
+        # child.  These must not also receive the default tie-off driver.
+        # 注入行为子级所驱动的冻结包络输出 ID；不能再叠加默认 tie-off 驱动。
+        self._full_inventory_bound_ids: set[int] = set()
         self._install_full_inventory(self.full_port_specs)
 
     def _install_full_inventory(self, specs: Iterable[Mapping[str, Any]]) -> None:
@@ -530,6 +539,36 @@ class UHSCMemoryMemBlock(Elaboratable):
                      self.writeback_id.eq(d.resp_id), self.writeback_miss.eq(d.resp_miss),
                      self.mbist_done.eq(d.mbist_done), self.mmu_ready.eq(1), self.lsu_ready.eq(1)]
 
+        # Bind the real FrontendBridge child when the parent closure injects
+        # one.  The locked MemBlock names the child edge as
+        # ``auto_inner_frontendBridge_<edge>`` while the standalone Build
+        # exposes ``auto_<edge>``; this is a pure prefix adaptation and keeps
+        # all TileLink payload fields (including ready/valid) observable.
+        # 未冻结包络默认仍保持 tie-off；只有验证器注入真实 FrontendBridge
+        # 时才建立完整子级接线，避免 reduced instances 引入隐式依赖。
+        frontend = getattr(self, "frontend_bridge", None)
+        if frontend is not None:
+            m.submodules.frontend_bridge = frontend
+            if hasattr(frontend, "clock"):
+                m.d.comb += frontend.clock.eq(self.clock)
+            if hasattr(frontend, "reset"):
+                m.d.comb += frontend.reset.eq(self.reset)
+            prefix = "auto_inner_frontendBridge_"
+            for parent_name, parent_signal in self.full_inventory.items():
+                if not parent_name.startswith(prefix):
+                    continue
+                child_name = "auto_" + parent_name[len(prefix):]
+                child_signal = getattr(frontend, child_name, None)
+                if child_signal is None:
+                    continue
+                if id(parent_signal) in {id(item) for item in self.full_inventory_outputs}:
+                    # Parent output is driven by the child's output.
+                    m.d.comb += parent_signal.eq(child_signal)
+                    self._full_inventory_bound_ids.add(id(parent_signal))
+                else:
+                    # Parent input drives the child's corresponding input.
+                    m.d.comb += child_signal.eq(parent_signal)
+
         # One-entry instruction bridge: address is returned as a deterministic probe word. / 单项指令桥：返回确定性探针字。
         ic_pending = Signal(name="icache_pending")
         ic_addr = Signal(c.vaddr_bits, name="icache_addr_reg")
@@ -549,7 +588,7 @@ class UHSCMemoryMemBlock(Elaboratable):
         # 完整清单输出在具体子级闭包注入前保持静默；输入保留为真实父级 IO，
         # 不作为隐藏配置读取。
         for signal in self.full_inventory_outputs:
-            if id(signal) in self._full_inventory_new_ids:
+            if id(signal) in self._full_inventory_new_ids and id(signal) not in self._full_inventory_bound_ids:
                 m.d.comb += signal.eq(0)
         return m
 
