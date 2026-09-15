@@ -329,13 +329,13 @@ class FudianFpu(Elaboratable):
         exp = operand[frac_width:frac_width + c.exp_width]
         sig = operand[:frac_width]
         sign = operand[width - 1]
-        exp_zero = ~amaranth_value(exp).any()
-        exp_ones = amaranth_value(exp).all()
-        sig_zero = ~amaranth_value(sig).any()
+        exp_zero = ~amaranth_value(amaranth_value(exp).any())
+        exp_ones = amaranth_value(amaranth_value(exp).all())
+        sig_zero = ~amaranth_value(amaranth_value(sig).any())
         is_nan = exp_ones & ~sig_zero
         is_inf = exp_ones & sig_zero
         is_zero = exp_zero & sig_zero
-        snan = is_nan & ~sig[frac_width - 1]
+        snan = is_nan & ~amaranth_value(sig[frac_width - 1])
 
         # Integer-to-float network.  A fixed case for each possible leading
         # one keeps the implementation synthesizable and avoids a Python
@@ -353,8 +353,8 @@ class FudianFpu(Elaboratable):
                 kept = (self.input >> shift)[:c.precision]
                 discarded = self.input & ((1 << shift) - 1)
                 guard = self.input[shift - 1]
-                sticky = discarded[:max(0, shift - 1)].any() if shift > 1 else Const(0, 1)
-                inexact_case: Any = discarded.any()
+                sticky = amaranth_value(discarded[:max(0, shift - 1)]).any() if shift > 1 else Const(0, 1)
+                inexact_case: Any = amaranth_value(discarded.any())
                 rne = guard & (sticky | kept[0])
                 rup = inexact_case
                 rmm = guard
@@ -381,30 +381,30 @@ class FudianFpu(Elaboratable):
         a_sign, b_sign = a_fp[width - 1], b_fp[width - 1]
         a_exp, b_exp = a_fp[frac_width:frac_width + c.exp_width], b_fp[frac_width:frac_width + c.exp_width]
         a_sig, b_sig = a_fp[:frac_width], b_fp[:frac_width]
-        a_exp_zero, b_exp_zero = ~a_exp.any(), ~b_exp.any()
-        a_exp_ones, b_exp_ones = a_exp.all(), b_exp.all()
-        a_sig_zero, b_sig_zero = ~a_sig.any(), ~b_sig.any()
+        a_exp_zero, b_exp_zero = ~amaranth_value(a_exp).any(), ~amaranth_value(b_exp).any()
+        a_exp_ones, b_exp_ones = amaranth_value(a_exp).all(), amaranth_value(b_exp).all()
+        a_sig_zero, b_sig_zero = ~amaranth_value(a_sig).any(), ~amaranth_value(b_sig).any()
         a_nan, b_nan = a_exp_ones & ~a_sig_zero, b_exp_ones & ~b_sig_zero
         both_zero = a_exp_zero & a_sig_zero & b_exp_zero & b_sig_zero
         same_sign = a_sign == b_sign
-        mag_a, mag_b = a_fp[:width - 1], b_fp[:width - 1]
+        mag_a, mag_b = amaranth_value(a_fp[:width - 1]), amaranth_value(b_fp[:width - 1])
         mag_eq, mag_lt = mag_a == mag_b, mag_a < mag_b
         cmp_eq = (~a_nan & ~b_nan) & (mag_eq | both_zero)
         cmp_lt = (~a_nan & ~b_nan) & Mux(same_sign, Mux(a_sign, mag_a > mag_b, mag_lt), a_sign & ~both_zero)
         cmp_le = cmp_eq | cmp_lt
-        cmp_invalid = (a_nan & ~a_sig[frac_width - 1]) | (b_nan & ~b_sig[frac_width - 1]) | (self.rounding == Const(5, 3)) & (a_nan | b_nan)
+        cmp_invalid = (a_nan & ~amaranth_value(a_sig[frac_width - 1])) | (b_nan & ~amaranth_value(b_sig[frac_width - 1])) | (self.rounding == Const(5, 3)) & (a_nan | b_nan)
         cmp_word = Cat(Const(0, max(0, width - 5)), cmp_invalid, Const(0, 1), cmp_lt, cmp_le, cmp_eq) if width >= 5 else Cat(cmp_invalid, cmp_lt, cmp_le, cmp_eq)
 
         # FMUL common finite path.  The special-value muxes mirror FMUL's
         # invalid/zero/infinity handling; product rounding uses guard+sticky.
-        mant_a = Cat(a_sig, ~a_exp_zero)
-        mant_b = Cat(b_sig, ~b_exp_zero)
-        product = mant_a * mant_b
+        mant_a = Cat(a_sig, ~amaranth_value(a_exp_zero))
+        mant_b = Cat(b_sig, ~amaranth_value(b_exp_zero))
+        product = amaranth_value(mant_a) * amaranth_value(mant_b)
         product_top = product[2 * c.precision - 1]
         product_norm = Mux(product_top, product >> c.precision, product >> (c.precision - 1))
         mul_keep = product_norm[frac_width:frac_width + c.precision]
         mul_guard = product_norm[frac_width - 1]
-        mul_sticky = product_norm[:max(0, frac_width - 1)].any() if frac_width > 1 else Const(0, 1)
+        mul_sticky = amaranth_value(product_norm[:max(0, frac_width - 1)]).any() if frac_width > 1 else Const(0, 1)
         mul_rne = mul_guard & (mul_sticky | mul_keep[0])
         mul_up = Mux(self.rounding == Const(0, 3), mul_rne,
                      Mux(self.rounding == Const(3, 3), mul_guard | mul_sticky,
@@ -412,9 +412,9 @@ class FudianFpu(Elaboratable):
         mul_rounded = Cat(mul_keep, Const(0, 1)) + mul_up
         mul_carry = mul_rounded[c.precision]
         mul_frac = Mux(mul_carry, mul_rounded[1:c.precision], mul_rounded[:frac_width])
-        mul_exp_wide = a_exp + b_exp - bias + product_top + mul_carry
+        mul_exp_wide = amaranth_value(a_exp) + amaranth_value(b_exp) - bias + amaranth_value(product_top) + amaranth_value(mul_carry)
         mul_exp = mul_exp_wide[:c.exp_width]
-        mul_sign = a_sign ^ b_sign
+        mul_sign = amaranth_value(a_sign) ^ amaranth_value(b_sign)
         mul_normal = Cat(mul_frac, mul_exp, mul_sign)
         canonical_nan = Cat(Const(1, max(0, frac_width - 1)), Const(0, 1), Const(exp_mask, c.exp_width), Const(0, 1))
         mul_nan = a_nan | b_nan | ((a_exp_ones & a_sig_zero) & b_exp_zero & b_sig_zero) | ((b_exp_ones & b_sig_zero) & a_exp_zero & a_sig_zero)
