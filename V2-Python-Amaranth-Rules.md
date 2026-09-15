@@ -176,6 +176,13 @@ export must parse without syntax errors and its top module name must match the
 Build contract. This gate proves that the file is usable as a Build subject; it
 does not prove behavioral equivalence.
 
+Pyright compatibility directives that disable whole diagnostic classes are not
+an acceptable freeze result. A worker may use a narrow, justified type cast or
+an explicit protocol stub at the exact dynamic Amaranth boundary, but the
+owned batch must finish with zero Pyright errors without file-level blanket
+suppression. Any non-zero diagnostic count is recorded as a failed gate and
+the Build remains outside `STRUCTURE_VERIFIED` until repaired.
+
 During rewrite freeze, workers may batch many disjoint Build files and may
 reuse one shared basic-gate runner. They must not create a separate full
 Verilator/Yosys or locked-reference harness for every file. Family and parent
