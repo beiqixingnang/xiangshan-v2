@@ -530,6 +530,31 @@ class ResourcePermissions:
     cacheable: bool = False
     atomic: bool = False
 
+    # Return the source-style read flag. / 返回源代码风格的读标志。
+    @property
+    def r(self) -> bool:
+        return self.readable
+
+    # Return the source-style write flag. / 返回源代码风格的写标志。
+    @property
+    def w(self) -> bool:
+        return self.writable
+
+    # Return the source-style execute flag. / 返回源代码风格的执行标志。
+    @property
+    def x(self) -> bool:
+        return self.executable
+
+    # Return the source-style cache flag. / 返回源代码风格的缓存标志。
+    @property
+    def c(self) -> bool:
+        return self.cacheable
+
+    # Return the source-style atomic flag. / 返回源代码风格的原子标志。
+    @property
+    def a(self) -> bool:
+        return self.atomic
+
 
 @dataclass(frozen=True)
 class AddressMapEntry:
