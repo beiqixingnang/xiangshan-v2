@@ -1,0 +1,191 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_BACKEND_DECODE_ISSUE_EXU_CLOSURE_BATCH",
+  "batch_id": "V2-BACKEND-DECODE-ISSUE-EXU-CLOSURE-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "locked_reference": {
+    "canonical_path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "immutable": true
+  },
+  "execution": {
+    "fresh_harnesses": [
+      "validation/v2_a1_core_leaf_batch.py",
+      "validation/v2_backend_decode_child_differential.py",
+      "validation/v2_backend_branch_child_differential.py"
+    ],
+    "reused_parent_evidence": [
+      "validation/v2_backend_parent_validator.py",
+      "validation/v2_backend_parent_closure_round.py",
+      "validation/v2_backend_alu_jump_child_differential.py"
+    ],
+    "stable_summary_rule": "Records deterministic counts, result states, source hashes, and the immutable reference hash only; volatile compiler wall-time and temporary-path output stay in the leaf evidence."
+  },
+  "covered_children": {
+    "decode_bitfield_riscvinst": {
+      "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Decode.Isa.Bitfield.RiscvInst-Hardware.py",
+      "direct": {
+        "status": "PASS_BOUNDED",
+        "input_vectors": 514,
+        "scalar_checks": 23644
+      },
+      "reference_differential": {
+        "status": "PASS_BOUNDED",
+        "vectors": 1024,
+        "mode": "independent_sv_riscv_field_equations"
+      },
+      "verilator": "PASS_BOUNDED",
+      "yosys": "PASS_BOUNDED",
+      "evidence": "validation/v2-backend-decode-child-differential-results.json"
+    },
+    "decode_predecode_leaf": {
+      "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Decode.Isa.Predecode.PreDecodeInst-Hardware.py",
+      "direct": {
+        "status": "PASS_BOUNDED",
+        "coverage": "JAL,JALR,BRANCH,C_J,C_JALR,C_EBREAK branch-type probes"
+      },
+      "reference_differential": "PASS_BOUNDED",
+      "verilator": "PASS_BOUNDED",
+      "yosys": "PASS_BOUNDED",
+      "evidence": "validation/v2-a1-core-leaf-{direct-results,reference-differential-results,tool-results}.json"
+    },
+    "issue_queue_leaves": {
+      "targets": [
+        "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.EnqPolicy-Hardware.py",
+        "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.AgeDetector-Hardware.py",
+        "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.ImmExtractor-Hardware.py"
+      ],
+      "direct": {
+        "status": "PASS_BOUNDED",
+        "enq_policy_vectors": 8192,
+        "imm_extractor_vectors": 96,
+        "age_detector_configurations": 2
+      },
+      "reference_differential": "PASS_BOUNDED",
+      "verilator": "PASS_BOUNDED",
+      "yosys": "PASS_BOUNDED",
+      "evidence": "validation/v2-a1-core-leaf-{direct-results,reference-differential-results,tool-results}.json"
+    },
+    "branch_module": {
+      "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.BranchModule-Hardware.py",
+      "direct": {
+        "status": "PASS_BOUNDED",
+        "vectors": 2048,
+        "checks": 2048
+      },
+      "reference_differential": {
+        "status": "PASS_BOUNDED",
+        "vectors": 2048,
+        "mode": "locked_xstop_branchmodule_and_submodule"
+      },
+      "verilator": "PASS_BOUNDED",
+      "yosys": "PASS_BOUNDED",
+      "evidence": "validation/v2-backend-branch-child-differential-results.json"
+    },
+    "alu_jump_modules": {
+      "targets": [
+        "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.AluDataModule-Hardware.py",
+        "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.JumpDataModule-Hardware.py"
+      ],
+      "direct": {
+        "status": "PASS_BOUNDED",
+        "alu_vectors": 2048,
+        "jump_vectors": 2048,
+        "checks": 4096
+      },
+      "reference_differential": {
+        "status": "PASS_BOUNDED",
+        "alu_vectors": 1024,
+        "jump_vectors": 1024,
+        "vectors": 2048,
+        "mode": "locked_xstop_module_differential"
+      },
+      "verilator": "PASS_BOUNDED",
+      "yosys": "PASS_BOUNDED",
+      "evidence": "validation/v2-backend-alu-jump-child-differential-results.json"
+    },
+    "parent_child_signal_flow": {
+      "children": [
+        "Decode.Instructions",
+        "Issue.EnqPolicy",
+        "WbDataPath"
+      ],
+      "direct": {
+        "status": "PASS_BOUNDED",
+        "vectors": 128,
+        "checks": 1024
+      },
+      "reference_differential": {
+        "status": "PASS_BOUNDED",
+        "vectors": 128,
+        "mode": "independent_child_equations"
+      },
+      "verilator": "PASS_BOUNDED",
+      "yosys": "PASS_BOUNDED",
+      "writeback_classes": 5,
+      "writeback_ports_checked": 1,
+      "evidence": "validation/v2-backend-parent-closure-round-results.json"
+    },
+    "backend_parent_envelope": {
+      "direct": {
+        "status": "PASS_BOUNDED",
+        "vectors": 256
+      },
+      "reference_differential": {
+        "status": "PASS_BOUNDED",
+        "vectors": 256,
+        "mode": "independent_sv_parent_equations"
+      },
+      "verilator": "PASS_BOUNDED",
+      "yosys": "PASS_BOUNDED",
+      "full_inventory": {
+        "status": "PASS_BOUNDED",
+        "ports": 1165
+      },
+      "evidence": "validation/v2-backend-parent-results.json"
+    }
+  },
+  "pending_parent_children": {
+    "DecodeUnit": {
+      "source": "upstream/src/main/scala/xiangshan/backend/decode/DecodeUnit.scala",
+      "sha256": "b9508c9bc768f6966208a39d03eda73571b209de88611ddea02fef1bb83c2ecf",
+      "status": "PENDING",
+      "reason": "The exercised RiscvInst/Instructions/PreDecodeInst leaves do not instantiate the DecodeUnit micro-op, exception, and fusion path."
+    },
+    "DecodeStage": {
+      "source": "upstream/src/main/scala/xiangshan/backend/decode/DecodeStage.scala",
+      "sha256": "1fa0821ab5dbd6ba2ab3967db75378571c39b124f17226a10bab55275e836f41",
+      "status": "PENDING",
+      "reason": "No executable Build equivalent wires the six-wide stage boundary, redirect, and downstream rename interface."
+    },
+    "IssueQueue": {
+      "source": "upstream/src/main/scala/xiangshan/backend/issue/IssueQueue.scala",
+      "sha256": "9cf94ef99fb9292cc79c1279ff6506605fc727fd0209ef626e8d79faacddf112",
+      "status": "PENDING",
+      "reason": "EnqPolicy/AgeDetector evidence covers selection leaves, not queue state, wakeup, dequeue, bypass, or flush behavior."
+    },
+    "ExuBlock": {
+      "source": "upstream/src/main/scala/xiangshan/backend/exu/ExuBlock.scala",
+      "sha256": "dfeaf0ffce84d204036b12e10948abb556cc4abcc3f51c3fbc14f97296554aaf",
+      "status": "PENDING",
+      "reason": "Branch/ALU/Jump module equivalence does not close unit wrappers, arbitration, redirects, or all Backend EXU interfaces."
+    }
+  },
+  "gates": {
+    "DIRECT_TEST_PASS_BOUNDED": "PASS_BOUNDED",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED",
+    "VERILATOR": "PASS_BOUNDED",
+    "YOSYS": "PASS_BOUNDED",
+    "PARENT_CLOSURE_MATCHED": "PENDING",
+    "LICENSE_REVIEW": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "PASS_BOUNDED",
+  "acceptance_eligible": false,
+  "unclosed": [
+    "DecodeUnit and DecodeStage executable integration.",
+    "IssueQueue stateful wakeup/dequeue/flush/bypass closure.",
+    "ExuBlock wrapper, arbitration, redirect, Rename, CSR, and Memory closure across the full 1165-port Backend.",
+    "License review and user approval."
+  ]
+}
