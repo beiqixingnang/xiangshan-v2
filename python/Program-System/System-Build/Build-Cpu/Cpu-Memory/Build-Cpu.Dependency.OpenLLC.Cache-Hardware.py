@@ -641,16 +641,16 @@ class OpenLLCSlice(Elaboratable):
         req_set = self.req_address[shift:shift + c.set_bits]
         hit_values: list[Value] = []
         for way in range(c.ways):
-            index = req_set * c.ways + way
+            index = amaranth_value(req_set) * c.ways + way
             hit_values.append(Array(valids)[index] & (Array(tags)[index] == req_tag))
         hit_any: Value = Const(0)
         hit_way: Value = Const(0, len(pending_way))
         selected_way: Value = Const(0, len(pending_way))
         for way in range(c.ways):
-            index = req_set * c.ways + way
+            index = amaranth_value(req_set) * c.ways + way
             hit_any = hit_any | hit_values[way]
             hit_way = Mux(hit_values[way], way, hit_way)
-            selected_way = Mux(~Array(valids)[index], way, selected_way)
+            selected_way = Mux(~amaranth_value(Array(valids)[index]), way, selected_way)
         selected_way = Mux(hit_any, hit_way, selected_way)
         selected_index = pending_set * c.ways + pending_way
         selected_data = Array(datas)[selected_index]
@@ -666,7 +666,7 @@ class OpenLLCSlice(Elaboratable):
                 merged = Cat(merged[:lo], lane, merged[lo + 8:])
             return merged
 
-        req_index = req_set * c.ways + selected_way
+        req_index = amaranth_value(req_set) * c.ways + amaranth_value(selected_way)
         req_merged_data = merge_bytes(Array(datas)[req_index], self.req_data, self.req_mask)
         refill_merged_data = merge_bytes(Const(0, c.data_bits), pending_data, pending_mask)
 
@@ -699,11 +699,11 @@ class OpenLLCSlice(Elaboratable):
                         with amaranth_if(m, is_write):
                             m.d.openllc_slice += [Array(datas)[req_index].eq(req_merged_data),
                                                  Array(dirtys)[req_index].eq(1)]
-                    with amaranth_if(m, ~hit_any & Array(valids)[req_set * c.ways + selected_way]
-                                     & Array(dirtys)[req_set * c.ways + selected_way]):
+                    with amaranth_if(m, ~amaranth_value(hit_any) & amaranth_value(Array(valids)[req_index])
+                                     & amaranth_value(Array(dirtys)[req_index])):
                         m.d.openllc_slice += state.eq(2)
-                    with amaranth_if(m, ~hit_any & ~(Array(valids)[req_set * c.ways + selected_way]
-                                                    & Array(dirtys)[req_set * c.ways + selected_way])):
+                    with amaranth_if(m, ~amaranth_value(hit_any) & ~(amaranth_value(Array(valids)[req_index])
+                                                    & amaranth_value(Array(dirtys)[req_index]))):
                         m.d.openllc_slice += state.eq(3)
             with amaranth_if(m, state == 1):
                 with amaranth_if(m, fire_resp):
