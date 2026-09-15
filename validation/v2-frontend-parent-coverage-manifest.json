@@ -1893,8 +1893,8 @@
     "direction_width_match": true,
     "target_input_count": 232,
     "target_output_count": 139,
-    "full_rtl_sha256": "ee46538101b3bf4b413239495af5c7231b3b1f32233405bff60fff4c7a34e420",
-    "full_rtl_bytes": 76209
+    "full_rtl_sha256": "ce23b40f546d7b9dd68ba251cacf886dfdf7ddb52a8b89f4851e47864ded2320",
+    "full_rtl_bytes": 76553
   },
   "injected_child_probe": {
     "status": "PASS",
@@ -1906,13 +1906,13 @@
     ],
     "target_rtl": {
       "path": "validation/.work/v2-frontend-parent/UHSCTop-injected-children.sv",
-      "sha256": "6c11f96d159fecf7353029727b0ccd9ad4991451ee7da9c58410f5db60930548",
-      "bytes": 830892
+      "sha256": "7030d3d3122b864b613e16270a629cdd693734ab606652d955928e67f7a1fece",
+      "bytes": 782992
     },
     "verilator": {
       "status": "PASS",
       "returncode": 0,
-      "stderr_tail": "arent/UHSCTop-injected-children.sv:1349:24: Operator GT expects 8 bits on the RHS, but RHS's VARREF '$18' generates 6 bits.\n                                                                                                           : ... note: In instance 'UHSCTop.bpu'\n 1349 |   assign \\$19  = \\$17  > \\$18 ;\n      |                        ^\n%Warning-WIDTHEXPAND: /tmp/uhsc-v2/validation/.work/v2-frontend-parent/UHSCTop-injected-children.sv:1355:24: Operator ADD expects 40 bits on the RHS, but RHS's CONST '6'h20' generates 6 bits.\n                                                                                                           : ... note: In instance 'UHSCTop.bpu'\n 1355 |   assign \\$25  = s1_pc + 6'h20;\n      |                        ^\n%Warning-WIDTHEXPAND: /tmp/uhsc-v2/validation/.work/v2-frontend-parent/UHSCTop-injected-children.sv:992:46: Operator ADD expects 51 bits on the RHS, but RHS's CONST '7'h40' generates 7 bits.\n                                                                                                          : ... note: In instance 'UHSCTop'\n  992 |   assign \\$1  = io_softPrefetch_0_bits_vaddr + 7'h40;\n      |                                              ^\n"
+      "stderr_tail": "arent/UHSCTop-injected-children.sv:1345:24: Operator GT expects 8 bits on the RHS, but RHS's VARREF '$18' generates 6 bits.\n                                                                                                           : ... note: In instance 'UHSCTop.bpu'\n 1345 |   assign \\$19  = \\$17  > \\$18 ;\n      |                        ^\n%Warning-WIDTHEXPAND: /tmp/uhsc-v2/validation/.work/v2-frontend-parent/UHSCTop-injected-children.sv:1351:24: Operator ADD expects 40 bits on the RHS, but RHS's CONST '6'h20' generates 6 bits.\n                                                                                                           : ... note: In instance 'UHSCTop.bpu'\n 1351 |   assign \\$25  = s1_pc + 6'h20;\n      |                        ^\n%Warning-WIDTHEXPAND: /tmp/uhsc-v2/validation/.work/v2-frontend-parent/UHSCTop-injected-children.sv:993:46: Operator ADD expects 51 bits on the RHS, but RHS's CONST '7'h40' generates 7 bits.\n                                                                                                          : ... note: In instance 'UHSCTop'\n  993 |   assign \\$1  = io_softPrefetch_0_bits_vaddr + 7'h40;\n      |                                              ^\n"
     },
     "yosys": {
       "status": "PASS",
