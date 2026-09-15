@@ -107,7 +107,7 @@ BACKEND_PARENT_SOURCE_PATHS: tuple[str, ...] = (
 )
 
 # Return the machine-readable parent contract consumed by landing evidence. /
-# 返回落地证据使用的机器可读父级契约。
+# 返回落地证据使用的机器可读父级契约。/
 def backend_parent_contract() -> dict[str, Any]:
     """Describe the Backend aggregate and its intentionally open child gates. / 描述 Backend 聚合及明确保持开放的子级门禁。"""
     return {
