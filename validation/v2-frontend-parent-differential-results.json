@@ -1887,7 +1887,7 @@
   },
   "target": {
     "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Top-Hardware.py",
-    "sha256": "1e0f4e2bd4af1ad900602f0a8c120ce5f9d138ef77ea4dee1f63abbf37f1effc"
+    "sha256": "c8ea5d2240cd12bdc6af6011292e5ae72f98193f0ce1491d8f91c5ddfcf4c43f"
   },
   "port_inventory": {
     "status": "PASS",
@@ -1905,8 +1905,8 @@
     "direction_width_match": true,
     "target_input_count": 232,
     "target_output_count": 139,
-    "full_rtl_sha256": "ce23b40f546d7b9dd68ba251cacf886dfdf7ddb52a8b89f4851e47864ded2320",
-    "full_rtl_bytes": 76553
+    "full_rtl_sha256": "1cbdbfea181dfdb58c4939b1e8dd9f5c5aa914d28c39803d1b9ba14d6e104c2f",
+    "full_rtl_bytes": 309574
   },
   "injected_child_probe": {
     "status": "PASS",
@@ -1918,13 +1918,13 @@
     ],
     "target_rtl": {
       "path": "validation/.work/v2-frontend-parent/UHSCTop-injected-children.sv",
-      "sha256": "7030d3d3122b864b613e16270a629cdd693734ab606652d955928e67f7a1fece",
-      "bytes": 782992
+      "sha256": "ea978ab2aa87d41ba7a94daed49dc7563431ff74399edf8bf4d8a570297979b1",
+      "bytes": 1016093
     },
     "verilator": {
       "status": "PASS",
       "returncode": 0,
-      "stderr_tail": "arent/UHSCTop-injected-children.sv:1345:24: Operator GT expects 8 bits on the RHS, but RHS's VARREF '$18' generates 6 bits.\n                                                                                                           : ... note: In instance 'UHSCTop.bpu'\n 1345 |   assign \\$19  = \\$17  > \\$18 ;\n      |                        ^\n%Warning-WIDTHEXPAND: /tmp/uhsc-v2/validation/.work/v2-frontend-parent/UHSCTop-injected-children.sv:1351:24: Operator ADD expects 40 bits on the RHS, but RHS's CONST '6'h20' generates 6 bits.\n                                                                                                           : ... note: In instance 'UHSCTop.bpu'\n 1351 |   assign \\$25  = s1_pc + 6'h20;\n      |                        ^\n%Warning-WIDTHEXPAND: /tmp/uhsc-v2/validation/.work/v2-frontend-parent/UHSCTop-injected-children.sv:993:46: Operator ADD expects 51 bits on the RHS, but RHS's CONST '7'h40' generates 7 bits.\n                                                                                                          : ... note: In instance 'UHSCTop'\n  993 |   assign \\$1  = io_softPrefetch_0_bits_vaddr + 7'h40;\n      |                                              ^\n"
+      "stderr_tail": "lb_pending_index)\n      |         ^~~~~\n%Warning-CASEINCOMPLETE: /tmp/uhsc-v2/validation/.work/v2-frontend-parent/UHSCTop-injected-children.sv:31464:9: Case values incompletely covered (example pattern 0x2)\n31464 |         casez (itlb_pending_index)\n      |         ^~~~~\n%Warning-CASEINCOMPLETE: /tmp/uhsc-v2/validation/.work/v2-frontend-parent/UHSCTop-injected-children.sv:31480:9: Case values incompletely covered (example pattern 0x3)\n31480 |         casez (itlb_pending_index)\n      |         ^~~~~\n%Warning-CASEINCOMPLETE: /tmp/uhsc-v2/validation/.work/v2-frontend-parent/UHSCTop-injected-children.sv:31673:9: Case values incompletely covered (example pattern 0x1)\n31673 |         casez (itlb_pending_index)\n      |         ^~~~~\n%Warning-CASEINCOMPLETE: /tmp/uhsc-v2/validation/.work/v2-frontend-parent/UHSCTop-injected-children.sv:31688:9: Case values incompletely covered (example pattern 0x2)\n31688 |         casez (itlb_pending_index)\n      |         ^~~~~\n%Warning-CASEINCOMPLETE: /tmp/uhsc-v2/validation/.work/v2-frontend-parent/UHSCTop-injected-children.sv:31705:9: Case values incompletely covered (example pattern 0x3)\n31705 |         casez (itlb_pending_index)\n      |         ^~~~~\n"
     },
     "yosys": {
       "status": "PASS",
@@ -1935,16 +1935,16 @@
   "comparison": {
     "status": "PASS",
     "returncode": 0,
-    "stdout_tail": "FRONTEND_PARENT_DIFFERENTIAL_PASS 96\n- /tmp/uhsc-v2/validation/.work/v2-frontend-parent/frontend-parent-diff.sv:2665: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 385ps; walltime 0.002 s; speed 245.837 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n",
-    "trace_sha256": "21f2d646ee0ec717e642a287e2c905589cbe7eedcaa0516e7e5bcb77271c857e",
+    "stdout_tail": "FRONTEND_PARENT_DIFFERENTIAL_PASS 96\n- /tmp/uhsc-v2/validation/.work/v2-frontend-parent/frontend-parent-diff.sv:11081: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 385ps; walltime 0.002 s; speed 267.026 ns/s\n- Verilator: cpu 0.001 s on 1 threads; alloced 153 MB\n",
+    "trace_sha256": "d840fa5756d086bda4d3df212e5121bc794492bdf0a96053f843247fd8a8aac4",
     "trace_lines": 5,
-    "source_sha256": "12aae609dbcd3a0c8c0f63f8a1f9204084144a552509dde225b1f90f3a8c40bc"
+    "source_sha256": "441f8f4532b20978c0a7e9a5b16e13db678091b63cac1b2ab036b67f8eedee62"
   },
   "backend_gates": {
     "verilator": {
       "status": "PASS",
       "returncode": 0,
-      "stderr_tail": "%Warning-WIDTHEXPAND: /tmp/uhsc-v2/validation/.work/v2-frontend-parent/UHSCTop.sv:987:46: Operator ADD expects 51 bits on the RHS, but RHS's CONST '7'h40' generates 7 bits.\n                                                                                        : ... note: In instance 'UHSCTop'\n  987 |   assign \\$1  = io_softPrefetch_0_bits_vaddr + 7'h40;\n      |                                              ^\n                      ... For warning description see https://verilator.org/warn/WIDTHEXPAND?v=5.032\n                      ... Use \"/* verilator lint_off WIDTHEXPAND */\" and lint_on around source to disable this message.\n"
+      "stderr_tail": " covered (example pattern 0x1)\n 9580 |         casez (itlb_pending_index)\n      |         ^~~~~\n%Warning-CASEINCOMPLETE: /tmp/uhsc-v2/validation/.work/v2-frontend-parent/UHSCTop.sv:9594:9: Case values incompletely covered (example pattern 0x2)\n 9594 |         casez (itlb_pending_index)\n      |         ^~~~~\n%Warning-CASEINCOMPLETE: /tmp/uhsc-v2/validation/.work/v2-frontend-parent/UHSCTop.sv:9610:9: Case values incompletely covered (example pattern 0x3)\n 9610 |         casez (itlb_pending_index)\n      |         ^~~~~\n%Warning-CASEINCOMPLETE: /tmp/uhsc-v2/validation/.work/v2-frontend-parent/UHSCTop.sv:9649:9: Case values incompletely covered (example pattern 0x1)\n 9649 |         casez (itlb_pending_index)\n      |         ^~~~~\n%Warning-CASEINCOMPLETE: /tmp/uhsc-v2/validation/.work/v2-frontend-parent/UHSCTop.sv:9663:9: Case values incompletely covered (example pattern 0x2)\n 9663 |         casez (itlb_pending_index)\n      |         ^~~~~\n%Warning-CASEINCOMPLETE: /tmp/uhsc-v2/validation/.work/v2-frontend-parent/UHSCTop.sv:9679:9: Case values incompletely covered (example pattern 0x3)\n 9679 |         casez (itlb_pending_index)\n      |         ^~~~~\n%Warning-CASEINCOMPLETE: /tmp/uhsc-v2/validation/.work/v2-frontend-parent/UHSCTop.sv:9872:9: Case values incompletely covered (example pattern 0x1)\n 9872 |         casez (itlb_pending_index)\n      |         ^~~~~\n%Warning-CASEINCOMPLETE: /tmp/uhsc-v2/validation/.work/v2-frontend-parent/UHSCTop.sv:9887:9: Case values incompletely covered (example pattern 0x2)\n 9887 |         casez (itlb_pending_index)\n      |         ^~~~~\n%Warning-CASEINCOMPLETE: /tmp/uhsc-v2/validation/.work/v2-frontend-parent/UHSCTop.sv:9904:9: Case values incompletely covered (example pattern 0x3)\n 9904 |         casez (itlb_pending_index)\n      |         ^~~~~\n"
     },
     "yosys": {
       "status": "PASS",
@@ -1952,8 +1952,8 @@
       "stderr_tail": ""
     },
     "status": "PASS",
-    "rtl_sha256": "ce23b40f546d7b9dd68ba251cacf886dfdf7ddb52a8b89f4851e47864ded2320",
-    "rtl_bytes": 76553
+    "rtl_sha256": "1cbdbfea181dfdb58c4939b1e8dd9f5c5aa914d28c39803d1b9ba14d6e104c2f",
+    "rtl_bytes": 309574
   },
   "behavioral_equivalence": true,
   "status": "DIFFERENTIAL_MATCHED_BOUNDED",
@@ -1978,7 +1978,7 @@
     "status": "PASS",
     "vectors": 32,
     "checks": 192,
-    "trace_sha256": "637b9a9436929bbbfd56ece2044defc41deda4afc3f1a4de34d9d1ba291d2071",
+    "trace_sha256": "d8fc8ae3c1807936ed50b1295950b7f792c2046a17cb0b179e8ff49ce79a6cc5",
     "observations": [
       {
         "reset": 1,
@@ -1992,7 +1992,7 @@
         "reset": 1,
         "ptw_valid": 0,
         "wfi_safe": 0,
-        "icache_a_valid": 1,
+        "icache_a_valid": 0,
         "uncache_a_valid": 0,
         "error_valid": 0
       },
@@ -2000,7 +2000,7 @@
         "reset": 1,
         "ptw_valid": 0,
         "wfi_safe": 0,
-        "icache_a_valid": 1,
+        "icache_a_valid": 0,
         "uncache_a_valid": 0,
         "error_valid": 0
       },
