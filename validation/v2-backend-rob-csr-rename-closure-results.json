@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_BACKEND_ROB_CSR_RENAME_CLOSURE",
+  "batch_id": "V2-BACKEND-ROB-CSR-RENAME-003",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "locked_reference": {
+    "canonical_path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "immutable": true
+  },
+  "direct": {
+    "commit_stuck_counter": {
+      "status": "PASS",
+      "vectors": 512,
+      "checks": 1024,
+      "reference": "CommitStuckCounter equation (enable&stuck increment, otherwise clear)"
+    },
+    "ptr_wrappers": {
+      "status": "PASS",
+      "vectors": 1024,
+      "checks": 2048,
+      "reference": "RobEnqPtrWrapper/NewRobDeqPtrWrapper equations"
+    },
+    "csrs": {
+      "status": "PASS",
+      "vectors": 1024,
+      "checks": 1024,
+      "reference": "CSRConst permission equations"
+    },
+    "rename_ready_flush": {
+      "status": "PASS",
+      "vectors": 1024,
+      "checks": 2048,
+      "reference": "rename ready/flush equation oracle",
+      "integration": "PENDING"
+    }
+  },
+  "rename_sim": {
+    "status": "PASS",
+    "vectors": 128,
+    "trace_sha256": "8715b444ec2474da0099eea3e6ec26f735cf7120db50e74425e917dabff882fc"
+  },
+  "tool_gates": {
+    "commit_stuck_counter": {
+      "verilator": "PASS",
+      "yosys": "PASS",
+      "verilator_sha256": "03ccf23b505d61839a8c2cec61aee939bc7bbe36a81e0b551447725c126df38c",
+      "yosys_sha256": "d1d8b99fcafb4b99d5e162a1daebab90dab25b530ce8a10615b768c076520252"
+    },
+    "ptr_wrappers": {
+      "verilator": "PASS",
+      "yosys": "PASS",
+      "verilator_sha256": "4d5080f8c604a5bad6aa4b47fbde7158131f429295c296d5fab1f338dfd2621c",
+      "yosys_sha256": "0d35a7e6610f94478ad7fd201e2182ed4d094ee61d6b8d654a9624f3fbcaa77e"
+    },
+    "rename_ready_flush": {
+      "verilator": "PASS",
+      "yosys": "PASS",
+      "verilator_sha256": "35350b284c8140b69dbac7c2a3796c2ae9b06d42d88171f2ec0e41454f76a562",
+      "yosys_sha256": "38f6c40a44461ca7bc2a6e0386baa68cc568c3087ca79219bbffd5dca1c86b1c"
+    }
+  },
+  "status": "PASS_BOUNDED",
+  "acceptance_eligible": false,
+  "gates": {
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "unclosed": [
+    "Rename full Backend wiring and CSR dynamic state remain pending.",
+    "Equation-level aggregate does not claim 1165-port Backend closure."
+  ]
+}
