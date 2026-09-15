@@ -39,6 +39,7 @@ OUT = ROOT / "validation" / "v2-rocket-diplomacy-rewrite-freeze-basic-results.js
 MAPPING = ROOT / "validation" / "v2-rocket-diplomacy-rewrite-freeze-mapping.json"
 CACHE_ROOT = ROOT / "validation" / ".cache"
 SOURCE_COMMIT = "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af"
+LOCKED_XSTOP_SHA256 = "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d"
 BATCH_ID = "V2-DEPENDENCY-ROCKET-DIPLOMACY-001"
 FAMILY_ID = "dependency.rocket.diplomacy"
 TOP_MODULE = "UHSCRocketDiplomacy"
@@ -302,6 +303,7 @@ def syntax_gate(rtl: str, export: Mapping[str, Any], target_hash: str) -> dict[s
     fingerprint = {
         "target_sha256": target_hash,
         "rtl_sha256": export["rtl_sha256"],
+        "locked_xstop_sha256": LOCKED_XSTOP_SHA256,
         "module_name": TOP_MODULE,
         "configuration": EXPORT_CONFIGURATION,
         "tool_versions": versions,
@@ -408,6 +410,7 @@ def mapping_record(result: Mapping[str, Any]) -> dict[str, Any]:
         "batch_id": BATCH_ID,
         "family_id": FAMILY_ID,
         "source_commit": SOURCE_COMMIT,
+        "locked_xstop_sha256": LOCKED_XSTOP_SHA256,
         "source_root": "upstream/rocket-chip/src/main/scala/diplomacy",
         "source_scala_file_count": len(SOURCE_PATHS),
         "source_paths": list(SOURCE_PATHS),
