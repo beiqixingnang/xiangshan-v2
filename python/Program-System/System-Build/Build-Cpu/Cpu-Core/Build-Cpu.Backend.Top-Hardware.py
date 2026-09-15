@@ -317,6 +317,53 @@ class BackendTop(Elaboratable):
         self.sbuffer_flush = Signal(name="io_fenceio_sbuffer_flushSb")
         self.frontend_reset = Signal(name="io_frontendReset")
 
+        # -----------------------------------------------------------------
+        # Explicit vector/ROB/CSR ready-valid boundaries.  Backend.scala
+        # carries these channels through several optional children; keeping
+        # one-entry buffers here makes the parent contract executable even
+        # when those children are not injected.  The aliases below retain a
+        # compact Python-facing spelling while the generated names stay
+        # stable and self-describing.
+        # -----------------------------------------------------------------
+        self.vector_in_valid = Signal(name="io_vector_in_valid")
+        self.vector_in_ready = Signal(name="io_vector_in_ready")
+        self.vector_in_bits = Signal(cfg.data_width, name="io_vector_in_bits")
+        self.vector_out_valid = Signal(name="io_vector_out_valid")
+        self.vector_out_ready = Signal(name="io_vector_out_ready")
+        self.vector_out_bits = Signal(cfg.data_width, name="io_vector_out_bits")
+        self.vector_flush = Signal(name="io_vector_flush")
+        self.vector_flush_state = Signal(2, name="io_vector_flush_state")
+        self.vector_valid = self.vector_in_valid
+        self.vector_ready = self.vector_in_ready
+
+        self.rob_in_valid = Signal(name="io_rob_in_valid")
+        self.rob_in_ready = Signal(name="io_rob_in_ready")
+        self.rob_in_bits = Signal(cfg.data_width, name="io_rob_in_bits")
+        self.rob_out_valid = Signal(name="io_rob_out_valid")
+        self.rob_out_ready = Signal(name="io_rob_out_ready")
+        self.rob_out_bits = Signal(cfg.data_width, name="io_rob_out_bits")
+        self.rob_flush = Signal(name="io_rob_flush")
+        self.rob_flush_state = Signal(2, name="io_rob_flush_state")
+        self.rob_valid = self.rob_in_valid
+        self.rob_ready = self.rob_in_ready
+
+        self.csr_req_valid = Signal(name="io_csr_req_valid")
+        self.csr_req_ready = Signal(name="io_csr_req_ready")
+        self.csr_req_write = Signal(name="io_csr_req_write")
+        self.csr_req_addr = Signal(12, name="io_csr_req_addr")
+        self.csr_req_data = Signal(cfg.data_width, name="io_csr_req_data")
+        self.csr_resp_valid = Signal(name="io_csr_resp_valid")
+        self.csr_resp_ready = Signal(name="io_csr_resp_ready")
+        self.csr_resp_data = Signal(cfg.data_width, name="io_csr_resp_data")
+        self.csr_flush = Signal(name="io_csr_flush")
+        self.csr_flush_state = Signal(2, name="io_csr_flush_state")
+        self.csr_valid = self.csr_req_valid
+        self.csr_ready = self.csr_req_ready
+        self.csr_rvalid = self.csr_resp_valid
+        self.csr_rready = self.csr_resp_ready
+        self.csr_rdata = self.csr_resp_data
+        self.ready_valid_flush = Signal(name="io_readyValid_flush")
+
         # Reusable child-boundary observation signals.  These make Decode,
         # Issue, and Writeback attachment visible in generated RTL while
         # preserving the bounded parent contract and acceptance gate.
@@ -401,6 +448,98 @@ class BackendTop(Elaboratable):
             self.dispatch_instr.eq(Mux(accept_window, self.frontend_instr, self.dispatch_instr)),
             self.dispatch_exception.eq(Mux(accept_window, self.frontend_exception, self.dispatch_exception)),
             self.dispatch_pc.eq(Mux(accept_window, self.frontend_pc, self.dispatch_pc)),
+        ]
+
+        # -----------------------------------------------------------------
+        # Vector, ROB and CSR one-entry ready/valid channels.
+        #
+        # A channel accepts a beat when ``valid && ready`` and keeps its
+        # payload stable until the consumer raises ``ready``.  A flush has
+        # priority over every transfer: pending payloads are discarded and
+        # output valid is held low for the flush state and one drain cycle.
+        # This mirrors the parent-level redirect ordering without requiring
+        # any child implementation or changing existing frontend/EXU ports.
+        # -----------------------------------------------------------------
+        flush_request = self.flush | self.vector_flush | self.rob_flush | self.csr_flush
+        flush_state = Signal(2, init=0, name="backend_flush_state")
+        FLUSH_IDLE = 0
+        FLUSH_ACTIVE = 1
+        FLUSH_DRAIN = 2
+        flush_active = Signal(name="backend_flush_active")
+        module.d.comb += flush_active.eq(flush_request | (flush_state != FLUSH_IDLE))
+        module.d.comb += self.ready_valid_flush.eq(flush_active)
+        module.d.sync += [
+            # ACTIVE records the request; DRAIN guarantees a full cycle in
+            # which no channel can observe stale valid data.
+            flush_state.eq(Mux(flush_request, FLUSH_ACTIVE,
+                               Mux(flush_state == FLUSH_ACTIVE, FLUSH_DRAIN, FLUSH_IDLE))),
+        ]
+
+        vector_pending = Signal(name="vector_pending")
+        vector_payload = Signal(cfg.data_width, name="vector_payload")
+        vector_space = ~vector_pending | (self.vector_out_ready & vector_pending)
+        vector_fire_in = self.vector_in_valid & self.vector_in_ready
+        vector_fire_out = self.vector_out_valid & self.vector_out_ready
+        module.d.comb += [
+            self.vector_in_ready.eq(vector_space & ~flush_active),
+            self.vector_out_valid.eq(vector_pending & ~flush_active),
+            self.vector_out_bits.eq(vector_payload),
+            self.vector_flush_state.eq(Mux(flush_state == FLUSH_IDLE, 0,
+                                           Mux(flush_state == FLUSH_ACTIVE, 1, 2))),
+        ]
+        module.d.sync += [
+            vector_pending.eq(Mux(flush_active, 0,
+                                  Mux(vector_fire_in, 1,
+                                      Mux(vector_fire_out, 0, vector_pending)))),
+            vector_payload.eq(Mux(vector_fire_in, self.vector_in_bits, vector_payload)),
+        ]
+
+        rob_pending = Signal(name="rob_pending")
+        rob_payload = Signal(cfg.data_width, name="rob_payload")
+        rob_space = ~rob_pending | (self.rob_out_ready & rob_pending)
+        rob_fire_in = self.rob_in_valid & self.rob_in_ready
+        rob_fire_out = self.rob_out_valid & self.rob_out_ready
+        module.d.comb += [
+            self.rob_in_ready.eq(rob_space & ~flush_active),
+            self.rob_out_valid.eq(rob_pending & ~flush_active),
+            self.rob_out_bits.eq(rob_payload),
+            self.rob_flush_state.eq(Mux(flush_state == FLUSH_IDLE, 0,
+                                        Mux(flush_state == FLUSH_ACTIVE, 1, 2))),
+        ]
+        module.d.sync += [
+            rob_pending.eq(Mux(flush_active, 0,
+                               Mux(rob_fire_in, 1,
+                                   Mux(rob_fire_out, 0, rob_pending)))),
+            rob_payload.eq(Mux(rob_fire_in, self.rob_in_bits, rob_payload)),
+        ]
+
+        # CSR requests use a shadow register for deterministic readback.  A
+        # write is acknowledged with the written value; a read returns the
+        # previous value.  The response remains valid under backpressure and
+        # is cancelled by the same flush boundary as vector/ROB traffic.
+        csr_shadow = Signal(cfg.data_width, init=0, name="csr_shadow")
+        csr_resp_pending = Signal(name="csr_resp_pending")
+        csr_resp_payload = Signal(cfg.data_width, name="csr_resp_payload")
+        csr_space = ~csr_resp_pending | (self.csr_resp_ready & csr_resp_pending)
+        csr_fire_in = self.csr_req_valid & self.csr_req_ready
+        csr_fire_out = self.csr_resp_valid & self.csr_resp_ready
+        module.d.comb += [
+            self.csr_req_ready.eq(csr_space & ~flush_active),
+            self.csr_resp_valid.eq(csr_resp_pending & ~flush_active),
+            self.csr_resp_data.eq(csr_resp_payload),
+            self.csr_flush_state.eq(Mux(flush_state == FLUSH_IDLE, 0,
+                                        Mux(flush_state == FLUSH_ACTIVE, 1, 2))),
+        ]
+        module.d.sync += [
+            csr_resp_pending.eq(Mux(flush_active, 0,
+                                    Mux(csr_fire_in, 1,
+                                        Mux(csr_fire_out, 0, csr_resp_pending)))),
+            csr_resp_payload.eq(Mux(csr_fire_in,
+                                     Mux(self.csr_req_write, self.csr_req_data, csr_shadow),
+                                     csr_resp_payload)),
+            csr_shadow.eq(Mux(flush_active, csr_shadow,
+                              Mux(csr_fire_in & self.csr_req_write,
+                                  self.csr_req_data, csr_shadow))),
         ]
 
         # Select the first live EXU for each V2 writeback class/port.  The
@@ -729,6 +868,16 @@ def build_verilog(configuration, injected_dependencies):
               top.child_issue_active, top.child_issue_free_slots, top.child_issue_can_enq,
               top.child_issue_selected_valid, top.child_issue_selected_bits,
               top.child_datapath_active, top.child_writeback_active] + top.child_writeback_valid + top.child_writeback_data + top.child_writeback_pdest
+    ports += [top.vector_in_valid, top.vector_in_ready, top.vector_in_bits,
+              top.vector_out_valid, top.vector_out_ready, top.vector_out_bits,
+              top.vector_flush, top.vector_flush_state,
+              top.rob_in_valid, top.rob_in_ready, top.rob_in_bits,
+              top.rob_out_valid, top.rob_out_ready, top.rob_out_bits,
+              top.rob_flush, top.rob_flush_state,
+              top.csr_req_valid, top.csr_req_ready, top.csr_req_write,
+              top.csr_req_addr, top.csr_req_data, top.csr_resp_valid,
+              top.csr_resp_ready, top.csr_resp_data, top.csr_flush,
+              top.csr_flush_state, top.ready_valid_flush]
     name = str(config.get("name", config.get("module", "UHSCBackendTop")))
     return verilog.convert(top, name=name, ports=ports)
 

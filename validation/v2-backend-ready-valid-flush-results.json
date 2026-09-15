@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "kind": "BOUNDED_BACKEND_READY_VALID_FLUSH",
+  "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Top-Hardware.py",
+  "scala_paths": [
+    "upstream/src/main/scala/xiangshan/backend/Backend.scala",
+    "upstream/src/main/scala/xiangshan/backend/rob/Rob.scala",
+    "upstream/src/main/scala/xiangshan/backend/rename/Rename.scala",
+    "upstream/src/main/scala/xiangshan/backend/decode/DecodeUnit.scala",
+    "upstream/src/main/scala/xiangshan/backend/datapath/DataPath.scala"
+  ],
+  "behavior": {
+    "vector": "one-entry ready/valid payload, stable under backpressure",
+    "rob": "one-entry ready/valid payload, stable under backpressure",
+    "csr": "one-entry request/response with deterministic shadow readback",
+    "flush": "shared ACTIVE/DRAIN state clears pending vector, ROB and CSR traffic"
+  },
+  "checks": {
+    "py_compile": "PASS",
+    "pyright": "PASS (0 errors, 0 warnings, 0 informations)",
+    "import": "PASS",
+    "build_verilog": "PASS (bounded export)",
+    "parent_validator": "PASS_BOUNDED_PARENT"
+  },
+  "status": "PYTHON_PRESENT_UNVERIFIED",
+  "accepted": false,
+  "boundary": "Full Backend child closure and Scala differential remain pending; this evidence covers only the executable parent ready/valid/flush boundary."
+}
