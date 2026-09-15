@@ -5,6 +5,7 @@ V2 异步读发射数据阵列。
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Any, cast
 
 from amaranth import Array, Elaboratable, Module, Mux, Signal
 
@@ -80,7 +81,7 @@ class DataArray(Elaboratable):
             m.d.comb += self.read_data[port].eq(read_value)
         for port in range(c.num_write):
             for index in range(c.num_entries):
-                with m.If(self.write_enable[port] & (self.write_addr[port] == index)):
+                with cast(Any, m.If(self.write_enable[port] & (self.write_addr[port] == index))):
                     m.d.sync += storage[index].eq(self.write_data[port])
         return m
 

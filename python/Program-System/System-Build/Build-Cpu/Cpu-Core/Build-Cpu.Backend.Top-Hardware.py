@@ -13,7 +13,7 @@ from __future__ import annotations
 import json
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any, Iterable, cast
 
 from amaranth import ClockDomain, ClockSignal, Elaboratable, Module, Mux, ResetSignal, Signal
 from amaranth.back import verilog
@@ -96,7 +96,7 @@ def full_backend_port_schema() -> tuple[tuple[str, str, int], ...]:
     if path.is_file():
         try:
             payload = json.loads(path.read_text(encoding="utf-8"))
-            rows = tuple((str(item["direction"]), str(item["name"]), int(item["width"]))
+            rows: Any = tuple((str(item["direction"]), str(item["name"]), int(item["width"]))
                          for item in payload.get("ports", []))
             if len(rows) == BACKEND_REFERENCE_PORT_COUNT:
                 return rows
@@ -104,7 +104,7 @@ def full_backend_port_schema() -> tuple[tuple[str, str, int], ...]:
             pass
     # Standalone fallback keeps geometry deterministic but intentionally does
     # not claim semantic correspondence to the locked names.
-    rows: list[tuple[str, str, int]] = [("input", "clock", 1), ("input", "reset", 1)]
+    rows: Any = [("input", "clock", 1), ("input", "reset", 1)]
     rows.extend(("input", f"backend_inventory_input_{index:03d}", 1)
                 for index in range(BACKEND_REFERENCE_INPUT_COUNT - 2))
     rows.extend(("output", f"backend_inventory_output_{index:03d}", 1)
@@ -341,8 +341,10 @@ class BackendTop(Elaboratable):
         exception_any: Any = 0
         for lane in range(fw):
             lane_valid = self.frontend_valid[lane]
-            lane_exception = self.frontend_exception[lane * cfg.exception_width:(lane + 1) * cfg.exception_width].any()
-            exception_any = exception_any | (lane_valid & lane_exception)
+            lane_exception = 0
+            for bit in self.frontend_exception[lane * cfg.exception_width:(lane + 1) * cfg.exception_width]:
+                lane_exception = lane_exception | cast(Any, bit)
+            exception_any = exception_any | (cast(Any, lane_valid) & lane_exception)
         exu_redirect_any: Any = 0
         for signal in self.exu_redirect:
             exu_redirect_any = exu_redirect_any | signal
@@ -417,7 +419,7 @@ class BackendTop(Elaboratable):
                     for index, signal in enumerate(child_matches.values()):
                         if index >= 32:
                             break
-                        module.d.comb += self.child_decode_matches[index].eq(signal)
+                        module.d.comb += cast(Any, self.child_decode_matches[index]).eq(cast(Any, signal))
         if self.issue is not None:
             module.submodules.issue = self.issue
             child_can_enq = getattr(self.issue, "can_enq", None)
@@ -440,12 +442,15 @@ class BackendTop(Elaboratable):
             if any(group is not None for group in (*valid_groups, *data_groups, *pdest_groups)):
                 module.d.comb += self.child_writeback_active.eq(1)
                 for index in range(5):
-                    if isinstance(valid_groups[index], (list, tuple)) and valid_groups[index]:
-                        module.d.comb += self.child_writeback_valid[index].eq(valid_groups[index][0])
-                    if isinstance(data_groups[index], (list, tuple)) and data_groups[index]:
-                        module.d.comb += self.child_writeback_data[index].eq(data_groups[index][0])
-                    if isinstance(pdest_groups[index], (list, tuple)) and pdest_groups[index]:
-                        module.d.comb += self.child_writeback_pdest[index].eq(pdest_groups[index][0])
+                    valid_group = valid_groups[index]
+                    data_group = data_groups[index]
+                    pdest_group = pdest_groups[index]
+                    if isinstance(valid_group, (list, tuple)) and valid_group:
+                        module.d.comb += self.child_writeback_valid[index].eq(valid_group[0])
+                    if isinstance(data_group, (list, tuple)) and data_group:
+                        module.d.comb += self.child_writeback_data[index].eq(data_group[0])
+                    if isinstance(pdest_group, (list, tuple)) and pdest_group:
+                        module.d.comb += self.child_writeback_pdest[index].eq(pdest_group[0])
 
         # Locked output ports are explicit tie-offs until their corresponding
         # Decode/Issue/Rename/CSR/EXU child closures are implemented.

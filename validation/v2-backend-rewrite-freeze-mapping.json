@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_BACKEND_REWRITE_FREEZE_MAPPING",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "batch_id": "V2-REWRITE-FREEZE-BACKEND-A",
+  "targets": [
+    {"id": "BackendTop", "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Top-Hardware.py", "source_scala": ["upstream/src/main/scala/xiangshan/backend/Backend.scala"], "family_id": "core.backend", "closure": "parent", "freeze_status": "BASIC_PASS"},
+    {"id": "Instructions", "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Decode.Instructions-Hardware.py", "source_scala": ["upstream/src/main/scala/xiangshan/backend/decode/Instructions.scala"], "family_id": "core.decode.isa", "closure": "family", "freeze_status": "BASIC_PASS"},
+    {"id": "DeqPolicy", "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.DeqPolicy-Hardware.py", "source_scala": ["upstream/src/main/scala/xiangshan/backend/issue/DeqPolicy.scala"], "family_id": "core.backend.issue.deq", "closure": "family", "freeze_status": "BASIC_PASS"},
+    {"id": "DataArray", "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.DataArray-Hardware.py", "source_scala": ["upstream/src/main/scala/xiangshan/backend/issue/DataArray.scala"], "family_id": "core.backend.issue.data", "closure": "family", "freeze_status": "BASIC_PASS"},
+    {"id": "FuBusyTableRead", "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.FuBusyTableRead-Hardware.py", "source_scala": ["upstream/src/main/scala/xiangshan/backend/issue/FuBusyTableRead.scala"], "family_id": "core.backend.issue.busy", "closure": "family", "freeze_status": "BASIC_PASS"},
+    {"id": "RobPtrWrappers", "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Rob.PtrWrappers-Hardware.py", "source_scala": ["upstream/src/main/scala/xiangshan/backend/rob/RobEnqPtrWrapper.scala", "upstream/src/main/scala/xiangshan/backend/rob/RobDeqPtrWrapper.scala"], "family_id": "core.backend.rob.ptr", "closure": "family", "freeze_status": "BASIC_PASS"}
+  ],
+  "behavior_status": "PENDING_FAMILY_VALIDATION",
+  "accepted": false
+}

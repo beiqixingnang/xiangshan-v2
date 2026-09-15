@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_BACKEND_REWRITE_FREEZE_BASIC",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "targets": {
+    "BackendTop": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Top-Hardware.py",
+      "sha256": "5a31db047e6b2da5425e11b6dd07e47d8d478182a334462bdf350f9c2dd310c2",
+      "utf8_lf": true,
+      "ast": true,
+      "py_compile": true,
+      "exact_import": true,
+      "build_verilog": true,
+      "module_decl": true,
+      "generated_bytes": 13921581,
+      "syntax": {
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_returncode": 0,
+        "yosys_returncode": 0,
+        "stderr_tail": "\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Top-Hardware.py:325\" *) 2'h2;\n      |                                         ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_backend_freeze_7b9z09d9/UHSCBackendTop.sv:69164:41: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n69164 |   assign \\$34073  = io_fromExu_7_wbPort == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Top-Hardware.py:325\" *) 2'h3;\n      |                                         ^~\n"
+      },
+      "pass": true
+    },
+    "Instructions": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Decode.Instructions-Hardware.py",
+      "sha256": "bb2625f6a36b2649680ad69ea52c4e025f6b9540579aac9903895de36345c581",
+      "utf8_lf": true,
+      "ast": true,
+      "py_compile": true,
+      "exact_import": true,
+      "build_verilog": true,
+      "module_decl": true,
+      "generated_bytes": 5627,
+      "syntax": {
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_returncode": 0,
+        "yosys_returncode": 0,
+        "stderr_tail": "structions.sv:73:31: Operator EQ expects 32 bits on the RHS, but RHS's CONST '31'h50000057' generates 31 bits.\n                                                                                                             : ... note: In instance 'Instructions'\n   73 |   assign zvbb_vror_vv = \\$12  == 31'h50000057;\n      |                               ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_backend_freeze_7b9z09d9/Instructions.sv:74:31: Operator EQ expects 32 bits on the RHS, but RHS's CONST '31'h50004057' generates 31 bits.\n                                                                                                             : ... note: In instance 'Instructions'\n   74 |   assign zvbb_vror_vx = \\$13  == 31'h50004057;\n      |                               ^~\n"
+      },
+      "pass": true
+    },
+    "DeqPolicy": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.DeqPolicy-Hardware.py",
+      "sha256": "8268843c490f85890ecf7b56761f2412b7c725ca23aa300f3615880942605d3c",
+      "utf8_lf": true,
+      "ast": true,
+      "py_compile": true,
+      "exact_import": true,
+      "build_verilog": true,
+      "module_decl": true,
+      "generated_bytes": 290229,
+      "syntax": {
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_returncode": 0,
+        "yosys_returncode": 0,
+        "stderr_tail": "0];\n      |                        ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_backend_freeze_7b9z09d9/DeqPolicy.sv:1410:24: Operator ADD expects 6 bits on the RHS, but RHS's SEL generates 1 bits.\n                                                                                                            : ... note: In instance 'DeqPolicy'\n 1410 |   assign \\$298  = 1'h0 + (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Issue.DeqPolicy-Hardware.py:78\" *) io_request[0];\n      |                        ^\n"
+      },
+      "pass": true
+    },
+    "DataArray": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.DataArray-Hardware.py",
+      "sha256": "bd1563b184714c883393f51f443d99eb3a664a77a4d36be985dffc1bae762349",
+      "utf8_lf": true,
+      "ast": true,
+      "py_compile": true,
+      "exact_import": true,
+      "build_verilog": true,
+      "module_decl": true,
+      "generated_bytes": 38615,
+      "syntax": {
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_returncode": 0,
+        "yosys_returncode": 0,
+        "stderr_tail": "               ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_backend_freeze_7b9z09d9/DataArray.sv:209:34: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                           : ... note: In instance 'DataArray'\n  209 |   assign \\$31  = io_write_0_addr == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Issue.DataArray-Hardware.py:84\" *) 2'h2;\n      |                                  ^~\n"
+      },
+      "pass": true
+    },
+    "FuBusyTableRead": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.FuBusyTableRead-Hardware.py",
+      "sha256": "b810549f7676a4614a3c3d29d58eb917e3e90fe7cdec7b7a9bc5ecaedd676c4d",
+      "utf8_lf": true,
+      "ast": true,
+      "py_compile": true,
+      "exact_import": true,
+      "build_verilog": true,
+      "module_decl": true,
+      "generated_bytes": 177368,
+      "syntax": {
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_returncode": 0,
+        "yosys_returncode": 0,
+        "stderr_tail": "                                                          : ... note: In instance 'FuBusyTableRead'\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_backend_freeze_7b9z09d9/FuBusyTableRead.sv:867:41: Operator EQ expects 8 bits on the RHS, but RHS's CONST '3'h6' generates 3 bits.\n                                                                                                                 : ... note: In instance 'FuBusyTableRead'\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_backend_freeze_7b9z09d9/FuBusyTableRead.sv:870:41: Operator EQ expects 8 bits on the RHS, but RHS's CONST '3'h7' generates 3 bits.\n                                                                                                                 : ... note: In instance 'FuBusyTableRead'\n"
+      },
+      "pass": true
+    },
+    "RobPtrWrappers": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Rob.PtrWrappers-Hardware.py",
+      "sha256": "fa8092e96cf7028b761b065cf44a5253c5968e7881dc81f149636da72c27515d",
+      "utf8_lf": true,
+      "ast": true,
+      "py_compile": true,
+      "exact_import": true,
+      "build_verilog": true,
+      "module_decl": true,
+      "generated_bytes": 784324,
+      "syntax": {
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_returncode": 0,
+        "yosys_returncode": 0,
+        "stderr_tail": "Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_backend_freeze_7b9z09d9/RobPtrWrappers.sv:4489:29: Operator ADD expects 8 bits on the LHS, but LHS's VARREF 'io_out_3' generates 6 bits.\n                                                                                                                 : ... note: In instance 'RobPtrWrappers.deq'\n 4489 |   assign \\$2575  = io_out_3 + (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Rob.PtrWrappers-Hardware.py:168\" *) \\$2574 ;\n      |                             ^\n"
+      },
+      "pass": true
+    }
+  },
+  "pyright": {
+    "version": "1.1.411",
+    "error_count": 0,
+    "warning_count": 0
+  },
+  "gates": {
+    "REWRITE_FREEZE_BASIC": "PASS",
+    "STRUCTURE_VERIFIED": "PASS",
+    "BEHAVIOR_VERIFIED_backend": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "REWRITE_FREEZE_BASIC_PASS",
+  "acceptance_eligible": false
+}
