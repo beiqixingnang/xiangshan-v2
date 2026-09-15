@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_OPENLLC_REWRITE_FREEZE_MAPPING",
+  "phase": "REWRITE_FREEZE",
+  "batch_id": "V2-DEPENDENCY-OPENLLC-BRIDGE-001",
+  "family_id": "dependency.openLLC.bridge",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "source_root": "openLLC/src/main/scala/openLLC/chi",
+  "source_scala_file_count": 8,
+  "source_paths": [
+    "openLLC/src/main/scala/openLLC/chi/LinkLayer.scala",
+    "openLLC/src/main/scala/openLLC/chi/RXDAT.scala",
+    "openLLC/src/main/scala/openLLC/chi/RXREQ.scala",
+    "openLLC/src/main/scala/openLLC/chi/RXRSP.scala",
+    "openLLC/src/main/scala/openLLC/chi/TXDAT.scala",
+    "openLLC/src/main/scala/openLLC/chi/TXREQ.scala",
+    "openLLC/src/main/scala/openLLC/chi/TXRSP.scala",
+    "openLLC/src/main/scala/openLLC/chi/TXSNP.scala"
+  ],
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.OpenLLC.Bridge-Hardware.py",
+    "sha256": "066f03775d5624be9334de6ff27b6035d566f4066fe4abdd948b12f432095c5e",
+    "bytes": 21679
+  },
+  "disposition": "AGGREGATED_FAMILY_BOUNDARY",
+  "boundary": {
+    "implemented_contracts": [
+      "issue-specific CHI flit layouts and pack/unpack",
+      "TX/RX REQ/RSP/DAT/SNP ready-valid channels",
+      "STOP/ACTIVATE/RUN/DEACTIVATE link states",
+      "three-channel L-Credit accounting"
+    ],
+    "explicitly_deferred_closure": [
+      "Full selected-top OpenLLC/OpenNCB integration remains pending.",
+      "Locked V2 reference differential and parent closure remain pending.",
+      "Mulan PSL/BSD attribution review and user approval remain pending."
+    ],
+    "deferred_reason": "The family is staged at a single Build boundary; conditional CHI/OpenLLC reachability is validated after the selected top is elaborated."
+  },
+  "localization": [
+    {
+      "source_name": "dependency.openLLC.bridge",
+      "local_name": "UHSCOpenLLCBridge",
+      "visibility": "generated HDL top",
+      "reason": "UHSC project-facing family Build export while retaining source names in provenance"
+    }
+  ],
+  "evidence": {
+    "rewrite_freeze_basic": "validation/v2-openllc-bridge-rewrite-freeze-basic-results.json",
+    "bounded_family_validation": "validation/v2-openllc-family-direct-results.json"
+  },
+  "gates": {
+    "UTF8_LF": "PASS",
+    "FIVE_ZONE_BILINGUAL_AUDIT": "PASS",
+    "AST": "PASS",
+    "PY_COMPILE": "PASS",
+    "EXACT_PATH_IMPORT_NO_SIDE_EFFECTS": "PASS",
+    "PYRIGHT": "PASS",
+    "DETERMINISTIC_SAME_NAME_BUILD_VERILOG": "PASS",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "REWRITE_FREEZE_BASIC": "PASS",
+    "STRUCTURE_VERIFIED": "PASS",
+    "BEHAVIOR_VERIFIED_dependency.openLLC.bridge": "PENDING_BATCH_VALIDATION",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "structure_status": "PASS",
+  "behavior_status": "PENDING_BATCH_VALIDATION",
+  "unclosed": [
+    "Family direct/reference vectors and locked-SV differential are not yet run.",
+    "Selected-top parent closure and complete Kunminghu V2 generation remain pending.",
+    "License audit and user approval remain pending."
+  ],
+  "accepted": false,
+  "acceptance_eligible": false
+}

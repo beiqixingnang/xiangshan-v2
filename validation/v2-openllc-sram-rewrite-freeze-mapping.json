@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_OPENLLC_REWRITE_FREEZE_MAPPING",
+  "phase": "REWRITE_FREEZE",
+  "batch_id": "V2-DEPENDENCY-OPENLLC-SRAM-001",
+  "family_id": "dependency.openLLC.sram",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "source_root": "openLLC/src/main/scala/openLLC/utils",
+  "source_scala_file_count": 4,
+  "source_paths": [
+    "openLLC/src/main/scala/openLLC/utils/CHIXbar.scala",
+    "openLLC/src/main/scala/openLLC/utils/MMIOBridge.scala",
+    "openLLC/src/main/scala/openLLC/utils/OpenNCB.scala",
+    "openLLC/src/main/scala/openLLC/utils/TargetBinder.scala"
+  ],
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.OpenLLC.Sram-Hardware.py",
+    "sha256": "e087e39b18a85128b00e8e122394524b9581e981edcf53ae4d65e38738990d4e",
+    "bytes": 17284
+  },
+  "disposition": "AGGREGATED_FAMILY_BOUNDARY",
+  "boundary": {
+    "implemented_contracts": [
+      "banked CHI request routing",
+      "MMIO divergence/merge transaction-ID classification",
+      "byte-enabled synchronous SRAM",
+      "TargetBinder address-map selection"
+    ],
+    "explicitly_deferred_closure": [
+      "Full selected-top OpenLLC/OpenNCB integration remains pending.",
+      "Locked V2 reference differential and parent closure remain pending.",
+      "Mulan PSL/BSD attribution review and user approval remain pending."
+    ],
+    "deferred_reason": "The family is staged at a single Build boundary; conditional CHI/OpenLLC reachability is validated after the selected top is elaborated."
+  },
+  "localization": [
+    {
+      "source_name": "dependency.openLLC.sram",
+      "local_name": "UHSCOpenLLCSram",
+      "visibility": "generated HDL top",
+      "reason": "UHSC project-facing family Build export while retaining source names in provenance"
+    }
+  ],
+  "evidence": {
+    "rewrite_freeze_basic": "validation/v2-openllc-sram-rewrite-freeze-basic-results.json",
+    "bounded_family_validation": "validation/v2-openllc-family-direct-results.json"
+  },
+  "gates": {
+    "UTF8_LF": "PASS",
+    "FIVE_ZONE_BILINGUAL_AUDIT": "PASS",
+    "AST": "PASS",
+    "PY_COMPILE": "PASS",
+    "EXACT_PATH_IMPORT_NO_SIDE_EFFECTS": "PASS",
+    "PYRIGHT": "PASS",
+    "DETERMINISTIC_SAME_NAME_BUILD_VERILOG": "PASS",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "REWRITE_FREEZE_BASIC": "PASS",
+    "STRUCTURE_VERIFIED": "PASS",
+    "BEHAVIOR_VERIFIED_dependency.openLLC.sram": "PENDING_BATCH_VALIDATION",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "structure_status": "PASS",
+  "behavior_status": "PENDING_BATCH_VALIDATION",
+  "unclosed": [
+    "Family direct/reference vectors and locked-SV differential are not yet run.",
+    "Selected-top parent closure and complete Kunminghu V2 generation remain pending.",
+    "License audit and user approval remain pending."
+  ],
+  "accepted": false,
+  "acceptance_eligible": false
+}
