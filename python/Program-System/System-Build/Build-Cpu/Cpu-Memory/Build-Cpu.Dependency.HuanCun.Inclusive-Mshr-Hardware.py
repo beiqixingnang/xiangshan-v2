@@ -27,17 +27,17 @@ __all__ = ["InclusiveMshrConfig", "InclusiveMshrBoundary", "build_verilog", "mai
 
 
 # Cast Amaranth's generator controls to a context-manager protocol. / 将 Amaranth 生成器控制转换为上下文管理器协议。
-def _if(module: Module, condition: Any) -> AbstractContextManager[None]:
+def amaranth_if(module: Module, condition: Any) -> AbstractContextManager[None]:
     return cast(AbstractContextManager[None], module.If(condition))
 
 
 # Cast the Amaranth else branch to a context-manager protocol. / 将 Amaranth else 分支转换为上下文管理器协议。
-def _else(module: Module) -> AbstractContextManager[None]:
+def amaranth_else(module: Module) -> AbstractContextManager[None]:
     return cast(AbstractContextManager[None], module.Else())
 
 
 # Narrow dynamic Amaranth values at the DSL boundary. / 在 DSL 边界窄化动态 Amaranth 值。
-def _value(expression: Any) -> Value:
+def amaranth_value(expression: Any) -> Value:
     return cast(Value, expression)
 
 
@@ -115,26 +115,26 @@ class InclusiveMshrBoundary(Elaboratable):
         alloc_found: Any = 0
         alloc_choice: Any = 0
         for index in range(c.entries):
-            take = ~_value(used[index]) & ~_value(alloc_found)
+            take = ~amaranth_value(used[index]) & ~amaranth_value(alloc_found)
             alloc_choice = Mux(take, index, alloc_choice)
-            alloc_found = _value(alloc_found) | ~_value(used[index])
+            alloc_found = amaranth_value(alloc_found) | ~amaranth_value(used[index])
         lookup_found: Any = 0
         lookup_choice: Any = 0
         for index in range(c.entries):
             hit = used[index] & (addr_mem[index] == self.lookup_address)
             lookup_choice = Mux(hit & ~lookup_found, index, lookup_choice)
             lookup_found = lookup_found | hit
-        occupancy_expr = sum((_value(used[index]) for index in range(c.entries)), 0)
+        occupancy_expr = sum((amaranth_value(used[index]) for index in range(c.entries)), 0)
         m.d.comb += [self.alloc_ready.eq(~self.flush & alloc_found), self.alloc_index.eq(alloc_choice),
                      self.lookup_hit.eq(self.lookup_valid & lookup_found), self.occupancy.eq(occupancy_expr),
                      self.resp_valid.eq(self.refill_valid & lookup_found), self.resp_data.eq(Array(data_mem)[lookup_choice]),
                      self.resp_source.eq(Array(source_mem)[lookup_choice])]
-        with _if(m, self.reset | self.flush):
+        with amaranth_if(m, self.reset | self.flush):
             m.d.huancun_mshr += used.eq(0)
-        with _else(m):
-            with _if(m, self.alloc_valid & self.alloc_ready):
+        with amaranth_else(m):
+            with amaranth_if(m, self.alloc_valid & self.alloc_ready):
                 m.d.huancun_mshr += [Array(used)[alloc_choice].eq(1), Array(addr_mem)[alloc_choice].eq(self.alloc_address), Array(source_mem)[alloc_choice].eq(self.alloc_source), alloc_index.eq(alloc_choice)]
-            with _if(m, self.refill_valid & lookup_found):
+            with amaranth_if(m, self.refill_valid & lookup_found):
                 m.d.huancun_mshr += [Array(data_mem)[lookup_choice].eq(self.refill_data), Array(used)[lookup_choice].eq(0), free_index.eq(lookup_choice)]
         return m
 

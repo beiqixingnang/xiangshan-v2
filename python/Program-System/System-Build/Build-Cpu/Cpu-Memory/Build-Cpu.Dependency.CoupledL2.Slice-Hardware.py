@@ -56,17 +56,17 @@ __all__ = [
 
 # Typed wrappers preserve Amaranth's generator-based control contexts. / 类型包装保持 Amaranth 基于生成器的控制上下文。
 # Convert a dynamic If context into a static context-manager protocol. / 将动态 If 上下文转换为静态上下文管理器协议。
-def _if(module: Module, condition: Any) -> AbstractContextManager[None]:
+def amaranth_if(module: Module, condition: Any) -> AbstractContextManager[None]:
     return cast(AbstractContextManager[None], module.If(condition))
 
 
 # Convert a dynamic Elif context into a static context-manager protocol. / 将动态 Elif 上下文转换为静态上下文管理器协议。
-def _elif(module: Module, condition: Any) -> AbstractContextManager[None]:
+def amaranth_elif(module: Module, condition: Any) -> AbstractContextManager[None]:
     return cast(AbstractContextManager[None], module.Elif(condition))
 
 
 # Convert a dynamic Else context into a static context-manager protocol. / 将动态 Else 上下文转换为静态上下文管理器协议。
-def _else(module: Module) -> AbstractContextManager[None]:
+def amaranth_else(module: Module) -> AbstractContextManager[None]:
     return cast(AbstractContextManager[None], module.Else())
 
 
@@ -467,11 +467,11 @@ class CoupledL2MSHR(Elaboratable):
         task_main_fire = self.task_main_valid & self.task_main_ready
         sink_c_fire = self.sink_c_valid & valid
         sink_d_fire = self.sink_d_valid & valid
-        with _if(m, self.reset):
+        with amaranth_if(m, self.reset):
             m.d.coupled_l2_mshr += [valid.eq(0), state.eq(5), got_grant_data.eq(0),
                                     probe_dirty.eq(0), denied.eq(0), corrupt.eq(0)]
-        with _else(m):
-            with _if(m, alloc_fire):
+        with amaranth_else(m):
+            with amaranth_if(m, alloc_fire):
                 m.d.coupled_l2_mshr += [valid.eq(1), state.eq(0), got_grant_data.eq(0),
                                         probe_dirty.eq(0), denied.eq(0), corrupt.eq(0),
                                         req_opcode.eq(self.alloc_opcode), req_source.eq(self.alloc_source),
@@ -479,23 +479,23 @@ class CoupledL2MSHR(Elaboratable):
                                         req_set.eq(self.alloc_set), req_way.eq(self.alloc_way),
                                         req_dirty.eq(self.alloc_dirty), req_prefetch.eq(self.alloc_prefetch),
                                         req_need_probe_ack_data.eq(self.alloc_need_probe_ack_data)]
-            with _elif(m, valid):
-                with _if(m, (state == 0) & task_a_fire):
+            with amaranth_elif(m, valid):
+                with amaranth_if(m, (state == 0) & task_a_fire):
                     m.d.coupled_l2_mshr += state.eq(1)
-                with _elif(m, (state == 1) & task_b_fire):
+                with amaranth_elif(m, (state == 1) & task_b_fire):
                     m.d.coupled_l2_mshr += state.eq(2)
-                with _elif(m, (state == 2) & sink_d_fire):
+                with amaranth_elif(m, (state == 2) & sink_d_fire):
                     m.d.coupled_l2_mshr += [got_grant_data.eq(got_grant_data | (self.sink_d_opcode == 5)),
                                             denied.eq(denied | self.sink_d_denied), corrupt.eq(corrupt | self.sink_d_corrupt)]
-                    with _if(m, self.sink_d_last):
+                    with amaranth_if(m, self.sink_d_last):
                         m.d.coupled_l2_mshr += state.eq(4)
-                with _elif(m, (state == 4) & task_main_fire):
+                with amaranth_elif(m, (state == 4) & task_main_fire):
                     m.d.coupled_l2_mshr += state.eq(3)
-                with _elif(m, (state == 3) & (sink_c_fire | self.repl_valid)):
+                with amaranth_elif(m, (state == 3) & (sink_c_fire | self.repl_valid)):
                     m.d.coupled_l2_mshr += state.eq(5)
-                with _if(m, sink_c_fire & (self.sink_c_opcode == 4)):
+                with amaranth_if(m, sink_c_fire & (self.sink_c_opcode == 4)):
                     m.d.coupled_l2_mshr += probe_dirty.eq(1)
-                with _if(m, state == 5):
+                with amaranth_if(m, state == 5):
                     m.d.coupled_l2_mshr += valid.eq(0)
         return m
 
@@ -550,13 +550,13 @@ class CoupledL2MSHRCtl(Elaboratable):
                      self.alloc_ready.eq(has_space), self.alloc_id.eq(alloc_ptr)]
         alloc_fire = self.alloc_valid & self.alloc_ready
         release_fire = self.release_valid & (occupancy != 0)
-        with _if(m, self.reset):
+        with amaranth_if(m, self.reset):
             m.d.coupled_l2_mshrc += [occupancy.eq(0), alloc_ptr.eq(0)]
-        with _else(m):
-            with _if(m, alloc_fire & ~release_fire):
+        with amaranth_else(m):
+            with amaranth_if(m, alloc_fire & ~release_fire):
                 m.d.coupled_l2_mshrc += [occupancy.eq(occupancy + 1),
                                          alloc_ptr.eq(Mux(alloc_ptr == c.entries - 1, 0, alloc_ptr + 1))]
-            with _elif(m, release_fire & ~alloc_fire):
+            with amaranth_elif(m, release_fire & ~alloc_fire):
                 m.d.coupled_l2_mshrc += occupancy.eq(occupancy - 1)
         return m
 
@@ -615,24 +615,24 @@ class CoupledL2ProbeQueue(Elaboratable):
                      self.prb_source.eq(Array(source)[head]), self.prb_address.eq(Array(address)[head])]
         enq = self.sink_valid & self.sink_ready
         deq = self.prb_valid & self.prb_ready & ~self.arb_busy
-        with _if(m, self.reset):
+        with amaranth_if(m, self.reset):
             m.d.coupled_l2_probeq += [head.eq(0), tail.eq(0), count.eq(0)]
             for v in valid: m.d.coupled_l2_probeq += v.eq(0)
-        with _else(m):
+        with amaranth_else(m):
             # Update occupancy once so simultaneous enqueue/dequeue has the
             # expected net effect (the Chisel queue permits both). / 单次更新占用，保证同时入队/出队具有正确净效果。
-            with _if(m, enq | deq):
+            with amaranth_if(m, enq | deq):
                 m.d.coupled_l2_probeq += count.eq(count + enq - deq)
-            with _if(m, enq):
+            with amaranth_if(m, enq):
                 m.d.coupled_l2_probeq += tail.eq(Mux(tail == self.entries - 1, 0, tail + 1))
                 for i in range(self.entries):
-                    with _if(m, tail == i):
+                    with amaranth_if(m, tail == i):
                         m.d.coupled_l2_probeq += [valid[i].eq(1), opcode[i].eq(self.sink_opcode), param[i].eq(self.sink_param),
                                                   size[i].eq(self.sink_size), source[i].eq(self.sink_source), address[i].eq(self.sink_address)]
-            with _if(m, deq):
+            with amaranth_if(m, deq):
                 m.d.coupled_l2_probeq += head.eq(Mux(head == self.entries - 1, 0, head + 1))
                 for i in range(self.entries):
-                    with _if(m, head == i): m.d.coupled_l2_probeq += valid[i].eq(0)
+                    with amaranth_if(m, head == i): m.d.coupled_l2_probeq += valid[i].eq(0)
         return m
 
 
@@ -708,23 +708,23 @@ class CoupledL2RefillUnit(Elaboratable):
                      self.resp_id.eq(self.sink_source[:c.id_bits]), self.resp_opcode.eq(self.sink_opcode),
                      self.resp_last.eq(last), self.resp_denied.eq(self.sink_denied), self.resp_corrupt.eq(self.sink_corrupt),
                      self.beat.eq(beat)]
-        with _if(m, self.reset):
+        with amaranth_if(m, self.reset):
             m.d.coupled_l2_refill += [beat.eq(0), line.eq(0), mask.eq(0), ack_count.eq(0), ack_head.eq(0), ack_tail.eq(0)]
-        with _else(m):
-            with _if(m, fire):
-                with _if(m, has_data):
+        with amaranth_else(m):
+            with amaranth_if(m, fire):
+                with amaranth_if(m, has_data):
                     m.d.coupled_l2_refill += [line.eq(line_next), mask.eq(mask_next)]
-                with _if(m, ack_enq):
+                with amaranth_if(m, ack_enq):
                     m.d.coupled_l2_refill += [ack_count.eq(ack_count + 1),
                                               ack_tail.eq(Mux(ack_tail == c.entries - 1, 0, ack_tail + 1))]
                     for i in range(c.entries):
-                        with _if(m, ack_tail == i):
+                        with amaranth_if(m, ack_tail == i):
                             m.d.coupled_l2_refill += [ack_source[i].eq(self.sink_source), ack_sink[i].eq(self.sink_sink)]
-                with _if(m, last):
+                with amaranth_if(m, last):
                     m.d.coupled_l2_refill += [beat.eq(0), mask.eq(0)]
-                with _else(m):
+                with amaranth_else(m):
                     m.d.coupled_l2_refill += beat.eq(beat + 1)
-            with _if(m, ack_deq):
+            with amaranth_if(m, ack_deq):
                 m.d.coupled_l2_refill += [ack_count.eq(ack_count - 1),
                                           ack_head.eq(Mux(ack_head == c.entries - 1, 0, ack_head + 1))]
         return m
@@ -850,7 +850,7 @@ class CoupledL2Slice(Elaboratable):
         }.items():
             signal = port(name, width)
             setattr(self, name, signal)
-        self.perf = [port(f"perf_{index}_value", 64) for index in range(17)]
+        self.perf = [port(f"perf_{index}", 64) for index in range(17)]
 
         # Source-oriented aliases make direct tests readable without changing generated names. /
         # 源导向别名使 direct 测试可读，同时不改变生成名称。
@@ -1193,17 +1193,17 @@ class CoupledL2Slice(Elaboratable):
 
         # State transitions preserve one outstanding miss and explicit flush cancellation. /
         # 状态转换保持单个未决缺失，并显式处理 flush 取消。
-        with _if(m, self.reset | self.flush):
+        with amaranth_if(m, self.reset | self.flush):
             m.d.coupled_l2 += [state.eq(0), outer_c_pending.eq(0), outer_b_pending.eq(0),
                                l2_miss_pulse.eq(0), hint_pending.eq(0), refill_beat.eq(0), repl_way.eq(0)]
-        with _else(m):
+        with amaranth_else(m):
             m.d.coupled_l2 += [l2_miss_pulse.eq(0), hint_pending.eq(0)]
-            with _if(m, state == 0):
-                with _if(m, probe_fire):
+            with amaranth_if(m, state == 0):
+                with amaranth_if(m, probe_fire):
                     m.d.coupled_l2 += [pending_address.eq(local_address_expr(self.out_b_bits_address)), pending_size.eq(self.out_b_bits_size),
                                        pending_source.eq(self.out_b_bits_source), pending_outer_source.eq(0),
                                        outer_b_pending.eq(1), state.eq(5)]
-                with _elif(m, release_fire):
+                with amaranth_elif(m, release_fire):
                     m.d.coupled_l2 += [pending_address.eq(local_address_expr(self.in_c_bits_address)), pending_source.eq(self.in_c_bits_source), pending_outer_source.eq(0),
                                        pending_size.eq(self.in_c_bits_size), pending_data.eq(self.in_c_bits_data),
                                        pending_opcode.eq(self.in_c_bits_opcode), state.eq(1), response_opcode.eq(6),
@@ -1211,7 +1211,7 @@ class CoupledL2Slice(Elaboratable):
                                        response_data.eq(0), response_denied.eq(0), response_corrupt.eq(self.in_c_bits_corrupt)]
                     # ReleaseData writes the received beat; Release invalidates the line. / 
                     # ReleaseData 写入接收 beat；Release 使缓存行失效。
-                with _elif(m, request_fire | (self.prefetch_req_valid & self.prefetch_req_ready)):
+                with amaranth_elif(m, request_fire | (self.prefetch_req_valid & self.prefetch_req_ready)):
                     # A-channel has priority over prefetch, matching RequestArb's C/B/A ordering after C/B are idle.
                     m.d.coupled_l2 += [pending_opcode.eq(Mux(request_fire, self.in_a_bits_opcode, 5)),
                                        pending_param.eq(Mux(request_fire, self.in_a_bits_param, 0)),
@@ -1229,7 +1229,7 @@ class CoupledL2Slice(Elaboratable):
                                        pending_set.eq(req_set), pending_tag.eq(req_tag), pending_way.eq(Mux(hit_any, hit_way, victim_way)),
                                        pending_dirty.eq(Array([x.data for x in dirty_reads])[Mux(hit_any, hit_way, victim_way)]),
                                        pending_hit.eq(hit_any), pending_from_prefetch.eq(~request_fire), pending_outer_source.eq(0)]
-                    with _if(m, hit_any):
+                    with amaranth_if(m, hit_any):
                         m.d.coupled_l2 += [state.eq(1), response_source.eq(Mux(request_fire, self.in_a_bits_source, self.prefetch_req_bits_source)),
                                            response_size.eq(Mux(request_fire, self.in_a_bits_size, c.offset_bits)),
                                            response_param.eq(0), response_denied.eq(0), response_corrupt.eq(0),
@@ -1238,42 +1238,42 @@ class CoupledL2Slice(Elaboratable):
                                                                       Mux(Mux(request_fire, self.in_a_bits_opcode, 5) >= 6, 5, 1)))),
                                            response_data.eq(Mux(Mux(request_fire, self.in_a_bits_opcode, 5) == 5, 0,
                                                                 Array([x.data for x in data_reads])[hit_way][:c.data_bits]))]
-                    with _else(m):
+                    with amaranth_else(m):
                         m.d.coupled_l2 += [l2_miss_pulse.eq(1), state.eq(Mux(Array([x.data for x in dirty_reads])[victim_way], 3, 2)),
                                            response_source.eq(Mux(request_fire, self.in_a_bits_source, self.prefetch_req_bits_source)),
                                            response_size.eq(Mux(request_fire, self.in_a_bits_size, c.offset_bits)), response_param.eq(0),
                                            response_denied.eq(0), response_corrupt.eq(0)]
-                        with _if(m, Array([x.data for x in dirty_reads])[victim_way]):
+                        with amaranth_if(m, Array([x.data for x in dirty_reads])[victim_way]):
                             m.d.coupled_l2 += outer_c_pending.eq(1)
-            with _elif(m, state == 1):
-                with _if(m, response_fire):
+            with amaranth_elif(m, state == 1):
+                with amaranth_if(m, response_fire):
                     m.d.coupled_l2 += state.eq(0)
-            with _elif(m, state == 2):
-                with _if(m, outer_a_fire):
+            with amaranth_elif(m, state == 2):
+                with amaranth_if(m, outer_a_fire):
                     m.d.coupled_l2 += [state.eq(4), refill_beat.eq(0)]
-            with _elif(m, state == 3):
-                with _if(m, outer_c_fire):
+            with amaranth_elif(m, state == 3):
+                with amaranth_if(m, outer_c_fire):
                     m.d.coupled_l2 += [outer_c_pending.eq(0), state.eq(2)]
-            with _elif(m, state == 4):
-                with _if(m, outer_d_fire):
+            with amaranth_elif(m, state == 4):
+                with amaranth_if(m, outer_d_fire):
                     m.d.coupled_l2 += [refill_data.eq((refill_data & ~(((1 << c.data_bits) - 1) << (refill_beat * c.data_bits))) |
                                                        (self.out_d_bits_data << (refill_beat * c.data_bits)))]
-                    with _if(m, (refill_beat == c.line_beats - 1) | (self.out_d_bits_size == pending_size)):
+                    with amaranth_if(m, (refill_beat == c.line_beats - 1) | (self.out_d_bits_size == pending_size)):
                         m.d.coupled_l2 += [state.eq(1), response_opcode.eq(Mux(pending_opcode >= 6, 5, 1)),
                                            response_source.eq(pending_source), response_size.eq(pending_size),
                                            response_param.eq(0), response_data.eq(self.out_d_bits_data),
                                            response_denied.eq(self.out_d_bits_denied), response_corrupt.eq(self.out_d_bits_corrupt),
                                            refill_beat.eq(0)]
-                    with _else(m):
+                    with amaranth_else(m):
                         m.d.coupled_l2 += refill_beat.eq(refill_beat + 1)
-            with _elif(m, state == 5):
+            with amaranth_elif(m, state == 5):
                 # A probe is acknowledged downwards after the upper cache has accepted it. /
                 # 上层缓存接受 probe 后向下游发送确认。
-                with _if(m, self.in_b_valid & self.in_b_ready):
+                with amaranth_if(m, self.in_b_valid & self.in_b_ready):
                     m.d.coupled_l2 += [outer_b_pending.eq(0), state.eq(0)]
 
         # Keep the replacement pointer moving only after a completed refill. / 仅在回填完成后推进替换指针。
-        with _if(m, state == 4 & outer_d_fire & ((refill_beat == c.line_beats - 1) | (self.out_d_bits_size == pending_size))):
+        with amaranth_if(m, state == 4 & outer_d_fire & ((refill_beat == c.line_beats - 1) | (self.out_d_bits_size == pending_size))):
             m.d.coupled_l2 += repl_way.eq(Mux(repl_way == c.ways - 1, 0, repl_way + 1))
 
         return m

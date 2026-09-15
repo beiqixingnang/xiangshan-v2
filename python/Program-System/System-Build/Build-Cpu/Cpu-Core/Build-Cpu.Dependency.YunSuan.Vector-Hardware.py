@@ -10,12 +10,14 @@ adder/divider/FMA and long iterative closures remain explicit open children.
 
 from __future__ import annotations
 
+from contextlib import AbstractContextManager
 from dataclasses import dataclass
-from typing import Any, Iterable, Sequence
+from typing import Any, Iterable, Sequence, cast
 
 from amaranth import Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
 from amaranth.lib.coding import PriorityEncoder
+from amaranth.hdl.ast import Value
 
 
 # =============================================================================
@@ -36,6 +38,36 @@ __all__ = [
     "YunSuanVectorPrimitive", "vector_add", "vector_compare", "vector_mask_operation",
     "vector_reduce", "vector_permute", "width_mask", "split_vector", "pack_vector", "signed_lane", "reverse_bits", "build_verilog", "main",
 ]
+
+
+# Cast Amaranth generator controls to static context-manager protocols. / 将 Amaranth 生成器控制转换为静态上下文管理器协议。
+def amaranth_if(module: Module, condition: Any) -> AbstractContextManager[None]:
+    return cast(AbstractContextManager[None], module.If(condition))
+
+
+# Cast an Amaranth elif branch to its context-manager protocol. / 将 Amaranth elif 分支转换为上下文管理器协议。
+def amaranth_elif(module: Module, condition: Any) -> AbstractContextManager[None]:
+    return cast(AbstractContextManager[None], module.Elif(condition))
+
+
+# Cast an Amaranth else branch to its context-manager protocol. / 将 Amaranth else 分支转换为上下文管理器协议。
+def amaranth_else(module: Module) -> AbstractContextManager[None]:
+    return cast(AbstractContextManager[None], module.Else())
+
+
+# Cast an Amaranth switch/case branch to its context-manager protocol. / 将 Amaranth switch/case 分支转换为上下文管理器协议。
+def amaranth_switch(module: Module, expression: Any) -> AbstractContextManager[None]:
+    return cast(AbstractContextManager[None], module.Switch(expression))
+
+
+# Cast a case branch to its context-manager protocol. / 将 case 分支转换为上下文管理器协议。
+def amaranth_case(module: Module, *patterns: Any) -> AbstractContextManager[None]:
+    return cast(AbstractContextManager[None], module.Case(*patterns))
+
+
+# Narrow a dynamic Amaranth expression at the DSL boundary. / 在 DSL 边界窄化动态 Amaranth 表达式。
+def amaranth_value(expression: Any) -> Value:
+    return cast(Value, expression)
 
 
 # VAluOpcode encodings from the locked V2 source. / 锁定 V2 源码中的 VAluOpcode 编码。
@@ -313,6 +345,10 @@ def vector_permute(vs2: int, vs1: int = 0, opcode: int = VREV8, sew: int = 0,
 # Implementation: synthesizable primitive boundaries
 # =============================================================================
 class YunSuanVectorPrimitive(Elaboratable):
+    # Resolve runtime-created ports for static type checking. / 为静态类型检查解析运行时创建的端口。
+    def __getattr__(self, name: str) -> Signal:
+        raise AttributeError(name)
+
     """Combinational 128-bit integer primitive boundary. / 组合式 128 位整数 primitive 边界。"""
 
     # Construct primitive ports. / 构造 primitive 端口。
@@ -339,20 +375,20 @@ class YunSuanVectorPrimitive(Elaboratable):
             values: list[Any] = []
             compares: list[Any] = []
             for left, right in zip(lanes1, lanes2):
-                signed_left = left.as_signed()
-                signed_right = right.as_signed()
-                add = left + right
-                sub = left - right
-                logical = Mux(self.opcode == VAND, left & right,
-                               Mux(self.opcode == VNAND, ~(left & right),
-                                   Mux(self.opcode == VANDN, left & ~right,
-                                       Mux(self.opcode == VXOR, left ^ right,
-                                           Mux(self.opcode == VOR, left | right,
-                                               Mux(self.opcode == VNOR, ~(left | right),
-                                                   Mux(self.opcode == VORN, left | ~right, ~(left ^ right))))))))
+                signed_left = amaranth_value(left).as_signed()
+                signed_right = amaranth_value(right).as_signed()
+                add = amaranth_value(left) + amaranth_value(right)
+                sub = amaranth_value(left) - amaranth_value(right)
+                logical = Mux(self.opcode == VAND, amaranth_value(left) & amaranth_value(right),
+                               Mux(self.opcode == VNAND, ~(amaranth_value(left) & amaranth_value(right)),
+                                   Mux(self.opcode == VANDN, amaranth_value(left) & ~amaranth_value(right),
+                                       Mux(self.opcode == VXOR, amaranth_value(left) ^ amaranth_value(right),
+                                           Mux(self.opcode == VOR, amaranth_value(left) | amaranth_value(right),
+                                               Mux(self.opcode == VNOR, ~(amaranth_value(left) | amaranth_value(right)),
+                                                   Mux(self.opcode == VORN, amaranth_value(left) | ~amaranth_value(right), ~(amaranth_value(left) ^ amaranth_value(right)))))))))
                 relation_eq = left == right
-                relation_lt = Mux(self.signed, signed_left < signed_right, left < right)
-                relation_le = relation_lt | relation_eq
+                relation_lt = Mux(self.signed, signed_left < signed_right, amaranth_value(left) < amaranth_value(right))
+                relation_le = amaranth_value(relation_lt) | amaranth_value(relation_eq)
                 relation_gt = ~relation_le
                 compare = Mux(self.opcode == VMSEQ, relation_eq,
                                Mux(self.opcode == VMSNE, ~relation_eq,
@@ -363,7 +399,7 @@ class YunSuanVectorPrimitive(Elaboratable):
                 minmax = Mux(self.opcode == VMIN,
                              Mux(relation_lt, left, right),
                              Mux(self.signed, Mux(signed_left > signed_right, left, right),
-                                 Mux(left > right, left, right)))
+                                 Mux(amaranth_value(left) > amaranth_value(right), left, right)))
                 selected = logical
                 for operation, expression in ((VMSGT, compare), (VMSLE, compare),
                                                (VMSLT, compare), (VMSNE, compare),
@@ -387,6 +423,10 @@ class YunSuanVectorPrimitive(Elaboratable):
 
 # Exact VIntAdder64b boundary used by the selected V2 top. / 选定 V2 顶层使用的精确 VIntAdder64b 边界。
 class YunSuanVIntAdder64b(Elaboratable):
+    # Resolve runtime-created ports for static type checking. / 为静态类型检查解析运行时创建的端口。
+    def __getattr__(self, name: str) -> Signal:
+        raise AttributeError(name)
+
     """Match VIntAdder64b's lane/carry/compare ports. / 匹配 VIntAdder64b 的元素、进位及比较端口。"""
 
     # Construct source-compatible ports. / 构造源码兼容端口。
@@ -489,8 +529,8 @@ class YunSuanVIntAdder64b(Elaboratable):
                          # Amaranth Cat places its first argument at the low
                          # end; reverse the Chisel Cat(0, lane, cin) order.
                          # Amaranth Cat 首参数在低位，因此反转 Chisel 的 Cat 顺序。
-                         wide.eq(Cat(cin_signals[index], left, Const(0)) +
-                                 Cat(cin_signals[index], right, Const(0))),
+                         wide.eq(amaranth_value(Cat(cin_signals[index], left, Const(0))) +
+                                 amaranth_value(Cat(cin_signals[index], right, Const(0)))),
                          byte_values[index].eq(wide[1:9]),
                          byte_carries[index].eq(wide[9])]
         sum_result = Signal(64, name="sum_result")
@@ -503,7 +543,7 @@ class YunSuanVIntAdder64b(Elaboratable):
             m.d.comb += [equal[index].eq(self.vs1[index * 8:(index + 1) * 8] ==
                                          self.vs2[index * 8:(index + 1) * 8]),
                          less[index].eq(Mux(signed,
-                                            (self.vs2[index * 8 + 7] ^ vs1_adjust[index * 8 + 7]) ^ byte_carries[index],
+                                            (amaranth_value(self.vs2[index * 8 + 7]) ^ amaranth_value(vs1_adjust[index * 8 + 7])) ^ amaranth_value(byte_carries[index]),
                                             ~byte_carries[index]))]
         equal_raw = Signal(8, name="equal_raw")
         less_raw = Signal(8, name="less_raw")
@@ -567,6 +607,10 @@ class YunSuanVIntAdder64b(Elaboratable):
 
 # Miscellaneous scalar lane operations from VIntMisc64b. / VIntMisc64b 中的杂项元素操作。
 class YunSuanVIntMisc64b(Elaboratable):
+    # Resolve runtime-created ports for static type checking. / 为静态类型检查解析运行时创建的端口。
+    def __getattr__(self, name: str) -> Signal:
+        raise AttributeError(name)
+
     """Implement logical, shift, reverse and count observations. / 实现逻辑、移位、反转及计数观察点。"""
 
     # Construct source-compatible misc ports. / 构造源码兼容杂项端口。
@@ -603,12 +647,12 @@ class YunSuanVIntMisc64b(Elaboratable):
             logical = Mux(self.opcode == operation, expression, logical)
         shift_amount = self.vs1[:6]
         shift_right = self.vs2 >> shift_amount
-        shift_signed = self.vs2.as_signed() >> shift_amount
+        shift_signed = amaranth_value(self.vs2).as_signed() >> shift_amount
         shift = Mux(self.opcode == VSLL, self.vs2 << shift_amount,
                     Mux(self.opcode == VSRA, shift_signed, shift_right))
         reversed_bits = Const(0, 64)
         for index in range(64):
-            reversed_bits = reversed_bits | (self.vs2[index] << (63 - index))
+            reversed_bits = amaranth_value(reversed_bits) | (amaranth_value(self.vs2[index]) << (63 - index))
         count_lanes: list[Any] = []
         for width in (8, 16, 32, 64):
             values = [self.vs2[index:index + width] for index in range(0, 64, width)]
@@ -637,6 +681,10 @@ class YunSuanVIntMisc64b(Elaboratable):
 
 # Vector mask operation boundary with explicit one-cycle state. / 带显式一级时序的向量掩码操作边界。
 class YunSuanVMask(Elaboratable):
+    # Resolve runtime-created ports for static type checking. / 为静态类型检查解析运行时创建的端口。
+    def __getattr__(self, name: str) -> Signal:
+        raise AttributeError(name)
+
     """Cover VMask vcpop/vfirst/vmsof/viota/vid observation points. / 覆盖 VMask 的 vcpop/vfirst/vmsof/viota/vid 观察点。"""
 
     # Construct mask ports. / 构造掩码端口。
@@ -705,19 +753,23 @@ class YunSuanVMask(Elaboratable):
             selected = Mux(self.opcode == operation, expression, selected)
         stage_result = Signal(128, name="stage_result")
         fire_reg = Signal(name="fire_reg")
-        with m.If(self.reset):
+        with amaranth_if(m, self.reset):
             m.d.v_mask += [stage_result.eq(0), fire_reg.eq(0), self.result.eq(0)]
-        with m.Else():
+        with amaranth_else(m):
             m.d.v_mask += fire_reg.eq(self.fire)
-            with m.If(self.fire):
+            with amaranth_if(m, self.fire):
                 m.d.v_mask += stage_result.eq(selected)
-            with m.If(fire_reg):
+            with amaranth_if(m, fire_reg):
                 m.d.v_mask += self.result.eq(stage_result)
         return m
 
 
 # Reduction boundary retaining the one-cycle source timing. / 保留源码一级时序的归约边界。
 class YunSuanReduction(Elaboratable):
+    # Resolve runtime-created ports for static type checking. / 为静态类型检查解析运行时创建的端口。
+    def __getattr__(self, name: str) -> Signal:
+        raise AttributeError(name)
+
     """Implement deterministic VRED sum/min/max/logic lanes. / 实现确定性的 VRED 求和/极值/逻辑元素。"""
 
     # Construct reduction ports. / 构造归约端口。
@@ -759,9 +811,9 @@ class YunSuanReduction(Elaboratable):
             or_value = lanes[0]
             xor_value = lanes[0]
             for lane in lanes[1:]:
-                and_value = and_value & lane
-                or_value = or_value | lane
-                xor_value = xor_value ^ lane
+                and_value = amaranth_value(and_value) & amaranth_value(lane)
+                or_value = amaranth_value(or_value) | amaranth_value(lane)
+                xor_value = amaranth_value(xor_value) ^ amaranth_value(lane)
             # Min/max are parent-level comparisons; expose the first lane at
             # this bounded family boundary until the full Reduction closure is
             # integrated and differentially checked.
@@ -771,13 +823,17 @@ class YunSuanReduction(Elaboratable):
                 chosen = Mux(self.opcode == operation, expression, chosen)
             candidates.append(chosen)
         result = Mux(sew == 0, candidates[0], Mux(sew == 1, candidates[1], Mux(sew == 2, candidates[2], candidates[3])))
-        with m.If(self.fire):
+        with amaranth_if(m, self.fire):
             m.d.v_reduction += self.result.eq(result)
         return m
 
 
 # Basic permutation boundary. / 基础排列边界。
 class YunSuanPermutation(Elaboratable):
+    # Resolve runtime-created ports for static type checking. / 为静态类型检查解析运行时创建的端口。
+    def __getattr__(self, name: str) -> Signal:
+        raise AttributeError(name)
+
     """Cover reverse, slide, gather and compress observation points. / 覆盖反转、滑移、聚集及压缩观察点。"""
 
     # Construct permutation ports. / 构造排列端口。
@@ -821,6 +877,10 @@ class YunSuanVectorIntAdder(YunSuanVectorPrimitive):
 # Vector conversion boundary; full CVT64 remains an explicit open child. /
 # 向量转换边界；完整 CVT64 仍明确记录为未闭合子项。
 class YunSuanVectorConvert(Elaboratable):
+    # Resolve runtime-created ports for static type checking. / 为静态类型检查解析运行时创建的端口。
+    def __getattr__(self, name: str) -> Signal:
+        raise AttributeError(name)
+
     """Provide integer widening and f32/f64 payload conversion observations. / 提供整数宽化及 f32/f64 负载转换观察点。"""
 
     # Construct conversion ports. / 构造转换端口。
@@ -848,6 +908,10 @@ class YunSuanVectorConvert(Elaboratable):
 
 # Family aggregate top with explicit child ports. / 带显式子项端口的 family 聚合顶层。
 class YunSuanVectorBoundary(Elaboratable):
+    # Resolve runtime-created ports for static type checking. / 为静态类型检查解析运行时创建的端口。
+    def __getattr__(self, name: str) -> Signal:
+        raise AttributeError(name)
+
     """Expose concrete vector children through one UHSC boundary. / 通过一个 UHSC 边界暴露具体向量子项。"""
 
     # Construct aggregate ports. / 构造聚合端口。

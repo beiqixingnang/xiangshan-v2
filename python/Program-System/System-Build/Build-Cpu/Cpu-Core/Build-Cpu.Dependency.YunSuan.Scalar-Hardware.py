@@ -7,12 +7,14 @@ The five pinned scalar sources are kept behind one explicit family boundary.
 
 from __future__ import annotations
 
+from contextlib import AbstractContextManager
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, cast
 
 from amaranth import Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
 from amaranth.lib.coding import PriorityEncoder
+from amaranth.hdl.ast import Value
 
 
 # =============================================================================
@@ -63,6 +65,36 @@ __all__ = [
     "build_verilog",
     "main",
 ]
+
+
+# Cast Amaranth generator controls to static context-manager protocols. / 将 Amaranth 生成器控制转换为静态上下文管理器协议。
+def amaranth_if(module: Module, condition: Any) -> AbstractContextManager[None]:
+    return cast(AbstractContextManager[None], module.If(condition))
+
+
+# Cast an Amaranth elif branch to its context-manager protocol. / 将 Amaranth elif 分支转换为上下文管理器协议。
+def amaranth_elif(module: Module, condition: Any) -> AbstractContextManager[None]:
+    return cast(AbstractContextManager[None], module.Elif(condition))
+
+
+# Cast an Amaranth else branch to its context-manager protocol. / 将 Amaranth else 分支转换为上下文管理器协议。
+def amaranth_else(module: Module) -> AbstractContextManager[None]:
+    return cast(AbstractContextManager[None], module.Else())
+
+
+# Cast an Amaranth switch/case branch to its context-manager protocol. / 将 Amaranth switch/case 分支转换为上下文管理器协议。
+def amaranth_switch(module: Module, expression: Any) -> AbstractContextManager[None]:
+    return cast(AbstractContextManager[None], module.Switch(expression))
+
+
+# Cast a case branch to its context-manager protocol. / 将 case 分支转换为上下文管理器协议。
+def amaranth_case(module: Module, *patterns: Any) -> AbstractContextManager[None]:
+    return cast(AbstractContextManager[None], module.Case(*patterns))
+
+
+# Narrow a dynamic Amaranth expression at the DSL boundary. / 在 DSL 边界窄化动态 Amaranth 表达式。
+def amaranth_value(expression: Any) -> Value:
+    return cast(Value, expression)
 
 
 # RISC-V rounding mode encodings used by the pinned scalar source. /
@@ -469,6 +501,10 @@ def fp_convert_bits(value: int, source: FType, target: FType, rm: int) -> tuple[
 
 # Build the scalar rounding unit. / 构造标量舍入单元。
 class YunSuanRoundingUnit(Elaboratable):
+    # Resolve runtime-created ports for static type checking. / 为静态类型检查解析运行时创建的端口。
+    def __getattr__(self, name: str) -> Signal:
+        raise AttributeError(name)
+
     """Combinational guard/round/sticky unit from RoundingUnit.scala. / 来自 RoundingUnit.scala 的组合 GRS 舍入单元。"""
 
     # Construct rounding ports. / 构造舍入端口。
@@ -509,6 +545,10 @@ class YunSuanRoundingUnit(Elaboratable):
 
 # Build the source LZA recurrence. / 构造源码 LZA 递推。
 class YunSuanLZA(Elaboratable):
+    # Resolve runtime-created ports for static type checking. / 为静态类型检查解析运行时创建的端口。
+    def __getattr__(self, name: str) -> Signal:
+        raise AttributeError(name)
+
     """Leading-zero anticipator matching scalar utils.scala. / 匹配 scalar utils.scala 的前导零预测器。"""
 
     # Construct LZA ports. / 构造 LZA 端口。
@@ -529,8 +569,8 @@ class YunSuanLZA(Elaboratable):
             if index == 0:
                 bits.append(Const(0))
             else:
-                p = self.a[index] ^ self.b[index]
-                k_previous = (~self.a[index - 1]) & (~self.b[index - 1])
+                p = amaranth_value(self.a[index]) ^ amaranth_value(self.b[index])
+                k_previous = (~amaranth_value(self.a[index - 1])) & (~amaranth_value(self.b[index - 1]))
                 bits.append(p ^ ~k_previous)
         output = Const(0, self.width)
         for index, bit in enumerate(bits):
@@ -541,6 +581,10 @@ class YunSuanLZA(Elaboratable):
 
 # Build the source CLZ convention. / 构造源码 CLZ 约定。
 class YunSuanCLZ(Elaboratable):
+    # Resolve runtime-created ports for static type checking. / 为静态类型检查解析运行时创建的端口。
+    def __getattr__(self, name: str) -> Signal:
+        raise AttributeError(name)
+
     """PriorityEncoder-based leading-zero count. / 基于 PriorityEncoder 的前导零计数器。"""
 
     # Construct CLZ ports. / 构造 CLZ 端口。
@@ -572,6 +616,10 @@ class YunSuanCLZ(Elaboratable):
 
 # Build the scalar integer pre-normalizer. / 构造标量整数预规格化单元。
 class YunSuanIntToFPPreNorm(Elaboratable):
+    # Resolve runtime-created ports for static type checking. / 为静态类型检查解析运行时创建的端口。
+    def __getattr__(self, name: str) -> Signal:
+        raise AttributeError(name)
+
     """Pre-normalization stage from IntToFP.scala. / 来自 IntToFP.scala 的预规格化阶段。"""
 
     # Construct pre-normalization ports. / 构造预规格化端口。
@@ -589,7 +637,7 @@ class YunSuanIntToFPPreNorm(Elaboratable):
         del platform
         m = Module()
         in_sign = self.signed & Mux(self.long, self.input[63], self.input[31])
-        in_sext = (self.input[31].replicate(32) << 32) | self.input[:32]
+        in_sext = (amaranth_value(self.input[31]).replicate(32) << 32) | amaranth_value(self.input[:32])
         in_raw = Mux(self.signed & ~self.long, in_sext, self.input)
         in_abs = Mux(in_sign, (~in_raw) + 1, in_raw)
         lza = YunSuanLZA(64)
@@ -606,22 +654,26 @@ class YunSuanIntToFPPreNorm(Elaboratable):
             if index == 63:
                 mask_bits.append(lza.output[63])
             elif index == 0:
-                mask_bits.append(~lza.output[1:64].any())
+                mask_bits.append(~amaranth_value(lza.output[1:64]).any())
             else:
-                mask_bits.append(lza.output[index] & ~lza.output[index + 1:64].any())
+                mask_bits.append(lza.output[index] & ~amaranth_value(lza.output[index + 1:64]).any())
         one_mask = Const(0, 64)
         for index, bit in enumerate(mask_bits):
             one_mask = one_mask | (bit << index)
-        lzc_error = in_sign & ~((in_abs & one_mask).any())
+        lzc_error = in_sign & ~amaranth_value((in_abs & one_mask)).any()
         shifted = (in_abs << lzc)
         norm = Mux(lzc_error, Cat(Const(0), shifted[:62]), shifted[:63])
         m.d.comb += [self.norm_int.eq(norm), self.lzc.eq(lzc + lzc_error),
-                     self.is_zero.eq(~self.input.any()), self.output_sign.eq(in_sign)]
+                     self.is_zero.eq(~amaranth_value(self.input).any()), self.output_sign.eq(in_sign)]
         return m
 
 
 # Build the scalar integer post-normalizer. / 构造标量整数后规格化单元。
 class YunSuanIntToFPPostNorm(Elaboratable):
+    # Resolve runtime-created ports for static type checking. / 为静态类型检查解析运行时创建的端口。
+    def __getattr__(self, name: str) -> Signal:
+        raise AttributeError(name)
+
     """Post-normalization stage parameterized by destination format. / 按目标格式参数化的后规格化阶段。"""
 
     # Construct post-normalization ports. / 构造后规格化端口。
@@ -645,7 +697,7 @@ class YunSuanIntToFPPostNorm(Elaboratable):
         frac_width = self.precision - 1
         raw_sig = self.norm_int[63 - frac_width:63]
         round_bit = self.norm_int[63 - frac_width - 1]
-        sticky = self.norm_int[:63 - frac_width - 1].any()
+        sticky = amaranth_value(self.norm_int[:63 - frac_width - 1]).any()
         rounder = YunSuanRoundingUnit(frac_width)
         m.submodules.rounder = rounder
         m.d.comb += [rounder.input.eq(raw_sig), rounder.round_in.eq(round_bit),
@@ -660,18 +712,22 @@ class YunSuanIntToFPPostNorm(Elaboratable):
         max_finite = (1 << (self.exp_width + self.precision - 1)) - (1 << 0)
         inf_payload = (1 << self.exp_width) - 1
         finite_payload = (max_norm << frac_width) | ((1 << frac_width) - 1)
-        normal_payload = (fp_exp[:self.exp_width] << frac_width) | rounder.output
+        normal_payload = (amaranth_value(fp_exp[:self.exp_width]) << frac_width) | amaranth_value(rounder.output)
         payload = Mux(flow, Mux(rmin, Const(finite_payload, self.exp_width + frac_width),
                                 Const(inf_payload << frac_width, self.exp_width + frac_width)),
                       normal_payload)
-        m.d.comb += [self.result.eq((self.sign << (self.exp_width + frac_width)) | payload),
-                     self.fflags.eq((flow << 2) | (flow | rounder.inexact))]
+        m.d.comb += [self.result.eq((amaranth_value(self.sign) << (self.exp_width + frac_width)) | amaranth_value(payload)),
+                     self.fflags.eq((amaranth_value(flow) << 2) | (amaranth_value(flow) | amaranth_value(rounder.inexact)))]
         del max_finite
         return m
 
 
 # Build a complete scalar IntToFP converter. / 构造完整标量 IntToFP 转换器。
 class YunSuanIntToFP(Elaboratable):
+    # Resolve runtime-created ports for static type checking. / 为静态类型检查解析运行时创建的端口。
+    def __getattr__(self, name: str) -> Signal:
+        raise AttributeError(name)
+
     """Two-stage integer-to-float converter matching scalar IntToFP.scala. / 匹配 scalar IntToFP.scala 的两级整数转浮点转换器。"""
 
     # Construct converter ports. / 构造转换器端口。
@@ -702,6 +758,10 @@ class YunSuanIntToFP(Elaboratable):
 
 # Build the scalar Convert.scala INT2FP pipeline. / 构造 Convert.scala 标量 INT2FP 流水线。
 class YunSuanINT2FP(Elaboratable):
+    # Resolve runtime-created ports for static type checking. / 为静态类型检查解析运行时创建的端口。
+    def __getattr__(self, name: str) -> Signal:
+        raise AttributeError(name)
+
     """Latency-parametric integer-to-float pipeline from Convert.scala. / 来自 Convert.scala 的参数化延迟整数转浮点流水线。"""
 
     # Construct pipeline ports. / 构造流水线端口。
@@ -731,7 +791,7 @@ class YunSuanINT2FP(Elaboratable):
         selected_rm = Mux(self.rm_inst == 7, self.rm, self.rm_inst)
         in_long = self.op_type[3]
         in_sign = self.op_type[0]
-        short_value = (self.src[31].replicate(32) << 32) | self.src[:32]
+        short_value = (amaranth_value(self.src[31]).replicate(32) << 32) | amaranth_value(self.src[:32])
         int_value_next = Mux(self.wflags, Mux(in_long, self.src, Mux(in_sign, short_value, self.src[:32])), self.src)
         int_value = Signal(64, name="int_value")
         type_in = Signal(name="type_in")
@@ -739,10 +799,10 @@ class YunSuanINT2FP(Elaboratable):
         sign_in = Signal(name="sign_in")
         wflags_reg = Signal(name="wflags_reg")
         rm_reg = Signal(3, name="rm_reg")
-        with m.If(self.reset):
+        with amaranth_if(m, self.reset):
             m.d.scalar_int2fp += [int_value.eq(0), type_in.eq(0), type_out.eq(0),
                                   sign_in.eq(0), wflags_reg.eq(0), rm_reg.eq(0)]
-        with m.Elif(self.reg_enables[0]):
+        with amaranth_elif(m, self.reg_enables[0]):
             m.d.scalar_int2fp += [int_value.eq(int_value_next), type_in.eq(in_long),
                                   type_out.eq(self.op_type[1:3]), sign_in.eq(in_sign),
                                   wflags_reg.eq(self.wflags), rm_reg.eq(selected_rm)]
@@ -760,9 +820,9 @@ class YunSuanINT2FP(Elaboratable):
         data_reg = Signal(64, name="data_reg")
         flags_reg = Signal(5, name="flags_reg")
         tag_reg = Signal(2, name="tag_reg")
-        with m.If(self.reset):
+        with amaranth_if(m, self.reset):
             m.d.scalar_int2fp += [data_reg.eq(0), flags_reg.eq(0), tag_reg.eq(0)]
-        with m.Elif(self.reg_enables[1]):
+        with amaranth_elif(m, self.reg_enables[1]):
             m.d.scalar_int2fp += [data_reg.eq(chosen_data), flags_reg.eq(chosen_flags), tag_reg.eq(type_out)]
         boxed = Mux(tag_reg == 0, (Const((1 << 48) - 1, 64) << 16) | data_reg[:16],
                     Mux(tag_reg == 1, (Const((1 << 32) - 1, 64) << 32) | data_reg[:32], data_reg))
@@ -772,6 +832,10 @@ class YunSuanINT2FP(Elaboratable):
 
 # Build an explicit scalar FPCVT boundary. / 构造显式标量 FPCVT 边界。
 class YunSuanFPCVT(Elaboratable):
+    # Resolve runtime-created ports for static type checking. / 为静态类型检查解析运行时创建的端口。
+    def __getattr__(self, name: str) -> Signal:
+        raise AttributeError(name)
+
     """FP conversion boundary with source-compatible two-cycle timing. / 具有源码兼容两周期时序的浮点转换边界。"""
 
     # Construct FPCVT ports. / 构造 FPCVT 端口。
@@ -800,61 +864,61 @@ class YunSuanFPCVT(Elaboratable):
         m.domains.scalar_fpcvt = domain
         # Decode source/destination widths exactly as Convert.scala's one-hot PLA. /
         # 精确按 Convert.scala 的 one-hot PLA 译码源/目标宽度。
-        widen = self.op_type[3] & ~self.op_type[4]
-        narrow = self.op_type[4] & ~self.op_type[3]
+        widen = amaranth_value(self.op_type[3]) & ~amaranth_value(self.op_type[4])
+        narrow = amaranth_value(self.op_type[4]) & ~amaranth_value(self.op_type[3])
         input_width = Signal(7, name="input_width")
         output_width = Signal(7, name="output_width")
-        relation_sew = (self.op_type[4] << 3) | (self.op_type[3] << 2) | self.sew
+        relation_sew = (amaranth_value(self.op_type[4]) << 3) | (amaranth_value(self.op_type[3]) << 2) | amaranth_value(self.sew)
         m.d.comb += [input_width.eq(0), output_width.eq(0)]
         # Input one-hot decoder table copied from Convert.scala. /
         # 复制自 Convert.scala 的输入宽度译码表。
-        with m.Switch(relation_sew):
-            with m.Case(0b0001):
+        with amaranth_switch(m, relation_sew):
+            with amaranth_case(m, 0b0001):
                 m.d.comb += input_width.eq(16)
-            with m.Case(0b0010):
+            with amaranth_case(m, 0b0010):
                 m.d.comb += input_width.eq(32)
-            with m.Case(0b0011):
+            with amaranth_case(m, 0b0011):
                 m.d.comb += input_width.eq(64)
-            with m.Case(0b0100):
+            with amaranth_case(m, 0b0100):
                 m.d.comb += input_width.eq(8)
-            with m.Case(0b0101):
+            with amaranth_case(m, 0b0101):
                 m.d.comb += input_width.eq(16)
-            with m.Case(0b0110):
+            with amaranth_case(m, 0b0110):
                 m.d.comb += input_width.eq(32)
-            with m.Case(0b1000):
+            with amaranth_case(m, 0b1000):
                 m.d.comb += input_width.eq(16)
-            with m.Case(0b1001):
+            with amaranth_case(m, 0b1001):
                 m.d.comb += input_width.eq(32)
-            with m.Case(0b1010):
+            with amaranth_case(m, 0b1010):
                 m.d.comb += input_width.eq(64)
-            with m.Case(0b1101):
+            with amaranth_case(m, 0b1101):
                 m.d.comb += input_width.eq(16)
-            with m.Case(0b1111):
+            with amaranth_case(m, 0b1111):
                 m.d.comb += input_width.eq(64)
         # Output one-hot decoder table copied from Convert.scala. /
         # 复制自 Convert.scala 的输出宽度译码表。
-        with m.Switch(relation_sew):
-            with m.Case(0b0001):
+        with amaranth_switch(m, relation_sew):
+            with amaranth_case(m, 0b0001):
                 m.d.comb += output_width.eq(16)
-            with m.Case(0b0010):
+            with amaranth_case(m, 0b0010):
                 m.d.comb += output_width.eq(32)
-            with m.Case(0b0011):
+            with amaranth_case(m, 0b0011):
                 m.d.comb += output_width.eq(64)
-            with m.Case(0b0100):
+            with amaranth_case(m, 0b0100):
                 m.d.comb += output_width.eq(16)
-            with m.Case(0b0101):
+            with amaranth_case(m, 0b0101):
                 m.d.comb += output_width.eq(32)
-            with m.Case(0b0110):
+            with amaranth_case(m, 0b0110):
                 m.d.comb += output_width.eq(64)
-            with m.Case(0b1000):
+            with amaranth_case(m, 0b1000):
                 m.d.comb += output_width.eq(8)
-            with m.Case(0b1001):
+            with amaranth_case(m, 0b1001):
                 m.d.comb += output_width.eq(16)
-            with m.Case(0b1010):
+            with amaranth_case(m, 0b1010):
                 m.d.comb += output_width.eq(32)
-            with m.Case(0b1101):
+            with amaranth_case(m, 0b1101):
                 m.d.comb += output_width.eq(64)
-            with m.Case(0b1111):
+            with amaranth_case(m, 0b1111):
                 m.d.comb += output_width.eq(16)
         in_is_fp = self.op_type[7]
         out_is_fp = self.op_type[6]
@@ -869,25 +933,25 @@ class YunSuanFPCVT(Elaboratable):
         m.submodules.f64_to_f32 = f64_to_f32
         m.d.comb += [f32_to_f64.input.eq(src_f32), f32_to_f64.rm.eq(self.rm),
                      f64_to_f32.input.eq(src_f64), f64_to_f32.rm.eq(self.rm)]
-        converted = Mux((in_is_fp & out_is_fp & (input_width == 32) & (output_width == 64)), f32_to_f64.output,
-                        Mux((in_is_fp & out_is_fp & (input_width == 64) & (output_width == 32)),
+        converted = Mux((amaranth_value(in_is_fp) & amaranth_value(out_is_fp) & (amaranth_value(input_width) == 32) & (amaranth_value(output_width) == 64)), f32_to_f64.output,
+                        Mux((amaranth_value(in_is_fp) & amaranth_value(out_is_fp) & (amaranth_value(input_width) == 64) & (amaranth_value(output_width) == 32)),
                             f64_to_f32.output, self.src))
-        converted_flags = Mux((in_is_fp & out_is_fp & (input_width == 32) & (output_width == 64)), f32_to_f64.flags,
-                              Mux((in_is_fp & out_is_fp & (input_width == 64) & (output_width == 32)),
+        converted_flags = Mux((amaranth_value(in_is_fp) & amaranth_value(out_is_fp) & (amaranth_value(input_width) == 32) & (amaranth_value(output_width) == 64)), f32_to_f64.flags,
+                              Mux((amaranth_value(in_is_fp) & amaranth_value(out_is_fp) & (amaranth_value(input_width) == 64) & (amaranth_value(output_width) == 32)),
                                   f64_to_f32.flags, Const(0, 5)))
         stage_result = Signal(64, name="stage_result")
         stage_flags = Signal(5, name="stage_flags")
         result_reg = Signal(64, name="result_reg")
         flags_reg = Signal(5, name="flags_reg")
         fire_reg = Signal(name="fire_reg")
-        with m.If(self.reset):
+        with amaranth_if(m, self.reset):
             m.d.scalar_fpcvt += [fire_reg.eq(0), stage_result.eq(0), stage_flags.eq(0),
                                  result_reg.eq(0), flags_reg.eq(0)]
-        with m.Else():
+        with amaranth_else(m):
             m.d.scalar_fpcvt += fire_reg.eq(self.fire)
-            with m.If(self.fire):
+            with amaranth_if(m, self.fire):
                 m.d.scalar_fpcvt += [stage_result.eq(converted), stage_flags.eq(converted_flags)]
-            with m.If(fire_reg):
+            with amaranth_if(m, fire_reg):
                 m.d.scalar_fpcvt += [result_reg.eq(stage_result), flags_reg.eq(stage_flags)]
         m.d.comb += [self.result.eq(result_reg), self.fflags.eq(flags_reg)]
         del input_width, output_width, out_is_fp
@@ -896,6 +960,10 @@ class YunSuanFPCVT(Elaboratable):
 
 # Build a small IEEE widening/narrowing helper used by FPCVT. / 构造 FPCVT 使用的小型 IEEE 宽化/窄化辅助单元。
 class YunSuanFPConvert(Elaboratable):
+    # Resolve runtime-created ports for static type checking. / 为静态类型检查解析运行时创建的端口。
+    def __getattr__(self, name: str) -> Signal:
+        raise AttributeError(name)
+
     """Combinational f32/f64 payload converter. / 组合式 f32/f64 负载转换器。"""
 
     # Construct converter ports. / 构造转换器端口。
@@ -922,23 +990,23 @@ class YunSuanFPConvert(Elaboratable):
         exp = self.input[src_frac_width:self.source_width - 1]
         frac = self.input[:src_frac_width]
         src_exp_max = (1 << self.source_exp) - 1
-        is_nan = (exp == src_exp_max) & frac.any()
-        is_inf = (exp == src_exp_max) & ~frac.any()
-        is_zero = (exp == 0) & ~frac.any()
+        is_nan = (exp == src_exp_max) & amaranth_value(frac).any()
+        is_inf = (exp == src_exp_max) & ~amaranth_value(frac).any()
+        is_zero = (exp == 0) & ~amaranth_value(frac).any()
         # Widening preserves payload bits and shifts the exponent bias. /
         # 宽化保留负载位并调整指数偏置。
         if self.target_width >= self.source_width:
             bias_delta = ((1 << (self.target_exp - 1)) - 1) - ((1 << (self.source_exp - 1)) - 1)
-            normal_exp = exp + bias_delta
-            normal_frac = frac << (dst_frac_width - src_frac_width)
-            normal = (sign << (self.target_width - 1)) | (normal_exp << dst_frac_width) | normal_frac
-            inf = (sign << (self.target_width - 1)) | (((1 << self.target_exp) - 1) << dst_frac_width)
-            nan_payload = (frac << (dst_frac_width - src_frac_width)) | Const(1, self.target_width) << (dst_frac_width - 1)
-            nan = (sign << (self.target_width - 1)) | (((1 << self.target_exp) - 1) << dst_frac_width) | nan_payload
+            normal_exp = amaranth_value(exp) + bias_delta
+            normal_frac = amaranth_value(frac) << (dst_frac_width - src_frac_width)
+            normal = (amaranth_value(sign) << (self.target_width - 1)) | (amaranth_value(normal_exp) << dst_frac_width) | amaranth_value(normal_frac)
+            inf = (amaranth_value(sign) << (self.target_width - 1)) | (((1 << self.target_exp) - 1) << dst_frac_width)
+            nan_payload = (amaranth_value(frac) << (dst_frac_width - src_frac_width)) | (Const(1, self.target_width) << (dst_frac_width - 1))
+            nan = (amaranth_value(sign) << (self.target_width - 1)) | (((1 << self.target_exp) - 1) << dst_frac_width) | amaranth_value(nan_payload)
             zero = Const(0, self.target_width)
-            output = Mux(is_nan, nan, Mux(is_inf, inf, Mux(is_zero, sign << (self.target_width - 1), normal)))
+            output = Mux(is_nan, nan, Mux(is_inf, inf, Mux(is_zero, amaranth_value(sign) << (self.target_width - 1), normal)))
             m.d.comb += [self.output.eq(output),
-                         self.flags.eq(Mux(is_nan & ~frac[src_frac_width - 1], 16, 0))]
+                         self.flags.eq(Mux(amaranth_value(is_nan) & ~amaranth_value(frac[src_frac_width - 1]), 16, 0))]
         else:
             # Narrowing uses truncation with a sticky guard and preserves the
             # directed overflow choice.  / 窄化使用带粘滞位的截断并保留定向溢出选择。
@@ -947,21 +1015,21 @@ class YunSuanFPConvert(Elaboratable):
             m.submodules.narrow_rounder = narrow_rounder
             narrow_input = frac[src_frac_width - dst_frac_width:src_frac_width]
             narrow_guard = frac[src_frac_width - dst_frac_width - 1]
-            narrow_sticky = frac[:src_frac_width - dst_frac_width - 1].any()
+            narrow_sticky = amaranth_value(frac[:src_frac_width - dst_frac_width - 1]).any()
             m.d.comb += [narrow_rounder.input.eq(narrow_input),
                          narrow_rounder.round_in.eq(narrow_guard),
                          narrow_rounder.sticky_in.eq(narrow_sticky),
                          narrow_rounder.sign_in.eq(sign), narrow_rounder.rm.eq(self.rm)]
-            narrowed_exp = Mux(exp > bias_delta, exp - bias_delta + narrow_rounder.carry_out, 0)
+            narrowed_exp = Mux(amaranth_value(exp) > bias_delta, amaranth_value(exp) - bias_delta + amaranth_value(narrow_rounder.carry_out), 0)
             narrowed_frac = narrow_rounder.output
-            normal = (sign << (self.target_width - 1)) | (narrowed_exp << dst_frac_width) | narrowed_frac
-            inf = (sign << (self.target_width - 1)) | (((1 << self.target_exp) - 1) << dst_frac_width)
-            nan_payload = (frac >> (src_frac_width - dst_frac_width)) | Const(1, self.target_width) << (dst_frac_width - 1)
-            nan = (sign << (self.target_width - 1)) | (((1 << self.target_exp) - 1) << dst_frac_width) | nan_payload
-            zero = sign << (self.target_width - 1)
+            normal = (amaranth_value(sign) << (self.target_width - 1)) | (amaranth_value(narrowed_exp) << dst_frac_width) | amaranth_value(narrowed_frac)
+            inf = (amaranth_value(sign) << (self.target_width - 1)) | (((1 << self.target_exp) - 1) << dst_frac_width)
+            nan_payload = (amaranth_value(frac) >> (src_frac_width - dst_frac_width)) | (Const(1, self.target_width) << (dst_frac_width - 1))
+            nan = (amaranth_value(sign) << (self.target_width - 1)) | (((1 << self.target_exp) - 1) << dst_frac_width) | amaranth_value(nan_payload)
+            zero = amaranth_value(sign) << (self.target_width - 1)
             output = Mux(is_nan, nan, Mux(is_inf, inf, Mux(is_zero, zero, normal)))
-            overflow = (~is_nan) & (~is_inf) & (narrowed_exp >= (1 << self.target_exp) - 1)
-            narrow_flags = Mux(is_nan, Mux(~frac[src_frac_width - 1], 16, 0),
+            overflow = (~amaranth_value(is_nan)) & (~amaranth_value(is_inf)) & (amaranth_value(narrowed_exp) >= (1 << self.target_exp) - 1)
+            narrow_flags = Mux(is_nan, Mux(~amaranth_value(frac[src_frac_width - 1]), 16, 0),
                                Mux(is_inf, 0, (overflow << 2) | (overflow | narrow_rounder.inexact)))
             m.d.comb += [self.output.eq(Mux(overflow, inf, output)), self.flags.eq(narrow_flags)]
         return m
@@ -969,6 +1037,10 @@ class YunSuanFPConvert(Elaboratable):
 
 # Build the aggregate family boundary. / 构造聚合 family 边界。
 class YunSuanScalarBoundary(Elaboratable):
+    # Resolve runtime-created ports for static type checking. / 为静态类型检查解析运行时创建的端口。
+    def __getattr__(self, name: str) -> Signal:
+        raise AttributeError(name)
+
     """Expose all five scalar source contracts through one UHSC boundary. / 通过一个 UHSC 边界暴露五个标量源契约。"""
 
     # Construct aggregate ports. / 构造聚合端口。

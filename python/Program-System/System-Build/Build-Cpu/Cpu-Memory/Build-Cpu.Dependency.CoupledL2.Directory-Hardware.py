@@ -42,22 +42,22 @@ __all__ = [
 
 # Typed wrappers preserve Amaranth's generator-based control contexts. / 类型包装保持 Amaranth 基于生成器的控制上下文。
 # Convert a dynamic If context into a static context-manager protocol. / 将动态 If 上下文转换为静态上下文管理器协议。
-def _if(module: Module, condition: Any) -> AbstractContextManager[None]:
+def amaranth_if(module: Module, condition: Any) -> AbstractContextManager[None]:
     return cast(AbstractContextManager[None], module.If(condition))
 
 
 # Convert a dynamic Elif context into a static context-manager protocol. / 将动态 Elif 上下文转换为静态上下文管理器协议。
-def _elif(module: Module, condition: Any) -> AbstractContextManager[None]:
+def amaranth_elif(module: Module, condition: Any) -> AbstractContextManager[None]:
     return cast(AbstractContextManager[None], module.Elif(condition))
 
 
 # Convert a dynamic Else context into a static context-manager protocol. / 将动态 Else 上下文转换为静态上下文管理器协议。
-def _else(module: Module) -> AbstractContextManager[None]:
+def amaranth_else(module: Module) -> AbstractContextManager[None]:
     return cast(AbstractContextManager[None], module.Else())
 
 
 # Narrowly cast dynamic Amaranth expressions at the DSL boundary. / 在 DSL 边界窄化动态 Amaranth 表达式类型。
-def _value(expression: Any) -> Value:
+def amaranth_value(expression: Any) -> Value:
     return cast(Value, expression)
 
 
@@ -303,9 +303,9 @@ class CoupledL2Directory(Elaboratable):
         for index in range(c.mshr_entries):
             set_lo = index * c.set_bits
             way_lo = index * c.way_bits
-            same_set = _value(self.mshr_set[set_lo:set_lo + c.set_bits]) == _value(self.read_set)
-            active = _value(self.mshr_valid[index]) & ~_value(self.mshr_will_free[index])
-            occupies = active & same_set & (_value(self.mshr_block_refill[index]) | _value(self.mshr_dir_hit[index]))
+            same_set = amaranth_value(self.mshr_set[set_lo:set_lo + c.set_bits]) == amaranth_value(self.read_set)
+            active = amaranth_value(self.mshr_valid[index]) & ~amaranth_value(self.mshr_will_free[index])
+            occupies = active & same_set & (amaranth_value(self.mshr_block_refill[index]) | amaranth_value(self.mshr_dir_hit[index]))
             way_value = self.mshr_way[way_lo:way_lo + c.way_bits]
             way_one_hot: Any = 0
             for way in range(c.ways):
@@ -476,17 +476,17 @@ class CoupledL2Directory(Elaboratable):
         first_masked: Any = 0
         first_masked_seen: Any = 0
         for way in range(c.ways):
-            take = _value(self.read_way_mask[way]) & _value(free_mask[way]) & ~_value(first_masked_seen)
+            take = amaranth_value(self.read_way_mask[way]) & amaranth_value(free_mask[way]) & ~amaranth_value(first_masked_seen)
             first_masked = Mux(take, way, first_masked)
-            first_masked_seen = _value(first_masked_seen) | _value(take)
-        selected_way = Mux(~_value(masked_selected) & (_value(self.read_way_mask) != 0), first_masked, selected_way)
-        retry = ~_value(free_mask.any())
+            first_masked_seen = amaranth_value(first_masked_seen) | amaranth_value(take)
+        selected_way = Mux(~amaranth_value(masked_selected) & (amaranth_value(self.read_way_mask) != 0), first_masked, selected_way)
+        retry = ~amaranth_value(free_mask.any())
         selected_meta = lambda values: Array(values)[selected_way]
 
         # Public response and refill response fields. / 对外响应及回填响应字段。
         m.d.comb += [
             self.resp_valid.eq(req2_valid),
-            self.resp_hit.eq((_value(hit_any) | (_value(req2_cmo_all) & ~_value(Array(invalid_vec)[req2_cmo_way]))) & ~_value(multi_hit)),
+            self.resp_hit.eq((amaranth_value(hit_any) | (amaranth_value(req2_cmo_all) & ~amaranth_value(Array(invalid_vec)[req2_cmo_way]))) & ~amaranth_value(multi_hit)),
             self.resp_tag.eq(selected_meta(tags2)),
             self.resp_set.eq(req2_set),
             self.resp_way.eq(selected_way),
@@ -530,7 +530,7 @@ class CoupledL2Directory(Elaboratable):
             replacement_write.data.eq(selected_way + 1),
             replacement_write.en.eq(replacement_update & ~self.reset),
         ]
-        with _if(m, self.reset):
+        with amaranth_if(m, self.reset):
             m.d.coupled_l2_directory += [req1_valid.eq(0), req2_valid.eq(0)]
 
         return m
@@ -619,9 +619,9 @@ class CompactCoupledL2Directory(Elaboratable):
         for index in range(c.mshr_entries):
             set_lo = index * c.set_bits
             way_lo = index * c.way_bits
-            same_set = _value(self.mshr_set[set_lo:set_lo + c.set_bits]) == _value(self.read_set)
-            active = _value(self.mshr_valid[index]) & ~_value(self.mshr_will_free[index])
-            occupies = active & same_set & (_value(self.mshr_block_refill[index]) | _value(self.mshr_dir_hit[index]))
+            same_set = amaranth_value(self.mshr_set[set_lo:set_lo + c.set_bits]) == amaranth_value(self.read_set)
+            active = amaranth_value(self.mshr_valid[index]) & ~amaranth_value(self.mshr_will_free[index])
+            occupies = active & same_set & (amaranth_value(self.mshr_block_refill[index]) | amaranth_value(self.mshr_dir_hit[index]))
             way_value = self.mshr_way[way_lo:way_lo + c.way_bits]
             way_one_hot: Any = 0
             for way in range(c.ways):
@@ -632,9 +632,9 @@ class CompactCoupledL2Directory(Elaboratable):
         write_way: Any = 0
         write_way_valid: Any = 0
         for way in range(c.ways):
-            take = _value(self.meta_write_way_oh[way]) & ~_value(write_way_valid)
+            take = amaranth_value(self.meta_write_way_oh[way]) & ~amaranth_value(write_way_valid)
             write_way = Mux(take, way, write_way)
-            write_way_valid = _value(write_way_valid) | _value(self.meta_write_way_oh[way])
+            write_way_valid = amaranth_value(write_way_valid) | amaranth_value(self.meta_write_way_oh[way])
         write_index = self.meta_write_set
         payload = Signal(meta_width, name="directory_meta_write_payload")
         self._debug_meta_payload = payload
@@ -737,11 +737,11 @@ class CompactCoupledL2Directory(Elaboratable):
         first_masked: Any = 0
         first_masked_seen: Any = 0
         for way in range(c.ways):
-            take = _value(req2_way_mask[way]) & _value(free_mask[way]) & ~_value(first_masked_seen)
+            take = amaranth_value(req2_way_mask[way]) & amaranth_value(free_mask[way]) & ~amaranth_value(first_masked_seen)
             first_masked = Mux(take, way, first_masked)
-            first_masked_seen = _value(first_masked_seen) | _value(take)
-        selected_way = Mux(~_value(masked_selected) & (_value(req2_way_mask) != 0), first_masked, selected_way)
-        retry = ~_value(free_mask.any())
+            first_masked_seen = amaranth_value(first_masked_seen) | amaranth_value(take)
+        selected_way = Mux(~amaranth_value(masked_selected) & (amaranth_value(req2_way_mask) != 0), first_masked, selected_way)
+        retry = ~amaranth_value(free_mask.any())
         selected_tag = Array(tag2)[selected_way]
         selected_meta = Array(meta2)[selected_way]
         selected_state = selected_meta[offsets["state"]:offsets["state"] + c.state_bits]
@@ -763,7 +763,7 @@ class CompactCoupledL2Directory(Elaboratable):
         ]
         replacement_update = req2_valid & (hit_any | (req2_refill & ~retry))
         m.d.comb += [replacement_write.addr.eq(req2_set), replacement_write.data.eq(selected_way + 1), replacement_write.en.eq(replacement_update & ~self.reset)]
-        with _if(m, self.reset):
+        with amaranth_if(m, self.reset):
             m.d.coupled_l2_directory += [req1_valid.eq(0), req2_valid.eq(0)]
         return m
 
@@ -935,7 +935,7 @@ def tl2tl_parent_port_contract(configuration: TL2TLCoupledL2ParentConfig | None 
     ):
         add(name, width, direction)
     for index in range(1, cfg.perf_count + 1):
-        add(f"io_perf_{index}_value", 6, "output")
+            add(f"io_perf_{index}", 6, "output")
     return tuple(entries)
 
 
@@ -1049,16 +1049,16 @@ class TL2TLCoupledL2Parent(Elaboratable):
         # the generated names stable without relying on dynamic attributes).
         for index, signal in enumerate(tp_raw):
             m.d.comb += getattr(self, f"auto_tpmeta_source_out_bits_rawData_{index}").eq(signal)
-        with _if(m, self.reset):
+        with amaranth_if(m, self.reset):
             m.d.tl2tl_parent += [tp_pending.eq(0), tp_hartid.eq(0)]
             for signal in tp_raw:
                 m.d.tl2tl_parent += signal.eq(0)
-        with _else(m):
-            with _if(m, tp_in_fire):
+        with amaranth_else(m):
+            with amaranth_if(m, tp_in_fire):
                 m.d.tl2tl_parent += [tp_pending.eq(1), tp_hartid.eq(self.auto_tpmeta_sink_in_bits_hartid)]
                 for index, signal in enumerate(tp_raw):
                     m.d.tl2tl_parent += signal.eq(getattr(self, f"auto_tpmeta_sink_in_bits_rawData_{index}"))
-            with _elif(m, tp_pending & self.auto_tpmeta_source_out_ready):
+            with amaranth_elif(m, tp_pending & self.auto_tpmeta_source_out_ready):
                 m.d.tl2tl_parent += tp_pending.eq(0)
 
         # Per-bank ready/valid relay. / 每 bank ready/valid 中继。
@@ -1153,10 +1153,10 @@ class TL2TLCoupledL2Parent(Elaboratable):
             # Use one-bit Boolean equations instead of logical operators on
             # the two-bit state register; this keeps generated RTL width-clean.
             # 使用单比特布尔方程而不是对两位状态寄存器做逻辑运算，确保生成 RTL 位宽干净。
-            idle = ~(_value(state[bank][0]) | _value(state[bank][1]))
-            outer_a = _value(state[bank][0]) & ~_value(state[bank][1])
-            outer_d = ~_value(state[bank][0]) & _value(state[bank][1])
-            inner_d = _value(state[bank][0]) & _value(state[bank][1])
+            idle = ~(amaranth_value(state[bank][0]) | amaranth_value(state[bank][1]))
+            outer_a = amaranth_value(state[bank][0]) & ~amaranth_value(state[bank][1])
+            outer_d = ~amaranth_value(state[bank][0]) & amaranth_value(state[bank][1])
+            inner_d = amaranth_value(state[bank][0]) & amaranth_value(state[bank][1])
             inner_a_fire = getattr(self, inner + "a_valid") & getattr(self, inner + "a_ready")
             inner_c_fire = getattr(self, inner + "c_valid") & getattr(self, inner + "c_ready")
             outer_a_fire = getattr(self, outer + "a_valid") & getattr(self, outer + "a_ready")
@@ -1213,39 +1213,39 @@ class TL2TLCoupledL2Parent(Elaboratable):
                 getattr(self, outer + "e_valid").eq(getattr(self, inner + "e_valid")),
                 getattr(self, outer + "e_bits_sink").eq(getattr(self, inner + "e_bits_sink")[:c.outer_sink_bits]),
             ]
-            with _if(m, self.reset):
+            with amaranth_if(m, self.reset):
                 m.d.tl2tl_parent += [state[bank].eq(0), c_pending[bank].eq(0), b_pending[bank].eq(0)]
-            with _else(m):
-                with _if(m, inner_a_fire):
+            with amaranth_else(m):
+                with amaranth_if(m, inner_a_fire):
                     m.d.tl2tl_parent += [state[bank].eq(1), req_opcode[bank].eq(getattr(self, inner + "a_bits_opcode")),
                                          req_param[bank].eq(getattr(self, inner + "a_bits_param")), req_size[bank].eq(getattr(self, inner + "a_bits_size")),
                                          req_source[bank].eq(getattr(self, inner + "a_bits_source")), req_address[bank].eq(getattr(self, inner + "a_bits_address")),
                                          req_req_source[bank].eq(getattr(self, inner + "a_bits_user_reqSource")), req_data[bank].eq(getattr(self, inner + "a_bits_data")),
                                          req_mask[bank].eq(getattr(self, inner + "a_bits_mask")), req_keyword[bank].eq(getattr(self, inner + "a_bits_echo_isKeyword"))]
-                with _elif(m, outer_a_fire):
+                with amaranth_elif(m, outer_a_fire):
                     m.d.tl2tl_parent += state[bank].eq(2)
-                with _elif(m, outer_d_fire):
+                with amaranth_elif(m, outer_d_fire):
                     m.d.tl2tl_parent += [state[bank].eq(3), resp_opcode[bank].eq(getattr(self, outer + "d_bits_opcode")),
                                          resp_param[bank].eq(getattr(self, outer + "d_bits_param")), resp_size[bank].eq(getattr(self, outer + "d_bits_size")),
                                          resp_source[bank].eq(getattr(self, outer + "d_bits_source")[:c.inner_source_bits]), resp_sink[bank].eq(getattr(self, outer + "d_bits_sink")[:c.inner_sink_bits]),
                                          resp_data[bank].eq(getattr(self, outer + "d_bits_data")), resp_denied[bank].eq(getattr(self, outer + "d_bits_denied")),
                                          resp_corrupt[bank].eq(getattr(self, outer + "d_bits_corrupt"))]
-                with _elif(m, inner_d_fire):
+                with amaranth_elif(m, inner_d_fire):
                     m.d.tl2tl_parent += state[bank].eq(0)
-                with _if(m, inner_c_fire):
+                with amaranth_if(m, inner_c_fire):
                     m.d.tl2tl_parent += [c_pending[bank].eq(1), c_opcode[bank].eq(getattr(self, inner + "c_bits_opcode")),
                                          c_param[bank].eq(getattr(self, inner + "c_bits_param")), c_size[bank].eq(getattr(self, inner + "c_bits_size")),
                                          c_source[bank].eq(getattr(self, inner + "c_bits_source")), c_address[bank].eq(getattr(self, inner + "c_bits_address")),
                                          c_data[bank].eq(getattr(self, inner + "c_bits_data")), c_corrupt[bank].eq(getattr(self, inner + "c_bits_corrupt"))]
-                with _if(m, c_pending[bank] & getattr(self, outer + "c_ready")):
+                with amaranth_if(m, c_pending[bank] & getattr(self, outer + "c_ready")):
                     m.d.tl2tl_parent += [c_pending[bank].eq(0), state[bank].eq(0)]
-                with _if(m, getattr(self, outer + "b_valid") & getattr(self, outer + "b_ready")):
+                with amaranth_if(m, getattr(self, outer + "b_valid") & getattr(self, outer + "b_ready")):
                     m.d.tl2tl_parent += [b_pending[bank].eq(1), b_opcode[bank].eq(getattr(self, outer + "b_bits_opcode")),
                                          b_param[bank].eq(getattr(self, outer + "b_bits_param")), b_size[bank].eq(getattr(self, outer + "b_bits_size")),
                                          b_source[bank].eq(getattr(self, outer + "b_bits_source")), b_address[bank].eq(getattr(self, outer + "b_bits_address")),
                                          b_mask[bank].eq(getattr(self, outer + "b_bits_mask")), b_data[bank].eq(getattr(self, outer + "b_bits_data")),
                                          b_corrupt[bank].eq(getattr(self, outer + "b_bits_corrupt"))]
-                with _if(m, b_pending[bank] & getattr(self, inner + "b_ready")):
+                with amaranth_if(m, b_pending[bank] & getattr(self, inner + "b_ready")):
                     m.d.tl2tl_parent += b_pending[bank].eq(0)
 
         # Prefetch/TLB/error/performance outputs are explicit quiescent values. /

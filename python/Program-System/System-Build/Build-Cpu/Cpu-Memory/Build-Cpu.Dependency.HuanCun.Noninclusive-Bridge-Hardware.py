@@ -26,12 +26,12 @@ __all__ = ["HuanCunBridgeConfig", "HuanCunBridgeBoundary", "build_verilog", "mai
 
 
 # Cast Amaranth's generator controls to a context-manager protocol. / 将 Amaranth 生成器控制转换为上下文管理器协议。
-def _if(module: Module, condition: Any) -> AbstractContextManager[None]:
+def amaranth_if(module: Module, condition: Any) -> AbstractContextManager[None]:
     return cast(AbstractContextManager[None], module.If(condition))
 
 
 # Cast the Amaranth else branch to a context-manager protocol. / 将 Amaranth else 分支转换为上下文管理器协议。
-def _else(module: Module) -> AbstractContextManager[None]:
+def amaranth_else(module: Module) -> AbstractContextManager[None]:
     return cast(AbstractContextManager[None], module.Else())
 
 
@@ -102,15 +102,15 @@ class HuanCunBridgeBoundary(Elaboratable):
                      self.probe_valid.eq(pending & ~self.flush), self.probe_address.eq(address_r),
                      self.probe_source.eq(source_r), self.resp_valid.eq(response & ~self.flush),
                      self.resp_source.eq(source_r), self.resp_data.eq(data_r)]
-        with _if(m, self.reset | self.flush):
+        with amaranth_if(m, self.reset | self.flush):
             m.d.huancun_bridge += [pending.eq(0), response.eq(0)]
-        with _else(m):
+        with amaranth_else(m):
             m.d.huancun_bridge += response.eq(0)
-            with _if(m, self.req_valid & self.req_ready):
+            with amaranth_if(m, self.req_valid & self.req_ready):
                 m.d.huancun_bridge += [pending.eq(1), address_r.eq(self.req_address), source_r.eq(self.req_source), data_r.eq(self.req_data)]
-            with _if(m, self.probe_valid & self.probe_ready):
+            with amaranth_if(m, self.probe_valid & self.probe_ready):
                 m.d.huancun_bridge += [pending.eq(0), response.eq(1)]
-            with _if(m, response & self.resp_ready):
+            with amaranth_if(m, response & self.resp_ready):
                 m.d.huancun_bridge += response.eq(0)
         return m
 

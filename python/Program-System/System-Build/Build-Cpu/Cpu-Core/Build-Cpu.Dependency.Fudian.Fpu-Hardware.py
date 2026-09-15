@@ -22,7 +22,7 @@ __all__ = ["FpuConfig", "decode_float", "int_to_float", "FudianFpu", "build_veri
 
 
 # Narrow dynamic Amaranth values at the DSL boundary. / 在 DSL 边界窄化动态 Amaranth 值。
-def _value(expression: Any) -> Value:
+def amaranth_value(expression: Any) -> Value:
     return cast(Value, expression)
 
 
@@ -97,7 +97,7 @@ class FudianFpu(Elaboratable):
         m = Module(); domain = ClockDomain("fudian_fpu", async_reset=True); domain.clk = self.clock; domain.rst = self.reset; m.domains.fudian_fpu = domain
         exp = self.input[ c.precision - 1 : c.precision - 1 + c.exp_width ]
         sig = self.input[: c.precision - 1]
-        m.d.comb += [self.output.eq(self.input[:width]), self.inexact.eq(0), self.is_nan.eq(_value(exp).all() & _value(sig).any()), self.is_inf.eq(_value(exp).all() & ~_value(sig).any()), self.is_zero.eq(~_value(exp).any() & ~_value(sig).any())]
+        m.d.comb += [self.output.eq(self.input[:width]), self.inexact.eq(0), self.is_nan.eq(amaranth_value(exp).all() & amaranth_value(sig).any()), self.is_inf.eq(amaranth_value(exp).all() & ~amaranth_value(sig).any()), self.is_zero.eq(~amaranth_value(exp).any() & ~amaranth_value(sig).any())]
         return m
 
 

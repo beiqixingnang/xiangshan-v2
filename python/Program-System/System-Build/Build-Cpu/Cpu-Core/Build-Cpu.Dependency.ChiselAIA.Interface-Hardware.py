@@ -23,12 +23,12 @@ __all__ = ["AIAConfig", "UHSCAIAInterface", "AIAInterface", "aia_reference_step"
 
 
 # Cast Amaranth generator controls to the context-manager protocol. / 将 Amaranth 生成器控制转换为上下文管理器协议。
-def _if(module: Module, condition: Any) -> AbstractContextManager[None]:
+def amaranth_if(module: Module, condition: Any) -> AbstractContextManager[None]:
     return cast(AbstractContextManager[None], module.If(condition))
 
 
 # Cast an Amaranth else branch to the context-manager protocol. / 将 Amaranth else 分支转换为上下文管理器协议。
-def _else(module: Module) -> AbstractContextManager[None]:
+def amaranth_else(module: Module) -> AbstractContextManager[None]:
     return cast(AbstractContextManager[None], module.Else())
 
 
@@ -113,13 +113,13 @@ class UHSCAIAInterface(Elaboratable):
             self.claim.eq(claim_value), self.csr_ready.eq(self.csr_valid),
             self.csr_rdata.eq(Mux(self.csr_addr[4], read_pending, read_enable)),
         ]
-        with _if(m, self.reset):
+        with amaranth_if(m, self.reset):
             m.d.aia += [pending.eq(0), enable.eq(0)]
-        with _else(m):
+        with amaranth_else(m):
             m.d.aia += pending.eq(pending | self.external_source)
-            with _if(m, self.csr_valid & self.csr_write & (self.csr_addr[4] == 0)):
+            with amaranth_if(m, self.csr_valid & self.csr_write & (self.csr_addr[4] == 0)):
                 m.d.aia += enable.eq(self.csr_wdata)
-            with _if(m, self.csr_valid & self.csr_write & (self.csr_addr[4] == 1)):
+            with amaranth_if(m, self.csr_valid & self.csr_write & (self.csr_addr[4] == 1)):
                 m.d.aia += pending.eq(pending & ~self.csr_wdata)
         return m
 

@@ -41,7 +41,7 @@ __all__ = [
 
 
 # Cast Amaranth's generator control to a context-manager protocol. / 将 Amaranth 生成器控制转换为上下文管理器协议。
-def _if(module: Module, condition: Any) -> AbstractContextManager[None]:
+def amaranth_if(module: Module, condition: Any) -> AbstractContextManager[None]:
     return cast(AbstractContextManager[None], module.If(condition))
 
 
@@ -227,7 +227,7 @@ class UHSCCoreVldMergeUnit(Elaboratable):
         need_flush = self.flush_valid & ((self.flush_level & same_ptr) | is_after)
         wb_fire = self.writeback_valid
         module.d.clock += wb_valid.eq(wb_fire & ~need_flush)
-        with _if(module, wb_fire):
+        with amaranth_if(module, wb_fire):
             module.d.clock += [
                 wb_data.eq(self.writeback_data), wb_pdest.eq(self.writeback_pdest),
                 wb_rob_flag.eq(self.writeback_rob_flag), wb_rob_value.eq(self.writeback_rob_value),

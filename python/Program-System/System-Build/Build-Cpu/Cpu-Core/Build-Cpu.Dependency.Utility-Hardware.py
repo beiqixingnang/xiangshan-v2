@@ -40,12 +40,12 @@ __all__ = [
 
 
 # Cast Amaranth generator controls to the context-manager protocol. / 将 Amaranth 生成器控制转换为上下文管理器协议。
-def _if(module: Module, condition: Any) -> AbstractContextManager[None]:
+def amaranth_if(module: Module, condition: Any) -> AbstractContextManager[None]:
     return cast(AbstractContextManager[None], module.If(condition))
 
 
 # Cast an Amaranth elif branch to the context-manager protocol. / 将 Amaranth elif 分支转换为上下文管理器协议。
-def _elif(module: Module, condition: Any) -> AbstractContextManager[None]:
+def amaranth_elif(module: Module, condition: Any) -> AbstractContextManager[None]:
     return cast(AbstractContextManager[None], module.Elif(condition))
 
 
@@ -159,10 +159,10 @@ class UtilityBoundary(Elaboratable):
                      self.pointer_wrap.eq((self.pointer_value + self.pointer_increment) >= (1 << c.pointer_bits)),
                      self.parity_bit.eq(self.parity_value.xor()),
                      self.critical_error.eq(self.counter_enable & self.counter_clear)]
-        with _if(m, self.reset | self.counter_clear):
+        with amaranth_if(m, self.reset | self.counter_clear):
             m.d.utility += self.counter_value.eq(0)
-        with _elif(m, self.counter_enable):
-            with _if(m, self.counter_value != Const((1 << c.counter_bits) - 1, c.counter_bits)):
+        with amaranth_elif(m, self.counter_enable):
+            with amaranth_if(m, self.counter_value != Const((1 << c.counter_bits) - 1, c.counter_bits)):
                 m.d.utility += self.counter_value.eq(self.counter_value + 1)
         return m
 

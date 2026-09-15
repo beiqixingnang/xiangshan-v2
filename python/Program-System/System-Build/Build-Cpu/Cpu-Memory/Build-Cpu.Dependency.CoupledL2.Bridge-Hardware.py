@@ -79,17 +79,17 @@ __all__ = [
 
 # Typed wrappers preserve Amaranth's generator-based control contexts. / 类型包装保持 Amaranth 基于生成器的控制上下文。
 # Convert a dynamic If context into a static context-manager protocol. / 将动态 If 上下文转换为静态上下文管理器协议。
-def _if(module: Module, condition: Any) -> AbstractContextManager[None]:
+def amaranth_if(module: Module, condition: Any) -> AbstractContextManager[None]:
     return cast(AbstractContextManager[None], module.If(condition))
 
 
 # Convert a dynamic Elif context into a static context-manager protocol. / 将动态 Elif 上下文转换为静态上下文管理器协议。
-def _elif(module: Module, condition: Any) -> AbstractContextManager[None]:
+def amaranth_elif(module: Module, condition: Any) -> AbstractContextManager[None]:
     return cast(AbstractContextManager[None], module.Elif(condition))
 
 
 # Convert a dynamic Else context into a static context-manager protocol. / 将动态 Else 上下文转换为静态上下文管理器协议。
-def _else(module: Module) -> AbstractContextManager[None]:
+def amaranth_else(module: Module) -> AbstractContextManager[None]:
     return cast(AbstractContextManager[None], module.Else())
 
 
@@ -743,38 +743,38 @@ class CoupledL2Bridge(Elaboratable):
                                                        Mux(req_opcode == TL_OPCODE_PUTFULL, CHI_REQ_OPCODES["WriteNoSnpFull"],
                                                            CHI_REQ_OPCODES["ReadShared"])))))
 
-        with _if(m, self.reset | self.flush):
+        with amaranth_if(m, self.reset | self.flush):
             m.d.coupled_l2_bridge += [pending.eq(0), req_sent.eq(0), write_data_sent.eq(0), response_pending.eq(0),
                                        response_opcode.eq(0), response_data.eq(0), response_source.eq(0),
                                        response_denied.eq(0), response_corrupt.eq(0), pcrd_wait.eq(0), snp_pending.eq(0),
                                        tx_req_credit.eq(credit_reset), tx_rsp_credit.eq(credit_reset),
                                        tx_dat_credit.eq(credit_reset), tx_state_r.eq(LINK_STOP), rx_state_r.eq(LINK_STOP)]
-        with _else(m):
+        with amaranth_else(m):
             m.d.coupled_l2_bridge += [tx_state_r.eq(link_next(self.tx_linkactivereq, self.tx_linkactiveack)),
                                        rx_state_r.eq(link_next(self.rx_linkactivereq, self.rx_linkactiveack))]
 
             # Return credits and consume one credit per accepted flit. / 每次 flit 握手返还或消耗一个信用。
             if not c.tx_source_ready:
-                with _if(m, self.tx_req_credit_return & ~self.tx_req_valid):
-                    with _if(m, tx_req_credit < c.credit_num):
+                with amaranth_if(m, self.tx_req_credit_return & ~self.tx_req_valid):
+                    with amaranth_if(m, tx_req_credit < c.credit_num):
                         m.d.coupled_l2_bridge += tx_req_credit.eq(tx_req_credit + 1)
-                with _elif(m, self.tx_req_valid & self.tx_req_ready):
-                    with _if(m, tx_req_credit != 0):
+                with amaranth_elif(m, self.tx_req_valid & self.tx_req_ready):
+                    with amaranth_if(m, tx_req_credit != 0):
                         m.d.coupled_l2_bridge += tx_req_credit.eq(tx_req_credit - 1)
-                with _if(m, self.tx_rsp_credit_return & ~self.tx_rsp_valid):
-                    with _if(m, tx_rsp_credit < c.credit_num):
+                with amaranth_if(m, self.tx_rsp_credit_return & ~self.tx_rsp_valid):
+                    with amaranth_if(m, tx_rsp_credit < c.credit_num):
                         m.d.coupled_l2_bridge += tx_rsp_credit.eq(tx_rsp_credit + 1)
-                with _elif(m, self.tx_rsp_valid & self.tx_rsp_ready):
-                    with _if(m, tx_rsp_credit != 0):
+                with amaranth_elif(m, self.tx_rsp_valid & self.tx_rsp_ready):
+                    with amaranth_if(m, tx_rsp_credit != 0):
                         m.d.coupled_l2_bridge += tx_rsp_credit.eq(tx_rsp_credit - 1)
-                with _if(m, self.tx_dat_credit_return & ~self.tx_dat_valid):
-                    with _if(m, tx_dat_credit < c.credit_num):
+                with amaranth_if(m, self.tx_dat_credit_return & ~self.tx_dat_valid):
+                    with amaranth_if(m, tx_dat_credit < c.credit_num):
                         m.d.coupled_l2_bridge += tx_dat_credit.eq(tx_dat_credit + 1)
-                with _elif(m, self.tx_dat_valid & self.tx_dat_ready):
-                    with _if(m, tx_dat_credit != 0):
+                with amaranth_elif(m, self.tx_dat_valid & self.tx_dat_ready):
+                    with amaranth_if(m, tx_dat_credit != 0):
                         m.d.coupled_l2_bridge += tx_dat_credit.eq(tx_dat_credit - 1)
 
-            with _if(m, self.tl_req_valid & self.tl_req_ready):
+            with amaranth_if(m, self.tl_req_valid & self.tl_req_ready):
                 m.d.coupled_l2_bridge += [pending.eq(1), req_sent.eq(0), write_data_sent.eq(0), response_pending.eq(0),
                                            req_opcode.eq(self.tl_req_opcode), req_size.eq(self.tl_req_size),
                                            req_source.eq(self.tl_req_source), response_source.eq(self.tl_req_source),
@@ -782,44 +782,44 @@ class CoupledL2Bridge(Elaboratable):
                                            req_mask.eq(self.tl_req_mask), req_mmio.eq(self.tl_req_mmio),
                                            req_txn.eq(self.tl_req_source), req_dbid.eq(0), pcrd_wait.eq(0)]
 
-            with _if(m, self.tx_req_valid & self.tx_req_ready):
+            with amaranth_if(m, self.tx_req_valid & self.tx_req_ready):
                 m.d.coupled_l2_bridge += req_sent.eq(1)
 
-            with _if(m, self.rx_rsp_valid & self.rx_rsp_ready):
-                with _if(m, self.rx_rsp_opcode == CHI_RSP_OPCODES["RetryAck"]):
+            with amaranth_if(m, self.rx_rsp_valid & self.rx_rsp_ready):
+                with amaranth_if(m, self.rx_rsp_opcode == CHI_RSP_OPCODES["RetryAck"]):
                     m.d.coupled_l2_bridge += [req_sent.eq(0), pcrd_wait.eq(1)]
-                with _elif(m, self.rx_rsp_opcode == CHI_RSP_OPCODES["PCrdGrant"]):
+                with amaranth_elif(m, self.rx_rsp_opcode == CHI_RSP_OPCODES["PCrdGrant"]):
                     m.d.coupled_l2_bridge += pcrd_wait.eq(0)
-                with _elif(m, (self.rx_rsp_opcode == CHI_RSP_OPCODES["DBIDResp"]) |
+                with amaranth_elif(m, (self.rx_rsp_opcode == CHI_RSP_OPCODES["DBIDResp"]) |
                             (self.rx_rsp_opcode == CHI_RSP_OPCODES["CompDBIDResp"])):
                     m.d.coupled_l2_bridge += req_dbid.eq(self.rx_rsp_db_id)
-                    with _if(m, (req_opcode == TL_OPCODE_PUTFULL) | (req_opcode == TL_OPCODE_PUTPARTIAL)):
+                    with amaranth_if(m, (req_opcode == TL_OPCODE_PUTFULL) | (req_opcode == TL_OPCODE_PUTPARTIAL)):
                         m.d.coupled_l2_bridge += write_data_sent.eq(1)
-                    with _if(m, self.rx_rsp_opcode == CHI_RSP_OPCODES["CompDBIDResp"]):
+                    with amaranth_if(m, self.rx_rsp_opcode == CHI_RSP_OPCODES["CompDBIDResp"]):
                         m.d.coupled_l2_bridge += [response_pending.eq(1), response_opcode.eq(0),
                                                    response_denied.eq(self.rx_rsp_resp_err == CHI_RESP_ERR["NDERR"]),
                                                    response_corrupt.eq(self.rx_rsp_resp_err != CHI_RESP_ERR["OK"])]
-                with _elif(m, (self.rx_rsp_opcode == CHI_RSP_OPCODES["Comp"]) |
+                with amaranth_elif(m, (self.rx_rsp_opcode == CHI_RSP_OPCODES["Comp"]) |
                             (self.rx_rsp_opcode == CHI_RSP_OPCODES["CompAck"])):
                     m.d.coupled_l2_bridge += [response_pending.eq(1), response_opcode.eq(0),
                                                response_denied.eq(self.rx_rsp_resp_err == CHI_RESP_ERR["NDERR"]),
                                                response_corrupt.eq(self.rx_rsp_resp_err != CHI_RESP_ERR["OK"])]
 
-            with _if(m, self.rx_dat_valid & self.rx_dat_ready):
+            with amaranth_if(m, self.rx_dat_valid & self.rx_dat_ready):
                 m.d.coupled_l2_bridge += [response_pending.eq(1), response_opcode.eq(1), response_data.eq(self.rx_dat_data),
                                            response_denied.eq(self.rx_dat_resp_err == CHI_RESP_ERR["NDERR"]),
                                            response_corrupt.eq(self.rx_dat_resp_err != CHI_RESP_ERR["OK"])]
 
-            with _if(m, self.tx_dat_valid & self.tx_dat_ready):
+            with amaranth_if(m, self.tx_dat_valid & self.tx_dat_ready):
                 m.d.coupled_l2_bridge += write_data_sent.eq(0)
 
-            with _if(m, self.tl_resp_valid & self.tl_resp_ready):
+            with amaranth_if(m, self.tl_resp_valid & self.tl_resp_ready):
                 m.d.coupled_l2_bridge += [response_pending.eq(0), pending.eq(0), req_sent.eq(0), write_data_sent.eq(0)]
 
-            with _if(m, self.rx_snp_valid & self.rx_snp_ready):
+            with amaranth_if(m, self.rx_snp_valid & self.rx_snp_ready):
                 m.d.coupled_l2_bridge += [snp_pending.eq(1), snp_opcode.eq(self.rx_snp_opcode),
                                            snp_txn.eq(self.rx_snp_txn_id), snp_src.eq(self.rx_snp_src_id)]
-            with _if(m, self.tx_rsp_valid & self.tx_rsp_ready):
+            with amaranth_if(m, self.tx_rsp_valid & self.tx_rsp_ready):
                 m.d.coupled_l2_bridge += snp_pending.eq(0)
 
         return m
@@ -1164,60 +1164,60 @@ class TL2CHICoupledL2(Elaboratable):
         selected_data = Mux(mmio_a_fire, extend(self.auto_mmioBridge_mmio_in_a_bits_data, c.data_bits), Const(0, c.data_bits))
         selected_mask = Mux(mmio_a_fire, extend(self.auto_mmioBridge_mmio_in_a_bits_mask, c.data_bits // 8), Const((1 << (c.data_bits // 8)) - 1, c.data_bits // 8))
         selected_txn = Cat(mmio_a_fire, selected_source[:iw["txn_id"] - 1])
-        with _if(m, self.reset):
+        with amaranth_if(m, self.reset):
             m.d.tl2chi_parent += [pending.eq(0), req_sent.eq(0), pending_mmio.eq(0), pending_write_data.eq(0),
                                    response_pending.eq(0), response_opcode.eq(0), response_data.eq(0), response_source.eq(0),
                                    response_denied.eq(0), response_corrupt.eq(0), request_opcode.eq(0), request_size.eq(0),
                                    request_source.eq(0), request_address.eq(0), request_data.eq(0), request_mask.eq(0),
                                    request_txn.eq(0), request_dbid.eq(0), retry_wait.eq(0), snoop_pending.eq(0),
                                    tx_req_credit.eq(0), tx_rsp_credit.eq(0), tx_dat_credit.eq(0), tx_state.eq(LINK_STOP), rx_state.eq(LINK_STOP)]
-        with _else(m):
+        with amaranth_else(m):
             m.d.tl2chi_parent += [tx_state.eq(next_link(self.io_chi_tx_linkactivereq, self.io_chi_tx_linkactiveack)),
                                    rx_state.eq(next_link(self.io_chi_rx_linkactivereq, self.io_chi_rx_linkactiveack))]
-            with _if(m, self.io_chi_tx_req_lcrdv & ~tx_req_valid):
-                with _if(m, tx_req_credit < c.credit_num):
+            with amaranth_if(m, self.io_chi_tx_req_lcrdv & ~tx_req_valid):
+                with amaranth_if(m, tx_req_credit < c.credit_num):
                     m.d.tl2chi_parent += tx_req_credit.eq(tx_req_credit + 1)
-            with _elif(m, tx_req_valid):
+            with amaranth_elif(m, tx_req_valid):
                 m.d.tl2chi_parent += tx_req_credit.eq(tx_req_credit - 1)
-            with _if(m, self.io_chi_tx_rsp_lcrdv & ~tx_rsp_valid):
-                with _if(m, tx_rsp_credit < c.credit_num):
+            with amaranth_if(m, self.io_chi_tx_rsp_lcrdv & ~tx_rsp_valid):
+                with amaranth_if(m, tx_rsp_credit < c.credit_num):
                     m.d.tl2chi_parent += tx_rsp_credit.eq(tx_rsp_credit + 1)
-            with _elif(m, tx_rsp_valid):
+            with amaranth_elif(m, tx_rsp_valid):
                 m.d.tl2chi_parent += tx_rsp_credit.eq(tx_rsp_credit - 1)
-            with _if(m, self.io_chi_tx_dat_lcrdv & ~tx_dat_valid):
-                with _if(m, tx_dat_credit < c.credit_num):
+            with amaranth_if(m, self.io_chi_tx_dat_lcrdv & ~tx_dat_valid):
+                with amaranth_if(m, tx_dat_credit < c.credit_num):
                     m.d.tl2chi_parent += tx_dat_credit.eq(tx_dat_credit + 1)
-            with _elif(m, tx_dat_valid):
+            with amaranth_elif(m, tx_dat_valid):
                 m.d.tl2chi_parent += tx_dat_credit.eq(tx_dat_credit - 1)
-            with _if(m, mmio_a_fire | tl_a_fire):
+            with amaranth_if(m, mmio_a_fire | tl_a_fire):
                 m.d.tl2chi_parent += [pending.eq(1), req_sent.eq(0), pending_mmio.eq(mmio_a_fire), pending_write_data.eq(0),
                                        request_opcode.eq(selected_opcode), request_size.eq(selected_size),
                                        request_source.eq(selected_source), response_source.eq(selected_source),
                                        request_address.eq(selected_address), request_data.eq(selected_data),
                                        request_mask.eq(selected_mask), request_txn.eq(selected_txn)]
-            with _if(m, tx_req_valid):
+            with amaranth_if(m, tx_req_valid):
                 m.d.tl2chi_parent += req_sent.eq(1)
-            with _if(m, rx_rsp_valid & (rx_rsp_opcode == CHI_RSP_OPCODES["RetryAck"])):
+            with amaranth_if(m, rx_rsp_valid & (rx_rsp_opcode == CHI_RSP_OPCODES["RetryAck"])):
                 m.d.tl2chi_parent += [req_sent.eq(0), retry_wait.eq(1)]
-            with _if(m, rx_rsp_valid & (rx_rsp_opcode == CHI_RSP_OPCODES["PCrdGrant"])):
+            with amaranth_if(m, rx_rsp_valid & (rx_rsp_opcode == CHI_RSP_OPCODES["PCrdGrant"])):
                 m.d.tl2chi_parent += retry_wait.eq(0)
-            with _if(m, rx_rsp_valid & ((rx_rsp_opcode == CHI_RSP_OPCODES["DBIDResp"]) | (rx_rsp_opcode == CHI_RSP_OPCODES["CompDBIDResp"]))):
+            with amaranth_if(m, rx_rsp_valid & ((rx_rsp_opcode == CHI_RSP_OPCODES["DBIDResp"]) | (rx_rsp_opcode == CHI_RSP_OPCODES["CompDBIDResp"]))):
                 m.d.tl2chi_parent += request_dbid.eq(rx_rsp_txn)
-                with _if(m, pending_mmio | (request_opcode == TL_OPCODE_PUTFULL) | (request_opcode == TL_OPCODE_PUTPARTIAL)):
+                with amaranth_if(m, pending_mmio | (request_opcode == TL_OPCODE_PUTFULL) | (request_opcode == TL_OPCODE_PUTPARTIAL)):
                     m.d.tl2chi_parent += pending_write_data.eq(1)
-                with _if(m, rx_rsp_opcode == CHI_RSP_OPCODES["CompDBIDResp"]):
+                with amaranth_if(m, rx_rsp_opcode == CHI_RSP_OPCODES["CompDBIDResp"]):
                     m.d.tl2chi_parent += [response_pending.eq(1), response_opcode.eq(0), response_denied.eq(rx_rsp_err == CHI_RESP_ERR["NDERR"]), response_corrupt.eq(rx_rsp_err != CHI_RESP_ERR["OK"])]
-            with _if(m, rx_rsp_valid & ((rx_rsp_opcode == CHI_RSP_OPCODES["Comp"]) | (rx_rsp_opcode == CHI_RSP_OPCODES["CompAck"]))):
+            with amaranth_if(m, rx_rsp_valid & ((rx_rsp_opcode == CHI_RSP_OPCODES["Comp"]) | (rx_rsp_opcode == CHI_RSP_OPCODES["CompAck"]))):
                 m.d.tl2chi_parent += [response_pending.eq(1), response_opcode.eq(0), response_denied.eq(rx_rsp_err == CHI_RESP_ERR["NDERR"]), response_corrupt.eq(rx_rsp_err != CHI_RESP_ERR["OK"])]
-            with _if(m, rx_dat_valid):
+            with amaranth_if(m, rx_dat_valid):
                 m.d.tl2chi_parent += [response_pending.eq(1), response_opcode.eq(1), response_data.eq(rx_dat_data), response_denied.eq(0), response_corrupt.eq(0)]
-            with _if(m, tx_dat_valid):
+            with amaranth_if(m, tx_dat_valid):
                 m.d.tl2chi_parent += pending_write_data.eq(0)
-            with _if(m, (self.auto_in_d_valid & self.auto_in_d_ready) | (self.auto_mmioBridge_mmio_in_d_valid & self.auto_mmioBridge_mmio_in_d_ready)):
+            with amaranth_if(m, (self.auto_in_d_valid & self.auto_in_d_ready) | (self.auto_mmioBridge_mmio_in_d_valid & self.auto_mmioBridge_mmio_in_d_ready)):
                 m.d.tl2chi_parent += [response_pending.eq(0), pending.eq(0), req_sent.eq(0)]
-            with _if(m, rx_snp_valid & ~snoop_pending):
+            with amaranth_if(m, rx_snp_valid & ~snoop_pending):
                 m.d.tl2chi_parent += [snoop_pending.eq(1), snoop_txn.eq(rx_snp_txn), snoop_src.eq(rx_snp_src)]
-            with _if(m, tx_rsp_valid):
+            with amaranth_if(m, tx_rsp_valid):
                 m.d.tl2chi_parent += snoop_pending.eq(0)
         return m
 

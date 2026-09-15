@@ -27,12 +27,12 @@ __all__ = ["HuanCunConfig", "HuanCunCacheBoundary", "build_verilog", "main"]
 
 
 # Cast Amaranth's generator controls to a context-manager protocol. / 将 Amaranth 生成器控制转换为上下文管理器协议。
-def _if(module: Module, condition: Any) -> AbstractContextManager[None]:
+def amaranth_if(module: Module, condition: Any) -> AbstractContextManager[None]:
     return cast(AbstractContextManager[None], module.If(condition))
 
 
 # Cast the Amaranth else branch to a context-manager protocol. / 将 Amaranth else 分支转换为上下文管理器协议。
-def _else(module: Module) -> AbstractContextManager[None]:
+def amaranth_else(module: Module) -> AbstractContextManager[None]:
     return cast(AbstractContextManager[None], module.Else())
 
 
@@ -133,16 +133,16 @@ class HuanCunCacheBoundary(Elaboratable):
                      self.miss_address.eq(pending_addr), self.miss_source.eq(source),
                      self.evict_valid.eq(pending & dirty & ~self.flush), self.evict_address.eq(pending_addr),
                      self.evict_data.eq(line)]
-        with _if(m, self.reset | self.flush):
+        with amaranth_if(m, self.reset | self.flush):
             m.d.huancun_cache += [valid.eq(0), dirty.eq(0), pending.eq(0)]
-        with _else(m):
-            with _if(m, self.req_valid & self.req_ready):
-                with _if(m, hit):
-                    with _if(m, self.req_write):
+        with amaranth_else(m):
+            with amaranth_if(m, self.req_valid & self.req_ready):
+                with amaranth_if(m, hit):
+                    with amaranth_if(m, self.req_write):
                         m.d.huancun_cache += [line.eq(self.req_data), dirty.eq(1)]
-                with _else(m):
+                with amaranth_else(m):
                     m.d.huancun_cache += [pending.eq(1), pending_addr.eq(self.req_address), pending_write.eq(self.req_write), source.eq(self.req_source)]
-            with _if(m, self.refill_valid & pending):
+            with amaranth_if(m, self.refill_valid & pending):
                 m.d.huancun_cache += [line.eq(self.refill_data), tag.eq(self.refill_source), valid.eq(1), dirty.eq(pending_write), pending.eq(0)]
         return m
 

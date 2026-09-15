@@ -53,12 +53,12 @@ __all__ = [
 
 
 # Cast Amaranth generator controls to the context-manager protocol. / 将 Amaranth 生成器控制转换为上下文管理器协议。
-def _if(module: Module, condition: Any) -> AbstractContextManager[None]:
+def amaranth_if(module: Module, condition: Any) -> AbstractContextManager[None]:
     return cast(AbstractContextManager[None], module.If(condition))
 
 
 # Cast an Amaranth else branch to the context-manager protocol. / 将 Amaranth else 分支转换为上下文管理器协议。
-def _else(module: Module) -> AbstractContextManager[None]:
+def amaranth_else(module: Module) -> AbstractContextManager[None]:
     return cast(AbstractContextManager[None], module.Else())
 
 
@@ -187,13 +187,13 @@ class _TagFallback(Elaboratable):
         rows = [Signal(width, name=f"tag_{way}") for way in range(c.tag_ways)]
         valid = Signal(name="tag_valid")
         m.d.comb += self.io_read_ready.eq(valid & ~self.io_write_valid)
-        with _if(m, self.reset):
+        with amaranth_if(m, self.reset):
             m.d.tag_sync += valid.eq(0)
-        with _else(m):
+        with amaranth_else(m):
             m.d.tag_sync += valid.eq(1)
-            with _if(m, self.io_write_valid):
+            with amaranth_if(m, self.io_write_valid):
                 for way in range(c.tag_ways):
-                    with _if(m, self.io_write_bits_way_en[way]):
+                    with amaranth_if(m, self.io_write_bits_way_en[way]):
                         m.d.tag_sync += rows[way].eq(self.io_write_bits_tag |
                                                   (self.io_write_bits_ecc << c.tag_bits))
         for way, row in enumerate(rows):
@@ -315,21 +315,21 @@ class UHSCCacheMainPipe(Elaboratable):
         miss_fire = self.miss_valid & self.miss_ready
         refill_fire = self.refill_valid & pending
         # Response is a one-cycle pulse; a flush drops both pending and response. / 响应为单拍脉冲；flush 丢弃未决事务及响应。
-        with _if(m, self.flush):
+        with amaranth_if(m, self.flush):
             m.d.mainpipe_sync += [pending.eq(0), response.eq(0)]
-        with _else(m):
+        with amaranth_else(m):
             m.d.mainpipe_sync += response.eq(0)
-            with _if(m, request_fire):
+            with amaranth_if(m, request_fire):
                 m.d.mainpipe_sync += [pending.eq(1), pending_miss.eq(self.req_miss),
                              pending_source.eq(self.req_source), pending_cmd.eq(self.req_cmd),
                              pending_addr.eq(self.req_addr), pending_data.eq(self.req_data),
                              pending_mask.eq(self.req_mask), pending_id.eq(self.req_id),
                              pending_rhs.eq(self.refill_data)]
-            with _if(m, pending & ~pending_miss):
+            with amaranth_if(m, pending & ~pending_miss):
                 m.d.mainpipe_sync += [pending.eq(0), response.eq(1),
                              response_data.eq(Mux(pending_source == 2, self.amo_result, pending_data)),
                              response_id.eq(pending_id), response_miss.eq(0)]
-            with _if(m, pending & pending_miss & (refill_fire | miss_fire & self.refill_valid)):
+            with amaranth_if(m, pending & pending_miss & (refill_fire | miss_fire & self.refill_valid)):
                 m.d.mainpipe_sync += [pending.eq(0), response.eq(1),
                              response_data.eq(Mux(pending_source == 2, self.amo_result, self.refill_data)),
                              response_id.eq(Mux(refill_fire, self.refill_id, pending_id)),
@@ -604,12 +604,12 @@ class UHSCMemoryMemBlock(Elaboratable):
         ic_pending = Signal(name="icache_pending")
         ic_addr = Signal(c.vaddr_bits, name="icache_addr_reg")
         m.d.comb += self.icache_req_ready.eq(~ic_pending & ~self.flush)
-        with _if(m, self.flush):
+        with amaranth_if(m, self.flush):
             m.d.mem_sync += ic_pending.eq(0)
-        with _else(m):
-            with _if(m, self.icache_req_valid & self.icache_req_ready):
+        with amaranth_else(m):
+            with amaranth_if(m, self.icache_req_valid & self.icache_req_ready):
                 m.d.mem_sync += [ic_pending.eq(1), ic_addr.eq(self.icache_req_addr)]
-            with _else(m):
+            with amaranth_else(m):
                 m.d.mem_sync += ic_pending.eq(0)
         m.d.comb += [self.icache_resp_valid.eq(ic_pending & ~self.flush),
                      self.icache_resp_data.eq(ic_addr[:32] ^ Const(0x13579BDF, 32))]

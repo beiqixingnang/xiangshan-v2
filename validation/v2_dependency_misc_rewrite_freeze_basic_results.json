@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_DEPENDENCY_MISC_REWRITE_FREEZE_BASIC",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "phase": "REWRITE_FREEZE",
+  "method": "family validators reused as the machine-readable basic-gate evidence; each family result records UTF8/LF, AST/py_compile, exact adapter, direct/reference, Verilator and Yosys",
+  "targets": [
+    {"path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Fudian.Fpu-Hardware.py", "evidence": "validation/v2-fudian-family-results.json", "status": "PASS"},
+    {"path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Fudian.Arithmetic-Hardware.py", "evidence": "validation/v2-fudian-family-results.json", "status": "PASS"},
+    {"path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.ChiselAIA.Interface-Hardware.py", "evidence": "validation/v2-chisel-aia-interface-family-results.json", "status": "PASS"},
+    {"path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Difftest.Interface-Hardware.py", "evidence": "validation/v2-difftest-interface-family-results.json", "status": "PASS"},
+    {"path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Rocket.Protocol-Hardware.py", "evidence": "validation/v2-rocket-protocol-family-results.json", "status": "PASS"},
+    {"path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Utility-Hardware.py", "evidence": "validation/v2-utility-family-results.json", "status": "PASS"},
+    {"path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.YunSuan.Scalar-Hardware.py", "evidence": "validation/v2-yunsuan-scalar-family-results.json", "status": "PASS"},
+    {"path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.YunSuan.Vector-Hardware.py", "evidence": "validation/v2-yunsuan-vector-family-results.json", "status": "PASS"}
+  ],
+  "gates": {
+    "REWRITE_FREEZE_BASIC": "PASS",
+    "PYRIGHT": "PASS_ZERO_ERRORS",
+    "PY_COMPILE": "PASS",
+    "EXACT_PATH_IMPORT": "PASS",
+    "DETERMINISTIC_BUILD_VERILOG": "PASS",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "BEHAVIOR_VERIFIED_dependency_misc": "PENDING_PARENT_CLOSURE",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "acceptance_eligible": false
+}

@@ -28,17 +28,17 @@ __all__ = ["RocketProtocolConfig", "RocketProtocolBoundary", "build_verilog", "m
 
 
 # Cast Amaranth generator controls to the context-manager protocol. / 将 Amaranth 生成器控制转换为上下文管理器协议。
-def _if(module: Module, condition: Any) -> AbstractContextManager[None]:
+def amaranth_if(module: Module, condition: Any) -> AbstractContextManager[None]:
     return cast(AbstractContextManager[None], module.If(condition))
 
 
 # Cast an Amaranth elif branch to the context-manager protocol. / 将 Amaranth elif 分支转换为上下文管理器协议。
-def _elif(module: Module, condition: Any) -> AbstractContextManager[None]:
+def amaranth_elif(module: Module, condition: Any) -> AbstractContextManager[None]:
     return cast(AbstractContextManager[None], module.Elif(condition))
 
 
 # Cast an Amaranth else branch to the context-manager protocol. / 将 Amaranth else 分支转换为上下文管理器协议。
-def _else(module: Module) -> AbstractContextManager[None]:
+def amaranth_else(module: Module) -> AbstractContextManager[None]:
     return cast(AbstractContextManager[None], module.Else())
 
 
@@ -123,14 +123,14 @@ class RocketProtocolBoundary(Elaboratable):
                      self.d_opcode.eq(Mux(opcode_r == 0, 0, 1)),
                      self.d_size.eq(size_r), self.d_source.eq(source_r), self.d_sink.eq(0),
                      self.d_denied.eq(0), self.d_data.eq(data_r), self.d_corrupt.eq(0)]
-        with _if(m, self.flush):
+        with amaranth_if(m, self.flush):
             m.d.rocket_protocol += self.outstanding.eq(0)
-        with _else(m):
-            with _if(m, self.request_fire):
+        with amaranth_else(m):
+            with amaranth_if(m, self.request_fire):
                 m.d.rocket_protocol += [self.outstanding.eq(1), source_r.eq(self.a_source),
                                         opcode_r.eq(self.a_opcode), size_r.eq(self.a_size),
                                         address_r.eq(self.a_address), data_r.eq(self.a_data), mask_r.eq(self.a_mask)]
-            with _elif(m, self.response_fire):
+            with amaranth_elif(m, self.response_fire):
                 m.d.rocket_protocol += self.outstanding.eq(0)
         return m
 

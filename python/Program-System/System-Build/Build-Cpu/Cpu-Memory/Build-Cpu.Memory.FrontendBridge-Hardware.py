@@ -32,17 +32,17 @@ __all__ = [
 
 
 # Cast Amaranth generator controls to the context-manager protocol. / 将 Amaranth 生成器控制转换为上下文管理器协议。
-def _if(module: Module, condition: Any) -> AbstractContextManager[None]:
+def amaranth_if(module: Module, condition: Any) -> AbstractContextManager[None]:
     return cast(AbstractContextManager[None], module.If(condition))
 
 
 # Cast an Amaranth elif branch to the context-manager protocol. / 将 Amaranth elif 分支转换为上下文管理器协议。
-def _elif(module: Module, condition: Any) -> AbstractContextManager[None]:
+def amaranth_elif(module: Module, condition: Any) -> AbstractContextManager[None]:
     return cast(AbstractContextManager[None], module.Elif(condition))
 
 
 # Cast an Amaranth else branch to the context-manager protocol. / 将 Amaranth else 分支转换为上下文管理器协议。
-def _else(module: Module) -> AbstractContextManager[None]:
+def amaranth_else(module: Module) -> AbstractContextManager[None]:
     return cast(AbstractContextManager[None], module.Else())
 
 
@@ -112,33 +112,33 @@ class TwoEntryQueue(Elaboratable):
         for output, source in zip(self.deq_bits, data0):
             m.d.comb += output.eq(source)
 
-        with _if(m, pop):
-            with _if(m, count == 2):
+        with amaranth_if(m, pop):
+            with amaranth_if(m, count == 2):
                 for dst, src in zip(data0, data1):
                     m.d.sync += dst.eq(src)
-                with _if(m, push):
+                with amaranth_if(m, push):
                     for dst, src in zip(data1, self.enq_bits):
                         m.d.sync += dst.eq(src)
                     m.d.sync += count.eq(2)
-                with _else(m):
+                with amaranth_else(m):
                     m.d.sync += count.eq(1)
-            with _else(m):
-                with _if(m, push):
+            with amaranth_else(m):
+                with amaranth_if(m, push):
                     for dst, src in zip(data0, self.enq_bits):
                         m.d.sync += dst.eq(src)
                     m.d.sync += count.eq(1)
-                with _else(m):
+                with amaranth_else(m):
                     m.d.sync += count.eq(0)
-        with _elif(m, push):
-            with _if(m, count == 0):
+        with amaranth_elif(m, push):
+            with amaranth_if(m, count == 0):
                 for dst, src in zip(data0, self.enq_bits):
                     m.d.sync += dst.eq(src)
                 m.d.sync += count.eq(1)
-            with _else(m):
+            with amaranth_else(m):
                 for dst, src in zip(data1, self.enq_bits):
                     m.d.sync += dst.eq(src)
                 m.d.sync += count.eq(2)
-        with _if(m, ResetSignal("sync")):
+        with amaranth_if(m, ResetSignal("sync")):
             m.d.sync += count.eq(0)
         return m
 
