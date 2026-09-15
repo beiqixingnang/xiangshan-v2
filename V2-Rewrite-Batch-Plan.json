@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "kind": "XIANGSHAN_KUNMINGHU_V2_REWRITE_BATCH_PLAN",
-  "authority": "V2-Core-Rewrite-Inventory.json + V2-Dependency-Family-Inventory.json",
+  "authority": "V2-Core-Rewrite-Inventory.json + V2-Dependency-Family-Inventory.json + V2-Rewrite-Freeze-Manifest.json",
   "worker_model": "gpt-5.6-terra",
   "reasoning_effort": "high",
   "validator_model": "gpt-5.6-terra",
@@ -395,7 +395,7 @@
       "accepted": "NOT_ALLOWED"
     }
   ],
-  "status": "SCAN_COMPLETE_IMPLEMENTATION_ACTIVE",
+  "status": "REWRITE_FREEZE_ACTIVE",
   "scan_freeze": {
     "status": "PASS",
     "core_scala_files": 325,
@@ -411,20 +411,41 @@
     "frozen_at": "2026-09-14"
   },
   "implementation_policy": {
+    "phase_order": ["REWRITE_FREEZE", "BATCH_VALIDATION", "PARENT_CLOSURE", "MILESTONE_FULL_TOP"],
     "aggregation": "family_or_parent_closure; do_not_map_one_scala_to_one_python",
     "worker": "gpt-5.6-terra",
     "worker_reasoning_effort": "high",
     "validator": "gpt-5.6-terra",
     "validator_reasoning_effort": "medium",
     "parallelism": "non-overlapping workers; focused validator spot-checks overlap with later work; parent/protocol failures escalate to serial full review",
+    "rewrite_freeze_basic_gate": [
+      "UTF-8 without BOM and LF line endings",
+      "five-zone and bilingual function-comment audit",
+      "AST parse and py_compile",
+      "exact-path import without side effects",
+      "Pyright on the owned batch",
+      "deterministic same-name build_verilog export",
+      "generated Verilog syntax parse without errors"
+    ],
     "per_batch_done_definition": [
       "final Build-Cpu path implementation",
       "UHSC external-name localization",
-      "tier-appropriate direct/reference differential",
-      "Verilator and Yosys gates for family/parent/milestone tiers, cacheable by content hash",
-      "contract/license evidence",
-      "machine-readable evidence and mapping in the same batch commit"
+      "rewrite-freeze basic gate evidence",
+      "machine-readable mapping in the same batch commit"
     ],
+    "post_freeze_validation_definition": [
+      "family/parent direct and locked-reference differential",
+      "Verilator and Yosys gates for family/parent/milestone tiers, cacheable by content hash",
+      "contract/license evidence and unclosed-gate inventory",
+      "machine-readable evidence in the validation auxiliary repository"
+    ],
+    "placement_policy": {
+      "build_targets": "auxiliary repository final python/Program-System/System-Build/Build-Cpu paths",
+      "migration_validators_and_evidence": "auxiliary repository .agents/xiangshan-v2/validation only",
+      "direct_tests_after_acceptance": "main repository Program-System/System-Testing/Testing-Cpu with Manifest-Testing-Hardware.py",
+      "generated_sv_waveforms_logs_cache": "ignored validation work/output directories",
+      "runtime_import_rule": "Build files may not import auxiliary validators or evidence"
+    },
     "promotion_rule": "ACCEPTED remains NOT_ALLOWED until parent closure, license, UHSC and user approval gates pass",
     "full_generation_required": true,
     "full_generation_gate": "single reproducible Python/Amaranth-generated Kunminghu V2 hierarchy must elaborate and pass complete XSTop module/port inventory plus Verilator/Yosys; reduced wrappers are intermediate only",
@@ -443,7 +464,10 @@
     "validated_batch_count": 54,
     "count_reconciliation": "53 bounded validator records across 12 leaf, 7 parent, and 18 dependency-family gates; semantic/family evidence entries overlap those records; +1 top-generation probe = 54 verification records",
     "planned_build_file_count": 78,
-    "current_build_file_count": 74,
+    "current_build_file_count": 75,
+    "tracked_build_file_count": 74,
+    "draft_build_file_count": 1,
+    "rewrite_freeze_basic_gate_status": "ACTIVE",
     "exact_parent_envelopes": {
       "Frontend": {"ports": 371, "status": "STRUCTURAL_PASS_BOUNDED"},
       "Backend": {"ports": 1165, "inputs": 478, "outputs": 687, "status": "STRUCTURAL_PASS_BOUNDED"},

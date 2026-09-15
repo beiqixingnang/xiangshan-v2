@@ -165,6 +165,37 @@ port/direction/width, hierarchy, and synthesis gates, and
 rails improve visibility but never grant `ACCEPTED`; complete parent closure,
 license review, UHSC localization, and user approval remain mandatory.
 
+## 5B. Rewrite-freeze basic gates and placement
+
+The rewrite phase is completed before the expensive family and parent
+differential phase. Every planned Build file must first pass a cheap basic
+gate in the auxiliary repository: UTF-8/LF and format audit, AST parse,
+`py_compile`, exact-path import, Pyright for the owned batch, and deterministic
+same-name `build_verilog(configuration, injected_dependencies)` export. The
+export must parse without syntax errors and its top module name must match the
+Build contract. This gate proves that the file is usable as a Build subject; it
+does not prove behavioral equivalence.
+
+During rewrite freeze, workers may batch many disjoint Build files and may
+reuse one shared basic-gate runner. They must not create a separate full
+Verilator/Yosys or locked-reference harness for every file. Family and parent
+verification begins only after the planned Build set has passed the basic gate
+or has an explicit `CONTRACT_ONLY`/`CONDITIONAL` record with its missing
+evidence.
+
+The auxiliary repository keeps migration-only differential validators,
+reference extraction, hashes, evidence JSON, generated SV, waveforms, tool
+logs, and caches under `.agents/xiangshan-v2/validation/`. These scripts are
+not product modules and must not be imported by a Build file. After user
+approval and `ACCEPTED`, reusable direct tests are adapted into the main
+repository's `Program-System/System-Testing/Testing-Cpu/` and registered in
+`Manifest-Testing-Hardware.py`, one direct test per formal Build subject.
+Family/parent differential harnesses remain traceability tools in the
+auxiliary repository unless separately approved as a stable test subject.
+
+`Program-System/System-Output/` stores only controller-generated, ignored
+logic artifacts and does not become a second test or evidence source.
+
 ## 6. Prohibited shortcuts
 
 - No one-Scala/one-Python requirement for external dependencies.

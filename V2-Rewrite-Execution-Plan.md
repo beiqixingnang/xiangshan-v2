@@ -121,6 +121,33 @@ escalates only failures or high-risk parent/protocol changes to a full rerun.
 The coordinator records both `STRUCTURE_VERIFIED` and
 `BEHAVIOR_VERIFIED_<family>` while keeping `ACCEPTED` locked.
 
+## Rewrite-freeze phase
+
+The execution order is now explicitly split into two large phases:
+
+1. `REWRITE_FREEZE`: complete the frozen set of 78 aggregate Build subjects
+   (46 core leaves, 8 core parents, 23 dependency-family subjects, and one
+   UHSC integration subject; one source entry is retired/excluded). A worker
+   may own a disjoint family batch and write several Build files before any
+   expensive reference differential is started.
+2. `BATCH_VALIDATION`: after the Build set is frozen, run family and parent
+   differential closures in dependency order, followed by the milestone
+   complete-top gate.
+
+Every Build file must pass the rewrite-freeze basic gate before it is counted
+as `STRUCTURE_VERIFIED`: UTF-8/LF and five-zone audit, AST parse,
+`py_compile`, exact-path import, Pyright on the owned batch, and deterministic
+same-name `build_verilog()` export with syntax-valid generated Verilog. A
+basic-gate pass is not a behavior pass. The worker records the basic result and
+mapping with the implementation batch; it does not run a fresh full-top
+Verilator/Yosys compile for every leaf.
+
+The final product placement is deliberately separate from migration tooling.
+Build files are staged at their final `python/Program-System/System-Build/`
+paths in this auxiliary repository. Migration-only reference extractors,
+differential harnesses, tool logs, caches, generated SV/VCD, and evidence JSON+remain under `.agents/xiangshan-v2/validation/`. Only after all applicable+family/parent/milestone gates reach `ACCEPTED` may reusable direct tests be+adapted into the main repository's `Program-System/System-Testing/Testing-Cpu/`
+and registered in its Testing Manifest. The auxiliary repository remains the+traceable source of the full locked-reference evidence package; no Build file+may import it.
+
 ## Acceptance gates
 
 The evidence graph has two parallel rails. The structure rail is
