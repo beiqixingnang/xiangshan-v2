@@ -194,10 +194,11 @@ def main() -> int:
     pyright_data = json.loads(pyright.stdout) if pyright.stdout else {"version": "unavailable", "summary": {"errorCount": -1}}
     structural_passed = all(bool(record["pass"]) for record in records.values())
     pyright_errors = int(pyright_data["summary"].get("errorCount", -1))
-    # Pyright currently reports dynamic Signal/operator diagnostics for the
-    # Amaranth API; record them explicitly while keeping structural freeze
-    # gates independent.  Type cleanup remains a tracked follow-up.
-    passed = structural_passed
+    # The rewrite-freeze contract requires a clean Pyright run.  A recorded
+    # baseline is useful diagnostic information but cannot advance a Build to
+    # STRUCTURE_VERIFIED; otherwise this family would silently weaken the
+    # per-file gate.
+    passed = structural_passed and pyright_errors == 0
     result = {
         "schema_version": 1,
         "kind": "XIANGSHAN_KUNMINGHU_V2_MEMORY_REWRITE_FREEZE_BASIC",
@@ -213,12 +214,12 @@ def main() -> int:
             "REWRITE_FREEZE_BASIC": "PASS" if passed else "FAIL",
             "STRUCTURE_VERIFIED": "PASS" if passed else "PENDING",
             "BEHAVIOR_VERIFIED_memory": "PENDING",
-            "PYRIGHT": "PASS" if pyright_errors == 0 else "BASELINE_RECORDED",
+            "PYRIGHT": "PASS" if pyright_errors == 0 else "FAIL",
             "ACCEPTED": "NOT_ALLOWED",
         },
-        "status": "REWRITE_FREEZE_BASIC_STRUCTURAL_PASS" if passed else "REWRITE_FREEZE_BASIC_FAIL",
+        "status": "REWRITE_FREEZE_BASIC_PASS" if passed else "REWRITE_FREEZE_BASIC_FAIL",
         "notes": [
-            f"Pyright ran on all ten owned memory aggregates and reported {pyright_errors} diagnostics; these are tracked baseline Amaranth dynamic Signal/operator typing issues.",
+            f"Pyright ran on all ten owned memory aggregates and reported {pyright_errors} diagnostics; a non-zero result blocks STRUCTURE_VERIFIED until repaired.",
             "All structural targets must still pass UTF-8/LF, AST, py_compile, exact import, deterministic same-name export, Verilator and Yosys gates.",
         ],
         "acceptance_eligible": False,
