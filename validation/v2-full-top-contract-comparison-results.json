@@ -1,0 +1,1796 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_FULL_TOP_CONTRACT_COMPARISON",
+  "batch_id": "V2-FULL-XSTOP-BEHAVIORAL-DIFFERENTIAL-PRECONDITION",
+  "status": "FAIL_FULL_TOP_CONTRACT",
+  "reference_integrity": {
+    "canonical_path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "local_access_path": "\\\\wsl$\\Debian\\home\\lishuo\\xs-v2-local\\build\\rtl\\XSTop.sv",
+    "bytes": 228590583,
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "expected_bytes": 228590583,
+    "expected_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+    "expected_source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+    "status": "PASS"
+  },
+  "locked_header_inventory": {
+    "header_sha256": "d25a8aa30cdb1ea201897a746b8ab5dea64cedd89b902f790187ae1a443d24b8",
+    "expected_header_sha256": "a2356b4ccf8334a908b81792ab0a604578963b0c3821011f27e280816a95bf1e",
+    "parsed_port_count": 204,
+    "frozen_port_count": 204,
+    "comparison": {
+      "reference_port_count": 204,
+      "candidate_port_count": 204,
+      "exact_direction_width_matches": 204,
+      "missing": [],
+      "extra": [],
+      "direction_width_mismatches": [],
+      "status": "PASS",
+      "port_order": "NOT_A_GATE_NAMED_PORT_CONTRACT"
+    },
+    "status": "FAIL"
+  },
+  "normalized_top_metrics": {
+    "source": "validation/v2-top-generation-normalized-metrics.json",
+    "port_envelope_coverage": {
+      "planned_roots": 7,
+      "matched_roots": 7,
+      "coverage": "7/7",
+      "matched": [
+        "Frontend",
+        "Backend",
+        "MemBlock",
+        "XSCore",
+        "L2Top",
+        "XSTile",
+        "XSTop"
+      ],
+      "pending": [],
+      "status": "PASS_STRUCTURAL_PORT_ENVELOPE"
+    },
+    "family_closure_coverage": {
+      "planned_families": 23,
+      "structure_landed_or_satisfied": 23,
+      "structure_coverage": "23/23",
+      "behavior_verified_bounded": 7,
+      "behavior_coverage": "7/23",
+      "full_behavior_verified": 0,
+      "status": "STRUCTURE_COMPLETE_BEHAVIOR_PENDING"
+    },
+    "leaf_behavioral_coverage": {
+      "planned_leaves": 46,
+      "behavior_verified_bounded": 12,
+      "behavior_coverage": "12/46",
+      "full_behavior_verified": 0,
+      "status": "BOUNDED_ONLY"
+    },
+    "full_top_behavior": "PENDING_FULL_CHILD_BEHAVIORAL_DIFFERENTIAL"
+  },
+  "artifacts": {
+    "uhsc_top": {
+      "path": "validation/.work/v2-full-top-contract/UHSCTopFullTopContract.sv",
+      "bytes": 23676,
+      "sha256": "c8d9b12a7165b4dd69a30c3d8cd3c22bcd5b34d80f359943634f0072d2b65b5a"
+    },
+    "source_named_xstop": {
+      "path": "validation/.work/v2-full-top-contract/UHSCXSTopFullTopContract.sv",
+      "bytes": 21148,
+      "sha256": "5b6abfb54d11aa9783b98f2ae140f5597485f543e3b65328078a90dce11ba728"
+    },
+    "locked_header_contract_carrier": {
+      "path": "validation/.work/v2-full-top-contract/LockedXSTopPortContract.sv",
+      "bytes": 10257,
+      "sha256": "26e04de7bb2f0931833c7aaa34494f2bc942b73a0e64f270e7ddc34c0f38a974"
+    }
+  },
+  "envelopes": {
+    "UHSCTop": {
+      "port_contract": {
+        "reference_port_count": 204,
+        "candidate_port_count": 204,
+        "exact_direction_width_matches": 204,
+        "missing": [],
+        "extra": [],
+        "direction_width_mismatches": [],
+        "status": "PASS",
+        "port_order": "NOT_A_GATE_NAMED_PORT_CONTRACT"
+      },
+      "handshake_contract": {
+        "reference_channel_count": 20,
+        "candidate_channel_count": 20,
+        "checked_channels": 20,
+        "channels": [
+          {
+            "channel": "dma_ar",
+            "reference": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "dma_aw",
+            "reference": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "dma_b",
+            "reference": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "dma_r",
+            "reference": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "dma_w",
+            "reference": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "imsic_axi4_ar",
+            "reference": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "imsic_axi4_aw",
+            "reference": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "imsic_axi4_b",
+            "reference": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "imsic_axi4_r",
+            "reference": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "imsic_axi4_w",
+            "reference": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "memory_ar",
+            "reference": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "memory_aw",
+            "reference": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "memory_b",
+            "reference": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "memory_r",
+            "reference": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "memory_w",
+            "reference": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "peripheral_ar",
+            "reference": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "peripheral_aw",
+            "reference": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "peripheral_b",
+            "reference": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "peripheral_r",
+            "reference": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "peripheral_w",
+            "reference": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          }
+        ],
+        "issues": [],
+        "status": "PASS",
+        "scope": "AXI_STYLE_VALID_READY_ONLY"
+      },
+      "tools": {
+        "verilator": {
+          "status": "PASS",
+          "returncode": 0,
+          "command": "verilator --lint-only --Wno-fatal --top-module UHSCTopFullTopContract '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-full-top-contract/UHSCTopFullTopContract.sv'",
+          "stdout_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.043 MB sources in 2 modules, into 0.014 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.029 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.010 s on 1 threads; alloced 10.195 MB\n",
+          "stderr_tail": ""
+        },
+        "yosys": {
+          "status": "PASS",
+          "returncode": 0,
+          "command": "yosys -Q -p 'read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-full-top-contract/UHSCTopFullTopContract.sv; hierarchy -check -top UHSCTopFullTopContract; proc; check'",
+          "stdout_tail": "\n-- Running command `read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-full-top-contract/UHSCTopFullTopContract.sv; hierarchy -check -top UHSCTopFullTopContract; proc; check' --\n\n1. Executing Verilog-2005 frontend: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-full-top-contract/UHSCTopFullTopContract.sv\nParsing SystemVerilog input from `/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-full-top-contract/UHSCTopFullTopContract.sv' to AST representation.\nGenerating RTLIL representation for module `\\UHSCTopFullTopContract'.\nSuccessfully finished Verilog frontend.\n\n2. Executing HIERARCHY pass (managing design hierarchy).\n\n2.1. Analyzing design hierarchy..\nTop module:  \\UHSCTopFullTopContract\n\n2.2. Analyzing design hierarchy..\nTop module:  \\UHSCTopFullTopContract\nRemoved 0 unused modules.\n\n3. Executing PROC pass (convert processes to netlists).\n\n3.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module UHSCTopFullTopContract.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module UHSCTopFullTopContract...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 07e51040b3, CPU: user 0.01s system 0.01s, MEM: 12.34 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 72% 2x read_verilog (0 sec), 6% 1x check (0 sec), ...\n",
+          "stderr_tail": ""
+        }
+      },
+      "status": "PASS"
+    },
+    "source_named_XSTop": {
+      "port_contract": {
+        "reference_port_count": 204,
+        "candidate_port_count": 204,
+        "exact_direction_width_matches": 204,
+        "missing": [],
+        "extra": [],
+        "direction_width_mismatches": [],
+        "status": "PASS",
+        "port_order": "NOT_A_GATE_NAMED_PORT_CONTRACT"
+      },
+      "handshake_contract": {
+        "reference_channel_count": 20,
+        "candidate_channel_count": 20,
+        "checked_channels": 20,
+        "channels": [
+          {
+            "channel": "dma_ar",
+            "reference": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "dma_aw",
+            "reference": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "dma_b",
+            "reference": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "dma_r",
+            "reference": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "dma_w",
+            "reference": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "imsic_axi4_ar",
+            "reference": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "imsic_axi4_aw",
+            "reference": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "imsic_axi4_b",
+            "reference": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "imsic_axi4_r",
+            "reference": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "imsic_axi4_w",
+            "reference": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "memory_ar",
+            "reference": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "memory_aw",
+            "reference": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "memory_b",
+            "reference": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "memory_r",
+            "reference": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "memory_w",
+            "reference": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "peripheral_ar",
+            "reference": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "peripheral_aw",
+            "reference": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "peripheral_b",
+            "reference": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "peripheral_r",
+            "reference": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "peripheral_w",
+            "reference": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          }
+        ],
+        "issues": [],
+        "status": "PASS",
+        "scope": "AXI_STYLE_VALID_READY_ONLY"
+      },
+      "tools": {
+        "verilator": {
+          "status": "PASS",
+          "returncode": 0,
+          "command": "verilator --lint-only --Wno-fatal --top-module UHSCXSTopFullTopContract '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-full-top-contract/UHSCXSTopFullTopContract.sv'",
+          "stdout_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.041 MB sources in 2 modules, into 0.014 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.029 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.010 s on 1 threads; alloced 10.082 MB\n",
+          "stderr_tail": ""
+        },
+        "yosys": {
+          "status": "PASS",
+          "returncode": 0,
+          "command": "yosys -Q -p 'read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-full-top-contract/UHSCXSTopFullTopContract.sv; hierarchy -check -top UHSCXSTopFullTopContract; proc; check'",
+          "stdout_tail": "\n-- Running command `read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-full-top-contract/UHSCXSTopFullTopContract.sv; hierarchy -check -top UHSCXSTopFullTopContract; proc; check' --\n\n1. Executing Verilog-2005 frontend: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-full-top-contract/UHSCXSTopFullTopContract.sv\nParsing SystemVerilog input from `/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-full-top-contract/UHSCXSTopFullTopContract.sv' to AST representation.\nGenerating RTLIL representation for module `\\UHSCXSTopFullTopContract'.\nSuccessfully finished Verilog frontend.\n\n2. Executing HIERARCHY pass (managing design hierarchy).\n\n2.1. Analyzing design hierarchy..\nTop module:  \\UHSCXSTopFullTopContract\n\n2.2. Analyzing design hierarchy..\nTop module:  \\UHSCXSTopFullTopContract\nRemoved 0 unused modules.\n\n3. Executing PROC pass (convert processes to netlists).\n\n3.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module UHSCXSTopFullTopContract.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module UHSCXSTopFullTopContract...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 61465338a2, CPU: user 0.01s system 0.01s, MEM: 11.72 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 72% 2x read_verilog (0 sec), 7% 1x opt_expr (0 sec), ...\n",
+          "stderr_tail": ""
+        }
+      },
+      "status": "PASS"
+    },
+    "locked_header_contract_carrier": {
+      "port_contract": {
+        "reference_port_count": 204,
+        "candidate_port_count": 204,
+        "exact_direction_width_matches": 204,
+        "missing": [],
+        "extra": [],
+        "direction_width_mismatches": [],
+        "status": "PASS",
+        "port_order": "NOT_A_GATE_NAMED_PORT_CONTRACT"
+      },
+      "handshake_contract": {
+        "reference_channel_count": 20,
+        "candidate_channel_count": 20,
+        "checked_channels": 20,
+        "channels": [
+          {
+            "channel": "dma_ar",
+            "reference": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "dma_aw",
+            "reference": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "dma_b",
+            "reference": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "dma_r",
+            "reference": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "dma_w",
+            "reference": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "imsic_axi4_ar",
+            "reference": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "imsic_axi4_aw",
+            "reference": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "imsic_axi4_b",
+            "reference": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "imsic_axi4_r",
+            "reference": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "imsic_axi4_w",
+            "reference": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "memory_ar",
+            "reference": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "memory_aw",
+            "reference": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "memory_b",
+            "reference": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "memory_r",
+            "reference": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "memory_w",
+            "reference": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "peripheral_ar",
+            "reference": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "peripheral_aw",
+            "reference": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "peripheral_b",
+            "reference": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "peripheral_r",
+            "reference": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "output",
+                1
+              ],
+              "valid": [
+                "input",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          },
+          {
+            "channel": "peripheral_w",
+            "reference": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "candidate": {
+              "ready": [
+                "input",
+                1
+              ],
+              "valid": [
+                "output",
+                1
+              ]
+            },
+            "status": "PASS",
+            "orientation": "OPPOSITE_EXTERNAL_DIRECTIONS"
+          }
+        ],
+        "issues": [],
+        "status": "PASS",
+        "scope": "AXI_STYLE_VALID_READY_ONLY"
+      },
+      "tools": {
+        "verilator": {
+          "status": "PASS",
+          "returncode": 0,
+          "command": "verilator --lint-only --Wno-fatal --top-module LockedXSTopPortContract '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-full-top-contract/LockedXSTopPortContract.sv'",
+          "stdout_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.030 MB sources in 2 modules, into 0.014 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.032 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.008 s on 1 threads; alloced 9.621 MB\n",
+          "stderr_tail": ""
+        },
+        "yosys": {
+          "status": "PASS",
+          "returncode": 0,
+          "command": "yosys -Q -p 'read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-full-top-contract/LockedXSTopPortContract.sv; hierarchy -check -top LockedXSTopPortContract; proc; check'",
+          "stdout_tail": "\n-- Running command `read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-full-top-contract/LockedXSTopPortContract.sv; hierarchy -check -top LockedXSTopPortContract; proc; check' --\n\n1. Executing Verilog-2005 frontend: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-full-top-contract/LockedXSTopPortContract.sv\nParsing SystemVerilog input from `/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-full-top-contract/LockedXSTopPortContract.sv' to AST representation.\nGenerating RTLIL representation for module `\\LockedXSTopPortContract'.\nSuccessfully finished Verilog frontend.\n\n2. Executing HIERARCHY pass (managing design hierarchy).\n\n2.1. Analyzing design hierarchy..\nTop module:  \\LockedXSTopPortContract\n\n2.2. Analyzing design hierarchy..\nTop module:  \\LockedXSTopPortContract\nRemoved 0 unused modules.\n\n3. Executing PROC pass (convert processes to netlists).\n\n3.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module LockedXSTopPortContract.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module LockedXSTopPortContract...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: e8f6eba5ab, CPU: user 0.01s system 0.01s, MEM: 11.41 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 67% 2x read_verilog (0 sec), 9% 1x opt_expr (0 sec), ...\n",
+          "stderr_tail": ""
+        }
+      },
+      "scope": "REFERENCE_PORT_CONTRACT_ONLY_NOT_XSTOP_BEHAVIOR",
+      "status": "PASS"
+    }
+  },
+  "direct": {
+    "status": "PASS_BOUNDED_DIAGNOSTIC_QUIESCENT_ENVELOPE",
+    "diagnostic_probe": {
+      "vectors": 2,
+      "observations": [
+        {
+          "reset": 0,
+          "closure_missing": 1,
+          "closure_missing_count": 4,
+          "closure_complete": 0,
+          "cpu_halted": 1,
+          "mem_d_ready": 0
+        },
+        {
+          "reset": 1,
+          "closure_missing": 1,
+          "closure_missing_count": 4,
+          "closure_complete": 0,
+          "cpu_halted": 1,
+          "mem_d_ready": 0
+        }
+      ],
+      "expected": {
+        "closure_missing": 1,
+        "closure_missing_count": 4,
+        "closure_complete": 0,
+        "cpu_halted": 1,
+        "mem_d_ready": 0
+      },
+      "status": "PASS"
+    },
+    "full_envelope_quiescence": {
+      "vectors": 2,
+      "driven_inputs": 100,
+      "observed_outputs": 104,
+      "nonzero_outputs": [],
+      "status": "PASS",
+      "meaning": "Current local envelope tie-off behavior only; not locked-XSTop behavioral equivalence."
+    }
+  },
+  "raw_locked_reference_tool_probe": {
+    "scope": "RAW_LOCKED_XSTOP_NOT_A_BEHAVIORAL_GATE",
+    "verilator": {
+      "status": "FAIL",
+      "returncode": 1,
+      "command": "verilator --lint-only --Wno-fatal --top-module XSTop /home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+      "stdout_tail": "",
+      "stderr_tail": "%Error: /home/lishuo/xs-v2-local/build/rtl/XSTop.sv:2180063:1: syntax error, unexpected IDENTIFIER\n2180063 | ClockGate.sv\n        | ^~~~~~~~~\n%Error: Exiting due to 1 error(s)\n",
+      "classification": "PENDING_REFERENCE_RESOURCE_FILELIST_ASSEMBLY"
+    },
+    "yosys": {
+      "status": "FAIL",
+      "returncode": 1,
+      "command": "yosys -Q -p 'read_verilog -sv /home/lishuo/xs-v2-local/build/rtl/XSTop.sv; hierarchy -check -top XSTop'",
+      "stdout_tail": "\n-- Running command `read_verilog -sv /home/lishuo/xs-v2-local/build/rtl/XSTop.sv; hierarchy -check -top XSTop' --\n\n1. Executing Verilog-2005 frontend: /home/lishuo/xs-v2-local/build/rtl/XSTop.sv\n",
+      "stderr_tail": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv:918: ERROR: syntax error, unexpected TOK_AUTOMATIC\n",
+      "classification": "PENDING_REFERENCE_TOOL_COMPATIBILITY"
+    },
+    "interpretation": "The immutable concatenated artifact includes a resource-file list and uses source constructs outside this Yosys frontend. These execution constraints are PENDING assembly/tool work, not a target functional failure."
+  },
+  "flat_module_name_comparison": {
+    "status": "NON_COMPARABLE_NOT_A_FUNCTIONAL_GATE",
+    "reason": "Locked Chisel output uses flattened generated module names while local Amaranth output uses hierarchical names. No instance-normalization map exists, so this count cannot be a functional FAIL.",
+    "behavioral_gate": false
+  },
+  "gates": {
+    "LOCKED_REFERENCE_INTEGRITY": "PASS",
+    "LOCKED_HEADER_TO_FROZEN_INVENTORY": "FAIL",
+    "UHSC_TOP_PORT_DIRECTION_WIDTH": "PASS",
+    "UHSC_TOP_VALID_READY_DIRECTION": "PASS",
+    "SOURCE_NAMED_XSTOP_PORT_DIRECTION_WIDTH": "PASS",
+    "SOURCE_NAMED_XSTOP_VALID_READY_DIRECTION": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS_BOUNDED_DIAGNOSTIC_QUIESCENT_ENVELOPE",
+    "REFERENCE_PORT_CONTRACT": "PASS",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "FULL_TOP_BEHAVIORAL_DIFFERENTIAL": "PENDING_FULL_CHILD_BEHAVIORAL_DIFFERENTIAL",
+    "FLAT_MODULE_NAMES": "NON_COMPARABLE_NOT_A_FUNCTIONAL_GATE",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "pending": [
+    "UHSCTop direct checks exercise only its explicit diagnostic/quiescent envelope; all full-envelope outputs are current tie-offs.",
+    "XSCore, L2Top, XSTile, Frontend, Backend, MemBlock, HuanCun, and external Diplomacy closures are not a behaviorally connected full XSTop.",
+    "The locked XSTop artifact is not currently assembled as a standalone reference DUT: Verilator reaches its appended resource-file list and this Yosys frontend rejects an upstream construct.",
+    "No executable full-top target/reference transaction differential exists; child/parent bounded passes cannot be promoted to full-top behavior.",
+    "License review and explicit user acceptance remain pending."
+  ],
+  "acceptance_eligible": false,
+  "accepted": false
+}
