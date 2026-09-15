@@ -31,7 +31,34 @@ __all__ = [
     "SynchronousCrossing", "RationalCrossing", "AsynchronousCrossing", "CreditedCrossing",
     "DiplomacyConfig", "DiplomacyAddressRouter", "DiplomacyRouter", "UHSCRocketDiplomacy",
     "address_decoder", "AddressDecoder", "build_verilog", "main",
+    "SOURCE_SCALA_ROOT", "SOURCE_SCALA_PATHS", "SOURCE_SCALA_FILE_COUNT",
 ]
+
+
+# Keep the inventory paths beside the aggregate boundary for traceability. /
+# 将 inventory 路径保留在聚合边界旁以便追溯。
+SOURCE_SCALA_ROOT = "rocket-chip/src/main/scala/diplomacy"
+SOURCE_SCALA_PATHS = (
+    "rocket-chip/src/main/scala/diplomacy/AddressDecoder.scala",
+    "rocket-chip/src/main/scala/diplomacy/AddressRange.scala",
+    "rocket-chip/src/main/scala/diplomacy/BundleBridge.scala",
+    "rocket-chip/src/main/scala/diplomacy/ClockDomain.scala",
+    "rocket-chip/src/main/scala/diplomacy/Clone.scala",
+    "rocket-chip/src/main/scala/diplomacy/CloneModule.scala",
+    "rocket-chip/src/main/scala/diplomacy/DeviceTree.scala",
+    "rocket-chip/src/main/scala/diplomacy/FixedClockResource.scala",
+    "rocket-chip/src/main/scala/diplomacy/JSON.scala",
+    "rocket-chip/src/main/scala/diplomacy/LazyModule.scala",
+    "rocket-chip/src/main/scala/diplomacy/Main.scala",
+    "rocket-chip/src/main/scala/diplomacy/Nodes.scala",
+    "rocket-chip/src/main/scala/diplomacy/package.scala",
+    "rocket-chip/src/main/scala/diplomacy/Parameters.scala",
+    "rocket-chip/src/main/scala/diplomacy/Resources.scala",
+    "rocket-chip/src/main/scala/diplomacy/SRAM.scala",
+    "rocket-chip/src/main/scala/diplomacy/Unreachable.scala",
+    "rocket-chip/src/main/scala/diplomacy/ValName.scala",
+)
+SOURCE_SCALA_FILE_COUNT = len(SOURCE_SCALA_PATHS)
 
 
 # =============================================================================

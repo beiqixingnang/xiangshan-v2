@@ -74,7 +74,35 @@ __all__ = [
     "build_verilog",
     "build_parent_verilog",
     "main",
+    "SOURCE_SCALA_ROOT", "SOURCE_SCALA_PATHS", "SOURCE_SCALA_FILE_COUNT",
 ]
+
+
+# Keep all nineteen inventory paths on the single CHI bridge aggregate. /
+# 在单一 CHI bridge 聚合中保留 inventory 的全部 19 条路径。
+SOURCE_SCALA_ROOT = "coupledL2/src/main/scala/coupledL2/tl2chi"
+SOURCE_SCALA_PATHS = (
+    "coupledL2/src/main/scala/coupledL2/tl2chi/Bundle.scala",
+    "coupledL2/src/main/scala/coupledL2/tl2chi/chi/AsyncBridge.scala",
+    "coupledL2/src/main/scala/coupledL2/tl2chi/chi/CHILogger.scala",
+    "coupledL2/src/main/scala/coupledL2/tl2chi/chi/LinkLayer.scala",
+    "coupledL2/src/main/scala/coupledL2/tl2chi/chi/Message.scala",
+    "coupledL2/src/main/scala/coupledL2/tl2chi/chi/NetworkLayer.scala",
+    "coupledL2/src/main/scala/coupledL2/tl2chi/chi/Opcode.scala",
+    "coupledL2/src/main/scala/coupledL2/tl2chi/MainPipe.scala",
+    "coupledL2/src/main/scala/coupledL2/tl2chi/MMIOBridge.scala",
+    "coupledL2/src/main/scala/coupledL2/tl2chi/MSHR.scala",
+    "coupledL2/src/main/scala/coupledL2/tl2chi/MSHRCtl.scala",
+    "coupledL2/src/main/scala/coupledL2/tl2chi/RXDAT.scala",
+    "coupledL2/src/main/scala/coupledL2/tl2chi/RXRSP.scala",
+    "coupledL2/src/main/scala/coupledL2/tl2chi/RXSNP.scala",
+    "coupledL2/src/main/scala/coupledL2/tl2chi/Slice.scala",
+    "coupledL2/src/main/scala/coupledL2/tl2chi/TL2CHICoupledL2.scala",
+    "coupledL2/src/main/scala/coupledL2/tl2chi/TXDAT.scala",
+    "coupledL2/src/main/scala/coupledL2/tl2chi/TXREQ.scala",
+    "coupledL2/src/main/scala/coupledL2/tl2chi/TXRSP.scala",
+)
+SOURCE_SCALA_FILE_COUNT = len(SOURCE_SCALA_PATHS)
 
 
 # Typed wrappers preserve Amaranth's generator-based control contexts. / 类型包装保持 Amaranth 基于生成器的控制上下文。

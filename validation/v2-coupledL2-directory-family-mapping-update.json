@@ -4,10 +4,17 @@
   "family_id": "dependency.coupledL2.directory",
   "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
   "source_paths": [
-    "upstream/coupledL2/src/main/scala/coupledL2/Directory.scala",
-    "upstream/coupledL2/src/main/scala/coupledL2/Common.scala",
-    "upstream/coupledL2/src/main/scala/coupledL2/Consts.scala",
-    "upstream/coupledL2/src/main/scala/coupledL2/L2Param.scala"
+    "coupledL2/src/main/scala/coupledL2/tl2tl/AcquireUnit.scala",
+    "coupledL2/src/main/scala/coupledL2/tl2tl/Bundle.scala",
+    "coupledL2/src/main/scala/coupledL2/tl2tl/MainPipe.scala",
+    "coupledL2/src/main/scala/coupledL2/tl2tl/MSHR.scala",
+    "coupledL2/src/main/scala/coupledL2/tl2tl/MSHRCtl.scala",
+    "coupledL2/src/main/scala/coupledL2/tl2tl/ProbeQueue.scala",
+    "coupledL2/src/main/scala/coupledL2/tl2tl/RefillUnit.scala",
+    "coupledL2/src/main/scala/coupledL2/tl2tl/SinkB.scala",
+    "coupledL2/src/main/scala/coupledL2/tl2tl/Slice.scala",
+    "coupledL2/src/main/scala/coupledL2/tl2tl/SourceC.scala",
+    "coupledL2/src/main/scala/coupledL2/tl2tl/TL2TLCoupledL2.scala"
   ],
   "target_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.CoupledL2.Directory-Hardware.py",
   "classification": "AGGREGATED_REWRITE",
@@ -19,7 +26,11 @@
     "reason": "UHSC external family wrapper; locked Scala/SV names remain unchanged"
   },
   "evidence": "validation/v2-coupledL2-directory-family-results.json",
-  "status": "VALIDATOR_PASS_BOUNDED",
+  "target_sha256": "d24ca156b703e79378a93399371adfddb40b1224cde1a3040b32ecc9fefbadf2",
+  "structure_status": "PASS",
+  "behavior_status": "PENDING_BATCH_VALIDATION",
+  "landing_status": "STRUCTURE_LANDED",
+  "status": "STRUCTURE_LANDED",
   "parent_closure": "PENDING_TL2TLCoupledL2_PARENT",
   "accepted": "NOT_ALLOWED"
 }
