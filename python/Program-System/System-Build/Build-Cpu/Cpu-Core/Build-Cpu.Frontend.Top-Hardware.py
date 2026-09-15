@@ -505,7 +505,9 @@ class FrontendParent(Elaboratable):
     def connect_child_signal(self, module: Module, child: Any, child_name: str,
                              attribute: str, value: Any) -> None:
         signal = getattr(child, attribute, None)
-        if signal is not None:
+        # Only drive assignable child ports.  Some compatibility aliases are
+        # expressions (e.g. a source-gated grant-valid), not writable Signals.
+        if isinstance(signal, Signal):
             module.d.comb += signal.eq(value)
         del child_name
 
@@ -621,20 +623,47 @@ class FrontendParent(Elaboratable):
         child_uncache_resp_data = getattr(self.instr_uncache, "resp_data", self.uncache_resp_data)
         child_uncache_resp_error = getattr(self.instr_uncache, "resp_error", self.uncache_resp_error)
         if self.locked_io:
-            # In the exact envelope, external TileLink D beats are the
-            # response source; the injected child remains responsible for
-            # request readiness.  精确包络中外部 TileLink D beat 作为响应源，
-            # 注入子级继续负责请求就绪。
+            # In the exact envelope, the InstrUncache child owns the complete
+            # request/grant transaction.  External TileLink A/D pins are
+            # connected to the injected child, matching the locked
+            # InstrUncache module instead of bypassing its state machine.
+            # 精确包络中 InstrUncache 子级负责完整请求/grant 事务；外部
+            # TileLink A/D 引脚连接到注入子级，保持与锁定模块一致。
             module.d.comb += [
                 self.fetch_req_ready.eq(child_icache_ready),
                 self.fetch_resp_valid.eq(self.auto_inner_icache_client_out_d_valid),
                 self.fetch_resp_data.eq(Cat(self.auto_inner_icache_client_out_d_bits_data, Const(0, 256))),
                 self.fetch_resp_error.eq(self.auto_inner_icache_client_out_d_bits_corrupt),
                 self.uncache_req_ready.eq(child_uncache_ready),
-                self.uncache_resp_valid.eq(self.auto_inner_instrUncache_client_out_d_valid),
-                self.uncache_resp_data.eq(self.auto_inner_instrUncache_client_out_d_bits_data),
-                self.uncache_resp_error.eq(self.auto_inner_instrUncache_client_out_d_bits_corrupt),
+                self.uncache_resp_valid.eq(child_uncache_resp_valid),
+                self.uncache_resp_data.eq(child_uncache_resp_data[:len(self.uncache_resp_data)]),
+                self.uncache_resp_error.eq(child_uncache_resp_error),
             ]
+            # InstrUncache's generated client has no D-ready port and accepts
+            # every grant beat (the locked one-entry arbiter ties ready high).
+            self.connect_child_signal(module, self.instr_uncache, "instr_uncache",
+                                      "mmio_acquire_ready", self.auto_inner_instrUncache_client_out_a_ready)
+            self.connect_child_signal(module, self.instr_uncache, "instr_uncache",
+                                      "mmio_grant_valid", self.auto_inner_instrUncache_client_out_d_valid)
+            self.connect_child_signal(module, self.instr_uncache, "instr_uncache",
+                                      "mmio_grant_source", self.auto_inner_instrUncache_client_out_d_bits_source)
+            self.connect_child_signal(module, self.instr_uncache, "instr_uncache",
+                                      "mmio_grant_data", self.auto_inner_instrUncache_client_out_d_bits_data)
+            self.connect_child_signal(module, self.instr_uncache, "instr_uncache",
+                                      "mmio_grant_corrupt", self.auto_inner_instrUncache_client_out_d_bits_corrupt)
+            # Canonical InstrUncache child names (used by the standalone
+            # aggregate) are wired as well; aliases above support legacy
+            # InstrMMIOEntry injections.
+            self.connect_child_signal(module, self.instr_uncache, "instr_uncache",
+                                      "client_out_a_ready", self.auto_inner_instrUncache_client_out_a_ready)
+            self.connect_child_signal(module, self.instr_uncache, "instr_uncache",
+                                      "client_out_d_valid", self.auto_inner_instrUncache_client_out_d_valid)
+            self.connect_child_signal(module, self.instr_uncache, "instr_uncache",
+                                      "client_out_d_bits_source", self.auto_inner_instrUncache_client_out_d_bits_source)
+            self.connect_child_signal(module, self.instr_uncache, "instr_uncache",
+                                      "client_out_d_bits_data", self.auto_inner_instrUncache_client_out_d_bits_data)
+            self.connect_child_signal(module, self.instr_uncache, "instr_uncache",
+                                      "client_out_d_bits_corrupt", self.auto_inner_instrUncache_client_out_d_bits_corrupt)
         else:
             module.d.comb += [
                 self.fetch_req_ready.eq(child_icache_ready),
@@ -690,8 +719,10 @@ class FrontendParent(Elaboratable):
                 self.auto_inner_icache_client_out_a_valid.eq(self.fetch_req_valid & self.fetch_req_ready),
                 self.auto_inner_icache_client_out_a_bits_source.eq(0),
                 self.auto_inner_icache_client_out_a_bits_address.eq(self.fetch_req_addr[:48]),
-                self.auto_inner_instrUncache_client_out_a_valid.eq(self.uncache_req_valid & self.uncache_req_ready),
-                self.auto_inner_instrUncache_client_out_a_bits_address.eq(self.uncache_req_addr[:48]),
+                self.auto_inner_instrUncache_client_out_a_valid.eq(
+                    getattr(self.instr_uncache, "mmio_acquire_valid", self.uncache_req_valid & self.uncache_req_ready)),
+                self.auto_inner_instrUncache_client_out_a_bits_address.eq(
+                    getattr(self.instr_uncache, "mmio_acquire_address", self.uncache_req_addr[:48])),
                 self.io_ptw_req_0_valid.eq(self.ptw_req_valid),
                 self.io_ptw_req_0_bits_vpn.eq(self.ptw_req_vpn),
                 self.io_ptw_req_0_bits_s2xlate.eq(0),

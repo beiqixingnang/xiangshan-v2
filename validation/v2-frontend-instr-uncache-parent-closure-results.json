@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_FRONTEND_INSTR_UNCACHE_PARENT_CLOSURE",
+  "batch_id": "V2-FRONTEND-INSTR-UNCACHE-PARENT-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.InstrUncache-Hardware.py",
+    "sha256": "c73e7a7564ae36cda751227e0d8bcee7adeca8761d225e1aef2758a9fc254cb8",
+    "rtl_bytes": 34942
+  },
+  "locked_reference": {
+    "canonical_path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "immutable": true,
+    "module": "InstrUncache"
+  },
+  "direct": {
+    "status": "PASS",
+    "vectors": 1024,
+    "checks": 7168
+  },
+  "differential": {
+    "status": "PASS",
+    "vectors": 1024,
+    "compile": {
+      "status": "PASS",
+      "returncode": 0,
+      "output_tail": "gn-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -x c++-header Vtb__pch.h -o Vtb__pch.h.slow.gch\ng++   -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -include Vtb__pch.h.slow -c -o Vtb___024root__Slow.o Vtb___024root__Slow.cpp\ng++   -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -include Vtb__pch.h.slow -c -o Vtb___024root__DepSet_hfe20aad3__0__Slow.o Vtb___024root__DepSet_hfe20aad3__0__Slow.cpp\ng++   -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -include Vtb__pch.h.slow -c -o Vtb___024root__DepSet_ha183790c__0__Slow.o Vtb___024root__DepSet_ha183790c__0__Slow.cpp\ng++   -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -include Vtb__pch.h.slow -c -o Vtb__Syms.o Vtb__Syms.cpp\necho \"\" > Vtb__ALL.verilator_deplist.tmp\ng++    verilated.o verilated_timing.o verilated_threads.o Vtb__ALL.a    -pthread -lpthread -latomic   -o Vtb\nrm Vtb__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-instr-uncache-parent/obj'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.354 MB sources in 6 modules, into 23.357 MB in 21 C++ files needing 0.000 MB\n- Verilator: Walltime 69.453 s (elab=0.019, cvt=0.975, bld=67.785); cpu 1.268 s on 1 threads; alloced 195.590 MB\n",
+      "output_sha256": "3e6481adbc0381f42801dc528f5ba0562cfc90015721037a91e6d5c504fb6e19"
+    },
+    "run": {
+      "status": "PASS",
+      "returncode": 0,
+      "output_tail": "FRONTEND_INSTR_UNCACHE_PARENT_DIFF_PASS 1024\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-instr-uncache-parent/instr-uncache-parent-tb.sv:1036: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 10ns; walltime 0.014 s; speed 2.982 us/s\n- Verilator: cpu 0.003 s on 1 threads; alloced 154 MB\n",
+      "output_sha256": "95afd4a62480679a465cabe9c2dddb9a2906c809cffad3869c7dd20ca08080ea"
+    }
+  },
+  "tool_gates": {
+    "verilator": {
+      "status": "PASS",
+      "returncode": 0,
+      "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.054 MB sources in 2 modules, into 0.033 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.028 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.008 s on 1 threads; alloced 9.535 MB\n",
+      "output_sha256": "aa067c75b65611299d3029b969fdca4a9d97f7b804551680fa08992a9bfe4175"
+    },
+    "yosys": {
+      "status": "PASS",
+      "returncode": 0,
+      "output_tail": "tion/.work/v2-frontend-instr-uncache-parent/InstrUncache-target.sv:205$56'.\nRemoving empty process `InstrUncache.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-instr-uncache-parent/InstrUncache-target.sv:205$56'.\nFound and cleaned up 3 empty switches in `\\InstrUncache.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-instr-uncache-parent/InstrUncache-target.sv:194$55'.\nRemoving empty process `InstrUncache.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-instr-uncache-parent/InstrUncache-target.sv:194$55'.\nRemoving empty process `InstrUncache.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-instr-uncache-parent/InstrUncache-target.sv:143$6'.\nRemoving empty process `InstrUncache.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-instr-uncache-parent/InstrUncache-target.sv:139$5'.\nRemoving empty process `InstrUncache.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-instr-uncache-parent/InstrUncache-target.sv:135$4'.\nRemoving empty process `InstrUncache.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-instr-uncache-parent/InstrUncache-target.sv:131$3'.\nRemoving empty process `InstrUncache.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-instr-uncache-parent/InstrUncache-target.sv:127$2'.\nCleaned up 10 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module InstrUncache.\n<suppressed ~5 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module InstrUncache...\nFound and reported 0 problems.\n\n5. Printing statistics.\n\n=== InstrUncache ===\n\n   Number of wires:                193\n   Number of wire bits:           1511\n   Number of public wires:          75\n   Number of public wire bits:     516\n   Number of ports:                 18\n   Number of port bits:            206\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                 73\n     $adff                           5\n     $and                           25\n     $mux                           19\n     $not                           19\n     $or                             5\n\nEnd of script. Logfile hash: 3754989b5a, CPU: user 0.02s system 0.00s, MEM: 12.97 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 65% 2x read_verilog (0 sec), 8% 1x opt_expr (0 sec), ...\n",
+      "output_sha256": "e1fc8f7e23f17700743d6da3e4c1bd206da33369dcc243a5ef01e4cfcc8da659"
+    }
+  },
+  "gates": {
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "PARENT_CLOSURE_MATCHED": "PASS_BOUNDED_INSTR_UNCACHE",
+    "UHSC_LOCALIZED": "PASS_BOUNDED",
+    "LICENSE_REVIEW": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "PASS_BOUNDED_INSTR_UNCACHE_PARENT",
+  "acceptance_eligible": false,
+  "unclosed": [
+    "Frontend full child closure, license review and user approval remain pending."
+  ]
+}
