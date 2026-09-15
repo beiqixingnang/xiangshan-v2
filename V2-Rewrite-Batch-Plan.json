@@ -3,7 +3,7 @@
   "kind": "XIANGSHAN_KUNMINGHU_V2_REWRITE_BATCH_PLAN",
   "authority": "V2-Core-Rewrite-Inventory.json + V2-Dependency-Family-Inventory.json + V2-Rewrite-Freeze-Manifest.json",
   "worker_model": "gpt-5.6-terra",
-  "reasoning_effort": "high",
+  "reasoning_effort": "max",
   "validator_model": "gpt-5.6-terra",
   "validator_reasoning_effort": "medium",
   "counts": {
@@ -430,7 +430,7 @@
     ],
     "aggregation": "family_or_parent_closure; do_not_map_one_scala_to_one_python",
     "worker": "gpt-5.6-terra",
-    "worker_reasoning_effort": "high",
+    "worker_reasoning_effort": "max",
     "validator": "gpt-5.6-terra",
     "validator_reasoning_effort": "medium",
     "parallelism": "non-overlapping workers; focused validator spot-checks overlap with later work; parent/protocol failures escalate to serial full review",

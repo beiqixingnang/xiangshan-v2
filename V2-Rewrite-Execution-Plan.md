@@ -93,8 +93,11 @@ protocol names stay stable.
   harness, evidence JSON, and mapping fragment only.
 - The coordinator owns manifests, naming policy, top-level adapters, plan
   events, conflict resolution, and pushes.
-- Workers use Terra with high reasoning for normal batches (medium is allowed
-  for mechanical leaf work; max is reserved for parent/milestone closure).
+- Workers use Terra for all implementation batches. The coordinator may set
+  `max` (or `xhigh` when a shorter bounded pass is sufficient) for file-writing
+  and repair work so that each aggregate Build is completed in one focused
+  transaction; `high` remains acceptable only for mechanical leaf batches.
+  Parent and milestone closures should use `max` by default.
   They must return a commit hash, changed paths, evidence paths, exact
   commands, and unclosed gates.
 - Existing carried candidates may contain V3-era contract debt (missing
