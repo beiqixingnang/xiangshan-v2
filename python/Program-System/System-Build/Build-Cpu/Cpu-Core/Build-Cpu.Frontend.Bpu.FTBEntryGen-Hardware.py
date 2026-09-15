@@ -3,10 +3,9 @@
 """
 
 from __future__ import annotations
-# pyright: reportAttributeAccessIssue=false, reportGeneralTypeIssues=false, reportOperatorIssue=false
 
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, cast
 
 from amaranth import Cat, Const, Elaboratable, Module, Mux, Signal
 
@@ -124,15 +123,17 @@ class FTBEntryGen(Elaboratable):
     def elaborate(self, platform: Any) -> Module:
         del platform
         cfg = self.configuration
-        module = Module()
+        # Amaranth's ``If``/``Elif`` context managers are generated at runtime;
+        # this local annotation preserves their DSL use without suppression.
+        module: Any = Module()
 
         br_mask = Cat(*self.pd_br_mask)
         rvc_mask = Cat(*self.pd_rvc_mask)
         mispredict = Cat(*self.mispredict_vec)
-        cfi_is_br = br_mask.bit_select(self.cfi_index_bits, 1) & self.cfi_index_valid
+        cfi_is_br = cast(Any, br_mask).bit_select(self.cfi_index_bits, 1) & self.cfi_index_valid
         entry_has_jmp = self.pd_jmp_info_valid
         init_entry_is_jalr = entry_has_jmp & self.pd_jmp_info_0 & self.cfi_index_valid
-        last_jmp_rvi = entry_has_jmp & (self.pd_jmp_offset == Const(15, cfg.branch_offset_bits)) & ~rvc_mask[15]
+        last_jmp_rvi = entry_has_jmp & (self.pd_jmp_offset == Const(15, cfg.branch_offset_bits)) & ~cast(Any, rvc_mask[15])
         cfi_is_jal = (self.cfi_index_bits == self.pd_jmp_offset) & entry_has_jmp & ~self.pd_jmp_info_0 & self.cfi_index_valid
         cfi_is_jalr = (self.cfi_index_bits == self.pd_jmp_offset) & init_entry_is_jalr
         del cfi_is_jal
@@ -140,8 +141,8 @@ class FTBEntryGen(Elaboratable):
         gen0 = Mux(cfi_is_jalr, self.target[1:cfg.vaddr_bits], self.pd_jal_target[1:cfg.vaddr_bits])
         start_low = self.start_addr[1:5]
         start_low_wide = Cat(start_low, Const(0, 1))
-        jmp_step = Mux(rvc_mask.bit_select(self.pd_jmp_offset, 1), Const(1, 3), Const(2, 3))
-        jmp_pft_wide = Cat(start_low, Const(0, 1)) + Cat(self.pd_jmp_offset, Const(0, 1)) + jmp_step
+        jmp_step = Mux(cast(Any, rvc_mask).bit_select(self.pd_jmp_offset, 1), Const(1, 3), Const(2, 3))
+        jmp_pft_wide = cast(Any, Cat(start_low, Const(0, 1))) + cast(Any, Cat(self.pd_jmp_offset, Const(0, 1))) + jmp_step
         jmp_pft = jmp_pft_wide[:5]
 
         br_recorded_0 = self.old_br_valid & (self.old_br_offset == self.cfi_index_bits)
@@ -154,7 +155,7 @@ class FTBEntryGen(Elaboratable):
         gen4 = gen3 | ~self.old_br_valid
         pft_need_change = is_new_br & self.old_br_valid & self.old_tail_valid
         new_pft_offset = Mux(insert_0 | insert_1, self.old_tail_offset, self.cfi_index_bits)
-        old_entry_modified_carry = (Cat(start_low, Const(0, 1)) + Cat(new_pft_offset, Const(0, 1)))[:5]
+        old_entry_modified_carry = (cast(Any, Cat(start_low, Const(0, 1))) + cast(Any, Cat(new_pft_offset, Const(0, 1))))[:5]
 
         old_tail_hi_br = self.start_addr[13:50]
         old_tail_hi_jmp = self.start_addr[21:50]
@@ -189,12 +190,12 @@ class FTBEntryGen(Elaboratable):
 
         br_target_hi = self.target[13:50]
         start_target_hi = self.start_addr[13:50]
-        br_target_stat = Mux(br_target_hi > start_target_hi, Const(1, 2), Mux(br_target_hi < start_target_hi, Const(2, 2), Const(0, 2)))
+        br_target_stat = Mux(cast(Any, br_target_hi) > cast(Any, start_target_hi), Const(1, 2), Mux(cast(Any, br_target_hi) < cast(Any, start_target_hi), Const(2, 2), Const(0, 2)))
         jmp_target_hi = self.target[21:50]
         start_jmp_hi = self.start_addr[21:50]
-        jmp_target_stat = Mux(jmp_target_hi > start_jmp_hi, Const(1, 2), Mux(jmp_target_hi < start_jmp_hi, Const(2, 2), Const(0, 2)))
+        jmp_target_stat = Mux(cast(Any, jmp_target_hi) > cast(Any, start_jmp_hi), Const(1, 2), Mux(cast(Any, jmp_target_hi) < cast(Any, start_jmp_hi), Const(2, 2), Const(0, 2)))
         init_target_hi = gen0[20:49]
-        init_target_stat = Mux(init_target_hi > start_jmp_hi, Const(1, 2), Mux(init_target_hi < start_jmp_hi, Const(2, 2), Const(0, 2)))
+        init_target_stat = Mux(cast(Any, init_target_hi) > cast(Any, start_jmp_hi), Const(1, 2), Mux(cast(Any, init_target_hi) < cast(Any, start_jmp_hi), Const(2, 2), Const(0, 2)))
         target_br_lower_wide = Cat(self.target[1:13], Const(0, 8))
         old_br_lower_wide = Cat(self.old_br_lower, Const(0, 8))
 
@@ -251,7 +252,7 @@ class FTBEntryGen(Elaboratable):
             Mux(gen7, old_entry_modified_carry[4], self.old_carry),
             ~(entry_has_jmp & ~last_jmp_rvi) | jmp_pft[4],
         )
-        new_last_rvi_call = Mux(self.hit, gen5 & self.old_last_rvi_call, (self.pd_jmp_offset == Const(15, 4)) & ~rvc_mask[15])
+        new_last_rvi_call = Mux(self.hit, gen5 & self.old_last_rvi_call, (self.pd_jmp_offset == Const(15, 4)) & ~cast(Any, rvc_mask[15]))
         new_strong_bias_0 = Mux(
             self.hit,
             Mux(is_new_br, insert_0 | (~insert_br_after & self.old_strong_bias_0), Mux(jalr_target_modified, ~jalr_target_modified & self.old_strong_bias_0, old_strong_0)),
@@ -287,9 +288,9 @@ class FTBEntryGen(Elaboratable):
             self.taken_mask_0.eq((self.cfi_index_bits == new_br_offset) & self.cfi_index_valid & new_br_valid),
             self.taken_mask_1.eq((self.cfi_index_bits == new_tail_offset) & self.cfi_index_valid & tail_share_marker),
             self.jmp_taken.eq(new_tail_valid & ~new_tail_sharing & (new_tail_offset == self.cfi_index_bits)),
-            self.mispred_mask_0.eq(new_br_valid & mispredict.bit_select(new_br_offset, 1)),
-            self.mispred_mask_1.eq(tail_share_marker & mispredict.bit_select(new_tail_offset, 1)),
-            self.mispred_mask_2.eq(new_tail_valid & ~new_tail_sharing & mispredict.bit_select(self.pd_jmp_offset, 1)),
+            self.mispred_mask_0.eq(new_br_valid & cast(Any, mispredict).bit_select(new_br_offset, 1)),
+            self.mispred_mask_1.eq(tail_share_marker & cast(Any, mispredict).bit_select(new_tail_offset, 1)),
+            self.mispred_mask_2.eq(new_tail_valid & ~new_tail_sharing & cast(Any, mispredict).bit_select(self.pd_jmp_offset, 1)),
             self.is_old_entry.eq(
                 self.hit
                 & ~is_new_br

@@ -2,9 +2,9 @@
 香山 V2 指令缓存缺失状态保持寄存器的 Amaranth 重写。
 """
 from __future__ import annotations
-# pyright: reportAttributeAccessIssue=false, reportGeneralTypeIssues=false, reportOperatorIssue=false
 
 from dataclasses import dataclass
+from typing import Any
 
 from amaranth import ClockDomain, Const, Elaboratable, Module, Signal
 
@@ -116,7 +116,8 @@ class ICacheMSHR(Elaboratable):
     # Elaborate the request/issue/response state machine. / 实例化请求、发出和响应状态机。
     def elaborate(self, platform) -> Module:
         del platform
-        m = Module()
+        # Amaranth's ``If`` branches are decorator-generated context managers.
+        m: Any = Module()
         # Chisel ``RegInit`` in the locked V2 reference uses an active-high
         # asynchronous reset.  Declare the same reset topology explicitly so
         # reset assertion between clock edges cannot diverge from XSTop.

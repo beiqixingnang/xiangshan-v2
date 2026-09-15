@@ -1,7 +1,6 @@
 """V2 FTB fall-through address closure. / V2 FTB 顺序地址闭包。"""
 
 from __future__ import annotations
-# pyright: reportAttributeAccessIssue=false, reportGeneralTypeIssues=false, reportOperatorIssue=false
 
 from dataclasses import dataclass
 from typing import Any
@@ -197,7 +196,9 @@ class FallThroughPredictor(Elaboratable):
         del platform
         cfg = self.configuration
         bits = cfg.effective_vaddr_bits
-        module = Module()
+        # Amaranth's context-manager decorator is dynamically typed; retain
+        # the runtime Module while exposing its DSL branch API locally.
+        module: Any = Module()
         pc_reg = Signal(bits, name="s1_pc")
         carry_reg = Signal(name="s1_carry")
         pft_reg = Signal(cfg.pft_width, name="s1_pft_addr")

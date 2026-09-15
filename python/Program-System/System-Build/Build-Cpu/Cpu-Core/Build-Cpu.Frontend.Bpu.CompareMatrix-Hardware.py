@@ -1,10 +1,9 @@
 """V2 dispatch issue-queue ordering matrix. / V2 dispatch 发射队列排序矩阵。"""
 
 from __future__ import annotations
-# pyright: reportAttributeAccessIssue=false, reportGeneralTypeIssues=false, reportOperatorIssue=false
 
 from dataclasses import dataclass
-from typing import Any, Sequence
+from typing import Any, Sequence, cast
 
 from amaranth import Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
@@ -153,7 +152,9 @@ class CompareMatrix(Elaboratable):
     def elaborate(self, platform: Any) -> Module:
         del platform
         cfg = self.configuration
-        module = Module()
+        # The Amaranth DSL branch methods are generated context managers and
+        # are not represented precisely by the runtime annotations.
+        module: Any = Module()
         module.domains.sync = self.clock_domain
         indices = cfg.effective_exu_indices
         queue_num = cfg.effective_issue_queue_num
@@ -167,8 +168,8 @@ class CompareMatrix(Elaboratable):
                 elif i < j:
                     matrix_expr[i][j] = count_expr[i] < count_expr[j]
                 else:
-                    matrix_expr[i][j] = ~(count_expr[j] < count_expr[i])
-                module.d.comb += self.compare_matrix[i][j].eq(matrix_expr[i][j])
+                    matrix_expr[i][j] = ~cast(Any, count_expr[j] < count_expr[i])
+                module.d.comb += cast(Any, self.compare_matrix[i][j]).eq(matrix_expr[i][j])
 
         # NewDispatch stores IQSort in a register; preserve that one-cycle
         # boundary instead of exposing the combinational next value directly.
@@ -186,7 +187,7 @@ class CompareMatrix(Elaboratable):
                 next_row.append(row_sum == Const(cfg.n - 1 - rank, sum_width))
             next_sort.append(next_row)
         module.d.sync += [
-            self.iq_sort[rank][row].eq(next_sort[rank][row])
+            cast(Any, self.iq_sort[rank][row]).eq(next_sort[rank][row])
             for rank in range(cfg.n) for row in range(cfg.n)
         ]
 
@@ -196,9 +197,9 @@ class CompareMatrix(Elaboratable):
             for queue in range(queue_num):
                 if queue in selected:
                     row = selected.index(queue)
-                    module.d.comb += self.min_iq_sel[slot][queue].eq(self.iq_sort[rank][row])
+                    module.d.comb += cast(Any, self.min_iq_sel[slot][queue]).eq(self.iq_sort[rank][row])
                 else:
-                    module.d.comb += self.min_iq_sel[slot][queue].eq(0)
+                    module.d.comb += cast(Any, self.min_iq_sel[slot][queue]).eq(0)
 
         # Historical masks use the same matrix but honor the valid input. / 历史掩码沿用矩阵并应用 valid。
         lower_terms: list[Any] = []
@@ -210,16 +211,16 @@ class CompareMatrix(Elaboratable):
             for j in range(cfg.n):
                 if i == j:
                     continue
-                lower = lower & ((~self.valid[j]) | matrix_expr[i][j])
-                greater = greater & ((~self.valid[j]) | matrix_expr[j][i])
+                lower = lower & ((~cast(Any, self.valid[j])) | matrix_expr[i][j])
+                greater = greater & ((~cast(Any, self.valid[j])) | matrix_expr[j][i])
             lower_terms.append(lower)
             least_terms.append(self.valid[i] & lower)
             greatest_terms.append(self.valid[i] & greater)
         for i in range(cfg.n):
             module.d.comb += [
-                self.lower_element_mask[i].eq(lower_terms[i]),
-                self.least_element_oh[i].eq(least_terms[i]),
-                self.greatest_element_oh[i].eq(greatest_terms[i]),
+                cast(Any, self.lower_element_mask[i]).eq(lower_terms[i]),
+                cast(Any, self.least_element_oh[i]).eq(least_terms[i]),
+                cast(Any, self.greatest_element_oh[i]).eq(greatest_terms[i]),
             ]
         return module
 

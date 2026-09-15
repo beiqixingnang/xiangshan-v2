@@ -3,7 +3,6 @@
 """
 
 from __future__ import annotations
-# pyright: reportAttributeAccessIssue=false, reportGeneralTypeIssues=false, reportOperatorIssue=false
 
 from dataclasses import dataclass
 from typing import Any
@@ -93,7 +92,8 @@ class InstrMMIOEntry(Elaboratable):
     def elaborate(self, platform: Any) -> Module:
         del platform
         cfg = self.configuration
-        module = Module()
+        # The Amaranth DSL context manager is generated dynamically.
+        module: Any = Module()
 
         # Match Chisel RegInit's active-high asynchronous reset topology.
         # 对齐 Chisel RegInit 的高有效异步复位拓扑。

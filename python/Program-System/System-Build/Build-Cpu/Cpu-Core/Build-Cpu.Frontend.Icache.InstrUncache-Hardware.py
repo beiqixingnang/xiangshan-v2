@@ -7,10 +7,9 @@ same observable client/request/response surface as XSTop.sv.
 """
 
 from __future__ import annotations
-# pyright: reportAttributeAccessIssue=false, reportGeneralTypeIssues=false, reportOperatorIssue=false
 
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, cast
 
 from amaranth import Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
@@ -101,7 +100,8 @@ class InstrUncache(Elaboratable):
     def elaborate(self, platform: Any) -> Module:
         del platform
         cfg = self.configuration
-        module = Module()
+        # The Amaranth DSL context manager is generated dynamically.
+        module: Any = Module()
         domain = ClockDomain("sync", async_reset=True)
         domain.clk = self.clock
         domain.rst = self.reset
@@ -114,10 +114,12 @@ class InstrUncache(Elaboratable):
         need_flush = Signal(reset=0, name="needFlush")
         # Decode the four states bitwise to keep generated comparisons
         # explicitly one-bit and warning-free under Verilator.
-        invalid = ~(state[0] | state[1])
-        refill_req = state[0] & ~state[1]
-        refill_resp = ~state[0] & state[1]
-        send_resp = state[0] & state[1]
+        state_0 = cast(Any, state[0])
+        state_1 = cast(Any, state[1])
+        invalid = ~(state_0 | state_1)
+        refill_req = state_0 & ~state_1
+        refill_resp = ~state_0 & state_1
+        send_resp = state_0 & state_1
 
         req_fire = self.req_valid & invalid
         acquire_valid = refill_req & ~self.wfi_req
@@ -126,12 +128,14 @@ class InstrUncache(Elaboratable):
 
         response_word = Signal(cfg.instr_bits, name="response_word")
         module.d.comb += response_word.eq(resp_data_reg[:32])
-        with module.If(req_addr_reg[1] & ~req_addr_reg[2]):
+        req_addr_bit_1 = cast(Any, req_addr_reg[1])
+        req_addr_bit_2 = cast(Any, req_addr_reg[2])
+        with module.If(req_addr_bit_1 & ~req_addr_bit_2):
             module.d.comb += response_word.eq(resp_data_reg[16:48])
-        with module.Elif(~req_addr_reg[1] & req_addr_reg[2]):
+        with module.Elif(~req_addr_bit_1 & req_addr_bit_2):
             module.d.comb += response_word.eq(resp_data_reg[32:64])
-        with module.Elif(req_addr_reg[1] & req_addr_reg[2]):
-            module.d.comb += response_word.eq(Cat(resp_data_reg[48:64], Const(0, 16)))
+        with module.Elif(req_addr_bit_1 & req_addr_bit_2):
+            module.d.comb += response_word.eq(cast(Any, Cat(resp_data_reg[48:64], Const(0, 16))))
         module.d.comb += [
             self.req_ready.eq(invalid),
             self.client_out_a_valid.eq(acquire_valid),

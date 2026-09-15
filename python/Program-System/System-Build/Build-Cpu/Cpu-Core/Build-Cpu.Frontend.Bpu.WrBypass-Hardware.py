@@ -3,9 +3,9 @@ V2 前端带伪 LRU 替换的写旁路 CAM。
 """
 
 from __future__ import annotations
-# pyright: reportAttributeAccessIssue=false, reportGeneralTypeIssues=false, reportOperatorIssue=false
 
 from dataclasses import dataclass
+from typing import Any
 
 from amaranth import Array, ClockDomain, Elaboratable, Mux, Module, Signal
 
@@ -126,7 +126,9 @@ class WrBypass(Elaboratable):
     # 构造 CAM 比较、数据复用、有效状态及 PLRU 更新逻辑。
     def elaborate(self, platform) -> Module:
         del platform
-        m = Module()
+        # The branch API is a generated context manager in Amaranth; type it
+        # locally while retaining the exact Module object at runtime.
+        m: Any = Module()
         m.domains += self.clock_domain
         c = self.configuration
         entry_bits = max(1, (c.num_entries - 1).bit_length())

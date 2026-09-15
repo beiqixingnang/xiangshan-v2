@@ -10,10 +10,9 @@ Diplomacy/SRAM port has already been rewritten.
 """
 
 from __future__ import annotations
-# pyright: reportAttributeAccessIssue=false, reportGeneralTypeIssues=false, reportOperatorIssue=false
 
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, cast
 
 from amaranth import Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
@@ -292,7 +291,8 @@ class FrontendChildBoundary(Elaboratable):
     def elaborate(self, platform: Any) -> Module:
         del platform
         cfg = self.configuration
-        module = Module()
+        # The Amaranth DSL branch methods are generated context managers.
+        module: Any = Module()
         domain = ClockDomain(f"{self.child_name}_sync", async_reset=True)
         domain.clk = self.clock
         domain.rst = self.reset
@@ -348,7 +348,8 @@ class FrontendRvcBoundary(Elaboratable):
     # Keep a deterministic legal pass-through for standalone parent use. / 独立父级使用时保持确定性合法直通。
     def elaborate(self, platform: Any) -> Module:
         del platform
-        module = Module()
+        # The Amaranth DSL branch methods are generated context managers.
+        module: Any = Module()
         module.d.comb += [self.out_bits.eq(self.in_), self.out_rd.eq(self.in_[7:12]),
                           self.out_rs1.eq(self.in_[15:20]), self.out_rs2.eq(self.in_[20:25]),
                           self.out_rs3.eq(self.in_[27:32]), self.ill.eq(0)]
@@ -375,7 +376,8 @@ class FrontendBpuBoundary(Elaboratable):
     # Emit a no-taken sequential prediction until a full BPU is injected. / 在注入完整 BPU 前输出不跳转顺序预测。
     def elaborate(self, platform: Any) -> Module:
         del platform
-        module = Module()
+        # The Amaranth DSL branch methods are generated context managers.
+        module: Any = Module()
         module.d.comb += [self.pred_taken.eq(0), self.pred_target.eq(self.pc + 4),
                           self.pred_cfi_position.eq(0), self.bp_right.eq(0), self.bp_wrong.eq(0)]
         return module
@@ -383,6 +385,49 @@ class FrontendBpuBoundary(Elaboratable):
 
 class FrontendParent(Elaboratable):
     """Reduced executable V2 Frontend parent closure. / 可执行的精简 V2 前端父级闭包。"""
+
+    # The locked 371-port envelope is materialized from ``frontend_port_specs``
+    # with ``setattr`` in ``__init__``.  These annotations document the
+    # dynamically installed boundary signals for static checking while
+    # retaining their exact runtime names and widths.
+    io_reset_vector: Signal
+    io_fencei: Signal
+    io_backend_toFtq_redirect_valid: Signal
+    io_backend_toFtq_redirect_bits_cfiUpdate_isMisPred: Signal
+    io_backend_toFtq_redirect_bits_cfiUpdate_backendIPF: Signal
+    io_backend_canAccept: Signal
+    io_backend_wfi_wfiReq: Signal
+    io_csrCtrl_pf_ctrl_l1I_pf_enable: Signal
+    io_csrCtrl_fsIsOff: Signal
+    io_csrCtrl_bp_ctrl_ubtb_enable: Signal
+    io_csrCtrl_bp_ctrl_btb_enable: Signal
+    io_csrCtrl_bp_ctrl_tage_enable: Signal
+    io_csrCtrl_bp_ctrl_sc_enable: Signal
+    io_csrCtrl_bp_ctrl_ras_enable: Signal
+    io_sfence_valid: Signal
+    io_softPrefetch_0_valid: Signal
+    io_softPrefetch_0_bits_vaddr: Signal
+    auto_inner_icache_client_out_d_valid: Signal
+    auto_inner_icache_client_out_d_bits_data: Signal
+    auto_inner_icache_client_out_d_bits_corrupt: Signal
+    auto_inner_instrUncache_client_out_a_ready: Signal
+    auto_inner_instrUncache_client_out_d_valid: Signal
+    auto_inner_instrUncache_client_out_d_bits_source: Signal
+    auto_inner_instrUncache_client_out_d_bits_data: Signal
+    auto_inner_instrUncache_client_out_d_bits_corrupt: Signal
+    auto_inner_icache_client_out_a_valid: Signal
+    auto_inner_icache_client_out_a_bits_source: Signal
+    auto_inner_icache_client_out_a_bits_address: Signal
+    auto_inner_instrUncache_client_out_a_valid: Signal
+    auto_inner_instrUncache_client_out_a_bits_address: Signal
+    io_ptw_req_0_valid: Signal
+    io_ptw_req_0_bits_vpn: Signal
+    io_ptw_req_0_bits_s2xlate: Signal
+    io_ptw_resp_ready: Signal
+    io_backend_wfi_wfiSafe: Signal
+    io_error_ecc_error_valid: Signal
+    io_error_ecc_error_bits: Signal
+    io_resetInFrontend: Signal
 
     # Construct parent controls, child boundaries, and observable frontend lanes. / 构造父级控制、子级边界及可观察前端通道。
     def __init__(self, configuration: FrontendTopConfig | dict[str, Any] | None = None,
@@ -516,7 +561,8 @@ class FrontendParent(Elaboratable):
     def elaborate(self, platform: Any) -> Module:
         del platform
         cfg = self.configuration
-        module = Module()
+        # The Amaranth DSL branch methods are generated context managers.
+        module: Any = Module()
         domain = ClockDomain("frontend_sync", async_reset=True)
         domain.clk = self.clock
         domain.rst = self.reset
@@ -599,15 +645,15 @@ class FrontendParent(Elaboratable):
             rvc_out = getattr(self.rvc, "out_bits", None)
             rvc_ill = getattr(self.rvc, "ill", None)
             if rvc_out is not None:
-                module.d.comb += self.cf_instr[:cfg.instr_bits].eq(rvc_out)
+                module.d.comb += cast(Any, self.cf_instr[:cfg.instr_bits]).eq(rvc_out)
             if rvc_ill is not None:
-                module.d.comb += self.cf_exception[0].eq(rvc_ill)
+                module.d.comb += cast(Any, self.cf_exception[0]).eq(rvc_ill)
         if self.bpu is not None:
             self.connect_child_signal(module, self.bpu, "bpu", "enable", self.bpu_enable)
             self.connect_child_signal(module, self.bpu, "bpu", "reset_vector", self.reset_vector)
             bpu_taken = getattr(self.bpu, "pred_taken", None)
             if bpu_taken is not None:
-                module.d.comb += self.cf_pred_taken[0].eq(bpu_taken)
+                module.d.comb += cast(Any, self.cf_pred_taken[0]).eq(bpu_taken)
         for child, name in ((self.icache_replacer, "icache_replacer"), (self.icache_mshr, "icache_mshr")):
             if child is None:
                 continue

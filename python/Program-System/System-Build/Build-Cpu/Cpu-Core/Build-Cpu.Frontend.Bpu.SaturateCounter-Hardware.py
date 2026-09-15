@@ -1,10 +1,9 @@
 """V2 unsigned saturating counter closure. / V2 无符号饱和计数器闭包。"""
 
 from __future__ import annotations
-# pyright: reportAttributeAccessIssue=false, reportGeneralTypeIssues=false, reportOperatorIssue=false
 
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, cast
 
 from amaranth import Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
@@ -112,7 +111,7 @@ class SaturateCounter:
 
     # Report whether the counter predicts not-taken. / 报告计数器是否预测 not-taken。
     def is_negative(self) -> Any:
-        return ~self.value[-1]
+        return ~cast(Any, self.value[-1])
 
     # Report positive saturation. / 报告正饱和。
     def is_saturate_positive(self) -> Any:
@@ -190,7 +189,8 @@ class SaturateCounterReg(Elaboratable):
     # Elaborate one synchronous satUpdate recurrence. / 展开一个同步 satUpdate 递推。
     def elaborate(self, platform: Any) -> Module:
         del platform
-        module = Module()
+        # The DSL context-manager API is dynamically decorated in Amaranth.
+        module: Any = Module()
         counter = SaturateCounter(self.configuration.width, self.value)
         module.d.comb += [
             self.next_value.eq(counter.get_updated_value(self.increase, self.en)),

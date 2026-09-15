@@ -2,7 +2,8 @@
 香山 V2 指令缓存解耦工具模块的 Amaranth 重写。
 """
 from __future__ import annotations
-# pyright: reportAttributeAccessIssue=false, reportGeneralTypeIssues=false, reportOperatorIssue=false
+
+from typing import Any
 
 from amaranth import Array, Elaboratable, Module, Mux, Signal
 
@@ -43,7 +44,9 @@ class DeMultiplexer(Elaboratable):
     # Elaborate ready-priority routing and chosen encoding. / 实例化 ready 优先路由及 chosen 编码。
     def elaborate(self, platform) -> Module:
         del platform
-        m = Module()
+        # The branch API is decorator-generated in Amaranth; keep this local
+        # adapter dynamic while preserving the exact runtime Module.
+        m: Any = Module()
         prior_ready = 0
         for index in range(self.n):
             m.d.comb += [
@@ -83,7 +86,9 @@ class MuxBundle(Elaboratable):
     # Elaborate selector routing and ready gating. / 实例化选择路由及 ready 门控。
     def elaborate(self, platform) -> Module:
         del platform
-        m = Module()
+        # The branch API is decorator-generated in Amaranth; keep this local
+        # adapter dynamic while preserving the exact runtime Module.
+        m: Any = Module()
         out_valid = self.in_valid[0]
         out_bits = self.in_bits[0]
         m.d.comb += self.in_ready[0].eq((self.sel == 0) & self.out_ready)
@@ -126,7 +131,9 @@ class FIFOReg(Elaboratable):
     # Elaborate circular pointers, storage, and flush priority. / 实例化环形指针、存储及 flush 优先级逻辑。
     def elaborate(self, platform) -> Module:
         del platform
-        m = Module()
+        # The branch API is decorator-generated in Amaranth; keep this local
+        # adapter dynamic while preserving the exact runtime Module.
+        m: Any = Module()
         ptr_bits = max(1, (self.entries - 1).bit_length())
         regs = Array(
             Signal(self.bits_width, name=f"fifo_reg_{index}")

@@ -3,9 +3,9 @@ V2 快速辅助 FTB 单路标签与写旁路行为。
 """
 
 from __future__ import annotations
-# pyright: reportAttributeAccessIssue=false, reportGeneralTypeIssues=false, reportOperatorIssue=false
 
 from dataclasses import dataclass
+from typing import Any
 
 from amaranth import ClockDomain, Elaboratable, Module, Signal
 
@@ -110,7 +110,9 @@ class FauFTBWay(Elaboratable):
     # 展开寄存式条目存储、标签比较及写旁路。 /
     def elaborate(self, platform) -> Module:
         del platform
-        m = Module()
+        # The Amaranth DSL branches are decorator-generated context managers;
+        # keep this local adapter dynamically typed without altering hardware.
+        m: Any = Module()
         m.domains += self.clock_domain
         c = self.configuration
 

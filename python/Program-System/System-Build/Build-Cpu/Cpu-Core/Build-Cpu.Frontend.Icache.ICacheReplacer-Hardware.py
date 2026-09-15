@@ -2,9 +2,9 @@
 香山 V2 指令缓存组相联替换策略的 Amaranth 重写。
 """
 from __future__ import annotations
-# pyright: reportAttributeAccessIssue=false, reportGeneralTypeIssues=false, reportOperatorIssue=false
 
 from dataclasses import dataclass
+from typing import Any
 
 from amaranth import Array, Cat, Elaboratable, Module, Mux, Signal
 
@@ -155,7 +155,9 @@ class SetAssocPolicy(Elaboratable):
     # Elaborate per-set state updates and combinational victim selection. / 实例化逐组状态更新和组合 victim 选择。
     def elaborate(self, platform) -> Module:
         del platform
-        m = Module()
+        # Keep the runtime Module unchanged; its generated branch API is
+        # locally dynamic for static checking purposes.
+        m: Any = Module()
         c = self.cfg
         state = Array(
             Signal(c.state_bits, init=0, name=f"state_vec_{index}")
@@ -205,7 +207,9 @@ class ICacheReplacer(Elaboratable):
     # Route interleaved touches and delay victim touch-back by one cycle. / 路由交错 touch，并将 victim touch-back 延迟一个周期。
     def elaborate(self, platform) -> Module:
         del platform
-        m = Module()
+        # Keep the runtime Module unchanged; its generated branch API is
+        # locally dynamic for static checking purposes.
+        m: Any = Module()
         c = self.cfg
         policies = []
         for bank in range(c.port_number):
