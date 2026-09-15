@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_FRONTEND_INSTR_MMIO_ENTRY_CHILD_DIFFERENTIAL",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "targets": {
+    "InstrMMIOEntry": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.InstrMMIOEntry-Hardware.py"
+  },
+  "locked_reference": {
+    "canonical_path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "immutable": true,
+    "modules": [
+      "InstrMMIOEntry"
+    ]
+  },
+  "direct": {
+    "status": "PASS",
+    "cycles": 4096,
+    "checks": 32768
+  },
+  "differential": {
+    "status": "PASS",
+    "vectors": 1024,
+    "compile": {
+      "command": [
+        "verilator",
+        "--binary",
+        "--timing",
+        "-Wno-fatal",
+        "--top-module",
+        "tb",
+        "--Mdir",
+        "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-instr-mmio-entry-child/obj",
+        "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-instr-mmio-entry-child/InstrMMIOEntry-target.sv",
+        "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-instr-mmio-entry-child/InstrMMIOEntry-reference.sv",
+        "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-instr-mmio-entry-child/instr-mmio-entry-child-tb.sv"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "output_tail": "  |                        ^~\n%Warning-WIDTHTRUNC: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-instr-mmio-entry-child/InstrMMIOEntry-target.sv:139:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'state' generates 2 bits.\n                                                                                                                                                                            : ... note: In instance 'tb.t'\n  139 |   assign \\$28  = ! (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Frontend.Icache.InstrMMIOEntry-Hardware.py:110\" *) state;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-instr-mmio-entry-child/InstrMMIOEntry-target.sv:141:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'state' generates 2 bits.\n                                                                                                                                                                            : ... note: In instance 'tb.t'\n  141 |   assign \\$30  = ! (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Frontend.Icache.InstrMMIOEntry-Hardware.py:110\" *) state;\n      |                  ^\n",
+      "output_sha256": "b2af2e5e0ad4ffa0f8cdf46e764103fd83fd0162eeb2020ce32cab757729fd9c"
+    },
+    "run": {
+      "command": [
+        "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-instr-mmio-entry-child/obj/Vtb"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "output_tail": "FRONTEND_INSTR_MMIO_ENTRY_DIFF_PASS 1024\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-instr-mmio-entry-child/instr-mmio-entry-child-tb.sv:1036: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 10ns; walltime 0.014 s; speed 2.837 us/s\n- Verilator: cpu 0.004 s on 1 threads; alloced 154 MB\n",
+      "output_sha256": "6aeb94c7d2c1dac089864d3ff28dcf07525daa09ebc369583c6939062e45fcd0"
+    }
+  },
+  "tool_gates": {
+    "verilator": {
+      "command": [
+        "verilator",
+        "--lint-only",
+        "-Wno-fatal",
+        "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-instr-mmio-entry-child/InstrMMIOEntry-target.sv"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "output_tail": "       ^~\n%Warning-WIDTHTRUNC: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-instr-mmio-entry-child/InstrMMIOEntry-target.sv:139:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'state' generates 2 bits.\n                                                                                                                                                                            : ... note: In instance 'InstrMMIOEntry'\n  139 |   assign \\$28  = ! (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Frontend.Icache.InstrMMIOEntry-Hardware.py:110\" *) state;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-instr-mmio-entry-child/InstrMMIOEntry-target.sv:141:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'state' generates 2 bits.\n                                                                                                                                                                            : ... note: In instance 'InstrMMIOEntry'\n  141 |   assign \\$30  = ! (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Frontend.Icache.InstrMMIOEntry-Hardware.py:110\" *) state;\n      |                  ^\n",
+      "output_sha256": "3696d9794ec3e84a290987a756c303888fd37325eb13a23f349b376723d97ad5"
+    },
+    "yosys": {
+      "command": [
+        "yosys",
+        "-Q",
+        "-p",
+        "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-instr-mmio-entry-child/InstrMMIOEntry-target.sv; hierarchy -top InstrMMIOEntry; proc; check; stat"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "output_tail": "1/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-instr-mmio-entry-child/InstrMMIOEntry-target.sv:154$41'.\nRemoving empty process `InstrMMIOEntry.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-instr-mmio-entry-child/InstrMMIOEntry-target.sv:150$40'.\nRemoving empty process `InstrMMIOEntry.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-instr-mmio-entry-child/InstrMMIOEntry-target.sv:146$39'.\nCleaned up 7 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module InstrMMIOEntry.\n<suppressed ~5 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module InstrMMIOEntry...\nFound and reported 0 problems.\n\n5. Printing statistics.\n\n=== InstrMMIOEntry ===\n\n   Number of wires:                151\n   Number of wire bits:           1283\n   Number of public wires:          60\n   Number of public wire bits:     532\n   Number of ports:                 17\n   Number of port bits:            205\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                 56\n     $adff                           5\n     $and                           11\n     $eq                            11\n     $logic_not                      5\n     $mux                           16\n     $not                            7\n     $or                             1\n\nEnd of script. Logfile hash: 4d14fd9667, CPU: user 0.02s system 0.00s, MEM: 12.81 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 67% 2x read_verilog (0 sec), 9% 1x opt_expr (0 sec), ...\n",
+      "output_sha256": "e8874592a8faf9a2028e5b33195186d153f1b2f29a6cdfb3e06b411741b12140"
+    }
+  },
+  "gates": {
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "PARENT_CLOSURE_MATCHED": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "PASS_BOUNDED_INSTR_MMIO_ENTRY_CHILD",
+  "acceptance_eligible": false,
+  "unclosed": [
+    "InstrUncache/Frontend parent integration remains pending.",
+    "License review and user approval remain pending."
+  ]
+}
