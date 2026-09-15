@@ -13,7 +13,7 @@ from contextlib import AbstractContextManager
 from dataclasses import dataclass
 from typing import Any, Mapping, cast
 
-from amaranth import ClockDomain, Elaboratable, Module, Mux, Signal
+from amaranth import Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
 from amaranth.hdl.ast import Value
 
@@ -35,7 +35,7 @@ SOURCE_SCALA_FILE_COUNT = len(SOURCE_SCALA_PATHS)
 __all__ = [
     "SOURCE_SCALA_ROOT", "SOURCE_SCALA_PATHS", "SOURCE_SCALA_FILE_COUNT",
     "ArithmeticConfig", "FudianArithmetic", "clz", "lza", "shift_right_jam",
-    "csa", "multiply_unsigned", "build_verilog", "main",
+    "csa", "multiply_unsigned", "round_shift_right", "build_verilog", "main",
 ]
 
 
@@ -89,6 +89,45 @@ def shift_right_jam(value: int, shift: int, width: int) -> tuple[int, int]:
     if shift > width:
         return 0, int(value != 0)
     return (value >> shift), int((value & ((1 << shift) - 1)) != 0)
+
+
+# Round a right shift using Fudian guard/round/sticky modes. / 使用 Fudian G/R/S 模式舍入右移。
+def round_shift_right(value: int, shift: int, width: int, rounding: int = 0) -> tuple[int, int]:
+    """Round a right shift using the five Fudian rounding modes.
+
+    ``RNE/RTZ/RDN/RUP/RMM`` are encoded as 0..4 in ``package.scala``.  The
+    helper returns the rounded ``width``-bit value and an inexact flag; it is
+    deliberately integer-only so the same guard/round/sticky equations can be
+    used by software checks and by the generated datapath.
+    """
+    if width < 1 or value < 0 or shift < 0 or rounding not in range(5):
+        raise ValueError("invalid rounded shift arguments")
+    mask = (1 << width) - 1
+    value &= mask
+    if shift == 0:
+        return value, 0
+    if shift >= width:
+        discarded = value
+        base = 0
+        guard = (value >> (shift - 1)) & 1 if shift <= value.bit_length() else 0
+        sticky = int(discarded != 0)
+    else:
+        base = value >> shift
+        discarded = value & ((1 << shift) - 1)
+        guard = (discarded >> (shift - 1)) & 1
+        sticky = int((discarded & ((1 << (shift - 1)) - 1)) != 0)
+    inexact = int(discarded != 0)
+    if rounding == 0:  # RNE, ties to even
+        up = bool(guard and (sticky or (base & 1)))
+    elif rounding == 1:  # RTZ
+        up = False
+    elif rounding == 2:  # RDN for a positive magnitude
+        up = False
+    elif rounding == 3:  # RUP for a positive magnitude
+        up = bool(inexact)
+    else:  # RMM, ties away from zero
+        up = bool(guard)
+    return (base + int(up)) & mask, inexact
 
 
 # =============================================================================
@@ -171,23 +210,35 @@ class FudianArithmetic(Elaboratable):
             expr = width - 1
             for index in range(width):
                 expr = Mux(self.a[index], width - 1 - index, expr)
-            m.d.comb += self.auxiliary.eq(expr)
+            m.d.comb += [self.auxiliary.eq(expr), self.result.eq(expr)]
         with amaranth_elif(m, self.operation == 1):
+            # Keep the recurrence in one-bit Values.  Using Python ``~`` on
+            # the previous integer (the old implementation) created a
+            # negative constant and produced width-dependent RTL.
             lza_expr = 0
-            previous_k = 0
+            previous_k: Any = Const(0, 1)
             for index in range(width):
                 p = amaranth_value(self.a[index]) ^ amaranth_value(self.b[index])
                 k = (~amaranth_value(self.a[index])) & (~amaranth_value(self.b[index]))
-                bit = 0 if index == 0 else p ^ (~previous_k)
+                bit = Const(0, 1) if index == 0 else p ^ (~previous_k)
                 lza_expr = lza_expr | (bit << index)
                 previous_k = k
-            m.d.comb += self.auxiliary.eq(lza_expr)
+            m.d.comb += [self.auxiliary.eq(lza_expr), self.result.eq(lza_expr)]
         with amaranth_elif(m, self.operation == 2):
             exceed = self.shift > width
-            discarded = self.a & ((1 << width) - 1)
-            m.d.comb += [self.result.eq(Mux(exceed, 0, self.a >> self.shift)), self.sticky.eq(Mux(exceed, self.a != 0, (discarded & ((1 << width) - 1)) != 0))]
+            # ``(1 << shamt)-1`` is formed at width+1 so a shift equal to the
+            # operand width still retains all discarded bits after slicing.
+            shift_mask = ((Const(1, width + 1) << self.shift) - 1)[:width]
+            sticky_expr = (self.a & shift_mask).any() | exceed & (self.a != 0)
+            m.d.comb += [self.result.eq(Mux(exceed, 0, self.a >> self.shift)), self.sticky.eq(sticky_expr)]
         with amaranth_elif(m, self.operation == 3):
             m.d.comb += self.result.eq(self.a * self.b)
+        with amaranth_elif(m, self.operation == 4):
+            # CSA3_2 is the common Fudian carry-save primitive.  Carry bits
+            # are intentionally not shifted, matching CSA.scala's Vec output.
+            sum_bits = self.a ^ self.b ^ self.shift[:width]
+            carry_bits = (self.a & self.b) | (self.a & self.shift[:width]) | (self.b & self.shift[:width])
+            m.d.comb += [self.result.eq(sum_bits), self.auxiliary.eq(carry_bits)]
         return m
 
 
