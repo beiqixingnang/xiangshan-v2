@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_COUPLEDL2_TL2TL_PROTOCOL_COVERAGE_BATCH2",
+  "batch_id": "V2-DEPENDENCY-COUPLEDL2-TL2TL-PROTOCOL-COVERAGE-002",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "locked_xstop": {
+    "canonical_path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "bytes": 228590583,
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "expected_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "module": "TL2TLCoupledL2",
+    "closure_modules": 148
+  },
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.CoupledL2.Directory-Hardware.py",
+    "rtl_sha256": "b00b3b91aa916dd6321ba9203d8b5fef0c73b1f7ebe5b19f70bd34124d3d7022",
+    "rtl_bytes": 5630795
+  },
+  "reference": {
+    "rtl_sha256": "17ce8cb9cf60bd603349269eaf1f4ab061d34d474748f0c9e0ab2909c21121e2",
+    "rtl_bytes": 228582072
+  },
+  "port_filter": {
+    "contract_count": 540,
+    "wired_count": 540,
+    "missing_target": [],
+    "missing_reference": [],
+    "direction_mismatch": [],
+    "target_port_count": 540,
+    "reference_port_count": 540
+  },
+  "differential": {
+    "status": "FAIL",
+    "vectors": 6,
+    "vector_boundaries": [
+      "reset",
+      "idle",
+      "acquire",
+      "probe",
+      "refill",
+      "response"
+    ],
+    "available_output_count": 285,
+    "compared_outputs": 45,
+    "compared_output_names": [
+      "auto_tpmeta_source_out_valid",
+      "auto_in_3_a_ready",
+      "auto_in_3_b_valid",
+      "auto_in_3_c_ready",
+      "auto_in_3_d_valid",
+      "auto_in_3_e_ready",
+      "auto_in_2_a_ready",
+      "auto_in_2_b_valid",
+      "auto_in_2_c_ready",
+      "auto_in_2_d_valid",
+      "auto_in_2_e_ready",
+      "auto_in_1_a_ready",
+      "auto_in_1_b_valid",
+      "auto_in_1_c_ready",
+      "auto_in_1_d_valid",
+      "auto_in_1_e_ready",
+      "auto_in_0_a_ready",
+      "auto_in_0_b_valid",
+      "auto_in_0_c_ready",
+      "auto_in_0_d_valid",
+      "auto_in_0_e_ready",
+      "auto_out_3_a_valid",
+      "auto_out_3_b_ready",
+      "auto_out_3_c_valid",
+      "auto_out_3_d_ready",
+      "auto_out_3_e_valid",
+      "auto_out_2_a_valid",
+      "auto_out_2_b_ready",
+      "auto_out_2_c_valid",
+      "auto_out_2_d_ready",
+      "auto_out_2_e_valid",
+      "auto_out_1_a_valid",
+      "auto_out_1_b_ready",
+      "auto_out_1_c_valid",
+      "auto_out_1_d_ready",
+      "auto_out_1_e_valid",
+      "auto_out_0_a_valid",
+      "auto_out_0_b_ready",
+      "auto_out_0_c_valid",
+      "auto_out_0_d_ready",
+      "auto_out_0_e_valid",
+      "io_l2_hint_valid",
+      "io_l2_tlb_req_req_valid",
+      "io_l2Miss",
+      "io_error_valid"
+    ],
+    "coverage_scope": "all stable ready/valid handshake, arbitration controls, reset/idle/acquire/probe/refill/response boundaries",
+    "compile": {
+      "status": "PASS_REUSED_CACHE",
+      "returncode": 0,
+      "cache": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\.cache\\tl2tl-protocol-coverage-batch2\\obj"
+    },
+    "run": {
+      "status": "PASS",
+      "returncode": 0,
+      "output_tail": "TL2TL_PROTOCOL_MISMATCH phase=1 cycle=1\nDIFF auto_out_3_d_ready t=0 r=1\nDIFF auto_out_2_d_ready t=0 r=1\nTL2TL_PROTOCOL_MISMATCH phase=2 cycle=2\nDIFF auto_out_3_d_ready t=0 r=1\nDIFF auto_out_2_d_ready t=0 r=1\nTL2TL_PROTOCOL_MISMATCH phase=3 cycle=3\nDIFF auto_in_0_a_ready t=0 r=1\nDIFF auto_in_0_c_ready t=0 r=1\nDIFF auto_out_3_d_ready t=0 r=1\nDIFF auto_out_2_d_ready t=0 r=1\nTL2TL_PROTOCOL_MISMATCH phase=0 cycle=4\nDIFF auto_in_0_a_ready t=0 r=1\nDIFF auto_in_0_c_ready t=0 r=1\nDIFF auto_out_3_d_ready t=0 r=1\nDIFF auto_out_2_d_ready t=0 r=1\nTL2TL_PROTOCOL_MISMATCH phase=4 cycle=5\nDIFF auto_in_0_a_ready t=0 r=1\nDIFF auto_in_0_c_ready t=0 r=1\nDIFF auto_out_3_d_ready t=0 r=1\nDIFF auto_out_2_d_ready t=0 r=1\nTL2TL_PROTOCOL_MISMATCH phase=0 cycle=6\nDIFF auto_in_0_a_ready t=0 r=1\nDIFF auto_in_0_c_ready t=0 r=1\nDIFF auto_out_3_d_ready t=0 r=1\nDIFF auto_out_2_d_ready t=0 r=1\nTL2TL_PROTOCOL_MISMATCH phase=5 cycle=7\nDIFF auto_in_0_a_ready t=0 r=1\nDIFF auto_in_0_c_ready t=0 r=1\nDIFF auto_in_0_d_valid t=1 r=0\nDIFF auto_out_3_d_ready t=0 r=1\nDIFF auto_out_2_d_ready t=0 r=1\nTL2TL_PROTOCOL_MISMATCH phase=0 cycle=8\nDIFF auto_out_3_d_ready t=0 r=1\nDIFF auto_out_2_d_ready t=0 r=1\nTL2TL_PROTOCOL_MISMATCH phase=6 cycle=9\nDIFF auto_in_0_a_ready t=0 r=1\nDIFF auto_in_0_c_ready t=0 r=1\nDIFF auto_in_0_d_valid t=1 r=0\nDIFF auto_out_3_d_ready t=0 r=1\nDIFF auto_out_2_d_ready t=0 r=1\nTL2TL_PROTOCOL_MISMATCH phase=0 cycle=10\nDIFF auto_out_3_d_ready t=0 r=1\nDIFF auto_out_2_d_ready t=0 r=1\nTL2TL_PROTOCOL_COVERAGE_FAIL mismatches=10\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/tl2tl-protocol-coverage-batch2/tb.sv:4506: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 100ps; walltime 0.012 s; speed 29.182 ns/s\n- Verilator: cpu 0.003 s on 1 threads; alloced 156 MB\n",
+      "output_sha256": "a54b0de2a27bc0136c1b46df98f212649f9547f5587e2e8fc348e32cc1a8089a"
+    }
+  },
+  "tool_gates": {
+    "verilator": {
+      "status": "PASS_REUSED_CACHE",
+      "returncode": 0,
+      "cache": "verilator"
+    },
+    "yosys": {
+      "status": "PASS_REUSED_CACHE",
+      "returncode": 0,
+      "cache": "yosys"
+    },
+    "cache_reused": true,
+    "cache_root": "validation\\.cache\\tl2tl-protocol-coverage-batch2",
+    "compile_hash": "3202b901f7588802b3f1cbb4642a33e9c1263a36cef9171fdcead5608a385108"
+  },
+  "gates": {
+    "DIRECT_TEST_PASS_BOUNDED": "FAIL",
+    "V2_REFERENCE_MATCHED": "FAIL",
+    "VERILATOR": "PASS_REUSED_CACHE",
+    "YOSYS": "PASS_REUSED_CACHE",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "FAIL_PROTOCOL_COVERAGE",
+  "acceptance_eligible": false,
+  "unclosed": [
+    "Full TL2TL CoupledL2 Slice/Directory/Prefetch/Diplomacy behavior remains pending.",
+    "Bounded protocol vectors do not establish complete parent closure.",
+    "Partial coverage is not labelled PASS or ACCEPTED."
+  ]
+}
