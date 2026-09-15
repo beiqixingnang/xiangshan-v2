@@ -7,12 +7,12 @@
   "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
   "target": {
     "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Rocket.Diplomacy-Hardware.py",
-    "sha256": "4f78cc185074ed479829e81a45dbcf84bd5a2372779400ab9055b5b86f2bf422"
+    "sha256": "910c9957b7287ed40ca4b08565c3bda45a0e3c34b25060778cc8808ee7f0069f"
   },
   "static": {
     "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Rocket.Diplomacy-Hardware.py",
-    "sha256": "4f78cc185074ed479829e81a45dbcf84bd5a2372779400ab9055b5b86f2bf422",
-    "bytes": 49932,
+    "sha256": "910c9957b7287ed40ca4b08565c3bda45a0e3c34b25060778cc8808ee7f0069f",
+    "bytes": 49945,
     "utf8_lf": true,
     "ast": true,
     "five_zone_order": true,
@@ -22,15 +22,15 @@
     "zones": {
       "Module Contract": 847,
       "Configuration": 1696,
-      "Implementation": 30746,
-      "Public Adapter": 44559,
-      "Direct Entry": 46169
+      "Implementation": 30759,
+      "Public Adapter": 44572,
+      "Direct Entry": 46182
     },
     "pass": true
   },
   "py_compile": {
     "status": "PASS",
-    "bytecode_bytes": 69272
+    "bytecode_bytes": 69308
   },
   "exact_path_import": {
     "status": "PASS",
@@ -74,19 +74,19 @@
   },
   "verilog_syntax": {
     "status": "PASS",
-    "cache": "HIT_REUSED",
-    "cache_key": "61855b47953c2042967cfd41ed7ea3f286b9533bbfd40bce5c88613d88223d33",
+    "cache": "MISS_EXECUTED",
+    "cache_key": "1588da1a93c83639022f2fb0fa7ff8f2e266b8969f2c09a2e42ccb9f55160d5d",
     "verilator": {
       "status": "PASS",
       "returncode": 0,
-      "output_sha256": "720e8724bfe73f0afbcd1f8b0e7175179254ac84ff77c4c68ed79f7dbacc4355",
+      "output_sha256": "3b6cbbb2019bf47e05093594be3e00e1a30d63e9ebfd7970d29a01ae62cea27c",
       "output_tail": "1 bit on the LHS, but LHS's VARREF '$23' generates 16 bits.\n                                                                                                                                                                                                        : ... note: In instance 'UHSCRocketDiplomacy'\n   69 |   assign \\$24  = ! \\$23 ;\n      |                  ^\n%Warning-WIDTHTRUNC: <RTL>:70:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF '$26' generates 16 bits.\n                                                                                                                                                                                                        : ... note: In instance 'UHSCRocketDiplomacy'\n   70 |   assign \\$27  = ! \\$26 ;\n      |                  ^\n"
     },
     "yosys": {
       "status": "PASS",
       "returncode": 0,
-      "output_sha256": "053e82d0f49e3296cfa200aa707250822b9cb7903d9515cc304a85440b99972e",
-      "output_tail": "onvert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module UHSCRocketDiplomacy.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module UHSCRocketDiplomacy...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 3da54fafcd, CPU: user 0.00s system 0.01s, MEM: 11.41 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 65% 2x read_verilog (0 sec), 14% 1x opt_expr (0 sec), ...\n"
+      "output_sha256": "55593475a36763afd421ceb9648d454afc5a953d8c5c77770345870ff751e59d",
+      "output_tail": "onvert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module UHSCRocketDiplomacy.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module UHSCRocketDiplomacy...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 3bf8e43dc2, CPU: user 0.01s system 0.00s, MEM: 11.25 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 65% 2x read_verilog (0 sec), 13% 1x opt_expr (0 sec), ...\n"
     }
   },
   "gates": {

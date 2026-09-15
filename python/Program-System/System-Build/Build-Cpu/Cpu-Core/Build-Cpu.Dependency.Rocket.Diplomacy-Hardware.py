@@ -334,10 +334,10 @@ class AddressSet:
             base_alignment = current & -current
             size_alignment = 1 << (remaining.bit_length() - 1)
             step = size_alignment if base_alignment == 0 or base_alignment > size_alignment else base_alignment
-            result.append(AddressSet(current, step - 1))
+            result.insert(0, AddressSet(current, step - 1))
             current += step
             remaining -= step
-        return tuple(result)
+        return tuple(reversed(result))
 
     # Unify pairs that differ only in one don't-care bit. / 合并仅在一个可忽略位
     # 上不同的地址集合。 /
