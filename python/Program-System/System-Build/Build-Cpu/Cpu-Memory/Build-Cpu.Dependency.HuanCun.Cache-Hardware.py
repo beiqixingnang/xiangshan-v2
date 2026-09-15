@@ -14,8 +14,9 @@ from contextlib import AbstractContextManager
 from dataclasses import dataclass
 from typing import Any, cast
 
-from amaranth import ClockDomain, Elaboratable, Module, Mux, Signal
+from amaranth import Array, Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
+from amaranth.hdl.ast import Value
 
 
 # =============================================================================
@@ -36,6 +37,11 @@ def amaranth_else(module: Module) -> AbstractContextManager[None]:
     return cast(AbstractContextManager[None], module.Else())
 
 
+# Narrow dynamic Amaranth values at the DSL boundary. / 在 DSL 边界窄化动态 Amaranth 值。
+def amaranth_value(expression: Any) -> Value:
+    return cast(Value, expression)
+
+
 # =============================================================================
 # Configuration
 # =============================================================================
@@ -49,12 +55,25 @@ class HuanCunConfig:
     address_bits: int = 48
     source_bits: int = 6
 
+    # Return the byte offset width carried by a cache-line address. /
+    # 返回缓存行地址携带的字节偏移位宽。
+    @property
+    # Return offset bits. /
+    def offset_bits(self) -> int:
+        line_bytes = self.line_bits // 8
+        return max(0, (line_bytes - 1).bit_length())
+
     # Validate selected V2 cache geometry. / 校验选定 V2 缓存几何参数。
     def __post_init__(self) -> None:
         if self.sets < 1 or self.sets & (self.sets - 1):
             raise ValueError("HuanCun sets must be a power of two")
-        if self.ways < 1 or self.line_bits < 8 or self.line_bits % 8:
+        line_bytes = self.line_bits // 8
+        if self.ways < 1 or self.ways > 16 or self.line_bits < 8 or self.line_bits % 8:
             raise ValueError("invalid HuanCun cache geometry")
+        if line_bytes & (line_bytes - 1):
+            raise ValueError("HuanCun line size must be a power of two")
+        if self.address_bits <= self.offset_bits + self.set_bits:
+            raise ValueError("HuanCun address width leaves no tag bits")
 
     @property
     # Return set-index width. / 返回组索引位宽。
@@ -64,7 +83,20 @@ class HuanCunConfig:
     @property
     # Return tag width. / 返回标签位宽。
     def tag_bits(self) -> int:
-        return max(1, self.address_bits - self.set_bits - 6)
+        return max(1, self.address_bits - self.set_bits - self.offset_bits)
+
+    @property
+    # Return the byte mask width used by partial line writes. /
+    # 返回部分缓存行写入使用的字节掩码位宽。
+    # Return mask bits. /
+    def mask_bits(self) -> int:
+        return self.line_bits // 8
+
+    @property
+    # Return the replacement-way index width. / 返回替换路索引位宽。
+    # Return way bits. /
+    def way_bits(self) -> int:
+        return max(1, (self.ways - 1).bit_length())
 
 
 # =============================================================================
@@ -75,7 +107,19 @@ class HuanCunCacheBoundary(Elaboratable):
     def __getattr__(self, name: str) -> Signal:
         raise AttributeError(name)
 
-    """One-line-per-way HuanCun cache protocol boundary. / 每路单缓存行 HuanCun 协议边界。"""
+    """Set-associative HuanCun cache protocol boundary.
+
+    The implementation is intentionally bounded, but it materializes the
+    state that the Scala ``DataStorage``/``MetaData``/``RequestBuffer``
+    closure observes: valid/dirty/tag/data arrays, round-robin replacement,
+    one outstanding miss, write-back eviction, and a refill-to-response
+    transition.  The legacy ``refill_source`` tag convention is accepted when
+    ``refill_has_address`` is low; selected top-level users can provide a full
+    line address through the new address port.
+    每个 set/way 都有有效位、脏位、标签和数据阵列，并实现轮询替换、单未决
+    缺失、写回逐出以及回填到响应的状态迁移；当 ``refill_has_address`` 为零
+    时兼容旧版将 ``refill_source`` 作为标签的约定。
+    """
 
     # Construct request/refill/eviction ports. / 构造请求、回填及逐出端口。
     def __init__(self, configuration: HuanCunConfig | None = None) -> None:
@@ -102,11 +146,26 @@ class HuanCunCacheBoundary(Elaboratable):
         self.refill_valid = Signal(name="io_refill_valid")
         self.refill_data = Signal(c.line_bits, name="io_refill_data")
         self.refill_source = Signal(c.source_bits, name="io_refill_source")
+        # A full refill address removes ambiguity between source IDs and tags.
+        # 完整回填地址消除 source ID 与标签之间的歧义。
+        self.refill_address = Signal(c.address_bits, name="io_refill_address")
+        self.refill_has_address = Signal(name="io_refill_has_address")
+        self.refill_tag = Signal(c.tag_bits, name="io_refill_tag")
+        self.refill_ready = Signal(name="io_refill_ready")
+        self.req_mask = Signal(c.mask_bits, name="io_req_mask")
+        self.req_fire = Signal(name="io_req_fire")
+        self.refill_fire = Signal(name="io_refill_fire")
+        self.evict_fire = Signal(name="io_evict_fire")
         self.hit = Signal(name="io_hit")
         self.dirty = Signal(name="io_dirty")
         self.state = Signal(2, name="io_state")
+        self.miss_set = Signal(c.set_bits, name="io_miss_set")
+        self.miss_tag = Signal(c.tag_bits, name="io_miss_tag")
+        self.evict_way = Signal(c.way_bits, name="io_evict_way")
 
-    # Elaborate cache lookup and one-outstanding miss state. / 展开缓存查找及单个未决缺失状态。
+    # Elaborate cache lookup, replacement, write-back, and refill state.
+    # 展开缓存查找、替换、写回及回填状态。
+    # Elaborate cache lookup and replacement state. /
     def elaborate(self, platform: Any) -> Module:
         del platform
         c = self.configuration
@@ -115,35 +174,184 @@ class HuanCunCacheBoundary(Elaboratable):
         domain.clk = self.clock
         domain.rst = self.reset
         m.domains.huancun_cache = domain
-        valid = Signal(name="line_valid")
-        dirty = Signal(name="line_dirty")
-        tag = Signal(c.tag_bits, name="line_tag")
-        line = Signal(c.line_bits, name="line_data")
+        # Materialize one metadata/data row per set and way.  Array indexing is
+        # dynamic on the set field and synthesizes into a bounded mux/RAM.
+        # 每个 set/way 物化一行元数据及数据；动态 set 索引综合为有界 mux/RAM。
+        entries = c.sets * c.ways
+        index_width = max(1, (entries - 1).bit_length())
+        valid_mem = Array(Signal(name=f"valid_{index}", init=0) for index in range(entries))
+        dirty_mem = Array(Signal(name=f"dirty_{index}", init=0) for index in range(entries))
+        tag_mem = Array(Signal(c.tag_bits, name=f"tag_{index}", init=0) for index in range(entries))
+        data_mem = Array(Signal(c.line_bits, name=f"data_{index}", init=0) for index in range(entries))
+        rr_mem = Array(Signal(c.way_bits, name=f"rr_{index}", init=0) for index in range(c.sets))
+
+        # Decode a byte address into line offset, set, and tag. / 将字节地址译码为
+        # 行偏移、set 和标签。
+        line_address = self.req_address >> c.offset_bits
+        req_set = line_address[:c.set_bits]
+        req_tag = line_address[c.set_bits:c.set_bits + c.tag_bits]
+        # The arithmetic width includes a spare high bit, avoiding truncation
+        # when ``ways`` is not a power of two. / 算术宽度多保留一位，避免 ways
+        # 非二次幂时被截断。
+        req_entry_base = Signal(index_width, name="req_entry_base")
+        m.d.comb += req_entry_base.eq(amaranth_value(req_set) * c.ways)
+
+        hit_vec = []
+        dirty_vec = []
+        data_vec = []
+        for way in range(c.ways):
+            entry = req_entry_base + way
+            valid_at = valid_mem[entry]
+            tag_at = tag_mem[entry]
+            hit_vec.append(valid_at & (tag_at == req_tag))
+            dirty_vec.append(dirty_mem[entry])
+            data_vec.append(data_mem[entry])
+        hit = Const(0)
+        hit_way = Signal(c.way_bits, name="hit_way")
+        hit_dirty = Signal(name="hit_dirty")
+        hit_data = Signal(c.line_bits, name="hit_data")
+        m.d.comb += [hit_way.eq(0), hit_dirty.eq(0), hit_data.eq(0)]
+        for way, way_hit in enumerate(hit_vec):
+            # Priority order is deterministic if malformed state has duplicate
+            # tags. / 即使异常状态出现重复标签，优先级仍是确定的。
+            with amaranth_if(m, way_hit & ~hit):
+                m.d.comb += [hit_way.eq(way), hit_dirty.eq(dirty_vec[way]),
+                             hit_data.eq(data_vec[way])]
+            hit = hit | way_hit
+
+        # Pick an invalid way first, otherwise use the per-set round-robin way.
+        # 优先选择无效路，否则使用每个 set 的轮询路。
+        rr_way = rr_mem[req_set]
+        victim_way = Signal(c.way_bits, name="victim_way")
+        victim_valid = Signal(name="victim_valid")
+        victim_dirty = Signal(name="victim_dirty")
+        victim_tag = Signal(c.tag_bits, name="victim_tag")
+        victim_data = Signal(c.line_bits, name="victim_data")
+        m.d.comb += [victim_way.eq(rr_way), victim_valid.eq(0), victim_dirty.eq(0),
+                     victim_tag.eq(0), victim_data.eq(0)]
+        found_invalid = Const(0)
+        for way in range(c.ways):
+            entry = req_entry_base + way
+            valid_at = valid_mem[entry]
+            choose = ~amaranth_value(found_invalid) & ~amaranth_value(valid_at)
+            with amaranth_if(m, choose):
+                m.d.comb += [victim_way.eq(way), victim_valid.eq(valid_at),
+                             victim_dirty.eq(dirty_mem[entry]), victim_tag.eq(tag_mem[entry]),
+                             victim_data.eq(data_mem[entry])]
+            found_invalid = amaranth_value(found_invalid) | ~amaranth_value(valid_at)
+        # If every way was valid, the round-robin way supplies victim metadata.
+        rr_entry = req_entry_base + rr_way
+        with amaranth_if(m, ~amaranth_value(found_invalid)):
+            m.d.comb += [victim_valid.eq(valid_mem[rr_entry]), victim_dirty.eq(dirty_mem[rr_entry]),
+                         victim_tag.eq(tag_mem[rr_entry]), victim_data.eq(data_mem[rr_entry])]
+
         source = Signal(c.source_bits, name="pending_source")
         pending_addr = Signal(c.address_bits, name="pending_address")
+        pending_set = Signal(c.set_bits, name="pending_set")
+        pending_tag = Signal(c.tag_bits, name="pending_tag")
+        pending_way = Signal(c.way_bits, name="pending_way")
         pending_write = Signal(name="pending_write")
+        pending_data = Signal(c.line_bits, name="pending_data")
+        pending_mask = Signal(c.mask_bits, name="pending_mask")
         pending = Signal(name="pending")
-        req_tag = self.req_address[c.address_bits - c.tag_bits:]
-        hit = valid & (tag == req_tag)
-        m.d.comb += [self.req_ready.eq(~pending & ~self.flush), self.hit.eq(hit), self.dirty.eq(dirty),
-                     self.state.eq(Mux(pending, 2, Mux(valid, Mux(dirty, 1, 0), 0))),
-                     self.resp_valid.eq(self.req_valid & self.req_ready & hit),
-                     self.resp_data.eq(Mux(hit, Mux(self.req_write, self.req_data, line), 0)),
-                     self.resp_source.eq(self.req_source), self.miss_valid.eq(pending & ~hit & ~self.flush),
-                     self.miss_address.eq(pending_addr), self.miss_source.eq(source),
-                     self.evict_valid.eq(pending & dirty & ~self.flush), self.evict_address.eq(pending_addr),
-                     self.evict_data.eq(line)]
+        evict_pending = Signal(name="evict_pending")
+        response_pending = Signal(name="response_pending")
+        response_data = Signal(c.line_bits, name="response_data")
+        response_source = Signal(c.source_bits, name="response_source")
+
+        # A zero mask is the legacy full-line write convention. / 零掩码沿用旧版
+        # 的整行写入约定。
+        full_mask = (1 << c.mask_bits) - 1
+        effective_mask = Mux(self.req_mask == 0, full_mask, self.req_mask)
+        req_fire = self.req_valid & self.req_ready
+        refill_fire = self.refill_valid & self.refill_ready
+        evict_fire = self.evict_valid
+
+        # Refill address may be supplied explicitly; otherwise retain the
+        # pending set and interpret ``refill_source`` as the legacy tag.
+        # 回填可提供完整地址；否则保留 pending set 并将 refill_source 解释为旧版标签。
+        refill_line_address = self.refill_address >> c.offset_bits
+        refill_set = Mux(self.refill_has_address, refill_line_address[:c.set_bits], pending_set)
+        refill_tag = Mux(self.refill_has_address,
+                         refill_line_address[c.set_bits:c.set_bits + c.tag_bits],
+                         Mux(self.refill_tag != 0, self.refill_tag, pending_tag))
+        refill_entry = Signal(index_width, name="refill_entry")
+        m.d.comb += refill_entry.eq(amaranth_value(refill_set) * c.ways + pending_way)
+
+        # Merge a partial write into the refilled line. / 将部分写入合并到回填行。
+        merged_refill = Signal(c.line_bits, name="merged_refill")
+        merge_parts = []
+        bytes_per_line = c.mask_bits
+        for byte in range(bytes_per_line):
+            old_byte = self.refill_data[byte * 8:(byte + 1) * 8]
+            new_byte = pending_data[byte * 8:(byte + 1) * 8]
+            choose_new = pending_mask[byte]
+            merge_parts.append(Mux(choose_new, new_byte, old_byte))
+        # Cat takes the first item as the least-significant part. / Cat 首项是最低有效片段。
+        m.d.comb += merged_refill.eq(Cat(*merge_parts))
+
+        m.d.comb += [self.req_ready.eq(~pending & ~self.flush), self.req_fire.eq(req_fire),
+                     self.refill_ready.eq(pending & ~self.flush), self.refill_fire.eq(refill_fire),
+                     self.evict_fire.eq(evict_fire), self.hit.eq(hit),
+                     self.dirty.eq(Mux(hit, hit_dirty, victim_dirty)),
+                     self.state.eq(Mux(pending, 2, Mux(hit, Mux(hit_dirty, 1, 0), 0))),
+                     self.resp_valid.eq((self.req_valid & self.req_ready & hit) | response_pending),
+                     self.resp_data.eq(Mux(response_pending, response_data,
+                                            Mux(hit, Mux(self.req_write, self.req_data, hit_data), 0))),
+                     self.resp_source.eq(Mux(response_pending, response_source, self.req_source)),
+                     self.miss_valid.eq(pending & ~self.flush), self.miss_address.eq(pending_addr),
+                     self.miss_source.eq(source), self.miss_set.eq(pending_set), self.miss_tag.eq(pending_tag),
+                     self.evict_valid.eq(evict_pending & ~self.flush),
+                     self.evict_address.eq((victim_tag << (c.set_bits + c.offset_bits)) |
+                                          (pending_set << c.offset_bits)),
+                     self.evict_data.eq(victim_data), self.evict_way.eq(pending_way)]
+
+        # Reset/flush invalidates all ways, as DataStorage's metadata reset does.
+        # 复位/flush 使所有路无效，对应 DataStorage 元数据复位。
         with amaranth_if(m, self.reset | self.flush):
-            m.d.huancun_cache += [valid.eq(0), dirty.eq(0), pending.eq(0)]
+            m.d.huancun_cache += [pending.eq(0), evict_pending.eq(0), response_pending.eq(0)]
+            for index in range(entries):
+                m.d.huancun_cache += [valid_mem[index].eq(0), dirty_mem[index].eq(0)]
+            for index in range(c.sets):
+                m.d.huancun_cache += rr_mem[index].eq(0)
         with amaranth_else(m):
-            with amaranth_if(m, self.req_valid & self.req_ready):
+            # Response pulses are one cycle unless a new refill arrives.
+            m.d.huancun_cache += response_pending.eq(0)
+            with amaranth_if(m, req_fire):
                 with amaranth_if(m, hit):
                     with amaranth_if(m, self.req_write):
-                        m.d.huancun_cache += [line.eq(self.req_data), dirty.eq(1)]
+                        # Byte-enable writes model PutPartialData and PutFullData.
+                        # 字节使能写同时覆盖 PutPartialData/PutFullData。
+                        for byte in range(bytes_per_line):
+                            old_byte = data_mem[req_entry_base + hit_way][byte * 8:(byte + 1) * 8]
+                            new_byte = self.req_data[byte * 8:(byte + 1) * 8]
+                            with amaranth_if(m, effective_mask[byte]):
+                                m.d.huancun_cache += old_byte.eq(new_byte)
+                        m.d.huancun_cache += dirty_mem[req_entry_base + hit_way].eq(1)
+                    with amaranth_else(m):
+                        m.d.huancun_cache += [response_data.eq(hit_data), response_source.eq(self.req_source),
+                                              response_pending.eq(1)]
                 with amaranth_else(m):
-                    m.d.huancun_cache += [pending.eq(1), pending_addr.eq(self.req_address), pending_write.eq(self.req_write), source.eq(self.req_source)]
-            with amaranth_if(m, self.refill_valid & pending):
-                m.d.huancun_cache += [line.eq(self.refill_data), tag.eq(self.refill_source), valid.eq(1), dirty.eq(pending_write), pending.eq(0)]
+                    m.d.huancun_cache += [pending.eq(1), pending_addr.eq(self.req_address),
+                                          pending_set.eq(req_set), pending_tag.eq(req_tag),
+                                          pending_way.eq(victim_way), pending_write.eq(self.req_write),
+                                          pending_data.eq(self.req_data), pending_mask.eq(effective_mask),
+                                          source.eq(self.req_source), evict_pending.eq(victim_dirty)]
+                    with amaranth_if(m, ~victim_valid):
+                        # Invalid victims cannot produce a write-back transaction.
+                        m.d.huancun_cache += evict_pending.eq(0)
+                    with amaranth_if(m, victim_way == (c.ways - 1)):
+                        m.d.huancun_cache += rr_mem[req_set].eq(0)
+                    with amaranth_else(m):
+                        m.d.huancun_cache += rr_mem[req_set].eq(victim_way + 1)
+            with amaranth_if(m, refill_fire):
+                m.d.huancun_cache += [data_mem[refill_entry].eq(merged_refill),
+                                      tag_mem[refill_entry].eq(refill_tag), valid_mem[refill_entry].eq(1),
+                                      dirty_mem[refill_entry].eq(pending_write), pending.eq(0),
+                                      evict_pending.eq(0)]
+                with amaranth_if(m, ~pending_write):
+                    m.d.huancun_cache += [response_data.eq(self.refill_data), response_source.eq(source),
+                                          response_pending.eq(1)]
         return m
 
 

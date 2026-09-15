@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_DEPENDENCY_WAVE1",
+  "batch_id": "V2-DEPENDENCY-YUNSUAN-HUANCUN-WAVE1-001",
+  "status": "PASS_BOUNDED_FAMILY",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "families": [
+    {
+      "family_id": "dependency.yunsuan.scalar",
+      "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.YunSuan.Scalar-Hardware.py",
+      "scala_path_count": 5,
+      "scala_paths": [
+        "yunsuan/src/main/scala/yunsuan/scalar/Convert.scala",
+        "yunsuan/src/main/scala/yunsuan/scalar/FPU.scala",
+        "yunsuan/src/main/scala/yunsuan/scalar/IntToFP.scala",
+        "yunsuan/src/main/scala/yunsuan/scalar/RoundingUnit.scala",
+        "yunsuan/src/main/scala/yunsuan/scalar/utils.scala"
+      ],
+      "target_sha256": "e1729ef076c79b64530b85fdfad93fe49cf1c5430f2afd7d32897e64a673753a",
+      "target_bytes": 59649,
+      "target_lines": 1223,
+      "prior_family_evidence": "validation/v2-yunsuan-scalar-family-results.json",
+      "direct_status": "PASS",
+      "verilator_status": "PASS",
+      "yosys_status": "PASS"
+    },
+    {
+      "family_id": "dependency.huancun.cache",
+      "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.HuanCun.Cache-Hardware.py",
+      "scala_path_count": 43,
+      "scala_paths_manifest": "V2-Dependency-Family-Inventory.json#/families/dependency.huancun.cache/source_paths",
+      "target_sha256": "156399a8d830b10e051c1d56daae672d7e35a8022d5feae6283c95f7f01683ed",
+      "target_bytes": 21781,
+      "target_lines": 398,
+      "implementation": [
+        "set/way valid-dirty-tag-data arrays",
+        "per-set round-robin replacement",
+        "one-outstanding miss with source/address retention",
+        "write-back eviction and full-address refill",
+        "partial-line byte-mask merge and refill response pulse"
+      ],
+      "direct_status": "PASS",
+      "direct_vectors": 3,
+      "verilator_status": "PASS",
+      "yosys_status": "PASS",
+      "checkpoint_rtl_bytes": 268222
+    }
+  ],
+  "scala_coverage": {
+    "closure_view_count": 48,
+    "unique_minimum_count": 43,
+    "requirement_minimum": 25,
+    "meets_requirement": true
+  },
+  "checks": {
+    "ast_parse": "PASS",
+    "py_compile": "PASS",
+    "exact_path_import": "PASS",
+    "build_verilog": "PASS",
+    "pyright": {
+      "status": "PASS",
+      "error_count": 0,
+      "targets": [
+        "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.YunSuan.Scalar-Hardware.py",
+        "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.HuanCun.Cache-Hardware.py"
+      ]
+    },
+    "family_checkpoints": {
+      "huancun_cache_verilator": "PASS",
+      "huancun_cache_yosys": "PASS",
+      "yunsuan_scalar_verilator_reused": "PASS",
+      "yunsuan_scalar_yosys_reused": "PASS"
+    }
+  },
+  "commands": [
+    "python -m py_compile <two aggregate Build paths>",
+    "python validation/v2_huancun_cache_family_validator.py",
+    "pyright --project pyright.json <two aggregate Build paths>",
+    "build_verilog({mode: aggregate})",
+    "verilator --lint-only -Wno-fatal --top-module UHSCHuanCunCache",
+    "yosys -Q -p 'read_verilog -sv; hierarchy -top UHSCHuanCunCache; proc; check'"
+  ],
+  "pending": [
+    "HuanCun inclusive MSHR and non-inclusive bridge wave",
+    "full FPCVT/vector CVT64 parent closure",
+    "full XSTop integration and license review"
+  ],
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED_FAMILY",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "PARENT_CLOSURE_MATCHED": "PENDING",
+    "LICENSE_REVIEW": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "acceptance_eligible": false
+}
