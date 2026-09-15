@@ -32,7 +32,7 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
-from typing import Any, Iterable, Mapping
+from typing import Any, Iterable, Mapping, cast
 
 from amaranth.sim import Settle, Simulator
 
@@ -200,8 +200,14 @@ def parse_generated_ports(text: str, module_name: str) -> list[dict[str, object]
 def schema_comparison(reference: Iterable[Mapping[str, object]], candidate: Iterable[Mapping[str, object]]) -> dict[str, object]:
     """Compare named port maps; order is intentionally not a behavioral gate."""
 
-    expected = {str(port["name"]): (str(port["direction"]), int(port["width"])) for port in reference}
-    actual = {str(port["name"]): (str(port["direction"]), int(port["width"])) for port in candidate}
+    expected = {
+        str(port["name"]): (str(port["direction"]), int(cast(int, port["width"])))
+        for port in reference
+    }
+    actual = {
+        str(port["name"]): (str(port["direction"]), int(cast(int, port["width"])))
+        for port in candidate
+    }
     missing = sorted(set(expected) - set(actual))
     extra = sorted(set(actual) - set(expected))
     mismatches = [
@@ -235,7 +241,10 @@ def handshake_contract(reference: Iterable[Mapping[str, object]], candidate: Ite
             if match is None:
                 continue
             key = f"{match.group('bus')}_{match.group('channel')}"
-            result.setdefault(key, {})[match.group("role")] = (str(port["direction"]), int(port["width"]))
+            result.setdefault(key, {})[match.group("role")] = (
+                str(port["direction"]),
+                int(cast(int, port["width"])),
+            )
         return result
 
     expected = pairs(reference)
@@ -257,8 +266,16 @@ def handshake_contract(reference: Iterable[Mapping[str, object]], candidate: Ite
             continue
         ref_pair = ref.get("valid"), ref.get("ready")
         got_pair = got.get("valid"), got.get("ready")
-        well_formed = all(item is not None and item[1] == 1 for item in (*ref_pair, *got_pair))
-        opposite = well_formed and ref_pair[0][0] != ref_pair[1][0] and got_pair[0][0] != got_pair[1][0]
+        if all(item is not None and item[1] == 1 for item in (*ref_pair, *got_pair)):
+            ref_valid = cast(tuple[str, int], ref_pair[0])
+            ref_ready = cast(tuple[str, int], ref_pair[1])
+            got_valid = cast(tuple[str, int], got_pair[0])
+            got_ready = cast(tuple[str, int], got_pair[1])
+            well_formed = True
+            opposite = ref_valid[0] != ref_ready[0] and got_valid[0] != got_ready[0]
+        else:
+            well_formed = False
+            opposite = False
         exact = ref_pair == got_pair
         record["status"] = "PASS" if well_formed and opposite and exact else "FAIL"
         record["orientation"] = "OPPOSITE_EXTERNAL_DIRECTIONS" if opposite else "INVALID"
@@ -305,7 +322,7 @@ def render_reference_carrier(module_name: str, ports: Iterable[Mapping[str, obje
     assembly.
     """
 
-    rows = list(ports)
+    rows: list[dict[str, Any]] = [dict(cast(Mapping[str, Any], port)) for port in ports]
     lines = [f"module {module_name}("]
     for index, port in enumerate(rows):
         width = int(port["width"])
@@ -334,8 +351,14 @@ def windows_to_wsl(path: Path) -> str:
     raise RuntimeError(f"cannot translate path to WSL: {path}")
 
 
-def tail(value: str | None, limit: int = 3000) -> str:
-    return (value or "")[-limit:]
+def tail(value: str | bytes | None, limit: int = 3000) -> str:
+    """Return a bounded text tail, decoding timeout payloads when needed."""
+
+    if value is None:
+        return ""
+    if isinstance(value, bytes):
+        value = value.decode("utf-8", "replace")
+    return value[-limit:]
 
 
 def run_wsl(command: str, timeout_seconds: int = 180) -> dict[str, object]:
@@ -563,9 +586,10 @@ def main() -> int:
     }
     uhsc_ports = parse_generated_ports(uhsc_rtl, uhsc_name)
     source_ports = parse_generated_ports(source_rtl, source_name)
-    reference_contract_ports = parse_ansi_header(
-        re.search(rf"(?s)^module\s+{reference_name}\s*\(.*?\);", reference_rtl).group(0).encode("utf-8")
-    )
+    reference_match = re.search(rf"(?s)^module\s+{reference_name}\s*\(.*?\);", reference_rtl)
+    if reference_match is None:
+        raise ValueError(f"missing reference module header: {reference_name}")
+    reference_contract_ports = parse_ansi_header(reference_match.group(0).encode("utf-8"))
     envelopes = {
         "UHSCTop": {
             "port_contract": schema_comparison(parsed_ports, uhsc_ports),
@@ -595,8 +619,9 @@ def main() -> int:
         record.get("classification") == "FAIL_UNEXPECTED_REFERENCE_TOOL_ERROR"
         for record in raw_reference.values() if isinstance(record, dict)
     )
+    direct_status = str(direct["status"])
     structural_pass = reference_integrity["status"] == "PASS" and inventory_header["status"] == "PASS" \
-        and direct["status"].startswith("PASS") and all(item["status"] == "PASS" for item in envelopes.values())
+        and direct_status.startswith("PASS") and all(item["status"] == "PASS" for item in envelopes.values())
     status = "PASS_BOUNDED_FULL_TOP_PORT_CONTRACT_PENDING_BEHAVIOR" if structural_pass and not unexpected_raw_failure \
         else "FAIL_FULL_TOP_CONTRACT"
     payload = {
