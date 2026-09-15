@@ -92,6 +92,8 @@ class InclusiveMshrBoundary(Elaboratable):
         self.lookup_address = Signal(c.address_bits, name="io_lookup_address")
         self.lookup_hit = Signal(name="io_lookup_hit")
         self.refill_valid = Signal(name="io_refill_valid")
+        self.refill_ready = Signal(name="io_refill_ready")
+        self.refill_error = Signal(name="io_refill_error")
         self.refill_data = Signal(c.line_bits, name="io_refill_data")
         self.refill_source = Signal(c.source_bits, name="io_refill_source")
         self.resp_valid = Signal(name="io_resp_valid")
@@ -127,15 +129,17 @@ class InclusiveMshrBoundary(Elaboratable):
         occupancy_expr = sum((amaranth_value(used[index]) for index in range(c.entries)), 0)
         m.d.comb += [self.alloc_ready.eq(~self.flush & alloc_found), self.alloc_index.eq(alloc_choice),
                      self.lookup_hit.eq(self.lookup_valid & lookup_found), self.occupancy.eq(occupancy_expr),
-                     self.resp_valid.eq(self.refill_valid & lookup_found), self.resp_data.eq(Array(data_mem)[lookup_choice]),
+                     self.refill_ready.eq(~self.flush & lookup_found),
+                     self.resp_valid.eq(self.refill_valid & self.refill_ready), self.resp_data.eq(Array(data_mem)[lookup_choice]),
                      self.resp_source.eq(Array(source_mem)[lookup_choice])]
         with amaranth_if(m, self.reset | self.flush):
             m.d.huancun_mshr += used.eq(0)
         with amaranth_else(m):
             with amaranth_if(m, self.alloc_valid & self.alloc_ready):
                 m.d.huancun_mshr += [Array(used)[alloc_choice].eq(1), Array(addr_mem)[alloc_choice].eq(self.alloc_address), Array(source_mem)[alloc_choice].eq(self.alloc_source), alloc_index.eq(alloc_choice)]
-            with amaranth_if(m, self.refill_valid & lookup_found):
+            with amaranth_if(m, self.refill_valid & self.refill_ready):
                 m.d.huancun_mshr += [Array(data_mem)[lookup_choice].eq(self.refill_data), Array(used)[lookup_choice].eq(0), free_index.eq(lookup_choice)]
+            m.d.comb += self.refill_error.eq(self.refill_valid & ~self.refill_ready & ~self.flush)
         return m
 
 
@@ -164,7 +168,7 @@ def build_verilog(configuration, injected_dependencies):
     top = InclusiveMshrBoundary(cfg)
     ports = [top.clock, top.reset, top.flush, top.alloc_valid, top.alloc_ready, top.alloc_address,
              top.alloc_source, top.alloc_index, top.lookup_valid, top.lookup_address, top.lookup_hit,
-             top.refill_valid, top.refill_data, top.refill_source, top.resp_valid, top.resp_data,
+             top.refill_valid, top.refill_ready, top.refill_error, top.refill_data, top.refill_source, top.resp_valid, top.resp_data,
              top.resp_source, top.occupancy]
     return verilog.convert(top, name=name, ports=ports, emit_src=False)
 
