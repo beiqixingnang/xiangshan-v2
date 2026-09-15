@@ -36,6 +36,8 @@ __all__ = [
     "UHSCCoreBackend",
     "BackendParent",
     "BackendFullTop",
+    "BACKEND_PARENT_SOURCE_PATHS",
+    "backend_parent_contract",
     "full_backend_port_schema",
     "backend_parent_model",
     "build_verilog",
@@ -86,6 +88,56 @@ class BackendTopConfig:
 BACKEND_REFERENCE_PORT_COUNT = 1165
 BACKEND_REFERENCE_INPUT_COUNT = 478
 BACKEND_REFERENCE_OUTPUT_COUNT = 687
+
+# Frozen V2 sources that form the executable Backend parent aggregate. /
+# 构成可执行 Backend 父级聚合的冻结 V2 源路径。
+#
+# These paths are deliberately the seven source-evidence entries from the
+# parent-closure readiness inventory.  They cover the parent, datapath,
+# writeback, and decode boundaries without pretending that every inlined
+# backend child is already behaviorally rewritten.
+BACKEND_PARENT_SOURCE_PATHS: tuple[str, ...] = (
+    "upstream/src/main/scala/xiangshan/backend/Backend.scala",
+    "upstream/src/main/scala/xiangshan/backend/datapath/DataPath.scala",
+    "upstream/src/main/scala/xiangshan/backend/datapath/DataSource.scala",
+    "upstream/src/main/scala/xiangshan/backend/datapath/NewPipelineConnect.scala",
+    "upstream/src/main/scala/xiangshan/backend/datapath/WbArbiter.scala",
+    "upstream/src/main/scala/xiangshan/backend/decode/DecodeUnit.scala",
+    "upstream/src/main/scala/xiangshan/backend/decode/DecodeStage.scala",
+)
+
+# Return the machine-readable parent contract consumed by landing evidence. /
+# 返回落地证据使用的机器可读父级契约。
+def backend_parent_contract() -> dict[str, Any]:
+    """Describe the Backend aggregate and its intentionally open child gates. / 描述 Backend 聚合及明确保持开放的子级门禁。"""
+    return {
+        "closure_root": "core.backend.parent",
+        "root_module": "Backend",
+        "source_paths": list(BACKEND_PARENT_SOURCE_PATHS),
+        "covered_children": [
+            "DataPath",
+            "DataSource",
+            "NewPipelineConnect",
+            "WbArbiter/WbDataPath",
+            "DecodeUnit",
+            "DecodeStage",
+        ],
+        "observation_points": [
+            "frontend-to-backend ready/valid",
+            "dispatch register and flush",
+            "EXU writeback class/port arbitration",
+            "decode and issue child attachment status",
+            "redirect and exception propagation",
+        ],
+        "port_envelope": {
+            "reduced": 134,
+            "locked": BACKEND_REFERENCE_PORT_COUNT,
+            "locked_inputs": BACKEND_REFERENCE_INPUT_COUNT,
+            "locked_outputs": BACKEND_REFERENCE_OUTPUT_COUNT,
+        },
+        "status": "STRUCTURE_LANDED_BEHAVIOR_PENDING",
+        "accepted": False,
+    }
 
 
 # Load the exact locked Backend port names and widths. / 加载锁定 Backend 端口名称与位宽。
@@ -205,6 +257,7 @@ class BackendTop(Elaboratable):
         self.child_issue_can_enq = Signal(22, name="io_child_issue_canEnq")
         self.child_issue_selected_valid = Signal(name="io_child_issue_selected_valid")
         self.child_issue_selected_bits = Signal(22, name="io_child_issue_selected_bits")
+        self.child_datapath_active = Signal(name="io_child_datapath_active")
         self.child_writeback_active = Signal(name="io_child_writeback_active")
         self.child_writeback_valid = [Signal(name=f"io_child_writeback_{i}_valid") for i in range(5)]
         self.child_writeback_data = [Signal(cfg.data_width, name=f"io_child_writeback_{i}_data") for i in range(5)]
@@ -365,6 +418,10 @@ class BackendTop(Elaboratable):
         # builds can be injected without imports or hidden global state.
         if self.datapath is not None:
             module.submodules.datapath = self.datapath
+            # Make datapath injection visible at the parent boundary without
+            # assuming a particular child port shape.
+            # 在不假设子级端口形状的前提下，让数据通路注入在父边界可见。
+            module.d.comb += self.child_datapath_active.eq(1)
             for child_attr, parent_signal in (("flush", self.flush),):
                 child_signal = getattr(self.datapath, child_attr, None)
                 if child_signal is not None:
@@ -405,6 +462,7 @@ class BackendTop(Elaboratable):
             self.child_issue_can_enq.eq(0),
             self.child_issue_selected_valid.eq(0),
             self.child_issue_selected_bits.eq(0),
+            self.child_datapath_active.eq(0),
             self.child_writeback_active.eq(0),
         ]
         for signal in (*self.child_writeback_valid, *self.child_writeback_data, *self.child_writeback_pdest):
@@ -569,7 +627,7 @@ def build_verilog(configuration, injected_dependencies):
     ports += [top.child_decode_active, top.child_decode_instruction, top.child_decode_matches,
               top.child_issue_active, top.child_issue_free_slots, top.child_issue_can_enq,
               top.child_issue_selected_valid, top.child_issue_selected_bits,
-              top.child_writeback_active] + top.child_writeback_valid + top.child_writeback_data + top.child_writeback_pdest
+              top.child_datapath_active, top.child_writeback_active] + top.child_writeback_valid + top.child_writeback_data + top.child_writeback_pdest
     name = str(config.get("name", config.get("module", "UHSCBackendTop")))
     return verilog.convert(top, name=name, ports=ports)
 
