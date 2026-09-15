@@ -488,6 +488,7 @@ def main() -> int:
         "batch_id": BATCH_ID,
         "family_id": FAMILY_ID,
         "source_commit": SOURCE_COMMIT,
+        "locked_xstop_sha256": LOCKED_XSTOP_SHA256,
         "target": {
             "path": TARGET.relative_to(ROOT).as_posix(),
             "sha256": static["sha256"],
