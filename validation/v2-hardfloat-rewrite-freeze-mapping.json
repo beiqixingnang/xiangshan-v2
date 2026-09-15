@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_HARDFLOAT_REWRITE_FREEZE_MAPPING",
+  "phase": "REWRITE_FREEZE",
+  "batch_id": "V2-DEPENDENCY-HARDFLOAT-001",
+  "family_id": "dependency.hardfloat",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "source_root": "upstream/rocket-chip/hardfloat/hardfloat/src/main/scala",
+  "source_scala_file_count": 20,
+  "source_paths": [
+    "rocket-chip/hardfloat/hardfloat/src/main/scala/AddRecFN.scala",
+    "rocket-chip/hardfloat/hardfloat/src/main/scala/classifyRecFN.scala",
+    "rocket-chip/hardfloat/hardfloat/src/main/scala/common.scala",
+    "rocket-chip/hardfloat/hardfloat/src/main/scala/CompareRecFN.scala",
+    "rocket-chip/hardfloat/hardfloat/src/main/scala/DivSqrtRecF64.scala",
+    "rocket-chip/hardfloat/hardfloat/src/main/scala/DivSqrtRecF64_mulAddZ31.scala",
+    "rocket-chip/hardfloat/hardfloat/src/main/scala/DivSqrtRecFN_small.scala",
+    "rocket-chip/hardfloat/hardfloat/src/main/scala/fNFromRecFN.scala",
+    "rocket-chip/hardfloat/hardfloat/src/main/scala/INToRecFN.scala",
+    "rocket-chip/hardfloat/hardfloat/src/main/scala/MulAddRecFN.scala",
+    "rocket-chip/hardfloat/hardfloat/src/main/scala/MulRecFN.scala",
+    "rocket-chip/hardfloat/hardfloat/src/main/scala/primitives.scala",
+    "rocket-chip/hardfloat/hardfloat/src/main/scala/rawFloatFromFN.scala",
+    "rocket-chip/hardfloat/hardfloat/src/main/scala/rawFloatFromIN.scala",
+    "rocket-chip/hardfloat/hardfloat/src/main/scala/rawFloatFromRecFN.scala",
+    "rocket-chip/hardfloat/hardfloat/src/main/scala/recFNFromFN.scala",
+    "rocket-chip/hardfloat/hardfloat/src/main/scala/RecFNToIN.scala",
+    "rocket-chip/hardfloat/hardfloat/src/main/scala/RecFNToRecFN.scala",
+    "rocket-chip/hardfloat/hardfloat/src/main/scala/resizeRawFloat.scala",
+    "rocket-chip/hardfloat/hardfloat/src/main/scala/RoundAnyRawFNToRecFN.scala"
+  ],
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Rocket.Hardfloat-Hardware.py",
+    "sha256": "833ca20f59b79302bcf3f12aac43d887b48982e6c79a3500a183f1326f849a64"
+  },
+  "disposition": "AGGREGATED_FAMILY_BOUNDARY",
+  "boundary": {
+    "implemented_contracts": [
+      "IEEE sign/exponent/fraction packing and zero/subnormal/Inf/NaN classification",
+      "combinational equality and sign-aware magnitude comparison observations",
+      "bounded primitive operation result mux used by Rocket/Fudian adapters"
+    ],
+    "source_backed_metadata": [
+      "classifyRecFN.scala",
+      "CompareRecFN.scala",
+      "rawFloatFromFN.scala",
+      "rawFloatFromRecFN.scala",
+      "recFNFromFN.scala",
+      "RecFNToIN.scala"
+    ],
+    "explicitly_deferred_closure": [
+      "AddRecFN.scala",
+      "DivSqrtRecF64.scala",
+      "DivSqrtRecF64_mulAddZ31.scala",
+      "DivSqrtRecFN_small.scala",
+      "MulAddRecFN.scala",
+      "MulRecFN.scala",
+      "RoundAnyRawFNToRecFN.scala",
+      "resizeRawFloat.scala",
+      "RecFNToRecFN.scala",
+      "INToRecFN.scala",
+      "rawFloatFromIN.scala",
+      "primitives.scala",
+      "common.scala"
+    ],
+    "deferred_reason": "Iterative div/sqrt, FMA, recFN recoding, rounding, and selected Rocket FPU parent wiring require parent-level reference closure; they are not silently represented by this bounded boundary."
+  },
+  "localization": [
+    {
+      "source_name": "HardFloat aggregate boundary",
+      "local_name": "UHSCHardFloatPrimitive",
+      "visibility": "generated HDL top",
+      "reason": "UHSC project-facing family Build export while retaining source names in provenance"
+    }
+  ],
+  "evidence": {
+    "rewrite_freeze_basic": "validation/v2-hardfloat-rewrite-freeze-basic-results.json",
+    "bounded_family_validation": "validation/v2-hardfloat-family-results.json"
+  },
+  "gates": {
+    "UTF8_LF": "PASS",
+    "FIVE_ZONE_BILINGUAL_AUDIT": "PASS",
+    "AST": "PASS",
+    "PY_COMPILE": "PASS",
+    "EXACT_PATH_IMPORT_NO_SIDE_EFFECTS": "PASS",
+    "PYRIGHT": "PASS",
+    "DETERMINISTIC_SAME_NAME_BUILD_VERILOG": "PASS",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "REWRITE_FREEZE_BASIC": "PASS",
+    "STRUCTURE_VERIFIED": "PASS",
+    "BEHAVIOR_VERIFIED_dependency.hardfloat": "PENDING_BATCH_VALIDATION",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "structure_status": "PASS",
+  "behavior_status": "PENDING_BATCH_VALIDATION",
+  "unclosed": [
+    "Full HardFloat div/sqrt/FMA and recFN-rounding closure remains pending.",
+    "Rocket FPU parent and locked XSTop differential remain pending.",
+    "BSD attribution/license review and user approval remain pending."
+  ],
+  "accepted": false,
+  "acceptance_eligible": false
+}

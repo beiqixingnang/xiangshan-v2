@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_HARDFLOAT_REWRITE_FREEZE_BASIC",
+  "phase": "REWRITE_FREEZE",
+  "batch_id": "V2-DEPENDENCY-HARDFLOAT-001",
+  "family_id": "dependency.hardfloat",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Rocket.Hardfloat-Hardware.py",
+    "sha256": "833ca20f59b79302bcf3f12aac43d887b48982e6c79a3500a183f1326f849a64"
+  },
+  "static": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Rocket.Hardfloat-Hardware.py",
+    "sha256": "833ca20f59b79302bcf3f12aac43d887b48982e6c79a3500a183f1326f849a64",
+    "bytes": 7801,
+    "utf8_lf": true,
+    "ast": true,
+    "five_zone_order": true,
+    "bilingual_function_comments": true,
+    "function_comment_errors": [],
+    "forbidden_imports": [],
+    "zones": {
+      "Module Contract": 709,
+      "Configuration": 1024,
+      "Implementation": 1725,
+      "Public Adapter": 6110,
+      "Direct Entry": 7237
+    },
+    "pass": true
+  },
+  "py_compile": {
+    "status": "PASS",
+    "bytecode_bytes": 10162
+  },
+  "exact_path_import": {
+    "status": "PASS",
+    "stdout_bytes": 0,
+    "stderr_bytes": 0,
+    "cwd_unchanged": true,
+    "environment_unchanged": true,
+    "sys_path_unchanged": true,
+    "target_directory_unchanged": true,
+    "foreign_modules": []
+  },
+  "pyright": {
+    "status": "PASS",
+    "version": "1.1.411",
+    "error_count": 0,
+    "warning_count": 0
+  },
+  "build_verilog": {
+    "status": "PASS",
+    "configuration": {
+      "module": "UHSCHardFloatPrimitive",
+      "exp_width": 8,
+      "sig_width": 24
+    },
+    "same_name": "UHSCHardFloatPrimitive",
+    "module_name": "UHSCHardFloatPrimitive",
+    "deterministic_export": true,
+    "rtl_bytes": 2994,
+    "rtl_sha256": "4a1600d1088bad3e368fdaf88725b399b7d1223f0275248bfe6ef9e8cab01b44"
+  },
+  "verilog_syntax": {
+    "status": "PASS",
+    "cache": "HIT_REUSED",
+    "cache_key": "46698005f2e204acb917dfaeac3d80a25c5dcc8bc6e7a272a22a2364613469a7",
+    "verilator": {
+      "status": "PASS",
+      "returncode": 0,
+      "output_sha256": "9a6dd0c3ee5a5d55d78eeaba940639561873b735b5089f58d042fa1e67fd86a6",
+      "output_tail": "                                                                                                                                                                                                             : ... note: In instance 'UHSCHardFloatPrimitive'\n  106 |   assign \\$33  = io_operation == 1'h1;\n      |                               ^~\n%Warning-WIDTHEXPAND: <RTL>:108:31: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                                                                                                             : ... note: In instance 'UHSCHardFloatPrimitive'\n  108 |   assign \\$35  = io_operation == 2'h2;\n      |                               ^~\n"
+    },
+    "yosys": {
+      "status": "PASS",
+      "returncode": 0,
+      "output_sha256": "ebe4c7ccc93f17518c44d75b8928c19eb98305d0bd147f1499efe44113234578",
+      "output_tail": "ert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module UHSCHardFloatPrimitive.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module UHSCHardFloatPrimitive...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: c0e3a7b8d4, CPU: user 0.00s system 0.01s, MEM: 11.72 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 50% 2x read_verilog (0 sec), 18% 1x check (0 sec), ...\n"
+    }
+  },
+  "gates": {
+    "UTF8_LF": "PASS",
+    "FIVE_ZONE_BILINGUAL_AUDIT": "PASS",
+    "AST": "PASS",
+    "PY_COMPILE": "PASS",
+    "EXACT_PATH_IMPORT_NO_SIDE_EFFECTS": "PASS",
+    "PYRIGHT": "PASS",
+    "DETERMINISTIC_SAME_NAME_BUILD_VERILOG": "PASS",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "REWRITE_FREEZE_BASIC": "PASS",
+    "STRUCTURE_VERIFIED": "PASS",
+    "BEHAVIOR_VERIFIED_dependency.hardfloat": "PENDING_BATCH_VALIDATION",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "REWRITE_FREEZE_BASIC_PASS",
+  "unclosed": [
+    "Full HardFloat div/sqrt/FMA and recFN-rounding closure remains pending.",
+    "Rocket FPU parent and locked XSTop differential remain pending.",
+    "BSD attribution/license review and user approval remain pending."
+  ],
+  "acceptance_eligible": false
+}
