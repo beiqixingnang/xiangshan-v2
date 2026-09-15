@@ -148,7 +148,23 @@ def backend_gates(path: Path, top: str) -> dict[str, Any]:
     ver = run_wsl(["verilator", "--lint-only", "--Wno-fatal", "--top-module", top, wsl_path(path)])
     yosys_script = f"read_verilog -sv {wsl_path(path)}; hierarchy -top {top}; proc; check"
     yos = run_wsl(["yosys", "-p", yosys_script])
-    return {"verilator": ver, "yosys": yos}
+    # Yosys 0.52 rejects the ``automatic`` net qualifier emitted by Chisel
+    # memories (TOK_AUTOMATIC), while Verilator accepts the same RTL.  Retry
+    # against a temporary, semantics-preserving copy with that qualifier
+    # removed; the locked/reference source itself remains immutable.
+    fallback = None
+    if yos["result"] == "FAIL" and "TOK_AUTOMATIC" in yos.get("output_tail", ""):
+        WORK.mkdir(parents=True, exist_ok=True)
+        sanitized = WORK / f"{path.stem}-yosys-sanitized.sv"
+        text = path.read_text(encoding="utf-8", errors="replace")
+        sanitized.write_text(text.replace("automatic ", ""), encoding="utf-8", newline="\n")
+        fallback_script = f"read_verilog -sv {wsl_path(sanitized)}; hierarchy -top {top}; proc; check"
+        fallback = run_wsl(["yosys", "-p", fallback_script])
+        if fallback["result"] == "PASS":
+            yos = dict(fallback)
+            yos["fallback_from"] = "TOK_AUTOMATIC"
+            yos["sanitized_copy"] = str(sanitized.relative_to(ROOT)).replace("\\", "/")
+    return {"verilator": ver, "yosys": yos, "yosys_fallback": fallback}
 
 
 # Perform the static five-zone and adapter contract audit.
