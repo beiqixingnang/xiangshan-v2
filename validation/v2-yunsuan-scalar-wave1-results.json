@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_YUNSUAN_SCALAR_WAVE1",
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.YunSuan.Scalar-Hardware.py",
+    "aggregate": "dependency.yunsuan.scalar",
+    "behavior": "elastic arithmetic pipeline with fixed latency scoreboard and RISC-V NV/DZ/OF flags"
+  },
+  "source_scala_paths": [
+    "yunsuan/src/main/scala/yunsuan/scalar/Convert.scala",
+    "yunsuan/src/main/scala/yunsuan/scalar/FPU.scala",
+    "yunsuan/src/main/scala/yunsuan/scalar/IntToFP.scala",
+    "yunsuan/src/main/scala/yunsuan/scalar/RoundingUnit.scala",
+    "yunsuan/src/main/scala/yunsuan/scalar/utils.scala"
+  ],
+  "gates": {
+    "AST": "PASS",
+    "PY_COMPILE": "PASS",
+    "EXACT_IMPORT": "PASS",
+    "PYRIGHT": "PASS",
+    "BUILD_VERILOG": "PASS",
+    "BUILD_VERILOG_BYTES": 491152
+  },
+  "status": "PASS_BOUNDED_FAMILY",
+  "acceptance_eligible": false,
+  "accepted": "NOT_ALLOWED",
+  "pending": [
+    "full scalar reference differential",
+    "vector/FPU integration closure",
+    "license review and user approval"
+  ]
+}

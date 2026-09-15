@@ -59,6 +59,8 @@ __all__ = [
     "YunSuanIntToFP",
     "YunSuanINT2FP",
     "YunSuanFPCVT",
+    "YunSuanScalarArithmeticPipeline",
+    "YunSuanScalarPipe",
     "YunSuanScalarBoundary",
     "FPU",
     "RoundingUnit",
@@ -210,6 +212,7 @@ class YunSuanScalarConfig:
     rounding_width: int = 52
     default_exp_width: int = 11
     default_precision: int = 53
+    arithmetic_latency: int = 3
 
     # Validate finite source-compatible geometry. / 校验有限且兼容源码的几何参数。
     def __post_init__(self) -> None:
@@ -221,6 +224,8 @@ class YunSuanScalarConfig:
             raise ValueError("rounding width must be positive")
         if self.default_exp_width < 2 or self.default_precision < 2:
             raise ValueError("floating format widths must be positive")
+        if self.arithmetic_latency < 1:
+            raise ValueError("arithmetic latency must be positive")
 
 
 # =============================================================================
@@ -1050,6 +1055,144 @@ class YunSuanFPConvert(Elaboratable):
         return m
 
 
+# Build a fixed-latency decoupled scalar arithmetic pipeline. / 构造固定延迟解耦标量算术流水线。
+class YunSuanScalarArithmeticPipeline(Elaboratable):
+    """Execute scalar integer arithmetic with an elastic valid/ready shell.
+
+    The datapath is deliberately integer-width and deterministic; floating-point
+    conversion remains provided by :class:`YunSuanFPCVT`.  Every accepted input
+    advances through exactly ``latency`` registers when the sink is ready.  A
+    small occupancy scoreboard prevents accepting work after the pipeline is
+    full and records protocol underflow/overflow as ``scoreboard_error``.
+    """
+
+    # Construct decoupled arithmetic ports and scoreboard state. / 构造解耦算术端口与记分板状态。
+    def __init__(self, latency: int = 3, xlen: int = 64) -> None:
+        if latency < 1 or xlen != 64:
+            raise ValueError("scalar arithmetic requires latency>=1 and XLEN=64")
+        self.latency = latency
+        self.xlen = xlen
+        self.clock = Signal(name="clock")
+        self.reset = Signal(name="reset")
+        self.in_valid = Signal(name="io_arith_in_valid")
+        self.in_ready = Signal(name="io_arith_in_ready")
+        self.in_opcode = Signal(4, name="io_arith_in_opcode")
+        self.in_signed = Signal(name="io_arith_in_signed")
+        self.in_a = Signal(xlen, name="io_arith_in_a")
+        self.in_b = Signal(xlen, name="io_arith_in_b")
+        self.in_rm = Signal(3, name="io_arith_in_rm")
+        self.out_valid = Signal(name="io_arith_out_valid")
+        self.out_ready = Signal(name="io_arith_out_ready")
+        self.out_result = Signal(xlen, name="io_arith_out_result")
+        self.out_fflags = Signal(5, name="io_arith_out_fflags")
+        self.out_exception = Signal(name="io_arith_out_exception")
+        self.in_fire = Signal(name="io_arith_in_fire")
+        self.out_fire = Signal(name="io_arith_out_fire")
+        count_width = max(1, (latency + 1).bit_length())
+        self.scoreboard_count = Signal(count_width, name="io_arith_scoreboard_count")
+        self.scoreboard_error = Signal(name="io_arith_scoreboard_error")
+
+    # Elaborate arithmetic equations, elastic stages and fixed-latency scoreboard. / 展开算术方程、弹性级及固定延迟记分板。
+    def elaborate(self, platform: Any) -> Module:
+        del platform
+        m = Module()
+        domain = ClockDomain("scalar_arith", async_reset=True)
+        domain.clk = self.clock
+        domain.rst = self.reset
+        m.domains.scalar_arith = domain
+
+        # Opcode contract: 0 add, 1 sub, 2 mul, 3 div, 4 rem, 5 min, 6 max.
+        a = self.in_a
+        b = self.in_b
+        add_u = a + b
+        sub_u = a - b
+        add_ext = amaranth_value(Cat(Const(0), a)) + amaranth_value(Cat(Const(0), b))
+        mul_unsigned = a * b
+        a_signed = a.as_signed()
+        b_signed = b.as_signed()
+        mul_signed = a_signed * b_signed
+        div_signed = a_signed // b_signed
+        rem_signed = a_signed % b_signed
+        div_unsigned = a // b
+        rem_unsigned = a % b
+        # Divide-by-zero is defined by the RISC-V integer result convention.
+        div_zero = b == 0
+        signed_div_overflow = (self.in_signed & (a == Const(1 << (self.xlen - 1), self.xlen))
+                               & (b == Const((1 << self.xlen) - 1, self.xlen)))
+        div_result = Mux(div_zero, Const((1 << self.xlen) - 1, self.xlen),
+                         Mux(self.in_signed, div_signed, div_unsigned))
+        rem_result = Mux(div_zero, a, Mux(self.in_signed, rem_signed, rem_unsigned))
+        min_result = Mux(self.in_signed, Mux(a_signed < b_signed, a, b), Mux(a < b, a, b))
+        max_result = Mux(self.in_signed, Mux(a_signed > b_signed, a, b), Mux(a > b, a, b))
+        mul_result = Mux(self.in_signed, mul_signed, mul_unsigned)
+        arithmetic_result = Mux(self.in_opcode == 0, add_u,
+                            Mux(self.in_opcode == 1, sub_u,
+                            Mux(self.in_opcode == 2, mul_result,
+                            Mux(self.in_opcode == 3, div_result,
+                            Mux(self.in_opcode == 4, rem_result,
+                            Mux(self.in_opcode == 5, min_result,
+                            Mux(self.in_opcode == 6, max_result, a)))))))
+        add_overflow = Mux(self.in_signed,
+                           (a[63] == b[63]) & (arithmetic_result[63] != a[63]),
+                           add_ext[64])
+        sub_overflow = self.in_signed & ((a[63] != b[63]) & (arithmetic_result[63] != a[63]))
+        mul_high_unsigned = mul_unsigned[64:128]
+        mul_high_signed = mul_signed[64:128]
+        mul_overflow = Mux(self.in_signed,
+                           ~((mul_high_signed == 0) | (mul_high_signed == ((1 << 64) - 1))),
+                           mul_high_unsigned != 0)
+        overflow = ((self.in_opcode == 0) & add_overflow) | ((self.in_opcode == 1) & sub_overflow) | ((self.in_opcode == 2) & mul_overflow)
+        # fflags uses NV/DZ/OF/UF/NX in bits [4:0], matching RISC-V.
+        flags = (Const(0, 5) | (div_zero << 3) | (overflow << 2) | signed_div_overflow)
+        result_next = Signal(self.xlen, name="arith_result_next")
+        flags_next = Signal(5, name="arith_flags_next")
+        m.d.comb += [result_next.eq(arithmetic_result), flags_next.eq(flags)]
+
+        valid_regs = [Signal(name=f"arith_valid_{index}") for index in range(self.latency)]
+        result_regs = [Signal(self.xlen, name=f"arith_result_{index}") for index in range(self.latency)]
+        flags_regs = [Signal(5, name=f"arith_flags_{index}") for index in range(self.latency)]
+        ready_chain: list[Any] = [Const(0)] * self.latency
+        ready_chain[-1] = ~valid_regs[-1] | self.out_ready
+        for index in range(self.latency - 2, -1, -1):
+            ready_chain[index] = ~valid_regs[index] | ready_chain[index + 1]
+        in_fire = self.in_valid & ready_chain[0]
+        out_fire = valid_regs[-1] & self.out_ready
+        m.d.comb += [self.in_ready.eq(ready_chain[0]), self.in_fire.eq(in_fire),
+                     self.out_valid.eq(valid_regs[-1]), self.out_fire.eq(out_fire),
+                     self.out_result.eq(result_regs[-1]), self.out_fflags.eq(flags_regs[-1]),
+                     self.out_exception.eq(flags_regs[-1].any())]
+
+        with amaranth_if(m, self.reset):
+            m.d.scalar_arith += [self.scoreboard_count.eq(0), self.scoreboard_error.eq(0)]
+            for valid in valid_regs:
+                m.d.scalar_arith += valid.eq(0)
+            for result in result_regs:
+                m.d.scalar_arith += result.eq(0)
+            for flag in flags_regs:
+                m.d.scalar_arith += flag.eq(0)
+        with amaranth_else(m):
+            # Elastic movement: each stage loads its predecessor only when ready.
+            for index in range(self.latency - 1, -1, -1):
+                source_valid = in_fire if index == 0 else valid_regs[index - 1]
+                source_result = result_next if index == 0 else result_regs[index - 1]
+                source_flags = flags_next if index == 0 else flags_regs[index - 1]
+                with amaranth_if(m, ready_chain[index]):
+                    m.d.scalar_arith += [valid_regs[index].eq(source_valid),
+                                         result_regs[index].eq(source_result),
+                                         flags_regs[index].eq(source_flags)]
+            count_next = self.scoreboard_count + in_fire - out_fire
+            m.d.scalar_arith += self.scoreboard_count.eq(count_next)
+            with amaranth_if(m, out_fire & (self.scoreboard_count == 0)):
+                m.d.scalar_arith += self.scoreboard_error.eq(1)
+            with amaranth_if(m, in_fire & ~out_fire & (self.scoreboard_count == self.latency)):
+                m.d.scalar_arith += self.scoreboard_error.eq(1)
+        return m
+
+
+# Short source-compatible alias for scalar pipeline users. / 为标量流水线用户保留简短源码兼容别名。
+YunSuanScalarPipe = YunSuanScalarArithmeticPipeline
+
+
 # Build the aggregate family boundary. / 构造聚合 family 边界。
 class YunSuanScalarBoundary(Elaboratable):
     # Resolve runtime-created ports for static type checking. / 为静态类型检查解析运行时创建的端口。
@@ -1097,6 +1240,22 @@ class YunSuanScalarBoundary(Elaboratable):
         self.fcvt_sew = Signal(2, name="io_fcvt_sew")
         self.fcvt_result = Signal(64, name="io_fcvt_result")
         self.fcvt_flags = Signal(5, name="io_fcvt_fflags")
+        # Decoupled arithmetic sideband; existing conversion ports stay unchanged.
+        self.arith_in_valid = Signal(name="io_arith_in_valid")
+        self.arith_in_ready = Signal(name="io_arith_in_ready")
+        self.arith_in_opcode = Signal(4, name="io_arith_in_opcode")
+        self.arith_in_signed = Signal(name="io_arith_in_signed")
+        self.arith_in_a = Signal(64, name="io_arith_in_a")
+        self.arith_in_b = Signal(64, name="io_arith_in_b")
+        self.arith_in_rm = Signal(3, name="io_arith_in_rm")
+        self.arith_out_valid = Signal(name="io_arith_out_valid")
+        self.arith_out_ready = Signal(name="io_arith_out_ready")
+        self.arith_out_result = Signal(64, name="io_arith_out_result")
+        self.arith_out_fflags = Signal(5, name="io_arith_out_fflags")
+        self.arith_out_exception = Signal(name="io_arith_out_exception")
+        self.arith_scoreboard_count = Signal(max(1, (self.configuration.arithmetic_latency + 1).bit_length()),
+                                              name="io_arith_scoreboard_count")
+        self.arith_scoreboard_error = Signal(name="io_arith_scoreboard_error")
 
     # Elaborate all independent family closures. / 展开所有相互独立的 family 闭包。
     def elaborate(self, platform: Any) -> Module:
@@ -1109,12 +1268,14 @@ class YunSuanScalarBoundary(Elaboratable):
         integer = YunSuanIntToFP(c.default_exp_width, c.default_precision)
         int2fp = YunSuanINT2FP(c.int2fp_latency, c.xlen)
         fpcvt = YunSuanFPCVT(c.xlen)
+        arithmetic = YunSuanScalarArithmeticPipeline(c.arithmetic_latency, c.xlen)
         m.submodules.rounding = rounding
         m.submodules.lza = lza
         m.submodules.clz = clz
         m.submodules.integer = integer
         m.submodules.int2fp = int2fp
         m.submodules.fpcvt = fpcvt
+        m.submodules.arithmetic = arithmetic
         boxed_integer = integer.result
         # The aggregate integer port is a 64-bit staging payload; boxing is
         # selected by the caller's explicit type in the dedicated converter.
@@ -1136,7 +1297,17 @@ class YunSuanScalarBoundary(Elaboratable):
                      fpcvt.clock.eq(self.clock), fpcvt.reset.eq(self.reset), fpcvt.fire.eq(self.fire),
                      fpcvt.src.eq(self.fcvt_src), fpcvt.op_type.eq(self.fcvt_op_type),
                      fpcvt.sew.eq(self.fcvt_sew), fpcvt.rm.eq(self.rm),
-                     self.fcvt_result.eq(fpcvt.result), self.fcvt_flags.eq(fpcvt.fflags)]
+                     self.fcvt_result.eq(fpcvt.result), self.fcvt_flags.eq(fpcvt.fflags),
+                     arithmetic.clock.eq(self.clock), arithmetic.reset.eq(self.reset),
+                     arithmetic.in_valid.eq(self.arith_in_valid), arithmetic.in_opcode.eq(self.arith_in_opcode),
+                     arithmetic.in_signed.eq(self.arith_in_signed), arithmetic.in_a.eq(self.arith_in_a),
+                     arithmetic.in_b.eq(self.arith_in_b), arithmetic.in_rm.eq(self.arith_in_rm),
+                     arithmetic.out_ready.eq(self.arith_out_ready),
+                     self.arith_in_ready.eq(arithmetic.in_ready), self.arith_out_valid.eq(arithmetic.out_valid),
+                     self.arith_out_result.eq(arithmetic.out_result), self.arith_out_fflags.eq(arithmetic.out_fflags),
+                     self.arith_out_exception.eq(arithmetic.out_exception),
+                     self.arith_scoreboard_count.eq(arithmetic.scoreboard_count),
+                     self.arith_scoreboard_error.eq(arithmetic.scoreboard_error)]
         return m
 
 
@@ -1196,6 +1367,12 @@ def build_verilog(configuration: YunSuanScalarConfig | Mapping[str, Any] | None,
         top = YunSuanFPCVT(cfg.xlen)
         ports = [top.clock, top.reset, top.fire, top.src, top.op_type, top.sew,
                  top.rm, top.is_fround, top.is_fcvtmod, top.result, top.fflags]
+    elif mode in ("arithmetic", "scalar_arithmetic", "scalar_pipe"):
+        top = YunSuanScalarArithmeticPipeline(cfg.arithmetic_latency, cfg.xlen)
+        ports = [top.clock, top.reset, top.in_valid, top.in_ready, top.in_opcode,
+                 top.in_signed, top.in_a, top.in_b, top.in_rm, top.out_valid,
+                 top.out_ready, top.out_result, top.out_fflags, top.out_exception,
+                 top.in_fire, top.out_fire, top.scoreboard_count, top.scoreboard_error]
     else:
         top = YunSuanScalarBoundary(cfg)
         ports = [top.clock, top.reset, top.fire, top.round_input, top.round_in,
@@ -1205,7 +1382,11 @@ def build_verilog(configuration: YunSuanScalarConfig | Mapping[str, Any] | None,
                  top.int_flags, top.int2fp_src, top.int2fp_op_type, top.int2fp_rm,
                  top.int2fp_wflags, top.int2fp_rm_inst, *top.int2fp_reg_enables,
                  top.int2fp_result, top.int2fp_flags, top.fcvt_src, top.fcvt_op_type, top.fcvt_sew,
-                 top.fcvt_result, top.fcvt_flags]
+                 top.fcvt_result, top.fcvt_flags, top.arith_in_valid, top.arith_in_ready,
+                 top.arith_in_opcode, top.arith_in_signed, top.arith_in_a, top.arith_in_b,
+                 top.arith_in_rm, top.arith_out_valid, top.arith_out_ready, top.arith_out_result,
+                 top.arith_out_fflags, top.arith_out_exception, top.arith_scoreboard_count,
+                 top.arith_scoreboard_error]
     return verilog.convert(top, name=name, ports=ports, emit_src=False)
 
 
