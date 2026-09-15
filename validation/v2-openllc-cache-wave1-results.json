@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_OPENLLC_CACHE_WAVE1",
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.OpenLLC.Cache-Hardware.py",
+    "aggregate": "dependency.openllc.cache",
+    "behavior": "2-way set/way hit-miss-refill-evict FSM with dirty writeback and byte-mask merge"
+  },
+  "source_scala_paths": [
+    "openLLC/src/main/scala/Cache.scala",
+    "openLLC/src/main/scala/CacheData.scala",
+    "openLLC/src/main/scala/CacheMeta.scala",
+    "openLLC/src/main/scala/Replacement.scala",
+    "openLLC/src/main/scala/BankedDataArray.scala"
+  ],
+  "gates": {
+    "AST": "PASS",
+    "PY_COMPILE": "PASS",
+    "EXACT_IMPORT": "PASS",
+    "PYRIGHT": "PASS",
+    "BUILD_VERILOG_SMALL_CONFIGURATION": "PASS",
+    "BUILD_VERILOG_DEFAULT_CONFIGURATION": "NOT_RUN_LARGE_BOUNDARY"
+  },
+  "status": "PASS_BOUNDED_FAMILY",
+  "acceptance_eligible": false,
+  "accepted": "NOT_ALLOWED",
+  "pending": [
+    "default full-width export checkpoint",
+    "locked reference differential",
+    "full OpenLLC/CoupledL2 integration",
+    "license review and user approval"
+  ]
+}

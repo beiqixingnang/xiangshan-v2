@@ -13,7 +13,7 @@ from contextlib import AbstractContextManager
 from dataclasses import dataclass, field
 from typing import Any, Iterable, Mapping, Sequence, cast
 
-from amaranth import Array, ClockDomain, Const, Elaboratable, Memory, Module, Mux, Signal
+from amaranth import Array, Cat, ClockDomain, Const, Elaboratable, Memory, Module, Mux, Signal
 from amaranth.back import verilog
 from amaranth.hdl.ast import Value
 
@@ -600,6 +600,14 @@ class OpenLLCSlice(Elaboratable):
         self.resp_ready = Signal(name="io_resp_ready")
         self.resp_data = Signal(c.data_bits, name="io_resp_bits_data")
         self.l3_miss = Signal(name="io_l3Miss")
+        # Optional payload signals are retained on the slice boundary for
+        # byte-masked stores; the aggregate adapter leaves them at zero so the
+        # historical Build ABI (address/opcode only) remains unchanged.
+        self.req_data = Signal(c.data_bits, name="io_req_bits_data")
+        self.req_mask = Signal(c.block_bytes, name="io_req_bits_mask")
+        self.evict_valid = Signal(name="io_evict_valid")
+        self.evict_address = Signal(c.full_address_bits, name="io_evict_bits_address")
+        self.evict_data = Signal(c.data_bits, name="io_evict_bits_data")
 
     # Elaborate one cache bank. / 展开一个 cache bank。
     def elaborate(self, platform: Any) -> Module:
@@ -608,29 +616,112 @@ class OpenLLCSlice(Elaboratable):
         del platform
         c = self.configuration
         m = Module()
-        directory = OpenLLCDirectory(c)
-        pipeline = OpenLLCPipeline(c)
-        storage = OpenLLCDataStorage(c)
-        m.submodules.directory = directory
-        m.submodules.pipeline = pipeline
-        m.submodules.storage = storage
-        for child in (directory, pipeline, storage):
-            m.d.comb += [child.clock.eq(self.clock), child.reset.eq(self.reset)]
-        tag, set_index, _bank, offset = parse_address(0, c)
-        del tag, offset
+        # The original closure wired directory/pipeline/storage independently,
+        # which reported every lookup as a one-cycle miss.  This implementation
+        # keeps the same I/O but adds a real set/way transaction FSM:
+        # IDLE -> HIT_RESP or MISS_EVICT -> REFILL -> MISS_RESP.
+        depth = c.sets * c.ways
+        tags = [Signal(c.tag_bits, name=f"slice_tag_{i}") for i in range(depth)]
+        valids = [Signal(name=f"slice_valid_{i}") for i in range(depth)]
+        dirtys = [Signal(name=f"slice_dirty_{i}") for i in range(depth)]
+        datas = [Signal(c.data_bits, name=f"slice_data_{i}") for i in range(depth)]
+        state = Signal(3, name="slice_fsm_state")
+        pending_tag = Signal(c.tag_bits, name="slice_pending_tag")
+        pending_set = Signal(c.set_bits, name="slice_pending_set")
+        pending_way = Signal(max(1, (c.ways - 1).bit_length()), name="slice_pending_way")
+        pending_address = Signal(c.full_address_bits, name="slice_pending_address")
+        pending_opcode = Signal(8, name="slice_pending_opcode")
+        pending_data = Signal(c.data_bits, name="slice_pending_data")
+        pending_mask = Signal(c.block_bytes, name="slice_pending_mask")
+        response_data = Signal(c.data_bits, name="slice_response_data")
+        response_miss = Signal(name="slice_response_miss")
+
+        shift = c.offset_bits + c.bank_bits
+        req_tag = self.req_address[shift + c.set_bits:shift + c.set_bits + c.tag_bits]
+        req_set = self.req_address[shift:shift + c.set_bits]
+        hit_values: list[Value] = []
+        for way in range(c.ways):
+            index = req_set * c.ways + way
+            hit_values.append(Array(valids)[index] & (Array(tags)[index] == req_tag))
+        hit_any: Value = Const(0)
+        hit_way: Value = Const(0, len(pending_way))
+        selected_way: Value = Const(0, len(pending_way))
+        for way in range(c.ways):
+            index = req_set * c.ways + way
+            hit_any = hit_any | hit_values[way]
+            hit_way = Mux(hit_values[way], way, hit_way)
+            selected_way = Mux(~Array(valids)[index], way, selected_way)
+        selected_way = Mux(hit_any, hit_way, selected_way)
+        selected_index = pending_set * c.ways + pending_way
+        selected_data = Array(datas)[selected_index]
+        selected_dirty = Array(dirtys)[selected_index]
+
+        # Expand a byte mask into a block-wide value, preserving unselected
+        # lanes.  This is used for both hit stores and write-allocate refills.
+        def merge_bytes(base: Value, data: Value, mask: Value) -> Value:
+            merged: Value = base
+            for byte in range(c.block_bytes):
+                lo = byte * 8
+                lane = Mux(mask[byte], data[lo:lo + 8], merged[lo:lo + 8])
+                merged = Cat(merged[:lo], lane, merged[lo + 8:])
+            return merged
+
+        req_index = req_set * c.ways + selected_way
+        req_merged_data = merge_bytes(Array(datas)[req_index], self.req_data, self.req_mask)
+        refill_merged_data = merge_bytes(Const(0, c.data_bits), pending_data, pending_mask)
+
+        is_write = self.req_opcode[0]
+        pending_is_write = pending_opcode[0]
+        fire_req = self.req_valid & self.req_ready
+        fire_resp = self.resp_valid & self.resp_ready
         m.d.comb += [
-            self.req_ready.eq(pipeline.in_ready),
-            pipeline.in_valid.eq(self.req_valid), pipeline.in_address.eq(self.req_address),
-            pipeline.in_opcode.eq(self.req_opcode), pipeline.dir_hit.eq(directory.resp_hit),
-            pipeline.out_ready.eq(self.resp_ready), self.resp_valid.eq(pipeline.out_valid),
-            self.resp_data.eq(storage.read_data), self.l3_miss.eq(pipeline.out_miss),
-            directory.read_valid.eq(self.req_valid & self.req_ready),
-            directory.read_tag.eq(self.req_address >> (c.offset_bits + c.bank_bits + c.set_bits)),
-            directory.read_set.eq(self.req_address >> (c.offset_bits + c.bank_bits)),
-            storage.read_valid.eq(self.req_valid),
-            storage.read_index.eq((self.req_address >> c.offset_bits)[:len(storage.read_index)]),
+            self.req_ready.eq(state == 0),
+            self.resp_valid.eq((state == 1) | (state == 4)),
+            self.resp_data.eq(response_data), self.l3_miss.eq(response_miss),
+            self.evict_valid.eq(state == 2),
+            self.evict_address.eq(pending_address), self.evict_data.eq(selected_data),
         ]
-        del set_index
+        with amaranth_if(m, self.reset):
+            m.d.openllc_slice += [state.eq(0), response_data.eq(0), response_miss.eq(0)]
+            for idx in range(depth):
+                m.d.openllc_slice += [valids[idx].eq(0), dirtys[idx].eq(0), tags[idx].eq(0), datas[idx].eq(0)]
+        with amaranth_if(m, ~self.reset):
+            with amaranth_if(m, state == 0):
+                with amaranth_if(m, fire_req):
+                    m.d.openllc_slice += [pending_tag.eq(req_tag), pending_set.eq(req_set),
+                                 pending_way.eq(selected_way), pending_address.eq(self.req_address),
+                                 pending_opcode.eq(self.req_opcode), pending_data.eq(self.req_data),
+                                 pending_mask.eq(self.req_mask)]
+                    with amaranth_if(m, hit_any):
+                        m.d.openllc_slice += [response_data.eq(Mux(is_write, req_merged_data,
+                                                                   Array(datas)[req_index])),
+                                     response_miss.eq(0), state.eq(1)]
+                        with amaranth_if(m, is_write):
+                            m.d.openllc_slice += [Array(datas)[req_index].eq(req_merged_data),
+                                                 Array(dirtys)[req_index].eq(1)]
+                    with amaranth_if(m, ~hit_any & Array(valids)[req_set * c.ways + selected_way]
+                                     & Array(dirtys)[req_set * c.ways + selected_way]):
+                        m.d.openllc_slice += state.eq(2)
+                    with amaranth_if(m, ~hit_any & ~(Array(valids)[req_set * c.ways + selected_way]
+                                                    & Array(dirtys)[req_set * c.ways + selected_way])):
+                        m.d.openllc_slice += state.eq(3)
+            with amaranth_if(m, state == 1):
+                with amaranth_if(m, fire_resp):
+                    m.d.openllc_slice += state.eq(0)
+            with amaranth_if(m, state == 2):
+                # Eviction is observable for one cycle, then the line is refilled.
+                m.d.openllc_slice += state.eq(3)
+            with amaranth_if(m, state == 3):
+                # Deterministic zero-line refill; writes merge through the saved
+                # byte mask and mark the newly installed line dirty.
+                m.d.openllc_slice += [Array(tags)[selected_index].eq(pending_tag), Array(valids)[selected_index].eq(1),
+                             Array(dirtys)[selected_index].eq(pending_is_write),
+                             Array(datas)[selected_index].eq(refill_merged_data),
+                             response_data.eq(refill_merged_data),
+                             response_miss.eq(1), state.eq(4)]
+            with amaranth_if(m, state == 4):
+                with amaranth_if(m, fire_resp):
+                    m.d.openllc_slice += state.eq(0)
         return m
 
 
