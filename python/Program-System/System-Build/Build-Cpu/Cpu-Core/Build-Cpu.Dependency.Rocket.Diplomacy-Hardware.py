@@ -141,7 +141,7 @@ class AddressRange:
 
     # Render the original Scala JSON string form. / 生成原始 Scala JSON 字符串格式。
     def toJSON(self) -> str:
-        return json.dumps(self.to_json(), ensure_ascii=False, separators=(",", ":"))
+        return f'{{"base": {self.base}, "max": {self.end}}}'
 
     # Preserve the camel-case UVM helper exposed by Scala tooling. / 保留 Scala 工具暴露的
     # 驼峰命名 UVM 辅助方法。
@@ -549,7 +549,7 @@ class AddressMapEntry:
             "X" if permissions.executable else " ",
             "C" if permissions.cacheable else " ",
         ))
-        return f"\t{self.range.base:0{address_width}x} - {self.range.end:0{address_width}x} {flags} {', '.join(self.names)}"
+        return f"\t{self.range.base:{address_width}x} - {self.range.end:{address_width}x} {flags} {', '.join(self.names)}"
 
     # Render a JSON-compatible address-map row. / 生成 JSON 兼容的地址映射行。
     def to_json(self) -> dict[str, Any]:
@@ -858,6 +858,12 @@ class CreditedCrossing(ClockCrossingType):
 
     source_delay: CreditedDelay = field(default_factory=CreditedDelay)
     sink_delay: CreditedDelay = field(default_factory=CreditedDelay)
+
+    # Credit crossings remain synchronous from the protocol perspective. /
+    # 从协议视角看，Credit 跨越仍属于同步跨越。 /
+    @property
+    def same_clock(self) -> bool:
+        return True
 
 
 # =============================================================================
