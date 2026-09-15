@@ -413,21 +413,27 @@
   "implementation_policy": {
     "aggregation": "family_or_parent_closure; do_not_map_one_scala_to_one_python",
     "worker": "gpt-5.6-terra",
-    "worker_reasoning_effort": "max",
+    "worker_reasoning_effort": "high",
     "validator": "gpt-5.6-terra",
-    "validator_reasoning_effort": "max",
-    "parallelism": "non-overlapping workers; one serial independent validator",
+    "validator_reasoning_effort": "medium",
+    "parallelism": "non-overlapping workers; focused validator spot-checks overlap with later work; parent/protocol failures escalate to serial full review",
     "per_batch_done_definition": [
       "final Build-Cpu path implementation",
       "UHSC external-name localization",
-      "direct and locked-XSTop reference differential",
-      "Verilator and Yosys gates",
+      "tier-appropriate direct/reference differential",
+      "Verilator and Yosys gates for family/parent/milestone tiers, cacheable by content hash",
       "contract/license evidence",
-      "independent validator commit"
+      "machine-readable evidence and mapping in the same batch commit"
     ],
     "promotion_rule": "ACCEPTED remains NOT_ALLOWED until parent closure, license, UHSC and user approval gates pass",
     "full_generation_required": true,
-    "full_generation_gate": "single reproducible Python/Amaranth-generated Kunminghu V2 hierarchy must elaborate and pass complete XSTop module/port inventory plus Verilator/Yosys; reduced wrappers are intermediate only"
+    "full_generation_gate": "single reproducible Python/Amaranth-generated Kunminghu V2 hierarchy must elaborate and pass complete XSTop module/port inventory plus Verilator/Yosys; reduced wrappers are intermediate only",
+    "verification_tiers": {"leaf": "static+direct/reference; no fresh full HDL compile by default", "family": "direct/reference+Verilator+Yosys", "parent": "child closure+contract inventory+Verilator+Yosys", "milestone": "complete hierarchy/module-port/behavior differential"},
+    "compile_cache": {"root": "validation/.cache/<sha256>", "key": "target bytes+configuration+command+tool version+locked reference hash"},
+    "progress_rails": ["STRUCTURE_VERIFIED", "BEHAVIOR_VERIFIED_<family>"],
+    "leaf_validation_ratio_limit": 0.4,
+    "family_validation_ratio_limit": 1.0,
+    "top_probe_policy": "milestone-only or invalidating child change"
   },
   "execution_state": {
     "bounded_validator_pass_count": 47,

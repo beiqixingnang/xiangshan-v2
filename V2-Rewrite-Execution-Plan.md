@@ -84,14 +84,19 @@ protocol names stay stable.
 
 ## Batch size and delegation
 
-- A normal leaf batch contains 8–20 closely related modules; a stateful family
-  contains at most 5 closure roots and an explicit child list.
+- A normal leaf batch contains 30–40 closely related modules when their
+  equations and source provenance are homogeneous; a stateful family contains
+  at most 5 closure roots and an explicit child list. Smaller batches are used
+  only when a family boundary or reference module genuinely prevents safe
+  aggregation.
 - A worker owns one disjoint family and may edit its Python targets, direct
   harness, evidence JSON, and mapping fragment only.
 - The coordinator owns manifests, naming policy, top-level adapters, plan
   events, conflict resolution, and pushes.
-- Workers use Terra with maximum reasoning. They must return a commit hash,
-  changed paths, evidence paths, exact commands, and unclosed gates.
+- Workers use Terra with high reasoning for normal batches (medium is allowed
+  for mechanical leaf work; max is reserved for parent/milestone closure).
+  They must return a commit hash, changed paths, evidence paths, exact
+  commands, and unclosed gates.
 - Existing carried candidates may contain V3-era contract debt (missing
   bilingual function comments, leading-underscore helpers, compatibility
   aliases, or imports outside the allowed band). Workers must repair that debt
@@ -100,15 +105,36 @@ protocol names stay stable.
 - No worker may modify the locked V2 source, the main hardware product tree,
   or another worker's family.
 
+### Throughput policy
+
+Workers run the static contract, direct tests, and the reference check required
+by the batch tier in one commit. Leaf batches do not start a fresh full-top
+Verilator/Yosys build. Family and parent batches use the content-addressed
+cache under `validation/.cache/<sha256>/`; a matching target/configuration/tool
+key reuses the prior result. The complete top probe and full hierarchy
+differential run only at milestone events or after an invalidating parent
+change.
+
+The implementation worker and focused validator may overlap on non-dependent
+batches. The validator spot-checks one batch per five completed batches and
+escalates only failures or high-risk parent/protocol changes to a full rerun.
+The coordinator records both `STRUCTURE_VERIFIED` and
+`BEHAVIOR_VERIFIED_<family>` while keeping `ACCEPTED` locked.
+
 ## Acceptance gates
 
-`PYTHON_PRESENT` → `DIRECT_TEST_PASS_BOUNDED` → `V2_REFERENCE_MATCHED` →
-`UHSC_LOCALIZED` → `PARENT_CLOSURE_MATCHED` → `ACCEPTED`.
+The evidence graph has two parallel rails. The structure rail is
+`PYTHON_PRESENT` → `STRUCTURE_VERIFIED`; the behavior rail is
+`DIRECT_TEST_PASS_BOUNDED` → `V2_REFERENCE_MATCHED` →
+`BEHAVIOR_VERIFIED_<family>` → `PARENT_CLOSURE_MATCHED`. UHSC localization and
+license evidence attach to both rails. The final release gate remains
+`ACCEPTED` only after complete closure and user approval.
 
 Each transition requires machine-readable evidence. `DIRECT_TEST_PASS_BOUNDED`
 never implies reference equivalence; `V2_REFERENCE_MATCHED` never implies
-parent integration; `UHSC_LOCALIZED` never implies license or release
-acceptance. Blocked or missing-reference closures remain explicitly blocked.
+parent integration; `STRUCTURE_VERIFIED` never implies behavioral equivalence;
+and no intermediate rail implies license or release acceptance. Blocked or
+missing-reference closures remain explicitly blocked.
 
 ## Delivery order
 
@@ -149,21 +175,23 @@ Counts must distinguish `core_files`, `dependency_family_files`,
 
 Each implementation worker receives one disjoint batch and performs, in one
 transaction and one commit: V2 implementation at the final Build path, UHSC
-project-facing naming, direct vectors, independent V2 reference-SV/source-level
-differential, Verilator/Yosys, UTF-8/LF/AST/five-zone/forbidden-import audits,
-and machine-readable evidence/mapping updates. Workers may not leave targets
-under `python/ported`, borrow another family, modify `upstream/` or the main
-repository, or mark `ACCEPTED`.
+project-facing naming, the direct/reference checks required by its tier, static
+audits, and machine-readable evidence/mapping updates. Verilator/Yosys are
+mandatory for family/parent/milestone tiers and may be reused from the
+content-addressed cache; they are not a fresh requirement for every leaf.
+Workers may not leave targets under `python/ported`, borrow another family,
+modify `upstream/` or the main repository, or mark `ACCEPTED`.
 
 ## Independent validator contract
 
-Implementation workers do not validate one another concurrently. After a worker
-reports its commit, one dedicated validator runs the exact manifest commands
-serially, checks changed paths and source/reference hashes, reruns focused
-direct/reference/differential gates, and records `VALIDATOR_PASS` or an explicit
-failure. Only the coordinator pushes the batch and updates the main preview
-plan. Bounded passes remain bounded until parent, license, UHSC wrapper, and
-user-approval gates close.
+Implementation workers may continue on non-dependent batches while a focused
+validator spot-checks one batch per five completed batches. The validator checks
+changed paths and source/reference hashes, reruns the tier-required focused
+gates, and records `VALIDATOR_PASS` or an explicit failure. A failure or a
+high-risk parent/protocol change escalates that batch and adjacent dependents to
+serial full validation. Only the coordinator pushes the batch and updates the
+main preview plan. Bounded passes remain bounded until parent, license, UHSC
+wrapper, and user-approval gates close.
 
 ## Full Kunminghu V2 generation gate
 

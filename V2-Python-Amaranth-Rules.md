@@ -136,6 +136,35 @@ reviews the diff, reruns the focused command, and pushes one coherent batch.
 Generated SV, VCD/FST, caches, and temporary adapters stay ignored or under
 the ignored `.agents` evidence area.
 
+## 5A. Tiered verification and cached tool gates
+
+The required evidence is tiered by closure size. A leaf or pure utility batch
+must run the static contract, exact-path import, `py_compile`, and deterministic
+direct/reference checks; it does not run a fresh Verilator/Yosys compile unless
+the batch is selected for spot review. Stateful families and all parent
+closures additionally require locked-reference differential, Verilator, and
+Yosys. The UHSC top and complete Kunminghu hierarchy run these full gates only
+at explicit milestones or after a child change invalidates the milestone.
+
+Tool output is content-addressed under the ignored
+`.agents/xiangshan-v2/validation/.cache/<sha256>/` directory. The key includes
+target bytes, serialized configuration, command, tool version, and locked
+reference hash; a hit is reusable only when all fields match exactly.
+
+Leaf verification code should stay at or below 0.4 times the implementation's
+effective lines; family and parent batches use a 1.0 upper bound. Exceptions
+are recorded in evidence. Workers commit implementation, tests, evidence, and
+mapping together; standalone hash-refresh commits are not a normal batch.
+Non-overlapping implementation may continue while a coordinator performs a
+focused spot check. A failed spot check escalates that batch and adjacent
+dependent batches to full validation.
+
+Progress is tracked on two independent rails: `STRUCTURE_VERIFIED` for exact
+port/direction/width, hierarchy, and synthesis gates, and
+`BEHAVIOR_VERIFIED_<family>` for direct and locked-reference behavior. These
+rails improve visibility but never grant `ACCEPTED`; complete parent closure,
+license review, UHSC localization, and user approval remain mandatory.
+
 ## 6. Prohibited shortcuts
 
 - No one-Scala/one-Python requirement for external dependencies.
