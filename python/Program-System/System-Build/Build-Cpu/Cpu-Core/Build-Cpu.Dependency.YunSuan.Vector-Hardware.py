@@ -920,6 +920,10 @@ class YunSuanVectorBoundary(Elaboratable):
         self.clock = Signal(name="clock")
         self.reset = Signal(name="reset")
         self.fire = Signal(name="io_fire")
+        self.ready = Signal(name="io_ready")
+        self.valid = Signal(name="io_valid")
+        self.result_ready = Signal(name="io_result_ready")
+        self.exception = Signal(5, name="io_exception_flags")
         self.opcode = Signal(6, name="io_opcode")
         self.sew = Signal(2, name="io_sew")
         self.signed = Signal(name="io_signed")
@@ -940,6 +944,11 @@ class YunSuanVectorBoundary(Elaboratable):
     def elaborate(self, platform: Any) -> Module:
         del platform
         m = Module()
+        domain = ClockDomain("vector", async_reset=True)
+        domain.clk = self.clock
+        domain.rst = self.reset
+        m.domains.vector = domain
+        pending = Signal(name="vector_pending")
         primitive = YunSuanVectorPrimitive()
         mask = YunSuanVMask()
         reduction = YunSuanReduction()
@@ -966,7 +975,16 @@ class YunSuanVectorBoundary(Elaboratable):
                      permutation.mask.eq(self.mask), permutation.opcode.eq(self.opcode), permutation.sew.eq(self.sew),
                      permutation.slide.eq(0), self.permutation_result.eq(permutation.result),
                      converter.src.eq(self.vs1[:64]), converter.opcode.eq(self.opcode), converter.sew.eq(self.sew),
-                     converter.rm.eq(0), self.convert_result.eq(converter.result), self.convert_flags.eq(converter.fflags)]
+                     converter.rm.eq(0), self.convert_result.eq(converter.result), self.convert_flags.eq(converter.fflags),
+                     self.ready.eq(~pending), self.valid.eq(pending),
+                     self.exception.eq(Mux(self.opcode == VCPop, 0, self.convert_flags)),]
+        with amaranth_if(m, self.reset):
+            m.d.vector += pending.eq(0)
+        with amaranth_else(m):
+            with amaranth_if(m, self.fire & self.ready):
+                m.d.vector += pending.eq(1)
+            with amaranth_if(m, self.valid & self.result_ready):
+                m.d.vector += pending.eq(0)
         return m
 
 
@@ -1015,7 +1033,8 @@ def build_verilog(configuration, injected_dependencies):
         ports = [top.src, top.opcode, top.sew, top.rm, top.result, top.fflags]
     else:
         top = YunSuanVectorBoundary()
-        ports = [top.clock, top.reset, top.fire, top.opcode, top.sew, top.signed, top.vs1, top.vs2,
+        ports = [top.clock, top.reset, top.fire, top.ready, top.valid, top.result_ready, top.exception,
+                 top.opcode, top.sew, top.signed, top.vs1, top.vs2,
                  top.old_vd, top.mask, top.vl, top.vector_result, top.vector_compare, top.mask_result,
                  top.reduction_result, top.permutation_result, top.convert_result, top.convert_flags]
     return verilog.convert(top, name=name, ports=ports, emit_src=False)

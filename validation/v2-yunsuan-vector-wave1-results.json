@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_YUNSUAN_VECTOR_WAVE1",
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.YunSuan.Vector-Hardware.py",
+    "aggregate": "dependency.yunsuan.vector",
+    "behavior": "vector primitive, mask/reduction/permutation/conversion children with ready-valid aggregate boundary"
+  },
+  "source_scala_file_count": 53,
+  "gates": {
+    "AST": "PASS",
+    "PY_COMPILE": "PASS",
+    "EXACT_IMPORT": "PASS",
+    "PYRIGHT": "PASS",
+    "DIRECT_VECTOR_ADD_COMPARE_MASK": "PASS",
+    "BUILD_VERILOG": "PASS",
+    "BUILD_VERILOG_BYTES": 12323046
+  },
+  "status": "PASS_BOUNDED_FAMILY",
+  "acceptance_eligible": false,
+  "accepted": "NOT_ALLOWED",
+  "pending": [
+    "full vector child reference differential",
+    "floating vector and long-iteration closure",
+    "license review and user approval"
+  ]
+}
