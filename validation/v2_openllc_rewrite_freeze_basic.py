@@ -19,7 +19,7 @@ import subprocess
 import sys
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from typing import Any
+from typing import Any, cast
 
 
 # =============================================================================
@@ -99,13 +99,13 @@ def backend_gate(rtl: str, module_name: str, directory: Path) -> dict[str, objec
 # =============================================================================
 # Implementation
 # =============================================================================
-def check_target(path: Path, work: Path) -> dict[str, object]:
+def check_target(path: Path, work: Path) -> dict[str, Any]:
     """Run all structural gates for one OpenLLC aggregate. / 对一个 OpenLLC 聚合运行全部结构门禁。"""
 
     raw = path.read_bytes()
     source = raw.decode("utf-8")
     style = style_gate(source)
-    record: dict[str, object] = {
+    record: dict[str, Any] = {
         "path": path.relative_to(ROOT).as_posix(),
         "sha256": hashlib.sha256(raw).hexdigest(),
         "bytes": len(raw),
@@ -134,8 +134,8 @@ def check_target(path: Path, work: Path) -> dict[str, object]:
                                 "rtl_bytes": len(first.encode("utf-8"))}
     record["verilog_syntax"] = backend_gate(first, match.group(1), work) if match else {
         "verilator": {"status": "FAIL"}, "yosys": {"status": "FAIL"}}
-    syntax = record["verilog_syntax"]
-    build = record["build_verilog"]
+    syntax = cast(dict[str, Any], record["verilog_syntax"])
+    build = cast(dict[str, Any], record["build_verilog"])
     record["pass"] = bool(record["utf8_lf"] and record["ast"] and record["py_compile"]
                            and record["exact_path_import"] and style["five_zone_order"]
                            and style["bilingual_function_comments"] and build["status"] == "PASS"

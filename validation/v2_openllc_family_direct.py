@@ -102,7 +102,7 @@ def main() -> int:
     checks: dict[str, Callable[[Any], dict[str, object]]] = {
         "cache": cache_checks, "sram": sram_checks, "bridge": bridge_checks, "ncb": ncb_checks,
     }
-    records: dict[str, object] = {}
+    records: dict[str, dict[str, Any]] = {}
     for key, path in TARGETS.items():
         module = load(path, key)
         result = checks[key](module)
