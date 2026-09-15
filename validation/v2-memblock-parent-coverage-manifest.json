@@ -68,14 +68,14 @@
     "extra": [],
     "direction_width_mismatches": [],
     "ordered_inventory_sha256": "86f2a6829e11529fddbc91ec630a89f8004620a07eef82d3f0899b999fd27722",
-    "rtl_sha256": "5d348ac564df39208e38fc1504441321d55586349687901d203acfa7d4fd46b3",
-    "rtl_bytes": 523374
+    "rtl_sha256": "3c2f14a25f3eafeae74d09d8749cd6dd31c488bcbb04676d2dd27c037f86412f",
+    "rtl_bytes": 532091
   },
   "full_backend_gates": {
     "verilator": {
       "status": "PASS",
       "returncode": 0,
-      "stderr_tail": "ent/full-parent-envelope.sv:4410:25: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'hd' generates 4 bits.\n                                                                                                                                                             : ... note: In instance 'UHSCMemoryMemBlockFull.dcache.mainpipe.amo'\n 4410 |   assign \\$64  = io_cmd == 4'hd;\n      |                         ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memblock-parent/full-parent-envelope.sv:4411:25: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'hf' generates 4 bits.\n                                                                                                                                                             : ... note: In instance 'UHSCMemoryMemBlockFull.dcache.mainpipe.amo'\n 4411 |   assign \\$65  = io_cmd == 4'hf;\n      |                         ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memblock-parent/full-parent-envelope.sv:3813:41: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                             : ... note: In instance 'UHSCMemoryMemBlockFull.dcache'\n 3813 |   assign \\$1  = io_miss_req_bits_source == 1'h1;\n      |                                         ^~\n"
+      "stderr_tail": "ent/full-parent-envelope.sv:4747:25: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'hd' generates 4 bits.\n                                                                                                                                                             : ... note: In instance 'UHSCMemoryMemBlockFull.dcache.mainpipe.amo'\n 4747 |   assign \\$64  = io_cmd == 4'hd;\n      |                         ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memblock-parent/full-parent-envelope.sv:4748:25: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'hf' generates 4 bits.\n                                                                                                                                                             : ... note: In instance 'UHSCMemoryMemBlockFull.dcache.mainpipe.amo'\n 4748 |   assign \\$65  = io_cmd == 4'hf;\n      |                         ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memblock-parent/full-parent-envelope.sv:3930:41: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                             : ... note: In instance 'UHSCMemoryMemBlockFull.dcache'\n 3930 |   assign \\$1  = io_miss_req_bits_source == 1'h1;\n      |                                         ^~\n"
     },
     "yosys": {
       "status": "PASS",
@@ -86,7 +86,7 @@
   "frontend_parent_differential": {
     "status": "PASS",
     "returncode": 0,
-    "stdout_tail": "FRONTEND_PARENT_REFERENCE_PASS 96\n- /mnt/c/Users/lishuo/AppData/Local/Temp/memblock-frontend-parent-diff-zb8q3p7m/tb.sv:91389: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 200ps; walltime 0.010 s; speed 72.836 ns/s\n- Verilator: cpu 0.003 s on 1 threads; alloced 154 MB\n",
+    "stdout_tail": "FRONTEND_PARENT_REFERENCE_PASS 96\n- /mnt/c/Users/lishuo/AppData/Local/Temp/memblock-frontend-parent-diff-t5sqou13/tb.sv:91726: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 200ps; walltime 0.009 s; speed 75.256 ns/s\n- Verilator: cpu 0.003 s on 1 threads; alloced 154 MB\n",
     "stderr_tail": "",
     "vectors": 96,
     "checked_outputs": 48,

@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "kind": "V2_MEMBLOCK_BULK_FSM_MAPPING",
+  "batch_id": "V2-BULK-CORE-MEMBLOCK-FSM-001",
+  "root_module": "MemBlock",
+  "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.MemBlock-Hardware.py",
+  "aggregate_classes": [
+    "UHSCMemoryMemBlock",
+    "UHSCDCacheWrapper",
+    "UHSCCacheMainPipe"
+  ],
+  "behavioral_edges": [
+    {"source": "MemBlock.scala", "edge": "issue arbitration -> DCache request", "status": "IMPLEMENTED"},
+    {"source": "DCacheWrapper.scala", "edge": "miss A / refill D handshake", "status": "IMPLEMENTED"},
+    {"source": "MainPipe.scala", "edge": "one outstanding request and flush", "status": "IMPLEMENTED"},
+    {"source": "MMU/TLB*.scala", "edge": "MMU readiness and exception gate", "status": "BOUNDED_OBSERVATION"},
+    {"source": "LSQ/pipeline/*.scala", "edge": "LSU issue readiness", "status": "BOUNDED_OBSERVATION"},
+    {"source": "FrontendBridge.scala", "edge": "frontend child prefix wiring", "status": "IMPLEMENTED"},
+    {"source": "rocket-chip/tilelink + diplomacy", "edge": "A/D payload boundary", "status": "BOUNDED_OBSERVATION"}
+  ],
+  "source_file_count": 27,
+  "status": "PASS_BOUNDED_PARENT",
+  "pending": [
+    "full DCache data-array and MSHR closure",
+    "full MMU/PTW/LSU behavior",
+    "full Diplomacy graph differential",
+    "license review and user acceptance"
+  ],
+  "acceptance_eligible": false,
+  "ACCEPTED": "NOT_ALLOWED"
+}

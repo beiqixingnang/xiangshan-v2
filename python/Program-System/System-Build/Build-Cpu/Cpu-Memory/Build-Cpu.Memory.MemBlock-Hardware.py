@@ -62,6 +62,31 @@ MEMBLOCK_PARENT_SOURCE_PATHS: tuple[str, ...] = (
     "upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/MainPipe.scala",
     "upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/AMOALU.scala",
     "upstream/src/main/scala/xiangshan/cache/dcache/meta/TagArray.scala",
+    # The parent owns these edges in the selected DefaultConfig.  Keeping
+    # them in one frozen tuple makes the aggregate coverage explicit instead
+    # of implying that a five-file shell is a complete MemBlock rewrite.
+    "upstream/src/main/scala/xiangshan/cache/dcache/Uncache.scala",
+    "upstream/src/main/scala/xiangshan/cache/mmu/TLB.scala",
+    "upstream/src/main/scala/xiangshan/cache/mmu/TLBStorage.scala",
+    "upstream/src/main/scala/xiangshan/cache/mmu/MMUBundle.scala",
+    "upstream/src/main/scala/xiangshan/cache/mmu/MMUConst.scala",
+    "upstream/src/main/scala/xiangshan/cache/mmu/L2TLB.scala",
+    "upstream/src/main/scala/xiangshan/cache/mmu/L2TLBMissQueue.scala",
+    "upstream/src/main/scala/xiangshan/cache/mmu/L2TlbPrefetch.scala",
+    "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMainPipe.scala",
+    "upstream/src/main/scala/xiangshan/frontend/icache/InstrUncache.scala",
+    "upstream/src/main/scala/xiangshan/mem/lsqueue/LSQWrapper.scala",
+    "upstream/src/main/scala/xiangshan/mem/lsqueue/LoadQueueUncache.scala",
+    "upstream/src/main/scala/xiangshan/mem/pipeline/LoadUnit.scala",
+    "upstream/src/main/scala/xiangshan/mem/pipeline/StoreUnit.scala",
+    "upstream/src/main/scala/xiangshan/mem/pipeline/HybridUnit.scala",
+    "upstream/src/main/scala/xiangshan/mem/sbuffer/Sbuffer.scala",
+    "upstream/src/main/scala/xiangshan/mem/sbuffer/FakeSbuffer.scala",
+    "upstream/rocket-chip/src/main/scala/tilelink/Buffer.scala",
+    "upstream/rocket-chip/src/main/scala/tilelink/Bundles.scala",
+    "upstream/rocket-chip/src/main/scala/tilelink/Edges.scala",
+    "upstream/rocket-chip/src/main/scala/tilelink/Nodes.scala",
+    "upstream/rocket-chip/src/main/scala/diplomacy/Nodes.scala",
 )
 MEMBLOCK_PARENT_SOURCE_FILE_COUNT = len(MEMBLOCK_PARENT_SOURCE_PATHS)
 
@@ -257,10 +282,19 @@ class UHSCCacheMainPipe(Elaboratable):
         self.refill_valid = Signal(name="io_refill_req_valid")
         self.refill_data = Signal(c.data_bits, name="io_refill_req_bits_data")
         self.refill_id = Signal(c.id_bits, name="io_refill_req_bits_id")
+        # A refill is only consumed after the miss request has handshaken.
+        # This explicit ready/error surface makes the reduced parent useful as
+        # a real Decoupled transaction rather than a level-sensitive stub.
+        self.refill_error = Signal(name="io_refill_req_error")
+        self.refill_ready = Signal(name="io_refill_req_ready")
         self.resp_valid = Signal(name="io_resp_valid")
         self.resp_data = Signal(c.data_bits, name="io_resp_bits_data")
         self.resp_id = Signal(c.id_bits, name="io_resp_bits_id")
         self.resp_miss = Signal(name="io_resp_bits_miss")
+        self.fault_valid = Signal(name="io_fault_valid")
+        self.fault_code = Signal(2, name="io_fault_code")
+        self.pending_observe = Signal(name="io_pending")
+        self.miss_accepted = Signal(name="io_miss_accepted")
         self.amo_result = Signal(c.data_bits, name="io_amo_result")
         self.amo_raw = Signal(c.data_bits, name="io_amo_raw")
         self.tag_ready = Signal(name="io_tag_read_ready")
@@ -288,17 +322,27 @@ class UHSCCacheMainPipe(Elaboratable):
         pending_rhs = Signal(c.data_bits, name="mainpipe_pending_rhs")
         pending_mask = Signal(c.byte_mask_bits, name="mainpipe_pending_mask")
         pending_id = Signal(c.id_bits, name="mainpipe_pending_id")
+        miss_sent = Signal(name="mainpipe_miss_sent")
         response = Signal(name="mainpipe_response")
         response_data = Signal(c.data_bits, name="mainpipe_response_data")
         response_id = Signal(c.id_bits, name="mainpipe_response_id")
         response_miss = Signal(name="mainpipe_response_miss")
+        fault_pending = Signal(name="mainpipe_fault_pending")
+        fault_code = Signal(2, name="mainpipe_fault_code")
+        miss_fire = pending & pending_miss & ~miss_sent & self.miss_ready & ~self.flush
+        refill_fire = self.refill_valid & pending & (miss_sent | miss_fire) & ~self.flush
 
         # Child contracts are deliberately connected by named attributes only. / 子级契约有意仅通过命名属性连接。
         amo_width = len(self.amo.io_lhs)
         amo_mask_width = len(self.amo.io_mask)
         amo_lhs = Mux(pending, pending_data[:amo_width], self.req_data[:amo_width])
         amo_mask = Mux(pending, pending_mask[:amo_mask_width], self.req_mask[:amo_mask_width])
-        amo_rhs = Mux(pending, pending_rhs[:amo_width], self.refill_data[:amo_width])
+        # A miss may return a different D beat than the request-side probe;
+        # select that beat in the same cycle as ``refill_ready`` so AMO
+        # read-modify-write operations observe the actual refill payload.
+        amo_rhs = Mux(refill_fire,
+                      self.refill_data[:amo_width],
+                      Mux(pending, pending_rhs[:amo_width], self.refill_data[:amo_width]))
         amo_out_wide = self.amo.io_out
         amo_raw_wide = self.amo.io_out_unmasked
         m.d.comb += [self.amo.io_mask.eq(amo_mask), self.amo.io_cmd.eq(Mux(pending, pending_cmd, self.req_cmd)),
@@ -317,20 +361,26 @@ class UHSCCacheMainPipe(Elaboratable):
                      self.tag_ready.eq(self.tag.io_read_ready),
                      self.tag_rdata.eq(self.tag.io_rdata)]
 
+        # ``miss_valid`` is a one-shot request: once A has handshaken, the
+        # parent waits for D/refill without issuing a duplicate transaction.
         m.d.comb += [self.req_ready.eq(~pending & ~self.flush),
-                     self.miss_valid.eq(pending & pending_miss & ~self.flush),
+                     self.miss_valid.eq(pending & pending_miss & ~miss_sent & ~self.flush),
                      self.miss_source.eq(pending_source), self.miss_cmd.eq(pending_cmd),
                      self.miss_addr.eq(pending_addr), self.miss_data.eq(pending_data),
                      self.miss_mask.eq(pending_mask), self.miss_id.eq(pending_id),
                      self.resp_valid.eq(response & ~self.flush),
                      self.resp_data.eq(response_data), self.resp_id.eq(response_id),
-                     self.resp_miss.eq(response_miss)]
+                     self.resp_miss.eq(response_miss),
+                     self.refill_ready.eq(pending & pending_miss &
+                                          (miss_sent | miss_fire) & ~self.flush),
+                     self.pending_observe.eq(pending), self.miss_accepted.eq(miss_sent),
+                     self.fault_valid.eq(fault_pending & ~self.flush),
+                     self.fault_code.eq(fault_code)]
         request_fire = self.req_valid & self.req_ready
-        miss_fire = self.miss_valid & self.miss_ready
-        refill_fire = self.refill_valid & pending
         # Response is a one-cycle pulse; a flush drops both pending and response. / 响应为单拍脉冲；flush 丢弃未决事务及响应。
         with amaranth_if(m, self.flush):
-            m.d.mainpipe_sync += [pending.eq(0), response.eq(0)]
+            m.d.mainpipe_sync += [pending.eq(0), response.eq(0), miss_sent.eq(0),
+                                  fault_pending.eq(0)]
         with amaranth_else(m):
             m.d.mainpipe_sync += response.eq(0)
             with amaranth_if(m, request_fire):
@@ -338,16 +388,20 @@ class UHSCCacheMainPipe(Elaboratable):
                              pending_source.eq(self.req_source), pending_cmd.eq(self.req_cmd),
                              pending_addr.eq(self.req_addr), pending_data.eq(self.req_data),
                              pending_mask.eq(self.req_mask), pending_id.eq(self.req_id),
-                             pending_rhs.eq(self.refill_data)]
+                             pending_rhs.eq(self.refill_data), miss_sent.eq(0),
+                             fault_pending.eq(0)]
             with amaranth_if(m, pending & ~pending_miss):
                 m.d.mainpipe_sync += [pending.eq(0), response.eq(1),
                              response_data.eq(Mux(pending_source == 2, self.amo_result, pending_data)),
                              response_id.eq(pending_id), response_miss.eq(0)]
-            with amaranth_if(m, pending & pending_miss & (refill_fire | miss_fire & self.refill_valid)):
+            with amaranth_if(m, miss_fire):
+                m.d.mainpipe_sync += miss_sent.eq(1)
+            with amaranth_if(m, pending & pending_miss & refill_fire):
                 m.d.mainpipe_sync += [pending.eq(0), response.eq(1),
                              response_data.eq(Mux(pending_source == 2, self.amo_result, self.refill_data)),
-                             response_id.eq(Mux(refill_fire, self.refill_id, pending_id)),
-                             response_miss.eq(1)]
+                             response_id.eq(self.refill_id), response_miss.eq(1),
+                             miss_sent.eq(0), fault_pending.eq(self.refill_error),
+                             fault_code.eq(Mux(self.refill_error, 1, 0))]
         return m
 
 
@@ -378,6 +432,10 @@ class UHSCDCacheWrapper(Elaboratable):
         self.refill_valid = Signal(name="io_refill_valid")
         self.refill_data = Signal(c.data_bits, name="io_refill_data")
         self.refill_id = Signal(c.id_bits, name="io_refill_id")
+        self.refill_error = Signal(name="io_refill_error")
+        self.refill_ready = Signal(name="io_refill_ready")
+        self.pending_observe = Signal(name="io_pending")
+        self.miss_accepted = Signal(name="io_miss_accepted")
         self.tl_a_ready = Signal(name="auto_client_out_a_ready")
         self.tl_a_valid = Signal(name="auto_client_out_a_valid")
         self.tl_a_opcode = Signal(4, name="auto_client_out_a_bits_opcode")
@@ -393,6 +451,8 @@ class UHSCDCacheWrapper(Elaboratable):
         self.resp_data = Signal(c.data_bits, name="io_resp_data")
         self.resp_id = Signal(c.id_bits, name="io_resp_id")
         self.resp_miss = Signal(name="io_resp_miss")
+        self.fault_valid = Signal(name="io_fault_valid")
+        self.fault_code = Signal(2, name="io_fault_code")
         self.error_valid = Signal(name="io_error_valid")
         self.mbist_enable = Signal(name="io_mbist_enable")
         self.mbist_done = Signal(name="io_mbist_done")
@@ -418,12 +478,16 @@ class UHSCDCacheWrapper(Elaboratable):
                      p.req_miss.eq(self.req_miss), self.req_ready.eq(p.req_ready),
                      p.miss_ready.eq(self.tl_a_ready), p.refill_valid.eq(self.tl_d_valid),
                      p.refill_data.eq(self.tl_d_data), p.refill_id.eq(self.tl_d_source),
+                     p.refill_error.eq(self.refill_error), self.refill_ready.eq(p.refill_ready),
+                     self.pending_observe.eq(p.pending_observe),
+                     self.miss_accepted.eq(p.miss_accepted),
                      self.tl_a_valid.eq(p.miss_valid), self.tl_a_source.eq(p.miss_id),
                      self.tl_a_address.eq(p.miss_addr), self.tl_a_data.eq(p.miss_data),
                      self.tl_a_mask.eq(p.miss_mask), self.tl_a_opcode.eq(Mux(p.miss_source == 1, 0, 4)),
                      self.tl_a_size.eq(4), self.resp_valid.eq(p.resp_valid),
                      self.resp_data.eq(p.resp_data), self.resp_id.eq(p.resp_id),
-                     self.resp_miss.eq(p.resp_miss), self.error_valid.eq(0),
+                     self.resp_miss.eq(p.resp_miss), self.fault_valid.eq(p.fault_valid),
+                     self.fault_code.eq(p.fault_code), self.error_valid.eq(p.fault_valid),
                      self.mbist_done.eq(~self.mbist_enable)]
         return m
 
@@ -467,6 +531,8 @@ class UHSCMemoryMemBlock(Elaboratable):
         self.refill_valid = Signal(name="io_refill_valid")
         self.refill_data = Signal(c.data_bits, name="io_refill_data")
         self.refill_id = Signal(c.id_bits, name="io_refill_id")
+        self.refill_error = Signal(name="io_refill_error")
+        self.refill_ready = Signal(name="io_refill_ready")
         self.tl_a_ready = Signal(name="auto_inner_out_a_ready")
         self.tl_a_valid = Signal(name="auto_inner_out_a_valid")
         self.tl_a_opcode = Signal(4, name="auto_inner_out_a_bits_opcode")
@@ -481,6 +547,12 @@ class UHSCMemoryMemBlock(Elaboratable):
         self.writeback_data = Signal(c.data_bits, name="io_writeback_data")
         self.writeback_id = Signal(c.id_bits, name="io_writeback_id")
         self.writeback_miss = Signal(name="io_writeback_miss")
+        self.fault_valid = Signal(name="io_fault_valid")
+        self.fault_code = Signal(2, name="io_fault_code")
+        self.pending_observe = Signal(name="io_pending")
+        self.miss_accepted = Signal(name="io_miss_accepted")
+        self.exception_valid = Signal(name="io_exception_valid")
+        self.flush_seen = Signal(name="io_flush_seen")
         self.icache_req_valid = Signal(name="io_icache_req_valid")
         self.icache_req_ready = Signal(name="io_icache_req_ready")
         self.icache_req_addr = Signal(c.vaddr_bits, name="io_icache_req_addr")
@@ -563,9 +635,11 @@ class UHSCMemoryMemBlock(Elaboratable):
         m.submodules.dcache = self.dcache
         d = self.dcache
         issue_any = self.load_valid | self.store_valid | self.atomic_valid
-        selected_valid = issue_any
+        service_enable = ~self.flush & ~self.mbist_enable & ~self.exception_valid
+        selected_valid = issue_any & service_enable
         selected_ready = d.req_ready
-        m.d.comb += [d.clock.eq(self.clock), d.reset.eq(self.reset), d.flush.eq(self.flush),
+        m.d.comb += [d.clock.eq(self.clock), d.reset.eq(self.reset),
+                     d.flush.eq(self.flush | self.exception_valid),
                      d.req_valid.eq(selected_valid), d.req_source.eq(Mux(self.atomic_valid, 2, self.issue_source)),
                      d.req_cmd.eq(self.issue_cmd), d.req_vaddr.eq(self.issue_vaddr), d.req_addr.eq(self.issue_addr),
                      d.req_data.eq(self.issue_data), d.req_mask.eq(self.issue_mask), d.req_id.eq(self.issue_id),
@@ -573,16 +647,33 @@ class UHSCMemoryMemBlock(Elaboratable):
                      d.tl_d_valid.eq(self.tl_d_valid | self.refill_valid),
                      d.tl_d_source.eq(Mux(self.refill_valid, self.refill_id, self.tl_d_source)),
                      d.tl_d_data.eq(Mux(self.refill_valid | self.atomic_valid, self.refill_data, self.tl_d_data)),
+                     d.refill_error.eq(self.refill_error),
                      d.mbist_enable.eq(self.mbist_enable),
-                     self.load_ready.eq(selected_ready & ~self.store_valid & ~self.atomic_valid),
-                     self.store_ready.eq(selected_ready & ~self.atomic_valid),
-                     self.atomic_ready.eq(selected_ready),
+                     self.load_ready.eq(selected_ready & service_enable & ~self.store_valid & ~self.atomic_valid),
+                     self.store_ready.eq(selected_ready & service_enable & ~self.atomic_valid),
+                     self.atomic_ready.eq(selected_ready & service_enable),
+                     self.refill_ready.eq(d.refill_ready),
                      self.tl_a_valid.eq(d.tl_a_valid), self.tl_a_opcode.eq(d.tl_a_opcode),
                      self.tl_a_source.eq(d.tl_a_source), self.tl_a_address.eq(d.tl_a_address),
                      self.tl_a_data.eq(d.tl_a_data), self.tl_a_mask.eq(d.tl_a_mask),
                      self.writeback_valid.eq(d.resp_valid), self.writeback_data.eq(d.resp_data),
                      self.writeback_id.eq(d.resp_id), self.writeback_miss.eq(d.resp_miss),
-                     self.mbist_done.eq(d.mbist_done), self.mmu_ready.eq(1), self.lsu_ready.eq(1)]
+                     self.fault_valid.eq(d.fault_valid | self.exception_valid),
+                     self.fault_code.eq(Mux(self.exception_valid, 2, d.fault_code)),
+                     self.pending_observe.eq(d.pending_observe),
+                     self.miss_accepted.eq(d.miss_accepted),
+                     self.mbist_done.eq(d.mbist_done), self.mmu_ready.eq(service_enable),
+                     self.lsu_ready.eq(service_enable)]
+
+        # Keep a registered flush pulse for parent-level debug and formal
+        # observation.  The pulse is intentionally one cycle wide even when a
+        # caller holds ``flush`` asserted for several cycles.
+        flush_seen_reg = Signal(name="memblock_flush_seen")
+        m.d.comb += self.flush_seen.eq(flush_seen_reg)
+        with amaranth_if(m, self.flush):
+            m.d.mem_sync += flush_seen_reg.eq(1)
+        with amaranth_else(m):
+            m.d.mem_sync += flush_seen_reg.eq(0)
 
         # Bind the real FrontendBridge child when the parent closure injects
         # one.  The locked MemBlock names the child edge as
@@ -674,12 +765,15 @@ def build_verilog(configuration, injected_dependencies):
         top.issue_data, top.issue_mask, top.issue_id, top.issue_miss,
         top.load_ready, top.store_ready, top.atomic_ready,
         top.refill_valid, top.refill_data, top.refill_id,
+        top.refill_error, top.refill_ready,
         top.tl_a_ready, top.tl_a_valid, top.tl_a_opcode, top.tl_a_source,
         top.tl_a_address, top.tl_a_data, top.tl_a_mask,
         top.tl_d_valid, top.tl_d_source, top.tl_d_data,
         top.writeback_valid, top.writeback_data, top.writeback_id, top.writeback_miss,
+        top.fault_valid, top.fault_code, top.pending_observe, top.miss_accepted,
         top.icache_req_valid, top.icache_req_ready, top.icache_req_addr,
-        top.icache_resp_valid, top.icache_resp_data, top.flush,
+        top.icache_resp_valid, top.icache_resp_data, top.flush, top.flush_seen,
+        top.exception_valid,
         top.mmu_ready, top.lsu_ready, top.mbist_enable, top.mbist_done,
     ]
     # When a frozen parent inventory is injected, emit exactly that envelope
