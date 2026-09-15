@@ -398,7 +398,7 @@ class CoupledL2MSHR(Elaboratable):
         del platform
         c = self.configuration
         m = Module()
-        domain = ClockDomain("coupled_l2_mshr", async_reset=True)
+        domain = ClockDomain("coupled_l2_mshr", async_reset=True, local=True)
         domain.clk = self.clock
         domain.rst = self.reset
         m.domains.coupled_l2_mshr = domain
@@ -510,7 +510,7 @@ class CoupledL2MSHRCtl(Elaboratable):
         del platform
         c = self.configuration
         m = Module()
-        domain = ClockDomain("coupled_l2_mshrc", async_reset=True)
+        domain = ClockDomain("coupled_l2_mshrc", async_reset=True, local=True)
         domain.clk = self.clock; domain.rst = self.reset
         m.domains.coupled_l2_mshrc = domain
         # The selected V2 Slice has one outstanding request per bank at this
@@ -568,7 +568,7 @@ class CoupledL2ProbeQueue(Elaboratable):
         del platform
         c = self.configuration
         m = Module()
-        domain = ClockDomain("coupled_l2_probeq", async_reset=True)
+        domain = ClockDomain("coupled_l2_probeq", async_reset=True, local=True)
         domain.clk = self.clock; domain.rst = self.reset
         m.domains.coupled_l2_probeq = domain
         valid = [Signal(name=f"probeq_valid_{i}") for i in range(self.entries)]
@@ -647,7 +647,7 @@ class CoupledL2RefillUnit(Elaboratable):
         del platform
         c = self.configuration
         m = Module()
-        domain = ClockDomain("coupled_l2_refill", async_reset=True)
+        domain = ClockDomain("coupled_l2_refill", async_reset=True, local=True)
         domain.clk = self.clock; domain.rst = self.reset
         m.domains.coupled_l2_refill = domain
         beat = Signal(c.beat_bits, name="refill_beat_reg")

@@ -387,11 +387,25 @@ def child_integration(module: ModuleType) -> dict[str, Any]:
                                 f"yosys -Q -p 'read_verilog -sv {converted}; hierarchy -top UHSCTL2TLCoupledL2; proc; opt; check'"],
                                capture_output=True, text=True, encoding="utf-8", errors="replace", check=False)
     expected_count = len(module.tl2tl_parent_port_contract(module.TL2TLCoupledL2ParentConfig()))
-    child_modules = [name for name in module_names if "tl2tl_slice_" in name]
-    passed = len(parent_schema) == expected_count and len(child_modules) == 4 and verilator.returncode == 0 and yosys.returncode == 0
+    # Nested family modules carry the parent instance prefix as well (for
+    # example ``...tl2tl_slice_0.coupled_l2_mshr``).  Count only the four
+    # direct Slice instances for the parent-preservation gate, while recording
+    # nested MSHR/ProbeQueue/RefillUnit modules separately. / 只统计四个直接 Slice 实例，嵌套子族单独记录。
+    child_modules = [name for name in module_names
+                     if "tl2tl_slice_" in name and name.count("tl2tl_slice_") == 1 and "." not in name.split("tl2tl_slice_", 1)[1]]
+    nested_modules = [name for name in module_names if any(token in name for token in ("coupled_l2_mshr", "coupled_l2_probe_queue", "coupled_l2_refill_unit"))]
+    required_nested = {
+        "mshr": sum("coupled_l2_mshr" in name and "coupled_l2_mshr_ctl" not in name for name in nested_modules),
+        "mshr_ctl": sum("coupled_l2_mshr_ctl" in name for name in nested_modules),
+        "probe_queue": sum("coupled_l2_probe_queue" in name for name in nested_modules),
+        "refill_unit": sum("coupled_l2_refill_unit" in name for name in nested_modules),
+    }
+    nested_ok = all(value == 4 for value in required_nested.values())
+    passed = len(parent_schema) == expected_count and len(child_modules) == 4 and nested_ok and verilator.returncode == 0 and yosys.returncode == 0
     return {"status": "PASS" if passed else "FAIL", "parent_ports": len(parent_schema),
             "expected_parent_ports": expected_count, "child_module_count": len(child_modules),
-            "modules": module_names, "verilator": "PASS" if verilator.returncode == 0 else "FAIL",
+            "modules": module_names, "nested_family_modules": required_nested,
+            "verilator": "PASS" if verilator.returncode == 0 else "FAIL",
             "yosys": "PASS" if yosys.returncode == 0 else "FAIL", "rtl_bytes": len(rtl.encode()),
             "rtl_sha256": hashlib.sha256(rtl.encode()).hexdigest(),
             "verilator_returncode": verilator.returncode, "yosys_returncode": yosys.returncode}
