@@ -49,7 +49,21 @@ __all__ = [
     "MemBlock",
     "build_verilog",
     "main",
+    "MEMBLOCK_PARENT_SOURCE_PATHS",
+    "MEMBLOCK_PARENT_SOURCE_FILE_COUNT",
 ]
+
+
+# Frozen V2 source closure represented by this memory parent aggregate. /
+# 此存储器父级聚合所表示的冻结 V2 源闭包。
+MEMBLOCK_PARENT_SOURCE_PATHS: tuple[str, ...] = (
+    "upstream/src/main/scala/xiangshan/mem/MemBlock.scala",
+    "upstream/src/main/scala/xiangshan/cache/dcache/DCacheWrapper.scala",
+    "upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/MainPipe.scala",
+    "upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/AMOALU.scala",
+    "upstream/src/main/scala/xiangshan/cache/dcache/meta/TagArray.scala",
+)
+MEMBLOCK_PARENT_SOURCE_FILE_COUNT = len(MEMBLOCK_PARENT_SOURCE_PATHS)
 
 
 # Cast Amaranth generator controls to the context-manager protocol. / 将 Amaranth 生成器控制转换为上下文管理器协议。

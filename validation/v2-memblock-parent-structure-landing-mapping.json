@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "kind": "V2_MEMBLOCK_PARENT_STRUCTURE_LANDING_MAPPING",
+  "batch_id": "V2-BULK-CORE-MEMBLOCK-PARENT-STRUCTURE-001",
+  "closure_root": "core.memblock.parent",
+  "root_module": "MemBlock",
+  "targets": {
+    "memblock": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.MemBlock-Hardware.py",
+    "frontend_bridge": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.FrontendBridge-Hardware.py"
+  },
+  "source_paths": [
+    "upstream/src/main/scala/xiangshan/mem/MemBlock.scala",
+    "upstream/src/main/scala/xiangshan/cache/dcache/DCacheWrapper.scala",
+    "upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/MainPipe.scala",
+    "upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/AMOALU.scala",
+    "upstream/src/main/scala/xiangshan/cache/dcache/meta/TagArray.scala"
+  ],
+  "classification": "AGGREGATED_PARENT_BOUNDARY",
+  "status": "STRUCTURE_LANDED",
+  "behavior_status": "PENDING_FULL_CHILD_CLOSURE",
+  "gates": {
+    "AST": "PASS",
+    "PY_COMPILE": "PASS",
+    "PYRIGHT": "PASS",
+    "V2_REFERENCE": "PENDING",
+    "PARENT_CLOSURE_MATCHED": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "acceptance_eligible": false
+}
