@@ -15,9 +15,9 @@
     "dependency_family_subjects": 23,
     "uhsc_integration_subjects": 1,
     "retired_or_excluded_subjects": 1,
-    "current_distinct_build_paths": 75,
-    "current_committed_build_paths": 74,
-    "current_draft_build_paths": 1,
+    "current_distinct_build_paths": 76,
+    "current_committed_build_paths": 75,
+    "current_draft_build_paths": 0,
     "note": "78 is the frozen closure-subject upper bound. Dependency-family entries may be satisfied by an existing aggregate or inlined selected-top child and are not automatically 78 additional physical Python files. No new Build path may be added without a plan/manifest event."
   },
   "phases": [
@@ -39,7 +39,12 @@
     {
       "id": "BATCH_VALIDATION",
       "status": "PENDING_REWRITE_FREEZE",
-      "required_gates": ["direct/reference differential", "Verilator", "Yosys", "machine-readable evidence"]
+      "required_gates": [
+        "direct/reference differential",
+        "Verilator",
+        "Yosys",
+        "machine-readable evidence"
+      ]
     },
     {
       "id": "PARENT_CLOSURE",
