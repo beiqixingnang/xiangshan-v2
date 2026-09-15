@@ -1,0 +1,337 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_BACKEND_PARENT_CLOSURE_ROUND",
+  "batch_id": "V2-PARENT-BACKEND-CLOSURE-002",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "locked_reference": {
+    "canonical_path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "immutable": true
+  },
+  "targets": {
+    "parent": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Top-Hardware.py",
+    "children": [
+      "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Decode.Instructions-Hardware.py",
+      "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.EnqPolicy-Hardware.py",
+      "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Datapath.WbArbiter-Hardware.py"
+    ]
+  },
+  "direct": {
+    "status": "PASS",
+    "vectors": 128,
+    "checks": 1024,
+    "trace_sha256": "5bd66790737cc830ab88fea8bc2c630aeed887958a52dab8b69b5021f65acba0",
+    "trace_head": [
+      {
+        "decode_instruction": 61262929,
+        "decode_matches": 0,
+        "issue_can_enq": 3201193,
+        "issue_selected_valid": 1,
+        "issue_selected_bits": 1,
+        "writeback_valid": [
+          [
+            1
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ]
+        ],
+        "writeback_data": [
+          [
+            9521688676171411002
+          ],
+          [
+            3402318029543361378
+          ],
+          [
+            3402318029543361378
+          ],
+          [
+            3402318029543361378
+          ],
+          [
+            3402318029543361378
+          ]
+        ],
+        "writeback_pdest": [
+          [
+            25
+          ],
+          [
+            188
+          ],
+          [
+            188
+          ],
+          [
+            188
+          ],
+          [
+            188
+          ]
+        ]
+      },
+      {
+        "decode_instruction": 2607628102,
+        "decode_matches": 0,
+        "issue_can_enq": 3896678,
+        "issue_selected_valid": 1,
+        "issue_selected_bits": 2,
+        "writeback_valid": [
+          [
+            0
+          ],
+          [
+            1
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ]
+        ],
+        "writeback_data": [
+          [
+            14531896728742697047
+          ],
+          [
+            5617962242809567558
+          ],
+          [
+            14531896728742697047
+          ],
+          [
+            14531896728742697047
+          ],
+          [
+            14531896728742697047
+          ]
+        ],
+        "writeback_pdest": [
+          [
+            110
+          ],
+          [
+            77
+          ],
+          [
+            110
+          ],
+          [
+            110
+          ],
+          [
+            110
+          ]
+        ]
+      }
+    ],
+    "trace_tail": [
+      {
+        "decode_instruction": 952381166,
+        "decode_matches": 0,
+        "issue_can_enq": 2847082,
+        "issue_selected_valid": 1,
+        "issue_selected_bits": 2,
+        "writeback_valid": [
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ]
+        ],
+        "writeback_data": [
+          [
+            10129951860869357071
+          ],
+          [
+            10129951860869357071
+          ],
+          [
+            10129951860869357071
+          ],
+          [
+            10129951860869357071
+          ],
+          [
+            10129951860869357071
+          ]
+        ],
+        "writeback_pdest": [
+          [
+            101
+          ],
+          [
+            101
+          ],
+          [
+            101
+          ],
+          [
+            101
+          ],
+          [
+            101
+          ]
+        ]
+      },
+      {
+        "decode_instruction": 1993784514,
+        "decode_matches": 0,
+        "issue_can_enq": 1159927,
+        "issue_selected_valid": 1,
+        "issue_selected_bits": 1,
+        "writeback_valid": [
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            1
+          ],
+          [
+            0
+          ]
+        ],
+        "writeback_data": [
+          [
+            747040878893145222
+          ],
+          [
+            747040878893145222
+          ],
+          [
+            747040878893145222
+          ],
+          [
+            15163498205865600647
+          ],
+          [
+            747040878893145222
+          ]
+        ],
+        "writeback_pdest": [
+          [
+            32
+          ],
+          [
+            32
+          ],
+          [
+            32
+          ],
+          [
+            180
+          ],
+          [
+            32
+          ]
+        ]
+      }
+    ]
+  },
+  "differential": {
+    "status": "PASS",
+    "vectors": 128,
+    "compile": {
+      "command": [
+        "verilator",
+        "--binary",
+        "--timing",
+        "-Wno-fatal",
+        "-Wno-WIDTHEXPAND",
+        "-Wno-WIDTHTRUNC",
+        "--top-module",
+        "tb",
+        "--Mdir",
+        "/tmp/uhsc-v2/validation/.work/v2-backend-parent-closure-round/obj",
+        "/tmp/uhsc-v2/validation/.work/v2-backend-parent-closure-round/backend-parent-closure-round.sv",
+        "/tmp/uhsc-v2/validation/.work/v2-backend-parent-closure-round/BackendParentClosureReference.sv",
+        "/tmp/uhsc-v2/validation/.work/v2-backend-parent-closure-round/backend-parent-closure-round-tb.sv"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "output_tail": "tstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -include Vtb__pch.h.slow -c -o Vtb___024root__DepSet_ha183790c__0__Slow.o Vtb___024root__DepSet_ha183790c__0__Slow.cpp\ng++   -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -include Vtb__pch.h.slow -c -o Vtb__Syms.o Vtb__Syms.cpp\necho \"\" > Vtb__ALL.verilator_deplist.tmp\ng++    verilated.o verilated_timing.o verilated_threads.o Vtb__ALL.a    -pthread -lpthread -latomic   -o Vtb\nrm Vtb__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-parent-closure-round/obj'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 7.206 MB sources in 37 modules, into 0.655 MB in 9 C++ files needing 0.000 MB\n- Verilator: Walltime 24.622 s (elab=0.490, cvt=0.862, bld=22.848); cpu 1.574 s on 1 threads; alloced 155.203 MB\n",
+      "output_sha256": "23c52ec3eee4d3863d629353a8dafdc9720eb461d63373ad4423e88c6a16a57d"
+    },
+    "run": {
+      "command": [
+        "/tmp/uhsc-v2/validation/.work/v2-backend-parent-closure-round/obj/Vtb"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "output_tail": "BACKEND_PARENT_CLOSURE_DIFF_PASS 128\n- /tmp/uhsc-v2/validation/.work/v2-backend-parent-closure-round/backend-parent-closure-round-tb.sv:1435: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 128ps; walltime 0.001 s; speed 62.600 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n",
+      "output_sha256": "bfb8a53fd14633f294217ef98178da5c22d7a76f3a8fc393cdf52c73c55841ec"
+    },
+    "reference_mode": "independent_child_equations"
+  },
+  "tool_gates": {
+    "verilator": {
+      "command": [
+        "verilator",
+        "--lint-only",
+        "-Wno-fatal",
+        "/tmp/uhsc-v2/validation/.work/v2-backend-parent-closure-round/backend-parent-closure-round.sv"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "output_tail": "/backend-parent-closure-round.sv:67892:52: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n67892 |   assign io_fromExu_6_v0Wen = io_fromExu_6_rfClass == 2'h3;\n      |                                                    ^~\n%Warning-WIDTHTRUNC: /tmp/uhsc-v2/validation/.work/v2-backend-parent-closure-round/backend-parent-closure-round.sv:67894:32: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'io_fromExu_7_rfClass' generates 3 bits.\n67894 |   assign io_fromExu_7_intWen = ! io_fromExu_7_rfClass;\n      |                                ^\n%Warning-WIDTHEXPAND: /tmp/uhsc-v2/validation/.work/v2-backend-parent-closure-round/backend-parent-closure-round.sv:67895:52: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n67895 |   assign io_fromExu_7_fpWen = io_fromExu_7_rfClass == 1'h1;\n      |                                                    ^~\n%Warning-WIDTHEXPAND: /tmp/uhsc-v2/validation/.work/v2-backend-parent-closure-round/backend-parent-closure-round.sv:67896:53: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n67896 |   assign io_fromExu_7_vecWen = io_fromExu_7_rfClass == 2'h2;\n      |                                                     ^~\n%Warning-WIDTHEXPAND: /tmp/uhsc-v2/validation/.work/v2-backend-parent-closure-round/backend-parent-closure-round.sv:67897:52: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n67897 |   assign io_fromExu_7_v0Wen = io_fromExu_7_rfClass == 2'h3;\n      |                                                    ^~\n",
+      "output_sha256": "45578589bac4f57475fa1adc3e4f5549232db616ca7975d437a6efeaad3684f5"
+    },
+    "yosys": {
+      "command": [
+        "yosys",
+        "-p",
+        "read_verilog -sv /tmp/uhsc-v2/validation/.work/v2-backend-parent-closure-round/backend-parent-closure-round.sv; hierarchy -top UHSCBackendParentClosureRound; proc; check"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "output_tail": "3...\nChecking module UHSCBackendParentClosureRound.writeback.v0_wb.arb_2...\nChecking module UHSCBackendParentClosureRound.writeback.v0_wb.arb_1...\nChecking module UHSCBackendParentClosureRound.writeback.v0_wb.arb_0...\nChecking module UHSCBackendParentClosureRound.writeback.v0_wb...\nChecking module UHSCBackendParentClosureRound.writeback.int_wb.arb_4...\nChecking module UHSCBackendParentClosureRound.writeback.int_wb.arb_3...\nChecking module UHSCBackendParentClosureRound.writeback.int_wb.arb_2...\nChecking module UHSCBackendParentClosureRound.writeback.int_wb.arb_1...\nChecking module UHSCBackendParentClosureRound.writeback.int_wb.arb_0...\nChecking module UHSCBackendParentClosureRound.writeback.int_wb...\nChecking module UHSCBackendParentClosureRound.writeback.fp_wb.arb_4...\nChecking module UHSCBackendParentClosureRound.writeback.fp_wb.arb_3...\nChecking module UHSCBackendParentClosureRound.writeback.fp_wb.arb_2...\nChecking module UHSCBackendParentClosureRound.writeback.fp_wb.arb_1...\nChecking module UHSCBackendParentClosureRound.writeback.fp_wb.arb_0...\nChecking module UHSCBackendParentClosureRound.writeback.fp_wb...\nChecking module UHSCBackendParentClosureRound.writeback...\nChecking module UHSCBackendParentClosureRound.issue...\nChecking module UHSCBackendParentClosureRound.decode...\nChecking module UHSCBackendParentClosureRound...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 27d49d156b, CPU: user 1.59s system 0.14s, MEM: 314.53 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 72% 2x read_verilog (1 sec), 8% 1x check (0 sec), ...\n",
+      "output_sha256": "8783717ed91c9114b5373fc10cbe73521814a2bebba9f52fc30c3036b0b52e7d"
+    },
+    "status": "PASS"
+  },
+  "child_wiring": {
+    "decode": "PASS",
+    "issue": "PASS",
+    "writeback": "PASS",
+    "writeback_classes": 5,
+    "writeback_ports_checked": 1
+  },
+  "status": "PASS_BOUNDED_PARENT_CLOSURE",
+  "behavioral_status": "BOUNDED_CHILD_SIGNAL_FLOW",
+  "acceptance_eligible": false,
+  "unclosed": [
+    "Backend full 1165-port behavior still requires Rename/CSR/Exu/Memory closure.",
+    "Only first physical port per register class is exposed by the parent child observation surface.",
+    "License review and user approval remain pending."
+  ]
+}

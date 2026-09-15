@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "kind": "V2_BACKEND_PARENT_CLOSURE_MAPPING",
+  "batch_id": "V2-PARENT-BACKEND-CLOSURE-002",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "entries": [
+    {
+      "source": "Backend.scala",
+      "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Top-Hardware.py",
+      "children": [
+        "Decode.Instructions",
+        "Issue.EnqPolicy",
+        "WbDataPath"
+      ],
+      "status": "PASS_BOUNDED_PARENT_CLOSURE"
+    }
+  ],
+  "gates": {
+    "STRUCTURE_VERIFIED": "PASS_BOUNDED_PARENT_CLOSURE",
+    "BEHAVIOR_VERIFIED_BackendChild": "PASS_BOUNDED_PARENT_CLOSURE",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "acceptance_eligible": false
+}
