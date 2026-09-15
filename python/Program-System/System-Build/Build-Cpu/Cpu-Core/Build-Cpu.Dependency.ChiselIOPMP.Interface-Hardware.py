@@ -9,11 +9,13 @@ explicit transaction boundary; parent integration remains a separate closure.
 
 from __future__ import annotations
 
+from contextlib import AbstractContextManager
 from dataclasses import dataclass
-from typing import Any, Mapping, Sequence
+from typing import Any, Mapping, Sequence, cast
 
 from amaranth import Array, Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
+from amaranth.hdl.ast import Value
 from amaranth.lib.coding import PriorityEncoder
 
 
@@ -36,6 +38,30 @@ SOURCE_SCALA_PATHS = (
     "ChiselIOPMP/src/main/scala/IopmpChecker.scala",
 )
 SOURCE_SCALA_FILE_COUNT = len(SOURCE_SCALA_PATHS)
+
+
+# Cast Amaranth's generator controls to the context-manager protocol. /
+# 将 Amaranth 生成器控制转换为上下文管理器协议。
+def amaranth_if(module: Module, condition: Any) -> AbstractContextManager[None]:
+    return cast(AbstractContextManager[None], module.If(condition))
+
+
+# Cast an Amaranth else branch to the context-manager protocol. /
+# 将 Amaranth else 分支转换为上下文管理器协议。
+def amaranth_else(module: Module) -> AbstractContextManager[None]:
+    return cast(AbstractContextManager[None], module.Else())
+
+
+# Cast an Amaranth elif branch to the context-manager protocol. /
+# 将 Amaranth elif 分支转换为上下文管理器协议。
+def amaranth_elif(module: Module, condition: Any) -> AbstractContextManager[None]:
+    return cast(AbstractContextManager[None], module.Elif(condition))
+
+
+# Narrow dynamic Amaranth expressions at the DSL boundary. /
+# 在 DSL 边界窄化动态 Amaranth 表达式。
+def amaranth_value(expression: Any) -> Value:
+    return cast(Value, expression)
 
 
 # =============================================================================
@@ -190,13 +216,13 @@ class UHSCIOPMPInterface(Elaboratable):
         m.d.comb += [self.csr_ready.eq(self.csr_valid), self.enable.eq(enable_reg), self.interrupt.eq(err_interrupt)]
 
         # Build a lowest-index priority match for the current request. / 为当前请求构造最低索引优先匹配。
-        request_length = Mux(self.req_length == 0, 1, self.req_length)
+        request_length = amaranth_value(Mux(self.req_length == 0, 1, self.req_length))
         request_end = self.req_address + request_length - 1
         match_bits: list[Any] = []
         for index in range(c.entry_num):
             mode = entry_cfg[index][3:5]
             valid_mode = (mode == 2) | (mode == 3)
-            encoded = entry_addr[index]
+            encoded = amaranth_value(entry_addr[index])
             napot_mask = encoded ^ (encoded + 1)
             range_start = encoded & ~napot_mask
             range_end = range_start | napot_mask
@@ -208,8 +234,8 @@ class UHSCIOPMPInterface(Elaboratable):
         encoder = PriorityEncoder(c.entry_num)
         m.submodules.iopmp_priority_encoder = encoder
         m.d.comb += encoder.i.eq(match_vector)
-        selected_read = Array(entry_cfg[index][0] for index in range(c.entry_num))[selected_index]
-        selected_write = Array(entry_cfg[index][1] for index in range(c.entry_num))[selected_index]
+        selected_read = amaranth_value(Array(entry_cfg[index][0] for index in range(c.entry_num))[selected_index])
+        selected_write = amaranth_value(Array(entry_cfg[index][1] for index in range(c.entry_num))[selected_index])
         m.d.comb += selected_index.eq(encoder.o)
         matched = ~encoder.n
         no_rule = ~matched
@@ -231,44 +257,44 @@ class UHSCIOPMPInterface(Elaboratable):
         read_value = Mux(self.csr_addr[0:16] == 0x0010, Const(0, 32), read_value)
         read_value = Mux(self.csr_addr[0:16] == 0x0060, errcfg, read_value)
         read_value = Mux(self.csr_addr[0:16] == 0x0064, errinfo, read_value)
-        entry_read = Array(entry_low[i] for i in range(c.entry_num))[entry_index]
-        entry_high_read = Array(entry_high[i] for i in range(c.entry_num))[entry_index]
-        entry_cfg_read = Array(entry_cfg[i] for i in range(c.entry_num))[entry_index]
+        entry_read = amaranth_value(Array(entry_low[i] for i in range(c.entry_num))[entry_index])
+        entry_high_read = amaranth_value(Array(entry_high[i] for i in range(c.entry_num))[entry_index])
+        entry_cfg_read = amaranth_value(Array(entry_cfg[i] for i in range(c.entry_num))[entry_index])
         entry_value = Mux(entry_word == 0, entry_read,
-                          Mux(entry_word == 1, Cat(Const(0, 32 - len(entry_high_read)), entry_high_read),
+                          Mux(entry_word == 1, Cat(Const(0, 32 - max(1, c.address_bits - 32)), entry_high_read),
                               Cat(Const(0, 21), entry_cfg_read)))
         m.d.comb += self.csr_rdata.eq(Mux(entry_window, entry_value, read_value))
 
         # Update tables, capture first faults, and retire responses synchronously. / 同步更新表项、捕获首个错误并完成响应。
-        with m.If(self.reset):
+        with amaranth_if(m, self.reset):
             m.d.iopmp += [enable_reg.eq(0), err_interrupt.eq(0), errcfg.eq(0), errinfo.eq(0), err_addr.eq(0), err_rrid.eq(0),
                           response_valid.eq(0), response_read_fault.eq(0), response_write_fault.eq(0), response_entry.eq(0)]
-        with m.Else():
-            with m.If(self.csr_valid & self.csr_write):
-                with m.If(self.csr_addr[0:16] == 0x0008):
+        with amaranth_else(m):
+            with amaranth_if(m, self.csr_valid & self.csr_write):
+                with amaranth_if(m, self.csr_addr[0:16] == 0x0008):
                     m.d.iopmp += enable_reg.eq(self.csr_wdata[0])
-                with m.If(self.csr_addr[0:16] == 0x0060):
+                with amaranth_if(m, self.csr_addr[0:16] == 0x0060):
                     m.d.iopmp += errcfg.eq(self.csr_wdata)
-                with m.If((self.csr_addr[0:16] == 0x0064) & self.csr_wdata[31]):
+                with amaranth_if(m, amaranth_value(self.csr_addr[0:16] == 0x0064) & amaranth_value(self.csr_wdata[31])):
                     errinfo.eq(0)
                     err_interrupt.eq(0)
-                with m.If(entry_window & (entry_index < c.entry_num)):
-                    with m.If(entry_word == 0):
+                with amaranth_if(m, entry_window & (entry_index < c.entry_num)):
+                    with amaranth_if(m, entry_word == 0):
                         m.d.iopmp += entry_low[entry_index].eq(self.csr_wdata)
-                    with m.Elif(entry_word == 1):
-                        m.d.iopmp += entry_high[entry_index].eq(self.csr_wdata[:len(entry_high[0])])
-                    with m.Elif(entry_word == 2):
+                    with amaranth_elif(m, entry_word == 1):
+                        m.d.iopmp += entry_high[entry_index].eq(self.csr_wdata[:max(1, c.address_bits - 32)])
+                    with amaranth_elif(m, entry_word == 2):
                         m.d.iopmp += entry_cfg[entry_index].eq(self.csr_wdata[:11])
-            with m.If(request_fire):
+            with amaranth_if(m, request_fire):
                 m.d.iopmp += [
                     response_valid.eq(1), response_read_fault.eq(read_fault_now),
                     response_write_fault.eq(write_fault_now), response_entry.eq(selected_index),
                     errinfo.eq(Cat(Const(0, 15), selected_index, Const(0, 14), write_fault_now, read_fault_now, 1)),
                     err_addr.eq(self.req_address), err_rrid.eq(self.req_rrid),
                 ]
-                with m.If(read_fault_now | write_fault_now):
+                with amaranth_if(m, read_fault_now | write_fault_now):
                     m.d.iopmp += err_interrupt.eq(1)
-            with m.If(response_fire):
+            with amaranth_if(m, response_fire):
                 m.d.iopmp += response_valid.eq(0)
         return m
 
