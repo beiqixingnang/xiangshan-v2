@@ -29,6 +29,28 @@ SOURCE_COMMIT = "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af"
 LOCKED_SHA256 = "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d"
 LOCKED_BYTES = 228590583
 
+# The Amaranth parent keeps the compact ``io_perf_N`` names used by the
+# local Build contract, while Chisel's locked TL2TLCoupledL2 ANSI envelope
+# appends ``_value`` to each HardwarePerfMonitor output.  Keep this aliasing
+# local to the comparator: changing the Build contract would alter the target
+# ABI and would make the ordinary parent validator compare against the wrong
+# source-shaped names.  All other ports are identity-mapped and therefore
+# still checked strictly by the generated testbench.
+# 本地 Build 契约保留紧凑的 ``io_perf_N`` 名称，而 Chisel 锁定的
+# TL2TLCoupledL2 ANSI 包络为每个 HardwarePerfMonitor 输出追加 ``_value``。
+# 将别名限定在比较器内；修改 Build 契约会改变目标 ABI，并使普通父级验证器
+# 与错误的源形状名称比较。其余端口均恒等映射，因此仍由生成测试台严格检查。
+REFERENCE_PORT_ALIASES: dict[str, str] = {
+    **{f"io_perf_{index}": f"io_perf_{index}_value" for index in range(1, 69)},
+}
+
+# Resolve comparator-only aliases without changing the target contract. /
+# 解析仅用于比较器的别名而不改变目标契约。
+def reference_port_name(target_name: str) -> str:
+    """Map one target port to its immutable reference spelling. / 将目标端口映射到不可变参考名称。"""
+
+    return REFERENCE_PORT_ALIASES.get(target_name, target_name)
+
 
 def digest(data: bytes) -> str:
     """Hash exact bytes without newline normalization. / 对原始字节计算摘要。"""
@@ -126,7 +148,13 @@ def port_declarations(contract: tuple[dict[str, Any], ...]) -> tuple[list[str], 
     ref_connections: list[str] = []
     for row in contract:
         name = row["name"]
-        ref_connections.append(f".{name}({name if row['direction'] == 'input' else 'r_' + name})")
+        # Keep target-side declarations source-shaped, but connect reference
+        # outputs through the immutable Chisel spelling (notably
+        # ``io_perf_N_value``).  Inputs remain identity-mapped.
+        # 保持目标侧声明的源形状，但将参考输出连接到不可变 Chisel 名称
+        # （尤其是 ``io_perf_N_value``）；输入保持恒等映射。
+        reference_name = reference_port_name(name)
+        ref_connections.append(f".{reference_name}({name if row['direction'] == 'input' else 'r_' + name})")
     return declarations, [",\n".join(connections), ",\n".join(ref_connections)], outputs
 
 
