@@ -9,8 +9,9 @@ visible, without importing another Build file or the generated reference.
 
 from __future__ import annotations
 
+from contextlib import AbstractContextManager
 from dataclasses import dataclass
-from typing import Any, Iterable, Sequence
+from typing import Any, Iterable, Sequence, cast
 
 from amaranth import ClockDomain, Elaboratable, Module, ResetSignal, Signal
 from amaranth.back import verilog
@@ -28,6 +29,21 @@ __all__ = [
     "build_verilog",
     "main",
 ]
+
+
+# Cast Amaranth generator controls to the context-manager protocol. / 将 Amaranth 生成器控制转换为上下文管理器协议。
+def _if(module: Module, condition: Any) -> AbstractContextManager[None]:
+    return cast(AbstractContextManager[None], module.If(condition))
+
+
+# Cast an Amaranth elif branch to the context-manager protocol. / 将 Amaranth elif 分支转换为上下文管理器协议。
+def _elif(module: Module, condition: Any) -> AbstractContextManager[None]:
+    return cast(AbstractContextManager[None], module.Elif(condition))
+
+
+# Cast an Amaranth else branch to the context-manager protocol. / 将 Amaranth else 分支转换为上下文管理器协议。
+def _else(module: Module) -> AbstractContextManager[None]:
+    return cast(AbstractContextManager[None], module.Else())
 
 
 # =============================================================================
@@ -54,6 +70,10 @@ class FrontendBridgeConfig:
 # Implementation
 # =============================================================================
 class TwoEntryQueue(Elaboratable):
+    # Resolve runtime-created ports for static type checking. / 为静态类型检查解析运行时创建的端口。
+    def __getattr__(self, name: str) -> Signal:
+        raise AttributeError(name)
+
     """A fall-through-free two-entry Decoupled queue. / 无旁路的两项 Decoupled 队列。"""
 
     # Construct a queue with one signal per packed payload field. / 按每个打包字段构造队列信号。
@@ -92,38 +112,42 @@ class TwoEntryQueue(Elaboratable):
         for output, source in zip(self.deq_bits, data0):
             m.d.comb += output.eq(source)
 
-        with m.If(pop):
-            with m.If(count == 2):
+        with _if(m, pop):
+            with _if(m, count == 2):
                 for dst, src in zip(data0, data1):
                     m.d.sync += dst.eq(src)
-                with m.If(push):
+                with _if(m, push):
                     for dst, src in zip(data1, self.enq_bits):
                         m.d.sync += dst.eq(src)
                     m.d.sync += count.eq(2)
-                with m.Else():
+                with _else(m):
                     m.d.sync += count.eq(1)
-            with m.Else():
-                with m.If(push):
+            with _else(m):
+                with _if(m, push):
                     for dst, src in zip(data0, self.enq_bits):
                         m.d.sync += dst.eq(src)
                     m.d.sync += count.eq(1)
-                with m.Else():
+                with _else(m):
                     m.d.sync += count.eq(0)
-        with m.Elif(push):
-            with m.If(count == 0):
+        with _elif(m, push):
+            with _if(m, count == 0):
                 for dst, src in zip(data0, self.enq_bits):
                     m.d.sync += dst.eq(src)
                 m.d.sync += count.eq(1)
-            with m.Else():
+            with _else(m):
                 for dst, src in zip(data1, self.enq_bits):
                     m.d.sync += dst.eq(src)
                 m.d.sync += count.eq(2)
-        with m.If(ResetSignal("sync")):
+        with _if(m, ResetSignal("sync")):
             m.d.sync += count.eq(0)
         return m
 
 
 class BufferedEdge(Elaboratable):
+    # Resolve runtime-created ports for static type checking. / 为静态类型检查解析运行时创建的端口。
+    def __getattr__(self, name: str) -> Signal:
+        raise AttributeError(name)
+
     """Two queues in series, matching ``Buffer(default(default(edge)))``. / 两级串联队列，对应双重默认 Buffer。"""
 
     # Construct the two queue stages and expose edge-level handshakes. / 构造两级队列并暴露边界握手。
@@ -163,6 +187,10 @@ class BufferedEdge(Elaboratable):
 
 
 class ICacheBuffer(Elaboratable):
+    # Resolve runtime-created ports for static type checking. / 为静态类型检查解析运行时创建的端口。
+    def __getattr__(self, name: str) -> Signal:
+        raise AttributeError(name)
+
     """Buffered L1-I to L2 TileLink edge. / 带缓冲的 L1-I 至 L2 TileLink 边。"""
 
     # Construct the exact reduced ICache edge payload. / 构造精确的 ICache 边界载荷。
@@ -242,6 +270,10 @@ class ICacheBuffer(Elaboratable):
 
 
 class ICacheCtrlBuffer(Elaboratable):
+    # Resolve runtime-created ports for static type checking. / 为静态类型检查解析运行时创建的端口。
+    def __getattr__(self, name: str) -> Signal:
+        raise AttributeError(name)
+
     """Buffered I-cache control TileLink edge. / 带缓冲的 I-cache 控制 TileLink 边。"""
 
     # Construct control-edge fields with the V2 width adaptations. / 按 V2 位宽适配构造控制边界字段。
@@ -310,6 +342,10 @@ class ICacheCtrlBuffer(Elaboratable):
 
 
 class InstrUncacheBuffer(Elaboratable):
+    # Resolve runtime-created ports for static type checking. / 为静态类型检查解析运行时创建的端口。
+    def __getattr__(self, name: str) -> Signal:
+        raise AttributeError(name)
+
     """Buffered instruction-MMIO TileLink edge. / 带缓冲的指令 MMIO TileLink 边。"""
 
     # Construct the optimized instruction-uncache fields. / 构造优化后的指令非缓存字段。
@@ -362,6 +398,10 @@ class InstrUncacheBuffer(Elaboratable):
 
 
 class FrontendBridge(Elaboratable):
+    # Resolve runtime-created ports for static type checking. / 为静态类型检查解析运行时创建的端口。
+    def __getattr__(self, name: str) -> Signal:
+        raise AttributeError(name)
+
     """The three-edge V2 frontend bridge. / 三条边组成的 V2 前端桥。"""
 
     # Construct all 91 source-generated boundary signals. / 构造源生成的全部 91 个边界信号。

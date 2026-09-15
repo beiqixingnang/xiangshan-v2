@@ -10,10 +10,12 @@ the explicit family boundary instead of being fabricated as unrelated files.
 
 from __future__ import annotations
 
+from contextlib import AbstractContextManager
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, cast
 
 from amaranth import Array, ClockDomain, Elaboratable, Memory, Module, Mux, Signal
+from amaranth.hdl.ast import Value
 from amaranth.back import verilog
 
 
@@ -36,6 +38,27 @@ __all__ = [
     "build_parent_verilog",
     "main",
 ]
+
+
+# Typed wrappers preserve Amaranth's generator-based control contexts. / 类型包装保持 Amaranth 基于生成器的控制上下文。
+# Convert a dynamic If context into a static context-manager protocol. / 将动态 If 上下文转换为静态上下文管理器协议。
+def _if(module: Module, condition: Any) -> AbstractContextManager[None]:
+    return cast(AbstractContextManager[None], module.If(condition))
+
+
+# Convert a dynamic Elif context into a static context-manager protocol. / 将动态 Elif 上下文转换为静态上下文管理器协议。
+def _elif(module: Module, condition: Any) -> AbstractContextManager[None]:
+    return cast(AbstractContextManager[None], module.Elif(condition))
+
+
+# Convert a dynamic Else context into a static context-manager protocol. / 将动态 Else 上下文转换为静态上下文管理器协议。
+def _else(module: Module) -> AbstractContextManager[None]:
+    return cast(AbstractContextManager[None], module.Else())
+
+
+# Narrowly cast dynamic Amaranth expressions at the DSL boundary. / 在 DSL 边界窄化动态 Amaranth 表达式类型。
+def _value(expression: Any) -> Value:
+    return cast(Value, expression)
 
 
 # =============================================================================
@@ -135,6 +158,10 @@ def directory_reference_step(
 
 
 class CoupledL2Directory(Elaboratable):
+    # Resolve runtime-created Amaranth ports for static typing. / 为静态类型解析运行时创建的 Amaranth 端口。
+    def __getattr__(self, name: str) -> Signal:
+        raise AttributeError(name)
+
     """Two-stage metadata directory with V2 replacement decisions.
     带 V2 替换决策的两级元数据目录。
     """
@@ -276,9 +303,9 @@ class CoupledL2Directory(Elaboratable):
         for index in range(c.mshr_entries):
             set_lo = index * c.set_bits
             way_lo = index * c.way_bits
-            same_set = self.mshr_set[set_lo:set_lo + c.set_bits] == self.read_set
-            active = self.mshr_valid[index] & ~self.mshr_will_free[index]
-            occupies = active & same_set & (self.mshr_block_refill[index] | self.mshr_dir_hit[index])
+            same_set = _value(self.mshr_set[set_lo:set_lo + c.set_bits]) == _value(self.read_set)
+            active = _value(self.mshr_valid[index]) & ~_value(self.mshr_will_free[index])
+            occupies = active & same_set & (_value(self.mshr_block_refill[index]) | _value(self.mshr_dir_hit[index]))
             way_value = self.mshr_way[way_lo:way_lo + c.way_bits]
             way_one_hot: Any = 0
             for way in range(c.ways):
@@ -449,17 +476,17 @@ class CoupledL2Directory(Elaboratable):
         first_masked: Any = 0
         first_masked_seen: Any = 0
         for way in range(c.ways):
-            take = self.read_way_mask[way] & free_mask[way] & ~first_masked_seen
+            take = _value(self.read_way_mask[way]) & _value(free_mask[way]) & ~_value(first_masked_seen)
             first_masked = Mux(take, way, first_masked)
-            first_masked_seen = first_masked_seen | take
-        selected_way = Mux(~masked_selected & (self.read_way_mask != 0), first_masked, selected_way)
-        retry = ~free_mask.any()
+            first_masked_seen = _value(first_masked_seen) | _value(take)
+        selected_way = Mux(~_value(masked_selected) & (_value(self.read_way_mask) != 0), first_masked, selected_way)
+        retry = ~_value(free_mask.any())
         selected_meta = lambda values: Array(values)[selected_way]
 
         # Public response and refill response fields. / 对外响应及回填响应字段。
         m.d.comb += [
             self.resp_valid.eq(req2_valid),
-            self.resp_hit.eq((hit_any | (req2_cmo_all & ~Array(invalid_vec)[req2_cmo_way])) & ~multi_hit),
+            self.resp_hit.eq((_value(hit_any) | (_value(req2_cmo_all) & ~_value(Array(invalid_vec)[req2_cmo_way]))) & ~_value(multi_hit)),
             self.resp_tag.eq(selected_meta(tags2)),
             self.resp_set.eq(req2_set),
             self.resp_way.eq(selected_way),
@@ -503,7 +530,7 @@ class CoupledL2Directory(Elaboratable):
             replacement_write.data.eq(selected_way + 1),
             replacement_write.en.eq(replacement_update & ~self.reset),
         ]
-        with m.If(self.reset):
+        with _if(m, self.reset):
             m.d.coupled_l2_directory += [req1_valid.eq(0), req2_valid.eq(0)]
 
         return m
@@ -518,6 +545,10 @@ _LegacyCoupledL2Directory = CoupledL2Directory
 
 
 class CompactCoupledL2Directory(Elaboratable):
+    # Resolve runtime-created Amaranth ports for static typing. / 为静态类型解析运行时创建的 Amaranth 端口。
+    def __getattr__(self, name: str) -> Signal:
+        raise AttributeError(name)
+
     """Packed-memory CoupledL2 Directory implementation. / 打包存储器 CoupledL2 目录实现。"""
 
     # Construct the same public boundary as CoupledL2Directory. / 构造与 CoupledL2Directory 相同的公共边界。
@@ -527,8 +558,8 @@ class CompactCoupledL2Directory(Elaboratable):
         # legacy Elaboratable is not registered as an unused instance.
         # 在普通对象上调用声明式端口构造器，避免将旧 Elaboratable 注册为未使用实例。
         template = type("_DirectoryPortTemplate", (), {})()
-        _LegacyCoupledL2Directory.__init__(template, configuration)
-        self.__dict__.update(template.__dict__)
+        _LegacyCoupledL2Directory.__init__(cast(_LegacyCoupledL2Directory, template), configuration)
+        self.__dict__.update(vars(template))
         self.configuration = configuration or CoupledL2DirectoryConfig()
 
     # Elaborate packed tag/meta memories and the two-stage directory equations. / 展开打包标签/元数据存储及两级目录方程。
@@ -588,9 +619,9 @@ class CompactCoupledL2Directory(Elaboratable):
         for index in range(c.mshr_entries):
             set_lo = index * c.set_bits
             way_lo = index * c.way_bits
-            same_set = self.mshr_set[set_lo:set_lo + c.set_bits] == self.read_set
-            active = self.mshr_valid[index] & ~self.mshr_will_free[index]
-            occupies = active & same_set & (self.mshr_block_refill[index] | self.mshr_dir_hit[index])
+            same_set = _value(self.mshr_set[set_lo:set_lo + c.set_bits]) == _value(self.read_set)
+            active = _value(self.mshr_valid[index]) & ~_value(self.mshr_will_free[index])
+            occupies = active & same_set & (_value(self.mshr_block_refill[index]) | _value(self.mshr_dir_hit[index]))
             way_value = self.mshr_way[way_lo:way_lo + c.way_bits]
             way_one_hot: Any = 0
             for way in range(c.ways):
@@ -601,22 +632,22 @@ class CompactCoupledL2Directory(Elaboratable):
         write_way: Any = 0
         write_way_valid: Any = 0
         for way in range(c.ways):
-            take = self.meta_write_way_oh[way] & ~write_way_valid
+            take = _value(self.meta_write_way_oh[way]) & ~_value(write_way_valid)
             write_way = Mux(take, way, write_way)
-            write_way_valid = write_way_valid | self.meta_write_way_oh[way]
+            write_way_valid = _value(write_way_valid) | _value(self.meta_write_way_oh[way])
         write_index = self.meta_write_set
         payload = Signal(meta_width, name="directory_meta_write_payload")
         self._debug_meta_payload = payload
         m.d.comb += [
-            payload.eq(0), payload[offsets["dirty"]].eq(self.meta_write_dirty),
-            payload[offsets["state"]:offsets["state"] + c.state_bits].eq(self.meta_write_state),
-            payload[offsets["clients"]:offsets["clients"] + c.client_bits].eq(self.meta_write_clients),
-            payload[offsets["alias"]:offsets["alias"] + alias_width].eq(self.meta_write_alias),
-            payload[offsets["prefetch"]].eq(self.meta_write_prefetch),
-            payload[offsets["prefetch_src"]:offsets["prefetch_src"] + prefetch_width].eq(self.meta_write_prefetch_src),
-            payload[offsets["accessed"]].eq(self.meta_write_accessed),
-            payload[offsets["tag_err"]].eq(self.meta_write_tag_err),
-            payload[offsets["data_err"]].eq(self.meta_write_data_err),
+            payload.eq(0), cast(Signal, payload[offsets["dirty"]]).eq(self.meta_write_dirty),
+            cast(Signal, payload[offsets["state"]:offsets["state"] + c.state_bits]).eq(self.meta_write_state),
+            cast(Signal, payload[offsets["clients"]:offsets["clients"] + c.client_bits]).eq(self.meta_write_clients),
+            cast(Signal, payload[offsets["alias"]:offsets["alias"] + alias_width]).eq(self.meta_write_alias),
+            cast(Signal, payload[offsets["prefetch"]]).eq(self.meta_write_prefetch),
+            cast(Signal, payload[offsets["prefetch_src"]:offsets["prefetch_src"] + prefetch_width]).eq(self.meta_write_prefetch_src),
+            cast(Signal, payload[offsets["accessed"]]).eq(self.meta_write_accessed),
+            cast(Signal, payload[offsets["tag_err"]]).eq(self.meta_write_tag_err),
+            cast(Signal, payload[offsets["data_err"]]).eq(self.meta_write_data_err),
             replacement_read.addr.eq(self.read_set),
         ]
         for way in range(c.ways):
@@ -706,11 +737,11 @@ class CompactCoupledL2Directory(Elaboratable):
         first_masked: Any = 0
         first_masked_seen: Any = 0
         for way in range(c.ways):
-            take = req2_way_mask[way] & free_mask[way] & ~first_masked_seen
+            take = _value(req2_way_mask[way]) & _value(free_mask[way]) & ~_value(first_masked_seen)
             first_masked = Mux(take, way, first_masked)
-            first_masked_seen = first_masked_seen | take
-        selected_way = Mux(~masked_selected & (req2_way_mask != 0), first_masked, selected_way)
-        retry = ~free_mask.any()
+            first_masked_seen = _value(first_masked_seen) | _value(take)
+        selected_way = Mux(~_value(masked_selected) & (_value(req2_way_mask) != 0), first_masked, selected_way)
+        retry = ~_value(free_mask.any())
         selected_tag = Array(tag2)[selected_way]
         selected_meta = Array(meta2)[selected_way]
         selected_state = selected_meta[offsets["state"]:offsets["state"] + c.state_bits]
@@ -732,7 +763,7 @@ class CompactCoupledL2Directory(Elaboratable):
         ]
         replacement_update = req2_valid & (hit_any | (req2_refill & ~retry))
         m.d.comb += [replacement_write.addr.eq(req2_set), replacement_write.data.eq(selected_way + 1), replacement_write.en.eq(replacement_update & ~self.reset)]
-        with m.If(self.reset):
+        with _if(m, self.reset):
             m.d.coupled_l2_directory += [req1_valid.eq(0), req2_valid.eq(0)]
         return m
 
@@ -740,7 +771,7 @@ class CompactCoupledL2Directory(Elaboratable):
 # Public names select the compact implementation while retaining the Scala
 # family alias expected by downstream manifests. / 公共名称选择紧凑实现，
 # 同时保留下游台账所需的 Scala family 别名。
-CoupledL2Directory = CompactCoupledL2Directory
+CoupledL2Directory = cast(type[CoupledL2Directory], CompactCoupledL2Directory)
 Directory = CompactCoupledL2Directory
 
 
@@ -909,6 +940,10 @@ def tl2tl_parent_port_contract(configuration: TL2TLCoupledL2ParentConfig | None 
 
 
 class TL2TLCoupledL2Parent(Elaboratable):
+    # Resolve runtime-created Amaranth ports for static typing. / 为静态类型解析运行时创建的 Amaranth 端口。
+    def __getattr__(self, name: str) -> Signal:
+        raise AttributeError(name)
+
     """Bounded four-bank TL2TL parent with exact V2 ports. / 具有精确 V2 端口的有界四 bank TL2TL 父级。"""
 
     # Construct all source-shaped parent signals in generated order. / 按生成顺序构造全部源形状父级信号。
@@ -1014,16 +1049,16 @@ class TL2TLCoupledL2Parent(Elaboratable):
         # the generated names stable without relying on dynamic attributes).
         for index, signal in enumerate(tp_raw):
             m.d.comb += getattr(self, f"auto_tpmeta_source_out_bits_rawData_{index}").eq(signal)
-        with m.If(self.reset):
+        with _if(m, self.reset):
             m.d.tl2tl_parent += [tp_pending.eq(0), tp_hartid.eq(0)]
             for signal in tp_raw:
                 m.d.tl2tl_parent += signal.eq(0)
-        with m.Else():
-            with m.If(tp_in_fire):
+        with _else(m):
+            with _if(m, tp_in_fire):
                 m.d.tl2tl_parent += [tp_pending.eq(1), tp_hartid.eq(self.auto_tpmeta_sink_in_bits_hartid)]
                 for index, signal in enumerate(tp_raw):
                     m.d.tl2tl_parent += signal.eq(getattr(self, f"auto_tpmeta_sink_in_bits_rawData_{index}"))
-            with m.Elif(tp_pending & self.auto_tpmeta_source_out_ready):
+            with _elif(m, tp_pending & self.auto_tpmeta_source_out_ready):
                 m.d.tl2tl_parent += tp_pending.eq(0)
 
         # Per-bank ready/valid relay. / 每 bank ready/valid 中继。
@@ -1118,10 +1153,10 @@ class TL2TLCoupledL2Parent(Elaboratable):
             # Use one-bit Boolean equations instead of logical operators on
             # the two-bit state register; this keeps generated RTL width-clean.
             # 使用单比特布尔方程而不是对两位状态寄存器做逻辑运算，确保生成 RTL 位宽干净。
-            idle = ~(state[bank][0] | state[bank][1])
-            outer_a = state[bank][0] & ~state[bank][1]
-            outer_d = ~state[bank][0] & state[bank][1]
-            inner_d = state[bank][0] & state[bank][1]
+            idle = ~(_value(state[bank][0]) | _value(state[bank][1]))
+            outer_a = _value(state[bank][0]) & ~_value(state[bank][1])
+            outer_d = ~_value(state[bank][0]) & _value(state[bank][1])
+            inner_d = _value(state[bank][0]) & _value(state[bank][1])
             inner_a_fire = getattr(self, inner + "a_valid") & getattr(self, inner + "a_ready")
             inner_c_fire = getattr(self, inner + "c_valid") & getattr(self, inner + "c_ready")
             outer_a_fire = getattr(self, outer + "a_valid") & getattr(self, outer + "a_ready")
@@ -1178,39 +1213,39 @@ class TL2TLCoupledL2Parent(Elaboratable):
                 getattr(self, outer + "e_valid").eq(getattr(self, inner + "e_valid")),
                 getattr(self, outer + "e_bits_sink").eq(getattr(self, inner + "e_bits_sink")[:c.outer_sink_bits]),
             ]
-            with m.If(self.reset):
+            with _if(m, self.reset):
                 m.d.tl2tl_parent += [state[bank].eq(0), c_pending[bank].eq(0), b_pending[bank].eq(0)]
-            with m.Else():
-                with m.If(inner_a_fire):
+            with _else(m):
+                with _if(m, inner_a_fire):
                     m.d.tl2tl_parent += [state[bank].eq(1), req_opcode[bank].eq(getattr(self, inner + "a_bits_opcode")),
                                          req_param[bank].eq(getattr(self, inner + "a_bits_param")), req_size[bank].eq(getattr(self, inner + "a_bits_size")),
                                          req_source[bank].eq(getattr(self, inner + "a_bits_source")), req_address[bank].eq(getattr(self, inner + "a_bits_address")),
                                          req_req_source[bank].eq(getattr(self, inner + "a_bits_user_reqSource")), req_data[bank].eq(getattr(self, inner + "a_bits_data")),
                                          req_mask[bank].eq(getattr(self, inner + "a_bits_mask")), req_keyword[bank].eq(getattr(self, inner + "a_bits_echo_isKeyword"))]
-                with m.Elif(outer_a_fire):
+                with _elif(m, outer_a_fire):
                     m.d.tl2tl_parent += state[bank].eq(2)
-                with m.Elif(outer_d_fire):
+                with _elif(m, outer_d_fire):
                     m.d.tl2tl_parent += [state[bank].eq(3), resp_opcode[bank].eq(getattr(self, outer + "d_bits_opcode")),
                                          resp_param[bank].eq(getattr(self, outer + "d_bits_param")), resp_size[bank].eq(getattr(self, outer + "d_bits_size")),
                                          resp_source[bank].eq(getattr(self, outer + "d_bits_source")[:c.inner_source_bits]), resp_sink[bank].eq(getattr(self, outer + "d_bits_sink")[:c.inner_sink_bits]),
                                          resp_data[bank].eq(getattr(self, outer + "d_bits_data")), resp_denied[bank].eq(getattr(self, outer + "d_bits_denied")),
                                          resp_corrupt[bank].eq(getattr(self, outer + "d_bits_corrupt"))]
-                with m.Elif(inner_d_fire):
+                with _elif(m, inner_d_fire):
                     m.d.tl2tl_parent += state[bank].eq(0)
-                with m.If(inner_c_fire):
+                with _if(m, inner_c_fire):
                     m.d.tl2tl_parent += [c_pending[bank].eq(1), c_opcode[bank].eq(getattr(self, inner + "c_bits_opcode")),
                                          c_param[bank].eq(getattr(self, inner + "c_bits_param")), c_size[bank].eq(getattr(self, inner + "c_bits_size")),
                                          c_source[bank].eq(getattr(self, inner + "c_bits_source")), c_address[bank].eq(getattr(self, inner + "c_bits_address")),
                                          c_data[bank].eq(getattr(self, inner + "c_bits_data")), c_corrupt[bank].eq(getattr(self, inner + "c_bits_corrupt"))]
-                with m.If(c_pending[bank] & getattr(self, outer + "c_ready")):
+                with _if(m, c_pending[bank] & getattr(self, outer + "c_ready")):
                     m.d.tl2tl_parent += [c_pending[bank].eq(0), state[bank].eq(0)]
-                with m.If(getattr(self, outer + "b_valid") & getattr(self, outer + "b_ready")):
+                with _if(m, getattr(self, outer + "b_valid") & getattr(self, outer + "b_ready")):
                     m.d.tl2tl_parent += [b_pending[bank].eq(1), b_opcode[bank].eq(getattr(self, outer + "b_bits_opcode")),
                                          b_param[bank].eq(getattr(self, outer + "b_bits_param")), b_size[bank].eq(getattr(self, outer + "b_bits_size")),
                                          b_source[bank].eq(getattr(self, outer + "b_bits_source")), b_address[bank].eq(getattr(self, outer + "b_bits_address")),
                                          b_mask[bank].eq(getattr(self, outer + "b_bits_mask")), b_data[bank].eq(getattr(self, outer + "b_bits_data")),
                                          b_corrupt[bank].eq(getattr(self, outer + "b_bits_corrupt"))]
-                with m.If(b_pending[bank] & getattr(self, inner + "b_ready")):
+                with _if(m, b_pending[bank] & getattr(self, inner + "b_ready")):
                     m.d.tl2tl_parent += b_pending[bank].eq(0)
 
         # Prefetch/TLB/error/performance outputs are explicit quiescent values. /

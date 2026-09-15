@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from contextlib import AbstractContextManager
+from typing import Protocol, cast
 
 from amaranth import ClockDomain, Module, Mux, Signal
 from amaranth.lib.memory import Memory
@@ -21,6 +23,21 @@ from amaranth.lib.wiring import Component, In, Out
 # V2 TagArray 默认由两个双路 TagSRAMBank 组成；复位后清零 256 个组，清零期间
 # 屏蔽读写，每周期接受一次按路掩码写入，并在读握手后一个时钟返回同步结果。
 __all__ = ["TagArrayConfig", "TagArray", "build_verilog", "main"]
+
+
+class _MemoryReadPort(Protocol):
+    """Typed view of an Amaranth memory read port. / Amaranth 存储器读端口的类型视图。"""
+
+    addr: Signal
+    data: Signal
+
+
+class _MemoryWritePort(Protocol):
+    """Typed view of an Amaranth memory write port. / Amaranth 存储器写端口的类型视图。"""
+
+    addr: Signal
+    data: Signal
+    en: Signal
 
 
 # =============================================================================
@@ -51,6 +68,10 @@ class TagArrayConfig:
 # =============================================================================
 class TagArray(Component):
     # Construct flattened V2 TagArray ports and per-way memories. / 构造扁平化 V2 TagArray 端口及各路存储器。
+    # Resolve Component's runtime-created ports for static type checkers. / 为静态类型检查器解析 Component 运行时创建的端口。
+    def __getattr__(self, name: str) -> Signal:
+        raise AttributeError(name)
+
     def __init__(self, cfg: TagArrayConfig | None = None):
         c = cfg or TagArrayConfig()
         self.cfg = c
@@ -110,12 +131,12 @@ class TagArray(Component):
             m.submodules[f"bank{way}"] = memory
             # The generated SRAM captures an address on a read fire and exposes
             # the selected row combinationally thereafter. / 生成的 SRAM 在读握手时锁存地址，随后组合输出选中行。
-            read_port = memory.read_port(domain="comb", transparent_for=())
+            read_port = cast(_MemoryReadPort, memory.read_port(domain="comb", transparent_for=()))
             m.d.comb += [
                 read_port.addr.eq(self.read_addr),
                 self.resp[way].eq(read_port.data),
             ]
-            write_port = memory.write_port(domain="sync")
+            write_port = cast(_MemoryWritePort, memory.write_port(domain="sync"))
             m.d.comb += [
                 write_port.addr.eq(Mux(initializing, self.reset_count,
                                        self.write_idx)),
@@ -127,11 +148,11 @@ class TagArray(Component):
         # Pack responses low-way first, matching Chisel Vec flattening. / 按低路优先打包响应，匹配 Chisel Vec 展平顺序。
         for way in range(c.nWays):
             lo = way * self.encodedBits
-            m.d.comb += self.rdata[lo:lo + self.encodedBits].eq(self.resp[way])
+            m.d.comb += cast(Signal, self.rdata[lo:lo + self.encodedBits]).eq(self.resp[way])
 
-        with m.If(initializing):
+        with cast(AbstractContextManager[None], m.If(initializing)):
             m.d.sync += self.reset_count.eq(self.reset_count + 1)
-        with m.If(read_fire):
+        with cast(AbstractContextManager[None], m.If(read_fire)):
             m.d.sync += self.read_addr.eq(self.read_idx)
         return m
 

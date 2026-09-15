@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import cast
 
 from amaranth import Cat, Const, Module, Mux, Signal
+from amaranth.hdl.ast import Value
 from amaranth.lib.wiring import Component, In, Out
 
 
@@ -57,6 +59,10 @@ class AMOALUConfig:
 # =============================================================================
 class AMOALU(Component):
     # AMO arithmetic-logic unit / AMO 运算逻辑单元
+    # Resolve Component's runtime-created ports for static type checkers. / 为静态类型检查器解析 Component 运行时创建的端口。
+    def __getattr__(self, name: str) -> Signal:
+        raise AttributeError(name)
+
     def __init__(self, cfg: AMOALUConfig | None = None):
         c = cfg or AMOALUConfig()
         self.cfg = c
@@ -139,8 +145,10 @@ class AMOALU(Component):
         out = Mux(isAdd, adderOut, Mux(logicAnd | logicXor, logic, minmax))
         # Expand each byte-lane mask in hardware; the Python helper above is
         # only for constant callers and cannot shift a Signal.
-        wmask = Cat(*[self.mask[i].replicate(8) for i in range(bits // 8)])
-        m.d.comb += self.out.eq((wmask & out) | (~wmask & lhs))
+        # Cat avoids the untyped IOConcat.replicate helper while preserving the
+        # exact byte mask expansion. / Cat 避免无类型 IOConcat.replicate，同时保持精确字节掩码展开。
+        wmask = Cat(*[Cat(*[self.mask[i] for _ in range(8)]) for i in range(bits // 8)])
+        m.d.comb += self.out.eq((wmask & out) | (~cast(Value, wmask) & lhs))
         m.d.comb += self.out_unmasked.eq(out)
         return m
 

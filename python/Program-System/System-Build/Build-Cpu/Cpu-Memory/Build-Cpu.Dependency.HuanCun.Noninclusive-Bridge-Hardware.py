@@ -9,8 +9,9 @@ cancellation while keeping helper records inside the family boundary.
 
 from __future__ import annotations
 
+from contextlib import AbstractContextManager
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, cast
 
 from amaranth import ClockDomain, Elaboratable, Module, Signal
 from amaranth.back import verilog
@@ -22,6 +23,16 @@ from amaranth.back import verilog
 # Bridge contract: request admission, probe forwarding, response return, and
 # one-entry backpressure. / bridge 契约：请求接收、probe 转发、响应返回及单项反压。
 __all__ = ["HuanCunBridgeConfig", "HuanCunBridgeBoundary", "build_verilog", "main"]
+
+
+# Cast Amaranth's generator controls to a context-manager protocol. / 将 Amaranth 生成器控制转换为上下文管理器协议。
+def _if(module: Module, condition: Any) -> AbstractContextManager[None]:
+    return cast(AbstractContextManager[None], module.If(condition))
+
+
+# Cast the Amaranth else branch to a context-manager protocol. / 将 Amaranth else 分支转换为上下文管理器协议。
+def _else(module: Module) -> AbstractContextManager[None]:
+    return cast(AbstractContextManager[None], module.Else())
 
 
 # =============================================================================
@@ -45,6 +56,10 @@ class HuanCunBridgeConfig:
 # Implementation
 # =============================================================================
 class HuanCunBridgeBoundary(Elaboratable):
+    # Resolve runtime-created ports for static type checking. / 为静态类型检查解析运行时创建的端口。
+    def __getattr__(self, name: str) -> Signal:
+        raise AttributeError(name)
+
     """Ready/valid bridge for request, probe, and response channels. / 请求、probe、响应通道的 ready/valid bridge。"""
 
     # Construct bridge ports. / 构造 bridge 端口。
@@ -87,15 +102,15 @@ class HuanCunBridgeBoundary(Elaboratable):
                      self.probe_valid.eq(pending & ~self.flush), self.probe_address.eq(address_r),
                      self.probe_source.eq(source_r), self.resp_valid.eq(response & ~self.flush),
                      self.resp_source.eq(source_r), self.resp_data.eq(data_r)]
-        with m.If(self.reset | self.flush):
+        with _if(m, self.reset | self.flush):
             m.d.huancun_bridge += [pending.eq(0), response.eq(0)]
-        with m.Else():
+        with _else(m):
             m.d.huancun_bridge += response.eq(0)
-            with m.If(self.req_valid & self.req_ready):
+            with _if(m, self.req_valid & self.req_ready):
                 m.d.huancun_bridge += [pending.eq(1), address_r.eq(self.req_address), source_r.eq(self.req_source), data_r.eq(self.req_data)]
-            with m.If(self.probe_valid & self.probe_ready):
+            with _if(m, self.probe_valid & self.probe_ready):
                 m.d.huancun_bridge += [pending.eq(0), response.eq(1)]
-            with m.If(response & self.resp_ready):
+            with _if(m, response & self.resp_ready):
                 m.d.huancun_bridge += response.eq(0)
         return m
 

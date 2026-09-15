@@ -12,8 +12,9 @@ sibling Build-Cpu file.
 
 from __future__ import annotations
 
+from contextlib import AbstractContextManager
 from dataclasses import dataclass
-from typing import Any, Iterable, Mapping
+from typing import Any, Iterable, Mapping, cast
 
 from amaranth import Array, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
@@ -49,6 +50,16 @@ __all__ = [
     "build_verilog",
     "main",
 ]
+
+
+# Cast Amaranth generator controls to the context-manager protocol. / 将 Amaranth 生成器控制转换为上下文管理器协议。
+def _if(module: Module, condition: Any) -> AbstractContextManager[None]:
+    return cast(AbstractContextManager[None], module.If(condition))
+
+
+# Cast an Amaranth else branch to the context-manager protocol. / 将 Amaranth else 分支转换为上下文管理器协议。
+def _else(module: Module) -> AbstractContextManager[None]:
+    return cast(AbstractContextManager[None], module.Else())
 
 
 # =============================================================================
@@ -98,6 +109,10 @@ class MemBlockParentConfig:
 # Implementation
 # =============================================================================
 class _AtomicFallback(Elaboratable):
+    # Resolve runtime-created ports for static type checking. / 为静态类型检查解析运行时创建的端口。
+    def __getattr__(self, name: str) -> Signal:
+        raise AttributeError(name)
+
     """Small dependency fallback used only when no AMOALU child is injected. / 未注入 AMOALU 时使用的小型依赖回退。"""
 
     # Construct the AMOALU-compatible fallback ports. / 构造 AMOALU 兼容回退端口。
@@ -135,6 +150,10 @@ class _AtomicFallback(Elaboratable):
 
 
 class _TagFallback(Elaboratable):
+    # Resolve runtime-created ports for static type checking. / 为静态类型检查解析运行时创建的端口。
+    def __getattr__(self, name: str) -> Signal:
+        raise AttributeError(name)
+
     """Synchronous masked tag storage matching the injected TagArray surface. / 与注入 TagArray 表面匹配的同步按掩码标签存储。"""
 
     # Construct a compact tag-array fallback with source-shaped observations. / 构造带源形观测的紧凑标签阵列回退。
@@ -168,22 +187,26 @@ class _TagFallback(Elaboratable):
         rows = [Signal(width, name=f"tag_{way}") for way in range(c.tag_ways)]
         valid = Signal(name="tag_valid")
         m.d.comb += self.io_read_ready.eq(valid & ~self.io_write_valid)
-        with m.If(self.reset):
+        with _if(m, self.reset):
             m.d.tag_sync += valid.eq(0)
-        with m.Else():
+        with _else(m):
             m.d.tag_sync += valid.eq(1)
-            with m.If(self.io_write_valid):
+            with _if(m, self.io_write_valid):
                 for way in range(c.tag_ways):
-                    with m.If(self.io_write_bits_way_en[way]):
+                    with _if(m, self.io_write_bits_way_en[way]):
                         m.d.tag_sync += rows[way].eq(self.io_write_bits_tag |
                                                   (self.io_write_bits_ecc << c.tag_bits))
         for way, row in enumerate(rows):
             lo = way * width
-            m.d.comb += self.io_rdata[lo:lo + width].eq(row)
+            m.d.comb += cast(Signal, self.io_rdata[lo:lo + width]).eq(row)
         return m
 
 
 class UHSCCacheMainPipe(Elaboratable):
+    # Resolve runtime-created ports for static type checking. / 为静态类型检查解析运行时创建的端口。
+    def __getattr__(self, name: str) -> Signal:
+        raise AttributeError(name)
+
     """Reduced V2 DCache MainPipe transaction boundary. / 精简 V2 DCache MainPipe 事务边界。"""
 
     # Construct explicit request, miss/refill, child-observation and response ports. / 构造显式请求、缺失/回填、子级观测及响应端口。
@@ -292,21 +315,21 @@ class UHSCCacheMainPipe(Elaboratable):
         miss_fire = self.miss_valid & self.miss_ready
         refill_fire = self.refill_valid & pending
         # Response is a one-cycle pulse; a flush drops both pending and response. / 响应为单拍脉冲；flush 丢弃未决事务及响应。
-        with m.If(self.flush):
+        with _if(m, self.flush):
             m.d.mainpipe_sync += [pending.eq(0), response.eq(0)]
-        with m.Else():
+        with _else(m):
             m.d.mainpipe_sync += response.eq(0)
-            with m.If(request_fire):
+            with _if(m, request_fire):
                 m.d.mainpipe_sync += [pending.eq(1), pending_miss.eq(self.req_miss),
                              pending_source.eq(self.req_source), pending_cmd.eq(self.req_cmd),
                              pending_addr.eq(self.req_addr), pending_data.eq(self.req_data),
                              pending_mask.eq(self.req_mask), pending_id.eq(self.req_id),
                              pending_rhs.eq(self.refill_data)]
-            with m.If(pending & ~pending_miss):
+            with _if(m, pending & ~pending_miss):
                 m.d.mainpipe_sync += [pending.eq(0), response.eq(1),
                              response_data.eq(Mux(pending_source == 2, self.amo_result, pending_data)),
                              response_id.eq(pending_id), response_miss.eq(0)]
-            with m.If(pending & pending_miss & (refill_fire | miss_fire & self.refill_valid)):
+            with _if(m, pending & pending_miss & (refill_fire | miss_fire & self.refill_valid)):
                 m.d.mainpipe_sync += [pending.eq(0), response.eq(1),
                              response_data.eq(Mux(pending_source == 2, self.amo_result, self.refill_data)),
                              response_id.eq(Mux(refill_fire, self.refill_id, pending_id)),
@@ -315,6 +338,10 @@ class UHSCCacheMainPipe(Elaboratable):
 
 
 class UHSCDCacheWrapper(Elaboratable):
+    # Resolve runtime-created ports for static type checking. / 为静态类型检查解析运行时创建的端口。
+    def __getattr__(self, name: str) -> Signal:
+        raise AttributeError(name)
+
     """Reduced DCacheWrapper with explicit TileLink and MBIST boundaries. / 带显式 TileLink 与 MBIST 边界的精简 DCacheWrapper。"""
 
     # Construct wrapper ports and inject the reduced MainPipe child. / 构造外壳端口并注入精简 MainPipe 子级。
@@ -388,6 +415,10 @@ class UHSCDCacheWrapper(Elaboratable):
 
 
 class UHSCMemoryMemBlock(Elaboratable):
+    # Resolve runtime-created ports for static type checking. / 为静态类型检查解析运行时创建的端口。
+    def __getattr__(self, name: str) -> Signal:
+        raise AttributeError(name)
+
     """UHSC-localized MemBlock parent with DCache and frontend bridge. / 带 DCache 与前端桥的 UHSC 本地化 MemBlock 父级。"""
 
     # Construct issue, cache, frontend, flush and dependency-stub ports. / 构造发射、缓存、前端、flush 及依赖桩端口。
@@ -474,7 +505,7 @@ class UHSCMemoryMemBlock(Elaboratable):
         existing: dict[str, Signal] = {}
         for value in self.__dict__.values():
             if isinstance(value, Signal) and value.name:
-                existing.setdefault(value.name, value)
+                existing.setdefault(str(value.name), value)
         for spec in specs:
             name = str(spec.get("name", ""))
             if not name or name in self.full_inventory:
@@ -573,12 +604,12 @@ class UHSCMemoryMemBlock(Elaboratable):
         ic_pending = Signal(name="icache_pending")
         ic_addr = Signal(c.vaddr_bits, name="icache_addr_reg")
         m.d.comb += self.icache_req_ready.eq(~ic_pending & ~self.flush)
-        with m.If(self.flush):
+        with _if(m, self.flush):
             m.d.mem_sync += ic_pending.eq(0)
-        with m.Else():
-            with m.If(self.icache_req_valid & self.icache_req_ready):
+        with _else(m):
+            with _if(m, self.icache_req_valid & self.icache_req_ready):
                 m.d.mem_sync += [ic_pending.eq(1), ic_addr.eq(self.icache_req_addr)]
-            with m.Else():
+            with _else(m):
                 m.d.mem_sync += ic_pending.eq(0)
         m.d.comb += [self.icache_resp_valid.eq(ic_pending & ~self.flush),
                      self.icache_resp_data.eq(ic_addr[:32] ^ Const(0x13579BDF, 32))]
