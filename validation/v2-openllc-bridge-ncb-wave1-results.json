@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_OPENLLC_BRIDGE_NCB_WAVE1",
+  "targets": [
+    {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.OpenLLC.Bridge-Hardware.py",
+      "aggregate": "dependency.openLLC.bridge",
+      "source_scala_file_count": 8,
+      "behavior": "CHI link state transitions, flit field packing and credit accounting",
+      "build_verilog_bytes": 7276
+    },
+    {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.OpenLLC.OpenNCB-Hardware.py",
+      "aggregate": "dependency.openLLC.ncb",
+      "source_scala_file_count": 89,
+      "behavior": "AXI ID allocation/decode, CHI credit/link managers and transaction queue",
+      "build_verilog_bytes": 16794
+    }
+  ],
+  "gates": {
+    "AST": "PASS",
+    "PY_COMPILE": "PASS",
+    "EXACT_IMPORT": "PASS",
+    "PYRIGHT": "PASS",
+    "DIRECT_HELPER_EQUATIONS": "PASS",
+    "BUILD_VERILOG": "PASS"
+  },
+  "status": "PASS_BOUNDED_FAMILY",
+  "acceptance_eligible": false,
+  "accepted": "NOT_ALLOWED",
+  "pending": [
+    "selected-top OpenLLC CHI differential",
+    "full NCB200 transaction closure",
+    "license review and user approval"
+  ]
+}
