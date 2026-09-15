@@ -60,6 +60,14 @@ def _enumerate_bits(mask: int) -> tuple[int, ...]:
     return tuple(bits)
 
 
+# Return Chisel's ceiling log2 for a positive integer. / 返回正整数的 Chisel 向上取整
+# log2 值。 /
+def _log2_ceil(value: int) -> int:
+    if value <= 1:
+        return 0
+    return (value - 1).bit_length()
+
+
 # Address and protocol value contracts are the immutable metadata layer used
 # by the selected Rocket diplomacy boundary. / 地址和协议值契约构成选定 Rocket
 # diplomacy 边界使用的不可变元数据层。
@@ -926,19 +934,105 @@ class LazyModuleGraph:
         return tuple(sorted(self.nodes))
 
 
+# Partition one port by a candidate address bit. / 按候选地址位拆分一个端口。
+def _partition_port(port: tuple[AddressSet, ...], bit: int) -> tuple[tuple[AddressSet, ...], tuple[AddressSet, ...]]:
+    low = AddressSet(0, ~bit)
+    high = AddressSet(bit, ~bit)
+    return (
+        tuple(item for item in port if item.overlaps(low)),
+        tuple(item for item in port if item.overlaps(high)),
+    )
+
+
+# Partition all ports in one graph partition. / 在一个图分区中拆分全部端口。
+def _partition_ports(
+    ports: tuple[tuple[AddressSet, ...], ...],
+    bit: int,
+) -> tuple[tuple[tuple[AddressSet, ...], ...], tuple[tuple[AddressSet, ...], ...]]:
+    cases = [_partition_port(port, bit) for port in ports]
+    low = tuple(sorted((left for left, _right in cases if left)))
+    high = tuple(sorted((right for _left, right in cases if right)))
+    return low, high
+
+
+# Remove adjacent duplicate partitions after sorting. / 排序后移除相邻重复分区。
+def _dedupe_partitions(
+    partitions: tuple[tuple[tuple[AddressSet, ...], ...], ...],
+) -> tuple[tuple[tuple[AddressSet, ...], ...], ...]:
+    result: list[tuple[tuple[AddressSet, ...], ...]] = []
+    for partition in partitions:
+        if not result or result[-1] != partition:
+            result.append(partition)
+    return tuple(result)
+
+
+# Partition an existing set of partitions by one bit. / 按一个地址位拆分现有分区集合。
+def _partition_partitions(
+    partitions: tuple[tuple[tuple[AddressSet, ...], ...], ...],
+    bit: int,
+) -> tuple[tuple[tuple[AddressSet, ...], ...], ...]:
+    split = [_partition_ports(partition, bit) for partition in partitions]
+    candidates = tuple(
+        sorted(
+            [item for low, high in split for item in (low, high) if item],
+        )
+    )
+    return _dedupe_partitions(candidates)
+
+
+# Score partitions with Rocket's greedy decoder heuristic. / 使用 Rocket 贪心解码器
+# 启发式为分区评分。 /
+def _partition_score(
+    partitions: tuple[tuple[tuple[AddressSet, ...], ...], ...],
+) -> tuple[int, int, int, int]:
+    if not partitions:
+        return (0, 0, 0, 0)
+    return (
+        max(len(partition) for partition in partitions),
+        max(sum(len(port) for port in partition) for partition in partitions),
+        sum(len(partition) * len(partition) for partition in partitions),
+        max(sum(len(port) * len(port) for port in partition) for partition in partitions),
+    )
+
+
+# Recursively select the minimum-score distinguishing bit set. / 递归选择最低评分的区分
+# 位集合。 /
+def _decoder_recurse(
+    partitions: tuple[tuple[tuple[AddressSet, ...], ...], ...],
+    bits: tuple[int, ...],
+) -> tuple[int, ...]:
+    if all(len(partition) <= 1 for partition in partitions):
+        return ()
+    if not bits:
+        raise ValueError("address decoder cannot distinguish overlapping ports")
+    candidates = [(_partition_score(_partition_partitions(partitions, bit)), bit) for bit in bits]
+    _score, selected = min(candidates, key=lambda candidate: candidate[0])
+    next_partitions = _partition_partitions(partitions, selected)
+    remaining = tuple(bit for bit in bits if bit != selected)
+    return (selected,) + _decoder_recurse(next_partitions, remaining)
+
+
+# Validate widened decoder ports remain disjoint. / 校验扩宽后的解码器端口仍保持不重叠。
+def _validate_decoder_ports(ports: tuple[tuple[AddressSet, ...], ...], bits: int) -> None:
+    widened = tuple(tuple(item.widen(~bits) for item in port) for port in ports)
+    for index, left_port in enumerate(widened):
+        for right_port in widened[index + 1:]:
+            if any(left.overlaps(right) for left in left_port for right in right_port):
+                raise ValueError("widened decoder ports overlap")
+
+
 # Find a deterministic bit mask that separates non-overlapping ports. /
 # 为不重叠端口查找确定性地址区分位掩码。 /
 def address_decoder(
     ports: Sequence[Sequence[AddressSet]] | Sequence[int],
     given_bits: int = 0,
 ) -> int:
-    """Return a conservative AddressDecoder-compatible distinguishing mask. /
-    返回兼容 AddressDecoder 的保守区分掩码。
+    """Return an AddressDecoder-compatible distinguishing mask. / 返回兼容
+    AddressDecoder 的地址区分掩码。
 
-    The source implementation uses a greedy partition heuristic.  The V2
-    aggregate computes the same observable contract without retaining mutable
-    partition state: every pair of ports contributes one care bit, and the
-    result is widened only when those bits remain disjoint.
+    The implementation follows Rocket's deterministic partition/bit-score
+    heuristic while keeping all intermediate partitions immutable tuples.
+    本实现遵循 Rocket 的确定性分区和位评分启发式，所有中间分区均使用不可变元组。
     """
     if given_bits < 0:
         raise ValueError("given_bits must be non-negative")
@@ -960,16 +1054,17 @@ def address_decoder(
                     if left.overlaps(right):
                         raise ValueError(f"ports cannot overlap: {left} {right}")
     selected = given_bits
-    for index, left_port in enumerate(non_empty):
-        for right_port in non_empty[index + 1:]:
-            candidates = [
-                (~(left.mask | right.mask) & (left.base ^ right.base))
-                for left in left_port for right in right_port
-            ]
-            distinguishing = 0
-            for candidate in candidates:
-                distinguishing |= candidate
-            selected |= distinguishing
+    max_base = max(item.base for port in non_empty for item in port)
+    max_bits = _log2_ceil(1 + max_base)
+    bits = tuple(1 << index for index in range(max_bits))
+    bits_to_take = tuple(bit for bit in bits if given_bits & bit)
+    bits_to_try = tuple(bit for bit in bits if not (given_bits & bit))
+    partitions: tuple[tuple[tuple[AddressSet, ...], ...], ...] = (tuple(sorted(non_empty)),)
+    for bit in bits_to_take:
+        partitions = _partition_partitions(partitions, bit)
+    selected_bits = _decoder_recurse(partitions, tuple(reversed(bits_to_try))) if partitions else ()
+    selected |= sum(selected_bits)
+    _validate_decoder_ports(tuple(non_empty), selected)
     return selected
 
 
