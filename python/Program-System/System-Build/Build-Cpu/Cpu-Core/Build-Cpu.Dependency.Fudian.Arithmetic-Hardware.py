@@ -8,17 +8,34 @@ Build-Cpu boundary.
 
 from __future__ import annotations
 
+from contextlib import AbstractContextManager
 from dataclasses import dataclass
-from typing import Any, Mapping
+from typing import Any, Mapping, cast
 
 from amaranth import ClockDomain, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
+from amaranth.hdl.ast import Value
 
 
 # =============================================================================
 # Module Contract
 # =============================================================================
 __all__ = ["ArithmeticConfig", "FudianArithmetic", "clz", "lza", "shift_right_jam", "build_verilog", "main"]
+
+
+# Cast Amaranth generator controls to the context-manager protocol. / 将 Amaranth 生成器控制转换为上下文管理器协议。
+def _if(module: Module, condition: Any) -> AbstractContextManager[None]:
+    return cast(AbstractContextManager[None], module.If(condition))
+
+
+# Cast an Amaranth elif branch to the context-manager protocol. / 将 Amaranth elif 分支转换为上下文管理器协议。
+def _elif(module: Module, condition: Any) -> AbstractContextManager[None]:
+    return cast(AbstractContextManager[None], module.Elif(condition))
+
+
+# Narrow dynamic Amaranth values at the DSL boundary. / 在 DSL 边界窄化动态 Amaranth 值。
+def _value(expression: Any) -> Value:
+    return cast(Value, expression)
 
 
 # Count leading zeroes in a fixed-width value. / 计算定宽数值的前导零数量。
@@ -74,6 +91,10 @@ class ArithmeticConfig:
 
 
 class FudianArithmetic(Elaboratable):
+    # Resolve runtime-created ports for static type checking. / 为静态类型检查解析运行时创建的端口。
+    def __getattr__(self, name: str) -> Signal:
+        raise AttributeError(name)
+
     """Combinational CLZ/LZA/shift-jam/multiply helper boundary."""
 
     # Construct helper ports. / 构造辅助器端口。
@@ -101,26 +122,26 @@ class FudianArithmetic(Elaboratable):
         m.domains.fudian_arithmetic = domain
         m.d.comb += [self.result.eq(0), self.auxiliary.eq(0), self.sticky.eq(0)]
         # op=0 CLZ, op=1 LZA, op=2 shift-jam, op=3 multiply. / 操作码定义。
-        with m.If(self.operation == 0):
+        with _if(m, self.operation == 0):
             # PriorityEncoder(reverse) gives width-1 for zero. / 反向优先编码器对零返回 width-1。
             expr = width - 1
             for index in range(width):
                 expr = Mux(self.a[index], width - 1 - index, expr)
             m.d.comb += self.auxiliary.eq(expr)
-        with m.Elif(self.operation == 1):
+        with _elif(m, self.operation == 1):
             lza_expr = 0
             previous_k = 0
             for index in range(width):
-                p = self.a[index] ^ self.b[index]
-                k = (~self.a[index]) & (~self.b[index])
+                p = _value(self.a[index]) ^ _value(self.b[index])
+                k = (~_value(self.a[index])) & (~_value(self.b[index]))
                 bit = 0 if index == 0 else p ^ (~previous_k)
                 lza_expr = lza_expr | (bit << index)
                 previous_k = k
             m.d.comb += self.auxiliary.eq(lza_expr)
-        with m.Elif(self.operation == 2):
+        with _elif(m, self.operation == 2):
             exceed = self.shift > width
             m.d.comb += [self.result.eq(Mux(exceed, 0, self.a >> self.shift)), self.sticky.eq(Mux(exceed, self.a != 0, (self.a & ((1 << width) - 1)) != 0))]
-        with m.Elif(self.operation == 3):
+        with _elif(m, self.operation == 3):
             m.d.comb += self.result.eq(self.a * self.b)
         return m
 

@@ -8,16 +8,22 @@ and deterministic add/multiply operation shells used by the XiangShan FPU.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Mapping
+from typing import Any, Mapping, cast
 
 from amaranth import ClockDomain, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
+from amaranth.hdl.ast import Value
 
 
 # =============================================================================
 # Module Contract
 # =============================================================================
 __all__ = ["FpuConfig", "decode_float", "int_to_float", "FudianFpu", "build_verilog", "main"]
+
+
+# Narrow dynamic Amaranth values at the DSL boundary. / 在 DSL 边界窄化动态 Amaranth 值。
+def _value(expression: Any) -> Value:
+    return cast(Value, expression)
 
 
 # Decode IEEE-like floating-point fields. / 解码 IEEE 风格浮点字段。
@@ -91,7 +97,7 @@ class FudianFpu(Elaboratable):
         m = Module(); domain = ClockDomain("fudian_fpu", async_reset=True); domain.clk = self.clock; domain.rst = self.reset; m.domains.fudian_fpu = domain
         exp = self.input[ c.precision - 1 : c.precision - 1 + c.exp_width ]
         sig = self.input[: c.precision - 1]
-        m.d.comb += [self.output.eq(self.input[:width]), self.inexact.eq(0), self.is_nan.eq(exp.all() & sig.any()), self.is_inf.eq(exp.all() & ~sig.any()), self.is_zero.eq(~exp.any() & ~sig.any())]
+        m.d.comb += [self.output.eq(self.input[:width]), self.inexact.eq(0), self.is_nan.eq(_value(exp).all() & _value(sig).any()), self.is_inf.eq(_value(exp).all() & ~_value(sig).any()), self.is_zero.eq(~_value(exp).any() & ~_value(sig).any())]
         return m
 
 

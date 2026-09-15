@@ -8,8 +8,9 @@ Simulation-only device models remain outside this Build target.
 
 from __future__ import annotations
 
+from contextlib import AbstractContextManager
 from dataclasses import dataclass
-from typing import Any, Mapping
+from typing import Any, Mapping, cast
 
 from amaranth import ClockDomain, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
@@ -19,6 +20,16 @@ from amaranth.back import verilog
 # Module Contract
 # =============================================================================
 __all__ = ["AIAConfig", "UHSCAIAInterface", "AIAInterface", "aia_reference_step", "build_verilog", "main"]
+
+
+# Cast Amaranth generator controls to the context-manager protocol. / 将 Amaranth 生成器控制转换为上下文管理器协议。
+def _if(module: Module, condition: Any) -> AbstractContextManager[None]:
+    return cast(AbstractContextManager[None], module.If(condition))
+
+
+# Cast an Amaranth else branch to the context-manager protocol. / 将 Amaranth else 分支转换为上下文管理器协议。
+def _else(module: Module) -> AbstractContextManager[None]:
+    return cast(AbstractContextManager[None], module.Else())
 
 
 # =============================================================================
@@ -57,6 +68,10 @@ def aia_reference_step(pending: int, enable: int, source: int, claim: bool, comp
 
 
 class UHSCAIAInterface(Elaboratable):
+    # Resolve runtime-created ports for static type checking. / 为静态类型检查解析运行时创建的端口。
+    def __getattr__(self, name: str) -> Signal:
+        raise AttributeError(name)
+
     """CSR-facing IMSIC/APLIC interrupt register boundary."""
 
     def __init__(self, configuration: AIAConfig | None = None) -> None:
@@ -98,13 +113,13 @@ class UHSCAIAInterface(Elaboratable):
             self.claim.eq(claim_value), self.csr_ready.eq(self.csr_valid),
             self.csr_rdata.eq(Mux(self.csr_addr[4], read_pending, read_enable)),
         ]
-        with m.If(self.reset):
+        with _if(m, self.reset):
             m.d.aia += [pending.eq(0), enable.eq(0)]
-        with m.Else():
+        with _else(m):
             m.d.aia += pending.eq(pending | self.external_source)
-            with m.If(self.csr_valid & self.csr_write & (self.csr_addr[4] == 0)):
+            with _if(m, self.csr_valid & self.csr_write & (self.csr_addr[4] == 0)):
                 m.d.aia += enable.eq(self.csr_wdata)
-            with m.If(self.csr_valid & self.csr_write & (self.csr_addr[4] == 1)):
+            with _if(m, self.csr_valid & self.csr_write & (self.csr_addr[4] == 1)):
                 m.d.aia += pending.eq(pending & ~self.csr_wdata)
         return m
 

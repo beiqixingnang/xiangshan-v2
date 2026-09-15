@@ -10,8 +10,9 @@ has no dependency on sibling Build-file import paths.
 
 from __future__ import annotations
 
+from contextlib import AbstractContextManager
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, cast
 
 from amaranth import Cat, ClockDomain, ClockSignal, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
@@ -37,6 +38,11 @@ __all__ = [
     "build_verilog",
     "main",
 ]
+
+
+# Cast Amaranth's generator control to a context-manager protocol. / 将 Amaranth 生成器控制转换为上下文管理器协议。
+def _if(module: Module, condition: Any) -> AbstractContextManager[None]:
+    return cast(AbstractContextManager[None], module.If(condition))
 
 
 # =============================================================================
@@ -141,6 +147,10 @@ def vld_merge_model(
 # Implementation
 # =============================================================================
 class UHSCCoreVldMergeUnit(Elaboratable):
+    # Resolve runtime-created Amaranth ports for static type checking. / 为静态类型检查解析运行时创建的 Amaranth 端口。
+    def __getattr__(self, name: str) -> Signal:
+        raise AttributeError(name)
+
     """UHSC-localized reduced V2 parent boundary. / UHSC 本地化精简 V2 父边界。"""
 
     # Construct flattened locked-XSTop ports and the injected child boundary.
@@ -217,7 +227,7 @@ class UHSCCoreVldMergeUnit(Elaboratable):
         need_flush = self.flush_valid & ((self.flush_level & same_ptr) | is_after)
         wb_fire = self.writeback_valid
         module.d.clock += wb_valid.eq(wb_fire & ~need_flush)
-        with module.If(wb_fire):
+        with _if(module, wb_fire):
             module.d.clock += [
                 wb_data.eq(self.writeback_data), wb_pdest.eq(self.writeback_pdest),
                 wb_rob_flag.eq(self.writeback_rob_flag), wb_rob_value.eq(self.writeback_rob_value),
@@ -231,6 +241,8 @@ class UHSCCoreVldMergeUnit(Elaboratable):
             ]
 
         child = self.mask_generator
+        if child is None:
+            raise RuntimeError("mask_generator dependency is required")
         module.submodules.mask_generator = child
         real_eew = Mux(wb_is_indexed, wb_vsew, wb_veew)
         mask_arms: list[Any] = []

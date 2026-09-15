@@ -8,8 +8,9 @@ remain outside this Build target.
 
 from __future__ import annotations
 
+from contextlib import AbstractContextManager
 from dataclasses import dataclass
-from typing import Any, Mapping
+from typing import Any, Mapping, cast
 
 from amaranth import Array, ClockDomain, Elaboratable, Module, Signal
 from amaranth.back import verilog
@@ -19,6 +20,16 @@ from amaranth.back import verilog
 # Module Contract
 # =============================================================================
 __all__ = ["DifftestConfig", "UHSCDifftestInterface", "DifftestInterface", "build_verilog", "main"]
+
+
+# Cast Amaranth generator controls to the context-manager protocol. / 将 Amaranth 生成器控制转换为上下文管理器协议。
+def _if(module: Module, condition: Any) -> AbstractContextManager[None]:
+    return cast(AbstractContextManager[None], module.If(condition))
+
+
+# Cast an Amaranth else branch to the context-manager protocol. / 将 Amaranth else 分支转换为上下文管理器协议。
+def _else(module: Module) -> AbstractContextManager[None]:
+    return cast(AbstractContextManager[None], module.Else())
 
 
 # =============================================================================
@@ -45,6 +56,10 @@ class DifftestConfig:
 # Implementation
 # =============================================================================
 class UHSCDifftestInterface(Elaboratable):
+    # Resolve runtime-created ports for static type checking. / 为静态类型检查解析运行时创建的端口。
+    def __getattr__(self, name: str) -> Signal:
+        raise AttributeError(name)
+
     """Trace FIFO and AXI-lite status/control boundary."""
 
     def __init__(self, configuration: DifftestConfig | None = None) -> None:
@@ -111,14 +126,14 @@ class UHSCDifftestInterface(Elaboratable):
             self.axi_r_data.eq(self.trace_count), self.halted.eq(0), self.error.eq(0),
             self.trace_count.eq(count),
         ]
-        with m.If(self.reset):
+        with _if(m, self.reset):
             m.d.difftest += count.eq(0)
-        with m.Else():
-            with m.If(self.commit_valid & self.commit_ready):
+        with _else(m):
+            with _if(m, self.commit_valid & self.commit_ready):
                 m.d.difftest += [count.eq(count + 1), pc_mem[count].eq(self.commit_pc),
                                  inst_mem[count].eq(self.commit_inst), rd_mem[count].eq(self.commit_rd),
                                  data_mem[count].eq(self.commit_data)]
-            with m.If(self.trace_valid & self.trace_ready):
+            with _if(m, self.trace_valid & self.trace_ready):
                 m.d.difftest += count.eq(count - 1)
         return m
 

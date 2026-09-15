@@ -11,8 +11,9 @@ sources remain excluded by the frozen dependency inventory.
 
 from __future__ import annotations
 
+from contextlib import AbstractContextManager
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, cast
 
 from amaranth import Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
@@ -36,6 +37,16 @@ __all__ = [
     "build_verilog",
     "main",
 ]
+
+
+# Cast Amaranth generator controls to the context-manager protocol. / 将 Amaranth 生成器控制转换为上下文管理器协议。
+def _if(module: Module, condition: Any) -> AbstractContextManager[None]:
+    return cast(AbstractContextManager[None], module.If(condition))
+
+
+# Cast an Amaranth elif branch to the context-manager protocol. / 将 Amaranth elif 分支转换为上下文管理器协议。
+def _elif(module: Module, condition: Any) -> AbstractContextManager[None]:
+    return cast(AbstractContextManager[None], module.Elif(condition))
 
 
 # =============================================================================
@@ -95,6 +106,10 @@ def parity_encode(value: int, width: int = 64) -> int:
 
 
 class UtilityBoundary(Elaboratable):
+    # Resolve runtime-created ports for static type checking. / 为静态类型检查解析运行时创建的端口。
+    def __getattr__(self, name: str) -> Signal:
+        raise AttributeError(name)
+
     """Aggregated hardware boundary for selected V2 utility helpers. / 选定 V2 utility 辅助逻辑的聚合硬件边界。"""
 
     # Construct the aggregated utility boundary. / 构造聚合 utility 边界。
@@ -144,10 +159,10 @@ class UtilityBoundary(Elaboratable):
                      self.pointer_wrap.eq((self.pointer_value + self.pointer_increment) >= (1 << c.pointer_bits)),
                      self.parity_bit.eq(self.parity_value.xor()),
                      self.critical_error.eq(self.counter_enable & self.counter_clear)]
-        with m.If(self.reset | self.counter_clear):
+        with _if(m, self.reset | self.counter_clear):
             m.d.utility += self.counter_value.eq(0)
-        with m.Elif(self.counter_enable):
-            with m.If(self.counter_value != Const((1 << c.counter_bits) - 1, c.counter_bits)):
+        with _elif(m, self.counter_enable):
+            with _if(m, self.counter_value != Const((1 << c.counter_bits) - 1, c.counter_bits)):
                 m.d.utility += self.counter_value.eq(self.counter_value + 1)
         return m
 

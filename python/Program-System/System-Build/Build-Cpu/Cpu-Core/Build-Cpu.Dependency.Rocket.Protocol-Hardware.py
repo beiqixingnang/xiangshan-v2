@@ -10,8 +10,9 @@ explicit family boundary rather than duplicated one-file ports.
 
 from __future__ import annotations
 
+from contextlib import AbstractContextManager
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, cast
 
 from amaranth import ClockDomain, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
@@ -24,6 +25,21 @@ from amaranth.back import verilog
 # D-channel response routing, and reset/flush cancellation. / 该边界模型覆盖
 # TileLink A 通道接收、单个未决 source、D 通道响应路由以及复位/flush 取消。
 __all__ = ["RocketProtocolConfig", "RocketProtocolBoundary", "build_verilog", "main"]
+
+
+# Cast Amaranth generator controls to the context-manager protocol. / 将 Amaranth 生成器控制转换为上下文管理器协议。
+def _if(module: Module, condition: Any) -> AbstractContextManager[None]:
+    return cast(AbstractContextManager[None], module.If(condition))
+
+
+# Cast an Amaranth elif branch to the context-manager protocol. / 将 Amaranth elif 分支转换为上下文管理器协议。
+def _elif(module: Module, condition: Any) -> AbstractContextManager[None]:
+    return cast(AbstractContextManager[None], module.Elif(condition))
+
+
+# Cast an Amaranth else branch to the context-manager protocol. / 将 Amaranth else 分支转换为上下文管理器协议。
+def _else(module: Module) -> AbstractContextManager[None]:
+    return cast(AbstractContextManager[None], module.Else())
 
 
 # =============================================================================
@@ -50,6 +66,10 @@ class RocketProtocolConfig:
 # Implementation
 # =============================================================================
 class RocketProtocolBoundary(Elaboratable):
+    # Resolve runtime-created ports for static type checking. / 为静态类型检查解析运行时创建的端口。
+    def __getattr__(self, name: str) -> Signal:
+        raise AttributeError(name)
+
     """Aggregated TileLink A/D ready-valid protocol boundary. / 聚合 TileLink A/D ready-valid 协议边界。"""
 
     # Construct protocol channel ports. / 构造协议通道端口。
@@ -103,14 +123,14 @@ class RocketProtocolBoundary(Elaboratable):
                      self.d_opcode.eq(Mux(opcode_r == 0, 0, 1)),
                      self.d_size.eq(size_r), self.d_source.eq(source_r), self.d_sink.eq(0),
                      self.d_denied.eq(0), self.d_data.eq(data_r), self.d_corrupt.eq(0)]
-        with m.If(self.flush):
+        with _if(m, self.flush):
             m.d.rocket_protocol += self.outstanding.eq(0)
-        with m.Else():
-            with m.If(self.request_fire):
+        with _else(m):
+            with _if(m, self.request_fire):
                 m.d.rocket_protocol += [self.outstanding.eq(1), source_r.eq(self.a_source),
                                         opcode_r.eq(self.a_opcode), size_r.eq(self.a_size),
                                         address_r.eq(self.a_address), data_r.eq(self.a_data), mask_r.eq(self.a_mask)]
-            with m.Elif(self.response_fire):
+            with _elif(m, self.response_fire):
                 m.d.rocket_protocol += self.outstanding.eq(0)
         return m
 
