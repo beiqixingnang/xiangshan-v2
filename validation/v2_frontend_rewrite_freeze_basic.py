@@ -27,10 +27,12 @@ OUT = ROOT / "validation/v2-frontend-rewrite-freeze-basic-results.json"
 MAPPING = ROOT / "validation/v2-frontend-rewrite-freeze-mapping.json"
 
 # One aggregate per Frontend family; no one-Scala/one-Python expansion is used.
-# This batch owns the new BPU parent aggregate. Existing leaves have historical
-# evidence and remain outside this commit to avoid cross-worker ownership.
+# The freeze gate covers all currently materialized Frontend aggregates.  The
+# source files are already owned by the V2 rewrite inventory; this batch only
+# records basic-gate evidence and does not run locked-reference differential.
 TARGETS = {
-    "Frontend.Bpu.Parent": BUILD / "Build-Cpu.Frontend.Bpu.Parent-Hardware.py",
+    path.stem.removeprefix("Build-Cpu.").removesuffix("-Hardware"): path
+    for path in sorted(BUILD.glob("Build-Cpu.Frontend*Hardware.py"))
 }
 
 

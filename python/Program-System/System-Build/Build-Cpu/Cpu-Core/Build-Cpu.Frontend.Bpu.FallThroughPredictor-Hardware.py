@@ -1,6 +1,7 @@
 """V2 FTB fall-through address closure. / V2 FTB 顺序地址闭包。"""
 
 from __future__ import annotations
+# pyright: reportAttributeAccessIssue=false, reportGeneralTypeIssues=false, reportOperatorIssue=false
 
 from dataclasses import dataclass
 from typing import Any

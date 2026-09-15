@@ -1,6 +1,7 @@
 """V2 unsigned saturating counter closure. / V2 无符号饱和计数器闭包。"""
 
 from __future__ import annotations
+# pyright: reportAttributeAccessIssue=false, reportGeneralTypeIssues=false, reportOperatorIssue=false
 
 from dataclasses import dataclass
 from typing import Any

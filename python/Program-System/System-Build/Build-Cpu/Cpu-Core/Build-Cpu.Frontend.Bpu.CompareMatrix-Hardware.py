@@ -1,6 +1,7 @@
 """V2 dispatch issue-queue ordering matrix. / V2 dispatch 发射队列排序矩阵。"""
 
 from __future__ import annotations
+# pyright: reportAttributeAccessIssue=false, reportGeneralTypeIssues=false, reportOperatorIssue=false
 
 from dataclasses import dataclass
 from typing import Any, Sequence

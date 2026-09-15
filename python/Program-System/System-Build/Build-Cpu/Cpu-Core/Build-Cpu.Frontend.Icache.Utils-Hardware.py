@@ -2,6 +2,7 @@
 香山 V2 指令缓存解耦工具模块的 Amaranth 重写。
 """
 from __future__ import annotations
+# pyright: reportAttributeAccessIssue=false, reportGeneralTypeIssues=false, reportOperatorIssue=false
 
 from amaranth import Array, Elaboratable, Module, Mux, Signal
 

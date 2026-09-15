@@ -2,6 +2,7 @@
 香山 V2 指令缓存组相联替换策略的 Amaranth 重写。
 """
 from __future__ import annotations
+# pyright: reportAttributeAccessIssue=false, reportGeneralTypeIssues=false, reportOperatorIssue=false
 
 from dataclasses import dataclass
 

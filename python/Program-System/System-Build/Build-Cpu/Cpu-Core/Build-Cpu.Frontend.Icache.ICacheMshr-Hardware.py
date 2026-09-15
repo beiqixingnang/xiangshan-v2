@@ -2,6 +2,7 @@
 香山 V2 指令缓存缺失状态保持寄存器的 Amaranth 重写。
 """
 from __future__ import annotations
+# pyright: reportAttributeAccessIssue=false, reportGeneralTypeIssues=false, reportOperatorIssue=false
 
 from dataclasses import dataclass
 

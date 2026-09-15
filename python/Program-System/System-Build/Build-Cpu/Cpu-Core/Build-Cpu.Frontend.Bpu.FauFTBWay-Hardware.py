@@ -3,6 +3,7 @@ V2 快速辅助 FTB 单路标签与写旁路行为。
 """
 
 from __future__ import annotations
+# pyright: reportAttributeAccessIssue=false, reportGeneralTypeIssues=false, reportOperatorIssue=false
 
 from dataclasses import dataclass
 

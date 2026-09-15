@@ -4,6 +4,86 @@
   "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
   "locked_xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
   "targets": {
+    "Frontend.Bpu.CompareMatrix": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.CompareMatrix-Hardware.py",
+      "sha256": "8e3eaef5a74f3e1ade950e669c1687210312c039b7e56683bd4bca90b079b590",
+      "utf8_lf": true,
+      "ast": true,
+      "py_compile": true,
+      "exact_import": true,
+      "build_verilog": true,
+      "module_decl": true,
+      "generated_bytes": 26762,
+      "module": "CompareMatrix",
+      "syntax": {
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_returncode": 0,
+        "yosys_returncode": 0,
+        "stderr_tail": "ishuo/AppData/Local/Temp/v2_frontend_freeze_2tfocq31/CompareMatrix.sv:815:24: Operator ADD expects 4 bits on the LHS, but LHS's CONST '1'h0' generates 1 bits.\n                                                                                                                : ... note: In instance 'CompareMatrix'\n  815 |   assign \\$393  = 1'h0 + \\$392 ;\n      |                        ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_freeze_2tfocq31/CompareMatrix.sv:825:19: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 3 bits.\n                                                                                                               : ... note: In instance 'CompareMatrix'\n  825 |   assign \\$404  = ! \\$403 [2:0];\n      |                   ^\n"
+      },
+      "pass": true
+    },
+    "Frontend.Bpu.FallThroughPredictor": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.FallThroughPredictor-Hardware.py",
+      "sha256": "e9739bd504244a96ec64ceb0eaa59c729bc2bafc1a26c6a3880fbc49f6ef63cc",
+      "utf8_lf": true,
+      "ast": true,
+      "py_compile": true,
+      "exact_import": true,
+      "build_verilog": true,
+      "module_decl": true,
+      "generated_bytes": 4933,
+      "module": "FallThroughPredictor",
+      "syntax": {
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_returncode": 0,
+        "yosys_returncode": 0,
+        "stderr_tail": "tfocq31/FallThroughPredictor.sv:98:24: Operator GT expects 8 bits on the RHS, but RHS's VARREF '$18' generates 6 bits.\n                                                                                                                      : ... note: In instance 'FallThroughPredictor'\n   98 |   assign \\$19  = \\$17  > \\$18 ;\n      |                        ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_freeze_2tfocq31/FallThroughPredictor.sv:104:24: Operator ADD expects 40 bits on the RHS, but RHS's CONST '6'h20' generates 6 bits.\n                                                                                                                       : ... note: In instance 'FallThroughPredictor'\n  104 |   assign \\$25  = s1_pc + 6'h20;\n      |                        ^\n"
+      },
+      "pass": true
+    },
+    "Frontend.Bpu.FauFTBWay": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.FauFTBWay-Hardware.py",
+      "sha256": "04bbb2c61c0cd8cf2bc8233b1e1499df3b3ca2313f5138402410f19783a42fb0",
+      "utf8_lf": true,
+      "ast": true,
+      "py_compile": true,
+      "exact_import": true,
+      "build_verilog": true,
+      "module_decl": true,
+      "generated_bytes": 49108,
+      "module": "FauFTBWay",
+      "syntax": {
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_returncode": 0,
+        "yosys_returncode": 0,
+        "stderr_tail": ""
+      },
+      "pass": true
+    },
+    "Frontend.Bpu.FTBEntryGen": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.FTBEntryGen-Hardware.py",
+      "sha256": "907bec30d7f1e8327fdde41a0e0e3996b2cca2e72e1bb92abc4fc63f6d0439b9",
+      "utf8_lf": true,
+      "ast": true,
+      "py_compile": true,
+      "exact_import": true,
+      "build_verilog": true,
+      "module_decl": true,
+      "generated_bytes": 587597,
+      "module": "FTBEntryGen",
+      "syntax": {
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_returncode": 0,
+        "yosys_returncode": 0,
+        "stderr_tail": "                                           : ... note: In instance 'FTBEntryGen'\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_freeze_2tfocq31/FTBEntryGen.sv:2817:50: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                               : ... note: In instance 'FTBEntryGen'\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_freeze_2tfocq31/FTBEntryGen.sv:2821:20: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'io_old_entry_tailSlot_tarStat' generates 2 bits.\n                                                                                                              : ... note: In instance 'FTBEntryGen'\n"
+      },
+      "pass": true
+    },
     "Frontend.Bpu.Parent": {
       "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Parent-Hardware.py",
       "sha256": "65ddeea348abe6452d3df76f37b33d3a1a1fa2fcb4175e9d6c89311c1d4aac2a",
@@ -21,6 +101,266 @@
         "verilator_returncode": 0,
         "yosys_returncode": 0,
         "stderr_tail": ""
+      },
+      "pass": true
+    },
+    "Frontend.Bpu.Replacer.LruStateGen": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.LruStateGen-Hardware.py",
+      "sha256": "bea5c2cf53df4291c041c1ef8c85122a1f3778848724059bb81eec95a6752bbb",
+      "utf8_lf": true,
+      "ast": true,
+      "py_compile": true,
+      "exact_import": true,
+      "build_verilog": true,
+      "module_decl": true,
+      "generated_bytes": 2986,
+      "module": "LruStateGen",
+      "syntax": {
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_returncode": 0,
+        "yosys_returncode": 0,
+        "stderr_tail": "_freeze_2tfocq31/LruStateGen.sv:73:36: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                             : ... note: In instance 'LruStateGen'\n   73 |   assign \\$13  = io_touches_0_bits == 1'h1;\n      |                                    ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_freeze_2tfocq31/LruStateGen.sv:77:36: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                             : ... note: In instance 'LruStateGen'\n   77 |   assign \\$17  = io_touches_0_bits == 1'h1;\n      |                                    ^~\n"
+      },
+      "pass": true
+    },
+    "Frontend.Bpu.Replacer.PlruStateGen": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.PlruStateGen-Hardware.py",
+      "sha256": "aa30777732cd21bb1ad326d706f55b5d466dbf14bedb4d95313f172e964c6347",
+      "utf8_lf": true,
+      "ast": true,
+      "py_compile": true,
+      "exact_import": true,
+      "build_verilog": true,
+      "module_decl": true,
+      "generated_bytes": 1112,
+      "module": "PlruStateGen",
+      "syntax": {
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_returncode": 0,
+        "yosys_returncode": 0,
+        "stderr_tail": ""
+      },
+      "pass": true
+    },
+    "Frontend.Bpu.Replacer.ReplacerState": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.ReplacerState-Hardware.py",
+      "sha256": "8643fbff85c65914b4f42673f10d8eb479c4464d774ba96743d2837b31b379ab",
+      "utf8_lf": true,
+      "ast": true,
+      "py_compile": true,
+      "exact_import": true,
+      "build_verilog": true,
+      "module_decl": true,
+      "generated_bytes": 225474,
+      "module": "ReplacerState",
+      "syntax": {
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_returncode": 0,
+        "yosys_returncode": 0,
+        "stderr_tail": ":43: Operator EQ expects 6 bits on the RHS, but RHS's CONST '5'h1f' generates 5 bits.\n                                                                                                                 : ... note: In instance 'ReplacerState'\n 5984 |   assign \\$2671  = io_write_0_bits_setIdx == 5'h1f;\n      |                                           ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_freeze_2tfocq31/ReplacerState.sv:5986:36: Operator EQ expects 6 bits on the RHS, but RHS's CONST '5'h1f' generates 5 bits.\n                                                                                                                 : ... note: In instance 'ReplacerState'\n 5986 |   assign \\$2673  = io_access_0_set == 5'h1f;\n      |                                    ^~\n"
+      },
+      "pass": true
+    },
+    "Frontend.Bpu.SaturateCounter": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.SaturateCounter-Hardware.py",
+      "sha256": "153b4017d389eac2bdd6ce4d5bd3af109a4224d59cb5908cd8f92cdb15cc010b",
+      "utf8_lf": true,
+      "ast": true,
+      "py_compile": true,
+      "exact_import": true,
+      "build_verilog": true,
+      "module_decl": true,
+      "generated_bytes": 1493,
+      "module": "SaturateCounter",
+      "syntax": {
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_returncode": 0,
+        "yosys_returncode": 0,
+        "stderr_tail": "                                                            : ... note: In instance 'SaturateCounter'\n   40 |   assign \\$4  = ! value;\n      |                 ^\n                     ... For warning description see https://verilator.org/warn/WIDTHTRUNC?v=5.032\n                     ... Use \"/* verilator lint_off WIDTHTRUNC */\" and lint_on around source to disable this message.\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_freeze_2tfocq31/SaturateCounter.sv:50:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'value' generates 2 bits.\n                                                                                                                : ... note: In instance 'SaturateCounter'\n   50 |   assign \\$13  = ! value;\n      |                  ^\n"
+      },
+      "pass": true
+    },
+    "Frontend.Bpu.SignedSaturateCounter": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.SignedSaturateCounter-Hardware.py",
+      "sha256": "8b0523a2f3f973bdc028a73ddb57ee6a0cdcabf65030f657f482a45ab94fa6d5",
+      "utf8_lf": true,
+      "ast": true,
+      "py_compile": true,
+      "exact_import": true,
+      "build_verilog": true,
+      "module_decl": true,
+      "generated_bytes": 1649,
+      "module": "SignedSaturateCounter",
+      "syntax": {
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_returncode": 0,
+        "yosys_returncode": 0,
+        "stderr_tail": "Operator GTES expects 6 bits on the RHS, but RHS's SIGNED generates 1 bits.\n                                                                                                                       : ... note: In instance 'SignedSaturateCounter'\n   50 |   assign is_positive = $signed(value) >= $signed(1'h0);\n      |                                       ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_freeze_2tfocq31/SignedSaturateCounter.sv:51:24: Operator EQ expects 6 bits on the RHS, but RHS's CONST '5'h1f' generates 5 bits.\n                                                                                                                       : ... note: In instance 'SignedSaturateCounter'\n   51 |   assign \\$13  = value == 5'h1f;\n      |                        ^~\n"
+      },
+      "pass": true
+    },
+    "Frontend.Bpu.WrBypass": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.WrBypass-Hardware.py",
+      "sha256": "4f840f06d776f5cd0822d9205b5adef2e54e512264d9228a2ae7598c34691302",
+      "utf8_lf": true,
+      "ast": true,
+      "py_compile": true,
+      "exact_import": true,
+      "build_verilog": true,
+      "module_decl": true,
+      "generated_bytes": 959752,
+      "module": "WrBypass",
+      "syntax": {
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_returncode": 0,
+        "yosys_returncode": 0,
+        "stderr_tail": "                           ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_freeze_2tfocq31/WrBypass.sv:4374:28: Operator EQ expects 4 bits on the RHS, but RHS's CONST '3'h7' generates 3 bits.\n                                                                                                            : ... note: In instance 'WrBypass'\n 4374 |   assign \\$1872  = \\$1871  == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Frontend.Bpu.WrBypass-Hardware.py:226\" *) 3'h7;\n      |                            ^~\n"
+      },
+      "pass": true
+    },
+    "Frontend.Icache.ICacheMshr": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.ICacheMshr-Hardware.py",
+      "sha256": "a2857a29366d3173007c9686dbcb90171b4025869c9773a0c24dfb1e390d7a27",
+      "utf8_lf": true,
+      "ast": true,
+      "py_compile": true,
+      "exact_import": true,
+      "build_verilog": true,
+      "module_decl": true,
+      "generated_bytes": 39621,
+      "module": "ICacheMSHR",
+      "syntax": {
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_returncode": 0,
+        "yosys_returncode": 0,
+        "stderr_tail": ""
+      },
+      "pass": true
+    },
+    "Frontend.Icache.ICacheReplacer": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.ICacheReplacer-Hardware.py",
+      "sha256": "52c3f3acb5b4ed75536cd638022648da7007e4a9ac84dc9cfdd1a7033c0d1577",
+      "utf8_lf": true,
+      "ast": true,
+      "py_compile": true,
+      "exact_import": true,
+      "build_verilog": true,
+      "module_decl": true,
+      "generated_bytes": 4703975,
+      "module": "ICacheReplacer",
+      "syntax": {
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_returncode": 0,
+        "yosys_returncode": 0,
+        "stderr_tail": "                      : ... note: In instance 'ICacheReplacer.replacer_0'\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_freeze_2tfocq31/ICacheReplacer.sv:9021:32: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3f' generates 6 bits.\n                                                                                                                  : ... note: In instance 'ICacheReplacer.replacer_0'\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_freeze_2tfocq31/ICacheReplacer.sv:9034:32: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3f' generates 6 bits.\n                                                                                                                  : ... note: In instance 'ICacheReplacer.replacer_0'\n"
+      },
+      "pass": true
+    },
+    "Frontend.Icache.InstrMMIOEntry": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.InstrMMIOEntry-Hardware.py",
+      "sha256": "f4defdf00e3f9f6303f6363455319ecdf11e714dd67e14cb2c86a08d3ee17f09",
+      "utf8_lf": true,
+      "ast": true,
+      "py_compile": true,
+      "exact_import": true,
+      "build_verilog": true,
+      "module_decl": true,
+      "generated_bytes": 29197,
+      "module": "InstrMMIOEntry",
+      "syntax": {
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_returncode": 0,
+        "yosys_returncode": 0,
+        "stderr_tail": "             ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_freeze_2tfocq31/InstrMMIOEntry.sv:141:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'state' generates 2 bits.\n                                                                                                                : ... note: In instance 'InstrMMIOEntry'\n  141 |   assign \\$30  = ! (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Frontend.Icache.InstrMMIOEntry-Hardware.py:111\" *) state;\n      |                  ^\n"
+      },
+      "pass": true
+    },
+    "Frontend.Icache.InstrUncache": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.InstrUncache-Hardware.py",
+      "sha256": "150fb6ecc9053f487679e5b03e29d810c37ad2ba7953121b0b108a74adeda0fb",
+      "utf8_lf": true,
+      "ast": true,
+      "py_compile": true,
+      "exact_import": true,
+      "build_verilog": true,
+      "module_decl": true,
+      "generated_bytes": 34942,
+      "module": "InstrUncache",
+      "syntax": {
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_returncode": 0,
+        "yosys_returncode": 0,
+        "stderr_tail": ""
+      },
+      "pass": true
+    },
+    "Frontend.Icache.Utils": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.Utils-Hardware.py",
+      "sha256": "d9e73f68405e2502fd910e1c00510b450ba1978598aa594a53f88460746c9b80",
+      "utf8_lf": true,
+      "ast": true,
+      "py_compile": true,
+      "exact_import": true,
+      "build_verilog": true,
+      "module_decl": true,
+      "generated_bytes": 31374,
+      "module": "FIFOReg",
+      "syntax": {
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_returncode": 0,
+        "yosys_returncode": 0,
+        "stderr_tail": "tfocq31/FIFOReg.sv:305:7: Case values incompletely covered (example pattern 0x7)\n  305 |       casez (enq_ptr_value)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_freeze_2tfocq31/FIFOReg.sv:330:7: Case values incompletely covered (example pattern 0x8)\n  330 |       casez (enq_ptr_value)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_freeze_2tfocq31/FIFOReg.sv:357:7: Case values incompletely covered (example pattern 0x9)\n  357 |       casez (enq_ptr_value)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_freeze_2tfocq31/FIFOReg.sv:386:7: Case values incompletely covered (example pattern 0xa)\n  386 |       casez (enq_ptr_value)\n      |       ^~~~~\n"
+      },
+      "pass": true
+    },
+    "Frontend.Ifu.RvcExpander": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Ifu.RvcExpander-Hardware.py",
+      "sha256": "63a13f8b15b5c7107ea46e6e4b93ed22bf831d91b383d0eb2694ebbc6b400827",
+      "utf8_lf": true,
+      "ast": true,
+      "py_compile": true,
+      "exact_import": true,
+      "build_verilog": true,
+      "module_decl": true,
+      "generated_bytes": 27171,
+      "module": "RVCExpander",
+      "syntax": {
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_returncode": 0,
+        "yosys_returncode": 0,
+        "stderr_tail": "o/AppData/Local/Temp/v2_frontend_freeze_2tfocq31/RVCExpander.sv:799:19: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 5 bits.\n                                                                                                             : ... note: In instance 'RVCExpander'\n  799 |   assign \\$395  = ! io_in[11:7];\n      |                   ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_freeze_2tfocq31/RVCExpander.sv:800:32: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                              : ... note: In instance 'RVCExpander'\n  800 |   assign \\$396  = io_in[15:13] == 1'h1;\n      |                                ^~\n"
+      },
+      "pass": true
+    },
+    "Frontend.Top": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Top-Hardware.py",
+      "sha256": "f0966b7480d12f60c243e051a74cb8239ef2fc759b0433d454d4de05b67c644a",
+      "utf8_lf": true,
+      "ast": true,
+      "py_compile": true,
+      "exact_import": true,
+      "build_verilog": true,
+      "module_decl": true,
+      "generated_bytes": 76553,
+      "module": "UHSCTop",
+      "syntax": {
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "verilator_returncode": 0,
+        "yosys_returncode": 0,
+        "stderr_tail": "%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_frontend_freeze_2tfocq31/UHSCTop.sv:987:46: Operator ADD expects 51 bits on the RHS, but RHS's CONST '7'h40' generates 7 bits.\n                                                                                                          : ... note: In instance 'UHSCTop'\n  987 |   assign \\$1  = io_softPrefetch_0_bits_vaddr + 7'h40;\n      |                                              ^\n                      ... For warning description see https://verilator.org/warn/WIDTHEXPAND?v=5.032\n                      ... Use \"/* verilator lint_off WIDTHEXPAND */\" and lint_on around source to disable this message.\n"
       },
       "pass": true
     }

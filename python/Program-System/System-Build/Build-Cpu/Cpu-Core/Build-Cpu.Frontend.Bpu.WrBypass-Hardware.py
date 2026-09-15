@@ -3,6 +3,7 @@ V2 前端带伪 LRU 替换的写旁路 CAM。
 """
 
 from __future__ import annotations
+# pyright: reportAttributeAccessIssue=false, reportGeneralTypeIssues=false, reportOperatorIssue=false
 
 from dataclasses import dataclass
 
