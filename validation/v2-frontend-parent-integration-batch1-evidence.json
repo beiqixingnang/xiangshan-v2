@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_FRONTEND_PARENT_INTEGRATION_BATCH1",
+  "batch_id": "V2-SEMANTIC-FRONTEND-PARENT-INTEGRATION-001",
+  "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Top-Hardware.py",
+  "local_name": "UHSCTop",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "source_path_count": 25,
+  "source_paths": [
+    "upstream/src/main/scala/xiangshan/frontend/Frontend.scala",
+    "upstream/src/main/scala/xiangshan/frontend/BPU.scala",
+    "upstream/src/main/scala/xiangshan/frontend/Bim.scala",
+    "upstream/src/main/scala/xiangshan/frontend/Composer.scala",
+    "upstream/src/main/scala/xiangshan/frontend/FauFTB.scala",
+    "upstream/src/main/scala/xiangshan/frontend/FTB.scala",
+    "upstream/src/main/scala/xiangshan/frontend/FrontendBundle.scala",
+    "upstream/src/main/scala/xiangshan/frontend/IBuffer.scala",
+    "upstream/src/main/scala/xiangshan/frontend/IFU.scala",
+    "upstream/src/main/scala/xiangshan/frontend/NewFtq.scala",
+    "upstream/src/main/scala/xiangshan/frontend/PreDecode.scala",
+    "upstream/src/main/scala/xiangshan/frontend/ITTAGE.scala",
+    "upstream/src/main/scala/xiangshan/frontend/newRAS.scala",
+    "upstream/src/main/scala/xiangshan/frontend/RAS.scala",
+    "upstream/src/main/scala/xiangshan/frontend/SC.scala",
+    "upstream/src/main/scala/xiangshan/frontend/Tage.scala",
+    "upstream/src/main/scala/xiangshan/frontend/WrBypass.scala",
+    "upstream/src/main/scala/xiangshan/frontend/icache/ICache.scala",
+    "upstream/src/main/scala/xiangshan/frontend/icache/ICacheBundle.scala",
+    "upstream/src/main/scala/xiangshan/frontend/icache/ICacheCtrlUnit.scala",
+    "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala",
+    "upstream/src/main/scala/xiangshan/frontend/icache/InstrUncache.scala",
+    "upstream/src/main/scala/xiangshan/cache/mmu/MMUBundle.scala",
+    "upstream/src/main/scala/xiangshan/cache/mmu/Repeater.scala",
+    "upstream/src/main/scala/xiangshan/cache/mmu/TLB.scala"
+  ],
+  "implementation": {
+    "engines": [
+      "FrontendFtqEngine",
+      "FrontendIfuEngine",
+      "FrontendIbufferEngine",
+      "FrontendItlbEngine",
+      "FrontendBpuEngine"
+    ],
+    "stateful_handshakes": [
+      "FTQ circular enqueue/issue with simultaneous fire",
+      "IFU held request and response pipeline",
+      "IBuffer enqueue/dequeue backpressure",
+      "ITLB miss/PTW refill and SFENCE invalidation",
+      "BPU two-bit counter training"
+    ]
+  },
+  "checks": {
+    "AST": "PASS",
+    "PY_COMPILE": "PASS",
+    "EXACT_PATH_IMPORT": "PASS",
+    "BUILD_VERILOG_COMPACT": "PASS",
+    "BUILD_VERILOG_LOCKED": "PASS",
+    "PYRIGHT": "PASS",
+    "DIRECT_FTQ_ORDER": "PASS",
+    "DIRECT_BPU_TRAINING": "PASS",
+    "DIRECT_ITLB_REFILL": "PASS",
+    "VERILATOR": "NOT_RUN_WINDOWS_TOOL_UNAVAILABLE",
+    "YOSYS": "NOT_RUN_WINDOWS_TOOL_UNAVAILABLE"
+  },
+  "metrics": {
+    "source_sha256": "c8ea5d2240cd12bdc6af6011292e5ae72f98193f0ce1491d8f91c5ddfcf4c43f",
+    "rtl_compact_bytes": 309574,
+    "rtl_locked_bytes": 309574,
+    "direct_vectors": 3,
+    "port_count": 371
+  },
+  "status": "PASS_BOUNDED",
+  "behavior_status": "PENDING_FULL_CHILD_BEHAVIOR",
+  "remaining_pending": [
+    "full IFU predecode/MMIO state equivalence",
+    "full FTQ/BPU/IBuffer child closure differential",
+    "ITLB/PMP/PTW complete protocol differential",
+    "locked reference SV differential",
+    "license review"
+  ],
+  "acceptance_eligible": false,
+  "ACCEPTED": "NOT_ALLOWED"
+}

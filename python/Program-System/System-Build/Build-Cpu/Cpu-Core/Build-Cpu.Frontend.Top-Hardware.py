@@ -14,7 +14,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, cast
 
-from amaranth import Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
+from amaranth import Array, Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
 
 
@@ -33,6 +33,11 @@ __all__ = [
     "FrontendChildBoundary",
     "FrontendRvcBoundary",
     "FrontendBpuBoundary",
+    "FrontendFtqEngine",
+    "FrontendIfuEngine",
+    "FrontendIbufferEngine",
+    "FrontendItlbEngine",
+    "FrontendBpuEngine",
     "FrontendParent",
     "UHSCTop",
     "Frontend",
@@ -49,13 +54,28 @@ __all__ = [
 FRONTEND_PARENT_SOURCE_PATHS: tuple[str, ...] = (
     "upstream/src/main/scala/xiangshan/frontend/Frontend.scala",
     "upstream/src/main/scala/xiangshan/frontend/BPU.scala",
+    "upstream/src/main/scala/xiangshan/frontend/Bim.scala",
+    "upstream/src/main/scala/xiangshan/frontend/Composer.scala",
+    "upstream/src/main/scala/xiangshan/frontend/FauFTB.scala",
+    "upstream/src/main/scala/xiangshan/frontend/FTB.scala",
+    "upstream/src/main/scala/xiangshan/frontend/FrontendBundle.scala",
     "upstream/src/main/scala/xiangshan/frontend/IBuffer.scala",
     "upstream/src/main/scala/xiangshan/frontend/IFU.scala",
     "upstream/src/main/scala/xiangshan/frontend/NewFtq.scala",
     "upstream/src/main/scala/xiangshan/frontend/PreDecode.scala",
+    "upstream/src/main/scala/xiangshan/frontend/ITTAGE.scala",
+    "upstream/src/main/scala/xiangshan/frontend/newRAS.scala",
+    "upstream/src/main/scala/xiangshan/frontend/RAS.scala",
+    "upstream/src/main/scala/xiangshan/frontend/SC.scala",
+    "upstream/src/main/scala/xiangshan/frontend/Tage.scala",
+    "upstream/src/main/scala/xiangshan/frontend/WrBypass.scala",
     "upstream/src/main/scala/xiangshan/frontend/icache/ICache.scala",
+    "upstream/src/main/scala/xiangshan/frontend/icache/ICacheBundle.scala",
+    "upstream/src/main/scala/xiangshan/frontend/icache/ICacheCtrlUnit.scala",
     "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala",
     "upstream/src/main/scala/xiangshan/frontend/icache/InstrUncache.scala",
+    "upstream/src/main/scala/xiangshan/cache/mmu/MMUBundle.scala",
+    "upstream/src/main/scala/xiangshan/cache/mmu/Repeater.scala",
     "upstream/src/main/scala/xiangshan/cache/mmu/TLB.scala",
 )
 FRONTEND_PARENT_SOURCE_FILE_COUNT = len(FRONTEND_PARENT_SOURCE_PATHS)
@@ -402,6 +422,429 @@ class FrontendBpuBoundary(Elaboratable):
         return module
 
 
+class FrontendFtqEngine(Elaboratable):
+    """Small stateful FTQ with one issue port and redirect flush. / 带单发射端口及重定向冲刷的小型有状态 FTQ。"""
+
+    # Construct the FTQ request, issue, and backend-observation contract. / 构造 FTQ 请求、发射及后端观测契约。
+    def __init__(self, configuration: FrontendTopConfig | None = None,
+                 depth: int = 8) -> None:
+        self.configuration = configuration or FrontendTopConfig()
+        cfg = self.configuration
+        if depth < 2 or depth & (depth - 1):
+            raise ValueError("FTQ depth must be a power of two >= 2")
+        self.depth = depth
+        self.clock = Signal(name="ftq_clock")
+        self.reset = Signal(name="ftq_reset")
+        self.flush = Signal(name="ftq_flush")
+        self.enq_valid = Signal(name="ftq_enq_valid")
+        self.enq_ready = Signal(name="ftq_enq_ready")
+        self.enq_addr = Signal(cfg.vaddr_bits, name="ftq_enq_start_addr")
+        self.enq_nextline = Signal(cfg.vaddr_bits, name="ftq_enq_nextline_addr")
+        self.ifu_valid = Signal(name="ftq_to_ifu_valid")
+        self.ifu_ready = Signal(name="ftq_to_ifu_ready")
+        self.ifu_addr = Signal(cfg.vaddr_bits, name="ftq_to_ifu_start_addr")
+        self.ifu_nextline = Signal(cfg.vaddr_bits, name="ftq_to_ifu_nextline_addr")
+        self.ifu_index = Signal(cfg.ftq_idx_bits, name="ftq_to_ifu_index")
+        self.icache_ready = Signal(name="ftq_icache_ready")
+        self.icache_valid = Signal(name="ftq_to_icache_valid")
+        self.icache_addr = Signal(cfg.vaddr_bits, name="ftq_to_icache_addr")
+        self.bpu_valid = Signal(name="ftq_to_bpu_valid")
+        self.bpu_pc = Signal(cfg.vaddr_bits, name="ftq_to_bpu_pc")
+        self.pc_mem_wen = Signal(name="ftq_pc_mem_wen")
+        self.pc_mem_waddr = Signal(cfg.ftq_idx_bits, name="ftq_pc_mem_waddr")
+        self.pc_mem_start = Signal(cfg.vaddr_bits, name="ftq_pc_mem_start")
+        self.newest_valid = Signal(name="ftq_newest_valid")
+        self.newest_target = Signal(cfg.vaddr_bits, name="ftq_newest_target")
+        self.newest_index = Signal(cfg.ftq_idx_bits, name="ftq_newest_index")
+        self.count = Signal(range(depth + 1), name="ftq_count")
+
+    # Elaborate a bounded circular queue preserving enqueue/issue ordering. / 展开保持入队与发射顺序的有界环形队列。
+    def elaborate(self, platform: Any) -> Module:
+        del platform
+        cfg = self.configuration
+        module: Any = Module()
+        domain = ClockDomain("frontend_sync", async_reset=True)
+        domain.clk = self.clock
+        domain.rst = self.reset
+        setattr(module.domains, "frontend_sync", domain)
+        head = Signal(range(self.depth), name="ftq_head")
+        tail = Signal(range(self.depth), name="ftq_tail")
+        addresses = [Signal(cfg.vaddr_bits, name=f"ftq_addr_{i}") for i in range(self.depth)]
+        nextlines = [Signal(cfg.vaddr_bits, name=f"ftq_nextline_{i}") for i in range(self.depth)]
+        address_at_head = Array(addresses)[head]
+        nextline_at_head = Array(nextlines)[head]
+        issue_valid = self.count != 0
+        issue_fire = issue_valid & self.ifu_ready & self.icache_ready
+        enq_fire = self.enq_valid & self.enq_ready
+        module.d.comb += [
+            self.enq_ready.eq((self.count < self.depth) & ~self.flush),
+            self.ifu_valid.eq(issue_valid & ~self.flush),
+            self.ifu_addr.eq(address_at_head),
+            self.ifu_nextline.eq(nextline_at_head),
+            self.ifu_index.eq(head),
+            self.icache_valid.eq(issue_valid & ~self.flush),
+            self.icache_addr.eq(address_at_head),
+            self.bpu_valid.eq(issue_valid & ~self.flush),
+            self.bpu_pc.eq(address_at_head),
+            self.pc_mem_wen.eq(enq_fire),
+            self.pc_mem_waddr.eq(tail),
+            self.pc_mem_start.eq(self.enq_addr),
+            self.newest_valid.eq(enq_fire),
+            self.newest_target.eq(self.enq_nextline),
+            self.newest_index.eq(tail),
+        ]
+        with module.If(self.reset | self.flush):
+            module.d.frontend_sync += [head.eq(0), tail.eq(0), self.count.eq(0)]
+        with module.Else():
+            with module.If(enq_fire):
+                module.d.frontend_sync += [
+                    Array(addresses)[tail].eq(self.enq_addr),
+                    Array(nextlines)[tail].eq(self.enq_nextline),
+                    tail.eq(tail + 1),
+                ]
+            with module.If(issue_fire):
+                module.d.frontend_sync += head.eq(head + 1)
+            with module.If(enq_fire & ~issue_fire):
+                module.d.frontend_sync += self.count.eq(self.count + 1)
+            with module.Elif(issue_fire & ~enq_fire):
+                module.d.frontend_sync += self.count.eq(self.count - 1)
+        return module
+
+
+class FrontendIfuEngine(Elaboratable):
+    """Three-phase IFU request/response pipeline with backpressure. / 带反压的三阶段 IFU 请求响应流水。"""
+
+    # Construct IFU stage signals and the ICache/IBuffer boundaries. / 构造 IFU 阶段信号及 ICache/IBuffer 边界。
+    def __init__(self, configuration: FrontendTopConfig | None = None) -> None:
+        self.configuration = configuration or FrontendTopConfig()
+        cfg = self.configuration
+        self.clock = Signal(name="ifu_clock")
+        self.reset = Signal(name="ifu_reset")
+        self.flush = Signal(name="ifu_flush")
+        self.ftq_valid = Signal(name="ifu_ftq_valid")
+        self.ftq_ready = Signal(name="ifu_ftq_ready")
+        self.ftq_addr = Signal(cfg.vaddr_bits, name="ifu_ftq_addr")
+        self.ftq_nextline = Signal(cfg.vaddr_bits, name="ifu_ftq_nextline")
+        self.ftq_index = Signal(cfg.ftq_idx_bits, name="ifu_ftq_index")
+        self.icache_req_valid = Signal(name="ifu_icache_req_valid")
+        self.icache_req_ready = Signal(name="ifu_icache_req_ready")
+        self.icache_req_addr = Signal(cfg.vaddr_bits, name="ifu_icache_req_addr")
+        self.icache_resp_valid = Signal(name="ifu_icache_resp_valid")
+        self.icache_resp_ready = Signal(name="ifu_icache_resp_ready")
+        self.icache_resp_data = Signal(cfg.instr_bits * 16, name="ifu_icache_resp_data")
+        self.icache_resp_error = Signal(name="ifu_icache_resp_error")
+        self.bpu_pred_taken = Signal(name="ifu_bpu_pred_taken")
+        self.ibuffer_valid = Signal(name="ifu_ibuffer_valid")
+        self.ibuffer_ready = Signal(name="ifu_ibuffer_ready")
+        self.ibuffer_instr = Signal(cfg.instr_bits, name="ifu_ibuffer_instr")
+        self.ibuffer_pc = Signal(cfg.vaddr_bits, name="ifu_ibuffer_pc")
+        self.ibuffer_is_rvc = Signal(name="ifu_ibuffer_is_rvc")
+        self.ibuffer_pred_taken = Signal(name="ifu_ibuffer_pred_taken")
+        self.ibuffer_exception = Signal(name="ifu_ibuffer_exception")
+        self.ptw_req_valid = Signal(name="ifu_ptw_req_valid")
+        self.ptw_req_addr = Signal(cfg.vaddr_bits, name="ifu_ptw_req_addr")
+        self.stage_valid = Signal(3, name="ifu_stage_valid")
+
+    # Elaborate a held-request pipeline that never drops an unaccepted beat. / 展开保持未接收事务且不丢失数据的流水。
+    def elaborate(self, platform: Any) -> Module:
+        del platform
+        cfg = self.configuration
+        module: Any = Module()
+        domain = ClockDomain("frontend_sync", async_reset=True)
+        domain.clk = self.clock
+        domain.rst = self.reset
+        setattr(module.domains, "frontend_sync", domain)
+        s0_valid = Signal(name="ifu_s0_valid")
+        s0_addr = Signal(cfg.vaddr_bits, name="ifu_s0_addr")
+        s0_nextline = Signal(cfg.vaddr_bits, name="ifu_s0_nextline")
+        s0_index = Signal(cfg.ftq_idx_bits, name="ifu_s0_index")
+        waiting = Signal(name="ifu_waiting_resp")
+        out_valid = Signal(name="ifu_s2_valid")
+        out_instr = Signal(cfg.instr_bits, name="ifu_s2_instr")
+        out_pc = Signal(cfg.vaddr_bits, name="ifu_s2_pc")
+        out_rvc = Signal(name="ifu_s2_rvc")
+        out_pred = Signal(name="ifu_s2_pred")
+        out_exception = Signal(name="ifu_s2_exception")
+        ftq_fire = self.ftq_valid & self.ftq_ready
+        req_fire = self.icache_req_valid & self.icache_req_ready
+        resp_fire = self.icache_resp_valid & self.icache_resp_ready
+        out_fire = self.ibuffer_valid & self.ibuffer_ready
+        module.d.comb += [
+            self.ftq_ready.eq(~s0_valid & ~waiting & ~out_valid & ~self.flush),
+            self.icache_req_valid.eq(s0_valid & ~waiting & ~out_valid & ~self.flush),
+            self.icache_req_addr.eq(s0_addr),
+            self.icache_resp_ready.eq(waiting & ~out_valid & ~self.flush),
+            self.ibuffer_valid.eq(out_valid & ~self.flush),
+            self.ibuffer_instr.eq(out_instr),
+            self.ibuffer_pc.eq(out_pc),
+            self.ibuffer_is_rvc.eq(out_rvc),
+            self.ibuffer_pred_taken.eq(out_pred),
+            self.ibuffer_exception.eq(out_exception),
+            self.ptw_req_valid.eq(waiting & self.icache_resp_error & ~self.flush),
+            self.ptw_req_addr.eq(s0_addr),
+            self.stage_valid.eq(Cat(out_valid, waiting, s0_valid)),
+        ]
+        with module.If(self.reset | self.flush):
+            module.d.frontend_sync += [s0_valid.eq(0), waiting.eq(0), out_valid.eq(0)]
+        with module.Else():
+            with module.If(ftq_fire):
+                module.d.frontend_sync += [
+                    s0_valid.eq(1), s0_addr.eq(self.ftq_addr),
+                    s0_nextline.eq(self.ftq_nextline), s0_index.eq(self.ftq_index),
+                ]
+            with module.If(req_fire):
+                module.d.frontend_sync += [s0_valid.eq(0), waiting.eq(1)]
+            with module.If(resp_fire):
+                module.d.frontend_sync += [
+                    waiting.eq(0), out_valid.eq(1), out_instr.eq(self.icache_resp_data[:cfg.instr_bits]),
+                    out_pc.eq(s0_addr), out_rvc.eq(self.icache_resp_data[1:2] != 0),
+                    out_pred.eq(self.bpu_pred_taken), out_exception.eq(self.icache_resp_error),
+                ]
+            with module.If(out_fire):
+                module.d.frontend_sync += out_valid.eq(0)
+        return module
+
+
+class FrontendIbufferEngine(Elaboratable):
+    """Six-lane-visible instruction queue with explicit dequeue backpressure. / 显式出队反压的六通道可见指令队列。"""
+
+    # Construct queue storage and the backend CF-vector observation surface. / 构造队列存储及后端 CF 向量观测面。
+    def __init__(self, configuration: FrontendTopConfig | None = None,
+                 depth: int = 16) -> None:
+        self.configuration = configuration or FrontendTopConfig()
+        cfg = self.configuration
+        if depth < 2 or depth & (depth - 1):
+            raise ValueError("IBuffer depth must be a power of two >= 2")
+        self.depth = depth
+        self.clock = Signal(name="ibuffer_clock")
+        self.reset = Signal(name="ibuffer_reset")
+        self.flush = Signal(name="ibuffer_flush")
+        self.enq_valid = Signal(name="ibuffer_enq_valid")
+        self.enq_ready = Signal(name="ibuffer_enq_ready")
+        self.enq_instr = Signal(cfg.instr_bits, name="ibuffer_enq_instr")
+        self.enq_pc = Signal(cfg.vaddr_bits, name="ibuffer_enq_pc")
+        self.enq_is_rvc = Signal(name="ibuffer_enq_is_rvc")
+        self.enq_pred_taken = Signal(name="ibuffer_enq_pred_taken")
+        self.enq_exception = Signal(name="ibuffer_enq_exception")
+        self.backend_can_accept = Signal(name="ibuffer_backend_can_accept")
+        self.cf_valid = Signal(cfg.fetch_width, name="ibuffer_cf_valid")
+        self.cf_instr = Signal(cfg.fetch_width * cfg.instr_bits, name="ibuffer_cf_instr")
+        self.cf_pc = Signal(cfg.fetch_width * cfg.vaddr_bits, name="ibuffer_cf_pc")
+        self.cf_is_rvc = Signal(cfg.fetch_width, name="ibuffer_cf_is_rvc")
+        self.cf_pred_taken = Signal(cfg.fetch_width, name="ibuffer_cf_pred_taken")
+        self.cf_exception = Signal(cfg.fetch_width, name="ibuffer_cf_exception")
+        self.full = Signal(name="ibuffer_full")
+        self.stall = Signal(name="ibuffer_stall")
+        self.count = Signal(range(depth + 1), name="ibuffer_count")
+
+    # Elaborate queue storage with simultaneous enqueue/dequeue support. / 展开支持同周期入队与出队的队列存储。
+    def elaborate(self, platform: Any) -> Module:
+        del platform
+        cfg = self.configuration
+        module: Any = Module()
+        domain = ClockDomain("frontend_sync", async_reset=True)
+        domain.clk = self.clock
+        domain.rst = self.reset
+        setattr(module.domains, "frontend_sync", domain)
+        head = Signal(range(self.depth), name="ibuffer_head")
+        tail = Signal(range(self.depth), name="ibuffer_tail")
+        instr_mem = [Signal(cfg.instr_bits, name=f"ibuffer_instr_{i}") for i in range(self.depth)]
+        pc_mem = [Signal(cfg.vaddr_bits, name=f"ibuffer_pc_{i}") for i in range(self.depth)]
+        rvc_mem = [Signal(name=f"ibuffer_rvc_{i}") for i in range(self.depth)]
+        pred_mem = [Signal(name=f"ibuffer_pred_{i}") for i in range(self.depth)]
+        exc_mem = [Signal(name=f"ibuffer_exc_{i}") for i in range(self.depth)]
+        valid = self.count != 0
+        enq_fire = self.enq_valid & self.enq_ready
+        deq_fire = valid & self.backend_can_accept & ~self.flush
+        module.d.comb += [
+            self.enq_ready.eq((self.count < self.depth) & ~self.flush),
+            self.cf_valid.eq(valid),
+            self.cf_instr.eq(Array(instr_mem)[head]),
+            self.cf_pc.eq(Array(pc_mem)[head]),
+            self.cf_is_rvc.eq(Array(rvc_mem)[head]),
+            self.cf_pred_taken.eq(Array(pred_mem)[head]),
+            self.cf_exception.eq(Array(exc_mem)[head]),
+            self.full.eq(self.count == self.depth),
+            self.stall.eq(valid & ~self.backend_can_accept),
+        ]
+        with module.If(self.reset | self.flush):
+            module.d.frontend_sync += [head.eq(0), tail.eq(0), self.count.eq(0)]
+        with module.Else():
+            with module.If(enq_fire):
+                module.d.frontend_sync += [
+                    Array(instr_mem)[tail].eq(self.enq_instr), Array(pc_mem)[tail].eq(self.enq_pc),
+                    Array(rvc_mem)[tail].eq(self.enq_is_rvc), Array(pred_mem)[tail].eq(self.enq_pred_taken),
+                    Array(exc_mem)[tail].eq(self.enq_exception), tail.eq(tail + 1),
+                ]
+            with module.If(deq_fire):
+                module.d.frontend_sync += head.eq(head + 1)
+            with module.If(enq_fire & ~deq_fire):
+                module.d.frontend_sync += self.count.eq(self.count + 1)
+            with module.Elif(deq_fire & ~enq_fire):
+                module.d.frontend_sync += self.count.eq(self.count - 1)
+        return module
+
+
+class FrontendItlbEngine(Elaboratable):
+    """Four-entry ITLB with one outstanding PTW request and SFENCE invalidation. / 四项 ITLB、单个 PTW 未决请求及 SFENCE 失效。"""
+
+    # Construct the ITLB request, translation, and PTW handshake ports. / 构造 ITLB 请求、翻译及 PTW 握手端口。
+    def __init__(self, configuration: FrontendTopConfig | None = None,
+                 entries: int = 4) -> None:
+        self.configuration = configuration or FrontendTopConfig()
+        cfg = self.configuration
+        if entries < 2 or entries & (entries - 1):
+            raise ValueError("ITLB entries must be a power of two >= 2")
+        self.entries = entries
+        self.clock = Signal(name="itlb_clock")
+        self.reset = Signal(name="itlb_reset")
+        self.flush = Signal(name="itlb_flush")
+        self.sfence = Signal(name="itlb_sfence")
+        self.req_valid = Signal(name="itlb_req_valid")
+        self.req_ready = Signal(name="itlb_req_ready")
+        self.req_vaddr = Signal(cfg.vaddr_bits, name="itlb_req_vaddr")
+        self.resp_valid = Signal(name="itlb_resp_valid")
+        self.resp_paddr = Signal(cfg.paddr_bits, name="itlb_resp_paddr")
+        self.ptw_valid = Signal(name="itlb_ptw_valid")
+        self.ptw_ready = Signal(name="itlb_ptw_ready")
+        self.ptw_vpn = Signal(max(1, cfg.vaddr_bits - 12), name="itlb_ptw_vpn")
+        self.ptw_resp_valid = Signal(name="itlb_ptw_resp_valid")
+        self.ptw_resp_ppn = Signal(max(1, cfg.paddr_bits - 12), name="itlb_ptw_resp_ppn")
+        self.hit = Signal(name="itlb_hit")
+        self.pending = Signal(name="itlb_pending")
+
+    # Elaborate a direct-mapped translation cache and PTW refill path. / 展开直接映射翻译缓存及 PTW 回填路径。
+    def elaborate(self, platform: Any) -> Module:
+        del platform
+        cfg = self.configuration
+        module: Any = Module()
+        domain = ClockDomain("frontend_sync", async_reset=True)
+        domain.clk = self.clock
+        domain.rst = self.reset
+        setattr(module.domains, "frontend_sync", domain)
+        index_bits = (self.entries - 1).bit_length()
+        tag_width = max(1, cfg.vaddr_bits - 12 - index_bits)
+        valid_mem = [Signal(name=f"itlb_valid_{i}") for i in range(self.entries)]
+        tag_mem = [Signal(tag_width, name=f"itlb_tag_{i}") for i in range(self.entries)]
+        ppn_mem = [Signal(max(1, cfg.paddr_bits - 12), name=f"itlb_ppn_{i}") for i in range(self.entries)]
+        index = self.req_vaddr[12:12 + index_bits]
+        tag = self.req_vaddr[12 + index_bits:]
+        hit = Array(valid_mem)[index] & (Array(tag_mem)[index] == tag)
+        pending_vaddr = Signal(cfg.vaddr_bits, name="itlb_pending_vaddr")
+        pending_index = Signal(index_bits, name="itlb_pending_index")
+        refill_valid = Signal(name="itlb_refill_valid")
+        refill_paddr = Signal(cfg.paddr_bits, name="itlb_refill_paddr")
+        req_fire = self.req_valid & self.req_ready
+        ptw_fire = self.ptw_valid & self.ptw_resp_valid
+        module.d.comb += [
+            self.req_ready.eq(~self.pending & ~self.sfence & ~self.flush),
+            self.hit.eq(hit & self.req_valid),
+            self.resp_valid.eq((hit & self.req_valid) | refill_valid),
+            self.resp_paddr.eq(Mux(hit & self.req_valid,
+                                   Cat(Array(ppn_mem)[index], self.req_vaddr[:12]), refill_paddr)),
+            self.ptw_valid.eq(self.pending & ~self.flush),
+            self.ptw_ready.eq(self.pending & ~self.flush),
+            self.ptw_vpn.eq(pending_vaddr[12:]),
+        ]
+        with module.If(self.reset | self.flush | self.sfence):
+            module.d.frontend_sync += [self.pending.eq(0), refill_valid.eq(0)]
+            for valid_signal in valid_mem:
+                module.d.frontend_sync += valid_signal.eq(0)
+        with module.Else():
+            module.d.frontend_sync += refill_valid.eq(0)
+            with module.If(req_fire & ~hit):
+                module.d.frontend_sync += [
+                    self.pending.eq(1), pending_vaddr.eq(self.req_vaddr), pending_index.eq(index),
+                ]
+            with module.If(ptw_fire):
+                module.d.frontend_sync += [
+                    self.pending.eq(0), refill_valid.eq(1),
+                    refill_paddr.eq(Cat(self.ptw_resp_ppn, pending_vaddr[:12])),
+                    Array(valid_mem)[pending_index].eq(1), Array(tag_mem)[pending_index].eq(pending_vaddr[12 + index_bits:]),
+                    Array(ppn_mem)[pending_index].eq(self.ptw_resp_ppn),
+                ]
+        return module
+
+
+class FrontendBpuEngine(Elaboratable):
+    """Stateful sixteen-entry two-bit BPU table with redirect training. / 带重定向训练的十六项两位状态 BPU 表。"""
+
+    # Construct prediction and update ports for the parent integration. / 构造供父级集成的预测及更新端口。
+    def __init__(self, configuration: FrontendTopConfig | None = None,
+                 entries: int = 16) -> None:
+        self.configuration = configuration or FrontendTopConfig()
+        cfg = self.configuration
+        if entries < 2 or entries & (entries - 1):
+            raise ValueError("BPU entries must be a power of two >= 2")
+        self.entries = entries
+        self.clock = Signal(name="bpu_engine_clock")
+        self.reset = Signal(name="bpu_engine_reset")
+        self.req_valid = Signal(name="bpu_engine_req_valid")
+        self.req_ready = Signal(name="bpu_engine_req_ready")
+        self.req_pc = Signal(cfg.vaddr_bits, name="bpu_engine_req_pc")
+        self.enable = Signal(5, name="bpu_engine_enable")
+        self.pred_valid = Signal(name="bpu_engine_pred_valid")
+        self.pred_taken = Signal(name="bpu_engine_pred_taken")
+        self.pred_target = Signal(cfg.vaddr_bits, name="bpu_engine_pred_target")
+        self.pred_cfi_position = Signal(4, name="bpu_engine_pred_cfi_position")
+        self.update_valid = Signal(name="bpu_engine_update_valid")
+        self.update_pc = Signal(cfg.vaddr_bits, name="bpu_engine_update_pc")
+        self.update_taken = Signal(name="bpu_engine_update_taken")
+        self.update_target = Signal(cfg.vaddr_bits, name="bpu_engine_update_target")
+        self.table_hit = Signal(name="bpu_engine_table_hit")
+
+    # Elaborate predictor counters and target training with saturating updates. / 展开预测计数器及带饱和更新的目标训练。
+    def elaborate(self, platform: Any) -> Module:
+        del platform
+        cfg = self.configuration
+        module: Any = Module()
+        domain = ClockDomain("frontend_sync", async_reset=True)
+        domain.clk = self.clock
+        domain.rst = self.reset
+        setattr(module.domains, "frontend_sync", domain)
+        index_bits = (self.entries - 1).bit_length()
+        tag_width = max(1, cfg.vaddr_bits - index_bits - 2)
+        valid_mem = [Signal(name=f"bpu_valid_{i}") for i in range(self.entries)]
+        tag_mem = [Signal(tag_width, name=f"bpu_tag_{i}") for i in range(self.entries)]
+        ctr_mem = [Signal(2, name=f"bpu_ctr_{i}") for i in range(self.entries)]
+        target_mem = [Signal(cfg.vaddr_bits, name=f"bpu_target_{i}") for i in range(self.entries)]
+        req_index = self.req_pc[2:2 + index_bits]
+        req_tag = self.req_pc[2 + index_bits:]
+        hit = Array(valid_mem)[req_index] & (Array(tag_mem)[req_index] == req_tag)
+        taken = hit & Array(ctr_mem)[req_index][1]
+        update_index = self.update_pc[2:2 + index_bits]
+        update_tag = self.update_pc[2 + index_bits:]
+        update_match = Array(valid_mem)[update_index] & (Array(tag_mem)[update_index] == update_tag)
+        enable_any = self.enable.any()
+        module.d.comb += [
+            self.req_ready.eq(~self.reset),
+            self.pred_valid.eq(self.req_valid & enable_any),
+            self.table_hit.eq(hit & self.req_valid),
+            self.pred_taken.eq(self.req_valid & enable_any & taken),
+            self.pred_target.eq(Mux(taken, Array(target_mem)[req_index], self.req_pc + 4)),
+            self.pred_cfi_position.eq(0),
+        ]
+        with module.If(self.reset):
+            for valid_signal in valid_mem:
+                module.d.frontend_sync += valid_signal.eq(0)
+            for counter in ctr_mem:
+                module.d.frontend_sync += counter.eq(1)
+        with module.Else():
+            with module.If(self.update_valid):
+                module.d.frontend_sync += [
+                    Array(valid_mem)[update_index].eq(1), Array(tag_mem)[update_index].eq(update_tag),
+                    Array(target_mem)[update_index].eq(self.update_target),
+                ]
+                with module.If(update_match):
+                    with module.If(self.update_taken & (Array(ctr_mem)[update_index] != 3)):
+                        module.d.frontend_sync += Array(ctr_mem)[update_index].eq(Array(ctr_mem)[update_index] + 1)
+                    with module.Elif(~self.update_taken & (Array(ctr_mem)[update_index] != 0)):
+                        module.d.frontend_sync += Array(ctr_mem)[update_index].eq(Array(ctr_mem)[update_index] - 1)
+                with module.Else():
+                    module.d.frontend_sync += Array(ctr_mem)[update_index].eq(Mux(self.update_taken, 2, 1))
+        return module
+
+
 class FrontendParent(Elaboratable):
     """Reduced executable V2 Frontend parent closure. / 可执行的精简 V2 前端父级闭包。"""
 
@@ -412,6 +855,8 @@ class FrontendParent(Elaboratable):
     io_reset_vector: Signal
     io_fencei: Signal
     io_backend_toFtq_redirect_valid: Signal
+    io_backend_toFtq_redirect_bits_cfiUpdate_pc: Signal
+    io_backend_toFtq_redirect_bits_cfiUpdate_taken: Signal
     io_backend_toFtq_redirect_bits_cfiUpdate_isMisPred: Signal
     io_backend_toFtq_redirect_bits_cfiUpdate_backendIPF: Signal
     io_backend_canAccept: Signal
@@ -443,10 +888,22 @@ class FrontendParent(Elaboratable):
     io_ptw_req_0_bits_vpn: Signal
     io_ptw_req_0_bits_s2xlate: Signal
     io_ptw_resp_ready: Signal
+    io_ptw_resp_valid: Signal
+    io_ptw_resp_bits_s1_entry_ppn: Signal
     io_backend_wfi_wfiSafe: Signal
     io_error_ecc_error_valid: Signal
     io_error_ecc_error_bits: Signal
     io_resetInFrontend: Signal
+    io_backend_fromFtq_pc_mem_wen: Signal
+    io_backend_fromFtq_pc_mem_waddr: Signal
+    io_backend_fromFtq_pc_mem_wdata_startAddr: Signal
+    io_backend_fromFtq_newest_entry_en: Signal
+    io_backend_fromFtq_newest_entry_target: Signal
+    io_backend_fromFtq_newest_entry_ptr_value: Signal
+    io_backend_fromIfu_gpaddrMem_wen: Signal
+    io_backend_fromIfu_gpaddrMem_waddr: Signal
+    io_backend_fromIfu_gpaddrMem_wdata_gpaddr: Signal
+    io_backend_fromIfu_gpaddrMem_wdata_isForVSnonLeafPTE: Signal
 
     # Construct parent controls, child boundaries, and observable frontend lanes. / 构造父级控制、子级边界及可观察前端通道。
     def __init__(self, configuration: FrontendTopConfig | dict[str, Any] | None = None,
@@ -477,6 +934,16 @@ class FrontendParent(Elaboratable):
         self.icache_replacer = dependencies.get("icache_replacer") or dependencies.get("ICacheReplacer")
         self.icache_mshr = dependencies.get("icache_mshr") or dependencies.get("ICacheMSHR")
         self.wr_bypass = dependencies.get("wr_bypass") or dependencies.get("WrBypass")
+        # Stateful frontend closure engines.  They are always present so the
+        # parent has a real IFU/FTQ/IBuffer/ITLB/BPU boundary even when a
+        # larger implementation is not injected.  有状态前端闭包引擎始终
+        # 存在，未注入完整实现时仍保留真实的 IFU/FTQ/IBuffer/ITLB/BPU 边界。
+        self.ftq = dependencies.get("ftq") or dependencies.get("Ftq") or FrontendFtqEngine(cfg)
+        self.ifu = dependencies.get("ifu") or dependencies.get("IFU") or FrontendIfuEngine(cfg)
+        self.ibuffer = dependencies.get("ibuffer") or dependencies.get("IBuffer") or FrontendIbufferEngine(cfg)
+        self.itlb = dependencies.get("itlb") or dependencies.get("ITLB") or FrontendItlbEngine(cfg)
+        self.bpu_engine = (dependencies.get("bpu_engine") or dependencies.get("BpuEngine")
+                           or FrontendBpuEngine(cfg))
 
         # Clock/reset and source-level Frontend.scala controls. / 时钟、复位及 Frontend.scala 源级控制。
         self.clock = Signal(name="clock")
@@ -600,6 +1067,11 @@ class FrontendParent(Elaboratable):
             module.submodules.icache_replacer = self.icache_replacer
         if self.icache_mshr is not None:
             module.submodules.icache_mshr = self.icache_mshr
+        module.submodules.ftq_engine = self.ftq
+        module.submodules.ifu_engine = self.ifu
+        module.submodules.ibuffer_engine = self.ibuffer
+        module.submodules.itlb_engine = self.itlb
+        module.submodules.bpu_engine = self.bpu_engine
 
         # In full locked-I/O mode, bridge the exact generated Frontend names
         # into the compact internal equations below.  The reduced validator
@@ -613,6 +1085,8 @@ class FrontendParent(Elaboratable):
                 self.redirect_valid.eq(self.io_backend_toFtq_redirect_valid),
                 self.redirect_debug_ctrl.eq(self.io_backend_toFtq_redirect_bits_cfiUpdate_isMisPred),
                 self.redirect_debug_memvio.eq(self.io_backend_toFtq_redirect_bits_cfiUpdate_backendIPF),
+                self.redirect_pc.eq(self.io_backend_toFtq_redirect_bits_cfiUpdate_pc),
+                self.redirect_cfi_taken.eq(self.io_backend_toFtq_redirect_bits_cfiUpdate_taken),
                 self.backend_can_accept.eq(self.io_backend_canAccept),
                 self.wfi_req.eq(self.io_backend_wfi_wfiReq),
                 self.csr_pf_enable.eq(self.io_csrCtrl_pf_ctrl_l1I_pf_enable),
@@ -640,6 +1114,16 @@ class FrontendParent(Elaboratable):
             (self.icache, "icache", self.fetch_req_valid, self.fetch_req_addr, self.fetch_req_nextline),
             (self.instr_uncache, "instr_uncache", self.uncache_req_valid, self.uncache_req_addr, self.uncache_req_addr),
         ):
+            # In the locked envelope the FTQ/IFU engine owns the ICache
+            # request channel; compact mode retains the legacy direct source.
+            # 锁定包络中由 FTQ/IFU 引擎负责 ICache 请求通道；精简模式保留旧直连源。
+            child_valid = valid
+            child_addr = addr
+            child_nextline = nextline
+            if self.locked_io and name == "icache":
+                child_valid = getattr(self.ifu, "icache_req_valid", valid)
+                child_addr = getattr(self.ifu, "icache_req_addr", addr)
+                child_nextline = child_addr
             self.connect_child_signal(module, child, name, "clock", self.clock)
             self.connect_child_signal(module, child, name, "reset", self.reset)
             self.connect_child_signal(module, child, name, "flush", self.need_flush)
@@ -650,9 +1134,9 @@ class FrontendParent(Elaboratable):
             self.connect_child_signal(module, child, name, "sfence", self.itlb_sfence)
             self.connect_child_signal(module, child, name, "wfi_req",
                                       self.icache_wfi_req if name == "icache" else self.instr_uncache_wfi_req)
-            self.connect_child_signal(module, child, name, "req_valid", valid)
-            self.connect_child_signal(module, child, name, "req_addr", addr)
-            self.connect_child_signal(module, child, name, "req_nextline", nextline)
+            self.connect_child_signal(module, child, name, "req_valid", child_valid)
+            self.connect_child_signal(module, child, name, "req_addr", child_addr)
+            self.connect_child_signal(module, child, name, "req_nextline", child_nextline)
 
         # Bind optional RVC/BPU/ICache leaf contracts when their canonical
         # signals are present.  This keeps the parent usable with the already
@@ -688,6 +1172,62 @@ class FrontendParent(Elaboratable):
         child_uncache_resp_valid = getattr(self.instr_uncache, "resp_valid", self.uncache_resp_valid)
         child_uncache_resp_data = getattr(self.instr_uncache, "resp_data", self.uncache_resp_data)
         child_uncache_resp_error = getattr(self.instr_uncache, "resp_error", self.uncache_resp_error)
+
+        # Wire the executable FTQ -> IFU -> IBuffer path and the ITLB/BPU
+        # side channels.  In compact mode this is a shadow closure used by
+        # direct tests; in locked mode it owns the ICache request channel.
+        # 连接可执行的 FTQ -> IFU -> IBuffer 路径及 ITLB/BPU 旁路；精简模式
+        # 供 direct 测试使用影子闭包，锁定模式则负责 ICache 请求通道。
+        for engine in (self.ftq, self.ifu, self.ibuffer, self.itlb, self.bpu_engine):
+            self.connect_child_signal(module, engine, "frontend_engine", "clock", self.clock)
+            self.connect_child_signal(module, engine, "frontend_engine", "reset", self.reset)
+        module.d.comb += [
+            self.ftq.flush.eq(self.need_flush),
+            self.ftq.enq_valid.eq(self.fetch_req_valid),
+            self.ftq.enq_addr.eq(self.fetch_req_addr),
+            self.ftq.enq_nextline.eq(self.fetch_req_nextline),
+            self.ftq.ifu_ready.eq(self.ifu.ftq_ready),
+            self.ftq.icache_ready.eq(child_icache_ready),
+            self.ifu.flush.eq(self.need_flush),
+            self.ifu.ftq_valid.eq(self.ftq.ifu_valid),
+            self.ifu.ftq_addr.eq(self.ftq.ifu_addr),
+            self.ifu.ftq_nextline.eq(self.ftq.ifu_nextline),
+            self.ifu.ftq_index.eq(self.ftq.ifu_index),
+            self.ifu.icache_req_ready.eq(child_icache_ready),
+            self.ifu.icache_resp_valid.eq(
+                self.auto_inner_icache_client_out_d_valid if self.locked_io else child_fetch_resp_valid),
+            self.ifu.icache_resp_data.eq(
+                Cat(self.auto_inner_icache_client_out_d_bits_data, Const(0, 256))
+                if self.locked_io else child_fetch_resp_data[:len(self.ifu.icache_resp_data)]),
+            self.ifu.icache_resp_error.eq(
+                self.auto_inner_icache_client_out_d_bits_corrupt if self.locked_io else child_fetch_resp_error),
+            self.ifu.bpu_pred_taken.eq(self.bpu_engine.pred_taken),
+            self.ifu.ibuffer_ready.eq(self.ibuffer.enq_ready),
+            self.ibuffer.flush.eq(self.need_flush),
+            self.ibuffer.enq_valid.eq(self.ifu.ibuffer_valid),
+            self.ibuffer.enq_instr.eq(self.ifu.ibuffer_instr),
+            self.ibuffer.enq_pc.eq(self.ifu.ibuffer_pc),
+            self.ibuffer.enq_is_rvc.eq(self.ifu.ibuffer_is_rvc),
+            self.ibuffer.enq_pred_taken.eq(self.ifu.ibuffer_pred_taken),
+            self.ibuffer.enq_exception.eq(self.ifu.ibuffer_exception),
+            self.ibuffer.backend_can_accept.eq(self.backend_can_accept),
+            self.itlb.flush.eq(self.need_flush),
+            self.itlb.sfence.eq(self.itlb_sfence),
+            self.itlb.req_valid.eq(self.ifu.ptw_req_valid),
+            self.itlb.req_vaddr.eq(self.ifu.ptw_req_addr),
+            self.itlb.ptw_resp_valid.eq(
+                self.io_ptw_resp_valid if self.locked_io else Const(0)),
+            self.itlb.ptw_resp_ppn.eq(
+                self.io_ptw_resp_bits_s1_entry_ppn[:len(self.itlb.ptw_resp_ppn)]
+                if self.locked_io else Const(0, len(self.itlb.ptw_resp_ppn))),
+            self.bpu_engine.req_valid.eq(self.ftq.bpu_valid),
+            self.bpu_engine.req_pc.eq(self.ftq.bpu_pc),
+            self.bpu_engine.enable.eq(self.bpu_enable),
+            self.bpu_engine.update_valid.eq(self.redirect_valid),
+            self.bpu_engine.update_pc.eq(self.redirect_pc),
+            self.bpu_engine.update_taken.eq(self.redirect_cfi_taken),
+            self.bpu_engine.update_target.eq(self.redirect_pc),
+        ]
         if self.locked_io:
             # In the exact envelope, the InstrUncache child owns the complete
             # request/grant transaction.  External TileLink A/D pins are
@@ -696,7 +1236,7 @@ class FrontendParent(Elaboratable):
             # 精确包络中 InstrUncache 子级负责完整请求/grant 事务；外部
             # TileLink A/D 引脚连接到注入子级，保持与锁定模块一致。
             module.d.comb += [
-                self.fetch_req_ready.eq(child_icache_ready),
+                self.fetch_req_ready.eq(self.ftq.enq_ready),
                 self.fetch_resp_valid.eq(self.auto_inner_icache_client_out_d_valid),
                 self.fetch_resp_data.eq(Cat(self.auto_inner_icache_client_out_d_bits_data, Const(0, 256))),
                 self.fetch_resp_error.eq(self.auto_inner_icache_client_out_d_bits_corrupt),
@@ -773,6 +1313,11 @@ class FrontendParent(Elaboratable):
                 "auto_inner_icache_client_out_a_bits_address", "auto_inner_instrUncache_client_out_a_valid",
                 "auto_inner_instrUncache_client_out_a_bits_address", "io_ptw_req_0_valid",
                 "io_ptw_req_0_bits_vpn", "io_ptw_req_0_bits_s2xlate", "io_ptw_resp_ready",
+                "io_backend_fromFtq_pc_mem_wen", "io_backend_fromFtq_pc_mem_waddr",
+                "io_backend_fromFtq_pc_mem_wdata_startAddr", "io_backend_fromFtq_newest_entry_en",
+                "io_backend_fromFtq_newest_entry_target", "io_backend_fromFtq_newest_entry_ptr_value",
+                "io_backend_fromIfu_gpaddrMem_wen", "io_backend_fromIfu_gpaddrMem_waddr",
+                "io_backend_fromIfu_gpaddrMem_wdata_gpaddr", "io_backend_fromIfu_gpaddrMem_wdata_isForVSnonLeafPTE",
                 "io_backend_wfi_wfiSafe", "io_error_ecc_error_valid", "io_error_ecc_error_bits",
                 "io_resetInFrontend", *[f"io_perf_{index}_value" for index in range(cfg.perf_count)],
                 *[f"io_backend_cfVec_{lane}_{suffix}" for lane in range(cfg.fetch_width)
@@ -782,17 +1327,30 @@ class FrontendParent(Elaboratable):
                 if _direction == "output" and port_name not in mapped_outputs:
                     module.d.comb += self.frontend_ports[port_name].eq(0)
             module.d.comb += [
-                self.auto_inner_icache_client_out_a_valid.eq(self.fetch_req_valid & self.fetch_req_ready),
+                self.auto_inner_icache_client_out_a_valid.eq(
+                    self.ifu.icache_req_valid if self.locked_io else self.fetch_req_valid & self.fetch_req_ready),
                 self.auto_inner_icache_client_out_a_bits_source.eq(0),
-                self.auto_inner_icache_client_out_a_bits_address.eq(self.fetch_req_addr[:48]),
+                self.auto_inner_icache_client_out_a_bits_address.eq(
+                    (self.ifu.icache_req_addr if self.locked_io else self.fetch_req_addr)[:48]),
                 self.auto_inner_instrUncache_client_out_a_valid.eq(
                     getattr(self.instr_uncache, "mmio_acquire_valid", self.uncache_req_valid & self.uncache_req_ready)),
                 self.auto_inner_instrUncache_client_out_a_bits_address.eq(
                     getattr(self.instr_uncache, "mmio_acquire_address", self.uncache_req_addr[:48])),
-                self.io_ptw_req_0_valid.eq(self.ptw_req_valid),
-                self.io_ptw_req_0_bits_vpn.eq(self.ptw_req_vpn),
+                self.io_ptw_req_0_valid.eq(self.itlb.ptw_valid if self.locked_io else self.ptw_req_valid),
+                self.io_ptw_req_0_bits_vpn.eq(self.itlb.ptw_vpn if self.locked_io else self.ptw_req_vpn),
                 self.io_ptw_req_0_bits_s2xlate.eq(0),
-                self.io_ptw_resp_ready.eq(self.ptw_resp_ready),
+                self.io_ptw_resp_ready.eq(self.itlb.ptw_ready if self.locked_io else self.ptw_resp_ready),
+                self.io_backend_fromFtq_pc_mem_wen.eq(self.ftq.pc_mem_wen),
+                self.io_backend_fromFtq_pc_mem_waddr.eq(self.ftq.pc_mem_waddr),
+                self.io_backend_fromFtq_pc_mem_wdata_startAddr.eq(self.ftq.pc_mem_start),
+                self.io_backend_fromFtq_newest_entry_en.eq(self.ftq.newest_valid),
+                self.io_backend_fromFtq_newest_entry_target.eq(self.ftq.newest_target),
+                self.io_backend_fromFtq_newest_entry_ptr_value.eq(self.ftq.newest_index),
+                self.io_backend_fromIfu_gpaddrMem_wen.eq(self.ifu.ptw_req_valid),
+                self.io_backend_fromIfu_gpaddrMem_waddr.eq(self.ftq.ifu_index),
+                self.io_backend_fromIfu_gpaddrMem_wdata_gpaddr.eq(
+                    Cat(Const(0, 6), self.itlb.resp_paddr)),
+                self.io_backend_fromIfu_gpaddrMem_wdata_isForVSnonLeafPTE.eq(0),
                 self.io_backend_wfi_wfiSafe.eq(self.wfi_safe),
                 self.io_error_ecc_error_valid.eq(self.error_valid),
                 self.io_error_ecc_error_bits.eq(self.error_bits),
@@ -874,26 +1432,39 @@ class FrontendParent(Elaboratable):
             self.error_valid.eq(error_valid_reg_2),
             self.error_bits.eq(error_bits_reg_2),
             self.reset_in_frontend.eq(self.reset),
-            self.frontend_info_ibuf_full.eq(ibuffer_full_reg),
+            self.frontend_info_ibuf_full.eq(self.ibuffer.full if self.locked_io else ibuffer_full_reg),
             self.frontend_info_bp_right.eq(self.bp_right_in),
             self.frontend_info_bp_wrong.eq(self.bp_wrong_in),
-            self.ptw_req_valid.eq(0),
-            self.ptw_req_vpn.eq(self.fetch_req_addr[12:]),
-            self.ptw_resp_ready.eq(~self.reset & ~need_flush_reg),
+            self.ptw_req_valid.eq(self.itlb.ptw_valid if self.locked_io else 0),
+            self.ptw_req_vpn.eq(self.itlb.ptw_vpn if self.locked_io else self.fetch_req_addr[12:]),
+            self.ptw_resp_ready.eq(self.itlb.ptw_ready if self.locked_io else (~self.reset & ~need_flush_reg)),
         ]
 
         # Forward a pipeline child when supplied; otherwise expose the ICache
         # child as the bounded CF-vector source and keep all metadata explicit.
         # 若提供 pipeline 子级则转发其 CF 向量，否则以 ICache 子级作为精简来源。
         source = self.pipeline if self.pipeline is not None else self.icache
-        module.d.comb += [
-            self.cf_valid.eq(getattr(source, "cf_valid", 0)),
-            self.cf_instr.eq(getattr(source, "cf_instr", 0)),
-            self.cf_pc.eq(getattr(source, "cf_pc", 0)),
-            self.cf_is_rvc.eq(getattr(source, "cf_is_rvc", 0)),
-            self.cf_pred_taken.eq(getattr(source, "cf_pred_taken", 0)),
-            self.cf_exception.eq(getattr(source, "cf_exception", 0)),
-        ]
+        if self.locked_io:
+            # The locked parent exposes the live IBuffer queue, so CF lanes
+            # observe IFU response data and backend backpressure directly.
+            # 锁定父级直接暴露实时 IBuffer 队列，CF 通道观察 IFU 响应及后端反压。
+            module.d.comb += [
+                self.cf_valid.eq(self.ibuffer.cf_valid),
+                self.cf_instr.eq(self.ibuffer.cf_instr),
+                self.cf_pc.eq(self.ibuffer.cf_pc),
+                self.cf_is_rvc.eq(self.ibuffer.cf_is_rvc),
+                self.cf_pred_taken.eq(self.ibuffer.cf_pred_taken),
+                self.cf_exception.eq(self.ibuffer.cf_exception),
+            ]
+        else:
+            module.d.comb += [
+                self.cf_valid.eq(getattr(source, "cf_valid", 0)),
+                self.cf_instr.eq(getattr(source, "cf_instr", 0)),
+                self.cf_pc.eq(getattr(source, "cf_pc", 0)),
+                self.cf_is_rvc.eq(getattr(source, "cf_is_rvc", 0)),
+                self.cf_pred_taken.eq(getattr(source, "cf_pred_taken", 0)),
+                self.cf_exception.eq(getattr(source, "cf_exception", 0)),
+            ]
         for index, perf_signal in enumerate(self.perf):
             # The reduced parent reports deterministic event lanes; injected
             # pipelines may override them through an optional ``perf`` array.
