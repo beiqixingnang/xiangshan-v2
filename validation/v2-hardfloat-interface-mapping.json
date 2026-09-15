@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_ROCKET_HARDFLOAT_MAPPING",
+  "phase": "REWRITE_FREEZE",
+  "batch_id": "V2-DEPENDENCY-HARDFLOAT-001",
+  "family_id": "dependency.hardfloat",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "source_root": "rocket-chip/hardfloat/hardfloat/src/main/scala",
+  "source_scala_file_count": 20,
+  "source_paths": [
+    "rocket-chip/hardfloat/hardfloat/src/main/scala/AddRecFN.scala",
+    "rocket-chip/hardfloat/hardfloat/src/main/scala/classifyRecFN.scala",
+    "rocket-chip/hardfloat/hardfloat/src/main/scala/common.scala",
+    "rocket-chip/hardfloat/hardfloat/src/main/scala/CompareRecFN.scala",
+    "rocket-chip/hardfloat/hardfloat/src/main/scala/DivSqrtRecF64.scala",
+    "rocket-chip/hardfloat/hardfloat/src/main/scala/DivSqrtRecF64_mulAddZ31.scala",
+    "rocket-chip/hardfloat/hardfloat/src/main/scala/DivSqrtRecFN_small.scala",
+    "rocket-chip/hardfloat/hardfloat/src/main/scala/fNFromRecFN.scala",
+    "rocket-chip/hardfloat/hardfloat/src/main/scala/INToRecFN.scala",
+    "rocket-chip/hardfloat/hardfloat/src/main/scala/MulAddRecFN.scala",
+    "rocket-chip/hardfloat/hardfloat/src/main/scala/MulRecFN.scala",
+    "rocket-chip/hardfloat/hardfloat/src/main/scala/primitives.scala",
+    "rocket-chip/hardfloat/hardfloat/src/main/scala/rawFloatFromFN.scala",
+    "rocket-chip/hardfloat/hardfloat/src/main/scala/rawFloatFromIN.scala",
+    "rocket-chip/hardfloat/hardfloat/src/main/scala/rawFloatFromRecFN.scala",
+    "rocket-chip/hardfloat/hardfloat/src/main/scala/recFNFromFN.scala",
+    "rocket-chip/hardfloat/hardfloat/src/main/scala/RecFNToIN.scala",
+    "rocket-chip/hardfloat/hardfloat/src/main/scala/RecFNToRecFN.scala",
+    "rocket-chip/hardfloat/hardfloat/src/main/scala/resizeRawFloat.scala",
+    "rocket-chip/hardfloat/hardfloat/src/main/scala/RoundAnyRawFNToRecFN.scala"
+  ],
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Rocket.Hardfloat-Hardware.py",
+    "sha256": "833ca20f59b79302bcf3f12aac43d887b48982e6c79a3500a183f1326f849a64"
+  },
+  "disposition": "AGGREGATED_FAMILY_BOUNDARY",
+  "boundary": {
+    "implemented_contracts": [
+      "IEEE sign/exponent/fraction packing and classification",
+      "sign-aware compare/equality observations",
+      "bounded primitive operation result mux used by Rocket/Fudian adapters"
+    ],
+    "explicitly_deferred_closure": [
+      "iterative Add/Mul/FMA and Div/Sqrt recFN datapaths",
+      "rounding/recoding and complete Rocket FPU parent closure"
+    ],
+    "deferred_reason": "The aggregate records a source-traceable interface boundary; deferred children require selected-top/reference closure and are not promoted here."
+  },
+  "closure_root": "hardfloat",
+  "reachability_status": "INLINED_SOURCE",
+  "localization": [
+    {
+      "source_name": "dependency.hardfloat",
+      "local_name": "UHSCHardFloatPrimitive",
+      "visibility": "generated HDL top",
+      "reason": "UHSC project-facing family Build export; source identifiers remain in provenance"
+    }
+  ],
+  "evidence": {
+    "bounded_family_validation": "validation/v2-hardfloat-family-results.json"
+  },
+  "gates": {
+    "UTF8_LF": "PASS",
+    "AST": "PASS",
+    "PY_COMPILE": "PASS",
+    "DETERMINISTIC_SAME_NAME_BUILD_VERILOG": "PASS",
+    "STRUCTURE_VERIFIED": "PASS",
+    "BEHAVIOR_VERIFIED_dependency.hardfloat": "PENDING_BATCH_VALIDATION",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "structure_status": "PASS",
+  "behavior_status": "PENDING_BATCH_VALIDATION",
+  "accepted": false,
+  "acceptance_eligible": false,
+  "unclosed": [
+    "iterative Add/Mul/FMA and Div/Sqrt recFN datapaths",
+    "rounding/recoding and complete Rocket FPU parent closure",
+    "License review and user approval remain pending."
+  ]
+}
+

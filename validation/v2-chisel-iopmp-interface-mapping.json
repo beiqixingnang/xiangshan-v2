@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_CHISELIOPMP_INTERFACE_MAPPING",
+  "phase": "REWRITE_FREEZE",
+  "batch_id": "V2-DEPENDENCY-IOPMP-001",
+  "family_id": "dependency.iopmp.interface",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "source_root": "ChiselIOPMP/src/main/scala",
+  "source_scala_file_count": 3,
+  "source_paths": [
+    "ChiselIOPMP/src/main/scala/Iopmp.scala",
+    "ChiselIOPMP/src/main/scala/IopmpBridge.scala",
+    "ChiselIOPMP/src/main/scala/IopmpChecker.scala"
+  ],
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.ChiselIOPMP.Interface-Hardware.py",
+    "sha256": "1e8273b0c6d1f228accd02586f71918b8690f648ea1dd9725910f0b342e6f661"
+  },
+  "disposition": "AGGREGATED_FAMILY_BOUNDARY",
+  "boundary": {
+    "implemented_contracts": [
+      "APB register window for hwcfg0/errcfg/errinfo and entry table words",
+      "NA4/NAPOT inclusive range decode via trailing-one mask",
+      "RRID admission, lowest-index rule priority, read/write permission faults",
+      "single outstanding request/response handshake plus interrupt/flush observations"
+    ],
+    "explicitly_deferred_closure": [
+      "IopmpBridgeLazy AXI channel ordering and error response FSM",
+      "multi-bridge ReqArb/RspArb fairness under backpressure",
+      "full 512-entry selected-top differential and locked XSTop closure"
+    ],
+    "deferred_reason": "The aggregate records a source-traceable interface boundary; deferred children require selected-top/reference closure and are not promoted here."
+  },
+  "closure_root": "iopmp.interface",
+  "reachability_status": "UNREACHED_IN_LOCKED_XSTOP",
+  "localization": [
+    {
+      "source_name": "dependency.iopmp.interface",
+      "local_name": "UHSCIOPMPInterface",
+      "visibility": "generated HDL top",
+      "reason": "UHSC project-facing family Build export; source identifiers remain in provenance"
+    }
+  ],
+  "evidence": {
+    "bounded_family_validation": "validation/v2-chisel-iopmp-interface-family-results.json"
+  },
+  "gates": {
+    "UTF8_LF": "PASS",
+    "AST": "PASS",
+    "PY_COMPILE": "PASS",
+    "DETERMINISTIC_SAME_NAME_BUILD_VERILOG": "PASS",
+    "STRUCTURE_VERIFIED": "PASS",
+    "BEHAVIOR_VERIFIED_dependency.iopmp.interface": "PENDING_BATCH_VALIDATION",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "structure_status": "PASS",
+  "behavior_status": "PENDING_BATCH_VALIDATION",
+  "accepted": false,
+  "acceptance_eligible": false,
+  "unclosed": [
+    "IopmpBridgeLazy AXI channel ordering and error response FSM",
+    "multi-bridge ReqArb/RspArb fairness under backpressure",
+    "full 512-entry selected-top differential and locked XSTop closure",
+    "License review and user approval remain pending."
+  ]
+}
+

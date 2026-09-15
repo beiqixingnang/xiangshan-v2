@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_CHISELIOPMP_INTERFACE_FAMILY",
+  "batch_id": "V2-DEPENDENCY-IOPMP-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "source_scala_file_count": 3,
+  "source_paths": [
+    "ChiselIOPMP/src/main/scala/Iopmp.scala",
+    "ChiselIOPMP/src/main/scala/IopmpBridge.scala",
+    "ChiselIOPMP/src/main/scala/IopmpChecker.scala"
+  ],
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.ChiselIOPMP.Interface-Hardware.py",
+    "sha256": "1e8273b0c6d1f228accd02586f71918b8690f648ea1dd9725910f0b342e6f661"
+  },
+  "direct": {
+    "status": "PASS_BOUNDED",
+    "vectors": 2,
+    "observations": [
+      {"case": "NAPOT read permission", "status": "PASS"},
+      {"case": "unmatched write fault", "status": "PASS"}
+    ]
+  },
+  "build_verilog": {
+    "status": "PASS",
+    "configuration": {"entry_num": 4, "module": "UHSCIOPMPInterface"},
+    "rtl_bytes": 31388,
+    "rtl_sha256": "96154aa30aeb1a87f375e018d6652334a657741e579dcd4de61ebb5a307707d1"
+  },
+  "gates": {
+    "AST": "PASS",
+    "PY_COMPILE": "PASS",
+    "DETERMINISTIC_SAME_NAME_BUILD_VERILOG": "PASS",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED_NAPOT_PERMISSION_EQUATIONS",
+    "PARENT_CLOSURE_MATCHED": "PENDING_IOPMP_SELECTED_TOP",
+    "LICENSE_REVIEW": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "VALIDATOR_PASS_BOUNDED",
+  "acceptance_eligible": false,
+  "unclosed": [
+    "AXI bridge channel FSM, multi-bridge arbitration, selected-top and locked XSTop differential remain pending.",
+    "License review and user approval remain pending."
+  ]
+}

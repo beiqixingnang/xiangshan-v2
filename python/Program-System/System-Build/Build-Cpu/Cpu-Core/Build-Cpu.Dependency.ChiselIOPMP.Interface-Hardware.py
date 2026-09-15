@@ -14,6 +14,7 @@ from typing import Any, Mapping, Sequence
 
 from amaranth import Array, Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
+from amaranth.lib.coding import PriorityEncoder
 
 
 # =============================================================================
@@ -173,6 +174,10 @@ class UHSCIOPMPInterface(Elaboratable):
         errinfo = Signal(32, reset=0, name="iopmp_errinfo")
         err_addr = Signal(c.address_bits, reset=0, name="iopmp_err_addr")
         err_rrid = Signal(c.rrid_bits, reset=0, name="iopmp_err_rrid")
+        response_valid = Signal(reset=0, name="iopmp_response_valid")
+        response_read_fault = Signal(reset=0, name="iopmp_response_read_fault")
+        response_write_fault = Signal(reset=0, name="iopmp_response_write_fault")
+        response_entry = Signal(len(self.resp_entry), reset=0, name="iopmp_response_entry")
         entry_low = Array(Signal(32, reset=0, name=f"entry_addr_{i}_lo") for i in range(c.entry_num))
         entry_high = Array(Signal(max(1, c.address_bits - 32), reset=0, name=f"entry_addr_{i}_hi") for i in range(c.entry_num))
         entry_cfg = Array(Signal(11, reset=0, name=f"entry_cfg_{i}") for i in range(c.entry_num))
@@ -187,10 +192,7 @@ class UHSCIOPMPInterface(Elaboratable):
         # Build a lowest-index priority match for the current request. / 为当前请求构造最低索引优先匹配。
         request_length = Mux(self.req_length == 0, 1, self.req_length)
         request_end = self.req_address + request_length - 1
-        matched = Const(0)
-        selected_read = Const(0)
-        selected_write = Const(0)
-        selected_entry = Const(0, len(self.resp_entry))
+        match_bits: list[Any] = []
         for index in range(c.entry_num):
             mode = entry_cfg[index][3:5]
             valid_mode = (mode == 2) | (mode == 3)
@@ -200,21 +202,26 @@ class UHSCIOPMPInterface(Elaboratable):
             range_end = range_start | napot_mask
             rrid_match = (self.req_rrid < c.rrid_num)
             full_match = valid_mode & rrid_match & (self.req_address >= range_start) & (request_end <= range_end)
-            choose = full_match & ~matched
-            matched = Mux(choose, 1, matched)
-            selected_read = Mux(choose, entry_cfg[index][0], selected_read)
-            selected_write = Mux(choose, entry_cfg[index][1], selected_write)
-            selected_entry = Mux(choose, index, selected_entry)
+            match_bits.append(full_match)
+        match_vector = Cat(*match_bits)
+        selected_index = Signal(len(self.resp_entry), name="iopmp_selected_entry")
+        encoder = PriorityEncoder(c.entry_num)
+        m.submodules.iopmp_priority_encoder = encoder
+        m.d.comb += encoder.i.eq(match_vector)
+        selected_read = Array(entry_cfg[index][0] for index in range(c.entry_num))[selected_index]
+        selected_write = Array(entry_cfg[index][1] for index in range(c.entry_num))[selected_index]
+        m.d.comb += selected_index.eq(encoder.o)
+        matched = ~encoder.n
         no_rule = ~matched
         read_fault_now = enable_reg & (~self.req_write) & (no_rule | ~selected_read)
         write_fault_now = enable_reg & self.req_write & (no_rule | ~selected_write)
         request_fire = self.req_valid & self.req_ready
-        response_fire = self.resp_valid & self.resp_ready
+        response_fire = response_valid & self.resp_ready
         m.d.comb += [
-            self.req_ready.eq(~self.resp_valid),
-            self.resp_read_fault.eq(errinfo[0]), self.resp_write_fault.eq(errinfo[1]),
-            self.resp_entry.eq(errinfo[16:16 + len(self.resp_entry)]),
-            self.resp_valid.eq(errinfo[31]), self.flush.eq(self.resp_valid & (self.resp_read_fault | self.resp_write_fault)),
+            self.req_ready.eq(~response_valid),
+            self.resp_read_fault.eq(response_read_fault), self.resp_write_fault.eq(response_write_fault),
+            self.resp_entry.eq(response_entry), self.resp_valid.eq(response_valid),
+            self.flush.eq(response_valid & (response_read_fault | response_write_fault)),
         ]
 
         # Expose source register values through the APB read path. / 通过 APB 读路径暴露源代码寄存器值。
@@ -234,7 +241,8 @@ class UHSCIOPMPInterface(Elaboratable):
 
         # Update tables, capture first faults, and retire responses synchronously. / 同步更新表项、捕获首个错误并完成响应。
         with m.If(self.reset):
-            m.d.iopmp += [enable_reg.eq(0), err_interrupt.eq(0), errcfg.eq(0), errinfo.eq(0), err_addr.eq(0), err_rrid.eq(0)]
+            m.d.iopmp += [enable_reg.eq(0), err_interrupt.eq(0), errcfg.eq(0), errinfo.eq(0), err_addr.eq(0), err_rrid.eq(0),
+                          response_valid.eq(0), response_read_fault.eq(0), response_write_fault.eq(0), response_entry.eq(0)]
         with m.Else():
             with m.If(self.csr_valid & self.csr_write):
                 with m.If(self.csr_addr[0:16] == 0x0008):
@@ -253,13 +261,15 @@ class UHSCIOPMPInterface(Elaboratable):
                         m.d.iopmp += entry_cfg[entry_index].eq(self.csr_wdata[:11])
             with m.If(request_fire):
                 m.d.iopmp += [
-                    errinfo.eq(Cat(Const(0, 15), selected_entry, Const(0, 14), write_fault_now, read_fault_now, 1)),
+                    response_valid.eq(1), response_read_fault.eq(read_fault_now),
+                    response_write_fault.eq(write_fault_now), response_entry.eq(selected_index),
+                    errinfo.eq(Cat(Const(0, 15), selected_index, Const(0, 14), write_fault_now, read_fault_now, 1)),
                     err_addr.eq(self.req_address), err_rrid.eq(self.req_rrid),
                 ]
                 with m.If(read_fault_now | write_fault_now):
                     m.d.iopmp += err_interrupt.eq(1)
             with m.If(response_fire):
-                m.d.iopmp += errinfo.eq(errinfo & ~(1 << 31))
+                m.d.iopmp += response_valid.eq(0)
         return m
 
 

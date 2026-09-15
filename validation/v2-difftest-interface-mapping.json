@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_DIFFTEST_INTERFACE_MAPPING",
+  "phase": "REWRITE_FREEZE",
+  "batch_id": "V2-DEPENDENCY-DIFFTEST-001",
+  "family_id": "dependency.difftest.interface",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "source_root": "difftest/src/main/scala",
+  "source_scala_file_count": 35,
+  "source_paths": [
+    "difftest/src/main/scala/Batch.scala",
+    "difftest/src/main/scala/Bundles.scala",
+    "difftest/src/main/scala/common/AXI4.scala",
+    "difftest/src/main/scala/common/AXI4Lite.scala",
+    "difftest/src/main/scala/common/AXI4Stream.scala",
+    "difftest/src/main/scala/common/FileControl.scala",
+    "difftest/src/main/scala/common/Flash.scala",
+    "difftest/src/main/scala/common/LogPerfControl.scala",
+    "difftest/src/main/scala/common/Mem.scala",
+    "difftest/src/main/scala/common/SDCard.scala",
+    "difftest/src/main/scala/common/WiringControl.scala",
+    "difftest/src/main/scala/Coverage.scala",
+    "difftest/src/main/scala/Delta.scala",
+    "difftest/src/main/scala/Difftest.scala",
+    "difftest/src/main/scala/DPIC.scala",
+    "difftest/src/main/scala/fpga/DifftestMemCtrl.scala",
+    "difftest/src/main/scala/fpga/Host.scala",
+    "difftest/src/main/scala/fpga/XDMAConfigBar.scala",
+    "difftest/src/main/scala/Gateway.scala",
+    "difftest/src/main/scala/plugin/topdown/TopdownDPI.scala",
+    "difftest/src/main/scala/plugin/topdown/TopdownIQInfo.scala",
+    "difftest/src/main/scala/plugin/topdown/TopdownRobInfo.scala",
+    "difftest/src/main/scala/Preprocess.scala",
+    "difftest/src/main/scala/Replay.scala",
+    "difftest/src/main/scala/SimTop.scala",
+    "difftest/src/main/scala/Squash.scala",
+    "difftest/src/main/scala/Trace.scala",
+    "difftest/src/main/scala/util/Compatibility.scala",
+    "difftest/src/main/scala/util/Delayer.scala",
+    "difftest/src/main/scala/util/Lookup.scala",
+    "difftest/src/main/scala/util/PipelineConnect.scala",
+    "difftest/src/main/scala/util/Profile.scala",
+    "difftest/src/main/scala/util/Query.scala",
+    "difftest/src/main/scala/util/SkidBufferConnect.scala",
+    "difftest/src/main/scala/Validate.scala"
+  ],
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Difftest.Interface-Hardware.py",
+    "sha256": "5470dc78f83435834106c19190db96c86b9287075f25c8ca9e25413b9a1f9b4c"
+  },
+  "disposition": "AGGREGATED_FAMILY_BOUNDARY",
+  "boundary": {
+    "implemented_contracts": [
+      "commit trace FIFO ordering and bounded backpressure",
+      "AXI-lite address/data handshake and status readback",
+      "halt/error status output boundary"
+    ],
+    "explicitly_deferred_closure": [
+      "DPI/C++ simulation services, replay/coverage plugins, FPGA host blocks",
+      "full XSCore Difftest parent closure and locked XSTop differential"
+    ],
+    "deferred_reason": "The aggregate records a source-traceable interface boundary; deferred children require selected-top/reference closure and are not promoted here."
+  },
+  "closure_root": "difftest.interface",
+  "reachability_status": "REACHABLE_SELECTED_OR_CONDITIONAL",
+  "localization": [
+    {
+      "source_name": "dependency.difftest.interface",
+      "local_name": "UHSCDifftestInterface",
+      "visibility": "generated HDL top",
+      "reason": "UHSC project-facing family Build export; source identifiers remain in provenance"
+    }
+  ],
+  "evidence": {
+    "bounded_family_validation": "validation/v2-difftest-interface-family-results.json"
+  },
+  "gates": {
+    "UTF8_LF": "PASS",
+    "AST": "PASS",
+    "PY_COMPILE": "PASS",
+    "DETERMINISTIC_SAME_NAME_BUILD_VERILOG": "PASS",
+    "STRUCTURE_VERIFIED": "PASS",
+    "BEHAVIOR_VERIFIED_dependency.difftest.interface": "PENDING_BATCH_VALIDATION",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "structure_status": "PASS",
+  "behavior_status": "PENDING_BATCH_VALIDATION",
+  "accepted": false,
+  "acceptance_eligible": false,
+  "unclosed": [
+    "DPI/C++ simulation services, replay/coverage plugins, FPGA host blocks",
+    "full XSCore Difftest parent closure and locked XSTop differential",
+    "License review and user approval remain pending."
+  ]
+}
+

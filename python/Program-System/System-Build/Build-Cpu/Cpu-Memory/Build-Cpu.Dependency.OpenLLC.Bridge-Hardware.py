@@ -30,7 +30,24 @@ __all__ = [
     "request_from_mmio", "OpenLLCLinkLayer", "OpenLLCChannelTransmitter",
     "OpenLLCChannelReceiver", "LinkLayer", "TXREQ", "TXRSP", "TXDAT", "TXSNP",
     "RXREQ", "RXRSP", "RXDAT", "OpenLLCBridge", "build_verilog", "main",
+    "SOURCE_SCALA_ROOT", "SOURCE_SCALA_PATHS", "SOURCE_SCALA_FILE_COUNT",
 ]
+
+
+# Keep all eight CHI inventory paths on the bridge aggregate. /
+# 在 bridge 聚合中保留 CHI inventory 的全部 8 条路径。
+SOURCE_SCALA_ROOT = "openLLC/src/main/scala/openLLC/chi"
+SOURCE_SCALA_PATHS = (
+    "openLLC/src/main/scala/openLLC/chi/LinkLayer.scala",
+    "openLLC/src/main/scala/openLLC/chi/RXDAT.scala",
+    "openLLC/src/main/scala/openLLC/chi/RXREQ.scala",
+    "openLLC/src/main/scala/openLLC/chi/RXRSP.scala",
+    "openLLC/src/main/scala/openLLC/chi/TXDAT.scala",
+    "openLLC/src/main/scala/openLLC/chi/TXREQ.scala",
+    "openLLC/src/main/scala/openLLC/chi/TXRSP.scala",
+    "openLLC/src/main/scala/openLLC/chi/TXSNP.scala",
+)
+SOURCE_SCALA_FILE_COUNT = len(SOURCE_SCALA_PATHS)
 
 
 # Typed wrapper for conditional DSL contexts. / 条件 DSL 上下文的类型包装。

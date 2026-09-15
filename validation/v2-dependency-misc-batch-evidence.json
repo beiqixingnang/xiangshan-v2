@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_DEPENDENCY_MISC_BATCH_EVIDENCE",
+  "batch_id": "V2-DEPENDENCY-MISC-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "acceptance_eligible": false,
+  "status": "BOUNDED_SMOKE_PASS",
+  "families": [
+    {
+      "family_id": "dependency.iopmp.interface",
+      "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.ChiselIOPMP.Interface-Hardware.py",
+      "target_sha256": "1e8273b0c6d1f228accd02586f71918b8690f648ea1dd9725910f0b342e6f661",
+      "source_scala_file_count": 3,
+      "smoke": {
+        "ast": "PASS",
+        "py_compile": "PASS",
+        "build_verilog": "PASS",
+        "configuration": {
+          "entry_num": 4,
+          "module": "UHSCIOPMPInterface"
+        },
+        "rtl_bytes": 31388,
+        "rtl_sha256": "96154aa30aeb1a87f375e018d6652334a657741e579dcd4de61ebb5a307707d1"
+      },
+      "closure_status": "PENDING_SELECTED_TOP"
+    },
+    {
+      "family_id": "dependency.aia.interface",
+      "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.ChiselAIA.Interface-Hardware.py",
+      "target_sha256": "73a21af1f5303253142973e3d17cd0cb5bd1b2da24c452eff498dea44c641f28",
+      "source_scala_file_count": 6,
+      "smoke": {
+        "ast": "PASS",
+        "py_compile": "PASS",
+        "build_verilog": "PASS"
+      },
+      "evidence_ref": "validation/v2-chisel-aia-interface-family-results.json",
+      "closure_status": "PENDING_PARENT"
+    },
+    {
+      "family_id": "dependency.difftest.interface",
+      "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Difftest.Interface-Hardware.py",
+      "target_sha256": "5470dc78f83435834106c19190db96c86b9287075f25c8ca9e25413b9a1f9b4c",
+      "source_scala_file_count": 35,
+      "smoke": {
+        "ast": "PASS",
+        "py_compile": "PASS",
+        "build_verilog": "PASS"
+      },
+      "evidence_ref": "validation/v2-difftest-interface-family-results.json",
+      "closure_status": "PENDING_PARENT"
+    },
+    {
+      "family_id": "dependency.hardfloat",
+      "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Rocket.Hardfloat-Hardware.py",
+      "target_sha256": "833ca20f59b79302bcf3f12aac43d887b48982e6c79a3500a183f1326f849a64",
+      "source_scala_file_count": 20,
+      "smoke": {
+        "ast": "PASS",
+        "py_compile": "PASS",
+        "build_verilog": "PASS"
+      },
+      "evidence_ref": "validation/v2-hardfloat-family-results.json",
+      "closure_status": "PENDING_PARENT"
+    }
+  ],
+  "gates": {
+    "AST": "PASS",
+    "PY_COMPILE": "PASS",
+    "BUILD_VERILOG_SMOKE": "PASS",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "unclosed": [
+    "Selected-top parent closure, locked-reference differential, license review, and user approval remain pending."
+  ]
+}
+

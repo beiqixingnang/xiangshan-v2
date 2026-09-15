@@ -34,7 +34,43 @@ __all__ = [
     "DataStorage", "Directory", "RequestBuffer", "RequestArb", "MainPipe",
     "MemUnit", "RefillUnit", "ResponseUnit", "SnoopUnit", "OpenLLC", "Slice",
     "build_verilog", "main",
+    "SOURCE_SCALA_ROOT", "SOURCE_SCALA_PATHS", "SOURCE_SCALA_FILE_COUNT",
 ]
+
+
+# Keep all 27 inventory paths on the single cache aggregate. /
+# 在单一 cache 聚合中保留 inventory 的全部 27 条路径。
+SOURCE_SCALA_ROOT = "openLLC/src/main/scala/openLLC"
+SOURCE_SCALA_PATHS = (
+    "openLLC/src/main/scala/openLLC/chi/LinkLayer.scala",
+    "openLLC/src/main/scala/openLLC/chi/RXDAT.scala",
+    "openLLC/src/main/scala/openLLC/chi/RXREQ.scala",
+    "openLLC/src/main/scala/openLLC/chi/RXRSP.scala",
+    "openLLC/src/main/scala/openLLC/chi/TXDAT.scala",
+    "openLLC/src/main/scala/openLLC/chi/TXREQ.scala",
+    "openLLC/src/main/scala/openLLC/chi/TXRSP.scala",
+    "openLLC/src/main/scala/openLLC/chi/TXSNP.scala",
+    "openLLC/src/main/scala/openLLC/Common.scala",
+    "openLLC/src/main/scala/openLLC/DataStorage.scala",
+    "openLLC/src/main/scala/openLLC/Directory.scala",
+    "openLLC/src/main/scala/openLLC/DummyLLC.scala",
+    "openLLC/src/main/scala/openLLC/LLCParam.scala",
+    "openLLC/src/main/scala/openLLC/MainPipe.scala",
+    "openLLC/src/main/scala/openLLC/MemUnit.scala",
+    "openLLC/src/main/scala/openLLC/OpenLLC.scala",
+    "openLLC/src/main/scala/openLLC/RefillUnit.scala",
+    "openLLC/src/main/scala/openLLC/RequestArb.scala",
+    "openLLC/src/main/scala/openLLC/RequestBuffer.scala",
+    "openLLC/src/main/scala/openLLC/ResponseUnit.scala",
+    "openLLC/src/main/scala/openLLC/Slice.scala",
+    "openLLC/src/main/scala/openLLC/SnoopUnit.scala",
+    "openLLC/src/main/scala/openLLC/TopDownMonitor.scala",
+    "openLLC/src/main/scala/openLLC/utils/CHIXbar.scala",
+    "openLLC/src/main/scala/openLLC/utils/MMIOBridge.scala",
+    "openLLC/src/main/scala/openLLC/utils/OpenNCB.scala",
+    "openLLC/src/main/scala/openLLC/utils/TargetBinder.scala",
+)
+SOURCE_SCALA_FILE_COUNT = len(SOURCE_SCALA_PATHS)
 
 
 # Narrow dynamic Amaranth contexts to the static protocol used by Pyright. /
