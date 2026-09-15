@@ -31,7 +31,8 @@ class JumpConfig:
 
     xlen: int = 64
     imm_width: int = 33
-    next_pc_offset_width: int = 9
+    # Locked JumpDataModule uses a five-bit next-PC offset. / 锁定 JumpDataModule 使用五位 next-PC 偏移。
+    next_pc_offset_width: int = 5
     inst_offset_bits: int = 1
 
     # Validate V2 widths and compressed-instruction offset scaling. / 校验 V2 位宽及压缩指令偏移缩放。
@@ -78,7 +79,7 @@ class JumpDataModule(Elaboratable):
         self.pc = Signal(c.xlen, name="io_pc")
         self.imm = Signal(c.imm_width, name="io_imm")
         self.next_pc_offset = Signal(c.next_pc_offset_width, name="io_nextPcOffset")
-        self.func = Signal(7, name="io_func")
+        self.func = Signal(9, name="io_func")
         self.result = Signal(c.xlen, name="io_result")
         self.target = Signal(c.xlen, name="io_target")
         self.is_auipc = Signal(name="io_isAuipc")
@@ -88,8 +89,11 @@ class JumpDataModule(Elaboratable):
         del platform
         m = Module()
         c = self.configuration
-        imm_signed = self.imm.as_signed()
-        offset = imm_signed.as_unsigned()
+        # Jump.scala sign-extends the 33-bit immediate to XLEN before adding.
+        # Explicit replication keeps the signed extension visible in emitted
+        # RTL; relying on mixed signed/unsigned arithmetic would zero-extend
+        # the immediate in Amaranth.
+        offset = Cat(self.imm, self.imm[-1].replicate(c.xlen - c.imm_width))
         target_full = Mux(self.func[0], self.src + offset, self.pc + offset)
         target = Cat(Const(0, 1), target_full[1:c.xlen])
         snpc = self.pc + (self.next_pc_offset << c.inst_offset_bits)
