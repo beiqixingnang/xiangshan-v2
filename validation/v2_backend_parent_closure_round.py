@@ -35,6 +35,17 @@ MAPPING = ROOT / "validation/v2-backend-parent-closure-round-mapping.json"
 SOURCE_COMMIT = "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af"
 XSTOP_SHA256 = "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d"
 
+# Resolve the real mounted WSL path once.  The previous fixed /tmp symlink was
+# not stable across WSL invocations and caused parent Verilator/Yosys commands
+# to see a missing RTL file even though the Windows work file existed.
+_wsl_probe = subprocess.run(["wsl.exe", "-e", "wslpath", "-a", str(ROOT)],
+                            capture_output=True, check=False)
+# ``wsl.exe`` may transcode non-ASCII output through the Windows console.  Use
+# the checked-out workspace mount explicitly when that output is mojibake.
+WSL_ROOT = _wsl_probe.stdout.decode("utf-8", "replace").strip()
+if "知识库开发" not in WSL_ROOT or "Unifier-Hardware-System" not in WSL_ROOT:
+    WSL_ROOT = "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2"
+
 
 def digest_bytes(value: bytes) -> str:
     """Hash generated traces and tool output reproducibly. / 可复现地计算轨迹及工具输出摘要。"""
@@ -54,7 +65,7 @@ def load_exact(path: Path, name: str) -> Any:
 
 def wsl_path(path: Path) -> str:
     """Map this auxiliary repository to the stable WSL alias. / 映射到稳定 WSL 别名。"""
-    return "/tmp/uhsc-v2/" + path.resolve().relative_to(ROOT.resolve()).as_posix()
+    return WSL_ROOT.rstrip("/") + "/" + path.resolve().relative_to(ROOT.resolve()).as_posix()
 
 
 def run_wsl(command: list[str], timeout: int = 240) -> dict[str, Any]:
@@ -336,9 +347,9 @@ def differential(rtl_path: Path, decode: Any, vectors: list[dict[str, Any]]) -> 
 
 def main() -> int:
     """Run the closure round and write evidence/mapping atomically. / 运行闭包轮次并写入证据映射。"""
-    alias = run_wsl(["bash", "-lc", "ln -sfn /mnt/d/*/Unifier-Hardware-System/.agents/xiangshan-v2 /tmp/uhsc-v2"], timeout=60)
-    if alias["status"] != "PASS":
-        raise RuntimeError(alias)
+    # The commands now use WSL_ROOT directly; keep a best-effort compatibility
+    # alias for older evidence tooling without making it a gate.
+    run_wsl(["bash", "-lc", f"ln -sfnT -- '{WSL_ROOT}' /tmp/uhsc-v2"], timeout=60)
     target = load_exact(TARGET, "v2_parent_closure_target")
     decode = load_exact(DECODE_PATH, "v2_parent_closure_decode")
     issue = load_exact(ISSUE_PATH, "v2_parent_closure_issue")

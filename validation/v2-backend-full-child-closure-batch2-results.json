@@ -1,0 +1,684 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_BACKEND_FULL_CHILD_CLOSURE_BATCH2",
+  "batch_id": "V2-BACKEND-FULL-CHILD-CLOSURE-002",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "locked_reference": {
+    "canonical_path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "immutable": true
+  },
+  "coverage": {
+    "parent_vectors": 1024,
+    "decode_vectors": 1024,
+    "branch_vectors": 2048,
+    "alu_jump_vectors": 2048,
+    "issue_busy_vectors": 4096,
+    "rob_csr_vectors": 4096,
+    "exu_direct_vectors": 4096
+  },
+  "children": {
+    "DecodeUnit/DecodeStage": {
+      "schema_version": 1,
+      "kind": "XIANGSHAN_KUNMINGHU_V2_BACKEND_DECODE_CHILD_DIFFERENTIAL",
+      "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+      "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Decode.Isa.Bitfield.RiscvInst-Hardware.py",
+      "locked_reference": {
+        "path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+        "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+        "immutable": true
+      },
+      "direct": {
+        "status": "PASS",
+        "input_vectors": 514,
+        "scalar_checks": 23644
+      },
+      "differential": {
+        "status": "PASS",
+        "vectors": 1024,
+        "build": {
+          "command": [
+            "verilator",
+            "--binary",
+            "--timing",
+            "-Wno-fatal",
+            "-Wno-WIDTHEXPAND",
+            "-Wno-WIDTHTRUNC",
+            "--top-module",
+            "tb",
+            "--Mdir",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-decode-child/obj",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-decode-child/RiscvInst-target.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-decode-child/RiscvInst-reference.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-decode-child/decode-child-tb.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "coroutines -include Vtb__pch.h.slow -c -o Vtb___024root__DepSet_hfe20aad3__0__Slow.o Vtb___024root__DepSet_hfe20aad3__0__Slow.cpp\ng++   -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -include Vtb__pch.h.slow -c -o Vtb___024root__DepSet_ha183790c__0__Slow.o Vtb___024root__DepSet_ha183790c__0__Slow.cpp\ng++   -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -include Vtb__pch.h.slow -c -o Vtb__Syms.o Vtb__Syms.cpp\necho \"\" > Vtb__ALL.verilator_deplist.tmp\ng++    verilated.o verilated_timing.o verilated_threads.o Vtb__ALL.a    -pthread -lpthread -latomic   -o Vtb\nrm Vtb__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-decode-child/obj'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.322 MB sources in 4 modules, into 0.845 MB in 9 C++ files needing 0.000 MB\n- Verilator: Walltime 86.202 s (elab=0.104, cvt=0.325, bld=85.426); cpu 0.540 s on 1 threads; alloced 24.879 MB\n",
+          "output_sha256": "91e53acfa89dad3bc9ba326fdeea0c9b4c015f35aa308c95ab0a950769ddc3f9"
+        },
+        "run": {
+          "command": [
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-decode-child/obj/Vtb"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "BACKEND_DECODE_CHILD_DIFF_PASS 1024\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-decode-child/decode-child-tb.sv:1031: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 1ns; walltime 0.008 s; speed 208.161 ns/s\n- Verilator: cpu 0.005 s on 1 threads; alloced 153 MB\n",
+          "output_sha256": "bf1f9ff68f44c5ce7fccd9d1ecfc22b4df1d361e19757ef6ceaff15d4c95359a"
+        },
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-decode-child/RiscvInst-target.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "s SEL generates 3 bits.\n                                                                                                                                                           : ... note: In instance 'RiscvInst'\n   87 |   assign \\$13  = ! inst[14:12];\n      |                  ^\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-decode-child/RiscvInst-target.sv:90:30: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                            : ... note: In instance 'RiscvInst'\n   90 |   assign \\$15  = inst[14:12] == 1'h1;\n      |                              ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-decode-child/RiscvInst-target.sv:93:30: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                                                            : ... note: In instance 'RiscvInst'\n   93 |   assign \\$17  = inst[14:12] == 2'h2;\n      |                              ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-decode-child/RiscvInst-target.sv:96:30: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                                                                                                                                            : ... note: In instance 'RiscvInst'\n   96 |   assign \\$19  = inst[14:12] == 2'h3;\n      |                              ^~\n",
+          "output_sha256": "71e0dcb8b5661a58dca92702385c9243a6d7510c5c4e65166dbdad64c89215fd"
+        },
+        "yosys": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-decode-child/RiscvInst-target.sv; hierarchy -top RiscvInst; proc; check; stat"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "n trees).\nRemoved a total of 0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RiscvInst.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module RiscvInst...\nFound and reported 0 problems.\n\n5. Printing statistics.\n\n=== RiscvInst ===\n\n   Number of wires:                 79\n   Number of wire bits:            151\n   Number of public wires:          46\n   Number of public wire bits:     118\n   Number of ports:                 21\n   Number of port bits:             87\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                 33\n     $and                           10\n     $eq                            18\n     $logic_not                      3\n     $or                             2\n\nEnd of script. Logfile hash: 4750fb200e, CPU: user 0.03s system 0.04s, MEM: 11.41 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 64% 2x read_verilog (0 sec), 13% 1x opt_expr (0 sec), ...\n",
+          "output_sha256": "5fed1edd7d5f0baece3a69531ffa1356b830a1246b830dfce9c1e91686650b98"
+        },
+        "trace_sha256": "921519716e02ccb59e2f18ee9a97d3feeecd770d53e864cbed5f281c07209b72"
+      },
+      "gates": {
+        "DIRECT_TEST_PASS_BOUNDED": "PASS",
+        "V2_REFERENCE_MATCHED": "PASS",
+        "VERILATOR": "PASS",
+        "YOSYS": "PASS",
+        "PARENT_CLOSURE_MATCHED": "PENDING",
+        "ACCEPTED": "NOT_ALLOWED"
+      },
+      "status": "PASS_BOUNDED_DECODE_CHILD",
+      "acceptance_eligible": false,
+      "unclosed": [
+        "Backend DecodeUnit/DecodeStage integration remains pending.",
+        "Issue/Rename/CSR/EXU parent closure remains pending.",
+        "License review and user approval remain pending."
+      ]
+    },
+    "IssueQueue/BusyTable": {
+      "status": "PASS",
+      "vectors": 4096,
+      "checks": 12288,
+      "children": [
+        "IssueQueue.EnqPolicy",
+        "IssueQueue.FuBusyTableRead"
+      ],
+      "reference": "python_equation_oracle"
+    },
+    "ExuBlock/Branch/ALU/Jump": {
+      "direct": {
+        "status": "PASS",
+        "vectors": 4096,
+        "checks": 12288,
+        "children": [
+          "ExuBlock.BranchModule",
+          "ExuBlock.AluDataModule",
+          "ExuBlock.JumpDataModule"
+        ],
+        "reference": "existing_locked_child_harnesses"
+      },
+      "locked": {
+        "branch": {
+          "schema_version": 1,
+          "kind": "XIANGSHAN_KUNMINGHU_V2_BACKEND_BRANCH_CHILD_DIFFERENTIAL",
+          "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+          "target": {
+            "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.BranchModule-Hardware.py",
+            "sha256": "d95127c09e3f1f319ecc8660afc875f6e5f521a07485153c06fa8fa52e3fbef3"
+          },
+          "locked_reference": {
+            "canonical_path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+            "xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+            "immutable": true,
+            "extracted_reference": {
+              "branch_bytes": 1940,
+              "submodule_bytes": 589,
+              "module_payload_sha256": "ea5860bf681126b3019b9fcb33cdebb2d20f6952b937fb64f01b1f1f425f6d34"
+            }
+          },
+          "direct": {
+            "status": "PASS",
+            "vectors": 2048,
+            "checks": 2048
+          },
+          "differential": {
+            "status": "PASS",
+            "vectors": 2048,
+            "compile": {
+              "command": [
+                "verilator",
+                "--binary",
+                "--timing",
+                "-Wno-fatal",
+                "--top-module",
+                "tb",
+                "--Mdir",
+                "/tmp/uhsc-v2/validation/.work/v2-backend-branch-child/obj",
+                "/tmp/uhsc-v2/validation/.work/v2-backend-branch-child/BranchModule-target.sv",
+                "/tmp/uhsc-v2/validation/.work/v2-backend-branch-child/BranchModule-reference.sv",
+                "/tmp/uhsc-v2/validation/.work/v2-backend-branch-child/branch-child-tb.sv"
+              ],
+              "returncode": 0,
+              "status": "PASS",
+              "output_tail": "OGNOT expects 1 bit on the LHS, but LHS's SEL generates 3 bits.\n                                                                                                       : ... note: In instance 'tb.t'\n   34 |   assign \\$1  = ! (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Fu.BranchModule-Hardware.py:92\" *) io_func[3:1];\n      |                 ^\n                     ... For warning description see https://verilator.org/warn/WIDTHTRUNC?v=5.032\n                     ... Use \"/* verilator lint_off WIDTHTRUNC */\" and lint_on around source to disable this message.\n%Warning-WIDTHEXPAND: /tmp/uhsc-v2/validation/.work/v2-backend-branch-child/BranchModule-target.sv:36:30: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                        : ... note: In instance 'tb.t'\n   36 |   assign \\$3  = io_func[3:1] == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Fu.BranchModule-Hardware.py:92\" *) 2'h2;\n      |                              ^~\n",
+              "output_sha256": "28fd0e96da5bfbe84309469af38a56c05e0f23eaf20ce46e657dfff7967ddd91"
+            },
+            "run": {
+              "command": [
+                "/tmp/uhsc-v2/validation/.work/v2-backend-branch-child/obj/Vtb"
+              ],
+              "returncode": 0,
+              "status": "PASS",
+              "output_tail": "BACKEND_BRANCH_CHILD_DIFF_PASS 2048\n- /tmp/uhsc-v2/validation/.work/v2-backend-branch-child/branch-child-tb.sv:2053: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 2ns; walltime 0.011 s; speed 417.104 ns/s\n- Verilator: cpu 0.005 s on 1 threads; alloced 153 MB\n",
+              "output_sha256": "811ebd03fb43d7d270344fb90265d2f3165e32515d51322379dbc2692e65e6ed"
+            }
+          },
+          "tool_gates": {
+            "verilator": {
+              "command": [
+                "verilator",
+                "--lint-only",
+                "-Wno-fatal",
+                "/tmp/uhsc-v2/validation/.work/v2-backend-branch-child/BranchModule-target.sv"
+              ],
+              "returncode": 0,
+              "status": "PASS",
+              "output_tail": "bit on the LHS, but LHS's SEL generates 3 bits.\n                                                                                                       : ... note: In instance 'BranchModule'\n   34 |   assign \\$1  = ! (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Fu.BranchModule-Hardware.py:92\" *) io_func[3:1];\n      |                 ^\n                     ... For warning description see https://verilator.org/warn/WIDTHTRUNC?v=5.032\n                     ... Use \"/* verilator lint_off WIDTHTRUNC */\" and lint_on around source to disable this message.\n%Warning-WIDTHEXPAND: /tmp/uhsc-v2/validation/.work/v2-backend-branch-child/BranchModule-target.sv:36:30: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                        : ... note: In instance 'BranchModule'\n   36 |   assign \\$3  = io_func[3:1] == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Fu.BranchModule-Hardware.py:92\" *) 2'h2;\n      |                              ^~\n",
+              "output_sha256": "e81a3265bf9f75feb33a8c997269ffff56013afb64fbc7f0d3b0cbd66ea7587a"
+            },
+            "yosys": {
+              "command": [
+                "yosys",
+                "-Q",
+                "-p",
+                "read_verilog -sv /tmp/uhsc-v2/validation/.work/v2-backend-branch-child/BranchModule-target.sv; hierarchy -top BranchModule; proc; check; stat"
+              ],
+              "returncode": 0,
+              "status": "PASS",
+              "output_tail": ".\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BranchModule.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module BranchModule...\nFound and reported 0 problems.\n\n5. Printing statistics.\n\n=== BranchModule ===\n\n   Number of wires:                 26\n   Number of wire bits:            160\n   Number of public wires:          15\n   Number of public wire bits:     149\n   Number of ports:                  6\n   Number of port bits:            140\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                 11\n     $eq                             3\n     $logic_not                      1\n     $lt                             2\n     $mux                            3\n     $xor                            2\n\nEnd of script. Logfile hash: 5b39260c36, CPU: user 0.03s system 0.02s, MEM: 11.25 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 48% 2x read_verilog (0 sec), 16% 1x opt_expr (0 sec), ...\n",
+              "output_sha256": "3f4b163db41573b5b7c3df7825475570a4e1850828476176a2b304ff6453a4c3"
+            }
+          },
+          "gates": {
+            "DIRECT_TEST_PASS_BOUNDED": "PASS",
+            "V2_REFERENCE_MATCHED": "PASS_BOUNDED",
+            "VERILATOR": "PASS",
+            "YOSYS": "PASS",
+            "PARENT_CLOSURE_MATCHED": "PENDING",
+            "ACCEPTED": "NOT_ALLOWED"
+          },
+          "status": "PASS_BOUNDED_BRANCH_CHILD",
+          "acceptance_eligible": false,
+          "unclosed": [
+            "BranchUnit/Backend ExuBlock parent integration remains pending.",
+            "Full Backend semantic closure and license/user review remain pending."
+          ]
+        },
+        "alu_jump": {
+          "schema_version": 1,
+          "kind": "XIANGSHAN_KUNMINGHU_V2_BACKEND_ALU_JUMP_CHILD_DIFFERENTIAL",
+          "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+          "targets": {
+            "AluDataModule": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.AluDataModule-Hardware.py",
+            "JumpDataModule": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.JumpDataModule-Hardware.py"
+          },
+          "locked_reference": {
+            "canonical_path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+            "xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+            "immutable": true,
+            "modules": [
+              "AluDataModule",
+              "JumpDataModule"
+            ]
+          },
+          "direct": {
+            "status": "PASS",
+            "alu_vectors": 2048,
+            "jump_vectors": 2048,
+            "checks": 4096
+          },
+          "differential": {
+            "status": "PASS",
+            "alu_vectors": 1024,
+            "jump_vectors": 1024,
+            "compile": {
+              "command": [
+                "verilator",
+                "--binary",
+                "--timing",
+                "-Wno-fatal",
+                "-Wno-WIDTHEXPAND",
+                "-Wno-WIDTHTRUNC",
+                "--top-module",
+                "tb",
+                "--Mdir",
+                "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-alu-jump-child/obj",
+                "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-alu-jump-child/AluDataModule-target.sv",
+                "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-alu-jump-child/AluDataModule-reference.sv",
+                "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-alu-jump-child/JumpDataModule-target.sv",
+                "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-alu-jump-child/JumpDataModule-reference.sv",
+                "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-alu-jump-child/alu-jump-child-tb.sv"
+              ],
+              "returncode": 0,
+              "status": "PASS",
+              "output_tail": "s -include Vtb__pch.h.slow -c -o Vtb___024root__DepSet_hfe20aad3__0__Slow.o Vtb___024root__DepSet_hfe20aad3__0__Slow.cpp\ng++   -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -include Vtb__pch.h.slow -c -o Vtb___024root__DepSet_ha183790c__0__Slow.o Vtb___024root__DepSet_ha183790c__0__Slow.cpp\ng++   -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -include Vtb__pch.h.slow -c -o Vtb__Syms.o Vtb__Syms.cpp\necho \"\" > Vtb__ALL.verilator_deplist.tmp\ng++    verilated.o verilated_timing.o verilated_threads.o Vtb__ALL.a    -pthread -lpthread -latomic   -o Vtb\nrm Vtb__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-alu-jump-child/obj'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 36.585 MB sources in 17 modules, into 2.653 MB in 11 C++ files needing 0.005 MB\n- Verilator: Walltime 80.048 s (elab=3.957, cvt=10.523, bld=63.449); cpu 16.265 s on 1 threads; alloced 1063.863 MB\n",
+              "output_sha256": "feb8983da54f9d557001d84d73595a2dab659af47ec777754548cabfea6d8915"
+            },
+            "run": {
+              "command": [
+                "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-alu-jump-child/obj/Vtb"
+              ],
+              "returncode": 0,
+              "status": "PASS",
+              "output_tail": "BACKEND_ALU_JUMP_CHILD_DIFF_PASS 2048\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-alu-jump-child/alu-jump-child-tb.sv:2053: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 2ns; walltime 0.007 s; speed 593.467 ns/s\n- Verilator: cpu 0.003 s on 1 threads; alloced 153 MB\n",
+              "output_sha256": "3c2983b40442d3c34967ba09365d261722b0dcdfa947904b39505ba52e3ffdab"
+            }
+          },
+          "tool_gates": {
+            "alu_verilator": {
+              "command": [
+                "verilator",
+                "--lint-only",
+                "-Wno-fatal",
+                "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-alu-jump-child/AluDataModule-target.sv"
+              ],
+              "returncode": 0,
+              "status": "PASS",
+              "output_tail": "'s CONST '2'h3' generates 2 bits.\n105109 |   assign \\$47421  = io_func[3:0] == 2'h3;\n       |                                  ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-alu-jump-child/AluDataModule-target.sv:105117:34: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n105117 |   assign \\$47429  = io_func[6:4] == 1'h1;\n       |                                  ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-alu-jump-child/AluDataModule-target.sv:105118:34: Operator EQ expects 4 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n105118 |   assign \\$47430  = io_func[3:0] == 1'h1;\n       |                                  ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-alu-jump-child/AluDataModule-target.sv:105123:34: Operator EQ expects 4 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n105123 |   assign \\$47435  = io_func[3:0] == 2'h3;\n       |                                  ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-alu-jump-child/AluDataModule-target.sv:105126:34: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n105126 |   assign \\$47438  = io_func[6:4] == 1'h1;\n       |                                  ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-alu-jump-child/AluDataModule-target.sv:105127:34: Operator EQ expects 4 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n105127 |   assign \\$47439  = io_func[3:0] == 2'h3;\n       |                                  ^~\n",
+              "output_sha256": "d4bbe23098bd025da058d7981409583e2b0af9fc0ac1295382bf60ea4a5d91a0"
+            },
+            "jump_verilator": {
+              "command": [
+                "verilator",
+                "--lint-only",
+                "-Wno-fatal",
+                "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-alu-jump-child/JumpDataModule-target.sv"
+              ],
+              "returncode": 0,
+              "status": "PASS",
+              "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.029 MB sources in 2 modules, into 0.029 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.029 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.009 s on 1 threads; alloced 9.504 MB\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-alu-jump-child/JumpDataModule-target.sv:46:23: Operator ADD expects 65 bits on the RHS, but RHS's VARREF '$7' generates 6 bits.\n                                                                                                                                                                   : ... note: In instance 'JumpDataModule'\n   46 |   assign \\$8  = io_pc + (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Fu.JumpDataModule-Hardware.py:101\" *) \\$7 ;\n      |                       ^\n                      ... For warning description see https://verilator.org/warn/WIDTHEXPAND?v=5.032\n                      ... Use \"/* verilator lint_off WIDTHEXPAND */\" and lint_on around source to disable this message.\n",
+              "output_sha256": "d401a18be5b1a82614dc5ca60cb4fbbab5d65b959e9b4eabbfdf523a6761644b"
+            },
+            "alu_yosys": {
+              "command": [
+                "yosys",
+                "-Q",
+                "-p",
+                "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-alu-jump-child/AluDataModule-target.sv; hierarchy -top AluDataModule; proc; check; stat"
+              ],
+              "returncode": 0,
+              "status": "PASS",
+              "output_tail": "ecuting PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module AluDataModule.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module AluDataModule...\nFound and reported 0 problems.\n\n5. Printing statistics.\n\n=== AluDataModule ===\n\n   Number of wires:             105118\n   Number of wire bits:         1788096\n   Number of public wires:       52564\n   Number of public wire bits:  894351\n   Number of ports:                  4\n   Number of port bits:            201\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:              52554\n     $add                         2950\n     $and                        11299\n     $eq                         14046\n     $logic_not                     10\n     $mux                        11617\n     $not                         8605\n     $or                          3774\n     $reduce_or                      1\n     $shl                          106\n     $shr                          103\n     $sshr                          34\n     $xor                            9\n\nEnd of script. Logfile hash: 62767ddf4e, CPU: user 13.27s system 0.95s, MEM: 1879.52 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 66% 2x read_verilog (9 sec), 20% 1x check (2 sec), ...\n",
+              "output_sha256": "accd021f1ad0ed6f36e2780dfd20f8de56b887eeebdde35ee17e2013ea29dec7"
+            },
+            "jump_yosys": {
+              "command": [
+                "yosys",
+                "-Q",
+                "-p",
+                "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-alu-jump-child/JumpDataModule-target.sv; hierarchy -top JumpDataModule; proc; check; stat"
+              ],
+              "returncode": 0,
+              "status": "PASS",
+              "output_tail": "3.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module JumpDataModule.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module JumpDataModule...\nFound and reported 0 problems.\n\n5. Printing statistics.\n\n=== JumpDataModule ===\n\n   Number of wires:                 25\n   Number of wire bits:           1350\n   Number of public wires:          17\n   Number of public wire bits:     830\n   Number of ports:                  8\n   Number of port bits:            304\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                  8\n     $add                            5\n     $mux                            3\n\nEnd of script. Logfile hash: ba2941127d, CPU: user 0.01s system 0.02s, MEM: 11.88 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 54% 2x read_verilog (0 sec), 18% 1x check (0 sec), ...\n",
+              "output_sha256": "ac3306ccad9a74e31417cbd1f30a4accbea2968f99a29f6a70aefd6f15d06572"
+            }
+          },
+          "gates": {
+            "DIRECT_TEST_PASS_BOUNDED": "PASS",
+            "V2_REFERENCE_MATCHED": "PASS_BOUNDED",
+            "VERILATOR": "PASS",
+            "YOSYS": "PASS",
+            "PARENT_CLOSURE_MATCHED": "PENDING",
+            "ACCEPTED": "NOT_ALLOWED"
+          },
+          "status": "PASS_BOUNDED_ALU_JUMP_CHILD",
+          "acceptance_eligible": false,
+          "unclosed": [
+            "ALU/JumpUnit integration into ExuBlock and full Backend remains pending.",
+            "License review and user approval remain pending."
+          ]
+        }
+      }
+    },
+    "ROB/CSR": {
+      "status": "PASS",
+      "vectors": 4096,
+      "checks": 12288,
+      "children": [
+        "ROB.RobPtrWrappers",
+        "ROB.CommitStuckCounter",
+        "CSR.CSRProbe"
+      ],
+      "reference": "python_equation_oracle"
+    }
+  },
+  "parent_closure": {
+    "direct": {
+      "status": "PASS",
+      "vectors": 1024,
+      "checks": 8192,
+      "trace_sha256": "2cc9d30eff6ed1ae53b35b708473fccdaffcaf1ffea2c009a072a458f340f8ae",
+      "trace_head": [
+        {
+          "decode_instruction": 61262929,
+          "decode_matches": 0,
+          "issue_can_enq": 3201193,
+          "issue_selected_valid": 1,
+          "issue_selected_bits": 1,
+          "writeback_valid": [
+            [
+              1
+            ],
+            [
+              0
+            ],
+            [
+              0
+            ],
+            [
+              0
+            ],
+            [
+              0
+            ]
+          ],
+          "writeback_data": [
+            [
+              9521688676171411002
+            ],
+            [
+              3402318029543361378
+            ],
+            [
+              3402318029543361378
+            ],
+            [
+              3402318029543361378
+            ],
+            [
+              3402318029543361378
+            ]
+          ],
+          "writeback_pdest": [
+            [
+              25
+            ],
+            [
+              188
+            ],
+            [
+              188
+            ],
+            [
+              188
+            ],
+            [
+              188
+            ]
+          ]
+        },
+        {
+          "decode_instruction": 2607628102,
+          "decode_matches": 0,
+          "issue_can_enq": 3896678,
+          "issue_selected_valid": 1,
+          "issue_selected_bits": 2,
+          "writeback_valid": [
+            [
+              0
+            ],
+            [
+              1
+            ],
+            [
+              0
+            ],
+            [
+              0
+            ],
+            [
+              0
+            ]
+          ],
+          "writeback_data": [
+            [
+              14531896728742697047
+            ],
+            [
+              5617962242809567558
+            ],
+            [
+              14531896728742697047
+            ],
+            [
+              14531896728742697047
+            ],
+            [
+              14531896728742697047
+            ]
+          ],
+          "writeback_pdest": [
+            [
+              110
+            ],
+            [
+              77
+            ],
+            [
+              110
+            ],
+            [
+              110
+            ],
+            [
+              110
+            ]
+          ]
+        }
+      ],
+      "trace_tail": [
+        {
+          "decode_instruction": 2029051199,
+          "decode_matches": 0,
+          "issue_can_enq": 2000035,
+          "issue_selected_valid": 1,
+          "issue_selected_bits": 1,
+          "writeback_valid": [
+            [
+              0
+            ],
+            [
+              0
+            ],
+            [
+              0
+            ],
+            [
+              1
+            ],
+            [
+              0
+            ]
+          ],
+          "writeback_data": [
+            [
+              13937676907768484650
+            ],
+            [
+              13937676907768484650
+            ],
+            [
+              13937676907768484650
+            ],
+            [
+              6868199581389993428
+            ],
+            [
+              13937676907768484650
+            ]
+          ],
+          "writeback_pdest": [
+            [
+              45
+            ],
+            [
+              45
+            ],
+            [
+              45
+            ],
+            [
+              64
+            ],
+            [
+              45
+            ]
+          ]
+        },
+        {
+          "decode_instruction": 2906932319,
+          "decode_matches": 0,
+          "issue_can_enq": 308659,
+          "issue_selected_valid": 1,
+          "issue_selected_bits": 1,
+          "writeback_valid": [
+            [
+              0
+            ],
+            [
+              0
+            ],
+            [
+              0
+            ],
+            [
+              0
+            ],
+            [
+              0
+            ]
+          ],
+          "writeback_data": [
+            [
+              2994269751057801033
+            ],
+            [
+              2994269751057801033
+            ],
+            [
+              2994269751057801033
+            ],
+            [
+              2994269751057801033
+            ],
+            [
+              2994269751057801033
+            ]
+          ],
+          "writeback_pdest": [
+            [
+              203
+            ],
+            [
+              203
+            ],
+            [
+              203
+            ],
+            [
+              203
+            ],
+            [
+              203
+            ]
+          ]
+        }
+      ]
+    },
+    "differential": {
+      "status": "PASS",
+      "vectors": 1024,
+      "compile": {
+        "command": [
+          "verilator",
+          "--binary",
+          "--timing",
+          "-Wno-fatal",
+          "-Wno-WIDTHEXPAND",
+          "-Wno-WIDTHTRUNC",
+          "--top-module",
+          "tb",
+          "--Mdir",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-parent-closure-round/obj",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-parent-closure-round/backend-parent-closure-round.sv",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-parent-closure-round/BackendParentClosureReference.sv",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-parent-closure-round/backend-parent-closure-round-tb.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "std -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -include Vtb__pch.h.slow -c -o Vtb___024root__DepSet_ha183790c__0__Slow.o Vtb___024root__DepSet_ha183790c__0__Slow.cpp\ng++   -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -include Vtb__pch.h.slow -c -o Vtb__Syms.o Vtb__Syms.cpp\necho \"\" > Vtb__ALL.verilator_deplist.tmp\ng++    verilated.o verilated_timing.o verilated_threads.o Vtb__ALL.a    -pthread -lpthread -latomic   -o Vtb\nrm Vtb__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-parent-closure-round/obj'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 8.675 MB sources in 37 modules, into 4.888 MB in 15 C++ files needing 0.000 MB\n- Verilator: Walltime 47.717 s (elab=0.771, cvt=1.985, bld=44.166); cpu 3.242 s on 1 threads; alloced 225.227 MB\n",
+        "output_sha256": "427f4c8c4350459258107d650dfff80b96033654a4584da553658c7df8f70ad2"
+      },
+      "run": {
+        "command": [
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-parent-closure-round/obj/Vtb"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "BACKEND_PARENT_CLOSURE_DIFF_PASS 1024\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-parent-closure-round/backend-parent-closure-round-tb.sv:11291: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 1ns; walltime 0.006 s; speed 429.749 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n",
+        "output_sha256": "777c7cf0e25301a7cb8ed79414827e5ec679e7dfdde301edfbb3ab663154eb2b"
+      },
+      "reference_mode": "independent_child_equations"
+    },
+    "yosys": {
+      "command": [
+        "yosys",
+        "-Q",
+        "-p",
+        "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-parent-closure-round/backend-parent-closure-round.sv; hierarchy -top UHSCBackendParentClosureRound; proc; check; stat"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "output_tail": "ack.vf_wb.arb_2      1\n         UHSCBackendParentClosureRound.writeback.vf_wb.arb_3      1\n         UHSCBackendParentClosureRound.writeback.vf_wb.arb_4      1\n       UHSCBackendParentClosureRound.writeback.vl_wb      1\n         UHSCBackendParentClosureRound.writeback.vl_wb.arb_0      1\n         UHSCBackendParentClosureRound.writeback.vl_wb.arb_1      1\n         UHSCBackendParentClosureRound.writeback.vl_wb.arb_2      1\n         UHSCBackendParentClosureRound.writeback.vl_wb.arb_3      1\n         UHSCBackendParentClosureRound.writeback.vl_wb.arb_4      1\n\n   Number of wires:              72255\n   Number of wire bits:         126453\n   Number of public wires:       38535\n   Number of public wire bits:   78452\n   Number of ports:                989\n   Number of port bits:          10230\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:              33708\n     $add                          506\n     $and                        14488\n     $dff                           12\n     $eq                          3807\n     $ge                             2\n     $logic_not                    980\n     $mux                         1151\n     $ne                          4560\n     $not                         5459\n     $or                          2730\n     $reduce_or                     13\n\nEnd of script. Logfile hash: 84fafc03aa, CPU: user 1.70s system 0.17s, MEM: 346.93 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 73% 2x read_verilog (1 sec), 7% 1x check (0 sec), ...\n",
+      "output_sha256": "91a5a0ac14fd51c0a2b1ecad39b5f23c17c70d554c1b6021b67e144210557493"
+    },
+    "child_wiring": [
+      "DecodeUnit",
+      "DecodeStage",
+      "IssueQueue",
+      "BusyTable",
+      "ExuBlock",
+      "ROB",
+      "CSR"
+    ]
+  },
+  "gates": {
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "PARENT_CLOSURE_MATCHED": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "PASS_BOUNDED_BACKEND_CHILD_CLOSURE_BATCH2",
+  "acceptance_eligible": false,
+  "unclosed": [
+    "Decode/Issue/Rename/CSR/Exu full Backend integration remains pending.",
+    "ROB and CSR checks are equation-level child boundaries, not full Backend acceptance.",
+    "License review and user approval remain pending."
+  ]
+}
