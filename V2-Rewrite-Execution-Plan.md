@@ -124,6 +124,17 @@ escalates only failures or high-risk parent/protocol changes to a full rerun.
 The coordinator records both `STRUCTURE_VERIFIED` and
 `BEHAVIOR_VERIFIED_<family>` while keeping `ACCEPTED` locked.
 
+### Bulk landing mode
+
+When the user requests large-scale landing, implementation workers may first
+land all disjoint aggregate Build files for a family in one transaction. The
+coordinator then runs one shared static sweep over the whole landed set (AST,
+`py_compile`, import, Pyright and adapter export) instead of re-running the
+same setup per file. Direct/reference/Verilator/Yosys checks are batched by
+family after landing. A family remains `STRUCTURE_PENDING` if any file fails;
+no individual smoke PASS is promoted to behavior or `ACCEPTED`. This mode is
+the default for the remaining REWRITE_FREEZE work to maximize throughput.
+
 ## Rewrite-freeze phase
 
 The execution order is now explicitly split into two large phases:

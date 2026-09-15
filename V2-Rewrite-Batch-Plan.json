@@ -433,7 +433,9 @@
     "worker_reasoning_effort": "max",
     "validator": "gpt-5.6-terra",
     "validator_reasoning_effort": "medium",
-    "parallelism": "non-overlapping workers; focused validator spot-checks overlap with later work; parent/protocol failures escalate to serial full review",
+    "parallelism": "up to three concurrent Terra max bulk-family workers on disjoint paths; one shared coordinator sweep after each landing; focused validator spot-checks overlap with later work; parent/protocol failures escalate to serial full review",
+    "landing_mode": "BULK_LANDING_DEFAULT",
+    "bulk_landing_rule": "write all disjoint aggregate files in a family first, then run one shared static sweep; defer repeated per-file behavior/tool setup until BATCH_VALIDATION",
     "rewrite_freeze_basic_gate": [
       "UTF-8 without BOM and LF line endings",
       "five-zone and bilingual function-comment audit",
