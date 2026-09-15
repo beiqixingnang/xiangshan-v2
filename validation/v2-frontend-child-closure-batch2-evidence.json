@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_FRONTEND_CHILD_CLOSURE_BATCH2",
+  "batch_id": "V2-FRONTEND-CHILD-CLOSURE-002",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "scope": {
+    "bpu_parent": ["CompareMatrix", "FallThroughPredictor", "FTBEntryGen", "ICacheReplacer", "WrBypass"],
+    "icache_children": ["ICacheMSHR", "ICacheReplacer", "InstrUncache"]
+  },
+  "validators": {
+    "bpu_state_family": {
+      "evidence": "validation/v2-frontend-bpu-state-family-results.json",
+      "sha256": "6258f39179c3a5ab787f8e3228d387c1b92bd34fc425478f33429f5b7148c399",
+      "status": "VALIDATOR_PASS_BOUNDED",
+      "vectors": {
+        "CompareMatrix_pure": 340,
+        "CompareMatrix_hardware": 131,
+        "FallThroughPredictor_pure": 2048,
+        "Replacement_lru": 11944,
+        "Replacement_plru": 1976,
+        "WrBypass": 520
+      },
+      "backend": {"verilator": "PASS", "yosys": "PASS"}
+    },
+    "ftb_entry_gen": {
+      "evidence": "validation/v2-frontend-ftb-entry-gen-differential-results.json",
+      "sha256": "696271219b3fe04d9b1fb2eafe070a5572a5e6406b39c1c090be4628de7a3254",
+      "status": "PASS_BOUNDED_REFERENCE",
+      "ports": 104,
+      "formal_equivalence": "PASS",
+      "backend": {"verilator": "PASS", "yosys": "PASS"}
+    },
+    "icache_mshr": {
+      "evidence": "validation/v2-icache-mshr-family-results.json",
+      "sha256": "4d34bd325051d52fe8828ab8f7cc2f87fcba7ec76942dfdbf29b5fdfebf211fd",
+      "status": "VALIDATOR_PASS_BOUNDED",
+      "variants": {"fetch-id0": 1024, "prefetch-id4": 1024},
+      "backend": {"verilator": "PASS", "yosys": "PASS"}
+    },
+    "icache_replacer_and_children": {
+      "evidence": "validation/v2-p1-b-icache-differential-results.json",
+      "sha256": "4fd273e7535f654590aefc520ea103e21e7c08792f911aef5d87764b3a25d8bc",
+      "status": "DIFFERENTIAL_MATCHED",
+      "covered_children": ["ICacheMSHR", "ICacheReplacer", "DeMultiplexer", "MuxBundle", "FIFOReg"],
+      "backend": {"verilator": "PASS", "yosys": "PASS"}
+    },
+    "instr_uncache": {
+      "evidence": "validation/v2-frontend-instr-uncache-parent-closure-results.json",
+      "sha256": "3f23a5bfd8af96c2e77fa32b2dd9dbe6ab36262e7bcd1f6b1d0845da8ab31c81",
+      "status": "PASS_BOUNDED_INSTR_UNCACHE_PARENT",
+      "vectors": 1024,
+      "checks": 7168,
+      "backend": {"verilator": "PASS", "yosys": "PASS"}
+    }
+  },
+  "port_boundaries": {
+    "frontend_parent_locked_envelope": {"target_ports": 371, "locked_ports": 371, "set_match": true, "direction_width_match": true},
+    "ftb_entry_gen": {"ports": 104},
+    "icache_replacer": {"way_count": 4},
+    "mshr_variants": ["fetch-id0", "prefetch-id4"]
+  },
+  "status": "PASS_BOUNDED",
+  "gates": {
+    "direct_vectors_expanded": "PASS",
+    "reference_differential": "PASS_BOUNDED",
+    "verilator": "PASS",
+    "yosys": "PASS",
+    "PARENT_CLOSURE_MATCHED": "PENDING",
+    "LICENSE_REVIEW": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "unclosed": [
+    "Full reachable BPU/FTQ/IFU/IBuffer/ITLB/PMP closure is not established.",
+    "Evidence is bounded to child contracts and locked/reference projections; quiescent PASS is not promoted to complete closure.",
+    "License review and coordinator/user acceptance remain pending."
+  ],
+  "acceptance_eligible": false
+}
