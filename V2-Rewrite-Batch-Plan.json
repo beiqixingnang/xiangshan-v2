@@ -430,12 +430,12 @@
     "full_generation_gate": "single reproducible Python/Amaranth-generated Kunminghu V2 hierarchy must elaborate and pass complete XSTop module/port inventory plus Verilator/Yosys; reduced wrappers are intermediate only"
   },
   "execution_state": {
-    "bounded_validator_pass_count": 46,
+    "bounded_validator_pass_count": 47,
     "bounded_leaf_pass_count": 12,
     "bounded_parent_pass_count": 4,
     "bounded_dependency_family_pass_count": 17,
-    "validated_batch_count": 47,
-    "count_reconciliation": "12 leaf + 4 reduced parent + 17 dependency family + 13 semantic/family closure records = 46 bounded validators; +1 top generation probe = 47 verification records",
+    "validated_batch_count": 48,
+    "count_reconciliation": "12 leaf + 4 reduced parent + 17 dependency family + 14 semantic/family closure records = 47 bounded validators; +1 top generation probe = 48 verification records",
     "planned_build_file_count": 78,
     "current_build_file_count": 72,
     "exact_parent_envelopes": {
@@ -476,7 +476,8 @@
       {"batch_id": "V2-SEMANTIC-BACKEND-DECODE-CHILD-001", "status": "PASS_BOUNDED", "commit": "c39bcaa", "target": "RiscvInst", "direct_vectors": 514, "direct_scalar_checks": 23644, "reference_vectors": 1024, "verilator": "PASS", "yosys": "PASS", "parent_closure": "PENDING_BACKEND_DECODEUNIT_ISSUE_EXU"}
       ,{"batch_id": "V2-SEMANTIC-BACKEND-BRANCH-CHILD-001", "status": "PASS_BOUNDED", "commit": "43eac87", "target": "BranchModule", "direct_vectors": 2048, "reference_vectors": 2048, "verilator": "PASS", "yosys": "PASS", "parent_closure": "PENDING_BACKEND_BRANCHUNIT_EXUBLOCK"},
       {"batch_id": "V2-SEMANTIC-FRONTEND-FTB-ENTRY-GEN-001", "status": "PASS_BOUNDED_REFERENCE", "commit": "a155870", "target": "FTBEntryGen", "ports": 104, "direct_checks": 26624, "formal_reference": "PASS", "verilator": "PASS", "yosys": "PASS", "parent_closure": "PENDING_FRONTEND_FTB_BPU"}
-      ,{"batch_id": "V2-SEMANTIC-COUPLEDL2-SLICE-CHILDREN-001", "status": "PASS_BOUNDED", "commit": "fd04316", "target": "CoupledL2Slice", "children": ["CoupledL2MSHR", "CoupledL2MSHRCtl", "CoupledL2ProbeQueue", "CoupledL2RefillUnit"], "direct_checks": 4, "equation_vectors": 256, "verilator": "PASS", "yosys": "PASS", "parent_closure": "PENDING_FULL_SLICE_PARENT"}
+      ,{"batch_id": "V2-SEMANTIC-COUPLEDL2-SLICE-CHILDREN-001", "status": "PASS_BOUNDED", "commit": "fd04316", "target": "CoupledL2Slice", "children": ["CoupledL2MSHR", "CoupledL2MSHRCtl", "CoupledL2ProbeQueue", "CoupledL2RefillUnit"], "direct_checks": 4, "equation_vectors": 256, "verilator": "PASS", "yosys": "PASS", "parent_closure": "PENDING_FULL_SLICE_PARENT"},
+      {"batch_id": "V2-DEPENDENCY-COUPLEDL2-SLICE-MSHR-001", "status": "PASS_BOUNDED", "commit": "b87afd4", "target": "CoupledL2Slice", "children": ["MSHR", "MSHRCtl", "ProbeQueue", "RefillUnit"], "direct_checks": {"MSHR": 4, "MSHRCtl": 4, "ProbeQueue": 5, "RefillUnit": 4}, "equation_vectors": 15, "verilator": "PASS", "yosys": "PASS", "conditional_reference": "locked ProbeQueue is XiangShan DCache Probe.scala; tl2tl ProbeQueue remains conditional", "parent_closure": "PENDING_FULL_MSHR_SRAM_PREFETCH_DIPLOMACY"}
     ],
     "locked_module_inventory": {
       "reference_modules": 1976,
