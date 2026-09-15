@@ -5,6 +5,7 @@ V2 循环入队槽选择器。
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Any, cast
 
 from amaranth import Const, Elaboratable, Module, Mux, Signal
 
@@ -84,7 +85,13 @@ class EnqPolicy(Elaboratable):
             rank = rank_index + 1
             count_width = max(1, (width + 1).bit_length())
             count = Signal(count_width, name=f"count_{rank_index}")
-            m.d.comb += count.eq(sum(available, 0))
+            # Build the population count as an explicit expression chain; the
+            # Amaranth value type is intentionally preserved at every step.
+            # 以显式表达式链构造人口计数，确保每一步保留 Amaranth 值类型。
+            count_expr: Any = Const(0, count_width)
+            for available_bit in available:
+                count_expr = cast(Any, count_expr) + cast(Any, available_bit)
+            m.d.comb += count.eq(count_expr)
             m.d.comb += self.selection_valid[rank_index].eq(count >= rank)
             if rank & 1:
                 ordinal = (rank + 1) // 2

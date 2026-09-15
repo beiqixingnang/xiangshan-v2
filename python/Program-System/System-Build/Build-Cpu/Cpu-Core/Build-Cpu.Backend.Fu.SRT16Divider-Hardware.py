@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Iterable
+from typing import Any, Iterable, cast
 
 from amaranth import Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 
@@ -185,7 +185,7 @@ class RightShifter(Elaboratable):
         """Connect each sign-filled shift stage. / 连接每个符号填充移位级。"""
 
         del platform
-        module = Module()
+        module: Any = Module()
         shifted: Any = self.in_
         for bit in range(self.lzc_width):
             amount = 1 << bit
@@ -263,7 +263,7 @@ class SRT16DividerDataModule(Elaboratable):
         """Build the sequential radix-four implementation. / 构建时序基四实现。"""
 
         del platform
-        module = Module()
+        module: Any = Module()
         domain = ClockDomain("sync", async_reset=True)
         domain.clk = self.clock
         domain.rst = self.reset
@@ -321,13 +321,13 @@ class SRT16DividerDataModule(Elaboratable):
 
         # One radix-four restoring step. / 一个基四恢复除法步骤。
         pair = dividend_shift.bit_select(width - 2, 2)
-        shifted_remainder = ((remainder_reg << 2) | pair).bit_select(0, rem_width)
+        shifted_remainder: Any = (cast(Any, (remainder_reg << 2)) | cast(Any, pair)).bit_select(0, rem_width)
         # Cat's first operand occupies the low bits; append two low zeroes to
         # represent a fixed-point divisor scaled by four.
         # Cat 的第一个操作数位于低位；追加两个低零表示乘四后的除数。
-        divisor_ext = Cat(d_abs_reg, Const(0, 2))
-        divisor_x2 = (divisor_ext << 1).bit_select(0, rem_width)
-        divisor_x3 = (divisor_x2 + divisor_ext).bit_select(0, rem_width)
+        divisor_ext: Any = Cat(d_abs_reg, Const(0, 2))
+        divisor_x2: Any = (cast(Any, divisor_ext) << 1).bit_select(0, rem_width)
+        divisor_x3: Any = (cast(Any, divisor_x2) + cast(Any, divisor_ext)).bit_select(0, rem_width)
         digit = Mux(shifted_remainder >= divisor_x3, Const(3, 2),
                      Mux(shifted_remainder >= divisor_x2, Const(2, 2),
                          Mux(shifted_remainder >= divisor_ext, Const(1, 2),

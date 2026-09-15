@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Any, cast
 
 from amaranth import Cat, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
@@ -123,7 +124,7 @@ class DstMgu(Elaboratable):
 
         mask_vd = Signal(16, name="maskVd")
         for lane in range(16):
-            module.d.comb += mask_vd[lane].eq(
+            module.d.comb += cast(Any, mask_vd[lane]).eq(
                 Mux(mask_bits[lane], self.in_vd[lane], Mux(self.in_info_ma, 1, old_mask[lane]))
             )
 

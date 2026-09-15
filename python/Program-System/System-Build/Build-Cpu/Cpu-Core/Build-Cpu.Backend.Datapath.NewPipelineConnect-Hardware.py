@@ -5,7 +5,7 @@ V2 带冲刷与年龄覆盖的解耦流水线寄存器。
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, cast
 
 from amaranth import ClockDomain, ClockSignal, Elaboratable, Module, Mux, ResetSignal, Signal
 
@@ -82,7 +82,9 @@ def connect(
     if reset is not None:
         next_valid = Mux(reset, 0, next_valid)
     module.d.sync += valid_reg.eq(next_valid)
-    with module.If(left_fire):
+    # Amaranth's dynamic context manager is cast at this typed boundary; the
+    # emitted control condition remains exactly ``left_fire``.
+    with cast(Any, module.If(left_fire)):
         module.d.sync += data_reg.eq(leftBits)
     return data_reg
 

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, cast
 
 from amaranth import ClockDomain, Elaboratable, Module, Signal
 
@@ -74,13 +74,13 @@ class SstcInterruptGen(Elaboratable):
         vstip_enable = (self.i_vstime_valid | self.i_vstimecmp_wen |
                         self.i_htimedeltaWen | self.i_menvcfg_wen |
                         self.i_henvcfg_wen)
-        with module.If(stip_enable):
+        with cast(Any, module.If(stip_enable)):
             # RegEnable data expression: comparison is unsigned in Amaranth.
             module.d.sync += self.stip_register.eq(
                 (self.i_stime_bits >= self.i_stimecmp_rdata) &
                 self.i_menvcfg_STCE
             )
-        with module.If(vstip_enable):
+        with cast(Any, module.If(vstip_enable)):
             module.d.sync += self.vstip_register.eq(
                 (self.i_vstime_bits >= self.i_vstimecmp_rdata) &
                 self.i_henvcfg_STCE

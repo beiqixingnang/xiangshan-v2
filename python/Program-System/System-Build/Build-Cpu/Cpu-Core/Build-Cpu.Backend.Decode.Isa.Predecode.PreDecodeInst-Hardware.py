@@ -90,7 +90,7 @@ def match_pattern(pattern: str, instruction: int) -> bool:
 
 
 # Decode the ordered branch table and RAS attributes. / 解码有序分支表及 RAS 属性。
-def decode_branch(instruction: int) -> dict[str, int | bool]:
+def decode_branch(instruction: int) -> dict[str, int | bool | str]:
     """Model ``PreDecodeInst.brTable`` plus ``HasPdConst.brInfo``.
     建模 ``PreDecodeInst.brTable`` 与 ``HasPdConst.brInfo``。
     """

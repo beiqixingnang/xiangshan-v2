@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Any, cast
 
 from amaranth import Cat, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
@@ -119,8 +120,8 @@ class ByteMaskTailGen(Elaboratable):
         tail = Signal(full_width, name="tailEn")
         for index in range(full_width):
             module.d.comb += [
-                body[index].eq((start_bytes <= index) & (index < vl_bytes)),
-                tail[index].eq(vl_bytes <= index),
+                cast(Any, body[index]).eq((start_bytes <= index) & (index < vl_bytes)),
+                cast(Any, tail[index]).eq(vl_bytes <= index),
             ]
 
         body_selected = body[:16]

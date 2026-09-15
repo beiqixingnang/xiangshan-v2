@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Any, cast
 
 from amaranth import Cat, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
@@ -140,8 +141,8 @@ class NewMgu(Elaboratable):
         tail = Signal(128, name="tailEn")
         for index in range(128):
             module.d.comb += [
-                body[index].eq((start_bytes <= index) & (index < end_bytes)),
-                tail[index].eq(end_bytes <= index),
+                cast(Any, body[index]).eq((start_bytes <= index) & (index < end_bytes)),
+                cast(Any, tail[index]).eq(end_bytes <= index),
             ]
         body_selected = body[:16]
         tail_selected = tail[:16]

@@ -5,6 +5,7 @@ V2 提交卡死监视计数器。
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Any, cast
 
 from amaranth import ClockDomain, Elaboratable, Module, Signal
 
@@ -61,9 +62,9 @@ class CommitStuckCounter(Elaboratable):
         m.domains += self.clock_domain
         m.d.comb += self.overflow.eq(self.count.all() & self.overflow_enabled)
         effective_enable = self.runtime_enable | self.configuration.force_enable
-        with m.If(effective_enable & self.stuck):
+        with cast(Any, m.If(effective_enable & self.stuck)):
             m.d.sync += self.count.eq(self.count + 1)
-        with m.Else():
+        with cast(Any, m.Else()):
             m.d.sync += self.count.eq(0)
         return m
 

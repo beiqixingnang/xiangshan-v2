@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Any, cast
 
 from amaranth import Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
@@ -68,7 +69,7 @@ class Mgtu(Elaboratable):
         del platform
         module = Module()
         for index in range(self.config.vlen):
-            module.d.comb += self.out_vd[index].eq(
+            module.d.comb += cast(Any, self.out_vd[index]).eq(
                 Mux(index < self.in_vl, self.in_vd[index], Const(1, 1))
             )
         return module

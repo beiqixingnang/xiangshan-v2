@@ -5,6 +5,7 @@ V2 发射队列年龄矩阵与最老项选择器。
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Any, cast
 
 from amaranth import ClockDomain, Const, Elaboratable, Module, Mux, Signal
 
@@ -83,27 +84,27 @@ class AgeDetector(Elaboratable):
         m = Module()
         m.domains += self.clock_domain
         c = self.configuration
-        age = [[Signal(reset=0, name=f"age_{row}_{col}") if row < col else None
-                for col in range(c.num_entries)] for row in range(c.num_entries)]
+        age: list[list[Any | None]] = [[Signal(reset=0, name=f"age_{row}_{col}") if row < col else None
+                                        for col in range(c.num_entries)] for row in range(c.num_entries)]
 
         # Enqueue presence for each entry and port-prefix presence. / 计算每项入队及端口前缀入队标志。
-        entry_enq = [None] * c.num_entries
+        entry_enq: list[Any] = [None] * c.num_entries
         for entry in range(c.num_entries):
-            present = Const(0)
+            present: Any = Const(0)
             for port in range(c.num_enq):
-                present = present | self.enq[port][entry]
+                present = cast(Any, present) | cast(Any, self.enq[port][entry])
             entry_enq[entry] = present
 
         # Update upper matrix entries exactly as AgeDetector.scala. / 按 AgeDetector.scala 精确更新上三角矩阵。
         for row in range(c.num_entries):
             for col in range(row + 1, c.num_entries):
-                old = age[row][col]
-                both_terms = Const(0)
+                old = cast(Any, age[row][col])
+                both_terms: Any = Const(0)
                 for port in range(c.num_enq):
-                    earlier_ports = Const(0)
+                    earlier_ports: Any = Const(0)
                     for prior_port in range(port):
-                        earlier_ports = earlier_ports | self.enq[prior_port][col]
-                    both_terms = both_terms | (self.enq[port][row] & earlier_ports)
+                        earlier_ports = cast(Any, earlier_ports) | cast(Any, self.enq[prior_port][col])
+                    both_terms = cast(Any, both_terms) | (cast(Any, self.enq[port][row]) & cast(Any, earlier_ports))
                 both_value = ~both_terms
                 age_value = Mux(
                     entry_enq[row] & entry_enq[col],
@@ -116,15 +117,15 @@ class AgeDetector(Elaboratable):
         for deq, eligible in enumerate(self.can_issue):
             result = Const(0, c.num_entries)
             for row in range(c.num_entries):
-                older_than_all = Const(1)
+                older_than_all: Any = Const(1)
                 for col in range(c.num_entries):
                     if row == col:
                         relation = Const(1)
                     elif row < col:
-                        relation = age[row][col]
+                        relation = cast(Any, age[row][col])
                     else:
-                        relation = ~age[col][row]
-                    older_than_all = older_than_all & (relation | ~eligible[col])
+                        relation = ~cast(Any, age[col][row])
+                    older_than_all = cast(Any, older_than_all) & (cast(Any, relation) | ~cast(Any, eligible[col]))
                 selected = eligible[row] & older_than_all
                 result = Mux(selected, 1 << row, result)
             m.d.comb += self.out[deq].eq(result)

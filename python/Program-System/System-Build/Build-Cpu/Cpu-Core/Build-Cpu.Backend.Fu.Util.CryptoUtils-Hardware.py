@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Sequence
+from typing import Any, Sequence, cast
 
 from amaranth import Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
@@ -226,7 +226,7 @@ def MixInv(bytes_: Sequence[Any]) -> Any:
 # AES S-box affine top network. / AES S-box 仿射顶层网络。
 def SboxAesTop(i: Any) -> list[Any]:
     inputs = [(i >> index) & 1 for index in range(8)] if is_integer(i) else [i[index] for index in range(8)]
-    equations: dict[str, tuple[Any, ...]] = {
+    equations: dict[str, Any] = {
         "t0": ("xor", "i3", "i1"), "t1": ("xor", "i6", "i5"), "t2": ("xor", "i6", "i2"),
         "t3": ("xor", "i5", "i2"), "t4": ("xor", "i4", "i0"), "t5": ("xor", "i1", "i0"),
         "o0": "i0", "o1": ("xor", "i7", "i4"), "o2": ("xor", "i7", "i2"),
@@ -243,7 +243,7 @@ def SboxAesTop(i: Any) -> list[Any]:
 # AES inverse-affine top network. / AES 逆 S-box 仿射顶层网络。
 def SboxIaesTop(i: Any) -> list[Any]:
     inputs = [(i >> index) & 1 for index in range(8)] if is_integer(i) else [i[index] for index in range(8)]
-    equations: dict[str, tuple[Any, ...]] = {
+    equations: dict[str, Any] = {
         "t0": ("xor", "i1", "i0"), "t1": ("xor", "i6", "i1"),
         "t2": ("xor", "i5", ("not", "i2")), "t3": ("xor", "i2", ("not", "i1")),
         "t4": ("xor", "i5", ("not", "i3")), "o0": ("xor", "i7", "t2"),
@@ -264,7 +264,7 @@ def SboxIaesTop(i: Any) -> list[Any]:
 # SM4 S-box affine top network. / SM4 S-box 仿射顶层网络。
 def SboxSm4Top(i: Any) -> list[Any]:
     inputs = [(i >> index) & 1 for index in range(8)] if is_integer(i) else [i[index] for index in range(8)]
-    equations: dict[str, tuple[Any, ...]] = {
+    equations: dict[str, Any] = {
         "t0": ("xor", "i3", "i4"), "t1": ("xor", "i2", "i7"), "t2": ("xor", "i7", "o18"),
         "t3": ("xor", "i1", "t1"), "t4": ("xor", "i6", "i7"), "t5": ("xor", "i0", "o18"),
         "t6": ("xor", "i3", "i6"), "o0": ("xor", "i5", ("not", "o10")),
@@ -281,10 +281,10 @@ def SboxSm4Top(i: Any) -> list[Any]:
 
 
 # Shared 21-to-18 Boolean middle network. / 共用的 21 到 18 位布尔中间网络。
-def SboxInv(i: Sequence[Any]) -> list[Any]:
+def SboxInv(i: Any) -> list[Any]:
     if len(i) != 21:
         raise ValueError("SboxInv requires 21 input bits")
-    equations: dict[str, tuple[Any, ...]] = {
+    equations: dict[str, Any] = {
         "t0": ("xor", "i3", "i12"), "t1": ("and", "i9", "i5"), "t2": ("and", "i17", "i6"),
         "t3": ("xor", "i10", "t1"), "t4": ("and", "i14", "i0"), "t5": ("xor", "t4", "t1"),
         "t6": ("and", "i3", "i12"), "t7": ("and", "i16", "i7"), "t8": ("xor", "t0", "t6"),
@@ -316,7 +316,7 @@ def SboxInv(i: Sequence[Any]) -> list[Any]:
 def SboxAesOut(i: Sequence[Any]) -> Any:
     if len(i) != 18:
         raise ValueError("SboxAesOut requires 18 input bits")
-    equations: dict[str, tuple[Any, ...]] = {
+    equations: dict[str, Any] = {
         "t0": ("xor", "i11", "i12"), "t1": ("xor", "i0", "i6"), "t2": ("xor", "i14", "i16"),
         "t3": ("xor", "i15", "i5"), "t4": ("xor", "i4", "i8"), "t5": ("xor", "i17", "i11"),
         "t6": ("xor", "i12", "t5"), "t7": ("xor", "i14", "t3"), "t8": ("xor", "i1", "i9"),
@@ -341,7 +341,7 @@ def SboxAesOut(i: Sequence[Any]) -> Any:
 def SboxIaesOut(i: Sequence[Any]) -> Any:
     if len(i) != 18:
         raise ValueError("SboxIaesOut requires 18 input bits")
-    equations: dict[str, tuple[Any, ...]] = {
+    equations: dict[str, Any] = {
         "t0": ("xor", "i2", "i11"), "t1": ("xor", "i8", "i9"), "t2": ("xor", "i4", "i12"),
         "t3": ("xor", "i15", "i0"), "t4": ("xor", "i16", "i6"), "t5": ("xor", "i14", "i1"),
         "t6": ("xor", "i17", "i10"), "t7": ("xor", "t0", "t1"), "t8": ("xor", "i0", "i3"),
@@ -366,7 +366,7 @@ def SboxIaesOut(i: Sequence[Any]) -> Any:
 def SboxSm4Out(i: Sequence[Any]) -> Any:
     if len(i) != 18:
         raise ValueError("SboxSm4Out requires 18 input bits")
-    equations: dict[str, tuple[Any, ...]] = {
+    equations: dict[str, Any] = {
         "t0": ("xor", "i4", "i7"), "t1": ("xor", "i13", "i15"), "t2": ("xor", "i2", "i16"),
         "t3": ("xor", "i6", "t0"), "t4": ("xor", "i12", "t1"), "t5": ("xor", "i9", "i10"),
         "t6": ("xor", "i11", "t2"), "t7": ("xor", "i1", "t4"), "t8": ("xor", "i0", "i17"),
@@ -439,7 +439,7 @@ class CryptoUtilsProbe(Elaboratable):
     # Elaborate all combinational helper observation points. / 展开全部组合式辅助器观测点。
     def elaborate(self, platform: Any) -> Module:
         del platform
-        module = Module()
+        module: Any = Module()
         src1_bytes = [slice_value(self.src1, index * 8, 8) for index in range(8)]
         src2_bytes = [slice_value(self.src2, index * 8, 8) for index in range(8)]
         fwd = ForwardShiftRows(src1_bytes, src2_bytes)
@@ -495,7 +495,7 @@ class CryptoBlockProbe(Elaboratable):
     # Elaborate the registered S-box, key-schedule, and SM4 closure. / 展开寄存式 S-box、密钥调度及 SM4 闭包。
     def elaborate(self, platform: Any) -> Module:
         del platform
-        module = Module()
+        module: Any = Module()
         module.domains += self.clock_domain
         src1_bytes = [slice_value(self.src0, index * 8, 8) for index in range(8)]
         src2_bytes = [slice_value(self.src1, index * 8, 8) for index in range(8)]
@@ -544,8 +544,10 @@ class CryptoBlockProbe(Elaboratable):
         rcon = Const(0, 8)
         for index, value in enumerate(rcon_values):
             rcon = Mux(ks_idx == index, Const(value, 8), rcon)
-        ks_word = Cat(*ks_out)
-        aes64ks1i = Cat(ks_word ^ Cat(rcon, rcon, rcon, rcon), ks_word ^ Cat(rcon, rcon, rcon, rcon))
+        ks_word: Any = Cat(*ks_out)
+        rcon_word: Any = Cat(rcon, rcon, rcon, rcon)
+        aes64ks1i: Any = Cat(cast(Any, ks_word) ^ cast(Any, rcon_word),
+                             cast(Any, ks_word) ^ cast(Any, rcon_word))
         ks2_temp = slice_value(self.src0, 32, 32) ^ slice_value(self.src1, 0, 32)
         ks2_reg = Signal(64, name="aes64ks2Reg")
         with module.If(self.reg_enable):
@@ -565,11 +567,16 @@ class CryptoBlockProbe(Elaboratable):
         with module.If(self.reg_enable):
             module.d.sync += sm4_top.eq(Cat(*SboxSm4Top(sm4_input)))
         sm4_sbox_out = SboxSm4Out([bit for bit in SboxInv([sm4_top[index] for index in range(21)])])
-        sm4_wide = Cat(sm4_sbox_out, Const(0, 24))
-        sm4ed = (sm4_wide ^ (sm4_wide << 8) ^ (sm4_wide << 2) ^ (sm4_wide << 18) ^
-                 ((sm4_wide & Const(0x3F, 32)) << 26) ^ ((sm4_wide & Const(0xC0, 32)) << 10)).bit_select(0, 32)
-        sm4ks = (sm4_wide ^ ((sm4_wide & Const(0x07, 32)) << 29) ^ ((sm4_wide & Const(0xFE, 32)) << 7) ^
-                 ((sm4_wide & Const(0x01, 32)) << 23) ^ ((sm4_wide & Const(0xF8, 32)) << 13)).bit_select(0, 32)
+        sm4_wide: Any = Cat(sm4_sbox_out, Const(0, 24))
+        sm4ed: Any = (cast(Any, sm4_wide) ^ (cast(Any, sm4_wide) << 8) ^
+                      (cast(Any, sm4_wide) << 2) ^ (cast(Any, sm4_wide) << 18) ^
+                      ((cast(Any, sm4_wide) & Const(0x3F, 32)) << 26) ^
+                      ((cast(Any, sm4_wide) & Const(0xC0, 32)) << 10)).bit_select(0, 32)
+        sm4ks: Any = (cast(Any, sm4_wide) ^
+                      ((cast(Any, sm4_wide) & Const(0x07, 32)) << 29) ^
+                      ((cast(Any, sm4_wide) & Const(0xFE, 32)) << 7) ^
+                      ((cast(Any, sm4_wide) & Const(0x01, 32)) << 23) ^
+                      ((cast(Any, sm4_wide) & Const(0xF8, 32)) << 13)).bit_select(0, 32)
         sm4_source = [
             sm4ed,
             Cat(sm4ed[8:32], sm4ed[0:8]), Cat(sm4ed[16:32], sm4ed[0:16]), Cat(sm4ed[24:32], sm4ed[0:24]),

@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Any, cast
 
 from amaranth import Cat, Const, Elaboratable, Module, Mux, Signal
 
@@ -69,14 +70,14 @@ class AluConfig:
 # Implementation
 # =============================================================================
 # Replicate a one-bit expression. / 复制一个单比特表达式。
-def replicate(bit, count: int):
+def replicate(bit: Any, count: int) -> Any:
     """Return ``count`` copies of one bit. / 返回一个比特的 ``count`` 份复制。"""
 
     return Cat(*[bit for _ in range(count)]) if count else Const(0, 1)
 
 
 # Sign-extend an Amaranth value. / 对 Amaranth 值进行符号扩展。
-def sign_extend(value, width: int):
+def sign_extend(value: Any, width: int) -> Any:
     """Return a value with the requested width. / 返回指定宽度的值。"""
 
     current = len(value)
@@ -86,7 +87,7 @@ def sign_extend(value, width: int):
 
 
 # Zero-extend an Amaranth value. / 对 Amaranth 值进行零扩展。
-def zero_extend(value, width: int):
+def zero_extend(value: Any, width: int) -> Any:
     """Return a zero-extended value. / 返回零扩展值。"""
 
     current = len(value)
@@ -261,10 +262,14 @@ class AluDataModule(Elaboratable):
     # Elaborate the V2 ALU equations and result-group mux. / 展开 V2 ALU 方程及结果分组多路器。
     def elaborate(self, platform) -> Module:
         del platform
-        m = Module()
+        # Amaranth's expression classes are dynamically generated; keep the
+        # intermediate hardware expressions at an explicit typed boundary.
+        # Amaranth 表达式类由运行时生成；在明确边界保留中间硬件表达式。
+        m: Any = Module()
         width = self.configuration.xlen
-        src0, src1 = self.src
-        func = self.func
+        src0: Any = cast(Any, self.src[0])
+        src1: Any = cast(Any, self.src[1])
+        func: Any = cast(Any, self.func)
         half = width // 2
         shamt = src1[:6]
         shamt5 = src1[:5]
@@ -294,14 +299,14 @@ class AluDataModule(Elaboratable):
         lui_src1 = sign_extend(src1[:12], width)
         lui_src2 = Cat(Const(0, 12), src1[12:width])
         word_mask = Mux(f0, src0, zero_extend(low32, width))
-        addw_src1 = Mux(
+        addw_src1: Any = Mux(
             ((~f3 & ~f2 & ~f0) | f2),
             src0,
             Mux((group == 1) & (func[:4] == 1), odd_src, lui_src1),
         )
         addw_src1 = Mux((group == 1) & (func[:4] == 3), lui_src1, addw_src1)
-        addw_src2 = Mux(func[:4] == 3, lui_src2, src1)
-        addw_half = (addw_src1[:32] + addw_src2[:32])[:32]
+        addw_src2: Any = Mux(func[:4] == 3, lui_src2, src1)
+        addw_half: Any = (cast(Any, addw_src1[:32]) + cast(Any, addw_src2[:32]))[:32]
         addw_all = [zero_extend(addw_half[:1], width), zero_extend(addw_half[:8], width),
                     zero_extend(addw_half[:16], width), sign_extend(addw_half[:16], width)]
         addw_sel = Mux(func[1], Mux(func[0], addw_all[3], addw_all[2]),
@@ -309,7 +314,8 @@ class AluDataModule(Elaboratable):
         addw = Mux(f2, addw_sel, sign_extend(addw_half, width))
         # Chisel's ``+& (~b) + 1`` retains the carry bit used by SLTU.
         # Chisel 的 ``+& (~b) + 1`` 保留 SLTU 使用的进位位。
-        sub_full = (Cat(src0, Const(0, 1)) + Cat(~src1, Const(0, 1)) + 1)[:width + 1]
+        sub_full: Any = (cast(Any, Cat(src0, Const(0, 1))) +
+                         cast(Any, Cat(~src1, Const(0, 1))) + 1)[:width + 1]
         subw = sub_full[:32]
         sllw = (low32 << shamt5)[:32]
         srlw = low32 >> shamt5
@@ -339,7 +345,7 @@ class AluDataModule(Elaboratable):
         shadd_result = (shadd_src + src1)[:width]
 
         # Compare and min/max results. / 比较及最小最大结果。
-        sltu = ~sub_full[width]
+        sltu: Any = ~cast(Any, sub_full[width])
         slt = src0[width - 1] ^ src1[width - 1] ^ sltu
         max_min = Mux(slt ^ f0, src1, src0)
         max_min_u = Mux(sltu ^ f0, src1, src0)
@@ -374,9 +380,9 @@ class AluDataModule(Elaboratable):
         rev_pair = Mux(func[:2] == 0, revb,
                        Mux(func[:2] == 1, rev8,
                            Mux(func[:2] == 2, pack, orh48)))
-        custom_pair = Mux(func[:2] == 0, Cat(src0[:32], Const(0, 32)) << 1,
-                          Mux(func[:2] == 1, Cat(src0[:32], Const(0, 32)) << 2,
-                              Mux(func[:2] == 2, Cat(src0[:32], Const(0, 32)) << 3,
+        custom_pair: Any = Mux(func[:2] == 0, cast(Any, Cat(src0[:32], Const(0, 32))) << 1,
+                          Mux(func[:2] == 1, cast(Any, Cat(src0[:32], Const(0, 32))) << 2,
+                              Mux(func[:2] == 2, cast(Any, Cat(src0[:32], Const(0, 32))) << 3,
                                   zero_extend(src0[8:16], width))))
         misc = Mux(func[5], zero_extend(misc_logic[:16] & Mux(f0, Const(0xFFFF, 16), Const(1, 16)), width),
                    Mux(func[4], Mux(f3, custom_pair[:width], rev_pair),

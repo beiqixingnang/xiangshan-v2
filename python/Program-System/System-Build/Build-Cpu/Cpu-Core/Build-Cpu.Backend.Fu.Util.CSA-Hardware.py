@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, cast
 
 from amaranth import Cat, Elaboratable, Module, Signal
 
@@ -117,9 +117,9 @@ class CSA2_2(CarrySaveAdderMToN):
 
         del platform
         module = Module()
-        sums = [self.inputs[0][index] ^ self.inputs[1][index]
+        sums: list[Any] = [cast(Any, self.inputs[0][index]) ^ cast(Any, self.inputs[1][index])
                 for index in range(self.length)]
-        carries = [self.inputs[0][index] & self.inputs[1][index]
+        carries: list[Any] = [cast(Any, self.inputs[0][index]) & cast(Any, self.inputs[1][index])
                    for index in range(self.length)]
         module.d.comb += [self.outputs[0].eq(Cat(*sums)),
                           self.outputs[1].eq(Cat(*carries))]
@@ -144,10 +144,10 @@ class CSA3_2(CarrySaveAdderMToN):
         sums = []
         carries = []
         for index in range(self.length):
-            first_xor = self.inputs[0][index] ^ self.inputs[1][index]
-            sums.append(first_xor ^ self.inputs[2][index])
-            carries.append((self.inputs[0][index] & self.inputs[1][index]) |
-                           (first_xor & self.inputs[2][index]))
+            first_xor: Any = cast(Any, self.inputs[0][index]) ^ cast(Any, self.inputs[1][index])
+            sums.append(cast(Any, first_xor) ^ cast(Any, self.inputs[2][index]))
+            carries.append((cast(Any, self.inputs[0][index]) & cast(Any, self.inputs[1][index])) |
+                           (cast(Any, first_xor) & cast(Any, self.inputs[2][index])))
         module.d.comb += [self.outputs[0].eq(Cat(*sums)),
                           self.outputs[1].eq(Cat(*carries))]
         return module

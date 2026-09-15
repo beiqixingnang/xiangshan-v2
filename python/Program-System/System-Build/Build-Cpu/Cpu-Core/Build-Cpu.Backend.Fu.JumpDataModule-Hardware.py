@@ -93,7 +93,9 @@ class JumpDataModule(Elaboratable):
         # Explicit replication keeps the signed extension visible in emitted
         # RTL; relying on mixed signed/unsigned arithmetic would zero-extend
         # the immediate in Amaranth.
-        offset = Cat(self.imm, self.imm[-1].replicate(c.xlen - c.imm_width))
+        # Spell out sign replication so the width and polarity are explicit.
+        # 显式展开符号复制，确保位宽和符号极性清晰可见。
+        offset = Cat(self.imm, *[self.imm[-1] for _ in range(c.xlen - c.imm_width)])
         target_full = Mux(self.func[0], self.src + offset, self.pc + offset)
         target = Cat(Const(0, 1), target_full[1:c.xlen])
         snpc = self.pc + (self.next_pc_offset << c.inst_offset_bits)
