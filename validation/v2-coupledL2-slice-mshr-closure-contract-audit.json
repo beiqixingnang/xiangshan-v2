@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_COUPLEDL2_SLICE_MSHR_CLOSURE_CONTRACT_AUDIT",
+  "batch_id": "V2-DEPENDENCY-COUPLEDL2-SLICE-MSHR-001",
+  "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.CoupledL2.Slice-Hardware.py",
+  "source_scala_file_count": 4,
+  "boundary": [
+    "MSHR allocation/milestones",
+    "MSHRCtl occupancy/full",
+    "ProbeQueue FIFO/back-pressure",
+    "Refill beat/mask/GrantAck",
+    "Slice child wiring"
+  ],
+  "reference_modules": {
+    "MSHR": {
+      "found": true,
+      "line": 2043727,
+      "source": "home/lishuo/xs-v2-local/coupledL2/src/main/scala/coupledL2/tl2tl/MSHR.scala:47:7"
+    },
+    "MSHRCtl": {
+      "found": true,
+      "line": 2048282,
+      "source": "home/lishuo/xs-v2-local/coupledL2/src/main/scala/coupledL2/tl2tl/MSHRCtl.scala:40:7"
+    },
+    "ProbeQueue": {
+      "found": true,
+      "line": 1476404,
+      "source": "home/lishuo/xs-v2-local/src/main/scala/xiangshan/cache/dcache/mainpipe/Probe.scala:128:7"
+    },
+    "RefillUnit": {
+      "found": true,
+      "line": 2062708,
+      "source": "home/lishuo/xs-v2-local/coupledL2/src/main/scala/coupledL2/tl2tl/RefillUnit.scala:37:7"
+    }
+  },
+  "status": "PASS_BOUNDED_FAMILY",
+  "parent_status": "PENDING_FULL_MSHR_SRAM_PREFETCH_DIPLOMACY_BEHAVIOR",
+  "license_review": "PENDING",
+  "accepted": "NOT_ALLOWED",
+  "acceptance_eligible": false
+}

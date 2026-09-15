@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_COUPLEDL2_SLICE_MSHR_CLOSURE_MAPPING",
+  "batch_id": "V2-DEPENDENCY-COUPLEDL2-SLICE-MSHR-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "closure_root": "dependency.coupledL2.tl2tl.slice.mshr",
+  "target_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.CoupledL2.Slice-Hardware.py",
+  "source_paths": [
+    "upstream/coupledL2/src/main/scala/coupledL2/tl2tl/MSHR.scala",
+    "upstream/coupledL2/src/main/scala/coupledL2/tl2tl/MSHRCtl.scala",
+    "upstream/coupledL2/src/main/scala/coupledL2/tl2tl/ProbeQueue.scala",
+    "upstream/coupledL2/src/main/scala/coupledL2/tl2tl/RefillUnit.scala"
+  ],
+  "classification": "AGGREGATED_STATEFUL_CHILD_FAMILY",
+  "local_names": {
+    "MSHR": "CoupledL2MSHR",
+    "MSHRCtl": "CoupledL2MSHRCtl",
+    "ProbeQueue": "CoupledL2ProbeQueue",
+    "RefillUnit": "CoupledL2RefillUnit"
+  },
+  "evidence": "validation/v2-coupledL2-slice-mshr-closure-results.json",
+  "coverage": "validation/v2-coupledL2-slice-mshr-closure-coverage-manifest.json",
+  "status": "VALIDATOR_PASS_BOUNDED",
+  "parent_closure": "PENDING_FULL_MSHR_SRAM_PREFETCH_DIPLOMACY_BEHAVIOR",
+  "accepted": "NOT_ALLOWED",
+  "acceptance_eligible": false
+}

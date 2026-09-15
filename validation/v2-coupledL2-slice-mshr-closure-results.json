@@ -1,0 +1,254 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_COUPLEDL2_SLICE_MSHR_CLOSURE",
+  "batch_id": "V2-DEPENDENCY-COUPLEDL2-SLICE-MSHR-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "source_scala_file_count": 4,
+  "source_scala_hashes": [
+    {
+      "path": "upstream/coupledL2/src/main/scala/coupledL2/tl2tl/MSHR.scala",
+      "sha256": "06a697a792bfd8e400494c8c958efe478e10e81eac63bbf96e4d78fe96ee704c",
+      "bytes": 24377
+    },
+    {
+      "path": "upstream/coupledL2/src/main/scala/coupledL2/tl2tl/MSHRCtl.scala",
+      "sha256": "e344ee0fdaf1f094f76d21d89862a4ed7a8394d833a0e3afe2d386e03e1caf50",
+      "bytes": 10384
+    },
+    {
+      "path": "upstream/coupledL2/src/main/scala/coupledL2/tl2tl/ProbeQueue.scala",
+      "sha256": "5016a8efa27027f5400076bac1a89229bfca7f0d0f9fb72ca8b4a148c98125d0",
+      "bytes": 3808
+    },
+    {
+      "path": "upstream/coupledL2/src/main/scala/coupledL2/tl2tl/RefillUnit.scala",
+      "sha256": "598af716e161f7996a92516bc3aca975459afdb2a9b330e1cd1f0d5105ad7264",
+      "bytes": 3901
+    }
+  ],
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.CoupledL2.Slice-Hardware.py",
+    "sha256": "f6731c2812be73ba06c8b6e5ab23ed6caaa6dda950f8dd568a59418c8ffe5a94"
+  },
+  "static": {
+    "status": "PASS",
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.CoupledL2.Slice-Hardware.py",
+    "bytes": 78277,
+    "sha256": "f6731c2812be73ba06c8b6e5ab23ed6caaa6dda950f8dd568a59418c8ffe5a94",
+    "zones": [
+      "Module Contract",
+      "Configuration",
+      "Implementation",
+      "Public Adapter",
+      "Direct Entry"
+    ],
+    "required_classes": [
+      "CoupledL2MSHR",
+      "CoupledL2MSHRConfig",
+      "CoupledL2MSHRCtl",
+      "CoupledL2ProbeQueue",
+      "CoupledL2RefillUnit"
+    ],
+    "required_functions": [
+      "build_verilog",
+      "mshr_reference_step",
+      "probe_queue_reference_step",
+      "refill_reference_step"
+    ],
+    "adapter_args": [
+      "configuration",
+      "injected_dependencies"
+    ],
+    "forbidden_imports": []
+  },
+  "equations": {
+    "status": "PASS",
+    "mshr_trace": [
+      {
+        "event": "alloc",
+        "from": "free",
+        "to": "acquire"
+      },
+      {
+        "event": "task_a",
+        "from": "acquire",
+        "to": "probe"
+      },
+      {
+        "event": "task_b",
+        "from": "probe",
+        "to": "refill"
+      },
+      {
+        "event": "refill",
+        "from": "refill",
+        "to": "grant"
+      },
+      {
+        "event": "mainpipe",
+        "from": "grant",
+        "to": "release"
+      },
+      {
+        "event": "release_ack",
+        "from": "release",
+        "to": "free"
+      }
+    ],
+    "mshr_vectors": 6,
+    "probe_queue_vectors": 7,
+    "refill_vectors": 2,
+    "refill_trace": [
+      {
+        "fire": 1,
+        "first": 1,
+        "last": 0,
+        "has_data": 1,
+        "grant_ack_enq": 1,
+        "buf_valid": 0,
+        "next_beat": 1,
+        "next_ack_count": 1,
+        "denied": 1,
+        "corrupt": 1
+      },
+      {
+        "fire": 1,
+        "first": 0,
+        "last": 1,
+        "has_data": 1,
+        "grant_ack_enq": 0,
+        "buf_valid": 1,
+        "next_beat": 0,
+        "next_ack_count": 1,
+        "denied": 0,
+        "corrupt": 0
+      }
+    ]
+  },
+  "direct": {
+    "mshr": {
+      "status": "PASS",
+      "checks": 4,
+      "trace": [
+        {
+          "allocated": 1,
+          "task_a": 1
+        },
+        {
+          "task_b": 1
+        },
+        {
+          "grant_data": 1,
+          "denied": 1,
+          "corrupt": 1
+        },
+        {
+          "freed": 1
+        }
+      ],
+      "trace_sha256": "ab99a08c2e99a6d8e51e970b8e2aa99dc6e0dd5e3d335578a813de854381729c"
+    },
+    "mshrc": {
+      "status": "PASS",
+      "checks": 4,
+      "capacity": 2
+    },
+    "probe_queue": {
+      "status": "PASS",
+      "checks": 5,
+      "fifo": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "trace_sha256": "86c1b3261036a8299ab366cd479dcf1b5b2f23151883c84211f33b6f01c39bc2"
+    },
+    "refill_unit": {
+      "status": "PASS",
+      "checks": 4,
+      "trace": [
+        {
+          "buf_data": 3203383039,
+          "mask": 1,
+          "ack": 2
+        }
+      ],
+      "trace_sha256": "b5adff7a8ca65ec6e0e0a3318a78b27b3222a7a756f5b0cc8040b8c2364684d6"
+    }
+  },
+  "reference": {
+    "status": "PASS",
+    "path": "\\\\wsl$\\Debian\\home\\lishuo\\xs-v2-local\\build\\rtl\\XSTop.sv",
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "expected_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "modules": {
+      "MSHR": {
+        "found": true,
+        "line": 2043727,
+        "source": "home/lishuo/xs-v2-local/coupledL2/src/main/scala/coupledL2/tl2tl/MSHR.scala:47:7"
+      },
+      "MSHRCtl": {
+        "found": true,
+        "line": 2048282,
+        "source": "home/lishuo/xs-v2-local/coupledL2/src/main/scala/coupledL2/tl2tl/MSHRCtl.scala:40:7"
+      },
+      "ProbeQueue": {
+        "found": true,
+        "line": 1476404,
+        "source": "home/lishuo/xs-v2-local/src/main/scala/xiangshan/cache/dcache/mainpipe/Probe.scala:128:7"
+      },
+      "RefillUnit": {
+        "found": true,
+        "line": 2062708,
+        "source": "home/lishuo/xs-v2-local/coupledL2/src/main/scala/coupledL2/tl2tl/RefillUnit.scala:37:7"
+      }
+    },
+    "source_comments_match": true,
+    "conditional_role": {
+      "ProbeQueue": true,
+      "note": "locked ProbeQueue is XiangShan DCache Probe.scala; coupledL2 tl2tl ProbeQueue remains conditional"
+    }
+  },
+  "hierarchy_backend": {
+    "status": "PASS",
+    "hierarchy": {
+      "coupled_l2_mshr": true,
+      "coupled_l2_mshr_ctl": true,
+      "coupled_l2_probe_queue": true,
+      "coupled_l2_refill_unit": true
+    },
+    "verilator": "PASS",
+    "yosys": "PASS",
+    "rtl_bytes": 145606,
+    "rtl_sha256": "6c86da76f45f23dbf11f3759a777344def957710d5c071e4b4b3a356139fcb37",
+    "verilator_returncode": 0,
+    "yosys_returncode": 0
+  },
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED_CHILD_MODULES",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "UHSC_LOCALIZED": "PASS_BOUNDED_FAMILY_LOCAL_NAME",
+    "PARENT_CLOSURE_MATCHED": "PENDING_FULL_MSHR_SRAM_PREFETCH_DIPLOMACY_BEHAVIOR",
+    "LICENSE_REVIEW": "PENDING_COORDINATOR_REVIEW",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "covered_children": [
+    "MSHR",
+    "MSHRCtl",
+    "ProbeQueue",
+    "RefillUnit",
+    "Slice wiring"
+  ],
+  "unclosed": [
+    "Full Chisel MSHR task Bundle and multi-entry arbitration remain pending.",
+    "Full SRAM/Prefetch/Diplomacy differential and top-level closure remain pending.",
+    "License review and user approval remain pending."
+  ],
+  "status": "VALIDATOR_PASS_BOUNDED",
+  "acceptance_eligible": false
+}

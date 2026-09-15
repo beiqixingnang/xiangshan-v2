@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_COUPLEDL2_SLICE_MSHR_CLOSURE_COVERAGE",
+  "batch_id": "V2-DEPENDENCY-COUPLEDL2-SLICE-MSHR-001",
+  "source_scala_file_count": 4,
+  "covered_children": [
+    "MSHR",
+    "MSHRCtl",
+    "ProbeQueue",
+    "RefillUnit",
+    "Slice wiring"
+  ],
+  "equation_vectors": 15,
+  "direct_checks": {
+    "mshr": 4,
+    "mshrc": 4,
+    "probe_queue": 5,
+    "refill_unit": 4
+  },
+  "hierarchy": {
+    "coupled_l2_mshr": true,
+    "coupled_l2_mshr_ctl": true,
+    "coupled_l2_probe_queue": true,
+    "coupled_l2_refill_unit": true
+  },
+  "verilator": "PASS",
+  "yosys": "PASS",
+  "parent_status": "VALIDATOR_PASS_BOUNDED_WITH_CHILD_FAMILIES",
+  "acceptance_eligible": false
+}
