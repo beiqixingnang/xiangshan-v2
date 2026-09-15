@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_FRONTEND_FTB_ENTRY_GEN_DIRECT",
+  "batch_id": "V2-SEMANTIC-FRONTEND-FTB-ENTRY-GEN",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.FTBEntryGen-Hardware.py",
+    "audit": {
+      "utf8": true,
+      "bom": false,
+      "lf_only": true,
+      "ast_parse": true,
+      "zones": [
+        "Module Contract",
+        "Configuration",
+        "Implementation",
+        "Public Adapter",
+        "Direct Entry"
+      ],
+      "functions": [
+        "__init__",
+        "__post_init__",
+        "build_verilog",
+        "elaborate",
+        "main"
+      ],
+      "bytes": 19840,
+      "sha256": "f0c5666d71fdae97ceaa5f6cac092c795c1cb68c9cd35c1f350841e38f01a760"
+    }
+  },
+  "source": {
+    "path": "upstream/src/main/scala/xiangshan/frontend/NewFtq.scala",
+    "sha256": "c4b442406e933416cde923d64b94139d3f2e84b979118e3fe58055a1193e843b"
+  },
+  "direct": {
+    "vectors": 1024,
+    "observations": 1024,
+    "checks": 26624,
+    "trace_sha256": "d9ab5ed218709dde7cf0742cc8ba42ebefff5b439d51508ce414af20df220b14",
+    "failures": [],
+    "pass": true
+  },
+  "generated": {
+    "module": "FTBEntryGen",
+    "bytes": 587596,
+    "sha256": "c29042cc41cdd9c958c7306f8aff253d592e548f01874b3b27467bca1b4d69c9",
+    "module_decl": true
+  },
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PENDING",
+    "UHSC_LOCALIZED": "NO_PROJECT_FACING_RENAME",
+    "PARENT_CLOSURE_MATCHED": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "DIRECT_PASS_BOUNDED",
+  "acceptance_eligible": false,
+  "unclosed": [
+    "Locked XSTop differential, independent validator, and full FTB/BPU parent closure remain pending."
+  ]
+}

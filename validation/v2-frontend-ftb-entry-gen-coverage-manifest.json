@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_FRONTEND_FTB_ENTRY_GEN_COVERAGE",
+  "batch_id": "V2-SEMANTIC-FRONTEND-FTB-ENTRY-GEN",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "children": [
+    {
+      "name": "FTBEntryGen",
+      "source": "upstream/src/main/scala/xiangshan/frontend/NewFtq.scala",
+      "reference": "FTBEntryGen",
+      "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.FTBEntryGen-Hardware.py",
+      "ports": 104,
+      "observation_points": [
+        "new-entry fields",
+        "branch insertion",
+        "jump target/stat",
+        "taken/mispredict masks",
+        "old-entry classification"
+      ]
+    }
+  ],
+  "direct": "PASS_BOUNDED",
+  "locked_sv_formal_differential": "PASS_BOUNDED",
+  "verilator": "PASS",
+  "yosys": "PASS",
+  "parent_closure": "PENDING",
+  "license_review": "PENDING_COORDINATOR_REVIEW",
+  "acceptance_eligible": false
+}
