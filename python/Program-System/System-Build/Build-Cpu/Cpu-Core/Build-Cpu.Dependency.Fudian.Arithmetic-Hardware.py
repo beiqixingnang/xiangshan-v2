@@ -1,9 +1,10 @@
 """UHSC Kunminghu V2 Fudian arithmetic helper aggregate.
+昆明湖 V2 Fudian 算术辅助聚合边界，集中保留逐位辅助器契约。
 
 The aggregate preserves the bit-level contracts of CLZ, LZA, ShiftRightJam,
 CSA and the unsigned multiplier helpers used by the Fudian floating-point
 datapath.  Scala utility files are intentionally condensed into this single
-Build-Cpu boundary.
+Build-Cpu boundary with explicit source provenance.
 """
 
 from __future__ import annotations
@@ -20,7 +21,22 @@ from amaranth.hdl.ast import Value
 # =============================================================================
 # Module Contract
 # =============================================================================
-__all__ = ["ArithmeticConfig", "FudianArithmetic", "clz", "lza", "shift_right_jam", "build_verilog", "main"]
+# The family covers the five pinned utility sources. / 此 family 覆盖锁定的五个工具源文件。
+SOURCE_SCALA_ROOT = "fudian/src/main/scala/fudian/utils"
+SOURCE_SCALA_PATHS = (
+    "fudian/src/main/scala/fudian/utils/CLZ.scala",
+    "fudian/src/main/scala/fudian/utils/CSA.scala",
+    "fudian/src/main/scala/fudian/utils/LZA.scala",
+    "fudian/src/main/scala/fudian/utils/Multiplier.scala",
+    "fudian/src/main/scala/fudian/utils/ShiftRightJam.scala",
+)
+SOURCE_SCALA_FILE_COUNT = len(SOURCE_SCALA_PATHS)
+
+__all__ = [
+    "SOURCE_SCALA_ROOT", "SOURCE_SCALA_PATHS", "SOURCE_SCALA_FILE_COUNT",
+    "ArithmeticConfig", "FudianArithmetic", "clz", "lza", "shift_right_jam",
+    "csa", "multiply_unsigned", "build_verilog", "main",
+]
 
 
 # Cast Amaranth generator controls to the context-manager protocol. / 将 Amaranth 生成器控制转换为上下文管理器协议。
@@ -76,7 +92,7 @@ def shift_right_jam(value: int, shift: int, width: int) -> tuple[int, int]:
 
 
 # =============================================================================
-# Hardware boundary
+# Configuration
 # =============================================================================
 @dataclass(frozen=True)
 class ArithmeticConfig:
@@ -88,6 +104,28 @@ class ArithmeticConfig:
     def __post_init__(self) -> None:
         if self.width < 2 or self.width > 256:
             raise ValueError("arithmetic width must be in [2, 256]")
+
+
+# =============================================================================
+# Implementation
+# =============================================================================
+# Compute a carry-save sum and carry vector. / 计算进位保存加法的和与进位向量。
+def csa(a: int, b: int, c: int, width: int) -> tuple[int, int]:
+    """Return ``(sum, carry)`` for three width-bit operands. / 返回三个定宽操作数的（和、进位）。"""
+    if width < 1:
+        raise ValueError("CSA width must be positive")
+    mask = (1 << width) - 1
+    a, b, c = a & mask, b & mask, c & mask
+    return (a ^ b ^ c) & mask, ((a & b) | (a & c) | (b & c)) & mask
+
+
+# Compute the bounded unsigned multiplier result. / 计算有界无符号乘法结果。
+def multiply_unsigned(a: int, b: int, width: int) -> int:
+    """Return a ``2*width``-bit product. / 返回 2*width 位乘积。"""
+    if width < 1:
+        raise ValueError("multiplier width must be positive")
+    mask = (1 << width) - 1
+    return ((a & mask) * (b & mask)) & ((1 << (2 * width)) - 1)
 
 
 class FudianArithmetic(Elaboratable):
@@ -140,7 +178,8 @@ class FudianArithmetic(Elaboratable):
             m.d.comb += self.auxiliary.eq(lza_expr)
         with amaranth_elif(m, self.operation == 2):
             exceed = self.shift > width
-            m.d.comb += [self.result.eq(Mux(exceed, 0, self.a >> self.shift)), self.sticky.eq(Mux(exceed, self.a != 0, (self.a & ((1 << width) - 1)) != 0))]
+            discarded = self.a & ((1 << width) - 1)
+            m.d.comb += [self.result.eq(Mux(exceed, 0, self.a >> self.shift)), self.sticky.eq(Mux(exceed, self.a != 0, (discarded & ((1 << width) - 1)) != 0))]
         with amaranth_elif(m, self.operation == 3):
             m.d.comb += self.result.eq(self.a * self.b)
         return m
@@ -167,6 +206,9 @@ def build_verilog(configuration: ArithmeticConfig | Mapping[str, Any] | None, in
     return verilog.convert(top, name=name, ports=ports, emit_src=False)
 
 
+# =============================================================================
+# Direct Entry
+# =============================================================================
 # Print deterministic direct export. / 打印确定性的 direct 导出。
 def main() -> None:
     """Emit default arithmetic Verilog. / 输出默认算术 Verilog。"""

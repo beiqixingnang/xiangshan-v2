@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from contextlib import AbstractContextManager
 from dataclasses import dataclass
-from typing import Any, cast
+from typing import Any, Mapping, cast
 
 from amaranth import Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
@@ -20,12 +20,27 @@ from amaranth.hdl.ast import Value
 # =============================================================================
 # Module Contract
 # =============================================================================
+# The five scalar sources are intentionally exposed as one family boundary. /
+# 五个标量源文件有意通过一个 family 边界聚合暴露。
+SOURCE_SCALA_ROOT = "yunsuan/src/main/scala/yunsuan/scalar"
+SOURCE_SCALA_PATHS = (
+    "yunsuan/src/main/scala/yunsuan/scalar/Convert.scala",
+    "yunsuan/src/main/scala/yunsuan/scalar/FPU.scala",
+    "yunsuan/src/main/scala/yunsuan/scalar/IntToFP.scala",
+    "yunsuan/src/main/scala/yunsuan/scalar/RoundingUnit.scala",
+    "yunsuan/src/main/scala/yunsuan/scalar/utils.scala",
+)
+SOURCE_SCALA_FILE_COUNT = len(SOURCE_SCALA_PATHS)
+
 # Source closure: Convert.scala, FPU.scala, IntToFP.scala, RoundingUnit.scala,
 # and utils.scala.  The aggregate exposes the source-level primitive contracts,
 # integer-to-float pipeline, and an explicit FP conversion boundary.
 # 来源闭包：Convert.scala、FPU.scala、IntToFP.scala、RoundingUnit.scala 与
 # utils.scala；聚合边界暴露源级 primitive、整数转浮点流水线及显式浮点转换边界。
 __all__ = [
+    "SOURCE_SCALA_ROOT",
+    "SOURCE_SCALA_PATHS",
+    "SOURCE_SCALA_FILE_COUNT",
     "RNE",
     "RTZ",
     "RDN",
@@ -1139,7 +1154,8 @@ FPCVT = YunSuanFPCVT
 # Public Adapter
 # =============================================================================
 # Emit a deterministic UHSC-localized family Verilog boundary. / 导出确定性的 UHSC family Verilog 边界。
-def build_verilog(configuration, injected_dependencies):
+def build_verilog(configuration: YunSuanScalarConfig | Mapping[str, Any] | None,
+                 injected_dependencies: Mapping[str, Any]) -> str:
     """Build the aggregate family or a selected primitive mode. / 构建聚合 family 或选定的 primitive 模式。"""
 
     del injected_dependencies
@@ -1147,7 +1163,7 @@ def build_verilog(configuration, injected_dependencies):
         cfg = configuration
         mode = "aggregate"
         name = "UHSCYunSuanScalar"
-    elif isinstance(configuration, dict):
+    elif isinstance(configuration, Mapping):
         fields = YunSuanScalarConfig.__dataclass_fields__
         values = {key: int(value) for key, value in configuration.items() if key in fields}
         cfg = YunSuanScalarConfig(**values)
