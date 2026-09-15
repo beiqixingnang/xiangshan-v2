@@ -15,7 +15,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterable, cast
 
-from amaranth import ClockDomain, ClockSignal, Elaboratable, Module, Mux, ResetSignal, Signal
+from amaranth import ClockDomain, ClockSignal, Const, Elaboratable, Module, Mux, ResetSignal, Signal
 from amaranth.back import verilog
 
 
@@ -39,6 +39,7 @@ __all__ = [
     "BACKEND_PARENT_SOURCE_PATHS",
     "backend_parent_contract",
     "full_backend_port_schema",
+    "backend_decode_pattern_model",
     "backend_parent_model",
     "build_verilog",
     "main",
@@ -104,7 +105,74 @@ BACKEND_PARENT_SOURCE_PATHS: tuple[str, ...] = (
     "upstream/src/main/scala/xiangshan/backend/datapath/WbArbiter.scala",
     "upstream/src/main/scala/xiangshan/backend/decode/DecodeUnit.scala",
     "upstream/src/main/scala/xiangshan/backend/decode/DecodeStage.scala",
+    "upstream/src/main/scala/xiangshan/backend/issue/IssueQueue.scala",
+    "upstream/src/main/scala/xiangshan/backend/issue/EnqPolicy.scala",
+    "upstream/src/main/scala/xiangshan/backend/issue/AgeDetector.scala",
+    "upstream/src/main/scala/xiangshan/backend/issue/FuBusyTableRead.scala",
+    "upstream/src/main/scala/xiangshan/backend/exu/ExuBlock.scala",
+    "upstream/src/main/scala/xiangshan/backend/fu/Alu.scala",
+    "upstream/src/main/scala/xiangshan/backend/fu/Branch.scala",
+    "upstream/src/main/scala/xiangshan/backend/fu/Jump.scala",
 )
+
+# The DecodeUnit leaf patterns are kept local so the parent remains import
+# free and can still elaborate when a caller does not inject a child module.
+# DecodeUnit 叶级模式在父模块内保持本地化，确保无注入子模块时仍可独立展开。
+BACKEND_DECODE_PATTERN_STRINGS: tuple[str, ...] = (
+    "b000001???????????000?????1010111",
+    "b000001???????????100?????1010111",
+    "b010010??????01010010?????1010111",
+    "b010010??????01000010?????1010111",
+    "b010010??????01001010?????1010111",
+    "b010010??????01100010?????1010111",
+    "b010010??????01101010?????1010111",
+    "b010010??????01110010?????1010111",
+    "b010101???????????000?????1010111",
+    "b010101???????????100?????1010111",
+    "b01010????????????011?????1010111",
+    "b010100???????????000?????1010111",
+    "b010100???????????100?????1010111",
+    "b110101???????????011?????1010111",
+    "b110101???????????000?????1010111",
+    "b110101???????????100?????1010111",
+    "b1?00??0111???????100?????1110011",
+    "b1?00??1??????????100?????1110011",
+)
+
+
+# Convert one Chisel-style BitPat into a hardware mask and expected value. /
+# 将一个 Chisel 风格 BitPat 转换为硬件掩码和期望值。/
+def _backend_pattern_mask_expected(pattern: str) -> tuple[int, int]:
+    """Return a 32-bit ``(mask, expected)`` pair for a parent decoder pattern. /
+    返回父级解码器模式的 32 位 ``(mask, expected)`` 对。
+    """
+
+    bits = pattern[1:] if pattern.startswith("b") else pattern
+    bits = bits.rjust(32, "?")
+    mask = 0
+    expected = 0
+    for bit in bits:
+        mask = (mask << 1) | int(bit != "?")
+        expected = (expected << 1) | (int(bit) if bit != "?" else 0)
+    return mask, expected
+
+
+BACKEND_DECODE_PATTERN_MASKS: tuple[tuple[int, int], ...] = tuple(
+    _backend_pattern_mask_expected(pattern) for pattern in BACKEND_DECODE_PATTERN_STRINGS
+)
+
+
+# Evaluate the parent-local DecodeUnit pattern vector in Python. /
+# 在 Python 中计算父级本地 DecodeUnit 模式向量。/
+def backend_decode_pattern_model(instruction: int) -> int:
+    """Return one bit per V2 DecodeUnit BitPat match. / 返回每个 V2 DecodeUnit BitPat 匹配的一位。"""
+
+    value = int(instruction) & 0xFFFFFFFF
+    result = 0
+    for index, (mask, expected) in enumerate(BACKEND_DECODE_PATTERN_MASKS):
+        if value & mask == expected:
+            result |= 1 << index
+    return result
 
 # Return the machine-readable parent contract consumed by landing evidence. /
 # 返回落地证据使用的机器可读父级契约。/
@@ -121,6 +189,8 @@ def backend_parent_contract() -> dict[str, Any]:
             "WbArbiter/WbDataPath",
             "DecodeUnit",
             "DecodeStage",
+            "IssueQueue/EnqPolicy/AgeDetector/FuBusyTableRead",
+            "ExuBlock/Alu/Branch/Jump",
         ],
         "observation_points": [
             "frontend-to-backend ready/valid",
@@ -135,7 +205,8 @@ def backend_parent_contract() -> dict[str, Any]:
             "locked_inputs": BACKEND_REFERENCE_INPUT_COUNT,
             "locked_outputs": BACKEND_REFERENCE_OUTPUT_COUNT,
         },
-        "status": "STRUCTURE_LANDED_BEHAVIOR_PENDING",
+        "status": "STRUCTURE_AND_BOUNDARY_BEHAVIOR_LANDED",
+        "behavior_scope": "decode-pattern, issue-slot, writeback-observation equations are active without injection; full queue/EXU closure remains pending",
         "accepted": False,
     }
 
@@ -451,22 +522,52 @@ class BackendTop(Elaboratable):
                     if index < len(signals):
                         module.d.comb += signals[index].eq(self.exu_class[index] == class_index)
 
-        # Default child observability is quiescent; injected families override
-        # only signals they explicitly implement.  This avoids hidden imports
-        # and keeps missing closures machine-readable in simulation.
-        module.d.comb += [
-            self.child_decode_active.eq(0),
-            self.child_decode_instruction.eq(self.frontend_instr[:32]),
-            self.child_decode_matches.eq(0),
-            self.child_issue_active.eq(0),
-            self.child_issue_can_enq.eq(0),
-            self.child_issue_selected_valid.eq(0),
-            self.child_issue_selected_bits.eq(0),
-            self.child_datapath_active.eq(0),
-            self.child_writeback_active.eq(0),
-        ]
-        for signal in (*self.child_writeback_valid, *self.child_writeback_data, *self.child_writeback_pdest):
-            module.d.comb += signal.eq(0)
+        # The parent has a useful standalone boundary even without injected
+        # children: DecodeUnit BitPat matches, EnqPolicy's low/high selector,
+        # and WbDataPath observations are evaluated directly.  Injection keeps
+        # precedence and is still supported for family-level closure tests.
+        # 即使没有注入子模块，父边界也会直接计算 DecodeUnit BitPat 匹配、
+        # EnqPolicy 低高选择和 WbDataPath 观测；注入时仍保持优先级。
+        module.d.comb += self.child_decode_instruction.eq(self.frontend_instr[:32])
+        module.d.comb += self.child_datapath_active.eq(1 if self.datapath is not None else 0)
+        if self.decode is None:
+            module.d.comb += self.child_decode_active.eq(1)
+            match_value: Any = 0
+            for bit_index, (mask, expected) in enumerate(BACKEND_DECODE_PATTERN_MASKS):
+                matched = (self.child_decode_instruction & Const(mask, 32)) == Const(expected, 32)
+                match_value = cast(Any, match_value) | (cast(Any, matched) << bit_index)
+            module.d.comb += self.child_decode_matches.eq(match_value)
+        else:
+            module.d.comb += self.child_decode_active.eq(0)
+            module.d.comb += self.child_decode_matches.eq(0)
+        if self.issue is None:
+            # CircSelectOne's first rank walks low-to-high.  The two's
+            # complement expression is equivalent to priority encoding the
+            # least-significant free issue slot.
+            module.d.comb += [
+                self.child_issue_active.eq(1),
+                self.child_issue_can_enq.eq(self.child_issue_free_slots),
+                self.child_issue_selected_valid.eq(self.child_issue_free_slots != 0),
+                self.child_issue_selected_bits.eq(
+                    self.child_issue_free_slots & (-self.child_issue_free_slots)
+                ),
+            ]
+        else:
+            module.d.comb += [
+                self.child_issue_active.eq(0),
+                self.child_issue_can_enq.eq(0),
+                self.child_issue_selected_valid.eq(0),
+                self.child_issue_selected_bits.eq(0),
+            ]
+        module.d.comb += self.child_writeback_active.eq(self.wb_valid[0] | self.wb_valid[1] |
+                                                        self.wb_valid[2] | self.wb_valid[3] |
+                                                        self.wb_valid[4])
+        for index, signal in enumerate(self.child_writeback_valid):
+            module.d.comb += signal.eq(self.wb_valid[index])
+        for index, signal in enumerate(self.child_writeback_data):
+            module.d.comb += signal.eq(self.wb_data[index])
+        for index, signal in enumerate(self.child_writeback_pdest):
+            module.d.comb += signal.eq(self.wb_pdest[index])
         if self.decode is not None:
             module.submodules.decode = self.decode
             child_instruction = getattr(self.decode, "instruction", None)

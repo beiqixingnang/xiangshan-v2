@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_BACKEND_TOP_BEHAVIOR_BATCH",
+  "batch_id": "V2-BULK-CORE-BACKEND-TOP-BEHAVIOR-003",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Top-Hardware.py",
+    "local_name": "UHSCBackendTop",
+    "sha256": "213e9470cab1b9dcdcafb5c3ed209fbe637ebd43fe9259fac0481b8484e882dc",
+    "bytes": 41965,
+    "lines": 763,
+    "line_delta_vs_head": 148
+  },
+  "implementation": {
+    "changed_files": 1,
+    "added_files": 0,
+    "deleted_files": 0,
+    "inserted_lines": 119,
+    "deleted_lines": 18,
+    "behavioral_changes": [
+      "parent-local DecodeUnit Zvbb/Zimop BitPat match vector",
+      "parent-local EnqPolicy least-significant free-slot selection",
+      "WbDataPath observation mirrors five parent writeback classes",
+      "Backend closure source inventory now includes IssueQueue and ExuBlock anchors"
+    ]
+  },
+  "scala_coverage": {
+    "paths": [
+      "upstream/src/main/scala/xiangshan/backend/Backend.scala",
+      "upstream/src/main/scala/xiangshan/backend/datapath/DataPath.scala",
+      "upstream/src/main/scala/xiangshan/backend/datapath/DataSource.scala",
+      "upstream/src/main/scala/xiangshan/backend/datapath/NewPipelineConnect.scala",
+      "upstream/src/main/scala/xiangshan/backend/datapath/WbArbiter.scala",
+      "upstream/src/main/scala/xiangshan/backend/decode/DecodeUnit.scala",
+      "upstream/src/main/scala/xiangshan/backend/decode/DecodeStage.scala",
+      "upstream/src/main/scala/xiangshan/backend/issue/IssueQueue.scala",
+      "upstream/src/main/scala/xiangshan/backend/issue/EnqPolicy.scala",
+      "upstream/src/main/scala/xiangshan/backend/issue/AgeDetector.scala",
+      "upstream/src/main/scala/xiangshan/backend/issue/FuBusyTableRead.scala",
+      "upstream/src/main/scala/xiangshan/backend/exu/ExuBlock.scala",
+      "upstream/src/main/scala/xiangshan/backend/fu/Alu.scala",
+      "upstream/src/main/scala/xiangshan/backend/fu/Branch.scala",
+      "upstream/src/main/scala/xiangshan/backend/fu/Jump.scala"
+    ],
+    "implemented_scope": [
+      "Backend parent dispatch/flush and writeback arbitration",
+      "DecodeUnit Zvbb/Zimop pattern equations",
+      "Issue enqueue free-slot boundary equation",
+      "five-class writeback child observation"
+    ],
+    "remaining_pending": [
+      "DecodeUnit/DecodeStage six-wide micro-op and fusion path",
+      "IssueQueue stateful entries, wakeup, dequeue, and bypass",
+      "ExuBlock wrapper integration for ALU/Branch/Jump outputs",
+      "Rename/CSR/memory closure across the locked 1165-port Backend",
+      "full XSTop behavioral differential, license review, and user approval"
+    ]
+  },
+  "gates": {
+    "AST": "PASS",
+    "PY_COMPILE": "PASS",
+    "EXACT_IMPORT": "PASS",
+    "BUILD_VERILOG": {
+      "status": "PASS",
+      "module": "UHSCBackendTop",
+      "bytes": 13945244,
+      "sha256": "c455c5f7bc553e95cd9c2e9a2b8569f75cd8b5f49d8abc7aa603a5d0e5fc8516"
+    },
+    "PYRIGHT": "PASS",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "DIRECT_PARENT_VECTORS": 256,
+    "CHILD_BOUNDARY_VECTORS": 64,
+    "REFERENCE_EQUATION_VECTORS": 256,
+    "PARENT_CLOSURE_MATCHED": "PENDING_FULL_DECODE_ISSUE_EXU",
+    "LICENSE_REVIEW": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "PASS_BOUNDED_PARENT_BOUNDARY",
+  "acceptance_eligible": false
+}
