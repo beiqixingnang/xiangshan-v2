@@ -269,6 +269,15 @@ class AddressSet:
     def finite(self) -> bool:
         return self.mask >= 0
 
+    # Return the number of represented addresses for a finite set. /
+    # 返回有限地址集合所表示的地址数量。
+    # Return the number of represented addresses for a finite set. / 返回有限地址集合所表示的地址数量。
+    @property
+    def cardinality(self) -> int:
+        if not self.finite:
+            raise ValueError("infinite AddressSet has no cardinality")
+        return 1 << self.mask.bit_count()
+
     # Return maximum represented address. / 返回集合表示的最大地址。
     @property
     def max(self) -> int:
@@ -317,6 +326,15 @@ class AddressSet:
             for selector in range(1 << len(high_bits))
         ]
         return tuple(sorted(fragments))
+
+    # Return the least and greatest represented address as a pair. /
+    # 返回集合表示地址的最小值和最大值。
+    # Return the least and greatest represented address as a pair. / 返回集合表示地址的最小值和最大值。
+    @property
+    def bounds(self) -> tuple[int, int]:
+        if not self.finite:
+            raise ValueError("infinite AddressSet has no finite bounds")
+        return self.base, self.max
 
     # Render rocket-chip style string. / 生成 rocket-chip 风格字符串。
     def __str__(self) -> str:
@@ -741,6 +759,21 @@ class ResourceBindings:
     def __call__(self, key: str) -> tuple["ResourceBinding", ...]:
         return self.get(key)
 
+    # Merge another binding map without losing insertion order. /
+    # 合并另一个绑定映射并保持绑定顺序。
+    # Merge another binding map without losing insertion order. / 合并另一个绑定映射并保持绑定顺序。
+    def merge(self, other: "ResourceBindings") -> "ResourceBindings":
+        merged: dict[str, tuple[ResourceBinding, ...]] = dict(self.map)
+        for key, values in other.map.items():
+            merged[key] = tuple(dict.fromkeys((*merged.get(key, ()), *values)))
+        return ResourceBindings(merged)
+
+    # Flatten all bindings into a deterministic key/value sequence. /
+    # 将全部绑定展平为确定性的键值序列。
+    # Flatten all bindings into a deterministic key/value sequence. / 将全部绑定展平为确定性的键值序列。
+    def items(self) -> tuple[tuple[str, ResourceBinding], ...]:
+        return tuple((key, value) for key in sorted(self.map) for value in self.get(key))
+
 
 @dataclass(frozen=True)
 class ResourceBinding:
@@ -949,6 +982,18 @@ class DiplomacyNode:
         if self.name not in target.inputs:
             target.inputs.append(self.name)
 
+    # Report whether this node is a graph source or sink. /
+    # 报告节点是否为图源或图汇。
+    # Report whether this node is a graph source. / 报告节点是否为图源。
+    @property
+    def is_source(self) -> bool:
+        return not self.inputs
+
+    # Report whether this node is a graph sink. / 报告节点是否为图汇。
+    @property
+    def is_sink(self) -> bool:
+        return not self.outputs
+
 
 class LazyModuleGraph:
     """Deterministic graph resolver mirroring Rocket LazyModule topology."""
@@ -990,6 +1035,24 @@ class LazyModuleGraph:
     # Flatten all graph address resources. / 汇总图中所有地址资源。
     def address_map(self) -> tuple[tuple[str, AddressSet], ...]:
         return tuple((name, addr) for name in self.resolve() for addr in self.nodes[name].addresses)
+
+    # Return all directed edges in stable order. / 以稳定顺序返回全部有向边。
+    @property
+    def edges(self) -> tuple[tuple[str, str], ...]:
+        return tuple((name, child) for name in sorted(self.nodes) for child in sorted(self.nodes[name].outputs))
+
+    # Validate edge symmetry and acyclicity before hardware elaboration. /
+    # 在硬件展开前校验边对称性及无环性。
+    # Validate edge symmetry and acyclicity before elaboration. / 在展开前校验边对称性及无环性。
+    def validate(self) -> None:
+        for name, node in self.nodes.items():
+            for child in node.outputs:
+                if child not in self.nodes or name not in self.nodes[child].inputs:
+                    raise ValueError(f"asymmetric diplomacy edge: {name}->{child}")
+            for parent in node.inputs:
+                if parent not in self.nodes or name not in self.nodes[parent].outputs:
+                    raise ValueError(f"asymmetric diplomacy edge: {parent}->{name}")
+        self.resolve()
 
     # Return all nodes in stable insertion-independent order. / 按稳定且与插入顺序
     # 无关的方式返回全部节点。 /
@@ -1188,6 +1251,19 @@ class DiplomacyConfig:
                 return True, index
         return False, 0
 
+    # Decode a batch of addresses using the same route table. /
+    # 使用同一路由表批量解码地址。
+    # Decode a batch of addresses using the same route table. / 使用同一路由表批量解码地址。
+    def decode_many(self, addresses: Iterable[int]) -> tuple[tuple[bool, int], ...]:
+        return tuple(self.decode(address) for address in addresses)
+
+    # Width of the route selector exposed by the hardware boundary. /
+    # 硬件边界暴露的路由选择器宽度。
+    # Width of the route selector exposed by the hardware boundary. / 硬件边界暴露的路由选择器宽度。
+    @property
+    def route_bits(self) -> int:
+        return max(1, (len(self.route_bases) - 1).bit_length())
+
 
 class DiplomacyAddressRouter(Elaboratable):
     """Combinational ready/valid address decoder. / 组合式 ready/valid 地址解码器。"""
@@ -1202,7 +1278,7 @@ class DiplomacyAddressRouter(Elaboratable):
         self.input_ready = Signal(name="io_in_ready")
         self.input_address = Signal(c.address_bits, name="io_in_address")
         self.output_valid = Signal(name="io_out_valid")
-        self.output_route = Signal(max(1, (len(c.route_bases) - 1).bit_length()), name="io_out_route")
+        self.output_route = Signal(c.route_bits, name="io_out_route")
         self.output_hit = Signal(name="io_out_hit")
         self.output_address = Signal(c.address_bits, name="io_out_address")
 
@@ -1215,18 +1291,25 @@ class DiplomacyAddressRouter(Elaboratable):
         domain.clk = self.clock
         domain.rst = self.reset
         m.domains.diplomacy = domain
-        hit_expr = 0
-        route_expr = 0
+        hit_expr: Any = 0
+        route_expr: Any = 0
+        selected_expr: Any = 0
         width_mask = (1 << c.address_bits) - 1
         for index, (base, mask) in enumerate(zip(c.route_bases, c.route_masks)):
-            care_mask = width_mask ^ (mask & width_mask)
+            care_mask = (~mask) & width_mask
             hit = ((self.input_address ^ base) & care_mask) == 0
+            # Keep the first matching route, matching AddressDecoder's
+            # deterministic port ordering even if a caller supplies overlap
+            # through a dynamically-built configuration.
+            take = hit & ~selected_expr
             hit_expr = hit_expr | hit
-            route_expr = Mux(hit, index, route_expr)
+            route_expr = Mux(take, index, route_expr)
+            selected_expr = selected_expr | hit
+        active = self.input_valid & ~self.reset
         m.d.comb += [
-            self.input_ready.eq(1),
-            self.output_valid.eq(self.input_valid),
-            self.output_hit.eq(hit_expr),
+            self.input_ready.eq(~self.reset),
+            self.output_valid.eq(active),
+            self.output_hit.eq(active & hit_expr),
             self.output_route.eq(route_expr),
             self.output_address.eq(self.input_address),
         ]
