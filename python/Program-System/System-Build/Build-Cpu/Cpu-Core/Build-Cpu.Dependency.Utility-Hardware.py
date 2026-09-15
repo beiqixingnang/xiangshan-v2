@@ -34,6 +34,8 @@ __all__ = [
     "priority_select",
     "circular_next",
     "parity_encode",
+    "secded_encode",
+    "secded_check",
     "build_verilog",
     "main",
 ]
@@ -103,6 +105,71 @@ def parity_encode(value: int, width: int = 64) -> int:
     if width < 1:
         raise ValueError("parity width must be positive")
     return (value & ((1 << width) - 1)).bit_count() & 1
+
+
+def secded_encode(value: int, width: int = 64) -> int:
+    """Encode a word with SECDED Hamming parity bits.
+
+    The returned code packs the data and seven Hamming parity bits followed
+    by one overall parity bit.  This mirrors the ECC helper used by the V2
+    utility closure while keeping the software oracle deterministic.
+    """
+    if width < 1:
+        raise ValueError("ECC width must be positive")
+    parity_count = 0
+    while (1 << parity_count) < width + parity_count + 1:
+        parity_count += 1
+    code_bits = width + parity_count
+    code = 0
+    data_index = 0
+    for position in range(1, code_bits + 1):
+        if position & (position - 1):
+            code |= ((value >> data_index) & 1) << (position - 1)
+            data_index += 1
+    for bit in range(parity_count):
+        parity_position = 1 << bit
+        parity = 0
+        for position in range(1, code_bits + 1):
+            if position & parity_position and position != parity_position:
+                parity ^= (code >> (position - 1)) & 1
+        code |= parity << (parity_position - 1)
+    overall = code.bit_count() & 1
+    return code | (overall << code_bits)
+
+
+def secded_check(code: int, width: int = 64) -> tuple[int, int, int]:
+    """Return ``(corrected_data, corrected, uncorrectable)`` for SECDED code."""
+    if width < 1:
+        raise ValueError("ECC width must be positive")
+    parity_count = 0
+    while (1 << parity_count) < width + parity_count + 1:
+        parity_count += 1
+    code_bits = width + parity_count
+    raw = code & ((1 << code_bits) - 1)
+    syndrome = 0
+    for bit in range(parity_count):
+        parity_position = 1 << bit
+        parity = 0
+        for position in range(1, code_bits + 1):
+            if position & parity_position:
+                parity ^= (raw >> (position - 1)) & 1
+        if parity:
+            syndrome |= parity_position
+    overall_error = ((code >> code_bits) ^ (code & ((1 << code_bits) - 1)).bit_count()) & 1
+    corrected = 0
+    uncorrectable = 0
+    if overall_error and syndrome:
+        raw ^= 1 << (syndrome - 1)
+        corrected = 1
+    elif not overall_error and syndrome:
+        uncorrectable = 1
+    data = 0
+    data_index = 0
+    for position in range(1, code_bits + 1):
+        if position & (position - 1):
+            data |= ((raw >> (position - 1)) & 1) << data_index
+            data_index += 1
+    return data, corrected, uncorrectable
 
 
 class UtilityBoundary(Elaboratable):
