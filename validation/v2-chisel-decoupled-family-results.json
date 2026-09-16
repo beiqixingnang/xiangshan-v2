@@ -1,0 +1,3295 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_CHISEL_DECOUPLED_FAMILY",
+  "batch_id": "V2-DEPENDENCY-DECOUPLED-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "scala_sources": [
+    "src/main/scala/chisel3/util/Decoupled.scala",
+    "src/main/scala/utils/PipeWithFlush.scala"
+  ],
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Chisel.Decoupled-Hardware.py",
+    "sha256": "ab4f7a18bbb583dcdb09e6f827d43b39ade942937cdd094ccbdc69c1c677adbe",
+    "line_count": 1071
+  },
+  "coverage": {
+    "covered_module_count": 216,
+    "expected_module_count": 216,
+    "decoupled_scala_module_count": 208,
+    "pipe_with_flush_module_count": 8,
+    "queue_instance_count": 134,
+    "queue_ram_primitive_count": 74,
+    "pipe_instance_count": 8,
+    "missing_modules": [],
+    "extra_modules": [],
+    "covered_modules": [
+      "PipeWithFlush",
+      "PipeWithFlush_1",
+      "PipeWithFlush_10",
+      "PipeWithFlush_11",
+      "PipeWithFlush_6",
+      "PipeWithFlush_7",
+      "PipeWithFlush_8",
+      "PipeWithFlush_9",
+      "Queue10_GrantBuffer_Anon",
+      "Queue10_PutBufferBeatEntry",
+      "Queue16_DSBeat",
+      "Queue16_GrantQueueData",
+      "Queue16_GrantQueueTask",
+      "Queue16_HintQueueEntry",
+      "Queue16_TaskBundle",
+      "Queue16_grantAckQEntry",
+      "Queue1_AXI4BundleAR",
+      "Queue1_AXI4BundleARW",
+      "Queue1_AXI4BundleARW_1",
+      "Queue1_AXI4BundleARW_2",
+      "Queue1_AXI4BundleAW",
+      "Queue1_AXI4BundleB",
+      "Queue1_AXI4BundleR",
+      "Queue1_AXI4BundleW",
+      "Queue1_AXI4BundleW_1",
+      "Queue1_AXI4BundleW_2",
+      "Queue1_BundleMap",
+      "Queue1_BundleMap_128",
+      "Queue1_BundleMap_162",
+      "Queue1_ChosenQBundle",
+      "Queue1_ClientDirWrite",
+      "Queue1_ClientTagWrite",
+      "Queue1_CtrlReq",
+      "Queue1_CtrlResp",
+      "Queue1_EccInfo",
+      "Queue1_L1PrefetchReq",
+      "Queue1_MSHRRequest",
+      "Queue1_PipeInfo",
+      "Queue1_PrefetchReq",
+      "Queue1_PrefetchReq_1",
+      "Queue1_PrefetchResp",
+      "Queue1_PrefetchResp_4",
+      "Queue1_PrefetchTrain",
+      "Queue1_PrefetchTrain_4",
+      "Queue1_RegMapperInput",
+      "Queue1_RegMapperInput_1",
+      "Queue1_RegMapperInput_3",
+      "Queue1_RegMapperInput_5",
+      "Queue1_RegMapperInput_6",
+      "Queue1_RegMapperInput_7",
+      "Queue1_RegMapperInput_8",
+      "Queue1_SelfDirWrite",
+      "Queue1_SelfTagWrite",
+      "Queue1_TLBundleA",
+      "Queue2_AXI4BundleAR",
+      "Queue2_AXI4BundleAR_10",
+      "Queue2_AXI4BundleAR_3",
+      "Queue2_AXI4BundleAR_7",
+      "Queue2_AXI4BundleAR_9",
+      "Queue2_AXI4BundleAW",
+      "Queue2_AXI4BundleAW_10",
+      "Queue2_AXI4BundleAW_3",
+      "Queue2_AXI4BundleAW_7",
+      "Queue2_AXI4BundleAW_9",
+      "Queue2_AXI4BundleB",
+      "Queue2_AXI4BundleB_10",
+      "Queue2_AXI4BundleB_3",
+      "Queue2_AXI4BundleB_7",
+      "Queue2_AXI4BundleB_9",
+      "Queue2_AXI4BundleR",
+      "Queue2_AXI4BundleR_3",
+      "Queue2_AXI4BundleR_67",
+      "Queue2_AXI4BundleR_71",
+      "Queue2_AXI4BundleR_72",
+      "Queue2_AXI4BundleR_74",
+      "Queue2_AXI4BundleR_75",
+      "Queue2_AXI4BundleW",
+      "Queue2_AXI4BundleW_3",
+      "Queue2_AXI4BundleW_9",
+      "Queue2_DSData",
+      "Queue2_TLBundleA",
+      "Queue2_TLBundleA_10",
+      "Queue2_TLBundleA_14",
+      "Queue2_TLBundleA_15",
+      "Queue2_TLBundleA_16",
+      "Queue2_TLBundleA_2",
+      "Queue2_TLBundleA_20",
+      "Queue2_TLBundleA_21",
+      "Queue2_TLBundleA_22",
+      "Queue2_TLBundleA_26",
+      "Queue2_TLBundleA_28",
+      "Queue2_TLBundleA_29",
+      "Queue2_TLBundleA_33",
+      "Queue2_TLBundleA_39",
+      "Queue2_TLBundleA_5",
+      "Queue2_TLBundleA_50",
+      "Queue2_TLBundleA_7",
+      "Queue2_TLBundleB",
+      "Queue2_TLBundleB_1",
+      "Queue2_TLBundleB_10",
+      "Queue2_TLBundleB_2",
+      "Queue2_TLBundleB_6",
+      "Queue2_TLBundleC",
+      "Queue2_TLBundleC_1",
+      "Queue2_TLBundleC_2",
+      "Queue2_TLBundleC_6",
+      "Queue2_TLBundleD",
+      "Queue2_TLBundleD_12",
+      "Queue2_TLBundleD_16",
+      "Queue2_TLBundleD_17",
+      "Queue2_TLBundleD_18",
+      "Queue2_TLBundleD_19",
+      "Queue2_TLBundleD_2",
+      "Queue2_TLBundleD_23",
+      "Queue2_TLBundleD_24",
+      "Queue2_TLBundleD_29",
+      "Queue2_TLBundleD_31",
+      "Queue2_TLBundleD_32",
+      "Queue2_TLBundleD_36",
+      "Queue2_TLBundleD_4",
+      "Queue2_TLBundleD_42",
+      "Queue2_TLBundleD_53",
+      "Queue2_TLBundleD_7",
+      "Queue2_TLBundleE",
+      "Queue2_TLBundleE_1",
+      "Queue2_TLBundleE_10",
+      "Queue2_TLBundleE_2",
+      "Queue2_UInt2",
+      "Queue2_UInt3",
+      "Queue40_L2TlbMQBundle",
+      "Queue4_BundleMap",
+      "Queue4_HintQueueEntry",
+      "Queue4_TPmetaReq",
+      "Queue4_triggerBundle",
+      "Queue5_BundleMap",
+      "Queue5_MSHRRequest",
+      "Queue68_BundleMap",
+      "Queue6_DSData",
+      "Queue8_TPmetaReq",
+      "Queue8_UInt12",
+      "Queue9_TLBundleC",
+      "Queue9_tpDataEntry",
+      "ram_10x288",
+      "ram_16x11",
+      "ram_16x25",
+      "ram_16x6",
+      "ram_16x67",
+      "ram_2x10",
+      "ram_2x116",
+      "ram_2x117",
+      "ram_2x119",
+      "ram_2x132",
+      "ram_2x135",
+      "ram_2x136",
+      "ram_2x16",
+      "ram_2x18",
+      "ram_2x2",
+      "ram_2x256",
+      "ram_2x273",
+      "ram_2x274",
+      "ram_2x275",
+      "ram_2x276",
+      "ram_2x281",
+      "ram_2x283",
+      "ram_2x284",
+      "ram_2x289",
+      "ram_2x3",
+      "ram_2x309",
+      "ram_2x312",
+      "ram_2x315",
+      "ram_2x324",
+      "ram_2x345",
+      "ram_2x348",
+      "ram_2x35",
+      "ram_2x350",
+      "ram_2x351",
+      "ram_2x352",
+      "ram_2x354",
+      "ram_2x355",
+      "ram_2x356",
+      "ram_2x359",
+      "ram_2x361",
+      "ram_2x362",
+      "ram_2x37",
+      "ram_2x373",
+      "ram_2x374",
+      "ram_2x406",
+      "ram_2x407",
+      "ram_2x51",
+      "ram_2x56",
+      "ram_2x61",
+      "ram_2x7",
+      "ram_2x71",
+      "ram_2x72",
+      "ram_2x73",
+      "ram_2x77",
+      "ram_2x79",
+      "ram_2x80",
+      "ram_2x81",
+      "ram_2x87",
+      "ram_40x47",
+      "ram_4x11",
+      "ram_4x52",
+      "ram_4x525",
+      "ram_5x119",
+      "ram_68x11",
+      "ram_6x257",
+      "ram_8x12",
+      "ram_8x525",
+      "ram_9x318",
+      "ram_9x504",
+      "ram_data_16x256",
+      "ram_extra_id_4x3",
+      "ram_extra_id_5x3",
+      "ram_sink_2x6",
+      "ram_sink_2x8"
+    ]
+  },
+  "locked_reference": {
+    "canonical_path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "xstop_bytes": 228590583,
+    "immutable": true
+  },
+  "port_surface": {
+    "status": "PASS",
+    "checked_module_count": 216,
+    "declaration_order_preserved_module_count": 0,
+    "failures": [],
+    "modules": [
+      {
+        "module": "PipeWithFlush",
+        "locked_port_count": 14,
+        "emitted_port_count": 14,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "e6625e4f690b22c89acee3c1590aa0bf71174fbc936461b2e43df70cc6b4fab8",
+        "verilog_bytes": 1872
+      },
+      {
+        "module": "PipeWithFlush_1",
+        "locked_port_count": 28,
+        "emitted_port_count": 28,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "2afd24a269106a595bd2127e08c114fa23b26cc54bbc4049344a252edd21fb6c",
+        "verilog_bytes": 10967
+      },
+      {
+        "module": "PipeWithFlush_10",
+        "locked_port_count": 12,
+        "emitted_port_count": 12,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "557fc774b71ab6b8f062868a8b4e60eab7daa78cee626ae7526fc5493ebe48e0",
+        "verilog_bytes": 3065
+      },
+      {
+        "module": "PipeWithFlush_11",
+        "locked_port_count": 17,
+        "emitted_port_count": 17,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "71558e3588be22fd2e40a3c249c1b54cf4bf356a610a77fad96655297135e131",
+        "verilog_bytes": 7980
+      },
+      {
+        "module": "PipeWithFlush_6",
+        "locked_port_count": 18,
+        "emitted_port_count": 18,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "5248aedac9124ee79e45cedc3131ac3606bcd2e571b5b27bf617ad7fbaa2fd23",
+        "verilog_bytes": 4818
+      },
+      {
+        "module": "PipeWithFlush_7",
+        "locked_port_count": 23,
+        "emitted_port_count": 23,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "71049d2b92c0248ec578afbfce296964a64403b1813fa9f6b8945b7bd4b142f1",
+        "verilog_bytes": 8591
+      },
+      {
+        "module": "PipeWithFlush_8",
+        "locked_port_count": 12,
+        "emitted_port_count": 12,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "a0d516249b06e4113e62223d2f16e52ec4c2f36e7255cd19696280f0976b287e",
+        "verilog_bytes": 1353
+      },
+      {
+        "module": "PipeWithFlush_9",
+        "locked_port_count": 23,
+        "emitted_port_count": 23,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "26a95f3e84285a8cdbb5b4f84d18839a261160ecd62ced0fe8cea4c8ec716e10",
+        "verilog_bytes": 11780
+      },
+      {
+        "module": "Queue10_GrantBuffer_Anon",
+        "locked_port_count": 7,
+        "emitted_port_count": 7,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "189b5964c7e95882b781212ba050d5dbb14f7c8462cca1cd23d8b0129b790226",
+        "verilog_bytes": 4888
+      },
+      {
+        "module": "Queue10_PutBufferBeatEntry",
+        "locked_port_count": 9,
+        "emitted_port_count": 9,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "5770713f434b0987f592e89fc3e04d5d4a16d0fdc2ff3138cb1b0ec0440c2b45",
+        "verilog_bytes": 5886
+      },
+      {
+        "module": "Queue16_DSBeat",
+        "locked_port_count": 6,
+        "emitted_port_count": 6,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "2f21fef3396810f7fe8c1ae607cd42718552aa60a2d768899fdf2f0e5f4fb145",
+        "verilog_bytes": 6570
+      },
+      {
+        "module": "Queue16_GrantQueueData",
+        "locked_port_count": 6,
+        "emitted_port_count": 6,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "ef7e7af46c907f6bc3faa73235ff2049bf83601e0057b6205573e8e752c1d564",
+        "verilog_bytes": 5533
+      },
+      {
+        "module": "Queue16_GrantQueueTask",
+        "locked_port_count": 89,
+        "emitted_port_count": 89,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "4ba175af89253a11b0917f9d4d4ce39dbbef997ca72a25e9c075b77defbf141c",
+        "verilog_bytes": 15774
+      },
+      {
+        "module": "Queue16_HintQueueEntry",
+        "locked_port_count": 12,
+        "emitted_port_count": 12,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "5ea7f6921fc5a784b4f37ee338aca80a745783f185e1e36939fe35ca8734b0f8",
+        "verilog_bytes": 5680
+      },
+      {
+        "module": "Queue16_TaskBundle",
+        "locked_port_count": 89,
+        "emitted_port_count": 89,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "d67bce6d7e59d7405d4c80d63595e634059f08a3352e52cb7648b45be2f85af1",
+        "verilog_bytes": 17657
+      },
+      {
+        "module": "Queue16_grantAckQEntry",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "9ea29585c3a3aa7c6cbfc1e6a2e5d4cc66e7cdb94d7f434384543482c99b2cdb",
+        "verilog_bytes": 4775
+      },
+      {
+        "module": "Queue1_AXI4BundleAR",
+        "locked_port_count": 22,
+        "emitted_port_count": 22,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "f4db20c3ae015121acb9ea6525070d4eaff14ea39be636ace080ba1e8a3ffda5",
+        "verilog_bytes": 6136
+      },
+      {
+        "module": "Queue1_AXI4BundleARW",
+        "locked_port_count": 25,
+        "emitted_port_count": 25,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "3d2627052f6b414a935e3b788b67f20f91fff4b274c104bd9b04b42354283d1f",
+        "verilog_bytes": 7226
+      },
+      {
+        "module": "Queue1_AXI4BundleARW_1",
+        "locked_port_count": 25,
+        "emitted_port_count": 25,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "9d47956233309588858d3a6e15647f25c0fbe7ebd989f2d37783a1af98ca0ec8",
+        "verilog_bytes": 7159
+      },
+      {
+        "module": "Queue1_AXI4BundleARW_2",
+        "locked_port_count": 24,
+        "emitted_port_count": 24,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "78dc37a5c4e5785e3344ec345f75f46f4a8208b8324e125428b16d9ac0bdb445",
+        "verilog_bytes": 7024
+      },
+      {
+        "module": "Queue1_AXI4BundleAW",
+        "locked_port_count": 22,
+        "emitted_port_count": 22,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "49a4e8aed6decbd6c0edea311c9125a0d05f560ca35dde1f9c1f7838e84dacc1",
+        "verilog_bytes": 6136
+      },
+      {
+        "module": "Queue1_AXI4BundleB",
+        "locked_port_count": 10,
+        "emitted_port_count": 10,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "3eec21c595e6e7eca82a7da5b66c957a32db0bd11f739616adc233baf2e9641a",
+        "verilog_bytes": 3085
+      },
+      {
+        "module": "Queue1_AXI4BundleR",
+        "locked_port_count": 14,
+        "emitted_port_count": 14,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "1cc131623043beb590ff2d0a046eeb6c40e7241cdc2bfb412fa4028233e28979",
+        "verilog_bytes": 4468
+      },
+      {
+        "module": "Queue1_AXI4BundleW",
+        "locked_port_count": 12,
+        "emitted_port_count": 12,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "f63f117444b2d84c3f46dfe043aae850db9a1f3b01e074737cd7d727e3ecb381",
+        "verilog_bytes": 4027
+      },
+      {
+        "module": "Queue1_AXI4BundleW_1",
+        "locked_port_count": 12,
+        "emitted_port_count": 12,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "56ad8dc33f558271a1524b6b31207b5c602748486bb52cfcc6f28d9074abe0da",
+        "verilog_bytes": 3698
+      },
+      {
+        "module": "Queue1_AXI4BundleW_2",
+        "locked_port_count": 11,
+        "emitted_port_count": 11,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "70707f7ad38e9a47edfe3f129998273cc4f61a41b0d2612e16e4d0467891350b",
+        "verilog_bytes": 3591
+      },
+      {
+        "module": "Queue1_BundleMap",
+        "locked_port_count": 10,
+        "emitted_port_count": 10,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "503bc5e2e0cdd8e169c57337367ca3a430f9961b8bd2f44d46575c3a5543d23d",
+        "verilog_bytes": 2703
+      },
+      {
+        "module": "Queue1_BundleMap_128",
+        "locked_port_count": 10,
+        "emitted_port_count": 10,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "07fd972cddef619fb6ec3718f74b11ed624ffc05cdcb57199927a4e6a6bb5a04",
+        "verilog_bytes": 2705
+      },
+      {
+        "module": "Queue1_BundleMap_162",
+        "locked_port_count": 10,
+        "emitted_port_count": 10,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "be17d79e6da19eebb62c0af8f87c32ed5d8c21ffe9db2438db1fdba3cc610dc4",
+        "verilog_bytes": 2598
+      },
+      {
+        "module": "Queue1_ChosenQBundle",
+        "locked_port_count": 100,
+        "emitted_port_count": 100,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "1dc3880524854b3b974a557193ecdab9a7c6c24c0dab0dd7802829ebfc73f58d",
+        "verilog_bytes": 23670
+      },
+      {
+        "module": "Queue1_ClientDirWrite",
+        "locked_port_count": 12,
+        "emitted_port_count": 12,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "7bcc685e57f3027735231457229a5327300398a7c0b9bc1469ac1c534c4faac9",
+        "verilog_bytes": 2950
+      },
+      {
+        "module": "Queue1_ClientTagWrite",
+        "locked_port_count": 12,
+        "emitted_port_count": 12,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "1204e243b24f0dcadf3adcff6503422e3273b268e777a8ae1324befe1a5c3efd",
+        "verilog_bytes": 2904
+      },
+      {
+        "module": "Queue1_CtrlReq",
+        "locked_port_count": 32,
+        "emitted_port_count": 32,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "f809594733b22204f66cffb798b2d6e8dcb563baab670116c09c394810a254ca",
+        "verilog_bytes": 9370
+      },
+      {
+        "module": "Queue1_CtrlResp",
+        "locked_port_count": 24,
+        "emitted_port_count": 24,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "1ef7edaf4439a20835e4ec6c36efbe201b4e945cd8d4239a325602c4a867f871",
+        "verilog_bytes": 6322
+      },
+      {
+        "module": "Queue1_EccInfo",
+        "locked_port_count": 10,
+        "emitted_port_count": 10,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "1c07d5b206c3155398c82718690b5855dab9e157df34a37f78ec42545ec9be2b",
+        "verilog_bytes": 2607
+      },
+      {
+        "module": "Queue1_L1PrefetchReq",
+        "locked_port_count": 16,
+        "emitted_port_count": 16,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "3acb36de0d188942cfd8c051de2b67b7e2079754e4e9b9f980cfb610c094aaab",
+        "verilog_bytes": 3782
+      },
+      {
+        "module": "Queue1_MSHRRequest",
+        "locked_port_count": 45,
+        "emitted_port_count": 45,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "294f414c2f2a69d575b1131ef837b7940a84906f364cdeb8505e9503b1ac3eb4",
+        "verilog_bytes": 9591
+      },
+      {
+        "module": "Queue1_PipeInfo",
+        "locked_port_count": 50,
+        "emitted_port_count": 50,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "e230b5ec01cfcd678388e094dbb3f000e2aead2039473c09311444d2120602c4",
+        "verilog_bytes": 10461
+      },
+      {
+        "module": "Queue1_PrefetchReq",
+        "locked_port_count": 18,
+        "emitted_port_count": 18,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "aaeca675b9a629f5c1df0c0c110de228e2a6467714a53a911eb694f3c16918c0",
+        "verilog_bytes": 4127
+      },
+      {
+        "module": "Queue1_PrefetchReq_1",
+        "locked_port_count": 14,
+        "emitted_port_count": 14,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "fe6549785f43a94d72a70b6087c8562f5b1b6250261d5aef0fa752ca8dd8a99a",
+        "verilog_bytes": 3329
+      },
+      {
+        "module": "Queue1_PrefetchResp",
+        "locked_port_count": 6,
+        "emitted_port_count": 6,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "052a23875053f602f73761a2a7206437ef380145dc5eef1043fd0f9115ddcd91",
+        "verilog_bytes": 1466
+      },
+      {
+        "module": "Queue1_PrefetchResp_4",
+        "locked_port_count": 6,
+        "emitted_port_count": 6,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "f96f5127135acf10b4854602d33c839926742f1ff6da42a8136a00e1e2e2d417",
+        "verilog_bytes": 1468
+      },
+      {
+        "module": "Queue1_PrefetchTrain",
+        "locked_port_count": 20,
+        "emitted_port_count": 20,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "ad4e9779cb57db8e502b55b5b324bbf5bab9dd131cd379f5512c66178e565fb5",
+        "verilog_bytes": 4945
+      },
+      {
+        "module": "Queue1_PrefetchTrain_4",
+        "locked_port_count": 6,
+        "emitted_port_count": 6,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "eb7bd3e8d514a8a52888eb84d7036d73a083b7a769b5ce6a1e8a87fcddbd2ad5",
+        "verilog_bytes": 1469
+      },
+      {
+        "module": "Queue1_RegMapperInput",
+        "locked_port_count": 18,
+        "emitted_port_count": 18,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "66abedfb00a721c955be5a46835dcd44059a3889ba670dbf35bf397c6c5e993e",
+        "verilog_bytes": 4377
+      },
+      {
+        "module": "Queue1_RegMapperInput_1",
+        "locked_port_count": 14,
+        "emitted_port_count": 14,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "0df1a06216e96cedb8a2b7aa8a734f84d21f3f736483e65cd14d55aa80ce44f0",
+        "verilog_bytes": 3271
+      },
+      {
+        "module": "Queue1_RegMapperInput_3",
+        "locked_port_count": 18,
+        "emitted_port_count": 18,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "d61ece33bf7324ee492ac21d7367b75e93ccbcb63b50a1d5f1bc21d2b60cb1a1",
+        "verilog_bytes": 4358
+      },
+      {
+        "module": "Queue1_RegMapperInput_5",
+        "locked_port_count": 18,
+        "emitted_port_count": 18,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "95275a5f430b11b4b0f493421ed0749b4083d052a0a4fd2860fa4d8e7662e5df",
+        "verilog_bytes": 4354
+      },
+      {
+        "module": "Queue1_RegMapperInput_6",
+        "locked_port_count": 18,
+        "emitted_port_count": 18,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "182dd25b7decdff37e4a087f7d84b4c4122652fdc48403541aa37dd0d3c6e66a",
+        "verilog_bytes": 4353
+      },
+      {
+        "module": "Queue1_RegMapperInput_7",
+        "locked_port_count": 18,
+        "emitted_port_count": 18,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "b4a0bb6c074a658c747110b7164bb33409ec7da62db764fc58fdf38c944dfeb8",
+        "verilog_bytes": 4366
+      },
+      {
+        "module": "Queue1_RegMapperInput_8",
+        "locked_port_count": 13,
+        "emitted_port_count": 13,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "5bddc03acca32fba27f6be2e2112a1279611e0290b1c44e4256dc9db107a0b21",
+        "verilog_bytes": 3175
+      },
+      {
+        "module": "Queue1_SelfDirWrite",
+        "locked_port_count": 18,
+        "emitted_port_count": 18,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "1ede4f407ddb7682083f3687edbde5b2ae712df57a4fb321b9374e9d6f4df5ca",
+        "verilog_bytes": 4162
+      },
+      {
+        "module": "Queue1_SelfTagWrite",
+        "locked_port_count": 12,
+        "emitted_port_count": 12,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "4cc30c39ccaf931ceb896cf8aa0127749960341bdf3e60d8ad36fda47cf4c2da",
+        "verilog_bytes": 2913
+      },
+      {
+        "module": "Queue1_TLBundleA",
+        "locked_port_count": 17,
+        "emitted_port_count": 17,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "4bd72d5a97932529bbde57b257cd7409044fa2cff1dbc7c978f0a39103647132",
+        "verilog_bytes": 4802
+      },
+      {
+        "module": "Queue2_AXI4BundleAR",
+        "locked_port_count": 24,
+        "emitted_port_count": 24,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "41bf7b8cb027a4b0123d0782dd8659b9379dfcd2783366f0319752810053fe6c",
+        "verilog_bytes": 7503
+      },
+      {
+        "module": "Queue2_AXI4BundleAR_10",
+        "locked_port_count": 24,
+        "emitted_port_count": 24,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "fb09df0309e1af0948aaaa35ff427d9c25475a9b782846aa425371e897d65354",
+        "verilog_bytes": 7316
+      },
+      {
+        "module": "Queue2_AXI4BundleAR_3",
+        "locked_port_count": 24,
+        "emitted_port_count": 24,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "535ab0c7603a306f7fe1854fc4878ad11336a7743ebb1e96bc7dab9b1aca6eb9",
+        "verilog_bytes": 7373
+      },
+      {
+        "module": "Queue2_AXI4BundleAR_7",
+        "locked_port_count": 26,
+        "emitted_port_count": 26,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "f9979648da4a8786a6dd5cc1c546885dc6f04fd8e7a97e1d3bb375686c29dcac",
+        "verilog_bytes": 7885
+      },
+      {
+        "module": "Queue2_AXI4BundleAR_9",
+        "locked_port_count": 24,
+        "emitted_port_count": 24,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "903b8a7ea6808fe4a0b187a1a151641511124d2b2fd24cc37c853cee7ab86502",
+        "verilog_bytes": 7422
+      },
+      {
+        "module": "Queue2_AXI4BundleAW",
+        "locked_port_count": 24,
+        "emitted_port_count": 24,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "02a67e250e89186040a5305970a090dbde368dbb44ee9391ca5bd136a2edcd1b",
+        "verilog_bytes": 7503
+      },
+      {
+        "module": "Queue2_AXI4BundleAW_10",
+        "locked_port_count": 24,
+        "emitted_port_count": 24,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "5e6c96cfed0e64c2244af9f66ad98a35dae09abd67b4ed8cad1da72cdd1fb8bf",
+        "verilog_bytes": 7316
+      },
+      {
+        "module": "Queue2_AXI4BundleAW_3",
+        "locked_port_count": 24,
+        "emitted_port_count": 24,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "7873408b3d69f02117ae467b13d5c786a233afa742a520847e099ce01c4f2dcf",
+        "verilog_bytes": 7373
+      },
+      {
+        "module": "Queue2_AXI4BundleAW_7",
+        "locked_port_count": 26,
+        "emitted_port_count": 26,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "38bbbaafb582add4c0da1dbff610e64e001ff5f82801bc2468ca91fccd7d5c9a",
+        "verilog_bytes": 7885
+      },
+      {
+        "module": "Queue2_AXI4BundleAW_9",
+        "locked_port_count": 24,
+        "emitted_port_count": 24,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "afeaec0a5085b55f08b662118b8e3c5a1b0319cfa4408447b1642f1ae0d0c745",
+        "verilog_bytes": 7422
+      },
+      {
+        "module": "Queue2_AXI4BundleB",
+        "locked_port_count": 10,
+        "emitted_port_count": 10,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "b8bf5a9224385ea396c829591c1704397b64fc2a04d7815ef1a6b14e91f464e3",
+        "verilog_bytes": 4801
+      },
+      {
+        "module": "Queue2_AXI4BundleB_10",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "6a96d921fc5a91513d072ad5fdb7cb86e86de583789dc3f9b1a012af8268c21e",
+        "verilog_bytes": 4436
+      },
+      {
+        "module": "Queue2_AXI4BundleB_3",
+        "locked_port_count": 10,
+        "emitted_port_count": 10,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "a91d4431dd27844b46d24cbf5937375d45da3f78eb9c249a24b494e791781a30",
+        "verilog_bytes": 4778
+      },
+      {
+        "module": "Queue2_AXI4BundleB_7",
+        "locked_port_count": 12,
+        "emitted_port_count": 12,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "5c5e80df159e754444e91f5c7d9f8d78f16cd57b2393135a7bbaa612f06aa410",
+        "verilog_bytes": 5124
+      },
+      {
+        "module": "Queue2_AXI4BundleB_9",
+        "locked_port_count": 10,
+        "emitted_port_count": 10,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "f559cb1869fec06fd9d81765eb232c1aa878c37e2678614c06f64531cd713c13",
+        "verilog_bytes": 4813
+      },
+      {
+        "module": "Queue2_AXI4BundleR",
+        "locked_port_count": 14,
+        "emitted_port_count": 14,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "3da05377a78f720fe06ace6c56b59f40ca3faa982ffaaee2942a9728d569493b",
+        "verilog_bytes": 6014
+      },
+      {
+        "module": "Queue2_AXI4BundleR_3",
+        "locked_port_count": 17,
+        "emitted_port_count": 17,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "8ffd6dc65b23fce8f2f45bd290e78192d770b82aa6caadce5014536711b176e7",
+        "verilog_bytes": 6973
+      },
+      {
+        "module": "Queue2_AXI4BundleR_67",
+        "locked_port_count": 14,
+        "emitted_port_count": 14,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "8693b38e0415aee0ffe54de788f2ef100fe52821b72726543e8ab790b486e6a9",
+        "verilog_bytes": 5596
+      },
+      {
+        "module": "Queue2_AXI4BundleR_71",
+        "locked_port_count": 18,
+        "emitted_port_count": 18,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "69ef034226cda58c6dd4c7afaaaea4f93dedf89cb9a067479beb0fde94e9f252",
+        "verilog_bytes": 6608
+      },
+      {
+        "module": "Queue2_AXI4BundleR_72",
+        "locked_port_count": 16,
+        "emitted_port_count": 16,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "4a46376803c05f84ba9230172780c691352f6cacd03b2a15a115da6490e7ca24",
+        "verilog_bytes": 6545
+      },
+      {
+        "module": "Queue2_AXI4BundleR_74",
+        "locked_port_count": 14,
+        "emitted_port_count": 14,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "6403896a6760b9378b5e546602d25601c4c2253b298f1ea2262850997be5ac2e",
+        "verilog_bytes": 5544
+      },
+      {
+        "module": "Queue2_AXI4BundleR_75",
+        "locked_port_count": 12,
+        "emitted_port_count": 12,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "1cc1245c152bd10eeadeb9dc2d4ef4741c26ceab5a89392c87071ab7add0ca10",
+        "verilog_bytes": 5188
+      },
+      {
+        "module": "Queue2_AXI4BundleW",
+        "locked_port_count": 12,
+        "emitted_port_count": 12,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "528dcce9dd7e2e1adc421ce4f21f80a455c5fe35cbaa6164f86963e786c19ab3",
+        "verilog_bytes": 5638
+      },
+      {
+        "module": "Queue2_AXI4BundleW_3",
+        "locked_port_count": 12,
+        "emitted_port_count": 12,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "0972c628c70e2c51b955306489a58f22680dcd8efe4ece7282b77c1ca6475d1e",
+        "verilog_bytes": 5252
+      },
+      {
+        "module": "Queue2_AXI4BundleW_9",
+        "locked_port_count": 12,
+        "emitted_port_count": 12,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "7cdc2bca397ee74d588ac226a5a61986a6ca56192d94ecae541f6c4b33694112",
+        "verilog_bytes": 5188
+      },
+      {
+        "module": "Queue2_DSData",
+        "locked_port_count": 9,
+        "emitted_port_count": 9,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "4f7d575f9fab2924c4fe27a418fb85a7b3d45ee52a1304d88e61aa73a4b19179",
+        "verilog_bytes": 4658
+      },
+      {
+        "module": "Queue2_TLBundleA",
+        "locked_port_count": 22,
+        "emitted_port_count": 22,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "79579076296403758dd9ad8e9eb2145cd36edc83a97c14bdb3e44239f91682ac",
+        "verilog_bytes": 7869
+      },
+      {
+        "module": "Queue2_TLBundleA_10",
+        "locked_port_count": 22,
+        "emitted_port_count": 22,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "43a213753cef198a51bf395b506b75fc5381dd0123b52e9dd5085c905d1e0702",
+        "verilog_bytes": 7863
+      },
+      {
+        "module": "Queue2_TLBundleA_14",
+        "locked_port_count": 25,
+        "emitted_port_count": 25,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "635d49a9287b723bede8b66157b6c7ce6e5d7863d7072de53668a98d8948e3fa",
+        "verilog_bytes": 8517
+      },
+      {
+        "module": "Queue2_TLBundleA_15",
+        "locked_port_count": 19,
+        "emitted_port_count": 19,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "1746da442a5bff1967db2301e6222ef09f80f0453ef1f319fe7bb0deab004fdd",
+        "verilog_bytes": 7399
+      },
+      {
+        "module": "Queue2_TLBundleA_16",
+        "locked_port_count": 22,
+        "emitted_port_count": 22,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "dc6354eaf9a9e1252f201c2247ccac44db3b31f3ee25a59fa38b64fdd486af8a",
+        "verilog_bytes": 7240
+      },
+      {
+        "module": "Queue2_TLBundleA_2",
+        "locked_port_count": 22,
+        "emitted_port_count": 22,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "4f536d471959aa6824882fa0c1d1a215bb74db4dbe1af7a067f625b86f155f6c",
+        "verilog_bytes": 7340
+      },
+      {
+        "module": "Queue2_TLBundleA_20",
+        "locked_port_count": 24,
+        "emitted_port_count": 24,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "8fc98724c3f031a1131f262398ad0d123f51eda14c45fa478418556f1c7a8745",
+        "verilog_bytes": 8391
+      },
+      {
+        "module": "Queue2_TLBundleA_21",
+        "locked_port_count": 30,
+        "emitted_port_count": 30,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "598861a1d40113d55847d23478139b19e6d67142aa1fe5723be1ca65d1dd9111",
+        "verilog_bytes": 10133
+      },
+      {
+        "module": "Queue2_TLBundleA_22",
+        "locked_port_count": 28,
+        "emitted_port_count": 28,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "7877a0390740cb38089b07b6ea55215121b5208699300d49941f713155131ead",
+        "verilog_bytes": 9378
+      },
+      {
+        "module": "Queue2_TLBundleA_26",
+        "locked_port_count": 22,
+        "emitted_port_count": 22,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "57e6478e1171eb92e3b6154175946f8e1591065bb8a0a950dafac141d921d7fe",
+        "verilog_bytes": 7318
+      },
+      {
+        "module": "Queue2_TLBundleA_28",
+        "locked_port_count": 22,
+        "emitted_port_count": 22,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "024ab6a9e23c864967e97d83238dc380013f220ba8eac0364e97cd6b4318dc27",
+        "verilog_bytes": 7353
+      },
+      {
+        "module": "Queue2_TLBundleA_29",
+        "locked_port_count": 22,
+        "emitted_port_count": 22,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "3a0ce8c92394c300dc174b21e9a8c40e36d2abdd7eb4af1bc2deec6dbfd607ea",
+        "verilog_bytes": 7238
+      },
+      {
+        "module": "Queue2_TLBundleA_33",
+        "locked_port_count": 32,
+        "emitted_port_count": 32,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "c36de22a04addf4c545c3d6c08e26b22200eaf930dfb841580991bd3ed67b1c4",
+        "verilog_bytes": 10540
+      },
+      {
+        "module": "Queue2_TLBundleA_39",
+        "locked_port_count": 26,
+        "emitted_port_count": 26,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "31ef2ad3dd786d37b5f401abc19168e2d5d26dde064eadade1528dc06728dcca",
+        "verilog_bytes": 8926
+      },
+      {
+        "module": "Queue2_TLBundleA_5",
+        "locked_port_count": 22,
+        "emitted_port_count": 22,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "402cb40120414eab61fcefbb61a6f214037da13c7d1559d2ba5110d470b6fa1e",
+        "verilog_bytes": 7872
+      },
+      {
+        "module": "Queue2_TLBundleA_50",
+        "locked_port_count": 21,
+        "emitted_port_count": 21,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "f6851f5c86b300134853773149ee245fc08cacaf6ba7abb0f710b744eb7f9a47",
+        "verilog_bytes": 7745
+      },
+      {
+        "module": "Queue2_TLBundleA_7",
+        "locked_port_count": 22,
+        "emitted_port_count": 22,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "40312f8ede08323c2280c396f4f5ebb6c4f64cdaec7df6269061e085eb374746",
+        "verilog_bytes": 7238
+      },
+      {
+        "module": "Queue2_TLBundleB",
+        "locked_port_count": 19,
+        "emitted_port_count": 19,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "b8cc0100824003a0a6af3747382b899c17f698629cca78317cf88bed9f81403e",
+        "verilog_bytes": 7277
+      },
+      {
+        "module": "Queue2_TLBundleB_1",
+        "locked_port_count": 18,
+        "emitted_port_count": 18,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "f78d7436c85d9fde6928bf61e8feeef70854e9e2a68e2b7af47dcf21f11f6dbd",
+        "verilog_bytes": 6284
+      },
+      {
+        "module": "Queue2_TLBundleB_10",
+        "locked_port_count": 11,
+        "emitted_port_count": 11,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "162c8d89f32c808684f366df6cbbc3638e21a3e64e44c0b37eeef9248cefa82b",
+        "verilog_bytes": 3904
+      },
+      {
+        "module": "Queue2_TLBundleB_2",
+        "locked_port_count": 22,
+        "emitted_port_count": 22,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "fe7d6c33c9670e52e0c857b4a3febd944316e008699682532913bad2dc70e631",
+        "verilog_bytes": 7849
+      },
+      {
+        "module": "Queue2_TLBundleB_6",
+        "locked_port_count": 19,
+        "emitted_port_count": 19,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "34334d161ee12c78e7dce662aaca26c3e12449c2353d4b4eddd42e7e7209a81f",
+        "verilog_bytes": 6624
+      },
+      {
+        "module": "Queue2_TLBundleC",
+        "locked_port_count": 22,
+        "emitted_port_count": 22,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "41c1fc87e5f2b42a6137c40e2422f5090b9c0d87764d8fe6a1ccd5f084baa1b9",
+        "verilog_bytes": 7568
+      },
+      {
+        "module": "Queue2_TLBundleC_1",
+        "locked_port_count": 25,
+        "emitted_port_count": 25,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "020002e9ad5038be3dc83ecbd21faf32e2f332e365cb03d22869f9f98025af5e",
+        "verilog_bytes": 8378
+      },
+      {
+        "module": "Queue2_TLBundleC_2",
+        "locked_port_count": 30,
+        "emitted_port_count": 30,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "ae92f0bc460e5985f4e776dc60957d85b87400d43164f7e99097663ffad20f76",
+        "verilog_bytes": 9960
+      },
+      {
+        "module": "Queue2_TLBundleC_6",
+        "locked_port_count": 19,
+        "emitted_port_count": 19,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "61ea23237266d04de56e710456b0efc5ea31bdc254aafc37783d16c73e8c3e14",
+        "verilog_bytes": 7005
+      },
+      {
+        "module": "Queue2_TLBundleD",
+        "locked_port_count": 22,
+        "emitted_port_count": 22,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "19e4c40db0900928463b52e5f0f7b7c2cc04fcb59992ec7d2524d99a1a7aec55",
+        "verilog_bytes": 7659
+      },
+      {
+        "module": "Queue2_TLBundleD_12",
+        "locked_port_count": 22,
+        "emitted_port_count": 22,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "f955d7c971fdaf9dc0d86bf4cf4e01c70dbda9041cd1cb75d646ab2529c5aab4",
+        "verilog_bytes": 7686
+      },
+      {
+        "module": "Queue2_TLBundleD_16",
+        "locked_port_count": 24,
+        "emitted_port_count": 24,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "91b7ca0577ae0e21d68dbc393677a50e8a4b8c2c16cb10a15102e94af5b803c9",
+        "verilog_bytes": 8194
+      },
+      {
+        "module": "Queue2_TLBundleD_17",
+        "locked_port_count": 17,
+        "emitted_port_count": 17,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "126f10a3beb8c32110f5d5e9abf227ec62cd5e7fb75036d9dc8e6423edb32362",
+        "verilog_bytes": 5537
+      },
+      {
+        "module": "Queue2_TLBundleD_18",
+        "locked_port_count": 21,
+        "emitted_port_count": 21,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "857c7da7a9e5e9fa4acc8dc79eacb190300a50635111ab4d5134c8f28f0cca84",
+        "verilog_bytes": 7473
+      },
+      {
+        "module": "Queue2_TLBundleD_19",
+        "locked_port_count": 22,
+        "emitted_port_count": 22,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "74f15621c1a7536bdc0a177f7254350f483723b67830f93fb9d216459d3d3538",
+        "verilog_bytes": 7082
+      },
+      {
+        "module": "Queue2_TLBundleD_2",
+        "locked_port_count": 16,
+        "emitted_port_count": 16,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "943fdc7796afb0a54f05bdf3f92331799880ecf72e5000e850c897c53d3fb68e",
+        "verilog_bytes": 6344
+      },
+      {
+        "module": "Queue2_TLBundleD_23",
+        "locked_port_count": 22,
+        "emitted_port_count": 22,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "4bab06605c3d0ecff1bcd38f7a6e309a1b553cd68c4f55fe558603b192a671e8",
+        "verilog_bytes": 7692
+      },
+      {
+        "module": "Queue2_TLBundleD_24",
+        "locked_port_count": 24,
+        "emitted_port_count": 24,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "7a722ea3f80314126533ac09e3a6b2f2946d9e6d161519c55d20b23f70db963e",
+        "verilog_bytes": 8164
+      },
+      {
+        "module": "Queue2_TLBundleD_29",
+        "locked_port_count": 22,
+        "emitted_port_count": 22,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "bb600f913dc90f9a07ee2fe037b0f59921d4d8965b42edc6f90ac57ccc0d34bc",
+        "verilog_bytes": 7059
+      },
+      {
+        "module": "Queue2_TLBundleD_31",
+        "locked_port_count": 22,
+        "emitted_port_count": 22,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "bb6271e80302d46513da1142c146ca44ffbba0173302648a3573942eed34d8ed",
+        "verilog_bytes": 7084
+      },
+      {
+        "module": "Queue2_TLBundleD_32",
+        "locked_port_count": 22,
+        "emitted_port_count": 22,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "f0bd5944b896a7cb26b4282950e32cd19b5a2ada30f2abd0d9c808f50b67ebf9",
+        "verilog_bytes": 7079
+      },
+      {
+        "module": "Queue2_TLBundleD_36",
+        "locked_port_count": 24,
+        "emitted_port_count": 24,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "b8ec5bc1bc2f2ef9e1dcbd4cad5c1463d2c9a0e2b3c061014a404ec956d7b07c",
+        "verilog_bytes": 8171
+      },
+      {
+        "module": "Queue2_TLBundleD_4",
+        "locked_port_count": 22,
+        "emitted_port_count": 22,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "b67940a8ad70912883e1106a250612533417aa306bfa6c337c29179ef8dd3ac0",
+        "verilog_bytes": 7092
+      },
+      {
+        "module": "Queue2_TLBundleD_42",
+        "locked_port_count": 22,
+        "emitted_port_count": 22,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "bad5f8cc792ca56ddb41b56a76df91b95bda1e9e8dba327847976fd9e294bb69",
+        "verilog_bytes": 7758
+      },
+      {
+        "module": "Queue2_TLBundleD_53",
+        "locked_port_count": 21,
+        "emitted_port_count": 21,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "354eec44ba8247aca0371a319af0c0b5a4d810a1365cff5e1543a48f9743cbc7",
+        "verilog_bytes": 7226
+      },
+      {
+        "module": "Queue2_TLBundleD_7",
+        "locked_port_count": 22,
+        "emitted_port_count": 22,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "54e14461d45f3cad1d381194611223500943e96ec1a3191694f33442e674fb26",
+        "verilog_bytes": 7660
+      },
+      {
+        "module": "Queue2_TLBundleE",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "d0737299948e72b0f4bf64d913a5c92133a8f79d32bfd637b8d4fad69749e91f",
+        "verilog_bytes": 4433
+      },
+      {
+        "module": "Queue2_TLBundleE_1",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "430bbd7048549c1ef8dbf478fe5ffa87bc28e2f41205999cd33872abbebf691a",
+        "verilog_bytes": 4441
+      },
+      {
+        "module": "Queue2_TLBundleE_10",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "fabd3dcebb303daace8d8dbc598bcd29b96d219adb7dc03760fd85b00832e443",
+        "verilog_bytes": 4434
+      },
+      {
+        "module": "Queue2_TLBundleE_2",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "43991031279f5da28d792dda970629eb50e4ce5f33f6a798fe628092ae57be24",
+        "verilog_bytes": 4435
+      },
+      {
+        "module": "Queue2_UInt2",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "8fff2bf88267dd0fa356b911457bfc50ed20ad4590d67d04d386694438e946b1",
+        "verilog_bytes": 5525
+      },
+      {
+        "module": "Queue2_UInt3",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "a46e28e4659dc86f9366b79435690b06ca245175b417352ea70e0f16c66b680e",
+        "verilog_bytes": 5525
+      },
+      {
+        "module": "Queue40_L2TlbMQBundle",
+        "locked_port_count": 17,
+        "emitted_port_count": 17,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "f5630f318023c3bee0d3d10922cdf244372ab4b159555464e6bb90f0db889dca",
+        "verilog_bytes": 8505
+      },
+      {
+        "module": "Queue4_BundleMap",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "4dda16f2467875069a81945566cedf58d81a5bd17c50a3f5fcedfd60d77c2503",
+        "verilog_bytes": 4563
+      },
+      {
+        "module": "Queue4_HintQueueEntry",
+        "locked_port_count": 12,
+        "emitted_port_count": 12,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "ae0224cfc4d283bbffaa9c60eb659e639f33026478599394e04baf81ee03994a",
+        "verilog_bytes": 6897
+      },
+      {
+        "module": "Queue4_TPmetaReq",
+        "locked_port_count": 37,
+        "emitted_port_count": 37,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "875aa80b6279e9bea287201ccb1251d2bb2ce46827a6bd59890e613acb9d2703",
+        "verilog_bytes": 12704
+      },
+      {
+        "module": "Queue4_triggerBundle",
+        "locked_port_count": 12,
+        "emitted_port_count": 12,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "a82b8319f3f18e8fb0db54776cbaaf4009682629662aaf6d90410efe06e98819",
+        "verilog_bytes": 5284
+      },
+      {
+        "module": "Queue5_BundleMap",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "87373c863a7180843b2968a87bb7d37e5b50cbf451c06a4c9c03bc66f3801848",
+        "verilog_bytes": 4817
+      },
+      {
+        "module": "Queue5_MSHRRequest",
+        "locked_port_count": 30,
+        "emitted_port_count": 30,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "dea2eb7a169029f077ddc5322dd15b0b8d2373e3a14df61d2017a3f4f224d6ba",
+        "verilog_bytes": 9262
+      },
+      {
+        "module": "Queue68_BundleMap",
+        "locked_port_count": 10,
+        "emitted_port_count": 10,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "3a24df079e955d5a73080407453f0564d7619a9c5713b425355ea6a59def570a",
+        "verilog_bytes": 7345
+      },
+      {
+        "module": "Queue6_DSData",
+        "locked_port_count": 9,
+        "emitted_port_count": 9,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "eb5fd0ed8ac76ceeda8328c57e82bd57d27386f0bc5622cd8847708491774f76",
+        "verilog_bytes": 6843
+      },
+      {
+        "module": "Queue8_TPmetaReq",
+        "locked_port_count": 24,
+        "emitted_port_count": 24,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "d4d9c705cdbe7a5be0e4754bed2dad1707801de16733e5198e46d395874f896f",
+        "verilog_bytes": 8850
+      },
+      {
+        "module": "Queue8_UInt12",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "0148b5bc45f085d632d83f1c11102275912baf8acfa1ff51463d909e25d378a6",
+        "verilog_bytes": 4626
+      },
+      {
+        "module": "Queue9_TLBundleC",
+        "locked_port_count": 19,
+        "emitted_port_count": 19,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "dfafcb88ca81c265f4f18186dda173255abaf8a6fcf4e3f0033340e1ccf56dc0",
+        "verilog_bytes": 11198
+      },
+      {
+        "module": "Queue9_tpDataEntry",
+        "locked_port_count": 31,
+        "emitted_port_count": 31,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "4e0d1b2e8dea5e6a21f80f01bf47d44c522d8830e884fdbd6a49ce638e1846cf",
+        "verilog_bytes": 12555
+      },
+      {
+        "module": "ram_10x288",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "f5e0d9c45857aca96396ac34fccdce913dba07039390b810105e85b16523df3d",
+        "verilog_bytes": 2106
+      },
+      {
+        "module": "ram_16x11",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "053cab937232f1af190184e1228c96cc08cf0265cfb568bdba4451a32b2813d8",
+        "verilog_bytes": 1485
+      },
+      {
+        "module": "ram_16x25",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "1bdcd492db48c435fe89d2fb2c7c2db384c80534e96a40897c8e1d08c21d3e08",
+        "verilog_bytes": 1553
+      },
+      {
+        "module": "ram_16x6",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "d2b3a09b73ec3d959954413f2b5df784fdebb0764f052d45f9c85ecc46a7e3fa",
+        "verilog_bytes": 1443
+      },
+      {
+        "module": "ram_16x67",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "788a9b047c078c3b565e771dee8620953ddce8844490c3f8ca991ac4cf70c33a",
+        "verilog_bytes": 1723
+      },
+      {
+        "module": "ram_2x10",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "23a8487ffdc6324807c7912be885e411d6997d8df9b5816aaf9c1c241f2b8e01",
+        "verilog_bytes": 1084
+      },
+      {
+        "module": "ram_2x116",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "6f8030aee4a905be559f38d02f42e04cbf34343f404f8bb5226456a3be7c6629",
+        "verilog_bytes": 1180
+      },
+      {
+        "module": "ram_2x117",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "60ed7e8b50d159f04f708555b446cf5ff32d8c5bacf10a253b940777b801a6ad",
+        "verilog_bytes": 1183
+      },
+      {
+        "module": "ram_2x119",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "c397c97f5876353b4927604b995f01e3e318678462c5b6e34584ba58c5980fe5",
+        "verilog_bytes": 1183
+      },
+      {
+        "module": "ram_2x132",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "414a87b49aae192c08d3c33e4ea653b4bf929c89d99935a579e6fba299fcf80d",
+        "verilog_bytes": 1192
+      },
+      {
+        "module": "ram_2x135",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "8b620d3cf3daff7ea156a96ec5a673a4a16dc8746cd9ac9355cbb3ea15514006",
+        "verilog_bytes": 1195
+      },
+      {
+        "module": "ram_2x136",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "28f8f02bdb75861d678c2e298fdfd79cd725d337215ae4b884d5c9b5f064e853",
+        "verilog_bytes": 1195
+      },
+      {
+        "module": "ram_2x16",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "918b664ddd1fae2e24ce6a47e82c3d301120bb4f17458670edc619740a560d35",
+        "verilog_bytes": 1094
+      },
+      {
+        "module": "ram_2x18",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "16bdf71c83c9984b6faa66c46393b24920f203960e76fa4e9266ee9857cbe15a",
+        "verilog_bytes": 1097
+      },
+      {
+        "module": "ram_2x2",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "88bfcd5a14017c10de3ea61c9a34d72b13da3794be23e6119634787eb285fccf",
+        "verilog_bytes": 1074
+      },
+      {
+        "module": "ram_2x256",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "41e5ce09658975db69df25facd95193f7a8eebd639c0c20c07798f7eb77f2099",
+        "verilog_bytes": 1285
+      },
+      {
+        "module": "ram_2x273",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "5831d634f0d4f6317adece212218f29154533881ead74479e447547ba33ec236",
+        "verilog_bytes": 1300
+      },
+      {
+        "module": "ram_2x274",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "c4f428a3510d109aed2935fb511bea538ed18d9d270cc43861168a0288fb4b2b",
+        "verilog_bytes": 1300
+      },
+      {
+        "module": "ram_2x275",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "a37146cfc4b7a4888502101800063c01a7c9c20363169b750e4cbc1268996460",
+        "verilog_bytes": 1300
+      },
+      {
+        "module": "ram_2x276",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "9c4f21576a1f03ec52692b8b7713f398a277397b38662728b958a222c4951ccb",
+        "verilog_bytes": 1300
+      },
+      {
+        "module": "ram_2x281",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "7de8fc612a95c7c7bfd03937bd8f3db23d110d3cde8f76bf5f86722b874b226e",
+        "verilog_bytes": 1306
+      },
+      {
+        "module": "ram_2x283",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "d28384d41c839c0f8db5efce5ae9c8d6ac0c2390a6d399cbb8855d8b2d6e7fc4",
+        "verilog_bytes": 1306
+      },
+      {
+        "module": "ram_2x284",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "27f8b65d606d39c443e9fb80e568f7c3f86e9008dfff142b0895007a0f1ffbf2",
+        "verilog_bytes": 1306
+      },
+      {
+        "module": "ram_2x289",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "34f735244d4689da4caa7a21436c65e2a8129d3abe4e0a657894a9aa015fde00",
+        "verilog_bytes": 1312
+      },
+      {
+        "module": "ram_2x3",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "4bec232de32167bb5357f1cd6af93b2c486e8f10c34020606fcc014e5c08282e",
+        "verilog_bytes": 1074
+      },
+      {
+        "module": "ram_2x309",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "4b4a123ed2accc594923993d301f4183be39ba813cf6c29b3b21f6ec603eda92",
+        "verilog_bytes": 1327
+      },
+      {
+        "module": "ram_2x312",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "67cac4497f30f5b66fd6c0139e478060a2e4c5c055ee91d12d3519c3cebae29c",
+        "verilog_bytes": 1327
+      },
+      {
+        "module": "ram_2x315",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "6c2daa627e4ab05316067c3fcc77edc1130d7f444ac597432f190f4da40e6775",
+        "verilog_bytes": 1330
+      },
+      {
+        "module": "ram_2x324",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "4372583af96ee9f0ffa39e51959f8a90674eb969cd73cec702aaa97a00b2b8eb",
+        "verilog_bytes": 1336
+      },
+      {
+        "module": "ram_2x345",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "34fdf8a8ba396f41c57a0624dcb0887b98160f8944fc88f520eec8a0225611cd",
+        "verilog_bytes": 1354
+      },
+      {
+        "module": "ram_2x348",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "872d3faa4984388a20e91ad0712b9281fcd29224998bd9afcade0791501f6391",
+        "verilog_bytes": 1354
+      },
+      {
+        "module": "ram_2x35",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "81253de79618f81d8acc730eb593349c916da905b639654c0ee3ca0dda6716f6",
+        "verilog_bytes": 1109
+      },
+      {
+        "module": "ram_2x350",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "e62e8bbcba11024afefb6a69729547f2f6f237c7c4b581bc0055155b7bf95f71",
+        "verilog_bytes": 1357
+      },
+      {
+        "module": "ram_2x351",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "0c559a6c5f63e999016b96fe9bc269dca2a7a8b151e4833b001f68e486eb275c",
+        "verilog_bytes": 1357
+      },
+      {
+        "module": "ram_2x352",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "6187961cd15432be2d83dbeafe0ffe02aa2f952494f08e8e82b6c7bfb704c190",
+        "verilog_bytes": 1357
+      },
+      {
+        "module": "ram_2x354",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "3f887d1638308c9abc7d948f4d076e17427ef71acd7d4c2660b7db8434df44d4",
+        "verilog_bytes": 1360
+      },
+      {
+        "module": "ram_2x355",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "d118aa470ffe725040198341e71f732306fdeafac79d908849dc4322869fe0e6",
+        "verilog_bytes": 1360
+      },
+      {
+        "module": "ram_2x356",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "2bf88b3d352d767b923c829fe739cd932728db5241958d4875e874e44c1a31df",
+        "verilog_bytes": 1360
+      },
+      {
+        "module": "ram_2x359",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "f606102c01900d3dd013793f3385dcc753baef6e27a8621fca009b5b82cecf83",
+        "verilog_bytes": 1363
+      },
+      {
+        "module": "ram_2x361",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "d2954468d7c7e0aeed926e744df677c3b2a6e1549c9af0e42a01ea57048c05f2",
+        "verilog_bytes": 1366
+      },
+      {
+        "module": "ram_2x362",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "e858fdf5e38546be45b89bd57909c730d265494db40c14241db77e737ddd5225",
+        "verilog_bytes": 1366
+      },
+      {
+        "module": "ram_2x37",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "e8f41b820edfb7cd3262afd3c4c32f1550664992bfcfea3a13c810bc4a69b883",
+        "verilog_bytes": 1112
+      },
+      {
+        "module": "ram_2x373",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "91f5c5f01eaaba9e44560e638d812fbd449b638cc02bba5fa166ff686e33467e",
+        "verilog_bytes": 1375
+      },
+      {
+        "module": "ram_2x374",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "dc6846aaa81edbb6b232790b699be0541e64959abc7400cf12acac2cfe47d571",
+        "verilog_bytes": 1375
+      },
+      {
+        "module": "ram_2x406",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "dffb564d4724dcc1118658c20fad82fff58176d47d25136c9fb48bcc368404f5",
+        "verilog_bytes": 1399
+      },
+      {
+        "module": "ram_2x407",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "7201d84ebbea04aa746d6b160a7c4d940dbc031ef3bcd4ef7a08c44e5b378301",
+        "verilog_bytes": 1399
+      },
+      {
+        "module": "ram_2x51",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "b9eda0461eb3e3270da43f66aa0360aacbd165d6eb3df52779cb4eb71e736d3d",
+        "verilog_bytes": 1121
+      },
+      {
+        "module": "ram_2x56",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "d07543976cf3882539157a5611fce0cdb63f8b5b03b5263740bf6605e00fb44b",
+        "verilog_bytes": 1124
+      },
+      {
+        "module": "ram_2x61",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "69dfad9eb411a9e8177500ca8c153a935242d035774602f57ca3e9c696113355",
+        "verilog_bytes": 1130
+      },
+      {
+        "module": "ram_2x7",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "9fd15cb7c18438e571622f7dbca7eca2b2c1fe998a04f0633585e7705eda4b84",
+        "verilog_bytes": 1077
+      },
+      {
+        "module": "ram_2x71",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "c58a9987ccb719022ae1cfd63c7b35e2963c8528f56ba34df3b6d1bd2b106cd6",
+        "verilog_bytes": 1136
+      },
+      {
+        "module": "ram_2x72",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "ea4b76a8ce462153b400dde4bb93df5adcab4613ebe7ea1e180208f687f24871",
+        "verilog_bytes": 1136
+      },
+      {
+        "module": "ram_2x73",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "47029355ac4c23d5882e8464f3c454ba0910dc455e819e0bdd1017ad4e4241a5",
+        "verilog_bytes": 1139
+      },
+      {
+        "module": "ram_2x77",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "b145401de076d3f9c3abe51f0316fce869cd932bd1ec8cc767207a8d4fb208d3",
+        "verilog_bytes": 1142
+      },
+      {
+        "module": "ram_2x79",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "6537c0819c8b04b6ff37694b6f2313b291692130fc057806676463fb5f6092dd",
+        "verilog_bytes": 1142
+      },
+      {
+        "module": "ram_2x80",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "51e31211cf3ad3e99f7e68dc63147b853a92b312936973d8cb43456ba0217a35",
+        "verilog_bytes": 1142
+      },
+      {
+        "module": "ram_2x81",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "d791baff3b04ba2c0bc95b6c90303ca41bbfd2eea3e70ef60c60eab6ade56899",
+        "verilog_bytes": 1145
+      },
+      {
+        "module": "ram_2x87",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "d936fd31d5b18142302b3fcc1c79cb7894d4bb67c2e7630d5821045fb222d2b6",
+        "verilog_bytes": 1148
+      },
+      {
+        "module": "ram_40x47",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "0c051220aeaa2f098aec01612500229282aa0962c09403e803dc51add1a9acb3",
+        "verilog_bytes": 2478
+      },
+      {
+        "module": "ram_4x11",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "9996bd61603a5b4e6ceef40361c37062c7ed94477d65db31b728caeaf3da2bfa",
+        "verilog_bytes": 1177
+      },
+      {
+        "module": "ram_4x52",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "3369289e08b610753dda16fef97dfedb0164889b9ae47b6c44d02096f355d457",
+        "verilog_bytes": 1227
+      },
+      {
+        "module": "ram_4x525",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "9ea3d664a0f149e4d0f3d677f7f4b5d41621f074ae8ebfec77fbb3e0e6d80ea8",
+        "verilog_bytes": 1835
+      },
+      {
+        "module": "ram_5x119",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "9475030db60ad628d004948fccf062a0dd5686e752b66fa4581683aef9e9c90e",
+        "verilog_bytes": 1378
+      },
+      {
+        "module": "ram_68x11",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "9982a976466ad51cc3b4e826bce17d1d0757b0f48af65e033c700f847c056b9f",
+        "verilog_bytes": 2837
+      },
+      {
+        "module": "ram_6x257",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "8e012192df329463419a7ae493cb3906f25d28927f84377d798166519140c9ac",
+        "verilog_bytes": 1676
+      },
+      {
+        "module": "ram_8x12",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "08de714018a2abbe4a77abecdbdfb9d50fc398d5f6bbefd5d59d9e2e5d20b30c",
+        "verilog_bytes": 1277
+      },
+      {
+        "module": "ram_8x525",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "e913c6b7430992d4d51760d18f84513709c87bd62c43039fcec98897f2508106",
+        "verilog_bytes": 2455
+      },
+      {
+        "module": "ram_9x318",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "bec80c072d2a091893006dbf8ea82e5d0f86e1dd139f54afe40682a6cf661c1a",
+        "verilog_bytes": 2090
+      },
+      {
+        "module": "ram_9x504",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "7e52f579e4472face532a35c7a78de123e419e1ca9b42e199eb683125a9cfe3d",
+        "verilog_bytes": 2550
+      },
+      {
+        "module": "ram_data_16x256",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "546092ff4e37bbc442443701e8f07ef2aaa3db172aefe3a2e800d41936c0a06d",
+        "verilog_bytes": 2552
+      },
+      {
+        "module": "ram_extra_id_4x3",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "51d9a0d58c4c3c69a00217a7d5ed4a01f97b929e8fc9f24d798f8034668f0b2a",
+        "verilog_bytes": 1163
+      },
+      {
+        "module": "ram_extra_id_5x3",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "6e14df26e3c98f2abd26a2dc212aed85d66fc77676a22395b09ce7b390c86e68",
+        "verilog_bytes": 1185
+      },
+      {
+        "module": "ram_sink_2x6",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "5f2be06c3c244bddb9d219fef11684dd6b36ab0160ad667c3310e9ad1d2db945",
+        "verilog_bytes": 1082
+      },
+      {
+        "module": "ram_sink_2x8",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "declaration_order_preserved": false,
+        "verilog_sha256": "17b2cc1fc5888066a9152c262c79be4112791f8fb9361ddc0505f401a17f4837",
+        "verilog_bytes": 1082
+      }
+    ]
+  },
+  "determinism": {
+    "status": "PASS",
+    "repeated_elaborations_per_module": 2,
+    "failures": []
+  },
+  "differential": {
+    "status": "PASS",
+    "tool": "verilator",
+    "transport": "wsl.exe -d Debian -- bash -lc",
+    "stimulus": "shared 64-bit Galois LFSR replayed identically into both modules",
+    "compared_signals": [
+      "io_deq_valid",
+      "io_deq_bits_*",
+      "io_enq_ready",
+      "io_count",
+      "every remaining output port"
+    ],
+    "fixture_families": {
+      "queue": 10,
+      "pipe_with_flush": 8
+    },
+    "trace_log_sha256": "01d57093e17f6527caef29f06f76950e39eace1a5b3a8283dd47c9a6ac5f8610",
+    "trace_log_lines": 169,
+    "fixture_count": 18,
+    "cycles_per_fixture": 4096,
+    "total_cycles": 73728,
+    "compile": {
+      "command": [
+        "verilator",
+        "--binary",
+        "--timing",
+        "-Wno-fatal",
+        "-Wno-WIDTHEXPAND",
+        "-Wno-WIDTHTRUNC",
+        "--x-assign",
+        "0",
+        "--x-initial",
+        "0",
+        "--top-module",
+        "tb",
+        "--Mdir",
+        "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-chisel-decoupled-family/obj-differential",
+        "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-chisel-decoupled-family/decoupled-differential.sv"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "output_tail": "odule PipeWithFlush_8_Reference(  \n      |        ^~~~~~~~~~~~~~~~~~~~~~~~~\n                       /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-chisel-decoupled-family/decoupled-differential.sv:5882:8: ... Location of module with timescale\n 5882 | module tb;\n      |        ^~\n%Warning-TIMESCALEMOD: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-chisel-decoupled-family/decoupled-differential.sv:5518:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)\n 5518 | module PipeWithFlush_9_Reference(  \n      |        ^~~~~~~~~~~~~~~~~~~~~~~~~\n                       /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-chisel-decoupled-family/decoupled-differential.sv:5882:8: ... Location of module with timescale\n 5882 | module tb;\n      |        ^~\n%Warning-TIMESCALEMOD: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-chisel-decoupled-family/decoupled-differential.sv:5683:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)\n 5683 | module PipeWithFlush_10_Reference(  \n      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~\n                       /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-chisel-decoupled-family/decoupled-differential.sv:5882:8: ... Location of module with timescale\n 5882 | module tb;\n      |        ^~\n%Warning-TIMESCALEMOD: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-chisel-decoupled-family/decoupled-differential.sv:5749:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)\n 5749 | module PipeWithFlush_11_Reference(  \n      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~\n                       /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-chisel-decoupled-family/decoupled-differential.sv:5882:8: ... Location of module with timescale\n 5882 | module tb;\n      |        ^~\n",
+      "output_sha256": "3f29cda4c440b6a845464b5f27734974d72a1f48d88c21dac0a1602fa925540e"
+    },
+    "run": {
+      "command": [
+        "bash",
+        "-c",
+        "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-chisel-decoupled-family/obj-differential/Vtb > /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-chisel-decoupled-family/decoupled-differential.log 2>&1"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "output_tail": "",
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "fixtures": [
+      {
+        "module": "Queue2_UInt2",
+        "family": "queue",
+        "cycles": 4096,
+        "locked_port_count": 8,
+        "mid_run_reset_pulse_cycle": 1024,
+        "has_clock": true,
+        "has_reset": true,
+        "fixture_summary": "FIXTURE Queue2_UInt2 cycles=4096 errors=0",
+        "trace_match": true,
+        "output_errors": [
+          [
+            "io_deq_bits",
+            0
+          ],
+          [
+            "io_deq_valid",
+            0
+          ],
+          [
+            "io_enq_ready",
+            0
+          ]
+        ],
+        "entries": 2,
+        "pointer_bits": 1,
+        "stored_word_bits": 2,
+        "flow": true,
+        "pipe_option": false,
+        "has_flush": false,
+        "has_count": false
+      },
+      {
+        "module": "Queue1_CtrlReq",
+        "family": "queue",
+        "cycles": 4096,
+        "locked_port_count": 32,
+        "mid_run_reset_pulse_cycle": 1024,
+        "has_clock": true,
+        "has_reset": true,
+        "fixture_summary": "FIXTURE Queue1_CtrlReq cycles=4096 errors=0",
+        "trace_match": true,
+        "output_errors": [
+          [
+            "io_deq_bits_cmd",
+            0
+          ],
+          [
+            "io_deq_bits_data_0",
+            0
+          ],
+          [
+            "io_deq_bits_data_1",
+            0
+          ],
+          [
+            "io_deq_bits_data_2",
+            0
+          ],
+          [
+            "io_deq_bits_data_3",
+            0
+          ],
+          [
+            "io_deq_bits_data_4",
+            0
+          ],
+          [
+            "io_deq_bits_data_5",
+            0
+          ],
+          [
+            "io_deq_bits_data_6",
+            0
+          ],
+          [
+            "io_deq_bits_data_7",
+            0
+          ],
+          [
+            "io_deq_bits_dir",
+            0
+          ],
+          [
+            "io_deq_bits_set",
+            0
+          ],
+          [
+            "io_deq_bits_tag",
+            0
+          ],
+          [
+            "io_deq_bits_way",
+            0
+          ],
+          [
+            "io_deq_valid",
+            0
+          ],
+          [
+            "io_enq_ready",
+            0
+          ]
+        ],
+        "entries": 1,
+        "pointer_bits": 1,
+        "stored_word_bits": 776,
+        "flow": false,
+        "pipe_option": false,
+        "has_flush": false,
+        "has_count": false
+      },
+      {
+        "module": "Queue10_GrantBuffer_Anon",
+        "family": "queue",
+        "cycles": 4096,
+        "locked_port_count": 7,
+        "mid_run_reset_pulse_cycle": 1024,
+        "has_clock": true,
+        "has_reset": true,
+        "fixture_summary": "FIXTURE Queue10_GrantBuffer_Anon cycles=4096 errors=0",
+        "trace_match": true,
+        "output_errors": [
+          [
+            "io_count",
+            0
+          ],
+          [
+            "io_deq_valid",
+            0
+          ],
+          [
+            "io_enq_ready",
+            0
+          ]
+        ],
+        "entries": 10,
+        "pointer_bits": 4,
+        "stored_word_bits": 0,
+        "flow": true,
+        "pipe_option": false,
+        "has_flush": false,
+        "has_count": true
+      },
+      {
+        "module": "Queue16_GrantQueueTask",
+        "family": "queue",
+        "cycles": 4096,
+        "locked_port_count": 89,
+        "mid_run_reset_pulse_cycle": 1024,
+        "has_clock": true,
+        "has_reset": true,
+        "fixture_summary": "FIXTURE Queue16_GrantQueueTask cycles=4096 errors=0",
+        "trace_match": true,
+        "output_errors": [
+          [
+            "io_count",
+            0
+          ],
+          [
+            "io_deq_bits_grantid",
+            0
+          ],
+          [
+            "io_deq_bits_task_corrupt",
+            0
+          ],
+          [
+            "io_deq_bits_task_denied",
+            0
+          ],
+          [
+            "io_deq_bits_task_isKeyword",
+            0
+          ],
+          [
+            "io_deq_bits_task_opcode",
+            0
+          ],
+          [
+            "io_deq_bits_task_param",
+            0
+          ],
+          [
+            "io_deq_bits_task_sourceId",
+            0
+          ],
+          [
+            "io_deq_valid",
+            0
+          ],
+          [
+            "io_enq_ready",
+            0
+          ]
+        ],
+        "entries": 16,
+        "pointer_bits": 4,
+        "stored_word_bits": 25,
+        "flow": false,
+        "pipe_option": false,
+        "has_flush": false,
+        "has_count": true
+      },
+      {
+        "module": "Queue5_MSHRRequest",
+        "family": "queue",
+        "cycles": 4096,
+        "locked_port_count": 30,
+        "mid_run_reset_pulse_cycle": 1024,
+        "has_clock": true,
+        "has_reset": true,
+        "fixture_summary": "FIXTURE Queue5_MSHRRequest cycles=4096 errors=0",
+        "trace_match": true,
+        "output_errors": [
+          [
+            "io_count",
+            0
+          ],
+          [
+            "io_deq_bits_bufIdx",
+            0
+          ],
+          [
+            "io_deq_bits_channel",
+            0
+          ],
+          [
+            "io_deq_bits_dirty",
+            0
+          ],
+          [
+            "io_deq_bits_fromCmoHelper",
+            0
+          ],
+          [
+            "io_deq_bits_fromProbeHelper",
+            0
+          ],
+          [
+            "io_deq_bits_isBop",
+            0
+          ],
+          [
+            "io_deq_bits_isHit",
+            0
+          ],
+          [
+            "io_deq_bits_isPrefetch",
+            0
+          ],
+          [
+            "io_deq_bits_mask",
+            0
+          ],
+          [
+            "io_deq_bits_needHint",
+            0
+          ],
+          [
+            "io_deq_bits_needProbeAckData",
+            0
+          ],
+          [
+            "io_deq_bits_off",
+            0
+          ],
+          [
+            "io_deq_bits_opcode",
+            0
+          ],
+          [
+            "io_deq_bits_param",
+            0
+          ],
+          [
+            "io_deq_bits_preferCache",
+            0
+          ],
+          [
+            "io_deq_bits_reqSource",
+            0
+          ],
+          [
+            "io_deq_bits_set",
+            0
+          ],
+          [
+            "io_deq_bits_size",
+            0
+          ],
+          [
+            "io_deq_bits_source",
+            0
+          ],
+          [
+            "io_deq_bits_tag",
+            0
+          ],
+          [
+            "io_deq_valid",
+            0
+          ],
+          [
+            "io_enq_ready",
+            0
+          ]
+        ],
+        "entries": 5,
+        "pointer_bits": 3,
+        "stored_word_bits": 119,
+        "flow": false,
+        "pipe_option": false,
+        "has_flush": false,
+        "has_count": true
+      },
+      {
+        "module": "Queue9_TLBundleC",
+        "family": "queue",
+        "cycles": 4096,
+        "locked_port_count": 19,
+        "mid_run_reset_pulse_cycle": 1024,
+        "has_clock": true,
+        "has_reset": true,
+        "fixture_summary": "FIXTURE Queue9_TLBundleC cycles=4096 errors=0",
+        "trace_match": true,
+        "output_errors": [
+          [
+            "io_count",
+            0
+          ],
+          [
+            "io_deq_bits_address",
+            0
+          ],
+          [
+            "io_deq_bits_corrupt",
+            0
+          ],
+          [
+            "io_deq_bits_data",
+            0
+          ],
+          [
+            "io_deq_bits_opcode",
+            0
+          ],
+          [
+            "io_deq_bits_param",
+            0
+          ],
+          [
+            "io_deq_bits_size",
+            0
+          ],
+          [
+            "io_deq_bits_source",
+            0
+          ],
+          [
+            "io_deq_valid",
+            0
+          ]
+        ],
+        "entries": 9,
+        "pointer_bits": 4,
+        "stored_word_bits": 318,
+        "flow": true,
+        "pipe_option": false,
+        "has_flush": false,
+        "has_count": true
+      },
+      {
+        "module": "Queue40_L2TlbMQBundle",
+        "family": "queue",
+        "cycles": 4096,
+        "locked_port_count": 17,
+        "mid_run_reset_pulse_cycle": 1024,
+        "has_clock": true,
+        "has_reset": true,
+        "fixture_summary": "FIXTURE Queue40_L2TlbMQBundle cycles=4096 errors=0",
+        "trace_match": true,
+        "output_errors": [
+          [
+            "io_deq_bits_hptwId",
+            0
+          ],
+          [
+            "io_deq_bits_isHptwReq",
+            0
+          ],
+          [
+            "io_deq_bits_isLLptw",
+            0
+          ],
+          [
+            "io_deq_bits_req_info_s2xlate",
+            0
+          ],
+          [
+            "io_deq_bits_req_info_source",
+            0
+          ],
+          [
+            "io_deq_bits_req_info_vpn",
+            0
+          ],
+          [
+            "io_deq_valid",
+            0
+          ],
+          [
+            "io_enq_ready",
+            0
+          ]
+        ],
+        "entries": 40,
+        "pointer_bits": 6,
+        "stored_word_bits": 47,
+        "flow": false,
+        "pipe_option": false,
+        "has_flush": true,
+        "has_count": false
+      },
+      {
+        "module": "Queue1_PrefetchTrain",
+        "family": "queue",
+        "cycles": 4096,
+        "locked_port_count": 20,
+        "mid_run_reset_pulse_cycle": 1024,
+        "has_clock": true,
+        "has_reset": true,
+        "fixture_summary": "FIXTURE Queue1_PrefetchTrain cycles=4096 errors=0",
+        "trace_match": true,
+        "output_errors": [
+          [
+            "io_deq_bits_needT",
+            0
+          ],
+          [
+            "io_deq_bits_reqsource",
+            0
+          ],
+          [
+            "io_deq_bits_set",
+            0
+          ],
+          [
+            "io_deq_bits_source",
+            0
+          ],
+          [
+            "io_deq_bits_tag",
+            0
+          ],
+          [
+            "io_deq_bits_vaddr",
+            0
+          ],
+          [
+            "io_deq_valid",
+            0
+          ]
+        ],
+        "entries": 1,
+        "pointer_bits": 1,
+        "stored_word_bits": 104,
+        "flow": false,
+        "pipe_option": true,
+        "has_flush": false,
+        "has_count": false
+      },
+      {
+        "module": "Queue68_BundleMap",
+        "family": "queue",
+        "cycles": 4096,
+        "locked_port_count": 10,
+        "mid_run_reset_pulse_cycle": 1024,
+        "has_clock": true,
+        "has_reset": true,
+        "fixture_summary": "FIXTURE Queue68_BundleMap cycles=4096 errors=0",
+        "trace_match": true,
+        "output_errors": [
+          [
+            "io_deq_bits_tl_state_size",
+            0
+          ],
+          [
+            "io_deq_bits_tl_state_source",
+            0
+          ],
+          [
+            "io_deq_valid",
+            0
+          ],
+          [
+            "io_enq_ready",
+            0
+          ]
+        ],
+        "entries": 68,
+        "pointer_bits": 7,
+        "stored_word_bits": 11,
+        "flow": false,
+        "pipe_option": false,
+        "has_flush": false,
+        "has_count": false
+      },
+      {
+        "module": "Queue2_TLBundleB_10",
+        "family": "queue",
+        "cycles": 4096,
+        "locked_port_count": 11,
+        "mid_run_reset_pulse_cycle": 1024,
+        "has_clock": true,
+        "has_reset": true,
+        "fixture_summary": "FIXTURE Queue2_TLBundleB_10 cycles=4096 errors=0",
+        "trace_match": true,
+        "output_errors": [
+          [
+            "io_deq_bits_address",
+            0
+          ],
+          [
+            "io_deq_bits_data",
+            0
+          ],
+          [
+            "io_deq_bits_mask",
+            0
+          ],
+          [
+            "io_deq_bits_opcode",
+            0
+          ],
+          [
+            "io_deq_bits_param",
+            0
+          ],
+          [
+            "io_deq_bits_size",
+            0
+          ],
+          [
+            "io_deq_bits_source",
+            0
+          ],
+          [
+            "io_deq_valid",
+            0
+          ]
+        ],
+        "entries": 2,
+        "pointer_bits": 1,
+        "stored_word_bits": 0,
+        "flow": false,
+        "pipe_option": false,
+        "has_flush": false,
+        "has_count": false
+      },
+      {
+        "module": "PipeWithFlush",
+        "family": "pipe_with_flush",
+        "cycles": 4096,
+        "locked_port_count": 14,
+        "mid_run_reset_pulse_cycle": 1024,
+        "has_clock": false,
+        "has_reset": false,
+        "fixture_summary": "FIXTURE PipeWithFlush cycles=4096 errors=0",
+        "trace_match": true,
+        "output_errors": [
+          [
+            "io_deq_bits_fuType",
+            0
+          ],
+          [
+            "io_deq_bits_loadDependency_0",
+            0
+          ],
+          [
+            "io_deq_bits_loadDependency_1",
+            0
+          ],
+          [
+            "io_deq_bits_loadDependency_2",
+            0
+          ],
+          [
+            "io_deq_bits_pdest",
+            0
+          ],
+          [
+            "io_deq_bits_rfWen",
+            0
+          ],
+          [
+            "io_deq_valid",
+            0
+          ]
+        ],
+        "latency": 0,
+        "field_count": 6,
+        "flush_field_count": 0,
+        "stage_rules": [],
+        "stage_shifts": []
+      },
+      {
+        "module": "PipeWithFlush_1",
+        "family": "pipe_with_flush",
+        "cycles": 4096,
+        "locked_port_count": 28,
+        "mid_run_reset_pulse_cycle": 1024,
+        "has_clock": true,
+        "has_reset": true,
+        "fixture_summary": "FIXTURE PipeWithFlush_1 cycles=4096 errors=0",
+        "trace_match": true,
+        "output_errors": [
+          [
+            "io_deq_bits_fuType",
+            0
+          ],
+          [
+            "io_deq_bits_loadDependency_0",
+            0
+          ],
+          [
+            "io_deq_bits_loadDependency_1",
+            0
+          ],
+          [
+            "io_deq_bits_loadDependency_2",
+            0
+          ],
+          [
+            "io_deq_bits_pdest",
+            0
+          ],
+          [
+            "io_deq_bits_rfWen",
+            0
+          ],
+          [
+            "io_deq_bits_robIdx_flag",
+            0
+          ],
+          [
+            "io_deq_bits_robIdx_value",
+            0
+          ],
+          [
+            "io_deq_valid",
+            0
+          ]
+        ],
+        "latency": 2,
+        "field_count": 8,
+        "flush_field_count": 8,
+        "stage_rules": [
+          "rol"
+        ],
+        "stage_shifts": [
+          [
+            "loadDependency_0",
+            "loadDependency_1",
+            "loadDependency_2"
+          ]
+        ]
+      },
+      {
+        "module": "PipeWithFlush_6",
+        "family": "pipe_with_flush",
+        "cycles": 4096,
+        "locked_port_count": 18,
+        "mid_run_reset_pulse_cycle": 1024,
+        "has_clock": true,
+        "has_reset": true,
+        "fixture_summary": "FIXTURE PipeWithFlush_6 cycles=4096 errors=0",
+        "trace_match": true,
+        "output_errors": [
+          [
+            "io_deq_bits_fpWen",
+            0
+          ],
+          [
+            "io_deq_bits_fuType",
+            0
+          ],
+          [
+            "io_deq_bits_pdest",
+            0
+          ],
+          [
+            "io_deq_bits_robIdx_flag",
+            0
+          ],
+          [
+            "io_deq_bits_robIdx_value",
+            0
+          ],
+          [
+            "io_deq_bits_v0Wen",
+            0
+          ],
+          [
+            "io_deq_bits_vecWen",
+            0
+          ],
+          [
+            "io_deq_valid",
+            0
+          ]
+        ],
+        "latency": 1,
+        "field_count": 7,
+        "flush_field_count": 0,
+        "stage_rules": [],
+        "stage_shifts": []
+      },
+      {
+        "module": "PipeWithFlush_7",
+        "family": "pipe_with_flush",
+        "cycles": 4096,
+        "locked_port_count": 23,
+        "mid_run_reset_pulse_cycle": 1024,
+        "has_clock": true,
+        "has_reset": true,
+        "fixture_summary": "FIXTURE PipeWithFlush_7 cycles=4096 errors=0",
+        "trace_match": true,
+        "output_errors": [
+          [
+            "io_deq_bits_fpWen",
+            0
+          ],
+          [
+            "io_deq_bits_fuType",
+            0
+          ],
+          [
+            "io_deq_bits_pdest",
+            0
+          ],
+          [
+            "io_deq_bits_robIdx_flag",
+            0
+          ],
+          [
+            "io_deq_bits_robIdx_value",
+            0
+          ],
+          [
+            "io_deq_bits_v0Wen",
+            0
+          ],
+          [
+            "io_deq_bits_vecWen",
+            0
+          ],
+          [
+            "io_deq_valid",
+            0
+          ]
+        ],
+        "latency": 2,
+        "field_count": 7,
+        "flush_field_count": 5,
+        "stage_rules": [
+          "ro"
+        ],
+        "stage_shifts": [
+          []
+        ]
+      },
+      {
+        "module": "PipeWithFlush_8",
+        "family": "pipe_with_flush",
+        "cycles": 4096,
+        "locked_port_count": 12,
+        "mid_run_reset_pulse_cycle": 1024,
+        "has_clock": false,
+        "has_reset": false,
+        "fixture_summary": "FIXTURE PipeWithFlush_8 cycles=4096 errors=0",
+        "trace_match": true,
+        "output_errors": [
+          [
+            "io_deq_bits_fpWen",
+            0
+          ],
+          [
+            "io_deq_bits_fuType",
+            0
+          ],
+          [
+            "io_deq_bits_pdest",
+            0
+          ],
+          [
+            "io_deq_bits_v0Wen",
+            0
+          ],
+          [
+            "io_deq_bits_vecWen",
+            0
+          ],
+          [
+            "io_deq_valid",
+            0
+          ]
+        ],
+        "latency": 0,
+        "field_count": 5,
+        "flush_field_count": 0,
+        "stage_rules": [],
+        "stage_shifts": []
+      },
+      {
+        "module": "PipeWithFlush_9",
+        "family": "pipe_with_flush",
+        "cycles": 4096,
+        "locked_port_count": 23,
+        "mid_run_reset_pulse_cycle": 1024,
+        "has_clock": true,
+        "has_reset": true,
+        "fixture_summary": "FIXTURE PipeWithFlush_9 cycles=4096 errors=0",
+        "trace_match": true,
+        "output_errors": [
+          [
+            "io_deq_bits_fpWen",
+            0
+          ],
+          [
+            "io_deq_bits_fuType",
+            0
+          ],
+          [
+            "io_deq_bits_pdest",
+            0
+          ],
+          [
+            "io_deq_bits_robIdx_flag",
+            0
+          ],
+          [
+            "io_deq_bits_robIdx_value",
+            0
+          ],
+          [
+            "io_deq_bits_v0Wen",
+            0
+          ],
+          [
+            "io_deq_bits_vecWen",
+            0
+          ],
+          [
+            "io_deq_valid",
+            0
+          ]
+        ],
+        "latency": 3,
+        "field_count": 7,
+        "flush_field_count": 5,
+        "stage_rules": [
+          "ro",
+          "r"
+        ],
+        "stage_shifts": [
+          [],
+          []
+        ]
+      },
+      {
+        "module": "PipeWithFlush_10",
+        "family": "pipe_with_flush",
+        "cycles": 4096,
+        "locked_port_count": 12,
+        "mid_run_reset_pulse_cycle": 1024,
+        "has_clock": true,
+        "has_reset": true,
+        "fixture_summary": "FIXTURE PipeWithFlush_10 cycles=4096 errors=0",
+        "trace_match": true,
+        "output_errors": [
+          [
+            "io_deq_bits_fpWen",
+            0
+          ],
+          [
+            "io_deq_bits_pdest",
+            0
+          ],
+          [
+            "io_deq_bits_robIdx_flag",
+            0
+          ],
+          [
+            "io_deq_bits_robIdx_value",
+            0
+          ],
+          [
+            "io_deq_valid",
+            0
+          ]
+        ],
+        "latency": 1,
+        "field_count": 4,
+        "flush_field_count": 0,
+        "stage_rules": [],
+        "stage_shifts": []
+      },
+      {
+        "module": "PipeWithFlush_11",
+        "family": "pipe_with_flush",
+        "cycles": 4096,
+        "locked_port_count": 17,
+        "mid_run_reset_pulse_cycle": 1024,
+        "has_clock": true,
+        "has_reset": true,
+        "fixture_summary": "FIXTURE PipeWithFlush_11 cycles=4096 errors=0",
+        "trace_match": true,
+        "output_errors": [
+          [
+            "io_deq_bits_fpWen",
+            0
+          ],
+          [
+            "io_deq_bits_pdest",
+            0
+          ],
+          [
+            "io_deq_bits_robIdx_flag",
+            0
+          ],
+          [
+            "io_deq_bits_robIdx_value",
+            0
+          ],
+          [
+            "io_deq_valid",
+            0
+          ]
+        ],
+        "latency": 3,
+        "field_count": 4,
+        "flush_field_count": 5,
+        "stage_rules": [
+          "ro",
+          "r"
+        ],
+        "stage_shifts": [
+          [],
+          []
+        ]
+      }
+    ]
+  },
+  "tool_gates": {
+    "lint": {
+      "status": "PASS",
+      "command": "verilator --lint-only -Wno-fatal <member>.sv",
+      "checked_module_count": 216,
+      "pass_count": 216,
+      "failures": [],
+      "sweep": {
+        "command": [
+          "bash",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-chisel-decoupled-family/tool-sweep.sh"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "",
+        "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "yosys": {
+      "status": "PASS",
+      "command": "yosys -Q -p 'read_verilog -sv <member>.sv; hierarchy -top <member>; proc; check'",
+      "checked_module_count": 216,
+      "pass_count": 216,
+      "failures": []
+    },
+    "default_export_lint": {
+      "command": [
+        "verilator",
+        "--lint-only",
+        "-Wno-fatal",
+        "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-chisel-decoupled-family/UHSCChiselQueueFamily.sv"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.026 MB sources in 2 modules, into 0.030 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.021 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.379 MB\n",
+      "output_sha256": "3f535df86002b659fb3c4cc910cfb48dad5b9b7bcc3a58acc4b0301c721f1010"
+    },
+    "default_export_yosys": {
+      "command": [
+        "yosys",
+        "-Q",
+        "-p",
+        "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-chisel-decoupled-family/UHSCChiselQueueFamily.sv; hierarchy -top UHSCChiselQueueFamily; proc; check"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "output_tail": "System/.agents/xiangshan-v2/validation/.work/v2-chisel-decoupled-family/UHSCChiselQueueFamily.sv:185$81'.\nRemoving empty process `UHSCChiselQueueFamily.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-chisel-decoupled-family/UHSCChiselQueueFamily.sv:185$81'.\nRemoving empty process `UHSCChiselQueueFamily.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-chisel-decoupled-family/UHSCChiselQueueFamily.sv:152$50'.\nRemoving empty process `UHSCChiselQueueFamily.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-chisel-decoupled-family/UHSCChiselQueueFamily.sv:149$49'.\nRemoving empty process `UHSCChiselQueueFamily.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-chisel-decoupled-family/UHSCChiselQueueFamily.sv:146$48'.\nFound and cleaned up 1 empty switch in `\\UHSCChiselQueueFamily.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-chisel-decoupled-family/UHSCChiselQueueFamily.sv:105$4'.\nRemoving empty process `UHSCChiselQueueFamily.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-chisel-decoupled-family/UHSCChiselQueueFamily.sv:105$4'.\nCleaned up 4 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module UHSCChiselQueueFamily.\n<suppressed ~3 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module UHSCChiselQueueFamily...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 6350806db1, CPU: user 0.01s system 0.01s, MEM: 12.19 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 67% 2x read_verilog (0 sec), 13% 1x opt_expr (0 sec), ...\n",
+      "output_sha256": "7e30fe931e0f3b3117b68faaefa087f8664d9a32a7cfc4b6bb00a72a9deeb462"
+    },
+    "default_export_bytes": 5534,
+    "default_export_sha256": "2c1fa7138b3a44cb3e9e53322e0782826ac451068d257a69cac4ff5e50427fd6"
+  },
+  "gates": {
+    "COVERAGE_COMPLETE": "PASS",
+    "PORT_SURFACE_MATCHED": "PASS",
+    "DETERMINISTIC_VERILOG": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED_DECOUPLED_FIXTURES",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "V2_LOCKED_REFERENCE_IMMUTABLE": "PASS",
+    "PYTHON_PRESENT": "PASS",
+    "UHSC_LOCALIZED": "PASS_BOUNDED_FAMILY_LOCAL_NAME",
+    "PARENT_CLOSURE_MATCHED": "PENDING_SYSTEM_TOP_QUEUE_PARENTS",
+    "LICENSE_REVIEW": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "DIRECT_TEST_PASS_BOUNDED",
+  "acceptance_eligible": false,
+  "unclosed": [
+    "Queue/BundleMap parents and the full XSTop top-level closure remain pending.",
+    "The Verilator trace set holds 10 of the 134 queue instances, all 8 PipeWithFlush instances and 0 of the 74 ram_<N>x<W> primitives; every remaining member is port-, determinism- and lint/Yosys-verified only.",
+    "Two pipe fixtures (PipeWithFlush, PipeWithFlush_8) are combinational and declare no clock/reset, so they only prove pass-through and flush masking; the registered stages are covered by the other six pipe fixtures.",
+    "hasFlush is exercised by a single fixture (Queue40_L2TlbMQBundle) and the queue pipe option by a single fixture (Queue1_PrefetchTrain).",
+    "BundleMap payloads are exercised through one fixture (Queue68_BundleMap).",
+    "Port equality is a set comparison on (name, direction, width). The emitted declaration order differs from the pinned order for every member because Amaranth emits clock/reset after the data ports; only the surface identity is claimed.",
+    "License review and user approval remain pending."
+  ]
+}

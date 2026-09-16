@@ -1,0 +1,319 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_NEWCSR_CSRLEVELS_FAMILY",
+  "batch_id": "V2-BACKEND-NEWCSR-CSRLEVELS-001",
+  "authority": {
+    "reference_path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "reference_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "locked_hierarchy": "validation/v2-locked-hierarchy.json",
+    "locked_module_count": 1976
+  },
+  "commands": {
+    "import_and_smoke": "python -c \"import importlib.util,sys; s=importlib.util.spec_from_file_location('t',TARGET); m=importlib.util.module_from_spec(s); sys.modules['t']=m; s.loader.exec_module(m); print(len(m.build_verilog({}, {})))\"",
+    "freeze_audit": "python validation/v2-build-freeze-shared-audit.py",
+    "pyright": "pyright.cmd --outputjson python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.NewCSR.CSRLite-Hardware.py",
+    "validator": "python validation/v2-newcsr-csrlevels-family-validator.py",
+    "verilator": "wsl.exe -e bash -lc \"verilator --lint-only -Wno-fatal <generated.sv>\"",
+    "yosys": "wsl.exe -e bash -lc \"yosys -Q -p 'read_verilog -sv <generated.sv>; hierarchy -top PMPEntryHandleModule; proc; check'\"",
+    "locked_reset_block": "wsl.exe -e bash -lc \"awk '/^module PMAEntryHandleModule\\(/{f=1} f{print} f&&/^endmodule/{exit}' /home/lishuo/xs-v2-local/build/rtl/XSTop.sv\""
+  },
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.NewCSR.CSRLite-Hardware.py",
+    "sha256": "65ce3af6fde41ffdf9f0cb4db3082053cd014e92b23940a28921650b07807baf",
+    "bytes": 22009,
+    "lines": 484,
+    "covered_module_count": 2
+  },
+  "scope": {
+    "newcsr_locked_module_count": 396,
+    "implemented_here": [
+      "PMPEntryHandleModule",
+      "PMAEntryHandleModule"
+    ],
+    "sibling_subject_load": "LOADED",
+    "implemented_by_sibling_subject": 374,
+    "not_in_sibling_subject": [
+      "CSRPermitModule",
+      "CommitIDModule",
+      "Debug",
+      "IndirectCSRPermitModule",
+      "InterruptFilter",
+      "MLevelPermitModule",
+      "MemTrigger",
+      "MemTrigger_3",
+      "NewCSR",
+      "PFEvent",
+      "PMAEntryHandleModule",
+      "PMPEntryHandleModule",
+      "PrivilegePermitModule",
+      "SLevelPermitModule",
+      "SatpFlushMod",
+      "SstcInterruptGen",
+      "TrapHandleModule",
+      "TrapInstMod",
+      "TrapTvalMod",
+      "VSegmentTrigger",
+      "VirtualLevelPermitModule",
+      "XRetPermitModule"
+    ],
+    "uncovered_after_this_subject": [
+      "CSRPermitModule",
+      "CommitIDModule",
+      "Debug",
+      "IndirectCSRPermitModule",
+      "InterruptFilter",
+      "MLevelPermitModule",
+      "MemTrigger",
+      "MemTrigger_3",
+      "NewCSR",
+      "PFEvent",
+      "PrivilegePermitModule",
+      "SLevelPermitModule",
+      "SatpFlushMod",
+      "SstcInterruptGen",
+      "TrapHandleModule",
+      "TrapInstMod",
+      "TrapTvalMod",
+      "VSegmentTrigger",
+      "VirtualLevelPermitModule",
+      "XRetPermitModule"
+    ]
+  },
+  "covered": [
+    {
+      "module": "PMPEntryHandleModule",
+      "locked_ports": 199,
+      "emitted_ports": 199,
+      "scala_sources": [
+        "home/lishuo/xs-v2-local/src/main/scala/xiangshan/backend/fu/NewCSR/PMPEntryModule.scala:18",
+        "home/lishuo/xs-v2-local/src/main/scala/xiangshan/backend/fu/NewCSR/PMPEntryModule.scala:19"
+      ],
+      "child_count": 0
+    },
+    {
+      "module": "PMAEntryHandleModule",
+      "locked_ports": 263,
+      "emitted_ports": 263,
+      "scala_sources": [
+        "home/lishuo/xs-v2-local/src/main/scala/xiangshan/backend/fu/NewCSR/PMAEntryModule.scala:17",
+        "home/lishuo/xs-v2-local/src/main/scala/xiangshan/backend/fu/NewCSR/PMAEntryModule.scala:18"
+      ],
+      "child_count": 0
+    }
+  ],
+  "address_index_gates": {
+    "PMP_CFG_WORD_ADDRESSES": true,
+    "PMP_ENTRY_ADDRESSES": true,
+    "PMA_CFG_WORD_ADDRESSES": true,
+    "PMA_ENTRY_ADDRESSES": true
+  },
+  "pma_entry_reset_addresses": {
+    "values": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      67108864,
+      134217728,
+      201342976,
+      201408512,
+      234913792,
+      234914816,
+      234915840,
+      239075328,
+      239077376,
+      243269632,
+      536870912,
+      2199023255552,
+      35184372088831
+    ],
+    "locked_artifact_match": "MATCH",
+    "locked_artifact_values": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      67108864,
+      134217728,
+      201342976,
+      201408512,
+      234913792,
+      234914816,
+      234915840,
+      239075328,
+      239077376,
+      243269632,
+      536870912,
+      2199023255552,
+      35184372088831
+    ]
+  },
+  "direct": {
+    "status": "PASS",
+    "vectors": 19,
+    "pmp_observations": [
+      {
+        "case": "reset-read",
+        "value": 0
+      },
+      {
+        "case": "after-write",
+        "value": 2936917655552
+      },
+      {
+        "case": "napot-read",
+        "value": 2936917656063
+      },
+      {
+        "case": "locked-entry",
+        "value": 2936917655552
+      },
+      {
+        "case": "tor-locked-entry",
+        "value": 2936917655552
+      },
+      {
+        "case": "cfg-word0-na4-promoted",
+        "value": 24
+      },
+      {
+        "case": "cfg-word1-locked-image",
+        "value": 128
+      },
+      {
+        "case": "cfg-word2-unselected",
+        "value": 24
+      },
+      {
+        "case": "cfg-idle",
+        "value": 0
+      }
+    ],
+    "pmp_expected": {
+      "reset-read": 0,
+      "after-write": 2936917655552,
+      "napot-read": 2936917656063,
+      "locked-entry": 2936917655552,
+      "tor-locked-entry": 2936917655552,
+      "cfg-word0-na4-promoted": 24,
+      "cfg-word1-locked-image": 128,
+      "cfg-word2-unselected": 24,
+      "cfg-idle": 0
+    },
+    "pma_observations": [
+      {
+        "case": "reset-entry31-masked",
+        "value": 35184372087808
+      },
+      {
+        "case": "reset-entry21",
+        "value": 201342976
+      },
+      {
+        "case": "reset-entry22",
+        "value": 201408512
+      },
+      {
+        "case": "napot-entry31",
+        "value": 35184372088831
+      },
+      {
+        "case": "unselected-entry31",
+        "value": 35184372088831
+      },
+      {
+        "case": "pma-cfg-word0-unlocked",
+        "value": 6917529027641081856
+      },
+      {
+        "case": "pma-cfg-word0-locked",
+        "value": 16140901064495857664
+      },
+      {
+        "case": "pma-cfg-word1-fields",
+        "value": 6917529027641082080
+      },
+      {
+        "case": "pma-cfg-word2-cleared",
+        "value": 0
+      },
+      {
+        "case": "pma-entry7-write",
+        "value": 274877905920
+      }
+    ],
+    "pma_expected": {
+      "reset-entry31-masked": 35184372087808,
+      "reset-entry21": 201342976,
+      "reset-entry22": 201408512,
+      "napot-entry31": 35184372088831,
+      "unselected-entry31": 35184372088831,
+      "pma-cfg-word0-unlocked": 6917529027641081856,
+      "pma-cfg-word0-locked": 16140901064495857664,
+      "pma-cfg-word1-fields": 6917529027641082080,
+      "pma-cfg-word2-cleared": 0,
+      "pma-entry7-write": 274877905920
+    }
+  },
+  "backend": {
+    "verilator": "PASS",
+    "yosys": "PASS",
+    "verilator_output": "  = io_in_addr == 10'h3c2;\n      |                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_csrlevels_wuf8lewp/csrlevels.sv:2251:37: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                       : ... note: In instance 'PMPEntryHandleModule'\n 2251 |   assign \\$129  = io_in_pmpCfg_19_A == 1'h1;\n      |                                     ^~\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.190 MB sources in 3 modules, into 0.534 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.400 s (elab=0.101, cvt=0.137, bld=0.000); cpu 0.353 s on 1 threads; alloced 18.391 MB",
+    "yosys_output": "PEntryHandleModule.\n<suppressed ~32 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module PMPEntryHandleModule...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 13edfbd7c5, CPU: user 0.33s system 0.02s, MEM: 33.91 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 76% 2x read_verilog (0 sec), 9% 1x check (0 sec), ...",
+    "rtl_bytes": 178342,
+    "rtl_sha256": "f608fd1bf15aab793b394ecac78a8423e902d96fc386ddfd6eb754bca621add2",
+    "deterministic": true
+  },
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "STRUCTURE_VERIFIED": "PASS",
+    "PORT_CONTRACT_MATCHED": "PASS",
+    "PMC_ADDRESS_INDICES_MATCHED": "PASS",
+    "PMA_RESET_MATCHED": "PASS",
+    "DETERMINISTIC_OUTPUT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "PARENT_CLOSURE_MATCHED": "PENDING_SYSTEM_TOP_CSRLEVEL_PARENT",
+    "BEHAVIOR_MATCHED": "NOT_ALLOWED",
+    "LICENSE_REVIEW": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "DIRECT_TEST_PASS_BOUNDED",
+  "acceptance_eligible": false,
+  "unclosed": [
+    "Both handlers are verified as standalone locked modules; wiring them into the System-Top CSR parent (the NewCSR address decode that drives io_in_wen/io_in_addr) is outside this subject.",
+    "The PMA reset values were compared against the locked artifact body only when the WSL copy of build/rtl/XSTop.sv was reachable; otherwise this gate stays UNAVAILABLE.",
+    "License review and user approval remain pending."
+  ]
+}

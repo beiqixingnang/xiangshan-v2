@@ -269,6 +269,44 @@ and Yosys are reserved for family/parent checkpoints or a failed spot-check.
 This keeps the implementation lane moving while preserving the existing
 evidence and acceptance gates.
 
+## Hierarchy-completion wave amendment (2026-09-16)
+
+The rewrite-freeze count of 78 aggregate Build subjects is a *closure-subject*
+bound, not a statement that the locked hierarchy is implemented.  A read-only
+scan of the pinned artifact (`validation/v2-locked-hierarchy.json`, 1976 modules
+with exact ANSI ports, child instances, and Scala provenance) joined with the two
+rewrite inventories (`validation/v2-hierarchy-coverage.json`) shows:
+
+- 156 locked modules are reached by a bounded core subject,
+- 722 locked modules are reached by a dependency-family subject,
+- 1098 locked modules have **no** subject at all.
+
+The uncovered set is concentrated: the `xiangshan/backend/fu/NewCSR` family alone
+accounts for roughly 600 modules, and the Chisel `Decoupled`/`Arbiter` primitives
+account for a further 240.  A second wave is therefore authorised to add new
+aggregate Build subjects that implement these families:
+
+| new Build subject | covered family | representative locked modules |
+| --- | --- | --- |
+| `Cpu-Core/Build-Cpu.Backend.Fu.NewCSR.CSRModule-Hardware.py` | `CSRModule` register family | 364 |
+| `Cpu-Core/Build-Cpu.Backend.Fu.NewCSR.CSRLite-Hardware.py` | CSR level/map modules (`MachineLevel`, `Unprivileged`, `HypervisorLevel`, `DebugLevel`, `CSRPMP`, `CSRPMA`, `CSRAIA`) | ~230 |
+| `Cpu-Core/Build-Cpu.Dependency.Chisel.Decoupled-Hardware.py` | Chisel `Queue1_*`/`Queue2_*`/`Queue68_*` | ~208 |
+| `Cpu-Core/Build-Cpu.Dependency.Chisel.Arbiter-Hardware.py` | Chisel `Arbiter*`, `AsyncQueue*`, `Repeater`, `ValidIOBroadcast` | ~70 |
+
+Rules for this wave, in addition to the existing contract:
+
+- A new Build subject must justify its path by a Scala source root and must list
+  every covered locked module in its evidence file.
+- Coverage is counted by *implemented module*, not by file.  Landing four files
+  does not reduce rewrite debt unless the modules inside them are source-backed
+  and their ports are checked against `validation/v2-locked-hierarchy.json`.
+- A module whose behaviour is transcribed from the pinned artifact records
+  `DIRECT_TEST_PASS_BOUNDED` at most; `BEHAVIOR_MATCHED`, `INTEGRATED`, and
+  `ACCEPTED` remain locked.
+- The coordinator records the new subjects in `V2-Rewrite-Freeze-Manifest.json`
+  and re-runs the shared static sweep, Pyright, and the generation probe after
+  the wave lands.
+
 ## Rewrite-debt checkpoint (2026-09-16)
 
 The shared freeze audit is a static scaffold gate, not proof that every

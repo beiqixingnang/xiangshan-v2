@@ -1,877 +1,884 @@
 {
-  "schema_version": 1,
-  "kind": "XIANGSHAN_KUNMINGHU_V2_REWRITE_BATCH_PLAN",
-  "authority": "V2-Core-Rewrite-Inventory.json + V2-Dependency-Family-Inventory.json + V2-Rewrite-Freeze-Manifest.json",
-  "worker_model": "gpt-5.6-terra",
-  "reasoning_effort": "max",
-  "validator_model": "gpt-5.6-terra",
-  "validator_reasoning_effort": "medium",
-  "counts": {
-    "core_leaf_build_files": 46,
-    "core_parent_build_files": 8,
-    "dependency_family_build_files": 23,
-    "uhsc_integration_build_files": 1,
-    "retired_or_excluded": 1,
-    "total_planned_build_files": 78,
-    "inventory_note": "The 23 dependency families cover 612 scoped Scala paths (557 unique after nested parent/child overlap); counts are closure views and are not additive. Locked DefaultConfig XSTop instantiates HuanCun/TL2TLCoupledL2; CHI/OpenLLC/OpenNCB/HardFloat/IOPMP families remain conditional or inlined until selected-top evidence is produced."
-  },
-  "batches": [
+ "schema_version": 1,
+ "kind": "XIANGSHAN_KUNMINGHU_V2_REWRITE_BATCH_PLAN",
+ "authority": "V2-Core-Rewrite-Inventory.json + V2-Dependency-Family-Inventory.json + V2-Rewrite-Freeze-Manifest.json",
+ "worker_model": "gpt-5.6-terra",
+ "reasoning_effort": "max",
+ "validator_model": "gpt-5.6-terra",
+ "validator_reasoning_effort": "medium",
+ "counts": {
+  "core_leaf_build_files": 46,
+  "core_parent_build_files": 8,
+  "dependency_family_build_files": 23,
+  "uhsc_integration_build_files": 1,
+  "retired_or_excluded": 1,
+  "total_planned_build_files": 78,
+  "inventory_note": "The 23 dependency families cover 612 scoped Scala paths (557 unique after nested parent/child overlap); counts are closure views and are not additive. Locked DefaultConfig XSTop instantiates HuanCun/TL2TLCoupledL2; CHI/OpenLLC/OpenNCB/HardFloat/IOPMP families remain conditional or inlined until selected-top evidence is produced."
+ },
+ "batches": [
+  {
+   "batch_id": "V2-SCAN-A-CORE-LEAVES",
+   "scope": "core",
+   "family_ids": [
+    "core.decode",
+    "core.fu",
+    "core.csr",
+    "core.frontend.leaves",
+    "core.backend.leaves"
+   ],
+   "expected_build_files": 46,
+   "depends_on": [],
+   "validator": "v2-independent-validator",
+   "status": "VALIDATOR_PASS_BOUNDED",
+   "sub_batches": [
     {
-      "batch_id": "V2-SCAN-A-CORE-LEAVES",
-      "scope": "core",
-      "family_ids": [
-        "core.decode",
-        "core.fu",
-        "core.csr",
-        "core.frontend.leaves",
-        "core.backend.leaves"
-      ],
-      "expected_build_files": 46,
-      "depends_on": [],
-      "validator": "v2-independent-validator",
-      "status": "VALIDATOR_PASS_BOUNDED",
-      "sub_batches": [
-        {
-          "batch_id": "V2-SCAN-A1-CORE-DECODE-ARITH-LEAVES",
-          "scope": "core.decode-arithmetic-issue",
-          "targets": [
-            "ImmExtractor",
-            "AluDataModule",
-            "CommitStuckCounter",
-            "EnqPolicy",
-            "AgeDetector",
-            "PreDecodeInst"
-          ],
-          "expected_build_files": 6,
-          "build_root": "python/Program-System/System-Build/Build-Cpu/Cpu-Core",
-          "validator": "v2-independent-validator",
-          "status": "VALIDATOR_PASS_BOUNDED",
-          "evidence": "validation/v2-core-leaf-a1-validator-results.json",
-          "commit": "8e388ea"
-        },
-        {
-          "batch_id": "V2-SCAN-A2-CORE-CONTROLFLOW",
-          "scope": "core.fu.controlflow",
-          "targets": [
-            "BranchModule",
-            "JumpDataModule"
-          ],
-          "expected_build_files": 2,
-          "build_root": "python/Program-System/System-Build/Build-Cpu/Cpu-Core",
-          "validator": "v2-independent-validator",
-          "status": "VALIDATOR_PASS_BOUNDED",
-          "evidence": "validation/v2-core-leaf-a2-validator-results.json",
-          "commit": "f8c3e8e"
-        },
-        {
-          "batch_id": "V2-SCAN-A3-CORE-ISSUE-DATA",
-          "scope": "core.backend.issue",
-          "targets": [
-            "DeqPolicy",
-            "DataArray"
-          ],
-          "expected_build_files": 2,
-          "build_root": "python/Program-System/System-Build/Build-Cpu/Cpu-Core",
-          "validator": "v2-independent-validator",
-          "status": "VALIDATOR_PASS_BOUNDED",
-          "evidence": "validation/v2-core-leaf-a3-validator-results.json",
-          "commit": "9751887"
-        },
-        {
-          "batch_id": "V2-SCAN-A4-CORE-FU-BUSY",
-          "scope": "core.backend.issue",
-          "targets": [
-            "FuBusyTableRead"
-          ],
-          "expected_build_files": 1,
-          "build_root": "python/Program-System/System-Build/Build-Cpu/Cpu-Core",
-          "validator": "v2-independent-validator",
-          "status": "VALIDATOR_PASS_BOUNDED",
-          "evidence": "validation/v2-core-leaf-a4-validator-results.json",
-          "commit": "86c5ac6"
-        },
-        {
-          "batch_id": "V2-SCAN-A5-CORE-ROB-PTR",
-          "scope": "core.backend.rob.ptr",
-          "targets": [
-            "RobPtrWrappers"
-          ],
-          "expected_build_files": 1,
-          "build_root": "python/Program-System/System-Build/Build-Cpu/Cpu-Core",
-          "validator": "v2-independent-validator",
-          "status": "VALIDATOR_PASS_BOUNDED",
-          "evidence": "validation/v2-core-leaf-a5-validator-results.json",
-          "commit": "981debd"
-        }
-      ]
+     "batch_id": "V2-SCAN-A1-CORE-DECODE-ARITH-LEAVES",
+     "scope": "core.decode-arithmetic-issue",
+     "targets": [
+      "ImmExtractor",
+      "AluDataModule",
+      "CommitStuckCounter",
+      "EnqPolicy",
+      "AgeDetector",
+      "PreDecodeInst"
+     ],
+     "expected_build_files": 6,
+     "build_root": "python/Program-System/System-Build/Build-Cpu/Cpu-Core",
+     "validator": "v2-independent-validator",
+     "status": "VALIDATOR_PASS_BOUNDED",
+     "evidence": "validation/v2-core-leaf-a1-validator-results.json",
+     "commit": "8e388ea"
     },
     {
-      "batch_id": "V2-SCAN-B-CORE-PARENTS",
-      "scope": "core-parent",
-      "family_ids": [
-        "core.frontend.parent",
-        "core.backend.parent",
-        "core.cache.parent",
-        "core.mem.parent",
-        "core.top"
-      ],
-      "expected_build_files": 8,
-      "depends_on": [
-        "V2-SCAN-A-CORE-LEAVES"
-      ],
-      "validator": "v2-independent-validator",
-      "status": "REDUCED_PARENT_BATCHES_COMPLETE_FULL_CLOSURE_PENDING",
-      "active_reduced_batches": [],
-      "completed_reduced_batches": [
-        {
-          "batch_id": "V2-PARENT-VECTOR-001",
-          "status": "PASS_BOUNDED_REDUCED",
-          "commit": "b40dfed",
-          "evidence": "validation/v2-vector-parent-closure-differential-results.json",
-          "full_parent_status": "PENDING_BACKEND_PARENT"
-        },
-        {
-          "batch_id": "V2-PARENT-MEMBLOCK-001",
-          "status": "PASS_BOUNDED_REDUCED",
-          "commit": "7b87818",
-          "evidence": "validation/v2-memblock-parent-differential-results.json",
-          "full_parent_status": "PENDING_FULL_DIPLOMACY_CLOSURE",
-          "vectors": 32,
-          "direct_checks": 37,
-          "validator": "v2_memblock_parent_closure.py"
-        },
-        {
-          "batch_id": "V2-PARENT-BACKEND-001",
-          "status": "PASS_BOUNDED_PARENT",
-          "commit": "14c585a",
-          "evidence": "validation/v2-backend-parent-results.json",
-          "vectors": 256,
-          "full_parent_status": "PENDING_FULL_1165_PORT_BACKEND"
-        },
-        {
-          "batch_id": "V2-PARENT-FRONTEND-001",
-          "status": "PASS_BOUNDED_PARENT",
-          "commit": "9e8db8b",
-          "evidence": "validation/v2-frontend-parent-differential-results.json",
-          "vectors": 96,
-          "full_parent_status": "PENDING_FULL_371_PORT_FRONTEND"
-        }
-      ],
-      "failed_validation_attempts": [
-        {
-          "batch_id": "V2-PARENT-CACHE-001",
-          "status": "REPAIRED_AND_PASS",
-          "phase": "reference_compile",
-          "reason": "reference shell connected child output io_*_issue_ready ports directly to variables",
-          "direct": "PASS",
-          "verilator_target": "PASS",
-          "yosys_target": "PASS",
-          "repair_commit": "7b87818"
-        }
-      ]
+     "batch_id": "V2-SCAN-A2-CORE-CONTROLFLOW",
+     "scope": "core.fu.controlflow",
+     "targets": [
+      "BranchModule",
+      "JumpDataModule"
+     ],
+     "expected_build_files": 2,
+     "build_root": "python/Program-System/System-Build/Build-Cpu/Cpu-Core",
+     "validator": "v2-independent-validator",
+     "status": "VALIDATOR_PASS_BOUNDED",
+     "evidence": "validation/v2-core-leaf-a2-validator-results.json",
+     "commit": "f8c3e8e"
     },
     {
-      "batch_id": "V2-SCAN-C-DEPENDENCY-FAMILIES",
-      "scope": "external",
-      "family_ids": [
-        "dependency.utility",
-        "dependency.rocket.protocol",
-        "dependency.rocket.replacement",
-        "dependency.rocket.rvc",
-        "dependency.rocket.diplomacy",
-        "dependency.hardfloat",
-        "dependency.fudian.fpu",
-        "dependency.fudian.arithmetic",
-        "dependency.yunsuan.scalar",
-        "dependency.yunsuan.vector",
-        "dependency.huancun.cache",
-        "dependency.huancun.mshr",
-        "dependency.huancun.bridge",
-        "dependency.coupledL2.slice",
-        "dependency.coupledL2.directory",
-        "dependency.coupledL2.bridge",
-        "dependency.openLLC.cache",
-        "dependency.openLLC.sram",
-        "dependency.openLLC.bridge",
-        "dependency.openLLC.ncb",
-        "dependency.difftest.interface",
-        "dependency.aia.interface",
-        "dependency.iopmp.interface"
-      ],
-      "expected_build_files": 23,
-      "depends_on": [
-        "V2-SCAN-B-CORE-PARENTS"
-      ],
-      "validator": "v2-independent-validator",
-      "status": "BOUNDED_FAMILY_COVERAGE_COMPLETE_PARENT_PENDING",
-      "active_family_batches": [],
-      "failed_family_attempts": [
-        {
-          "batch_id": "V2-DEPENDENCY-ROCKET-REPLACEMENT-RVC-001",
-          "status": "REPAIRED_AND_PASS",
-          "reason": "Initial ICacheReplacer differential diverged at cycle 304; the repaired rerun passed.",
-          "evidence": "validation/v2-rocket-replacement-rvc-family-results.json",
-          "accepted": "NOT_ALLOWED",
-          "repair_commit": "58ecfe5"
-        }
-      ],
-      "completed_family_batches": [
-        {
-          "batch_id": "V2-DEPENDENCY-UTILITY-001",
-          "status": "PASS_BOUNDED_FAMILY",
-          "commit": "f34bf40",
-          "evidence": "validation/v2-utility-family-results.json",
-          "source_file_count": 61,
-          "vectors": 128
-        },
-        {
-          "batch_id": "V2-DEPENDENCY-ROCKET-PROTOCOL-001",
-          "status": "PASS_BOUNDED_FAMILY",
-          "commit": "a9799a5",
-          "evidence": "validation/v2-rocket-protocol-family-results.json",
-          "source_file_count": 120,
-          "vectors": 128
-        },
-        {
-          "batch_id": "V2-DEPENDENCY-ROCKET-REPLACEMENT-RVC-001",
-          "status": "PASS_BOUNDED_FAMILY",
-          "commit": "58ecfe5",
-          "evidence": "validation/v2-rocket-replacement-rvc-family-results.json",
-          "source_file_count": 2,
-          "additional_build_files": 0,
-          "direct_vectors": 403122,
-          "reference_vectors": 131584
-        },
-        {
-          "batch_id": "V2-DEPENDENCY-HUANCUN-CACHE-001",
-          "status": "PASS_BOUNDED_FAMILY",
-          "commit": "af7cb70",
-          "evidence": "validation/v2-huancun-cache-family-results.json",
-          "source_file_count": 43,
-          "vectors": 3
-        },
-        {
-          "batch_id": "V2-DEPENDENCY-HUANCUN-MSHR-001",
-          "status": "PASS_BOUNDED_FAMILY",
-          "commit": "2aee0d6",
-          "evidence": "validation/v2-huancun-mshr-family-results.json",
-          "source_file_count": 3,
-          "vectors": 3
-        },
-        {
-          "batch_id": "V2-DEPENDENCY-HUANCUN-BRIDGE-001",
-          "status": "PASS_BOUNDED_FAMILY",
-          "commit": "c56e1d8",
-          "evidence": "validation/v2-huancun-bridge-family-results.json",
-          "source_file_count": 5,
-          "vectors": 32
-        },
-        {
-          "batch_id": "V2-DEPENDENCY-COUPLEDL2-SLICE-001",
-          "status": "PASS_BOUNDED_FAMILY",
-          "commit": "d709d43",
-          "evidence": "validation/v2-coupledL2-slice-family-results.json",
-          "source_file_count": 60,
-          "equation_vectors": 256,
-          "direct_checks": 4,
-          "refill_hit_check": "PASS",
-          "full_parent_status": "PENDING_FULL_SLICE_PARENT"
-        },
-        {
-          "batch_id": "V2-DEPENDENCY-YUNSUAN-SCALAR-001",
-          "status": "PASS_BOUNDED_FAMILY",
-          "commit": "1be966d",
-          "evidence": "validation/v2-yunsuan-scalar-family-results.json",
-          "source_file_count": 5,
-          "direct_vectors": 82323,
-          "full_fpcvt_status": "PENDING_VECTOR_CVT64_CLOSURE"
-        },
-        {
-          "batch_id": "V2-DEPENDENCY-COUPLEDL2-DIRECTORY-001",
-          "status": "PASS_BOUNDED_FAMILY",
-          "commit": "79ec0e1",
-          "evidence": "validation/v2-coupledL2-directory-family-results.json",
-          "source_file_count": 11,
-          "equation_vectors": 257,
-          "direct_checks": 4,
-          "full_parent_status": "PENDING_TL2TLCoupledL2_PARENT"
-        },
-        {
-          "batch_id": "V2-DEPENDENCY-YUNSUAN-VECTOR-001",
-          "status": "PASS_BOUNDED_FAMILY",
-          "commit": "8c5423a",
-          "evidence": "validation/v2-yunsuan-vector-family-results.json",
-          "source_file_count": 53,
-          "direct_vectors": 9311,
-          "rtl_modes": 8,
-          "full_reference_status": "PENDING_VECTOR_PARENT_CLOSURE"
-        },
-        {
-          "batch_id": "V2-DEPENDENCY-ROCKET-DIPLOMACY-001",
-          "status": "PASS_BOUNDED_FAMILY",
-          "commit": "00cc95d",
-          "evidence": "validation/v2-rocket-diplomacy-family-results.json",
-          "source_file_count": 18,
-          "contract_vectors": 256,
-          "router_vectors": 128,
-          "full_parent_status": "PENDING_FULL_ROCKET_DIPLOMACY_CLOSURE"
-        },
-        {
-          "batch_id": "V2-DEPENDENCY-FUDIAN-001",
-          "status": "PASS_BOUNDED_FAMILY",
-          "commit": "3a9ce32",
-          "evidence": "validation/v2-fudian-family-results.json",
-          "build_files": 2,
-          "source_file_count": {
-            "fpu": 15,
-            "arithmetic": 5
-          },
-          "direct_vectors": {
-            "fpu": 266,
-            "arithmetic": 355
-          },
-          "full_parent_status": "PENDING_FUDIAN_FPU_PARENT"
-        },
-        {
-          "batch_id": "V2-DEPENDENCY-DIFFTEST-001",
-          "status": "PASS_BOUNDED_FAMILY",
-          "commit": "2e8540a",
-          "evidence": "validation/v2-difftest-interface-family-results.json",
-          "source_file_count": 35,
-          "direct_vectors": 3,
-          "full_parent_status": "PENDING_XSCORE_DIFFTEST_PARENT"
-        },
-        {
-          "batch_id": "V2-DEPENDENCY-AIA-001",
-          "status": "PASS_BOUNDED_FAMILY",
-          "commit": "cd9287b",
-          "evidence": "validation/v2-chisel-aia-interface-family-results.json",
-          "source_file_count": 6,
-          "direct_vectors": 4,
-          "full_parent_status": "PENDING_SYSTEM_TOP_AIA_PARENT"
-        },
-        {
-          "batch_id": "V2-DEPENDENCY-COUPLEDL2-BRIDGE-001",
-          "status": "PASS_BOUNDED_FAMILY",
-          "commit": "f7a5134",
-          "evidence": "validation/v2-coupledL2-bridge-family-results.json",
-          "source_file_count": 19,
-          "equation_vectors": 3424,
-          "direct_checks": 4,
-          "full_parent_status": "PENDING_TL2CHICoupledL2_PARENT"
-        },
-        {
-          "batch_id": "V2-DEPENDENCY-HARDFLOAT-001",
-          "status": "PASS_BOUNDED_FAMILY",
-          "commit": "f4e050f",
-          "evidence": "validation/v2-hardfloat-family-results.json",
-          "source_file_count": 20,
-          "direct_vectors": 11,
-          "full_parent_status": "PENDING_ROCKET_FPU_PARENT"
-        }
-      ]
+     "batch_id": "V2-SCAN-A3-CORE-ISSUE-DATA",
+     "scope": "core.backend.issue",
+     "targets": [
+      "DeqPolicy",
+      "DataArray"
+     ],
+     "expected_build_files": 2,
+     "build_root": "python/Program-System/System-Build/Build-Cpu/Cpu-Core",
+     "validator": "v2-independent-validator",
+     "status": "VALIDATOR_PASS_BOUNDED",
+     "evidence": "validation/v2-core-leaf-a3-validator-results.json",
+     "commit": "9751887"
     },
     {
-      "batch_id": "V2-SCAN-D-UHSC-TOP",
-      "scope": "integration",
-      "family_ids": [
-        "integration.uhsc.top"
-      ],
-      "expected_build_files": 1,
-      "depends_on": [
-        "V2-SCAN-C-DEPENDENCY-FAMILIES"
-      ],
-      "validator": "v2-independent-validator",
-      "status": "GENERATION_PROBE_PASS_REDUCED_FULL_CLOSURE_PENDING",
-      "evidence": "validation/v2-top-generation-probe-results.json",
-      "probe_build_files": 2,
-      "integrated_children": [
-        "frontend",
-        "backend",
-        "mem_block",
-        "coupled_l2"
-      ],
-      "reference_named_port_counts": {
-        "Frontend": 371,
-        "Backend": 1165,
-        "MemBlock": 1326,
-        "XSCore": 308,
-        "L2Top": 441,
-        "XSTile": 153,
-        "XSTop": 204
-      },
-      "complete_gate": "BLOCKED_MISSING_INTERNAL_CLOSURES",
-      "accepted": "NOT_ALLOWED"
+     "batch_id": "V2-SCAN-A4-CORE-FU-BUSY",
+     "scope": "core.backend.issue",
+     "targets": [
+      "FuBusyTableRead"
+     ],
+     "expected_build_files": 1,
+     "build_root": "python/Program-System/System-Build/Build-Cpu/Cpu-Core",
+     "validator": "v2-independent-validator",
+     "status": "VALIDATOR_PASS_BOUNDED",
+     "evidence": "validation/v2-core-leaf-a4-validator-results.json",
+     "commit": "86c5ac6"
+    },
+    {
+     "batch_id": "V2-SCAN-A5-CORE-ROB-PTR",
+     "scope": "core.backend.rob.ptr",
+     "targets": [
+      "RobPtrWrappers"
+     ],
+     "expected_build_files": 1,
+     "build_root": "python/Program-System/System-Build/Build-Cpu/Cpu-Core",
+     "validator": "v2-independent-validator",
+     "status": "VALIDATOR_PASS_BOUNDED",
+     "evidence": "validation/v2-core-leaf-a5-validator-results.json",
+     "commit": "981debd"
     }
+   ]
+  },
+  {
+   "batch_id": "V2-SCAN-B-CORE-PARENTS",
+   "scope": "core-parent",
+   "family_ids": [
+    "core.frontend.parent",
+    "core.backend.parent",
+    "core.cache.parent",
+    "core.mem.parent",
+    "core.top"
+   ],
+   "expected_build_files": 8,
+   "depends_on": [
+    "V2-SCAN-A-CORE-LEAVES"
+   ],
+   "validator": "v2-independent-validator",
+   "status": "REDUCED_PARENT_BATCHES_COMPLETE_FULL_CLOSURE_PENDING",
+   "active_reduced_batches": [],
+   "completed_reduced_batches": [
+    {
+     "batch_id": "V2-PARENT-VECTOR-001",
+     "status": "PASS_BOUNDED_REDUCED",
+     "commit": "b40dfed",
+     "evidence": "validation/v2-vector-parent-closure-differential-results.json",
+     "full_parent_status": "PENDING_BACKEND_PARENT"
+    },
+    {
+     "batch_id": "V2-PARENT-MEMBLOCK-001",
+     "status": "PASS_BOUNDED_REDUCED",
+     "commit": "7b87818",
+     "evidence": "validation/v2-memblock-parent-differential-results.json",
+     "full_parent_status": "PENDING_FULL_DIPLOMACY_CLOSURE",
+     "vectors": 32,
+     "direct_checks": 37,
+     "validator": "v2_memblock_parent_closure.py"
+    },
+    {
+     "batch_id": "V2-PARENT-BACKEND-001",
+     "status": "PASS_BOUNDED_PARENT",
+     "commit": "14c585a",
+     "evidence": "validation/v2-backend-parent-results.json",
+     "vectors": 256,
+     "full_parent_status": "PENDING_FULL_1165_PORT_BACKEND"
+    },
+    {
+     "batch_id": "V2-PARENT-FRONTEND-001",
+     "status": "PASS_BOUNDED_PARENT",
+     "commit": "9e8db8b",
+     "evidence": "validation/v2-frontend-parent-differential-results.json",
+     "vectors": 96,
+     "full_parent_status": "PENDING_FULL_371_PORT_FRONTEND"
+    }
+   ],
+   "failed_validation_attempts": [
+    {
+     "batch_id": "V2-PARENT-CACHE-001",
+     "status": "REPAIRED_AND_PASS",
+     "phase": "reference_compile",
+     "reason": "reference shell connected child output io_*_issue_ready ports directly to variables",
+     "direct": "PASS",
+     "verilator_target": "PASS",
+     "yosys_target": "PASS",
+     "repair_commit": "7b87818"
+    }
+   ]
+  },
+  {
+   "batch_id": "V2-SCAN-C-DEPENDENCY-FAMILIES",
+   "scope": "external",
+   "family_ids": [
+    "dependency.utility",
+    "dependency.rocket.protocol",
+    "dependency.rocket.replacement",
+    "dependency.rocket.rvc",
+    "dependency.rocket.diplomacy",
+    "dependency.hardfloat",
+    "dependency.fudian.fpu",
+    "dependency.fudian.arithmetic",
+    "dependency.yunsuan.scalar",
+    "dependency.yunsuan.vector",
+    "dependency.huancun.cache",
+    "dependency.huancun.mshr",
+    "dependency.huancun.bridge",
+    "dependency.coupledL2.slice",
+    "dependency.coupledL2.directory",
+    "dependency.coupledL2.bridge",
+    "dependency.openLLC.cache",
+    "dependency.openLLC.sram",
+    "dependency.openLLC.bridge",
+    "dependency.openLLC.ncb",
+    "dependency.difftest.interface",
+    "dependency.aia.interface",
+    "dependency.iopmp.interface"
+   ],
+   "expected_build_files": 23,
+   "depends_on": [
+    "V2-SCAN-B-CORE-PARENTS"
+   ],
+   "validator": "v2-independent-validator",
+   "status": "BOUNDED_FAMILY_COVERAGE_COMPLETE_PARENT_PENDING",
+   "active_family_batches": [],
+   "failed_family_attempts": [
+    {
+     "batch_id": "V2-DEPENDENCY-ROCKET-REPLACEMENT-RVC-001",
+     "status": "REPAIRED_AND_PASS",
+     "reason": "Initial ICacheReplacer differential diverged at cycle 304; the repaired rerun passed.",
+     "evidence": "validation/v2-rocket-replacement-rvc-family-results.json",
+     "accepted": "NOT_ALLOWED",
+     "repair_commit": "58ecfe5"
+    }
+   ],
+   "completed_family_batches": [
+    {
+     "batch_id": "V2-DEPENDENCY-UTILITY-001",
+     "status": "PASS_BOUNDED_FAMILY",
+     "commit": "f34bf40",
+     "evidence": "validation/v2-utility-family-results.json",
+     "source_file_count": 61,
+     "vectors": 128
+    },
+    {
+     "batch_id": "V2-DEPENDENCY-ROCKET-PROTOCOL-001",
+     "status": "PASS_BOUNDED_FAMILY",
+     "commit": "a9799a5",
+     "evidence": "validation/v2-rocket-protocol-family-results.json",
+     "source_file_count": 120,
+     "vectors": 128
+    },
+    {
+     "batch_id": "V2-DEPENDENCY-ROCKET-REPLACEMENT-RVC-001",
+     "status": "PASS_BOUNDED_FAMILY",
+     "commit": "58ecfe5",
+     "evidence": "validation/v2-rocket-replacement-rvc-family-results.json",
+     "source_file_count": 2,
+     "additional_build_files": 0,
+     "direct_vectors": 403122,
+     "reference_vectors": 131584
+    },
+    {
+     "batch_id": "V2-DEPENDENCY-HUANCUN-CACHE-001",
+     "status": "PASS_BOUNDED_FAMILY",
+     "commit": "af7cb70",
+     "evidence": "validation/v2-huancun-cache-family-results.json",
+     "source_file_count": 43,
+     "vectors": 3
+    },
+    {
+     "batch_id": "V2-DEPENDENCY-HUANCUN-MSHR-001",
+     "status": "PASS_BOUNDED_FAMILY",
+     "commit": "2aee0d6",
+     "evidence": "validation/v2-huancun-mshr-family-results.json",
+     "source_file_count": 3,
+     "vectors": 3
+    },
+    {
+     "batch_id": "V2-DEPENDENCY-HUANCUN-BRIDGE-001",
+     "status": "PASS_BOUNDED_FAMILY",
+     "commit": "c56e1d8",
+     "evidence": "validation/v2-huancun-bridge-family-results.json",
+     "source_file_count": 5,
+     "vectors": 32
+    },
+    {
+     "batch_id": "V2-DEPENDENCY-COUPLEDL2-SLICE-001",
+     "status": "PASS_BOUNDED_FAMILY",
+     "commit": "d709d43",
+     "evidence": "validation/v2-coupledL2-slice-family-results.json",
+     "source_file_count": 60,
+     "equation_vectors": 256,
+     "direct_checks": 4,
+     "refill_hit_check": "PASS",
+     "full_parent_status": "PENDING_FULL_SLICE_PARENT"
+    },
+    {
+     "batch_id": "V2-DEPENDENCY-YUNSUAN-SCALAR-001",
+     "status": "PASS_BOUNDED_FAMILY",
+     "commit": "1be966d",
+     "evidence": "validation/v2-yunsuan-scalar-family-results.json",
+     "source_file_count": 5,
+     "direct_vectors": 82323,
+     "full_fpcvt_status": "PENDING_VECTOR_CVT64_CLOSURE"
+    },
+    {
+     "batch_id": "V2-DEPENDENCY-COUPLEDL2-DIRECTORY-001",
+     "status": "PASS_BOUNDED_FAMILY",
+     "commit": "79ec0e1",
+     "evidence": "validation/v2-coupledL2-directory-family-results.json",
+     "source_file_count": 11,
+     "equation_vectors": 257,
+     "direct_checks": 4,
+     "full_parent_status": "PENDING_TL2TLCoupledL2_PARENT"
+    },
+    {
+     "batch_id": "V2-DEPENDENCY-YUNSUAN-VECTOR-001",
+     "status": "PASS_BOUNDED_FAMILY",
+     "commit": "8c5423a",
+     "evidence": "validation/v2-yunsuan-vector-family-results.json",
+     "source_file_count": 53,
+     "direct_vectors": 9311,
+     "rtl_modes": 8,
+     "full_reference_status": "PENDING_VECTOR_PARENT_CLOSURE"
+    },
+    {
+     "batch_id": "V2-DEPENDENCY-ROCKET-DIPLOMACY-001",
+     "status": "PASS_BOUNDED_FAMILY",
+     "commit": "00cc95d",
+     "evidence": "validation/v2-rocket-diplomacy-family-results.json",
+     "source_file_count": 18,
+     "contract_vectors": 256,
+     "router_vectors": 128,
+     "full_parent_status": "PENDING_FULL_ROCKET_DIPLOMACY_CLOSURE"
+    },
+    {
+     "batch_id": "V2-DEPENDENCY-FUDIAN-001",
+     "status": "PASS_BOUNDED_FAMILY",
+     "commit": "3a9ce32",
+     "evidence": "validation/v2-fudian-family-results.json",
+     "build_files": 2,
+     "source_file_count": {
+      "fpu": 15,
+      "arithmetic": 5
+     },
+     "direct_vectors": {
+      "fpu": 266,
+      "arithmetic": 355
+     },
+     "full_parent_status": "PENDING_FUDIAN_FPU_PARENT"
+    },
+    {
+     "batch_id": "V2-DEPENDENCY-DIFFTEST-001",
+     "status": "PASS_BOUNDED_FAMILY",
+     "commit": "2e8540a",
+     "evidence": "validation/v2-difftest-interface-family-results.json",
+     "source_file_count": 35,
+     "direct_vectors": 3,
+     "full_parent_status": "PENDING_XSCORE_DIFFTEST_PARENT"
+    },
+    {
+     "batch_id": "V2-DEPENDENCY-AIA-001",
+     "status": "PASS_BOUNDED_FAMILY",
+     "commit": "cd9287b",
+     "evidence": "validation/v2-chisel-aia-interface-family-results.json",
+     "source_file_count": 6,
+     "direct_vectors": 4,
+     "full_parent_status": "PENDING_SYSTEM_TOP_AIA_PARENT"
+    },
+    {
+     "batch_id": "V2-DEPENDENCY-COUPLEDL2-BRIDGE-001",
+     "status": "PASS_BOUNDED_FAMILY",
+     "commit": "f7a5134",
+     "evidence": "validation/v2-coupledL2-bridge-family-results.json",
+     "source_file_count": 19,
+     "equation_vectors": 3424,
+     "direct_checks": 4,
+     "full_parent_status": "PENDING_TL2CHICoupledL2_PARENT"
+    },
+    {
+     "batch_id": "V2-DEPENDENCY-HARDFLOAT-001",
+     "status": "PASS_BOUNDED_FAMILY",
+     "commit": "f4e050f",
+     "evidence": "validation/v2-hardfloat-family-results.json",
+     "source_file_count": 20,
+     "direct_vectors": 11,
+     "full_parent_status": "PENDING_ROCKET_FPU_PARENT"
+    }
+   ]
+  },
+  {
+   "batch_id": "V2-SCAN-D-UHSC-TOP",
+   "scope": "integration",
+   "family_ids": [
+    "integration.uhsc.top"
+   ],
+   "expected_build_files": 1,
+   "depends_on": [
+    "V2-SCAN-C-DEPENDENCY-FAMILIES"
+   ],
+   "validator": "v2-independent-validator",
+   "status": "GENERATION_PROBE_PASS_REDUCED_FULL_CLOSURE_PENDING",
+   "evidence": "validation/v2-top-generation-probe-results.json",
+   "probe_build_files": 2,
+   "integrated_children": [
+    "frontend",
+    "backend",
+    "mem_block",
+    "coupled_l2"
+   ],
+   "reference_named_port_counts": {
+    "Frontend": 371,
+    "Backend": 1165,
+    "MemBlock": 1326,
+    "XSCore": 308,
+    "L2Top": 441,
+    "XSTile": 153,
+    "XSTop": 204
+   },
+   "complete_gate": "BLOCKED_MISSING_INTERNAL_CLOSURES",
+   "accepted": "NOT_ALLOWED"
+  }
+ ],
+ "status": "REWRITE_FREEZE_ACTIVE",
+ "scan_freeze": {
+  "status": "PASS",
+  "core_scala_files": 325,
+  "reachable_sv_modules": 1976,
+  "dependency_scoped_scala_paths": 612,
+  "dependency_unique_scala_paths": 557,
+  "dependency_family_upper_bound": 23,
+  "dependency_family_required_at_locked_default_config": 13,
+  "dependency_family_satisfied_by_core_or_inlined": 2,
+  "dependency_family_conditional_or_inlined": 8,
+  "reference_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "frozen_at": "2026-09-14"
+ },
+ "implementation_policy": {
+  "phase_order": [
+   "REWRITE_FREEZE",
+   "BATCH_VALIDATION",
+   "PARENT_CLOSURE",
+   "MILESTONE_FULL_TOP"
   ],
-  "status": "REWRITE_FREEZE_ACTIVE",
-  "scan_freeze": {
-    "status": "PASS",
-    "core_scala_files": 325,
-    "reachable_sv_modules": 1976,
-    "dependency_scoped_scala_paths": 612,
-    "dependency_unique_scala_paths": 557,
-    "dependency_family_upper_bound": 23,
-    "dependency_family_required_at_locked_default_config": 13,
-    "dependency_family_satisfied_by_core_or_inlined": 2,
-    "dependency_family_conditional_or_inlined": 8,
-    "reference_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
-    "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
-    "frozen_at": "2026-09-14"
+  "aggregation": "family_or_parent_closure; do_not_map_one_scala_to_one_python",
+  "worker": "gpt-5.6-terra",
+  "worker_reasoning_effort": "max",
+  "validator": "gpt-5.6-terra",
+  "validator_reasoning_effort": "medium",
+  "parallelism": "up to three concurrent Terra max bulk-family workers on disjoint paths; one shared coordinator sweep after each landing; focused validator spot-checks overlap with later work; parent/protocol failures escalate to serial full review",
+  "landing_mode": "BULK_LANDING_DEFAULT",
+  "bulk_landing_rule": "write all disjoint aggregate files in a family first, then run one shared static sweep; defer repeated per-file behavior/tool setup until BATCH_VALIDATION",
+  "rewrite_freeze_basic_gate": [
+   "UTF-8 without BOM and LF line endings",
+   "five-zone and bilingual function-comment audit",
+   "AST parse and py_compile",
+   "exact-path import without side effects",
+   "Pyright on the owned batch",
+   "deterministic same-name build_verilog export",
+   "generated Verilog syntax parse without errors"
+  ],
+  "per_batch_done_definition": [
+   "final Build-Cpu path implementation",
+   "UHSC external-name localization",
+   "rewrite-freeze basic gate evidence",
+   "machine-readable mapping in the same batch commit"
+  ],
+  "post_freeze_validation_definition": [
+   "family/parent direct and locked-reference differential",
+   "Verilator and Yosys gates for family/parent/milestone tiers, cacheable by content hash",
+   "contract/license evidence and unclosed-gate inventory",
+   "machine-readable evidence in the validation auxiliary repository"
+  ],
+  "placement_policy": {
+   "build_targets": "auxiliary repository final python/Program-System/System-Build/Build-Cpu paths",
+   "migration_validators_and_evidence": "auxiliary repository .agents/xiangshan-v2/validation only",
+   "direct_tests_after_acceptance": "main repository Program-System/System-Testing/Testing-Cpu with Manifest-Testing-Hardware.py",
+   "generated_sv_waveforms_logs_cache": "ignored validation work/output directories",
+   "runtime_import_rule": "Build files may not import auxiliary validators or evidence"
   },
-  "implementation_policy": {
-    "phase_order": [
-      "REWRITE_FREEZE",
-      "BATCH_VALIDATION",
-      "PARENT_CLOSURE",
-      "MILESTONE_FULL_TOP"
-    ],
-    "aggregation": "family_or_parent_closure; do_not_map_one_scala_to_one_python",
-    "worker": "gpt-5.6-terra",
-    "worker_reasoning_effort": "max",
-    "validator": "gpt-5.6-terra",
-    "validator_reasoning_effort": "medium",
-    "parallelism": "up to three concurrent Terra max bulk-family workers on disjoint paths; one shared coordinator sweep after each landing; focused validator spot-checks overlap with later work; parent/protocol failures escalate to serial full review",
-    "landing_mode": "BULK_LANDING_DEFAULT",
-    "bulk_landing_rule": "write all disjoint aggregate files in a family first, then run one shared static sweep; defer repeated per-file behavior/tool setup until BATCH_VALIDATION",
-    "rewrite_freeze_basic_gate": [
-      "UTF-8 without BOM and LF line endings",
-      "five-zone and bilingual function-comment audit",
-      "AST parse and py_compile",
-      "exact-path import without side effects",
-      "Pyright on the owned batch",
-      "deterministic same-name build_verilog export",
-      "generated Verilog syntax parse without errors"
-    ],
-    "per_batch_done_definition": [
-      "final Build-Cpu path implementation",
-      "UHSC external-name localization",
-      "rewrite-freeze basic gate evidence",
-      "machine-readable mapping in the same batch commit"
-    ],
-    "post_freeze_validation_definition": [
-      "family/parent direct and locked-reference differential",
-      "Verilator and Yosys gates for family/parent/milestone tiers, cacheable by content hash",
-      "contract/license evidence and unclosed-gate inventory",
-      "machine-readable evidence in the validation auxiliary repository"
-    ],
-    "placement_policy": {
-      "build_targets": "auxiliary repository final python/Program-System/System-Build/Build-Cpu paths",
-      "migration_validators_and_evidence": "auxiliary repository .agents/xiangshan-v2/validation only",
-      "direct_tests_after_acceptance": "main repository Program-System/System-Testing/Testing-Cpu with Manifest-Testing-Hardware.py",
-      "generated_sv_waveforms_logs_cache": "ignored validation work/output directories",
-      "runtime_import_rule": "Build files may not import auxiliary validators or evidence"
-    },
-    "promotion_rule": "ACCEPTED remains NOT_ALLOWED until parent closure, license, UHSC and user approval gates pass",
-    "full_generation_required": true,
-    "full_generation_gate": "single reproducible Python/Amaranth-generated Kunminghu V2 hierarchy must elaborate and pass complete XSTop module/port inventory plus Verilator/Yosys; reduced wrappers are intermediate only",
-    "verification_tiers": {
-      "leaf": "static+direct/reference; no fresh full HDL compile by default",
-      "family": "direct/reference+Verilator+Yosys",
-      "parent": "child closure+contract inventory+Verilator+Yosys",
-      "milestone": "complete hierarchy/module-port/behavior differential"
-    },
-    "compile_cache": {
-      "root": "validation/.cache/<sha256>",
-      "key": "target bytes+configuration+command+tool version+locked reference hash"
-    },
-    "progress_rails": [
-      "STRUCTURE_VERIFIED",
-      "BEHAVIOR_VERIFIED_<family>"
-    ],
-    "leaf_validation_ratio_limit": 0.4,
-    "family_validation_ratio_limit": 1.0,
-    "top_probe_policy": "milestone-only or invalidating child change"
+  "promotion_rule": "ACCEPTED remains NOT_ALLOWED until parent closure, license, UHSC and user approval gates pass",
+  "full_generation_required": true,
+  "full_generation_gate": "single reproducible Python/Amaranth-generated Kunminghu V2 hierarchy must elaborate and pass complete XSTop module/port inventory plus Verilator/Yosys; reduced wrappers are intermediate only",
+  "verification_tiers": {
+   "leaf": "static+direct/reference; no fresh full HDL compile by default",
+   "family": "direct/reference+Verilator+Yosys",
+   "parent": "child closure+contract inventory+Verilator+Yosys",
+   "milestone": "complete hierarchy/module-port/behavior differential"
   },
-  "execution_state": {
-    "bounded_validator_pass_count": 53,
-    "bounded_leaf_pass_count": 12,
-    "bounded_parent_pass_count": 7,
-    "bounded_dependency_family_pass_count": 21,
-    "validated_batch_count": 54,
-    "count_reconciliation": "56 bounded validator records across 12 leaf, 7 parent, and 21 explicit dependency-family gates; two additional dependency families are satisfied by bounded core families; semantic/family evidence entries overlap those records; +1 top-generation probe remains milestone evidence",
-    "planned_build_file_count": 78,
-    "current_build_file_count": 78,
-    "tracked_build_file_count": 78,
-    "draft_build_file_count": 0,
-    "rewrite_freeze_basic_gate_status": "ACTIVE",
-    "exact_parent_envelopes": {
-      "Frontend": {
-        "ports": 371,
-        "status": "STRUCTURAL_PASS_BOUNDED"
-      },
-      "Backend": {
-        "ports": 1165,
-        "inputs": 478,
-        "outputs": 687,
-        "status": "STRUCTURAL_PASS_BOUNDED"
-      },
-      "MemBlock": {
-        "ports": 1326,
-        "status": "STRUCTURAL_PASS_BOUNDED"
-      }
-    },
-    "root_envelopes": {
-      "XSCore": {
-        "ports": 308,
-        "status": "STRUCTURAL_PASS_BOUNDED"
-      },
-      "L2Top": {
-        "ports": 441,
-        "status": "STRUCTURAL_PASS_BOUNDED"
-      },
-      "XSTile": {
-        "ports": 153,
-        "status": "STRUCTURAL_PASS_BOUNDED"
-      },
-      "XSTop": {
-        "ports": 204,
-        "status": "STRUCTURAL_PASS_BOUNDED"
-      }
-    },
-    "exact_envelope_count": 7,
-    "exact_envelope_status": "ALL_STRUCTURAL_PORT_DIRECTION_WIDTH_GATES_PASS",
-    "single_hierarchy_status": "PASS_STRUCTURAL_2_9MB_VERILATOR_YOSYS",
-    "semantic_boundary_probes": {
-      "Frontend": {
-        "status": "PASS_BOUNDED",
-        "direct_vectors": 32,
-        "equation_vectors": 96,
-        "child_probe": "PASS"
-      },
-      "Backend": {
-        "status": "PASS_BOUNDED",
-        "direct_vectors": 256,
-        "equation_vectors": 256,
-        "child_boundary_vectors": 64
-      },
-      "MemBlock": {
-        "status": "PASS_BOUNDED",
-        "full_envelope": "PASS",
-        "behavioral_closure": "PENDING"
-      }
-    },
-    "new_family_probes": {
-      "FrontendBridge": {
-        "status": "PASS_BOUNDED",
-        "direct_vectors": 7,
-        "verilator": "PASS",
-        "yosys": "PASS"
-      },
-      "WrBypass": {
-        "status": "PASS_BOUNDED",
-        "direct_checks": 520,
-        "verilator": "PASS",
-        "yosys": "PASS"
-      },
-      "FauFTBWay": {
-        "status": "PASS_BOUNDED",
-        "differential_vectors": 388,
-        "trace_match": true,
-        "verilator": "PASS",
-        "yosys": "PASS",
-        "parent_closure": "PENDING"
-      },
-      "ICache": {
-        "status": "PASS_BOUNDED",
-        "comparisons": 7,
-        "differential_vectors": 75343,
-        "trace_match": true,
-        "verilator": "PASS",
-        "yosys": "PASS",
-        "parent_closure": "PENDING"
-      },
-      "CoupledL2Parent": {
-        "status": "PASS_BOUNDED_BOUNDARY",
-        "ports": 137,
-        "generated_bytes": 53678,
-        "verilator": "PASS",
-        "yosys": "PASS",
-        "chi_reference": "LOCAL_TESTTOP_CHIL2",
-        "locked_default_config": "TL2TL_CONDITIONAL",
-        "parent_differential": "PENDING"
-      },
-      "TL2TLCoupledL2Parent": {
-        "status": "PASS_BOUNDED_LOCKED_XSTOP_DIFF",
-        "ports": 540,
-        "closure_modules": 148,
-        "locked_differential_vectors": 3,
-        "compared_outputs": 24,
-        "verilator": "PASS",
-        "yosys": "PASS",
-        "reference": "LOCKED_XSTOP_DEFAULT_CONFIG",
-        "parent_closure": "PENDING_FULL_MSHR_SRAM_PREFETCH_DIPLOMACY"
-      }
-    },
-    "semantic_family_batches": [
-      {
-        "batch_id": "V2-SEMANTIC-FRONTEND-FAUFTBWAY",
-        "status": "PASS_BOUNDED",
-        "commit": "fa25204",
-        "differential_vectors": 388,
-        "parent_closure": "PENDING"
-      },
-      {
-        "batch_id": "V2-P1-B-ICACHE",
-        "status": "PASS_BOUNDED",
-        "commit": "5bb5ed2",
-        "comparisons": 7,
-        "differential_vectors": 75343,
-        "parent_closure": "PENDING"
-      },
-      {
-        "batch_id": "V2-SEMANTIC-FRONTEND-ICACHE-MSHR",
-        "status": "PASS_BOUNDED",
-        "commit": "7d1e5ae",
-        "direct_vectors": 2048,
-        "differential_variants": 2,
-        "parent_closure": "PENDING"
-      },
-      {
-        "batch_id": "V2-SEMANTIC-COUPLEDL2-PARENT",
-        "status": "PASS_BOUNDED_BOUNDARY",
-        "commit": "d1ad38e",
-        "ports": 137,
-        "generated_bytes": 53678,
-        "verilator": "PASS",
-        "yosys": "PASS",
-        "parent_differential": "PENDING"
-      },
-      {
-        "batch_id": "V2-SEMANTIC-COUPLEDL2-PARENT-BOUNDARY-001",
-        "status": "PASS_BOUNDED",
-        "commit": "e8a2975",
-        "ports": 137,
-        "direct_checks": 4,
-        "reference": "TL2CHICoupledL2-Eb",
-        "verilator": "PASS",
-        "yosys": "PASS",
-        "parent_closure": "PENDING_FULL_CHILD_CLOSURE"
-      },
-      {
-        "batch_id": "V2-P1-C-FRONTEND-BPU-RVC",
-        "status": "PASS_BOUNDED_SOURCE_EQUATION",
-        "commit": "7a5d598",
-        "direct_vectors": {
-          "CompareMatrix": 1310,
-          "FallThroughPredictor": 2068,
-          "SaturateCounter": 2040,
-          "SignedSaturateCounter": 2032,
-          "Replacement": 13950
-        },
-        "reference": "RVC_65536_PLUS_SOURCE_LEVEL",
-        "independent_validator": "PASS_BOUNDED",
-        "parent_closure": "PENDING_BPU_PARENT"
-      },
-      {
-        "batch_id": "V2-DEPENDENCY-COUPLEDL2-TL2TL-PARENT-001",
-        "status": "PASS_BOUNDED",
-        "commit": "1f67954",
-        "ports": 540,
-        "direct_checks": 6,
-        "child_integration": {
-          "status": "PASS",
-          "slice_children": 4,
-          "verilator": "PASS",
-          "yosys": "PASS"
-        },
-        "reference": "LOCKED_XSTOP_DEFAULT_CONFIG",
-        "verilator": "PASS",
-        "yosys": "PASS",
-        "parent_closure": "PENDING_FULL_MSHR_SRAM_PREFETCH_DIPLOMACY"
-      },
-      {
-        "batch_id": "V2-SEMANTIC-BACKEND-DECODE-CHILD-001",
-        "status": "PASS_BOUNDED",
-        "commit": "c39bcaa",
-        "target": "RiscvInst",
-        "direct_vectors": 514,
-        "direct_scalar_checks": 23644,
-        "reference_vectors": 1024,
-        "verilator": "PASS",
-        "yosys": "PASS",
-        "parent_closure": "PENDING_BACKEND_DECODEUNIT_ISSUE_EXU"
-      },
-      {
-        "batch_id": "V2-SEMANTIC-BACKEND-BRANCH-CHILD-001",
-        "status": "PASS_BOUNDED",
-        "commit": "43eac87",
-        "target": "BranchModule",
-        "direct_vectors": 2048,
-        "reference_vectors": 2048,
-        "verilator": "PASS",
-        "yosys": "PASS",
-        "parent_closure": "PENDING_BACKEND_BRANCHUNIT_EXUBLOCK"
-      },
-      {
-        "batch_id": "V2-SEMANTIC-FRONTEND-FTB-ENTRY-GEN-001",
-        "status": "PASS_BOUNDED_REFERENCE",
-        "commit": "a155870",
-        "target": "FTBEntryGen",
-        "ports": 104,
-        "direct_checks": 26624,
-        "formal_reference": "PASS",
-        "verilator": "PASS",
-        "yosys": "PASS",
-        "parent_closure": "PENDING_FRONTEND_FTB_BPU"
-      },
-      {
-        "batch_id": "V2-SEMANTIC-COUPLEDL2-SLICE-CHILDREN-001",
-        "status": "PASS_BOUNDED",
-        "commit": "fd04316",
-        "target": "CoupledL2Slice",
-        "children": [
-          "CoupledL2MSHR",
-          "CoupledL2MSHRCtl",
-          "CoupledL2ProbeQueue",
-          "CoupledL2RefillUnit"
-        ],
-        "direct_checks": 4,
-        "equation_vectors": 256,
-        "verilator": "PASS",
-        "yosys": "PASS",
-        "parent_closure": "PENDING_FULL_SLICE_PARENT"
-      },
-      {
-        "batch_id": "V2-DEPENDENCY-COUPLEDL2-SLICE-MSHR-001",
-        "status": "PASS_BOUNDED",
-        "commit": "b87afd4",
-        "target": "CoupledL2Slice",
-        "children": [
-          "MSHR",
-          "MSHRCtl",
-          "ProbeQueue",
-          "RefillUnit"
-        ],
-        "direct_checks": {
-          "MSHR": 4,
-          "MSHRCtl": 4,
-          "ProbeQueue": 5,
-          "RefillUnit": 4
-        },
-        "equation_vectors": 15,
-        "verilator": "PASS",
-        "yosys": "PASS",
-        "conditional_reference": "locked ProbeQueue is XiangShan DCache Probe.scala; tl2tl ProbeQueue remains conditional",
-        "parent_closure": "PENDING_FULL_MSHR_SRAM_PREFETCH_DIPLOMACY"
-      },
-      {
-        "batch_id": "V2-DEPENDENCY-COUPLEDL2-SLICE-MSHR-001",
-        "status": "PASS_BOUNDED",
-        "commit": "b87afd4",
-        "target": "CoupledL2Slice",
-        "children": [
-          "MSHR",
-          "MSHRCtl",
-          "ProbeQueue",
-          "RefillUnit"
-        ],
-        "direct_checks": {
-          "MSHR": 4,
-          "MSHRCtl": 4,
-          "ProbeQueue": 5,
-          "RefillUnit": 4
-        },
-        "equation_vectors": 15,
-        "verilator": "PASS",
-        "yosys": "PASS",
-        "conditional_reference": "locked ProbeQueue is XiangShan DCache Probe.scala; tl2tl ProbeQueue remains conditional",
-        "parent_closure": "PENDING_FULL_MSHR_SRAM_PREFETCH_DIPLOMACY"
-      },
-      {
-        "batch_id": "V2-SEMANTIC-BACKEND-ALU-JUMP-CHILD-001",
-        "status": "PASS_BOUNDED",
-        "commit": "decb758",
-        "targets": [
-          "AluDataModule",
-          "JumpDataModule"
-        ],
-        "direct_vectors": 4096,
-        "reference_vectors": 2048,
-        "verilator": "PASS",
-        "yosys": "PASS",
-        "parent_closure": "PENDING_BACKEND_EXUBLOCK"
-      },
-      {
-        "batch_id": "V2-SEMANTIC-FRONTEND-INSTR-MMIO-ENTRY-CHILD-001",
-        "status": "PASS_BOUNDED",
-        "commit": "c3c691e",
-        "target": "InstrMMIOEntry",
-        "direct_cycles": 4096,
-        "reference_cycles": 1024,
-        "verilator": "PASS",
-        "yosys": "PASS",
-        "parent_closure": "PENDING_FRONTEND_INSTRUNCACHE"
-      },
-      {
-        "batch_id": "V2-PARENT-BACKEND-CLOSURE-002",
-        "status": "PASS_BOUNDED_PARENT_CLOSURE",
-        "commit": "3c9128f",
-        "target": "Backend.Top",
-        "direct_vectors": 128,
-        "reference_vectors": 128,
-        "verilator": "PASS",
-        "yosys": "PASS",
-        "parent_closure": "PENDING_BACKEND_FULL_1165_PORT"
-      },
-      {
-        "batch_id": "V2-FRONTEND-INSTR-UNCACHE-PARENT-001",
-        "status": "PASS_BOUNDED_INSTR_UNCACHE_PARENT",
-        "commit": "86b43f2",
-        "target": "InstrUncache",
-        "direct_vectors": 1024,
-        "reference_vectors": 1024,
-        "verilator": "PASS",
-        "yosys": "PASS",
-        "parent_closure": "PENDING_FRONTEND_FULL_CHILD_CLOSURE"
-      },
-      {
-        "batch_id": "V2-PARENT-MEMBLOCK-FRONTENDBRIDGE-002",
-        "status": "PASS_BOUNDED_PARENT",
-        "commit": "4196e51",
-        "target": "MemBlock",
-        "direct_vectors": 28,
-        "reduced_reference_vectors": 32,
-        "frontend_bridge_vectors": 96,
-        "frontend_bridge_outputs": 48,
-        "full_port_envelope": 1326,
-        "verilator": "PASS",
-        "yosys": "PASS",
-        "parent_closure": "PENDING_FULL_DCACHE_MMU_LSU_DIPLOMACY"
-      },
-      {
-        "batch_id": "V2-DEPENDENCY-COUPLEDL2-TL2TL-PARENT-LOCKED-DIFF-001",
-        "status": "PASS_BOUNDED_LOCKED_XSTOP_DIFF",
-        "commit": "d7c7275",
-        "target": "TL2TLCoupledL2",
-        "closure_modules": 148,
-        "closure_bytes": 10078969,
-        "vectors": 3,
-        "compared_outputs": 24,
-        "verilator": "PASS",
-        "yosys": "PASS",
-        "parent_closure": "PENDING_FULL_COUPLEDL2_BEHAVIOR"
-      }
-    ],
-    "locked_module_inventory": {
-      "reference_modules": 1976,
-      "generated_modules": 19,
-      "missing_modules": 1976,
-      "status": "INCOMPLETE_MODULE_CLOSURE",
-      "evidence": "validation/v2-top-generation-probe-results.json"
-    },
-    "semantic_closure_status": "PENDING_FULL_CHILD_BEHAVIORAL_DIFFERENTIAL",
-    "parent_closures_planned": 8,
-    "parent_closures_indexed": 8,
-    "parent_closures_matched": 0,
-    "accepted_count": 0,
-    "next_batches": [
-      "V2-SEMANTIC-FRONTEND-CHILD-CLOSURE",
-      "V2-SEMANTIC-BACKEND-DECODE-ISSUE-EXU-CLOSURE",
-      "V2-SEMANTIC-MEMBLOCK-MMU-LSU-DIPLOMACY-CLOSURE",
-      "V2-FULL-XSTOP-BEHAVIORAL-DIFFERENTIAL"
-    ]
+  "compile_cache": {
+   "root": "validation/.cache/<sha256>",
+   "key": "target bytes+configuration+command+tool version+locked reference hash"
   },
+  "progress_rails": [
+   "STRUCTURE_VERIFIED",
+   "BEHAVIOR_VERIFIED_<family>"
+  ],
+  "leaf_validation_ratio_limit": 0.4,
+  "family_validation_ratio_limit": 1.0,
+  "top_probe_policy": "milestone-only or invalidating child change"
+ },
+ "execution_state": {
+  "bounded_validator_pass_count": 53,
+  "bounded_leaf_pass_count": 12,
+  "bounded_parent_pass_count": 7,
+  "bounded_dependency_family_pass_count": 21,
+  "validated_batch_count": 54,
+  "count_reconciliation": "56 bounded validator records across 12 leaf, 7 parent, and 21 explicit dependency-family gates; two additional dependency families are satisfied by bounded core families; semantic/family evidence entries overlap those records; +1 top-generation probe remains milestone evidence",
+  "planned_build_file_count": 78,
+  "current_build_file_count": 84,
+  "tracked_build_file_count": 78,
+  "draft_build_file_count": 0,
+  "rewrite_freeze_basic_gate_status": "ACTIVE",
+  "exact_parent_envelopes": {
+   "Frontend": {
+    "ports": 371,
+    "status": "STRUCTURAL_PASS_BOUNDED"
+   },
+   "Backend": {
+    "ports": 1165,
+    "inputs": 478,
+    "outputs": 687,
+    "status": "STRUCTURAL_PASS_BOUNDED"
+   },
+   "MemBlock": {
+    "ports": 1326,
+    "status": "STRUCTURAL_PASS_BOUNDED"
+   }
+  },
+  "root_envelopes": {
+   "XSCore": {
+    "ports": 308,
+    "status": "STRUCTURAL_PASS_BOUNDED"
+   },
+   "L2Top": {
+    "ports": 441,
+    "status": "STRUCTURAL_PASS_BOUNDED"
+   },
+   "XSTile": {
+    "ports": 153,
+    "status": "STRUCTURAL_PASS_BOUNDED"
+   },
+   "XSTop": {
+    "ports": 204,
+    "status": "STRUCTURAL_PASS_BOUNDED"
+   }
+  },
+  "exact_envelope_count": 7,
+  "exact_envelope_status": "ALL_STRUCTURAL_PORT_DIRECTION_WIDTH_GATES_PASS",
+  "single_hierarchy_status": "PASS_STRUCTURAL_2_9MB_VERILATOR_YOSYS",
+  "semantic_boundary_probes": {
+   "Frontend": {
+    "status": "PASS_BOUNDED",
+    "direct_vectors": 32,
+    "equation_vectors": 96,
+    "child_probe": "PASS"
+   },
+   "Backend": {
+    "status": "PASS_BOUNDED",
+    "direct_vectors": 256,
+    "equation_vectors": 256,
+    "child_boundary_vectors": 64
+   },
+   "MemBlock": {
+    "status": "PASS_BOUNDED",
+    "full_envelope": "PASS",
+    "behavioral_closure": "PENDING"
+   }
+  },
+  "new_family_probes": {
+   "FrontendBridge": {
+    "status": "PASS_BOUNDED",
+    "direct_vectors": 7,
+    "verilator": "PASS",
+    "yosys": "PASS"
+   },
+   "WrBypass": {
+    "status": "PASS_BOUNDED",
+    "direct_checks": 520,
+    "verilator": "PASS",
+    "yosys": "PASS"
+   },
+   "FauFTBWay": {
+    "status": "PASS_BOUNDED",
+    "differential_vectors": 388,
+    "trace_match": true,
+    "verilator": "PASS",
+    "yosys": "PASS",
+    "parent_closure": "PENDING"
+   },
+   "ICache": {
+    "status": "PASS_BOUNDED",
+    "comparisons": 7,
+    "differential_vectors": 75343,
+    "trace_match": true,
+    "verilator": "PASS",
+    "yosys": "PASS",
+    "parent_closure": "PENDING"
+   },
+   "CoupledL2Parent": {
+    "status": "PASS_BOUNDED_BOUNDARY",
+    "ports": 137,
+    "generated_bytes": 53678,
+    "verilator": "PASS",
+    "yosys": "PASS",
+    "chi_reference": "LOCAL_TESTTOP_CHIL2",
+    "locked_default_config": "TL2TL_CONDITIONAL",
+    "parent_differential": "PENDING"
+   },
+   "TL2TLCoupledL2Parent": {
+    "status": "PASS_BOUNDED_LOCKED_XSTOP_DIFF",
+    "ports": 540,
+    "closure_modules": 148,
+    "locked_differential_vectors": 3,
+    "compared_outputs": 24,
+    "verilator": "PASS",
+    "yosys": "PASS",
+    "reference": "LOCKED_XSTOP_DEFAULT_CONFIG",
+    "parent_closure": "PENDING_FULL_MSHR_SRAM_PREFETCH_DIPLOMACY"
+   }
+  },
+  "semantic_family_batches": [
+   {
+    "batch_id": "V2-SEMANTIC-FRONTEND-FAUFTBWAY",
+    "status": "PASS_BOUNDED",
+    "commit": "fa25204",
+    "differential_vectors": 388,
+    "parent_closure": "PENDING"
+   },
+   {
+    "batch_id": "V2-P1-B-ICACHE",
+    "status": "PASS_BOUNDED",
+    "commit": "5bb5ed2",
+    "comparisons": 7,
+    "differential_vectors": 75343,
+    "parent_closure": "PENDING"
+   },
+   {
+    "batch_id": "V2-SEMANTIC-FRONTEND-ICACHE-MSHR",
+    "status": "PASS_BOUNDED",
+    "commit": "7d1e5ae",
+    "direct_vectors": 2048,
+    "differential_variants": 2,
+    "parent_closure": "PENDING"
+   },
+   {
+    "batch_id": "V2-SEMANTIC-COUPLEDL2-PARENT",
+    "status": "PASS_BOUNDED_BOUNDARY",
+    "commit": "d1ad38e",
+    "ports": 137,
+    "generated_bytes": 53678,
+    "verilator": "PASS",
+    "yosys": "PASS",
+    "parent_differential": "PENDING"
+   },
+   {
+    "batch_id": "V2-SEMANTIC-COUPLEDL2-PARENT-BOUNDARY-001",
+    "status": "PASS_BOUNDED",
+    "commit": "e8a2975",
+    "ports": 137,
+    "direct_checks": 4,
+    "reference": "TL2CHICoupledL2-Eb",
+    "verilator": "PASS",
+    "yosys": "PASS",
+    "parent_closure": "PENDING_FULL_CHILD_CLOSURE"
+   },
+   {
+    "batch_id": "V2-P1-C-FRONTEND-BPU-RVC",
+    "status": "PASS_BOUNDED_SOURCE_EQUATION",
+    "commit": "7a5d598",
+    "direct_vectors": {
+     "CompareMatrix": 1310,
+     "FallThroughPredictor": 2068,
+     "SaturateCounter": 2040,
+     "SignedSaturateCounter": 2032,
+     "Replacement": 13950
+    },
+    "reference": "RVC_65536_PLUS_SOURCE_LEVEL",
+    "independent_validator": "PASS_BOUNDED",
+    "parent_closure": "PENDING_BPU_PARENT"
+   },
+   {
+    "batch_id": "V2-DEPENDENCY-COUPLEDL2-TL2TL-PARENT-001",
+    "status": "PASS_BOUNDED",
+    "commit": "1f67954",
+    "ports": 540,
+    "direct_checks": 6,
+    "child_integration": {
+     "status": "PASS",
+     "slice_children": 4,
+     "verilator": "PASS",
+     "yosys": "PASS"
+    },
+    "reference": "LOCKED_XSTOP_DEFAULT_CONFIG",
+    "verilator": "PASS",
+    "yosys": "PASS",
+    "parent_closure": "PENDING_FULL_MSHR_SRAM_PREFETCH_DIPLOMACY"
+   },
+   {
+    "batch_id": "V2-SEMANTIC-BACKEND-DECODE-CHILD-001",
+    "status": "PASS_BOUNDED",
+    "commit": "c39bcaa",
+    "target": "RiscvInst",
+    "direct_vectors": 514,
+    "direct_scalar_checks": 23644,
+    "reference_vectors": 1024,
+    "verilator": "PASS",
+    "yosys": "PASS",
+    "parent_closure": "PENDING_BACKEND_DECODEUNIT_ISSUE_EXU"
+   },
+   {
+    "batch_id": "V2-SEMANTIC-BACKEND-BRANCH-CHILD-001",
+    "status": "PASS_BOUNDED",
+    "commit": "43eac87",
+    "target": "BranchModule",
+    "direct_vectors": 2048,
+    "reference_vectors": 2048,
+    "verilator": "PASS",
+    "yosys": "PASS",
+    "parent_closure": "PENDING_BACKEND_BRANCHUNIT_EXUBLOCK"
+   },
+   {
+    "batch_id": "V2-SEMANTIC-FRONTEND-FTB-ENTRY-GEN-001",
+    "status": "PASS_BOUNDED_REFERENCE",
+    "commit": "a155870",
+    "target": "FTBEntryGen",
+    "ports": 104,
+    "direct_checks": 26624,
+    "formal_reference": "PASS",
+    "verilator": "PASS",
+    "yosys": "PASS",
+    "parent_closure": "PENDING_FRONTEND_FTB_BPU"
+   },
+   {
+    "batch_id": "V2-SEMANTIC-COUPLEDL2-SLICE-CHILDREN-001",
+    "status": "PASS_BOUNDED",
+    "commit": "fd04316",
+    "target": "CoupledL2Slice",
+    "children": [
+     "CoupledL2MSHR",
+     "CoupledL2MSHRCtl",
+     "CoupledL2ProbeQueue",
+     "CoupledL2RefillUnit"
+    ],
+    "direct_checks": 4,
+    "equation_vectors": 256,
+    "verilator": "PASS",
+    "yosys": "PASS",
+    "parent_closure": "PENDING_FULL_SLICE_PARENT"
+   },
+   {
+    "batch_id": "V2-DEPENDENCY-COUPLEDL2-SLICE-MSHR-001",
+    "status": "PASS_BOUNDED",
+    "commit": "b87afd4",
+    "target": "CoupledL2Slice",
+    "children": [
+     "MSHR",
+     "MSHRCtl",
+     "ProbeQueue",
+     "RefillUnit"
+    ],
+    "direct_checks": {
+     "MSHR": 4,
+     "MSHRCtl": 4,
+     "ProbeQueue": 5,
+     "RefillUnit": 4
+    },
+    "equation_vectors": 15,
+    "verilator": "PASS",
+    "yosys": "PASS",
+    "conditional_reference": "locked ProbeQueue is XiangShan DCache Probe.scala; tl2tl ProbeQueue remains conditional",
+    "parent_closure": "PENDING_FULL_MSHR_SRAM_PREFETCH_DIPLOMACY"
+   },
+   {
+    "batch_id": "V2-DEPENDENCY-COUPLEDL2-SLICE-MSHR-001",
+    "status": "PASS_BOUNDED",
+    "commit": "b87afd4",
+    "target": "CoupledL2Slice",
+    "children": [
+     "MSHR",
+     "MSHRCtl",
+     "ProbeQueue",
+     "RefillUnit"
+    ],
+    "direct_checks": {
+     "MSHR": 4,
+     "MSHRCtl": 4,
+     "ProbeQueue": 5,
+     "RefillUnit": 4
+    },
+    "equation_vectors": 15,
+    "verilator": "PASS",
+    "yosys": "PASS",
+    "conditional_reference": "locked ProbeQueue is XiangShan DCache Probe.scala; tl2tl ProbeQueue remains conditional",
+    "parent_closure": "PENDING_FULL_MSHR_SRAM_PREFETCH_DIPLOMACY"
+   },
+   {
+    "batch_id": "V2-SEMANTIC-BACKEND-ALU-JUMP-CHILD-001",
+    "status": "PASS_BOUNDED",
+    "commit": "decb758",
+    "targets": [
+     "AluDataModule",
+     "JumpDataModule"
+    ],
+    "direct_vectors": 4096,
+    "reference_vectors": 2048,
+    "verilator": "PASS",
+    "yosys": "PASS",
+    "parent_closure": "PENDING_BACKEND_EXUBLOCK"
+   },
+   {
+    "batch_id": "V2-SEMANTIC-FRONTEND-INSTR-MMIO-ENTRY-CHILD-001",
+    "status": "PASS_BOUNDED",
+    "commit": "c3c691e",
+    "target": "InstrMMIOEntry",
+    "direct_cycles": 4096,
+    "reference_cycles": 1024,
+    "verilator": "PASS",
+    "yosys": "PASS",
+    "parent_closure": "PENDING_FRONTEND_INSTRUNCACHE"
+   },
+   {
+    "batch_id": "V2-PARENT-BACKEND-CLOSURE-002",
+    "status": "PASS_BOUNDED_PARENT_CLOSURE",
+    "commit": "3c9128f",
+    "target": "Backend.Top",
+    "direct_vectors": 128,
+    "reference_vectors": 128,
+    "verilator": "PASS",
+    "yosys": "PASS",
+    "parent_closure": "PENDING_BACKEND_FULL_1165_PORT"
+   },
+   {
+    "batch_id": "V2-FRONTEND-INSTR-UNCACHE-PARENT-001",
+    "status": "PASS_BOUNDED_INSTR_UNCACHE_PARENT",
+    "commit": "86b43f2",
+    "target": "InstrUncache",
+    "direct_vectors": 1024,
+    "reference_vectors": 1024,
+    "verilator": "PASS",
+    "yosys": "PASS",
+    "parent_closure": "PENDING_FRONTEND_FULL_CHILD_CLOSURE"
+   },
+   {
+    "batch_id": "V2-PARENT-MEMBLOCK-FRONTENDBRIDGE-002",
+    "status": "PASS_BOUNDED_PARENT",
+    "commit": "4196e51",
+    "target": "MemBlock",
+    "direct_vectors": 28,
+    "reduced_reference_vectors": 32,
+    "frontend_bridge_vectors": 96,
+    "frontend_bridge_outputs": 48,
+    "full_port_envelope": 1326,
+    "verilator": "PASS",
+    "yosys": "PASS",
+    "parent_closure": "PENDING_FULL_DCACHE_MMU_LSU_DIPLOMACY"
+   },
+   {
+    "batch_id": "V2-DEPENDENCY-COUPLEDL2-TL2TL-PARENT-LOCKED-DIFF-001",
+    "status": "PASS_BOUNDED_LOCKED_XSTOP_DIFF",
+    "commit": "d7c7275",
+    "target": "TL2TLCoupledL2",
+    "closure_modules": 148,
+    "closure_bytes": 10078969,
+    "vectors": 3,
+    "compared_outputs": 24,
+    "verilator": "PASS",
+    "yosys": "PASS",
+    "parent_closure": "PENDING_FULL_COUPLEDL2_BEHAVIOR"
+   }
+  ],
+  "locked_module_inventory": {
+   "reference_modules": 1976,
+   "generated_modules": 19,
+   "missing_modules": 1976,
+   "status": "INCOMPLETE_MODULE_CLOSURE",
+   "evidence": "validation/v2-top-generation-probe-results.json"
+  },
+  "semantic_closure_status": "PENDING_FULL_CHILD_BEHAVIORAL_DIFFERENTIAL",
+  "parent_closures_planned": 8,
+  "parent_closures_indexed": 8,
+  "parent_closures_matched": 0,
   "accepted_count": 0,
-  "acceptance_eligible": false
+  "next_batches": [
+   "V2-SEMANTIC-FRONTEND-CHILD-CLOSURE",
+   "V2-SEMANTIC-BACKEND-DECODE-ISSUE-EXU-CLOSURE",
+   "V2-SEMANTIC-MEMBLOCK-MMU-LSU-DIPLOMACY-CLOSURE",
+   "V2-FULL-XSTOP-BEHAVIORAL-DIFFERENTIAL"
+  ],
+  "hierarchy_wave1_build_files": [
+   "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.OpenLLC.OpenNCB-Hardware.py",
+   "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.OpenLLC.Sram-Hardware.py",
+   "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.FrontendBridge-Hardware.py",
+   "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.MemBlock-Hardware.py"
+  ],
+  "hierarchy_wave1_note": "Four new aggregate Build subjects were added under the 2026-09-16 hierarchy-completion amendment; the 78 closure-subject bound is unchanged and the new subjects are counted separately."
+ },
+ "accepted_count": 0,
+ "acceptance_eligible": false
 }

@@ -1,665 +1,699 @@
 {
-  "schema_version": 1,
-  "kind": "XIANGSHAN_KUNMINGHU_V2_CORE_REWRITE_INVENTORY",
-  "authority": {
-    "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
-    "xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
-    "xstop_bytes": 228590583
+ "schema_version": 1,
+ "kind": "XIANGSHAN_KUNMINGHU_V2_CORE_REWRITE_INVENTORY",
+ "authority": {
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+  "xstop_bytes": 228590583
+ },
+ "scan_counts": {
+  "xiangshan_scala_files": 325,
+  "existing_candidate_entries": 47,
+  "retained_build_files": 46,
+  "retired_or_excluded": 1,
+  "planned_core_build_files": 46,
+  "families": 35,
+  "parent_closures": 4
+ },
+ "classification_counts": {
+  "EXACT": 12,
+  "MOVED": 4,
+  "REWRITTEN": 18,
+  "SPLIT": 6,
+  "RETIRED": 1
+ },
+ "entries": [
+  {
+   "id": "Instructions",
+   "source_scala": "scala/src/main/scala/xiangshan/backend/decode/Instructions.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Decode.Instructions-Hardware.py",
+   "family_id": "core.decode.isa",
+   "closure_root": "core.decode",
+   "classification": "REWRITTEN",
+   "disposition": "REWRITTEN",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "upstream/src/main/scala/xiangshan/backend/decode/Instructions.scala"
+   ]
   },
-  "scan_counts": {
-    "xiangshan_scala_files": 325,
-    "existing_candidate_entries": 47,
-    "retained_build_files": 46,
-    "retired_or_excluded": 1,
-    "planned_core_build_files": 46,
-    "families": 35,
-    "parent_closures": 4
+  {
+   "id": "CSRs",
+   "source_scala": "scala/src/main/scala/xiangshan/backend/decode/isa/CSRs.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Decode.Isa.CSRs-Hardware.py",
+   "family_id": "core.decode.csr",
+   "closure_root": "core.csr",
+   "classification": "SPLIT",
+   "disposition": "SPLIT",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "upstream/rocket-chip/src/main/scala/rocket/Instructions.scala",
+    "upstream/src/main/scala/xiangshan/backend/fu/util/CSRConst.scala"
+   ]
   },
-  "classification_counts": {
-    "EXACT": 12,
-    "MOVED": 4,
-    "REWRITTEN": 18,
-    "SPLIT": 6,
-    "RETIRED": 1
+  {
+   "id": "RiscvInst",
+   "source_scala": "scala/src/main/scala/xiangshan/backend/decode/isa/bitfield/RiscvInst.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Decode.Isa.Bitfield.RiscvInst-Hardware.py",
+   "family_id": "core.decode.isa",
+   "closure_root": "core.decode",
+   "classification": "EXACT",
+   "disposition": "REUSED",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "upstream/src/main/scala/xiangshan/backend/decode/isa/bitfield/RiscvInst.scala"
+   ]
   },
-  "entries": [
-    {
-      "id": "Instructions",
-      "source_scala": "scala/src/main/scala/xiangshan/backend/decode/Instructions.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Decode.Instructions-Hardware.py",
-      "family_id": "core.decode.isa",
-      "closure_root": "core.decode",
-      "classification": "REWRITTEN",
-      "disposition": "REWRITTEN",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "upstream/src/main/scala/xiangshan/backend/decode/Instructions.scala"
-      ]
-    },
-    {
-      "id": "CSRs",
-      "source_scala": "scala/src/main/scala/xiangshan/backend/decode/isa/CSRs.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Decode.Isa.CSRs-Hardware.py",
-      "family_id": "core.decode.csr",
-      "closure_root": "core.csr",
-      "classification": "SPLIT",
-      "disposition": "SPLIT",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "upstream/rocket-chip/src/main/scala/rocket/Instructions.scala",
-        "upstream/src/main/scala/xiangshan/backend/fu/util/CSRConst.scala"
-      ]
-    },
-    {
-      "id": "RiscvInst",
-      "source_scala": "scala/src/main/scala/xiangshan/backend/decode/isa/bitfield/RiscvInst.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Decode.Isa.Bitfield.RiscvInst-Hardware.py",
-      "family_id": "core.decode.isa",
-      "closure_root": "core.decode",
-      "classification": "EXACT",
-      "disposition": "REUSED",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "upstream/src/main/scala/xiangshan/backend/decode/isa/bitfield/RiscvInst.scala"
-      ]
-    },
-    {
-      "id": "SstcInterruptGen",
-      "source_scala": "scala/src/main/scala/xiangshan/backend/fu/NewCSR/SstcInterruptGen.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.NewCSR.SstcInterruptGen-Hardware.py",
-      "family_id": "core.csr.timer",
-      "closure_root": "core.csr",
-      "classification": "EXACT",
-      "disposition": "REUSED",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/SstcInterruptGen.scala"
-      ]
-    },
-    {
-      "id": "SRT16Divider",
-      "source_scala": "scala/src/main/scala/xiangshan/backend/fu/SRT16Divider.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.SRT16Divider-Hardware.py",
-      "family_id": "core.fu.divider",
-      "closure_root": "core.fu.divider",
-      "classification": "REWRITTEN",
-      "disposition": "REWRITTEN",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "upstream/src/main/scala/xiangshan/backend/fu/SRT16Divider.scala",
-        "upstream/src/main/scala/xiangshan/backend/fu/SRT4Divider.scala"
-      ]
-    },
-    {
-      "id": "FliTable",
-      "source_scala": "scala/src/main/scala/xiangshan/backend/fu/fpu/FliTable.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Fpu.FliTable-Hardware.py",
-      "family_id": "core.fu.fpu",
-      "closure_root": "core.fu.fpu",
-      "classification": "EXACT",
-      "disposition": "REUSED",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "upstream/src/main/scala/xiangshan/backend/fu/fpu/FliTable.scala"
-      ]
-    },
-    {
-      "id": "CSA",
-      "source_scala": "scala/src/main/scala/xiangshan/backend/fu/util/CSA.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Util.CSA-Hardware.py",
-      "family_id": "core.fu.arithmetic.csa",
-      "closure_root": "core.fu.arithmetic",
-      "classification": "EXACT",
-      "disposition": "REUSED",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "upstream/src/main/scala/xiangshan/backend/fu/util/CSA.scala"
-      ]
-    },
-    {
-      "id": "CryptoUtils",
-      "source_scala": "scala/src/main/scala/xiangshan/backend/fu/util/CryptoUtils.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Util.CryptoUtils-Hardware.py",
-      "family_id": "core.fu.crypto",
-      "closure_root": "core.fu.crypto",
-      "classification": "EXACT",
-      "disposition": "REUSED",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "upstream/src/main/scala/xiangshan/backend/fu/util/CryptoUtils.scala"
-      ]
-    },
-    {
-      "id": "DebugCSR",
-      "source_scala": "scala/src/main/scala/xiangshan/backend/fu/util/DebugCSR.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Util.DebugCSR-Hardware.py",
-      "family_id": "core.fu.debug",
-      "closure_root": "core.fu.debug",
-      "classification": "EXACT",
-      "disposition": "REUSED",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "upstream/src/main/scala/xiangshan/backend/fu/util/DebugCSR.scala"
-      ]
-    },
-    {
-      "id": "ShiftUtils",
-      "source_scala": "scala/src/main/scala/xiangshan/backend/fu/util/ShiftUtils.scala",
-      "build_path": null,
-      "family_id": "core.fu.shift",
-      "closure_root": "core.fu.shift",
-      "classification": "RETIRED",
-      "disposition": "RETIRED",
-      "v2_status": "RETIRED",
-      "reference_surface": []
-    },
-    {
-      "id": "ByteMaskTailGen",
-      "source_scala": "scala/src/main/scala/xiangshan/backend/fu/vector/ByteMaskTailGen.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Vector.ByteMaskTailGen-Hardware.py",
-      "family_id": "core.fu.vector.mask",
-      "closure_root": "core.fu.vector",
-      "classification": "EXACT",
-      "disposition": "REUSED",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "upstream/src/main/scala/xiangshan/backend/fu/vector/ByteMaskTailGen.scala"
-      ]
-    },
-    {
-      "id": "DstMgu",
-      "source_scala": "scala/src/main/scala/xiangshan/backend/fu/vector/DstMgu.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Vector.DstMgu-Hardware.py",
-      "family_id": "core.fu.vector.mgu",
-      "closure_root": "core.fu.vector.mgu",
-      "classification": "REWRITTEN",
-      "disposition": "REWRITTEN",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "upstream/src/main/scala/xiangshan/backend/fu/vector/Mgu.scala"
-      ]
-    },
-    {
-      "id": "Mgtu",
-      "source_scala": "scala/src/main/scala/xiangshan/backend/fu/vector/Mgtu.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Vector.Mgtu-Hardware.py",
-      "family_id": "core.fu.vector.compare",
-      "closure_root": "core.fu.vector",
-      "classification": "REWRITTEN",
-      "disposition": "REWRITTEN",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "upstream/src/main/scala/xiangshan/backend/fu/vector/Mgtu.scala"
-      ]
-    },
-    {
-      "id": "NewMgu",
-      "source_scala": "scala/src/main/scala/xiangshan/backend/fu/vector/NewMgu.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Vector.NewMgu-Hardware.py",
-      "family_id": "core.fu.vector.mgu",
-      "closure_root": "core.fu.vector.mgu",
-      "classification": "REWRITTEN",
-      "disposition": "REWRITTEN",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "upstream/src/main/scala/xiangshan/backend/fu/vector/Mgu.scala"
-      ]
-    },
-    {
-      "id": "MaskExtrator",
-      "source_scala": "scala/src/main/scala/xiangshan/backend/fu/vector/utils/MaskExtrator.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Vector.Utils.MaskExtrator-Hardware.py",
-      "family_id": "core.fu.vector.mask",
-      "closure_root": "core.fu.vector",
-      "classification": "EXACT",
-      "disposition": "REUSED",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "upstream/src/main/scala/xiangshan/backend/fu/vector/utils/MaskExtrator.scala"
-      ]
-    },
-    {
-      "id": "ScalaDupToVector",
-      "source_scala": "scala/src/main/scala/xiangshan/backend/fu/vector/utils/ScalaDupToVector.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Vector.Utils.ScalaDupToVector-Hardware.py",
-      "family_id": "core.fu.vector.mask",
-      "closure_root": "core.fu.vector",
-      "classification": "EXACT",
-      "disposition": "REUSED",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "upstream/src/main/scala/xiangshan/backend/fu/vector/utils/ScalaDupToVector.scala"
-      ]
-    },
-    {
-      "id": "UIntToCont0s",
-      "source_scala": "scala/src/main/scala/xiangshan/backend/fu/vector/utils/UIntToCont0s.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Vector.Utils.UIntToCont0s-Hardware.py",
-      "family_id": "core.fu.vector.mask",
-      "closure_root": "core.fu.vector",
-      "classification": "REWRITTEN",
-      "disposition": "REWRITTEN",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "upstream/src/main/scala/xiangshan/backend/fu/vector/utils/UIntToCont0s.scala"
-      ]
-    },
-    {
-      "id": "UIntToCont1s",
-      "source_scala": "scala/src/main/scala/xiangshan/backend/fu/vector/utils/UIntToCont1s.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Vector.Utils.UIntToCont1s-Hardware.py",
-      "family_id": "core.fu.vector.mask",
-      "closure_root": "core.fu.vector",
-      "classification": "REWRITTEN",
-      "disposition": "REWRITTEN",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "upstream/src/main/scala/xiangshan/backend/fu/vector/utils/UIntToCont1s.scala"
-      ]
-    },
-    {
-      "id": "VecDataSplitModule",
-      "source_scala": "scala/src/main/scala/xiangshan/backend/fu/vector/utils/VecDataSplitModule.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Vector.Utils.VecDataSplitModule-Hardware.py",
-      "family_id": "core.fu.vector.mask",
-      "closure_root": "core.fu.vector",
-      "classification": "EXACT",
-      "disposition": "REUSED",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "upstream/src/main/scala/xiangshan/backend/fu/vector/utils/VecDataSplitModule.scala"
-      ]
-    },
-    {
-      "id": "AMOALU",
-      "source_scala": "scala/src/main/scala/xiangshan/cache/dcache/mainpipe/AMOALU.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Cache.Dcache.Mainpipe.AMOALU-Hardware.py",
-      "family_id": "core.cache.dcache.atomic",
-      "closure_root": "core.cache.dcache",
-      "classification": "REWRITTEN",
-      "disposition": "REWRITTEN",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/AMOALU.scala"
-      ]
-    },
-    {
-      "id": "TagArray",
-      "source_scala": "scala/src/main/scala/xiangshan/cache/dcache/meta/TagArray.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Cache.Dcache.Meta.TagArray-Hardware.py",
-      "family_id": "core.cache.dcache.meta",
-      "closure_root": "core.cache.dcache",
-      "classification": "REWRITTEN",
-      "disposition": "REWRITTEN",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "upstream/src/main/scala/xiangshan/cache/dcache/meta/TagArray.scala"
-      ]
-    },
-    {
-      "id": "CompareMatrix",
-      "source_scala": "scala/src/main/scala/xiangshan/frontend/bpu/CompareMatrix.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.CompareMatrix-Hardware.py",
-      "family_id": "core.frontend.bpu.compare",
-      "closure_root": "core.frontend.bpu",
-      "classification": "SPLIT",
-      "disposition": "SPLIT",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "upstream/src/main/scala/xiangshan/backend/dispatch/NewDispatch.scala"
-      ]
-    },
-    {
-      "id": "FallThroughPredictor",
-      "source_scala": "scala/src/main/scala/xiangshan/frontend/bpu/FallThroughPredictor.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.FallThroughPredictor-Hardware.py",
-      "family_id": "core.frontend.ftb",
-      "closure_root": "core.frontend",
-      "classification": "SPLIT",
-      "disposition": "SPLIT",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "upstream/src/main/scala/xiangshan/frontend/BPU.scala",
-        "upstream/src/main/scala/xiangshan/frontend/FTB.scala",
-        "upstream/src/main/scala/xiangshan/frontend/FrontendBundle.scala",
-        "upstream/src/main/scala/xiangshan/frontend/NewFtq.scala"
-      ]
-    },
-    {
-      "id": "SaturateCounter",
-      "source_scala": "scala/src/main/scala/xiangshan/frontend/bpu/SaturateCounter.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.SaturateCounter-Hardware.py",
-      "family_id": "core.frontend.bpu.counters",
-      "closure_root": "core.frontend.bpu",
-      "classification": "SPLIT",
-      "disposition": "SPLIT",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "upstream/src/main/scala/xiangshan/frontend/BPU.scala",
-        "upstream/src/main/scala/xiangshan/frontend/Tage.scala",
-        "upstream/src/main/scala/xiangshan/frontend/SC.scala"
-      ]
-    },
-    {
-      "id": "SignedSaturateCounter",
-      "source_scala": "scala/src/main/scala/xiangshan/frontend/bpu/SignedSaturateCounter.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.SignedSaturateCounter-Hardware.py",
-      "family_id": "core.frontend.bpu.counters",
-      "closure_root": "core.frontend.bpu",
-      "classification": "SPLIT",
-      "disposition": "SPLIT",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "upstream/src/main/scala/xiangshan/frontend/BPU.scala",
-        "upstream/src/main/scala/xiangshan/frontend/SC.scala"
-      ]
-    },
-    {
-      "id": "LruStateGen",
-      "source_scala": "scala/src/main/scala/xiangshan/frontend/bpu/replacer/LruStateGen.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.LruStateGen-Hardware.py",
-      "family_id": "core.replacement",
-      "closure_root": "core.replacement",
-      "classification": "MOVED",
-      "disposition": "RELOCATED",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "upstream/utility/src/main/scala/utility/Replacement.scala",
-        "upstream/rocket-chip/src/main/scala/util/Replacement.scala"
-      ]
-    },
-    {
-      "id": "PlruStateGen",
-      "source_scala": "scala/src/main/scala/xiangshan/frontend/bpu/replacer/PlruStateGen.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.PlruStateGen-Hardware.py",
-      "family_id": "core.replacement",
-      "closure_root": "core.replacement",
-      "classification": "MOVED",
-      "disposition": "RELOCATED",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "upstream/utility/src/main/scala/utility/Replacement.scala",
-        "upstream/rocket-chip/src/main/scala/util/Replacement.scala"
-      ]
-    },
-    {
-      "id": "ReplacerState",
-      "source_scala": "scala/src/main/scala/xiangshan/frontend/bpu/replacer/ReplacerState.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.ReplacerState-Hardware.py",
-      "family_id": "core.replacement",
-      "closure_root": "core.replacement",
-      "classification": "REWRITTEN",
-      "disposition": "REWRITTEN",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "upstream/utility/src/main/scala/utility/Replacement.scala",
-        "upstream/rocket-chip/src/main/scala/util/Replacement.scala"
-      ]
-    },
-    {
-      "id": "ICacheMshr",
-      "source_scala": "scala/src/main/scala/xiangshan/frontend/icache/ICacheMshr.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.ICacheMshr-Hardware.py",
-      "family_id": "core.frontend.icache.mshr",
-      "closure_root": "core.frontend.icache",
-      "classification": "REWRITTEN",
-      "disposition": "REWRITTEN",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala"
-      ]
-    },
-    {
-      "id": "ICacheReplacer",
-      "source_scala": "scala/src/main/scala/xiangshan/frontend/icache/ICacheReplacer.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.ICacheReplacer-Hardware.py",
-      "family_id": "core.frontend.icache.replacer",
-      "closure_root": "core.frontend.icache",
-      "classification": "MOVED",
-      "disposition": "RELOCATED",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "upstream/src/main/scala/xiangshan/frontend/icache/ICache.scala"
-      ]
-    },
-    {
-      "id": "Utils",
-      "source_scala": "scala/src/main/scala/xiangshan/frontend/icache/Utils.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.Utils-Hardware.py",
-      "family_id": "core.frontend.icache.utility",
-      "closure_root": "core.frontend.icache",
-      "classification": "SPLIT",
-      "disposition": "SPLIT",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala",
-        "upstream/src/main/scala/xiangshan/frontend/icache/FIFO.scala"
-      ]
-    },
-    {
-      "id": "RvcExpander",
-      "source_scala": "scala/src/main/scala/xiangshan/frontend/ifu/RvcExpander.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Ifu.RvcExpander-Hardware.py",
-      "family_id": "core.frontend.ifu.rvc",
-      "closure_root": "core.frontend.ifu",
-      "classification": "MOVED",
-      "disposition": "RELOCATED",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "upstream/src/main/scala/xiangshan/frontend/PreDecode.scala",
-        "upstream/rocket-chip/src/main/scala/rocket/RVC.scala"
-      ]
-    },
-    {
-      "id": "DataSource",
-      "source_scala": "scala/src/main/scala/xiangshan/backend/datapath/DataSource.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Datapath.DataSource-Hardware.py",
-      "family_id": "core.backend.datapath",
-      "closure_root": "core.backend.datapath",
-      "classification": "EXACT",
-      "disposition": "REUSED",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "upstream/src/main/scala/xiangshan/backend/datapath/DataSource.scala"
-      ]
-    },
-    {
-      "id": "NewPipelineConnect",
-      "source_scala": "scala/src/main/scala/xiangshan/backend/datapath/NewPipelineConnect.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Datapath.NewPipelineConnect-Hardware.py",
-      "family_id": "core.backend.datapath",
-      "closure_root": "core.backend.datapath",
-      "classification": "EXACT",
-      "disposition": "REUSED",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "upstream/src/main/scala/xiangshan/backend/datapath/NewPipelineConnect.scala"
-      ]
-    },
-    {
-      "id": "WbArbiter",
-      "source_scala": "scala/src/main/scala/xiangshan/backend/datapath/WbArbiter.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Datapath.WbArbiter-Hardware.py",
-      "family_id": "core.backend.datapath.writeback",
-      "closure_root": "core.backend.datapath",
-      "classification": "REWRITTEN",
-      "disposition": "REWRITTEN",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "upstream/src/main/scala/xiangshan/backend/datapath/WbArbiter.scala"
-      ]
-    },
-    {
-      "id": "ImmExtractor",
-      "source_scala": "scala/src/main/scala/xiangshan/backend/issue/ImmExtractor.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.ImmExtractor-Hardware.py",
-      "family_id": "core.backend.issue.imm",
-      "closure_root": "core.backend.issue",
-      "classification": "REWRITTEN",
-      "disposition": "REWRITTEN",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "ImmExtractor",
-        "ImmExtractor_2",
-        "ImmExtractor_12",
-        "ImmExtractor_37",
-        "ImmExtractor_57"
-      ]
-    },
-    {
-      "id": "AluDataModule",
-      "source_scala": "scala/src/main/scala/xiangshan/backend/fu/Alu.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.AluDataModule-Hardware.py",
-      "family_id": "core.fu.alu",
-      "closure_root": "core.fu",
-      "classification": "REWRITTEN",
-      "disposition": "REWRITTEN",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "AluDataModule",
-        "AddModule",
-        "SubModule",
-        "LeftShiftModule",
-        "RightShiftModule"
-      ]
-    },
-    {
-      "id": "CommitStuckCounter",
-      "source_scala": "scala/src/main/scala/xiangshan/backend/rob/CommitStuckCounter.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Rob.CommitStuckCounter-Hardware.py",
-      "family_id": "core.backend.rob.commit",
-      "closure_root": "core.backend.rob",
-      "classification": "REWRITTEN",
-      "disposition": "REWRITTEN",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "CommitStuckCounter"
-      ]
-    },
-    {
-      "id": "EnqPolicy",
-      "source_scala": "scala/src/main/scala/xiangshan/backend/issue/EnqPolicy.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.EnqPolicy-Hardware.py",
-      "family_id": "core.backend.issue.enq",
-      "closure_root": "core.backend.issue",
-      "classification": "REWRITTEN",
-      "disposition": "REWRITTEN",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "EnqPolicy"
-      ]
-    },
-    {
-      "id": "AgeDetector",
-      "source_scala": "scala/src/main/scala/xiangshan/backend/issue/AgeDetector.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.AgeDetector-Hardware.py",
-      "family_id": "core.backend.issue.age",
-      "closure_root": "core.backend.issue",
-      "classification": "REWRITTEN",
-      "disposition": "REWRITTEN",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "AgeDetector"
-      ]
-    },
-    {
-      "id": "PreDecodeInst",
-      "source_scala": "scala/src/main/scala/xiangshan/backend/decode/isa/predecode/predecode.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Decode.Isa.Predecode.PreDecodeInst-Hardware.py",
-      "family_id": "core.decode.predecode",
-      "closure_root": "core.decode",
-      "classification": "REWRITTEN",
-      "disposition": "REWRITTEN",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "PreDecode"
-      ]
-    },
-    {
-      "id": "BranchModule",
-      "source_scala": "scala/src/main/scala/xiangshan/backend/fu/Branch.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.BranchModule-Hardware.py",
-      "family_id": "core.fu.controlflow",
-      "closure_root": "core.fu",
-      "classification": "REWRITTEN",
-      "disposition": "REWRITTEN",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "BranchModule"
-      ]
-    },
-    {
-      "id": "JumpDataModule",
-      "source_scala": "scala/src/main/scala/xiangshan/backend/fu/Jump.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.JumpDataModule-Hardware.py",
-      "family_id": "core.fu.controlflow",
-      "closure_root": "core.fu",
-      "classification": "REWRITTEN",
-      "disposition": "REWRITTEN",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "JumpDataModule"
-      ]
-    },
-    {
-      "id": "DeqPolicy",
-      "source_scala": "scala/src/main/scala/xiangshan/backend/issue/DeqPolicy.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.DeqPolicy-Hardware.py",
-      "family_id": "core.backend.issue.deq",
-      "closure_root": "core.backend.issue",
-      "classification": "REWRITTEN",
-      "disposition": "REWRITTEN",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "DeqPolicy"
-      ]
-    },
-    {
-      "id": "DataArray",
-      "source_scala": "scala/src/main/scala/xiangshan/backend/issue/DataArray.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.DataArray-Hardware.py",
-      "family_id": "core.backend.issue.data",
-      "closure_root": "core.backend.issue",
-      "classification": "REWRITTEN",
-      "disposition": "REWRITTEN",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "DataArray",
-        "AsyncRawDataModuleTemplate"
-      ]
-    },
-    {
-      "id": "FuBusyTableRead",
-      "source_scala": "scala/src/main/scala/xiangshan/backend/issue/FuBusyTableRead.scala",
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.FuBusyTableRead-Hardware.py",
-      "family_id": "core.backend.issue.busy",
-      "closure_root": "core.backend.issue",
-      "classification": "REWRITTEN",
-      "disposition": "REWRITTEN",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "FuBusyTableRead",
-        "FuBusyTableReadIO"
-      ]
-    },
-    {
-      "id": "RobPtrWrappers",
-      "source_scala": [
-        "scala/src/main/scala/xiangshan/backend/rob/RobEnqPtrWrapper.scala",
-        "scala/src/main/scala/xiangshan/backend/rob/RobDeqPtrWrapper.scala"
-      ],
-      "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Rob.PtrWrappers-Hardware.py",
-      "family_id": "core.backend.rob.ptr",
-      "closure_root": "core.backend.rob",
-      "classification": "REWRITTEN",
-      "disposition": "REWRITTEN",
-      "v2_status": "VALIDATOR_PASS_BOUNDED",
-      "reference_surface": [
-        "RobEnqPtrWrapper",
-        "NewRobDeqPtrWrapper"
-      ]
-    }
-  ],
-  "status": "IMPLEMENTATION_WAVES_VALIDATED_BOUNDED",
-  "acceptance_eligible": false
+  {
+   "id": "SstcInterruptGen",
+   "source_scala": "scala/src/main/scala/xiangshan/backend/fu/NewCSR/SstcInterruptGen.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.NewCSR.SstcInterruptGen-Hardware.py",
+   "family_id": "core.csr.timer",
+   "closure_root": "core.csr",
+   "classification": "EXACT",
+   "disposition": "REUSED",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/SstcInterruptGen.scala"
+   ]
+  },
+  {
+   "id": "SRT16Divider",
+   "source_scala": "scala/src/main/scala/xiangshan/backend/fu/SRT16Divider.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.SRT16Divider-Hardware.py",
+   "family_id": "core.fu.divider",
+   "closure_root": "core.fu.divider",
+   "classification": "REWRITTEN",
+   "disposition": "REWRITTEN",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "upstream/src/main/scala/xiangshan/backend/fu/SRT16Divider.scala",
+    "upstream/src/main/scala/xiangshan/backend/fu/SRT4Divider.scala"
+   ]
+  },
+  {
+   "id": "FliTable",
+   "source_scala": "scala/src/main/scala/xiangshan/backend/fu/fpu/FliTable.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Fpu.FliTable-Hardware.py",
+   "family_id": "core.fu.fpu",
+   "closure_root": "core.fu.fpu",
+   "classification": "EXACT",
+   "disposition": "REUSED",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "upstream/src/main/scala/xiangshan/backend/fu/fpu/FliTable.scala"
+   ]
+  },
+  {
+   "id": "CSA",
+   "source_scala": "scala/src/main/scala/xiangshan/backend/fu/util/CSA.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Util.CSA-Hardware.py",
+   "family_id": "core.fu.arithmetic.csa",
+   "closure_root": "core.fu.arithmetic",
+   "classification": "EXACT",
+   "disposition": "REUSED",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "upstream/src/main/scala/xiangshan/backend/fu/util/CSA.scala"
+   ]
+  },
+  {
+   "id": "CryptoUtils",
+   "source_scala": "scala/src/main/scala/xiangshan/backend/fu/util/CryptoUtils.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Util.CryptoUtils-Hardware.py",
+   "family_id": "core.fu.crypto",
+   "closure_root": "core.fu.crypto",
+   "classification": "EXACT",
+   "disposition": "REUSED",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "upstream/src/main/scala/xiangshan/backend/fu/util/CryptoUtils.scala"
+   ]
+  },
+  {
+   "id": "DebugCSR",
+   "source_scala": "scala/src/main/scala/xiangshan/backend/fu/util/DebugCSR.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Util.DebugCSR-Hardware.py",
+   "family_id": "core.fu.debug",
+   "closure_root": "core.fu.debug",
+   "classification": "EXACT",
+   "disposition": "REUSED",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "upstream/src/main/scala/xiangshan/backend/fu/util/DebugCSR.scala"
+   ]
+  },
+  {
+   "id": "ShiftUtils",
+   "source_scala": "scala/src/main/scala/xiangshan/backend/fu/util/ShiftUtils.scala",
+   "build_path": null,
+   "family_id": "core.fu.shift",
+   "closure_root": "core.fu.shift",
+   "classification": "RETIRED",
+   "disposition": "RETIRED",
+   "v2_status": "RETIRED",
+   "reference_surface": []
+  },
+  {
+   "id": "ByteMaskTailGen",
+   "source_scala": "scala/src/main/scala/xiangshan/backend/fu/vector/ByteMaskTailGen.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Vector.ByteMaskTailGen-Hardware.py",
+   "family_id": "core.fu.vector.mask",
+   "closure_root": "core.fu.vector",
+   "classification": "EXACT",
+   "disposition": "REUSED",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "upstream/src/main/scala/xiangshan/backend/fu/vector/ByteMaskTailGen.scala"
+   ]
+  },
+  {
+   "id": "DstMgu",
+   "source_scala": "scala/src/main/scala/xiangshan/backend/fu/vector/DstMgu.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Vector.DstMgu-Hardware.py",
+   "family_id": "core.fu.vector.mgu",
+   "closure_root": "core.fu.vector.mgu",
+   "classification": "REWRITTEN",
+   "disposition": "REWRITTEN",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "upstream/src/main/scala/xiangshan/backend/fu/vector/Mgu.scala"
+   ]
+  },
+  {
+   "id": "Mgtu",
+   "source_scala": "scala/src/main/scala/xiangshan/backend/fu/vector/Mgtu.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Vector.Mgtu-Hardware.py",
+   "family_id": "core.fu.vector.compare",
+   "closure_root": "core.fu.vector",
+   "classification": "REWRITTEN",
+   "disposition": "REWRITTEN",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "upstream/src/main/scala/xiangshan/backend/fu/vector/Mgtu.scala"
+   ]
+  },
+  {
+   "id": "NewMgu",
+   "source_scala": "scala/src/main/scala/xiangshan/backend/fu/vector/NewMgu.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Vector.NewMgu-Hardware.py",
+   "family_id": "core.fu.vector.mgu",
+   "closure_root": "core.fu.vector.mgu",
+   "classification": "REWRITTEN",
+   "disposition": "REWRITTEN",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "upstream/src/main/scala/xiangshan/backend/fu/vector/Mgu.scala"
+   ]
+  },
+  {
+   "id": "MaskExtrator",
+   "source_scala": "scala/src/main/scala/xiangshan/backend/fu/vector/utils/MaskExtrator.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Vector.Utils.MaskExtrator-Hardware.py",
+   "family_id": "core.fu.vector.mask",
+   "closure_root": "core.fu.vector",
+   "classification": "EXACT",
+   "disposition": "REUSED",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "upstream/src/main/scala/xiangshan/backend/fu/vector/utils/MaskExtrator.scala"
+   ]
+  },
+  {
+   "id": "ScalaDupToVector",
+   "source_scala": "scala/src/main/scala/xiangshan/backend/fu/vector/utils/ScalaDupToVector.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Vector.Utils.ScalaDupToVector-Hardware.py",
+   "family_id": "core.fu.vector.mask",
+   "closure_root": "core.fu.vector",
+   "classification": "EXACT",
+   "disposition": "REUSED",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "upstream/src/main/scala/xiangshan/backend/fu/vector/utils/ScalaDupToVector.scala"
+   ]
+  },
+  {
+   "id": "UIntToCont0s",
+   "source_scala": "scala/src/main/scala/xiangshan/backend/fu/vector/utils/UIntToCont0s.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Vector.Utils.UIntToCont0s-Hardware.py",
+   "family_id": "core.fu.vector.mask",
+   "closure_root": "core.fu.vector",
+   "classification": "REWRITTEN",
+   "disposition": "REWRITTEN",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "upstream/src/main/scala/xiangshan/backend/fu/vector/utils/UIntToCont0s.scala"
+   ]
+  },
+  {
+   "id": "UIntToCont1s",
+   "source_scala": "scala/src/main/scala/xiangshan/backend/fu/vector/utils/UIntToCont1s.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Vector.Utils.UIntToCont1s-Hardware.py",
+   "family_id": "core.fu.vector.mask",
+   "closure_root": "core.fu.vector",
+   "classification": "REWRITTEN",
+   "disposition": "REWRITTEN",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "upstream/src/main/scala/xiangshan/backend/fu/vector/utils/UIntToCont1s.scala"
+   ]
+  },
+  {
+   "id": "VecDataSplitModule",
+   "source_scala": "scala/src/main/scala/xiangshan/backend/fu/vector/utils/VecDataSplitModule.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Vector.Utils.VecDataSplitModule-Hardware.py",
+   "family_id": "core.fu.vector.mask",
+   "closure_root": "core.fu.vector",
+   "classification": "EXACT",
+   "disposition": "REUSED",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "upstream/src/main/scala/xiangshan/backend/fu/vector/utils/VecDataSplitModule.scala"
+   ]
+  },
+  {
+   "id": "AMOALU",
+   "source_scala": "scala/src/main/scala/xiangshan/cache/dcache/mainpipe/AMOALU.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Cache.Dcache.Mainpipe.AMOALU-Hardware.py",
+   "family_id": "core.cache.dcache.atomic",
+   "closure_root": "core.cache.dcache",
+   "classification": "REWRITTEN",
+   "disposition": "REWRITTEN",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/AMOALU.scala"
+   ]
+  },
+  {
+   "id": "TagArray",
+   "source_scala": "scala/src/main/scala/xiangshan/cache/dcache/meta/TagArray.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Cache.Dcache.Meta.TagArray-Hardware.py",
+   "family_id": "core.cache.dcache.meta",
+   "closure_root": "core.cache.dcache",
+   "classification": "REWRITTEN",
+   "disposition": "REWRITTEN",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "upstream/src/main/scala/xiangshan/cache/dcache/meta/TagArray.scala"
+   ]
+  },
+  {
+   "id": "CompareMatrix",
+   "source_scala": "scala/src/main/scala/xiangshan/frontend/bpu/CompareMatrix.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.CompareMatrix-Hardware.py",
+   "family_id": "core.frontend.bpu.compare",
+   "closure_root": "core.frontend.bpu",
+   "classification": "SPLIT",
+   "disposition": "SPLIT",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "upstream/src/main/scala/xiangshan/backend/dispatch/NewDispatch.scala"
+   ]
+  },
+  {
+   "id": "FallThroughPredictor",
+   "source_scala": "scala/src/main/scala/xiangshan/frontend/bpu/FallThroughPredictor.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.FallThroughPredictor-Hardware.py",
+   "family_id": "core.frontend.ftb",
+   "closure_root": "core.frontend",
+   "classification": "SPLIT",
+   "disposition": "SPLIT",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "upstream/src/main/scala/xiangshan/frontend/BPU.scala",
+    "upstream/src/main/scala/xiangshan/frontend/FTB.scala",
+    "upstream/src/main/scala/xiangshan/frontend/FrontendBundle.scala",
+    "upstream/src/main/scala/xiangshan/frontend/NewFtq.scala"
+   ]
+  },
+  {
+   "id": "SaturateCounter",
+   "source_scala": "scala/src/main/scala/xiangshan/frontend/bpu/SaturateCounter.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.SaturateCounter-Hardware.py",
+   "family_id": "core.frontend.bpu.counters",
+   "closure_root": "core.frontend.bpu",
+   "classification": "SPLIT",
+   "disposition": "SPLIT",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "upstream/src/main/scala/xiangshan/frontend/BPU.scala",
+    "upstream/src/main/scala/xiangshan/frontend/Tage.scala",
+    "upstream/src/main/scala/xiangshan/frontend/SC.scala"
+   ]
+  },
+  {
+   "id": "SignedSaturateCounter",
+   "source_scala": "scala/src/main/scala/xiangshan/frontend/bpu/SignedSaturateCounter.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.SignedSaturateCounter-Hardware.py",
+   "family_id": "core.frontend.bpu.counters",
+   "closure_root": "core.frontend.bpu",
+   "classification": "SPLIT",
+   "disposition": "SPLIT",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "upstream/src/main/scala/xiangshan/frontend/BPU.scala",
+    "upstream/src/main/scala/xiangshan/frontend/SC.scala"
+   ]
+  },
+  {
+   "id": "LruStateGen",
+   "source_scala": "scala/src/main/scala/xiangshan/frontend/bpu/replacer/LruStateGen.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.LruStateGen-Hardware.py",
+   "family_id": "core.replacement",
+   "closure_root": "core.replacement",
+   "classification": "MOVED",
+   "disposition": "RELOCATED",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "upstream/utility/src/main/scala/utility/Replacement.scala",
+    "upstream/rocket-chip/src/main/scala/util/Replacement.scala"
+   ]
+  },
+  {
+   "id": "PlruStateGen",
+   "source_scala": "scala/src/main/scala/xiangshan/frontend/bpu/replacer/PlruStateGen.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.PlruStateGen-Hardware.py",
+   "family_id": "core.replacement",
+   "closure_root": "core.replacement",
+   "classification": "MOVED",
+   "disposition": "RELOCATED",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "upstream/utility/src/main/scala/utility/Replacement.scala",
+    "upstream/rocket-chip/src/main/scala/util/Replacement.scala"
+   ]
+  },
+  {
+   "id": "ReplacerState",
+   "source_scala": "scala/src/main/scala/xiangshan/frontend/bpu/replacer/ReplacerState.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.ReplacerState-Hardware.py",
+   "family_id": "core.replacement",
+   "closure_root": "core.replacement",
+   "classification": "REWRITTEN",
+   "disposition": "REWRITTEN",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "upstream/utility/src/main/scala/utility/Replacement.scala",
+    "upstream/rocket-chip/src/main/scala/util/Replacement.scala"
+   ]
+  },
+  {
+   "id": "ICacheMshr",
+   "source_scala": "scala/src/main/scala/xiangshan/frontend/icache/ICacheMshr.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.ICacheMshr-Hardware.py",
+   "family_id": "core.frontend.icache.mshr",
+   "closure_root": "core.frontend.icache",
+   "classification": "REWRITTEN",
+   "disposition": "REWRITTEN",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala"
+   ]
+  },
+  {
+   "id": "ICacheReplacer",
+   "source_scala": "scala/src/main/scala/xiangshan/frontend/icache/ICacheReplacer.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.ICacheReplacer-Hardware.py",
+   "family_id": "core.frontend.icache.replacer",
+   "closure_root": "core.frontend.icache",
+   "classification": "MOVED",
+   "disposition": "RELOCATED",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "upstream/src/main/scala/xiangshan/frontend/icache/ICache.scala"
+   ]
+  },
+  {
+   "id": "Utils",
+   "source_scala": "scala/src/main/scala/xiangshan/frontend/icache/Utils.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.Utils-Hardware.py",
+   "family_id": "core.frontend.icache.utility",
+   "closure_root": "core.frontend.icache",
+   "classification": "SPLIT",
+   "disposition": "SPLIT",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala",
+    "upstream/src/main/scala/xiangshan/frontend/icache/FIFO.scala"
+   ]
+  },
+  {
+   "id": "RvcExpander",
+   "source_scala": "scala/src/main/scala/xiangshan/frontend/ifu/RvcExpander.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Ifu.RvcExpander-Hardware.py",
+   "family_id": "core.frontend.ifu.rvc",
+   "closure_root": "core.frontend.ifu",
+   "classification": "MOVED",
+   "disposition": "RELOCATED",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "upstream/src/main/scala/xiangshan/frontend/PreDecode.scala",
+    "upstream/rocket-chip/src/main/scala/rocket/RVC.scala"
+   ]
+  },
+  {
+   "id": "DataSource",
+   "source_scala": "scala/src/main/scala/xiangshan/backend/datapath/DataSource.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Datapath.DataSource-Hardware.py",
+   "family_id": "core.backend.datapath",
+   "closure_root": "core.backend.datapath",
+   "classification": "EXACT",
+   "disposition": "REUSED",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "upstream/src/main/scala/xiangshan/backend/datapath/DataSource.scala"
+   ]
+  },
+  {
+   "id": "NewPipelineConnect",
+   "source_scala": "scala/src/main/scala/xiangshan/backend/datapath/NewPipelineConnect.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Datapath.NewPipelineConnect-Hardware.py",
+   "family_id": "core.backend.datapath",
+   "closure_root": "core.backend.datapath",
+   "classification": "EXACT",
+   "disposition": "REUSED",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "upstream/src/main/scala/xiangshan/backend/datapath/NewPipelineConnect.scala"
+   ]
+  },
+  {
+   "id": "WbArbiter",
+   "source_scala": "scala/src/main/scala/xiangshan/backend/datapath/WbArbiter.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Datapath.WbArbiter-Hardware.py",
+   "family_id": "core.backend.datapath.writeback",
+   "closure_root": "core.backend.datapath",
+   "classification": "REWRITTEN",
+   "disposition": "REWRITTEN",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "upstream/src/main/scala/xiangshan/backend/datapath/WbArbiter.scala"
+   ]
+  },
+  {
+   "id": "ImmExtractor",
+   "source_scala": "scala/src/main/scala/xiangshan/backend/issue/ImmExtractor.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.ImmExtractor-Hardware.py",
+   "family_id": "core.backend.issue.imm",
+   "closure_root": "core.backend.issue",
+   "classification": "REWRITTEN",
+   "disposition": "REWRITTEN",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "ImmExtractor",
+    "ImmExtractor_2",
+    "ImmExtractor_12",
+    "ImmExtractor_37",
+    "ImmExtractor_57"
+   ]
+  },
+  {
+   "id": "AluDataModule",
+   "source_scala": "scala/src/main/scala/xiangshan/backend/fu/Alu.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.AluDataModule-Hardware.py",
+   "family_id": "core.fu.alu",
+   "closure_root": "core.fu",
+   "classification": "REWRITTEN",
+   "disposition": "REWRITTEN",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "AluDataModule",
+    "AddModule",
+    "SubModule",
+    "LeftShiftModule",
+    "RightShiftModule"
+   ]
+  },
+  {
+   "id": "CommitStuckCounter",
+   "source_scala": "scala/src/main/scala/xiangshan/backend/rob/CommitStuckCounter.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Rob.CommitStuckCounter-Hardware.py",
+   "family_id": "core.backend.rob.commit",
+   "closure_root": "core.backend.rob",
+   "classification": "REWRITTEN",
+   "disposition": "REWRITTEN",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "CommitStuckCounter"
+   ]
+  },
+  {
+   "id": "EnqPolicy",
+   "source_scala": "scala/src/main/scala/xiangshan/backend/issue/EnqPolicy.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.EnqPolicy-Hardware.py",
+   "family_id": "core.backend.issue.enq",
+   "closure_root": "core.backend.issue",
+   "classification": "REWRITTEN",
+   "disposition": "REWRITTEN",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "EnqPolicy"
+   ]
+  },
+  {
+   "id": "AgeDetector",
+   "source_scala": "scala/src/main/scala/xiangshan/backend/issue/AgeDetector.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.AgeDetector-Hardware.py",
+   "family_id": "core.backend.issue.age",
+   "closure_root": "core.backend.issue",
+   "classification": "REWRITTEN",
+   "disposition": "REWRITTEN",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "AgeDetector"
+   ]
+  },
+  {
+   "id": "PreDecodeInst",
+   "source_scala": "scala/src/main/scala/xiangshan/backend/decode/isa/predecode/predecode.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Decode.Isa.Predecode.PreDecodeInst-Hardware.py",
+   "family_id": "core.decode.predecode",
+   "closure_root": "core.decode",
+   "classification": "REWRITTEN",
+   "disposition": "REWRITTEN",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "PreDecode"
+   ]
+  },
+  {
+   "id": "BranchModule",
+   "source_scala": "scala/src/main/scala/xiangshan/backend/fu/Branch.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.BranchModule-Hardware.py",
+   "family_id": "core.fu.controlflow",
+   "closure_root": "core.fu",
+   "classification": "REWRITTEN",
+   "disposition": "REWRITTEN",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "BranchModule"
+   ]
+  },
+  {
+   "id": "JumpDataModule",
+   "source_scala": "scala/src/main/scala/xiangshan/backend/fu/Jump.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.JumpDataModule-Hardware.py",
+   "family_id": "core.fu.controlflow",
+   "closure_root": "core.fu",
+   "classification": "REWRITTEN",
+   "disposition": "REWRITTEN",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "JumpDataModule"
+   ]
+  },
+  {
+   "id": "DeqPolicy",
+   "source_scala": "scala/src/main/scala/xiangshan/backend/issue/DeqPolicy.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.DeqPolicy-Hardware.py",
+   "family_id": "core.backend.issue.deq",
+   "closure_root": "core.backend.issue",
+   "classification": "REWRITTEN",
+   "disposition": "REWRITTEN",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "DeqPolicy"
+   ]
+  },
+  {
+   "id": "DataArray",
+   "source_scala": "scala/src/main/scala/xiangshan/backend/issue/DataArray.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.DataArray-Hardware.py",
+   "family_id": "core.backend.issue.data",
+   "closure_root": "core.backend.issue",
+   "classification": "REWRITTEN",
+   "disposition": "REWRITTEN",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "DataArray",
+    "AsyncRawDataModuleTemplate"
+   ]
+  },
+  {
+   "id": "FuBusyTableRead",
+   "source_scala": "scala/src/main/scala/xiangshan/backend/issue/FuBusyTableRead.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.FuBusyTableRead-Hardware.py",
+   "family_id": "core.backend.issue.busy",
+   "closure_root": "core.backend.issue",
+   "classification": "REWRITTEN",
+   "disposition": "REWRITTEN",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "FuBusyTableRead",
+    "FuBusyTableReadIO"
+   ]
+  },
+  {
+   "id": "RobPtrWrappers",
+   "source_scala": [
+    "scala/src/main/scala/xiangshan/backend/rob/RobEnqPtrWrapper.scala",
+    "scala/src/main/scala/xiangshan/backend/rob/RobDeqPtrWrapper.scala"
+   ],
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Rob.PtrWrappers-Hardware.py",
+   "family_id": "core.backend.rob.ptr",
+   "closure_root": "core.backend.rob",
+   "classification": "REWRITTEN",
+   "disposition": "REWRITTEN",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "RobEnqPtrWrapper",
+    "NewRobDeqPtrWrapper"
+   ]
+  },
+  {
+   "id": "CSRModule",
+   "source_scala": "scala/src/main/scala/xiangshan/backend/fu/NewCSR/CSRModule.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.NewCSR.CSRModule-Hardware.py",
+   "family_id": "core.backend.newcsr",
+   "closure_root": "core.backend.newcsr",
+   "classification": "REWRITTEN",
+   "disposition": "DIRECT_TEST_PASS_BOUNDED",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/CSRModule.scala",
+    "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/CSRBundles.scala",
+    "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/CSRFields.scala",
+    "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/CSRDefines.scala"
+   ]
+  },
+  {
+   "id": "CSRLite",
+   "source_scala": "scala/src/main/scala/xiangshan/backend/fu/NewCSR/CSRPMP.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.NewCSR.CSRLite-Hardware.py",
+   "family_id": "core.backend.newcsr",
+   "closure_root": "core.backend.newcsr",
+   "classification": "REWRITTEN",
+   "disposition": "DIRECT_TEST_PASS_BOUNDED",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/CSRPMP.scala",
+    "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/CSRPMA.scala"
+   ]
+  }
+ ],
+ "status": "IMPLEMENTATION_WAVES_VALIDATED_BOUNDED_HIERARCHY_WAVE1",
+ "acceptance_eligible": false,
+ "entries_status_counts": {
+  "VALIDATOR_PASS_BOUNDED": 48,
+  "RETIRED": 1
+ }
 }
