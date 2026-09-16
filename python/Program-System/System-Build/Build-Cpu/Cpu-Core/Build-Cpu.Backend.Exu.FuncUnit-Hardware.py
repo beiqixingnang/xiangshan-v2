@@ -1816,7 +1816,7 @@ def build_div(self: "ExuFuncModule", m: Any) -> None:
     kill_r = Const(0, 1)
     kill_r = cast(Any, ~(cast(Any, valid_r))) & busy & _rob_need_flush(flush_v, p["io_flush_bits_robIdx_flag"], p["io_flush_bits_robIdx_value"], p["io_flush_bits_level"], p["io_in_bits_ctrl_robIdx_flag"], p["io_in_bits_ctrl_robIdx_value"])
     fire = p["io_in_valid"] & Mux(cast(Any, busy), 0, 1) & Mux(cast(Any, valid_r), 0, 1) & Mux(cast(Any, kill_w), 0, 1)
-    is_sign = cast(Any, ~func[1:2])
+    is_sign = cast(Any, ~(cast(Any, func[1:2])))
     is_w = func[2:3]
     is_hi = func[0:1]
     src0 = p["io_in_bits_data_src_0"]
