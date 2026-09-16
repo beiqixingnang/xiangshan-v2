@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_V2_CORE_WAVE_PROGRESS",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "locked_xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+  "implemented_commits": [
+    "9fdd28d", "5e67a0b", "a870b8d", "126e418", "d039bb5", "94ac9dc",
+    "9de0ea2", "45dc7e4", "356f8fb", "f6c32bc", "6278c65"
+  ],
+  "newly_promoted_core_entries": [
+    "Instructions", "CSRs", "SRT16Divider", "FliTable", "ByteMaskTailGen",
+    "AMOALU", "TagArray", "CompareMatrix", "FallThroughPredictor",
+    "SaturateCounter", "LruStateGen", "PlruStateGen", "DataSource",
+    "EnqPolicy", "AgeDetector"
+  ],
+  "inventory_counts": {
+    "planned_core_build_files": 46,
+    "core_entries_validator_pass_bounded": 25,
+    "core_entries_candidate_v2_reuse": 21,
+    "retired_or_excluded": 1
+  },
+  "shared_static_gate": {
+    "utf8_lf": "PASS",
+    "ast_parse": "PASS",
+    "py_compile": "PASS",
+    "exact_import": "PASS",
+    "pyright_errors": 0,
+    "build_verilog_smoke": "PASS for all newly promoted standalone targets"
+  },
+  "behavior_status": "DIRECT_TEST_PASS_BOUNDED",
+  "parent_closures_matched": 0,
+  "full_xstop_differential": "PENDING",
+  "accepted": "NOT_ALLOWED",
+  "note": "Promotion records bounded implementation/static evidence only; it does not claim full Scala/SV equivalence or parent closure."
+}
