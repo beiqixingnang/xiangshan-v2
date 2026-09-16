@@ -21,6 +21,7 @@ __all__ = [
     "FliSTable",
     "FliDTable",
     "decode_fli",
+    "fli_table_expression",
     "build_verilog",
     "main",
 ]
@@ -84,6 +85,20 @@ def decode_fli(table: Sequence[int], source: int,
     return value & ((1 << out_width) - 1)
 
 
+# Build the decoder PLA expression / 构造 Chisel ``decoder`` helper 使用的 PLA 表达式。
+# 构造 Chisel ``decoder`` helper 使用的译码 PLA 表达式 / Build decoder PLA.
+def fli_table_expression(source: Any, configuration: FliTableConfig) -> Any:
+    """Return a deterministic priority-equivalent FLI lookup expression."""
+
+    expression: Any = Const(0, configuration.out_width)
+    for index in range(1 << configuration.src_width):
+        value = decode_fli(configuration.table, index,
+                           configuration.src_width, configuration.out_width)
+        expression = Mux(source == Const(index, configuration.src_width),
+                         Const(value, configuration.out_width), expression)
+    return expression
+
+
 class FliTable(Elaboratable):
     """Combinational FLI table decoder. / 组合式 FLI 表解码器。"""
 
@@ -101,20 +116,9 @@ class FliTable(Elaboratable):
 
         del platform
         module = Module()
-        expression = 0
-        for source in range(1 << self.configuration.src_width):
-            value = decode_fli(
-                self.configuration.table,
-                source,
-                self.configuration.src_width,
-                self.configuration.out_width,
-            )
-            expression = Mux(
-                self.src == Const(source, self.configuration.src_width),
-                Const(value, self.configuration.out_width),
-                expression,
-            )
-        module.d.comb += self.out.eq(expression)
+        module.d.comb += self.out.eq(
+            fli_table_expression(self.src, self.configuration)
+        )
         return module
 
 

@@ -148,6 +148,53 @@ def mux1h(selectors: Any, values: list[Any]) -> Any:
     return result
 
 
+# Form one source-equivalent radix-four restoring digit. / 形成一个与源代码等价的基四恢复数位。
+def radix4_step(remainder: Any, dividend_pair: Any, divisor: Any,
+                rem_width: int) -> tuple[Any, Any]:
+    """Return ``(remainder_next, quotient_digit)`` for one radix-four step.
+
+    The Chisel implementation computes the same three comparisons in its
+    selection/speculation block; keeping this helper explicit makes the
+    recurrence observable to adapters and reference benches.
+    """
+
+    shifted = ((remainder << 2) | dividend_pair).bit_select(0, rem_width)
+    divisor_ext = Cat(divisor, Const(0, 2))
+    divisor_x2 = (cast(Any, divisor_ext) << 1).bit_select(0, rem_width)
+    divisor_x3 = (cast(Any, divisor_x2) + cast(Any, divisor_ext)).bit_select(0, rem_width)
+    digit = Mux(shifted >= divisor_x3, Const(3, 2),
+                Mux(shifted >= divisor_x2, Const(2, 2),
+                    Mux(shifted >= divisor_ext, Const(1, 2), Const(0, 2))))
+    subtract = Mux(digit == 3, divisor_x3,
+                   Mux(digit == 2, divisor_x2,
+                       Mux(digit == 1, divisor_ext,
+                           Const(0, rem_width))))
+    return (shifted - subtract).bit_select(0, rem_width), digit
+
+
+# Compute the source's signed special-result rules / 计算源代码的有符号特殊结果规则。
+# 计算源代码的有符号特殊结果规则 / 供整数参考模型使用。
+def special_result(dividend: int, divisor: int, width: int,
+                   signed: bool) -> tuple[bool, int, int]:
+    """Return ``(is_special, quotient, remainder)`` before iteration."""
+
+    mask = (1 << width) - 1
+    a = dividend & mask
+    d = divisor & mask
+    a_signed = a - (1 << width) if signed and (a >> (width - 1)) else a
+    d_signed = d - (1 << width) if signed and (d >> (width - 1)) else d
+    a_abs = abs(a_signed) if signed else a
+    d_abs = abs(d_signed) if signed else d
+    if d_abs == 0:
+        return True, mask, a
+    if d_abs == 1:
+        q = -a_signed if signed and d_signed < 0 else a_signed
+        return True, q & mask, 0
+    if a_abs < d_abs:
+        return True, 0, a
+    return False, 0, 0
+
+
 # Build a bounded barrel left shift. / 构建有界桶形左移器。
 def barrel_lsh(value: Any, shift: Any, width: int) -> Any:
     """Shift left and fill with zeros. / 左移并以零填充。"""
@@ -321,22 +368,11 @@ class SRT16DividerDataModule(Elaboratable):
 
         # One radix-four restoring step. / 一个基四恢复除法步骤。
         pair = dividend_shift.bit_select(width - 2, 2)
-        shifted_remainder: Any = (cast(Any, (remainder_reg << 2)) | cast(Any, pair)).bit_select(0, rem_width)
-        # Cat's first operand occupies the low bits; append two low zeroes to
-        # represent a fixed-point divisor scaled by four.
-        # Cat 的第一个操作数位于低位；追加两个低零表示乘四后的除数。
-        divisor_ext: Any = Cat(d_abs_reg, Const(0, 2))
-        divisor_x2: Any = (cast(Any, divisor_ext) << 1).bit_select(0, rem_width)
-        divisor_x3: Any = (cast(Any, divisor_x2) + cast(Any, divisor_ext)).bit_select(0, rem_width)
-        digit = Mux(shifted_remainder >= divisor_x3, Const(3, 2),
-                     Mux(shifted_remainder >= divisor_x2, Const(2, 2),
-                         Mux(shifted_remainder >= divisor_ext, Const(1, 2),
-                             Const(0, 2))))
-        subtract = Mux(digit == 3, divisor_x3,
-                       Mux(digit == 2, divisor_x2,
-                           Mux(digit == 1, divisor_ext,
-                               Const(0, rem_width))))
-        remainder_step = (shifted_remainder - subtract).bit_select(0, rem_width)
+        # Keep the recurrence in one helper so direct/reference adapters can
+        # observe the same source-shaped radix-four operation.
+        # 将递推集中到 helper，使 direct/reference 适配器观察到相同的源形基四操作。
+        remainder_step, digit = radix4_step(
+            cast(Any, remainder_reg), cast(Any, pair), cast(Any, d_abs_reg), rem_width)
         quotient_step = ((quotient_reg << 2) | digit).bit_select(0, width)
 
         # Normal signed final values. / 正常有符号最终值。

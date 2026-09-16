@@ -103,6 +103,17 @@ class ByteMaskTailGen(Elaboratable):
         self.in_vdIdx = Signal(3, name="io_in_vdIdx")
         self.out_activeEn = Signal(16, name="io_out_activeEn")
         self.out_agnosticEn = Signal(16, name="io_out_agnosticEn")
+        # Source-visible debugOnly observability (not part of the flattened ABI).
+        # 保留源代码 debugOnly 可观测信号（不改变扁平 ABI）。
+        self.debugOnly_startBytes = Signal(8, name="debugOnly_startBytes")
+        self.debugOnly_vlBytes = Signal(8, name="debugOnly_vlBytes")
+        self.debugOnly_prestartEn = Signal(16, name="debugOnly_prestartEn")
+        self.debugOnly_bodyEn = Signal(128, name="debugOnly_bodyEn")
+        self.debugOnly_tailEn = Signal(16, name="debugOnly_tailEn")
+        self.debugOnly_maskEn = Signal(16, name="debugOnly_maskEn")
+        self.debugOnly_maskAgnosticEn = Signal(16, name="debugOnly_maskAgnosticEn")
+        self.debugOnly_tailAgnosticEn = Signal(16, name="debugOnly_tailAgnosticEn")
+        self.debugOnly_agnosticEn = Signal(16, name="debugOnly_agnosticEn")
 
     # Elaborate byte masks, destination lookup, and agnostic policy. / 展开字节掩码、目的查找与 agnostic 策略。
     def elaborate(self, platform):
@@ -118,15 +129,19 @@ class ByteMaskTailGen(Elaboratable):
 
         body = Signal(full_width, name="bodyEn")
         tail = Signal(full_width, name="tailEn")
+        prestart = Signal(full_width, name="prestartEn")
         for index in range(full_width):
             module.d.comb += [
+                cast(Any, prestart[index]).eq(start_bytes > index),
                 cast(Any, body[index]).eq((start_bytes <= index) & (index < vl_bytes)),
                 cast(Any, tail[index]).eq(vl_bytes <= index),
             ]
 
+        prestart_selected = prestart[:16]
         body_selected = body[:16]
         tail_selected = tail[:16]
         for index in range(1, 8):
+            prestart_selected = Mux(self.in_vdIdx == index, prestart[index * 16:(index + 1) * 16], prestart_selected)
             body_selected = Mux(self.in_vdIdx == index, body[index * 16:(index + 1) * 16], body_selected)
             tail_selected = Mux(self.in_vdIdx == index, tail[index * 16:(index + 1) * 16], tail_selected)
 
@@ -153,6 +168,19 @@ class ByteMaskTailGen(Elaboratable):
             Const(0, 16),
         )
         module.d.comb += [self.out_activeEn.eq(active), self.out_agnosticEn.eq(agnostic)]
+        module.d.comb += [
+            self.debugOnly_startBytes.eq(start_bytes),
+            self.debugOnly_vlBytes.eq(vl_bytes),
+            self.debugOnly_prestartEn.eq(prestart_selected),
+            self.debugOnly_bodyEn.eq(body),
+            self.debugOnly_tailEn.eq(tail_selected),
+            self.debugOnly_maskEn.eq(expanded),
+            self.debugOnly_maskAgnosticEn.eq((~expanded) & body_selected &
+                                              Mux(self.in_vma, Const(0xFFFF, 16), Const(0, 16))),
+            self.debugOnly_tailAgnosticEn.eq(tail_selected &
+                                             Mux(self.in_vta, Const(0xFFFF, 16), Const(0, 16))),
+            self.debugOnly_agnosticEn.eq(agnostic),
+        ]
         return module
 
 
