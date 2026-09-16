@@ -18,7 +18,7 @@ from amaranth.back import verilog
 # vl as one.  The operation is combinational and deliberately independent of
 # vta. Mgtu.scala 将 vl 以下的位保留为数据，将 vl 及以上的位设为一；该操作为
 # 组合逻辑且有意与 vta 无关。 The flattened names below match Chisel output.
-__all__ = ["MgtuConfig", "Mgtu", "mgtu_value", "build_verilog", "main"]
+__all__ = ["MgtuConfig", "Mgtu", "mgtu_value", "mgtu_observation", "build_verilog", "main"]
 
 
 # =============================================================================
@@ -51,6 +51,14 @@ def mgtu_value(vd: int, vl: int, config: MgtuConfig | None = None) -> int:
     return ((vd & mask) & ((1 << min(vl, c.vlen)) - 1)) | (
         mask & ~((1 << min(vl, c.vlen)) - 1)
     )
+
+
+def mgtu_observation(vd: int, vl: int, config: MgtuConfig | None = None) -> dict[str, int]:
+    """Return filled value and tail mask for one Mgtu cycle. / 返回填充结果与尾掩码。"""
+
+    c = config or MgtuConfig()
+    active = (1 << min(max(0, int(vl)), c.vlen)) - 1
+    return {"value": mgtu_value(vd, vl, c), "tail_mask": ((1 << c.vlen) - 1) ^ active}
 
 
 class Mgtu(Elaboratable):

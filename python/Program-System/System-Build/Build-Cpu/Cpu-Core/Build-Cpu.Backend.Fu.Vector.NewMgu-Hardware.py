@@ -22,7 +22,7 @@ from amaranth.back import verilog
 # 输入：isIndexedVls 时 realEw=info.vsew，否则为 info.eew；按 vdIdx 选择掩码块，
 # 再由 ByteMaskTailGen 应用 vstart/vl/vma/vta。Reference mode is source/parent
 # closure because XSTop contains Mgu but no standalone NewMgu module.
-__all__ = ["NewMguConfig", "VSew", "NewMgu", "new_mgu_model", "build_verilog", "main"]
+__all__ = ["NewMguConfig", "VSew", "NewMgu", "new_mgu_model", "new_mgu_observation", "build_verilog", "main"]
 
 
 # =============================================================================
@@ -82,6 +82,15 @@ def new_mgu_model(
         if vstart < vl and ((ma and body and not selected) or (ta and tail)):
             agnostic |= 1 << lane
     return active, agnostic
+
+
+def new_mgu_observation(mask: int, ta: bool, ma: bool, vstart: int, vl: int,
+                        eew: int, vsew: int, vd_idx: int,
+                        is_indexed_vls: bool) -> dict[str, int]:
+    """Return active/agnostic enables as a named parent observation. / 返回 Mgu 使能观测。"""
+
+    active, agnostic = new_mgu_model(mask, ta, ma, vstart, vl, eew, vsew, vd_idx, is_indexed_vls)
+    return {"active": active, "agnostic": agnostic, "real_eew": vsew if is_indexed_vls else eew}
 
 
 # =============================================================================

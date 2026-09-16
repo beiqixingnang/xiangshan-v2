@@ -20,7 +20,7 @@ from amaranth.back import verilog
 # does not affect the IO shape.  VecDataSplitModule.scala 四次使用 asTypeOf；
 # 这是纯位重解释，元素 i 为输入 [i*w+w-1:i*w]，无换字节或寄存器状态。Scala
 # 的 outDataWidth 构造参数保留在配置中，但不改变 IO 形状。
-__all__ = ["VecDataSplitConfig", "VecDataSplitModule", "build_verilog", "main"]
+__all__ = ["VecDataSplitConfig", "VecDataSplitModule", "split_integer", "build_verilog", "main"]
 
 
 # =============================================================================
@@ -48,6 +48,15 @@ class VecDataSplitConfig:
 def connect_slices(module: Module, source: Signal, outputs: list[Signal], width: int) -> None:
     for index, output in enumerate(outputs):
         module.d.comb += output.eq(source.bit_select(index * width, width))
+
+
+def split_integer(value: int, in_width: int = 128) -> dict[str, list[int]]:
+    """Return all four packed views used by VecDataSplitModule. / 返回四种打包视图。"""
+
+    masked = int(value) & ((1 << in_width) - 1)
+    return {f"bits{width}": [(masked >> offset) & ((1 << width) - 1)
+                             for offset in range(0, in_width, width)]
+            for width in (8, 16, 32, 64)}
 
 
 class VecDataSplitModule(Elaboratable):
