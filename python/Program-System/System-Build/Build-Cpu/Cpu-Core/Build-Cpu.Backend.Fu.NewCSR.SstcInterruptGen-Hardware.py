@@ -13,7 +13,7 @@ from amaranth import ClockDomain, Elaboratable, Module, Signal
 # ``STIP`` and ``VSTIP`` are independently enabled, asynchronously reset,
 # registered unsigned comparisons, exactly as in SstcInterruptGen.scala.
 # STIP/VSTIP 是独立使能、异步复位的无符号比较寄存器，与 Scala 一致。
-__all__ = ["SstcInterruptGen", "build_verilog", "main"]
+__all__ = ["SstcInterruptGen", "sstc_observation", "build_verilog", "main"]
 
 
 # =============================================================================
@@ -21,6 +21,15 @@ __all__ = ["SstcInterruptGen", "build_verilog", "main"]
 # =============================================================================
 # The V2 module has no tunable parameters; all widths and enables are fixed by
 # the source IO bundle. / V2 模块没有可调参数，宽度与使能均由源 IO 固定。
+
+
+def sstc_observation(stime: int, stimecmp: int, vstime: int, vstimecmp: int,
+                     stce: bool, vstce: bool) -> dict[str, int]:
+    """Return unsigned STIP/VSTIP comparison outputs. / 返回无符号定时器比较结果。"""
+
+    mask = (1 << 64) - 1
+    return {"STIP": int(stce and ((int(stime) & mask) >= (int(stimecmp) & mask))),
+            "VSTIP": int(vstce and ((int(vstime) & mask) >= (int(vstimecmp) & mask)))}
 
 
 # =============================================================================

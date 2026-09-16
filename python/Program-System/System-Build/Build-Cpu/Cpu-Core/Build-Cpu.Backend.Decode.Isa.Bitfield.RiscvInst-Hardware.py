@@ -34,6 +34,7 @@ __all__ = [
     "isOPIVX",
     "isOPFVF",
     "isOPMVX",
+    "decode_observation",
     "RiscvInstProbe",
     "build_verilog",
     "main",
@@ -274,6 +275,16 @@ def isOPMVX(inst: Any) -> Any:
     """Return true for OPMVX. / 检测 OPMVX。"""
 
     return vec_arith_funct3(inst, 0b110)
+
+
+def decode_observation(inst: int) -> dict[str, int]:
+    """Return key vector/AMO decode predicates. / 返回关键向量与 AMO 译码谓词。"""
+
+    value = int(inst) & 0xFFFFFFFF
+    return {"opcode": value & 0x7F, "is_vec_load": int(bool(isVecLoad(value))),
+            "is_vec_store": int(bool(isVecStore(value))),
+            "is_vec_arith": int(bool(isVecArith(value))),
+            "is_amo_cas": int(bool(isAMOCAS(value)))}
 
 
 class Riscv32BitInst:

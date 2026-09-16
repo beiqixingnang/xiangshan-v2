@@ -26,6 +26,7 @@ __all__ = [
     "csa2_2",
     "csa3_2",
     "csa5_3",
+    "csa_observation",
     "build_verilog",
     "main",
 ]
@@ -77,6 +78,21 @@ def csa5_3(a: int, b: int, c: int, d: int, e: int,
     first_sum, first_carry = csa3_2(a, b, c, length)
     second_sum, second_carry = csa3_2(first_sum, d, e, length)
     return second_sum, first_carry, second_carry
+
+
+def csa_observation(values: list[int], length: int) -> dict[str, int]:
+    """Return compressor outputs and reconstructed modulo sum. / 返回压缩输出与重构和。"""
+
+    if len(values) == 2:
+        result = csa2_2(values[0], values[1], length)
+    elif len(values) == 3:
+        result = csa3_2(values[0], values[1], values[2], length)
+    elif len(values) == 5:
+        result = csa5_3(values[0], values[1], values[2], values[3], values[4], length)
+    else:
+        raise ValueError("CSA observation expects 2, 3, or 5 operands")
+    return {"sum": result[0], "carry": result[1],
+            "reconstructed": sum(result) & ((1 << length) - 1)}
 
 
 class CarrySaveAdderMToN(Elaboratable):
