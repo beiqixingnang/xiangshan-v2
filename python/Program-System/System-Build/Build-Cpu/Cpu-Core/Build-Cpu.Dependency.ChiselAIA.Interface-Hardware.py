@@ -56,6 +56,7 @@ def aia_reference_step(pending: int, enable: int, source: int, claim: bool, comp
     """Return one deterministic IMSIC/APLIC transaction result."""
     mask = (1 << irq_sources) - 1
     pending &= mask; enable &= mask
+    source_mask = (1 << ((int(source) - 1) % irq_sources)) if source > 0 else 0
     active = pending & enable
     interrupt = int(active != 0)
     claimed = 0
@@ -63,7 +64,7 @@ def aia_reference_step(pending: int, enable: int, source: int, claim: bool, comp
         claimed = (active & -active).bit_length()
         pending &= ~(1 << (claimed - 1))
     if complete and source > 0:
-        pending |= 1 << ((source - 1) % irq_sources)
+        pending |= source_mask
     return {"pending": pending & mask, "active": active, "interrupt": interrupt, "claimed": claimed}
 
 
@@ -101,6 +102,20 @@ class UHSCAIAInterface(Elaboratable):
         pending = Signal(c.irq_sources, name="aia_pending_reg")
         enable = Signal(c.irq_sources, name="aia_enable_reg")
         active = pending & enable
+        # Software claim/complete writes use a compact 12-bit source ID.  A
+        # write to 0x10 clears the selected pending bit (claim), while 0x14
+        # re-asserts it (complete), mirroring the IMSIC hand-off semantics.
+        claim_write = self.csr_valid & self.csr_write & (self.csr_addr[2:6] == 4)
+        complete_write = self.csr_valid & self.csr_write & (self.csr_addr[2:6] == 5)
+        claim_id = cast(Signal, self.csr_wdata[:12])
+        claim_valid = (claim_id > 0) & (claim_id <= c.irq_sources)
+        claim_mask = Signal(c.irq_sources, name="aia_claim_mask")
+        complete_mask = Signal(c.irq_sources, name="aia_complete_mask")
+        claim_decode = Const(0, c.irq_sources)
+        for index in range(c.irq_sources):
+            claim_decode = Mux(claim_id == index + 1, 1 << index, claim_decode)
+        m.d.comb += [claim_mask.eq(Mux(claim_valid, claim_decode, 0)),
+                     complete_mask.eq(Mux(claim_valid, claim_decode, 0))]
         claim_value: Any = Const(0, 12)
         seen: Any = Const(0)
         for index in range(c.irq_sources):
@@ -116,10 +131,11 @@ class UHSCAIAInterface(Elaboratable):
         with amaranth_if(m, self.reset):
             m.d.aia += [pending.eq(0), enable.eq(0)]
         with amaranth_else(m):
-            m.d.aia += pending.eq(pending | self.external_source)
+            m.d.aia += pending.eq((pending | self.external_source | Mux(complete_write, complete_mask, 0))
+                                  & ~Mux(claim_write, claim_mask, 0))
             with amaranth_if(m, self.csr_valid & self.csr_write & (self.csr_addr[4] == 0)):
                 m.d.aia += enable.eq(self.csr_wdata)
-            with amaranth_if(m, self.csr_valid & self.csr_write & (self.csr_addr[4] == 1)):
+            with amaranth_if(m, self.csr_valid & self.csr_write & (self.csr_addr[4] == 1) & ~claim_write & ~complete_write):
                 m.d.aia += pending.eq(pending & ~self.csr_wdata)
         return m
 

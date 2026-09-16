@@ -133,7 +133,14 @@ def iopmp_reference_check(address: int, length: int, write: bool, rrid: int,
     if not enabled:
         return {"matched": 0, "read_fault": 0, "write_fault": 0, "interrupt": 0, "entry": 0}
     request_length = max(1, int(length))
-    request_end = int(address) + request_length - 1
+    request_address = int(address) & ((1 << address_bits) - 1)
+    request_sum = request_address + request_length
+    # A wrapped request is never admitted: the source checker operates on a
+    # fixed-width physical address and must not accidentally match address 0
+    # after an arithmetic truncation.
+    if request_sum > (1 << address_bits):
+        return {"matched": 0, "read_fault": int(not write), "write_fault": int(write), "interrupt": 1, "entry": 0}
+    request_end = request_sum - 1
     selected: IOPMPEntry | None = None
     selected_index = 0
     for index, entry in enumerate(entries):
@@ -142,7 +149,7 @@ def iopmp_reference_check(address: int, length: int, write: bool, rrid: int,
         if entry.rrid_mask and (rrid & entry.rrid_mask) != (entry.rrid_value & entry.rrid_mask):
             continue
         start, end = napot_range(entry.address, entry.mode, address_bits)
-        if int(address) >= start and request_end <= end:
+        if request_address >= start and request_end <= end:
             selected = entry
             selected_index = index
             break
@@ -207,27 +214,53 @@ class UHSCIOPMPInterface(Elaboratable):
         entry_low = Array(Signal(32, reset=0, name=f"entry_addr_{i}_lo") for i in range(c.entry_num))
         entry_high = Array(Signal(max(1, c.address_bits - 32), reset=0, name=f"entry_addr_{i}_hi") for i in range(c.entry_num))
         entry_cfg = Array(Signal(11, reset=0, name=f"entry_cfg_{i}") for i in range(c.entry_num))
-        entry_addr = [Cat(entry_high[i], entry_low[i])[:c.address_bits] for i in range(c.entry_num)]
+        # RRID attributes are kept separately from the source entry cfg word.
+        # This preserves the 16-byte entry table while exposing a deterministic
+        # extension window for the bounded aggregate (0x3000..0x3fff).
+        entry_rrid_value = Array(Signal(c.rrid_bits, reset=0, name=f"entry_rrid_{i}_value")
+                                 for i in range(c.entry_num))
+        entry_rrid_mask = Array(Signal(c.rrid_bits, reset=0, name=f"entry_rrid_{i}_mask")
+                                for i in range(c.entry_num))
+        # Cat's first operand occupies the low bits, so place ENTRY_ADDR_LO
+        # first and append ENTRY_ADDRH above it (matching the Scala
+        # ``Cat(entry_addrh, entry_addr)`` convention).
+        entry_addr = [Cat(entry_low[i], entry_high[i])[:c.address_bits] for i in range(c.entry_num)]
 
         # Decode APB register windows and dynamic entry-table addressing. / 解码 APB 寄存器窗口与动态 entryTable 地址。
         entry_window = (self.csr_addr >= 0x2000) & (self.csr_addr < (0x2000 + c.entry_num * 16))
+        rrid_window = (self.csr_addr >= 0x3000) & (self.csr_addr < (0x3000 + c.entry_num * 8))
         entry_index = (self.csr_addr - 0x2000) >> 4
+        rrid_index = (self.csr_addr - 0x3000) >> 3
         entry_word = self.csr_addr[2:4]
+        rrid_word = self.csr_addr[2:3]
         m.d.comb += [self.csr_ready.eq(self.csr_valid), self.enable.eq(enable_reg), self.interrupt.eq(err_interrupt)]
 
         # Build a lowest-index priority match for the current request. / 为当前请求构造最低索引优先匹配。
         request_length = amaranth_value(Mux(self.req_length == 0, 1, self.req_length))
-        request_end = self.req_address + request_length - 1
+        # Cat places its first operand in the least-significant bits; append a
+        # zero above each operand to form a true zero-extended sum.
+        request_address_ext = amaranth_value(Cat(self.req_address, Const(0)))
+        request_length_ext = amaranth_value(Cat(request_length, Const(0)))
+        request_sum = amaranth_value(request_address_ext + request_length_ext)
+        request_overflow = amaranth_value(request_sum[c.address_bits])
+        request_end = amaranth_value(request_sum[:c.address_bits] - 1)
         match_bits: list[Any] = []
         for index in range(c.entry_num):
             mode = entry_cfg[index][3:5]
             valid_mode = (mode == 2) | (mode == 3)
-            encoded = amaranth_value(entry_addr[index])
-            napot_mask = encoded ^ (encoded + 1)
-            range_start = encoded & ~napot_mask
-            range_end = range_start | napot_mask
-            rrid_match = (self.req_rrid < c.rrid_num)
-            full_match = valid_mode & rrid_match & (self.req_address >= range_start) & (request_end <= range_end)
+            # The source stores address bits above the two-byte granularity
+            # boundary.  Decode the NAPOT suffix before comparing byte
+            # addresses, matching ``napot_range`` above.
+            suffix = Mux(mode == 2, 1, 3)
+            encoded_base = amaranth_value(Cat(Const(0, 2), entry_addr[index]))
+            encoded = amaranth_value(encoded_base | suffix)
+            napot_mask = amaranth_value(encoded ^ (encoded + 1))
+            range_start = amaranth_value((encoded & ~napot_mask) >> 2)
+            range_end = amaranth_value((encoded | napot_mask) >> 2)
+            rrid_match = (self.req_rrid < c.rrid_num) & (
+                (self.req_rrid & entry_rrid_mask[index]) ==
+                (entry_rrid_value[index] & entry_rrid_mask[index]))
+            full_match = valid_mode & rrid_match & ~request_overflow & (self.req_address >= range_start) & (request_end <= range_end)
             match_bits.append(full_match)
         match_vector = Cat(*match_bits)
         selected_index = Signal(len(self.resp_entry), name="iopmp_selected_entry")
@@ -260,10 +293,15 @@ class UHSCIOPMPInterface(Elaboratable):
         entry_read = amaranth_value(Array(entry_low[i] for i in range(c.entry_num))[entry_index])
         entry_high_read = amaranth_value(Array(entry_high[i] for i in range(c.entry_num))[entry_index])
         entry_cfg_read = amaranth_value(Array(entry_cfg[i] for i in range(c.entry_num))[entry_index])
+        rrid_value_read = amaranth_value(Array(entry_rrid_value[i] for i in range(c.entry_num))[rrid_index])
+        rrid_mask_read = amaranth_value(Array(entry_rrid_mask[i] for i in range(c.entry_num))[rrid_index])
         entry_value = Mux(entry_word == 0, entry_read,
-                          Mux(entry_word == 1, Cat(Const(0, 32 - max(1, c.address_bits - 32)), entry_high_read),
-                              Cat(Const(0, 21), entry_cfg_read)))
-        m.d.comb += self.csr_rdata.eq(Mux(entry_window, entry_value, read_value))
+                          Mux(entry_word == 1, Cat(entry_high_read, Const(0, 32 - max(1, c.address_bits - 32))),
+                              Cat(entry_cfg_read, Const(0, 21))))
+        rrid_value_word = Cat(rrid_value_read, Const(0, 32 - c.rrid_bits)) if c.rrid_bits < 32 else rrid_value_read[:32]
+        rrid_mask_word = Cat(rrid_mask_read, Const(0, 32 - c.rrid_bits)) if c.rrid_bits < 32 else rrid_mask_read[:32]
+        m.d.comb += self.csr_rdata.eq(Mux(entry_window, entry_value,
+                                           Mux(rrid_window, Mux(rrid_word == 0, rrid_value_word, rrid_mask_word), read_value)))
 
         # Update tables, capture first faults, and retire responses synchronously. / 同步更新表项、捕获首个错误并完成响应。
         with amaranth_if(m, self.reset):
@@ -285,6 +323,11 @@ class UHSCIOPMPInterface(Elaboratable):
                         m.d.iopmp += entry_high[entry_index].eq(self.csr_wdata[:max(1, c.address_bits - 32)])
                     with amaranth_elif(m, entry_word == 2):
                         m.d.iopmp += entry_cfg[entry_index].eq(self.csr_wdata[:11])
+            with amaranth_if(m, self.csr_valid & self.csr_write & rrid_window & (rrid_index < c.entry_num)):
+                with amaranth_if(m, rrid_word == 0):
+                    m.d.iopmp += entry_rrid_value[rrid_index].eq(self.csr_wdata[:c.rrid_bits])
+                with amaranth_elif(m, rrid_word == 1):
+                    m.d.iopmp += entry_rrid_mask[rrid_index].eq(self.csr_wdata[:c.rrid_bits])
             with amaranth_if(m, request_fire):
                 m.d.iopmp += [
                     response_valid.eq(1), response_read_fault.eq(read_fault_now),

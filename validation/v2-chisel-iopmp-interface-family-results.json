@@ -11,21 +11,24 @@
   ],
   "target": {
     "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.ChiselIOPMP.Interface-Hardware.py",
-    "sha256": "62ef1376d43d4ab1636dd80bbfc68a38c953b9f2922a10b880fad7eea4f975b9"
+    "sha256": "e347ef5fd21c0bd023ae9a2ce4db8f2165549bd0ade6f88c7fc93f471becc549"
   },
   "direct": {
     "status": "PASS_BOUNDED",
-    "vectors": 2,
+    "vectors": 5,
     "observations": [
       {"case": "NAPOT read permission", "status": "PASS"},
-      {"case": "unmatched write fault", "status": "PASS"}
+      {"case": "unmatched write fault", "status": "PASS"},
+      {"case": "RRID masked admission", "status": "PASS"},
+      {"case": "address-width wrap fault", "status": "PASS"},
+      {"case": "byte-range full containment", "status": "PASS"}
     ]
   },
   "build_verilog": {
     "status": "PASS",
     "configuration": {"entry_num": 4, "module": "UHSCIOPMPInterface"},
-    "rtl_bytes": 31388,
-    "rtl_sha256": "96154aa30aeb1a87f375e018d6652334a657741e579dcd4de61ebb5a307707d1"
+    "rtl_bytes": 45863,
+    "rtl_sha256": "0da5022ea9f842b558cb68e257828966e93311c242eff33415259265b0e832d5"
   },
   "gates": {
     "AST": "PASS",
@@ -33,6 +36,8 @@
     "DETERMINISTIC_SAME_NAME_BUILD_VERILOG": "PASS",
     "V2_REFERENCE_MATCHED": "PASS_BOUNDED_NAPOT_PERMISSION_EQUATIONS",
     "PARENT_CLOSURE_MATCHED": "PENDING_IOPMP_SELECTED_TOP",
+    "RRID_MASKED_ADMISSION": "PASS_BOUNDED",
+    "ADDRESS_WRAP_REJECTION": "PASS_BOUNDED",
     "LICENSE_REVIEW": "PENDING",
     "ACCEPTED": "NOT_ALLOWED"
   },

@@ -14,7 +14,7 @@
   ],
   "target": {
     "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.ChiselIOPMP.Interface-Hardware.py",
-    "sha256": "1e8273b0c6d1f228accd02586f71918b8690f648ea1dd9725910f0b342e6f661"
+    "sha256": "e347ef5fd21c0bd023ae9a2ce4db8f2165549bd0ade6f88c7fc93f471becc549"
   },
   "disposition": "AGGREGATED_FAMILY_BOUNDARY",
   "boundary": {
@@ -22,7 +22,8 @@
       "APB register window for hwcfg0/errcfg/errinfo and entry table words",
       "NA4/NAPOT inclusive range decode via trailing-one mask",
       "RRID admission, lowest-index rule priority, read/write permission faults",
-      "single outstanding request/response handshake plus interrupt/flush observations"
+      "single outstanding request/response handshake plus interrupt/flush observations",
+      "RRID value/mask extension window and fixed-width address-wrap rejection"
     ],
     "explicitly_deferred_closure": [
       "IopmpBridgeLazy AXI channel ordering and error response FSM",
@@ -50,11 +51,11 @@
     "PY_COMPILE": "PASS",
     "DETERMINISTIC_SAME_NAME_BUILD_VERILOG": "PASS",
     "STRUCTURE_VERIFIED": "PASS",
-    "BEHAVIOR_VERIFIED_dependency.iopmp.interface": "PENDING_BATCH_VALIDATION",
+    "BEHAVIOR_VERIFIED_dependency.iopmp.interface": "PASS_BOUNDED_RRID_WRAP",
     "ACCEPTED": "NOT_ALLOWED"
   },
   "structure_status": "PASS",
-  "behavior_status": "PENDING_BATCH_VALIDATION",
+  "behavior_status": "PASS_BOUNDED_FAMILY",
   "accepted": false,
   "acceptance_eligible": false,
   "unclosed": [
@@ -64,4 +65,3 @@
     "License review and user approval remain pending."
   ]
 }
-
