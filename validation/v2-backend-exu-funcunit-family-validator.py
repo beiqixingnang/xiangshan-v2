@@ -38,7 +38,7 @@ HIERARCHY = ROOT / "validation/v2-locked-hierarchy.json"
 LOCKED_WSL = "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv"
 WORK = ROOT / "validation/.work/v2-backend-exu-funcunit-family"
 EVIDENCE = ROOT / "validation/v2-backend-exu-funcunit-family-results.json"
-SOURCE_COMMIT = "8b181bc"
+SOURCE_COMMIT = "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af"
 
 FAMILY_SOURCES = (
     "xiangshan/backend/fu/FuncUnit.scala",
