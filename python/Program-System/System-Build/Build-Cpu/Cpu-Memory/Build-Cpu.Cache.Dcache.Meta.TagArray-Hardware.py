@@ -22,7 +22,7 @@ from amaranth.lib.wiring import Component, In, Out
 # checks; MBIST/DFT ports are injected dependencies at this leaf.
 # V2 TagArray 默认由两个双路 TagSRAMBank 组成；复位后清零 256 个组，清零期间
 # 屏蔽读写，每周期接受一次按路掩码写入，并在读握手后一个时钟返回同步结果。
-__all__ = ["TagArrayConfig", "TagArray", "build_verilog", "main"]
+__all__ = ["TagArrayConfig", "TagArray", "tag_lookup", "build_verilog", "main"]
 
 
 class _MemoryReadPort(Protocol):
@@ -61,6 +61,26 @@ class TagArrayConfig:
             raise ValueError("tag and ECC widths must be non-negative/positive")
         if self.nWays & (self.nWays - 1):
             raise ValueError("nWays must be a power of two")
+
+
+def tag_lookup(tags: list[int], valid: int, probe_tag: int,
+               configuration: TagArrayConfig | None = None) -> dict[str, int]:
+    """Return the lowest-index matching way and one-hot hit mask.
+
+    The Scala tag array resolves duplicate hits with a priority encoder while
+    masking invalid ways.  This pure helper exposes that observation for
+    differential benches without changing the synchronous SRAM ABI. / 以最低路
+    优先编码命中路并屏蔽无效路，供差分测试观察。
+    """
+
+    c = configuration or TagArrayConfig(nWays=max(1, len(tags)))
+    if len(tags) != c.nWays:
+        raise ValueError("tags length must equal configured nWays")
+    tag_mask = (1 << c.tagBits) - 1
+    hits = [index for index, tag in enumerate(tags)
+            if (valid >> index) & 1 and (int(tag) & tag_mask) == (int(probe_tag) & tag_mask)]
+    one_hot = sum(1 << index for index in hits)
+    return {"hit": int(bool(hits)), "way": hits[0] if hits else 0, "way_en": one_hot}
 
 
 # =============================================================================
