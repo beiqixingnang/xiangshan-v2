@@ -38,7 +38,7 @@ _2026-09-16 23:05_。本报告只写增量事实：我在你 9/16 中断点之�
 | --- | --- | --- |
 | `Cpu-Core/Build-Cpu.Backend.Issue.Entries-Hardware.py` | 2060 行 | ✅ 已提交；34 模块端口面、确定性、结构向量、Verilator/Yosys 均 PASS；证据 `validation/v2-backend-issue-entries-family-results.json` 完整；状态 `DIRECT_TEST_PASS_BOUNDED`（行为闭包未建立） |
 | `Cpu-Memory/Build-Cpu.Memory.Lsqueue.Uncache-Hardware.py` | 1724 行 | ⚠️ 已提交；端口面 42/42、Verilator/Yosys 局部编译 PASS，但锁定参考差分真实 FAIL（FreeList 1107/1200、UncacheEntry_15 23293/37600）；证据整体 `FAIL`，不得升级状态 |
-| `Cpu-Core/Build-Cpu.Backend.Exu.FuncUnit-Hardware.py` | ~122KB | ⚠️ Build、validator 与证据已提交；30/30 端口面、确定性、Verilator/Yosys 通过，但 Alu/Bku 有界差分分别为 235/398 mismatches（3072 checks each），状态保持 `FAIL` |
+| `Cpu-Core/Build-Cpu.Backend.Exu.FuncUnit-Hardware.py` | ~122KB | ⚠️ Build、validator 与证据已提交；30/30 端口面、确定性、Verilator/Yosys 通过，但 Alu/Bku 有界差分分别为 235/632 mismatches（3072 checks each），状态保持 `FAIL` |
 | `Cpu-Core/Build-Cpu.Backend.Regfile.Regfile-Hardware.py` | ~448KB | ✅ Build、`validation/v2-backend-regfile-family-validator.py` 与证据已提交；97/97 端口面/确定性通过，10 个代表模块 Verilator/Yosys 通过；状态 `DIRECT_TEST_PASS_BOUNDED`，完整行为差分仍待补齐 |
 
 配套：每主题有 focused validator（`validation/v2-*-family-validator.py` 或 `_validator.py` 命名）。
@@ -59,7 +59,7 @@ owned closure Build files passing UTF-8/LF, AST, `py_compile`, exact import,
 `build_verilog`, and strict single-file Pyright (two non-closure integration
 paths are explicitly excluded). Decoupled (216/216) and Arbiter (57) focused
 reruns pass their bounded gates. FuncUnit's current evidence is a real FAIL
-(Alu 235/3072 and Bku 398/3072 mismatches), Regfile now has a focused structure-only evidence file
+(Alu 235/3072 and Bku 632/3072 mismatches), Regfile now has a focused structure-only evidence file
 (`DIRECT_TEST_PASS_BOUNDED`), and Lsqueue's behavioral checkpoint also fails.
 `ACCEPTED` remains locked.
 
