@@ -19,7 +19,7 @@ from amaranth.back import verilog
 # Vec.asUInt ordering places element zero in the least-significant slice.
 # ScalaDupToVector.scala 用 scalaData 低 8/16/32/64 位构造四个 VecInit，再以
 # Mux1H 选择；V2 的 VSew 为两位，因此四个编码均有定义。Vec.asUInt 的元素零在低位。
-__all__ = ["ScalaDupToVectorConfig", "VSew", "ScalaDupToVector", "build_verilog", "main"]
+__all__ = ["ScalaDupToVectorConfig", "VSew", "ScalaDupToVector", "duplicate_scalar_integer", "build_verilog", "main"]
 
 
 # =============================================================================
@@ -52,6 +52,16 @@ class VSew:
 # Build repeated low bits in the packed Vec.asUInt ordering. / 按打包 Vec.asUInt 顺序构造重复的低位数据。
 def repeated_slice(scalar: Signal, element_width: int, vlen: int) -> object:
     return Cat(*[scalar[:element_width] for _ in range(vlen // element_width)])
+
+
+def duplicate_scalar_integer(scalar: int, vsew: int, vlen: int = 128) -> int:
+    """Duplicate scalar low bits across VLEN elements as ScalaDupToVector. / 按元素宽复制标量低位。"""
+
+    element_width = 8 << int(vsew)
+    if element_width not in (8, 16, 32, 64) or vlen < element_width or vlen % element_width:
+        raise ValueError("invalid VSew or VLEN")
+    element = int(scalar) & ((1 << element_width) - 1)
+    return sum(element << (index * element_width) for index in range(vlen // element_width))
 
 
 class ScalaDupToVector(Elaboratable):

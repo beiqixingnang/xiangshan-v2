@@ -18,7 +18,7 @@ from amaranth.back import verilog
 # numBytes-bit output truncates the intermediate vlen-bit UInt exactly as in
 # Chisel. V2 MaskExtractor.scala 接受 numBytes 位掩码与两位 VSew，并将每个源位
 # 重复 1/2/4/8 次；中间 vlen 位 UInt 赋给 numBytes 位输出时按 Chisel 截断。
-__all__ = ["MaskExtractorConfig", "VSew", "MaskExtractor", "build_verilog", "main"]
+__all__ = ["MaskExtractorConfig", "VSew", "MaskExtractor", "expand_mask_integer", "build_verilog", "main"]
 
 
 # =============================================================================
@@ -57,6 +57,20 @@ def expand_mask(mask: Signal, width: int, repeat: int) -> object:
         for index in range(width // repeat)
         for _ in range(repeat)
     ])
+
+
+def expand_mask_integer(mask: int, vsew: int, num_bytes: int) -> int:
+    """Expand a packed mask using the four Scala VSew arms. / 以 Scala 四种 VSew 分支展开整数掩码。"""
+
+    repeat = 1 << int(vsew)
+    if repeat not in (1, 2, 4, 8) or num_bytes < 1:
+        raise ValueError("invalid VSew or byte width")
+    source = int(mask) & ((1 << num_bytes) - 1)
+    result = 0
+    for index in range(num_bytes // repeat):
+        bit = (source >> index) & 1
+        result |= ((1 << repeat) - 1) * bit << (index * repeat)
+    return result & ((1 << num_bytes) - 1)
 
 
 class MaskExtractor(Elaboratable):
