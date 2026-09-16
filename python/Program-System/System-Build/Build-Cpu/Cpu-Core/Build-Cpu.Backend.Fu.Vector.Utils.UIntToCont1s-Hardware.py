@@ -22,6 +22,7 @@ __all__ = [
     "UIntToContConfig",
     "UIntToContLow1s",
     "UIntToContHigh1s",
+    "contiguous_low_ones_integer",
     "build_verilog",
     "main",
 ]
@@ -53,6 +54,15 @@ def contiguous_low_ones(data: Any, output_width: int) -> Any:
         Mux(index < data, Const(1, 1), Const(0, 1))
         for index in range(output_width)
     ])
+
+
+def contiguous_low_ones_integer(data: int, output_width: int) -> int:
+    """Return the integer low-one run mask used by the Scala helper. / 返回整数低一连续掩码。"""
+
+    if output_width < 1:
+        raise ValueError("output_width must be positive")
+    count = min(max(int(data), 0), output_width)
+    return (1 << count) - 1
 
 
 # Reverse a value in the same least-significant-first order as Chisel Reverse. / 按与 Chisel Reverse 相同的最低位优先顺序反转值。

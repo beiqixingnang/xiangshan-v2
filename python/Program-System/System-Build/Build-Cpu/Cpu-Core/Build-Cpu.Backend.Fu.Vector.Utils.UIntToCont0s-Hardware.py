@@ -22,6 +22,7 @@ __all__ = [
     "UIntToContConfig",
     "UIntToContLow0s",
     "UIntToContHigh0s",
+    "contiguous_low_zeros_integer",
     "build_verilog",
     "main",
 ]
@@ -53,6 +54,16 @@ def contiguous_low_zeros(data: Any, output_width: int) -> Any:
         Mux(index < data, Const(0, 1), Const(1, 1))
         for index in range(output_width)
     ])
+
+
+def contiguous_low_zeros_integer(data: int, output_width: int) -> int:
+    """Return the integer low-zero run mask used by the Scala helper. / 返回整数低零连续掩码。"""
+
+    if output_width < 1:
+        raise ValueError("output_width must be positive")
+    value = int(data)
+    count = min(max(value, 0), output_width)
+    return ((1 << output_width) - 1) ^ ((1 << count) - 1)
 
 
 # Reverse a value in the same least-significant-first order as Chisel Reverse. / 按与 Chisel Reverse 相同的最低位优先顺序反转值。
