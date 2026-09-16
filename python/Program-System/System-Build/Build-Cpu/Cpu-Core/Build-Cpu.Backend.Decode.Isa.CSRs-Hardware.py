@@ -36,6 +36,8 @@ __all__ = [
     "CSRs",
     "CSRConst",
     "CSRProbe",
+    "csr_mask",
+    "csr_field_mask",
     "csr_access_permission_check",
     "perfcnt_permission_check",
     "dcsr_permission_check",
@@ -557,6 +559,15 @@ class CSRConst:
             raise ValueError("length must be in (0, max_length]")
         return (1 << length) - 1
 
+    # Alias the Scala SATP field mask under a concise public helper.
+    # 以简洁公共辅助函数暴露 Scala SATP 字段掩码。
+    @staticmethod
+    # Compute the CSR field mask / 计算 CSR 字段掩码
+    def csrMask(max_length: int, length: int) -> int:
+        """Return a low-bit CSR field mask with the requested width. / 返回 CSR 字段低位掩码。"""
+
+        return CSRConst.satp_part_wmask(max_length, length)
+
     # Check architectural CSR access permissions. / 检查架构 CSR 访问权限。
     @staticmethod
     # Check architectural CSR access / 检查架构 CSR 访问
@@ -642,6 +653,22 @@ def trigger_permission_check(addr: int, m_mode_can_write: bool,
     """Call the V2 trigger permission checker. / 调用 V2 触发器权限检查器。"""
 
     return CSRConst.triggerPermissionCheck(addr, m_mode_can_write, debug)
+
+
+# Compute a width-limited CSR field mask, mirroring ``satp_part_wmask``.
+# 计算受位宽限制的 CSR 字段掩码，对应 Scala 的 satp_part_wmask。
+def csr_field_mask(max_length: int, length: int) -> int:
+    """Return low ``length`` bits constrained to ``max_length``. / 返回 CSR 字段掩码。"""
+
+    return CSRConst.csrMask(max_length, length)
+
+
+# Concise alias for callers that use the CSR mask terminology.
+# 为使用 CSR mask 术语的调用者提供简洁别名。
+def csr_mask(max_length: int, length: int) -> int:
+    """Return a low-bit CSR mask. / 返回 CSR 低位掩码。"""
+
+    return csr_field_mask(max_length, length)
 
 
 # Emit a tiny deterministic probe for the constant-only closure. / 为常量闭包输出微型确定性探针。

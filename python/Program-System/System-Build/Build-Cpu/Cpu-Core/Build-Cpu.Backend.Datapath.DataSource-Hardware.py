@@ -5,6 +5,7 @@ V2 寄存器数据源选择器及其谓词。
 from __future__ import annotations
 
 from dataclasses import dataclass
+from enum import IntEnum
 from typing import Any
 
 from amaranth import Elaboratable, Module, Signal
@@ -16,7 +17,7 @@ from amaranth import Elaboratable, Module, Signal
 # DataSource.scala is a four-bit Bundle.  The values are kept as source
 # traceable integers here; no external source-tree import is needed.
 # DataSource.scala 是四位 Bundle；这里保留可追溯的整数编码，不导入外部 Scala。
-__all__ = ["DataSourceConfig", "DataSource", "DataSourceProbe", "build_verilog", "main"]
+__all__ = ["DataSourceConfig", "DataSourceKind", "DataSource", "DataSourceProbe", "build_verilog", "main"]
 
 
 # =============================================================================
@@ -32,6 +33,32 @@ class DataSourceConfig:
     def __post_init__(self) -> None:
         if self.width != 4:
             raise ValueError("V2 DataSource.value is exactly four bits")
+
+
+# Stable enum names for the Scala object DataSource selector values.
+# 为 Scala DataSource 对象选择值提供稳定的枚举名称。
+class DataSourceKind(IntEnum):
+    """Four-bit source selector encodings. / 四位数据源选择编码。"""
+
+    ZERO = 0b0000
+    FORWARD = 0b0001
+    BYPASS = 0b0010
+    BYPASS2 = 0b0011
+    IMM = 0b0100
+    V0 = 0b0101
+    REGCACHE = 0b0110
+    REG = 0b1000
+
+    @classmethod
+    # Decode a raw selector while preserving unknown encodings.
+    # 解码原始选择值，未知编码保留为 None。
+    def decode(cls, value: int) -> "DataSourceKind | None":
+        """Return the matching enum member, or ``None`` for reserved values. / 返回匹配枚举或 None。"""
+
+        try:
+            return cls(int(value))
+        except (TypeError, ValueError):
+            return None
 
 
 class DataSource:
@@ -126,6 +153,14 @@ class DataSource:
     # Test an integer against the immediate encoding. / 检查整数是否为立即数编码。
     def isImm(value: int) -> bool:
         return int(value) == DataSource.imm
+
+    @staticmethod
+    # Decode a raw value into the Scala-equivalent selector enum.
+    # 将原始值解码为对应 Scala 选择器枚举。
+    def decode(value: int) -> DataSourceKind | None:
+        """Map a selector value to ``DataSourceKind``. / 将选择值映射为枚举。"""
+
+        return DataSourceKind.decode(value)
 
 
 # =============================================================================

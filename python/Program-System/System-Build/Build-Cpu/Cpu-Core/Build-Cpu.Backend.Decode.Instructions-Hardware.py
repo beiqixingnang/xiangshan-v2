@@ -19,6 +19,7 @@ __all__ = [
     "PATTERNS",
     "pattern_mask_expected",
     "match32",
+    "decode_legality",
     "InstructionPatternProbe",
     "build_verilog",
     "main",
@@ -84,6 +85,16 @@ def match32(pattern: str, value: int) -> bool:
     return (value & 0xFFFFFFFF & mask) == expected
 
 
+# Check whether an instruction belongs to one of the source BitPat classes.
+# 检查指令是否匹配源 Scala 中定义的任一 BitPat 类别。
+def decode_legality(instruction: int) -> bool:
+    """Return true when ``instruction`` matches any V2 decode pattern. / 判断指令是否可解码。"""
+
+    if not isinstance(instruction, int):
+        raise TypeError("decode_legality accepts an integer instruction")
+    return any(match32(pattern, instruction) for pattern in PATTERNS.values())
+
+
 class Zvbb:
     """Zvbb instruction patterns. / Zvbb 指令模式集合。"""
 
@@ -121,6 +132,9 @@ class InstructionPatternProbe(Elaboratable):
 
         self.instruction = Signal(32, name="instruction")
         self.matches = {name: Signal(name=name) for name in PATTERNS}
+        # Aggregate legality is intentionally internal so existing ports remain stable.
+        # 合法性汇总信号保持为内部信号，确保既有端口兼容。
+        self.legal = Signal(name="legal")
 
     # Build the mask comparisons / 构建掩码比较逻辑。
     def elaborate(self, platform: Any) -> Module:
@@ -133,6 +147,10 @@ class InstructionPatternProbe(Elaboratable):
             module.d.comb += self.matches[name].eq(
                 (self.instruction & Const(mask, 32)) == Const(expected, 32)
             )
+        legal = next(iter(self.matches.values()))
+        for match in list(self.matches.values())[1:]:
+            legal = legal | match
+        module.d.comb += self.legal.eq(legal)
         return module
 
 
