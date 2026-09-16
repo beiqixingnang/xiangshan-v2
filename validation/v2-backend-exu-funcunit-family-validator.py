@@ -287,11 +287,6 @@ def write_diff_harness(work: Path, name: str, mine_sv: str, pinned_sv: str, port
     """Write a two-instance differential harness for one module. / 为一个模块写双实例差分平台。"""
     mine_path = work / f"{name}_DUT.sv"
     mine_path.write_text(mine_sv, encoding="utf-8", newline="\n")
-    # Preserve the Verilog module keyword while changing only the top name.
-    # 保留 Verilog module 关键字，只替换顶层模块名。
-    renamed = pinned_sv.replace(f"module {name}(", f"module {name}_Reference(", 1)
-    ref_path = work / f"{name}_Reference.sv"
-    ref_path.write_text(renamed, encoding="utf-8", newline="\n")
     # Close the pinned child hierarchy recursively.  A single AluDataModule,
     # for example, instantiates eleven utility modules of its own.
     pending = list(PINNED_CHILDREN[name])
@@ -308,8 +303,19 @@ def write_diff_harness(work: Path, name: str, mine_sv: str, pinned_sv: str, port
         for nested in referenced_module_names(child_sv):
             if nested not in children and nested != name:
                 pending.append(nested)
-    for child, child_sv in children.items():
-        (work / f"{child}_Ref.sv").write_text(child_sv, encoding="utf-8", newline="\n")
+    # Rename every reference declaration *and* every internal child use.  The
+    # DUT export may contain identically named generated children; retaining
+    # an original reference child name makes the combined Verilator input
+    # ambiguous or duplicate-defined.
+    closure = {name: pinned_sv, **children}
+    rename_map = {module_name: f"{module_name}_Reference" for module_name in closure}
+    for module_name, source in closure.items():
+        renamed = source
+        for old, new in rename_map.items():
+            renamed = re.sub(rf"\b{re.escape(old)}\b", new, renamed)
+        (work / f"{module_name}_Reference.sv").write_text(
+            renamed, encoding="utf-8", newline="\n"
+        )
 
     inputs = [p for p in ports if p[1] == "input"]
     outputs = [p for p in ports if p[1] == "output"]
@@ -373,7 +379,7 @@ int main(int argc, char** argv) {{
 {tick_body}
     }};
     auto randomize_inputs = [&]() {{
-{chr(10).join(f'        tb.{p[0]} = rng() & ((1ULL << {p[2]}) - 1);' for p in inputs)}
+{chr(10).join(f'        tb.{p[0]} = rng();' for p in inputs)}
     }};
 {reset_block}
     for (int v = 0; v < {DIFF_VECTORS}; v++) {{
@@ -394,7 +400,7 @@ int main(int argc, char** argv) {{
 all:
 \tverilator --cc --exe --build -O2 -Wno-fatal \\
 \t  --top-module diff_{name} diff_{name}.sv {name}_DUT.sv {name}_Reference.sv \\
-{chr(10).join(f'\t  {child}_Ref.sv \\' for child in children)}
+{chr(10).join(f'\t  {child}_Reference.sv \\' for child in children)}
 \t  tb_{name}.cpp -o sim_{name}
 """
     (work / f"Makefile_{name}").write_text(mk, encoding="utf-8", newline="\n")

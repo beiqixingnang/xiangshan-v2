@@ -408,7 +408,7 @@
         "differential_mismatches": 235,
         "build_status": "PASS",
         "sim_status": "FAIL",
-        "build_output_tail": " assign \\$2308  = io_in_bits_ctrl_fuOpType[2:1] == 1'h1;\n      |                                                  ^~\n../tb_Alu.cpp: In lambda function:\n../tb_Alu.cpp:22:51: warning: left shift count >= width of type [-Wshift-count-overflow]\n   22 |         tb.io_in_bits_data_src_1 = rng() & ((1ULL << 64) - 1);\n      |                                              ~~~~~^~~~~\n../tb_Alu.cpp:23:51: warning: left shift count >= width of type [-Wshift-count-overflow]\n   23 |         tb.io_in_bits_data_src_0 = rng() & ((1ULL << 64) - 1);\n      |                                              ~~~~~^~~~~\n",
+        "build_output_tail": "expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                        : ... note: In instance 'diff_Alu.dut'\n 4145 |   assign \\$1785  = io_in_bits_ctrl_fuOpType[1:0] == 1'h1;\n      |                                                  ^~\n%Warning-WIDTHEXPAND: Alu_DUT.sv:4668:50: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                        : ... note: In instance 'diff_Alu.dut'\n 4668 |   assign \\$2308  = io_in_bits_ctrl_fuOpType[2:1] == 1'h1;\n      |                                                  ^~\n",
         "verdict": "MISMATCH_BOUNDED"
       },
       {
@@ -418,10 +418,10 @@
         "port_vector_match": true,
         "differential_vectors": 512,
         "differential_checks": 3072,
-        "differential_mismatches": 398,
+        "differential_mismatches": 632,
         "build_status": "PASS",
         "sim_status": "FAIL",
-        "build_output_tail": "nce 'diff_Bku.dut.clmul'\n 1022 |   assign \\$194  = clmul_funcReg == 2'h2;\n      |                                 ^~\n../tb_Bku.cpp: In lambda function:\n../tb_Bku.cpp:28:51: warning: left shift count >= width of type [-Wshift-count-overflow]\n   28 |         tb.io_in_bits_data_src_1 = rng() & ((1ULL << 64) - 1);\n      |                                              ~~~~~^~~~~\n../tb_Bku.cpp:29:51: warning: left shift count >= width of type [-Wshift-count-overflow]\n   29 |         tb.io_in_bits_data_src_0 = rng() & ((1ULL << 64) - 1);\n      |                                              ~~~~~^~~~~\n",
+        "build_output_tail": "      ^\n%Warning-WIDTHEXPAND: Bku_DUT.sv:894:31: Operator EQ expects 9 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                       : ... note: In instance 'diff_Bku.dut.clmul'\n  894 |   assign \\$1  = clmul_funcReg == 1'h1;\n      |                               ^~\n%Warning-WIDTHEXPAND: Bku_DUT.sv:1022:33: Operator EQ expects 9 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                        : ... note: In instance 'diff_Bku.dut.clmul'\n 1022 |   assign \\$194  = clmul_funcReg == 2'h2;\n      |                                 ^~\n",
         "verdict": "MISMATCH_BOUNDED"
       }
     ],
@@ -451,7 +451,7 @@
       "returncode": 0,
       "status": "PASS",
       "output_tail": "19737:34: Operator ADD expects 7 bits on the RHS, but RHS's VARREF 'count_cpopTmp_1' generates 5 bits.\n19737 |   assign \\$67  = count_cpopTmp_0 + count_cpopTmp_1;\n      |                                  ^\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-exu-funcunit-family/UHSCBackendExuFuncUnitFamily.sv:19738:24: Operator ADD expects 8 bits on the RHS, but RHS's VARREF 'count_cpopTmp_2' generates 5 bits.\n19738 |   assign \\$68  = \\$67  + count_cpopTmp_2;\n      |                        ^\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-exu-funcunit-family/UHSCBackendExuFuncUnitFamily.sv:19739:24: Operator ADD expects 9 bits on the RHS, but RHS's VARREF 'count_cpopTmp_3' generates 5 bits.\n19739 |   assign \\$69  = \\$68  + count_cpopTmp_3;\n      |                        ^\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-exu-funcunit-family/UHSCBackendExuFuncUnitFamily.sv:894:31: Operator EQ expects 9 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                                                : ... note: In instance 'Bku.clmul'\n  894 |   assign \\$1  = clmul_funcReg == 1'h1;\n      |                               ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-exu-funcunit-family/UHSCBackendExuFuncUnitFamily.sv:1022:33: Operator EQ expects 9 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                                                                                 : ... note: In instance 'Bku.clmul'\n 1022 |   assign \\$194  = clmul_funcReg == 2'h2;\n      |                                 ^~\n",
-      "output_sha256": "6ac249109ad50be785a5fea349d7a336fec4c4a9336fbeda628c614267f82199"
+      "output_sha256": "3c6055838d0c7d7d7ad114e60c3259de837261b2ef95d1ced636c3abd7dd966e"
     },
     "default_export_bytes": 3064840,
     "default_export_sha256": "c31214a62ad8518d5c97452e58c4aeeab49ce2d6eb544c7c6ae334e5ede435db"
