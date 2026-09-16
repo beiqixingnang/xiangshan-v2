@@ -1032,7 +1032,7 @@ def sbox_sm4_out(m: Any, bits: Value, prefix: str):
 def xt2(byte: Value) -> Value:
     # CryptoUtils.XtN.Xt2: GF(2^8) multiply by 2. / CryptoUtils.XtN.Xt2：GF(2^8) 乘 2。
     v = cast(Any, byte)
-    shifted = (Cat(Const(0, 1), v[0:8]) << 1)[0:9]
+    shifted = (cast(Any, Cat(Const(0, 1), v[0:8])) << 1)[0:9]
     fb = Mux(v[7:8], Const(0x1b, 8), Const(0, 8))
     return cast(Value, (cast(Any, shifted) ^ Cat(Const(0, 1), fb))[0:8])
 
@@ -1117,7 +1117,7 @@ def alu_result(func, src1, src2):
     addw = Mux(f[2:3] & ~f[1:2] & ~f[0:1], addw_all[0], addw)
     addw = Mux(f[2:3] & ~f[1:2] & f[0:1], addw_all[1], addw)
     addw = Mux(~f[2:3], _zext(addw_raw, 64), addw)
-    sub65 = Cat(Const(0, 1), s1) + Cat(Const(0, 1), ~s2) + Const(1, 65)
+    sub65 = cast(Any, Cat(Const(0, 1), s1)) + cast(Any, Cat(Const(0, 1), ~s2)) + Const(1, 65)
     subw = sub65[0:32]
     sllw = (s1[0:32] << s2[0:5])[0:32]
     rev_sllw = (s1[0:32] << rev_shamt[0:5])[0:32]
@@ -1146,8 +1146,8 @@ def alu_result(func, src1, src2):
     add_a = Mux(f[3:4], Mux(f[1:3] == 0, shadd[0], Mux(f[1:3] == 1, shadd[1], Mux(f[1:3] == 2, shadd[2], shadd[3]))), add_a)
     add_b = Mux(f[0:4] == Const(0b0011, 4), Cat(s2[12:64], Const(0, 12)), s2)
     add = add_a + add_b
-    sltu = ~sub65[64:65]
-    slt = s1[63:64] ^ s2[63:64] ^ sltu
+    sltu = cast(Any, ~sub65[64:65])
+    slt = cast(Any, s1[63:64]) ^ cast(Any, s2[63:64]) ^ sltu
     max_min = Mux(slt ^ f[0:1], s2, s1)
     max_min_u = Mux(sltu ^ f[0:1], s2, s1)
     compare_res = Mux(f[2:3], Mux(f[1:2], max_min, max_min_u), Mux(f[1:2], _zext(slt, 64), Mux(f[0:1], _zext(sltu, 64), sub65[0:64])))
@@ -1228,11 +1228,11 @@ def branch_taken(m: Any, func: Value, src1: Value, src2: Value, pred_taken: Valu
     sub_s = Signal(65, name=prefix + "_sub65")
     xor_s = Signal(64, name=prefix + "_xor")
     m.d.comb += [
-        sub_s.eq(Cat(Const(0, 1), s1) + Cat(Const(0, 1), ~s2) + Const(1, 65)),
+        sub_s.eq(cast(Any, Cat(Const(0, 1), s1)) + cast(Any, Cat(Const(0, 1), ~s2)) + Const(1, 65)),
         xor_s.eq(s1 ^ s2),
     ]
-    sltu = ~sub_s[64:65]
-    slt = s1[63:64] ^ s2[63:64] ^ sltu
+    sltu = cast(Any, ~(cast(Any, sub_s)[64:65]))
+    slt = cast(Any, s1[63:64]) ^ cast(Any, s2[63:64]) ^ sltu
     btype = f[1:4]
     cond = Mux(btype == Const(0, 3), ~_or_reduce(xor_s), Mux(btype == Const(2, 3), slt, sltu))
     taken = cond ^ f[0:1]
@@ -1268,7 +1268,7 @@ def check_faults(m: Any, addr_trans: Value, target: Value, prefix: str):
     sv48 = cast(Any, addr_trans)[3:4]
     sv48x4 = cast(Any, addr_trans)[4:5]
     iaf = bare & _or_reduce(t[48:64])
-    ipf = (sv39 & (t[39:64] != t[38:39].replicate(25))) | (sv48 & (t[48:64] != t[47:48].replicate(16)))
+    ipf = (sv39 & (t[39:64] != cast(Any, t[38:39]).replicate(25))) | (sv48 & (t[48:64] != cast(Any, t[47:48]).replicate(16)))
     igpf = (sv39x4 & _or_reduce(t[41:64])) | (sv48x4 & _or_reduce(t[50:64]))
     return iaf, ipf, igpf
 
@@ -1339,7 +1339,7 @@ class ClmulLeaf(Elaboratable):
             m.d.sync += [self._a.eq(self.src0), self._b.eq(self.src1), self._func_r.eq(self.func)]
         acc = Const(0, 128)
         for i in range(64):
-            shifted = (Cat(self._b, Const(0, 64)) << i)[0:128]
+            shifted = (cast(Any, Cat(self._b, Const(0, 64))) << i)[0:128]
             acc = acc ^ Mux(self._a[i:i + 1], shifted, Const(0, 128))
         clmul = acc[0:64]
         clmulh = acc[64:128]
@@ -1394,8 +1394,8 @@ class HashLeaf(Elaboratable):
         sha_src = (
             _sext(_ror32(s1, 2)[0:32] ^ _ror32(s1, 13)[0:32] ^ _ror32(s1, 22)[0:32], 64),
             _sext(_ror32(s1, 6)[0:32] ^ _ror32(s1, 11)[0:32] ^ _ror32(s1, 25)[0:32], 64),
-            _sext(_ror32(s1, 7)[0:32] ^ _ror32(s1, 18)[0:32] ^ (s1[0:32] >> 3), 64),
-            _sext(_ror32(s1, 17)[0:32] ^ _ror32(s1, 19)[0:32] ^ (s1[0:32] >> 10), 64),
+            _sext(cast(Any, _ror32(s1, 7)[0:32]) ^ cast(Any, _ror32(s1, 18)[0:32]) ^ (cast(Any, s1[0:32]) >> 3), 64),
+            _sext(cast(Any, _ror32(s1, 17)[0:32]) ^ cast(Any, _ror32(s1, 19)[0:32]) ^ (cast(Any, s1[0:32]) >> 10), 64),
             _ror64(s1, 28) ^ _ror64(s1, 34) ^ _ror64(s1, 39),
             _ror64(s1, 14) ^ _ror64(s1, 18) ^ _ror64(s1, 41),
             _ror64(s1, 1) ^ _ror64(s1, 8) ^ (s1 >> 7),
@@ -1452,9 +1452,9 @@ class BlockCipherLeaf(Elaboratable):
             inv_sig = Signal(18, name=inv_name)
             out_sig = Signal(8, name=out_name)
             iv = sbox_inv(m, top_bits, inv_name)
-            m.d.comb += Cat(*[inv_sig[j] for j in range(18)]).eq(Cat(*iv))
+            m.d.comb += cast(Any, Cat(*[inv_sig[j] for j in range(18)])).eq(Cat(*iv))
             ov = out_fn(m, inv_sig, out_name)
-            m.d.comb += Cat(*[out_sig[j] for j in range(8)]).eq(Cat(*ov))
+            m.d.comb += cast(Any, Cat(*[out_sig[j] for j in range(8)])).eq(Cat(*ov))
             return out_sig
 
         aes_out = [_sbox_chain(self._aes_mid[i], sbox_aes_out, "aesSboxInv_%d" % i, "aesSboxOut_%d" % i) for i in range(8)]
@@ -1488,8 +1488,8 @@ class BlockCipherLeaf(Elaboratable):
         sm4_iv = sbox_inv(m, self._sm4_top, "sm4SboxInv")
         sm4_ov = sbox_sm4_out(m, sm4_iv, "sm4SboxOutStage")
         m.d.comb += sm4_sbox.eq(sm4_ov)
-        sm4ed = sm4_sbox ^ (sm4_sbox << 8) ^ (sm4_sbox << 2) ^ (sm4_sbox << 18) ^ ((sm4_sbox & Const(0x3f, 8)) << 26) ^ ((sm4_sbox & Const(0xc0, 8)) << 10)
-        sm4ks = sm4_sbox ^ ((sm4_sbox & Const(0x07, 8)) << 29) ^ ((sm4_sbox & Const(0xfe, 8)) << 7) ^ ((sm4_sbox & Const(0x01, 8)) << 23) ^ ((sm4_sbox & Const(0xf8, 8)) << 13)
+        sm4ed = cast(Any, sm4_sbox) ^ (cast(Any, sm4_sbox) << 8) ^ (cast(Any, sm4_sbox) << 2) ^ (cast(Any, sm4_sbox) << 18) ^ ((cast(Any, sm4_sbox) & Const(0x3f, 8)) << 26) ^ ((cast(Any, sm4_sbox) & Const(0xc0, 8)) << 10)
+        sm4ks = cast(Any, sm4_sbox) ^ ((cast(Any, sm4_sbox) & Const(0x07, 8)) << 29) ^ ((cast(Any, sm4_sbox) & Const(0xfe, 8)) << 7) ^ ((cast(Any, sm4_sbox) & Const(0x01, 8)) << 23) ^ ((cast(Any, sm4_sbox) & Const(0xf8, 8)) << 13)
         sm4_src = (
             sm4ed[0:32],
             Cat(sm4ed[0:24], sm4ed[24:32]),
@@ -1517,21 +1517,21 @@ class BlockCipherLeaf(Elaboratable):
             # the register update so the trees are not rebuilt per output bit.
             # 每条 Top 级网络先落地为组合信号再写寄存器，避免逐位重建表达式树。
             sm4_top_c = Signal(21, name="sm4TopComb")
-            m.d.comb += Cat(*[sm4_top_c[j] for j in range(21)]).eq(Cat(*sbox_sm4_top(m, sm4_in, "sm4TopIn")))
+            m.d.comb += cast(Any, Cat(*[sm4_top_c[j] for j in range(21)])).eq(Cat(*sbox_sm4_top(m, sm4_in, "sm4TopIn")))
             for j in range(21):
                 stmts.append(self._sm4_top[j].eq(sm4_top_c[j]))
             for i in range(8):
                 stmts.append(self._im_min[i].eq(sb1[i]))
                 aes_top_c = Signal(21, name="aesTopComb_%d" % i)
                 iaes_top_c = Signal(21, name="iaesTopComb_%d" % i)
-                m.d.comb += Cat(*[aes_top_c[j] for j in range(21)]).eq(Cat(*sbox_aes_top(m, fsr[i], "aesTopIn_%d" % i)))
-                m.d.comb += Cat(*[iaes_top_c[j] for j in range(21)]).eq(Cat(*sbox_iaes_top(m, isr[i], "iaesTopIn_%d" % i)))
+                m.d.comb += cast(Any, Cat(*[aes_top_c[j] for j in range(21)])).eq(Cat(*sbox_aes_top(m, fsr[i], "aesTopIn_%d" % i)))
+                m.d.comb += cast(Any, Cat(*[iaes_top_c[j] for j in range(21)])).eq(Cat(*sbox_iaes_top(m, isr[i], "iaesTopIn_%d" % i)))
                 for j in range(21):
                     stmts.append(self._aes_mid[i][j].eq(aes_top_c[j]))
                     stmts.append(self._iaes_mid[i][j].eq(iaes_top_c[j]))
             for i in range(4):
                 ks_top_c = Signal(21, name="ksTopComb_%d" % i)
-                m.d.comb += Cat(*[ks_top_c[j] for j in range(21)]).eq(Cat(*sbox_aes_top(m, ks_in[i], "ksTopIn_%d" % i)))
+                m.d.comb += cast(Any, Cat(*[ks_top_c[j] for j in range(21)])).eq(Cat(*sbox_aes_top(m, ks_in[i], "ksTopIn_%d" % i)))
                 for j in range(21):
                     stmts.append(self._ks_top[i][j].eq(ks_top_c[j]))
             m.d.sync += stmts
@@ -1814,9 +1814,9 @@ def build_div(self: "ExuFuncModule", m: Any) -> None:
     flush_v = p["io_flush_valid"]
     kill_w = _rob_need_flush(flush_v, p["io_flush_bits_robIdx_flag"], p["io_flush_bits_robIdx_value"], p["io_flush_bits_level"], p["io_in_bits_ctrl_robIdx_flag"], p["io_in_bits_ctrl_robIdx_value"])
     kill_r = ~busy & Const(0, 1)
-    kill_r = (~valid_r) & busy & _rob_need_flush(flush_v, p["io_flush_bits_robIdx_flag"], p["io_flush_bits_robIdx_value"], p["io_flush_bits_level"], p["io_in_bits_ctrl_robIdx_flag"], p["io_in_bits_ctrl_robIdx_value"])
-    fire = p["io_in_valid"] & ~busy & ~valid_r & ~kill_w
-    is_sign = ~func[1:2]
+    kill_r = cast(Any, ~valid_r) & busy & _rob_need_flush(flush_v, p["io_flush_bits_robIdx_flag"], p["io_flush_bits_robIdx_value"], p["io_flush_bits_level"], p["io_in_bits_ctrl_robIdx_flag"], p["io_in_bits_ctrl_robIdx_value"])
+    fire = p["io_in_valid"] & cast(Any, ~(cast(Any, busy))) & cast(Any, ~(cast(Any, valid_r))) & cast(Any, ~(cast(Any, kill_w)))
+    is_sign = cast(Any, ~func[1:2])
     is_w = func[2:3]
     is_hi = func[0:1]
     src0 = p["io_in_bits_data_src_0"]
@@ -1859,7 +1859,7 @@ def build_div(self: "ExuFuncModule", m: Any) -> None:
         m.d.comb += [
             rem_s.eq(Cat(rem[0:64], a_abs[i:i + 1])),
             diff.eq(rem_s - _pad(b_abs, 65)),
-            ge.eq(~diff[64:65]),
+            ge.eq(cast(Any, ~(cast(Any, diff)[64:65]))),
             rem_next.eq(Mux(ge, diff, rem_s)),
             quot_next.eq(Cat(ge, quot[0:63])),
         ]
@@ -1868,7 +1868,7 @@ def build_div(self: "ExuFuncModule", m: Any) -> None:
     r_raw = rem[0:64]
     q_fix = Mux(b_r == Const(0, 64), _zext(_or_reduce(Const(1, 1)).replicate(64), 64) if False else Const(0xffffffffffffffff, 64), q_raw)
     r_fix = Mux(b_r == Const(0, 64), a_abs, r_raw)
-    q_signed = Mux((a_r[63:64] ^ b_r[63:64]) & sign_r, (~q_fix + Const(1, 64))[0:64], q_fix)
+    q_signed = Mux((cast(Any, a_r[63:64]) ^ cast(Any, b_r[63:64])) & sign_r, (cast(Any, ~q_fix) + Const(1, 64))[0:64], q_fix)
     r_signed = Mux(a_r[63:64] & sign_r, (~r_fix + Const(1, 64))[0:64], r_fix)
     word_res = Mux(ishi_r, _sext(r_signed[0:32], 64), _sext(q_signed[0:32], 64))
     full_res = Mux(ishi_r, r_signed, q_signed)
@@ -2051,7 +2051,7 @@ def build_jump_unit(self: "ExuFuncModule", m: Any) -> None:
     sext_pc = p["io_instrAddrTransType_sv39"] | p["io_instrAddrTransType_sv48"]
     pc = Mux(sext_pc, _sext(p["io_in_bits_data_pc"], 64), _zext(p["io_in_bits_data_pc"], 64))
     offset = _sext(p["io_in_bits_data_imm"][0:33], 64)
-    snpc = pc + (Cat(Const(0, 59), p["io_in_bits_data_nextPcOffset"]) << 1)
+    snpc = pc + (cast(Any, Cat(Const(0, 59), p["io_in_bits_data_nextPcOffset"])) << 1)
     target_raw = Mux(is_jalr, p["io_in_bits_data_src_0"] + offset, pc + offset)
     target = Cat(target_raw[1:64], Const(0, 1))
     jmp_target = p["io_in_bits_ctrl_predictInfo_target"]
@@ -2072,7 +2072,7 @@ def build_jump_unit(self: "ExuFuncModule", m: Any) -> None:
         p["io_out_bits_ctrl_robIdx_value"].eq(p["io_in_bits_ctrl_robIdx_value"]),
         p["io_out_bits_ctrl_pdest"].eq(p["io_in_bits_ctrl_pdest"]),
         p["io_out_bits_ctrl_rfWen"].eq(p["io_in_bits_ctrl_rfWen"]),
-        p["io_out_bits_res_redirect_valid"].eq(p["io_in_valid"] & ~is_auipc & (mis_pred | iaf | ipf | igpf)),
+        p["io_out_bits_res_redirect_valid"].eq(p["io_in_valid"] & cast(Any, ~(cast(Any, is_auipc))) & (cast(Any, mis_pred) | iaf | ipf | igpf)),
         p[rd + "level"].eq(Const(0, 1)),
         p[rd + "robIdx_flag"].eq(p["io_in_bits_ctrl_robIdx_flag"]),
         p[rd + "robIdx_value"].eq(p["io_in_bits_ctrl_robIdx_value"]),
@@ -2331,7 +2331,7 @@ class ExuFuncModule(Elaboratable):
         m = Module()
         if self.has_clock:
             dom = ClockDomain("sync", async_reset=self.has_reset)
-            dom.clk = self.clock
+            cast(Any, dom).clk = self.clock
             if self.has_reset:
                 dom.rst = self.reset
             m.domains.sync = dom
