@@ -42,6 +42,7 @@ __all__ = [
     "UHSCTop",
     "Frontend",
     "frontend_port_specs",
+    "frontend_parent_observation",
     "build_verilog",
     "main",
     "FRONTEND_PARENT_SOURCE_PATHS",
@@ -79,6 +80,69 @@ FRONTEND_PARENT_SOURCE_PATHS: tuple[str, ...] = (
     "upstream/src/main/scala/xiangshan/cache/mmu/TLB.scala",
 )
 FRONTEND_PARENT_SOURCE_FILE_COUNT = len(FRONTEND_PARENT_SOURCE_PATHS)
+
+
+# These equations are deliberately kept next to the aggregate rather than in
+# a validator.  They are the executable parent boundary extracted from
+# ``FrontendInlinedImp``: source lines 111--123 register redirect/fence
+# controls, 191--224 delay WFI and bind FTQ/IFU/ICache, and 421--451 bind the
+# IBuffer and error/frontend-information observations.  A full Frontend is
+# still outside this bounded closure; the table documents only the parent
+# relations implemented below. / 这些方程刻意保留在聚合实现而非验证器中；它们
+# 来自 ``FrontendInlinedImp`` 的父级边界：111--123 行寄存 redirect/fence 控制，
+# 191--224 行延迟 WFI 并连接 FTQ/IFU/ICache，421--451 行连接 IBuffer 以及
+# error/frontend-information 观测。完整 Frontend 仍在此有界闭包之外；本表仅
+# 记录下方已实现的父级关系。
+FRONTEND_PARENT_SOURCE_OBSERVATIONS: tuple[tuple[str, str], ...] = (
+    ("redirect_flush", "Frontend.scala:111-113,423-431"),
+    ("wfi_safe", "Frontend.scala:191-197"),
+    ("ftq_ifu_icache_fire", "Frontend.scala:199-214"),
+    ("rvc_ifu_ibuffer", "Frontend.scala:125-132,226-231"),
+    ("uncache_fire", "Frontend.scala:442-445"),
+    ("ibuffer_frontend_info", "Frontend.scala:439-452"),
+)
+
+
+def frontend_parent_observation(*, need_flush: bool, redirect_valid: bool,
+                                redirect_debug_is_ctrl: bool,
+                                redirect_debug_is_mem_vio: bool,
+                                ftq_enq_valid: bool, ftq_enq_ready: bool,
+                                ftq_issue_valid: bool, ifu_ready: bool,
+                                icache_ready: bool, ifu_req_valid: bool,
+                                ifu_req_ready: bool, ifu_resp_valid: bool,
+                                ifu_resp_ready: bool, ibuffer_valid: bool,
+                                backend_can_accept: bool,
+                                icache_a_valid: bool, icache_a_ready: bool,
+                                icache_d_valid: bool, icache_d_ready: bool,
+                                uncache_a_valid: bool, uncache_a_ready: bool,
+                                uncache_d_valid: bool, uncache_d_ready: bool) -> dict[str, int]:
+    """Expose one source-backed Frontend parent observation cycle.
+
+    ``need_flush`` is the registered redirect value, rather than the current
+    redirect input, exactly as ``RegNext(io.backend.toFtq.redirect.valid)`` in
+    Frontend.scala.  Every transaction that the bounded parent owns is gated
+    by that delayed kill.  This is intentionally a small observation helper,
+    not a claim to model every BPU/FTQ state transition. / 暴露一个源代码支撑的
+    Frontend 父级观测周期。``need_flush`` 是寄存后的 redirect 值，而不是当前
+    redirect 输入，与 Frontend.scala 中的 ``RegNext`` 一致；有界父级拥有的每
+    笔事务均受该延迟 kill 门控。这是小型观测辅助器，并不声称模型化全部
+    BPU/FTQ 状态转换。
+    """
+    blocked = bool(need_flush)
+    return {
+        "redirect_sampled": int(bool(redirect_valid)),
+        "flush_control_redirect": int(blocked and bool(redirect_debug_is_ctrl)),
+        "flush_mem_vio_redirect": int(blocked and bool(redirect_debug_is_mem_vio)),
+        "ftq_enqueue_fire": int(bool(ftq_enq_valid) and bool(ftq_enq_ready) and not blocked),
+        "ftq_issue_fire": int(bool(ftq_issue_valid) and bool(ifu_ready) and bool(icache_ready) and not blocked),
+        "ifu_icache_request_fire": int(bool(ifu_req_valid) and bool(ifu_req_ready) and not blocked),
+        "ifu_icache_response_fire": int(bool(ifu_resp_valid) and bool(ifu_resp_ready) and not blocked),
+        "ibuffer_dequeue_fire": int(bool(ibuffer_valid) and bool(backend_can_accept) and not blocked),
+        "icache_a_fire": int(bool(icache_a_valid) and bool(icache_a_ready) and not blocked),
+        "icache_d_fire": int(bool(icache_d_valid) and bool(icache_d_ready) and not blocked),
+        "uncache_a_fire": int(bool(uncache_a_valid) and bool(uncache_a_ready) and not blocked),
+        "uncache_d_fire": int(bool(uncache_d_valid) and bool(uncache_d_ready) and not blocked),
+    }
 
 
 # =============================================================================
@@ -308,9 +372,15 @@ class FrontendChildBoundary(Elaboratable):
         self.wfi_req = Signal(name=f"{child_name}_wfiReq")
         self.req_valid = Signal(name=f"{child_name}_req_valid")
         self.req_ready = Signal(name=f"{child_name}_req_ready")
+        # Explicit Decoupled fire taps make the parent/child boundary
+        # observable without inferring a fire from a payload signal. /
+        # 显式 Decoupled fire 观测点使父子边界无需从 payload 推断 fire。
+        self.req_fire = Signal(name=f"{child_name}_req_fire")
         self.req_addr = Signal(cfg.vaddr_bits, name=f"{child_name}_req_addr")
         self.req_nextline = Signal(cfg.vaddr_bits, name=f"{child_name}_req_nextline")
         self.resp_valid = Signal(name=f"{child_name}_resp_valid")
+        self.resp_ready = Signal(name=f"{child_name}_resp_ready")
+        self.resp_fire = Signal(name=f"{child_name}_resp_fire")
         self.resp_data = Signal(cfg.instr_bits * 16, name=f"{child_name}_resp_data")
         self.resp_error = Signal(name=f"{child_name}_resp_error")
         self.wfi_safe = Signal(name=f"{child_name}_wfiSafe")
@@ -339,9 +409,13 @@ class FrontendChildBoundary(Elaboratable):
         busy = Signal(name=f"{self.child_name}_busy")
         saved_addr = Signal(cfg.vaddr_bits, name=f"{self.child_name}_saved_addr")
         request_fire = self.req_valid & self.req_ready
+        response_fire = self.resp_valid & self.resp_ready
         module.d.comb += [
-            self.req_ready.eq(~busy & ~self.flush & ~self.fencei),
+            self.req_ready.eq(~busy & ~self.flush & ~self.fencei & ~self.wfi_req),
+            self.req_fire.eq(request_fire & ~self.flush),
             self.resp_valid.eq(busy & ~self.flush),
+            self.resp_ready.eq(~self.flush),
+            self.resp_fire.eq(response_fire & ~self.flush),
             self.resp_data.eq(0),
             self.resp_error.eq(0),
             self.wfi_safe.eq(~busy),
@@ -438,6 +512,7 @@ class FrontendFtqEngine(Elaboratable):
         self.flush = Signal(name="ftq_flush")
         self.enq_valid = Signal(name="ftq_enq_valid")
         self.enq_ready = Signal(name="ftq_enq_ready")
+        self.enq_fire = Signal(name="ftq_enq_fire")
         self.enq_addr = Signal(cfg.vaddr_bits, name="ftq_enq_start_addr")
         self.enq_nextline = Signal(cfg.vaddr_bits, name="ftq_enq_nextline_addr")
         self.ifu_valid = Signal(name="ftq_to_ifu_valid")
@@ -446,6 +521,7 @@ class FrontendFtqEngine(Elaboratable):
         self.ifu_nextline = Signal(cfg.vaddr_bits, name="ftq_to_ifu_nextline_addr")
         self.ifu_index = Signal(cfg.ftq_idx_bits, name="ftq_to_ifu_index")
         self.icache_ready = Signal(name="ftq_icache_ready")
+        self.issue_fire = Signal(name="ftq_issue_fire")
         self.icache_valid = Signal(name="ftq_to_icache_valid")
         self.icache_addr = Signal(cfg.vaddr_bits, name="ftq_to_icache_addr")
         self.bpu_valid = Signal(name="ftq_to_bpu_valid")
@@ -478,6 +554,8 @@ class FrontendFtqEngine(Elaboratable):
         enq_fire = self.enq_valid & self.enq_ready
         module.d.comb += [
             self.enq_ready.eq((self.count < self.depth) & ~self.flush),
+            self.enq_fire.eq(enq_fire & ~self.flush),
+            self.issue_fire.eq(issue_fire & ~self.flush),
             self.ifu_valid.eq(issue_valid & ~self.flush),
             self.ifu_addr.eq(address_at_head),
             self.ifu_nextline.eq(nextline_at_head),
@@ -528,9 +606,11 @@ class FrontendIfuEngine(Elaboratable):
         self.ftq_index = Signal(cfg.ftq_idx_bits, name="ifu_ftq_index")
         self.icache_req_valid = Signal(name="ifu_icache_req_valid")
         self.icache_req_ready = Signal(name="ifu_icache_req_ready")
+        self.icache_req_fire = Signal(name="ifu_icache_req_fire")
         self.icache_req_addr = Signal(cfg.vaddr_bits, name="ifu_icache_req_addr")
         self.icache_resp_valid = Signal(name="ifu_icache_resp_valid")
         self.icache_resp_ready = Signal(name="ifu_icache_resp_ready")
+        self.icache_resp_fire = Signal(name="ifu_icache_resp_fire")
         self.icache_resp_data = Signal(cfg.instr_bits * 16, name="ifu_icache_resp_data")
         self.icache_resp_error = Signal(name="ifu_icache_resp_error")
         self.bpu_pred_taken = Signal(name="ifu_bpu_pred_taken")
@@ -544,6 +624,7 @@ class FrontendIfuEngine(Elaboratable):
         self.ptw_req_valid = Signal(name="ifu_ptw_req_valid")
         self.ptw_req_addr = Signal(cfg.vaddr_bits, name="ifu_ptw_req_addr")
         self.stage_valid = Signal(3, name="ifu_stage_valid")
+        self.flush_kill = Signal(name="ifu_flush_kill")
 
     # Elaborate a held-request pipeline that never drops an unaccepted beat. / 展开保持未接收事务且不丢失数据的流水。
     def elaborate(self, platform: Any) -> Module:
@@ -569,11 +650,14 @@ class FrontendIfuEngine(Elaboratable):
         req_fire = self.icache_req_valid & self.icache_req_ready
         resp_fire = self.icache_resp_valid & self.icache_resp_ready
         out_fire = self.ibuffer_valid & self.ibuffer_ready
+        flush_kill = self.flush
         module.d.comb += [
             self.ftq_ready.eq(~s0_valid & ~waiting & ~out_valid & ~self.flush),
             self.icache_req_valid.eq(s0_valid & ~waiting & ~out_valid & ~self.flush),
             self.icache_req_addr.eq(s0_addr),
+            self.icache_req_fire.eq(req_fire & ~flush_kill),
             self.icache_resp_ready.eq(waiting & ~out_valid & ~self.flush),
+            self.icache_resp_fire.eq(resp_fire & ~flush_kill),
             self.ibuffer_valid.eq(out_valid & ~self.flush),
             self.ibuffer_instr.eq(out_instr),
             self.ibuffer_pc.eq(out_pc),
@@ -583,6 +667,7 @@ class FrontendIfuEngine(Elaboratable):
             self.ptw_req_valid.eq(waiting & self.icache_resp_error & ~self.flush),
             self.ptw_req_addr.eq(s0_addr),
             self.stage_valid.eq(Cat(out_valid, waiting, s0_valid)),
+            self.flush_kill.eq(flush_kill),
         ]
         with module.If(self.reset | self.flush):
             module.d.frontend_sync += [s0_valid.eq(0), waiting.eq(0), out_valid.eq(0)]
@@ -621,6 +706,7 @@ class FrontendIbufferEngine(Elaboratable):
         self.flush = Signal(name="ibuffer_flush")
         self.enq_valid = Signal(name="ibuffer_enq_valid")
         self.enq_ready = Signal(name="ibuffer_enq_ready")
+        self.enq_fire = Signal(name="ibuffer_enq_fire")
         self.enq_instr = Signal(cfg.instr_bits, name="ibuffer_enq_instr")
         self.enq_pc = Signal(cfg.vaddr_bits, name="ibuffer_enq_pc")
         self.enq_is_rvc = Signal(name="ibuffer_enq_is_rvc")
@@ -633,6 +719,7 @@ class FrontendIbufferEngine(Elaboratable):
         self.cf_is_rvc = Signal(cfg.fetch_width, name="ibuffer_cf_is_rvc")
         self.cf_pred_taken = Signal(cfg.fetch_width, name="ibuffer_cf_pred_taken")
         self.cf_exception = Signal(cfg.fetch_width, name="ibuffer_cf_exception")
+        self.deq_fire = Signal(name="ibuffer_deq_fire")
         self.full = Signal(name="ibuffer_full")
         self.stall = Signal(name="ibuffer_stall")
         self.count = Signal(range(depth + 1), name="ibuffer_count")
@@ -654,10 +741,12 @@ class FrontendIbufferEngine(Elaboratable):
         pred_mem = [Signal(name=f"ibuffer_pred_{i}") for i in range(self.depth)]
         exc_mem = [Signal(name=f"ibuffer_exc_{i}") for i in range(self.depth)]
         valid = self.count != 0
-        enq_fire = self.enq_valid & self.enq_ready
+        enq_fire = self.enq_valid & self.enq_ready & ~self.flush
         deq_fire = valid & self.backend_can_accept & ~self.flush
         module.d.comb += [
             self.enq_ready.eq((self.count < self.depth) & ~self.flush),
+            self.enq_fire.eq(enq_fire & ~self.flush),
+            self.deq_fire.eq(deq_fire),
             self.cf_valid.eq(valid),
             self.cf_instr.eq(Array(instr_mem)[head]),
             self.cf_pc.eq(Array(pc_mem)[head]),
@@ -955,6 +1044,7 @@ class FrontendParent(Elaboratable):
         self.redirect_ftq_offset = Signal(cfg.ftq_offset_bits, name="io_backend_toFtq_redirect_ftqOffset")
         self.redirect_level = Signal(name="io_backend_toFtq_redirect_level")
         self.redirect_pc = Signal(cfg.vaddr_bits, name="io_backend_toFtq_redirect_pc")
+        self.redirect_target = Signal(cfg.vaddr_bits, name="io_backend_toFtq_redirect_target")
         self.redirect_cfi_taken = Signal(name="io_backend_toFtq_redirect_cfiTaken")
         self.redirect_debug_ctrl = Signal(name="io_backend_toFtq_redirect_debugIsCtrl")
         self.redirect_debug_memvio = Signal(name="io_backend_toFtq_redirect_debugIsMemVio")
@@ -1020,6 +1110,24 @@ class FrontendParent(Elaboratable):
         self.ptw_req_vpn = Signal(max(1, cfg.vaddr_bits - 12), name="io_ptw_req_vpn")
         self.ptw_resp_ready = Signal(name="io_ptw_resp_ready")
         self.perf = [Signal(cfg.perf_bits, name=f"io_perf_{index}_value") for index in range(cfg.perf_count)]
+
+        # Parent-owned fire/kill observations.  These are intentionally
+        # internal compact taps: the locked 371-port envelope remains exact,
+        # while tests and injected children can inspect the same boundaries as
+        # the source Frontend.scala equations. / 父级拥有的 fire/kill 观测点；
+        # 它们是内部紧凑 tap，锁定 371 端口包络保持不变，同时测试和注入子级
+        # 可以观察与 Frontend.scala 方程相同的边界。
+        self.redirect_kill = Signal(name="frontend_redirect_kill")
+        self.ftq_enq_fire = Signal(name="frontend_ftq_enq_fire")
+        self.ftq_issue_fire = Signal(name="frontend_ftq_issue_fire")
+        self.ifu_icache_req_fire = Signal(name="frontend_ifu_icache_req_fire")
+        self.ifu_icache_resp_fire = Signal(name="frontend_ifu_icache_resp_fire")
+        self.ibuffer_enq_fire = Signal(name="frontend_ibuffer_enq_fire")
+        self.ibuffer_deq_fire = Signal(name="frontend_ibuffer_deq_fire")
+        self.icache_req_fire = Signal(name="frontend_icache_req_fire")
+        self.icache_resp_fire = Signal(name="frontend_icache_resp_fire")
+        self.uncache_req_fire = Signal(name="frontend_uncache_req_fire")
+        self.uncache_resp_fire = Signal(name="frontend_uncache_resp_fire")
 
         # Materialize the exact 371-port XSTop inventory. / 实例化与 XSTop 完全一致的 371 个端口清单。
         self.frontend_port_specs = frontend_port_specs()
