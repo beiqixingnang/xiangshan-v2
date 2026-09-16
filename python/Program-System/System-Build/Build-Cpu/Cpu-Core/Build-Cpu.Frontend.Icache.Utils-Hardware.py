@@ -13,13 +13,30 @@ from amaranth import Array, Elaboratable, Module, Mux, Signal
 # This family covers the exact V2 DeMultiplexer and MuxBundle declarations in
 # ICacheMissUnit.scala plus FIFOReg in FIFO.scala.  Payloads are intentionally
 # scalarized at this boundary; callers choose the packed width of their bundle.
-__all__ = ["DeMultiplexer", "MuxBundle", "FIFOReg"]
+__all__ = ["DeMultiplexer", "MuxBundle", "FIFOReg", "fifo_observation", "build_verilog", "main"]
 
 
 # Configuration
 # ---------------------------------------------------------------------------
 # Width and entry parameters are explicit constructor values; no host probing
 # or sibling-module imports are used.
+
+
+def fifo_observation(occupancy: int, entries: int, enq_valid: bool,
+                     deq_ready: bool, pipe: bool = False,
+                     flush: bool = False) -> dict[str, int]:
+    """Return FIFO ready/valid/fire and next occupancy for one cycle. / 返回 FIFO 单周期握手与占用量。"""
+
+    if entries < 1 or not 0 <= occupancy <= entries:
+        raise ValueError("invalid FIFO occupancy")
+    deq_valid = occupancy > 0
+    enq_ready = occupancy < entries or (pipe and deq_ready)
+    enq_fire = bool(enq_valid and enq_ready and not flush)
+    deq_fire = bool(deq_valid and deq_ready and not flush)
+    next_occupancy = 0 if flush else occupancy + int(enq_fire) - int(deq_fire)
+    return {"enq_ready": int(enq_ready), "deq_valid": int(deq_valid),
+            "enq_fire": int(enq_fire), "deq_fire": int(deq_fire),
+            "next_occupancy": next_occupancy}
 
 
 # Implementation

@@ -14,7 +14,7 @@ from amaranth import Array, Cat, Elaboratable, Module, Mux, Signal
 # V2 places ICacheReplacer in ICache.scala and instantiates two
 # SetAssocLRU(PseudoLRU) policies, one for each interleaved set bank.  Two hit
 # touches and one delayed victim touch are retained as separate observations.
-__all__ = ["ReplacerConfig", "ICacheReplacer"]
+__all__ = ["ReplacerConfig", "ICacheReplacer", "replacer_request_observation", "build_verilog", "main"]
 
 
 # Configuration
@@ -54,6 +54,16 @@ class ReplacerConfig:
         if self.policy.lower() == "setlru":
             return self.n_ways * (self.n_ways - 1) // 2
         return max(1, self.n_ways - 1)
+
+
+def replacer_request_observation(v_set_idx: int, request_valid: bool,
+                                 n_sets: int = 256, port_number: int = 2) -> dict[str, int]:
+    """Return interleaved bank/set routing used by ICacheReplacer. / 返回 ICacheReplacer 的交错 bank/set 路由。"""
+
+    if n_sets < 2 or port_number != 2 or n_sets % port_number:
+        raise ValueError("ICacheReplacer requires two evenly interleaved banks")
+    index = int(v_set_idx) & (n_sets - 1)
+    return {"bank": index & 1, "bank_set": index >> 1, "request_valid": int(bool(request_valid))}
 
 
 # Implementation
