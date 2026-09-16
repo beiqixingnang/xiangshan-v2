@@ -268,3 +268,16 @@ next wave. Leaf workers run static checks and direct Amaranth tests; Verilator
 and Yosys are reserved for family/parent checkpoints or a failed spot-check.
 This keeps the implementation lane moving while preserving the existing
 evidence and acceptance gates.
+
+## Rewrite-debt checkpoint (2026-09-16)
+
+The shared freeze audit is a static scaffold gate, not proof that every
+candidate has been semantically rewritten.  The authoritative core inventory
+still contains 34 entries with `v2_status = CANDIDATE_V2_REUSE`; those files
+must receive source-backed V2 logic before they can be counted as landed
+rewrites.  A wave therefore counts only when it changes at least three
+disjoint aggregate Build files (or one complete parent), records the covered
+Scala-path delta, and passes one shared static sweep.  Evidence-only, hash-only,
+or protocol-log-only commits do not reduce this rewrite debt.  Until the debt
+is closed, reports must show both the 78/78 static freeze result and the
+remaining candidate count separately.
