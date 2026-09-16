@@ -203,6 +203,7 @@ class ICacheReplacer(Elaboratable):
         self.victim_req_valid = Signal(name="io_victim_vSetIdx_valid")
         self.victim_req_v_set_idx = Signal(c.idx_bits, name="io_victim_vSetIdx_bits")
         self.victim_resp_way = Signal(c.way_bits, name="io_victim_way")
+        self.victim_resp_valid = Signal(name="io_victim_valid")
 
     # Route interleaved touches and delay victim touch-back by one cycle. / 路由交错 touch，并将 victim touch-back 延迟一个周期。
     def elaborate(self, platform) -> Module:
@@ -252,6 +253,7 @@ class ICacheReplacer(Elaboratable):
                 victim_way_reg.eq(self.victim_resp_way),
             ]
         m.d.sync += victim_valid_reg.eq(self.victim_req_valid)
+        m.d.comb += self.victim_resp_valid.eq(victim_valid_reg)
 
         for bank, policy in enumerate(policies):
             m.d.comb += [
@@ -275,11 +277,12 @@ def build_verilog(configuration, injected_dependencies):
     if isinstance(configuration, ReplacerConfig):
         cfg = configuration
     elif isinstance(configuration, dict):
-        cfg = ReplacerConfig(**configuration)
+        cfg = ReplacerConfig(**{key: value for key, value in configuration.items()
+                                if key in ReplacerConfig.__dataclass_fields__})
     else:
         cfg = ReplacerConfig()
     top = ICacheReplacer(cfg)
-    ports = [top.victim_req_valid, top.victim_req_v_set_idx, top.victim_resp_way]
+    ports = [top.victim_req_valid, top.victim_req_v_set_idx, top.victim_resp_way, top.victim_resp_valid]
     ports += top.touch_req_valid + top.touch_req_v_set_idx + top.touch_req_way
     return verilog.convert(top, name="ICacheReplacer", ports=ports)
 

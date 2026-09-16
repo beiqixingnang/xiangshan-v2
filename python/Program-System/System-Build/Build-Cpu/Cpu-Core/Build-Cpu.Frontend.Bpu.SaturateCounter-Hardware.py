@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, cast
+from typing import Any, Mapping, cast
 
 from amaranth import Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
@@ -185,6 +185,7 @@ class SaturateCounterReg(Elaboratable):
         self.next_value = Signal(cfg.width, name="next_value")
         self.is_positive = Signal(name="is_positive")
         self.is_saturate = Signal(name="is_saturate")
+        self.step_fire = Signal(name="step_fire")
 
     # Elaborate one synchronous satUpdate recurrence. / 展开一个同步 satUpdate 递推。
     def elaborate(self, platform: Any) -> Module:
@@ -193,6 +194,7 @@ class SaturateCounterReg(Elaboratable):
         module: Any = Module()
         counter = SaturateCounter(self.configuration.width, self.value)
         module.d.comb += [
+            self.step_fire.eq(self.en),
             self.next_value.eq(counter.get_updated_value(self.increase, self.en)),
             self.is_positive.eq(counter.is_positive()),
             self.is_saturate.eq(counter.is_saturate()),
@@ -207,12 +209,19 @@ class SaturateCounterReg(Elaboratable):
 # Emit deterministic RTL for the registered counter. / 输出确定性的寄存器计数器 RTL。
 def build_verilog(configuration, injected_dependencies):
     del injected_dependencies
-    top = SaturateCounterReg(configuration)
+    if isinstance(configuration, SaturateCounterConfig):
+        cfg = configuration
+    elif isinstance(configuration, Mapping):
+        cfg = SaturateCounterConfig(**{key: value for key, value in configuration.items()
+                                       if key in SaturateCounterConfig.__dataclass_fields__})
+    else:
+        cfg = SaturateCounterConfig()
+    top = SaturateCounterReg(cfg)
     return verilog.convert(
         top,
         name="SaturateCounter",
         ports=[top.en, top.increase, top.value, top.next_value,
-               top.is_positive, top.is_saturate],
+               top.is_positive, top.is_saturate, top.step_fire],
         emit_src=False,
     )
 

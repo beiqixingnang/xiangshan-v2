@@ -5,7 +5,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, cast
+from typing import Any, Mapping, cast
 
 from amaranth import Cat, Const, Elaboratable, Module, Mux, Signal
 
@@ -117,6 +117,7 @@ class FTBEntryGen(Elaboratable):
         self.mispred_mask_1 = Signal(name="io_mispred_mask_1")
         self.mispred_mask_2 = Signal(name="io_mispred_mask_2")
         self.is_old_entry = Signal(name="io_is_old_entry")
+        self.update_valid = Signal(name="io_update_valid")
 
     # Elaborate the V2 NewFtq FTB-entry equations as one combinational module.
     # Elaborate the V2 NewFtq FTB-entry equations as one combinational module. / 将 V2 NewFtq FTB 条目方程展开为一个组合逻辑模块。
@@ -266,6 +267,7 @@ class FTBEntryGen(Elaboratable):
 
         tail_share_marker = new_tail_valid & new_tail_sharing
         module.d.comb += [
+            self.update_valid.eq(self.new_valid),
             self.new_is_call.eq(Mux(self.hit, gen5 & self.old_is_call, entry_has_jmp & self.pd_jmp_info_1 & self.cfi_index_valid)),
             self.new_is_ret.eq(Mux(self.hit, gen5 & self.old_is_ret, entry_has_jmp & self.pd_jmp_info_2 & self.cfi_index_valid)),
             self.new_is_jalr.eq(Mux(self.hit, gen5 & self.old_is_jalr, init_entry_is_jalr)),
@@ -314,7 +316,14 @@ def build_verilog(configuration, injected_dependencies):
     del injected_dependencies
     from amaranth.back import verilog
 
-    top = FTBEntryGen(configuration if isinstance(configuration, FTBEntryGenConfig) else FTBEntryGenConfig())
+    if isinstance(configuration, FTBEntryGenConfig):
+        cfg = configuration
+    elif isinstance(configuration, Mapping):
+        cfg = FTBEntryGenConfig(**{key: value for key, value in configuration.items()
+                                   if key in FTBEntryGenConfig.__dataclass_fields__})
+    else:
+        cfg = FTBEntryGenConfig()
+    top = FTBEntryGen(cfg)
     inputs = [
         top.start_addr, top.old_is_call, top.old_is_ret, top.old_is_jalr, top.old_valid,
         top.old_br_offset, top.old_br_sharing, top.old_br_valid, top.old_br_lower, top.old_br_tar_stat,
@@ -331,6 +340,7 @@ def build_verilog(configuration, injected_dependencies):
         top.new_pft_addr, top.new_carry, top.new_last_rvi_call, top.new_strong_bias_0, top.new_strong_bias_1,
         top.taken_mask_0, top.taken_mask_1, top.jmp_taken,
         top.mispred_mask_0, top.mispred_mask_1, top.mispred_mask_2, top.is_old_entry,
+        top.update_valid,
     ]
     return verilog.convert(top, ports=inputs + outputs, name="FTBEntryGen")
 

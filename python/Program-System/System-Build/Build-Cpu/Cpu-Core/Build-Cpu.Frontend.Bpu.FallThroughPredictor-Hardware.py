@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Mapping
 
 from amaranth import Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
@@ -182,6 +182,7 @@ class FallThroughPredictor(Elaboratable):
         self.pred_cross_page = Signal(name="pred_cross_page")
         self.fall_through_addr = Signal(bits, name="fall_through_addr")
         self.fall_through_err = Signal(name="fall_through_err")
+        self.stage_valid = Signal(name="stage_valid")
 
     # Align an encoded address to the configured fetch block. / 将编码地址对齐到配置的取指块。
     def cat_align(self, pc: Any) -> Any:
@@ -230,6 +231,7 @@ class FallThroughPredictor(Elaboratable):
         cfi_width = cfg.effective_cfi_position_width
         cfi_value = pft_reg[:cfi_width] if cfg.pft_width >= cfi_width else pft_reg
         module.d.comb += [
+            self.stage_valid.eq(self.s1_fire & valid_reg),
             self.train_ready.eq(1),
             self.sram_reset_done.eq(1),
             self.pred_taken.eq(0),
@@ -248,7 +250,14 @@ class FallThroughPredictor(Elaboratable):
 # Emit deterministic RTL for the fall-through closure. / 输出顺序地址闭包 RTL。
 def build_verilog(configuration, injected_dependencies):
     del injected_dependencies
-    top = FallThroughPredictor(configuration)
+    if isinstance(configuration, FallThroughConfig):
+        cfg = configuration
+    elif isinstance(configuration, Mapping):
+        cfg = FallThroughConfig(**{key: value for key, value in configuration.items()
+                                   if key in FallThroughConfig.__dataclass_fields__})
+    else:
+        cfg = FallThroughConfig()
+    top = FallThroughPredictor(cfg)
     return verilog.convert(
         top,
         name="FallThroughPredictor",
@@ -256,7 +265,7 @@ def build_verilog(configuration, injected_dependencies):
                top.carry, top.pft_addr, top.entry_valid, top.hit,
                top.train_ready, top.sram_reset_done, top.pred_taken,
                top.pred_cfi_position, top.pred_target, top.pred_cross_page,
-               top.fall_through_addr, top.fall_through_err],
+               top.fall_through_addr, top.fall_through_err, top.stage_valid],
         emit_src=False,
     )
 

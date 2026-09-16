@@ -112,6 +112,9 @@ class ICacheMSHR(Elaboratable):
         self.info_v_set_idx = Signal(c.idx_bits, name="io_resp_bits_vSetIdx")
         self.info_way = Signal(c.way_bits, name="io_resp_bits_way")
         self.perf_latency = Signal(c.latency_bits, name="perf_latency")
+        # Explicit handshake taps let a parent account for issue/retire events.
+        self.acquire_fire = Signal(name="io_acquire_fire")
+        self.response_fire = Signal(name="io_response_fire")
 
     # Elaborate the request/issue/response state machine. / 实例化请求、发出和响应状态机。
     def elaborate(self, platform) -> Module:
@@ -198,6 +201,7 @@ class ICacheMSHR(Elaboratable):
         else:
             m.d.comb += self.acquire_alias_tag.eq(0)
         acquire_fire = self.acquire_valid & self.acquire_ready
+        m.d.comb += self.acquire_fire.eq(acquire_fire)
 
         # Latch the victim and start the response-latency counter on fire.
         with m.If(acquire_fire):
@@ -212,6 +216,7 @@ class ICacheMSHR(Elaboratable):
         # Keep response payload stable while valid, even when hidden by flush.
         m.d.comb += [
             self.info_valid.eq(valid & ~flush_reg & ~fencei_reg),
+            self.response_fire.eq(self.info_valid & self.invalid),
             self.info_blk_paddr.eq(blk_paddr),
             self.info_v_set_idx.eq(v_set_idx),
             self.info_way.eq(way),
@@ -282,6 +287,8 @@ def build_verilog(configuration, injected_dependencies):
         top.info_v_set_idx,
         top.info_way,
         top.perf_latency,
+        top.acquire_fire,
+        top.response_fire,
     ]
     ports += top.lookup_valid + top.lookup_blk_paddr + top.lookup_v_set_idx + top.lookup_hit
     return verilog.convert(top, name="ICacheMSHR", ports=ports)

@@ -5,7 +5,7 @@ V2 快速辅助 FTB 单路标签与写旁路行为。
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Mapping
 
 from amaranth import ClockDomain, Elaboratable, Module, Signal
 
@@ -105,6 +105,7 @@ class FauFTBWay(Elaboratable):
         self.write_strong_bias_0 = Signal(name="io_write_entry_strong_bias_0")
         self.write_strong_bias_1 = Signal(name="io_write_entry_strong_bias_1")
         self.write_tag = Signal(c.tag_width, name="io_write_tag")
+        self.write_fire = Signal(name="io_write_fire")
 
     # Elaborate registered entry storage, tag compares, and write bypass.
     # 展开寄存式条目存储、标签比较及写旁路。 /
@@ -141,6 +142,7 @@ class FauFTBWay(Elaboratable):
         # The response is a direct view of the stored FTB entry.
         # 响应是存储 FTB 条目的直接视图。
         m.d.comb += [
+            self.write_fire.eq(self.write_valid),
             self.resp_is_call.eq(data_is_call),
             self.resp_is_ret.eq(data_is_ret),
             self.resp_is_jalr.eq(data_is_jalr),
@@ -208,7 +210,13 @@ def build_verilog(configuration, injected_dependencies):
     del injected_dependencies
     from amaranth.back import verilog
 
-    config = configuration if isinstance(configuration, FauFTBWayConfig) else FauFTBWayConfig()
+    if isinstance(configuration, FauFTBWayConfig):
+        config = configuration
+    elif isinstance(configuration, Mapping):
+        config = FauFTBWayConfig(**{key: value for key, value in configuration.items()
+                                    if key in FauFTBWayConfig.__dataclass_fields__})
+    else:
+        config = FauFTBWayConfig()
     top = FauFTBWay(config)
     ports = [
         top.clock,
@@ -257,6 +265,7 @@ def build_verilog(configuration, injected_dependencies):
         top.write_strong_bias_0,
         top.write_strong_bias_1,
         top.write_tag,
+        top.write_fire,
     ]
     return verilog.convert(top, ports=ports, name="FauFTBWay")
 

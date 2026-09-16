@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Sequence, cast
+from typing import Any, Mapping, Sequence, cast
 
 from amaranth import Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
@@ -141,6 +141,8 @@ class CompareMatrix(Elaboratable):
         self.lower_element_mask = Signal(cfg.n, name="lower_element_mask")
         self.least_element_oh = Signal(cfg.n, name="least_element_oh")
         self.greatest_element_oh = Signal(cfg.n, name="greatest_element_oh")
+        # Parent-visible commit indicator: at least one queue entry is eligible.
+        self.selection_valid = Signal(name="selection_valid")
 
     # Expose the historical positions view without creating a signal alias. / 暴露历史 positions 视图。
     @property
@@ -222,6 +224,7 @@ class CompareMatrix(Elaboratable):
                 cast(Any, self.least_element_oh[i]).eq(least_terms[i]),
                 cast(Any, self.greatest_element_oh[i]).eq(greatest_terms[i]),
             ]
+        module.d.comb += self.selection_valid.eq(self.least_element_oh != 0)
         return module
 
 
@@ -231,13 +234,20 @@ class CompareMatrix(Elaboratable):
 # Emit deterministic RTL for the ordering closure. / 输出确定性的排序闭包 RTL。
 def build_verilog(configuration, injected_dependencies):
     del injected_dependencies
-    top = CompareMatrix(configuration)
+    if isinstance(configuration, CompareMatrixConfig):
+        cfg = configuration
+    elif isinstance(configuration, Mapping):
+        cfg = CompareMatrixConfig(**{key: value for key, value in configuration.items()
+                                     if key in CompareMatrixConfig.__dataclass_fields__})
+    else:
+        cfg = CompareMatrixConfig()
+    top = CompareMatrix(cfg)
     ports: list[Any] = [top.clock, top.reset, *top.issue_queue_counts, top.valid]
     ports.extend(top.compare_matrix)
     ports.extend(top.iq_sort)
     ports.extend(top.min_iq_sel)
     ports.extend([top.lower_element_mask, top.least_element_oh,
-                  top.greatest_element_oh])
+                  top.greatest_element_oh, top.selection_valid])
     return verilog.convert(top, name="CompareMatrix", ports=ports, emit_src=False)
 
 
