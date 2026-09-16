@@ -246,7 +246,7 @@ class ICacheReplacer(Elaboratable):
 
         victim_set_reg = Signal(c.idx_bits, name="victim_vSetIdx_reg")
         victim_way_reg = Signal(c.way_bits, name="victim_way_reg")
-        victim_valid_reg = Signal(name="victim_valid_reg")
+        victim_valid_reg = Signal(name="victim_valid_reg", reset=0)
         with m.If(self.victim_req_valid):
             m.d.sync += [
                 victim_set_reg.eq(self.victim_req_v_set_idx),
