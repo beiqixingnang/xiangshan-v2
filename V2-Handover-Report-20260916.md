@@ -66,8 +66,9 @@ reruns pass their bounded gates. FuncUnit's current evidence is a real FAIL
 Subsequent coordinator work landed IssueEntries (`3e9f104`), Regfile
 structure typing (`13e09c0`), and FuncUnit strict typing (`af425cc` through
 `1cc5772`). The shared structure sweep is now 86/86, and the registered
-hierarchy coverage is 784 core + 961 family + 231 missing after registering
-the additional Regfile-owned Snapshot/RFRead/RFWB/WbFu source roots. Lsqueue's fast
+hierarchy coverage is 793 core + 961 family + 222 missing after registering
+the additional Regfile-owned Snapshot/RFRead/RFWB/WbFu roots and the CSR event
+closure. Lsqueue's fast
 checkpoint is still a real failure (FreeList 1107/1200 and UncacheEntry_15
 23293/37600 comparisons), so this report records structure only and does not
 promote behavioral equivalence. The working tree also contains untracked
