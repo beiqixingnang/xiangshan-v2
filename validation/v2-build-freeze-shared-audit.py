@@ -17,7 +17,12 @@ for p in files:
       if not rec['gates']['build_verilog_available']: rec['errors'].append('missing build_verilog')
     except Exception as e: rec['gates']['exact_import']=False; rec['gates']['build_verilog_available']=False; rec['errors'].append(f'import:{e}')
     try:
-      r=subprocess.run(['pyright.cmd','--outputjson',str(p)],capture_output=True,text=True,timeout=60); j=json.loads(r.stdout or '{}'); rec['gates']['single_file_pyright']=j.get('summary',{}).get('errorCount',1)==0; rec['pyright_errors']=j.get('summary',{}).get('errorCount')
+      # Use forward slashes so Pyright's Windows JSON remains valid when the
+      # workspace path contains backslash-prefixed Unicode escapes (for
+      # example ``D:\知识库开发``). / 使用正斜杠，避免工作区路径中的反斜杠被
+      # Pyright 写成非法 JSON 转义。
+      pyright_path = str(p).replace('\\', '/')
+      r=subprocess.run(['pyright.cmd','--outputjson',pyright_path],capture_output=True,text=True,timeout=60); j=json.loads(r.stdout or '{}'); rec['gates']['single_file_pyright']=j.get('summary',{}).get('errorCount',1)==0; rec['pyright_errors']=j.get('summary',{}).get('errorCount')
     except Exception as e: rec['gates']['single_file_pyright']=False; rec['errors'].append(f'pyright:{e}')
     rec['pass']=all(rec['gates'].values()); rows.append(rec)
 summary={k:sum(1 for r in rows if r['gates'].get(k)) for k in ['utf8_lf','ast_parse','py_compile','exact_import','build_verilog_available','single_file_pyright']}

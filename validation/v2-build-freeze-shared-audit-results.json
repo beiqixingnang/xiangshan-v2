@@ -1,21 +1,21 @@
 {
   "schema_version": 1,
   "kind": "XIANGSHAN_V2_BUILD_FREEZE_SHARED_AUDIT",
-  "target_count": 82,
+  "target_count": 86,
   "excluded_nonclosure": [
     "Build-Cpu.Backend.Datapath.VldMergeUnit-Hardware.py",
     "Build-Cpu.Top.UHSCTop-GenerationProbe-Hardware.py"
   ],
   "gates": {
-    "utf8_lf": 82,
-    "ast_parse": 82,
-    "py_compile": 82,
-    "exact_import": 82,
-    "build_verilog_available": 82,
-    "single_file_pyright": 82
+    "utf8_lf": 86,
+    "ast_parse": 86,
+    "py_compile": 86,
+    "exact_import": 86,
+    "build_verilog_available": 86,
+    "single_file_pyright": 85
   },
-  "pass_count": 82,
-  "fail_count": 0,
+  "pass_count": 85,
+  "fail_count": 1,
   "verilator": "NOT_RUN",
   "yosys": "NOT_RUN",
   "results": [
@@ -116,6 +116,21 @@
       "errors": [],
       "pyright_errors": 0,
       "pass": true
+    },
+    {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Exu.FuncUnit-Hardware.py",
+      "gates": {
+        "utf8_lf": true,
+        "ast_parse": true,
+        "py_compile": true,
+        "exact_import": true,
+        "build_verilog_available": true,
+        "single_file_pyright": false
+      },
+      "errors": [
+        "pyright:Invalid \\escape: line 6 column 34 (char 128)"
+      ],
+      "pass": false
     },
     {
       "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.AluDataModule-Hardware.py",
@@ -454,6 +469,20 @@
       "pass": true
     },
     {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.Entries-Hardware.py",
+      "gates": {
+        "utf8_lf": true,
+        "ast_parse": true,
+        "py_compile": true,
+        "exact_import": true,
+        "build_verilog_available": true,
+        "single_file_pyright": true
+      },
+      "errors": [],
+      "pyright_errors": 0,
+      "pass": true
+    },
+    {
       "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.FuBusyTableRead-Hardware.py",
       "gates": {
         "utf8_lf": true,
@@ -469,6 +498,20 @@
     },
     {
       "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.ImmExtractor-Hardware.py",
+      "gates": {
+        "utf8_lf": true,
+        "ast_parse": true,
+        "py_compile": true,
+        "exact_import": true,
+        "build_verilog_available": true,
+        "single_file_pyright": true
+      },
+      "errors": [],
+      "pyright_errors": 0,
+      "pass": true
+    },
+    {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Regfile.Regfile-Hardware.py",
       "gates": {
         "utf8_lf": true,
         "ast_parse": true,
@@ -1141,6 +1184,20 @@
     },
     {
       "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.FrontendBridge-Hardware.py",
+      "gates": {
+        "utf8_lf": true,
+        "ast_parse": true,
+        "py_compile": true,
+        "exact_import": true,
+        "build_verilog_available": true,
+        "single_file_pyright": true
+      },
+      "errors": [],
+      "pyright_errors": 0,
+      "pass": true
+    },
+    {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Lsqueue.Uncache-Hardware.py",
       "gates": {
         "utf8_lf": true,
         "ast_parse": true,
