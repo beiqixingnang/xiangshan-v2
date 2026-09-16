@@ -5,9 +5,9 @@
  "reference_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
  "locked_module_count": 1976,
  "status_counts": {
-  "CORE_BOUNDED_SUBJECT": 521,
-  "FAMILY_SUBJECT": 973,
-  "MISSING": 482
+  "CORE_BOUNDED_SUBJECT": 703,
+  "FAMILY_SUBJECT": 961,
+  "MISSING": 312
  },
  "row_count": 1976,
  "rows": [
@@ -759,14 +759,16 @@
   },
   {
    "module": "Alu",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 14,
    "children": 1,
    "scala_sources": [
     "xiangshan/backend/fu/FuncUnit.scala",
     "xiangshan/backend/fu/wrapper/Alu.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -1554,26 +1556,30 @@
   },
   {
    "module": "Bku",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 19,
    "children": 4,
    "scala_sources": [
     "xiangshan/backend/fu/Bku.scala",
     "xiangshan/backend/fu/FuncUnit.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "BlockCipherModule",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 6,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/fu/Bku.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -1631,14 +1637,16 @@
   },
   {
    "module": "BranchUnit",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 117,
    "children": 2,
    "scala_sources": [
     "xiangshan/backend/fu/FuncUnit.scala",
     "xiangshan/backend/fu/wrapper/BranchUnit.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -1659,49 +1667,57 @@
   },
   {
    "module": "BusyTable",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 132,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/rename/BusyTable.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "BusyTable_1",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 73,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/rename/BusyTable.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "BusyTable_2",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 67,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/rename/BusyTable.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "BusyTable_3",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 43,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/rename/BusyTable.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -2187,7 +2203,7 @@
   },
   {
    "module": "CSR",
-   "status": "FAMILY_SUBJECT",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 439,
    "children": 5,
    "scala_sources": [
@@ -2195,7 +2211,9 @@
     "xiangshan/backend/fu/FuncUnit.scala",
     "xiangshan/backend/fu/wrapper/CSR.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [
     "dependency.utility"
    ],
@@ -2435,13 +2453,15 @@
   },
   {
    "module": "ClmulModule",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 6,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/fu/Bku.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -2801,13 +2821,15 @@
   },
   {
    "module": "CountModule",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 5,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/fu/Bku.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -2825,13 +2847,15 @@
   },
   {
    "module": "CryptoModule",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 6,
    "children": 2,
    "scala_sources": [
     "xiangshan/backend/fu/Bku.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -3361,13 +3385,15 @@
   },
   {
    "module": "DecodeUnitComp",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 686,
    "children": 1,
    "scala_sources": [
     "xiangshan/backend/decode/DecodeUnitComp.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -4280,170 +4306,198 @@
   },
   {
    "module": "Dispatcher",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 9,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/exu/ExeUnit.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "Dispatcher_1",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 41,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/exu/ExeUnit.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "Dispatcher_10",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 13,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/exu/ExeUnit.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "Dispatcher_13",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 39,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/exu/ExeUnit.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "Dispatcher_14",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 49,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/exu/ExeUnit.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "Dispatcher_15",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 23,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/exu/ExeUnit.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "Dispatcher_16",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 19,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/exu/ExeUnit.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "Dispatcher_17",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 53,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/exu/ExeUnit.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "Dispatcher_4",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 5,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/exu/ExeUnit.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "Dispatcher_5",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 74,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/exu/ExeUnit.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "Dispatcher_7",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 39,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/exu/ExeUnit.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "Dispatcher_8",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 31,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/exu/ExeUnit.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "Dispatcher_9",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 21,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/exu/ExeUnit.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "DivUnit",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 22,
    "children": 1,
    "scala_sources": [
     "xiangshan/backend/fu/FuncUnit.scala",
     "xiangshan/backend/fu/wrapper/DivUnit.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -4846,169 +4900,197 @@
   },
   {
    "module": "EnqEntry",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 240,
    "children": 6,
    "scala_sources": [
     "xiangshan/backend/issue/EnqEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "EnqEntryVecMem",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 291,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/issue/EnqEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "EnqEntryVecMem_2",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 285,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/issue/EnqEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "EnqEntry_10",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 146,
    "children": 9,
    "scala_sources": [
     "xiangshan/backend/issue/EnqEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "EnqEntry_12",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 140,
    "children": 9,
    "scala_sources": [
     "xiangshan/backend/issue/EnqEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "EnqEntry_14",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 281,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/issue/EnqEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "EnqEntry_16",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 254,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/issue/EnqEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "EnqEntry_18",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 233,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/issue/EnqEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "EnqEntry_20",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 190,
    "children": 3,
    "scala_sources": [
     "xiangshan/backend/issue/EnqEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "EnqEntry_24",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 215,
    "children": 3,
    "scala_sources": [
     "xiangshan/backend/issue/EnqEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "EnqEntry_30",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 218,
    "children": 3,
    "scala_sources": [
     "xiangshan/backend/issue/EnqEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "EnqEntry_4",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 270,
    "children": 6,
    "scala_sources": [
     "xiangshan/backend/issue/EnqEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "EnqEntry_6",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 234,
    "children": 6,
    "scala_sources": [
     "xiangshan/backend/issue/EnqEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "EnqEntry_8",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 158,
    "children": 9,
    "scala_sources": [
     "xiangshan/backend/issue/EnqEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -5070,169 +5152,197 @@
   },
   {
    "module": "EntriesAluBrhJmpI2fVsetriwiVsetriwvfI2v",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 481,
    "children": 26,
    "scala_sources": [
     "xiangshan/backend/issue/Entries.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "EntriesAluCsrFenceDiv",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 442,
    "children": 26,
    "scala_sources": [
     "xiangshan/backend/issue/Entries.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "EntriesAluMulBkuBrhJmp",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 449,
    "children": 26,
    "scala_sources": [
     "xiangshan/backend/issue/Entries.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "EntriesFaluFcvtF2vFmacFdiv",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 303,
    "children": 20,
    "scala_sources": [
     "xiangshan/backend/issue/Entries.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "EntriesFaluFmac",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 263,
    "children": 20,
    "scala_sources": [
     "xiangshan/backend/issue/Entries.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "EntriesFaluFmacFdiv",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 289,
    "children": 20,
    "scala_sources": [
     "xiangshan/backend/issue/Entries.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "EntriesLdu",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 304,
    "children": 18,
    "scala_sources": [
     "xiangshan/backend/issue/Entries.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "EntriesStaMou",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 288,
    "children": 18,
    "scala_sources": [
     "xiangshan/backend/issue/Entries.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "EntriesStdMoud",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 312,
    "children": 18,
    "scala_sources": [
     "xiangshan/backend/issue/Entries.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "EntriesVfdivVidiv",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 297,
    "children": 12,
    "scala_sources": [
     "xiangshan/backend/issue/Entries.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "EntriesVfmaVialuFixVfalu",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 385,
    "children": 18,
    "scala_sources": [
     "xiangshan/backend/issue/Entries.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "EntriesVfmaVialuFixVimacVppuVfaluVfcvtVipuVsetrvfwvf",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 417,
    "children": 18,
    "scala_sources": [
     "xiangshan/backend/issue/Entries.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "EntriesVlduVstu",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 410,
    "children": 18,
    "scala_sources": [
     "xiangshan/backend/issue/Entries.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "EntriesVlduVstuVseglduVsegstu",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 416,
    "children": 18,
    "scala_sources": [
     "xiangshan/backend/issue/Entries.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -5264,14 +5374,16 @@
   },
   {
    "module": "ExeUnit",
-   "status": "FAMILY_SUBJECT",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 24,
    "children": 6,
    "scala_sources": [
     "utility/ClockGate.scala",
     "xiangshan/backend/exu/ExeUnit.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [
     "dependency.utility"
    ],
@@ -5279,26 +5391,30 @@
   },
   {
    "module": "ExeUnit_1",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 43,
    "children": 3,
    "scala_sources": [
     "xiangshan/backend/exu/ExeUnit.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "ExeUnit_10",
-   "status": "FAMILY_SUBJECT",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 34,
    "children": 5,
    "scala_sources": [
     "utility/ClockGate.scala",
     "xiangshan/backend/exu/ExeUnit.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [
     "dependency.utility"
    ],
@@ -5306,14 +5422,16 @@
   },
   {
    "module": "ExeUnit_13",
-   "status": "FAMILY_SUBJECT",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 49,
    "children": 9,
    "scala_sources": [
     "utility/ClockGate.scala",
     "xiangshan/backend/exu/ExeUnit.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [
     "dependency.utility"
    ],
@@ -5321,14 +5439,16 @@
   },
   {
    "module": "ExeUnit_14",
-   "status": "FAMILY_SUBJECT",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 65,
    "children": 8,
    "scala_sources": [
     "utility/ClockGate.scala",
     "xiangshan/backend/exu/ExeUnit.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [
     "dependency.utility"
    ],
@@ -5336,14 +5456,16 @@
   },
   {
    "module": "ExeUnit_15",
-   "status": "FAMILY_SUBJECT",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 46,
    "children": 5,
    "scala_sources": [
     "utility/ClockGate.scala",
     "xiangshan/backend/exu/ExeUnit.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [
     "dependency.utility"
    ],
@@ -5351,14 +5473,16 @@
   },
   {
    "module": "ExeUnit_16",
-   "status": "FAMILY_SUBJECT",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 48,
    "children": 3,
    "scala_sources": [
     "utility/ClockGate.scala",
     "xiangshan/backend/exu/ExeUnit.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [
     "dependency.utility"
    ],
@@ -5366,14 +5490,16 @@
   },
   {
    "module": "ExeUnit_17",
-   "status": "FAMILY_SUBJECT",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 44,
    "children": 5,
    "scala_sources": [
     "utility/ClockGate.scala",
     "xiangshan/backend/exu/ExeUnit.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [
     "dependency.utility"
    ],
@@ -5381,26 +5507,30 @@
   },
   {
    "module": "ExeUnit_4",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 16,
    "children": 2,
    "scala_sources": [
     "xiangshan/backend/exu/ExeUnit.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "ExeUnit_5",
-   "status": "FAMILY_SUBJECT",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 76,
    "children": 8,
    "scala_sources": [
     "utility/ClockGate.scala",
     "xiangshan/backend/exu/ExeUnit.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [
     "dependency.utility"
    ],
@@ -5408,7 +5538,7 @@
   },
   {
    "module": "ExeUnit_7",
-   "status": "FAMILY_SUBJECT",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 380,
    "children": 9,
    "scala_sources": [
@@ -5416,7 +5546,9 @@
     "utility/CriticalErrorUtils.scala",
     "xiangshan/backend/exu/ExeUnit.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [
     "dependency.utility"
    ],
@@ -5424,14 +5556,16 @@
   },
   {
    "module": "ExeUnit_8",
-   "status": "FAMILY_SUBJECT",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 41,
    "children": 8,
    "scala_sources": [
     "utility/ClockGate.scala",
     "xiangshan/backend/exu/ExeUnit.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [
     "dependency.utility"
    ],
@@ -5439,14 +5573,16 @@
   },
   {
    "module": "ExeUnit_9",
-   "status": "FAMILY_SUBJECT",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 30,
    "children": 3,
    "scala_sources": [
     "utility/ClockGate.scala",
     "xiangshan/backend/exu/ExeUnit.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [
     "dependency.utility"
    ],
@@ -5514,40 +5650,46 @@
   },
   {
    "module": "FAlu",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 25,
    "children": 1,
    "scala_sources": [
     "xiangshan/backend/fu/FuncUnit.scala",
     "xiangshan/backend/fu/wrapper/FALU.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "FCVT",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 25,
    "children": 1,
    "scala_sources": [
     "xiangshan/backend/fu/FuncUnit.scala",
     "xiangshan/backend/fu/wrapper/FCVT.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "FDivSqrt",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 28,
    "children": 1,
    "scala_sources": [
     "xiangshan/backend/fu/FuncUnit.scala",
     "xiangshan/backend/fu/wrapper/FDivSqrt.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -5567,14 +5709,16 @@
   },
   {
    "module": "FMA",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 24,
    "children": 1,
    "scala_sources": [
     "xiangshan/backend/fu/FuncUnit.scala",
     "xiangshan/backend/fu/wrapper/FMA.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -6083,14 +6227,16 @@
   },
   {
    "module": "Fence",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 30,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/fu/Fence.scala",
     "xiangshan/backend/fu/FuncUnit.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -6370,49 +6516,57 @@
   },
   {
    "module": "FpRegFilePart0",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 234,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/regfile/Regfile.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "RegfileFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "FpRegFilePart1",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 234,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/regfile/Regfile.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "RegfileFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "FpRegFilePart2",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 234,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/regfile/Regfile.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "RegfileFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "FpRegFilePart3",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 234,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/regfile/Regfile.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "RegfileFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -6817,181 +6971,211 @@
   },
   {
    "module": "FuBusyTableWrite",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 7,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/issue/FuBusyTableWrite.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "FuBusyTableWrite_105",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 10,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/issue/FuBusyTableWrite.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "FuBusyTableWrite_22",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 7,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/issue/FuBusyTableWrite.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "FuBusyTableWrite_26",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 7,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/issue/FuBusyTableWrite.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "FuBusyTableWrite_42",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 7,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/issue/FuBusyTableWrite.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "FuBusyTableWrite_43",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 7,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/issue/FuBusyTableWrite.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "FuBusyTableWrite_52",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 7,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/issue/FuBusyTableWrite.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "FuBusyTableWrite_53",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 5,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/issue/FuBusyTableWrite.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "FuBusyTableWrite_68",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 7,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/issue/FuBusyTableWrite.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "FuBusyTableWrite_69",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 7,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/issue/FuBusyTableWrite.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "FuBusyTableWrite_71",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 7,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/issue/FuBusyTableWrite.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "FuBusyTableWrite_73",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 7,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/issue/FuBusyTableWrite.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "FuBusyTableWrite_75",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 7,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/issue/FuBusyTableWrite.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "FuBusyTableWrite_79",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 5,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/issue/FuBusyTableWrite.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "FuBusyTableWrite_80",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 7,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/issue/FuBusyTableWrite.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -7225,13 +7409,15 @@
   },
   {
    "module": "HashModule",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 5,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/fu/Bku.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -8825,14 +9011,16 @@
   },
   {
    "module": "IntFPToVec",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 19,
    "children": 3,
    "scala_sources": [
     "xiangshan/backend/fu/FuncUnit.scala",
     "xiangshan/backend/fu/fpu/IntFPToVec.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -8876,49 +9064,57 @@
   },
   {
    "module": "IntRegFilePart0",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 271,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/regfile/Regfile.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "RegfileFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "IntRegFilePart1",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 271,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/regfile/Regfile.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "RegfileFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "IntRegFilePart2",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 271,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/regfile/Regfile.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "RegfileFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "IntRegFilePart3",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 271,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/regfile/Regfile.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "RegfileFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -8979,14 +9175,16 @@
   },
   {
    "module": "IntToFP_3",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 25,
    "children": 1,
    "scala_sources": [
     "xiangshan/backend/fu/FuncUnit.scala",
     "xiangshan/backend/fu/fpu/IntToFP.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -9210,169 +9408,197 @@
   },
   {
    "module": "IssueQueueAluBrhJmpI2fVsetriwiVsetriwvfI2v",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 290,
    "children": 12,
    "scala_sources": [
     "xiangshan/backend/issue/IssueQueue.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "IssueQueueAluCsrFenceDiv",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 255,
    "children": 6,
    "scala_sources": [
     "xiangshan/backend/issue/IssueQueue.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "IssueQueueAluMulBkuBrhJmp",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 265,
    "children": 10,
    "scala_sources": [
     "xiangshan/backend/issue/IssueQueue.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "IssueQueueFaluFcvtF2vFmacFdiv",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 161,
    "children": 11,
    "scala_sources": [
     "xiangshan/backend/issue/IssueQueue.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "IssueQueueFaluFmac",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 131,
    "children": 11,
    "scala_sources": [
     "xiangshan/backend/issue/IssueQueue.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "IssueQueueFaluFmacFdiv",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 152,
    "children": 11,
    "scala_sources": [
     "xiangshan/backend/issue/IssueQueue.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "IssueQueueLdu",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 217,
    "children": 6,
    "scala_sources": [
     "xiangshan/backend/issue/IssueQueue.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "IssueQueueStaMou",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 174,
    "children": 4,
    "scala_sources": [
     "xiangshan/backend/issue/IssueQueue.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "IssueQueueStdMoud",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 196,
    "children": 4,
    "scala_sources": [
     "xiangshan/backend/issue/IssueQueue.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "IssueQueueVfdivVidiv",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 216,
    "children": 4,
    "scala_sources": [
     "xiangshan/backend/issue/IssueQueue.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "IssueQueueVfmaVialuFixVfalu",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 278,
    "children": 18,
    "scala_sources": [
     "xiangshan/backend/issue/IssueQueue.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "IssueQueueVfmaVialuFixVimacVppuVfaluVfcvtVipuVsetrvfwvf",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 294,
    "children": 22,
    "scala_sources": [
     "xiangshan/backend/issue/IssueQueue.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "IssueQueueVlduVstu",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 284,
    "children": 4,
    "scala_sources": [
     "xiangshan/backend/issue/IssueQueue.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "IssueQueueVlduVstuVseglduVsegstu",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 284,
    "children": 4,
    "scala_sources": [
     "xiangshan/backend/issue/IssueQueue.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -9484,14 +9710,16 @@
   },
   {
    "module": "JumpUnit",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 119,
    "children": 1,
    "scala_sources": [
     "xiangshan/backend/fu/FuncUnit.scala",
     "xiangshan/backend/fu/wrapper/JumpUnit.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -10945,13 +11173,15 @@
   },
   {
    "module": "MemExeUnit",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 16,
    "children": 1,
    "scala_sources": [
     "xiangshan/backend/exu/ExeUnit.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -11596,13 +11826,15 @@
   },
   {
    "module": "MiscModule",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 6,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/fu/Bku.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -11943,62 +12175,72 @@
   },
   {
    "module": "MulUnit",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 19,
    "children": 1,
    "scala_sources": [
     "xiangshan/backend/fu/FuncUnit.scala",
     "xiangshan/backend/fu/wrapper/MulUnit.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "MultiWakeupQueue",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 57,
    "children": 2,
    "scala_sources": [
     "xiangshan/backend/issue/MultiWakeupQueue.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "MultiWakeupQueue_2",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 44,
    "children": 1,
    "scala_sources": [
     "xiangshan/backend/issue/MultiWakeupQueue.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "MultiWakeupQueue_4",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 22,
    "children": 4,
    "scala_sources": [
     "xiangshan/backend/issue/MultiWakeupQueue.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "MultiWakeupQueue_5",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 16,
    "children": 2,
    "scala_sources": [
     "xiangshan/backend/issue/MultiWakeupQueue.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -12464,337 +12706,393 @@
   },
   {
    "module": "OthersEntry",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 186,
    "children": 2,
    "scala_sources": [
     "xiangshan/backend/issue/OthersEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "OthersEntryVecMem",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 249,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/issue/OthersEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "OthersEntryVecMem_14",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 243,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/issue/OthersEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "OthersEntryVecMem_16",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 179,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/issue/OthersEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "OthersEntryVecMem_2",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 183,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/issue/OthersEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "OthersEntry_104",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 127,
    "children": 3,
    "scala_sources": [
     "xiangshan/backend/issue/OthersEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "OthersEntry_106",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 94,
    "children": 6,
    "scala_sources": [
     "xiangshan/backend/issue/OthersEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "OthersEntry_120",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 120,
    "children": 3,
    "scala_sources": [
     "xiangshan/backend/issue/OthersEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "OthersEntry_122",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 89,
    "children": 6,
    "scala_sources": [
     "xiangshan/backend/issue/OthersEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "OthersEntry_136",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 237,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/issue/OthersEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "OthersEntry_138",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 174,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/issue/OthersEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "OthersEntry_150",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 210,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/issue/OthersEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "OthersEntry_152",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 156,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/issue/OthersEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "OthersEntry_164",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 188,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/issue/OthersEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "OthersEntry_166",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 141,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/issue/OthersEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "OthersEntry_172",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 137,
    "children": 1,
    "scala_sources": [
     "xiangshan/backend/issue/OthersEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "OthersEntry_174",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 111,
    "children": 2,
    "scala_sources": [
     "xiangshan/backend/issue/OthersEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "OthersEntry_200",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 167,
    "children": 1,
    "scala_sources": [
     "xiangshan/backend/issue/OthersEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "OthersEntry_202",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 131,
    "children": 2,
    "scala_sources": [
     "xiangshan/backend/issue/OthersEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "OthersEntry_242",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 144,
    "children": 1,
    "scala_sources": [
     "xiangshan/backend/issue/OthersEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "OthersEntry_244",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 122,
    "children": 2,
    "scala_sources": [
     "xiangshan/backend/issue/OthersEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "OthersEntry_44",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 216,
    "children": 2,
    "scala_sources": [
     "xiangshan/backend/issue/OthersEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "OthersEntry_50",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 163,
    "children": 4,
    "scala_sources": [
     "xiangshan/backend/issue/OthersEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "OthersEntry_6",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 143,
    "children": 4,
    "scala_sources": [
     "xiangshan/backend/issue/OthersEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "OthersEntry_66",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 180,
    "children": 2,
    "scala_sources": [
     "xiangshan/backend/issue/OthersEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "OthersEntry_72",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 139,
    "children": 4,
    "scala_sources": [
     "xiangshan/backend/issue/OthersEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "OthersEntry_88",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 139,
    "children": 3,
    "scala_sources": [
     "xiangshan/backend/issue/OthersEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "OthersEntry_90",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 102,
    "children": 6,
    "scala_sources": [
     "xiangshan/backend/issue/OthersEntry.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -18969,61 +19267,71 @@
   },
   {
    "module": "RenameTable",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 127,
    "children": 1,
    "scala_sources": [
     "xiangshan/backend/rename/RenameTable.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "RegfileFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "RenameTableWrapper",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 408,
    "children": 12,
    "scala_sources": [
     "xiangshan/backend/rename/RenameTable.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "RegfileFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "RenameTable_1",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 139,
    "children": 1,
    "scala_sources": [
     "xiangshan/backend/rename/RenameTable.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "RegfileFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "RenameTable_2",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 138,
    "children": 1,
    "scala_sources": [
     "xiangshan/backend/rename/RenameTable.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "RegfileFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "RenameTable_3",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 48,
    "children": 1,
    "scala_sources": [
     "xiangshan/backend/rename/RenameTable.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "RegfileFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -21655,14 +21963,16 @@
   },
   {
    "module": "Std",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 8,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/fu/FuncUnit.scala",
     "xiangshan/mem/MemBlock.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -23853,25 +24163,29 @@
   },
   {
    "module": "V0RegFilePart0",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 50,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/regfile/Regfile.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "RegfileFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "V0RegFilePart1",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 50,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/regfile/Regfile.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "RegfileFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -23936,53 +24250,61 @@
   },
   {
    "module": "VCVT_8",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 37,
    "children": 2,
    "scala_sources": [
     "xiangshan/backend/fu/FuncUnit.scala",
     "xiangshan/backend/fu/wrapper/VCVT.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "VFAlu",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 56,
    "children": 6,
    "scala_sources": [
     "xiangshan/backend/fu/FuncUnit.scala",
     "xiangshan/backend/fu/wrapper/VFALU.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "VFDivSqrt",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 40,
    "children": 5,
    "scala_sources": [
     "xiangshan/backend/fu/FuncUnit.scala",
     "xiangshan/backend/fu/wrapper/VFDivSqrt.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "VFMA",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 39,
    "children": 6,
    "scala_sources": [
     "xiangshan/backend/fu/FuncUnit.scala",
     "xiangshan/backend/fu/wrapper/VFMA.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -24028,14 +24350,16 @@
   },
   {
    "module": "VIAluFix",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 45,
    "children": 7,
    "scala_sources": [
     "xiangshan/backend/fu/FuncUnit.scala",
     "xiangshan/backend/fu/wrapper/VIAluFix.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -24053,14 +24377,16 @@
   },
   {
    "module": "VIDiv",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 35,
    "children": 2,
    "scala_sources": [
     "xiangshan/backend/fu/FuncUnit.scala",
     "xiangshan/backend/fu/wrapper/VIDiv.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -24093,27 +24419,31 @@
   },
   {
    "module": "VIMacU",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 34,
    "children": 7,
    "scala_sources": [
     "xiangshan/backend/fu/FuncUnit.scala",
     "xiangshan/backend/fu/wrapper/VIMacU.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "VIPU",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 33,
    "children": 2,
    "scala_sources": [
     "xiangshan/backend/fu/FuncUnit.scala",
     "xiangshan/backend/fu/wrapper/VIPU.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -24223,14 +24553,16 @@
   },
   {
    "module": "VPPU",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 31,
    "children": 2,
    "scala_sources": [
     "xiangshan/backend/fu/FuncUnit.scala",
     "xiangshan/backend/fu/wrapper/VPPU.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -24368,40 +24700,46 @@
   },
   {
    "module": "VSetRiWi",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 14,
    "children": 1,
    "scala_sources": [
     "xiangshan/backend/fu/FuncUnit.scala",
     "xiangshan/backend/fu/wrapper/VSet.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "VSetRiWvf",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 22,
    "children": 1,
    "scala_sources": [
     "xiangshan/backend/fu/FuncUnit.scala",
     "xiangshan/backend/fu/wrapper/VSet.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "VSetRvfWvf",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 24,
    "children": 1,
    "scala_sources": [
     "xiangshan/backend/fu/FuncUnit.scala",
     "xiangshan/backend/fu/wrapper/VSet.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FuncUnitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -24790,49 +25128,57 @@
   },
   {
    "module": "VfRegFilePart0",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 172,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/regfile/Regfile.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "RegfileFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "VfRegFilePart1",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 172,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/regfile/Regfile.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "RegfileFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "VfRegFilePart2",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 172,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/regfile/Regfile.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "RegfileFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "VfRegFilePart3",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 172,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/regfile/Regfile.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "RegfileFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -24874,13 +25220,15 @@
   },
   {
    "module": "VlBusyTable",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 50,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/rename/BusyTable.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -24910,13 +25258,15 @@
   },
   {
    "module": "VlRegFile",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 24,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/regfile/Regfile.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "RegfileFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -26071,85 +26421,99 @@
   },
   {
    "module": "indexedLSUopTable_1",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 3,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/decode/DecodeUnitComp.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "indexedLSUopTable_2",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 3,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/decode/DecodeUnitComp.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "indexedLSUopTable_3",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 3,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/decode/DecodeUnitComp.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "indexedLSUopTable_4",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 3,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/decode/DecodeUnitComp.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "indexedLSUopTable_5",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 3,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/decode/DecodeUnitComp.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "indexedLSUopTable_6",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 3,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/decode/DecodeUnitComp.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "indexedLSUopTable_7",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 3,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/decode/DecodeUnitComp.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IssueEntries"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -27726,44 +28090,12 @@
  ],
  "missing_top_scala": [
   {
-   "scala": "xiangshan/backend/issue/OthersEntry.scala",
-   "modules": 28
-  },
-  {
    "scala": "xiangshan/backend/datapath/RFWBConflictChecker.scala",
    "modules": 27
   },
   {
-   "scala": "xiangshan/backend/fu/FuncUnit.scala",
-   "modules": 26
-  },
-  {
    "scala": "xiangshan/mem/lsqueue/LoadQueueUncache.scala",
    "modules": 17
-  },
-  {
-   "scala": "xiangshan/backend/exu/ExeUnit.scala",
-   "modules": 16
-  },
-  {
-   "scala": "xiangshan/backend/regfile/Regfile.scala",
-   "modules": 15
-  },
-  {
-   "scala": "xiangshan/backend/issue/FuBusyTableWrite.scala",
-   "modules": 15
-  },
-  {
-   "scala": "xiangshan/backend/issue/EnqEntry.scala",
-   "modules": 14
-  },
-  {
-   "scala": "xiangshan/backend/issue/Entries.scala",
-   "modules": 14
-  },
-  {
-   "scala": "xiangshan/backend/issue/IssueQueue.scala",
-   "modules": 14
   },
   {
    "scala": "xiangshan/backend/rename/Snapshot.scala",
@@ -27778,10 +28110,6 @@
    "modules": 9
   },
   {
-   "scala": "xiangshan/backend/decode/DecodeUnitComp.scala",
-   "modules": 8
-  },
-  {
    "scala": "utils/PipeWithFlush.scala",
    "modules": 8
   },
@@ -27791,10 +28119,6 @@
   },
   {
    "scala": "util/SynchronizerReg.scala",
-   "modules": 7
-  },
-  {
-   "scala": "xiangshan/backend/fu/Bku.scala",
    "modules": 7
   },
   {
@@ -27810,10 +28134,6 @@
    "modules": 6
   },
   {
-   "scala": "xiangshan/backend/rename/BusyTable.scala",
-   "modules": 5
-  },
-  {
    "scala": "jtag/JtagShifter.scala",
    "modules": 5
   },
@@ -27823,10 +28143,6 @@
   },
   {
    "scala": "xiangshan/cache/mmu/Repeater.scala",
-   "modules": 5
-  },
-  {
-   "scala": "xiangshan/backend/rename/RenameTable.scala",
    "modules": 5
   },
   {
@@ -27847,10 +28163,6 @@
   },
   {
    "scala": "xiangshan/mem/lsqueue/LoadQueueData.scala",
-   "modules": 4
-  },
-  {
-   "scala": "xiangshan/backend/issue/MultiWakeupQueue.scala",
    "modules": 4
   },
   {
@@ -27894,14 +28206,6 @@
    "modules": 3
   },
   {
-   "scala": "xiangshan/backend/fu/wrapper/VSet.scala",
-   "modules": 3
-  },
-  {
-   "scala": "xiangshan/backend/fu/wrapper/BranchUnit.scala",
-   "modules": 2
-  },
-  {
    "scala": "xiangshan/mem/prefetch/FDP.scala",
    "modules": 2
   },
@@ -27911,10 +28215,6 @@
   },
   {
    "scala": "xiangshan/cache/dcache/mainpipe/MissQueue.scala",
-   "modules": 2
-  },
-  {
-   "scala": "xiangshan/backend/fu/fpu/IntToFP.scala",
    "modules": 2
   },
   {
@@ -27954,16 +28254,80 @@
    "modules": 2
   },
   {
-   "scala": "xiangshan/backend/fu/wrapper/VCVT.scala",
+   "scala": "xiangshan/backend/fu/vector/VecSrcTypeModule.scala",
    "modules": 2
   },
   {
-   "scala": "xiangshan/backend/fu/wrapper/VIPU.scala",
+   "scala": "xiangshan/mem/vector/VMergeBuffer.scala",
    "modules": 2
   },
   {
-   "scala": "xiangshan/backend/fu/wrapper/VIAluFix.scala",
+   "scala": "xiangshan/cache/dcache/mainpipe/WritebackQueue.scala",
    "modules": 2
+  },
+  {
+   "scala": "xiangshan/backend/fu/wrapper/BranchUnit.scala",
+   "modules": 1
+  },
+  {
+   "scala": "xiangshan/mem/lsqueue/LoadQueueReplay.scala",
+   "modules": 1
+  },
+  {
+   "scala": "xiangshan/backend/fu/Multiplier.scala",
+   "modules": 1
+  },
+  {
+   "scala": "xiangshan/mem/pipeline/AtomicsUnit.scala",
+   "modules": 1
+  },
+  {
+   "scala": "xiangshan/backend/Backend.scala",
+   "modules": 1
+  },
+  {
+   "scala": "xiangshan/cache/mmu/BitmapCheck.scala",
+   "modules": 1
+  },
+  {
+   "scala": "xiangshan/backend/datapath/BypassNetwork.scala",
+   "modules": 1
+  },
+  {
+   "scala": "xiangshan/backend/fu/NewCSR/CommitIDModule.scala",
+   "modules": 1
+  },
+  {
+   "scala": "xiangshan/backend/rename/CompressUnit.scala",
+   "modules": 1
+  },
+  {
+   "scala": "xiangshan/mem/sbuffer/DatamoduleResultBuffer.scala",
+   "modules": 1
+  },
+  {
+   "scala": "devices/debug/DebugTransport.scala",
+   "modules": 1
+  },
+  {
+   "scala": "xiangshan/backend/decode/DecodeUnit.scala",
+   "modules": 1
+  },
+  {
+   "scala": "xiangshan/backend/fu/NewCSR/CSREvents/DretEvent.scala",
+   "modules": 1
+  },
+  {
+   "scala": "xiangshan/backend/rob/ExceptionGen.scala",
+   "modules": 1
+  },
+  {
+   "scala": "xiangshan/backend/decode/FPDecoder.scala",
+   "modules": 1
+  },
+  {
+   "scala": "xiangshan/frontend/FauFTB.scala",
+   "modules": 1
   }
  ]
 }

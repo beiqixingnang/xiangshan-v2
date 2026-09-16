@@ -688,12 +688,68 @@
     "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/CSRPMP.scala",
     "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/CSRPMA.scala"
    ]
+  },
+  {
+   "id": "IssueEntries",
+   "source_scala": [
+    "scala/src/main/scala/xiangshan/backend/issue/Entries.scala",
+    "scala/src/main/scala/xiangshan/backend/issue/OthersEntry.scala",
+    "scala/src/main/scala/xiangshan/backend/issue/EnqEntry.scala",
+    "scala/src/main/scala/xiangshan/backend/issue/IssueQueue.scala",
+    "scala/src/main/scala/xiangshan/backend/issue/FuBusyTableWrite.scala",
+    "scala/src/main/scala/xiangshan/backend/issue/MultiWakeupQueue.scala",
+    "scala/src/main/scala/xiangshan/backend/rename/BusyTable.scala",
+    "scala/src/main/scala/xiangshan/backend/decode/DecodeUnitComp.scala"
+   ],
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.Entries-Hardware.py",
+   "family_id": "core.backend.issue.entries",
+   "closure_root": "core.backend.issue",
+   "classification": "REWRITTEN",
+   "disposition": "DIRECT_TEST_PASS_BOUNDED",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "validation/v2-backend-issue-entries-family-results.json"
+   ]
+  },
+  {
+   "id": "FuncUnitFamily",
+   "source_scala": [
+    "scala/src/main/scala/xiangshan/backend/fu/FuncUnit.scala",
+    "scala/src/main/scala/xiangshan/backend/fu/Bku.scala",
+    "scala/src/main/scala/xiangshan/backend/exu/ExeUnit.scala"
+   ],
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Exu.FuncUnit-Hardware.py",
+   "family_id": "core.backend.exu.funcunit",
+   "closure_root": "core.backend.exu",
+   "classification": "REWRITTEN",
+   "disposition": "STRUCTURE_VERIFIED",
+   "v2_status": "STRUCTURE_VERIFIED",
+   "reference_surface": [
+    "validation/v2-build-freeze-shared-audit-results.json"
+   ]
+  },
+  {
+   "id": "RegfileFamily",
+   "source_scala": [
+    "scala/src/main/scala/xiangshan/backend/regfile/Regfile.scala",
+    "scala/src/main/scala/xiangshan/backend/rename/RenameTable.scala"
+   ],
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Regfile.Regfile-Hardware.py",
+   "family_id": "core.backend.regfile",
+   "closure_root": "core.backend.rename",
+   "classification": "REWRITTEN",
+   "disposition": "STRUCTURE_VERIFIED",
+   "v2_status": "STRUCTURE_VERIFIED",
+   "reference_surface": [
+    "validation/v2-build-freeze-shared-audit-results.json"
+   ]
   }
- ],
+],
  "status": "IMPLEMENTATION_WAVES_VALIDATED_BOUNDED_HIERARCHY_WAVE1",
  "acceptance_eligible": false,
- "entries_status_counts": {
-  "VALIDATOR_PASS_BOUNDED": 48,
+  "entries_status_counts": {
+  "VALIDATOR_PASS_BOUNDED": 49,
+  "STRUCTURE_VERIFIED": 2,
   "RETIRED": 1
  }
 }
