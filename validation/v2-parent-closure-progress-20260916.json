@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_V2_PARENT_CLOSURE_PROGRESS",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "locked_xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+  "leaf_gate": {
+    "planned_core": 46,
+    "bounded_core": 46,
+    "planned_dependency_families": 23,
+    "bounded_dependency_families": 21,
+    "satisfied_by_core": 2
+  },
+  "parent_closures": [
+    {"id": "vector", "root": "VldMergeUnit", "status": "PASS_BOUNDED_REDUCED_PARENT", "full_closure": "PENDING"},
+    {"id": "frontend", "root": "Frontend", "status": "STRUCTURAL_PASS_BOUNDED", "full_closure": "PENDING_CHILD_BEHAVIOR"},
+    {"id": "backend", "root": "Backend", "status": "STRUCTURAL_PASS_BOUNDED", "full_closure": "PENDING_CHILD_BEHAVIOR"},
+    {"id": "cache", "root": "MemBlock", "status": "STRUCTURAL_PASS_BOUNDED", "full_closure": "PENDING_DCACHE_MMU_LSU"},
+    {"id": "coupled_l2", "root": "TL2TLCoupledL2", "status": "PASS_BOUNDED_PROTOCOL_WITH_MISMATCH", "full_closure": "PENDING_SOURCE_SEMANTIC_REPAIR"},
+    {"id": "xstop", "root": "XSTop", "status": "STRUCTURAL_PORT_ENVELOPE_BOUNDED", "full_closure": "PENDING_SINGLE_HIERARCHY_BEHAVIOR"
+    }
+  ],
+  "root_probe": {
+    "metadata_driven_closure_status": "IMPLEMENTED",
+    "default_missing_children": 4,
+    "default_missing_inventory": 1,
+    "complete_requires": "frontend+backend+mem_block+coupled_l2 injected and exact 204-port inventory"
+  },
+  "gates": {
+    "py_compile": "PASS",
+    "pyright": "PASS",
+    "build_verilog_standalone": "PASS",
+    "parent_closure_matched": 0,
+    "full_xstop_differential": "PENDING",
+    "license_review": "PENDING",
+    "accepted": "NOT_ALLOWED"
+  }
+}
