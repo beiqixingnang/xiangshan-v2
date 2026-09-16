@@ -19,6 +19,7 @@ __all__ = [
     "TrueLRU",
     "lru_next_state",
     "lru_victim",
+    "lru_observation",
     "build_verilog",
     "main",
 ]
@@ -130,6 +131,22 @@ def lru_victim(state: int, num_ways: int) -> int:
     # OHToUInt on a malformed/non-transitive matrix has an implementation-
     # defined priority; zero is the safe deterministic fallback.
     return 0
+
+
+def lru_observation(state: int, touches: list[tuple[bool, int]], num_ways: int) -> dict[str, int]:
+    """Fold valid touches and return the source policy's victim observation.
+
+    Rocket's replacement policy exposes both the post-access state and the
+    victim selected from the pre-access matrix.  Keeping that pair together
+    makes parent tests compare one transaction rather than reconstructing the
+    fold order independently. / 同时返回访问后的状态与访问前受害路选择。
+    """
+
+    next_state = int(state)
+    for valid, way in touches:
+        if valid:
+            next_state = lru_next_state(next_state, int(way), num_ways)
+    return {"victim": lru_victim(int(state), num_ways), "next_state": next_state}
 
 
 # Implementation / 实现
