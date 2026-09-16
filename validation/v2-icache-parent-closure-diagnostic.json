@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_ICACHE_PARENT_CLOSURE_DIAGNOSTIC",
+  "batch_id": "V2-P1-B-ICACHE-PARENT-DIAGNOSTIC-001",
+  "target_evidence": "validation/v2-p1-b-icache-differential-results.json",
+  "target_evidence_sha256": "c9d20ad67a6f3faa1be97cf4af9168fec7d44203698ebdca80027308ce29b814",
+  "child_differential": {
+    "status": "PASS_BOUNDED",
+    "children": 7,
+    "behavioral_equivalence": true,
+    "target_yosys": "7/7 PASS"
+  },
+  "reference_yosys": {
+    "automatic_fallback": {
+      "status": "PASS_BOUNDED",
+      "modules": ["FIFOReg_entries10"],
+      "method": "temporary copy removes Chisel automatic qualifier; locked reference immutable"
+    },
+    "remaining_tool_limit": {
+      "status": "FAIL_RECORDED",
+      "modules": ["ICacheReplacer", "ICacheMSHR_fetch", "ICacheMSHR_prefetch"],
+      "reason": "Yosys rejects block-scoped declarations with Invalid nesting of always blocks after qualifier removal"
+    }
+  },
+  "parent_closure": {
+    "status": "PENDING",
+    "missing_local_parent": "ICacheMainPipe",
+    "locked_reference_module": "XSTop.sv:module ICacheMainPipe",
+    "reason": "No local Build-Cpu aggregate currently exposes the ICacheMainPipe parent contract; child-only equivalence cannot claim parent closure"
+  },
+  "next_action": "Add a local ICacheMainPipe parent harness with explicit MSHR/Replacer/utility injection, then run bounded differential without editing upstream or XSTop.",
+  "acceptance_eligible": false
+}
