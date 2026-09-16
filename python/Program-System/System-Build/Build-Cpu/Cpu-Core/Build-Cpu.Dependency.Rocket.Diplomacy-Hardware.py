@@ -31,7 +31,7 @@ __all__ = [
     "DiplomacyNode", "DiplomacyNodeState", "LazyModuleGraph", "ClockCrossingType", "NoCrossing",
     "SynchronousCrossing", "RationalCrossing", "AsynchronousCrossing", "CreditedCrossing",
     "DiplomacyConfig", "DiplomacyAddressRouter", "DiplomacyRouter", "UHSCRocketDiplomacy",
-    "address_decoder", "AddressDecoder", "build_verilog", "main",
+    "address_decoder", "AddressDecoder", "diplomacy_route_observation", "build_verilog", "main",
     "SOURCE_SCALA_ROOT", "SOURCE_SCALA_PATHS", "SOURCE_SCALA_FILE_COUNT",
 ]
 
@@ -60,6 +60,36 @@ SOURCE_SCALA_PATHS = (
     "rocket-chip/src/main/scala/diplomacy/ValName.scala",
 )
 SOURCE_SCALA_FILE_COUNT = len(SOURCE_SCALA_PATHS)
+
+
+# ``AddressDecoder`` selects an address port while TileLink's Decoupled
+# boundary owns acceptance.  Keep the two source locations explicit: a route
+# is only consumed when both sides fire, not merely when its address matches.
+# / ``AddressDecoder`` 选择地址端口，TileLink 的 Decoupled 边界负责接收；
+# 明确保留两个源位置：路由只有在双方 fire 时才被消费，而非仅地址命中时。
+DIPLOMACY_ROUTER_SOURCE_OBSERVATIONS: tuple[tuple[str, str], ...] = (
+    ("address_selection", "rocket-chip/src/main/scala/diplomacy/AddressDecoder.scala:18-49"),
+    ("decoupled_acceptance", "rocket-chip/src/main/scala/tilelink/Arbiter.scala:59-97"),
+)
+
+
+def diplomacy_route_observation(*, input_valid: bool, output_ready: bool,
+                                route_hit: bool, reset: bool = False) -> dict[str, int]:
+    """Return the source-backed Decoupled observation of one address route.
+
+    AddressDecoder supplies selection only; the surrounding TileLink graph
+    advances exactly on a valid/ready fire. / AddressDecoder 只提供选择；周围
+    TileLink 图仅在 valid/ready fire 时推进。
+    """
+    active = bool(input_valid) and not bool(reset)
+    fire = active and bool(output_ready)
+    return {
+        "input_ready": int(bool(output_ready) and not bool(reset)),
+        "output_valid": int(active),
+        "route_hit": int(active and bool(route_hit)),
+        "route_miss": int(active and not bool(route_hit)),
+        "route_fire": int(fire),
+    }
 
 
 # =============================================================================
@@ -1303,7 +1333,7 @@ class DiplomacyConfig:
 
 
 class DiplomacyAddressRouter(Elaboratable):
-    """Combinational ready/valid address decoder. / 组合式 ready/valid 地址解码器。"""
+    """Combinational Decoupled address decoder. / 组合式 Decoupled 地址解码器。"""
 
     # Construct router IO. / 构造路由器 IO。
     def __init__(self, configuration: DiplomacyConfig | None = None) -> None:
@@ -1315,9 +1345,13 @@ class DiplomacyAddressRouter(Elaboratable):
         self.input_ready = Signal(name="io_in_ready")
         self.input_address = Signal(c.address_bits, name="io_in_address")
         self.output_valid = Signal(name="io_out_valid")
+        self.output_ready = Signal(name="io_out_ready")
         self.output_route = Signal(c.route_bits, name="io_out_route")
         self.output_hit = Signal(name="io_out_hit")
         self.output_address = Signal(c.address_bits, name="io_out_address")
+        self.input_fire = Signal(name="io_in_fire")
+        self.output_fire = Signal(name="io_out_fire")
+        self.route_miss = Signal(name="io_route_miss")
 
     # Elaborate combinational ready/valid route selection. / 展开组合 ready/valid 路由选择。
     def elaborate(self, platform: Any) -> Module:
@@ -1342,13 +1376,23 @@ class DiplomacyAddressRouter(Elaboratable):
             hit_expr = hit_expr | hit
             route_expr = Mux(take, index, route_expr)
             selected_expr = selected_expr | hit
+        # A route is a Decoupled pass-through: selection is combinational, but
+        # acceptance follows the sink's ready.  This preserves the TileLink
+        # boundary around AddressDecoder instead of treating every address
+        # match as an implicit transfer. / 路由是 Decoupled 直通：选择组合化，
+        # 但接收遵从 sink ready；这保留了 AddressDecoder 周围的 TileLink 边界，
+        # 而不是将每次地址命中视为隐式传输。
         active = self.input_valid & ~self.reset
+        route_fire = active & self.output_ready
         m.d.comb += [
-            self.input_ready.eq(~self.reset),
+            self.input_ready.eq(self.output_ready & ~self.reset),
             self.output_valid.eq(active),
             self.output_hit.eq(active & hit_expr),
             self.output_route.eq(route_expr),
             self.output_address.eq(self.input_address),
+            self.input_fire.eq(route_fire),
+            self.output_fire.eq(route_fire),
+            self.route_miss.eq(active & ~hit_expr),
         ]
         return m
 
@@ -1382,7 +1426,8 @@ def build_verilog(configuration: DiplomacyConfig | Mapping[str, Any] | None, inj
         raise TypeError("configuration must be DiplomacyConfig, mapping, or None")
     top = DiplomacyAddressRouter(cfg)
     ports = [top.clock, top.reset, top.input_valid, top.input_ready, top.input_address,
-             top.output_valid, top.output_route, top.output_hit, top.output_address]
+             top.output_valid, top.output_ready, top.output_route, top.output_hit,
+             top.output_address, top.input_fire, top.output_fire, top.route_miss]
     return verilog.convert(top, name=name, ports=ports, emit_src=False)
 
 

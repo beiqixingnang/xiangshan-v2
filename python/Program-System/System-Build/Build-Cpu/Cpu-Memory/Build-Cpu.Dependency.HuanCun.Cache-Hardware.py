@@ -24,7 +24,50 @@ from amaranth.hdl.ast import Value
 # =============================================================================
 # HuanCun cache contract: lookup, hit response, miss request, refill, and
 # dirty eviction. / HuanCun 缓存契约：查找、命中响应、缺失请求、回填及脏逐出。
-__all__ = ["HuanCunConfig", "HuanCunCacheBoundary", "build_verilog", "main"]
+__all__ = [
+    "HuanCunConfig", "HuanCunCacheBoundary", "cache_transaction_observation",
+    "build_verilog", "main", "HUANCUN_CACHE_SOURCE_PATHS",
+]
+
+
+# This bounded cache follows the request-buffer dependency, metadata victim,
+# and refill/writeback boundaries from the frozen HuanCun sources.  It does
+# not claim to implement a complete banked coherent L2. / 此有界缓存遵循冻结
+# HuanCun 源码的请求缓冲依赖、元数据 victim、回填/写回边界；它不声称实现完整的
+# 分 bank 一致性 L2。
+HUANCUN_CACHE_SOURCE_PATHS: tuple[str, ...] = (
+    "upstream/huancun/src/main/scala/huancun/RequestBuffer.scala",
+    "upstream/huancun/src/main/scala/huancun/MetaData.scala",
+    "upstream/huancun/src/main/scala/huancun/DataStorage.scala",
+    "upstream/huancun/src/main/scala/huancun/HuanCun.scala",
+)
+
+
+def cache_transaction_observation(*, req_valid: bool, req_ready: bool,
+                                  miss_valid: bool, miss_ready: bool,
+                                  evict_valid: bool, evict_ready: bool,
+                                  refill_valid: bool, refill_ready: bool,
+                                  resp_valid: bool, resp_ready: bool,
+                                  flush: bool = False) -> dict[str, int]:
+    """Return one source-backed bounded cache transaction observation.
+
+    The request/refill/response channels advance only on Decoupled fire; a
+    dirty victim blocks miss issuance until its write-back fires.  This mirrors
+    RequestBuffer's fire-based dequeue and the HuanCun slice's Decoupled
+    wiring, while remaining intentionally one-entry. / request/refill/response
+    通道只在 Decoupled fire 时推进；脏 victim 在其写回 fire 前阻塞 miss 发出。
+    这对应 RequestBuffer 基于 fire 的出队和 HuanCun slice 的 Decoupled 接线，
+    同时刻意保持单项有界。
+    """
+    blocked = bool(flush)
+    return {
+        "req_fire": int(bool(req_valid) and bool(req_ready) and not blocked),
+        "miss_fire": int(bool(miss_valid) and bool(miss_ready) and not blocked),
+        "evict_fire": int(bool(evict_valid) and bool(evict_ready) and not blocked),
+        "refill_fire": int(bool(refill_valid) and bool(refill_ready) and not blocked),
+        "resp_fire": int(bool(resp_valid) and bool(resp_ready) and not blocked),
+        "flush_cancel": int(blocked and any((req_valid, miss_valid, evict_valid, refill_valid, resp_valid))),
+    }
 
 
 # Cast Amaranth's generator controls to a context-manager protocol. / 将 Amaranth 生成器控制转换为上下文管理器协议。
@@ -135,12 +178,15 @@ class HuanCunCacheBoundary(Elaboratable):
         self.req_data = Signal(c.line_bits, name="io_req_data")
         self.req_source = Signal(c.source_bits, name="io_req_source")
         self.resp_valid = Signal(name="io_resp_valid")
+        self.resp_ready = Signal(name="io_resp_ready", init=1)
         self.resp_data = Signal(c.line_bits, name="io_resp_data")
         self.resp_source = Signal(c.source_bits, name="io_resp_source")
         self.miss_valid = Signal(name="io_miss_valid")
+        self.miss_ready = Signal(name="io_miss_ready", init=1)
         self.miss_address = Signal(c.address_bits, name="io_miss_address")
         self.miss_source = Signal(c.source_bits, name="io_miss_source")
         self.evict_valid = Signal(name="io_evict_valid")
+        self.evict_ready = Signal(name="io_evict_ready", init=1)
         self.evict_address = Signal(c.address_bits, name="io_evict_address")
         self.evict_data = Signal(c.line_bits, name="io_evict_data")
         self.refill_valid = Signal(name="io_refill_valid")
@@ -154,8 +200,10 @@ class HuanCunCacheBoundary(Elaboratable):
         self.refill_ready = Signal(name="io_refill_ready")
         self.req_mask = Signal(c.mask_bits, name="io_req_mask")
         self.req_fire = Signal(name="io_req_fire")
+        self.miss_fire = Signal(name="io_miss_fire")
         self.refill_fire = Signal(name="io_refill_fire")
         self.evict_fire = Signal(name="io_evict_fire")
+        self.resp_fire = Signal(name="io_resp_fire")
         self.hit = Signal(name="io_hit")
         self.dirty = Signal(name="io_dirty")
         self.state = Signal(2, name="io_state")
@@ -254,6 +302,11 @@ class HuanCunCacheBoundary(Elaboratable):
         pending_data = Signal(c.line_bits, name="pending_data")
         pending_mask = Signal(c.mask_bits, name="pending_mask")
         pending = Signal(name="pending")
+        # A miss cannot accept a refill before the outgoing request has fired.
+        # This is the one-entry counterpart of RequestBuffer's issue-fire
+        # discipline. / miss 在其向外请求 fire 前不能接收 refill；这是
+        # RequestBuffer issue-fire 纪律的单项对应物。
+        miss_issued = Signal(name="miss_issued")
         evict_pending = Signal(name="evict_pending")
         # Capture eviction metadata with the accepted miss.  The request bus
         # may change while the write-back is pending, so live victim muxes are
@@ -271,8 +324,10 @@ class HuanCunCacheBoundary(Elaboratable):
         full_mask = (1 << c.mask_bits) - 1
         effective_mask = Mux(self.req_mask == 0, full_mask, self.req_mask)
         req_fire = self.req_valid & self.req_ready
+        miss_fire = self.miss_valid & self.miss_ready
         refill_fire = self.refill_valid & self.refill_ready
-        evict_fire = evict_pending & ~self.flush
+        evict_fire = self.evict_valid & self.evict_ready
+        resp_fire = self.resp_valid & self.resp_ready
 
         # Refill address may be supplied explicitly; otherwise retain the
         # pending set and interpret ``refill_source`` as the legacy tag.
@@ -297,22 +352,25 @@ class HuanCunCacheBoundary(Elaboratable):
         # Cat takes the first item as the least-significant part. / Cat 首项是最低有效片段。
         m.d.comb += merged_refill.eq(Cat(*merge_parts))
 
-        # A dirty victim must leave the cache before its replacement line can
-        # be accepted.  ``evict_pending`` is a one-entry write-back queue;
-        # exposing refill-ready in the same cycle would permit a refill to
-        # overwrite the victim before the downstream eviction handshake.
-        # 脏 victim 必须先离开缓存，才能接收替换行；evict_pending 是单项写回
-        # 队列，同周期拉高 refill_ready 会在逐出握手前覆盖 victim。
-        m.d.comb += [self.req_ready.eq(~pending & ~self.flush), self.req_fire.eq(req_fire),
-                     self.refill_ready.eq(pending & ~evict_pending & ~self.flush), self.refill_fire.eq(refill_fire),
-                     self.evict_fire.eq(evict_fire), self.hit.eq(hit),
+        # A dirty victim must leave before the replacement miss is issued, and
+        # a refill must wait for that miss's Decoupled fire.  Likewise, retain
+        # responses until the receiver accepts them.  This is the concrete
+        # ready/valid boundary missing from the earlier valid-only model.
+        # 脏 victim 必须先离开才能发出替换 miss，refill 必须等待该 miss 的
+        # Decoupled fire；同样，response 必须保留到接收方接受。这补上了此前
+        # 仅 valid 模型缺失的具体 ready/valid 边界。
+        m.d.comb += [self.req_ready.eq(~pending & ~response_pending & ~self.flush), self.req_fire.eq(req_fire),
+                     self.miss_valid.eq(pending & ~evict_pending & ~miss_issued & ~self.flush),
+                     self.miss_fire.eq(miss_fire),
+                     self.refill_ready.eq(pending & miss_issued & ~evict_pending & ~self.flush),
+                     self.refill_fire.eq(refill_fire), self.evict_fire.eq(evict_fire),
+                     self.resp_valid.eq(response_pending & ~self.flush), self.resp_fire.eq(resp_fire),
+                     self.hit.eq(self.req_valid & hit),
                      self.dirty.eq(Mux(hit, hit_dirty, victim_dirty)),
-                     self.state.eq(Mux(pending, 2, Mux(hit, Mux(hit_dirty, 1, 0), 0))),
-                     self.resp_valid.eq((self.req_valid & self.req_ready & hit) | response_pending),
-                     self.resp_data.eq(Mux(response_pending, response_data,
-                                            Mux(hit, Mux(self.req_write, self.req_data, hit_data), 0))),
-                     self.resp_source.eq(Mux(response_pending, response_source, self.req_source)),
-                     self.miss_valid.eq(pending & ~self.flush), self.miss_address.eq(pending_addr),
+                     self.state.eq(Mux(response_pending, 3,
+                                       Mux(evict_pending, 1, Mux(pending, 2, 0)))),
+                     self.resp_data.eq(response_data), self.resp_source.eq(response_source),
+                     self.miss_address.eq(pending_addr),
                      self.miss_source.eq(source), self.miss_set.eq(pending_set), self.miss_tag.eq(pending_tag),
                      self.evict_valid.eq(evict_pending & ~self.flush),
                      self.evict_address.eq((evict_tag_r << (c.set_bits + c.offset_bits)) |
@@ -322,22 +380,24 @@ class HuanCunCacheBoundary(Elaboratable):
         # Reset/flush invalidates all ways, as DataStorage's metadata reset does.
         # 复位/flush 使所有路无效，对应 DataStorage 元数据复位。
         with amaranth_if(m, self.reset | self.flush):
-            m.d.huancun_cache += [pending.eq(0), evict_pending.eq(0), response_pending.eq(0)]
+            m.d.huancun_cache += [pending.eq(0), miss_issued.eq(0), evict_pending.eq(0), response_pending.eq(0)]
             for index in range(entries):
                 m.d.huancun_cache += [valid_mem[index].eq(0), dirty_mem[index].eq(0)]
             for index in range(c.sets):
                 m.d.huancun_cache += rr_mem[index].eq(0)
         with amaranth_else(m):
-            # Response pulses are one cycle unless a new refill arrives.
-            m.d.huancun_cache += response_pending.eq(0)
-            # The evict channel is an output-only Valid boundary in this
-            # aggregate (there is no separate ready pin in the locked ABI).
-            # Consume the advertised write-back for one cycle, then permit
-            # the refill handshake on the following cycle.
-            # 逐出通道在锁定 ABI 中是仅输出 Valid（没有独立 ready）；广告
-            # 一个周期后消费写回，下一周期才允许 refill 握手。
-            with amaranth_if(m, evict_pending):
+            # Keep responses stable under backpressure; only the concrete
+            # response handshake retires them. / 在反压下保持 response 稳定；
+            # 仅实际 response 握手将其退休。
+            with amaranth_if(m, resp_fire):
+                m.d.huancun_cache += response_pending.eq(0)
+            # Write-back is also Decoupled.  A stalled sink retains the victim
+            # and prevents the miss/refill path from overtaking it. / 写回同样
+            # 是 Decoupled；停滞 sink 保留 victim 并阻止 miss/refill 路径超越它。
+            with amaranth_if(m, evict_fire):
                 m.d.huancun_cache += evict_pending.eq(0)
+            with amaranth_if(m, miss_fire):
+                m.d.huancun_cache += miss_issued.eq(1)
             with amaranth_if(m, req_fire):
                 with amaranth_if(m, hit):
                     with amaranth_if(m, self.req_write):
@@ -349,16 +409,19 @@ class HuanCunCacheBoundary(Elaboratable):
                             with amaranth_if(m, effective_mask[byte]):
                                 m.d.huancun_cache += old_byte.eq(new_byte)
                         m.d.huancun_cache += dirty_mem[req_entry_base + hit_way].eq(1)
-                    with amaranth_else(m):
-                        m.d.huancun_cache += [response_data.eq(hit_data), response_source.eq(self.req_source),
-                                              response_pending.eq(1)]
+                    # A hit response is registered so data/source remain
+                    # stable until ``resp.fire``. / 命中 response 被寄存，
+                    # 使 data/source 在 ``resp.fire`` 前保持稳定。
+                    m.d.huancun_cache += [response_data.eq(Mux(self.req_write, self.req_data, hit_data)),
+                                          response_source.eq(self.req_source), response_pending.eq(1)]
                 with amaranth_else(m):
                     m.d.huancun_cache += [pending.eq(1), pending_addr.eq(self.req_address),
                                           pending_set.eq(req_set), pending_tag.eq(req_tag),
                                           pending_way.eq(victim_way), pending_write.eq(self.req_write),
                                           pending_data.eq(self.req_data), pending_mask.eq(effective_mask),
                                           source.eq(self.req_source), evict_tag_r.eq(victim_tag),
-                                          evict_data_r.eq(victim_data), evict_pending.eq(victim_dirty)]
+                                          evict_data_r.eq(victim_data), miss_issued.eq(0),
+                                          evict_pending.eq(victim_dirty)]
                     with amaranth_if(m, ~victim_valid):
                         # Invalid victims cannot produce a write-back transaction.
                         m.d.huancun_cache += evict_pending.eq(0)
@@ -370,10 +433,9 @@ class HuanCunCacheBoundary(Elaboratable):
                 m.d.huancun_cache += [data_mem[refill_entry].eq(merged_refill),
                                       tag_mem[refill_entry].eq(refill_tag), valid_mem[refill_entry].eq(1),
                                       dirty_mem[refill_entry].eq(pending_write), pending.eq(0),
-                                      evict_pending.eq(0)]
-                with amaranth_if(m, ~pending_write):
-                    m.d.huancun_cache += [response_data.eq(self.refill_data), response_source.eq(source),
-                                          response_pending.eq(1)]
+                                      miss_issued.eq(0), evict_pending.eq(0),
+                                      response_data.eq(Mux(pending_write, pending_data, self.refill_data)),
+                                      response_source.eq(source), response_pending.eq(1)]
         return m
 
 
@@ -402,11 +464,13 @@ def build_verilog(configuration, injected_dependencies):
     top = HuanCunCacheBoundary(cfg)
     ports = [top.clock, top.reset, top.flush, top.req_valid, top.req_ready, top.req_address,
              top.req_write, top.req_data, top.req_source, top.resp_valid, top.resp_data,
-             top.resp_source, top.miss_valid, top.miss_address, top.miss_source, top.evict_valid,
+             top.resp_source, top.resp_ready, top.miss_valid, top.miss_ready, top.miss_address,
+             top.miss_source, top.evict_valid, top.evict_ready,
              top.evict_address, top.evict_data, top.refill_valid, top.refill_data,
              top.refill_source, top.refill_address, top.refill_has_address, top.refill_tag,
-             top.refill_ready, top.req_mask, top.req_fire, top.refill_fire, top.evict_fire,
-             top.hit, top.dirty, top.state, top.miss_set, top.miss_tag, top.evict_way]
+             top.refill_ready, top.req_mask, top.req_fire, top.miss_fire, top.refill_fire,
+             top.evict_fire, top.resp_fire, top.hit, top.dirty, top.state, top.miss_set,
+             top.miss_tag, top.evict_way]
     return verilog.convert(top, name=name, ports=ports, emit_src=False)
 
 
