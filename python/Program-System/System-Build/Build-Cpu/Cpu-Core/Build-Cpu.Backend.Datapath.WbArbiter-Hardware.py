@@ -24,6 +24,7 @@ __all__ = [
     "WbExuAttr",
     "WbDataPathConfig",
     "arbiterCtrl",
+    "writeback_observation",
     "RealWBArbiter",
     "WbArbiterDispatcher",
     "RealWBCollideChecker",
@@ -130,6 +131,17 @@ def arbiterCtrl(request: Iterable[Any]) -> list[Any]:
         grants.append(~prefix)
         prefix = prefix | item
     return grants
+
+
+def writeback_observation(valid: list[bool], ready: bool = True) -> dict[str, object]:
+    """Return first-valid writeback grant and selected index. / 返回首个有效写回授权与索引。"""
+
+    if not valid:
+        return {"grants": [], "selected": -1, "fire": 0}
+    selected = next((index for index, item in enumerate(valid) if item), -1)
+    grants = [int(item and index == selected) for index, item in enumerate(valid)]
+    return {"grants": grants, "selected": selected,
+            "fire": int(selected >= 0 and bool(ready))}
 
 
 class RealWBArbiter(Elaboratable):
