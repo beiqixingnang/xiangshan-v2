@@ -70,6 +70,7 @@ __all__ = [
     "INT2FP",
     "FPCVT",
     "rounding_decision",
+    "float_classify",
     "leading_zero_count",
     "lza_value",
     "sign_extend",
@@ -371,6 +372,21 @@ def rounding_decision(value: int, round_in: int, sticky_in: int, sign_in: int,
     rounded = (value + round_up) & mask
     carry = int(bool(round_up and value == mask))
     return rounded, inexact, carry, round_up
+
+
+# Classify an IEEE-like payload using the source FPU exception categories. /
+# 按源码 FPU 异常类别对类 IEEE 负载进行分类。
+def float_classify(value: int, floating: FType) -> str:
+    """Return ``zero``, ``subnormal``, ``normal``, ``inf`` or ``nan``. / 返回 zero、subnormal、normal、inf 或 nan。"""
+
+    payload = int(value) & ((1 << floating.width) - 1)
+    exponent = (payload >> floating.frac_width) & ((1 << floating.exp_width) - 1)
+    fraction = payload & ((1 << floating.frac_width) - 1)
+    if exponent == 0:
+        return "zero" if fraction == 0 else "subnormal"
+    if exponent == (1 << floating.exp_width) - 1:
+        return "inf" if fraction == 0 else "nan"
+    return "normal"
 
 
 # Box f16/f32/f64 payloads as FPU.scala. / 按 FPU.scala 装箱 f16/f32/f64 负载。

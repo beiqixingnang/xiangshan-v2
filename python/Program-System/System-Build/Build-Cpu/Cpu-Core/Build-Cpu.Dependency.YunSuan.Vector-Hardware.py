@@ -32,7 +32,7 @@ __all__ = [
     "VREDMIN", "VREDAND", "VREDOR", "VREDXOR", "VCPop", "VFIRST", "VMSBF",
     "VMSIF", "VMSOF", "VIOTA", "VID", "VREV8", "VROL", "VROR",
     "VEXT", "VSLL", "VSRL", "VSRA", "VMERGE", "VMV", "VSLIDEUP", "VSLIDEDN", "VCOMPRESS",
-    "VBREV", "VBREV8", "VCLZ", "VCTZ", "VWSLL", "VectorConfig", "VectorFamilyConfig", "VectorElementFormat", "YunSuanVectorBoundary",
+    "VBREV", "VBREV8", "VCLZ", "VCTZ", "VWSLL", "VectorConfig", "VectorFamilyConfig", "VectorElementFormat", "YunSuanVectorBoundary", "vector_lane_ready",
     "YunSuanVIntAdder64b", "YunSuanVIntMisc64b", "YunSuanVMask", "YunSuanReduction",
     "YunSuanPermutation", "YunSuanVectorIntAdder", "YunSuanVectorConvert",
     "YunSuanVectorPrimitive", "vector_add", "vector_compare", "vector_mask_operation",
@@ -149,6 +149,20 @@ def width_mask(width: int) -> int:
     if width == 0:
         return 0
     return (1 << width) - 1
+
+
+# Compute source-style lane readiness from VL and VSEW. / 按 VL 与 VSEW 计算源码语义的元素就绪掩码。
+def vector_lane_ready(vl: int, sew: int, lanes: int = 2) -> int:
+    """Return a bit per 64-bit lane that contains at least one active element. / 返回每个含活动元素的 64 位 lane 就绪位。"""
+
+    if lanes < 1:
+        raise ValueError("lanes must be positive")
+    width = 8 << int(sew)
+    if width not in (8, 16, 32, 64):
+        raise ValueError("sew must be in [0, 3]")
+    elements_per_lane = 64 // width
+    return sum(1 << lane for lane in range(lanes)
+               if int(vl) > lane * elements_per_lane)
 
 
 # Split a packed vector into little-endian elements. / 将打包向量拆成小端元素。
@@ -939,6 +953,9 @@ class YunSuanVectorBoundary(Elaboratable):
         self.permutation_result = Signal(128, name="io_permutation_result")
         self.convert_result = Signal(64, name="io_convert_result")
         self.convert_flags = Signal(5, name="io_convert_flags")
+        # Per-lane readiness sideband; existing ports remain unchanged. /
+        # 每 lane 就绪旁带；保留所有既有端口不变。
+        self.lane_ready = Signal(2, name="io_lane_ready")
 
     # Elaborate concrete vector child boundaries. / 展开具体向量子边界。
     def elaborate(self, platform: Any) -> Module:
@@ -977,6 +994,10 @@ class YunSuanVectorBoundary(Elaboratable):
                      converter.src.eq(self.vs1[:64]), converter.opcode.eq(self.opcode), converter.sew.eq(self.sew),
                      converter.rm.eq(0), self.convert_result.eq(converter.result), self.convert_flags.eq(converter.fflags),
                      self.ready.eq(~pending), self.valid.eq(pending),
+                     self.lane_ready.eq(Mux(self.vl == 0, 0,
+                                            Mux(self.sew == 3,
+                                                Mux(self.vl > 1, 0b11, 0b01),
+                                                0b11))),
                      self.exception.eq(Mux(self.opcode == VCPop, 0, self.convert_flags)),]
         with amaranth_if(m, self.reset):
             m.d.vector += pending.eq(0)
@@ -1036,7 +1057,8 @@ def build_verilog(configuration, injected_dependencies):
         ports = [top.clock, top.reset, top.fire, top.ready, top.valid, top.result_ready, top.exception,
                  top.opcode, top.sew, top.signed, top.vs1, top.vs2,
                  top.old_vd, top.mask, top.vl, top.vector_result, top.vector_compare, top.mask_result,
-                 top.reduction_result, top.permutation_result, top.convert_result, top.convert_flags]
+                 top.reduction_result, top.permutation_result, top.convert_result, top.convert_flags,
+                 top.lane_ready]
     return verilog.convert(top, name=name, ports=ports, emit_src=False)
 
 
