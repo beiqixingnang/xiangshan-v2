@@ -287,6 +287,16 @@ def write_tb(name: str, ports: list[tuple[str, str, int]], mine: str, pinned: st
 def main() -> int:
     """Run every coverage, port, determinism, differential and tool gate. / 运行覆盖、端口、确定性、差分与工具门禁。"""
 
+    # ``--fast`` is an explicitly partial checkpoint for tight WSL windows:
+    # it keeps the two behavioral representatives but limits lint/Yosys to
+    # the same representatives.  The evidence records partial coverage and
+    # never promotes this path to full-family equivalence. / ``--fast`` 是资源
+    # 紧张时的显式部分检查点；保留两个行为代表并把工具扫查限制到它们，
+    # 证据会记录部分覆盖，绝不会升级为整族等价。
+    fast_mode = "--fast" in sys.argv[1:]
+    differential_targets = ("FreeList", "UncacheEntry_15") if fast_mode else DIFFERENTIAL_TARGETS
+    tool_sweep_targets = ("FreeList", "UncacheEntry_15") if fast_mode else TOOL_SWEEP_TARGETS
+
     module = load(TARGET, "v2_lsq_uncache_target")
     hierarchy = json.loads(HIERARCHY.read_text(encoding="utf-8"))
     locked_modules: dict[str, Any] = hierarchy["modules"]
@@ -317,7 +327,7 @@ def main() -> int:
 
     # Gate 2: deterministic Verilog for the differential and sweep targets.
     # 门禁 2：差分与扫查目标的确定性 Verilog。
-    determinism_targets = sorted(set(DIFFERENTIAL_TARGETS) | set(TOOL_SWEEP_TARGETS))
+    determinism_targets = sorted(set(differential_targets) | set(tool_sweep_targets))
     determinism_failures: list[str] = []
     sha256_table: dict[str, str] = {}
     for name in determinism_targets:
@@ -332,7 +342,7 @@ def main() -> int:
     WORK.mkdir(parents=True, exist_ok=True)
     diff_records: list[dict[str, object]] = []
     differential_pass = True
-    for name in DIFFERENTIAL_TARGETS:
+    for name in differential_targets:
         work = WORK / name
         work.mkdir(parents=True, exist_ok=True)
         mine = module.build_verilog({"module": name}, {})
@@ -390,7 +400,7 @@ def main() -> int:
     # Gate 4: Verilator lint + Yosys elaboration on bounded representatives.
     # 门禁 4：对有界代表成员运行 Verilator lint 与 Yosys 展开。
     sweep_records: list[dict[str, object]] = []
-    for name in TOOL_SWEEP_TARGETS:
+    for name in tool_sweep_targets:
         single = WORK / f"{name}.sv"
         single.write_text(module.build_verilog({"module": name}, {}), encoding="utf-8", newline="\n")
         located = wsl_path(single)
@@ -439,7 +449,7 @@ def main() -> int:
     unclosed_gates: list[str] = [
         "DETERMINISM_FULL_SWEEP_UNCLOSED: repeated elaboration bounded to "
         + ", ".join(determinism_targets),
-        "TOOL_SWEEP_FULL_UNCLOSED: Verilator/Yosys bounded to " + ", ".join(TOOL_SWEEP_TARGETS),
+        "TOOL_SWEEP_FULL_UNCLOSED: Verilator/Yosys bounded to " + ", ".join(tool_sweep_targets),
         "TLB_SFENCE_ADDR_BRANCH_CONTRACT_ONLY: pinned rs1=0 addr-match sfence rule "
         "implemented best-effort, exact pinned lines not transcribed",
         "TLB_WRITE_MERGE_LEVEL_CONTRACT_ONLY: s2_exception/inner_level merge chain "
@@ -454,15 +464,20 @@ def main() -> int:
         "COVERAGE_COMPLETE": "PASS" if not missing and not extra_locked else "PASS_BOUNDED",
         "PORT_SURFACE_MATCHED": "PASS" if not port_failures else "FAIL",
         "DETERMINISTIC_VERILOG": "PASS" if not determinism_failures else "FAIL",
-        "DIFFERENTIAL": "PASS" if differential_pass else "FAIL",
-        "VERILATOR": "PASS" if verilator_pass else "FAIL",
-        "YOSYS": "PASS" if yosys_pass else "FAIL",
+        "DIFFERENTIAL": ("PASS_PARTIAL_COVERAGE" if fast_mode and differential_pass else
+                          "PASS" if differential_pass else "FAIL"),
+        "VERILATOR": ("PASS_PARTIAL_COVERAGE" if fast_mode and verilator_pass else
+                       "PASS" if verilator_pass else "FAIL"),
+        "YOSYS": ("PASS_PARTIAL_COVERAGE" if fast_mode and yosys_pass else
+                   "PASS" if yosys_pass else "FAIL"),
         "V2_LOCKED_REFERENCE_IMMUTABLE": "PASS" if locked_ok else "FAIL",
         "ACCEPTED": "NOT_ALLOWED",
     }
-    status = "DIRECT_TEST_PASS_BOUNDED" if (
+    status = ("DIRECT_TEST_PASS_PARTIAL_COVERAGE" if fast_mode and
+              not port_failures and not determinism_failures and differential_pass and verilator_pass and yosys_pass else
+              "DIRECT_TEST_PASS_BOUNDED" if (
         not port_failures and not determinism_failures and differential_pass and verilator_pass and yosys_pass
-    ) else "FAIL"
+    ) else "FAIL")
 
     payload = {
         "schema_version": 1,
@@ -482,6 +497,7 @@ def main() -> int:
             "sha256": digest(TARGET.read_bytes()),
             "line_count": len(TARGET.read_text(encoding="utf-8").splitlines()),
         },
+        "coverage_mode": "PARTIAL_FAST_CHECKPOINT" if fast_mode else "FULL_BOUNDED_FAMILY",
         "covered_modules": covered,
         "covered_module_count": len(covered),
         "hierarchy_extra_modules": extra_locked,
@@ -508,18 +524,20 @@ def main() -> int:
             "status": "PASS" if differential_pass else "FAIL",
             "tool": "verilator",
             "transport": "wsl.exe -e bash -lc",
-            "compared_instances": list(DIFFERENTIAL_TARGETS),
+            "compared_instances": list(differential_targets),
             "cycles_per_instance": DIFFERENTIAL_CYCLES,
             "records": diff_records,
-            "trace_verdict": "BEHAVIORAL_DIFFERENTIAL_BOUNDED" if differential_pass
-            else "BEHAVIORAL_DIFFERENTIAL_FAIL",
-            "behavioral_equivalence": "BOUNDED_ESTABLISHED" if differential_pass else "NOT_ESTABLISHED",
+            "trace_verdict": ("BEHAVIORAL_DIFFERENTIAL_PARTIAL" if fast_mode and differential_pass else
+                              "BEHAVIORAL_DIFFERENTIAL_BOUNDED" if differential_pass else
+                              "BEHAVIORAL_DIFFERENTIAL_FAIL"),
+            "behavioral_equivalence": ("PARTIAL_REPRESENTATIVE_ONLY" if fast_mode and differential_pass else
+                                        "BOUNDED_ESTABLISHED" if differential_pass else "NOT_ESTABLISHED"),
         },
         "tool_gates": {
             "verilator": "PASS" if verilator_pass else "FAIL",
             "yosys": "PASS" if yosys_pass else "FAIL",
             "sweep": sweep_records,
-            "bounded_to": list(TOOL_SWEEP_TARGETS),
+            "bounded_to": list(tool_sweep_targets),
         },
         "unclosed_gates": unclosed_gates,
         "gates": gates,
@@ -529,7 +547,7 @@ def main() -> int:
     print("port failures:", len(port_failures))
     print("differential:", [rec["verdict"] for rec in diff_records])
     print("verilator/yosys:", verilator_pass, yosys_pass)
-    return 0 if status == "DIRECT_TEST_PASS_BOUNDED" else 1
+    return 0 if status in {"DIRECT_TEST_PASS_BOUNDED", "DIRECT_TEST_PASS_PARTIAL_COVERAGE"} else 1
 
 
 if __name__ == "__main__":
