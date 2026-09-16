@@ -6,11 +6,41 @@
   "source_scala_file_count": 20,
   "target": {
     "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Rocket.Hardfloat-Hardware.py",
-    "sha256": "833ca20f59b79302bcf3f12aac43d887b48982e6c79a3500a183f1326f849a64"
+    "sha256": "272fd5df98d5cdb41c4058bbc3f299b0943929147a53ae68cc1a8e8e51c2d2fd"
   },
   "direct": {
     "status": "PASS",
     "vectors": 11,
+    "compare_vectors": [
+      {
+        "a": 0,
+        "b": 2147483648,
+        "equal": 1,
+        "less": 0,
+        "unordered": 0
+      },
+      {
+        "a": 1065353216,
+        "b": 1073741824,
+        "equal": 0,
+        "less": 1,
+        "unordered": 0
+      },
+      {
+        "a": 3212836864,
+        "b": 1065353216,
+        "equal": 0,
+        "less": 1,
+        "unordered": 0
+      },
+      {
+        "a": 2143289345,
+        "b": 1065353216,
+        "equal": 0,
+        "less": 0,
+        "unordered": 1
+      }
+    ],
     "observations": [
       {
         "op": 0,
@@ -26,19 +56,44 @@
         "op": 2,
         "result": 63,
         "nan": 0
+      },
+      {
+        "op": 3,
+        "result": 1065353216,
+        "nan": 0
+      },
+      {
+        "op": 4,
+        "result": 1073741824,
+        "nan": 0
+      },
+      {
+        "op": 5,
+        "result": 2143289344,
+        "nan": 1
+      },
+      {
+        "op": 6,
+        "result": 1065353216,
+        "nan": 0
+      },
+      {
+        "op": 7,
+        "result": 3212836864,
+        "nan": 0
       }
     ]
   },
   "backend": {
     "verilator": "PASS",
     "yosys": "PASS",
-    "rtl_bytes": 2994,
-    "rtl_sha256": "4a1600d1088bad3e368fdaf88725b399b7d1223f0275248bfe6ef9e8cab01b44"
+    "rtl_bytes": 6151,
+    "rtl_sha256": "ad50233f558d16e199ba7a9b53d28fc4ba7323aeb2798bbbb0af7f248d920a67"
   },
   "gates": {
     "PYTHON_PRESENT": "PASS",
     "DIRECT_TEST_PASS_BOUNDED": "PASS",
-    "V2_REFERENCE_MATCHED": "PASS_BOUNDED_HARDFLOAT_FIELDS",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED_HARDFLOAT_FIELDS_COMPARE_MINMAX",
     "VERILATOR": "PASS",
     "YOSYS": "PASS",
     "UHSC_LOCALIZED": "PASS_BOUNDED_FAMILY_LOCAL_NAME",

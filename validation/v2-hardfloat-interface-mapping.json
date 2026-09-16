@@ -31,13 +31,14 @@
   ],
   "target": {
     "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Rocket.Hardfloat-Hardware.py",
-    "sha256": "833ca20f59b79302bcf3f12aac43d887b48982e6c79a3500a183f1326f849a64"
+    "sha256": "272fd5df98d5cdb41c4058bbc3f299b0943929147a53ae68cc1a8e8e51c2d2fd"
   },
   "disposition": "AGGREGATED_FAMILY_BOUNDARY",
   "boundary": {
     "implemented_contracts": [
       "IEEE sign/exponent/fraction packing and classification",
       "sign-aware compare/equality observations",
+      "NaN-unordered compare helper and min/max/abs/negate operation probes",
       "bounded primitive operation result mux used by Rocket/Fudian adapters"
     ],
     "explicitly_deferred_closure": [
@@ -65,11 +66,11 @@
     "PY_COMPILE": "PASS",
     "DETERMINISTIC_SAME_NAME_BUILD_VERILOG": "PASS",
     "STRUCTURE_VERIFIED": "PASS",
-    "BEHAVIOR_VERIFIED_dependency.hardfloat": "PENDING_BATCH_VALIDATION",
+    "BEHAVIOR_VERIFIED_dependency.hardfloat": "PASS_BOUNDED_COMPARE_MINMAX",
     "ACCEPTED": "NOT_ALLOWED"
   },
   "structure_status": "PASS",
-  "behavior_status": "PENDING_BATCH_VALIDATION",
+  "behavior_status": "PASS_BOUNDED_FAMILY",
   "accepted": false,
   "acceptance_eligible": false,
   "unclosed": [
@@ -78,4 +79,3 @@
     "License review and user approval remain pending."
   ]
 }
-
