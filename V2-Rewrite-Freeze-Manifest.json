@@ -15,11 +15,36 @@
   "dependency_family_subjects": 23,
   "uhsc_integration_subjects": 1,
   "retired_or_excluded_subjects": 1,
-  "current_distinct_build_paths": 84,
-  "current_committed_build_paths": 84,
-  "current_draft_build_paths": 0,
-  "note": "78 remains the frozen closure-subject upper bound.  The 2026-09-16 hierarchy-completion amendment adds four further aggregate subjects whose covered modules are counted in validation/v2-hierarchy-coverage.json, not in the 78.",
-  "hierarchy_wave1_added_subjects": 4
+    "current_distinct_build_paths": 88,
+  "current_committed_build_paths": 86,
+    "current_draft_build_paths": 2,
+    "note": "78 remains the frozen closure-subject upper bound. The hierarchy-completion amendments add four Wave 1 and four Wave 2 aggregate subjects; their covered modules are tracked in validation/v2-hierarchy-coverage.json and do not change the original 78.",
+    "hierarchy_wave1_added_subjects": 4,
+    "hierarchy_wave2_added_subjects": 4,
+    "hierarchy_wave1_subject_paths": [
+      "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.NewCSR.CSRModule-Hardware.py",
+      "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.NewCSR.CSRLite-Hardware.py",
+      "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Chisel.Decoupled-Hardware.py",
+      "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Chisel.Arbiter-Hardware.py"
+    ],
+    "hierarchy_wave2_subject_paths": [
+      {
+        "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.Entries-Hardware.py",
+        "status": "COMMITTED_BOUNDED"
+      },
+      {
+        "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Exu.FuncUnit-Hardware.py",
+        "status": "DRAFT_PYRIGHT_BLOCKED"
+      },
+      {
+        "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Regfile.Regfile-Hardware.py",
+        "status": "COMMITTED_STRUCTURE_PENDING_BEHAVIOR"
+      },
+      {
+        "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Lsqueue.Uncache-Hardware.py",
+        "status": "DRAFT_HARNESS_REPAIRED_VALIDATION_PENDING"
+      }
+    ]
  },
  "phases": [
   {
