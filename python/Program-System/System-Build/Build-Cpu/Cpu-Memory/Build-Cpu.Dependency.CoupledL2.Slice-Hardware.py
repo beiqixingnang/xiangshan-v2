@@ -49,6 +49,7 @@ __all__ = [
     "mshr_reference_step",
     "probe_queue_reference_step",
     "refill_reference_step",
+    "tl2tl_slice_admission_reference_step",
     "build_verilog",
     "main",
 ]
@@ -304,6 +305,59 @@ def refill_reference_step(beat: int, line_beats: int, opcode: int, size: int,
             "next_beat": 0 if (fire and last) else (beat + 1 if fire else beat),
             "next_ack_count": ack_count + int(fire and grant and first),
             "denied": int(bool(denied)), "corrupt": int(bool(corrupt))}
+
+
+# Evaluate the source-level TL2TL Slice admission envelope. / 计算源级 TL2TL Slice 准入包络。
+def tl2tl_slice_admission_reference_step(
+    *,
+    request_buffer_ready: bool,
+    mainpipe_block: bool,
+    mshr_admit: bool,
+    release_buffer_ready: bool,
+    probe_queue_full: bool,
+    grant_ack_valid: bool,
+    source_e_ready: bool,
+    in_a_valid: bool = False,
+    in_c_valid: bool = False,
+    out_b_valid: bool = False,
+    out_d_valid: bool = False,
+    out_a_valid: bool = False,
+    out_a_ready: bool = False,
+    out_c_valid: bool = False,
+    out_c_ready: bool = False,
+) -> dict[str, int]:
+    """Return executable TL2TL Slice channel-admission observations.
+
+    ``tl2tl/Slice.scala`` routes A through ``RequestBuffer``, C through
+    ``SinkC``/``releaseBuf``, B through ``SinkB``/``ProbeQueue``, D through
+    ``RefillUnit``, and E through its GrantAck queue.  ``ProbeQueue.scala``
+    admits B while its five entries are not all valid; ``RefillUnit.scala``
+    explicitly drives ``sinkD.ready := true.B``.  This helper keeps those
+    source facts independently observable without weakening a parent
+    comparator or pretending that a local queue is a combinational bypass.
+    """
+
+    in_a_ready = bool(request_buffer_ready and not mainpipe_block and mshr_admit)
+    in_c_ready = bool(release_buffer_ready)
+    out_b_ready = not bool(probe_queue_full)
+    # RefillUnit.scala: ``io.sinkD.ready := true.B``.  The outer D admission
+    # is consequently independent of current MSHR/main-pipe state.
+    out_d_ready = True
+    out_e_valid = bool(grant_ack_valid)
+    return {
+        "in_a_ready": int(in_a_ready),
+        "in_c_ready": int(in_c_ready),
+        "out_b_ready": int(out_b_ready),
+        "out_d_ready": int(out_d_ready),
+        "out_e_valid": int(out_e_valid),
+        "in_a_fire": int(bool(in_a_valid) and in_a_ready),
+        "in_c_fire": int(bool(in_c_valid) and in_c_ready),
+        "out_b_fire": int(bool(out_b_valid) and out_b_ready),
+        "out_d_fire": int(bool(out_d_valid) and out_d_ready),
+        "out_a_fire": int(bool(out_a_valid) and bool(out_a_ready)),
+        "out_c_fire": int(bool(out_c_valid) and bool(out_c_ready)),
+        "out_e_fire": int(out_e_valid and bool(source_e_ready)),
+    }
 
 
 # =============================================================================
