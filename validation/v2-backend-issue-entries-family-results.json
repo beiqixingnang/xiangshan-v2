@@ -1,0 +1,498 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_BACKEND_ISSUE_ENTRIES_FAMILY",
+  "batch_id": "V2-WAVE2-BACKEND-ISSUE-ENTRIES",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "scala_sources": [
+    "src/main/scala/xiangshan/backend/issue/Entries.scala",
+    "src/main/scala/xiangshan/backend/issue/OthersEntry.scala",
+    "src/main/scala/xiangshan/backend/issue/EnqEntry.scala",
+    "src/main/scala/xiangshan/backend/issue/IssueQueue.scala",
+    "src/main/scala/xiangshan/backend/issue/FuBusyTableWrite.scala",
+    "src/main/scala/xiangshan/backend/issue/MultiWakeupQueue.scala",
+    "src/main/scala/xiangshan/backend/rename/BusyTable.scala",
+    "src/main/scala/xiangshan/backend/decode/DecodeUnitComp.scala"
+  ],
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.Entries-Hardware.py",
+    "sha256": "a9b80eecd3da74765a10d4134c70f4fd995805af02b22e7c9d234714db62360c",
+    "line_count": 2060
+  },
+  "covered_family_groups": {
+    "rename_busytable": [
+      "BusyTable",
+      "BusyTable_1",
+      "BusyTable_2",
+      "BusyTable_3"
+    ],
+    "decode_indexed": [
+      "indexedLSUopTable_1",
+      "indexedLSUopTable_2",
+      "indexedLSUopTable_3",
+      "indexedLSUopTable_4",
+      "indexedLSUopTable_5",
+      "indexedLSUopTable_6",
+      "indexedLSUopTable_7"
+    ],
+    "representative": [
+      "EnqEntry",
+      "OthersEntry",
+      "EntriesAluCsrFenceDiv",
+      "IssueQueueAluCsrFenceDiv"
+    ],
+    "issue_leaf": [
+      "FuBusyTableWrite",
+      "MultiWakeupQueue",
+      "FuBusyTableWrite_22",
+      "FuBusyTableWrite_26",
+      "MultiWakeupQueue_2",
+      "FuBusyTableWrite_42",
+      "FuBusyTableWrite_43",
+      "MultiWakeupQueue_4",
+      "FuBusyTableWrite_52",
+      "FuBusyTableWrite_53",
+      "MultiWakeupQueue_5",
+      "FuBusyTableWrite_68",
+      "FuBusyTableWrite_69",
+      "FuBusyTableWrite_71",
+      "FuBusyTableWrite_73",
+      "FuBusyTableWrite_75",
+      "FuBusyTableWrite_79",
+      "FuBusyTableWrite_80",
+      "FuBusyTableWrite_105"
+    ]
+  },
+  "coverage": {
+    "covered_module_count": 34,
+    "expected_module_count": 34,
+    "missing_modules": [],
+    "extra_modules": [],
+    "covered_modules": [
+      "BusyTable",
+      "BusyTable_1",
+      "BusyTable_2",
+      "BusyTable_3",
+      "EnqEntry",
+      "EntriesAluCsrFenceDiv",
+      "FuBusyTableWrite",
+      "FuBusyTableWrite_105",
+      "FuBusyTableWrite_22",
+      "FuBusyTableWrite_26",
+      "FuBusyTableWrite_42",
+      "FuBusyTableWrite_43",
+      "FuBusyTableWrite_52",
+      "FuBusyTableWrite_53",
+      "FuBusyTableWrite_68",
+      "FuBusyTableWrite_69",
+      "FuBusyTableWrite_71",
+      "FuBusyTableWrite_73",
+      "FuBusyTableWrite_75",
+      "FuBusyTableWrite_79",
+      "FuBusyTableWrite_80",
+      "IssueQueueAluCsrFenceDiv",
+      "MultiWakeupQueue",
+      "MultiWakeupQueue_2",
+      "MultiWakeupQueue_4",
+      "MultiWakeupQueue_5",
+      "OthersEntry",
+      "indexedLSUopTable_1",
+      "indexedLSUopTable_2",
+      "indexedLSUopTable_3",
+      "indexedLSUopTable_4",
+      "indexedLSUopTable_5",
+      "indexedLSUopTable_6",
+      "indexedLSUopTable_7"
+    ]
+  },
+  "locked_reference": {
+    "canonical_path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "immutable_check": true
+  },
+  "port_surface": {
+    "status": "PASS",
+    "checked_module_count": 34,
+    "failures": [],
+    "modules": [
+      {
+        "module": "BusyTable",
+        "locked_port_count": 132,
+        "emitted_port_count": 132,
+        "ports_match": true,
+        "verilog_sha256": "f43de3b8ab8c632b003be34d5f63f900d18daa345a7c77da0e0b8597c4d5fc8a",
+        "verilog_bytes": 65776
+      },
+      {
+        "module": "BusyTable_1",
+        "locked_port_count": 73,
+        "emitted_port_count": 73,
+        "ports_match": true,
+        "verilog_sha256": "459388c1c3ba6e3057a978da94114f9fd1af5e42db3c34e98d43a11609232698",
+        "verilog_bytes": 36325
+      },
+      {
+        "module": "BusyTable_2",
+        "locked_port_count": 67,
+        "emitted_port_count": 67,
+        "ports_match": true,
+        "verilog_sha256": "839d9e1f6b7352d765f911b57b3d11dfe0b28af4d6142b5d3270da3989a5a077",
+        "verilog_bytes": 33628
+      },
+      {
+        "module": "BusyTable_3",
+        "locked_port_count": 43,
+        "emitted_port_count": 43,
+        "ports_match": true,
+        "verilog_sha256": "4cfba6ace654f26a46f8199ac03571fb11a5addce95212f79e0ffcacf2da495e",
+        "verilog_bytes": 22960
+      },
+      {
+        "module": "EnqEntry",
+        "locked_port_count": 240,
+        "emitted_port_count": 240,
+        "ports_match": true,
+        "verilog_sha256": "efce286fddc33dc6f74ebed69c118e6435aa3e68b18bf2e2366b1f7d9dddb0f0",
+        "verilog_bytes": 132763
+      },
+      {
+        "module": "EntriesAluCsrFenceDiv",
+        "locked_port_count": 442,
+        "emitted_port_count": 442,
+        "ports_match": true,
+        "verilog_sha256": "90d7f50447cb40b662d68e1665a947826531a3ca690915593b9332c2a16de3bc",
+        "verilog_bytes": 223847
+      },
+      {
+        "module": "FuBusyTableWrite",
+        "locked_port_count": 7,
+        "emitted_port_count": 7,
+        "ports_match": true,
+        "verilog_sha256": "3a791c6747dffc5ff3d87a45daccc3e2e41a20c0891a04c40b81c4f51725dd9d",
+        "verilog_bytes": 5837
+      },
+      {
+        "module": "FuBusyTableWrite_105",
+        "locked_port_count": 10,
+        "emitted_port_count": 10,
+        "ports_match": true,
+        "verilog_sha256": "2b803f227b5ec42015c0144e4317942a8f2a43c592581a0b1236c9d6a61be6a2",
+        "verilog_bytes": 7205
+      },
+      {
+        "module": "FuBusyTableWrite_22",
+        "locked_port_count": 7,
+        "emitted_port_count": 7,
+        "ports_match": true,
+        "verilog_sha256": "9f2414a81ed5bdb836d2fe209fc0c0a128515762b8f49c4626608f1260b6b077",
+        "verilog_bytes": 5840
+      },
+      {
+        "module": "FuBusyTableWrite_26",
+        "locked_port_count": 7,
+        "emitted_port_count": 7,
+        "ports_match": true,
+        "verilog_sha256": "5491c4cf757e9965bdc683966352b85f387f31f2f2bd09704206dacf5a949722",
+        "verilog_bytes": 5840
+      },
+      {
+        "module": "FuBusyTableWrite_42",
+        "locked_port_count": 7,
+        "emitted_port_count": 7,
+        "ports_match": true,
+        "verilog_sha256": "5a9df0efec812a8e73dc11f2e6ca3cabc89acd7c439455c5578fa569098b782e",
+        "verilog_bytes": 5840
+      },
+      {
+        "module": "FuBusyTableWrite_43",
+        "locked_port_count": 7,
+        "emitted_port_count": 7,
+        "ports_match": true,
+        "verilog_sha256": "66503cf0731ce551d14468d944238df367ab9fd43c2b94d257f993e4ffa6968c",
+        "verilog_bytes": 5840
+      },
+      {
+        "module": "FuBusyTableWrite_52",
+        "locked_port_count": 7,
+        "emitted_port_count": 7,
+        "ports_match": true,
+        "verilog_sha256": "4e3a6aaaa39183d109e42eeabc721122468f2fb9acab9992b93dacfe28692778",
+        "verilog_bytes": 5840
+      },
+      {
+        "module": "FuBusyTableWrite_53",
+        "locked_port_count": 5,
+        "emitted_port_count": 5,
+        "ports_match": true,
+        "verilog_sha256": "37f9eec69191caff730b4c45cbfd9b5d1e5bd4c7ab6caf26da8bbe640ca3923b",
+        "verilog_bytes": 4936
+      },
+      {
+        "module": "FuBusyTableWrite_68",
+        "locked_port_count": 7,
+        "emitted_port_count": 7,
+        "ports_match": true,
+        "verilog_sha256": "ff8a910d4254d5a7c5d3e9b57956ae08ab6dea5d10c7521c9fe49583a8223f93",
+        "verilog_bytes": 5841
+      },
+      {
+        "module": "FuBusyTableWrite_69",
+        "locked_port_count": 7,
+        "emitted_port_count": 7,
+        "ports_match": true,
+        "verilog_sha256": "5a03e56a3cd658ed2f14e4500b25ccaba35d6323a75ea290742cc1b0ebe31d57",
+        "verilog_bytes": 5840
+      },
+      {
+        "module": "FuBusyTableWrite_71",
+        "locked_port_count": 7,
+        "emitted_port_count": 7,
+        "ports_match": true,
+        "verilog_sha256": "de8c03bacb7ae56b851a541e35348d066d95d2d9e614830caedf06843ef1e958",
+        "verilog_bytes": 5841
+      },
+      {
+        "module": "FuBusyTableWrite_73",
+        "locked_port_count": 7,
+        "emitted_port_count": 7,
+        "ports_match": true,
+        "verilog_sha256": "c6c145b522701f12babdcf2184cf6aa9c40a5909e069cb6ed9ccfd3ee5cf9319",
+        "verilog_bytes": 5840
+      },
+      {
+        "module": "FuBusyTableWrite_75",
+        "locked_port_count": 7,
+        "emitted_port_count": 7,
+        "ports_match": true,
+        "verilog_sha256": "55ab1f898374060efae303347935894477e0101eb200904b6020497f23850f69",
+        "verilog_bytes": 5840
+      },
+      {
+        "module": "FuBusyTableWrite_79",
+        "locked_port_count": 5,
+        "emitted_port_count": 5,
+        "ports_match": true,
+        "verilog_sha256": "dba3fe21d34f4b1860f8cfb4a78089f4e5d2b013198c3978630856379a3c5a4a",
+        "verilog_bytes": 4936
+      },
+      {
+        "module": "FuBusyTableWrite_80",
+        "locked_port_count": 7,
+        "emitted_port_count": 7,
+        "ports_match": true,
+        "verilog_sha256": "fd6214a29b03465b7c32360cb2c3ac67fa5f2a8afbf670447ca698d143e9f8b5",
+        "verilog_bytes": 5841
+      },
+      {
+        "module": "IssueQueueAluCsrFenceDiv",
+        "locked_port_count": 255,
+        "emitted_port_count": 255,
+        "ports_match": true,
+        "verilog_sha256": "16a9ea03b4d2f33109f8b77aee559bafe9bbfa7e6e8fc41fe02169730eafb26a",
+        "verilog_bytes": 130646
+      },
+      {
+        "module": "MultiWakeupQueue",
+        "locked_port_count": 57,
+        "emitted_port_count": 57,
+        "ports_match": true,
+        "verilog_sha256": "cc50b12391fad0d9e149657e6744f3d7302e6c8a8f26765058e0f1d77d129a74",
+        "verilog_bytes": 31510
+      },
+      {
+        "module": "MultiWakeupQueue_2",
+        "locked_port_count": 44,
+        "emitted_port_count": 44,
+        "ports_match": true,
+        "verilog_sha256": "1bce3e220289853d99f9653eb6407360dae61dc728c9e872ff7f636e3810266f",
+        "verilog_bytes": 23697
+      },
+      {
+        "module": "MultiWakeupQueue_4",
+        "locked_port_count": 22,
+        "emitted_port_count": 22,
+        "ports_match": true,
+        "verilog_sha256": "c2e5b0b8e99ae592cee5eb06f55d8dfc0326b42eb75884901429d126e0fb08ab",
+        "verilog_bytes": 13123
+      },
+      {
+        "module": "MultiWakeupQueue_5",
+        "locked_port_count": 16,
+        "emitted_port_count": 16,
+        "ports_match": true,
+        "verilog_sha256": "c9babc0ad12ab4409ed517488ad997d424dbed795913137854c012e7aef53bae",
+        "verilog_bytes": 10347
+      },
+      {
+        "module": "OthersEntry",
+        "locked_port_count": 186,
+        "emitted_port_count": 186,
+        "ports_match": true,
+        "verilog_sha256": "4546be0a593eb142ab935ad8d91b242a2884582d3fd2ee622a7e446ad4d6f6f2",
+        "verilog_bytes": 103676
+      },
+      {
+        "module": "indexedLSUopTable_1",
+        "locked_port_count": 3,
+        "emitted_port_count": 3,
+        "ports_match": true,
+        "verilog_sha256": "2e4c764eb695c7335485ee0814690059ef22937b986a0813e392eadb694ad234",
+        "verilog_bytes": 1839
+      },
+      {
+        "module": "indexedLSUopTable_2",
+        "locked_port_count": 3,
+        "emitted_port_count": 3,
+        "ports_match": true,
+        "verilog_sha256": "db3a64f02d14e7eb3e57b892489d3f100a5b6d4837364523b8f1c594949f5850",
+        "verilog_bytes": 1839
+      },
+      {
+        "module": "indexedLSUopTable_3",
+        "locked_port_count": 3,
+        "emitted_port_count": 3,
+        "ports_match": true,
+        "verilog_sha256": "dc6f9ac9a70471e88d91a1cd76683abf3f02e8d62b14bc1fc93dcea298940046",
+        "verilog_bytes": 1839
+      },
+      {
+        "module": "indexedLSUopTable_4",
+        "locked_port_count": 3,
+        "emitted_port_count": 3,
+        "ports_match": true,
+        "verilog_sha256": "767f8ce49141ba81ab78e2d1b956e0336a2094d0bc1a290ee01244032af46b73",
+        "verilog_bytes": 1839
+      },
+      {
+        "module": "indexedLSUopTable_5",
+        "locked_port_count": 3,
+        "emitted_port_count": 3,
+        "ports_match": true,
+        "verilog_sha256": "9f3927b88dad1f4fa77d4f0b9a8f11264bc5abbcc58c16ee9d2917e2a36aed50",
+        "verilog_bytes": 1839
+      },
+      {
+        "module": "indexedLSUopTable_6",
+        "locked_port_count": 3,
+        "emitted_port_count": 3,
+        "ports_match": true,
+        "verilog_sha256": "c4313de30b7961f391a07d5c2104fae120c75c71f8bb95b2af04895c7e0acee2",
+        "verilog_bytes": 1839
+      },
+      {
+        "module": "indexedLSUopTable_7",
+        "locked_port_count": 3,
+        "emitted_port_count": 3,
+        "ports_match": true,
+        "verilog_sha256": "b6f642a7b64b09c44bc94bd92a513015df95c2e97f6d004b0b822c9ef10c01b6",
+        "verilog_bytes": 1839
+      }
+    ]
+  },
+  "determinism": {
+    "status": "PASS",
+    "repeated_elaborations_per_module": 2,
+    "failures": []
+  },
+  "differential": {
+    "status": "PASS",
+    "tool": "verilator",
+    "transport": "wsl.exe -d Debian -- bash -lc",
+    "compared_instances": [
+      "EntriesAluCsrFenceDiv",
+      "OthersEntry"
+    ],
+    "vector_counts": {
+      "modules_compared": 2,
+      "port_vectors_total": 628
+    },
+    "records": [
+      {
+        "module": "EntriesAluCsrFenceDiv",
+        "mine_port_count": 442,
+        "pinned_port_count": 442,
+        "port_vector_match": true,
+        "mine_assign_count": 241,
+        "pinned_child_instance_count": 0,
+        "mine_lint": "PASS",
+        "pinned_lint": "FAIL",
+        "pinned_lint_output_tail": "/.agents/xiangshan-v2/validation/.work/v2-backend-issue-entries-family/EntriesAluCsrFenceDiv_Reference.sv:3562:13: Define or directive not defined: '`ASSERT_VERBOSE_COND_'\n 3562 |         if (`ASSERT_VERBOSE_COND_)  \n      |             ^~~~~~~~~~~~~~~~~~~~~\n%Error: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-issue-entries-family/EntriesAluCsrFenceDiv_Reference.sv:3562:34: syntax error, unexpected ')', expecting IDENTIFIER-for-type\n 3562 |         if (`ASSERT_VERBOSE_COND_)  \n      |                                  ^\n%Error: Exiting due to 4 error(s)\n",
+        "verdict": "STRUCTURAL_PORT_MATCH_BOUNDED"
+      },
+      {
+        "module": "OthersEntry",
+        "mine_port_count": 186,
+        "pinned_port_count": 186,
+        "port_vector_match": true,
+        "mine_assign_count": 84,
+        "pinned_child_instance_count": 0,
+        "mine_lint": "PASS",
+        "pinned_lint": "FAIL",
+        "pinned_lint_output_tail": "nifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-issue-entries-family/OthersEntry_Reference.sv:358:13: Define or directive not defined: '`ASSERT_VERBOSE_COND_'\n  358 |         if (`ASSERT_VERBOSE_COND_)  \n      |             ^~~~~~~~~~~~~~~~~~~~~\n%Error: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-issue-entries-family/OthersEntry_Reference.sv:358:34: syntax error, unexpected ')', expecting IDENTIFIER-for-type\n  358 |         if (`ASSERT_VERBOSE_COND_)  \n      |                                  ^\n%Error: Exiting due to 2 error(s)\n",
+        "verdict": "STRUCTURAL_PORT_MATCH_BOUNDED"
+      }
+    ],
+    "trace_verdict": "STRUCTURAL_PORT_MATCH_BOUNDED",
+    "behavioral_equivalence": "NOT_ESTABLISHED"
+  },
+  "tool_gates": {
+    "lint": {
+      "status": "PASS",
+      "checked_module_count": 34,
+      "pass_count": 34,
+      "failures": []
+    },
+    "yosys": {
+      "status": "PASS",
+      "checked_module_count": 34,
+      "pass_count": 34,
+      "failures": []
+    },
+    "default_export_lint": {
+      "command": [
+        "verilator",
+        "--lint-only",
+        "-Wno-fatal",
+        "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-issue-entries-family/UHSCBackendIssueEntriesFamily.sv"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.406 MB sources in 29 modules, into 0.010 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.055 s (elab=0.005, cvt=0.012, bld=0.000); cpu 0.035 s on 1 threads; alloced 13.137 MB\n",
+      "output_sha256": "a385c24543b025ea8de03af15e3c6f907d06bc2ac65c42e48d8b88fc84d46ec2"
+    },
+    "default_export_yosys": {
+      "command": [
+        "yosys",
+        "-Q",
+        "-p",
+        "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-issue-entries-family/UHSCBackendIssueEntriesFamily.sv; hierarchy -top UHSCBackendIssueEntriesFamily; proc; check"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "output_tail": "WakeupQueue_5...\nChecking module UHSCBackendIssueEntriesFamily.MultiWakeupQueue_4...\nChecking module UHSCBackendIssueEntriesFamily.MultiWakeupQueue_2...\nChecking module UHSCBackendIssueEntriesFamily.MultiWakeupQueue...\nChecking module UHSCBackendIssueEntriesFamily.IssueQueueAluCsrFenceDiv...\nChecking module UHSCBackendIssueEntriesFamily.FuBusyTableWrite_80...\nChecking module UHSCBackendIssueEntriesFamily.FuBusyTableWrite_79...\nChecking module UHSCBackendIssueEntriesFamily.FuBusyTableWrite_75...\nChecking module UHSCBackendIssueEntriesFamily.FuBusyTableWrite_73...\nChecking module UHSCBackendIssueEntriesFamily.FuBusyTableWrite_71...\nChecking module UHSCBackendIssueEntriesFamily.FuBusyTableWrite_69...\nChecking module UHSCBackendIssueEntriesFamily.FuBusyTableWrite_68...\nChecking module UHSCBackendIssueEntriesFamily.FuBusyTableWrite_53...\nChecking module UHSCBackendIssueEntriesFamily.FuBusyTableWrite_52...\nChecking module UHSCBackendIssueEntriesFamily.FuBusyTableWrite_43...\nChecking module UHSCBackendIssueEntriesFamily.FuBusyTableWrite_42...\nChecking module UHSCBackendIssueEntriesFamily.FuBusyTableWrite_26...\nChecking module UHSCBackendIssueEntriesFamily.FuBusyTableWrite_22...\nChecking module UHSCBackendIssueEntriesFamily.FuBusyTableWrite_105...\nChecking module UHSCBackendIssueEntriesFamily.FuBusyTableWrite...\nChecking module UHSCBackendIssueEntriesFamily.EntriesAluCsrFenceDiv...\nChecking module UHSCBackendIssueEntriesFamily.EnqEntry...\nChecking module UHSCBackendIssueEntriesFamily.BusyTable_3...\nChecking module UHSCBackendIssueEntriesFamily.BusyTable_2...\nChecking module UHSCBackendIssueEntriesFamily.BusyTable_1...\nChecking module UHSCBackendIssueEntriesFamily.BusyTable...\nChecking module UHSCBackendIssueEntriesFamily...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 4da714d071, CPU: user 0.09s system 0.01s, MEM: 22.93 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 84% 2x read_verilog (0 sec), 6% 1x opt_expr (0 sec), ...\n",
+      "output_sha256": "48c8f6d40e8b3c430a3b6fb4e531e7255ec97e90ba0545fbd41f53995f649155"
+    },
+    "default_export_bytes": 398991,
+    "default_export_sha256": "5e86f296ffde50ebf52cb41ca917aac527f619ab72324d40f97804b87afa14ea"
+  },
+  "gates": {
+    "COVERAGE_COMPLETE": "PASS",
+    "PORT_SURFACE_MATCHED": "PASS",
+    "DETERMINISTIC_VERILOG": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED_PORT_VECTOR",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "V2_LOCKED_REFERENCE_IMMUTABLE": "PASS",
+    "PYTHON_PRESENT": "PASS",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "DIRECT_TEST_PASS_BOUNDED",
+  "acceptance_eligible": false,
+  "unclosed": [
+    "BEHAVIOR_MATCHED / INTEGRATED / ACCEPTED remain locked by contract; this batch is DIRECT_TEST_PASS_BOUNDED only.",
+    "Only one FU-specialization representative is emitted per large kind (Entries, OthersEntry, EnqEntry, IssueQueue); the remaining Chisel parameter variants (e.g. EntriesAluMulBkuBrhJmp) share the same generic class and locked port surface but are not individually emitted here and are recorded CONTRACT_ONLY for per-variant emission.",
+    "The generic entry model registers paired io_in_/io_out_ payload fields and drives a one-bit valid from enq/alloc/flush/cancel/deq; exact MicroOp bit-layout and per-source wakeup selection are not bit-established and are CONTRACT_ONLY.",
+    "The bounded differential is a structural port-vector + Verilator lint comparison; no cycle-by-cycle trace equivalence against the pinned Chisel datapath is claimed.",
+    "License review and user approval remain pending."
+  ]
+}
