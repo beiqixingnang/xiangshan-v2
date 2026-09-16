@@ -94,7 +94,10 @@ def main() -> int:
             {"scala": s, "modules": n} for s, n in missing_by_scala.most_common(60)
         ],
     }
-    OUT.write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
+    # Keep the generated evidence byte-stable across Windows and WSL runs.
+    with OUT.open("w", encoding="utf-8", newline="\n") as handle:
+        handle.write(json.dumps(out, ensure_ascii=False, indent=1))
+        handle.write("\n")
     print(json.dumps({
         "locked_modules": len(rows),
         "status": dict(counts),
