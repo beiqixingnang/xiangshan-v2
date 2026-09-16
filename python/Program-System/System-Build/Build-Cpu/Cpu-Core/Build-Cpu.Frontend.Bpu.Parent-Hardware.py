@@ -25,7 +25,13 @@ from amaranth.back import verilog
 # while exposing bounded observation ports for FTBEntryGen and state leaves.
 # BpuParent 连接 FauFTBWay 与 FallThroughPredictor 标准契约，同时为 FTBEntryGen
 # 及状态叶子暴露有界观测端口。
-__all__ = ["BpuParentConfig", "BpuParent", "build_verilog", "main"]
+__all__ = [
+    "BpuParentConfig",
+    "BpuParent",
+    "bpu_redirect_flush_observation",
+    "build_verilog",
+    "main",
+]
 
 
 # =============================================================================
@@ -57,6 +63,62 @@ class BpuParentConfig:
 # =============================================================================
 # Implementation
 # =============================================================================
+# Observe the V2 redirect, flush, and FTB-response admission boundary. / 观测 V2 重定向、冲刷及 FTB 响应准入边界。
+def bpu_redirect_flush_observation(
+    redirect_valid: bool,
+    s0_fire: bool,
+    s1_fire: bool,
+    s2_fire: bool,
+    s3_fire: bool,
+    s2_redirect: bool,
+    s3_branch_mask_changed: bool,
+    s3_target_changed: bool,
+    s3_fall_through_error: bool,
+    s3_ftb_multi_hit: bool,
+    s3_both_first_taken: bool,
+    ftb_hit: bool,
+) -> dict[str, int]:
+    """Return the source-ordered BPU pipeline control observations. / 返回按源码优先级排列的 BPU 流水控制观测。"""
+
+    # BPU.scala:385-390 propagates an external redirect from s3 to s1.
+    # BPU.scala:385-390 将外部重定向冲刷从 s3 逐级传播到 s1。
+    s3_redirect = bool(s3_fire) and (
+        (bool(s3_branch_mask_changed) and not bool(s3_both_first_taken))
+        or bool(s3_target_changed)
+        or bool(s3_fall_through_error)
+        or bool(s3_ftb_multi_hit)
+    )
+    s3_flush = bool(redirect_valid)
+    s2_flush = s3_flush or s3_redirect
+    s1_flush = s2_flush or bool(s2_redirect)
+
+    # BPU.scala:416-420 gives redirect priority over s0 admission.
+    # BPU.scala:416-420 指定重定向优先于 s0 准入。
+    s1_admit = bool(s0_fire) and not bool(redirect_valid)
+    s1_emit = bool(s1_fire) and not s1_flush
+    s2_emit = bool(s2_fire) and not s2_flush
+    s3_emit = bool(s3_fire) and not s3_flush
+
+    # BPU.scala:889-902 only makes a stage response visible when it fires
+    # without a stage flush.  ``ftb_hit_visible`` is consequently an
+    # observation of an admitted FTB result, not an inferred cache hit.
+    # BPU.scala:889-902 仅在阶段 fire 且未冲刷时使响应可见；
+    # 因此 ftb_hit_visible 是已准入 FTB 结果的观测，而非推断缓存命中。
+    return {
+        "predictor_input_ready": int(not bool(redirect_valid)),
+        "s1_admit": int(s1_admit),
+        "s1_flush": int(s1_flush),
+        "s2_flush": int(s2_flush),
+        "s3_flush": int(s3_flush),
+        "s3_redirect": int(s3_redirect),
+        "s1_response_visible": int(s1_emit),
+        "s2_response_visible": int(s2_emit),
+        "s3_response_visible": int(s3_emit),
+        "ftb_hit_visible": int(s1_emit and bool(ftb_hit)),
+        "target_redirect": int(bool(s3_fire) and bool(s3_target_changed)),
+    }
+
+
 class BpuNullChild(Elaboratable):
     """Empty fallback for standalone envelope generation. / 独立包络生成用空回退子级。"""
 
