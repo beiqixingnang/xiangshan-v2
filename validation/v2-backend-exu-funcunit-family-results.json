@@ -1,0 +1,481 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_BACKEND_EXU_FUNCUNIT_FAMILY",
+  "batch_id": "V2-WAVE2-BACKEND-EXU-FUNCUNIT",
+  "source_commit": "8b181bc",
+  "scala_sources": [
+    "src/main/scala/xiangshan/backend/fu/FuncUnit.scala",
+    "src/main/scala/xiangshan/backend/fu/Bku.scala",
+    "src/main/scala/xiangshan/backend/exu/ExeUnit.scala"
+  ],
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Exu.FuncUnit-Hardware.py",
+    "sha256": "4713d6a9150d503b4d182bb86e3821c90244d443ad906ac4792fc55afda93798",
+    "line_count": 2372
+  },
+  "locked_hierarchy_sha256": "e556c5c7a4d61c5fa15faea71c5e553639456f54e8138e0bc157e618eca30ad1",
+  "covered_family_groups": {
+    "int_dispatch": [
+      "Dispatcher",
+      "Dispatcher_1",
+      "Dispatcher_10",
+      "Dispatcher_13",
+      "Dispatcher_14",
+      "Dispatcher_15",
+      "Dispatcher_16",
+      "Dispatcher_17",
+      "Dispatcher_4",
+      "Dispatcher_5",
+      "Dispatcher_7",
+      "Dispatcher_8",
+      "Dispatcher_9"
+    ],
+    "exe_unit": [
+      "ExeUnit",
+      "MemExeUnit"
+    ],
+    "bku_core": [
+      "AddrAddModule",
+      "Bku",
+      "BlockCipherModule",
+      "ClmulModule",
+      "CountModule",
+      "CryptoModule",
+      "HashModule",
+      "MiscModule"
+    ],
+    "fu_wrappers": [
+      "Alu",
+      "BranchUnit",
+      "DivUnit",
+      "Fence",
+      "JumpUnit",
+      "MulUnit",
+      "Std"
+    ]
+  },
+  "coverage": {
+    "covered_module_count": 30,
+    "expected_module_count": 29,
+    "missing_modules": [],
+    "extra_modules": [
+      "AddrAddModule"
+    ],
+    "covered_modules": [
+      "AddrAddModule",
+      "Alu",
+      "Bku",
+      "BlockCipherModule",
+      "BranchUnit",
+      "ClmulModule",
+      "CountModule",
+      "CryptoModule",
+      "Dispatcher",
+      "Dispatcher_1",
+      "Dispatcher_10",
+      "Dispatcher_13",
+      "Dispatcher_14",
+      "Dispatcher_15",
+      "Dispatcher_16",
+      "Dispatcher_17",
+      "Dispatcher_4",
+      "Dispatcher_5",
+      "Dispatcher_7",
+      "Dispatcher_8",
+      "Dispatcher_9",
+      "DivUnit",
+      "ExeUnit",
+      "Fence",
+      "HashModule",
+      "JumpUnit",
+      "MemExeUnit",
+      "MiscModule",
+      "MulUnit",
+      "Std"
+    ],
+    "excluded_modules": [
+      "CSR",
+      "ExeUnit_1",
+      "ExeUnit_10",
+      "ExeUnit_13",
+      "ExeUnit_14",
+      "ExeUnit_15",
+      "ExeUnit_16",
+      "ExeUnit_17",
+      "ExeUnit_4",
+      "ExeUnit_5",
+      "ExeUnit_7",
+      "ExeUnit_8",
+      "ExeUnit_9",
+      "FAlu",
+      "FCVT",
+      "FDivSqrt",
+      "FMA",
+      "IntFPToVec",
+      "IntToFP_3",
+      "VCVT_8",
+      "VFAlu",
+      "VFDivSqrt",
+      "VFMA",
+      "VIAluFix",
+      "VIDiv",
+      "VIMacU",
+      "VIPU",
+      "VPPU",
+      "VSetRiWi",
+      "VSetRiWvf",
+      "VSetRvfWvf"
+    ],
+    "exclusion_reason": "CSR belongs to the NewCSR wave; ExeUnit_<n> are generic-parameter EXU variants of the same locked class; the remaining excluded names are FP/vector FU leaves owned by other workers (fudian/yunsuan)."
+  },
+  "locked_reference": {
+    "canonical_path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "immutable_check": true
+  },
+  "port_surface": {
+    "status": "PASS",
+    "checked_module_count": 30,
+    "failures": [],
+    "modules": [
+      {
+        "module": "AddrAddModule",
+        "locked_port_count": 5,
+        "emitted_port_count": 5,
+        "ports_match": true,
+        "verilog_sha256": "25f9557d08fbf9f7b8f0920de8fb80ada93a95ae57a59c0c16e182eb83e52092",
+        "verilog_bytes": 2164
+      },
+      {
+        "module": "Alu",
+        "locked_port_count": 14,
+        "emitted_port_count": 14,
+        "ports_match": true,
+        "verilog_sha256": "518d6cc38edb535bb19e899405270aa1cc68344c47d2b3a9199e23b7f4bde8d5",
+        "verilog_bytes": 342300
+      },
+      {
+        "module": "Bku",
+        "locked_port_count": 19,
+        "emitted_port_count": 19,
+        "ports_match": true,
+        "verilog_sha256": "c31214a62ad8518d5c97452e58c4aeeab49ce2d6eb544c7c6ae334e5ede435db",
+        "verilog_bytes": 3064840
+      },
+      {
+        "module": "BlockCipherModule",
+        "locked_port_count": 6,
+        "emitted_port_count": 6,
+        "ports_match": true,
+        "verilog_sha256": "9c32aad90fb925f4fdba4fc09a1c04bbf375b1ebc373c013197d3ed299c1c23d",
+        "verilog_bytes": 1499449
+      },
+      {
+        "module": "BranchUnit",
+        "locked_port_count": 117,
+        "emitted_port_count": 117,
+        "ports_match": true,
+        "verilog_sha256": "312dcb62da7963530b4112913cdb2d28760ad0510fd67f243e341f2042c94f41",
+        "verilog_bytes": 53173
+      },
+      {
+        "module": "ClmulModule",
+        "locked_port_count": 6,
+        "emitted_port_count": 6,
+        "ports_match": true,
+        "verilog_sha256": "c6c9a0168029d8f4816c80eacec533c4f35b76b9cad0996012a311a65ae415bc",
+        "verilog_bytes": 52362
+      },
+      {
+        "module": "CountModule",
+        "locked_port_count": 5,
+        "emitted_port_count": 5,
+        "ports_match": true,
+        "verilog_sha256": "eabcde81e6bc7562458bb6317a0b5b12eab8a4bdc4630868f095d2586e76036a",
+        "verilog_bytes": 1408395
+      },
+      {
+        "module": "CryptoModule",
+        "locked_port_count": 6,
+        "emitted_port_count": 6,
+        "ports_match": true,
+        "verilog_sha256": "9d457a7643289c138cc43a338e7ff76e47b2b1c9892d54d76f3f11227926c948",
+        "verilog_bytes": 1528229
+      },
+      {
+        "module": "Dispatcher",
+        "locked_port_count": 9,
+        "emitted_port_count": 9,
+        "ports_match": true,
+        "verilog_sha256": "2ff22c759796c098a505517515e126658478fd3fc5de75fce1657df16b88cf36",
+        "verilog_bytes": 1360
+      },
+      {
+        "module": "Dispatcher_1",
+        "locked_port_count": 41,
+        "emitted_port_count": 41,
+        "ports_match": true,
+        "verilog_sha256": "be34c3ed739dc6d6b5fa4db5541c5cd076f1213255a4e834c64ff77bdbebb526",
+        "verilog_bytes": 5649
+      },
+      {
+        "module": "Dispatcher_10",
+        "locked_port_count": 13,
+        "emitted_port_count": 13,
+        "ports_match": true,
+        "verilog_sha256": "539c8f2f146dedb1f4370b8d6dcb71d48a0852dd8d262d32d68ee3120a1111e1",
+        "verilog_bytes": 1805
+      },
+      {
+        "module": "Dispatcher_13",
+        "locked_port_count": 39,
+        "emitted_port_count": 39,
+        "ports_match": true,
+        "verilog_sha256": "ca7ced196c6c1817e6347a37cbeb2bba8565ae85cf74ec2705a082abb17b5234",
+        "verilog_bytes": 5352
+      },
+      {
+        "module": "Dispatcher_14",
+        "locked_port_count": 49,
+        "emitted_port_count": 49,
+        "ports_match": true,
+        "verilog_sha256": "58209d441b0abfe81405b9b7d5e37b71ce3e94e12056455e1a9aa6025ac5a731",
+        "verilog_bytes": 6667
+      },
+      {
+        "module": "Dispatcher_15",
+        "locked_port_count": 23,
+        "emitted_port_count": 23,
+        "ports_match": true,
+        "verilog_sha256": "0387931d605f07622537ec1638ab1522437898736ea5eba2f0dd1a6d84e07c8d",
+        "verilog_bytes": 3050
+      },
+      {
+        "module": "Dispatcher_16",
+        "locked_port_count": 19,
+        "emitted_port_count": 19,
+        "ports_match": true,
+        "verilog_sha256": "765ee07203b3487686cd50af45c9b9f8533e6a34099343fe9207a1b8e456cfc8",
+        "verilog_bytes": 2622
+      },
+      {
+        "module": "Dispatcher_17",
+        "locked_port_count": 53,
+        "emitted_port_count": 53,
+        "ports_match": true,
+        "verilog_sha256": "a94dfa8b9a60887c0c3ced31e6fba600532720a2db8671a0ced3f2ef823925ff",
+        "verilog_bytes": 6808
+      },
+      {
+        "module": "Dispatcher_4",
+        "locked_port_count": 5,
+        "emitted_port_count": 5,
+        "ports_match": true,
+        "verilog_sha256": "08fa2b14e0e5e8870722007b7ab490189148b9eb50a696bb9bd683f16655caae",
+        "verilog_bytes": 716
+      },
+      {
+        "module": "Dispatcher_5",
+        "locked_port_count": 74,
+        "emitted_port_count": 74,
+        "ports_match": true,
+        "verilog_sha256": "d461f2be73fc3d40f3ba207f58593583a4aa92dea79c233f0d7bee6b4da5e25b",
+        "verilog_bytes": 10135
+      },
+      {
+        "module": "Dispatcher_7",
+        "locked_port_count": 39,
+        "emitted_port_count": 39,
+        "ports_match": true,
+        "verilog_sha256": "81f42e99b053c567e89401d79daca1998a24ccffde8be2933666125759a97531",
+        "verilog_bytes": 5075
+      },
+      {
+        "module": "Dispatcher_8",
+        "locked_port_count": 31,
+        "emitted_port_count": 31,
+        "ports_match": true,
+        "verilog_sha256": "5cc44c4751787c12829113185e8ce6b417e31dd06bfcadf502b4574741cc7d9e",
+        "verilog_bytes": 4089
+      },
+      {
+        "module": "Dispatcher_9",
+        "locked_port_count": 21,
+        "emitted_port_count": 21,
+        "ports_match": true,
+        "verilog_sha256": "2e48f1767562f463b91e5f2084fdde7f369056595474c86f7eadf525f97bfab0",
+        "verilog_bytes": 2520
+      },
+      {
+        "module": "DivUnit",
+        "locked_port_count": 22,
+        "emitted_port_count": 22,
+        "ports_match": true,
+        "verilog_sha256": "d0bd74021cbb784fce3c966b04c364f28dd15d2c492527fe232d3248e38906a1",
+        "verilog_bytes": 195679
+      },
+      {
+        "module": "ExeUnit",
+        "locked_port_count": 24,
+        "emitted_port_count": 24,
+        "ports_match": true,
+        "verilog_sha256": "5e6e0f8bb76df9dba4739b143428a875ec986d0579b9e84a4110381ea63f1ba9",
+        "verilog_bytes": 3695544
+      },
+      {
+        "module": "Fence",
+        "locked_port_count": 30,
+        "emitted_port_count": 30,
+        "ports_match": true,
+        "verilog_sha256": "caf131371e643aa533005846e23b7bed0e2b27c4b9cebbd6d3a5347077eeef5f",
+        "verilog_bytes": 8955
+      },
+      {
+        "module": "HashModule",
+        "locked_port_count": 5,
+        "emitted_port_count": 5,
+        "ports_match": true,
+        "verilog_sha256": "20c6d9d5d63964c48dfa83131e726fcc38661b577481f6b0cabbdcb8d52f5e17",
+        "verilog_bytes": 28038
+      },
+      {
+        "module": "JumpUnit",
+        "locked_port_count": 119,
+        "emitted_port_count": 119,
+        "ports_match": true,
+        "verilog_sha256": "e19b055de12170e925bc972231c9207212e0102e83fac122613f9e243405910c",
+        "verilog_bytes": 49214
+      },
+      {
+        "module": "MemExeUnit",
+        "locked_port_count": 16,
+        "emitted_port_count": 16,
+        "ports_match": true,
+        "verilog_sha256": "82bbc4f09ac7d26e023698ef227390e1034446103ab6d7e3240e78cdf2c4335e",
+        "verilog_bytes": 2054
+      },
+      {
+        "module": "MiscModule",
+        "locked_port_count": 6,
+        "emitted_port_count": 6,
+        "ports_match": true,
+        "verilog_sha256": "dd24d71409c13324f59c6436dac218ecdbf8381e93abb79b9434cf3a95c0ed8f",
+        "verilog_bytes": 46031
+      },
+      {
+        "module": "MulUnit",
+        "locked_port_count": 19,
+        "emitted_port_count": 19,
+        "ports_match": true,
+        "verilog_sha256": "2995843bdde09bda88f84865b59eabb4bdc8e06b32b419a43003157bb86d62dd",
+        "verilog_bytes": 8948
+      },
+      {
+        "module": "Std",
+        "locked_port_count": 8,
+        "emitted_port_count": 8,
+        "ports_match": true,
+        "verilog_sha256": "6c1c1e7c4e313e3621f2620ba54adad8076110f6683138a714a9e3ad75ae8313",
+        "verilog_bytes": 1011
+      }
+    ]
+  },
+  "determinism": {
+    "status": "PASS",
+    "repeated_elaborations_per_module": 2,
+    "failures": []
+  },
+  "differential": {
+    "status": "FAIL",
+    "tool": "verilator",
+    "transport": "wsl.exe -e bash -lc",
+    "compared_instances": [
+      "Alu",
+      "Bku"
+    ],
+    "vector_counts": {
+      "modules_compared": 2,
+      "vectors_per_module": 512,
+      "port_checks_total": 6144
+    },
+    "records": [
+      {
+        "module": "Alu",
+        "mine_port_count": 14,
+        "pinned_port_count": 14,
+        "port_vector_match": true,
+        "differential_vectors": 512,
+        "differential_checks": 3072,
+        "differential_mismatches": 235,
+        "build_status": "PASS",
+        "sim_status": "FAIL",
+        "build_output_tail": " assign \\$2308  = io_in_bits_ctrl_fuOpType[2:1] == 1'h1;\n      |                                                  ^~\n../tb_Alu.cpp: In lambda function:\n../tb_Alu.cpp:22:51: warning: left shift count >= width of type [-Wshift-count-overflow]\n   22 |         tb.io_in_bits_data_src_1 = rng() & ((1ULL << 64) - 1);\n      |                                              ~~~~~^~~~~\n../tb_Alu.cpp:23:51: warning: left shift count >= width of type [-Wshift-count-overflow]\n   23 |         tb.io_in_bits_data_src_0 = rng() & ((1ULL << 64) - 1);\n      |                                              ~~~~~^~~~~\n",
+        "verdict": "MISMATCH_BOUNDED"
+      },
+      {
+        "module": "Bku",
+        "mine_port_count": 19,
+        "pinned_port_count": 19,
+        "port_vector_match": true,
+        "differential_vectors": 512,
+        "differential_checks": 3072,
+        "differential_mismatches": 398,
+        "build_status": "PASS",
+        "sim_status": "FAIL",
+        "build_output_tail": "nce 'diff_Bku.dut.clmul'\n 1022 |   assign \\$194  = clmul_funcReg == 2'h2;\n      |                                 ^~\n../tb_Bku.cpp: In lambda function:\n../tb_Bku.cpp:28:51: warning: left shift count >= width of type [-Wshift-count-overflow]\n   28 |         tb.io_in_bits_data_src_1 = rng() & ((1ULL << 64) - 1);\n      |                                              ~~~~~^~~~~\n../tb_Bku.cpp:29:51: warning: left shift count >= width of type [-Wshift-count-overflow]\n   29 |         tb.io_in_bits_data_src_0 = rng() & ((1ULL << 64) - 1);\n      |                                              ~~~~~^~~~~\n",
+        "verdict": "MISMATCH_BOUNDED"
+      }
+    ],
+    "trace_verdict": "MISMATCH_BOUNDED",
+    "behavioral_equivalence": "NOT_ESTABLISHED"
+  },
+  "tool_gates": {
+    "lint": {
+      "status": "PASS",
+      "checked_module_count": 30,
+      "pass_count": 30,
+      "failures": []
+    },
+    "yosys": {
+      "status": "PASS",
+      "checked_module_count": 30,
+      "pass_count": 30,
+      "failures": []
+    },
+    "default_export_lint": {
+      "command": [
+        "verilator",
+        "--lint-only",
+        "-Wno-fatal",
+        "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-exu-funcunit-family/UHSCBackendExuFuncUnitFamily.sv"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "output_tail": "19737:34: Operator ADD expects 7 bits on the RHS, but RHS's VARREF 'count_cpopTmp_1' generates 5 bits.\n19737 |   assign \\$67  = count_cpopTmp_0 + count_cpopTmp_1;\n      |                                  ^\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-exu-funcunit-family/UHSCBackendExuFuncUnitFamily.sv:19738:24: Operator ADD expects 8 bits on the RHS, but RHS's VARREF 'count_cpopTmp_2' generates 5 bits.\n19738 |   assign \\$68  = \\$67  + count_cpopTmp_2;\n      |                        ^\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-exu-funcunit-family/UHSCBackendExuFuncUnitFamily.sv:19739:24: Operator ADD expects 9 bits on the RHS, but RHS's VARREF 'count_cpopTmp_3' generates 5 bits.\n19739 |   assign \\$69  = \\$68  + count_cpopTmp_3;\n      |                        ^\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-exu-funcunit-family/UHSCBackendExuFuncUnitFamily.sv:894:31: Operator EQ expects 9 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                                                : ... note: In instance 'Bku.clmul'\n  894 |   assign \\$1  = clmul_funcReg == 1'h1;\n      |                               ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-exu-funcunit-family/UHSCBackendExuFuncUnitFamily.sv:1022:33: Operator EQ expects 9 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                                                                                 : ... note: In instance 'Bku.clmul'\n 1022 |   assign \\$194  = clmul_funcReg == 2'h2;\n      |                                 ^~\n",
+      "output_sha256": "6ac249109ad50be785a5fea349d7a336fec4c4a9336fbeda628c614267f82199"
+    },
+    "default_export_bytes": 3064840,
+    "default_export_sha256": "c31214a62ad8518d5c97452e58c4aeeab49ce2d6eb544c7c6ae334e5ede435db"
+  },
+  "gates": {
+    "COVERAGE_COMPLETE": "PASS",
+    "PORT_SURFACE_MATCHED": "PASS",
+    "DETERMINISTIC_VERILOG": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "FAIL",
+    "V2_REFERENCE_MATCHED": "FAIL",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "V2_LOCKED_REFERENCE_IMMUTABLE": "PASS",
+    "PYTHON_PRESENT": "PASS",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "FAIL",
+  "acceptance_eligible": false,
+  "unclosed": [
+    "BEHAVIOR_MATCHED / INTEGRATED / ACCEPTED remain locked by contract; this batch is DIRECT_TEST_PASS_BOUNDED only.",
+    "The Verilator differential covers exactly two instances (comb Alu, sequential Bku) with 512 seeded random vectors each; the other 28 covered members are proven by port surface, determinism, Verilator lint and Yosys elaboration only.",
+    "ExeUnit_<n> FP/vector EXU parameter variants and the FP/vector FU leaves are excluded: they are owned by other workers; the int-family ExeUnit is emitted for its locked ports.",
+    "DivUnit iteration-cycle latency is CONTRACT_ONLY: the pinned divider latency is not bit-established beyond the request/kill protocol.",
+    "The Bku differential uses random opcodes; per-opcode exhaustive equivalence is not claimed.",
+    "License review and user approval remain pending."
+  ]
+}

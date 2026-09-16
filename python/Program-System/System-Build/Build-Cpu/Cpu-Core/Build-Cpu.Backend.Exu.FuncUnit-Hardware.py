@@ -1603,8 +1603,13 @@ def _passthrough_outputs(self: "ExuFuncModule", m: Any) -> None:
     # Drive every ``io_out_bits_*`` port from the same-named ``io_in_bits_*`` input.
     # 由同名 ``io_in_bits_*`` 输入驱动每个 ``io_out_bits_*`` 端口。
     for spec in self.specs:
-        if spec.name.startswith("io_out_bits_"):
-            cand = "io_in_bits_" + spec.name[len("io_out_bits_"):]
+        # Dispatcher ports include the output index between ``io_out`` and
+        # ``bits`` (for example ``io_out_0_bits_fuOpType``).  Match those
+        # fields explicitly so Amaranth sees a real driver and emits them as
+        # output ports rather than undriven inputs.
+        marker = "_bits_"
+        if spec.name.startswith("io_out_") and marker in spec.name:
+            cand = "io_in_bits_" + spec.name.split(marker, 1)[1]
             if cand in self.ports:
                 m.d.comb += self.ports[spec.name].eq(self.ports[cand])
             else:
