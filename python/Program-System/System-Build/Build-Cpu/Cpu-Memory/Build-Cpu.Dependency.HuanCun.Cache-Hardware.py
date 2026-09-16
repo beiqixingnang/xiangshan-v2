@@ -290,8 +290,14 @@ class HuanCunCacheBoundary(Elaboratable):
         # Cat takes the first item as the least-significant part. / Cat 首项是最低有效片段。
         m.d.comb += merged_refill.eq(Cat(*merge_parts))
 
+        # A dirty victim must leave the cache before its replacement line can
+        # be accepted.  ``evict_pending`` is a one-entry write-back queue;
+        # exposing refill-ready in the same cycle would permit a refill to
+        # overwrite the victim before the downstream eviction handshake.
+        # 脏 victim 必须先离开缓存，才能接收替换行；evict_pending 是单项写回
+        # 队列，同周期拉高 refill_ready 会在逐出握手前覆盖 victim。
         m.d.comb += [self.req_ready.eq(~pending & ~self.flush), self.req_fire.eq(req_fire),
-                     self.refill_ready.eq(pending & ~self.flush), self.refill_fire.eq(refill_fire),
+                     self.refill_ready.eq(pending & ~evict_pending & ~self.flush), self.refill_fire.eq(refill_fire),
                      self.evict_fire.eq(evict_fire), self.hit.eq(hit),
                      self.dirty.eq(Mux(hit, hit_dirty, victim_dirty)),
                      self.state.eq(Mux(pending, 2, Mux(hit, Mux(hit_dirty, 1, 0), 0))),
@@ -317,6 +323,14 @@ class HuanCunCacheBoundary(Elaboratable):
         with amaranth_else(m):
             # Response pulses are one cycle unless a new refill arrives.
             m.d.huancun_cache += response_pending.eq(0)
+            # The evict channel is an output-only Valid boundary in this
+            # aggregate (there is no separate ready pin in the locked ABI).
+            # Consume the advertised write-back for one cycle, then permit
+            # the refill handshake on the following cycle.
+            # 逐出通道在锁定 ABI 中是仅输出 Valid（没有独立 ready）；广告
+            # 一个周期后消费写回，下一周期才允许 refill 握手。
+            with amaranth_if(m, evict_pending):
+                m.d.huancun_cache += evict_pending.eq(0)
             with amaranth_if(m, req_fire):
                 with amaranth_if(m, hit):
                     with amaranth_if(m, self.req_write):

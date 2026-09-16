@@ -14,7 +14,7 @@ from contextlib import AbstractContextManager
 from dataclasses import dataclass
 from typing import Any, Mapping, Sequence, cast
 
-from amaranth import ClockDomain, Const, Elaboratable, Memory, Module, Mux, Signal
+from amaranth import Cat, ClockDomain, Const, Elaboratable, Memory, Module, Mux, Signal
 from amaranth.back import verilog
 from amaranth.hdl.ast import Value
 
@@ -28,6 +28,7 @@ from amaranth.hdl.ast import Value
 # TargetBinder.scala，并提供稳定的 banked ready/valid 边界。
 __all__ = [
     "OpenLLCSramConfig", "route_bank", "is_mmio_transaction", "byte_mask",
+    "sram_reference_update",
     "OpenLLCSram", "OpenLLCCHIXbar", "OpenLLCMMIOBridge", "OpenLLCTargetBinder",
     "CHIXbar", "MMIODiverger", "MMIOMerger", "TargetBinder", "OpenNCBUtility",
     "build_verilog", "main", "SOURCE_SCALA_ROOT", "SOURCE_SCALA_PATHS",
@@ -130,6 +131,34 @@ def byte_mask(strobe: int, configuration: OpenLLCSramConfig | None = None) -> in
     return int(strobe) & mask
 
 
+def sram_reference_update(memory: Mapping[int, int], read_address: int,
+                          write_address: int, write_data: int, write_strobe: int,
+                          configuration: OpenLLCSramConfig | None = None) -> tuple[dict[int, int], int]:
+    """Apply one byte-masked write and return the read observation.
+
+    The helper mirrors the RTL's write-first behavior: lanes selected by the
+    strobe are forwarded immediately when the read and write addresses alias,
+    while untouched lanes retain the old SRAM value.
+    """
+
+    cfg = configuration or OpenLLCSramConfig()
+    lane_mask = byte_mask(write_strobe, cfg)
+    word_mask = (1 << cfg.data_bits) - 1
+    current = int(memory.get(int(read_address), 0)) & word_mask
+    incoming = int(write_data) & word_mask
+    old_at_write = int(memory.get(int(write_address), 0)) & word_mask
+    merged = old_at_write
+    for lane in range(cfg.byte_lanes):
+        if lane_mask & (1 << lane):
+            lane_value = (incoming >> (lane * 8)) & 0xFF
+            merged = (merged & ~(0xFF << (lane * 8))) | (lane_value << (lane * 8))
+    updated = dict(memory)
+    if lane_mask:
+        updated[int(write_address)] = merged
+    observed = merged if int(read_address) == int(write_address) and lane_mask else current
+    return updated, observed
+
+
 # =============================================================================
 # Implementation
 # =============================================================================
@@ -173,15 +202,27 @@ class OpenLLCSram(Elaboratable):
         m.submodules.write_port = write_port
         read_index = self.read_address[:address_bits]
         write_index = self.write_address[:address_bits]
-        same = self.write_valid & self.read_valid & (read_index == write_index)
+        read_in_range = amaranth_value(self.read_address < c.depth)
+        write_in_range = amaranth_value(self.write_address < c.depth)
+        write_fire = self.write_valid & self.write_ready & write_in_range
+        same = write_fire & self.read_valid & read_in_range & (read_index == write_index)
         # Byte-enable records are expanded into the Memory write data lanes. /
         # 将字节使能展开到 Memory 写数据 lane。
         m.d.comb += write_port.data.eq(self.write_data)
-        m.d.comb += write_port.en.eq(self.write_valid & self.write_mask)
+        write_enable = amaranth_value(Cat(*[write_fire for _ in range(c.byte_lanes)]))
+        m.d.comb += write_port.en.eq(write_enable & self.write_mask)
+        forwarded_lanes: list[Value] = []
+        for lane in range(c.byte_lanes):
+            start = lane * 8
+            forwarded_lanes.append(Mux(same & self.write_mask[lane],
+                                       self.write_data[start:start + 8],
+                                       read_port.data[start:start + 8]))
+        forwarded_data = amaranth_value(Cat(*forwarded_lanes))
         m.d.comb += [
-            self.read_ready.eq(~self.reset), self.write_ready.eq(~self.reset),
-            read_port.addr.eq(read_index), write_port.addr.eq(write_index),
-            self.read_data.eq(Mux(same, self.write_data, read_port.data)),
+            self.read_ready.eq(~self.reset & read_in_range), self.write_ready.eq(~self.reset & write_in_range),
+            read_port.addr.eq(read_index), read_port.en.eq(self.read_valid & self.read_ready),
+            write_port.addr.eq(write_index),
+            self.read_data.eq(Mux(read_in_range, forwarded_data, 0)),
         ]
         return m
 

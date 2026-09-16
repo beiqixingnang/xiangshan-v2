@@ -296,8 +296,9 @@ class FudianFpu(Elaboratable):
     ``operation`` selects the source-level units that share the aggregate
     ports: 0 = ``FloatPoint.decode``/pass-through, 1 = ``IntToFP`` (unsigned
     64-bit), 2 = ``FCMP`` (the low five output bits are EQ/LE/LT/NV), and 3 =
-    the finite ``FMUL`` datapath.  The packed input carries two FP operands for
-    operations 2 and 3 (low word ``a``, high word ``b``).
+    the finite ``FMUL`` datapath, and 4 = bounded ``FADD``.  The packed input
+    carries two FP operands for operations 2, 3, and 4 (low word ``a``, high
+    word ``b``).
     """
 
     # Construct FPU ports. / 构造 FPU 端口。
@@ -308,7 +309,9 @@ class FudianFpu(Elaboratable):
         self.input = Signal(64, name="io_input"); self.rounding = Signal(3, name="io_rounding")
         self.output = Signal(width, name="io_output"); self.inexact = Signal(name="io_inexact")
         self.is_nan = Signal(name="io_is_nan"); self.is_inf = Signal(name="io_is_inf"); self.is_zero = Signal(name="io_is_zero")
-        self.operation = Signal(2, name="io_operation")
+        # Three bits retain the original 0..3 operation encodings and add
+        # operation 4 for the bounded FADD datapath.
+        self.operation = Signal(3, name="io_operation")
 
     # Elaborate integer conversion and classification. / 展开整数转换与分类逻辑。
     def elaborate(self, platform: Any) -> Module:
@@ -416,22 +419,74 @@ class FudianFpu(Elaboratable):
         mul_exp = mul_exp_wide[:c.exp_width]
         mul_sign = amaranth_value(a_sign) ^ amaranth_value(b_sign)
         mul_normal = Cat(mul_frac, mul_exp, mul_sign)
-        canonical_nan = Cat(Const(1, max(0, frac_width - 1)), Const(0, 1), Const(exp_mask, c.exp_width), Const(0, 1))
+        # Canonical quiet NaN in packed sign|exponent|fraction order.  Using a
+        # single fixed-width constant avoids Cat-order ambiguity (Amaranth Cat
+        # places its first operand in the least-significant bits).
+        canonical_nan = Const((exp_mask << frac_width) | (1 << (frac_width - 1)), width)
         mul_nan = a_nan | b_nan | ((a_exp_ones & a_sig_zero) & b_exp_zero & b_sig_zero) | ((b_exp_ones & b_sig_zero) & a_exp_zero & a_sig_zero)
         mul_inf = (a_exp_ones & a_sig_zero) | (b_exp_ones & b_sig_zero)
         mul_zero = (a_exp_zero & a_sig_zero) | (b_exp_zero & b_sig_zero)
         mul_special = Mux(mul_nan, canonical_nan[:width], Mux(mul_inf, Cat(Const(0, frac_width), Const(exp_mask, c.exp_width), mul_sign), Mux(mul_zero, Const(0, width), mul_normal)))
 
-        # Operation mux: decode/pass-through, IntToFP, FCMP, FMUL.
+        # FADD bounded equal-exponent path. The source FADD aligns arbitrary
+        # exponents in a larger iterative unit; this aggregate keeps the
+        # common equal-exponent operation fully combinational and forwards the
+        # larger operand for unequal exponents. Existing operation encodings
+        # remain unchanged while operation 4 exposes this source-backed slice.
+        a_exp_v = amaranth_value(a_exp)
+        b_exp_v = amaranth_value(b_exp)
+        a_sig_v = amaranth_value(a_sig)
+        b_sig_v = amaranth_value(b_sig)
+        add_same_exp = a_exp_v == b_exp_v
+        add_a_ge = (a_exp_v > b_exp_v) | ((add_same_exp) & (a_sig_v >= b_sig_v))
+        add_same_sign = a_sign == b_sign
+        add_mant_a = Cat(a_sig, ~amaranth_value(a_exp_zero))
+        add_mant_b = Cat(b_sig, ~amaranth_value(b_exp_zero))
+        add_mant_a_v = amaranth_value(add_mant_a)
+        add_mant_b_v = amaranth_value(add_mant_b)
+        add_equal_raw = amaranth_value(Mux(add_same_sign, add_mant_a_v + add_mant_b_v,
+                                           Mux(a_sig_v >= b_sig_v, add_mant_a_v - add_mant_b_v,
+                                               add_mant_b_v - add_mant_a_v)))
+        add_equal_carry = add_equal_raw[c.precision]
+        add_equal_frac = Mux(add_equal_carry, add_equal_raw[1:frac_width + 1], add_equal_raw[:frac_width])
+        add_equal_exp = amaranth_value(a_exp_v + add_equal_carry)
+        add_equal_normal = Cat(add_equal_frac, add_equal_exp[:c.exp_width],
+                               Mux(add_same_sign, a_sign, Mux(a_sig_v >= b_sig_v, a_sign, b_sign)))
+        add_fallback = Mux(add_a_ge, a_fp, b_fp)
+        add_normal = Mux(add_same_exp, add_equal_normal, add_fallback)
+        add_nan = a_nan | b_nan | ((a_exp_ones & a_sig_zero) & b_exp_zero & b_sig_zero) | ((b_exp_ones & b_sig_zero) & a_exp_zero & a_sig_zero)
+        add_inf = (a_exp_ones & a_sig_zero) | (b_exp_ones & b_sig_zero)
+        add_inf_sign = Mux(a_exp_ones & a_sig_zero, a_sign, b_sign)
+        add_inf_conflict = a_exp_ones & a_sig_zero & b_exp_ones & b_sig_zero & (a_sign != b_sign)
+        add_zero = (a_exp_zero & a_sig_zero) & (b_exp_zero & b_sig_zero)
+        add_special = Mux(add_nan | add_inf_conflict, canonical_nan[:width],
+                          Mux(add_inf, Cat(Const(0, frac_width), Const(exp_mask, c.exp_width), add_inf_sign),
+                              Mux(add_zero, Const(0, width), add_normal)))
+        add_inexact = ~add_same_exp
+
+        # Operation mux: decode/pass-through, IntToFP, FCMP, FMUL, bounded FADD.
+        output_value: Any = operand
+        output_value = Mux(self.operation == Const(4, 3), add_special, output_value)
+        output_value = Mux(self.operation == Const(3, 3), mul_special, output_value)
+        output_value = Mux(self.operation == Const(2, 3), cmp_word, output_value)
+        output_value = Mux(self.operation == Const(1, 3), int_word, output_value)
+        inexact_value: Any = Const(0, 1)
+        inexact_value = Mux(self.operation == Const(4, 3), add_inexact, inexact_value)
+        inexact_value = Mux(self.operation == Const(3, 3), mul_guard | mul_sticky, inexact_value)
+        inexact_value = Mux(self.operation == Const(1, 3), int_ix, inexact_value)
+        nan_value: Any = is_nan
+        nan_value = Mux(self.operation == Const(4, 3), add_nan | add_inf_conflict, nan_value)
+        nan_value = Mux(self.operation == Const(2, 3), a_nan | b_nan, nan_value)
+        inf_value: Any = is_inf
+        inf_value = Mux(self.operation == Const(4, 3), add_inf & ~add_inf_conflict, inf_value)
+        inf_value = Mux(self.operation == Const(2, 3), a_exp_ones & a_sig_zero, inf_value)
+        zero_value: Any = is_zero
+        zero_value = Mux(self.operation == Const(4, 3), add_zero, zero_value)
+        zero_value = Mux(self.operation == Const(2, 3), both_zero, zero_value)
         m.d.comb += [
-            self.output.eq(Mux(self.operation == Const(1, 2), int_word,
-                               Mux(self.operation == Const(2, 2), cmp_word,
-                                   Mux(self.operation == Const(3, 2), mul_special, operand)))),
-            self.inexact.eq(Mux(self.operation == Const(1, 2), int_ix,
-                                Mux(self.operation == Const(3, 2), mul_guard | mul_sticky, Const(0, 1)))),
-            self.is_nan.eq(Mux(self.operation == Const(2, 2), a_nan | b_nan, is_nan)),
-            self.is_inf.eq(Mux(self.operation == Const(2, 2), a_exp_ones & a_sig_zero, is_inf)),
-            self.is_zero.eq(Mux(self.operation == Const(2, 2), both_zero, is_zero)),
+            self.output.eq(output_value),
+            self.inexact.eq(inexact_value), self.is_nan.eq(nan_value),
+            self.is_inf.eq(inf_value), self.is_zero.eq(zero_value),
         ]
         return m
 

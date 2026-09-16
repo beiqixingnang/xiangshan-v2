@@ -45,16 +45,29 @@ def main() -> int:
         for a, b in ((0, 0), (1, 2), ((1 << width) - 1, 0x55 & ((1 << width) - 1))):
             module.lza(a, b, width)
             vectors += 1
+        for value, shift, rounding in ((0b1011, 1, 0), (0b1000, 2, 3), (0b1111, width, 4)):
+            rounded, inexact = module.round_shift_right(value, shift, width, rounding)
+            discarded_mask = (1 << min(shift, width)) - 1
+            if not (0 <= rounded < (1 << width)) or inexact != int((value & discarded_mask) != 0):
+                raise AssertionError(("round", width, value, shift, rounding, rounded, inexact))
+            vectors += 1
     top = module.FudianArithmetic(module.ArithmeticConfig(width=8))
     observations = []
 
     async def bench(ctx):
         for signal in (top.clock, top.reset, top.a, top.b, top.shift, top.operation):
             ctx.set(signal, 0)
-        for op, a, b, shift in ((0, 0, 0, 0), (0, 1, 0, 0), (2, 0xF3, 0, 3), (3, 7, 9, 0)):
+        for op, a, b, shift in ((0, 0, 0, 0), (0, 1, 0, 0), (2, 0xF3, 0, 3),
+                                (3, 7, 9, 0), (5, 0b1011, 0, 1),
+                                (5, 0b1000, 3, 2)):
             ctx.set(top.operation, op); ctx.set(top.a, a); ctx.set(top.b, b); ctx.set(top.shift, shift)
             await ctx.delay(1e-9)
-            observations.append({"op": op, "result": int(ctx.get(top.result)), "aux": int(ctx.get(top.auxiliary)), "sticky": int(ctx.get(top.sticky))})
+            result = int(ctx.get(top.result)); sticky = int(ctx.get(top.sticky))
+            if op == 5:
+                expected, expected_sticky = module.round_shift_right(a, shift, 8, b & 0x7)
+                if result != expected or sticky != expected_sticky:
+                    raise AssertionError(("round-rtl", a, shift, b & 0x7, result, sticky, expected, expected_sticky))
+            observations.append({"op": op, "result": result, "aux": int(ctx.get(top.auxiliary)), "sticky": sticky})
     sim = Simulator(top); sim.add_clock(1e-6, domain="fudian_arithmetic"); sim.add_testbench(bench); sim.run()
     rtl = module.build_verilog({"width": 8, "module": "UHSCFudianArithmetic"}, {})
     with tempfile.TemporaryDirectory(prefix="v2_fudian_arithmetic_") as directory:

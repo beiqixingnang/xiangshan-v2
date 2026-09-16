@@ -1028,7 +1028,15 @@ class CoupledL2Slice(Elaboratable):
             self.in_b_bits_size.eq(pending_size), self.in_b_bits_source.eq(0),
             self.in_b_bits_address.eq(pending_address), self.in_b_bits_mask.eq((1 << c.mask_bits) - 1),
             self.in_b_bits_data.eq(0), self.in_b_bits_corrupt.eq(0),
-            self.out_d_ready.eq((state == 4) & ~self.flush),
+            # RefillUnit's sinkD is fronted by a two-entry enqueue queue in
+            # the Scala Slice.  Its ready is therefore capacity-driven and
+            # remains asserted while the slice is idle (the queue may accept
+            # an early D beat before the MSHR state advances).  Gating this
+            # signal on ``state == 4`` drops legal D beats and diverges from
+            # the TL2TL parent envelope; retain back-pressure only for flush.
+            # RefillUnit 的 sinkD 前端是两项入队队列；ready 由容量驱动，
+            # 空闲时仍保持有效，可在 MSHR 状态推进前接收早到的 D beat。
+            self.out_d_ready.eq(~self.flush),
             self.l1Hint_valid.eq(hint_pending), self.l1Hint_bits_sourceId.eq(pending_source),
             self.l1Hint_bits_isKeyword.eq(pending_keyword), self.prefetch_req_ready.eq((state == 0) & ~self.flush & child_mshr_admit),
             self.prefetch_resp_valid.eq(0), self.prefetch_train_valid.eq(0), self.error_valid.eq(0),

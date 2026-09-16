@@ -204,7 +204,11 @@ class FudianArithmetic(Elaboratable):
         domain.rst = self.reset
         m.domains.fudian_arithmetic = domain
         m.d.comb += [self.result.eq(0), self.auxiliary.eq(0), self.sticky.eq(0)]
-        # op=0 CLZ, op=1 LZA, op=2 shift-jam, op=3 multiply. / 操作码定义。
+        # op=0 CLZ, op=1 LZA, op=2 shift-jam, op=3 multiply, op=4 CSA,
+        # op=5 rounded shift-right (``b[2:0]`` selects RNE/RTZ/RDN/RUP/RMM).
+        # The extra operation reuses the existing ports so legacy callers keep
+        # the same interface while Fudian's RoundingUnit gets a concrete
+        # bit-level helper at this aggregate boundary.
         with amaranth_if(m, self.operation == 0):
             # PriorityEncoder(reverse) gives width-1 for zero. / 反向优先编码器对零返回 width-1。
             expr = width - 1
@@ -239,6 +243,23 @@ class FudianArithmetic(Elaboratable):
             sum_bits = self.a ^ self.b ^ self.shift[:width]
             carry_bits = (self.a & self.b) | (self.a & self.shift[:width]) | (self.b & self.shift[:width])
             m.d.comb += [self.result.eq(sum_bits), self.auxiliary.eq(carry_bits)]
+        with amaranth_elif(m, self.operation == 5):
+            shift_mask = ((Const(1, width + 1) << self.shift) - 1)[:width]
+            discarded = amaranth_value(self.a & shift_mask)
+            base = amaranth_value(self.a >> self.shift)
+            shift_minus_one = amaranth_value((self.shift - Const(1, len(self.shift))).as_unsigned())
+            guard = amaranth_value(Mux(self.shift == 0, 0,
+                                       (self.a >> shift_minus_one)[:1]))
+            lower_mask = amaranth_value(amaranth_value(shift_mask) >> Const(1, 1))
+            lower_discarded = amaranth_value(discarded & lower_mask)
+            sticky_round = lower_discarded.any()
+            inexact_round = discarded.any() | ((self.shift > width) & (self.a != 0))
+            round_up = Mux(self.b[:3] == 0, guard & (sticky_round | base[0]),
+                           Mux(self.b[:3] == 3, inexact_round,
+                               Mux(self.b[:3] == 4, guard, Const(0, 1))))
+            rounded = amaranth_value(base + round_up)
+            m.d.comb += [self.result.eq(rounded), self.auxiliary.eq(rounded[:width]),
+                         self.sticky.eq(inexact_round)]
         return m
 
 
