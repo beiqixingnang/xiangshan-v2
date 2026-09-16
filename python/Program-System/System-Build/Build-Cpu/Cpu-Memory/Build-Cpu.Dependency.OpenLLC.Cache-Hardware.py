@@ -33,9 +33,30 @@ __all__ = [
     "OpenLLCPipeline", "OpenLLCSlice", "OpenLLCCache", "LLCParam", "Common",
     "DataStorage", "Directory", "RequestBuffer", "RequestArb", "MainPipe",
     "MemUnit", "RefillUnit", "ResponseUnit", "SnoopUnit", "OpenLLC", "Slice",
+    "openllc_handshake",
     "build_verilog", "main",
     "SOURCE_SCALA_ROOT", "SOURCE_SCALA_PATHS", "SOURCE_SCALA_FILE_COUNT",
 ]
+
+
+def openllc_handshake(valid: bool, ready: bool) -> dict[str, int]:
+    """Return a stable ready/valid observation without changing the HW ABI.
+
+    The helper is intentionally pure Python so existing generated-module ports
+    remain unchanged while tests and software monitors can observe the same
+    handshake equation used by the cache boundary.
+    返回稳定的 ready/valid 观测；保持硬件端口 ABI 不变。
+    """
+
+    valid_bit = int(bool(valid))
+    ready_bit = int(bool(ready))
+    fire = valid_bit & ready_bit
+    return {
+        "valid": valid_bit,
+        "ready": ready_bit,
+        "fire": fire,
+        "stalled": valid_bit & (1 - ready_bit),
+    }
 
 
 # Keep all 27 inventory paths on the single cache aggregate. /

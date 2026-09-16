@@ -31,12 +31,41 @@ __all__ = [
     "NCBParameters", "encode_axi_id", "decode_axi_id", "chi_opcode_decode",
     "odd_parity", "select_rotational", "age_matrix_step", "address_overlap",
     "OpenNCBTransaction", "OpenNCBAxiRequest", "OpenNCBChiRequest",
+    "ncb_queue_observation",
     "OpenNCBLinkActive", "OpenNCBCreditManager", "OpenNCBTransactionQueue",
     "OpenNCB", "NCB200", "RotationalPrioritySelector", "SpillRegister",
     "CHILinkActiveManagerRX", "CHILinkActiveManagerTX", "CHILinkCreditManagerRX",
     "CHILinkCreditManagerTX", "build_verilog", "main", "SOURCE_SCALA_ROOT",
     "SOURCE_SCALA_PATHS", "SOURCE_SCALA_FILE_COUNT",
 ]
+
+
+def ncb_queue_observation(occupancy: int, capacity: int,
+                          enqueue_valid: bool = False,
+                          dequeue_valid: bool = False) -> dict[str, int]:
+    """Return deterministic queue ready/valid and next-occupancy fields.
+
+    The equation matches ``OpenNCBTransactionQueue`` while remaining a pure
+    monitor helper; no additional hardware ports are required for legacy NCB
+    integrations.
+    返回与 OpenNCBTransactionQueue 一致的队列 ready/valid 及下一占用量。
+    """
+
+    if capacity < 1 or occupancy < 0 or occupancy > capacity:
+        raise ValueError("invalid NCB queue occupancy")
+    valid_bit = int(occupancy > 0)
+    ready_bit = int(occupancy < capacity or bool(dequeue_valid))
+    enq_fire = int(bool(enqueue_valid) and bool(ready_bit))
+    deq_fire = int(bool(dequeue_valid) and bool(valid_bit))
+    return {
+        "ready": ready_bit,
+        "valid": valid_bit,
+        "enqueue_fire": enq_fire,
+        "dequeue_fire": deq_fire,
+        "occupancy": occupancy,
+        "next_occupancy": occupancy + enq_fire - deq_fire,
+        "full": int(occupancy >= capacity),
+    }
 
 
 # Keep all 89 OpenNCB inventory paths on the aggregate boundary. /

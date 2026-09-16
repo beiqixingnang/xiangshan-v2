@@ -27,11 +27,33 @@ __all__ = [
     "CHI_REQ_OPCODES", "CHI_RSP_OPCODES", "CHI_DAT_OPCODES", "CHI_SNP_OPCODES",
     "LINK_STOP", "LINK_ACTIVATE", "LINK_RUN", "LINK_DEACTIVATE", "chi_layout",
     "pack_fields", "unpack_fields", "next_link_state", "credit_update",
-    "request_from_mmio", "OpenLLCLinkLayer", "OpenLLCChannelTransmitter",
+    "request_from_mmio", "chi_handshake_observation", "OpenLLCLinkLayer", "OpenLLCChannelTransmitter",
     "OpenLLCChannelReceiver", "LinkLayer", "TXREQ", "TXRSP", "TXDAT", "TXSNP",
     "RXREQ", "RXRSP", "RXDAT", "OpenLLCBridge", "build_verilog", "main",
     "SOURCE_SCALA_ROOT", "SOURCE_SCALA_PATHS", "SOURCE_SCALA_FILE_COUNT",
 ]
+
+
+def chi_handshake_observation(valid: bool, ready: bool,
+                              credit_return: bool = False) -> dict[str, int]:
+    """Summarize one CHI channel's ready/valid and L-Credit event.
+
+    This pure helper mirrors the link-layer equations and keeps the historical
+    Verilog port list untouched, while giving protocol monitors a deterministic
+    observation point for fire/stall/credit-return behavior.
+    返回单个 CHI 通道 ready/valid 与 L-Credit 事件摘要，不改变旧端口。
+    """
+
+    valid_bit = int(bool(valid))
+    ready_bit = int(bool(ready))
+    credit_bit = int(bool(credit_return))
+    return {
+        "valid": valid_bit,
+        "ready": ready_bit,
+        "credit_return": credit_bit,
+        "fire": valid_bit & ready_bit,
+        "stalled": valid_bit & (1 - ready_bit),
+    }
 
 
 # Keep all eight CHI inventory paths on the bridge aggregate. /
