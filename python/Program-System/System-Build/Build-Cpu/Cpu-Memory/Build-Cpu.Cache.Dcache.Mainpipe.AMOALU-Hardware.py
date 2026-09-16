@@ -24,7 +24,7 @@ from amaranth.lib.wiring import Component, In, Out
 #     byte-replicated wmask into out, with the raw result on out_unmasked.
 #   / 与 Scala AMOALU 一致的解码、分段加法器、比较器与掩码合并。
 # Status / 状态: PYTHON_PRESENT_UNVERIFIED (phase-1 bulk port / 阶段一批量重写)
-__all__ = ["AMOALUConfig", "AMOALU", "build_verilog", "main"]
+__all__ = ["AMOALUConfig", "AMOALU", "amo_reference", "build_verilog", "main"]
 
 
 # =============================================================================
@@ -52,6 +52,46 @@ class AMOALUConfig:
         ratio = self.operandBits // self.minXLen
         if ratio & (ratio - 1):
             raise ValueError("operandBits/minXLen must be a power of two")
+
+
+def amo_reference(lhs: int, rhs: int, cmd: int, mask: int,
+                  configuration: AMOALUConfig | None = None) -> dict[str, int]:
+    """Return the masked AMO result and raw operation result.
+
+    This mirrors AMOALU's lane-partitioned arithmetic and signed/unsigned
+    min/max selection without requiring RTL elaboration. / 对齐 Scala
+    AMOALU 的分段加法、掩码合并及有符号/无符号比较。
+    """
+
+    c = configuration or AMOALUConfig()
+    width_mask = (1 << c.operandBits) - 1
+    lhs &= width_mask; rhs &= width_mask
+    if cmd == M_XA_ADD:
+        raw = (lhs + rhs) & width_mask
+    elif cmd == M_XA_XOR:
+        raw = lhs ^ rhs
+    elif cmd == M_XA_OR:
+        raw = lhs | rhs
+    elif cmd == M_XA_AND:
+        raw = lhs & rhs
+    elif cmd in (M_XA_MIN, M_XA_MAX, M_XA_MINU, M_XA_MAXU):
+        signed = cmd in (M_XA_MIN, M_XA_MAX)
+        if signed:
+            sign = 1 << (c.minXLen - 1)
+            x = (lhs & (sign - 1)) - (lhs & sign)
+            y = (rhs & (sign - 1)) - (rhs & sign)
+        else:
+            x, y = lhs, rhs
+        choose_lhs = x <= y if cmd in (M_XA_MIN, M_XA_MINU) else x >= y
+        raw = lhs if choose_lhs else rhs
+    else:
+        raw = lhs
+    byte_mask = 0
+    for index in range(c.operandBits // 8):
+        if mask & (1 << index):
+            byte_mask |= 0xFF << (index * 8)
+    merged = ((raw & byte_mask) | (lhs & ~byte_mask)) & width_mask
+    return {"raw": raw & width_mask, "merged": merged}
 
 
 # =============================================================================
