@@ -1,0 +1,70 @@
+# V2 交接报告 — Cube（WorkBuddy 侧）→ 执行方
+
+_2026-09-16 23:05_。本报告只写增量事实：我在你 9/16 中断点之后做了什么、做到哪、请先验证什么再往后推。总纲与既有一切约束默认你已知晓并继续生效，不赘述。
+
+## 0. 接手时的断点
+
+- 你的根会话止于 `gptcodex.top` 上游耗尽（9/16 15:12 末次写入），非 Pyright 原因——此前已核实，不再展开。
+- 接手时 HEAD：`10bea1a`；聚合 Build 78/78 在盘；核心清单 46 `VALIDATOR_PASS_BOUNDED` + 1 `RETIRED`；锁定层级比对 1976 模块中仅 19 闭环。
+
+## 1. 我新增的基础设施（已随 wave-1 提交）
+
+| 文件 | 内容 |
+| --- | --- |
+| `validation/v2_locked_hierarchy_extract.py` | 从 WSL 锁定参考 `XSTop.sv` 只读提取**机器可读锁定层级**：1976 模块的精确 ANSI 端口、子实例、Scala 出处 |
+| `validation/v2-locked-hierarchy.json` | 上述产物（冻结事实，**只读，勿改**） |
+| `validation/v2_hierarchy_coverage.py` → `validation/v2-hierarchy-coverage.json` | 每个锁定模块的覆盖状态视图，接手时 156 core + 722 family + **1098 missing** |
+
+## 2. Wave 1（已提交并推送，commit `8b181bc`）
+
+四个聚合 Build 主题，补上当时最大的四个缺口家族：
+
+| Build 文件 | 覆盖锁定模块 |
+| --- | --- |
+| `Cpu-Core/Build-Cpu.Backend.Fu.NewCSR.CSRModule-Hardware.py` | ~374（CSRModule 寄存器家族） |
+| `Cpu-Core/Build-Cpu.Backend.Fu.NewCSR.CSRLite-Hardware.py` | PMP/PMA/各级 CSR 映射 |
+| `Cpu-Core/Build-Cpu.Dependency.Chisel.Decoupled-Hardware.py` | ~216（Queue1/2/68_*、BundleMap、PipeWithFlush） |
+| `Cpu-Core/Build-Cpu.Dependency.Chisel.Arbiter-Hardware.py` | ~57（Arbiter*、AsyncQueue*、Repeater 等） |
+
+- 提交时独立复跑：82 文件共享静态审计六门全绿，Pyright 82/82 零错误（无 suppress），Decoupled/Arbiter 家族有 Verilator 对锁定参考的差分证据。
+- 覆盖度推进到 **521 core + 973 family + 482 missing**。
+- remote 已切为 `git@github.com:beiqixingnang/xiangshan-v2.git`（SSH），push 实测可用。
+
+## 3. Wave 2（代码已落盘、**未提交**——这是你要先看的东西）
+
+按计划新增的 wave-2 授权表（`V2-Rewrite-Execution-Plan.md` 未提交改动里有）落了四个主题：
+
+| 主题 | 规模 | 当前状态 |
+| --- | --- | --- |
+| `Cpu-Core/Build-Cpu.Backend.Issue.Entries-Hardware.py` | 2060 行 | ✅ 34 模块：端口面 PASS、确定性 PASS、**结构端口向量差分 PASS（行为等价未建立）**、Verilator/Yosys 34/34 PASS、证据 `validation/v2-backend-issue-entries-family-results.json` 完整，`DIRECT_TEST_PASS_BOUNDED` |
+| `Cpu-Memory/Build-Cpu.Memory.Lsqueue.Uncache-Hardware.py` | 1724 行 | ⚠️ 端口面 42/42 PASS、Verilator PASS，但**差分 FAIL（`BEHAVIORAL_DIFFERENTIAL_FAIL`）+ Yosys FAIL**，证据里整体 status=FAIL |
+| `Cpu-Core/Build-Cpu.Backend.Exu.FuncUnit-Hardware.py` | ~122KB | 代码在盘；验证脚本 `validation/v2-backend-exu-funcunit-family-validator.py` 在盘；**证据 JSON 未产出**（进程被中止） |
+| `Cpu-Core/Build-Cpu.Backend.Regfile.Regfile-Hardware.py` | ~448KB | 代码在盘；**证据 JSON 未产出**（同上） |
+
+配套：每主题有 focused validator（`validation/v2-*-family-validator.py` 或 `_validator.py` 命名）。
+
+## 4. 请你按此顺序接手
+
+1. **先审阅再动手**：复跑验证命令核对上表——重点看 Issue.Entries 证据 JSON 是否可复现（端口面比对、确定性、差分、Verilator/Yosys、Pyright），不要直接信我写的结果。
+2. **修 Lsqueue.Uncache**：差分失败按例先查复位值、flow/pipe 旁路时序、full 标志 X 传播、向量 split 的拍序；Yosys 失败读它的报错原文（常见：多驱动、不支持结构）。修完重出证据。
+3. **补 Exu.FuncUnit 与 Regfile.Regfile 的证据 JSON**（validator 已在盘，跑通即可；若 validator 本身有问题一并修）。
+4. 全部绿之后你再做一次独立核实（共享审计 + 全量 Pyright），然后统一提交 wave-2。
+5. 之后继续 482 missing 里的其余家族，优先级建议看 `validation/v2-hierarchy-coverage.json` 按 Scala 来源聚类的 top 缺口。
+
+## 6. Coordinator review addendum
+
+The handover claims were independently checked on 2026-09-17.  The locked
+hierarchy and coverage counts reproduce as 1976 = 521 core + 973 family + 482
+missing, with the pinned XSTop SHA-256 unchanged.  Decoupled (216/216) and
+Arbiter (57) focused reruns pass their bounded gates.  Wave-2 is not green:
+FuncUnit and Regfile currently fail the strict Pyright gate, while
+Lsqueue.Uncache remains a behavioral-differential/Yosys failure.  These three
+subjects must not be counted as completed until their focused evidence is
+repaired; `ACCEPTED` remains locked.
+
+## 5. 已知未闭合项（非本次引入）
+
+- Pyright 历史 161 条的口径已由 wave-1 全量复扫清零，但若有别的口径残留，以你复扫为准。
+- 父闭包 0/8、ACCEPTED=0 等里程碑照旧未动，Phase 1 状态上限不变。
+
+—— Cube 🧊

@@ -293,6 +293,18 @@ aggregate Build subjects that implement these families:
 | `Cpu-Core/Build-Cpu.Dependency.Chisel.Decoupled-Hardware.py` | Chisel `Queue1_*`/`Queue2_*`/`Queue68_*` | ~208 |
 | `Cpu-Core/Build-Cpu.Dependency.Chisel.Arbiter-Hardware.py` | Chisel `Arbiter*`, `AsyncQueue*`, `Repeater`, `ValidIOBroadcast` | ~70 |
 
+Wave 1 landed all four subjects and moved locked-module coverage from
+156 core + 722 family + 1098 missing to **521 core + 973 family + 482 missing**
+(commit `8b181bc`).  A second wave is authorised for the largest remaining
+clusters:
+
+| wave-2 Build subject | covered family | representative locked modules |
+| --- | --- | --- |
+| `Cpu-Core/Build-Cpu.Backend.Issue.Entries-Hardware.py` | issue/rename entries, busy tables, wakeup queues | `OthersEntry*`, `EnqEntry`, `Entries`, `IssueQueue`, `FuBusyTableWrite`, `BusyTable`, `MultiWakeupQueue` |
+| `Cpu-Core/Build-Cpu.Backend.Exu.FuncUnit-Hardware.py` | execution-unit and functional-unit leaves | `FuncUnit`, `ExeUnit`, `Bku`, `Dispatcher` |
+| `Cpu-Core/Build-Cpu.Backend.Regfile.Regfile-Hardware.py` | register file, rename snapshot, writeback arbitration | `Regfile`, `SnapshotGenerator`, `FreeList`, `RenameTable`, `RFReadArbiter`, `RealWBArbiter`, `RFWBConflictChecker` |
+| `Cpu-Memory/Build-Cpu.Memory.Lsqueue.Uncache-Hardware.py` | uncache load-queue entries, TLB storage, vector split leaves | `UncacheEntry*`, `LoadQueueUncache`, `TLBStorage`, `VSplit*`, `indexedLSUopTable` |
+
 Rules for this wave, in addition to the existing contract:
 
 - A new Build subject must justify its path by a Scala source root and must list

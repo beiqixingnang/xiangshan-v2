@@ -1,8 +1,15 @@
-# V2 rewrite worker brief — hierarchy-completion wave (2026-09-16)
+# V2 rewrite worker brief — hierarchy-completion waves (2026-09-16)
 
 This brief is the shared contract for every parallel implementation worker in the
-hierarchy-completion wave. It is subordinate to `V2-Python-Amaranth-Rules.md` and
-`V2-Rewrite-Execution-Plan.md`; read both before writing code.
+hierarchy-completion waves (wave 1 added the NewCSR and Chisel primitive
+families; later waves continue the same rules). It is subordinate to
+`V2-Python-Amaranth-Rules.md` and `V2-Rewrite-Execution-Plan.md`; read both
+before writing code.
+
+New aggregate Build subjects are authorised by the "Hierarchy-completion wave
+amendment (2026-09-16)" section of `V2-Rewrite-Execution-Plan.md`. If your
+assignment needs a Build path that is not listed there, stop and report instead
+of inventing one — the coordinator registers paths.
 
 ## Working directory
 
