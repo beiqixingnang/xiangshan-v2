@@ -743,13 +743,31 @@
    "reference_surface": [
     "validation/v2-build-freeze-shared-audit-results.json"
    ]
+  },
+  {
+   "id": "LsqueueUncacheFamily",
+   "source_scala": [
+    "scala/src/main/scala/xiangshan/mem/lsqueue/LoadQueueUncache.scala",
+    "scala/src/main/scala/xiangshan/mem/lsqueue/FreeList.scala",
+    "scala/src/main/scala/xiangshan/cache/mmu/TLBStorage.scala",
+    "scala/src/main/scala/xiangshan/mem/vector/VSplit.scala"
+   ],
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Lsqueue.Uncache-Hardware.py",
+   "family_id": "core.memory.lsqueue.uncache",
+   "closure_root": "core.memory.lsqueue",
+   "classification": "REWRITTEN",
+   "disposition": "STRUCTURE_VERIFIED_BEHAVIOR_FAIL",
+   "v2_status": "STRUCTURE_VERIFIED",
+   "reference_surface": [
+    "validation/v2-memory-lsqueue-uncache-family-results.json"
+   ]
   }
 ],
  "status": "IMPLEMENTATION_WAVES_VALIDATED_BOUNDED_HIERARCHY_WAVE1",
  "acceptance_eligible": false,
   "entries_status_counts": {
   "VALIDATOR_PASS_BOUNDED": 49,
-  "STRUCTURE_VERIFIED": 2,
+  "STRUCTURE_VERIFIED": 3,
   "RETIRED": 1
  }
 }
