@@ -53,21 +53,19 @@ _2026-09-16 23:05_。本报告只写增量事实：我在你 9/16 中断点之�
 
 ## 6. Coordinator review addendum
 
-The handover claims were independently checked on 2026-09-17.  The locked
-hierarchy and coverage counts reproduce as 1976 = 521 core + 973 family + 482
-missing, with the pinned XSTop SHA-256 unchanged.  Decoupled (216/216) and
-Arbiter (57) focused reruns pass their bounded gates.  Wave-2 is not green:
-FuncUnit and Regfile currently fail the strict Pyright gate, while
-Lsqueue.Uncache remains a behavioral-differential/Yosys failure.  These three
-subjects must not be counted as completed until their focused evidence is
-repaired; `ACCEPTED` remains locked.
+The handover claims were independently checked on 2026-09-17. The pinned
+hierarchy SHA-256 is unchanged. Decoupled (216/216) and Arbiter (57) focused
+reruns pass their bounded gates. FuncUnit and Regfile now pass the strict
+structure gate; Lsqueue also passes structure, but its behavioral checkpoint
+still fails. `ACCEPTED` remains locked.
 
 Subsequent coordinator work landed IssueEntries (`3e9f104`), Regfile
 structure typing (`13e09c0`), and FuncUnit strict typing (`af425cc` through
-`1cc5772`).  The shared structure sweep is now 86/86, and the registered
-hierarchy coverage is 703 core + 961 family + 312 missing.  Lsqueue's fast
+`1cc5772`). The shared structure sweep is now 86/86, and the registered
+hierarchy coverage is 740 core + 961 family + 275 missing. Lsqueue's fast
 checkpoint is still a real failure (FreeList 1107/1200 and UncacheEntry_15
-23293/37600 comparisons), so this report does not promote it.
+23293/37600 comparisons), so this report records structure only and does not
+promote behavioral equivalence.
 
 ## 5. 已知未闭合项（非本次引入）
 
