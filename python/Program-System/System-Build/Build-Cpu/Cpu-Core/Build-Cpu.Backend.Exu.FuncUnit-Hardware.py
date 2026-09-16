@@ -729,7 +729,7 @@ def _xperm_lut(table, idx, width):
     return result
 
 
-def sbox_aes_top(m, byte, prefix):
+def sbox_aes_top(m: Any, byte: Value, prefix: str):
     # CryptoUtils.SboxAesTop: first stage of the AES S-box network. / CryptoUtils.SboxAesTop：AES S-box 网络第一级。
     i = cast(Any, byte)
     o = _SignalDict(m, 'aesTop')
@@ -763,7 +763,7 @@ def sbox_aes_top(m, byte, prefix):
     return [o[k] for k in range(21)]
 
 
-def sbox_iaes_top(m, byte, prefix):
+def sbox_iaes_top(m: Any, byte: Value, prefix: str):
     # CryptoUtils.SboxIaesTop: first stage of the AES^-1 S-box network. / CryptoUtils.SboxIaesTop：AES 逆 S-box 网络第一级。
     i = cast(Any, byte)
     t0 = i[1:2] ^ i[0:1]
@@ -796,7 +796,7 @@ def sbox_iaes_top(m, byte, prefix):
     return [o[k] for k in range(21)]
 
 
-def sbox_sm4_top(m, byte, prefix):
+def sbox_sm4_top(m: Any, byte: Value, prefix: str):
     # CryptoUtils.SboxSm4Top: first stage of the SM4 S-box network. / CryptoUtils.SboxSm4Top：SM4 S-box 网络第一级。
     i = cast(Any, byte)
     o = _SignalDict(m, 'sm4Top')
@@ -847,7 +847,7 @@ class _SignalDict(dict):
         dict.__setitem__(self, key, sig)
 
 
-def sbox_inv(m, bits, prefix):
+def sbox_inv(m: Any, bits: Value, prefix: str):
     # CryptoUtils.SboxInv: shared middle stage for AES/AES^-1/SM4. / CryptoUtils.SboxInv：AES/AES 逆/SM4 共享中间级。
     i = [cast(Any, b) for b in bits]
     t = _SignalDict(m, prefix)
@@ -907,7 +907,7 @@ def sbox_inv(m, bits, prefix):
     return o
 
 
-def sbox_aes_out(m, bits, prefix):
+def sbox_aes_out(m: Any, bits: Value, prefix: str):
     # CryptoUtils.SboxAesOut: output stage of the AES S-box network. / CryptoUtils.SboxAesOut：AES S-box 网络输出级。
     i = [cast(Any, b) for b in bits]
     t = _SignalDict(m, prefix)
@@ -948,7 +948,7 @@ def sbox_aes_out(m, bits, prefix):
     return cast(Any, Cat(*o))
 
 
-def sbox_iaes_out(m, bits, prefix):
+def sbox_iaes_out(m: Any, bits: Value, prefix: str):
     # CryptoUtils.SboxIaesOut: output stage of the AES^-1 S-box network. / CryptoUtils.SboxIaesOut：AES 逆 S-box 网络输出级。
     i = [cast(Any, b) for b in bits]
     t = _SignalDict(m, prefix)
@@ -988,7 +988,7 @@ def sbox_iaes_out(m, bits, prefix):
     return cast(Any, Cat(*o))
 
 
-def sbox_sm4_out(m, bits, prefix):
+def sbox_sm4_out(m: Any, bits: Value, prefix: str):
     # CryptoUtils.SboxSm4Out: output stage of the SM4 S-box network. / CryptoUtils.SboxSm4Out：SM4 S-box 网络输出级。
     i = [cast(Any, b) for b in bits]
     t = _SignalDict(m, prefix)
@@ -1029,15 +1029,15 @@ def sbox_sm4_out(m, bits, prefix):
     return cast(Any, Cat(*o))
 
 
-def xt2(byte):
+def xt2(byte: Value) -> Value:
     # CryptoUtils.XtN.Xt2: GF(2^8) multiply by 2. / CryptoUtils.XtN.Xt2：GF(2^8) 乘 2。
     v = cast(Any, byte)
     shifted = (Cat(Const(0, 1), v[0:8]) << 1)[0:9]
     fb = Mux(v[7:8], Const(0x1b, 8), Const(0, 8))
-    return (shifted ^ Cat(Const(0, 1), fb))[0:8]
+    return cast(Value, (cast(Any, shifted) ^ Cat(Const(0, 1), fb))[0:8])
 
 
-def xtn(byte, t):
+def xtn(byte: Value, t: Value) -> Value:
     # CryptoUtils.XtN: repeated GF(2^8) doubling selected by mask ``t``. / CryptoUtils.XtN：按掩码 ``t`` 选择的 GF(2^8) 重复倍乘。
     b0 = cast(Any, byte)[0:8]
     b1 = xt2(b0)
@@ -1047,20 +1047,20 @@ def xtn(byte, t):
     res = res ^ Mux(t[1:2], b1, Const(0, 8))
     res = res ^ Mux(t[2:3], b2, Const(0, 8))
     res = res ^ Mux(t[3:4], b3, Const(0, 8))
-    return res[0:8]
+    return cast(Value, res[0:8])
 
 
-def byte_enc(bytes4):
+def byte_enc(bytes4: list[Value]) -> Value:
     # CryptoUtils.ByteEnc: AES forward mix-column on one column. / CryptoUtils.ByteEnc：一列的 AES 正向列混合。
     return xtn(bytes4[0], Const(0x2, 8)) ^ xtn(bytes4[1], Const(0x3, 8)) ^ bytes4[2] ^ bytes4[3]
 
 
-def byte_dec(bytes4):
+def byte_dec(bytes4: list[Value]) -> Value:
     # CryptoUtils.ByteDec: AES inverse mix-column on one column. / CryptoUtils.ByteDec：一列的 AES 逆向列混合。
     return xtn(bytes4[0], Const(0xe, 8)) ^ xtn(bytes4[1], Const(0xb, 8)) ^ xtn(bytes4[2], Const(0xd, 8)) ^ xtn(bytes4[3], Const(0x9, 8))
 
 
-def mix_fwd(bytes4):
+def mix_fwd(bytes4: list[Value]) -> Value:
     # CryptoUtils.MixFwd over one column group. / 一组列的 CryptoUtils.MixFwd。
     return Cat(
         byte_enc([bytes4[3], bytes4[0], bytes4[1], bytes4[2]]),
@@ -1070,7 +1070,7 @@ def mix_fwd(bytes4):
     )
 
 
-def mix_inv(bytes4):
+def mix_inv(bytes4: list[Value]) -> Value:
     # CryptoUtils.MixInv over one column group. / 一组列的 CryptoUtils.MixInv。
     return Cat(
         byte_dec([bytes4[3], bytes4[0], bytes4[1], bytes4[2]]),
@@ -1216,7 +1216,7 @@ def alu_result(func, src1, src2):
     return res
 
 
-def branch_taken(m, func, src1, src2, pred_taken, prefix):
+def branch_taken(m: Any, func: Value, src1: Value, src2: Value, pred_taken: Value, prefix: str):
     # BranchModule: branch resolution and misprediction detection.  Wide
     # intermediates are materialised as comb signals because slicing a plain
     # expression rebuilds its whole tree per bit.
@@ -1240,7 +1240,7 @@ def branch_taken(m, func, src1, src2, pred_taken, prefix):
     return taken, mispredict
 
 
-def addr_add_result(m, pc_extend, taken, imm, next_pc_offset, prefix):
+def addr_add_result(m: Any, pc_extend: Value, taken: Value, imm: Value, next_pc_offset: Value, prefix: str):
     # AddrAddModule: branch target / sequential next address (pinned AddrAddModule.sv).
     # AddrAddModule：分支目标 / 顺序下一地址（钉死的 AddrAddModule.sv）。
     pc_s = Signal(51, name=prefix + "_pc")
@@ -1258,7 +1258,7 @@ def addr_add_result(m, pc_extend, taken, imm, next_pc_offset, prefix):
     return out
 
 
-def check_faults(m, addr_trans, target, prefix):
+def check_faults(m: Any, addr_trans: Value, target: Value, prefix: str):
     # AddrTransType.check*Fault on the full target (Bundle.scala:692-698). / 对全目标地址的 AddrTransType.check*Fault（Bundle.scala:692-698）。
     t = Signal(64, name=prefix + "_faultT")
     m.d.comb += t.eq(cast(Any, target))
@@ -1599,7 +1599,7 @@ def _out_indices(self: "ExuFuncModule") -> list[str]:
     return sorted(outs, key=lambda s: int(s))
 
 
-def _passthrough_outputs(self: "ExuFuncModule", m: Module) -> None:
+def _passthrough_outputs(self: "ExuFuncModule", m: Any) -> None:
     # Drive every ``io_out_bits_*`` port from the same-named ``io_in_bits_*`` input.
     # 由同名 ``io_in_bits_*`` 输入驱动每个 ``io_out_bits_*`` 端口。
     for spec in self.specs:
@@ -1611,7 +1611,7 @@ def _passthrough_outputs(self: "ExuFuncModule", m: Module) -> None:
                 m.d.comb += self.ports[spec.name].eq(Const(0, spec.width))
 
 
-def build_dispatcher(self: "ExuFuncModule", m: Module) -> None:
+def build_dispatcher(self: "ExuFuncModule", m: Any) -> None:
     # Dispatcher: one-hot fuType compare routes the input to exactly one output
     # (pinned Dispatcher*.sv: io_out_N_valid = io_in_bits_fuType == 35'hMASK & io_in_valid).
     # Dispatcher：one-hot fuType 比较将输入路由到唯一输出（钉死的 Dispatcher*.sv）。
@@ -1630,7 +1630,7 @@ def build_dispatcher(self: "ExuFuncModule", m: Module) -> None:
         m.d.comb += p["io_in_ready"].eq(acc)
 
 
-def _leaf_ports(self: "ExuFuncModule", m: Module, leaf: Any) -> None:
+def _leaf_ports(self: "ExuFuncModule", m: Any, leaf: Any) -> None:
     # Instantiate a Bku leaf under ``m`` and wire it to the locked port surface. / 在 ``m`` 下实例化 Bku 叶子并连接锁定端口面。
     m.submodules.leaf = leaf
     m.d.comb += [
@@ -1640,49 +1640,49 @@ def _leaf_ports(self: "ExuFuncModule", m: Module, leaf: Any) -> None:
     ]
 
 
-def build_count(self: "ExuFuncModule", m: Module) -> None:
+def build_count(self: "ExuFuncModule", m: Any) -> None:
     # CountModule locked leaf: CLZ/CTZ/CPOP with registered stage-0 state. / CountModule 锁定叶子：带寄存一级状态的 CLZ/CTZ/CPOP。
     leaf = CountLeaf()
     _leaf_ports(self, m, leaf)
     m.d.comb += [leaf.src.eq(self.ports["io_src"]), leaf.func.eq(self.ports["io_func"])]
 
 
-def build_clmul(self: "ExuFuncModule", m: Module) -> None:
+def build_clmul(self: "ExuFuncModule", m: Any) -> None:
     # ClmulModule locked leaf: carry-less multiply with registered operands. / ClmulModule 锁定叶子：带寄存操作数的无进位乘法。
     leaf = ClmulLeaf()
     _leaf_ports(self, m, leaf)
     m.d.comb += [leaf.src0.eq(self.ports["io_src_0"]), leaf.src1.eq(self.ports["io_src_1"]), leaf.func.eq(self.ports["io_func"])]
 
 
-def build_misc(self: "ExuFuncModule", m: Module) -> None:
+def build_misc(self: "ExuFuncModule", m: Any) -> None:
     # MiscModule locked leaf: XPERM.N / XPERM.B. / MiscModule 锁定叶子：XPERM.N / XPERM.B。
     leaf = MiscLeaf()
     _leaf_ports(self, m, leaf)
     m.d.comb += [leaf.src0.eq(self.ports["io_src_0"]), leaf.src1.eq(self.ports["io_src_1"]), leaf.func.eq(self.ports["io_func"])]
 
 
-def build_hash(self: "ExuFuncModule", m: Module) -> None:
+def build_hash(self: "ExuFuncModule", m: Any) -> None:
     # HashModule locked leaf: SHA-256/512 and SM3 message words. / HashModule 锁定叶子：SHA-256/512 与 SM3 消息字。
     leaf = HashLeaf()
     _leaf_ports(self, m, leaf)
     m.d.comb += [leaf.src.eq(self.ports["io_src"]), leaf.func.eq(self.ports["io_func"])]
 
 
-def build_blockcipher(self: "ExuFuncModule", m: Module) -> None:
+def build_blockcipher(self: "ExuFuncModule", m: Any) -> None:
     # BlockCipherModule locked leaf: AES/SM4 round functions. / BlockCipherModule 锁定叶子：AES/SM4 轮函数。
     leaf = BlockCipherLeaf()
     _leaf_ports(self, m, leaf)
     m.d.comb += [leaf.src0.eq(self.ports["io_src_0"]), leaf.src1.eq(self.ports["io_src_1"]), leaf.func.eq(self.ports["io_func"])]
 
 
-def build_crypto(self: "ExuFuncModule", m: Module) -> None:
+def build_crypto(self: "ExuFuncModule", m: Any) -> None:
     # CryptoModule locked leaf: hash vs block-cipher selection. / CryptoModule 锁定叶子：哈希与分组密码选择。
     leaf = CryptoLeaf()
     _leaf_ports(self, m, leaf)
     m.d.comb += [leaf.src0.eq(self.ports["io_src_0"]), leaf.src1.eq(self.ports["io_src_1"]), leaf.func.eq(self.ports["io_func"])]
 
 
-def build_alu(self: "ExuFuncModule", m: Module) -> None:
+def build_alu(self: "ExuFuncModule", m: Any) -> None:
     # Alu: 0-latency FuncUnit over AluDataModule; ctrlPipe_0 ctrl passthrough.
     # Alu：AluDataModule 之上的 0 延迟 FuncUnit；ctrlPipe_0 控制透传。
     p = self.ports
@@ -1696,7 +1696,7 @@ def build_alu(self: "ExuFuncModule", m: Module) -> None:
     ]
 
 
-def build_bku(self: "ExuFuncModule", m: Module) -> None:
+def build_bku(self: "ExuFuncModule", m: Any) -> None:
     # Bku: 2-stage FuncUnit (latency 2) muxing the four K-extension leaves
     # (pinned Bku.sv, FuncUnit.scala HasPipelineReg with latency=2).
     # Bku：二级 FuncUnit（延迟 2），选择四个 K 扩展叶子（钉死的 Bku.sv）。
@@ -1753,7 +1753,7 @@ def build_bku(self: "ExuFuncModule", m: Module) -> None:
     ]
 
 
-def build_mul(self: "ExuFuncModule", m: Module) -> None:
+def build_mul(self: "ExuFuncModule", m: Any) -> None:
     # MulUnit: 2-stage FuncUnit over ArrayMulDataModule (a,b 65-bit Booth inputs,
     # result selected by the pipelined isHi/isW control).
     # MulUnit：ArrayMulDataModule 之上的二级 FuncUnit（65 位 Booth 输入 a、b，
@@ -1793,7 +1793,7 @@ def build_mul(self: "ExuFuncModule", m: Module) -> None:
     ]
 
 
-def build_div(self: "ExuFuncModule", m: Module) -> None:
+def build_div(self: "ExuFuncModule", m: Any) -> None:
     # DivUnit: wrapper handshake around the divider core.  The SRT16 core itself
     # is a separate locked subject; this model restores the identical request/kill
     # protocol with a one-iteration-per-cycle restoring array and a fixed result
@@ -1885,14 +1885,14 @@ def build_div(self: "ExuFuncModule", m: Module) -> None:
     ]
 
 
-def build_addr_add(self: "ExuFuncModule", m: Module) -> None:
+def build_addr_add(self: "ExuFuncModule", m: Any) -> None:
     # AddrAddModule: branch target / sequential next address (pinned AddrAddModule.sv).
     # AddrAddModule：分支目标 / 顺序下一地址（钉死的 AddrAddModule.sv）。
     p = self.ports
     m.d.comb += p["io_target"].eq(addr_add_result(m, p["io_pcExtend"], p["io_taken"], p["io_imm"], p["io_nextPcOffset"], "aam"))
 
 
-def build_std(self: "ExuFuncModule", m: Module) -> None:
+def build_std(self: "ExuFuncModule", m: Any) -> None:
     # Std: store-data pass-through with valid/ready handshake (pinned Std.sv).
     # Std：带 valid/ready 握手的存储数据透传（钉死的 Std.sv）。
     p = self.ports
@@ -1904,7 +1904,7 @@ def build_std(self: "ExuFuncModule", m: Module) -> None:
     ]
 
 
-def build_mem_exe_unit(self: "ExuFuncModule", m: Module) -> None:
+def build_mem_exe_unit(self: "ExuFuncModule", m: Any) -> None:
     # MemExeUnit: store-data pass-through with uop sideband passthrough (pinned MemExeUnit.sv).
     # MemExeUnit：带 uop 边带透传的存储数据直通（钉死的 MemExeUnit.sv）。
     p = self.ports
@@ -1920,7 +1920,7 @@ def build_mem_exe_unit(self: "ExuFuncModule", m: Module) -> None:
     ]
 
 
-def build_fence(self: "ExuFuncModule", m: Module) -> None:
+def build_fence(self: "ExuFuncModule", m: Any) -> None:
     # Fence: six-state fence FSM driving sfence/fencei/sbuffer (upstream Fence.scala).
     # Fence：驱动 sfence/fencei/sbuffer 的六态 fence 状态机（upstream Fence.scala）。
     p = self.ports
@@ -1986,7 +1986,7 @@ def build_fence(self: "ExuFuncModule", m: Module) -> None:
     ]
 
 
-def build_branch_unit(self: "ExuFuncModule", m: Module) -> None:
+def build_branch_unit(self: "ExuFuncModule", m: Any) -> None:
     # BranchUnit: 0-latency branch resolution, AddrAddModule target and Redirect
     # bundle emission (upstream wrapper/BranchUnit.scala).
     # BranchUnit：0 延迟分支裁决、AddrAddModule 目标与 Redirect 包输出（upstream wrapper/BranchUnit.scala）。
@@ -2040,7 +2040,7 @@ def build_branch_unit(self: "ExuFuncModule", m: Module) -> None:
                 m.d.comb += p[spec.name].eq(Const(0, spec.width))
 
 
-def build_jump_unit(self: "ExuFuncModule", m: Module) -> None:
+def build_jump_unit(self: "ExuFuncModule", m: Any) -> None:
     # JumpUnit: 0-latency jump target computation and Redirect emission
     # (upstream wrapper/JumpUnit.scala + JumpDataModule).
     # JumpUnit：0 延迟跳转目标计算与 Redirect 输出（upstream wrapper/JumpUnit.scala）。
@@ -2102,7 +2102,7 @@ def build_jump_unit(self: "ExuFuncModule", m: Module) -> None:
                 m.d.comb += p[spec.name].eq(Const(0, spec.width))
 
 
-def build_exe_unit(self: "ExuFuncModule", m: Module) -> None:
+def build_exe_unit(self: "ExuFuncModule", m: Any) -> None:
     # ExeUnit: Dispatcher + Alu/MulUnit/Bku lanes with clock-gated mul/bku domains,
     # flush-cancelling inPipe and OR-combined writeback (pinned ExeUnit.sv).
     # ExeUnit：Dispatcher 加 Alu/MulUnit/Bku 三条通路，mul/bku 时钟门控、
