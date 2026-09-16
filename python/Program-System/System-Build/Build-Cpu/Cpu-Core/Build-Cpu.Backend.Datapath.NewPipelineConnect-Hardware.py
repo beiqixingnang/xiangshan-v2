@@ -23,6 +23,7 @@ __all__ = [
     "NewPipelineConnectPipe",
     "NewPipelineConnect",
     "connect",
+    "connect_observation",
     "build_verilog",
     "main",
 ]
@@ -87,6 +88,22 @@ def connect(
     with cast(Any, module.If(left_fire)):
         module.d.sync += data_reg.eq(leftBits)
     return data_reg
+
+
+def connect_observation(valid: bool, ready: bool, out_fire: bool,
+                        flush: bool, older: bool) -> dict[str, int]:
+    """Return one source-priority decoupled stage observation. / 返回单周期流水观测。"""
+
+    left_fire = int(bool(valid) and (bool(ready) or not bool(valid) or bool(older)))
+    next_valid = int(bool(valid))
+    if out_fire:
+        next_valid = 0
+    if left_fire:
+        next_valid = 1
+    if flush:
+        next_valid = 0
+    return {"left_fire": left_fire, "next_valid": next_valid,
+            "flush": int(bool(flush)), "older": int(bool(older))}
 
 
 class NewPipelineConnectPipe(Elaboratable):

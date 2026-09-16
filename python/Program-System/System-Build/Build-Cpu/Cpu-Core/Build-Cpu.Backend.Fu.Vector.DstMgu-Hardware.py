@@ -20,7 +20,7 @@ from amaranth.back import verilog
 # exactly that combinational closure; the V3 valid/S1 register interface is not
 # carried forward. V2 没有独立 DstMgu.scala：Mgu.scala 用 splitVdMask 计算掩码，
 # 从 maskVd 取低元素位并写回 oldVd。此边界只暴露该组合闭包，不保留 V3 的寄存器接口。
-__all__ = ["DstMguConfig", "VSew", "DstMgu", "dst_mgu_model", "build_verilog", "main"]
+__all__ = ["DstMguConfig", "VSew", "DstMgu", "dst_mgu_model", "dst_mgu_observation", "build_verilog", "main"]
 
 
 # =============================================================================
@@ -69,6 +69,14 @@ def dst_mgu_model(vd: int, old_vd: int, mask: int, ma: bool, eew: int, vd_idx: i
     shift = width * (vd_idx & 7)
     field_mask = ((1 << width) - 1) << shift
     return ((old_vd & ((1 << 128) - 1)) & ~field_mask) | ((mask_vd & ((1 << width) - 1)) << shift)
+
+
+def dst_mgu_observation(vd: int, old_vd: int, mask: int, ma: bool,
+                        eew: int, vd_idx: int) -> dict[str, int]:
+    """Return the merged destination and selected mask chunk. / 返回合并结果与掩码块。"""
+
+    return {"result": dst_mgu_model(vd, old_vd, mask, ma, eew, vd_idx),
+            "mask_chunk": split_mask_chunk(mask, eew, vd_idx)}
 
 
 # =============================================================================

@@ -15,7 +15,7 @@ from amaranth import ClockDomain, Const, Elaboratable, Module, Signal
 # are connected with flush tied low by the parent; prefetch entries expose the
 # same signal.  The Python boundary keeps both signals so one implementation
 # can be exercised against either extracted specialization.
-__all__ = ["MshrConfig", "ICacheMSHR", "ICacheMshr"]
+__all__ = ["MshrConfig", "ICacheMSHR", "ICacheMshr", "mshr_observation", "build_verilog", "main"]
 
 
 # Configuration
@@ -51,6 +51,18 @@ class MshrConfig:
     # Return the physical block-address width. / 返回物理块地址位宽。
     def blk_paddr_bits(self) -> int:
         return self.paddr_bits - self.block_off_bits
+
+
+def mshr_observation(req_valid: bool, req_ready: bool, acquire_valid: bool,
+                     acquire_ready: bool, response_valid: bool,
+                     response_ready: bool, flush: bool = False) -> dict[str, int]:
+    """Return request/acquire/response fire taps for one MSHR cycle. / 返回 MSHR fire 观测。"""
+
+    blocked = bool(flush)
+    return {"req_fire": int(req_valid and req_ready and not blocked),
+            "acquire_fire": int(acquire_valid and acquire_ready and not blocked),
+            "response_fire": int(response_valid and response_ready and not blocked),
+            "blocked": int(blocked)}
 
 
 # Implementation
