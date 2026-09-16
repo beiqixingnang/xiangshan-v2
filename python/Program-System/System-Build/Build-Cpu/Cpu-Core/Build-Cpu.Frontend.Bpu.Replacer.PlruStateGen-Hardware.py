@@ -20,6 +20,7 @@ __all__ = [
     "PseudoLRU",
     "plru_next_state",
     "plru_victim",
+    "plru_observation",
     "build_verilog",
     "main",
 ]
@@ -147,6 +148,21 @@ def plru_victim(state: int, num_ways: int) -> int:
         return child | (root << (bits - 1))
 
     return recurse(state, num_ways)
+
+
+def plru_observation(state: int, touches: list[tuple[bool, int]], num_ways: int) -> dict[str, int]:
+    """Return pre-access victim and folded post-access PLRU state.
+
+    This keeps the Rocket PseudoLRU observation atomic for parent differential
+    benches while preserving the existing RTL ports. / 原子返回访问前受害路
+    与按输入顺序折叠后的伪 LRU 状态。
+    """
+
+    next_state = int(state)
+    for valid, way in touches:
+        if valid:
+            next_state = plru_next_state(next_state, int(way), num_ways)
+    return {"victim": plru_victim(int(state), num_ways), "next_state": next_state}
 
 
 # Implementation / 实现
