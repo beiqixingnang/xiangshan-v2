@@ -24,6 +24,7 @@ __all__ = [
     "ReplacerStateGen",
     "policy_next_state",
     "policy_victim",
+    "replacement_observation",
     "build_verilog",
     "main",
 ]
@@ -242,6 +243,14 @@ def policy_victim(state: int, num_ways: int, policy: str) -> int:
     if policy.lower() in ("plru", "setplru"):
         return pseudo_lru_victim(state, num_ways)
     raise ValueError("policy must be lru/setlru/plru/setplru")
+
+
+def replacement_observation(state: int, touch_way: int, num_ways: int,
+                            policy: str) -> dict[str, int]:
+    """Return pre-touch victim and post-touch replacement state. / 返回触碰前 victim 与触碰后状态。"""
+
+    return {"victim": policy_victim(state, num_ways, policy),
+            "next_state": policy_next_state(state, touch_way, num_ways, policy)}
 
 
 # Implementation / 实现

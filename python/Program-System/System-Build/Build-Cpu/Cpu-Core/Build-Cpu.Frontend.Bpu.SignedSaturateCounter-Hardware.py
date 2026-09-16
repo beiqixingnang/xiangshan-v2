@@ -22,6 +22,7 @@ __all__ = [
     "SignedSaturateCounter",
     "SignedSaturateCounterReg",
     "signed_sat_update",
+    "signed_counter_observation",
     "build_verilog",
     "main",
 ]
@@ -96,6 +97,15 @@ def signed_sat_update(old: int, width: int, taken: bool) -> int:
     if taken:
         return min(value + 1, upper)
     return max(value - 1, lower)
+
+
+def signed_counter_observation(old: int, width: int, taken: bool) -> dict[str, int]:
+    """Return updated signed state and prediction bit. / 返回更新状态与预测位。"""
+
+    updated = signed_sat_update(old, width, taken)
+    return {"value": updated, "taken_prediction": int(updated >= 0),
+            "saturated_high": int(updated == (1 << (width - 1)) - 1),
+            "saturated_low": int(updated == -(1 << (width - 1)))}
 
 
 class SignedSaturateCounter:
