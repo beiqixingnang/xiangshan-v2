@@ -13,6 +13,7 @@ from __future__ import annotations
 import json
 from dataclasses import dataclass, field
 from functools import total_ordering
+from enum import Enum
 from typing import Any, ClassVar, Iterable, Mapping, Sequence, cast
 
 from amaranth import ClockDomain, Elaboratable, Module, Mux, Signal
@@ -27,7 +28,7 @@ __all__ = [
     "ResourcePermissions", "ResourceAddress", "ResourceMapping", "ResourceString",
     "ResourceInt", "ResourceReference", "ResourceAlias", "ResourceMap", "ResourceBinding",
     "ResourceBindings", "BufferParams", "CreditedDelay", "AsyncQueueParams",
-    "DiplomacyNode", "LazyModuleGraph", "ClockCrossingType", "NoCrossing",
+    "DiplomacyNode", "DiplomacyNodeState", "LazyModuleGraph", "ClockCrossingType", "NoCrossing",
     "SynchronousCrossing", "RationalCrossing", "AsynchronousCrossing", "CreditedCrossing",
     "DiplomacyConfig", "DiplomacyAddressRouter", "DiplomacyRouter", "UHSCRocketDiplomacy",
     "address_decoder", "AddressDecoder", "build_verilog", "main",
@@ -957,6 +958,14 @@ class CreditedCrossing(ClockCrossingType):
 # =============================================================================
 # Lazy module and node graph contracts
 # =============================================================================
+class DiplomacyNodeState(str, Enum):
+    """Lifecycle states matching LazyModule node binding/finalization phases."""
+
+    NEW = "new"
+    CONNECTED = "connected"
+    FINALIZED = "finalized"
+
+
 @dataclass
 class DiplomacyNode:
     """Minimal node carrying deterministic inward/outward edge metadata."""
@@ -966,6 +975,7 @@ class DiplomacyNode:
     addresses: tuple[AddressSet, ...] = ()
     inputs: list[str] = field(default_factory=list)
     outputs: list[str] = field(default_factory=list)
+    state: DiplomacyNodeState = DiplomacyNodeState.NEW
 
     # Normalize mutable edge lists at construction time. / 在构造时规范化可变边列表。
     def __post_init__(self) -> None:
@@ -974,6 +984,10 @@ class DiplomacyNode:
         self.addresses = tuple(self.addresses)
         if not self.name:
             raise ValueError("diplomacy node name cannot be empty")
+        if isinstance(self.state, str):
+            self.state = DiplomacyNodeState(self.state)
+        if self.inputs or self.outputs:
+            self.state = DiplomacyNodeState.CONNECTED
 
     # Attach one outgoing edge. / 添加一条向外连接边。
     def connect(self, target: "DiplomacyNode") -> None:
@@ -981,6 +995,27 @@ class DiplomacyNode:
             self.outputs.append(target.name)
         if self.name not in target.inputs:
             target.inputs.append(self.name)
+        if self.state is DiplomacyNodeState.NEW:
+            self.state = DiplomacyNodeState.CONNECTED
+        if target.state is DiplomacyNodeState.NEW:
+            target.state = DiplomacyNodeState.CONNECTED
+
+    # Mark a resolved node as finalized, mirroring LazyModule graph sealing. /
+    # 将已解析节点标记为 finalized，对应 LazyModule 图封存阶段。
+    def finalize(self) -> None:
+        self.state = DiplomacyNodeState.FINALIZED
+
+    # Return a stable metadata snapshot for graph/debug tooling. /
+    # 返回供图和调试工具使用的稳定元数据快照。
+    def snapshot(self) -> dict[str, object]:
+        return {
+            "name": self.name,
+            "role": self.role,
+            "state": self.state.value,
+            "inputs": tuple(sorted(self.inputs)),
+            "outputs": tuple(sorted(self.outputs)),
+            "addresses": tuple(str(address) for address in self.addresses),
+        }
 
     # Report whether this node is a graph source or sink. /
     # 报告节点是否为图源或图汇。
@@ -1030,6 +1065,8 @@ class LazyModuleGraph:
                     ready.sort()
         if len(order) != len(self.nodes):
             raise ValueError("diplomacy graph contains a cycle")
+        for name in order:
+            self.nodes[name].finalize()
         return tuple(order)
 
     # Flatten all graph address resources. / 汇总图中所有地址资源。

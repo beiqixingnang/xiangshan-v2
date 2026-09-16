@@ -12,7 +12,7 @@ from __future__ import annotations
 
 from contextlib import AbstractContextManager
 from dataclasses import dataclass
-from typing import Any, cast
+from typing import Any, cast, Iterable, Sequence
 
 from amaranth import ClockDomain, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
@@ -24,7 +24,56 @@ from amaranth.back import verilog
 # The boundary models TileLink A-channel admission, one outstanding source,
 # D-channel response routing, and reset/flush cancellation. / 该边界模型覆盖
 # TileLink A 通道接收、单个未决 source、D 通道响应路由以及复位/flush 取消。
-__all__ = ["RocketProtocolConfig", "RocketProtocolBoundary", "build_verilog", "main"]
+__all__ = [
+    "RocketProtocolConfig", "RocketProtocolBoundary", "RocketProtocolArbiterState",
+    "protocol_handshake", "protocol_arbiter", "build_verilog", "main",
+]
+
+
+# Return the Decoupled/ready-valid fire condition used by TileLink channels. /
+# 返回 TileLink 通道使用的 Decoupled/ready-valid fire 条件。
+def protocol_handshake(valid: bool, ready: bool) -> bool:
+    """Return ``True`` exactly when a channel transfer occurs."""
+
+    return bool(valid and ready)
+
+
+@dataclass(frozen=True)
+class RocketProtocolArbiterState:
+    """Software shadow of ``TLArbiter.roundRobin``'s rotating mask."""
+
+    pointer: int = 0
+
+
+# Resolve a deterministic one-hot grant, mirroring Rocket's TLArbiter policies. /
+# 解析确定性 one-hot 授予，匹配 Rocket 的 TLArbiter 策略。
+def protocol_arbiter(
+    valids: Sequence[bool] | Iterable[bool],
+    sink_ready: bool,
+    state: RocketProtocolArbiterState | None = None,
+    policy: str = "round_robin",
+) -> tuple[tuple[bool, ...], int | None, RocketProtocolArbiterState]:
+    """Compute source readies, winner and next round-robin state.
+
+    ``TLArbiter.apply`` locks a winner until all beats complete; this helper
+    models the single-beat decision and rotates the pointer only on ``fire``.
+    """
+
+    requested = tuple(bool(value) for value in valids)
+    count = len(requested)
+    if count == 0:
+        return (), None, state or RocketProtocolArbiterState()
+    if policy not in {"round_robin", "lowest", "highest"}:
+        raise ValueError("unsupported Rocket protocol arbiter policy")
+    pointer = (state or RocketProtocolArbiterState()).pointer % count
+    order = tuple(range(pointer, count)) + tuple(range(pointer)) if policy == "round_robin" else (
+        tuple(range(count)) if policy == "lowest" else tuple(reversed(range(count)))
+    )
+    winner = next((index for index in order if requested[index]), None)
+    fire = winner is not None and bool(sink_ready)
+    readies = tuple(bool(fire and index == winner) for index in range(count))
+    next_pointer = ((winner + 1) % count) if fire and winner is not None else pointer
+    return readies, winner, RocketProtocolArbiterState(next_pointer)
 
 
 # Cast Amaranth generator controls to the context-manager protocol. / 将 Amaranth 生成器控制转换为上下文管理器协议。
