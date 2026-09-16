@@ -255,6 +255,13 @@ class HuanCunCacheBoundary(Elaboratable):
         pending_mask = Signal(c.mask_bits, name="pending_mask")
         pending = Signal(name="pending")
         evict_pending = Signal(name="evict_pending")
+        # Capture eviction metadata with the accepted miss.  The request bus
+        # may change while the write-back is pending, so live victim muxes are
+        # not a stable eviction transaction.
+        # 在接收 miss 时锁存逐出元数据；写回未决期间请求总线可能变化，因此
+        # 不能把实时 victim mux 当作稳定的逐出事务。
+        evict_tag_r = Signal(c.tag_bits, name="evict_tag_r")
+        evict_data_r = Signal(c.line_bits, name="evict_data_r")
         response_pending = Signal(name="response_pending")
         response_data = Signal(c.line_bits, name="response_data")
         response_source = Signal(c.source_bits, name="response_source")
@@ -265,7 +272,7 @@ class HuanCunCacheBoundary(Elaboratable):
         effective_mask = Mux(self.req_mask == 0, full_mask, self.req_mask)
         req_fire = self.req_valid & self.req_ready
         refill_fire = self.refill_valid & self.refill_ready
-        evict_fire = self.evict_valid
+        evict_fire = evict_pending & ~self.flush
 
         # Refill address may be supplied explicitly; otherwise retain the
         # pending set and interpret ``refill_source`` as the legacy tag.
@@ -308,9 +315,9 @@ class HuanCunCacheBoundary(Elaboratable):
                      self.miss_valid.eq(pending & ~self.flush), self.miss_address.eq(pending_addr),
                      self.miss_source.eq(source), self.miss_set.eq(pending_set), self.miss_tag.eq(pending_tag),
                      self.evict_valid.eq(evict_pending & ~self.flush),
-                     self.evict_address.eq((victim_tag << (c.set_bits + c.offset_bits)) |
+                     self.evict_address.eq((evict_tag_r << (c.set_bits + c.offset_bits)) |
                                           (pending_set << c.offset_bits)),
-                     self.evict_data.eq(victim_data), self.evict_way.eq(pending_way)]
+                     self.evict_data.eq(evict_data_r), self.evict_way.eq(pending_way)]
 
         # Reset/flush invalidates all ways, as DataStorage's metadata reset does.
         # 复位/flush 使所有路无效，对应 DataStorage 元数据复位。
@@ -350,7 +357,8 @@ class HuanCunCacheBoundary(Elaboratable):
                                           pending_set.eq(req_set), pending_tag.eq(req_tag),
                                           pending_way.eq(victim_way), pending_write.eq(self.req_write),
                                           pending_data.eq(self.req_data), pending_mask.eq(effective_mask),
-                                          source.eq(self.req_source), evict_pending.eq(victim_dirty)]
+                                          source.eq(self.req_source), evict_tag_r.eq(victim_tag),
+                                          evict_data_r.eq(victim_data), evict_pending.eq(victim_dirty)]
                     with amaranth_if(m, ~victim_valid):
                         # Invalid victims cannot produce a write-back transaction.
                         m.d.huancun_cache += evict_pending.eq(0)
@@ -396,7 +404,9 @@ def build_verilog(configuration, injected_dependencies):
              top.req_write, top.req_data, top.req_source, top.resp_valid, top.resp_data,
              top.resp_source, top.miss_valid, top.miss_address, top.miss_source, top.evict_valid,
              top.evict_address, top.evict_data, top.refill_valid, top.refill_data,
-             top.refill_source, top.hit, top.dirty, top.state]
+             top.refill_source, top.refill_address, top.refill_has_address, top.refill_tag,
+             top.refill_ready, top.req_mask, top.req_fire, top.refill_fire, top.evict_fire,
+             top.hit, top.dirty, top.state, top.miss_set, top.miss_tag, top.evict_way]
     return verilog.convert(top, name=name, ports=ports, emit_src=False)
 
 

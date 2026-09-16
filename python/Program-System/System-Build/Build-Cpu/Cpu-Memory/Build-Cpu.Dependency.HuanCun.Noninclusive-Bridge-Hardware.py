@@ -60,7 +60,7 @@ class HuanCunBridgeBoundary(Elaboratable):
     def __getattr__(self, name: str) -> Signal:
         raise AttributeError(name)
 
-    """Ready/valid bridge for request, probe, and response channels. / 请求、probe、响应通道的 ready/valid bridge。"""
+    """One-entry ready/valid bridge for request, probe, and response channels. / 请求、probe、响应通道的单项 ready/valid bridge。"""
 
     # Construct bridge ports. / 构造 bridge 端口。
     def __init__(self, configuration: HuanCunBridgeConfig | None = None) -> None:
@@ -97,20 +97,27 @@ class HuanCunBridgeBoundary(Elaboratable):
         data_r = Signal(c.data_bits, name="data_r")
         pending = Signal(name="pending")
         response = Signal(name="response")
-        m.d.comb += [self.req_ready.eq(~pending & ~self.flush), self.probe_ready.eq(~self.flush),
-                     self.busy.eq(pending), self.forward_valid.eq(pending & ~self.flush),
+        req_fire = self.req_valid & self.req_ready
+        probe_fire = self.probe_valid & self.probe_ready
+        resp_fire = self.resp_valid & self.resp_ready
+        # The response slot is part of the one-entry buffer.  It remains full
+        # until the consumer handshakes, preventing a stalled response from
+        # being overwritten by a newly admitted request.
+        # response 槽属于单项缓冲；只有消费者握手后才释放，防止停顿 response
+        # 被新接收的请求覆盖。
+        m.d.comb += [self.req_ready.eq(~pending & (~response | self.resp_ready) & ~self.flush), self.probe_ready.eq(~self.flush),
+                     self.busy.eq((pending | response) & ~self.flush), self.forward_valid.eq(pending & ~self.flush),
                      self.probe_valid.eq(pending & ~self.flush), self.probe_address.eq(address_r),
                      self.probe_source.eq(source_r), self.resp_valid.eq(response & ~self.flush),
                      self.resp_source.eq(source_r), self.resp_data.eq(data_r)]
         with amaranth_if(m, self.reset | self.flush):
             m.d.huancun_bridge += [pending.eq(0), response.eq(0)]
         with amaranth_else(m):
-            m.d.huancun_bridge += response.eq(0)
-            with amaranth_if(m, self.req_valid & self.req_ready):
-                m.d.huancun_bridge += [pending.eq(1), address_r.eq(self.req_address), source_r.eq(self.req_source), data_r.eq(self.req_data)]
-            with amaranth_if(m, self.probe_valid & self.probe_ready):
+            with amaranth_if(m, req_fire):
+                m.d.huancun_bridge += [pending.eq(1), response.eq(0), address_r.eq(self.req_address), source_r.eq(self.req_source), data_r.eq(self.req_data)]
+            with amaranth_if(m, probe_fire):
                 m.d.huancun_bridge += [pending.eq(0), response.eq(1)]
-            with amaranth_if(m, response & self.resp_ready):
+            with amaranth_if(m, resp_fire & ~req_fire):
                 m.d.huancun_bridge += response.eq(0)
         return m
 

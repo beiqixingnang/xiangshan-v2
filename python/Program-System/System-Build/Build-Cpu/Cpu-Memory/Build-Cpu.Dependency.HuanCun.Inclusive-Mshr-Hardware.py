@@ -2,9 +2,9 @@
 昆明湖 V2 HuanCun inclusive MSHR family 边界。
 
 This aggregate captures the selected inclusive-directory MSHR contract:
-bounded allocation, source/address retention, refill completion, and flush
-cancellation.  Directory/SinkC protocol details remain explicit family
-boundary inputs rather than being split into dozens of Scala-shaped files.
+bounded allocation, source/address retention, source-matched refill completion,
+and flush cancellation.  Directory/SinkC protocol details remain explicit
+family boundary inputs rather than being split into dozens of Scala-shaped files.
 """
 
 from __future__ import annotations
@@ -111,35 +111,51 @@ class InclusiveMshrBoundary(Elaboratable):
         used = Signal(c.entries, name="mshr_used")
         addr_mem = [Signal(c.address_bits, name=f"mshr_addr_{i}") for i in range(c.entries)]
         source_mem = [Signal(c.source_bits, name=f"mshr_source_{i}") for i in range(c.entries)]
-        data_mem = [Signal(c.line_bits, name=f"mshr_data_{i}") for i in range(c.entries)]
-        alloc_index = Signal(c.index_bits, name="alloc_index_r")
-        free_index = Signal(c.index_bits, name="free_index_r")
         alloc_found: Any = 0
         alloc_choice: Any = 0
+        alloc_conflict: Any = 0
         for index in range(c.entries):
             take = ~amaranth_value(used[index]) & ~amaranth_value(alloc_found)
             alloc_choice = Mux(take, index, alloc_choice)
             alloc_found = amaranth_value(alloc_found) | ~amaranth_value(used[index])
+            # A source identifies the returning transaction, while an address
+            # identifies the line being protected.  Either collision would
+            # make refill routing ambiguous, so admission backpressures it.
+            # source 标识返回事务，address 标识受保护的缓存行；任一冲突都会
+            # 使回填路由含糊，因此接收端施加反压。
+            alloc_conflict = amaranth_value(alloc_conflict) | (
+                amaranth_value(used[index])
+                & ((addr_mem[index] == self.alloc_address) | (source_mem[index] == self.alloc_source))
+            )
         lookup_found: Any = 0
         lookup_choice: Any = 0
+        refill_found: Any = 0
+        refill_choice: Any = 0
         for index in range(c.entries):
             hit = used[index] & (addr_mem[index] == self.lookup_address)
             lookup_choice = Mux(hit & ~lookup_found, index, lookup_choice)
             lookup_found = lookup_found | hit
+            refill_match = used[index] & (source_mem[index] == self.refill_source)
+            refill_choice = Mux(refill_match & ~refill_found, index, refill_choice)
+            refill_found = refill_found | refill_match
         occupancy_expr = sum((amaranth_value(used[index]) for index in range(c.entries)), 0)
-        m.d.comb += [self.alloc_ready.eq(~self.flush & alloc_found), self.alloc_index.eq(alloc_choice),
+        # Lookup remains address based, but a refill is resolved by the stored
+        # source ID and therefore cannot depend on an unrelated live lookup.
+        # lookup 仍按地址查询；refill 按保留的 source ID 路由，不依赖无关的
+        # 同周期 lookup。
+        m.d.comb += [self.alloc_ready.eq(~self.flush & alloc_found & ~alloc_conflict), self.alloc_index.eq(alloc_choice),
                      self.lookup_hit.eq(self.lookup_valid & lookup_found), self.occupancy.eq(occupancy_expr),
-                     self.refill_ready.eq(~self.flush & lookup_found),
-                     self.resp_valid.eq(self.refill_valid & self.refill_ready), self.resp_data.eq(Array(data_mem)[lookup_choice]),
-                     self.resp_source.eq(Array(source_mem)[lookup_choice])]
+                     self.refill_ready.eq(~self.flush & refill_found),
+                     self.refill_error.eq(self.refill_valid & ~self.refill_ready & ~self.flush),
+                     self.resp_valid.eq(self.refill_valid & self.refill_ready), self.resp_data.eq(self.refill_data),
+                     self.resp_source.eq(Array(source_mem)[refill_choice])]
         with amaranth_if(m, self.reset | self.flush):
             m.d.huancun_mshr += used.eq(0)
         with amaranth_else(m):
             with amaranth_if(m, self.alloc_valid & self.alloc_ready):
-                m.d.huancun_mshr += [Array(used)[alloc_choice].eq(1), Array(addr_mem)[alloc_choice].eq(self.alloc_address), Array(source_mem)[alloc_choice].eq(self.alloc_source), alloc_index.eq(alloc_choice)]
+                m.d.huancun_mshr += [Array(used)[alloc_choice].eq(1), Array(addr_mem)[alloc_choice].eq(self.alloc_address), Array(source_mem)[alloc_choice].eq(self.alloc_source)]
             with amaranth_if(m, self.refill_valid & self.refill_ready):
-                m.d.huancun_mshr += [Array(data_mem)[lookup_choice].eq(self.refill_data), Array(used)[lookup_choice].eq(0), free_index.eq(lookup_choice)]
-            m.d.comb += self.refill_error.eq(self.refill_valid & ~self.refill_ready & ~self.flush)
+                m.d.huancun_mshr += Array(used)[refill_choice].eq(0)
         return m
 
 
