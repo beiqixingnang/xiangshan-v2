@@ -21,6 +21,7 @@ __all__ = [
     "AluConfig",
     "AluDataModule",
     "alu_reference",
+    "alu_observation",
     "build_verilog",
     "main",
 ]
@@ -249,6 +250,37 @@ def alu_reference(src0: int, src1: int, func: int, xlen: int = 64) -> int:
     return 0
 
 
+# Expose the Alu.scala result-selector boundaries for parent probes. /
+# 暴露 Alu.scala 结果选择器边界，供父级探针使用。
+def alu_observation(src0: int, src1: int, func: int, xlen: int = 64) -> dict[str, int]:
+    """Return executable group, shift, carry, and result observations.
+
+    ``AluResSel`` selects word/shift, compare/add, or misc/conditional from
+    ``func(6, 4)``.  The helper mirrors those predicates and the ``+&``
+    subtraction carry used by SLTU while retaining the existing oracle.
+    返回可执行的分组、移位、进位和结果观测，保持既有预言机接口。
+    """
+
+    mask = (1 << xlen) - 1
+    value0 = int(src0) & mask
+    value1 = int(src1) & mask
+    operation = int(func) & 0x1FF
+    group = (operation >> 4) & 0x7
+    sub_full = value0 + ((~value1) & mask) + 1
+    return {
+        "group": group,
+        "shift_amount": value1 & 0x3F,
+        "is_word": int((group & 0x3) == 0 and bool(group & 0x1)),
+        "is_shift": int((group & 0x3) == 0 and not (group & 0x1)),
+        "is_compare": int((group & 0x3) == 1 and not (group & 0x4)),
+        "is_add": int((group & 0x3) == 1 and bool(group & 0x4) is False and bool(group & 0x1) is False),
+        "is_misc": int((group & 0x3) == 2 and not (group & 0x4)),
+        "is_conditional": int(group == 0x7),
+        "sub_carry": (sub_full >> xlen) & 1,
+        "result": alu_reference(value0, value1, operation, xlen),
+    }
+
+
 class AluDataModule(Elaboratable):
     """Combinational V2 ALU datapath. / V2 组合 ALU 数据通路。"""
 
@@ -258,6 +290,12 @@ class AluDataModule(Elaboratable):
         self.src = [Signal(configuration.xlen, name=f"io_src_{index}") for index in range(2)]
         self.func = Signal(9, name="io_func")
         self.result = Signal(configuration.xlen, name="io_result")
+        # Source-equation taps are additive and preserve the three-port ABI. /
+        # 源方程观测点为附加端口，保留三端口 ABI。
+        self.operation_group = Signal(3, name="alu_operation_group")
+        self.shift_amount = Signal(6, name="alu_shift_amount")
+        self.sub_carry = Signal(name="alu_sub_carry")
+        self.result_zero = Signal(name="alu_result_zero")
 
     # Elaborate the V2 ALU equations and result-group mux. / 展开 V2 ALU 方程及结果分组多路器。
     def elaborate(self, platform) -> Module:
@@ -407,7 +445,15 @@ class AluDataModule(Elaboratable):
                      Mux(group[2],
                          Mux(group[1] & group[0], cond_result, misc),
                          Mux(group[0], compare, add_result)))
-        m.d.comb += self.result.eq(result)
+        # Keep the final selector and its observable source predicates together. /
+        # 将最终选择器及其源级可观测谓词并行保留。
+        m.d.comb += [
+            self.result.eq(result),
+            self.operation_group.eq(group),
+            self.shift_amount.eq(shamt),
+            self.sub_carry.eq(sub_full[width]),
+            self.result_zero.eq(result == 0),
+        ]
         return m
 
 

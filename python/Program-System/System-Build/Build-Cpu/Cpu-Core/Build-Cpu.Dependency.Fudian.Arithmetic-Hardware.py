@@ -35,7 +35,8 @@ SOURCE_SCALA_FILE_COUNT = len(SOURCE_SCALA_PATHS)
 __all__ = [
     "SOURCE_SCALA_ROOT", "SOURCE_SCALA_PATHS", "SOURCE_SCALA_FILE_COUNT",
     "ArithmeticConfig", "FudianArithmetic", "clz", "lza", "shift_right_jam",
-    "csa", "multiply_unsigned", "round_shift_right", "build_verilog", "main",
+    "csa", "csa5_3", "multiply_unsigned", "multiply_signed", "round_shift_right",
+    "booth_radix4_digits", "build_verilog", "main",
 ]
 
 
@@ -171,6 +172,53 @@ def multiply_unsigned(a: int, b: int, width: int) -> int:
         raise ValueError("multiplier width must be positive")
     mask = (1 << width) - 1
     return ((a & mask) * (b & mask)) & ((1 << (2 * width)) - 1)
+
+
+# Reduce five CSA inputs exactly as CSA5_3's two CSA3_2 layers. /
+# 按 CSA5_3 的两层 CSA3_2 精确压缩五个输入。
+def csa5_3(a: int, b: int, c: int, d: int, e: int, width: int) -> tuple[int, int, int]:
+    """Return the three unshifted carry-save vectors emitted by ``CSA5_3``."""
+
+    first_sum, first_carry = csa(a, b, c, width)
+    second_sum, second_carry = csa(first_sum, d, e, width)
+    return second_sum, first_carry, second_carry
+
+
+# Interpret one finite-width operand as two's-complement. /
+# 将一个定宽操作数解释为补码。
+def _signed_value(value: int, width: int) -> int:
+    mask = (1 << width) - 1
+    value &= mask
+    return value - (1 << width) if value & (1 << (width - 1)) else value
+
+
+# Compute the signed product represented by Multiplier.scala's Booth tree. /
+# 计算 Multiplier.scala Booth 树表示的有符号乘积。
+def multiply_signed(a: int, b: int, width: int) -> int:
+    """Return the width*2 two's-complement product used by Fudian helpers."""
+
+    if width < 1:
+        raise ValueError("multiplier width must be positive")
+    return (_signed_value(a, width) * _signed_value(b, width)) & ((1 << (2 * width)) - 1)
+
+
+# Decode radix-4 Booth recoding windows used by Multiplier.scala. /
+# 解码 Multiplier.scala 使用的 radix-4 Booth 重编码窗口。
+def booth_radix4_digits(value: int, width: int) -> list[int]:
+    """Return low-to-high Booth coefficients in ``{-2,-1,0,1,2}``."""
+
+    if width < 2:
+        raise ValueError("Booth recoding requires width >= 2")
+    signed = _signed_value(value, width)
+    # Append the implicit low zero and sign-extend both high bits, matching
+    # ``Cat(a(1,0), 0.U)`` / ``SignExt(a(i,i-1), 3)`` in the source.
+    encoded = (signed << 1) & ((1 << (width + 3)) - 1)
+    if signed < 0:
+        encoded |= ((1 << 3) - 1) << (width + 1)
+    table = {0b000: 0, 0b111: 0, 0b001: 1, 0b010: 1,
+             0b011: 2, 0b100: -2, 0b101: -1, 0b110: -1}
+    return [table[(encoded >> (2 * index)) & 0b111]
+            for index in range((width + 1) // 2)]
 
 
 class FudianArithmetic(Elaboratable):

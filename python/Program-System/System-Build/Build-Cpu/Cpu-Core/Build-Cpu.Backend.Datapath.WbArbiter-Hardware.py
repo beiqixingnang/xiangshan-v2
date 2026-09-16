@@ -24,6 +24,7 @@ __all__ = [
     "WbExuAttr",
     "WbDataPathConfig",
     "arbiterCtrl",
+    "starvation_observation",
     "writeback_observation",
     "RealWBArbiter",
     "WbArbiterDispatcher",
@@ -144,6 +145,47 @@ def writeback_observation(valid: list[bool], ready: bool = True) -> dict[str, ob
             "fire": int(selected >= 0 and bool(ready))}
 
 
+# Model the source WBArbiter cancellation-counter promotion. /
+# 建模源 WBArbiter 的取消计数器提升。
+def starvation_observation(
+    valid: list[bool],
+    ready: list[bool],
+    cancel_counter: list[int],
+    is_full: list[bool],
+) -> dict[str, object]:
+    """Return one RFWBConflictChecker ``WBArbiter`` state transition.
+
+    The V2 helper first suppresses non-full requests when any full request is
+    live, then uses its normal first-valid arbiter.  A failed request advances
+    a 3-bit saturating counter and reaches the source threshold at seven.
+    返回一次 V2 饥饿提升仲裁状态转换。
+    """
+
+    width = len(valid)
+    if not (len(ready) == len(cancel_counter) == len(is_full) == width):
+        raise ValueError("WBArbiter observation vectors must have equal length")
+    full_request = any(bool(v and full) for v, full in zip(valid, is_full))
+    has_full = any(bool(item) for item in is_full)
+    final_valid = [bool(item and (not has_full or not full_request or full))
+                   for item, full in zip(valid, is_full)]
+    winner = next((index for index, item in enumerate(final_valid) if item), -1)
+    next_counter: list[int] = []
+    next_full: list[int] = []
+    for index in range(width):
+        accepted = bool(valid[index] and ready[index])
+        failed = bool(valid[index] and not ready[index])
+        count = min(7, int(cancel_counter[index]) + 1) if failed else (0 if accepted else int(cancel_counter[index]))
+        full = bool(count == 7) if failed else (False if accepted else bool(is_full[index]))
+        next_counter.append(count)
+        next_full.append(int(full))
+    return {
+        "final_valid": [int(item) for item in final_valid],
+        "selected": winner,
+        "next_cancel_counter": next_counter,
+        "next_is_full": next_full,
+    }
+
+
 class RealWBArbiter(Elaboratable):
     """Priority arbiter used by V2 write-back ports.
     V2 写回端口使用的优先级仲裁器。
@@ -176,12 +218,24 @@ class RealWBArbiter(Elaboratable):
         self.out_vlWen = Signal(name="io_out_bits_vlWen")
         self.out_fire = Signal(name="io_out_fire")
         self.chosen = Signal(max(1, (self.n - 1).bit_length()), name="io_chosen")
+        # RFWBConflictChecker.WBArbiter uses a separate three-bit starvation
+        # history.  RealWBArbiter remains stateless, but exposing these taps
+        # makes the real source promotion boundary available to parents.
+        # RFWBConflictChecker.WBArbiter 使用独立三位饥饿历史；保留无状态
+        # RealWBArbiter，同时向父级暴露真实源提升边界。
+        self.cancel_counter = [Signal(3, name=f"io_cancelCounter_{index}") for index in range(self.n)]
+        self.is_full = [Signal(name=f"io_isFull_{index}") for index in range(self.n)]
+        self.has_full_request = Signal(name="io_hasFullRequest")
 
     # Elaborate lowest-index priority and ready propagation. / 展开低索引优先级与就绪传播。
     def elaborate(self, platform) -> Module:
         del platform
         module = Module()
         grants = arbiterCtrl(self.in_valid)
+        full_request: Any = Const(0, 1)
+        for valid, full in zip(self.in_valid, self.is_full):
+            full_request = full_request | (valid & full)
+        module.d.comb += self.has_full_request.eq(full_request)
         selected_bits: Any = self.in_bits[-1]
         selected_pdest: Any = self.in_pdest[-1]
         selected_rf: Any = self.in_rfWen[-1]
@@ -216,6 +270,20 @@ class RealWBArbiter(Elaboratable):
         module.d.comb += self.chosen.eq(chosen)
         for index, grant in enumerate(grants):
             module.d.comb += self.in_ready[index].eq((grant | ~self.in_valid[index]) & self.out_ready)
+            # The observation state follows the V2 saturation rule; it does
+            # not alter RealWBArbiter priority, whose source implementation is
+            # intentionally stateless.  将观测状态按 V2 饱和规则更新，不改变
+            # 源 RealWBArbiter 固有的无状态优先级。
+            failed = self.in_valid[index] & ~self.in_ready[index]
+            accepted = self.in_valid[index] & self.in_ready[index]
+            next_counter = Mux(failed, Mux(self.cancel_counter[index] == 7,
+                                            7, self.cancel_counter[index] + 1),
+                               Mux(accepted, 0, self.cancel_counter[index]))
+            module.d.sync += [
+                self.cancel_counter[index].eq(next_counter),
+                self.is_full[index].eq(Mux(failed, next_counter == 7,
+                                            Mux(accepted, 0, self.is_full[index]))),
+            ]
         return module
 
 

@@ -40,6 +40,7 @@ __all__ = [
     "backend_parent_contract",
     "full_backend_port_schema",
     "backend_decode_pattern_model",
+    "backend_child_observation",
     "backend_parent_model",
     "build_verilog",
     "main",
@@ -173,6 +174,47 @@ def backend_decode_pattern_model(instruction: int) -> int:
         if value & mask == expected:
             result |= 1 << index
     return result
+
+
+# Evaluate the source-level Decode/Issue/Writeback attachment boundary. /
+# 计算源级 Decode/Issue/Writeback 附着边界。
+def backend_child_observation(
+    instruction: int,
+    free_slots: int,
+    exu_valid: Iterable[bool],
+    exu_class: Iterable[int],
+    exu_port: Iterable[int],
+    flush: bool = False,
+) -> dict[str, Any]:
+    """Return executable child-boundary equations from Backend.scala.
+
+    The real parent routes DecodeUnit output to dispatch, asks the issue
+    scheduler for its lowest available slot, and only lets a live EXU reach
+    WbDataPath when its class/physical port matches.  This compact helper
+    keeps precisely those aggregation predicates observable without claiming
+    the unported Rename, CtrlBlock, and EXU closures.
+    返回 Backend.scala 的可执行子级聚合谓词，不宣称未迁移闭包已完成。
+    """
+
+    valid = [bool(item) for item in exu_valid]
+    classes = [int(item) for item in exu_class]
+    ports = [int(item) for item in exu_port]
+    if not (len(valid) == len(classes) == len(ports)):
+        raise ValueError("EXU observation vectors must have equal length")
+    slot_mask = int(free_slots) & ((1 << 22) - 1)
+    winners: list[int] = []
+    for port in range(5):
+        winner = next((index for index, item in enumerate(valid)
+                       if item and not flush and classes[index] != 7 and ports[index] == port), -1)
+        winners.append(winner)
+    return {
+        "decode_matches": backend_decode_pattern_model(instruction),
+        "issue_can_enqueue": slot_mask,
+        "issue_first_slot": slot_mask & -slot_mask,
+        "issue_has_slot": int(slot_mask != 0),
+        "writeback_winners": winners,
+        "writeback_active": int(any(index >= 0 for index in winners)),
+    }
 
 # Return the machine-readable parent contract consumed by landing evidence. /
 # 返回落地证据使用的机器可读父级契约。/
@@ -380,6 +422,15 @@ class BackendTop(Elaboratable):
         self.child_writeback_valid = [Signal(name=f"io_child_writeback_{i}_valid") for i in range(5)]
         self.child_writeback_data = [Signal(cfg.data_width, name=f"io_child_writeback_{i}_data") for i in range(5)]
         self.child_writeback_pdest = [Signal(cfg.pdest_width, name=f"io_child_writeback_{i}_pdest") for i in range(5)]
+        # Aggregate fire observations match Backend.scala's Decode ->
+        # Scheduler -> WbDataPath ordering.  They are internal taps, so the
+        # locked Backend envelope and existing compact ABI remain unchanged.
+        # 聚合 fire 观测匹配 Backend.scala 的 Decode -> Scheduler -> WbDataPath
+        # 顺序；它们是内部 tap，不改变锁定包络或既有紧凑 ABI。
+        self.decode_dispatch_fire = Signal(name="backend_decode_dispatch_fire")
+        self.issue_enqueue_fire = Signal(name="backend_issue_enqueue_fire")
+        self.writeback_fire_any = Signal(name="backend_writeback_fire_any")
+        self.exu_fire = [Signal(name=f"backend_exu_{index}_fire") for index in range(exu)]
 
         # Explicit child closure injection points.  Existing leaf/family
         # implementations are connected by attribute contract when supplied;
@@ -443,6 +494,11 @@ class BackendTop(Elaboratable):
             self.frontend_reset.eq(self.reset),
         ]
         accepted = self.frontend_valid & self.frontend_ready
+        # DecodeStage receives only accepted control-flow lanes.  The scalar
+        # tap is the source ``cfVec`` reduction used to drive dispatch.
+        # DecodeStage 只接收已接受控制流 lane；标量 tap 是驱动 dispatch 的
+        # 源 ``cfVec`` 归约。
+        module.d.comb += self.decode_dispatch_fire.eq(accepted.any())
         module.d.sync += [
             self.dispatch_valid.eq(Mux(self.flush, 0, Mux(accept_window, accepted, self.dispatch_valid))),
             self.dispatch_instr.eq(Mux(accept_window, self.frontend_instr, self.dispatch_instr)),
@@ -597,6 +653,21 @@ class BackendTop(Elaboratable):
                 | ~self.exu_uncertain[exu_index]
                 | selected_any
             )
+            module.d.comb += self.exu_fire[exu_index].eq(
+                self.exu_valid[exu_index] & self.exu_ready[exu_index]
+            )
+
+        # The source scheduler admits an issue slot when a decoded dispatch
+        # beat and at least one free entry are both present.  The compact
+        # boundary retains the same ready/valid conjunction.
+        # 源 Scheduler 在译码 dispatch 与空闲项同时存在时接收入队；紧凑边界
+        # 保留同样的 ready/valid 合取关系。
+        module.d.comb += [
+            self.issue_enqueue_fire.eq(self.decode_dispatch_fire & (self.child_issue_free_slots != 0)),
+            self.writeback_fire_any.eq(self.wb_fire[0] | self.wb_fire[1] |
+                                       self.wb_fire[2] | self.wb_fire[3] |
+                                       self.wb_fire[4]),
+        ]
 
         # Redirect is raised by a flushed parent, an EXU redirect, or an input
         # exception.  Lowest frontend lane wins, preserving Vec/Seq ordering.

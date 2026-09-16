@@ -71,6 +71,7 @@ __all__ = [
     "FPCVT",
     "rounding_decision",
     "float_classify",
+    "fp_exception_flags",
     "leading_zero_count",
     "lza_value",
     "sign_extend",
@@ -387,6 +388,27 @@ def float_classify(value: int, floating: FType) -> str:
     if exponent == (1 << floating.exp_width) - 1:
         return "inf" if fraction == 0 else "nan"
     return "normal"
+
+
+# Assemble RISC-V NV/DZ/OF/UF/NX flags from the Convert.scala conditions. /
+# 按 Convert.scala 条件组合 RISC-V NV/DZ/OF/UF/NX 标志。
+def fp_exception_flags(value: int, floating: FType, *, divide_by_zero: bool = False,
+                       overflow: bool = False, underflow: bool = False,
+                       inexact: bool = False) -> int:
+    """Return FPCVT-style exception bits with signaling-NaN detection.
+
+    Convert.scala propagates invalid for a NaN whose quiet payload bit is zero;
+    the remaining inputs model the directly generated DZ/OF/UF/NX equations.
+    """
+
+    payload = int(value) & ((1 << floating.width) - 1)
+    fraction = payload & ((1 << floating.frac_width) - 1)
+    classification = float_classify(payload, floating)
+    quiet_bit = (fraction >> max(0, floating.frac_width - 1)) & 1
+    invalid = int(classification == "nan" and not quiet_bit)
+    return ((invalid << 4) | (int(bool(divide_by_zero)) << 3) |
+            (int(bool(overflow)) << 2) | (int(bool(underflow)) << 1) |
+            int(bool(inexact)))
 
 
 # Box f16/f32/f64 payloads as FPU.scala. / 按 FPU.scala 装箱 f16/f32/f64 负载。

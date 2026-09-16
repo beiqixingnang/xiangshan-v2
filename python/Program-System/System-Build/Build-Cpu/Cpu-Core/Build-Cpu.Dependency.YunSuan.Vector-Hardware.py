@@ -36,7 +36,8 @@ __all__ = [
     "YunSuanVIntAdder64b", "YunSuanVIntMisc64b", "YunSuanVMask", "YunSuanReduction",
     "YunSuanPermutation", "YunSuanVectorIntAdder", "YunSuanVectorConvert",
     "YunSuanVectorPrimitive", "vector_add", "vector_compare", "vector_mask_operation",
-    "vector_reduce", "vector_permute", "width_mask", "split_vector", "pack_vector", "signed_lane", "reverse_bits", "build_verilog", "main",
+    "vector_reduce", "vector_permute", "width_mask", "split_vector", "pack_vector", "signed_lane", "reverse_bits",
+    "saturating_lane", "average_lane", "vector_fixed_point", "build_verilog", "main",
 ]
 
 
@@ -190,6 +191,65 @@ def signed_lane(value: int, width: int) -> int:
 
     value &= width_mask(width)
     return value - (1 << width) if value & (1 << (width - 1)) else value
+
+
+# Saturate one lane using the VFixPoint64b signed/unsigned endpoint rules. /
+# 使用 VFixPoint64b 的有符号/无符号端点规则饱和一个 lane。
+def saturating_lane(left: int, right: int, width: int, signed: bool,
+                    subtract: bool = False) -> tuple[int, int]:
+    """Return ``(value, vxsat)`` for one VSADD/VSSUB element."""
+
+    if width < 1:
+        raise ValueError("lane width must be positive")
+    mask = width_mask(width)
+    lhs = signed_lane(left, width) if signed else left & mask
+    rhs = signed_lane(right, width) if signed else right & mask
+    raw = lhs - rhs if subtract else lhs + rhs
+    low, high = (-(1 << (width - 1)), (1 << (width - 1)) - 1) if signed else (0, mask)
+    saturated = int(raw < low or raw > high)
+    return min(high, max(low, raw)) & mask, saturated
+
+
+# Apply VFixPoint64b's one-bit average rounding equations. /
+# 应用 VFixPoint64b 的单 bit 平均舍入方程。
+def average_lane(left: int, right: int, width: int, signed: bool,
+                 vxrm: int = 0, subtract: bool = False) -> tuple[int, int]:
+    """Return ``(value, discarded)`` for VAADD/VASUB (RNU/RNE/RDN/ROD)."""
+
+    if width < 1 or vxrm not in range(4):
+        raise ValueError("invalid average lane arguments")
+    mask = width_mask(width)
+    lhs = signed_lane(left, width) if signed else left & mask
+    rhs = signed_lane(right, width) if signed else right & mask
+    raw = lhs - rhs if subtract else lhs + rhs
+    encoded = raw & width_mask(width + 1)
+    guard = encoded & 1
+    shifted = signed_lane(encoded, width + 1) >> 1 if signed else encoded >> 1
+    increment = guard if vxrm == 0 else guard & (shifted & 1) if vxrm == 1 else 0 if vxrm == 2 else int(bool(guard and not (shifted & 1)))
+    return (shifted + increment) & mask, int(bool(guard))
+
+
+# Execute the VFixPoint64b lane family for a packed VLEN value. /
+# 对打包 VLEN 值执行 VFixPoint64b lane family。
+def vector_fixed_point(vs1: int, vs2: int, opcode: int, sew: int = 0,
+                       signed: bool = False, vxrm: int = 0) -> tuple[int, int]:
+    """Return packed fixed-point result and one ``vxsat`` bit per element."""
+
+    if sew not in range(4):
+        raise ValueError("sew must be in [0, 3]")
+    width = 8 << sew
+    values: list[int] = []
+    sat_bits = 0
+    for index, (left, right) in enumerate(zip(split_vector(vs1, width), split_vector(vs2, width))):
+        if opcode in (VSADD, VSSUB):
+            lane, sat = saturating_lane(left, right, width, signed, opcode == VSSUB)
+        elif opcode in (VAADD, VASUB):
+            lane, sat = average_lane(left, right, width, signed, vxrm, opcode == VASUB)
+        else:
+            lane, sat = left, 0
+        values.append(lane)
+        sat_bits |= sat << index
+    return pack_vector(values, width), sat_bits
 
 
 # Reverse bits inside one lane. / 反转单个元素内的位。
