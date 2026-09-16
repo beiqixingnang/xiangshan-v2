@@ -25,7 +25,7 @@ __all__ = [
     "ForwardShiftRows", "InverseShiftRows", "XtN", "Xt2", "ByteEnc", "ByteDec",
     "MixFwd", "MixInv", "SboxAesTop", "SboxAesOut", "SboxIaesTop", "SboxIaesOut",
     "SboxSm4Top", "SboxSm4Out", "SboxInv", "SboxAes", "SboxIaes", "SboxSm4",
-    "evaluate_bit_network", "build_verilog", "main",
+    "evaluate_bit_network", "crypto_rotate_integer", "build_verilog", "main",
 ]
 
 
@@ -50,6 +50,16 @@ class CryptoUtilsConfig:
 # Identify software integers without importing host-specific helpers. / 识别软件整数且不引入主机相关辅助器。
 def is_integer(value: Any) -> bool:
     return isinstance(value, int)
+
+
+def crypto_rotate_integer(value: int, amount: int, width: int = 64) -> int:
+    """Return the source rotate-right primitive in integer form. / 返回整数循环右移。"""
+
+    if width < 1 or not 0 <= amount < width:
+        raise ValueError("invalid rotate width or amount")
+    mask = (1 << width) - 1
+    value = int(value) & mask
+    return value if amount == 0 else ((value >> amount) | (value << (width - amount))) & mask
 
 
 # Evaluate a compact one-bit equation graph for both integers and Amaranth Values.

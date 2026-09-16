@@ -22,7 +22,7 @@ from amaranth.back import verilog
 __all__ = [
     "DcsrConfig", "DcsrStruct", "DEBUGVER_NONE", "DEBUGVER_SPEC", "DEBUGVER_CUSTOM",
     "CAUSE_EBREAK", "CAUSE_TRIGGER", "CAUSE_HALTREQ", "CAUSE_STEP",
-    "CAUSE_RESETHALTREQ", "MODE_M", "field_values", "build_verilog", "main",
+    "CAUSE_RESETHALTREQ", "MODE_M", "field_values", "debug_csr_observation", "build_verilog", "main",
 ]
 
 
@@ -78,6 +78,14 @@ def field_values(value: int) -> dict[str, int]:
         "step": (value >> 2) & 1,
         "prv": value & 0x3,
     }
+
+
+def debug_csr_observation(value: int, halt_request: bool = False) -> dict[str, int]:
+    """Return decoded fields and effective halt request. / 返回 DCSR 字段与有效停机请求。"""
+
+    fields = field_values(value)
+    fields["halt_request"] = int(bool(halt_request) or fields["cause"] in (CAUSE_HALTREQ, CAUSE_RESETHALTREQ))
+    return fields
 
 
 class DcsrStruct(Elaboratable):

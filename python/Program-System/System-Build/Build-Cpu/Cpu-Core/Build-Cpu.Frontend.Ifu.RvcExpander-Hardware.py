@@ -343,6 +343,14 @@ def decode_rvc(value: int, fs_is_off: bool = False,
     return (*expanded_integer(out, x, out_rd, out_rs1, out_rs2, out_rs3), bool(illegal))
 
 
+def rvc_observation(value: int, fs_is_off: bool = False,
+                    configuration: RvcExpanderConfig | None = None) -> dict[str, int]:
+    """Return expanded instruction fields as a named observation. / 返回压缩指令展开观测。"""
+
+    bits, rd, rs1, rs2, rs3, illegal = decode_rvc(value, fs_is_off, configuration)
+    return {"bits": bits, "rd": rd, "rs1": rs1, "rs2": rs2, "rs3": rs3, "illegal": int(illegal)}
+
+
 # =============================================================================
 # Amaranth implementation
 # =============================================================================
