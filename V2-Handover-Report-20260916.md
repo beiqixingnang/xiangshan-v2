@@ -30,16 +30,16 @@ _2026-09-16 23:05_。本报告只写增量事实：我在你 9/16 中断点之�
 - 覆盖度推进到 **521 core + 973 family + 482 missing**。
 - remote 已切为 `git@github.com:beiqixingnang/xiangshan-v2.git`（SSH），push 实测可用。
 
-## 3. Wave 2（代码已落盘、**未提交**——这是你要先看的东西）
+## 3. Wave 2（已提交；以下状态以当前 HEAD 和证据文件为准）
 
 按计划新增的 wave-2 授权表（`V2-Rewrite-Execution-Plan.md` 未提交改动里有）落了四个主题：
 
 | 主题 | 规模 | 当前状态 |
 | --- | --- | --- |
-| `Cpu-Core/Build-Cpu.Backend.Issue.Entries-Hardware.py` | 2060 行 | ✅ 34 模块：端口面 PASS、确定性 PASS、**结构端口向量差分 PASS（行为等价未建立）**、Verilator/Yosys 34/34 PASS、证据 `validation/v2-backend-issue-entries-family-results.json` 完整，`DIRECT_TEST_PASS_BOUNDED` |
-| `Cpu-Memory/Build-Cpu.Memory.Lsqueue.Uncache-Hardware.py` | 1724 行 | ⚠️ 端口面 42/42 PASS、Verilator PASS，但**差分 FAIL（`BEHAVIORAL_DIFFERENTIAL_FAIL`）+ Yosys FAIL**，证据里整体 status=FAIL |
-| `Cpu-Core/Build-Cpu.Backend.Exu.FuncUnit-Hardware.py` | ~122KB | 代码在盘；验证脚本 `validation/v2-backend-exu-funcunit-family-validator.py` 在盘；**证据 JSON 未产出**（进程被中止） |
-| `Cpu-Core/Build-Cpu.Backend.Regfile.Regfile-Hardware.py` | ~448KB | 代码在盘；**证据 JSON 未产出**（同上） |
+| `Cpu-Core/Build-Cpu.Backend.Issue.Entries-Hardware.py` | 2060 行 | ✅ 已提交；34 模块端口面、确定性、结构向量、Verilator/Yosys 均 PASS；证据 `validation/v2-backend-issue-entries-family-results.json` 完整；状态 `DIRECT_TEST_PASS_BOUNDED`（行为闭包未建立） |
+| `Cpu-Memory/Build-Cpu.Memory.Lsqueue.Uncache-Hardware.py` | 1724 行 | ⚠️ 已提交；端口面 42/42、Verilator/Yosys 局部编译 PASS，但锁定参考差分真实 FAIL（FreeList 1107/1200、UncacheEntry_15 23293/37600）；证据整体 `FAIL`，不得升级状态 |
+| `Cpu-Core/Build-Cpu.Backend.Exu.FuncUnit-Hardware.py` | ~122KB | ✅ Build 已提交；validator 与证据草稿已生成但尚未纳入提交；当前证据 `FAIL`（Dispatcher 端口方向/参考模块提取问题），不得计为行为通过 |
+| `Cpu-Core/Build-Cpu.Backend.Regfile.Regfile-Hardware.py` | ~448KB | ✅ Build 已提交；专用 family validator 与机器证据仍待补齐，当前只计共享结构门禁，不计行为通过 |
 
 配套：每主题有 focused validator（`validation/v2-*-family-validator.py` 或 `_validator.py` 命名）。
 
@@ -54,10 +54,13 @@ _2026-09-16 23:05_。本报告只写增量事实：我在你 9/16 中断点之�
 ## 6. Coordinator review addendum
 
 The handover claims were independently checked on 2026-09-17. The pinned
-hierarchy SHA-256 is unchanged. Decoupled (216/216) and Arbiter (57) focused
-reruns pass their bounded gates. FuncUnit and Regfile now pass the strict
-structure gate; Lsqueue also passes structure, but its behavioral checkpoint
-still fails. `ACCEPTED` remains locked.
+hierarchy SHA-256 is unchanged. The independent shared audit reports 86/86
+owned closure Build files passing UTF-8/LF, AST, `py_compile`, exact import,
+`build_verilog`, and strict single-file Pyright (two non-closure integration
+paths are explicitly excluded). Decoupled (216/216) and Arbiter (57) focused
+reruns pass their bounded gates. FuncUnit's current evidence is a real FAIL,
+and Regfile still lacks a focused family evidence file; Lsqueue's behavioral
+checkpoint also fails. `ACCEPTED` remains locked.
 
 Subsequent coordinator work landed IssueEntries (`3e9f104`), Regfile
 structure typing (`13e09c0`), and FuncUnit strict typing (`af425cc` through
@@ -65,7 +68,9 @@ structure typing (`13e09c0`), and FuncUnit strict typing (`af425cc` through
 hierarchy coverage is 740 core + 961 family + 275 missing. Lsqueue's fast
 checkpoint is still a real failure (FreeList 1107/1200 and UncacheEntry_15
 23293/37600 comparisons), so this report records structure only and does not
-promote behavioral equivalence.
+promote behavioral equivalence. The working tree also contains untracked
+scratch scripts/logs; they are not part of the handover and must not be
+blanket-staged.
 
 ## 5. 已知未闭合项（非本次引入）
 
