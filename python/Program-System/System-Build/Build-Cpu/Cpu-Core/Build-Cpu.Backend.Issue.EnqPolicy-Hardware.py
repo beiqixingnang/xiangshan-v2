@@ -16,7 +16,7 @@ from amaranth import Const, Elaboratable, Module, Mux, Signal
 # SelectOne("circ") emits odd-ranked free slots from low to high and
 # even-ranked slots from high to low, while validity is population based.
 # SelectOne("circ") 奇数序号从低到高、偶数序号从高到低选择空槽，valid 由人口计数决定。
-__all__ = ["EnqPolicyConfig", "EnqPolicy", "select_circular", "build_verilog", "main"]
+__all__ = ["EnqPolicyConfig", "EnqPolicy", "select_circular", "enqueue_observation", "build_verilog", "main"]
 
 
 # =============================================================================
@@ -60,6 +60,22 @@ def select_circular(mask: int, num_enq: int, rank: int) -> tuple[bool, int]:
     else:
         index = indices[-(rank // 2)]
     return True, 1 << index
+
+
+def enqueue_observation(mask: int, num_enq: int, width: int) -> dict[str, object]:
+    """Return all circular selections and population for one issue cycle.
+
+    The helper folds the odd-low/even-high ``CircSelectOne`` policy once and
+    is used by parent benches to compare every enqueue lane atomically. /
+    一次性返回所有入队 lane 选择与人口，便于父级差分测试。
+    """
+
+    if width < 1 or num_enq < 1:
+        raise ValueError("width and num_enq must be positive")
+    bounded = int(mask) & ((1 << width) - 1)
+    selections = [select_circular(bounded, num_enq, rank) for rank in range(1, num_enq + 1)]
+    return {"population": bounded.bit_count(), "selections": selections,
+            "can_enqueue": int(bounded.bit_count() >= num_enq)}
 
 
 class EnqPolicy(Elaboratable):
