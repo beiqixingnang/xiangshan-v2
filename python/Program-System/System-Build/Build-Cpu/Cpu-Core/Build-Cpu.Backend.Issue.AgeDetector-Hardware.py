@@ -16,7 +16,15 @@ from amaranth import ClockDomain, Const, Elaboratable, Module, Mux, Signal
 # AgeDetector tracks pairwise enqueue age, updates the upper triangular matrix
 # on each enqueue, and emits one-hot oldest eligible entries per dequeue port.
 # AgeDetector 跟踪成对入队年龄，每次入队更新上三角矩阵，并为每个出队端口输出最老可发射项。
-__all__ = ["AgeDetectorConfig", "AgeDetector", "age_select_reference", "build_verilog", "main"]
+__all__ = [
+    "AgeDetectorConfig",
+    "AgeDetector",
+    "age_relation_reference",
+    "oldest_priority_mask",
+    "age_select_reference",
+    "build_verilog",
+    "main",
+]
 
 
 # =============================================================================
@@ -39,27 +47,48 @@ class AgeDetectorConfig:
 # =============================================================================
 # Implementation
 # =============================================================================
-# Compute oldest one-hot selections from an age matrix. / 根据年龄矩阵计算最老项独热选择。
+# The helpers below mirror ``AgeDetector.get_age`` and
+# ``getOldestCanIssue`` in the source Scala implementation.  Keeping this
+# reference path explicit makes the priority semantics testable without
+# elaborating RTL while preserving the existing public adapter ABI.
+# 下列辅助函数精确镜像 Scala ``get_age`` / ``getOldestCanIssue``，可在
+# 不展开 RTL 的情况下测试优先级语义，同时保持既有适配器 ABI。
+def age_relation_reference(age: list[list[bool]], row: int, col: int) -> bool:
+    """Return whether ``row`` entered before ``col`` (diagonal is true)."""
+
+    n = len(age)
+    if not (0 <= row < n and 0 <= col < n):
+        raise IndexError("age matrix index out of range")
+    if row == col:
+        return True
+    return bool(age[row][col]) if row < col else not bool(age[col][row])
+
+
+def oldest_priority_mask(age: list[list[bool]], can_issue: int) -> int:
+    """Mirror Scala ``getOldestCanIssue(get_age, canIssue)`` for one mask."""
+
+    n = len(age)
+    if any(len(row) != n for row in age):
+        raise ValueError("age matrix must be square")
+    selected = 0
+    for row in range(n):
+        if not ((can_issue >> row) & 1):
+            continue
+        # Scala computes ``(Vec(get(i,j)) | ~canIssue).andR & canIssue(i)``:
+        # an eligible row wins only when it is older than every eligible col.
+        if all(
+            age_relation_reference(age, row, col)
+            for col in range(n)
+            if (can_issue >> col) & 1
+        ):
+            selected |= 1 << row
+    return selected
+
+
 def age_select_reference(age: list[list[bool]], can_issue: list[int]) -> list[int]:
     """Return one selection mask per dequeue port. / 返回每个出队端口的选择掩码。"""
 
-    n = len(age)
-    outputs: list[int] = []
-    for eligible in can_issue:
-        selected = 0
-        for row in range(n):
-            if not ((eligible >> row) & 1):
-                continue
-            oldest = True
-            for col in range(n):
-                relation = True if row == col else (age[row][col] if row < col else not age[col][row])
-                if ((eligible >> col) & 1) and not relation:
-                    oldest = False
-                    break
-            if oldest:
-                selected |= 1 << row
-        outputs.append(selected)
-    return outputs
+    return [oldest_priority_mask(age, eligible) for eligible in can_issue]
 
 
 class AgeDetector(Elaboratable):
