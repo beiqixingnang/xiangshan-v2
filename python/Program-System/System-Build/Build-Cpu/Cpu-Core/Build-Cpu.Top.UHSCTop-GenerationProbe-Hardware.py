@@ -18,7 +18,7 @@ from amaranth import Elaboratable, Module, Signal
 from amaranth.back import verilog
 
 
-__all__ = ["UHSCTopConfig", "UHSCTop", "build_verilog", "main"]
+__all__ = ["UHSCTopConfig", "UHSCTop", "closure_observation", "build_verilog", "main"]
 
 
 @dataclass(frozen=True)
@@ -42,6 +42,24 @@ class UHSCTopConfig:
             raise ValueError("Kunminghu V2 fetch width is six")
         if self.num_cores < 1:
             raise ValueError("num_cores must be positive")
+
+
+def closure_observation(bound_children: Iterable[str], expected_children: Iterable[str],
+                        inventory_ports: int, expected_inventory_ports: int = 204) -> dict[str, int]:
+    """Summarize parent/port closure readiness from explicit injected metadata.
+
+    The probe must not infer readiness from generated names: only bound child
+    objects and the versioned port inventory count are accepted as evidence.
+    / 仅依据显式 child 绑定和版本化端口清单统计闭包状态。
+    """
+
+    expected = tuple(expected_children)
+    bound = set(bound_children)
+    missing_children = sum(name not in bound for name in expected)
+    missing_inventory = int(inventory_ports != expected_inventory_ports)
+    missing = missing_children + missing_inventory
+    return {"missing_children": missing_children, "missing_inventory": missing_inventory,
+            "missing_count": missing, "complete": int(missing == 0)}
 
 
 class UHSCTop(Elaboratable):
@@ -287,15 +305,19 @@ class UHSCTop(Elaboratable):
             m.d.comb += sink.eq(signal)
 
         # The probe is quiescent by construction.  No unimplemented child is
-        # represented as a fake datapath; the missing-closure flag remains
-        # asserted until XSCore, L2Top, and XSTile are bound.
+        # represented as a fake datapath.  Closure status is derived from the
+        # explicit child bindings and exact inventory metadata, so a fully
+        # injected hierarchy can clear the diagnostic without a name heuristic.
+        expected_children = ("frontend", "backend", "mem_block", "coupled_l2")
+        bound_children = tuple(name for name, child in children.items() if child is not None)
+        missing_children = sum(name not in bound_children for name in expected_children)
+        inventory_complete = len(self.full_port_specs) == 204
+        closure_done = (missing_children == 0) & inventory_complete
         m.d.comb += [
             self.mem_d_ready.eq(0),
-            self.closure_missing.eq(1),
-            self.closure_missing_count.eq(
-                sum(1 for child in children.values() if child is None)
-            ),
-            self.closure_complete.eq(0),
+            self.closure_missing.eq(~closure_done),
+            self.closure_missing_count.eq(missing_children + int(not inventory_complete)),
+            self.closure_complete.eq(closure_done),
         ]
         for signal in self.full_inventory_outputs:
             if id(signal) in self._full_inventory_new_ids:

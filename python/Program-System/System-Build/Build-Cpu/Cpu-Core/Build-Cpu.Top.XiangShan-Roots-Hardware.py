@@ -19,7 +19,7 @@ from amaranth.back import verilog
 # =============================================================================
 # Module Contract
 # =============================================================================
-__all__ = ["RootConfig", "XSCore", "L2Top", "XSTile", "XSTop", "build_verilog", "main"]
+__all__ = ["RootConfig", "XSCore", "L2Top", "XSTile", "XSTop", "root_closure_observation", "build_verilog", "main"]
 
 
 # =============================================================================
@@ -37,6 +37,19 @@ class RootConfig:
             raise ValueError("Kunminghu V2 requires XLEN=64 and fetch width six")
         if self.vaddr_bits < self.paddr_bits or self.paddr_bits < 8:
             raise ValueError("address widths are inconsistent")
+
+
+def root_closure_observation(bound_children: Iterable[str], expected_children: Iterable[str],
+                             inventory_ports: int, expected_inventory_ports: int) -> dict[str, int]:
+    """Return explicit root child/inventory closure status. / 返回根层级显式闭包状态。"""
+
+    expected = tuple(expected_children)
+    bound = set(bound_children)
+    missing_children = sum(name not in bound for name in expected)
+    missing_inventory = int(inventory_ports != expected_inventory_ports)
+    missing = missing_children + missing_inventory
+    return {"missing_children": missing_children, "missing_inventory": missing_inventory,
+            "missing_count": missing, "complete": int(missing == 0)}
 
 
 # =============================================================================
