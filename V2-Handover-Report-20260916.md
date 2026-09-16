@@ -62,6 +62,13 @@ Lsqueue.Uncache remains a behavioral-differential/Yosys failure.  These three
 subjects must not be counted as completed until their focused evidence is
 repaired; `ACCEPTED` remains locked.
 
+Subsequent coordinator work landed IssueEntries (`3e9f104`), Regfile
+structure typing (`13e09c0`), and FuncUnit strict typing (`af425cc` through
+`1cc5772`).  The shared structure sweep is now 86/86, and the registered
+hierarchy coverage is 703 core + 961 family + 312 missing.  Lsqueue's fast
+checkpoint is still a real failure (FreeList 1107/1200 and UncacheEntry_15
+23293/37600 comparisons), so this report does not promote it.
+
 ## 5. 已知未闭合项（非本次引入）
 
 - Pyright 历史 161 条的口径已由 wave-1 全量复扫清零，但若有别的口径残留，以你复扫为准。
