@@ -27,12 +27,12 @@
   "upstream_scala_files": 1214,
   "external_packages": 15,
   "raw_family_seed_count": 30,
-  "planned_dependency_family_files": 23,
+  "planned_dependency_family_files": 24,
   "core_existing_build_files": 34,
-  "total_planned_or_existing_build_files": 57,
+  "total_planned_or_existing_build_files": 58,
   "non_target_roots": 3,
   "conditional_or_inlined_families": 8,
-  "selected_top_reachable_families": 15
+  "selected_top_reachable_families": 16
  },
  "families": [
   {
@@ -1150,8 +1150,25 @@
    "boundary": "arbitration priority and four-phase asynchronous queue handshake boundary",
    "status": "DIRECT_TEST_PASS_BOUNDED",
    "exclusion_rationale": "chisel3 Arbiter sources are not vendored; AsyncQueue is transcribed from the vendored rocket-chip source plus the pinned artifact"
+  },
+  {
+   "family_id": "dependency.rocket.jtag",
+   "kind": "dependency",
+   "plan_build_file": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Rocket.Jtag-Hardware.py",
+   "source_roots": [
+    "rocket-chip/src/main/scala/jtag"
+   ],
+   "scala_source_count": 1,
+   "source_paths": [
+    "rocket-chip/src/main/scala/jtag/JtagShifter.scala"
+   ],
+   "covered_locked_modules": 5,
+   "boundary": "JTAG bypass, capture, capture/update, and serial shift-register boundaries",
+   "status": "VALIDATOR_PASS_BOUNDED",
+   "evidence": "validation/v2-jtag-family-results.json",
+   "exclusion_rationale": "JtagStateMachine and unrelated utility classes remain source references until selected-top parent closure evidence is available"
   }
- ],
+],
  "non_target_roots": [
   {
    "root": "upstream/debug",

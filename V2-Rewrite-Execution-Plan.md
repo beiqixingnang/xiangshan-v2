@@ -164,8 +164,16 @@ non-zero diagnostic count keeps the target outside `STRUCTURE_VERIFIED`.
 The final product placement is deliberately separate from migration tooling.
 Build files are staged at their final `python/Program-System/System-Build/`
 paths in this auxiliary repository. Migration-only reference extractors,
-differential harnesses, tool logs, caches, generated SV/VCD, and evidence JSON+remain under `.agents/xiangshan-v2/validation/`. Only after all applicable+family/parent/milestone gates reach `ACCEPTED` may reusable direct tests be+adapted into the main repository's `Program-System/System-Testing/Testing-Cpu/`
-and registered in its Testing Manifest. The auxiliary repository remains the+traceable source of the full locked-reference evidence package; no Build file+may import it.
+differential harnesses, tool logs, caches, generated SV/VCD, and evidence JSON
+remain under `.agents/xiangshan-v2/validation/`. Reusable one-to-one direct
+tests may be maintained in the auxiliary
+`python/Program-System/System-Testing/Testing-Cpu/` tree while a family is
+being developed; they must not be counted as reference evidence or imported
+by Build files. Only after all applicable family/parent/milestone gates reach
+`ACCEPTED` may those tests be adapted into the main repository's
+`Program-System/System-Testing/Testing-Cpu/` and registered in its Testing
+Manifest. The auxiliary repository remains the traceable source of the full
+locked-reference evidence package.
 
 ## Acceptance gates
 

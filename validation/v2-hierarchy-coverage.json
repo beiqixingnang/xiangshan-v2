@@ -6,8 +6,8 @@
  "locked_module_count": 1976,
  "status_counts": {
   "CORE_BOUNDED_SUBJECT": 818,
-  "FAMILY_SUBJECT": 976,
-  "MISSING": 182
+  "FAMILY_SUBJECT": 981,
+  "MISSING": 177
  },
  "row_count": 1976,
  "rows": [
@@ -2301,50 +2301,58 @@
   },
   {
    "module": "CaptureChain",
-   "status": "MISSING",
+   "status": "FAMILY_SUBJECT",
    "ports": 10,
    "children": 0,
    "scala_sources": [
     "jtag/JtagShifter.scala"
    ],
    "core_subjects": [],
-   "family_subjects": [],
+   "family_subjects": [
+    "dependency.rocket.jtag"
+   ],
    "conditional_or_inlined": false
   },
   {
    "module": "CaptureUpdateChain",
-   "status": "MISSING",
+   "status": "FAMILY_SUBJECT",
    "ports": 10,
    "children": 0,
    "scala_sources": [
     "jtag/JtagShifter.scala"
    ],
    "core_subjects": [],
-   "family_subjects": [],
+   "family_subjects": [
+    "dependency.rocket.jtag"
+   ],
    "conditional_or_inlined": false
   },
   {
    "module": "CaptureUpdateChain_1",
-   "status": "MISSING",
+   "status": "FAMILY_SUBJECT",
    "ports": 15,
    "children": 0,
    "scala_sources": [
     "jtag/JtagShifter.scala"
    ],
    "core_subjects": [],
-   "family_subjects": [],
+   "family_subjects": [
+    "dependency.rocket.jtag"
+   ],
    "conditional_or_inlined": false
   },
   {
    "module": "CaptureUpdateChain_2",
-   "status": "MISSING",
+   "status": "FAMILY_SUBJECT",
    "ports": 8,
    "children": 0,
    "scala_sources": [
     "jtag/JtagShifter.scala"
    ],
    "core_subjects": [],
-   "family_subjects": [],
+   "family_subjects": [
+    "dependency.rocket.jtag"
+   ],
    "conditional_or_inlined": false
   },
   {
@@ -9700,14 +9708,16 @@
   },
   {
    "module": "JtagBypassChain",
-   "status": "MISSING",
+   "status": "FAMILY_SUBJECT",
    "ports": 7,
    "children": 0,
    "scala_sources": [
     "jtag/JtagShifter.scala"
    ],
    "core_subjects": [],
-   "family_subjects": [],
+   "family_subjects": [
+    "dependency.rocket.jtag"
+   ],
    "conditional_or_inlined": false
   },
   {
@@ -28350,10 +28360,6 @@
  ],
  "missing_top_scala": [
   {
-   "scala": "jtag/JtagShifter.scala",
-   "modules": 5
-  },
-  {
    "scala": "xiangshan/mem/prefetch/SMSPrefetcher.scala",
    "modules": 4
   },
@@ -28587,6 +28593,10 @@
   },
   {
    "scala": "xiangshan/mem/lsqueue/LoadMisalignBuffer.scala",
+   "modules": 1
+  },
+  {
+   "scala": "xiangshan/mem/lsqueue/LoadExceptionBuffer.scala",
    "modules": 1
   }
  ]

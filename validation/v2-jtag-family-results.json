@@ -1,0 +1,289 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_JTAG_SHIFTER_FAMILY",
+  "batch_id": "V2-DEPENDENCY-JTAG-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "scala_sources": [
+    "upstream/rocket-chip/src/main/scala/jtag/JtagShifter.scala"
+  ],
+  "covered_modules": [
+    "CaptureChain",
+    "CaptureUpdateChain",
+    "CaptureUpdateChain_1",
+    "CaptureUpdateChain_2",
+    "JtagBypassChain"
+  ],
+  "port_surface": {
+    "CaptureChain": {
+      "locked": 10,
+      "emitted": 10,
+      "match": true
+    },
+    "CaptureUpdateChain": {
+      "locked": 10,
+      "emitted": 10,
+      "match": true
+    },
+    "CaptureUpdateChain_1": {
+      "locked": 15,
+      "emitted": 15,
+      "match": true
+    },
+    "CaptureUpdateChain_2": {
+      "locked": 8,
+      "emitted": 8,
+      "match": true
+    },
+    "JtagBypassChain": {
+      "locked": 7,
+      "emitted": 7,
+      "match": true
+    }
+  },
+  "direct": {
+    "status": "PASS",
+    "members": [
+      {
+        "member": "CaptureChain",
+        "vectors": 3,
+        "observations": [
+          {
+            "capture_data": 1
+          },
+          {
+            "update_valid": 1
+          },
+          {
+            "shifted_data": 0
+          }
+        ]
+      },
+      {
+        "member": "CaptureUpdateChain",
+        "vectors": 3,
+        "observations": [
+          {
+            "capture_data": 0
+          },
+          {
+            "update_valid": 1,
+            "update_bits": 0
+          },
+          {
+            "shifted_data": 1
+          }
+        ]
+      },
+      {
+        "member": "CaptureUpdateChain_1",
+        "vectors": 3,
+        "observations": [
+          {
+            "capture_data": 1
+          },
+          {
+            "update_valid": 1,
+            "update_addr": 69,
+            "update_data": 2309737967,
+            "update_op": 2,
+            "capture_pulse": 0
+          },
+          {
+            "shifted_data": 0
+          }
+        ]
+      },
+      {
+        "member": "CaptureUpdateChain_2",
+        "vectors": 3,
+        "observations": [
+          {
+            "capture_data": 0
+          },
+          {
+            "update_valid": 0,
+            "update_bits": 0
+          },
+          {
+            "shifted_data": 0
+          }
+        ]
+      },
+      {
+        "member": "JtagBypassChain",
+        "vectors": 3,
+        "observations": [
+          {
+            "capture_data": 0
+          },
+          {
+            "update_valid": 0
+          },
+          {
+            "shifted_data": 1
+          }
+        ]
+      }
+    ]
+  },
+  "tool_gates": {
+    "CaptureChain": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-jtag-family/CaptureChain.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.022 MB sources in 2 modules, into 0.022 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.063 s (elab=0.001, cvt=0.006, bld=0.000); cpu 0.020 s on 1 threads; alloced 9.086 MB\n",
+        "output_sha256": "9a3443ca99a9f6dde87addbde56913ce94bb180d7b78302fc122603bc2810f8b"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-jtag-family/CaptureChain.sv; hierarchy -top CaptureChain; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-jtag-family/CaptureChain.sv:6$9'.\nFound and cleaned up 2 empty switches in `\\CaptureChain.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-jtag-family/CaptureChain.sv:42$5'.\nRemoving empty process `CaptureChain.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-jtag-family/CaptureChain.sv:42$5'.\nRemoving empty process `CaptureChain.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-jtag-family/CaptureChain.sv:39$4'.\nCleaned up 2 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module CaptureChain.\n<suppressed ~1 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module CaptureChain...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 745100e2b9, CPU: user 0.03s system 0.02s, MEM: 11.56 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 32% 1x opt_expr (0 sec), 29% 2x read_verilog (0 sec), ...\n",
+        "output_sha256": "9888df7c3d95bd165c15fe290423e61df27df39f890f06fd543bfde16f995ff1"
+      },
+      "rtl_bytes": 1961,
+      "rtl_sha256": "177c24d3e29cb753a458f9ebc1c367d13e6016e1f2a669b355ba98fdc1de2918"
+    },
+    "CaptureUpdateChain": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-jtag-family/CaptureUpdateChain.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.022 MB sources in 2 modules, into 0.022 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.054 s (elab=0.001, cvt=0.004, bld=0.000); cpu 0.019 s on 1 threads; alloced 9.078 MB\n",
+        "output_sha256": "038cb9d381105d66c2ae6f6fe609b0a065381c9574ba21a826898672166d2ec1"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-jtag-family/CaptureUpdateChain.sv; hierarchy -top CaptureUpdateChain; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "on/.work/v2-jtag-family/CaptureUpdateChain.sv:6$7'.\nFound and cleaned up 2 empty switches in `\\CaptureUpdateChain.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-jtag-family/CaptureUpdateChain.sv:36$3'.\nRemoving empty process `CaptureUpdateChain.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-jtag-family/CaptureUpdateChain.sv:36$3'.\nRemoving empty process `CaptureUpdateChain.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-jtag-family/CaptureUpdateChain.sv:33$2'.\nCleaned up 2 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module CaptureUpdateChain.\n<suppressed ~1 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module CaptureUpdateChain...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: f22f732012, CPU: user 0.04s system 0.02s, MEM: 11.56 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 42% 2x read_verilog (0 sec), 29% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "978cb85ede6d53a7cf471da189ed3ca249597aad244fa329765c97f0e52812fe"
+      },
+      "rtl_bytes": 1676,
+      "rtl_sha256": "858d8ea0cb5f33dd83aaca7cbbd13448fc9c456fb3bc9c421360117213516f63"
+    },
+    "CaptureUpdateChain_1": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-jtag-family/CaptureUpdateChain_1.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.023 MB sources in 2 modules, into 0.024 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.041 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.011 s on 1 threads; alloced 9.242 MB\n",
+        "output_sha256": "cee96e79938c5b3d22cdbd496a019038c83a5ac7ecdabbe88a46b0af1f0ede42"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-jtag-family/CaptureUpdateChain_1.sv; hierarchy -top CaptureUpdateChain_1; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "amily/CaptureUpdateChain_1.sv:6$9'.\nFound and cleaned up 2 empty switches in `\\CaptureUpdateChain_1.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-jtag-family/CaptureUpdateChain_1.sv:52$5'.\nRemoving empty process `CaptureUpdateChain_1.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-jtag-family/CaptureUpdateChain_1.sv:52$5'.\nRemoving empty process `CaptureUpdateChain_1.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-jtag-family/CaptureUpdateChain_1.sv:49$4'.\nCleaned up 2 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module CaptureUpdateChain_1.\n<suppressed ~1 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module CaptureUpdateChain_1...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 71ba33f288, CPU: user 0.02s system 0.01s, MEM: 11.88 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 39% 2x read_verilog (0 sec), 17% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "6923e82ee5dde2fbf8ec2c6a9e58e946ec26ab1b456581ad04104a95e27bdbb2"
+      },
+      "rtl_bytes": 2629,
+      "rtl_sha256": "77fde145271bc567f981353108c6608a665801aad3090d9f378503d9bf82d447"
+    },
+    "CaptureUpdateChain_2": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-jtag-family/CaptureUpdateChain_2.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.022 MB sources in 2 modules, into 0.022 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.037 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.010 s on 1 threads; alloced 9.191 MB\n",
+        "output_sha256": "7f889bf24b9096e3ebe541f9b572460a66af4a392d709fa593e4e293d006c1f9"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-jtag-family/CaptureUpdateChain_2.sv; hierarchy -top CaptureUpdateChain_2; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "amily/CaptureUpdateChain_2.sv:6$7'.\nFound and cleaned up 2 empty switches in `\\CaptureUpdateChain_2.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-jtag-family/CaptureUpdateChain_2.sv:33$3'.\nRemoving empty process `CaptureUpdateChain_2.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-jtag-family/CaptureUpdateChain_2.sv:33$3'.\nRemoving empty process `CaptureUpdateChain_2.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-jtag-family/CaptureUpdateChain_2.sv:30$2'.\nCleaned up 2 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module CaptureUpdateChain_2.\n<suppressed ~1 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module CaptureUpdateChain_2...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 4d98154c03, CPU: user 0.01s system 0.02s, MEM: 11.25 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 49% 2x read_verilog (0 sec), 22% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "1b3ea09d3da9da531b37fb5924a22c1b953569527c095ed9c9369be90dc52ef0"
+      },
+      "rtl_bytes": 1446,
+      "rtl_sha256": "0783f33183d8cf438cd29dc463198f4ad4df22b191334ce897499acf315148d1"
+    },
+    "JtagBypassChain": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-jtag-family/JtagBypassChain.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.022 MB sources in 2 modules, into 0.020 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.040 s (elab=0.000, cvt=0.003, bld=0.000); cpu 0.012 s on 1 threads; alloced 9.180 MB\n",
+        "output_sha256": "851ff076b6de9b704f56830a3e763e16a957ff78e6380561dcdece4a979b2f4a"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-jtag-family/JtagBypassChain.sv; hierarchy -top JtagBypassChain; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "gents/xiangshan-v2/validation/.work/v2-jtag-family/JtagBypassChain.sv:6$6'.\nFound and cleaned up 2 empty switches in `\\JtagBypassChain.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-jtag-family/JtagBypassChain.sv:27$2'.\nRemoving empty process `JtagBypassChain.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-jtag-family/JtagBypassChain.sv:27$2'.\nRemoving empty process `JtagBypassChain.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-jtag-family/JtagBypassChain.sv:24$1'.\nCleaned up 2 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module JtagBypassChain.\n<suppressed ~1 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module JtagBypassChain...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: c7c90829aa, CPU: user 0.01s system 0.02s, MEM: 11.25 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 46% 2x read_verilog (0 sec), 25% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "2089f10b3b73edb219ec7e1e377aac5fedde5590c17c96ffac7c3702a3ed8df2"
+      },
+      "rtl_bytes": 1124,
+      "rtl_sha256": "454a55b5f038094bf1c5232e45953817a53f94eb788391e0643a08675de591d9"
+    }
+  },
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PENDING_LOCKED_JTAG_PARENT_DIFF",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "UHSC_LOCALIZED": "PASS_BOUNDED_FAMILY_LOCAL_NAME",
+    "PARENT_CLOSURE_MATCHED": "PENDING",
+    "LICENSE_REVIEW": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "VALIDATOR_PASS_BOUNDED",
+  "acceptance_eligible": false,
+  "failures": [],
+  "unclosed": [
+    "Complete JTAG parent and locked XSTop differential remain pending.",
+    "License review and user approval remain pending."
+  ]
+}
