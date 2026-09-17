@@ -331,3 +331,33 @@ Scala-path delta, and passes one shared static sweep.  Evidence-only, hash-only,
 or protocol-log-only commits do not reduce this rewrite debt.  Until the debt
 is closed, reports must show both the 78/78 static freeze result and the
 remaining candidate count separately.
+
+## Dynamic Build and throughput amendment (2026-09-17)
+
+The original 78 aggregate subjects are retained as a historical planning
+baseline, not as a maximum or completion criterion. The effective completion
+scope is the full pinned Kunminghu V2 hierarchy: every one of the 1976 locked
+modules must be covered by a source-backed core or dependency family subject,
+with parent and top-level closure evidence still required. Build-file count is
+derived telemetry and may increase when a real source/protocol/clock/reset
+boundary requires a new aggregate subject.
+
+An aggregate Build may cover multiple Scala files and parameterized child
+instances. A new Build is justified only when its boundary, covered modules,
+and observation points are distinct and recorded in the inventories. Splitting
+solely to increase file count is prohibited; reverting to one Scala file per
+Python file is explicitly out of scope.
+
+Each normal implementation round must add at least 5000 effective Python
+implementation lines across formal Build files. Effective lines exclude blank
+lines, comment-only lines, validators, evidence JSON, logs, generated RTL,
+temporary scripts, and formatting-only changes. The coordinator records both
+raw Build lines and effective lines; emergency correctness fixes below the
+threshold are recorded as exception fixes and do not substitute for a normal
+throughput round.
+
+Every round report must include: covered locked modules / 1976, structure-
+verified modules, behavior-verified modules, missing modules, current Build
+count, current raw/effective Build Python lines, this-round effective additions,
+new Scala source roots, validation results, and the commit pushed. Coverage is
+never promoted to behavioral equivalence merely because a Build file exists.
