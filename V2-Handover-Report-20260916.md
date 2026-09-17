@@ -49,7 +49,7 @@ _2026-09-16 23:05_。本报告只写增量事实：我在你 9/16 中断点之�
 2. **修 Lsqueue.Uncache**：差分失败按例先查复位值、flow/pipe 旁路时序、full 标志 X 传播、向量 split 的拍序；Yosys 失败读它的报错原文（常见：多驱动、不支持结构）。修完重出证据。
 3. **修 Exu.FuncUnit 的 Alu/Bku 差分失败**；Regfile.Regfile 的聚焦结构证据已由协调方补齐并提交，仍不得当作行为闭包。
 4. 全部绿之后你再做一次独立核实（共享审计 + 全量 Pyright），然后统一提交 wave-2。
-5. 之后继续 482 missing 里的其余家族，优先级建议看 `validation/v2-hierarchy-coverage.json` 按 Scala 来源聚类的 top 缺口。
+5. 之后继续当前 189 missing 里的其余家族，优先级建议看 `validation/v2-hierarchy-coverage.json` 按 Scala 来源聚类的 top 缺口。
 
 ## 6. Coordinator review addendum
 
