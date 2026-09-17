@@ -5,9 +5,9 @@
  "reference_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
  "locked_module_count": 1976,
  "status_counts": {
-  "CORE_BOUNDED_SUBJECT": 802,
-  "FAMILY_SUBJECT": 961,
-  "MISSING": 213
+  "CORE_BOUNDED_SUBJECT": 811,
+  "FAMILY_SUBJECT": 976,
+  "MISSING": 189
  },
  "row_count": 1976,
  "rows": [
@@ -1402,7 +1402,7 @@
   },
   {
    "module": "AsyncResetSynchronizerPrimitiveShiftReg_d3_i0",
-   "status": "MISSING",
+   "status": "FAMILY_SUBJECT",
    "ports": 4,
    "children": 0,
    "scala_sources": [
@@ -1410,12 +1410,14 @@
     "util/SynchronizerReg.scala"
    ],
    "core_subjects": [],
-   "family_subjects": [],
+   "family_subjects": [
+    "dependency.chisel.arbiter"
+   ],
    "conditional_or_inlined": false
   },
   {
    "module": "AsyncResetSynchronizerShiftReg_w1_d3_i0",
-   "status": "MISSING",
+   "status": "FAMILY_SUBJECT",
    "ports": 4,
    "children": 1,
    "scala_sources": [
@@ -1423,12 +1425,14 @@
     "util/SynchronizerReg.scala"
    ],
    "core_subjects": [],
-   "family_subjects": [],
+   "family_subjects": [
+    "dependency.chisel.arbiter"
+   ],
    "conditional_or_inlined": false
   },
   {
    "module": "AsyncResetSynchronizerShiftReg_w4_d3_i0",
-   "status": "MISSING",
+   "status": "FAMILY_SUBJECT",
    "ports": 4,
    "children": 4,
    "scala_sources": [
@@ -1436,7 +1440,9 @@
     "util/SynchronizerReg.scala"
    ],
    "core_subjects": [],
-   "family_subjects": [],
+   "family_subjects": [
+    "dependency.chisel.arbiter"
+   ],
    "conditional_or_inlined": false
   },
   {
@@ -2467,50 +2473,58 @@
   },
   {
    "module": "ClockCrossingReg_w15",
-   "status": "MISSING",
+   "status": "FAMILY_SUBJECT",
    "ports": 4,
    "children": 0,
    "scala_sources": [
     "util/SynchronizerReg.scala"
    ],
    "core_subjects": [],
-   "family_subjects": [],
+   "family_subjects": [
+    "dependency.chisel.arbiter"
+   ],
    "conditional_or_inlined": false
   },
   {
    "module": "ClockCrossingReg_w44",
-   "status": "MISSING",
+   "status": "FAMILY_SUBJECT",
    "ports": 4,
    "children": 0,
    "scala_sources": [
     "util/SynchronizerReg.scala"
    ],
    "core_subjects": [],
-   "family_subjects": [],
+   "family_subjects": [
+    "dependency.chisel.arbiter"
+   ],
    "conditional_or_inlined": false
   },
   {
    "module": "ClockCrossingReg_w56",
-   "status": "MISSING",
+   "status": "FAMILY_SUBJECT",
    "ports": 4,
    "children": 0,
    "scala_sources": [
     "util/SynchronizerReg.scala"
    ],
    "core_subjects": [],
-   "family_subjects": [],
+   "family_subjects": [
+    "dependency.chisel.arbiter"
+   ],
    "conditional_or_inlined": false
   },
   {
    "module": "ClockCrossingReg_w64",
-   "status": "MISSING",
+   "status": "FAMILY_SUBJECT",
    "ports": 4,
    "children": 0,
    "scala_sources": [
     "util/SynchronizerReg.scala"
    ],
    "core_subjects": [],
-   "family_subjects": [],
+   "family_subjects": [
+    "dependency.chisel.arbiter"
+   ],
    "conditional_or_inlined": false
   },
   {
@@ -13280,61 +13294,71 @@
   },
   {
    "module": "PTWFilter",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 148,
    "children": 1,
    "scala_sources": [
     "xiangshan/cache/mmu/Repeater.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "LsqueueUncacheFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "PTWFilterEntry",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 58,
    "children": 0,
    "scala_sources": [
     "xiangshan/cache/mmu/Repeater.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "LsqueueUncacheFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "PTWFilterEntry_1",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 41,
    "children": 0,
    "scala_sources": [
     "xiangshan/cache/mmu/Repeater.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "LsqueueUncacheFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "PTWNewFilter",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 179,
    "children": 5,
    "scala_sources": [
     "xiangshan/cache/mmu/Repeater.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "LsqueueUncacheFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "PTWRepeaterNB",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 135,
    "children": 1,
    "scala_sources": [
     "xiangshan/cache/mmu/Repeater.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "LsqueueUncacheFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -13382,98 +13406,114 @@
   },
   {
    "module": "PipeWithFlush",
-   "status": "MISSING",
+   "status": "FAMILY_SUBJECT",
    "ports": 14,
    "children": 0,
    "scala_sources": [
     "utils/PipeWithFlush.scala"
    ],
    "core_subjects": [],
-   "family_subjects": [],
+   "family_subjects": [
+    "dependency.chisel.decoupled"
+   ],
    "conditional_or_inlined": false
   },
   {
    "module": "PipeWithFlush_1",
-   "status": "MISSING",
+   "status": "FAMILY_SUBJECT",
    "ports": 28,
    "children": 0,
    "scala_sources": [
     "utils/PipeWithFlush.scala"
    ],
    "core_subjects": [],
-   "family_subjects": [],
+   "family_subjects": [
+    "dependency.chisel.decoupled"
+   ],
    "conditional_or_inlined": false
   },
   {
    "module": "PipeWithFlush_10",
-   "status": "MISSING",
+   "status": "FAMILY_SUBJECT",
    "ports": 12,
    "children": 0,
    "scala_sources": [
     "utils/PipeWithFlush.scala"
    ],
    "core_subjects": [],
-   "family_subjects": [],
+   "family_subjects": [
+    "dependency.chisel.decoupled"
+   ],
    "conditional_or_inlined": false
   },
   {
    "module": "PipeWithFlush_11",
-   "status": "MISSING",
+   "status": "FAMILY_SUBJECT",
    "ports": 17,
    "children": 0,
    "scala_sources": [
     "utils/PipeWithFlush.scala"
    ],
    "core_subjects": [],
-   "family_subjects": [],
+   "family_subjects": [
+    "dependency.chisel.decoupled"
+   ],
    "conditional_or_inlined": false
   },
   {
    "module": "PipeWithFlush_6",
-   "status": "MISSING",
+   "status": "FAMILY_SUBJECT",
    "ports": 18,
    "children": 0,
    "scala_sources": [
     "utils/PipeWithFlush.scala"
    ],
    "core_subjects": [],
-   "family_subjects": [],
+   "family_subjects": [
+    "dependency.chisel.decoupled"
+   ],
    "conditional_or_inlined": false
   },
   {
    "module": "PipeWithFlush_7",
-   "status": "MISSING",
+   "status": "FAMILY_SUBJECT",
    "ports": 23,
    "children": 0,
    "scala_sources": [
     "utils/PipeWithFlush.scala"
    ],
    "core_subjects": [],
-   "family_subjects": [],
+   "family_subjects": [
+    "dependency.chisel.decoupled"
+   ],
    "conditional_or_inlined": false
   },
   {
    "module": "PipeWithFlush_8",
-   "status": "MISSING",
+   "status": "FAMILY_SUBJECT",
    "ports": 12,
    "children": 0,
    "scala_sources": [
     "utils/PipeWithFlush.scala"
    ],
    "core_subjects": [],
-   "family_subjects": [],
+   "family_subjects": [
+    "dependency.chisel.decoupled"
+   ],
    "conditional_or_inlined": false
   },
   {
    "module": "PipeWithFlush_9",
-   "status": "MISSING",
+   "status": "FAMILY_SUBJECT",
    "ports": 23,
    "children": 0,
    "scala_sources": [
     "utils/PipeWithFlush.scala"
    ],
    "core_subjects": [],
-   "family_subjects": [],
+   "family_subjects": [
+    "dependency.chisel.decoupled"
+   ],
    "conditional_or_inlined": false
   },
   {
@@ -19383,49 +19423,57 @@
   },
   {
    "module": "Repeater",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 23,
    "children": 0,
    "scala_sources": [
     "util/Repeater.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "LsqueueUncacheFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "Repeater_1",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 18,
    "children": 0,
    "scala_sources": [
     "util/Repeater.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "LsqueueUncacheFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "Repeater_2",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 19,
    "children": 0,
    "scala_sources": [
     "util/Repeater.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "LsqueueUncacheFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "Repeater_3",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 23,
    "children": 0,
    "scala_sources": [
     "util/Repeater.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "LsqueueUncacheFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -28288,23 +28336,11 @@
  ],
  "missing_top_scala": [
   {
-   "scala": "utils/PipeWithFlush.scala",
-   "modules": 8
-  },
-  {
-   "scala": "util/SynchronizerReg.scala",
-   "modules": 7
-  },
-  {
    "scala": "xiangshan/backend/fu/NewCSR/CSRPermitModule.scala",
    "modules": 7
   },
   {
    "scala": "jtag/JtagShifter.scala",
-   "modules": 5
-  },
-  {
-   "scala": "xiangshan/cache/mmu/Repeater.scala",
    "modules": 5
   },
   {
@@ -28336,16 +28372,8 @@
    "modules": 4
   },
   {
-   "scala": "util/Repeater.scala",
-   "modules": 4
-  },
-  {
    "scala": "xiangshan/mem/lsqueue/StoreQueueData.scala",
    "modules": 4
-  },
-  {
-   "scala": "util/ShiftReg.scala",
-   "modules": 3
   },
   {
    "scala": "xiangshan/backend/rob/DiffRatStateBuffer.scala",
@@ -28525,6 +28553,26 @@
   },
   {
    "scala": "xiangshan/backend/fu/NewCSR/InterruptFilter.scala",
+   "modules": 1
+  },
+  {
+   "scala": "jtag/JtagStateMachine.scala",
+   "modules": 1
+  },
+  {
+   "scala": "jtag/JtagTap.scala",
+   "modules": 1
+  },
+  {
+   "scala": "xiangshan/mem/prefetch/BasePrefecher.scala",
+   "modules": 1
+  },
+  {
+   "scala": "xiangshan/cache/mmu/L2TLBMissQueue.scala",
+   "modules": 1
+  },
+  {
+   "scala": "xiangshan/cache/mmu/L2TlbPrefetch.scala",
    "modules": 1
   }
  ]
