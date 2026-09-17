@@ -193,10 +193,13 @@ evidence.
 The auxiliary repository keeps migration-only differential validators,
 reference extraction, hashes, evidence JSON, generated SV, waveforms, tool
 logs, and caches under `.agents/xiangshan-v2/validation/`. These scripts are
-not product modules and must not be imported by a Build file. After user
-approval and `ACCEPTED`, reusable direct tests are adapted into the main
-repository's `Program-System/System-Testing/Testing-Cpu/` and registered in
-`Manifest-Testing-Hardware.py`, one direct test per formal Build subject.
+not product modules and must not be imported by a Build file. Reusable,
+one-to-one direct tests may be staged during development under the auxiliary
+`python/Program-System/System-Testing/Testing-Cpu/` tree; they are ordinary
+test subjects, not acceptance evidence, and must load only the local Build
+path. After user approval and `ACCEPTED`, those tests may be adapted into the
+main repository's `Program-System/System-Testing/Testing-Cpu/` and registered
+in `Manifest-Testing-Hardware.py`, one direct test per formal Build subject.
 Family/parent differential harnesses remain traceability tools in the
 auxiliary repository unless separately approved as a stable test subject.
 

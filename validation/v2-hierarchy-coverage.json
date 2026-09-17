@@ -5,9 +5,9 @@
  "reference_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
  "locked_module_count": 1976,
  "status_counts": {
-  "CORE_BOUNDED_SUBJECT": 811,
+  "CORE_BOUNDED_SUBJECT": 818,
   "FAMILY_SUBJECT": 976,
-  "MISSING": 189
+  "MISSING": 182
  },
  "row_count": 1976,
  "rows": [
@@ -2227,13 +2227,15 @@
   },
   {
    "module": "CSRPermitModule",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 59,
    "children": 6,
    "scala_sources": [
     "xiangshan/backend/fu/NewCSR/CSRPermitModule.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "CSRPermitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -8941,13 +8943,15 @@
   },
   {
    "module": "IndirectCSRPermitModule",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 12,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/fu/NewCSR/CSRPermitModule.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "CSRPermitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -10416,13 +10420,15 @@
   },
   {
    "module": "MLevelPermitModule",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 25,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/fu/NewCSR/CSRPermitModule.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "CSRPermitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -16686,13 +16692,15 @@
   },
   {
    "module": "PrivilegePermitModule",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 6,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/fu/NewCSR/CSRPermitModule.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "CSRPermitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -19820,13 +19828,15 @@
   },
   {
    "module": "SLevelPermitModule",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 6,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/fu/NewCSR/CSRPermitModule.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "CSRPermitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -25392,13 +25402,15 @@
   },
   {
    "module": "VirtualLevelPermitModule",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 23,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/fu/NewCSR/CSRPermitModule.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "CSRPermitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -25887,13 +25899,15 @@
   },
   {
    "module": "XRetPermitModule",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 15,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/fu/NewCSR/CSRPermitModule.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "CSRPermitFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -28336,10 +28350,6 @@
  ],
  "missing_top_scala": [
   {
-   "scala": "xiangshan/backend/fu/NewCSR/CSRPermitModule.scala",
-   "modules": 7
-  },
-  {
    "scala": "jtag/JtagShifter.scala",
    "modules": 5
   },
@@ -28573,6 +28583,10 @@
   },
   {
    "scala": "xiangshan/cache/mmu/L2TlbPrefetch.scala",
+   "modules": 1
+  },
+  {
+   "scala": "xiangshan/mem/lsqueue/LoadMisalignBuffer.scala",
    "modules": 1
   }
  ]

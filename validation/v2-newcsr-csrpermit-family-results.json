@@ -1,0 +1,305 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_NEWCSR_CSRPERMIT_FAMILY",
+  "batch_id": "V2-NEWCSR-CSRPERMIT-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "scala_sources": [
+    "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/CSRPermitModule.scala"
+  ],
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.NewCSR.CSRPermit-Hardware.py",
+    "sha256": "d167a9d7270fffda0da4a851dda8c0814946ff72f9b81555f51363d37b44a5ab",
+    "line_count": 285
+  },
+  "coverage": {
+    "covered_module_count": 7,
+    "expected_module_count": 7,
+    "missing_modules": [],
+    "covered_modules": [
+      "CSRPermitModule",
+      "IndirectCSRPermitModule",
+      "MLevelPermitModule",
+      "PrivilegePermitModule",
+      "SLevelPermitModule",
+      "VirtualLevelPermitModule",
+      "XRetPermitModule"
+    ]
+  },
+  "port_surface": {
+    "status": "PASS",
+    "checked_module_count": 7,
+    "failures": [],
+    "modules": [
+      {
+        "module": "CSRPermitModule",
+        "locked_port_count": 59,
+        "emitted_port_count": 59,
+        "ports_match": true,
+        "deterministic": true,
+        "verilog_bytes": 1390812,
+        "verilog_sha256": "14ccf9ddf32aa80fac0b7b39870fb93f7a1ba839853837b7cf10e40913928f2a"
+      },
+      {
+        "module": "IndirectCSRPermitModule",
+        "locked_port_count": 12,
+        "emitted_port_count": 12,
+        "ports_match": true,
+        "deterministic": true,
+        "verilog_bytes": 26962,
+        "verilog_sha256": "a9a93f26c9a98a9d077537aca5977e878a8940a5f6edefe7b95ddc43b4878cda"
+      },
+      {
+        "module": "MLevelPermitModule",
+        "locked_port_count": 25,
+        "emitted_port_count": 25,
+        "ports_match": true,
+        "deterministic": true,
+        "verilog_bytes": 66460,
+        "verilog_sha256": "06a9c4da75ded313676e5fb2b9cad5548a42f1d7c648a8ed2382875c2475c2b0"
+      },
+      {
+        "module": "PrivilegePermitModule",
+        "locked_port_count": 6,
+        "emitted_port_count": 6,
+        "ports_match": true,
+        "deterministic": true,
+        "verilog_bytes": 28897,
+        "verilog_sha256": "53fb6ed0ab7f5548a446c4dcde7991c9f83d01a39835b8bdc09944b0488b73c9"
+      },
+      {
+        "module": "SLevelPermitModule",
+        "locked_port_count": 6,
+        "emitted_port_count": 6,
+        "ports_match": true,
+        "deterministic": true,
+        "verilog_bytes": 11200,
+        "verilog_sha256": "13e34c5b9e24fd473a9e2702f828c4b4cd2c9b6b2c15caffc963f5bcde86136a"
+      },
+      {
+        "module": "VirtualLevelPermitModule",
+        "locked_port_count": 23,
+        "emitted_port_count": 23,
+        "ports_match": true,
+        "deterministic": true,
+        "verilog_bytes": 39235,
+        "verilog_sha256": "fb1d9805323b0a7ecc1041b848f7e910cf546fa6f858868d1e56c7499e3c8dee"
+      },
+      {
+        "module": "XRetPermitModule",
+        "locked_port_count": 15,
+        "emitted_port_count": 15,
+        "ports_match": true,
+        "deterministic": true,
+        "verilog_bytes": 35163,
+        "verilog_sha256": "9f07355a1b4d222f4d6bf0133adfc8ea63057f8108e0d6ff5daccf1ec9d93480"
+      }
+    ]
+  },
+  "determinism": {
+    "status": "PASS",
+    "checked_module_count": 7
+  },
+  "tool_gates": {
+    "results": {
+      "CSRPermitModule": {
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-csrpermit/CSRPermitModule.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "work/v2-newcsr-csrpermit/CSRPermitModule.sv:6805:41: Operator LTE expects 12 bits on the RHS, but RHS's CONST '10'h256' generates 10 bits.\n                                                                                                                                                         : ... note: In instance 'CSRPermitModule'\n%Warning-WIDTHTRUNC: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-csrpermit/CSRPermitModule.sv:6818:20: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'io_in_privState_PRVM' generates 2 bits.\n                                                                                                                                                        : ... note: In instance 'CSRPermitModule'\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-csrpermit/CSRPermitModule.sv:6820:41: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                         : ... note: In instance 'CSRPermitModule'\n",
+          "output_sha256": "96aa882de409a09fc9e94f9d643b75164258b356c3f0f68b8ef3cb026581f897"
+        },
+        "yosys": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-csrpermit/CSRPermitModule.sv; hierarchy -top CSRPermitModule; proc; check"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "total of 0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module CSRPermitModule.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module CSRPermitModule...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 3a599cf345, CPU: user 0.28s system 0.03s, MEM: 61.90 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 85% 2x read_verilog (0 sec), 4% 1x opt_expr (0 sec), ...\n",
+          "output_sha256": "e77c7cd1cdb60428e831a047c06620c47749f1166c6181cd01b512d6df5d26ed"
+        }
+      },
+      "IndirectCSRPermitModule": {
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-csrpermit/IndirectCSRPermitModule.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": ":137:39: Operator EQ expects 12 bits on the RHS, but RHS's CONST '10'h250' generates 10 bits.\n                                                                                                                                                                : ... note: In instance 'IndirectCSRPermitModule'\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-csrpermit/IndirectCSRPermitModule.sv:138:39: Operator GTE expects 12 bits on the RHS, but RHS's CONST '10'h251' generates 10 bits.\n                                                                                                                                                                : ... note: In instance 'IndirectCSRPermitModule'\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-csrpermit/IndirectCSRPermitModule.sv:139:39: Operator LTE expects 12 bits on the RHS, but RHS's CONST '10'h256' generates 10 bits.\n                                                                                                                                                                : ... note: In instance 'IndirectCSRPermitModule'\n",
+          "output_sha256": "6289b4edbe95cd68f5fc6fdc026aaee01f8b1b27a3fafaabaacf33c794ed8db0"
+        },
+        "yosys": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-csrpermit/IndirectCSRPermitModule.sv; hierarchy -top IndirectCSRPermitModule; proc; check"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module IndirectCSRPermitModule.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module IndirectCSRPermitModule...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 8b3dcee54f, CPU: user 0.00s system 0.01s, MEM: 11.72 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 75% 2x read_verilog (0 sec), 8% 1x opt_expr (0 sec), ...\n",
+          "output_sha256": "0a72ba19640bb8e83b0973308d33718e7f5de46fe56ea0b4abe83d176dafc48e"
+        }
+      },
+      "MLevelPermitModule": {
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-csrpermit/MLevelPermitModule.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "dation/.work/v2-newcsr-csrpermit/MLevelPermitModule.sv:336:40: Operator EQ expects 12 bits on the RHS, but RHS's CONST '4'h9' generates 4 bits.\n                                                                                                                                                           : ... note: In instance 'MLevelPermitModule'\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-csrpermit/MLevelPermitModule.sv:338:40: Operator EQ expects 12 bits on the RHS, but RHS's CONST '4'ha' generates 4 bits.\n                                                                                                                                                           : ... note: In instance 'MLevelPermitModule'\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-csrpermit/MLevelPermitModule.sv:340:40: Operator EQ expects 12 bits on the RHS, but RHS's CONST '4'hf' generates 4 bits.\n                                                                                                                                                           : ... note: In instance 'MLevelPermitModule'\n",
+          "output_sha256": "86d76cefb5def57efcad5a25ef7ad7b0f81d3fc35796eddda508731b85781cba"
+        },
+        "yosys": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-csrpermit/MLevelPermitModule.sv; hierarchy -top MLevelPermitModule; proc; check"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "of 0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module MLevelPermitModule.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module MLevelPermitModule...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: a5bb444076, CPU: user 0.01s system 0.01s, MEM: 12.97 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 84% 2x read_verilog (0 sec), 6% 1x opt_expr (0 sec), ...\n",
+          "output_sha256": "d301ca4066ed4869b4919958d88cf0fdf2dd77afb3ca512ae76adc32f9b69de1"
+        }
+      },
+      "PrivilegePermitModule": {
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-csrpermit/PrivilegePermitModule.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "ule.sv:131:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 2 bits.\n                                                                                                                                                             : ... note: In instance 'PrivilegePermitModule'\n%Warning-WIDTHTRUNC: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-csrpermit/PrivilegePermitModule.sv:144:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'io_in_privState_PRVM' generates 2 bits.\n                                                                                                                                                             : ... note: In instance 'PrivilegePermitModule'\n%Warning-WIDTHTRUNC: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-csrpermit/PrivilegePermitModule.sv:147:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 2 bits.\n                                                                                                                                                             : ... note: In instance 'PrivilegePermitModule'\n",
+          "output_sha256": "7b11fb31310f256f134c5be77d67c1cb95f39e30d34d8dbdaa640fc60696e197"
+        },
+        "yosys": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-csrpermit/PrivilegePermitModule.sv; hierarchy -top PrivilegePermitModule; proc; check"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "ead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module PrivilegePermitModule.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module PrivilegePermitModule...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: ce99b075ad, CPU: user 0.01s system 0.01s, MEM: 11.72 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 80% 2x read_verilog (0 sec), 7% 1x opt_expr (0 sec), ...\n",
+          "output_sha256": "6b319a9e6a89bc9b781c02024d3cf645111d74b612176f2e5bce2868c2ce0dae"
+        }
+      },
+      "SLevelPermitModule": {
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-csrpermit/SLevelPermitModule.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "          ... For warning description see https://verilator.org/warn/WIDTHTRUNC?v=5.032\n                     ... Use \"/* verilator lint_off WIDTHTRUNC */\" and lint_on around source to disable this message.\n%Warning-WIDTHTRUNC: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-csrpermit/SLevelPermitModule.sv:51:15: Operator ASSIGNW expects 1 bits on the Assign RHS, but Assign RHS's SHIFTR generates 32 bits.\n                                                                                                                                                         : ... note: In instance 'SLevelPermitModule'\n   51 |   assign \\$8  = io_in_xcounteren_scounteren >> io_in_csrAccess_addr[4:0];\n      |               ^\n%Warning-WIDTHTRUNC: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-csrpermit/SLevelPermitModule.sv:57:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'io_in_privState_PRVM' generates 2 bits.\n                                                                                                                                                         : ... note: In instance 'SLevelPermitModule'\n",
+          "output_sha256": "147abfe33bfb86ba7ebf1838aee8f5901ee630382a94c95ca7a050369c63919d"
+        },
+        "yosys": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-csrpermit/SLevelPermitModule.sv; hierarchy -top SLevelPermitModule; proc; check"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "f 0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module SLevelPermitModule.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module SLevelPermitModule...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: d02d0da8ef, CPU: user 0.00s system 0.02s, MEM: 11.09 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 74% 2x read_verilog (0 sec), 10% 1x opt_expr (0 sec), ...\n",
+          "output_sha256": "bf51ffe146d6fe7079cd3f15975fd7333d5f8e69ed711c0893b1ce9e53f2eecb"
+        }
+      },
+      "VirtualLevelPermitModule": {
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-csrpermit/VirtualLevelPermitModule.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "8: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'io_in_status_vgein' generates 6 bits.\n                                                                                                                                                                : ... note: In instance 'VirtualLevelPermitModule'\n  208 |   assign \\$22  = ! (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Fu.NewCSR.CSRPermit-Hardware.py:207\" *) io_in_status_vgein;\n      |                  ^\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-csrpermit/VirtualLevelPermitModule.sv:214:39: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                                 : ... note: In instance 'VirtualLevelPermitModule'\n",
+          "output_sha256": "914e3e51fafa12363bea31275e42236e7566f7dc8431a4ba10cf1104ea9c0e23"
+        },
+        "yosys": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-csrpermit/VirtualLevelPermitModule.sv; hierarchy -top VirtualLevelPermitModule; proc; check"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "ses.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module VirtualLevelPermitModule.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module VirtualLevelPermitModule...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 3706641aed, CPU: user 0.01s system 0.01s, MEM: 12.19 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 79% 2x read_verilog (0 sec), 7% 1x opt_expr (0 sec), ...\n",
+          "output_sha256": "49e212b0a6beeb9e5826e5a7051e42a5d97d59e80358fa0ded6fd7bcc3ae9e22"
+        }
+      },
+      "XRetPermitModule": {
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-csrpermit/XRetPermitModule.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "n/.work/v2-newcsr-csrpermit/XRetPermitModule.sv:162:39: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                         : ... note: In instance 'XRetPermitModule'\n%Warning-WIDTHTRUNC: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-csrpermit/XRetPermitModule.sv:172:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'io_in_privState_PRVM' generates 2 bits.\n                                                                                                                                                        : ... note: In instance 'XRetPermitModule'\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-csrpermit/XRetPermitModule.sv:174:39: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                         : ... note: In instance 'XRetPermitModule'\n",
+          "output_sha256": "84c2fe7abb4b1ae2860ad4f886dad2a197c9728a5e1595ad22eb2af8f63360db"
+        },
+        "yosys": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-csrpermit/XRetPermitModule.sv; hierarchy -top XRetPermitModule; proc; check"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "tal of 0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module XRetPermitModule.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module XRetPermitModule...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 143971ba36, CPU: user 0.02s system 0.00s, MEM: 11.88 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 82% 2x read_verilog (0 sec), 7% 1x opt_expr (0 sec), ...\n",
+          "output_sha256": "278eab604b9e14abbce171653ee3f9b080ac829734913fd87292f3c23e8787b0"
+        }
+      }
+    }
+  },
+  "gates": {
+    "COVERAGE_COMPLETE": "PASS",
+    "PORT_SURFACE_MATCHED": "PASS",
+    "DETERMINISTIC_VERILOG": "PASS",
+    "PY_COMPILE": "PASS",
+    "PYRIGHT": "PASS",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "V2_LOCKED_REFERENCE_IMMUTABLE": "PASS",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "STRUCTURE_VERIFIED",
+  "acceptance_eligible": false,
+  "unclosed": [
+    "No complete CSR parent behavioral differential is established.",
+    "Parent closure, license review and user approval remain pending."
+  ]
+}
