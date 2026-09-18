@@ -5,9 +5,9 @@
  "reference_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
  "locked_module_count": 1976,
  "status_counts": {
-  "CORE_BOUNDED_SUBJECT": 834,
+  "CORE_BOUNDED_SUBJECT": 844,
   "FAMILY_SUBJECT": 981,
-  "MISSING": 161
+  "MISSING": 151
  },
  "row_count": 1976,
  "rows": [
@@ -12376,25 +12376,29 @@
   },
   {
    "module": "NewAgeDetector",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 8,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/issue/NewAgeDetector.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "AgeRegcacheFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "NewAgeDetector_6",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 6,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/issue/NewAgeDetector.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "AgeRegcacheFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -19234,97 +19238,113 @@
   },
   {
    "module": "RegCacheAgeDetector",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 126,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/regcache/AgeDetector.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "AgeRegcacheFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "RegCacheAgeDetector_1",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 71,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/regcache/AgeDetector.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "AgeRegcacheFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "RegCacheAgeTimer",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 192,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/regcache/RegCacheAgeTimer.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "AgeRegcacheFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "RegCacheAgeTimer_1",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 132,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/regcache/RegCacheAgeTimer.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "AgeRegcacheFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "RegCacheDataModule",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 99,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/regcache/RegCacheDataModule.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "AgeRegcacheFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "RegCacheDataModule_1",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 92,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/regcache/RegCacheDataModule.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "AgeRegcacheFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "RegCacheTagModule",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 170,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/regcache/RegCacheTagModule.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "AgeRegcacheFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "RegCacheTagModule_1",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 131,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/regcache/RegCacheTagModule.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "AgeRegcacheFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -28452,27 +28472,7 @@
    "modules": 2
   },
   {
-   "scala": "xiangshan/backend/issue/NewAgeDetector.scala",
-   "modules": 2
-  },
-  {
    "scala": "utils/OverrideableQueue.scala",
-   "modules": 2
-  },
-  {
-   "scala": "xiangshan/backend/regcache/AgeDetector.scala",
-   "modules": 2
-  },
-  {
-   "scala": "xiangshan/backend/regcache/RegCacheAgeTimer.scala",
-   "modules": 2
-  },
-  {
-   "scala": "xiangshan/backend/regcache/RegCacheDataModule.scala",
-   "modules": 2
-  },
-  {
-   "scala": "xiangshan/backend/regcache/RegCacheTagModule.scala",
    "modules": 2
   },
   {
@@ -28629,6 +28629,26 @@
   },
   {
    "scala": "xiangshan/backend/fu/NewCSR/PMAEntryModule.scala",
+   "modules": 1
+  },
+  {
+   "scala": "xiangshan/backend/fu/NewCSR/PMPEntryModule.scala",
+   "modules": 1
+  },
+  {
+   "scala": "xiangshan/backend/PipeGroupConnect.scala",
+   "modules": 1
+  },
+  {
+   "scala": "xiangshan/mem/prefetch/PrefetcherMonitor.scala",
+   "modules": 1
+  },
+  {
+   "scala": "xiangshan/cache/dcache/mainpipe/Probe.scala",
+   "modules": 1
+  },
+  {
+   "scala": "xiangshan/frontend/newRAS.scala",
    "modules": 1
   }
  ]

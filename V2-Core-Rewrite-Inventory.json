@@ -9,16 +9,16 @@
  "scan_counts": {
   "xiangshan_scala_files": 325,
   "existing_candidate_entries": 47,
-  "retained_build_files": 50,
+  "retained_build_files": 51,
   "retired_or_excluded": 1,
-  "planned_core_build_files": 50,
-  "families": 39,
+  "planned_core_build_files": 51,
+  "families": 40,
   "parent_closures": 4
  },
  "classification_counts": {
   "EXACT": 12,
   "MOVED": 4,
-  "REWRITTEN": 22,
+  "REWRITTEN": 23,
   "SPLIT": 6,
   "RETIRED": 1
  },
@@ -869,12 +869,31 @@
     "upstream/src/main/scala/xiangshan/cache/dcache/meta/AsynchronousMetaArray.scala",
     "validation/v2-dcache-metaarray-family-results.json"
    ]
+  },
+  {
+   "id": "AgeRegcacheFamily",
+   "source_scala": [
+    "scala/src/main/scala/xiangshan/backend/issue/NewAgeDetector.scala",
+    "scala/src/main/scala/xiangshan/backend/regcache/AgeDetector.scala",
+    "scala/src/main/scala/xiangshan/backend/regcache/RegCacheAgeTimer.scala",
+    "scala/src/main/scala/xiangshan/backend/regcache/RegCacheDataModule.scala",
+    "scala/src/main/scala/xiangshan/backend/regcache/RegCacheTagModule.scala"
+   ],
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Regcache.AgeFamily-Hardware.py",
+   "family_id": "core.backend.regcache.age",
+   "closure_root": "core.backend.regcache",
+   "classification": "REWRITTEN",
+   "disposition": "STRUCTURE_VERIFIED_DIRECT_BOUNDED",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "validation/v2-age-family-results.json"
+   ]
   }
 ],
  "status": "IMPLEMENTATION_WAVES_VALIDATED_BOUNDED_HIERARCHY_WAVE1",
  "acceptance_eligible": false,
   "entries_status_counts": {
-  "VALIDATOR_PASS_BOUNDED": 51,
+  "VALIDATOR_PASS_BOUNDED": 52,
   "STRUCTURE_VERIFIED_DIRECT_PASS_BOUNDED": 2,
   "STRUCTURE_VERIFIED_DIRECT_PARTIAL": 1,
    "STRUCTURE_VERIFIED": 2,

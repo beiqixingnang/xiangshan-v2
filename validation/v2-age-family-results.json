@@ -1,0 +1,407 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_AGE_REGCACHE_FAMILY",
+  "batch_id": "V2-BACKEND-AGE-REGCACHE-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "scala_sources": [
+    "upstream/src/main/scala/xiangshan/backend/issue/NewAgeDetector.scala",
+    "upstream/src/main/scala/xiangshan/backend/regcache/AgeDetector.scala",
+    "upstream/src/main/scala/xiangshan/backend/regcache/RegCacheAgeTimer.scala",
+    "upstream/src/main/scala/xiangshan/backend/regcache/RegCacheDataModule.scala",
+    "upstream/src/main/scala/xiangshan/backend/regcache/RegCacheTagModule.scala"
+  ],
+  "covered_modules": [
+    "NewAgeDetector",
+    "NewAgeDetector_6",
+    "RegCacheAgeDetector",
+    "RegCacheAgeDetector_1",
+    "RegCacheAgeTimer",
+    "RegCacheAgeTimer_1",
+    "RegCacheDataModule",
+    "RegCacheDataModule_1",
+    "RegCacheTagModule",
+    "RegCacheTagModule_1"
+  ],
+  "port_surface": {
+    "NewAgeDetector": {
+      "locked": 8,
+      "emitted": 8,
+      "match": true
+    },
+    "NewAgeDetector_6": {
+      "locked": 6,
+      "emitted": 6,
+      "match": true
+    },
+    "RegCacheAgeDetector": {
+      "locked": 126,
+      "emitted": 126,
+      "match": true
+    },
+    "RegCacheAgeDetector_1": {
+      "locked": 71,
+      "emitted": 71,
+      "match": true
+    },
+    "RegCacheAgeTimer": {
+      "locked": 192,
+      "emitted": 192,
+      "match": true
+    },
+    "RegCacheAgeTimer_1": {
+      "locked": 132,
+      "emitted": 132,
+      "match": true
+    },
+    "RegCacheDataModule": {
+      "locked": 99,
+      "emitted": 99,
+      "match": true
+    },
+    "RegCacheDataModule_1": {
+      "locked": 92,
+      "emitted": 92,
+      "match": true
+    },
+    "RegCacheTagModule": {
+      "locked": 170,
+      "emitted": 170,
+      "match": true
+    },
+    "RegCacheTagModule_1": {
+      "locked": 131,
+      "emitted": 131,
+      "match": true
+    }
+  },
+  "direct": {
+    "status": "PASS",
+    "members": [
+      {
+        "member": "NewAgeDetector",
+        "vectors": 1,
+        "observations": [
+          1
+        ]
+      },
+      {
+        "member": "NewAgeDetector_6",
+        "vectors": 1,
+        "observations": [
+          1
+        ]
+      }
+    ],
+    "remaining_members": [
+      "RegCacheAgeDetector",
+      "RegCacheAgeDetector_1",
+      "RegCacheAgeTimer",
+      "RegCacheAgeTimer_1",
+      "RegCacheDataModule",
+      "RegCacheDataModule_1",
+      "RegCacheTagModule",
+      "RegCacheTagModule_1"
+    ]
+  },
+  "tool_gates": {
+    "NewAgeDetector": {
+      "rtl_bytes": 778,
+      "rtl_sha256": "333e4f90d26c3336583db61f4fcd9f257f4e2ce28a580f710d46f135ab425474",
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-age-family/NewAgeDetector.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.017 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.021 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.148 MB\n",
+        "output_sha256": "046d046ac8555c56635770eb048496390f50dcf39d58bfc535b57b782f37ce3b"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-age-family/NewAgeDetector.sv; hierarchy -top NewAgeDetector; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "ass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module NewAgeDetector.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module NewAgeDetector...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 2981777c21, CPU: user 0.01s system 0.00s, MEM: 10.94 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 56% 2x read_verilog (0 sec), 22% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "147e54b03deafb495ba198f126b9c27a0e6bce3d967381184c57674b7badedc4"
+      }
+    },
+    "NewAgeDetector_6": {
+      "rtl_bytes": 555,
+      "rtl_sha256": "71fff9e583fd17d9916209643c656548a851a87b39bcbf2b6569171bee0fdb01",
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-age-family/NewAgeDetector_6.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.017 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.019 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.004 s on 1 threads; alloced 9.141 MB\n",
+        "output_sha256": "6846525122370e691eadb1ed5686e69beb65fbc7b2d45ad0d809c4c00531e215"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-age-family/NewAgeDetector_6.sv; hierarchy -top NewAgeDetector_6; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "(extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module NewAgeDetector_6.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module NewAgeDetector_6...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 5ccc177b67, CPU: user 0.00s system 0.01s, MEM: 10.94 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 43% 2x read_verilog (0 sec), 26% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "a0c937f155dbdc2f359918d7ec7d8bdfcfba194aa32590d606e01a57cad0410f"
+      }
+    },
+    "RegCacheAgeDetector": {
+      "rtl_bytes": 8415,
+      "rtl_sha256": "7872ff33529b90306e27e5be90a5e3993c9d68d9662f5656516cedc94923922e",
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-age-family/RegCacheAgeDetector.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.028 MB sources in 2 modules, into 0.010 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.023 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.453 MB\n",
+        "output_sha256": "af4ad38ea5652b506fae6ff1fd2407895b293ac780d1edb4964df133ba38ac6e"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-age-family/RegCacheAgeDetector.sv; hierarchy -top RegCacheAgeDetector; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "ct init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RegCacheAgeDetector.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module RegCacheAgeDetector...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: bd4d7f60d3, CPU: user 0.01s system 0.00s, MEM: 10.47 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 57% 2x read_verilog (0 sec), 13% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "4a5a2f9cb38ec62236fa489ec10a8d00e8ea5ec29b2e9d4b92106a19b5268d3c"
+      }
+    },
+    "RegCacheAgeDetector_1": {
+      "rtl_bytes": 4724,
+      "rtl_sha256": "b8a054b0a54a647bffece6f115002024d722e87963eeef4bae2b33e78d80d122",
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-age-family/RegCacheAgeDetector_1.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.025 MB sources in 2 modules, into 0.010 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.023 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.277 MB\n",
+        "output_sha256": "178044e83cc284e9211fd7816f8363f9e6031d52cc67eb2a2f08ccf15ef59c65"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-age-family/RegCacheAgeDetector_1.sv; hierarchy -top RegCacheAgeDetector_1; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "nit attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RegCacheAgeDetector_1.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module RegCacheAgeDetector_1...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 57eef02e65, CPU: user 0.00s system 0.01s, MEM: 10.62 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 66% 2x read_verilog (0 sec), 16% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "f966d419852290a7f30de9264ff9a80be49cefae5fdf03d800296511df28ccfe"
+      }
+    },
+    "RegCacheAgeTimer": {
+      "rtl_bytes": 17712,
+      "rtl_sha256": "ff5ead85dd3b73c3a496aaa838f0fa9b5df499b2f9014d0eb83842080bacbcb8",
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-age-family/RegCacheAgeTimer.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.037 MB sources in 2 modules, into 0.013 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.022 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.009 s on 1 threads; alloced 9.949 MB\n",
+        "output_sha256": "c1f0c797385b93f79a26d91be200d35e651f33c83fe15343dd77ff2abb31985a"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-age-family/RegCacheAgeTimer.sv; hierarchy -top RegCacheAgeTimer; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": " (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RegCacheAgeTimer.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module RegCacheAgeTimer...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: c1fd684ee5, CPU: user 0.02s system 0.00s, MEM: 11.09 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 77% 2x read_verilog (0 sec), 7% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "1a521bb77ec59bf0edfead50feafe72e26d94a984901c884c4606e12400b6d4b"
+      }
+    },
+    "RegCacheAgeTimer_1": {
+      "rtl_bytes": 11820,
+      "rtl_sha256": "da8344e560383aac6b16d7ed3ced9b2a67fe4dbfb177945ddfc2f91d6055516e",
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-age-family/RegCacheAgeTimer_1.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.032 MB sources in 2 modules, into 0.012 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.023 s (elab=0.001, cvt=0.002, bld=0.000); cpu 0.007 s on 1 threads; alloced 9.641 MB\n",
+        "output_sha256": "6e7f094ace3b0209afbe8d10613a8181e7aa8b1a738e6b1778768276ce1fb963"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-age-family/RegCacheAgeTimer_1.sv; hierarchy -top RegCacheAgeTimer_1; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "ract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RegCacheAgeTimer_1.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module RegCacheAgeTimer_1...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: bf909b6950, CPU: user 0.01s system 0.01s, MEM: 11.09 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 74% 2x read_verilog (0 sec), 11% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "b1c91f97ff266361643f6ab580bced861d6b35e9c645640b982116076b3ab43b"
+      }
+    },
+    "RegCacheDataModule": {
+      "rtl_bytes": 10153,
+      "rtl_sha256": "bb1e5b9a96eefd429c63d0d56bfc7ee54104104c53ea52d769e8b9cc5f371482",
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-age-family/RegCacheDataModule.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.030 MB sources in 2 modules, into 0.011 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.021 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.512 MB\n",
+        "output_sha256": "a4f2f17b68ad04ef8c036fe3b698fb990ca5ee683b775d19b401b54b4bf8d746"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-age-family/RegCacheDataModule.sv; hierarchy -top RegCacheDataModule; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "ract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RegCacheDataModule.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module RegCacheDataModule...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 168644948c, CPU: user 0.01s system 0.01s, MEM: 11.09 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 65% 2x read_verilog (0 sec), 10% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "27ffa3c498d9f7c8cc14b773b633b3cecd3fce35dec77690272457e5edd6a96a"
+      }
+    },
+    "RegCacheDataModule_1": {
+      "rtl_bytes": 9489,
+      "rtl_sha256": "16bcd212d02bc0eb2e2648b2966e060160c8508b8aaef0d0f4ab19cc6b488431",
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-age-family/RegCacheDataModule_1.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.030 MB sources in 2 modules, into 0.011 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.019 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.359 MB\n",
+        "output_sha256": "124e2dfcd6e587a5423df7f50827a64a5efba8f571ead75914fa4ca05bbb40cf"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-age-family/RegCacheDataModule_1.sv; hierarchy -top RegCacheDataModule_1; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": " init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RegCacheDataModule_1.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module RegCacheDataModule_1...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: b4218c9bdb, CPU: user 0.01s system 0.00s, MEM: 11.25 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 66% 2x read_verilog (0 sec), 12% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "03eb28f476b83ffdb34fe60f14188c09b59be8c1dacc3888182a979ec3a7b752"
+      }
+    },
+    "RegCacheTagModule": {
+      "rtl_bytes": 19063,
+      "rtl_sha256": "e268f1e006760aad5dbc1bdf02dbf2ed478cbc060f9d140082101f6f23cf29da",
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-age-family/RegCacheTagModule.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.039 MB sources in 2 modules, into 0.014 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.025 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.008 s on 1 threads; alloced 9.953 MB\n",
+        "output_sha256": "34b8b671c5c2c84978b0078798fd48d13ed74e900a2153c956d43ad2e31415a6"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-age-family/RegCacheTagModule.sv; hierarchy -top RegCacheTagModule; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RegCacheTagModule.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module RegCacheTagModule...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: f645eef733, CPU: user 0.01s system 0.01s, MEM: 11.72 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 80% 2x read_verilog (0 sec), 7% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "85a1308d36ce57fbbf8dcbb611f2cb6c7c761a509951eb1a650a6c030c427a88"
+      }
+    },
+    "RegCacheTagModule_1": {
+      "rtl_bytes": 14378,
+      "rtl_sha256": "9c181c56b6ffb52a1b3eb614d5bf728f12f914877344111834b47a9d6f80d23d",
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-age-family/RegCacheTagModule_1.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.034 MB sources in 2 modules, into 0.013 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.022 s (elab=0.001, cvt=0.002, bld=0.000); cpu 0.007 s on 1 threads; alloced 9.621 MB\n",
+        "output_sha256": "86faa5b47fec6a29adce7576fc63d15c321e06bee3f56757d8ebd0b5089d309f"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-age-family/RegCacheTagModule_1.sv; hierarchy -top RegCacheTagModule_1; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "act init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RegCacheTagModule_1.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module RegCacheTagModule_1...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: c26f35b925, CPU: user 0.01s system 0.00s, MEM: 11.25 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 79% 2x read_verilog (0 sec), 8% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "5f00251b4203c7613aed93526b1ff5d4a449c2fe2f46a4056db7244112c88bcb"
+      }
+    }
+  },
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS_BOUNDED_NEW_AGE_ONLY",
+    "V2_REFERENCE_MATCHED": "PENDING_LOCKED_REGCACHE_DIFF",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "UHSC_LOCALIZED": "PASS_BOUNDED_FAMILY_LOCAL_NAME",
+    "PARENT_CLOSURE_MATCHED": "PENDING",
+    "LICENSE_REVIEW": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "VALIDATOR_PASS_BOUNDED",
+  "acceptance_eligible": false,
+  "failures": [],
+  "unclosed": [
+    "Full RegCache parent and locked XSTop differential remain pending.",
+    "AgeTimer/Data/Tag direct behavior vectors remain to be expanded.",
+    "License review and user approval remain pending."
+  ]
+}
