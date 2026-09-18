@@ -164,6 +164,17 @@ NEW = [
         "v2_status": "VALIDATOR_PASS_BOUNDED",
         "reference_surface": ["validation/v2-residual-leaf-family-results.json"],
     },
+    {
+        "id": "UtilityResidualFamily",
+        "source_scala": ["upstream/rocket-chip/src/main/scala/util", "upstream/rocket-chip/src/main/scala/jtag", "upstream/src/main/scala/utils", "upstream/yunsuan/src/main/scala"],
+        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Utility.ResidualFamily-Hardware.py",
+        "family_id": "dependency.utility.residual",
+        "closure_root": "dependency.utility",
+        "classification": "REWRITTEN_STRUCTURAL_BOUNDED",
+        "disposition": "STRUCTURE_VERIFIED_SOURCE_SPLIT_PENDING",
+        "v2_status": "VALIDATOR_PASS_BOUNDED",
+        "reference_surface": ["validation/v2-utility-residual-family-results.json"],
+    },
 ]
 
 data = json.loads(PATH.read_text(encoding="utf-8"))
