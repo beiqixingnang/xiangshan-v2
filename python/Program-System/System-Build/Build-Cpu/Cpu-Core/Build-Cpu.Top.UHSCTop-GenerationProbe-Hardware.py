@@ -14,7 +14,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Iterable, Mapping
 
-from amaranth import Elaboratable, Module, Signal
+from amaranth import Const, Elaboratable, Module, Signal
 from amaranth.back import verilog
 
 
@@ -311,12 +311,19 @@ class UHSCTop(Elaboratable):
         expected_children = ("frontend", "backend", "mem_block", "coupled_l2")
         bound_children = tuple(name for name, child in children.items() if child is not None)
         missing_children = sum(name not in bound_children for name in expected_children)
+        root_missing = Const(0, 1)
+        root_missing_count = Const(0, 8)
+        for child in self.root_children:
+            child_missing = getattr(child, "closure_missing", None)
+            if child_missing is not None:
+                root_missing = root_missing | child_missing
+                root_missing_count = root_missing_count + child_missing
         inventory_complete = len(self.full_port_specs) == 204
-        closure_done = (missing_children == 0) & inventory_complete
+        closure_done = (missing_children == 0) & ~root_missing & inventory_complete
         m.d.comb += [
             self.mem_d_ready.eq(0),
             self.closure_missing.eq(~closure_done),
-            self.closure_missing_count.eq(missing_children + int(not inventory_complete)),
+            self.closure_missing_count.eq(missing_children + root_missing_count + int(not inventory_complete)),
             self.closure_complete.eq(closure_done),
         ]
         for signal in self.full_inventory_outputs:
