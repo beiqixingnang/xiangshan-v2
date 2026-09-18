@@ -11,6 +11,7 @@ import hashlib
 import importlib.util
 import json
 import re
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -147,8 +148,9 @@ def static_gate() -> dict[str, Any]:
 
 
 def pyright_gate() -> dict[str, Any]:
+    executable = "pyright.cmd" if shutil.which("pyright.cmd") else "pyright"
     command = [
-        "pyright.cmd", "--outputjson",
+        executable, "--outputjson",
         str(BUILD.relative_to(ROOT)), str(TEST.relative_to(ROOT)),
     ]
     result = subprocess.run(command, cwd=ROOT, capture_output=True, text=True,
