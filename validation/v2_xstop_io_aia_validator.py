@@ -55,7 +55,7 @@ def main() -> int:
         module.imsic_axi4_reference_step(2, 2, 0, write_word=4, write_data=2, irq_sources=8),
         module.imsic_axi4_reference_step(0, 2, 0, write_word=5, write_data=2, irq_sources=8),
     ]
-    pyright_proc = run(["pyright", str(TARGET), str(TEST), str(Path(__file__))])
+    pyright_proc = run(["pyright.cmd", str(TARGET), str(TEST), str(Path(__file__))])
     direct = run([sys.executable, str(TEST)])
     rtl = module.build_verilog({"module": "UHSCAIAImsicAXI4"}, {})
     with tempfile.TemporaryDirectory(prefix="v2_xstop_aia_") as directory:
@@ -103,7 +103,7 @@ def main() -> int:
         "backend": backend,
         "commands": {
             "py_compile": ["python", "-m", "py_compile", str(TARGET), str(TEST), str(Path(__file__))],
-            "pyright": ["pyright", str(TARGET), str(TEST), str(Path(__file__))],
+            "pyright": ["pyright.cmd", str(TARGET), str(TEST), str(Path(__file__))],
             "build_verilog": "build_verilog({module: UHSCAIAImsicAXI4})",
             "system_testing": [sys.executable, str(TEST)],
             "verilator": "verilator --lint-only -Wno-fatal UHSCAIAImsicAXI4.sv",

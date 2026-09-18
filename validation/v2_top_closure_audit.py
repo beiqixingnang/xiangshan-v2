@@ -369,11 +369,12 @@ def main() -> int:
                 "available_evidence": [
                     "validation/v2-coupledL2-tl2tl-parent-results.json",
                     "validation/v2-top-l2top-tl2tl-results.json",
+                    "validation/v2-top-l2top-tl-children-results.json",
                     "validation/v2-rocket-protocol-family-results.json",
                     "validation/v2-chisel-decoupled-family-results.json",
                     "validation/v2-chisel-arbiter-family-results.json",
                 ],
-                "blocker": "441-port L2Top bridge and selected TL2TL parent are bounded and tool-clean; exact TLXbar/TLBuffer/merger instances and full MSHR/SRAM/prefetch/diplomacy behavior remain pending",
+                "blocker": "441-port L2Top bridge, selected TL2TL parent, and 11 exact TL child families are bounded and tool-clean; full MSHR/SRAM/prefetch/diplomacy parent behavior remains pending",
             },
             {
                 "id": "TOP-XSTILE-INTBUFFER-004",
@@ -402,6 +403,7 @@ def main() -> int:
                     "validation/v2-chisel-aia-interface-family-results.json",
                     "validation/v2-chisel-arbiter-family-results.json",
                     "validation/v2-huancun-cache-family-results.json",
+                    "validation/v2-top-xstop-io-aia-results.json",
                 ],
                 "blocker": "UHSC naming manifest is still PLANNED/non-atomic and AIA explicitly defers TL/AXI/multi-hart wrapper closure",
             },
