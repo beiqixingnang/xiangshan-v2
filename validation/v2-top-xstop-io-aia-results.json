@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_TOP_XSTOP_UHSC_IO_AIA",
+  "task_id": "TOP-XSTOP-UHSC-IO-005",
+  "batch_id": "V2-TOP-IO-AIA-002",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "locked_reference": {
+    "inventory": "validation/v2-xstop-port-inventory.json",
+    "port_count": 40,
+    "ports": [
+      "imsic_axi4_araddr",
+      "imsic_axi4_arburst",
+      "imsic_axi4_arcache",
+      "imsic_axi4_arid",
+      "imsic_axi4_arlen",
+      "imsic_axi4_arlock",
+      "imsic_axi4_arprot",
+      "imsic_axi4_arqos",
+      "imsic_axi4_arready",
+      "imsic_axi4_arsize",
+      "imsic_axi4_arvalid",
+      "imsic_axi4_awaddr",
+      "imsic_axi4_awburst",
+      "imsic_axi4_awcache",
+      "imsic_axi4_awid",
+      "imsic_axi4_awlen",
+      "imsic_axi4_awlock",
+      "imsic_axi4_awprot",
+      "imsic_axi4_awqos",
+      "imsic_axi4_awready",
+      "imsic_axi4_awsize",
+      "imsic_axi4_awvalid",
+      "imsic_axi4_bid",
+      "imsic_axi4_bready",
+      "imsic_axi4_bresp",
+      "imsic_axi4_bvalid",
+      "imsic_axi4_rdata",
+      "imsic_axi4_rid",
+      "imsic_axi4_rlast",
+      "imsic_axi4_rready",
+      "imsic_axi4_rresp",
+      "imsic_axi4_rvalid",
+      "imsic_axi4_wdata",
+      "imsic_axi4_wlast",
+      "imsic_axi4_wready",
+      "imsic_axi4_wstrb",
+      "imsic_axi4_wvalid",
+      "io_clock",
+      "io_extIntrs",
+      "io_reset"
+    ]
+  },
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.ChiselAIA.Interface-Hardware.py",
+    "sha256": "f86424d8ca581b6821c4d26e1910bfb176ffadd17327203eab036a5d01a971d2"
+  },
+  "direct": {
+    "status": "PASS",
+    "vectors": [
+      {
+        "pending": 2,
+        "enable": 0,
+        "active": 0,
+        "interrupt": 0,
+        "read_data": 0
+      },
+      {
+        "pending": 0,
+        "enable": 2,
+        "active": 0,
+        "interrupt": 0,
+        "read_data": 0
+      },
+      {
+        "pending": 2,
+        "enable": 2,
+        "active": 2,
+        "interrupt": 1,
+        "read_data": 2
+      }
+    ],
+    "command": [
+      "C:\\Program Files\\Python313\\python.exe",
+      "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu.Dependency.ChiselAIA.Interface-Hardware.py"
+    ]
+  },
+  "backend": {
+    "verilator": "PASS",
+    "yosys": "PASS",
+    "rtl_bytes": 318105,
+    "rtl_sha256": "8cb8627f9cdc6c9c6a8d2da9327aec39a42d8ed493fc6f8e9255a4b6b6cf4be0"
+  },
+  "gates": {
+    "PY_COMPILE": "PASS",
+    "PYRIGHT": "PASS_BOUNDED_TARGET",
+    "BUILD_VERILOG": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "LOCKED_XSTOP_PORT_SURFACE": "PASS",
+    "PARENT_CLOSURE_MATCHED": "PENDING_XSTOP_AIA_PARENT",
+    "LICENSE_REVIEW": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "VALIDATOR_PASS_BOUNDED",
+  "acceptance_eligible": false,
+  "failures": [],
+  "unclosed": [
+    "Full XSTop/UHSCTop AIA parent wiring and locked behavioral differential remain pending.",
+    "TL/AXI burst ordering, multi-hart/TEE routing, license review, and user approval remain pending."
+  ]
+}
