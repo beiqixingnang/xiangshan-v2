@@ -1088,7 +1088,10 @@ def alu_result(func, src1, src2):
     s2 = cast(Any, src2)
     shamt = s2[0:6]
     rev_shamt = (~s2[0:6] + Const(1, 6))[0:6]
-    sll_mask = Cat(Mux(f[0:1], Const(0xffffffff, 32), Const(0, 32)), Const(0xffffffff, 32))
+    # Chisel Cat places its first argument at the MSB, whereas Amaranth Cat
+    # places its first argument at the LSB.  Keep the low 32 bits all-ones and
+    # select the upper 32-bit half exactly as Alu.scala does.
+    sll_mask = Cat(Const(0xffffffff, 32), Mux(f[0:1], Const(0xffffffff, 32), Const(0, 32)))
     sll_src = sll_mask & s1
     sll = sll_src << shamt
     rev_sll = sll_src << rev_shamt
@@ -1104,7 +1107,11 @@ def alu_result(func, src1, src2):
     ror = srl | rev_sll
     # addw path. / addw 路径。
     srcw = Mux(~f[2:3] & f[0:1], Mux(f[1:2], _sext(s2[0:12], 64), _zext(s1[0:1], 64)), _zext(s1[0:32], 64))
-    addw_raw = (srcw + s2[0:32])[0:32]
+    # AddModule.addw uses the same second operand as the full-width adder;
+    # lui32addw therefore must use the shifted ``add_b`` (src2[63:12]<<12),
+    # not the unshifted low word.
+    addw_src2 = Mux(f[0:4] == Const(0b0011, 4), Cat(Const(0, 12), s2[12:32]), s2[0:32])
+    addw_raw = (srcw + addw_src2)[0:32]
     addw_all = (
         _zext(addw_raw[0:1], 64),
         _zext(addw_raw[0:8], 64),
@@ -1117,7 +1124,8 @@ def alu_result(func, src1, src2):
     addw = Mux(f[2:3] & ~f[1:2] & ~f[0:1], addw_all[0], addw)
     addw = Mux(f[2:3] & ~f[1:2] & f[0:1], addw_all[1], addw)
     addw = Mux(~f[2:3], _zext(addw_raw, 64), addw)
-    sub65 = cast(Any, Cat(Const(0, 1), s1)) + cast(Any, Cat(Const(0, 1), ~s2)) + Const(1, 65)
+    # Scala's ``Cat(0.U, src)`` is {0,src}; Amaranth's Cat is LSB-first.
+    sub65 = cast(Any, Cat(s1, Const(0, 1))) + cast(Any, Cat(~s2, Const(0, 1))) + Const(1, 65)
     subw = sub65[0:32]
     sllw = (s1[0:32] << s2[0:5])[0:32]
     rev_sllw = (s1[0:32] << rev_shamt[0:5])[0:32]
@@ -1129,10 +1137,10 @@ def alu_result(func, src1, src2):
     # add operand selection (shadd / sradd / lui32 / odd). / 加法操作数选择。
     word_mask = sll_mask & s1
     shadd = (
-        Cat(word_mask[0:63], Const(0, 1)),
-        Cat(word_mask[0:62], Const(0, 2)),
-        Cat(word_mask[0:61], Const(0, 3)),
-        Cat(word_mask[0:60], Const(0, 4)),
+        Cat(Const(0, 1), word_mask[0:63]),
+        Cat(Const(0, 2), word_mask[0:62]),
+        Cat(Const(0, 3), word_mask[0:61]),
+        Cat(Const(0, 4), word_mask[0:60]),
     )
     sradd = (
         _zext(s1[29:64], 64),
@@ -1144,7 +1152,7 @@ def alu_result(func, src1, src2):
     add_a = Mux(f[1:2], Mux(f[0:1], _sext(s2[0:12], 64), _zext(s1[0:1], 64)), add_a)
     add_a = Mux(f[2:3], Mux(f[0:2] == 0, sradd[0], Mux(f[0:2] == 1, sradd[1], Mux(f[0:2] == 2, sradd[2], sradd[3]))), add_a)
     add_a = Mux(f[3:4], Mux(f[1:3] == 0, shadd[0], Mux(f[1:3] == 1, shadd[1], Mux(f[1:3] == 2, shadd[2], shadd[3]))), add_a)
-    add_b = Mux(f[0:4] == Const(0b0011, 4), Cat(s2[12:64], Const(0, 12)), s2)
+    add_b = Mux(f[0:4] == Const(0b0011, 4), Cat(Const(0, 12), s2[12:64]), s2)
     add = add_a + add_b
     sltu = cast(Any, ~sub65[64:65])
     slt = cast(Any, s1[63:64]) ^ cast(Any, s2[63:64]) ^ sltu
@@ -1155,14 +1163,14 @@ def alu_result(func, src1, src2):
     and_r = s1 & logic_src2
     or_r = s1 | logic_src2
     xor_r = s1 ^ logic_src2
-    orcb = Cat(*[_pad(Mux(_or_reduce(s1[i * 8:i * 8 + 8]), Const(1, 1), Const(0, 1)), 1).replicate(8) for i in range(7, -1, -1)])
-    orh48 = Cat(s1[8:64], Const(0, 8)) | s2
+    orcb = Cat(*[_pad(Mux(_or_reduce(s1[i * 8:i * 8 + 8]), Const(1, 1), Const(0, 1)), 1).replicate(8) for i in range(8)])
+    orh48 = Cat(Const(0, 8), s1[8:64]) | s2
     sextb = _sext(s1[0:8], 64)
-    packh = Cat(s2[0:8], s1[0:8])
+    packh = Cat(s1[0:8], s2[0:8])
     sexth = _sext(s1[0:16], 64)
-    packw = _sext(Cat(s2[0:16], s1[0:16]), 64)
-    revb = Cat(*[_bit_reverse(s1[i * 8:i * 8 + 8], 8) for i in range(7, -1, -1)])
-    pack = Cat(s2[0:32], s1[0:32])
+    packw = _sext(Cat(s1[0:16], s2[0:16]), 64)
+    revb = Cat(*[_bit_reverse(s1[i * 8:i * 8 + 8], 8) for i in range(8)])
+    pack = Cat(s1[0:32], s2[0:32])
     rev8 = Cat(*[s1[i * 8:i * 8 + 8] for i in range(7, -1, -1)])
     # ShiftResultSelect. / 移位结果选择。
     simple = (sll, sll, bclr, bset, binv, srl, Cat(Const(0, 63), bext), sra)
@@ -1184,16 +1192,16 @@ def alu_result(func, src1, src2):
     rev_res = Mux(f[0:2] == Const(2, 2), pack, rev_res)
     rev_res = Mux(f[0:2] == Const(3, 2), orh48, rev_res)
     custom = (
-        Cat(Const(0, 31), s1[0:32], Const(0, 1)),
-        Cat(Const(0, 30), s1[0:32], Const(0, 2)),
-        Cat(Const(0, 29), s1[0:32], Const(0, 3)),
-        Cat(Const(0, 56), s1[8:16]),
+        Cat(Const(0, 1), s1[0:32], Const(0, 31)),
+        Cat(Const(0, 2), s1[0:32], Const(0, 30)),
+        Cat(Const(0, 3), s1[0:32], Const(0, 29)),
+        Cat(s1[8:16], Const(0, 56)),
     )
     custom_res = custom[0]
     for k in range(1, 4):
         custom_res = Mux(f[0:2] == Const(k, 2), custom[k], custom_res)
     logic_adv = Mux(f[3:4], custom_res, rev_res)
-    mask = Cat(f[0:1].replicate(15), Const(1, 1))
+    mask = Cat(Const(1, 1), f[0:1].replicate(15))
     masked_logic = mask & logic_res
     misc_res = Mux(f[5:6], masked_logic, Mux(f[4:5], logic_adv, logic_base))
     # ConditionalZeroModule. / 条件清零模块。
@@ -1203,7 +1211,10 @@ def alu_result(func, src1, src2):
     # WordResultSelect. / 字结果选择。
     addsub_res = Mux(~f[2:3] & f[1:2] & ~f[0:1], _zext(subw, 64), addw)
     word_shift = Mux(f[2:3], Mux(f[0:1], rorw, rolw), Mux(f[1:2], sraw, Mux(f[0:1], srlw, sllw)))
-    word_res = Mux(f[3:4], _sext(word_shift[0:32], 64), addsub_res)
+    # WordResultSelect always sign-extends its 32-bit selected result.  The
+    # previous implementation left add/addw/subw zero-extended, which only
+    # differed when bit 31 was set.
+    word_res = Mux(f[3:4], _sext(word_shift[0:32], 64), _sext(addsub_res[0:32], 64))
     # AluResSel on func[6:4]. / 按 func[6:4] 的最终选择。
     fa = f[4:5]
     fb = f[5:6]
