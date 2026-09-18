@@ -46,6 +46,8 @@ def main() -> int:
 
     core_subject: dict[str, str] = {}
     for entry in core["entries"]:
+        for module in as_list(entry.get("covered_modules")):
+            core_subject.setdefault(f"__MODULE__:{module}", entry["id"])
         for source in as_list(entry.get("source_scala")) + as_list(entry.get("reference_surface")):
             core_subject[key(source)] = entry["id"]
     family_subject: dict[str, str] = {}
@@ -58,7 +60,7 @@ def main() -> int:
     rows = []
     for name, node in sorted(modules.items()):
         sources = sorted({key(s) for s in node["scala_sources"]})
-        core_ids = sorted({core_subject[s] for s in sources if s in core_subject})
+        core_ids = sorted({core_subject[s] for s in sources if s in core_subject} | set(core_subject.get(f"__MODULE__:{name}", "").split()) - {""})
         fam_ids = sorted({family_subject[s] for s in sources if s in family_subject})
         if core_ids:
             status = "CORE_BOUNDED_SUBJECT"

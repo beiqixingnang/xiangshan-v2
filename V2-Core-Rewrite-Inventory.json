@@ -1087,9 +1087,9 @@
    "source_scala": [
     "scala/src/main/scala/xiangshan/backend/datapath/Og2ForVector.scala",
     "scala/src/main/scala/xiangshan/backend/rob/VTypeBuffer.scala",
-   "scala/src/main/scala/xiangshan/backend/VecExcpDataMergeModule.scala"
-   ,"scala/src/main/scala/xiangshan/backend/fu/vector/VecSrcTypeModule.scala"
-   ,"scala/src/main/scala/xiangshan/backend/fu/wrapper/VIAluFix.scala"
+    "scala/src/main/scala/xiangshan/backend/VecExcpDataMergeModule.scala",
+    "scala/src/main/scala/xiangshan/backend/fu/vector/VecSrcTypeModule.scala",
+    "scala/src/main/scala/xiangshan/backend/fu/wrapper/VIAluFix.scala"
    ],
    "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Datapath.VectorFamily-Hardware.py",
    "family_id": "core.backend.datapath.vector",
@@ -1121,12 +1121,31 @@
    "reference_surface": [
     "validation/v2-frontend-icache-prefetch-family-results.json"
    ]
+  },
+  {
+   "id": "DifftestStateFamily",
+   "source_scala": [
+    "scala/src/main/scala/difftest/ArchEvent.scala",
+    "scala/src/main/scala/difftest/CSRState.scala",
+    "scala/src/main/scala/difftest/InstrCommit.scala",
+    "scala/src/main/scala/difftest/TrapEvent.scala"
+   ],
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Difftest.StateFamily-Hardware.py",
+   "family_id": "dependency.difftest.state",
+   "closure_root": "dependency.difftest",
+   "classification": "REWRITTEN",
+   "disposition": "STRUCTURE_VERIFIED_DIRECT_BOUNDED",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "validation/v2-difftest-state-family-results.json"
+   ],
+   "covered_modules": ["DiffExtArchEvent", "DiffExtArchFpRenameTable", "DiffExtArchIntRenameTable", "DiffExtArchVecRenameTable", "DiffExtCSRState", "DiffExtCriticalErrorEvent", "DiffExtDebugMode", "DiffExtFpCSRState", "DiffExtHCSRState", "DiffExtInstrCommit", "DiffExtLrScEvent", "DiffExtMhpmeventOverflowEvent", "DiffExtNonRegInterruptPendingEvent", "DiffExtPhyFpRegState", "DiffExtPhyIntRegState", "DiffExtPhyVecRegState", "DiffExtSyncAIAEvent", "DiffExtSyncCustomMflushpwrEvent", "DiffExtTrapEvent", "DiffExtTriggerCSRState", "DiffExtVecCSRState"]
   }
  ],
  "status": "IMPLEMENTATION_WAVES_VALIDATED_BOUNDED_HIERARCHY_WAVE1",
  "acceptance_eligible": false,
  "entries_status_counts": {
-  "VALIDATOR_PASS_BOUNDED": 64,
+  "VALIDATOR_PASS_BOUNDED": 65,
   "RETIRED": 1,
   "STRUCTURE_VERIFIED": 2,
   "STRUCTURE_VERIFIED_BEHAVIOR_FAIL": 2,

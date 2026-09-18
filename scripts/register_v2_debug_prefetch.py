@@ -141,6 +141,18 @@ NEW = [
         "v2_status": "VALIDATOR_PASS_BOUNDED",
         "reference_surface": ["validation/v2-frontend-icache-prefetch-family-results.json"],
     },
+    {
+        "id": "DifftestStateFamily",
+        "source_scala": ["scala/src/main/scala/difftest/ArchEvent.scala", "scala/src/main/scala/difftest/CSRState.scala", "scala/src/main/scala/difftest/InstrCommit.scala", "scala/src/main/scala/difftest/TrapEvent.scala"],
+        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Difftest.StateFamily-Hardware.py",
+        "family_id": "dependency.difftest.state",
+        "closure_root": "dependency.difftest",
+        "classification": "REWRITTEN",
+        "disposition": "STRUCTURE_VERIFIED_DIRECT_BOUNDED",
+        "v2_status": "VALIDATOR_PASS_BOUNDED",
+        "reference_surface": ["validation/v2-difftest-state-family-results.json"],
+        "covered_modules": ["DiffExtArchEvent", "DiffExtArchFpRenameTable", "DiffExtArchIntRenameTable", "DiffExtArchVecRenameTable", "DiffExtCSRState", "DiffExtCriticalErrorEvent", "DiffExtDebugMode", "DiffExtFpCSRState", "DiffExtHCSRState", "DiffExtInstrCommit", "DiffExtLrScEvent", "DiffExtMhpmeventOverflowEvent", "DiffExtNonRegInterruptPendingEvent", "DiffExtPhyFpRegState", "DiffExtPhyIntRegState", "DiffExtPhyVecRegState", "DiffExtSyncAIAEvent", "DiffExtSyncCustomMflushpwrEvent", "DiffExtTrapEvent", "DiffExtTriggerCSRState", "DiffExtVecCSRState"],
+    },
 ]
 
 data = json.loads(PATH.read_text(encoding="utf-8"))
