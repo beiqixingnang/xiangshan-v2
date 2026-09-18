@@ -53,6 +53,17 @@ NEW = [
         "v2_status": "VALIDATOR_PASS_BOUNDED",
         "reference_surface": ["validation/v2-store-family-results.json"],
     },
+    {
+        "id": "DecodeControlFamily",
+        "source_scala": ["scala/src/main/scala/xiangshan/backend/Backend.scala", "scala/src/main/scala/xiangshan/backend/decode/DecodeUnit.scala", "scala/src/main/scala/xiangshan/backend/decode/FusionDecoder.scala", "scala/src/main/scala/xiangshan/backend/decode/UopInfoGen.scala", "scala/src/main/scala/xiangshan/backend/decode/FPDecoder.scala", "scala/src/main/scala/xiangshan/backend/decode/VTypeGen.scala", "scala/src/main/scala/xiangshan/backend/decode/VecExceptionGen.scala", "scala/src/main/scala/xiangshan/backend/fu/wrapper/VIPU.scala"],
+        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Decode.ControlFamily-Hardware.py",
+        "family_id": "core.backend.decode.control",
+        "closure_root": "core.backend",
+        "classification": "REWRITTEN",
+        "disposition": "STRUCTURE_VERIFIED_DIRECT_BOUNDED",
+        "v2_status": "VALIDATOR_PASS_BOUNDED",
+        "reference_surface": ["validation/v2-decode-control-family-results.json"],
+    },
 ]
 
 data = json.loads(PATH.read_text(encoding="utf-8"))

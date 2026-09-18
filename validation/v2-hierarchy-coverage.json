@@ -5,9 +5,9 @@
  "reference_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
  "locked_module_count": 1976,
  "status_counts": {
-  "CORE_BOUNDED_SUBJECT": 871,
+  "CORE_BOUNDED_SUBJECT": 881,
   "FAMILY_SUBJECT": 977,
-  "MISSING": 128
+  "MISSING": 118
  },
  "row_count": 1976,
  "rows": [
@@ -1475,13 +1475,15 @@
   },
   {
    "module": "Backend",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 1165,
    "children": 46,
    "scala_sources": [
     "xiangshan/backend/Backend.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "DecodeControlFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -3405,13 +3407,15 @@
   },
   {
    "module": "DecodeUnit",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 154,
    "children": 2,
    "scala_sources": [
     "xiangshan/backend/decode/DecodeUnit.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "DecodeControlFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -5772,13 +5776,15 @@
   },
   {
    "module": "FPDecoder",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 6,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/decode/FPDecoder.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "DecodeControlFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -7231,13 +7237,15 @@
   },
   {
    "module": "FusionDecoder",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 90,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/decode/FusionDecoder.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "DecodeControlFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -24427,13 +24435,15 @@
   },
   {
    "module": "UopInfoGen",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 15,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/decode/UopInfoGen.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "DecodeControlFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -24642,13 +24652,15 @@
   },
   {
    "module": "VIAluDecoder",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 4,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/fu/wrapper/VIPU.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "DecodeControlFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -24746,6 +24758,7 @@
     "xiangshan/backend/fu/wrapper/VIPU.scala"
    ],
    "core_subjects": [
+    "DecodeControlFamily",
     "FuncUnitFamily"
    ],
    "family_subjects": [],
@@ -25244,13 +25257,15 @@
   },
   {
    "module": "VTypeGen",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 39,
    "children": 1,
    "scala_sources": [
     "xiangshan/backend/decode/VTypeGen.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "DecodeControlFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -25302,13 +25317,15 @@
   },
   {
    "module": "VecExceptionGen",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 11,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/decode/VecExceptionGen.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "DecodeControlFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -26785,13 +26802,15 @@
   },
   {
    "module": "indexedLSNumOfUopTable",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 2,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/decode/UopInfoGen.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "DecodeControlFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -28438,13 +28457,15 @@
   },
   {
    "module": "strdiedLSNumOfUopTable",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 2,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/decode/UopInfoGen.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "DecodeControlFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -28479,10 +28500,6 @@
   },
   {
    "scala": "xiangshan/backend/VecExcpDataMergeModule.scala",
-   "modules": 3
-  },
-  {
-   "scala": "xiangshan/backend/decode/UopInfoGen.scala",
    "modules": 3
   },
   {
@@ -28538,10 +28555,6 @@
    "modules": 1
   },
   {
-   "scala": "xiangshan/backend/Backend.scala",
-   "modules": 1
-  },
-  {
    "scala": "xiangshan/cache/mmu/BitmapCheck.scala",
    "modules": 1
   },
@@ -28566,23 +28579,11 @@
    "modules": 1
   },
   {
-   "scala": "xiangshan/backend/decode/DecodeUnit.scala",
-   "modules": 1
-  },
-  {
    "scala": "xiangshan/backend/rob/ExceptionGen.scala",
    "modules": 1
   },
   {
-   "scala": "xiangshan/backend/decode/FPDecoder.scala",
-   "modules": 1
-  },
-  {
    "scala": "xiangshan/frontend/FauFTB.scala",
-   "modules": 1
-  },
-  {
-   "scala": "xiangshan/backend/decode/FusionDecoder.scala",
    "modules": 1
   },
   {
@@ -28703,6 +28704,26 @@
   },
   {
    "scala": "xiangshan/mem/prefetch/L1StreamPrefetcher.scala",
+   "modules": 1
+  },
+  {
+   "scala": "xiangshan/mem/prefetch/L1StridePrefetcher.scala",
+   "modules": 1
+  },
+  {
+   "scala": "xiangshan/cache/mmu/TLB.scala",
+   "modules": 1
+  },
+  {
+   "scala": "device/TimeAsync.scala",
+   "modules": 1
+  },
+  {
+   "scala": "xiangshan/backend/trace/Trace.scala",
+   "modules": 1
+  },
+  {
+   "scala": "xiangshan/backend/trace/TraceBuffer.scala",
    "modules": 1
   }
  ]
