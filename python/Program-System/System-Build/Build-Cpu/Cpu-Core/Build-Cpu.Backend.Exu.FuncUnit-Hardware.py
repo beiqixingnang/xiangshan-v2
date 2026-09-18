@@ -1052,9 +1052,12 @@ def sbox_sm4_out(m: Any, bits: Value, prefix: str):
 def xt2(byte: Value) -> Value:
     # CryptoUtils.XtN.Xt2: GF(2^8) multiply by 2. / CryptoUtils.XtN.Xt2：GF(2^8) 乘 2。
     v = cast(Any, byte)
-    shifted = (cast(Any, Cat(Const(0, 1), v[0:8])) << 1)[0:9]
+    # Zero-extend before shifting.  Amaranth Cat is LSB-first; ``Cat(0,v)``
+    # would already shift the byte left by one and the explicit <<1 would
+    # accidentally implement multiplication by four.
+    shifted = (cast(Any, Cat(v[0:8], Const(0, 1))) << 1)[0:9]
     fb = Mux(v[7:8], Const(0x1b, 8), Const(0, 8))
-    return cast(Value, (cast(Any, shifted) ^ Cat(Const(0, 1), fb))[0:8])
+    return cast(Value, (cast(Any, shifted) ^ Cat(fb, Const(0, 1)))[0:8])
 
 
 def xtn(byte: Value, t: Value) -> Value:
