@@ -13,7 +13,8 @@
   "retired_or_excluded": 1,
   "planned_core_build_files": 51,
   "families": 40,
-  "parent_closures": 4
+  "parent_closures": 4,
+  "current_distinct_build_paths": 2
  },
  "classification_counts": {
   "EXACT": 12,
@@ -1179,24 +1180,14 @@
    ],
    "covered_modules": [
     "AddrAddModule",
-    "AgeDetector_38",
-    "AtomicsUnit",
-    "Bitmap",
     "DatamoduleResultBuffer",
     "FauFTBWay",
     "GPAMem",
-    "HPTW",
-    "LoadMisalignBuffer",
-    "LqExceptionBuffer",
-    "LsqEnqCtrl",
     "RASStack",
     "RedirectGenerator",
     "RegCache",
     "RegCacheTagTable",
     "RegionWays",
-    "StreamBitVectorArray",
-    "StrideMetaArray",
-    "TLBNonBlock_2",
     "VectorCvtTop"
    ]
   },
@@ -1269,12 +1260,64 @@
     "Trace",
     "TraceBuffer"
    ]
+  },
+  {
+   "id": "MemoryMmuLsqFamily",
+   "source_scala": [
+    "scala/src/main/scala/xiangshan/mem/pipeline/AtomicsUnit.scala",
+    "scala/src/main/scala/xiangshan/cache/mmu/BitmapCheck.scala",
+    "scala/src/main/scala/xiangshan/cache/mmu/PageTableWalker.scala",
+    "scala/src/main/scala/xiangshan/cache/mmu/TLB.scala",
+    "scala/src/main/scala/xiangshan/mem/lsqueue/LoadMisalignBuffer.scala",
+    "scala/src/main/scala/xiangshan/mem/lsqueue/LoadExceptionBuffer.scala",
+    "scala/src/main/scala/xiangshan/mem/lsqueue/LSQWrapper.scala",
+    "scala/src/main/scala/xiangshan/mem/lsqueue/LoadQueueReplay.scala"
+   ],
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Mmu.Lsq.Family-Hardware.py",
+   "family_id": "core.memory.mmu_lsq",
+   "closure_root": "core.memory",
+   "classification": "REWRITTEN",
+   "disposition": "VALIDATOR_PASS_BOUNDED",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "validation/v2-memory-mmu-lsq-family-results.json"
+   ],
+   "covered_modules": [
+    "AtomicsUnit",
+    "Bitmap",
+    "HPTW",
+    "TLBNonBlock_2",
+    "LoadMisalignBuffer",
+    "LqExceptionBuffer",
+    "LsqEnqCtrl",
+    "AgeDetector_38"
+   ]
+  },
+  {
+   "id": "PrefetchMetadataFamily",
+   "source_scala": [
+    "scala/src/main/scala/xiangshan/mem/prefetch/L1StreamPrefetcher.scala",
+    "scala/src/main/scala/xiangshan/mem/prefetch/L1StridePrefetcher.scala"
+   ],
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Prefetch.Metadata.Family-Hardware.py",
+   "family_id": "core.memory.prefetch.metadata",
+   "closure_root": "core.memory",
+   "classification": "REWRITTEN",
+   "disposition": "VALIDATOR_PASS_BOUNDED",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "validation/v2-memory-mmu-lsq-family-results.json"
+   ],
+   "covered_modules": [
+    "StreamBitVectorArray",
+    "StrideMetaArray"
+   ]
   }
  ],
  "status": "IMPLEMENTATION_WAVES_VALIDATED_BOUNDED_HIERARCHY_WAVE1",
  "acceptance_eligible": false,
  "entries_status_counts": {
-  "VALIDATOR_PASS_BOUNDED": 67,
+  "VALIDATOR_PASS_BOUNDED": 69,
   "RETIRED": 1,
   "STRUCTURE_VERIFIED": 2,
   "STRUCTURE_VERIFIED_BEHAVIOR_FAIL": 2,
