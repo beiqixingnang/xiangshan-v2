@@ -1,0 +1,211 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_DCACHE_METAARRAY_FAMILY",
+  "batch_id": "V2-MEMORY-DCACHE-METAARRAY-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "scala_sources": [
+    "upstream/src/main/scala/xiangshan/cache/dcache/meta/AsynchronousMetaArray.scala"
+  ],
+  "covered_modules": [
+    "L1CohMetaArray",
+    "L1ErrorMetaArray",
+    "L1FlagMetaArray",
+    "L1PrefetchSourceArray"
+  ],
+  "port_surface": {
+    "L1CohMetaArray": {
+      "locked": 30,
+      "emitted": 30,
+      "match": true
+    },
+    "L1ErrorMetaArray": {
+      "locked": 47,
+      "emitted": 47,
+      "match": true
+    },
+    "L1FlagMetaArray": {
+      "locked": 27,
+      "emitted": 27,
+      "match": true
+    },
+    "L1PrefetchSourceArray": {
+      "locked": 45,
+      "emitted": 45,
+      "match": true
+    }
+  },
+  "direct": {
+    "status": "PASS",
+    "members": [
+      {
+        "member": "L1CohMetaArray",
+        "vectors": 2,
+        "observations": [
+          {
+            "way0": 2
+          }
+        ]
+      },
+      {
+        "member": "L1ErrorMetaArray",
+        "vectors": 2,
+        "observations": [
+          {
+            "denied": 1,
+            "corrupt": 1
+          }
+        ]
+      },
+      {
+        "member": "L1FlagMetaArray",
+        "vectors": 2,
+        "observations": [
+          {
+            "way0": 1
+          }
+        ]
+      },
+      {
+        "member": "L1PrefetchSourceArray",
+        "vectors": 2,
+        "observations": [
+          {
+            "way0": 5
+          }
+        ]
+      }
+    ]
+  },
+  "tool_gates": {
+    "L1CohMetaArray": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-metaarray/L1CohMetaArray.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "1809:7: Case values incompletely covered (example pattern 0xfb)\n281809 |       casez (io_write_0_bits_idx)\n       |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-metaarray/L1CohMetaArray.sv:282319:7: Case values incompletely covered (example pattern 0xfc)\n282319 |       casez (io_write_0_bits_idx)\n       |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-metaarray/L1CohMetaArray.sv:282831:7: Case values incompletely covered (example pattern 0xfd)\n282831 |       casez (io_write_0_bits_idx)\n       |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-metaarray/L1CohMetaArray.sv:283345:7: Case values incompletely covered (example pattern 0xfe)\n283345 |       casez (io_write_0_bits_idx)\n       |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-metaarray/L1CohMetaArray.sv:283861:7: Case values incompletely covered (example pattern 0xff)\n283861 |       casez (io_write_0_bits_idx)\n       |       ^~~~~\n",
+        "output_sha256": "ec7c006f367b099d7861411deaefd0f7b85865692b88b99a7353e5de43dee465"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-metaarray/L1CohMetaArray.sv; hierarchy -top L1CohMetaArray; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "iangshan-v2/validation/.work/v2-dcache-metaarray/L1CohMetaArray.sv:2141$8'.\nRemoving empty process `L1CohMetaArray.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-metaarray/L1CohMetaArray.sv:2138$7'.\nRemoving empty process `L1CohMetaArray.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-metaarray/L1CohMetaArray.sv:2135$6'.\nRemoving empty process `L1CohMetaArray.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-metaarray/L1CohMetaArray.sv:2132$5'.\nCleaned up 2068 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module L1CohMetaArray.\n<suppressed ~1052 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module L1CohMetaArray...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 03a2b5b37c, CPU: user 1.75s system 0.18s, MEM: 594.99 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 68% 2x read_verilog (1 sec), 8% 1x proc_mux (0 sec), ...\n",
+        "output_sha256": "990935681219586b75d6e69f99eb754ec0ad04d9fb90dcc4a6a93149ee2e805e"
+      },
+      "rtl_bytes": 5975537,
+      "rtl_sha256": "27329cb074c46307d9ae009b29658381f5338ef8b7663ce729258987da474372"
+    },
+    "L1ErrorMetaArray": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-metaarray/L1ErrorMetaArray.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "Case values incompletely covered (example pattern 0xfb)\n566616 |       casez (io_write_0_bits_idx)\n       |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-metaarray/L1ErrorMetaArray.sv:567126:7: Case values incompletely covered (example pattern 0xfc)\n567126 |       casez (io_write_0_bits_idx)\n       |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-metaarray/L1ErrorMetaArray.sv:567638:7: Case values incompletely covered (example pattern 0xfd)\n567638 |       casez (io_write_0_bits_idx)\n       |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-metaarray/L1ErrorMetaArray.sv:568152:7: Case values incompletely covered (example pattern 0xfe)\n568152 |       casez (io_write_0_bits_idx)\n       |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-metaarray/L1ErrorMetaArray.sv:568668:7: Case values incompletely covered (example pattern 0xff)\n568668 |       casez (io_write_0_bits_idx)\n       |       ^~~~~\n",
+        "output_sha256": "2d0d8e95cda9907fb17722270d2e6621508c7c8126feed82d38cff4c2f73f495"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-metaarray/L1ErrorMetaArray.sv; hierarchy -top L1ErrorMetaArray; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "ion/.work/v2-dcache-metaarray/L1ErrorMetaArray.sv:4224$8'.\nRemoving empty process `L1ErrorMetaArray.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-metaarray/L1ErrorMetaArray.sv:4221$7'.\nRemoving empty process `L1ErrorMetaArray.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-metaarray/L1ErrorMetaArray.sv:4218$6'.\nRemoving empty process `L1ErrorMetaArray.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-metaarray/L1ErrorMetaArray.sv:4215$5'.\nCleaned up 4132 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module L1ErrorMetaArray.\n<suppressed ~2100 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module L1ErrorMetaArray...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: b95b87e218, CPU: user 3.22s system 0.35s, MEM: 1159.89 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 70% 2x read_verilog (2 sec), 8% 1x proc_mux (0 sec), ...\n",
+        "output_sha256": "a873481dd383d28c87b6f19262b48cb6231e6d22515aecd065b05c9bebd663ff"
+      },
+      "rtl_bytes": 11942872,
+      "rtl_sha256": "42d571237d8a71ddcbab0d25a435d6ad3d989b81ba443ba5f130f61fa1d84a4a"
+    },
+    "L1FlagMetaArray": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-metaarray/L1FlagMetaArray.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "s incompletely covered (example pattern 0xfe)\n1077918 |       casez (io_write_3_bits_idx)\n        |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-metaarray/L1FlagMetaArray.sv:1078434:7: Case values incompletely covered (example pattern 0xff)\n1078434 |       casez (io_write_0_bits_idx)\n        |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-metaarray/L1FlagMetaArray.sv:1078948:7: Case values incompletely covered (example pattern 0xff)\n1078948 |       casez (io_write_1_bits_idx)\n        |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-metaarray/L1FlagMetaArray.sv:1079462:7: Case values incompletely covered (example pattern 0xff)\n1079462 |       casez (io_write_2_bits_idx)\n        |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-metaarray/L1FlagMetaArray.sv:1079976:7: Case values incompletely covered (example pattern 0xff)\n1079976 |       casez (io_write_3_bits_idx)\n        |       ^~~~~\n",
+        "output_sha256": "496a8dc4a9da4cc87b999d1fbb33fd810001c0578eb9d770ba0d51d066c356aa"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-metaarray/L1FlagMetaArray.sv; hierarchy -top L1FlagMetaArray; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "lidation/.work/v2-dcache-metaarray/L1FlagMetaArray.sv:2167$20'.\nRemoving empty process `L1FlagMetaArray.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-metaarray/L1FlagMetaArray.sv:2164$19'.\nRemoving empty process `L1FlagMetaArray.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-metaarray/L1FlagMetaArray.sv:2161$18'.\nRemoving empty process `L1FlagMetaArray.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-metaarray/L1FlagMetaArray.sv:2158$17'.\nCleaned up 8202 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module L1FlagMetaArray.\n<suppressed ~1066 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module L1FlagMetaArray...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 5688c6760f, CPU: user 5.20s system 0.69s, MEM: 2057.35 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 74% 2x read_verilog (4 sec), 8% 1x proc_mux (0 sec), ...\n",
+        "output_sha256": "7a3c1317febbcfe3b8304766182c4032ea619306cfff0cf89b9d57f2329c0b41"
+      },
+      "rtl_bytes": 21798138,
+      "rtl_sha256": "f6e759e9fc01d06416dc8b4b95208d1b197033d62b9131b5e502357242e25cb3"
+    },
+    "L1PrefetchSourceArray": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-metaarray/L1PrefetchSourceArray.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "example pattern 0xfe)\n1084207 |       casez (io_write_3_bits_idx)\n        |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-metaarray/L1PrefetchSourceArray.sv:1084723:7: Case values incompletely covered (example pattern 0xff)\n1084723 |       casez (io_write_0_bits_idx)\n        |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-metaarray/L1PrefetchSourceArray.sv:1085237:7: Case values incompletely covered (example pattern 0xff)\n1085237 |       casez (io_write_1_bits_idx)\n        |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-metaarray/L1PrefetchSourceArray.sv:1085751:7: Case values incompletely covered (example pattern 0xff)\n1085751 |       casez (io_write_2_bits_idx)\n        |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-metaarray/L1PrefetchSourceArray.sv:1086265:7: Case values incompletely covered (example pattern 0xff)\n1086265 |       casez (io_write_3_bits_idx)\n        |       ^~~~~\n",
+        "output_sha256": "3dff63ff00568168b8875f031b48364700ef7597dabaef002018b81a0a8ee0a3"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-metaarray/L1PrefetchSourceArray.sv; hierarchy -top L1PrefetchSourceArray; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "ay.sv:2210$20'.\nRemoving empty process `L1PrefetchSourceArray.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-metaarray/L1PrefetchSourceArray.sv:2207$19'.\nRemoving empty process `L1PrefetchSourceArray.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-metaarray/L1PrefetchSourceArray.sv:2204$18'.\nRemoving empty process `L1PrefetchSourceArray.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-metaarray/L1PrefetchSourceArray.sv:2201$17'.\nCleaned up 8217 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module L1PrefetchSourceArray.\n<suppressed ~1081 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module L1PrefetchSourceArray...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: b745fd4a90, CPU: user 5.77s system 0.72s, MEM: 2127.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 68% 2x read_verilog (4 sec), 9% 1x proc_mux (0 sec), ...\n",
+        "output_sha256": "7051b800b51f6c80d479a831b34185ceaee103bf618789ad85e9e1e55302a083"
+      },
+      "rtl_bytes": 21984672,
+      "rtl_sha256": "b1b24853187a317d4c5112c3d8652fa2d4b0dab2b1c29a317d9b46cecd47cfd9"
+    }
+  },
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PENDING_LOCKED_DCACHE_PARENT_DIFF",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "UHSC_LOCALIZED": "PASS_BOUNDED_FAMILY_LOCAL_NAME",
+    "PARENT_CLOSURE_MATCHED": "PENDING",
+    "LICENSE_REVIEW": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "VALIDATOR_PASS_BOUNDED",
+  "acceptance_eligible": false,
+  "failures": [],
+  "unclosed": [
+    "Complete DCache parent and locked XSTop differential remain pending.",
+    "License review and user approval remain pending."
+  ]
+}

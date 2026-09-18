@@ -9,16 +9,16 @@
  "scan_counts": {
   "xiangshan_scala_files": 325,
   "existing_candidate_entries": 47,
-  "retained_build_files": 46,
+  "retained_build_files": 50,
   "retired_or_excluded": 1,
-  "planned_core_build_files": 46,
-  "families": 35,
+  "planned_core_build_files": 50,
+  "families": 39,
   "parent_closures": 4
  },
  "classification_counts": {
   "EXACT": 12,
   "MOVED": 4,
-  "REWRITTEN": 18,
+  "REWRITTEN": 22,
   "SPLIT": 6,
   "RETIRED": 1
  },
@@ -813,12 +813,70 @@
    "reference_surface": [
     "validation/v2-memory-lsqueue-uncache-family-results.json"
    ]
+  },
+  {
+   "id": "MemCommonPipelineFamily",
+   "source_scala": "scala/src/main/scala/xiangshan/mem/MemCommon.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.MemCommon-Pipeline-Hardware.py",
+   "family_id": "core.memory.memcommon.pipeline",
+   "closure_root": "core.memory",
+   "classification": "REWRITTEN",
+   "disposition": "STRUCTURE_VERIFIED_DIRECT_PASS_BOUNDED",
+   "v2_status": "STRUCTURE_VERIFIED_DIRECT_PASS_BOUNDED",
+   "reference_surface": [
+    "upstream/src/main/scala/xiangshan/mem/MemCommon.scala",
+    "validation/v2-memory-data-families-results.json"
+   ]
+  },
+  {
+   "id": "LoadQueueDataFamily",
+   "source_scala": "scala/src/main/scala/xiangshan/mem/lsqueue/LoadQueueData.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Lsqueue.LoadQueueData-Hardware.py",
+   "family_id": "core.memory.lsqueue.load_data",
+   "closure_root": "core.memory.lsqueue",
+   "classification": "REWRITTEN",
+   "disposition": "STRUCTURE_VERIFIED_DIRECT_PASS_BOUNDED",
+   "v2_status": "STRUCTURE_VERIFIED_DIRECT_PASS_BOUNDED",
+   "reference_surface": [
+    "upstream/src/main/scala/xiangshan/mem/lsqueue/LoadQueueData.scala",
+    "validation/v2-memory-data-families-results.json"
+   ]
+  },
+  {
+   "id": "StoreQueueDataFamily",
+   "source_scala": "scala/src/main/scala/xiangshan/mem/lsqueue/StoreQueueData.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Lsqueue.StoreQueueData-Hardware.py",
+   "family_id": "core.memory.lsqueue.store_data",
+   "closure_root": "core.memory.lsqueue",
+   "classification": "REWRITTEN",
+   "disposition": "STRUCTURE_VERIFIED_DIRECT_PARTIAL",
+   "v2_status": "STRUCTURE_VERIFIED_DIRECT_PARTIAL",
+   "reference_surface": [
+    "upstream/src/main/scala/xiangshan/mem/lsqueue/StoreQueueData.scala",
+    "validation/v2-memory-data-families-results.json"
+   ]
+  },
+  {
+   "id": "DcacheMetaArrayFamily",
+   "source_scala": "scala/src/main/scala/xiangshan/cache/dcache/meta/AsynchronousMetaArray.scala",
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Dcache.MetaArray-Hardware.py",
+   "family_id": "core.memory.dcache.meta_array",
+   "closure_root": "core.memory.dcache",
+   "classification": "REWRITTEN",
+   "disposition": "DIRECT_TEST_PASS_BOUNDED",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "upstream/src/main/scala/xiangshan/cache/dcache/meta/AsynchronousMetaArray.scala",
+    "validation/v2-dcache-metaarray-family-results.json"
+   ]
   }
 ],
  "status": "IMPLEMENTATION_WAVES_VALIDATED_BOUNDED_HIERARCHY_WAVE1",
  "acceptance_eligible": false,
   "entries_status_counts": {
-  "VALIDATOR_PASS_BOUNDED": 50,
+  "VALIDATOR_PASS_BOUNDED": 51,
+  "STRUCTURE_VERIFIED_DIRECT_PASS_BOUNDED": 2,
+  "STRUCTURE_VERIFIED_DIRECT_PARTIAL": 1,
    "STRUCTURE_VERIFIED": 2,
   "STRUCTURE_VERIFIED_BEHAVIOR_FAIL": 2,
   "RETIRED": 1

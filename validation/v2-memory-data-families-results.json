@@ -1,0 +1,763 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_MEMORY_DATA_FAMILIES",
+  "batch_id": "V2-MEMORY-DATA-FAMILIES-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "covered_modules": [
+    "LqMaskModule",
+    "LqPAddrModule",
+    "LqPAddrModule_1",
+    "LqVAddrModule",
+    "SQAddrModule",
+    "SQAddrModule_1",
+    "SQData8Module",
+    "SQDataModule",
+    "PipelineRegModule",
+    "PipelineRegModule_1",
+    "PipelineRegModule_2",
+    "PipelineRegModule_6",
+    "L1CohMetaArray",
+    "L1ErrorMetaArray",
+    "L1FlagMetaArray",
+    "L1PrefetchSourceArray"
+  ],
+  "port_surface": {
+    "LqMaskModule": {
+      "locked": 77,
+      "emitted": 77,
+      "match": true,
+      "missing": [],
+      "extra": []
+    },
+    "LqPAddrModule": {
+      "locked": 303,
+      "emitted": 303,
+      "match": true,
+      "missing": [],
+      "extra": []
+    },
+    "LqPAddrModule_1": {
+      "locked": 79,
+      "emitted": 79,
+      "match": true,
+      "missing": [],
+      "extra": []
+    },
+    "LqVAddrModule": {
+      "locked": 20,
+      "emitted": 20,
+      "match": true,
+      "missing": [],
+      "extra": []
+    },
+    "SQAddrModule": {
+      "locked": 192,
+      "emitted": 192,
+      "match": true,
+      "missing": [],
+      "extra": []
+    },
+    "SQAddrModule_1": {
+      "locked": 190,
+      "emitted": 190,
+      "match": true,
+      "missing": [],
+      "extra": []
+    },
+    "SQData8Module": {
+      "locked": 32,
+      "emitted": 32,
+      "match": true,
+      "missing": [],
+      "extra": []
+    },
+    "SQDataModule": {
+      "locked": 122,
+      "emitted": 122,
+      "match": true,
+      "missing": [],
+      "extra": []
+    },
+    "PipelineRegModule": {
+      "locked": 26,
+      "emitted": 26,
+      "match": true,
+      "missing": [],
+      "extra": []
+    },
+    "PipelineRegModule_1": {
+      "locked": 68,
+      "emitted": 68,
+      "match": true,
+      "missing": [],
+      "extra": []
+    },
+    "PipelineRegModule_2": {
+      "locked": 68,
+      "emitted": 68,
+      "match": true,
+      "missing": [],
+      "extra": []
+    },
+    "PipelineRegModule_6": {
+      "locked": 18,
+      "emitted": 18,
+      "match": true,
+      "missing": [],
+      "extra": []
+    },
+    "L1CohMetaArray": {
+      "locked": 30,
+      "emitted": 30,
+      "match": true,
+      "missing": [],
+      "extra": []
+    },
+    "L1ErrorMetaArray": {
+      "locked": 47,
+      "emitted": 47,
+      "match": true,
+      "missing": [],
+      "extra": []
+    },
+    "L1FlagMetaArray": {
+      "locked": 27,
+      "emitted": 27,
+      "match": true,
+      "missing": [],
+      "extra": []
+    },
+    "L1PrefetchSourceArray": {
+      "locked": 45,
+      "emitted": 45,
+      "match": true,
+      "missing": [],
+      "extra": []
+    }
+  },
+  "direct": {
+    "status": "PASS_PARTIAL",
+    "members": [
+      {
+        "member": "LqMaskModule",
+        "vectors": 2,
+        "observations": [
+          {
+            "hit": 1
+          }
+        ]
+      },
+      {
+        "member": "LqPAddrModule",
+        "vectors": 2,
+        "observations": [
+          {
+            "hit": 1
+          }
+        ]
+      },
+      {
+        "member": "LqPAddrModule_1",
+        "vectors": 2,
+        "observations": [
+          {
+            "hit": 1
+          }
+        ]
+      },
+      {
+        "member": "LqVAddrModule",
+        "vectors": 2,
+        "observations": [
+          {
+            "rdata": 341
+          }
+        ]
+      },
+      {
+        "member": "SQAddrModule",
+        "vectors": 2,
+        "observations": [
+          {
+            "hit": 0
+          }
+        ]
+      },
+      {
+        "member": "SQAddrModule_1",
+        "vectors": 2,
+        "observations": [
+          {
+            "hit": 0
+          }
+        ]
+      },
+      {
+        "member": "SQData8Module",
+        "vectors": 0,
+        "observations": [
+          "DIRECT_DEFERRED_LARGE_FORWARDING_MUX"
+        ]
+      },
+      {
+        "member": "SQDataModule",
+        "vectors": 0,
+        "observations": [
+          "DIRECT_DEFERRED_LARGE_FORWARDING_MUX"
+        ]
+      },
+      {
+        "member": "PipelineRegModule",
+        "vectors": 2,
+        "observations": [
+          1,
+          0
+        ]
+      },
+      {
+        "member": "PipelineRegModule_1",
+        "vectors": 2,
+        "observations": [
+          1,
+          0
+        ]
+      },
+      {
+        "member": "PipelineRegModule_2",
+        "vectors": 2,
+        "observations": [
+          1,
+          0
+        ]
+      },
+      {
+        "member": "PipelineRegModule_6",
+        "vectors": 2,
+        "observations": [
+          1,
+          0
+        ]
+      },
+      {
+        "member": "L1CohMetaArray",
+        "vectors": 2,
+        "observations": [
+          "SEE_VALIDATED_METAARRAY_FAMILY_EVIDENCE"
+        ],
+        "evidence": "validation/v2-dcache-metaarray-family-results.json"
+      },
+      {
+        "member": "L1ErrorMetaArray",
+        "vectors": 2,
+        "observations": [
+          "SEE_VALIDATED_METAARRAY_FAMILY_EVIDENCE"
+        ],
+        "evidence": "validation/v2-dcache-metaarray-family-results.json"
+      },
+      {
+        "member": "L1FlagMetaArray",
+        "vectors": 2,
+        "observations": [
+          "SEE_VALIDATED_METAARRAY_FAMILY_EVIDENCE"
+        ],
+        "evidence": "validation/v2-dcache-metaarray-family-results.json"
+      },
+      {
+        "member": "L1PrefetchSourceArray",
+        "vectors": 2,
+        "observations": [
+          "SEE_VALIDATED_METAARRAY_FAMILY_EVIDENCE"
+        ],
+        "evidence": "validation/v2-dcache-metaarray-family-results.json"
+      }
+    ],
+    "deferred_members": [
+      "SQData8Module",
+      "SQDataModule"
+    ]
+  },
+  "tool_gates": {
+    "LqMaskModule": {
+      "deterministic": true,
+      "rtl_bytes": 91492,
+      "rtl_sha256": "a3dc53f4e4b8ca569cbd3bf055ff1935ad7877a575a8f95d1fedbd7a5692eb35",
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/load-LqMaskModule.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "rdware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/load-LqMaskModule.sv:3690:7: Case values incompletely covered (example pattern 0x1e)\n 3690 |       casez (io_waddr_2)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/load-LqMaskModule.sv:3758:7: Case values incompletely covered (example pattern 0x1f)\n 3758 |       casez (io_waddr_0)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/load-LqMaskModule.sv:3824:7: Case values incompletely covered (example pattern 0x1f)\n 3824 |       casez (io_waddr_1)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/load-LqMaskModule.sv:3890:7: Case values incompletely covered (example pattern 0x1f)\n 3890 |       casez (io_waddr_2)\n      |       ^~~~~\n",
+        "output_sha256": "b3e870d5dde673baa7c480f3695f5d338360f06487f4b0ee003bb3f1d33aaf33"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/load-LqMaskModule.sv; hierarchy -top LqMaskModule; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "ngshan-v2/validation/.work/v2-memory-data-families/load-LqMaskModule.sv:421$128'.\nRemoving empty process `LqMaskModule.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/load-LqMaskModule.sv:419$127'.\nRemoving empty process `LqMaskModule.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/load-LqMaskModule.sv:417$126'.\nCleaned up 192 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module LqMaskModule.\n<suppressed ~6 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module LqMaskModule...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: bcac72adf9, CPU: user 0.06s system 0.02s, MEM: 23.61 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 48% 2x read_verilog (0 sec), 16% 1x check (0 sec), ...\n",
+        "output_sha256": "ef60b47df21a7f9f7fd043042d5e82a5781c679979be10e76d2878deb5457c65"
+      }
+    },
+    "LqPAddrModule": {
+      "deterministic": true,
+      "rtl_bytes": 400064,
+      "rtl_sha256": "75dd1b3f4287c2556cca1d1790f93316c6d3c8521b06ad12675b531ae9bc4496",
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/load-LqPAddrModule.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "ystem/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/load-LqPAddrModule.sv:17529:7: Case values incompletely covered (example pattern 0x47)\n17529 |       casez (io_waddr_2)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/load-LqPAddrModule.sv:17679:7: Case values incompletely covered (example pattern 0x48)\n17679 |       casez (io_waddr_0)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/load-LqPAddrModule.sv:17827:7: Case values incompletely covered (example pattern 0x48)\n17827 |       casez (io_waddr_1)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/load-LqPAddrModule.sv:17975:7: Case values incompletely covered (example pattern 0x48)\n17975 |       casez (io_waddr_2)\n      |       ^~~~~\n",
+        "output_sha256": "d7430f908443d3c5bdc8c03ee8a8939034df6a9c181fc0dd177a4e5984b0efa7"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/load-LqPAddrModule.sv; hierarchy -top LqPAddrModule; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "idation/.work/v2-memory-data-families/load-LqPAddrModule.sv:1036$264'.\nRemoving empty process `LqPAddrModule.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/load-LqPAddrModule.sv:1034$263'.\nRemoving empty process `LqPAddrModule.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/load-LqPAddrModule.sv:1032$262'.\nCleaned up 432 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module LqPAddrModule.\n<suppressed ~3 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module LqPAddrModule...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 5ba1830be8, CPU: user 0.20s system 0.02s, MEM: 53.24 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 57% 2x read_verilog (0 sec), 14% 1x proc_mux (0 sec), ...\n",
+        "output_sha256": "85e05f9088ccae6b38327f75372e85c89be7055b8ea048a8ef1e4b966ef7863b"
+      }
+    },
+    "LqPAddrModule_1": {
+      "deterministic": true,
+      "rtl_bytes": 98526,
+      "rtl_sha256": "9ea9551c06972e686c41778a3c941e4eac4d4a9d4e71d77268f7891722738918",
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/load-LqPAddrModule_1.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "m/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/load-LqPAddrModule_1.sv:3822:7: Case values incompletely covered (example pattern 0x1e)\n 3822 |       casez (io_waddr_2)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/load-LqPAddrModule_1.sv:3890:7: Case values incompletely covered (example pattern 0x1f)\n 3890 |       casez (io_waddr_0)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/load-LqPAddrModule_1.sv:3956:7: Case values incompletely covered (example pattern 0x1f)\n 3956 |       casez (io_waddr_1)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/load-LqPAddrModule_1.sv:4022:7: Case values incompletely covered (example pattern 0x1f)\n 4022 |       casez (io_waddr_2)\n      |       ^~~~~\n",
+        "output_sha256": "4c29ecd1eeaf55cc2b0dd6e056abaf5316a5cc5718ed45c8d5c1ab247a2fee01"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/load-LqPAddrModule_1.sv; hierarchy -top LqPAddrModule_1; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": ".work/v2-memory-data-families/load-LqPAddrModule_1.sv:556$195'.\nRemoving empty process `LqPAddrModule_1.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/load-LqPAddrModule_1.sv:554$194'.\nRemoving empty process `LqPAddrModule_1.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/load-LqPAddrModule_1.sv:552$193'.\nCleaned up 192 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module LqPAddrModule_1.\n<suppressed ~6 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module LqPAddrModule_1...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 76be2cb3aa, CPU: user 0.08s system 0.01s, MEM: 26.02 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 42% 2x read_verilog (0 sec), 20% 1x check (0 sec), ...\n",
+        "output_sha256": "41931ac06f9ad4766f394fdebf84eae9d7b755fabced3034bee222b2315bab99"
+      }
+    },
+    "LqVAddrModule": {
+      "deterministic": true,
+      "rtl_bytes": 360945,
+      "rtl_sha256": "628dbb135b13701eb4ebbb94f89b551f7b94a77b7a706214211136bcd8024026",
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/load-LqVAddrModule.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "re-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/load-LqVAddrModule.sv:17635:7: Case values incompletely covered (example pattern 0xa)\n17635 |       casez (io_waddr_2)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/load-LqVAddrModule.sv:17663:7: Case values incompletely covered (example pattern 0xb)\n17663 |       casez (io_waddr_0)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/load-LqVAddrModule.sv:17689:7: Case values incompletely covered (example pattern 0xb)\n17689 |       casez (io_waddr_1)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/load-LqVAddrModule.sv:17715:7: Case values incompletely covered (example pattern 0xb)\n17715 |       casez (io_waddr_2)\n      |       ^~~~~\n",
+        "output_sha256": "86ef55af438cda2926c67ecba9d1de05d7450ebbb9975b2d1c64a0786fed37d0"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/load-LqVAddrModule.sv; hierarchy -top LqVAddrModule; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "gshan-v2/validation/.work/v2-memory-data-families/load-LqVAddrModule.sv:201$3'.\nRemoving empty process `LqVAddrModule.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/load-LqVAddrModule.sv:199$2'.\nRemoving empty process `LqVAddrModule.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/load-LqVAddrModule.sv:197$1'.\nCleaned up 438 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module LqVAddrModule.\n<suppressed ~9 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module LqVAddrModule...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 1490093d3d, CPU: user 0.34s system 0.03s, MEM: 74.84 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 37% 2x read_verilog (0 sec), 27% 1x check (0 sec), ...\n",
+        "output_sha256": "62c8723b1257bb57779d78eecd3eb48c500544f38f32ddccb306ba25b90f99d6"
+      }
+    },
+    "SQAddrModule": {
+      "deterministic": true,
+      "rtl_bytes": 549300,
+      "rtl_sha256": "a624b8049c341c6c74d3979a9c9ec8961bca6e6f791a67a8af74ae283937a0eb",
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/store-SQAddrModule.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "ystem/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/store-SQAddrModule.sv:24442:7: Case values incompletely covered (example pattern 0x37)\n24442 |       casez (io_waddr_0)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/store-SQAddrModule.sv:24556:7: Case values incompletely covered (example pattern 0x37)\n24556 |       casez (io_waddr_1)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/store-SQAddrModule.sv:24674:7: Case values incompletely covered (example pattern 0x38)\n24674 |       casez (io_waddr_0)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/store-SQAddrModule.sv:24790:7: Case values incompletely covered (example pattern 0x38)\n24790 |       casez (io_waddr_1)\n      |       ^~~~~\n",
+        "output_sha256": "67f97cc7ea0bd498178b4115a9202606228f1318fddecb3efb249d804fcc374f"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/store-SQAddrModule.sv; hierarchy -top SQAddrModule; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "validation/.work/v2-memory-data-families/store-SQAddrModule.sv:2928$1179'.\nRemoving empty process `SQAddrModule.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/store-SQAddrModule.sv:2926$1178'.\nRemoving empty process `SQAddrModule.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/store-SQAddrModule.sv:2924$1177'.\nCleaned up 676 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module SQAddrModule.\n<suppressed ~12 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module SQAddrModule...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: f63e7961d7, CPU: user 0.36s system 0.02s, MEM: 80.51 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 52% 2x read_verilog (0 sec), 17% 1x check (0 sec), ...\n",
+        "output_sha256": "7b98d557c47447fafae8cb404775a0325ec367f328ea21ff91b0e5f3452c2622"
+      }
+    },
+    "SQAddrModule_1": {
+      "deterministic": true,
+      "rtl_bytes": 384337,
+      "rtl_sha256": "f4486ed71b310eea21932cba8d680eb323e18b37668c26e008d7995a989bd3a6",
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/store-SQAddrModule_1.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "tem/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/store-SQAddrModule_1.sv:16582:7: Case values incompletely covered (example pattern 0x38)\n16582 |       casez (io_waddr_0)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/store-SQAddrModule_1.sv:16698:7: Case values incompletely covered (example pattern 0x38)\n16698 |       casez (io_waddr_1)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/store-SQAddrModule_1.sv:16817:5: Case values incompletely covered (example pattern 0x38)\n16817 |     casez (addr_read_0)\n      |     ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/store-SQAddrModule_1.sv:16935:5: Case values incompletely covered (example pattern 0x38)\n16935 |     casez (addr_read_1)\n      |     ^~~~~\n",
+        "output_sha256": "b4ed8a3397b3070a6d4fd667fe9b0c45f3853b5efac69c4d6080e2d194230a12"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/store-SQAddrModule_1.sv; hierarchy -top SQAddrModule_1; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "/.work/v2-memory-data-families/store-SQAddrModule_1.sv:2433$968'.\nRemoving empty process `SQAddrModule_1.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/store-SQAddrModule_1.sv:2431$967'.\nRemoving empty process `SQAddrModule_1.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/store-SQAddrModule_1.sv:2429$966'.\nCleaned up 450 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module SQAddrModule_1.\n<suppressed ~8 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module SQAddrModule_1...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 946f0489fa, CPU: user 0.32s system 0.01s, MEM: 67.13 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 48% 2x read_verilog (0 sec), 21% 1x check (0 sec), ...\n",
+        "output_sha256": "3144cf6595b73c5a98a10d5cd245d19344167ce0112e17cde1446ffe5ae070f4"
+      }
+    },
+    "SQData8Module": {
+      "deterministic": true,
+      "rtl_bytes": 383994,
+      "rtl_sha256": "24dc2e0e4b1323940b50e5b65a3a4d98a320804636cb6b0e5247eeb6ff1876e2",
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/store-SQData8Module.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "v2/validation/.work/v2-memory-data-families/store-SQData8Module.sv:16657:7: Case values incompletely covered (example pattern 0x37)\n16657 |       casez (io_mask_waddr_0)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/store-SQData8Module.sv:16771:7: Case values incompletely covered (example pattern 0x37)\n16771 |       casez (io_mask_waddr_1)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/store-SQData8Module.sv:16889:7: Case values incompletely covered (example pattern 0x38)\n16889 |       casez (io_mask_waddr_0)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/store-SQData8Module.sv:17005:7: Case values incompletely covered (example pattern 0x38)\n17005 |       casez (io_mask_waddr_1)\n      |       ^~~~~\n",
+        "output_sha256": "9b4cf3784158cd223ba35d653f7d8fa7b37bcfbd0c6ec648ba1f49a2727f0ed0"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/store-SQData8Module.sv; hierarchy -top SQData8Module; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "n/.work/v2-memory-data-families/store-SQData8Module.sv:2313$1008'.\nRemoving empty process `SQData8Module.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/store-SQData8Module.sv:2310$1007'.\nRemoving empty process `SQData8Module.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/store-SQData8Module.sv:2307$1006'.\nCleaned up 452 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module SQData8Module.\n<suppressed ~10 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module SQData8Module...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 4ad48e4865, CPU: user 0.19s system 0.01s, MEM: 55.81 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 67% 2x read_verilog (0 sec), 7% 1x proc_mux (0 sec), ...\n",
+        "output_sha256": "73049beb44bbd7177fb61e63b09ce297a3c93962ea7a6dd1e4badf3d1ae80fd4"
+      }
+    },
+    "SQDataModule": {
+      "deterministic": true,
+      "rtl_bytes": 1500204,
+      "rtl_sha256": "85e8b17e64974d0a5ef2c0672951308f0ff0245e226c2d8cce6a3857e81e8f4a",
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/store-SQDataModule.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "han-v2/validation/.work/v2-memory-data-families/store-SQDataModule.sv:46944:7: Case values incompletely covered (example pattern 0x37)\n46944 |       casez (io_mask_waddr_0)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/store-SQDataModule.sv:47058:7: Case values incompletely covered (example pattern 0x37)\n47058 |       casez (io_mask_waddr_1)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/store-SQDataModule.sv:47176:7: Case values incompletely covered (example pattern 0x38)\n47176 |       casez (io_mask_waddr_0)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/store-SQDataModule.sv:47292:7: Case values incompletely covered (example pattern 0x38)\n47292 |       casez (io_mask_waddr_1)\n      |       ^~~~~\n",
+        "output_sha256": "1b80c89f6d773248de80056b56102d4cdc168f4ec916ad06a7cd6316501d8e6c"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/store-SQDataModule.sv; hierarchy -top SQDataModule; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "ion/.work/v2-memory-data-families/store-SQDataModule.sv:32600$16083'.\nRemoving empty process `SQDataModule.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/store-SQDataModule.sv:32597$16082'.\nRemoving empty process `SQDataModule.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/store-SQDataModule.sv:32594$16081'.\nCleaned up 452 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module SQDataModule.\n<suppressed ~10 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module SQDataModule...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 38ee77d010, CPU: user 1.44s system 0.08s, MEM: 254.43 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 57% 2x read_verilog (0 sec), 20% 1x check (0 sec), ...\n",
+        "output_sha256": "4e453f590e8a88b9e4882fb59baa47d13e188c012091066aa36a268e43c0d3a1"
+      }
+    },
+    "PipelineRegModule": {
+      "deterministic": true,
+      "rtl_bytes": 8789,
+      "rtl_sha256": "9d7fb97e3bed8bdeed66e2fd5bb76ab81e3ae105d855074a284af941ff263054",
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/pipeline-PipelineRegModule.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.029 MB sources in 2 modules, into 0.028 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.022 s (elab=0.001, cvt=0.002, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.348 MB\n",
+        "output_sha256": "4b9346602dce0d8066cfd76c3fed0e68d49eb6d2fd047bfed689bd1392f9bfb7"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/pipeline-PipelineRegModule.sv; hierarchy -top PipelineRegModule; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "milies/pipeline-PipelineRegModule.sv:134$3'.\nRemoving empty process `PipelineRegModule.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/pipeline-PipelineRegModule.sv:131$2'.\nRemoving empty process `PipelineRegModule.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/pipeline-PipelineRegModule.sv:128$1'.\nCleaned up 12 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module PipelineRegModule.\n<suppressed ~11 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module PipelineRegModule...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 7ff49bbe15, CPU: user 0.00s system 0.01s, MEM: 12.66 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 59% 2x read_verilog (0 sec), 11% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "a1506fda797ea11e0897d8fa423b92c01d4e6324295b1645f4c178904e57d52f"
+      }
+    },
+    "PipelineRegModule_1": {
+      "deterministic": true,
+      "rtl_bytes": 27721,
+      "rtl_sha256": "82a45d18261a770deb3725585d1355233c32af19f9637fa6376f73d4db5a1c7f",
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/pipeline-PipelineRegModule_1.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.047 MB sources in 2 modules, into 0.044 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.029 s (elab=0.001, cvt=0.004, bld=0.000); cpu 0.012 s on 1 threads; alloced 10.152 MB\n",
+        "output_sha256": "37f06cc38294b43edaf959e70d5bc05770883e3d5490559d1df3cb50b75ffe0f"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/pipeline-PipelineRegModule_1.sv; hierarchy -top PipelineRegModule_1; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "elineRegModule_1.sv:445$102'.\nRemoving empty process `PipelineRegModule_1.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/pipeline-PipelineRegModule_1.sv:442$101'.\nRemoving empty process `PipelineRegModule_1.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/pipeline-PipelineRegModule_1.sv:439$100'.\nCleaned up 33 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module PipelineRegModule_1.\n<suppressed ~32 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module PipelineRegModule_1...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 1f5ea8c4f6, CPU: user 0.01s system 0.01s, MEM: 14.84 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 67% 2x read_verilog (0 sec), 6% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "4bd04af372491cfae2972a0bbea5e5a2cce8db470cffbe0f1105caf264bbd850"
+      }
+    },
+    "PipelineRegModule_2": {
+      "deterministic": true,
+      "rtl_bytes": 27175,
+      "rtl_sha256": "58545ffec6db0a61856c98925dad78d5548c32edaf6f65bf2d280a9091eacea2",
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/pipeline-PipelineRegModule_2.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.046 MB sources in 2 modules, into 0.044 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.026 s (elab=0.001, cvt=0.004, bld=0.000); cpu 0.011 s on 1 threads; alloced 10.164 MB\n",
+        "output_sha256": "a21154f126f39be8c623371189b833cc60201d64419b209dc6bd6dd5175e091f"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/pipeline-PipelineRegModule_2.sv; hierarchy -top PipelineRegModule_2; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "elineRegModule_2.sv:445$102'.\nRemoving empty process `PipelineRegModule_2.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/pipeline-PipelineRegModule_2.sv:442$101'.\nRemoving empty process `PipelineRegModule_2.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/pipeline-PipelineRegModule_2.sv:439$100'.\nCleaned up 33 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module PipelineRegModule_2.\n<suppressed ~32 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module PipelineRegModule_2...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: d01b250c27, CPU: user 0.03s system 0.00s, MEM: 15.00 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 65% 2x read_verilog (0 sec), 8% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "6dff01051628fcda44c63ea8055b44ff9b662d7b66446f4a7dbd66dd7f783b8c"
+      }
+    },
+    "PipelineRegModule_6": {
+      "deterministic": true,
+      "rtl_bytes": 5521,
+      "rtl_sha256": "3ddf257bc802c76a45136c992ef6281a3f1ccadd7686683c614a88420dde8ef9",
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/pipeline-PipelineRegModule_6.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.026 MB sources in 2 modules, into 0.027 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.022 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.234 MB\n",
+        "output_sha256": "9f86498ce206c3f852125ee32fd9f7c8b1e34829bbfb8212b9402889fc231300"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/pipeline-PipelineRegModule_6.sv; hierarchy -top PipelineRegModule_6; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "-PipelineRegModule_6.sv:117$27'.\nRemoving empty process `PipelineRegModule_6.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/pipeline-PipelineRegModule_6.sv:114$26'.\nRemoving empty process `PipelineRegModule_6.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/pipeline-PipelineRegModule_6.sv:111$25'.\nCleaned up 8 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module PipelineRegModule_6.\n<suppressed ~7 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module PipelineRegModule_6...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 3f9e0e98d6, CPU: user 0.01s system 0.01s, MEM: 12.19 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 54% 2x read_verilog (0 sec), 17% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "2d605c43a126af75bda56dc97e9344600eef76418befef67f74053bc0067265e"
+      }
+    },
+    "L1CohMetaArray": {
+      "deterministic": true,
+      "rtl_bytes": 5975537,
+      "rtl_sha256": "27329cb074c46307d9ae009b29658381f5338ef8b7663ce729258987da474372",
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/meta-L1CohMetaArray.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "y-data-families/meta-L1CohMetaArray.sv:282319:7: Case values incompletely covered (example pattern 0xfc)\n282319 |       casez (io_write_0_bits_idx)\n       |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/meta-L1CohMetaArray.sv:282831:7: Case values incompletely covered (example pattern 0xfd)\n282831 |       casez (io_write_0_bits_idx)\n       |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/meta-L1CohMetaArray.sv:283345:7: Case values incompletely covered (example pattern 0xfe)\n283345 |       casez (io_write_0_bits_idx)\n       |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/meta-L1CohMetaArray.sv:283861:7: Case values incompletely covered (example pattern 0xff)\n283861 |       casez (io_write_0_bits_idx)\n       |       ^~~~~\n",
+        "output_sha256": "229c6919c4f3dfb21b07b44207283a1ce62f0db974592c33d4dcf9c7f3608df4"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/meta-L1CohMetaArray.sv; hierarchy -top L1CohMetaArray; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "on/.work/v2-memory-data-families/meta-L1CohMetaArray.sv:2138$7'.\nRemoving empty process `L1CohMetaArray.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/meta-L1CohMetaArray.sv:2135$6'.\nRemoving empty process `L1CohMetaArray.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/meta-L1CohMetaArray.sv:2132$5'.\nCleaned up 2068 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module L1CohMetaArray.\n<suppressed ~1052 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module L1CohMetaArray...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 5422cf239d, CPU: user 1.69s system 0.17s, MEM: 597.27 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 68% 2x read_verilog (1 sec), 9% 1x proc_mux (0 sec), ...\n",
+        "output_sha256": "66c3745c40e3d7f9ef75066dd9e9f030caf7010c7c958abe893a2b7ab4be07d9"
+      }
+    },
+    "L1ErrorMetaArray": {
+      "deterministic": true,
+      "rtl_bytes": 11942872,
+      "rtl_sha256": "42d571237d8a71ddcbab0d25a435d6ad3d989b81ba443ba5f130f61fa1d84a4a",
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/meta-L1ErrorMetaArray.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "amilies/meta-L1ErrorMetaArray.sv:567126:7: Case values incompletely covered (example pattern 0xfc)\n567126 |       casez (io_write_0_bits_idx)\n       |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/meta-L1ErrorMetaArray.sv:567638:7: Case values incompletely covered (example pattern 0xfd)\n567638 |       casez (io_write_0_bits_idx)\n       |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/meta-L1ErrorMetaArray.sv:568152:7: Case values incompletely covered (example pattern 0xfe)\n568152 |       casez (io_write_0_bits_idx)\n       |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/meta-L1ErrorMetaArray.sv:568668:7: Case values incompletely covered (example pattern 0xff)\n568668 |       casez (io_write_0_bits_idx)\n       |       ^~~~~\n",
+        "output_sha256": "7c3fa22e17ab2fcb9d97b85513d162d6a76464cc6cfd225e235b9579b76a0335"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/meta-L1ErrorMetaArray.sv; hierarchy -top L1ErrorMetaArray; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "ory-data-families/meta-L1ErrorMetaArray.sv:4221$7'.\nRemoving empty process `L1ErrorMetaArray.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/meta-L1ErrorMetaArray.sv:4218$6'.\nRemoving empty process `L1ErrorMetaArray.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/meta-L1ErrorMetaArray.sv:4215$5'.\nCleaned up 4132 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module L1ErrorMetaArray.\n<suppressed ~2100 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module L1ErrorMetaArray...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 383c427664, CPU: user 3.60s system 0.28s, MEM: 1164.21 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 70% 2x read_verilog (2 sec), 8% 1x proc_mux (0 sec), ...\n",
+        "output_sha256": "6db0a96526e0b27cf20cf3773294a66dd7b844c11b0ecb79668a7ac71a456c06"
+      }
+    },
+    "L1FlagMetaArray": {
+      "deterministic": true,
+      "rtl_bytes": 21798138,
+      "rtl_sha256": "f6e759e9fc01d06416dc8b4b95208d1b197033d62b9131b5e502357242e25cb3",
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/meta-L1FlagMetaArray.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "meta-L1FlagMetaArray.sv:1078434:7: Case values incompletely covered (example pattern 0xff)\n1078434 |       casez (io_write_0_bits_idx)\n        |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/meta-L1FlagMetaArray.sv:1078948:7: Case values incompletely covered (example pattern 0xff)\n1078948 |       casez (io_write_1_bits_idx)\n        |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/meta-L1FlagMetaArray.sv:1079462:7: Case values incompletely covered (example pattern 0xff)\n1079462 |       casez (io_write_2_bits_idx)\n        |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/meta-L1FlagMetaArray.sv:1079976:7: Case values incompletely covered (example pattern 0xff)\n1079976 |       casez (io_write_3_bits_idx)\n        |       ^~~~~\n",
+        "output_sha256": "596316c0ac79b3c27483ee041e4f3290369d7bda136e24aaf6350f53fa1ce101"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/meta-L1FlagMetaArray.sv; hierarchy -top L1FlagMetaArray; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "-memory-data-families/meta-L1FlagMetaArray.sv:2164$19'.\nRemoving empty process `L1FlagMetaArray.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/meta-L1FlagMetaArray.sv:2161$18'.\nRemoving empty process `L1FlagMetaArray.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/meta-L1FlagMetaArray.sv:2158$17'.\nCleaned up 8202 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module L1FlagMetaArray.\n<suppressed ~1066 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module L1FlagMetaArray...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: a9854a1a21, CPU: user 5.56s system 0.98s, MEM: 2065.84 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 74% 2x read_verilog (4 sec), 7% 1x proc_mux (0 sec), ...\n",
+        "output_sha256": "c31ecace78047a5735f63f7894f21423f802144a4ecad61c637c338d9959adfd"
+      }
+    },
+    "L1PrefetchSourceArray": {
+      "deterministic": true,
+      "rtl_bytes": 21984672,
+      "rtl_sha256": "b1b24853187a317d4c5112c3d8652fa2d4b0dab2b1c29a317d9b46cecd47cfd9",
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/meta-L1PrefetchSourceArray.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "ay.sv:1084723:7: Case values incompletely covered (example pattern 0xff)\n1084723 |       casez (io_write_0_bits_idx)\n        |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/meta-L1PrefetchSourceArray.sv:1085237:7: Case values incompletely covered (example pattern 0xff)\n1085237 |       casez (io_write_1_bits_idx)\n        |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/meta-L1PrefetchSourceArray.sv:1085751:7: Case values incompletely covered (example pattern 0xff)\n1085751 |       casez (io_write_2_bits_idx)\n        |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/meta-L1PrefetchSourceArray.sv:1086265:7: Case values incompletely covered (example pattern 0xff)\n1086265 |       casez (io_write_3_bits_idx)\n        |       ^~~~~\n",
+        "output_sha256": "673fb9eae8cc6d013c275aeed66605d039d278c14eeaa68b8491f78adecdea63"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/meta-L1PrefetchSourceArray.sv; hierarchy -top L1PrefetchSourceArray; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "eArray.sv:2207$19'.\nRemoving empty process `L1PrefetchSourceArray.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/meta-L1PrefetchSourceArray.sv:2204$18'.\nRemoving empty process `L1PrefetchSourceArray.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-data-families/meta-L1PrefetchSourceArray.sv:2201$17'.\nCleaned up 8217 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module L1PrefetchSourceArray.\n<suppressed ~1081 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module L1PrefetchSourceArray...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 95d278b752, CPU: user 6.35s system 0.88s, MEM: 2179.77 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 68% 2x read_verilog (4 sec), 9% 1x proc_mux (0 sec), ...\n",
+        "output_sha256": "a3f2cdbd7f720957ed9f4dc8b810ece5fee1f4b2db730addda86c10dbc6e77ba"
+      }
+    }
+  },
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PARTIAL_SQDATA_FORWARDING_DEFERRED",
+    "V2_REFERENCE_MATCHED": "PENDING_LOCKED_LSQ_DCACHE_PARENT_DIFF",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "UHSC_LOCALIZED": "PASS_BOUNDED_FAMILY_LOCAL_NAME",
+    "PARENT_CLOSURE_MATCHED": "PENDING",
+    "LICENSE_REVIEW": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "STRUCTURE_VERIFIED_DIRECT_PARTIAL",
+  "failures": [],
+  "unclosed": [
+    "SQData8Module and SQDataModule direct forwarding-mux simulation is deferred after the Python simulator exceeded its nesting limit; exact ports and Verilator/Yosys remain green.",
+    "Complete LSQ/DCache parent and locked XSTop differential remain pending.",
+    "License review and user approval remain pending."
+  ]
+}
