@@ -388,8 +388,9 @@ def main() -> int:
                 "available_evidence": [
                     "validation/v2-intbuffer-family-results.json",
                     "validation/v2-top-xstile-intbuffer-family-results.json",
+                    "validation/v2-top-xstile-parent-results.json",
                 ],
-                "blocker": "all three IntBuffer subjects and direct/tool gates are landed; XSCore/L2Top/IntBuffer child binding into the 153-port XSTile parent remains pending",
+                "blocker": "153-port XSTile parent bridge and six explicit child slots are tool-clean; XSCore/L2Top/IntBuffer child behavior and full XSTile differential remain pending",
             },
             {
                 "id": "TOP-XSTOP-UHSC-IO-005",

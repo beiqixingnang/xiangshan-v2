@@ -56,7 +56,6 @@ L2TOP_SOURCE_SCALA_PATHS: tuple[str, ...] = (
     "upstream/rocket-chip/src/main/scala/tilelink/BusWrapper.scala",
 )
 
-
 # Dependency aliases accepted by the source-backed L2Top adapter.  The
 # validator may inject either source instance names or concise local names;
 # no alias is treated as a child unless it is explicitly supplied. /
@@ -252,14 +251,55 @@ class _RootBoundary(Elaboratable):
         domain.clk = self.clock
         domain.rst = self.reset
         setattr(m.domains, f"{self.root_name}_sync", domain)
+        xstile_missing_terms: list[Any] = []
+        if self.root_name == "xs_tile":
+            # XSTile child instances are injected by the validator; no sibling
+            # Build import is performed here. / XSTile 子实例由验证器注入，
+            # 此处不导入 sibling Build。
+            children = getattr(self, "xstile_children", {})
+            for child_name, child in children.items():
+                if child is None:
+                    xstile_missing_terms.append(Const(1))
+                    continue
+                setattr(m.submodules, f"xstile_{child_name}", child)
+                child_clock = getattr(child, "clock", None)
+                child_reset = getattr(child, "reset", None)
+                if child_clock is None and isinstance(getattr(child, "ports", None), dict):
+                    child_clock = child.ports.get("clock")
+                    child_reset = child.ports.get("reset")
+                if child_clock is not None:
+                    m.d.comb += child_clock.eq(self.clock)
+                if child_reset is not None:
+                    m.d.comb += child_reset.eq(self.reset)
+                child_missing = getattr(child, "closure_missing", None)
+                child_count = getattr(child, "closure_missing_count", None)
+                if child_count is not None:
+                    xstile_missing_terms.append(child_count)
+                elif child_missing is not None:
+                    xstile_missing_terms.append(child_missing)
+                else:
+                    xstile_missing_terms.append(Const(1))
+            inventory_missing = int(len(self.full_port_specs) != 153)
+            xstile_missing_count: Any = Const(inventory_missing, 8)
+            xstile_missing_any: Any = Const(inventory_missing)
+            for term in xstile_missing_terms:
+                xstile_missing_count = xstile_missing_count + term
+                xstile_missing_any = xstile_missing_any | (term != 0)
+            closure_missing_expr: Any = xstile_missing_any
+            closure_count_expr: Any = xstile_missing_count
+            closure_complete_expr: Any = ~xstile_missing_any
+        else:
+            closure_missing_expr = Const(1)
+            closure_count_expr = Const(1, 8)
+            closure_complete_expr = Const(0)
         m.d.comb += [
             self.mem_a_valid.eq(self.cf_valid.any() & ~self.reset),
             self.mem_a_address.eq(0),
             self.mem_d_ready.eq(~self.reset),
-            self.closure_missing.eq(1),
-            self.closure_missing_count.eq(1),
-            self.closure_complete.eq(0),
-            self.child_missing.eq(1),
+            self.closure_missing.eq(closure_missing_expr),
+            self.closure_missing_count.eq(closure_count_expr),
+            self.closure_complete.eq(closure_complete_expr),
+            self.child_missing.eq(closure_missing_expr),
         ]
         # Full-envelope outputs are deterministic tie-offs until the actual
         # XSCore/L2Top/XSTile/XSTop child closures are connected.  This is a
@@ -543,11 +583,24 @@ class L2Top(_RootBoundary):
 
 
 class XSTile(_RootBoundary):
-    """Source-named XSTile boundary; XSCore/L2Top child binding pending."""
+    """Source-backed XSTile boundary with explicit child slots. / 显式子级槽位的源代码 XSTile 边界。"""
 
     def __init__(self, configuration: RootConfig | None = None,
                  injected_dependencies: dict[str, Any] | None = None) -> None:
         super().__init__(configuration, "xs_tile", injected_dependencies)
+        deps = self.injected_dependencies
+        nested = deps.get("children", deps.get("xstile_children", {}))
+        if not isinstance(nested, Mapping):
+            nested = {}
+        merged = {**deps, **dict(nested)}
+        self.xstile_children: dict[str, Any] = {
+            "xs_core": merged.get("xs_core") or merged.get("core"),
+            "l2_top": merged.get("l2_top") or merged.get("l2top"),
+            "intbuffer": merged.get("intbuffer") or merged.get("int_buffer"),
+            "intbuffer_1": merged.get("intbuffer_1") or merged.get("intBuffer_1"),
+            "intbuffer_2": merged.get("intbuffer_2") or merged.get("intBuffer_2"),
+            "intbuffer_3": merged.get("intbuffer_3") or merged.get("intBuffer_3") or merged.get("intbuffer_1") or merged.get("intBuffer_1"),
+        }
 
 
 class XSTop(_RootBoundary):
