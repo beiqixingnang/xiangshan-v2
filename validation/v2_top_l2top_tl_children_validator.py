@@ -7,6 +7,7 @@ L2Top parent closure pending.
 """
 from __future__ import annotations
 
+import ast
 import hashlib
 import importlib.util
 import json
@@ -14,6 +15,7 @@ import re
 import shutil
 import subprocess
 import sys
+import py_compile
 from pathlib import Path
 from types import ModuleType
 from typing import Any
@@ -137,6 +139,61 @@ def direct_gate(module: ModuleType) -> dict[str, Any]:
             "merger_vectors": mergers, "bus_error": bus}
 
 
+def static_contract() -> dict[str, Any]:
+    """Audit five Build zones, exact adapter, and bilingual function comments."""
+
+    raw = BUILD.read_bytes()
+    source = raw.decode("utf-8")
+    tree = ast.parse(source, filename=str(BUILD))
+    lines = source.splitlines()
+    zone_names = ("Module Contract", "Configuration", "Implementation",
+                  "Public Adapter", "Direct Entry")
+    positions = [source.find(f"# {name}") for name in zone_names]
+    missing_comments: list[str] = []
+    for node in ast.walk(tree):
+        if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            continue
+        index = node.lineno - 2
+        while index >= 0 and not lines[index].strip():
+            index -= 1
+        if index < 0 or not lines[index].lstrip().startswith("#") or "/" not in lines[index]:
+            missing_comments.append(f"{node.name}:{node.lineno}")
+    adapters = [
+        node for node in tree.body
+        if isinstance(node, ast.FunctionDef) and node.name == "build_verilog"
+    ]
+    adapter_args = [arg.arg for arg in adapters[0].args.args] if len(adapters) == 1 else []
+    adapter_exact = bool(
+        len(adapters) == 1
+        and adapter_args == ["configuration", "injected_dependencies"]
+        and adapters[0].args.vararg is None
+        and adapters[0].args.kwarg is None
+        and not adapters[0].args.defaults
+    )
+    compiled = True
+    try:
+        py_compile.compile(str(BUILD), doraise=True)
+    except py_compile.PyCompileError:
+        compiled = False
+    passed = (
+        not raw.startswith(b"\xef\xbb\xbf") and b"\r" not in raw
+        and all(position >= 0 for position in positions)
+        and positions == sorted(positions)
+        and adapter_exact and not missing_comments and compiled
+    )
+    return {
+        "status": "PASS" if passed else "FAIL",
+        "utf8_lf": not raw.startswith(b"\xef\xbb\xbf") and b"\r" not in raw,
+        "compiled": compiled,
+        "zones": dict(zip(zone_names, positions)),
+        "five_zone_order": all(position >= 0 for position in positions)
+        and positions == sorted(positions),
+        "adapter_args": adapter_args,
+        "adapter_exact": adapter_exact,
+        "missing_bilingual_comments": missing_comments,
+    }
+
+
 def static_gate() -> dict[str, Any]:
     command = [sys.executable, "-m", "py_compile", str(BUILD), str(TEST)]
     result = subprocess.run(command, capture_output=True, text=True,
@@ -207,11 +264,14 @@ def main() -> int:
         if rtl != module.build_verilog({"module": member}, {}):
             failures.append(f"{member}: nondeterministic export")
     direct = direct_gate(module)
-    static = static_gate()
+    contract_static = static_contract()
+    compile_static = static_gate()
     pyright = pyright_gate()
     if direct["status"] != "PASS":
         failures.append("direct equations")
-    if static["status"] != "PASS":
+    if contract_static["status"] != "PASS":
+        failures.append("static contract")
+    if compile_static["status"] != "PASS":
         failures.append("py_compile")
     if pyright["status"] != "PASS":
         failures.append("pyright")
@@ -237,9 +297,11 @@ def main() -> int:
         "source_inventory": source_inventory,
         "contracts": contract_rows,
         "tools": tool_rows,
-        "direct": direct, "static": static, "pyright": pyright,
+        "direct": direct, "static_contract": contract_static,
+        "static": compile_static, "pyright": pyright,
         "gates": {
-            "PY_COMPILE": static["status"],
+            "PY_COMPILE": compile_static["status"],
+            "STATIC_CONTRACT": contract_static["status"],
             "PYRIGHT": pyright["status"],
             "EXACT_SOURCE_PORTS": "PASS" if not any(
                 not row["ports_match"] for row in contract_rows.values()) else "FAIL",

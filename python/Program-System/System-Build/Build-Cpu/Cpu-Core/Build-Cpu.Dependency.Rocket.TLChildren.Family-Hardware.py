@@ -14,7 +14,9 @@ from typing import Any, Iterable, Mapping, NamedTuple
 from amaranth import Elaboratable, Module, Signal
 from amaranth.back import verilog
 
-__all__ = ["COVERED_MODULES", "SOURCE_PATHS", "PortSpec", "FamilySpec",
+# Module Contract / 模块契约
+__all__ = ["COVERED_MODULES", "SOURCE_PATHS", "SOURCE_SCALA_PATHS",
+           "LOCKED_REFERENCE_SHA256", "PortSpec", "FamilySpec",
            "PORT_SPECS", "TLChildFamily", "relay_observation",
            "merge_source_ids", "bus_error_observation", "build_verilog", "main"]
 
@@ -29,7 +31,10 @@ SOURCE_PATHS = {
     "TLClientsMerger": ("upstream/utility/src/main/scala/utility/TLUtils/TLClientsMerger.scala",),
     "BusErrorUnit": ("upstream/rocket-chip/src/main/scala/tile/BusErrorUnit.scala",),
 }
+SOURCE_SCALA_PATHS = tuple(path for paths in SOURCE_PATHS.values() for path in paths)
+LOCKED_REFERENCE_SHA256 = "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d"
 
+# Configuration / 配置
 class PortSpec(NamedTuple):
     name: str
     direction: str
@@ -45,38 +50,48 @@ PORT_SPECS: dict[str, tuple[PortSpec, ...]] = {
     for module, rows in _LOCKED_PORTS.items()
 }
 
+# Implementation / 实现
 @dataclass(frozen=True)
 class FamilySpec:
     module: str
+
+    # Validate one selected source member / 校验一个选定的源成员。
     def __post_init__(self) -> None:
         if self.module not in PORT_SPECS:
             raise ValueError(f"unknown TL child: {self.module}")
     @property
+    # Return the exact frozen port tuple / 返回精确冻结端口元组。
     def ports(self) -> tuple[PortSpec, ...]:
         return PORT_SPECS[self.module]
     @property
+    # Return the frozen port count / 返回冻结端口数量。
     def port_count(self) -> int:
         return len(self.ports)
     @property
+    # Return the frozen aggregate bit count / 返回冻结聚合位宽。
     def port_bits(self) -> int:
         return sum(port.width for port in self.ports)
 
+# Normalize generated auto channel names / 规范化生成的 auto 通道名称。
 def _tail(name: str) -> str:
     return re.sub(r"^auto_(?:in|out)(?:_[0-9]+)?_", "", name)
 
 class TLChildFamily(Elaboratable):
     """Exact-port bounded child relay with deterministic inactive defaults."""
+    # Allocate exact frozen signals / 分配精确冻结信号。
     def __init__(self, module: str = COVERED_MODULES[0]) -> None:
         self.spec, self.member = FamilySpec(module), module
         self.ports = {port.name: Signal(port.width, name=port.name)
                       for port in self.spec.ports}
         for port_name, signal in self.ports.items():
             setattr(self, port_name, signal)
+    # Find compatible opposite-direction channel signals / 查找兼容的反向通道信号。
     def _candidates(self, output: PortSpec) -> list[Signal]:
         tail = _tail(output.name)
         return [self.ports[port.name] for port in self.spec.ports
                 if port.direction == "input" and port.width == output.width
                 and _tail(port.name) == tail]
+    # Elaborate bounded ready-valid relay / 展开有界 ready-valid 中继。
     def elaborate(self, platform: Any) -> Module:
         del platform
         module = Module()
@@ -106,11 +121,13 @@ class TLChildFamily(Elaboratable):
             module.d.comb += signal.eq(expression)
         return module
 
+# Return one bounded Decoupled observation / 返回一个有界 Decoupled 观测。
 def relay_observation(*, valid: bool, ready: bool, reset: bool = False) -> dict[str, int]:
     active = bool(valid) and not bool(reset)
     return {"ready": int(not bool(reset)), "valid": int(active),
             "fire": int(active and bool(ready)), "reset": int(bool(reset))}
 
+# Merge source-id ranges as TLClientsMerger does / 按 TLClientsMerger 规则合并 source-id 范围。
 def merge_source_ids(source_ids: Iterable[int], *,
                      starts: Iterable[int] | None = None) -> dict[str, Any]:
     values = tuple(int(value) for value in source_ids)
@@ -124,6 +141,7 @@ def merge_source_ids(source_ids: Iterable[int], *,
     return {"min_id": lo, "max_id": hi, "source_id_width": max(0, hi - lo),
             "client_count": len(values)}
 
+# Return bounded BusErrorUnit cause and interrupt taps / 返回有界 BusErrorUnit 原因及中断观测。
 def bus_error_observation(error_valid: Iterable[bool], enabled: Iterable[bool],
                           global_interrupt: Iterable[bool],
                           local_interrupt: Iterable[bool]) -> dict[str, int]:
@@ -145,6 +163,8 @@ def bus_error_observation(error_valid: Iterable[bool], enabled: Iterable[bool],
                                    in zip(errors, enables, locals_))),
     }
 
+# Public Adapter / 公共适配器
+# Export one deterministic selected member / 导出一个确定性的选定成员。
 def build_verilog(configuration: Any,
                   injected_dependencies: Any) -> str:
     del injected_dependencies
@@ -153,13 +173,17 @@ def build_verilog(configuration: Any,
         member = str(configuration.get("module", configuration.get("name", member)))
     elif isinstance(configuration, str):
         member = configuration
+    if member not in PORT_SPECS:
+        raise ValueError(f"unknown TL child: {member}")
     family = TLChildFamily(member)
     return verilog.convert(family, name=member,
                            ports=[family.ports[port.name] for port in family.spec.ports],
                            emit_src=False)
 
+# Emit the default selected member / 输出默认选定成员。
 def main() -> None:
     print(build_verilog({"module": COVERED_MODULES[0]}, {}))
 
+# Direct Entry / 直接入口
 if __name__ == "__main__":
     main()
