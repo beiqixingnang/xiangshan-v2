@@ -5,8 +5,8 @@
  "reference_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
  "locked_module_count": 1976,
  "status_counts": {
-  "CORE_BOUNDED_SUBJECT": 1018,
-  "FAMILY_SUBJECT": 958
+  "CORE_BOUNDED_SUBJECT": 1021,
+  "FAMILY_SUBJECT": 955
  },
  "row_count": 1976,
  "rows": [
@@ -2393,7 +2393,7 @@
    "module": "ClkDiv2SRAMTemplate",
    "status": "FAMILY_SUBJECT",
    "ports": 8,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "huancun/utils/SRAMTemplate.scala"
    ],
@@ -2407,7 +2407,7 @@
    "module": "ClkDiv2SRAMTemplate_32",
    "status": "FAMILY_SUBJECT",
    "ports": 8,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "huancun/utils/SRAMTemplate.scala"
    ],
@@ -2421,7 +2421,7 @@
    "module": "ClkDiv2SRAMTemplate_40",
    "status": "FAMILY_SUBJECT",
    "ports": 26,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "huancun/utils/SRAMTemplate.scala"
    ],
@@ -2435,7 +2435,7 @@
    "module": "ClkDiv2SRAMTemplate_41",
    "status": "FAMILY_SUBJECT",
    "ports": 26,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "huancun/utils/SRAMTemplate.scala"
    ],
@@ -2449,7 +2449,7 @@
    "module": "ClkDiv2SRAMTemplate_42",
    "status": "FAMILY_SUBJECT",
    "ports": 26,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "huancun/utils/SRAMTemplate.scala"
    ],
@@ -2463,7 +2463,7 @@
    "module": "ClkDiv2SRAMTemplate_43",
    "status": "FAMILY_SUBJECT",
    "ports": 134,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "huancun/utils/SRAMTemplate.scala"
    ],
@@ -2477,7 +2477,7 @@
    "module": "ClkDiv2SRAMTemplate_44",
    "status": "FAMILY_SUBJECT",
    "ports": 38,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "huancun/utils/SRAMTemplate.scala"
    ],
@@ -2491,7 +2491,7 @@
    "module": "ClkDiv2SRAMTemplate_45",
    "status": "FAMILY_SUBJECT",
    "ports": 38,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "huancun/utils/SRAMTemplate.scala"
    ],
@@ -3466,7 +3466,7 @@
    "module": "DecodeUnitComp",
    "status": "CORE_BOUNDED_SUBJECT",
    "ports": 686,
-   "children": 1,
+   "children": 8,
    "scala_sources": [
     "xiangshan/backend/decode/DecodeUnitComp.scala"
    ],
@@ -4320,7 +4320,7 @@
    "module": "DiffRatStateBuffer",
    "status": "CORE_BOUNDED_SUBJECT",
    "ports": 265,
-   "children": 0,
+   "children": 7,
    "scala_sources": [
     "xiangshan/backend/rob/DiffRatStateBuffer.scala"
    ],
@@ -6516,7 +6516,7 @@
    "module": "FloatDivider",
    "status": "CORE_BOUNDED_SUBJECT",
    "ports": 16,
-   "children": 1,
+   "children": 2,
    "scala_sources": [
     "yunsuan/fpu/FloatDivider.scala"
    ],
@@ -6530,7 +6530,7 @@
    "module": "FloatDividerR64",
    "status": "CORE_BOUNDED_SUBJECT",
    "ports": 15,
-   "children": 2,
+   "children": 3,
    "scala_sources": [
     "yunsuan/fpu/FloatDivider.scala"
    ],
@@ -9154,14 +9154,16 @@
   },
   {
    "module": "IntBuffer",
-   "status": "FAMILY_SUBJECT",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 4,
    "children": 0,
    "scala_sources": [
     "diplomacy/LazyModule.scala",
     "utility/IntBuffer.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IntBufferFamily"
+   ],
    "family_subjects": [
     "dependency.rocket.diplomacy",
     "dependency.utility"
@@ -9170,14 +9172,16 @@
   },
   {
    "module": "IntBuffer_1",
-   "status": "FAMILY_SUBJECT",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 6,
    "children": 0,
    "scala_sources": [
     "diplomacy/LazyModule.scala",
     "utility/IntBuffer.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IntBufferFamily"
+   ],
    "family_subjects": [
     "dependency.rocket.diplomacy",
     "dependency.utility"
@@ -9186,14 +9190,16 @@
   },
   {
    "module": "IntBuffer_2",
-   "status": "FAMILY_SUBJECT",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 6,
    "children": 0,
    "scala_sources": [
     "diplomacy/LazyModule.scala",
     "utility/IntBuffer.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IntBufferFamily"
+   ],
    "family_subjects": [
     "dependency.rocket.diplomacy",
     "dependency.utility"
@@ -12596,7 +12602,7 @@
    "module": "NewCSR",
    "status": "FAMILY_SUBJECT",
    "ports": 332,
-   "children": 421,
+   "children": 424,
    "scala_sources": [
     "utility/CriticalErrorUtils.scala",
     "xiangshan/backend/fu/NewCSR/MachineLevel.scala",
@@ -13417,7 +13423,7 @@
    "module": "PFEvent",
    "status": "CORE_BOUNDED_SUBJECT",
    "ports": 29,
-   "children": 0,
+   "children": 24,
    "scala_sources": [
     "xiangshan/backend/fu/NewCSR/PFEvent.scala"
    ],
@@ -13634,7 +13640,7 @@
    "module": "Permutation",
    "status": "FAMILY_SUBJECT",
    "ports": 18,
-   "children": 0,
+   "children": 2,
    "scala_sources": [
     "yunsuan/vector/VectorPerm/Permutation.scala"
    ],
@@ -17047,7 +17053,7 @@
    "module": "Queue10_PutBufferBeatEntry",
    "status": "FAMILY_SUBJECT",
    "ports": 9,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -17061,7 +17067,7 @@
    "module": "Queue16_DSBeat",
    "status": "FAMILY_SUBJECT",
    "ports": 6,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -17075,7 +17081,7 @@
    "module": "Queue16_GrantQueueData",
    "status": "FAMILY_SUBJECT",
    "ports": 6,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -17089,7 +17095,7 @@
    "module": "Queue16_GrantQueueTask",
    "status": "FAMILY_SUBJECT",
    "ports": 89,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -17103,7 +17109,7 @@
    "module": "Queue16_HintQueueEntry",
    "status": "FAMILY_SUBJECT",
    "ports": 12,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -17117,7 +17123,7 @@
    "module": "Queue16_TaskBundle",
    "status": "FAMILY_SUBJECT",
    "ports": 89,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -17131,7 +17137,7 @@
    "module": "Queue16_grantAckQEntry",
    "status": "FAMILY_SUBJECT",
    "ports": 8,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -17677,7 +17683,7 @@
    "module": "Queue2_AXI4BundleAR",
    "status": "FAMILY_SUBJECT",
    "ports": 24,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -17691,7 +17697,7 @@
    "module": "Queue2_AXI4BundleAR_10",
    "status": "FAMILY_SUBJECT",
    "ports": 24,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -17705,7 +17711,7 @@
    "module": "Queue2_AXI4BundleAR_3",
    "status": "FAMILY_SUBJECT",
    "ports": 24,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -17719,7 +17725,7 @@
    "module": "Queue2_AXI4BundleAR_7",
    "status": "FAMILY_SUBJECT",
    "ports": 26,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -17733,7 +17739,7 @@
    "module": "Queue2_AXI4BundleAR_9",
    "status": "FAMILY_SUBJECT",
    "ports": 24,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -17747,7 +17753,7 @@
    "module": "Queue2_AXI4BundleAW",
    "status": "FAMILY_SUBJECT",
    "ports": 24,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -17761,7 +17767,7 @@
    "module": "Queue2_AXI4BundleAW_10",
    "status": "FAMILY_SUBJECT",
    "ports": 24,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -17775,7 +17781,7 @@
    "module": "Queue2_AXI4BundleAW_3",
    "status": "FAMILY_SUBJECT",
    "ports": 24,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -17789,7 +17795,7 @@
    "module": "Queue2_AXI4BundleAW_7",
    "status": "FAMILY_SUBJECT",
    "ports": 26,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -17803,7 +17809,7 @@
    "module": "Queue2_AXI4BundleAW_9",
    "status": "FAMILY_SUBJECT",
    "ports": 24,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -17817,7 +17823,7 @@
    "module": "Queue2_AXI4BundleB",
    "status": "FAMILY_SUBJECT",
    "ports": 10,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -17831,7 +17837,7 @@
    "module": "Queue2_AXI4BundleB_10",
    "status": "FAMILY_SUBJECT",
    "ports": 8,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -17845,7 +17851,7 @@
    "module": "Queue2_AXI4BundleB_3",
    "status": "FAMILY_SUBJECT",
    "ports": 10,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -17859,7 +17865,7 @@
    "module": "Queue2_AXI4BundleB_7",
    "status": "FAMILY_SUBJECT",
    "ports": 12,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -17873,7 +17879,7 @@
    "module": "Queue2_AXI4BundleB_9",
    "status": "FAMILY_SUBJECT",
    "ports": 10,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -17887,7 +17893,7 @@
    "module": "Queue2_AXI4BundleR",
    "status": "FAMILY_SUBJECT",
    "ports": 14,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -17901,7 +17907,7 @@
    "module": "Queue2_AXI4BundleR_3",
    "status": "FAMILY_SUBJECT",
    "ports": 17,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -17915,7 +17921,7 @@
    "module": "Queue2_AXI4BundleR_67",
    "status": "FAMILY_SUBJECT",
    "ports": 14,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -17929,7 +17935,7 @@
    "module": "Queue2_AXI4BundleR_71",
    "status": "FAMILY_SUBJECT",
    "ports": 18,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -17943,7 +17949,7 @@
    "module": "Queue2_AXI4BundleR_72",
    "status": "FAMILY_SUBJECT",
    "ports": 16,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -17957,7 +17963,7 @@
    "module": "Queue2_AXI4BundleR_74",
    "status": "FAMILY_SUBJECT",
    "ports": 14,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -17971,7 +17977,7 @@
    "module": "Queue2_AXI4BundleR_75",
    "status": "FAMILY_SUBJECT",
    "ports": 12,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -17985,7 +17991,7 @@
    "module": "Queue2_AXI4BundleW",
    "status": "FAMILY_SUBJECT",
    "ports": 12,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -17999,7 +18005,7 @@
    "module": "Queue2_AXI4BundleW_3",
    "status": "FAMILY_SUBJECT",
    "ports": 12,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18013,7 +18019,7 @@
    "module": "Queue2_AXI4BundleW_9",
    "status": "FAMILY_SUBJECT",
    "ports": 12,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18027,7 +18033,7 @@
    "module": "Queue2_DSData",
    "status": "FAMILY_SUBJECT",
    "ports": 9,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18041,7 +18047,7 @@
    "module": "Queue2_TLBundleA",
    "status": "FAMILY_SUBJECT",
    "ports": 22,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18055,7 +18061,7 @@
    "module": "Queue2_TLBundleA_10",
    "status": "FAMILY_SUBJECT",
    "ports": 22,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18069,7 +18075,7 @@
    "module": "Queue2_TLBundleA_14",
    "status": "FAMILY_SUBJECT",
    "ports": 25,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18083,7 +18089,7 @@
    "module": "Queue2_TLBundleA_15",
    "status": "FAMILY_SUBJECT",
    "ports": 19,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18097,7 +18103,7 @@
    "module": "Queue2_TLBundleA_16",
    "status": "FAMILY_SUBJECT",
    "ports": 22,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18111,7 +18117,7 @@
    "module": "Queue2_TLBundleA_2",
    "status": "FAMILY_SUBJECT",
    "ports": 22,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18125,7 +18131,7 @@
    "module": "Queue2_TLBundleA_20",
    "status": "FAMILY_SUBJECT",
    "ports": 24,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18139,7 +18145,7 @@
    "module": "Queue2_TLBundleA_21",
    "status": "FAMILY_SUBJECT",
    "ports": 30,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18153,7 +18159,7 @@
    "module": "Queue2_TLBundleA_22",
    "status": "FAMILY_SUBJECT",
    "ports": 28,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18167,7 +18173,7 @@
    "module": "Queue2_TLBundleA_26",
    "status": "FAMILY_SUBJECT",
    "ports": 22,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18181,7 +18187,7 @@
    "module": "Queue2_TLBundleA_28",
    "status": "FAMILY_SUBJECT",
    "ports": 22,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18195,7 +18201,7 @@
    "module": "Queue2_TLBundleA_29",
    "status": "FAMILY_SUBJECT",
    "ports": 22,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18209,7 +18215,7 @@
    "module": "Queue2_TLBundleA_33",
    "status": "FAMILY_SUBJECT",
    "ports": 32,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18223,7 +18229,7 @@
    "module": "Queue2_TLBundleA_39",
    "status": "FAMILY_SUBJECT",
    "ports": 26,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18237,7 +18243,7 @@
    "module": "Queue2_TLBundleA_5",
    "status": "FAMILY_SUBJECT",
    "ports": 22,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18251,7 +18257,7 @@
    "module": "Queue2_TLBundleA_50",
    "status": "FAMILY_SUBJECT",
    "ports": 21,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18265,7 +18271,7 @@
    "module": "Queue2_TLBundleA_7",
    "status": "FAMILY_SUBJECT",
    "ports": 22,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18279,7 +18285,7 @@
    "module": "Queue2_TLBundleB",
    "status": "FAMILY_SUBJECT",
    "ports": 19,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18293,7 +18299,7 @@
    "module": "Queue2_TLBundleB_1",
    "status": "FAMILY_SUBJECT",
    "ports": 18,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18321,7 +18327,7 @@
    "module": "Queue2_TLBundleB_2",
    "status": "FAMILY_SUBJECT",
    "ports": 22,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18335,7 +18341,7 @@
    "module": "Queue2_TLBundleB_6",
    "status": "FAMILY_SUBJECT",
    "ports": 19,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18349,7 +18355,7 @@
    "module": "Queue2_TLBundleC",
    "status": "FAMILY_SUBJECT",
    "ports": 22,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18363,7 +18369,7 @@
    "module": "Queue2_TLBundleC_1",
    "status": "FAMILY_SUBJECT",
    "ports": 25,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18377,7 +18383,7 @@
    "module": "Queue2_TLBundleC_2",
    "status": "FAMILY_SUBJECT",
    "ports": 30,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18391,7 +18397,7 @@
    "module": "Queue2_TLBundleC_6",
    "status": "FAMILY_SUBJECT",
    "ports": 19,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18405,7 +18411,7 @@
    "module": "Queue2_TLBundleD",
    "status": "FAMILY_SUBJECT",
    "ports": 22,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18419,7 +18425,7 @@
    "module": "Queue2_TLBundleD_12",
    "status": "FAMILY_SUBJECT",
    "ports": 22,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18433,7 +18439,7 @@
    "module": "Queue2_TLBundleD_16",
    "status": "FAMILY_SUBJECT",
    "ports": 24,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18447,7 +18453,7 @@
    "module": "Queue2_TLBundleD_17",
    "status": "FAMILY_SUBJECT",
    "ports": 17,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18461,7 +18467,7 @@
    "module": "Queue2_TLBundleD_18",
    "status": "FAMILY_SUBJECT",
    "ports": 21,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18475,7 +18481,7 @@
    "module": "Queue2_TLBundleD_19",
    "status": "FAMILY_SUBJECT",
    "ports": 22,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18489,7 +18495,7 @@
    "module": "Queue2_TLBundleD_2",
    "status": "FAMILY_SUBJECT",
    "ports": 16,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18503,7 +18509,7 @@
    "module": "Queue2_TLBundleD_23",
    "status": "FAMILY_SUBJECT",
    "ports": 22,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18517,7 +18523,7 @@
    "module": "Queue2_TLBundleD_24",
    "status": "FAMILY_SUBJECT",
    "ports": 24,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18531,7 +18537,7 @@
    "module": "Queue2_TLBundleD_29",
    "status": "FAMILY_SUBJECT",
    "ports": 22,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18545,7 +18551,7 @@
    "module": "Queue2_TLBundleD_31",
    "status": "FAMILY_SUBJECT",
    "ports": 22,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18559,7 +18565,7 @@
    "module": "Queue2_TLBundleD_32",
    "status": "FAMILY_SUBJECT",
    "ports": 22,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18573,7 +18579,7 @@
    "module": "Queue2_TLBundleD_36",
    "status": "FAMILY_SUBJECT",
    "ports": 24,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18587,7 +18593,7 @@
    "module": "Queue2_TLBundleD_4",
    "status": "FAMILY_SUBJECT",
    "ports": 22,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18601,7 +18607,7 @@
    "module": "Queue2_TLBundleD_42",
    "status": "FAMILY_SUBJECT",
    "ports": 22,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18615,7 +18621,7 @@
    "module": "Queue2_TLBundleD_53",
    "status": "FAMILY_SUBJECT",
    "ports": 21,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18629,7 +18635,7 @@
    "module": "Queue2_TLBundleD_7",
    "status": "FAMILY_SUBJECT",
    "ports": 22,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18643,7 +18649,7 @@
    "module": "Queue2_TLBundleE",
    "status": "FAMILY_SUBJECT",
    "ports": 8,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18657,7 +18663,7 @@
    "module": "Queue2_TLBundleE_1",
    "status": "FAMILY_SUBJECT",
    "ports": 8,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18671,7 +18677,7 @@
    "module": "Queue2_TLBundleE_10",
    "status": "FAMILY_SUBJECT",
    "ports": 8,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18685,7 +18691,7 @@
    "module": "Queue2_TLBundleE_2",
    "status": "FAMILY_SUBJECT",
    "ports": 8,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18699,7 +18705,7 @@
    "module": "Queue2_UInt2",
    "status": "FAMILY_SUBJECT",
    "ports": 8,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18713,7 +18719,7 @@
    "module": "Queue2_UInt3",
    "status": "FAMILY_SUBJECT",
    "ports": 8,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18727,7 +18733,7 @@
    "module": "Queue40_L2TlbMQBundle",
    "status": "FAMILY_SUBJECT",
    "ports": 17,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18741,7 +18747,7 @@
    "module": "Queue4_BundleMap",
    "status": "FAMILY_SUBJECT",
    "ports": 8,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18755,7 +18761,7 @@
    "module": "Queue4_HintQueueEntry",
    "status": "FAMILY_SUBJECT",
    "ports": 12,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18769,7 +18775,7 @@
    "module": "Queue4_TPmetaReq",
    "status": "FAMILY_SUBJECT",
    "ports": 37,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18783,7 +18789,7 @@
    "module": "Queue4_triggerBundle",
    "status": "FAMILY_SUBJECT",
    "ports": 12,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18797,7 +18803,7 @@
    "module": "Queue5_BundleMap",
    "status": "FAMILY_SUBJECT",
    "ports": 8,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18811,7 +18817,7 @@
    "module": "Queue5_MSHRRequest",
    "status": "FAMILY_SUBJECT",
    "ports": 30,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18825,7 +18831,7 @@
    "module": "Queue68_BundleMap",
    "status": "FAMILY_SUBJECT",
    "ports": 10,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18839,7 +18845,7 @@
    "module": "Queue6_DSData",
    "status": "FAMILY_SUBJECT",
    "ports": 9,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18853,7 +18859,7 @@
    "module": "Queue8_TPmetaReq",
    "status": "FAMILY_SUBJECT",
    "ports": 24,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18867,7 +18873,7 @@
    "module": "Queue8_UInt12",
    "status": "FAMILY_SUBJECT",
    "ports": 8,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18881,7 +18887,7 @@
    "module": "Queue9_TLBundleC",
    "status": "FAMILY_SUBJECT",
    "ports": 19,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -18895,7 +18901,7 @@
    "module": "Queue9_tpDataEntry",
    "status": "FAMILY_SUBJECT",
    "ports": 31,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "chisel3/util/Decoupled.scala"
    ],
@@ -19419,7 +19425,7 @@
    "module": "Reduction",
    "status": "FAMILY_SUBJECT",
    "ports": 16,
-   "children": 19,
+   "children": 36,
    "scala_sources": [
     "yunsuan/vector/VectorALU/Reduction.scala"
    ],
@@ -19433,7 +19439,7 @@
    "module": "RefillBuffer",
    "status": "FAMILY_SUBJECT",
    "ports": 14,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "huancun/RefillBuffer.scala"
    ],
@@ -19813,7 +19819,7 @@
    "module": "RequestBuffer_4",
    "status": "FAMILY_SUBJECT",
    "ports": 87,
-   "children": 2,
+   "children": 3,
    "scala_sources": [
     "huancun/RequestBuffer.scala"
    ],
@@ -20229,7 +20235,7 @@
    "module": "SRAMTemplate",
    "status": "FAMILY_SUBJECT",
    "ports": 30,
-   "children": 1,
+   "children": 2,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -20316,7 +20322,7 @@
    "module": "SRAMTemplate_100",
    "status": "FAMILY_SUBJECT",
    "ports": 26,
-   "children": 1,
+   "children": 2,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -20331,7 +20337,7 @@
    "module": "SRAMTemplate_116",
    "status": "FAMILY_SUBJECT",
    "ports": 29,
-   "children": 1,
+   "children": 2,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -20346,7 +20352,7 @@
    "module": "SRAMTemplate_124",
    "status": "FAMILY_SUBJECT",
    "ports": 29,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -20361,7 +20367,7 @@
    "module": "SRAMTemplate_128",
    "status": "FAMILY_SUBJECT",
    "ports": 29,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -20376,7 +20382,7 @@
    "module": "SRAMTemplate_129",
    "status": "FAMILY_SUBJECT",
    "ports": 29,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -20391,7 +20397,7 @@
    "module": "SRAMTemplate_143",
    "status": "FAMILY_SUBJECT",
    "ports": 29,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -20406,7 +20412,7 @@
    "module": "SRAMTemplate_145",
    "status": "FAMILY_SUBJECT",
    "ports": 151,
-   "children": 1,
+   "children": 2,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -20421,7 +20427,7 @@
    "module": "SRAMTemplate_146",
    "status": "FAMILY_SUBJECT",
    "ports": 29,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -20436,7 +20442,7 @@
    "module": "SRAMTemplate_148",
    "status": "FAMILY_SUBJECT",
    "ports": 89,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -20451,7 +20457,7 @@
    "module": "SRAMTemplate_149",
    "status": "FAMILY_SUBJECT",
    "ports": 34,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -20466,7 +20472,7 @@
    "module": "SRAMTemplate_151",
    "status": "FAMILY_SUBJECT",
    "ports": 33,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -20481,7 +20487,7 @@
    "module": "SRAMTemplate_153",
    "status": "FAMILY_SUBJECT",
    "ports": 172,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -20496,7 +20502,7 @@
    "module": "SRAMTemplate_154",
    "status": "FAMILY_SUBJECT",
    "ports": 26,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -20511,7 +20517,7 @@
    "module": "SRAMTemplate_155",
    "status": "FAMILY_SUBJECT",
    "ports": 41,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -20526,7 +20532,7 @@
    "module": "SRAMTemplate_156",
    "status": "FAMILY_SUBJECT",
    "ports": 30,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -20541,7 +20547,7 @@
    "module": "SRAMTemplate_159",
    "status": "FAMILY_SUBJECT",
    "ports": 30,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -20556,7 +20562,7 @@
    "module": "SRAMTemplate_16",
    "status": "FAMILY_SUBJECT",
    "ports": 26,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -20571,7 +20577,7 @@
    "module": "SRAMTemplate_160",
    "status": "FAMILY_SUBJECT",
    "ports": 34,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -20586,7 +20592,7 @@
    "module": "SRAMTemplate_164",
    "status": "FAMILY_SUBJECT",
    "ports": 172,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -20601,7 +20607,7 @@
    "module": "SRAMTemplate_165",
    "status": "FAMILY_SUBJECT",
    "ports": 26,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -20616,7 +20622,7 @@
    "module": "SRAMTemplate_166",
    "status": "FAMILY_SUBJECT",
    "ports": 41,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -20631,7 +20637,7 @@
    "module": "SRAMTemplate_175",
    "status": "FAMILY_SUBJECT",
    "ports": 172,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -20646,7 +20652,7 @@
    "module": "SRAMTemplate_176",
    "status": "FAMILY_SUBJECT",
    "ports": 26,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -20661,7 +20667,7 @@
    "module": "SRAMTemplate_177",
    "status": "FAMILY_SUBJECT",
    "ports": 41,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -20676,7 +20682,7 @@
    "module": "SRAMTemplate_178",
    "status": "FAMILY_SUBJECT",
    "ports": 30,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -20691,7 +20697,7 @@
    "module": "SRAMTemplate_182",
    "status": "FAMILY_SUBJECT",
    "ports": 34,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -20706,7 +20712,7 @@
    "module": "SRAMTemplate_193",
    "status": "FAMILY_SUBJECT",
    "ports": 422,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/sram/SRAMTemplate.scala"
    ],
@@ -20720,7 +20726,7 @@
    "module": "SRAMTemplate_194",
    "status": "FAMILY_SUBJECT",
    "ports": 8,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "huancun/utils/SRAMTemplate.scala"
    ],
@@ -20734,7 +20740,7 @@
    "module": "SRAMTemplate_2",
    "status": "FAMILY_SUBJECT",
    "ports": 30,
-   "children": 1,
+   "children": 2,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -20749,7 +20755,7 @@
    "module": "SRAMTemplate_32",
    "status": "FAMILY_SUBJECT",
    "ports": 26,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -20764,7 +20770,7 @@
    "module": "SRAMTemplate_36",
    "status": "FAMILY_SUBJECT",
    "ports": 34,
-   "children": 1,
+   "children": 2,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -20779,7 +20785,7 @@
    "module": "SRAMTemplate_4",
    "status": "FAMILY_SUBJECT",
    "ports": 26,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -20794,7 +20800,7 @@
    "module": "SRAMTemplate_44",
    "status": "FAMILY_SUBJECT",
    "ports": 59,
-   "children": 1,
+   "children": 2,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -20809,7 +20815,7 @@
    "module": "SRAMTemplate_45",
    "status": "FAMILY_SUBJECT",
    "ports": 30,
-   "children": 1,
+   "children": 2,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -20824,7 +20830,7 @@
    "module": "SRAMTemplate_64",
    "status": "FAMILY_SUBJECT",
    "ports": 33,
-   "children": 1,
+   "children": 2,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -20839,7 +20845,7 @@
    "module": "SRAMTemplate_68",
    "status": "FAMILY_SUBJECT",
    "ports": 33,
-   "children": 1,
+   "children": 2,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -20854,7 +20860,7 @@
    "module": "SRAMTemplate_76",
    "status": "FAMILY_SUBJECT",
    "ports": 30,
-   "children": 1,
+   "children": 2,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -20869,7 +20875,7 @@
    "module": "SRAMTemplate_78",
    "status": "FAMILY_SUBJECT",
    "ports": 34,
-   "children": 1,
+   "children": 2,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -20884,7 +20890,7 @@
    "module": "SRAMTemplate_8",
    "status": "FAMILY_SUBJECT",
    "ports": 26,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -20899,7 +20905,7 @@
    "module": "SRAMTemplate_84",
    "status": "FAMILY_SUBJECT",
    "ports": 26,
-   "children": 1,
+   "children": 2,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -20914,7 +20920,7 @@
    "module": "SRAMTemplate_86",
    "status": "FAMILY_SUBJECT",
    "ports": 26,
-   "children": 1,
+   "children": 2,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -20929,7 +20935,7 @@
    "module": "SRAMTemplate_88",
    "status": "FAMILY_SUBJECT",
    "ports": 26,
-   "children": 1,
+   "children": 2,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -20944,7 +20950,7 @@
    "module": "SRAMTemplate_92",
    "status": "FAMILY_SUBJECT",
    "ports": 26,
-   "children": 1,
+   "children": 2,
    "scala_sources": [
     "utility/mbist/Mbist.scala",
     "utility/sram/SRAMTemplate.scala"
@@ -23479,7 +23485,7 @@
    "module": "TLSourceShrinker",
    "status": "FAMILY_SUBJECT",
    "ports": 34,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "diplomacy/LazyModule.scala",
     "tilelink/SourceShrinker.scala"
@@ -24670,7 +24676,7 @@
    "module": "UopInfoGen",
    "status": "CORE_BOUNDED_SUBJECT",
    "ports": 15,
-   "children": 0,
+   "children": 2,
    "scala_sources": [
     "xiangshan/backend/decode/UopInfoGen.scala"
    ],
@@ -25077,7 +25083,7 @@
    "module": "VLSplitImp",
    "status": "CORE_BOUNDED_SUBJECT",
    "ports": 119,
-   "children": 2,
+   "children": 3,
    "scala_sources": [
     "xiangshan/mem/vector/VSplit.scala"
    ],
@@ -25177,7 +25183,7 @@
    "module": "VSSplitImp",
    "status": "CORE_BOUNDED_SUBJECT",
    "ports": 123,
-   "children": 2,
+   "children": 3,
    "scala_sources": [
     "xiangshan/mem/vector/VSplit.scala"
    ],
@@ -25638,7 +25644,7 @@
    "module": "VectorFloatDivider",
    "status": "FAMILY_SUBJECT",
    "ports": 14,
-   "children": 1,
+   "children": 2,
    "scala_sources": [
     "yunsuan/vector/VectorFloatDivider.scala"
    ],
@@ -25652,7 +25658,7 @@
    "module": "VectorFloatDividerR64",
    "status": "FAMILY_SUBJECT",
    "ports": 13,
-   "children": 8,
+   "children": 9,
    "scala_sources": [
     "yunsuan/vector/VectorFloatDivider.scala"
    ],
@@ -26188,7 +26194,7 @@
    "module": "WrBypass",
    "status": "CORE_BOUNDED_SUBJECT",
    "ports": 8,
-   "children": 1,
+   "children": 2,
    "scala_sources": [
     "xiangshan/frontend/WrBypass.scala"
    ],
@@ -26202,7 +26208,7 @@
    "module": "WrBypass_32",
    "status": "CORE_BOUNDED_SUBJECT",
    "ports": 13,
-   "children": 1,
+   "children": 2,
    "scala_sources": [
     "xiangshan/frontend/WrBypass.scala"
    ],
@@ -26216,7 +26222,7 @@
    "module": "WrBypass_33",
    "status": "CORE_BOUNDED_SUBJECT",
    "ports": 13,
-   "children": 1,
+   "children": 2,
    "scala_sources": [
     "xiangshan/frontend/WrBypass.scala"
    ],
@@ -26230,7 +26236,7 @@
    "module": "WrBypass_41",
    "status": "CORE_BOUNDED_SUBJECT",
    "ports": 7,
-   "children": 1,
+   "children": 2,
    "scala_sources": [
     "xiangshan/frontend/WrBypass.scala"
    ],
@@ -26244,7 +26250,7 @@
    "module": "WrBypass_43",
    "status": "CORE_BOUNDED_SUBJECT",
    "ports": 7,
-   "children": 1,
+   "children": 2,
    "scala_sources": [
     "xiangshan/frontend/WrBypass.scala"
    ],
@@ -26347,7 +26353,7 @@
    "module": "XSTop",
    "status": "FAMILY_SUBJECT",
    "ports": 204,
-   "children": 16,
+   "children": 17,
    "scala_sources": [
     "diplomacy/Nodes.scala",
     "top/Top.scala"
@@ -26993,7 +26999,7 @@
    "module": "fpdiv_r64_block",
    "status": "CORE_BOUNDED_SUBJECT",
    "ports": 12,
-   "children": 12,
+   "children": 15,
    "scala_sources": [
     "yunsuan/fpu/FloatDivider.scala"
    ],
@@ -27007,7 +27013,7 @@
    "module": "fpdiv_r64_block_vector",
    "status": "FAMILY_SUBJECT",
    "ports": 34,
-   "children": 12,
+   "children": 27,
    "scala_sources": [
     "yunsuan/vector/VectorFloatDivider.scala"
    ],
@@ -27021,7 +27027,7 @@
    "module": "fpsqrt_r16",
    "status": "CORE_BOUNDED_SUBJECT",
    "ports": 13,
-   "children": 0,
+   "children": 3,
    "scala_sources": [
     "yunsuan/fpu/fqrt/fpsqrt_r16.scala"
    ],
@@ -27035,7 +27041,7 @@
    "module": "fpsqrt_r16_block",
    "status": "FAMILY_SUBJECT",
    "ports": 58,
-   "children": 0,
+   "children": 48,
    "scala_sources": [
     "yunsuan/vector/vfsqrt/fpsqrt_r16_block.scala"
    ],
@@ -27049,7 +27055,7 @@
    "module": "fpsqrt_vector_r16",
    "status": "FAMILY_SUBJECT",
    "ports": 12,
-   "children": 0,
+   "children": 9,
    "scala_sources": [
     "yunsuan/vector/vfsqrt/fpsqrt_vector_r16.scala"
    ],
@@ -28420,7 +28426,7 @@
    "module": "sram_array_1p1024x528m33s1h0l1b_l2_pftch_tp_meta",
    "status": "FAMILY_SUBJECT",
    "ports": 9,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/sram/SramProto.scala"
    ],
@@ -28434,7 +28440,7 @@
    "module": "sram_array_1p1024x8160m255s1h0l1_pftch",
    "status": "FAMILY_SUBJECT",
    "ports": 7,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/sram/SramProto.scala"
    ],
@@ -28448,7 +28454,7 @@
    "module": "sram_array_1p128x24m6s1h0l1b_bp_sc",
    "status": "FAMILY_SUBJECT",
    "ports": 9,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/sram/SramProto.scala"
    ],
@@ -28462,7 +28468,7 @@
    "module": "sram_array_1p128x74m37s1h0l1b_icsh_tag",
    "status": "FAMILY_SUBJECT",
    "ports": 9,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/sram/SramProto.scala"
    ],
@@ -28476,7 +28482,7 @@
    "module": "sram_array_1p128x76m1s1h0l1b_bp_ittage",
    "status": "FAMILY_SUBJECT",
    "ports": 9,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/sram/SramProto.scala"
    ],
@@ -28490,7 +28496,7 @@
    "module": "sram_array_1p256x13m13s1h0l1b_l2_pftch_rrt",
    "status": "FAMILY_SUBJECT",
    "ports": 8,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/sram/SramProto.scala"
    ],
@@ -28504,7 +28510,7 @@
    "module": "sram_array_1p256x16m1s1h0l1b_bp_tage_us",
    "status": "FAMILY_SUBJECT",
    "ports": 9,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/sram/SramProto.scala"
    ],
@@ -28518,7 +28524,7 @@
    "module": "sram_array_1p256x66m66s1h0l1b_icsh_dat",
    "status": "FAMILY_SUBJECT",
    "ports": 8,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/sram/SramProto.scala"
    ],
@@ -28532,7 +28538,7 @@
    "module": "sram_array_1p256x72m72s1h0l1b_dcsh_dat",
    "status": "FAMILY_SUBJECT",
    "ports": 8,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/sram/SramProto.scala"
    ],
@@ -28546,7 +28552,7 @@
    "module": "sram_array_1p256x86m43s1h0l1b_dcsh_tag",
    "status": "FAMILY_SUBJECT",
    "ports": 9,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/sram/SramProto.scala"
    ],
@@ -28560,7 +28566,7 @@
    "module": "sram_array_1p256x8m2s1h0l1b_bp_tage_bt",
    "status": "FAMILY_SUBJECT",
    "ports": 9,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/sram/SramProto.scala"
    ],
@@ -28574,7 +28580,7 @@
    "module": "sram_array_1p32x148m74s1h0l1b_pftch_pht",
    "status": "FAMILY_SUBJECT",
    "ports": 9,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/sram/SramProto.scala"
    ],
@@ -28588,7 +28594,7 @@
    "module": "sram_array_1p32x90m45s1h0l1b_bitmap",
    "status": "FAMILY_SUBJECT",
    "ports": 9,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/sram/SramProto.scala"
    ],
@@ -28602,7 +28608,7 @@
    "module": "sram_array_1p4096x137m137s1h1l2b_l2_dat",
    "status": "FAMILY_SUBJECT",
    "ports": 8,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/sram/SramProto.scala"
    ],
@@ -28616,7 +28622,7 @@
    "module": "sram_array_1p4x786m131s1h0l1b_ptw_l1",
    "status": "FAMILY_SUBJECT",
    "ports": 9,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/sram/SramProto.scala"
    ],
@@ -28630,7 +28636,7 @@
    "module": "sram_array_1p512x104m13s1h0l1b_l2_meta",
    "status": "FAMILY_SUBJECT",
    "ports": 9,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/sram/SramProto.scala"
    ],
@@ -28644,7 +28650,7 @@
    "module": "sram_array_1p512x16m16s1h0l1b_l2_repl",
    "status": "FAMILY_SUBJECT",
    "ports": 8,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/sram/SramProto.scala"
    ],
@@ -28658,7 +28664,7 @@
    "module": "sram_array_1p512x24m12s1h0l1b_bp_tage",
    "status": "FAMILY_SUBJECT",
    "ports": 9,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/sram/SramProto.scala"
    ],
@@ -28672,7 +28678,7 @@
    "module": "sram_array_1p512x40m10s1h0l1b_bp_ftb",
    "status": "FAMILY_SUBJECT",
    "ports": 9,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/sram/SramProto.scala"
    ],
@@ -28686,7 +28692,7 @@
    "module": "sram_array_1p512x76m19s1h0l1b_l2_tag",
    "status": "FAMILY_SUBJECT",
    "ports": 9,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/sram/SramProto.scala"
    ],
@@ -28700,7 +28706,7 @@
    "module": "sram_array_1p512x8m1s1h0l1b_l2_orgb",
    "status": "FAMILY_SUBJECT",
    "ports": 9,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/sram/SramProto.scala"
    ],
@@ -28714,7 +28720,7 @@
    "module": "sram_array_1p64x114m57s1h0l1b_ptw_l0",
    "status": "FAMILY_SUBJECT",
    "ports": 9,
-   "children": 0,
+   "children": 1,
    "scala_sources": [
     "utility/sram/SramProto.scala"
    ],

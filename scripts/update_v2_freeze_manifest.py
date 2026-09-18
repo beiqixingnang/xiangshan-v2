@@ -8,7 +8,7 @@ from pathlib import Path
 path = Path(__file__).resolve().parents[1] / "V2-Rewrite-Freeze-Manifest.json"
 data = json.loads(path.read_text(encoding="utf-8"))
 sem = data["file_count_semantics"]
-sem["current_distinct_build_paths"] = 115
+sem["current_distinct_build_paths"] = 116
 sem["current_committed_build_paths"] = 95
 sem["current_draft_build_paths"] = 19
 sem["hierarchy_wave2_subject_paths"].extend([
@@ -29,6 +29,7 @@ sem["hierarchy_wave2_subject_paths"].extend([
     {"path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Utility.ResidualFamily-Hardware.py", "status": "DRAFT_VALIDATOR_PASS_BOUNDED_SOURCE_SPLIT_PENDING"},
     {"path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.SmallControl.Family-Hardware.py", "status": "DRAFT_VALIDATOR_PASS_BOUNDED"},
     {"path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.FinalTwo.Family-Hardware.py", "status": "DRAFT_VALIDATOR_PASS_BOUNDED"},
+    {"path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Top.XSTile.IntBuffer.Family-Hardware.py", "status": "DRAFT_VALIDATOR_PASS_BOUNDED_PARENT_PENDING"},
 ])
 unique_paths: list[dict[str, str]] = []
 seen_paths: set[str] = set()
