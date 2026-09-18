@@ -1179,16 +1179,8 @@
     "validation/v2-residual-leaf-family-results.json"
    ],
    "covered_modules": [
-    "AddrAddModule",
     "DatamoduleResultBuffer",
-    "FauFTBWay",
-    "GPAMem",
-    "RASStack",
-    "RedirectGenerator",
-    "RegCache",
-    "RegCacheTagTable",
-    "RegionWays",
-    "VectorCvtTop"
+    "RegionWays"
    ]
   },
   {
@@ -1311,6 +1303,38 @@
    "covered_modules": [
     "StreamBitVectorArray",
     "StrideMetaArray"
+   ]
+  },
+  {
+   "id": "BackendSmallControlFamily",
+   "source_scala": [
+    "scala/src/main/scala/xiangshan/backend/fu/wrapper/BranchUnit.scala",
+    "scala/src/main/scala/xiangshan/backend/GPAMem.scala",
+    "scala/src/main/scala/xiangshan/backend/ctrlblock/RedirectGenerator.scala",
+    "scala/src/main/scala/xiangshan/backend/regcache/RegCache.scala",
+    "scala/src/main/scala/xiangshan/backend/regcache/RegCacheTagTable.scala",
+    "scala/src/main/scala/xiangshan/frontend/newRAS.scala",
+    "scala/src/main/scala/xiangshan/frontend/FauFTB.scala",
+    "scala/src/main/scala/xiangshan/backend/fu/wrapper/VCVT.scala"
+   ],
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.SmallControl.Family-Hardware.py",
+   "family_id": "core.backend.small_control",
+   "closure_root": "core.backend",
+   "classification": "REWRITTEN",
+   "disposition": "STRUCTURE_VERIFIED_DIRECT_BOUNDED",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "validation/v2-backend-small-control-family-results.json"
+   ],
+   "covered_modules": [
+    "AddrAddModule",
+    "FauFTBWay",
+    "GPAMem",
+    "RASStack",
+    "RedirectGenerator",
+    "RegCache",
+    "RegCacheTagTable",
+    "VectorCvtTop"
    ]
   }
  ],

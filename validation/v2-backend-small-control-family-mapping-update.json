@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_BACKEND_SMALL_CONTROL_MAPPING_UPDATE",
+  "batch_id": "V2-BACKEND-SMALL-CONTROL-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "closure_root": "core.backend.small_control",
+  "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.SmallControl.Family-Hardware.py",
+  "entries": [
+    {"id": "AddrAddModule", "source_scala": "upstream/src/main/scala/xiangshan/backend/fu/wrapper/BranchUnit.scala", "reference_module": "AddrAddModule", "status": "PORT_SURFACE_MATCHED_BOUNDED"},
+    {"id": "GPAMem", "source_scala": "upstream/src/main/scala/xiangshan/backend/GPAMem.scala", "reference_module": "GPAMem", "status": "PORT_SURFACE_MATCHED_BOUNDED"},
+    {"id": "RedirectGenerator", "source_scala": "upstream/src/main/scala/xiangshan/backend/ctrlblock/RedirectGenerator.scala", "reference_module": "RedirectGenerator", "status": "PORT_SURFACE_MATCHED_BOUNDED"},
+    {"id": "RegCache", "source_scala": "upstream/src/main/scala/xiangshan/backend/regcache/RegCache.scala", "reference_module": "RegCache", "status": "PORT_SURFACE_MATCHED_BOUNDED"},
+    {"id": "RegCacheTagTable", "source_scala": "upstream/src/main/scala/xiangshan/backend/regcache/RegCacheTagTable.scala", "reference_module": "RegCacheTagTable", "status": "PORT_SURFACE_MATCHED_BOUNDED"},
+    {"id": "RASStack", "source_scala": "upstream/src/main/scala/xiangshan/frontend/newRAS.scala", "reference_module": "RASStack", "status": "PORT_SURFACE_MATCHED_BOUNDED"},
+    {"id": "FauFTBWay", "source_scala": "upstream/src/main/scala/xiangshan/frontend/FauFTB.scala", "reference_module": "FauFTBWay", "status": "PORT_SURFACE_MATCHED_BOUNDED"},
+    {"id": "VectorCvtTop", "source_scala": "upstream/src/main/scala/xiangshan/backend/fu/wrapper/VCVT.scala", "reference_module": "VectorCvtTop", "status": "PORT_SURFACE_MATCHED_BOUNDED"}
+  ],
+  "gates": {
+    "direct": "PASS_BOUNDED",
+    "locked_port_surface": "PASS",
+    "verilator": "PASS",
+    "yosys": "PASS",
+    "reference_differential": "PENDING",
+    "parent_closure": "PENDING",
+    "license_review": "PENDING_COORDINATOR_REVIEW",
+    "accepted": "NOT_ALLOWED"
+  },
+  "acceptance_eligible": false
+}
