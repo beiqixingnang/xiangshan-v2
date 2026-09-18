@@ -8,7 +8,7 @@ from pathlib import Path
 path = Path(__file__).resolve().parents[1] / "V2-Rewrite-Freeze-Manifest.json"
 data = json.loads(path.read_text(encoding="utf-8"))
 sem = data["file_count_semantics"]
-sem["current_distinct_build_paths"] = 114
+sem["current_distinct_build_paths"] = 115
 sem["current_committed_build_paths"] = 95
 sem["current_draft_build_paths"] = 19
 sem["hierarchy_wave2_subject_paths"].extend([
