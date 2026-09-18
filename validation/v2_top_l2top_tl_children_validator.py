@@ -336,6 +336,12 @@ def main() -> int:
         "reference_port_counts": {key: value["reference_ports"]
                                   for key, value in contract_rows.items()},
         "source_backed": True, "bounded_relay": True,
+        "static_contract": payload["gates"]["STATIC_CONTRACT"],
+        "py_compile": payload["gates"]["PY_COMPILE"],
+        "pyright": payload["gates"]["PYRIGHT"],
+        "direct": payload["gates"]["DIRECT"],
+        "verilator": payload["gates"]["VERILATOR"],
+        "yosys": payload["gates"]["YOSYS"],
         "parent_closure": PARENT_PENDING, "l2top_reference_ports": 441,
         "acceptance_eligible": False,
     }, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
@@ -347,6 +353,9 @@ def main() -> int:
                       for key, value in contract_rows.items()},
         "verilator": payload["gates"]["VERILATOR"],
         "yosys": payload["gates"]["YOSYS"],
+        "static_contract": payload["gates"]["STATIC_CONTRACT"],
+        "py_compile": payload["gates"]["PY_COMPILE"],
+        "pyright": payload["gates"]["PYRIGHT"],
         "direct": direct["status"], "parent_closure": PARENT_PENDING,
         "accepted": "NOT_ALLOWED", "acceptance_eligible": False,
     }, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
