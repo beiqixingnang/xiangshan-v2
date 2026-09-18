@@ -42,6 +42,17 @@ NEW = [
         "v2_status": "VALIDATOR_PASS_BOUNDED",
         "reference_surface": ["validation/v2-pmp-family-results.json"],
     },
+    {
+        "id": "StoreFamily",
+        "source_scala": ["scala/src/main/scala/xiangshan/mem/sbuffer/Sbuffer.scala", "scala/src/main/scala/xiangshan/mem/lsqueue/StoreQueue.scala", "scala/src/main/scala/xiangshan/mem/lsqueue/StoreMisalignBuffer.scala", "scala/src/main/scala/xiangshan/mem/pipeline/StoreUnit.scala"],
+        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Store.Family-Hardware.py",
+        "family_id": "core.memory.store",
+        "closure_root": "core.memory",
+        "classification": "REWRITTEN",
+        "disposition": "STRUCTURE_VERIFIED_DIRECT_BOUNDED",
+        "v2_status": "VALIDATOR_PASS_BOUNDED",
+        "reference_surface": ["validation/v2-store-family-results.json"],
+    },
 ]
 
 data = json.loads(PATH.read_text(encoding="utf-8"))

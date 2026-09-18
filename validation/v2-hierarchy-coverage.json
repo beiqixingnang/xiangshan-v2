@@ -5,9 +5,9 @@
  "reference_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
  "locked_module_count": 1976,
  "status_counts": {
-  "CORE_BOUNDED_SUBJECT": 865,
-  "FAMILY_SUBJECT": 979,
-  "MISSING": 132
+  "CORE_BOUNDED_SUBJECT": 871,
+  "FAMILY_SUBJECT": 977,
+  "MISSING": 128
  },
  "row_count": 1976,
  "rows": [
@@ -20899,14 +20899,16 @@
   },
   {
    "module": "Sbuffer",
-   "status": "FAMILY_SUBJECT",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 160,
    "children": 1,
    "scala_sources": [
     "utility/HardwarePerfMonitor.scala",
     "xiangshan/mem/sbuffer/Sbuffer.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "StoreFamily"
+   ],
    "family_subjects": [
     "dependency.utility"
    ],
@@ -20914,13 +20916,15 @@
   },
   {
    "module": "SbufferData",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 2064,
    "children": 0,
    "scala_sources": [
     "xiangshan/mem/sbuffer/Sbuffer.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "StoreFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -22310,38 +22314,44 @@
   },
   {
    "module": "StoreExceptionBuffer",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 106,
    "children": 0,
    "scala_sources": [
     "xiangshan/mem/lsqueue/StoreQueue.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "StoreFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "StoreMisalignBuffer",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 200,
    "children": 0,
    "scala_sources": [
     "xiangshan/mem/lsqueue/StoreMisalignBuffer.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "StoreFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "StoreQueue",
-   "status": "FAMILY_SUBJECT",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 798,
    "children": 5,
    "scala_sources": [
     "utility/HardwarePerfMonitor.scala",
     "xiangshan/mem/lsqueue/StoreQueue.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "StoreFamily"
+   ],
    "family_subjects": [
     "dependency.utility"
    ],
@@ -22349,13 +22359,15 @@
   },
   {
    "module": "StoreUnit",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 312,
    "children": 1,
    "scala_sources": [
     "xiangshan/mem/pipeline/StoreUnit.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "StoreFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -28690,7 +28702,7 @@
    "modules": 1
   },
   {
-   "scala": "xiangshan/mem/sbuffer/Sbuffer.scala",
+   "scala": "xiangshan/mem/prefetch/L1StreamPrefetcher.scala",
    "modules": 1
   }
  ]

@@ -937,12 +937,30 @@
    "reference_surface": [
     "validation/v2-pmp-family-results.json"
    ]
+  },
+  {
+   "id": "StoreFamily",
+   "source_scala": [
+    "scala/src/main/scala/xiangshan/mem/sbuffer/Sbuffer.scala",
+    "scala/src/main/scala/xiangshan/mem/lsqueue/StoreQueue.scala",
+    "scala/src/main/scala/xiangshan/mem/lsqueue/StoreMisalignBuffer.scala",
+    "scala/src/main/scala/xiangshan/mem/pipeline/StoreUnit.scala"
+   ],
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Store.Family-Hardware.py",
+   "family_id": "core.memory.store",
+   "closure_root": "core.memory",
+   "classification": "REWRITTEN",
+   "disposition": "STRUCTURE_VERIFIED_DIRECT_BOUNDED",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "validation/v2-store-family-results.json"
+   ]
   }
  ],
  "status": "IMPLEMENTATION_WAVES_VALIDATED_BOUNDED_HIERARCHY_WAVE1",
  "acceptance_eligible": false,
  "entries_status_counts": {
-  "VALIDATOR_PASS_BOUNDED": 55,
+  "VALIDATOR_PASS_BOUNDED": 56,
   "RETIRED": 1,
   "STRUCTURE_VERIFIED": 2,
   "STRUCTURE_VERIFIED_BEHAVIOR_FAIL": 2,
