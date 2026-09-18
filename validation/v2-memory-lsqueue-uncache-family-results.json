@@ -3,7 +3,7 @@
  "kind": "XIANGSHAN_KUNMINGHU_V2_MEMORY_LSQUEUE_UNCACHE_FAMILY",
  "batch_id": "V2-WAVE2-MEMORY-LSQUEUE-UNCACHE",
  "source_commit": "8b181bc",
- "status": "FAIL",
+ "status": "DIRECT_TEST_PASS_PARTIAL_COVERAGE",
  "scala_sources": [
   "src/main/scala/xiangshan/mem/lsqueue/LoadQueueUncache.scala",
   "src/main/scala/xiangshan/mem/lsqueue/FreeList.scala",
@@ -13,8 +13,8 @@
  ],
  "target": {
   "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Lsqueue.Uncache-Hardware.py",
-  "sha256": "9064e0a056fd6cbb67408e40495847af887a7b2924642b64f3c6311c2f85709b",
-  "line_count": 1789
+  "sha256": "9c3b80a8dce4fdb5d85d35b0358c0a0902be22408ab80d3f874dc5204999a4e6",
+  "line_count": 1792
  },
  "coverage_mode": "PARTIAL_FAST_CHECKPOINT",
  "covered_modules": [
@@ -2272,12 +2272,12 @@
   ],
   "failures": [],
   "verilog_sha256": {
-   "FreeList": "0fb3337efb80599d0ed4308626522f99b44f5ee452b57db856fb628f093ae496",
+   "FreeList": "dbcedd2b17a78098963302d10ae528f619974c776f25e6fa5594a5cf2ba5fe46",
    "UncacheEntry_15": "e00e739835021e9ee02c16aa9954d2de81f96d80e3dc0212108d759f73f9d76c"
   }
  },
  "differential": {
-  "status": "FAIL",
+  "status": "PASS",
   "tool": "verilator",
   "transport": "wsl.exe -e bash -lc",
   "compared_instances": [
@@ -2291,17 +2291,17 @@
     "build": "PASS",
     "build_output_tail": "8486 [3:0])\n       |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/\u77e5\u8bc6\u5e93\u5f00\u53d1/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-lsqueue-uncache-family/FreeList/UHSCFreeList.sv:135944:7: Case values incompletely covered (example pattern 0xc)\n135944 |       casez (\\$78487 [3:0])\n       |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/\u77e5\u8bc6\u5e93\u5f00\u53d1/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-lsqueue-uncache-family/FreeList/UHSCFreeList.sv:135976:7: Case values incompletely covered (example pattern 0xd)\n135976 |       casez (\\$78486 [3:0])\n       |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/\u77e5\u8bc6\u5e93\u5f00\u53d1/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-lsqueue-uncache-family/FreeList/UHSCFreeList.sv:136006:7: Case values incompletely covered (example pattern 0xd)\n136006 |       casez (\\$78487 [3:0])\n       |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/\u77e5\u8bc6\u5e93\u5f00\u53d1/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-lsqueue-uncache-family/FreeList/UHSCFreeList.sv:136040:7: Case values incompletely covered (example pattern 0xe)\n136040 |       casez (\\$78486 [3:0])\n       |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/\u77e5\u8bc6\u5e93\u5f00\u53d1/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-lsqueue-uncache-family/FreeList/UHSCFreeList.sv:136072:7: Case values incompletely covered (example pattern 0xe)\n136072 |       casez (\\$78487 [3:0])\n       |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/\u77e5\u8bc6\u5e93\u5f00\u53d1/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-lsqueue-uncache-family/FreeList/UHSCFreeList.sv:136108:7: Case values incompletely covered (example pattern 0xf)\n136108 |       casez (\\$78486 [3:0])\n       |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/\u77e5\u8bc6\u5e93\u5f00\u53d1/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-lsqueue-uncache-family/FreeList/UHSCFreeList.sv:136142:7: Case values incompletely covered (example pattern 0xf)\n136142 |       casez (\\$78487 [3:0])\n       |       ^~~~~\n",
     "simulation": {
-     "status": "FAIL",
-     "returncode": 1,
-     "output_tail": "CYCLES 400 MISMATCH 361 CHECKED 1200\n"
+     "status": "PASS",
+     "returncode": 0,
+     "output_tail": "CYCLES 400 MISMATCH 0 CHECKED 1200\n"
     },
     "cycles": 400,
-    "verdict": "BEHAVIORAL_DIFFERENTIAL_FAIL"
+    "verdict": "BEHAVIORAL_DIFFERENTIAL_PASS"
    },
    {
     "module": "UncacheEntry_15",
     "build": "PASS",
-    "build_output_tail": "tb__ALL.verilator_deplist.tmp\ng++    main.o verilated.o verilated_threads.o Vtb__ALL.a    -pthread -lpthread -latomic   -o tb\nrm Vtb__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/d/\u77e5\u8bc6\u5e93\u5f00\u53d1/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-lsqueue-uncache-family/UncacheEntry_15/obj_dir'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.259 MB sources in 4 modules, into 0.226 MB in 8 C++ files needing 0.000 MB\n- Verilator: Walltime 3.061 s (elab=0.005, cvt=0.036, bld=2.943); cpu 0.058 s on 4 threads; alloced 21.535 MB\n%Warning-WIDTHEXPAND: /mnt/d/\u77e5\u8bc6\u5e93\u5f00\u53d1/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-lsqueue-uncache-family/UncacheEntry_15/UHSCUncacheEntry_15.sv:697:31: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                                                         : ... note: In instance 'tb.u_mine'\n  697 |   assign \\$66  = uncacheState == 1'h1;\n      |                               ^~\n                      ... For warning description see https://verilator.org/warn/WIDTHEXPAND?v=5.032\n                      ... Use \"/* verilator lint_off WIDTHEXPAND */\" and lint_on around source to disable this message.\n%Warning-WIDTHEXPAND: /mnt/d/\u77e5\u8bc6\u5e93\u5f00\u53d1/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-lsqueue-uncache-family/UncacheEntry_15/UHSCUncacheEntry_15.sv:760:46: Operator EQ expects 7 bits on the RHS, but RHS's CONST '4'hf' generates 4 bits.\n                                                                                                                                                                                         : ... note: In instance 'tb.u_mine'\n  760 |   assign \\$121  = io_uncache_idResp_bits_mid == 4'hf;\n      |                                              ^~\n",
+    "build_output_tail": "tb__ALL.verilator_deplist.tmp\ng++    main.o verilated.o verilated_threads.o Vtb__ALL.a    -pthread -lpthread -latomic   -o tb\nrm Vtb__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/d/\u77e5\u8bc6\u5e93\u5f00\u53d1/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-lsqueue-uncache-family/UncacheEntry_15/obj_dir'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.259 MB sources in 4 modules, into 0.226 MB in 8 C++ files needing 0.000 MB\n- Verilator: Walltime 3.153 s (elab=0.005, cvt=0.043, bld=3.023); cpu 0.059 s on 4 threads; alloced 21.527 MB\n%Warning-WIDTHEXPAND: /mnt/d/\u77e5\u8bc6\u5e93\u5f00\u53d1/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-lsqueue-uncache-family/UncacheEntry_15/UHSCUncacheEntry_15.sv:697:31: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                                                         : ... note: In instance 'tb.u_mine'\n  697 |   assign \\$66  = uncacheState == 1'h1;\n      |                               ^~\n                      ... For warning description see https://verilator.org/warn/WIDTHEXPAND?v=5.032\n                      ... Use \"/* verilator lint_off WIDTHEXPAND */\" and lint_on around source to disable this message.\n%Warning-WIDTHEXPAND: /mnt/d/\u77e5\u8bc6\u5e93\u5f00\u53d1/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-lsqueue-uncache-family/UncacheEntry_15/UHSCUncacheEntry_15.sv:760:46: Operator EQ expects 7 bits on the RHS, but RHS's CONST '4'hf' generates 4 bits.\n                                                                                                                                                                                         : ... note: In instance 'tb.u_mine'\n  760 |   assign \\$121  = io_uncache_idResp_bits_mid == 4'hf;\n      |                                              ^~\n",
     "simulation": {
      "status": "PASS",
      "returncode": 0,
@@ -2311,8 +2311,8 @@
     "verdict": "BEHAVIORAL_DIFFERENTIAL_PASS"
    }
   ],
-  "trace_verdict": "BEHAVIORAL_DIFFERENTIAL_FAIL",
-  "behavioral_equivalence": "NOT_ESTABLISHED"
+  "trace_verdict": "BEHAVIORAL_DIFFERENTIAL_PARTIAL",
+  "behavioral_equivalence": "PARTIAL_REPRESENTATIVE_ONLY"
  },
  "tool_gates": {
   "verilator": "PASS",
@@ -2325,7 +2325,7 @@
     "yosys": "PASS",
     "yosys_output_tail": "",
     "yosys_preprocessing": "attribute_hint_lines_stripped",
-    "verilog_sha256": "0fb3337efb80599d0ed4308626522f99b44f5ee452b57db856fb628f093ae496"
+    "verilog_sha256": "dbcedd2b17a78098963302d10ae528f619974c776f25e6fa5594a5cf2ba5fe46"
    },
    {
     "module": "UncacheEntry_15",
@@ -2354,7 +2354,7 @@
   "COVERAGE_COMPLETE": "PASS_BOUNDED",
   "PORT_SURFACE_MATCHED": "PASS",
   "DETERMINISTIC_VERILOG": "PASS",
-  "DIFFERENTIAL": "FAIL",
+  "DIFFERENTIAL": "PASS_PARTIAL_COVERAGE",
   "VERILATOR": "PASS_PARTIAL_COVERAGE",
   "YOSYS": "PASS_PARTIAL_COVERAGE",
   "V2_LOCKED_REFERENCE_IMMUTABLE": "PASS",

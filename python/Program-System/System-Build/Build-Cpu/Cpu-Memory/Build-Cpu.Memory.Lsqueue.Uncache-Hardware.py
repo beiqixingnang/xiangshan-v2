@@ -393,7 +393,10 @@ class LsqUncacheFreeList(PortBound):
         for rem in range(1, self.free_width):
             do_free = do_free | free_req[rem]
         for rem in range(self.free_width):
-            offset = free_req[0]
+            # ``PopCount(freeReq.take(rem))`` is zero for remainder 0;
+            # seeding every row with freeReq(0) shifted the first write one
+            # slot and made it collide with remainder 1.
+            offset = Const(0, 1) if rem == 0 else free_req[0]
             for k in range(1, rem):
                 offset = offset + free_req[k]
             enq_flag, enq_value = ptr_add(tail_flag, tail_value, offset, size)
