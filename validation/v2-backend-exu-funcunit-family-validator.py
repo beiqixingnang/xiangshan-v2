@@ -352,18 +352,99 @@ def write_diff_harness(work: Path, name: str, mine_sv: str, pinned_sv: str, port
 
     has_clock = any(p[0] == "clock" for p in inputs)
     has_reset = any(p[0] == "reset" for p in inputs)
+    valid_output = next((p[0] for p in outputs if p[0].endswith("_valid")), None)
     tick_body = (
         "        tb.clock = 0; tb.eval();\n        tb.clock = 1; tb.eval();"
         if has_clock
         else "        tb.eval();"
     )
-    reset_block = (
-        "    tb.reset = 1;\n"
-        + "\n".join(f"    tb.{p[0]} = 0;" for p in inputs if p[0] != "reset")
-        + "\n    for (int i = 0; i < 4; i++) tick();\n    tb.reset = 0;"
-        if has_reset
-        else ""
-    )
+
+    # A sequential FU cannot be driven by independent random clock/reset and
+    # valid-pipe bits: that creates arbitrary asynchronous reset edges and
+    # violates FuncUnit.scala's validVec timing contract.  Keep the clock
+    # deterministic, hold reset for complete cycles, and derive validPipe_1/2
+    # from the preceding input-valid samples.  This is the same protocol used
+    # by the locked Bku SV (validVecThisFu_1/2 are two registered delays).
+    if has_clock:
+        state_decl = "    bool current_valid = false, prev_valid_1 = false, prev_valid_2 = false;"
+        random_lines = [
+            "        current_valid = (rng() & 1U) != 0;",
+            "        tb.io_in_valid = current_valid;",
+            "        tb.io_in_bits_validPipe_0 = current_valid;",
+            "        tb.io_in_bits_validPipe_1 = prev_valid_1;",
+            "        tb.io_in_bits_validPipe_2 = prev_valid_2;",
+        ]
+        for p in inputs:
+            if p[0] in {
+                "clock", "reset", "io_in_valid", "io_in_bits_validPipe_0",
+                "io_in_bits_validPipe_1", "io_in_bits_validPipe_2",
+            }:
+                continue
+            random_lines.append(f"        tb.{p[0]} = rng();")
+        state_update = (
+            "        prev_valid_2 = prev_valid_1;\n"
+            "        prev_valid_1 = current_valid;"
+        )
+        reset_lines = [
+            "    tb.clock = 0;",
+            "    tb.reset = 1;",
+        ]
+        reset_lines.extend(
+            f"    tb.{p[0]} = 0;"
+            for p in inputs
+            if p[0] not in {"clock", "reset"}
+        )
+        reset_lines.extend(
+            [
+                "    tb.eval();",
+                "    for (int i = 0; i < 4; i++) tick();",
+                "    tb.clock = 0;",
+                "    tb.reset = 0;",
+                "    tb.eval();",
+            ]
+        )
+        reset_block = "\n".join(reset_lines)
+    else:
+        state_decl = ""
+        random_lines = [f"        tb.{p[0]} = rng();" for p in inputs]
+        state_update = ""
+        reset_block = ""
+
+    def cxx_compare(port: tuple[str, str, int]) -> str:
+        pname, _, width = port
+        if width == 1:
+            return f"((tb.dut_{pname} & 1) != (tb.ref_{pname} & 1))"
+        return f"(tb.dut_{pname} != tb.ref_{pname})"
+
+    if has_clock and valid_output is not None:
+        # Valid is always checked.  Payload/control fields are meaningful only
+        # on a jointly-valid transfer; comparing stale payloads during bubbles
+        # would report a false mismatch because the pinned SV intentionally
+        # does not reset its result register.
+        lines = [
+            f"        const bool dut_valid = (tb.dut_{valid_output} & 1) != 0;",
+            f"        const bool ref_valid = (tb.ref_{valid_output} & 1) != 0;",
+            "        if (dut_valid != ref_valid) mismatches++;",
+            "        checks++;",
+        ]
+        for p in outputs:
+            if p[0] == valid_output:
+                continue
+            expr = cxx_compare(p)
+            # Result data is a hold register in the pinned SV and is
+            # intentionally don't-care during bubbles; control fields remain
+            # directly driven and are checked on every vector.
+            if p[0] == "io_out_bits_res_data":
+                lines.append(f"        if (dut_valid && ref_valid && {expr}) mismatches++;")
+            else:
+                lines.append(f"        if ({expr}) mismatches++;" )
+            lines.append("        checks++;")
+        valid_compare = "\n".join(lines)
+    else:
+        valid_compare = "\n".join(
+            f"        if ({cxx_compare(p)}) mismatches++;\n        checks++;"
+            for p in outputs
+        )
     cpp = f"""
 #include "Vdiff_{name}.h"
 #include "verilated.h"
@@ -375,19 +456,20 @@ int main(int argc, char** argv) {{
     static Vdiff_{name} tb;
     std::mt19937_64 rng(0x5632FU);
     long mismatches = 0, checks = 0;
+{state_decl}
     auto tick = [&]() {{
 {tick_body}
     }};
     auto randomize_inputs = [&]() {{
-{chr(10).join(f'        tb.{p[0]} = rng();' for p in inputs)}
+{chr(10).join(random_lines)}
     }};
 {reset_block}
     for (int v = 0; v < {DIFF_VECTORS}; v++) {{
         randomize_inputs();
         tb.eval();
-{chr(10).join(f'        if (tb.dut_{p[0]} != tb.ref_{p[0]}) mismatches++;' for p in outputs)}
-{chr(10).join(f'        checks++;' for p in outputs)}
+{valid_compare}
         tick();
+{state_update}
     }}
     std::printf("MISMATCHES %ld CHECKS %ld\\n", mismatches, checks);
     return mismatches == 0 ? 0 : 1;

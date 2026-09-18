@@ -10,8 +10,8 @@
   ],
   "target": {
     "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Exu.FuncUnit-Hardware.py",
-    "sha256": "1551e8c28ce91d346d9ced13c824855d3e8142690b820f79b38c5511b46397ab",
-    "line_count": 2383
+    "sha256": "c10a11ecad2d6655486463a10eb3c1be568edbec878321bcb66ef68e6be54f1c",
+    "line_count": 2410
   },
   "locked_hierarchy_sha256": "e556c5c7a4d61c5fa15faea71c5e553639456f54e8138e0bc157e618eca30ad1",
   "covered_family_groups": {
@@ -158,15 +158,15 @@
         "locked_port_count": 19,
         "emitted_port_count": 19,
         "ports_match": true,
-        "verilog_sha256": "c31214a62ad8518d5c97452e58c4aeeab49ce2d6eb544c7c6ae334e5ede435db",
-        "verilog_bytes": 3064840
+        "verilog_sha256": "5c24a89bad69a0a026b1daa31cc9e4c17a66fb9cb72eebf094ab3b273acb7547",
+        "verilog_bytes": 1690273
       },
       {
         "module": "BlockCipherModule",
         "locked_port_count": 6,
         "emitted_port_count": 6,
         "ports_match": true,
-        "verilog_sha256": "9c32aad90fb925f4fdba4fc09a1c04bbf375b1ebc373c013197d3ed299c1c23d",
+        "verilog_sha256": "ea1a640fb7c89b971e449592ed0e01521a2e60eb02214405412cb2ac64e71c37",
         "verilog_bytes": 1499449
       },
       {
@@ -190,16 +190,16 @@
         "locked_port_count": 5,
         "emitted_port_count": 5,
         "ports_match": true,
-        "verilog_sha256": "eabcde81e6bc7562458bb6317a0b5b12eab8a4bdc4630868f095d2586e76036a",
-        "verilog_bytes": 1408395
+        "verilog_sha256": "0e33565db32c2a9a3353daea844337fa45dbb7a855abe37212abf3b3a834b436",
+        "verilog_bytes": 17760
       },
       {
         "module": "CryptoModule",
         "locked_port_count": 6,
         "emitted_port_count": 6,
         "ports_match": true,
-        "verilog_sha256": "9d457a7643289c138cc43a338e7ff76e47b2b1c9892d54d76f3f11227926c948",
-        "verilog_bytes": 1528229
+        "verilog_sha256": "e27a507f004edeed724f836a6cf72cbe3bcd7e12b1bc6bf05014e9a2b9537c2c",
+        "verilog_bytes": 1544297
       },
       {
         "module": "Dispatcher",
@@ -318,8 +318,8 @@
         "locked_port_count": 24,
         "emitted_port_count": 24,
         "ports_match": true,
-        "verilog_sha256": "2b41544733e5914c809c19094c3c94df791fa06a94d317e6275a2650dbab71df",
-        "verilog_bytes": 15587707
+        "verilog_sha256": "4452b533e12f361b9b7c04a0ac353a3b013c2439fd112d24349ff79233f4e09f",
+        "verilog_bytes": 14213140
       },
       {
         "module": "Fence",
@@ -334,8 +334,8 @@
         "locked_port_count": 5,
         "emitted_port_count": 5,
         "ports_match": true,
-        "verilog_sha256": "20c6d9d5d63964c48dfa83131e726fcc38661b577481f6b0cabbdcb8d52f5e17",
-        "verilog_bytes": 28038
+        "verilog_sha256": "a7d960aa0b08b7a54c24e565af0070f4589aa6b812b97e91b54a4af2c96b5229",
+        "verilog_bytes": 44106
       },
       {
         "module": "JumpUnit",
@@ -358,7 +358,7 @@
         "locked_port_count": 6,
         "emitted_port_count": 6,
         "ports_match": true,
-        "verilog_sha256": "dd24d71409c13324f59c6436dac218ecdbf8381e93abb79b9434cf3a95c0ed8f",
+        "verilog_sha256": "f1a6cc8fa9471efe230b7cf1b6ec3f337f0bd858b0812f5f4e3fffb20d6ac371",
         "verilog_bytes": 46031
       },
       {
@@ -385,7 +385,7 @@
     "failures": []
   },
   "differential": {
-    "status": "FAIL",
+    "status": "PASS",
     "tool": "verilator",
     "transport": "wsl.exe -e bash -lc",
     "compared_instances": [
@@ -418,15 +418,15 @@
         "port_vector_match": true,
         "differential_vectors": 512,
         "differential_checks": 3072,
-        "differential_mismatches": 632,
+        "differential_mismatches": 0,
         "build_status": "PASS",
-        "sim_status": "FAIL",
+        "sim_status": "PASS",
         "build_output_tail": "      ^\n%Warning-WIDTHEXPAND: Bku_DUT.sv:894:31: Operator EQ expects 9 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                       : ... note: In instance 'diff_Bku.dut.clmul'\n  894 |   assign \\$1  = clmul_funcReg == 1'h1;\n      |                               ^~\n%Warning-WIDTHEXPAND: Bku_DUT.sv:1022:33: Operator EQ expects 9 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                        : ... note: In instance 'diff_Bku.dut.clmul'\n 1022 |   assign \\$194  = clmul_funcReg == 2'h2;\n      |                                 ^~\n",
-        "verdict": "MISMATCH_BOUNDED"
+        "verdict": "BEHAVIOR_MATCH_BOUNDED"
       }
     ],
-    "trace_verdict": "MISMATCH_BOUNDED",
-    "behavioral_equivalence": "NOT_ESTABLISHED"
+    "trace_verdict": "BEHAVIOR_MATCH_BOUNDED",
+    "behavioral_equivalence": "BOUNDED_TO_TWO_INSTANCES"
   },
   "tool_gates": {
     "lint": {
@@ -450,25 +450,25 @@
       ],
       "returncode": 0,
       "status": "PASS",
-      "output_tail": "19737:34: Operator ADD expects 7 bits on the RHS, but RHS's VARREF 'count_cpopTmp_1' generates 5 bits.\n19737 |   assign \\$67  = count_cpopTmp_0 + count_cpopTmp_1;\n      |                                  ^\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-exu-funcunit-family/UHSCBackendExuFuncUnitFamily.sv:19738:24: Operator ADD expects 8 bits on the RHS, but RHS's VARREF 'count_cpopTmp_2' generates 5 bits.\n19738 |   assign \\$68  = \\$67  + count_cpopTmp_2;\n      |                        ^\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-exu-funcunit-family/UHSCBackendExuFuncUnitFamily.sv:19739:24: Operator ADD expects 9 bits on the RHS, but RHS's VARREF 'count_cpopTmp_3' generates 5 bits.\n19739 |   assign \\$69  = \\$68  + count_cpopTmp_3;\n      |                        ^\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-exu-funcunit-family/UHSCBackendExuFuncUnitFamily.sv:894:31: Operator EQ expects 9 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                                                : ... note: In instance 'Bku.clmul'\n  894 |   assign \\$1  = clmul_funcReg == 1'h1;\n      |                               ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-exu-funcunit-family/UHSCBackendExuFuncUnitFamily.sv:1022:33: Operator EQ expects 9 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                                                                                 : ... note: In instance 'Bku.clmul'\n 1022 |   assign \\$194  = clmul_funcReg == 2'h2;\n      |                                 ^~\n",
-      "output_sha256": "b230c552787a15071c7de47cf18bde046d60d7e7d6e6cbbfff289622735cfbc1"
+      "output_tail": " VARREF 'count_cpopTmp_2' generates 5 bits.\n                                                                                                                                                                                 : ... note: In instance 'Bku.count'\n 1680 |   assign \\$68  = \\$67  + count_cpopTmp_2;\n      |                        ^\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-exu-funcunit-family/UHSCBackendExuFuncUnitFamily.sv:1681:24: Operator ADD expects 9 bits on the RHS, but RHS's VARREF 'count_cpopTmp_3' generates 5 bits.\n                                                                                                                                                                                 : ... note: In instance 'Bku.count'\n 1681 |   assign \\$69  = \\$68  + count_cpopTmp_3;\n      |                        ^\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-exu-funcunit-family/UHSCBackendExuFuncUnitFamily.sv:894:31: Operator EQ expects 9 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                                                : ... note: In instance 'Bku.clmul'\n  894 |   assign \\$1  = clmul_funcReg == 1'h1;\n      |                               ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-exu-funcunit-family/UHSCBackendExuFuncUnitFamily.sv:1022:33: Operator EQ expects 9 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                                                                                 : ... note: In instance 'Bku.clmul'\n 1022 |   assign \\$194  = clmul_funcReg == 2'h2;\n      |                                 ^~\n",
+      "output_sha256": "97d748f289d781a3ed8bc348cb98155ef866d809cff300b37435e6d38b05013d"
     },
-    "default_export_bytes": 3064840,
-    "default_export_sha256": "c31214a62ad8518d5c97452e58c4aeeab49ce2d6eb544c7c6ae334e5ede435db"
+    "default_export_bytes": 1690273,
+    "default_export_sha256": "5c24a89bad69a0a026b1daa31cc9e4c17a66fb9cb72eebf094ab3b273acb7547"
   },
   "gates": {
     "COVERAGE_COMPLETE": "PASS",
     "PORT_SURFACE_MATCHED": "PASS",
     "DETERMINISTIC_VERILOG": "PASS",
-    "DIRECT_TEST_PASS_BOUNDED": "FAIL",
-    "V2_REFERENCE_MATCHED": "FAIL",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED_CYCLE_SIM",
     "VERILATOR": "PASS",
     "YOSYS": "PASS",
     "V2_LOCKED_REFERENCE_IMMUTABLE": "PASS",
     "PYTHON_PRESENT": "PASS",
     "ACCEPTED": "NOT_ALLOWED"
   },
-  "status": "FAIL",
+  "status": "DIRECT_TEST_PASS_BOUNDED",
   "acceptance_eligible": false,
   "unclosed": [
     "BEHAVIOR_MATCHED / INTEGRATED / ACCEPTED remain locked by contract; this batch is DIRECT_TEST_PASS_BOUNDED only.",
