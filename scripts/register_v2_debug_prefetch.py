@@ -108,6 +108,17 @@ NEW = [
         "v2_status": "VALIDATOR_PASS_BOUNDED",
         "reference_surface": ["validation/v2-vector-memory-family-results.json"],
     },
+    {
+        "id": "FloatingPointFamily",
+        "source_scala": ["scala/src/main/scala/yunsuan/fpu/FloatAdder.scala", "scala/src/main/scala/yunsuan/fpu/FloatDivider.scala", "scala/src/main/scala/yunsuan/fpu/FloatFMA.scala", "scala/src/main/scala/yunsuan/fpu/fqrt/fpsqrt_r16.scala", "scala/src/main/scala/xiangshan/backend/fu/Multiplier.scala", "scala/src/main/scala/xiangshan/backend/fu/fpu/IntToFP.scala"],
+        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.FloatingPoint.Family-Hardware.py",
+        "family_id": "core.backend.fu.floating_point",
+        "closure_root": "core.backend.fu",
+        "classification": "REWRITTEN",
+        "disposition": "STRUCTURE_VERIFIED_DIRECT_BOUNDED",
+        "v2_status": "VALIDATOR_PASS_BOUNDED",
+        "reference_surface": ["validation/v2-floating-point-family-results.json"],
+    },
 ]
 
 data = json.loads(PATH.read_text(encoding="utf-8"))

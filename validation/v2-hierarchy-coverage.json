@@ -5,9 +5,9 @@
  "reference_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
  "locked_module_count": 1976,
  "status_counts": {
-  "CORE_BOUNDED_SUBJECT": 910,
+  "CORE_BOUNDED_SUBJECT": 921,
   "FAMILY_SUBJECT": 972,
-  "MISSING": 94
+  "MISSING": 83
  },
  "row_count": 1976,
  "rows": [
@@ -1280,13 +1280,15 @@
   },
   {
    "module": "ArrayMulDataModule",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 6,
    "children": 1366,
    "scala_sources": [
     "xiangshan/backend/fu/Multiplier.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FloatingPointFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -1609,13 +1611,15 @@
   },
   {
    "module": "BoothEncoderF64F32F16",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 31,
    "children": 0,
    "scala_sources": [
     "yunsuan/fpu/FloatFMA.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FloatingPointFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -6334,13 +6338,15 @@
   },
   {
    "module": "FloatAdder",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 11,
    "children": 2,
    "scala_sources": [
     "yunsuan/fpu/FloatAdder.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FloatingPointFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -6360,13 +6366,15 @@
   },
   {
    "module": "FloatAdderF32F16MixedPipeline",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 12,
    "children": 2,
    "scala_sources": [
     "yunsuan/fpu/FloatAdder.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FloatingPointFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -6386,13 +6394,15 @@
   },
   {
    "module": "FloatAdderF64Pipeline",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 11,
    "children": 2,
    "scala_sources": [
     "yunsuan/fpu/FloatAdder.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FloatingPointFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -6426,37 +6436,43 @@
   },
   {
    "module": "FloatDivider",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 16,
    "children": 1,
    "scala_sources": [
     "yunsuan/fpu/FloatDivider.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FloatingPointFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "FloatDividerR64",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 15,
    "children": 2,
    "scala_sources": [
     "yunsuan/fpu/FloatDivider.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FloatingPointFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "FloatFMA",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 14,
    "children": 3,
    "scala_sources": [
     "yunsuan/fpu/FloatFMA.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FloatingPointFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -9208,14 +9224,16 @@
   },
   {
    "module": "IntToFPDataModule",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 11,
    "children": 3,
    "scala_sources": [
     "xiangshan/backend/fu/fpu/FPUSubModule.scala",
     "xiangshan/backend/fu/fpu/IntToFP.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FloatingPointFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -9257,6 +9275,7 @@
     "xiangshan/backend/fu/fpu/IntToFP.scala"
    ],
    "core_subjects": [
+    "FloatingPointFamily",
     "FuncUnitFamily"
    ],
    "family_subjects": [],
@@ -26778,13 +26797,15 @@
   },
   {
    "module": "fpdiv_r64_block",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 12,
    "children": 12,
    "scala_sources": [
     "yunsuan/fpu/FloatDivider.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FloatingPointFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -26804,13 +26825,15 @@
   },
   {
    "module": "fpsqrt_r16",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 13,
    "children": 0,
    "scala_sources": [
     "yunsuan/fpu/fqrt/fpsqrt_r16.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "FloatingPointFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -28549,20 +28572,8 @@
    "modules": 3
   },
   {
-   "scala": "yunsuan/fpu/FloatAdder.scala",
-   "modules": 3
-  },
-  {
-   "scala": "yunsuan/fpu/FloatDivider.scala",
-   "modules": 3
-  },
-  {
    "scala": "xiangshan/backend/VecExcpDataMergeModule.scala",
    "modules": 3
-  },
-  {
-   "scala": "yunsuan/fpu/FloatFMA.scala",
-   "modules": 2
   },
   {
    "scala": "chisel3/util/random/FibonacciLFSR.scala",
@@ -28586,10 +28597,6 @@
   },
   {
    "scala": "xiangshan/mem/lsqueue/LoadQueueReplay.scala",
-   "modules": 1
-  },
-  {
-   "scala": "xiangshan/backend/fu/Multiplier.scala",
    "modules": 1
   },
   {
@@ -28642,14 +28649,6 @@
   },
   {
    "scala": "xiangshan/frontend/icache/InstrUncache.scala",
-   "modules": 1
-  },
-  {
-   "scala": "xiangshan/backend/fu/fpu/FPUSubModule.scala",
-   "modules": 1
-  },
-  {
-   "scala": "xiangshan/backend/fu/fpu/IntToFP.scala",
    "modules": 1
   },
   {
@@ -28758,10 +28757,6 @@
   },
   {
    "scala": "xiangshan/frontend/icache/WayLookup.scala",
-   "modules": 1
-  },
-  {
-   "scala": "yunsuan/fpu/fqrt/fpsqrt_r16.scala",
    "modules": 1
   },
   {
