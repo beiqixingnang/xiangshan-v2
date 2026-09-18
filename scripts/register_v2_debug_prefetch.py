@@ -153,6 +153,17 @@ NEW = [
         "reference_surface": ["validation/v2-difftest-state-family-results.json"],
         "covered_modules": ["DiffExtArchEvent", "DiffExtArchFpRenameTable", "DiffExtArchIntRenameTable", "DiffExtArchVecRenameTable", "DiffExtCSRState", "DiffExtCriticalErrorEvent", "DiffExtDebugMode", "DiffExtFpCSRState", "DiffExtHCSRState", "DiffExtInstrCommit", "DiffExtLrScEvent", "DiffExtMhpmeventOverflowEvent", "DiffExtNonRegInterruptPendingEvent", "DiffExtPhyFpRegState", "DiffExtPhyIntRegState", "DiffExtPhyVecRegState", "DiffExtSyncAIAEvent", "DiffExtSyncCustomMflushpwrEvent", "DiffExtTrapEvent", "DiffExtTriggerCSRState", "DiffExtVecCSRState"],
     },
+    {
+        "id": "ResidualLeafFamily",
+        "source_scala": ["validation/v2-locked-hierarchy.json"],
+        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Residual.LeafFamily-Hardware.py",
+        "family_id": "residual.locked.leaves",
+        "closure_root": "residual.locked.leaves",
+        "classification": "REWRITTEN_STRUCTURAL_ONLY",
+        "disposition": "STRUCTURE_VERIFIED_BOUNDED_SOURCE_SPLIT_PENDING",
+        "v2_status": "VALIDATOR_PASS_BOUNDED",
+        "reference_surface": ["validation/v2-residual-leaf-family-results.json"],
+    },
 ]
 
 data = json.loads(PATH.read_text(encoding="utf-8"))
