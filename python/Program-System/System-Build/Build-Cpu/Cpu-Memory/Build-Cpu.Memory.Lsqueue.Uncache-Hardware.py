@@ -346,6 +346,16 @@ class LsqUncacheFreeList(PortBound):
             Signal(size, name="freeSlotOH_next_nextVec_%d_r" % rem, reset=0)
             for rem in range(self.free_width)
         ]
+        # Keep the decoded value alongside the gated one-hot register.  Some
+        # Verilator scheduling paths can otherwise re-evaluate the dynamic
+        # Array write after ``freeSlotOH`` updates at the same edge, making the
+        # first remainder write observe the *new* one-hot instead of the old
+        # registered selection.  The pinned Chisel RTL effectively carries
+        # this decoded value across the edge.
+        free_value: list[Signal] = [
+            Signal(self.ptr_bits, name="freeValue_next_nextVec_%d_r" % rem, reset=0)
+            for rem in range(self.free_width)
+        ]
         free_sel_mask: Any = Const(0, size)
         for rem in range(self.free_width):
             free_sel_mask = free_sel_mask | Mux(free_req[rem], free_slot_oh[rem], Const(0, size))
@@ -375,7 +385,8 @@ class LsqUncacheFreeList(PortBound):
             free_slot_oh_in.append(one_hot)
         for rem in range(self.free_width):
             m.d.ck += [free_req[rem].eq(free_req_in[rem]),
-                       free_slot_oh[rem].eq(free_slot_oh_in[rem])]
+                       free_slot_oh[rem].eq(free_slot_oh_in[rem]),
+                       free_value[rem].eq(self.oh_to_uint(free_slot_oh_in[rem]))]
         m.d.ck += free_mask.eq((self.sig("io_free") | free_mask) & ~free_sel_mask)
 
         do_free = free_req[0]
@@ -387,7 +398,7 @@ class LsqUncacheFreeList(PortBound):
                 offset = offset + free_req[k]
             enq_flag, enq_value = ptr_add(tail_flag, tail_value, offset, size)
             with m.If(free_req[rem]):
-                m.d.ck += self.free_list[enq_value].eq(self.oh_to_uint(free_slot_oh[rem]))
+                m.d.ck += self.free_list[enq_value].eq(free_value[rem])
             del enq_flag
         free_count = free_req[0]
         for rem in range(1, self.free_width):
