@@ -17,7 +17,8 @@ from amaranth.back import verilog
 # Module Contract / 模块契约
 __all__ = ["COVERED_MODULES", "SOURCE_PATHS", "SOURCE_SCALA_PATHS",
            "LOCKED_REFERENCE_SHA256", "PortSpec", "FamilySpec",
-           "PORT_SPECS", "TLChildFamily", "relay_observation",
+           "PORT_SPECS", "family_spec", "TLChildFamily",
+           "RocketTLChildrenFamily", "relay_observation",
            "merge_source_ids", "bus_error_observation", "build_verilog", "main"]
 
 COVERED_MODULES = (
@@ -72,6 +73,10 @@ class FamilySpec:
     def port_bits(self) -> int:
         return sum(port.width for port in self.ports)
 
+# Resolve one exact family specification / 解析一个精确 family 规格。
+def family_spec(module: str) -> FamilySpec:
+    return FamilySpec(module)
+
 # Normalize generated auto channel names / 规范化生成的 auto 通道名称。
 def _tail(name: str) -> str:
     return re.sub(r"^auto_(?:in|out)(?:_[0-9]+)?_", "", name)
@@ -80,7 +85,7 @@ class TLChildFamily(Elaboratable):
     """Exact-port bounded child relay with deterministic inactive defaults."""
     # Allocate exact frozen signals / 分配精确冻结信号。
     def __init__(self, module: str = COVERED_MODULES[0]) -> None:
-        self.spec, self.member = FamilySpec(module), module
+        self.spec, self.member = family_spec(module), module
         self.ports = {port.name: Signal(port.width, name=port.name)
                       for port in self.spec.ports}
         for port_name, signal in self.ports.items():
@@ -120,6 +125,8 @@ class TLChildFamily(Elaboratable):
                 expression = 0
             module.d.comb += signal.eq(expression)
         return module
+
+RocketTLChildrenFamily = TLChildFamily
 
 # Return one bounded Decoupled observation / 返回一个有界 Decoupled 观测。
 def relay_observation(*, valid: bool, ready: bool, reset: bool = False) -> dict[str, int]:
