@@ -48,6 +48,208 @@
       "io_clock",
       "io_extIntrs",
       "io_reset"
+    ],
+    "port_contract": [
+      {
+        "name": "imsic_axi4_araddr",
+        "direction": "input",
+        "width": "[31:0]"
+      },
+      {
+        "name": "imsic_axi4_arburst",
+        "direction": "input",
+        "width": "[1:0]"
+      },
+      {
+        "name": "imsic_axi4_arcache",
+        "direction": "input",
+        "width": "[3:0]"
+      },
+      {
+        "name": "imsic_axi4_arid",
+        "direction": "input",
+        "width": "[15:0]"
+      },
+      {
+        "name": "imsic_axi4_arlen",
+        "direction": "input",
+        "width": "[7:0]"
+      },
+      {
+        "name": "imsic_axi4_arlock",
+        "direction": "input",
+        "width": ""
+      },
+      {
+        "name": "imsic_axi4_arprot",
+        "direction": "input",
+        "width": "[2:0]"
+      },
+      {
+        "name": "imsic_axi4_arqos",
+        "direction": "input",
+        "width": "[3:0]"
+      },
+      {
+        "name": "imsic_axi4_arready",
+        "direction": "output",
+        "width": ""
+      },
+      {
+        "name": "imsic_axi4_arsize",
+        "direction": "input",
+        "width": "[2:0]"
+      },
+      {
+        "name": "imsic_axi4_arvalid",
+        "direction": "input",
+        "width": ""
+      },
+      {
+        "name": "imsic_axi4_awaddr",
+        "direction": "input",
+        "width": "[31:0]"
+      },
+      {
+        "name": "imsic_axi4_awburst",
+        "direction": "input",
+        "width": "[1:0]"
+      },
+      {
+        "name": "imsic_axi4_awcache",
+        "direction": "input",
+        "width": "[3:0]"
+      },
+      {
+        "name": "imsic_axi4_awid",
+        "direction": "input",
+        "width": "[15:0]"
+      },
+      {
+        "name": "imsic_axi4_awlen",
+        "direction": "input",
+        "width": "[7:0]"
+      },
+      {
+        "name": "imsic_axi4_awlock",
+        "direction": "input",
+        "width": ""
+      },
+      {
+        "name": "imsic_axi4_awprot",
+        "direction": "input",
+        "width": "[2:0]"
+      },
+      {
+        "name": "imsic_axi4_awqos",
+        "direction": "input",
+        "width": "[3:0]"
+      },
+      {
+        "name": "imsic_axi4_awready",
+        "direction": "output",
+        "width": ""
+      },
+      {
+        "name": "imsic_axi4_awsize",
+        "direction": "input",
+        "width": "[2:0]"
+      },
+      {
+        "name": "imsic_axi4_awvalid",
+        "direction": "input",
+        "width": ""
+      },
+      {
+        "name": "imsic_axi4_bid",
+        "direction": "output",
+        "width": "[15:0]"
+      },
+      {
+        "name": "imsic_axi4_bready",
+        "direction": "input",
+        "width": ""
+      },
+      {
+        "name": "imsic_axi4_bresp",
+        "direction": "output",
+        "width": "[1:0]"
+      },
+      {
+        "name": "imsic_axi4_bvalid",
+        "direction": "output",
+        "width": ""
+      },
+      {
+        "name": "imsic_axi4_rdata",
+        "direction": "output",
+        "width": "[31:0]"
+      },
+      {
+        "name": "imsic_axi4_rid",
+        "direction": "output",
+        "width": "[15:0]"
+      },
+      {
+        "name": "imsic_axi4_rlast",
+        "direction": "output",
+        "width": ""
+      },
+      {
+        "name": "imsic_axi4_rready",
+        "direction": "input",
+        "width": ""
+      },
+      {
+        "name": "imsic_axi4_rresp",
+        "direction": "output",
+        "width": "[1:0]"
+      },
+      {
+        "name": "imsic_axi4_rvalid",
+        "direction": "output",
+        "width": ""
+      },
+      {
+        "name": "imsic_axi4_wdata",
+        "direction": "input",
+        "width": "[31:0]"
+      },
+      {
+        "name": "imsic_axi4_wlast",
+        "direction": "input",
+        "width": ""
+      },
+      {
+        "name": "imsic_axi4_wready",
+        "direction": "output",
+        "width": ""
+      },
+      {
+        "name": "imsic_axi4_wstrb",
+        "direction": "input",
+        "width": "[3:0]"
+      },
+      {
+        "name": "imsic_axi4_wvalid",
+        "direction": "input",
+        "width": ""
+      },
+      {
+        "name": "io_clock",
+        "direction": "input",
+        "width": ""
+      },
+      {
+        "name": "io_extIntrs",
+        "direction": "input",
+        "width": "[63:0]"
+      },
+      {
+        "name": "io_reset",
+        "direction": "input",
+        "width": ""
+      }
     ]
   },
   "target": {
@@ -90,9 +292,32 @@
     "rtl_bytes": 318105,
     "rtl_sha256": "8cb8627f9cdc6c9c6a8d2da9327aec39a42d8ed493fc6f8e9255a4b6b6cf4be0"
   },
+  "commands": {
+    "py_compile": [
+      "python",
+      "-m",
+      "py_compile",
+      "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Build\\Build-Cpu\\Cpu-Core\\Build-Cpu.Dependency.ChiselAIA.Interface-Hardware.py",
+      "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu.Dependency.ChiselAIA.Interface-Hardware.py",
+      "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\v2_xstop_io_aia_validator.py"
+    ],
+    "pyright": [
+      "pyright.cmd",
+      "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Build\\Build-Cpu\\Cpu-Core\\Build-Cpu.Dependency.ChiselAIA.Interface-Hardware.py",
+      "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu.Dependency.ChiselAIA.Interface-Hardware.py",
+      "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\v2_xstop_io_aia_validator.py"
+    ],
+    "build_verilog": "build_verilog({module: UHSCAIAImsicAXI4})",
+    "system_testing": [
+      "C:\\Program Files\\Python313\\python.exe",
+      "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu.Dependency.ChiselAIA.Interface-Hardware.py"
+    ],
+    "verilator": "verilator --lint-only -Wno-fatal UHSCAIAImsicAXI4.sv",
+    "yosys": "yosys -Q -p 'read_verilog -sv UHSCAIAImsicAXI4.sv; hierarchy -top UHSCAIAImsicAXI4; proc; check'"
+  },
   "gates": {
     "PY_COMPILE": "PASS",
-    "PYRIGHT": "PASS_BOUNDED_TARGET",
+    "PYRIGHT": "PASS",
     "BUILD_VERILOG": "PASS",
     "DIRECT_TEST_PASS_BOUNDED": "PASS",
     "VERILATOR": "PASS",
