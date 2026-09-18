@@ -73,6 +73,17 @@ class FamilySpec:
     def port_bits(self) -> int:
         return sum(port.width for port in self.ports)
 
+    # Return one named port width / 返回指定端口位宽。
+    def width(self, name: str) -> int:
+        for port in self.ports:
+            if port.name == name:
+                return port.width
+        raise KeyError(name)
+
+    # Test one named port presence / 判断指定端口是否存在。
+    def has(self, name: str) -> bool:
+        return any(port.name == name for port in self.ports)
+
 # Resolve one exact family specification / 解析一个精确 family 规格。
 def family_spec(module: str) -> FamilySpec:
     return FamilySpec(module)
