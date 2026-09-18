@@ -317,7 +317,11 @@ class UHSCTop(Elaboratable):
             child_missing = getattr(child, "closure_missing", None)
             if child_missing is not None:
                 root_missing = root_missing | child_missing
-                root_missing_count = root_missing_count + child_missing
+                child_count = getattr(child, "closure_missing_count", None)
+                if child_count is not None:
+                    root_missing_count = root_missing_count + child_count
+                else:
+                    root_missing_count = root_missing_count + child_missing
         inventory_complete = len(self.full_port_specs) == 204
         closure_done = (missing_children == 0) & ~root_missing & inventory_complete
         m.d.comb += [

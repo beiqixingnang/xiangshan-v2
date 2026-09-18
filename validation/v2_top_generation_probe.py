@@ -201,6 +201,7 @@ def main() -> int:
     mem_mod = load_module(BUILD_ROOT / "Cpu-Memory/Build-Cpu.Memory.MemBlock-Hardware.py", "v2_memblock")
     l2_mod = load_module(BUILD_ROOT / "Cpu-Memory/Build-Cpu.Dependency.CoupledL2.Slice-Hardware.py", "v2_coupled_l2")
     roots_mod = load_module(BUILD_ROOT / "Cpu-Core/Build-Cpu.Top.XiangShan-Roots-Hardware.py", "v2_roots")
+    xscore_mod = load_module(BUILD_ROOT / "Cpu-Core/Build-Cpu.Top.XSCore.Parent-Hardware.py", "v2_xscore_parent")
     deps = {
         "frontend": frontend_mod.FrontendParent(),
         "backend": backend_mod.BackendTop(),
@@ -340,7 +341,13 @@ def main() -> int:
     module_inventory: dict[str, object] = {"status": "PENDING"}
     if "XSTop" in root_specs_by_name:
         root_children = {
-            "xs_core": roots_mod.XSCore(injected_dependencies={"full_port_specs": root_specs_by_name["XSCore"]}),
+            # Use the landed source-backed XSCore parent bridge in the
+            # integrated hierarchy.  Its three injected core children remain
+            # explicitly pending, so this improves binding evidence without
+            # changing the complete-gate semantics.
+            "xs_core": xscore_mod.XSCoreParent(
+                injected_dependencies={"full_port_specs": root_specs_by_name["XSCore"]}
+            ),
             "l2_top": roots_mod.L2Top(injected_dependencies={"full_port_specs": root_specs_by_name["L2Top"]}),
             "xs_tile": roots_mod.XSTile(injected_dependencies={"full_port_specs": root_specs_by_name["XSTile"]}),
         }
