@@ -1,0 +1,411 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_NEWCSR_CONTROL_FAMILY",
+  "batch_id": "V2-NEWCSR-CONTROL-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "scala_sources": [
+    "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/PMAEntryModule.scala",
+    "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/InterruptFilter.scala",
+    "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/CommitIDModule.scala",
+    "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/SatpFlushMod.scala",
+    "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/TrapHandleModule.scala",
+    "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/TrapInstMod.scala",
+    "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/TrapTvalMod.scala",
+    "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/PFEvent.scala"
+  ],
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.NewCSR.ControlFamily-Hardware.py",
+    "sha256": "1795850338cb8e35a0f5a1f7e14b689a0ff6aa47f340758daa03eb85e5f4d42d",
+    "line_count": 503
+  },
+  "coverage": {
+    "covered_module_count": 9,
+    "expected_module_count": 9,
+    "missing_modules": [],
+    "covered_modules": [
+      "PMAEntryHandleModule",
+      "InterruptFilter",
+      "CommitIDModule",
+      "PrintCommitIDModule",
+      "SatpFlushMod",
+      "TrapHandleModule",
+      "TrapInstMod",
+      "TrapTvalMod",
+      "PFEvent"
+    ]
+  },
+  "port_surface": {
+    "status": "PASS",
+    "modules": [
+      {
+        "module": "PMAEntryHandleModule",
+        "locked_port_count": 263,
+        "emitted_port_count": 263,
+        "ports_match": true,
+        "deterministic": true,
+        "verilog_bytes": 90126,
+        "verilog_sha256": "a2b9494756441a8d0f4d9031d31fe33c2ebb475643de7638e42d4f9ac7b5a599"
+      },
+      {
+        "module": "InterruptFilter",
+        "locked_port_count": 311,
+        "emitted_port_count": 311,
+        "ports_match": true,
+        "deterministic": true,
+        "verilog_bytes": 28020,
+        "verilog_sha256": "ab759c9277cc9734d9ef506eefcc4be655a126e9e13588864a892301464fc2cb"
+      },
+      {
+        "module": "CommitIDModule",
+        "locked_port_count": 1,
+        "emitted_port_count": 1,
+        "ports_match": true,
+        "deterministic": true,
+        "verilog_bytes": 273,
+        "verilog_sha256": "d8f6e060b8e3aa26d6bb3272ca2fc09062ea5eccc0cffa8b64a4cf65cf603b28"
+      },
+      {
+        "module": "PrintCommitIDModule",
+        "locked_port_count": 3,
+        "emitted_port_count": 3,
+        "ports_match": true,
+        "deterministic": true,
+        "verilog_bytes": 364,
+        "verilog_sha256": "4de96011815c701c54f6604bd808d03eaf82f6a5b4e4cc02d21a509a3b4302b7"
+      },
+      {
+        "module": "SatpFlushMod",
+        "locked_port_count": 11,
+        "emitted_port_count": 11,
+        "ports_match": true,
+        "deterministic": true,
+        "verilog_bytes": 2489,
+        "verilog_sha256": "fc149b96d50297de4583f84f11764a059b5b45a13fd7d6f32389235d9684a29f"
+      },
+      {
+        "module": "TrapHandleModule",
+        "locked_port_count": 60,
+        "emitted_port_count": 60,
+        "ports_match": true,
+        "deterministic": true,
+        "verilog_bytes": 391208,
+        "verilog_sha256": "78cbb0f6620a536226f1635b7239e8b5d193566d993b2b2bf37993201d0b0aa1"
+      },
+      {
+        "module": "TrapInstMod",
+        "locked_port_count": 22,
+        "emitted_port_count": 22,
+        "ports_match": true,
+        "deterministic": true,
+        "verilog_bytes": 6770,
+        "verilog_sha256": "4c90d03acc79cfccd729af63613af5bf756fd34e9c302bf6d0d98fee00b27adf"
+      },
+      {
+        "module": "TrapTvalMod",
+        "locked_port_count": 18,
+        "emitted_port_count": 18,
+        "ports_match": true,
+        "deterministic": true,
+        "verilog_bytes": 5367,
+        "verilog_sha256": "32e3520d19d0f796e061c56ff5a441167f45f423447a2f1b65c63e21fc4cecea"
+      },
+      {
+        "module": "PFEvent",
+        "locked_port_count": 29,
+        "emitted_port_count": 29,
+        "ports_match": true,
+        "deterministic": true,
+        "verilog_bytes": 16974,
+        "verilog_sha256": "e54571abef74dc2277fb5d0bcff15c06856bc3a3211524d61ff48bac47c599ba"
+      }
+    ]
+  },
+  "tool_gates": {
+    "PMAEntryHandleModule": {
+      "verilator": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "verilator --lint-only -Wno-fatal '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/PMAEntryHandleModule.sv'"
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "ryHandleModule'\n 2234 |   assign \\$185  = io_in_pmaCfg_27_A == 1'h1;\n      |                                     ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/PMAEntryHandleModule.sv:2239:30: Operator EQ expects 12 bits on the RHS, but RHS's CONST '11'h7e3' generates 11 bits.\n                                                                                                                                                                   : ... note: In instance 'PMAEntryHandleModule'\n 2239 |   assign \\$190  = io_in_addr == 11'h7e3;\n      |                              ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/PMAEntryHandleModule.sv:2241:37: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                                   : ... note: In instance 'PMAEntryHandleModule'\n 2241 |   assign \\$192  = io_in_pmaCfg_28_A == 1'h1;\n      |                                     ^~\n",
+        "output_sha256": "a7d2d6f7fbbbee80aed096b00c639068b249767d696058bf6e01d6334c27b4dd"
+      },
+      "yosys": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "yosys -Q -p 'read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/PMAEntryHandleModule.sv; hierarchy -top PMAEntryHandleModule; proc; check'"
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "sv:1963$586'.\nRemoving empty process `PMAEntryHandleModule.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/PMAEntryHandleModule.sv:1960$585'.\nRemoving empty process `PMAEntryHandleModule.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/PMAEntryHandleModule.sv:1957$584'.\nRemoving empty process `PMAEntryHandleModule.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/PMAEntryHandleModule.sv:1954$583'.\nCleaned up 32 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module PMAEntryHandleModule.\n<suppressed ~32 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module PMAEntryHandleModule...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 7b28e18360, CPU: user 0.08s system 0.02s, MEM: 26.72 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 59% 2x read_verilog (0 sec), 16% 1x check (0 sec), ...\n",
+        "output_sha256": "aaf8212ce185c8116a6fe6ccf88e6e3c63c286b48bf36a099de10732a68e5d85"
+      }
+    },
+    "InterruptFilter": {
+      "verilator": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "verilator --lint-only -Wno-fatal '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/InterruptFilter.sv'"
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.047 MB sources in 2 modules, into 0.031 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.030 s (elab=0.001, cvt=0.006, bld=0.000); cpu 0.012 s on 1 threads; alloced 10.387 MB\n",
+        "output_sha256": "eeea7c95e8d33facacff4e429f5cecf8e42118f6f86f9d6b73706a275c026849"
+      },
+      "yosys": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "yosys -Q -p 'read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/InterruptFilter.sv; hierarchy -top InterruptFilter; proc; check'"
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": ".work/v2-newcsr-control-family/InterruptFilter.sv:731$39'.\nRemoving empty process `InterruptFilter.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/InterruptFilter.sv:728$38'.\nRemoving empty process `InterruptFilter.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/InterruptFilter.sv:725$37'.\nRemoving empty process `InterruptFilter.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/InterruptFilter.sv:722$36'.\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module InterruptFilter.\n<suppressed ~20 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module InterruptFilter...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 70cab39e17, CPU: user 0.01s system 0.01s, MEM: 12.97 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 71% 2x read_verilog (0 sec), 8% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "964cbfed85eeaeb6afb157ff1c47da35ea68062c2a1d616febfb64d78bc22ab9"
+      }
+    },
+    "CommitIDModule": {
+      "verilator": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "verilator --lint-only -Wno-fatal '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/CommitIDModule.sv'"
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.009 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.022 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.066 MB\n",
+        "output_sha256": "8d06982e8ad55493b3e9e59090dcc6b0afa7dc2f287eea8174373f69482391c9"
+      },
+      "yosys": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "yosys -Q -p 'read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/CommitIDModule.sv; hierarchy -top CommitIDModule; proc; check'"
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": " total of 0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module CommitIDModule.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module CommitIDModule...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 6b31a9dede, CPU: user 0.01s system 0.01s, MEM: 10.31 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 46% 2x read_verilog (0 sec), 25% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "ad33a6faf9dfd1568e147acf86e02c5e13baf86bd726844b8ef9d9750ee8ca4c"
+      }
+    },
+    "PrintCommitIDModule": {
+      "verilator": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "verilator --lint-only -Wno-fatal '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/PrintCommitIDModule.sv'"
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.009 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.024 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.062 MB\n",
+        "output_sha256": "1bd96a2c871ef9d14f979d1cbb343dcc545960557e17c711bf10e0c6865ceca7"
+      },
+      "yosys": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "yosys -Q -p 'read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/PrintCommitIDModule.sv; hierarchy -top PrintCommitIDModule; proc; check'"
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module PrintCommitIDModule.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module PrintCommitIDModule...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: a3e3f8bc61, CPU: user 0.00s system 0.01s, MEM: 10.47 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 45% 2x read_verilog (0 sec), 30% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "c4bbc46657d6bf3cd49e4f694cc21b35fc3d4d6a42bdbd9b4886ebb23cf24396"
+      }
+    },
+    "SatpFlushMod": {
+      "verilator": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "verilator --lint-only -Wno-fatal '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/SatpFlushMod.sv'"
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.023 MB sources in 2 modules, into 0.020 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.025 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.105 MB\n",
+        "output_sha256": "2a73aad4a83944e35d64e0fab255c622582201a81a46526cf263768c49895d3c"
+      },
+      "yosys": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "yosys -Q -p 'read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/SatpFlushMod.sv; hierarchy -top SatpFlushMod; proc; check'"
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/SatpFlushMod.sv:51$5'.\nRemoving empty process `SatpFlushMod.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/SatpFlushMod.sv:48$3'.\nRemoving empty process `SatpFlushMod.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/SatpFlushMod.sv:46$2'.\nRemoving empty process `SatpFlushMod.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/SatpFlushMod.sv:44$1'.\nCleaned up 4 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module SatpFlushMod.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module SatpFlushMod...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: b0a0b20d2f, CPU: user 0.01s system 0.00s, MEM: 11.72 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 42% 2x read_verilog (0 sec), 18% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "ccd6da7d80e61c2d8d691971cede9b072afc824cf80706d3023bdf6183e1f856"
+      }
+    },
+    "TrapHandleModule": {
+      "verilator": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "verilator --lint-only -Wno-fatal '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/TrapHandleModule.sv'"
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "em/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/TrapHandleModule.sv:5661:28: Operator ADD expects 63 bits on the RHS, but RHS's VARREF '$5183' generates 6 bits.\n                                                                                                                                                               : ... note: In instance 'TrapHandleModule'\n 5661 |   assign \\$5184  = \\$2850  + \\$5183 ;\n      |                            ^\n                      ... For warning description see https://verilator.org/warn/WIDTHEXPAND?v=5.032\n                      ... Use \"/* verilator lint_off WIDTHEXPAND */\" and lint_on around source to disable this message.\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/TrapHandleModule.sv:8539:28: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                               : ... note: In instance 'TrapHandleModule'\n 8539 |   assign \\$2970  = \\$2969  == 1'h1;\n      |                            ^~\n",
+        "output_sha256": "1453b1d9a06928a25927cf12eb32fddf6ee6bb6bd4216ae9d3127298825094c6"
+      },
+      "yosys": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "yosys -Q -p 'read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/TrapHandleModule.sv; hierarchy -top TrapHandleModule; proc; check'"
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "tal of 0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module TrapHandleModule.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module TrapHandleModule...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 496b61c2f4, CPU: user 0.26s system 0.01s, MEM: 65.12 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 81% 2x read_verilog (0 sec), 5% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "0253afd5965fd718c6bbb02d461ecb1f18f1cfd9439af4f9cc19a2cc04ef0381"
+      }
+    },
+    "TrapInstMod": {
+      "verilator": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "verilator --lint-only -Wno-fatal '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/TrapInstMod.sv'"
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.027 MB sources in 2 modules, into 0.030 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.022 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.007 s on 1 threads; alloced 9.406 MB\n",
+        "output_sha256": "991d1677a98d704ae96e15b1295ecfe64a1791c8525b60632db60b258a60230a"
+      },
+      "yosys": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "yosys -Q -p 'read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/TrapInstMod.sv; hierarchy -top TrapInstMod; proc; check'"
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "em/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/TrapInstMod.sv:119$27'.\nRemoving empty process `TrapInstMod.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/TrapInstMod.sv:116$26'.\nRemoving empty process `TrapInstMod.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/TrapInstMod.sv:113$25'.\nRemoving empty process `TrapInstMod.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/TrapInstMod.sv:110$24'.\nCleaned up 15 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module TrapInstMod.\n<suppressed ~5 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module TrapInstMod...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 1083914529, CPU: user 0.01s system 0.01s, MEM: 12.34 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 55% 2x read_verilog (0 sec), 13% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "1aba00f498581d932ec1e5b282126ed78e62715512feb30679a3048bb95dd036"
+      }
+    },
+    "TrapTvalMod": {
+      "verilator": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "verilator --lint-only -Wno-fatal '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/TrapTvalMod.sv'"
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.026 MB sources in 2 modules, into 0.024 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.022 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.211 MB\n",
+        "output_sha256": "d5bb0d5f68064e10508170997011ccbf3da3916cb0449fb5f26383727f99df06"
+      },
+      "yosys": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "yosys -Q -p 'read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/TrapTvalMod.sv; hierarchy -top TrapTvalMod; proc; check'"
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "ystem/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/TrapTvalMod.sv:104$25'.\nRemoving empty process `TrapTvalMod.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/TrapTvalMod.sv:101$24'.\nRemoving empty process `TrapTvalMod.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/TrapTvalMod.sv:98$23'.\nRemoving empty process `TrapTvalMod.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/TrapTvalMod.sv:95$22'.\nCleaned up 9 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module TrapTvalMod.\n<suppressed ~4 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module TrapTvalMod...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 0ed2ae5739, CPU: user 0.00s system 0.02s, MEM: 12.19 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 51% 2x read_verilog (0 sec), 14% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "6540b94e4fca05f5e7a4d5f6c48527a3ac969ab08c3ec8a435535f77595c6c09"
+      }
+    },
+    "PFEvent": {
+      "verilator": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "verilator --lint-only -Wno-fatal '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/PFEvent.sv'"
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "Event'\n  301 |   assign \\$23  = io_distribute_csr_w_bits_addr == 10'h32e;\n      |                                                ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/PFEvent.sv:303:48: Operator EQ expects 12 bits on the RHS, but RHS's CONST '10'h32f' generates 10 bits.\n                                                                                                                                                     : ... note: In instance 'PFEvent'\n  303 |   assign \\$25  = io_distribute_csr_w_bits_addr == 10'h32f;\n      |                                                ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/PFEvent.sv:305:48: Operator EQ expects 12 bits on the RHS, but RHS's CONST '10'h330' generates 10 bits.\n                                                                                                                                                     : ... note: In instance 'PFEvent'\n  305 |   assign \\$27  = io_distribute_csr_w_bits_addr == 10'h330;\n      |                                                ^~\n",
+        "output_sha256": "a7da57b89fa1aae7d504b1da9be123d065ddd90901ab06fd8ea74294ff9e4722"
+      },
+      "yosys": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "yosys -Q -p 'read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/PFEvent.sv; hierarchy -top PFEvent; proc; check'"
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/PFEvent.sv:216$25'.\nRemoving empty process `PFEvent.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/PFEvent.sv:213$24'.\nRemoving empty process `PFEvent.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/PFEvent.sv:210$23'.\nRemoving empty process `PFEvent.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-newcsr-control-family/PFEvent.sv:207$22'.\nCleaned up 24 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module PFEvent.\n<suppressed ~24 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module PFEvent...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 634746f38a, CPU: user 0.03s system 0.00s, MEM: 15.78 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 46% 2x read_verilog (0 sec), 19% 1x check (0 sec), ...\n",
+        "output_sha256": "43267804260548b3ef1605eb6381c0763bf809bc9afa19b7667db6528df36f5e"
+      }
+    }
+  },
+  "py_compile": {
+    "status": "PASS",
+    "returncode": 0
+  },
+  "pyright": {
+    "status": "PASS",
+    "summary": {
+      "filesAnalyzed": 1,
+      "errorCount": 0,
+      "warningCount": 0,
+      "informationCount": 0,
+      "timeInSec": 0.764
+    }
+  },
+  "gates": {
+    "COVERAGE_COMPLETE": "PASS",
+    "PORT_SURFACE_MATCHED": "PASS",
+    "DETERMINISTIC_VERILOG": "PASS",
+    "PY_COMPILE": "PASS",
+    "PYRIGHT": "PASS",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "UHSC_LOCALIZED": "PASS_BOUNDED_FAMILY_LOCAL_NAME",
+    "PARENT_CLOSURE_MATCHED": "PENDING",
+    "LICENSE_REVIEW": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "VALIDATOR_PASS_BOUNDED",
+  "acceptance_eligible": false,
+  "failures": [],
+  "unclosed": [
+    "Complete NewCSR parent behavioral closure remains pending.",
+    "License review and user approval remain pending."
+  ]
+}

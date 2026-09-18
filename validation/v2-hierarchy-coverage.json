@@ -5,9 +5,9 @@
  "reference_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
  "locked_module_count": 1976,
  "status_counts": {
-  "CORE_BOUNDED_SUBJECT": 881,
-  "FAMILY_SUBJECT": 977,
-  "MISSING": 118
+  "CORE_BOUNDED_SUBJECT": 910,
+  "FAMILY_SUBJECT": 972,
+  "MISSING": 94
  },
  "row_count": 1976,
  "rows": [
@@ -1735,13 +1735,15 @@
   },
   {
    "module": "BypassNetwork",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 1295,
    "children": 60,
    "scala_sources": [
     "xiangshan/backend/datapath/BypassNetwork.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "BypassPipeFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -1929,13 +1931,15 @@
   },
   {
    "module": "CMOUnit",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 20,
    "children": 0,
    "scala_sources": [
     "xiangshan/cache/dcache/mainpipe/MissQueue.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "DcacheMissQueueFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -2737,13 +2741,15 @@
   },
   {
    "module": "CommitIDModule",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 1,
    "children": 1,
    "scala_sources": [
     "xiangshan/backend/fu/NewCSR/CommitIDModule.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "CSRControlFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -2954,7 +2960,7 @@
   },
   {
    "module": "DCache",
-   "status": "FAMILY_SUBJECT",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 617,
    "children": 29,
    "scala_sources": [
@@ -2964,7 +2970,9 @@
     "utility/sram/SramHelper.scala",
     "xiangshan/cache/dcache/DCacheWrapper.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "DcacheMissQueueFamily"
+   ],
    "family_subjects": [
     "dependency.rocket.diplomacy",
     "dependency.utility"
@@ -2973,7 +2981,7 @@
   },
   {
    "module": "DCacheWrapper",
-   "status": "FAMILY_SUBJECT",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 617,
    "children": 1,
    "scala_sources": [
@@ -2983,7 +2991,9 @@
     "utility/sram/SramHelper.scala",
     "xiangshan/cache/dcache/DCacheWrapper.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "DcacheMissQueueFamily"
+   ],
    "family_subjects": [
     "dependency.rocket.diplomacy",
     "dependency.utility"
@@ -9310,13 +9320,15 @@
   },
   {
    "module": "InterruptFilter",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 311,
    "children": 6,
    "scala_sources": [
     "xiangshan/backend/fu/NewCSR/InterruptFilter.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "CSRControlFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -11963,26 +11975,30 @@
   },
   {
    "module": "MissEntry",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 137,
    "children": 0,
    "scala_sources": [
     "xiangshan/cache/dcache/mainpipe/MissQueue.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "DcacheMissQueueFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "MissQueue",
-   "status": "FAMILY_SUBJECT",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 202,
    "children": 18,
    "scala_sources": [
     "utility/HardwarePerfMonitor.scala",
     "xiangshan/cache/dcache/mainpipe/MissQueue.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "DcacheMissQueueFamily"
+   ],
    "family_subjects": [
     "dependency.utility"
    ],
@@ -11990,13 +12006,15 @@
   },
   {
    "module": "MissReadyGen",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 35,
    "children": 0,
    "scala_sources": [
     "xiangshan/cache/dcache/DCacheWrapper.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "DcacheMissQueueFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -13241,13 +13259,15 @@
   },
   {
    "module": "PFEvent",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 29,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/fu/NewCSR/PFEvent.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "CSRControlFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -13267,13 +13287,15 @@
   },
   {
    "module": "PMAEntryHandleModule",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 263,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/fu/NewCSR/PMAEntryModule.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "CSRControlFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -13466,13 +13488,15 @@
   },
   {
    "module": "PipeGroupConnect",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 1338,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/PipeGroupConnect.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "BypassPipeFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -16782,13 +16806,15 @@
   },
   {
    "module": "ProbeEntry",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 22,
    "children": 0,
    "scala_sources": [
     "xiangshan/cache/dcache/mainpipe/Probe.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "DcacheMissQueueFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -16808,14 +16834,16 @@
   },
   {
    "module": "ProbeQueue",
-   "status": "FAMILY_SUBJECT",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 23,
    "children": 9,
    "scala_sources": [
     "utility/HardwarePerfMonitor.scala",
     "xiangshan/cache/dcache/mainpipe/Probe.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "DcacheMissQueueFamily"
+   ],
    "family_subjects": [
     "dependency.utility"
    ],
@@ -20866,13 +20894,15 @@
   },
   {
    "module": "SatpFlushMod",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 11,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/fu/NewCSR/SatpFlushMod.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "CSRControlFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -23933,49 +23963,57 @@
   },
   {
    "module": "TrapHandleModule",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 60,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/fu/NewCSR/TrapHandleModule.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "CSRControlFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "TrapInstMod",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 22,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/fu/NewCSR/TrapInstMod.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "CSRControlFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "TrapTvalMod",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 18,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/fu/NewCSR/TrapTvalMod.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "CSRControlFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "TreeArbiter",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 65,
    "children": 0,
    "scala_sources": [
     "xiangshan/cache/dcache/DCacheWrapper.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "DcacheMissQueueFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -24808,13 +24846,15 @@
   },
   {
    "module": "VLMergeBufferImp",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 223,
    "children": 3,
    "scala_sources": [
     "xiangshan/mem/vector/VMergeBuffer.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "VectorMemoryFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -24904,13 +24944,15 @@
   },
   {
    "module": "VSMergeBufferImp",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 112,
    "children": 2,
    "scala_sources": [
     "xiangshan/mem/vector/VMergeBuffer.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "VectorMemoryFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -25003,13 +25045,15 @@
   },
   {
    "module": "VSegmentUnit",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 157,
    "children": 2,
    "scala_sources": [
     "xiangshan/mem/vector/VSegmentUnit.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "VectorMemoryFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -25523,13 +25567,15 @@
   },
   {
    "module": "VfofBuffer",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 85,
    "children": 0,
    "scala_sources": [
     "xiangshan/mem/vector/VfofBuffer.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "VectorMemoryFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -25549,13 +25595,15 @@
   },
   {
    "module": "VirtualLoadQueue",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 115,
    "children": 0,
    "scala_sources": [
     "xiangshan/mem/lsqueue/VirtualLoadQueue.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "VectorMemoryFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -25617,13 +25665,15 @@
   },
   {
    "module": "VldMergeUnit",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 30,
    "children": 1,
    "scala_sources": [
     "xiangshan/backend/datapath/VldMergeUnit.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "VectorMemoryFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -25643,13 +25693,15 @@
   },
   {
    "module": "VsetModule",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 15,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/fu/Vsetu.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "VectorMemoryFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -25993,38 +26045,44 @@
   },
   {
    "module": "WritebackEntry",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 24,
    "children": 0,
    "scala_sources": [
     "xiangshan/cache/dcache/mainpipe/WritebackQueue.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "DcacheMissQueueFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "WritebackEntry_15",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 24,
    "children": 0,
    "scala_sources": [
     "xiangshan/cache/dcache/mainpipe/WritebackQueue.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "DcacheMissQueueFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "WritebackQueue",
-   "status": "FAMILY_SUBJECT",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 42,
    "children": 18,
    "scala_sources": [
     "utility/HardwarePerfMonitor.scala",
     "xiangshan/cache/dcache/mainpipe/WritebackQueue.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "DcacheMissQueueFamily"
+   ],
    "family_subjects": [
     "dependency.utility"
    ],
@@ -28507,10 +28565,6 @@
    "modules": 2
   },
   {
-   "scala": "xiangshan/cache/dcache/mainpipe/MissQueue.scala",
-   "modules": 2
-  },
-  {
    "scala": "chisel3/util/random/FibonacciLFSR.scala",
    "modules": 2
   },
@@ -28519,23 +28573,11 @@
    "modules": 2
   },
   {
-   "scala": "xiangshan/cache/dcache/DCacheWrapper.scala",
-   "modules": 2
-  },
-  {
    "scala": "utils/OverrideableQueue.scala",
    "modules": 2
   },
   {
    "scala": "xiangshan/backend/fu/vector/VecSrcTypeModule.scala",
-   "modules": 2
-  },
-  {
-   "scala": "xiangshan/mem/vector/VMergeBuffer.scala",
-   "modules": 2
-  },
-  {
-   "scala": "xiangshan/cache/dcache/mainpipe/WritebackQueue.scala",
    "modules": 2
   },
   {
@@ -28556,14 +28598,6 @@
   },
   {
    "scala": "xiangshan/cache/mmu/BitmapCheck.scala",
-   "modules": 1
-  },
-  {
-   "scala": "xiangshan/backend/datapath/BypassNetwork.scala",
-   "modules": 1
-  },
-  {
-   "scala": "xiangshan/backend/fu/NewCSR/CommitIDModule.scala",
    "modules": 1
   },
   {
@@ -28619,10 +28653,6 @@
    "modules": 1
   },
   {
-   "scala": "xiangshan/backend/fu/NewCSR/InterruptFilter.scala",
-   "modules": 1
-  },
-  {
    "scala": "jtag/JtagStateMachine.scala",
    "modules": 1
   },
@@ -28655,23 +28685,7 @@
    "modules": 1
   },
   {
-   "scala": "xiangshan/backend/fu/NewCSR/PFEvent.scala",
-   "modules": 1
-  },
-  {
-   "scala": "xiangshan/backend/fu/NewCSR/PMAEntryModule.scala",
-   "modules": 1
-  },
-  {
-   "scala": "xiangshan/backend/PipeGroupConnect.scala",
-   "modules": 1
-  },
-  {
    "scala": "xiangshan/mem/prefetch/PrefetcherMonitor.scala",
-   "modules": 1
-  },
-  {
-   "scala": "xiangshan/cache/dcache/mainpipe/Probe.scala",
    "modules": 1
   },
   {
@@ -28699,10 +28713,6 @@
    "modules": 1
   },
   {
-   "scala": "xiangshan/backend/fu/NewCSR/SatpFlushMod.scala",
-   "modules": 1
-  },
-  {
    "scala": "xiangshan/mem/prefetch/L1StreamPrefetcher.scala",
    "modules": 1
   },
@@ -28724,6 +28734,38 @@
   },
   {
    "scala": "xiangshan/backend/trace/TraceBuffer.scala",
+   "modules": 1
+  },
+  {
+   "scala": "xiangshan/backend/fu/wrapper/VIAluFix.scala",
+   "modules": 1
+  },
+  {
+   "scala": "xiangshan/backend/fu/wrapper/VIMacU.scala",
+   "modules": 1
+  },
+  {
+   "scala": "xiangshan/backend/fu/wrapper/VPPU.scala",
+   "modules": 1
+  },
+  {
+   "scala": "xiangshan/backend/rob/VTypeBuffer.scala",
+   "modules": 1
+  },
+  {
+   "scala": "xiangshan/backend/fu/wrapper/VCVT.scala",
+   "modules": 1
+  },
+  {
+   "scala": "xiangshan/frontend/icache/WayLookup.scala",
+   "modules": 1
+  },
+  {
+   "scala": "yunsuan/fpu/fqrt/fpsqrt_r16.scala",
+   "modules": 1
+  },
+  {
+   "scala": "xiangshan/mem/vector/VecCommon.scala",
    "modules": 1
   }
  ]

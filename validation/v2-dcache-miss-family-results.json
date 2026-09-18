@@ -1,0 +1,297 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_DCACHE_MISS_QUEUE_FAMILY",
+  "batch_id": "V2-MEM-DCACHE-MISS-QUEUE-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "scala_sources": [
+    "upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/MissQueue.scala",
+    "upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/Probe.scala",
+    "upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/WritebackQueue.scala",
+    "upstream/src/main/scala/xiangshan/cache/dcache/DCacheWrapper.scala"
+  ],
+  "covered_modules": [
+    "CMOUnit",
+    "MissEntry",
+    "MissReadyGen",
+    "ProbeEntry",
+    "TreeArbiter",
+    "WritebackEntry",
+    "WritebackEntry_15"
+  ],
+  "covered_module_count": 7,
+  "port_surface": {
+    "CMOUnit": {
+      "locked": 20,
+      "emitted": 20,
+      "match": true
+    },
+    "MissEntry": {
+      "locked": 137,
+      "emitted": 137,
+      "match": true
+    },
+    "MissReadyGen": {
+      "locked": 35,
+      "emitted": 35,
+      "match": true
+    },
+    "ProbeEntry": {
+      "locked": 22,
+      "emitted": 22,
+      "match": true
+    },
+    "TreeArbiter": {
+      "locked": 65,
+      "emitted": 65,
+      "match": true
+    },
+    "WritebackEntry": {
+      "locked": 24,
+      "emitted": 24,
+      "match": true
+    },
+    "WritebackEntry_15": {
+      "locked": 24,
+      "emitted": 24,
+      "match": true
+    }
+  },
+  "tool_gates": {
+    "CMOUnit": {
+      "rtl_bytes": 5059,
+      "rtl_sha256": "d1d860c02ca75e1d3a4bba07d881baa5704ab54f3c1742e8294ce31096b2d466",
+      "deterministic": true,
+      "verilator": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "verilator --lint-only -Wno-fatal '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-miss-family/CMOUnit.sv'"
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "EF 'state' generates 2 bits.\n                                                                                                                                                : ... note: In instance 'CMOUnit'\n   82 |   assign \\$5  = ! state;\n      |                 ^\n%Warning-WIDTHTRUNC: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-miss-family/CMOUnit.sv:84:17: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'state' generates 2 bits.\n                                                                                                                                                : ... note: In instance 'CMOUnit'\n   84 |   assign \\$6  = ! state;\n      |                 ^\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-miss-family/CMOUnit.sv:86:23: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                 : ... note: In instance 'CMOUnit'\n   86 |   assign \\$8  = state == 1'h1;\n      |                       ^~\n"
+      },
+      "yosys": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "yosys -Q -p \"read_verilog -sv '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-miss-family/CMOUnit.sv'; proc; check\""
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "ROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 0d26c26ce3, CPU: user 0.00s system 0.01s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 42% 1x opt_expr (0 sec), 33% 2x read_verilog (0 sec), ...\n"
+      }
+    },
+    "MissEntry": {
+      "rtl_bytes": 25300,
+      "rtl_sha256": "1d8566fd812b21bb73b1e7885e66ca4b7eab33b40e74d6321943ad162d7a1983",
+      "deterministic": true,
+      "verilator": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "verilator --lint-only -Wno-fatal '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-miss-family/MissEntry.sv'"
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.045 MB sources in 2 modules, into 0.040 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.029 s (elab=0.001, cvt=0.004, bld=0.000); cpu 0.012 s on 1 threads; alloced 10.027 MB\n"
+      },
+      "yosys": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "yosys -Q -p \"read_verilog -sv '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-miss-family/MissEntry.sv'; proc; check\""
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "ROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: e5f47e8818, CPU: user 0.01s system 0.00s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 43% 2x read_verilog (0 sec), 34% 1x opt_expr (0 sec), ...\n"
+      }
+    },
+    "MissReadyGen": {
+      "rtl_bytes": 4599,
+      "rtl_sha256": "919e94f55b3cfd113cbca3b0806e9876abd557809e40fddc7d2dc2b50b377aad",
+      "deterministic": true,
+      "verilator": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "verilator --lint-only -Wno-fatal '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-miss-family/MissReadyGen.sv'"
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.025 MB sources in 2 modules, into 0.018 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.026 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.007 s on 1 threads; alloced 9.285 MB\n"
+      },
+      "yosys": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "yosys -Q -p \"read_verilog -sv '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-miss-family/MissReadyGen.sv'; proc; check\""
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "ROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 9097172a36, CPU: user 0.01s system 0.00s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 37% 1x opt_expr (0 sec), 32% 2x read_verilog (0 sec), ...\n"
+      }
+    },
+    "ProbeEntry": {
+      "rtl_bytes": 4907,
+      "rtl_sha256": "f5bea82fde88037462dbdc28fed958863e2130769c5b63288a05424a323f72da",
+      "deterministic": true,
+      "verilator": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "verilator --lint-only -Wno-fatal '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-miss-family/ProbeEntry.sv'"
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "                                                                                                                 : ... note: In instance 'ProbeEntry'\n   76 |   assign io_pipe_req_valid = state == 1'h1;\n      |                                    ^~\n%Warning-WIDTHTRUNC: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-miss-family/ProbeEntry.sv:78:17: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'state' generates 2 bits.\n                                                                                                                                                   : ... note: In instance 'ProbeEntry'\n   78 |   assign \\$1  = ! state;\n      |                 ^\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-miss-family/ProbeEntry.sv:80:23: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                    : ... note: In instance 'ProbeEntry'\n   80 |   assign \\$3  = state == 1'h1;\n      |                       ^~\n"
+      },
+      "yosys": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "yosys -Q -p \"read_verilog -sv '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-miss-family/ProbeEntry.sv'; proc; check\""
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "ROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: b153c3fb1e, CPU: user 0.01s system 0.00s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 47% 1x opt_expr (0 sec), 23% 2x read_verilog (0 sec), ...\n"
+      }
+    },
+    "TreeArbiter": {
+      "rtl_bytes": 11649,
+      "rtl_sha256": "73f9bf7ad492a3468557075dbcacfbab9a5c1c93e787e1b42cad65e2104867a2",
+      "deterministic": true,
+      "verilator": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "verilator --lint-only -Wno-fatal '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-miss-family/TreeArbiter.sv'"
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "                                                                                                        : ... note: In instance 'TreeArbiter'\n  293 |   assign \\$12  = selected == 1'h1;\n      |                           ^~\n%Warning-WIDTHTRUNC: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-miss-family/TreeArbiter.sv:299:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'selected' generates 2 bits.\n                                                                                                                                                     : ... note: In instance 'TreeArbiter'\n  299 |   assign \\$17  = ! selected;\n      |                  ^\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-miss-family/TreeArbiter.sv:300:27: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                      : ... note: In instance 'TreeArbiter'\n  300 |   assign \\$18  = selected == 1'h1;\n      |                           ^~\n"
+      },
+      "yosys": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "yosys -Q -p \"read_verilog -sv '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-miss-family/TreeArbiter.sv'; proc; check\""
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "ROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 1f4123167f, CPU: user 0.00s system 0.01s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 41% 2x read_verilog (0 sec), 39% 1x opt_expr (0 sec), ...\n"
+      }
+    },
+    "WritebackEntry": {
+      "rtl_bytes": 5774,
+      "rtl_sha256": "484e76269da1b225250a55e55d7a47a0f2a08ae60635fdffe24b6cfb148db014",
+      "deterministic": true,
+      "verilator": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "verilator --lint-only -Wno-fatal '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-miss-family/WritebackEntry.sv'"
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.026 MB sources in 2 modules, into 0.028 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.024 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.007 s on 1 threads; alloced 9.246 MB\n"
+      },
+      "yosys": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "yosys -Q -p \"read_verilog -sv '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-miss-family/WritebackEntry.sv'; proc; check\""
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "ROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 9f53ef7ee8, CPU: user 0.01s system 0.01s, MEM: 8.91 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 38% 1x opt_expr (0 sec), 37% 2x read_verilog (0 sec), ...\n"
+      }
+    },
+    "WritebackEntry_15": {
+      "rtl_bytes": 5767,
+      "rtl_sha256": "e4d940a7780bf9cfd774550eb08c148f82ab965ee0d1e5c7a5d12a4f7464f9a1",
+      "deterministic": true,
+      "verilator": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "verilator --lint-only -Wno-fatal '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-miss-family/WritebackEntry_15.sv'"
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.026 MB sources in 2 modules, into 0.029 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.024 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.007 s on 1 threads; alloced 9.242 MB\n"
+      },
+      "yosys": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "yosys -Q -p \"read_verilog -sv '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-dcache-miss-family/WritebackEntry_15.sv'; proc; check\""
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "ROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: fdaa756f94, CPU: user 0.01s system 0.00s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 40% 1x opt_expr (0 sec), 38% 2x read_verilog (0 sec), ...\n"
+      }
+    }
+  },
+  "static_gates": {
+    "pyright": {
+      "command": [
+        "pyright.cmd",
+        "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Build\\Build-Cpu\\Cpu-Memory\\Build-Cpu.Memory.Dcache.MissQueue.Family-Hardware.py",
+        "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\v2-dcache-miss-family-validator.py"
+      ],
+      "status": "PASS",
+      "returncode": 0,
+      "output_tail": "0 errors, 0 warnings, 0 informations\n"
+    }
+  },
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "PY_COMPILE": "PASS",
+    "PYRIGHT": "PASS",
+    "BUILD_VERILOG": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS_BOUNDED_PORT_AND_EXPORT",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "V2_REFERENCE_MATCHED": "PENDING_LOCKED_DCACHE_MISS_DIFFERENTIAL",
+    "PARENT_CLOSURE_MATCHED": "PENDING",
+    "SYSTEM_TESTING": "PASS_BOUNDED_EXTERNAL_COMMAND",
+    "LICENSE_REVIEW": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "VALIDATOR_PASS_BOUNDED",
+  "acceptance_eligible": false,
+  "failures": [],
+  "unclosed": [
+    "Full miss-queue, probe, writeback, and TileLink parent differential remains pending.",
+    "Parent DCache/DCacheWrapper closure, license review, and user approval remain pending."
+  ]
+}

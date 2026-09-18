@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_BYPASS_PIPE_FAMILY",
+  "batch_id": "V2-BACKEND-DATAPATH-BYPASS-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "scala_sources": [
+    "upstream/src/main/scala/xiangshan/backend/datapath/BypassNetwork.scala",
+    "upstream/src/main/scala/xiangshan/backend/PipeGroupConnect.scala"
+  ],
+  "covered_modules": [
+    "BypassNetwork",
+    "PipeGroupConnect"
+  ],
+  "port_surface": {
+    "BypassNetwork": {
+      "locked": 1295,
+      "emitted": 1295,
+      "match": true
+    },
+    "PipeGroupConnect": {
+      "locked": 1338,
+      "emitted": 1338,
+      "match": true
+    }
+  },
+  "tool_gates": {
+    "BypassNetwork": {
+      "rtl_bytes": 203091,
+      "rtl_sha256": "cdb6957e3eae137db5611668d5ee78b8539b00fbb59e0404eaae63edeb15cd65",
+      "verilator": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "verilator --lint-only -Wno-fatal '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-bypass-pipe-family/BypassNetwork.sv'"
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.214 MB sources in 2 modules, into 0.038 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.065 s (elab=0.007, cvt=0.024, bld=0.000); cpu 0.048 s on 1 threads; alloced 15.773 MB\n"
+      },
+      "yosys": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "yosys -Q -p \"read_verilog -sv '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-bypass-pipe-family/BypassNetwork.sv'; proc; check\""
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "nvert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: a619670176, CPU: user 0.01s system 0.00s, MEM: 8.75 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 43% 1x opt_expr (0 sec), 32% 2x read_verilog (0 sec), ...\n"
+      }
+    },
+    "PipeGroupConnect": {
+      "rtl_bytes": 160976,
+      "rtl_sha256": "bf89ee3eb8e6e0a44dfccec7414bdb7039b2c2dd3da21e2a99e32422dfca615b",
+      "verilator": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "verilator --lint-only -Wno-fatal '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-bypass-pipe-family/PipeGroupConnect.sv'"
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.174 MB sources in 2 modules, into 0.039 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.064 s (elab=0.007, cvt=0.026, bld=0.000); cpu 0.048 s on 1 threads; alloced 15.613 MB\n"
+      },
+      "yosys": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "yosys -Q -p \"read_verilog -sv '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-bypass-pipe-family/PipeGroupConnect.sv'; proc; check\""
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "nvert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: ea9f32c06b, CPU: user 0.01s system 0.00s, MEM: 8.91 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 43% 1x opt_expr (0 sec), 36% 2x read_verilog (0 sec), ...\n"
+      }
+    }
+  },
+  "gates": {
+    "PYTHON_PRESENT": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS_BOUNDED_PORT_AND_EXPORT",
+    "V2_REFERENCE_MATCHED": "PENDING_LOCKED_BYPASS_DIFF",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "UHSC_LOCALIZED": "PASS_BOUNDED_FAMILY_LOCAL_NAME",
+    "PARENT_CLOSURE_MATCHED": "PENDING",
+    "LICENSE_REVIEW": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "VALIDATOR_PASS_BOUNDED",
+  "acceptance_eligible": false,
+  "failures": [],
+  "unclosed": [
+    "Complete bypass wakeup/pipe behavior and parent closure remain pending.",
+    "Locked reference differential, license review, and user approval remain pending."
+  ]
+}
