@@ -118,7 +118,11 @@ def main() -> int:
             m = INST_RE.match(line)
             if m and not NET_RE.match(line):
                 child_module = m.group(1)
-                if child_module not in {"module"} and child_module[:1].isupper():
+                # Chisel/Verilog-generated wrappers may use lower-case module
+                # names (for example ``imsic_bus_top``).  The locked XSTop
+                # explicitly instantiates these; filtering by uppercase loses
+                # real parent-child closure edges.
+                if child_module not in {"module", "wire", "reg", "logic"}:
                     p = PROV.search(line.rstrip())
                     children.append({
                         "module": child_module,
