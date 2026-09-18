@@ -888,16 +888,49 @@
    "reference_surface": [
     "validation/v2-age-family-results.json"
    ]
+  },
+  {
+   "id": "DebugTriggerFamily",
+   "source_scala": [
+    "scala/src/main/scala/xiangshan/backend/fu/NewCSR/Debug.scala"
+   ],
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.NewCSR.DebugFamily-Hardware.py",
+   "family_id": "core.backend.newcsr.debug",
+   "closure_root": "core.backend.newcsr",
+   "classification": "REWRITTEN",
+   "disposition": "STRUCTURE_VERIFIED_DIRECT_BOUNDED",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/Debug.scala",
+    "validation/v2-debug-family-results.json"
+   ]
+  },
+  {
+   "id": "PrefetchFamily",
+   "source_scala": [
+    "scala/src/main/scala/xiangshan/mem/prefetch/SMSPrefetcher.scala",
+    "scala/src/main/scala/xiangshan/mem/prefetch/L1PrefetchComponent.scala",
+    "scala/src/main/scala/xiangshan/mem/prefetch/FDP.scala"
+   ],
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Prefetch.Family-Hardware.py",
+   "family_id": "core.memory.prefetch",
+   "closure_root": "core.memory.prefetch",
+   "classification": "REWRITTEN",
+   "disposition": "STRUCTURE_VERIFIED_DIRECT_BOUNDED",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "validation/v2-prefetch-family-results.json"
+   ]
   }
-],
+ ],
  "status": "IMPLEMENTATION_WAVES_VALIDATED_BOUNDED_HIERARCHY_WAVE1",
  "acceptance_eligible": false,
-  "entries_status_counts": {
-  "VALIDATOR_PASS_BOUNDED": 52,
-  "STRUCTURE_VERIFIED_DIRECT_PASS_BOUNDED": 2,
-  "STRUCTURE_VERIFIED_DIRECT_PARTIAL": 1,
-   "STRUCTURE_VERIFIED": 2,
+ "entries_status_counts": {
+  "VALIDATOR_PASS_BOUNDED": 54,
+  "RETIRED": 1,
+  "STRUCTURE_VERIFIED": 2,
   "STRUCTURE_VERIFIED_BEHAVIOR_FAIL": 2,
-  "RETIRED": 1
+  "STRUCTURE_VERIFIED_DIRECT_PASS_BOUNDED": 2,
+  "STRUCTURE_VERIFIED_DIRECT_PARTIAL": 1
  }
 }

@@ -5,9 +5,9 @@
  "reference_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
  "locked_module_count": 1976,
  "status_counts": {
-  "CORE_BOUNDED_SUBJECT": 844,
-  "FAMILY_SUBJECT": 981,
-  "MISSING": 151
+  "CORE_BOUNDED_SUBJECT": 860,
+  "FAMILY_SUBJECT": 979,
+  "MISSING": 137
  },
  "row_count": 1976,
  "rows": [
@@ -471,13 +471,15 @@
   },
   {
    "module": "ActiveGenerationTable",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 35,
    "children": 0,
    "scala_sources": [
     "xiangshan/mem/prefetch/SMSPrefetcher.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "PrefetchFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -1591,13 +1593,15 @@
   },
   {
    "module": "BloomFilter",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 6,
    "children": 0,
    "scala_sources": [
     "xiangshan/mem/prefetch/FDP.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "PrefetchFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -2859,13 +2863,15 @@
   },
   {
    "module": "CounterFilter",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 23,
    "children": 0,
    "scala_sources": [
     "xiangshan/mem/prefetch/FDP.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "PrefetchFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -3343,13 +3349,15 @@
   },
   {
    "module": "Debug",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 70,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/fu/NewCSR/Debug.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "DebugTriggerFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -9831,14 +9839,16 @@
   },
   {
    "module": "L1Prefetcher",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 73,
    "children": 5,
    "scala_sources": [
     "xiangshan/mem/prefetch/BasePrefecher.scala",
     "xiangshan/mem/prefetch/L1PrefetchComponent.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "PrefetchFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -11259,25 +11269,29 @@
   },
   {
    "module": "MemTrigger",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 41,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/fu/NewCSR/Debug.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "DebugTriggerFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "MemTrigger_3",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 40,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/fu/NewCSR/Debug.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "DebugTriggerFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -12320,13 +12334,15 @@
   },
   {
    "module": "MutiLevelPrefetchFilter",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 48,
    "children": 4,
    "scala_sources": [
     "xiangshan/mem/prefetch/L1PrefetchComponent.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "PrefetchFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -13400,7 +13416,7 @@
   },
   {
    "module": "PatternHistoryTable",
-   "status": "FAMILY_SUBJECT",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 41,
    "children": 4,
    "scala_sources": [
@@ -13408,7 +13424,9 @@
     "utility/sram/SramHelper.scala",
     "xiangshan/mem/prefetch/SMSPrefetcher.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "PrefetchFamily"
+   ],
    "family_subjects": [
     "dependency.utility"
    ],
@@ -16511,13 +16529,15 @@
   },
   {
    "module": "PrefetchFilter",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 33,
    "children": 2,
    "scala_sources": [
     "xiangshan/mem/prefetch/SMSPrefetcher.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "PrefetchFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -19896,7 +19916,7 @@
   },
   {
    "module": "SMSPrefetcher",
-   "status": "FAMILY_SUBJECT",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 69,
    "children": 5,
    "scala_sources": [
@@ -19905,7 +19925,9 @@
     "xiangshan/mem/prefetch/BasePrefecher.scala",
     "xiangshan/mem/prefetch/SMSPrefetcher.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "PrefetchFamily"
+   ],
    "family_subjects": [
     "dependency.utility"
    ],
@@ -19913,13 +19935,15 @@
   },
   {
    "module": "SMSTrainFilter",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 24,
    "children": 0,
    "scala_sources": [
     "xiangshan/mem/prefetch/SMSPrefetcher.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "PrefetchFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -22351,13 +22375,15 @@
   },
   {
    "module": "StridePF",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 5,
    "children": 0,
    "scala_sources": [
     "xiangshan/mem/prefetch/SMSPrefetcher.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "PrefetchFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -23774,25 +23800,29 @@
   },
   {
    "module": "TrainFilter",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 22,
    "children": 0,
    "scala_sources": [
     "xiangshan/mem/prefetch/L1PrefetchComponent.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "PrefetchFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "TrainFilter_1",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 26,
    "children": 0,
    "scala_sources": [
     "xiangshan/mem/prefetch/L1PrefetchComponent.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "PrefetchFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -24924,13 +24954,15 @@
   },
   {
    "module": "VSegmentTrigger",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 41,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/fu/NewCSR/Debug.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "DebugTriggerFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -28412,18 +28444,6 @@
  ],
  "missing_top_scala": [
   {
-   "scala": "xiangshan/mem/prefetch/SMSPrefetcher.scala",
-   "modules": 4
-  },
-  {
-   "scala": "xiangshan/backend/fu/NewCSR/Debug.scala",
-   "modules": 4
-  },
-  {
-   "scala": "xiangshan/mem/prefetch/L1PrefetchComponent.scala",
-   "modules": 4
-  },
-  {
    "scala": "xiangshan/backend/fu/PMP.scala",
    "modules": 4
   },
@@ -28446,10 +28466,6 @@
   {
    "scala": "xiangshan/backend/decode/UopInfoGen.scala",
    "modules": 3
-  },
-  {
-   "scala": "xiangshan/mem/prefetch/FDP.scala",
-   "modules": 2
   },
   {
    "scala": "yunsuan/fpu/FloatFMA.scala",
@@ -28596,10 +28612,6 @@
    "modules": 1
   },
   {
-   "scala": "xiangshan/mem/prefetch/BasePrefecher.scala",
-   "modules": 1
-  },
-  {
    "scala": "xiangshan/cache/mmu/L2TLBMissQueue.scala",
    "modules": 1
   },
@@ -28649,6 +28661,26 @@
   },
   {
    "scala": "xiangshan/frontend/newRAS.scala",
+   "modules": 1
+  },
+  {
+   "scala": "xiangshan/backend/ctrlblock/RedirectGenerator.scala",
+   "modules": 1
+  },
+  {
+   "scala": "xiangshan/backend/regcache/RegCache.scala",
+   "modules": 1
+  },
+  {
+   "scala": "xiangshan/backend/regcache/RegCacheTagTable.scala",
+   "modules": 1
+  },
+  {
+   "scala": "xiangshan/frontend/ITTAGE.scala",
+   "modules": 1
+  },
+  {
+   "scala": "xiangshan/backend/rob/Rab.scala",
    "modules": 1
   }
  ]
