@@ -5,9 +5,9 @@
  "reference_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
  "locked_module_count": 1976,
  "status_counts": {
-  "CORE_BOUNDED_SUBJECT": 921,
-  "FAMILY_SUBJECT": 972,
-  "MISSING": 83
+  "CORE_BOUNDED_SUBJECT": 937,
+  "FAMILY_SUBJECT": 971,
+  "MISSING": 68
  },
  "row_count": 1976,
  "rows": [
@@ -7343,13 +7343,15 @@
   },
   {
    "module": "GetE8OffsetInVreg",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 3,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/VecExcpDataMergeModule.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "VectorDatapathFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -8616,13 +8618,15 @@
   },
   {
    "module": "ICacheMainPipe",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 138,
    "children": 1,
    "scala_sources": [
     "xiangshan/frontend/icache/ICacheMainPipe.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IcachePrefetchFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -8742,13 +8746,15 @@
   },
   {
    "module": "IPrefetchPipe",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 101,
    "children": 1,
    "scala_sources": [
     "xiangshan/frontend/icache/IPrefetch.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IcachePrefetchFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -9007,26 +9013,30 @@
   },
   {
    "module": "InstrMMIOEntry",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 17,
    "children": 0,
    "scala_sources": [
     "xiangshan/frontend/icache/InstrUncache.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IcachePrefetchFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "InstrUncache",
-   "status": "FAMILY_SUBJECT",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 18,
    "children": 2,
    "scala_sources": [
     "diplomacy/LazyModule.scala",
     "xiangshan/frontend/icache/InstrUncache.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IcachePrefetchFamily"
+   ],
    "family_subjects": [
     "dependency.rocket.diplomacy"
    ],
@@ -10059,25 +10069,29 @@
   },
   {
    "module": "L2TlbMissQueue",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 21,
    "children": 1,
    "scala_sources": [
     "xiangshan/cache/mmu/L2TLBMissQueue.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IcachePrefetchFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "L2TlbPrefetch",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 16,
    "children": 0,
    "scala_sources": [
     "xiangshan/cache/mmu/L2TlbPrefetch.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IcachePrefetchFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -12793,13 +12807,15 @@
   },
   {
    "module": "NfMappedElemIdx",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 18,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/VecExcpDataMergeModule.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "VectorDatapathFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -12833,13 +12849,15 @@
   },
   {
    "module": "Og2ForVector",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 511,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/datapath/Og2ForVector.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "VectorDatapathFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -16691,13 +16709,15 @@
   },
   {
    "module": "PrefetcherMonitor",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 9,
    "children": 0,
    "scala_sources": [
     "xiangshan/mem/prefetch/PrefetcherMonitor.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IcachePrefetchFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -24731,20 +24751,23 @@
     "xiangshan/backend/fu/wrapper/VIAluFix.scala"
    ],
    "core_subjects": [
-    "FuncUnitFamily"
+    "FuncUnitFamily",
+    "VectorDatapathFamily"
    ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
   {
    "module": "VIAluSrcTypeModule",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 10,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/fu/wrapper/VIAluFix.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "VectorDatapathFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -24779,14 +24802,16 @@
   },
   {
    "module": "VIMacSrcTypeModule",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 4,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/fu/vector/VecSrcTypeModule.scala",
     "xiangshan/backend/fu/wrapper/VIMacU.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "VectorDatapathFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -24950,14 +24975,16 @@
   },
   {
    "module": "VPermSrcTypeModule",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 4,
    "children": 0,
    "scala_sources": [
     "xiangshan/backend/fu/vector/VecSrcTypeModule.scala",
     "xiangshan/backend/fu/wrapper/VPPU.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "VectorDatapathFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -25308,13 +25335,15 @@
   },
   {
    "module": "VTypeBuffer",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 116,
    "children": 3,
    "scala_sources": [
     "xiangshan/backend/rob/VTypeBuffer.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "VectorDatapathFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -25394,13 +25423,15 @@
   },
   {
    "module": "VecExcpDataMergeModule",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 98,
    "children": 3,
    "scala_sources": [
     "xiangshan/backend/VecExcpDataMergeModule.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "VectorDatapathFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -25940,13 +25971,15 @@
   },
   {
    "module": "WayLookup",
-   "status": "MISSING",
+   "status": "CORE_BOUNDED_SUBJECT",
    "ports": 40,
    "children": 0,
    "scala_sources": [
     "xiangshan/frontend/icache/WayLookup.scala"
    ],
-   "core_subjects": [],
+   "core_subjects": [
+    "IcachePrefetchFamily"
+   ],
    "family_subjects": [],
    "conditional_or_inlined": false
   },
@@ -28572,10 +28605,6 @@
    "modules": 3
   },
   {
-   "scala": "xiangshan/backend/VecExcpDataMergeModule.scala",
-   "modules": 3
-  },
-  {
    "scala": "chisel3/util/random/FibonacciLFSR.scala",
    "modules": 2
   },
@@ -28585,10 +28614,6 @@
   },
   {
    "scala": "utils/OverrideableQueue.scala",
-   "modules": 2
-  },
-  {
-   "scala": "xiangshan/backend/fu/vector/VecSrcTypeModule.scala",
    "modules": 2
   },
   {
@@ -28636,19 +28661,7 @@
    "modules": 1
   },
   {
-   "scala": "xiangshan/frontend/icache/ICacheMainPipe.scala",
-   "modules": 1
-  },
-  {
    "scala": "util/IDPool.scala",
-   "modules": 1
-  },
-  {
-   "scala": "xiangshan/frontend/icache/IPrefetch.scala",
-   "modules": 1
-  },
-  {
-   "scala": "xiangshan/frontend/icache/InstrUncache.scala",
    "modules": 1
   },
   {
@@ -28657,14 +28670,6 @@
   },
   {
    "scala": "jtag/JtagTap.scala",
-   "modules": 1
-  },
-  {
-   "scala": "xiangshan/cache/mmu/L2TLBMissQueue.scala",
-   "modules": 1
-  },
-  {
-   "scala": "xiangshan/cache/mmu/L2TlbPrefetch.scala",
    "modules": 1
   },
   {
@@ -28677,14 +28682,6 @@
   },
   {
    "scala": "xiangshan/mem/lsqueue/LSQWrapper.scala",
-   "modules": 1
-  },
-  {
-   "scala": "xiangshan/backend/datapath/Og2ForVector.scala",
-   "modules": 1
-  },
-  {
-   "scala": "xiangshan/mem/prefetch/PrefetcherMonitor.scala",
    "modules": 1
   },
   {
@@ -28736,27 +28733,7 @@
    "modules": 1
   },
   {
-   "scala": "xiangshan/backend/fu/wrapper/VIAluFix.scala",
-   "modules": 1
-  },
-  {
-   "scala": "xiangshan/backend/fu/wrapper/VIMacU.scala",
-   "modules": 1
-  },
-  {
-   "scala": "xiangshan/backend/fu/wrapper/VPPU.scala",
-   "modules": 1
-  },
-  {
-   "scala": "xiangshan/backend/rob/VTypeBuffer.scala",
-   "modules": 1
-  },
-  {
    "scala": "xiangshan/backend/fu/wrapper/VCVT.scala",
-   "modules": 1
-  },
-  {
-   "scala": "xiangshan/frontend/icache/WayLookup.scala",
    "modules": 1
   },
   {

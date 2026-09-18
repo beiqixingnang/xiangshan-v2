@@ -119,6 +119,28 @@ NEW = [
         "v2_status": "VALIDATOR_PASS_BOUNDED",
         "reference_surface": ["validation/v2-floating-point-family-results.json"],
     },
+    {
+        "id": "VectorDatapathFamily",
+        "source_scala": ["scala/src/main/scala/xiangshan/backend/datapath/Og2ForVector.scala", "scala/src/main/scala/xiangshan/backend/rob/VTypeBuffer.scala", "scala/src/main/scala/xiangshan/backend/VecExcpDataMergeModule.scala"],
+        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Datapath.VectorFamily-Hardware.py",
+        "family_id": "core.backend.datapath.vector",
+        "closure_root": "core.backend.datapath",
+        "classification": "REWRITTEN",
+        "disposition": "STRUCTURE_VERIFIED_DIRECT_BOUNDED",
+        "v2_status": "VALIDATOR_PASS_BOUNDED",
+        "reference_surface": ["validation/v2-backend-vector-datapath-family-results.json"],
+    },
+    {
+        "id": "IcachePrefetchFamily",
+        "source_scala": ["scala/src/main/scala/xiangshan/frontend/icache/ICacheMainPipe.scala", "scala/src/main/scala/xiangshan/frontend/icache/IPrefetch.scala", "scala/src/main/scala/xiangshan/frontend/icache/WayLookup.scala", "scala/src/main/scala/xiangshan/frontend/icache/InstrUncache.scala", "scala/src/main/scala/xiangshan/cache/mmu/L2TlbPrefetch.scala", "scala/src/main/scala/xiangshan/cache/mmu/L2TLBMissQueue.scala", "scala/src/main/scala/xiangshan/mem/prefetch/PrefetcherMonitor.scala"],
+        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.Prefetch.Family-Hardware.py",
+        "family_id": "core.frontend.icache.prefetch",
+        "closure_root": "core.frontend.icache",
+        "classification": "REWRITTEN",
+        "disposition": "STRUCTURE_VERIFIED_DIRECT_BOUNDED",
+        "v2_status": "VALIDATOR_PASS_BOUNDED",
+        "reference_surface": ["validation/v2-frontend-icache-prefetch-family-results.json"],
+    },
 ]
 
 data = json.loads(PATH.read_text(encoding="utf-8"))

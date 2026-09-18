@@ -1,0 +1,317 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_FRONTEND_ICACHE_PREFETCH_FAMILY",
+  "batch_id": "V2-FRONTEND-ICACHE-PREFETCH-MISSING-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.Prefetch.Family-Hardware.py",
+    "sha256": "90724b028f97dd6a38c52db901232cfa1a83746a8852d65c54c0f3327b7d573f"
+  },
+  "scala_sources": [
+    "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMainPipe.scala",
+    "upstream/src/main/scala/xiangshan/frontend/icache/IPrefetch.scala",
+    "upstream/src/main/scala/xiangshan/frontend/icache/WayLookup.scala",
+    "upstream/src/main/scala/xiangshan/frontend/icache/InstrUncache.scala",
+    "upstream/src/main/scala/xiangshan/cache/mmu/L2TlbPrefetch.scala",
+    "upstream/src/main/scala/xiangshan/cache/mmu/L2TLBMissQueue.scala",
+    "upstream/src/main/scala/xiangshan/mem/prefetch/PrefetcherMonitor.scala"
+  ],
+  "covered_modules": [
+    "ICacheMainPipe",
+    "IPrefetchPipe",
+    "WayLookup",
+    "InstrMMIOEntry",
+    "L2TlbPrefetch",
+    "L2TlbMissQueue",
+    "PrefetcherMonitor"
+  ],
+  "port_surface": {
+    "status": "PASS",
+    "modules": [
+      {
+        "module": "ICacheMainPipe",
+        "locked": 138,
+        "emitted": 138,
+        "match": true
+      },
+      {
+        "module": "IPrefetchPipe",
+        "locked": 101,
+        "emitted": 101,
+        "match": true
+      },
+      {
+        "module": "WayLookup",
+        "locked": 40,
+        "emitted": 40,
+        "match": true
+      },
+      {
+        "module": "InstrMMIOEntry",
+        "locked": 17,
+        "emitted": 17,
+        "match": true
+      },
+      {
+        "module": "L2TlbPrefetch",
+        "locked": 16,
+        "emitted": 16,
+        "match": true
+      },
+      {
+        "module": "L2TlbMissQueue",
+        "locked": 21,
+        "emitted": 21,
+        "match": true
+      },
+      {
+        "module": "PrefetcherMonitor",
+        "locked": 9,
+        "emitted": 9,
+        "match": true
+      }
+    ]
+  },
+  "py_compile": "PASS",
+  "pyright": {
+    "command": [
+      "pyright.cmd",
+      "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Build\\Build-Cpu\\Cpu-Core\\Build-Cpu.Frontend.Icache.Prefetch.Family-Hardware.py"
+    ],
+    "status": "PASS",
+    "returncode": 0,
+    "output_tail": "0 errors, 0 warnings, 0 informations\n"
+  },
+  "exports": {
+    "ICacheMainPipe": {
+      "bytes": 19978,
+      "sha256": "2d6ef39d29bee98ffec489d328f45de7c3cb44342342514ec40735e5c776f550",
+      "deterministic": true,
+      "verilator": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "verilator --lint-only -Wno-fatal '/mnt/c/v2_icache_prefetch_family/ICacheMainPipe.sv'"
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.039 MB sources in 2 modules, into 0.021 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.022 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.008 s on 1 threads; alloced 9.781 MB\n"
+      },
+      "yosys": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "yosys -Q -p \"read_verilog -sv '/mnt/c/v2_icache_prefetch_family/yosys-ICacheMainPipe.sv'; proc; check\""
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "cuting PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: f19d99f0d7, CPU: user 0.01s system 0.00s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 52% 1x proc (0 sec), 21% 1x opt_expr (0 sec), ...\n"
+      }
+    },
+    "IPrefetchPipe": {
+      "bytes": 13972,
+      "sha256": "074f9faff6fbfae677abf1ee43a24c70d920424c6b94410d7d1b9161f0ece0af",
+      "deterministic": true,
+      "verilator": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "verilator --lint-only -Wno-fatal '/mnt/c/v2_icache_prefetch_family/IPrefetchPipe.sv'"
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.033 MB sources in 2 modules, into 0.019 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.017 s (elab=0.001, cvt=0.002, bld=0.000); cpu 0.007 s on 1 threads; alloced 9.559 MB\n"
+      },
+      "yosys": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "yosys -Q -p \"read_verilog -sv '/mnt/c/v2_icache_prefetch_family/yosys-IPrefetchPipe.sv'; proc; check\""
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "ROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 5cef94304a, CPU: user 0.01s system 0.00s, MEM: 8.91 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 43% 1x opt_expr (0 sec), 34% 2x read_verilog (0 sec), ...\n"
+      }
+    },
+    "WayLookup": {
+      "bytes": 13067,
+      "sha256": "5b4834dabdbac509714ced9d385d28384f0f868a7097199aac10b523e435dcee",
+      "deterministic": true,
+      "verilator": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "verilator --lint-only -Wno-fatal '/mnt/c/v2_icache_prefetch_family/WayLookup.sv'"
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.033 MB sources in 2 modules, into 0.029 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.019 s (elab=0.001, cvt=0.002, bld=0.000); cpu 0.007 s on 1 threads; alloced 9.469 MB\n"
+      },
+      "yosys": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "yosys -Q -p \"read_verilog -sv '/mnt/c/v2_icache_prefetch_family/yosys-WayLookup.sv'; proc; check\""
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "ROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 25484b3ee7, CPU: user 0.01s system 0.00s, MEM: 8.91 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 44% 1x opt_expr (0 sec), 31% 2x read_verilog (0 sec), ...\n"
+      }
+    },
+    "InstrMMIOEntry": {
+      "bytes": 5247,
+      "sha256": "a8a25bd31d558552f32d611a330f30bdd8153eff0fbba2a407c5939e385d6c7f",
+      "deterministic": true,
+      "verilator": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "verilator --lint-only -Wno-fatal '/mnt/c/v2_icache_prefetch_family/InstrMMIOEntry.sv'"
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "  = ! io_mmio_acquire_bits_address[2:1];\n      |                 ^\n%Warning-WIDTHEXPAND: /mnt/c/v2_icache_prefetch_family/InstrMMIOEntry.sv:84:51: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                              : ... note: In instance 'InstrMMIOEntry'\n   84 |   assign \\$6  = io_mmio_acquire_bits_address[2:1] == 1'h1;\n      |                                                   ^~\n%Warning-WIDTHEXPAND: /mnt/c/v2_icache_prefetch_family/InstrMMIOEntry.sv:96:29: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                              : ... note: In instance 'InstrMMIOEntry'\n   96 |   assign \\$16  = mmio_state == 1'h1;\n      |                             ^~\n%Warning-WIDTHTRUNC: /mnt/c/v2_icache_prefetch_family/InstrMMIOEntry.sv:100:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'mmio_state' generates 2 bits.\n                                                                              : ... note: In instance 'InstrMMIOEntry'\n  100 |   assign \\$20  = ! mmio_state;\n      |                  ^\n"
+      },
+      "yosys": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "yosys -Q -p \"read_verilog -sv '/mnt/c/v2_icache_prefetch_family/yosys-InstrMMIOEntry.sv'; proc; check\""
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "ROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: e231ee8f52, CPU: user 0.01s system 0.00s, MEM: 8.91 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 48% 1x opt_expr (0 sec), 32% 2x read_verilog (0 sec), ...\n"
+      }
+    },
+    "L2TlbPrefetch": {
+      "bytes": 3446,
+      "sha256": "edc60d27e906a383bb8c8ab4db14573168694f665edc2d084c57eaa2a8d47547",
+      "deterministic": true,
+      "verilator": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "verilator --lint-only -Wno-fatal '/mnt/c/v2_icache_prefetch_family/L2TlbPrefetch.sv'"
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.023 MB sources in 2 modules, into 0.022 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.017 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.266 MB\n"
+      },
+      "yosys": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "yosys -Q -p \"read_verilog -sv '/mnt/c/v2_icache_prefetch_family/yosys-L2TlbPrefetch.sv'; proc; check\""
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "ROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 9a0595d6b5, CPU: user 0.00s system 0.01s, MEM: 8.91 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 43% 1x opt_expr (0 sec), 31% 2x read_verilog (0 sec), ...\n"
+      }
+    },
+    "L2TlbMissQueue": {
+      "bytes": 5113,
+      "sha256": "562ddf753f63454aa78219346b0ae49775710291776f42510a48e29e59abb93f",
+      "deterministic": true,
+      "verilator": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "verilator --lint-only -Wno-fatal '/mnt/c/v2_icache_prefetch_family/L2TlbMissQueue.sv'"
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.025 MB sources in 2 modules, into 0.024 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.018 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.219 MB\n"
+      },
+      "yosys": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "yosys -Q -p \"read_verilog -sv '/mnt/c/v2_icache_prefetch_family/yosys-L2TlbMissQueue.sv'; proc; check\""
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "ROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: b588fe8f26, CPU: user 0.01s system 0.00s, MEM: 8.91 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 46% 1x opt_expr (0 sec), 27% 2x read_verilog (0 sec), ...\n"
+      }
+    },
+    "PrefetcherMonitor": {
+      "bytes": 2025,
+      "sha256": "de44cb43ae65d7982a64056d570a2cd52c21a85fc0f2b762217aec93ea3ea453",
+      "deterministic": true,
+      "verilator": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "verilator --lint-only -Wno-fatal '/mnt/c/v2_icache_prefetch_family/PrefetcherMonitor.sv'"
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.022 MB sources in 2 modules, into 0.023 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.017 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.094 MB\n"
+      },
+      "yosys": {
+        "command": [
+          "wsl.exe",
+          "-e",
+          "bash",
+          "-lc",
+          "yosys -Q -p \"read_verilog -sv '/mnt/c/v2_icache_prefetch_family/yosys-PrefetcherMonitor.sv'; proc; check\""
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "ROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 197071244c, CPU: user 0.01s system 0.00s, MEM: 8.91 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 37% 1x opt_expr (0 sec), 32% 2x read_verilog (0 sec), ...\n"
+      }
+    }
+  },
+  "locked_reference": {
+    "canonical_path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "immutable": true
+  },
+  "system_testing": {
+    "manifest": "Program-System/System-Testing/Manifest-Testing-Hardware.py",
+    "status": "NOT_REGISTERED_AGGREGATE_DIRECT_TEST"
+  },
+  "gates": {
+    "PY_COMPILE": "PASS",
+    "PYRIGHT": "PASS",
+    "PORT_SURFACE": "PASS",
+    "BUILD_VERILOG": "PASS",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "V2_LOCKED_REFERENCE_IMMUTABLE": "PASS",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "VALIDATOR_PASS_BOUNDED",
+  "acceptance_eligible": false,
+  "failures": [],
+  "unclosed": [
+    "Locked-reference behavioural differential for the seven aggregate members remains pending.",
+    "ICache parent closure and System-Testing direct registration remain coordinator obligations.",
+    "License review and user acceptance remain pending."
+  ]
+}
