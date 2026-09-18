@@ -2,8 +2,8 @@
 源自锁定层次的 prefetch metadata family 聚合。
 """
 from __future__ import annotations
-from typing import Any
-from amaranth import Elaboratable, Module, Mux, Signal
+from typing import Any, cast
+from amaranth import Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
 
 # Module Contract
@@ -75,7 +75,7 @@ class MemoryFamily(Elaboratable):
             self.drive(module, "io_l1_prefetch_req_valid", v)
             self.drive(module, "io_l2_l3_prefetch_req_valid", v & self.ports["io_train_req_bits_pfHitStream"])
             region = self.ports["io_train_req_bits_vaddr"][6:46]
-            bits = 1 << self.ports["io_train_req_bits_vaddr"][:4]
+            bits = Const(1, 16) << self.ports["io_train_req_bits_vaddr"][:4]
             for n in ("io_l1_prefetch_req_bits_region", "io_l2_l3_prefetch_req_bits_region"): self.drive(module, n, region)
             for n in ("io_l1_prefetch_req_bits_bit_vec", "io_l2_l3_prefetch_req_bits_bit_vec"): self.drive(module, n, bits)
         elif m == "StrideMetaArray":
@@ -84,7 +84,7 @@ class MemoryFamily(Elaboratable):
             self.drive(module, "io_l1_prefetch_req_valid", v)
             self.drive(module, "io_l2_l3_prefetch_req_valid", v)
             region = self.ports["io_train_req_bits_vaddr"][6:46]
-            bits = 1 << self.ports["io_train_req_bits_vaddr"][:4]
+            bits = Const(1, 16) << self.ports["io_train_req_bits_vaddr"][:4]
             for n in ("io_l1_prefetch_req_bits_region", "io_l2_l3_prefetch_req_bits_region"): self.drive(module, n, region)
             for n in ("io_l1_prefetch_req_bits_bit_vec", "io_l2_l3_prefetch_req_bits_bit_vec"): self.drive(module, n, bits)
         elif m == "LqExceptionBuffer":
