@@ -1,0 +1,1227 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_TOP_CLOSURE_AUDIT",
+  "read_only": true,
+  "source": {
+    "probe": "validation/v2-top-generation-probe-results.json",
+    "probe_status": "GENERATION_PROBE_PASS_REDUCED",
+    "complete_gate": "BLOCKED_MISSING_CLOSURES",
+    "reference_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+    "probe_sha256": "a7ab1660de90958512e038fc4377af539269112946db4e24302e9802619c40c6"
+  },
+  "root_findings": [
+    {
+      "root": "XSCore",
+      "locked_ports": 308,
+      "locked_child_instances": [
+        {
+          "module": "Frontend",
+          "instance": "frontend",
+          "ports": 371,
+          "sources": [
+            "home/lishuo/xs-v2-local/src/main/scala/xiangshan/frontend/Frontend.scala:55",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/diplomacy/LazyModule.scala:365",
+            "home/lishuo/xs-v2-local/src/main/scala/xiangshan/frontend/Frontend.scala:56",
+            "home/lishuo/xs-v2-local/src/main/scala/xiangshan/frontend/Frontend.scala:57"
+          ]
+        },
+        {
+          "module": "Backend",
+          "instance": "backend",
+          "ports": 1165,
+          "sources": [
+            "home/lishuo/xs-v2-local/src/main/scala/xiangshan/backend/Backend.scala:63",
+            "home/lishuo/xs-v2-local/src/main/scala/xiangshan/backend/Backend.scala:64"
+          ]
+        },
+        {
+          "module": "MemBlock",
+          "instance": "memBlock",
+          "ports": 1326,
+          "sources": [
+            "home/lishuo/xs-v2-local/src/main/scala/xiangshan/mem/MemBlock.scala:2255",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/diplomacy/LazyModule.scala:365",
+            "home/lishuo/xs-v2-local/src/main/scala/xiangshan/mem/MemBlock.scala:2256",
+            "home/lishuo/xs-v2-local/src/main/scala/xiangshan/mem/MemBlock.scala:2257"
+          ]
+        }
+      ],
+      "locked_child_count": 3,
+      "implementation": {
+        "class_declared": true,
+        "implementation": "_RootBoundary",
+        "constant_closure_missing": true,
+        "child_bindings_in_root_file": [],
+        "interpretation": "diagnostic boundary/tie-off; no root child closure is installed"
+      },
+      "child_mapping_candidates": [
+        {
+          "source_child": "Frontend",
+          "local_symbols": [
+            "FrontendParent"
+          ],
+          "build_files": [
+            "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Top-Hardware.py"
+          ],
+          "port_envelope": 371,
+          "mapping_kind": "parent_boundary_available",
+          "evidence": [
+            {
+              "path": "validation/v2-frontend-parent-differential-results.json",
+              "present": true,
+              "status": "DIFFERENTIAL_MATCHED_BOUNDED",
+              "pending_gates": [
+                "LICENSE_REVIEW=PENDING",
+                "PARENT_CLOSURE_MATCHED=PENDING_FULL_CHILD_CLOSURE"
+              ]
+            }
+          ]
+        },
+        {
+          "source_child": "Backend",
+          "local_symbols": [
+            "BackendTop",
+            "BackendParent"
+          ],
+          "build_files": [
+            "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Top-Hardware.py"
+          ],
+          "port_envelope": 1165,
+          "mapping_kind": "parent_boundary_available",
+          "evidence": [
+            {
+              "path": "validation/v2-backend-parent-differential-results.json",
+              "present": true,
+              "status": null,
+              "pending_gates": [
+                "LICENSE_REVIEW=PENDING",
+                "PARENT_CLOSURE_MATCHED=PENDING_FULL_1165_PORT_BACKEND"
+              ]
+            }
+          ]
+        },
+        {
+          "source_child": "MemBlock",
+          "local_symbols": [
+            "UHSCMemoryMemBlock",
+            "MemBlockParent"
+          ],
+          "build_files": [
+            "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.MemBlock-Hardware.py"
+          ],
+          "port_envelope": 1326,
+          "mapping_kind": "parent_boundary_available",
+          "evidence": [
+            {
+              "path": "validation/v2-memblock-parent-differential-results.json",
+              "present": true,
+              "status": "DIFFERENTIAL_MATCHED_BOUNDED",
+              "pending_gates": [
+                "LICENSE_REVIEW=PENDING"
+              ]
+            }
+          ]
+        }
+      ],
+      "available_local_class_hits": {
+        "BackendParent": [],
+        "BackendTop": [
+          "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Top-Hardware.py"
+        ],
+        "FrontendParent": [
+          "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Top-Hardware.py"
+        ],
+        "MemBlockParent": [],
+        "UHSCMemoryMemBlock": [
+          "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.MemBlock-Hardware.py"
+        ]
+      }
+    },
+    {
+      "root": "L2Top",
+      "locked_ports": 441,
+      "locked_child_instances": [
+        {
+          "module": "TLXbar_7",
+          "instance": "inner_xbar",
+          "ports": 311,
+          "sources": [
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/tilelink/Xbar.scala:71",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/diplomacy/LazyModule.scala:365"
+          ]
+        },
+        {
+          "module": "TLXbar_8",
+          "instance": "inner_xbar_1",
+          "ports": 101,
+          "sources": [
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/tilelink/Xbar.scala:71",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/diplomacy/LazyModule.scala:365"
+          ]
+        },
+        {
+          "module": "BusErrorUnit",
+          "instance": "inner_beu",
+          "ports": 26,
+          "sources": [
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/tile/BusErrorUnit.scala:49",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/diplomacy/LazyModule.scala:365",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/tile/BusErrorUnit.scala:50"
+          ]
+        },
+        {
+          "module": "TLBuffer_27",
+          "instance": "inner_buffer",
+          "ports": 426,
+          "sources": [
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/tilelink/Buffer.scala:36",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/diplomacy/LazyModule.scala:365"
+          ]
+        },
+        {
+          "module": "TLBuffer_20",
+          "instance": "inner_ptw_to_l2_buffer",
+          "ports": 44,
+          "sources": [
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/tilelink/Buffer.scala:36",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/diplomacy/LazyModule.scala:365"
+          ]
+        },
+        {
+          "module": "TLBuffer_29",
+          "instance": "inner_i_mmio_buffer",
+          "ports": 42,
+          "sources": [
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/tilelink/Buffer.scala:36",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/diplomacy/LazyModule.scala:365"
+          ]
+        },
+        {
+          "module": "IntBuffer",
+          "instance": "inner_intBuffer",
+          "ports": 4,
+          "sources": [
+            "home/lishuo/xs-v2-local/utility/src/main/scala/utility/IntBuffer.scala:13",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/diplomacy/LazyModule.scala:365"
+          ]
+        },
+        {
+          "module": "TL2TLCoupledL2",
+          "instance": "inner_l2cache",
+          "ports": 540,
+          "sources": [
+            "home/lishuo/xs-v2-local/coupledL2/src/main/scala/coupledL2/tl2tl/TL2TLCoupledL2.scala:35",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/diplomacy/LazyModule.scala:365",
+            "home/lishuo/xs-v2-local/coupledL2/src/main/scala/coupledL2/CoupledL2.scala:323",
+            "home/lishuo/xs-v2-local/utility/src/main/scala/utility/HardwarePerfMonitor.scala:30"
+          ]
+        },
+        {
+          "module": "BankBinder_1",
+          "instance": "inner_binder",
+          "ports": 376,
+          "sources": [
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/tilelink/BankBinder.scala:58",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/diplomacy/LazyModule.scala:365"
+          ]
+        },
+        {
+          "module": "TLClientsMerger_1",
+          "instance": "inner_merger",
+          "ports": 93,
+          "sources": [
+            "home/lishuo/xs-v2-local/utility/src/main/scala/utility/TLUtils/TLClientsMerger.scala:43",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/diplomacy/LazyModule.scala:365"
+          ]
+        },
+        {
+          "module": "TLXbar_9",
+          "instance": "inner_xbar_2",
+          "ports": 237,
+          "sources": [
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/tilelink/Xbar.scala:71",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/diplomacy/LazyModule.scala:365"
+          ]
+        },
+        {
+          "module": "TLBuffer_29",
+          "instance": "inner_buffers",
+          "ports": 42,
+          "sources": [
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/tilelink/Buffer.scala:36",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/diplomacy/LazyModule.scala:365"
+          ]
+        },
+        {
+          "module": "TLBuffer_29",
+          "instance": "inner_buffers_1",
+          "ports": 42,
+          "sources": [
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/tilelink/Buffer.scala:36",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/diplomacy/LazyModule.scala:365"
+          ]
+        },
+        {
+          "module": "TLBuffer_22",
+          "instance": "inner_buffers_2",
+          "ports": 42,
+          "sources": [
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/tilelink/Buffer.scala:36",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/diplomacy/LazyModule.scala:365"
+          ]
+        },
+        {
+          "module": "TLBuffer_22",
+          "instance": "inner_buffers_3",
+          "ports": 42,
+          "sources": [
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/tilelink/Buffer.scala:36",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/diplomacy/LazyModule.scala:365"
+          ]
+        },
+        {
+          "module": "TLBuffer_16",
+          "instance": "inner_buffers_4",
+          "ports": 42,
+          "sources": [
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/tilelink/Buffer.scala:36",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/diplomacy/LazyModule.scala:365"
+          ]
+        },
+        {
+          "module": "TLBuffer_16",
+          "instance": "inner_buffers_5",
+          "ports": 42,
+          "sources": [
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/tilelink/Buffer.scala:36",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/diplomacy/LazyModule.scala:365"
+          ]
+        },
+        {
+          "module": "TLBuffer_2",
+          "instance": "inner_buffer_1",
+          "ports": 42,
+          "sources": [
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/tilelink/Buffer.scala:36",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/diplomacy/LazyModule.scala:365"
+          ]
+        },
+        {
+          "module": "DelayN_334",
+          "instance": "inner_resetDelayN",
+          "ports": 3,
+          "sources": [
+            "home/lishuo/xs-v2-local/utility/src/main/scala/utility/Hold.scala:90",
+            "home/lishuo/xs-v2-local/utility/src/main/scala/utility/Hold.scala:91"
+          ]
+        },
+        {
+          "module": "DelayNWithValid_203",
+          "instance": "inner_io_clintTime_toCore_pipMod",
+          "ports": 6,
+          "sources": [
+            "home/lishuo/xs-v2-local/utility/src/main/scala/utility/Hold.scala:110",
+            "home/lishuo/xs-v2-local/utility/src/main/scala/utility/Hold.scala:111"
+          ]
+        }
+      ],
+      "locked_child_count": 20,
+      "implementation": {
+        "class_declared": true,
+        "implementation": "_RootBoundary",
+        "constant_closure_missing": true,
+        "child_bindings_in_root_file": [],
+        "interpretation": "diagnostic boundary/tie-off; no root child closure is installed"
+      },
+      "child_mapping_candidates": [
+        {
+          "source_child": "TLXbar_7",
+          "ports": 311,
+          "mapping_kind": "no exact landed local symbol",
+          "local_symbols": [],
+          "build_files": [],
+          "evidence": []
+        },
+        {
+          "source_child": "TLXbar_8",
+          "ports": 101,
+          "mapping_kind": "no exact landed local symbol",
+          "local_symbols": [],
+          "build_files": [],
+          "evidence": []
+        },
+        {
+          "source_child": "BusErrorUnit",
+          "ports": 26,
+          "mapping_kind": "no exact landed local symbol",
+          "local_symbols": [],
+          "build_files": [],
+          "evidence": []
+        },
+        {
+          "source_child": "TLBuffer_27",
+          "ports": 426,
+          "mapping_kind": "no exact landed local symbol",
+          "local_symbols": [],
+          "build_files": [],
+          "evidence": []
+        },
+        {
+          "source_child": "TLBuffer_20",
+          "ports": 44,
+          "mapping_kind": "no exact landed local symbol",
+          "local_symbols": [],
+          "build_files": [],
+          "evidence": []
+        },
+        {
+          "source_child": "TLBuffer_29",
+          "ports": 42,
+          "mapping_kind": "no exact landed local symbol",
+          "local_symbols": [],
+          "build_files": [],
+          "evidence": []
+        },
+        {
+          "source_child": "IntBuffer",
+          "ports": 4,
+          "mapping_kind": "no exact landed local symbol",
+          "local_symbols": [],
+          "build_files": [],
+          "evidence": []
+        },
+        {
+          "source_child": "TL2TLCoupledL2",
+          "local_symbols": [
+            "TL2TLCoupledL2Parent"
+          ],
+          "build_files": [
+            "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.CoupledL2.Directory-Hardware.py"
+          ],
+          "port_envelope": 540,
+          "mapping_kind": "selected_parent_boundary_available",
+          "evidence": [
+            {
+              "path": "validation/v2-coupledL2-tl2tl-parent-results.json",
+              "present": true,
+              "status": "VALIDATOR_PASS_BOUNDED",
+              "pending_gates": [
+                "LICENSE_REVIEW=PENDING_COORDINATOR_REVIEW",
+                "PARENT_CLOSURE_MATCHED=PENDING_FULL_MSHR_SRAM_PREFETCH_DIPLOMACY_BEHAVIOR"
+              ]
+            }
+          ]
+        },
+        {
+          "source_child": "BankBinder_1",
+          "ports": 376,
+          "mapping_kind": "no exact landed local symbol",
+          "local_symbols": [],
+          "build_files": [],
+          "evidence": []
+        },
+        {
+          "source_child": "TLClientsMerger_1",
+          "ports": 93,
+          "mapping_kind": "no exact landed local symbol",
+          "local_symbols": [],
+          "build_files": [],
+          "evidence": []
+        },
+        {
+          "source_child": "TLXbar_9",
+          "ports": 237,
+          "mapping_kind": "no exact landed local symbol",
+          "local_symbols": [],
+          "build_files": [],
+          "evidence": []
+        },
+        {
+          "source_child": "TLBuffer_29",
+          "ports": 42,
+          "mapping_kind": "no exact landed local symbol",
+          "local_symbols": [],
+          "build_files": [],
+          "evidence": []
+        },
+        {
+          "source_child": "TLBuffer_29",
+          "ports": 42,
+          "mapping_kind": "no exact landed local symbol",
+          "local_symbols": [],
+          "build_files": [],
+          "evidence": []
+        },
+        {
+          "source_child": "TLBuffer_22",
+          "ports": 42,
+          "mapping_kind": "no exact landed local symbol",
+          "local_symbols": [],
+          "build_files": [],
+          "evidence": []
+        },
+        {
+          "source_child": "TLBuffer_22",
+          "ports": 42,
+          "mapping_kind": "no exact landed local symbol",
+          "local_symbols": [],
+          "build_files": [],
+          "evidence": []
+        },
+        {
+          "source_child": "TLBuffer_16",
+          "ports": 42,
+          "mapping_kind": "no exact landed local symbol",
+          "local_symbols": [],
+          "build_files": [],
+          "evidence": []
+        },
+        {
+          "source_child": "TLBuffer_16",
+          "ports": 42,
+          "mapping_kind": "no exact landed local symbol",
+          "local_symbols": [],
+          "build_files": [],
+          "evidence": []
+        },
+        {
+          "source_child": "TLBuffer_2",
+          "ports": 42,
+          "mapping_kind": "no exact landed local symbol",
+          "local_symbols": [],
+          "build_files": [],
+          "evidence": []
+        },
+        {
+          "source_child": "DelayN_334",
+          "ports": 3,
+          "mapping_kind": "no exact landed local symbol",
+          "local_symbols": [],
+          "build_files": [],
+          "evidence": []
+        },
+        {
+          "source_child": "DelayNWithValid_203",
+          "ports": 6,
+          "mapping_kind": "no exact landed local symbol",
+          "local_symbols": [],
+          "build_files": [],
+          "evidence": []
+        }
+      ],
+      "available_local_class_hits": {
+        "TL2TLCoupledL2Parent": [
+          "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.CoupledL2.Directory-Hardware.py"
+        ]
+      }
+    },
+    {
+      "root": "XSTile",
+      "locked_ports": 153,
+      "locked_child_instances": [
+        {
+          "module": "XSCore",
+          "instance": "core",
+          "ports": 308,
+          "sources": [
+            "home/lishuo/xs-v2-local/src/main/scala/xiangshan/XSCore.scala:82",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/diplomacy/LazyModule.scala:365",
+            "home/lishuo/xs-v2-local/src/main/scala/xiangshan/XSCore.scala:85"
+          ]
+        },
+        {
+          "module": "L2Top",
+          "instance": "l2top",
+          "ports": 441,
+          "sources": [
+            "home/lishuo/xs-v2-local/src/main/scala/xiangshan/L2Top.scala:406",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/diplomacy/LazyModule.scala:365",
+            "home/lishuo/xs-v2-local/src/main/scala/xiangshan/L2Top.scala:407"
+          ]
+        },
+        {
+          "module": "IntBuffer_1",
+          "instance": "intBuffer",
+          "ports": 6,
+          "sources": [
+            "home/lishuo/xs-v2-local/utility/src/main/scala/utility/IntBuffer.scala:13",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/diplomacy/LazyModule.scala:365"
+          ]
+        },
+        {
+          "module": "IntBuffer_2",
+          "instance": "intBuffer_1",
+          "ports": 6,
+          "sources": [
+            "home/lishuo/xs-v2-local/utility/src/main/scala/utility/IntBuffer.scala:13",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/diplomacy/LazyModule.scala:365"
+          ]
+        },
+        {
+          "module": "IntBuffer",
+          "instance": "intBuffer_2",
+          "ports": 4,
+          "sources": [
+            "home/lishuo/xs-v2-local/utility/src/main/scala/utility/IntBuffer.scala:13",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/diplomacy/LazyModule.scala:365"
+          ]
+        },
+        {
+          "module": "IntBuffer_1",
+          "instance": "intBuffer_3",
+          "ports": 6,
+          "sources": [
+            "home/lishuo/xs-v2-local/utility/src/main/scala/utility/IntBuffer.scala:13",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/diplomacy/LazyModule.scala:365"
+          ]
+        }
+      ],
+      "locked_child_count": 6,
+      "implementation": {
+        "class_declared": true,
+        "implementation": "_RootBoundary",
+        "constant_closure_missing": true,
+        "child_bindings_in_root_file": [],
+        "interpretation": "diagnostic boundary/tie-off; no root child closure is installed"
+      },
+      "child_mapping_candidates": [
+        {
+          "source_child": "XSCore",
+          "ports": 308,
+          "mapping_kind": "no exact landed local symbol",
+          "local_symbols": [],
+          "build_files": [],
+          "evidence": []
+        },
+        {
+          "source_child": "L2Top",
+          "ports": 441,
+          "mapping_kind": "no exact landed local symbol",
+          "local_symbols": [],
+          "build_files": [],
+          "evidence": []
+        },
+        {
+          "source_child": "IntBuffer_1",
+          "ports": 6,
+          "mapping_kind": "no exact landed local symbol",
+          "local_symbols": [],
+          "build_files": [],
+          "evidence": []
+        },
+        {
+          "source_child": "IntBuffer_2",
+          "ports": 6,
+          "mapping_kind": "no exact landed local symbol",
+          "local_symbols": [],
+          "build_files": [],
+          "evidence": []
+        },
+        {
+          "source_child": "IntBuffer",
+          "ports": 4,
+          "mapping_kind": "no exact landed local symbol",
+          "local_symbols": [],
+          "build_files": [],
+          "evidence": []
+        },
+        {
+          "source_child": "IntBuffer_1",
+          "ports": 6,
+          "mapping_kind": "no exact landed local symbol",
+          "local_symbols": [],
+          "build_files": [],
+          "evidence": []
+        }
+      ],
+      "available_local_class_hits": {}
+    },
+    {
+      "root": "XSTop",
+      "locked_ports": 204,
+      "locked_child_instances": [
+        {
+          "module": "SoCMisc",
+          "instance": "socMisc",
+          "ports": 559,
+          "sources": [
+            "home/lishuo/xs-v2-local/src/main/scala/system/SoC.scala:628",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/diplomacy/LazyModule.scala:365",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/diplomacy/Nodes.scala:1713",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/diplomacy/Nodes.scala:1649"
+          ]
+        },
+        {
+          "module": "XSTile",
+          "instance": "core_with_l2",
+          "ports": 153,
+          "sources": [
+            "home/lishuo/xs-v2-local/src/main/scala/xiangshan/XSTile.scala:102",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/diplomacy/LazyModule.scala:365",
+            "home/lishuo/xs-v2-local/src/main/scala/xiangshan/XSTile.scala:103"
+          ]
+        },
+        {
+          "module": "HuanCun",
+          "instance": "l3cacheOpt",
+          "ports": 328,
+          "sources": [
+            "home/lishuo/xs-v2-local/huancun/src/main/scala/huancun/HuanCun.scala:253",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/diplomacy/LazyModule.scala:365",
+            "home/lishuo/xs-v2-local/huancun/src/main/scala/huancun/HuanCun.scala:255"
+          ]
+        },
+        {
+          "module": "AXI4Map",
+          "instance": "map",
+          "ports": 30,
+          "sources": [
+            "home/lishuo/xs-v2-local/ChiselAIA/src/main/scala/common.scala:280",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/diplomacy/LazyModule.scala:365"
+          ]
+        },
+        {
+          "module": "AXI4Buffer_10",
+          "instance": "axi4buf",
+          "ports": 72,
+          "sources": [
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/amba/axi4/Buffer.scala:32",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/diplomacy/LazyModule.scala:365"
+          ]
+        },
+        {
+          "module": "AXI4UserYanker_4",
+          "instance": "axi4yank",
+          "ports": 80,
+          "sources": [
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/amba/axi4/UserYanker.scala:33",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/diplomacy/LazyModule.scala:365"
+          ]
+        },
+        {
+          "module": "TLToAXI4_2",
+          "instance": "tl2axi4",
+          "ports": 61,
+          "sources": [
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/tilelink/ToAXI4.scala:96",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/diplomacy/LazyModule.scala:365"
+          ]
+        },
+        {
+          "module": "TLFragmenter_1",
+          "instance": "fragmenter",
+          "ports": 34,
+          "sources": [
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/tilelink/Fragmenter.scala:84",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/diplomacy/LazyModule.scala:365"
+          ]
+        },
+        {
+          "module": "TLWidthWidget_2",
+          "instance": "widget",
+          "ports": 34,
+          "sources": [
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/tilelink/WidthWidget.scala:22",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/diplomacy/LazyModule.scala:365"
+          ]
+        },
+        {
+          "module": "IntBuffer",
+          "instance": "intBuffer",
+          "ports": 4,
+          "sources": [
+            "home/lishuo/xs-v2-local/utility/src/main/scala/utility/IntBuffer.scala:13",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/diplomacy/LazyModule.scala:365"
+          ]
+        },
+        {
+          "module": "IntBuffer",
+          "instance": "intBuffer_1",
+          "ports": 4,
+          "sources": [
+            "home/lishuo/xs-v2-local/utility/src/main/scala/utility/IntBuffer.scala:13",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/diplomacy/LazyModule.scala:365"
+          ]
+        },
+        {
+          "module": "ValidIOBroadcast",
+          "instance": "broadcast",
+          "ports": 28,
+          "sources": [
+            "home/lishuo/xs-v2-local/utility/src/main/scala/utility/DiplomacyWidget.scala:26",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/diplomacy/LazyModule.scala:365"
+          ]
+        },
+        {
+          "module": "ResetGen",
+          "instance": "reset_sync_resetSync",
+          "ports": 3,
+          "sources": [
+            "home/lishuo/xs-v2-local/utility/src/main/scala/utility/ResetGen.scala:28",
+            "home/lishuo/xs-v2-local/utility/src/main/scala/utility/ResetGen.scala:29"
+          ]
+        },
+        {
+          "module": "ResetGen",
+          "instance": "jtag_reset_sync_resetSync",
+          "ports": 3,
+          "sources": [
+            "home/lishuo/xs-v2-local/utility/src/main/scala/utility/ResetGen.scala:28",
+            "home/lishuo/xs-v2-local/utility/src/main/scala/utility/ResetGen.scala:29"
+          ]
+        },
+        {
+          "module": "ResetGen",
+          "instance": "ref_reset_sync_resetSync",
+          "ports": 3,
+          "sources": [
+            "home/lishuo/xs-v2-local/utility/src/main/scala/utility/ResetGen.scala:28",
+            "home/lishuo/xs-v2-local/utility/src/main/scala/utility/ResetGen.scala:29"
+          ]
+        },
+        {
+          "module": "AsyncQueueSink_3",
+          "instance": "time_sink",
+          "ports": 18,
+          "sources": [
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/util/AsyncQueue.scala:134",
+            "home/lishuo/xs-v2-local/rocket-chip/src/main/scala/util/AsyncQueue.scala:135"
+          ]
+        }
+      ],
+      "locked_child_count": 16,
+      "implementation": {
+        "class_declared": true,
+        "implementation": "_RootBoundary",
+        "constant_closure_missing": true,
+        "child_bindings_in_root_file": [],
+        "interpretation": "diagnostic boundary/tie-off; no root child closure is installed"
+      },
+      "child_mapping_candidates": [
+        {
+          "source_child": "SoCMisc",
+          "ports": 559,
+          "mapping_kind": "no exact landed local symbol",
+          "local_symbols": [],
+          "build_files": [],
+          "evidence": []
+        },
+        {
+          "source_child": "XSTile",
+          "ports": 153,
+          "mapping_kind": "no exact landed local symbol",
+          "local_symbols": [],
+          "build_files": [],
+          "evidence": []
+        },
+        {
+          "source_child": "HuanCun",
+          "local_symbols": [
+            "HuanCunCacheBoundary",
+            "InclusiveMshrBoundary",
+            "HuanCunBridgeBoundary"
+          ],
+          "build_files": [
+            "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.HuanCun.Cache-Hardware.py",
+            "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.HuanCun.Inclusive-Mshr-Hardware.py",
+            "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.HuanCun.Noninclusive-Bridge-Hardware.py"
+          ],
+          "port_envelope": 328,
+          "mapping_kind": "family_boundaries_only; no exact HuanCun parent",
+          "evidence": [
+            {
+              "path": "validation/v2-huancun-cache-family-results.json",
+              "present": true,
+              "status": null,
+              "pending_gates": [
+                "LICENSE_REVIEW=PENDING"
+              ]
+            },
+            {
+              "path": "validation/v2-huancun-mshr-family-results.json",
+              "present": true,
+              "status": null,
+              "pending_gates": [
+                "LICENSE_REVIEW=PENDING"
+              ]
+            },
+            {
+              "path": "validation/v2-huancun-bridge-family-results.json",
+              "present": true,
+              "status": null,
+              "pending_gates": [
+                "LICENSE_REVIEW=PENDING"
+              ]
+            }
+          ]
+        },
+        {
+          "source_child": "AXI4Map",
+          "ports": 30,
+          "mapping_kind": "no exact landed local symbol",
+          "local_symbols": [],
+          "build_files": [],
+          "evidence": []
+        },
+        {
+          "source_child": "AXI4Buffer_10",
+          "ports": 72,
+          "mapping_kind": "no exact landed local symbol",
+          "local_symbols": [],
+          "build_files": [],
+          "evidence": []
+        },
+        {
+          "source_child": "AXI4UserYanker_4",
+          "ports": 80,
+          "mapping_kind": "no exact landed local symbol",
+          "local_symbols": [],
+          "build_files": [],
+          "evidence": []
+        },
+        {
+          "source_child": "TLToAXI4_2",
+          "ports": 61,
+          "mapping_kind": "no exact landed local symbol",
+          "local_symbols": [],
+          "build_files": [],
+          "evidence": []
+        },
+        {
+          "source_child": "TLFragmenter_1",
+          "ports": 34,
+          "mapping_kind": "no exact landed local symbol",
+          "local_symbols": [],
+          "build_files": [],
+          "evidence": []
+        },
+        {
+          "source_child": "TLWidthWidget_2",
+          "ports": 34,
+          "mapping_kind": "no exact landed local symbol",
+          "local_symbols": [],
+          "build_files": [],
+          "evidence": []
+        },
+        {
+          "source_child": "IntBuffer",
+          "ports": 4,
+          "mapping_kind": "no exact landed local symbol",
+          "local_symbols": [],
+          "build_files": [],
+          "evidence": []
+        },
+        {
+          "source_child": "IntBuffer",
+          "ports": 4,
+          "mapping_kind": "no exact landed local symbol",
+          "local_symbols": [],
+          "build_files": [],
+          "evidence": []
+        },
+        {
+          "source_child": "ValidIOBroadcast",
+          "local_symbols": [
+            "ValidIOBroadcast"
+          ],
+          "build_files": [
+            "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Chisel.Arbiter-Hardware.py"
+          ],
+          "port_envelope": 28,
+          "mapping_kind": "family_subject_available",
+          "evidence": [
+            {
+              "path": "validation/v2-chisel-arbiter-family-results.json",
+              "present": true,
+              "status": "DIRECT_TEST_PASS_BOUNDED",
+              "pending_gates": [
+                "LICENSE_REVIEW=PENDING",
+                "PARENT_CLOSURE_MATCHED=PENDING_SYSTEM_TOP_ARBITER_PARENT"
+              ]
+            }
+          ]
+        },
+        {
+          "source_child": "ResetGen",
+          "ports": 3,
+          "mapping_kind": "no exact landed local symbol",
+          "local_symbols": [],
+          "build_files": [],
+          "evidence": []
+        },
+        {
+          "source_child": "ResetGen",
+          "ports": 3,
+          "mapping_kind": "no exact landed local symbol",
+          "local_symbols": [],
+          "build_files": [],
+          "evidence": []
+        },
+        {
+          "source_child": "ResetGen",
+          "ports": 3,
+          "mapping_kind": "no exact landed local symbol",
+          "local_symbols": [],
+          "build_files": [],
+          "evidence": []
+        },
+        {
+          "source_child": "AsyncQueueSink_3",
+          "local_symbols": [
+            "AsyncQueueSink"
+          ],
+          "build_files": [
+            "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Chisel.Arbiter-Hardware.py"
+          ],
+          "port_envelope": 18,
+          "mapping_kind": "family_subject_available",
+          "evidence": [
+            {
+              "path": "validation/v2-chisel-arbiter-family-results.json",
+              "present": true,
+              "status": "DIRECT_TEST_PASS_BOUNDED",
+              "pending_gates": [
+                "LICENSE_REVIEW=PENDING",
+                "PARENT_CLOSURE_MATCHED=PENDING_SYSTEM_TOP_ARBITER_PARENT"
+              ]
+            }
+          ]
+        },
+        {
+          "source_child": "imsic_bus_top",
+          "instance": "imsic_bus_tops",
+          "ports": 92,
+          "mapping_kind": "inventory_child_capture_gap",
+          "local_symbols": [],
+          "build_files": [],
+          "evidence": []
+        }
+      ],
+      "available_local_class_hits": {
+        "AsyncQueueSink": [
+          "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Chisel.Arbiter-Hardware.py"
+        ],
+        "HuanCunBridgeBoundary": [
+          "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.HuanCun.Noninclusive-Bridge-Hardware.py"
+        ],
+        "HuanCunCacheBoundary": [
+          "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.HuanCun.Cache-Hardware.py"
+        ],
+        "InclusiveMshrBoundary": [
+          "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.HuanCun.Inclusive-Mshr-Hardware.py"
+        ],
+        "ValidIOBroadcast": [
+          "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Chisel.Arbiter-Hardware.py"
+        ]
+      }
+    }
+  ],
+  "extractor_child_capture_gap": {
+    "extractor": "validation/v2_locked_hierarchy_extract.py",
+    "filter": "lowercase child names retained by current extractor",
+    "source_xstop_direct_child_count": 17,
+    "inventory_xstop_direct_child_count": 16,
+    "uncaptured_children": [
+      "imsic_bus_top"
+    ],
+    "inventory_snapshot_stale": true,
+    "impact": "locked hierarchy JSON predates the lowercase-child extractor fix; regenerate it before using XSTop child count"
+  },
+  "metric_root_cause": {
+    "locked_module_count": 1976,
+    "generated_module_count": 24,
+    "raw_missing_module_count": 1976,
+    "raw_extra_module_count": 24,
+    "raw_comparison_interpretation": "NON_COMPARABLE_WITHOUT_INSTANCE_NORMALIZATION",
+    "why": [
+      "locked Chisel names are flat and include generated suffixes; local Amaranth names are hierarchical UHSC paths",
+      "the local full hierarchy contains reduced parent/root envelopes, not the 1976 locked child modules",
+      "there is no source_name -> local_name/instance normalization map in the probe"
+    ],
+    "structural_port_envelopes": {
+      "Backend": {
+        "inventory_count": 1165,
+        "generated_ports": 1165,
+        "rtl_bytes": 2182819,
+        "rtl_sha256": "8e5e0375fb53bd24fef7e5903e3e6ac64ba3c939f04210e3f8ed62caa9a57393",
+        "path": "validation/.work/uhsc-backend-envelope.sv"
+      },
+      "MemBlock": {
+        "inventory_count": 1326,
+        "rtl_bytes": 283471,
+        "rtl_sha256": "2e1a422c61b123645b0495a0b57dc32ec5a3fbef8732f91dde8cd5a61a073f66",
+        "path": "validation/.work/uhsc-memblock-envelope.sv"
+      },
+      "TL2TLCoupledL2": {
+        "inventory_count": 540,
+        "generated_ports": 540,
+        "contract_status": "PASS",
+        "direct_checks": 6,
+        "verilator": "PASS",
+        "yosys": "PASS",
+        "parent_closure": "PENDING_FULL_MSHR_SRAM_PREFETCH_DIPLOMACY_BEHAVIOR",
+        "status": "VALIDATOR_PASS_BOUNDED",
+        "evidence_sha256": "6107202cea910f409aa2e00a68904d4cd55ca4a86100e6f2fc4e3212f4fc25f3",
+        "evidence_path": "validation/v2-coupledL2-tl2tl-parent-results.json"
+      },
+      "XSCore": {
+        "inventory_count": 308,
+        "generated_ports": 308,
+        "missing": [],
+        "extra": [],
+        "direction_width_mismatches": [],
+        "rtl_bytes": 55946,
+        "rtl_sha256": "1470b264da797d0dda05432e536d3eb5a029a90b021bb478e008bc3551d654ac",
+        "path": "validation/.work/uhsc-xscore-envelope.sv",
+        "status": "PASS",
+        "verilator": "PASS",
+        "yosys": "PASS"
+      },
+      "L2Top": {
+        "inventory_count": 441,
+        "generated_ports": 441,
+        "missing": [],
+        "extra": [],
+        "direction_width_mismatches": [],
+        "rtl_bytes": 72962,
+        "rtl_sha256": "424cedda34352f8d88c62ff5c386d1ac58afb8daf174d2f9a7c7e901b46d105d",
+        "path": "validation/.work/uhsc-l2top-envelope.sv",
+        "status": "PASS",
+        "verilator": "PASS",
+        "yosys": "PASS"
+      },
+      "XSTile": {
+        "inventory_count": 153,
+        "generated_ports": 153,
+        "missing": [],
+        "extra": [],
+        "direction_width_mismatches": [],
+        "rtl_bytes": 29624,
+        "rtl_sha256": "f0d4b1e6a0254a111134aade3a898a6ec5f71210805d787bad27ab485d246e42",
+        "path": "validation/.work/uhsc-xstile-envelope.sv",
+        "status": "PASS",
+        "verilator": "PASS",
+        "yosys": "PASS"
+      },
+      "XSTop": {
+        "inventory_count": 204,
+        "generated_ports": 204,
+        "missing": [],
+        "extra": [],
+        "direction_width_mismatches": [],
+        "rtl_bytes": 21141,
+        "rtl_sha256": "bd12b39e84e08d2bca8365b918f05660f9c21568eab8269f65aa5c918348bacd",
+        "path": "validation/.work/uhsc-xstop-envelope.sv",
+        "status": "PASS",
+        "verilator": "PASS",
+        "yosys": "PASS"
+      },
+      "UHSCTop": {
+        "inventory_count": 204,
+        "generated_ports": 204,
+        "missing": [],
+        "extra": [],
+        "direction_width_mismatches": [],
+        "rtl_bytes": 23936,
+        "rtl_sha256": "b366f051eafe8f66e553037213b072a998bcf105aa749e226047438fd16b9407",
+        "path": "validation/.work/uhsc-top-envelope.sv",
+        "status": "PASS",
+        "verilator": "PASS",
+        "yosys": "PASS"
+      },
+      "Frontend": {
+        "inventory_count": 371,
+        "rtl_bytes": 312959,
+        "rtl_sha256": "4cd52144d6c8af6afc21ddfc30b431630189f76b7766ba95470565acc5f494f5",
+        "path": "validation/.work/uhsc-frontend-envelope.sv"
+      }
+    },
+    "single_hierarchy_status": "PASS",
+    "direct_probe_observation": {
+      "closure_missing": 1,
+      "closure_missing_count": 5,
+      "closure_complete": 0,
+      "cpu_halted": 1
+    }
+  },
+  "actionable_tasks": [
+    {
+      "id": "TOP-ROOT-STATUS-001",
+      "priority": "P0",
+      "scope": [
+        "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Top.UHSCTop-GenerationProbe-Hardware.py",
+        "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Top.XiangShan-Roots-Hardware.py"
+      ],
+      "mapping": "aggregate xs_core/l2_top/xs_tile closure_missing into UHSCTop closure_missing/count/complete",
+      "current_failure": "root children are bound as objects but remain _RootBoundary tie-offs; UHSCTop reports complete from only four parent injections + 204 ports",
+      "evidence": "validation/v2-top-generation-probe-results.json",
+      "done_when": "reduced hierarchy cannot report closure_complete while any source-named root child asserts closure_missing"
+    },
+    {
+      "id": "TOP-XSCORE-CHILD-002",
+      "priority": "P1",
+      "scope": [
+        "XSCore <- Frontend/Backend/MemBlock",
+        "Build-Cpu.Top.XiangShan-Roots-Hardware.py"
+      ],
+      "mapping": "FrontendParent(371) + BackendTop(1165) + UHSCMemoryMemBlock(1326) -> XSCore(308)",
+      "available_evidence": [
+        "validation/v2-frontend-parent-differential-results.json",
+        "validation/v2-backend-parent-differential-results.json",
+        "validation/v2-memblock-parent-differential-results.json"
+      ],
+      "blocker": "parent behavior/child closures remain bounded; implement explicit 308-port bridge before semantic promotion"
+    },
+    {
+      "id": "TOP-L2TOP-TL2TL-003",
+      "priority": "P1",
+      "scope": [
+        "L2Top <- TL2TLCoupledL2 + TLXbar_7/8/9 + TLClientsMerger_1 + BusErrorUnit + buffers",
+        "Build-Cpu.Dependency.CoupledL2.Directory-Hardware.py"
+      ],
+      "mapping": "TL2TLCoupledL2Parent is a 540-port selected parent boundary; Rocket protocol/Chisel families supply bounded relay primitives",
+      "available_evidence": [
+        "validation/v2-coupledL2-tl2tl-parent-results.json",
+        "validation/v2-rocket-protocol-family-results.json",
+        "validation/v2-chisel-decoupled-family-results.json",
+        "validation/v2-chisel-arbiter-family-results.json"
+      ],
+      "blocker": "exact TLXbar/TLBuffer/merger child instances and full MSHR/SRAM/prefetch/diplomacy behavior are not yet bound"
+    },
+    {
+      "id": "TOP-XSTILE-INTBUFFER-004",
+      "priority": "P2",
+      "scope": [
+        "XSTile <- XSCore/L2Top/IntBuffer variants"
+      ],
+      "mapping": "bind the two root adapters and add IntBuffer 4-port, 6-port, and reordered 6-port subjects from utility/IntBuffer.scala",
+      "reference_shapes": {
+        "IntBuffer": 4,
+        "IntBuffer_1": 6,
+        "IntBuffer_2": 6
+      },
+      "blocker": "no landed IntBuffer Build subject; source is a one-stage resettable register pipeline, so this is a small directly implementable utility family"
+    },
+    {
+      "id": "TOP-XSTOP-UHSC-IO-005",
+      "priority": "P2",
+      "scope": [
+        "XSTop -> UHSCTop localization and system I/O children"
+      ],
+      "mapping": "freeze XSTop->UHSCTop external map, capture lower-case imsic_bus_top, then stage AXI4Map/AIA, TLToAXI4, ResetGen, AsyncQueueSink_3, ValidIOBroadcast, and HuanCun/SoCMisc adapters",
+      "available_evidence": [
+        "validation/v2-full-top-contract-comparison-results.json",
+        "validation/v2-chisel-aia-interface-family-results.json",
+        "validation/v2-chisel-arbiter-family-results.json",
+        "validation/v2-huancun-cache-family-results.json"
+      ],
+      "blocker": "UHSC naming manifest is still PLANNED/non-atomic and AIA explicitly defers TL/AXI/multi-hart wrapper closure"
+    }
+  ],
+  "acceptance": {
+    "accepted": false,
+    "acceptance_eligible": false,
+    "note": "This audit is evidence/task decomposition only; it does not alter BLOCKED_MISSING_CLOSURES."
+  }
+}
