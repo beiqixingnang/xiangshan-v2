@@ -463,7 +463,11 @@ def direct_checks(top_module: Any, frozen_ports: list[dict[str, object]]) -> dic
     simulator.run()
     expected_probe = {
         "closure_missing": 1,
-        "closure_missing_count": 4,
+        # The current UHSCTop probe aggregates XSCore, L2Top, XSTile and the
+        # explicit top inventory blocker, yielding five bounded blockers after
+        # the parent bridges are injected. / 当前 UHSCTop 探针聚合 XSCore、L2Top、
+        # XSTile 及顶层清单 blocker，共五个有界阻塞项。
+        "closure_missing_count": 5,
         "closure_complete": 0,
         "cpu_halted": 1,
         "mem_d_ready": 0,
