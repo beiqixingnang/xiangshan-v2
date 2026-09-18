@@ -202,6 +202,7 @@ def main() -> int:
     l2_mod = load_module(BUILD_ROOT / "Cpu-Memory/Build-Cpu.Dependency.CoupledL2.Slice-Hardware.py", "v2_coupled_l2")
     roots_mod = load_module(BUILD_ROOT / "Cpu-Core/Build-Cpu.Top.XiangShan-Roots-Hardware.py", "v2_roots")
     xscore_mod = load_module(BUILD_ROOT / "Cpu-Core/Build-Cpu.Top.XSCore.Parent-Hardware.py", "v2_xscore_parent")
+    intbuffer_mod = load_module(BUILD_ROOT / "Cpu-Core/Build-Cpu.Top.XSTile.IntBuffer.Family-Hardware.py", "v2_intbuffer_family")
     deps = {
         "frontend": frontend_mod.FrontendParent(),
         "backend": backend_mod.BackendTop(),
@@ -349,7 +350,21 @@ def main() -> int:
                 injected_dependencies={"full_port_specs": root_specs_by_name["XSCore"]}
             ),
             "l2_top": roots_mod.L2Top(injected_dependencies={"full_port_specs": root_specs_by_name["L2Top"]}),
-            "xs_tile": roots_mod.XSTile(injected_dependencies={"full_port_specs": root_specs_by_name["XSTile"]}),
+            "xs_tile": roots_mod.XSTile(
+                injected_dependencies={
+                    "full_port_specs": root_specs_by_name["XSTile"],
+                    "xs_core": xscore_mod.XSCoreParent(
+                        injected_dependencies={"full_port_specs": root_specs_by_name["XSCore"]}
+                    ),
+                    "l2_top": roots_mod.L2Top(
+                        injected_dependencies={"full_port_specs": root_specs_by_name["L2Top"]}
+                    ),
+                    "intbuffer": intbuffer_mod.IntBufferFamily("IntBuffer"),
+                    "intbuffer_1": intbuffer_mod.IntBufferFamily("IntBuffer_1"),
+                    "intbuffer_2": intbuffer_mod.IntBufferFamily("IntBuffer_2"),
+                    "intbuffer_3": intbuffer_mod.IntBufferFamily("IntBuffer_1"),
+                }
+            ),
         }
         full_deps = {
             # Use the compact Frontend child for the single-hierarchy bind;
