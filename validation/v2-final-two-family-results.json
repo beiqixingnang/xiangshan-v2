@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_FINAL_TWO_FAMILY",
+  "covered_modules": [
+    "DatamoduleResultBuffer",
+    "RegionWays"
+  ],
+  "reports": [
+    {
+      "module": "DatamoduleResultBuffer",
+      "ports_match": true,
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.025 MB sources in 2 modules, into 0.011 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.054 s (elab=0.006, cvt=0.012, bld=0.000); cpu 0.011 s on 1 threads; alloced 9.270 MB\n"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "tail": "g CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 707da9d947, CPU: user 0.00s system 0.01s, MEM: 8.91 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 40% 2x read_verilog (0 sec), 27% 1x opt_expr (0 sec), ...\n"
+      }
+    },
+    {
+      "module": "RegionWays",
+      "ports_match": true,
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.023 MB sources in 2 modules, into 0.009 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.020 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.082 MB\n"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "tail": "g CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: be5760bbad, CPU: user 0.01s system 0.00s, MEM: 8.91 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 45% 1x opt_expr (0 sec), 32% 2x read_verilog (0 sec), ...\n"
+      }
+    }
+  ],
+  "gates": {
+    "PY_COMPILE": "PASS",
+    "PYRIGHT": "PASS_BOUNDED_EXTERNAL",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "V2_REFERENCE_MATCHED": "PENDING_SOURCE_BEHAVIOR_DIFF",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "VALIDATOR_PASS_BOUNDED",
+  "acceptance_eligible": false,
+  "failures": []
+}

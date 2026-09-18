@@ -175,6 +175,18 @@ NEW = [
         "v2_status": "VALIDATOR_PASS_BOUNDED",
         "reference_surface": ["validation/v2-utility-residual-family-results.json"],
     },
+    {
+        "id": "FinalTwoFamily",
+        "source_scala": ["scala/src/main/scala/xiangshan/mem/sbuffer/DatamoduleResultBuffer.scala", "scala/src/main/scala/xiangshan/frontend/ITTAGE.scala"],
+        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.FinalTwo.Family-Hardware.py",
+        "family_id": "core.backend.final_two",
+        "closure_root": "core.backend",
+        "classification": "REWRITTEN",
+        "disposition": "STRUCTURE_VERIFIED_DIRECT_BOUNDED",
+        "v2_status": "VALIDATOR_PASS_BOUNDED",
+        "reference_surface": ["validation/v2-final-two-family-results.json"],
+        "covered_modules": ["DatamoduleResultBuffer", "RegionWays"],
+    },
 ]
 
 data = json.loads(PATH.read_text(encoding="utf-8"))

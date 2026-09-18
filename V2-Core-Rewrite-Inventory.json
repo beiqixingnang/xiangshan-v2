@@ -1172,16 +1172,13 @@
    "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Residual.LeafFamily-Hardware.py",
    "family_id": "residual.locked.leaves",
    "closure_root": "residual.locked.leaves",
-   "classification": "REWRITTEN_STRUCTURAL_ONLY",
-   "disposition": "STRUCTURE_VERIFIED_BOUNDED_SOURCE_SPLIT_PENDING",
-   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "classification": "RETIRED_STRUCTURAL_SCAFFOLD",
+   "disposition": "RETIRED_REPLACED_BY_SOURCE_FAMILIES",
+   "v2_status": "RETIRED",
    "reference_surface": [
     "validation/v2-residual-leaf-family-results.json"
    ],
-   "covered_modules": [
-    "DatamoduleResultBuffer",
-    "RegionWays"
-   ]
+   "covered_modules": []
   },
   {
    "id": "UtilityResidualFamily",
@@ -1336,13 +1333,33 @@
     "RegCacheTagTable",
     "VectorCvtTop"
    ]
+  },
+  {
+   "id": "FinalTwoFamily",
+   "source_scala": [
+    "scala/src/main/scala/xiangshan/mem/sbuffer/DatamoduleResultBuffer.scala",
+    "scala/src/main/scala/xiangshan/frontend/ITTAGE.scala"
+   ],
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.FinalTwo.Family-Hardware.py",
+   "family_id": "core.backend.final_two",
+   "closure_root": "core.backend",
+   "classification": "REWRITTEN",
+   "disposition": "STRUCTURE_VERIFIED_DIRECT_BOUNDED",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "validation/v2-final-two-family-results.json"
+   ],
+   "covered_modules": [
+    "DatamoduleResultBuffer",
+    "RegionWays"
+   ]
   }
  ],
  "status": "IMPLEMENTATION_WAVES_VALIDATED_BOUNDED_HIERARCHY_WAVE1",
  "acceptance_eligible": false,
  "entries_status_counts": {
-  "VALIDATOR_PASS_BOUNDED": 69,
-  "RETIRED": 1,
+  "VALIDATOR_PASS_BOUNDED": 71,
+  "RETIRED": 2,
   "STRUCTURE_VERIFIED": 2,
   "STRUCTURE_VERIFIED_BEHAVIOR_FAIL": 2,
   "STRUCTURE_VERIFIED_DIRECT_PASS_BOUNDED": 2,
