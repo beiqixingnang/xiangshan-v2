@@ -368,11 +368,12 @@ def main() -> int:
                 "mapping": "TL2TLCoupledL2Parent is a 540-port selected parent boundary; Rocket protocol/Chisel families supply bounded relay primitives",
                 "available_evidence": [
                     "validation/v2-coupledL2-tl2tl-parent-results.json",
+                    "validation/v2-top-l2top-tl2tl-results.json",
                     "validation/v2-rocket-protocol-family-results.json",
                     "validation/v2-chisel-decoupled-family-results.json",
                     "validation/v2-chisel-arbiter-family-results.json",
                 ],
-                "blocker": "exact TLXbar/TLBuffer/merger child instances and full MSHR/SRAM/prefetch/diplomacy behavior are not yet bound",
+                "blocker": "441-port L2Top bridge and selected TL2TL parent are bounded and tool-clean; exact TLXbar/TLBuffer/merger instances and full MSHR/SRAM/prefetch/diplomacy behavior remain pending",
             },
             {
                 "id": "TOP-XSTILE-INTBUFFER-004",
@@ -384,7 +385,11 @@ def main() -> int:
                     "IntBuffer_1": 6,
                     "IntBuffer_2": 6,
                 },
-                "blocker": "no landed IntBuffer Build subject; source is a one-stage resettable register pipeline, so this is a small directly implementable utility family",
+                "available_evidence": [
+                    "validation/v2-intbuffer-family-results.json",
+                    "validation/v2-top-xstile-intbuffer-family-results.json",
+                ],
+                "blocker": "all three IntBuffer subjects and direct/tool gates are landed; XSCore/L2Top/IntBuffer child binding into the 153-port XSTile parent remains pending",
             },
             {
                 "id": "TOP-XSTOP-UHSC-IO-005",

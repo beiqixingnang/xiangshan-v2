@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_XSCORE_PARENT_CONTRACT_AUDIT",
+  "batch_id": "TOP-XSCORE-CHILD-002",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "source_scala": [
+    "upstream/src/main/scala/xiangshan/XSCore.scala",
+    "upstream/src/main/scala/xiangshan/frontend/Frontend.scala",
+    "upstream/src/main/scala/xiangshan/backend/Backend.scala",
+    "upstream/src/main/scala/xiangshan/mem/MemBlock.scala",
+    "upstream/src/main/scala/xiangshan/cache/dcache/DCacheWrapper.scala"
+  ],
+  "locked_reference": {
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "immutable": true
+  },
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Top.XSCore.Parent-Hardware.py",
+    "sha256": "195ab220bc38099e37d22c5ddbe492cfd319a45fb26e063d14025df90294f1f3"
+  },
+  "static_audit": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Top.XSCore.Parent-Hardware.py",
+    "sha256": "195ab220bc38099e37d22c5ddbe492cfd319a45fb26e063d14025df90294f1f3",
+    "bytes": 36159,
+    "zones": [
+      767,
+      21111,
+      23696,
+      34506,
+      35571
+    ],
+    "adapter_args": [
+      "configuration",
+      "injected_dependencies"
+    ],
+    "function_comment_errors": [],
+    "forbidden_imports": [],
+    "cross_build_imports": [],
+    "status": "PASS"
+  },
+  "port_inventory": {
+    "schema_version": 1,
+    "kind": "XIANGSHAN_KUNMINGHU_V2_XSCORE_PARENT_PORT_INVENTORY",
+    "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+    "reference_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "module": "XSCore",
+    "port_count": 308,
+    "inventory_source": "validation/v2-root-port-inventories.json",
+    "inventory_sha256": "044a69323f9ee28ab3561cd5f5e138230ab8acfe8906486f5e44d449e95b5278",
+    "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Top.XSCore.Parent-Hardware.py",
+    "generated_module": "UHSCXSCoreParent",
+    "generated_port_count": 308,
+    "missing": [],
+    "extra": [],
+    "direction_width_mismatches": [],
+    "status": "PASS"
+  },
+  "children": {
+    "frontend": {
+      "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Top-Hardware.py",
+      "source": "upstream/src/main/scala/xiangshan/frontend/Frontend.scala",
+      "present": true,
+      "sha256": "4eaa8de9205f9c997e7c437b431f1bda1072a22dbd8508787ff645c92be72cc1",
+      "closure": "PENDING_CHILD_MISSING"
+    },
+    "backend": {
+      "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Top-Hardware.py",
+      "source": "upstream/src/main/scala/xiangshan/backend/Backend.scala",
+      "present": true,
+      "sha256": "ebf3da624dcd996387dc86dcec371d08bf39e997cc43cfd2b2de2f21a074d198",
+      "closure": "PENDING_CHILD_MISSING"
+    },
+    "mem_block": {
+      "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.MemBlock-Hardware.py",
+      "source": "upstream/src/main/scala/xiangshan/mem/MemBlock.scala",
+      "present": true,
+      "sha256": "06b40e56510d5aadbd71fd1cf3e393350a5dc15f5b2b51d6664c121500157614",
+      "closure": "PENDING_CHILD_MISSING"
+    }
+  },
+  "status": "PASS_BOUNDED",
+  "acceptance_eligible": false
+}

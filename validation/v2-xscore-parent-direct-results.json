@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_XSCORE_PARENT_DIRECT",
+  "batch_id": "TOP-XSCORE-CHILD-002",
+  "direct": {
+    "status": "PASS",
+    "observed": {
+      "child_missing": 7,
+      "child_missing_count": 3,
+      "closure_missing": 1,
+      "closure_complete": 0
+    },
+    "expected_missing_mask": 7,
+    "equation_probe": {
+      "frontend_backend_fire": 1,
+      "mem_a_fire": 1,
+      "mem_d_fire": 1,
+      "child_missing": 3,
+      "closure_complete": 0
+    },
+    "child_missing_semantics": "three bounded/injected child closures remain missing until explicit PASS_COMPLETE status"
+  },
+  "py_compile": {
+    "status": "PASS"
+  },
+  "pyright": {
+    "status": "PASS",
+    "returncode": 0,
+    "output_tail": "{\n    \"version\": \"1.1.411\",\n    \"time\": \"1789742644519\",\n    \"generalDiagnostics\": [],\n    \"summary\": {\n        \"filesAnalyzed\": 1,\n        \"errorCount\": 0,\n        \"warningCount\": 0,\n        \"informationCount\": 0,\n        \"timeInSec\": 0.724\n    }\n}\n\n"
+  },
+  "status": "PASS_BOUNDED",
+  "gates": {
+    "PARENT_CLOSURE_MATCHED": "PENDING_CHILD_MISSING",
+    "ACCEPTED": "NOT_ALLOWED"
+  }
+}

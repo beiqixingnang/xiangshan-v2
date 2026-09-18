@@ -1,11 +1,5 @@
-"""Source-backed IntBuffer family used by the bounded XSTile closure.
-
-The pinned XiangShan V2 hierarchy contains three elaborated instances of
-``utility.IntBuffer``.  Diplomacy gives each interrupt bit one scalar input
-and output; this family deliberately preserves the locked instance-specific
-port order while implementing the one-stage positive-reset register pipeline
-visible in the reference Verilog.  XSTile/XSCore/L2Top parent integration is
-kept pending by the accompanying evidence and validator.
+"""Source-backed IntBuffer family for the bounded XSTile closure.
+锁定 XSTile 闭包的源代码 IntBuffer family。
 """
 from __future__ import annotations
 
@@ -15,12 +9,14 @@ from typing import Any
 from amaranth import ClockDomain, Elaboratable, Module, Signal
 from amaranth.back import verilog
 
+# Module Contract / 模块契约
 __all__ = [
     "PortSpec", "COVERED_MODULES", "SOURCE_PATHS", "LOCKED_REFERENCE_SHA256",
     "LOCKED_PORT_SPECS", "PORT_SPECS", "FamilySpec", "IntBufferFamily",
     "TopXSTileIntBufferFamily", "family_spec", "build_verilog", "main",
 ]
 
+# Configuration / 配置
 COVERED_MODULES: tuple[str, ...] = ("IntBuffer", "IntBuffer_1", "IntBuffer_2")
 SOURCE_PATHS: tuple[str, ...] = (
     "upstream/utility/src/main/scala/utility/IntBuffer.scala",
@@ -29,8 +25,11 @@ SOURCE_PATHS: tuple[str, ...] = (
 LOCKED_REFERENCE_SHA256 = "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d"
 
 
+# Implementation / 实现
 @dataclass(frozen=True)
 class PortSpec:
+    """One locked scalar port / 一个锁定的标量端口。"""
+
     name: str
     direction: str
     width: int = 1
@@ -59,14 +58,16 @@ PORT_SPECS = LOCKED_PORT_SPECS
 
 
 class FamilySpec:
-    """Immutable selected-member view of the locked port catalog."""
+    """Immutable locked-member view / 不可变的锁定成员视图。"""
 
+    # Validate and capture one locked member / 校验并捕获一个锁定成员。
     def __init__(self, module: str) -> None:
         if module not in LOCKED_PORT_SPECS:
             raise ValueError(f"unknown IntBuffer member: {module}")
         self.module = module
         self.ports = LOCKED_PORT_SPECS[module]
 
+    # Return the width of one named port / 返回指定端口的位宽。
     def width(self, name: str) -> int:
         for port in self.ports:
             if port.name == name:
@@ -74,13 +75,15 @@ class FamilySpec:
         raise KeyError(name)
 
 
+    # Resolve one family member specification / 解析一个 family 成员规格。
 def family_spec(module: str) -> FamilySpec:
     return FamilySpec(module)
 
 
 class IntBufferFamily(Elaboratable):
-    """One exact IntBuffer variant with a one-cycle resettable pipeline."""
+    """One exact resettable IntBuffer variant / 一个精确的可复位 IntBuffer 变体。"""
 
+    # Allocate the exact locked ports and scalar registers / 分配精确锁定端口及标量寄存器。
     def __init__(self, module: str = COVERED_MODULES[0]) -> None:
         self.member = module
         self.spec = family_spec(module)
@@ -91,6 +94,7 @@ class IntBufferFamily(Elaboratable):
         self.output_names = [p.name for p in self.spec.ports if p.name.startswith("auto_out_")]
         self.registers = [Signal(1, name=f"REG_{index}") for index in range(len(self.input_names))]
 
+    # Elaborate the one-stage positive-reset register pipeline / 展开一级正复位寄存器流水线。
     def elaborate(self, platform: Any) -> Module:
         del platform
         module = Module()
@@ -109,22 +113,24 @@ class IntBufferFamily(Elaboratable):
 TopXSTileIntBufferFamily = IntBufferFamily
 
 
-def build_verilog(configuration: Any = None, injected_dependencies: Any = None, name: str | None = None) -> str:
+# Public Adapter / 公共适配器
+# Export one deterministic selected member / 导出一个确定性的选定成员。
+def build_verilog(configuration: Any, injected_dependencies: Any) -> str:
     del injected_dependencies
     member = COVERED_MODULES[0]
     if isinstance(configuration, dict):
         member = str(configuration.get("module", member))
     elif isinstance(configuration, str):
         member = configuration
-    elif name is not None:
-        member = name
     top = IntBufferFamily(member)
     return verilog.convert(top, name=member, ports=[top.ports[p.name] for p in top.spec.ports], emit_src=False)
 
 
+# Emit the default member for direct invocation / 直接调用时输出默认成员。
 def main() -> None:
     print(build_verilog({"module": COVERED_MODULES[0]}, {}))
 
 
+# Direct Entry / 直接入口
 if __name__ == "__main__":
     main()

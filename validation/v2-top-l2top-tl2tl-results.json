@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_TOP_L2TOP_TL2TL",
+  "batch_id": "TOP-L2TOP-TL2TL-003",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "reference_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Top.XiangShan-Roots-Hardware.py",
+    "sha256": "edc99ae7ee6a92423fd8e2cd97faeda26e5508b1a53a54cc387cb31c2e8ae39a"
+  },
+  "source_inventory": {
+    "count": 10,
+    "paths": [
+      {
+        "path": "upstream/src/main/scala/xiangshan/L2Top.scala",
+        "sha256": "1bb27fdd7810a2f4957a8a8900d3bfb0040a4b4c01b2346312999b4e97df52a9",
+        "bytes": 18199
+      },
+      {
+        "path": "upstream/rocket-chip/src/main/scala/tilelink/Xbar.scala",
+        "sha256": "a7c75ae098f8611d1e32a0b07f899d5e6b0061f921d796f9e24319f01833940f",
+        "bytes": 16907
+      },
+      {
+        "path": "upstream/rocket-chip/src/main/scala/tilelink/Buffer.scala",
+        "sha256": "62819b9d9e81eddda2e9ca39691d5713058d925300e6caddd93e6a26c9efcdb2",
+        "bytes": 2918
+      },
+      {
+        "path": "upstream/rocket-chip/src/main/scala/tilelink/BankBinder.scala",
+        "sha256": "a0d2cf5a7554d6372a8006b391a94dfa3c3d5f59c195392912a2126951e5e827",
+        "bytes": 3451
+      },
+      {
+        "path": "upstream/utility/src/main/scala/utility/TLUtils/TLClientsMerger.scala",
+        "sha256": "700724eda2922e608aceadcfeead9f60d3eb09ab0c1f91ad35a42797e7bcebf0",
+        "bytes": 2212
+      },
+      {
+        "path": "upstream/rocket-chip/src/main/scala/tilelink/Arbiter.scala",
+        "sha256": "c98b34d114b14d360b1f93e824b5bea5f0f8ac3f1662163ac0222ecdfd27d429",
+        "bytes": 7574
+      },
+      {
+        "path": "upstream/rocket-chip/src/main/scala/tilelink/Bundles.scala",
+        "sha256": "48fc47d344a49c7281acb619e95b8a14c70b5ec03fdfb111e6e0c1f3a21494b8",
+        "bytes": 13347
+      },
+      {
+        "path": "upstream/rocket-chip/src/main/scala/tilelink/Parameters.scala",
+        "sha256": "aa84e0f573fec08a8e62b3115fbc599f34f96bfd3ef7fb1b857c0ba18e29c054",
+        "bytes": 65153
+      },
+      {
+        "path": "upstream/rocket-chip/src/main/scala/tilelink/Nodes.scala",
+        "sha256": "b9c20468e9c728be70e11deac9878d8f5fdc16324c48e80f90fc302c9e7636a5",
+        "bytes": 11498
+      },
+      {
+        "path": "upstream/rocket-chip/src/main/scala/tilelink/BusWrapper.scala",
+        "sha256": "679b386dfeb512f974fb48067ff69d69921f26dc36cab6ea849f9f62a2e9371b",
+        "bytes": 13540
+      }
+    ]
+  },
+  "contract": {
+    "status": "PASS",
+    "expected_count": 441,
+    "generated_count": 441,
+    "missing": [],
+    "extra": [],
+    "direction_width_mismatches": [],
+    "reference_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "reference_port_count": 441
+  },
+  "direct_diagnostics": {
+    "status": "PASS",
+    "observed": {
+      "closure_missing": 1,
+      "closure_missing_count": 21,
+      "closure_complete": 0,
+      "child_missing": 1
+    },
+    "expected_missing_count": 21
+  },
+  "tl2tl_bridge": {
+    "status": "PASS",
+    "generated_count": 441,
+    "bridge_connections": 1,
+    "child_pending_policy": "PENDING_MISSING_ROCKET_TLXBAR_BUFFER_MERGER_BUSERROR",
+    "tools": {
+      "path": "validation/.work/v2-top-l2top-tl2tl/UHSCL2TopWithTL2TL.sv",
+      "bytes": 257896,
+      "sha256": "b777af2a7cd5d371d9265f48fc1a4cd2e36e6eff3af942c5f824545d061235b5",
+      "verilator": "PASS",
+      "yosys": "PASS",
+      "verilator_returncode": 0,
+      "yosys_returncode": 0,
+      "verilator_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.267 MB sources in 3 modules, into 0.023 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.080 s (elab=0.013, cvt=0.027, bld=0.000); cpu 0.065 s on 1 threads; alloced 17.695 MB\n",
+      "yosys_tail": "thTL2TL'.\nFinding identical cells in module `\\UHSCL2TopWithTL2TL.l2top_tl2tl_parent'.\nRemoved a total of 0 cells.\n\n4.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\UHSCL2TopWithTL2TL..\nFinding unused cells or wires in module \\UHSCL2TopWithTL2TL.l2top_tl2tl_parent..\n\n4.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module UHSCL2TopWithTL2TL.\nOptimizing module UHSCL2TopWithTL2TL.l2top_tl2tl_parent.\n\n4.23. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module UHSCL2TopWithTL2TL...\nChecking module UHSCL2TopWithTL2TL.l2top_tl2tl_parent...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 726233aabd, CPU: user 0.31s system 0.02s, MEM: 48.87 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 28% 2x read_verilog (0 sec), 25% 3x opt_clean (0 sec), ...\n"
+    }
+  },
+  "pending_closure": {
+    "status": "PENDING",
+    "required_children": 20,
+    "bound_children": 1,
+    "missing_or_pending": 20,
+    "complete": false
+  },
+  "gates": {
+    "PY_COMPILE": "PASS",
+    "PYRIGHT": "PASS",
+    "L2TOP_441_PORTS": "PASS",
+    "DIRECT_CHILD_MISSING_DIAGNOSTIC": "PASS",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "PARENT_CLOSURE_MATCHED": "PENDING_FULL_TLXBAR_BUFFER_MERGER_BUSERROR_MSHR_SRAM_DIPLOMACY",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "VALIDATOR_PASS_BOUNDED",
+  "acceptance_eligible": false,
+  "failures": [],
+  "unclosed": [
+    "TLXbar/Buffer/TLClientsMerger/BusErrorUnit/BankBinder children are not all source-backed bound.",
+    "Full TL2TL MSHR/SRAM/refill/prefetch/Diplomacy behavior remains pending.",
+    "Bounded bridge evidence is not a complete L2Top or XSTop claim."
+  ]
+}

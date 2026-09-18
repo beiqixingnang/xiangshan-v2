@@ -1,11 +1,21 @@
 {
   "schema_version": 1,
   "kind": "XIANGSHAN_KUNMINGHU_V2_INTBUFFER_FAMILY",
+  "batch_id": "TOP-XSTILE-INTBUFFER-004",
+  "source_paths": [
+    "upstream/utility/src/main/scala/utility/IntBuffer.scala",
+    "upstream/rocket-chip/src/main/scala/diplomacy/LazyModule.scala"
+  ],
   "covered_modules": [
     "IntBuffer",
     "IntBuffer_1",
     "IntBuffer_2"
   ],
+  "port_counts": {
+    "IntBuffer": 4,
+    "IntBuffer_1": 6,
+    "IntBuffer_2": 6
+  },
   "reports": [
     {
       "module": "IntBuffer",
@@ -31,10 +41,15 @@
     "PYRIGHT": "PASS_BOUNDED_EXTERNAL",
     "VERILATOR": "PASS",
     "YOSYS": "PASS",
-    "V2_REFERENCE_MATCHED": "PENDING_XSTILE_PARENT_DIFF",
+    "V2_REFERENCE_MATCHED": "PENDING_LOCKED_REFERENCE_DIFFERENTIAL",
+    "PARENT_XSTILE_CLOSURE": "PENDING",
     "ACCEPTED": "NOT_ALLOWED"
   },
   "status": "VALIDATOR_PASS_BOUNDED",
   "acceptance_eligible": false,
-  "failures": []
+  "parent_closure": "PENDING",
+  "failures": [],
+  "unclosed": [
+    "XSCore/L2Top/XSTile parent binding and full XSTop closure remain pending."
+  ]
 }

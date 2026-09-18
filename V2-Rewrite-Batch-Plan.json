@@ -601,6 +601,19 @@
     "yosys": "PASS",
     "reference": "LOCKED_XSTOP_DEFAULT_CONFIG",
     "parent_closure": "PENDING_FULL_MSHR_SRAM_PREFETCH_DIPLOMACY"
+   },
+   "L2TopTL2TLBridge": {
+    "batch_id": "TOP-L2TOP-TL2TL-003",
+    "status": "VALIDATOR_PASS_BOUNDED",
+    "ports": 441,
+    "generated_bytes": 257887,
+    "missing_child_diagnostic": "PASS",
+    "verilator": "PASS",
+    "yosys": "PASS",
+    "reference": "LOCKED_ROOT_PORT_INVENTORY",
+    "selected_parent": "TL2TLCoupledL2Parent",
+    "parent_closure": "PENDING_FULL_TLXBAR_BUFFER_MERGER_BUSERROR_MSHR_SRAM_DIPLOMACY",
+    "acceptance_eligible": false
    }
   },
   "semantic_family_batches": [
@@ -850,7 +863,21 @@
     "compared_outputs": 24,
     "verilator": "PASS",
     "yosys": "PASS",
-    "parent_closure": "PENDING_FULL_COUPLEDL2_BEHAVIOR"
+   "parent_closure": "PENDING_FULL_COUPLEDL2_BEHAVIOR"
+   },
+   {
+    "batch_id": "TOP-XSCORE-CHILD-002",
+    "scope": "core.xscore.parent.bridge",
+    "target": "XSCore",
+    "build_file": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Top.XSCore.Parent-Hardware.py",
+    "children": ["Frontend", "Backend", "MemBlock"],
+    "locked_port_count": 308,
+    "status": "PASS_BOUNDED_PARENT",
+    "evidence": "validation/v2-xscore-parent-results.json",
+    "verilator": "PASS",
+    "yosys": "PASS",
+    "parent_closure": "PENDING_CHILD_MISSING",
+    "accepted": "NOT_ALLOWED"
    }
   ],
   "locked_module_inventory": {
@@ -861,8 +888,8 @@
    "evidence": "validation/v2-top-generation-probe-results.json"
   },
   "semantic_closure_status": "PENDING_FULL_CHILD_BEHAVIORAL_DIFFERENTIAL",
-  "parent_closures_planned": 8,
-  "parent_closures_indexed": 8,
+  "parent_closures_planned": 9,
+  "parent_closures_indexed": 9,
   "parent_closures_matched": 0,
   "accepted_count": 0,
   "next_batches": [
@@ -877,7 +904,8 @@
    "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.FrontendBridge-Hardware.py",
    "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.MemBlock-Hardware.py"
   ],
-  "hierarchy_wave1_note": "Four new aggregate Build subjects were added under the 2026-09-16 hierarchy-completion amendment; the 78 closure-subject bound is unchanged and the new subjects are counted separately."
+  "hierarchy_wave1_note": "Four new aggregate Build subjects were added under the 2026-09-16 hierarchy-completion amendment; the 78 closure-subject bound is unchanged and the new subjects are counted separately.",
+  "xscore_parent_note": "TOP-XSCORE-CHILD-002 adds a source-backed 308-port parent bridge; Frontend/Backend/MemBlock child_missing remains pending and does not change full-top completion."
  },
  "accepted_count": 0,
  "acceptance_eligible": false

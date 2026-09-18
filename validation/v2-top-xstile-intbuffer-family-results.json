@@ -1,0 +1,309 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_TOP_XSTILE_INTBUFFER_FAMILY",
+  "batch_id": "TOP-XSTILE-INTBUFFER-004",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "source_paths": [
+    "upstream/utility/src/main/scala/utility/IntBuffer.scala",
+    "upstream/rocket-chip/src/main/scala/diplomacy/LazyModule.scala"
+  ],
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Top.XSTile.IntBuffer.Family-Hardware.py",
+    "sha256": "840ab9af3cbe489fac38aa0bdc47e98d5bace81c3c399d4b73f00cef39cf5450"
+  },
+  "locked_reference": {
+    "path": "validation/v2-locked-hierarchy.json",
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d"
+  },
+  "covered_modules": [
+    "IntBuffer",
+    "IntBuffer_1",
+    "IntBuffer_2"
+  ],
+  "port_surface": {
+    "IntBuffer": {
+      "locked": 4,
+      "catalog": 4,
+      "match": true,
+      "ports": [
+        {
+          "name": "clock",
+          "direction": "input",
+          "width": 1
+        },
+        {
+          "name": "reset",
+          "direction": "input",
+          "width": 1
+        },
+        {
+          "name": "auto_in_0",
+          "direction": "input",
+          "width": 1
+        },
+        {
+          "name": "auto_out_0",
+          "direction": "output",
+          "width": 1
+        }
+      ]
+    },
+    "IntBuffer_1": {
+      "locked": 6,
+      "catalog": 6,
+      "match": true,
+      "ports": [
+        {
+          "name": "clock",
+          "direction": "input",
+          "width": 1
+        },
+        {
+          "name": "reset",
+          "direction": "input",
+          "width": 1
+        },
+        {
+          "name": "auto_in_0",
+          "direction": "input",
+          "width": 1
+        },
+        {
+          "name": "auto_in_1",
+          "direction": "input",
+          "width": 1
+        },
+        {
+          "name": "auto_out_0",
+          "direction": "output",
+          "width": 1
+        },
+        {
+          "name": "auto_out_1",
+          "direction": "output",
+          "width": 1
+        }
+      ]
+    },
+    "IntBuffer_2": {
+      "locked": 6,
+      "catalog": 6,
+      "match": true,
+      "ports": [
+        {
+          "name": "clock",
+          "direction": "input",
+          "width": 1
+        },
+        {
+          "name": "reset",
+          "direction": "input",
+          "width": 1
+        },
+        {
+          "name": "auto_in_1_0",
+          "direction": "input",
+          "width": 1
+        },
+        {
+          "name": "auto_in_0_0",
+          "direction": "input",
+          "width": 1
+        },
+        {
+          "name": "auto_out_1_0",
+          "direction": "output",
+          "width": 1
+        },
+        {
+          "name": "auto_out_0_0",
+          "direction": "output",
+          "width": 1
+        }
+      ]
+    }
+  },
+  "exports": {
+    "IntBuffer": {
+      "bytes": 512,
+      "sha256": "3e691336e9edd587fa5c18138132a0cad2fa9e9360b355d3382a011d00af5c99",
+      "deterministic": true
+    },
+    "IntBuffer_1": {
+      "bytes": 793,
+      "sha256": "2ac661d290fdbfa9808c5f2fb900cc8bd685dceffb19432305a2794991ec7d49",
+      "deterministic": true
+    },
+    "IntBuffer_2": {
+      "bytes": 833,
+      "sha256": "fbbf4fd127a37524e1b65a5ca54982cf6c1980b06781b873ddc5526c8039c3e8",
+      "deterministic": true
+    }
+  },
+  "direct": {
+    "IntBuffer": {
+      "member": "IntBuffer",
+      "vectors": 2,
+      "observed": [
+        [
+          1
+        ],
+        [
+          0
+        ]
+      ],
+      "status": "PASS"
+    },
+    "IntBuffer_1": {
+      "member": "IntBuffer_1",
+      "vectors": 2,
+      "observed": [
+        [
+          1,
+          0
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "status": "PASS"
+    },
+    "IntBuffer_2": {
+      "member": "IntBuffer_2",
+      "vectors": 2,
+      "observed": [
+        [
+          1,
+          0
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "status": "PASS"
+    }
+  },
+  "static_contract": {
+    "utf8_lf": true,
+    "ast": true,
+    "zones": {
+      "Module Contract": 297,
+      "Configuration": 559,
+      "Implementation": 923,
+      "Public Adapter": 4331,
+      "Direct Entry": 5015
+    },
+    "five_zone_order": true,
+    "adapter_args": [
+      "configuration",
+      "injected_dependencies"
+    ],
+    "adapter_exact": true,
+    "missing_bilingual_comments": [],
+    "status": "PASS"
+  },
+  "tool_gates": {
+    "IntBuffer": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "/mnt/c/top_xstile_intbuffer_004/IntBuffer.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.010 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.015 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.004 s on 1 threads; alloced 9.062 MB\n",
+        "output_sha256": "72adc14ae0932bfc8e71fce4c01c12b34ee1bd72742c47cd193111f4ca6a545e"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/top_xstile_intbuffer_004/IntBuffer.sv; hierarchy -top IntBuffer; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "1: $0\\auto_out_0[0:0]\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\nCreating register for signal `\\IntBuffer.\\auto_out_0' using process `\\IntBuffer.$proc$/mnt/c/top_xstile_intbuffer_004/IntBuffer.sv:16$1'.\n  created $adff cell `$procdff$5' with positive edge clock and positive level reset.\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nRemoving empty process `IntBuffer.$proc$/mnt/c/top_xstile_intbuffer_004/IntBuffer.sv:11$2'.\nRemoving empty process `IntBuffer.$proc$/mnt/c/top_xstile_intbuffer_004/IntBuffer.sv:16$1'.\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module IntBuffer.\n<suppressed ~1 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module IntBuffer...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 75e806b93d, CPU: user 0.01s system 0.00s, MEM: 11.09 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 38% 2x read_verilog (0 sec), 30% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "8acb0a8938aed4eeededa726a04f1a3997347ffdd549e27a15a6f688f0abda72"
+      }
+    },
+    "IntBuffer_1": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "/mnt/c/top_xstile_intbuffer_004/IntBuffer_1.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.011 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.015 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.004 s on 1 threads; alloced 9.086 MB\n",
+        "output_sha256": "7bfce77321c281eedadba625345f7d783ec253c856bf4be567118addcb97e11b"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/top_xstile_intbuffer_004/IntBuffer_1.sv; hierarchy -top IntBuffer_1; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "ing process `\\IntBuffer_1.$proc$/mnt/c/top_xstile_intbuffer_004/IntBuffer_1.sv:22$1'.\n  created $adff cell `$procdff$10' with positive edge clock and positive level reset.\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nRemoving empty process `IntBuffer_1.$proc$/mnt/c/top_xstile_intbuffer_004/IntBuffer_1.sv:17$4'.\nRemoving empty process `IntBuffer_1.$proc$/mnt/c/top_xstile_intbuffer_004/IntBuffer_1.sv:15$3'.\nRemoving empty process `IntBuffer_1.$proc$/mnt/c/top_xstile_intbuffer_004/IntBuffer_1.sv:25$2'.\nRemoving empty process `IntBuffer_1.$proc$/mnt/c/top_xstile_intbuffer_004/IntBuffer_1.sv:22$1'.\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module IntBuffer_1.\n<suppressed ~2 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module IntBuffer_1...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 94b26c3d69, CPU: user 0.01s system 0.00s, MEM: 11.09 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 42% 2x read_verilog (0 sec), 26% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "d48289fff9b627087320f3325f941180be908f0cbb2aeec6977390a8fc4c3d70"
+      }
+    },
+    "IntBuffer_2": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "/mnt/c/top_xstile_intbuffer_004/IntBuffer_2.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.011 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.016 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.004 s on 1 threads; alloced 9.086 MB\n",
+        "output_sha256": "09e494ee4c84c188979f42c56bf7cd9fd70f8a9836f45dc01324b5a5731521b6"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/top_xstile_intbuffer_004/IntBuffer_2.sv; hierarchy -top IntBuffer_2; proc; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "ing process `\\IntBuffer_2.$proc$/mnt/c/top_xstile_intbuffer_004/IntBuffer_2.sv:22$1'.\n  created $adff cell `$procdff$10' with positive edge clock and positive level reset.\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nRemoving empty process `IntBuffer_2.$proc$/mnt/c/top_xstile_intbuffer_004/IntBuffer_2.sv:17$4'.\nRemoving empty process `IntBuffer_2.$proc$/mnt/c/top_xstile_intbuffer_004/IntBuffer_2.sv:15$3'.\nRemoving empty process `IntBuffer_2.$proc$/mnt/c/top_xstile_intbuffer_004/IntBuffer_2.sv:25$2'.\nRemoving empty process `IntBuffer_2.$proc$/mnt/c/top_xstile_intbuffer_004/IntBuffer_2.sv:22$1'.\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module IntBuffer_2.\n<suppressed ~2 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module IntBuffer_2...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 59a7ac75e2, CPU: user 0.01s system 0.01s, MEM: 11.25 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 39% 2x read_verilog (0 sec), 26% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "d4a42778e810e543926d18c25a9dd38ea61a2adbb83e33a04792cf4e7e5a8669"
+      }
+    }
+  },
+  "gates": {
+    "PY_COMPILE": "PASS",
+    "FIVE_ZONE_BILINGUAL_AUDIT": "PASS",
+    "ADAPTER_EXACT": "PASS",
+    "PYRIGHT": "PASS",
+    "BUILD_VERILOG": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS",
+    "LOCKED_PORT_CATALOG": "PASS",
+    "VERILATOR": "PASS",
+    "YOSYS": "PASS",
+    "REFERENCE_DIFFERENTIAL": "PENDING_LOCKED_REFERENCE_DIFFERENTIAL",
+    "PARENT_XSTILE_CLOSURE": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "VALIDATOR_PASS_BOUNDED",
+  "acceptance_eligible": false,
+  "parent_closure": "PENDING",
+  "failures": [],
+  "unclosed": [
+    "XSCore/L2Top/XSTile parent binding and full XSTop closure remain pending.",
+    "Reference differential and license review remain pending; this is bounded child evidence only."
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "kind": "V2_XSCORE_PARENT_MAPPING_UPDATE",
+  "batch_id": "TOP-XSCORE-CHILD-002",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "entries": [
+    {
+      "source_name": "XSCore",
+      "local_name": "UHSCXSCoreParent",
+      "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Top.XSCore.Parent-Hardware.py",
+      "classification": "SOURCE_BACKED_PARENT_BRIDGE",
+      "locked_ports": 308,
+      "children": [
+        "Frontend",
+        "Backend",
+        "MemBlock"
+      ],
+      "status": "PASS_BOUNDED_PARENT",
+      "closure": "PENDING_CHILD_MISSING"
+    }
+  ],
+  "inventory": "validation/v2-xscore-parent-port-inventory.json",
+  "prohibited_claims": [
+    "FULL_XSCORE_CLOSURE",
+    "ACCEPTED"
+  ]
+}

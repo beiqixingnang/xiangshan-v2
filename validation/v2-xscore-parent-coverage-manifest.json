@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_XSCORE_PARENT_COVERAGE",
+  "batch_id": "TOP-XSCORE-CHILD-002",
+  "root_module": "XSCore",
+  "locked_ports": 308,
+  "covered_children": [
+    {
+      "name": "frontend",
+      "source": "upstream/src/main/scala/xiangshan/frontend/Frontend.scala",
+      "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Top-Hardware.py",
+      "status": "PRESENT_BOUNDED",
+      "child_missing": 1
+    },
+    {
+      "name": "backend",
+      "source": "upstream/src/main/scala/xiangshan/backend/Backend.scala",
+      "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Top-Hardware.py",
+      "status": "PRESENT_BOUNDED",
+      "child_missing": 1
+    },
+    {
+      "name": "mem_block",
+      "source": "upstream/src/main/scala/xiangshan/mem/MemBlock.scala",
+      "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.MemBlock-Hardware.py",
+      "status": "PRESENT_BOUNDED",
+      "child_missing": 1
+    }
+  ],
+  "bridge_edges": [
+    "Frontend.cfVec -> Backend.frontend",
+    "Backend.redirect/fence -> Frontend",
+    "MemBlock TileLink A/D -> XSCore buffers",
+    "XSCore reset/hart/MSI/CLINT fanout"
+  ],
+  "generated": {
+    "standalone": {
+      "schema_version": 1,
+      "kind": "XIANGSHAN_KUNMINGHU_V2_XSCORE_PARENT_PORT_INVENTORY",
+      "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+      "reference_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+      "module": "XSCore",
+      "port_count": 308,
+      "inventory_source": "validation/v2-root-port-inventories.json",
+      "inventory_sha256": "044a69323f9ee28ab3561cd5f5e138230ab8acfe8906486f5e44d449e95b5278",
+      "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Top.XSCore.Parent-Hardware.py",
+      "generated_module": "UHSCXSCoreParent",
+      "generated_port_count": 308,
+      "missing": [],
+      "extra": [],
+      "direction_width_mismatches": [],
+      "status": "PASS"
+    },
+    "integrated": {
+      "status": "PASS",
+      "path": "validation/.work/v2-xscore-parent/uhsc-xscore-integrated.sv",
+      "bytes": 1882060,
+      "sha256": "c3671ec1a609aa3527ec8c9625ce37b6feea3cdf827172791ba91948f346144f",
+      "bound_children": [
+        "backend",
+        "frontend",
+        "mem_block"
+      ],
+      "child_missing": 7,
+      "semantic_status": "PENDING_CHILD_BEHAVIORAL_CLOSURE"
+    },
+    "verilator": {
+      "status": "PASS",
+      "returncode": 0,
+      "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.092 MB sources in 2 modules, into 0.018 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.064 s (elab=0.008, cvt=0.016, bld=0.000); cpu 0.022 s on 1 threads; alloced 11.152 MB\n",
+      "output_sha256": "9cd254433079ceafa8e1162cd1a218d7bd39d0f66b6b3d64dbcb9f6f31c49a18",
+      "command": "verilator --lint-only --Wno-fatal --top-module UHSCXSCoreParent /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-xscore-parent/uhsc-xscore-parent.sv"
+    },
+    "yosys": {
+      "status": "PASS",
+      "returncode": 0,
+      "output_tail": "ent.sv' to AST representation.\nGenerating RTLIL representation for module `\\UHSCXSCoreParent'.\nSuccessfully finished Verilog frontend.\n\n2. Executing HIERARCHY pass (managing design hierarchy).\n\n2.1. Analyzing design hierarchy..\nTop module:  \\UHSCXSCoreParent\n\n2.2. Analyzing design hierarchy..\nTop module:  \\UHSCXSCoreParent\nRemoved 0 unused modules.\n\n3. Executing PROC pass (convert processes to netlists).\n\n3.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module UHSCXSCoreParent.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module UHSCXSCoreParent...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: eefb4d60bc, CPU: user 0.01s system 0.02s, MEM: 13.75 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 73% 2x read_verilog (0 sec), 6% 1x check (0 sec), ...\n",
+      "output_sha256": "74c051191b47a467e65ec8880b3234909fd705c267b4178b8559194304091f97",
+      "command": "yosys -p 'read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-xscore-parent/uhsc-xscore-parent.sv; hierarchy -top UHSCXSCoreParent; proc; check'"
+    },
+    "integrated_verilator": {
+      "status": "PASS",
+      "returncode": 0,
+      "output_tail": ".agents/xiangshan-v2/validation/.work/v2-xscore-parent/uhsc-xscore-integrated.sv:77308:9: Case values incompletely covered (example pattern 0x9)\n77308 |         casez (ibuffer_tail)\n      |         ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-xscore-parent/uhsc-xscore-integrated.sv:77338:9: Case values incompletely covered (example pattern 0xa)\n77338 |         casez (ibuffer_tail)\n      |         ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-xscore-parent/uhsc-xscore-integrated.sv:77370:9: Case values incompletely covered (example pattern 0xb)\n77370 |         casez (ibuffer_tail)\n      |         ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-xscore-parent/uhsc-xscore-integrated.sv:77404:9: Case values incompletely covered (example pattern 0xc)\n77404 |         casez (ibuffer_tail)\n      |         ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-xscore-parent/uhsc-xscore-integrated.sv:77440:9: Case values incompletely covered (example pattern 0xd)\n77440 |         casez (ibuffer_tail)\n      |         ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-xscore-parent/uhsc-xscore-integrated.sv:77478:9: Case values incompletely covered (example pattern 0xe)\n77478 |         casez (ibuffer_tail)\n      |         ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-xscore-parent/uhsc-xscore-integrated.sv:77518:9: Case values incompletely covered (example pattern 0xf)\n77518 |         casez (ibuffer_tail)\n      |         ^~~~~\n",
+      "output_sha256": "e841d226c505262f4981e3152a31906fe76a4041c7884b94beccbbd3012e9d48",
+      "command": "verilator --lint-only --Wno-fatal --top-module UHSCXSCoreIntegrated /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-xscore-parent/uhsc-xscore-integrated.sv"
+    },
+    "integrated_yosys": {
+      "status": "PASS",
+      "returncode": 0,
+      "output_tail": "uppressed ~5 debug messages>\nOptimizing module UHSCXSCoreIntegrated.frontend.ibuffer_engine.\n<suppressed ~98 debug messages>\nOptimizing module UHSCXSCoreIntegrated.frontend.ftq_engine.\n<suppressed ~78 debug messages>\nOptimizing module UHSCXSCoreIntegrated.frontend.bpu_engine.\n<suppressed ~75 debug messages>\nOptimizing module UHSCXSCoreIntegrated.frontend.bpu.\nOptimizing module UHSCXSCoreIntegrated.frontend.\n<suppressed ~20 debug messages>\nOptimizing module UHSCXSCoreIntegrated.backend.\n<suppressed ~12 debug messages>\nOptimizing module UHSCXSCoreIntegrated.\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module UHSCXSCoreIntegrated.mem_block.dcache.mainpipe.tag...\nChecking module UHSCXSCoreIntegrated.mem_block.dcache.mainpipe.amo...\nChecking module UHSCXSCoreIntegrated.mem_block.dcache.mainpipe...\nChecking module UHSCXSCoreIntegrated.mem_block.dcache...\nChecking module UHSCXSCoreIntegrated.mem_block...\nChecking module UHSCXSCoreIntegrated.frontend.itlb_engine...\nChecking module UHSCXSCoreIntegrated.frontend.instr_uncache...\nChecking module UHSCXSCoreIntegrated.frontend.ifu_engine...\nChecking module UHSCXSCoreIntegrated.frontend.icache...\nChecking module UHSCXSCoreIntegrated.frontend.ibuffer_engine...\nChecking module UHSCXSCoreIntegrated.frontend.ftq_engine...\nChecking module UHSCXSCoreIntegrated.frontend.bpu_engine...\nChecking module UHSCXSCoreIntegrated.frontend.bpu...\nChecking module UHSCXSCoreIntegrated.frontend...\nChecking module UHSCXSCoreIntegrated.backend...\nChecking module UHSCXSCoreIntegrated...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 4805a166a4, CPU: user 0.81s system 0.10s, MEM: 210.35 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 79% 2x read_verilog (0 sec), 6% 1x check (0 sec), ...\n",
+      "output_sha256": "41f8d354f83111277973022fbb345c3f0822d4af9fed2338b622f6318cd60e69",
+      "command": "yosys -p 'read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-xscore-parent/uhsc-xscore-integrated.sv; hierarchy -top UHSCXSCoreIntegrated; proc; check'"
+    }
+  },
+  "closure": {
+    "child_missing": 7,
+    "status": "PENDING",
+    "reason": "FrontendParent, BackendTop, and UHSCMemoryMemBlock are bounded parent boundaries; no complete child status is asserted."
+  },
+  "acceptance_eligible": false
+}

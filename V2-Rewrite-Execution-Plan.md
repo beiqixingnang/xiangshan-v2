@@ -82,6 +82,39 @@ wrapper's ports and hierarchy against the V2 top, then run CPU/cache/memory
 transaction tests. Only project-owned external names are changed; internal
 protocol names stay stable.
 
+## Phase 4 — verification execution after family rewrite
+
+The rewrite inventory is structurally complete only when the locked 1976-module
+catalog is covered by source-backed family subjects. Verification then proceeds
+in dependency order and records a separate bounded result for each gate:
+
+1. Re-run the shared Build audit (UTF-8/LF, AST, compile, exact import,
+   deterministic adapter, and single-file Pyright) after every implementation
+   batch. A transient tool-output change is not behavioral evidence.
+2. For each family, run its direct reset/steady-state/boundary tests and the
+   required Verilator/Yosys checks. Keep the result `*_BOUNDED` until its parent
+   closure is proven; leaf success never implies top-level equivalence.
+3. Bind XSCore's Frontend, Backend, and MemBlock envelopes through an explicit
+   308-port bridge, then run the XSCore parent validator. Bind L2Top's exact
+   TL2TL, Xbar, Buffer, merger, and error-unit instances through its 441-port
+   bridge, then run the L2Top parent validator. Missing or pending children
+   keep `closure_complete=0`.
+4. Bind XSTile to the XSCore/L2Top adapters and all three locked IntBuffer
+   variants, then run the XSTile closure validator. IntBuffer direct evidence
+   is not a substitute for XSTile closure.
+5. Validate XSTop-to-UHSCTop localization and all 204 external ports, capture
+   lower-case `imsic_bus_top`, and run the complete hierarchy/structural
+   differential probe. The reduced top probe remains reduced until every root
+   child has source-backed behavior evidence.
+6. Run license review, reproducibility/determinism checks, and the final locked
+   reference differential. Only after all gates pass and the user approves may
+   evidence be promoted to `ACCEPTED` and copied to the main repository.
+
+Authoritative progress counters are the locked-module coverage manifest, the
+current Build line count, the shared-audit pass count, and the top-closure task
+list. Evidence JSON must retain failures and pending gates rather than rewriting
+them as success.
+
 ## Batch size and delegation
 
 - A normal leaf batch contains 30–40 closely related modules when their

@@ -2,8 +2,8 @@
   "schema_version": 1,
   "kind": "XIANGSHAN_V2_PARENT_CLOSURE_READINESS_INDEX",
   "generated_from": "validation/*-parent-*-results.json and V2-Rewrite-Batch-Plan.json",
-  "planned": 8,
-  "indexed": 8,
+  "planned": 9,
+  "indexed": 9,
   "matched": 0,
   "acceptance": "NOT_ALLOWED",
   "closures": [
@@ -14,6 +14,7 @@
     {"id":"Vector","evidence":["validation/v2-vector-parent-closure-direct-results.json","validation/v2-vector-parent-closure-differential-results.json"],"direct":"PASS_BOUNDED","reference":"PASS_BOUNDED","verilator":"PASS","yosys":"PASS","pending_child":"full WbDataPath/Backend parent integration","pending_license":"PENDING"},
     {"id":"CoupledL2","evidence":["validation/v2-coupledL2-parent-boundary-results.json"],"direct":"PASS_BOUNDED","reference":"PASS_BOUNDED_PARENT_PORT_AND_RESET_LINK","verilator":"PASS","yosys":"PASS","pending_child":"full Slice MSHR/SRAM/Diplomacy children","pending_license":"PENDING_COORDINATOR_REVIEW"},
     {"id":"CoupledL2-TL2TL","evidence":["validation/v2-coupledL2-tl2tl-parent-results.json","validation/v2-coupledL2-tl2tl-parent-locked-differential-results.json"],"direct":"PASS_BOUNDED","reference":"FAIL","verilator":"PASS","yosys":"PASS","pending_child":"full MSHR/SRAM/Prefetch/Diplomacy behavior","pending_license":"PENDING_COORDINATOR_REVIEW"},
-    {"id":"ICache","evidence":["validation/v2-p1-b-icache-differential-results.json","validation/v2-p1-b-icache-coverage-manifest.json"],"direct":"PASS_BOUNDED_DIRECT","reference":"PASS_BOUNDED_DIFFERENTIAL","verilator":"PASS","yosys":"FAIL_REFERENCE_AUTOMATIC_SYNTAX","pending_child":"full ICache parent closure (MSHR/Replacer/FIFO)","pending_license":"PENDING_REVIEW"}
+    {"id":"ICache","evidence":["validation/v2-p1-b-icache-differential-results.json","validation/v2-p1-b-icache-coverage-manifest.json"],"direct":"PASS_BOUNDED_DIRECT","reference":"PASS_BOUNDED_DIFFERENTIAL","verilator":"PASS","yosys":"FAIL_REFERENCE_AUTOMATIC_SYNTAX","pending_child":"full ICache parent closure (MSHR/Replacer/FIFO)","pending_license":"PENDING_REVIEW"},
+    {"id":"XSCore","evidence":["validation/v2-xscore-parent-direct-results.json","validation/v2-xscore-parent-differential-results.json","validation/v2-xscore-parent-results.json"],"direct":"PASS_BOUNDED","reference":"PENDING_LOCKED_XSCORE_CHILD_DIFFERENTIAL","verilator":"PASS","yosys":"PASS","pending_child":"Frontend/Backend/MemBlock child_missing and full XSCore closure","pending_license":"PENDING"}
   ]
 }
