@@ -102,8 +102,8 @@ CATALOG_ROWS: tuple[str, ...] = (
     "UncacheEntry_13|entry|slaveId=19|clock:i:1;reset:i:1;io_redirect_valid:i:1;io_redirect_bits_robIdx_flag:i:1;io_redirect_bits_robIdx_value:i:8;io_redirect_bits_level:i:1;io_flush:o:1;io_rob_pendingMMIOld:i:1;io_rob_pendingPtr_flag:i:1;io_rob_pendingPtr_value:i:8;io_mmioSelect:o:1;io_slaveId_valid:o:1;io_slaveId_bits:o:4;io_req_valid:i:1;io_req_bits_uop_exceptionVec_3:i:1;io_req_bits_uop_exceptionVec_4:i:1;io_req_bits_uop_exceptionVec_13:i:1;io_req_bits_uop_exceptionVec_21:i:1;io_req_bits_uop_trigger:i:4;io_req_bits_uop_preDecodeInfo_isRVC:i:1;io_req_bits_uop_ftqPtr_flag:i:1;io_req_bits_uop_ftqPtr_value:i:6;io_req_bits_uop_ftqOffset:i:4;io_req_bits_uop_fuOpType:i:9;io_req_bits_uop_rfWen:i:1;io_req_bits_uop_fpWen:i:1;io_req_bits_uop_vpu_vstart:i:8;io_req_bits_uop_vpu_veew:i:2;io_req_bits_uop_uopIdx:i:7;io_req_bits_uop_pdest:i:8;io_req_bits_uop_robIdx_flag:i:1;io_req_bits_uop_robIdx_value:i:8;io_req_bits_uop_storeSetHit:i:1;io_req_bits_uop_waitForRobIdx_flag:i:1;io_req_bits_uop_waitForRobIdx_value:i:8;io_req_bits_uop_loadWaitBit:i:1;io_req_bits_uop_loadWaitStrict:i:1;io_req_bits_uop_lqIdx_flag:i:1;io_req_bits_uop_lqIdx_value:i:7;io_req_bits_uop_sqIdx_flag:i:1;io_req_bits_uop_sqIdx_value:i:6;io_req_bits_vaddr:i:50;io_req_bits_fullva:i:64;io_req_bits_paddr:i:48;io_req_bits_gpaddr:i:64;io_req_bits_mask:i:16;io_req_bits_nc:i:1;io_req_bits_mmio:i:1;io_req_bits_memBackTypeMM:i:1;io_req_bits_isHyper:i:1;io_req_bits_isForVSnonLeafPTE:i:1;io_req_bits_isvec:i:1;io_req_bits_is128bit:i:1;io_req_bits_vecActive:i:1;io_req_bits_schedIndex:i:7;io_mmioOut_ready:i:1;io_mmioOut_valid:o:1;io_mmioOut_bits_uop_exceptionVec_3:o:1;io_mmioOut_bits_uop_exceptionVec_4:o:1;io_mmioOut_bits_uop_exceptionVec_5:o:1;io_mmioOut_bits_uop_exceptionVec_13:o:1;io_mmioOut_bits_uop_exceptionVec_19:o:1;io_mmioOut_bits_uop_exceptionVec_21:o:1;io_mmioOut_bits_uop_trigger:o:4;io_mmioOut_bits_uop_preDecodeInfo_isRVC:o:1;io_mmioOut_bits_uop_ftqPtr_flag:o:1;io_mmioOut_bits_uop_ftqPtr_value:o:6;io_mmioOut_bits_uop_ftqOffset:o:4;io_mmioOut_bits_uop_fuOpType:o:9;io_mmioOut_bits_uop_rfWen:o:1;io_mmioOut_bits_uop_fpWen:o:1;io_mmioOut_bits_uop_flushPipe:o:1;io_mmioOut_bits_uop_vpu_vstart:o:8;io_mmioOut_bits_uop_vpu_veew:o:2;io_mmioOut_bits_uop_uopIdx:o:7;io_mmioOut_bits_uop_pdest:o:8;io_mmioOut_bits_uop_robIdx_flag:o:1;io_mmioOut_bits_uop_robIdx_value:o:8;io_mmioOut_bits_uop_storeSetHit:o:1;io_mmioOut_bits_uop_waitForRobIdx_flag:o:1;io_mmioOut_bits_uop_waitForRobIdx_value:o:8;io_mmioOut_bits_uop_loadWaitBit:o:1;io_mmioOut_bits_uop_loadWaitStrict:o:1;io_mmioOut_bits_uop_lqIdx_flag:o:1;io_mmioOut_bits_uop_lqIdx_value:o:7;io_mmioOut_bits_uop_sqIdx_flag:o:1;io_mmioOut_bits_uop_sqIdx_value:o:6;io_mmioOut_bits_uop_replayInst:o:1;io_mmioRawData_lqData:o:64;io_mmioRawData_uop_fuOpType:o:9;io_mmioRawData_uop_fpWen:o:1;io_mmioRawData_addrOffset:o:3;io_ncOut_ready:i:1;io_ncOut_valid:o:1;io_ncOut_bits_uop_exceptionVec_4:o:1;io_ncOut_bits_uop_exceptionVec_19:o:1;io_ncOut_bits_uop_preDecodeInfo_isRVC:o:1;io_ncOut_bits_uop_ftqPtr_flag:o:1;io_ncOut_bits_uop_ftqPtr_value:o:6;io_ncOut_bits_uop_ftqOffset:o:4;io_ncOut_bits_uop_fuOpType:o:9;io_ncOut_bits_uop_rfWen:o:1;io_ncOut_bits_uop_fpWen:o:1;io_ncOut_bits_uop_vpu_vstart:o:8;io_ncOut_bits_uop_vpu_veew:o:2;io_ncOut_bits_uop_uopIdx:o:7;io_ncOut_bits_uop_pdest:o:8;io_ncOut_bits_uop_robIdx_flag:o:1;io_ncOut_bits_uop_robIdx_value:o:8;io_ncOut_bits_uop_storeSetHit:o:1;io_ncOut_bits_uop_waitForRobIdx_flag:o:1;io_ncOut_bits_uop_waitForRobIdx_value:o:8;io_ncOut_bits_uop_loadWaitBit:o:1;io_ncOut_bits_uop_loadWaitStrict:o:1;io_ncOut_bits_uop_lqIdx_flag:o:1;io_ncOut_bits_uop_lqIdx_value:o:7;io_ncOut_bits_uop_sqIdx_flag:o:1;io_ncOut_bits_uop_sqIdx_value:o:6;io_ncOut_bits_vaddr:o:50;io_ncOut_bits_paddr:o:48;io_ncOut_bits_data:o:129;io_ncOut_bits_isvec:o:1;io_ncOut_bits_is128bit:o:1;io_ncOut_bits_vecActive:o:1;io_ncOut_bits_schedIndex:o:7;io_uncache_req_ready:i:1;io_uncache_req_valid:o:1;io_uncache_req_bits_robIdx_flag:o:1;io_uncache_req_bits_robIdx_value:o:8;io_uncache_req_bits_addr:o:48;io_uncache_req_bits_vaddr:o:50;io_uncache_req_bits_mask:o:8;io_uncache_req_bits_nc:o:1;io_uncache_req_bits_memBackTypeMM:o:1;io_uncache_idResp_valid:i:1;io_uncache_idResp_bits_mid:i:7;io_uncache_idResp_bits_sid:i:4;io_uncache_resp_valid:i:1;io_uncache_resp_bits_data:i:64;io_uncache_resp_bits_denied:i:1;io_uncache_resp_bits_corrupt:i:1;io_exception_valid:o:1;io_exception_bits_uop_exceptionVec_3:o:1;io_exception_bits_uop_exceptionVec_4:o:1;io_exception_bits_uop_exceptionVec_5:o:1;io_exception_bits_uop_exceptionVec_13:o:1;io_exception_bits_uop_exceptionVec_19:o:1;io_exception_bits_uop_exceptionVec_21:o:1;io_exception_bits_uop_uopIdx:o:7;io_exception_bits_uop_robIdx_flag:o:1;io_exception_bits_uop_robIdx_value:o:8;io_exception_bits_fullva:o:64;io_exception_bits_gpaddr:o:64;io_exception_bits_isHyper:o:1;io_exception_bits_isForVSnonLeafPTE:o:1",
     "UncacheEntry_14|entry|slaveId=20|clock:i:1;reset:i:1;io_redirect_valid:i:1;io_redirect_bits_robIdx_flag:i:1;io_redirect_bits_robIdx_value:i:8;io_redirect_bits_level:i:1;io_flush:o:1;io_rob_pendingMMIOld:i:1;io_rob_pendingPtr_flag:i:1;io_rob_pendingPtr_value:i:8;io_mmioSelect:o:1;io_slaveId_valid:o:1;io_slaveId_bits:o:4;io_req_valid:i:1;io_req_bits_uop_exceptionVec_3:i:1;io_req_bits_uop_exceptionVec_4:i:1;io_req_bits_uop_exceptionVec_13:i:1;io_req_bits_uop_exceptionVec_21:i:1;io_req_bits_uop_trigger:i:4;io_req_bits_uop_preDecodeInfo_isRVC:i:1;io_req_bits_uop_ftqPtr_flag:i:1;io_req_bits_uop_ftqPtr_value:i:6;io_req_bits_uop_ftqOffset:i:4;io_req_bits_uop_fuOpType:i:9;io_req_bits_uop_rfWen:i:1;io_req_bits_uop_fpWen:i:1;io_req_bits_uop_vpu_vstart:i:8;io_req_bits_uop_vpu_veew:i:2;io_req_bits_uop_uopIdx:i:7;io_req_bits_uop_pdest:i:8;io_req_bits_uop_robIdx_flag:i:1;io_req_bits_uop_robIdx_value:i:8;io_req_bits_uop_storeSetHit:i:1;io_req_bits_uop_waitForRobIdx_flag:i:1;io_req_bits_uop_waitForRobIdx_value:i:8;io_req_bits_uop_loadWaitBit:i:1;io_req_bits_uop_loadWaitStrict:i:1;io_req_bits_uop_lqIdx_flag:i:1;io_req_bits_uop_lqIdx_value:i:7;io_req_bits_uop_sqIdx_flag:i:1;io_req_bits_uop_sqIdx_value:i:6;io_req_bits_vaddr:i:50;io_req_bits_fullva:i:64;io_req_bits_paddr:i:48;io_req_bits_gpaddr:i:64;io_req_bits_mask:i:16;io_req_bits_nc:i:1;io_req_bits_mmio:i:1;io_req_bits_memBackTypeMM:i:1;io_req_bits_isHyper:i:1;io_req_bits_isForVSnonLeafPTE:i:1;io_req_bits_isvec:i:1;io_req_bits_is128bit:i:1;io_req_bits_vecActive:i:1;io_req_bits_schedIndex:i:7;io_mmioOut_ready:i:1;io_mmioOut_valid:o:1;io_mmioOut_bits_uop_exceptionVec_3:o:1;io_mmioOut_bits_uop_exceptionVec_4:o:1;io_mmioOut_bits_uop_exceptionVec_5:o:1;io_mmioOut_bits_uop_exceptionVec_13:o:1;io_mmioOut_bits_uop_exceptionVec_19:o:1;io_mmioOut_bits_uop_exceptionVec_21:o:1;io_mmioOut_bits_uop_trigger:o:4;io_mmioOut_bits_uop_preDecodeInfo_isRVC:o:1;io_mmioOut_bits_uop_ftqPtr_flag:o:1;io_mmioOut_bits_uop_ftqPtr_value:o:6;io_mmioOut_bits_uop_ftqOffset:o:4;io_mmioOut_bits_uop_fuOpType:o:9;io_mmioOut_bits_uop_rfWen:o:1;io_mmioOut_bits_uop_fpWen:o:1;io_mmioOut_bits_uop_flushPipe:o:1;io_mmioOut_bits_uop_vpu_vstart:o:8;io_mmioOut_bits_uop_vpu_veew:o:2;io_mmioOut_bits_uop_uopIdx:o:7;io_mmioOut_bits_uop_pdest:o:8;io_mmioOut_bits_uop_robIdx_flag:o:1;io_mmioOut_bits_uop_robIdx_value:o:8;io_mmioOut_bits_uop_storeSetHit:o:1;io_mmioOut_bits_uop_waitForRobIdx_flag:o:1;io_mmioOut_bits_uop_waitForRobIdx_value:o:8;io_mmioOut_bits_uop_loadWaitBit:o:1;io_mmioOut_bits_uop_loadWaitStrict:o:1;io_mmioOut_bits_uop_lqIdx_flag:o:1;io_mmioOut_bits_uop_lqIdx_value:o:7;io_mmioOut_bits_uop_sqIdx_flag:o:1;io_mmioOut_bits_uop_sqIdx_value:o:6;io_mmioOut_bits_uop_replayInst:o:1;io_mmioRawData_lqData:o:64;io_mmioRawData_uop_fuOpType:o:9;io_mmioRawData_uop_fpWen:o:1;io_mmioRawData_addrOffset:o:3;io_ncOut_ready:i:1;io_ncOut_valid:o:1;io_ncOut_bits_uop_exceptionVec_4:o:1;io_ncOut_bits_uop_exceptionVec_19:o:1;io_ncOut_bits_uop_preDecodeInfo_isRVC:o:1;io_ncOut_bits_uop_ftqPtr_flag:o:1;io_ncOut_bits_uop_ftqPtr_value:o:6;io_ncOut_bits_uop_ftqOffset:o:4;io_ncOut_bits_uop_fuOpType:o:9;io_ncOut_bits_uop_rfWen:o:1;io_ncOut_bits_uop_fpWen:o:1;io_ncOut_bits_uop_vpu_vstart:o:8;io_ncOut_bits_uop_vpu_veew:o:2;io_ncOut_bits_uop_uopIdx:o:7;io_ncOut_bits_uop_pdest:o:8;io_ncOut_bits_uop_robIdx_flag:o:1;io_ncOut_bits_uop_robIdx_value:o:8;io_ncOut_bits_uop_storeSetHit:o:1;io_ncOut_bits_uop_waitForRobIdx_flag:o:1;io_ncOut_bits_uop_waitForRobIdx_value:o:8;io_ncOut_bits_uop_loadWaitBit:o:1;io_ncOut_bits_uop_loadWaitStrict:o:1;io_ncOut_bits_uop_lqIdx_flag:o:1;io_ncOut_bits_uop_lqIdx_value:o:7;io_ncOut_bits_uop_sqIdx_flag:o:1;io_ncOut_bits_uop_sqIdx_value:o:6;io_ncOut_bits_vaddr:o:50;io_ncOut_bits_paddr:o:48;io_ncOut_bits_data:o:129;io_ncOut_bits_isvec:o:1;io_ncOut_bits_is128bit:o:1;io_ncOut_bits_vecActive:o:1;io_ncOut_bits_schedIndex:o:7;io_uncache_req_ready:i:1;io_uncache_req_valid:o:1;io_uncache_req_bits_robIdx_flag:o:1;io_uncache_req_bits_robIdx_value:o:8;io_uncache_req_bits_addr:o:48;io_uncache_req_bits_vaddr:o:50;io_uncache_req_bits_mask:o:8;io_uncache_req_bits_nc:o:1;io_uncache_req_bits_memBackTypeMM:o:1;io_uncache_idResp_valid:i:1;io_uncache_idResp_bits_mid:i:7;io_uncache_idResp_bits_sid:i:4;io_uncache_resp_valid:i:1;io_uncache_resp_bits_data:i:64;io_uncache_resp_bits_denied:i:1;io_uncache_resp_bits_corrupt:i:1;io_exception_valid:o:1;io_exception_bits_uop_exceptionVec_3:o:1;io_exception_bits_uop_exceptionVec_4:o:1;io_exception_bits_uop_exceptionVec_5:o:1;io_exception_bits_uop_exceptionVec_13:o:1;io_exception_bits_uop_exceptionVec_19:o:1;io_exception_bits_uop_exceptionVec_21:o:1;io_exception_bits_uop_uopIdx:o:7;io_exception_bits_uop_robIdx_flag:o:1;io_exception_bits_uop_robIdx_value:o:8;io_exception_bits_fullva:o:64;io_exception_bits_gpaddr:o:64;io_exception_bits_isHyper:o:1;io_exception_bits_isForVSnonLeafPTE:o:1",
     "UncacheEntry_15|entry|slaveId=21|clock:i:1;reset:i:1;io_redirect_valid:i:1;io_redirect_bits_robIdx_flag:i:1;io_redirect_bits_robIdx_value:i:8;io_redirect_bits_level:i:1;io_flush:o:1;io_rob_pendingMMIOld:i:1;io_rob_pendingPtr_flag:i:1;io_rob_pendingPtr_value:i:8;io_mmioSelect:o:1;io_slaveId_valid:o:1;io_slaveId_bits:o:4;io_req_valid:i:1;io_req_bits_uop_exceptionVec_3:i:1;io_req_bits_uop_exceptionVec_4:i:1;io_req_bits_uop_exceptionVec_13:i:1;io_req_bits_uop_exceptionVec_21:i:1;io_req_bits_uop_trigger:i:4;io_req_bits_uop_preDecodeInfo_isRVC:i:1;io_req_bits_uop_ftqPtr_flag:i:1;io_req_bits_uop_ftqPtr_value:i:6;io_req_bits_uop_ftqOffset:i:4;io_req_bits_uop_fuOpType:i:9;io_req_bits_uop_rfWen:i:1;io_req_bits_uop_fpWen:i:1;io_req_bits_uop_vpu_vstart:i:8;io_req_bits_uop_vpu_veew:i:2;io_req_bits_uop_uopIdx:i:7;io_req_bits_uop_pdest:i:8;io_req_bits_uop_robIdx_flag:i:1;io_req_bits_uop_robIdx_value:i:8;io_req_bits_uop_storeSetHit:i:1;io_req_bits_uop_waitForRobIdx_flag:i:1;io_req_bits_uop_waitForRobIdx_value:i:8;io_req_bits_uop_loadWaitBit:i:1;io_req_bits_uop_loadWaitStrict:i:1;io_req_bits_uop_lqIdx_flag:i:1;io_req_bits_uop_lqIdx_value:i:7;io_req_bits_uop_sqIdx_flag:i:1;io_req_bits_uop_sqIdx_value:i:6;io_req_bits_vaddr:i:50;io_req_bits_fullva:i:64;io_req_bits_paddr:i:48;io_req_bits_gpaddr:i:64;io_req_bits_mask:i:16;io_req_bits_nc:i:1;io_req_bits_mmio:i:1;io_req_bits_memBackTypeMM:i:1;io_req_bits_isHyper:i:1;io_req_bits_isForVSnonLeafPTE:i:1;io_req_bits_isvec:i:1;io_req_bits_is128bit:i:1;io_req_bits_vecActive:i:1;io_req_bits_schedIndex:i:7;io_mmioOut_ready:i:1;io_mmioOut_valid:o:1;io_mmioOut_bits_uop_exceptionVec_3:o:1;io_mmioOut_bits_uop_exceptionVec_4:o:1;io_mmioOut_bits_uop_exceptionVec_5:o:1;io_mmioOut_bits_uop_exceptionVec_13:o:1;io_mmioOut_bits_uop_exceptionVec_19:o:1;io_mmioOut_bits_uop_exceptionVec_21:o:1;io_mmioOut_bits_uop_trigger:o:4;io_mmioOut_bits_uop_preDecodeInfo_isRVC:o:1;io_mmioOut_bits_uop_ftqPtr_flag:o:1;io_mmioOut_bits_uop_ftqPtr_value:o:6;io_mmioOut_bits_uop_ftqOffset:o:4;io_mmioOut_bits_uop_fuOpType:o:9;io_mmioOut_bits_uop_rfWen:o:1;io_mmioOut_bits_uop_fpWen:o:1;io_mmioOut_bits_uop_flushPipe:o:1;io_mmioOut_bits_uop_vpu_vstart:o:8;io_mmioOut_bits_uop_vpu_veew:o:2;io_mmioOut_bits_uop_uopIdx:o:7;io_mmioOut_bits_uop_pdest:o:8;io_mmioOut_bits_uop_robIdx_flag:o:1;io_mmioOut_bits_uop_robIdx_value:o:8;io_mmioOut_bits_uop_storeSetHit:o:1;io_mmioOut_bits_uop_waitForRobIdx_flag:o:1;io_mmioOut_bits_uop_waitForRobIdx_value:o:8;io_mmioOut_bits_uop_loadWaitBit:o:1;io_mmioOut_bits_uop_loadWaitStrict:o:1;io_mmioOut_bits_uop_lqIdx_flag:o:1;io_mmioOut_bits_uop_lqIdx_value:o:7;io_mmioOut_bits_uop_sqIdx_flag:o:1;io_mmioOut_bits_uop_sqIdx_value:o:6;io_mmioOut_bits_uop_replayInst:o:1;io_mmioRawData_lqData:o:64;io_mmioRawData_uop_fuOpType:o:9;io_mmioRawData_uop_fpWen:o:1;io_mmioRawData_addrOffset:o:3;io_ncOut_ready:i:1;io_ncOut_valid:o:1;io_ncOut_bits_uop_exceptionVec_4:o:1;io_ncOut_bits_uop_exceptionVec_19:o:1;io_ncOut_bits_uop_preDecodeInfo_isRVC:o:1;io_ncOut_bits_uop_ftqPtr_flag:o:1;io_ncOut_bits_uop_ftqPtr_value:o:6;io_ncOut_bits_uop_ftqOffset:o:4;io_ncOut_bits_uop_fuOpType:o:9;io_ncOut_bits_uop_rfWen:o:1;io_ncOut_bits_uop_fpWen:o:1;io_ncOut_bits_uop_vpu_vstart:o:8;io_ncOut_bits_uop_vpu_veew:o:2;io_ncOut_bits_uop_uopIdx:o:7;io_ncOut_bits_uop_pdest:o:8;io_ncOut_bits_uop_robIdx_flag:o:1;io_ncOut_bits_uop_robIdx_value:o:8;io_ncOut_bits_uop_storeSetHit:o:1;io_ncOut_bits_uop_waitForRobIdx_flag:o:1;io_ncOut_bits_uop_waitForRobIdx_value:o:8;io_ncOut_bits_uop_loadWaitBit:o:1;io_ncOut_bits_uop_loadWaitStrict:o:1;io_ncOut_bits_uop_lqIdx_flag:o:1;io_ncOut_bits_uop_lqIdx_value:o:7;io_ncOut_bits_uop_sqIdx_flag:o:1;io_ncOut_bits_uop_sqIdx_value:o:6;io_ncOut_bits_vaddr:o:50;io_ncOut_bits_paddr:o:48;io_ncOut_bits_data:o:129;io_ncOut_bits_isvec:o:1;io_ncOut_bits_is128bit:o:1;io_ncOut_bits_vecActive:o:1;io_ncOut_bits_schedIndex:o:7;io_uncache_req_ready:i:1;io_uncache_req_valid:o:1;io_uncache_req_bits_robIdx_flag:o:1;io_uncache_req_bits_robIdx_value:o:8;io_uncache_req_bits_addr:o:48;io_uncache_req_bits_vaddr:o:50;io_uncache_req_bits_mask:o:8;io_uncache_req_bits_nc:o:1;io_uncache_req_bits_memBackTypeMM:o:1;io_uncache_idResp_valid:i:1;io_uncache_idResp_bits_mid:i:7;io_uncache_idResp_bits_sid:i:4;io_uncache_resp_valid:i:1;io_uncache_resp_bits_data:i:64;io_uncache_resp_bits_denied:i:1;io_uncache_resp_bits_corrupt:i:1;io_exception_valid:o:1;io_exception_bits_uop_exceptionVec_3:o:1;io_exception_bits_uop_exceptionVec_4:o:1;io_exception_bits_uop_exceptionVec_5:o:1;io_exception_bits_uop_exceptionVec_13:o:1;io_exception_bits_uop_exceptionVec_19:o:1;io_exception_bits_uop_exceptionVec_21:o:1;io_exception_bits_uop_uopIdx:o:7;io_exception_bits_uop_robIdx_flag:o:1;io_exception_bits_uop_robIdx_value:o:8;io_exception_bits_fullva:o:64;io_exception_bits_gpaddr:o:64;io_exception_bits_isHyper:o:1;io_exception_bits_isForVSnonLeafPTE:o:1",
-    "FreeList|freelist|size=16,allocWidth=2,freeWidth=4,preAlloc=0,reqConst=1|clock:i:1;reset:i:1;io_allocateSlot_0:o:4;io_allocateSlot_1:o:4;io_doAllocate_0:i:1;io_doAllocate_1:i:1;io_free:i:16;io_validCount:o:5",
-    "FreeList_1|freelist|size=16,allocWidth=1,freeWidth=4,preAlloc=0,reqConst=1|clock:i:1;reset:i:1;io_allocateSlot_0:o:4;io_doAllocate_0:i:1;io_free:i:16;io_validCount:o:5",
+    "FreeList|freelist|size=16,allocWidth=2,freeWidth=2,preAlloc=0,reqConst=1|clock:i:1;reset:i:1;io_allocateSlot_0:o:4;io_allocateSlot_1:o:4;io_doAllocate_0:i:1;io_doAllocate_1:i:1;io_free:i:16;io_validCount:o:5",
+    "FreeList_1|freelist|size=16,allocWidth=1,freeWidth=1,preAlloc=0,reqConst=1|clock:i:1;reset:i:1;io_allocateSlot_0:o:4;io_doAllocate_0:i:1;io_free:i:16;io_validCount:o:5",
     "FreeList_3|freelist|size=72,allocWidth=3,freeWidth=4,preAlloc=0,reqConst=1|clock:i:1;reset:i:1;io_allocateSlot_0:o:7;io_allocateSlot_1:o:7;io_allocateSlot_2:o:7;io_canAllocate_0:o:1;io_canAllocate_1:o:1;io_canAllocate_2:o:1;io_doAllocate_0:i:1;io_doAllocate_1:i:1;io_doAllocate_2:i:1;io_free:i:72;io_empty:o:1",
     "FreeList_4|freelist|size=32,allocWidth=3,freeWidth=4,preAlloc=1,reqConst=1|clock:i:1;reset:i:1;io_allocateSlot_0:o:5;io_allocateSlot_1:o:5;io_allocateSlot_2:o:5;io_canAllocate_0:o:1;io_canAllocate_1:o:1;io_canAllocate_2:o:1;io_doAllocate_0:i:1;io_doAllocate_1:i:1;io_doAllocate_2:i:1;io_free:i:32;io_empty:o:1",
     "FreeList_5|freelist|size=72,allocWidth=3,freeWidth=4,preAlloc=1,reqConst=1|clock:i:1;reset:i:1;io_allocateSlot_0:o:7;io_allocateSlot_1:o:7;io_allocateSlot_2:o:7;io_canAllocate_0:o:1;io_canAllocate_1:o:1;io_canAllocate_2:o:1;io_doAllocate_0:i:1;io_doAllocate_1:i:1;io_doAllocate_2:i:1;io_free:i:72;io_empty:o:1",
@@ -150,6 +150,14 @@ def parse_catalog_row(row: str) -> FamilySpec:
         for item in params_text.split(","):
             key, value = item.split("=")
             params[key] = int(value)
+    # The generated XSTop instances use the 4-bit TileLink slave-id directly
+    # as the UncacheEntry module suffix (…_10 … _15 => ids 0xA … 0xF).
+    # Older catalog rows carried the parent allocator's decimal 16…21 ids;
+    # those can never match the pinned ``mid == 7'hF`` style compares.
+    if family == "entry" and name.startswith("UncacheEntry_"):
+        suffix = name.rsplit("_", 1)[1]
+        if suffix.isdigit() and int(suffix) >= 10:
+            params["slaveId"] = int(suffix)
     ports: list[tuple[str, str, int]] = []
     for item in ports_text.split(";"):
         port_name, direction, bits = item.split(":")
@@ -243,8 +251,13 @@ def ptr_add(flag: Any, value: Any, addend: Any, size: int) -> tuple[Any, Any]:
     """Return ``(flag, value)`` of ``ptr + addend``. / 返回 ``ptr + addend`` 的 ``(flag, value)``。"""
 
     if size & (size - 1) == 0:
-        total = Cat(value, flag) + addend
-        return total[-1], total[:-1]
+        # Amaranth widens an addition by one carry bit.  Slice that carry off
+        # before splitting the circular pointer; otherwise ``value`` absorbs
+        # the old flag bit and all distance/slot calculations drift after the
+        # first allocation.
+        ptr_width = len(value) + len(flag)
+        total = (Cat(value, flag) + addend)[:ptr_width]
+        return total[ptr_width - 1], total[:ptr_width - 1]
     new_value = value + addend
     wrapped = new_value >= size
     return (flag != wrapped), Mux(wrapped, new_value - size, new_value)
@@ -319,8 +332,24 @@ class LsqUncacheFreeList(PortBound):
         tail_value = Signal(self.ptr_bits, name="tailPtr_value", reset=0)
         free_mask = Signal(size, name="freeMask", reset=0)
 
-        # rem-interleaved priority selection over the pending free mask.
-        # 待释放掩码上的 rem 交错优先选择。
+        # ``FreeList.scala`` selects from the pending mask after removing the
+        # selection that is currently being retired.  The old model selected
+        # directly from ``free_mask``; that re-selected the same slot for one
+        # extra cycle and quickly desynchronised the ring under random frees.
+        # ``FreeList.scala`` 在移除当前正在退休的选择后才从 pending mask
+        # 选择；旧模型直接从 ``free_mask`` 选择，导致同一 slot 多保留一拍。
+        free_req: list[Signal] = [
+            Signal(name="freeReq_next_nextVec_%d_r" % rem, reset=0)
+            for rem in range(self.free_width)
+        ]
+        free_slot_oh: list[Signal] = [
+            Signal(size, name="freeSlotOH_next_nextVec_%d_r" % rem, reset=0)
+            for rem in range(self.free_width)
+        ]
+        free_sel_mask: Any = Const(0, size)
+        for rem in range(self.free_width):
+            free_sel_mask = free_sel_mask | Mux(free_req[rem], free_slot_oh[rem], Const(0, size))
+        pending_mask: Any = free_mask & ~free_sel_mask
         free_req_in: list[Any] = []
         free_slot_oh_in: list[Any] = []
         for rem in range(self.free_width):
@@ -328,25 +357,25 @@ class LsqUncacheFreeList(PortBound):
             one_hot = Const(0, size)
             found = Const(0, 1)
             for i in range(size // self.free_width):
-                bit = free_mask[rem + i * self.free_width]
+                bit = pending_mask[rem + i * self.free_width]
                 selected = selected | bit
                 hit = bit & ~found
-                one_hot = one_hot | (hit << (i * self.free_width + rem))
+                # A one-bit Amaranth signal keeps its width when shifted;
+                # shifting ``hit`` directly therefore discarded every bit
+                # above position zero.  Materialise a full-width constant
+                # one-hot under the hit predicate, matching Chisel's
+                # PriorityEncoderOH expansion.
+                one_hot = one_hot | Mux(
+                    hit,
+                    Const(1 << (i * self.free_width + rem), size),
+                    Const(0, size),
+                )
                 found = found | hit
             free_req_in.append(selected)
             free_slot_oh_in.append(one_hot)
-        free_req: list[Signal] = []
-        free_slot_oh: list[Signal] = []
         for rem in range(self.free_width):
-            req_reg = Signal(name="freeReq_next_nextVec_%d_r" % rem, reset=0)
-            oh_reg = Signal(size, name="freeSlotOH_next_nextVec_%d_r" % rem, reset=0)
-            m.d.ck += [req_reg.eq(free_req_in[rem]), oh_reg.eq(free_slot_oh_in[rem])]
-            free_req.append(req_reg)
-            free_slot_oh.append(oh_reg)
-
-        free_sel_mask: Any = Const(0, size)
-        for rem in range(self.free_width):
-            free_sel_mask = free_sel_mask | Mux(free_req[rem], free_slot_oh[rem], Const(0, size))
+            m.d.ck += [free_req[rem].eq(free_req_in[rem]),
+                       free_slot_oh[rem].eq(free_slot_oh_in[rem])]
         m.d.ck += free_mask.eq((self.sig("io_free") | free_mask) & ~free_sel_mask)
 
         do_free = free_req[0]
@@ -393,9 +422,21 @@ class LsqUncacheFreeList(PortBound):
         head_flag_next, head_value_next = ptr_add(head_flag, head_value, num_allocate, size)
         with m.If(do_allocate):
             m.d.ck += [head_flag.eq(head_flag_next), head_value.eq(head_value_next)]
-        distance: Any = tail_value_next - head_value_next
-        distance = Mux(tail_flag_next == head_flag_next, tail_value_next - head_value_next,
-                       size + tail_value_next - head_value_next)
+        # Keep the circular-distance arithmetic at exactly ``value_width+1``
+        # bits.  Letting Amaranth infer widths here duplicates carry/flag bits
+        # and can produce counts above the queue size (the reference uses the
+        # same-width ``distanceBetween`` subtraction).
+        value_width = len(tail_value_next)
+        tail_value_ext = Cat(tail_value_next, Const(0, 1))
+        head_value_ext = Cat(head_value_next, Const(0, 1))
+        # In the equal-flag arm Chisel subtracts the value-width operands
+        # first, then zero-extends the wrapped result.  Extending before the
+        # subtraction would retain a borrow (e.g. 0-12 => 20 instead of 4).
+        distance_same = Cat((tail_value_next - head_value_next)[:value_width], Const(0, 1))
+        distance_wrap = (tail_value_ext - Const(size, value_width + 1)
+                         - head_value_ext)[:value_width + 1]
+        distance: Any = Mux(tail_flag_next == head_flag_next,
+                             distance_same, distance_wrap)
         free_slot_cnt = Signal((size).bit_length(), name="freeSlotCnt", reset=size)
         m.d.ck += free_slot_cnt.eq(distance)
         if spec.has("io_validCount"):
@@ -468,6 +509,9 @@ class UncacheEntryModel(PortBound):
                                         p["io_redirect_bits_robIdx_flag"],
                                         p["io_redirect_bits_robIdx_value"],
                                         p["io_redirect_bits_level"])
+            # The Chisel predicate is explicitly qualified by req_valid;
+            # redirect traffic while the entry is idle must not flush it.
+            need_flush = req_valid & need_flush
         can_send_req = req_valid & ~need_flush
         if req_nc is not None:
             pending_match = Const(1, 1)
@@ -481,40 +525,41 @@ class UncacheEntryModel(PortBound):
         mmio_fire = p["io_mmioOut_ready"] & p["io_mmioOut_valid"]
         writeback = Mux(req_nc if req_nc is not None else Const(0, 1), nc_fire, mmio_fire)
 
-        flush = Const(0, 1)
-        next_state: Any = state
+        # Use actual combinational signals for the FSM.  Assigning a Python
+        # expression inside an Amaranth ``with m.If`` only overwrites the
+        # elaboration-time variable; the old model consequently collapsed the
+        # state machine to ``state=0`` and ``flush=1`` in generated Verilog.
+        flush_sig = Signal(name="flush", reset=0)
+        next_state = Signal(2, name="uncacheState_next", reset=0)
+        m.d.comb += [next_state.eq(state), flush_sig.eq(0)]
         with m.Switch(state):
             with m.Case(0):
                 with m.If(need_flush):
-                    next_state = Const(0, 2)
-                    flush = Const(1, 1)
+                    m.d.comb += [next_state.eq(0), flush_sig.eq(1)]
                 with m.Elif(can_send_req):
-                    next_state = Const(1, 2)
+                    m.d.comb += next_state.eq(1)
             with m.Case(1):
                 with m.If(need_flush):
-                    next_state = Const(0, 2)
-                    flush = Const(1, 1)
+                    m.d.comb += [next_state.eq(0), flush_sig.eq(1)]
                 with m.Elif(uncache_req_fire):
-                    next_state = Const(2, 2)
+                    m.d.comb += next_state.eq(2)
             with m.Case(2):
                 with m.If(resp_fire):
                     with m.If(need_flush | need_flush_reg):
-                        next_state = Const(0, 2)
-                        flush = Const(1, 1)
+                        m.d.comb += [next_state.eq(0), flush_sig.eq(1)]
                     with m.Else():
-                        next_state = Const(3, 2)
+                        m.d.comb += next_state.eq(3)
             with m.Case(3):
                 with m.If(need_flush | writeback):
-                    next_state = Const(0, 2)
-                    flush = Const(1, 1)
+                    m.d.comb += [next_state.eq(0), flush_sig.eq(1)]
         m.d.ck += state.eq(next_state)
-        with m.If(flush):
+        with m.If(flush_sig):
             m.d.ck += need_flush_reg.eq(0)
         with m.Elif(need_flush):
             m.d.ck += need_flush_reg.eq(1)
 
         slave_ack = req_valid & p["io_uncache_idResp_valid"] & (p["io_uncache_idResp_bits_mid"] == self.slave_id)
-        with m.If(flush):
+        with m.If(flush_sig):
             m.d.ck += [req_valid.eq(0), slave_accept.eq(0)]
         with m.Elif(p["io_req_valid"]):
             m.d.ck += [req_valid.eq(1), slave_accept.eq(0)]
@@ -534,7 +579,7 @@ class UncacheEntryModel(PortBound):
                        corrupt.eq(p["io_uncache_resp_bits_corrupt"])]
 
         mmio_select = (state != Const(0, 2)) & (req_mmio if req_mmio is not None else Const(0, 1))
-        m.d.comb += [p["io_flush"].eq(flush),
+        m.d.comb += [p["io_flush"].eq(flush_sig),
                      p["io_mmioSelect"].eq(mmio_select),
                      p["io_slaveId_valid"].eq(slave_accept),
                      p["io_slaveId_bits"].eq(slave_id),

@@ -682,12 +682,14 @@ def _bit_reverse(v: Value, width: int) -> Value:
 def _ror32(x: Value, shamt: int) -> Value:
     # 32-bit rotate encoded like CryptoUtils.ROR32 (low 32 bits valid). / 仿 CryptoUtils.ROR32 的 32 位旋转（低 32 位有效）。
     v = x[0:32]
-    return cast(Value, Cat(Const(0, 32), v[0:shamt], v[shamt:32]))
+    # Chisel's ``Cat(0, bits[shamt-1:0], bits[31:shamt])`` is MSB-first;
+    # Amaranth Cat is LSB-first.  Keep the rotated word in the low half.
+    return cast(Value, Cat(v[shamt:32], v[0:shamt], Const(0, 32)))
 
 
 def _ror64(x: Value, shamt: int) -> Value:
     # 64-bit rotate-right like CryptoUtils.ROR64. / 仿 CryptoUtils.ROR64 的 64 位旋转。
-    return cast(Value, Cat(x[0:shamt], x[shamt:64]))
+    return cast(Value, Cat(x[shamt:64], x[0:shamt]))
 
 
 def _popcount16(v: Value) -> Value:
@@ -717,6 +719,24 @@ def _clz_tree(v: Value, n: int) -> Value:
     else:
         merged = Cat(right[0:half], not_msb, hi)
     return cast(Value, Mux(sel, merged, left))
+
+
+def _leading_zero_count(v: Value, width: int) -> Value:
+    """Combinational leading-zero count matching CountModule.clzi.
+
+    The Chisel tree encodes a count in ``ceil(log2(width+1))`` bits.  Building
+    the equivalent priority chain directly avoids accidentally treating the
+    two-bit ``encode`` leaves as raw Boolean values (the old recursive helper
+    returned zero for the ``01`` leaf).
+    """
+    out_width = (width + 1).bit_length()
+    result: Value = Const(width, out_width)
+    # Higher-index bits have priority for a leading-zero count.  Iterating
+    # low-to-high lets each later (more significant) set bit override the
+    # result selected by a less significant bit.
+    for i in range(width):
+        result = cast(Value, Mux(v[i:i + 1], Const(width - 1 - i, out_width), result))
+    return result
 
 
 def _xperm_lut(table, idx, width):
@@ -1063,20 +1083,20 @@ def byte_dec(bytes4: list[Value]) -> Value:
 def mix_fwd(bytes4: list[Value]) -> Value:
     # CryptoUtils.MixFwd over one column group. / 一组列的 CryptoUtils.MixFwd。
     return Cat(
-        byte_enc([bytes4[3], bytes4[0], bytes4[1], bytes4[2]]),
-        byte_enc([bytes4[2], bytes4[3], bytes4[0], bytes4[1]]),
-        byte_enc([bytes4[1], bytes4[2], bytes4[3], bytes4[0]]),
         byte_enc([bytes4[0], bytes4[1], bytes4[2], bytes4[3]]),
+        byte_enc([bytes4[1], bytes4[2], bytes4[3], bytes4[0]]),
+        byte_enc([bytes4[2], bytes4[3], bytes4[0], bytes4[1]]),
+        byte_enc([bytes4[3], bytes4[0], bytes4[1], bytes4[2]]),
     )
 
 
 def mix_inv(bytes4: list[Value]) -> Value:
     # CryptoUtils.MixInv over one column group. / 一组列的 CryptoUtils.MixInv。
     return Cat(
-        byte_dec([bytes4[3], bytes4[0], bytes4[1], bytes4[2]]),
-        byte_dec([bytes4[2], bytes4[3], bytes4[0], bytes4[1]]),
-        byte_dec([bytes4[1], bytes4[2], bytes4[3], bytes4[0]]),
         byte_dec([bytes4[0], bytes4[1], bytes4[2], bytes4[3]]),
+        byte_dec([bytes4[1], bytes4[2], bytes4[3], bytes4[0]]),
+        byte_dec([bytes4[2], bytes4[3], bytes4[0], bytes4[1]]),
+        byte_dec([bytes4[3], bytes4[0], bytes4[1], bytes4[2]]),
     )
 
 
@@ -1317,15 +1337,18 @@ class CountLeaf(Elaboratable):
                 self._pop[2].eq(_popcount16(self.src[32:48])),
                 self._pop[3].eq(_popcount16(self.src[48:64])),
             ]
-        lz64 = _zext(_clz_tree(self._cnt_src, 64), 64)
-        lz32_lo = _zext(_clz_tree(self._cnt_src[0:32], 32), 64)
-        lz32_hi = _zext(_clz_tree(self._cnt_src[32:64], 32), 64)
+        lz64 = _zext(_leading_zero_count(self._cnt_src, 64), 64)
+        # CountModule reverses the complete source for CTZ.  After that
+        # reversal the original low word lives in the upper half, hence the
+        # func[1]-selected half below.
+        word_src = Mux(self._func_r[1:2], self._cnt_src[32:64], self._cnt_src[0:32])
+        lz32 = _zext(_leading_zero_count(word_src, 32), 64)
         lo = _pad(self._pop[0], 6) + _pad(self._pop[1], 6)
         cpop_w = _zext(lo, 64)
         cpop_all = _zext(_pad(lo, 7) + _pad(self._pop[2], 7) + _pad(self._pop[3], 7), 64)
         fr = self._func_r
         m.d.comb += self.out.eq(
-            Mux(fr[2:3], Mux(fr[0:1], cpop_w, cpop_all), Mux(fr[0:1], Mux(fr[1:2], lz32_hi, lz32_lo), lz64))
+            Mux(fr[2:3], Mux(fr[0:1], cpop_w, cpop_all), Mux(fr[0:1], lz32, lz64))
         )
         return m
 
@@ -1376,10 +1399,12 @@ class MiscLeaf(Elaboratable):
         m: Any = Module()
         s1 = self.src0
         s2 = self.src1
-        xperm_n = Cat(*[_xperm_lut(s1, s2[i * 4:i * 4 + 4], 4) for i in range(15, -1, -1)])
+        # xperm vectors are packed with element 0 in the low lane (Vec.asUInt
+        # in Chisel); reverse the MSB-first Scala Cat order for Amaranth.
+        xperm_n = Cat(*[_xperm_lut(s1, s2[i * 4:i * 4 + 4], 4) for i in range(16)])
         xperm_b = Cat(*[
             Mux(_or_reduce(s2[i * 8 + 3:i * 8 + 8]), Const(0, 8), _xperm_lut(s1, s2[i * 8:i * 8 + 3], 8))
-            for i in range(7, -1, -1)
+            for i in range(8)
         ])
         with m.If(self.reg_enable):
             m.d.sync += self._out_r.eq(Mux(cast(Any, self.func)[0:1], xperm_b, xperm_n))
@@ -1472,10 +1497,12 @@ class BlockCipherLeaf(Elaboratable):
         iaes_out = [_sbox_chain(self._iaes_mid[i], sbox_iaes_out, "iaesSboxInv_%d" % i, "iaesSboxOut_%d" % i) for i in range(8)]
         aes64es = Cat(*aes_out)
         aes64ds = Cat(*iaes_out)
-        aes64esm = Cat(mix_fwd(aes_out[4:8]), mix_fwd(aes_out[0:4]))
-        aes64dsm = Cat(mix_inv(iaes_out[4:8]), mix_inv(iaes_out[0:4]))
+        # Scala Cat lists the high half first; Amaranth Cat lists the low
+        # half first.
+        aes64esm = Cat(mix_fwd(aes_out[0:4]), mix_fwd(aes_out[4:8]))
+        aes64dsm = Cat(mix_inv(iaes_out[0:4]), mix_inv(iaes_out[4:8]))
         im_min = [self._im_min[i] for i in range(8)]
-        aes64im = Cat(mix_inv(im_min[4:8]), mix_inv(im_min[0:4]))
+        aes64im = Cat(mix_inv(im_min[0:4]), mix_inv(im_min[4:8]))
         ks_in = [
             Mux(s2[0:4] == Const(0xa, 4), sb1[4], sb1[5]),
             Mux(s2[0:4] == Const(0xa, 4), sb1[5], sb1[6]),
@@ -1487,7 +1514,7 @@ class BlockCipherLeaf(Elaboratable):
         for i, val in enumerate(self.RCON):
             rcon = Mux(self._ks1_idx == Const(i, 4), Const(val, 8), rcon)
         ks_cat = Cat(*ks_out)
-        aes64ks1i = Cat(ks_cat[0:32] ^ _zext(rcon, 32), ks_cat[32:64] ^ _zext(rcon, 32))
+        aes64ks1i = Cat(ks_cat[32:64] ^ _zext(rcon, 32), ks_cat[0:32] ^ _zext(rcon, 32))
         aes64ks2 = self._ks2_r
         aes_res = aes64es
         for code, val in ((0x21, aes64esm), (0x22, aes64ds), (0x23, aes64dsm), (0x24, aes64im), (0x25, aes64ks1i), (0x26, aes64ks2)):
@@ -1503,13 +1530,13 @@ class BlockCipherLeaf(Elaboratable):
         sm4ks = cast(Any, sm4_sbox) ^ ((cast(Any, sm4_sbox) & Const(0x07, 8)) << 29) ^ ((cast(Any, sm4_sbox) & Const(0xfe, 8)) << 7) ^ ((cast(Any, sm4_sbox) & Const(0x01, 8)) << 23) ^ ((cast(Any, sm4_sbox) & Const(0xf8, 8)) << 13)
         sm4_src = (
             sm4ed[0:32],
-            Cat(sm4ed[0:24], sm4ed[24:32]),
-            Cat(sm4ed[0:16], sm4ed[16:32]),
-            Cat(sm4ed[0:8], sm4ed[8:32]),
+            Cat(sm4ed[24:32], sm4ed[0:24]),
+            Cat(sm4ed[16:32], sm4ed[0:16]),
+            Cat(sm4ed[8:32], sm4ed[0:8]),
             sm4ks[0:32],
-            Cat(sm4ks[0:24], sm4ks[24:32]),
-            Cat(sm4ks[0:16], sm4ks[16:32]),
-            Cat(sm4ks[0:8], sm4ks[8:32]),
+            Cat(sm4ks[24:32], sm4ks[0:24]),
+            Cat(sm4ks[16:32], sm4ks[0:16]),
+            Cat(sm4ks[8:32], sm4ks[0:8]),
         )
         sm4_sel = sm4_src[0]
         for k in range(1, 8):
@@ -1523,7 +1550,7 @@ class BlockCipherLeaf(Elaboratable):
                 self._sm4_src1.eq(s1[0:32]),
             ]
             ks_temp = s1[32:64] ^ s2[0:32]
-            stmts.append(self._ks2_r.eq(Cat(ks_temp ^ s2[32:64], ks_temp)))
+            stmts.append(self._ks2_r.eq(Cat(ks_temp, ks_temp ^ s2[32:64])))
             # Materialise each Top-stage network once into comb signals before
             # the register update so the trees are not rebuilt per output bit.
             # 每条 Top 级网络先落地为组合信号再写寄存器，避免逐位重建表达式树。
