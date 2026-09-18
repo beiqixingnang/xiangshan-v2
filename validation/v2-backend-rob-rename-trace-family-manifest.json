@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_BACKEND_ROB_RENAME_TRACE_FAMILY_MANIFEST",
+  "family_id": "core.backend.rob.rename.trace",
+  "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Rob.Rename.Trace-Family-Hardware.py",
+  "validator_path": "validation/v2-backend-rob-rename-trace-family-validator.py",
+  "evidence_path": "validation/v2-backend-rob-rename-trace-family-results.json",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "locked_reference_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+  "aggregation": "single_build",
+  "status": "VALIDATOR_PASS_BOUNDED",
+  "acceptance_eligible": false,
+  "modules": [
+    {"module": "ExceptionGen", "ports": 377, "children": [], "scala_sources": ["home/lishuo/xs-v2-local/src/main/scala/xiangshan/backend/rob/ExceptionGen.scala:37", "home/lishuo/xs-v2-local/src/main/scala/xiangshan/backend/rob/ExceptionGen.scala:38"]},
+    {"module": "DiffRatStateBuffer", "ports": 265, "children": [], "scala_sources": ["home/lishuo/xs-v2-local/src/main/scala/xiangshan/backend/rob/DiffRatStateBuffer.scala:75", "home/lishuo/xs-v2-local/src/main/scala/xiangshan/backend/rob/DiffRatStateBuffer.scala:79"]},
+    {"module": "diff_rat_state_bank_320x776", "ports": 8, "children": [], "scala_sources": ["home/lishuo/xs-v2-local/src/main/scala/xiangshan/backend/rob/DiffRatStateBuffer.scala:122"]},
+    {"module": "stateBankTags_320x3", "ports": 28, "children": [], "scala_sources": ["home/lishuo/xs-v2-local/src/main/scala/xiangshan/backend/rob/DiffRatStateBuffer.scala:128"]},
+    {"module": "RenameBuffer", "ports": 153, "children": ["SnapshotGenerator"], "scala_sources": ["home/lishuo/xs-v2-local/src/main/scala/xiangshan/backend/rob/Rab.scala:33", "home/lishuo/xs-v2-local/src/main/scala/xiangshan/backend/rob/Rab.scala:34"]},
+    {"module": "SnapshotGenerator", "ports": 19, "children": [], "scala_sources": ["home/lishuo/xs-v2-local/src/main/scala/xiangshan/backend/rename/Snapshot.scala:26", "home/lishuo/xs-v2-local/src/main/scala/xiangshan/backend/rename/Snapshot.scala:41"]},
+    {"module": "CompressUnit", "ports": 198, "children": [], "scala_sources": ["home/lishuo/xs-v2-local/src/main/scala/xiangshan/backend/rename/CompressUnit.scala:38", "home/lishuo/xs-v2-local/src/main/scala/xiangshan/backend/rename/CompressUnit.scala:39"]},
+    {"module": "Trace", "ports": 74, "children": ["TraceBuffer"], "scala_sources": ["home/lishuo/xs-v2-local/src/main/scala/xiangshan/backend/trace/Trace.scala:28", "home/lishuo/xs-v2-local/src/main/scala/xiangshan/backend/trace/Trace.scala:29"]},
+    {"module": "TraceBuffer", "ports": 71, "children": [], "scala_sources": ["home/lishuo/xs-v2-local/src/main/scala/xiangshan/backend/trace/TraceBuffer.scala:9", "home/lishuo/xs-v2-local/src/main/scala/xiangshan/backend/trace/TraceBuffer.scala:13"]}
+  ]
+}

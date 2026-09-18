@@ -1182,10 +1182,7 @@
     "AgeDetector_38",
     "AtomicsUnit",
     "Bitmap",
-    "CompressUnit",
     "DatamoduleResultBuffer",
-    "DiffRatStateBuffer",
-    "ExceptionGen",
     "FauFTBWay",
     "GPAMem",
     "HPTW",
@@ -1197,15 +1194,10 @@
     "RegCache",
     "RegCacheTagTable",
     "RegionWays",
-    "RenameBuffer",
     "StreamBitVectorArray",
     "StrideMetaArray",
     "TLBNonBlock_2",
-    "Trace",
-    "TraceBuffer",
-    "VectorCvtTop",
-    "diff_rat_state_bank_320x776",
-    "stateBankTags_320x3"
+    "VectorCvtTop"
    ]
   },
   {
@@ -1245,6 +1237,37 @@
     "r4_qds_v2",
     "r4_qds_v2_spec",
     "skidBufferConnect"
+   ]
+  },
+  {
+   "id": "RobRenameTraceFamily",
+   "source_scala": [
+    "scala/src/main/scala/xiangshan/backend/rob/ExceptionGen.scala",
+    "scala/src/main/scala/xiangshan/backend/rob/DiffRatStateBuffer.scala",
+    "scala/src/main/scala/xiangshan/backend/rename/Rab.scala",
+    "scala/src/main/scala/xiangshan/backend/rename/CompressUnit.scala",
+    "scala/src/main/scala/xiangshan/backend/trace/Trace.scala",
+    "scala/src/main/scala/xiangshan/backend/trace/TraceBuffer.scala"
+   ],
+   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Rob.Rename.Trace-Family-Hardware.py",
+   "family_id": "core.backend.rob.rename.trace",
+   "closure_root": "core.backend.rob",
+   "classification": "REWRITTEN",
+   "disposition": "STRUCTURE_VERIFIED_DIRECT_BOUNDED",
+   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "reference_surface": [
+    "validation/v2-backend-rob-rename-trace-family-results.json"
+   ],
+   "covered_modules": [
+    "ExceptionGen",
+    "DiffRatStateBuffer",
+    "diff_rat_state_bank_320x776",
+    "stateBankTags_320x3",
+    "RenameBuffer",
+    "SnapshotGenerator",
+    "CompressUnit",
+    "Trace",
+    "TraceBuffer"
    ]
   }
  ],

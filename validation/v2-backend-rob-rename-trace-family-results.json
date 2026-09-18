@@ -1,0 +1,243 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_BACKEND_ROB_RENAME_TRACE_FAMILY",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "locked_reference_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+  "build": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Rob.Rename.Trace-Family-Hardware.py",
+  "covered_modules": [
+    "ExceptionGen",
+    "DiffRatStateBuffer",
+    "diff_rat_state_bank_320x776",
+    "stateBankTags_320x3",
+    "RenameBuffer",
+    "SnapshotGenerator",
+    "CompressUnit",
+    "Trace",
+    "TraceBuffer"
+  ],
+  "source_paths": [
+    "upstream/src/main/scala/xiangshan/backend/rob/ExceptionGen.scala",
+    "upstream/src/main/scala/xiangshan/backend/rob/DiffRatStateBuffer.scala",
+    "upstream/src/main/scala/xiangshan/backend/rob/Rab.scala",
+    "upstream/src/main/scala/xiangshan/backend/rename/CompressUnit.scala",
+    "upstream/src/main/scala/xiangshan/backend/rename/Snapshot.scala",
+    "upstream/src/main/scala/xiangshan/backend/trace/Trace.scala",
+    "upstream/src/main/scala/xiangshan/backend/trace/TraceBuffer.scala"
+  ],
+  "port_surface": {
+    "ExceptionGen": {
+      "locked": 377,
+      "catalog": 377,
+      "exact": true
+    },
+    "DiffRatStateBuffer": {
+      "locked": 265,
+      "catalog": 265,
+      "exact": true
+    },
+    "diff_rat_state_bank_320x776": {
+      "locked": 8,
+      "catalog": 8,
+      "exact": true
+    },
+    "stateBankTags_320x3": {
+      "locked": 28,
+      "catalog": 28,
+      "exact": true
+    },
+    "RenameBuffer": {
+      "locked": 153,
+      "catalog": 153,
+      "exact": true
+    },
+    "SnapshotGenerator": {
+      "locked": 19,
+      "catalog": 19,
+      "exact": true
+    },
+    "CompressUnit": {
+      "locked": 198,
+      "catalog": 198,
+      "exact": true
+    },
+    "Trace": {
+      "locked": 74,
+      "catalog": 74,
+      "exact": true
+    },
+    "TraceBuffer": {
+      "locked": 71,
+      "catalog": 71,
+      "exact": true
+    }
+  },
+  "exports": {
+    "ExceptionGen": {
+      "bytes": 41642,
+      "sha256": "0b180d340e3919788eace98b0f7de70b25eb2a52490349fe847d15a4a298b611",
+      "deterministic": true,
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.060 MB sources in 2 modules, into 0.021 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.032 s (elab=0.001, cvt=0.005, bld=0.000); cpu 0.014 s on 1 threads; alloced 10.641 MB\n",
+        "sha256": "0793d80a3b9855e7275fe060b4dc6c58ea5b4c2ca4e376f8b3b5a79db1628526"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "ROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 3df0cbe556, CPU: user 0.01s system 0.00s, MEM: 8.91 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 42% 2x read_verilog (0 sec), 39% 1x opt_expr (0 sec), ...\n",
+        "sha256": "cf5a11968385598fa8eaa31863ecec40373be870be509d39184aad17967bcc3e"
+      }
+    },
+    "DiffRatStateBuffer": {
+      "bytes": 206813,
+      "sha256": "085c70ad3aae0382ee86e766cf2218d2ab3d97cbef9b797304e53e878d3dd7e9",
+      "deterministic": true,
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "                                                                                        : ... note: In instance 'DiffRatStateBuffer'\n 5093 |   assign \\$2219  = ! io_renameUpdates_2_bits_ldest;\n      |                    ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2-rob-rename-trace-f8vvq9uk/DiffRatStateBuffer.sv:5096:20: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'io_renameUpdates_1_bits_ldest' generates 6 bits.\n                                                                                                                      : ... note: In instance 'DiffRatStateBuffer'\n 5096 |   assign \\$2222  = ! io_renameUpdates_1_bits_ldest;\n      |                    ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2-rob-rename-trace-f8vvq9uk/DiffRatStateBuffer.sv:5099:20: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'io_renameUpdates_0_bits_ldest' generates 6 bits.\n                                                                                                                      : ... note: In instance 'DiffRatStateBuffer'\n 5099 |   assign \\$2225  = ! io_renameUpdates_0_bits_ldest;\n      |                    ^\n",
+        "sha256": "533e0179be1bab07e79c66e83b0ef365206a32bcbf54098bd50212e9ccf3f5fd"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "ROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: ad6365e65a, CPU: user 0.01s system 0.00s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 41% 1x opt_expr (0 sec), 29% 2x read_verilog (0 sec), ...\n",
+        "sha256": "577a3e17f6b955d21bdd6538de50ac76f5157362f571e85110f3344fad7085be"
+      }
+    },
+    "diff_rat_state_bank_320x776": {
+      "bytes": 774,
+      "sha256": "26c8b31b3ca052b779a389903c93e49670f366c3920251611a24fb903e3f4d58",
+      "deterministic": true,
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.010 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.029 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.004 s on 1 threads; alloced 9.129 MB\n",
+        "sha256": "31a26bf73d5f5fcfaa4f43166cca673a3438482342e8d8c2bae398990ac41cbb"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "ROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: d6cb3166f4, CPU: user 0.01s system 0.00s, MEM: 8.91 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 43% 1x opt_expr (0 sec), 34% 2x read_verilog (0 sec), ...\n",
+        "sha256": "3d9bc021293a98e96c07656125e06dad2f9c9821539a5456f26df660faa5f788"
+      }
+    },
+    "stateBankTags_320x3": {
+      "bytes": 1479,
+      "sha256": "245cec8375a768d69edd6ab43f40ed0a21fbdda444a3e87952c493bbe944d6c4",
+      "deterministic": true,
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.022 MB sources in 2 modules, into 0.010 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.026 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.191 MB\n",
+        "sha256": "17ed31d1930ba4eb2bead016e3f5561b3f160b30b2a960835342819c2c85aa95"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "ROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: aa5981fe2e, CPU: user 0.01s system 0.00s, MEM: 8.91 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 42% 1x opt_expr (0 sec), 32% 2x read_verilog (0 sec), ...\n",
+        "sha256": "a4296c5cdfa50b1b0a972b2d43c1f5d3dfc3e48b2ff62f8ecdcdfb76504c2cc2"
+      }
+    },
+    "RenameBuffer": {
+      "bytes": 19490,
+      "sha256": "b7479b830a8f3c7a9eb128b681d07fedc1dbbb6c7cec9b3e25d721a36bdf9d99",
+      "deterministic": true,
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.039 MB sources in 2 modules, into 0.023 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.032 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.009 s on 1 threads; alloced 9.805 MB\n",
+        "sha256": "6e648c66457e77f887f1569dc7cb3ceb1a7f797dc74f5ede5d0b44a640e70a16"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "ROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: d739c64116, CPU: user 0.00s system 0.01s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 51% 1x opt_expr (0 sec), 27% 2x read_verilog (0 sec), ...\n",
+        "sha256": "ae422c02216ef82a00f33f1f90f009134db5eab941281eec8063a12ec440f156"
+      }
+    },
+    "SnapshotGenerator": {
+      "bytes": 1844,
+      "sha256": "1865649b9f15bc46eb6779a18c4e0c5a7bea78229b52e2310ccfaea80709ef39",
+      "deterministic": true,
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.022 MB sources in 2 modules, into 0.017 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.027 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.180 MB\n",
+        "sha256": "92ffd38c635d34130b768a17192e63eb07c4e38eca637999edb99f51f8b5da79"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "ROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 3ba7a3be37, CPU: user 0.01s system 0.01s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 41% 2x read_verilog (0 sec), 38% 1x opt_expr (0 sec), ...\n",
+        "sha256": "5afe11f0a66edd9f75802fc11eacdb0dd3d0924385fbc425222962b826a74550"
+      }
+    },
+    "CompressUnit": {
+      "bytes": 356135,
+      "sha256": "abe1b1f3cc2c679a233b017182cf2c909807a5097567b2efd32a13b844bb0772",
+      "deterministic": true,
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "ase values incompletely covered (example pattern 0x40)\n 9865 |     casez (\\$2858 )\n      |     ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/v2-rob-rename-trace-f8vvq9uk/CompressUnit.sv:9999:5: Case values incompletely covered (example pattern 0x40)\n 9999 |     casez (\\$3068 )\n      |     ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/v2-rob-rename-trace-f8vvq9uk/CompressUnit.sv:10133:5: Case values incompletely covered (example pattern 0x40)\n10133 |     casez (\\$3278 )\n      |     ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/v2-rob-rename-trace-f8vvq9uk/CompressUnit.sv:10267:5: Case values incompletely covered (example pattern 0x40)\n10267 |     casez (\\$3520 )\n      |     ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/v2-rob-rename-trace-f8vvq9uk/CompressUnit.sv:10401:5: Case values incompletely covered (example pattern 0x40)\n10401 |     casez (\\$3730 )\n      |     ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/v2-rob-rename-trace-f8vvq9uk/CompressUnit.sv:10535:5: Case values incompletely covered (example pattern 0x40)\n10535 |     casez (\\$3940 )\n      |     ^~~~~\n",
+        "sha256": "11ce39ba3e6211102549d0150ea0553fc32324fc56f51974a4938fe83fa129db"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "ROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: e4644898cc, CPU: user 0.00s system 0.01s, MEM: 8.91 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 41% 2x read_verilog (0 sec), 34% 1x opt_expr (0 sec), ...\n",
+        "sha256": "f62ac166dcc0f9533d76fcd1824e2c1ab9b5fea166dbf874b75c69a0aaf6abf9"
+      }
+    },
+    "Trace": {
+      "bytes": 12891,
+      "sha256": "6a34f9aea95cc8c93a32e948cdac046e406a0b19c290d3f10395e65ff1c01d9a",
+      "deterministic": true,
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.033 MB sources in 2 modules, into 0.017 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.028 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.457 MB\n",
+        "sha256": "2be10135f6eb5a58fbdd718b6c430f787dd16b911052a25f8ebec21c23560d16"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "ROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 9283956c07, CPU: user 0.01s system 0.01s, MEM: 8.91 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 39% 1x opt_expr (0 sec), 38% 2x read_verilog (0 sec), ...\n",
+        "sha256": "0c4d958ea3ba1bca93b0f5daa450cb78f4d5921e57d78589bf106491d48f5e3d"
+      }
+    },
+    "TraceBuffer": {
+      "bytes": 12018,
+      "sha256": "8596a0a89ea45c03d1baf15f7d7aeb1431dc06d695a1b4f7feb19899f7f76940",
+      "deterministic": true,
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.032 MB sources in 2 modules, into 0.018 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.024 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.434 MB\n",
+        "sha256": "567617a9ffceb5eeb73b57ed2893af08e3b8164d3e330884c7472da01cde2880"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "ROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: f34ab84922, CPU: user 0.01s system 0.00s, MEM: 8.91 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 44% 1x opt_expr (0 sec), 31% 2x read_verilog (0 sec), ...\n",
+        "sha256": "576d1bcde9f0734b79939d6ff00fa333101de77060e1c7736f41c3171bc88487"
+      }
+    }
+  },
+  "gates": {
+    "PY_COMPILE": "PASS",
+    "PORTS": "PASS",
+    "DETERMINISTIC_EXPORT": "PASS",
+    "VERILATOR_YOSYS": "PASS",
+    "DIRECT_TEST_PASS_BOUNDED": "PASS_BOUNDED_PORT_AND_EXPORT",
+    "REFERENCE_DIFFERENTIAL": "PENDING_LOCKED_BEHAVIORAL_TRACE",
+    "PARENT_CLOSURE": "PENDING_BACKEND_CPU",
+    "LICENSE_REVIEW": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "VALIDATOR_PASS_BOUNDED",
+  "acceptance_eligible": false,
+  "failures": []
+}
