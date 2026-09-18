@@ -31,6 +31,17 @@ NEW = [
         "v2_status": "VALIDATOR_PASS_BOUNDED",
         "reference_surface": ["validation/v2-prefetch-family-results.json"],
     },
+    {
+        "id": "PMPFamily",
+        "source_scala": ["scala/src/main/scala/xiangshan/backend/fu/PMP.scala", "scala/src/main/scala/xiangshan/backend/fu/NewCSR/PMPEntryModule.scala"],
+        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.PMP.Family-Hardware.py",
+        "family_id": "core.backend.newcsr.pmp",
+        "closure_root": "core.backend.newcsr",
+        "classification": "REWRITTEN",
+        "disposition": "STRUCTURE_VERIFIED_DIRECT_BOUNDED",
+        "v2_status": "VALIDATOR_PASS_BOUNDED",
+        "reference_surface": ["validation/v2-pmp-family-results.json"],
+    },
 ]
 
 data = json.loads(PATH.read_text(encoding="utf-8"))
