@@ -23,10 +23,12 @@ DIRECT: Final = True
 
 MEMBERS: Final = (
     "AddrAddModule",
+    "DatamoduleResultBuffer",
     "GPAMem",
     "RedirectGenerator",
     "RegCache",
     "RegCacheTagTable",
+    "RegionWays",
     "RASStack",
     "FauFTBWay",
     "VectorCvtTop",
@@ -49,7 +51,7 @@ class SmallControlFamilyContractTest(unittest.TestCase):
         self.assertEqual(MEMBERS, tuple(self.module.COVERED_MODULES))
         self.assertEqual(set(MEMBERS), set(self.module.PORT_SPECS))
         self.assertEqual(
-            (5, 11, 56, 92, 111, 47, 46, 14),
+            (5, 41, 11, 56, 92, 111, 26, 47, 46, 14),
             tuple(len(self.module.PORT_SPECS[name]) for name in MEMBERS),
         )
         for name in MEMBERS:

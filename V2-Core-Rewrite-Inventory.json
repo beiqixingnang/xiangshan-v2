@@ -1306,10 +1306,12 @@
    "id": "BackendSmallControlFamily",
    "source_scala": [
     "scala/src/main/scala/xiangshan/backend/fu/wrapper/BranchUnit.scala",
+    "scala/src/main/scala/xiangshan/mem/sbuffer/DatamoduleResultBuffer.scala",
     "scala/src/main/scala/xiangshan/backend/GPAMem.scala",
     "scala/src/main/scala/xiangshan/backend/ctrlblock/RedirectGenerator.scala",
     "scala/src/main/scala/xiangshan/backend/regcache/RegCache.scala",
     "scala/src/main/scala/xiangshan/backend/regcache/RegCacheTagTable.scala",
+    "scala/src/main/scala/xiangshan/frontend/ITTAGE.scala",
     "scala/src/main/scala/xiangshan/frontend/newRAS.scala",
     "scala/src/main/scala/xiangshan/frontend/FauFTB.scala",
     "scala/src/main/scala/xiangshan/backend/fu/wrapper/VCVT.scala"
@@ -1325,12 +1327,14 @@
    ],
    "covered_modules": [
     "AddrAddModule",
+    "DatamoduleResultBuffer",
     "FauFTBWay",
     "GPAMem",
     "RASStack",
     "RedirectGenerator",
     "RegCache",
     "RegCacheTagTable",
+    "RegionWays",
     "VectorCvtTop"
    ]
   },
@@ -1343,23 +1347,20 @@
    "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.FinalTwo.Family-Hardware.py",
    "family_id": "core.backend.final_two",
    "closure_root": "core.backend",
-   "classification": "REWRITTEN",
-   "disposition": "STRUCTURE_VERIFIED_DIRECT_BOUNDED",
-   "v2_status": "VALIDATOR_PASS_BOUNDED",
+   "classification": "RETIRED_DUPLICATE",
+   "disposition": "RETIRED_REPLACED_BY_BACKEND_SMALL_CONTROL",
+   "v2_status": "RETIRED",
    "reference_surface": [
     "validation/v2-final-two-family-results.json"
    ],
-   "covered_modules": [
-    "DatamoduleResultBuffer",
-    "RegionWays"
-   ]
+   "covered_modules": []
   }
  ],
  "status": "IMPLEMENTATION_WAVES_VALIDATED_BOUNDED_HIERARCHY_WAVE1",
  "acceptance_eligible": false,
  "entries_status_counts": {
-  "VALIDATOR_PASS_BOUNDED": 71,
-  "RETIRED": 2,
+  "VALIDATOR_PASS_BOUNDED": 70,
+  "RETIRED": 3,
   "STRUCTURE_VERIFIED": 2,
   "STRUCTURE_VERIFIED_BEHAVIOR_FAIL": 2,
   "STRUCTURE_VERIFIED_DIRECT_PASS_BOUNDED": 2,

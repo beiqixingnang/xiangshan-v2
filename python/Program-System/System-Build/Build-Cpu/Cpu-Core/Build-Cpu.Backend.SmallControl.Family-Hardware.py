@@ -2,6 +2,8 @@
 
 """Bounded XiangShan backend/small-control aggregate with locked V2 ports.
 
+带锁定 V2 端口面的香山后端小控制有界聚合。
+
 This aggregate keeps the eight residual leaf contracts in one deterministic
 Build entry.  Port names, directions, and widths are taken from the pinned V2
 XSTop hierarchy (digest ``8f279a...b473d``); the implementations below are
@@ -45,10 +47,12 @@ class PortSpec:
 
 COVERED_MODULES: tuple[str, ...] = (
     "AddrAddModule",
+    "DatamoduleResultBuffer",
     "GPAMem",
     "RedirectGenerator",
     "RegCache",
     "RegCacheTagTable",
+    "RegionWays",
     "RASStack",
     "FauFTBWay",
     "VectorCvtTop",
@@ -56,16 +60,18 @@ COVERED_MODULES: tuple[str, ...] = (
 
 SOURCE_PATHS: tuple[str, ...] = (
     "upstream/src/main/scala/xiangshan/backend/fu/wrapper/BranchUnit.scala",
+    "upstream/src/main/scala/xiangshan/mem/sbuffer/DatamoduleResultBuffer.scala",
     "upstream/src/main/scala/xiangshan/backend/GPAMem.scala",
     "upstream/src/main/scala/xiangshan/backend/ctrlblock/RedirectGenerator.scala",
     "upstream/src/main/scala/xiangshan/backend/regcache/RegCache.scala",
     "upstream/src/main/scala/xiangshan/backend/regcache/RegCacheTagTable.scala",
+    "upstream/src/main/scala/xiangshan/frontend/ITTAGE.scala",
     "upstream/src/main/scala/xiangshan/frontend/newRAS.scala",
     "upstream/src/main/scala/xiangshan/frontend/FauFTB.scala",
     "upstream/src/main/scala/xiangshan/backend/fu/wrapper/VCVT.scala",
 )
 
-LOCKED_REFERENCE_SHA256 = "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b473d"
+LOCKED_REFERENCE_SHA256 = "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d"
 
 
 # Create one normalized port record. / 创建一个规范化端口记录。
@@ -84,6 +90,25 @@ def _build_port_specs() -> dict[str, tuple[PortSpec, ...]]:
         _p("io_imm", "input", 32), _p("io_target", "output", 64),
         _p("io_nextPcOffset", "input", 5),
     )
+    data_buffer: list[PortSpec] = [_p("clock", "input"), _p("reset", "input")]
+    for i in range(2):
+        data_buffer.extend((
+            _p(f"io_enq_{i}_ready", "output"), _p(f"io_enq_{i}_valid", "input"),
+            _p(f"io_enq_{i}_bits_addr", "input", 48), _p(f"io_enq_{i}_bits_vaddr", "input", 50),
+            _p(f"io_enq_{i}_bits_data", "input", 128), _p(f"io_enq_{i}_bits_mask", "input", 16),
+            _p(f"io_enq_{i}_bits_wline", "input"), _p(f"io_enq_{i}_bits_sqPtr_value", "input", 6),
+            _p(f"io_enq_{i}_bits_vecValid", "input"),
+        ))
+        if i == 0:
+            data_buffer.append(_p("io_enq_0_bits_sqNeedDeq", "input"))
+    for i in range(2):
+        data_buffer.extend((
+            _p(f"io_deq_{i}_ready", "input"), _p(f"io_deq_{i}_valid", "output"),
+            _p(f"io_deq_{i}_bits_addr", "output", 48), _p(f"io_deq_{i}_bits_vaddr", "output", 50),
+            _p(f"io_deq_{i}_bits_data", "output", 128), _p(f"io_deq_{i}_bits_mask", "output", 16),
+            _p(f"io_deq_{i}_bits_wline", "output"), _p(f"io_deq_{i}_bits_sqPtr_value", "output", 6),
+            _p(f"io_deq_{i}_bits_vecValid", "output"), _p(f"io_deq_{i}_bits_sqNeedDeq", "output"),
+        ))
     gpa = (
         _p("clock", "input"), _p("reset", "input"),
         _p("io_fromIFU_gpaddrMem_wen", "input"),
@@ -188,6 +213,15 @@ def _build_port_specs() -> dict[str, tuple[PortSpec, ...]]:
     tagtable.extend(_p(f"io_og0Cancel_{i}", "input") for i in (0, 2, 4, 6))
     tagtable.extend(_p(f"io_ldCancel_{i}_ld2Cancel", "input") for i in range(3))
 
+    region_ways = [_p("clock", "input"), _p("reset", "input")]
+    region_ways.extend(_p(f"io_req_pointer_{i}", "input", 4) for i in range(5))
+    region_ways.extend(_p(f"io_resp_hit_{i}", "output") for i in range(5))
+    region_ways.extend(_p(f"io_resp_region_{i}", "output", 30) for i in range(5))
+    region_ways.extend(_p(f"io_update_region_{i}", "input", 30) for i in range(2))
+    region_ways.extend((_p("io_update_hit_0", "output"), _p("io_update_hit_1", "output")))
+    region_ways.extend((_p("io_update_pointer_0", "output", 4), _p("io_update_pointer_1", "output", 4)))
+    region_ways.extend((_p("io_write_valid", "input"), _p("io_write_region", "input", 30), _p("io_write_pointer", "output", 4)))
+
     ras = (
         _p("clock", "input"), _p("reset", "input"),
         _p("io_spec_push_valid", "input"), _p("io_spec_pop_valid", "input"),
@@ -247,7 +281,8 @@ def _build_port_specs() -> dict[str, tuple[PortSpec, ...]]:
     )
     return {
         "AddrAddModule": addr, "GPAMem": gpa, "RedirectGenerator": redirect,
-        "RegCache": tuple(regcache), "RegCacheTagTable": tuple(tagtable),
+        "DatamoduleResultBuffer": tuple(data_buffer), "RegCache": tuple(regcache),
+        "RegCacheTagTable": tuple(tagtable), "RegionWays": tuple(region_ways),
         "RASStack": ras, "FauFTBWay": fau, "VectorCvtTop": vector,
     }
 
@@ -326,6 +361,66 @@ class BackendSmallControlFamily(Elaboratable):
             self.ports["io_exceptionReadData_gpaddr"].eq(entry[:56] + (read_offset << 1)),
             self.ports["io_exceptionReadData_isForVSnonLeafPTE"].eq(entry[56]),
         ]
+
+    # Implement two bounded enqueue/dequeue lanes. / 实现两个有界入队/出队通道。
+    def _data_buffer(self, module: Module) -> None:
+        """Retain one result per lane under ready/valid backpressure. / 在 ready/valid 回压下每通道保留一个结果。"""
+
+        fields = (("addr", 48), ("vaddr", 50), ("data", 128), ("mask", 16),
+                  ("wline", 1), ("sqPtr_value", 6), ("vecValid", 1), ("sqNeedDeq", 1))
+        for lane in range(2):
+            full = Signal(name=f"db_full_{lane}")
+            regs = {name: Signal(width, name=f"db_{lane}_{name}") for name, width in fields}
+            pop = self.ports[f"io_deq_{lane}_ready"] & full
+            push = self.ports[f"io_enq_{lane}_valid"] & (self.ports[f"io_enq_{lane}_ready"])
+            module.d.comb += self.ports[f"io_enq_{lane}_ready"].eq(~full | pop)
+            module.d.comb += self.ports[f"io_deq_{lane}_valid"].eq(full)
+            for name, _width in fields:
+                module.d.comb += self.ports[f"io_deq_{lane}_bits_{name}"].eq(regs[name])
+            with module.If(pop & ~push):
+                module.d.sync += full.eq(0)
+            with module.If(push):
+                module.d.sync += full.eq(1)
+                for name, _width in fields:
+                    source = self.ports.get(f"io_enq_{lane}_bits_{name}", Const(0, len(regs[name])))
+                    module.d.sync += regs[name].eq(source)
+
+    # Implement region tag hits and write pointer allocation. / 实现区域标签命中与写指针分配。
+    def _region_ways(self, module: Module) -> None:
+        """Expose five probes over a sixteen-entry region table. / 暴露十六项区域表的五个探针。"""
+
+        regions = Array(Signal(30, name=f"region_{i}") for i in range(16))
+        valid = Array(Signal(name=f"region_valid_{i}") for i in range(16))
+        write_pointer = Signal(4, name="region_write_pointer")
+        module.d.comb += self.ports["io_write_pointer"].eq(write_pointer)
+        for i in range(5):
+            hit = Const(0, 1)
+            value = Const(0, 30)
+            for entry in range(15, -1, -1):
+                hit_entry = valid[entry] & (regions[entry] == self.ports[f"io_req_pointer_{i}"])
+                hit = hit | hit_entry
+                value = Mux(hit_entry, regions[entry], value)
+            module.d.comb += [
+                self.ports[f"io_resp_hit_{i}"].eq(hit),
+                self.ports[f"io_resp_region_{i}"].eq(value),
+            ]
+        for i in range(2):
+            update_hit = Const(0, 1)
+            update_ptr = Const(0, 4)
+            for entry in range(15, -1, -1):
+                hit_entry = valid[entry] & (regions[entry] == self.ports[f"io_update_region_{i}"])
+                update_hit = update_hit | hit_entry
+                update_ptr = Mux(hit_entry, Const(entry, 4), update_ptr)
+            module.d.comb += [
+                self.ports[f"io_update_hit_{i}"].eq(update_hit),
+                self.ports[f"io_update_pointer_{i}"].eq(update_ptr),
+            ]
+        with module.If(self.ports["io_write_valid"]):
+            module.d.sync += [
+                regions[write_pointer].eq(self.ports["io_write_region"]),
+                valid[write_pointer].eq(1),
+                write_pointer.eq(write_pointer + 1),
+            ]
 
 # Select the oldest redirect. / 选择最老重定向。
     def _redirect(self, module: Module) -> None:
@@ -495,12 +590,16 @@ class BackendSmallControlFamily(Elaboratable):
             self._addr_add(module)
         elif self.member == "GPAMem":
             self._gpa_mem(module)
+        elif self.member == "DatamoduleResultBuffer":
+            self._data_buffer(module)
         elif self.member == "RedirectGenerator":
             self._redirect(module)
         elif self.member == "RegCache":
             self._regcache(module)
         elif self.member == "RegCacheTagTable":
             self._tagtable(module)
+        elif self.member == "RegionWays":
+            self._region_ways(module)
         elif self.member == "RASStack":
             self._ras(module)
         elif self.member == "FauFTBWay":

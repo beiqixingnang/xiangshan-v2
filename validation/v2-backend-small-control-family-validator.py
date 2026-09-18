@@ -29,8 +29,8 @@ RESULT = ROOT / "validation/v2-backend-small-control-family-results.json"
 WORK = ROOT / "validation/.work/v2-backend-small-control-family"
 TOOL_WORK = Path("C:/backend_small_control_family")
 MEMBERS = (
-    "AddrAddModule", "GPAMem", "RedirectGenerator", "RegCache",
-    "RegCacheTagTable", "RASStack", "FauFTBWay", "VectorCvtTop",
+    "AddrAddModule", "DatamoduleResultBuffer", "GPAMem", "RedirectGenerator", "RegCache",
+    "RegCacheTagTable", "RegionWays", "RASStack", "FauFTBWay", "VectorCvtTop",
 )
 LOCKED_SHA256 = "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d"
 
