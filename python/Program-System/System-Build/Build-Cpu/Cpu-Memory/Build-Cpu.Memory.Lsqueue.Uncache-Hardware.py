@@ -469,9 +469,12 @@ class UncacheEntryModel(PortBound):
             return data_reg
         if suffix == "nc":
             return Const(1, 1)
-        if suffix == "uop_exceptionVec_hardwareError":
+        # The pinned hierarchy flattens the exception bundle to numeric
+        # fields (Vec index 5 = load access fault, 19 = hardware error), while
+        # older generators used descriptive names.  Accept both spellings.
+        if suffix in ("uop_exceptionVec_hardwareError", "uop_exceptionVec_19"):
             return corrupt & ~denied
-        if suffix == "uop_exceptionVec_loadAccessFault":
+        if suffix in ("uop_exceptionVec_loadAccessFault", "uop_exceptionVec_5"):
             return denied
         return req_regs.get(suffix)
 
@@ -620,7 +623,9 @@ class UncacheEntryModel(PortBound):
         if spec.has("io_mmioRawData_lqData"):
             m.d.comb += p["io_mmioRawData_lqData"].eq(data_reg)
         for field in spec.fields("io_mmioRawData_uop_"):
-            source = req_regs.get(field[len("io_mmioRawData_uop_"):])
+            # Raw-data fields retain the ``uop_`` bundle prefix in req_regs.
+            suffix = field[len("io_mmioRawData_uop_"):]
+            source = req_regs.get("uop_" + suffix)
             if source is not None:
                 m.d.comb += p[field].eq(source)
         if spec.has("io_mmioRawData_addrOffset") and req_paddr is not None:
@@ -634,6 +639,10 @@ class UncacheEntryModel(PortBound):
             m.d.comb += p["io_exception_bits_uop_exceptionVec_hardwareError"].eq(corrupt & ~denied)
         if "io_exception_bits_uop_exceptionVec_loadAccessFault" in p:
             m.d.comb += p["io_exception_bits_uop_exceptionVec_loadAccessFault"].eq(denied)
+        if "io_exception_bits_uop_exceptionVec_19" in p:
+            m.d.comb += p["io_exception_bits_uop_exceptionVec_19"].eq(corrupt & ~denied)
+        if "io_exception_bits_uop_exceptionVec_5" in p:
+            m.d.comb += p["io_exception_bits_uop_exceptionVec_5"].eq(denied)
         return m
 
 

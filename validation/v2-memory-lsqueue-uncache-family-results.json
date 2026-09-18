@@ -13,10 +13,10 @@
  ],
  "target": {
   "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Lsqueue.Uncache-Hardware.py",
-  "sha256": "370b3263251aec68ff25f212bf121e2cc6dd13b3415c44db66aab0d16d376447",
-  "line_count": 1769
+  "sha256": "3822723d1f9c90faecbf8d01314c3f4e0b3434836175e4912cf5f06365636b31",
+  "line_count": 1778
  },
- "coverage_mode": "FULL_BOUNDED_FAMILY",
+ "coverage_mode": "PARTIAL_FAST_CHECKPOINT",
  "covered_modules": [
   "FreeList",
   "FreeList_1",
@@ -2268,28 +2268,12 @@
   "repeated_elaborations_per_module": 2,
   "bounded_to": [
    "FreeList",
-   "LoadQueueUncache",
-   "PTWRepeaterNB",
-   "Repeater",
-   "TLBFA",
-   "TlbStorageWrapper",
-   "UncacheEntry",
-   "UncacheEntry_15",
-   "VLSplitImp",
-   "VSSplitImp"
+   "UncacheEntry_15"
   ],
   "failures": [],
   "verilog_sha256": {
    "FreeList": "f2c144da41d3888475f3c323427e6f06136321f826c655b007ebe5691c3b201b",
-   "LoadQueueUncache": "30e9985bfe92031b52beadc44021d20b42790b5ff57e10e458c5c214e4caca83",
-   "PTWRepeaterNB": "5ee5f30af296b23bedb43dca8049b57715c9147dad996737cb12b127bcc7ad17",
-   "Repeater": "ffd1efb88509fbc62b1b8e9b4b576e55c54c1d03bcd2917c7d2585b8e1b4992f",
-   "TLBFA": "96c0c2da416c9dfaf8e7c3dfa45fece2633e0e387369a35de25a895e0b18169e",
-   "TlbStorageWrapper": "1238a6ec95a3ad957a3a96ea9114bc726fc7aaeda45ac0fbc2f5b7b97f9c96da",
-   "UncacheEntry": "2cc6cf53a22b6f50ed46b8f265aa9804f2a34da1f2a806f3cc32ef477d6a83e3",
-   "UncacheEntry_15": "17ff0c89b76cf49924ea48ba00eb2e63928314b966b5da5e953a87cd31c8c861",
-   "VLSplitImp": "3940d2fd973d6764a7eec89c8006ddcaf6815fb64ca7a9ce04e28467709a91c7",
-   "VSSplitImp": "0338cccf9b1f7accbceeab839382accb1cc1052f4bd2c4c377e253a3cfd157a9"
+   "UncacheEntry_15": "e00e739835021e9ee02c16aa9954d2de81f96d80e3dc0212108d759f73f9d76c"
   }
  },
  "differential": {
@@ -2317,14 +2301,14 @@
    {
     "module": "UncacheEntry_15",
     "build": "PASS",
-    "build_output_tail": "tb__ALL.verilator_deplist.tmp\ng++    main.o verilated.o verilated_threads.o Vtb__ALL.a    -pthread -lpthread -latomic   -o tb\nrm Vtb__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/d/\u77e5\u8bc6\u5e93\u5f00\u53d1/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-lsqueue-uncache-family/UncacheEntry_15/obj_dir'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.239 MB sources in 4 modules, into 0.175 MB in 7 C++ files needing 0.000 MB\n- Verilator: Walltime 3.118 s (elab=0.005, cvt=0.036, bld=2.995); cpu 0.052 s on 4 threads; alloced 20.984 MB\n%Warning-WIDTHEXPAND: /mnt/d/\u77e5\u8bc6\u5e93\u5f00\u53d1/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-lsqueue-uncache-family/UncacheEntry_15/UHSCUncacheEntry_15.sv:564:45: Operator EQ expects 7 bits on the RHS, but RHS's CONST '5'h15' generates 5 bits.\n                                                                                                                                                                                         : ... note: In instance 'tb.u_mine'\n  564 |   assign \\$11  = io_uncache_idResp_bits_mid == 5'h15;\n      |                                             ^~\n                      ... For warning description see https://verilator.org/warn/WIDTHEXPAND?v=5.032\n                      ... Use \"/* verilator lint_off WIDTHEXPAND */\" and lint_on around source to disable this message.\n%Warning-WIDTHEXPAND: /mnt/d/\u77e5\u8bc6\u5e93\u5f00\u53d1/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-lsqueue-uncache-family/UncacheEntry_15/UHSCUncacheEntry_15.sv:571:31: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                                                         : ... note: In instance 'tb.u_mine'\n  571 |   assign \\$17  = uncacheState == 1'h1;\n      |                               ^~\n",
+    "build_output_tail": "tb__ALL.verilator_deplist.tmp\ng++    main.o verilated.o verilated_threads.o Vtb__ALL.a    -pthread -lpthread -latomic   -o tb\nrm Vtb__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/d/\u77e5\u8bc6\u5e93\u5f00\u53d1/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-lsqueue-uncache-family/UncacheEntry_15/obj_dir'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.259 MB sources in 4 modules, into 0.226 MB in 8 C++ files needing 0.000 MB\n- Verilator: Walltime 3.111 s (elab=0.005, cvt=0.038, bld=2.980); cpu 0.055 s on 4 threads; alloced 21.531 MB\n%Warning-WIDTHEXPAND: /mnt/d/\u77e5\u8bc6\u5e93\u5f00\u53d1/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-lsqueue-uncache-family/UncacheEntry_15/UHSCUncacheEntry_15.sv:697:31: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                                                         : ... note: In instance 'tb.u_mine'\n  697 |   assign \\$66  = uncacheState == 1'h1;\n      |                               ^~\n                      ... For warning description see https://verilator.org/warn/WIDTHEXPAND?v=5.032\n                      ... Use \"/* verilator lint_off WIDTHEXPAND */\" and lint_on around source to disable this message.\n%Warning-WIDTHEXPAND: /mnt/d/\u77e5\u8bc6\u5e93\u5f00\u53d1/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-memory-lsqueue-uncache-family/UncacheEntry_15/UHSCUncacheEntry_15.sv:760:46: Operator EQ expects 7 bits on the RHS, but RHS's CONST '4'hf' generates 4 bits.\n                                                                                                                                                                                         : ... note: In instance 'tb.u_mine'\n  760 |   assign \\$121  = io_uncache_idResp_bits_mid == 4'hf;\n      |                                              ^~\n",
     "simulation": {
-     "status": "FAIL",
-     "returncode": 1,
-     "output_tail": "CYCLES 400 MISMATCH 23293 CHECKED 37600\n"
+     "status": "PASS",
+     "returncode": 0,
+     "output_tail": "CYCLES 400 MISMATCH 0 CHECKED 37600\n"
     },
     "cycles": 400,
-    "verdict": "BEHAVIORAL_DIFFERENTIAL_FAIL"
+    "verdict": "BEHAVIORAL_DIFFERENTIAL_PASS"
    }
   ],
   "trace_verdict": "BEHAVIORAL_DIFFERENTIAL_FAIL",
@@ -2344,93 +2328,23 @@
     "verilog_sha256": "f2c144da41d3888475f3c323427e6f06136321f826c655b007ebe5691c3b201b"
    },
    {
-    "module": "UncacheEntry",
+    "module": "UncacheEntry_15",
     "verilator_lint": "PASS",
     "verilator_output_tail": "",
     "yosys": "PASS",
     "yosys_output_tail": "",
     "yosys_preprocessing": "attribute_hint_lines_stripped",
-    "verilog_sha256": "2cc6cf53a22b6f50ed46b8f265aa9804f2a34da1f2a806f3cc32ef477d6a83e3"
-   },
-   {
-    "module": "LoadQueueUncache",
-    "verilator_lint": "PASS",
-    "verilator_output_tail": "",
-    "yosys": "PASS",
-    "yosys_output_tail": "",
-    "yosys_preprocessing": "attribute_hint_lines_stripped",
-    "verilog_sha256": "30e9985bfe92031b52beadc44021d20b42790b5ff57e10e458c5c214e4caca83"
-   },
-   {
-    "module": "TLBFA",
-    "verilator_lint": "PASS",
-    "verilator_output_tail": "",
-    "yosys": "PASS",
-    "yosys_output_tail": "",
-    "yosys_preprocessing": "attribute_hint_lines_stripped",
-    "verilog_sha256": "96c0c2da416c9dfaf8e7c3dfa45fece2633e0e387369a35de25a895e0b18169e"
-   },
-   {
-    "module": "TlbStorageWrapper",
-    "verilator_lint": "PASS",
-    "verilator_output_tail": "",
-    "yosys": "PASS",
-    "yosys_output_tail": "",
-    "yosys_preprocessing": "attribute_hint_lines_stripped",
-    "verilog_sha256": "1238a6ec95a3ad957a3a96ea9114bc726fc7aaeda45ac0fbc2f5b7b97f9c96da"
-   },
-   {
-    "module": "VSSplitImp",
-    "verilator_lint": "PASS",
-    "verilator_output_tail": "",
-    "yosys": "PASS",
-    "yosys_output_tail": "",
-    "yosys_preprocessing": "attribute_hint_lines_stripped",
-    "verilog_sha256": "0338cccf9b1f7accbceeab839382accb1cc1052f4bd2c4c377e253a3cfd157a9"
-   },
-   {
-    "module": "VLSplitImp",
-    "verilator_lint": "PASS",
-    "verilator_output_tail": "",
-    "yosys": "PASS",
-    "yosys_output_tail": "",
-    "yosys_preprocessing": "attribute_hint_lines_stripped",
-    "verilog_sha256": "3940d2fd973d6764a7eec89c8006ddcaf6815fb64ca7a9ce04e28467709a91c7"
-   },
-   {
-    "module": "Repeater",
-    "verilator_lint": "PASS",
-    "verilator_output_tail": "",
-    "yosys": "PASS",
-    "yosys_output_tail": "",
-    "yosys_preprocessing": "attribute_hint_lines_stripped",
-    "verilog_sha256": "ffd1efb88509fbc62b1b8e9b4b576e55c54c1d03bcd2917c7d2585b8e1b4992f"
-   },
-   {
-    "module": "PTWRepeaterNB",
-    "verilator_lint": "PASS",
-    "verilator_output_tail": "",
-    "yosys": "PASS",
-    "yosys_output_tail": "",
-    "yosys_preprocessing": "attribute_hint_lines_stripped",
-    "verilog_sha256": "5ee5f30af296b23bedb43dca8049b57715c9147dad996737cb12b127bcc7ad17"
+    "verilog_sha256": "e00e739835021e9ee02c16aa9954d2de81f96d80e3dc0212108d759f73f9d76c"
    }
   ],
   "bounded_to": [
    "FreeList",
-   "UncacheEntry",
-   "LoadQueueUncache",
-   "TLBFA",
-   "TlbStorageWrapper",
-   "VSSplitImp",
-   "VLSplitImp",
-   "Repeater",
-   "PTWRepeaterNB"
+   "UncacheEntry_15"
   ]
  },
  "unclosed_gates": [
-  "DETERMINISM_FULL_SWEEP_UNCLOSED: repeated elaboration bounded to FreeList, LoadQueueUncache, PTWRepeaterNB, Repeater, TLBFA, TlbStorageWrapper, UncacheEntry, UncacheEntry_15, VLSplitImp, VSSplitImp",
-  "TOOL_SWEEP_FULL_UNCLOSED: Verilator/Yosys bounded to FreeList, UncacheEntry, LoadQueueUncache, TLBFA, TlbStorageWrapper, VSSplitImp, VLSplitImp, Repeater, PTWRepeaterNB",
+  "DETERMINISM_FULL_SWEEP_UNCLOSED: repeated elaboration bounded to FreeList, UncacheEntry_15",
+  "TOOL_SWEEP_FULL_UNCLOSED: Verilator/Yosys bounded to FreeList, UncacheEntry_15",
   "TLB_SFENCE_ADDR_BRANCH_CONTRACT_ONLY: pinned rs1=0 addr-match sfence rule implemented best-effort, exact pinned lines not transcribed",
   "TLB_WRITE_MERGE_LEVEL_CONTRACT_ONLY: s2_exception/inner_level merge chain transcribed from pinned SV, not differentially proven",
   "V_SPLIT_SEMANTIC_CONTRACT_ONLY: split beat counters follow the pinned port structure; full cycle behavior not differentially proven",
@@ -2441,8 +2355,8 @@
   "PORT_SURFACE_MATCHED": "PASS",
   "DETERMINISTIC_VERILOG": "PASS",
   "DIFFERENTIAL": "FAIL",
-  "VERILATOR": "PASS",
-  "YOSYS": "PASS",
+  "VERILATOR": "PASS_PARTIAL_COVERAGE",
+  "YOSYS": "PASS_PARTIAL_COVERAGE",
   "V2_LOCKED_REFERENCE_IMMUTABLE": "PASS",
   "ACCEPTED": "NOT_ALLOWED"
  }
