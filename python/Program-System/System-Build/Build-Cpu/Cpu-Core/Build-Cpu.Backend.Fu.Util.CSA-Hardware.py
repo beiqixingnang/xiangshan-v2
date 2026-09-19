@@ -15,6 +15,8 @@ from amaranth import Cat, Elaboratable, Module, Signal
 # vector keeps the source bit index, so integer reference models are exact.
 # CSA.scala 定义逐位并行 2:2、3:2、5:3 压缩器；输出向量保持位索引。
 __all__ = [
+    "PUBLIC_MEMBERS",
+    "C_MEMBERS",
     "CSAConfig",
     "CarrySaveAdderMToN",
     "CSA2_2",
@@ -35,18 +37,25 @@ __all__ = [
 # =============================================================================
 # Configuration
 # =============================================================================
+PUBLIC_MEMBERS: tuple[str, ...] = ("CSA2_2", "CSA3_2", "CSA5_3", "C22", "C32", "C53")
+C_MEMBERS: frozenset[str] = frozenset({"C22", "C32", "C53"})
+
+
 @dataclass(frozen=True)
 class CSAConfig:
-    """Width for one compressor family. / 一个压缩器族的位宽。"""
+    """Width and public member for one compressor family. / 压缩器族的位宽与公开成员。"""
 
     length: int = 10
+    member: str = "CSA3_2"
 
     # Validate the compressor width / 校验压缩器位宽。
     def __post_init__(self) -> None:
-        """Reject non-positive widths. / 拒绝非正位宽。"""
+        """Reject non-positive widths and unknown members. / 拒绝非正位宽与未知成员。"""
 
         if self.length < 1:
             raise ValueError("CSA length must be positive")
+        if self.member not in PUBLIC_MEMBERS:
+            raise ValueError(f"unknown CSA member: {self.member}")
 
 
 # =============================================================================
@@ -245,16 +254,20 @@ class C53(CSA5_3):
 # Emit a deterministic CSA3_2 module / 输出确定性的 CSA3_2 模块。
 def build_verilog(configuration: CSAConfig | None = None,
                   injected_dependencies: dict[str, Any] | None = None) -> str:
-    """Build the default CSA3_2 adapter. / 构建默认 CSA3_2 适配器。"""
+    """Build the selected public compressor. / 构建选定的公开压缩器。"""
 
     del injected_dependencies
     from amaranth.back import verilog
 
     config = configuration or CSAConfig()
-    top = CSA3_2(config.length)
+    member = config.member
+    if member in C_MEMBERS:
+        top = {"C22": C22, "C32": C32, "C53": C53}[member]()
+    else:
+        top = {"CSA2_2": CSA2_2, "CSA3_2": CSA3_2, "CSA5_3": CSA5_3}[member](config.length)
     return verilog.convert(
         top,
-        name="CSA3_2",
+        name=member,
         ports=[*top.inputs, *top.outputs],
         emit_src=False,
     )
