@@ -2,17 +2,85 @@
   "schema_version": 1,
   "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_EQUIVALENCE_PROGRESS",
   "build_denominator": 118,
-  "strict_complete_build_count": 14,
-  "fraction": "14/118",
-  "percentage": 11.864407,
+  "strict_complete_build_count": 15,
+  "fraction": "15/118",
+  "percentage": 12.711864,
   "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with the locked source commit, matching source hashes, and either a Yosys SAT no-model miter or fully proven Yosys inductive-equivalence status is counted.",
   "plan_reconciliation": {
-    "plan_count": 14,
+    "plan_count": 15,
     "plan_denominator": 118,
     "status": "PASS"
   },
   "duplicate_build_ids": [],
   "proofs": [
+    {
+      "evidence": "validation/v2-aludatamodule-strict-evidence.json",
+      "build_id": "Build-Cpu.Backend.Fu.AluDataModule",
+      "source_commit": {
+        "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+        "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+        "status": "PASS"
+      },
+      "status": "PASS",
+      "scope": {
+        "kind": "stateless_combinational_leaf",
+        "configuration": "locked Kunminghu V2 RV64 AluDataModule, AluConfig(xlen=64)",
+        "state_bits": 0,
+        "state_boundary": "no clock/reset/register/memory; one combinational evaluation",
+        "inputs": {
+          "io_src_0": 64,
+          "io_src_1": 64,
+          "io_func": 9
+        },
+        "outputs_compared": {
+          "io_result": 64
+        },
+        "input_bits": 137,
+        "input_bit_accounting": "64+64+9=137",
+        "output_bits_compared": 64,
+        "input_space": "2**137",
+        "input_space_cardinality": "174224571863520493293247799005065324265472",
+        "func_encodings_covered": "all 512 nine-bit io_func valuations are quantified; ALUOpType names 74 of them, so the other 438 (every func[6:4] group has 49..62 spare encodings, and func[8:7] is consumed by no select in the locked reference) still reach concrete default result-select branches, where the target equals the reference bit-for-bit. No don't-care relaxation was needed to close the proof.",
+        "why_complete": "Yosys SAT proves the single declared output bus io_result (all 64 bits) equal with all 137 input bits unconstrained and no assume/constraint in the miter; no temporal state exists.",
+        "bounded_tests_counted": false
+      },
+      "sources": {
+        "scala": {
+          "path": "upstream/src/main/scala/xiangshan/backend/fu/Alu.scala",
+          "present": true,
+          "expected_sha256": "7f4e7f5f2f463216330efa02c5b8a0d42e02a2345e339bca4d2a633e374ee287",
+          "observed_sha256": "7f4e7f5f2f463216330efa02c5b8a0d42e02a2345e339bca4d2a633e374ee287",
+          "status": "PASS"
+        },
+        "reference_sv": {
+          "path": "validation/reference-sv/AluDataModule.sv",
+          "present": true,
+          "expected_sha256": "72dba6e3fede619e52c0c6e9f4fafdcf7b367e342c0f622f96c5d88c2868a204",
+          "observed_sha256": "72dba6e3fede619e52c0c6e9f4fafdcf7b367e342c0f622f96c5d88c2868a204",
+          "status": "PASS"
+        },
+        "python_build": {
+          "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.AluDataModule-Hardware.py",
+          "present": true,
+          "expected_sha256": "bc3aad0112defba0fb6f01b39949d6ab5e8d06704c7883d5c9f532a3b44ec4b2",
+          "observed_sha256": "bc3aad0112defba0fb6f01b39949d6ab5e8d06704c7883d5c9f532a3b44ec4b2",
+          "status": "PASS"
+        }
+      },
+      "formal": {
+        "proof_method": "sat_miter",
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_aludatamodule_strict/UHSC_AluDataModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_aludatamodule_strict/REF_AluDataModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_aludatamodule_strict/AluDataModule_MITER.sv; prep -top AluDataModule_MITER; flatten; opt; sat -prove mismatch 0"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "formal_success_marker": true
+      },
+      "failures": []
+    },
     {
       "evidence": "validation/v2-amoalu-strict-evidence.json",
       "build_id": "Build-Cpu.Cache.Dcache.Mainpipe.AMOALU",
