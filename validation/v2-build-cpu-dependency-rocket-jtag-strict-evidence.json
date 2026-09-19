@@ -1,0 +1,880 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_COMPLETE_EQUIVALENCE",
+  "build_id": "Build-Cpu.Dependency.Rocket.Jtag",
+  "validator": "validation/v2_strict_family_rail.py",
+  "status": "COMPLETE_EQUIVALENCE",
+  "strict_complete_eligible": true,
+  "strict_complete_count_delta": 1,
+  "acceptance_eligible": true,
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "audit_policy": {
+    "require_negative_control": true,
+    "require_two_sided_negative_control": true,
+    "require_locked_reference_lint": true,
+    "require_validator_hash": true,
+    "scope_source": "Build catalog tables"
+  },
+  "scope": {
+    "kind": "catalog_build_multi_variant",
+    "public_variants": [
+      "CaptureChain",
+      "CaptureUpdateChain",
+      "CaptureUpdateChain_1",
+      "CaptureUpdateChain_2",
+      "JtagBypassChain"
+    ],
+    "variant_count": 5,
+    "combinational_variants": 0,
+    "sequential_variants": 5,
+    "inputs": {
+      "CaptureChain_clock": 1,
+      "CaptureChain_reset": 1,
+      "CaptureChain_io_chainIn_shift": 1,
+      "CaptureChain_io_chainIn_data": 1,
+      "CaptureChain_io_chainIn_capture": 1,
+      "CaptureChain_io_chainIn_update": 1,
+      "CaptureChain_io_capture_bits_version": 4,
+      "CaptureChain_io_capture_bits_partNumber": 16,
+      "CaptureChain_io_capture_bits_mfrId": 11,
+      "CaptureUpdateChain_clock": 1,
+      "CaptureUpdateChain_reset": 1,
+      "CaptureUpdateChain_io_chainIn_shift": 1,
+      "CaptureUpdateChain_io_chainIn_data": 1,
+      "CaptureUpdateChain_io_chainIn_capture": 1,
+      "CaptureUpdateChain_io_chainIn_update": 1,
+      "CaptureUpdateChain_io_capture_bits_dmiStatus": 2,
+      "CaptureUpdateChain_1_clock": 1,
+      "CaptureUpdateChain_1_reset": 1,
+      "CaptureUpdateChain_1_io_chainIn_shift": 1,
+      "CaptureUpdateChain_1_io_chainIn_data": 1,
+      "CaptureUpdateChain_1_io_chainIn_capture": 1,
+      "CaptureUpdateChain_1_io_chainIn_update": 1,
+      "CaptureUpdateChain_1_io_capture_bits_addr": 7,
+      "CaptureUpdateChain_1_io_capture_bits_data": 32,
+      "CaptureUpdateChain_1_io_capture_bits_resp": 2,
+      "CaptureUpdateChain_2_clock": 1,
+      "CaptureUpdateChain_2_reset": 1,
+      "CaptureUpdateChain_2_io_chainIn_shift": 1,
+      "CaptureUpdateChain_2_io_chainIn_data": 1,
+      "CaptureUpdateChain_2_io_chainIn_capture": 1,
+      "CaptureUpdateChain_2_io_chainIn_update": 1,
+      "JtagBypassChain_clock": 1,
+      "JtagBypassChain_reset": 1,
+      "JtagBypassChain_io_chainIn_shift": 1,
+      "JtagBypassChain_io_chainIn_data": 1,
+      "JtagBypassChain_io_chainIn_capture": 1,
+      "JtagBypassChain_io_chainIn_update": 1
+    },
+    "outputs_compared": {
+      "CaptureChain_io_chainOut_data": 1,
+      "CaptureUpdateChain_io_chainOut_data": 1,
+      "CaptureUpdateChain_io_update_valid": 1,
+      "CaptureUpdateChain_io_update_bits_dmireset": 1,
+      "CaptureUpdateChain_1_io_chainOut_data": 1,
+      "CaptureUpdateChain_1_io_capture_capture": 1,
+      "CaptureUpdateChain_1_io_update_valid": 1,
+      "CaptureUpdateChain_1_io_update_bits_addr": 7,
+      "CaptureUpdateChain_1_io_update_bits_data": 32,
+      "CaptureUpdateChain_1_io_update_bits_op": 2,
+      "CaptureUpdateChain_2_io_chainOut_data": 1,
+      "CaptureUpdateChain_2_io_update_bits": 5,
+      "JtagBypassChain_io_chainOut_data": 1
+    },
+    "aggregate_input_bits": 104,
+    "aggregate_compared_output_bits": 55,
+    "variants": {
+      "CaptureChain": {
+        "method": "sequential_equivalence",
+        "sequential": true,
+        "locked_reference": "validation/reference-sv/CaptureChain.sv",
+        "locked_sha256": "80174dd717df431aeddd189b9b7581b7c06aec990de62782873bca7bd5c04d9d",
+        "children": [],
+        "inputs": {
+          "clock": 1,
+          "reset": 1,
+          "io_chainIn_shift": 1,
+          "io_chainIn_data": 1,
+          "io_chainIn_capture": 1,
+          "io_chainIn_update": 1,
+          "io_capture_bits_version": 4,
+          "io_capture_bits_partNumber": 16,
+          "io_capture_bits_mfrId": 11
+        },
+        "outputs_compared": {
+          "io_chainOut_data": 1
+        },
+        "input_bits": 37,
+        "output_bits": 1,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "PASS",
+        "success_marker": true,
+        "markers_present": {
+          "0 are unproven.": true,
+          "Equivalence successfully proven!": true
+        },
+        "unconstrained_or_equiv_cells": 32,
+        "proven_cells": 32,
+        "unproven_cells": 0,
+        "sat_variables": null,
+        "sat_clauses": null
+      },
+      "CaptureUpdateChain": {
+        "method": "sequential_equivalence",
+        "sequential": true,
+        "locked_reference": "validation/reference-sv/CaptureUpdateChain.sv",
+        "locked_sha256": "de6651a98ffbc55e9f6a5865632a728bdd6b1e24aef507b095c8d3ca1f56b75f",
+        "children": [],
+        "inputs": {
+          "clock": 1,
+          "reset": 1,
+          "io_chainIn_shift": 1,
+          "io_chainIn_data": 1,
+          "io_chainIn_capture": 1,
+          "io_chainIn_update": 1,
+          "io_capture_bits_dmiStatus": 2
+        },
+        "outputs_compared": {
+          "io_chainOut_data": 1,
+          "io_update_valid": 1,
+          "io_update_bits_dmireset": 1
+        },
+        "input_bits": 8,
+        "output_bits": 3,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "PASS",
+        "success_marker": true,
+        "markers_present": {
+          "0 are unproven.": true,
+          "Equivalence successfully proven!": true
+        },
+        "unconstrained_or_equiv_cells": 33,
+        "proven_cells": 33,
+        "unproven_cells": 0,
+        "sat_variables": null,
+        "sat_clauses": null
+      },
+      "CaptureUpdateChain_1": {
+        "method": "sequential_equivalence",
+        "sequential": true,
+        "locked_reference": "validation/reference-sv/CaptureUpdateChain_1.sv",
+        "locked_sha256": "76cbd654ff97f8c180ea24c50423e53df96e89f679f3e46a846f787eceac29fc",
+        "children": [],
+        "inputs": {
+          "clock": 1,
+          "reset": 1,
+          "io_chainIn_shift": 1,
+          "io_chainIn_data": 1,
+          "io_chainIn_capture": 1,
+          "io_chainIn_update": 1,
+          "io_capture_bits_addr": 7,
+          "io_capture_bits_data": 32,
+          "io_capture_bits_resp": 2
+        },
+        "outputs_compared": {
+          "io_chainOut_data": 1,
+          "io_capture_capture": 1,
+          "io_update_valid": 1,
+          "io_update_bits_addr": 7,
+          "io_update_bits_data": 32,
+          "io_update_bits_op": 2
+        },
+        "input_bits": 47,
+        "output_bits": 44,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "PASS",
+        "success_marker": true,
+        "markers_present": {
+          "0 are unproven.": true,
+          "Equivalence successfully proven!": true
+        },
+        "unconstrained_or_equiv_cells": 43,
+        "proven_cells": 43,
+        "unproven_cells": 0,
+        "sat_variables": null,
+        "sat_clauses": null
+      },
+      "CaptureUpdateChain_2": {
+        "method": "sequential_equivalence",
+        "sequential": true,
+        "locked_reference": "validation/reference-sv/CaptureUpdateChain_2.sv",
+        "locked_sha256": "e0842210cbbe524c74f05af081247c26078c0050a6e03d6ffd03063269e96817",
+        "children": [],
+        "inputs": {
+          "clock": 1,
+          "reset": 1,
+          "io_chainIn_shift": 1,
+          "io_chainIn_data": 1,
+          "io_chainIn_capture": 1,
+          "io_chainIn_update": 1
+        },
+        "outputs_compared": {
+          "io_chainOut_data": 1,
+          "io_update_bits": 5
+        },
+        "input_bits": 6,
+        "output_bits": 6,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "PASS",
+        "success_marker": true,
+        "markers_present": {
+          "0 are unproven.": true,
+          "Equivalence successfully proven!": true
+        },
+        "unconstrained_or_equiv_cells": 5,
+        "proven_cells": 5,
+        "unproven_cells": 0,
+        "sat_variables": null,
+        "sat_clauses": null
+      },
+      "JtagBypassChain": {
+        "method": "sequential_equivalence",
+        "sequential": true,
+        "locked_reference": "validation/reference-sv/JtagBypassChain.sv",
+        "locked_sha256": "3a1d4a502cb143af1c07d569116c88b12af0d8bace6d3ffd60cf09d0261ac936",
+        "children": [],
+        "inputs": {
+          "clock": 1,
+          "reset": 1,
+          "io_chainIn_shift": 1,
+          "io_chainIn_data": 1,
+          "io_chainIn_capture": 1,
+          "io_chainIn_update": 1
+        },
+        "outputs_compared": {
+          "io_chainOut_data": 1
+        },
+        "input_bits": 6,
+        "output_bits": 1,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "PASS",
+        "success_marker": true,
+        "markers_present": {
+          "0 are unproven.": true,
+          "Equivalence successfully proven!": true
+        },
+        "unconstrained_or_equiv_cells": 1,
+        "proven_cells": 1,
+        "unproven_cells": 0,
+        "sat_variables": null,
+        "sat_clauses": null
+      }
+    },
+    "why_complete": "Every locked module named by this Build's own tables is proven against its exact-name locked reference on the rail its timing requires, with a conservation-audited 5C view where the installed Yosys cannot read the original.",
+    "bounded_tests_counted": false
+  },
+  "reference_lock": {
+    "directory": "validation/reference-sv",
+    "xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "locked_references_written": false,
+    "sha256_by_module": {
+      "CaptureChain": "80174dd717df431aeddd189b9b7581b7c06aec990de62782873bca7bd5c04d9d",
+      "CaptureUpdateChain": "de6651a98ffbc55e9f6a5865632a728bdd6b1e24aef507b095c8d3ca1f56b75f",
+      "CaptureUpdateChain_1": "76cbd654ff97f8c180ea24c50423e53df96e89f679f3e46a846f787eceac29fc",
+      "CaptureUpdateChain_2": "e0842210cbbe524c74f05af081247c26078c0050a6e03d6ffd03063269e96817",
+      "JtagBypassChain": "3a1d4a502cb143af1c07d569116c88b12af0d8bace6d3ffd60cf09d0261ac936"
+    }
+  },
+  "sources": {
+    "validator": {
+      "path": "validation/v2_strict_family_rail.py",
+      "sha256": "5b65a44666a69728602dcc704408cb9403a992c904d2dad5dcbf21672c0360ce",
+      "bytes": 43596
+    },
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Rocket.Jtag-Hardware.py",
+      "sha256": "f60b777a4b674b6e2c2948392d9945398437d7f3b338e6b0c5a9f00f5ee4e761",
+      "bytes": 10875
+    },
+    "reference_sv": {
+      "path": "validation/reference-sv/CaptureChain.sv",
+      "sha256": "80174dd717df431aeddd189b9b7581b7c06aec990de62782873bca7bd5c04d9d",
+      "bytes": 20000
+    },
+    "scala": {
+      "path": "upstream/rocket-chip/src/main/scala/jtag/JtagShifter.scala",
+      "sha256": "06d5d99abf074ad028dd1619b0f80bebf4a005908c10cf1b61bb5891013853ad",
+      "bytes": 7075
+    },
+    "declared_scala_sources": {
+      "upstream/rocket-chip/src/main/scala/jtag/JtagShifter.scala": {
+        "vendored": true,
+        "sha256": "06d5d99abf074ad028dd1619b0f80bebf4a005908c10cf1b61bb5891013853ad"
+      }
+    },
+    "reference_children": {}
+  },
+  "checks": {
+    "py_compile": {
+      "status": "PASS"
+    },
+    "pyright": {
+      "build": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_pqvub9iq\\Build-Cpu.Dependency.Rocket.Jtag-Hardware.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "error_count": 0,
+        "files_analyzed": 1,
+        "stderr_tail": ""
+      },
+      "rail": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_kpfkba2v\\v2_strict_family_rail.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "error_count": 0,
+        "files_analyzed": 1,
+        "stderr_tail": ""
+      }
+    },
+    "catalog_coverage": {
+      "entries": 5,
+      "proven": 5
+    },
+    "formal": {
+      "yosys_formal_miter": {
+        "status": "NOT_APPLICABLE",
+        "mitered_variants": 0
+      }
+    },
+    "aggregate_sat_miter": {
+      "status": "NOT_APPLICABLE",
+      "mitered_variants": 0
+    },
+    "negative_control": {
+      "status": "PASS",
+      "cases": {
+        "sat": {
+          "status": "PASS",
+          "note": "no representative with outputs"
+        },
+        "sequential.target": {
+          "status": "PASS",
+          "control_entry": "CaptureChain",
+          "control_port": "io_chainOut_data",
+          "mutation_applied": true,
+          "explicit_failure_marker": true,
+          "success_marker_still_present": false,
+          "returncode": 1
+        },
+        "sequential.reference": {
+          "status": "PASS",
+          "control_entry": "CaptureChain",
+          "control_port": "io_chainOut_data",
+          "mutation_applied": true,
+          "explicit_failure_marker": true,
+          "success_marker_still_present": false,
+          "returncode": 1
+        }
+      },
+      "note": "a reference-side mutation that still proves means the reference never reaches the comparison"
+    },
+    "variants": [
+      {
+        "method": "sequential_equivalence",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "CaptureChain_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_jtag_family/DUT_CaptureChain.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_jtag_family/REF_CaptureChain.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_jtag_family/CaptureChain_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.135 MB sources in 4 modules, into 0.087 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.088 s (elab=0.009, cvt=0.016, bld=0.000); cpu 0.027 s on 1 threads; alloced 11.035 MB\n",
+          "output_sha256": "39d8d4f6e0622caae41f9dc67aa55919991cc5a2dfc7a37c7fc5864f9a42b810"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "CaptureChain",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/CaptureChain.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.025 MB sources in 2 modules, into 0.024 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.041 s (elab=0.000, cvt=0.004, bld=0.000); cpu 0.012 s on 1 threads; alloced 9.680 MB\n",
+          "output_sha256": "f724b8146b68e82ba73163c2a1deb7b24d17a4e155729ff27fcffd4db4452095"
+        },
+        "yosys_equiv": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_jtag_family/DUT_CaptureChain.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_jtag_family/REF_CaptureChain.sv; proc; async2sync; memory; opt; flatten REF_CaptureChain; flatten DUT_CaptureChain; equiv_make REF_CaptureChain DUT_CaptureChain CaptureChain_EQUIV; prep -top CaptureChain_EQUIV; equiv_induct -undef; equiv_status -assert"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": 32,
+          "equiv_summary_full": [
+            32,
+            0
+          ],
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": ".\nRemoved top 30 bits (of 35) from wire CaptureChain_EQUIV.\\$94_gate.\nRemoved top 3 bits (of 31) from wire CaptureChain_EQUIV.\\$99_gate.\n\n10.9. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\CaptureChain_EQUIV..\nRemoved 0 unused cells and 145 unused wires.\n<suppressed ~1 debug messages>\n\n10.10. Executing MEMORY_COLLECT pass (generating $mem cells).\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module CaptureChain_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\CaptureChain_EQUIV'.\nRemoved a total of 0 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\CaptureChain_EQUIV..\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== CaptureChain_EQUIV ===\n\n   Number of wires:                481\n   Number of wire bits:           6391\n   Number of public wires:         415\n   Number of public wire bits:    6325\n   Number of ports:                 10\n   Number of port bits:             38\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                196\n     $dff                            1\n     $dffe                          63\n     $equiv                         32\n     $mux                           96\n     $or                             3\n     $reduce_bool                    1\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module CaptureChain_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 32 unproven $equiv cells in module CaptureChain_EQUIV:\n  Undef modelling: force def on 64 initial reg values and 35 inputs.\n  Proving existence of base case for step 1. (10618 clauses over 4106 variables)\n  Proving induction step 1. (25737 clauses over 9733 variables)\n  Proof for induction step holds. Entire workset of 32 cells proven!\nProved 32 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 32 $equiv cells in CaptureChain_EQUIV:\n  Of those cells 32 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: 88e1ed10bd, CPU: user 0.21s system 0.03s, MEM: 21.79 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 28% 10x opt_clean (0 sec), 17% 3x read_verilog (0 sec), ...\n",
+          "output_sha256": "c12cc9b23103ed1a6dc18a82b36385818a7aa1462e0e9ec9ea0fd3d90a73090c",
+          "markers_present": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "formal_success_marker": true,
+          "equiv_cells": 32,
+          "proven_cells": 32,
+          "unproven_cells": 0
+        }
+      },
+      {
+        "method": "sequential_equivalence",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "CaptureUpdateChain_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_jtag_family/DUT_CaptureUpdateChain.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_jtag_family/REF_CaptureUpdateChain.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_jtag_family/CaptureUpdateChain_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.120 MB sources in 4 modules, into 0.087 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.083 s (elab=0.004, cvt=0.014, bld=0.000); cpu 0.032 s on 1 threads; alloced 11.168 MB\n",
+          "output_sha256": "acae01a670fa61f4c31f7e86c47c730a16b85deb468be68ff868f4e226790a57"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "CaptureUpdateChain",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/CaptureUpdateChain.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.024 MB sources in 2 modules, into 0.031 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.034 s (elab=0.000, cvt=0.003, bld=0.000); cpu 0.010 s on 1 threads; alloced 9.660 MB\n",
+          "output_sha256": "9929562cde28100222104f6165507a58b36a6dc79350e5c59000cb2f42c363f6"
+        },
+        "yosys_equiv": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_jtag_family/DUT_CaptureUpdateChain.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_jtag_family/REF_CaptureUpdateChain.sv; proc; async2sync; memory; opt; flatten REF_CaptureUpdateChain; flatten DUT_CaptureUpdateChain; equiv_make REF_CaptureUpdateChain DUT_CaptureUpdateChain CaptureUpdateChain_EQUIV; prep -top CaptureUpdateChain_EQUIV; equiv_induct -undef; equiv_status -assert"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": 33,
+          "equiv_summary_full": [
+            33,
+            0
+          ],
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "\nFinding unused cells or wires in module \\CaptureUpdateChain_EQUIV..\nRemoved 0 unused cells and 77 unused wires.\n<suppressed ~1 debug messages>\n\n10.10. Executing MEMORY_COLLECT pass (generating $mem cells).\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module CaptureUpdateChain_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\CaptureUpdateChain_EQUIV'.\nRemoved a total of 0 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\CaptureUpdateChain_EQUIV..\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== CaptureUpdateChain_EQUIV ===\n\n   Number of wires:                330\n   Number of wire bits:           1918\n   Number of public wires:         260\n   Number of public wire bits:    1848\n   Number of ports:                 10\n   Number of port bits:             11\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                173\n     $and                           26\n     $dff                           30\n     $dffe                           4\n     $equiv                         33\n     $mux                           38\n     $ne                             1\n     $not                            3\n     $or                             7\n     $reduce_bool                    1\n     $sdffe                         30\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module CaptureUpdateChain_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 32 unproven $equiv cells in module CaptureUpdateChain_EQUIV:\n  Undef modelling: force def on 64 initial reg values and 7 inputs.\n  Proving existence of base case for step 1. (5994 clauses over 2328 variables)\n  Proving induction step 1. (16171 clauses over 6071 variables)\n  Proof for induction step holds. Entire workset of 32 cells proven!\nProved 32 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 33 $equiv cells in CaptureUpdateChain_EQUIV:\n  Of those cells 33 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: 2a0b4d5252, CPU: user 0.10s system 0.02s, MEM: 19.69 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 21% 10x opt_clean (0 sec), 18% 3x read_verilog (0 sec), ...\n",
+          "output_sha256": "ad3089ac408cbfe2944aa7ea5d2a603f95dbe0f54132ae140a29cc782844e57f",
+          "markers_present": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "formal_success_marker": true,
+          "equiv_cells": 33,
+          "proven_cells": 33,
+          "unproven_cells": 0
+        }
+      },
+      {
+        "method": "sequential_equivalence",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "CaptureUpdateChain_1_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_jtag_family/DUT_CaptureUpdateChain_1.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_jtag_family/REF_CaptureUpdateChain_1.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_jtag_family/CaptureUpdateChain_1_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.151 MB sources in 4 modules, into 0.147 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.086 s (elab=0.004, cvt=0.014, bld=0.000); cpu 0.034 s on 1 threads; alloced 11.305 MB\n",
+          "output_sha256": "b5cb58909c3e2187643114c781e542e1c182e9f0bf484e8e659deebe469e552e"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "CaptureUpdateChain_1",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/CaptureUpdateChain_1.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.026 MB sources in 2 modules, into 0.046 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.305 s (elab=0.001, cvt=0.004, bld=0.000); cpu 0.012 s on 1 threads; alloced 9.926 MB\n",
+          "output_sha256": "2ff4956e613c11fa36efcdd1bf796fd8cefbf8ef878364ef24e6ff50e21514b6"
+        },
+        "yosys_equiv": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_jtag_family/DUT_CaptureUpdateChain_1.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_jtag_family/REF_CaptureUpdateChain_1.sv; proc; async2sync; memory; opt; flatten REF_CaptureUpdateChain_1; flatten DUT_CaptureUpdateChain_1; equiv_make REF_CaptureUpdateChain_1 DUT_CaptureUpdateChain_1 CaptureUpdateChain_1_EQUIV; prep -top CaptureUpdateChain_1_EQUIV; equiv_induct -undef; equiv_status -assert"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": 43,
+          "equiv_summary_full": [
+            43,
+            0
+          ],
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": " Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\CaptureUpdateChain_1_EQUIV..\nRemoved 0 unused cells and 176 unused wires.\n<suppressed ~1 debug messages>\n\n10.10. Executing MEMORY_COLLECT pass (generating $mem cells).\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module CaptureUpdateChain_1_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\CaptureUpdateChain_1_EQUIV'.\nRemoved a total of 0 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\CaptureUpdateChain_1_EQUIV..\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== CaptureUpdateChain_1_EQUIV ===\n\n   Number of wires:                585\n   Number of wire bits:          10958\n   Number of public wires:         458\n   Number of public wire bits:   10831\n   Number of ports:                 15\n   Number of port bits:             91\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                299\n     $and                            2\n     $dffe                          82\n     $equiv                         43\n     $mux                          164\n     $ne                             1\n     $not                            3\n     $or                             3\n     $reduce_bool                    1\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module CaptureUpdateChain_1_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 41 unproven $equiv cells in module CaptureUpdateChain_1_EQUIV:\n  Undef modelling: force def on 82 initial reg values and 46 inputs.\n  Proving existence of base case for step 1. (16803 clauses over 6463 variables)\n  Proving induction step 1. (39427 clauses over 14893 variables)\n  Proof for induction step holds. Entire workset of 41 cells proven!\nProved 41 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 43 $equiv cells in CaptureUpdateChain_1_EQUIV:\n  Of those cells 43 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: 3a9306637d, CPU: user 0.34s system 0.03s, MEM: 25.89 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 37% 10x opt_clean (0 sec), 14% 1x equiv_induct (0 sec), ...\n",
+          "output_sha256": "555f38308388d76701bbfd9ad487420d647cb61c69481385711d5f8d34b96a16",
+          "markers_present": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "formal_success_marker": true,
+          "equiv_cells": 43,
+          "proven_cells": 43,
+          "unproven_cells": 0
+        }
+      },
+      {
+        "method": "sequential_equivalence",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "CaptureUpdateChain_2_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_jtag_family/DUT_CaptureUpdateChain_2.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_jtag_family/REF_CaptureUpdateChain_2.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_jtag_family/CaptureUpdateChain_2_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.048 MB sources in 4 modules, into 0.033 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.051 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.008 s on 1 threads; alloced 9.242 MB\n",
+          "output_sha256": "b68b2efde75b656087f2f7c72b74791a433caf42e903df00bf91c9ad22010176"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "CaptureUpdateChain_2",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/CaptureUpdateChain_2.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.022 MB sources in 2 modules, into 0.018 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.035 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.008 s on 1 threads; alloced 9.246 MB\n",
+          "output_sha256": "eb03f284214276884b66fdd8a3ab3b3b5bbf6749158bc03baabdfbdf5057f6a7"
+        },
+        "yosys_equiv": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_jtag_family/DUT_CaptureUpdateChain_2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_jtag_family/REF_CaptureUpdateChain_2.sv; proc; async2sync; memory; opt; flatten REF_CaptureUpdateChain_2; flatten DUT_CaptureUpdateChain_2; equiv_make REF_CaptureUpdateChain_2 DUT_CaptureUpdateChain_2 CaptureUpdateChain_2_EQUIV; prep -top CaptureUpdateChain_2_EQUIV; equiv_induct -undef; equiv_status -assert"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": 5,
+          "equiv_summary_full": [
+            5,
+            0
+          ],
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "EXPR pass (perform const folding).\nOptimizing module CaptureUpdateChain_2_EQUIV.\n\n10.7.8. Finished OPT passes. (There is nothing left to do.)\n\n10.8. Executing WREDUCE pass (reducing word size of cells).\n\n10.9. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\CaptureUpdateChain_2_EQUIV..\n\n10.10. Executing MEMORY_COLLECT pass (generating $mem cells).\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module CaptureUpdateChain_2_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\CaptureUpdateChain_2_EQUIV'.\nRemoved a total of 0 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\CaptureUpdateChain_2_EQUIV..\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== CaptureUpdateChain_2_EQUIV ===\n\n   Number of wires:                 43\n   Number of wire bits:             55\n   Number of public wires:          41\n   Number of public wire bits:      53\n   Number of ports:                  8\n   Number of port bits:             12\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                 19\n     $and                            1\n     $equiv                          5\n     $not                            2\n     $or                             1\n     $sdffe                         10\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module CaptureUpdateChain_2_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 5 unproven $equiv cells in module CaptureUpdateChain_2_EQUIV:\n  Undef modelling: force def on 10 initial reg values and 5 inputs.\n  Proving existence of base case for step 1. (403 clauses over 174 variables)\n  Proving induction step 1. (1818 clauses over 690 variables)\n  Proof for induction step holds. Entire workset of 5 cells proven!\nProved 5 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 5 $equiv cells in CaptureUpdateChain_2_EQUIV:\n  Of those cells 5 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: 250b0e7b26, CPU: user 0.03s system 0.01s, MEM: 13.91 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 23% 10x opt_expr (0 sec), 18% 9x opt_clean (0 sec), ...\n",
+          "output_sha256": "159a1c310da99715e84958ff61e43fe2f4a2d9f2d7bb800c99748f4f5d2e4f92",
+          "markers_present": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "formal_success_marker": true,
+          "equiv_cells": 5,
+          "proven_cells": 5,
+          "unproven_cells": 0
+        }
+      },
+      {
+        "method": "sequential_equivalence",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "JtagBypassChain_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_jtag_family/DUT_JtagBypassChain.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_jtag_family/REF_JtagBypassChain.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_jtag_family/JtagBypassChain_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.043 MB sources in 4 modules, into 0.022 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.051 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.008 s on 1 threads; alloced 9.094 MB\n",
+          "output_sha256": "70144b63ea44fcc64722748e9b849d79aea27ab72358960ffd4fc061e1b2f444"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "JtagBypassChain",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/JtagBypassChain.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.015 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.030 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.203 MB\n",
+          "output_sha256": "264ab6edb4e740f15ba66e58bc336e95164085da07e6c234fe218d7ae27fa98b"
+        },
+        "yosys_equiv": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_jtag_family/DUT_JtagBypassChain.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_jtag_family/REF_JtagBypassChain.sv; proc; async2sync; memory; opt; flatten REF_JtagBypassChain; flatten DUT_JtagBypassChain; equiv_make REF_JtagBypassChain DUT_JtagBypassChain JtagBypassChain_EQUIV; prep -top JtagBypassChain_EQUIV; equiv_induct -undef; equiv_status -assert"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": 1,
+          "equiv_summary_full": [
+            1,
+            0
+          ],
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "f 0 cells.\n\n10.7.6. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\JtagBypassChain_EQUIV..\n\n10.7.7. Executing OPT_EXPR pass (perform const folding).\nOptimizing module JtagBypassChain_EQUIV.\n\n10.7.8. Finished OPT passes. (There is nothing left to do.)\n\n10.8. Executing WREDUCE pass (reducing word size of cells).\n\n10.9. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\JtagBypassChain_EQUIV..\n\n10.10. Executing MEMORY_COLLECT pass (generating $mem cells).\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module JtagBypassChain_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\JtagBypassChain_EQUIV'.\nRemoved a total of 0 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\JtagBypassChain_EQUIV..\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== JtagBypassChain_EQUIV ===\n\n   Number of wires:                 24\n   Number of wire bits:             24\n   Number of public wires:          24\n   Number of public wire bits:      24\n   Number of ports:                  7\n   Number of port bits:              7\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                  3\n     $equiv                          1\n     $sdffe                          2\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module JtagBypassChain_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 1 unproven $equiv cells in module JtagBypassChain_EQUIV:\n  Undef modelling: force def on 2 initial reg values and 4 inputs.\n  Proving existence of base case for step 1. (51 clauses over 26 variables)\n  Proving induction step 1. (301 clauses over 121 variables)\n  Proof for induction step holds. Entire workset of 1 cells proven!\nProved 1 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 1 $equiv cells in JtagBypassChain_EQUIV:\n  Of those cells 1 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: 651c6445f6, CPU: user 0.03s system 0.01s, MEM: 13.75 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 28% 10x opt_expr (0 sec), 18% 9x opt_clean (0 sec), ...\n",
+          "output_sha256": "406143677e5420c544fc0ff4ac57840988ba1e5539fe562027969d81b591596f",
+          "markers_present": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "formal_success_marker": true,
+          "equiv_cells": 1,
+          "proven_cells": 1,
+          "unproven_cells": 0
+        }
+      }
+    ]
+  },
+  "failures": [],
+  "unclosed": [],
+  "acceptance_unclosed": [
+    "Parent closure, full-top differential, final license review, and user approval remain outside this Build proof."
+  ]
+}

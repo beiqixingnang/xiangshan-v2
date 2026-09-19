@@ -2,9 +2,9 @@
   "schema_version": 1,
   "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_EQUIVALENCE_PROGRESS",
   "build_denominator": 118,
-  "strict_complete_build_count": 24,
-  "fraction": "24/118",
-  "percentage": 20.338983,
+  "strict_complete_build_count": 25,
+  "fraction": "25/118",
+  "percentage": 21.186441,
   "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with the locked source commit, matching source hashes, and either a Yosys SAT no-model miter or fully proven Yosys inductive-equivalence status is counted. STRICT_PENDING and COMPLETE_EQUIVALENCE_VARIANT_ONLY records are inventoried as attempted-but-not-counted instead of failing the rail, and one Build file may not be claimed by several counting proofs.",
   "non_counting_attempt_count": 4,
   "non_counting_attempts": [
@@ -140,7 +140,7 @@
     }
   ],
   "plan_reconciliation": {
-    "plan_count": 24,
+    "plan_count": 25,
     "plan_denominator": 118,
     "status": "PASS"
   },
@@ -837,6 +837,7 @@
             "locked_reference_lint": "PASS",
             "verdict": "PASS",
             "success_marker": true,
+            "markers_present": null,
             "unconstrained_or_equiv_cells": true,
             "proven_cells": null,
             "unproven_cells": null,
@@ -874,6 +875,7 @@
             "locked_reference_lint": "PASS",
             "verdict": "PASS",
             "success_marker": true,
+            "markers_present": null,
             "unconstrained_or_equiv_cells": true,
             "proven_cells": null,
             "unproven_cells": null,
@@ -924,6 +926,7 @@
             "locked_reference_lint": "PASS",
             "verdict": "PASS",
             "success_marker": true,
+            "markers_present": null,
             "unconstrained_or_equiv_cells": true,
             "proven_cells": null,
             "unproven_cells": null,
@@ -955,6 +958,7 @@
             "locked_reference_lint": "PASS",
             "verdict": "PASS",
             "success_marker": true,
+            "markers_present": null,
             "unconstrained_or_equiv_cells": true,
             "proven_cells": null,
             "unproven_cells": null,
@@ -986,6 +990,7 @@
             "locked_reference_lint": "PASS",
             "verdict": "PASS",
             "success_marker": true,
+            "markers_present": null,
             "unconstrained_or_equiv_cells": true,
             "proven_cells": null,
             "unproven_cells": null,
@@ -1034,6 +1039,7 @@
             "locked_reference_lint": "PASS",
             "verdict": "PASS",
             "success_marker": true,
+            "markers_present": null,
             "unconstrained_or_equiv_cells": true,
             "proven_cells": null,
             "unproven_cells": null,
@@ -1074,6 +1080,7 @@
             "locked_reference_lint": "PASS",
             "verdict": "PASS",
             "success_marker": true,
+            "markers_present": null,
             "unconstrained_or_equiv_cells": true,
             "proven_cells": null,
             "unproven_cells": null,
@@ -1089,8 +1096,8 @@
           "path": "validation/v2_strict_family_rail.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "83e3a807d574e87121caae15ab78dc87e7ab9f16f0bf698fdb677a2ceaf7cd76",
-          "observed_sha256": "83e3a807d574e87121caae15ab78dc87e7ab9f16f0bf698fdb677a2ceaf7cd76",
+          "expected_sha256": "5b65a44666a69728602dcc704408cb9403a992c904d2dad5dcbf21672c0360ce",
+          "observed_sha256": "5b65a44666a69728602dcc704408cb9403a992c904d2dad5dcbf21672c0360ce",
           "status": "PASS"
         },
         "python_build": {
@@ -2702,7 +2709,9 @@
           "failures": [
             "formal verdict",
             "zero/missing equivalence cells",
-            "unproven equivalence cells"
+            "incomplete proven equivalence cells",
+            "unproven equivalence cells",
+            "sequential equivalence full-output markers"
           ]
         },
         "FauFTBWay": {
@@ -2714,7 +2723,9 @@
           "failures": [
             "formal verdict",
             "zero/missing equivalence cells",
-            "unproven equivalence cells"
+            "incomplete proven equivalence cells",
+            "unproven equivalence cells",
+            "sequential equivalence full-output markers"
           ]
         },
         "RASStack": {
@@ -2722,7 +2733,10 @@
           "failures": [
             "reference view",
             "formal verdict",
-            "zero/missing equivalence cells"
+            "zero/missing equivalence cells",
+            "incomplete proven equivalence cells",
+            "unproven equivalence cells",
+            "sequential equivalence full-output markers"
           ]
         },
         "RedirectGenerator": {
@@ -2730,14 +2744,20 @@
           "failures": [
             "reference view",
             "formal verdict",
-            "zero/missing equivalence cells"
+            "zero/missing equivalence cells",
+            "incomplete proven equivalence cells",
+            "unproven equivalence cells",
+            "sequential equivalence full-output markers"
           ]
         },
         "RegCache": {
           "status": "FAIL",
           "failures": [
             "formal verdict",
-            "zero/missing equivalence cells"
+            "zero/missing equivalence cells",
+            "incomplete proven equivalence cells",
+            "unproven equivalence cells",
+            "sequential equivalence full-output markers"
           ]
         },
         "RegCacheTagTable": {
@@ -2745,7 +2765,9 @@
           "failures": [
             "formal verdict",
             "zero/missing equivalence cells",
-            "unproven equivalence cells"
+            "incomplete proven equivalence cells",
+            "unproven equivalence cells",
+            "sequential equivalence full-output markers"
           ]
         },
         "RegionWays": {
@@ -2753,7 +2775,9 @@
           "failures": [
             "formal verdict",
             "zero/missing equivalence cells",
-            "unproven equivalence cells"
+            "incomplete proven equivalence cells",
+            "unproven equivalence cells",
+            "sequential equivalence full-output markers"
           ]
         },
         "VectorCvtTop": {
@@ -2761,7 +2785,10 @@
           "failures": [
             "reference view",
             "formal verdict",
-            "zero/missing equivalence cells"
+            "zero/missing equivalence cells",
+            "incomplete proven equivalence cells",
+            "unproven equivalence cells",
+            "sequential equivalence full-output markers"
           ]
         }
       },
@@ -2808,6 +2835,405 @@
       "declared_unclosed": [
         "strict gates did not all pass"
       ]
+    },
+    {
+      "evidence": "validation/v2-build-cpu-dependency-rocket-jtag-strict-evidence.json",
+      "build_id": "Build-Cpu.Dependency.Rocket.Jtag",
+      "declared_status": "COMPLETE_EQUIVALENCE",
+      "source_commit": {
+        "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+        "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+        "status": "PASS"
+      },
+      "status": "PASS",
+      "note": null,
+      "scope": {
+        "kind": "catalog_build_multi_variant",
+        "public_variants": [
+          "CaptureChain",
+          "CaptureUpdateChain",
+          "CaptureUpdateChain_1",
+          "CaptureUpdateChain_2",
+          "JtagBypassChain"
+        ],
+        "variant_count": 5,
+        "combinational_variants": 0,
+        "sequential_variants": 5,
+        "inputs": {
+          "CaptureChain_clock": 1,
+          "CaptureChain_reset": 1,
+          "CaptureChain_io_chainIn_shift": 1,
+          "CaptureChain_io_chainIn_data": 1,
+          "CaptureChain_io_chainIn_capture": 1,
+          "CaptureChain_io_chainIn_update": 1,
+          "CaptureChain_io_capture_bits_version": 4,
+          "CaptureChain_io_capture_bits_partNumber": 16,
+          "CaptureChain_io_capture_bits_mfrId": 11,
+          "CaptureUpdateChain_clock": 1,
+          "CaptureUpdateChain_reset": 1,
+          "CaptureUpdateChain_io_chainIn_shift": 1,
+          "CaptureUpdateChain_io_chainIn_data": 1,
+          "CaptureUpdateChain_io_chainIn_capture": 1,
+          "CaptureUpdateChain_io_chainIn_update": 1,
+          "CaptureUpdateChain_io_capture_bits_dmiStatus": 2,
+          "CaptureUpdateChain_1_clock": 1,
+          "CaptureUpdateChain_1_reset": 1,
+          "CaptureUpdateChain_1_io_chainIn_shift": 1,
+          "CaptureUpdateChain_1_io_chainIn_data": 1,
+          "CaptureUpdateChain_1_io_chainIn_capture": 1,
+          "CaptureUpdateChain_1_io_chainIn_update": 1,
+          "CaptureUpdateChain_1_io_capture_bits_addr": 7,
+          "CaptureUpdateChain_1_io_capture_bits_data": 32,
+          "CaptureUpdateChain_1_io_capture_bits_resp": 2,
+          "CaptureUpdateChain_2_clock": 1,
+          "CaptureUpdateChain_2_reset": 1,
+          "CaptureUpdateChain_2_io_chainIn_shift": 1,
+          "CaptureUpdateChain_2_io_chainIn_data": 1,
+          "CaptureUpdateChain_2_io_chainIn_capture": 1,
+          "CaptureUpdateChain_2_io_chainIn_update": 1,
+          "JtagBypassChain_clock": 1,
+          "JtagBypassChain_reset": 1,
+          "JtagBypassChain_io_chainIn_shift": 1,
+          "JtagBypassChain_io_chainIn_data": 1,
+          "JtagBypassChain_io_chainIn_capture": 1,
+          "JtagBypassChain_io_chainIn_update": 1
+        },
+        "outputs_compared": {
+          "CaptureChain_io_chainOut_data": 1,
+          "CaptureUpdateChain_io_chainOut_data": 1,
+          "CaptureUpdateChain_io_update_valid": 1,
+          "CaptureUpdateChain_io_update_bits_dmireset": 1,
+          "CaptureUpdateChain_1_io_chainOut_data": 1,
+          "CaptureUpdateChain_1_io_capture_capture": 1,
+          "CaptureUpdateChain_1_io_update_valid": 1,
+          "CaptureUpdateChain_1_io_update_bits_addr": 7,
+          "CaptureUpdateChain_1_io_update_bits_data": 32,
+          "CaptureUpdateChain_1_io_update_bits_op": 2,
+          "CaptureUpdateChain_2_io_chainOut_data": 1,
+          "CaptureUpdateChain_2_io_update_bits": 5,
+          "JtagBypassChain_io_chainOut_data": 1
+        },
+        "aggregate_input_bits": 104,
+        "aggregate_compared_output_bits": 55,
+        "variants": {
+          "CaptureChain": {
+            "method": "sequential_equivalence",
+            "sequential": true,
+            "locked_reference": "validation/reference-sv/CaptureChain.sv",
+            "locked_sha256": "80174dd717df431aeddd189b9b7581b7c06aec990de62782873bca7bd5c04d9d",
+            "children": [],
+            "inputs": {
+              "clock": 1,
+              "reset": 1,
+              "io_chainIn_shift": 1,
+              "io_chainIn_data": 1,
+              "io_chainIn_capture": 1,
+              "io_chainIn_update": 1,
+              "io_capture_bits_version": 4,
+              "io_capture_bits_partNumber": 16,
+              "io_capture_bits_mfrId": 11
+            },
+            "outputs_compared": {
+              "io_chainOut_data": 1
+            },
+            "input_bits": 37,
+            "output_bits": 1,
+            "abi_exact": true,
+            "deterministic": true,
+            "miter_selfcheck": true,
+            "view_trusted": true,
+            "locked_reference_lint": "PASS",
+            "verdict": "PASS",
+            "success_marker": true,
+            "markers_present": {
+              "0 are unproven.": true,
+              "Equivalence successfully proven!": true
+            },
+            "unconstrained_or_equiv_cells": 32,
+            "proven_cells": 32,
+            "unproven_cells": 0,
+            "sat_variables": null,
+            "sat_clauses": null
+          },
+          "CaptureUpdateChain": {
+            "method": "sequential_equivalence",
+            "sequential": true,
+            "locked_reference": "validation/reference-sv/CaptureUpdateChain.sv",
+            "locked_sha256": "de6651a98ffbc55e9f6a5865632a728bdd6b1e24aef507b095c8d3ca1f56b75f",
+            "children": [],
+            "inputs": {
+              "clock": 1,
+              "reset": 1,
+              "io_chainIn_shift": 1,
+              "io_chainIn_data": 1,
+              "io_chainIn_capture": 1,
+              "io_chainIn_update": 1,
+              "io_capture_bits_dmiStatus": 2
+            },
+            "outputs_compared": {
+              "io_chainOut_data": 1,
+              "io_update_valid": 1,
+              "io_update_bits_dmireset": 1
+            },
+            "input_bits": 8,
+            "output_bits": 3,
+            "abi_exact": true,
+            "deterministic": true,
+            "miter_selfcheck": true,
+            "view_trusted": true,
+            "locked_reference_lint": "PASS",
+            "verdict": "PASS",
+            "success_marker": true,
+            "markers_present": {
+              "0 are unproven.": true,
+              "Equivalence successfully proven!": true
+            },
+            "unconstrained_or_equiv_cells": 33,
+            "proven_cells": 33,
+            "unproven_cells": 0,
+            "sat_variables": null,
+            "sat_clauses": null
+          },
+          "CaptureUpdateChain_1": {
+            "method": "sequential_equivalence",
+            "sequential": true,
+            "locked_reference": "validation/reference-sv/CaptureUpdateChain_1.sv",
+            "locked_sha256": "76cbd654ff97f8c180ea24c50423e53df96e89f679f3e46a846f787eceac29fc",
+            "children": [],
+            "inputs": {
+              "clock": 1,
+              "reset": 1,
+              "io_chainIn_shift": 1,
+              "io_chainIn_data": 1,
+              "io_chainIn_capture": 1,
+              "io_chainIn_update": 1,
+              "io_capture_bits_addr": 7,
+              "io_capture_bits_data": 32,
+              "io_capture_bits_resp": 2
+            },
+            "outputs_compared": {
+              "io_chainOut_data": 1,
+              "io_capture_capture": 1,
+              "io_update_valid": 1,
+              "io_update_bits_addr": 7,
+              "io_update_bits_data": 32,
+              "io_update_bits_op": 2
+            },
+            "input_bits": 47,
+            "output_bits": 44,
+            "abi_exact": true,
+            "deterministic": true,
+            "miter_selfcheck": true,
+            "view_trusted": true,
+            "locked_reference_lint": "PASS",
+            "verdict": "PASS",
+            "success_marker": true,
+            "markers_present": {
+              "0 are unproven.": true,
+              "Equivalence successfully proven!": true
+            },
+            "unconstrained_or_equiv_cells": 43,
+            "proven_cells": 43,
+            "unproven_cells": 0,
+            "sat_variables": null,
+            "sat_clauses": null
+          },
+          "CaptureUpdateChain_2": {
+            "method": "sequential_equivalence",
+            "sequential": true,
+            "locked_reference": "validation/reference-sv/CaptureUpdateChain_2.sv",
+            "locked_sha256": "e0842210cbbe524c74f05af081247c26078c0050a6e03d6ffd03063269e96817",
+            "children": [],
+            "inputs": {
+              "clock": 1,
+              "reset": 1,
+              "io_chainIn_shift": 1,
+              "io_chainIn_data": 1,
+              "io_chainIn_capture": 1,
+              "io_chainIn_update": 1
+            },
+            "outputs_compared": {
+              "io_chainOut_data": 1,
+              "io_update_bits": 5
+            },
+            "input_bits": 6,
+            "output_bits": 6,
+            "abi_exact": true,
+            "deterministic": true,
+            "miter_selfcheck": true,
+            "view_trusted": true,
+            "locked_reference_lint": "PASS",
+            "verdict": "PASS",
+            "success_marker": true,
+            "markers_present": {
+              "0 are unproven.": true,
+              "Equivalence successfully proven!": true
+            },
+            "unconstrained_or_equiv_cells": 5,
+            "proven_cells": 5,
+            "unproven_cells": 0,
+            "sat_variables": null,
+            "sat_clauses": null
+          },
+          "JtagBypassChain": {
+            "method": "sequential_equivalence",
+            "sequential": true,
+            "locked_reference": "validation/reference-sv/JtagBypassChain.sv",
+            "locked_sha256": "3a1d4a502cb143af1c07d569116c88b12af0d8bace6d3ffd60cf09d0261ac936",
+            "children": [],
+            "inputs": {
+              "clock": 1,
+              "reset": 1,
+              "io_chainIn_shift": 1,
+              "io_chainIn_data": 1,
+              "io_chainIn_capture": 1,
+              "io_chainIn_update": 1
+            },
+            "outputs_compared": {
+              "io_chainOut_data": 1
+            },
+            "input_bits": 6,
+            "output_bits": 1,
+            "abi_exact": true,
+            "deterministic": true,
+            "miter_selfcheck": true,
+            "view_trusted": true,
+            "locked_reference_lint": "PASS",
+            "verdict": "PASS",
+            "success_marker": true,
+            "markers_present": {
+              "0 are unproven.": true,
+              "Equivalence successfully proven!": true
+            },
+            "unconstrained_or_equiv_cells": 1,
+            "proven_cells": 1,
+            "unproven_cells": 0,
+            "sat_variables": null,
+            "sat_clauses": null
+          }
+        },
+        "why_complete": "Every locked module named by this Build's own tables is proven against its exact-name locked reference on the rail its timing requires, with a conservation-audited 5C view where the installed Yosys cannot read the original.",
+        "bounded_tests_counted": false
+      },
+      "sources": {
+        "validator": {
+          "path": "validation/v2_strict_family_rail.py",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "5b65a44666a69728602dcc704408cb9403a992c904d2dad5dcbf21672c0360ce",
+          "observed_sha256": "5b65a44666a69728602dcc704408cb9403a992c904d2dad5dcbf21672c0360ce",
+          "status": "PASS"
+        },
+        "python_build": {
+          "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Rocket.Jtag-Hardware.py",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "f60b777a4b674b6e2c2948392d9945398437d7f3b338e6b0c5a9f00f5ee4e761",
+          "observed_sha256": "f60b777a4b674b6e2c2948392d9945398437d7f3b338e6b0c5a9f00f5ee4e761",
+          "status": "PASS"
+        },
+        "reference_sv": {
+          "path": "validation/reference-sv/CaptureChain.sv",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "80174dd717df431aeddd189b9b7581b7c06aec990de62782873bca7bd5c04d9d",
+          "observed_sha256": "80174dd717df431aeddd189b9b7581b7c06aec990de62782873bca7bd5c04d9d",
+          "status": "PASS"
+        },
+        "scala": {
+          "path": "upstream/rocket-chip/src/main/scala/jtag/JtagShifter.scala",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "06d5d99abf074ad028dd1619b0f80bebf4a005908c10cf1b61bb5891013853ad",
+          "observed_sha256": "06d5d99abf074ad028dd1619b0f80bebf4a005908c10cf1b61bb5891013853ad",
+          "status": "PASS"
+        }
+      },
+      "source_children": {},
+      "reference_lock": {
+        "CaptureChain": {
+          "path": "validation/reference-sv/CaptureChain.sv",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "80174dd717df431aeddd189b9b7581b7c06aec990de62782873bca7bd5c04d9d",
+          "observed_sha256": "80174dd717df431aeddd189b9b7581b7c06aec990de62782873bca7bd5c04d9d",
+          "status": "PASS"
+        },
+        "CaptureUpdateChain": {
+          "path": "validation/reference-sv/CaptureUpdateChain.sv",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "de6651a98ffbc55e9f6a5865632a728bdd6b1e24aef507b095c8d3ca1f56b75f",
+          "observed_sha256": "de6651a98ffbc55e9f6a5865632a728bdd6b1e24aef507b095c8d3ca1f56b75f",
+          "status": "PASS"
+        },
+        "CaptureUpdateChain_1": {
+          "path": "validation/reference-sv/CaptureUpdateChain_1.sv",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "76cbd654ff97f8c180ea24c50423e53df96e89f679f3e46a846f787eceac29fc",
+          "observed_sha256": "76cbd654ff97f8c180ea24c50423e53df96e89f679f3e46a846f787eceac29fc",
+          "status": "PASS"
+        },
+        "CaptureUpdateChain_2": {
+          "path": "validation/reference-sv/CaptureUpdateChain_2.sv",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "e0842210cbbe524c74f05af081247c26078c0050a6e03d6ffd03063269e96817",
+          "observed_sha256": "e0842210cbbe524c74f05af081247c26078c0050a6e03d6ffd03063269e96817",
+          "status": "PASS"
+        },
+        "JtagBypassChain": {
+          "path": "validation/reference-sv/JtagBypassChain.sv",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "3a1d4a502cb143af1c07d569116c88b12af0d8bace6d3ffd60cf09d0261ac936",
+          "observed_sha256": "3a1d4a502cb143af1c07d569116c88b12af0d8bace6d3ffd60cf09d0261ac936",
+          "status": "PASS"
+        }
+      },
+      "declared_scala_sources": {
+        "upstream/rocket-chip/src/main/scala/jtag/JtagShifter.scala": {
+          "path": "upstream/rocket-chip/src/main/scala/jtag/JtagShifter.scala",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "06d5d99abf074ad028dd1619b0f80bebf4a005908c10cf1b61bb5891013853ad",
+          "observed_sha256": "06d5d99abf074ad028dd1619b0f80bebf4a005908c10cf1b61bb5891013853ad",
+          "status": "PASS"
+        }
+      },
+      "variant_checks": {
+        "CaptureChain": {
+          "status": "PASS",
+          "failures": []
+        },
+        "CaptureUpdateChain": {
+          "status": "PASS",
+          "failures": []
+        },
+        "CaptureUpdateChain_1": {
+          "status": "PASS",
+          "failures": []
+        },
+        "CaptureUpdateChain_2": {
+          "status": "PASS",
+          "failures": []
+        },
+        "JtagBypassChain": {
+          "status": "PASS",
+          "failures": []
+        }
+      },
+      "formal": {
+        "proof_method": "sequential_variant_set",
+        "command": null,
+        "returncode": null,
+        "status": null,
+        "formal_success_marker": null
+      },
+      "failures": [],
+      "declared_failures": [],
+      "declared_unclosed": []
     },
     {
       "evidence": "validation/v2-build-cpu-dependency-utility-residualfamily-strict-evidence.json",
@@ -4097,7 +4523,9 @@
           "failures": [
             "formal verdict",
             "zero/missing equivalence cells",
-            "unproven equivalence cells"
+            "incomplete proven equivalence cells",
+            "unproven equivalence cells",
+            "sequential equivalence full-output markers"
           ]
         },
         "ClockGate": {
@@ -4122,7 +4550,9 @@
           "failures": [
             "formal verdict",
             "zero/missing equivalence cells",
-            "unproven equivalence cells"
+            "incomplete proven equivalence cells",
+            "unproven equivalence cells",
+            "sequential equivalence full-output markers"
           ]
         },
         "JtagStateMachine": {
@@ -4130,7 +4560,10 @@
           "failures": [
             "reference view",
             "formal verdict",
-            "zero/missing equivalence cells"
+            "zero/missing equivalence cells",
+            "incomplete proven equivalence cells",
+            "unproven equivalence cells",
+            "sequential equivalence full-output markers"
           ]
         },
         "JtagTapController": {
@@ -4138,7 +4571,10 @@
           "failures": [
             "reference view",
             "formal verdict",
-            "zero/missing equivalence cells"
+            "zero/missing equivalence cells",
+            "incomplete proven equivalence cells",
+            "unproven equivalence cells",
+            "sequential equivalence full-output markers"
           ]
         },
         "MaxPeriodFibonacciLFSR": {
@@ -4146,7 +4582,9 @@
           "failures": [
             "formal verdict",
             "zero/missing equivalence cells",
-            "unproven equivalence cells"
+            "incomplete proven equivalence cells",
+            "unproven equivalence cells",
+            "sequential equivalence full-output markers"
           ]
         },
         "MaxPeriodFibonacciLFSR_3": {
@@ -4154,7 +4592,9 @@
           "failures": [
             "formal verdict",
             "zero/missing equivalence cells",
-            "unproven equivalence cells"
+            "incomplete proven equivalence cells",
+            "unproven equivalence cells",
+            "sequential equivalence full-output markers"
           ]
         },
         "OverrideableQueue": {
@@ -4162,7 +4602,9 @@
           "failures": [
             "formal verdict",
             "zero/missing equivalence cells",
-            "unproven equivalence cells"
+            "incomplete proven equivalence cells",
+            "unproven equivalence cells",
+            "sequential equivalence full-output markers"
           ]
         },
         "OverrideableQueue_1": {
@@ -4170,7 +4612,9 @@
           "failures": [
             "formal verdict",
             "zero/missing equivalence cells",
-            "unproven equivalence cells"
+            "incomplete proven equivalence cells",
+            "unproven equivalence cells",
+            "sequential equivalence full-output markers"
           ]
         },
         "PrintCommitIDModule": {
@@ -4187,7 +4631,9 @@
           "failures": [
             "formal verdict",
             "zero/missing equivalence cells",
-            "unproven equivalence cells"
+            "incomplete proven equivalence cells",
+            "unproven equivalence cells",
+            "sequential equivalence full-output markers"
           ]
         },
         "r4_qds_v2": {
@@ -4207,7 +4653,9 @@
           "failures": [
             "formal verdict",
             "zero/missing equivalence cells",
-            "unproven equivalence cells"
+            "incomplete proven equivalence cells",
+            "unproven equivalence cells",
+            "sequential equivalence full-output markers"
           ]
         }
       },
@@ -15207,7 +15655,10 @@
             "missing outputs",
             "miter selfcheck",
             "formal verdict",
-            "zero/missing equivalence cells"
+            "zero/missing equivalence cells",
+            "incomplete proven equivalence cells",
+            "unproven equivalence cells",
+            "sequential equivalence full-output markers"
           ]
         },
         "DiffExtArchFpRenameTable": {
@@ -15216,7 +15667,10 @@
             "missing outputs",
             "miter selfcheck",
             "formal verdict",
-            "zero/missing equivalence cells"
+            "zero/missing equivalence cells",
+            "incomplete proven equivalence cells",
+            "unproven equivalence cells",
+            "sequential equivalence full-output markers"
           ]
         },
         "DiffExtArchIntRenameTable": {
@@ -15225,7 +15679,10 @@
             "missing outputs",
             "miter selfcheck",
             "formal verdict",
-            "zero/missing equivalence cells"
+            "zero/missing equivalence cells",
+            "incomplete proven equivalence cells",
+            "unproven equivalence cells",
+            "sequential equivalence full-output markers"
           ]
         },
         "DiffExtArchVecRenameTable": {
@@ -15234,7 +15691,10 @@
             "missing outputs",
             "miter selfcheck",
             "formal verdict",
-            "zero/missing equivalence cells"
+            "zero/missing equivalence cells",
+            "incomplete proven equivalence cells",
+            "unproven equivalence cells",
+            "sequential equivalence full-output markers"
           ]
         },
         "DiffExtCSRState": {
@@ -15243,7 +15703,10 @@
             "missing outputs",
             "miter selfcheck",
             "formal verdict",
-            "zero/missing equivalence cells"
+            "zero/missing equivalence cells",
+            "incomplete proven equivalence cells",
+            "unproven equivalence cells",
+            "sequential equivalence full-output markers"
           ]
         },
         "DiffExtCriticalErrorEvent": {
@@ -15252,7 +15715,10 @@
             "missing outputs",
             "miter selfcheck",
             "formal verdict",
-            "zero/missing equivalence cells"
+            "zero/missing equivalence cells",
+            "incomplete proven equivalence cells",
+            "unproven equivalence cells",
+            "sequential equivalence full-output markers"
           ]
         },
         "DiffExtDebugMode": {
@@ -15261,7 +15727,10 @@
             "missing outputs",
             "miter selfcheck",
             "formal verdict",
-            "zero/missing equivalence cells"
+            "zero/missing equivalence cells",
+            "incomplete proven equivalence cells",
+            "unproven equivalence cells",
+            "sequential equivalence full-output markers"
           ]
         },
         "DiffExtFpCSRState": {
@@ -15270,7 +15739,10 @@
             "missing outputs",
             "miter selfcheck",
             "formal verdict",
-            "zero/missing equivalence cells"
+            "zero/missing equivalence cells",
+            "incomplete proven equivalence cells",
+            "unproven equivalence cells",
+            "sequential equivalence full-output markers"
           ]
         },
         "DiffExtHCSRState": {
@@ -15279,7 +15751,10 @@
             "missing outputs",
             "miter selfcheck",
             "formal verdict",
-            "zero/missing equivalence cells"
+            "zero/missing equivalence cells",
+            "incomplete proven equivalence cells",
+            "unproven equivalence cells",
+            "sequential equivalence full-output markers"
           ]
         },
         "DiffExtInstrCommit": {
@@ -15288,7 +15763,10 @@
             "missing outputs",
             "miter selfcheck",
             "formal verdict",
-            "zero/missing equivalence cells"
+            "zero/missing equivalence cells",
+            "incomplete proven equivalence cells",
+            "unproven equivalence cells",
+            "sequential equivalence full-output markers"
           ]
         },
         "DiffExtLrScEvent": {
@@ -15297,7 +15775,10 @@
             "missing outputs",
             "miter selfcheck",
             "formal verdict",
-            "zero/missing equivalence cells"
+            "zero/missing equivalence cells",
+            "incomplete proven equivalence cells",
+            "unproven equivalence cells",
+            "sequential equivalence full-output markers"
           ]
         },
         "DiffExtMhpmeventOverflowEvent": {
@@ -15306,7 +15787,10 @@
             "missing outputs",
             "miter selfcheck",
             "formal verdict",
-            "zero/missing equivalence cells"
+            "zero/missing equivalence cells",
+            "incomplete proven equivalence cells",
+            "unproven equivalence cells",
+            "sequential equivalence full-output markers"
           ]
         },
         "DiffExtNonRegInterruptPendingEvent": {
@@ -15315,7 +15799,10 @@
             "missing outputs",
             "miter selfcheck",
             "formal verdict",
-            "zero/missing equivalence cells"
+            "zero/missing equivalence cells",
+            "incomplete proven equivalence cells",
+            "unproven equivalence cells",
+            "sequential equivalence full-output markers"
           ]
         },
         "DiffExtPhyFpRegState": {
@@ -15324,7 +15811,10 @@
             "missing outputs",
             "miter selfcheck",
             "formal verdict",
-            "zero/missing equivalence cells"
+            "zero/missing equivalence cells",
+            "incomplete proven equivalence cells",
+            "unproven equivalence cells",
+            "sequential equivalence full-output markers"
           ]
         },
         "DiffExtPhyIntRegState": {
@@ -15333,7 +15823,10 @@
             "missing outputs",
             "miter selfcheck",
             "formal verdict",
-            "zero/missing equivalence cells"
+            "zero/missing equivalence cells",
+            "incomplete proven equivalence cells",
+            "unproven equivalence cells",
+            "sequential equivalence full-output markers"
           ]
         },
         "DiffExtPhyVecRegState": {
@@ -15342,7 +15835,10 @@
             "missing outputs",
             "miter selfcheck",
             "formal verdict",
-            "zero/missing equivalence cells"
+            "zero/missing equivalence cells",
+            "incomplete proven equivalence cells",
+            "unproven equivalence cells",
+            "sequential equivalence full-output markers"
           ]
         },
         "DiffExtSyncAIAEvent": {
@@ -15351,7 +15847,10 @@
             "missing outputs",
             "miter selfcheck",
             "formal verdict",
-            "zero/missing equivalence cells"
+            "zero/missing equivalence cells",
+            "incomplete proven equivalence cells",
+            "unproven equivalence cells",
+            "sequential equivalence full-output markers"
           ]
         },
         "DiffExtSyncCustomMflushpwrEvent": {
@@ -15360,7 +15859,10 @@
             "missing outputs",
             "miter selfcheck",
             "formal verdict",
-            "zero/missing equivalence cells"
+            "zero/missing equivalence cells",
+            "incomplete proven equivalence cells",
+            "unproven equivalence cells",
+            "sequential equivalence full-output markers"
           ]
         },
         "DiffExtTrapEvent": {
@@ -15369,7 +15871,10 @@
             "missing outputs",
             "miter selfcheck",
             "formal verdict",
-            "zero/missing equivalence cells"
+            "zero/missing equivalence cells",
+            "incomplete proven equivalence cells",
+            "unproven equivalence cells",
+            "sequential equivalence full-output markers"
           ]
         },
         "DiffExtTriggerCSRState": {
@@ -15378,7 +15883,10 @@
             "missing outputs",
             "miter selfcheck",
             "formal verdict",
-            "zero/missing equivalence cells"
+            "zero/missing equivalence cells",
+            "incomplete proven equivalence cells",
+            "unproven equivalence cells",
+            "sequential equivalence full-output markers"
           ]
         },
         "DiffExtVecCSRState": {
@@ -15387,15 +15895,18 @@
             "missing outputs",
             "miter selfcheck",
             "formal verdict",
-            "zero/missing equivalence cells"
+            "zero/missing equivalence cells",
+            "incomplete proven equivalence cells",
+            "unproven equivalence cells",
+            "sequential equivalence full-output markers"
           ]
         }
       },
       "formal": {
-        "proof_method": "sat_miter",
+        "proof_method": "sequential_variant_set",
         "command": null,
         "returncode": null,
-        "status": "NOT_APPLICABLE",
+        "status": null,
         "formal_success_marker": null
       },
       "failures": [],

@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from typing import Any, cast
 
-from amaranth import ClockDomain, Elaboratable, Module, Signal
+from amaranth import Cat, ClockDomain, Elaboratable, Module, Signal
 from amaranth.back import verilog
 
 
@@ -90,9 +90,9 @@ def capture_width(member: str) -> int:
     """Return the parallel capture width. / 返回并行捕获位宽。"""
 
     if member == "CaptureChain":
-        return 31
+        return 32
     if member == "CaptureUpdateChain":
-        return 2
+        return 32
     if member == "CaptureUpdateChain_1":
         return 41
     if member == "CaptureUpdateChain_2":
@@ -104,7 +104,7 @@ def update_width(member: str) -> int:
     """Return the parallel update width. / 返回并行更新位宽。"""
 
     if member == "CaptureUpdateChain":
-        return 1
+        return 32
     if member == "CaptureUpdateChain_1":
         return 41
     if member == "CaptureUpdateChain_2":
@@ -150,31 +150,33 @@ class JtagShifterFamily(Elaboratable):
         """Return the packed capture payload. / 返回打包的捕获载荷。"""
 
         if self.member == "CaptureChain":
-            return self.port("io_capture_bits_mfrId") | (
-                self.port("io_capture_bits_partNumber") << 11
-            ) | (self.port("io_capture_bits_version") << 27)
+            return 1 | (self.port("io_capture_bits_mfrId") << 1) | (
+                self.port("io_capture_bits_partNumber") << 12
+            ) | (self.port("io_capture_bits_version") << 28)
         if self.member == "CaptureUpdateChain":
-            return self.port("io_capture_bits_dmiStatus")
+            return 0x5071 | (self.port("io_capture_bits_dmiStatus") << 10)
         if self.member == "CaptureUpdateChain_1":
-            return self.port("io_capture_bits_addr") | (
-                self.port("io_capture_bits_data") << 7
-            ) | (self.port("io_capture_bits_resp") << 39)
+            return self.port("io_capture_bits_resp") | (
+                self.port("io_capture_bits_data") << 2
+            ) | (self.port("io_capture_bits_addr") << 34)
+        if self.member == "CaptureUpdateChain_2":
+            return 1
         return 0
 
     # Drive update outputs from the register payload. / 用寄存器载荷驱动更新输出。
-    def drive_update_outputs(self, module: Module, register: Signal) -> None:
+    def drive_update_outputs(self, module: Module, registers: list[Signal]) -> None:
         """Connect member-specific update fields. / 连接成员专用更新字段。"""
 
         if self.member == "CaptureUpdateChain":
-            module.d.comb += self.port("io_update_bits_dmireset").eq(register[0])
+            module.d.comb += self.port("io_update_bits_dmireset").eq(registers[16])
         elif self.member == "CaptureUpdateChain_1":
             module.d.comb += [
-                self.port("io_update_bits_addr").eq(register[0:7]),
-                self.port("io_update_bits_data").eq(register[7:39]),
-                self.port("io_update_bits_op").eq(register[39:41]),
+                self.port("io_update_bits_addr").eq(Cat(*registers[34:41])),
+                self.port("io_update_bits_data").eq(Cat(*registers[2:34])),
+                self.port("io_update_bits_op").eq(Cat(*registers[0:2])),
             ]
         elif self.member == "CaptureUpdateChain_2":
-            module.d.comb += self.port("io_update_bits").eq(register[0:5])
+            module.d.comb += self.port("io_update_bits").eq(Cat(*registers))
 
     # Build the selected shifter's sequential and combinational behavior. /
     # 构建选定移位器的时序与组合行为。
@@ -183,27 +185,29 @@ class JtagShifterFamily(Elaboratable):
 
         del platform
         module = Module()
-        domain = ClockDomain("sync", async_reset=True)
+        domain = ClockDomain("sync", reset_less=True)
         domain.clk = self.clock
-        domain.rst = self.reset
         module.domains += domain
 
         width = chain_width(self.member)
-        register = Signal(width, name="shifter_register", reset=0)
-        module.d.comb += self.port("io_chainOut_data").eq(register[0])
+        registers = [
+            Signal(name=f"regs_{index}", reset_less=True)
+            for index in range(width)
+        ]
+        module.d.comb += self.port("io_chainOut_data").eq(registers[0])
 
         # Outputs absent from a member's locked surface are intentionally not
         # created; every exposed update/capture flag has an explicit default.
         # 锁定表面中不存在的输出不创建；所有公开标志都有明确默认值。
         if "io_update_valid" in self.ports:
             module.d.comb += self.port("io_update_valid").eq(
-                self.port("io_chainIn_update")
+                ~self.port("io_chainIn_capture") & self.port("io_chainIn_update")
             )
         if "io_capture_capture" in self.ports:
             module.d.comb += self.port("io_capture_capture").eq(
                 self.port("io_chainIn_capture")
             )
-        self.drive_update_outputs(module, register)
+        self.drive_update_outputs(module, registers)
 
         # Capture has priority over shift, matching the Chisel when/elsewhen
         # chain.  Update is a pulse-only observation and does not alter state.
@@ -212,23 +216,14 @@ class JtagShifterFamily(Elaboratable):
         shift = self.port("io_chainIn_shift")
         with cast(Any, module.If(capture)):
             payload = self.capture_payload()
-            if self.member == "CaptureChain":
-                module.d.sync += register.eq(payload)
-            elif self.member == "CaptureUpdateChain":
-                module.d.sync += register.eq(payload)
-            elif self.member == "CaptureUpdateChain_1":
-                module.d.sync += register.eq(payload)
-            elif self.member == "CaptureUpdateChain_2":
-                module.d.sync += register.eq(0)
-            else:
-                module.d.sync += register.eq(0)
-        with cast(Any, module.Elif(shift)):
-            if width == 1:
-                module.d.sync += register.eq(self.port("io_chainIn_data"))
-            else:
-                module.d.sync += register.eq(
-                    (register >> 1) | (self.port("io_chainIn_data") << (width - 1))
-                )
+            for index, register in enumerate(registers):
+                module.d.sync += register.eq((payload >> index) & 1)
+        update_suppresses_shift = self.member.startswith("CaptureUpdateChain")
+        shift_enabled = shift & ~self.port("io_chainIn_update") if update_suppresses_shift else shift
+        with cast(Any, module.Elif(shift_enabled)):
+            for index in range(width - 1):
+                module.d.sync += registers[index].eq(registers[index + 1])
+            module.d.sync += registers[-1].eq(self.port("io_chainIn_data"))
         return module
 
 

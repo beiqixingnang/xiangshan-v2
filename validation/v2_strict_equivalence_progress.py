@@ -336,6 +336,14 @@ def verify_variant_scope(payload: dict[str, Any], failures: list[str], counted: 
             failures.append("aggregate public_variants missing per-variant records")
         return {}
     public_names = {str(item) for item in public}
+    detailed_variants = nested(payload, "checks", "variants")
+    detailed_by_name: dict[str, Any] = {}
+    if isinstance(detailed_variants, list) and len(detailed_variants) == len(public):
+        detailed_by_name = {
+            str(name): record
+            for name, record in zip(public, detailed_variants, strict=True)
+            if isinstance(record, dict)
+        }
     if strict_variant_audit and public_names != set(variants):
         failures.append("public_variants and variant records differ")
     if strict_variant_audit and scope.get("variant_count") not in (None, len(public_names)):
@@ -387,8 +395,19 @@ def verify_variant_scope(payload: dict[str, Any], failures: list[str], counted: 
                 cells = raw.get("unconstrained_or_cells", raw.get("unconstrained_or_equiv_cells"))
                 if not isinstance(cells, int) or isinstance(cells, bool) or cells <= 0:
                     member_failures.append("zero/missing equivalence cells")
-                if raw.get("unproven_cells") not in (0, None):
+                proven = raw.get("proven_cells")
+                if not isinstance(proven, int) or isinstance(proven, bool) or proven != cells:
+                    member_failures.append("incomplete proven equivalence cells")
+                if raw.get("unproven_cells") != 0:
                     member_failures.append("unproven equivalence cells")
+                markers = raw.get("markers_present")
+                if not isinstance(markers, dict):
+                    detail = detailed_by_name.get(str(name), {})
+                    markers = detail.get("yosys_equiv", {}).get("markers_present") \
+                        if isinstance(detail, dict) else None
+                if not isinstance(markers, dict) or not all(
+                        markers.get(marker) is True for marker in EQUIV_SUCCESS_MARKERS):
+                    member_failures.append("sequential equivalence full-output markers")
             else:
                 free = raw.get("unconstrained_or_cells", raw.get("unconstrained_or_equiv_cells"))
                 if free is not True:
@@ -481,6 +500,21 @@ def verify_evidence(path: Path, expected_source_commit: str) -> dict[str, Any]:
         checks = {}
         if not non_counting:
             failures.append("checks object")
+    scope_for_gates = payload.get("scope", {})
+    public_for_gates = scope_for_gates.get("public_variants", []) \
+        if isinstance(scope_for_gates, dict) else []
+    variants_for_gates = scope_for_gates.get("variants", {}) \
+        if isinstance(scope_for_gates, dict) else {}
+    all_sequential_variants = (
+        isinstance(public_for_gates, list)
+        and len(public_for_gates) > 1
+        and isinstance(variants_for_gates, dict)
+        and set(str(item) for item in public_for_gates) == set(variants_for_gates)
+        and all(isinstance(record, dict)
+                and record.get("sequential") is True
+                and record.get("method") == "sequential_equivalence"
+                for record in variants_for_gates.values())
+    )
     if not non_counting:
         declared_failures = payload.get("failures")
         declared_unclosed = payload.get("unclosed")
@@ -491,7 +525,12 @@ def verify_evidence(path: Path, expected_source_commit: str) -> dict[str, Any]:
         require_pass_gate(checks, "py_compile", failures)
         require_pass_gate(checks, "pyright", failures)
         for status_path, status in status_paths(checks):
-            if status != "PASS":
+            allowed_not_applicable = all_sequential_variants and status == "NOT_APPLICABLE" \
+                and status_path in {
+                    "checks.formal.yosys_formal_miter",
+                    "checks.aggregate_sat_miter",
+                }
+            if status != "PASS" and not allowed_not_applicable:
                 failures.append(f"gate status {status_path}: {status}")
         public = payload.get("scope", {}).get("public_variants", [])
         if not isinstance(public, list) or len(public) <= 1:
@@ -561,18 +600,19 @@ def verify_evidence(path: Path, expected_source_commit: str) -> dict[str, Any]:
                 "aggregate variants lack verified locked references: "
                 + ", ".join(missing_variant_refs))
 
-    proof_method = "sat_miter"
-    formal = nested(payload, "checks", "formal", "yosys_formal_miter")
-    if not isinstance(formal, dict):
+    proof_method = "sequential_variant_set" if all_sequential_variants else "sat_miter"
+    formal = {} if all_sequential_variants else nested(
+        payload, "checks", "formal", "yosys_formal_miter")
+    if not all_sequential_variants and not isinstance(formal, dict):
         proof_method = "sequential_equivalence"
         formal = nested(payload, "checks", "formal", "yosys_equiv")
-    if not isinstance(formal, dict):
+    if not all_sequential_variants and not isinstance(formal, dict):
         formal = {}
         if not non_counting:
             failures.append("formal result")
     formal_command = formal.get("command", [])
     command_text = " ".join(str(item) for item in formal_command) if isinstance(formal_command, list) else str(formal_command)
-    if not non_counting:
+    if not non_counting and not all_sequential_variants:
         if formal.get("returncode") != 0 or formal.get("status") != "PASS":
             failures.append("formal status")
         if formal.get("formal_success_marker") is not True:

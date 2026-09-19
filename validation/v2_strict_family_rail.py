@@ -627,6 +627,10 @@ class FamilyRail:
                         rf"assign\s+{re.escape(candidate)}\s*=\s*[^;]+;",
                         lambda _m: f"assign {candidate} = 1'b0;", body, count=1)
                     if count != 1:
+                        mutated_body, count = re.subn(
+                            rf"\b{re.escape(candidate)}\s*<=\s*[^;]+;",
+                            lambda _m: f"{candidate} <= 1'b0;", body, count=1)
+                    if count != 1:
                         continue
                     attempted = True
                     mutated = (source[:module_start.start()] + mutated_body
@@ -747,6 +751,7 @@ class FamilyRail:
                 "locked_reference_lint": results[index].get("locked_verilator", {}).get("status"),
                 "verdict": proof.get("status"),
                 "success_marker": proof.get("formal_success_marker"),
+                "markers_present": proof.get("markers_present"),
                 "unconstrained_or_equiv_cells": (proof.get("unconstrained")
                                                  if not item["sequential"] else proof.get("equiv_cells")),
                 "proven_cells": proof.get("proven_cells"),
