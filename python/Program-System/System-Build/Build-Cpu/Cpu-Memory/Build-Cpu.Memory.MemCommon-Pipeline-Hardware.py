@@ -1046,7 +1046,7 @@ class PipelineRegFamily(Elaboratable):
         fields = FIELD_LAYOUTS[self.member]
         registers: dict[str, Signal] = {}
         for name, width in fields:
-            register = Signal(width, name=f"pipeline_{name}")
+            register = Signal(width, name=f"io_out_bits_r_{name}", reset_less=True)
             registers[name] = register
             module.d.comb += self.ports[f"io_out_bits_{name}"].eq(register)
             with cast(Any, module.If(in_fire)):
