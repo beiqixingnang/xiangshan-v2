@@ -164,6 +164,22 @@ def main() -> int:
             row["failures"].append("duplicate build_id")
         seen.add(build_id)
     builds = sorted(BUILD_ROOT.rglob("*.py"))
+    build_claims: dict[str, list[str]] = {}
+    for row in rows:
+        if row["status"] != "PASS":
+            continue
+        claimed_path = str(row["sources"].get("python_build", {}).get("path", ""))
+        if claimed_path:
+            build_claims.setdefault(claimed_path, []).append(str(row["build_id"]))
+    aggregate_claims = {path: ids for path, ids in build_claims.items() if len(ids) > 1}
+    for row in rows:
+        row_path = str(row["sources"].get("python_build", {}).get("path", ""))
+        if row["status"] == "PASS" and row_path in aggregate_claims:
+            row["status"] = "FAIL"
+            row["failures"].append(
+                "aggregate Build claimed by "
+                f"{len(aggregate_claims[row_path])} strict proofs: {row_path}"
+            )
     strict_count = sum(row["status"] == "PASS" for row in rows)
     denominator = len(builds)
     execution = plan.get("execution_state", {})
@@ -186,6 +202,9 @@ def main() -> int:
             "status": reconciliation,
         },
         "duplicate_build_ids": duplicates,
+        "aggregate_build_claim_conflicts": {
+            path: ids for path, ids in sorted(aggregate_claims.items())
+        },
         "proofs": rows,
         "status": "PASS" if all(row["status"] == "PASS" for row in rows) and reconciliation == "PASS" else "FAIL",
     }
