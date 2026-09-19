@@ -2,12 +2,12 @@
   "schema_version": 1,
   "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_EQUIVALENCE_PROGRESS",
   "build_denominator": 118,
-  "strict_complete_build_count": 13,
-  "fraction": "13/118",
-  "percentage": 11.016949,
+  "strict_complete_build_count": 14,
+  "fraction": "14/118",
+  "percentage": 11.864407,
   "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with the locked source commit, matching source hashes, and either a Yosys SAT no-model miter or fully proven Yosys inductive-equivalence status is counted.",
   "plan_reconciliation": {
-    "plan_count": 13,
+    "plan_count": 14,
     "plan_denominator": 118,
     "status": "PASS"
   },
@@ -211,6 +211,68 @@
           "-Q",
           "-p",
           "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_bytemasktailgen_strict/UHSC_ByteMaskTailGen.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_bytemasktailgen_strict/REF_ByteMaskTailGen_closure.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_bytemasktailgen_strict/ByteMaskTailGen_MITER.sv; prep -top ByteMaskTailGen_MITER; flatten; opt; sat -prove mismatch 0"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "formal_success_marker": true
+      },
+      "failures": []
+    },
+    {
+      "evidence": "validation/v2-commitstuckcounter-strict-evidence.json",
+      "build_id": "Build-Cpu.Backend.Rob.CommitStuckCounter",
+      "source_commit": {
+        "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+        "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+        "status": "PASS"
+      },
+      "status": "PASS",
+      "scope": {
+        "kind": "sequential_registered_leaf",
+        "state_bits": 21,
+        "inputs": {
+          "clock": 1,
+          "reset": 1,
+          "io_stuck": 1,
+          "io_runtimeEnable": 1
+        },
+        "outputs_compared": {
+          "io_overflow": 1
+        },
+        "input_bits": 4,
+        "transition_relation": "all input sequences, posedge clock, async reset",
+        "why_complete": "Yosys equiv_induct -undef proves all state/output equivalence cells"
+      },
+      "sources": {
+        "scala": {
+          "path": "upstream/src/main/scala/xiangshan/backend/rob/CommitStuckCounter.scala",
+          "present": true,
+          "expected_sha256": "0f19beedb1d73d4eccc04550a4c42e394f34f2adecde88ed0d65c7e98c8777db",
+          "observed_sha256": "0f19beedb1d73d4eccc04550a4c42e394f34f2adecde88ed0d65c7e98c8777db",
+          "status": "PASS"
+        },
+        "reference_sv": {
+          "path": "validation/reference-closures/CommitStuckCounter-v2.sv",
+          "present": true,
+          "expected_sha256": "271ce54be31e50b0ba031837d6a92a24c0979eefa6ba3af9c9aad89af96442a4",
+          "observed_sha256": "271ce54be31e50b0ba031837d6a92a24c0979eefa6ba3af9c9aad89af96442a4",
+          "status": "PASS"
+        },
+        "python_build": {
+          "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Rob.CommitStuckCounter-Hardware.py",
+          "present": true,
+          "expected_sha256": "8333ca63f27abd4b84e176ea58953c73bbef061bee3a7ec0ad5e6e7ba63529e9",
+          "observed_sha256": "8333ca63f27abd4b84e176ea58953c73bbef061bee3a7ec0ad5e6e7ba63529e9",
+          "status": "PASS"
+        }
+      },
+      "formal": {
+        "proof_method": "sequential_equivalence",
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_commitstuckcounter_strict/CommitStuckCounter.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_commitstuckcounter_strict/CommitStuckCounter_ref.sv; proc; async2sync; memory; opt; equiv_make CommitStuckCounter CommitStuckCounter_ref CommitStuckCounter_equiv; prep -top CommitStuckCounter_equiv; equiv_induct -undef; equiv_status -assert"
         ],
         "returncode": 0,
         "status": "PASS",

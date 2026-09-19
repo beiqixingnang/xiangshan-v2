@@ -1,0 +1,309 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_COMPLETE_EQUIVALENCE",
+  "build_id": "Build-Cpu.Frontend.Icache.Utils.DeMultiplexer-n10",
+  "validator": "validation/v2_demultiplexer_strict_validator.py",
+  "status": "COMPLETE_EQUIVALENCE_VARIANT_ONLY",
+  "strict_complete_eligible": false,
+  "strict_complete_count_delta": 0,
+  "acceptance_eligible": false,
+  "variant_only_reason": "This SAT miter closes the DeMultiplexer n=10/bits_width=50 specialization only. The target Build parameterizes DeMultiplexer and additionally serves MuxBundle and FIFOReg, which is its default export, so one configuration cannot complete it.",
+  "uncovered_public_variants": [
+    "DeMultiplexer(n!=10 or bits_width!=50)",
+    "DeMultiplexer default n=4 export",
+    "MuxBundle(bits_width,n)",
+    "FIFOReg(bits_width,entries,pipe,has_flush)"
+  ],
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "scope": {
+    "kind": "stateless_combinational_leaf",
+    "configuration": "DeMultiplexer, n=10, scalar payload width=50",
+    "packing": "io_*_bits[41:0]=blkPaddr; io_*_bits[49:42]=vSetIdx",
+    "state_bits": 0,
+    "state_boundary": "no clock/reset/register/memory; one combinational evaluation",
+    "inputs": {
+      "io_in_bits": 50,
+      "io_in_valid": 1,
+      "io_out_0_ready": 1,
+      "io_out_1_ready": 1,
+      "io_out_2_ready": 1,
+      "io_out_3_ready": 1,
+      "io_out_4_ready": 1,
+      "io_out_5_ready": 1,
+      "io_out_6_ready": 1,
+      "io_out_7_ready": 1,
+      "io_out_8_ready": 1,
+      "io_out_9_ready": 1
+    },
+    "outputs_compared": {
+      "io_in_ready": 1,
+      "io_chosen": 4,
+      "io_out_0_valid": 1,
+      "io_out_1_valid": 1,
+      "io_out_2_valid": 1,
+      "io_out_3_valid": 1,
+      "io_out_4_valid": 1,
+      "io_out_5_valid": 1,
+      "io_out_6_valid": 1,
+      "io_out_7_valid": 1,
+      "io_out_8_valid": 1,
+      "io_out_9_valid": 1,
+      "io_out_0_bits": 50,
+      "io_out_1_bits": 50,
+      "io_out_2_bits": 50,
+      "io_out_3_bits": 50,
+      "io_out_4_bits": 50,
+      "io_out_5_bits": 50,
+      "io_out_6_bits": 50,
+      "io_out_7_bits": 50,
+      "io_out_8_bits": 50,
+      "io_out_9_bits": 50
+    },
+    "input_bits": 61,
+    "output_bits": 515,
+    "input_space": "2**61",
+    "input_space_cardinality": "2305843009213693952",
+    "why_complete": "Yosys SAT proves the packed miter mismatch is zero with all 61 input bits unconstrained; all ten valid lanes, payload lanes, ready, and chosen are compared.",
+    "bounded_tests_counted": false
+  },
+  "reference_lock": {
+    "status": "PASS",
+    "checks": {
+      "scala_present": true,
+      "scala_hash": true,
+      "reference_present": true,
+      "reference_hash": true,
+      "index_present": true,
+      "index_source_commit": true,
+      "index_xstop_hash": true,
+      "index_xstop_bytes": true,
+      "index_module_hash": true,
+      "index_module_path": true,
+      "index_extraction": true
+    },
+    "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+    "scala_sha256": "12489d704c86b65f6d4bc15e64b659bb2fa94f236eb93350d9dee012a22ba926",
+    "xstop": {
+      "canonical_path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+      "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+      "bytes": 228590583
+    },
+    "reference": {
+      "path": "validation/reference-closures/DeMultiplexer_1.sv",
+      "sha256": "71f94459f54714ad7e4b37e5cd8a96cfd24ea2b1eec7a4ffbb0c6c2a1446e67d",
+      "locked_module": "DeMultiplexer_1",
+      "packing": "target scalar [49:0] maps to locked blkPaddr[41:0] and vSetIdx[7:0]",
+      "xstop_lines": [
+        93401,
+        93507
+      ]
+    }
+  },
+  "sources": {
+    "scala": {
+      "path": "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala",
+      "sha256": "12489d704c86b65f6d4bc15e64b659bb2fa94f236eb93350d9dee012a22ba926",
+      "bytes": 20881
+    },
+    "reference_sv": {
+      "path": "validation/reference-closures/DeMultiplexer_1.sv",
+      "sha256": "71f94459f54714ad7e4b37e5cd8a96cfd24ea2b1eec7a4ffbb0c6c2a1446e67d",
+      "bytes": 12157,
+      "locked_module": "DeMultiplexer_1",
+      "reference_index": "validation/v2-p1-b-icache-reference-index.json"
+    },
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.Utils-Hardware.py",
+      "sha256": "777a19b67125e5d8a668507cb8d45423282051975186a1b212ec6d59cd55e273",
+      "bytes": 11082
+    }
+  },
+  "checks": {
+    "py_compile": {
+      "status": "PASS"
+    },
+    "pyright": {
+      "target": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_demultiplexer_pyright_jput18h0\\Build-Cpu.Frontend.Icache.Utils-Hardware.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "files_analyzed": 1,
+        "error_count": 0,
+        "warning_count": 0,
+        "output_sha256": "30d57189f4f7ac8793b4c5febbc2ed91c09c57a80abae72800603d337ca30d84",
+        "stderr_tail": ""
+      },
+      "validator": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_demultiplexer_pyright_t62irh5l\\v2_demultiplexer_strict_validator.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "files_analyzed": 1,
+        "error_count": 0,
+        "warning_count": 0,
+        "output_sha256": "99ec3a0c9b147ec05281302a17ca085e79714d884e51400dd201a93ea908c997",
+        "stderr_tail": ""
+      }
+    },
+    "deterministic_export": {
+      "status": "PASS",
+      "bytes": 45164,
+      "sha256": "a65f7a679ebca1a8445cb5610fd1b6540037cea82b573747788b5ac7dce39a23",
+      "repeat_sha256": "a65f7a679ebca1a8445cb5610fd1b6540037cea82b573747788b5ac7dce39a23",
+      "byte_equal": true,
+      "abi": {
+        "expected_port_count": 34,
+        "observed_port_count": 34,
+        "exact_port_set": true,
+        "configuration": {
+          "module": "DeMultiplexer",
+          "bits_width": 50,
+          "n": 10
+        }
+      }
+    },
+    "existing_behavior": {
+      "status": "PASS",
+      "direct": {
+        "path": "validation/v2-p1-b-icache-direct-results.json",
+        "status": "PASS_BOUNDED_DIRECT",
+        "sha256": "083c13c41c203799cec3146ef232c51688d4e518c0540cbd5b85b71b973cd095"
+      },
+      "differential": {
+        "path": "validation/v2-p1-b-icache-differential-results.json",
+        "status": "DIFFERENTIAL_MATCHED",
+        "comparison": "PASS",
+        "behavioral_equivalence": true,
+        "vectors": 8192,
+        "sha256": "4fd273e7535f654590aefc520ea103e21e7c08792f911aef5d87764b3a25d8bc"
+      }
+    },
+    "tools": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--version"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n",
+        "output_sha256": "ae161d63a0898d55050284fd76bd5e83136b75d2ec90d5b0622f196d5edc2aff"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "--version"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\n",
+        "output_sha256": "239d92e36e753a9dff4e79d97878ed5d55304b675d411895ec57508bc134e28e"
+      }
+    },
+    "formal": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "--top-module",
+          "DeMultiplexer_MITER",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_demultiplexer_strict/UHSC_DeMultiplexer.sv",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_demultiplexer_strict/REF_DeMultiplexer.sv",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_demultiplexer_strict/DeMultiplexer_MITER.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.182 MB sources in 4 modules, into 0.020 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.147 s (elab=0.005, cvt=0.010, bld=0.000); cpu 0.039 s on 1 threads; alloced 9.977 MB\n",
+        "output_sha256": "07360103a2429bed6ed1ae40d96140f555d0e7757d757ef9c7269e0acdb01686"
+      },
+      "yosys_target": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_demultiplexer_strict/UHSC_DeMultiplexer.sv; hierarchy -top DeMultiplexer; proc; opt; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "\n-- Running command `read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_demultiplexer_strict/UHSC_DeMultiplexer.sv; hierarchy -top DeMultiplexer; proc; opt; check' --\n\n1. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_demultiplexer_strict/UHSC_DeMultiplexer.sv\nParsing SystemVerilog input from `/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_demultiplexer_strict/UHSC_DeMultiplexer.sv' to AST representation.\nGenerating RTLIL representation for module `\\DeMultiplexer'.\nSuccessfully finished Verilog frontend.\n\n2. Executing HIERARCHY pass (managing design hierarchy).\n\n2.1. Analyzing design hierarchy..\nTop module:  \\DeMultiplexer\n\n2.2. Analyzing design hierarchy..\nTop module:  \\DeMultiplexer\nRemoved 0 unused modules.\n\n3. Executing PROC pass (convert processes to netlists).\n\n3.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DeMultiplexer.\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DeMultiplexer.\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\DeMultiplexer'.\n<suppressed ~108 debug messages>\nRemoved a total of 36 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\DeMultiplexer..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\DeMultiplexer.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\DeMultiplexer'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\DeMultiplexer..\nRemoved 0 unused cells and 72 unused wires.\n<suppressed ~1 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DeMultiplexer.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\DeMultiplexer..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\DeMultiplexer.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\DeMultiplexer'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\DeMultiplexer..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DeMultiplexer.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module DeMultiplexer...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 468b9d7920, CPU: user 0.08s system 0.00s, MEM: 12.97 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 43% 2x read_verilog (0 sec), 20% 4x opt_expr (0 sec), ...\n",
+        "output_sha256": "5fc3a08f698e896e305db1137128f3be8f9a5485c3276d2d797ff8045ea2dffe"
+      },
+      "yosys_reference": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_demultiplexer_strict/REF_DeMultiplexer.sv; hierarchy -top DeMultiplexer_ref; proc; opt; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "\n-- Running command `read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_demultiplexer_strict/REF_DeMultiplexer.sv; hierarchy -top DeMultiplexer_ref; proc; opt; check' --\n\n1. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_demultiplexer_strict/REF_DeMultiplexer.sv\nParsing SystemVerilog input from `/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_demultiplexer_strict/REF_DeMultiplexer.sv' to AST representation.\nGenerating RTLIL representation for module `\\DeMultiplexer_ref'.\nSuccessfully finished Verilog frontend.\n\n2. Executing HIERARCHY pass (managing design hierarchy).\n\n2.1. Analyzing design hierarchy..\nTop module:  \\DeMultiplexer_ref\n\n2.2. Analyzing design hierarchy..\nTop module:  \\DeMultiplexer_ref\nRemoved 0 unused modules.\n\n3. Executing PROC pass (convert processes to netlists).\n\n3.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DeMultiplexer_ref.\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DeMultiplexer_ref.\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\DeMultiplexer_ref'.\n<suppressed ~63 debug messages>\nRemoved a total of 21 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\DeMultiplexer_ref..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\DeMultiplexer_ref.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\DeMultiplexer_ref'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\DeMultiplexer_ref..\nRemoved 0 unused cells and 34 unused wires.\n<suppressed ~1 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DeMultiplexer_ref.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\DeMultiplexer_ref..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\DeMultiplexer_ref.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\DeMultiplexer_ref'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\DeMultiplexer_ref..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DeMultiplexer_ref.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module DeMultiplexer_ref...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: ce4e22447c, CPU: user 0.05s system 0.02s, MEM: 12.19 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 23% 4x opt_expr (0 sec), 19% 2x read_verilog (0 sec), ...\n",
+        "output_sha256": "189a43853d386f837a580c7512d6b59e967afca8e74e3745ab9b47151a6122ec"
+      },
+      "yosys_formal_miter": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_demultiplexer_strict/UHSC_DeMultiplexer.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_demultiplexer_strict/REF_DeMultiplexer.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_demultiplexer_strict/DeMultiplexer_MITER.sv; prep -top DeMultiplexer_MITER; flatten; opt; sat -prove mismatch 0"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "  Number of port bits:            576\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                 36\n     $and                            9\n     $mux                            8\n     $not                           10\n     $or                             9\n\n=== design hierarchy ===\n\n   DeMultiplexer_MITER               1\n     DeMultiplexer                   1\n     DeMultiplexer_ref               1\n\n   Number of wires:                297\n   Number of wire bits:           2934\n   Number of public wires:         221\n   Number of public wire bits:    2344\n   Number of ports:                 92\n   Number of port bits:           1214\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                126\n     $and                           18\n     $mux                           17\n     $not                           19\n     $or                            39\n     $reduce_or                     11\n     $xor                           22\n\n4.13. Executing CHECK pass (checking for obvious problems).\nChecking module DeMultiplexer...\nChecking module DeMultiplexer_MITER...\nChecking module DeMultiplexer_ref...\nFound and reported 0 problems.\n\n5. Executing FLATTEN pass (flatten design).\nDeleting now unused module DeMultiplexer.\nDeleting now unused module DeMultiplexer_ref.\n<suppressed ~2 debug messages>\n\n6. Executing OPT pass (performing simple optimizations).\n\n6.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DeMultiplexer_MITER.\n<suppressed ~2 debug messages>\n\n6.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\DeMultiplexer_MITER'.\n<suppressed ~135 debug messages>\nRemoved a total of 45 cells.\n\n6.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\DeMultiplexer_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\DeMultiplexer_MITER.\nPerformed a total of 0 changes.\n\n6.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\DeMultiplexer_MITER'.\nRemoved a total of 0 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\DeMultiplexer_MITER..\nRemoved 0 unused cells and 84 unused wires.\n<suppressed ~1 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DeMultiplexer_MITER.\n<suppressed ~20 debug messages>\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\DeMultiplexer_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\DeMultiplexer_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\DeMultiplexer_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\DeMultiplexer_MITER..\nRemoved 27 unused cells and 78 unused wires.\n<suppressed ~70 debug messages>\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DeMultiplexer_MITER.\n\n6.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\DeMultiplexer_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\DeMultiplexer_MITER.\nPerformed a total of 0 changes.\n\n6.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\DeMultiplexer_MITER'.\nRemoved a total of 0 cells.\n\n6.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\DeMultiplexer_MITER..\n\n6.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DeMultiplexer_MITER.\n\n6.23. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 34 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 694 variables and 1689 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 4f97343cd6, CPU: user 0.23s system 0.01s, MEM: 15.78 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 31% 8x opt_clean (0 sec), 16% 10x opt_expr (0 sec), ...\n",
+        "output_sha256": "4c49b5e41d817ba8152bf4ef5ab5c62a757525422d041bdcf28b86fcbeebb297",
+        "formal_success_marker": true,
+        "formal_scope": {
+          "input_bits": 61,
+          "input_space": "2**61",
+          "input_space_cardinality": "2305843009213693952",
+          "state_bits": 0,
+          "state_space": "singleton (stateless combinational module)",
+          "outputs_compared": {
+            "io_in_ready": 1,
+            "io_chosen": 4,
+            "io_out_0_valid": 1,
+            "io_out_1_valid": 1,
+            "io_out_2_valid": 1,
+            "io_out_3_valid": 1,
+            "io_out_4_valid": 1,
+            "io_out_5_valid": 1,
+            "io_out_6_valid": 1,
+            "io_out_7_valid": 1,
+            "io_out_8_valid": 1,
+            "io_out_9_valid": 1,
+            "io_out_0_bits": 50,
+            "io_out_1_bits": 50,
+            "io_out_2_bits": 50,
+            "io_out_3_bits": 50,
+            "io_out_4_bits": 50,
+            "io_out_5_bits": 50,
+            "io_out_6_bits": 50,
+            "io_out_7_bits": 50,
+            "io_out_8_bits": 50,
+            "io_out_9_bits": 50
+          },
+          "output_bits": 515,
+          "property": "mismatch == 0 for every 2-state valuation of all packed n=10 inputs"
+        }
+      }
+    }
+  },
+  "failures": [],
+  "unclosed": []
+}

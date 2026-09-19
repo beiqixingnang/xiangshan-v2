@@ -336,9 +336,18 @@ class BackendSmallControlFamily(Elaboratable):
         # Branch immediates are sign-extended from the low 15 bits in the
         # locked wrapper; the sequential path advances by halfword units.
         imm15 = Cat(imm[:15], imm[14].replicate(36))
-        seq = Cat(self.ports["io_nextPcOffset"], Const(0, 1))
+        # ``Cat`` places its first argument in the least-significant bits;
+        # put the explicit zero first so the sequential offset is shifted by
+        # one (the Chisel ``<< instOffsetBits`` operation).
+        seq = Cat(Const(0, 1), self.ports["io_nextPcOffset"])
+        target_sum = Signal(51, name="addr_target_sum")
         target = Mux(self.ports["io_taken"], pc + imm15, pc + seq)
-        module.d.comb += self.ports["io_target"].eq(target)
+        # The generated Chisel leaf truncates the adder carry to VAddrBits+1
+        # and then sign-extends that 51-bit result to XLEN.
+        module.d.comb += [
+            target_sum.eq(target[:51]),
+            self.ports["io_target"].eq(Cat(target_sum, target_sum[50].replicate(13))),
+        ]
 
 # Implement bounded GPA storage. / 实现有界 GPA 存储。
     def _gpa_mem(self, module: Module) -> None:

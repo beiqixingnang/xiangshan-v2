@@ -13,9 +13,11 @@ from amaranth import ClockDomain, Elaboratable, Module, Signal
 # =============================================================================
 # Module Contract
 # =============================================================================
-# The V2 counter clears when disabled/not stuck and reports an all-ones
-# overflow after the configured number of consecutive stuck cycles.
-# V2 计数器在禁用或未卡死时清零，并在连续卡死达到阈值时报告溢出。
+# The locked V2 ABI has clock/reset, stuck/runtimeEnable inputs and one
+# overflow output.  The count is private state and overflow is the reduction
+# AND of that state (there is no external overflow-enable gate).
+# 锁定 V2 ABI 只有时钟/复位、卡死/运行使能输入和溢出输出；计数为私有状态，
+# 溢出是计数的归约与（不存在外部 overflow-enable 门控）。
 __all__ = ["CommitStuckCounterConfig", "CommitStuckCounter", "build_verilog", "main"]
 
 
@@ -51,8 +53,9 @@ class CommitStuckCounter(Elaboratable):
         self.clock_domain.rst = self.reset
         self.stuck = Signal(name="io_stuck")
         self.runtime_enable = Signal(name="io_runtimeEnable")
-        self.overflow_enabled = Signal(name="io_overflowEnabled")
-        self.count = Signal(configuration.width, name="io_count")
+        # Keep count internal: the locked generated module does not expose it.
+        # 保持 count 为内部状态：锁定生成模块不导出该端口。
+        self.count = Signal(configuration.width, name="count")
         self.overflow = Signal(name="io_overflow")
 
     # Elaborate reset, clear, increment, and overflow equations. / 展开复位、清零、递增与溢出方程。
@@ -60,7 +63,7 @@ class CommitStuckCounter(Elaboratable):
         del platform
         m = Module()
         m.domains += self.clock_domain
-        m.d.comb += self.overflow.eq(self.count.all() & self.overflow_enabled)
+        m.d.comb += self.overflow.eq(self.count.all())
         effective_enable = self.runtime_enable | self.configuration.force_enable
         with cast(Any, m.If(effective_enable & self.stuck)):
             m.d.sync += self.count.eq(self.count + 1)
@@ -84,8 +87,7 @@ def build_verilog(configuration=None, injected_dependencies=None) -> str:
     return verilog.convert(
         top,
         name="CommitStuckCounter",
-        ports=[top.clock, top.reset, top.stuck, top.runtime_enable,
-               top.overflow_enabled, top.count, top.overflow],
+        ports=[top.clock, top.reset, top.stuck, top.runtime_enable, top.overflow],
     )
 
 
