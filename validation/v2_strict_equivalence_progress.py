@@ -6,8 +6,10 @@ from __future__ import annotations
 
 import ast
 import hashlib
+import importlib.util
 import json
 import re
+import sys
 from pathlib import Path
 from typing import Any
 
@@ -194,7 +196,39 @@ def _string_members(value: Any) -> set[str]:
     return set()
 
 
-def build_declared_members(build_path: Path) -> list[str]:
+def _runtime_catalog_members(build_path: Path, failures: list[str]) -> list[str]:
+    """Import one side-effect-free Build and read its public catalog."""
+
+    module_name = f"_v2_progress_catalog_{hashlib.sha256(str(build_path).encode()).hexdigest()[:16]}"
+    try:
+        spec = importlib.util.spec_from_file_location(module_name, build_path)
+        if spec is None or spec.loader is None:
+            raise ImportError(f"cannot create import spec for {build_path.name}")
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[module_name] = module
+        try:
+            spec.loader.exec_module(module)
+        finally:
+            sys.modules.pop(module_name, None)
+    except Exception as error:  # The audit must record import failures, not crash.
+        failures.append(f"runtime Build catalog import failed: {type(error).__name__}: {error}")
+        return []
+    for attribute in ("LOCKED_VARIANTS", "COVERED_MODULES"):
+        value = getattr(module, attribute, None)
+        if value is None:
+            continue
+        if not isinstance(value, (list, tuple)) or not value \
+                or not all(isinstance(item, str) and item for item in value):
+            failures.append(f"runtime Build catalog {attribute} is not a non-empty string sequence")
+            return []
+        members = list(value)
+        if len(members) != len(set(members)):
+            failures.append(f"runtime Build catalog {attribute} repeats a member")
+        return sorted(members)
+    return []
+
+
+def build_declared_members(build_path: Path, failures: list[str] | None = None) -> list[str]:
     """Enumerate every module name a catalog Build declares.
 
     Covers ``COVERED_MODULES`` and ``*_MEMBERS`` tuples plus ``*_SPECS`` mapping
@@ -204,6 +238,7 @@ def build_declared_members(build_path: Path) -> list[str]:
     complete one.
     """
 
+    catalog_failures = failures if failures is not None else []
     if not build_path.is_file():
         return []
     text = build_path.read_text(encoding="utf-8")
@@ -226,10 +261,12 @@ def build_declared_members(build_path: Path) -> list[str]:
             resolved = _static_value(value_node, values)
             if resolved is not None:
                 values[name] = resolved
+    static_primary: set[str] = set()
     for primary in ("LOCKED_VARIANTS", "COVERED_MODULES"):
         members = _string_members(values.get(primary))
         if members:
-            return sorted(members)
+            static_primary = members
+            break
     candidates: set[str] = set()
     for name, value in values.items():
         if name.endswith("_MEMBERS") or name.endswith("_SPECS"):
@@ -243,7 +280,15 @@ def build_declared_members(build_path: Path) -> list[str]:
             candidates |= set(re.findall(r'^\s{4}"([^"]+)":', block.group(0), re.M))
     candidates |= set(re.findall(
         r'(?:member|module_name|subject|module)\s*==\s*"([A-Za-z_]\w*)"', text))
-    return sorted(candidates)
+    runtime_members = _runtime_catalog_members(build_path, catalog_failures)
+    if runtime_members:
+        if static_primary and set(runtime_members) != static_primary:
+            catalog_failures.append(
+                "runtime/static Build catalog mismatch: "
+                f"runtime={len(runtime_members)}, static={len(static_primary)}"
+            )
+        return runtime_members
+    return sorted(static_primary or candidates)
 
 
 def build_declared_scala_paths(build_path: Path) -> set[str]:
@@ -567,7 +612,7 @@ def verify_evidence(path: Path, expected_source_commit: str) -> dict[str, Any]:
             failures.append(
                 "Build-declared Scala sources are not locked in evidence: "
                 + ", ".join(missing_scala))
-        member_list = build_declared_members(ROOT / claimed_build)
+        member_list = build_declared_members(ROOT / claimed_build, failures)
         members = set(member_list)
         if len(member_list) != len(members):
             failures.append("aggregate Build declares duplicate locked members")
