@@ -3419,11 +3419,17 @@ class AsyncQueueSource(Elaboratable):
                      ridx_sync.io_d.eq(self.ports["io_async_ridx"])]
         memory = {(wire, field): Signal(width, reset_less=True)
                   for wire in range(spec.depth) for field, width in spec.layout}
-        widx_bin = Signal(counter_width, reset=0)
-        widx_incremented = Signal(counter_width)
-        widx_gray = Signal(counter_width)
-        ready_reg = Signal(reset=0)
-        wide_widx_reg = Signal(counter_width, reset=0)
+        # Names follow the locked netlist so equivalence cells pair the same state:
+        # widx_widx_bin is the binary write pointer and widx_gray the registered
+        # Gray output. The combinational Gray value keeps a distinct name because
+        # the locked reference has no such net, and matching it to the register of
+        # the same role would compare a combinational signal against a clocked one.
+        # 命名对齐锁定网表：组合格雷码另起名，避免与同名寄存器错配。
+        widx_bin = Signal(counter_width, reset=0, name="widx_widx_bin")
+        widx_incremented = Signal(counter_width, name="widx_incremented")
+        widx_gray = Signal(counter_width, name="widx_gray_comb")
+        ready_reg = Signal(reset=0, name="ready_reg")
+        wide_widx_reg = Signal(counter_width, reset=0, name="widx_gray")
         enq_ready = Signal()
         enq_fire = Signal()
         m.d.comb += [enq_ready.eq(ready_reg & sink_ready),
@@ -3543,11 +3549,16 @@ class AsyncQueueSink(Elaboratable):
         m.submodules.widx_widx_gray = widx_sync
         m.d.comb += [widx_sync.clock.eq(self.clock), widx_sync.reset.eq(self.reset),
                      widx_sync.io_d.eq(self.ports["io_async_widx"])]
-        ridx_bin = Signal(counter_width, reset=0)
-        ridx_incremented = Signal(counter_width)
-        ridx_gray = Signal(counter_width)
-        valid_reg = Signal(reset=0)
-        ridx_reg = Signal(counter_width, reset=0)
+        # Internal names mirror the locked netlist so name-matched equivalence cells
+        # correspond: ridx_ridx_bin is the binary read pointer, ridx the combinational
+        # Gray code of the incremented pointer, and ridx_gray the registered Gray
+        # output that drives io_async_ridx.
+        # 内部命名对齐锁定网表，按名配对的等价单元才有意义。
+        ridx_bin = Signal(counter_width, reset=0, name="ridx_ridx_bin")
+        ridx_incremented = Signal(counter_width, name="ridx_incremented")
+        ridx_gray = Signal(counter_width, name="ridx")
+        valid_reg = Signal(reset=0, name="valid_reg")
+        ridx_reg = Signal(counter_width, reset=0, name="ridx_gray")
         valid = Signal()
         deq_ready: Any = (self.ports["io_deq_ready"] if "io_deq_ready" in self.ports
                           else Const(spec.deq_ready_constant or 0, 1))

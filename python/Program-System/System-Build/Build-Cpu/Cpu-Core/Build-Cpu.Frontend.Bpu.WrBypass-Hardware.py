@@ -179,9 +179,19 @@ class WrBypass(Elaboratable):
         hit_expr = hits[0]
         for entry in range(1, c.num_entries):
             hit_expr = hit_expr | hits[entry]
+        # The locked netlist OR-decodes the one-hot hit vector: result bit k is the
+        # OR of every hit whose entry index has bit k set. A lowest-index-wins mux
+        # chain would resolve simultaneous hits differently.
+        # 锁定网表对独热命中按位或解码，而非低索引优先选择。
         hit_idx = 0
-        for entry in range(c.num_entries - 1, -1, -1):
-            hit_idx = Mux(hits[entry], entry, hit_idx)
+        for bit in range(c.num_entries.bit_length() - 1):
+            terms = [hits[entry] for entry in range(c.num_entries) if (entry >> bit) & 1]
+            if not terms:
+                continue
+            bit_expr = terms[0]
+            for term in terms[1:]:
+                bit_expr = bit_expr | term
+            hit_idx = hit_idx | (bit_expr << bit)
         enq_idx = self.plru_victim_expr(state_reg, c.num_entries)
         selected_idx = Mux(hit_expr, hit_idx, enq_idx)
         m.d.comb += self.hit.eq(hit_expr)
