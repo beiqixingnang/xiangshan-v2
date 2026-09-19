@@ -62,6 +62,8 @@ __all__ = [
     "PMA_ENTRY_ADDRESSES",
     "PMA_ENTRY_RESET_ADDRESSES",
     "HANDLER_MODULE_NAMES",
+    "COVERED_MODULES",
+    "SOURCE_PATHS",
     "pmp_word_images",
     "pma_word_images",
     "cfg_word_selected",
@@ -150,6 +152,11 @@ PMA_ENTRY_RESET_ADDRESSES = (
 
 # The two locked module names this subject implements. / 本主体实现的锁定模块名。
 HANDLER_MODULE_NAMES: tuple[str, ...] = ("PMPEntryHandleModule", "PMAEntryHandleModule")
+COVERED_MODULES: tuple[str, ...] = HANDLER_MODULE_NAMES
+SOURCE_PATHS: tuple[str, ...] = (
+    "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/PMPEntryModule.scala",
+    "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/PMAEntryModule.scala",
+)
 
 
 # =============================================================================
