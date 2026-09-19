@@ -115,6 +115,19 @@ current Build line count, the shared-audit pass count, and the top-closure task
 list. Evidence JSON must retain failures and pending gates rather than rewriting
 them as success.
 
+### Strict behavior-equivalence progress rail
+
+Every progress report also includes `strict_complete_builds / total_builds`.
+The denominator is the dynamically discovered formal Build set under
+`System-Build/Build-Cpu`; it is not a fixed historical number. The numerator
+counts only Build targets with complete declared input/state-space equivalence
+or a successful formal/reference miter covering the target's full observable
+behavior. `PASS_BOUNDED`, exact ports, deterministic Verilog, Verilator/Yosys,
+random vectors, and reduced parent probes do not increment this numerator.
+Until such evidence exists the value remains zero even when the target has a
+passing bounded family gate. This rail is the strict completion fraction used
+for user-facing reports and cannot be promoted by structure-only coverage.
+
 ## Batch size and delegation
 
 - A normal leaf batch contains 30–40 closely related modules when their
