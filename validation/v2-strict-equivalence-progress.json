@@ -2,12 +2,12 @@
   "schema_version": 1,
   "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_EQUIVALENCE_PROGRESS",
   "build_denominator": 118,
-  "strict_complete_build_count": 4,
-  "fraction": "4/118",
-  "percentage": 3.389831,
+  "strict_complete_build_count": 6,
+  "fraction": "6/118",
+  "percentage": 5.084746,
   "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with matching source hashes and a Yosys SAT no-model success marker is counted.",
   "plan_reconciliation": {
-    "plan_count": 4,
+    "plan_count": 6,
     "plan_denominator": 118,
     "status": "PASS"
   },
@@ -67,6 +67,66 @@
           "-Q",
           "-p",
           "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_amoalu_strict/UHSC_AMOALU.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_amoalu_strict/REF_AMOALU.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_amoalu_strict/AMOALU_MITER.sv; prep -top AMOALU_MITER; flatten; opt; sat -prove mismatch 0"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "formal_success_marker": true
+      },
+      "failures": []
+    },
+    {
+      "evidence": "validation/v2-branchmodule-strict-evidence.json",
+      "build_id": "Build-Cpu.Backend.Fu.BranchModule",
+      "status": "PASS",
+      "scope": {
+        "kind": "stateless_combinational_leaf",
+        "configuration": "locked RV64, FuOpType func=9 bits",
+        "state_bits": 0,
+        "state_boundary": "no clock/reset/register/memory; one combinational evaluation",
+        "inputs": {
+          "io_src_0": 64,
+          "io_src_1": 64,
+          "io_func": 9,
+          "io_pred_taken": 1
+        },
+        "outputs_compared": {
+          "io_taken": 1,
+          "io_mispredict": 1
+        },
+        "input_bits": 138,
+        "input_space": "2**138",
+        "input_space_cardinality": "348449143727040986586495598010130648530944",
+        "why_complete": "Yosys SAT proves the two-output miter mismatch is zero with all 138 input bits unconstrained; no temporal state exists."
+      },
+      "sources": {
+        "scala": {
+          "path": "upstream/src/main/scala/xiangshan/backend/fu/Branch.scala",
+          "present": true,
+          "expected_sha256": "2553218c21dc4eb5368ae122c47a42b8d3873e326c5f381119a3651998508953",
+          "observed_sha256": "2553218c21dc4eb5368ae122c47a42b8d3873e326c5f381119a3651998508953",
+          "status": "PASS"
+        },
+        "reference_sv": {
+          "path": "validation/reference-closures/BranchModule-v2.sv",
+          "present": true,
+          "expected_sha256": "2f62a3e9fd5bbe51af539adc594d15f0ca2c75059cfde022b8051addb61dbd5a",
+          "observed_sha256": "2f62a3e9fd5bbe51af539adc594d15f0ca2c75059cfde022b8051addb61dbd5a",
+          "status": "PASS"
+        },
+        "python_build": {
+          "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.BranchModule-Hardware.py",
+          "present": true,
+          "expected_sha256": "d95127c09e3f1f319ecc8660afc875f6e5f521a07485153c06fa8fa52e3fbef3",
+          "observed_sha256": "d95127c09e3f1f319ecc8660afc875f6e5f521a07485153c06fa8fa52e3fbef3",
+          "status": "PASS"
+        }
+      },
+      "formal": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_branchmodule_strict/UHSC_BranchModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_branchmodule_strict/REF_BranchModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_branchmodule_strict/BranchModule_MITER.sv; prep -top BranchModule_MITER; flatten; opt; sat -prove mismatch 0"
         ],
         "returncode": 0,
         "status": "PASS",
@@ -244,6 +304,63 @@
           "-Q",
           "-p",
           "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_uinttocont0s_strict/UHSC_UIntToContLow0s.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_uinttocont0s_strict/REF_UIntToContLow0s.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_uinttocont0s_strict/UIntToContLow0s_MITER.sv; prep -top UIntToContLow0s_MITER; flatten; opt; sat -prove mismatch 0"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "formal_success_marker": true
+      },
+      "failures": []
+    },
+    {
+      "evidence": "validation/v2-uinttocont1s-strict-evidence.json",
+      "build_id": "Build-Cpu.Backend.Fu.Vector.Utils.UIntToCont1s",
+      "status": "PASS",
+      "scope": {
+        "kind": "stateless_combinational_leaf",
+        "configuration": "locked V2 UIntToContLow1s uintWidth=8, outWidth=(2**8)-1=255",
+        "state_bits": 0,
+        "state_boundary": "no clock/reset/register/memory; one combinational evaluation",
+        "inputs": {
+          "io_dataIn": 8
+        },
+        "outputs_compared": {
+          "io_dataOut": 255
+        },
+        "input_bits": 8,
+        "input_space": "2**8",
+        "input_space_cardinality": "256",
+        "why_complete": "Yosys SAT proves the complete 255-bit-output miter mismatch is zero with all 8 input bits unconstrained; no temporal state exists.",
+        "bounded_tests_counted": false
+      },
+      "sources": {
+        "scala": {
+          "path": "upstream/src/main/scala/xiangshan/backend/fu/vector/utils/UIntToCont1s.scala",
+          "present": true,
+          "expected_sha256": "e7c2dd1eacd1da976cf1e1409317b6d5b4d66ae530e7e2f8b084bca582b1bfb2",
+          "observed_sha256": "e7c2dd1eacd1da976cf1e1409317b6d5b4d66ae530e7e2f8b084bca582b1bfb2",
+          "status": "PASS"
+        },
+        "reference_sv": {
+          "path": "validation/reference-sv/UIntToContLow1s.sv",
+          "present": true,
+          "expected_sha256": "5db2a1ab3b5234c81d91b19f52caf43d214350a2ad1f6c88e1ef344692914d98",
+          "observed_sha256": "5db2a1ab3b5234c81d91b19f52caf43d214350a2ad1f6c88e1ef344692914d98",
+          "status": "PASS"
+        },
+        "python_build": {
+          "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Vector.Utils.UIntToCont1s-Hardware.py",
+          "present": true,
+          "expected_sha256": "0b5ca7d3d1b8e90ebd8ccbe34c4fa08baf5937b3d7eeb129103cfd70225c3837",
+          "observed_sha256": "0b5ca7d3d1b8e90ebd8ccbe34c4fa08baf5937b3d7eeb129103cfd70225c3837",
+          "status": "PASS"
+        }
+      },
+      "formal": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_uinttocont1s_strict/UHSC_UIntToContLow1s.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_uinttocont1s_strict/REF_UIntToContLow1s.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_uinttocont1s_strict/UIntToContLow1s_MITER.sv; prep -top UIntToContLow1s_MITER; flatten; opt; sat -prove mismatch 0"
         ],
         "returncode": 0,
         "status": "PASS",

@@ -1,8 +1,9 @@
-"""Complete combinational equivalence validator for the V2 JumpDataModule leaf.
+"""Complete formal equivalence validator for the V2 UIntToCont1s leaf.
 
-The miter leaves every input bit unconstrained and proves all three outputs,
-so this is a complete input-space proof for the locked RV64 configuration,
-not a bounded vector checkpoint.
+This helper is stateless and combinational.  Its locked V2 interface has an
+8-bit count and a 255-bit output.  The Yosys SAT miter leaves every input bit
+unconstrained and compares the complete output bus, so no bounded vector set
+is used for the strict status.
 """
 
 from __future__ import annotations
@@ -10,7 +11,6 @@ from __future__ import annotations
 import hashlib
 import importlib.util
 import json
-import platform
 import py_compile
 import shlex
 import shutil
@@ -24,30 +24,29 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = ROOT / (
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/"
-    "Build-Cpu.Backend.Fu.JumpDataModule-Hardware.py"
+    "Build-Cpu.Backend.Fu.Vector.Utils.UIntToCont1s-Hardware.py"
 )
-SCALA = ROOT / "upstream/src/main/scala/xiangshan/backend/fu/Jump.scala"
-REFERENCE = ROOT / "validation/reference-closures/JumpDataModule-v2.sv"
+SCALA = ROOT / (
+    "upstream/src/main/scala/xiangshan/backend/fu/vector/utils/"
+    "UIntToCont1s.scala"
+)
+REFERENCE = ROOT / "validation/reference-sv/UIntToContLow1s.sv"
 TEMP_ROOT = Path(tempfile.gettempdir())
 if not str(TEMP_ROOT).isascii():
     TEMP_ROOT = Path("C:/Temp")
-WORK = TEMP_ROOT / "uhsc_jumpdatamodule_strict"
-EVIDENCE = ROOT / "validation/v2-jumpdatamodule-strict-evidence.json"
+WORK = TEMP_ROOT / "uhsc_uinttocont1s_strict"
+EVIDENCE = ROOT / "validation/v2-uinttocont1s-strict-evidence.json"
 
-INPUT_WIDTHS = {
-    "io_src": 64,
-    "io_pc": 64,
-    "io_imm": 33,
-    "io_nextPcOffset": 5,
-    "io_func": 9,
-}
-OUTPUT_WIDTHS = {"io_result": 64, "io_target": 64, "io_isAuipc": 1}
-INPUT_BITS = sum(INPUT_WIDTHS.values())
+INPUT_WIDTHS = {"io_dataIn": 8}
+OUTPUT_WIDTHS = {"io_dataOut": 255}
+INPUT_BITS = 8
+SOURCE_COMMIT = "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af"
+XSTOP_SHA256 = "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d"
+XSTOP_BYTES = 228590583
 
 
-# Hash exact source/artifact bytes for reproducible evidence.
 def sha256_file(path: Path) -> str:
-    """Return the SHA-256 digest of one file."""
+    """Return SHA-256 of exact file bytes."""
 
     digest = hashlib.sha256()
     with path.open("rb") as stream:
@@ -56,11 +55,10 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
-# Load only the selected Build module by exact path.
 def load_target() -> Any:
-    """Load the JumpDataModule Build."""
+    """Load the selected Build module by exact path."""
 
-    spec = importlib.util.spec_from_file_location("strict_jump_target", TARGET)
+    spec = importlib.util.spec_from_file_location("strict_uinttocont1s_target", TARGET)
     if spec is None or spec.loader is None:
         raise RuntimeError(f"cannot load target: {TARGET}")
     module = importlib.util.module_from_spec(spec)
@@ -69,45 +67,46 @@ def load_target() -> Any:
     return module
 
 
-# Convert a Windows path to a WSL path using the platform bridge.
 def wsl_path(path: Path) -> str:
-    """Return the absolute WSL spelling of a Windows path."""
+    """Convert a Windows path to an absolute WSL path."""
 
     result = subprocess.run(["wsl.exe", "-e", "wslpath", "-a", str(path)],
                             capture_output=True, check=True)
     return result.stdout.decode("utf-8", "replace").strip()
 
 
-# Run one WSL tool command with exact shell quoting and bounded diagnostics.
 def run_wsl(command: list[str]) -> dict[str, Any]:
-    """Run a WSL command and return a stable machine-readable record."""
+    """Run one WSL command and retain bounded, hashed diagnostics."""
 
     rendered = " ".join(shlex.quote(item) for item in command)
-    result = subprocess.run(["wsl.exe", "-e", "bash", "-lc", rendered],
-                            capture_output=True, check=False)
+    try:
+        result = subprocess.run(["wsl.exe", "-e", "bash", "-lc", rendered],
+                                capture_output=True, check=False)
+    except OSError as error:
+        return {"command": command, "status": "FAIL", "error": repr(error)}
     output = (result.stdout + result.stderr).decode("utf-8", "replace")
     return {
         "command": command,
         "returncode": result.returncode,
         "status": "PASS" if result.returncode == 0 else "FAIL",
-        "output_tail": output[-3000:],
+        "output_tail": output[-4000:],
         "output_sha256": hashlib.sha256(output.encode()).hexdigest(),
     }
 
 
-# Record the exact backend tool versions used by the strict run.
 def tool_versions() -> dict[str, Any]:
-    """Collect Verilator and Yosys version records."""
+    """Record versions of the proof back-end tools."""
 
-    return {"verilator": run_wsl(["verilator", "--version"]),
-            "yosys": run_wsl(["yosys", "--version"])}
+    return {
+        "verilator": run_wsl(["verilator", "--version"]),
+        "yosys": run_wsl(["yosys", "--version"]),
+    }
 
 
-# Run Pyright on a visible exact source copy (Pyright auto-excludes dot paths).
 def pyright_check(source: Path) -> dict[str, Any]:
-    """Run Pyright and retain the diagnostic summary."""
+    """Run Pyright on an exact visible copy of one source file."""
 
-    temporary = Path(tempfile.mkdtemp(prefix="uhsc_jump_pyright_"))
+    temporary = Path(tempfile.mkdtemp(prefix="uhsc_uinttocont1s_pyright_"))
     try:
         copied = temporary / source.name
         shutil.copyfile(source, copied)
@@ -135,9 +134,8 @@ def pyright_check(source: Path) -> dict[str, Any]:
         shutil.rmtree(temporary, ignore_errors=True)
 
 
-# Generate the target twice and require exact byte identity.
 def deterministic_export(module: Any) -> tuple[str, dict[str, Any]]:
-    """Return one export and deterministic-export evidence."""
+    """Generate target RTL twice and require byte identity."""
 
     first = module.build_verilog(None, {})
     second = module.build_verilog(None, {})
@@ -152,65 +150,59 @@ def deterministic_export(module: Any) -> tuple[str, dict[str, Any]]:
     }
 
 
-# Materialize renamed reference and a miter comparing every declared output.
 def materialize_miter(target_rtl: str) -> dict[str, Path]:
-    """Write target/reference/miter sources in an ASCII tool directory."""
+    """Write target, renamed locked reference, and complete-output miter."""
 
+    if not REFERENCE.is_file():
+        raise FileNotFoundError(f"locked V2 reference missing: {REFERENCE}")
+    reference_text = REFERENCE.read_text(encoding="utf-8")
+    marker = "module UIntToContLow1s("
+    if marker not in reference_text:
+        raise AssertionError("locked UIntToContLow1s declaration missing")
     WORK.mkdir(parents=True, exist_ok=True)
-    target = WORK / "UHSC_JumpDataModule.sv"
-    reference = WORK / "REF_JumpDataModule.sv"
-    miter = WORK / "JumpDataModule_MITER.sv"
+    target = WORK / "UHSC_UIntToContLow1s.sv"
+    reference = WORK / "REF_UIntToContLow1s.sv"
+    miter = WORK / "UIntToContLow1s_MITER.sv"
     target.write_text(target_rtl, encoding="utf-8", newline="\n")
-    source = REFERENCE.read_text(encoding="utf-8")
-    source = source.replace("module JumpDataModule(",
-                            "module REF_JumpDataModule(", 1)
-    reference.write_text(source, encoding="utf-8", newline="\n")
+    reference.write_text(reference_text.replace(marker, "module REF_UIntToContLow1s(", 1),
+                          encoding="utf-8", newline="\n")
     miter.write_text(
-        """module JumpDataModule_MITER(
-  input [63:0] io_src,
-  input [63:0] io_pc,
-  input [32:0] io_imm,
-  input [4:0] io_nextPcOffset,
-  input [8:0] io_func,
+        """module UIntToContLow1s_MITER(
+  input [7:0] io_dataIn,
   output mismatch
 );
-  wire [63:0] ref_result, ref_target, dut_result, dut_target;
-  wire ref_auipc, dut_auipc;
-  REF_JumpDataModule ref_i(
-    .io_src(io_src), .io_pc(io_pc), .io_imm(io_imm),
-    .io_nextPcOffset(io_nextPcOffset), .io_func(io_func),
-    .io_result(ref_result), .io_target(ref_target), .io_isAuipc(ref_auipc));
-  JumpDataModule dut_i(
-    .io_src(io_src), .io_pc(io_pc), .io_imm(io_imm),
-    .io_nextPcOffset(io_nextPcOffset), .io_func(io_func),
-    .io_result(dut_result), .io_target(dut_target), .io_isAuipc(dut_auipc));
-  assign mismatch = |(ref_result ^ dut_result)
-                  | |(ref_target ^ dut_target)
-                  | (ref_auipc ^ dut_auipc);
+  wire [254:0] reference_out;
+  wire [254:0] target_out;
+  REF_UIntToContLow1s reference_i(
+    .io_dataIn(io_dataIn), .io_dataOut(reference_out));
+  UIntToContLow1s target_i(
+    .io_dataIn(io_dataIn), .io_dataOut(target_out));
+  assign mismatch = |(reference_out ^ target_out);
 endmodule
 """,
         encoding="utf-8", newline="\n")
     return {"target": target, "reference": reference, "miter": miter}
 
 
-# Run lint, synthesis, and the unrestricted SAT miter proof.
 def formal_gates(paths: dict[str, Path]) -> dict[str, Any]:
-    """Run Verilator/Yosys gates and prove mismatch is impossible."""
+    """Run Verilator/Yosys lint and unrestricted SAT equivalence."""
 
     converted = {name: wsl_path(path) for name, path in paths.items()}
     target, reference, miter = (converted["target"], converted["reference"],
                                 converted["miter"])
-    verilator = run_wsl(["verilator", "--lint-only", "-Wno-fatal",
-                         target, reference, miter])
+    verilator = run_wsl([
+        "verilator", "--lint-only", "-Wno-fatal", "--top-module",
+        "UIntToContLow1s_MITER", target, reference, miter,
+    ])
     target_yosys = run_wsl(["yosys", "-Q", "-p",
                             f"read_verilog -sv {shlex.quote(target)}; "
-                            "hierarchy -top JumpDataModule; proc; opt; check"])
+                            "hierarchy -top UIntToContLow1s; proc; opt; check"])
     reference_yosys = run_wsl(["yosys", "-Q", "-p",
                                f"read_verilog -sv {shlex.quote(reference)}; "
-                               "hierarchy -top REF_JumpDataModule; proc; opt; check"])
+                               "hierarchy -top REF_UIntToContLow1s; proc; opt; check"])
     proof_script = (
         f"read_verilog -sv {shlex.quote(target)} {shlex.quote(reference)} "
-        f"{shlex.quote(miter)}; prep -top JumpDataModule_MITER; flatten; opt; "
+        f"{shlex.quote(miter)}; prep -top UIntToContLow1s_MITER; flatten; opt; "
         "sat -prove mismatch 0"
     )
     proof = run_wsl(["yosys", "-Q", "-p", proof_script])
@@ -224,7 +216,8 @@ def formal_gates(paths: dict[str, Path]) -> dict[str, Any]:
         "input_space_cardinality": str(1 << INPUT_BITS),
         "state_bits": 0,
         "state_space": "singleton (stateless combinational module)",
-        "property": "mismatch == 0 for every 2-state input valuation",
+        "property": "mismatch == 0 for every 2-state valuation of io_dataIn",
+        "outputs_compared": OUTPUT_WIDTHS,
     }
     return {
         "verilator": verilator,
@@ -234,9 +227,8 @@ def formal_gates(paths: dict[str, Path]) -> dict[str, Any]:
     }
 
 
-# Assemble evidence and refuse COMPLETE_EQUIVALENCE on any failed gate.
 def validate() -> dict[str, Any]:
-    """Run all gates and write the JumpDataModule evidence JSON."""
+    """Run every strict gate and persist machine-readable evidence."""
 
     module = load_target()
     py_compile.compile(str(TARGET), doraise=True)
@@ -258,16 +250,16 @@ def validate() -> dict[str, Any]:
     payload: dict[str, Any] = {
         "schema_version": 1,
         "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_COMPLETE_EQUIVALENCE",
-        "build_id": "Build-Cpu.Backend.Fu.JumpDataModule",
+        "build_id": "Build-Cpu.Backend.Fu.Vector.Utils.UIntToCont1s",
         "validator": Path(__file__).relative_to(ROOT).as_posix(),
         "status": status,
         "strict_complete_eligible": status == "COMPLETE_EQUIVALENCE",
         "strict_complete_count_delta": 1 if status == "COMPLETE_EQUIVALENCE" else 0,
         "acceptance_eligible": status == "COMPLETE_EQUIVALENCE",
-        "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+        "source_commit": SOURCE_COMMIT,
         "scope": {
             "kind": "stateless_combinational_leaf",
-            "configuration": "locked RV64, imm=33 bits, nextPcOffset=5 bits, func=9 bits",
+            "configuration": "locked V2 UIntToContLow1s uintWidth=8, outWidth=(2**8)-1=255",
             "state_bits": 0,
             "state_boundary": "no clock/reset/register/memory; one combinational evaluation",
             "inputs": INPUT_WIDTHS,
@@ -276,25 +268,36 @@ def validate() -> dict[str, Any]:
             "input_space": f"2**{INPUT_BITS}",
             "input_space_cardinality": str(1 << INPUT_BITS),
             "why_complete": (
-                "Yosys SAT proves the three-output miter mismatch is zero with "
-                "all 175 input bits unconstrained; no temporal state exists."
+                "Yosys SAT proves the complete 255-bit-output miter mismatch is zero "
+                "with all 8 input bits unconstrained; no temporal state exists."
             ),
+            "bounded_tests_counted": False,
+        },
+        "reference_lock": {
+            "upstream_source_commit": SOURCE_COMMIT,
+            "xstop_sha256": XSTOP_SHA256,
+            "xstop_bytes": XSTOP_BYTES,
+            "reference_module": "UIntToContLow1s extracted from locked V2 XSTop",
         },
         "sources": {
             "scala": {"path": SCALA.relative_to(ROOT).as_posix(),
                       "sha256": sha256_file(SCALA), "bytes": SCALA.stat().st_size},
             "reference_sv": {"path": REFERENCE.relative_to(ROOT).as_posix(),
                              "sha256": sha256_file(REFERENCE), "bytes": REFERENCE.stat().st_size,
-                             "locked_module": "JumpDataModule",
-                             "locked_xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
-                             "locked_xstop_module_lines": [1198515, 1198531]},
+                             "locked_module": "UIntToContLow1s"},
             "python_build": {"path": TARGET.relative_to(ROOT).as_posix(),
                              "sha256": sha256_file(TARGET), "bytes": TARGET.stat().st_size},
         },
-        "checks": {"python_version": platform.python_version(),
-                    "py_compile": {"status": "PASS"},
-                    "pyright": pyright, "deterministic_export": export,
-                    "tools": tool_versions(), "formal": gates},
+        "checks": {
+            "py_compile": {"status": "PASS", "files": [
+                TARGET.relative_to(ROOT).as_posix(),
+                Path(__file__).relative_to(ROOT).as_posix(),
+            ]},
+            "pyright": pyright,
+            "deterministic_export": export,
+            "tools": tool_versions(),
+            "formal": gates,
+        },
         "failures": failures,
         "unclosed": [] if not failures else ["strict gates did not all pass"],
     }
@@ -303,9 +306,8 @@ def validate() -> dict[str, Any]:
     return payload
 
 
-# Print a compact result and return nonzero while strict proof is pending.
 def main() -> int:
-    """Run validation and return its strict status."""
+    """Print strict status and return nonzero until every gate passes."""
 
     payload = validate()
     print(json.dumps({"status": payload["status"],

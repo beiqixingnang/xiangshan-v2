@@ -291,7 +291,7 @@ def validate() -> dict[str, Any]:
         "strict_complete_eligible": status == "COMPLETE_EQUIVALENCE",
         "strict_complete_count_delta": 1 if status == "COMPLETE_EQUIVALENCE" else 0,
         "acceptance_eligible": status == "COMPLETE_EQUIVALENCE",
-        "source_commit": "5fe0e8f3f77aa1cdb8523312cb222405bb6be8e5",
+        "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "scope": {
             "kind": "stateless_combinational_leaf",
             "state_bits": 0,
