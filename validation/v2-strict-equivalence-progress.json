@@ -2,12 +2,12 @@
   "schema_version": 1,
   "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_EQUIVALENCE_PROGRESS",
   "build_denominator": 118,
-  "strict_complete_build_count": 15,
-  "fraction": "15/118",
-  "percentage": 12.711864,
+  "strict_complete_build_count": 17,
+  "fraction": "17/118",
+  "percentage": 14.40678,
   "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with the locked source commit, matching source hashes, and either a Yosys SAT no-model miter or fully proven Yosys inductive-equivalence status is counted.",
   "plan_reconciliation": {
-    "plan_count": 15,
+    "plan_count": 17,
     "plan_denominator": 118,
     "status": "PASS"
   },
@@ -1010,6 +1010,79 @@
       "failures": []
     },
     {
+      "evidence": "validation/v2-mgtu-strict-evidence.json",
+      "build_id": "Build-Cpu.Backend.Fu.Vector.Mgtu",
+      "source_commit": {
+        "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+        "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+        "status": "PASS"
+      },
+      "status": "PASS",
+      "scope": {
+        "kind": "stateless_combinational_leaf",
+        "configuration": "locked Kunminghu V2 vector Mgtu, MgtuConfig(vlen=128, vl_width=8)",
+        "state_bits": 0,
+        "state_boundary": "no clock/reset/register/memory; one combinational evaluation",
+        "inputs": {
+          "io_in_vd": 128,
+          "io_in_vl": 8
+        },
+        "outputs_compared": {
+          "io_out_vd": 128
+        },
+        "input_bits": 136,
+        "input_bit_accounting": "128+8=136",
+        "output_bits_compared": 128,
+        "input_space": "2**136",
+        "input_space_cardinality": "87112285931760246646623899502532662132736",
+        "brief_input_bits_discrepancy": {
+          "brief_claimed_input_bits": 236,
+          "measured_distinct_declared_input_bits": 136,
+          "explanation": "The locked Mgtu.sv header declares exactly io_in_vd[127:0] and io_in_vl[7:0], i.e. 136 distinct input nets. The briefed 236 = 128 + 8 + 100 counts io_in_vd once more for each of the 100 reference comparison terms whose second operand is not the default broadcast io_in_vd[127], so it re-counts already-declared nets rather than exposing extra state. No additional free net exists in either surface, so the claim is stated over the measured 136.",
+          "affects_proven_space": false
+        },
+        "semantics_covered": "out[idx] == (idx < vl ? vd[idx] : 1) for all 128 indices. vl ranges over all 256 eight-bit values: vl=0..127 select a tail-agnostic region of 128-vl ones, and every vl >= 128 passes vd through unchanged, which matches the locked reference where all comparisons idx.U < vl hold. No don't-care relaxation was needed to close the proof.",
+        "why_complete": "Yosys SAT proves the single declared output bus io_out_vd (all 128 bits) equal with all 136 declared input bits unconstrained and no assume/constraint in the miter; no temporal state exists.",
+        "bounded_tests_counted": false
+      },
+      "sources": {
+        "scala": {
+          "path": "upstream/src/main/scala/xiangshan/backend/fu/vector/Mgtu.scala",
+          "present": true,
+          "expected_sha256": "e30ec89676d13925bb6d54d461813574a2916791f25807823c1329ec2520b2d8",
+          "observed_sha256": "e30ec89676d13925bb6d54d461813574a2916791f25807823c1329ec2520b2d8",
+          "status": "PASS"
+        },
+        "reference_sv": {
+          "path": "validation/reference-sv/Mgtu.sv",
+          "present": true,
+          "expected_sha256": "5bee9bab2eea71bf59d9af847bce19823b04c17649c30462a648b6e1cae5a0ad",
+          "observed_sha256": "5bee9bab2eea71bf59d9af847bce19823b04c17649c30462a648b6e1cae5a0ad",
+          "status": "PASS"
+        },
+        "python_build": {
+          "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Vector.Mgtu-Hardware.py",
+          "present": true,
+          "expected_sha256": "0d3faf965c6f6d7f40f6192e17656ee3fa4d4819251623e97b3713a768ed0230",
+          "observed_sha256": "0d3faf965c6f6d7f40f6192e17656ee3fa4d4819251623e97b3713a768ed0230",
+          "status": "PASS"
+        }
+      },
+      "formal": {
+        "proof_method": "sat_miter",
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_mgtu_strict/UHSC_Mgtu.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_mgtu_strict/REF_Mgtu.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_mgtu_strict/Mgtu_MITER.sv; prep -top Mgtu_MITER; flatten; opt; sat -prove mismatch 0"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "formal_success_marker": true
+      },
+      "failures": []
+    },
+    {
       "evidence": "validation/v2-rvcexpander-strict-evidence.json",
       "build_id": "Build-Cpu.Frontend.Ifu.RvcExpander",
       "source_commit": {
@@ -1287,6 +1360,100 @@
           "-Q",
           "-p",
           "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_uinttocont1s_strict/UHSC_UIntToContLow1s.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_uinttocont1s_strict/REF_UIntToContLow1s.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_uinttocont1s_strict/UIntToContLow1s_MITER.sv; prep -top UIntToContLow1s_MITER; flatten; opt; sat -prove mismatch 0"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "formal_success_marker": true
+      },
+      "failures": []
+    },
+    {
+      "evidence": "validation/v2-vecdatasplitmodule-strict-evidence.json",
+      "build_id": "Build-Cpu.Backend.Fu.Vector.Utils.VecDataSplitModule",
+      "source_commit": {
+        "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+        "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+        "status": "PASS"
+      },
+      "status": "PASS",
+      "scope": {
+        "kind": "stateless_combinational_leaf",
+        "configuration": "locked V2 vlen=128 splitter, inDataWidth=128, outDataWidth=128",
+        "state_bits": 0,
+        "state_boundary": "no clock/reset/register/memory; one combinational evaluation",
+        "inputs": {
+          "io_inVecData": 128
+        },
+        "outputs_compared": {
+          "io_outVec8b_0": 8,
+          "io_outVec8b_1": 8,
+          "io_outVec8b_2": 8,
+          "io_outVec8b_3": 8,
+          "io_outVec8b_4": 8,
+          "io_outVec8b_5": 8,
+          "io_outVec8b_6": 8,
+          "io_outVec8b_7": 8,
+          "io_outVec8b_8": 8,
+          "io_outVec8b_9": 8,
+          "io_outVec8b_10": 8,
+          "io_outVec8b_11": 8,
+          "io_outVec8b_12": 8,
+          "io_outVec8b_13": 8,
+          "io_outVec8b_14": 8,
+          "io_outVec8b_15": 8,
+          "io_outVec16b_0": 16,
+          "io_outVec16b_1": 16,
+          "io_outVec16b_2": 16,
+          "io_outVec16b_3": 16,
+          "io_outVec16b_4": 16,
+          "io_outVec16b_5": 16,
+          "io_outVec16b_6": 16,
+          "io_outVec16b_7": 16,
+          "io_outVec32b_0": 32,
+          "io_outVec32b_1": 32,
+          "io_outVec32b_2": 32,
+          "io_outVec32b_3": 32,
+          "io_outVec64b_0": 64,
+          "io_outVec64b_1": 64
+        },
+        "input_bits": 128,
+        "output_bits": 512,
+        "input_space": "2**128",
+        "input_space_cardinality": "340282366920938463463374607431768211456",
+        "surface_derivation": "input and output lanes are parsed from the locked VecDataSplitModule.sv declaration rather than restated by hand",
+        "why_complete": "Yosys SAT proves the reduction-OR over all 30 declared output lanes (512 bits) equals zero with all 128 input bits unconstrained; the module holds no state.",
+        "bounded_tests_counted": false
+      },
+      "sources": {
+        "scala": {
+          "path": "upstream/src/main/scala/xiangshan/backend/fu/vector/utils/VecDataSplitModule.scala",
+          "present": true,
+          "expected_sha256": "0ceadaab2e57eb98d4c9112ea19f939adb74c42e1f60db80c6bd36b00c00e862",
+          "observed_sha256": "0ceadaab2e57eb98d4c9112ea19f939adb74c42e1f60db80c6bd36b00c00e862",
+          "status": "PASS"
+        },
+        "reference_sv": {
+          "path": "validation/reference-sv/VecDataSplitModule.sv",
+          "present": true,
+          "expected_sha256": "494de5c03cd80c217c1bf8207026f4146b530c7f72110283b117ef7487e170df",
+          "observed_sha256": "494de5c03cd80c217c1bf8207026f4146b530c7f72110283b117ef7487e170df",
+          "status": "PASS"
+        },
+        "python_build": {
+          "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Vector.Utils.VecDataSplitModule-Hardware.py",
+          "present": true,
+          "expected_sha256": "022026944f5de43d17b4b2f267cf0a9bd9b8ef578b5cf58e0a824345c57c8de9",
+          "observed_sha256": "022026944f5de43d17b4b2f267cf0a9bd9b8ef578b5cf58e0a824345c57c8de9",
+          "status": "PASS"
+        }
+      },
+      "formal": {
+        "proof_method": "sat_miter",
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_vecdatasplitmodule_strict/UHSC_VecDataSplitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_vecdatasplitmodule_strict/REF_VecDataSplitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_vecdatasplitmodule_strict/VecDataSplitModule_MITER.sv; prep -top VecDataSplitModule_MITER; flatten; opt; sat -prove mismatch 0"
         ],
         "returncode": 0,
         "status": "PASS",

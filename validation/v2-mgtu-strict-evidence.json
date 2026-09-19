@@ -1,0 +1,343 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_COMPLETE_EQUIVALENCE",
+  "build_id": "Build-Cpu.Backend.Fu.Vector.Mgtu",
+  "validator": "validation/v2_mgtu_strict_validator.py",
+  "status": "COMPLETE_EQUIVALENCE",
+  "strict_complete_eligible": true,
+  "strict_complete_count_delta": 1,
+  "acceptance_eligible": true,
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "scope": {
+    "kind": "stateless_combinational_leaf",
+    "configuration": "locked Kunminghu V2 vector Mgtu, MgtuConfig(vlen=128, vl_width=8)",
+    "state_bits": 0,
+    "state_boundary": "no clock/reset/register/memory; one combinational evaluation",
+    "inputs": {
+      "io_in_vd": 128,
+      "io_in_vl": 8
+    },
+    "outputs_compared": {
+      "io_out_vd": 128
+    },
+    "input_bits": 136,
+    "input_bit_accounting": "128+8=136",
+    "output_bits_compared": 128,
+    "input_space": "2**136",
+    "input_space_cardinality": "87112285931760246646623899502532662132736",
+    "brief_input_bits_discrepancy": {
+      "brief_claimed_input_bits": 236,
+      "measured_distinct_declared_input_bits": 136,
+      "explanation": "The locked Mgtu.sv header declares exactly io_in_vd[127:0] and io_in_vl[7:0], i.e. 136 distinct input nets. The briefed 236 = 128 + 8 + 100 counts io_in_vd once more for each of the 100 reference comparison terms whose second operand is not the default broadcast io_in_vd[127], so it re-counts already-declared nets rather than exposing extra state. No additional free net exists in either surface, so the claim is stated over the measured 136.",
+      "affects_proven_space": false
+    },
+    "semantics_covered": "out[idx] == (idx < vl ? vd[idx] : 1) for all 128 indices. vl ranges over all 256 eight-bit values: vl=0..127 select a tail-agnostic region of 128-vl ones, and every vl >= 128 passes vd through unchanged, which matches the locked reference where all comparisons idx.U < vl hold. No don't-care relaxation was needed to close the proof.",
+    "why_complete": "Yosys SAT proves the single declared output bus io_out_vd (all 128 bits) equal with all 136 declared input bits unconstrained and no assume/constraint in the miter; no temporal state exists.",
+    "bounded_tests_counted": false
+  },
+  "reference_lock": {
+    "path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "upstream_source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+    "xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "xstop_bytes": 228590583,
+    "reference_module": "Mgtu extracted from locked V2 XSTop",
+    "parent_reference": "validation/reference-sv/Mgtu.sv",
+    "parent_reference_sha256": "5bee9bab2eea71bf59d9af847bce19823b04c17649c30462a648b6e1cae5a0ad",
+    "child_references": {},
+    "closure_policy": "the locked reference declares a single module and instantiates no children, so the only textual transformation anywhere is the REF_ prefix on its own module name required to compile it beside the target"
+  },
+  "sources": {
+    "scala": {
+      "path": "upstream/src/main/scala/xiangshan/backend/fu/vector/Mgtu.scala",
+      "sha256": "e30ec89676d13925bb6d54d461813574a2916791f25807823c1329ec2520b2d8",
+      "bytes": 1809
+    },
+    "reference_sv": {
+      "path": "validation/reference-sv/Mgtu.sv",
+      "sha256": "5bee9bab2eea71bf59d9af847bce19823b04c17649c30462a648b6e1cae5a0ad",
+      "bytes": 5486,
+      "locked_module": "Mgtu"
+    },
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Vector.Mgtu-Hardware.py",
+      "sha256": "0d3faf965c6f6d7f40f6192e17656ee3fa4d4819251623e97b3713a768ed0230",
+      "bytes": 4358
+    }
+  },
+  "checks": {
+    "python_version": "3.13.12",
+    "py_compile": {
+      "status": "PASS",
+      "files": [
+        "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Vector.Mgtu-Hardware.py",
+        "validation/v2_mgtu_strict_validator.py"
+      ]
+    },
+    "pyright": {
+      "target": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_mgtu_pyright_edxaq1f2\\Build-Cpu.Backend.Fu.Vector.Mgtu-Hardware.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "files_analyzed": 1,
+        "error_count": 0,
+        "warning_count": 0,
+        "output_sha256": "99bd7808a7b6a2d83e72951ce71ac948e21421c88bd505a991638b4eac86238c",
+        "stderr_tail": ""
+      },
+      "validator": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_mgtu_pyright_4p8mdhri\\v2_mgtu_strict_validator.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "files_analyzed": 1,
+        "error_count": 0,
+        "warning_count": 0,
+        "output_sha256": "ed7d6332ebf4a3437f61a210ff847d3ac0e8f96afb2b9cea470f85d4585aa4c9",
+        "stderr_tail": ""
+      }
+    },
+    "source_lock": {
+      "status": "PASS",
+      "checks": {
+        "scala_present": true,
+        "python_build_present": true,
+        "reference_sv_present": true,
+        "source_commit_recorded": true,
+        "xstop_lock_recorded": true
+      },
+      "actual": {
+        "scala": "e30ec89676d13925bb6d54d461813574a2916791f25807823c1329ec2520b2d8",
+        "python_build": "0d3faf965c6f6d7f40f6192e17656ee3fa4d4819251623e97b3713a768ed0230",
+        "reference_sv": "5bee9bab2eea71bf59d9af847bce19823b04c17649c30462a648b6e1cae5a0ad"
+      },
+      "paths": {
+        "scala": "upstream/src/main/scala/xiangshan/backend/fu/vector/Mgtu.scala",
+        "python_build": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Vector.Mgtu-Hardware.py",
+        "reference_sv": "validation/reference-sv/Mgtu.sv"
+      },
+      "expected_scala_source": "upstream/src/main/scala/xiangshan/backend/fu/vector/Mgtu.scala",
+      "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+      "xstop": {
+        "path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+        "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+        "bytes": 228590583
+      }
+    },
+    "variant": {
+      "status": "PASS",
+      "public_entry_point": "build_verilog(configuration=None, injected_dependencies=None)",
+      "default_configuration": "MgtuConfig(vlen=128, vl_width=8)",
+      "covered_modules": [
+        "Mgtu"
+      ],
+      "locked_configuration_matches_default": true,
+      "rejected_configurations": [
+        "vlen=129"
+      ]
+    },
+    "abi": {
+      "status": "PASS",
+      "checks": {
+        "target_module": true,
+        "reference_module": true,
+        "reference_single_module": true,
+        "reference_no_child_instances": true,
+        "target_io_in_vd": true,
+        "target_io_in_vl": true,
+        "target_io_out_vd": true,
+        "reference_io_in_vd": true,
+        "reference_io_in_vl": true,
+        "reference_io_out_vd": true,
+        "target_exact_port_set": true,
+        "reference_exact_port_set": true,
+        "target_reference_port_sets_equal": true,
+        "target_declared_bits_match_claimed_space": true,
+        "reference_declared_bits_match_claimed_space": true
+      },
+      "declared_input_bits": {
+        "target": 136,
+        "reference": 136,
+        "claimed": 136
+      },
+      "declared_output_bits": {
+        "target": 128,
+        "reference": 128,
+        "claimed": 128
+      },
+      "target_declared_ports": {
+        "io_in_vd": [
+          "input",
+          128
+        ],
+        "io_in_vl": [
+          "input",
+          8
+        ],
+        "io_out_vd": [
+          "output",
+          128
+        ]
+      },
+      "reference_declared_ports": {
+        "io_in_vd": [
+          "input",
+          128
+        ],
+        "io_in_vl": [
+          "input",
+          8
+        ],
+        "io_out_vd": [
+          "output",
+          128
+        ]
+      },
+      "expected_declared_ports": {
+        "io_in_vd": [
+          "input",
+          128
+        ],
+        "io_in_vl": [
+          "input",
+          8
+        ],
+        "io_out_vd": [
+          "output",
+          128
+        ]
+      },
+      "inputs": {
+        "io_in_vd": 128,
+        "io_in_vl": 8
+      },
+      "outputs": {
+        "io_out_vd": 128
+      },
+      "port_count": 3
+    },
+    "deterministic_export": {
+      "status": "PASS",
+      "configuration": {
+        "vlen": 128,
+        "vl_width": 8,
+        "canonical_default_export": true
+      },
+      "bytes": 18856,
+      "sha256": "cae1894a0e09f2134491cdbdc2b677fe6e09c4116a3fd1fd5658004064c4cb24",
+      "repeat_sha256": "cae1894a0e09f2134491cdbdc2b677fe6e09c4116a3fd1fd5658004064c4cb24",
+      "byte_equal": true
+    },
+    "tools": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--version"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n",
+        "output_sha256": "ae161d63a0898d55050284fd76bd5e83136b75d2ec90d5b0622f196d5edc2aff"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "--version"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\n",
+        "output_sha256": "239d92e36e753a9dff4e79d97878ed5d55304b675d411895ec57508bc134e28e"
+      }
+    },
+    "formal": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "--top-module",
+          "Mgtu_MITER",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_mgtu_strict/UHSC_Mgtu.sv",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_mgtu_strict/REF_Mgtu.sv",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_mgtu_strict/Mgtu_MITER.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "o/AppData/Local/Temp/uhsc_mgtu_strict/UHSC_Mgtu.sv:504:28: Operator GT expects 8 bits on the RHS, but RHS's CONST '7'h76' generates 7 bits.\n                                                                                                 : ... note: In instance 'Mgtu_MITER.target_i'\n  504 |   assign \\$237  = io_in_vl > 7'h76;\n      |                            ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_mgtu_strict/UHSC_Mgtu.sv:506:28: Operator GT expects 8 bits on the RHS, but RHS's CONST '7'h77' generates 7 bits.\n                                                                                                 : ... note: In instance 'Mgtu_MITER.target_i'\n  506 |   assign \\$239  = io_in_vl > 7'h77;\n      |                            ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_mgtu_strict/UHSC_Mgtu.sv:508:28: Operator GT expects 8 bits on the RHS, but RHS's CONST '7'h78' generates 7 bits.\n                                                                                                 : ... note: In instance 'Mgtu_MITER.target_i'\n  508 |   assign \\$241  = io_in_vl > 7'h78;\n      |                            ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_mgtu_strict/UHSC_Mgtu.sv:510:28: Operator GT expects 8 bits on the RHS, but RHS's CONST '7'h79' generates 7 bits.\n                                                                                                 : ... note: In instance 'Mgtu_MITER.target_i'\n  510 |   assign \\$243  = io_in_vl > 7'h79;\n      |                            ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_mgtu_strict/UHSC_Mgtu.sv:512:28: Operator GT expects 8 bits on the RHS, but RHS's CONST '7'h7a' generates 7 bits.\n                                                                                                 : ... note: In instance 'Mgtu_MITER.target_i'\n  512 |   assign \\$245  = io_in_vl > 7'h7a;\n      |                            ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_mgtu_strict/UHSC_Mgtu.sv:514:28: Operator GT expects 8 bits on the RHS, but RHS's CONST '7'h7b' generates 7 bits.\n                                                                                                 : ... note: In instance 'Mgtu_MITER.target_i'\n  514 |   assign \\$247  = io_in_vl > 7'h7b;\n      |                            ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_mgtu_strict/UHSC_Mgtu.sv:516:28: Operator GT expects 8 bits on the RHS, but RHS's CONST '7'h7c' generates 7 bits.\n                                                                                                 : ... note: In instance 'Mgtu_MITER.target_i'\n  516 |   assign \\$249  = io_in_vl > 7'h7c;\n      |                            ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_mgtu_strict/UHSC_Mgtu.sv:518:28: Operator GT expects 8 bits on the RHS, but RHS's CONST '7'h7d' generates 7 bits.\n                                                                                                 : ... note: In instance 'Mgtu_MITER.target_i'\n  518 |   assign \\$251  = io_in_vl > 7'h7d;\n      |                            ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_mgtu_strict/UHSC_Mgtu.sv:520:28: Operator GT expects 8 bits on the RHS, but RHS's CONST '7'h7e' generates 7 bits.\n                                                                                                 : ... note: In instance 'Mgtu_MITER.target_i'\n  520 |   assign \\$253  = io_in_vl > 7'h7e;\n      |                            ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_mgtu_strict/UHSC_Mgtu.sv:522:28: Operator GT expects 8 bits on the RHS, but RHS's CONST '7'h7f' generates 7 bits.\n                                                                                                 : ... note: In instance 'Mgtu_MITER.target_i'\n  522 |   assign \\$255  = io_in_vl > 7'h7f;\n      |                            ^\n",
+        "output_sha256": "9f6133c8ecc1fd5e90e41a10912f79958d858982641e0cd8d1a439e942c159a4"
+      },
+      "yosys_target": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_mgtu_strict/UHSC_Mgtu.sv; hierarchy -top UHSC_Mgtu; proc; opt; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "ers/lishuo/AppData/Local/Temp/uhsc_mgtu_strict/UHSC_Mgtu.sv' to AST representation.\nGenerating RTLIL representation for module `\\UHSC_Mgtu'.\nSuccessfully finished Verilog frontend.\n\n2. Executing HIERARCHY pass (managing design hierarchy).\n\n2.1. Analyzing design hierarchy..\nTop module:  \\UHSC_Mgtu\n\n2.2. Analyzing design hierarchy..\nTop module:  \\UHSC_Mgtu\nRemoved 0 unused modules.\n\n3. Executing PROC pass (convert processes to netlists).\n\n3.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module UHSC_Mgtu.\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module UHSC_Mgtu.\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\UHSC_Mgtu'.\nRemoved a total of 0 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\UHSC_Mgtu..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~128 debug messages>\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\UHSC_Mgtu.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\UHSC_Mgtu'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\UHSC_Mgtu..\nRemoved 0 unused cells and 256 unused wires.\n<suppressed ~1 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module UHSC_Mgtu.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\UHSC_Mgtu..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~128 debug messages>\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\UHSC_Mgtu.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\UHSC_Mgtu'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\UHSC_Mgtu..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module UHSC_Mgtu.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module UHSC_Mgtu...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 85c7de9ca5, CPU: user 0.06s system 0.02s, MEM: 14.53 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 41% 2x read_verilog (0 sec), 19% 4x opt_expr (0 sec), ...\n",
+        "output_sha256": "79da2a5ccdd2d08a4612097b1cf0073e64619928aa84a30b3f639915a22f83a0"
+      },
+      "yosys_reference": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_mgtu_strict/REF_Mgtu.sv; hierarchy -top REF_Mgtu; proc; opt; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "' --\n\n1. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_mgtu_strict/REF_Mgtu.sv\nParsing SystemVerilog input from `/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_mgtu_strict/REF_Mgtu.sv' to AST representation.\nGenerating RTLIL representation for module `\\REF_Mgtu'.\nSuccessfully finished Verilog frontend.\n\n2. Executing HIERARCHY pass (managing design hierarchy).\n\n2.1. Analyzing design hierarchy..\nTop module:  \\REF_Mgtu\n\n2.2. Analyzing design hierarchy..\nTop module:  \\REF_Mgtu\nRemoved 0 unused modules.\n\n3. Executing PROC pass (convert processes to netlists).\n\n3.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_Mgtu.\n<suppressed ~7 debug messages>\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_Mgtu.\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_Mgtu'.\nRemoved a total of 0 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\REF_Mgtu..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\REF_Mgtu.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_Mgtu'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\REF_Mgtu..\nRemoved 0 unused cells and 128 unused wires.\n<suppressed ~1 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_Mgtu.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\REF_Mgtu..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\REF_Mgtu.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_Mgtu'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\REF_Mgtu..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_Mgtu.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module REF_Mgtu...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 9239c9f9bb, CPU: user 0.05s system 0.03s, MEM: 13.28 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 30% 4x opt_expr (0 sec), 19% 2x read_verilog (0 sec), ...\n",
+        "output_sha256": "c9cd6737bf35cff1deba2a8bdcc7bcd473eb77f69329df5233998e89717e94e9"
+      },
+      "yosys_formal_miter": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_mgtu_strict/UHSC_Mgtu.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_mgtu_strict/REF_Mgtu.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_mgtu_strict/Mgtu_MITER.sv; prep -top Mgtu_MITER; flatten; opt; sat -prove mismatch 0"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "                     1\n     $or                           128\n\n=== UHSC_Mgtu ===\n\n   Number of wires:                259\n   Number of wire bits:            520\n   Number of public wires:         259\n   Number of public wire bits:     520\n   Number of ports:                  3\n   Number of port bits:            264\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                256\n     $gt                           128\n     $mux                          128\n\n=== design hierarchy ===\n\n   Mgtu_MITER                        1\n     REF_Mgtu                        1\n     UHSC_Mgtu                       1\n\n   Number of wires:                396\n   Number of wire bits:           1433\n   Number of public wires:         267\n   Number of public wire bits:    1177\n   Number of ports:                  9\n   Number of port bits:            665\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                514\n     $gt                           128\n     $logic_not                      7\n     $lt                           120\n     $mux                          128\n     $not                            1\n     $or                           128\n     $reduce_or                      1\n     $xor                            1\n\n4.13. Executing CHECK pass (checking for obvious problems).\nChecking module Mgtu_MITER...\nChecking module REF_Mgtu...\nChecking module UHSC_Mgtu...\nFound and reported 0 problems.\n\n5. Executing FLATTEN pass (flatten design).\nDeleting now unused module REF_Mgtu.\nDeleting now unused module UHSC_Mgtu.\n<suppressed ~2 debug messages>\n\n6. Executing OPT pass (performing simple optimizations).\n\n6.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module Mgtu_MITER.\n\n6.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\Mgtu_MITER'.\nRemoved a total of 0 cells.\n\n6.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\Mgtu_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~128 debug messages>\n\n6.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\Mgtu_MITER.\nPerformed a total of 0 changes.\n\n6.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\Mgtu_MITER'.\nRemoved a total of 0 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\Mgtu_MITER..\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module Mgtu_MITER.\n\n6.9. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 516 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 5771 variables and 15768 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: bf705aacd7, CPU: user 0.28s system 0.01s, MEM: 19.89 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 29% 1x sat (0 sec), 14% 5x opt_clean (0 sec), ...\n",
+        "output_sha256": "438eba6de5772db75a0a2ef3298efa244a9e0292af532fef29e63b6ffeff5d39",
+        "formal_success_marker": true,
+        "miter_carries_no_assumption": true,
+        "observed_constraint_equation": "Final constraint equation: { } = { }",
+        "sat_variables": 5771,
+        "sat_clauses": 15768,
+        "miter_sha256": "b515f29bd3efd6e9f3b8a5bee4a157dd5ad04c50c0d53a92e0b8a87463774d03",
+        "miter_has_assume": false,
+        "formal_scope": {
+          "input_bits": 136,
+          "input_space": "2**136",
+          "input_space_cardinality": "87112285931760246646623899502532662132736",
+          "state_bits": 0,
+          "state_space": "singleton (stateless combinational module)",
+          "property": "mismatch == 0 for every 2-state valuation of io_in_vd/io_in_vl",
+          "outputs_compared": {
+            "io_out_vd": 128
+          },
+          "miter_sequence": "read_verilog -> prep -top Mgtu_MITER -> flatten -> opt -> sat -prove mismatch 0"
+        }
+      }
+    }
+  },
+  "failures": [],
+  "unclosed": []
+}

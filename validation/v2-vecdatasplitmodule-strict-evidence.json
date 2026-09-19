@@ -1,0 +1,492 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_COMPLETE_EQUIVALENCE",
+  "build_id": "Build-Cpu.Backend.Fu.Vector.Utils.VecDataSplitModule",
+  "validator": "validation/v2_vecdatasplitmodule_strict_validator.py",
+  "status": "COMPLETE_EQUIVALENCE",
+  "strict_complete_eligible": true,
+  "strict_complete_count_delta": 1,
+  "acceptance_eligible": true,
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "scope": {
+    "kind": "stateless_combinational_leaf",
+    "configuration": "locked V2 vlen=128 splitter, inDataWidth=128, outDataWidth=128",
+    "state_bits": 0,
+    "state_boundary": "no clock/reset/register/memory; one combinational evaluation",
+    "inputs": {
+      "io_inVecData": 128
+    },
+    "outputs_compared": {
+      "io_outVec8b_0": 8,
+      "io_outVec8b_1": 8,
+      "io_outVec8b_2": 8,
+      "io_outVec8b_3": 8,
+      "io_outVec8b_4": 8,
+      "io_outVec8b_5": 8,
+      "io_outVec8b_6": 8,
+      "io_outVec8b_7": 8,
+      "io_outVec8b_8": 8,
+      "io_outVec8b_9": 8,
+      "io_outVec8b_10": 8,
+      "io_outVec8b_11": 8,
+      "io_outVec8b_12": 8,
+      "io_outVec8b_13": 8,
+      "io_outVec8b_14": 8,
+      "io_outVec8b_15": 8,
+      "io_outVec16b_0": 16,
+      "io_outVec16b_1": 16,
+      "io_outVec16b_2": 16,
+      "io_outVec16b_3": 16,
+      "io_outVec16b_4": 16,
+      "io_outVec16b_5": 16,
+      "io_outVec16b_6": 16,
+      "io_outVec16b_7": 16,
+      "io_outVec32b_0": 32,
+      "io_outVec32b_1": 32,
+      "io_outVec32b_2": 32,
+      "io_outVec32b_3": 32,
+      "io_outVec64b_0": 64,
+      "io_outVec64b_1": 64
+    },
+    "input_bits": 128,
+    "output_bits": 512,
+    "input_space": "2**128",
+    "input_space_cardinality": "340282366920938463463374607431768211456",
+    "surface_derivation": "input and output lanes are parsed from the locked VecDataSplitModule.sv declaration rather than restated by hand",
+    "why_complete": "Yosys SAT proves the reduction-OR over all 30 declared output lanes (512 bits) equals zero with all 128 input bits unconstrained; the module holds no state.",
+    "bounded_tests_counted": false
+  },
+  "sources": {
+    "scala": {
+      "path": "upstream/src/main/scala/xiangshan/backend/fu/vector/utils/VecDataSplitModule.scala",
+      "sha256": "0ceadaab2e57eb98d4c9112ea19f939adb74c42e1f60db80c6bd36b00c00e862",
+      "bytes": 1335
+    },
+    "reference_sv": {
+      "path": "validation/reference-sv/VecDataSplitModule.sv",
+      "sha256": "494de5c03cd80c217c1bf8207026f4146b530c7f72110283b117ef7487e170df",
+      "bytes": 9300
+    },
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Vector.Utils.VecDataSplitModule-Hardware.py",
+      "sha256": "022026944f5de43d17b4b2f267cf0a9bd9b8ef578b5cf58e0a824345c57c8de9",
+      "bytes": 5093
+    }
+  },
+  "checks": {
+    "py_compile": {
+      "status": "PASS"
+    },
+    "pyright": {
+      "target": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_vecdatasplit_pyright_bjrh630r\\Build-Cpu.Backend.Fu.Vector.Utils.VecDataSplitModule-Hardware.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "files_analyzed": 1,
+        "error_count": 0,
+        "warning_count": 0,
+        "output_sha256": "71d4384e34f3717330d98ce180ee423ff58efcab9698f5bae4064a5a3bb1b931",
+        "stderr_tail": ""
+      },
+      "validator": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_vecdatasplit_pyright_atflcj3d\\v2_vecdatasplitmodule_strict_validator.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "files_analyzed": 1,
+        "error_count": 0,
+        "warning_count": 0,
+        "output_sha256": "b38d5f0e7ae49695f65c38d0d54381a7ef5481f1c7ceceb165ca084f74e33563",
+        "stderr_tail": ""
+      }
+    },
+    "source_lock": {
+      "status": "PASS",
+      "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+      "locked_reference_directory": "validation/reference-sv"
+    },
+    "abi": {
+      "status": "PASS",
+      "checks": {
+        "target_module": true,
+        "reference_module": true,
+        "target_declares_every_port": true,
+        "surface_equals_locked_surface": true,
+        "no_extra_target_ports": true,
+        "every_output_compared": true
+      },
+      "target_declared_ports": {
+        "io_inVecData": [
+          "input",
+          128
+        ],
+        "io_outVec16b_0": [
+          "output",
+          16
+        ],
+        "io_outVec16b_1": [
+          "output",
+          16
+        ],
+        "io_outVec16b_2": [
+          "output",
+          16
+        ],
+        "io_outVec16b_3": [
+          "output",
+          16
+        ],
+        "io_outVec16b_4": [
+          "output",
+          16
+        ],
+        "io_outVec16b_5": [
+          "output",
+          16
+        ],
+        "io_outVec16b_6": [
+          "output",
+          16
+        ],
+        "io_outVec16b_7": [
+          "output",
+          16
+        ],
+        "io_outVec32b_0": [
+          "output",
+          32
+        ],
+        "io_outVec32b_1": [
+          "output",
+          32
+        ],
+        "io_outVec32b_2": [
+          "output",
+          32
+        ],
+        "io_outVec32b_3": [
+          "output",
+          32
+        ],
+        "io_outVec64b_0": [
+          "output",
+          64
+        ],
+        "io_outVec64b_1": [
+          "output",
+          64
+        ],
+        "io_outVec8b_0": [
+          "output",
+          8
+        ],
+        "io_outVec8b_1": [
+          "output",
+          8
+        ],
+        "io_outVec8b_10": [
+          "output",
+          8
+        ],
+        "io_outVec8b_11": [
+          "output",
+          8
+        ],
+        "io_outVec8b_12": [
+          "output",
+          8
+        ],
+        "io_outVec8b_13": [
+          "output",
+          8
+        ],
+        "io_outVec8b_14": [
+          "output",
+          8
+        ],
+        "io_outVec8b_15": [
+          "output",
+          8
+        ],
+        "io_outVec8b_2": [
+          "output",
+          8
+        ],
+        "io_outVec8b_3": [
+          "output",
+          8
+        ],
+        "io_outVec8b_4": [
+          "output",
+          8
+        ],
+        "io_outVec8b_5": [
+          "output",
+          8
+        ],
+        "io_outVec8b_6": [
+          "output",
+          8
+        ],
+        "io_outVec8b_7": [
+          "output",
+          8
+        ],
+        "io_outVec8b_8": [
+          "output",
+          8
+        ],
+        "io_outVec8b_9": [
+          "output",
+          8
+        ]
+      },
+      "reference_declared_ports": {
+        "io_inVecData": [
+          "input",
+          128
+        ],
+        "io_outVec16b_0": [
+          "output",
+          16
+        ],
+        "io_outVec16b_1": [
+          "output",
+          16
+        ],
+        "io_outVec16b_2": [
+          "output",
+          16
+        ],
+        "io_outVec16b_3": [
+          "output",
+          16
+        ],
+        "io_outVec16b_4": [
+          "output",
+          16
+        ],
+        "io_outVec16b_5": [
+          "output",
+          16
+        ],
+        "io_outVec16b_6": [
+          "output",
+          16
+        ],
+        "io_outVec16b_7": [
+          "output",
+          16
+        ],
+        "io_outVec32b_0": [
+          "output",
+          32
+        ],
+        "io_outVec32b_1": [
+          "output",
+          32
+        ],
+        "io_outVec32b_2": [
+          "output",
+          32
+        ],
+        "io_outVec32b_3": [
+          "output",
+          32
+        ],
+        "io_outVec64b_0": [
+          "output",
+          64
+        ],
+        "io_outVec64b_1": [
+          "output",
+          64
+        ],
+        "io_outVec8b_0": [
+          "output",
+          8
+        ],
+        "io_outVec8b_1": [
+          "output",
+          8
+        ],
+        "io_outVec8b_10": [
+          "output",
+          8
+        ],
+        "io_outVec8b_11": [
+          "output",
+          8
+        ],
+        "io_outVec8b_12": [
+          "output",
+          8
+        ],
+        "io_outVec8b_13": [
+          "output",
+          8
+        ],
+        "io_outVec8b_14": [
+          "output",
+          8
+        ],
+        "io_outVec8b_15": [
+          "output",
+          8
+        ],
+        "io_outVec8b_2": [
+          "output",
+          8
+        ],
+        "io_outVec8b_3": [
+          "output",
+          8
+        ],
+        "io_outVec8b_4": [
+          "output",
+          8
+        ],
+        "io_outVec8b_5": [
+          "output",
+          8
+        ],
+        "io_outVec8b_6": [
+          "output",
+          8
+        ],
+        "io_outVec8b_7": [
+          "output",
+          8
+        ],
+        "io_outVec8b_8": [
+          "output",
+          8
+        ],
+        "io_outVec8b_9": [
+          "output",
+          8
+        ]
+      },
+      "input_count": 1,
+      "output_count": 30
+    },
+    "deterministic_export": {
+      "status": "PASS",
+      "bytes": 3928,
+      "sha256": "afbaf2c4f645f285f589e67f5824415f23299d45787c502deca10276ee8e5d5c",
+      "repeat_sha256": "afbaf2c4f645f285f589e67f5824415f23299d45787c502deca10276ee8e5d5c",
+      "byte_equal": true
+    },
+    "formal": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "--top-module",
+          "VecDataSplitModule_MITER",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_vecdatasplitmodule_strict/UHSC_VecDataSplitModule.sv",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_vecdatasplitmodule_strict/REF_VecDataSplitModule.sv",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_vecdatasplitmodule_strict/VecDataSplitModule_MITER.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.060 MB sources in 4 modules, into 0.010 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.091 s (elab=0.002, cvt=0.004, bld=0.000); cpu 0.022 s on 1 threads; alloced 9.625 MB\n",
+        "output_sha256": "3c1fe2e5c5903e138463c0b165b057c3a7af204ada180e3fa93935194b96f4c7"
+      },
+      "yosys_target": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_vecdatasplitmodule_strict/UHSC_VecDataSplitModule.sv; hierarchy -top VecDataSplitModule; proc; opt; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "\n-- Running command `read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_vecdatasplitmodule_strict/UHSC_VecDataSplitModule.sv; hierarchy -top VecDataSplitModule; proc; opt; check' --\n\n1. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_vecdatasplitmodule_strict/UHSC_VecDataSplitModule.sv\nParsing SystemVerilog input from `/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_vecdatasplitmodule_strict/UHSC_VecDataSplitModule.sv' to AST representation.\nGenerating RTLIL representation for module `\\VecDataSplitModule'.\nSuccessfully finished Verilog frontend.\n\n2. Executing HIERARCHY pass (managing design hierarchy).\n\n2.1. Analyzing design hierarchy..\nTop module:  \\VecDataSplitModule\n\n2.2. Analyzing design hierarchy..\nTop module:  \\VecDataSplitModule\nRemoved 0 unused modules.\n\n3. Executing PROC pass (convert processes to netlists).\n\n3.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module VecDataSplitModule.\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module VecDataSplitModule.\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\VecDataSplitModule'.\nRemoved a total of 0 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\VecDataSplitModule..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\VecDataSplitModule.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\VecDataSplitModule'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\VecDataSplitModule..\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module VecDataSplitModule.\n\n4.9. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module VecDataSplitModule...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 919b8cc8a8, CPU: user 0.04s system 0.01s, MEM: 11.56 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 28% 3x opt_expr (0 sec), 25% 2x read_verilog (0 sec), ...\n",
+        "output_sha256": "afefac2cfa79f395beed3aa09d42413509448a87225b8262b7db5d0b000c33c2"
+      },
+      "yosys_reference": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_vecdatasplitmodule_strict/REF_VecDataSplitModule.sv; hierarchy -top REF_VecDataSplitModule; proc; opt; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "\n-- Running command `read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_vecdatasplitmodule_strict/REF_VecDataSplitModule.sv; hierarchy -top REF_VecDataSplitModule; proc; opt; check' --\n\n1. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_vecdatasplitmodule_strict/REF_VecDataSplitModule.sv\nParsing SystemVerilog input from `/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_vecdatasplitmodule_strict/REF_VecDataSplitModule.sv' to AST representation.\nGenerating RTLIL representation for module `\\REF_VecDataSplitModule'.\nSuccessfully finished Verilog frontend.\n\n2. Executing HIERARCHY pass (managing design hierarchy).\n\n2.1. Analyzing design hierarchy..\nTop module:  \\REF_VecDataSplitModule\n\n2.2. Analyzing design hierarchy..\nTop module:  \\REF_VecDataSplitModule\nRemoved 0 unused modules.\n\n3. Executing PROC pass (convert processes to netlists).\n\n3.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_VecDataSplitModule.\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_VecDataSplitModule.\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_VecDataSplitModule'.\nRemoved a total of 0 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\REF_VecDataSplitModule..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\REF_VecDataSplitModule.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_VecDataSplitModule'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\REF_VecDataSplitModule..\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_VecDataSplitModule.\n\n4.9. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module REF_VecDataSplitModule...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: d47359d4b4, CPU: user 0.03s system 0.01s, MEM: 11.41 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 30% 3x opt_expr (0 sec), 22% 2x read_verilog (0 sec), ...\n",
+        "output_sha256": "0c24c8a2241cccd3a170b5ccce60554c7f14cff91c3d69be55acf94ce35064d3"
+      },
+      "yosys_formal_miter": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_vecdatasplitmodule_strict/UHSC_VecDataSplitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_vecdatasplitmodule_strict/REF_VecDataSplitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_vecdatasplitmodule_strict/VecDataSplitModule_MITER.sv; prep -top VecDataSplitModule_MITER; flatten; opt; sat -prove mismatch 0"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "ls).\nFinding identical cells in module `\\VecDataSplitModule_MITER'.\nRemoved a total of 0 cells.\n\n6.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\VecDataSplitModule_MITER..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n6.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\VecDataSplitModule_MITER.\nPerformed a total of 0 changes.\n\n6.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\VecDataSplitModule_MITER'.\nRemoved a total of 0 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\VecDataSplitModule_MITER..\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module VecDataSplitModule_MITER.\n<suppressed ~59 debug messages>\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\VecDataSplitModule_MITER..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\VecDataSplitModule_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\VecDataSplitModule_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\VecDataSplitModule_MITER..\nRemoved 0 unused cells and 58 unused wires.\n<suppressed ~1 debug messages>\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module VecDataSplitModule_MITER.\n\n6.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\VecDataSplitModule_MITER..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n6.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\VecDataSplitModule_MITER.\nPerformed a total of 0 changes.\n\n6.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\VecDataSplitModule_MITER'.\nRemoved a total of 0 cells.\n\n6.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\VecDataSplitModule_MITER..\n\n6.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module VecDataSplitModule_MITER.\n\n6.23. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 2 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 2 variables and 4 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: e9d5942639, CPU: user 0.17s system 0.05s, MEM: 14.73 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 30% 7x opt_clean (0 sec), 20% 9x opt_expr (0 sec), ...\n",
+        "output_sha256": "08e3f65fe3f70fd5e0b17f63a2978840e54f98a60fdfaa878544f207fef55f2e",
+        "formal_success_marker": true,
+        "formal_scope": {
+          "input_bits": 128,
+          "input_space": "2**128",
+          "state_bits": 0,
+          "state_space": "singleton (stateless combinational module)",
+          "property": "mismatch == 0 for every 2-state input valuation",
+          "outputs_compared": {
+            "io_outVec8b_0": 8,
+            "io_outVec8b_1": 8,
+            "io_outVec8b_2": 8,
+            "io_outVec8b_3": 8,
+            "io_outVec8b_4": 8,
+            "io_outVec8b_5": 8,
+            "io_outVec8b_6": 8,
+            "io_outVec8b_7": 8,
+            "io_outVec8b_8": 8,
+            "io_outVec8b_9": 8,
+            "io_outVec8b_10": 8,
+            "io_outVec8b_11": 8,
+            "io_outVec8b_12": 8,
+            "io_outVec8b_13": 8,
+            "io_outVec8b_14": 8,
+            "io_outVec8b_15": 8,
+            "io_outVec16b_0": 16,
+            "io_outVec16b_1": 16,
+            "io_outVec16b_2": 16,
+            "io_outVec16b_3": 16,
+            "io_outVec16b_4": 16,
+            "io_outVec16b_5": 16,
+            "io_outVec16b_6": 16,
+            "io_outVec16b_7": 16,
+            "io_outVec32b_0": 32,
+            "io_outVec32b_1": 32,
+            "io_outVec32b_2": 32,
+            "io_outVec32b_3": 32,
+            "io_outVec64b_0": 64,
+            "io_outVec64b_1": 64
+          }
+        }
+      }
+    }
+  },
+  "failures": [],
+  "unclosed": []
+}
