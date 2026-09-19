@@ -2,21 +2,14 @@
   "schema_version": 1,
   "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_EQUIVALENCE_PROGRESS",
   "build_denominator": 118,
-  "strict_complete_build_count": 19,
-  "fraction": "19/118",
-  "percentage": 16.101695,
+  "strict_complete_build_count": 20,
+  "fraction": "20/118",
+  "percentage": 16.949153,
   "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with the locked source commit, matching source hashes, and either a Yosys SAT no-model miter or fully proven Yosys inductive-equivalence status is counted. STRICT_PENDING and COMPLETE_EQUIVALENCE_VARIANT_ONLY records are inventoried as attempted-but-not-counted instead of failing the rail, and one Build file may not be claimed by several counting proofs.",
-  "non_counting_attempt_count": 1,
-  "non_counting_attempts": [
-    {
-      "evidence": "validation/v2-instrmmioentry-strict-evidence.json",
-      "build_id": "Build-Cpu.Frontend.Icache.InstrMMIOEntry",
-      "declared_status": "STRICT_PENDING",
-      "failures": []
-    }
-  ],
+  "non_counting_attempt_count": 0,
+  "non_counting_attempts": [],
   "plan_reconciliation": {
-    "plan_count": 19,
+    "plan_count": 20,
     "plan_denominator": 118,
     "status": "PASS"
   },
@@ -1961,13 +1954,13 @@
     {
       "evidence": "validation/v2-instrmmioentry-strict-evidence.json",
       "build_id": "Build-Cpu.Frontend.Icache.InstrMMIOEntry",
-      "declared_status": "STRICT_PENDING",
+      "declared_status": "COMPLETE_EQUIVALENCE",
       "source_commit": {
         "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "status": "PASS"
       },
-      "status": "NON_COUNTING",
+      "status": "PASS",
       "scope": {
         "kind": "sequential_registered_leaf",
         "configuration": "locked V2 single-entry uncached instruction transaction engine",
@@ -2026,8 +2019,8 @@
         "python_build": {
           "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.InstrMMIOEntry-Hardware.py",
           "present": true,
-          "expected_sha256": "2e0881c5fdf4fc40f3e2a2fe77dc96434441bc8aa019ee93fb3ad00dfa2ec9c1",
-          "observed_sha256": "2e0881c5fdf4fc40f3e2a2fe77dc96434441bc8aa019ee93fb3ad00dfa2ec9c1",
+          "expected_sha256": "6cb781af830601584c4f03182c5679f706f750da9dab36d384babdc62da2b41f",
+          "observed_sha256": "6cb781af830601584c4f03182c5679f706f750da9dab36d384babdc62da2b41f",
           "status": "PASS"
         }
       },
@@ -2039,9 +2032,9 @@
           "-p",
           "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_instrmmioentry_strict/InstrMMIOEntry-target.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_instrmmioentry_strict/InstrMMIOEntry-reference.sv; proc; async2sync; memory; opt; equiv_make InstrMMIOEntry InstrMMIOEntry_ref InstrMMIOEntry_equiv; prep -top InstrMMIOEntry_equiv; equiv_induct -undef; equiv_status -assert"
         ],
-        "returncode": 1,
-        "status": "FAIL",
-        "formal_success_marker": false
+        "returncode": 0,
+        "status": "PASS",
+        "formal_success_marker": true
       },
       "failures": []
     },

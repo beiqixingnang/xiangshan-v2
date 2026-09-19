@@ -354,9 +354,16 @@ def equiv_run(target: str, reference: str) -> dict[str, Any]:
     output = result.get("output_tail", "")
     result["markers_present"] = {marker: marker in output for marker in EQUIV_MARKERS}
     result["formal_success_marker"] = all(result["markers_present"].values())
-    unproven = re.findall(r"Found (\d+) unproven \$equiv cells", output)
-    if unproven:
-        result["unproven_cells"] = int(unproven[-1])
+    final = re.findall(r"Of those cells (\d+) are proven and (\d+) are unproven", output)
+    totals = re.findall(r"Found (\d+) \$equiv cells in", output)
+    assert_failure = re.findall(r"Found (\d+) unproven \$equiv cells in 'equiv_status -assert'", output)
+    if final:
+        result["proven_cells"] = int(final[-1][0])
+        result["unproven_cells"] = int(final[-1][1])
+    if totals:
+        result["equiv_cells"] = int(totals[-1])
+    if assert_failure:
+        result["unproven_cells"] = int(assert_failure[-1])
     if result["returncode"] != 0 or not result["formal_success_marker"]:
         result["status"] = "FAIL"
     return result
@@ -463,6 +470,10 @@ def validate() -> dict[str, Any]:
         failures.append("negative control did not detect a mutated target")
     if proof["status"] != "PASS":
         failures.append("yosys_equiv")
+    if not proof.get("equiv_cells"):
+        failures.append("no $equiv cells were matched, so the equivalence run is vacuous")
+    elif proof.get("unproven_cells"):
+        failures.append(f"{proof['unproven_cells']} $equiv cells remain unproven")
     status = "COMPLETE_EQUIVALENCE" if not failures else "STRICT_PENDING"
     state_bits, state_registers = measured_state_bits()
     payload: dict[str, Any] = {

@@ -103,7 +103,10 @@ class InstrMMIOEntry(Elaboratable):
         module.domains.sync = domain
 
         state = Signal(2, reset=self.INVALID, name="state")
-        req_addr_reg = Signal(cfg.paddr_bits, reset=0, name="req_addr")
+        # ``req_addr`` is a resetless Reg() in the locked reference; every other
+        # register here is a RegInit(0) inside the reset-bearing block.
+        # req_addr 在锁定参考中是无复位 Reg()，其余寄存器为 RegInit(0)。
+        req_addr_reg = Signal(cfg.paddr_bits, name="req_addr", reset_less=True)
         resp_data_reg = Signal(cfg.mmio_bus_width, reset=0, name="respDataReg")
         resp_corrupt_reg = Signal(reset=0, name="respCorruptReg")
         need_flush = Signal(reset=0, name="needFlush")
