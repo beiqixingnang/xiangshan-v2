@@ -47,9 +47,12 @@ SAT_MARKER = "SAT proof finished - no model found: SUCCESS!"
 EQUIV_MARKERS = ("0 are unproven.", "Equivalence successfully proven!")
 ANSI_PORT = re.compile(r"^(input|output)\s+(?:\[\s*(\d+):0\]\s*)?(.+)$")
 BLOCK_LOCAL = re.compile(
-    r"^([ \t]*)automatic\s+logic\s+(\[[^\]]*\])?\s*([A-Za-z_][A-Za-z0-9_]*)\s*;[ \t]*$", re.M)
+    r"^([ \t]*)automatic\s+logic\s+(\[[^\]]*\])?\s*([A-Za-z_]\w*(?:\s*,\s*[A-Za-z_]\w*)*)\s*;[ \t]*$", re.M)
 INIT_DECL = re.compile(
-    r"^([ \t]*)automatic\s+logic\s+(\[[^\]]*\])?\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.+);\s*$", re.M)
+    r"^([ \t]*)automatic\s+logic\s+(\[[^\]]*\])?\s*([A-Za-z_]\w*)\s*=\s*(.+);\s*$", re.M)
+# A `function automatic` header is accepted by the installed Yosys, so only a
+# block-local declaration counts as surviving.
+BLOCK_LOCAL_ANY = re.compile(r"\bautomatic\s+(?:logic|reg|bit)\b")
 REMOVED_REGIONS = ("`ifndef SYNTHESIS", "`ifdef ENABLE_INITIAL_REG_", "`ifdef ENABLE_INITIAL_MEM_")
 NESTED_OPEN = re.compile(r"^\s*`(ifdef|ifndef|else|elsif)\b")
 NESTED_CLOSE = re.compile(r"^\s*`endif\b")
@@ -264,7 +267,10 @@ def synthesizable_view(text: str, top: str, rename: bool) -> tuple[str, dict[str
         lines = lines[:start] + lines[end:]
     residual = [line for line in lines if "`" in line]
     body = "\n".join(lines)
-    temporaries = [(m.group(2), m.group(3)) for m in BLOCK_LOCAL.finditer(body)]
+    plain_lines = [m.group(2) for m in BLOCK_LOCAL.finditer(body)]
+    temporaries = [(width, name.strip())
+                   for m in BLOCK_LOCAL.finditer(body)
+                   for width, name in [(m.group(2), item) for item in m.group(3).split(",")]]
     initialized = [(m.group(2), m.group(3), m.group(4)) for m in INIT_DECL.finditer(body)]
     hoisted = temporaries + [(w, n) for w, n, _ in initialized]
     declarations = "".join(f"reg {w} {n};\n" if w else f"reg {n};\n" for w, n in hoisted)
@@ -274,12 +280,13 @@ def synthesizable_view(text: str, top: str, rename: bool) -> tuple[str, dict[str
     view_lines = [line for line in normalized.split("\n") if line.strip()]
     view_set = set(view_lines)
     disappeared = [line for line in lines if line and line not in view_set]
+    expected_declarations = [line.rstrip() for line in declarations.split("\n") if line.strip()]
+    expected_rewrites = [f"{n} = {e};" for _, n, e in initialized]
+    permitted = expected_declarations + expected_rewrites
     appeared = [line for line in view_lines if line not in set(lines)]
-    permitted = ([line.rstrip() for line in declarations.split("\n") if line.strip()]
-                 + [f"{n} = {e};" for _, n, e in initialized])
     conserved = (all(BLOCK_LOCAL.match(line) is not None or INIT_DECL.match(line) is not None
                      for line in disappeared)
-                 and len(disappeared) == len(temporaries) + len(initialized)
+                 and len(disappeared) == len(plain_lines) + len(initialized)
                  and sorted(appeared) == sorted(permitted))
     registers_before = re.findall(r"^\s*[A-Za-z_]\w*\s*<=\s*.+;$", body, re.M)
     registers_after = re.findall(r"^\s*[A-Za-z_]\w*\s*<=\s*.+;$", normalized, re.M)
@@ -296,9 +303,10 @@ def synthesizable_view(text: str, top: str, rename: bool) -> tuple[str, dict[str
         "register_update_equations_locked": len(registers_before),
         "register_update_equations_preserved": registers_before == registers_after,
     }
-    audit["view_trusted"] = bool(conserved and audit["register_update_equations_preserved"]
-                                 and "automatic" not in normalized
-                                 and all(line.lstrip().startswith("`") for line in residual))
+    audit["view_trusted"] = bool(
+        conserved and audit["register_update_equations_preserved"]
+        and not BLOCK_LOCAL_ANY.search(normalized)
+        and all(line.lstrip().startswith("`") for line in residual))
     if rename:
         renamed, count = re.subn(r"\bmodule\s+" + re.escape(top) + r"\s*\(",
                                  f"module REF_{top}(", normalized, count=1)
