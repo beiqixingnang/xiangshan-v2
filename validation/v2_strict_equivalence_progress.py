@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 from pathlib import Path
 from typing import Any
 
@@ -16,6 +17,7 @@ PLAN = ROOT / "V2-Rewrite-Batch-Plan.json"
 OUTPUT = ROOT / "validation/v2-strict-equivalence-progress.json"
 EXPECTED_KIND = "XIANGSHAN_KUNMINGHU_V2_STRICT_COMPLETE_EQUIVALENCE"
 NON_COUNTING_STATUSES = ("STRICT_PENDING", "COMPLETE_EQUIVALENCE_VARIANT_ONLY")
+LOCKED_REFERENCE_NAMES = {path.stem for path in (ROOT / "validation/reference-sv").glob("*.sv")}
 SUCCESS_MARKER = "SAT proof finished - no model found: SUCCESS!"
 EQUIV_SUCCESS_MARKERS = (
     "0 are unproven.",
@@ -67,6 +69,36 @@ def verify_source(record: Any, label: str, failures: list[str]) -> dict[str, Any
     }
 
 
+def locked_reference_names() -> set[str]:
+    """Return every module name that has an exact locked reference file."""
+
+    return {path.stem for path in (ROOT / "validation/reference-sv").glob("*.sv")}
+
+
+def build_locked_members(build_path: Path, locked_names: set[str]) -> set[str]:
+    """Enumerate the locked modules a catalog Build exposes.
+
+    Covers ``COVERED_MODULES`` and ``*_MEMBERS`` tuples plus ``*_SPECS`` mapping
+    keys and string-compared member selectors, keeping only names that have an
+    exact locked reference file.
+    """
+
+    if not build_path.is_file():
+        return set()
+    text = build_path.read_text(encoding="utf-8")
+    candidates: set[str] = set()
+    for table in re.finditer(r'\b(?:COVERED_MODULES|[A-Z_]+_MEMBERS)[^=]*=\s*([\(\[])(.*?)[\)\]]',
+                             text, re.S):
+        candidates |= set(re.findall(r'"([^"]+)"', table.group(2)))
+    for name in re.findall(r'^([A-Z_]+_SPECS):', text, re.M):
+        block = re.search(re.escape(name) + r':.*?\n\}', text, re.S)
+        if block is not None:
+            candidates |= set(re.findall(r'^\s{4}"([^"]+)":', block.group(0), re.M))
+    candidates |= set(re.findall(
+        r'(?:member|module_name|subject|module)\s*==\s*"([A-Za-z_]\w*)"', text))
+    return {item for item in candidates if item in locked_names}
+
+
 def verify_evidence(path: Path, expected_source_commit: str) -> dict[str, Any]:
     """Verify one strict proof without trusting its status string alone. / 不仅依赖状态字符串，验证一份严格证明。"""
 
@@ -114,6 +146,20 @@ def verify_evidence(path: Path, expected_source_commit: str) -> dict[str, Any]:
         row_note = None
     else:
         row_note = None
+
+    claimed_variants: set[str] = set()
+    if isinstance(scope_claim := payload.get("scope"), dict):
+        if isinstance(public_variants := scope_claim.get("public_variants"), list):
+            claimed_variants |= {str(item) for item in public_variants}
+        if isinstance(variant_map := scope_claim.get("variants"), dict):
+            claimed_variants |= {str(item) for item in variant_map}
+    claimed_build = str(verified_sources.get("python_build", {}).get("path", ""))
+    if not non_counting and claimed_build:
+        members = build_locked_members(ROOT / claimed_build, LOCKED_REFERENCE_NAMES)
+        if len(members) > 1 and not members <= claimed_variants:
+            failures.append(
+                f"aggregate Build exposes {len(members)} locked members but only "
+                f"{len(members & claimed_variants)} are proven here")
 
     proof_method = "sat_miter"
     formal = nested(payload, "checks", "formal", "yosys_formal_miter")
