@@ -374,36 +374,46 @@ def aggregate_proof(items: list[dict[str, Any]]) -> dict[str, Any]:
 
 
 def negative_control(items: list[dict[str, Any]]) -> dict[str, Any]:
-    """Pin one output lane of the widest specialization and require a model."""
+    """Perturb the target and the reference and require the proof to break."""
 
     widest = max(items, key=lambda item: item["entry"]["length"])
     entry = widest["entry"]
     output_name = sorted(widest["outputs"])[0]
-    target_rtl = widest["target"].read_text(encoding="utf-8")
-    mutated, count = re.subn(rf"assign\s+{re.escape(output_name)}\s*=\s*[^;]+;",
-                             lambda _match: f"assign {output_name} = 1'b0;",
-                             target_rtl, count=1)
-    if count != 1:
-        return {"status": "FAIL", "mutation_applied": False,
-                "note": "the control driver was not uniquely found"}
-    mutant = WORK / f"MUTANT_{entry['tag']}.sv"
-    mutant.write_text(mutated, encoding="utf-8", newline="\n")
-    script = (f"read_verilog -sv {shlex.quote(wsl_path(mutant))} "
-              f"{shlex.quote(wsl_path(widest['reference']))} "
-              f"{shlex.quote(wsl_path(widest['miter']))}; "
-              f"prep -top {entry['tag']}_MITER; flatten; opt; sat -prove mismatch 0")
-    verdict = run_wsl(["yosys", "-Q", "-p", script])
-    output = verdict.get("output_tail", "")
-    detected = "SAT proof finished - no model found: SUCCESS!" not in output
+    verdicts: dict[str, Any] = {}
+    for side, path in (("target", widest["target"]), ("reference", widest["reference"])):
+        source = path.read_text(encoding="utf-8")
+        mutated, count = re.subn(rf"assign\s+{re.escape(output_name)}\s*=\s*[^;]+;",
+                                 lambda _match: f"assign {output_name} = 1'b0;",
+                                 source, count=1)
+        if count != 1:
+            return {"status": "FAIL", "side": side, "mutation_applied": False,
+                    "note": "the control driver was not uniquely found, so the harness "
+                            "was never challenged"}
+        mutant = WORK / f"MUTANT_{side}_{entry['tag']}.sv"
+        mutant.write_text(mutated, encoding="utf-8", newline="\n")
+        if side == "target":
+            files = [mutant, widest["reference"], widest["miter"]]
+        else:
+            files = [widest["target"], mutant, widest["miter"]]
+        script = ("read_verilog -sv " + " ".join(shlex.quote(wsl_path(item)) for item in files)
+                  + f"; prep -top {entry['tag']}_MITER; flatten; opt; sat -prove mismatch 0")
+        verdict = run_wsl(["yosys", "-Q", "-p", script])
+        output = verdict.get("output_tail", "")
+        verdicts[side] = {
+            "status": "PASS" if SAT_SUCCESS_MARKER not in output else "FAIL",
+            "control_port": output_name,
+            "mutation_applied": True,
+            "success_marker_still_present": SAT_SUCCESS_MARKER in output,
+            "output_tail": output[-700:],
+        }
+    detected = all(item["status"] == "PASS" for item in verdicts.values())
     return {
         "status": "PASS" if detected else "FAIL",
         "control_target": entry["tag"],
-        "control_port": output_name,
-        "mutation_applied": True,
-        "markers_present": SAT_SUCCESS_MARKER in output,
-        "note": "pinning one output lane of the widest specialization must produce a model, "
-                "otherwise a clean aggregate success could be vacuous",
-        "output_tail": output[-1200:],
+        "sides": verdicts,
+        "note": "pinning one output lane on either side must produce a model; a "
+                "reference-side mutation that still 'proves' equality means the "
+                "reference is not actually reaching the comparison",
     }
 
 
