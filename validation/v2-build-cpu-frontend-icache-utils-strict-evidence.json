@@ -1,0 +1,949 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_COMPLETE_EQUIVALENCE",
+  "build_id": "Build-Cpu.Frontend.Icache.Utils",
+  "validator": "validation/v2_strict_family_rail.py",
+  "status": "COMPLETE_EQUIVALENCE",
+  "strict_complete_eligible": true,
+  "strict_complete_count_delta": 1,
+  "acceptance_eligible": true,
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "audit_policy": {
+    "require_negative_control": true,
+    "require_two_sided_negative_control": true,
+    "require_locked_reference_lint": true,
+    "require_validator_hash": true,
+    "scope_source": "Build catalog tables"
+  },
+  "scope": {
+    "kind": "catalog_build_multi_variant",
+    "public_variants": [
+      "DeMultiplexer",
+      "DeMultiplexer_1",
+      "FIFOReg",
+      "MuxBundle"
+    ],
+    "variant_count": 4,
+    "combinational_variants": 3,
+    "sequential_variants": 1,
+    "inputs": {
+      "DeMultiplexer_io_in_valid": 1,
+      "DeMultiplexer_io_in_bits_blkPaddr": 42,
+      "DeMultiplexer_io_in_bits_vSetIdx": 8,
+      "DeMultiplexer_io_out_0_ready": 1,
+      "DeMultiplexer_io_out_1_ready": 1,
+      "DeMultiplexer_io_out_2_ready": 1,
+      "DeMultiplexer_io_out_3_ready": 1,
+      "DeMultiplexer_1_io_in_valid": 1,
+      "DeMultiplexer_1_io_in_bits_blkPaddr": 42,
+      "DeMultiplexer_1_io_in_bits_vSetIdx": 8,
+      "DeMultiplexer_1_io_out_0_ready": 1,
+      "DeMultiplexer_1_io_out_1_ready": 1,
+      "DeMultiplexer_1_io_out_2_ready": 1,
+      "DeMultiplexer_1_io_out_3_ready": 1,
+      "DeMultiplexer_1_io_out_4_ready": 1,
+      "DeMultiplexer_1_io_out_5_ready": 1,
+      "DeMultiplexer_1_io_out_6_ready": 1,
+      "DeMultiplexer_1_io_out_7_ready": 1,
+      "DeMultiplexer_1_io_out_8_ready": 1,
+      "DeMultiplexer_1_io_out_9_ready": 1,
+      "FIFOReg_clock": 1,
+      "FIFOReg_reset": 1,
+      "FIFOReg_io_enq_valid": 1,
+      "FIFOReg_io_enq_bits": 4,
+      "FIFOReg_io_deq_ready": 1,
+      "FIFOReg_io_flush": 1,
+      "MuxBundle_io_sel": 4,
+      "MuxBundle_io_in_0_valid": 1,
+      "MuxBundle_io_in_0_bits_acquire_address": 48,
+      "MuxBundle_io_in_0_bits_vSetIdx": 8,
+      "MuxBundle_io_in_1_valid": 1,
+      "MuxBundle_io_in_1_bits_acquire_address": 48,
+      "MuxBundle_io_in_1_bits_vSetIdx": 8,
+      "MuxBundle_io_in_2_valid": 1,
+      "MuxBundle_io_in_2_bits_acquire_address": 48,
+      "MuxBundle_io_in_2_bits_vSetIdx": 8,
+      "MuxBundle_io_in_3_valid": 1,
+      "MuxBundle_io_in_3_bits_acquire_address": 48,
+      "MuxBundle_io_in_3_bits_vSetIdx": 8,
+      "MuxBundle_io_in_4_valid": 1,
+      "MuxBundle_io_in_4_bits_acquire_address": 48,
+      "MuxBundle_io_in_4_bits_vSetIdx": 8,
+      "MuxBundle_io_in_5_valid": 1,
+      "MuxBundle_io_in_5_bits_acquire_address": 48,
+      "MuxBundle_io_in_5_bits_vSetIdx": 8,
+      "MuxBundle_io_in_6_valid": 1,
+      "MuxBundle_io_in_6_bits_acquire_address": 48,
+      "MuxBundle_io_in_6_bits_vSetIdx": 8,
+      "MuxBundle_io_in_7_valid": 1,
+      "MuxBundle_io_in_7_bits_acquire_address": 48,
+      "MuxBundle_io_in_7_bits_vSetIdx": 8,
+      "MuxBundle_io_in_8_valid": 1,
+      "MuxBundle_io_in_8_bits_acquire_address": 48,
+      "MuxBundle_io_in_8_bits_vSetIdx": 8,
+      "MuxBundle_io_in_9_valid": 1,
+      "MuxBundle_io_in_9_bits_acquire_address": 48,
+      "MuxBundle_io_in_9_bits_vSetIdx": 8,
+      "MuxBundle_io_out_ready": 1
+    },
+    "outputs_compared": {
+      "DeMultiplexer_io_in_ready": 1,
+      "DeMultiplexer_io_out_0_valid": 1,
+      "DeMultiplexer_io_out_0_bits_blkPaddr": 42,
+      "DeMultiplexer_io_out_0_bits_vSetIdx": 8,
+      "DeMultiplexer_io_out_1_valid": 1,
+      "DeMultiplexer_io_out_1_bits_blkPaddr": 42,
+      "DeMultiplexer_io_out_1_bits_vSetIdx": 8,
+      "DeMultiplexer_io_out_2_valid": 1,
+      "DeMultiplexer_io_out_2_bits_blkPaddr": 42,
+      "DeMultiplexer_io_out_2_bits_vSetIdx": 8,
+      "DeMultiplexer_io_out_3_valid": 1,
+      "DeMultiplexer_io_out_3_bits_blkPaddr": 42,
+      "DeMultiplexer_io_out_3_bits_vSetIdx": 8,
+      "DeMultiplexer_1_io_in_ready": 1,
+      "DeMultiplexer_1_io_out_0_valid": 1,
+      "DeMultiplexer_1_io_out_0_bits_blkPaddr": 42,
+      "DeMultiplexer_1_io_out_0_bits_vSetIdx": 8,
+      "DeMultiplexer_1_io_out_1_valid": 1,
+      "DeMultiplexer_1_io_out_1_bits_blkPaddr": 42,
+      "DeMultiplexer_1_io_out_1_bits_vSetIdx": 8,
+      "DeMultiplexer_1_io_out_2_valid": 1,
+      "DeMultiplexer_1_io_out_2_bits_blkPaddr": 42,
+      "DeMultiplexer_1_io_out_2_bits_vSetIdx": 8,
+      "DeMultiplexer_1_io_out_3_valid": 1,
+      "DeMultiplexer_1_io_out_3_bits_blkPaddr": 42,
+      "DeMultiplexer_1_io_out_3_bits_vSetIdx": 8,
+      "DeMultiplexer_1_io_out_4_valid": 1,
+      "DeMultiplexer_1_io_out_4_bits_blkPaddr": 42,
+      "DeMultiplexer_1_io_out_4_bits_vSetIdx": 8,
+      "DeMultiplexer_1_io_out_5_valid": 1,
+      "DeMultiplexer_1_io_out_5_bits_blkPaddr": 42,
+      "DeMultiplexer_1_io_out_5_bits_vSetIdx": 8,
+      "DeMultiplexer_1_io_out_6_valid": 1,
+      "DeMultiplexer_1_io_out_6_bits_blkPaddr": 42,
+      "DeMultiplexer_1_io_out_6_bits_vSetIdx": 8,
+      "DeMultiplexer_1_io_out_7_valid": 1,
+      "DeMultiplexer_1_io_out_7_bits_blkPaddr": 42,
+      "DeMultiplexer_1_io_out_7_bits_vSetIdx": 8,
+      "DeMultiplexer_1_io_out_8_valid": 1,
+      "DeMultiplexer_1_io_out_8_bits_blkPaddr": 42,
+      "DeMultiplexer_1_io_out_8_bits_vSetIdx": 8,
+      "DeMultiplexer_1_io_out_9_valid": 1,
+      "DeMultiplexer_1_io_out_9_bits_blkPaddr": 42,
+      "DeMultiplexer_1_io_out_9_bits_vSetIdx": 8,
+      "DeMultiplexer_1_io_chosen": 4,
+      "FIFOReg_io_enq_ready": 1,
+      "FIFOReg_io_deq_valid": 1,
+      "FIFOReg_io_deq_bits": 4,
+      "MuxBundle_io_in_0_ready": 1,
+      "MuxBundle_io_in_1_ready": 1,
+      "MuxBundle_io_in_2_ready": 1,
+      "MuxBundle_io_in_3_ready": 1,
+      "MuxBundle_io_in_4_ready": 1,
+      "MuxBundle_io_in_5_ready": 1,
+      "MuxBundle_io_in_6_ready": 1,
+      "MuxBundle_io_in_7_ready": 1,
+      "MuxBundle_io_in_8_ready": 1,
+      "MuxBundle_io_in_9_ready": 1,
+      "MuxBundle_io_out_valid": 1,
+      "MuxBundle_io_out_bits_acquire_source": 4,
+      "MuxBundle_io_out_bits_acquire_address": 48,
+      "MuxBundle_io_out_bits_vSetIdx": 8
+    },
+    "aggregate_input_bits": 700,
+    "aggregate_compared_output_bits": 797,
+    "variants": {
+      "DeMultiplexer": {
+        "method": "sat_miter",
+        "sequential": false,
+        "locked_reference": "validation/reference-sv/DeMultiplexer.sv",
+        "locked_sha256": "2aaf079cf50c8fe4043b7d82b3cabc204b118f32aeef9087d73dd856b6569264",
+        "children": [],
+        "inputs": {
+          "io_in_valid": 1,
+          "io_in_bits_blkPaddr": 42,
+          "io_in_bits_vSetIdx": 8,
+          "io_out_0_ready": 1,
+          "io_out_1_ready": 1,
+          "io_out_2_ready": 1,
+          "io_out_3_ready": 1
+        },
+        "outputs_compared": {
+          "io_in_ready": 1,
+          "io_out_0_valid": 1,
+          "io_out_0_bits_blkPaddr": 42,
+          "io_out_0_bits_vSetIdx": 8,
+          "io_out_1_valid": 1,
+          "io_out_1_bits_blkPaddr": 42,
+          "io_out_1_bits_vSetIdx": 8,
+          "io_out_2_valid": 1,
+          "io_out_2_bits_blkPaddr": 42,
+          "io_out_2_bits_vSetIdx": 8,
+          "io_out_3_valid": 1,
+          "io_out_3_bits_blkPaddr": 42,
+          "io_out_3_bits_vSetIdx": 8
+        },
+        "input_bits": 55,
+        "output_bits": 205,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "PASS",
+        "success_marker": true,
+        "markers_present": null,
+        "unconstrained_or_equiv_cells": true,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "sat_variables": 2,
+        "sat_clauses": 4
+      },
+      "DeMultiplexer_1": {
+        "method": "sat_miter",
+        "sequential": false,
+        "locked_reference": "validation/reference-sv/DeMultiplexer_1.sv",
+        "locked_sha256": "71f94459f54714ad7e4b37e5cd8a96cfd24ea2b1eec7a4ffbb0c6c2a1446e67d",
+        "children": [],
+        "inputs": {
+          "io_in_valid": 1,
+          "io_in_bits_blkPaddr": 42,
+          "io_in_bits_vSetIdx": 8,
+          "io_out_0_ready": 1,
+          "io_out_1_ready": 1,
+          "io_out_2_ready": 1,
+          "io_out_3_ready": 1,
+          "io_out_4_ready": 1,
+          "io_out_5_ready": 1,
+          "io_out_6_ready": 1,
+          "io_out_7_ready": 1,
+          "io_out_8_ready": 1,
+          "io_out_9_ready": 1
+        },
+        "outputs_compared": {
+          "io_in_ready": 1,
+          "io_out_0_valid": 1,
+          "io_out_0_bits_blkPaddr": 42,
+          "io_out_0_bits_vSetIdx": 8,
+          "io_out_1_valid": 1,
+          "io_out_1_bits_blkPaddr": 42,
+          "io_out_1_bits_vSetIdx": 8,
+          "io_out_2_valid": 1,
+          "io_out_2_bits_blkPaddr": 42,
+          "io_out_2_bits_vSetIdx": 8,
+          "io_out_3_valid": 1,
+          "io_out_3_bits_blkPaddr": 42,
+          "io_out_3_bits_vSetIdx": 8,
+          "io_out_4_valid": 1,
+          "io_out_4_bits_blkPaddr": 42,
+          "io_out_4_bits_vSetIdx": 8,
+          "io_out_5_valid": 1,
+          "io_out_5_bits_blkPaddr": 42,
+          "io_out_5_bits_vSetIdx": 8,
+          "io_out_6_valid": 1,
+          "io_out_6_bits_blkPaddr": 42,
+          "io_out_6_bits_vSetIdx": 8,
+          "io_out_7_valid": 1,
+          "io_out_7_bits_blkPaddr": 42,
+          "io_out_7_bits_vSetIdx": 8,
+          "io_out_8_valid": 1,
+          "io_out_8_bits_blkPaddr": 42,
+          "io_out_8_bits_vSetIdx": 8,
+          "io_out_9_valid": 1,
+          "io_out_9_bits_blkPaddr": 42,
+          "io_out_9_bits_vSetIdx": 8,
+          "io_chosen": 4
+        },
+        "input_bits": 61,
+        "output_bits": 515,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "PASS",
+        "success_marker": true,
+        "markers_present": null,
+        "unconstrained_or_equiv_cells": true,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "sat_variables": 423,
+        "sat_clauses": 1108
+      },
+      "FIFOReg": {
+        "method": "sequential_equivalence",
+        "sequential": true,
+        "locked_reference": "validation/reference-sv/FIFOReg.sv",
+        "locked_sha256": "a61b102f34a59c06c7c9a93d836fdeaed083ebfae2438defb2f4db9a90360329",
+        "children": [],
+        "inputs": {
+          "clock": 1,
+          "reset": 1,
+          "io_enq_valid": 1,
+          "io_enq_bits": 4,
+          "io_deq_ready": 1,
+          "io_flush": 1
+        },
+        "outputs_compared": {
+          "io_enq_ready": 1,
+          "io_deq_valid": 1,
+          "io_deq_bits": 4
+        },
+        "input_bits": 9,
+        "output_bits": 6,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "PASS",
+        "success_marker": true,
+        "markers_present": {
+          "0 are unproven.": true,
+          "Equivalence successfully proven!": true
+        },
+        "unconstrained_or_equiv_cells": 56,
+        "proven_cells": 56,
+        "unproven_cells": 0,
+        "sat_variables": null,
+        "sat_clauses": null
+      },
+      "MuxBundle": {
+        "method": "sat_miter",
+        "sequential": false,
+        "locked_reference": "validation/reference-sv/MuxBundle.sv",
+        "locked_sha256": "1df9431d5ecc0715c9db3d78e729458cb9a8fd04e7de1f6b84149cb36aa99a71",
+        "children": [],
+        "inputs": {
+          "io_sel": 4,
+          "io_in_0_valid": 1,
+          "io_in_0_bits_acquire_address": 48,
+          "io_in_0_bits_vSetIdx": 8,
+          "io_in_1_valid": 1,
+          "io_in_1_bits_acquire_address": 48,
+          "io_in_1_bits_vSetIdx": 8,
+          "io_in_2_valid": 1,
+          "io_in_2_bits_acquire_address": 48,
+          "io_in_2_bits_vSetIdx": 8,
+          "io_in_3_valid": 1,
+          "io_in_3_bits_acquire_address": 48,
+          "io_in_3_bits_vSetIdx": 8,
+          "io_in_4_valid": 1,
+          "io_in_4_bits_acquire_address": 48,
+          "io_in_4_bits_vSetIdx": 8,
+          "io_in_5_valid": 1,
+          "io_in_5_bits_acquire_address": 48,
+          "io_in_5_bits_vSetIdx": 8,
+          "io_in_6_valid": 1,
+          "io_in_6_bits_acquire_address": 48,
+          "io_in_6_bits_vSetIdx": 8,
+          "io_in_7_valid": 1,
+          "io_in_7_bits_acquire_address": 48,
+          "io_in_7_bits_vSetIdx": 8,
+          "io_in_8_valid": 1,
+          "io_in_8_bits_acquire_address": 48,
+          "io_in_8_bits_vSetIdx": 8,
+          "io_in_9_valid": 1,
+          "io_in_9_bits_acquire_address": 48,
+          "io_in_9_bits_vSetIdx": 8,
+          "io_out_ready": 1
+        },
+        "outputs_compared": {
+          "io_in_0_ready": 1,
+          "io_in_1_ready": 1,
+          "io_in_2_ready": 1,
+          "io_in_3_ready": 1,
+          "io_in_4_ready": 1,
+          "io_in_5_ready": 1,
+          "io_in_6_ready": 1,
+          "io_in_7_ready": 1,
+          "io_in_8_ready": 1,
+          "io_in_9_ready": 1,
+          "io_out_valid": 1,
+          "io_out_bits_acquire_source": 4,
+          "io_out_bits_acquire_address": 48,
+          "io_out_bits_vSetIdx": 8
+        },
+        "input_bits": 575,
+        "output_bits": 71,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "PASS",
+        "success_marker": true,
+        "markers_present": null,
+        "unconstrained_or_equiv_cells": true,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "sat_variables": 428,
+        "sat_clauses": 1156
+      }
+    },
+    "why_complete": "Every locked module named by this Build's own tables is proven against its exact-name locked reference on the rail its timing requires, with a conservation-audited 5C view where the installed Yosys cannot read the original.",
+    "bounded_tests_counted": false
+  },
+  "reference_lock": {
+    "directory": "validation/reference-sv",
+    "xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "locked_references_written": false,
+    "sha256_by_module": {
+      "DeMultiplexer": "2aaf079cf50c8fe4043b7d82b3cabc204b118f32aeef9087d73dd856b6569264",
+      "DeMultiplexer_1": "71f94459f54714ad7e4b37e5cd8a96cfd24ea2b1eec7a4ffbb0c6c2a1446e67d",
+      "FIFOReg": "a61b102f34a59c06c7c9a93d836fdeaed083ebfae2438defb2f4db9a90360329",
+      "MuxBundle": "1df9431d5ecc0715c9db3d78e729458cb9a8fd04e7de1f6b84149cb36aa99a71"
+    }
+  },
+  "sources": {
+    "validator": {
+      "path": "validation/v2_strict_family_rail.py",
+      "sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
+      "bytes": 43710
+    },
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.Utils-Hardware.py",
+      "sha256": "e5313cda9f590f0248c71461154c4b025cfc623f5d72a2e47712e69b14741e12",
+      "bytes": 16036
+    },
+    "reference_sv": {
+      "path": "validation/reference-sv/DeMultiplexer.sv",
+      "sha256": "2aaf079cf50c8fe4043b7d82b3cabc204b118f32aeef9087d73dd856b6569264",
+      "bytes": 4985
+    },
+    "scala": {
+      "path": "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala",
+      "sha256": "12489d704c86b65f6d4bc15e64b659bb2fa94f236eb93350d9dee012a22ba926",
+      "bytes": 20881
+    },
+    "declared_scala_sources": {
+      "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala": {
+        "vendored": true,
+        "sha256": "12489d704c86b65f6d4bc15e64b659bb2fa94f236eb93350d9dee012a22ba926"
+      },
+      "upstream/src/main/scala/xiangshan/frontend/icache/FIFO.scala": {
+        "vendored": true,
+        "sha256": "31ab7a1ae4a86834bf6fb6d120c19b835111a9e83c49a53d41ec911ea32e9cd1"
+      }
+    },
+    "reference_children": {}
+  },
+  "checks": {
+    "py_compile": {
+      "status": "PASS"
+    },
+    "pyright": {
+      "build": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_tvohlbqh\\Build-Cpu.Frontend.Icache.Utils-Hardware.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "error_count": 0,
+        "files_analyzed": 1,
+        "stderr_tail": ""
+      },
+      "rail": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_qewr48n4\\v2_strict_family_rail.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "error_count": 0,
+        "files_analyzed": 1,
+        "stderr_tail": ""
+      }
+    },
+    "catalog_coverage": {
+      "entries": 4,
+      "proven": 4
+    },
+    "formal": {
+      "yosys_formal_miter": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/DUT_DeMultiplexer.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/REF_DeMultiplexer.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/DeMultiplexer_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/DUT_DeMultiplexer_1.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/REF_DeMultiplexer_1.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/DeMultiplexer_1_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/DUT_MuxBundle.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/REF_MuxBundle.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/MuxBundle_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/Utils_AGG.sv; prep -top Utils_AGG; flatten; opt; sat -prove mismatch 0"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "sat_success_marker": true,
+        "sat_counterexample_marker": false,
+        "unconstrained_marker": true,
+        "equiv_success_markers": {
+          "0 are unproven.": false,
+          "Equivalence successfully proven!": false
+        },
+        "equiv_failure_marker": false,
+        "equiv_cells_full": null,
+        "equiv_summary_full": null,
+        "equiv_failed_full": null,
+        "sat_counts_full": [
+          852,
+          2267
+        ],
+        "output_tail": " cells).\nFinding identical cells in module `\\Utils_AGG'.\nRemoved a total of 0 cells.\n\n13.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n13.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\Utils_AGG..\nRemoved 47 unused cells and 247 unused wires.\n<suppressed ~160 debug messages>\n\n13.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module Utils_AGG.\n\n13.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n13.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\Utils_AGG..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~4 debug messages>\n\n13.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\Utils_AGG.\nPerformed a total of 0 changes.\n\n13.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\Utils_AGG'.\nRemoved a total of 0 cells.\n\n13.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n13.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\Utils_AGG..\n\n13.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module Utils_AGG.\n\n13.23. Finished OPT passes. (There is nothing left to do.)\n\n14. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 56 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 852 variables and 2267 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: a6b8695b59, CPU: user 0.17s system 0.02s, MEM: 19.42 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 28% 8x opt_clean (0 sec), 20% 11x read_verilog (0 sec), ...\n",
+        "output_sha256": "d6deaf3b6a1d645ce29086755f304c799c2098da102fa34a5fe4326288349b5a",
+        "formal_success_marker": true,
+        "unconstrained": true,
+        "mitered_variants": 3,
+        "sat_variables": 852,
+        "sat_clauses": 2267
+      }
+    },
+    "aggregate_sat_miter": {
+      "command": [
+        "yosys",
+        "-Q",
+        "-p",
+        "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/DUT_DeMultiplexer.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/REF_DeMultiplexer.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/DeMultiplexer_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/DUT_DeMultiplexer_1.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/REF_DeMultiplexer_1.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/DeMultiplexer_1_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/DUT_MuxBundle.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/REF_MuxBundle.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/MuxBundle_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/Utils_AGG.sv; prep -top Utils_AGG; flatten; opt; sat -prove mismatch 0"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "sat_success_marker": true,
+      "sat_counterexample_marker": false,
+      "unconstrained_marker": true,
+      "equiv_success_markers": {
+        "0 are unproven.": false,
+        "Equivalence successfully proven!": false
+      },
+      "equiv_failure_marker": false,
+      "equiv_cells_full": null,
+      "equiv_summary_full": null,
+      "equiv_failed_full": null,
+      "sat_counts_full": [
+        852,
+        2267
+      ],
+      "output_tail": " cells).\nFinding identical cells in module `\\Utils_AGG'.\nRemoved a total of 0 cells.\n\n13.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n13.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\Utils_AGG..\nRemoved 47 unused cells and 247 unused wires.\n<suppressed ~160 debug messages>\n\n13.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module Utils_AGG.\n\n13.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n13.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\Utils_AGG..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~4 debug messages>\n\n13.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\Utils_AGG.\nPerformed a total of 0 changes.\n\n13.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\Utils_AGG'.\nRemoved a total of 0 cells.\n\n13.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n13.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\Utils_AGG..\n\n13.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module Utils_AGG.\n\n13.23. Finished OPT passes. (There is nothing left to do.)\n\n14. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 56 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 852 variables and 2267 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: a6b8695b59, CPU: user 0.17s system 0.02s, MEM: 19.42 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 28% 8x opt_clean (0 sec), 20% 11x read_verilog (0 sec), ...\n",
+      "output_sha256": "d6deaf3b6a1d645ce29086755f304c799c2098da102fa34a5fe4326288349b5a",
+      "formal_success_marker": true,
+      "unconstrained": true,
+      "mitered_variants": 3,
+      "sat_variables": 852,
+      "sat_clauses": 2267
+    },
+    "negative_control": {
+      "status": "PASS",
+      "cases": {
+        "sat.target": {
+          "status": "PASS",
+          "control_entry": "DeMultiplexer",
+          "control_port": "io_in_ready",
+          "mutation_applied": true,
+          "explicit_failure_marker": true,
+          "success_marker_still_present": false,
+          "returncode": 0
+        },
+        "sat.reference": {
+          "status": "PASS",
+          "control_entry": "DeMultiplexer",
+          "control_port": "io_in_ready",
+          "mutation_applied": true,
+          "explicit_failure_marker": true,
+          "success_marker_still_present": false,
+          "returncode": 0
+        },
+        "sequential.target": {
+          "status": "PASS",
+          "control_entry": "FIFOReg",
+          "control_port": "io_deq_valid",
+          "mutation_applied": true,
+          "explicit_failure_marker": true,
+          "success_marker_still_present": false,
+          "returncode": 1
+        },
+        "sequential.reference": {
+          "status": "PASS",
+          "control_entry": "FIFOReg",
+          "control_port": "io_deq_bits",
+          "mutation_applied": true,
+          "explicit_failure_marker": true,
+          "success_marker_still_present": false,
+          "returncode": 1
+        }
+      },
+      "note": "a reference-side mutation that still proves means the reference never reaches the comparison"
+    },
+    "variants": [
+      {
+        "method": "sat_miter",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "DeMultiplexer_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/DUT_DeMultiplexer.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/REF_DeMultiplexer.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/DeMultiplexer_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.087 MB sources in 4 modules, into 0.010 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.067 s (elab=0.001, cvt=0.002, bld=0.000); cpu 0.013 s on 1 threads; alloced 9.426 MB\n",
+          "output_sha256": "d77fce34d1b445a558ef8c7614e52e57d881e9d707b38b0bfb4851a67edb5fac"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "DeMultiplexer",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/DeMultiplexer.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.022 MB sources in 2 modules, into 0.018 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.040 s (elab=0.000, cvt=0.003, bld=0.000); cpu 0.011 s on 1 threads; alloced 9.379 MB\n",
+          "output_sha256": "d5f67483668c4e7bec9b41844037f1a77792fef98e11978552839e7d66d84e89"
+        },
+        "sat_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/DUT_DeMultiplexer.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/REF_DeMultiplexer.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/DeMultiplexer_MITER.sv; prep -top DeMultiplexer_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": true,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": true,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": [
+            2,
+            4
+          ],
+          "output_tail": "ERGE pass (detect identical cells).\nFinding identical cells in module `\\DeMultiplexer_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\DeMultiplexer_MITER..\nRemoved 9 unused cells and 39 unused wires.\n<suppressed ~28 debug messages>\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DeMultiplexer_MITER.\n\n6.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\DeMultiplexer_MITER..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n6.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\DeMultiplexer_MITER.\nPerformed a total of 0 changes.\n\n6.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\DeMultiplexer_MITER'.\nRemoved a total of 0 cells.\n\n6.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\DeMultiplexer_MITER..\n\n6.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DeMultiplexer_MITER.\n\n6.23. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 2 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 2 variables and 4 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 4423052a75, CPU: user 0.06s system 0.01s, MEM: 13.59 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 26% 7x opt_clean (0 sec), 22% 9x opt_expr (0 sec), ...\n",
+          "output_sha256": "4546fe84e7823b3168ee584c67153849c811aa11a0f8fc555f08359e4af90392",
+          "formal_success_marker": true,
+          "unconstrained": true,
+          "sat_variables": 2,
+          "sat_clauses": 4
+        }
+      },
+      {
+        "method": "sat_miter",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "DeMultiplexer_1_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/DUT_DeMultiplexer_1.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/REF_DeMultiplexer_1.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/DeMultiplexer_1_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.201 MB sources in 4 modules, into 0.020 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.062 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.014 s on 1 threads; alloced 10.070 MB\n",
+          "output_sha256": "d1093ec2f902c3182cfc6c380673ede82f8024183d85c908b088db1a8cd753a0"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "DeMultiplexer_1",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/DeMultiplexer_1.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.025 MB sources in 2 modules, into 0.022 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.028 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.007 s on 1 threads; alloced 9.539 MB\n",
+          "output_sha256": "b8a22dfd2d21099058cc0b57c08936bd1e50ff8aec3cbe528c967c91db6d077c"
+        },
+        "sat_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/DUT_DeMultiplexer_1.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/REF_DeMultiplexer_1.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/DeMultiplexer_1_MITER.sv; prep -top DeMultiplexer_1_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": true,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": true,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": [
+            423,
+            1108
+          ],
+          "output_tail": "al of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\DeMultiplexer_1_MITER..\nRemoved 27 unused cells and 102 unused wires.\n<suppressed ~70 debug messages>\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DeMultiplexer_1_MITER.\n\n6.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\DeMultiplexer_1_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\DeMultiplexer_1_MITER.\nPerformed a total of 0 changes.\n\n6.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\DeMultiplexer_1_MITER'.\nRemoved a total of 0 cells.\n\n6.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\DeMultiplexer_1_MITER..\n\n6.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DeMultiplexer_1_MITER.\n\n6.23. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 21 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 423 variables and 1108 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 2a94f34fb9, CPU: user 0.08s system 0.01s, MEM: 15.94 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 28% 8x opt_clean (0 sec), 20% 4x read_verilog (0 sec), ...\n",
+          "output_sha256": "8794a006e74b57bf37b8fb5b2206135102c2c38c1b9f6ec5a5f69493e00b215f",
+          "formal_success_marker": true,
+          "unconstrained": true,
+          "sat_variables": 423,
+          "sat_clauses": 1108
+        }
+      },
+      {
+        "method": "sequential_equivalence",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "FIFOReg_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/DUT_FIFOReg.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/REF_FIFOReg.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/FIFOReg_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "ild-Cpu.Frontend.Icache.Utils-Hardware.py:314\" *) 4'ha;\n      |                        ^~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/DUT_FIFOReg.sv:271:7: Case values incompletely covered (example pattern 0x1)\n  271 |       casez (enq_ptr_value)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/DUT_FIFOReg.sv:281:7: Case values incompletely covered (example pattern 0x2)\n  281 |       casez (enq_ptr_value)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/DUT_FIFOReg.sv:293:7: Case values incompletely covered (example pattern 0x3)\n  293 |       casez (enq_ptr_value)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/DUT_FIFOReg.sv:307:7: Case values incompletely covered (example pattern 0x4)\n  307 |       casez (enq_ptr_value)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/DUT_FIFOReg.sv:323:7: Case values incompletely covered (example pattern 0x5)\n  323 |       casez (enq_ptr_value)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/DUT_FIFOReg.sv:341:7: Case values incompletely covered (example pattern 0x6)\n  341 |       casez (enq_ptr_value)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/DUT_FIFOReg.sv:361:7: Case values incompletely covered (example pattern 0x7)\n  361 |       casez (enq_ptr_value)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/DUT_FIFOReg.sv:383:7: Case values incompletely covered (example pattern 0x8)\n  383 |       casez (enq_ptr_value)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/DUT_FIFOReg.sv:407:7: Case values incompletely covered (example pattern 0x9)\n  407 |       casez (enq_ptr_value)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/DUT_FIFOReg.sv:433:7: Case values incompletely covered (example pattern 0xa)\n  433 |       casez (enq_ptr_value)\n      |       ^~~~~\n",
+          "output_sha256": "64a26fd59ee773099c1b0a9baec7c92ae0cf3d46301adf31322c458032b31795"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "FIFOReg",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/FIFOReg.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.025 MB sources in 2 modules, into 0.026 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.035 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.008 s on 1 threads; alloced 9.453 MB\n",
+          "output_sha256": "234aeb4bdc57d9fedeefaf036ca960b93ecab980b969fc063a3e31731eacb388"
+        },
+        "yosys_equiv": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/DUT_FIFOReg.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/REF_FIFOReg.sv; proc; async2sync; memory; opt; flatten REF_FIFOReg; flatten DUT_FIFOReg; equiv_make REF_FIFOReg DUT_FIFOReg FIFOReg_EQUIV; prep -top FIFOReg_EQUIV; equiv_induct -undef; equiv_status -assert"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": 56,
+          "equiv_summary_full": [
+            56,
+            0
+          ],
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": ").\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FIFOReg_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\FIFOReg_EQUIV'.\n<suppressed ~6 debug messages>\nRemoved a total of 2 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\FIFOReg_EQUIV..\nRemoved 0 unused cells and 2 unused wires.\n<suppressed ~1 debug messages>\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== FIFOReg_EQUIV ===\n\n   Number of wires:                226\n   Number of wire bits:            661\n   Number of public wires:         116\n   Number of public wire bits:     385\n   Number of ports:                  9\n   Number of port bits:             15\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                232\n     $add                            2\n     $and                           19\n     $eq                            26\n     $equiv                         56\n     $ge                             2\n     $gt                             2\n     $logic_not                      2\n     $mux                           76\n     $ne                             2\n     $not                            4\n     $pmux                           1\n     $reduce_or                      2\n     $sdff                          28\n     $shiftx                         1\n     $sub                            4\n     $xor                            5\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module FIFOReg_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 56 unproven $equiv cells in module FIFOReg_EQUIV:\n  Undef modelling: force def on 100 initial reg values and 9 inputs.\n  Proving existence of base case for step 1. (32388 clauses over 11895 variables)\n  Proving induction step 1. (70966 clauses over 25886 variables)\n  Proof for induction step holds. Entire workset of 56 cells proven!\nProved 56 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 56 $equiv cells in FIFOReg_EQUIV:\n  Of those cells 56 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: b0a5be7160, CPU: user 0.18s system 0.00s, MEM: 31.98 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 50% 1x equiv_induct (0 sec), 11% 10x opt_clean (0 sec), ...\n",
+          "output_sha256": "aadb4626667541d89356afd1b9252ccb7cadbc5565f18c0db6eb8a676d6b6c58",
+          "markers_present": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "formal_success_marker": true,
+          "equiv_cells": 56,
+          "proven_cells": 56,
+          "unproven_cells": 0
+        }
+      },
+      {
+        "method": "sat_miter",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "MuxBundle_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/DUT_MuxBundle.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/REF_MuxBundle.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/MuxBundle_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "7\" *) 3'h4;\n      |                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/DUT_MuxBundle.sv:306:24: Operator EQ expects 4 bits on the RHS, but RHS's CONST '3'h5' generates 3 bits.\n                                                                                                                                : ... note: In instance 'MuxBundle_MITER.target_i'\n  306 |   assign \\$6  = io_sel == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Frontend.Icache.Utils-Hardware.py:207\" *) 3'h5;\n      |                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/DUT_MuxBundle.sv:308:24: Operator EQ expects 4 bits on the RHS, but RHS's CONST '3'h6' generates 3 bits.\n                                                                                                                                : ... note: In instance 'MuxBundle_MITER.target_i'\n  308 |   assign \\$7  = io_sel == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Frontend.Icache.Utils-Hardware.py:207\" *) 3'h6;\n      |                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/DUT_MuxBundle.sv:310:24: Operator EQ expects 4 bits on the RHS, but RHS's CONST '3'h7' generates 3 bits.\n                                                                                                                                : ... note: In instance 'MuxBundle_MITER.target_i'\n  310 |   assign \\$8  = io_sel == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Frontend.Icache.Utils-Hardware.py:207\" *) 3'h7;\n      |                        ^~\n",
+          "output_sha256": "5fc578ec37b5e54aa5a2ba67162d5942e36e8b347735a15037dd08ccf940b2c6"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "MuxBundle",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/MuxBundle.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.026 MB sources in 2 modules, into 0.025 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.028 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.007 s on 1 threads; alloced 9.469 MB\n",
+          "output_sha256": "c468d2d5280e041cdc048871124780e72fc3593eb6146b6fcdd5afa11364d5c8"
+        },
+        "sat_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/DUT_MuxBundle.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/REF_MuxBundle.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_utils_family/MuxBundle_MITER.sv; prep -top MuxBundle_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": true,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": true,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": [
+            428,
+            1156
+          ],
+          "output_tail": "n module `\\MuxBundle_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\MuxBundle_MITER..\nRemoved 11 unused cells and 103 unused wires.\n<suppressed ~64 debug messages>\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module MuxBundle_MITER.\n\n6.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\MuxBundle_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\MuxBundle_MITER.\nPerformed a total of 0 changes.\n\n6.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\MuxBundle_MITER'.\nRemoved a total of 0 cells.\n\n6.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\MuxBundle_MITER..\n\n6.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module MuxBundle_MITER.\n\n6.23. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 29 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 428 variables and 1156 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 4e5062a8e0, CPU: user 0.08s system 0.02s, MEM: 15.78 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 27% 7x opt_clean (0 sec), 20% 4x read_verilog (0 sec), ...\n",
+          "output_sha256": "9f9e5849f3f7b15e88314e4400091dab2397e1bdc3c59f6c9f3c280cdaaeb1bf",
+          "formal_success_marker": true,
+          "unconstrained": true,
+          "sat_variables": 428,
+          "sat_clauses": 1156
+        }
+      }
+    ]
+  },
+  "failures": [],
+  "unclosed": [],
+  "acceptance_unclosed": [
+    "Parent closure, full-top differential, final license review, and user approval remain outside this Build proof."
+  ]
+}

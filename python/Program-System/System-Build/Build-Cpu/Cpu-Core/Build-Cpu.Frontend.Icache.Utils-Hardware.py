@@ -5,7 +5,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from amaranth import Array, Elaboratable, Module, Mux, Signal
+from amaranth import Array, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 
 
 # Module Contract
@@ -13,7 +13,18 @@ from amaranth import Array, Elaboratable, Module, Mux, Signal
 # This family covers the exact V2 DeMultiplexer and MuxBundle declarations in
 # ICacheMissUnit.scala plus FIFOReg in FIFO.scala.  Payloads are intentionally
 # scalarized at this boundary; callers choose the packed width of their bundle.
-__all__ = ["DeMultiplexer", "MuxBundle", "FIFOReg", "fifo_observation", "build_verilog", "main"]
+__all__ = [
+    "COVERED_MODULES", "DeMultiplexer", "MuxBundle", "FIFOReg",
+    "fifo_observation", "build_verilog", "main",
+]
+
+COVERED_MODULES: tuple[str, ...] = (
+    "DeMultiplexer", "DeMultiplexer_1", "MuxBundle", "FIFOReg",
+)
+SOURCE_PATHS: tuple[str, ...] = (
+    "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala",
+    "upstream/src/main/scala/xiangshan/frontend/icache/FIFO.scala",
+)
 
 
 # Configuration
@@ -118,6 +129,106 @@ class MuxBundle(Elaboratable):
         return m
 
 
+class _LockedDeMultiplexer(Elaboratable):
+    """Exact flattened ICacheMissReq specialization from the locked hierarchy."""
+
+    def __init__(self, n: int, expose_chosen: bool) -> None:
+        self.n = n
+        self.in_ready = Signal(name="io_in_ready")
+        self.in_valid = Signal(name="io_in_valid")
+        self.in_blk_paddr = Signal(42, name="io_in_bits_blkPaddr")
+        self.in_vset_idx = Signal(8, name="io_in_bits_vSetIdx")
+        self.out_ready = [Signal(name=f"io_out_{i}_ready") for i in range(n)]
+        self.out_valid = [Signal(name=f"io_out_{i}_valid") for i in range(n)]
+        self.out_blk_paddr = [
+            Signal(42, name=f"io_out_{i}_bits_blkPaddr") for i in range(n)
+        ]
+        self.out_vset_idx = [
+            Signal(8, name=f"io_out_{i}_bits_vSetIdx") for i in range(n)
+        ]
+        self.chosen = Signal(4, name="io_chosen") if expose_chosen else None
+
+    def elaborate(self, platform: Any) -> Module:
+        del platform
+        module = Module()
+        prior_ready: Any = Const(0)
+        chosen: Any = Const(self.n - 1, 4)
+        for index in range(self.n):
+            module.d.comb += [
+                self.out_valid[index].eq(self.in_valid & ~prior_ready),
+                self.out_blk_paddr[index].eq(self.in_blk_paddr),
+                self.out_vset_idx[index].eq(self.in_vset_idx),
+            ]
+            prior_ready = prior_ready | self.out_ready[index]
+        for index in range(self.n - 1, -1, -1):
+            chosen = Mux(self.out_ready[index], index, chosen)
+        module.d.comb += self.in_ready.eq(prior_ready)
+        if self.chosen is not None:
+            module.d.comb += self.chosen.eq(chosen)
+        return module
+
+    def ports(self) -> list[Signal]:
+        values = [self.in_ready, self.in_valid, self.in_blk_paddr, self.in_vset_idx]
+        for index in range(self.n):
+            values.extend((self.out_ready[index], self.out_valid[index],
+                           self.out_blk_paddr[index], self.out_vset_idx[index]))
+        if self.chosen is not None:
+            values.append(self.chosen)
+        return values
+
+
+class _LockedMuxBundle(Elaboratable):
+    """Exact ten-way MSHRAcquire mux emitted by locked Kunminghu V2."""
+
+    def __init__(self) -> None:
+        self.sel = Signal(4, name="io_sel")
+        self.in_ready = [Signal(name=f"io_in_{i}_ready") for i in range(10)]
+        self.in_valid = [Signal(name=f"io_in_{i}_valid") for i in range(10)]
+        self.in_address = [
+            Signal(48, name=f"io_in_{i}_bits_acquire_address") for i in range(10)
+        ]
+        self.in_vset_idx = [
+            Signal(8, name=f"io_in_{i}_bits_vSetIdx") for i in range(10)
+        ]
+        self.out_ready = Signal(name="io_out_ready")
+        self.out_valid = Signal(name="io_out_valid")
+        self.out_source = Signal(4, name="io_out_bits_acquire_source")
+        self.out_address = Signal(48, name="io_out_bits_acquire_address")
+        self.out_vset_idx = Signal(8, name="io_out_bits_vSetIdx")
+
+    def elaborate(self, platform: Any) -> Module:
+        del platform
+        module = Module()
+        valid: Any = self.in_valid[0]
+        source: Any = Const(4, 4)
+        address: Any = self.in_address[0]
+        vset_idx: Any = self.in_vset_idx[0]
+        for index in range(10):
+            selected = self.sel == index
+            module.d.comb += self.in_ready[index].eq(selected & self.out_ready)
+            if index:
+                valid = Mux(selected, self.in_valid[index], valid)
+                source = Mux(selected, Const(index + 4, 4), source)
+                address = Mux(selected, self.in_address[index], address)
+                vset_idx = Mux(selected, self.in_vset_idx[index], vset_idx)
+        module.d.comb += [
+            self.out_valid.eq(valid),
+            self.out_source.eq(source),
+            self.out_address.eq(address),
+            self.out_vset_idx.eq(vset_idx),
+        ]
+        return module
+
+    def ports(self) -> list[Signal]:
+        values = [self.sel]
+        for index in range(10):
+            values.extend((self.in_ready[index], self.in_valid[index],
+                           self.in_address[index], self.in_vset_idx[index]))
+        values.extend((self.out_ready, self.out_valid, self.out_source,
+                       self.out_address, self.out_vset_idx))
+        return values
+
+
 class FIFOReg(Elaboratable):
     """Register-file circular FIFO with V2 flush semantics.
     带 V2 flush 语义的寄存器文件环形 FIFO。
@@ -137,6 +248,8 @@ class FIFOReg(Elaboratable):
         self.entries = int(entries)
         self.pipe = bool(pipe)
         self.has_flush = bool(has_flush)
+        self.clock = Signal(name="clock")
+        self.reset = Signal(name="reset")
         self.enq_valid = Signal(name="io_enq_valid")
         self.enq_ready = Signal(name="io_enq_ready")
         self.enq_bits = Signal(bits_width, name="io_enq_bits")
@@ -151,9 +264,13 @@ class FIFOReg(Elaboratable):
         # The branch API is decorator-generated in Amaranth; keep this local
         # adapter dynamic while preserving the exact runtime Module.
         m: Any = Module()
+        domain = ClockDomain("sync", async_reset=True)
+        domain.clk = self.clock
+        domain.rst = self.reset
+        m.domains += domain
         ptr_bits = max(1, (self.entries - 1).bit_length())
         regs = Array(
-            Signal(self.bits_width, name=f"fifo_reg_{index}")
+            Signal(self.bits_width, name=f"regFiles_{index}")
             for index in range(self.entries)
         )
         enq_value = Signal(ptr_bits, name="enq_ptr_value")
@@ -163,8 +280,9 @@ class FIFOReg(Elaboratable):
 
         empty = (enq_value == deq_value) & (enq_flag == deq_flag)
         full = (enq_value == deq_value) & (enq_flag != deq_flag)
+        read_regs = Array([*regs, *([regs[0]] * ((1 << ptr_bits) - self.entries))])
         m.d.comb += [
-            self.deq_bits.eq(regs[deq_value]),
+            self.deq_bits.eq(read_regs[deq_value]),
             self.deq_valid.eq(~empty),
             self.enq_ready.eq(~full | (self.pipe & self.deq_ready)),
         ]
@@ -186,12 +304,16 @@ class FIFOReg(Elaboratable):
             ]
         with m.If(~flush):
             with m.If(enq_fire):
-                next_value = Mux(enq_value == self.entries - 1, 0, enq_value + 1)
-                next_flag = Mux(enq_value == self.entries - 1, ~enq_flag, enq_flag)
+                extended = enq_value + 1
+                wraps = extended >= self.entries
+                next_value = Mux(wraps, extended - self.entries, extended)
+                next_flag = enq_flag ^ wraps
                 m.d.sync += [enq_value.eq(next_value), enq_flag.eq(next_flag)]
             with m.If(deq_fire):
-                next_value = Mux(deq_value == self.entries - 1, 0, deq_value + 1)
-                next_flag = Mux(deq_value == self.entries - 1, ~deq_flag, deq_flag)
+                extended = deq_value + 1
+                wraps = extended >= self.entries
+                next_value = Mux(wraps, extended - self.entries, extended)
+                next_flag = deq_flag ^ wraps
                 m.d.sync += [deq_value.eq(next_value), deq_flag.eq(next_flag)]
         return m
 
@@ -206,14 +328,13 @@ def build_verilog(configuration, injected_dependencies):
     del injected_dependencies
     config = configuration if isinstance(configuration, dict) else {}
     module_name = str(config.get("module", "FIFOReg"))
-    if module_name == "DeMultiplexer":
-        top = DeMultiplexer(int(config.get("bits_width", 50)), int(config.get("n", 4)))
-        ports = [top.in_valid, top.in_ready, top.in_bits, top.chosen]
-        ports += top.out_valid + top.out_ready + top.out_bits
+    if module_name in {"DeMultiplexer", "DeMultiplexer_1"}:
+        top = _LockedDeMultiplexer(4 if module_name == "DeMultiplexer" else 10,
+                                   module_name == "DeMultiplexer_1")
+        ports = top.ports()
     elif module_name == "MuxBundle":
-        top = MuxBundle(int(config.get("bits_width", 50)), int(config.get("n", 10)))
-        ports = [top.sel, top.out_valid, top.out_ready, top.out_bits]
-        ports += top.in_valid + top.in_ready + top.in_bits
+        top = _LockedMuxBundle()
+        ports = top.ports()
     else:
         top = FIFOReg(
             int(config.get("bits_width", 4)),
@@ -222,6 +343,8 @@ def build_verilog(configuration, injected_dependencies):
             bool(config.get("has_flush", True)),
         )
         ports = [
+            top.clock,
+            top.reset,
             top.enq_valid,
             top.enq_ready,
             top.enq_bits,
