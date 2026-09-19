@@ -1,0 +1,1364 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_COMPLETE_EQUIVALENCE",
+  "build_id": "Build-Cpu.Backend.Fu.NewCSR.CSRPermit",
+  "validator": "validation/v2_strict_family_rail.py",
+  "status": "COMPLETE_EQUIVALENCE",
+  "strict_complete_eligible": true,
+  "strict_complete_count_delta": 1,
+  "acceptance_eligible": true,
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "audit_policy": {
+    "require_negative_control": true,
+    "require_two_sided_negative_control": true,
+    "require_locked_reference_lint": true,
+    "require_validator_hash": true,
+    "scope_source": "Build catalog tables"
+  },
+  "scope": {
+    "kind": "catalog_build_multi_variant",
+    "public_variants": [
+      "CSRPermitModule",
+      "IndirectCSRPermitModule",
+      "MLevelPermitModule",
+      "PrivilegePermitModule",
+      "SLevelPermitModule",
+      "VirtualLevelPermitModule",
+      "XRetPermitModule"
+    ],
+    "variant_count": 7,
+    "combinational_variants": 7,
+    "sequential_variants": 0,
+    "inputs": {
+      "CSRPermitModule_io_in_csrAccess_ren": 1,
+      "CSRPermitModule_io_in_csrAccess_wen": 1,
+      "CSRPermitModule_io_in_csrAccess_addr": 12,
+      "CSRPermitModule_io_in_privState_PRVM": 2,
+      "CSRPermitModule_io_in_privState_V": 1,
+      "CSRPermitModule_io_in_debugMode": 1,
+      "CSRPermitModule_io_in_xRet_mnret": 1,
+      "CSRPermitModule_io_in_xRet_mret": 1,
+      "CSRPermitModule_io_in_xRet_sret": 1,
+      "CSRPermitModule_io_in_xRet_dret": 1,
+      "CSRPermitModule_io_in_status_tsr": 1,
+      "CSRPermitModule_io_in_status_vtsr": 1,
+      "CSRPermitModule_io_in_status_tvm": 1,
+      "CSRPermitModule_io_in_status_vtvm": 1,
+      "CSRPermitModule_io_in_status_vgein": 6,
+      "CSRPermitModule_io_in_status_mstatusFSOff": 1,
+      "CSRPermitModule_io_in_status_vsstatusFSOff": 1,
+      "CSRPermitModule_io_in_status_mstatusVSOff": 1,
+      "CSRPermitModule_io_in_status_vsstatusVSOff": 1,
+      "CSRPermitModule_io_in_xcounteren_mcounteren": 32,
+      "CSRPermitModule_io_in_xcounteren_hcounteren": 32,
+      "CSRPermitModule_io_in_xcounteren_scounteren": 32,
+      "CSRPermitModule_io_in_xenvcfg_menvcfg": 64,
+      "CSRPermitModule_io_in_xenvcfg_henvcfg": 64,
+      "CSRPermitModule_io_in_xstateen_mstateen0_SE0": 1,
+      "CSRPermitModule_io_in_xstateen_mstateen0_ENVCFG": 1,
+      "CSRPermitModule_io_in_xstateen_mstateen0_CSRIND": 1,
+      "CSRPermitModule_io_in_xstateen_mstateen0_AIA": 1,
+      "CSRPermitModule_io_in_xstateen_mstateen0_IMSIC": 1,
+      "CSRPermitModule_io_in_xstateen_mstateen0_CONTEXT": 1,
+      "CSRPermitModule_io_in_xstateen_mstateen0_C": 1,
+      "CSRPermitModule_io_in_xstateen_mstateen1_SE": 1,
+      "CSRPermitModule_io_in_xstateen_mstateen2_SE": 1,
+      "CSRPermitModule_io_in_xstateen_mstateen3_SE": 1,
+      "CSRPermitModule_io_in_xstateen_hstateen0_C": 1,
+      "CSRPermitModule_io_in_xstateen_hstateen0_SE0": 1,
+      "CSRPermitModule_io_in_xstateen_hstateen0_ENVCFG": 1,
+      "CSRPermitModule_io_in_xstateen_hstateen0_CSRIND": 1,
+      "CSRPermitModule_io_in_xstateen_hstateen0_AIA": 1,
+      "CSRPermitModule_io_in_xstateen_hstateen0_IMSIC": 1,
+      "CSRPermitModule_io_in_xstateen_hstateen0_CONTEXT": 1,
+      "CSRPermitModule_io_in_xstateen_hstateen1_SE": 1,
+      "CSRPermitModule_io_in_xstateen_hstateen2_SE": 1,
+      "CSRPermitModule_io_in_xstateen_hstateen3_SE": 1,
+      "CSRPermitModule_io_in_xstateen_sstateen0_C": 1,
+      "CSRPermitModule_io_in_aia_miselect": 64,
+      "CSRPermitModule_io_in_aia_siselect": 64,
+      "CSRPermitModule_io_in_aia_vsiselect": 64,
+      "CSRPermitModule_io_in_aia_mvienSEIE": 1,
+      "CSRPermitModule_io_in_aia_hvictlVTI": 1,
+      "IndirectCSRPermitModule_io_in_csrAccess_addr": 12,
+      "IndirectCSRPermitModule_io_in_privState_PRVM": 2,
+      "IndirectCSRPermitModule_io_in_privState_V": 1,
+      "IndirectCSRPermitModule_io_in_aia_miselect": 64,
+      "IndirectCSRPermitModule_io_in_aia_siselect": 64,
+      "IndirectCSRPermitModule_io_in_aia_vsiselect": 64,
+      "IndirectCSRPermitModule_io_in_aia_mvienSEIE": 1,
+      "IndirectCSRPermitModule_io_in_xstateen_mstateen0_AIA": 1,
+      "IndirectCSRPermitModule_io_in_xstateen_mstateen0_IMSIC": 1,
+      "IndirectCSRPermitModule_io_in_xstateen_hstateen0_IMSIC": 1,
+      "MLevelPermitModule_io_in_csrAccess_wen": 1,
+      "MLevelPermitModule_io_in_csrAccess_addr": 12,
+      "MLevelPermitModule_io_in_privState_PRVM": 2,
+      "MLevelPermitModule_io_in_privState_V": 1,
+      "MLevelPermitModule_io_in_status_tvm": 1,
+      "MLevelPermitModule_io_in_status_mstatusFSOff": 1,
+      "MLevelPermitModule_io_in_status_vsstatusFSOff": 1,
+      "MLevelPermitModule_io_in_status_mstatusVSOff": 1,
+      "MLevelPermitModule_io_in_status_vsstatusVSOff": 1,
+      "MLevelPermitModule_io_in_xcounteren_mcounteren": 32,
+      "MLevelPermitModule_io_in_xenvcfg_menvcfg": 64,
+      "MLevelPermitModule_io_in_xstateen_mstateen0_SE0": 1,
+      "MLevelPermitModule_io_in_xstateen_mstateen0_ENVCFG": 1,
+      "MLevelPermitModule_io_in_xstateen_mstateen0_CSRIND": 1,
+      "MLevelPermitModule_io_in_xstateen_mstateen0_AIA": 1,
+      "MLevelPermitModule_io_in_xstateen_mstateen0_IMSIC": 1,
+      "MLevelPermitModule_io_in_xstateen_mstateen0_CONTEXT": 1,
+      "MLevelPermitModule_io_in_xstateen_mstateen0_C": 1,
+      "MLevelPermitModule_io_in_xstateen_mstateen1_SE": 1,
+      "MLevelPermitModule_io_in_xstateen_mstateen2_SE": 1,
+      "MLevelPermitModule_io_in_xstateen_mstateen3_SE": 1,
+      "MLevelPermitModule_io_in_aia_mvienSEIE": 1,
+      "PrivilegePermitModule_io_in_csrAccess_addr": 12,
+      "PrivilegePermitModule_io_in_privState_PRVM": 2,
+      "PrivilegePermitModule_io_in_privState_V": 1,
+      "PrivilegePermitModule_io_in_debugMode": 1,
+      "SLevelPermitModule_io_in_csrAccess_addr": 12,
+      "SLevelPermitModule_io_in_privState_PRVM": 2,
+      "SLevelPermitModule_io_in_privState_V": 1,
+      "SLevelPermitModule_io_in_xcounteren_scounteren": 32,
+      "SLevelPermitModule_io_in_xstateen_sstateen0_C": 1,
+      "VirtualLevelPermitModule_io_in_csrAccess_wen": 1,
+      "VirtualLevelPermitModule_io_in_csrAccess_addr": 12,
+      "VirtualLevelPermitModule_io_in_privState_PRVM": 2,
+      "VirtualLevelPermitModule_io_in_privState_V": 1,
+      "VirtualLevelPermitModule_io_in_status_vtvm": 1,
+      "VirtualLevelPermitModule_io_in_status_vgein": 6,
+      "VirtualLevelPermitModule_io_in_xcounteren_hcounteren": 32,
+      "VirtualLevelPermitModule_io_in_xcounteren_scounteren": 32,
+      "VirtualLevelPermitModule_io_in_xenvcfg_henvcfg": 64,
+      "VirtualLevelPermitModule_io_in_xstateen_hstateen0_C": 1,
+      "VirtualLevelPermitModule_io_in_xstateen_hstateen0_SE0": 1,
+      "VirtualLevelPermitModule_io_in_xstateen_hstateen0_ENVCFG": 1,
+      "VirtualLevelPermitModule_io_in_xstateen_hstateen0_CSRIND": 1,
+      "VirtualLevelPermitModule_io_in_xstateen_hstateen0_AIA": 1,
+      "VirtualLevelPermitModule_io_in_xstateen_hstateen0_IMSIC": 1,
+      "VirtualLevelPermitModule_io_in_xstateen_hstateen0_CONTEXT": 1,
+      "VirtualLevelPermitModule_io_in_xstateen_hstateen1_SE": 1,
+      "VirtualLevelPermitModule_io_in_xstateen_hstateen2_SE": 1,
+      "VirtualLevelPermitModule_io_in_xstateen_hstateen3_SE": 1,
+      "VirtualLevelPermitModule_io_in_xstateen_sstateen0_C": 1,
+      "VirtualLevelPermitModule_io_in_aia_hvictlVTI": 1,
+      "XRetPermitModule_io_in_privState_PRVM": 2,
+      "XRetPermitModule_io_in_privState_V": 1,
+      "XRetPermitModule_io_in_debugMode": 1,
+      "XRetPermitModule_io_in_xRet_mnret": 1,
+      "XRetPermitModule_io_in_xRet_mret": 1,
+      "XRetPermitModule_io_in_xRet_sret": 1,
+      "XRetPermitModule_io_in_xRet_dret": 1,
+      "XRetPermitModule_io_in_status_tsr": 1,
+      "XRetPermitModule_io_in_status_vtsr": 1
+    },
+    "outputs_compared": {
+      "CSRPermitModule_io_out_hasLegalWen": 1,
+      "CSRPermitModule_io_out_hasLegalMNret": 1,
+      "CSRPermitModule_io_out_hasLegalMret": 1,
+      "CSRPermitModule_io_out_hasLegalSret": 1,
+      "CSRPermitModule_io_out_hasLegalDret": 1,
+      "CSRPermitModule_io_out_hasLegalWriteFcsr": 1,
+      "CSRPermitModule_io_out_hasLegalWriteVcsr": 1,
+      "CSRPermitModule_io_out_EX_II": 1,
+      "CSRPermitModule_io_out_EX_VI": 1,
+      "IndirectCSRPermitModule_io_out_indirectCSR_EX_II": 1,
+      "IndirectCSRPermitModule_io_out_indirectCSR_EX_VI": 1,
+      "MLevelPermitModule_io_out_mLevelPermit_EX_II": 1,
+      "MLevelPermitModule_io_out_hasLegalWriteFcsr": 1,
+      "MLevelPermitModule_io_out_hasLegalWriteVcsr": 1,
+      "PrivilegePermitModule_io_out_privilege_EX_II": 1,
+      "PrivilegePermitModule_io_out_privilege_EX_VI": 1,
+      "SLevelPermitModule_io_out_sLevelPermit_EX_II": 1,
+      "VirtualLevelPermitModule_io_out_virtualLevelPermit_EX_II": 1,
+      "VirtualLevelPermitModule_io_out_virtualLevelPermit_EX_VI": 1,
+      "XRetPermitModule_io_out_Xret_EX_II": 1,
+      "XRetPermitModule_io_out_Xret_EX_VI": 1,
+      "XRetPermitModule_io_out_hasLegalMNret": 1,
+      "XRetPermitModule_io_out_hasLegalMret": 1,
+      "XRetPermitModule_io_out_hasLegalSret": 1,
+      "XRetPermitModule_io_out_hasLegalDret": 1
+    },
+    "aggregate_input_bits": 1051,
+    "aggregate_compared_output_bits": 25,
+    "variants": {
+      "CSRPermitModule": {
+        "method": "sat_miter",
+        "sequential": false,
+        "locked_reference": "validation/reference-sv/CSRPermitModule.sv",
+        "locked_sha256": "7f3c849c00e6e434a364eea4216d074f483866071466b5a71978ec6d01dce3ce",
+        "children": [
+          "IndirectCSRPermitModule",
+          "MLevelPermitModule",
+          "PrivilegePermitModule",
+          "SLevelPermitModule",
+          "VirtualLevelPermitModule",
+          "XRetPermitModule"
+        ],
+        "inputs": {
+          "io_in_csrAccess_ren": 1,
+          "io_in_csrAccess_wen": 1,
+          "io_in_csrAccess_addr": 12,
+          "io_in_privState_PRVM": 2,
+          "io_in_privState_V": 1,
+          "io_in_debugMode": 1,
+          "io_in_xRet_mnret": 1,
+          "io_in_xRet_mret": 1,
+          "io_in_xRet_sret": 1,
+          "io_in_xRet_dret": 1,
+          "io_in_status_tsr": 1,
+          "io_in_status_vtsr": 1,
+          "io_in_status_tvm": 1,
+          "io_in_status_vtvm": 1,
+          "io_in_status_vgein": 6,
+          "io_in_status_mstatusFSOff": 1,
+          "io_in_status_vsstatusFSOff": 1,
+          "io_in_status_mstatusVSOff": 1,
+          "io_in_status_vsstatusVSOff": 1,
+          "io_in_xcounteren_mcounteren": 32,
+          "io_in_xcounteren_hcounteren": 32,
+          "io_in_xcounteren_scounteren": 32,
+          "io_in_xenvcfg_menvcfg": 64,
+          "io_in_xenvcfg_henvcfg": 64,
+          "io_in_xstateen_mstateen0_SE0": 1,
+          "io_in_xstateen_mstateen0_ENVCFG": 1,
+          "io_in_xstateen_mstateen0_CSRIND": 1,
+          "io_in_xstateen_mstateen0_AIA": 1,
+          "io_in_xstateen_mstateen0_IMSIC": 1,
+          "io_in_xstateen_mstateen0_CONTEXT": 1,
+          "io_in_xstateen_mstateen0_C": 1,
+          "io_in_xstateen_mstateen1_SE": 1,
+          "io_in_xstateen_mstateen2_SE": 1,
+          "io_in_xstateen_mstateen3_SE": 1,
+          "io_in_xstateen_hstateen0_C": 1,
+          "io_in_xstateen_hstateen0_SE0": 1,
+          "io_in_xstateen_hstateen0_ENVCFG": 1,
+          "io_in_xstateen_hstateen0_CSRIND": 1,
+          "io_in_xstateen_hstateen0_AIA": 1,
+          "io_in_xstateen_hstateen0_IMSIC": 1,
+          "io_in_xstateen_hstateen0_CONTEXT": 1,
+          "io_in_xstateen_hstateen1_SE": 1,
+          "io_in_xstateen_hstateen2_SE": 1,
+          "io_in_xstateen_hstateen3_SE": 1,
+          "io_in_xstateen_sstateen0_C": 1,
+          "io_in_aia_miselect": 64,
+          "io_in_aia_siselect": 64,
+          "io_in_aia_vsiselect": 64,
+          "io_in_aia_mvienSEIE": 1,
+          "io_in_aia_hvictlVTI": 1
+        },
+        "outputs_compared": {
+          "io_out_hasLegalWen": 1,
+          "io_out_hasLegalMNret": 1,
+          "io_out_hasLegalMret": 1,
+          "io_out_hasLegalSret": 1,
+          "io_out_hasLegalDret": 1,
+          "io_out_hasLegalWriteFcsr": 1,
+          "io_out_hasLegalWriteVcsr": 1,
+          "io_out_EX_II": 1,
+          "io_out_EX_VI": 1
+        },
+        "input_bits": 475,
+        "output_bits": 9,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "PASS",
+        "success_marker": true,
+        "unconstrained_or_equiv_cells": true,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "sat_variables": 11521,
+        "sat_clauses": 32481
+      },
+      "IndirectCSRPermitModule": {
+        "method": "sat_miter",
+        "sequential": false,
+        "locked_reference": "validation/reference-sv/IndirectCSRPermitModule.sv",
+        "locked_sha256": "1629bb29ba367ab1d9c663e31e42d6ed44420d6143b633ea4fd94b01abcba02c",
+        "children": [],
+        "inputs": {
+          "io_in_csrAccess_addr": 12,
+          "io_in_privState_PRVM": 2,
+          "io_in_privState_V": 1,
+          "io_in_aia_miselect": 64,
+          "io_in_aia_siselect": 64,
+          "io_in_aia_vsiselect": 64,
+          "io_in_aia_mvienSEIE": 1,
+          "io_in_xstateen_mstateen0_AIA": 1,
+          "io_in_xstateen_mstateen0_IMSIC": 1,
+          "io_in_xstateen_hstateen0_IMSIC": 1
+        },
+        "outputs_compared": {
+          "io_out_indirectCSR_EX_II": 1,
+          "io_out_indirectCSR_EX_VI": 1
+        },
+        "input_bits": 211,
+        "output_bits": 2,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "PASS",
+        "success_marker": true,
+        "unconstrained_or_equiv_cells": true,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "sat_variables": 7139,
+        "sat_clauses": 20492
+      },
+      "MLevelPermitModule": {
+        "method": "sat_miter",
+        "sequential": false,
+        "locked_reference": "validation/reference-sv/MLevelPermitModule.sv",
+        "locked_sha256": "76b18586526b67367fbbc44e55344aad83bfc702586579ea567f82edce0063cf",
+        "children": [],
+        "inputs": {
+          "io_in_csrAccess_wen": 1,
+          "io_in_csrAccess_addr": 12,
+          "io_in_privState_PRVM": 2,
+          "io_in_privState_V": 1,
+          "io_in_status_tvm": 1,
+          "io_in_status_mstatusFSOff": 1,
+          "io_in_status_vsstatusFSOff": 1,
+          "io_in_status_mstatusVSOff": 1,
+          "io_in_status_vsstatusVSOff": 1,
+          "io_in_xcounteren_mcounteren": 32,
+          "io_in_xenvcfg_menvcfg": 64,
+          "io_in_xstateen_mstateen0_SE0": 1,
+          "io_in_xstateen_mstateen0_ENVCFG": 1,
+          "io_in_xstateen_mstateen0_CSRIND": 1,
+          "io_in_xstateen_mstateen0_AIA": 1,
+          "io_in_xstateen_mstateen0_IMSIC": 1,
+          "io_in_xstateen_mstateen0_CONTEXT": 1,
+          "io_in_xstateen_mstateen0_C": 1,
+          "io_in_xstateen_mstateen1_SE": 1,
+          "io_in_xstateen_mstateen2_SE": 1,
+          "io_in_xstateen_mstateen3_SE": 1,
+          "io_in_aia_mvienSEIE": 1
+        },
+        "outputs_compared": {
+          "io_out_mLevelPermit_EX_II": 1,
+          "io_out_hasLegalWriteFcsr": 1,
+          "io_out_hasLegalWriteVcsr": 1
+        },
+        "input_bits": 128,
+        "output_bits": 3,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "PASS",
+        "success_marker": true,
+        "unconstrained_or_equiv_cells": true,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "sat_variables": 2224,
+        "sat_clauses": 6275
+      },
+      "PrivilegePermitModule": {
+        "method": "sat_miter",
+        "sequential": false,
+        "locked_reference": "validation/reference-sv/PrivilegePermitModule.sv",
+        "locked_sha256": "17382eb2f0439de02855894fdecb745158231a5e1cf03ef64851f076b92f36b9",
+        "children": [],
+        "inputs": {
+          "io_in_csrAccess_addr": 12,
+          "io_in_privState_PRVM": 2,
+          "io_in_privState_V": 1,
+          "io_in_debugMode": 1
+        },
+        "outputs_compared": {
+          "io_out_privilege_EX_II": 1,
+          "io_out_privilege_EX_VI": 1
+        },
+        "input_bits": 16,
+        "output_bits": 2,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "PASS",
+        "success_marker": true,
+        "unconstrained_or_equiv_cells": true,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "sat_variables": 300,
+        "sat_clauses": 768
+      },
+      "SLevelPermitModule": {
+        "method": "sat_miter",
+        "sequential": false,
+        "locked_reference": "validation/reference-sv/SLevelPermitModule.sv",
+        "locked_sha256": "f14c962274fa4215b4fcbdadb35f6457cb663cfac7275d3af2f745a4b1d42749",
+        "children": [],
+        "inputs": {
+          "io_in_csrAccess_addr": 12,
+          "io_in_privState_PRVM": 2,
+          "io_in_privState_V": 1,
+          "io_in_xcounteren_scounteren": 32,
+          "io_in_xstateen_sstateen0_C": 1
+        },
+        "outputs_compared": {
+          "io_out_sLevelPermit_EX_II": 1
+        },
+        "input_bits": 48,
+        "output_bits": 1,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "PASS",
+        "success_marker": true,
+        "unconstrained_or_equiv_cells": true,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "sat_variables": 909,
+        "sat_clauses": 2477
+      },
+      "VirtualLevelPermitModule": {
+        "method": "sat_miter",
+        "sequential": false,
+        "locked_reference": "validation/reference-sv/VirtualLevelPermitModule.sv",
+        "locked_sha256": "b99a2385e9dc0119d36649378c88f93274276a6414d4a5b2138d42b38bbe73a2",
+        "children": [],
+        "inputs": {
+          "io_in_csrAccess_wen": 1,
+          "io_in_csrAccess_addr": 12,
+          "io_in_privState_PRVM": 2,
+          "io_in_privState_V": 1,
+          "io_in_status_vtvm": 1,
+          "io_in_status_vgein": 6,
+          "io_in_xcounteren_hcounteren": 32,
+          "io_in_xcounteren_scounteren": 32,
+          "io_in_xenvcfg_henvcfg": 64,
+          "io_in_xstateen_hstateen0_C": 1,
+          "io_in_xstateen_hstateen0_SE0": 1,
+          "io_in_xstateen_hstateen0_ENVCFG": 1,
+          "io_in_xstateen_hstateen0_CSRIND": 1,
+          "io_in_xstateen_hstateen0_AIA": 1,
+          "io_in_xstateen_hstateen0_IMSIC": 1,
+          "io_in_xstateen_hstateen0_CONTEXT": 1,
+          "io_in_xstateen_hstateen1_SE": 1,
+          "io_in_xstateen_hstateen2_SE": 1,
+          "io_in_xstateen_hstateen3_SE": 1,
+          "io_in_xstateen_sstateen0_C": 1,
+          "io_in_aia_hvictlVTI": 1
+        },
+        "outputs_compared": {
+          "io_out_virtualLevelPermit_EX_II": 1,
+          "io_out_virtualLevelPermit_EX_VI": 1
+        },
+        "input_bits": 163,
+        "output_bits": 2,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "PASS",
+        "success_marker": true,
+        "unconstrained_or_equiv_cells": true,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "sat_variables": 2382,
+        "sat_clauses": 6557
+      },
+      "XRetPermitModule": {
+        "method": "sat_miter",
+        "sequential": false,
+        "locked_reference": "validation/reference-sv/XRetPermitModule.sv",
+        "locked_sha256": "a043d390d51c08e25de7a5928b4f824f523ed463ecbe4e073dd692dbe659dab9",
+        "children": [],
+        "inputs": {
+          "io_in_privState_PRVM": 2,
+          "io_in_privState_V": 1,
+          "io_in_debugMode": 1,
+          "io_in_xRet_mnret": 1,
+          "io_in_xRet_mret": 1,
+          "io_in_xRet_sret": 1,
+          "io_in_xRet_dret": 1,
+          "io_in_status_tsr": 1,
+          "io_in_status_vtsr": 1
+        },
+        "outputs_compared": {
+          "io_out_Xret_EX_II": 1,
+          "io_out_Xret_EX_VI": 1,
+          "io_out_hasLegalMNret": 1,
+          "io_out_hasLegalMret": 1,
+          "io_out_hasLegalSret": 1,
+          "io_out_hasLegalDret": 1
+        },
+        "input_bits": 10,
+        "output_bits": 6,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "PASS",
+        "success_marker": true,
+        "unconstrained_or_equiv_cells": true,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "sat_variables": 202,
+        "sat_clauses": 503
+      }
+    },
+    "why_complete": "Every locked module named by this Build's own tables is proven against its exact-name locked reference on the rail its timing requires, with a conservation-audited 5C view where the installed Yosys cannot read the original.",
+    "bounded_tests_counted": false
+  },
+  "reference_lock": {
+    "directory": "validation/reference-sv",
+    "xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "locked_references_written": false,
+    "sha256_by_module": {
+      "CSRPermitModule": "7f3c849c00e6e434a364eea4216d074f483866071466b5a71978ec6d01dce3ce",
+      "IndirectCSRPermitModule": "1629bb29ba367ab1d9c663e31e42d6ed44420d6143b633ea4fd94b01abcba02c",
+      "MLevelPermitModule": "76b18586526b67367fbbc44e55344aad83bfc702586579ea567f82edce0063cf",
+      "PrivilegePermitModule": "17382eb2f0439de02855894fdecb745158231a5e1cf03ef64851f076b92f36b9",
+      "SLevelPermitModule": "f14c962274fa4215b4fcbdadb35f6457cb663cfac7275d3af2f745a4b1d42749",
+      "VirtualLevelPermitModule": "b99a2385e9dc0119d36649378c88f93274276a6414d4a5b2138d42b38bbe73a2",
+      "XRetPermitModule": "a043d390d51c08e25de7a5928b4f824f523ed463ecbe4e073dd692dbe659dab9"
+    }
+  },
+  "sources": {
+    "validator": {
+      "path": "validation/v2_strict_family_rail.py",
+      "sha256": "83e3a807d574e87121caae15ab78dc87e7ab9f16f0bf698fdb677a2ceaf7cd76",
+      "bytes": 43290
+    },
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.NewCSR.CSRPermit-Hardware.py",
+      "sha256": "b23e3d95bc4eb524048336e2758e53a282e64fe2eaaf463a0b596b49cbab8846",
+      "bytes": 27236
+    },
+    "reference_sv": {
+      "path": "validation/reference-sv/CSRPermitModule.sv",
+      "sha256": "7f3c849c00e6e434a364eea4216d074f483866071466b5a71978ec6d01dce3ce",
+      "bytes": 18503
+    },
+    "scala": {
+      "path": "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/CSRPermitModule.scala",
+      "sha256": "bd11288ac05ad2ffe42d39a37222ebe750eff6a7a8ddb3cdeec23a16a6861fe6",
+      "bytes": 24878
+    },
+    "declared_scala_sources": {
+      "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/CSRPermitModule.scala": {
+        "vendored": true,
+        "sha256": "bd11288ac05ad2ffe42d39a37222ebe750eff6a7a8ddb3cdeec23a16a6861fe6"
+      }
+    },
+    "reference_children": {
+      "IndirectCSRPermitModule": {
+        "path": "validation/reference-sv/IndirectCSRPermitModule.sv",
+        "sha256": "1629bb29ba367ab1d9c663e31e42d6ed44420d6143b633ea4fd94b01abcba02c",
+        "bytes": 7699
+      },
+      "MLevelPermitModule": {
+        "path": "validation/reference-sv/MLevelPermitModule.sv",
+        "sha256": "76b18586526b67367fbbc44e55344aad83bfc702586579ea567f82edce0063cf",
+        "bytes": 10479
+      },
+      "PrivilegePermitModule": {
+        "path": "validation/reference-sv/PrivilegePermitModule.sv",
+        "sha256": "17382eb2f0439de02855894fdecb745158231a5e1cf03ef64851f076b92f36b9",
+        "bytes": 2558
+      },
+      "SLevelPermitModule": {
+        "path": "validation/reference-sv/SLevelPermitModule.sv",
+        "sha256": "f14c962274fa4215b4fcbdadb35f6457cb663cfac7275d3af2f745a4b1d42749",
+        "bytes": 2092
+      },
+      "VirtualLevelPermitModule": {
+        "path": "validation/reference-sv/VirtualLevelPermitModule.sv",
+        "sha256": "b99a2385e9dc0119d36649378c88f93274276a6414d4a5b2138d42b38bbe73a2",
+        "bytes": 8787
+      },
+      "XRetPermitModule": {
+        "path": "validation/reference-sv/XRetPermitModule.sv",
+        "sha256": "a043d390d51c08e25de7a5928b4f824f523ed463ecbe4e073dd692dbe659dab9",
+        "bytes": 5852
+      }
+    }
+  },
+  "checks": {
+    "py_compile": {
+      "status": "PASS"
+    },
+    "pyright": {
+      "build": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_3dje75fe\\Build-Cpu.Backend.Fu.NewCSR.CSRPermit-Hardware.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "error_count": 0,
+        "files_analyzed": 1,
+        "stderr_tail": ""
+      },
+      "rail": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_60n80rmp\\v2_strict_family_rail.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "error_count": 0,
+        "files_analyzed": 1,
+        "stderr_tail": ""
+      }
+    },
+    "catalog_coverage": {
+      "entries": 7,
+      "proven": 7
+    },
+    "formal": {
+      "yosys_formal_miter": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_CSRPermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/REF_CSRPermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/CSRPermitModule_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_IndirectCSRPermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/REF_IndirectCSRPermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/IndirectCSRPermitModule_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_MLevelPermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/REF_MLevelPermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/MLevelPermitModule_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_PrivilegePermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/REF_PrivilegePermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/PrivilegePermitModule_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_SLevelPermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/REF_SLevelPermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/SLevelPermitModule_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_VirtualLevelPermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/REF_VirtualLevelPermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/VirtualLevelPermitModule_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_XRetPermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/REF_XRetPermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/XRetPermitModule_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/CSRPermit_AGG.sv; prep -top CSRPermit_AGG; flatten; opt; sat -prove mismatch 0"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "sat_success_marker": true,
+        "sat_counterexample_marker": false,
+        "unconstrained_marker": true,
+        "equiv_success_markers": {
+          "0 are unproven.": false,
+          "Equivalence successfully proven!": false
+        },
+        "equiv_failure_marker": false,
+        "equiv_cells_full": null,
+        "equiv_summary_full": null,
+        "equiv_failed_full": null,
+        "sat_counts_full": [
+          24683,
+          69571
+        ],
+        "output_tail": "module `\\CSRPermit_AGG'.\nRemoved a total of 0 cells.\n\n25.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n25.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\CSRPermit_AGG..\nRemoved 15 unused cells and 45 unused wires.\n<suppressed ~41 debug messages>\n\n25.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module CSRPermit_AGG.\n\n25.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n25.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\CSRPermit_AGG..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~6 debug messages>\n\n25.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\CSRPermit_AGG.\nPerformed a total of 0 changes.\n\n25.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\CSRPermit_AGG'.\nRemoved a total of 0 cells.\n\n25.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n25.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\CSRPermit_AGG..\n\n25.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module CSRPermit_AGG.\n\n25.23. Finished OPT passes. (There is nothing left to do.)\n\n26. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 1348 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 24683 variables and 69571 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: e187e475db, CPU: user 1.52s system 0.07s, MEM: 105.83 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 34% 23x read_verilog (0 sec), 17% 8x opt_clean (0 sec), ...\n",
+        "output_sha256": "a410207db52fe62842ea78738176fc21cee979d95b71113b4dee726449956259",
+        "formal_success_marker": true,
+        "unconstrained": true,
+        "mitered_variants": 7,
+        "sat_variables": 24683,
+        "sat_clauses": 69571
+      }
+    },
+    "aggregate_sat_miter": {
+      "command": [
+        "yosys",
+        "-Q",
+        "-p",
+        "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_CSRPermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/REF_CSRPermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/CSRPermitModule_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_IndirectCSRPermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/REF_IndirectCSRPermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/IndirectCSRPermitModule_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_MLevelPermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/REF_MLevelPermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/MLevelPermitModule_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_PrivilegePermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/REF_PrivilegePermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/PrivilegePermitModule_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_SLevelPermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/REF_SLevelPermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/SLevelPermitModule_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_VirtualLevelPermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/REF_VirtualLevelPermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/VirtualLevelPermitModule_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_XRetPermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/REF_XRetPermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/XRetPermitModule_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/CSRPermit_AGG.sv; prep -top CSRPermit_AGG; flatten; opt; sat -prove mismatch 0"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "sat_success_marker": true,
+      "sat_counterexample_marker": false,
+      "unconstrained_marker": true,
+      "equiv_success_markers": {
+        "0 are unproven.": false,
+        "Equivalence successfully proven!": false
+      },
+      "equiv_failure_marker": false,
+      "equiv_cells_full": null,
+      "equiv_summary_full": null,
+      "equiv_failed_full": null,
+      "sat_counts_full": [
+        24683,
+        69571
+      ],
+      "output_tail": "module `\\CSRPermit_AGG'.\nRemoved a total of 0 cells.\n\n25.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n25.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\CSRPermit_AGG..\nRemoved 15 unused cells and 45 unused wires.\n<suppressed ~41 debug messages>\n\n25.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module CSRPermit_AGG.\n\n25.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n25.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\CSRPermit_AGG..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~6 debug messages>\n\n25.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\CSRPermit_AGG.\nPerformed a total of 0 changes.\n\n25.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\CSRPermit_AGG'.\nRemoved a total of 0 cells.\n\n25.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n25.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\CSRPermit_AGG..\n\n25.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module CSRPermit_AGG.\n\n25.23. Finished OPT passes. (There is nothing left to do.)\n\n26. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 1348 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 24683 variables and 69571 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: e187e475db, CPU: user 1.52s system 0.07s, MEM: 105.83 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 34% 23x read_verilog (0 sec), 17% 8x opt_clean (0 sec), ...\n",
+      "output_sha256": "a410207db52fe62842ea78738176fc21cee979d95b71113b4dee726449956259",
+      "formal_success_marker": true,
+      "unconstrained": true,
+      "mitered_variants": 7,
+      "sat_variables": 24683,
+      "sat_clauses": 69571
+    },
+    "negative_control": {
+      "status": "PASS",
+      "cases": {
+        "sat.target": {
+          "status": "PASS",
+          "control_entry": "CSRPermitModule",
+          "control_port": "io_out_EX_II",
+          "mutation_applied": true,
+          "explicit_failure_marker": true,
+          "success_marker_still_present": false,
+          "returncode": 0
+        },
+        "sat.reference": {
+          "status": "PASS",
+          "control_entry": "CSRPermitModule",
+          "control_port": "io_out_EX_II",
+          "mutation_applied": true,
+          "explicit_failure_marker": true,
+          "success_marker_still_present": false,
+          "returncode": 0
+        },
+        "sequential": {
+          "status": "PASS",
+          "note": "no representative with outputs"
+        }
+      },
+      "note": "a reference-side mutation that still proves means the reference never reaches the comparison"
+    },
+    "variants": [
+      {
+        "method": "sat_miter",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "CSRPermitModule_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_CSRPermitModule.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/REF_CSRPermitModule.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/CSRPermitModule_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_CSRPermitModule.sv:12400:41: Operator EQ expects 12 bits on the RHS, but RHS's CONST '9'h10c' generates 9 bits.\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_CSRPermitModule.sv:12404:41: Operator EQ expects 12 bits on the RHS, but RHS's CONST '9'h10d' generates 9 bits.\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_CSRPermitModule.sv:12409:41: Operator EQ expects 12 bits on the RHS, but RHS's CONST '9'h10e' generates 9 bits.\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_CSRPermitModule.sv:12414:41: Operator EQ expects 12 bits on the RHS, but RHS's CONST '9'h10f' generates 9 bits.\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_CSRPermitModule.sv:12420:41: Operator EQ expects 12 bits on the RHS, but RHS's CONST '9'h10a' generates 9 bits.\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_CSRPermitModule.sv:12425:41: Operator GTE expects 12 bits on the RHS, but RHS's CONST '9'h150' generates 9 bits.\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_CSRPermitModule.sv:12426:41: Operator LTE expects 12 bits on the RHS, but RHS's CONST '9'h157' generates 9 bits.\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_CSRPermitModule.sv:12428:41: Operator EQ expects 12 bits on the RHS, but RHS's CONST '9'h154' generates 9 bits.\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_CSRPermitModule.sv:12440:41: Operator EQ expects 12 bits on the RHS, but RHS's CONST '9'h15c' generates 9 bits.\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_CSRPermitModule.sv:12445:41: Operator EQ expects 12 bits on the RHS, but RHS's CONST '11'h5a8' generates 11 bits.\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_CSRPermitModule.sv:12451:46: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n",
+          "output_sha256": "85f95e480da03a8d819658553844429aa9b5c3cfcc92cbdf5bf4dff6a9178967"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "CSRPermitModule",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/IndirectCSRPermitModule.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/MLevelPermitModule.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/PrivilegePermitModule.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/SLevelPermitModule.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/VirtualLevelPermitModule.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/XRetPermitModule.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/CSRPermitModule.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.174 MB sources in 8 modules, into 0.054 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.089 s (elab=0.002, cvt=0.011, bld=0.000); cpu 0.029 s on 1 threads; alloced 10.477 MB\n",
+          "output_sha256": "e60201cbb919742d34aec1f1bef8b2b83335f7b00c41c1efe06bd4156e557c2b"
+        },
+        "sat_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_CSRPermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/REF_CSRPermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/CSRPermitModule_MITER.sv; prep -top CSRPermitModule_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": true,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": true,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": [
+            11521,
+            32481
+          ],
+          "output_tail": "of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\CSRPermitModule_MITER..\nRemoved 5 unused cells and 17 unused wires.\n<suppressed ~16 debug messages>\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module CSRPermitModule_MITER.\n\n6.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\CSRPermitModule_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~3 debug messages>\n\n6.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\CSRPermitModule_MITER.\nPerformed a total of 0 changes.\n\n6.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\CSRPermitModule_MITER'.\nRemoved a total of 0 cells.\n\n6.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\CSRPermitModule_MITER..\n\n6.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module CSRPermitModule_MITER.\n\n6.23. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 639 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 11521 variables and 32481 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: b36b4f9f2d, CPU: user 1.07s system 0.09s, MEM: 105.82 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 43% 4x read_verilog (0 sec), 15% 8x opt_clean (0 sec), ...\n",
+          "output_sha256": "1fb274c78719ba8129e4d34cbbe63a722f3a91ce626bbaca08e2baecc626d2fe",
+          "formal_success_marker": true,
+          "unconstrained": true,
+          "sat_variables": 11521,
+          "sat_clauses": 32481
+        }
+      },
+      {
+        "method": "sat_miter",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "IndirectCSRPermitModule_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_IndirectCSRPermitModule.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/REF_IndirectCSRPermitModule.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/IndirectCSRPermitModule_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": " on the RHS, but RHS's CONST '6'h3f' generates 6 bits.\n                                                                                                                                                    : ... note: In instance 'IndirectCSRPermitModule_MITER.target_i'\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_IndirectCSRPermitModule.sv:325:39: Operator GTE expects 64 bits on the RHS, but RHS's CONST '7'h70' generates 7 bits.\n                                                                                                                                                    : ... note: In instance 'IndirectCSRPermitModule_MITER.target_i'\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_IndirectCSRPermitModule.sv:326:39: Operator LTE expects 64 bits on the RHS, but RHS's CONST '8'hff' generates 8 bits.\n                                                                                                                                                    : ... note: In instance 'IndirectCSRPermitModule_MITER.target_i'\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_IndirectCSRPermitModule.sv:330:40: Operator GTE expects 12 bits on the RHS, but RHS's CONST '9'h152' generates 9 bits.\n                                                                                                                                                    : ... note: In instance 'IndirectCSRPermitModule_MITER.target_i'\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_IndirectCSRPermitModule.sv:331:40: Operator LTE expects 12 bits on the RHS, but RHS's CONST '9'h157' generates 9 bits.\n                                                                                                                                                    : ... note: In instance 'IndirectCSRPermitModule_MITER.target_i'\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_IndirectCSRPermitModule.sv:333:40: Operator EQ expects 12 bits on the RHS, but RHS's CONST '9'h154' generates 9 bits.\n                                                                                                                                                    : ... note: In instance 'IndirectCSRPermitModule_MITER.target_i'\n",
+          "output_sha256": "fb308ecf8c9c2b373c3256eaa4811210072c9003593fc80750a355b72d320b63"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "IndirectCSRPermitModule",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/IndirectCSRPermitModule.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.024 MB sources in 2 modules, into 0.025 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.026 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.007 s on 1 threads; alloced 9.363 MB\n",
+          "output_sha256": "24771369376f74d6e25c7c01f4eb46b02d5a75036018d3ff78d2900f1854a7c7"
+        },
+        "sat_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_IndirectCSRPermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/REF_IndirectCSRPermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/IndirectCSRPermitModule_MITER.sv; prep -top IndirectCSRPermitModule_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": true,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": true,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": [
+            7139,
+            20492
+          ],
+          "output_tail": "RPermitModule_MITER'.\nRemoved a total of 0 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\IndirectCSRPermitModule_MITER..\nRemoved 0 unused cells and 69 unused wires.\n<suppressed ~1 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module IndirectCSRPermitModule_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\IndirectCSRPermitModule_MITER..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\IndirectCSRPermitModule_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\IndirectCSRPermitModule_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\IndirectCSRPermitModule_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module IndirectCSRPermitModule_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 177 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 7139 variables and 20492 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 45f0af02ff, CPU: user 0.12s system 0.01s, MEM: 20.75 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 38% 1x sat (0 sec), 13% 4x read_verilog (0 sec), ...\n",
+          "output_sha256": "1b974247fb10312305e7199569b15ea96c37daa4574f4a82881291b19bf8a509",
+          "formal_success_marker": true,
+          "unconstrained": true,
+          "sat_variables": 7139,
+          "sat_clauses": 20492
+        }
+      },
+      {
+        "method": "sat_miter",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "MLevelPermitModule_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_MLevelPermitModule.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/REF_MLevelPermitModule.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/MLevelPermitModule_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "u_backend_fu_newcsr_csrpermit_family/DUT_MLevelPermitModule.sv:476:40: Operator EQ expects 12 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                                               : ... note: In instance 'MLevelPermitModule_MITER.target_i'\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_MLevelPermitModule.sv:478:40: Operator EQ expects 12 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                                                                                                                               : ... note: In instance 'MLevelPermitModule_MITER.target_i'\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_MLevelPermitModule.sv:485:40: Operator EQ expects 12 bits on the RHS, but RHS's CONST '4'h8' generates 4 bits.\n                                                                                                                                               : ... note: In instance 'MLevelPermitModule_MITER.target_i'\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_MLevelPermitModule.sv:486:40: Operator EQ expects 12 bits on the RHS, but RHS's CONST '4'h9' generates 4 bits.\n                                                                                                                                               : ... note: In instance 'MLevelPermitModule_MITER.target_i'\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_MLevelPermitModule.sv:488:40: Operator EQ expects 12 bits on the RHS, but RHS's CONST '4'ha' generates 4 bits.\n                                                                                                                                               : ... note: In instance 'MLevelPermitModule_MITER.target_i'\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_MLevelPermitModule.sv:490:40: Operator EQ expects 12 bits on the RHS, but RHS's CONST '4'hf' generates 4 bits.\n                                                                                                                                               : ... note: In instance 'MLevelPermitModule_MITER.target_i'\n",
+          "output_sha256": "692dc020232393f1bc63bb7612caf1926622f648abc51dd5c1890cd5903305c5"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "MLevelPermitModule",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/MLevelPermitModule.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.026 MB sources in 2 modules, into 0.034 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.031 s (elab=0.000, cvt=0.003, bld=0.000); cpu 0.010 s on 1 threads; alloced 9.641 MB\n",
+          "output_sha256": "63a08665e1e362e90e28aa141b1005d168bd59d8b3d54beb2de8613246d81637"
+        },
+        "sat_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_MLevelPermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/REF_MLevelPermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/MLevelPermitModule_MITER.sv; prep -top MLevelPermitModule_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": true,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": true,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": [
+            2224,
+            6275
+          ],
+          "output_tail": ".6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\MLevelPermitModule_MITER..\nRemoved 0 unused cells and 137 unused wires.\n<suppressed ~1 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module MLevelPermitModule_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\MLevelPermitModule_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\MLevelPermitModule_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\MLevelPermitModule_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\MLevelPermitModule_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module MLevelPermitModule_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 244 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 2224 variables and 6275 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 7b9b0ef9bc, CPU: user 0.10s system 0.01s, MEM: 17.03 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 26% 4x read_verilog (0 sec), 17% 7x opt_clean (0 sec), ...\n",
+          "output_sha256": "ce8a77989130bbba19733dfbb9865266ded26e2f73895729e9291df9d4600f29",
+          "formal_success_marker": true,
+          "unconstrained": true,
+          "sat_variables": 2224,
+          "sat_clauses": 6275
+        }
+      },
+      {
+        "method": "sat_miter",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "PrivilegePermitModule_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_PrivilegePermitModule.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/REF_PrivilegePermitModule.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/PrivilegePermitModule_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "ects 1 bit on the LHS, but LHS's VARREF 'io_in_privState_PRVM' generates 2 bits.\n                                                                                                                                                 : ... note: In instance 'PrivilegePermitModule_MITER.target_i'\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_PrivilegePermitModule.sv:129:17: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 2 bits.\n                                                                                                                                                 : ... note: In instance 'PrivilegePermitModule_MITER.target_i'\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_PrivilegePermitModule.sv:131:38: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                  : ... note: In instance 'PrivilegePermitModule_MITER.target_i'\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_PrivilegePermitModule.sv:137:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'io_in_privState_PRVM' generates 2 bits.\n                                                                                                                                                 : ... note: In instance 'PrivilegePermitModule_MITER.target_i'\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_PrivilegePermitModule.sv:139:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 2 bits.\n                                                                                                                                                 : ... note: In instance 'PrivilegePermitModule_MITER.target_i'\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_PrivilegePermitModule.sv:142:39: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                  : ... note: In instance 'PrivilegePermitModule_MITER.target_i'\n",
+          "output_sha256": "1d4bfcf2f26d32085035d20c69e803b9211153430ce97f490cb5cb8a9b005e60"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "PrivilegePermitModule",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/PrivilegePermitModule.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.022 MB sources in 2 modules, into 0.020 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.038 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.010 s on 1 threads; alloced 9.387 MB\n",
+          "output_sha256": "be62c4a9c7b486835b8c097b7ae50d32a6fe31d9468a63f6f4b093955b99dc73"
+        },
+        "sat_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_PrivilegePermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/REF_PrivilegePermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/PrivilegePermitModule_MITER.sv; prep -top PrivilegePermitModule_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": true,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": true,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": [
+            300,
+            768
+          ],
+          "output_tail": "T_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\PrivilegePermitModule_MITER..\nRemoved 0 unused cells and 39 unused wires.\n<suppressed ~1 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module PrivilegePermitModule_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\PrivilegePermitModule_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\PrivilegePermitModule_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\PrivilegePermitModule_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\PrivilegePermitModule_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module PrivilegePermitModule_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 51 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 300 variables and 768 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: b07dd3d73b, CPU: user 0.05s system 0.02s, MEM: 14.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 32% 4x read_verilog (0 sec), 21% 9x opt_expr (0 sec), ...\n",
+          "output_sha256": "e020c4ee893c8696e2ebedee568abfee1f03189d2e066691603e79a006941e51",
+          "formal_success_marker": true,
+          "unconstrained": true,
+          "sat_variables": 300,
+          "sat_clauses": 768
+        }
+      },
+      {
+        "method": "sat_miter",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "SLevelPermitModule_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_SLevelPermitModule.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/REF_SLevelPermitModule.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/SLevelPermitModule_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.073 MB sources in 4 modules, into 0.020 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.057 s (elab=0.001, cvt=0.002, bld=0.000); cpu 0.009 s on 1 threads; alloced 9.301 MB\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_SLevelPermitModule.sv:47:17: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'io_in_privState_PRVM' generates 2 bits.\n                                                                                                                                             : ... note: In instance 'SLevelPermitModule_MITER.target_i'\n                     ... For warning description see https://verilator.org/warn/WIDTHTRUNC?v=5.032\n                     ... Use \"/* verilator lint_off WIDTHTRUNC */\" and lint_on around source to disable this message.\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_SLevelPermitModule.sv:51:15: Operator ASSIGNW expects 1 bits on the Assign RHS, but Assign RHS's SHIFTR generates 32 bits.\n                                                                                                                                             : ... note: In instance 'SLevelPermitModule_MITER.target_i'\n   51 |   assign \\$8  = io_in_xcounteren_scounteren >> io_in_csrAccess_addr[4:0];\n      |               ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_SLevelPermitModule.sv:57:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'io_in_privState_PRVM' generates 2 bits.\n                                                                                                                                             : ... note: In instance 'SLevelPermitModule_MITER.target_i'\n",
+          "output_sha256": "f17735bc6bebcb4d5380e468d2d67d0d6df2cc8aff04bc0282bf6ac561ce284b"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "SLevelPermitModule",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/SLevelPermitModule.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.019 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.032 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.007 s on 1 threads; alloced 9.227 MB\n",
+          "output_sha256": "b4b2ce45077e9245ed99cf209bb9dcf1f8d489c7f5cf1014193562a4d8ccdb66"
+        },
+        "sat_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_SLevelPermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/REF_SLevelPermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/SLevelPermitModule_MITER.sv; prep -top SLevelPermitModule_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": true,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": true,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": [
+            909,
+            2477
+          ],
+          "output_tail": "identical cells in module `\\SLevelPermitModule_MITER'.\nRemoved a total of 0 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\SLevelPermitModule_MITER..\nRemoved 0 unused cells and 14 unused wires.\n<suppressed ~1 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module SLevelPermitModule_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\SLevelPermitModule_MITER..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\SLevelPermitModule_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\SLevelPermitModule_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\SLevelPermitModule_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module SLevelPermitModule_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 26 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 909 variables and 2477 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 7ff5b6267b, CPU: user 0.05s system 0.00s, MEM: 14.38 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 25% 8x opt_expr (0 sec), 17% 4x read_verilog (0 sec), ...\n",
+          "output_sha256": "babfd135919f444d221bb7d5e9ca81583c8b561ad81e9288d0cf738ef06b31d8",
+          "formal_success_marker": true,
+          "unconstrained": true,
+          "sat_variables": 909,
+          "sat_clauses": 2477
+        }
+      },
+      {
+        "method": "sat_miter",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "VirtualLevelPermitModule_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_VirtualLevelPermitModule.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/REF_VirtualLevelPermitModule.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/VirtualLevelPermitModule_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "generates 9 bits.\n                                                                                                                                                     : ... note: In instance 'VirtualLevelPermitModule_MITER.target_i'\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_VirtualLevelPermitModule.sv:304:39: Operator EQ expects 12 bits on the RHS, but RHS's CONST '9'h154' generates 9 bits.\n                                                                                                                                                     : ... note: In instance 'VirtualLevelPermitModule_MITER.target_i'\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_VirtualLevelPermitModule.sv:316:40: Operator EQ expects 12 bits on the RHS, but RHS's CONST '9'h15c' generates 9 bits.\n                                                                                                                                                     : ... note: In instance 'VirtualLevelPermitModule_MITER.target_i'\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_VirtualLevelPermitModule.sv:321:40: Operator EQ expects 12 bits on the RHS, but RHS's CONST '11'h5a8' generates 11 bits.\n                                                                                                                                                     : ... note: In instance 'VirtualLevelPermitModule_MITER.target_i'\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_VirtualLevelPermitModule.sv:327:45: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                     : ... note: In instance 'VirtualLevelPermitModule_MITER.target_i'\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_VirtualLevelPermitModule.sv:341:19: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'io_in_privState_PRVM' generates 2 bits.\n                                                                                                                                                    : ... note: In instance 'VirtualLevelPermitModule_MITER.target_i'\n",
+          "output_sha256": "aabc1c6a487af83f5c1844b3e6e9dea5592922bd715ce45dd4a4aea1d9966fcd"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "VirtualLevelPermitModule",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/VirtualLevelPermitModule.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.024 MB sources in 2 modules, into 0.030 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.036 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.011 s on 1 threads; alloced 9.531 MB\n",
+          "output_sha256": "0caf8e295d3f51818a850e2db8fecf5bf1f5605c9a5077e2f3c6ca9ffa08bb3f"
+        },
+        "sat_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_VirtualLevelPermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/REF_VirtualLevelPermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/VirtualLevelPermitModule_MITER.sv; prep -top VirtualLevelPermitModule_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": true,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": true,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": [
+            2382,
+            6557
+          ],
+          "output_tail": "e_MITER'.\nRemoved a total of 0 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\VirtualLevelPermitModule_MITER..\nRemoved 0 unused cells and 99 unused wires.\n<suppressed ~1 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module VirtualLevelPermitModule_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\VirtualLevelPermitModule_MITER..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\VirtualLevelPermitModule_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\VirtualLevelPermitModule_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\VirtualLevelPermitModule_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module VirtualLevelPermitModule_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 159 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 2382 variables and 6557 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 73e2da499f, CPU: user 0.07s system 0.03s, MEM: 16.09 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 22% 4x read_verilog (0 sec), 18% 7x opt_clean (0 sec), ...\n",
+          "output_sha256": "e5f6fcb81957cf337b3161b6ef03f34c0c1e2e2364cba1a2096d6cc88482fedb",
+          "formal_success_marker": true,
+          "unconstrained": true,
+          "sat_variables": 2382,
+          "sat_clauses": 6557
+        }
+      },
+      {
+        "method": "sat_miter",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "XRetPermitModule_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_XRetPermitModule.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/REF_XRetPermitModule.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/XRetPermitModule_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "DUT_XRetPermitModule.sv:131:17: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'io_in_privState_PRVM' generates 2 bits.\n                                                                                                                                            : ... note: In instance 'XRetPermitModule_MITER.target_i'\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_XRetPermitModule.sv:134:39: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                             : ... note: In instance 'XRetPermitModule_MITER.target_i'\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_XRetPermitModule.sv:144:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'io_in_privState_PRVM' generates 2 bits.\n                                                                                                                                            : ... note: In instance 'XRetPermitModule_MITER.target_i'\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_XRetPermitModule.sv:146:39: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                             : ... note: In instance 'XRetPermitModule_MITER.target_i'\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_XRetPermitModule.sv:161:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'io_in_privState_PRVM' generates 2 bits.\n                                                                                                                                            : ... note: In instance 'XRetPermitModule_MITER.target_i'\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_XRetPermitModule.sv:164:39: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                             : ... note: In instance 'XRetPermitModule_MITER.target_i'\n",
+          "output_sha256": "a72d85c96a8bfa1ae9a023321edb5209b1f6a7ec572861bb6a4920cc8e972252"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "XRetPermitModule",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/XRetPermitModule.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.022 MB sources in 2 modules, into 0.019 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.036 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.008 s on 1 threads; alloced 9.406 MB\n",
+          "output_sha256": "3788085711bea7b1f403cea6393deadef1ecf328a1d3c1159c6d2ecfee5311a1"
+        },
+        "sat_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/DUT_XRetPermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/REF_XRetPermitModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_csrpermit_family/XRetPermitModule_MITER.sv; prep -top XRetPermitModule_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": true,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": true,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": [
+            202,
+            503
+          ],
+          "output_tail": ".\nFinding identical cells in module `\\XRetPermitModule_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\XRetPermitModule_MITER..\nRemoved 10 unused cells and 26 unused wires.\n<suppressed ~26 debug messages>\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module XRetPermitModule_MITER.\n\n6.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\XRetPermitModule_MITER..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n6.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\XRetPermitModule_MITER.\nPerformed a total of 0 changes.\n\n6.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\XRetPermitModule_MITER'.\nRemoved a total of 0 cells.\n\n6.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\XRetPermitModule_MITER..\n\n6.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module XRetPermitModule_MITER.\n\n6.23. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 39 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 202 variables and 503 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 07df28bc5b, CPU: user 0.07s system 0.01s, MEM: 14.22 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 24% 10x opt_expr (0 sec), 21% 4x read_verilog (0 sec), ...\n",
+          "output_sha256": "12ec2423e35ad6a649fed962ae5c5f0e8db20e82fe645ea4eccb08c79fe5f41d",
+          "formal_success_marker": true,
+          "unconstrained": true,
+          "sat_variables": 202,
+          "sat_clauses": 503
+        }
+      }
+    ]
+  },
+  "failures": [],
+  "unclosed": [],
+  "acceptance_unclosed": [
+    "Parent closure, full-top differential, final license review, and user approval remain outside this Build proof."
+  ]
+}

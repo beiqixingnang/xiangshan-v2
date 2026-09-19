@@ -489,7 +489,7 @@
   "bounded_leaf_pass_count": 12,
   "bounded_parent_pass_count": 7,
  "bounded_dependency_family_pass_count": 21,
-  "strict_complete_equivalence_build_count": 23,
+  "strict_complete_equivalence_build_count": 24,
   "strict_complete_equivalence_build_denominator": 118,
   "strict_complete_equivalence_policy": "Count only a Build with complete locked-DefaultConfig-XSTop input/state-space or formal/reference equivalence evidence under Rules section 5D. Every counting record must use a repository-contained validator, lock the Build plus all declared Scala/reference/child sources, recursively pass static/ABI/deterministic gates, carry complete-output formal markers, and pass decisive target-side and reference-side negative controls; strict failures and unclosed lists must be empty. Aggregate Builds bind their exact LOCKED_VARIANTS/catalog scope and every variant/reference. Scala fields or legal configurations removed by locked elaboration are explicit non-claims. Older schemas, PASS_BOUNDED, structural ports, tool lint, and reduced parent probes do not increment this rail.",
   "validated_batch_count": 54,
@@ -884,12 +884,22 @@
     "accepted": "NOT_ALLOWED"
    }
   ],
-  "locked_module_inventory": {
+  "locked_module_subject_coverage": {
+   "reference_modules": 1976,
+   "represented_modules": 1976,
+   "missing_subject_mappings": 0,
+   "core_bounded_subject_modules": 1021,
+   "family_subject_modules": 955,
+   "status": "SUBJECT_MAPPING_COMPLETE_NOT_EQUIVALENCE",
+   "evidence": "validation/v2-hierarchy-coverage.json"
+  },
+  "historical_top_generation_probe": {
    "reference_modules": 1976,
    "generated_modules": 19,
    "missing_modules": 1976,
    "status": "INCOMPLETE_MODULE_CLOSURE",
-   "evidence": "validation/v2-top-generation-probe-results.json"
+   "evidence": "validation/v2-top-generation-probe-results.json",
+   "note": "Historical UHSCTop probe only; it is not the current Build-subject coverage counter."
   },
   "semantic_closure_status": "PENDING_FULL_CHILD_BEHAVIORAL_DIFFERENTIAL",
   "parent_closures_planned": 9,

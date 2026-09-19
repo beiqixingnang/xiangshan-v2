@@ -4,6 +4,7 @@
 """
 from __future__ import annotations
 
+import ast
 import hashlib
 import json
 import re
@@ -148,6 +149,51 @@ def locked_reference_names() -> set[str]:
     return {path.stem for path in (ROOT / "validation/reference-sv").glob("*.sv")}
 
 
+def _static_value(node: ast.AST, values: dict[str, Any]) -> Any:
+    """Resolve the small constant-expression subset used by Build catalogs."""
+
+    if isinstance(node, ast.Constant):
+        return node.value
+    if isinstance(node, (ast.List, ast.Tuple, ast.Set)):
+        items = [_static_value(item, values) for item in node.elts]
+        return items if all(item is not None for item in items) else None
+    if isinstance(node, ast.Dict):
+        if any(key is None for key in node.keys):
+            return None
+        keys = [_static_value(key, values) for key in node.keys if key is not None]
+        entries = [_static_value(value, values) for value in node.values]
+        if all(key is not None for key in keys) and all(value is not None for value in entries):
+            return dict(zip(keys, entries, strict=True))
+        return None
+    if isinstance(node, ast.Name):
+        return values.get(node.id)
+    if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Add):
+        left = _static_value(node.left, values)
+        right = _static_value(node.right, values)
+        if isinstance(left, list) and isinstance(right, list):
+            return left + right
+        return None
+    if (isinstance(node, ast.Call) and isinstance(node.func, ast.Name)
+            and node.func.id in {"list", "set", "sorted", "tuple"}
+            and len(node.args) == 1 and not node.keywords):
+        value = _static_value(node.args[0], values)
+        if isinstance(value, dict):
+            return list(value)
+        if isinstance(value, (list, tuple, set)):
+            return list(value)
+    return None
+
+
+def _string_members(value: Any) -> set[str]:
+    """Return string members from a resolved catalog sequence or mapping."""
+
+    if isinstance(value, dict):
+        return {str(item) for item in value if isinstance(item, str)}
+    if isinstance(value, (list, tuple, set)):
+        return {str(item) for item in value if isinstance(item, str)}
+    return set()
+
+
 def build_declared_members(build_path: Path) -> list[str]:
     """Enumerate every module name a catalog Build declares.
 
@@ -161,15 +207,38 @@ def build_declared_members(build_path: Path) -> list[str]:
     if not build_path.is_file():
         return []
     text = build_path.read_text(encoding="utf-8")
-    locked = re.search(r'\bLOCKED_VARIANTS[^=]*=\s*([\(\[])(.*?)[\)\]]', text, re.S)
-    if locked is not None:
-        return re.findall(r'"([^"]+)"', locked.group(2))
+    values: dict[str, Any] = {}
+    try:
+        tree = ast.parse(text)
+    except SyntaxError:
+        tree = ast.Module(body=[], type_ignores=[])
+    for statement in tree.body:
+        name: str | None = None
+        value_node: ast.AST | None = None
+        if (isinstance(statement, ast.Assign) and len(statement.targets) == 1
+                and isinstance(statement.targets[0], ast.Name)):
+            name = statement.targets[0].id
+            value_node = statement.value
+        elif isinstance(statement, ast.AnnAssign) and isinstance(statement.target, ast.Name):
+            name = statement.target.id
+            value_node = statement.value
+        if name is not None and value_node is not None:
+            resolved = _static_value(value_node, values)
+            if resolved is not None:
+                values[name] = resolved
+    for primary in ("LOCKED_VARIANTS", "COVERED_MODULES"):
+        members = _string_members(values.get(primary))
+        if members:
+            return sorted(members)
     candidates: set[str] = set()
+    for name, value in values.items():
+        if name.endswith("_MEMBERS") or name.endswith("_SPECS"):
+            candidates |= _string_members(value)
     for table in re.finditer(r'\b(?:COVERED_MODULES|[A-Z_]+_MEMBERS)[^=]*=\s*([\(\[])(.*?)[\)\]]',
                              text, re.S):
         candidates |= set(re.findall(r'"([^"]+)"', table.group(2)))
-    for name in re.findall(r'^([A-Z_]+_SPECS):', text, re.M):
-        block = re.search(re.escape(name) + r':.*?\n\}', text, re.S)
+    for spec_name in re.findall(r'^([A-Z_]+_SPECS):', text, re.M):
+        block = re.search(re.escape(spec_name) + r':.*?\n\}', text, re.S)
         if block is not None:
             candidates |= set(re.findall(r'^\s{4}"([^"]+)":', block.group(0), re.M))
     candidates |= set(re.findall(
@@ -381,8 +450,13 @@ def verify_evidence(path: Path, expected_source_commit: str) -> dict[str, Any]:
     verified_sources = {
         name: verify_source(record, name, failures)
         for name, record in sources.items()
-        if name in {"python_build", "scala", "reference_sv"}
+        if name in {"validator", "python_build", "scala", "reference_sv"}
     } if isinstance(sources, dict) else {}
+    if nested(payload, "audit_policy", "require_validator_hash") is True:
+        if "validator" not in verified_sources:
+            failures.append("required source: validator")
+        elif str(verified_sources["validator"].get("path", "")) != validator_path:
+            failures.append("validator source path does not match validator field")
     for required in ("python_build", "reference_sv"):
         if required not in verified_sources:
             failures.append(f"required source: {required}")

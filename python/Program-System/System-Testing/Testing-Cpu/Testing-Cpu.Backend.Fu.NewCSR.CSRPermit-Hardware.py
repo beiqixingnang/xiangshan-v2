@@ -148,7 +148,7 @@ class CSRPermitBehaviorTest(unittest.TestCase):
         })
         self.assertEqual(1, satp["io_out_virtualLevelPermit_EX_VI"])
         indirect = observe(module, "IndirectCSRPermitModule", {
-            "io_in_csrAccess_addr": 0x250,
+            "io_in_csrAccess_addr": 0x251,
         })
         self.assertEqual(1, indirect["io_out_indirectCSR_EX_II"])
 

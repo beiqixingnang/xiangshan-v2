@@ -150,8 +150,20 @@ def enumerate_members(module: Any, build_path: Path) -> list[str]:
     """Collect every locked module name the Build exposes, from its own tables."""
 
     text = build_path.read_text(encoding="utf-8")
-    locked = re.search(r'\bLOCKED_VARIANTS[^=]*=\s*([\(\[])(.*?)[\)\]]', text, re.S)
-    if locked is not None:
+    runtime_names: list[str] = []
+    for attribute in ("LOCKED_VARIANTS", "COVERED_MODULES"):
+        value = getattr(module, attribute, None)
+        if isinstance(value, (list, tuple)) and value:
+            if not all(isinstance(item, str) and item for item in value):
+                raise AssertionError(f"{build_path.name} has invalid {attribute} entries")
+            runtime_names = list(value)
+            break
+    if runtime_names:
+        if len(runtime_names) != len(set(runtime_names)):
+            raise AssertionError(f"{build_path.name} repeats a public member entry")
+        cands = set(runtime_names)
+    elif (locked := re.search(
+            r'\bLOCKED_VARIANTS[^=]*=\s*([\(\[])(.*?)[\)\]]', text, re.S)) is not None:
         locked_names = re.findall(r'"([^"]+)"', locked.group(2))
         if len(locked_names) != len(set(locked_names)):
             raise AssertionError(f"{build_path.name} repeats a LOCKED_VARIANTS entry")
@@ -743,6 +755,9 @@ class FamilyRail:
                 "sat_clauses": proof.get("sat_clauses"),
             }
         sources: dict[str, Any] = {
+            "validator": {"path": Path(__file__).relative_to(ROOT).as_posix(),
+                          "sha256": sha256_file(Path(__file__)),
+                          "bytes": Path(__file__).stat().st_size},
             "python_build": {"path": self.build_path.relative_to(ROOT).as_posix(),
                              "sha256": sha256_file(self.build_path),
                              "bytes": self.build_path.stat().st_size},
@@ -775,6 +790,7 @@ class FamilyRail:
             "audit_policy": {"require_negative_control": True,
                              "require_two_sided_negative_control": True,
                              "require_locked_reference_lint": True,
+                             "require_validator_hash": True,
                              "scope_source": "Build catalog tables"},
             "scope": {
                 "kind": "catalog_build_multi_variant",
@@ -814,6 +830,10 @@ class FamilyRail:
             },
             "failures": failures,
             "unclosed": [] if not failures else ["strict gates did not all pass"],
+            "acceptance_unclosed": [
+                "Parent closure, full-top differential, final license review, and user approval "
+                "remain outside this Build proof."
+            ],
         }
         self.evidence_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
                                       encoding="utf-8", newline="\n")
