@@ -220,11 +220,14 @@ does parse the originals.
 The accepted workaround is a **synthesizable view** built in an ASCII temporary
 work directory, never written back, limited to:
 
-1. dropping the two non-synthesis conditional regions
-   (`` `ifndef SYNTHESIS `` and `` `ifdef ENABLE_INITIAL_REG_ ``), asserting that
-   no preprocessor directive survives;
+1. dropping the three non-synthesis conditional regions
+   (`` `ifndef SYNTHESIS ``, `` `ifdef ENABLE_INITIAL_REG_ `` and
+   `` `ifdef ENABLE_INITIAL_MEM_ ``), asserting that no unbalanced preprocessor
+   text survives;
 2. hoisting each block-local `automatic` declaration to module scope as a `reg`
-   of identical width and name;
+   of identical width and name; where the declaration carries an initializer
+   (`automatic logic [2:0] x = expr;`), the hoisted `reg` replaces the statement
+   and the original line becomes the bare assignment `x = expr;`;
 3. renaming only the reference module for the equivalence pair.
 
 A validator using a view must enforce and record all of the following, and must
@@ -240,6 +243,12 @@ fail the run if any is false:
   valid rather than silently replaced;
 - a negative control that perturbs one target equation and confirms the harness
   reports it unproven, so a clean success cannot be vacuous.
+
+Two Yosys usage facts measured on the installed build: `flatten` takes a module
+*selection* and there is no `-top` option, so it must not run before the pair is
+chosen — a bare `flatten` deletes the reference top and `equiv_make` then reports
+`Can't find gold module`. And `equiv_make` has no `-hierarchy` option here: flatten
+`REF_<module>` and `DUT_<module>` by selection, then pair them plainly.
 
 Equivalence is claimed against that view. This is a frontend workaround, not a
 relaxation of section 6: the locked artifact is never modified, and any
