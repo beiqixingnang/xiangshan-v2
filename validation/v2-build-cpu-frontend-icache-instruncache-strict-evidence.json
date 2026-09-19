@@ -1,0 +1,337 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_COMPLETE_EQUIVALENCE",
+  "build_id": "Build-Cpu.Frontend.Icache.InstrUncache",
+  "validator": "validation/v2_strict_family_rail.py",
+  "status": "STRICT_PENDING",
+  "strict_complete_eligible": false,
+  "strict_complete_count_delta": 0,
+  "acceptance_eligible": false,
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "audit_policy": {
+    "require_negative_control": true,
+    "require_two_sided_negative_control": true,
+    "require_locked_reference_lint": true,
+    "require_validator_hash": true,
+    "scope_source": "Build catalog tables"
+  },
+  "scope": {
+    "kind": "catalog_build_multi_variant",
+    "public_variants": [
+      "InstrUncache"
+    ],
+    "variant_count": 1,
+    "combinational_variants": 0,
+    "sequential_variants": 1,
+    "inputs": {
+      "InstrUncache_clock": 1,
+      "InstrUncache_reset": 1,
+      "InstrUncache_auto_client_out_a_ready": 1,
+      "InstrUncache_auto_client_out_d_valid": 1,
+      "InstrUncache_auto_client_out_d_bits_source": 1,
+      "InstrUncache_auto_client_out_d_bits_data": 64,
+      "InstrUncache_auto_client_out_d_bits_corrupt": 1,
+      "InstrUncache_io_req_valid": 1,
+      "InstrUncache_io_req_bits_addr": 48,
+      "InstrUncache_io_req_bits_flush": 1,
+      "InstrUncache_io_wfi_wfiReq": 1
+    },
+    "outputs_compared": {
+      "InstrUncache_auto_client_out_a_valid": 1,
+      "InstrUncache_auto_client_out_a_bits_address": 48,
+      "InstrUncache_io_req_ready": 1,
+      "InstrUncache_io_resp_valid": 1,
+      "InstrUncache_io_resp_bits_data": 32,
+      "InstrUncache_io_resp_bits_corrupt": 1,
+      "InstrUncache_io_wfi_wfiSafe": 1
+    },
+    "aggregate_input_bits": 121,
+    "aggregate_compared_output_bits": 85,
+    "variants": {
+      "InstrUncache": {
+        "method": "sequential_equivalence",
+        "sequential": true,
+        "locked_reference": "validation/reference-sv/InstrUncache.sv",
+        "locked_sha256": "3d48322b0ba063a4798d32ce5df07b01069364b03bb0bf6aa6cbc0268ba550db",
+        "children": [
+          "Arbiter1_InsUncacheResp",
+          "InstrMMIOEntry"
+        ],
+        "inputs": {
+          "clock": 1,
+          "reset": 1,
+          "auto_client_out_a_ready": 1,
+          "auto_client_out_d_valid": 1,
+          "auto_client_out_d_bits_source": 1,
+          "auto_client_out_d_bits_data": 64,
+          "auto_client_out_d_bits_corrupt": 1,
+          "io_req_valid": 1,
+          "io_req_bits_addr": 48,
+          "io_req_bits_flush": 1,
+          "io_wfi_wfiReq": 1
+        },
+        "outputs_compared": {
+          "auto_client_out_a_valid": 1,
+          "auto_client_out_a_bits_address": 48,
+          "io_req_ready": 1,
+          "io_resp_valid": 1,
+          "io_resp_bits_data": 32,
+          "io_resp_bits_corrupt": 1,
+          "io_wfi_wfiSafe": 1
+        },
+        "input_bits": 121,
+        "output_bits": 85,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "FAIL",
+        "success_marker": false,
+        "markers_present": {
+          "0 are unproven.": false,
+          "Equivalence successfully proven!": false
+        },
+        "unconstrained_or_equiv_cells": 83,
+        "proven_cells": 5,
+        "unproven_cells": 78,
+        "sat_variables": null,
+        "sat_clauses": null
+      }
+    },
+    "why_complete": "Every locked module named by this Build's own tables is proven against its exact-name locked reference on the rail its timing requires, with a conservation-audited 5C view where the installed Yosys cannot read the original.",
+    "bounded_tests_counted": false
+  },
+  "reference_lock": {
+    "directory": "validation/reference-sv",
+    "xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "locked_references_written": false,
+    "sha256_by_module": {
+      "InstrUncache": "3d48322b0ba063a4798d32ce5df07b01069364b03bb0bf6aa6cbc0268ba550db"
+    }
+  },
+  "sources": {
+    "validator": {
+      "path": "validation/v2_strict_family_rail.py",
+      "sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
+      "bytes": 43710
+    },
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.InstrUncache-Hardware.py",
+      "sha256": "29e6aee108966749780a911f659a6125b73bda672e72cf34b9c2dedbae4960eb",
+      "bytes": 9534
+    },
+    "reference_sv": {
+      "path": "validation/reference-sv/InstrUncache.sv",
+      "sha256": "3d48322b0ba063a4798d32ce5df07b01069364b03bb0bf6aa6cbc0268ba550db",
+      "bytes": 4824
+    },
+    "scala": {
+      "path": "upstream/src/main/scala/xiangshan/frontend/icache/InstrUncache.scala",
+      "sha256": "e031ec5dfc18d0745cabbfceb814b083818cfdd67961d523132f06a947d1fa40",
+      "bytes": 8638
+    },
+    "declared_scala_sources": {
+      "upstream/src/main/scala/xiangshan/frontend/icache/InstrUncache.scala": {
+        "vendored": true,
+        "sha256": "e031ec5dfc18d0745cabbfceb814b083818cfdd67961d523132f06a947d1fa40"
+      }
+    },
+    "reference_children": {
+      "Arbiter1_InsUncacheResp": {
+        "path": "validation/reference-sv/Arbiter1_InsUncacheResp.sv",
+        "sha256": "660b04ca4bffac4ab75aecef8fb66accae8ce1f0e8d153ebf4b4dfa058be5128",
+        "bytes": 905
+      },
+      "InstrMMIOEntry": {
+        "path": "validation/reference-sv/InstrMMIOEntry.sv",
+        "sha256": "86989112566f2ddc77d2f4502007a36f33e6e7158990fbd8556f8bd1aefe7eb8",
+        "bytes": 11817
+      }
+    }
+  },
+  "checks": {
+    "py_compile": {
+      "status": "PASS"
+    },
+    "pyright": {
+      "build": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_5lw62xjf\\Build-Cpu.Frontend.Icache.InstrUncache-Hardware.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "error_count": 0,
+        "files_analyzed": 1,
+        "stderr_tail": ""
+      },
+      "rail": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_qj_sal4r\\v2_strict_family_rail.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "error_count": 0,
+        "files_analyzed": 1,
+        "stderr_tail": ""
+      }
+    },
+    "catalog_coverage": {
+      "entries": 1,
+      "proven": 0
+    },
+    "formal": {
+      "yosys_formal_miter": {
+        "status": "NOT_APPLICABLE",
+        "mitered_variants": 0
+      }
+    },
+    "aggregate_sat_miter": {
+      "status": "NOT_APPLICABLE",
+      "mitered_variants": 0
+    },
+    "negative_control": {
+      "status": "FAIL",
+      "cases": {
+        "sat": {
+          "status": "PASS",
+          "note": "no representative with outputs"
+        },
+        "sequential.target": {
+          "status": "PASS",
+          "control_entry": "InstrUncache",
+          "control_port": "auto_client_out_a_bits_address",
+          "mutation_applied": true,
+          "explicit_failure_marker": true,
+          "success_marker_still_present": false,
+          "returncode": 1
+        },
+        "sequential.reference": {
+          "status": "FAIL",
+          "mutation_applied": false
+        }
+      },
+      "note": "a reference-side mutation that still proves means the reference never reaches the comparison"
+    },
+    "variants": [
+      {
+        "method": "sequential_equivalence",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "InstrUncache_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_instruncache_family/DUT_InstrUncache.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_instruncache_family/REF_InstrUncache.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_instruncache_family/InstrUncache_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.150 MB sources in 6 modules, into 0.051 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.129 s (elab=0.009, cvt=0.017, bld=0.000); cpu 0.031 s on 1 threads; alloced 9.809 MB\n",
+          "output_sha256": "15da9c5b986319cff3b91c562c8bd48cfcd1c5ead8991145da0600a56284af65"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "InstrUncache",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Arbiter1_InsUncacheResp.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/InstrMMIOEntry.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/InstrUncache.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.049 MB sources in 4 modules, into 0.028 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.064 s (elab=0.001, cvt=0.005, bld=0.000); cpu 0.018 s on 1 threads; alloced 9.578 MB\n",
+          "output_sha256": "5c14e29108541fdeb87acacd9053b6ed213cb23f91c36aab66af4c6640f9ae45"
+        },
+        "yosys_equiv": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_instruncache_family/DUT_InstrUncache.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_instruncache_family/REF_InstrUncache.sv; proc; async2sync; memory; opt; flatten REF_InstrUncache; flatten DUT_InstrUncache; equiv_make REF_InstrUncache DUT_InstrUncache InstrUncache_EQUIV; prep -top InstrUncache_EQUIV; equiv_induct -undef; equiv_status -assert"
+          ],
+          "returncode": 1,
+          "status": "FAIL",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": true,
+          "equiv_cells_full": 83,
+          "equiv_summary_full": [
+            5,
+            78
+          ],
+          "equiv_failed_full": 78,
+          "sat_counts_full": null,
+          "output_tail": "io_resp_bits_data_gold [4] \\io_resp_bits_data_gate [4]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$307: \\entries_0.io_resp_bits_data_gold [5] \\io_resp_bits_data_gate [5]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$308: \\entries_0.io_resp_bits_data_gold [6] \\io_resp_bits_data_gate [6]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$309: \\entries_0.io_resp_bits_data_gold [7] \\io_resp_bits_data_gate [7]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$310: \\entries_0.io_resp_bits_data_gold [8] \\io_resp_bits_data_gate [8]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$311: \\entries_0.io_resp_bits_data_gold [9] \\io_resp_bits_data_gate [9]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$312: \\entries_0.io_resp_bits_data_gold [10] \\io_resp_bits_data_gate [10]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$313: \\entries_0.io_resp_bits_data_gold [11] \\io_resp_bits_data_gate [11]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$314: \\entries_0.io_resp_bits_data_gold [12] \\io_resp_bits_data_gate [12]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$315: \\entries_0.io_resp_bits_data_gold [13] \\io_resp_bits_data_gate [13]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$316: \\entries_0.io_resp_bits_data_gold [14] \\io_resp_bits_data_gate [14]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$317: \\entries_0.io_resp_bits_data_gold [15] \\io_resp_bits_data_gate [15]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$318: \\entries_0.io_resp_bits_data_gold [16] \\io_resp_bits_data_gate [16]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$319: \\entries_0.io_resp_bits_data_gold [17] \\io_resp_bits_data_gate [17]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$320: \\entries_0.io_resp_bits_data_gold [18] \\io_resp_bits_data_gate [18]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$321: \\entries_0.io_resp_bits_data_gold [19] \\io_resp_bits_data_gate [19]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$322: \\entries_0.io_resp_bits_data_gold [20] \\io_resp_bits_data_gate [20]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$323: \\entries_0.io_resp_bits_data_gold [21] \\io_resp_bits_data_gate [21]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$324: \\entries_0.io_resp_bits_data_gold [22] \\io_resp_bits_data_gate [22]\n  Unproven $equiv $auto$equiv_maERROR: Found 78 unproven $equiv cells in 'equiv_status -assert'.\n",
+          "output_sha256": "f95a55b20f3c5e4a8400c35a9192c9e8b181e5b65bcc0d159ea98f69bf76a832",
+          "markers_present": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "formal_success_marker": false,
+          "equiv_cells": 83,
+          "proven_cells": 5,
+          "unproven_cells": 78
+        }
+      }
+    ]
+  },
+  "failures": [
+    "InstrUncache:yosys_equiv",
+    "InstrUncache: 78 $equiv cells unproven",
+    "negative control did not detect a mutated design"
+  ],
+  "unclosed": [
+    "strict gates did not all pass"
+  ],
+  "acceptance_unclosed": [
+    "Parent closure, full-top differential, final license review, and user approval remain outside this Build proof."
+  ]
+}

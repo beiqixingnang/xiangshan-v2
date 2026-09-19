@@ -19,6 +19,7 @@ from amaranth import ClockDomain, ClockSignal, Elaboratable, Module, Mux, ResetS
 # NewPipelineConnect.scala 保存一个载荷和一个有效位；输出就绪、级为空或
 # isOlder 为真时接受输入；rightOutFire 清除级，但同周期输入出火可替换它。
 __all__ = [
+    "COVERED_MODULES",
     "NewPipelineConnectConfig",
     "NewPipelineConnectPipe",
     "NewPipelineConnect",
@@ -27,6 +28,11 @@ __all__ = [
     "build_verilog",
     "main",
 ]
+
+COVERED_MODULES: tuple[str, ...] = ("NewPipelineConnectPipe",)
+SOURCE_PATHS: tuple[str, ...] = (
+    "upstream/src/main/scala/xiangshan/backend/datapath/NewPipelineConnect.scala",
+)
 
 
 # =============================================================================
@@ -182,6 +188,64 @@ class NewPipelineConnect:
             reset,
         )
 
+
+class _LockedNewPipelineConnectPipe(Elaboratable):
+    """Exact ExecInput specialization emitted by the locked V2 hierarchy."""
+
+    FIELDS: tuple[tuple[str, int], ...] = (
+        ("fuType", 35), ("fuOpType", 9), ("src_0", 64), ("src_1", 64),
+        ("robIdx_flag", 1), ("robIdx_value", 8), ("pdest", 8), ("rfWen", 1),
+    )
+
+    def __init__(self) -> None:
+        self.clock = Signal(name="clock")
+        self.reset = Signal(name="reset")
+        self.in_valid = Signal(name="io_in_valid")
+        self.inputs = {
+            name: Signal(width, name=f"io_in_bits_{name}") for name, width in self.FIELDS
+        }
+        self.out_valid = Signal(name="io_out_valid")
+        self.outputs = {
+            name: Signal(width, name=f"io_out_bits_{name}") for name, width in self.FIELDS
+        }
+        self.right_out_fire = Signal(name="io_rightOutFire")
+        self.is_flush = Signal(name="io_isFlush")
+
+    def elaborate(self, platform: Any) -> Module:
+        del platform
+        module = Module()
+        domain = ClockDomain("sync", async_reset=True)
+        domain.clk = self.clock
+        domain.rst = self.reset
+        module.domains += domain
+        valid = Signal(name="valid", reset=0)
+        data = {
+            name: Signal(width, name=f"data_{name}", reset_less=True)
+            for name, width in self.FIELDS
+        }
+        module.d.sync += valid.eq(
+            ~self.is_flush & (self.in_valid | (~self.right_out_fire & valid))
+        )
+        with cast(Any, module.If(self.in_valid)):
+            module.d.sync += [data[name].eq(self.inputs[name]) for name, _ in self.FIELDS]
+        module.d.comb += [self.out_valid.eq(valid)]
+        module.d.comb += [
+            self.outputs[name].eq(data[name]) for name, _ in self.FIELDS
+        ]
+        return module
+
+    def ports(self) -> list[Signal]:
+        return [
+            self.clock,
+            self.reset,
+            self.in_valid,
+            *self.inputs.values(),
+            self.out_valid,
+            *self.outputs.values(),
+            self.right_out_fire,
+            self.is_flush,
+        ]
+
 # =============================================================================
 # Public Adapter
 # =============================================================================
@@ -192,6 +256,11 @@ def build_verilog(configuration, injected_dependencies):
 
     del injected_dependencies
     config: dict[str, Any] = configuration if isinstance(configuration, dict) else {}
+    if config.get("module") == "NewPipelineConnectPipe":
+        locked = _LockedNewPipelineConnectPipe()
+        return verilog.convert(
+            locked, name="NewPipelineConnectPipe", ports=locked.ports(), emit_src=False
+        )
     raw = config.get("data_width", config.get("width", 64))
     if isinstance(configuration, NewPipelineConnectConfig):
         width = configuration.data_width

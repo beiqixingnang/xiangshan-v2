@@ -24,7 +24,14 @@ from amaranth.back import verilog
 # InstrUncache.scala 在昆明湖 V2 中分配一个事务项（nMMIOs == 1），仲裁响应并
 # 转发单路 TileLink A/D；因此锁定 XSTop 不暴露 source-id 或 ready 输出。
 
-__all__ = ["InstrUncacheConfig", "InstrUncache", "build_verilog", "main"]
+__all__ = [
+    "COVERED_MODULES", "InstrUncacheConfig", "InstrUncache", "build_verilog", "main",
+]
+
+COVERED_MODULES: tuple[str, ...] = ("InstrUncache",)
+SOURCE_PATHS: tuple[str, ...] = (
+    "upstream/src/main/scala/xiangshan/frontend/icache/InstrUncache.scala",
+)
 
 
 # =============================================================================

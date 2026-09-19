@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import unittest
+import json
 from pathlib import Path
 import sys
 
@@ -28,6 +29,26 @@ class BuildCatalogEnumerationTests(unittest.TestCase):
         self.assertIn("BusyTable", members)
         self.assertIn("RenameTable", members)
         self.assertIn("WbFuBusyTable", members)
+
+    def test_single_sequential_catalog_uses_member_proof(self) -> None:
+        plan = json.loads(progress.PLAN.read_text(encoding="utf-8"))
+        expected_commit = plan["scan_freeze"]["source_commit"]
+        evidence = progress.ROOT / (
+            "validation/v2-build-cpu-backend-datapath-newpipelineconnect-strict-evidence.json"
+        )
+
+        result = progress.verify_evidence(evidence, expected_commit)
+
+        self.assertEqual("PASS", result["status"], result["failures"])
+
+    def test_specialized_aggregate_schema_stays_countable(self) -> None:
+        plan = json.loads(progress.PLAN.read_text(encoding="utf-8"))
+        expected_commit = plan["scan_freeze"]["source_commit"]
+        evidence = progress.ROOT / "validation/v2-csa-family-strict-evidence.json"
+
+        result = progress.verify_evidence(evidence, expected_commit)
+
+        self.assertEqual("PASS", result["status"], result["failures"])
 
 
 if __name__ == "__main__":

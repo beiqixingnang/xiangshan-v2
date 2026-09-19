@@ -550,11 +550,19 @@ def verify_evidence(path: Path, expected_source_commit: str) -> dict[str, Any]:
         if isinstance(scope_for_gates, dict) else []
     variants_for_gates = scope_for_gates.get("variants", {}) \
         if isinstance(scope_for_gates, dict) else {}
-    all_sequential_variants = (
+    catalog_scope = (
         isinstance(public_for_gates, list)
-        and len(public_for_gates) > 1
+        and len(public_for_gates) >= 1
         and isinstance(variants_for_gates, dict)
         and set(str(item) for item in public_for_gates) == set(variants_for_gates)
+    )
+    catalog_variant_set = (
+        catalog_scope
+        and all(isinstance(record, dict) and "method" in record
+                for record in variants_for_gates.values())
+    )
+    all_sequential_variants = (
+        catalog_variant_set
         and all(isinstance(record, dict)
                 and record.get("sequential") is True
                 and record.get("method") == "sequential_equivalence"
@@ -578,7 +586,7 @@ def verify_evidence(path: Path, expected_source_commit: str) -> dict[str, Any]:
             if status != "PASS" and not allowed_not_applicable:
                 failures.append(f"gate status {status_path}: {status}")
         public = payload.get("scope", {}).get("public_variants", [])
-        if not isinstance(public, list) or len(public) <= 1:
+        if not catalog_scope:
             require_pass_gate(checks, "abi", failures)
             require_pass_gate(checks, "deterministic_export", failures)
     if not non_counting:

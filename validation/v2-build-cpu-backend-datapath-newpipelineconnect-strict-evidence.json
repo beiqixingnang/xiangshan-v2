@@ -1,0 +1,328 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_COMPLETE_EQUIVALENCE",
+  "build_id": "Build-Cpu.Backend.Datapath.NewPipelineConnect",
+  "validator": "validation/v2_strict_family_rail.py",
+  "status": "COMPLETE_EQUIVALENCE",
+  "strict_complete_eligible": true,
+  "strict_complete_count_delta": 1,
+  "acceptance_eligible": true,
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "audit_policy": {
+    "require_negative_control": true,
+    "require_two_sided_negative_control": true,
+    "require_locked_reference_lint": true,
+    "require_validator_hash": true,
+    "scope_source": "Build catalog tables"
+  },
+  "scope": {
+    "kind": "catalog_build_multi_variant",
+    "public_variants": [
+      "NewPipelineConnectPipe"
+    ],
+    "variant_count": 1,
+    "combinational_variants": 0,
+    "sequential_variants": 1,
+    "inputs": {
+      "NewPipelineConnectPipe_clock": 1,
+      "NewPipelineConnectPipe_reset": 1,
+      "NewPipelineConnectPipe_io_in_valid": 1,
+      "NewPipelineConnectPipe_io_in_bits_fuType": 35,
+      "NewPipelineConnectPipe_io_in_bits_fuOpType": 9,
+      "NewPipelineConnectPipe_io_in_bits_src_0": 64,
+      "NewPipelineConnectPipe_io_in_bits_src_1": 64,
+      "NewPipelineConnectPipe_io_in_bits_robIdx_flag": 1,
+      "NewPipelineConnectPipe_io_in_bits_robIdx_value": 8,
+      "NewPipelineConnectPipe_io_in_bits_pdest": 8,
+      "NewPipelineConnectPipe_io_in_bits_rfWen": 1,
+      "NewPipelineConnectPipe_io_rightOutFire": 1,
+      "NewPipelineConnectPipe_io_isFlush": 1
+    },
+    "outputs_compared": {
+      "NewPipelineConnectPipe_io_out_valid": 1,
+      "NewPipelineConnectPipe_io_out_bits_fuType": 35,
+      "NewPipelineConnectPipe_io_out_bits_fuOpType": 9,
+      "NewPipelineConnectPipe_io_out_bits_src_0": 64,
+      "NewPipelineConnectPipe_io_out_bits_src_1": 64,
+      "NewPipelineConnectPipe_io_out_bits_robIdx_flag": 1,
+      "NewPipelineConnectPipe_io_out_bits_robIdx_value": 8,
+      "NewPipelineConnectPipe_io_out_bits_pdest": 8,
+      "NewPipelineConnectPipe_io_out_bits_rfWen": 1
+    },
+    "aggregate_input_bits": 195,
+    "aggregate_compared_output_bits": 191,
+    "variants": {
+      "NewPipelineConnectPipe": {
+        "method": "sequential_equivalence",
+        "sequential": true,
+        "locked_reference": "validation/reference-sv/NewPipelineConnectPipe.sv",
+        "locked_sha256": "7cf763c889fb63cb263d7d7910785653a3c25cf123ecc62700850454c6aa312f",
+        "children": [],
+        "inputs": {
+          "clock": 1,
+          "reset": 1,
+          "io_in_valid": 1,
+          "io_in_bits_fuType": 35,
+          "io_in_bits_fuOpType": 9,
+          "io_in_bits_src_0": 64,
+          "io_in_bits_src_1": 64,
+          "io_in_bits_robIdx_flag": 1,
+          "io_in_bits_robIdx_value": 8,
+          "io_in_bits_pdest": 8,
+          "io_in_bits_rfWen": 1,
+          "io_rightOutFire": 1,
+          "io_isFlush": 1
+        },
+        "outputs_compared": {
+          "io_out_valid": 1,
+          "io_out_bits_fuType": 35,
+          "io_out_bits_fuOpType": 9,
+          "io_out_bits_src_0": 64,
+          "io_out_bits_src_1": 64,
+          "io_out_bits_robIdx_flag": 1,
+          "io_out_bits_robIdx_value": 8,
+          "io_out_bits_pdest": 8,
+          "io_out_bits_rfWen": 1
+        },
+        "input_bits": 195,
+        "output_bits": 191,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "PASS",
+        "success_marker": true,
+        "markers_present": {
+          "0 are unproven.": true,
+          "Equivalence successfully proven!": true
+        },
+        "unconstrained_or_equiv_cells": 191,
+        "proven_cells": 191,
+        "unproven_cells": 0,
+        "sat_variables": null,
+        "sat_clauses": null
+      }
+    },
+    "why_complete": "Every locked module named by this Build's own tables is proven against its exact-name locked reference on the rail its timing requires, with a conservation-audited 5C view where the installed Yosys cannot read the original.",
+    "bounded_tests_counted": false
+  },
+  "reference_lock": {
+    "directory": "validation/reference-sv",
+    "xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "locked_references_written": false,
+    "sha256_by_module": {
+      "NewPipelineConnectPipe": "7cf763c889fb63cb263d7d7910785653a3c25cf123ecc62700850454c6aa312f"
+    }
+  },
+  "sources": {
+    "validator": {
+      "path": "validation/v2_strict_family_rail.py",
+      "sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
+      "bytes": 43710
+    },
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Datapath.NewPipelineConnect-Hardware.py",
+      "sha256": "0d951038b64f10b0d673e864122b3927424ac2ba0d5dd3c1291e75a2a8da4fe5",
+      "bytes": 10798
+    },
+    "reference_sv": {
+      "path": "validation/reference-sv/NewPipelineConnectPipe.sv",
+      "sha256": "7cf763c889fb63cb263d7d7910785653a3c25cf123ecc62700850454c6aa312f",
+      "bytes": 11278
+    },
+    "scala": {
+      "path": "upstream/src/main/scala/xiangshan/backend/datapath/NewPipelineConnect.scala",
+      "sha256": "5f69b6f1f5987a6b1a34be7108ec835521451efa9e7874a4039f05a4d25d4dd0",
+      "bytes": 2840
+    },
+    "declared_scala_sources": {
+      "upstream/src/main/scala/xiangshan/backend/datapath/NewPipelineConnect.scala": {
+        "vendored": true,
+        "sha256": "5f69b6f1f5987a6b1a34be7108ec835521451efa9e7874a4039f05a4d25d4dd0"
+      }
+    },
+    "reference_children": {}
+  },
+  "checks": {
+    "py_compile": {
+      "status": "PASS"
+    },
+    "pyright": {
+      "build": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_ilq0bjyc\\Build-Cpu.Backend.Datapath.NewPipelineConnect-Hardware.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "error_count": 0,
+        "files_analyzed": 1,
+        "stderr_tail": ""
+      },
+      "rail": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_ak1ekn3v\\v2_strict_family_rail.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "error_count": 0,
+        "files_analyzed": 1,
+        "stderr_tail": ""
+      }
+    },
+    "catalog_coverage": {
+      "entries": 1,
+      "proven": 1
+    },
+    "formal": {
+      "yosys_formal_miter": {
+        "status": "NOT_APPLICABLE",
+        "mitered_variants": 0
+      }
+    },
+    "aggregate_sat_miter": {
+      "status": "NOT_APPLICABLE",
+      "mitered_variants": 0
+    },
+    "negative_control": {
+      "status": "PASS",
+      "cases": {
+        "sat": {
+          "status": "PASS",
+          "note": "no representative with outputs"
+        },
+        "sequential.target": {
+          "status": "PASS",
+          "control_entry": "NewPipelineConnectPipe",
+          "control_port": "io_out_bits_fuOpType",
+          "mutation_applied": true,
+          "explicit_failure_marker": true,
+          "success_marker_still_present": false,
+          "returncode": 1
+        },
+        "sequential.reference": {
+          "status": "PASS",
+          "control_entry": "NewPipelineConnectPipe",
+          "control_port": "io_out_bits_fuOpType",
+          "mutation_applied": true,
+          "explicit_failure_marker": true,
+          "success_marker_still_present": false,
+          "returncode": 1
+        }
+      },
+      "note": "a reference-side mutation that still proves means the reference never reaches the comparison"
+    },
+    "variants": [
+      {
+        "method": "sequential_equivalence",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "NewPipelineConnectPipe_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_datapath_newpipelineconnect_family/DUT_NewPipelineConnectPipe.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_datapath_newpipelineconnect_family/REF_NewPipelineConnectPipe.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_datapath_newpipelineconnect_family/NewPipelineConnectPipe_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.061 MB sources in 4 modules, into 0.038 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.127 s (elab=0.007, cvt=0.025, bld=0.000); cpu 0.028 s on 1 threads; alloced 9.543 MB\n",
+          "output_sha256": "4cfb472c19f7d9274d8090ee27b658a04fa393918dd13f2335c7cd6c53da9209"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "NewPipelineConnectPipe",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/NewPipelineConnectPipe.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.023 MB sources in 2 modules, into 0.019 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.034 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.009 s on 1 threads; alloced 9.340 MB\n",
+          "output_sha256": "1f4f42d0591bb901a462c5046a168a791cc8921b1bccee32170172db59d4c6b7"
+        },
+        "yosys_equiv": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_datapath_newpipelineconnect_family/DUT_NewPipelineConnectPipe.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_datapath_newpipelineconnect_family/REF_NewPipelineConnectPipe.sv; proc; async2sync; memory; opt; flatten REF_NewPipelineConnectPipe; flatten DUT_NewPipelineConnectPipe; equiv_make REF_NewPipelineConnectPipe DUT_NewPipelineConnectPipe NewPipelineConnectPipe_EQUIV; prep -top NewPipelineConnectPipe_EQUIV; equiv_induct -undef; equiv_status -assert"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": 191,
+          "equiv_summary_full": [
+            191,
+            0
+          ],
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "re is nothing left to do.)\n\n10.8. Executing WREDUCE pass (reducing word size of cells).\n\n10.9. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\NewPipelineConnectPipe_EQUIV..\n\n10.10. Executing MEMORY_COLLECT pass (generating $mem cells).\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module NewPipelineConnectPipe_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\NewPipelineConnectPipe_EQUIV'.\nRemoved a total of 0 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\NewPipelineConnectPipe_EQUIV..\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== NewPipelineConnectPipe_EQUIV ===\n\n   Number of wires:                 93\n   Number of wire bits:           1549\n   Number of public wires:          91\n   Number of public wire bits:    1547\n   Number of ports:                 22\n   Number of port bits:            386\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                216\n     $and                            2\n     $dffe                          16\n     $equiv                        191\n     $mux                            2\n     $not                            2\n     $or                             1\n     $sdff                           2\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module NewPipelineConnectPipe_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 191 unproven $equiv cells in module NewPipelineConnectPipe_EQUIV:\n  Undef modelling: force def on 382 initial reg values and 195 inputs.\n  Proving existence of base case for step 1. (9692 clauses over 4335 variables)\n  Proving induction step 1. (46439 clauses over 18005 variables)\n  Proof for induction step holds. Entire workset of 191 cells proven!\nProved 191 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 191 $equiv cells in NewPipelineConnectPipe_EQUIV:\n  Of those cells 191 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: 53277ef087, CPU: user 0.16s system 0.05s, MEM: 25.94 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 51% 1x equiv_induct (0 sec), 13% 9x opt_clean (0 sec), ...\n",
+          "output_sha256": "d25ecea5db32f0caf87e1112e30c90f5a060a1b3dea4a7ae6667c84203a4f917",
+          "markers_present": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "formal_success_marker": true,
+          "equiv_cells": 191,
+          "proven_cells": 191,
+          "unproven_cells": 0
+        }
+      }
+    ]
+  },
+  "failures": [],
+  "unclosed": [],
+  "acceptance_unclosed": [
+    "Parent closure, full-top differential, final license review, and user approval remain outside this Build proof."
+  ]
+}
