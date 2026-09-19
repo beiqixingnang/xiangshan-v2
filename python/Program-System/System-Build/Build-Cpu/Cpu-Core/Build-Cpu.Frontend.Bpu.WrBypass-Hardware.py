@@ -138,12 +138,12 @@ class WrBypass(Elaboratable):
         # ever_written gates all observable comparisons until a real enqueue.
         # CAM 标签不复位，与 IndexableCAMTemplate 一致；ever_written 在实际入队前屏蔽比较。
         idx_store = Array(
-            Signal(c.idx_width, name=f"idx_store_{entry}")
+            Signal(c.idx_width, name=f"idx_store_{entry}", reset_less=True)
             for entry in range(c.num_entries)
         )
         tag_store = (
             Array(
-                Signal(c.tag_width, name=f"tag_store_{entry}")
+                Signal(c.tag_width, name=f"tag_store_{entry}", reset_less=True)
                 for entry in range(c.num_entries)
             )
             if c.tag_width
@@ -151,7 +151,7 @@ class WrBypass(Elaboratable):
         )
         data_store = [
             Array(
-                Signal(c.data_width, name=f"data_store_{way}_{entry}")
+                Signal(c.data_width, name=f"data_store_{way}_{entry}", reset_less=True)
                 for entry in range(c.num_entries)
             )
             for way in range(c.num_ways)

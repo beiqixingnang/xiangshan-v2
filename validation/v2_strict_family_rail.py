@@ -224,18 +224,27 @@ def directive_block_end(lines: list[str], start: int) -> int:
     raise AssertionError("unterminated preprocessor region")
 
 
-def insert_declarations(stripped: str, declarations: str, marker: str) -> str:
+def insert_declarations(stripped: str, declarations: str, top: str) -> str:
     """Place hoisted module-scope declarations just after the module header."""
 
-    start = stripped.index(marker) + len(marker)
-    header_end = stripped.index(");", start) + 2
+    header = re.search(r"\bmodule\s+" + re.escape(top) + r"\s*\(", stripped)
+    if header is None:
+        raise AssertionError(f"module header vanished while hoisting declarations for {top}")
+    header_end = stripped.index(");", header.end()) + 2
     return stripped[:header_end] + "\n" + declarations + stripped[header_end:]
+
+
+def module_declaration(text: str, top: str) -> re.Match[str] | None:
+    """Locate a module declaration, tolerating whitespace before its port list."""
+
+    return re.search(r"\bmodule\s+" + re.escape(top) + r"\s*\(", text)
 
 
 def synthesizable_view(text: str, top: str, rename: bool) -> tuple[str, dict[str, Any]]:
     """Apply the section 5C view to one locked module body."""
 
-    marker = f"module {top}("
+    if module_declaration(text, top) is None:
+        raise AssertionError(f"locked top declaration missing for {top}")
     lines = [line for line in (strip_line(raw) for raw in text.split("\n")) if line]
     removed: dict[str, int] = {}
     for opening in REMOVED_REGIONS:
@@ -253,7 +262,7 @@ def synthesizable_view(text: str, top: str, rename: bool) -> tuple[str, dict[str
     declarations = "".join(f"reg {w} {n};\n" if w else f"reg {n};\n" for w, n in hoisted)
     rewritten = INIT_DECL.sub(lambda m: f"{m.group(3)} = {m.group(4)};", body)
     stripped = BLOCK_LOCAL.sub("", rewritten)
-    normalized = stripped if not declarations else insert_declarations(stripped, declarations, marker)
+    normalized = stripped if not declarations else insert_declarations(stripped, declarations, top)
     view_lines = [line for line in normalized.split("\n") if line.strip()]
     view_set = set(view_lines)
     disappeared = [line for line in lines if line and line not in view_set]
@@ -283,9 +292,11 @@ def synthesizable_view(text: str, top: str, rename: bool) -> tuple[str, dict[str
                                  and "automatic" not in normalized
                                  and all(line.lstrip().startswith("`") for line in residual))
     if rename:
-        if marker not in normalized:
+        renamed, count = re.subn(r"\bmodule\s+" + re.escape(top) + r"\s*\(",
+                                 f"module REF_{top}(", normalized, count=1)
+        if count != 1:
             raise AssertionError(f"locked top declaration missing for {top}")
-        normalized = normalized.replace(marker, f"module REF_{top}(", 1)
+        normalized = renamed
     return normalized + "\n", audit
 
 

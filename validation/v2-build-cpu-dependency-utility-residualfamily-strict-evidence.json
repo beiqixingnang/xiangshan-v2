@@ -1,0 +1,1944 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_COMPLETE_EQUIVALENCE",
+  "build_id": "Build-Cpu.Dependency.Utility.ResidualFamily",
+  "validator": "validation/v2_strict_family_rail.py",
+  "status": "STRICT_PENDING",
+  "strict_complete_eligible": false,
+  "strict_complete_count_delta": 0,
+  "acceptance_eligible": false,
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "scope": {
+    "kind": "catalog_build_multi_variant",
+    "public_variants": [
+      "CSA3to2",
+      "CSA3to2_20",
+      "CSA3to2_24",
+      "CSA4to2",
+      "CSA_Nto2With3to2MainPipeline",
+      "ClockGate",
+      "DebugTransportModuleJTAG",
+      "IDPool",
+      "JtagStateMachine",
+      "JtagTapController",
+      "MaxPeriodFibonacciLFSR",
+      "MaxPeriodFibonacciLFSR_3",
+      "OverrideableQueue",
+      "OverrideableQueue_1",
+      "PrintCommitIDModule",
+      "TimeAsync",
+      "r4_qds_v2",
+      "r4_qds_v2_spec",
+      "skidBufferConnect"
+    ],
+    "variant_count": 19,
+    "combinational_variants": 9,
+    "sequential_variants": 10,
+    "inputs": {
+      "CSA3to2_io_in_a": 107,
+      "CSA3to2_io_in_b": 107,
+      "CSA3to2_io_in_c": 107,
+      "CSA3to2_20_io_in_a": 200,
+      "CSA3to2_20_io_in_b": 200,
+      "CSA3to2_20_io_in_c": 200,
+      "CSA3to2_24_io_in_a": 72,
+      "CSA3to2_24_io_in_b": 72,
+      "CSA3to2_24_io_in_c": 72,
+      "CSA4to2_io_in_a": 107,
+      "CSA4to2_io_in_b": 107,
+      "CSA4to2_io_in_c": 107,
+      "CSA4to2_io_in_d": 107,
+      "CSA_Nto2With3to2MainPipeline_clock": 1,
+      "CSA_Nto2With3to2MainPipeline_io_fire": 1,
+      "CSA_Nto2With3to2MainPipeline_io_in_0": 107,
+      "CSA_Nto2With3to2MainPipeline_io_in_1": 107,
+      "CSA_Nto2With3to2MainPipeline_io_in_2": 107,
+      "CSA_Nto2With3to2MainPipeline_io_in_3": 107,
+      "CSA_Nto2With3to2MainPipeline_io_in_4": 107,
+      "CSA_Nto2With3to2MainPipeline_io_in_5": 107,
+      "CSA_Nto2With3to2MainPipeline_io_in_6": 107,
+      "CSA_Nto2With3to2MainPipeline_io_in_7": 107,
+      "CSA_Nto2With3to2MainPipeline_io_in_8": 107,
+      "CSA_Nto2With3to2MainPipeline_io_in_9": 107,
+      "CSA_Nto2With3to2MainPipeline_io_in_10": 107,
+      "CSA_Nto2With3to2MainPipeline_io_in_11": 107,
+      "CSA_Nto2With3to2MainPipeline_io_in_12": 107,
+      "CSA_Nto2With3to2MainPipeline_io_in_13": 107,
+      "CSA_Nto2With3to2MainPipeline_io_in_14": 107,
+      "CSA_Nto2With3to2MainPipeline_io_in_15": 107,
+      "CSA_Nto2With3to2MainPipeline_io_in_16": 107,
+      "CSA_Nto2With3to2MainPipeline_io_in_17": 107,
+      "CSA_Nto2With3to2MainPipeline_io_in_18": 107,
+      "CSA_Nto2With3to2MainPipeline_io_in_19": 107,
+      "CSA_Nto2With3to2MainPipeline_io_in_20": 107,
+      "CSA_Nto2With3to2MainPipeline_io_in_21": 107,
+      "CSA_Nto2With3to2MainPipeline_io_in_22": 107,
+      "CSA_Nto2With3to2MainPipeline_io_in_23": 107,
+      "CSA_Nto2With3to2MainPipeline_io_in_24": 107,
+      "CSA_Nto2With3to2MainPipeline_io_in_25": 107,
+      "CSA_Nto2With3to2MainPipeline_io_in_26": 107,
+      "ClockGate_wire TE": 1,
+      "ClockGate_wire E": 1,
+      "ClockGate_wire CK": 1,
+      "DebugTransportModuleJTAG_io_jtag_clock": 1,
+      "DebugTransportModuleJTAG_io_jtag_reset": 1,
+      "DebugTransportModuleJTAG_io_dmi_req_ready": 1,
+      "DebugTransportModuleJTAG_io_dmi_resp_valid": 1,
+      "DebugTransportModuleJTAG_io_dmi_resp_bits_data": 32,
+      "DebugTransportModuleJTAG_io_dmi_resp_bits_resp": 2,
+      "DebugTransportModuleJTAG_io_jtag_TMS": 1,
+      "DebugTransportModuleJTAG_io_jtag_TDI": 1,
+      "DebugTransportModuleJTAG_io_jtag_mfr_id": 11,
+      "DebugTransportModuleJTAG_io_jtag_part_number": 16,
+      "DebugTransportModuleJTAG_io_jtag_version": 4,
+      "IDPool_clock": 1,
+      "IDPool_reset": 1,
+      "IDPool_io_free_valid": 1,
+      "IDPool_io_free_bits": 3,
+      "IDPool_io_alloc_ready": 1,
+      "JtagStateMachine_clock": 1,
+      "JtagStateMachine_reset": 1,
+      "JtagStateMachine_io_tms": 1,
+      "JtagTapController_clock": 1,
+      "JtagTapController_reset": 1,
+      "JtagTapController_io_jtag_TMS": 1,
+      "JtagTapController_io_jtag_TDI": 1,
+      "JtagTapController_io_control_jtag_reset": 1,
+      "JtagTapController_io_dataChainIn_data": 1,
+      "MaxPeriodFibonacciLFSR_clock": 1,
+      "MaxPeriodFibonacciLFSR_reset": 1,
+      "MaxPeriodFibonacciLFSR_3_clock": 1,
+      "MaxPeriodFibonacciLFSR_3_reset": 1,
+      "MaxPeriodFibonacciLFSR_3_io_increment": 1,
+      "OverrideableQueue_clock": 1,
+      "OverrideableQueue_reset": 1,
+      "OverrideableQueue_io_in_valid": 1,
+      "OverrideableQueue_io_in_bits_pht_index": 5,
+      "OverrideableQueue_io_in_bits_pht_tag": 13,
+      "OverrideableQueue_io_in_bits_region_paddr": 40,
+      "OverrideableQueue_io_in_bits_region_vaddr": 40,
+      "OverrideableQueue_io_in_bits_region_offset": 4,
+      "OverrideableQueue_io_out_ready": 1,
+      "OverrideableQueue_1_clock": 1,
+      "OverrideableQueue_1_reset": 1,
+      "OverrideableQueue_1_io_in_valid": 1,
+      "OverrideableQueue_1_io_in_bits_pht_index": 5,
+      "OverrideableQueue_1_io_in_bits_pht_tag": 13,
+      "OverrideableQueue_1_io_in_bits_region_bits": 16,
+      "OverrideableQueue_1_io_in_bits_region_bit_single": 16,
+      "OverrideableQueue_1_io_in_bits_region_offset": 4,
+      "OverrideableQueue_1_io_in_bits_access_cnt": 4,
+      "OverrideableQueue_1_io_in_bits_decr_mode": 1,
+      "OverrideableQueue_1_io_in_bits_single_update": 1,
+      "OverrideableQueue_1_io_in_bits_has_been_signal_updated": 1,
+      "OverrideableQueue_1_io_out_ready": 1,
+      "PrintCommitIDModule_hartID": 6,
+      "PrintCommitIDModule_commitID": 40,
+      "PrintCommitIDModule_dirty": 1,
+      "TimeAsync_clock": 1,
+      "TimeAsync_reset": 1,
+      "TimeAsync_io_i_time_valid": 1,
+      "TimeAsync_io_i_time_bits": 64,
+      "r4_qds_v2_io_rem_i": 6,
+      "r4_qds_v2_spec_io_rem_i": 7,
+      "r4_qds_v2_spec_io_divisor_mul_pos_2_i": 7,
+      "r4_qds_v2_spec_io_divisor_mul_pos_1_i": 7,
+      "r4_qds_v2_spec_io_divisor_mul_neg_1_i": 7,
+      "r4_qds_v2_spec_io_divisor_mul_neg_2_i": 7,
+      "r4_qds_v2_spec_io_prev_quo_dig_i": 5,
+      "skidBufferConnect_clock": 1,
+      "skidBufferConnect_reset": 1,
+      "skidBufferConnect_io_in_valid": 1,
+      "skidBufferConnect_io_in_bits_flowMask": 16,
+      "skidBufferConnect_io_in_bits_data": 128,
+      "skidBufferConnect_io_in_bits_baseAddr": 64,
+      "skidBufferConnect_io_in_bits_uopAddr": 64,
+      "skidBufferConnect_io_in_bits_stride": 128,
+      "skidBufferConnect_io_in_bits_flowNum": 5,
+      "skidBufferConnect_io_in_bits_eew": 2,
+      "skidBufferConnect_io_in_bits_sew": 3,
+      "skidBufferConnect_io_in_bits_emul": 3,
+      "skidBufferConnect_io_in_bits_lmul": 3,
+      "skidBufferConnect_io_in_bits_instType": 3,
+      "skidBufferConnect_io_in_bits_indexedSplitOffset": 5,
+      "skidBufferConnect_io_in_bits_uop_ftqPtr_flag": 1,
+      "skidBufferConnect_io_in_bits_uop_ftqPtr_value": 6,
+      "skidBufferConnect_io_in_bits_uop_ftqOffset": 4,
+      "skidBufferConnect_io_in_bits_uop_fuOpType": 9,
+      "skidBufferConnect_io_in_bits_uop_vpu_vstart": 8,
+      "skidBufferConnect_io_in_bits_uop_vpu_vuopIdx": 7,
+      "skidBufferConnect_io_in_bits_uop_vpu_veew": 2,
+      "skidBufferConnect_io_in_bits_uop_uopIdx": 7,
+      "skidBufferConnect_io_in_bits_uop_pdest": 8,
+      "skidBufferConnect_io_in_bits_uop_robIdx_flag": 1,
+      "skidBufferConnect_io_in_bits_uop_robIdx_value": 8,
+      "skidBufferConnect_io_in_bits_uop_lqIdx_flag": 1,
+      "skidBufferConnect_io_in_bits_uop_lqIdx_value": 7,
+      "skidBufferConnect_io_in_bits_uop_sqIdx_flag": 1,
+      "skidBufferConnect_io_in_bits_uop_sqIdx_value": 6,
+      "skidBufferConnect_io_in_bits_preIsSplit": 1,
+      "skidBufferConnect_io_in_bits_mBIndex": 4,
+      "skidBufferConnect_io_in_bits_alignedType": 3,
+      "skidBufferConnect_io_in_bits_indexVlMaxInVd": 8,
+      "skidBufferConnect_io_in_bits_usLowBitsAddr": 4,
+      "skidBufferConnect_io_in_bits_usAligned128": 1,
+      "skidBufferConnect_io_in_bits_usMask": 32,
+      "skidBufferConnect_io_in_bits_isVecPartReplay": 1,
+      "skidBufferConnect_io_in_bits_vecReplayFlowMask": 16,
+      "skidBufferConnect_io_flush": 1,
+      "skidBufferConnect_io_out_ready": 1
+    },
+    "outputs_compared": {
+      "CSA3to2_io_out_sum": 107,
+      "CSA3to2_io_out_car": 107,
+      "CSA3to2_20_io_out_sum": 200,
+      "CSA3to2_20_io_out_car": 200,
+      "CSA3to2_24_io_out_sum": 72,
+      "CSA3to2_24_io_out_car": 72,
+      "CSA4to2_io_out_sum": 107,
+      "CSA4to2_io_out_car": 107,
+      "CSA_Nto2With3to2MainPipeline_io_out_sum": 107,
+      "CSA_Nto2With3to2MainPipeline_io_out_car": 107,
+      "ClockGate_wire Q": 1,
+      "DebugTransportModuleJTAG_io_dmi_req_valid": 1,
+      "DebugTransportModuleJTAG_io_dmi_req_bits_addr": 7,
+      "DebugTransportModuleJTAG_io_dmi_req_bits_data": 32,
+      "DebugTransportModuleJTAG_io_dmi_req_bits_op": 2,
+      "DebugTransportModuleJTAG_io_dmi_resp_ready": 1,
+      "DebugTransportModuleJTAG_io_jtag_TDO_data": 1,
+      "DebugTransportModuleJTAG_io_jtag_TDO_driven": 1,
+      "IDPool_io_alloc_valid": 1,
+      "IDPool_io_alloc_bits": 3,
+      "JtagStateMachine_io_currState": 4,
+      "JtagTapController_io_jtag_TDO_data": 1,
+      "JtagTapController_io_jtag_TDO_driven": 1,
+      "JtagTapController_io_output_instruction": 5,
+      "JtagTapController_io_output_tapIsInTestLogicReset": 1,
+      "JtagTapController_io_dataChainOut_shift": 1,
+      "JtagTapController_io_dataChainOut_data": 1,
+      "JtagTapController_io_dataChainOut_capture": 1,
+      "JtagTapController_io_dataChainOut_update": 1,
+      "MaxPeriodFibonacciLFSR_io_out_0": 1,
+      "MaxPeriodFibonacciLFSR_io_out_1": 1,
+      "MaxPeriodFibonacciLFSR_io_out_2": 1,
+      "MaxPeriodFibonacciLFSR_io_out_3": 1,
+      "MaxPeriodFibonacciLFSR_io_out_4": 1,
+      "MaxPeriodFibonacciLFSR_io_out_5": 1,
+      "MaxPeriodFibonacciLFSR_io_out_6": 1,
+      "MaxPeriodFibonacciLFSR_io_out_7": 1,
+      "MaxPeriodFibonacciLFSR_io_out_8": 1,
+      "MaxPeriodFibonacciLFSR_io_out_9": 1,
+      "MaxPeriodFibonacciLFSR_io_out_10": 1,
+      "MaxPeriodFibonacciLFSR_io_out_11": 1,
+      "MaxPeriodFibonacciLFSR_io_out_12": 1,
+      "MaxPeriodFibonacciLFSR_io_out_13": 1,
+      "MaxPeriodFibonacciLFSR_io_out_14": 1,
+      "MaxPeriodFibonacciLFSR_3_io_out_0": 1,
+      "MaxPeriodFibonacciLFSR_3_io_out_1": 1,
+      "MaxPeriodFibonacciLFSR_3_io_out_2": 1,
+      "MaxPeriodFibonacciLFSR_3_io_out_3": 1,
+      "MaxPeriodFibonacciLFSR_3_io_out_4": 1,
+      "MaxPeriodFibonacciLFSR_3_io_out_5": 1,
+      "MaxPeriodFibonacciLFSR_3_io_out_6": 1,
+      "MaxPeriodFibonacciLFSR_3_io_out_7": 1,
+      "MaxPeriodFibonacciLFSR_3_io_out_8": 1,
+      "MaxPeriodFibonacciLFSR_3_io_out_9": 1,
+      "MaxPeriodFibonacciLFSR_3_io_out_10": 1,
+      "MaxPeriodFibonacciLFSR_3_io_out_11": 1,
+      "MaxPeriodFibonacciLFSR_3_io_out_12": 1,
+      "MaxPeriodFibonacciLFSR_3_io_out_13": 1,
+      "MaxPeriodFibonacciLFSR_3_io_out_14": 1,
+      "MaxPeriodFibonacciLFSR_3_io_out_15": 1,
+      "OverrideableQueue_io_out_valid": 1,
+      "OverrideableQueue_io_out_bits_pht_index": 5,
+      "OverrideableQueue_io_out_bits_pht_tag": 13,
+      "OverrideableQueue_io_out_bits_region_paddr": 40,
+      "OverrideableQueue_io_out_bits_region_vaddr": 40,
+      "OverrideableQueue_io_out_bits_region_offset": 4,
+      "OverrideableQueue_1_io_out_valid": 1,
+      "OverrideableQueue_1_io_out_bits_pht_index": 5,
+      "OverrideableQueue_1_io_out_bits_pht_tag": 13,
+      "OverrideableQueue_1_io_out_bits_region_bits": 16,
+      "OverrideableQueue_1_io_out_bits_region_bit_single": 16,
+      "OverrideableQueue_1_io_out_bits_region_offset": 4,
+      "OverrideableQueue_1_io_out_bits_access_cnt": 4,
+      "OverrideableQueue_1_io_out_bits_decr_mode": 1,
+      "OverrideableQueue_1_io_out_bits_single_update": 1,
+      "OverrideableQueue_1_io_out_bits_has_been_signal_updated": 1,
+      "TimeAsync_io_o_time_bits": 64,
+      "r4_qds_v2_io_quo_dig_o": 5,
+      "r4_qds_v2_spec_io_quo_dig_o": 5,
+      "skidBufferConnect_io_in_ready": 1,
+      "skidBufferConnect_io_out_valid": 1,
+      "skidBufferConnect_io_out_bits_flowMask": 16,
+      "skidBufferConnect_io_out_bits_data": 128,
+      "skidBufferConnect_io_out_bits_baseAddr": 64,
+      "skidBufferConnect_io_out_bits_uopAddr": 64,
+      "skidBufferConnect_io_out_bits_stride": 128,
+      "skidBufferConnect_io_out_bits_flowNum": 5,
+      "skidBufferConnect_io_out_bits_eew": 2,
+      "skidBufferConnect_io_out_bits_sew": 3,
+      "skidBufferConnect_io_out_bits_emul": 3,
+      "skidBufferConnect_io_out_bits_lmul": 3,
+      "skidBufferConnect_io_out_bits_instType": 3,
+      "skidBufferConnect_io_out_bits_indexedSplitOffset": 5,
+      "skidBufferConnect_io_out_bits_uop_exceptionVec_5": 1,
+      "skidBufferConnect_io_out_bits_uop_exceptionVec_13": 1,
+      "skidBufferConnect_io_out_bits_uop_exceptionVec_19": 1,
+      "skidBufferConnect_io_out_bits_uop_exceptionVec_21": 1,
+      "skidBufferConnect_io_out_bits_uop_trigger": 4,
+      "skidBufferConnect_io_out_bits_uop_preDecodeInfo_isRVC": 1,
+      "skidBufferConnect_io_out_bits_uop_ftqPtr_flag": 1,
+      "skidBufferConnect_io_out_bits_uop_ftqPtr_value": 6,
+      "skidBufferConnect_io_out_bits_uop_ftqOffset": 4,
+      "skidBufferConnect_io_out_bits_uop_fuOpType": 9,
+      "skidBufferConnect_io_out_bits_uop_rfWen": 1,
+      "skidBufferConnect_io_out_bits_uop_fpWen": 1,
+      "skidBufferConnect_io_out_bits_uop_vpu_vstart": 8,
+      "skidBufferConnect_io_out_bits_uop_vpu_vuopIdx": 7,
+      "skidBufferConnect_io_out_bits_uop_vpu_veew": 2,
+      "skidBufferConnect_io_out_bits_uop_uopIdx": 7,
+      "skidBufferConnect_io_out_bits_uop_pdest": 8,
+      "skidBufferConnect_io_out_bits_uop_robIdx_flag": 1,
+      "skidBufferConnect_io_out_bits_uop_robIdx_value": 8,
+      "skidBufferConnect_io_out_bits_uop_storeSetHit": 1,
+      "skidBufferConnect_io_out_bits_uop_waitForRobIdx_flag": 1,
+      "skidBufferConnect_io_out_bits_uop_waitForRobIdx_value": 8,
+      "skidBufferConnect_io_out_bits_uop_loadWaitBit": 1,
+      "skidBufferConnect_io_out_bits_uop_loadWaitStrict": 1,
+      "skidBufferConnect_io_out_bits_uop_lqIdx_flag": 1,
+      "skidBufferConnect_io_out_bits_uop_lqIdx_value": 7,
+      "skidBufferConnect_io_out_bits_uop_sqIdx_flag": 1,
+      "skidBufferConnect_io_out_bits_uop_sqIdx_value": 6,
+      "skidBufferConnect_io_out_bits_preIsSplit": 1,
+      "skidBufferConnect_io_out_bits_mBIndex": 4,
+      "skidBufferConnect_io_out_bits_alignedType": 3,
+      "skidBufferConnect_io_out_bits_indexVlMaxInVd": 8,
+      "skidBufferConnect_io_out_bits_usLowBitsAddr": 4,
+      "skidBufferConnect_io_out_bits_usAligned128": 1,
+      "skidBufferConnect_io_out_bits_usMask": 32,
+      "skidBufferConnect_io_out_bits_isVecPartReplay": 1,
+      "skidBufferConnect_io_out_bits_vecReplayFlowMask": 16
+    },
+    "aggregate_input_bits": 5457,
+    "aggregate_compared_output_bits": 2117,
+    "variants": {
+      "CSA3to2": {
+        "method": "sat_miter",
+        "sequential": false,
+        "locked_reference": "validation/reference-sv/CSA3to2.sv",
+        "locked_sha256": "0403b850f238fcc251172f155f864c445d5cf419ef16a8b388fa5cc5fa2e1f80",
+        "children": [],
+        "inputs": {
+          "io_in_a": 107,
+          "io_in_b": 107,
+          "io_in_c": 107
+        },
+        "outputs_compared": {
+          "io_out_sum": 107,
+          "io_out_car": 107
+        },
+        "input_bits": 321,
+        "output_bits": 214,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "verdict": "FAIL",
+        "success_marker": false,
+        "unconstrained_or_equiv_cells": true,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "sat_variables": 4488,
+        "sat_clauses": 11214
+      },
+      "CSA3to2_20": {
+        "method": "sat_miter",
+        "sequential": false,
+        "locked_reference": "validation/reference-sv/CSA3to2_20.sv",
+        "locked_sha256": "51bdfb8501e9af55ddc24d09d644056a2988dad6e7e302bdaef801a7c16ef27f",
+        "children": [],
+        "inputs": {
+          "io_in_a": 200,
+          "io_in_b": 200,
+          "io_in_c": 200
+        },
+        "outputs_compared": {
+          "io_out_sum": 200,
+          "io_out_car": 200
+        },
+        "input_bits": 600,
+        "output_bits": 400,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "verdict": "FAIL",
+        "success_marker": false,
+        "unconstrained_or_equiv_cells": true,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "sat_variables": 8394,
+        "sat_clauses": 20979
+      },
+      "CSA3to2_24": {
+        "method": "sat_miter",
+        "sequential": false,
+        "locked_reference": "validation/reference-sv/CSA3to2_24.sv",
+        "locked_sha256": "b9b54d819a8339a092da6a3124c6d8c3839968ccba49cfe8b0a76c13101e1f03",
+        "children": [],
+        "inputs": {
+          "io_in_a": 72,
+          "io_in_b": 72,
+          "io_in_c": 72
+        },
+        "outputs_compared": {
+          "io_out_sum": 72,
+          "io_out_car": 72
+        },
+        "input_bits": 216,
+        "output_bits": 144,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "verdict": "FAIL",
+        "success_marker": false,
+        "unconstrained_or_equiv_cells": true,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "sat_variables": 3018,
+        "sat_clauses": 7539
+      },
+      "CSA4to2": {
+        "method": "sat_miter",
+        "sequential": false,
+        "locked_reference": "validation/reference-sv/CSA4to2.sv",
+        "locked_sha256": "9d26b9bc16360d3cd6c37e476ddf45f6ae84ee22298424a43c928b55ab6480bc",
+        "children": [],
+        "inputs": {
+          "io_in_a": 107,
+          "io_in_b": 107,
+          "io_in_c": 107,
+          "io_in_d": 107
+        },
+        "outputs_compared": {
+          "io_out_sum": 107,
+          "io_out_car": 107
+        },
+        "input_bits": 428,
+        "output_bits": 214,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "verdict": "FAIL",
+        "success_marker": false,
+        "unconstrained_or_equiv_cells": true,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "sat_variables": 4929,
+        "sat_clauses": 12422
+      },
+      "CSA_Nto2With3to2MainPipeline": {
+        "method": "sequential_equivalence",
+        "sequential": true,
+        "locked_reference": "validation/reference-sv/CSA_Nto2With3to2MainPipeline.sv",
+        "locked_sha256": "5a482c6bf17c8ed8fd66be5127e93442351ae6d95047e134ffb365693e637297",
+        "children": [
+          "CSA3to2",
+          "CSA4to2"
+        ],
+        "inputs": {
+          "clock": 1,
+          "io_fire": 1,
+          "io_in_0": 107,
+          "io_in_1": 107,
+          "io_in_2": 107,
+          "io_in_3": 107,
+          "io_in_4": 107,
+          "io_in_5": 107,
+          "io_in_6": 107,
+          "io_in_7": 107,
+          "io_in_8": 107,
+          "io_in_9": 107,
+          "io_in_10": 107,
+          "io_in_11": 107,
+          "io_in_12": 107,
+          "io_in_13": 107,
+          "io_in_14": 107,
+          "io_in_15": 107,
+          "io_in_16": 107,
+          "io_in_17": 107,
+          "io_in_18": 107,
+          "io_in_19": 107,
+          "io_in_20": 107,
+          "io_in_21": 107,
+          "io_in_22": 107,
+          "io_in_23": 107,
+          "io_in_24": 107,
+          "io_in_25": 107,
+          "io_in_26": 107
+        },
+        "outputs_compared": {
+          "io_out_sum": 107,
+          "io_out_car": 107
+        },
+        "input_bits": 2891,
+        "output_bits": 214,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "verdict": "FAIL",
+        "success_marker": false,
+        "unconstrained_or_equiv_cells": null,
+        "proven_cells": null,
+        "unproven_cells": 212,
+        "sat_variables": null,
+        "sat_clauses": null
+      },
+      "ClockGate": {
+        "method": "sat_miter",
+        "sequential": false,
+        "locked_reference": "validation/reference-sv/ClockGate.sv",
+        "locked_sha256": "b4e6a1a11579276193dc18d2b56d24b04ba79879a32804456ce0116cbe878c97",
+        "children": [],
+        "inputs": {
+          "wire TE": 1,
+          "wire E": 1,
+          "wire CK": 1
+        },
+        "outputs_compared": {
+          "wire Q": 1
+        },
+        "input_bits": 3,
+        "output_bits": 1,
+        "abi_exact": false,
+        "deterministic": true,
+        "miter_selfcheck": false,
+        "view_trusted": true,
+        "verdict": "FAIL",
+        "success_marker": false,
+        "unconstrained_or_equiv_cells": false,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "sat_variables": null,
+        "sat_clauses": null
+      },
+      "DebugTransportModuleJTAG": {
+        "method": "sat_miter",
+        "sequential": false,
+        "locked_reference": "validation/reference-sv/DebugTransportModuleJTAG.sv",
+        "locked_sha256": "24368231db5960dea7c3665edd8940cd8b736f183980281480964287cbf5f6af",
+        "children": [
+          "CaptureChain",
+          "CaptureUpdateChain",
+          "CaptureUpdateChain_1",
+          "CaptureUpdateChain_2",
+          "JtagBypassChain",
+          "JtagStateMachine",
+          "JtagTapController"
+        ],
+        "inputs": {
+          "io_jtag_clock": 1,
+          "io_jtag_reset": 1,
+          "io_dmi_req_ready": 1,
+          "io_dmi_resp_valid": 1,
+          "io_dmi_resp_bits_data": 32,
+          "io_dmi_resp_bits_resp": 2,
+          "io_jtag_TMS": 1,
+          "io_jtag_TDI": 1,
+          "io_jtag_mfr_id": 11,
+          "io_jtag_part_number": 16,
+          "io_jtag_version": 4
+        },
+        "outputs_compared": {
+          "io_dmi_req_valid": 1,
+          "io_dmi_req_bits_addr": 7,
+          "io_dmi_req_bits_data": 32,
+          "io_dmi_req_bits_op": 2,
+          "io_dmi_resp_ready": 1,
+          "io_jtag_TDO_data": 1,
+          "io_jtag_TDO_driven": 1
+        },
+        "input_bits": 71,
+        "output_bits": 45,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": false,
+        "verdict": "FAIL",
+        "success_marker": false,
+        "unconstrained_or_equiv_cells": false,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "sat_variables": null,
+        "sat_clauses": null
+      },
+      "IDPool": {
+        "method": "sequential_equivalence",
+        "sequential": true,
+        "locked_reference": "validation/reference-sv/IDPool.sv",
+        "locked_sha256": "932ef6cece52106559484248607fcd6e7da94af45569cc1a9bc8f4bc8622105e",
+        "children": [],
+        "inputs": {
+          "clock": 1,
+          "reset": 1,
+          "io_free_valid": 1,
+          "io_free_bits": 3,
+          "io_alloc_ready": 1
+        },
+        "outputs_compared": {
+          "io_alloc_valid": 1,
+          "io_alloc_bits": 3
+        },
+        "input_bits": 7,
+        "output_bits": 4,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "verdict": "FAIL",
+        "success_marker": false,
+        "unconstrained_or_equiv_cells": null,
+        "proven_cells": null,
+        "unproven_cells": 4,
+        "sat_variables": null,
+        "sat_clauses": null
+      },
+      "JtagStateMachine": {
+        "method": "sequential_equivalence",
+        "sequential": true,
+        "locked_reference": "validation/reference-sv/JtagStateMachine.sv",
+        "locked_sha256": "1fb2105468abbc5c3b85cf7ce9c1bc1e089228e207d2df41a422dc71578ced75",
+        "children": [],
+        "inputs": {
+          "clock": 1,
+          "reset": 1,
+          "io_tms": 1
+        },
+        "outputs_compared": {
+          "io_currState": 4
+        },
+        "input_bits": 3,
+        "output_bits": 4,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": false,
+        "verdict": "FAIL",
+        "success_marker": false,
+        "unconstrained_or_equiv_cells": null,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "sat_variables": null,
+        "sat_clauses": null
+      },
+      "JtagTapController": {
+        "method": "sequential_equivalence",
+        "sequential": true,
+        "locked_reference": "validation/reference-sv/JtagTapController.sv",
+        "locked_sha256": "df28c071f313abd014e482d3f553a2313512e0ddf35742d1350d8caff7160c78",
+        "children": [
+          "CaptureUpdateChain_2",
+          "JtagStateMachine"
+        ],
+        "inputs": {
+          "clock": 1,
+          "reset": 1,
+          "io_jtag_TMS": 1,
+          "io_jtag_TDI": 1,
+          "io_control_jtag_reset": 1,
+          "io_dataChainIn_data": 1
+        },
+        "outputs_compared": {
+          "io_jtag_TDO_data": 1,
+          "io_jtag_TDO_driven": 1,
+          "io_output_instruction": 5,
+          "io_output_tapIsInTestLogicReset": 1,
+          "io_dataChainOut_shift": 1,
+          "io_dataChainOut_data": 1,
+          "io_dataChainOut_capture": 1,
+          "io_dataChainOut_update": 1
+        },
+        "input_bits": 6,
+        "output_bits": 12,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": false,
+        "verdict": "FAIL",
+        "success_marker": false,
+        "unconstrained_or_equiv_cells": null,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "sat_variables": null,
+        "sat_clauses": null
+      },
+      "MaxPeriodFibonacciLFSR": {
+        "method": "sequential_equivalence",
+        "sequential": true,
+        "locked_reference": "validation/reference-sv/MaxPeriodFibonacciLFSR.sv",
+        "locked_sha256": "d58524fd5c070f083f13a70acb0feced2dcbd7d536106673226d26be811665c2",
+        "children": [],
+        "inputs": {
+          "clock": 1,
+          "reset": 1
+        },
+        "outputs_compared": {
+          "io_out_0": 1,
+          "io_out_1": 1,
+          "io_out_2": 1,
+          "io_out_3": 1,
+          "io_out_4": 1,
+          "io_out_5": 1,
+          "io_out_6": 1,
+          "io_out_7": 1,
+          "io_out_8": 1,
+          "io_out_9": 1,
+          "io_out_10": 1,
+          "io_out_11": 1,
+          "io_out_12": 1,
+          "io_out_13": 1,
+          "io_out_14": 1
+        },
+        "input_bits": 2,
+        "output_bits": 15,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "verdict": "FAIL",
+        "success_marker": false,
+        "unconstrained_or_equiv_cells": null,
+        "proven_cells": null,
+        "unproven_cells": 1,
+        "sat_variables": null,
+        "sat_clauses": null
+      },
+      "MaxPeriodFibonacciLFSR_3": {
+        "method": "sequential_equivalence",
+        "sequential": true,
+        "locked_reference": "validation/reference-sv/MaxPeriodFibonacciLFSR_3.sv",
+        "locked_sha256": "60d32f0979e7f528f9ccdaddb87ffc8c2e703c7a98b397914cfd87e46ec9f93d",
+        "children": [],
+        "inputs": {
+          "clock": 1,
+          "reset": 1,
+          "io_increment": 1
+        },
+        "outputs_compared": {
+          "io_out_0": 1,
+          "io_out_1": 1,
+          "io_out_2": 1,
+          "io_out_3": 1,
+          "io_out_4": 1,
+          "io_out_5": 1,
+          "io_out_6": 1,
+          "io_out_7": 1,
+          "io_out_8": 1,
+          "io_out_9": 1,
+          "io_out_10": 1,
+          "io_out_11": 1,
+          "io_out_12": 1,
+          "io_out_13": 1,
+          "io_out_14": 1,
+          "io_out_15": 1
+        },
+        "input_bits": 3,
+        "output_bits": 16,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "verdict": "FAIL",
+        "success_marker": false,
+        "unconstrained_or_equiv_cells": null,
+        "proven_cells": null,
+        "unproven_cells": 1,
+        "sat_variables": null,
+        "sat_clauses": null
+      },
+      "OverrideableQueue": {
+        "method": "sequential_equivalence",
+        "sequential": true,
+        "locked_reference": "validation/reference-sv/OverrideableQueue.sv",
+        "locked_sha256": "713d955b7ae96eba1382dab7a22e129d5f6a6a30a745678ac6d877bb559dc543",
+        "children": [],
+        "inputs": {
+          "clock": 1,
+          "reset": 1,
+          "io_in_valid": 1,
+          "io_in_bits_pht_index": 5,
+          "io_in_bits_pht_tag": 13,
+          "io_in_bits_region_paddr": 40,
+          "io_in_bits_region_vaddr": 40,
+          "io_in_bits_region_offset": 4,
+          "io_out_ready": 1
+        },
+        "outputs_compared": {
+          "io_out_valid": 1,
+          "io_out_bits_pht_index": 5,
+          "io_out_bits_pht_tag": 13,
+          "io_out_bits_region_paddr": 40,
+          "io_out_bits_region_vaddr": 40,
+          "io_out_bits_region_offset": 4
+        },
+        "input_bits": 106,
+        "output_bits": 103,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "verdict": "FAIL",
+        "success_marker": false,
+        "unconstrained_or_equiv_cells": null,
+        "proven_cells": null,
+        "unproven_cells": 103,
+        "sat_variables": null,
+        "sat_clauses": null
+      },
+      "OverrideableQueue_1": {
+        "method": "sequential_equivalence",
+        "sequential": true,
+        "locked_reference": "validation/reference-sv/OverrideableQueue_1.sv",
+        "locked_sha256": "b12144af83d3a028eb23b122da535f54695a8b0a3351b8e6428dfe004bdd72bd",
+        "children": [],
+        "inputs": {
+          "clock": 1,
+          "reset": 1,
+          "io_in_valid": 1,
+          "io_in_bits_pht_index": 5,
+          "io_in_bits_pht_tag": 13,
+          "io_in_bits_region_bits": 16,
+          "io_in_bits_region_bit_single": 16,
+          "io_in_bits_region_offset": 4,
+          "io_in_bits_access_cnt": 4,
+          "io_in_bits_decr_mode": 1,
+          "io_in_bits_single_update": 1,
+          "io_in_bits_has_been_signal_updated": 1,
+          "io_out_ready": 1
+        },
+        "outputs_compared": {
+          "io_out_valid": 1,
+          "io_out_bits_pht_index": 5,
+          "io_out_bits_pht_tag": 13,
+          "io_out_bits_region_bits": 16,
+          "io_out_bits_region_bit_single": 16,
+          "io_out_bits_region_offset": 4,
+          "io_out_bits_access_cnt": 4,
+          "io_out_bits_decr_mode": 1,
+          "io_out_bits_single_update": 1,
+          "io_out_bits_has_been_signal_updated": 1
+        },
+        "input_bits": 65,
+        "output_bits": 62,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "verdict": "FAIL",
+        "success_marker": false,
+        "unconstrained_or_equiv_cells": null,
+        "proven_cells": null,
+        "unproven_cells": 62,
+        "sat_variables": null,
+        "sat_clauses": null
+      },
+      "PrintCommitIDModule": {
+        "method": "sat_miter",
+        "sequential": false,
+        "locked_reference": "validation/reference-sv/PrintCommitIDModule.sv",
+        "locked_sha256": "d0e8803b425fb09bb5918cc34d33fad744dcc576cafc4bea1a4cfafbd61c89d4",
+        "children": [],
+        "inputs": {
+          "hartID": 6,
+          "commitID": 40,
+          "dirty": 1
+        },
+        "outputs_compared": {},
+        "input_bits": 47,
+        "output_bits": 0,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": false,
+        "view_trusted": true,
+        "verdict": "FAIL",
+        "success_marker": false,
+        "unconstrained_or_equiv_cells": false,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "sat_variables": null,
+        "sat_clauses": null
+      },
+      "TimeAsync": {
+        "method": "sequential_equivalence",
+        "sequential": true,
+        "locked_reference": "validation/reference-sv/TimeAsync.sv",
+        "locked_sha256": "8994f73b7e4f36dc651da443814a92f8e8d5b1e3babbd50fbc029faa0638dc72",
+        "children": [
+          "AsyncResetSynchronizerPrimitiveShiftReg_d3_i0",
+          "AsyncResetSynchronizerShiftReg_w1_d3_i0"
+        ],
+        "inputs": {
+          "clock": 1,
+          "reset": 1,
+          "io_i_time_valid": 1,
+          "io_i_time_bits": 64
+        },
+        "outputs_compared": {
+          "io_o_time_bits": 64
+        },
+        "input_bits": 67,
+        "output_bits": 64,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "verdict": "FAIL",
+        "success_marker": false,
+        "unconstrained_or_equiv_cells": null,
+        "proven_cells": null,
+        "unproven_cells": 64,
+        "sat_variables": null,
+        "sat_clauses": null
+      },
+      "r4_qds_v2": {
+        "method": "sat_miter",
+        "sequential": false,
+        "locked_reference": "validation/reference-sv/r4_qds_v2.sv",
+        "locked_sha256": "4fd47c17c922fbb87ebd2b4589364c59e631e877a75a67680aeba81afa234c67",
+        "children": [],
+        "inputs": {
+          "io_rem_i": 6
+        },
+        "outputs_compared": {
+          "io_quo_dig_o": 5
+        },
+        "input_bits": 6,
+        "output_bits": 5,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "verdict": "FAIL",
+        "success_marker": false,
+        "unconstrained_or_equiv_cells": true,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "sat_variables": 249,
+        "sat_clauses": 670
+      },
+      "r4_qds_v2_spec": {
+        "method": "sat_miter",
+        "sequential": false,
+        "locked_reference": "validation/reference-sv/r4_qds_v2_spec.sv",
+        "locked_sha256": "0cc72dc27723b224b95036dbdfddd806ae656b360f2e3c96d498477a3f0f7b68",
+        "children": [],
+        "inputs": {
+          "io_rem_i": 7,
+          "io_divisor_mul_pos_2_i": 7,
+          "io_divisor_mul_pos_1_i": 7,
+          "io_divisor_mul_neg_1_i": 7,
+          "io_divisor_mul_neg_2_i": 7,
+          "io_prev_quo_dig_i": 5
+        },
+        "outputs_compared": {
+          "io_quo_dig_o": 5
+        },
+        "input_bits": 40,
+        "output_bits": 5,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "verdict": "FAIL",
+        "success_marker": false,
+        "unconstrained_or_equiv_cells": true,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "sat_variables": 1751,
+        "sat_clauses": 4714
+      },
+      "skidBufferConnect": {
+        "method": "sequential_equivalence",
+        "sequential": true,
+        "locked_reference": "validation/reference-sv/skidBufferConnect.sv",
+        "locked_sha256": "780e7888dd17f633ca41872ad2c39fa6a9edbded608413e58dca0c2f8b571d6c",
+        "children": [],
+        "inputs": {
+          "clock": 1,
+          "reset": 1,
+          "io_in_valid": 1,
+          "io_in_bits_flowMask": 16,
+          "io_in_bits_data": 128,
+          "io_in_bits_baseAddr": 64,
+          "io_in_bits_uopAddr": 64,
+          "io_in_bits_stride": 128,
+          "io_in_bits_flowNum": 5,
+          "io_in_bits_eew": 2,
+          "io_in_bits_sew": 3,
+          "io_in_bits_emul": 3,
+          "io_in_bits_lmul": 3,
+          "io_in_bits_instType": 3,
+          "io_in_bits_indexedSplitOffset": 5,
+          "io_in_bits_uop_ftqPtr_flag": 1,
+          "io_in_bits_uop_ftqPtr_value": 6,
+          "io_in_bits_uop_ftqOffset": 4,
+          "io_in_bits_uop_fuOpType": 9,
+          "io_in_bits_uop_vpu_vstart": 8,
+          "io_in_bits_uop_vpu_vuopIdx": 7,
+          "io_in_bits_uop_vpu_veew": 2,
+          "io_in_bits_uop_uopIdx": 7,
+          "io_in_bits_uop_pdest": 8,
+          "io_in_bits_uop_robIdx_flag": 1,
+          "io_in_bits_uop_robIdx_value": 8,
+          "io_in_bits_uop_lqIdx_flag": 1,
+          "io_in_bits_uop_lqIdx_value": 7,
+          "io_in_bits_uop_sqIdx_flag": 1,
+          "io_in_bits_uop_sqIdx_value": 6,
+          "io_in_bits_preIsSplit": 1,
+          "io_in_bits_mBIndex": 4,
+          "io_in_bits_alignedType": 3,
+          "io_in_bits_indexVlMaxInVd": 8,
+          "io_in_bits_usLowBitsAddr": 4,
+          "io_in_bits_usAligned128": 1,
+          "io_in_bits_usMask": 32,
+          "io_in_bits_isVecPartReplay": 1,
+          "io_in_bits_vecReplayFlowMask": 16,
+          "io_flush": 1,
+          "io_out_ready": 1
+        },
+        "outputs_compared": {
+          "io_in_ready": 1,
+          "io_out_valid": 1,
+          "io_out_bits_flowMask": 16,
+          "io_out_bits_data": 128,
+          "io_out_bits_baseAddr": 64,
+          "io_out_bits_uopAddr": 64,
+          "io_out_bits_stride": 128,
+          "io_out_bits_flowNum": 5,
+          "io_out_bits_eew": 2,
+          "io_out_bits_sew": 3,
+          "io_out_bits_emul": 3,
+          "io_out_bits_lmul": 3,
+          "io_out_bits_instType": 3,
+          "io_out_bits_indexedSplitOffset": 5,
+          "io_out_bits_uop_exceptionVec_5": 1,
+          "io_out_bits_uop_exceptionVec_13": 1,
+          "io_out_bits_uop_exceptionVec_19": 1,
+          "io_out_bits_uop_exceptionVec_21": 1,
+          "io_out_bits_uop_trigger": 4,
+          "io_out_bits_uop_preDecodeInfo_isRVC": 1,
+          "io_out_bits_uop_ftqPtr_flag": 1,
+          "io_out_bits_uop_ftqPtr_value": 6,
+          "io_out_bits_uop_ftqOffset": 4,
+          "io_out_bits_uop_fuOpType": 9,
+          "io_out_bits_uop_rfWen": 1,
+          "io_out_bits_uop_fpWen": 1,
+          "io_out_bits_uop_vpu_vstart": 8,
+          "io_out_bits_uop_vpu_vuopIdx": 7,
+          "io_out_bits_uop_vpu_veew": 2,
+          "io_out_bits_uop_uopIdx": 7,
+          "io_out_bits_uop_pdest": 8,
+          "io_out_bits_uop_robIdx_flag": 1,
+          "io_out_bits_uop_robIdx_value": 8,
+          "io_out_bits_uop_storeSetHit": 1,
+          "io_out_bits_uop_waitForRobIdx_flag": 1,
+          "io_out_bits_uop_waitForRobIdx_value": 8,
+          "io_out_bits_uop_loadWaitBit": 1,
+          "io_out_bits_uop_loadWaitStrict": 1,
+          "io_out_bits_uop_lqIdx_flag": 1,
+          "io_out_bits_uop_lqIdx_value": 7,
+          "io_out_bits_uop_sqIdx_flag": 1,
+          "io_out_bits_uop_sqIdx_value": 6,
+          "io_out_bits_preIsSplit": 1,
+          "io_out_bits_mBIndex": 4,
+          "io_out_bits_alignedType": 3,
+          "io_out_bits_indexVlMaxInVd": 8,
+          "io_out_bits_usLowBitsAddr": 4,
+          "io_out_bits_usAligned128": 1,
+          "io_out_bits_usMask": 32,
+          "io_out_bits_isVecPartReplay": 1,
+          "io_out_bits_vecReplayFlowMask": 16
+        },
+        "input_bits": 575,
+        "output_bits": 595,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "verdict": "FAIL",
+        "success_marker": false,
+        "unconstrained_or_equiv_cells": null,
+        "proven_cells": null,
+        "unproven_cells": 583,
+        "sat_variables": null,
+        "sat_clauses": null
+      }
+    },
+    "why_complete": "Every locked module named by this Build's own tables is proven against its exact-name locked reference on the rail its timing requires, with a conservation-audited 5C view where the installed Yosys cannot read the original.",
+    "bounded_tests_counted": false
+  },
+  "reference_lock": {
+    "directory": "validation/reference-sv",
+    "xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "locked_references_written": false,
+    "sha256_by_module": {
+      "CSA3to2": "0403b850f238fcc251172f155f864c445d5cf419ef16a8b388fa5cc5fa2e1f80",
+      "CSA3to2_20": "51bdfb8501e9af55ddc24d09d644056a2988dad6e7e302bdaef801a7c16ef27f",
+      "CSA3to2_24": "b9b54d819a8339a092da6a3124c6d8c3839968ccba49cfe8b0a76c13101e1f03",
+      "CSA4to2": "9d26b9bc16360d3cd6c37e476ddf45f6ae84ee22298424a43c928b55ab6480bc",
+      "CSA_Nto2With3to2MainPipeline": "5a482c6bf17c8ed8fd66be5127e93442351ae6d95047e134ffb365693e637297",
+      "ClockGate": "b4e6a1a11579276193dc18d2b56d24b04ba79879a32804456ce0116cbe878c97",
+      "DebugTransportModuleJTAG": "24368231db5960dea7c3665edd8940cd8b736f183980281480964287cbf5f6af",
+      "IDPool": "932ef6cece52106559484248607fcd6e7da94af45569cc1a9bc8f4bc8622105e",
+      "JtagStateMachine": "1fb2105468abbc5c3b85cf7ce9c1bc1e089228e207d2df41a422dc71578ced75",
+      "JtagTapController": "df28c071f313abd014e482d3f553a2313512e0ddf35742d1350d8caff7160c78",
+      "MaxPeriodFibonacciLFSR": "d58524fd5c070f083f13a70acb0feced2dcbd7d536106673226d26be811665c2",
+      "MaxPeriodFibonacciLFSR_3": "60d32f0979e7f528f9ccdaddb87ffc8c2e703c7a98b397914cfd87e46ec9f93d",
+      "OverrideableQueue": "713d955b7ae96eba1382dab7a22e129d5f6a6a30a745678ac6d877bb559dc543",
+      "OverrideableQueue_1": "b12144af83d3a028eb23b122da535f54695a8b0a3351b8e6428dfe004bdd72bd",
+      "PrintCommitIDModule": "d0e8803b425fb09bb5918cc34d33fad744dcc576cafc4bea1a4cfafbd61c89d4",
+      "TimeAsync": "8994f73b7e4f36dc651da443814a92f8e8d5b1e3babbd50fbc029faa0638dc72",
+      "r4_qds_v2": "4fd47c17c922fbb87ebd2b4589364c59e631e877a75a67680aeba81afa234c67",
+      "r4_qds_v2_spec": "0cc72dc27723b224b95036dbdfddd806ae656b360f2e3c96d498477a3f0f7b68",
+      "skidBufferConnect": "780e7888dd17f633ca41872ad2c39fa6a9edbded608413e58dca0c2f8b571d6c"
+    }
+  },
+  "sources": {
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Utility.ResidualFamily-Hardware.py",
+      "sha256": "c49dde2347bbd684f188e6b629c6c745fd0249d18134748e3219068ac5744857",
+      "bytes": 15845
+    },
+    "reference_sv": {
+      "path": "validation/reference-sv/CSA3to2.sv",
+      "sha256": "0403b850f238fcc251172f155f864c445d5cf419ef16a8b388fa5cc5fa2e1f80",
+      "bytes": 1867
+    }
+  },
+  "checks": {
+    "py_compile": {
+      "status": "PASS"
+    },
+    "pyright": {
+      "build": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_72ylt9bh\\Build-Cpu.Dependency.Utility.ResidualFamily-Hardware.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "error_count": 0,
+        "files_analyzed": 1,
+        "stderr_tail": ""
+      },
+      "rail": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_4zxq1x8e\\v2_strict_family_rail.py"
+        ],
+        "returncode": 1,
+        "status": "FAIL",
+        "version": "1.1.411",
+        "error_count": 3,
+        "files_analyzed": 1,
+        "stderr_tail": ""
+      }
+    },
+    "catalog_coverage": {
+      "entries": 19,
+      "proven": 0
+    },
+    "formal": {
+      "yosys_formal_miter": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_CSA3to2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_CSA3to2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/CSA3to2_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_CSA3to2_20.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_CSA3to2_20.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/CSA3to2_20_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_CSA3to2_24.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_CSA3to2_24.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/CSA3to2_24_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_CSA4to2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_CSA4to2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/CSA4to2_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_ClockGate.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_ClockGate.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/ClockGate_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_DebugTransportModuleJTAG.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_DebugTransportModuleJTAG.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DebugTransportModuleJTAG_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_PrintCommitIDModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_PrintCommitIDModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/PrintCommitIDModule_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_r4_qds_v2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_r4_qds_v2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/r4_qds_v2_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_r4_qds_v2_spec.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_r4_qds_v2_spec.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/r4_qds_v2_spec_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/ResidualFamily_AGG.sv; prep -top ResidualFamily_AGG; flatten; opt; sat -prove mismatch 0"
+        ],
+        "returncode": 1,
+        "status": "FAIL",
+        "output_tail": "e `\\CSA3to2_24_MITER'.\nSuccessfully finished Verilog frontend.\n\n10. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_CSA4to2.sv\nParsing SystemVerilog input from `/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_CSA4to2.sv' to AST representation.\nGenerating RTLIL representation for module `\\DUT_CSA4to2'.\nSuccessfully finished Verilog frontend.\n\n11. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_CSA4to2.sv\nParsing SystemVerilog input from `/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_CSA4to2.sv' to AST representation.\nGenerating RTLIL representation for module `\\REF_CSA4to2'.\nSuccessfully finished Verilog frontend.\n\n12. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/CSA4to2_MITER.sv\nParsing SystemVerilog input from `/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/CSA4to2_MITER.sv' to AST representation.\nGenerating RTLIL representation for module `\\CSA4to2_MITER'.\nSuccessfully finished Verilog frontend.\n\n13. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_ClockGate.sv\nParsing SystemVerilog input from `/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_ClockGate.sv' to AST representation.\nGenerating RTLIL representation for module `\\DUT_ClockGate'.\nSuccessfully finished Verilog frontend.\n\n14. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_ClockGate.sv\nParsing SystemVerilog input from `/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_ClockGate.sv' to AST representation.\nGenerating RTLIL representation for module `\\REF_ClockGate'.\nSuccessfully finished Verilog frontend.\n\n15. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/ClockGate_MITER.sv\n/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/ClockGate_MITER.sv:7: ERROR: syntax error, unexpected TOK_ID, expecting ',' or '=' or ';' or '['\n",
+        "output_sha256": "181f3a52b788cf0037ae5c884522554d62fffd52a52772ab08bf316823a4487d",
+        "formal_success_marker": false,
+        "unconstrained": false,
+        "mitered_variants": 9
+      }
+    },
+    "aggregate_sat_miter": {
+      "command": [
+        "yosys",
+        "-Q",
+        "-p",
+        "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_CSA3to2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_CSA3to2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/CSA3to2_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_CSA3to2_20.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_CSA3to2_20.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/CSA3to2_20_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_CSA3to2_24.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_CSA3to2_24.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/CSA3to2_24_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_CSA4to2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_CSA4to2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/CSA4to2_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_ClockGate.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_ClockGate.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/ClockGate_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_DebugTransportModuleJTAG.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_DebugTransportModuleJTAG.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DebugTransportModuleJTAG_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_PrintCommitIDModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_PrintCommitIDModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/PrintCommitIDModule_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_r4_qds_v2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_r4_qds_v2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/r4_qds_v2_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_r4_qds_v2_spec.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_r4_qds_v2_spec.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/r4_qds_v2_spec_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/ResidualFamily_AGG.sv; prep -top ResidualFamily_AGG; flatten; opt; sat -prove mismatch 0"
+      ],
+      "returncode": 1,
+      "status": "FAIL",
+      "output_tail": "e `\\CSA3to2_24_MITER'.\nSuccessfully finished Verilog frontend.\n\n10. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_CSA4to2.sv\nParsing SystemVerilog input from `/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_CSA4to2.sv' to AST representation.\nGenerating RTLIL representation for module `\\DUT_CSA4to2'.\nSuccessfully finished Verilog frontend.\n\n11. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_CSA4to2.sv\nParsing SystemVerilog input from `/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_CSA4to2.sv' to AST representation.\nGenerating RTLIL representation for module `\\REF_CSA4to2'.\nSuccessfully finished Verilog frontend.\n\n12. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/CSA4to2_MITER.sv\nParsing SystemVerilog input from `/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/CSA4to2_MITER.sv' to AST representation.\nGenerating RTLIL representation for module `\\CSA4to2_MITER'.\nSuccessfully finished Verilog frontend.\n\n13. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_ClockGate.sv\nParsing SystemVerilog input from `/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_ClockGate.sv' to AST representation.\nGenerating RTLIL representation for module `\\DUT_ClockGate'.\nSuccessfully finished Verilog frontend.\n\n14. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_ClockGate.sv\nParsing SystemVerilog input from `/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_ClockGate.sv' to AST representation.\nGenerating RTLIL representation for module `\\REF_ClockGate'.\nSuccessfully finished Verilog frontend.\n\n15. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/ClockGate_MITER.sv\n/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/ClockGate_MITER.sv:7: ERROR: syntax error, unexpected TOK_ID, expecting ',' or '=' or ';' or '['\n",
+      "output_sha256": "181f3a52b788cf0037ae5c884522554d62fffd52a52772ab08bf316823a4487d",
+      "formal_success_marker": false,
+      "unconstrained": false,
+      "mitered_variants": 9
+    },
+    "negative_control": {
+      "status": "PASS",
+      "cases": {
+        "sat.target": {
+          "status": "PASS",
+          "control_entry": "CSA3to2",
+          "control_port": "io_out_car"
+        },
+        "sat.reference": {
+          "status": "PASS",
+          "control_entry": "CSA3to2",
+          "control_port": "io_out_car"
+        },
+        "sequential.target": {
+          "status": "PASS",
+          "control_entry": "CSA_Nto2With3to2MainPipeline",
+          "control_port": "io_out_car"
+        },
+        "sequential.reference": {
+          "status": "PASS",
+          "control_entry": "CSA_Nto2With3to2MainPipeline",
+          "control_port": "io_out_car"
+        }
+      },
+      "note": "a reference-side mutation that still proves means the reference never reaches the comparison"
+    },
+    "variants": [
+      {
+        "method": "sat_miter",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "CSA3to2_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_CSA3to2.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_CSA3to2.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/CSA3to2_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.041 MB sources in 4 modules, into 0.018 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.081 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.011 s on 1 threads; alloced 9.195 MB\n",
+          "output_sha256": "cc2ea490ae4cb7e8ae4d568aea237f62a837f426c1e795b24afa6eb253df1642"
+        },
+        "sat_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_CSA3to2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_CSA3to2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/CSA3to2_MITER.sv; prep -top CSA3to2_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "FAIL",
+          "output_tail": "multiplexer ports.\n\n6.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\CSA3to2_MITER.\nPerformed a total of 0 changes.\n\n6.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\CSA3to2_MITER'.\nRemoved a total of 0 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\CSA3to2_MITER..\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module CSA3to2_MITER.\n\n6.9. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 12 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 4488 variables and 11214 clauses..\nSAT proof finished - model found: FAIL!\n\n   ______                   ___       ___       _ _            _ _ \n  (_____ \\                 / __)     / __)     (_) |          | | |\n   _____) )___ ___   ___ _| |__    _| |__ _____ _| | _____  __| | |\n  |  ____/ ___) _ \\ / _ (_   __)  (_   __|____ | | || ___ |/ _  |_|\n  | |   | |  | |_| | |_| || |       | |  / ___ | | || ____( (_| |_ \n  |_|   |_|   \\___/ \\___/ |_|       |_|  \\_____|_|\\_)_____)\\____|_|\n\n\n  Signal Name             Dec       Hex                                                                                                            Bin\n  --------------- ----------- --------- --------------------------------------------------------------------------------------------------------------\n  \\io_in_a                 --        --    00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\n  \\io_in_b                 --        --    00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\n  \\io_in_c                 --        --    00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001\n  \\mismatch                 1         1                                                                                                              1\n\nEnd of script. Logfile hash: 1bd34f4c1d, CPU: user 0.07s system 0.01s, MEM: 17.66 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 35% 1x sat (0 sec), 18% 5x opt_clean (0 sec), ...\n",
+          "output_sha256": "af20cf28de01d94940f75157f4dd1a4dbe06927e8b7fec1a3cdd1d622d4406ad",
+          "formal_success_marker": false,
+          "unconstrained": true,
+          "sat_variables": 4488,
+          "sat_clauses": 11214
+        }
+      },
+      {
+        "method": "sat_miter",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "CSA3to2_20_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_CSA3to2_20.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_CSA3to2_20.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/CSA3to2_20_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.042 MB sources in 4 modules, into 0.018 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.063 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.011 s on 1 threads; alloced 9.199 MB\n",
+          "output_sha256": "5e0cb1b953d1f3bcfadcde133055348486716f0d3070ad0d624c9ac6b9d73333"
+        },
+        "sat_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_CSA3to2_20.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_CSA3to2_20.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/CSA3to2_20_MITER.sv; prep -top CSA3to2_20_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "FAIL",
+          "output_tail": "A3to2_20_MITER.\n\n6.9. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 12 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 8394 variables and 20979 clauses..\nSAT proof finished - model found: FAIL!\n\n   ______                   ___       ___       _ _            _ _ \n  (_____ \\                 / __)     / __)     (_) |          | | |\n   _____) )___ ___   ___ _| |__    _| |__ _____ _| | _____  __| | |\n  |  ____/ ___) _ \\ / _ (_   __)  (_   __|____ | | || ___ |/ _  |_|\n  | |   | |  | |_| | |_| || |       | |  / ___ | | || ____( (_| |_ \n  |_|   |_|   \\___/ \\___/ |_|       |_|  \\_____|_|\\_)_____)\\____|_|\n\n\n  Signal Name             Dec       Hex                                                                                                                                                                                                         Bin\n  --------------- ----------- --------- -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n  \\io_in_a                 --        --    00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\n  \\io_in_b                 --        --    00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\n  \\io_in_c                 --        --    00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001\n  \\mismatch                 1         1                                                                                                                                                                                                           1\n\nEnd of script. Logfile hash: 7dc51411b1, CPU: user 0.11s system 0.02s, MEM: 21.53 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 46% 1x sat (0 sec), 17% 5x opt_clean (0 sec), ...\n",
+          "output_sha256": "fbf6ed6bff60100f48bb229e177e1a07a3e5497725e8252dffe4685ea3612e22",
+          "formal_success_marker": false,
+          "unconstrained": true,
+          "sat_variables": 8394,
+          "sat_clauses": 20979
+        }
+      },
+      {
+        "method": "sat_miter",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "CSA3to2_24_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_CSA3to2_24.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_CSA3to2_24.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/CSA3to2_24_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.041 MB sources in 4 modules, into 0.018 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.076 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.015 s on 1 threads; alloced 9.195 MB\n",
+          "output_sha256": "359a61ff8d9d649faa72f7fe8856661b5b6803ba9c219166f24bf599c1a64f41"
+        },
+        "sat_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_CSA3to2_24.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_CSA3to2_24.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/CSA3to2_24_MITER.sv; prep -top CSA3to2_24_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "FAIL",
+          "output_tail": "_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\CSA3to2_24_MITER..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n6.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\CSA3to2_24_MITER.\nPerformed a total of 0 changes.\n\n6.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\CSA3to2_24_MITER'.\nRemoved a total of 0 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\CSA3to2_24_MITER..\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module CSA3to2_24_MITER.\n\n6.9. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 12 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 3018 variables and 7539 clauses..\nSAT proof finished - model found: FAIL!\n\n   ______                   ___       ___       _ _            _ _ \n  (_____ \\                 / __)     / __)     (_) |          | | |\n   _____) )___ ___   ___ _| |__    _| |__ _____ _| | _____  __| | |\n  |  ____/ ___) _ \\ / _ (_   __)  (_   __|____ | | || ___ |/ _  |_|\n  | |   | |  | |_| | |_| || |       | |  / ___ | | || ____( (_| |_ \n  |_|   |_|   \\___/ \\___/ |_|       |_|  \\_____|_|\\_)_____)\\____|_|\n\n\n  Signal Name             Dec       Hex                                                                         Bin\n  --------------- ----------- --------- ---------------------------------------------------------------------------\n  \\io_in_a                 --        --    000000000000000000000000000000000000000000000000000000000000000000000000\n  \\io_in_b                 --        --    000000000000000000000000000000000000000000000000000000000000000000000000\n  \\io_in_c                 --        --    000000000000000000000000000000000000000000000000000000000000000000000001\n  \\mismatch                 1         1                                                                           1\n\nEnd of script. Logfile hash: 3b266f2301, CPU: user 0.09s system 0.02s, MEM: 15.78 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 32% 1x sat (0 sec), 18% 5x opt_clean (0 sec), ...\n",
+          "output_sha256": "873bffbc6174474bf0fc61d9f1ea21acd31742d2c5c51a21eb927bc8ceceb7d2",
+          "formal_success_marker": false,
+          "unconstrained": true,
+          "sat_variables": 3018,
+          "sat_clauses": 7539
+        }
+      },
+      {
+        "method": "sat_miter",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "CSA4to2_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_CSA4to2.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_CSA4to2.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/CSA4to2_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.087 MB sources in 4 modules, into 0.228 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.130 s (elab=0.010, cvt=0.043, bld=0.000); cpu 0.072 s on 1 threads; alloced 13.145 MB\n",
+          "output_sha256": "f0000bc1bc0e3551ea0eca872728e1954002aa47c30787d7232272022a4ebbe6"
+        },
+        "sat_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_CSA4to2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_CSA4to2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/CSA4to2_MITER.sv; prep -top CSA4to2_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "FAIL",
+          "output_tail": "f 0 changes.\n\n6.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\CSA4to2_MITER'.\nRemoved a total of 0 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\CSA4to2_MITER..\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module CSA4to2_MITER.\n\n6.9. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 646 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 4929 variables and 12422 clauses..\nSAT proof finished - model found: FAIL!\n\n   ______                   ___       ___       _ _            _ _ \n  (_____ \\                 / __)     / __)     (_) |          | | |\n   _____) )___ ___   ___ _| |__    _| |__ _____ _| | _____  __| | |\n  |  ____/ ___) _ \\ / _ (_   __)  (_   __|____ | | || ___ |/ _  |_|\n  | |   | |  | |_| | |_| || |       | |  / ___ | | || ____( (_| |_ \n  |_|   |_|   \\___/ \\___/ |_|       |_|  \\_____|_|\\_)_____)\\____|_|\n\n\n  Signal Name             Dec       Hex                                                                                                            Bin\n  --------------- ----------- --------- --------------------------------------------------------------------------------------------------------------\n  \\io_in_a                 --        --    00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\n  \\io_in_b                 --        --    00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\n  \\io_in_c                 --        --    00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001\n  \\io_in_d                 --        --    00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\n  \\mismatch                 1         1                                                                                                              1\n\nEnd of script. Logfile hash: bfba210a8a, CPU: user 0.25s system 0.01s, MEM: 20.78 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 19% 6x opt_clean (0 sec), 18% 8x opt_expr (0 sec), ...\n",
+          "output_sha256": "da94a4049cc7e7b23d23808e015d9e5dacb6d61e8dcba6ad93d5c07fec1399cb",
+          "formal_success_marker": false,
+          "unconstrained": true,
+          "sat_variables": 4929,
+          "sat_clauses": 12422
+        }
+      },
+      {
+        "method": "sequential_equivalence",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "CSA_Nto2With3to2MainPipeline_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_CSA_Nto2With3to2MainPipeline.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_CSA_Nto2With3to2MainPipeline.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/CSA_Nto2With3to2MainPipeline_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.107 MB sources in 6 modules, into 1.852 MB in 7 C++ files needing 0.000 MB\n- Verilator: Walltime 0.249 s (elab=0.016, cvt=0.131, bld=0.000); cpu 0.190 s on 1 threads; alloced 19.605 MB\n",
+          "output_sha256": "45b0a17ccedc61ac84170729385a64d3da2c72251d319be5145d2b3b5beb66f0"
+        },
+        "yosys_equiv": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_CSA_Nto2With3to2MainPipeline.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_CSA_Nto2With3to2MainPipeline.sv; proc; async2sync; memory; opt; flatten REF_CSA_Nto2With3to2MainPipeline; flatten DUT_CSA_Nto2With3to2MainPipeline; equiv_make REF_CSA_Nto2With3to2MainPipeline DUT_CSA_Nto2With3to2MainPipeline CSA_Nto2With3to2MainPipeline_EQUIV; prep -top CSA_Nto2With3to2MainPipeline_EQUIV; equiv_induct -undef; equiv_status -assert"
+          ],
+          "returncode": 1,
+          "status": "FAIL",
+          "output_tail": "[70] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$1289: \\U_CSA4to2_2.io_out_sum_gold [71] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$1290: \\U_CSA4to2_2.io_out_sum_gold [72] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$1291: \\U_CSA4to2_2.io_out_sum_gold [73] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$1292: \\U_CSA4to2_2.io_out_sum_gold [74] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$1293: \\U_CSA4to2_2.io_out_sum_gold [75] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$1294: \\U_CSA4to2_2.io_out_sum_gold [76] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$1295: \\U_CSA4to2_2.io_out_sum_gold [77] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$1296: \\U_CSA4to2_2.io_out_sum_gold [78] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$1297: \\U_CSA4to2_2.io_out_sum_gold [79] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$1298: \\U_CSA4to2_2.io_out_sum_gold [80] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$1299: \\U_CSA4to2_2.io_out_sum_gold [81] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$1300: \\U_CSA4to2_2.io_out_sum_gold [82] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$1301: \\U_CSA4to2_2.io_out_sum_gold [83] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$1302: \\U_CSA4to2_2.io_out_sum_gold [84] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$1303: \\U_CSA4to2_2.io_out_sum_gold [85] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$1304: \\U_CSA4to2_2.io_out_sum_gold [86] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$1305: \\U_CSA4to2_2.io_out_sum_gold [87] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$1306: \\U_CSA4to2_2.io_out_sum_gold [88] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$1307: \\U_CSA4to2_2.io_out_sum_gold [89] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$1308: \\U_CSA4to2_2.io_out_sum_gold [90] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$1309: \\U_CSA4to2_2.io_out_sum_gold [91] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$1310: \\U_CSA4to2_2.io_out_sum_gold [92] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$1311: \\U_CSA4to2_2.io_out_sum_gold [93] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$1312: \\U_CSA4to2_2.ioERROR: Found 212 unproven $equiv cells in 'equiv_status -assert'.\n",
+          "output_sha256": "4d8c2105876d43266d9a281249407fd8e7e23f312a9086c750c2d456c65f7408",
+          "markers_present": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "formal_success_marker": false,
+          "unproven_cells": 212
+        }
+      },
+      {
+        "method": "sat_miter",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "ClockGate_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_ClockGate.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_ClockGate.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/ClockGate_MITER.sv"
+          ],
+          "returncode": 1,
+          "status": "FAIL",
+          "output_tail": "%Error: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/ClockGate_MITER.sv:7:23: syntax error, unexpected IDENTIFIER, expecting ',' or ';'\n    7 |   wire [0:0] ref_wire Q;\n      |                       ^\n%Error: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/ClockGate_MITER.sv:8:23: syntax error, unexpected IDENTIFIER, expecting ',' or ';'\n    8 |   wire [0:0] dut_wire Q;\n      |                       ^\n%Error: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/ClockGate_MITER.sv:10:6: syntax error, unexpected wire\n   10 |     .wire TE(wire TE), .wire E(wire E), .wire CK(wire CK), .wire Q(ref_wire Q)\n      |      ^~~~\n%Error: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/ClockGate_MITER.sv:13:6: syntax error, unexpected wire\n   13 |     .wire TE(wire TE), .wire E(wire E), .wire CK(wire CK), .wire Q(dut_wire Q)\n      |      ^~~~\n%Error: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/ClockGate_MITER.sv:15:31: syntax error, unexpected IDENTIFIER\n   15 |   assign mismatch = (ref_wire Q != dut_wire Q);\n      |                               ^\n%Error: Exiting due to 5 error(s)\n",
+          "output_sha256": "85f6cb6157964dd238309b18f8e3b2e0a3dc6a9467cd1c41cb01e53ed9495d20"
+        },
+        "sat_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_ClockGate.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_ClockGate.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/ClockGate_MITER.sv; prep -top ClockGate_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 1,
+          "status": "FAIL",
+          "output_tail": "\n-- Running command `read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_ClockGate.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_ClockGate.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/ClockGate_MITER.sv; prep -top ClockGate_MITER; flatten; opt; sat -prove mismatch 0' --\n\n1. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_ClockGate.sv\nParsing SystemVerilog input from `/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_ClockGate.sv' to AST representation.\nGenerating RTLIL representation for module `\\DUT_ClockGate'.\nSuccessfully finished Verilog frontend.\n\n2. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_ClockGate.sv\nParsing SystemVerilog input from `/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_ClockGate.sv' to AST representation.\nGenerating RTLIL representation for module `\\REF_ClockGate'.\nSuccessfully finished Verilog frontend.\n\n3. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/ClockGate_MITER.sv\n/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/ClockGate_MITER.sv:7: ERROR: syntax error, unexpected TOK_ID, expecting ',' or '=' or ';' or '['\n",
+          "output_sha256": "cb926bc4c5c9b33e4cabda0cf8af3079d432d9004b4de982cf442a8c10f1d2be",
+          "formal_success_marker": false,
+          "unconstrained": false
+        }
+      },
+      {
+        "method": "sat_miter",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "DebugTransportModuleJTAG_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_DebugTransportModuleJTAG.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_DebugTransportModuleJTAG.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DebugTransportModuleJTAG_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.089 MB sources in 11 modules, into 0.148 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.097 s (elab=0.003, cvt=0.016, bld=0.000); cpu 0.034 s on 1 threads; alloced 10.621 MB\n",
+          "output_sha256": "a4b4e93da4f0ee90a76da305b85823ce27c2822f1ba165086c00f14053546850"
+        },
+        "sat_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_DebugTransportModuleJTAG.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_DebugTransportModuleJTAG.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DebugTransportModuleJTAG_MITER.sv; prep -top DebugTransportModuleJTAG_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 1,
+          "status": "FAIL",
+          "output_tail": "\n-- Running command `read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_DebugTransportModuleJTAG.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_DebugTransportModuleJTAG.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DebugTransportModuleJTAG_MITER.sv; prep -top DebugTransportModuleJTAG_MITER; flatten; opt; sat -prove mismatch 0' --\n\n1. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_DebugTransportModuleJTAG.sv\nParsing SystemVerilog input from `/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_DebugTransportModuleJTAG.sv' to AST representation.\nGenerating RTLIL representation for module `\\DUT_DebugTransportModuleJTAG'.\nSuccessfully finished Verilog frontend.\n\n2. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_DebugTransportModuleJTAG.sv\n/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_DebugTransportModuleJTAG.sv:463: ERROR: syntax error, unexpected TOK_AUTOMATIC\n",
+          "output_sha256": "ddcaefc240ea8d82c4043aff2c4572c42427372dc99574174b445a6d660dd501",
+          "formal_success_marker": false,
+          "unconstrained": false
+        }
+      },
+      {
+        "method": "sequential_equivalence",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "IDPool_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_IDPool.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_IDPool.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/IDPool_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.044 MB sources in 4 modules, into 0.027 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.077 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.012 s on 1 threads; alloced 9.293 MB\n",
+          "output_sha256": "7dbe93636cb78bc4af37d380b616e134c54b8a010e3dac7be2d2b87469b7b774"
+        },
+        "yosys_equiv": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_IDPool.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_IDPool.sv; proc; async2sync; memory; opt; flatten REF_IDPool; flatten DUT_IDPool; equiv_make REF_IDPool DUT_IDPool IDPool_EQUIV; prep -top IDPool_EQUIV; equiv_induct -undef; equiv_status -assert"
+          ],
+          "returncode": 1,
+          "status": "FAIL",
+          "output_tail": "ells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\IDPool_EQUIV..\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== IDPool_EQUIV ===\n\n   Number of wires:                 58\n   Number of wire bits:            162\n   Number of public wires:          27\n   Number of public wire bits:      55\n   Number of ports:                  7\n   Number of port bits:             11\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                 40\n     $add                            7\n     $and                            3\n     $eq                             1\n     $equiv                          4\n     $mux                           14\n     $not                            3\n     $or                             3\n     $reduce_or                      1\n     $sdff                           3\n     $shl                            1\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module IDPool_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 4 unproven $equiv cells in module IDPool_EQUIV:\n  Undef modelling: force def on 12 initial reg values and 7 inputs.\n  Proving existence of base case for step 1. (6184 clauses over 2307 variables)\n  Proving induction step 1. (13108 clauses over 4864 variables)\n  Proof for induction step failed. Extending to next time step.\n  Proving existence of base case for step 2. (13109 clauses over 4864 variables)\n  Proving induction step 2. (20033 clauses over 7421 variables)\n  Proof for induction step failed. Extending to next time step.\n  Proving existence of base case for step 3. (20034 clauses over 7421 variables)\n  Proving induction step 3. (26958 clauses over 9978 variables)\n  Proof for induction step failed. Extending to next time step.\n  Proving existence of base case for step 4. (26959 clauses over 9978 variables)\n  Proving induction step 4. (33883 clauses over 12535 variables)\n  Proof for induction step failed. Trying to prove individual $equiv from workset.\n  Trying to prove $equiv for \\io_alloc_valid: failed.\n  Trying to prove $equiv for \\io_alloc_bits [0]: failed.\n  Trying to prove $equiv for \\io_alloc_bits [1]: failed.\n  Trying to prove $equiv for \\io_alloc_bits [2]: failed.\nProved 0 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nERROR: Found 4 unproven $equiv cells in 'equiv_status -assert'.\n",
+          "output_sha256": "a5ac5f02b1c265f54c394443b343256b688137f88bc4a0dc89b6da234b6d029c",
+          "markers_present": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "formal_success_marker": false,
+          "unproven_cells": 4
+        }
+      },
+      {
+        "method": "sequential_equivalence",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "JtagStateMachine_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_JtagStateMachine.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_JtagStateMachine.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/JtagStateMachine_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.042 MB sources in 4 modules, into 0.022 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.063 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.011 s on 1 threads; alloced 9.086 MB\n",
+          "output_sha256": "99f9234ae161f7fefce2db584a3af6942072859d2591118ffded1994e73ec4c8"
+        },
+        "yosys_equiv": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_JtagStateMachine.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_JtagStateMachine.sv; proc; async2sync; memory; opt; flatten REF_JtagStateMachine; flatten DUT_JtagStateMachine; equiv_make REF_JtagStateMachine DUT_JtagStateMachine JtagStateMachine_EQUIV; prep -top JtagStateMachine_EQUIV; equiv_induct -undef; equiv_status -assert"
+          ],
+          "returncode": 1,
+          "status": "FAIL",
+          "output_tail": "\n-- Running command `read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_JtagStateMachine.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_JtagStateMachine.sv; proc; async2sync; memory; opt; flatten REF_JtagStateMachine; flatten DUT_JtagStateMachine; equiv_make REF_JtagStateMachine DUT_JtagStateMachine JtagStateMachine_EQUIV; prep -top JtagStateMachine_EQUIV; equiv_induct -undef; equiv_status -assert' --\n\n1. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_JtagStateMachine.sv\nParsing SystemVerilog input from `/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_JtagStateMachine.sv' to AST representation.\nGenerating RTLIL representation for module `\\DUT_JtagStateMachine'.\nSuccessfully finished Verilog frontend.\n\n2. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_JtagStateMachine.sv\n/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_JtagStateMachine.sv:12: ERROR: syntax error, unexpected TOK_AUTOMATIC\n",
+          "output_sha256": "e4c4fa6bf1a419bfd58afe42d94da36b22cb8649e7d42d3bd112608a8ba04dba",
+          "markers_present": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "formal_success_marker": false
+        }
+      },
+      {
+        "method": "sequential_equivalence",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "JtagTapController_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_JtagTapController.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_JtagTapController.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/JtagTapController_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.053 MB sources in 6 modules, into 0.034 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.093 s (elab=0.001, cvt=0.005, bld=0.000); cpu 0.018 s on 1 threads; alloced 9.441 MB\n",
+          "output_sha256": "508aa876379c7894df91e0de09c20147188057c75a8fb63412109510f959bcc1"
+        },
+        "yosys_equiv": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_JtagTapController.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_JtagTapController.sv; proc; async2sync; memory; opt; flatten REF_JtagTapController; flatten DUT_JtagTapController; equiv_make REF_JtagTapController DUT_JtagTapController JtagTapController_EQUIV; prep -top JtagTapController_EQUIV; equiv_induct -undef; equiv_status -assert"
+          ],
+          "returncode": 1,
+          "status": "FAIL",
+          "output_tail": "\n-- Running command `read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_JtagTapController.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_JtagTapController.sv; proc; async2sync; memory; opt; flatten REF_JtagTapController; flatten DUT_JtagTapController; equiv_make REF_JtagTapController DUT_JtagTapController JtagTapController_EQUIV; prep -top JtagTapController_EQUIV; equiv_induct -undef; equiv_status -assert' --\n\n1. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_JtagTapController.sv\nParsing SystemVerilog input from `/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_JtagTapController.sv' to AST representation.\nGenerating RTLIL representation for module `\\DUT_JtagTapController'.\nSuccessfully finished Verilog frontend.\n\n2. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_JtagTapController.sv\n/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_JtagTapController.sv:48: ERROR: syntax error, unexpected TOK_AUTOMATIC\n",
+          "output_sha256": "17b775abfc9b32f45e882056cf46225344791e9be172b135531072833aec5fd7",
+          "markers_present": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "formal_success_marker": false
+        }
+      },
+      {
+        "method": "sequential_equivalence",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "MaxPeriodFibonacciLFSR_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_MaxPeriodFibonacciLFSR.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_MaxPeriodFibonacciLFSR.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/MaxPeriodFibonacciLFSR_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.048 MB sources in 4 modules, into 0.024 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.069 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.012 s on 1 threads; alloced 9.379 MB\n",
+          "output_sha256": "e3095ec27381c30cb6bb66a7e87e6259650b5a7fad9bf5b94a841466a396f834"
+        },
+        "yosys_equiv": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_MaxPeriodFibonacciLFSR.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_MaxPeriodFibonacciLFSR.sv; proc; async2sync; memory; opt; flatten REF_MaxPeriodFibonacciLFSR; flatten DUT_MaxPeriodFibonacciLFSR; equiv_make REF_MaxPeriodFibonacciLFSR DUT_MaxPeriodFibonacciLFSR MaxPeriodFibonacciLFSR_EQUIV; prep -top MaxPeriodFibonacciLFSR_EQUIV; equiv_induct -undef; equiv_status -assert"
+          ],
+          "returncode": 1,
+          "status": "FAIL",
+          "output_tail": " of wire bits:             81\n   Number of public wires:          66\n   Number of public wire bits:      66\n   Number of ports:                 17\n   Number of port bits:             17\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                 45\n     $equiv                         15\n     $mux                           15\n     $sdff                          15\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module MaxPeriodFibonacciLFSR_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 15 unproven $equiv cells in module MaxPeriodFibonacciLFSR_EQUIV:\n  Undef modelling: force def on 15 initial reg values and 2 inputs.\n  Proving existence of base case for step 1. (1522 clauses over 591 variables)\n  Proving induction step 1. (3502 clauses over 1339 variables)\n  Proof for induction step failed. Extending to next time step.\n  Proving existence of base case for step 2. (3503 clauses over 1339 variables)\n  Proving induction step 2. (5483 clauses over 2087 variables)\n  Proof for induction step failed. Extending to next time step.\n  Proving existence of base case for step 3. (5484 clauses over 2087 variables)\n  Proving induction step 3. (7464 clauses over 2835 variables)\n  Proof for induction step failed. Extending to next time step.\n  Proving existence of base case for step 4. (7465 clauses over 2835 variables)\n  Proving induction step 4. (9445 clauses over 3583 variables)\n  Proof for induction step failed. Trying to prove individual $equiv from workset.\n  Trying to prove $equiv for \\io_out_2: success!\n  Trying to prove $equiv for \\io_out_3: success!\n  Trying to prove $equiv for \\io_out_6: success!\n  Trying to prove $equiv for \\io_out_7: success!\n  Trying to prove $equiv for \\io_out_4: success!\n  Trying to prove $equiv for \\io_out_10: success!\n  Trying to prove $equiv for \\io_out_11: success!\n  Trying to prove $equiv for \\io_out_13: success!\n  Trying to prove $equiv for \\io_out_8: success!\n  Trying to prove $equiv for \\io_out_5: success!\n  Trying to prove $equiv for \\io_out_14: success!\n  Trying to prove $equiv for \\io_out_0: failed.\n  Trying to prove $equiv for \\io_out_1: success!\n  Trying to prove $equiv for \\io_out_12: success!\n  Trying to prove $equiv for \\io_out_9: success!\nProved 14 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nERROR: Found 1 unproven $equiv cells in 'equiv_status -assert'.\n",
+          "output_sha256": "49080bcdb3b4277a29b583d1aed2e1f0c4da05bf1d2d776174ca2ceed8c31885",
+          "markers_present": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "formal_success_marker": false,
+          "unproven_cells": 1
+        }
+      },
+      {
+        "method": "sequential_equivalence",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "MaxPeriodFibonacciLFSR_3_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_MaxPeriodFibonacciLFSR_3.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_MaxPeriodFibonacciLFSR_3.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/MaxPeriodFibonacciLFSR_3_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.049 MB sources in 4 modules, into 0.027 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.064 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.012 s on 1 threads; alloced 9.402 MB\n",
+          "output_sha256": "16e831d245ea099c239c37926471b123c4ebe1939033aba1a0f50b9eba73870b"
+        },
+        "yosys_equiv": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_MaxPeriodFibonacciLFSR_3.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_MaxPeriodFibonacciLFSR_3.sv; proc; async2sync; memory; opt; flatten REF_MaxPeriodFibonacciLFSR_3; flatten DUT_MaxPeriodFibonacciLFSR_3; equiv_make REF_MaxPeriodFibonacciLFSR_3 DUT_MaxPeriodFibonacciLFSR_3 MaxPeriodFibonacciLFSR_3_EQUIV; prep -top MaxPeriodFibonacciLFSR_3_EQUIV; equiv_induct -undef; equiv_status -assert"
+          ],
+          "returncode": 1,
+          "status": "FAIL",
+          "output_tail": ":          73\n   Number of public wire bits:      73\n   Number of ports:                 19\n   Number of port bits:             19\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                 48\n     $equiv                         16\n     $mux                           16\n     $sdff                          16\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module MaxPeriodFibonacciLFSR_3_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 16 unproven $equiv cells in module MaxPeriodFibonacciLFSR_3_EQUIV:\n  Undef modelling: force def on 16 initial reg values and 2 inputs.\n  Proving existence of base case for step 1. (1623 clauses over 630 variables)\n  Proving induction step 1. (3733 clauses over 1427 variables)\n  Proof for induction step failed. Extending to next time step.\n  Proving existence of base case for step 2. (3734 clauses over 1427 variables)\n  Proving induction step 2. (5844 clauses over 2224 variables)\n  Proof for induction step failed. Extending to next time step.\n  Proving existence of base case for step 3. (5845 clauses over 2224 variables)\n  Proving induction step 3. (7955 clauses over 3021 variables)\n  Proof for induction step failed. Extending to next time step.\n  Proving existence of base case for step 4. (7956 clauses over 3021 variables)\n  Proving induction step 4. (10066 clauses over 3818 variables)\n  Proof for induction step failed. Trying to prove individual $equiv from workset.\n  Trying to prove $equiv for \\io_out_7: success!\n  Trying to prove $equiv for \\io_out_5: success!\n  Trying to prove $equiv for \\io_out_3: success!\n  Trying to prove $equiv for \\io_out_8: success!\n  Trying to prove $equiv for \\io_out_15: success!\n  Trying to prove $equiv for \\io_out_9: success!\n  Trying to prove $equiv for \\io_out_4: success!\n  Trying to prove $equiv for \\io_out_14: success!\n  Trying to prove $equiv for \\io_out_2: success!\n  Trying to prove $equiv for \\io_out_0: failed.\n  Trying to prove $equiv for \\io_out_1: success!\n  Trying to prove $equiv for \\io_out_12: success!\n  Trying to prove $equiv for \\io_out_10: success!\n  Trying to prove $equiv for \\io_out_6: success!\n  Trying to prove $equiv for \\io_out_11: success!\n  Trying to prove $equiv for \\io_out_13: success!\nProved 15 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nERROR: Found 1 unproven $equiv cells in 'equiv_status -assert'.\n",
+          "output_sha256": "e12f4240c4bb36067b8c21dce08d1a6628e2f0afc804035043ce3db939e0ad2c",
+          "markers_present": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "formal_success_marker": false,
+          "unproven_cells": 1
+        }
+      },
+      {
+        "method": "sequential_equivalence",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "OverrideableQueue_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_OverrideableQueue.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_OverrideableQueue.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/OverrideableQueue_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.055 MB sources in 4 modules, into 0.049 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.075 s (elab=0.001, cvt=0.007, bld=0.000); cpu 0.018 s on 1 threads; alloced 9.469 MB\n",
+          "output_sha256": "74e2994d107a16755a7f6a7ed8a9069ecaca622c0b1308f2839601f952ef27a0"
+        },
+        "yosys_equiv": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_OverrideableQueue.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_OverrideableQueue.sv; proc; async2sync; memory; opt; flatten REF_OverrideableQueue; flatten DUT_OverrideableQueue; equiv_make REF_OverrideableQueue DUT_OverrideableQueue OverrideableQueue_EQUIV; prep -top OverrideableQueue_EQUIV; equiv_induct -undef; equiv_status -assert"
+          ],
+          "returncode": 1,
+          "status": "FAIL",
+          "output_tail": "33] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$257: \\io_out_bits_region_paddr_gold [34] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$258: \\io_out_bits_region_paddr_gold [35] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$259: \\io_out_bits_region_paddr_gold [36] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$260: \\io_out_bits_region_paddr_gold [37] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$261: \\io_out_bits_region_paddr_gold [38] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$262: \\io_out_bits_region_paddr_gold [39] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$263: \\io_out_bits_region_vaddr_gold [0] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$264: \\io_out_bits_region_vaddr_gold [1] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$265: \\io_out_bits_region_vaddr_gold [2] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$266: \\io_out_bits_region_vaddr_gold [3] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$267: \\io_out_bits_region_vaddr_gold [4] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$268: \\io_out_bits_region_vaddr_gold [5] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$269: \\io_out_bits_region_vaddr_gold [6] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$270: \\io_out_bits_region_vaddr_gold [7] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$271: \\io_out_bits_region_vaddr_gold [8] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$272: \\io_out_bits_region_vaddr_gold [9] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$273: \\io_out_bits_region_vaddr_gold [10] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$274: \\io_out_bits_region_vaddr_gold [11] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$275: \\io_out_bits_region_vaddr_gold [12] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$276: \\io_out_bits_region_vaddr_gold [13] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$277: \\io_out_bits_region_vaddr_gold [14] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$278: \\io_out_bits_region_vaddr_gold [15] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$279: \\io_out_bits_region_vaddr_gold [16] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$280: \\io_ERROR: Found 103 unproven $equiv cells in 'equiv_status -assert'.\n",
+          "output_sha256": "c2b30dab9453272038c966c1e8c25b7025545840c1dd83c44f9a4d57c9f3922b",
+          "markers_present": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "formal_success_marker": false,
+          "unproven_cells": 103
+        }
+      },
+      {
+        "method": "sequential_equivalence",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "OverrideableQueue_1_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_OverrideableQueue_1.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_OverrideableQueue_1.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/OverrideableQueue_1_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.064 MB sources in 4 modules, into 0.063 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.073 s (elab=0.001, cvt=0.005, bld=0.000); cpu 0.016 s on 1 threads; alloced 9.801 MB\n",
+          "output_sha256": "cf72b85768cce78ddfed53f49ce5fb5a3530022aa02267afa9cf93bd4b609960"
+        },
+        "yosys_equiv": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_OverrideableQueue_1.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_OverrideableQueue_1.sv; proc; async2sync; memory; opt; flatten REF_OverrideableQueue_1; flatten DUT_OverrideableQueue_1; equiv_make REF_OverrideableQueue_1 DUT_OverrideableQueue_1 OverrideableQueue_1_EQUIV; prep -top OverrideableQueue_1_EQUIV; equiv_induct -undef; equiv_status -assert"
+          ],
+          "returncode": 1,
+          "status": "FAIL",
+          "output_tail": "bits_pht_tag_gold [4] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$313: \\io_out_bits_pht_tag_gold [5] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$314: \\io_out_bits_pht_tag_gold [6] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$315: \\io_out_bits_pht_tag_gold [7] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$316: \\io_out_bits_pht_tag_gold [8] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$317: \\io_out_bits_pht_tag_gold [9] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$318: \\io_out_bits_pht_tag_gold [10] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$319: \\io_out_bits_pht_tag_gold [11] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$320: \\io_out_bits_pht_tag_gold [12] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$321: \\io_out_bits_region_bit_single_gold [0] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$322: \\io_out_bits_region_bit_single_gold [1] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$323: \\io_out_bits_region_bit_single_gold [2] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$324: \\io_out_bits_region_bit_single_gold [3] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$325: \\io_out_bits_region_bit_single_gold [4] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$326: \\io_out_bits_region_bit_single_gold [5] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$327: \\io_out_bits_region_bit_single_gold [6] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$328: \\io_out_bits_region_bit_single_gold [7] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$329: \\io_out_bits_region_bit_single_gold [8] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$330: \\io_out_bits_region_bit_single_gold [9] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$331: \\io_out_bits_region_bit_single_gold [10] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$332: \\io_out_bits_region_bit_single_gold [11] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$333: \\io_out_bits_region_bit_single_gold [12] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$334: \\io_out_bits_region_bit_single_gold [13] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$335: \\io_out_bits_region_bit_single_gold [14] 1'0\n  Unproven $equiv $aERROR: Found 62 unproven $equiv cells in 'equiv_status -assert'.\n",
+          "output_sha256": "c5462fecee87c39e5ac48c1b0500623cda1d2971df9ff661027aa96417ad1bbf",
+          "markers_present": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "formal_success_marker": false,
+          "unproven_cells": 62
+        }
+      },
+      {
+        "method": "sat_miter",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "PrintCommitIDModule_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_PrintCommitIDModule.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_PrintCommitIDModule.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/PrintCommitIDModule_MITER.sv"
+          ],
+          "returncode": 1,
+          "status": "FAIL",
+          "output_tail": "%Error: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/PrintCommitIDModule_MITER.sv:13:21: syntax error, unexpected ';', expecting IDENTIFIER-for-type\n   13 |   assign mismatch = ;\n      |                     ^\n%Error: Exiting due to 1 error(s)\n",
+          "output_sha256": "db4bb7a79f3aa6feea26a2d1ad0f9100c1d9a430efb6887ce46d21662bc2c5a5"
+        },
+        "sat_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_PrintCommitIDModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_PrintCommitIDModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/PrintCommitIDModule_MITER.sv; prep -top PrintCommitIDModule_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 1,
+          "status": "FAIL",
+          "output_tail": "\n-- Running command `read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_PrintCommitIDModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_PrintCommitIDModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/PrintCommitIDModule_MITER.sv; prep -top PrintCommitIDModule_MITER; flatten; opt; sat -prove mismatch 0' --\n\n1. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_PrintCommitIDModule.sv\nParsing SystemVerilog input from `/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_PrintCommitIDModule.sv' to AST representation.\nGenerating RTLIL representation for module `\\DUT_PrintCommitIDModule'.\nSuccessfully finished Verilog frontend.\n\n2. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_PrintCommitIDModule.sv\nParsing SystemVerilog input from `/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_PrintCommitIDModule.sv' to AST representation.\nGenerating RTLIL representation for module `\\REF_PrintCommitIDModule'.\nSuccessfully finished Verilog frontend.\n\n3. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/PrintCommitIDModule_MITER.sv\n/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/PrintCommitIDModule_MITER.sv:13: ERROR: syntax error, unexpected ';'\n",
+          "output_sha256": "ef9c5d914485bd4fa9241ef05472dd5cf2f92ff7bb6c3659d1f3b7fff01c78a3",
+          "formal_success_marker": false,
+          "unconstrained": false
+        }
+      },
+      {
+        "method": "sequential_equivalence",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "TimeAsync_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_TimeAsync.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_TimeAsync.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/TimeAsync_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.043 MB sources in 6 modules, into 0.016 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.064 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.010 s on 1 threads; alloced 9.094 MB\n",
+          "output_sha256": "87d269c407ee8e2be27a9ce2daa73a09c8e2c1d3c1c07231dae85d7d5e16c6e5"
+        },
+        "yosys_equiv": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_TimeAsync.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_TimeAsync.sv; proc; async2sync; memory; opt; flatten REF_TimeAsync; flatten DUT_TimeAsync; equiv_make REF_TimeAsync DUT_TimeAsync TimeAsync_EQUIV; prep -top TimeAsync_EQUIV; equiv_induct -undef; equiv_status -assert"
+          ],
+          "returncode": 1,
+          "status": "FAIL",
+          "output_tail": "uiv $auto$equiv_make.cc:257:find_same_wires$52: \\io_o_time_bits_gold [17] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$53: \\io_o_time_bits_gold [18] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$54: \\io_o_time_bits_gold [19] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$55: \\io_o_time_bits_gold [20] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$56: \\io_o_time_bits_gold [21] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$57: \\io_o_time_bits_gold [22] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$58: \\io_o_time_bits_gold [23] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$59: \\io_o_time_bits_gold [24] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$60: \\io_o_time_bits_gold [25] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$61: \\io_o_time_bits_gold [26] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$62: \\io_o_time_bits_gold [27] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$63: \\io_o_time_bits_gold [28] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$64: \\io_o_time_bits_gold [29] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$65: \\io_o_time_bits_gold [30] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$66: \\io_o_time_bits_gold [31] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$67: \\io_o_time_bits_gold [32] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$68: \\io_o_time_bits_gold [33] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$69: \\io_o_time_bits_gold [34] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$70: \\io_o_time_bits_gold [35] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$71: \\io_o_time_bits_gold [36] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$72: \\io_o_time_bits_gold [37] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$73: \\io_o_time_bits_gold [38] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$74: \\io_o_time_bits_gold [39] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$75: \\io_o_time_bits_gold [40] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$76: \\io_o_time_bits_gold [41] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$77: \\io_o_time_bits_gold [42] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wiresERROR: Found 64 unproven $equiv cells in 'equiv_status -assert'.\n",
+          "output_sha256": "adaecaa3f09ffb26d8f9e491b36715951bbc366671a59936dbb521370c01d97c",
+          "markers_present": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "formal_success_marker": false,
+          "unproven_cells": 64
+        }
+      },
+      {
+        "method": "sat_miter",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "r4_qds_v2_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_r4_qds_v2.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_r4_qds_v2.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/r4_qds_v2_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.041 MB sources in 4 modules, into 0.020 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.092 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.018 s on 1 threads; alloced 9.191 MB\n",
+          "output_sha256": "9e8ef4a99fabf6e597cbd62d3aed4cccd1bac28945340be4e79847849569fb0c"
+        },
+        "sat_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_r4_qds_v2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_r4_qds_v2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/r4_qds_v2_MITER.sv; prep -top r4_qds_v2_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "FAIL",
+          "output_tail": "LATTEN pass (flatten design).\nDeleting now unused module DUT_r4_qds_v2.\nDeleting now unused module REF_r4_qds_v2.\n<suppressed ~2 debug messages>\n\n6. Executing OPT pass (performing simple optimizations).\n\n6.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module r4_qds_v2_MITER.\n<suppressed ~1 debug messages>\n\n6.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\r4_qds_v2_MITER'.\nRemoved a total of 0 cells.\n\n6.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\r4_qds_v2_MITER..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n6.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\r4_qds_v2_MITER.\nPerformed a total of 0 changes.\n\n6.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\r4_qds_v2_MITER'.\nRemoved a total of 0 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\r4_qds_v2_MITER..\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module r4_qds_v2_MITER.\n\n6.9. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 12 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 249 variables and 670 clauses..\nSAT proof finished - model found: FAIL!\n\n   ______                   ___       ___       _ _            _ _ \n  (_____ \\                 / __)     / __)     (_) |          | | |\n   _____) )___ ___   ___ _| |__    _| |__ _____ _| | _____  __| | |\n  |  ____/ ___) _ \\ / _ (_   __)  (_   __|____ | | || ___ |/ _  |_|\n  | |   | |  | |_| | |_| || |       | |  / ___ | | || ____( (_| |_ \n  |_|   |_|   \\___/ \\___/ |_|       |_|  \\_____|_|\\_)_____)\\____|_|\n\n\n  Signal Name             Dec       Hex           Bin\n  --------------- ----------- --------- -------------\n  \\io_rem_i                16        10        010000\n  \\mismatch                 1         1             1\n\nEnd of script. Logfile hash: 79dde5258d, CPU: user 0.06s system 0.04s, MEM: 13.28 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 33% 7x opt_expr (0 sec), 20% 5x opt_clean (0 sec), ...\n",
+          "output_sha256": "f54b7ef4074f124a326edfa69751e2dcabe564a018f8344d5e0528239c1b1d60",
+          "formal_success_marker": false,
+          "unconstrained": true,
+          "sat_variables": 249,
+          "sat_clauses": 670
+        }
+      },
+      {
+        "method": "sat_miter",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "r4_qds_v2_spec_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_r4_qds_v2_spec.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_r4_qds_v2_spec.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/r4_qds_v2_spec_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.047 MB sources in 4 modules, into 0.030 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.079 s (elab=0.001, cvt=0.004, bld=0.000); cpu 0.017 s on 1 threads; alloced 9.219 MB\n",
+          "output_sha256": "a281c68599a8a8462a9c6c33144fe4f48f4a34c0010a828df3baae73ed9d3d64"
+        },
+        "sat_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_r4_qds_v2_spec.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_r4_qds_v2_spec.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/r4_qds_v2_spec_MITER.sv; prep -top r4_qds_v2_spec_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "FAIL",
+          "output_tail": "e `\\r4_qds_v2_spec_MITER'.\nRemoved a total of 0 cells.\n\n6.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\r4_qds_v2_spec_MITER..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n6.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\r4_qds_v2_spec_MITER.\nPerformed a total of 0 changes.\n\n6.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\r4_qds_v2_spec_MITER'.\nRemoved a total of 0 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\r4_qds_v2_spec_MITER..\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module r4_qds_v2_spec_MITER.\n\n6.9. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 41 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 1751 variables and 4714 clauses..\nSAT proof finished - model found: FAIL!\n\n   ______                   ___       ___       _ _            _ _ \n  (_____ \\                 / __)     / __)     (_) |          | | |\n   _____) )___ ___   ___ _| |__    _| |__ _____ _| | _____  __| | |\n  |  ____/ ___) _ \\ / _ (_   __)  (_   __|____ | | || ___ |/ _  |_|\n  | |   | |  | |_| | |_| || |       | |  / ___ | | || ____( (_| |_ \n  |_|   |_|   \\___/ \\___/ |_|       |_|  \\_____|_|\\_)_____)\\____|_|\n\n\n  Signal Name                          Dec       Hex           Bin\n  ---------------------------- ----------- --------- -------------\n  \\io_divisor_mul_neg_1_i                0         0       0000000\n  \\io_divisor_mul_neg_2_i                0         0       0000000\n  \\io_divisor_mul_pos_1_i                0         0       0000000\n  \\io_divisor_mul_pos_2_i                0         0       0000000\n  \\io_prev_quo_dig_i                    31        1f         11111\n  \\io_rem_i                             32        20       0100000\n  \\mismatch                              1         1             1\n\nEnd of script. Logfile hash: fbb97e7d56, CPU: user 0.06s system 0.02s, MEM: 14.84 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 21% 7x opt_expr (0 sec), 21% 1x sat (0 sec), ...\n",
+          "output_sha256": "1192cab034c1ef76c3f5f9cf48a2f0c147e2722482fc107bf72117ca8ce50d53",
+          "formal_success_marker": false,
+          "unconstrained": true,
+          "sat_variables": 1751,
+          "sat_clauses": 4714
+        }
+      },
+      {
+        "method": "sequential_equivalence",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "skidBufferConnect_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_skidBufferConnect.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_skidBufferConnect.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/skidBufferConnect_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.114 MB sources in 4 modules, into 0.031 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.090 s (elab=0.004, cvt=0.010, bld=0.000); cpu 0.030 s on 1 threads; alloced 10.672 MB\n",
+          "output_sha256": "2328f18b8b087c3ab48e4a4b9b38df229726b96a53678375a2ef36290abd2694"
+        },
+        "yosys_equiv": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_skidBufferConnect.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_skidBufferConnect.sv; proc; async2sync; memory; opt; flatten REF_skidBufferConnect; flatten DUT_skidBufferConnect; equiv_make REF_skidBufferConnect DUT_skidBufferConnect skidBufferConnect_EQUIV; prep -top skidBufferConnect_EQUIV; equiv_induct -undef; equiv_status -assert"
+          ],
+          "returncode": 1,
+          "status": "FAIL",
+          "output_tail": "usMask_gold [24] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$830: \\io_out_bits_usMask_gold [25] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$831: \\io_out_bits_usMask_gold [26] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$832: \\io_out_bits_usMask_gold [27] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$833: \\io_out_bits_usMask_gold [28] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$834: \\io_out_bits_usMask_gold [29] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$835: \\io_out_bits_usMask_gold [30] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$836: \\io_out_bits_usMask_gold [31] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$837: \\io_out_bits_vecReplayFlowMask_gold [0] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$838: \\io_out_bits_vecReplayFlowMask_gold [1] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$839: \\io_out_bits_vecReplayFlowMask_gold [2] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$840: \\io_out_bits_vecReplayFlowMask_gold [3] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$841: \\io_out_bits_vecReplayFlowMask_gold [4] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$842: \\io_out_bits_vecReplayFlowMask_gold [5] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$843: \\io_out_bits_vecReplayFlowMask_gold [6] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$844: \\io_out_bits_vecReplayFlowMask_gold [7] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$845: \\io_out_bits_vecReplayFlowMask_gold [8] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$846: \\io_out_bits_vecReplayFlowMask_gold [9] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$847: \\io_out_bits_vecReplayFlowMask_gold [10] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$848: \\io_out_bits_vecReplayFlowMask_gold [11] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$849: \\io_out_bits_vecReplayFlowMask_gold [12] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$850: \\io_out_bits_vecReplayFlowMask_gold [13] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$851: \\io_out_bits_vecReplayFlowMask_gold [14] 1'0\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$852: \\io_out_bits_vecReplayFlowMask_gold [15] 1'0\n  Unproven $equiERROR: Found 583 unproven $equiv cells in 'equiv_status -assert'.\n",
+          "output_sha256": "c6d0e5f93fd13ce3c45e30f769be2880f252c151d87254240adf85dea6f1a13f",
+          "markers_present": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "formal_success_marker": false,
+          "unproven_cells": 583
+        }
+      }
+    ]
+  },
+  "failures": [
+    "CSA3to2:sat_miter",
+    "CSA3to2_20:sat_miter",
+    "CSA3to2_24:sat_miter",
+    "CSA4to2:sat_miter",
+    "CSA_Nto2With3to2MainPipeline:yosys_equiv",
+    "CSA_Nto2With3to2MainPipeline: 212 $equiv cells unproven",
+    "ABI mismatch: ClockGate",
+    "miter drives implicit nets: ClockGate",
+    "ClockGate:verilator",
+    "ClockGate:sat_miter",
+    "ClockGate: SAT ran under assumptions",
+    "synthesizable view failed conservation: DebugTransportModuleJTAG",
+    "DebugTransportModuleJTAG:sat_miter",
+    "DebugTransportModuleJTAG: SAT ran under assumptions",
+    "IDPool:yosys_equiv",
+    "IDPool: 4 $equiv cells unproven",
+    "synthesizable view failed conservation: JtagStateMachine",
+    "JtagStateMachine:yosys_equiv",
+    "synthesizable view failed conservation: JtagTapController",
+    "JtagTapController:yosys_equiv",
+    "MaxPeriodFibonacciLFSR:yosys_equiv",
+    "MaxPeriodFibonacciLFSR: 1 $equiv cells unproven",
+    "MaxPeriodFibonacciLFSR_3:yosys_equiv",
+    "MaxPeriodFibonacciLFSR_3: 1 $equiv cells unproven",
+    "OverrideableQueue:yosys_equiv",
+    "OverrideableQueue: 103 $equiv cells unproven",
+    "OverrideableQueue_1:yosys_equiv",
+    "OverrideableQueue_1: 62 $equiv cells unproven",
+    "output-less member, nothing observable to compare: PrintCommitIDModule",
+    "TimeAsync:yosys_equiv",
+    "TimeAsync: 64 $equiv cells unproven",
+    "r4_qds_v2:sat_miter",
+    "r4_qds_v2_spec:sat_miter",
+    "skidBufferConnect:yosys_equiv",
+    "skidBufferConnect: 583 $equiv cells unproven",
+    "aggregate SAT miter",
+    "pyright rail"
+  ],
+  "unclosed": [
+    "strict gates did not all pass"
+  ]
+}
