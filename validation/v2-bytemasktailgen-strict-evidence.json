@@ -1,0 +1,272 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_COMPLETE_EQUIVALENCE",
+  "build_id": "Build-Cpu.Backend.Fu.Vector.ByteMaskTailGen",
+  "validator": "validation/v2_bytemasktailgen_strict_validator.py",
+  "status": "COMPLETE_EQUIVALENCE",
+  "strict_complete_eligible": true,
+  "strict_complete_count_delta": 1,
+  "acceptance_eligible": true,
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "scope": {
+    "kind": "stateless_combinational_leaf_with_combinational_children",
+    "configuration": "locked V2 vlen=128, maxVLMAX=128, 16-byte destination slice",
+    "state_bits": 0,
+    "state_boundary": "no clock/reset/register/memory in top or extracted children",
+    "inputs": {
+      "io_in_begin": 8,
+      "io_in_end": 8,
+      "io_in_vma": 1,
+      "io_in_vta": 1,
+      "io_in_vsew": 2,
+      "io_in_maskUsed": 16,
+      "io_in_vdIdx": 3
+    },
+    "input_bits": 39,
+    "input_bit_accounting": "8+8+1+1+2+16+3=39",
+    "input_space": "2**39",
+    "input_space_cardinality": "549755813888",
+    "outputs_compared": {
+      "io_out_activeEn": 16,
+      "io_out_agnosticEn": 16
+    },
+    "output_bits": 32,
+    "why_complete": "Yosys SAT proves both 16-bit output buses equal for every valuation of all 39 flattened input bits; all four closure modules are purely combinational.",
+    "bounded_tests_counted": false
+  },
+  "reference_lock": {
+    "path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "upstream_source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+    "xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "xstop_bytes": 228590583,
+    "closure_manifest": {
+      "status": "PASS",
+      "checks": {
+        "target": true,
+        "source_sha256": true,
+        "source": true,
+        "closure_complete": true,
+        "module_count": true,
+        "modules": true,
+        "extracted_sha256": true
+      },
+      "manifest_path": "validation/reference-closures/ByteMaskTailGen-v2.json",
+      "manifest_sha256": "b225e8ce51572da15a93fc86e53e9f463264feb04bee1b3348709fd9eda60501",
+      "closure_path": "validation/reference-closures/ByteMaskTailGen-v2.sv",
+      "closure_sha256": "9a3de3d2c4bc437648ad502089abbc6b19c5ce3c13b41f35f0a77df583228cd3",
+      "closure_bytes": 47076,
+      "modules": [
+        "ByteMaskTailGen",
+        "MaskExtractor",
+        "UIntToContLow0s",
+        "UIntToContLow1s"
+      ],
+      "source": "//wsl$/Debian/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+      "source_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+      "source_bytes": 228590583
+    },
+    "extraction_rule": "exact ByteMaskTailGen module plus instantiated MaskExtractor/UIntToContLow0s/UIntToContLow1s from immutable XSTop.sv"
+  },
+  "sources": {
+    "scala": {
+      "path": "upstream/src/main/scala/xiangshan/backend/fu/vector/ByteMaskTailGen.scala",
+      "sha256": "2a6792444632182bff89f907c58fda06fa6e50aa48a8b3454f5c2562cd73e4fe",
+      "bytes": 3984
+    },
+    "reference_sv": {
+      "path": "validation/reference-closures/ByteMaskTailGen-v2.sv",
+      "sha256": "9a3de3d2c4bc437648ad502089abbc6b19c5ce3c13b41f35f0a77df583228cd3",
+      "bytes": 47076,
+      "modules": [
+        "ByteMaskTailGen",
+        "MaskExtractor",
+        "UIntToContLow0s",
+        "UIntToContLow1s"
+      ],
+      "closure_manifest": "validation/reference-closures/ByteMaskTailGen-v2.json"
+    },
+    "closure_manifest": {
+      "path": "validation/reference-closures/ByteMaskTailGen-v2.json",
+      "sha256": "b225e8ce51572da15a93fc86e53e9f463264feb04bee1b3348709fd9eda60501",
+      "bytes": 1539
+    },
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Vector.ByteMaskTailGen-Hardware.py",
+      "sha256": "7620de4e059c23e5a3f643f188282ef28613db1468f1b53284cba6946dbbfd43",
+      "bytes": 9381
+    }
+  },
+  "checks": {
+    "py_compile": {
+      "status": "PASS",
+      "files": [
+        "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Vector.ByteMaskTailGen-Hardware.py",
+        "validation/v2_bytemasktailgen_strict_validator.py"
+      ]
+    },
+    "pyright": {
+      "target": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_bytemasktailgen_pyright_rh0rd_ym\\Build-Cpu.Backend.Fu.Vector.ByteMaskTailGen-Hardware.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "files_analyzed": 1,
+        "error_count": 0,
+        "warning_count": 0,
+        "output_sha256": "212fecf04a28478f94d9cb34b3732ffd86bce3a5c8413971c66b4e8915378cf7",
+        "stderr_tail": ""
+      },
+      "validator": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_bytemasktailgen_pyright_h4fahha_\\v2_bytemasktailgen_strict_validator.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "files_analyzed": 1,
+        "error_count": 0,
+        "warning_count": 0,
+        "output_sha256": "4da9603b95700cfc3818e478ef5f493158c050deea470509f31a3ec492510bc3",
+        "stderr_tail": ""
+      }
+    },
+    "deterministic_export": {
+      "status": "PASS",
+      "bytes": 57307,
+      "sha256": "42661786c68c71a20e3ff602216c422bef02d084f38a9a7343deec4eaeeff035",
+      "repeat_sha256": "42661786c68c71a20e3ff602216c422bef02d084f38a9a7343deec4eaeeff035",
+      "byte_equal": true
+    },
+    "closure_audit": {
+      "status": "PASS",
+      "checks": {
+        "target": true,
+        "source_sha256": true,
+        "source": true,
+        "closure_complete": true,
+        "module_count": true,
+        "modules": true,
+        "extracted_sha256": true
+      },
+      "manifest_path": "validation/reference-closures/ByteMaskTailGen-v2.json",
+      "manifest_sha256": "b225e8ce51572da15a93fc86e53e9f463264feb04bee1b3348709fd9eda60501",
+      "closure_path": "validation/reference-closures/ByteMaskTailGen-v2.sv",
+      "closure_sha256": "9a3de3d2c4bc437648ad502089abbc6b19c5ce3c13b41f35f0a77df583228cd3",
+      "closure_bytes": 47076,
+      "modules": [
+        "ByteMaskTailGen",
+        "MaskExtractor",
+        "UIntToContLow0s",
+        "UIntToContLow1s"
+      ],
+      "source": "//wsl$/Debian/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+      "source_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+      "source_bytes": 228590583
+    },
+    "tools": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--version"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n",
+        "output_sha256": "ae161d63a0898d55050284fd76bd5e83136b75d2ec90d5b0622f196d5edc2aff"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "--version"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\n",
+        "output_sha256": "239d92e36e753a9dff4e79d97878ed5d55304b675d411895ec57508bc134e28e"
+      }
+    },
+    "formal": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "--top-module",
+          "ByteMaskTailGen_MITER",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_bytemasktailgen_strict/UHSC_ByteMaskTailGen.sv",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_bytemasktailgen_strict/REF_ByteMaskTailGen_closure.sv",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_bytemasktailgen_strict/ByteMaskTailGen_MITER.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "n.sv:1619:29: Operator GT expects 8 bits on the RHS, but RHS's CONST '6'h26' generates 6 bits.\n                                                                                                                        : ... note: In instance 'ByteMaskTailGen_MITER.target_i'\n 1619 |   assign \\$193  = \\$1 [7:0] > 6'h26;\n      |                             ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_bytemasktailgen_strict/UHSC_ByteMaskTailGen.sv:1620:29: Operator LTE expects 8 bits on the RHS, but RHS's CONST '6'h26' generates 6 bits.\n                                                                                                                        : ... note: In instance 'ByteMaskTailGen_MITER.target_i'\n 1620 |   assign \\$194  = \\$1 [7:0] <= 6'h26;\n      |                             ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_bytemasktailgen_strict/UHSC_ByteMaskTailGen.sv:1621:29: Operator GT expects 8 bits on the RHS, but RHS's CONST '6'h26' generates 6 bits.\n                                                                                                                        : ... note: In instance 'ByteMaskTailGen_MITER.target_i'\n 1621 |   assign \\$195  = \\$2 [7:0] > 6'h26;\n      |                             ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_bytemasktailgen_strict/UHSC_ByteMaskTailGen.sv:1623:29: Operator LTE expects 8 bits on the RHS, but RHS's CONST '6'h26' generates 6 bits.\n                                                                                                                        : ... note: In instance 'ByteMaskTailGen_MITER.target_i'\n 1623 |   assign \\$197  = \\$2 [7:0] <= 6'h26;\n      |                             ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_bytemasktailgen_strict/UHSC_ByteMaskTailGen.sv:1624:29: Operator GT expects 8 bits on the RHS, but RHS's CONST '6'h27' generates 6 bits.\n                                                                                                                        : ... note: In instance 'ByteMaskTailGen_MITER.target_i'\n 1624 |   assign \\$198  = \\$1 [7:0] > 6'h27;\n      |                             ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_bytemasktailgen_strict/UHSC_ByteMaskTailGen.sv:1625:29: Operator LTE expects 8 bits on the RHS, but RHS's CONST '6'h27' generates 6 bits.\n                                                                                                                        : ... note: In instance 'ByteMaskTailGen_MITER.target_i'\n 1625 |   assign \\$199  = \\$1 [7:0] <= 6'h27;\n      |                             ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_bytemasktailgen_strict/UHSC_ByteMaskTailGen.sv:1626:29: Operator GT expects 8 bits on the RHS, but RHS's CONST '6'h27' generates 6 bits.\n                                                                                                                        : ... note: In instance 'ByteMaskTailGen_MITER.target_i'\n 1626 |   assign \\$200  = \\$2 [7:0] > 6'h27;\n      |                             ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_bytemasktailgen_strict/UHSC_ByteMaskTailGen.sv:1628:29: Operator LTE expects 8 bits on the RHS, but RHS's CONST '6'h27' generates 6 bits.\n                                                                                                                        : ... note: In instance 'ByteMaskTailGen_MITER.target_i'\n 1628 |   assign \\$202  = \\$2 [7:0] <= 6'h27;\n      |                             ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_bytemasktailgen_strict/UHSC_ByteMaskTailGen.sv:1629:29: Operator GT expects 8 bits on the RHS, but RHS's CONST '6'h28' generates 6 bits.\n                                                                                                                        : ... note: In instance 'ByteMaskTailGen_MITER.target_i'\n 1629 |   assign \\$203  = \\$1 [7:0] > 6'h28;\n      |                             ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_bytemasktailgen_strict/UHSC_ByteMaskTailGen.sv:1630:29: Operator LTE expects 8 bits on the RHS, but RHS's CONST '6'h28' generates 6 bits.\n                                                                                                                        : ... note: In instance 'ByteMaskTailGen_MITER.target_i'\n 1630 |   assign \\$204  = \\$1 [7:0] <= 6'h28;\n      |                             ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_bytemasktailgen_strict/UHSC_ByteMaskTailGen.sv:1631:29: Operator GT expects 8 bits on the RHS, but RHS's CONST '6'h28' generates 6 bits.\n                                                                                                                        : ... note: In instance 'ByteMaskTailGen_MITER.target_i'\n 1631 |   assign \\$205  = \\$2 [7:0] > 6'h28;\n      |                             ^\n",
+        "output_sha256": "ba3cf1fcc593552a43d93d0718356234e66aa9617fde5144798e56a8e2209f8f"
+      },
+      "yosys_target": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_bytemasktailgen_strict/UHSC_ByteMaskTailGen.sv; hierarchy -top ByteMaskTailGen; proc; opt; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "on $mux $ternary$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_bytemasktailgen_strict/UHSC_ByteMaskTailGen.sv:1341$510.\n    dead port 2/2 on $mux $ternary$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_bytemasktailgen_strict/UHSC_ByteMaskTailGen.sv:1341$510.\n    dead port 1/2 on $mux $ternary$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_bytemasktailgen_strict/UHSC_ByteMaskTailGen.sv:1340$509.\n    dead port 2/2 on $mux $ternary$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_bytemasktailgen_strict/UHSC_ByteMaskTailGen.sv:1340$509.\n    dead port 1/2 on $mux $ternary$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_bytemasktailgen_strict/UHSC_ByteMaskTailGen.sv:1339$508.\n    dead port 2/2 on $mux $ternary$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_bytemasktailgen_strict/UHSC_ByteMaskTailGen.sv:1339$508.\n    dead port 1/2 on $mux $ternary$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_bytemasktailgen_strict/UHSC_ByteMaskTailGen.sv:1338$507.\n    dead port 2/2 on $mux $ternary$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_bytemasktailgen_strict/UHSC_ByteMaskTailGen.sv:1338$507.\n    dead port 1/2 on $mux $ternary$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_bytemasktailgen_strict/UHSC_ByteMaskTailGen.sv:1337$506.\n    dead port 2/2 on $mux $ternary$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_bytemasktailgen_strict/UHSC_ByteMaskTailGen.sv:1337$506.\n    dead port 1/2 on $mux $ternary$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_bytemasktailgen_strict/UHSC_ByteMaskTailGen.sv:1336$505.\n    dead port 2/2 on $mux $ternary$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_bytemasktailgen_strict/UHSC_ByteMaskTailGen.sv:1336$505.\n    dead port 1/2 on $mux $ternary$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_bytemasktailgen_strict/UHSC_ByteMaskTailGen.sv:1335$504.\n    dead port 2/2 on $mux $ternary$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_bytemasktailgen_strict/UHSC_ByteMaskTailGen.sv:1335$504.\nRemoved 30 multiplexer ports.\n<suppressed ~16 debug messages>\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\ByteMaskTailGen.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ByteMaskTailGen'.\n<suppressed ~138 debug messages>\nRemoved a total of 46 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\ByteMaskTailGen..\nRemoved 128 unused cells and 823 unused wires.\n<suppressed ~151 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ByteMaskTailGen.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\ByteMaskTailGen..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~7 debug messages>\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\ByteMaskTailGen.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ByteMaskTailGen'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\ByteMaskTailGen..\nRemoved 0 unused cells and 122 unused wires.\n<suppressed ~122 debug messages>\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ByteMaskTailGen.\n\n4.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\ByteMaskTailGen..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~7 debug messages>\n\n4.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\ByteMaskTailGen.\nPerformed a total of 0 changes.\n\n4.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ByteMaskTailGen'.\nRemoved a total of 0 cells.\n\n4.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\ByteMaskTailGen..\n\n4.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ByteMaskTailGen.\n\n4.23. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module ByteMaskTailGen...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 229a6994eb, CPU: user 0.09s system 0.02s, MEM: 21.88 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 31% 2x read_verilog (0 sec), 17% 3x opt_clean (0 sec), ...\n",
+        "output_sha256": "0ae5f823bcb49d9851aacd846eaca5a0ff32c0b2be6e4e5e0851b0ca15577832"
+      },
+      "yosys_reference": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_bytemasktailgen_strict/REF_ByteMaskTailGen_closure.sv; hierarchy -top REF_ByteMaskTailGen; proc; opt; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "g messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module MaskExtractor.\nOptimizing module REF_ByteMaskTailGen.\nOptimizing module UIntToContLow0s.\nOptimizing module UIntToContLow1s.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\MaskExtractor..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRunning muxtree optimizer on module \\REF_ByteMaskTailGen..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRunning muxtree optimizer on module \\UIntToContLow0s..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRunning muxtree optimizer on module \\UIntToContLow1s..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~34 debug messages>\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\MaskExtractor.\n  Optimizing cells in module \\REF_ByteMaskTailGen.\n  Optimizing cells in module \\UIntToContLow0s.\n  Optimizing cells in module \\UIntToContLow1s.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\MaskExtractor'.\nFinding identical cells in module `\\REF_ByteMaskTailGen'.\nFinding identical cells in module `\\UIntToContLow0s'.\nFinding identical cells in module `\\UIntToContLow1s'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\MaskExtractor..\nFinding unused cells or wires in module \\REF_ByteMaskTailGen..\nFinding unused cells or wires in module \\UIntToContLow0s..\nFinding unused cells or wires in module \\UIntToContLow1s..\nRemoved 0 unused cells and 2 unused wires.\n<suppressed ~2 debug messages>\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module MaskExtractor.\nOptimizing module REF_ByteMaskTailGen.\nOptimizing module UIntToContLow0s.\nOptimizing module UIntToContLow1s.\n\n4.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\MaskExtractor..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRunning muxtree optimizer on module \\REF_ByteMaskTailGen..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRunning muxtree optimizer on module \\UIntToContLow0s..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRunning muxtree optimizer on module \\UIntToContLow1s..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~34 debug messages>\n\n4.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\MaskExtractor.\n  Optimizing cells in module \\REF_ByteMaskTailGen.\n  Optimizing cells in module \\UIntToContLow0s.\n  Optimizing cells in module \\UIntToContLow1s.\nPerformed a total of 0 changes.\n\n4.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\MaskExtractor'.\nFinding identical cells in module `\\REF_ByteMaskTailGen'.\nFinding identical cells in module `\\UIntToContLow0s'.\nFinding identical cells in module `\\UIntToContLow1s'.\nRemoved a total of 0 cells.\n\n4.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\MaskExtractor..\nFinding unused cells or wires in module \\REF_ByteMaskTailGen..\nFinding unused cells or wires in module \\UIntToContLow0s..\nFinding unused cells or wires in module \\UIntToContLow1s..\n\n4.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module MaskExtractor.\nOptimizing module REF_ByteMaskTailGen.\nOptimizing module UIntToContLow0s.\nOptimizing module UIntToContLow1s.\n\n4.23. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module MaskExtractor...\nChecking module REF_ByteMaskTailGen...\nChecking module UIntToContLow0s...\nChecking module UIntToContLow1s...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 7446d7da5b, CPU: user 0.06s system 0.02s, MEM: 16.09 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 23% 2x read_verilog (0 sec), 18% 5x opt_expr (0 sec), ...\n",
+        "output_sha256": "927ecc6b5fc6338ae450ea033103c73afcb7e347d95885c151363926bb661c13"
+      },
+      "yosys_formal_miter": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_bytemasktailgen_strict/UHSC_ByteMaskTailGen.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_bytemasktailgen_strict/REF_ByteMaskTailGen_closure.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_bytemasktailgen_strict/ByteMaskTailGen_MITER.sv; prep -top ByteMaskTailGen_MITER; flatten; opt; sat -prove mismatch 0"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "Low1s               1\n\n   Number of wires:                721\n   Number of wire bits:           5439\n   Number of public wires:         645\n   Number of public wire bits:    4226\n   Number of ports:                 35\n   Number of port bits:           1005\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                657\n     $and                          135\n     $eq                            19\n     $ge                             1\n     $gt                           128\n     $le                           256\n     $logic_not                      4\n     $lt                             1\n     $mux                           74\n     $not                            4\n     $or                            26\n     $reduce_and                     3\n     $reduce_or                      2\n     $shl                            2\n     $xor                            2\n\n4.13. Executing CHECK pass (checking for obvious problems).\nChecking module ByteMaskTailGen...\nChecking module ByteMaskTailGen_MITER...\nChecking module MaskExtractor...\nChecking module REF_ByteMaskTailGen...\nChecking module UIntToContLow0s...\nChecking module UIntToContLow1s...\nFound and reported 0 problems.\n\n5. Executing FLATTEN pass (flatten design).\nDeleting now unused module ByteMaskTailGen.\nDeleting now unused module MaskExtractor.\nDeleting now unused module REF_ByteMaskTailGen.\nDeleting now unused module UIntToContLow0s.\nDeleting now unused module UIntToContLow1s.\n<suppressed ~6 debug messages>\n\n6. Executing OPT pass (performing simple optimizations).\n\n6.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ByteMaskTailGen_MITER.\n\n6.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ByteMaskTailGen_MITER'.\n<suppressed ~39 debug messages>\nRemoved a total of 13 cells.\n\n6.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\ByteMaskTailGen_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~42 debug messages>\n\n6.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\ByteMaskTailGen_MITER.\nPerformed a total of 0 changes.\n\n6.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ByteMaskTailGen_MITER'.\nRemoved a total of 0 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\ByteMaskTailGen_MITER..\nRemoved 0 unused cells and 34 unused wires.\n<suppressed ~1 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ByteMaskTailGen_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\ByteMaskTailGen_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~42 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\ByteMaskTailGen_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ByteMaskTailGen_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\ByteMaskTailGen_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ByteMaskTailGen_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 650 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 24266 variables and 65766 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: e5416e044a, CPU: user 0.71s system 0.03s, MEM: 38.89 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 70% 1x sat (0 sec), 7% 7x opt_clean (0 sec), ...\n",
+        "output_sha256": "245ac35188529046f7af36949a3f279acda460fed8ff85148aa6f5a226c3f508",
+        "formal_success_marker": true,
+        "formal_scope": {
+          "input_bits": 39,
+          "input_bit_accounting": "8+8+1+1+2+16+3=39 (locked flattened ABI; no padding inputs)",
+          "input_space": "2**39",
+          "input_space_cardinality": "549755813888",
+          "state_bits": 0,
+          "state_space": "singleton (stateless combinational module and children)",
+          "property": "mismatch == 0 for every 2-state valuation of all ByteMaskTailGen inputs",
+          "outputs_compared": {
+            "io_out_activeEn": 16,
+            "io_out_agnosticEn": 16
+          },
+          "output_bits": 32
+        }
+      }
+    }
+  },
+  "failures": [],
+  "unclosed": []
+}

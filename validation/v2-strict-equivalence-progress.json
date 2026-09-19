@@ -2,12 +2,12 @@
   "schema_version": 1,
   "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_EQUIVALENCE_PROGRESS",
   "build_denominator": 118,
-  "strict_complete_build_count": 6,
-  "fraction": "6/118",
-  "percentage": 5.084746,
+  "strict_complete_build_count": 8,
+  "fraction": "8/118",
+  "percentage": 6.779661,
   "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with the locked source commit, matching source hashes, and a Yosys SAT no-model success marker is counted.",
   "plan_reconciliation": {
-    "plan_count": 6,
+    "plan_count": 8,
     "plan_denominator": 118,
     "status": "PASS"
   },
@@ -137,6 +137,168 @@
           "-Q",
           "-p",
           "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_branchmodule_strict/UHSC_BranchModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_branchmodule_strict/REF_BranchModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_branchmodule_strict/BranchModule_MITER.sv; prep -top BranchModule_MITER; flatten; opt; sat -prove mismatch 0"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "formal_success_marker": true
+      },
+      "failures": []
+    },
+    {
+      "evidence": "validation/v2-bytemasktailgen-strict-evidence.json",
+      "build_id": "Build-Cpu.Backend.Fu.Vector.ByteMaskTailGen",
+      "source_commit": {
+        "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+        "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+        "status": "PASS"
+      },
+      "status": "PASS",
+      "scope": {
+        "kind": "stateless_combinational_leaf_with_combinational_children",
+        "configuration": "locked V2 vlen=128, maxVLMAX=128, 16-byte destination slice",
+        "state_bits": 0,
+        "state_boundary": "no clock/reset/register/memory in top or extracted children",
+        "inputs": {
+          "io_in_begin": 8,
+          "io_in_end": 8,
+          "io_in_vma": 1,
+          "io_in_vta": 1,
+          "io_in_vsew": 2,
+          "io_in_maskUsed": 16,
+          "io_in_vdIdx": 3
+        },
+        "input_bits": 39,
+        "input_bit_accounting": "8+8+1+1+2+16+3=39",
+        "input_space": "2**39",
+        "input_space_cardinality": "549755813888",
+        "outputs_compared": {
+          "io_out_activeEn": 16,
+          "io_out_agnosticEn": 16
+        },
+        "output_bits": 32,
+        "why_complete": "Yosys SAT proves both 16-bit output buses equal for every valuation of all 39 flattened input bits; all four closure modules are purely combinational.",
+        "bounded_tests_counted": false
+      },
+      "sources": {
+        "scala": {
+          "path": "upstream/src/main/scala/xiangshan/backend/fu/vector/ByteMaskTailGen.scala",
+          "present": true,
+          "expected_sha256": "2a6792444632182bff89f907c58fda06fa6e50aa48a8b3454f5c2562cd73e4fe",
+          "observed_sha256": "2a6792444632182bff89f907c58fda06fa6e50aa48a8b3454f5c2562cd73e4fe",
+          "status": "PASS"
+        },
+        "reference_sv": {
+          "path": "validation/reference-closures/ByteMaskTailGen-v2.sv",
+          "present": true,
+          "expected_sha256": "9a3de3d2c4bc437648ad502089abbc6b19c5ce3c13b41f35f0a77df583228cd3",
+          "observed_sha256": "9a3de3d2c4bc437648ad502089abbc6b19c5ce3c13b41f35f0a77df583228cd3",
+          "status": "PASS"
+        },
+        "python_build": {
+          "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Vector.ByteMaskTailGen-Hardware.py",
+          "present": true,
+          "expected_sha256": "7620de4e059c23e5a3f643f188282ef28613db1468f1b53284cba6946dbbfd43",
+          "observed_sha256": "7620de4e059c23e5a3f643f188282ef28613db1468f1b53284cba6946dbbfd43",
+          "status": "PASS"
+        }
+      },
+      "formal": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_bytemasktailgen_strict/UHSC_ByteMaskTailGen.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_bytemasktailgen_strict/REF_ByteMaskTailGen_closure.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_bytemasktailgen_strict/ByteMaskTailGen_MITER.sv; prep -top ByteMaskTailGen_MITER; flatten; opt; sat -prove mismatch 0"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "formal_success_marker": true
+      },
+      "failures": []
+    },
+    {
+      "evidence": "validation/v2-flitables-strict-evidence.json",
+      "build_id": "Build-Cpu.Backend.Fu.Fpu.FliTable",
+      "source_commit": {
+        "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+        "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+        "status": "PASS"
+      },
+      "status": "PASS",
+      "scope": {
+        "kind": "stateless_combinational_multi_variant_build",
+        "public_variants": [
+          "FliHTable",
+          "FliSTable",
+          "FliDTable"
+        ],
+        "state_bits": 0,
+        "state_boundary": "each table has no clock/reset/register/memory",
+        "inputs": {
+          "FliHTable": {
+            "src": 5
+          },
+          "FliSTable": {
+            "src": 5
+          },
+          "FliDTable": {
+            "src": 5
+          }
+        },
+        "outputs_compared": {
+          "FliHTable": {
+            "out": 16
+          },
+          "FliSTable": {
+            "out": 16
+          },
+          "FliDTable": {
+            "out": 16
+          }
+        },
+        "input_bits": 15,
+        "input_space": "2**15",
+        "input_space_cardinality": "32768",
+        "inputs_per_variant": {
+          "src": 5
+        },
+        "outputs_compared_per_variant": {
+          "out": 16
+        },
+        "input_bits_per_variant": 5,
+        "input_space_per_variant": "2**5",
+        "input_space_cardinality_per_variant": "32",
+        "aggregate_complete_cases": "3 * 32 = 96",
+        "why_complete": "All three declared public variants have independent Yosys SAT miters proving all 16 output bits equal for every 5-bit input; the variants are stateless."
+      },
+      "sources": {
+        "scala": {
+          "path": "upstream/src/main/scala/xiangshan/backend/fu/fpu/FliTable.scala",
+          "present": true,
+          "expected_sha256": "3614c54ac9f61c4c97a2d1e2ac767509a669fcc8ae85de94f5c3a447ce1fcfda",
+          "observed_sha256": "3614c54ac9f61c4c97a2d1e2ac767509a669fcc8ae85de94f5c3a447ce1fcfda",
+          "status": "PASS"
+        },
+        "reference_sv": {
+          "path": "validation/reference-closures/FliTables-v2.sv",
+          "present": true,
+          "expected_sha256": "0f9660f6a14a15436fce623a9bfd91fb8c9980880046bf19ef236315c155d0dc",
+          "observed_sha256": "0f9660f6a14a15436fce623a9bfd91fb8c9980880046bf19ef236315c155d0dc",
+          "status": "PASS"
+        },
+        "python_build": {
+          "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Fpu.FliTable-Hardware.py",
+          "present": true,
+          "expected_sha256": "383a9880a8e7b4cce8ec118e8f0fa3634128b4b1661aa39f001797e035166ebf",
+          "observed_sha256": "383a9880a8e7b4cce8ec118e8f0fa3634128b4b1661aa39f001797e035166ebf",
+          "status": "PASS"
+        }
+      },
+      "formal": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/UHSC_FliTables.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/REF_FliTables.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/FliTables_MITER.sv; prep -top FliTables_MITER; flatten; opt; sat -prove mismatch 0"
         ],
         "returncode": 0,
         "status": "PASS",

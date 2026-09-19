@@ -1,0 +1,434 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_COMPLETE_EQUIVALENCE",
+  "build_id": "Build-Cpu.Backend.Fu.Fpu.FliTable",
+  "validator": "validation/v2_flitables_strict_validator.py",
+  "status": "COMPLETE_EQUIVALENCE",
+  "strict_complete_eligible": true,
+  "strict_complete_count_delta": 1,
+  "acceptance_eligible": true,
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "scope": {
+    "kind": "stateless_combinational_multi_variant_build",
+    "public_variants": [
+      "FliHTable",
+      "FliSTable",
+      "FliDTable"
+    ],
+    "state_bits": 0,
+    "state_boundary": "each table has no clock/reset/register/memory",
+    "inputs": {
+      "FliHTable": {
+        "src": 5
+      },
+      "FliSTable": {
+        "src": 5
+      },
+      "FliDTable": {
+        "src": 5
+      }
+    },
+    "outputs_compared": {
+      "FliHTable": {
+        "out": 16
+      },
+      "FliSTable": {
+        "out": 16
+      },
+      "FliDTable": {
+        "out": 16
+      }
+    },
+    "input_bits": 15,
+    "input_space": "2**15",
+    "input_space_cardinality": "32768",
+    "inputs_per_variant": {
+      "src": 5
+    },
+    "outputs_compared_per_variant": {
+      "out": 16
+    },
+    "input_bits_per_variant": 5,
+    "input_space_per_variant": "2**5",
+    "input_space_cardinality_per_variant": "32",
+    "aggregate_complete_cases": "3 * 32 = 96",
+    "why_complete": "All three declared public variants have independent Yosys SAT miters proving all 16 output bits equal for every 5-bit input; the variants are stateless."
+  },
+  "sources": {
+    "scala": {
+      "path": "upstream/src/main/scala/xiangshan/backend/fu/fpu/FliTable.scala",
+      "sha256": "3614c54ac9f61c4c97a2d1e2ac767509a669fcc8ae85de94f5c3a447ce1fcfda",
+      "bytes": 2787
+    },
+    "reference_sv": {
+      "path": "validation/reference-closures/FliTables-v2.sv",
+      "sha256": "0f9660f6a14a15436fce623a9bfd91fb8c9980880046bf19ef236315c155d0dc",
+      "bytes": 13474,
+      "locked_modules": [
+        "FliHTable",
+        "FliSTable",
+        "FliDTable"
+      ],
+      "module_hashes": {
+        "FliHTable": {
+          "bytes": 3242,
+          "sha256": "1d950a48fe8c4b79844aa3b51ca6bc3ac21fbd46161ff0562f17b9acef864988"
+        },
+        "FliSTable": {
+          "bytes": 4744,
+          "sha256": "6cf9a3923d45cf5bc5a8d76b754f88b5fca6b9e3ff084d96aa0be9619b6780c6"
+        },
+        "FliDTable": {
+          "bytes": 5485,
+          "sha256": "5f4b161fa370fcac30ea8eb6c61b1843f63546592c028590f682ea55cacf7682"
+        }
+      },
+      "locked_xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+      "locked_xstop_module_lines": {
+        "FliHTable": [
+          1200613,
+          1200670
+        ],
+        "FliSTable": [
+          1200672,
+          1200758
+        ],
+        "FliDTable": [
+          1200760,
+          1200867
+        ]
+      }
+    },
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Fpu.FliTable-Hardware.py",
+      "sha256": "383a9880a8e7b4cce8ec118e8f0fa3634128b4b1661aa39f001797e035166ebf",
+      "bytes": 7162
+    }
+  },
+  "checks": {
+    "python_version": "3.13.12",
+    "py_compile": {
+      "status": "PASS"
+    },
+    "pyright": {
+      "target": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_flitables_pyright_ui5xzfg5\\Build-Cpu.Backend.Fu.Fpu.FliTable-Hardware.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "files_analyzed": 1,
+        "error_count": 0,
+        "warning_count": 0,
+        "output_sha256": "0740759cf6b2835f06008c0a54f50b1b1ade66650a553435d0302b8118f6acc2",
+        "stderr_tail": ""
+      },
+      "validator": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_flitables_pyright_14z6b4t3\\v2_flitables_strict_validator.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "files_analyzed": 1,
+        "error_count": 0,
+        "warning_count": 0,
+        "output_sha256": "97f14d36d544e82ea2fc3e5552eb59d85e81fbd58a3662735b1c23d17c0648b4",
+        "stderr_tail": ""
+      }
+    },
+    "deterministic_exports": {
+      "FliHTable": {
+        "status": "PASS",
+        "bytes": 3667,
+        "sha256": "0a4bc661e7a73e7faa559171c8af941d3dc30ada668d009fbc09d70e6cfa5f34",
+        "repeat_sha256": "0a4bc661e7a73e7faa559171c8af941d3dc30ada668d009fbc09d70e6cfa5f34",
+        "byte_equal": true
+      },
+      "FliSTable": {
+        "status": "PASS",
+        "bytes": 3667,
+        "sha256": "a786ebae827b7bf07de392150608c67d02921ef52d78741d084a9cac35326273",
+        "repeat_sha256": "a786ebae827b7bf07de392150608c67d02921ef52d78741d084a9cac35326273",
+        "byte_equal": true
+      },
+      "FliDTable": {
+        "status": "PASS",
+        "bytes": 3667,
+        "sha256": "50b25cb005933092c4879c9873858e0005fe146e5c58397c49d09859c7e288e1",
+        "repeat_sha256": "50b25cb005933092c4879c9873858e0005fe146e5c58397c49d09859c7e288e1",
+        "byte_equal": true
+      },
+      "build_verilog_adapter": {
+        "status": "PASS",
+        "module": "FliTable",
+        "bytes": 3666,
+        "sha256": "a5f5bdfdee41584ed84817c4736c92cb1c03745f1c9aba5dcc394c4fbc6dcf81",
+        "repeat_sha256": "a5f5bdfdee41584ed84817c4736c92cb1c03745f1c9aba5dcc394c4fbc6dcf81",
+        "byte_equal": true
+      }
+    },
+    "tools": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--version"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n",
+        "output_sha256": "ae161d63a0898d55050284fd76bd5e83136b75d2ec90d5b0622f196d5edc2aff"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "--version"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\n",
+        "output_sha256": "239d92e36e753a9dff4e79d97878ed5d55304b675d411895ec57508bc134e28e"
+      }
+    },
+    "variants": {
+      "FliHTable": {
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/UHSC_FliHTable.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/REF_FliHTable.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/FliHTable_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "ER.target_i'\n  125 |   assign \\$25  = src == 3'h7;\n      |                      ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/UHSC_FliHTable.sv:126:22: Operator EQ expects 5 bits on the RHS, but RHS's CONST '3'h6' generates 3 bits.\n                                                                                                           : ... note: In instance 'FliHTable_MITER.target_i'\n  126 |   assign \\$26  = src == 3'h6;\n      |                      ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/UHSC_FliHTable.sv:127:22: Operator EQ expects 5 bits on the RHS, but RHS's CONST '3'h5' generates 3 bits.\n                                                                                                           : ... note: In instance 'FliHTable_MITER.target_i'\n  127 |   assign \\$27  = src == 3'h5;\n      |                      ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/UHSC_FliHTable.sv:128:22: Operator EQ expects 5 bits on the RHS, but RHS's CONST '3'h4' generates 3 bits.\n                                                                                                           : ... note: In instance 'FliHTable_MITER.target_i'\n  128 |   assign \\$28  = src == 3'h4;\n      |                      ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/UHSC_FliHTable.sv:129:22: Operator EQ expects 5 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                                                                                           : ... note: In instance 'FliHTable_MITER.target_i'\n  129 |   assign \\$29  = src == 2'h3;\n      |                      ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/UHSC_FliHTable.sv:130:22: Operator EQ expects 5 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                           : ... note: In instance 'FliHTable_MITER.target_i'\n  130 |   assign \\$30  = src == 2'h2;\n      |                      ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/UHSC_FliHTable.sv:131:22: Operator EQ expects 5 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                           : ... note: In instance 'FliHTable_MITER.target_i'\n  131 |   assign \\$31  = src == 1'h1;\n      |                      ^~\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/UHSC_FliHTable.sv:132:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'src' generates 5 bits.\n                                                                                                          : ... note: In instance 'FliHTable_MITER.target_i'\n  132 |   assign \\$32  = ! src;\n      |                  ^\n",
+          "output_sha256": "c8f2c058d96bf316bdda1d95753cb8595ec3b0265e85441928574a23a42834fc"
+        },
+        "yosys_target": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/UHSC_FliHTable.sv; hierarchy -top FliHTable; proc; opt; check"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "ed 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FliHTable.\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FliHTable.\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\FliHTable'.\nRemoved a total of 0 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\FliHTable..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\FliHTable.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\FliHTable'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\FliHTable..\nRemoved 0 unused cells and 64 unused wires.\n<suppressed ~1 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FliHTable.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\FliHTable..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\FliHTable.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\FliHTable'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\FliHTable..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FliHTable.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module FliHTable...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: c435adeefb, CPU: user 0.02s system 0.00s, MEM: 12.50 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 23% 4x opt_expr (0 sec), 20% 2x read_verilog (0 sec), ...\n",
+          "output_sha256": "d57c6f91165ca0d152a48efeb08ead7090378887a3d5bc27eb618d98c2d7745f"
+        },
+        "yosys_reference": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/REF_FliHTable.sv; hierarchy -top REF_FliHTable; proc; opt; check"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "esses).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_FliHTable.\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_FliHTable.\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_FliHTable'.\n<suppressed ~39 debug messages>\nRemoved a total of 13 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\REF_FliHTable..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\REF_FliHTable.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_FliHTable'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\REF_FliHTable..\nRemoved 0 unused cells and 22 unused wires.\n<suppressed ~1 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_FliHTable.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\REF_FliHTable..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\REF_FliHTable.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_FliHTable'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\REF_FliHTable..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_FliHTable.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module REF_FliHTable...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: bbbbd632e0, CPU: user 0.01s system 0.01s, MEM: 13.12 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 43% 2x read_verilog (0 sec), 20% 4x opt_expr (0 sec), ...\n",
+          "output_sha256": "758a376abbeb8754f02c920414a41629953b5ff9145c59d82cebbdf41d8dfbd5"
+        },
+        "yosys_formal_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/UHSC_FliHTable.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/REF_FliHTable.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/FliHTable_MITER.sv; prep -top FliHTable_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "Number of processes:              0\n   Number of cells:                 97\n     $eq                            31\n     $logic_not                      1\n     $mux                           32\n     $not                            1\n     $reduce_and                    23\n     $reduce_or                      8\n     $xor                            1\n\n4.13. Executing CHECK pass (checking for obvious problems).\nChecking module FliHTable...\nChecking module FliHTable_MITER...\nChecking module REF_FliHTable...\nFound and reported 0 problems.\n\n5. Executing FLATTEN pass (flatten design).\nDeleting now unused module FliHTable.\nDeleting now unused module REF_FliHTable.\n<suppressed ~2 debug messages>\n\n6. Executing OPT pass (performing simple optimizations).\n\n6.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FliHTable_MITER.\n\n6.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\FliHTable_MITER'.\nRemoved a total of 0 cells.\n\n6.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\FliHTable_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n6.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\FliHTable_MITER.\nPerformed a total of 0 changes.\n\n6.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\FliHTable_MITER'.\nRemoved a total of 0 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\FliHTable_MITER..\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FliHTable_MITER.\n\n6.9. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 99 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 3527 variables and 9536 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 3ca63678e0, CPU: user 0.05s system 0.00s, MEM: 15.94 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 19% 1x sat (0 sec), 18% 4x read_verilog (0 sec), ...\n",
+          "output_sha256": "229d34eaa729e64ec7e2290887071d75836ad1d6354c7834e58ba51768699eec",
+          "formal_success_marker": true,
+          "formal_scope": {
+            "input_bits": 5,
+            "input_space": "2**5",
+            "input_space_cardinality": "32",
+            "state_bits": 0,
+            "state_space": "singleton (stateless combinational module)",
+            "property": "mismatch == 0 for every 2-state src valuation"
+          }
+        }
+      },
+      "FliSTable": {
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/UHSC_FliSTable.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/REF_FliSTable.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/FliSTable_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "ER.target_i'\n  125 |   assign \\$25  = src == 3'h7;\n      |                      ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/UHSC_FliSTable.sv:126:22: Operator EQ expects 5 bits on the RHS, but RHS's CONST '3'h6' generates 3 bits.\n                                                                                                           : ... note: In instance 'FliSTable_MITER.target_i'\n  126 |   assign \\$26  = src == 3'h6;\n      |                      ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/UHSC_FliSTable.sv:127:22: Operator EQ expects 5 bits on the RHS, but RHS's CONST '3'h5' generates 3 bits.\n                                                                                                           : ... note: In instance 'FliSTable_MITER.target_i'\n  127 |   assign \\$27  = src == 3'h5;\n      |                      ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/UHSC_FliSTable.sv:128:22: Operator EQ expects 5 bits on the RHS, but RHS's CONST '3'h4' generates 3 bits.\n                                                                                                           : ... note: In instance 'FliSTable_MITER.target_i'\n  128 |   assign \\$28  = src == 3'h4;\n      |                      ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/UHSC_FliSTable.sv:129:22: Operator EQ expects 5 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                                                                                           : ... note: In instance 'FliSTable_MITER.target_i'\n  129 |   assign \\$29  = src == 2'h3;\n      |                      ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/UHSC_FliSTable.sv:130:22: Operator EQ expects 5 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                           : ... note: In instance 'FliSTable_MITER.target_i'\n  130 |   assign \\$30  = src == 2'h2;\n      |                      ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/UHSC_FliSTable.sv:131:22: Operator EQ expects 5 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                           : ... note: In instance 'FliSTable_MITER.target_i'\n  131 |   assign \\$31  = src == 1'h1;\n      |                      ^~\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/UHSC_FliSTable.sv:132:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'src' generates 5 bits.\n                                                                                                          : ... note: In instance 'FliSTable_MITER.target_i'\n  132 |   assign \\$32  = ! src;\n      |                  ^\n",
+          "output_sha256": "5999d59bceb758fb8723cfc916fbb31025e51ab26b48cdeddb34635e402c83cf"
+        },
+        "yosys_target": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/UHSC_FliSTable.sv; hierarchy -top FliSTable; proc; opt; check"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "ed 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FliSTable.\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FliSTable.\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\FliSTable'.\nRemoved a total of 0 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\FliSTable..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\FliSTable.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\FliSTable'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\FliSTable..\nRemoved 0 unused cells and 64 unused wires.\n<suppressed ~1 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FliSTable.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\FliSTable..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\FliSTable.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\FliSTable'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\FliSTable..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FliSTable.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module FliSTable...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: c58972c7e6, CPU: user 0.02s system 0.01s, MEM: 12.66 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 23% 4x opt_expr (0 sec), 20% 2x read_verilog (0 sec), ...\n",
+          "output_sha256": "0357b756472f82207eabd1bde9d35eb1b3ca45bc5d3557abaeb63e843226547d"
+        },
+        "yosys_reference": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/REF_FliSTable.sv; hierarchy -top REF_FliSTable; proc; opt; check"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "sses).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_FliSTable.\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_FliSTable.\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_FliSTable'.\n<suppressed ~102 debug messages>\nRemoved a total of 34 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\REF_FliSTable..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\REF_FliSTable.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_FliSTable'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\REF_FliSTable..\nRemoved 0 unused cells and 45 unused wires.\n<suppressed ~1 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_FliSTable.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\REF_FliSTable..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\REF_FliSTable.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_FliSTable'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\REF_FliSTable..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_FliSTable.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module REF_FliSTable...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: e1828ebdde, CPU: user 0.01s system 0.01s, MEM: 13.12 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 45% 2x read_verilog (0 sec), 20% 4x opt_expr (0 sec), ...\n",
+          "output_sha256": "2d72e0d011b2b0f96728342681b5182eda1a54cc4fd4b9f08f1e9b01a5fe817a"
+        },
+        "yosys_formal_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/UHSC_FliSTable.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/REF_FliSTable.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/FliSTable_MITER.sv; prep -top FliSTable_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "umber of processes:              0\n   Number of cells:                101\n     $eq                            31\n     $logic_not                      1\n     $mux                           32\n     $not                            1\n     $reduce_and                    25\n     $reduce_or                     10\n     $xor                            1\n\n4.13. Executing CHECK pass (checking for obvious problems).\nChecking module FliSTable...\nChecking module FliSTable_MITER...\nChecking module REF_FliSTable...\nFound and reported 0 problems.\n\n5. Executing FLATTEN pass (flatten design).\nDeleting now unused module FliSTable.\nDeleting now unused module REF_FliSTable.\n<suppressed ~2 debug messages>\n\n6. Executing OPT pass (performing simple optimizations).\n\n6.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FliSTable_MITER.\n\n6.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\FliSTable_MITER'.\nRemoved a total of 0 cells.\n\n6.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\FliSTable_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n6.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\FliSTable_MITER.\nPerformed a total of 0 changes.\n\n6.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\FliSTable_MITER'.\nRemoved a total of 0 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\FliSTable_MITER..\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FliSTable_MITER.\n\n6.9. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 103 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 3556 variables and 9626 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 720a07596b, CPU: user 0.05s system 0.01s, MEM: 16.25 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 20% 1x sat (0 sec), 18% 4x read_verilog (0 sec), ...\n",
+          "output_sha256": "6f56605967681982a13f46446e02b9f79e38506b33ed07ab760c1b7729ff3f59",
+          "formal_success_marker": true,
+          "formal_scope": {
+            "input_bits": 5,
+            "input_space": "2**5",
+            "input_space_cardinality": "32",
+            "state_bits": 0,
+            "state_space": "singleton (stateless combinational module)",
+            "property": "mismatch == 0 for every 2-state src valuation"
+          }
+        }
+      },
+      "FliDTable": {
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/UHSC_FliDTable.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/REF_FliDTable.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/FliDTable_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "ER.target_i'\n  125 |   assign \\$25  = src == 3'h7;\n      |                      ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/UHSC_FliDTable.sv:126:22: Operator EQ expects 5 bits on the RHS, but RHS's CONST '3'h6' generates 3 bits.\n                                                                                                           : ... note: In instance 'FliDTable_MITER.target_i'\n  126 |   assign \\$26  = src == 3'h6;\n      |                      ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/UHSC_FliDTable.sv:127:22: Operator EQ expects 5 bits on the RHS, but RHS's CONST '3'h5' generates 3 bits.\n                                                                                                           : ... note: In instance 'FliDTable_MITER.target_i'\n  127 |   assign \\$27  = src == 3'h5;\n      |                      ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/UHSC_FliDTable.sv:128:22: Operator EQ expects 5 bits on the RHS, but RHS's CONST '3'h4' generates 3 bits.\n                                                                                                           : ... note: In instance 'FliDTable_MITER.target_i'\n  128 |   assign \\$28  = src == 3'h4;\n      |                      ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/UHSC_FliDTable.sv:129:22: Operator EQ expects 5 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                                                                                           : ... note: In instance 'FliDTable_MITER.target_i'\n  129 |   assign \\$29  = src == 2'h3;\n      |                      ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/UHSC_FliDTable.sv:130:22: Operator EQ expects 5 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                           : ... note: In instance 'FliDTable_MITER.target_i'\n  130 |   assign \\$30  = src == 2'h2;\n      |                      ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/UHSC_FliDTable.sv:131:22: Operator EQ expects 5 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                           : ... note: In instance 'FliDTable_MITER.target_i'\n  131 |   assign \\$31  = src == 1'h1;\n      |                      ^~\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/UHSC_FliDTable.sv:132:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'src' generates 5 bits.\n                                                                                                          : ... note: In instance 'FliDTable_MITER.target_i'\n  132 |   assign \\$32  = ! src;\n      |                  ^\n",
+          "output_sha256": "bd91b8b6195be5250d3d02eafb6af45ea9c44e3373e7036d3eeb8f1184612e74"
+        },
+        "yosys_target": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/UHSC_FliDTable.sv; hierarchy -top FliDTable; proc; opt; check"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "ed 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FliDTable.\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FliDTable.\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\FliDTable'.\nRemoved a total of 0 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\FliDTable..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\FliDTable.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\FliDTable'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\FliDTable..\nRemoved 0 unused cells and 64 unused wires.\n<suppressed ~1 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FliDTable.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\FliDTable..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\FliDTable.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\FliDTable'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\FliDTable..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FliDTable.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module FliDTable...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: db1eab7713, CPU: user 0.02s system 0.01s, MEM: 12.50 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 22% 4x opt_expr (0 sec), 19% 2x read_verilog (0 sec), ...\n",
+          "output_sha256": "093d676b6851f0fd22460068f786f7fa1d64eb3928f68c1fd370021324865dfb"
+        },
+        "yosys_reference": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/REF_FliDTable.sv; hierarchy -top REF_FliDTable; proc; opt; check"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "sses).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_FliDTable.\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_FliDTable.\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_FliDTable'.\n<suppressed ~174 debug messages>\nRemoved a total of 58 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\REF_FliDTable..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\REF_FliDTable.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_FliDTable'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\REF_FliDTable..\nRemoved 0 unused cells and 69 unused wires.\n<suppressed ~1 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_FliDTable.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\REF_FliDTable..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\REF_FliDTable.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_FliDTable'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\REF_FliDTable..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_FliDTable.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module REF_FliDTable...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 64c3382cf2, CPU: user 0.01s system 0.01s, MEM: 13.28 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 43% 2x read_verilog (0 sec), 21% 4x opt_expr (0 sec), ...\n",
+          "output_sha256": "c166613cf3374f2529b75a50c46ca34ba016b87908f7b17d0c4116fa964468df"
+        },
+        "yosys_formal_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/UHSC_FliDTable.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/REF_FliDTable.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/FliDTable_MITER.sv; prep -top FliDTable_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "   Number of processes:              0\n   Number of cells:                101\n     $eq                            31\n     $logic_not                      1\n     $mux                           32\n     $not                            1\n     $reduce_and                    25\n     $reduce_or                     10\n     $xor                            1\n\n4.13. Executing CHECK pass (checking for obvious problems).\nChecking module FliDTable...\nChecking module FliDTable_MITER...\nChecking module REF_FliDTable...\nFound and reported 0 problems.\n\n5. Executing FLATTEN pass (flatten design).\nDeleting now unused module FliDTable.\nDeleting now unused module REF_FliDTable.\n<suppressed ~2 debug messages>\n\n6. Executing OPT pass (performing simple optimizations).\n\n6.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FliDTable_MITER.\n\n6.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\FliDTable_MITER'.\nRemoved a total of 0 cells.\n\n6.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\FliDTable_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n6.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\FliDTable_MITER.\nPerformed a total of 0 changes.\n\n6.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\FliDTable_MITER'.\nRemoved a total of 0 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\FliDTable_MITER..\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FliDTable_MITER.\n\n6.9. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 103 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 3565 variables and 9653 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 69fa6d993d, CPU: user 0.06s system 0.00s, MEM: 16.56 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 22% 1x sat (0 sec), 17% 8x opt_expr (0 sec), ...\n",
+          "output_sha256": "7ee4849d558c75dd9dfe6c93588ff6550626c50bab36f9d10e93848f1f125b82",
+          "formal_success_marker": true,
+          "formal_scope": {
+            "input_bits": 5,
+            "input_space": "2**5",
+            "input_space_cardinality": "32",
+            "state_bits": 0,
+            "state_space": "singleton (stateless combinational module)",
+            "property": "mismatch == 0 for every 2-state src valuation"
+          }
+        }
+      }
+    },
+    "formal": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/UHSC_FliTables.sv",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/REF_FliTables.sv",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/FliTables_MITER.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": " instance 'FliTables_MITER.dut_h'\n  125 |   assign \\$25  = src == 3'h7;\n      |                      ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/UHSC_FliTables.sv:126:22: Operator EQ expects 5 bits on the RHS, but RHS's CONST '3'h6' generates 3 bits.\n                                                                                                           : ... note: In instance 'FliTables_MITER.dut_h'\n  126 |   assign \\$26  = src == 3'h6;\n      |                      ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/UHSC_FliTables.sv:127:22: Operator EQ expects 5 bits on the RHS, but RHS's CONST '3'h5' generates 3 bits.\n                                                                                                           : ... note: In instance 'FliTables_MITER.dut_h'\n  127 |   assign \\$27  = src == 3'h5;\n      |                      ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/UHSC_FliTables.sv:128:22: Operator EQ expects 5 bits on the RHS, but RHS's CONST '3'h4' generates 3 bits.\n                                                                                                           : ... note: In instance 'FliTables_MITER.dut_h'\n  128 |   assign \\$28  = src == 3'h4;\n      |                      ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/UHSC_FliTables.sv:129:22: Operator EQ expects 5 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                                                                                           : ... note: In instance 'FliTables_MITER.dut_h'\n  129 |   assign \\$29  = src == 2'h3;\n      |                      ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/UHSC_FliTables.sv:130:22: Operator EQ expects 5 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                           : ... note: In instance 'FliTables_MITER.dut_h'\n  130 |   assign \\$30  = src == 2'h2;\n      |                      ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/UHSC_FliTables.sv:131:22: Operator EQ expects 5 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                           : ... note: In instance 'FliTables_MITER.dut_h'\n  131 |   assign \\$31  = src == 1'h1;\n      |                      ^~\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/UHSC_FliTables.sv:132:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'src' generates 5 bits.\n                                                                                                          : ... note: In instance 'FliTables_MITER.dut_h'\n  132 |   assign \\$32  = ! src;\n      |                  ^\n",
+        "output_sha256": "ab84b05f85c7d966734e5c26d46380f1e9edb71376ca8825d3ebc6961312f84e"
+      },
+      "yosys_formal_miter": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/UHSC_FliTables.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/REF_FliTables.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/FliTables_MITER.sv; prep -top FliTables_MITER; flatten; opt; sat -prove mismatch 0"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "r                     28\n     $xor                            3\n\n4.13. Executing CHECK pass (checking for obvious problems).\nChecking module FliDTable...\nChecking module FliHTable...\nChecking module FliSTable...\nChecking module FliTables_MITER...\nChecking module REF_FliDTable...\nChecking module REF_FliHTable...\nChecking module REF_FliSTable...\nFound and reported 0 problems.\n\n5. Executing FLATTEN pass (flatten design).\nDeleting now unused module FliDTable.\nDeleting now unused module FliHTable.\nDeleting now unused module FliSTable.\nDeleting now unused module REF_FliDTable.\nDeleting now unused module REF_FliHTable.\nDeleting now unused module REF_FliSTable.\n<suppressed ~6 debug messages>\n\n6. Executing OPT pass (performing simple optimizations).\n\n6.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FliTables_MITER.\n\n6.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\FliTables_MITER'.\nRemoved a total of 0 cells.\n\n6.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\FliTables_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~3 debug messages>\n\n6.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\FliTables_MITER.\nPerformed a total of 0 changes.\n\n6.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\FliTables_MITER'.\nRemoved a total of 0 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\FliTables_MITER..\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FliTables_MITER.\n\n6.9. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 307 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 10650 variables and 28821 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: fc68cd2dca, CPU: user 0.13s system 0.00s, MEM: 22.73 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 27% 1x sat (0 sec), 16% 6x opt_clean (0 sec), ...\n",
+        "output_sha256": "d4f93123f31a49290318e054cff2be707d5d7810def96a1b89dbccded21c8820",
+        "formal_success_marker": true,
+        "formal_scope": {
+          "input_bits": 15,
+          "input_space": "2**15",
+          "input_space_cardinality": "32768",
+          "state_bits": 0,
+          "state_space": "singleton (three stateless combinational modules)",
+          "property": "OR of H/S/D output mismatches is zero for every valuation",
+          "variants": [
+            "FliHTable",
+            "FliSTable",
+            "FliDTable"
+          ]
+        }
+      }
+    }
+  },
+  "failures": [],
+  "unclosed": []
+}
