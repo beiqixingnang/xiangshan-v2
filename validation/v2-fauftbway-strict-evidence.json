@@ -1,0 +1,334 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_COMPLETE_EQUIVALENCE",
+  "build_id": "Build-Cpu.Frontend.Bpu.FauFTBWay",
+  "validator": "validation/v2_fauftbway_strict_validator.py",
+  "status": "COMPLETE_EQUIVALENCE",
+  "strict_complete_eligible": true,
+  "strict_complete_count_delta": 1,
+  "acceptance_eligible": true,
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "scope": {
+    "kind": "sequential_registered_leaf",
+    "configuration": "locked V2 FauFTBWay default widths",
+    "state_bits": 77,
+    "state_boundary": "one posedge-clocked FTB entry; payload/tag reset-less; valid only has asynchronous reset",
+    "inputs": {
+      "clock": 1,
+      "reset": 1,
+      "io_req_tag": 16,
+      "io_update_req_tag": 16,
+      "io_write_valid": 1,
+      "io_write_entry_isCall": 1,
+      "io_write_entry_isRet": 1,
+      "io_write_entry_isJalr": 1,
+      "io_write_entry_valid": 1,
+      "io_write_entry_brSlots_0_offset": 4,
+      "io_write_entry_brSlots_0_sharing": 1,
+      "io_write_entry_brSlots_0_valid": 1,
+      "io_write_entry_brSlots_0_lower": 12,
+      "io_write_entry_brSlots_0_tarStat": 2,
+      "io_write_entry_tailSlot_offset": 4,
+      "io_write_entry_tailSlot_sharing": 1,
+      "io_write_entry_tailSlot_valid": 1,
+      "io_write_entry_tailSlot_lower": 20,
+      "io_write_entry_tailSlot_tarStat": 2,
+      "io_write_entry_pftAddr": 4,
+      "io_write_entry_carry": 1,
+      "io_write_entry_last_may_be_rvi_call": 1,
+      "io_write_entry_strong_bias_0": 1,
+      "io_write_entry_strong_bias_1": 1,
+      "io_write_tag": 16
+    },
+    "outputs_compared": {
+      "io_resp_isCall": 1,
+      "io_resp_isRet": 1,
+      "io_resp_isJalr": 1,
+      "io_resp_valid": 1,
+      "io_resp_brSlots_0_offset": 4,
+      "io_resp_brSlots_0_sharing": 1,
+      "io_resp_brSlots_0_valid": 1,
+      "io_resp_brSlots_0_lower": 12,
+      "io_resp_brSlots_0_tarStat": 2,
+      "io_resp_tailSlot_offset": 4,
+      "io_resp_tailSlot_sharing": 1,
+      "io_resp_tailSlot_valid": 1,
+      "io_resp_tailSlot_lower": 20,
+      "io_resp_tailSlot_tarStat": 2,
+      "io_resp_pftAddr": 4,
+      "io_resp_carry": 1,
+      "io_resp_last_may_be_rvi_call": 1,
+      "io_resp_strong_bias_0": 1,
+      "io_resp_strong_bias_1": 1,
+      "io_resp_hit": 1,
+      "io_update_hit": 1
+    },
+    "input_bits": 111,
+    "output_bits": 62,
+    "transition_relation": "all input sequences, posedge clock, async reset normalized by async2sync",
+    "why_complete": "Yosys equiv_make + equiv_induct -undef proves every matched state and ABI output cell; no bounded trace assumption is used.",
+    "bounded_tests_counted": false
+  },
+  "reference_lock": {
+    "status": "PASS",
+    "scala_sha256": "05960e23660ebb2b44c1b7273c935f1afae39e381e283e2560c222d667d16580",
+    "expected_scala_sha256": "05960e23660ebb2b44c1b7273c935f1afae39e381e283e2560c222d667d16580",
+    "reference_sha256": "5bb9be2dc0cd27246b275f621eded9e28203028be17b0ddb1ad957bbef665451",
+    "expected_reference_sha256": "5bb9be2dc0cd27246b275f621eded9e28203028be17b0ddb1ad957bbef665451",
+    "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+    "xstop": {
+      "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+      "bytes": 228590583,
+      "module": "FauFTBWay",
+      "extraction_index": "validation/v2-frontend-fauftbway-reference-index.json",
+      "line_start": 122711,
+      "line_end": 122875
+    }
+  },
+  "sources": {
+    "scala": {
+      "path": "upstream/src/main/scala/xiangshan/frontend/FauFTB.scala",
+      "sha256": "05960e23660ebb2b44c1b7273c935f1afae39e381e283e2560c222d667d16580",
+      "bytes": 9304
+    },
+    "reference_sv": {
+      "path": "validation/reference-closures/FauFTBWay.sv",
+      "sha256": "5bb9be2dc0cd27246b275f621eded9e28203028be17b0ddb1ad957bbef665451",
+      "bytes": 19166,
+      "locked_module": "FauFTBWay"
+    },
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.FauFTBWay-Hardware.py",
+      "sha256": "0a5b3c73d5f2a7f5a9e6eab8636ad8c467e22283824b3c14c73d7a82f2d9da6d",
+      "bytes": 13689
+    }
+  },
+  "checks": {
+    "py_compile": {
+      "status": "PASS",
+      "files": [
+        "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.FauFTBWay-Hardware.py",
+        "validation/v2_fauftbway_strict_validator.py"
+      ]
+    },
+    "pyright": {
+      "target": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_fauftbway_pyright_rgs4g7op\\Build-Cpu.Frontend.Bpu.FauFTBWay-Hardware.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "files_analyzed": 1,
+        "error_count": 0,
+        "warning_count": 0,
+        "output_sha256": "4d1bfe9d1aa002530e8eaeda1492339e56aba7d8e94104055c686678c60ea998",
+        "stderr_tail": ""
+      },
+      "validator": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_fauftbway_pyright_1s30ebyi\\v2_fauftbway_strict_validator.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "files_analyzed": 1,
+        "error_count": 0,
+        "warning_count": 0,
+        "output_sha256": "0980a91fde54fd1d26fd0a18b9c023a51eaa5be51a9ca7fdc5230ada1c432099",
+        "stderr_tail": ""
+      }
+    },
+    "deterministic_export": {
+      "status": "PASS",
+      "bytes": 47806,
+      "sha256": "279b3e674d5b5b19722903c52dc300ea05f2b294bfa5c2b1e323aad28ac7b6c2",
+      "repeat_sha256": "279b3e674d5b5b19722903c52dc300ea05f2b294bfa5c2b1e323aad28ac7b6c2",
+      "byte_equal": true,
+      "abi": {
+        "expected_port_count": 46,
+        "observed_port_count": 46,
+        "exact_port_set": true,
+        "extra_removed": true
+      }
+    },
+    "existing_behavior": {
+      "status": "PASS",
+      "direct": {
+        "path": "validation/v2-frontend-fauftbway-direct-results.json",
+        "status": "DIRECT_PASS_BOUNDED",
+        "vectors": 96,
+        "sha256": "51c20a1c5b02b48a1829a3335b759b7dd4690481c162aadbf70467756edaec64"
+      },
+      "differential": {
+        "path": "validation/v2-frontend-fauftbway-differential-results.json",
+        "status": "PENDING_COORDINATOR_REVIEW",
+        "comparison": "PASS",
+        "behavioral_equivalence": true,
+        "vectors": 388,
+        "sha256": "786f7ccf7d720e2615b4e033b1d13409beb6a9137c7ce553d5bd520ddf78a781"
+      },
+      "backend_pass": true
+    },
+    "tools": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--version"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n",
+        "output_sha256": "ae161d63a0898d55050284fd76bd5e83136b75d2ec90d5b0622f196d5edc2aff"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "--version"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\n",
+        "output_sha256": "239d92e36e753a9dff4e79d97878ed5d55304b675d411895ec57508bc134e28e"
+      }
+    },
+    "formal": {
+      "target_verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "--top-module",
+          "FauFTBWay",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_fauftbway_strict/FauFTBWay-target.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.066 MB sources in 2 modules, into 0.030 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.028 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.009 s on 1 threads; alloced 9.762 MB\n",
+        "output_sha256": "efa80b35d38f1888cbcf07ed0f06fadea4ae5d5218b2b32b2d188ed01d3eedda"
+      },
+      "reference_verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "--top-module",
+          "FauFTBWay_ref",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_fauftbway_strict/FauFTBWay-reference.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.026 MB sources in 2 modules, into 0.026 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.026 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.336 MB\n",
+        "output_sha256": "714ff2e96b0af788c6df4fa0f03329ccff527f23754444f417e48efc77992e43"
+      },
+      "target_yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_fauftbway_strict/FauFTBWay-target.sv; proc; async2sync; opt; hierarchy -top FauFTBWay; check; stat"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": ".$procdff$182 ($adff): ARST=$auto$rtlil.cc:2783:ReduceOr$181, D=$procmux$118_Y, Q=\\valid\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FauFTBWay.\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\FauFTBWay'.\nRemoved a total of 0 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\FauFTBWay..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~22 debug messages>\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\FauFTBWay.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\FauFTBWay'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\nAdding EN signal on $procdff$202 ($dff) from module FauFTBWay (D = \\io_write_entry_isCall, Q = \\io_resp_isCall).\nAdding EN signal on $procdff$183 ($dff) from module FauFTBWay (D = \\io_write_tag, Q = \\tag).\nAdding EN signal on $procdff$184 ($dff) from module FauFTBWay (D = \\io_write_entry_strong_bias_1, Q = \\io_resp_strong_bias_1).\nAdding EN signal on $procdff$185 ($dff) from module FauFTBWay (D = \\io_write_entry_strong_bias_0, Q = \\io_resp_strong_bias_0).\nAdding EN signal on $procdff$186 ($dff) from module FauFTBWay (D = \\io_write_entry_last_may_be_rvi_call, Q = \\io_resp_last_may_be_rvi_call).\nAdding EN signal on $procdff$187 ($dff) from module FauFTBWay (D = \\io_write_entry_carry, Q = \\io_resp_carry).\nAdding EN signal on $procdff$188 ($dff) from module FauFTBWay (D = \\io_write_entry_pftAddr, Q = \\io_resp_pftAddr).\nAdding EN signal on $procdff$189 ($dff) from module FauFTBWay (D = \\io_write_entry_tailSlot_tarStat, Q = \\io_resp_tailSlot_tarStat).\nAdding EN signal on $procdff$190 ($dff) from module FauFTBWay (D = \\io_write_entry_tailSlot_lower, Q = \\io_resp_tailSlot_lower).\nAdding EN signal on $procdff$191 ($dff) from module FauFTBWay (D = \\io_write_entry_tailSlot_valid, Q = \\io_resp_tailSlot_valid).\nAdding EN signal on $procdff$192 ($dff) from module FauFTBWay (D = \\io_write_entry_tailSlot_sharing, Q = \\io_resp_tailSlot_sharing).\nAdding EN signal on $procdff$193 ($dff) from module FauFTBWay (D = \\io_write_entry_tailSlot_offset, Q = \\io_resp_tailSlot_offset).\nAdding EN signal on $procdff$194 ($dff) from module FauFTBWay (D = \\io_write_entry_brSlots_0_tarStat, Q = \\io_resp_brSlots_0_tarStat).\nAdding EN signal on $procdff$195 ($dff) from module FauFTBWay (D = \\io_write_entry_brSlots_0_lower, Q = \\io_resp_brSlots_0_lower).\nAdding EN signal on $procdff$196 ($dff) from module FauFTBWay (D = \\io_write_entry_brSlots_0_valid, Q = \\io_resp_brSlots_0_valid).\nAdding EN signal on $procdff$197 ($dff) from module FauFTBWay (D = \\io_write_entry_brSlots_0_sharing, Q = \\io_resp_brSlots_0_sharing).\nAdding EN signal on $procdff$198 ($dff) from module FauFTBWay (D = \\io_write_entry_brSlots_0_offset, Q = \\io_resp_brSlots_0_offset).\nAdding EN signal on $procdff$199 ($dff) from module FauFTBWay (D = \\io_write_entry_valid, Q = \\io_resp_valid).\nAdding EN signal on $procdff$200 ($dff) from module FauFTBWay (D = \\io_write_entry_isJalr, Q = \\io_resp_isJalr).\nAdding EN signal on $procdff$201 ($dff) from module FauFTBWay (D = \\io_write_entry_isRet, Q = \\io_resp_isRet).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\FauFTBWay..\nRemoved 20 unused cells and 157 unused wires.\n<suppressed ~41 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FauFTBWay.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\FauFTBWay..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\FauFTBWay.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\FauFTBWay'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\FauFTBWay..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FauFTBWay.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing HIERARCHY pass (managing design hierarchy).\n\n5.1. Analyzing design hierarchy..\nTop module:  \\FauFTBWay\n\n5.2. Analyzing design hierarchy..\nTop module:  \\FauFTBWay\nRemoved 0 unused modules.\n\n6. Executing CHECK pass (checking for obvious problems).\nChecking module FauFTBWay...\nFound and reported 0 problems.\n\n7. Printing statistics.\n\n=== FauFTBWay ===\n\n   Number of wires:                 77\n   Number of wire bits:            260\n   Number of public wires:          76\n   Number of public wire bits:     259\n   Number of ports:                 46\n   Number of port bits:            173\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                 32\n     $and                            4\n     $dffe                          20\n     $eq                             3\n     $mux                            2\n     $not                            1\n     $or                             1\n     $sdff                           1\n\nEnd of script. Logfile hash: fd610a6a14, CPU: user 0.03s system 0.00s, MEM: 13.91 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 49% 2x read_verilog (0 sec), 14% 4x opt_expr (0 sec), ...\n",
+        "output_sha256": "011e6a907431c5daa2b281e1cc81c104fc82f1142e226fafb41a31c754c8be05"
+      },
+      "reference_yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_fauftbway_strict/FauFTBWay-reference.sv; proc; async2sync; opt; hierarchy -top FauFTBWay_ref; check; stat"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "ce.sv:99$5_Y, Q=\\valid\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FauFTBWay_ref.\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\FauFTBWay_ref'.\nRemoved a total of 0 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\FauFTBWay_ref..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~21 debug messages>\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\FauFTBWay_ref.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\FauFTBWay_ref'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\nAdding EN signal on $procdff$75 ($dff) from module FauFTBWay_ref (D = \\io_write_tag, Q = \\tag).\nAdding EN signal on $procdff$56 ($dff) from module FauFTBWay_ref (D = \\io_write_entry_isCall, Q = \\data_isCall).\nAdding EN signal on $procdff$57 ($dff) from module FauFTBWay_ref (D = \\io_write_entry_isRet, Q = \\data_isRet).\nAdding EN signal on $procdff$58 ($dff) from module FauFTBWay_ref (D = \\io_write_entry_isJalr, Q = \\data_isJalr).\nAdding EN signal on $procdff$59 ($dff) from module FauFTBWay_ref (D = \\io_write_entry_valid, Q = \\data_valid).\nAdding EN signal on $procdff$60 ($dff) from module FauFTBWay_ref (D = \\io_write_entry_brSlots_0_offset, Q = \\data_brSlots_0_offset).\nAdding EN signal on $procdff$61 ($dff) from module FauFTBWay_ref (D = \\io_write_entry_brSlots_0_sharing, Q = \\data_brSlots_0_sharing).\nAdding EN signal on $procdff$62 ($dff) from module FauFTBWay_ref (D = \\io_write_entry_brSlots_0_valid, Q = \\data_brSlots_0_valid).\nAdding EN signal on $procdff$63 ($dff) from module FauFTBWay_ref (D = \\io_write_entry_brSlots_0_lower, Q = \\data_brSlots_0_lower).\nAdding EN signal on $procdff$64 ($dff) from module FauFTBWay_ref (D = \\io_write_entry_brSlots_0_tarStat, Q = \\data_brSlots_0_tarStat).\nAdding EN signal on $procdff$65 ($dff) from module FauFTBWay_ref (D = \\io_write_entry_tailSlot_offset, Q = \\data_tailSlot_offset).\nAdding EN signal on $procdff$66 ($dff) from module FauFTBWay_ref (D = \\io_write_entry_tailSlot_sharing, Q = \\data_tailSlot_sharing).\nAdding EN signal on $procdff$67 ($dff) from module FauFTBWay_ref (D = \\io_write_entry_tailSlot_valid, Q = \\data_tailSlot_valid).\nAdding EN signal on $procdff$68 ($dff) from module FauFTBWay_ref (D = \\io_write_entry_tailSlot_lower, Q = \\data_tailSlot_lower).\nAdding EN signal on $procdff$69 ($dff) from module FauFTBWay_ref (D = \\io_write_entry_tailSlot_tarStat, Q = \\data_tailSlot_tarStat).\nAdding EN signal on $procdff$70 ($dff) from module FauFTBWay_ref (D = \\io_write_entry_pftAddr, Q = \\data_pftAddr).\nAdding EN signal on $procdff$71 ($dff) from module FauFTBWay_ref (D = \\io_write_entry_carry, Q = \\data_carry).\nAdding EN signal on $procdff$72 ($dff) from module FauFTBWay_ref (D = \\io_write_entry_last_may_be_rvi_call, Q = \\data_last_may_be_rvi_call).\nAdding EN signal on $procdff$73 ($dff) from module FauFTBWay_ref (D = \\io_write_entry_strong_bias_0, Q = \\data_strong_bias_0).\nAdding EN signal on $procdff$74 ($dff) from module FauFTBWay_ref (D = \\io_write_entry_strong_bias_1, Q = \\data_strong_bias_1).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\FauFTBWay_ref..\nRemoved 20 unused cells and 64 unused wires.\n<suppressed ~21 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FauFTBWay_ref.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\FauFTBWay_ref..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\FauFTBWay_ref.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\FauFTBWay_ref'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\FauFTBWay_ref..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FauFTBWay_ref.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing HIERARCHY pass (managing design hierarchy).\n\n5.1. Analyzing design hierarchy..\nTop module:  \\FauFTBWay_ref\n\n5.2. Analyzing design hierarchy..\nTop module:  \\FauFTBWay_ref\nRemoved 0 unused modules.\n\n6. Executing CHECK pass (checking for obvious problems).\nChecking module FauFTBWay_ref...\nFound and reported 0 problems.\n\n7. Printing statistics.\n\n=== FauFTBWay_ref ===\n\n   Number of wires:                 76\n   Number of wire bits:            259\n   Number of public wires:          67\n   Number of public wire bits:     250\n   Number of ports:                 46\n   Number of port bits:            173\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                 32\n     $and                            4\n     $dffe                          20\n     $eq                             3\n     $mux                            1\n     $not                            1\n     $or                             2\n     $sdff                           1\n\nEnd of script. Logfile hash: a921c16d12, CPU: user 0.01s system 0.01s, MEM: 12.66 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 24% 4x opt_expr (0 sec), 22% 2x read_verilog (0 sec), ...\n",
+        "output_sha256": "909f530650a3df5e0fa1c312a917a111db80461fc4941d31fe5904a01f946cc0"
+      },
+      "yosys_equiv": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_fauftbway_strict/FauFTBWay-target.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_fauftbway_strict/FauFTBWay-reference.sv; proc; async2sync; memory; opt; equiv_make FauFTBWay FauFTBWay_ref FauFTBWay_equiv; prep -top FauFTBWay_equiv; equiv_induct -undef; equiv_status -assert"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "pty switches.\n\n8.2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n8.2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n8.2.4. Executing PROC_INIT pass (extract init attributes).\n\n8.2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n8.2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n8.2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n8.2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n8.2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n8.2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n8.2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n8.2.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FauFTBWay_equiv.\n\n8.3. Executing FUTURE pass.\n\n8.4. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FauFTBWay_equiv.\n\n8.5. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\FauFTBWay_equiv..\nRemoved 60 unused cells and 19 unused wires.\n<suppressed ~79 debug messages>\n\n8.6. Executing CHECK pass (checking for obvious problems).\nChecking module FauFTBWay_equiv...\nFound and reported 0 problems.\n\n8.7. Executing OPT pass (performing simple optimizations).\n\n8.7.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FauFTBWay_equiv.\n\n8.7.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\FauFTBWay_equiv'.\n<suppressed ~27 debug messages>\nRemoved a total of 9 cells.\n\n8.7.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\FauFTBWay_equiv..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~3 debug messages>\n\n8.7.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\FauFTBWay_equiv.\nPerformed a total of 0 changes.\n\n8.7.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\FauFTBWay_equiv'.\nRemoved a total of 0 cells.\n\n8.7.6. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\FauFTBWay_equiv..\nRemoved 0 unused cells and 7 unused wires.\n<suppressed ~1 debug messages>\n\n8.7.7. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FauFTBWay_equiv.\n\n8.7.8. Rerunning OPT passes. (Maybe there is more to do..)\n\n8.7.9. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\FauFTBWay_equiv..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~3 debug messages>\n\n8.7.10. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\FauFTBWay_equiv.\nPerformed a total of 0 changes.\n\n8.7.11. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\FauFTBWay_equiv'.\nRemoved a total of 0 cells.\n\n8.7.12. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\FauFTBWay_equiv..\n\n8.7.13. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FauFTBWay_equiv.\n\n8.7.14. Finished OPT passes. (There is nothing left to do.)\n\n8.8. Executing WREDUCE pass (reducing word size of cells).\n\n8.9. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\FauFTBWay_equiv..\n\n8.10. Executing MEMORY_COLLECT pass (generating $mem cells).\n\n8.11. Executing OPT pass (performing simple optimizations).\n\n8.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FauFTBWay_equiv.\n\n8.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\FauFTBWay_equiv'.\nRemoved a total of 0 cells.\n\n8.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\FauFTBWay_equiv..\n\n8.11.4. Finished fast OPT passes.\n\n8.12. Printing statistics.\n\n=== FauFTBWay_equiv ===\n\n   Number of wires:                194\n   Number of wire bits:            702\n   Number of public wires:         191\n   Number of public wire bits:     699\n   Number of ports:                 46\n   Number of port bits:            173\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                134\n     $and                            4\n     $dffe                          40\n     $eq                             3\n     $equiv                         79\n     $mux                            3\n     $not                            1\n     $or                             2\n     $sdff                           2\n\n8.13. Executing CHECK pass (checking for obvious problems).\nChecking module FauFTBWay_equiv...\nFound and reported 0 problems.\n\n9. Executing EQUIV_INDUCT pass.\nFound 77 unproven $equiv cells in module FauFTBWay_equiv:\n  Undef modelling: force def on 154 initial reg values and 111 inputs.\n  Proving existence of base case for step 1. (5941 clauses over 2474 variables)\n  Proving induction step 1. (22719 clauses over 8671 variables)\n  Proof for induction step holds. Entire workset of 77 cells proven!\nProved 77 previously unproven $equiv cells.\n\n10. Executing EQUIV_STATUS pass.\nFound 79 $equiv cells in FauFTBWay_equiv:\n  Of those cells 79 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: 42b889eb11, CPU: user 0.07s system 0.01s, MEM: 20.00 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 34% 1x equiv_induct (0 sec), 15% 9x opt_clean (0 sec), ...\n",
+        "output_sha256": "d8c52fbc7473174a960fb4fede7d8a499000b4cfb71dec8d9dbe2955d60f8325",
+        "formal_success_marker": true,
+        "equiv_cells": 79,
+        "formal_scope": {
+          "clock": "posedge clock",
+          "reset": "async reset normalized with async2sync; only valid is reset",
+          "input_bits": 111,
+          "inputs_unconstrained": {
+            "clock": 1,
+            "reset": 1,
+            "io_req_tag": 16,
+            "io_update_req_tag": 16,
+            "io_write_valid": 1,
+            "io_write_entry_isCall": 1,
+            "io_write_entry_isRet": 1,
+            "io_write_entry_isJalr": 1,
+            "io_write_entry_valid": 1,
+            "io_write_entry_brSlots_0_offset": 4,
+            "io_write_entry_brSlots_0_sharing": 1,
+            "io_write_entry_brSlots_0_valid": 1,
+            "io_write_entry_brSlots_0_lower": 12,
+            "io_write_entry_brSlots_0_tarStat": 2,
+            "io_write_entry_tailSlot_offset": 4,
+            "io_write_entry_tailSlot_sharing": 1,
+            "io_write_entry_tailSlot_valid": 1,
+            "io_write_entry_tailSlot_lower": 20,
+            "io_write_entry_tailSlot_tarStat": 2,
+            "io_write_entry_pftAddr": 4,
+            "io_write_entry_carry": 1,
+            "io_write_entry_last_may_be_rvi_call": 1,
+            "io_write_entry_strong_bias_0": 1,
+            "io_write_entry_strong_bias_1": 1,
+            "io_write_tag": 16
+          },
+          "output_bits": 62,
+          "outputs_compared": {
+            "io_resp_isCall": 1,
+            "io_resp_isRet": 1,
+            "io_resp_isJalr": 1,
+            "io_resp_valid": 1,
+            "io_resp_brSlots_0_offset": 4,
+            "io_resp_brSlots_0_sharing": 1,
+            "io_resp_brSlots_0_valid": 1,
+            "io_resp_brSlots_0_lower": 12,
+            "io_resp_brSlots_0_tarStat": 2,
+            "io_resp_tailSlot_offset": 4,
+            "io_resp_tailSlot_sharing": 1,
+            "io_resp_tailSlot_valid": 1,
+            "io_resp_tailSlot_lower": 20,
+            "io_resp_tailSlot_tarStat": 2,
+            "io_resp_pftAddr": 4,
+            "io_resp_carry": 1,
+            "io_resp_last_may_be_rvi_call": 1,
+            "io_resp_strong_bias_0": 1,
+            "io_resp_strong_bias_1": 1,
+            "io_resp_hit": 1,
+            "io_update_hit": 1
+          },
+          "architectural_state_bits": 77,
+          "property": "all matched output and state equivalence cells hold for every input sequence and every initial state under the normalized transition system"
+        }
+      }
+    }
+  },
+  "failures": [],
+  "unclosed": []
+}

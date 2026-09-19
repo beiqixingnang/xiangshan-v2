@@ -16,6 +16,10 @@ PLAN = ROOT / "V2-Rewrite-Batch-Plan.json"
 OUTPUT = ROOT / "validation/v2-strict-equivalence-progress.json"
 EXPECTED_KIND = "XIANGSHAN_KUNMINGHU_V2_STRICT_COMPLETE_EQUIVALENCE"
 SUCCESS_MARKER = "SAT proof finished - no model found: SUCCESS!"
+EQUIV_SUCCESS_MARKERS = (
+    "0 are unproven.",
+    "Equivalence successfully proven!",
+)
 
 
 def sha256(path: Path) -> str:
@@ -92,7 +96,11 @@ def verify_evidence(path: Path, expected_source_commit: str) -> dict[str, Any]:
         if required not in verified_sources:
             failures.append(f"required source: {required}")
 
+    proof_method = "sat_miter"
     formal = nested(payload, "checks", "formal", "yosys_formal_miter")
+    if not isinstance(formal, dict):
+        proof_method = "sequential_equivalence"
+        formal = nested(payload, "checks", "formal", "yosys_equiv")
     if not isinstance(formal, dict):
         failures.append("formal result")
         formal = {}
@@ -100,8 +108,18 @@ def verify_evidence(path: Path, expected_source_commit: str) -> dict[str, Any]:
         failures.append("formal status")
     if formal.get("formal_success_marker") is not True:
         failures.append("formal_success_marker")
-    if SUCCESS_MARKER not in str(formal.get("output_tail", "")):
-        failures.append("SAT success output")
+    formal_output = str(formal.get("output_tail", ""))
+    formal_command = formal.get("command", [])
+    command_text = " ".join(str(item) for item in formal_command) if isinstance(formal_command, list) else str(formal_command)
+    if proof_method == "sat_miter":
+        if SUCCESS_MARKER not in formal_output:
+            failures.append("SAT success output")
+    else:
+        if "equiv_induct" not in command_text or "equiv_status -assert" not in command_text:
+            failures.append("sequential equivalence command")
+        for marker in EQUIV_SUCCESS_MARKERS:
+            if marker not in formal_output:
+                failures.append(f"sequential equivalence marker: {marker}")
 
     scope = payload.get("scope", {})
     if not isinstance(scope, dict) or not scope.get("inputs") or not scope.get("outputs_compared"):
@@ -118,6 +136,7 @@ def verify_evidence(path: Path, expected_source_commit: str) -> dict[str, Any]:
         "scope": scope,
         "sources": verified_sources,
         "formal": {
+            "proof_method": proof_method,
             "command": formal.get("command"),
             "returncode": formal.get("returncode"),
             "status": formal.get("status"),
@@ -160,7 +179,7 @@ def main() -> int:
         "strict_complete_build_count": strict_count,
         "fraction": f"{strict_count}/{denominator}",
         "percentage": round(100.0 * strict_count / denominator, 6) if denominator else 0.0,
-        "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with the locked source commit, matching source hashes, and a Yosys SAT no-model success marker is counted.",
+        "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with the locked source commit, matching source hashes, and either a Yosys SAT no-model miter or fully proven Yosys inductive-equivalence status is counted.",
         "plan_reconciliation": {
             "plan_count": plan_count,
             "plan_denominator": plan_denominator,

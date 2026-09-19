@@ -105,7 +105,6 @@ class FauFTBWay(Elaboratable):
         self.write_strong_bias_0 = Signal(name="io_write_entry_strong_bias_0")
         self.write_strong_bias_1 = Signal(name="io_write_entry_strong_bias_1")
         self.write_tag = Signal(c.tag_width, name="io_write_tag")
-        self.write_fire = Signal(name="io_write_fire")
 
     # Elaborate registered entry storage, tag compares, and write bypass.
     # 展开寄存式条目存储、标签比较及写旁路。 /
@@ -117,32 +116,34 @@ class FauFTBWay(Elaboratable):
         m.domains += self.clock_domain
         c = self.configuration
 
-        data_is_call = Signal(name="data_isCall")
-        data_is_ret = Signal(name="data_isRet")
-        data_is_jalr = Signal(name="data_isJalr")
-        data_valid = Signal(name="data_valid")
-        data_br_offset = Signal(c.branch_offset_width, name="data_brSlots_0_offset")
-        data_br_sharing = Signal(name="data_brSlots_0_sharing")
-        data_br_valid = Signal(name="data_brSlots_0_valid")
-        data_br_lower = Signal(c.branch_lower_width, name="data_brSlots_0_lower")
-        data_br_tar_stat = Signal(c.target_status_width, name="data_brSlots_0_tarStat")
-        data_tail_offset = Signal(c.branch_offset_width, name="data_tailSlot_offset")
-        data_tail_sharing = Signal(name="data_tailSlot_sharing")
-        data_tail_valid = Signal(name="data_tailSlot_valid")
-        data_tail_lower = Signal(c.target_offset_width, name="data_tailSlot_lower")
-        data_tail_tar_stat = Signal(c.target_status_width, name="data_tailSlot_tarStat")
-        data_pft_addr = Signal(c.prefetch_address_width, name="data_pftAddr")
-        data_carry = Signal(name="data_carry")
-        data_last_rvi_call = Signal(name="data_last_may_be_rvi_call")
-        data_strong_bias_0 = Signal(name="data_strong_bias_0")
-        data_strong_bias_1 = Signal(name="data_strong_bias_1")
-        tag = Signal(c.tag_width, name="tag")
+        # The locked generated RTL asynchronously resets only ``valid``.
+        # Entry payload and tag registers retain their values across reset.
+        # 锁定生成 RTL 仅异步复位 ``valid``；条目载荷与标签寄存器在复位期间保持值。
+        data_is_call = Signal(name="data_isCall", reset_less=True)
+        data_is_ret = Signal(name="data_isRet", reset_less=True)
+        data_is_jalr = Signal(name="data_isJalr", reset_less=True)
+        data_valid = Signal(name="data_valid", reset_less=True)
+        data_br_offset = Signal(c.branch_offset_width, name="data_brSlots_0_offset", reset_less=True)
+        data_br_sharing = Signal(name="data_brSlots_0_sharing", reset_less=True)
+        data_br_valid = Signal(name="data_brSlots_0_valid", reset_less=True)
+        data_br_lower = Signal(c.branch_lower_width, name="data_brSlots_0_lower", reset_less=True)
+        data_br_tar_stat = Signal(c.target_status_width, name="data_brSlots_0_tarStat", reset_less=True)
+        data_tail_offset = Signal(c.branch_offset_width, name="data_tailSlot_offset", reset_less=True)
+        data_tail_sharing = Signal(name="data_tailSlot_sharing", reset_less=True)
+        data_tail_valid = Signal(name="data_tailSlot_valid", reset_less=True)
+        data_tail_lower = Signal(c.target_offset_width, name="data_tailSlot_lower", reset_less=True)
+        data_tail_tar_stat = Signal(c.target_status_width, name="data_tailSlot_tarStat", reset_less=True)
+        data_pft_addr = Signal(c.prefetch_address_width, name="data_pftAddr", reset_less=True)
+        data_carry = Signal(name="data_carry", reset_less=True)
+        data_last_rvi_call = Signal(name="data_last_may_be_rvi_call", reset_less=True)
+        data_strong_bias_0 = Signal(name="data_strong_bias_0", reset_less=True)
+        data_strong_bias_1 = Signal(name="data_strong_bias_1", reset_less=True)
+        tag = Signal(c.tag_width, name="tag", reset_less=True)
         valid = Signal(name="valid", reset=0)
 
         # The response is a direct view of the stored FTB entry.
         # 响应是存储 FTB 条目的直接视图。
         m.d.comb += [
-            self.write_fire.eq(self.write_valid),
             self.resp_is_call.eq(data_is_call),
             self.resp_is_ret.eq(data_is_ret),
             self.resp_is_jalr.eq(data_is_jalr),
@@ -265,7 +266,6 @@ def build_verilog(configuration, injected_dependencies):
         top.write_strong_bias_0,
         top.write_strong_bias_1,
         top.write_tag,
-        top.write_fire,
     ]
     return verilog.convert(top, ports=ports, name="FauFTBWay")
 
