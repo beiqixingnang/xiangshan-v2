@@ -117,6 +117,11 @@ class FTBEntryGen(Elaboratable):
         self.mispred_mask_1 = Signal(name="io_mispred_mask_1")
         self.mispred_mask_2 = Signal(name="io_mispred_mask_2")
         self.is_old_entry = Signal(name="io_is_old_entry")
+        # Internal-only mirror of the parent update gate: the locked XSTop extraction prunes
+        # io_update_valid because NewFtq.scala gates it with io.toBpu.update.valid, so this net
+        # stays off the exported boundary.
+        # 仅内部镜像父级更新门控：锁定 XSTop 抽取剪除了 io_update_valid，因为 NewFtq.scala 用
+        # io.toBpu.update.valid 门控它，故该网络不导出到公共边界。
         self.update_valid = Signal(name="io_update_valid")
 
     # Elaborate the V2 NewFtq FTB-entry equations as one combinational module.
@@ -340,8 +345,10 @@ def build_verilog(configuration, injected_dependencies):
         top.new_pft_addr, top.new_carry, top.new_last_rvi_call, top.new_strong_bias_0, top.new_strong_bias_1,
         top.taken_mask_0, top.taken_mask_1, top.jmp_taken,
         top.mispred_mask_0, top.mispred_mask_1, top.mispred_mask_2, top.is_old_entry,
-        top.update_valid,
     ]
+    # ``top.update_valid`` stays an internal net: the locked reference declares no such port
+    # because its parent gates the update with io.toBpu.update.valid.
+    # ``top.update_valid`` 保持为内部网络：锁定参考未声明该端口，其父级用 io.toBpu.update.valid 门控更新。
     return verilog.convert(top, ports=inputs + outputs, name="FTBEntryGen")
 
 
