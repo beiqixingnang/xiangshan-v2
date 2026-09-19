@@ -1,0 +1,169 @@
+"""Rebuild the authoritative strict-equivalence progress rail.
+
+重建严格行为等价验证的权威进度清单。
+"""
+from __future__ import annotations
+
+import hashlib
+import json
+from pathlib import Path
+from typing import Any
+
+
+ROOT = Path(__file__).resolve().parents[1]
+BUILD_ROOT = ROOT / "python/Program-System/System-Build/Build-Cpu"
+PLAN = ROOT / "V2-Rewrite-Batch-Plan.json"
+OUTPUT = ROOT / "validation/v2-strict-equivalence-progress.json"
+EXPECTED_KIND = "XIANGSHAN_KUNMINGHU_V2_STRICT_COMPLETE_EQUIVALENCE"
+SUCCESS_MARKER = "SAT proof finished - no model found: SUCCESS!"
+
+
+def sha256(path: Path) -> str:
+    """Return the exact SHA-256 digest. / 返回精确 SHA-256 摘要。"""
+
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def nested(payload: dict[str, Any], *keys: str) -> Any:
+    """Read a nested evidence value. / 读取嵌套证据值。"""
+
+    value: Any = payload
+    for key in keys:
+        if not isinstance(value, dict):
+            return None
+        value = value.get(key)
+    return value
+
+
+def verify_source(record: Any, label: str, failures: list[str]) -> dict[str, Any]:
+    """Verify one source path and digest. / 验证一个来源路径及摘要。"""
+
+    if not isinstance(record, dict):
+        failures.append(f"missing source record: {label}")
+        return {"status": "FAIL"}
+    relative = str(record.get("path", ""))
+    path = ROOT / relative
+    expected = str(record.get("sha256", ""))
+    present = path.is_file()
+    observed = sha256(path) if present else None
+    matched = present and bool(expected) and observed == expected
+    if not matched:
+        failures.append(f"source digest: {label}")
+    return {
+        "path": relative,
+        "present": present,
+        "expected_sha256": expected,
+        "observed_sha256": observed,
+        "status": "PASS" if matched else "FAIL",
+    }
+
+
+def verify_evidence(path: Path) -> dict[str, Any]:
+    """Verify one strict proof without trusting its status string alone. / 不仅依赖状态字符串，验证一份严格证明。"""
+
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    failures: list[str] = []
+    build_id = str(payload.get("build_id", ""))
+    if payload.get("kind") != EXPECTED_KIND:
+        failures.append("kind")
+    if payload.get("status") != "COMPLETE_EQUIVALENCE":
+        failures.append("status")
+    if payload.get("strict_complete_eligible") is not True:
+        failures.append("strict_complete_eligible")
+    if payload.get("strict_complete_count_delta") != 1:
+        failures.append("strict_complete_count_delta")
+    if not build_id:
+        failures.append("build_id")
+
+    sources = payload.get("sources", {})
+    verified_sources = {
+        name: verify_source(record, name, failures)
+        for name, record in sources.items()
+        if name in {"python_build", "scala", "reference_sv"}
+    } if isinstance(sources, dict) else {}
+    for required in ("python_build", "scala", "reference_sv"):
+        if required not in verified_sources:
+            failures.append(f"required source: {required}")
+
+    formal = nested(payload, "checks", "formal", "yosys_formal_miter")
+    if not isinstance(formal, dict):
+        failures.append("formal result")
+        formal = {}
+    if formal.get("returncode") != 0 or formal.get("status") != "PASS":
+        failures.append("formal status")
+    if formal.get("formal_success_marker") is not True:
+        failures.append("formal_success_marker")
+    if SUCCESS_MARKER not in str(formal.get("output_tail", "")):
+        failures.append("SAT success output")
+
+    scope = payload.get("scope", {})
+    if not isinstance(scope, dict) or not scope.get("inputs") or not scope.get("outputs_compared"):
+        failures.append("formal scope")
+    return {
+        "evidence": str(path.relative_to(ROOT)).replace("\\", "/"),
+        "build_id": build_id,
+        "status": "PASS" if not failures else "FAIL",
+        "scope": scope,
+        "sources": verified_sources,
+        "formal": {
+            "command": formal.get("command"),
+            "returncode": formal.get("returncode"),
+            "status": formal.get("status"),
+            "formal_success_marker": formal.get("formal_success_marker"),
+        },
+        "failures": failures,
+    }
+
+
+def main() -> int:
+    """Reconcile strict proofs against the dynamic Build denominator. / 根据动态 Build 分母核对严格证明。"""
+
+    evidence_paths = sorted((ROOT / "validation").glob("v2-*-strict-evidence.json"))
+    rows = [verify_evidence(path) for path in evidence_paths]
+    seen: set[str] = set()
+    duplicates: list[str] = []
+    for row in rows:
+        build_id = str(row["build_id"])
+        if build_id in seen:
+            duplicates.append(build_id)
+            row["status"] = "FAIL"
+            row["failures"].append("duplicate build_id")
+        seen.add(build_id)
+    builds = sorted(BUILD_ROOT.rglob("*.py"))
+    strict_count = sum(row["status"] == "PASS" for row in rows)
+    denominator = len(builds)
+    plan = json.loads(PLAN.read_text(encoding="utf-8"))
+    execution = plan.get("execution_state", {})
+    plan_count = execution.get("strict_complete_equivalence_build_count")
+    plan_denominator = execution.get("strict_complete_equivalence_build_denominator")
+    reconciliation = (
+        "PASS" if plan_count == strict_count and plan_denominator == denominator else "FAIL"
+    )
+    payload = {
+        "schema_version": 1,
+        "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_EQUIVALENCE_PROGRESS",
+        "build_denominator": denominator,
+        "strict_complete_build_count": strict_count,
+        "fraction": f"{strict_count}/{denominator}",
+        "percentage": round(100.0 * strict_count / denominator, 6) if denominator else 0.0,
+        "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with matching source hashes and a Yosys SAT no-model success marker is counted.",
+        "plan_reconciliation": {
+            "plan_count": plan_count,
+            "plan_denominator": plan_denominator,
+            "status": reconciliation,
+        },
+        "duplicate_build_ids": duplicates,
+        "proofs": rows,
+        "status": "PASS" if all(row["status"] == "PASS" for row in rows) and reconciliation == "PASS" else "FAIL",
+    }
+    OUTPUT.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
+    print(json.dumps({"status": payload["status"], "fraction": payload["fraction"], "proofs": len(rows), "duplicates": duplicates}))
+    return 0 if payload["status"] == "PASS" else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
