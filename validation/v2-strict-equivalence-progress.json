@@ -5,7 +5,22 @@
   "strict_complete_build_count": 17,
   "fraction": "17/118",
   "percentage": 14.40678,
-  "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with the locked source commit, matching source hashes, and either a Yosys SAT no-model miter or fully proven Yosys inductive-equivalence status is counted.",
+  "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with the locked source commit, matching source hashes, and either a Yosys SAT no-model miter or fully proven Yosys inductive-equivalence status is counted. STRICT_PENDING and COMPLETE_EQUIVALENCE_VARIANT_ONLY records are inventoried as attempted-but-not-counted instead of failing the rail, and one Build file may not be claimed by several counting proofs.",
+  "non_counting_attempt_count": 2,
+  "non_counting_attempts": [
+    {
+      "evidence": "validation/v2-fubusytableread-strict-evidence.json",
+      "build_id": "Build-Cpu.Backend.Issue.FuBusyTableRead",
+      "declared_status": "COMPLETE_EQUIVALENCE_VARIANT_ONLY",
+      "failures": []
+    },
+    {
+      "evidence": "validation/v2-instrmmioentry-strict-evidence.json",
+      "build_id": "Build-Cpu.Frontend.Icache.InstrMMIOEntry",
+      "declared_status": "STRICT_PENDING",
+      "failures": []
+    }
+  ],
   "plan_reconciliation": {
     "plan_count": 17,
     "plan_denominator": 118,
@@ -17,6 +32,7 @@
     {
       "evidence": "validation/v2-aludatamodule-strict-evidence.json",
       "build_id": "Build-Cpu.Backend.Fu.AluDataModule",
+      "declared_status": "COMPLETE_EQUIVALENCE",
       "source_commit": {
         "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
@@ -85,6 +101,7 @@
     {
       "evidence": "validation/v2-amoalu-strict-evidence.json",
       "build_id": "Build-Cpu.Cache.Dcache.Mainpipe.AMOALU",
+      "declared_status": "COMPLETE_EQUIVALENCE",
       "source_commit": {
         "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
@@ -152,6 +169,7 @@
     {
       "evidence": "validation/v2-branchmodule-strict-evidence.json",
       "build_id": "Build-Cpu.Backend.Fu.BranchModule",
+      "declared_status": "COMPLETE_EQUIVALENCE",
       "source_commit": {
         "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
@@ -218,6 +236,7 @@
     {
       "evidence": "validation/v2-bytemasktailgen-strict-evidence.json",
       "build_id": "Build-Cpu.Backend.Fu.Vector.ByteMaskTailGen",
+      "declared_status": "COMPLETE_EQUIVALENCE",
       "source_commit": {
         "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
@@ -290,6 +309,7 @@
     {
       "evidence": "validation/v2-commitstuckcounter-strict-evidence.json",
       "build_id": "Build-Cpu.Backend.Rob.CommitStuckCounter",
+      "declared_status": "COMPLETE_EQUIVALENCE",
       "source_commit": {
         "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
@@ -352,6 +372,7 @@
     {
       "evidence": "validation/v2-enqpolicy-strict-evidence.json",
       "build_id": "Build-Cpu.Backend.Issue.EnqPolicy",
+      "declared_status": "COMPLETE_EQUIVALENCE",
       "source_commit": {
         "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
@@ -514,6 +535,7 @@
     {
       "evidence": "validation/v2-fauftbway-strict-evidence.json",
       "build_id": "Build-Cpu.Frontend.Bpu.FauFTBWay",
+      "declared_status": "COMPLETE_EQUIVALENCE",
       "source_commit": {
         "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
@@ -621,6 +643,7 @@
     {
       "evidence": "validation/v2-flitables-strict-evidence.json",
       "build_id": "Build-Cpu.Backend.Fu.Fpu.FliTable",
+      "declared_status": "COMPLETE_EQUIVALENCE",
       "source_commit": {
         "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
@@ -711,8 +734,979 @@
       "failures": []
     },
     {
+      "evidence": "validation/v2-fubusytableread-strict-evidence.json",
+      "build_id": "Build-Cpu.Backend.Issue.FuBusyTableRead",
+      "declared_status": "COMPLETE_EQUIVALENCE_VARIANT_ONLY",
+      "source_commit": {
+        "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+        "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+        "status": "PASS"
+      },
+      "status": "NON_COUNTING",
+      "scope": {
+        "kind": "eighteen_locked_stateless_combinational_specializations",
+        "state_bits": 0,
+        "state_boundary": "no clock/reset/register/memory in any reference or target variant",
+        "public_variants": [
+          "FuBusyTableRead",
+          "FuBusyTableRead_2",
+          "FuBusyTableRead_22",
+          "FuBusyTableRead_23",
+          "FuBusyTableRead_26",
+          "FuBusyTableRead_28",
+          "FuBusyTableRead_42",
+          "FuBusyTableRead_43",
+          "FuBusyTableRead_52",
+          "FuBusyTableRead_53",
+          "FuBusyTableRead_68",
+          "FuBusyTableRead_69",
+          "FuBusyTableRead_71",
+          "FuBusyTableRead_73",
+          "FuBusyTableRead_75",
+          "FuBusyTableRead_79",
+          "FuBusyTableRead_80",
+          "FuBusyTableRead_105"
+        ],
+        "variants": {
+          "FuBusyTableRead": {
+            "num_entries": 24,
+            "fu_type_bits": 35,
+            "table_bits": 3,
+            "latency_to_oh_bits": {
+              "0": [
+                6
+              ],
+              "2": [
+                7,
+                10
+              ]
+            },
+            "parents": [
+              "IssueQueueAluMulBkuBrhJmp"
+            ],
+            "inputs": {
+              "io_in_fuBusyTable": 3,
+              "io_in_fuTypeRegVec_0": 35,
+              "io_in_fuTypeRegVec_1": 35,
+              "io_in_fuTypeRegVec_2": 35,
+              "io_in_fuTypeRegVec_3": 35,
+              "io_in_fuTypeRegVec_4": 35,
+              "io_in_fuTypeRegVec_5": 35,
+              "io_in_fuTypeRegVec_6": 35,
+              "io_in_fuTypeRegVec_7": 35,
+              "io_in_fuTypeRegVec_8": 35,
+              "io_in_fuTypeRegVec_9": 35,
+              "io_in_fuTypeRegVec_10": 35,
+              "io_in_fuTypeRegVec_11": 35,
+              "io_in_fuTypeRegVec_12": 35,
+              "io_in_fuTypeRegVec_13": 35,
+              "io_in_fuTypeRegVec_14": 35,
+              "io_in_fuTypeRegVec_15": 35,
+              "io_in_fuTypeRegVec_16": 35,
+              "io_in_fuTypeRegVec_17": 35,
+              "io_in_fuTypeRegVec_18": 35,
+              "io_in_fuTypeRegVec_19": 35,
+              "io_in_fuTypeRegVec_20": 35,
+              "io_in_fuTypeRegVec_21": 35,
+              "io_in_fuTypeRegVec_22": 35,
+              "io_in_fuTypeRegVec_23": 35
+            },
+            "input_bits": 843,
+            "outputs_compared": {
+              "io_out_fuBusyTableMask": 24
+            }
+          },
+          "FuBusyTableRead_2": {
+            "num_entries": 24,
+            "fu_type_bits": 35,
+            "table_bits": 1,
+            "latency_to_oh_bits": {
+              "0": [
+                0
+              ]
+            },
+            "parents": [
+              "IssueQueueAluMulBkuBrhJmp"
+            ],
+            "inputs": {
+              "io_in_fuBusyTable": 1,
+              "io_in_fuTypeRegVec_0": 35,
+              "io_in_fuTypeRegVec_1": 35,
+              "io_in_fuTypeRegVec_2": 35,
+              "io_in_fuTypeRegVec_3": 35,
+              "io_in_fuTypeRegVec_4": 35,
+              "io_in_fuTypeRegVec_5": 35,
+              "io_in_fuTypeRegVec_6": 35,
+              "io_in_fuTypeRegVec_7": 35,
+              "io_in_fuTypeRegVec_8": 35,
+              "io_in_fuTypeRegVec_9": 35,
+              "io_in_fuTypeRegVec_10": 35,
+              "io_in_fuTypeRegVec_11": 35,
+              "io_in_fuTypeRegVec_12": 35,
+              "io_in_fuTypeRegVec_13": 35,
+              "io_in_fuTypeRegVec_14": 35,
+              "io_in_fuTypeRegVec_15": 35,
+              "io_in_fuTypeRegVec_16": 35,
+              "io_in_fuTypeRegVec_17": 35,
+              "io_in_fuTypeRegVec_18": 35,
+              "io_in_fuTypeRegVec_19": 35,
+              "io_in_fuTypeRegVec_20": 35,
+              "io_in_fuTypeRegVec_21": 35,
+              "io_in_fuTypeRegVec_22": 35,
+              "io_in_fuTypeRegVec_23": 35
+            },
+            "input_bits": 841,
+            "outputs_compared": {
+              "io_out_fuBusyTableMask": 24
+            }
+          },
+          "FuBusyTableRead_22": {
+            "num_entries": 24,
+            "fu_type_bits": 35,
+            "table_bits": 3,
+            "latency_to_oh_bits": {
+              "0": [
+                0,
+                1,
+                3,
+                28,
+                29
+              ],
+              "2": [
+                2
+              ]
+            },
+            "parents": [
+              "IssueQueueAluBrhJmpI2fVsetriwiVsetriwvfI2v"
+            ],
+            "inputs": {
+              "io_in_fuBusyTable": 3,
+              "io_in_fuTypeRegVec_0": 35,
+              "io_in_fuTypeRegVec_1": 35,
+              "io_in_fuTypeRegVec_2": 35,
+              "io_in_fuTypeRegVec_3": 35,
+              "io_in_fuTypeRegVec_4": 35,
+              "io_in_fuTypeRegVec_5": 35,
+              "io_in_fuTypeRegVec_6": 35,
+              "io_in_fuTypeRegVec_7": 35,
+              "io_in_fuTypeRegVec_8": 35,
+              "io_in_fuTypeRegVec_9": 35,
+              "io_in_fuTypeRegVec_10": 35,
+              "io_in_fuTypeRegVec_11": 35,
+              "io_in_fuTypeRegVec_12": 35,
+              "io_in_fuTypeRegVec_13": 35,
+              "io_in_fuTypeRegVec_14": 35,
+              "io_in_fuTypeRegVec_15": 35,
+              "io_in_fuTypeRegVec_16": 35,
+              "io_in_fuTypeRegVec_17": 35,
+              "io_in_fuTypeRegVec_18": 35,
+              "io_in_fuTypeRegVec_19": 35,
+              "io_in_fuTypeRegVec_20": 35,
+              "io_in_fuTypeRegVec_21": 35,
+              "io_in_fuTypeRegVec_22": 35,
+              "io_in_fuTypeRegVec_23": 35
+            },
+            "input_bits": 843,
+            "outputs_compared": {
+              "io_out_fuBusyTableMask": 24
+            }
+          },
+          "FuBusyTableRead_23": {
+            "num_entries": 24,
+            "fu_type_bits": 35,
+            "table_bits": 1,
+            "latency_to_oh_bits": {
+              "0": [
+                6
+              ]
+            },
+            "parents": [
+              "IssueQueueAluBrhJmpI2fVsetriwiVsetriwvfI2v",
+              "IssueQueueAluCsrFenceDiv"
+            ],
+            "inputs": {
+              "io_in_fuBusyTable": 1,
+              "io_in_fuTypeRegVec_0": 35,
+              "io_in_fuTypeRegVec_1": 35,
+              "io_in_fuTypeRegVec_2": 35,
+              "io_in_fuTypeRegVec_3": 35,
+              "io_in_fuTypeRegVec_4": 35,
+              "io_in_fuTypeRegVec_5": 35,
+              "io_in_fuTypeRegVec_6": 35,
+              "io_in_fuTypeRegVec_7": 35,
+              "io_in_fuTypeRegVec_8": 35,
+              "io_in_fuTypeRegVec_9": 35,
+              "io_in_fuTypeRegVec_10": 35,
+              "io_in_fuTypeRegVec_11": 35,
+              "io_in_fuTypeRegVec_12": 35,
+              "io_in_fuTypeRegVec_13": 35,
+              "io_in_fuTypeRegVec_14": 35,
+              "io_in_fuTypeRegVec_15": 35,
+              "io_in_fuTypeRegVec_16": 35,
+              "io_in_fuTypeRegVec_17": 35,
+              "io_in_fuTypeRegVec_18": 35,
+              "io_in_fuTypeRegVec_19": 35,
+              "io_in_fuTypeRegVec_20": 35,
+              "io_in_fuTypeRegVec_21": 35,
+              "io_in_fuTypeRegVec_22": 35,
+              "io_in_fuTypeRegVec_23": 35
+            },
+            "input_bits": 841,
+            "outputs_compared": {
+              "io_out_fuBusyTableMask": 24
+            }
+          },
+          "FuBusyTableRead_26": {
+            "num_entries": 24,
+            "fu_type_bits": 35,
+            "table_bits": 3,
+            "latency_to_oh_bits": {
+              "0": [
+                3
+              ],
+              "2": [
+                2
+              ]
+            },
+            "parents": [
+              "IssueQueueAluBrhJmpI2fVsetriwiVsetriwvfI2v"
+            ],
+            "inputs": {
+              "io_in_fuBusyTable": 3,
+              "io_in_fuTypeRegVec_0": 35,
+              "io_in_fuTypeRegVec_1": 35,
+              "io_in_fuTypeRegVec_2": 35,
+              "io_in_fuTypeRegVec_3": 35,
+              "io_in_fuTypeRegVec_4": 35,
+              "io_in_fuTypeRegVec_5": 35,
+              "io_in_fuTypeRegVec_6": 35,
+              "io_in_fuTypeRegVec_7": 35,
+              "io_in_fuTypeRegVec_8": 35,
+              "io_in_fuTypeRegVec_9": 35,
+              "io_in_fuTypeRegVec_10": 35,
+              "io_in_fuTypeRegVec_11": 35,
+              "io_in_fuTypeRegVec_12": 35,
+              "io_in_fuTypeRegVec_13": 35,
+              "io_in_fuTypeRegVec_14": 35,
+              "io_in_fuTypeRegVec_15": 35,
+              "io_in_fuTypeRegVec_16": 35,
+              "io_in_fuTypeRegVec_17": 35,
+              "io_in_fuTypeRegVec_18": 35,
+              "io_in_fuTypeRegVec_19": 35,
+              "io_in_fuTypeRegVec_20": 35,
+              "io_in_fuTypeRegVec_21": 35,
+              "io_in_fuTypeRegVec_22": 35,
+              "io_in_fuTypeRegVec_23": 35
+            },
+            "input_bits": 843,
+            "outputs_compared": {
+              "io_out_fuBusyTableMask": 24
+            }
+          },
+          "FuBusyTableRead_28": {
+            "num_entries": 24,
+            "fu_type_bits": 35,
+            "table_bits": 1,
+            "latency_to_oh_bits": {
+              "0": [
+                3
+              ]
+            },
+            "parents": [
+              "IssueQueueAluBrhJmpI2fVsetriwiVsetriwvfI2v"
+            ],
+            "inputs": {
+              "io_in_fuBusyTable": 1,
+              "io_in_fuTypeRegVec_0": 35,
+              "io_in_fuTypeRegVec_1": 35,
+              "io_in_fuTypeRegVec_2": 35,
+              "io_in_fuTypeRegVec_3": 35,
+              "io_in_fuTypeRegVec_4": 35,
+              "io_in_fuTypeRegVec_5": 35,
+              "io_in_fuTypeRegVec_6": 35,
+              "io_in_fuTypeRegVec_7": 35,
+              "io_in_fuTypeRegVec_8": 35,
+              "io_in_fuTypeRegVec_9": 35,
+              "io_in_fuTypeRegVec_10": 35,
+              "io_in_fuTypeRegVec_11": 35,
+              "io_in_fuTypeRegVec_12": 35,
+              "io_in_fuTypeRegVec_13": 35,
+              "io_in_fuTypeRegVec_14": 35,
+              "io_in_fuTypeRegVec_15": 35,
+              "io_in_fuTypeRegVec_16": 35,
+              "io_in_fuTypeRegVec_17": 35,
+              "io_in_fuTypeRegVec_18": 35,
+              "io_in_fuTypeRegVec_19": 35,
+              "io_in_fuTypeRegVec_20": 35,
+              "io_in_fuTypeRegVec_21": 35,
+              "io_in_fuTypeRegVec_22": 35,
+              "io_in_fuTypeRegVec_23": 35
+            },
+            "input_bits": 841,
+            "outputs_compared": {
+              "io_out_fuBusyTableMask": 24
+            }
+          },
+          "FuBusyTableRead_42": {
+            "num_entries": 18,
+            "fu_type_bits": 35,
+            "table_bits": 4,
+            "latency_to_oh_bits": {
+              "0": [
+                4
+              ],
+              "1": [
+                11
+              ],
+              "2": [
+                13
+              ],
+              "3": [
+                12
+              ]
+            },
+            "parents": [
+              "IssueQueueFaluFcvtF2vFmacFdiv"
+            ],
+            "inputs": {
+              "io_in_fuBusyTable": 4,
+              "io_in_fuTypeRegVec_0": 35,
+              "io_in_fuTypeRegVec_1": 35,
+              "io_in_fuTypeRegVec_2": 35,
+              "io_in_fuTypeRegVec_3": 35,
+              "io_in_fuTypeRegVec_4": 35,
+              "io_in_fuTypeRegVec_5": 35,
+              "io_in_fuTypeRegVec_6": 35,
+              "io_in_fuTypeRegVec_7": 35,
+              "io_in_fuTypeRegVec_8": 35,
+              "io_in_fuTypeRegVec_9": 35,
+              "io_in_fuTypeRegVec_10": 35,
+              "io_in_fuTypeRegVec_11": 35,
+              "io_in_fuTypeRegVec_12": 35,
+              "io_in_fuTypeRegVec_13": 35,
+              "io_in_fuTypeRegVec_14": 35,
+              "io_in_fuTypeRegVec_15": 35,
+              "io_in_fuTypeRegVec_16": 35,
+              "io_in_fuTypeRegVec_17": 35
+            },
+            "input_bits": 634,
+            "outputs_compared": {
+              "io_out_fuBusyTableMask": 18
+            }
+          },
+          "FuBusyTableRead_43": {
+            "num_entries": 18,
+            "fu_type_bits": 35,
+            "table_bits": 3,
+            "latency_to_oh_bits": {
+              "1": [
+                11
+              ],
+              "2": [
+                13
+              ]
+            },
+            "parents": [
+              "IssueQueueFaluFcvtF2vFmacFdiv"
+            ],
+            "inputs": {
+              "io_in_fuBusyTable": 3,
+              "io_in_fuTypeRegVec_0": 35,
+              "io_in_fuTypeRegVec_1": 35,
+              "io_in_fuTypeRegVec_2": 35,
+              "io_in_fuTypeRegVec_3": 35,
+              "io_in_fuTypeRegVec_4": 35,
+              "io_in_fuTypeRegVec_5": 35,
+              "io_in_fuTypeRegVec_6": 35,
+              "io_in_fuTypeRegVec_7": 35,
+              "io_in_fuTypeRegVec_8": 35,
+              "io_in_fuTypeRegVec_9": 35,
+              "io_in_fuTypeRegVec_10": 35,
+              "io_in_fuTypeRegVec_11": 35,
+              "io_in_fuTypeRegVec_12": 35,
+              "io_in_fuTypeRegVec_13": 35,
+              "io_in_fuTypeRegVec_14": 35,
+              "io_in_fuTypeRegVec_15": 35,
+              "io_in_fuTypeRegVec_16": 35,
+              "io_in_fuTypeRegVec_17": 35
+            },
+            "input_bits": 633,
+            "outputs_compared": {
+              "io_out_fuBusyTableMask": 18
+            }
+          },
+          "FuBusyTableRead_52": {
+            "num_entries": 18,
+            "fu_type_bits": 35,
+            "table_bits": 4,
+            "latency_to_oh_bits": {
+              "1": [
+                11
+              ],
+              "3": [
+                12
+              ]
+            },
+            "parents": [
+              "IssueQueueFaluFmac",
+              "IssueQueueFaluFmacFdiv"
+            ],
+            "inputs": {
+              "io_in_fuBusyTable": 4,
+              "io_in_fuTypeRegVec_0": 35,
+              "io_in_fuTypeRegVec_1": 35,
+              "io_in_fuTypeRegVec_2": 35,
+              "io_in_fuTypeRegVec_3": 35,
+              "io_in_fuTypeRegVec_4": 35,
+              "io_in_fuTypeRegVec_5": 35,
+              "io_in_fuTypeRegVec_6": 35,
+              "io_in_fuTypeRegVec_7": 35,
+              "io_in_fuTypeRegVec_8": 35,
+              "io_in_fuTypeRegVec_9": 35,
+              "io_in_fuTypeRegVec_10": 35,
+              "io_in_fuTypeRegVec_11": 35,
+              "io_in_fuTypeRegVec_12": 35,
+              "io_in_fuTypeRegVec_13": 35,
+              "io_in_fuTypeRegVec_14": 35,
+              "io_in_fuTypeRegVec_15": 35,
+              "io_in_fuTypeRegVec_16": 35,
+              "io_in_fuTypeRegVec_17": 35
+            },
+            "input_bits": 634,
+            "outputs_compared": {
+              "io_out_fuBusyTableMask": 18
+            }
+          },
+          "FuBusyTableRead_53": {
+            "num_entries": 18,
+            "fu_type_bits": 35,
+            "table_bits": 2,
+            "latency_to_oh_bits": {
+              "1": [
+                11
+              ]
+            },
+            "parents": [
+              "IssueQueueFaluFmac",
+              "IssueQueueFaluFmacFdiv"
+            ],
+            "inputs": {
+              "io_in_fuBusyTable": 2,
+              "io_in_fuTypeRegVec_0": 35,
+              "io_in_fuTypeRegVec_1": 35,
+              "io_in_fuTypeRegVec_2": 35,
+              "io_in_fuTypeRegVec_3": 35,
+              "io_in_fuTypeRegVec_4": 35,
+              "io_in_fuTypeRegVec_5": 35,
+              "io_in_fuTypeRegVec_6": 35,
+              "io_in_fuTypeRegVec_7": 35,
+              "io_in_fuTypeRegVec_8": 35,
+              "io_in_fuTypeRegVec_9": 35,
+              "io_in_fuTypeRegVec_10": 35,
+              "io_in_fuTypeRegVec_11": 35,
+              "io_in_fuTypeRegVec_12": 35,
+              "io_in_fuTypeRegVec_13": 35,
+              "io_in_fuTypeRegVec_14": 35,
+              "io_in_fuTypeRegVec_15": 35,
+              "io_in_fuTypeRegVec_16": 35,
+              "io_in_fuTypeRegVec_17": 35
+            },
+            "input_bits": 632,
+            "outputs_compared": {
+              "io_out_fuBusyTableMask": 18
+            }
+          },
+          "FuBusyTableRead_68": {
+            "num_entries": 16,
+            "fu_type_bits": 35,
+            "table_bits": 5,
+            "latency_to_oh_bits": {
+              "2": [
+                19
+              ],
+              "3": [
+                20,
+                21
+              ],
+              "4": [
+                25
+              ]
+            },
+            "parents": [
+              "IssueQueueVfmaVialuFixVimacVppuVfaluVfcvtVipuVsetrvfwvf"
+            ],
+            "inputs": {
+              "io_in_fuBusyTable": 5,
+              "io_in_fuTypeRegVec_0": 35,
+              "io_in_fuTypeRegVec_1": 35,
+              "io_in_fuTypeRegVec_2": 35,
+              "io_in_fuTypeRegVec_3": 35,
+              "io_in_fuTypeRegVec_4": 35,
+              "io_in_fuTypeRegVec_5": 35,
+              "io_in_fuTypeRegVec_6": 35,
+              "io_in_fuTypeRegVec_7": 35,
+              "io_in_fuTypeRegVec_8": 35,
+              "io_in_fuTypeRegVec_9": 35,
+              "io_in_fuTypeRegVec_10": 35,
+              "io_in_fuTypeRegVec_11": 35,
+              "io_in_fuTypeRegVec_12": 35,
+              "io_in_fuTypeRegVec_13": 35,
+              "io_in_fuTypeRegVec_14": 35,
+              "io_in_fuTypeRegVec_15": 35
+            },
+            "input_bits": 565,
+            "outputs_compared": {
+              "io_out_fuBusyTableMask": 16
+            }
+          },
+          "FuBusyTableRead_69": {
+            "num_entries": 16,
+            "fu_type_bits": 35,
+            "table_bits": 4,
+            "latency_to_oh_bits": {
+              "1": [
+                30
+              ],
+              "2": [
+                24
+              ],
+              "3": [
+                18,
+                27
+              ]
+            },
+            "parents": [
+              "IssueQueueVfmaVialuFixVimacVppuVfaluVfcvtVipuVsetrvfwvf"
+            ],
+            "inputs": {
+              "io_in_fuBusyTable": 4,
+              "io_in_fuTypeRegVec_0": 35,
+              "io_in_fuTypeRegVec_1": 35,
+              "io_in_fuTypeRegVec_2": 35,
+              "io_in_fuTypeRegVec_3": 35,
+              "io_in_fuTypeRegVec_4": 35,
+              "io_in_fuTypeRegVec_5": 35,
+              "io_in_fuTypeRegVec_6": 35,
+              "io_in_fuTypeRegVec_7": 35,
+              "io_in_fuTypeRegVec_8": 35,
+              "io_in_fuTypeRegVec_9": 35,
+              "io_in_fuTypeRegVec_10": 35,
+              "io_in_fuTypeRegVec_11": 35,
+              "io_in_fuTypeRegVec_12": 35,
+              "io_in_fuTypeRegVec_13": 35,
+              "io_in_fuTypeRegVec_14": 35,
+              "io_in_fuTypeRegVec_15": 35
+            },
+            "input_bits": 564,
+            "outputs_compared": {
+              "io_out_fuBusyTableMask": 16
+            }
+          },
+          "FuBusyTableRead_71": {
+            "num_entries": 16,
+            "fu_type_bits": 35,
+            "table_bits": 5,
+            "latency_to_oh_bits": {
+              "2": [
+                30
+              ],
+              "4": [
+                18
+              ]
+            },
+            "parents": [
+              "IssueQueueVfmaVialuFixVimacVppuVfaluVfcvtVipuVsetrvfwvf"
+            ],
+            "inputs": {
+              "io_in_fuBusyTable": 5,
+              "io_in_fuTypeRegVec_0": 35,
+              "io_in_fuTypeRegVec_1": 35,
+              "io_in_fuTypeRegVec_2": 35,
+              "io_in_fuTypeRegVec_3": 35,
+              "io_in_fuTypeRegVec_4": 35,
+              "io_in_fuTypeRegVec_5": 35,
+              "io_in_fuTypeRegVec_6": 35,
+              "io_in_fuTypeRegVec_7": 35,
+              "io_in_fuTypeRegVec_8": 35,
+              "io_in_fuTypeRegVec_9": 35,
+              "io_in_fuTypeRegVec_10": 35,
+              "io_in_fuTypeRegVec_11": 35,
+              "io_in_fuTypeRegVec_12": 35,
+              "io_in_fuTypeRegVec_13": 35,
+              "io_in_fuTypeRegVec_14": 35,
+              "io_in_fuTypeRegVec_15": 35
+            },
+            "input_bits": 565,
+            "outputs_compared": {
+              "io_out_fuBusyTableMask": 16
+            }
+          },
+          "FuBusyTableRead_73": {
+            "num_entries": 16,
+            "fu_type_bits": 35,
+            "table_bits": 3,
+            "latency_to_oh_bits": {
+              "2": [
+                24
+              ]
+            },
+            "parents": [
+              "IssueQueueVfmaVialuFixVfalu",
+              "IssueQueueVfmaVialuFixVimacVppuVfaluVfcvtVipuVsetrvfwvf"
+            ],
+            "inputs": {
+              "io_in_fuBusyTable": 3,
+              "io_in_fuTypeRegVec_0": 35,
+              "io_in_fuTypeRegVec_1": 35,
+              "io_in_fuTypeRegVec_2": 35,
+              "io_in_fuTypeRegVec_3": 35,
+              "io_in_fuTypeRegVec_4": 35,
+              "io_in_fuTypeRegVec_5": 35,
+              "io_in_fuTypeRegVec_6": 35,
+              "io_in_fuTypeRegVec_7": 35,
+              "io_in_fuTypeRegVec_8": 35,
+              "io_in_fuTypeRegVec_9": 35,
+              "io_in_fuTypeRegVec_10": 35,
+              "io_in_fuTypeRegVec_11": 35,
+              "io_in_fuTypeRegVec_12": 35,
+              "io_in_fuTypeRegVec_13": 35,
+              "io_in_fuTypeRegVec_14": 35,
+              "io_in_fuTypeRegVec_15": 35
+            },
+            "input_bits": 563,
+            "outputs_compared": {
+              "io_out_fuBusyTableMask": 16
+            }
+          },
+          "FuBusyTableRead_75": {
+            "num_entries": 16,
+            "fu_type_bits": 35,
+            "table_bits": 4,
+            "latency_to_oh_bits": {
+              "2": [
+                24
+              ],
+              "3": [
+                18,
+                27
+              ]
+            },
+            "parents": [
+              "IssueQueueVfmaVialuFixVimacVppuVfaluVfcvtVipuVsetrvfwvf"
+            ],
+            "inputs": {
+              "io_in_fuBusyTable": 4,
+              "io_in_fuTypeRegVec_0": 35,
+              "io_in_fuTypeRegVec_1": 35,
+              "io_in_fuTypeRegVec_2": 35,
+              "io_in_fuTypeRegVec_3": 35,
+              "io_in_fuTypeRegVec_4": 35,
+              "io_in_fuTypeRegVec_5": 35,
+              "io_in_fuTypeRegVec_6": 35,
+              "io_in_fuTypeRegVec_7": 35,
+              "io_in_fuTypeRegVec_8": 35,
+              "io_in_fuTypeRegVec_9": 35,
+              "io_in_fuTypeRegVec_10": 35,
+              "io_in_fuTypeRegVec_11": 35,
+              "io_in_fuTypeRegVec_12": 35,
+              "io_in_fuTypeRegVec_13": 35,
+              "io_in_fuTypeRegVec_14": 35,
+              "io_in_fuTypeRegVec_15": 35
+            },
+            "input_bits": 564,
+            "outputs_compared": {
+              "io_out_fuBusyTableMask": 16
+            }
+          },
+          "FuBusyTableRead_79": {
+            "num_entries": 16,
+            "fu_type_bits": 35,
+            "table_bits": 2,
+            "latency_to_oh_bits": {
+              "1": [
+                30
+              ]
+            },
+            "parents": [
+              "IssueQueueVfmaVialuFixVimacVppuVfaluVfcvtVipuVsetrvfwvf"
+            ],
+            "inputs": {
+              "io_in_fuBusyTable": 2,
+              "io_in_fuTypeRegVec_0": 35,
+              "io_in_fuTypeRegVec_1": 35,
+              "io_in_fuTypeRegVec_2": 35,
+              "io_in_fuTypeRegVec_3": 35,
+              "io_in_fuTypeRegVec_4": 35,
+              "io_in_fuTypeRegVec_5": 35,
+              "io_in_fuTypeRegVec_6": 35,
+              "io_in_fuTypeRegVec_7": 35,
+              "io_in_fuTypeRegVec_8": 35,
+              "io_in_fuTypeRegVec_9": 35,
+              "io_in_fuTypeRegVec_10": 35,
+              "io_in_fuTypeRegVec_11": 35,
+              "io_in_fuTypeRegVec_12": 35,
+              "io_in_fuTypeRegVec_13": 35,
+              "io_in_fuTypeRegVec_14": 35,
+              "io_in_fuTypeRegVec_15": 35
+            },
+            "input_bits": 562,
+            "outputs_compared": {
+              "io_out_fuBusyTableMask": 16
+            }
+          },
+          "FuBusyTableRead_80": {
+            "num_entries": 16,
+            "fu_type_bits": 35,
+            "table_bits": 5,
+            "latency_to_oh_bits": {
+              "2": [
+                19
+              ],
+              "4": [
+                25
+              ]
+            },
+            "parents": [
+              "IssueQueueVfmaVialuFixVfalu"
+            ],
+            "inputs": {
+              "io_in_fuBusyTable": 5,
+              "io_in_fuTypeRegVec_0": 35,
+              "io_in_fuTypeRegVec_1": 35,
+              "io_in_fuTypeRegVec_2": 35,
+              "io_in_fuTypeRegVec_3": 35,
+              "io_in_fuTypeRegVec_4": 35,
+              "io_in_fuTypeRegVec_5": 35,
+              "io_in_fuTypeRegVec_6": 35,
+              "io_in_fuTypeRegVec_7": 35,
+              "io_in_fuTypeRegVec_8": 35,
+              "io_in_fuTypeRegVec_9": 35,
+              "io_in_fuTypeRegVec_10": 35,
+              "io_in_fuTypeRegVec_11": 35,
+              "io_in_fuTypeRegVec_12": 35,
+              "io_in_fuTypeRegVec_13": 35,
+              "io_in_fuTypeRegVec_14": 35,
+              "io_in_fuTypeRegVec_15": 35
+            },
+            "input_bits": 565,
+            "outputs_compared": {
+              "io_out_fuBusyTableMask": 16
+            }
+          },
+          "FuBusyTableRead_105": {
+            "num_entries": 16,
+            "fu_type_bits": 35,
+            "table_bits": 4,
+            "latency_to_oh_bits": {
+              "3": [
+                15
+              ]
+            },
+            "parents": [
+              "IssueQueueLdu"
+            ],
+            "inputs": {
+              "io_in_fuBusyTable": 4,
+              "io_in_fuTypeRegVec_0": 35,
+              "io_in_fuTypeRegVec_1": 35,
+              "io_in_fuTypeRegVec_2": 35,
+              "io_in_fuTypeRegVec_3": 35,
+              "io_in_fuTypeRegVec_4": 35,
+              "io_in_fuTypeRegVec_5": 35,
+              "io_in_fuTypeRegVec_6": 35,
+              "io_in_fuTypeRegVec_7": 35,
+              "io_in_fuTypeRegVec_8": 35,
+              "io_in_fuTypeRegVec_9": 35,
+              "io_in_fuTypeRegVec_10": 35,
+              "io_in_fuTypeRegVec_11": 35,
+              "io_in_fuTypeRegVec_12": 35,
+              "io_in_fuTypeRegVec_13": 35,
+              "io_in_fuTypeRegVec_14": 35,
+              "io_in_fuTypeRegVec_15": 35
+            },
+            "input_bits": 564,
+            "outputs_compared": {
+              "io_out_fuBusyTableMask": 16
+            }
+          }
+        },
+        "inputs": {
+          "FuBusyTableRead": {
+            "io_in_fuBusyTable": 3,
+            "io_in_fuTypeRegVec": 840
+          },
+          "FuBusyTableRead_2": {
+            "io_in_fuBusyTable": 1,
+            "io_in_fuTypeRegVec": 840
+          },
+          "FuBusyTableRead_22": {
+            "io_in_fuBusyTable": 3,
+            "io_in_fuTypeRegVec": 840
+          },
+          "FuBusyTableRead_23": {
+            "io_in_fuBusyTable": 1,
+            "io_in_fuTypeRegVec": 840
+          },
+          "FuBusyTableRead_26": {
+            "io_in_fuBusyTable": 3,
+            "io_in_fuTypeRegVec": 840
+          },
+          "FuBusyTableRead_28": {
+            "io_in_fuBusyTable": 1,
+            "io_in_fuTypeRegVec": 840
+          },
+          "FuBusyTableRead_42": {
+            "io_in_fuBusyTable": 4,
+            "io_in_fuTypeRegVec": 630
+          },
+          "FuBusyTableRead_43": {
+            "io_in_fuBusyTable": 3,
+            "io_in_fuTypeRegVec": 630
+          },
+          "FuBusyTableRead_52": {
+            "io_in_fuBusyTable": 4,
+            "io_in_fuTypeRegVec": 630
+          },
+          "FuBusyTableRead_53": {
+            "io_in_fuBusyTable": 2,
+            "io_in_fuTypeRegVec": 630
+          },
+          "FuBusyTableRead_68": {
+            "io_in_fuBusyTable": 5,
+            "io_in_fuTypeRegVec": 560
+          },
+          "FuBusyTableRead_69": {
+            "io_in_fuBusyTable": 4,
+            "io_in_fuTypeRegVec": 560
+          },
+          "FuBusyTableRead_71": {
+            "io_in_fuBusyTable": 5,
+            "io_in_fuTypeRegVec": 560
+          },
+          "FuBusyTableRead_73": {
+            "io_in_fuBusyTable": 3,
+            "io_in_fuTypeRegVec": 560
+          },
+          "FuBusyTableRead_75": {
+            "io_in_fuBusyTable": 4,
+            "io_in_fuTypeRegVec": 560
+          },
+          "FuBusyTableRead_79": {
+            "io_in_fuBusyTable": 2,
+            "io_in_fuTypeRegVec": 560
+          },
+          "FuBusyTableRead_80": {
+            "io_in_fuBusyTable": 5,
+            "io_in_fuTypeRegVec": 560
+          },
+          "FuBusyTableRead_105": {
+            "io_in_fuBusyTable": 4,
+            "io_in_fuTypeRegVec": 560
+          }
+        },
+        "outputs_compared": {
+          "FuBusyTableRead": {
+            "io_out_fuBusyTableMask": 24
+          },
+          "FuBusyTableRead_2": {
+            "io_out_fuBusyTableMask": 24
+          },
+          "FuBusyTableRead_22": {
+            "io_out_fuBusyTableMask": 24
+          },
+          "FuBusyTableRead_23": {
+            "io_out_fuBusyTableMask": 24
+          },
+          "FuBusyTableRead_26": {
+            "io_out_fuBusyTableMask": 24
+          },
+          "FuBusyTableRead_28": {
+            "io_out_fuBusyTableMask": 24
+          },
+          "FuBusyTableRead_42": {
+            "io_out_fuBusyTableMask": 18
+          },
+          "FuBusyTableRead_43": {
+            "io_out_fuBusyTableMask": 18
+          },
+          "FuBusyTableRead_52": {
+            "io_out_fuBusyTableMask": 18
+          },
+          "FuBusyTableRead_53": {
+            "io_out_fuBusyTableMask": 18
+          },
+          "FuBusyTableRead_68": {
+            "io_out_fuBusyTableMask": 16
+          },
+          "FuBusyTableRead_69": {
+            "io_out_fuBusyTableMask": 16
+          },
+          "FuBusyTableRead_71": {
+            "io_out_fuBusyTableMask": 16
+          },
+          "FuBusyTableRead_73": {
+            "io_out_fuBusyTableMask": 16
+          },
+          "FuBusyTableRead_75": {
+            "io_out_fuBusyTableMask": 16
+          },
+          "FuBusyTableRead_79": {
+            "io_out_fuBusyTableMask": 16
+          },
+          "FuBusyTableRead_80": {
+            "io_out_fuBusyTableMask": 16
+          },
+          "FuBusyTableRead_105": {
+            "io_out_fuBusyTableMask": 16
+          }
+        },
+        "aggregate_input_bits": 12097,
+        "aggregate_input_bit_accounting": "3+24*35 + 1+24*35 + 3+24*35 + 1+24*35 + 3+24*35 + 1+24*35 + 4+18*35 + 3+18*35 + 4+18*35 + 2+18*35 + 5+16*35 + 4+16*35 + 5+16*35 + 3+16*35 + 4+16*35 + 2+16*35 + 5+16*35 + 4+16*35",
+        "aggregate_compared_output_bits": 344,
+        "why_complete": "Each specialization is proven by its own Yosys SAT miter in which io_in_fuBusyTable and all num_entries 35-bit io_in_fuTypeRegVec ports are unconstrained inputs and mismatch is the reduction-OR over every declared io_out_fuBusyTableMask bit; a flattened aggregate miter then proves the same bit-wise property for all eighteen variants in one run. No bounded vector contributes to this verdict.",
+        "bounded_tests_counted": false
+      },
+      "sources": {
+        "scala": {
+          "path": "upstream/src/main/scala/xiangshan/backend/issue/FuBusyTableRead.scala",
+          "present": true,
+          "expected_sha256": "4c1ac56ddd26b3dff8db5362017c462ef8c8dcf0a46ffe31fff733c15a272c49",
+          "observed_sha256": "4c1ac56ddd26b3dff8db5362017c462ef8c8dcf0a46ffe31fff733c15a272c49",
+          "status": "PASS"
+        },
+        "reference_sv": {
+          "path": "validation/reference-sv/FuBusyTableRead.sv",
+          "present": true,
+          "expected_sha256": "41a3f61c74c3178a6bf30dff32bcfbb44154f529263cfaf68694936bb61ee271",
+          "observed_sha256": "41a3f61c74c3178a6bf30dff32bcfbb44154f529263cfaf68694936bb61ee271",
+          "status": "PASS"
+        },
+        "python_build": {
+          "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.FuBusyTableRead-Hardware.py",
+          "present": true,
+          "expected_sha256": "56aabfe425fcf548de1c108f670a1d705e41ffe292d03854b0d428dabcd26c98",
+          "observed_sha256": "56aabfe425fcf548de1c108f670a1d705e41ffe292d03854b0d428dabcd26c98",
+          "status": "PASS"
+        }
+      },
+      "formal": {
+        "proof_method": "sat_miter",
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_fubusytableread_strict/DUT_FuBusyTableRead.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_fubusytableread_strict/DUT_FuBusyTableRead_2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_fubusytableread_strict/DUT_FuBusyTableRead_22.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_fubusytableread_strict/DUT_FuBusyTableRead_23.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_fubusytableread_strict/DUT_FuBusyTableRead_26.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_fubusytableread_strict/DUT_FuBusyTableRead_28.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_fubusytableread_strict/DUT_FuBusyTableRead_42.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_fubusytableread_strict/DUT_FuBusyTableRead_43.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_fubusytableread_strict/DUT_FuBusyTableRead_52.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_fubusytableread_strict/DUT_FuBusyTableRead_53.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_fubusytableread_strict/DUT_FuBusyTableRead_68.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_fubusytableread_strict/DUT_FuBusyTableRead_69.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_fubusytableread_strict/DUT_FuBusyTableRead_71.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_fubusytableread_strict/DUT_FuBusyTableRead_73.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_fubusytableread_strict/DUT_FuBusyTableRead_75.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_fubusytableread_strict/DUT_FuBusyTableRead_79.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_fubusytableread_strict/DUT_FuBusyTableRead_80.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_fubusytableread_strict/DUT_FuBusyTableRead_105.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_fubusytableread_strict/REF_FuBusyTableRead_closure.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_fubusytableread_strict/FuBusyTableRead_ALL_MITER.sv; prep -top FuBusyTableRead_ALL_MITER; flatten; opt; sat -prove mismatch 0"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "formal_success_marker": true
+      },
+      "failures": []
+    },
+    {
       "evidence": "validation/v2-immextractor-strict-evidence.json",
       "build_id": "Build-Cpu.Backend.Issue.ImmExtractor",
+      "declared_status": "COMPLETE_EQUIVALENCE",
       "source_commit": {
         "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
@@ -879,8 +1873,96 @@
       "failures": []
     },
     {
+      "evidence": "validation/v2-instrmmioentry-strict-evidence.json",
+      "build_id": "Build-Cpu.Frontend.Icache.InstrMMIOEntry",
+      "declared_status": "STRICT_PENDING",
+      "source_commit": {
+        "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+        "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+        "status": "PASS"
+      },
+      "status": "NON_COUNTING",
+      "scope": {
+        "kind": "sequential_registered_leaf",
+        "configuration": "locked V2 single-entry uncached instruction transaction engine",
+        "state_bits": 116,
+        "state_registers": {
+          "state": 2,
+          "req_addr": 48,
+          "respDataReg": 64,
+          "respCorruptReg": 1,
+          "needFlush": 1
+        },
+        "state_boundary": "four-state register, request address, response data/corrupt and needFlush registers, all in one posedge clocked block",
+        "inputs": {
+          "clock": 1,
+          "reset": 1,
+          "io_req_valid": 1,
+          "io_req_bits_addr": 48,
+          "io_req_bits_flush": 1,
+          "io_mmio_acquire_ready": 1,
+          "io_mmio_grant_valid": 1,
+          "io_mmio_grant_bits_data": 64,
+          "io_mmio_grant_bits_corrupt": 1,
+          "io_wfi_wfiReq": 1
+        },
+        "outputs_compared": {
+          "io_req_ready": 1,
+          "io_resp_valid": 1,
+          "io_resp_bits_data": 32,
+          "io_resp_bits_corrupt": 1,
+          "io_mmio_acquire_valid": 1,
+          "io_mmio_acquire_bits_address": 48,
+          "io_wfi_wfiSafe": 1
+        },
+        "input_bits": 120,
+        "output_bits": 85,
+        "transition_relation": "all input sequences, posedge clock, async reset normalized by async2sync",
+        "proof_cell_coverage": "equiv_status -assert requires every matched state and output cell",
+        "why_complete": "Yosys equiv_induct -undef discharges the full transition relation; a built-in negative control proves the harness reports a mutated target",
+        "bounded_tests_counted": false
+      },
+      "sources": {
+        "scala": {
+          "path": "upstream/src/main/scala/xiangshan/frontend/icache/InstrUncache.scala",
+          "present": true,
+          "expected_sha256": "e031ec5dfc18d0745cabbfceb814b083818cfdd67961d523132f06a947d1fa40",
+          "observed_sha256": "e031ec5dfc18d0745cabbfceb814b083818cfdd67961d523132f06a947d1fa40",
+          "status": "PASS"
+        },
+        "reference_sv": {
+          "path": "validation/reference-sv/InstrMMIOEntry.sv",
+          "present": true,
+          "expected_sha256": "86989112566f2ddc77d2f4502007a36f33e6e7158990fbd8556f8bd1aefe7eb8",
+          "observed_sha256": "86989112566f2ddc77d2f4502007a36f33e6e7158990fbd8556f8bd1aefe7eb8",
+          "status": "PASS"
+        },
+        "python_build": {
+          "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.InstrMMIOEntry-Hardware.py",
+          "present": true,
+          "expected_sha256": "2e0881c5fdf4fc40f3e2a2fe77dc96434441bc8aa019ee93fb3ad00dfa2ec9c1",
+          "observed_sha256": "2e0881c5fdf4fc40f3e2a2fe77dc96434441bc8aa019ee93fb3ad00dfa2ec9c1",
+          "status": "PASS"
+        }
+      },
+      "formal": {
+        "proof_method": "sequential_equivalence",
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_instrmmioentry_strict/InstrMMIOEntry-target.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_instrmmioentry_strict/InstrMMIOEntry-reference.sv; proc; async2sync; memory; opt; equiv_make InstrMMIOEntry InstrMMIOEntry_ref InstrMMIOEntry_equiv; prep -top InstrMMIOEntry_equiv; equiv_induct -undef; equiv_status -assert"
+        ],
+        "returncode": 1,
+        "status": "FAIL",
+        "formal_success_marker": false
+      },
+      "failures": []
+    },
+    {
       "evidence": "validation/v2-jumpdatamodule-strict-evidence.json",
       "build_id": "Build-Cpu.Backend.Fu.JumpDataModule",
+      "declared_status": "COMPLETE_EQUIVALENCE",
       "source_commit": {
         "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
@@ -949,6 +2031,7 @@
     {
       "evidence": "validation/v2-maskextractor-strict-evidence.json",
       "build_id": "Build-Cpu.Backend.Fu.Vector.Utils.MaskExtrator",
+      "declared_status": "COMPLETE_EQUIVALENCE",
       "source_commit": {
         "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
@@ -1013,6 +2096,7 @@
     {
       "evidence": "validation/v2-mgtu-strict-evidence.json",
       "build_id": "Build-Cpu.Backend.Fu.Vector.Mgtu",
+      "declared_status": "COMPLETE_EQUIVALENCE",
       "source_commit": {
         "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
@@ -1086,6 +2170,7 @@
     {
       "evidence": "validation/v2-rvcexpander-strict-evidence.json",
       "build_id": "Build-Cpu.Frontend.Ifu.RvcExpander",
+      "declared_status": "COMPLETE_EQUIVALENCE",
       "source_commit": {
         "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
@@ -1157,6 +2242,7 @@
     {
       "evidence": "validation/v2-sstcinterruptgen-strict-evidence.json",
       "build_id": "Build-Cpu.Backend.Fu.NewCSR.SstcInterruptGen",
+      "declared_status": "COMPLETE_EQUIVALENCE",
       "source_commit": {
         "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
@@ -1245,6 +2331,7 @@
     {
       "evidence": "validation/v2-uinttocont0s-strict-evidence.json",
       "build_id": "Build-Cpu.Backend.Fu.Vector.Utils.UIntToCont0s",
+      "declared_status": "COMPLETE_EQUIVALENCE",
       "source_commit": {
         "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
@@ -1308,6 +2395,7 @@
     {
       "evidence": "validation/v2-uinttocont1s-strict-evidence.json",
       "build_id": "Build-Cpu.Backend.Fu.Vector.Utils.UIntToCont1s",
+      "declared_status": "COMPLETE_EQUIVALENCE",
       "source_commit": {
         "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
@@ -1371,6 +2459,7 @@
     {
       "evidence": "validation/v2-vecdatasplitmodule-strict-evidence.json",
       "build_id": "Build-Cpu.Backend.Fu.Vector.Utils.VecDataSplitModule",
+      "declared_status": "COMPLETE_EQUIVALENCE",
       "source_commit": {
         "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",

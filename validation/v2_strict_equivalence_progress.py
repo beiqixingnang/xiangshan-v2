@@ -15,6 +15,7 @@ BUILD_ROOT = ROOT / "python/Program-System/System-Build/Build-Cpu"
 PLAN = ROOT / "V2-Rewrite-Batch-Plan.json"
 OUTPUT = ROOT / "validation/v2-strict-equivalence-progress.json"
 EXPECTED_KIND = "XIANGSHAN_KUNMINGHU_V2_STRICT_COMPLETE_EQUIVALENCE"
+NON_COUNTING_STATUSES = ("STRICT_PENDING", "COMPLETE_EQUIVALENCE_VARIANT_ONLY")
 SUCCESS_MARKER = "SAT proof finished - no model found: SUCCESS!"
 EQUIV_SUCCESS_MARKERS = (
     "0 are unproven.",
@@ -74,12 +75,20 @@ def verify_evidence(path: Path, expected_source_commit: str) -> dict[str, Any]:
     build_id = str(payload.get("build_id", ""))
     if payload.get("kind") != EXPECTED_KIND:
         failures.append("kind")
-    if payload.get("status") != "COMPLETE_EQUIVALENCE":
-        failures.append("status")
-    if payload.get("strict_complete_eligible") is not True:
-        failures.append("strict_complete_eligible")
-    if payload.get("strict_complete_count_delta") != 1:
-        failures.append("strict_complete_count_delta")
+    declared_status = str(payload.get("status", ""))
+    non_counting = declared_status in NON_COUNTING_STATUSES
+    if non_counting:
+        if payload.get("strict_complete_eligible") is not False:
+            failures.append("non-counting record must not claim strict_complete_eligible")
+        if payload.get("strict_complete_count_delta") != 0:
+            failures.append("non-counting record must claim strict_complete_count_delta 0")
+    else:
+        if declared_status != "COMPLETE_EQUIVALENCE":
+            failures.append("status")
+        if payload.get("strict_complete_eligible") is not True:
+            failures.append("strict_complete_eligible")
+        if payload.get("strict_complete_count_delta") != 1:
+            failures.append("strict_complete_count_delta")
     if not build_id:
         failures.append("build_id")
     source_commit = str(payload.get("source_commit", ""))
@@ -102,37 +111,42 @@ def verify_evidence(path: Path, expected_source_commit: str) -> dict[str, Any]:
         proof_method = "sequential_equivalence"
         formal = nested(payload, "checks", "formal", "yosys_equiv")
     if not isinstance(formal, dict):
-        failures.append("formal result")
         formal = {}
-    if formal.get("returncode") != 0 or formal.get("status") != "PASS":
-        failures.append("formal status")
-    if formal.get("formal_success_marker") is not True:
-        failures.append("formal_success_marker")
+        if not non_counting:
+            failures.append("formal result")
     formal_output = str(formal.get("output_tail", ""))
     formal_command = formal.get("command", [])
     command_text = " ".join(str(item) for item in formal_command) if isinstance(formal_command, list) else str(formal_command)
-    if proof_method == "sat_miter":
-        if SUCCESS_MARKER not in formal_output:
-            failures.append("SAT success output")
-    else:
-        if "equiv_induct" not in command_text or "equiv_status -assert" not in command_text:
-            failures.append("sequential equivalence command")
-        for marker in EQUIV_SUCCESS_MARKERS:
-            if marker not in formal_output:
-                failures.append(f"sequential equivalence marker: {marker}")
+    if not non_counting:
+        if formal.get("returncode") != 0 or formal.get("status") != "PASS":
+            failures.append("formal status")
+        if formal.get("formal_success_marker") is not True:
+            failures.append("formal_success_marker")
+        if proof_method == "sat_miter":
+            if SUCCESS_MARKER not in formal_output:
+                failures.append("SAT success output")
+        else:
+            if "equiv_induct" not in command_text or "equiv_status -assert" not in command_text:
+                failures.append("sequential equivalence command")
+            for marker in EQUIV_SUCCESS_MARKERS:
+                if marker not in formal_output:
+                    failures.append(f"sequential equivalence marker: {marker}")
 
     scope = payload.get("scope", {})
     if not isinstance(scope, dict) or not scope.get("inputs") or not scope.get("outputs_compared"):
-        failures.append("formal scope")
+        if not non_counting:
+            failures.append("formal scope")
     return {
         "evidence": str(path.relative_to(ROOT)).replace("\\", "/"),
         "build_id": build_id,
+        "declared_status": declared_status,
         "source_commit": {
             "expected": expected_source_commit,
             "observed": source_commit,
             "status": "PASS" if source_commit == expected_source_commit else "FAIL",
         },
-        "status": "PASS" if not failures else "FAIL",
+        "status": ("NON_COUNTING" if non_counting and not failures
+                   else "PASS" if not failures else "FAIL"),
         "scope": scope,
         "sources": verified_sources,
         "formal": {
@@ -188,6 +202,10 @@ def main() -> int:
     reconciliation = (
         "PASS" if plan_count == strict_count and plan_denominator == denominator else "FAIL"
     )
+    accepted_rows = [row for row in rows if row["status"] in ("PASS", "NON_COUNTING")]
+    non_counting = [{"evidence": row["evidence"], "build_id": row["build_id"],
+                     "declared_status": row["declared_status"], "failures": row["failures"]}
+                    for row in rows if row["status"] == "NON_COUNTING"]
     payload = {
         "schema_version": 1,
         "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_EQUIVALENCE_PROGRESS",
@@ -195,7 +213,9 @@ def main() -> int:
         "strict_complete_build_count": strict_count,
         "fraction": f"{strict_count}/{denominator}",
         "percentage": round(100.0 * strict_count / denominator, 6) if denominator else 0.0,
-        "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with the locked source commit, matching source hashes, and either a Yosys SAT no-model miter or fully proven Yosys inductive-equivalence status is counted.",
+        "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with the locked source commit, matching source hashes, and either a Yosys SAT no-model miter or fully proven Yosys inductive-equivalence status is counted. STRICT_PENDING and COMPLETE_EQUIVALENCE_VARIANT_ONLY records are inventoried as attempted-but-not-counted instead of failing the rail, and one Build file may not be claimed by several counting proofs.",
+        "non_counting_attempt_count": len(non_counting),
+        "non_counting_attempts": non_counting,
         "plan_reconciliation": {
             "plan_count": plan_count,
             "plan_denominator": plan_denominator,
@@ -206,10 +226,12 @@ def main() -> int:
             path: ids for path, ids in sorted(aggregate_claims.items())
         },
         "proofs": rows,
-        "status": "PASS" if all(row["status"] == "PASS" for row in rows) and reconciliation == "PASS" else "FAIL",
+        "status": "PASS" if len(accepted_rows) == len(rows) and reconciliation == "PASS" else "FAIL",
     }
     OUTPUT.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
-    print(json.dumps({"status": payload["status"], "fraction": payload["fraction"], "proofs": len(rows), "duplicates": duplicates}))
+    print(json.dumps({"status": payload["status"], "fraction": payload["fraction"],
+                      "proofs": strict_count, "non_counting": len(non_counting),
+                      "duplicates": duplicates}, ensure_ascii=False))
     return 0 if payload["status"] == "PASS" else 1
 
 
