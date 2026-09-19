@@ -2,12 +2,12 @@
   "schema_version": 1,
   "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_EQUIVALENCE_PROGRESS",
   "build_denominator": 118,
-  "strict_complete_build_count": 11,
-  "fraction": "11/118",
-  "percentage": 9.322034,
+  "strict_complete_build_count": 13,
+  "fraction": "13/118",
+  "percentage": 11.016949,
   "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with the locked source commit, matching source hashes, and either a Yosys SAT no-model miter or fully proven Yosys inductive-equivalence status is counted.",
   "plan_reconciliation": {
-    "plan_count": 11,
+    "plan_count": 13,
     "plan_denominator": 118,
     "status": "PASS"
   },
@@ -872,6 +872,165 @@
           "-Q",
           "-p",
           "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_maskextractor_strict/UHSC_MaskExtractor.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_maskextractor_strict/REF_MaskExtractor.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_maskextractor_strict/MaskExtractor_MITER.sv; prep -top MaskExtractor_MITER; flatten; opt; sat -prove mismatch 0"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "formal_success_marker": true
+      },
+      "failures": []
+    },
+    {
+      "evidence": "validation/v2-rvcexpander-strict-evidence.json",
+      "build_id": "Build-Cpu.Frontend.Ifu.RvcExpander",
+      "source_commit": {
+        "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+        "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+        "status": "PASS"
+      },
+      "status": "PASS",
+      "scope": {
+        "kind": "stateless_combinational_leaf",
+        "configuration": {
+          "XLEN": 64,
+          "fLen": 64,
+          "useAddiForMv": true,
+          "HasCExtension": true
+        },
+        "inputs": {
+          "io_in": 32,
+          "io_fsIsOff": 1
+        },
+        "input_bits": 33,
+        "input_space": "2**33",
+        "input_space_cardinality": "8589934592",
+        "state_bits": 0,
+        "state_boundary": "no clock/reset/register/memory; one combinational evaluation",
+        "outputs_compared": {
+          "io_out_bits": 32,
+          "io_ill": 1
+        },
+        "output_bits": 33,
+        "why_complete": "Yosys SAT proves both locked output ports equal for every valuation of all 33 input bits; metadata taps are internal and not part of the locked ABI.",
+        "bounded_tests_counted": false
+      },
+      "sources": {
+        "scala": {
+          "path": "upstream/src/main/scala/xiangshan/frontend/PreDecode.scala",
+          "present": true,
+          "expected_sha256": "1d669a45258861850aca3fcf8e606f4a2e5c04e0daf00085582fcf33b11513d8",
+          "observed_sha256": "1d669a45258861850aca3fcf8e606f4a2e5c04e0daf00085582fcf33b11513d8",
+          "status": "PASS"
+        },
+        "python_build": {
+          "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Ifu.RvcExpander-Hardware.py",
+          "present": true,
+          "expected_sha256": "f0b74bec6228aac487dcd1c1b9de6c6a5146268751accc7cd7ea96c4a539d693",
+          "observed_sha256": "f0b74bec6228aac487dcd1c1b9de6c6a5146268751accc7cd7ea96c4a539d693",
+          "status": "PASS"
+        },
+        "reference_sv": {
+          "path": "validation/reference-closures/RVCExpander-v2.sv",
+          "present": true,
+          "expected_sha256": "b475b32782d91a7e8574b16133615b2e3c451a3ee29e334ca97d72d68a196e19",
+          "observed_sha256": "b475b32782d91a7e8574b16133615b2e3c451a3ee29e334ca97d72d68a196e19",
+          "status": "PASS"
+        }
+      },
+      "formal": {
+        "proof_method": "sat_miter",
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_rvcexpander_strict/UHSC_RVCExpander.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_rvcexpander_strict/REF_RVCExpander.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_rvcexpander_strict/RVCExpander_MITER.sv; prep -top RVCExpander_MITER; flatten; opt; sat -prove mismatch 0"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "formal_success_marker": true
+      },
+      "failures": []
+    },
+    {
+      "evidence": "validation/v2-sstcinterruptgen-strict-evidence.json",
+      "build_id": "Build-Cpu.Backend.Fu.NewCSR.SstcInterruptGen",
+      "source_commit": {
+        "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+        "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+        "status": "PASS"
+      },
+      "status": "PASS",
+      "scope": {
+        "kind": "sequential_registered_leaf",
+        "configuration": "fixed V2 SstcInterruptGen IO",
+        "state_bits": 2,
+        "state_boundary": "two independently enabled async-reset TIP registers",
+        "semantics": {
+          "stip_enable": "i_stime_valid | i_stimecmp_wen | i_menvcfg_wen",
+          "vstip_enable": "i_vstime_valid | i_vstimecmp_wen | i_htimedeltaWen | i_menvcfg_wen | i_henvcfg_wen",
+          "compare": "unsigned 64-bit >= with STCE/HSTCE gating",
+          "reset_value": {
+            "o_STIP": 0,
+            "o_VSTIP": 0
+          },
+          "disabled_enable": "RegEnable hold"
+        },
+        "inputs": {
+          "clock": 1,
+          "reset": 1,
+          "i_stime_valid": 1,
+          "i_stime_bits": 64,
+          "i_vstime_valid": 1,
+          "i_vstime_bits": 64,
+          "i_stimecmp_wen": 1,
+          "i_stimecmp_rdata": 64,
+          "i_vstimecmp_wen": 1,
+          "i_vstimecmp_rdata": 64,
+          "i_htimedeltaWen": 1,
+          "i_menvcfg_wen": 1,
+          "i_menvcfg_STCE": 1,
+          "i_henvcfg_wen": 1,
+          "i_henvcfg_STCE": 1
+        },
+        "outputs_compared": {
+          "o_STIP": 1,
+          "o_VSTIP": 1
+        },
+        "input_bits": 267,
+        "output_bits": 2,
+        "transition_relation": "all input sequences, posedge clock, async reset",
+        "why_complete": "Yosys equiv_induct -undef proves both state/output cells with all 267 input bits unconstrained",
+        "bounded_tests_counted": false
+      },
+      "sources": {
+        "scala": {
+          "path": "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/SstcInterruptGen.scala",
+          "present": true,
+          "expected_sha256": "e9156dc6a0eb8041b6476f537a6ece689daa06143f87c3a387c0eea7891a9da7",
+          "observed_sha256": "e9156dc6a0eb8041b6476f537a6ece689daa06143f87c3a387c0eea7891a9da7",
+          "status": "PASS"
+        },
+        "reference_sv": {
+          "path": "validation/reference-closures/SstcInterruptGen-v2.sv",
+          "present": true,
+          "expected_sha256": "e1ab00c5a55a283e913d9ab1413cb77925344e616af5491a1844c38bda8c29bf",
+          "observed_sha256": "e1ab00c5a55a283e913d9ab1413cb77925344e616af5491a1844c38bda8c29bf",
+          "status": "PASS"
+        },
+        "python_build": {
+          "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.NewCSR.SstcInterruptGen-Hardware.py",
+          "present": true,
+          "expected_sha256": "ca80799cdb7b72a0ca40f93e560a42fa5f243c1300eaae38d46f9419f468c3fc",
+          "observed_sha256": "ca80799cdb7b72a0ca40f93e560a42fa5f243c1300eaae38d46f9419f468c3fc",
+          "status": "PASS"
+        }
+      },
+      "formal": {
+        "proof_method": "sequential_equivalence",
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_sstcinterruptgen_strict/SstcInterruptGen-target.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_sstcinterruptgen_strict/SstcInterruptGen-reference.sv; proc; async2sync; memory; opt; equiv_make SstcInterruptGen SstcInterruptGen_ref Sstc_equiv; prep -top Sstc_equiv; equiv_induct -undef; equiv_status -assert"
         ],
         "returncode": 0,
         "status": "PASS",

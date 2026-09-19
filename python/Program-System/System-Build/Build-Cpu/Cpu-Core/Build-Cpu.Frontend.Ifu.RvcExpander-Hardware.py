@@ -673,9 +673,12 @@ def build_verilog(configuration: RvcExpanderConfig | None = None,
                   injected_dependencies: dict[str, Any] | None = None) -> str:
     del injected_dependencies
     top = RvcExpander(configuration)
+    # The locked V2 RVCExpander ABI exposes only the expanded instruction and
+    # legality bit.  The register metadata signals remain internal inspection
+    # taps; exporting them would change the public module contract.
+    # 锁定 V2 ABI 仅公开展开指令与合法性位；寄存器元数据只保留为内部观测信号。
     return verilog.convert(top, name="RVCExpander", ports=[top.in_, top.fsIsOff,
-                        top.out_bits, top.out_rd, top.out_rs1, top.out_rs2,
-                        top.out_rs3, top.ill], emit_src=False)
+                        top.out_bits, top.ill], emit_src=False)
 
 
 # =============================================================================

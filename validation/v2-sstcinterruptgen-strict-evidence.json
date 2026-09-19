@@ -1,0 +1,282 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_COMPLETE_EQUIVALENCE",
+  "build_id": "Build-Cpu.Backend.Fu.NewCSR.SstcInterruptGen",
+  "validator": "validation/v2_sstcinterruptgen_strict_validator.py",
+  "status": "COMPLETE_EQUIVALENCE",
+  "strict_complete_eligible": true,
+  "strict_complete_count_delta": 1,
+  "acceptance_eligible": true,
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "scope": {
+    "kind": "sequential_registered_leaf",
+    "configuration": "fixed V2 SstcInterruptGen IO",
+    "state_bits": 2,
+    "state_boundary": "two independently enabled async-reset TIP registers",
+    "semantics": {
+      "stip_enable": "i_stime_valid | i_stimecmp_wen | i_menvcfg_wen",
+      "vstip_enable": "i_vstime_valid | i_vstimecmp_wen | i_htimedeltaWen | i_menvcfg_wen | i_henvcfg_wen",
+      "compare": "unsigned 64-bit >= with STCE/HSTCE gating",
+      "reset_value": {
+        "o_STIP": 0,
+        "o_VSTIP": 0
+      },
+      "disabled_enable": "RegEnable hold"
+    },
+    "inputs": {
+      "clock": 1,
+      "reset": 1,
+      "i_stime_valid": 1,
+      "i_stime_bits": 64,
+      "i_vstime_valid": 1,
+      "i_vstime_bits": 64,
+      "i_stimecmp_wen": 1,
+      "i_stimecmp_rdata": 64,
+      "i_vstimecmp_wen": 1,
+      "i_vstimecmp_rdata": 64,
+      "i_htimedeltaWen": 1,
+      "i_menvcfg_wen": 1,
+      "i_menvcfg_STCE": 1,
+      "i_henvcfg_wen": 1,
+      "i_henvcfg_STCE": 1
+    },
+    "outputs_compared": {
+      "o_STIP": 1,
+      "o_VSTIP": 1
+    },
+    "input_bits": 267,
+    "output_bits": 2,
+    "transition_relation": "all input sequences, posedge clock, async reset",
+    "why_complete": "Yosys equiv_induct -undef proves both state/output cells with all 267 input bits unconstrained",
+    "bounded_tests_counted": false
+  },
+  "reference_lock": {
+    "status": "PASS",
+    "scala_sha256": "e9156dc6a0eb8041b6476f537a6ece689daa06143f87c3a387c0eea7891a9da7",
+    "expected_scala_sha256": "e9156dc6a0eb8041b6476f537a6ece689daa06143f87c3a387c0eea7891a9da7",
+    "reference_sha256": "e1ab00c5a55a283e913d9ab1413cb77925344e616af5491a1844c38bda8c29bf",
+    "expected_reference_sha256": "e1ab00c5a55a283e913d9ab1413cb77925344e616af5491a1844c38bda8c29bf",
+    "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+    "xstop": {
+      "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+      "bytes": 228590583,
+      "module": "SstcInterruptGen",
+      "line_start": 1227143,
+      "line_end": 1227203
+    }
+  },
+  "sources": {
+    "scala": {
+      "path": "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/SstcInterruptGen.scala",
+      "sha256": "e9156dc6a0eb8041b6476f537a6ece689daa06143f87c3a387c0eea7891a9da7",
+      "bytes": 1124
+    },
+    "reference_sv": {
+      "path": "validation/reference-closures/SstcInterruptGen-v2.sv",
+      "sha256": "e1ab00c5a55a283e913d9ab1413cb77925344e616af5491a1844c38bda8c29bf",
+      "bytes": 6548,
+      "locked_module": "SstcInterruptGen"
+    },
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.NewCSR.SstcInterruptGen-Hardware.py",
+      "sha256": "ca80799cdb7b72a0ca40f93e560a42fa5f243c1300eaae38d46f9419f468c3fc",
+      "bytes": 6108
+    }
+  },
+  "checks": {
+    "py_compile": {
+      "status": "PASS",
+      "files": [
+        "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.NewCSR.SstcInterruptGen-Hardware.py",
+        "validation/v2_sstcinterruptgen_strict_validator.py"
+      ]
+    },
+    "pyright": {
+      "target": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_sstc_pyright_vhmolh4z\\Build-Cpu.Backend.Fu.NewCSR.SstcInterruptGen-Hardware.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "files_analyzed": 1,
+        "error_count": 0,
+        "warning_count": 0,
+        "output_sha256": "a4eaaaaa7664fa375b54731e7398f8a6a07e7f080aa5ba666f06bfadd72d1508",
+        "stderr_tail": ""
+      },
+      "validator": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_sstc_pyright_2efq0bmz\\v2_sstcinterruptgen_strict_validator.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "files_analyzed": 1,
+        "error_count": 0,
+        "warning_count": 0,
+        "output_sha256": "d0f88725a9dc97ade9dbf8a96ecf68f9e4633d29309f27a921ca4f413288855c",
+        "stderr_tail": ""
+      }
+    },
+    "deterministic_export": {
+      "status": "PASS",
+      "bytes": 2507,
+      "sha256": "1c8b5d1960be2b36030166214947e380ca083afac6cdcf018c0bbd632b1cd964",
+      "repeat_sha256": "1c8b5d1960be2b36030166214947e380ca083afac6cdcf018c0bbd632b1cd964",
+      "byte_equal": true,
+      "abi": {
+        "expected_port_count": 17,
+        "observed_port_count": 17,
+        "exact_port_set": true
+      }
+    },
+    "bounded_behavior": {
+      "status": "PASS",
+      "direct": {
+        "cycles": 2,
+        "verilog_sha256": "1c8b5d1960be2b36030166214947e380ca083afac6cdcf018c0bbd632b1cd964"
+      },
+      "reference_differential": {
+        "status": "PASS",
+        "returncode": 0,
+        "stdout_tail": "PASS_SSTC\n- tb.sv:162: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 7ps; walltime 0.001 s; speed 4.934 ns/s\n- Verilator: cpu 0.001 s on 1 threads; alloced 152 MB\n",
+        "stderr_tail": "",
+        "source_sha256": "22a34397d6fed2c05aa737ddd4df3f7b1cf90dc6f40784e083235aa5d7a7ecf9",
+        "vectors": 2
+      },
+      "note": "The aggregate v2_csr_divider_batch audit is not used because unrelated family files may fail its global comment gate."
+    },
+    "tools": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--version"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n",
+        "output_sha256": "ae161d63a0898d55050284fd76bd5e83136b75d2ec90d5b0622f196d5edc2aff"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "--version"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\n",
+        "output_sha256": "239d92e36e753a9dff4e79d97878ed5d55304b675d411895ec57508bc134e28e"
+      }
+    },
+    "formal": {
+      "target_verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "--top-module",
+          "SstcInterruptGen",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_sstcinterruptgen_strict/SstcInterruptGen-target.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.023 MB sources in 2 modules, into 0.021 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.025 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.109 MB\n",
+        "output_sha256": "e58a22cac50ff8898b4189f9a376725d555ca5f3b0ef51afe76bdb830349d7ef"
+      },
+      "reference_verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "--top-module",
+          "SstcInterruptGen_ref",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_sstcinterruptgen_strict/SstcInterruptGen-reference.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.022 MB sources in 2 modules, into 0.016 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.028 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.188 MB\n",
+        "output_sha256": "eda35aa674100e48ce5550e44f13e1d5422d5bae24f38620512a55bd6e76f060"
+      },
+      "target_yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_sstcinterruptgen_strict/SstcInterruptGen-target.sv; proc; async2sync; opt; hierarchy -top SstcInterruptGen; check; stat"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": " process syncs to FFs).\nCreating register for signal `\\SstcInterruptGen.\\o_VSTIP' using process `\\SstcInterruptGen.$proc$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_sstcinterruptgen_strict/SstcInterruptGen-target.sv:70$12'.\n  created $adff cell `$procdff$31' with positive edge clock and positive level reset.\nCreating register for signal `\\SstcInterruptGen.\\o_STIP' using process `\\SstcInterruptGen.$proc$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_sstcinterruptgen_strict/SstcInterruptGen-target.sv:67$11'.\n  created $adff cell `$procdff$34' with positive edge clock and positive level reset.\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nRemoving empty process `SstcInterruptGen.$proc$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_sstcinterruptgen_strict/SstcInterruptGen-target.sv:52$22'.\nRemoving empty process `SstcInterruptGen.$proc$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_sstcinterruptgen_strict/SstcInterruptGen-target.sv:48$21'.\nRemoving empty process `SstcInterruptGen.$proc$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_sstcinterruptgen_strict/SstcInterruptGen-target.sv:6$19'.\nFound and cleaned up 1 empty switch in `\\SstcInterruptGen.$proc$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_sstcinterruptgen_strict/SstcInterruptGen-target.sv:80$16'.\nRemoving empty process `SstcInterruptGen.$proc$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_sstcinterruptgen_strict/SstcInterruptGen-target.sv:80$16'.\nFound and cleaned up 1 empty switch in `\\SstcInterruptGen.$proc$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_sstcinterruptgen_strict/SstcInterruptGen-target.sv:73$13'.\nRemoving empty process `SstcInterruptGen.$proc$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_sstcinterruptgen_strict/SstcInterruptGen-target.sv:73$13'.\nRemoving empty process `SstcInterruptGen.$proc$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_sstcinterruptgen_strict/SstcInterruptGen-target.sv:70$12'.\nRemoving empty process `SstcInterruptGen.$proc$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_sstcinterruptgen_strict/SstcInterruptGen-target.sv:67$11'.\nCleaned up 2 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module SstcInterruptGen.\n<suppressed ~2 debug messages>\n\n3. Executing ASYNC2SYNC pass.\nReplacing SstcInterruptGen.$procdff$31 ($adff): ARST=$auto$rtlil.cc:2783:ReduceOr$30, D=$procmux$24_Y, Q=\\o_VSTIP\nReplacing SstcInterruptGen.$procdff$34 ($adff): ARST=$auto$rtlil.cc:2783:ReduceOr$33, D=$procmux$27_Y, Q=\\o_STIP\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module SstcInterruptGen.\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\SstcInterruptGen'.\nRemoved a total of 0 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\SstcInterruptGen..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~4 debug messages>\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\SstcInterruptGen.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\SstcInterruptGen'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\SstcInterruptGen..\nRemoved 0 unused cells and 25 unused wires.\n<suppressed ~1 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module SstcInterruptGen.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\SstcInterruptGen..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~4 debug messages>\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\SstcInterruptGen.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\SstcInterruptGen'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\SstcInterruptGen..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module SstcInterruptGen.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing HIERARCHY pass (managing design hierarchy).\n\n5.1. Analyzing design hierarchy..\nTop module:  \\SstcInterruptGen\n\n5.2. Analyzing design hierarchy..\nTop module:  \\SstcInterruptGen\nRemoved 0 unused modules.\n\n6. Executing CHECK pass (checking for obvious problems).\nChecking module SstcInterruptGen...\nFound and reported 0 problems.\n\n7. Printing statistics.\n\n=== SstcInterruptGen ===\n\n   Number of wires:                 34\n   Number of wire bits:            286\n   Number of public wires:          32\n   Number of public wire bits:     284\n   Number of ports:                 17\n   Number of port bits:            269\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                 16\n     $and                            2\n     $ge                             2\n     $mux                            4\n     $or                             6\n     $sdff                           2\n\nEnd of script. Logfile hash: 5c03d8a94f, CPU: user 0.01s system 0.01s, MEM: 12.97 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 28% 4x opt_expr (0 sec), 20% 2x read_verilog (0 sec), ...\n",
+        "output_sha256": "c59e1cb53f68d5f7076f3d6cb73115247b8ba15024f34646fcfac91319b0805b"
+      },
+      "reference_yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_sstcinterruptgen_strict/SstcInterruptGen-reference.sv; proc; async2sync; opt; hierarchy -top SstcInterruptGen_ref; check; stat"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "es.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\nFound async reset \\reset in `\\SstcInterruptGen_ref.$proc$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_sstcinterruptgen_strict/SstcInterruptGen-reference.sv:23$1'.\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n<suppressed ~2 debug messages>\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\nCreating decoders for process `\\SstcInterruptGen_ref.$proc$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_sstcinterruptgen_strict/SstcInterruptGen-reference.sv:23$1'.\n     1/2: $0\\o_VSTIP_r[0:0]\n     2/2: $0\\o_STIP_r[0:0]\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\nCreating register for signal `\\SstcInterruptGen_ref.\\o_STIP_r' using process `\\SstcInterruptGen_ref.$proc$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_sstcinterruptgen_strict/SstcInterruptGen-reference.sv:23$1'.\n  created $adff cell `$procdff$18' with positive edge clock and positive level reset.\nCreating register for signal `\\SstcInterruptGen_ref.\\o_VSTIP_r' using process `\\SstcInterruptGen_ref.$proc$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_sstcinterruptgen_strict/SstcInterruptGen-reference.sv:23$1'.\n  created $adff cell `$procdff$21' with positive edge clock and positive level reset.\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nFound and cleaned up 2 empty switches in `\\SstcInterruptGen_ref.$proc$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_sstcinterruptgen_strict/SstcInterruptGen-reference.sv:23$1'.\nRemoving empty process `SstcInterruptGen_ref.$proc$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_sstcinterruptgen_strict/SstcInterruptGen-reference.sv:23$1'.\nCleaned up 2 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module SstcInterruptGen_ref.\n<suppressed ~2 debug messages>\n\n3. Executing ASYNC2SYNC pass.\nReplacing SstcInterruptGen_ref.$procdff$18 ($adff): ARST=$auto$rtlil.cc:2783:ReduceOr$17, D=$procmux$14_Y, Q=\\o_STIP_r\nReplacing SstcInterruptGen_ref.$procdff$21 ($adff): ARST=$auto$rtlil.cc:2783:ReduceOr$20, D=$procmux$12_Y, Q=\\o_VSTIP_r\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module SstcInterruptGen_ref.\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\SstcInterruptGen_ref'.\nRemoved a total of 0 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\SstcInterruptGen_ref..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~4 debug messages>\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\SstcInterruptGen_ref.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\SstcInterruptGen_ref'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\SstcInterruptGen_ref..\nRemoved 0 unused cells and 6 unused wires.\n<suppressed ~1 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module SstcInterruptGen_ref.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\SstcInterruptGen_ref..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~4 debug messages>\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\SstcInterruptGen_ref.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\SstcInterruptGen_ref'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\SstcInterruptGen_ref..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module SstcInterruptGen_ref.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing HIERARCHY pass (managing design hierarchy).\n\n5.1. Analyzing design hierarchy..\nTop module:  \\SstcInterruptGen_ref\n\n5.2. Analyzing design hierarchy..\nTop module:  \\SstcInterruptGen_ref\nRemoved 0 unused modules.\n\n6. Executing CHECK pass (checking for obvious problems).\nChecking module SstcInterruptGen_ref...\nFound and reported 0 problems.\n\n7. Printing statistics.\n\n=== SstcInterruptGen_ref ===\n\n   Number of wires:                 33\n   Number of wire bits:            285\n   Number of public wires:          19\n   Number of public wire bits:     271\n   Number of ports:                 17\n   Number of port bits:            269\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                 16\n     $and                            2\n     $ge                             2\n     $mux                            4\n     $or                             6\n     $sdff                           2\n\nEnd of script. Logfile hash: f530112675, CPU: user 0.00s system 0.01s, MEM: 12.97 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 29% 4x opt_expr (0 sec), 18% 2x read_verilog (0 sec), ...\n",
+        "output_sha256": "a7b01e5b059e797aa75cf655894341d9b80d8ced85b7b63d2824c38cf7d0def6"
+      },
+      "yosys_equiv": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_sstcinterruptgen_strict/SstcInterruptGen-target.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_sstcinterruptgen_strict/SstcInterruptGen-reference.sv; proc; async2sync; memory; opt; equiv_make SstcInterruptGen SstcInterruptGen_ref Sstc_equiv; prep -top Sstc_equiv; equiv_induct -undef; equiv_status -assert"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "e `\\SstcInterruptGen'.\nRemoving unused module `\\SstcInterruptGen_ref'.\nRemoved 2 unused modules.\n\n8.2. Executing PROC pass (convert processes to netlists).\n\n8.2.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n8.2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n8.2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n8.2.4. Executing PROC_INIT pass (extract init attributes).\n\n8.2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n8.2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n8.2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n8.2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n8.2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n8.2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n8.2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n8.2.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module Sstc_equiv.\n\n8.3. Executing FUTURE pass.\n\n8.4. Executing OPT_EXPR pass (perform const folding).\nOptimizing module Sstc_equiv.\n\n8.5. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\Sstc_equiv..\n\n8.6. Executing CHECK pass (checking for obvious problems).\nChecking module Sstc_equiv...\nFound and reported 0 problems.\n\n8.7. Executing OPT pass (performing simple optimizations).\n\n8.7.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module Sstc_equiv.\n\n8.7.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\Sstc_equiv'.\n<suppressed ~36 debug messages>\nRemoved a total of 12 cells.\n\n8.7.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\Sstc_equiv..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~8 debug messages>\n\n8.7.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\Sstc_equiv.\nPerformed a total of 0 changes.\n\n8.7.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\Sstc_equiv'.\n<suppressed ~6 debug messages>\nRemoved a total of 2 cells.\n\n8.7.6. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\Sstc_equiv..\nRemoved 0 unused cells and 12 unused wires.\n<suppressed ~1 debug messages>\n\n8.7.7. Executing OPT_EXPR pass (perform const folding).\nOptimizing module Sstc_equiv.\n\n8.7.8. Rerunning OPT passes. (Maybe there is more to do..)\n\n8.7.9. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\Sstc_equiv..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~6 debug messages>\n\n8.7.10. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\Sstc_equiv.\nPerformed a total of 0 changes.\n\n8.7.11. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\Sstc_equiv'.\nRemoved a total of 0 cells.\n\n8.7.12. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\Sstc_equiv..\n\n8.7.13. Executing OPT_EXPR pass (perform const folding).\nOptimizing module Sstc_equiv.\n\n8.7.14. Finished OPT passes. (There is nothing left to do.)\n\n8.8. Executing WREDUCE pass (reducing word size of cells).\n\n8.9. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\Sstc_equiv..\n\n8.10. Executing MEMORY_COLLECT pass (generating $mem cells).\n\n8.11. Executing OPT pass (performing simple optimizations).\n\n8.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module Sstc_equiv.\n\n8.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\Sstc_equiv'.\nRemoved a total of 0 cells.\n\n8.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\Sstc_equiv..\n\n8.11.4. Finished fast OPT passes.\n\n8.12. Printing statistics.\n\n=== Sstc_equiv ===\n\n   Number of wires:                 74\n   Number of wire bits:            830\n   Number of public wires:          70\n   Number of public wire bits:     826\n   Number of ports:                 17\n   Number of port bits:            269\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                 22\n     $and                            2\n     $equiv                          2\n     $ge                             2\n     $mux                            6\n     $or                             6\n     $sdff                           4\n\n8.13. Executing CHECK pass (checking for obvious problems).\nChecking module Sstc_equiv...\nFound and reported 0 problems.\n\n9. Executing EQUIV_INDUCT pass.\nFound 2 unproven $equiv cells in module Sstc_equiv:\n  Undef modelling: force def on 4 initial reg values and 267 inputs.\n  Proving existence of base case for step 1. (3757 clauses over 1657 variables)\n  Proving induction step 1. (7689 clauses over 3373 variables)\n  Proof for induction step holds. Entire workset of 2 cells proven!\nProved 2 previously unproven $equiv cells.\n\n10. Executing EQUIV_STATUS pass.\nFound 2 $equiv cells in Sstc_equiv:\n  Of those cells 2 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: fbcd0308cb, CPU: user 0.04s system 0.01s, MEM: 16.25 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 31% 1x equiv_induct (0 sec), 18% 8x opt_clean (0 sec), ...\n",
+        "output_sha256": "169a3ee59415b6c0dc89a084c19bafcc83d11024a09f59fbd8bc58ef7087952d",
+        "formal_success_marker": true,
+        "equiv_cells": 2,
+        "formal_scope": {
+          "clock": "posedge clock",
+          "reset": "async reset normalized with async2sync",
+          "input_bits": 267,
+          "inputs_unconstrained": {
+            "clock": 1,
+            "reset": 1,
+            "i_stime_valid": 1,
+            "i_stime_bits": 64,
+            "i_vstime_valid": 1,
+            "i_vstime_bits": 64,
+            "i_stimecmp_wen": 1,
+            "i_stimecmp_rdata": 64,
+            "i_vstimecmp_wen": 1,
+            "i_vstimecmp_rdata": 64,
+            "i_htimedeltaWen": 1,
+            "i_menvcfg_wen": 1,
+            "i_menvcfg_STCE": 1,
+            "i_henvcfg_wen": 1,
+            "i_henvcfg_STCE": 1
+          },
+          "output_bits": 2,
+          "outputs_compared": {
+            "o_STIP": 1,
+            "o_VSTIP": 1
+          },
+          "state_bits": 2,
+          "property": "all two state bits and both outputs equivalent for every input sequence"
+        }
+      }
+    }
+  },
+  "failures": [],
+  "unclosed": []
+}
