@@ -2,9 +2,9 @@
   "schema_version": 1,
   "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_EQUIVALENCE_PROGRESS",
   "build_denominator": 118,
-  "strict_complete_build_count": 25,
-  "fraction": "25/118",
-  "percentage": 21.186441,
+  "strict_complete_build_count": 26,
+  "fraction": "26/118",
+  "percentage": 22.033898,
   "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with the locked source commit, matching source hashes, and either a Yosys SAT no-model miter or fully proven Yosys inductive-equivalence status is counted. STRICT_PENDING and COMPLETE_EQUIVALENCE_VARIANT_ONLY records are inventoried as attempted-but-not-counted instead of failing the rail, and one Build file may not be claimed by several counting proofs.",
   "non_counting_attempt_count": 4,
   "non_counting_attempts": [
@@ -140,7 +140,7 @@
     }
   ],
   "plan_reconciliation": {
-    "plan_count": 25,
+    "plan_count": 26,
     "plan_denominator": 118,
     "status": "PASS"
   },
@@ -1096,8 +1096,8 @@
           "path": "validation/v2_strict_family_rail.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "5b65a44666a69728602dcc704408cb9403a992c904d2dad5dcbf21672c0360ce",
-          "observed_sha256": "5b65a44666a69728602dcc704408cb9403a992c904d2dad5dcbf21672c0360ce",
+          "expected_sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
+          "observed_sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
           "status": "PASS"
         },
         "python_build": {
@@ -3120,8 +3120,8 @@
           "path": "validation/v2_strict_family_rail.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "5b65a44666a69728602dcc704408cb9403a992c904d2dad5dcbf21672c0360ce",
-          "observed_sha256": "5b65a44666a69728602dcc704408cb9403a992c904d2dad5dcbf21672c0360ce",
+          "expected_sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
+          "observed_sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
           "status": "PASS"
         },
         "python_build": {
@@ -4714,6 +4714,261 @@
       "declared_unclosed": [
         "strict gates did not all pass"
       ]
+    },
+    {
+      "evidence": "validation/v2-build-cpu-top-xstile-intbuffer-family-strict-evidence.json",
+      "build_id": "Build-Cpu.Top.XSTile.IntBuffer.Family",
+      "declared_status": "COMPLETE_EQUIVALENCE",
+      "source_commit": {
+        "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+        "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+        "status": "PASS"
+      },
+      "status": "PASS",
+      "note": null,
+      "scope": {
+        "kind": "catalog_build_multi_variant",
+        "public_variants": [
+          "IntBuffer",
+          "IntBuffer_1",
+          "IntBuffer_2"
+        ],
+        "variant_count": 3,
+        "combinational_variants": 0,
+        "sequential_variants": 3,
+        "inputs": {
+          "IntBuffer_clock": 1,
+          "IntBuffer_reset": 1,
+          "IntBuffer_auto_in_0": 1,
+          "IntBuffer_1_clock": 1,
+          "IntBuffer_1_reset": 1,
+          "IntBuffer_1_auto_in_0": 1,
+          "IntBuffer_1_auto_in_1": 1,
+          "IntBuffer_2_clock": 1,
+          "IntBuffer_2_reset": 1,
+          "IntBuffer_2_auto_in_1_0": 1,
+          "IntBuffer_2_auto_in_0_0": 1
+        },
+        "outputs_compared": {
+          "IntBuffer_auto_out_0": 1,
+          "IntBuffer_1_auto_out_0": 1,
+          "IntBuffer_1_auto_out_1": 1,
+          "IntBuffer_2_auto_out_1_0": 1,
+          "IntBuffer_2_auto_out_0_0": 1
+        },
+        "aggregate_input_bits": 11,
+        "aggregate_compared_output_bits": 5,
+        "variants": {
+          "IntBuffer": {
+            "method": "sequential_equivalence",
+            "sequential": true,
+            "locked_reference": "validation/reference-sv/IntBuffer.sv",
+            "locked_sha256": "61ecf56b4ae167c6be9633121c904b1d1c0d744f68a9ad68042a487fb1d6ac68",
+            "children": [],
+            "inputs": {
+              "clock": 1,
+              "reset": 1,
+              "auto_in_0": 1
+            },
+            "outputs_compared": {
+              "auto_out_0": 1
+            },
+            "input_bits": 3,
+            "output_bits": 1,
+            "abi_exact": true,
+            "deterministic": true,
+            "miter_selfcheck": true,
+            "view_trusted": true,
+            "locked_reference_lint": "PASS",
+            "verdict": "PASS",
+            "success_marker": true,
+            "markers_present": {
+              "0 are unproven.": true,
+              "Equivalence successfully proven!": true
+            },
+            "unconstrained_or_equiv_cells": 1,
+            "proven_cells": 1,
+            "unproven_cells": 0,
+            "sat_variables": null,
+            "sat_clauses": null
+          },
+          "IntBuffer_1": {
+            "method": "sequential_equivalence",
+            "sequential": true,
+            "locked_reference": "validation/reference-sv/IntBuffer_1.sv",
+            "locked_sha256": "06997d0836bd54b03155a3651bc136a69acba2d045fc33cc70f3c93fad380cf2",
+            "children": [],
+            "inputs": {
+              "clock": 1,
+              "reset": 1,
+              "auto_in_0": 1,
+              "auto_in_1": 1
+            },
+            "outputs_compared": {
+              "auto_out_0": 1,
+              "auto_out_1": 1
+            },
+            "input_bits": 4,
+            "output_bits": 2,
+            "abi_exact": true,
+            "deterministic": true,
+            "miter_selfcheck": true,
+            "view_trusted": true,
+            "locked_reference_lint": "PASS",
+            "verdict": "PASS",
+            "success_marker": true,
+            "markers_present": {
+              "0 are unproven.": true,
+              "Equivalence successfully proven!": true
+            },
+            "unconstrained_or_equiv_cells": 2,
+            "proven_cells": 2,
+            "unproven_cells": 0,
+            "sat_variables": null,
+            "sat_clauses": null
+          },
+          "IntBuffer_2": {
+            "method": "sequential_equivalence",
+            "sequential": true,
+            "locked_reference": "validation/reference-sv/IntBuffer_2.sv",
+            "locked_sha256": "f1849b0c27a195b42e4921201a0af60cc042dbb3d232e67acb76df70670bd32f",
+            "children": [],
+            "inputs": {
+              "clock": 1,
+              "reset": 1,
+              "auto_in_1_0": 1,
+              "auto_in_0_0": 1
+            },
+            "outputs_compared": {
+              "auto_out_1_0": 1,
+              "auto_out_0_0": 1
+            },
+            "input_bits": 4,
+            "output_bits": 2,
+            "abi_exact": true,
+            "deterministic": true,
+            "miter_selfcheck": true,
+            "view_trusted": true,
+            "locked_reference_lint": "PASS",
+            "verdict": "PASS",
+            "success_marker": true,
+            "markers_present": {
+              "0 are unproven.": true,
+              "Equivalence successfully proven!": true
+            },
+            "unconstrained_or_equiv_cells": 2,
+            "proven_cells": 2,
+            "unproven_cells": 0,
+            "sat_variables": null,
+            "sat_clauses": null
+          }
+        },
+        "why_complete": "Every locked module named by this Build's own tables is proven against its exact-name locked reference on the rail its timing requires, with a conservation-audited 5C view where the installed Yosys cannot read the original.",
+        "bounded_tests_counted": false
+      },
+      "sources": {
+        "validator": {
+          "path": "validation/v2_strict_family_rail.py",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
+          "observed_sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
+          "status": "PASS"
+        },
+        "python_build": {
+          "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Top.XSTile.IntBuffer.Family-Hardware.py",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "840ab9af3cbe489fac38aa0bdc47e98d5bace81c3c399d4b73f00cef39cf5450",
+          "observed_sha256": "840ab9af3cbe489fac38aa0bdc47e98d5bace81c3c399d4b73f00cef39cf5450",
+          "status": "PASS"
+        },
+        "reference_sv": {
+          "path": "validation/reference-sv/IntBuffer.sv",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "61ecf56b4ae167c6be9633121c904b1d1c0d744f68a9ad68042a487fb1d6ac68",
+          "observed_sha256": "61ecf56b4ae167c6be9633121c904b1d1c0d744f68a9ad68042a487fb1d6ac68",
+          "status": "PASS"
+        },
+        "scala": {
+          "path": "upstream/utility/src/main/scala/utility/IntBuffer.scala",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "52deb4ccec49ebb4e1c1aa517c0955c708213c4f4f35a97c8cc97b60806b16e4",
+          "observed_sha256": "52deb4ccec49ebb4e1c1aa517c0955c708213c4f4f35a97c8cc97b60806b16e4",
+          "status": "PASS"
+        }
+      },
+      "source_children": {},
+      "reference_lock": {
+        "IntBuffer": {
+          "path": "validation/reference-sv/IntBuffer.sv",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "61ecf56b4ae167c6be9633121c904b1d1c0d744f68a9ad68042a487fb1d6ac68",
+          "observed_sha256": "61ecf56b4ae167c6be9633121c904b1d1c0d744f68a9ad68042a487fb1d6ac68",
+          "status": "PASS"
+        },
+        "IntBuffer_1": {
+          "path": "validation/reference-sv/IntBuffer_1.sv",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "06997d0836bd54b03155a3651bc136a69acba2d045fc33cc70f3c93fad380cf2",
+          "observed_sha256": "06997d0836bd54b03155a3651bc136a69acba2d045fc33cc70f3c93fad380cf2",
+          "status": "PASS"
+        },
+        "IntBuffer_2": {
+          "path": "validation/reference-sv/IntBuffer_2.sv",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "f1849b0c27a195b42e4921201a0af60cc042dbb3d232e67acb76df70670bd32f",
+          "observed_sha256": "f1849b0c27a195b42e4921201a0af60cc042dbb3d232e67acb76df70670bd32f",
+          "status": "PASS"
+        }
+      },
+      "declared_scala_sources": {
+        "upstream/utility/src/main/scala/utility/IntBuffer.scala": {
+          "path": "upstream/utility/src/main/scala/utility/IntBuffer.scala",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "52deb4ccec49ebb4e1c1aa517c0955c708213c4f4f35a97c8cc97b60806b16e4",
+          "observed_sha256": "52deb4ccec49ebb4e1c1aa517c0955c708213c4f4f35a97c8cc97b60806b16e4",
+          "status": "PASS"
+        },
+        "upstream/rocket-chip/src/main/scala/diplomacy/LazyModule.scala": {
+          "path": "upstream/rocket-chip/src/main/scala/diplomacy/LazyModule.scala",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "494d2b59ebd76a73a28095976e68f6fc227cbf08df2a8a2fb7e018ba5067ed7f",
+          "observed_sha256": "494d2b59ebd76a73a28095976e68f6fc227cbf08df2a8a2fb7e018ba5067ed7f",
+          "status": "PASS"
+        }
+      },
+      "variant_checks": {
+        "IntBuffer": {
+          "status": "PASS",
+          "failures": []
+        },
+        "IntBuffer_1": {
+          "status": "PASS",
+          "failures": []
+        },
+        "IntBuffer_2": {
+          "status": "PASS",
+          "failures": []
+        }
+      },
+      "formal": {
+        "proof_method": "sequential_variant_set",
+        "command": null,
+        "returncode": null,
+        "status": null,
+        "formal_success_marker": null
+      },
+      "failures": [],
+      "declared_failures": [],
+      "declared_unclosed": []
     },
     {
       "evidence": "validation/v2-bytemasktailgen-strict-evidence.json",

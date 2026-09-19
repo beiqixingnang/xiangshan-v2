@@ -1,0 +1,568 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_COMPLETE_EQUIVALENCE",
+  "build_id": "Build-Cpu.Top.XSTile.IntBuffer.Family",
+  "validator": "validation/v2_strict_family_rail.py",
+  "status": "COMPLETE_EQUIVALENCE",
+  "strict_complete_eligible": true,
+  "strict_complete_count_delta": 1,
+  "acceptance_eligible": true,
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "audit_policy": {
+    "require_negative_control": true,
+    "require_two_sided_negative_control": true,
+    "require_locked_reference_lint": true,
+    "require_validator_hash": true,
+    "scope_source": "Build catalog tables"
+  },
+  "scope": {
+    "kind": "catalog_build_multi_variant",
+    "public_variants": [
+      "IntBuffer",
+      "IntBuffer_1",
+      "IntBuffer_2"
+    ],
+    "variant_count": 3,
+    "combinational_variants": 0,
+    "sequential_variants": 3,
+    "inputs": {
+      "IntBuffer_clock": 1,
+      "IntBuffer_reset": 1,
+      "IntBuffer_auto_in_0": 1,
+      "IntBuffer_1_clock": 1,
+      "IntBuffer_1_reset": 1,
+      "IntBuffer_1_auto_in_0": 1,
+      "IntBuffer_1_auto_in_1": 1,
+      "IntBuffer_2_clock": 1,
+      "IntBuffer_2_reset": 1,
+      "IntBuffer_2_auto_in_1_0": 1,
+      "IntBuffer_2_auto_in_0_0": 1
+    },
+    "outputs_compared": {
+      "IntBuffer_auto_out_0": 1,
+      "IntBuffer_1_auto_out_0": 1,
+      "IntBuffer_1_auto_out_1": 1,
+      "IntBuffer_2_auto_out_1_0": 1,
+      "IntBuffer_2_auto_out_0_0": 1
+    },
+    "aggregate_input_bits": 11,
+    "aggregate_compared_output_bits": 5,
+    "variants": {
+      "IntBuffer": {
+        "method": "sequential_equivalence",
+        "sequential": true,
+        "locked_reference": "validation/reference-sv/IntBuffer.sv",
+        "locked_sha256": "61ecf56b4ae167c6be9633121c904b1d1c0d744f68a9ad68042a487fb1d6ac68",
+        "children": [],
+        "inputs": {
+          "clock": 1,
+          "reset": 1,
+          "auto_in_0": 1
+        },
+        "outputs_compared": {
+          "auto_out_0": 1
+        },
+        "input_bits": 3,
+        "output_bits": 1,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "PASS",
+        "success_marker": true,
+        "markers_present": {
+          "0 are unproven.": true,
+          "Equivalence successfully proven!": true
+        },
+        "unconstrained_or_equiv_cells": 1,
+        "proven_cells": 1,
+        "unproven_cells": 0,
+        "sat_variables": null,
+        "sat_clauses": null
+      },
+      "IntBuffer_1": {
+        "method": "sequential_equivalence",
+        "sequential": true,
+        "locked_reference": "validation/reference-sv/IntBuffer_1.sv",
+        "locked_sha256": "06997d0836bd54b03155a3651bc136a69acba2d045fc33cc70f3c93fad380cf2",
+        "children": [],
+        "inputs": {
+          "clock": 1,
+          "reset": 1,
+          "auto_in_0": 1,
+          "auto_in_1": 1
+        },
+        "outputs_compared": {
+          "auto_out_0": 1,
+          "auto_out_1": 1
+        },
+        "input_bits": 4,
+        "output_bits": 2,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "PASS",
+        "success_marker": true,
+        "markers_present": {
+          "0 are unproven.": true,
+          "Equivalence successfully proven!": true
+        },
+        "unconstrained_or_equiv_cells": 2,
+        "proven_cells": 2,
+        "unproven_cells": 0,
+        "sat_variables": null,
+        "sat_clauses": null
+      },
+      "IntBuffer_2": {
+        "method": "sequential_equivalence",
+        "sequential": true,
+        "locked_reference": "validation/reference-sv/IntBuffer_2.sv",
+        "locked_sha256": "f1849b0c27a195b42e4921201a0af60cc042dbb3d232e67acb76df70670bd32f",
+        "children": [],
+        "inputs": {
+          "clock": 1,
+          "reset": 1,
+          "auto_in_1_0": 1,
+          "auto_in_0_0": 1
+        },
+        "outputs_compared": {
+          "auto_out_1_0": 1,
+          "auto_out_0_0": 1
+        },
+        "input_bits": 4,
+        "output_bits": 2,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "PASS",
+        "success_marker": true,
+        "markers_present": {
+          "0 are unproven.": true,
+          "Equivalence successfully proven!": true
+        },
+        "unconstrained_or_equiv_cells": 2,
+        "proven_cells": 2,
+        "unproven_cells": 0,
+        "sat_variables": null,
+        "sat_clauses": null
+      }
+    },
+    "why_complete": "Every locked module named by this Build's own tables is proven against its exact-name locked reference on the rail its timing requires, with a conservation-audited 5C view where the installed Yosys cannot read the original.",
+    "bounded_tests_counted": false
+  },
+  "reference_lock": {
+    "directory": "validation/reference-sv",
+    "xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "locked_references_written": false,
+    "sha256_by_module": {
+      "IntBuffer": "61ecf56b4ae167c6be9633121c904b1d1c0d744f68a9ad68042a487fb1d6ac68",
+      "IntBuffer_1": "06997d0836bd54b03155a3651bc136a69acba2d045fc33cc70f3c93fad380cf2",
+      "IntBuffer_2": "f1849b0c27a195b42e4921201a0af60cc042dbb3d232e67acb76df70670bd32f"
+    }
+  },
+  "sources": {
+    "validator": {
+      "path": "validation/v2_strict_family_rail.py",
+      "sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
+      "bytes": 43710
+    },
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Top.XSTile.IntBuffer.Family-Hardware.py",
+      "sha256": "840ab9af3cbe489fac38aa0bdc47e98d5bace81c3c399d4b73f00cef39cf5450",
+      "bytes": 5361
+    },
+    "reference_sv": {
+      "path": "validation/reference-sv/IntBuffer.sv",
+      "sha256": "61ecf56b4ae167c6be9633121c904b1d1c0d744f68a9ad68042a487fb1d6ac68",
+      "bytes": 3339
+    },
+    "scala": {
+      "path": "upstream/utility/src/main/scala/utility/IntBuffer.scala",
+      "sha256": "52deb4ccec49ebb4e1c1aa517c0955c708213c4f4f35a97c8cc97b60806b16e4",
+      "bytes": 900
+    },
+    "declared_scala_sources": {
+      "upstream/utility/src/main/scala/utility/IntBuffer.scala": {
+        "vendored": true,
+        "sha256": "52deb4ccec49ebb4e1c1aa517c0955c708213c4f4f35a97c8cc97b60806b16e4"
+      },
+      "upstream/rocket-chip/src/main/scala/diplomacy/LazyModule.scala": {
+        "vendored": true,
+        "sha256": "494d2b59ebd76a73a28095976e68f6fc227cbf08df2a8a2fb7e018ba5067ed7f"
+      }
+    },
+    "reference_children": {}
+  },
+  "checks": {
+    "py_compile": {
+      "status": "PASS"
+    },
+    "pyright": {
+      "build": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_voahgkvc\\Build-Cpu.Top.XSTile.IntBuffer.Family-Hardware.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "error_count": 0,
+        "files_analyzed": 1,
+        "stderr_tail": ""
+      },
+      "rail": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_51ltd8ns\\v2_strict_family_rail.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "error_count": 0,
+        "files_analyzed": 1,
+        "stderr_tail": ""
+      }
+    },
+    "catalog_coverage": {
+      "entries": 3,
+      "proven": 3
+    },
+    "formal": {
+      "yosys_formal_miter": {
+        "status": "NOT_APPLICABLE",
+        "mitered_variants": 0
+      }
+    },
+    "aggregate_sat_miter": {
+      "status": "NOT_APPLICABLE",
+      "mitered_variants": 0
+    },
+    "negative_control": {
+      "status": "PASS",
+      "cases": {
+        "sat": {
+          "status": "PASS",
+          "note": "no representative with outputs"
+        },
+        "sequential.target": {
+          "status": "PASS",
+          "control_entry": "IntBuffer",
+          "control_port": "auto_out_0",
+          "mutation_applied": true,
+          "explicit_failure_marker": true,
+          "success_marker_still_present": false,
+          "returncode": 1
+        },
+        "sequential.reference": {
+          "status": "PASS",
+          "control_entry": "IntBuffer",
+          "control_port": "auto_out_0",
+          "mutation_applied": true,
+          "explicit_failure_marker": true,
+          "success_marker_still_present": false,
+          "returncode": 1
+        }
+      },
+      "note": "a reference-side mutation that still proves means the reference never reaches the comparison"
+    },
+    "variants": [
+      {
+        "method": "sequential_equivalence",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "IntBuffer_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_top_xstile_intbuffer_family_family/DUT_IntBuffer.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_top_xstile_intbuffer_family_family/REF_IntBuffer.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_top_xstile_intbuffer_family_family/IntBuffer_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.041 MB sources in 4 modules, into 0.016 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.123 s (elab=0.009, cvt=0.016, bld=0.000); cpu 0.025 s on 1 threads; alloced 9.164 MB\n",
+          "output_sha256": "592d65341b3b8a7524688a9e4f1166ec2c2e8a1fc332f65caca60a3d06add81a"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "IntBuffer",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/IntBuffer.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.014 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.036 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.008 s on 1 threads; alloced 9.332 MB\n",
+          "output_sha256": "ba5d600bff0b86b9c07e926c2703a2094b7ec11cd5c91c3e935ac46ec6258d59"
+        },
+        "yosys_equiv": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_top_xstile_intbuffer_family_family/DUT_IntBuffer.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_top_xstile_intbuffer_family_family/REF_IntBuffer.sv; proc; async2sync; memory; opt; flatten REF_IntBuffer; flatten DUT_IntBuffer; equiv_make REF_IntBuffer DUT_IntBuffer IntBuffer_EQUIV; prep -top IntBuffer_EQUIV; equiv_induct -undef; equiv_status -assert"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": 1,
+          "equiv_summary_full": [
+            1,
+            0
+          ],
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "V'.\nRemoved a total of 0 cells.\n\n10.7.6. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\IntBuffer_EQUIV..\n\n10.7.7. Executing OPT_EXPR pass (perform const folding).\nOptimizing module IntBuffer_EQUIV.\n\n10.7.8. Finished OPT passes. (There is nothing left to do.)\n\n10.8. Executing WREDUCE pass (reducing word size of cells).\n\n10.9. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\IntBuffer_EQUIV..\n\n10.10. Executing MEMORY_COLLECT pass (generating $mem cells).\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module IntBuffer_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\IntBuffer_EQUIV'.\nRemoved a total of 0 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\IntBuffer_EQUIV..\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== IntBuffer_EQUIV ===\n\n   Number of wires:                 16\n   Number of wire bits:             16\n   Number of public wires:          14\n   Number of public wire bits:      14\n   Number of ports:                  4\n   Number of port bits:              4\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                  5\n     $equiv                          1\n     $mux                            2\n     $sdff                           2\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module IntBuffer_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 1 unproven $equiv cells in module IntBuffer_EQUIV:\n  Undef modelling: force def on 2 initial reg values and 3 inputs.\n  Proving existence of base case for step 1. (173 clauses over 71 variables)\n  Proving induction step 1. (434 clauses over 172 variables)\n  Proof for induction step holds. Entire workset of 1 cells proven!\nProved 1 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 1 $equiv cells in IntBuffer_EQUIV:\n  Of those cells 1 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: c129e6e4c1, CPU: user 0.02s system 0.03s, MEM: 13.28 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 24% 8x opt_expr (0 sec), 14% 7x opt_clean (0 sec), ...\n",
+          "output_sha256": "c451ae475712f50616372596528bcb18743209f542dadb97e6e9481c578d661d",
+          "markers_present": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "formal_success_marker": true,
+          "equiv_cells": 1,
+          "proven_cells": 1,
+          "unproven_cells": 0
+        }
+      },
+      {
+        "method": "sequential_equivalence",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "IntBuffer_1_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_top_xstile_intbuffer_family_family/DUT_IntBuffer_1.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_top_xstile_intbuffer_family_family/REF_IntBuffer_1.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_top_xstile_intbuffer_family_family/IntBuffer_1_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.042 MB sources in 4 modules, into 0.017 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.063 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.010 s on 1 threads; alloced 9.195 MB\n",
+          "output_sha256": "19086179487e109da05f11da29750a41ae49174d953af0f20ea0b8d330ce083b"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "IntBuffer_1",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/IntBuffer_1.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.015 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.027 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.223 MB\n",
+          "output_sha256": "44eee21323cc650d883a6d17c8180256bccb0ff55bfbd551e75f75eae8b0edf1"
+        },
+        "yosys_equiv": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_top_xstile_intbuffer_family_family/DUT_IntBuffer_1.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_top_xstile_intbuffer_family_family/REF_IntBuffer_1.sv; proc; async2sync; memory; opt; flatten REF_IntBuffer_1; flatten DUT_IntBuffer_1; equiv_make REF_IntBuffer_1 DUT_IntBuffer_1 IntBuffer_1_EQUIV; prep -top IntBuffer_1_EQUIV; equiv_induct -undef; equiv_status -assert"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": 2,
+          "equiv_summary_full": [
+            2,
+            0
+          ],
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "f 0 cells.\n\n10.7.6. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\IntBuffer_1_EQUIV..\n\n10.7.7. Executing OPT_EXPR pass (perform const folding).\nOptimizing module IntBuffer_1_EQUIV.\n\n10.7.8. Finished OPT passes. (There is nothing left to do.)\n\n10.8. Executing WREDUCE pass (reducing word size of cells).\n\n10.9. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\IntBuffer_1_EQUIV..\n\n10.10. Executing MEMORY_COLLECT pass (generating $mem cells).\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module IntBuffer_1_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\IntBuffer_1_EQUIV'.\nRemoved a total of 0 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\IntBuffer_1_EQUIV..\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== IntBuffer_1_EQUIV ===\n\n   Number of wires:                 26\n   Number of wire bits:             26\n   Number of public wires:          22\n   Number of public wire bits:      22\n   Number of ports:                  6\n   Number of port bits:              6\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                 10\n     $equiv                          2\n     $mux                            4\n     $sdff                           4\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module IntBuffer_1_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 2 unproven $equiv cells in module IntBuffer_1_EQUIV:\n  Undef modelling: force def on 4 initial reg values and 4 inputs.\n  Proving existence of base case for step 1. (345 clauses over 138 variables)\n  Proving induction step 1. (865 clauses over 337 variables)\n  Proof for induction step holds. Entire workset of 2 cells proven!\nProved 2 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 2 $equiv cells in IntBuffer_1_EQUIV:\n  Of those cells 2 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: ca2fbb0645, CPU: user 0.02s system 0.01s, MEM: 13.44 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 25% 8x opt_expr (0 sec), 19% 7x opt_clean (0 sec), ...\n",
+          "output_sha256": "b99df812f04f16d36934a5319f1449162c28999c38ace51669261de63e6227c0",
+          "markers_present": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "formal_success_marker": true,
+          "equiv_cells": 2,
+          "proven_cells": 2,
+          "unproven_cells": 0
+        }
+      },
+      {
+        "method": "sequential_equivalence",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "IntBuffer_2_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_top_xstile_intbuffer_family_family/DUT_IntBuffer_2.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_top_xstile_intbuffer_family_family/REF_IntBuffer_2.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_top_xstile_intbuffer_family_family/IntBuffer_2_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.042 MB sources in 4 modules, into 0.017 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.061 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.011 s on 1 threads; alloced 9.074 MB\n",
+          "output_sha256": "41333823d1a368a3a9b12a787800b24b027ab7e57857110b2f4c591d11c73644"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "IntBuffer_2",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/IntBuffer_2.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.015 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.039 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.009 s on 1 threads; alloced 9.227 MB\n",
+          "output_sha256": "b4fb10991fc3a998b0949e4932fcd047d5c1e33ceba9216cb35256a315fe0238"
+        },
+        "yosys_equiv": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_top_xstile_intbuffer_family_family/DUT_IntBuffer_2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_top_xstile_intbuffer_family_family/REF_IntBuffer_2.sv; proc; async2sync; memory; opt; flatten REF_IntBuffer_2; flatten DUT_IntBuffer_2; equiv_make REF_IntBuffer_2 DUT_IntBuffer_2 IntBuffer_2_EQUIV; prep -top IntBuffer_2_EQUIV; equiv_induct -undef; equiv_status -assert"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": 2,
+          "equiv_summary_full": [
+            2,
+            0
+          ],
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "f 0 cells.\n\n10.7.6. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\IntBuffer_2_EQUIV..\n\n10.7.7. Executing OPT_EXPR pass (perform const folding).\nOptimizing module IntBuffer_2_EQUIV.\n\n10.7.8. Finished OPT passes. (There is nothing left to do.)\n\n10.8. Executing WREDUCE pass (reducing word size of cells).\n\n10.9. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\IntBuffer_2_EQUIV..\n\n10.10. Executing MEMORY_COLLECT pass (generating $mem cells).\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module IntBuffer_2_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\IntBuffer_2_EQUIV'.\nRemoved a total of 0 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\IntBuffer_2_EQUIV..\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== IntBuffer_2_EQUIV ===\n\n   Number of wires:                 26\n   Number of wire bits:             26\n   Number of public wires:          22\n   Number of public wire bits:      22\n   Number of ports:                  6\n   Number of port bits:              6\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                 10\n     $equiv                          2\n     $mux                            4\n     $sdff                           4\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module IntBuffer_2_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 2 unproven $equiv cells in module IntBuffer_2_EQUIV:\n  Undef modelling: force def on 4 initial reg values and 4 inputs.\n  Proving existence of base case for step 1. (345 clauses over 138 variables)\n  Proving induction step 1. (865 clauses over 337 variables)\n  Proof for induction step holds. Entire workset of 2 cells proven!\nProved 2 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 2 $equiv cells in IntBuffer_2_EQUIV:\n  Of those cells 2 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: c56d1a3e68, CPU: user 0.03s system 0.03s, MEM: 13.28 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 27% 8x opt_expr (0 sec), 18% 7x opt_clean (0 sec), ...\n",
+          "output_sha256": "c029519773405a12ef914d7542eeef953f8e8660e0ab6a745fb31666437c4e01",
+          "markers_present": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "formal_success_marker": true,
+          "equiv_cells": 2,
+          "proven_cells": 2,
+          "unproven_cells": 0
+        }
+      }
+    ]
+  },
+  "failures": [],
+  "unclosed": [],
+  "acceptance_unclosed": [
+    "Parent closure, full-top differential, final license review, and user approval remain outside this Build proof."
+  ]
+}

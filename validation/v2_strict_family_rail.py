@@ -624,12 +624,14 @@ class FamilyRail:
                 attempted = False
                 for candidate in sorted(sample["outputs"]):
                     mutated_body, count = re.subn(
-                        rf"assign\s+{re.escape(candidate)}\s*=\s*[^;]+;",
-                        lambda _m: f"assign {candidate} = 1'b0;", body, count=1)
+                        rf"assign\s+{re.escape(candidate)}\s*=\s*(?P<rhs>[^;]+);",
+                        lambda match: f"assign {candidate} = ~({match.group('rhs')});",
+                        body, count=1)
                     if count != 1:
                         mutated_body, count = re.subn(
-                            rf"\b{re.escape(candidate)}\s*<=\s*[^;]+;",
-                            lambda _m: f"{candidate} <= 1'b0;", body, count=1)
+                            rf"\b{re.escape(candidate)}\s*<=\s*(?P<rhs>[^;]+);",
+                            lambda match: f"{candidate} <= ~({match.group('rhs')});",
+                            body, count=1)
                     if count != 1:
                         continue
                     attempted = True
