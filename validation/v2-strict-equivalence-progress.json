@@ -2,16 +2,16 @@
   "schema_version": 1,
   "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_EQUIVALENCE_PROGRESS",
   "build_denominator": 118,
-  "strict_complete_build_count": 17,
-  "fraction": "17/118",
-  "percentage": 14.40678,
+  "strict_complete_build_count": 18,
+  "fraction": "18/118",
+  "percentage": 15.254237,
   "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with the locked source commit, matching source hashes, and either a Yosys SAT no-model miter or fully proven Yosys inductive-equivalence status is counted. STRICT_PENDING and COMPLETE_EQUIVALENCE_VARIANT_ONLY records are inventoried as attempted-but-not-counted instead of failing the rail, and one Build file may not be claimed by several counting proofs.",
   "non_counting_attempt_count": 2,
   "non_counting_attempts": [
     {
-      "evidence": "validation/v2-fubusytableread-strict-evidence.json",
-      "build_id": "Build-Cpu.Backend.Issue.FuBusyTableRead",
-      "declared_status": "COMPLETE_EQUIVALENCE_VARIANT_ONLY",
+      "evidence": "validation/v2-agedetector-strict-evidence.json",
+      "build_id": "Build-Cpu.Backend.Issue.AgeDetector",
+      "declared_status": "STRICT_PENDING",
       "failures": []
     },
     {
@@ -22,13 +22,105 @@
     }
   ],
   "plan_reconciliation": {
-    "plan_count": 17,
+    "plan_count": 18,
     "plan_denominator": 118,
     "status": "PASS"
   },
   "duplicate_build_ids": [],
   "aggregate_build_claim_conflicts": {},
   "proofs": [
+    {
+      "evidence": "validation/v2-agedetector-strict-evidence.json",
+      "build_id": "Build-Cpu.Backend.Issue.AgeDetector",
+      "declared_status": "STRICT_PENDING",
+      "source_commit": {
+        "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+        "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+        "status": "PASS"
+      },
+      "status": "NON_COUNTING",
+      "scope": {
+        "kind": "sequential_registered_leaf",
+        "configuration": "locked V2 AgeDetector(6 entries, 2 enq, 4 deq)",
+        "state_bits": 15,
+        "state_registers": {
+          "age_0_1": 1,
+          "age_0_2": 1,
+          "age_0_3": 1,
+          "age_0_4": 1,
+          "age_0_5": 1,
+          "age_1_2": 1,
+          "age_1_3": 1,
+          "age_1_4": 1,
+          "age_1_5": 1,
+          "age_2_3": 1,
+          "age_2_4": 1,
+          "age_2_5": 1,
+          "age_3_4": 1,
+          "age_3_5": 1,
+          "age_4_5": 1
+        },
+        "state_boundary": "fteen upper-triangular age registers age_i_j, all clocked on posedge clock with an asynchronous posedge reset that clears them to zero; the diagonal is a constant true and is not stored",
+        "inputs": {
+          "clock": 1,
+          "reset": 1,
+          "io_enq_0": 6,
+          "io_enq_1": 6,
+          "io_canIssue_0": 6,
+          "io_canIssue_1": 6,
+          "io_canIssue_2": 6,
+          "io_canIssue_3": 6
+        },
+        "outputs_compared": {
+          "io_out_0": 6,
+          "io_out_1": 6,
+          "io_out_2": 6,
+          "io_out_3": 6
+        },
+        "input_bits": 38,
+        "output_bits": 24,
+        "transition_relation": "all input sequences, posedge clock, async reset normalized by async2sync, undefined initial state forced by equiv_induct -undef",
+        "proof_cell_coverage": "equiv_status -assert discharges every matched cell; the log reports 15 age state bits plus all 24 io_out bits as $equiv cells",
+        "why_complete": "Yosys equiv_make + equiv_induct -undef proves the whole transition relation over every state bit and every output; no bounded vector set is counted, and a built-in negative control shows the harness detects a mutated target equation",
+        "bounded_tests_counted": false
+      },
+      "sources": {
+        "scala": {
+          "path": "upstream/src/main/scala/xiangshan/backend/issue/AgeDetector.scala",
+          "present": true,
+          "expected_sha256": "d15d687194badf8ef1ec1b6bb06a2239b5cacf1d38fdd86b34de6cea8c446921",
+          "observed_sha256": "d15d687194badf8ef1ec1b6bb06a2239b5cacf1d38fdd86b34de6cea8c446921",
+          "status": "PASS"
+        },
+        "reference_sv": {
+          "path": "validation/reference-sv/AgeDetector.sv",
+          "present": true,
+          "expected_sha256": "c3b11e62a4665d8c60a497d1fdc769592e11c726d0ac513d73b900c854e39977",
+          "observed_sha256": "c3b11e62a4665d8c60a497d1fdc769592e11c726d0ac513d73b900c854e39977",
+          "status": "PASS"
+        },
+        "python_build": {
+          "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.AgeDetector-Hardware.py",
+          "present": true,
+          "expected_sha256": "c7eb473cd114810838a2b05381ef997ab6b10d3582a04c21f665f8ad04e30f0a",
+          "observed_sha256": "c7eb473cd114810838a2b05381ef997ab6b10d3582a04c21f665f8ad04e30f0a",
+          "status": "PASS"
+        }
+      },
+      "formal": {
+        "proof_method": "sequential_equivalence",
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_agedetector_strict/AgeDetector-target.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_agedetector_strict/AgeDetector-reference.sv; proc; async2sync; memory; opt; equiv_make AgeDetector AgeDetector_ref AgeDetector_equiv; prep -top AgeDetector_equiv; equiv_induct -undef; equiv_status -assert"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "formal_success_marker": true
+      },
+      "failures": []
+    },
     {
       "evidence": "validation/v2-aludatamodule-strict-evidence.json",
       "build_id": "Build-Cpu.Backend.Fu.AluDataModule",
@@ -736,13 +828,13 @@
     {
       "evidence": "validation/v2-fubusytableread-strict-evidence.json",
       "build_id": "Build-Cpu.Backend.Issue.FuBusyTableRead",
-      "declared_status": "COMPLETE_EQUIVALENCE_VARIANT_ONLY",
+      "declared_status": "COMPLETE_EQUIVALENCE",
       "source_commit": {
         "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "status": "PASS"
       },
-      "status": "NON_COUNTING",
+      "status": "PASS",
       "scope": {
         "kind": "eighteen_locked_stateless_combinational_specializations",
         "state_bits": 0,
@@ -1684,8 +1776,8 @@
         "python_build": {
           "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.FuBusyTableRead-Hardware.py",
           "present": true,
-          "expected_sha256": "56aabfe425fcf548de1c108f670a1d705e41ffe292d03854b0d428dabcd26c98",
-          "observed_sha256": "56aabfe425fcf548de1c108f670a1d705e41ffe292d03854b0d428dabcd26c98",
+          "expected_sha256": "8823030c10a9fb564822be54eb9bce4ed12ad56c1745d132540facb11fbf2f72",
+          "observed_sha256": "8823030c10a9fb564822be54eb9bce4ed12ad56c1745d132540facb11fbf2f72",
           "status": "PASS"
         }
       },
