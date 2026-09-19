@@ -1,0 +1,1096 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_COMPLETE_EQUIVALENCE",
+  "build_id": "Build-Cpu.Backend.Issue.ImmExtractor",
+  "validator": "validation/v2_immextractor_strict_validator.py",
+  "status": "COMPLETE_EQUIVALENCE",
+  "strict_complete_eligible": true,
+  "strict_complete_count_delta": 1,
+  "acceptance_eligible": true,
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "scope": {
+    "kind": "five_locked_stateless_combinational_specializations",
+    "inputs": {
+      "io_in_imm": 32,
+      "io_in_immType": 4
+    },
+    "input_bits": 36,
+    "input_space": "2**36",
+    "input_space_cardinality": "68719476736",
+    "state_bits": 0,
+    "state_boundary": "no clock/reset/register/memory in any reference or target variant",
+    "variants": {
+      "ImmExtractor": {
+        "data_bits": 64,
+        "imm_type_set": [
+          2,
+          4,
+          11
+        ],
+        "imm_type_names": [
+          "U",
+          "I",
+          "LUI32"
+        ],
+        "outputs_compared": {
+          "io_out_imm": 64
+        }
+      },
+      "ImmExtractor_2": {
+        "data_bits": 64,
+        "imm_type_set": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "imm_type_names": [
+          "SB",
+          "U",
+          "UJ",
+          "I"
+        ],
+        "outputs_compared": {
+          "io_out_imm": 64
+        }
+      },
+      "ImmExtractor_12": {
+        "data_bits": 128,
+        "imm_type_set": [
+          1,
+          2,
+          3,
+          4,
+          9,
+          10,
+          12,
+          13,
+          15
+        ],
+        "imm_type_names": [
+          "SB",
+          "U",
+          "UJ",
+          "I",
+          "OPIVIS",
+          "OPIVIU",
+          "VSETVLI",
+          "VSETIVLI",
+          "VRORVI"
+        ],
+        "outputs_compared": {
+          "io_out_imm": 128
+        }
+      },
+      "ImmExtractor_37": {
+        "data_bits": 128,
+        "imm_type_set": [
+          12,
+          13
+        ],
+        "imm_type_names": [
+          "VSETVLI",
+          "VSETIVLI"
+        ],
+        "outputs_compared": {
+          "io_out_imm": 128
+        }
+      },
+      "ImmExtractor_57": {
+        "data_bits": 64,
+        "imm_type_set": [
+          14
+        ],
+        "imm_type_names": [
+          "S"
+        ],
+        "outputs_compared": {
+          "io_out_imm": 64
+        }
+      }
+    },
+    "outputs_compared": {
+      "ImmExtractor": {
+        "io_out_imm": 64
+      },
+      "ImmExtractor_2": {
+        "io_out_imm": 64
+      },
+      "ImmExtractor_12": {
+        "io_out_imm": 128
+      },
+      "ImmExtractor_37": {
+        "io_out_imm": 128
+      },
+      "ImmExtractor_57": {
+        "io_out_imm": 64
+      }
+    },
+    "aggregate_compared_output_bits": 448,
+    "why_complete": "Each individual SAT miter and an aggregate OR-miter prove zero mismatch with all 36 ABI input bits unconstrained.",
+    "bounded_tests_counted": false
+  },
+  "reference_lock": {
+    "path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "upstream_source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+    "xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "xstop_bytes": 228590583,
+    "closure_audit": {
+      "status": "PASS",
+      "checks": {
+        "target": true,
+        "source_sha256": true,
+        "closure_complete": true,
+        "module_count": true,
+        "module_order": true,
+        "closure_hash": true,
+        "all_variant_equations": true
+      },
+      "rows": {
+        "ImmExtractor": {
+          "output_width": 64,
+          "selectors_from_locked_equation": [
+            2,
+            4,
+            11
+          ],
+          "expected_selectors": [
+            2,
+            4,
+            11
+          ],
+          "selector_match": true,
+          "width_match": true,
+          "scala_imm_type_names": [
+            "U",
+            "I",
+            "LUI32"
+          ]
+        },
+        "ImmExtractor_2": {
+          "output_width": 64,
+          "selectors_from_locked_equation": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "expected_selectors": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "selector_match": true,
+          "width_match": true,
+          "scala_imm_type_names": [
+            "SB",
+            "U",
+            "UJ",
+            "I"
+          ]
+        },
+        "ImmExtractor_12": {
+          "output_width": 128,
+          "selectors_from_locked_equation": [
+            1,
+            2,
+            3,
+            4,
+            9,
+            10,
+            12,
+            13,
+            15
+          ],
+          "expected_selectors": [
+            1,
+            2,
+            3,
+            4,
+            9,
+            10,
+            12,
+            13,
+            15
+          ],
+          "selector_match": true,
+          "width_match": true,
+          "scala_imm_type_names": [
+            "SB",
+            "U",
+            "UJ",
+            "I",
+            "OPIVIS",
+            "OPIVIU",
+            "VSETVLI",
+            "VSETIVLI",
+            "VRORVI"
+          ]
+        },
+        "ImmExtractor_37": {
+          "output_width": 128,
+          "selectors_from_locked_equation": [
+            12,
+            13
+          ],
+          "expected_selectors": [
+            12,
+            13
+          ],
+          "selector_match": true,
+          "width_match": true,
+          "scala_imm_type_names": [
+            "VSETVLI",
+            "VSETIVLI"
+          ]
+        },
+        "ImmExtractor_57": {
+          "output_width": 64,
+          "selectors_from_locked_equation": [
+            14
+          ],
+          "expected_selectors": [
+            14
+          ],
+          "selector_match": true,
+          "width_match": true,
+          "scala_imm_type_names": [
+            "S"
+          ]
+        }
+      },
+      "closure_path": "validation/reference-closures/ImmExtractor-v2.sv",
+      "closure_sha256": "b1f76935f15a9c5a9d4c165ec042be0be327eba376e5f1e14d6c2d6c188a9c20",
+      "closure_bytes": 6253,
+      "manifest_path": "validation/reference-closures/ImmExtractor-v2.json",
+      "manifest_sha256": "e4466346eabfb65a0bf9509ae61b34096bbc837c837067262b98144472f8252b",
+      "source": "//wsl$/Debian/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+      "source_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d"
+    },
+    "extraction_rule": "exact five public ImmExtractor module bodies copied from immutable XSTop.sv; no dependencies"
+  },
+  "sources": {
+    "scala": {
+      "path": "upstream/src/main/scala/xiangshan/backend/issue/ImmExtractor.scala",
+      "sha256": "553ec41a4fdd3624808559025a94105f83eb91d3cfe6a1515a64db2d8bc04c1c",
+      "bytes": 2517
+    },
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.ImmExtractor-Hardware.py",
+      "sha256": "1f37ce2c2c7e02f520d0e35cc1d2b8c40cc92af0ebf7b402a5bd80d72acb9f02",
+      "bytes": 8701
+    },
+    "reference_sv": {
+      "path": "validation/reference-closures/ImmExtractor-v2.sv",
+      "sha256": "b1f76935f15a9c5a9d4c165ec042be0be327eba376e5f1e14d6c2d6c188a9c20",
+      "bytes": 6253,
+      "modules": [
+        "ImmExtractor",
+        "ImmExtractor_2",
+        "ImmExtractor_12",
+        "ImmExtractor_37",
+        "ImmExtractor_57"
+      ]
+    },
+    "reference_manifest": {
+      "path": "validation/reference-closures/ImmExtractor-v2.json",
+      "sha256": "e4466346eabfb65a0bf9509ae61b34096bbc837c837067262b98144472f8252b",
+      "bytes": 1590
+    }
+  },
+  "checks": {
+    "py_compile": {
+      "status": "PASS",
+      "files": [
+        "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.ImmExtractor-Hardware.py",
+        "validation/v2_immextractor_strict_validator.py"
+      ]
+    },
+    "pyright": {
+      "target": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_immextractor_pyright_qg9q82w3\\Build-Cpu.Backend.Issue.ImmExtractor-Hardware.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "files_analyzed": 1,
+        "error_count": 0,
+        "warning_count": 0,
+        "output_sha256": "11531bb4325d888c9dd4718e2a8b66dc446583545ffe1d26e2e319c717b3993b",
+        "stderr_tail": ""
+      },
+      "validator": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_immextractor_pyright_b9u766dz\\v2_immextractor_strict_validator.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "files_analyzed": 1,
+        "error_count": 0,
+        "warning_count": 0,
+        "output_sha256": "d6cd930705a2a80afb4c91b35a1b8d33cdbe26eb0924d2100aa7ceee9b795599",
+        "stderr_tail": ""
+      }
+    },
+    "deterministic_export": {
+      "ImmExtractor": {
+        "status": "PASS",
+        "configuration": {
+          "data_bits": 64,
+          "imm_type_set": [
+            2,
+            4,
+            11
+          ],
+          "imm_type_names": [
+            "U",
+            "I",
+            "LUI32"
+          ]
+        },
+        "bytes": 6084,
+        "sha256": "4d75eb3b4d3cb25f57085859131abca488c776b972885071e35b4cdece2e2753",
+        "repeat_sha256": "4d75eb3b4d3cb25f57085859131abca488c776b972885071e35b4cdece2e2753",
+        "byte_equal": true
+      },
+      "ImmExtractor_2": {
+        "status": "PASS",
+        "configuration": {
+          "data_bits": 64,
+          "imm_type_set": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "imm_type_names": [
+            "SB",
+            "U",
+            "UJ",
+            "I"
+          ]
+        },
+        "bytes": 7875,
+        "sha256": "a361656599268e91d2f6ed3c1a452dd5d8081132d05f8304795d551f296a29b4",
+        "repeat_sha256": "a361656599268e91d2f6ed3c1a452dd5d8081132d05f8304795d551f296a29b4",
+        "byte_equal": true
+      },
+      "ImmExtractor_12": {
+        "status": "PASS",
+        "configuration": {
+          "data_bits": 128,
+          "imm_type_set": [
+            1,
+            2,
+            3,
+            4,
+            9,
+            10,
+            12,
+            13,
+            15
+          ],
+          "imm_type_names": [
+            "SB",
+            "U",
+            "UJ",
+            "I",
+            "OPIVIS",
+            "OPIVIU",
+            "VSETVLI",
+            "VSETIVLI",
+            "VRORVI"
+          ]
+        },
+        "bytes": 14724,
+        "sha256": "d0a61fe7fca5af0313dd0f0d2a2b6f19a7122860bc10d9365fca819967f5ec7e",
+        "repeat_sha256": "d0a61fe7fca5af0313dd0f0d2a2b6f19a7122860bc10d9365fca819967f5ec7e",
+        "byte_equal": true
+      },
+      "ImmExtractor_37": {
+        "status": "PASS",
+        "configuration": {
+          "data_bits": 128,
+          "imm_type_set": [
+            12,
+            13
+          ],
+          "imm_type_names": [
+            "VSETVLI",
+            "VSETIVLI"
+          ]
+        },
+        "bytes": 5092,
+        "sha256": "7e4327222d1518b40b6c40841920be78edfc4c29593c09c3e1bdd52b7f90c294",
+        "repeat_sha256": "7e4327222d1518b40b6c40841920be78edfc4c29593c09c3e1bdd52b7f90c294",
+        "byte_equal": true
+      },
+      "ImmExtractor_57": {
+        "status": "PASS",
+        "configuration": {
+          "data_bits": 64,
+          "imm_type_set": [
+            14
+          ],
+          "imm_type_names": [
+            "S"
+          ]
+        },
+        "bytes": 3435,
+        "sha256": "71bf2c084d0ead675d9a41e8ac33308e3558e6436a520d39b1d6738ebfc3712d",
+        "repeat_sha256": "71bf2c084d0ead675d9a41e8ac33308e3558e6436a520d39b1d6738ebfc3712d",
+        "byte_equal": true
+      }
+    },
+    "closure_audit": {
+      "status": "PASS",
+      "checks": {
+        "target": true,
+        "source_sha256": true,
+        "closure_complete": true,
+        "module_count": true,
+        "module_order": true,
+        "closure_hash": true,
+        "all_variant_equations": true
+      },
+      "rows": {
+        "ImmExtractor": {
+          "output_width": 64,
+          "selectors_from_locked_equation": [
+            2,
+            4,
+            11
+          ],
+          "expected_selectors": [
+            2,
+            4,
+            11
+          ],
+          "selector_match": true,
+          "width_match": true,
+          "scala_imm_type_names": [
+            "U",
+            "I",
+            "LUI32"
+          ]
+        },
+        "ImmExtractor_2": {
+          "output_width": 64,
+          "selectors_from_locked_equation": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "expected_selectors": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "selector_match": true,
+          "width_match": true,
+          "scala_imm_type_names": [
+            "SB",
+            "U",
+            "UJ",
+            "I"
+          ]
+        },
+        "ImmExtractor_12": {
+          "output_width": 128,
+          "selectors_from_locked_equation": [
+            1,
+            2,
+            3,
+            4,
+            9,
+            10,
+            12,
+            13,
+            15
+          ],
+          "expected_selectors": [
+            1,
+            2,
+            3,
+            4,
+            9,
+            10,
+            12,
+            13,
+            15
+          ],
+          "selector_match": true,
+          "width_match": true,
+          "scala_imm_type_names": [
+            "SB",
+            "U",
+            "UJ",
+            "I",
+            "OPIVIS",
+            "OPIVIU",
+            "VSETVLI",
+            "VSETIVLI",
+            "VRORVI"
+          ]
+        },
+        "ImmExtractor_37": {
+          "output_width": 128,
+          "selectors_from_locked_equation": [
+            12,
+            13
+          ],
+          "expected_selectors": [
+            12,
+            13
+          ],
+          "selector_match": true,
+          "width_match": true,
+          "scala_imm_type_names": [
+            "VSETVLI",
+            "VSETIVLI"
+          ]
+        },
+        "ImmExtractor_57": {
+          "output_width": 64,
+          "selectors_from_locked_equation": [
+            14
+          ],
+          "expected_selectors": [
+            14
+          ],
+          "selector_match": true,
+          "width_match": true,
+          "scala_imm_type_names": [
+            "S"
+          ]
+        }
+      },
+      "closure_path": "validation/reference-closures/ImmExtractor-v2.sv",
+      "closure_sha256": "b1f76935f15a9c5a9d4c165ec042be0be327eba376e5f1e14d6c2d6c188a9c20",
+      "closure_bytes": 6253,
+      "manifest_path": "validation/reference-closures/ImmExtractor-v2.json",
+      "manifest_sha256": "e4466346eabfb65a0bf9509ae61b34096bbc837c837067262b98144472f8252b",
+      "source": "//wsl$/Debian/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+      "source_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d"
+    },
+    "tools": {
+      "verilator": {
+        "command": [
+          "verilator",
+          "--version"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n",
+        "output_sha256": "ae161d63a0898d55050284fd76bd5e83136b75d2ec90d5b0622f196d5edc2aff"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "--version"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\n",
+        "output_sha256": "239d92e36e753a9dff4e79d97878ed5d55304b675d411895ec57508bc134e28e"
+      }
+    },
+    "variants": {
+      "ImmExtractor": {
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "ImmExtractor_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/REF_ImmExtractor_closure.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/ImmExtractor_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.063 MB sources in 8 modules, into 0.029 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.060 s (elab=0.007, cvt=0.012, bld=0.000); cpu 0.012 s on 1 threads; alloced 9.336 MB\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor.sv:24:31: Operator EQ expects 4 bits on the RHS, but RHS's CONST '3'h4' generates 3 bits.\n                                                                                                               : ... note: In instance 'ImmExtractor_MITER.target_i'\n   24 |   assign \\$2  = io_in_immType == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Issue.ImmExtractor-Hardware.py:189\" *) 3'h4;\n      |                               ^~\n                      ... For warning description see https://verilator.org/warn/WIDTHEXPAND?v=5.032\n                      ... Use \"/* verilator lint_off WIDTHEXPAND */\" and lint_on around source to disable this message.\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor.sv:25:31: Operator EQ expects 4 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                               : ... note: In instance 'ImmExtractor_MITER.target_i'\n   25 |   assign \\$3  = io_in_immType == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Issue.ImmExtractor-Hardware.py:189\" *) 2'h2;\n      |                               ^~\n",
+          "output_sha256": "4bf403b7d3b1c4b0bf03733a24c86acfd91e6feabb441a933bae6269edaa3b61"
+        },
+        "yosys_target": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor.sv; hierarchy -top DUT_ImmExtractor; proc; opt; check"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "\n-- Running command `read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor.sv; hierarchy -top DUT_ImmExtractor; proc; opt; check' --\n\n1. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor.sv\nParsing SystemVerilog input from `/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor.sv' to AST representation.\nGenerating RTLIL representation for module `\\DUT_ImmExtractor'.\nSuccessfully finished Verilog frontend.\n\n2. Executing HIERARCHY pass (managing design hierarchy).\n\n2.1. Analyzing design hierarchy..\nTop module:  \\DUT_ImmExtractor\n\n2.2. Analyzing design hierarchy..\nTop module:  \\DUT_ImmExtractor\nRemoved 0 unused modules.\n\n3. Executing PROC pass (convert processes to netlists).\n\n3.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DUT_ImmExtractor.\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DUT_ImmExtractor.\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\DUT_ImmExtractor'.\nRemoved a total of 0 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\DUT_ImmExtractor..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\DUT_ImmExtractor.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\DUT_ImmExtractor'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\DUT_ImmExtractor..\nRemoved 0 unused cells and 6 unused wires.\n<suppressed ~1 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DUT_ImmExtractor.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\DUT_ImmExtractor..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\DUT_ImmExtractor.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\DUT_ImmExtractor'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\DUT_ImmExtractor..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DUT_ImmExtractor.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module DUT_ImmExtractor...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 7153ba8544, CPU: user 0.01s system 0.01s, MEM: 12.19 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 25% 2x read_verilog (0 sec), 23% 4x opt_expr (0 sec), ...\n",
+          "output_sha256": "b12de435b90c501c72d0b2a7e9079502b45e094937e966fe3619fabbcb88b25e"
+        },
+        "yosys_reference": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/REF_ImmExtractor_closure.sv; hierarchy -top ImmExtractor; proc; opt; check"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "\n-- Running command `read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/REF_ImmExtractor_closure.sv; hierarchy -top ImmExtractor; proc; opt; check' --\n\n1. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/REF_ImmExtractor_closure.sv\nParsing SystemVerilog input from `/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/REF_ImmExtractor_closure.sv' to AST representation.\nGenerating RTLIL representation for module `\\ImmExtractor'.\nGenerating RTLIL representation for module `\\ImmExtractor_2'.\nGenerating RTLIL representation for module `\\ImmExtractor_12'.\nGenerating RTLIL representation for module `\\ImmExtractor_37'.\nGenerating RTLIL representation for module `\\ImmExtractor_57'.\nSuccessfully finished Verilog frontend.\n\n2. Executing HIERARCHY pass (managing design hierarchy).\n\n2.1. Analyzing design hierarchy..\nTop module:  \\ImmExtractor\n\n2.2. Analyzing design hierarchy..\nTop module:  \\ImmExtractor\nRemoving unused module `\\ImmExtractor_57'.\nRemoving unused module `\\ImmExtractor_37'.\nRemoving unused module `\\ImmExtractor_12'.\nRemoving unused module `\\ImmExtractor_2'.\nRemoved 4 unused modules.\n\n3. Executing PROC pass (convert processes to netlists).\n\n3.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ImmExtractor.\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ImmExtractor.\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ImmExtractor'.\nRemoved a total of 0 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\ImmExtractor..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\ImmExtractor.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ImmExtractor'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\ImmExtractor..\nRemoved 0 unused cells and 1 unused wires.\n<suppressed ~1 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ImmExtractor.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\ImmExtractor..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\ImmExtractor.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ImmExtractor'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\ImmExtractor..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ImmExtractor.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module ImmExtractor...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: d1b1ba4321, CPU: user 0.00s system 0.02s, MEM: 11.88 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 25% 2x read_verilog (0 sec), 23% 4x opt_expr (0 sec), ...\n",
+          "output_sha256": "8a5c77351b95625aba42e2771ae9dac9b95b4554f69a3a89dbdd11705dbefd25"
+        },
+        "yosys_formal_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/REF_ImmExtractor_closure.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/ImmExtractor_MITER.sv; prep -top ImmExtractor_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "              6\n   Number of wire bits:            229\n   Number of public wires:           5\n   Number of public wire bits:     165\n   Number of ports:                  3\n   Number of port bits:             37\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                  4\n     $reduce_or                      1\n     $xor                            1\n     DUT_ImmExtractor                1\n     ImmExtractor                    1\n\n=== design hierarchy ===\n\n   ImmExtractor_MITER                1\n     DUT_ImmExtractor                1\n     ImmExtractor                    1\n\n   Number of wires:                 22\n   Number of wire bits:            691\n   Number of public wires:          16\n   Number of public wire bits:     496\n   Number of ports:                  9\n   Number of port bits:            237\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                 14\n     $eq                             6\n     $mux                            6\n     $reduce_or                      1\n     $xor                            1\n\n4.13. Executing CHECK pass (checking for obvious problems).\nChecking module DUT_ImmExtractor...\nChecking module ImmExtractor...\nChecking module ImmExtractor_MITER...\nFound and reported 0 problems.\n\n5. Executing FLATTEN pass (flatten design).\nDeleting now unused module DUT_ImmExtractor.\nDeleting now unused module ImmExtractor.\n<suppressed ~2 debug messages>\n\n6. Executing OPT pass (performing simple optimizations).\n\n6.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ImmExtractor_MITER.\n\n6.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ImmExtractor_MITER'.\n<suppressed ~9 debug messages>\nRemoved a total of 3 cells.\n\n6.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\ImmExtractor_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\ImmExtractor_MITER.\nPerformed a total of 0 changes.\n\n6.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ImmExtractor_MITER'.\n<suppressed ~9 debug messages>\nRemoved a total of 3 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\ImmExtractor_MITER..\nRemoved 0 unused cells and 5 unused wires.\n<suppressed ~1 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ImmExtractor_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\ImmExtractor_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\ImmExtractor_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ImmExtractor_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\ImmExtractor_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ImmExtractor_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 10 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 1379 variables and 3575 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 5f12f603cc, CPU: user 0.04s system 0.00s, MEM: 14.22 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 19% 6x opt_clean (0 sec), 18% 8x opt_expr (0 sec), ...\n",
+          "output_sha256": "bbb3d8b1b04a05c82754882f6de981f7659287f9d18b592e818039da4816b906",
+          "formal_success_marker": true,
+          "formal_scope": {
+            "input_bits": 36,
+            "input_space": "2**36",
+            "input_space_cardinality": "68719476736",
+            "state_bits": 0,
+            "state_space": "singleton (stateless combinational module)",
+            "outputs_compared": {
+              "io_out_imm": 64
+            },
+            "property": "mismatch == 0 for every 2-state valuation of io_in_imm/io_in_immType"
+          }
+        }
+      },
+      "ImmExtractor_2": {
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "ImmExtractor_2_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_2.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/REF_ImmExtractor_closure.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/ImmExtractor_2_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.068 MB sources in 8 modules, into 0.038 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.048 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.009 s on 1 threads; alloced 9.441 MB\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_2.sv:23:31: Operator EQ expects 4 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                 : ... note: In instance 'ImmExtractor_2_MITER.target_i'\n   23 |   assign \\$3  = io_in_immType == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Issue.ImmExtractor-Hardware.py:189\" *) 2'h2;\n      |                               ^~\n                      ... For warning description see https://verilator.org/warn/WIDTHEXPAND?v=5.032\n                      ... Use \"/* verilator lint_off WIDTHEXPAND */\" and lint_on around source to disable this message.\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_2.sv:24:31: Operator EQ expects 4 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                 : ... note: In instance 'ImmExtractor_2_MITER.target_i'\n   24 |   assign \\$4  = io_in_immType == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Issue.ImmExtractor-Hardware.py:189\" *) 1'h1;\n      |                               ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_2.sv:29:31: Operator EQ expects 4 bits on the RHS, but RHS's CONST '3'h4' generates 3 bits.\n                                                                                                                 : ... note: In instance 'ImmExtractor_2_MITER.target_i'\n   29 |   assign \\$1  = io_in_immType == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Issue.ImmExtractor-Hardware.py:189\" *) 3'h4;\n      |                               ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_2.sv:30:31: Operator EQ expects 4 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                                                                                                 : ... note: In instance 'ImmExtractor_2_MITER.target_i'\n   30 |   assign \\$2  = io_in_immType == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Issue.ImmExtractor-Hardware.py:189\" *) 2'h3;\n      |                               ^~\n",
+          "output_sha256": "dfbe25599f1863f4cdb535b08dc8a84c9a30ad8188930439d2af0ca109e306e8"
+        },
+        "yosys_target": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_2.sv; hierarchy -top DUT_ImmExtractor_2; proc; opt; check"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "\n-- Running command `read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_2.sv; hierarchy -top DUT_ImmExtractor_2; proc; opt; check' --\n\n1. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_2.sv\nParsing SystemVerilog input from `/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_2.sv' to AST representation.\nGenerating RTLIL representation for module `\\DUT_ImmExtractor_2'.\nSuccessfully finished Verilog frontend.\n\n2. Executing HIERARCHY pass (managing design hierarchy).\n\n2.1. Analyzing design hierarchy..\nTop module:  \\DUT_ImmExtractor_2\n\n2.2. Analyzing design hierarchy..\nTop module:  \\DUT_ImmExtractor_2\nRemoved 0 unused modules.\n\n3. Executing PROC pass (convert processes to netlists).\n\n3.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DUT_ImmExtractor_2.\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DUT_ImmExtractor_2.\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\DUT_ImmExtractor_2'.\nRemoved a total of 0 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\DUT_ImmExtractor_2..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\DUT_ImmExtractor_2.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\DUT_ImmExtractor_2'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\DUT_ImmExtractor_2..\nRemoved 0 unused cells and 8 unused wires.\n<suppressed ~1 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DUT_ImmExtractor_2.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\DUT_ImmExtractor_2..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\DUT_ImmExtractor_2.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\DUT_ImmExtractor_2'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\DUT_ImmExtractor_2..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DUT_ImmExtractor_2.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module DUT_ImmExtractor_2...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: ed6eaa8012, CPU: user 0.01s system 0.01s, MEM: 12.34 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 25% 2x read_verilog (0 sec), 25% 4x opt_expr (0 sec), ...\n",
+          "output_sha256": "9635f712f5dc02c86a141930f9e8f7e75fdd685e47bc7bad4af80e397be84adf"
+        },
+        "yosys_reference": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/REF_ImmExtractor_closure.sv; hierarchy -top ImmExtractor_2; proc; opt; check"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "\n-- Running command `read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/REF_ImmExtractor_closure.sv; hierarchy -top ImmExtractor_2; proc; opt; check' --\n\n1. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/REF_ImmExtractor_closure.sv\nParsing SystemVerilog input from `/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/REF_ImmExtractor_closure.sv' to AST representation.\nGenerating RTLIL representation for module `\\ImmExtractor'.\nGenerating RTLIL representation for module `\\ImmExtractor_2'.\nGenerating RTLIL representation for module `\\ImmExtractor_12'.\nGenerating RTLIL representation for module `\\ImmExtractor_37'.\nGenerating RTLIL representation for module `\\ImmExtractor_57'.\nSuccessfully finished Verilog frontend.\n\n2. Executing HIERARCHY pass (managing design hierarchy).\n\n2.1. Analyzing design hierarchy..\nTop module:  \\ImmExtractor_2\n\n2.2. Analyzing design hierarchy..\nTop module:  \\ImmExtractor_2\nRemoving unused module `\\ImmExtractor_57'.\nRemoving unused module `\\ImmExtractor_37'.\nRemoving unused module `\\ImmExtractor_12'.\nRemoving unused module `\\ImmExtractor'.\nRemoved 4 unused modules.\n\n3. Executing PROC pass (convert processes to netlists).\n\n3.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ImmExtractor_2.\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ImmExtractor_2.\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ImmExtractor_2'.\nRemoved a total of 0 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\ImmExtractor_2..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\ImmExtractor_2.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ImmExtractor_2'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\ImmExtractor_2..\nRemoved 0 unused cells and 1 unused wires.\n<suppressed ~1 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ImmExtractor_2.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\ImmExtractor_2..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\ImmExtractor_2.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ImmExtractor_2'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\ImmExtractor_2..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ImmExtractor_2.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module ImmExtractor_2...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 4c59213180, CPU: user 0.02s system 0.00s, MEM: 12.03 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 22% 4x opt_expr (0 sec), 21% 2x read_verilog (0 sec), ...\n",
+          "output_sha256": "cb1906f32ae522d59f0db9b81b0a82d8d4f2d7941df6a1d9b53cf35fdbbda059"
+        },
+        "yosys_formal_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/REF_ImmExtractor_closure.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/ImmExtractor_2_MITER.sv; prep -top ImmExtractor_2_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "ts:            229\n   Number of public wires:           5\n   Number of public wire bits:     165\n   Number of ports:                  3\n   Number of port bits:             37\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                  4\n     $reduce_or                      1\n     $xor                            1\n     DUT_ImmExtractor_2              1\n     ImmExtractor_2                  1\n\n=== design hierarchy ===\n\n   ImmExtractor_2_MITER              1\n     DUT_ImmExtractor_2              1\n     ImmExtractor_2                  1\n\n   Number of wires:                 26\n   Number of wire bits:            821\n   Number of public wires:          18\n   Number of public wire bits:     561\n   Number of ports:                  9\n   Number of port bits:            237\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                 18\n     $eq                             8\n     $mux                            8\n     $reduce_or                      1\n     $xor                            1\n\n4.13. Executing CHECK pass (checking for obvious problems).\nChecking module DUT_ImmExtractor_2...\nChecking module ImmExtractor_2...\nChecking module ImmExtractor_2_MITER...\nFound and reported 0 problems.\n\n5. Executing FLATTEN pass (flatten design).\nDeleting now unused module DUT_ImmExtractor_2.\nDeleting now unused module ImmExtractor_2.\n<suppressed ~2 debug messages>\n\n6. Executing OPT pass (performing simple optimizations).\n\n6.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ImmExtractor_2_MITER.\n\n6.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ImmExtractor_2_MITER'.\n<suppressed ~12 debug messages>\nRemoved a total of 4 cells.\n\n6.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\ImmExtractor_2_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\ImmExtractor_2_MITER.\nPerformed a total of 0 changes.\n\n6.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ImmExtractor_2_MITER'.\n<suppressed ~12 debug messages>\nRemoved a total of 4 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\ImmExtractor_2_MITER..\nRemoved 0 unused cells and 7 unused wires.\n<suppressed ~1 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ImmExtractor_2_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\ImmExtractor_2_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\ImmExtractor_2_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ImmExtractor_2_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\ImmExtractor_2_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ImmExtractor_2_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 12 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 1748 variables and 4590 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 30d4c6fa41, CPU: user 0.03s system 0.01s, MEM: 14.38 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 18% 8x opt_expr (0 sec), 17% 6x opt_clean (0 sec), ...\n",
+          "output_sha256": "3be04f2a4f5d8eaaea4bc13018f0df2b0fab57e39549ee0b4314df5aaf517ba7",
+          "formal_success_marker": true,
+          "formal_scope": {
+            "input_bits": 36,
+            "input_space": "2**36",
+            "input_space_cardinality": "68719476736",
+            "state_bits": 0,
+            "state_space": "singleton (stateless combinational module)",
+            "outputs_compared": {
+              "io_out_imm": 64
+            },
+            "property": "mismatch == 0 for every 2-state valuation of io_in_imm/io_in_immType"
+          }
+        }
+      },
+      "ImmExtractor_12": {
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "ImmExtractor_12_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_12.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/REF_ImmExtractor_closure.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/ImmExtractor_12_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.088 MB sources in 8 modules, into 0.089 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.053 s (elab=0.001, cvt=0.005, bld=0.000); cpu 0.013 s on 1 threads; alloced 10.156 MB\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_12.sv:38:31: Operator EQ expects 4 bits on the RHS, but RHS's CONST '3'h4' generates 3 bits.\n                                                                                                                  : ... note: In instance 'ImmExtractor_12_MITER.target_i'\n   38 |   assign \\$6  = io_in_immType == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Issue.ImmExtractor-Hardware.py:189\" *) 3'h4;\n      |                               ^~\n                      ... For warning description see https://verilator.org/warn/WIDTHEXPAND?v=5.032\n                      ... Use \"/* verilator lint_off WIDTHEXPAND */\" and lint_on around source to disable this message.\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_12.sv:39:31: Operator EQ expects 4 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                                                                                                  : ... note: In instance 'ImmExtractor_12_MITER.target_i'\n   39 |   assign \\$7  = io_in_immType == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Issue.ImmExtractor-Hardware.py:189\" *) 2'h3;\n      |                               ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_12.sv:40:31: Operator EQ expects 4 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                  : ... note: In instance 'ImmExtractor_12_MITER.target_i'\n   40 |   assign \\$8  = io_in_immType == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Issue.ImmExtractor-Hardware.py:189\" *) 2'h2;\n      |                               ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_12.sv:41:31: Operator EQ expects 4 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                  : ... note: In instance 'ImmExtractor_12_MITER.target_i'\n   41 |   assign \\$9  = io_in_immType == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Issue.ImmExtractor-Hardware.py:189\" *) 1'h1;\n      |                               ^~\n",
+          "output_sha256": "68872de5621403bd88291582a38cec75f859a8fad62209dc89dd1128378e0069"
+        },
+        "yosys_target": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_12.sv; hierarchy -top DUT_ImmExtractor_12; proc; opt; check"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "\n-- Running command `read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_12.sv; hierarchy -top DUT_ImmExtractor_12; proc; opt; check' --\n\n1. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_12.sv\nParsing SystemVerilog input from `/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_12.sv' to AST representation.\nGenerating RTLIL representation for module `\\DUT_ImmExtractor_12'.\nSuccessfully finished Verilog frontend.\n\n2. Executing HIERARCHY pass (managing design hierarchy).\n\n2.1. Analyzing design hierarchy..\nTop module:  \\DUT_ImmExtractor_12\n\n2.2. Analyzing design hierarchy..\nTop module:  \\DUT_ImmExtractor_12\nRemoved 0 unused modules.\n\n3. Executing PROC pass (convert processes to netlists).\n\n3.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DUT_ImmExtractor_12.\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DUT_ImmExtractor_12.\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\DUT_ImmExtractor_12'.\nRemoved a total of 0 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\DUT_ImmExtractor_12..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\DUT_ImmExtractor_12.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\DUT_ImmExtractor_12'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\DUT_ImmExtractor_12..\nRemoved 0 unused cells and 18 unused wires.\n<suppressed ~1 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DUT_ImmExtractor_12.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\DUT_ImmExtractor_12..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\DUT_ImmExtractor_12.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\DUT_ImmExtractor_12'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\DUT_ImmExtractor_12..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DUT_ImmExtractor_12.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module DUT_ImmExtractor_12...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 4e1526f467, CPU: user 0.01s system 0.02s, MEM: 13.59 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 24% 2x read_verilog (0 sec), 16% 2x opt_clean (0 sec), ...\n",
+          "output_sha256": "3d7534c8548d22a7c58e27005725a41d491b4eb667c1e71151e5935c2eef42ac"
+        },
+        "yosys_reference": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/REF_ImmExtractor_closure.sv; hierarchy -top ImmExtractor_12; proc; opt; check"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "\n-- Running command `read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/REF_ImmExtractor_closure.sv; hierarchy -top ImmExtractor_12; proc; opt; check' --\n\n1. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/REF_ImmExtractor_closure.sv\nParsing SystemVerilog input from `/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/REF_ImmExtractor_closure.sv' to AST representation.\nGenerating RTLIL representation for module `\\ImmExtractor'.\nGenerating RTLIL representation for module `\\ImmExtractor_2'.\nGenerating RTLIL representation for module `\\ImmExtractor_12'.\nGenerating RTLIL representation for module `\\ImmExtractor_37'.\nGenerating RTLIL representation for module `\\ImmExtractor_57'.\nSuccessfully finished Verilog frontend.\n\n2. Executing HIERARCHY pass (managing design hierarchy).\n\n2.1. Analyzing design hierarchy..\nTop module:  \\ImmExtractor_12\n\n2.2. Analyzing design hierarchy..\nTop module:  \\ImmExtractor_12\nRemoving unused module `\\ImmExtractor_57'.\nRemoving unused module `\\ImmExtractor_37'.\nRemoving unused module `\\ImmExtractor_2'.\nRemoving unused module `\\ImmExtractor'.\nRemoved 4 unused modules.\n\n3. Executing PROC pass (convert processes to netlists).\n\n3.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ImmExtractor_12.\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ImmExtractor_12.\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ImmExtractor_12'.\nRemoved a total of 0 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\ImmExtractor_12..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\ImmExtractor_12.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ImmExtractor_12'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\ImmExtractor_12..\nRemoved 0 unused cells and 1 unused wires.\n<suppressed ~1 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ImmExtractor_12.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\ImmExtractor_12..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\ImmExtractor_12.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ImmExtractor_12'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\ImmExtractor_12..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ImmExtractor_12.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module ImmExtractor_12...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 4f8da09017, CPU: user 0.02s system 0.00s, MEM: 12.50 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 23% 2x read_verilog (0 sec), 19% 4x opt_expr (0 sec), ...\n",
+          "output_sha256": "fc096f7d618a538a1fde4b62f1ced7aae2a60fec8982f4e82c1054611faab8f3"
+        },
+        "yosys_formal_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_12.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/REF_ImmExtractor_closure.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/ImmExtractor_12_MITER.sv; prep -top ImmExtractor_12_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "   5\n   Number of public wire bits:     293\n   Number of ports:                  3\n   Number of port bits:             37\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                  4\n     $reduce_or                      1\n     $xor                            1\n     DUT_ImmExtractor_12             1\n     ImmExtractor_12                 1\n\n=== design hierarchy ===\n\n   ImmExtractor_12_MITER             1\n     DUT_ImmExtractor_12             1\n     ImmExtractor_12                 1\n\n   Number of wires:                 46\n   Number of wire bits:           1983\n   Number of public wires:          28\n   Number of public wire bits:    1334\n   Number of ports:                  9\n   Number of port bits:            365\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                 38\n     $eq                            17\n     $mux                           18\n     $reduce_and                     1\n     $reduce_or                      1\n     $xor                            1\n\n4.13. Executing CHECK pass (checking for obvious problems).\nChecking module DUT_ImmExtractor_12...\nChecking module ImmExtractor_12...\nChecking module ImmExtractor_12_MITER...\nFound and reported 0 problems.\n\n5. Executing FLATTEN pass (flatten design).\nDeleting now unused module DUT_ImmExtractor_12.\nDeleting now unused module ImmExtractor_12.\n<suppressed ~2 debug messages>\n\n6. Executing OPT pass (performing simple optimizations).\n\n6.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ImmExtractor_12_MITER.\n\n6.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ImmExtractor_12_MITER'.\n<suppressed ~24 debug messages>\nRemoved a total of 8 cells.\n\n6.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\ImmExtractor_12_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\ImmExtractor_12_MITER.\nPerformed a total of 0 changes.\n\n6.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ImmExtractor_12_MITER'.\n<suppressed ~24 debug messages>\nRemoved a total of 8 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\ImmExtractor_12_MITER..\nRemoved 0 unused cells and 16 unused wires.\n<suppressed ~1 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ImmExtractor_12_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\ImmExtractor_12_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~3 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\ImmExtractor_12_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ImmExtractor_12_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\ImmExtractor_12_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ImmExtractor_12_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 24 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 4583 variables and 12263 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: cbc48a4bfa, CPU: user 0.07s system 0.00s, MEM: 17.37 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 26% 1x sat (0 sec), 16% 6x opt_clean (0 sec), ...\n",
+          "output_sha256": "d0e0e581ed6158b6370883504b22765df163565de95fbe26313a852b77251d9c",
+          "formal_success_marker": true,
+          "formal_scope": {
+            "input_bits": 36,
+            "input_space": "2**36",
+            "input_space_cardinality": "68719476736",
+            "state_bits": 0,
+            "state_space": "singleton (stateless combinational module)",
+            "outputs_compared": {
+              "io_out_imm": 128
+            },
+            "property": "mismatch == 0 for every 2-state valuation of io_in_imm/io_in_immType"
+          }
+        }
+      },
+      "ImmExtractor_37": {
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "ImmExtractor_37_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_37.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/REF_ImmExtractor_closure.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/ImmExtractor_37_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.060 MB sources in 8 modules, into 0.050 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.048 s (elab=0.001, cvt=0.002, bld=0.000); cpu 0.009 s on 1 threads; alloced 9.586 MB\n",
+          "output_sha256": "180d0c0a77ed5d7a5ef8c53a29868cb274187a77b056e5bbc1f72090047e3b44"
+        },
+        "yosys_target": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_37.sv; hierarchy -top DUT_ImmExtractor_37; proc; opt; check"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "\n-- Running command `read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_37.sv; hierarchy -top DUT_ImmExtractor_37; proc; opt; check' --\n\n1. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_37.sv\nParsing SystemVerilog input from `/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_37.sv' to AST representation.\nGenerating RTLIL representation for module `\\DUT_ImmExtractor_37'.\nSuccessfully finished Verilog frontend.\n\n2. Executing HIERARCHY pass (managing design hierarchy).\n\n2.1. Analyzing design hierarchy..\nTop module:  \\DUT_ImmExtractor_37\n\n2.2. Analyzing design hierarchy..\nTop module:  \\DUT_ImmExtractor_37\nRemoved 0 unused modules.\n\n3. Executing PROC pass (convert processes to netlists).\n\n3.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DUT_ImmExtractor_37.\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DUT_ImmExtractor_37.\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\DUT_ImmExtractor_37'.\nRemoved a total of 0 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\DUT_ImmExtractor_37..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\DUT_ImmExtractor_37.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\DUT_ImmExtractor_37'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\DUT_ImmExtractor_37..\nRemoved 0 unused cells and 4 unused wires.\n<suppressed ~1 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DUT_ImmExtractor_37.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\DUT_ImmExtractor_37..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\DUT_ImmExtractor_37.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\DUT_ImmExtractor_37'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\DUT_ImmExtractor_37..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DUT_ImmExtractor_37.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module DUT_ImmExtractor_37...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: fcc6aa43ad, CPU: user 0.01s system 0.01s, MEM: 12.19 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 24% 4x opt_expr (0 sec), 19% 2x opt_clean (0 sec), ...\n",
+          "output_sha256": "c34d8736f2a2a4477bbef1880be4a135a3404e11a7facfe5745b562d3881c61a"
+        },
+        "yosys_reference": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/REF_ImmExtractor_closure.sv; hierarchy -top ImmExtractor_37; proc; opt; check"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "\n-- Running command `read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/REF_ImmExtractor_closure.sv; hierarchy -top ImmExtractor_37; proc; opt; check' --\n\n1. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/REF_ImmExtractor_closure.sv\nParsing SystemVerilog input from `/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/REF_ImmExtractor_closure.sv' to AST representation.\nGenerating RTLIL representation for module `\\ImmExtractor'.\nGenerating RTLIL representation for module `\\ImmExtractor_2'.\nGenerating RTLIL representation for module `\\ImmExtractor_12'.\nGenerating RTLIL representation for module `\\ImmExtractor_37'.\nGenerating RTLIL representation for module `\\ImmExtractor_57'.\nSuccessfully finished Verilog frontend.\n\n2. Executing HIERARCHY pass (managing design hierarchy).\n\n2.1. Analyzing design hierarchy..\nTop module:  \\ImmExtractor_37\n\n2.2. Analyzing design hierarchy..\nTop module:  \\ImmExtractor_37\nRemoving unused module `\\ImmExtractor_57'.\nRemoving unused module `\\ImmExtractor_12'.\nRemoving unused module `\\ImmExtractor_2'.\nRemoving unused module `\\ImmExtractor'.\nRemoved 4 unused modules.\n\n3. Executing PROC pass (convert processes to netlists).\n\n3.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ImmExtractor_37.\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ImmExtractor_37.\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ImmExtractor_37'.\nRemoved a total of 0 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\ImmExtractor_37..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\ImmExtractor_37.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ImmExtractor_37'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\ImmExtractor_37..\nRemoved 0 unused cells and 1 unused wires.\n<suppressed ~1 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ImmExtractor_37.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\ImmExtractor_37..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\ImmExtractor_37.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ImmExtractor_37'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\ImmExtractor_37..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ImmExtractor_37.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module ImmExtractor_37...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 01deb6384b, CPU: user 0.01s system 0.01s, MEM: 11.88 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 35% 2x read_verilog (0 sec), 23% 4x opt_expr (0 sec), ...\n",
+          "output_sha256": "91f9baf60f47d04e85527e6992f316671a975b4c999e4539380a2bfc1f3fc381"
+        },
+        "yosys_formal_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_37.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/REF_ImmExtractor_closure.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/ImmExtractor_37_MITER.sv; prep -top ImmExtractor_37_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": " 421\n   Number of public wires:           5\n   Number of public wire bits:     293\n   Number of ports:                  3\n   Number of port bits:             37\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                  4\n     $reduce_or                      1\n     $xor                            1\n     DUT_ImmExtractor_37             1\n     ImmExtractor_37                 1\n\n=== design hierarchy ===\n\n   ImmExtractor_37_MITER             1\n     DUT_ImmExtractor_37             1\n     ImmExtractor_37                 1\n\n   Number of wires:                 18\n   Number of wire bits:            881\n   Number of public wires:          14\n   Number of public wire bits:     687\n   Number of ports:                  9\n   Number of port bits:            365\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                 10\n     $eq                             4\n     $mux                            4\n     $reduce_or                      1\n     $xor                            1\n\n4.13. Executing CHECK pass (checking for obvious problems).\nChecking module DUT_ImmExtractor_37...\nChecking module ImmExtractor_37...\nChecking module ImmExtractor_37_MITER...\nFound and reported 0 problems.\n\n5. Executing FLATTEN pass (flatten design).\nDeleting now unused module DUT_ImmExtractor_37.\nDeleting now unused module ImmExtractor_37.\n<suppressed ~2 debug messages>\n\n6. Executing OPT pass (performing simple optimizations).\n\n6.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ImmExtractor_37_MITER.\n\n6.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ImmExtractor_37_MITER'.\n<suppressed ~6 debug messages>\nRemoved a total of 2 cells.\n\n6.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\ImmExtractor_37_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\ImmExtractor_37_MITER.\nPerformed a total of 0 changes.\n\n6.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ImmExtractor_37_MITER'.\n<suppressed ~6 debug messages>\nRemoved a total of 2 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\ImmExtractor_37_MITER..\nRemoved 0 unused cells and 3 unused wires.\n<suppressed ~1 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ImmExtractor_37_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\ImmExtractor_37_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\ImmExtractor_37_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ImmExtractor_37_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\ImmExtractor_37_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ImmExtractor_37_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 8 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 1110 variables and 2883 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: cfb88998e4, CPU: user 0.03s system 0.01s, MEM: 13.91 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 19% 6x opt_clean (0 sec), 18% 8x opt_expr (0 sec), ...\n",
+          "output_sha256": "75706630f6ff8c2ee0e5affa18ae10448853237c7e41b10dddf99e8d9676bccd",
+          "formal_success_marker": true,
+          "formal_scope": {
+            "input_bits": 36,
+            "input_space": "2**36",
+            "input_space_cardinality": "68719476736",
+            "state_bits": 0,
+            "state_space": "singleton (stateless combinational module)",
+            "outputs_compared": {
+              "io_out_imm": 128
+            },
+            "property": "mismatch == 0 for every 2-state valuation of io_in_imm/io_in_immType"
+          }
+        }
+      },
+      "ImmExtractor_57": {
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "ImmExtractor_57_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_57.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/REF_ImmExtractor_closure.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/ImmExtractor_57_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.055 MB sources in 8 modules, into 0.026 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.047 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.007 s on 1 threads; alloced 9.379 MB\n",
+          "output_sha256": "a981aa95253ff3ebee4382e00cd03c1a9221b35b25ca9753821459457ab391e9"
+        },
+        "yosys_target": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_57.sv; hierarchy -top DUT_ImmExtractor_57; proc; opt; check"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "\n-- Running command `read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_57.sv; hierarchy -top DUT_ImmExtractor_57; proc; opt; check' --\n\n1. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_57.sv\nParsing SystemVerilog input from `/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_57.sv' to AST representation.\nGenerating RTLIL representation for module `\\DUT_ImmExtractor_57'.\nSuccessfully finished Verilog frontend.\n\n2. Executing HIERARCHY pass (managing design hierarchy).\n\n2.1. Analyzing design hierarchy..\nTop module:  \\DUT_ImmExtractor_57\n\n2.2. Analyzing design hierarchy..\nTop module:  \\DUT_ImmExtractor_57\nRemoved 0 unused modules.\n\n3. Executing PROC pass (convert processes to netlists).\n\n3.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DUT_ImmExtractor_57.\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DUT_ImmExtractor_57.\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\DUT_ImmExtractor_57'.\nRemoved a total of 0 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\DUT_ImmExtractor_57..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\DUT_ImmExtractor_57.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\DUT_ImmExtractor_57'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\DUT_ImmExtractor_57..\nRemoved 0 unused cells and 2 unused wires.\n<suppressed ~1 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DUT_ImmExtractor_57.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\DUT_ImmExtractor_57..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\DUT_ImmExtractor_57.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\DUT_ImmExtractor_57'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\DUT_ImmExtractor_57..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DUT_ImmExtractor_57.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module DUT_ImmExtractor_57...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 462a288ed1, CPU: user 0.01s system 0.01s, MEM: 11.88 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 31% 4x opt_expr (0 sec), 21% 2x read_verilog (0 sec), ...\n",
+          "output_sha256": "b89bd97e46f4531d768a6409d2d8c495457d0e0129c9877d6a6e1637f9ac1206"
+        },
+        "yosys_reference": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/REF_ImmExtractor_closure.sv; hierarchy -top ImmExtractor_57; proc; opt; check"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "\n-- Running command `read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/REF_ImmExtractor_closure.sv; hierarchy -top ImmExtractor_57; proc; opt; check' --\n\n1. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/REF_ImmExtractor_closure.sv\nParsing SystemVerilog input from `/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/REF_ImmExtractor_closure.sv' to AST representation.\nGenerating RTLIL representation for module `\\ImmExtractor'.\nGenerating RTLIL representation for module `\\ImmExtractor_2'.\nGenerating RTLIL representation for module `\\ImmExtractor_12'.\nGenerating RTLIL representation for module `\\ImmExtractor_37'.\nGenerating RTLIL representation for module `\\ImmExtractor_57'.\nSuccessfully finished Verilog frontend.\n\n2. Executing HIERARCHY pass (managing design hierarchy).\n\n2.1. Analyzing design hierarchy..\nTop module:  \\ImmExtractor_57\n\n2.2. Analyzing design hierarchy..\nTop module:  \\ImmExtractor_57\nRemoving unused module `\\ImmExtractor_37'.\nRemoving unused module `\\ImmExtractor_12'.\nRemoving unused module `\\ImmExtractor_2'.\nRemoving unused module `\\ImmExtractor'.\nRemoved 4 unused modules.\n\n3. Executing PROC pass (convert processes to netlists).\n\n3.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ImmExtractor_57.\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ImmExtractor_57.\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ImmExtractor_57'.\nRemoved a total of 0 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\ImmExtractor_57..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\ImmExtractor_57.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ImmExtractor_57'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\ImmExtractor_57..\nRemoved 0 unused cells and 1 unused wires.\n<suppressed ~1 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ImmExtractor_57.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\ImmExtractor_57..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\ImmExtractor_57.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ImmExtractor_57'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\ImmExtractor_57..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ImmExtractor_57.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module ImmExtractor_57...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 10eabeb86b, CPU: user 0.02s system 0.00s, MEM: 12.03 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 40% 2x read_verilog (0 sec), 22% 4x opt_expr (0 sec), ...\n",
+          "output_sha256": "ab9d058f8c8fc1133c3373f4a0fabfd1a73d27d7018ad706fc4a4bb162c24679"
+        },
+        "yosys_formal_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_57.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/REF_ImmExtractor_closure.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/ImmExtractor_57_MITER.sv; prep -top ImmExtractor_57_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "29\n   Number of public wires:           5\n   Number of public wire bits:     165\n   Number of ports:                  3\n   Number of port bits:             37\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                  4\n     $reduce_or                      1\n     $xor                            1\n     DUT_ImmExtractor_57             1\n     ImmExtractor_57                 1\n\n=== design hierarchy ===\n\n   ImmExtractor_57_MITER             1\n     DUT_ImmExtractor_57             1\n     ImmExtractor_57                 1\n\n   Number of wires:                 14\n   Number of wire bits:            431\n   Number of public wires:          12\n   Number of public wire bits:     366\n   Number of ports:                  9\n   Number of port bits:            237\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                  6\n     $eq                             2\n     $mux                            2\n     $reduce_or                      1\n     $xor                            1\n\n4.13. Executing CHECK pass (checking for obvious problems).\nChecking module DUT_ImmExtractor_57...\nChecking module ImmExtractor_57...\nChecking module ImmExtractor_57_MITER...\nFound and reported 0 problems.\n\n5. Executing FLATTEN pass (flatten design).\nDeleting now unused module DUT_ImmExtractor_57.\nDeleting now unused module ImmExtractor_57.\n<suppressed ~2 debug messages>\n\n6. Executing OPT pass (performing simple optimizations).\n\n6.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ImmExtractor_57_MITER.\n\n6.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ImmExtractor_57_MITER'.\n<suppressed ~3 debug messages>\nRemoved a total of 1 cells.\n\n6.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\ImmExtractor_57_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\ImmExtractor_57_MITER.\nPerformed a total of 0 changes.\n\n6.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ImmExtractor_57_MITER'.\n<suppressed ~3 debug messages>\nRemoved a total of 1 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\ImmExtractor_57_MITER..\nRemoved 0 unused cells and 1 unused wires.\n<suppressed ~1 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ImmExtractor_57_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\ImmExtractor_57_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\ImmExtractor_57_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ImmExtractor_57_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\ImmExtractor_57_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ImmExtractor_57_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 6 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 511 variables and 1287 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: b752646901, CPU: user 0.03s system 0.01s, MEM: 13.59 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 23% 4x read_verilog (0 sec), 21% 8x opt_expr (0 sec), ...\n",
+          "output_sha256": "3da4abfa1ab61553b88666ca39e052218c49f8f9af0e7936cd968bd185097722",
+          "formal_success_marker": true,
+          "formal_scope": {
+            "input_bits": 36,
+            "input_space": "2**36",
+            "input_space_cardinality": "68719476736",
+            "state_bits": 0,
+            "state_space": "singleton (stateless combinational module)",
+            "outputs_compared": {
+              "io_out_imm": 64
+            },
+            "property": "mismatch == 0 for every 2-state valuation of io_in_imm/io_in_immType"
+          }
+        }
+      }
+    },
+    "formal": {
+      "status": "PASS",
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "--top-module",
+          "ImmExtractor_ALL_MITER",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor.sv",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_2.sv",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_12.sv",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_37.sv",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_57.sv",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/REF_ImmExtractor_closure.sv",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/ImmExtractor_ALL_MITER.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": ":189\" *) 1'h1;\n      |                               ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_2.sv:23:31: Operator EQ expects 4 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                 : ... note: In instance 'ImmExtractor_ALL_MITER.dut_i_ImmExtractor_2'\n   23 |   assign \\$3  = io_in_immType == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Issue.ImmExtractor-Hardware.py:189\" *) 2'h2;\n      |                               ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_2.sv:24:31: Operator EQ expects 4 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                 : ... note: In instance 'ImmExtractor_ALL_MITER.dut_i_ImmExtractor_2'\n   24 |   assign \\$4  = io_in_immType == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Issue.ImmExtractor-Hardware.py:189\" *) 1'h1;\n      |                               ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_2.sv:29:31: Operator EQ expects 4 bits on the RHS, but RHS's CONST '3'h4' generates 3 bits.\n                                                                                                                 : ... note: In instance 'ImmExtractor_ALL_MITER.dut_i_ImmExtractor_2'\n   29 |   assign \\$1  = io_in_immType == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Issue.ImmExtractor-Hardware.py:189\" *) 3'h4;\n      |                               ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_2.sv:30:31: Operator EQ expects 4 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                                                                                                 : ... note: In instance 'ImmExtractor_ALL_MITER.dut_i_ImmExtractor_2'\n   30 |   assign \\$2  = io_in_immType == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Issue.ImmExtractor-Hardware.py:189\" *) 2'h3;\n      |                               ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor.sv:24:31: Operator EQ expects 4 bits on the RHS, but RHS's CONST '3'h4' generates 3 bits.\n                                                                                                               : ... note: In instance 'ImmExtractor_ALL_MITER.dut_i_ImmExtractor'\n   24 |   assign \\$2  = io_in_immType == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Issue.ImmExtractor-Hardware.py:189\" *) 3'h4;\n      |                               ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor.sv:25:31: Operator EQ expects 4 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                               : ... note: In instance 'ImmExtractor_ALL_MITER.dut_i_ImmExtractor'\n   25 |   assign \\$3  = io_in_immType == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Issue.ImmExtractor-Hardware.py:189\" *) 2'h2;\n      |                               ^~\n",
+        "output_sha256": "07f0458360791dad5144494b0e397aafa946a9020a661c19c2226205123d0025"
+      },
+      "yosys_check": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_12.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_37.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_57.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/REF_ImmExtractor_closure.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/ImmExtractor_ALL_MITER.sv; hierarchy -top ImmExtractor_ALL_MITER; proc; opt; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "ntation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRunning muxtree optimizer on module \\DUT_ImmExtractor_37..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRunning muxtree optimizer on module \\DUT_ImmExtractor_57..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRunning muxtree optimizer on module \\ImmExtractor..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRunning muxtree optimizer on module \\ImmExtractor_12..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRunning muxtree optimizer on module \\ImmExtractor_2..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRunning muxtree optimizer on module \\ImmExtractor_37..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRunning muxtree optimizer on module \\ImmExtractor_57..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRunning muxtree optimizer on module \\ImmExtractor_ALL_MITER..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n<suppressed ~10 debug messages>\n\n10.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\DUT_ImmExtractor.\n  Optimizing cells in module \\DUT_ImmExtractor_12.\n  Optimizing cells in module \\DUT_ImmExtractor_2.\n  Optimizing cells in module \\DUT_ImmExtractor_37.\n  Optimizing cells in module \\DUT_ImmExtractor_57.\n  Optimizing cells in module \\ImmExtractor.\n  Optimizing cells in module \\ImmExtractor_12.\n  Optimizing cells in module \\ImmExtractor_2.\n  Optimizing cells in module \\ImmExtractor_37.\n  Optimizing cells in module \\ImmExtractor_57.\n  Optimizing cells in module \\ImmExtractor_ALL_MITER.\nPerformed a total of 0 changes.\n\n10.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\DUT_ImmExtractor'.\nFinding identical cells in module `\\DUT_ImmExtractor_12'.\nFinding identical cells in module `\\DUT_ImmExtractor_2'.\nFinding identical cells in module `\\DUT_ImmExtractor_37'.\nFinding identical cells in module `\\DUT_ImmExtractor_57'.\nFinding identical cells in module `\\ImmExtractor'.\nFinding identical cells in module `\\ImmExtractor_12'.\nFinding identical cells in module `\\ImmExtractor_2'.\nFinding identical cells in module `\\ImmExtractor_37'.\nFinding identical cells in module `\\ImmExtractor_57'.\nFinding identical cells in module `\\ImmExtractor_ALL_MITER'.\nRemoved a total of 0 cells.\n\n10.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n10.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\DUT_ImmExtractor..\nFinding unused cells or wires in module \\DUT_ImmExtractor_12..\nFinding unused cells or wires in module \\DUT_ImmExtractor_2..\nFinding unused cells or wires in module \\DUT_ImmExtractor_37..\nFinding unused cells or wires in module \\DUT_ImmExtractor_57..\nFinding unused cells or wires in module \\ImmExtractor..\nFinding unused cells or wires in module \\ImmExtractor_12..\nFinding unused cells or wires in module \\ImmExtractor_2..\nFinding unused cells or wires in module \\ImmExtractor_37..\nFinding unused cells or wires in module \\ImmExtractor_57..\nFinding unused cells or wires in module \\ImmExtractor_ALL_MITER..\n\n10.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DUT_ImmExtractor.\nOptimizing module DUT_ImmExtractor_12.\nOptimizing module DUT_ImmExtractor_2.\nOptimizing module DUT_ImmExtractor_37.\nOptimizing module DUT_ImmExtractor_57.\nOptimizing module ImmExtractor.\nOptimizing module ImmExtractor_12.\nOptimizing module ImmExtractor_2.\nOptimizing module ImmExtractor_37.\nOptimizing module ImmExtractor_57.\nOptimizing module ImmExtractor_ALL_MITER.\n\n10.16. Finished OPT passes. (There is nothing left to do.)\n\n11. Executing CHECK pass (checking for obvious problems).\nChecking module DUT_ImmExtractor...\nChecking module DUT_ImmExtractor_12...\nChecking module DUT_ImmExtractor_2...\nChecking module DUT_ImmExtractor_37...\nChecking module DUT_ImmExtractor_57...\nChecking module ImmExtractor...\nChecking module ImmExtractor_12...\nChecking module ImmExtractor_2...\nChecking module ImmExtractor_37...\nChecking module ImmExtractor_57...\nChecking module ImmExtractor_ALL_MITER...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 4718b6bf52, CPU: user 0.07s system 0.01s, MEM: 14.87 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 19% 4x opt_expr (0 sec), 19% 8x read_verilog (0 sec), ...\n",
+        "output_sha256": "6767ab5707bfd2e9a436ba92e74584c96a484e93c1942830654aade050229568"
+      },
+      "yosys_formal_miter": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_12.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_37.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_57.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/REF_ImmExtractor_closure.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/ImmExtractor_ALL_MITER.sv; prep -top ImmExtractor_ALL_MITER; flatten; opt; sat -prove mismatch 0"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "its:    3104\n   Number of ports:                 33\n   Number of port bits:           1293\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                 90\n     $eq                            37\n     $mux                           38\n     $or                             4\n     $reduce_and                     1\n     $reduce_or                      5\n     $xor                            5\n\n8.13. Executing CHECK pass (checking for obvious problems).\nChecking module DUT_ImmExtractor...\nChecking module DUT_ImmExtractor_12...\nChecking module DUT_ImmExtractor_2...\nChecking module DUT_ImmExtractor_37...\nChecking module DUT_ImmExtractor_57...\nChecking module ImmExtractor...\nChecking module ImmExtractor_12...\nChecking module ImmExtractor_2...\nChecking module ImmExtractor_37...\nChecking module ImmExtractor_57...\nChecking module ImmExtractor_ALL_MITER...\nFound and reported 0 problems.\n\n9. Executing FLATTEN pass (flatten design).\nDeleting now unused module DUT_ImmExtractor.\nDeleting now unused module DUT_ImmExtractor_12.\nDeleting now unused module DUT_ImmExtractor_2.\nDeleting now unused module DUT_ImmExtractor_37.\nDeleting now unused module DUT_ImmExtractor_57.\nDeleting now unused module ImmExtractor.\nDeleting now unused module ImmExtractor_12.\nDeleting now unused module ImmExtractor_2.\nDeleting now unused module ImmExtractor_37.\nDeleting now unused module ImmExtractor_57.\n<suppressed ~10 debug messages>\n\n10. Executing OPT pass (performing simple optimizations).\n\n10.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ImmExtractor_ALL_MITER.\n\n10.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ImmExtractor_ALL_MITER'.\n<suppressed ~78 debug messages>\nRemoved a total of 26 cells.\n\n10.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\ImmExtractor_ALL_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~10 debug messages>\n\n10.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\ImmExtractor_ALL_MITER.\nPerformed a total of 0 changes.\n\n10.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ImmExtractor_ALL_MITER'.\n<suppressed ~66 debug messages>\nRemoved a total of 22 cells.\n\n10.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n10.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\ImmExtractor_ALL_MITER..\nRemoved 0 unused cells and 44 unused wires.\n<suppressed ~1 debug messages>\n\n10.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ImmExtractor_ALL_MITER.\n\n10.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n10.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\ImmExtractor_ALL_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~7 debug messages>\n\n10.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\ImmExtractor_ALL_MITER.\nPerformed a total of 0 changes.\n\n10.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ImmExtractor_ALL_MITER'.\nRemoved a total of 0 cells.\n\n10.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n10.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\ImmExtractor_ALL_MITER..\n\n10.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ImmExtractor_ALL_MITER.\n\n10.16. Finished OPT passes. (There is nothing left to do.)\n\n11. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 52 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 7616 variables and 20214 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 479c2e05bb, CPU: user 0.11s system 0.02s, MEM: 20.68 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 21% 1x sat (0 sec), 17% 6x opt_clean (0 sec), ...\n",
+        "output_sha256": "51d85bf6709635c0d270c3790962d2d6b7a4f25cae67f39b410ec0a159557750",
+        "formal_success_marker": true,
+        "formal_scope": {
+          "input_bits": 36,
+          "input_space": "2**36",
+          "input_space_cardinality": "68719476736",
+          "state_bits": 0,
+          "state_space": "five stateless combinational variants sharing one input valuation",
+          "outputs_compared": {
+            "ImmExtractor": {
+              "io_out_imm": 64
+            },
+            "ImmExtractor_2": {
+              "io_out_imm": 64
+            },
+            "ImmExtractor_12": {
+              "io_out_imm": 128
+            },
+            "ImmExtractor_37": {
+              "io_out_imm": 128
+            },
+            "ImmExtractor_57": {
+              "io_out_imm": 64
+            }
+          },
+          "total_compared_output_bits": 448,
+          "property": "OR of all five variant mismatches == 0 for every 2-state input valuation"
+        }
+      }
+    },
+    "aggregate_sat_miter": {
+      "status": "PASS",
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "--top-module",
+          "ImmExtractor_ALL_MITER",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor.sv",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_2.sv",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_12.sv",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_37.sv",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_57.sv",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/REF_ImmExtractor_closure.sv",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/ImmExtractor_ALL_MITER.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": ":189\" *) 1'h1;\n      |                               ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_2.sv:23:31: Operator EQ expects 4 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                 : ... note: In instance 'ImmExtractor_ALL_MITER.dut_i_ImmExtractor_2'\n   23 |   assign \\$3  = io_in_immType == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Issue.ImmExtractor-Hardware.py:189\" *) 2'h2;\n      |                               ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_2.sv:24:31: Operator EQ expects 4 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                 : ... note: In instance 'ImmExtractor_ALL_MITER.dut_i_ImmExtractor_2'\n   24 |   assign \\$4  = io_in_immType == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Issue.ImmExtractor-Hardware.py:189\" *) 1'h1;\n      |                               ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_2.sv:29:31: Operator EQ expects 4 bits on the RHS, but RHS's CONST '3'h4' generates 3 bits.\n                                                                                                                 : ... note: In instance 'ImmExtractor_ALL_MITER.dut_i_ImmExtractor_2'\n   29 |   assign \\$1  = io_in_immType == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Issue.ImmExtractor-Hardware.py:189\" *) 3'h4;\n      |                               ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_2.sv:30:31: Operator EQ expects 4 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                                                                                                 : ... note: In instance 'ImmExtractor_ALL_MITER.dut_i_ImmExtractor_2'\n   30 |   assign \\$2  = io_in_immType == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Issue.ImmExtractor-Hardware.py:189\" *) 2'h3;\n      |                               ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor.sv:24:31: Operator EQ expects 4 bits on the RHS, but RHS's CONST '3'h4' generates 3 bits.\n                                                                                                               : ... note: In instance 'ImmExtractor_ALL_MITER.dut_i_ImmExtractor'\n   24 |   assign \\$2  = io_in_immType == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Issue.ImmExtractor-Hardware.py:189\" *) 3'h4;\n      |                               ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor.sv:25:31: Operator EQ expects 4 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                               : ... note: In instance 'ImmExtractor_ALL_MITER.dut_i_ImmExtractor'\n   25 |   assign \\$3  = io_in_immType == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Issue.ImmExtractor-Hardware.py:189\" *) 2'h2;\n      |                               ^~\n",
+        "output_sha256": "07f0458360791dad5144494b0e397aafa946a9020a661c19c2226205123d0025"
+      },
+      "yosys_check": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_12.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_37.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_57.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/REF_ImmExtractor_closure.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/ImmExtractor_ALL_MITER.sv; hierarchy -top ImmExtractor_ALL_MITER; proc; opt; check"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "ntation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRunning muxtree optimizer on module \\DUT_ImmExtractor_37..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRunning muxtree optimizer on module \\DUT_ImmExtractor_57..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRunning muxtree optimizer on module \\ImmExtractor..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRunning muxtree optimizer on module \\ImmExtractor_12..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRunning muxtree optimizer on module \\ImmExtractor_2..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRunning muxtree optimizer on module \\ImmExtractor_37..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRunning muxtree optimizer on module \\ImmExtractor_57..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRunning muxtree optimizer on module \\ImmExtractor_ALL_MITER..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n<suppressed ~10 debug messages>\n\n10.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\DUT_ImmExtractor.\n  Optimizing cells in module \\DUT_ImmExtractor_12.\n  Optimizing cells in module \\DUT_ImmExtractor_2.\n  Optimizing cells in module \\DUT_ImmExtractor_37.\n  Optimizing cells in module \\DUT_ImmExtractor_57.\n  Optimizing cells in module \\ImmExtractor.\n  Optimizing cells in module \\ImmExtractor_12.\n  Optimizing cells in module \\ImmExtractor_2.\n  Optimizing cells in module \\ImmExtractor_37.\n  Optimizing cells in module \\ImmExtractor_57.\n  Optimizing cells in module \\ImmExtractor_ALL_MITER.\nPerformed a total of 0 changes.\n\n10.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\DUT_ImmExtractor'.\nFinding identical cells in module `\\DUT_ImmExtractor_12'.\nFinding identical cells in module `\\DUT_ImmExtractor_2'.\nFinding identical cells in module `\\DUT_ImmExtractor_37'.\nFinding identical cells in module `\\DUT_ImmExtractor_57'.\nFinding identical cells in module `\\ImmExtractor'.\nFinding identical cells in module `\\ImmExtractor_12'.\nFinding identical cells in module `\\ImmExtractor_2'.\nFinding identical cells in module `\\ImmExtractor_37'.\nFinding identical cells in module `\\ImmExtractor_57'.\nFinding identical cells in module `\\ImmExtractor_ALL_MITER'.\nRemoved a total of 0 cells.\n\n10.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n10.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\DUT_ImmExtractor..\nFinding unused cells or wires in module \\DUT_ImmExtractor_12..\nFinding unused cells or wires in module \\DUT_ImmExtractor_2..\nFinding unused cells or wires in module \\DUT_ImmExtractor_37..\nFinding unused cells or wires in module \\DUT_ImmExtractor_57..\nFinding unused cells or wires in module \\ImmExtractor..\nFinding unused cells or wires in module \\ImmExtractor_12..\nFinding unused cells or wires in module \\ImmExtractor_2..\nFinding unused cells or wires in module \\ImmExtractor_37..\nFinding unused cells or wires in module \\ImmExtractor_57..\nFinding unused cells or wires in module \\ImmExtractor_ALL_MITER..\n\n10.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DUT_ImmExtractor.\nOptimizing module DUT_ImmExtractor_12.\nOptimizing module DUT_ImmExtractor_2.\nOptimizing module DUT_ImmExtractor_37.\nOptimizing module DUT_ImmExtractor_57.\nOptimizing module ImmExtractor.\nOptimizing module ImmExtractor_12.\nOptimizing module ImmExtractor_2.\nOptimizing module ImmExtractor_37.\nOptimizing module ImmExtractor_57.\nOptimizing module ImmExtractor_ALL_MITER.\n\n10.16. Finished OPT passes. (There is nothing left to do.)\n\n11. Executing CHECK pass (checking for obvious problems).\nChecking module DUT_ImmExtractor...\nChecking module DUT_ImmExtractor_12...\nChecking module DUT_ImmExtractor_2...\nChecking module DUT_ImmExtractor_37...\nChecking module DUT_ImmExtractor_57...\nChecking module ImmExtractor...\nChecking module ImmExtractor_12...\nChecking module ImmExtractor_2...\nChecking module ImmExtractor_37...\nChecking module ImmExtractor_57...\nChecking module ImmExtractor_ALL_MITER...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 4718b6bf52, CPU: user 0.07s system 0.01s, MEM: 14.87 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 19% 4x opt_expr (0 sec), 19% 8x read_verilog (0 sec), ...\n",
+        "output_sha256": "6767ab5707bfd2e9a436ba92e74584c96a484e93c1942830654aade050229568"
+      },
+      "yosys_formal_miter": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_12.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_37.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_57.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/REF_ImmExtractor_closure.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/ImmExtractor_ALL_MITER.sv; prep -top ImmExtractor_ALL_MITER; flatten; opt; sat -prove mismatch 0"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "output_tail": "its:    3104\n   Number of ports:                 33\n   Number of port bits:           1293\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                 90\n     $eq                            37\n     $mux                           38\n     $or                             4\n     $reduce_and                     1\n     $reduce_or                      5\n     $xor                            5\n\n8.13. Executing CHECK pass (checking for obvious problems).\nChecking module DUT_ImmExtractor...\nChecking module DUT_ImmExtractor_12...\nChecking module DUT_ImmExtractor_2...\nChecking module DUT_ImmExtractor_37...\nChecking module DUT_ImmExtractor_57...\nChecking module ImmExtractor...\nChecking module ImmExtractor_12...\nChecking module ImmExtractor_2...\nChecking module ImmExtractor_37...\nChecking module ImmExtractor_57...\nChecking module ImmExtractor_ALL_MITER...\nFound and reported 0 problems.\n\n9. Executing FLATTEN pass (flatten design).\nDeleting now unused module DUT_ImmExtractor.\nDeleting now unused module DUT_ImmExtractor_12.\nDeleting now unused module DUT_ImmExtractor_2.\nDeleting now unused module DUT_ImmExtractor_37.\nDeleting now unused module DUT_ImmExtractor_57.\nDeleting now unused module ImmExtractor.\nDeleting now unused module ImmExtractor_12.\nDeleting now unused module ImmExtractor_2.\nDeleting now unused module ImmExtractor_37.\nDeleting now unused module ImmExtractor_57.\n<suppressed ~10 debug messages>\n\n10. Executing OPT pass (performing simple optimizations).\n\n10.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ImmExtractor_ALL_MITER.\n\n10.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ImmExtractor_ALL_MITER'.\n<suppressed ~78 debug messages>\nRemoved a total of 26 cells.\n\n10.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\ImmExtractor_ALL_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~10 debug messages>\n\n10.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\ImmExtractor_ALL_MITER.\nPerformed a total of 0 changes.\n\n10.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ImmExtractor_ALL_MITER'.\n<suppressed ~66 debug messages>\nRemoved a total of 22 cells.\n\n10.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n10.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\ImmExtractor_ALL_MITER..\nRemoved 0 unused cells and 44 unused wires.\n<suppressed ~1 debug messages>\n\n10.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ImmExtractor_ALL_MITER.\n\n10.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n10.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\ImmExtractor_ALL_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~7 debug messages>\n\n10.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\ImmExtractor_ALL_MITER.\nPerformed a total of 0 changes.\n\n10.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ImmExtractor_ALL_MITER'.\nRemoved a total of 0 cells.\n\n10.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n10.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\ImmExtractor_ALL_MITER..\n\n10.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ImmExtractor_ALL_MITER.\n\n10.16. Finished OPT passes. (There is nothing left to do.)\n\n11. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 52 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 7616 variables and 20214 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 479c2e05bb, CPU: user 0.11s system 0.02s, MEM: 20.68 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 21% 1x sat (0 sec), 17% 6x opt_clean (0 sec), ...\n",
+        "output_sha256": "51d85bf6709635c0d270c3790962d2d6b7a4f25cae67f39b410ec0a159557750",
+        "formal_success_marker": true,
+        "formal_scope": {
+          "input_bits": 36,
+          "input_space": "2**36",
+          "input_space_cardinality": "68719476736",
+          "state_bits": 0,
+          "state_space": "five stateless combinational variants sharing one input valuation",
+          "outputs_compared": {
+            "ImmExtractor": {
+              "io_out_imm": 64
+            },
+            "ImmExtractor_2": {
+              "io_out_imm": 64
+            },
+            "ImmExtractor_12": {
+              "io_out_imm": 128
+            },
+            "ImmExtractor_37": {
+              "io_out_imm": 128
+            },
+            "ImmExtractor_57": {
+              "io_out_imm": 64
+            }
+          },
+          "total_compared_output_bits": 448,
+          "property": "OR of all five variant mismatches == 0 for every 2-state input valuation"
+        }
+      }
+    }
+  },
+  "failures": [],
+  "unclosed": []
+}

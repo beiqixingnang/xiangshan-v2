@@ -2,12 +2,12 @@
   "schema_version": 1,
   "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_EQUIVALENCE_PROGRESS",
   "build_denominator": 118,
-  "strict_complete_build_count": 9,
-  "fraction": "9/118",
-  "percentage": 7.627119,
+  "strict_complete_build_count": 11,
+  "fraction": "11/118",
+  "percentage": 9.322034,
   "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with the locked source commit, matching source hashes, and either a Yosys SAT no-model miter or fully proven Yosys inductive-equivalence status is counted.",
   "plan_reconciliation": {
-    "plan_count": 9,
+    "plan_count": 11,
     "plan_denominator": 118,
     "status": "PASS"
   },
@@ -219,6 +219,168 @@
       "failures": []
     },
     {
+      "evidence": "validation/v2-enqpolicy-strict-evidence.json",
+      "build_id": "Build-Cpu.Backend.Issue.EnqPolicy",
+      "source_commit": {
+        "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+        "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+        "status": "PASS"
+      },
+      "status": "PASS",
+      "scope": {
+        "kind": "stateless_combinational_multi_variant_build",
+        "public_variants": [
+          "EnqPolicy",
+          "EnqPolicy_8",
+          "EnqPolicy_14",
+          "EnqPolicy_18"
+        ],
+        "state_bits": 0,
+        "state_boundary": "no clock/reset/register/memory",
+        "inputs": {
+          "EnqPolicy": {
+            "io_canEnq": 22
+          },
+          "EnqPolicy_8": {
+            "io_canEnq": 16
+          },
+          "EnqPolicy_14": {
+            "io_canEnq": 14
+          },
+          "EnqPolicy_18": {
+            "io_canEnq": 8
+          }
+        },
+        "outputs_compared": {
+          "EnqPolicy": {
+            "io_enqSelOHVec_0_valid": 1,
+            "io_enqSelOHVec_0_bits": 22,
+            "io_enqSelOHVec_1_valid": 1,
+            "io_enqSelOHVec_1_bits": 22
+          },
+          "EnqPolicy_8": {
+            "io_enqSelOHVec_0_valid": 1,
+            "io_enqSelOHVec_0_bits": 16,
+            "io_enqSelOHVec_1_valid": 1,
+            "io_enqSelOHVec_1_bits": 16
+          },
+          "EnqPolicy_14": {
+            "io_enqSelOHVec_0_valid": 1,
+            "io_enqSelOHVec_0_bits": 14,
+            "io_enqSelOHVec_1_valid": 1,
+            "io_enqSelOHVec_1_bits": 14
+          },
+          "EnqPolicy_18": {
+            "io_enqSelOHVec_0_valid": 1,
+            "io_enqSelOHVec_0_bits": 8,
+            "io_enqSelOHVec_1_valid": 1,
+            "io_enqSelOHVec_1_bits": 8
+          }
+        },
+        "input_bits": 60,
+        "input_space": "2**60",
+        "input_space_cardinality": "1152921504606846976",
+        "aggregate_complete_cases": "2**22 + 2**16 + 2**14 + 2**8 per isolated variant; 2**60 aggregate",
+        "variant_configurations": {
+          "EnqPolicy": {
+            "num_entries": 24,
+            "num_enq": 2,
+            "free_slots": 22,
+            "parents": [
+              "EntriesAluMulBkuBrhJmp",
+              "EntriesAluBrhJmpI2fVsetriwiVsetriwvfI2v",
+              "EntriesAluCsrFenceDiv"
+            ],
+            "source_refs": [
+              "Parameters.scala:402,406,410,414; IssueQueueSize=24",
+              "Entries.scala:72-73"
+            ]
+          },
+          "EnqPolicy_8": {
+            "num_entries": 18,
+            "num_enq": 2,
+            "free_slots": 16,
+            "parents": [
+              "EntriesFaluFcvtF2vFmacFdiv",
+              "EntriesFaluFmacFdiv",
+              "EntriesFaluFmac"
+            ],
+            "source_refs": [
+              "Parameters.scala:429,433,436; numEntries=18",
+              "Entries.scala:72-73"
+            ]
+          },
+          "EnqPolicy_14": {
+            "num_entries": 16,
+            "num_enq": 2,
+            "free_slots": 14,
+            "parents": [
+              "EntriesVfmaVialuFixVimacVppuVfaluVfcvtVipuVsetrvfwvf",
+              "EntriesVfmaVialuFixVfalu",
+              "EntriesStaMou",
+              "EntriesLdu",
+              "EntriesVlduVstuVseglduVsegstu",
+              "EntriesVlduVstu",
+              "EntriesStdMoud"
+            ],
+            "source_refs": [
+              "Parameters.scala:451,455,474,477,480,483,486,489,492,495,498; numEntries=16",
+              "Entries.scala:72-73"
+            ]
+          },
+          "EnqPolicy_18": {
+            "num_entries": 10,
+            "num_enq": 2,
+            "free_slots": 8,
+            "parents": [
+              "EntriesVfdivVidiv"
+            ],
+            "source_refs": [
+              "Parameters.scala:458; numEntries=10",
+              "Entries.scala:72-73"
+            ]
+          }
+        },
+        "why_complete": "All four locked EnqPolicy variants have independent and aggregate unrestricted SAT miters comparing every valid/bits output; all are stateless."
+      },
+      "sources": {
+        "scala": {
+          "path": "upstream/src/main/scala/xiangshan/backend/issue/EnqPolicy.scala",
+          "present": true,
+          "expected_sha256": "e0218e99d01c9073f38ba8d039ea611c98bf25c83bceb560415e044fc8789caf",
+          "observed_sha256": "e0218e99d01c9073f38ba8d039ea611c98bf25c83bceb560415e044fc8789caf",
+          "status": "PASS"
+        },
+        "reference_sv": {
+          "path": "validation/reference-closures/EnqPolicies-v2.sv",
+          "present": true,
+          "expected_sha256": "0856b5c89a4ad271f4413315678771df96531080e523ff370d2fb6e6805102fd",
+          "observed_sha256": "0856b5c89a4ad271f4413315678771df96531080e523ff370d2fb6e6805102fd",
+          "status": "PASS"
+        },
+        "python_build": {
+          "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.EnqPolicy-Hardware.py",
+          "present": true,
+          "expected_sha256": "b08f386e7dc5c6b2e1ab9115d1afc23c517644ebca6200a6b2854461a9aba45a",
+          "observed_sha256": "b08f386e7dc5c6b2e1ab9115d1afc23c517644ebca6200a6b2854461a9aba45a",
+          "status": "PASS"
+        }
+      },
+      "formal": {
+        "proof_method": "sat_miter",
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/UHSC_EnqPolicies.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/REF_EnqPolicies.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/EnqPolicies_MITER.sv; prep -top EnqPolicies_MITER; flatten; opt; sat -prove mismatch 0"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "formal_success_marker": true
+      },
+      "failures": []
+    },
+    {
       "evidence": "validation/v2-fauftbway-strict-evidence.json",
       "build_id": "Build-Cpu.Frontend.Bpu.FauFTBWay",
       "source_commit": {
@@ -410,6 +572,174 @@
           "-Q",
           "-p",
           "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/UHSC_FliTables.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/REF_FliTables.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_flitables_strict/FliTables_MITER.sv; prep -top FliTables_MITER; flatten; opt; sat -prove mismatch 0"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "formal_success_marker": true
+      },
+      "failures": []
+    },
+    {
+      "evidence": "validation/v2-immextractor-strict-evidence.json",
+      "build_id": "Build-Cpu.Backend.Issue.ImmExtractor",
+      "source_commit": {
+        "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+        "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+        "status": "PASS"
+      },
+      "status": "PASS",
+      "scope": {
+        "kind": "five_locked_stateless_combinational_specializations",
+        "inputs": {
+          "io_in_imm": 32,
+          "io_in_immType": 4
+        },
+        "input_bits": 36,
+        "input_space": "2**36",
+        "input_space_cardinality": "68719476736",
+        "state_bits": 0,
+        "state_boundary": "no clock/reset/register/memory in any reference or target variant",
+        "variants": {
+          "ImmExtractor": {
+            "data_bits": 64,
+            "imm_type_set": [
+              2,
+              4,
+              11
+            ],
+            "imm_type_names": [
+              "U",
+              "I",
+              "LUI32"
+            ],
+            "outputs_compared": {
+              "io_out_imm": 64
+            }
+          },
+          "ImmExtractor_2": {
+            "data_bits": 64,
+            "imm_type_set": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "imm_type_names": [
+              "SB",
+              "U",
+              "UJ",
+              "I"
+            ],
+            "outputs_compared": {
+              "io_out_imm": 64
+            }
+          },
+          "ImmExtractor_12": {
+            "data_bits": 128,
+            "imm_type_set": [
+              1,
+              2,
+              3,
+              4,
+              9,
+              10,
+              12,
+              13,
+              15
+            ],
+            "imm_type_names": [
+              "SB",
+              "U",
+              "UJ",
+              "I",
+              "OPIVIS",
+              "OPIVIU",
+              "VSETVLI",
+              "VSETIVLI",
+              "VRORVI"
+            ],
+            "outputs_compared": {
+              "io_out_imm": 128
+            }
+          },
+          "ImmExtractor_37": {
+            "data_bits": 128,
+            "imm_type_set": [
+              12,
+              13
+            ],
+            "imm_type_names": [
+              "VSETVLI",
+              "VSETIVLI"
+            ],
+            "outputs_compared": {
+              "io_out_imm": 128
+            }
+          },
+          "ImmExtractor_57": {
+            "data_bits": 64,
+            "imm_type_set": [
+              14
+            ],
+            "imm_type_names": [
+              "S"
+            ],
+            "outputs_compared": {
+              "io_out_imm": 64
+            }
+          }
+        },
+        "outputs_compared": {
+          "ImmExtractor": {
+            "io_out_imm": 64
+          },
+          "ImmExtractor_2": {
+            "io_out_imm": 64
+          },
+          "ImmExtractor_12": {
+            "io_out_imm": 128
+          },
+          "ImmExtractor_37": {
+            "io_out_imm": 128
+          },
+          "ImmExtractor_57": {
+            "io_out_imm": 64
+          }
+        },
+        "aggregate_compared_output_bits": 448,
+        "why_complete": "Each individual SAT miter and an aggregate OR-miter prove zero mismatch with all 36 ABI input bits unconstrained.",
+        "bounded_tests_counted": false
+      },
+      "sources": {
+        "scala": {
+          "path": "upstream/src/main/scala/xiangshan/backend/issue/ImmExtractor.scala",
+          "present": true,
+          "expected_sha256": "553ec41a4fdd3624808559025a94105f83eb91d3cfe6a1515a64db2d8bc04c1c",
+          "observed_sha256": "553ec41a4fdd3624808559025a94105f83eb91d3cfe6a1515a64db2d8bc04c1c",
+          "status": "PASS"
+        },
+        "python_build": {
+          "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.ImmExtractor-Hardware.py",
+          "present": true,
+          "expected_sha256": "1f37ce2c2c7e02f520d0e35cc1d2b8c40cc92af0ebf7b402a5bd80d72acb9f02",
+          "observed_sha256": "1f37ce2c2c7e02f520d0e35cc1d2b8c40cc92af0ebf7b402a5bd80d72acb9f02",
+          "status": "PASS"
+        },
+        "reference_sv": {
+          "path": "validation/reference-closures/ImmExtractor-v2.sv",
+          "present": true,
+          "expected_sha256": "b1f76935f15a9c5a9d4c165ec042be0be327eba376e5f1e14d6c2d6c188a9c20",
+          "observed_sha256": "b1f76935f15a9c5a9d4c165ec042be0be327eba376e5f1e14d6c2d6c188a9c20",
+          "status": "PASS"
+        }
+      },
+      "formal": {
+        "proof_method": "sat_miter",
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_12.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_37.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/DUT_ImmExtractor_57.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/REF_ImmExtractor_closure.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_immextractor_strict/ImmExtractor_ALL_MITER.sv; prep -top ImmExtractor_ALL_MITER; flatten; opt; sat -prove mismatch 0"
         ],
         "returncode": 0,
         "status": "PASS",
