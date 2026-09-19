@@ -2,18 +2,12 @@
   "schema_version": 1,
   "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_EQUIVALENCE_PROGRESS",
   "build_denominator": 118,
-  "strict_complete_build_count": 18,
-  "fraction": "18/118",
-  "percentage": 15.254237,
+  "strict_complete_build_count": 19,
+  "fraction": "19/118",
+  "percentage": 16.101695,
   "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with the locked source commit, matching source hashes, and either a Yosys SAT no-model miter or fully proven Yosys inductive-equivalence status is counted. STRICT_PENDING and COMPLETE_EQUIVALENCE_VARIANT_ONLY records are inventoried as attempted-but-not-counted instead of failing the rail, and one Build file may not be claimed by several counting proofs.",
-  "non_counting_attempt_count": 2,
+  "non_counting_attempt_count": 1,
   "non_counting_attempts": [
-    {
-      "evidence": "validation/v2-agedetector-strict-evidence.json",
-      "build_id": "Build-Cpu.Backend.Issue.AgeDetector",
-      "declared_status": "STRICT_PENDING",
-      "failures": []
-    },
     {
       "evidence": "validation/v2-instrmmioentry-strict-evidence.json",
       "build_id": "Build-Cpu.Frontend.Icache.InstrMMIOEntry",
@@ -22,7 +16,7 @@
     }
   ],
   "plan_reconciliation": {
-    "plan_count": 18,
+    "plan_count": 19,
     "plan_denominator": 118,
     "status": "PASS"
   },
@@ -32,13 +26,13 @@
     {
       "evidence": "validation/v2-agedetector-strict-evidence.json",
       "build_id": "Build-Cpu.Backend.Issue.AgeDetector",
-      "declared_status": "STRICT_PENDING",
+      "declared_status": "COMPLETE_EQUIVALENCE",
       "source_commit": {
         "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "status": "PASS"
       },
-      "status": "NON_COUNTING",
+      "status": "PASS",
       "scope": {
         "kind": "sequential_registered_leaf",
         "configuration": "locked V2 AgeDetector(6 entries, 2 enq, 4 deq)",
