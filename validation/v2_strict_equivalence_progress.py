@@ -101,9 +101,19 @@ def verify_evidence(path: Path, expected_source_commit: str) -> dict[str, Any]:
         for name, record in sources.items()
         if name in {"python_build", "scala", "reference_sv"}
     } if isinstance(sources, dict) else {}
-    for required in ("python_build", "scala", "reference_sv"):
+    for required in ("python_build", "reference_sv"):
         if required not in verified_sources:
             failures.append(f"required source: {required}")
+    if non_counting:
+        if "scala" not in verified_sources:
+            row_note = "scala provenance not vendored for this attempt record"
+        else:
+            row_note = None
+    elif "scala" not in verified_sources:
+        failures.append("required source: scala")
+        row_note = None
+    else:
+        row_note = None
 
     proof_method = "sat_miter"
     formal = nested(payload, "checks", "formal", "yosys_formal_miter")
@@ -147,6 +157,7 @@ def verify_evidence(path: Path, expected_source_commit: str) -> dict[str, Any]:
         },
         "status": ("NON_COUNTING" if non_counting and not failures
                    else "PASS" if not failures else "FAIL"),
+        "note": row_note,
         "scope": scope,
         "sources": verified_sources,
         "formal": {
