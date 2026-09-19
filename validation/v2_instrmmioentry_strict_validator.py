@@ -184,6 +184,99 @@ def pyright_check(source: Path) -> dict[str, Any]:
         shutil.rmtree(temporary, ignore_errors=True)
 
 
+REMOVED_REGIONS = ("`ifndef SYNTHESIS", "`ifdef ENABLE_INITIAL_REG_")
+BLOCK_LOCAL = re.compile(
+    r"^([ \t]*)automatic\s+logic\s+(\[[^\]]*\])?\s*([A-Za-z_][A-Za-z0-9_]*)\s*;[ \t]*$", re.M)
+NESTED_OPEN = re.compile(r"^\s*`(ifdef|ifndef|else|elsif)\b")
+NESTED_CLOSE = re.compile(r"^\s*`endif\b")
+
+
+def directive_block_end(lines: list[str], start: int) -> int:
+    """Return the index just past the `endif closing the directive at start."""
+
+    depth = 0
+    for index in range(start, len(lines)):
+        if NESTED_OPEN.match(lines[index]):
+            depth += 1
+        elif NESTED_CLOSE.match(lines[index]):
+            depth -= 1
+            if depth == 0:
+                return index + 1
+    raise AssertionError("unterminated preprocessor region")
+
+
+def strip_directives(text: str) -> tuple[str, dict[str, int]]:
+    """Drop the non-synthesis conditional regions from comment-stripped text."""
+
+    lines = text.split("\n")
+    removed: dict[str, int] = {}
+    for opening in REMOVED_REGIONS:
+        start = next((i for i, line in enumerate(lines) if opening in line), None)
+        if start is None:
+            continue
+        end = directive_block_end(lines, start)
+        removed[opening] = end - start
+        lines = lines[:start] + lines[end:]
+    return "\n".join(lines), removed
+
+
+def reference_synthesizable_view(locked_text: str) -> tuple[str, dict[str, Any]]:
+    """Build the Yosys-readable view of the locked reference, per rules 5C.
+
+    Only inert region removal and block-local declaration hoisting are allowed,
+    and the returned audit fails if any other code line moved.
+    """
+
+    marker = f"module {MODULE_NAME}("
+    if not locked_text.startswith(marker):
+        raise AssertionError("locked reference declaration marker missing")
+    body = "\n".join(strip_comments(line) for line in locked_text.split("\n"))
+    body, removed = strip_directives(body)
+    residual = [line for line in body.split("\n") if "`" in line]
+    if residual:
+        raise AssertionError(f"preprocessor directive survived region removal: {residual[0][:60]}")
+
+    temporaries = [(match.group(2), match.group(3)) for match in BLOCK_LOCAL.finditer(body)]
+    if not temporaries:
+        raise AssertionError("no block-local temporaries found; view assumption stale")
+    declarations = "".join(f"  reg {width} {name};\n" if width else f"  reg {name};\n"
+                           for width, name in temporaries)
+    stripped = BLOCK_LOCAL.sub("", body)
+    header_end = stripped.index(");") + 2
+    normalized = stripped[:header_end] + "\n" + declarations + stripped[header_end:]
+    if "automatic" in normalized:
+        raise AssertionError("automatic declaration survived hoisting")
+    renamed = normalized.replace(marker, f"module {MODULE_NAME}_ref(", 1)
+
+    body_lines = [line for line in body.split("\n") if line.strip()]
+    view_lines = [line for line in normalized.split("\n") if line.strip()]
+    body_set, view_set = set(body_lines), set(view_lines)
+    disappeared = [line for line in body_lines if line not in view_set]
+    appeared = [line for line in view_lines if line not in body_set]
+    expected = [f"  reg {width} {name};" if width else f"  reg {name};"
+                for width, name in temporaries]
+    conserved = (all(BLOCK_LOCAL.match(line) is not None for line in disappeared)
+                 and len(disappeared) == len(temporaries)
+                 and sorted(appeared) == sorted(expected))
+    locked_registers = re.findall(r"^\s*([A-Za-z_]\w*)\s*<=\s*(.+);$", body, re.M)
+    view_registers = re.findall(r"^\s*([A-Za-z_]\w*)\s*<=\s*(.+);$", normalized, re.M)
+    audit = {
+        "policy": "the locked reference under validation/reference-sv is opened read-only and "
+                  "never written; the synthesizable view exists only in a temporary work directory",
+        "regions_removed_lines": removed,
+        "block_local_temporaries_hoisted": [name for _, name in temporaries],
+        "code_lines_locked": len(body_lines),
+        "code_lines_view": len(view_lines),
+        "residual_preprocessor_directives": len(residual),
+        "line_conservation_ok": conserved,
+        "register_update_equations_locked": len(locked_registers),
+        "register_update_equations_preserved": locked_registers == view_registers,
+    }
+    audit["view_trusted"] = bool(conserved and audit["register_update_equations_preserved"]
+                                 and not residual and locked_registers)
+    return renamed, audit
+
+
 def port_surface() -> tuple[dict[str, int], dict[str, int]]:
     """Derive the compared input and output widths from the locked reference."""
 
@@ -234,24 +327,20 @@ def deterministic_export(module: Any) -> tuple[str, dict[str, Any]]:
     }
 
 
-def materialize(target_rtl: str) -> dict[str, Path]:
-    """Write target plus the renamed locked reference into one work directory."""
+def materialize(target_rtl: str) -> tuple[dict[str, Path], dict[str, Any]]:
+    """Write target plus the renamed 5C view of the locked reference."""
 
-    reference_text = REFERENCE.read_text(encoding="utf-8")
-    marker = f"module {MODULE_NAME}("
-    if marker not in reference_text:
-        raise AssertionError("locked reference declaration missing")
-    if re.search(r"^\s*[A-Z]\w*\s+\S+\s*\(", reference_text, re.M):
+    locked_text = REFERENCE.read_text(encoding="utf-8")
+    if re.search(r"^\s*[A-Z]\w*\s+\S+\s*\(", locked_text, re.M):
         raise AssertionError("unexpected child instance in locked reference; closure assembly required")
+    view, audit = reference_synthesizable_view(locked_text)
     shutil.rmtree(WORK, ignore_errors=True)
     WORK.mkdir(parents=True, exist_ok=True)
     target = WORK / f"{MODULE_NAME}-target.sv"
     reference = WORK / f"{MODULE_NAME}-reference.sv"
     target.write_text(target_rtl, encoding="utf-8", newline="\n")
-    reference.write_text(
-        reference_text.replace(marker, f"module {MODULE_NAME}_ref(", 1),
-        encoding="utf-8", newline="\n")
-    return {"target": target, "reference": reference}
+    reference.write_text(view, encoding="utf-8", newline="\n")
+    return {"target": target, "reference": reference}, audit
 
 
 def equiv_run(target: str, reference: str) -> dict[str, Any]:
@@ -265,7 +354,7 @@ def equiv_run(target: str, reference: str) -> dict[str, Any]:
     output = result.get("output_tail", "")
     result["markers_present"] = {marker: marker in output for marker in EQUIV_MARKERS}
     result["formal_success_marker"] = all(result["markers_present"].values())
-    unproven = re.findall(r"Found (\d+) unproven cells", output)
+    unproven = re.findall(r"Found (\d+) unproven \$equiv cells", output)
     if unproven:
         result["unproven_cells"] = int(unproven[-1])
     if result["returncode"] != 0 or not result["formal_success_marker"]:
@@ -311,6 +400,9 @@ def lint_and_check(paths: dict[str, Path]) -> dict[str, Any]:
     return {
         "target_verilator": run_wsl(["verilator", "--lint-only", "-Wno-fatal", target]),
         "reference_verilator": run_wsl(["verilator", "--lint-only", "-Wno-fatal", reference]),
+        "locked_reference_verilator": run_wsl([
+            "verilator", "--lint-only", "-Wno-fatal", "--top-module", MODULE_NAME,
+            wsl_path(REFERENCE)]),
         "target_yosys": run_wsl(["yosys", "-Q", "-p",
                                  f"read_verilog -sv {shlex.quote(target)}; proc; async2sync; opt; "
                                  f"hierarchy -top {MODULE_NAME}; check"]),
@@ -348,13 +440,15 @@ def validate() -> dict[str, Any]:
     py_compile.compile(str(Path(__file__)), doraise=True)
     target_rtl, export = deterministic_export(module)
     abi = abi_audit(target_rtl, inputs, outputs)
-    paths = materialize(target_rtl)
+    paths, normalization = materialize(target_rtl)
     lints = lint_and_check(paths)
     control = negative_control(paths)
     proof = equiv_run(wsl_path(paths["target"]), wsl_path(paths["reference"]))
     pyright = {"target": pyright_check(TARGET), "validator": pyright_check(Path(__file__))}
     if not inputs or not outputs:
         failures.append("derived port surface is empty")
+    if not normalization["view_trusted"]:
+        failures.append("synthesizable view failed its conservation or equation-preservation audit")
     if abi["status"] != "PASS":
         failures.append("ABI audit")
     if export["status"] != "PASS":
@@ -398,9 +492,17 @@ def validate() -> dict[str, Any]:
                             "a built-in negative control proves the harness reports a mutated target",
             "bounded_tests_counted": False,
         },
+        "reference_lock": {
+            "path": REFERENCE.relative_to(ROOT).as_posix(),
+            "sha256": sha256_file(REFERENCE),
+            "xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+            "reference_module": MODULE_NAME,
+            "child_instances": 0,
+        },
         "sources": sources,
         "checks": {
             "py_compile": {"status": "PASS"},
+            "reference_normalization": normalization,
             "pyright": pyright,
             "abi": abi,
             "deterministic_export": export,
