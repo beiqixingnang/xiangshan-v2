@@ -10,6 +10,7 @@ from __future__ import annotations
 import hashlib
 import importlib.util
 import json
+import platform
 import py_compile
 import shlex
 import shutil
@@ -92,6 +93,14 @@ def run_wsl(command: list[str]) -> dict[str, Any]:
         "output_tail": output[-3000:],
         "output_sha256": hashlib.sha256(output.encode()).hexdigest(),
     }
+
+
+# Record the exact backend tool versions used by the strict run.
+def tool_versions() -> dict[str, Any]:
+    """Collect Verilator and Yosys version records."""
+
+    return {"verilator": run_wsl(["verilator", "--version"]),
+            "yosys": run_wsl(["yosys", "--version"])}
 
 
 # Run Pyright on a visible exact source copy (Pyright auto-excludes dot paths).
@@ -282,9 +291,10 @@ def validate() -> dict[str, Any]:
             "python_build": {"path": TARGET.relative_to(ROOT).as_posix(),
                              "sha256": sha256_file(TARGET), "bytes": TARGET.stat().st_size},
         },
-        "checks": {"py_compile": {"status": "PASS"},
+        "checks": {"python_version": platform.python_version(),
+                    "py_compile": {"status": "PASS"},
                     "pyright": pyright, "deterministic_export": export,
-                    "formal": gates},
+                    "tools": tool_versions(), "formal": gates},
         "failures": failures,
         "unclosed": [] if not failures else ["strict gates did not all pass"],
     }
