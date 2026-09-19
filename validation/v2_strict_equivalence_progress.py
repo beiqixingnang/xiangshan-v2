@@ -62,7 +62,7 @@ def verify_source(record: Any, label: str, failures: list[str]) -> dict[str, Any
     }
 
 
-def verify_evidence(path: Path) -> dict[str, Any]:
+def verify_evidence(path: Path, expected_source_commit: str) -> dict[str, Any]:
     """Verify one strict proof without trusting its status string alone. / 不仅依赖状态字符串，验证一份严格证明。"""
 
     payload = json.loads(path.read_text(encoding="utf-8"))
@@ -78,6 +78,9 @@ def verify_evidence(path: Path) -> dict[str, Any]:
         failures.append("strict_complete_count_delta")
     if not build_id:
         failures.append("build_id")
+    source_commit = str(payload.get("source_commit", ""))
+    if source_commit != expected_source_commit:
+        failures.append("source_commit")
 
     sources = payload.get("sources", {})
     verified_sources = {
@@ -106,6 +109,11 @@ def verify_evidence(path: Path) -> dict[str, Any]:
     return {
         "evidence": str(path.relative_to(ROOT)).replace("\\", "/"),
         "build_id": build_id,
+        "source_commit": {
+            "expected": expected_source_commit,
+            "observed": source_commit,
+            "status": "PASS" if source_commit == expected_source_commit else "FAIL",
+        },
         "status": "PASS" if not failures else "FAIL",
         "scope": scope,
         "sources": verified_sources,
@@ -122,8 +130,11 @@ def verify_evidence(path: Path) -> dict[str, Any]:
 def main() -> int:
     """Reconcile strict proofs against the dynamic Build denominator. / 根据动态 Build 分母核对严格证明。"""
 
+    plan = json.loads(PLAN.read_text(encoding="utf-8"))
+    scan_freeze = plan.get("scan_freeze", {})
+    expected_source_commit = str(scan_freeze.get("source_commit", ""))
     evidence_paths = sorted((ROOT / "validation").glob("v2-*-strict-evidence.json"))
-    rows = [verify_evidence(path) for path in evidence_paths]
+    rows = [verify_evidence(path, expected_source_commit) for path in evidence_paths]
     seen: set[str] = set()
     duplicates: list[str] = []
     for row in rows:
@@ -136,7 +147,6 @@ def main() -> int:
     builds = sorted(BUILD_ROOT.rglob("*.py"))
     strict_count = sum(row["status"] == "PASS" for row in rows)
     denominator = len(builds)
-    plan = json.loads(PLAN.read_text(encoding="utf-8"))
     execution = plan.get("execution_state", {})
     plan_count = execution.get("strict_complete_equivalence_build_count")
     plan_denominator = execution.get("strict_complete_equivalence_build_denominator")
@@ -150,7 +160,7 @@ def main() -> int:
         "strict_complete_build_count": strict_count,
         "fraction": f"{strict_count}/{denominator}",
         "percentage": round(100.0 * strict_count / denominator, 6) if denominator else 0.0,
-        "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with matching source hashes and a Yosys SAT no-model success marker is counted.",
+        "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with the locked source commit, matching source hashes, and a Yosys SAT no-model success marker is counted.",
         "plan_reconciliation": {
             "plan_count": plan_count,
             "plan_denominator": plan_denominator,
