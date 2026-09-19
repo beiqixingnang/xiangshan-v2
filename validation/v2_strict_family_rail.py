@@ -169,13 +169,21 @@ def wsl_path(path: Path) -> str:
     return result.stdout.decode("utf-8", "replace").strip()
 
 
-def run_wsl(command: list[str]) -> dict[str, Any]:
+GATE_TIMEOUT_SECONDS = 900
+
+
+def run_wsl(command: list[str],
+            timeout: int = GATE_TIMEOUT_SECONDS) -> dict[str, Any]:
     """Run one WSL command and retain bounded diagnostics."""
 
     rendered = " ".join(shlex.quote(item) for item in command)
     try:
         result = subprocess.run(["wsl.exe", "-e", "bash", "-lc", rendered],
-                                capture_output=True, check=False)
+                                capture_output=True, check=False, timeout=timeout)
+    except subprocess.TimeoutExpired:
+        return {"command": command, "returncode": None, "status": "FAIL",
+                "timed_out": True,
+                "output_tail": f"tool call exceeded {timeout}s and was terminated"}
     except OSError as error:
         return {"command": command, "status": "FAIL", "error": repr(error)}
     output = (result.stdout + result.stderr).decode("utf-8", "replace")
