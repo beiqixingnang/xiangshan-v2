@@ -11,6 +11,7 @@ import hashlib
 import importlib.util
 import json
 import py_compile
+import re
 import shlex
 import shutil
 import subprocess
@@ -27,6 +28,8 @@ TARGET = ROOT / (
 )
 SCALA = ROOT / "upstream/src/main/scala/xiangshan/backend/rob/CommitStuckCounter.scala"
 REFERENCE = ROOT / "validation/reference-closures/CommitStuckCounter-v2.sv"
+LOCKED_REFERENCE = ROOT / "validation/reference-sv/CommitStuckCounter.sv"
+LOCKED_HIERARCHY = ROOT / "validation/v2-locked-hierarchy.json"
 EVIDENCE = ROOT / "validation/v2-commitstuckcounter-strict-evidence.json"
 TEMP_ROOT = Path(tempfile.gettempdir())
 if not str(TEMP_ROOT).isascii():
@@ -35,6 +38,10 @@ WORK = TEMP_ROOT / "uhsc_commitstuckcounter_strict"
 SOURCE_COMMIT = "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af"
 INPUT_WIDTHS = {"clock": 1, "reset": 1, "io_stuck": 1, "io_runtimeEnable": 1}
 OUTPUT_WIDTHS = {"io_overflow": 1}
+LOCKED_PORTS = {**INPUT_WIDTHS, **OUTPUT_WIDTHS}
+EQUIV_SUCCESS_MARKERS = ("0 are unproven.", "Equivalence successfully proven!")
+MODEL_FOUND_MARKER = "model found: FAIL!"
+FREE_INPUT_MARKER = "Final constraint equation: { } = { }"
 
 
 def sha256_file(path: Path) -> str:
@@ -61,10 +68,29 @@ def run_wsl(command: list[str]) -> dict[str, Any]:
         result = subprocess.run(["wsl.exe", "-e", "bash", "-lc", rendered],
                                 capture_output=True, check=False)
     except OSError as error:
-        return {"command": command, "status": "FAIL", "error": repr(error)}
+        return {"command": command, "returncode": None, "status": "FAIL",
+                "error": repr(error), "output_tail": repr(error),
+                "equiv_success_markers": {marker: False for marker in EQUIV_SUCCESS_MARKERS},
+                "equiv_failure_marker": False, "counterexample_marker": False,
+                "unconstrained_marker": False}
     output = (result.stdout + result.stderr).decode("utf-8", "replace")
+    summaries = re.findall(r"Of those cells (\d+) are proven and (\d+) are unproven", output)
+    proven_cells = unproven_cells = equiv_cells = None
+    if summaries:
+        proven_cells, unproven_cells = map(int, summaries[-1])
+        equiv_cells = proven_cells + unproven_cells
     return {"command": command, "returncode": result.returncode,
             "status": "PASS" if result.returncode == 0 else "FAIL",
+            "success_marker": all(marker in output for marker in EQUIV_SUCCESS_MARKERS),
+            "equiv_success_markers": {marker: marker in output
+                                       for marker in EQUIV_SUCCESS_MARKERS},
+            "equiv_failure_marker": bool(
+                re.search(r"ERROR:\s*Found\s+[1-9]\d*\s+unproven\s+\$equiv\s+cells", output)
+                or re.search(r"Of those cells\s+\d+\s+are proven and\s+[1-9]\d*\s+are unproven", output)),
+            "equiv_cells": equiv_cells, "proven_cells": proven_cells,
+            "unproven_cells": unproven_cells,
+            "counterexample_marker": MODEL_FOUND_MARKER in output,
+            "unconstrained_marker": FREE_INPUT_MARKER in output,
             "output_tail": output[-6000:],
             "output_sha256": hashlib.sha256(output.encode()).hexdigest()}
 
@@ -118,6 +144,62 @@ def export(module: Any) -> tuple[str, dict[str, Any]]:
                    "byte_equal": first_bytes == second_bytes}
 
 
+def declared_ports(rtl: str, module: str) -> dict[str, tuple[str, int]]:
+    """Parse both ANSI/grouped and Amaranth header-plus-body port surfaces."""
+
+    clean = re.sub(r"//.*", "", rtl)
+    header = re.search(r"module\s+" + re.escape(module) + r"\s*\((.*?)\)\s*;", clean, re.S)
+    if header is None:
+        return {}
+    ports: dict[str, tuple[str, int]] = {}
+    header_items = [item.strip() for item in header.group(1).replace("\n", " ").split(",")]
+    direction = ""
+    width = 1
+    for item in header_items:
+        item = item.strip()
+        match = re.match(r"^(input|output)\s*(?:\[(\d+):0\])?\s*([A-Za-z_]\w*)?$", item)
+        if match:
+            parsed_direction, msb, name = match.groups()
+            if parsed_direction is None:
+                continue
+            direction = parsed_direction
+            width = int(msb) + 1 if msb else 1
+            if name:
+                ports[name] = (direction, width)
+        elif direction and re.fullmatch(r"[A-Za-z_]\w*", item):
+            ports[item] = (direction, width)
+    for line in clean[header.end():].splitlines():
+        match = re.match(r"\s*(input|output)\s*(?:\[(\d+):0\])?\s*([A-Za-z_]\w*)", line)
+        if match:
+            parsed_direction, msb, name = match.groups()
+            if parsed_direction is None:
+                continue
+            direction = parsed_direction
+            ports[name] = (direction, int(msb) + 1 if msb else 1)
+    return ports
+
+
+def abi_audit(target_rtl: str, reference_rtl: str) -> dict[str, Any]:
+    """Require target and locked reference to expose exactly the five ports."""
+
+    target = declared_ports(target_rtl, "CommitStuckCounter")
+    reference = declared_ports(reference_rtl, "CommitStuckCounter_ref")
+    expected = {name: ("input" if name in INPUT_WIDTHS else "output", width)
+                for name, width in LOCKED_PORTS.items()}
+    checks = {
+        "target_module": "module CommitStuckCounter(" in target_rtl,
+        "reference_module": "module CommitStuckCounter_ref(" in reference_rtl,
+        "target_exact_port_set": target == expected,
+        "reference_exact_port_set": reference == expected,
+        "target_reference_equal": target == reference,
+    }
+    return {"status": "PASS" if all(checks.values()) else "FAIL",
+            "checks": checks,
+            "target_declared_ports": {k: list(v) for k, v in target.items()},
+            "reference_declared_ports": {k: list(v) for k, v in reference.items()},
+            "expected_declared_ports": {k: list(v) for k, v in expected.items()}}
+
+
 def materialize(target_rtl: str) -> dict[str, Path]:
     WORK.mkdir(parents=True, exist_ok=True)
     target = WORK / "CommitStuckCounter.sv"
@@ -130,6 +212,32 @@ def materialize(target_rtl: str) -> dict[str, Path]:
     reference.write_text(reference_text.replace(marker, "module CommitStuckCounter_ref(", 1),
                           encoding="utf-8", newline="\n")
     return {"target": target, "reference": reference}
+
+
+def projection_audit() -> dict[str, Any]:
+    """Bind the five-port proof to the exact locked-XSTop specialization."""
+
+    hierarchy = json.loads(LOCKED_HIERARCHY.read_text(encoding="utf-8"))
+    record = hierarchy["modules"]["CommitStuckCounter"]
+    observed = {item["name"]: 1 if not item["width"] else int(item["width"].split(":")[0][1:]) + 1
+                for item in record["ports"]}
+    scala = SCALA.read_text(encoding="utf-8")
+    locked = LOCKED_REFERENCE.read_text(encoding="utf-8")
+    checks = {
+        "locked_hierarchy_port_count": record.get("port_count") == 5,
+        "locked_hierarchy_ports": observed == LOCKED_PORTS,
+        "locked_reference_ports": all(name in locked for name in LOCKED_PORTS),
+        "scala_declares_pruned_count": "val count = Output" in scala,
+        "scala_declares_pruned_overflow_enable": "val overflowEnabled = Input" in scala,
+        "locked_force_enable_false": "io_runtimeEnable & io_stuck" in locked,
+        "locked_overflow_enable_true": "assign io_overflow = &count" in locked,
+    }
+    return {"status": "PASS" if all(checks.values()) else "FAIL", "checks": checks,
+            "authority": "locked DefaultConfig XSTop specialization",
+            "pruned_scala_ports": ["io_count", "io_overflowEnabled"],
+            "constant_specializations": {"forceEnable": False, "overflowEnabled": True},
+            "locked_reference": {"path": LOCKED_REFERENCE.relative_to(ROOT).as_posix(),
+                                 "sha256": sha256_file(LOCKED_REFERENCE)}}
 
 
 def formal(paths: dict[str, Path]) -> dict[str, Any]:
@@ -148,9 +256,18 @@ def formal(paths: dict[str, Path]) -> dict[str, Any]:
               "equiv_make CommitStuckCounter CommitStuckCounter_ref CommitStuckCounter_equiv; "
               "prep -top CommitStuckCounter_equiv; equiv_induct -undef; equiv_status -assert")
     proof = run_wsl(["yosys", "-Q", "-p", script])
-    marker = "Equivalence successfully proven!"
-    proof["formal_success_marker"] = marker in proof.get("output_tail", "")
+    proof["formal_success_marker"] = all(
+        proof.get("equiv_success_markers", {}).get(marker) is True
+        for marker in EQUIV_SUCCESS_MARKERS)
+    proof["markers_present"] = proof.get("equiv_success_markers", {})
     if not proof["formal_success_marker"]:
+        proof["status"] = "FAIL"
+    proof["proven_cells"] = proof.get("proven_cells")
+    proof["unproven_cells"] = proof.get("unproven_cells")
+    proof["equiv_cells"] = proof.get("equiv_cells")
+    equiv_cells = proof.get("equiv_cells")
+    if (not isinstance(equiv_cells, int) or isinstance(equiv_cells, bool)
+            or equiv_cells <= 0 or proof.get("unproven_cells") != 0):
         proof["status"] = "FAIL"
     proof["formal_scope"] = {
         "clock": "posedge clock", "reset": "async reset normalized with async2sync",
@@ -163,16 +280,60 @@ def formal(paths: dict[str, Path]) -> dict[str, Any]:
             "yosys_equiv": proof}
 
 
+def negative_control(paths: dict[str, Path]) -> dict[str, Any]:
+    """Mutate target and reference outputs and require both proofs to fail."""
+
+    results: dict[str, Any] = {}
+    for side in ("target", "reference"):
+        source = paths[side].read_text(encoding="utf-8")
+        mutated, count = re.subn(r"assign\s+io_overflow\s*=.*?;",
+                                 "assign io_overflow = 1'b0;", source,
+                                 count=1, flags=re.S)
+        if count != 1:
+            results[side] = {"status": "FAIL", "mutation_applied": False}
+            continue
+        mutant = WORK / f"MUTANT_{side}.sv"
+        mutant.write_text(mutated, encoding="utf-8", newline="\n")
+        selected = {**paths, side: mutant}
+        result = formal(selected)["yosys_equiv"]
+        explicit_unproven = result.get("equiv_failure_marker") is True \
+            or (isinstance(result.get("unproven_cells"), int)
+                and result.get("unproven_cells", 0) > 0)
+        detected = (isinstance(result.get("returncode"), int) and explicit_unproven
+                    and result.get("formal_success_marker") is not True)
+        results[side] = {"status": "PASS" if detected else "FAIL",
+                         "mutation_applied": True,
+                         "explicit_unproven_cells": explicit_unproven,
+                         "counterexample_marker": result.get("counterexample_marker") is True,
+                         "success_marker_still_present": result.get("formal_success_marker") is True,
+                         "returncode": result.get("returncode"),
+                         "equiv_cells": result.get("equiv_cells"),
+                         "unproven_cells": result.get("unproven_cells")}
+    return {"status": "PASS" if all(item["status"] == "PASS"
+                                      for item in results.values()) else "FAIL",
+            "sides": results}
+
+
 def validate() -> dict[str, Any]:
     failures: list[str] = []
     module = load_target()
+    projection = projection_audit()
     py_compile.compile(str(TARGET), doraise=True)
     py_compile.compile(str(Path(__file__)), doraise=True)
     target_rtl, deterministic = export(module)
-    gates = formal(materialize(target_rtl))
+    paths = materialize(target_rtl)
+    abi = abi_audit(target_rtl, paths["reference"].read_text(encoding="utf-8"))
+    gates = formal(paths)
+    control = negative_control(paths)
     checks_pyright = {"target": pyright_check(TARGET), "validator": pyright_check(Path(__file__))}
     if deterministic["status"] != "PASS":
         failures.append("deterministic export")
+    if projection["status"] != "PASS":
+        failures.append("locked specialization projection")
+    if abi["status"] != "PASS":
+        failures.append("ABI audit")
+    if control["status"] != "PASS":
+        failures.append("negative control")
     for name, result in checks_pyright.items():
         if result["status"] != "PASS":
             failures.append(f"pyright {name}")
@@ -190,7 +351,13 @@ def validate() -> dict[str, Any]:
         "strict_complete_count_delta": 1 if status == "COMPLETE_EQUIVALENCE" else 0,
         "acceptance_eligible": status == "COMPLETE_EQUIVALENCE",
         "source_commit": SOURCE_COMMIT,
+        "audit_policy": {"require_negative_control": True,
+                         "two_sided_negative_control": True,
+                         "full_output_markers": True,
+                         "scope_source": "locked XSTop specialization"},
         "scope": {"kind": "sequential_registered_leaf", "state_bits": 21,
+                  "authority": "locked DefaultConfig XSTop specialization",
+                  "scala_class_claimed": False,
                   "inputs": INPUT_WIDTHS, "outputs_compared": OUTPUT_WIDTHS,
                   "input_bits": 4, "transition_relation": "all input sequences, posedge clock, async reset",
                   "why_complete": "Yosys equiv_induct -undef proves all state/output equivalence cells"},
@@ -199,8 +366,11 @@ def validate() -> dict[str, Any]:
             "reference_sv": {"path": REFERENCE.relative_to(ROOT).as_posix(), "sha256": sha256_file(REFERENCE), "bytes": REFERENCE.stat().st_size},
             "python_build": {"path": TARGET.relative_to(ROOT).as_posix(), "sha256": sha256_file(TARGET), "bytes": TARGET.stat().st_size},
         },
+        "reference_lock": projection,
         "checks": {"py_compile": {"status": "PASS"}, "pyright": checks_pyright,
-                    "deterministic_export": deterministic, "formal": gates},
+                    "abi": abi,
+                    "deterministic_export": deterministic,
+                    "negative_control": control, "formal": gates},
         "failures": failures, "unclosed": [] if not failures else ["strict gates did not all pass"],
     }
     EVIDENCE.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n",

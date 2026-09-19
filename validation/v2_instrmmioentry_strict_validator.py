@@ -4,8 +4,8 @@ The reference is a four-state, single-clock engine with no child instances, so
 asynchronous reset semantics are normalized with async2sync and the whole
 transition relation is discharged by equiv_induct rather than by a bounded
 vector set.  The compared port surface is parsed from the locked reference and
-the run carries a built-in negative control, because an equivalence harness
-that cannot fail cannot prove anything.
+the run carries independent target/reference negative controls, because an
+equivalence harness that cannot fail cannot prove anything.
 """
 
 from __future__ import annotations
@@ -364,38 +364,91 @@ def equiv_run(target: str, reference: str) -> dict[str, Any]:
         result["equiv_cells"] = int(totals[-1])
     if assert_failure:
         result["unproven_cells"] = int(assert_failure[-1])
+    if result.get("unproven_cells") is None:
+        failed_summary = re.findall(r"Found (\d+) unproven \$equiv cells", output)
+        per_cell_failures = len(re.findall(r"Trying to prove \$equiv for .+: failed", output))
+        if failed_summary:
+            result["unproven_cells"] = int(failed_summary[-1])
+        elif per_cell_failures:
+            result["unproven_cells"] = per_cell_failures
+            if result.get("equiv_cells") is not None:
+                result["proven_cells"] = result["equiv_cells"] - per_cell_failures
     if result["returncode"] != 0 or not result["formal_success_marker"]:
         result["status"] = "FAIL"
     return result
 
 
 def negative_control(paths: dict[str, Path]) -> dict[str, Any]:
-    """Tie one observable output low and require the harness to report it."""
+    """Mutate target and reference output drivers and require unproven cells."""
 
-    target_rtl = paths["target"].read_text(encoding="utf-8")
     pattern = rf"assign\s+{CONTROL_PORT}\s*=\s*[^;]+;"
-    mutated, count = re.subn(pattern, lambda _match: f"assign {CONTROL_PORT} = 1'b0;",
-                             target_rtl, count=1)
-    control_path = WORK / f"{MODULE_NAME}-mutant.sv"
-    control_path.write_text(mutated, encoding="utf-8", newline="\n")
-    if count != 1:
-        return {
+    target_rtl = paths["target"].read_text(encoding="utf-8")
+    reference_rtl = paths["reference"].read_text(encoding="utf-8")
+    target_original = re.search(pattern, target_rtl)
+    reference_original = re.search(pattern, reference_rtl)
+    target_mutated, target_count = re.subn(
+        pattern, lambda _match: f"assign {CONTROL_PORT} = 1'b0;",
+        target_rtl, count=1)
+    reference_mutated, reference_count = re.subn(
+        pattern, lambda _match: f"assign {CONTROL_PORT} = 1'b0;",
+        reference_rtl, count=1)
+    mutations = {
+        "target": (target_mutated, target_count, target_original),
+        "reference": (reference_mutated, reference_count, reference_original),
+    }
+    results: dict[str, Any] = {}
+    for side, (mutated, count, original) in mutations.items():
+        mutant = WORK / f"{MODULE_NAME}-{side}-mutant.sv"
+        mutant.write_text(mutated, encoding="utf-8", newline="\n")
+        if count != 1 or original is None:
+            results[side] = {
+                "control_port": CONTROL_PORT,
+                "mutation_applied": False,
+                "matched_drivers": count,
+                "clean_proof_marker_disappeared": False,
+                "explicit_unproven_cells": False,
+                "counterexample_or_unproven": False,
+                "status": "FAIL",
+                "note": "the control driver was not uniquely found, so the harness was never challenged",
+            }
+            continue
+        if side == "target":
+            verdict = equiv_run(wsl_path(mutant), wsl_path(paths["reference"]))
+        else:
+            verdict = equiv_run(wsl_path(paths["target"]), wsl_path(mutant))
+        marker_disappeared = not bool(verdict.get("formal_success_marker"))
+        unproven = verdict.get("unproven_cells")
+        explicit_unproven = isinstance(unproven, int) and unproven > 0
+        detected = marker_disappeared and explicit_unproven
+        results[side] = {
             "control_port": CONTROL_PORT,
-            "mutation_applied": False,
-            "status": "FAIL",
-            "note": "the control driver was not found, so the harness was never challenged",
+            "mutation_applied": True,
+            "original_statement": original.group(0)[-200:],
+            "mutated_statement": f"assign {CONTROL_PORT} = 1'b0;",
+            "unproven_cells": unproven,
+            "markers_present": verdict.get("markers_present"),
+            "clean_proof_marker_disappeared": marker_disappeared,
+            "explicit_unproven_cells": explicit_unproven,
+            "counterexample_or_unproven": explicit_unproven,
+            "status": "PASS" if detected else "FAIL",
+            "note": "each independently mutated side must lose the clean proof marker "
+                    "and report at least one unproven equivalence cell",
+            "output_tail": verdict.get("output_tail", "")[-1500:],
         }
-    verdict = equiv_run(wsl_path(control_path), wsl_path(paths["reference"]))
-    detected = not verdict["formal_success_marker"]
+    all_pass = all(item.get("status") == "PASS" for item in results.values())
     return {
+        "status": "PASS" if all_pass else "FAIL",
         "control_port": CONTROL_PORT,
-        "mutation_applied": True,
-        "unproven_cells": verdict.get("unproven_cells"),
-        "markers_present": verdict.get("markers_present"),
-        "status": "PASS" if detected else "FAIL",
-        "note": "a mutated target must be reported as not equivalent, otherwise the "
-                "harness is vacuous and a clean success would mean nothing",
-        "output_tail": verdict.get("output_tail", "")[-1500:],
+        "sides": results,
+        "two_sided": True,
+        "mutation_applied": all(item.get("mutation_applied") is True
+                                 for item in results.values()),
+        "clean_proof_marker_disappeared": all(
+            item.get("clean_proof_marker_disappeared") is True
+            for item in results.values()),
+        "counterexample_or_unproven": all(
+            item.get("counterexample_or_unproven") is True
+            for item in results.values()),
     }
 
 
@@ -467,7 +520,7 @@ def validate() -> dict[str, Any]:
         if result["status"] != "PASS":
             failures.append(name)
     if control["status"] != "PASS":
-        failures.append("negative control did not detect a mutated target")
+        failures.append("two-sided negative control did not detect both mutations")
     if proof["status"] != "PASS":
         failures.append("yosys_equiv")
     if not proof.get("equiv_cells"):
@@ -486,8 +539,13 @@ def validate() -> dict[str, Any]:
         "strict_complete_count_delta": 1 if status == "COMPLETE_EQUIVALENCE" else 0,
         "acceptance_eligible": status == "COMPLETE_EQUIVALENCE",
         "source_commit": SOURCE_COMMIT,
+        "audit_policy": {"require_negative_control": True,
+                         "two_sided_negative_control": True,
+                         "scope_source": "locked XSTop specialization"},
         "scope": {
             "kind": "sequential_registered_leaf",
+            "authority": "locked DefaultConfig XSTop specialization",
+            "scala_class_claimed": False,
             "configuration": "locked V2 single-entry uncached instruction transaction engine",
             "state_bits": state_bits,
             "state_registers": state_registers,
@@ -500,8 +558,18 @@ def validate() -> dict[str, Any]:
             "transition_relation": "all input sequences, posedge clock, async reset normalized by async2sync",
             "proof_cell_coverage": "equiv_status -assert requires every matched state and output cell",
             "why_complete": "Yosys equiv_induct -undef discharges the full transition relation; "
-                            "a built-in negative control proves the harness reports a mutated target",
+                            "independent negative controls prove the harness reports mutations "
+                            "on both target and reference sides",
             "bounded_tests_counted": False,
+            "specialization_projection": {
+                "pruned_scala_fields": [
+                    "io_id", "io_req_bits_memBackTypeMM", "io_req_bits_memPageTypeNC",
+                    "io_resp_ready", "io_mmio_grant_ready",
+                    "unused TileLink A/D payload fields removed by the locked elaboration",
+                ],
+                "claim": "only the 17-port module emitted in the locked XSTop is proven; "
+                         "the generic Scala class ABI is not claimed",
+            },
         },
         "reference_lock": {
             "path": REFERENCE.relative_to(ROOT).as_posix(),
@@ -525,6 +593,10 @@ def validate() -> dict[str, Any]:
         },
         "failures": failures,
         "unclosed": [] if not failures else ["strict gates did not all pass"],
+        "acceptance_unclosed": [
+            "Frontend/Icache parent closure, license review and user approval remain outside "
+            "this proof.",
+        ],
     }
     EVIDENCE.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
                         encoding="utf-8", newline="\n")

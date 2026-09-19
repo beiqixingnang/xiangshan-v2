@@ -12,6 +12,7 @@ import hashlib
 import importlib.util
 import json
 import py_compile
+import re
 import shlex
 import shutil
 import subprocess
@@ -43,6 +44,9 @@ INPUT_BITS = 8
 SOURCE_COMMIT = "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af"
 XSTOP_SHA256 = "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d"
 XSTOP_BYTES = 228590583
+SAT_SUCCESS_MARKER = "SAT proof finished - no model found: SUCCESS!"
+SAT_FREE_INPUT_MARKER = "Final constraint equation: { } = { }"
+SAT_MODEL_MARKER = "model found: FAIL!"
 
 
 def sha256_file(path: Path) -> str:
@@ -85,10 +89,15 @@ def run_wsl(command: list[str]) -> dict[str, Any]:
     except OSError as error:
         return {"command": command, "status": "FAIL", "error": repr(error)}
     output = (result.stdout + result.stderr).decode("utf-8", "replace")
+    counts = re.findall(r"Solving problem with (\d+) variables and (\d+) clauses", output)
     return {
         "command": command,
         "returncode": result.returncode,
         "status": "PASS" if result.returncode == 0 else "FAIL",
+        "sat_success_marker": SAT_SUCCESS_MARKER in output,
+        "sat_counterexample_marker": SAT_MODEL_MARKER in output,
+        "unconstrained_marker": SAT_FREE_INPUT_MARKER in output,
+        "sat_counts_full": ([int(value) for value in counts[-1]] if counts else None),
         "output_tail": output[-4000:],
         "output_sha256": hashlib.sha256(output.encode()).hexdigest(),
     }
@@ -206,9 +215,13 @@ def formal_gates(paths: dict[str, Path]) -> dict[str, Any]:
         "sat -prove mismatch 0"
     )
     proof = run_wsl(["yosys", "-Q", "-p", proof_script])
-    marker = "SAT proof finished - no model found: SUCCESS!"
-    proof["formal_success_marker"] = marker in proof.get("output_tail", "")
-    if not proof["formal_success_marker"]:
+    proof["formal_success_marker"] = proof.get("sat_success_marker") is True
+    proof["unconstrained"] = proof.get("unconstrained_marker") is True
+    proof["miter_carries_no_assumption"] = proof["unconstrained"]
+    counts = proof.get("sat_counts_full")
+    if isinstance(counts, list) and len(counts) == 2:
+        proof["sat_variables"], proof["sat_clauses"] = counts
+    if not proof["formal_success_marker"] or not proof["unconstrained"]:
         proof["status"] = "FAIL"
     proof["formal_scope"] = {
         "input_bits": INPUT_BITS,
@@ -227,6 +240,58 @@ def formal_gates(paths: dict[str, Path]) -> dict[str, Any]:
     }
 
 
+def abi_audit(paths: dict[str, Path]) -> dict[str, Any]:
+    """Check both exact ports and the complete-output miter wiring."""
+
+    target = paths["target"].read_text(encoding="utf-8")
+    reference = paths["reference"].read_text(encoding="utf-8")
+    miter = paths["miter"].read_text(encoding="utf-8")
+    checks = {
+        "target_module": "module UIntToContLow1s(" in target,
+        "reference_module": "module REF_UIntToContLow1s(" in reference,
+        "target_input": bool(re.search(r"input\s+\[7:0\]\s+io_dataIn", target)),
+        "reference_input": bool(re.search(r"input\s+\[7:0\]\s+io_dataIn", reference)),
+        "target_output": bool(re.search(r"output\s+\[254:0\]\s+io_dataOut", target)),
+        "reference_output": bool(re.search(r"output\s+\[254:0\]\s+io_dataOut", reference)),
+        "miter_both_instances": "REF_UIntToContLow1s reference_i" in miter
+                                and "UIntToContLow1s target_i" in miter,
+        "miter_input_connected": miter.count(".io_dataIn(io_dataIn)") == 2,
+        "complete_output_compared": "reference_out ^ target_out" in miter,
+        "no_assume": "assume" not in miter.lower(),
+    }
+    return {"status": "PASS" if all(checks.values()) else "FAIL", "checks": checks}
+
+
+def negative_control(paths: dict[str, Path]) -> dict[str, Any]:
+    """Mutate each side's full output and require explicit SAT models."""
+
+    results: dict[str, Any] = {}
+    for side in ("target", "reference"):
+        source = paths[side].read_text(encoding="utf-8")
+        mutated, count = re.subn(r"assign\s+io_dataOut\s*=\s*.*?;",
+                                 "assign io_dataOut = 255'h0;", source,
+                                 count=1, flags=re.S)
+        if count != 1:
+            results[side] = {"status": "FAIL", "mutation_applied": False}
+            continue
+        mutant = WORK / f"MUTANT_{side}.sv"
+        mutant.write_text(mutated, encoding="utf-8", newline="\n")
+        selected = {**paths, side: mutant}
+        converted = {name: wsl_path(path) for name, path in selected.items()}
+        script = (f"read_verilog -sv {converted['target']} {converted['reference']} {converted['miter']}; "
+                  "prep -top UIntToContLow1s_MITER; flatten; opt; sat -prove mismatch 0")
+        verdict = run_wsl(["yosys", "-Q", "-p", script])
+        detected = (isinstance(verdict.get("returncode"), int)
+                    and verdict.get("sat_counterexample_marker") is True
+                    and verdict.get("sat_success_marker") is not True)
+        results[side] = {"status": "PASS" if detected else "FAIL",
+                         "mutation_applied": True,
+                         "counterexample_marker": verdict.get("sat_counterexample_marker"),
+                         "success_marker_still_present": verdict.get("sat_success_marker")}
+    return {"status": "PASS" if all(item["status"] == "PASS" for item in results.values()) else "FAIL",
+            "sides": results, "two_sided": True}
+
+
 def validate() -> dict[str, Any]:
     """Run every strict gate and persist machine-readable evidence."""
 
@@ -234,12 +299,19 @@ def validate() -> dict[str, Any]:
     py_compile.compile(str(TARGET), doraise=True)
     py_compile.compile(str(Path(__file__)), doraise=True)
     target_rtl, export = deterministic_export(module)
-    gates = formal_gates(materialize_miter(target_rtl))
+    paths = materialize_miter(target_rtl)
+    abi = abi_audit(paths)
+    gates = formal_gates(paths)
+    control = negative_control(paths)
     pyright = {"target": pyright_check(TARGET),
                "validator": pyright_check(Path(__file__))}
     failures: list[str] = []
     if export["status"] != "PASS":
         failures.append("deterministic export mismatch")
+    if abi["status"] != "PASS":
+        failures.append("ABI/miter audit")
+    if control["status"] != "PASS":
+        failures.append("two-sided negative control")
     for name, result in pyright.items():
         if result["status"] != "PASS":
             failures.append(f"pyright {name}")
@@ -257,6 +329,11 @@ def validate() -> dict[str, Any]:
         "strict_complete_count_delta": 1 if status == "COMPLETE_EQUIVALENCE" else 0,
         "acceptance_eligible": status == "COMPLETE_EQUIVALENCE",
         "source_commit": SOURCE_COMMIT,
+        "audit_policy": {"require_negative_control": True,
+                         "require_two_sided_negative_control": True,
+                         "require_unconstrained_sat": True,
+                         "require_all_declared_outputs_compared": True,
+                         "scope_source": "single locked UIntToContLow1s surface"},
         "scope": {
             "kind": "stateless_combinational_leaf",
             "configuration": "locked V2 UIntToContLow1s uintWidth=8, outWidth=(2**8)-1=255",
@@ -294,12 +371,18 @@ def validate() -> dict[str, Any]:
                 Path(__file__).relative_to(ROOT).as_posix(),
             ]},
             "pyright": pyright,
+            "source_lock": {"status": "PASS", "xstop_sha256": XSTOP_SHA256},
+            "abi": abi,
             "deterministic_export": export,
             "tools": tool_versions(),
             "formal": gates,
+            "negative_control": control,
         },
         "failures": failures,
         "unclosed": [] if not failures else ["strict gates did not all pass"],
+        "acceptance_unclosed": [
+            "Vector utility parent closure, license review and user approval remain outside this proof."
+        ],
     }
     EVIDENCE.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
                         encoding="utf-8", newline="\n")

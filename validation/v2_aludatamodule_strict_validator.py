@@ -127,6 +127,12 @@ def run_wsl(command: list[str]) -> dict[str, Any]:
         "command": command,
         "returncode": result.returncode,
         "status": "PASS" if result.returncode == 0 else "FAIL",
+        # Decide SAT verdicts from the complete process output.  A failing
+        # negative-control proof prints its model after the verdict, so the
+        # marker can be outside the bounded diagnostic tail retained below.
+        "success_marker": SUCCESS_MARKER in output,
+        "counterexample_marker": "model found: FAIL!" in output,
+        "unconstrained_marker": "Final constraint equation: { } = { }" in output,
         "output_tail": output[-4000:],
         "output_sha256": hashlib.sha256(output.encode()).hexdigest(),
     }
@@ -527,14 +533,16 @@ def formal_gates(paths: dict[str, Path]) -> dict[str, Any]:
         "sat -prove mismatch 0"
     )
     proof = run_wsl(["yosys", "-Q", "-p", proof_script])
-    proof["formal_success_marker"] = SUCCESS_MARKER in proof.get("output_tail", "")
+    proof["formal_success_marker"] = bool(proof.get(
+        "success_marker", SUCCESS_MARKER in proof.get("output_tail", "")))
     if not proof["formal_success_marker"]:
         proof["status"] = "FAIL"
     # The emitted miter text contains no ``assume`` construct, and Yosys prints
     # an empty constraint equation exactly when nothing was assumed, i.e. every
     # one of the 137 input bits stays free over the full space.
     free_input_line = "Final constraint equation: { } = { }"
-    proof["miter_carries_no_assumption"] = free_input_line in proof.get("output_tail", "")
+    proof["miter_carries_no_assumption"] = bool(proof.get(
+        "unconstrained_marker", free_input_line in proof.get("output_tail", "")))
     proof["observed_constraint_equation"] = free_input_line
     if not proof["miter_carries_no_assumption"]:
         proof["status"] = "FAIL"
@@ -556,6 +564,93 @@ def formal_gates(paths: dict[str, Path]) -> dict[str, Any]:
     }
 
 
+def _mutate_output(text: str, module: str, output_name: str,
+                   width: int) -> tuple[str, bool, str]:
+    """Force one parent output to zero and report the mutation form used."""
+
+    start = text.find(f"module {module}(")
+    if start < 0:
+        return text, False, "module-not-found"
+    end = text.find("endmodule", start)
+    if end < 0:
+        return text, False, "endmodule-not-found"
+    body = text[start:end]
+    bit_pattern = rf"assign\s+{re.escape(output_name)}\s*\[\s*\d+\s*\]\s*=\s*.*?;"
+    mutated, count = re.subn(
+        bit_pattern,
+        lambda match: re.sub(r"=.*", f"= 1'b0;", match.group(0), count=1),
+        body, flags=re.S)
+    if count == width:
+        return text[:start] + mutated + text[end:], True, f"bit_assignments:{count}"
+    vector_pattern = rf"assign\s+{re.escape(output_name)}\s*=\s*.*?;"
+    mutated, count = re.subn(
+        vector_pattern, f"assign {output_name} = {width}'h0;", body,
+        count=1, flags=re.S)
+    if count == 1:
+        return text[:start] + mutated + text[end:], True, "vector_assignment"
+    # AluDataModule drives io_result through AluResSel.  Disconnect that
+    # instance output and drive the public port with a deterministic constant.
+    connection_pattern = r"\.(io_\w+)\s*\(\s*" + re.escape(output_name) + r"\s*\)"
+    rerouted, count = re.subn(
+        connection_pattern,
+        lambda match: f".{match.group(1)}(_negative_control_sink)",
+        body, count=1)
+    if count == 1:
+        declaration = f"  wire [{width - 1}:0] _negative_control_sink;\n"
+        forced = declaration + f"  assign {output_name} = {width}'h0;\n"
+        rerouted = rerouted + forced
+        return text[:start] + rerouted + text[end:], True, "rerouted_instance_output"
+    return text, False, "output-driver-not-found"
+
+
+def negative_control(paths: dict[str, Path]) -> dict[str, Any]:
+    """Mutate target and reference outputs and require SAT counterexamples."""
+
+    results: dict[str, Any] = {}
+    output_name = "io_result"
+    width = OUTPUT_WIDTHS[output_name]
+    for side in ("target", "reference"):
+        source = paths[side]
+        module = "UHSC_AluDataModule" if side == "target" else "AluDataModule"
+        mutated, applied, mutation_kind = _mutate_output(
+            source.read_text(encoding="utf-8"), module, output_name, width)
+        if not applied:
+            results[side] = {"status": "FAIL", "mutation_applied": False,
+                             "mutation_kind": mutation_kind}
+            continue
+        mutant = WORK / f"MUTANT_{side}_AluDataModule.sv"
+        mutant.write_text(mutated, encoding="utf-8", newline="\n")
+        target = mutant if side == "target" else paths["target"]
+        reference = mutant if side == "reference" else paths["reference"]
+        converted = {name: wsl_path(path) for name, path in
+                     {"target": target, "reference": reference,
+                      "miter": paths["miter"]}.items()}
+        rendered = " ".join(shlex.quote(converted[name])
+                             for name in ("target", "reference", "miter"))
+        verdict = run_wsl(["yosys", "-Q", "-p",
+                           f"read_verilog -sv {rendered}; "
+                           "prep -top AluDataModule_MITER; flatten; opt; "
+                           "sat -prove mismatch 0"])
+        tail = verdict.get("output_tail", "")
+        success_marker = bool(verdict.get(
+            "success_marker", SUCCESS_MARKER in tail))
+        counterexample_marker = bool(verdict.get(
+            "counterexample_marker", "model found: FAIL!" in tail))
+        detected = verdict.get("returncode") == 0 and not success_marker \
+            and counterexample_marker
+        results[side] = {
+            "status": "PASS" if detected else "FAIL",
+            "mutation_applied": True,
+            "mutation_kind": mutation_kind,
+            "counterexample_marker": counterexample_marker,
+            "success_marker_still_present": success_marker,
+            "output_tail": tail[-900:],
+        }
+    return {"status": "PASS" if all(item["status"] == "PASS"
+                                     for item in results.values()) else "FAIL",
+            "output": output_name, "sides": results}
+
+
 def validate() -> dict[str, Any]:
     """Run strict gates and persist evidence without optimistic status."""
 
@@ -574,7 +669,9 @@ def validate() -> dict[str, Any]:
     abi = abi_audit(target_rtl, closure_rtl)
     if abi["status"] != "PASS":
         failures.append("ABI audit")
-    gates = formal_gates(materialize_miter(target_rtl))
+    paths = materialize_miter(target_rtl)
+    gates = formal_gates(paths)
+    control = negative_control(paths)
     pyright = {"target": pyright_check(TARGET),
                "validator": pyright_check(Path(__file__))}
     if export["status"] != "PASS":
@@ -585,6 +682,8 @@ def validate() -> dict[str, Any]:
     for name, result in gates.items():
         if result["status"] != "PASS":
             failures.append(name)
+    if control["status"] != "PASS":
+        failures.append("negative control")
     status = "COMPLETE_EQUIVALENCE" if not failures else "STRICT_PENDING"
     eligible = status == "COMPLETE_EQUIVALENCE"
     payload: dict[str, Any] = {
@@ -597,6 +696,10 @@ def validate() -> dict[str, Any]:
         "strict_complete_count_delta": 1 if eligible else 0,
         "acceptance_eligible": eligible,
         "source_commit": SOURCE_COMMIT,
+        "audit_policy": {
+            "require_negative_control": True,
+            "scope_source": "single locked AluDataModule surface",
+        },
         "scope": {
             "kind": "stateless_combinational_leaf",
             "configuration": "locked Kunminghu V2 RV64 AluDataModule, AluConfig(xlen=64)",
@@ -666,6 +769,7 @@ def validate() -> dict[str, Any]:
             "deterministic_export": export,
             "tools": tool_versions(),
             "formal": gates,
+            "negative_control": control,
         },
         "failures": failures,
         "unclosed": [] if not failures else ["strict gates did not all pass"],

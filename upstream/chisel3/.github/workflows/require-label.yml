@@ -1,0 +1,22 @@
+name: Require Release Notes Label
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - labeled
+      - unlabeled
+
+jobs:
+  check_labels:
+    name: Check Labels
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: docker://agilepathway/pull-request-label-checker:v1.6.32
+        with:
+          one_of: Feature,Performance,API Modification,Deprecation,Backend Code Generation,Bugfix,Documentation,Dependency Update,Internal,No Release Notes
+          repo_token: ${{ secrets.GITHUB_TOKEN }}

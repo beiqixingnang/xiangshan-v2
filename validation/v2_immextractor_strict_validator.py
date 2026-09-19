@@ -44,6 +44,9 @@ XSTOP_BYTES = 228590583
 LOCKED_XSTOP = "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv"
 INPUT_WIDTHS = {"io_in_imm": 32, "io_in_immType": 4}
 INPUT_BITS = sum(INPUT_WIDTHS.values())
+SAT_SUCCESS_MARKER = "SAT proof finished - no model found: SUCCESS!"
+SAT_FREE_INPUT_MARKER = "Final constraint equation: { } = { }"
+SAT_MODEL_MARKER = "model found: FAIL!"
 
 # Each specialization's exact width and selector subset, read from the locked
 # equations and represented with the same SelImm literals as the Scala map.
@@ -124,10 +127,15 @@ def run_wsl(command: list[str]) -> dict[str, Any]:
     except OSError as error:
         return {"command": command, "status": "FAIL", "error": repr(error)}
     output = (result.stdout + result.stderr).decode("utf-8", "replace")
+    counts = re.findall(r"Solving problem with (\d+) variables and (\d+) clauses", output)
     return {
         "command": command,
         "returncode": result.returncode,
         "status": "PASS" if result.returncode == 0 else "FAIL",
+        "sat_success_marker": SAT_SUCCESS_MARKER in output,
+        "sat_counterexample_marker": SAT_MODEL_MARKER in output,
+        "unconstrained_marker": SAT_FREE_INPUT_MARKER in output,
+        "sat_counts_full": ([int(value) for value in counts[-1]] if counts else None),
         "output_tail": output[-5000:],
         "output_sha256": hashlib.sha256(output.encode()).hexdigest(),
     }
@@ -182,6 +190,18 @@ def module_body(text: str, name: str) -> str:
     if match is None:
         raise AssertionError(f"reference module missing: {name}")
     return match.group(0)
+
+
+def reference_module_hashes() -> dict[str, dict[str, Any]]:
+    """Hash each exact module body inside the locked family closure."""
+
+    text = REFERENCE.read_text(encoding="utf-8")
+    records: dict[str, dict[str, Any]] = {}
+    for name in VARIANTS:
+        body = module_body(text, name).encode("utf-8")
+        records[name] = {"bytes": len(body),
+                         "sha256": hashlib.sha256(body).hexdigest()}
+    return records
 
 
 def closure_audit() -> dict[str, Any]:
@@ -363,9 +383,12 @@ def formal_one(name: str, paths: dict[str, Any]) -> dict[str, Any]:
                      f"read_verilog -sv {shlex.quote(target)} {shlex.quote(reference)} "
                      f"{shlex.quote(miter)}; prep -top {top}; flatten; opt; "
                      "sat -prove mismatch 0"])
-    marker = "SAT proof finished - no model found: SUCCESS!"
-    proof["formal_success_marker"] = marker in proof.get("output_tail", "")
-    if not proof["formal_success_marker"]:
+    proof["formal_success_marker"] = proof.get("sat_success_marker") is True
+    proof["unconstrained"] = proof.get("unconstrained_marker") is True
+    counts = proof.get("sat_counts_full")
+    if isinstance(counts, list) and len(counts) == 2:
+        proof["sat_variables"], proof["sat_clauses"] = counts
+    if not proof["formal_success_marker"] or not proof["unconstrained"]:
         proof["status"] = "FAIL"
     proof["formal_scope"] = {
         "input_bits": INPUT_BITS,
@@ -402,9 +425,13 @@ def formal_aggregate(paths: dict[str, Any]) -> dict[str, Any]:
     proof = run_wsl(["yosys", "-Q", "-p",
                      f"read_verilog -sv {source_args}; prep -top ImmExtractor_ALL_MITER; "
                      "flatten; opt; sat -prove mismatch 0"])
-    marker = "SAT proof finished - no model found: SUCCESS!"
-    proof["formal_success_marker"] = marker in proof.get("output_tail", "")
-    if not proof["formal_success_marker"]:
+    proof["formal_success_marker"] = proof.get("sat_success_marker") is True
+    proof["unconstrained"] = proof.get("unconstrained_marker") is True
+    proof["mitered_variants"] = len(VARIANTS)
+    counts = proof.get("sat_counts_full")
+    if isinstance(counts, list) and len(counts) == 2:
+        proof["sat_variables"], proof["sat_clauses"] = counts
+    if not proof["formal_success_marker"] or not proof["unconstrained"]:
         proof["status"] = "FAIL"
     proof["formal_scope"] = {
         "input_bits": INPUT_BITS,
@@ -427,6 +454,76 @@ def formal_aggregate(paths: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def abi_audit(paths: dict[str, Any]) -> dict[str, Any]:
+    """Check every target/reference ABI and complete-output miter."""
+
+    reference = paths["reference"].read_text(encoding="utf-8")
+    rows: dict[str, Any] = {}
+    for name, spec in VARIANTS.items():
+        target = paths["targets"][name].read_text(encoding="utf-8")
+        miter = paths["miters"][name].read_text(encoding="utf-8")
+        width = spec["data_bits"]
+        checks = {
+            "target_module": f"module DUT_{name}(" in target,
+            "reference_module": f"module {name}(" in reference,
+            "target_inputs": bool(re.search(r"input\s+\[31:0\]\s+io_in_imm", target))
+                             and bool(re.search(r"input\s+\[3:0\]\s+io_in_immType", target)),
+            "reference_inputs": "io_in_imm" in module_body(reference, name)
+                                and "io_in_immType" in module_body(reference, name),
+            "target_output": bool(re.search(
+                rf"output\s+\[{width - 1}:0\]\s+io_out_imm", target)),
+            "reference_output": bool(re.search(
+                rf"output\s+\[{width - 1}:0\]\s+io_out_imm", module_body(reference, name))),
+            "inputs_connected_twice": miter.count(".io_in_imm(io_in_imm)") == 2
+                                      and miter.count(".io_in_immType(io_in_immType)") == 2,
+            "complete_output_compared": "reference_out ^ target_out" in miter,
+            "no_assume": "assume" not in miter.lower(),
+        }
+        rows[name] = {"status": "PASS" if all(checks.values()) else "FAIL",
+                      "checks": checks}
+    return {"status": "PASS" if all(row["status"] == "PASS" for row in rows.values()) else "FAIL",
+            "rows": rows}
+
+
+def negative_control(paths: dict[str, Any]) -> dict[str, Any]:
+    """Mutate one representative variant on both sides and require SAT models."""
+
+    name = "ImmExtractor"
+    results: dict[str, Any] = {}
+    for side in ("target", "reference"):
+        source_path = paths["targets"][name] if side == "target" else paths["reference"]
+        source = source_path.read_text(encoding="utf-8")
+        module = f"DUT_{name}" if side == "target" else name
+        start = source.find(f"module {module}(")
+        end = source.find("endmodule", start)
+        body = source[start:end] if start >= 0 and end >= 0 else ""
+        mutated_body, count = re.subn(r"assign\s+io_out_imm\s*=\s*.*?;",
+                                      "assign io_out_imm = 64'h0;", body,
+                                      count=1, flags=re.S)
+        if count != 1:
+            results[side] = {"status": "FAIL", "mutation_applied": False}
+            continue
+        mutant = WORK / f"MUTANT_{side}_{name}.sv"
+        mutant.write_text(source[:start] + mutated_body + source[end:],
+                          encoding="utf-8", newline="\n")
+        target = mutant if side == "target" else paths["targets"][name]
+        reference = paths["reference"] if side == "target" else mutant
+        converted = {"target": wsl_path(target), "reference": wsl_path(reference),
+                     "miter": wsl_path(paths["miters"][name])}
+        script = (f"read_verilog -sv {converted['target']} {converted['reference']} {converted['miter']}; "
+                  f"prep -top {name}_MITER; flatten; opt; sat -prove mismatch 0")
+        verdict = run_wsl(["yosys", "-Q", "-p", script])
+        detected = (isinstance(verdict.get("returncode"), int)
+                    and verdict.get("sat_counterexample_marker") is True
+                    and verdict.get("sat_success_marker") is not True)
+        results[side] = {"status": "PASS" if detected else "FAIL",
+                         "mutation_applied": True,
+                         "counterexample_marker": verdict.get("sat_counterexample_marker"),
+                         "success_marker_still_present": verdict.get("sat_success_marker")}
+    return {"status": "PASS" if all(item["status"] == "PASS" for item in results.values()) else "FAIL",
+            "sides": results, "control_variant": name, "two_sided": True}
+
+
 def validate() -> dict[str, Any]:
     """Run all strict gates; only five proofs plus aggregate can pass status."""
 
@@ -439,13 +536,19 @@ def validate() -> dict[str, Any]:
     py_compile.compile(str(Path(__file__)), doraise=True)
     exported, deterministic = export_targets(module)
     paths = materialize_sources(exported)
+    abi = abi_audit(paths)
     variant_formal = {name: formal_one(name, paths) for name in VARIANTS}
     aggregate = formal_aggregate(paths)
+    control = negative_control(paths)
     pyright = {"target": pyright_check(TARGET),
                "validator": pyright_check(Path(__file__))}
     for name, result in deterministic.items():
         if result["status"] != "PASS":
             failures.append(f"deterministic export {name}")
+    if abi["status"] != "PASS":
+        failures.append("ABI/miter audit")
+    if control["status"] != "PASS":
+        failures.append("two-sided negative control")
     for name, result in pyright.items():
         if result["status"] != "PASS":
             failures.append(f"pyright {name}")
@@ -456,6 +559,29 @@ def validate() -> dict[str, Any]:
     if aggregate["status"] != "PASS":
         failures.append("aggregate formal gates")
     status = "COMPLETE_EQUIVALENCE" if not failures else "STRICT_PENDING"
+    closure_hash = sha256_file(REFERENCE)
+    module_hashes = reference_module_hashes()
+    variant_claims = {
+        name: {
+            "method": "sat_miter",
+            "sequential": False,
+            "locked_reference": REFERENCE.relative_to(ROOT).as_posix(),
+            "locked_sha256": closure_hash,
+            "locked_module_sha256": module_hashes[name]["sha256"],
+            "inputs": INPUT_WIDTHS,
+            "outputs_compared": {"io_out_imm": spec["data_bits"]},
+            "input_bits": INPUT_BITS,
+            "output_bits": spec["data_bits"],
+            "abi_exact": abi["rows"][name]["status"] == "PASS",
+            "deterministic": deterministic[name]["status"] == "PASS",
+            "miter_selfcheck": abi["rows"][name]["status"] == "PASS",
+            "sat": variant_formal[name]["yosys_formal_miter"],
+            "data_bits": spec["data_bits"],
+            "imm_type_set": list(spec["imm_type_set"]),
+            "imm_type_names": list(spec["imm_type_names"]),
+        }
+        for name, spec in VARIANTS.items()
+    }
     payload: dict[str, Any] = {
         "schema_version": 1,
         "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_COMPLETE_EQUIVALENCE",
@@ -466,23 +592,22 @@ def validate() -> dict[str, Any]:
         "strict_complete_count_delta": 1 if status == "COMPLETE_EQUIVALENCE" else 0,
         "acceptance_eligible": status == "COMPLETE_EQUIVALENCE",
         "source_commit": SOURCE_COMMIT,
+        "audit_policy": {"require_negative_control": True,
+                         "require_two_sided_negative_control": True,
+                         "require_unconstrained_sat": True,
+                         "require_all_variants_and_outputs_compared": True,
+                         "scope_source": "locked ImmExtractor family closure"},
         "scope": {
             "kind": "five_locked_stateless_combinational_specializations",
+            "public_variants": list(VARIANTS),
+            "variant_count": len(VARIANTS),
             "inputs": INPUT_WIDTHS,
             "input_bits": INPUT_BITS,
             "input_space": f"2**{INPUT_BITS}",
             "input_space_cardinality": str(1 << INPUT_BITS),
             "state_bits": 0,
             "state_boundary": "no clock/reset/register/memory in any reference or target variant",
-            "variants": {
-                name: {
-                    "data_bits": spec["data_bits"],
-                    "imm_type_set": list(spec["imm_type_set"]),
-                    "imm_type_names": list(spec["imm_type_names"]),
-                    "outputs_compared": {"io_out_imm": spec["data_bits"]},
-                }
-                for name, spec in VARIANTS.items()
-            },
+            "variants": variant_claims,
             "outputs_compared": {
                 name: {"io_out_imm": spec["data_bits"]}
                 for name, spec in VARIANTS.items()
@@ -502,6 +627,7 @@ def validate() -> dict[str, Any]:
             "xstop_sha256": XSTOP_SHA256,
             "xstop_bytes": XSTOP_BYTES,
             "closure_audit": closure,
+            "abi": abi,
             "extraction_rule": "exact five public ImmExtractor module bodies copied from immutable XSTop.sv; no dependencies",
         },
         "sources": {
@@ -527,9 +653,13 @@ def validate() -> dict[str, Any]:
             "variants": variant_formal,
             "formal": aggregate,
             "aggregate_sat_miter": aggregate,
+            "negative_control": control,
         },
         "failures": failures,
         "unclosed": [] if not failures else ["strict gates did not all pass"],
+        "acceptance_unclosed": [
+            "Backend/Issue parent closure, license review and user approval remain outside this proof."
+        ],
     }
     EVIDENCE.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
                         encoding="utf-8", newline="\n")

@@ -5,6 +5,13 @@ XiangShan Kunminghu V2 line. The complete upstream Scala/dependency source tree
 is vendored under `upstream/` and pinned to an immutable commit; its submodule
 SHAs are recorded in `V2-Snapshot.json`.
 
+The source snapshot also vendors Chisel `v6.7.0` at
+`upstream/chisel3/` (commit `8db8c1e063c22440c6fcbc61ea7e8923a969ad15`).
+This matches `upstream/build.sc`, the Mill build used by the locked generation
+script, and keeps the Scala provenance of generated standard-library arbiters,
+queues, and ready/valid helpers available offline. The older `build.sbt`
+dependency is not treated as the generation authority.
+
 The repository intentionally excludes only Git metadata and generated build
 products. A fresh checkout therefore contains the source and nested
 dependencies without requiring a network fetch.

@@ -6,6 +6,15 @@ The vendored V2 Scala tree and its generated SystemVerilog are the only
 behavioral authority. Existing V3 Python is reusable source material, never a
 V2 acceptance oracle.
 
+For strict Build counting, the concrete behavior boundary is the module and
+port surface emitted in the locked DefaultConfig `XSTop`. Chisel/FIRRTL may
+remove generic Scala parameters or IO fields after constant propagation and
+dead-code elimination. A proof over such a module must say
+`locked_xstop_specialization`, list every omitted Scala field and constant
+specialization, and explicitly set `scala_class_claimed` to false. It proves
+the locked processor instance only; it must never be reported as proof of all
+legal configurations of the generic Scala class.
+
 ## 1. Source, dependency, and evidence boundaries
 
 - Never modify `upstream/`, the locked V2 snapshot metadata, or generated
@@ -235,14 +244,20 @@ fail the run if any is false:
 
 - `sources.reference_sv` still names the untouched locked file with its real
   digest, plus a `reference_lock` block carrying the `XSTop` digest;
-- a line-conservation gate: every code line that disappeared is a hoisted
-  declaration, every line that appeared is exactly its module-scope `reg` form,
-  and the locked/view significant-line counts agree;
+- a multiplicity-preserving line-conservation gate: every code line that
+  disappeared is a hoisted declaration and every line that appeared is exactly
+  its module-scope `reg` form or initializer assignment. The significant-line
+  delta must equal the number of initialized declarations, because one
+  declaration-with-initializer becomes one `reg` declaration plus one bare
+  assignment;
 - every register update equation survives unchanged;
-- the locked original itself still lints under Verilator, proving the original was
-  valid rather than silently replaced;
-- a negative control that perturbs one target equation and confirms the harness
-  reports it unproven, so a clean success cannot be vacuous.
+- the locked original itself still lints under Verilator in the locked synthesis
+  preprocessor context, proving the original was valid rather than silently
+  replaced;
+- two negative controls that independently perturb a target equation and a
+  reference equation, each producing an explicit SAT counterexample or nonzero
+  final unproven-cell result. Tool errors, timeouts, empty output, and mere
+  absence of a success marker are failures, not successful controls.
 
 Two Yosys usage facts measured on the installed build: `flatten` takes a module
 *selection* and there is no `-top` option, so it must not run before the pair is
@@ -255,6 +270,34 @@ relaxation of section 6: the locked artifact is never modified, and any
 transformation beyond the three listed above remains prohibited. Where semantics
 cannot be compared through such a view, the record stays `STRICT_PENDING` and the
 central audit inventories it as an attempt rather than progress.
+
+## 5D. Strict evidence audit contract
+
+A Build increments the strict-complete numerator only when the central audit
+rechecks a repository-contained evidence record against all of these gates:
+
+- the validator, Python Build, every Build-declared Scala source, every locked
+  reference variant, and every recursively used reference child are inside this
+  repository and their SHA-256 digests match;
+- the Build filename matches `build_id`, a Build is claimed by at most one
+  counting record, and `LOCKED_VARIANTS` (when present) is the exact locked
+  DefaultConfig `XSTop` scope. Duplicate or reference-less members fail;
+- every declared static/ABI/deterministic/miter gate has status `PASS`, required
+  `py_compile` and Pyright gates are present, and counting records contain empty
+  strict `failures` and `unclosed` lists. Later parent, license, integration, and
+  user-approval tasks belong in a distinct `acceptance_unclosed` field;
+- SAT evidence carries success and no-assumption/free-input markers parsed from
+  the complete tool output, not only a bounded log tail. Sequential evidence
+  carries both complete-output equivalence markers plus a positive total cell
+  count with every cell proven and zero unproven;
+- aggregate evidence has one verified record per locked variant, exact aggregate
+  coverage counts, and decisive target-side and reference-side negative
+  controls. A partial family remains `STRICT_PENDING` even if some members pass.
+
+Evidence written under an older or weaker schema is non-counting until its
+validator is hardened and rerun. The numerator may decrease after an audit; it
+must never be preserved by weakening a gate or rewriting a failed record as a
+pass.
 
 ## 6. Prohibited shortcuts
 

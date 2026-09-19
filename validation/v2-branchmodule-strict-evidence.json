@@ -8,6 +8,12 @@
   "strict_complete_count_delta": 1,
   "acceptance_eligible": true,
   "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "audit_policy": {
+    "require_negative_control": true,
+    "scope_source": "locked BranchModule reference closure",
+    "require_unconstrained_sat": true,
+    "require_all_declared_outputs_compared": true
+  },
   "scope": {
     "kind": "stateless_combinational_leaf",
     "configuration": "locked RV64, FuOpType func=9 bits",
@@ -26,6 +32,7 @@
     "input_bits": 138,
     "input_space": "2**138",
     "input_space_cardinality": "348449143727040986586495598010130648530944",
+    "output_bits_compared": 2,
     "why_complete": "Yosys SAT proves the two-output miter mismatch is zero with all 138 input bits unconstrained; no temporal state exists."
   },
   "sources": {
@@ -60,10 +67,30 @@
       "bytes": 4814
     }
   },
+  "reference_lock": {
+    "path": "validation/reference-closures/BranchModule-v2.sv",
+    "upstream_source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+    "xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "xstop_bytes": 228590583,
+    "scala_path": "upstream/src/main/scala/xiangshan/backend/fu/Branch.scala",
+    "scala_dependency_path": "upstream/src/main/scala/xiangshan/backend/fu/Alu.scala",
+    "scala_sha256": "2553218c21dc4eb5368ae122c47a42b8d3873e326c5f381119a3651998508953",
+    "scala_dependency_sha256": "7f4e7f5f2f463216330efa02c5b8a0d42e02a2345e339bca4d2a633e374ee287",
+    "reference_sha256": "2f62a3e9fd5bbe51af539adc594d15f0ca2c75059cfde022b8051addb61dbd5a",
+    "child_modules": [
+      "SubModule",
+      "BranchModule"
+    ],
+    "closure_policy": "reference bytes are copied verbatim and only BranchModule is renamed to REF_BranchModule in the temporary work directory"
+  },
   "checks": {
     "python_version": "3.13.12",
     "py_compile": {
-      "status": "PASS"
+      "status": "PASS",
+      "files": [
+        "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.BranchModule-Hardware.py",
+        "validation/v2_branchmodule_strict_validator.py"
+      ]
     },
     "pyright": {
       "target": {
@@ -73,7 +100,7 @@
           "/c",
           "pyright",
           "--outputjson",
-          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_branch_pyright_so2qdpqc\\Build-Cpu.Backend.Fu.BranchModule-Hardware.py"
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_branch_pyright_pvr401qn\\Build-Cpu.Backend.Fu.BranchModule-Hardware.py"
         ],
         "returncode": 0,
         "status": "PASS",
@@ -81,7 +108,7 @@
         "files_analyzed": 1,
         "error_count": 0,
         "warning_count": 0,
-        "output_sha256": "d1abf8f3ffe0f69c43ecd8c7c7034c3d8cdb358dac8648040939caff2a81bf2c",
+        "output_sha256": "bdcf1ed79713b2b2368c9b74482b51493181806f3f7c195f8a95c905a4f0c1dd",
         "stderr_tail": ""
       },
       "validator": {
@@ -91,7 +118,7 @@
           "/c",
           "pyright",
           "--outputjson",
-          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_branch_pyright_na26q62i\\v2_branchmodule_strict_validator.py"
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_branch_pyright_ydhve_tw\\v2_branchmodule_strict_validator.py"
         ],
         "returncode": 0,
         "status": "PASS",
@@ -99,9 +126,169 @@
         "files_analyzed": 1,
         "error_count": 0,
         "warning_count": 0,
-        "output_sha256": "81c9ba556175641d73e92ba8064f4cfa557fc6f4fa550647d44abbfb3f1d87c8",
+        "output_sha256": "9d37521ac9b540cbeba49bc1e04b2624fb9c183d848017a6d8709d2dc3484b04",
         "stderr_tail": ""
       }
+    },
+    "source_lock": {
+      "status": "PASS",
+      "checks": {
+        "all_sources_present": true,
+        "scala_hash_locked": true,
+        "scala_dependency_hash_locked": true,
+        "reference_hash_locked": true,
+        "python_build_hash_recorded": true,
+        "source_commit_recorded": true,
+        "xstop_lock_recorded": true,
+        "reference_modules_present": true
+      },
+      "missing": [],
+      "actual": {
+        "scala": "2553218c21dc4eb5368ae122c47a42b8d3873e326c5f381119a3651998508953",
+        "scala_dependency": "7f4e7f5f2f463216330efa02c5b8a0d42e02a2345e339bca4d2a633e374ee287",
+        "reference_sv": "2f62a3e9fd5bbe51af539adc594d15f0ca2c75059cfde022b8051addb61dbd5a",
+        "python_build": "d95127c09e3f1f319ecc8660afc875f6e5f521a07485153c06fa8fa52e3fbef3"
+      },
+      "expected": {
+        "scala": "2553218c21dc4eb5368ae122c47a42b8d3873e326c5f381119a3651998508953",
+        "scala_dependency": "7f4e7f5f2f463216330efa02c5b8a0d42e02a2345e339bca4d2a633e374ee287",
+        "reference_sv": "2f62a3e9fd5bbe51af539adc594d15f0ca2c75059cfde022b8051addb61dbd5a",
+        "python_build": "d95127c09e3f1f319ecc8660afc875f6e5f521a07485153c06fa8fa52e3fbef3"
+      },
+      "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+      "xstop": {
+        "path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+        "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+        "bytes": 228590583
+      }
+    },
+    "identity": {
+      "status": "PASS",
+      "checks": {
+        "build_id_exact": true,
+        "validator_path_exact": true,
+        "target_path_exact": true,
+        "reference_path_exact": true,
+        "scala_path_exact": true,
+        "scala_dependency_path_exact": true
+      },
+      "build_id": "Build-Cpu.Backend.Fu.BranchModule",
+      "validator": "validation/v2_branchmodule_strict_validator.py",
+      "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.BranchModule-Hardware.py",
+      "reference": "validation/reference-closures/BranchModule-v2.sv",
+      "scala": "upstream/src/main/scala/xiangshan/backend/fu/Branch.scala",
+      "scala_dependency": "upstream/src/main/scala/xiangshan/backend/fu/Alu.scala"
+    },
+    "abi": {
+      "status": "PASS",
+      "checks": {
+        "target_module": true,
+        "reference_module": true,
+        "reference_child_submodule": true,
+        "target_exact_port_set": true,
+        "reference_exact_port_set": true,
+        "target_reference_port_sets_equal": true,
+        "every_output_compared": true,
+        "miter_has_mismatch": true,
+        "miter_compares_taken": true,
+        "miter_compares_mispredict": true,
+        "miter_connects_io_src_0_twice": true,
+        "miter_connects_io_src_1_twice": true,
+        "miter_connects_io_func_twice": true,
+        "miter_connects_io_pred_taken_twice": true,
+        "miter_connects_io_taken_twice": true,
+        "miter_connects_io_mispredict_twice": true
+      },
+      "target_declared_ports": {
+        "io_func": [
+          "input",
+          9
+        ],
+        "io_mispredict": [
+          "output",
+          1
+        ],
+        "io_pred_taken": [
+          "input",
+          1
+        ],
+        "io_src_0": [
+          "input",
+          64
+        ],
+        "io_src_1": [
+          "input",
+          64
+        ],
+        "io_taken": [
+          "output",
+          1
+        ]
+      },
+      "reference_declared_ports": {
+        "io_func": [
+          "input",
+          9
+        ],
+        "io_mispredict": [
+          "output",
+          1
+        ],
+        "io_pred_taken": [
+          "input",
+          1
+        ],
+        "io_src_0": [
+          "input",
+          64
+        ],
+        "io_src_1": [
+          "input",
+          64
+        ],
+        "io_taken": [
+          "output",
+          1
+        ]
+      },
+      "expected_declared_ports": {
+        "io_func": [
+          "input",
+          9
+        ],
+        "io_mispredict": [
+          "output",
+          1
+        ],
+        "io_pred_taken": [
+          "input",
+          1
+        ],
+        "io_src_0": [
+          "input",
+          64
+        ],
+        "io_src_1": [
+          "input",
+          64
+        ],
+        "io_taken": [
+          "output",
+          1
+        ]
+      },
+      "inputs": {
+        "io_src_0": 64,
+        "io_src_1": 64,
+        "io_func": 9,
+        "io_pred_taken": 1
+      },
+      "outputs_compared": {
+        "io_taken": 1,
+        "io_mispredict": 1
+      },
+      "port_count": 6,
+      "output_bits_compared": 2
     },
     "deterministic_export": {
       "status": "PASS",
@@ -118,6 +305,9 @@
         ],
         "returncode": 0,
         "status": "PASS",
+        "success_marker": false,
+        "counterexample_marker": false,
+        "unconstrained_marker": false,
         "output_tail": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n",
         "output_sha256": "ae161d63a0898d55050284fd76bd5e83136b75d2ec90d5b0622f196d5edc2aff"
       },
@@ -128,6 +318,9 @@
         ],
         "returncode": 0,
         "status": "PASS",
+        "success_marker": false,
+        "counterexample_marker": false,
+        "unconstrained_marker": false,
         "output_tail": "Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\n",
         "output_sha256": "239d92e36e753a9dff4e79d97878ed5d55304b675d411895ec57508bc134e28e"
       }
@@ -144,8 +337,11 @@
         ],
         "returncode": 0,
         "status": "PASS",
-        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.062 MB sources in 5 modules, into 0.021 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.045 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.008 s on 1 threads; alloced 9.285 MB\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_branchmodule_strict/UHSC_BranchModule.sv:34:17: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 3 bits.\n                                                                                                               : ... note: In instance 'BranchModule_MITER.dut_i'\n   34 |   assign \\$1  = ! (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Fu.BranchModule-Hardware.py:92\" *) io_func[3:1];\n      |                 ^\n                     ... For warning description see https://verilator.org/warn/WIDTHTRUNC?v=5.032\n                     ... Use \"/* verilator lint_off WIDTHTRUNC */\" and lint_on around source to disable this message.\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_branchmodule_strict/UHSC_BranchModule.sv:36:30: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                : ... note: In instance 'BranchModule_MITER.dut_i'\n   36 |   assign \\$3  = io_func[3:1] == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Fu.BranchModule-Hardware.py:92\" *) 2'h2;\n      |                              ^~\n",
-        "output_sha256": "0472fe059a5c7bf797f57edf940e060da8ab07dc7c4a18ba58b509cf389e6be9"
+        "success_marker": false,
+        "counterexample_marker": false,
+        "unconstrained_marker": false,
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.062 MB sources in 5 modules, into 0.021 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.092 s (elab=0.008, cvt=0.012, bld=0.000); cpu 0.015 s on 1 threads; alloced 9.281 MB\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_branchmodule_strict/UHSC_BranchModule.sv:34:17: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 3 bits.\n                                                                                                               : ... note: In instance 'BranchModule_MITER.dut_i'\n   34 |   assign \\$1  = ! (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Fu.BranchModule-Hardware.py:92\" *) io_func[3:1];\n      |                 ^\n                     ... For warning description see https://verilator.org/warn/WIDTHTRUNC?v=5.032\n                     ... Use \"/* verilator lint_off WIDTHTRUNC */\" and lint_on around source to disable this message.\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_branchmodule_strict/UHSC_BranchModule.sv:36:30: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                : ... note: In instance 'BranchModule_MITER.dut_i'\n   36 |   assign \\$3  = io_func[3:1] == (* src = \"D:\\\\\\37777777747\\37777777637\\37777777645\\37777777750\\37777777657\\37777777606\\37777777745\\37777777672\\37777777623\\37777777745\\37777777674\\37777777600\\37777777745\\37777777617\\37777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Backend.Fu.BranchModule-Hardware.py:92\" *) 2'h2;\n      |                              ^~\n",
+        "output_sha256": "c651ef8ece7e0ecee4b0ea004557a6811baafef8af60f562d9a0b47116ded21b"
       },
       "yosys_target": {
         "command": [
@@ -156,8 +352,11 @@
         ],
         "returncode": 0,
         "status": "PASS",
-        "output_tail": "ss (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BranchModule.\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BranchModule.\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\BranchModule'.\nRemoved a total of 0 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\BranchModule..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\BranchModule.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\BranchModule'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BranchModule..\nRemoved 0 unused cells and 11 unused wires.\n<suppressed ~1 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BranchModule.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\BranchModule..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\BranchModule.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\BranchModule'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BranchModule..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BranchModule.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module BranchModule...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 15874567d2, CPU: user 0.02s system 0.00s, MEM: 12.19 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 25% 4x opt_expr (0 sec), 23% 2x read_verilog (0 sec), ...\n",
-        "output_sha256": "c20f82013ca879504cbf28dc02168d2d2677ea953ea53d7e8d21ea598f010dbb"
+        "success_marker": false,
+        "counterexample_marker": false,
+        "unconstrained_marker": false,
+        "output_tail": "ss (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BranchModule.\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BranchModule.\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\BranchModule'.\nRemoved a total of 0 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\BranchModule..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\BranchModule.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\BranchModule'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BranchModule..\nRemoved 0 unused cells and 11 unused wires.\n<suppressed ~1 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BranchModule.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\BranchModule..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\BranchModule.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\BranchModule'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BranchModule..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BranchModule.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module BranchModule...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 15874567d2, CPU: user 0.01s system 0.02s, MEM: 11.88 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 25% 4x opt_expr (0 sec), 23% 2x read_verilog (0 sec), ...\n",
+        "output_sha256": "7dd8732e359057537ab8878bba6764b487c7b2bf5a623305a23911dad60cb437"
       },
       "yosys_reference": {
         "command": [
@@ -168,8 +367,11 @@
         ],
         "returncode": 0,
         "status": "PASS",
-        "output_tail": "2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_BranchModule'.\n<suppressed ~3 debug messages>\nFinding identical cells in module `\\SubModule'.\nRemoved a total of 1 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\REF_BranchModule..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRunning muxtree optimizer on module \\SubModule..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\REF_BranchModule.\n  Optimizing cells in module \\SubModule.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_BranchModule'.\nFinding identical cells in module `\\SubModule'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\REF_BranchModule..\nFinding unused cells or wires in module \\SubModule..\nRemoved 0 unused cells and 4 unused wires.\n<suppressed ~2 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_BranchModule.\nOptimizing module SubModule.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\REF_BranchModule..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRunning muxtree optimizer on module \\SubModule..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\REF_BranchModule.\n  Optimizing cells in module \\SubModule.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_BranchModule'.\nFinding identical cells in module `\\SubModule'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\REF_BranchModule..\nFinding unused cells or wires in module \\SubModule..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_BranchModule.\nOptimizing module SubModule.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module REF_BranchModule...\nChecking module SubModule...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: a6e45326ed, CPU: user 0.02s system 0.00s, MEM: 12.19 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 35% 4x opt_expr (0 sec), 17% 2x opt_clean (0 sec), ...\n",
-        "output_sha256": "181058dd8af5dfedf5185b285cdf2dab6fd2981d78306033558a31069c2d22c7"
+        "success_marker": false,
+        "counterexample_marker": false,
+        "unconstrained_marker": false,
+        "output_tail": "2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_BranchModule'.\n<suppressed ~3 debug messages>\nFinding identical cells in module `\\SubModule'.\nRemoved a total of 1 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\REF_BranchModule..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRunning muxtree optimizer on module \\SubModule..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\REF_BranchModule.\n  Optimizing cells in module \\SubModule.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_BranchModule'.\nFinding identical cells in module `\\SubModule'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\REF_BranchModule..\nFinding unused cells or wires in module \\SubModule..\nRemoved 0 unused cells and 4 unused wires.\n<suppressed ~2 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_BranchModule.\nOptimizing module SubModule.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\REF_BranchModule..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRunning muxtree optimizer on module \\SubModule..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\REF_BranchModule.\n  Optimizing cells in module \\SubModule.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_BranchModule'.\nFinding identical cells in module `\\SubModule'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\REF_BranchModule..\nFinding unused cells or wires in module \\SubModule..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_BranchModule.\nOptimizing module SubModule.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module REF_BranchModule...\nChecking module SubModule...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: a6e45326ed, CPU: user 0.02s system 0.02s, MEM: 12.19 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 31% 4x opt_expr (0 sec), 17% 2x opt_clean (0 sec), ...\n",
+        "output_sha256": "075974506cea572135f2030a37d414074a5e0abd44c992c6ea491bb63b77a4a3"
       },
       "yosys_formal_miter": {
         "command": [
@@ -180,16 +382,52 @@
         ],
         "returncode": 0,
         "status": "PASS",
-        "output_tail": "es).\nRunning muxtree optimizer on module \\BranchModule_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n6.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\BranchModule_MITER.\nPerformed a total of 0 changes.\n\n6.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\BranchModule_MITER'.\nRemoved a total of 0 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BranchModule_MITER..\nRemoved 0 unused cells and 3 unused wires.\n<suppressed ~1 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BranchModule_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\BranchModule_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\BranchModule_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\BranchModule_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BranchModule_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BranchModule_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 32 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 2924 variables and 7932 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 020e9715d8, CPU: user 0.06s system 0.01s, MEM: 16.41 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 45% 1x sat (0 sec), 13% 9x opt_expr (0 sec), ...\n",
-        "output_sha256": "00b6b3d0e00c78118c2436639afc7390891a8ecf8d45c12ba46e279993b5a11e",
+        "success_marker": true,
+        "counterexample_marker": false,
+        "unconstrained_marker": true,
+        "output_tail": "es).\nRunning muxtree optimizer on module \\BranchModule_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n6.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\BranchModule_MITER.\nPerformed a total of 0 changes.\n\n6.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\BranchModule_MITER'.\nRemoved a total of 0 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BranchModule_MITER..\nRemoved 0 unused cells and 3 unused wires.\n<suppressed ~1 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BranchModule_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\BranchModule_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\BranchModule_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\BranchModule_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BranchModule_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BranchModule_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 32 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 2924 variables and 7932 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 020e9715d8, CPU: user 0.09s system 0.01s, MEM: 16.09 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 46% 1x sat (0 sec), 13% 9x opt_expr (0 sec), ...\n",
+        "output_sha256": "c9c877bab7ec19976f7257a10ac723ea2daccb7d0766879e6141c2c949358a39",
         "formal_success_marker": true,
+        "unconstrained": true,
+        "miter_carries_no_assumption": true,
+        "miter_has_assume": false,
+        "miter_output_bits": 2,
         "formal_scope": {
           "input_bits": 138,
           "input_space": "2**138",
           "input_space_cardinality": "348449143727040986586495598010130648530944",
           "state_bits": 0,
           "state_space": "singleton (stateless combinational module)",
-          "property": "mismatch == 0 for every 2-state input valuation"
+          "property": "mismatch == 0 for every 2-state input valuation",
+          "outputs_compared": {
+            "io_taken": 1,
+            "io_mispredict": 1
+          },
+          "no_assumptions": true
+        }
+      }
+    },
+    "negative_control": {
+      "status": "PASS",
+      "control_output": "io_taken",
+      "sides": {
+        "target": {
+          "status": "PASS",
+          "mutation_applied": true,
+          "mutation_kind": "scalar_assignment",
+          "mutated_output": "io_taken",
+          "counterexample_marker": true,
+          "success_marker_still_present": false,
+          "output_tail": "____/ ___) _ \\ / _ (_   __)  (_   __|____ | | || ___ |/ _  |_|\n  | |   | |  | |_| | |_| || |       | |  / ___ | | || ____( (_| |_ \n  |_|   |_|   \\___/ \\___/ |_|       |_|  \\_____|_|\\_)_____)\\____|_|\n\n\n  Signal Name                 Dec       Hex                                                                 Bin\n  ------------------- ----------- --------- -------------------------------------------------------------------\n  \\io_func [3:0]                8         8                                                                1000\n  \\io_pred_taken                1         1                                                                   1\n  \\io_src_0                    --        --    0000000000000000000000000000000000000000000000000000000000000000\n  \\io_src_1                    --        --    1111111111111111111111111111111111111111111111111111111111111111\n  \\mismatch                     1         1                                                                   1\n\nEnd of script. Logfile hash: 4eff6df241, CPU: user 0.04s system 0.01s, MEM: 15.47 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 21% 1x sat (0 sec), 19% 9x opt_expr (0 sec), ...\n"
+        },
+        "reference": {
+          "status": "PASS",
+          "mutation_applied": true,
+          "mutation_kind": "scalar_assignment",
+          "mutated_output": "io_taken",
+          "counterexample_marker": true,
+          "success_marker_still_present": false,
+          "output_tail": "____/ ___) _ \\ / _ (_   __)  (_   __|____ | | || ___ |/ _  |_|\n  | |   | |  | |_| | |_| || |       | |  / ___ | | || ____( (_| |_ \n  |_|   |_|   \\___/ \\___/ |_|       |_|  \\_____|_|\\_)_____)\\____|_|\n\n\n  Signal Name                 Dec       Hex                                                                 Bin\n  ------------------- ----------- --------- -------------------------------------------------------------------\n  \\io_func [3:0]                3         3                                                                0011\n  \\io_pred_taken                1         1                                                                   1\n  \\io_src_0                    --        --    0000000000000000000000000000000000000000000000000000000000000000\n  \\io_src_1                    --        --    1111111111111111111111111111111111111111111111111111111111111111\n  \\mismatch                     1         1                                                                   1\n\nEnd of script. Logfile hash: e7a1644df2, CPU: user 0.05s system 0.02s, MEM: 16.09 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 26% 1x sat (0 sec), 18% 9x opt_expr (0 sec), ...\n"
         }
       }
     }

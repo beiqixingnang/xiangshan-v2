@@ -126,6 +126,12 @@ def run_wsl(command: list[str]) -> dict[str, Any]:
         "command": command,
         "returncode": result.returncode,
         "status": "PASS" if result.returncode == 0 else "FAIL",
+        # Capture verdict markers before bounding the retained diagnostic tail.
+        # SAT counterexamples are printed after the verdict and may push the
+        # ``model found: FAIL!`` line outside that tail.
+        "success_marker": SUCCESS_MARKER in output,
+        "counterexample_marker": "model found: FAIL!" in output,
+        "unconstrained_marker": FREE_INPUT_MARKER in output,
         "output_tail": output[-4000:],
         "output_sha256": hashlib.sha256(output.encode()).hexdigest(),
     }
@@ -523,13 +529,15 @@ def formal_gates(paths: dict[str, Path]) -> dict[str, Any]:
     )
     proof = run_wsl(["yosys", "-Q", "-p", proof_script])
     tail = proof.get("output_tail", "")
-    proof["formal_success_marker"] = SUCCESS_MARKER in tail
+    proof["formal_success_marker"] = bool(proof.get(
+        "success_marker", SUCCESS_MARKER in tail))
     if not proof["formal_success_marker"]:
         proof["status"] = "FAIL"
     # The emitted miter contains no ``assume`` construct, and Yosys prints an
     # empty constraint equation exactly when nothing was assumed, i.e. every
     # declared input bit stays free over the complete space.
-    proof["miter_carries_no_assumption"] = FREE_INPUT_MARKER in tail
+    proof["miter_carries_no_assumption"] = bool(proof.get(
+        "unconstrained_marker", FREE_INPUT_MARKER in tail))
     proof["observed_constraint_equation"] = FREE_INPUT_MARKER
     if not proof["miter_carries_no_assumption"]:
         proof["status"] = "FAIL"
@@ -563,6 +571,85 @@ def formal_gates(paths: dict[str, Path]) -> dict[str, Any]:
     }
 
 
+def _mutate_output(text: str, module: str, output_name: str,
+                   width: int) -> tuple[str, bool, str]:
+    """Replace one module's output driver with a constant-zero driver."""
+
+    start = text.find(f"module {module}(")
+    if start < 0:
+        return text, False, "module-not-found"
+    end = text.find("endmodule", start)
+    if end < 0:
+        return text, False, "endmodule-not-found"
+    body = text[start:end]
+    # The locked Mgtu reference and generated target both use a single
+    # multiline vector assignment to drive io_out_vd.
+    vector_pattern = rf"assign\s+{re.escape(output_name)}\s*=\s*.*?;"
+    mutated, count = re.subn(
+        vector_pattern, f"assign {output_name} = {width}'h0;", body,
+        count=1, flags=re.S)
+    if count == 1:
+        return text[:start] + mutated + text[end:], True, "vector_assignment"
+    # Retain a fallback for a generated bit-by-bit form should the backend
+    # change its emission style while preserving the same ABI.
+    bit_pattern = rf"assign\s+{re.escape(output_name)}\s*\[\s*\d+\s*\]\s*=\s*.*?;"
+    mutated, count = re.subn(
+        bit_pattern,
+        lambda match: re.sub(r"=.*", "= 1'b0;", match.group(0), count=1),
+        body, flags=re.S)
+    if count == width:
+        return text[:start] + mutated + text[end:], True, f"bit_assignments:{count}"
+    return text, False, "output-driver-not-found"
+
+
+def negative_control(paths: dict[str, Path]) -> dict[str, Any]:
+    """Mutate target and reference outputs and require SAT counterexamples."""
+
+    results: dict[str, Any] = {}
+    output_name = "io_out_vd"
+    width = OUTPUT_WIDTHS[output_name]
+    for side in ("target", "reference"):
+        source = paths[side]
+        module = "UHSC_Mgtu" if side == "target" else "REF_Mgtu"
+        mutated, applied, mutation_kind = _mutate_output(
+            source.read_text(encoding="utf-8"), module, output_name, width)
+        if not applied:
+            results[side] = {"status": "FAIL", "mutation_applied": False,
+                             "mutation_kind": mutation_kind}
+            continue
+        mutant = WORK / f"MUTANT_{side}_Mgtu.sv"
+        mutant.write_text(mutated, encoding="utf-8", newline="\n")
+        target = mutant if side == "target" else paths["target"]
+        reference = mutant if side == "reference" else paths["reference"]
+        converted = {name: wsl_path(path) for name, path in
+                     {"target": target, "reference": reference,
+                      "miter": paths["miter"]}.items()}
+        rendered = " ".join(shlex.quote(converted[name])
+                             for name in ("target", "reference", "miter"))
+        verdict = run_wsl(["yosys", "-Q", "-p",
+                           f"read_verilog -sv {rendered}; "
+                           "prep -top Mgtu_MITER; flatten; opt; "
+                           "sat -prove mismatch 0"])
+        tail = verdict.get("output_tail", "")
+        success_marker = bool(verdict.get(
+            "success_marker", SUCCESS_MARKER in tail))
+        counterexample_marker = bool(verdict.get(
+            "counterexample_marker", "model found: FAIL!" in tail))
+        detected = verdict.get("returncode") == 0 and not success_marker \
+            and counterexample_marker
+        results[side] = {
+            "status": "PASS" if detected else "FAIL",
+            "mutation_applied": True,
+            "mutation_kind": mutation_kind,
+            "counterexample_marker": counterexample_marker,
+            "success_marker_still_present": success_marker,
+            "output_tail": tail[-900:],
+        }
+    return {"status": "PASS" if all(item["status"] == "PASS"
+                                     for item in results.values()) else "FAIL",
+            "output": output_name, "sides": results}
+
+
 def validate() -> dict[str, Any]:
     """Run strict gates and persist evidence without optimistic status."""
 
@@ -581,7 +668,9 @@ def validate() -> dict[str, Any]:
     abi = abi_audit(target_rtl, closure_rtl)
     if abi["status"] != "PASS":
         failures.append("ABI audit")
-    gates = formal_gates(materialize_miter(target_rtl))
+    paths = materialize_miter(target_rtl)
+    gates = formal_gates(paths)
+    control = negative_control(paths)
     pyright = {"target": pyright_check(TARGET),
                "validator": pyright_check(Path(__file__))}
     if export["status"] != "PASS":
@@ -592,6 +681,8 @@ def validate() -> dict[str, Any]:
     for name, result in gates.items():
         if result["status"] != "PASS":
             failures.append(name)
+    if control["status"] != "PASS":
+        failures.append("negative control")
     status = "COMPLETE_EQUIVALENCE" if not failures else "STRICT_PENDING"
     eligible = status == "COMPLETE_EQUIVALENCE"
     payload: dict[str, Any] = {
@@ -604,6 +695,10 @@ def validate() -> dict[str, Any]:
         "strict_complete_count_delta": 1 if eligible else 0,
         "acceptance_eligible": eligible,
         "source_commit": SOURCE_COMMIT,
+        "audit_policy": {
+            "require_negative_control": True,
+            "scope_source": "single locked Mgtu surface",
+        },
         "scope": {
             "kind": "stateless_combinational_leaf",
             "configuration": ("locked Kunminghu V2 vector Mgtu, "
@@ -684,6 +779,7 @@ def validate() -> dict[str, Any]:
             "deterministic_export": export,
             "tools": tool_versions(),
             "formal": gates,
+            "negative_control": control,
         },
         "failures": failures,
         "unclosed": [] if not failures else ["strict gates did not all pass"],

@@ -561,19 +561,28 @@ class BackendSmallControlFamily(Elaboratable):
             ("tailSlot_tarStat", 2), ("pftAddr", 4), ("carry", 1),
             ("last_may_be_rvi_call", 1), ("strong_bias_0", 1), ("strong_bias_1", 1),
         )
-        regs = {name: Signal(width, name=f"fau_{name}") for name, width in fields}
-        tag = Signal(16, name="fau_tag")
+        # Mirrors the proven standalone FauFTBWay Build: only ``valid`` is reset,
+        # payload and tag keep their contents, and the names follow the locked
+        # netlist so induction pairs every register instead of leaving state free
+        # and unmatched.
+        # 命名与复位对齐锁定网表及已独立证明的同名模块。
+        regs = {name: Signal(width, name=f"data_{name}", reset_less=True)
+                for name, width in fields}
+        tag = Signal(16, name="tag", reset_less=True)
+        valid = Signal(name="valid", reset=0)
         for name, width in fields:
             out = p[f"io_resp_{name}"]
             module.d.comb += out.eq(regs[name])
         module.d.comb += [
-            p["io_resp_hit"].eq((tag == p["io_req_tag"]) & regs["valid"]),
-            p["io_update_hit"].eq(((tag == p["io_update_req_tag"]) & regs["valid"]) | (p["io_write_valid"] & (p["io_write_tag"] == p["io_update_req_tag"]))),
+            p["io_resp_hit"].eq((tag == p["io_req_tag"]) & valid),
+            p["io_update_hit"].eq(((tag == p["io_update_req_tag"]) & valid) | (p["io_write_valid"] & (p["io_write_tag"] == p["io_update_req_tag"]))),
         ]
         with module.If(p["io_write_valid"]):
             module.d.sync += tag.eq(p["io_write_tag"])
             for name, _width in fields:
                 module.d.sync += regs[name].eq(p[f"io_write_entry_{name}"])
+        with module.If(p["io_write_valid"] & ~valid):
+            module.d.sync += valid.eq(1)
 
 # Implement the vector conversion envelope. / 实现向量转换封装。
     def _vector(self, module: Module) -> None:

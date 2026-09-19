@@ -8,6 +8,13 @@
   "strict_complete_count_delta": 1,
   "acceptance_eligible": true,
   "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "audit_policy": {
+    "require_negative_control": true,
+    "require_two_sided_negative_control": true,
+    "require_unconstrained_sat": true,
+    "require_locked_reference_lint": true,
+    "scope_source": "Build variant configuration catalog"
+  },
   "scope": {
     "kind": "stateless_combinational_multi_variant_build",
     "public_variants": [
@@ -16,6 +23,265 @@
       "EnqPolicy_14",
       "EnqPolicy_18"
     ],
+    "variant_count": 4,
+    "variants": {
+      "EnqPolicy": {
+        "method": "sat_miter",
+        "sequential": false,
+        "locked_reference": "validation/reference-closures/EnqPolicies-v2.sv",
+        "locked_sha256": "0856b5c89a4ad271f4413315678771df96531080e523ff370d2fb6e6805102fd",
+        "locked_module_sha256": "a90196183e60966582956fd8bbb524e780091015eaa844b1913afef85dd1e002",
+        "inputs": {
+          "io_canEnq": 22
+        },
+        "outputs_compared": {
+          "io_enqSelOHVec_0_valid": 1,
+          "io_enqSelOHVec_0_bits": 22,
+          "io_enqSelOHVec_1_valid": 1,
+          "io_enqSelOHVec_1_bits": 22
+        },
+        "input_bits": 22,
+        "output_bits": 46,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "locked_reference_lint": "PASS",
+        "sat": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/UHSC_EnqPolicy.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/REF_EnqPolicy.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/EnqPolicy_MITER.sv; prep -top EnqPolicy_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": true,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": true,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "sat_counts_full": [
+            11427,
+            31951
+          ],
+          "output_tail": "dead branches in mux trees).\nRunning muxtree optimizer on module \\EnqPolicy_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicy_MITER.\nPerformed a total of 0 changes.\n\n6.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_MITER'.\nRemoved a total of 0 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicy_MITER..\nRemoved 0 unused cells and 470 unused wires.\n<suppressed ~3 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\EnqPolicy_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicy_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicy_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 328 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 11427 variables and 31951 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: f43e730592, CPU: user 0.27s system 0.02s, MEM: 26.53 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 28% 1x sat (0 sec), 17% 6x opt_clean (0 sec), ...\n",
+          "output_sha256": "2415264dabc00ea5004650d40ef0193e8f7fd0215d6583a23fdfa4e5a9dc3d2d",
+          "formal_success_marker": true,
+          "unconstrained": true,
+          "sat_variables": 11427,
+          "sat_clauses": 31951,
+          "formal_scope": {
+            "input_bits": 22,
+            "input_space": "2**22",
+            "input_space_cardinality": "4194304",
+            "state_bits": 0,
+            "state_space": "singleton (stateless combinational module)",
+            "outputs_compared": {
+              "io_enqSelOHVec_0_valid": 1,
+              "io_enqSelOHVec_0_bits": 22,
+              "io_enqSelOHVec_1_valid": 1,
+              "io_enqSelOHVec_1_bits": 22
+            }
+          }
+        }
+      },
+      "EnqPolicy_8": {
+        "method": "sat_miter",
+        "sequential": false,
+        "locked_reference": "validation/reference-closures/EnqPolicies-v2.sv",
+        "locked_sha256": "0856b5c89a4ad271f4413315678771df96531080e523ff370d2fb6e6805102fd",
+        "locked_module_sha256": "19903908e68824e4ad8e5b7294758e92b80c25c63ea6608b54dcdd668acf0c4a",
+        "inputs": {
+          "io_canEnq": 16
+        },
+        "outputs_compared": {
+          "io_enqSelOHVec_0_valid": 1,
+          "io_enqSelOHVec_0_bits": 16,
+          "io_enqSelOHVec_1_valid": 1,
+          "io_enqSelOHVec_1_bits": 16
+        },
+        "input_bits": 16,
+        "output_bits": 34,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "locked_reference_lint": "PASS",
+        "sat": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/UHSC_EnqPolicy_8.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/REF_EnqPolicy_8.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/EnqPolicy_8_MITER.sv; prep -top EnqPolicy_8_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": true,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": true,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "sat_counts_full": [
+            5995,
+            16633
+          ],
+          "output_tail": "x trees).\nRunning muxtree optimizer on module \\EnqPolicy_8_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicy_8_MITER.\nPerformed a total of 0 changes.\n\n6.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_8_MITER'.\nRemoved a total of 0 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicy_8_MITER..\nRemoved 0 unused cells and 248 unused wires.\n<suppressed ~3 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_8_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\EnqPolicy_8_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicy_8_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_8_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicy_8_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_8_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 238 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 5995 variables and 16633 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 783a89e38f, CPU: user 0.17s system 0.01s, MEM: 20.22 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 33% 1x sat (0 sec), 15% 6x opt_clean (0 sec), ...\n",
+          "output_sha256": "03c4889acd37fb636eec28c5a471ace8dfcd713f5a401810a450403b6d6ac93c",
+          "formal_success_marker": true,
+          "unconstrained": true,
+          "sat_variables": 5995,
+          "sat_clauses": 16633,
+          "formal_scope": {
+            "input_bits": 16,
+            "input_space": "2**16",
+            "input_space_cardinality": "65536",
+            "state_bits": 0,
+            "state_space": "singleton (stateless combinational module)",
+            "outputs_compared": {
+              "io_enqSelOHVec_0_valid": 1,
+              "io_enqSelOHVec_0_bits": 16,
+              "io_enqSelOHVec_1_valid": 1,
+              "io_enqSelOHVec_1_bits": 16
+            }
+          }
+        }
+      },
+      "EnqPolicy_14": {
+        "method": "sat_miter",
+        "sequential": false,
+        "locked_reference": "validation/reference-closures/EnqPolicies-v2.sv",
+        "locked_sha256": "0856b5c89a4ad271f4413315678771df96531080e523ff370d2fb6e6805102fd",
+        "locked_module_sha256": "ee5adda91cbb492b85f3f8edc183321b813282d50a795dc5ed892efaf1cdd84e",
+        "inputs": {
+          "io_canEnq": 14
+        },
+        "outputs_compared": {
+          "io_enqSelOHVec_0_valid": 1,
+          "io_enqSelOHVec_0_bits": 14,
+          "io_enqSelOHVec_1_valid": 1,
+          "io_enqSelOHVec_1_bits": 14
+        },
+        "input_bits": 14,
+        "output_bits": 30,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "locked_reference_lint": "PASS",
+        "sat": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/UHSC_EnqPolicy_14.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/REF_EnqPolicy_14.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/EnqPolicy_14_MITER.sv; prep -top EnqPolicy_14_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": true,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": true,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "sat_counts_full": [
+            4701,
+            13007
+          ],
+          "output_tail": "Running muxtree optimizer on module \\EnqPolicy_14_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicy_14_MITER.\nPerformed a total of 0 changes.\n\n6.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_14_MITER'.\nRemoved a total of 0 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicy_14_MITER..\nRemoved 0 unused cells and 190 unused wires.\n<suppressed ~3 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_14_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\EnqPolicy_14_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicy_14_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_14_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicy_14_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_14_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 208 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 4701 variables and 13007 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 420bc4435e, CPU: user 0.17s system 0.02s, MEM: 18.23 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 28% 1x sat (0 sec), 17% 6x opt_clean (0 sec), ...\n",
+          "output_sha256": "e159475f0d18464acd211141a03420e4f705dbe39002d67b985940890da59d64",
+          "formal_success_marker": true,
+          "unconstrained": true,
+          "sat_variables": 4701,
+          "sat_clauses": 13007,
+          "formal_scope": {
+            "input_bits": 14,
+            "input_space": "2**14",
+            "input_space_cardinality": "16384",
+            "state_bits": 0,
+            "state_space": "singleton (stateless combinational module)",
+            "outputs_compared": {
+              "io_enqSelOHVec_0_valid": 1,
+              "io_enqSelOHVec_0_bits": 14,
+              "io_enqSelOHVec_1_valid": 1,
+              "io_enqSelOHVec_1_bits": 14
+            }
+          }
+        }
+      },
+      "EnqPolicy_18": {
+        "method": "sat_miter",
+        "sequential": false,
+        "locked_reference": "validation/reference-closures/EnqPolicies-v2.sv",
+        "locked_sha256": "0856b5c89a4ad271f4413315678771df96531080e523ff370d2fb6e6805102fd",
+        "locked_module_sha256": "8b5eca1ea67a9393fb92030ed05414ee6df6bddaa5d33dfeaeb22b7b89f5ede6",
+        "inputs": {
+          "io_canEnq": 8
+        },
+        "outputs_compared": {
+          "io_enqSelOHVec_0_valid": 1,
+          "io_enqSelOHVec_0_bits": 8,
+          "io_enqSelOHVec_1_valid": 1,
+          "io_enqSelOHVec_1_bits": 8
+        },
+        "input_bits": 8,
+        "output_bits": 18,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "locked_reference_lint": "PASS",
+        "sat": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/UHSC_EnqPolicy_18.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/REF_EnqPolicy_18.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/EnqPolicy_18_MITER.sv; prep -top EnqPolicy_18_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": true,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": true,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "sat_counts_full": [
+            1773,
+            4841
+          ],
+          "output_tail": "ning muxtree optimizer on module \\EnqPolicy_18_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicy_18_MITER.\nPerformed a total of 0 changes.\n\n6.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_18_MITER'.\nRemoved a total of 0 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicy_18_MITER..\nRemoved 0 unused cells and 64 unused wires.\n<suppressed ~3 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_18_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\EnqPolicy_18_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicy_18_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_18_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicy_18_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_18_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 118 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 1773 variables and 4841 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: e86b8a9342, CPU: user 0.06s system 0.00s, MEM: 15.16 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 19% 8x opt_expr (0 sec), 18% 6x opt_clean (0 sec), ...\n",
+          "output_sha256": "aa6c4b127c617408c1b27bc14c1786ed0f7c5b60616b290c30c069c50314352c",
+          "formal_success_marker": true,
+          "unconstrained": true,
+          "sat_variables": 1773,
+          "sat_clauses": 4841,
+          "formal_scope": {
+            "input_bits": 8,
+            "input_space": "2**8",
+            "input_space_cardinality": "256",
+            "state_bits": 0,
+            "state_space": "singleton (stateless combinational module)",
+            "outputs_compared": {
+              "io_enqSelOHVec_0_valid": 1,
+              "io_enqSelOHVec_0_bits": 8,
+              "io_enqSelOHVec_1_valid": 1,
+              "io_enqSelOHVec_1_bits": 8
+            }
+          }
+        }
+      }
+    },
     "state_bits": 0,
     "state_boundary": "no clock/reset/register/memory",
     "inputs": {
@@ -140,6 +406,18 @@
       "sha256": "c05cdbbce53b1900724604e572e4f2a46b84b10da0e4ff17f005d8f68a25ac82",
       "bytes": 37823
     },
+    "scala_dependencies": {
+      "issue_block_params": {
+        "path": "upstream/src/main/scala/xiangshan/backend/issue/IssueBlockParams.scala",
+        "sha256": "205889be81f4b38dfa3cf8b0ba0dd287e9cf45bd4b859234ac1de249580188c9",
+        "bytes": 16483
+      },
+      "parameters": {
+        "path": "upstream/src/main/scala/xiangshan/Parameters.scala",
+        "sha256": "c05cdbbce53b1900724604e572e4f2a46b84b10da0e4ff17f005d8f68a25ac82",
+        "bytes": 37823
+      }
+    },
     "reference_sv": {
       "path": "validation/reference-closures/EnqPolicies-v2.sv",
       "sha256": "0856b5c89a4ad271f4413315678771df96531080e523ff370d2fb6e6805102fd",
@@ -152,20 +430,24 @@
       ],
       "module_hashes": {
         "EnqPolicy": {
-          "bytes": 9576,
-          "sha256": "55da7392b58fac78e71a91d3713906f893e2abb9d9ec50114401c9dfffb38c66"
+          "bytes": 9577,
+          "sha256": "a90196183e60966582956fd8bbb524e780091015eaa844b1913afef85dd1e002",
+          "path": "validation/reference-sv/EnqPolicy.sv"
         },
         "EnqPolicy_8": {
-          "bytes": 6149,
-          "sha256": "29cc7fdc3d291aa4a99dfa9105e5eec87913c8beeb82ba7a89eef035344af55a"
+          "bytes": 6150,
+          "sha256": "19903908e68824e4ad8e5b7294758e92b80c25c63ea6608b54dcdd668acf0c4a",
+          "path": "validation/reference-sv/EnqPolicy_8.sv"
         },
         "EnqPolicy_14": {
-          "bytes": 5207,
-          "sha256": "506f93f1d880103217d304a8ea582bb8b8633d192cf3a4d8b073b56e60e0743f"
+          "bytes": 5208,
+          "sha256": "ee5adda91cbb492b85f3f8edc183321b813282d50a795dc5ed892efaf1cdd84e",
+          "path": "validation/reference-sv/EnqPolicy_14.sv"
         },
         "EnqPolicy_18": {
-          "bytes": 2973,
-          "sha256": "eee186e33df708e46b11c7921894bdf2567618b1fb57f5984fb7adf66ba38c8a"
+          "bytes": 2974,
+          "sha256": "8b5eca1ea67a9393fb92030ed05414ee6df6bddaa5d33dfeaeb22b7b89f5ede6",
+          "path": "validation/reference-sv/EnqPolicy_18.sv"
         }
       },
       "locked_xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
@@ -207,7 +489,7 @@
           "/c",
           "pyright",
           "--outputjson",
-          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_enqpolicy_pyright_tbj2qov9\\Build-Cpu.Backend.Issue.EnqPolicy-Hardware.py"
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_enqpolicy_pyright_zeqp3xpp\\Build-Cpu.Backend.Issue.EnqPolicy-Hardware.py"
         ],
         "returncode": 0,
         "status": "PASS",
@@ -215,7 +497,7 @@
         "files_analyzed": 1,
         "error_count": 0,
         "warning_count": 0,
-        "output_sha256": "77253ccf938b0c490d7ba7fff0e36a48ff5c5a3e1190b991fea0116afd178d31",
+        "output_sha256": "7894aea746f381f271f8972689fe82d5f5007f7902c3af1f955961af053a4f7e",
         "stderr_tail": ""
       },
       "validator": {
@@ -225,7 +507,7 @@
           "/c",
           "pyright",
           "--outputjson",
-          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_enqpolicy_pyright_la6v9ax1\\v2_enqpolicy_strict_validator.py"
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_enqpolicy_pyright_ziqp7gp9\\v2_enqpolicy_strict_validator.py"
         ],
         "returncode": 0,
         "status": "PASS",
@@ -233,8 +515,61 @@
         "files_analyzed": 1,
         "error_count": 0,
         "warning_count": 0,
-        "output_sha256": "502a581ff5c51bf35dcd69f2936a7f5a198deb458b75b1f454e9ff622d2e59c9",
+        "output_sha256": "66fd307749061b417935ab0a4e12ef33c510c38438ff614c74354e399f80ad66",
         "stderr_tail": ""
+      }
+    },
+    "source_lock": {
+      "status": "PASS",
+      "checks": {
+        "python_build_hash_locked": true,
+        "scala_hash_locked": true,
+        "scala_params_hash_locked": true,
+        "scala_config_hash_locked": true,
+        "reference_closure_hash_locked": true,
+        "variant_reference_hashes_locked": true,
+        "variant_count": true
+      },
+      "actual": {
+        "python_build": "b08f386e7dc5c6b2e1ab9115d1afc23c517644ebca6200a6b2854461a9aba45a",
+        "scala": "e0218e99d01c9073f38ba8d039ea611c98bf25c83bceb560415e044fc8789caf",
+        "scala_params": "205889be81f4b38dfa3cf8b0ba0dd287e9cf45bd4b859234ac1de249580188c9",
+        "scala_config": "c05cdbbce53b1900724604e572e4f2a46b84b10da0e4ff17f005d8f68a25ac82",
+        "reference_closure": "0856b5c89a4ad271f4413315678771df96531080e523ff370d2fb6e6805102fd"
+      },
+      "reference_hashes": {
+        "EnqPolicy": {
+          "bytes": 9577,
+          "sha256": "a90196183e60966582956fd8bbb524e780091015eaa844b1913afef85dd1e002",
+          "path": "validation/reference-sv/EnqPolicy.sv"
+        },
+        "EnqPolicy_8": {
+          "bytes": 6150,
+          "sha256": "19903908e68824e4ad8e5b7294758e92b80c25c63ea6608b54dcdd668acf0c4a",
+          "path": "validation/reference-sv/EnqPolicy_8.sv"
+        },
+        "EnqPolicy_14": {
+          "bytes": 5208,
+          "sha256": "ee5adda91cbb492b85f3f8edc183321b813282d50a795dc5ed892efaf1cdd84e",
+          "path": "validation/reference-sv/EnqPolicy_14.sv"
+        },
+        "EnqPolicy_18": {
+          "bytes": 2974,
+          "sha256": "8b5eca1ea67a9393fb92030ed05414ee6df6bddaa5d33dfeaeb22b7b89f5ede6",
+          "path": "validation/reference-sv/EnqPolicy_18.sv"
+        }
+      },
+      "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+      "audit_policy": {
+        "require_negative_control": true,
+        "require_two_sided_negative_control": true,
+        "require_unconstrained_sat": true,
+        "require_locked_reference_lint": true,
+        "scope_source": "Build variant configuration catalog"
+      },
+      "xstop": {
+        "path": "validation/reference-closures/EnqPolicies-v2.sv",
+        "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d"
       }
     },
     "deterministic_exports": {
@@ -283,6 +618,16 @@
         ],
         "returncode": 0,
         "status": "PASS",
+        "sat_success_marker": false,
+        "sat_counterexample_marker": false,
+        "unconstrained_marker": false,
+        "equiv_success_markers": {
+          "0 are unproven.": false,
+          "Equivalence successfully proven!": false
+        },
+        "equiv_cells_full": null,
+        "equiv_summary_full": null,
+        "sat_counts_full": null,
         "output_tail": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n",
         "output_sha256": "ae161d63a0898d55050284fd76bd5e83136b75d2ec90d5b0622f196d5edc2aff"
       },
@@ -293,6 +638,16 @@
         ],
         "returncode": 0,
         "status": "PASS",
+        "sat_success_marker": false,
+        "sat_counterexample_marker": false,
+        "unconstrained_marker": false,
+        "equiv_success_markers": {
+          "0 are unproven.": false,
+          "Equivalence successfully proven!": false
+        },
+        "equiv_cells_full": null,
+        "equiv_summary_full": null,
+        "sat_counts_full": null,
         "output_tail": "Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\n",
         "output_sha256": "239d92e36e753a9dff4e79d97878ed5d55304b675d411895ec57508bc134e28e"
       }
@@ -310,8 +665,18 @@
           ],
           "returncode": 0,
           "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "sat_counts_full": null,
           "output_tail": "9];\n      |                          ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/UHSC_EnqPolicy.sv:1283:26: Operator ADD expects 19 bits on the RHS, but RHS's SEL generates 1 bits.\n                                                                                                            : ... note: In instance 'EnqPolicy_MITER.dut_i'\n 1283 |   assign \\$354  = \\$353  + io_canEnq[8];\n      |                          ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/UHSC_EnqPolicy.sv:1284:26: Operator ADD expects 20 bits on the RHS, but RHS's SEL generates 1 bits.\n                                                                                                            : ... note: In instance 'EnqPolicy_MITER.dut_i'\n 1284 |   assign \\$355  = \\$354  + io_canEnq[7];\n      |                          ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/UHSC_EnqPolicy.sv:1285:26: Operator ADD expects 21 bits on the RHS, but RHS's SEL generates 1 bits.\n                                                                                                            : ... note: In instance 'EnqPolicy_MITER.dut_i'\n 1285 |   assign \\$356  = \\$355  + io_canEnq[6];\n      |                          ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/UHSC_EnqPolicy.sv:1286:26: Operator ADD expects 22 bits on the RHS, but RHS's SEL generates 1 bits.\n                                                                                                            : ... note: In instance 'EnqPolicy_MITER.dut_i'\n 1286 |   assign \\$357  = \\$356  + io_canEnq[5];\n      |                          ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/UHSC_EnqPolicy.sv:1287:26: Operator ADD expects 23 bits on the RHS, but RHS's SEL generates 1 bits.\n                                                                                                            : ... note: In instance 'EnqPolicy_MITER.dut_i'\n 1287 |   assign \\$358  = \\$357  + io_canEnq[4];\n      |                          ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/UHSC_EnqPolicy.sv:1288:26: Operator ADD expects 24 bits on the RHS, but RHS's SEL generates 1 bits.\n                                                                                                            : ... note: In instance 'EnqPolicy_MITER.dut_i'\n 1288 |   assign \\$359  = \\$358  + io_canEnq[3];\n      |                          ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/UHSC_EnqPolicy.sv:1289:26: Operator ADD expects 25 bits on the RHS, but RHS's SEL generates 1 bits.\n                                                                                                            : ... note: In instance 'EnqPolicy_MITER.dut_i'\n 1289 |   assign \\$360  = \\$359  + io_canEnq[2];\n      |                          ^\n",
-          "output_sha256": "4b950c187678ac2cd50a0982125fe9517247e4bc72a1a0380905f6fe550c7351"
+          "output_sha256": "41d34330492fe9d3736e96d9b8db631415f81fad702b966d44fdc36f93afe014"
         },
         "yosys_target": {
           "command": [
@@ -322,8 +687,18 @@
           ],
           "returncode": 0,
           "status": "PASS",
-          "output_tail": "to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy.\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy.\n<suppressed ~44 debug messages>\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy'.\n<suppressed ~1389 debug messages>\nRemoved a total of 463 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\EnqPolicy..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicy.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicy..\nRemoved 0 unused cells and 636 unused wires.\n<suppressed ~3 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\EnqPolicy..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicy.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicy..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module EnqPolicy...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 92b0d2555e, CPU: user 0.08s system 0.01s, MEM: 19.83 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 25% 2x read_verilog (0 sec), 18% 4x opt_expr (0 sec), ...\n",
-          "output_sha256": "2dae1b50cc10718d7a2cfd072d1b5adfb8046971e60fae1eef2dfa12d4f01038"
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "sat_counts_full": null,
+          "output_tail": "to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy.\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy.\n<suppressed ~44 debug messages>\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy'.\n<suppressed ~1389 debug messages>\nRemoved a total of 463 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\EnqPolicy..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicy.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicy..\nRemoved 0 unused cells and 636 unused wires.\n<suppressed ~3 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\EnqPolicy..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicy.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicy..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module EnqPolicy...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 92b0d2555e, CPU: user 0.13s system 0.02s, MEM: 19.67 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 28% 2x read_verilog (0 sec), 17% 4x opt_expr (0 sec), ...\n",
+          "output_sha256": "7358ebdfdc343656b8aa6be7e017bff895f36189bc875791fc0455c806fc0d86"
         },
         "yosys_reference": {
           "command": [
@@ -334,8 +709,18 @@
           ],
           "returncode": 0,
           "status": "PASS",
-          "output_tail": "cesses).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_EnqPolicy.\n<suppressed ~40 debug messages>\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_EnqPolicy.\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_EnqPolicy'.\nRemoved a total of 0 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\REF_EnqPolicy..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\REF_EnqPolicy.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_EnqPolicy'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\REF_EnqPolicy..\nRemoved 0 unused cells and 44 unused wires.\n<suppressed ~1 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_EnqPolicy.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\REF_EnqPolicy..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\REF_EnqPolicy.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_EnqPolicy'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\REF_EnqPolicy..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_EnqPolicy.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module REF_EnqPolicy...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 32ecb7cbb6, CPU: user 0.02s system 0.01s, MEM: 15.16 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 43% 2x read_verilog (0 sec), 21% 4x opt_expr (0 sec), ...\n",
-          "output_sha256": "9f612c4b4d9a486e4ba9fa8d56e8901d367ebebb316f296a69f926b44667b796"
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "sat_counts_full": null,
+          "output_tail": "cesses).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_EnqPolicy.\n<suppressed ~40 debug messages>\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_EnqPolicy.\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_EnqPolicy'.\nRemoved a total of 0 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\REF_EnqPolicy..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\REF_EnqPolicy.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_EnqPolicy'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\REF_EnqPolicy..\nRemoved 0 unused cells and 44 unused wires.\n<suppressed ~1 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_EnqPolicy.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\REF_EnqPolicy..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\REF_EnqPolicy.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_EnqPolicy'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\REF_EnqPolicy..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_EnqPolicy.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module REF_EnqPolicy...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: b5d73cc440, CPU: user 0.02s system 0.01s, MEM: 12.97 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 28% 2x read_verilog (0 sec), 28% 4x opt_expr (0 sec), ...\n",
+          "output_sha256": "b283264427c4ea9f139d20b4761a495135f009addd6bb06434075f9275761f96"
         },
         "yosys_formal_miter": {
           "command": [
@@ -346,9 +731,25 @@
           ],
           "returncode": 0,
           "status": "PASS",
-          "output_tail": "dead branches in mux trees).\nRunning muxtree optimizer on module \\EnqPolicy_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicy_MITER.\nPerformed a total of 0 changes.\n\n6.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_MITER'.\nRemoved a total of 0 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicy_MITER..\nRemoved 0 unused cells and 470 unused wires.\n<suppressed ~3 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\EnqPolicy_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicy_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicy_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 328 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 11427 variables and 31951 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: a3ef9005e7, CPU: user 0.22s system 0.02s, MEM: 26.85 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 29% 1x sat (0 sec), 16% 6x opt_clean (0 sec), ...\n",
-          "output_sha256": "5ae6e3b36e2ffe45a2e2a7ccbee32c429c8029d1abd31f87800eb8fd21dc05fd",
+          "sat_success_marker": true,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": true,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "sat_counts_full": [
+            11427,
+            31951
+          ],
+          "output_tail": "dead branches in mux trees).\nRunning muxtree optimizer on module \\EnqPolicy_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicy_MITER.\nPerformed a total of 0 changes.\n\n6.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_MITER'.\nRemoved a total of 0 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicy_MITER..\nRemoved 0 unused cells and 470 unused wires.\n<suppressed ~3 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\EnqPolicy_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicy_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicy_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 328 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 11427 variables and 31951 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: f43e730592, CPU: user 0.27s system 0.02s, MEM: 26.53 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 28% 1x sat (0 sec), 17% 6x opt_clean (0 sec), ...\n",
+          "output_sha256": "2415264dabc00ea5004650d40ef0193e8f7fd0215d6583a23fdfa4e5a9dc3d2d",
           "formal_success_marker": true,
+          "unconstrained": true,
+          "sat_variables": 11427,
+          "sat_clauses": 31951,
           "formal_scope": {
             "input_bits": 22,
             "input_space": "2**22",
@@ -362,6 +763,102 @@
               "io_enqSelOHVec_1_bits": 22
             }
           }
+        },
+        "abi": {
+          "status": "PASS",
+          "checks": {
+            "target_exact_port_set": true,
+            "reference_exact_port_set": true,
+            "target_reference_port_sets_equal": true
+          },
+          "target_declared_ports": {
+            "io_canEnq": [
+              "input",
+              22
+            ],
+            "io_enqSelOHVec_0_bits": [
+              "output",
+              22
+            ],
+            "io_enqSelOHVec_0_valid": [
+              "output",
+              1
+            ],
+            "io_enqSelOHVec_1_bits": [
+              "output",
+              22
+            ],
+            "io_enqSelOHVec_1_valid": [
+              "output",
+              1
+            ]
+          },
+          "reference_declared_ports": {
+            "io_canEnq": [
+              "input",
+              22
+            ],
+            "io_enqSelOHVec_0_valid": [
+              "output",
+              1
+            ],
+            "io_enqSelOHVec_0_bits": [
+              "output",
+              22
+            ],
+            "io_enqSelOHVec_1_valid": [
+              "output",
+              1
+            ],
+            "io_enqSelOHVec_1_bits": [
+              "output",
+              22
+            ]
+          },
+          "expected_declared_ports": {
+            "io_canEnq": [
+              "input",
+              22
+            ],
+            "io_enqSelOHVec_0_valid": [
+              "output",
+              1
+            ],
+            "io_enqSelOHVec_0_bits": [
+              "output",
+              22
+            ],
+            "io_enqSelOHVec_1_valid": [
+              "output",
+              1
+            ],
+            "io_enqSelOHVec_1_bits": [
+              "output",
+              22
+            ]
+          },
+          "inputs": {
+            "io_canEnq": 22
+          },
+          "outputs": {
+            "io_enqSelOHVec_0_valid": 1,
+            "io_enqSelOHVec_0_bits": 22,
+            "io_enqSelOHVec_1_valid": 1,
+            "io_enqSelOHVec_1_bits": 22
+          },
+          "port_count": 5
+        },
+        "miter_selfcheck": {
+          "status": "PASS",
+          "checks": {
+            "required_nets_present": true,
+            "outputs_compared": true,
+            "no_assume": true,
+            "module_named": true
+          }
+        },
+        "locked_reference_lint": {
+          "status": "PASS"
         }
       },
       "EnqPolicy_8": {
@@ -376,8 +873,18 @@
           ],
           "returncode": 0,
           "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "sat_counts_full": null,
           "output_tail": "             ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/UHSC_EnqPolicy_8.sv:727:24: Operator ADD expects 6 bits on the LHS, but LHS's CONST '1'h0' generates 1 bits.\n                                                                                                             : ... note: In instance 'EnqPolicy_8_MITER.dut_i'\n  727 |   assign \\$343  = 1'h0 + io_canEnq[15];\n      |                        ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/UHSC_EnqPolicy_8.sv:727:24: Operator ADD expects 6 bits on the RHS, but RHS's SEL generates 1 bits.\n                                                                                                             : ... note: In instance 'EnqPolicy_8_MITER.dut_i'\n  727 |   assign \\$343  = 1'h0 + io_canEnq[15];\n      |                        ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/UHSC_EnqPolicy_8.sv:728:26: Operator ADD expects 7 bits on the RHS, but RHS's SEL generates 1 bits.\n                                                                                                             : ... note: In instance 'EnqPolicy_8_MITER.dut_i'\n  728 |   assign \\$344  = \\$343  + io_canEnq[14];\n      |                          ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/UHSC_EnqPolicy_8.sv:729:19: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF '$344' generates 7 bits.\n                                                                                                            : ... note: In instance 'EnqPolicy_8_MITER.dut_i'\n  729 |   assign \\$345  = ! \\$344 ;\n      |                   ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/UHSC_EnqPolicy_8.sv:731:24: Operator ADD expects 6 bits on the LHS, but LHS's CONST '1'h0' generates 1 bits.\n                                                                                                             : ... note: In instance 'EnqPolicy_8_MITER.dut_i'\n  731 |   assign \\$347  = 1'h0 + io_canEnq[15];\n      |                        ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/UHSC_EnqPolicy_8.sv:731:24: Operator ADD expects 6 bits on the RHS, but RHS's SEL generates 1 bits.\n                                                                                                             : ... note: In instance 'EnqPolicy_8_MITER.dut_i'\n  731 |   assign \\$347  = 1'h0 + io_canEnq[15];\n      |                        ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/UHSC_EnqPolicy_8.sv:732:19: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF '$347' generates 6 bits.\n                                                                                                            : ... note: In instance 'EnqPolicy_8_MITER.dut_i'\n  732 |   assign \\$348  = ! \\$347 ;\n      |                   ^\n",
-          "output_sha256": "e0485dd951ace3300cf632949cd9b1ae9f0dd1a94b1e45e295fc0e6ceb16ecb0"
+          "output_sha256": "f29a0eee514026bc97c252da8a9b7c713ca35719438bf9201f135d03de203db6"
         },
         "yosys_target": {
           "command": [
@@ -388,8 +895,18 @@
           ],
           "returncode": 0,
           "status": "PASS",
-          "output_tail": "cuting PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_8.\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_8.\n<suppressed ~32 debug messages>\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_8'.\n<suppressed ~723 debug messages>\nRemoved a total of 241 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\EnqPolicy_8..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicy_8.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_8'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicy_8..\nRemoved 0 unused cells and 366 unused wires.\n<suppressed ~3 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_8.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\EnqPolicy_8..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicy_8.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_8'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicy_8..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_8.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module EnqPolicy_8...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: f07f4f7758, CPU: user 0.05s system 0.02s, MEM: 15.94 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 28% 2x read_verilog (0 sec), 20% 4x opt_expr (0 sec), ...\n",
-          "output_sha256": "ceb2508e2e4d55db0dcd8c8e345849937dea26f79358798aebe4079554f1da80"
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "sat_counts_full": null,
+          "output_tail": "cuting PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_8.\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_8.\n<suppressed ~32 debug messages>\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_8'.\n<suppressed ~723 debug messages>\nRemoved a total of 241 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\EnqPolicy_8..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicy_8.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_8'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicy_8..\nRemoved 0 unused cells and 366 unused wires.\n<suppressed ~3 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_8.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\EnqPolicy_8..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicy_8.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_8'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicy_8..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_8.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module EnqPolicy_8...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: f07f4f7758, CPU: user 0.05s system 0.02s, MEM: 16.09 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 28% 2x read_verilog (0 sec), 19% 4x opt_expr (0 sec), ...\n",
+          "output_sha256": "ff895866141816bbc512c5afabdd1ec6eca76c433dc3516fc785cd6fe15e8a98"
         },
         "yosys_reference": {
           "command": [
@@ -400,8 +917,18 @@
           ],
           "returncode": 0,
           "status": "PASS",
-          "output_tail": "C_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_EnqPolicy_8.\n<suppressed ~28 debug messages>\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_EnqPolicy_8.\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_EnqPolicy_8'.\nRemoved a total of 0 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\REF_EnqPolicy_8..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\REF_EnqPolicy_8.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_EnqPolicy_8'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\REF_EnqPolicy_8..\nRemoved 0 unused cells and 32 unused wires.\n<suppressed ~1 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_EnqPolicy_8.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\REF_EnqPolicy_8..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\REF_EnqPolicy_8.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_EnqPolicy_8'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\REF_EnqPolicy_8..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_EnqPolicy_8.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module REF_EnqPolicy_8...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: a009f29ddd, CPU: user 0.01s system 0.02s, MEM: 15.31 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 49% 2x read_verilog (0 sec), 18% 4x opt_expr (0 sec), ...\n",
-          "output_sha256": "7d574d9b9cc3804c7d79fa349df4e0564033e4af5d5edfcf57a65d880287917c"
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "sat_counts_full": null,
+          "output_tail": "C_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_EnqPolicy_8.\n<suppressed ~28 debug messages>\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_EnqPolicy_8.\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_EnqPolicy_8'.\nRemoved a total of 0 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\REF_EnqPolicy_8..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\REF_EnqPolicy_8.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_EnqPolicy_8'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\REF_EnqPolicy_8..\nRemoved 0 unused cells and 32 unused wires.\n<suppressed ~1 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_EnqPolicy_8.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\REF_EnqPolicy_8..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\REF_EnqPolicy_8.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_EnqPolicy_8'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\REF_EnqPolicy_8..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_EnqPolicy_8.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module REF_EnqPolicy_8...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 91073dd361, CPU: user 0.01s system 0.02s, MEM: 12.34 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 27% 4x opt_expr (0 sec), 26% 2x read_verilog (0 sec), ...\n",
+          "output_sha256": "8ca0e1a296692d38f13d0dfc1411bbabe896e744763b6b1e72ec5b15d46f3e40"
         },
         "yosys_formal_miter": {
           "command": [
@@ -412,9 +939,25 @@
           ],
           "returncode": 0,
           "status": "PASS",
-          "output_tail": "rees).\nRunning muxtree optimizer on module \\EnqPolicy_8_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicy_8_MITER.\nPerformed a total of 0 changes.\n\n6.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_8_MITER'.\nRemoved a total of 0 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicy_8_MITER..\nRemoved 0 unused cells and 248 unused wires.\n<suppressed ~3 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_8_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\EnqPolicy_8_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicy_8_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_8_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicy_8_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_8_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 238 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 5995 variables and 16633 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: b04edba1f7, CPU: user 0.13s system 0.00s, MEM: 20.31 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 25% 1x sat (0 sec), 17% 4x read_verilog (0 sec), ...\n",
-          "output_sha256": "1139fbd4e583692d9ad207c6abc7dc73025e32348bfad6036972e3f1c1938471",
+          "sat_success_marker": true,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": true,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "sat_counts_full": [
+            5995,
+            16633
+          ],
+          "output_tail": "x trees).\nRunning muxtree optimizer on module \\EnqPolicy_8_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicy_8_MITER.\nPerformed a total of 0 changes.\n\n6.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_8_MITER'.\nRemoved a total of 0 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicy_8_MITER..\nRemoved 0 unused cells and 248 unused wires.\n<suppressed ~3 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_8_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\EnqPolicy_8_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicy_8_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_8_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicy_8_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_8_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 238 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 5995 variables and 16633 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 783a89e38f, CPU: user 0.17s system 0.01s, MEM: 20.22 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 33% 1x sat (0 sec), 15% 6x opt_clean (0 sec), ...\n",
+          "output_sha256": "03c4889acd37fb636eec28c5a471ace8dfcd713f5a401810a450403b6d6ac93c",
           "formal_success_marker": true,
+          "unconstrained": true,
+          "sat_variables": 5995,
+          "sat_clauses": 16633,
           "formal_scope": {
             "input_bits": 16,
             "input_space": "2**16",
@@ -428,6 +971,102 @@
               "io_enqSelOHVec_1_bits": 16
             }
           }
+        },
+        "abi": {
+          "status": "PASS",
+          "checks": {
+            "target_exact_port_set": true,
+            "reference_exact_port_set": true,
+            "target_reference_port_sets_equal": true
+          },
+          "target_declared_ports": {
+            "io_canEnq": [
+              "input",
+              16
+            ],
+            "io_enqSelOHVec_0_bits": [
+              "output",
+              16
+            ],
+            "io_enqSelOHVec_0_valid": [
+              "output",
+              1
+            ],
+            "io_enqSelOHVec_1_bits": [
+              "output",
+              16
+            ],
+            "io_enqSelOHVec_1_valid": [
+              "output",
+              1
+            ]
+          },
+          "reference_declared_ports": {
+            "io_canEnq": [
+              "input",
+              16
+            ],
+            "io_enqSelOHVec_0_valid": [
+              "output",
+              1
+            ],
+            "io_enqSelOHVec_0_bits": [
+              "output",
+              16
+            ],
+            "io_enqSelOHVec_1_valid": [
+              "output",
+              1
+            ],
+            "io_enqSelOHVec_1_bits": [
+              "output",
+              16
+            ]
+          },
+          "expected_declared_ports": {
+            "io_canEnq": [
+              "input",
+              16
+            ],
+            "io_enqSelOHVec_0_valid": [
+              "output",
+              1
+            ],
+            "io_enqSelOHVec_0_bits": [
+              "output",
+              16
+            ],
+            "io_enqSelOHVec_1_valid": [
+              "output",
+              1
+            ],
+            "io_enqSelOHVec_1_bits": [
+              "output",
+              16
+            ]
+          },
+          "inputs": {
+            "io_canEnq": 16
+          },
+          "outputs": {
+            "io_enqSelOHVec_0_valid": 1,
+            "io_enqSelOHVec_0_bits": 16,
+            "io_enqSelOHVec_1_valid": 1,
+            "io_enqSelOHVec_1_bits": 16
+          },
+          "port_count": 5
+        },
+        "miter_selfcheck": {
+          "status": "PASS",
+          "checks": {
+            "required_nets_present": true,
+            "outputs_compared": true,
+            "no_assume": true,
+            "module_named": true
+          }
+        },
+        "locked_reference_lint": {
+          "status": "PASS"
         }
       },
       "EnqPolicy_14": {
@@ -442,8 +1081,18 @@
           ],
           "returncode": 0,
           "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "sat_counts_full": null,
           "output_tail": "ng-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/UHSC_EnqPolicy_14.sv:581:24: Operator ADD expects 5 bits on the LHS, but LHS's CONST '1'h0' generates 1 bits.\n                                                                                                              : ... note: In instance 'EnqPolicy_14_MITER.dut_i'\n  581 |   assign \\$271  = 1'h0 + io_canEnq[13];\n      |                        ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/UHSC_EnqPolicy_14.sv:581:24: Operator ADD expects 5 bits on the RHS, but RHS's SEL generates 1 bits.\n                                                                                                              : ... note: In instance 'EnqPolicy_14_MITER.dut_i'\n  581 |   assign \\$271  = 1'h0 + io_canEnq[13];\n      |                        ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/UHSC_EnqPolicy_14.sv:582:26: Operator ADD expects 6 bits on the RHS, but RHS's SEL generates 1 bits.\n                                                                                                              : ... note: In instance 'EnqPolicy_14_MITER.dut_i'\n  582 |   assign \\$272  = \\$271  + io_canEnq[12];\n      |                          ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/UHSC_EnqPolicy_14.sv:583:19: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF '$272' generates 6 bits.\n                                                                                                             : ... note: In instance 'EnqPolicy_14_MITER.dut_i'\n  583 |   assign \\$273  = ! \\$272 ;\n      |                   ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/UHSC_EnqPolicy_14.sv:585:24: Operator ADD expects 5 bits on the LHS, but LHS's CONST '1'h0' generates 1 bits.\n                                                                                                              : ... note: In instance 'EnqPolicy_14_MITER.dut_i'\n  585 |   assign \\$275  = 1'h0 + io_canEnq[13];\n      |                        ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/UHSC_EnqPolicy_14.sv:585:24: Operator ADD expects 5 bits on the RHS, but RHS's SEL generates 1 bits.\n                                                                                                              : ... note: In instance 'EnqPolicy_14_MITER.dut_i'\n  585 |   assign \\$275  = 1'h0 + io_canEnq[13];\n      |                        ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/UHSC_EnqPolicy_14.sv:586:19: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF '$275' generates 5 bits.\n                                                                                                             : ... note: In instance 'EnqPolicy_14_MITER.dut_i'\n  586 |   assign \\$276  = ! \\$275 ;\n      |                   ^\n",
-          "output_sha256": "1f596a37d6012fea9931cd4d8e253f18864dbcf9721c802608b4be30ac7cb012"
+          "output_sha256": "7ebdafda5f42835e599f0bcbb28e45de5ba0d3f0e931f080bbc67fa11bf98f57"
         },
         "yosys_target": {
           "command": [
@@ -454,8 +1103,18 @@
           ],
           "returncode": 0,
           "status": "PASS",
-          "output_tail": "ATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_14.\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_14.\n<suppressed ~28 debug messages>\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_14'.\n<suppressed ~549 debug messages>\nRemoved a total of 183 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\EnqPolicy_14..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicy_14.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_14'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicy_14..\nRemoved 0 unused cells and 292 unused wires.\n<suppressed ~3 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_14.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\EnqPolicy_14..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicy_14.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_14'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicy_14..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_14.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module EnqPolicy_14...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: d23294ab1a, CPU: user 0.04s system 0.00s, MEM: 15.16 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 27% 2x read_verilog (0 sec), 24% 4x opt_expr (0 sec), ...\n",
-          "output_sha256": "38014eb3880d070652e437fbbe16947c1cf2745b855e878621a9e9b2a2179b69"
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "sat_counts_full": null,
+          "output_tail": "ATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_14.\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_14.\n<suppressed ~28 debug messages>\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_14'.\n<suppressed ~549 debug messages>\nRemoved a total of 183 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\EnqPolicy_14..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicy_14.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_14'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicy_14..\nRemoved 0 unused cells and 292 unused wires.\n<suppressed ~3 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_14.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\EnqPolicy_14..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicy_14.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_14'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicy_14..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_14.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module EnqPolicy_14...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: d23294ab1a, CPU: user 0.06s system 0.01s, MEM: 15.16 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 28% 2x read_verilog (0 sec), 20% 4x opt_expr (0 sec), ...\n",
+          "output_sha256": "75dcfa600056dfa13bf584d0fa2909d4822363640d43c7f36c10553ceb6477be"
         },
         "yosys_reference": {
           "command": [
@@ -466,8 +1125,18 @@
           ],
           "returncode": 0,
           "status": "PASS",
-          "output_tail": "nvert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_EnqPolicy_14.\n<suppressed ~24 debug messages>\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_EnqPolicy_14.\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_EnqPolicy_14'.\nRemoved a total of 0 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\REF_EnqPolicy_14..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\REF_EnqPolicy_14.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_EnqPolicy_14'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\REF_EnqPolicy_14..\nRemoved 0 unused cells and 28 unused wires.\n<suppressed ~1 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_EnqPolicy_14.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\REF_EnqPolicy_14..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\REF_EnqPolicy_14.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_EnqPolicy_14'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\REF_EnqPolicy_14..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_EnqPolicy_14.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module REF_EnqPolicy_14...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 01ea363cc8, CPU: user 0.02s system 0.01s, MEM: 15.16 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 51% 2x read_verilog (0 sec), 17% 4x opt_expr (0 sec), ...\n",
-          "output_sha256": "5ea653de3f33f4a69659d05f931af0473caaf680a788eafd22b7445142ff9cf1"
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "sat_counts_full": null,
+          "output_tail": "nvert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_EnqPolicy_14.\n<suppressed ~24 debug messages>\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_EnqPolicy_14.\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_EnqPolicy_14'.\nRemoved a total of 0 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\REF_EnqPolicy_14..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\REF_EnqPolicy_14.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_EnqPolicy_14'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\REF_EnqPolicy_14..\nRemoved 0 unused cells and 28 unused wires.\n<suppressed ~1 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_EnqPolicy_14.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\REF_EnqPolicy_14..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\REF_EnqPolicy_14.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_EnqPolicy_14'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\REF_EnqPolicy_14..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_EnqPolicy_14.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module REF_EnqPolicy_14...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 052202d8bb, CPU: user 0.01s system 0.02s, MEM: 12.19 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 32% 4x opt_expr (0 sec), 22% 2x read_verilog (0 sec), ...\n",
+          "output_sha256": "c2317223dab9b4829c2637c7715854e21fdb4096d616064720fd7585fc9005b3"
         },
         "yosys_formal_miter": {
           "command": [
@@ -478,9 +1147,25 @@
           ],
           "returncode": 0,
           "status": "PASS",
-          "output_tail": "ning muxtree optimizer on module \\EnqPolicy_14_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicy_14_MITER.\nPerformed a total of 0 changes.\n\n6.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_14_MITER'.\nRemoved a total of 0 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicy_14_MITER..\nRemoved 0 unused cells and 190 unused wires.\n<suppressed ~3 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_14_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\EnqPolicy_14_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicy_14_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_14_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicy_14_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_14_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 208 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 4701 variables and 13007 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 7111b659db, CPU: user 0.13s system 0.00s, MEM: 19.04 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 29% 1x sat (0 sec), 18% 4x read_verilog (0 sec), ...\n",
-          "output_sha256": "e2f0175a44843fc3cb290ec3b7f8ed2ebdbfb03dd2e13da33d004962365ce8d3",
+          "sat_success_marker": true,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": true,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "sat_counts_full": [
+            4701,
+            13007
+          ],
+          "output_tail": "Running muxtree optimizer on module \\EnqPolicy_14_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicy_14_MITER.\nPerformed a total of 0 changes.\n\n6.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_14_MITER'.\nRemoved a total of 0 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicy_14_MITER..\nRemoved 0 unused cells and 190 unused wires.\n<suppressed ~3 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_14_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\EnqPolicy_14_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicy_14_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_14_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicy_14_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_14_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 208 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 4701 variables and 13007 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 420bc4435e, CPU: user 0.17s system 0.02s, MEM: 18.23 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 28% 1x sat (0 sec), 17% 6x opt_clean (0 sec), ...\n",
+          "output_sha256": "e159475f0d18464acd211141a03420e4f705dbe39002d67b985940890da59d64",
           "formal_success_marker": true,
+          "unconstrained": true,
+          "sat_variables": 4701,
+          "sat_clauses": 13007,
           "formal_scope": {
             "input_bits": 14,
             "input_space": "2**14",
@@ -494,6 +1179,102 @@
               "io_enqSelOHVec_1_bits": 14
             }
           }
+        },
+        "abi": {
+          "status": "PASS",
+          "checks": {
+            "target_exact_port_set": true,
+            "reference_exact_port_set": true,
+            "target_reference_port_sets_equal": true
+          },
+          "target_declared_ports": {
+            "io_canEnq": [
+              "input",
+              14
+            ],
+            "io_enqSelOHVec_0_bits": [
+              "output",
+              14
+            ],
+            "io_enqSelOHVec_0_valid": [
+              "output",
+              1
+            ],
+            "io_enqSelOHVec_1_bits": [
+              "output",
+              14
+            ],
+            "io_enqSelOHVec_1_valid": [
+              "output",
+              1
+            ]
+          },
+          "reference_declared_ports": {
+            "io_canEnq": [
+              "input",
+              14
+            ],
+            "io_enqSelOHVec_0_valid": [
+              "output",
+              1
+            ],
+            "io_enqSelOHVec_0_bits": [
+              "output",
+              14
+            ],
+            "io_enqSelOHVec_1_valid": [
+              "output",
+              1
+            ],
+            "io_enqSelOHVec_1_bits": [
+              "output",
+              14
+            ]
+          },
+          "expected_declared_ports": {
+            "io_canEnq": [
+              "input",
+              14
+            ],
+            "io_enqSelOHVec_0_valid": [
+              "output",
+              1
+            ],
+            "io_enqSelOHVec_0_bits": [
+              "output",
+              14
+            ],
+            "io_enqSelOHVec_1_valid": [
+              "output",
+              1
+            ],
+            "io_enqSelOHVec_1_bits": [
+              "output",
+              14
+            ]
+          },
+          "inputs": {
+            "io_canEnq": 14
+          },
+          "outputs": {
+            "io_enqSelOHVec_0_valid": 1,
+            "io_enqSelOHVec_0_bits": 14,
+            "io_enqSelOHVec_1_valid": 1,
+            "io_enqSelOHVec_1_bits": 14
+          },
+          "port_count": 5
+        },
+        "miter_selfcheck": {
+          "status": "PASS",
+          "checks": {
+            "required_nets_present": true,
+            "outputs_compared": true,
+            "no_assume": true,
+            "module_named": true
+          }
+        },
+        "locked_reference_lint": {
+          "status": "PASS"
         }
       },
       "EnqPolicy_18": {
@@ -508,8 +1289,18 @@
           ],
           "returncode": 0,
           "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "sat_counts_full": null,
           "output_tail": "Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/UHSC_EnqPolicy_18.sv:239:24: Operator ADD expects 5 bits on the LHS, but LHS's CONST '1'h0' generates 1 bits.\n                                                                                                              : ... note: In instance 'EnqPolicy_18_MITER.dut_i'\n  239 |   assign \\$103  = 1'h0 + io_canEnq[7];\n      |                        ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/UHSC_EnqPolicy_18.sv:239:24: Operator ADD expects 5 bits on the RHS, but RHS's SEL generates 1 bits.\n                                                                                                              : ... note: In instance 'EnqPolicy_18_MITER.dut_i'\n  239 |   assign \\$103  = 1'h0 + io_canEnq[7];\n      |                        ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/UHSC_EnqPolicy_18.sv:240:26: Operator ADD expects 6 bits on the RHS, but RHS's SEL generates 1 bits.\n                                                                                                              : ... note: In instance 'EnqPolicy_18_MITER.dut_i'\n  240 |   assign \\$104  = \\$103  + io_canEnq[6];\n      |                          ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/UHSC_EnqPolicy_18.sv:241:19: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF '$104' generates 6 bits.\n                                                                                                             : ... note: In instance 'EnqPolicy_18_MITER.dut_i'\n  241 |   assign \\$105  = ! \\$104 ;\n      |                   ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/UHSC_EnqPolicy_18.sv:243:24: Operator ADD expects 5 bits on the LHS, but LHS's CONST '1'h0' generates 1 bits.\n                                                                                                              : ... note: In instance 'EnqPolicy_18_MITER.dut_i'\n  243 |   assign \\$107  = 1'h0 + io_canEnq[7];\n      |                        ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/UHSC_EnqPolicy_18.sv:243:24: Operator ADD expects 5 bits on the RHS, but RHS's SEL generates 1 bits.\n                                                                                                              : ... note: In instance 'EnqPolicy_18_MITER.dut_i'\n  243 |   assign \\$107  = 1'h0 + io_canEnq[7];\n      |                        ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/UHSC_EnqPolicy_18.sv:244:19: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF '$107' generates 5 bits.\n                                                                                                             : ... note: In instance 'EnqPolicy_18_MITER.dut_i'\n  244 |   assign \\$108  = ! \\$107 ;\n      |                   ^\n",
-          "output_sha256": "fe9b8cf7ee9b19006b68ad5aaa0058114f5099382ac9beb808fcd7736d49425f"
+          "output_sha256": "5d45e63fb74e49f67d72c3bdf44ca9e6c803fd0730dd5ee8351f42c91c2d1267"
         },
         "yosys_target": {
           "command": [
@@ -520,8 +1311,18 @@
           ],
           "returncode": 0,
           "status": "PASS",
-          "output_tail": "LATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_18.\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_18.\n<suppressed ~16 debug messages>\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_18'.\n<suppressed ~171 debug messages>\nRemoved a total of 57 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\EnqPolicy_18..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicy_18.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_18'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicy_18..\nRemoved 0 unused cells and 118 unused wires.\n<suppressed ~3 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_18.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\EnqPolicy_18..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicy_18.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_18'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicy_18..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_18.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module EnqPolicy_18...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 9a2fa918ea, CPU: user 0.02s system 0.01s, MEM: 12.66 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 29% 2x read_verilog (0 sec), 21% 4x opt_expr (0 sec), ...\n",
-          "output_sha256": "d03de9d33268d6e1aa349ba3e6359f3ac22e98e455d9d017f07fdc4664b642b3"
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "sat_counts_full": null,
+          "output_tail": "LATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_18.\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_18.\n<suppressed ~16 debug messages>\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_18'.\n<suppressed ~171 debug messages>\nRemoved a total of 57 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\EnqPolicy_18..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicy_18.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_18'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicy_18..\nRemoved 0 unused cells and 118 unused wires.\n<suppressed ~3 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_18.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\EnqPolicy_18..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicy_18.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_18'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicy_18..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_18.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module EnqPolicy_18...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 9a2fa918ea, CPU: user 0.02s system 0.02s, MEM: 12.97 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 26% 2x read_verilog (0 sec), 25% 4x opt_expr (0 sec), ...\n",
+          "output_sha256": "5d7ff070b7f0b2a16665e8af2904d2b14426c21f4d6cd9899f373c9304a3e6d6"
         },
         "yosys_reference": {
           "command": [
@@ -532,8 +1333,18 @@
           ],
           "returncode": 0,
           "status": "PASS",
-          "output_tail": "nvert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_EnqPolicy_18.\n<suppressed ~12 debug messages>\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_EnqPolicy_18.\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_EnqPolicy_18'.\nRemoved a total of 0 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\REF_EnqPolicy_18..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\REF_EnqPolicy_18.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_EnqPolicy_18'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\REF_EnqPolicy_18..\nRemoved 0 unused cells and 16 unused wires.\n<suppressed ~1 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_EnqPolicy_18.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\REF_EnqPolicy_18..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\REF_EnqPolicy_18.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_EnqPolicy_18'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\REF_EnqPolicy_18..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_EnqPolicy_18.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module REF_EnqPolicy_18...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 103fb951a8, CPU: user 0.02s system 0.01s, MEM: 15.16 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 51% 2x read_verilog (0 sec), 17% 4x opt_expr (0 sec), ...\n",
-          "output_sha256": "026e7f84bb0dac3b16335c5b02e67d8912d4ef0512273fac3d5d07ae9aad4d0c"
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "sat_counts_full": null,
+          "output_tail": "nvert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_EnqPolicy_18.\n<suppressed ~12 debug messages>\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_EnqPolicy_18.\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_EnqPolicy_18'.\nRemoved a total of 0 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\REF_EnqPolicy_18..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\REF_EnqPolicy_18.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_EnqPolicy_18'.\nRemoved a total of 0 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\REF_EnqPolicy_18..\nRemoved 0 unused cells and 16 unused wires.\n<suppressed ~1 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_EnqPolicy_18.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\REF_EnqPolicy_18..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\REF_EnqPolicy_18.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\REF_EnqPolicy_18'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\REF_EnqPolicy_18..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module REF_EnqPolicy_18.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module REF_EnqPolicy_18...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 880196dd4a, CPU: user 0.01s system 0.01s, MEM: 12.03 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 34% 4x opt_expr (0 sec), 21% 2x read_verilog (0 sec), ...\n",
+          "output_sha256": "05afbc4f2699ae52b9a02f4eeb2be73f9698c65699b6b1f10190b80f132a2ca3"
         },
         "yosys_formal_miter": {
           "command": [
@@ -544,9 +1355,25 @@
           ],
           "returncode": 0,
           "status": "PASS",
-          "output_tail": "g muxtree optimizer on module \\EnqPolicy_18_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicy_18_MITER.\nPerformed a total of 0 changes.\n\n6.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_18_MITER'.\nRemoved a total of 0 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicy_18_MITER..\nRemoved 0 unused cells and 64 unused wires.\n<suppressed ~3 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_18_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\EnqPolicy_18_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicy_18_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_18_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicy_18_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_18_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 118 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 1773 variables and 4841 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 37a17b173d, CPU: user 0.06s system 0.00s, MEM: 17.50 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 26% 4x read_verilog (0 sec), 16% 8x opt_expr (0 sec), ...\n",
-          "output_sha256": "fdd6938f25c259c521d705eae2f80d699d80130bdc424bd7ee07a516207b946b",
+          "sat_success_marker": true,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": true,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "sat_counts_full": [
+            1773,
+            4841
+          ],
+          "output_tail": "ning muxtree optimizer on module \\EnqPolicy_18_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicy_18_MITER.\nPerformed a total of 0 changes.\n\n6.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_18_MITER'.\nRemoved a total of 0 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicy_18_MITER..\nRemoved 0 unused cells and 64 unused wires.\n<suppressed ~3 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_18_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\EnqPolicy_18_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicy_18_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicy_18_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicy_18_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicy_18_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 118 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 1773 variables and 4841 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: e86b8a9342, CPU: user 0.06s system 0.00s, MEM: 15.16 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 19% 8x opt_expr (0 sec), 18% 6x opt_clean (0 sec), ...\n",
+          "output_sha256": "aa6c4b127c617408c1b27bc14c1786ed0f7c5b60616b290c30c069c50314352c",
           "formal_success_marker": true,
+          "unconstrained": true,
+          "sat_variables": 1773,
+          "sat_clauses": 4841,
           "formal_scope": {
             "input_bits": 8,
             "input_space": "2**8",
@@ -560,6 +1387,102 @@
               "io_enqSelOHVec_1_bits": 8
             }
           }
+        },
+        "abi": {
+          "status": "PASS",
+          "checks": {
+            "target_exact_port_set": true,
+            "reference_exact_port_set": true,
+            "target_reference_port_sets_equal": true
+          },
+          "target_declared_ports": {
+            "io_canEnq": [
+              "input",
+              8
+            ],
+            "io_enqSelOHVec_0_bits": [
+              "output",
+              8
+            ],
+            "io_enqSelOHVec_0_valid": [
+              "output",
+              1
+            ],
+            "io_enqSelOHVec_1_bits": [
+              "output",
+              8
+            ],
+            "io_enqSelOHVec_1_valid": [
+              "output",
+              1
+            ]
+          },
+          "reference_declared_ports": {
+            "io_canEnq": [
+              "input",
+              8
+            ],
+            "io_enqSelOHVec_0_valid": [
+              "output",
+              1
+            ],
+            "io_enqSelOHVec_0_bits": [
+              "output",
+              8
+            ],
+            "io_enqSelOHVec_1_valid": [
+              "output",
+              1
+            ],
+            "io_enqSelOHVec_1_bits": [
+              "output",
+              8
+            ]
+          },
+          "expected_declared_ports": {
+            "io_canEnq": [
+              "input",
+              8
+            ],
+            "io_enqSelOHVec_0_valid": [
+              "output",
+              1
+            ],
+            "io_enqSelOHVec_0_bits": [
+              "output",
+              8
+            ],
+            "io_enqSelOHVec_1_valid": [
+              "output",
+              1
+            ],
+            "io_enqSelOHVec_1_bits": [
+              "output",
+              8
+            ]
+          },
+          "inputs": {
+            "io_canEnq": 8
+          },
+          "outputs": {
+            "io_enqSelOHVec_0_valid": 1,
+            "io_enqSelOHVec_0_bits": 8,
+            "io_enqSelOHVec_1_valid": 1,
+            "io_enqSelOHVec_1_bits": 8
+          },
+          "port_count": 5
+        },
+        "miter_selfcheck": {
+          "status": "PASS",
+          "checks": {
+            "required_nets_present": true,
+            "outputs_compared": true,
+            "no_assume": true,
+            "module_named": true
+          }
+        },
+        "locked_reference_lint": {
+          "status": "PASS"
         }
       }
     },
@@ -575,8 +1498,18 @@
         ],
         "returncode": 0,
         "status": "PASS",
+        "sat_success_marker": false,
+        "sat_counterexample_marker": false,
+        "unconstrained_marker": false,
+        "equiv_success_markers": {
+          "0 are unproven.": false,
+          "Equivalence successfully proven!": false
+        },
+        "equiv_cells_full": null,
+        "equiv_summary_full": null,
+        "sat_counts_full": null,
         "output_tail": "                                                           ^~\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/EnqPolicies_MITER.sv:12:46: Logical operator LOGOR expects 1 bit on the RHS, but RHS's XOR generates 16 bits.\n                                                                                                            : ... note: In instance 'EnqPolicies_MITER'\n   12 |   assign mismatch_s=(rv0_1^v0_1)|(rv1_1^v1_1)||(rb0_1^b0_1)||(rb1_1^b1_1);\n      |                                              ^~\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/EnqPolicies_MITER.sv:12:60: Logical operator LOGOR expects 1 bit on the RHS, but RHS's XOR generates 16 bits.\n                                                                                                            : ... note: In instance 'EnqPolicies_MITER'\n   12 |   assign mismatch_s=(rv0_1^v0_1)|(rv1_1^v1_1)||(rb0_1^b0_1)||(rb1_1^b1_1);\n      |                                                            ^~\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/EnqPolicies_MITER.sv:17:46: Logical operator LOGOR expects 1 bit on the RHS, but RHS's XOR generates 14 bits.\n                                                                                                            : ... note: In instance 'EnqPolicies_MITER'\n   17 |   assign mismatch_v=(rv0_2^v0_2)|(rv1_2^v1_2)||(rb0_2^b0_2)||(rb1_2^b1_2);\n      |                                              ^~\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/EnqPolicies_MITER.sv:17:60: Logical operator LOGOR expects 1 bit on the RHS, but RHS's XOR generates 14 bits.\n                                                                                                            : ... note: In instance 'EnqPolicies_MITER'\n   17 |   assign mismatch_v=(rv0_2^v0_2)|(rv1_2^v1_2)||(rb0_2^b0_2)||(rb1_2^b1_2);\n      |                                                            ^~\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/EnqPolicies_MITER.sv:22:46: Logical operator LOGOR expects 1 bit on the RHS, but RHS's XOR generates 8 bits.\n                                                                                                            : ... note: In instance 'EnqPolicies_MITER'\n   22 |   assign mismatch_m=(rv0_3^v0_3)|(rv1_3^v1_3)||(rb0_3^b0_3)||(rb1_3^b1_3);\n      |                                              ^~\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_enqpolicy_strict/EnqPolicies_MITER.sv:22:60: Logical operator LOGOR expects 1 bit on the RHS, but RHS's XOR generates 8 bits.\n                                                                                                            : ... note: In instance 'EnqPolicies_MITER'\n   22 |   assign mismatch_m=(rv0_3^v0_3)|(rv1_3^v1_3)||(rb0_3^b0_3)||(rb1_3^b1_3);\n      |                                                            ^~\n",
-        "output_sha256": "8f725ac27d13c813a370a9b296a8f746e885ddc06c6b2889e78d736a063fcdcb"
+        "output_sha256": "677e4a361c80242d6ea30bf637d48f17ee96d4631a413b9041c478a1999f20c3"
       },
       "yosys_formal_miter": {
         "command": [
@@ -587,9 +1520,26 @@
         ],
         "returncode": 0,
         "status": "PASS",
-        "output_tail": " trees).\nRunning muxtree optimizer on module \\EnqPolicies_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~8 debug messages>\n\n6.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicies_MITER.\nPerformed a total of 0 changes.\n\n6.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicies_MITER'.\nRemoved a total of 0 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicies_MITER..\nRemoved 0 unused cells and 972 unused wires.\n<suppressed ~9 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicies_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\EnqPolicies_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~8 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicies_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicies_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicies_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicies_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 887 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 23867 variables and 66361 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 0c56e79810, CPU: user 0.54s system 0.01s, MEM: 36.16 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 32% 1x sat (0 sec), 16% 6x opt_clean (0 sec), ...\n",
-        "output_sha256": "04ecf54331a4b94e4264d68e44c863e2b7c6bc1d1b9ecd9f160d59c6d9c02261",
+        "sat_success_marker": true,
+        "sat_counterexample_marker": false,
+        "unconstrained_marker": true,
+        "equiv_success_markers": {
+          "0 are unproven.": false,
+          "Equivalence successfully proven!": false
+        },
+        "equiv_cells_full": null,
+        "equiv_summary_full": null,
+        "sat_counts_full": [
+          23867,
+          66361
+        ],
+        "output_tail": " trees).\nRunning muxtree optimizer on module \\EnqPolicies_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~8 debug messages>\n\n6.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicies_MITER.\nPerformed a total of 0 changes.\n\n6.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicies_MITER'.\nRemoved a total of 0 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicies_MITER..\nRemoved 0 unused cells and 972 unused wires.\n<suppressed ~9 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicies_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\EnqPolicies_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~8 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\EnqPolicies_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\EnqPolicies_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\EnqPolicies_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module EnqPolicies_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 887 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 23867 variables and 66361 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 0c56e79810, CPU: user 0.56s system 0.03s, MEM: 36.30 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 31% 1x sat (0 sec), 16% 6x opt_clean (0 sec), ...\n",
+        "output_sha256": "168ef559a6bb11b2af2c191ebc084eb08182e7b436b695e75cd5696a377a9652",
         "formal_success_marker": true,
+        "unconstrained": true,
+        "mitered_variants": 4,
+        "sat_variables": 23867,
+        "sat_clauses": 66361,
         "formal_scope": {
           "input_bits": 60,
           "input_space": "2**60",
@@ -604,8 +1554,41 @@
           ]
         }
       }
+    },
+    "negative_control": {
+      "status": "PASS",
+      "sides": {
+        "target": {
+          "status": "PASS",
+          "mutation_applied": true,
+          "control_port": "io_enqSelOHVec_0_bits",
+          "clean_proof_marker_disappeared": true,
+          "counterexample_marker": true,
+          "counterexample_or_unproven": true,
+          "success_marker_still_present": false,
+          "output_tail": "uting SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 191 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 4276 variables and 11867 clauses..\nSAT proof finished - model found: FAIL!\n\n   ______                   ___       ___       _ _            _ _ \n  (_____ \\                 / __)     / __)     (_) |          | | |\n   _____) )___ ___   ___ _| |__    _| |__ _____ _| | _____  __| | |\n  |  ____/ ___) _ \\ / _ (_   __)  (_   __|____ | | || ___ |/ _  |_|\n  | |   | |  | |_| | |_| || |       | |  / ___ | | || ____( (_| |_ \n  |_|   |_|   \\___/ \\___/ |_|       |_|  \\_____|_|\\_)_____)\\____|_|\n\n\n  Signal Name             Dec       Hex                 Bin\n  --------------- ----------- --------- -------------------\n  \\io_canEnq            32768      8000    1000000000000000\n  \\mismatch                 1         1                   1\n\nEnd of script. Logfile hash: 31597394bb, CPU: user 0.12s system 0.00s, MEM: 18.09 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 19% 6x opt_clean (0 sec), 17% 8x opt_expr (0 sec), ...\n"
+        },
+        "reference": {
+          "status": "PASS",
+          "mutation_applied": true,
+          "control_port": "io_enqSelOHVec_0_bits",
+          "clean_proof_marker_disappeared": true,
+          "counterexample_marker": true,
+          "counterexample_or_unproven": true,
+          "success_marker_still_present": false,
+          "output_tail": "g SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 207 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 5734 variables and 15851 clauses..\nSAT proof finished - model found: FAIL!\n\n   ______                   ___       ___       _ _            _ _ \n  (_____ \\                 / __)     / __)     (_) |          | | |\n   _____) )___ ___   ___ _| |__    _| |__ _____ _| | _____  __| | |\n  |  ____/ ___) _ \\ / _ (_   __)  (_   __|____ | | || ___ |/ _  |_|\n  | |   | |  | |_| | |_| || |       | |  / ___ | | || ____( (_| |_ \n  |_|   |_|   \\___/ \\___/ |_|       |_|  \\_____|_|\\_)_____)\\____|_|\n\n\n  Signal Name             Dec       Hex                 Bin\n  --------------- ----------- --------- -------------------\n  \\io_canEnq            32768      8000    1000000000000000\n  \\mismatch                 1         1                   1\n\nEnd of script. Logfile hash: 7f7dd3fefa, CPU: user 0.11s system 0.01s, MEM: 19.72 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 20% 6x opt_clean (0 sec), 15% 4x read_verilog (0 sec), ...\n"
+        }
+      },
+      "control_variant": "EnqPolicy_8",
+      "two_sided": true,
+      "mutation_applied": true,
+      "clean_proof_marker_disappeared": true,
+      "counterexample_or_unproven": true
     }
   },
   "failures": [],
-  "unclosed": []
+  "unclosed": [],
+  "acceptance_unclosed": [
+    "Backend/Issue parent closure, license review and user approval remain outside this proof."
+  ]
 }

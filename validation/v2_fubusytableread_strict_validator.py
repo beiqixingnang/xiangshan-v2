@@ -200,6 +200,14 @@ def run_wsl(command: list[str]) -> dict[str, Any]:
         "command": command,
         "returncode": result.returncode,
         "status": "PASS" if result.returncode == 0 else "FAIL",
+        # Keep marker decisions from the complete process output.  A failing
+        # SAT negative-control run prints the model after the verdict, so its
+        # ``model found: FAIL!`` line can fall outside the bounded diagnostic
+        # tail below.  Recording these booleans before truncation keeps the
+        # gate sound without retaining an unbounded Yosys log in the evidence.
+        "success_marker": SUCCESS_MARKER in output,
+        "counterexample_marker": "model found: FAIL!" in output,
+        "unconstrained_marker": "Final constraint equation: { } = { }" in output,
         "output_tail": output[-4000:],
         "output_sha256": hashlib.sha256(output.encode()).hexdigest(),
     }
@@ -611,6 +619,16 @@ def _port_declarations(name: str, spec: dict[str, Any], suffix: str) -> tuple[li
     return declarations, connections
 
 
+def miter_nets_declared(text: str) -> bool:
+    """Reject implicit miter nets before invoking Verilator or Yosys."""
+
+    declared = set(re.findall(
+        r"^\s*(?:input|output|wire)\s+(?:\[\s*\d+:\s*\d+\]\s*)?([A-Za-z_]\w*)",
+        text, re.M))
+    connected = {net.strip() for net in re.findall(r"\.\w+\(([^()]+)\)", text)}
+    return bool(connected) and connected <= declared
+
+
 def materialize(exported: dict[str, str]) -> dict[str, Any]:
     """Write targets, the renamed locked closure, miters, and the aggregate."""
 
@@ -627,6 +645,7 @@ def materialize(exported: dict[str, str]) -> dict[str, Any]:
 
     targets: dict[str, Path] = {}
     miters: dict[str, Path] = {}
+    miter_selfchecks: dict[str, bool] = {}
     target_names: dict[str, str] = {}
     aggregate_declarations: list[str] = []
     aggregate_instances: list[str] = []
@@ -644,7 +663,7 @@ def materialize(exported: dict[str, str]) -> dict[str, Any]:
         ref_map = f"{connections}, .io_out_fuBusyTableMask(ref_mask)"
         dut_map = f"{connections}, .io_out_fuBusyTableMask(dut_mask)"
         miter = WORK / f"{name}_MITER.sv"
-        miter.write_text(
+        miter_text = (
             f"module {name}_MITER(\n"
             + "\n".join(declarations)
             + "\n  output mismatch\n);\n"
@@ -653,9 +672,10 @@ def materialize(exported: dict[str, str]) -> dict[str, Any]:
             + f"  REF_{name} reference_i({ref_map});\n"
             + f"  {target_name} target_i({dut_map});\n"
             + "  assign mismatch = |(ref_mask ^ dut_mask);\n"
-            + "endmodule\n",
-            encoding="utf-8", newline="\n")
+            + "endmodule\n")
+        miter.write_text(miter_text, encoding="utf-8", newline="\n")
         miters[name] = miter
+        miter_selfchecks[name] = miter_nets_declared(miter_text)
 
         # Aggregate: one unconstrained input bundle per specialization, because
         # the eighteen geometries are not interchangeable.
@@ -683,7 +703,8 @@ def materialize(exported: dict[str, str]) -> dict[str, Any]:
         + ";\nendmodule\n",
         encoding="utf-8", newline="\n")
     return {"reference": reference, "targets": targets, "miters": miters,
-            "aggregate": aggregate, "target_names": target_names}
+            "aggregate": aggregate, "target_names": target_names,
+            "miter_selfchecks": miter_selfchecks}
 
 
 def formal_one(name: str, paths: dict[str, Any]) -> dict[str, Any]:
@@ -709,10 +730,15 @@ def formal_one(name: str, paths: dict[str, Any]) -> dict[str, Any]:
                      f"read_verilog -sv {shlex.quote(target)} {shlex.quote(reference)} "
                      f"{shlex.quote(miter)}; prep -top {top}; flatten; opt; "
                      "sat -prove mismatch 0"])
-    marker_present = SUCCESS_MARKER in proof.get("output_tail", "")
-    if not marker_present or proof.get("returncode") != 0:
+    marker_present = bool(proof.get(
+        "success_marker", SUCCESS_MARKER in proof.get("output_tail", "")))
+    unconstrained = bool(proof.get(
+        "unconstrained_marker",
+        "Final constraint equation: { } = { }" in proof.get("output_tail", "")))
+    if not marker_present or not unconstrained or proof.get("returncode") != 0:
         proof["status"] = "FAIL"
     proof["formal_success_marker"] = marker_present
+    proof["unconstrained"] = unconstrained
     input_bits = spec["table_bits"] + spec["num_entries"] * FU_TYPE_BITS
     proof["formal_scope"] = {
         "input_bits": input_bits,
@@ -745,10 +771,16 @@ def formal_aggregate(paths: dict[str, Any]) -> dict[str, Any]:
                      f"read_verilog -sv {source_args}; "
                      "prep -top FuBusyTableRead_ALL_MITER; flatten; opt; "
                      "sat -prove mismatch 0"])
-    marker_present = SUCCESS_MARKER in proof.get("output_tail", "")
-    if not marker_present or proof.get("returncode") != 0:
+    marker_present = bool(proof.get(
+        "success_marker", SUCCESS_MARKER in proof.get("output_tail", "")))
+    unconstrained = bool(proof.get(
+        "unconstrained_marker",
+        "Final constraint equation: { } = { }" in proof.get("output_tail", "")))
+    if not marker_present or not unconstrained or proof.get("returncode") != 0:
         proof["status"] = "FAIL"
     proof["formal_success_marker"] = marker_present
+    proof["unconstrained"] = unconstrained
+    proof["mitered_variants"] = len(VARIANTS)
     total_input_bits = sum(spec["table_bits"] + spec["num_entries"] * FU_TYPE_BITS
                            for spec in VARIANTS.values())
     proof["formal_scope"] = {
@@ -767,6 +799,72 @@ def formal_aggregate(paths: dict[str, Any]) -> dict[str, Any]:
         "yosys_check": yosys_check,
         "yosys_formal_miter": proof,
     }
+
+
+def _mutate_output(text: str, module: str, width: int) -> tuple[str, bool]:
+    """Force one module's output to zero without touching sibling variants."""
+
+    start = text.find(f"module {module}(")
+    if start < 0:
+        return text, False
+    end = text.find("endmodule", start)
+    if end < 0:
+        return text, False
+    body = text[start:end]
+    mutated, count = re.subn(
+        r"assign\s+io_out_fuBusyTableMask\s*=.*?;",
+        f"assign io_out_fuBusyTableMask = {width}'h0;",
+        body, count=1, flags=re.S)
+    if count != 1:
+        return text, False
+    return text[:start] + mutated + text[end:], True
+
+
+def negative_control(paths: dict[str, Any]) -> dict[str, Any]:
+    """Mutate both sides of one aggregate member and require SAT counterexamples."""
+
+    name = "FuBusyTableRead_68"
+    width = int(VARIANTS[name]["num_entries"])
+    results: dict[str, Any] = {}
+    for side in ("target", "reference"):
+        source_path = paths["targets"][name] if side == "target" else paths["reference"]
+        module = paths["target_names"][name] if side == "target" else f"REF_{name}"
+        mutated, applied = _mutate_output(
+            source_path.read_text(encoding="utf-8"), module, width)
+        if not applied:
+            results[side] = {"status": "FAIL", "mutation_applied": False}
+            continue
+        mutant = WORK / f"MUTANT_{side}_{name}.sv"
+        mutant.write_text(mutated, encoding="utf-8", newline="\n")
+        sources = [paths["targets"][variant] for variant in VARIANTS]
+        reference = paths["reference"]
+        if side == "target":
+            sources = [mutant if variant == name else paths["targets"][variant]
+                       for variant in VARIANTS]
+        else:
+            reference = mutant
+        sources += [reference, paths["aggregate"]]
+        rendered = " ".join(shlex.quote(wsl_path(path)) for path in sources)
+        verdict = run_wsl(["yosys", "-Q", "-p",
+                           f"read_verilog -sv {rendered}; "
+                           "prep -top FuBusyTableRead_ALL_MITER; flatten; opt; "
+                           "sat -prove mismatch 0"])
+        output = verdict.get("output_tail", "")
+        success_marker = bool(verdict.get(
+            "success_marker", SUCCESS_MARKER in output))
+        counterexample_marker = bool(verdict.get(
+            "counterexample_marker", "model found: FAIL!" in output))
+        detected = verdict.get("returncode") == 0 and not success_marker \
+            and counterexample_marker
+        results[side] = {
+            "status": "PASS" if detected else "FAIL",
+            "mutation_applied": True,
+            "counterexample_marker": counterexample_marker,
+            "success_marker_still_present": success_marker,
+            "output_tail": output[-900:],
+        }
+    return {"status": "PASS" if all(r["status"] == "PASS" for r in results.values())
+            else "FAIL", "control_variant": name, "sides": results}
 
 
 def source_lock_audit() -> dict[str, Any]:
@@ -802,6 +900,8 @@ def source_lock_audit() -> dict[str, Any]:
         "checks": checks,
         "actual": actual,
         "source_commit": SOURCE_COMMIT,
+        "audit_policy": {"require_negative_control": True,
+                         "scope_source": "Build.LOCKED_VARIANTS"},
         "xstop": {"path": LOCKED_XSTOP, "sha256": XSTOP_SHA256, "bytes": XSTOP_BYTES},
     }
 
@@ -820,9 +920,13 @@ def validate() -> dict[str, Any]:
     paths = materialize(exported)
     variants = {name: formal_one(name, paths) for name in VARIANTS}
     aggregate = formal_aggregate(paths)
+    control = negative_control(paths)
     pyright = {"target": pyright_check(TARGET), "validator": pyright_check(Path(__file__))}
 
     failures: list[str] = []
+    build_scope = tuple(getattr(module, "LOCKED_VARIANTS", ()))
+    if set(build_scope) != set(VARIANTS) or len(build_scope) != len(VARIANTS):
+        failures.append("Build LOCKED_VARIANTS does not match validator scope")
     if locks["status"] != "PASS":
         failures.append("source lock audit")
     if configuration["status"] != "PASS":
@@ -831,6 +935,8 @@ def validate() -> dict[str, Any]:
         failures.append("configuration rejection audit")
     if abi["status"] != "PASS":
         failures.append("ABI audit")
+    if not all(paths["miter_selfchecks"].values()):
+        failures.append("miter implicit-net selfcheck")
     for name, record in deterministic.items():
         if record["status"] != "PASS":
             failures.append(f"deterministic export {name}")
@@ -846,6 +952,8 @@ def validate() -> dict[str, Any]:
             closed.append(name)
     if aggregate["status"] != "PASS":
         failures.append("aggregate SAT miter")
+    if control["status"] != "PASS":
+        failures.append("aggregate negative control")
 
     status = "COMPLETE_EQUIVALENCE" if not failures else "COMPLETE_EQUIVALENCE_VARIANT_ONLY"
     unclosed = [name for name in VARIANTS if name not in closed]
@@ -859,6 +967,8 @@ def validate() -> dict[str, Any]:
         "strict_complete_count_delta": 1 if status == "COMPLETE_EQUIVALENCE" else 0,
         "acceptance_eligible": status == "COMPLETE_EQUIVALENCE",
         "source_commit": SOURCE_COMMIT,
+        "audit_policy": {"require_negative_control": True,
+                         "scope_source": "Build.LOCKED_VARIANTS"},
         "closed_variant_count": len(closed),
         "public_variant_count": len(VARIANTS),
         "scope": {
@@ -881,6 +991,17 @@ def validate() -> dict[str, Any]:
                     },
                     "input_bits": spec["table_bits"] + spec["num_entries"] * FU_TYPE_BITS,
                     "outputs_compared": {"io_out_fuBusyTableMask": spec["num_entries"]},
+                    "method": "sat_miter",
+                    "sequential": False,
+                    "abi_exact": abi["rows"][name]["status"] == "PASS",
+                    "deterministic": deterministic[name]["status"] == "PASS",
+                    "miter_selfcheck": paths["miter_selfchecks"][name],
+                    "sat": {
+                        "returncode": variants[name]["yosys_formal_miter"].get("returncode"),
+                        "status": variants[name]["yosys_formal_miter"].get("status"),
+                        "formal_success_marker": variants[name]["yosys_formal_miter"].get("formal_success_marker"),
+                        "unconstrained": variants[name]["yosys_formal_miter"].get("unconstrained"),
+                    },
                 }
                 for name, spec in VARIANTS.items()
             },
@@ -961,6 +1082,7 @@ def validate() -> dict[str, Any]:
             "variants": variants,
             "formal": aggregate,
             "aggregate_sat_miter": aggregate,
+            "negative_control": control,
         },
         "failures": failures,
         "unclosed": unclosed,

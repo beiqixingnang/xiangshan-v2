@@ -38,6 +38,8 @@ WORK = TEMP_ROOT / "uhsc_vecdatasplitmodule_strict"
 
 SOURCE_COMMIT = "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af"
 SAT_SUCCESS_MARKER = "SAT proof finished - no model found: SUCCESS!"
+MODEL_FOUND_MARKER = "SAT proof finished - model found: FAIL!"
+FREE_INPUT_MARKER = "Final constraint equation: { } = { }"
 ANSI_PORT = re.compile(r"^(input|output)\s+(?:\[(\d+):0\]\s*)?(.+)$")
 
 
@@ -139,12 +141,25 @@ def run_wsl(command: list[str]) -> dict[str, Any]:
         result = subprocess.run(["wsl.exe", "-e", "bash", "-lc", rendered],
                                 capture_output=True, check=False)
     except OSError as error:
-        return {"command": command, "status": "FAIL", "error": repr(error)}
+        return {"command": command, "returncode": None, "status": "FAIL",
+                "error": repr(error), "output_tail": repr(error),
+                "sat_success_marker": False, "sat_counterexample_marker": False,
+                "unconstrained_marker": False, "sat_variables": None,
+                "sat_clauses": None}
     output = (result.stdout + result.stderr).decode("utf-8", "replace")
+    counts = re.findall(r"Solving problem with (\d+) variables and (\d+) clauses", output)
+    variables = clauses = None
+    if counts:
+        variables, clauses = map(int, counts[-1])
     return {
         "command": command,
         "returncode": result.returncode,
         "status": "PASS" if result.returncode == 0 else "FAIL",
+        "sat_success_marker": SAT_SUCCESS_MARKER in output,
+        "sat_counterexample_marker": MODEL_FOUND_MARKER in output,
+        "unconstrained_marker": FREE_INPUT_MARKER in output,
+        "sat_variables": variables,
+        "sat_clauses": clauses,
         "output_tail": output[-4000:],
         "output_sha256": hashlib.sha256(output.encode()).hexdigest(),
     }
@@ -311,8 +326,9 @@ def formal_gates(paths: dict[str, Path], inputs: dict[str, int],
                     f"{shlex.quote(miter)}; prep -top {MODULE_NAME}_MITER; flatten; opt; "
                     "sat -prove mismatch 0")
     proof = run_wsl(["yosys", "-Q", "-p", proof_script])
-    proof["formal_success_marker"] = SAT_SUCCESS_MARKER in proof.get("output_tail", "")
-    if not proof["formal_success_marker"]:
+    proof["formal_success_marker"] = proof.get("sat_success_marker") is True
+    proof["unconstrained"] = proof.get("unconstrained_marker") is True
+    if not proof["formal_success_marker"] or not proof["unconstrained"]:
         proof["status"] = "FAIL"
     proof["formal_scope"] = {
         "input_bits": sum(inputs.values()),
@@ -326,6 +342,41 @@ def formal_gates(paths: dict[str, Path], inputs: dict[str, int],
             "yosys_reference": reference_yosys, "yosys_formal_miter": proof}
 
 
+def negative_control(paths: dict[str, Path], output_name: str) -> dict[str, Any]:
+    """Mutate one compared lane on both sides and require SAT counterexamples."""
+
+    results: dict[str, Any] = {}
+    for side in ("target", "reference"):
+        source = paths[side].read_text(encoding="utf-8")
+        mutated, count = re.subn(
+            rf"assign\s+{re.escape(output_name)}\s*=.*?;",
+            f"assign {output_name} = '0;", source, count=1, flags=re.S)
+        if count != 1:
+            results[side] = {"status": "FAIL", "mutation_applied": False}
+            continue
+        mutant = WORK / f"MUTANT_{side}.sv"
+        mutant.write_text(mutated, encoding="utf-8", newline="\n")
+        selected = {**paths, side: mutant}
+        converted = {name: wsl_path(path) for name, path in selected.items()}
+        script = (f"read_verilog -sv {shlex.quote(converted['target'])} "
+                  f"{shlex.quote(converted['reference'])} {shlex.quote(converted['miter'])}; "
+                  f"prep -top {MODULE_NAME}_MITER; flatten; opt; sat -prove mismatch 0")
+        verdict = run_wsl(["yosys", "-Q", "-p", script])
+        output = verdict.get("output_tail", "")
+        counterexample = verdict.get("sat_counterexample_marker") is True
+        success = verdict.get("sat_success_marker") is True
+        detected = verdict.get("returncode") == 0 and counterexample and not success
+        results[side] = {"status": "PASS" if detected else "FAIL",
+                         "mutation_applied": True,
+                         "counterexample_marker": counterexample,
+                         "success_marker_still_present": success,
+                         "returncode": verdict.get("returncode"),
+                         "output_tail": output[-900:]}
+    return {"status": "PASS" if all(item["status"] == "PASS"
+                                      for item in results.values()) else "FAIL",
+            "control_output": output_name, "sides": results}
+
+
 def validate() -> dict[str, Any]:
     """Run every strict gate and persist machine-readable evidence."""
 
@@ -337,7 +388,9 @@ def validate() -> dict[str, Any]:
     inputs, outputs = surface()
     target_rtl, export = deterministic_export(module)
     abi = abi_audit(target_rtl, inputs, outputs)
-    gates = formal_gates(materialize(target_rtl, inputs, outputs), inputs, outputs)
+    paths = materialize(target_rtl, inputs, outputs)
+    gates = formal_gates(paths, inputs, outputs)
+    control = negative_control(paths, sorted(outputs)[0])
     pyright = {"target": pyright_check(TARGET), "validator": pyright_check(Path(__file__))}
     if locks["status"] != "PASS":
         failures.append("source lock audit")
@@ -347,6 +400,8 @@ def validate() -> dict[str, Any]:
         failures.append("deterministic export mismatch")
     if not inputs or not outputs:
         failures.append("derived port surface is empty")
+    if control["status"] != "PASS":
+        failures.append("negative control")
     for name, result in pyright.items():
         if result["status"] != "PASS":
             failures.append(f"pyright {name}")
@@ -366,6 +421,10 @@ def validate() -> dict[str, Any]:
         "strict_complete_count_delta": 1 if status == "COMPLETE_EQUIVALENCE" else 0,
         "acceptance_eligible": status == "COMPLETE_EQUIVALENCE",
         "source_commit": SOURCE_COMMIT,
+        "audit_policy": {"require_negative_control": True,
+                         "two_sided_negative_control": True,
+                         "full_output_markers": True,
+                         "scope_source": "locked XSTop specialization"},
         "scope": {
             "kind": "stateless_combinational_leaf",
             "configuration": "locked V2 vlen=128 splitter, inDataWidth=128, outDataWidth=128",
@@ -391,6 +450,7 @@ def validate() -> dict[str, Any]:
             "source_lock": locks,
             "abi": abi,
             "deterministic_export": export,
+            "negative_control": control,
             "formal": gates,
         },
         "failures": failures,

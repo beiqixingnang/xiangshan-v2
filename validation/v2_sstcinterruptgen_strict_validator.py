@@ -64,6 +64,7 @@ OUTPUT_WIDTHS = {"o_STIP": 1, "o_VSTIP": 1}
 INPUT_BITS = sum(INPUT_WIDTHS.values())
 OUTPUT_BITS = sum(OUTPUT_WIDTHS.values())
 PORT_NAMES = tuple(INPUT_WIDTHS) + tuple(OUTPUT_WIDTHS)
+EQUIV_SUCCESS_MARKERS = ("0 are unproven.", "Equivalence successfully proven!")
 
 
 def sha256_file(path: Path) -> str:
@@ -112,8 +113,20 @@ def run_wsl(command: list[str]) -> dict[str, Any]:
     except OSError as error:
         return {"command": command, "status": "FAIL", "error": repr(error)}
     output = (result.stdout + result.stderr).decode("utf-8", "replace")
+    summaries = re.findall(r"Of those cells (\d+) are proven and (\d+) are unproven", output)
+    proven_cells = unproven_cells = equiv_cells = None
+    if summaries:
+        proven_cells, unproven_cells = map(int, summaries[-1])
+        equiv_cells = proven_cells + unproven_cells
     return {"command": command, "returncode": result.returncode,
             "status": "PASS" if result.returncode == 0 else "FAIL",
+            "equiv_success_markers": {marker: marker in output for marker in EQUIV_SUCCESS_MARKERS},
+            "equiv_failure_marker": bool(
+                re.search(r"ERROR:\s*Found\s+[1-9]\d*\s+unproven\s+\$equiv\s+cells", output)
+                or re.search(r"Of those cells\s+\d+\s+are proven and\s+[1-9]\d*\s+are unproven", output)),
+            "equiv_cells": equiv_cells,
+            "proven_cells": proven_cells,
+            "unproven_cells": unproven_cells,
             "output_tail": output[-6000:],
             "output_sha256": hashlib.sha256(output.encode()).hexdigest()}
 
@@ -146,10 +159,10 @@ def pyright_check(source: Path) -> dict[str, Any]:
         shutil.rmtree(temporary, ignore_errors=True)
 
 
-def parse_header_ports(rtl: str) -> set[str]:
+def parse_header_ports(rtl: str, module: str = "SstcInterruptGen") -> set[str]:
     """Extract the exact names in the generated ANSI module header."""
 
-    match = re.search(r"module\s+SstcInterruptGen\s*\((.*?)\);", rtl, re.DOTALL)
+    match = re.search(r"module\s+" + re.escape(module) + r"\s*\((.*?)\);", rtl, re.DOTALL)
     if match is None:
         raise AssertionError("SstcInterruptGen module header missing")
     header = match.group(1)
@@ -175,6 +188,22 @@ def deterministic_export(module: Any) -> tuple[str, dict[str, Any]]:
                    "abi": {"expected_port_count": len(expected),
                            "observed_port_count": len(observed),
                            "exact_port_set": abi_ok}}
+
+
+def abi_audit(target_rtl: str, reference_rtl: str) -> dict[str, Any]:
+    """Require the exact locked 17-port surface on both sides."""
+
+    expected = set(PORT_NAMES)
+    target = parse_header_ports(target_rtl)
+    reference = parse_header_ports(reference_rtl, "SstcInterruptGen_ref")
+    checks = {"target_exact_port_set": target == expected,
+              "reference_exact_port_set": reference == expected,
+              "target_reference_equal": target == reference,
+              "input_bits": INPUT_BITS == 267,
+              "output_bits": OUTPUT_BITS == 2}
+    return {"status": "PASS" if all(checks.values()) else "FAIL",
+            "checks": checks, "target_ports": sorted(target),
+            "reference_ports": sorted(reference)}
 
 
 def locked_source_check() -> dict[str, Any]:
@@ -248,12 +277,16 @@ def formal_gates(paths: dict[str, Path]) -> dict[str, Any]:
                      "equiv_make SstcInterruptGen SstcInterruptGen_ref Sstc_equiv; "
                      "prep -top Sstc_equiv; equiv_induct -undef; equiv_status -assert")
     formal = run_wsl(["yosys", "-Q", "-p", formal_script])
-    marker = "Equivalence successfully proven!"
-    formal["formal_success_marker"] = marker in formal.get("output_tail", "")
-    if not formal["formal_success_marker"]:
+    formal["markers_present"] = formal.get("equiv_success_markers", {})
+    formal["formal_success_marker"] = all(
+        formal.get("equiv_success_markers", {}).get(marker) is True
+        for marker in EQUIV_SUCCESS_MARKERS)
+    equiv_cells = formal.get("equiv_cells")
+    if (not formal["formal_success_marker"]
+            or not isinstance(equiv_cells, int) or isinstance(equiv_cells, bool)
+            or equiv_cells <= 0 or formal.get("unproven_cells") != 0
+            or formal.get("proven_cells") != equiv_cells):
         formal["status"] = "FAIL"
-    match = re.search(r"Found (\d+) \$equiv cells in [^:]+:", formal.get("output_tail", ""))
-    formal["equiv_cells"] = int(match.group(1)) if match else None
     formal["formal_scope"] = {"clock": "posedge clock",
                               "reset": "async reset normalized with async2sync",
                               "input_bits": INPUT_BITS,
@@ -269,6 +302,45 @@ def formal_gates(paths: dict[str, Path]) -> dict[str, Any]:
             "yosys_equiv": formal}
 
 
+def negative_control(paths: dict[str, Path]) -> dict[str, Any]:
+    """Mutate target and reference independently and require unproven cells."""
+
+    results: dict[str, Any] = {}
+    for side in ("target", "reference"):
+        source = paths[side].read_text(encoding="utf-8")
+        if side == "target":
+            mutated, count = re.subn(r"else\s+o_STIP\s*<=\s*[^;]+;",
+                                     "else o_STIP <= 1'b1;", source, count=1)
+        else:
+            mutated, count = re.subn(r"assign\s+o_STIP\s*=\s*[^;]+;",
+                                     "assign o_STIP = 1'b0;", source, count=1)
+        if count != 1:
+            results[side] = {"status": "FAIL", "mutation_applied": False}
+            continue
+        mutant = WORK / f"MUTANT_{side}.sv"
+        mutant.write_text(mutated, encoding="utf-8", newline="\n")
+        selected = {**paths, side: mutant}
+        target = wsl_path(selected["target"])
+        reference = wsl_path(selected["reference"])
+        script = (f"read_verilog -sv {target} {reference}; proc; async2sync; memory; opt; "
+                  "equiv_make SstcInterruptGen SstcInterruptGen_ref Sstc_equiv; "
+                  "prep -top Sstc_equiv; equiv_induct -undef; equiv_status -assert")
+        verdict = run_wsl(["yosys", "-Q", "-p", script])
+        explicit = (verdict.get("equiv_failure_marker") is True
+                    or (isinstance(verdict.get("unproven_cells"), int)
+                        and verdict.get("unproven_cells", 0) > 0))
+        still = all(verdict.get("equiv_success_markers", {}).values())
+        detected = isinstance(verdict.get("returncode"), int) and explicit and not still
+        results[side] = {"status": "PASS" if detected else "FAIL",
+                         "mutation_applied": True,
+                         "explicit_unproven_cells": explicit,
+                         "success_marker_still_present": still,
+                         "returncode": verdict.get("returncode"),
+                         "unproven_cells": verdict.get("unproven_cells")}
+    return {"status": "PASS" if all(item["status"] == "PASS" for item in results.values()) else "FAIL",
+            "sides": results, "two_sided": True}
+
+
 def validate() -> dict[str, Any]:
     """Run strict gates and persist evidence."""
 
@@ -276,7 +348,9 @@ def validate() -> dict[str, Any]:
     lock: dict[str, Any] = {"status": "FAIL"}
     bounded: dict[str, Any] = {"status": "FAIL"}
     export: dict[str, Any] = {"status": "FAIL"}
+    abi: dict[str, Any] = {"status": "FAIL"}
     gates: dict[str, Any] = {}
+    control: dict[str, Any] = {"status": "FAIL"}
     try:
         lock = locked_source_check()
         if lock["status"] != "PASS":
@@ -288,7 +362,14 @@ def validate() -> dict[str, Any]:
         py_compile.compile(str(TARGET), doraise=True)
         py_compile.compile(str(Path(__file__)), doraise=True)
         target_rtl, export = deterministic_export(module)
-        gates = formal_gates(materialize(target_rtl))
+        paths = materialize(target_rtl)
+        abi = abi_audit(target_rtl, paths["reference"].read_text(encoding="utf-8"))
+        if abi["status"] != "PASS":
+            failures.append("exact ABI audit")
+        gates = formal_gates(paths)
+        control = negative_control(paths)
+        if control["status"] != "PASS":
+            failures.append("two-sided negative control")
     except Exception as error:
         failures.append(f"exception: {type(error).__name__}: {error}")
     pyright = {"target": pyright_check(TARGET),
@@ -312,6 +393,11 @@ def validate() -> dict[str, Any]:
         "strict_complete_count_delta": 1 if status == "COMPLETE_EQUIVALENCE" else 0,
         "acceptance_eligible": status == "COMPLETE_EQUIVALENCE",
         "source_commit": SOURCE_COMMIT,
+        "audit_policy": {"require_negative_control": True,
+                         "require_two_sided_negative_control": True,
+                         "require_positive_equiv_cells": True,
+                         "require_all_declared_outputs_compared": True,
+                         "scope_source": "single locked SstcInterruptGen surface"},
         "scope": {"kind": "sequential_registered_leaf",
                   "configuration": "fixed V2 SstcInterruptGen IO",
                   "state_bits": 2,
@@ -339,13 +425,19 @@ def validate() -> dict[str, Any]:
         "checks": {"py_compile": {"status": "PASS" if not any(x.startswith("exception:") for x in failures) else "FAIL",
                                     "files": [TARGET.relative_to(ROOT).as_posix(), Path(__file__).relative_to(ROOT).as_posix()]},
                     "pyright": pyright,
+                    "source_lock": lock,
+                    "abi": abi,
                     "deterministic_export": export,
                     "bounded_behavior": bounded,
                     "tools": {"verilator": run_wsl(["verilator", "--version"]),
                               "yosys": run_wsl(["yosys", "--version"])},
-                    "formal": gates},
+                    "formal": gates,
+                    "negative_control": control},
         "failures": failures,
         "unclosed": [] if not failures else ["strict sequential equivalence gates did not all pass"],
+        "acceptance_unclosed": [
+            "CSR parent closure, license review and user approval remain outside this proof."
+        ],
     }
     EVIDENCE.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
                         encoding="utf-8", newline="\n")

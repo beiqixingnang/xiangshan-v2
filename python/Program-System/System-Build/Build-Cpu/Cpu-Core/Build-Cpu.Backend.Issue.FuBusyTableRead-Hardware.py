@@ -24,6 +24,7 @@ from amaranth.lib.data import StructLayout, View
 # 生成 numEntries 位的 io_out_fuBusyTableMask；空集合的延迟不出现，宽度 1 退化为标量输入。
 __all__ = [
     "FU_TYPE_BITS",
+    "LOCKED_VARIANTS",
     "FuBusyTableReadConfig",
     "FuBusyTableRead",
     "busy_mask_reference",
@@ -42,6 +43,18 @@ __all__ = [
 # the locked reference byte-for-byte.
 # / 本锁定源码树中 ``FuType()`` 为 UInt(6.W)，故 gold 端口宽 35 位而仅 0..30 可被引用。
 FU_TYPE_BITS = 35
+
+# Exact generated-module variants reachable in the locked Kunminghu V2 XSTop.
+# Validators must cover this Build-owned list in full before the Build counts.
+# 锁定昆明湖 V2 XSTop 中可达的精确生成模块变体；计数前必须全部证明。
+LOCKED_VARIANTS: tuple[str, ...] = (
+    "FuBusyTableRead", "FuBusyTableRead_2", "FuBusyTableRead_22",
+    "FuBusyTableRead_23", "FuBusyTableRead_26", "FuBusyTableRead_28",
+    "FuBusyTableRead_42", "FuBusyTableRead_43", "FuBusyTableRead_52",
+    "FuBusyTableRead_53", "FuBusyTableRead_68", "FuBusyTableRead_69",
+    "FuBusyTableRead_71", "FuBusyTableRead_73", "FuBusyTableRead_75",
+    "FuBusyTableRead_79", "FuBusyTableRead_80", "FuBusyTableRead_105",
+)
 
 
 def _freeze_latency_map(mapping: Any) -> dict[int, frozenset[int]]:

@@ -41,7 +41,7 @@ The proof sequence is the established inductive rail, in one Yosys invocation:
 ``equiv_make`` over both modules, then ``async2sync``-normalized
 ``equiv_induct -undef`` and ``equiv_status -assert``.  Both literal markers
 (``0 are unproven.`` and ``Equivalence successfully proven!``) are required, and
-a negative control that mutates exactly one target register equation must be
+two negative controls that mutate target and reference equations must each be
 reported as unproven -- otherwise the harness is vacuous and success is
 meaningless.
 """
@@ -546,33 +546,83 @@ def equiv_run(target: str, reference: str) -> dict[str, Any]:
 
 
 def negative_control(paths: dict[str, Path]) -> dict[str, Any]:
-    """Perturb exactly one target age equation and require the proof to break."""
+    """Mutate each proof side and require both runs to report unproven cells.
+
+    The target export and the synthesizable reference view have different
+    textual forms, so each side has an explicit mutation.  Keeping the clean
+    counterpart unchanged makes the two checks independent: a broken miter
+    cannot satisfy both controls by mutating only one side.
+    """
 
     target_rtl = paths["target"].read_text(encoding="utf-8")
-    needle = "    else age_4_5 <= " + chr(92) + "$270 ;"
-    count = target_rtl.count(needle)
-    mutated = target_rtl.replace(needle, "    else age_4_5 <= 1'h1;", 1)
-    mutant = WORK / f"{MODULE_NAME}-mutant.sv"
-    mutant.write_text(mutated, encoding="utf-8", newline="\n")
-    if count != 1:
-        return {"mutation_applied": False, "matched_lines": count, "status": "FAIL",
+    reference_rtl = paths["reference"].read_text(encoding="utf-8")
+    target_needle = "    else age_4_5 <= " + chr(92) + "$270 ;"
+    target_count = target_rtl.count(target_needle)
+    target_mutated = target_rtl.replace(target_needle, "    else age_4_5 <= 1'h1;", 1)
+    reference_pattern = r"assign\s+io_out_0\s*=\s*[^;]+;"
+    reference_mutated, reference_count = re.subn(
+        reference_pattern, "assign io_out_0 = 6'h0;", reference_rtl, count=1)
+
+    mutations = {
+        "target": (target_mutated, target_count,
+                    "else age_4_5 <= $270 ;  ->  else age_4_5 <= 1'h1;",
+                    paths["reference"]),
+        "reference": (reference_mutated, reference_count,
+                      "assign io_out_0 = <equation>;  ->  assign io_out_0 = 6'h0;",
+                      paths["target"]),
+    }
+    results: dict[str, Any] = {}
+    for side, (mutated, count, statement, clean_side) in mutations.items():
+        mutant = WORK / f"{MODULE_NAME}-{side}-mutant.sv"
+        mutant.write_text(mutated, encoding="utf-8", newline="\n")
+        if count != 1:
+            results[side] = {
+                "mutation_applied": False,
+                "matched_lines": count,
+                "clean_proof_marker_disappeared": False,
+                "explicit_unproven_cells": False,
+                "counterexample_or_unproven": False,
+                "status": "FAIL",
                 "note": "the control equation was not uniquely found, so the harness "
-                        "was never challenged"}
-    verdict = equiv_run(wsl_path(mutant), wsl_path(paths["reference"]))
-    detected = (not verdict["formal_success_marker"]
-                and verdict.get("unproven_cells") is not None
-                and verdict["unproven_cells"] > 0)
+                        "was never challenged",
+            }
+            continue
+        if side == "target":
+            verdict = equiv_run(wsl_path(mutant), wsl_path(clean_side))
+        else:
+            verdict = equiv_run(wsl_path(clean_side), wsl_path(mutant))
+        marker_disappeared = not bool(verdict.get("formal_success_marker"))
+        unproven = verdict.get("unproven_cells")
+        explicit_unproven = isinstance(unproven, int) and unproven > 0
+        detected = marker_disappeared and explicit_unproven
+        results[side] = {
+            "mutated_statement": statement,
+            "mutation_applied": True,
+            "equiv_cells": verdict.get("equiv_cells"),
+            "proven_cells": verdict.get("proven_cells"),
+            "unproven_cells": unproven,
+            "markers_present": verdict.get("markers_present"),
+            "clean_proof_marker_disappeared": marker_disappeared,
+            "explicit_unproven_cells": explicit_unproven,
+            "counterexample_or_unproven": explicit_unproven,
+            "status": "PASS" if detected else "FAIL",
+            "note": "each independently mutated side must lose the clean proof marker "
+                    "and report at least one unproven equivalence cell",
+            "output_tail": verdict.get("output_tail", "")[-1500:],
+        }
+    all_pass = all(item.get("status") == "PASS" for item in results.values())
     return {
-        "mutated_statement": "else age_4_5 <= $270 ;  ->  else age_4_5 <= 1'h1;",
-        "mutation_applied": True,
-        "equiv_cells": verdict.get("equiv_cells"),
-        "proven_cells": verdict.get("proven_cells"),
-        "unproven_cells": verdict.get("unproven_cells"),
-        "markers_present": verdict.get("markers_present"),
-        "status": "PASS" if detected else "FAIL",
-        "note": "a mutated target must be reported as unproven, otherwise the harness "
-                "is vacuous and a clean success would mean nothing",
-        "output_tail": verdict.get("output_tail", "")[-1500:],
+        "status": "PASS" if all_pass else "FAIL",
+        "sides": results,
+        "two_sided": True,
+        "mutation_applied": all(item.get("mutation_applied") is True
+                                 for item in results.values()),
+        "clean_proof_marker_disappeared": all(
+            item.get("clean_proof_marker_disappeared") is True
+            for item in results.values()),
+        "counterexample_or_unproven": all(
+            item.get("counterexample_or_unproven") is True
+            for item in results.values()),
     }
 
 
@@ -634,6 +684,9 @@ def source_lock_audit() -> dict[str, Any]:
         "checks": checks,
         "actual": actual,
         "source_commit": SOURCE_COMMIT,
+        "audit_policy": {"require_negative_control": True,
+                         "two_sided_negative_control": True,
+                         "scope_source": "locked XSTop specialization"},
         "xstop": {"path": LOCKED_XSTOP, "sha256": XSTOP_SHA256, "bytes": XSTOP_BYTES,
                   "module": MODULE_NAME},
     }
@@ -678,7 +731,7 @@ def validate() -> dict[str, Any]:
         if result.get("status") != "PASS":
             failures.append(name)
     if control["status"] != "PASS":
-        failures.append("negative control did not detect a mutated target")
+        failures.append("two-sided negative control did not detect both mutations")
     if proof["status"] != "PASS":
         failures.append("yosys_equiv")
     status = "COMPLETE_EQUIVALENCE" if not failures else "STRICT_PENDING"
@@ -692,6 +745,9 @@ def validate() -> dict[str, Any]:
         "strict_complete_count_delta": 1 if status == "COMPLETE_EQUIVALENCE" else 0,
         "acceptance_eligible": status == "COMPLETE_EQUIVALENCE",
         "source_commit": SOURCE_COMMIT,
+        "audit_policy": {"require_negative_control": True,
+                         "two_sided_negative_control": True,
+                         "scope_source": "locked XSTop specialization"},
         "scope": {
             "kind": "sequential_registered_leaf",
             "configuration": "locked V2 AgeDetector(6 entries, 2 enq, 4 deq)",
@@ -714,8 +770,8 @@ def validate() -> dict[str, Any]:
             "why_complete": (
                 "Yosys equiv_make + equiv_induct -undef proves the whole transition "
                 "relation over every state bit and every output; no bounded vector set "
-                "is counted, and a built-in negative control shows the harness detects "
-                "a mutated target equation"),
+                "is counted, and two independent negative controls show the harness "
+                "detects mutations on both target and reference sides"),
             "bounded_tests_counted": False,
         },
         "reference_lock": {
@@ -754,6 +810,10 @@ def validate() -> dict[str, Any]:
         },
         "failures": failures,
         "unclosed": [] if not failures else ["strict gates did not all pass"],
+        "acceptance_unclosed": [
+            "Backend/Issue parent closure, license review and user approval remain outside "
+            "this proof.",
+        ],
     }
     EVIDENCE.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
                         encoding="utf-8", newline="\n")

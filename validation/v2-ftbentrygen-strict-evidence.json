@@ -8,8 +8,15 @@
   "strict_complete_count_delta": 1,
   "acceptance_eligible": true,
   "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "audit_policy": {
+    "require_negative_control": true,
+    "two_sided_negative_control": true,
+    "scope_source": "locked XSTop specialization"
+  },
   "scope": {
     "kind": "stateless_combinational_leaf",
+    "authority": "locked DefaultConfig XSTop specialization",
+    "scala_class_claimed": false,
     "configuration": "locked Kunminghu V2 FTB geometry: VAddrBits=50, PredictWidth=16, numBr=2, BR_OFFSET_LEN=12, JMP_OFFSET_LEN=20, TAR_STAT_SZ=2",
     "state_bits": 0,
     "state_boundary": "no clock/reset/register/memory in either surface; one combinational evaluation",
@@ -126,8 +133,20 @@
     "input_space": "2**272",
     "input_space_cardinality": "7588550360256754183279148073529370729071901715047420004889892225542594864082845696",
     "surface_derivation": "all 104 names, directions and widths are parsed from the locked FTBEntryGen.sv declaration; none is restated by hand",
-    "why_complete": "Yosys SAT proves the reduction-OR over all 26 declared output lanes (67 bits) equals zero with all 272 input bits unconstrained (no assume anywhere in the miter) and no temporal state exists; the built-in negative control shows the same harness rejects a perturbed target equation",
+    "why_complete": "Yosys SAT proves the reduction-OR over all 26 declared output lanes (67 bits) equals zero with all 272 input bits unconstrained (no assume anywhere in the miter) and no temporal state exists; two independent negative controls show the same harness rejects perturbed target and reference equations",
     "bounded_tests_counted": false,
+    "specialization_projection": {
+      "pruned_scala_outputs": [
+        "io_new_br_insert_pos",
+        "io_is_init_entry",
+        "io_is_new_br",
+        "io_is_jalr_target_modified",
+        "io_is_strong_bias_modified",
+        "io_is_br_full"
+      ],
+      "pruned_output_bits": 7,
+      "claim": "only the 104-port module emitted in the locked XSTop is proven; the generic Scala class ABI is not claimed"
+    },
     "abi_defect_repair": {
       "symptom": "the Build exported 105 ports including io_update_valid; the locked reference declares 104",
       "resolution": "boundary alignment only: the internal net and its equation (update_valid := new_valid) were kept and io_update_valid was removed from verilog.convert ports, so the exported surface is now exactly the locked 104",
@@ -202,7 +221,7 @@
         "files_analyzed": 1,
         "error_count": 0,
         "warning_count": 0,
-        "output_sha256": "3d7c7cf90e3be51feba53ce1453e19e175a9a604fcc923b9179238a905d1c13e",
+        "output_sha256": "d059027f039e1188b9f67c29ece51f9388d8c2955bdcc923b604fecae112fed6",
         "stderr_tail": ""
       },
       "validator": {
@@ -220,13 +239,18 @@
         "files_analyzed": 1,
         "error_count": 0,
         "warning_count": 0,
-        "output_sha256": "d4f9bff1e28ff7535f7c1ce97cf5900cf2182ca3ab8885cef62b03ac7bca51c5",
+        "output_sha256": "3e1bd2a343dedec5e7825c9f93375fee8c9c3ddb59493b304700544f882f627e",
         "stderr_tail": ""
       }
     },
     "source_lock": {
       "status": "PASS",
       "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+      "audit_policy": {
+        "require_negative_control": true,
+        "two_sided_negative_control": true,
+        "scope_source": "locked XSTop specialization"
+      },
       "checks": {
         "scala_present": true,
         "python_build_present": true,
@@ -1176,7 +1200,7 @@
         "returncode": 0,
         "status": "PASS",
         "output_tail": "\n-- Running command `read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_ftbentrygen_strict/UHSC_FTBEntryGen.sv; hierarchy -top FTBEntryGen; proc; opt; check' --\n\n1. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_ftbentrygen_strict/UHSC_FTBEntryGen.sv\nParsing SystemVerilog input from `/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_ftbentrygen_strict/UHSC_FTBEntryGen.sv' to AST representation.\nGenerating RTLIL representation for module `\\FTBEntryGen'.\nSuccessfully finished Verilog frontend.\n\n2. Executing HIERARCHY pass (managing design hierarchy).\n\n2.1. Analyzing design hierarchy..\nTop module:  \\FTBEntryGen\n\n2.2. Analyzing design hierarchy..\nTop module:  \\FTBEntryGen\nRemoved 0 unused modules.\n\n3. Executing PROC pass (convert processes to netlists).\n\n3.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FTBEntryGen.\n\n4. Executing OPT pass (performing simple optimizations).\n\n4.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FTBEntryGen.\n\n4.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\FTBEntryGen'.\n<suppressed ~2700 debug messages>\nRemoved a total of 900 cells.\n\n4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\FTBEntryGen..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~57 debug messages>\n\n4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\FTBEntryGen.\nPerformed a total of 0 changes.\n\n4.5. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\FTBEntryGen'.\n<suppressed ~543 debug messages>\nRemoved a total of 181 cells.\n\n4.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\FTBEntryGen..\nRemoved 1 unused cells and 1281 unused wires.\n<suppressed ~3 debug messages>\n\n4.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FTBEntryGen.\n\n4.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\FTBEntryGen..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~25 debug messages>\n\n4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\FTBEntryGen.\nPerformed a total of 0 changes.\n\n4.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\FTBEntryGen'.\nRemoved a total of 0 cells.\n\n4.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n4.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\FTBEntryGen..\n\n4.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FTBEntryGen.\n\n4.16. Finished OPT passes. (There is nothing left to do.)\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module FTBEntryGen...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 0dc72a2f27\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)",
-        "output_characters": 4452,
+        "output_characters": 4451,
         "decisive_lines": [],
         "output_sha256": "c0a11fee4a96f84a3f5d543ca23975b1b006af2dd432cab4cc38d6722843f3d9",
         "success_marker_in_full_output": false,
@@ -1270,34 +1294,73 @@
         }
       },
       "negative_control": {
-        "control_port": "io_new_entry_valid",
-        "mutation_applied": true,
-        "original_statement": "7777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Frontend.Bpu.FTBEntryGen-Hardware.py:279\" *) io_old_entry_valid : 1'h1;",
-        "mutated_statement": "assign io_new_entry_valid = 1'h0;",
-        "mutant_sha256": "a50344121c3688c926a10eea6dce8f431a3cac6d783891af62713440b1c7ce6c",
-        "rerun_command_identical": [
-          "yosys",
-          "-Q",
-          "-p",
-          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_ftbentrygen_strict/UHSC_FTBEntryGen-mutant.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_ftbentrygen_strict/REF_FTBEntryGen.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_ftbentrygen_strict/FTBEntryGen_MITER.sv; prep -top FTBEntryGen_MITER; flatten; opt; sat -prove mismatch 0"
-        ],
-        "sat_variables": 12669,
-        "sat_clauses": 34183,
-        "model_found_marker": true,
-        "success_marker_present": false,
-        "decisive_lines": [
-          "Final constraint equation: { } = { }",
-          "Solving problem with 12669 variables and 34183 clauses..",
-          "SAT proof finished - model found: FAIL!"
-        ],
         "status": "PASS",
-        "note": "a mutated target must be reported as not equivalent, otherwise the harness is vacuous and a clean success would mean nothing",
-        "output_tail": "                                 0\n  \\io_pd_rvcMask_5                                  0         0                                                     0\n  \\io_pd_rvcMask_6                                  0         0                                                     0\n  \\io_pd_rvcMask_7                                  0         0                                                     0\n  \\io_pd_rvcMask_8                                  0         0                                                     0\n  \\io_pd_rvcMask_9                                  0         0                                                     0\n  \\io_start_addr [49:13]                           --        --                 1111111111111111111111111111101011111\n  \\io_start_addr [4:1]                              6         6                                                  0110\n  \\io_target                                       --        --    11111111111111111111111111111000101011101101011110\n  \\mismatch                                         1         1                                                     1\n\nEnd of script. Logfile hash: dac2002b2c\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)"
+        "control_port": "io_new_entry_valid",
+        "sides": {
+          "target": {
+            "control_port": "io_new_entry_valid",
+            "mutation_applied": true,
+            "original_statement": "7777777621\\\\Unifier-Hardware-System\\\\.agents\\\\xiangshan-v2\\\\python\\\\Program-System\\\\System-Build\\\\Build-Cpu\\\\Cpu-Core\\\\Build-Cpu.Frontend.Bpu.FTBEntryGen-Hardware.py:279\" *) io_old_entry_valid : 1'h1;",
+            "mutated_statement": "assign io_new_entry_valid = 1'h0;",
+            "mutant_sha256": "a50344121c3688c926a10eea6dce8f431a3cac6d783891af62713440b1c7ce6c",
+            "rerun_command_identical": [
+              "yosys",
+              "-Q",
+              "-p",
+              "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_ftbentrygen_strict/UHSC_FTBEntryGen-target-mutant.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_ftbentrygen_strict/REF_FTBEntryGen.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_ftbentrygen_strict/FTBEntryGen_MITER.sv; prep -top FTBEntryGen_MITER; flatten; opt; sat -prove mismatch 0"
+            ],
+            "sat_variables": 12669,
+            "sat_clauses": 34183,
+            "model_found_marker": true,
+            "success_marker_present": false,
+            "clean_proof_marker_disappeared": true,
+            "counterexample_detected": true,
+            "counterexample_or_unproven": true,
+            "decisive_lines": [
+              "Final constraint equation: { } = { }",
+              "Solving problem with 12669 variables and 34183 clauses..",
+              "SAT proof finished - model found: FAIL!"
+            ],
+            "status": "PASS",
+            "note": "each independently mutated side must lose the clean proof marker and produce an explicit SAT counterexample",
+            "output_tail": "                                 0\n  \\io_pd_rvcMask_5                                  0         0                                                     0\n  \\io_pd_rvcMask_6                                  0         0                                                     0\n  \\io_pd_rvcMask_7                                  0         0                                                     0\n  \\io_pd_rvcMask_8                                  0         0                                                     0\n  \\io_pd_rvcMask_9                                  0         0                                                     0\n  \\io_start_addr [49:13]                           --        --                 1111111111111111111111111111101011111\n  \\io_start_addr [4:1]                              6         6                                                  0110\n  \\io_target                                       --        --    11111111111111111111111111111000101011101101011110\n  \\mismatch                                         1         1                                                     1\n\nEnd of script. Logfile hash: 6352e9a0f1\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)"
+          },
+          "reference": {
+            "control_port": "io_new_entry_valid",
+            "mutation_applied": true,
+            "original_statement": "assign io_new_entry_valid = ~io_hit | io_old_entry_valid;",
+            "mutated_statement": "assign io_new_entry_valid = 1'h0;",
+            "mutant_sha256": "0443e5a0ca3ddf73155ac38efd3352660ad3aeb4cc0647968073f20a170015c7",
+            "rerun_command_identical": [
+              "yosys",
+              "-Q",
+              "-p",
+              "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_ftbentrygen_strict/UHSC_FTBEntryGen.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_ftbentrygen_strict/UHSC_FTBEntryGen-reference-mutant.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_ftbentrygen_strict/FTBEntryGen_MITER.sv; prep -top FTBEntryGen_MITER; flatten; opt; sat -prove mismatch 0"
+            ],
+            "sat_variables": 12666,
+            "sat_clauses": 34176,
+            "model_found_marker": true,
+            "success_marker_present": false,
+            "clean_proof_marker_disappeared": true,
+            "counterexample_detected": true,
+            "counterexample_or_unproven": true,
+            "decisive_lines": [
+              "Final constraint equation: { } = { }",
+              "Solving problem with 12666 variables and 34176 clauses..",
+              "SAT proof finished - model found: FAIL!"
+            ],
+            "status": "PASS",
+            "note": "each independently mutated side must lose the clean proof marker and produce an explicit SAT counterexample",
+            "output_tail": "                                 0\n  \\io_pd_rvcMask_5                                  0         0                                                     0\n  \\io_pd_rvcMask_6                                  0         0                                                     0\n  \\io_pd_rvcMask_7                                  0         0                                                     0\n  \\io_pd_rvcMask_8                                  0         0                                                     0\n  \\io_pd_rvcMask_9                                  0         0                                                     0\n  \\io_start_addr [49:13]                           --        --                 1001111111010110000011000110100010110\n  \\io_start_addr [4:1]                             15         f                                                  1111\n  \\io_target                                       --        --    10011111110101100000110001101000101001111111111111\n  \\mismatch                                         1         1                                                     1\n\nEnd of script. Logfile hash: 0c5afb2b4f\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)"
+          }
+        },
+        "two_sided": true
       }
     }
   },
   "failures": [],
-  "unclosed": [
+  "unclosed": [],
+  "acceptance_unclosed": [
     "Frontend/BPU parent closure, license review and user approval remain outside this proof."
   ]
 }

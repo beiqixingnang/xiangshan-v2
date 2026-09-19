@@ -16,6 +16,7 @@ from amaranth import Cat, Elaboratable, Module, Signal
 # CSA.scala 定义逐位并行 2:2、3:2、5:3 压缩器；输出向量保持位索引。
 __all__ = [
     "PUBLIC_MEMBERS",
+    "LOCKED_VARIANTS",
     "C_MEMBERS",
     "CSAConfig",
     "CarrySaveAdderMToN",
@@ -39,6 +40,15 @@ __all__ = [
 # =============================================================================
 PUBLIC_MEMBERS: tuple[str, ...] = ("CSA2_2", "CSA3_2", "CSA5_3", "C22", "C32", "C53")
 C_MEMBERS: frozenset[str] = frozenset({"C22", "C32", "C53"})
+# Exact specializations emitted in the locked Kunminghu V2 XSTop.  This table
+# is the Build-owned scope boundary consumed by strict-family auditing; generic
+# legal parameters outside it are not claimed by the locked-XSTop proof.
+# 锁定昆明湖 V2 XSTop 中实际出现的精确特化；严格 family 审计以此为范围边界。
+LOCKED_VARIANTS: tuple[str, ...] = (
+    "CSA3_2", "CSA3_2_3956", "CSA3_2_3960", "CSA3_2_3962",
+    "CSA3_2_3987", "CSA3_2_3988", "CSA3_2_3992", "CSA3_2_4017",
+    "CSA3_2_4111", "CSA3_2_4173", "C22", "C32", "C53",
+)
 
 
 @dataclass(frozen=True)

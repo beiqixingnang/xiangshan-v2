@@ -13,9 +13,10 @@ over every declared output bit, all input bits stay unconstrained (the log must
 show ``Final constraint equation: { } = { }``), and success is decided by the
 literal Yosys marker, never by the return code.
 
-A negative control ties exactly one generated target output lane to a different
-constant and requires the same command to answer ``model found``.  Without that
-gate a mis-wired miter can "prove" equivalence vacuously.
+A two-sided negative control ties one generated output lane low on the target
+and then on the reference, independently, and requires the same command to
+answer ``model found`` in both runs.  Without that gate a mis-wired miter can
+"prove" equivalence vacuously.
 """
 
 from __future__ import annotations
@@ -482,10 +483,16 @@ def materialize(target_rtl: str, inputs: dict[str, int],
     return paths
 
 
-def sat_run(target: str, paths: dict[str, Path]) -> dict[str, Any]:
-    """Discharge the miter and decide success from literal markers only."""
+def sat_run(target: str, paths: dict[str, Path],
+            reference_path: Path | None = None) -> dict[str, Any]:
+    """Discharge the miter and decide success from literal markers only.
 
-    script = (f"read_verilog -sv {shlex.quote(target)} {shlex.quote(wsl_path(paths['reference']))} "
+    ``reference_path`` is optional so the negative-control gate can mutate the
+    reference side independently while retaining the clean miter and target.
+    """
+
+    selected_reference = reference_path or paths["reference"]
+    script = (f"read_verilog -sv {shlex.quote(target)} {shlex.quote(wsl_path(selected_reference))} "
               f"{shlex.quote(wsl_path(paths['miter']))}; prep -top {MITER_NAME}; flatten; opt; "
               "sat -prove mismatch 0")
     result = run_wsl(["yosys", "-Q", "-p", script])
@@ -540,42 +547,80 @@ def formal_gates(paths: dict[str, Path], inputs: dict[str, int],
 
 
 def negative_control(paths: dict[str, Path]) -> dict[str, Any]:
-    """Tie one generated target output lane low and require the proof to break."""
+    """Mutate target and reference outputs and require SAT counterexamples."""
 
-    target_rtl = paths["target"].read_text(encoding="utf-8")
     pattern = rf"assign\s+{CONTROL_PORT}\s*=\s*[^;]+;"
-    original = re.search(pattern, target_rtl)
-    mutated, count = re.subn(pattern, lambda _match: CONTROL_MUTATION, target_rtl, count=1)
-    mutant = WORK / f"UHSC_{MODULE_NAME}-mutant.sv"
-    mutant.write_text(mutated, encoding="utf-8", newline="\n")
-    if count != 1 or original is None:
-        return {
+    target_rtl = paths["target"].read_text(encoding="utf-8")
+    reference_rtl = paths["reference"].read_text(encoding="utf-8")
+    target_original = re.search(pattern, target_rtl)
+    reference_original = re.search(pattern, reference_rtl)
+    target_mutated, target_count = re.subn(
+        pattern, lambda _match: CONTROL_MUTATION, target_rtl, count=1)
+    reference_mutated, reference_count = re.subn(
+        pattern, lambda _match: CONTROL_MUTATION, reference_rtl, count=1)
+    mutations = {
+        "target": (target_mutated, target_count, target_original),
+        "reference": (reference_mutated, reference_count, reference_original),
+    }
+    results: dict[str, Any] = {}
+    for side, (mutated, count, original) in mutations.items():
+        mutant = WORK / f"UHSC_{MODULE_NAME}-{side}-mutant.sv"
+        mutant.write_text(mutated, encoding="utf-8", newline="\n")
+        if count != 1 or original is None:
+            results[side] = {
+                "control_port": CONTROL_PORT,
+                "mutation_applied": False,
+                "matched_drivers": count,
+                "clean_proof_marker_disappeared": False,
+                "counterexample_detected": False,
+                "counterexample_or_unproven": False,
+                "status": "FAIL",
+                "note": "the control driver was not uniquely found, so the harness was never challenged",
+            }
+            continue
+        if side == "target":
+            verdict = sat_run(wsl_path(mutant), paths)
+        else:
+            verdict = sat_run(wsl_path(paths["target"]), paths,
+                              reference_path=mutant)
+        marker_disappeared = not bool(verdict.get("formal_success_marker"))
+        counterexample_detected = bool(verdict.get("model_found_marker"))
+        detected = (marker_disappeared and counterexample_detected
+                    and verdict.get("status") == "FAIL")
+        results[side] = {
             "control_port": CONTROL_PORT,
-            "mutation_applied": False,
-            "matched_drivers": count,
-            "status": "FAIL",
-            "note": "the control driver was not uniquely found, so the harness was never challenged",
+            "mutation_applied": True,
+            "original_statement": original.group(0)[-200:],
+            "mutated_statement": CONTROL_MUTATION,
+            "mutant_sha256": sha256_file(mutant),
+            "rerun_command_identical": verdict.get("command"),
+            "sat_variables": verdict.get("sat_variables"),
+            "sat_clauses": verdict.get("sat_clauses"),
+            "model_found_marker": counterexample_detected,
+            "success_marker_present": verdict.get("formal_success_marker"),
+            "clean_proof_marker_disappeared": marker_disappeared,
+            "counterexample_detected": counterexample_detected,
+            "counterexample_or_unproven": counterexample_detected,
+            "decisive_lines": verdict.get("decisive_lines", []),
+            "status": "PASS" if detected else "FAIL",
+            "note": "each independently mutated side must lose the clean proof marker "
+                    "and produce an explicit SAT counterexample",
+            "output_tail": verdict.get("output_tail", "")[-1200:],
         }
-    verdict = sat_run(wsl_path(mutant), paths)
-    detected = (not verdict["formal_success_marker"]
-                and verdict["model_found_marker"]
-                and verdict["status"] == "FAIL")
+    all_pass = all(item.get("status") == "PASS" for item in results.values())
     return {
+        "status": "PASS" if all_pass else "FAIL",
         "control_port": CONTROL_PORT,
-        "mutation_applied": True,
-        "original_statement": original.group(0)[-200:],
-        "mutated_statement": CONTROL_MUTATION,
-        "mutant_sha256": sha256_file(mutant),
-        "rerun_command_identical": verdict["command"],
-        "sat_variables": verdict.get("sat_variables"),
-        "sat_clauses": verdict.get("sat_clauses"),
-        "model_found_marker": verdict["model_found_marker"],
-        "success_marker_present": verdict["formal_success_marker"],
-        "decisive_lines": verdict.get("decisive_lines", []),
-        "status": "PASS" if detected else "FAIL",
-        "note": "a mutated target must be reported as not equivalent, otherwise the harness is "
-                "vacuous and a clean success would mean nothing",
-        "output_tail": verdict.get("output_tail", "")[-1200:],
+        "sides": results,
+        "two_sided": True,
+        "mutation_applied": all(item.get("mutation_applied") is True
+                                 for item in results.values()),
+        "clean_proof_marker_disappeared": all(
+            item.get("clean_proof_marker_disappeared") is True
+            for item in results.values()),
+        "counterexample_or_unproven": all(
+            item.get("counterexample_or_unproven") is True
+            for item in results.values()),
     }
 
 
@@ -605,6 +650,9 @@ def validate() -> dict[str, Any]:
     source_lock = {
         "status": "PASS",
         "source_commit": SOURCE_COMMIT,
+        "audit_policy": {"require_negative_control": True,
+                         "two_sided_negative_control": True,
+                         "scope_source": "locked XSTop specialization"},
         "checks": {
             "scala_present": SCALA.is_file(),
             "python_build_present": TARGET.is_file(),
@@ -632,14 +680,16 @@ def validate() -> dict[str, Any]:
         if result["status"] != "PASS":
             failures.append(name)
     if control["status"] != "PASS":
-        failures.append("negative control did not detect a mutated target")
+        failures.append("two-sided negative control did not detect both mutations")
     status = "COMPLETE_EQUIVALENCE" if not failures else "STRICT_PENDING"
     input_bits = sum(inputs.values())
     output_bits = sum(outputs.values())
     proof = gates["yosys_formal_miter"]
     unclosed = list(failures)
-    unclosed.append("Frontend/BPU parent closure, license review and user approval remain outside "
-                    "this proof.")
+    acceptance_unclosed = [
+        "Frontend/BPU parent closure, license review and user approval remain outside "
+        "this proof.",
+    ]
     payload: dict[str, Any] = {
         "schema_version": 1,
         "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_COMPLETE_EQUIVALENCE",
@@ -650,8 +700,13 @@ def validate() -> dict[str, Any]:
         "strict_complete_count_delta": 1 if status == "COMPLETE_EQUIVALENCE" else 0,
         "acceptance_eligible": status == "COMPLETE_EQUIVALENCE",
         "source_commit": SOURCE_COMMIT,
+        "audit_policy": {"require_negative_control": True,
+                         "two_sided_negative_control": True,
+                         "scope_source": "locked XSTop specialization"},
         "scope": {
             "kind": "stateless_combinational_leaf",
+            "authority": "locked DefaultConfig XSTop specialization",
+            "scala_class_claimed": False,
             "configuration": ("locked Kunminghu V2 FTB geometry: VAddrBits=50, PredictWidth=16, "
                               "numBr=2, BR_OFFSET_LEN=12, JMP_OFFSET_LEN=20, TAR_STAT_SZ=2"),
             "state_bits": 0,
@@ -667,9 +722,20 @@ def validate() -> dict[str, Any]:
             "why_complete": "Yosys SAT proves the reduction-OR over all "
                             f"{len(outputs)} declared output lanes ({output_bits} bits) equals zero "
                             f"with all {input_bits} input bits unconstrained (no assume anywhere in "
-                            "the miter) and no temporal state exists; the built-in negative control "
-                            "shows the same harness rejects a perturbed target equation",
+                            "the miter) and no temporal state exists; two independent negative "
+                            "controls show the same harness rejects perturbed target and "
+                            "reference equations",
             "bounded_tests_counted": False,
+            "specialization_projection": {
+                "pruned_scala_outputs": [
+                    "io_new_br_insert_pos", "io_is_init_entry", "io_is_new_br",
+                    "io_is_jalr_target_modified", "io_is_strong_bias_modified",
+                    "io_is_br_full",
+                ],
+                "pruned_output_bits": 7,
+                "claim": "only the 104-port module emitted in the locked XSTop is proven; "
+                         "the generic Scala class ABI is not claimed",
+            },
             "abi_defect_repair": {
                 "symptom": f"the Build exported 105 ports including {PRUNED_PORT}; the locked "
                            "reference declares 104",
@@ -712,6 +778,7 @@ def validate() -> dict[str, Any]:
         },
         "failures": failures,
         "unclosed": unclosed,
+        "acceptance_unclosed": acceptance_unclosed,
     }
     EVIDENCE.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
                         encoding="utf-8", newline="\n")

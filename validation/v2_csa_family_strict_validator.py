@@ -35,6 +35,7 @@ TARGET = ROOT / (
     "Build-Cpu.Backend.Fu.Util.CSA-Hardware.py"
 )
 SCALA = ROOT / "upstream/src/main/scala/xiangshan/backend/fu/util/CSA.scala"
+YUNSUAN_SCALA = ROOT / "upstream/yunsuan/src/main/scala/yunsuan/vector/VectorIdiv/SRT16Divint.scala"
 REF_DIR = ROOT / "validation/reference-sv"
 EVIDENCE = ROOT / "validation/v2-csa-family-strict-evidence.json"
 TEMP_ROOT = Path(tempfile.gettempdir())
@@ -45,6 +46,8 @@ WORK = TEMP_ROOT / "uhsc_csa_family_strict"
 SOURCE_COMMIT = "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af"
 XSTOP_SHA256 = "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d"
 SAT_SUCCESS_MARKER = "SAT proof finished - no model found: SUCCESS!"
+MODEL_FOUND_MARKER = "SAT proof finished - model found: FAIL!"
+FREE_INPUT_MARKER = "Final constraint equation: { } = { }"
 ANSI_PORT = re.compile(r"^(input|output)\s+(?:\[(\d+):0\]\s*)?(.+)$")
 
 # Locked CSA3_2 specializations are emitted with a suffix per width.
@@ -107,12 +110,25 @@ def run_wsl(command: list[str]) -> dict[str, Any]:
         result = subprocess.run(["wsl.exe", "-e", "bash", "-lc", rendered],
                                 capture_output=True, check=False)
     except OSError as error:
-        return {"command": command, "status": "FAIL", "error": repr(error)}
+        return {"command": command, "returncode": None, "status": "FAIL",
+                "error": repr(error), "output_tail": repr(error),
+                "sat_success_marker": False, "sat_counterexample_marker": False,
+                "unconstrained_marker": False, "sat_variables": None,
+                "sat_clauses": None}
     output = (result.stdout + result.stderr).decode("utf-8", "replace")
+    counts = re.findall(r"Solving problem with (\d+) variables and (\d+) clauses", output)
+    variables = clauses = None
+    if counts:
+        variables, clauses = map(int, counts[-1])
     return {
         "command": command,
         "returncode": result.returncode,
         "status": "PASS" if result.returncode == 0 else "FAIL",
+        "sat_success_marker": SAT_SUCCESS_MARKER in output,
+        "sat_counterexample_marker": MODEL_FOUND_MARKER in output,
+        "unconstrained_marker": FREE_INPUT_MARKER in output,
+        "sat_variables": variables,
+        "sat_clauses": clauses,
         "output_tail": output[-3000:],
         "output_sha256": hashlib.sha256(output.encode()).hexdigest(),
     }
@@ -316,12 +332,8 @@ def prove(item: dict[str, Any]) -> dict[str, Any]:
               f"{shlex.quote(miter)}; prep -top {entry['tag']}_MITER; flatten; opt; "
               "sat -prove mismatch 0")
     proof = run_wsl(["yosys", "-Q", "-p", script])
-    output = proof.get("output_tail", "")
-    proof["formal_success_marker"] = SAT_SUCCESS_MARKER in output
-    proof["unconstrained"] = "Final constraint equation: { } = { }" in output
-    counts = re.findall(r"Solving problem with (\d+) variables and (\d+) clauses", output)
-    if counts:
-        proof["sat_variables"], proof["sat_clauses"] = (int(counts[-1][0]), int(counts[-1][1]))
+    proof["formal_success_marker"] = proof.get("sat_success_marker") is True
+    proof["unconstrained"] = proof.get("unconstrained_marker") is True
     if not proof["formal_success_marker"] or not proof["unconstrained"]:
         proof["status"] = "FAIL"
     return {"verilator": lint, "yosys_check_target": check_target,
@@ -361,55 +373,58 @@ def aggregate_proof(items: list[dict[str, Any]]) -> dict[str, Any]:
     script = (f"read_verilog -sv {sources} {shlex.quote(wsl_path(glue))}; "
               "prep -top CSA_FAMILY_MITER; flatten; opt; sat -prove mismatch 0")
     proof = run_wsl(["yosys", "-Q", "-p", script])
-    output = proof.get("output_tail", "")
-    proof["formal_success_marker"] = SAT_SUCCESS_MARKER in output
-    proof["unconstrained"] = "Final constraint equation: { } = { }" in output
+    proof["formal_success_marker"] = proof.get("sat_success_marker") is True
+    proof["unconstrained"] = proof.get("unconstrained_marker") is True
     proof["mitered_variants"] = len(items)
-    counts = re.findall(r"Solving problem with (\d+) variables and (\d+) clauses", output)
-    if counts:
-        proof["sat_variables"], proof["sat_clauses"] = (int(counts[-1][0]), int(counts[-1][1]))
     if not proof["formal_success_marker"] or not proof["unconstrained"]:
         proof["status"] = "FAIL"
     return proof
 
 
 def negative_control(items: list[dict[str, Any]]) -> dict[str, Any]:
-    """Perturb the target and the reference and require the proof to break."""
+    """Perturb both sides of every specialization and require every proof to break."""
 
-    widest = max(items, key=lambda item: item["entry"]["length"])
-    entry = widest["entry"]
-    output_name = sorted(widest["outputs"])[0]
     verdicts: dict[str, Any] = {}
-    for side, path in (("target", widest["target"]), ("reference", widest["reference"])):
-        source = path.read_text(encoding="utf-8")
-        mutated, count = re.subn(rf"assign\s+{re.escape(output_name)}\s*=\s*[^;]+;",
-                                 lambda _match: f"assign {output_name} = 1'b0;",
-                                 source, count=1)
-        if count != 1:
-            return {"status": "FAIL", "side": side, "mutation_applied": False,
-                    "note": "the control driver was not uniquely found, so the harness "
-                            "was never challenged"}
-        mutant = WORK / f"MUTANT_{side}_{entry['tag']}.sv"
-        mutant.write_text(mutated, encoding="utf-8", newline="\n")
-        if side == "target":
-            files = [mutant, widest["reference"], widest["miter"]]
-        else:
-            files = [widest["target"], mutant, widest["miter"]]
-        script = ("read_verilog -sv " + " ".join(shlex.quote(wsl_path(item)) for item in files)
-                  + f"; prep -top {entry['tag']}_MITER; flatten; opt; sat -prove mismatch 0")
-        verdict = run_wsl(["yosys", "-Q", "-p", script])
-        output = verdict.get("output_tail", "")
-        verdicts[side] = {
-            "status": "PASS" if SAT_SUCCESS_MARKER not in output else "FAIL",
-            "control_port": output_name,
-            "mutation_applied": True,
-            "success_marker_still_present": SAT_SUCCESS_MARKER in output,
-            "output_tail": output[-700:],
-        }
+    for current in items:
+        entry = current["entry"]
+        output_name = sorted(current["outputs"])[0]
+        for side, path in (("target", current["target"]),
+                           ("reference", current["reference"])):
+            source = path.read_text(encoding="utf-8")
+            mutated, count = re.subn(
+                rf"assign\s+{re.escape(output_name)}\s*=\s*[^;]+;",
+                lambda _match: f"assign {output_name} = 1'b0;", source, count=1)
+            if count != 1:
+                verdicts[f"{entry['tag']}.{side}"] = {
+                    "status": "FAIL", "mutation_applied": False}
+                continue
+            mutant = WORK / f"MUTANT_{side}_{entry['tag']}.sv"
+            mutant.write_text(mutated, encoding="utf-8", newline="\n")
+            files = ([mutant, current["reference"], current["miter"]]
+                     if side == "target"
+                     else [current["target"], mutant, current["miter"]])
+            script = (
+                "read_verilog -sv "
+                + " ".join(shlex.quote(wsl_path(item)) for item in files)
+                + f"; prep -top {entry['tag']}_MITER; flatten; opt; sat -prove mismatch 0")
+            verdict = run_wsl(["yosys", "-Q", "-p", script])
+            output = verdict.get("output_tail", "")
+            counterexample = verdict.get("sat_counterexample_marker") is True
+            success = verdict.get("sat_success_marker") is True
+            decisive = (verdict.get("returncode") == 0 and counterexample and not success)
+            verdicts[f"{entry['tag']}.{side}"] = {
+                "status": "PASS" if decisive else "FAIL",
+                "control_port": output_name,
+                "mutation_applied": True,
+                "counterexample_marker": counterexample,
+                "success_marker_still_present": success,
+                "returncode": verdict.get("returncode"),
+                "output_tail": output[-700:],
+            }
     detected = all(item["status"] == "PASS" for item in verdicts.values())
     return {
         "status": "PASS" if detected else "FAIL",
-        "control_target": entry["tag"],
+        "control_targets": [item["entry"]["tag"] for item in items],
         "sides": verdicts,
         "note": "pinning one output lane on either side must produce a model; a "
                 "reference-side mutation that still 'proves' equality means the "
@@ -425,6 +440,10 @@ def validate() -> dict[str, Any]:
     py_compile.compile(str(TARGET), doraise=True)
     py_compile.compile(str(Path(__file__)), doraise=True)
     items = prepare(module)
+    build_scope = tuple(getattr(module, "LOCKED_VARIANTS", ()))
+    proven_scope = tuple(item["entry"]["tag"] for item in items)
+    if set(build_scope) != set(proven_scope) or len(build_scope) != len(proven_scope):
+        failures.append("Build LOCKED_VARIANTS does not match validator scope")
     results = [prove(item) for item in items]
     aggregate = aggregate_proof(items)
     control = negative_control(items)
@@ -464,6 +483,7 @@ def validate() -> dict[str, Any]:
             "output_bits": sum(item["outputs"].values()),
             "abi_exact": item["abi_ok"],
             "deterministic": item["deterministic_ok"],
+            "miter_selfcheck": item["miter_selfcheck"],
             "sat": {
                 "returncode": sat.get("returncode"),
                 "status": sat.get("status"),
@@ -489,6 +509,10 @@ def validate() -> dict[str, Any]:
         "strict_complete_count_delta": 1 if status == "COMPLETE_EQUIVALENCE" else 0,
         "acceptance_eligible": status == "COMPLETE_EQUIVALENCE",
         "source_commit": SOURCE_COMMIT,
+        "audit_policy": {"require_negative_control": True,
+                         "two_sided_negative_control": True,
+                         "full_output_markers": True,
+                         "scope_source": "Build.LOCKED_VARIANTS"},
         "scope": {
             "kind": "stateless_combinational_multi_variant_build",
             "public_variants": [item["entry"]["tag"] for item in items],
@@ -518,6 +542,13 @@ def validate() -> dict[str, Any]:
         "sources": {
             "scala": {"path": SCALA.relative_to(ROOT).as_posix(), "sha256": sha256_file(SCALA),
                       "bytes": SCALA.stat().st_size},
+            "scala_dependencies": {
+                "yunsuan_srt16divint": {
+                    "path": YUNSUAN_SCALA.relative_to(ROOT).as_posix(),
+                    "sha256": sha256_file(YUNSUAN_SCALA),
+                    "bytes": YUNSUAN_SCALA.stat().st_size,
+                }
+            },
             "reference_sv": {"path": "validation/reference-sv/CSA3_2.sv",
                              "sha256": sha256_file(REF_DIR / "CSA3_2.sv"),
                              "bytes": (REF_DIR / "CSA3_2.sv").stat().st_size},

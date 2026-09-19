@@ -33,6 +33,7 @@ import sys
 import tempfile
 from pathlib import Path
 from typing import Any
+from collections import Counter
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -54,7 +55,7 @@ INIT_DECL = re.compile(
 # block-local declaration counts as surviving.
 BLOCK_LOCAL_ANY = re.compile(r"\bautomatic\s+(?:logic|reg|bit)\b")
 REMOVED_REGIONS = ("`ifndef SYNTHESIS", "`ifdef ENABLE_INITIAL_REG_", "`ifdef ENABLE_INITIAL_MEM_")
-NESTED_OPEN = re.compile(r"^\s*`(ifdef|ifndef|else|elsif)\b")
+NESTED_OPEN = re.compile(r"^\s*`(ifdef|ifndef)\b")
 NESTED_CLOSE = re.compile(r"^\s*`endif\b")
 INSTANCE = re.compile(r"^\s*([A-Za-z_]\w*)\s+[A-Za-z_]\w*\s*\(", re.M)
 
@@ -149,19 +150,31 @@ def enumerate_members(module: Any, build_path: Path) -> list[str]:
     """Collect every locked module name the Build exposes, from its own tables."""
 
     text = build_path.read_text(encoding="utf-8")
-    cands: set[str] = set()
-    table = re.search(r'COVERED_MODULES[^=]*=\s*([\(\[])(.*?)[\)\]]', text, re.S)
-    if table is not None:
-        cands |= set(re.findall(r'"([^"]+)"', table.group(2)))
-    for name in re.findall(r'^([A-Z_]+_SPECS):', text, re.M):
-        block = re.search(re.escape(name) + r':.*?\n\}', text, re.S)
-        if block is not None:
-            cands |= set(re.findall(r'^\s{4}"([^"]+)":', block.group(0), re.M))
-    cands |= set(re.findall(r'(?:member|module_name|subject|module) == "([A-Za-z_]\w*)"', text))
-    locked = sorted(c for c in cands if (REF_DIR / f"{c}.sv").is_file())
-    if not locked:
+    locked = re.search(r'\bLOCKED_VARIANTS[^=]*=\s*([\(\[])(.*?)[\)\]]', text, re.S)
+    if locked is not None:
+        locked_names = re.findall(r'"([^"]+)"', locked.group(2))
+        if len(locked_names) != len(set(locked_names)):
+            raise AssertionError(f"{build_path.name} repeats a LOCKED_VARIANTS entry")
+        cands = set(locked_names)
+    else:
+        cands: set[str] = set()
+        for table in re.finditer(
+                r'\b(?:COVERED_MODULES|[A-Z_]+_MEMBERS)[^=]*=\s*([\(\[])(.*?)[\)\]]',
+                text, re.S):
+            cands |= set(re.findall(r'"([^"]+)"', table.group(2)))
+        for name in re.findall(r'^([A-Z_]+_SPECS):', text, re.M):
+            block = re.search(re.escape(name) + r':.*?\n\}', text, re.S)
+            if block is not None:
+                cands |= set(re.findall(r'^\s{4}"([^"]+)":', block.group(0), re.M))
+        cands |= set(re.findall(
+            r'(?:member|module_name|subject|module) == "([A-Za-z_]\w*)"', text))
+    if not cands:
         raise AssertionError(f"{build_path.name} exposes no locked module names this rail can resolve")
-    return locked
+    missing = sorted(c for c in cands if not (REF_DIR / f"{c}.sv").is_file())
+    if missing:
+        raise AssertionError(
+            f"{build_path.name} exposes members without locked references: {', '.join(missing)}")
+    return sorted(cands)
 
 
 def wsl_path(path: Path) -> str:
@@ -190,8 +203,28 @@ def run_wsl(command: list[str],
     except OSError as error:
         return {"command": command, "status": "FAIL", "error": repr(error)}
     output = (result.stdout + result.stderr).decode("utf-8", "replace")
+    equiv_totals = re.findall(r"Found (\d+) \$equiv cells in", output)
+    equiv_summary = re.findall(
+        r"Of those cells (\d+) are proven and (\d+) are unproven", output)
+    equiv_failed = re.findall(
+        r"Found (\d+) unproven \$equiv cells in 'equiv_status -assert'", output)
+    sat_counts = re.findall(
+        r"Solving problem with (\d+) variables and (\d+) clauses", output)
     return {"command": command, "returncode": result.returncode,
             "status": "PASS" if result.returncode == 0 else "FAIL",
+            "sat_success_marker": SAT_MARKER in output,
+            "sat_counterexample_marker": "model found: FAIL!" in output,
+            "unconstrained_marker": "Final constraint equation: { } = { }" in output,
+            "equiv_success_markers": {marker: marker in output for marker in EQUIV_MARKERS},
+            "equiv_failure_marker": bool(
+                re.search(r"ERROR:\s*Found\s+[1-9]\d*\s+unproven\s+\$equiv\s+cells", output)
+                or re.search(r"Of those cells\s+\d+\s+are proven and\s+[1-9]\d*\s+are unproven", output)),
+            "equiv_cells_full": int(equiv_totals[-1]) if equiv_totals else None,
+            "equiv_summary_full": ([int(value) for value in equiv_summary[-1]]
+                                   if equiv_summary else None),
+            "equiv_failed_full": int(equiv_failed[-1]) if equiv_failed else None,
+            "sat_counts_full": ([int(value) for value in sat_counts[-1]]
+                                if sat_counts else None),
             "output_tail": output[-2500:],
             "output_sha256": hashlib.sha256(output.encode()).hexdigest()}
 
@@ -259,12 +292,13 @@ def synthesizable_view(text: str, top: str, rename: bool) -> tuple[str, dict[str
     lines = [line for line in (strip_line(raw) for raw in text.split("\n")) if line]
     removed: dict[str, int] = {}
     for opening in REMOVED_REGIONS:
-        start = next((i for i, line in enumerate(lines) if opening in line), None)
-        if start is None:
-            continue
-        end = directive_block_end(lines, start)
-        removed[opening] = end - start
-        lines = lines[:start] + lines[end:]
+        while True:
+            start = next((i for i, line in enumerate(lines) if opening in line), None)
+            if start is None:
+                break
+            end = directive_block_end(lines, start)
+            removed[opening] = removed.get(opening, 0) + end - start
+            lines = lines[:start] + lines[end:]
     residual = [line for line in lines if "`" in line]
     body = "\n".join(lines)
     plain_lines = [m.group(2) for m in BLOCK_LOCAL.finditer(body)]
@@ -278,16 +312,18 @@ def synthesizable_view(text: str, top: str, rename: bool) -> tuple[str, dict[str
     stripped = BLOCK_LOCAL.sub("", rewritten)
     normalized = stripped if not declarations else insert_declarations(stripped, declarations, top)
     view_lines = [line for line in normalized.split("\n") if line.strip()]
-    view_set = set(view_lines)
-    disappeared = [line for line in lines if line and line not in view_set]
+    locked_counts = Counter(line for line in lines if line)
+    view_counts = Counter(view_lines)
+    disappeared = list((locked_counts - view_counts).elements())
     expected_declarations = [line.rstrip() for line in declarations.split("\n") if line.strip()]
     expected_rewrites = [f"{n} = {e};" for _, n, e in initialized]
     permitted = expected_declarations + expected_rewrites
-    appeared = [line for line in view_lines if line not in set(lines)]
+    appeared = list((view_counts - locked_counts).elements())
     conserved = (all(BLOCK_LOCAL.match(line) is not None or INIT_DECL.match(line) is not None
                      for line in disappeared)
                  and len(disappeared) == len(plain_lines) + len(initialized)
-                 and sorted(appeared) == sorted(permitted))
+                 and Counter(appeared) == Counter(permitted)
+                 and len(view_lines) == len(lines) + len(initialized))
     registers_before = re.findall(r"^\s*[A-Za-z_]\w*\s*<=\s*.+;$", body, re.M)
     registers_after = re.findall(r"^\s*[A-Za-z_]\w*\s*<=\s*.+;$", normalized, re.M)
     audit = {
@@ -306,7 +342,7 @@ def synthesizable_view(text: str, top: str, rename: bool) -> tuple[str, dict[str
     audit["view_trusted"] = bool(
         conserved and audit["register_update_equations_preserved"]
         and not BLOCK_LOCAL_ANY.search(normalized)
-        and all(line.lstrip().startswith("`") for line in residual))
+        and not residual)
     if rename:
         renamed, count = re.subn(r"\bmodule\s+" + re.escape(top) + r"\s*\(",
                                  f"module REF_{top}(", normalized, count=1)
@@ -383,6 +419,19 @@ def declared_scala(build_path: Path) -> Path | None:
     return None
 
 
+def declared_scala_sources(build_path: Path) -> dict[str, Any]:
+    """Record every Scala path declared by a catalog Build."""
+
+    text = build_path.read_text(encoding="utf-8")
+    records: dict[str, Any] = {}
+    for declared in dict.fromkeys(re.findall(r'"(upstream/[^"]+\.scala)"', text)):
+        path = ROOT / declared
+        records[declared] = (
+            {"vendored": True, "sha256": sha256_file(path)} if path.is_file()
+            else {"vendored": False, "note": "declared Scala source is missing"})
+    return records
+
+
 def export_member(module: Any, name: str) -> str:
     """Emit one member through the Build and rename its top for pairing."""
 
@@ -426,7 +475,11 @@ class FamilyRail:
         miter_path.write_text(miter, encoding="utf-8", newline="\n")
         return {
             "name": name, "inputs": inputs, "outputs": outputs, "children": children,
-            "sequential": any(p in ports for p in ("clock", "clk")),
+            "sequential": any(
+                direction == "input"
+                and (port in ("clock", "clk", "io_clock", "io_clk")
+                     or port.endswith("_clock") or port.endswith("_clk"))
+                for port, (direction, _width) in ports.items()),
             "abi_exact": declared_ports(target_rtl, f"DUT_{name}") == ports,
             "deterministic": export_member(module, name) == target_rtl,
             "output_less": not outputs,
@@ -434,6 +487,8 @@ class FamilyRail:
             "view_trusted": all(audit["view_trusted"] for audit in audits),
             "view_audits": audits,
             "locked_sha256": sha256_file(REF_DIR / f"{name}.sv"),
+            "locked_sources": [REF_DIR / f"{child}.sv" for child in children]
+                              + [REF_DIR / f"{name}.sv"],
             "target": target_path, "reference": reference_path, "miter": miter_path,
         }
 
@@ -445,40 +500,41 @@ class FamilyRail:
         lint = run_wsl(["verilator", "--lint-only", "-Wno-fatal", "--top-module",
                         f"{name}_MITER", wsl_path(item["target"]), wsl_path(item["reference"]),
                         wsl_path(item["miter"])])
+        locked_lint = run_wsl(
+            ["verilator", "--lint-only", "-Wno-fatal", "-DSYNTHESIS", "--top-module", name]
+            + [wsl_path(path) for path in item["locked_sources"]])
         if not item["sequential"]:
             script = (f"read_verilog -sv {files}; prep -top {name}_MITER; flatten; opt; "
                       "sat -prove mismatch 0")
             proof = run_wsl(["yosys", "-Q", "-p", script])
-            output = proof.get("output_tail", "")
-            proof["formal_success_marker"] = SAT_MARKER in output
-            proof["unconstrained"] = "Final constraint equation: { } = { }" in output
-            counts = re.findall(r"Solving problem with (\d+) variables and (\d+) clauses", output)
-            if counts:
-                proof["sat_variables"], proof["sat_clauses"] = int(counts[-1][0]), int(counts[-1][1])
+            proof["formal_success_marker"] = proof.get("sat_success_marker") is True
+            proof["unconstrained"] = proof.get("unconstrained_marker") is True
+            counts = proof.get("sat_counts_full")
+            if isinstance(counts, list) and len(counts) == 2:
+                proof["sat_variables"], proof["sat_clauses"] = counts
             if not proof["formal_success_marker"] or not proof["unconstrained"]:
                 proof["status"] = "FAIL"
-            return {"method": "sat_miter", "verilator": lint, "sat_miter": proof}
+            return {"method": "sat_miter", "verilator": lint,
+                    "locked_verilator": locked_lint, "sat_miter": proof}
         script = (f"read_verilog -sv {pair}; proc; async2sync; memory; opt; "
                   f"flatten REF_{name}; flatten DUT_{name}; "
                   f"equiv_make REF_{name} DUT_{name} {name}_EQUIV; "
                   f"prep -top {name}_EQUIV; equiv_induct -undef; equiv_status -assert")
         proof = run_wsl(["yosys", "-Q", "-p", script])
-        output = proof.get("output_tail", "")
-        markers = {marker: marker in output for marker in EQUIV_MARKERS}
+        markers = proof.get("equiv_success_markers", {})
         proof["markers_present"] = markers
         proof["formal_success_marker"] = all(markers.values())
-        totals = re.findall(r"Found (\d+) \$equiv cells in", output)
-        summary = re.findall(r"Of those cells (\d+) are proven and (\d+) are unproven", output)
-        failed = re.findall(r"Found (\d+) unproven \$equiv cells in 'equiv_status -assert'", output)
-        if totals:
-            proof["equiv_cells"] = int(totals[-1])
-        if summary:
-            proof["proven_cells"], proof["unproven_cells"] = int(summary[-1][0]), int(summary[-1][1])
-        if failed:
-            proof["unproven_cells"] = int(failed[-1])
+        if isinstance(proof.get("equiv_cells_full"), int):
+            proof["equiv_cells"] = proof["equiv_cells_full"]
+        summary = proof.get("equiv_summary_full")
+        if isinstance(summary, list) and len(summary) == 2:
+            proof["proven_cells"], proof["unproven_cells"] = summary
+        if isinstance(proof.get("equiv_failed_full"), int):
+            proof["unproven_cells"] = proof["equiv_failed_full"]
         if proof["returncode"] != 0 or not proof["formal_success_marker"]:
             proof["status"] = "FAIL"
-        return {"method": "sequential_equivalence", "verilator": lint, "yosys_equiv": proof}
+        return {"method": "sequential_equivalence", "verilator": lint,
+                "locked_verilator": locked_lint, "yosys_equiv": proof}
 
     def aggregate(self, items: list[dict[str, Any]]) -> dict[str, Any]:
         subset = [item for item in items if not item["sequential"]]
@@ -515,13 +571,12 @@ class FamilyRail:
         script = (f"read_verilog -sv {sources} {shlex.quote(wsl_path(glue))}; "
                   f"prep -top {glue.stem}; flatten; opt; sat -prove mismatch 0")
         proof = run_wsl(["yosys", "-Q", "-p", script])
-        output = proof.get("output_tail", "")
-        proof["formal_success_marker"] = SAT_MARKER in output
-        proof["unconstrained"] = "Final constraint equation: { } = { }" in output
+        proof["formal_success_marker"] = proof.get("sat_success_marker") is True
+        proof["unconstrained"] = proof.get("unconstrained_marker") is True
         proof["mitered_variants"] = len(subset)
-        counts = re.findall(r"Solving problem with (\d+) variables and (\d+) clauses", output)
-        if counts:
-            proof["sat_variables"], proof["sat_clauses"] = int(counts[-1][0]), int(counts[-1][1])
+        counts = proof.get("sat_counts_full")
+        if isinstance(counts, list) and len(counts) == 2:
+            proof["sat_variables"], proof["sat_clauses"] = counts
         if not proof["formal_success_marker"] or not proof["unconstrained"]:
             proof["status"] = "FAIL"
         return proof
@@ -537,40 +592,72 @@ class FamilyRail:
             if sample is None:
                 verdicts[kind] = {"status": "PASS", "note": "no representative with outputs"}
                 continue
-            port = sorted(sample["outputs"])[0]
             for side in ("target", "reference"):
                 path = sample["target"] if side == "target" else sample["reference"]
-                for candidate in sorted(sample["outputs"]):
-                    source = path.read_text(encoding="utf-8")
-                    mutated, count = re.subn(rf"assign\s+{re.escape(candidate)}\s*=\s*[^;]+;",
-                                             lambda _m: f"assign {candidate} = 1'b0;", source, count=1)
-                    if count:
-                        break
-                if count != 1:
-                    verdicts[f"{kind}.{side}"] = {"status": "FAIL", "mutation_applied": False}
+                source = path.read_text(encoding="utf-8")
+                top = f"DUT_{sample['name']}" if side == "target" else f"REF_{sample['name']}"
+                module_start = re.search(r"\bmodule\s+" + re.escape(top) + r"\s*\(", source)
+                if module_start is None:
+                    verdicts[f"{kind}.{side}"] = {
+                        "status": "FAIL", "mutation_applied": False,
+                        "reason": "top module not found"}
                     continue
-                mutant = self.work / f"MUTANT_{kind}_{side}.sv"
-                mutant.write_text(mutated, encoding="utf-8", newline="\n")
-                name = sample["name"]
-                if sample["sequential"]:
-                    files = ([mutant, sample["reference"]] if side == "target"
-                             else [sample["target"], mutant])
-                    script = ("read_verilog -sv "
-                              + " ".join(shlex.quote(wsl_path(entry)) for entry in files)
-                              + f"; proc; async2sync; memory; opt; flatten REF_{name}; flatten DUT_{name}; "
-                                f"equiv_make REF_{name} DUT_{name} {name}_EQUIV; prep -top {name}_EQUIV; "
-                                "equiv_induct -undef; equiv_status -assert")
-                else:
-                    files = ([mutant, sample["reference"], sample["miter"]] if side == "target"
-                             else [sample["target"], mutant, sample["miter"]])
-                    script = ("read_verilog -sv "
-                              + " ".join(shlex.quote(wsl_path(entry)) for entry in files)
-                              + f"; prep -top {name}_MITER; flatten; opt; sat -prove mismatch 0")
-                verdict = run_wsl(["yosys", "-Q", "-p", script])
-                output = verdict.get("output_tail", "")
-                still = SAT_MARKER in output or all(marker in output for marker in EQUIV_MARKERS)
-                verdicts[f"{kind}.{side}"] = {"status": "FAIL" if still else "PASS",
-                                              "control_entry": name, "control_port": candidate}
+                module_end = source.find("endmodule", module_start.end())
+                if module_end < 0:
+                    verdicts[f"{kind}.{side}"] = {
+                        "status": "FAIL", "mutation_applied": False,
+                        "reason": "top module is unterminated"}
+                    continue
+                body = source[module_start.start():module_end]
+                attempted = False
+                for candidate in sorted(sample["outputs"]):
+                    mutated_body, count = re.subn(
+                        rf"assign\s+{re.escape(candidate)}\s*=\s*[^;]+;",
+                        lambda _m: f"assign {candidate} = 1'b0;", body, count=1)
+                    if count != 1:
+                        continue
+                    attempted = True
+                    mutated = (source[:module_start.start()] + mutated_body
+                               + source[module_end:])
+                    mutant = self.work / f"MUTANT_{kind}_{side}.sv"
+                    mutant.write_text(mutated, encoding="utf-8", newline="\n")
+                    name = sample["name"]
+                    if sample["sequential"]:
+                        files = ([mutant, sample["reference"]] if side == "target"
+                                 else [sample["target"], mutant])
+                        script = ("read_verilog -sv "
+                                  + " ".join(shlex.quote(wsl_path(entry)) for entry in files)
+                                  + f"; proc; async2sync; memory; opt; flatten REF_{name}; flatten DUT_{name}; "
+                                    f"equiv_make REF_{name} DUT_{name} {name}_EQUIV; prep -top {name}_EQUIV; "
+                                    "equiv_induct -undef; equiv_status -assert")
+                    else:
+                        files = ([mutant, sample["reference"], sample["miter"]] if side == "target"
+                                 else [sample["target"], mutant, sample["miter"]])
+                        script = ("read_verilog -sv "
+                                  + " ".join(shlex.quote(wsl_path(entry)) for entry in files)
+                                  + f"; prep -top {name}_MITER; flatten; opt; sat -prove mismatch 0")
+                    verdict = run_wsl(["yosys", "-Q", "-p", script])
+                    if sample["sequential"]:
+                        explicit_failure = verdict.get("equiv_failure_marker") is True
+                        still = all(verdict.get("equiv_success_markers", {}).values())
+                    else:
+                        explicit_failure = verdict.get("sat_counterexample_marker") is True
+                        still = verdict.get("sat_success_marker") is True
+                    process_ran = isinstance(verdict.get("returncode"), int) \
+                        and verdict.get("timed_out") is not True
+                    detected = process_ran and explicit_failure and not still
+                    verdicts[f"{kind}.{side}"] = {
+                        "status": "PASS" if detected else "FAIL",
+                        "control_entry": name, "control_port": candidate,
+                        "mutation_applied": True,
+                        "explicit_failure_marker": explicit_failure,
+                        "success_marker_still_present": still,
+                        "returncode": verdict.get("returncode"),
+                    }
+                    if detected:
+                        break
+                if not attempted:
+                    verdicts[f"{kind}.{side}"] = {"status": "FAIL", "mutation_applied": False}
         detected = bool(verdicts) and all(case["status"] == "PASS" for case in verdicts.values())
         return {"status": "PASS" if detected else "FAIL", "cases": verdicts,
                 "note": "a reference-side mutation that still proves means the reference never "
@@ -607,10 +694,16 @@ class FamilyRail:
             proof = result.get("sat_miter") or result.get("yosys_equiv") or {}
             if result.get("verilator", {}).get("status") != "PASS":
                 failures.append(f"{name}:verilator")
+            if result.get("locked_verilator", {}).get("status") != "PASS":
+                failures.append(f"{name}:locked reference verilator")
             if proof.get("status") != "PASS":
                 failures.append(f"{name}:{'sat_miter' if 'sat_miter' in result and result['method'] == 'sat_miter' else 'yosys_equiv'}")
             if "unproven_cells" in proof and proof.get("unproven_cells"):
                 failures.append(f"{name}: {proof['unproven_cells']} $equiv cells unproven")
+            if item["sequential"] and (
+                    not isinstance(proof.get("equiv_cells"), int)
+                    or proof.get("equiv_cells", 0) <= 0):
+                failures.append(f"{name}: zero or missing $equiv cells")
             if "unconstrained" in proof and not proof["unconstrained"]:
                 failures.append(f"{name}: SAT ran under assumptions")
         if aggregate.get("status") not in ("PASS", "NOT_APPLICABLE"):
@@ -639,6 +732,7 @@ class FamilyRail:
                 "deterministic": item["deterministic"],
                 "miter_selfcheck": item["miter_selfcheck"],
                 "view_trusted": item["view_trusted"],
+                "locked_reference_lint": results[index].get("locked_verilator", {}).get("status"),
                 "verdict": proof.get("status"),
                 "success_marker": proof.get("formal_success_marker"),
                 "unconstrained_or_equiv_cells": (proof.get("unconstrained")
@@ -660,6 +754,14 @@ class FamilyRail:
             sources["scala"] = {"path": self.scala_path.relative_to(ROOT).as_posix(),
                                 "sha256": sha256_file(self.scala_path),
                                 "bytes": self.scala_path.stat().st_size}
+        sources["declared_scala_sources"] = declared_scala_sources(self.build_path)
+        child_paths = sorted({path for item in items
+                              for path in item["locked_sources"][:-1]})
+        sources["reference_children"] = {
+            path.stem: {"path": path.relative_to(ROOT).as_posix(),
+                        "sha256": sha256_file(path), "bytes": path.stat().st_size}
+            for path in child_paths
+        }
         payload: dict[str, Any] = {
             "schema_version": 1,
             "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_COMPLETE_EQUIVALENCE",
@@ -670,6 +772,10 @@ class FamilyRail:
             "strict_complete_count_delta": 1 if status == "COMPLETE_EQUIVALENCE" else 0,
             "acceptance_eligible": status == "COMPLETE_EQUIVALENCE",
             "source_commit": SOURCE_COMMIT,
+            "audit_policy": {"require_negative_control": True,
+                             "require_two_sided_negative_control": True,
+                             "require_locked_reference_lint": True,
+                             "scope_source": "Build catalog tables"},
             "scope": {
                 "kind": "catalog_build_multi_variant",
                 "public_variants": members,

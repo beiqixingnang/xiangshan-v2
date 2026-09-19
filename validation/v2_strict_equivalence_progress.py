@@ -46,6 +46,71 @@ def nested(payload: dict[str, Any], *keys: str) -> Any:
     return value
 
 
+def status_paths(value: Any, prefix: str = "checks") -> list[tuple[str, str]]:
+    """Collect every explicit status below a structured gate tree."""
+
+    found: list[tuple[str, str]] = []
+    if isinstance(value, dict):
+        for key, child in value.items():
+            path = f"{prefix}.{key}"
+            if key == "status":
+                found.append((prefix, str(child)))
+            else:
+                found.extend(status_paths(child, path))
+    elif isinstance(value, list):
+        for index, child in enumerate(value):
+            found.extend(status_paths(child, f"{prefix}[{index}]"))
+    return found
+
+
+def require_pass_gate(checks: dict[str, Any], name: str,
+                      failures: list[str]) -> None:
+    """Require a named gate to exist and expose only PASS statuses."""
+
+    if name not in checks:
+        failures.append(f"missing required check: {name}")
+        return
+    statuses = status_paths(checks[name], f"checks.{name}")
+    if not statuses:
+        failures.append(f"required check has no status: {name}")
+        return
+    failures.extend(f"gate status {path}: {status}" for path, status in statuses
+                    if status != "PASS")
+
+
+def verify_two_sided_control(control: Any, failures: list[str]) -> None:
+    """Require explicit, applied target and reference mutation results."""
+
+    if not isinstance(control, dict) or control.get("status") != "PASS":
+        failures.append("missing or failing negative control")
+        return
+    sides = control.get("sides")
+    if not isinstance(sides, dict):
+        sides = control.get("cases")
+    if not isinstance(sides, dict):
+        failures.append("negative control lacks two-sided cases")
+        return
+    target = [record for name, record in sides.items()
+              if str(name).split(".")[-1] == "target"]
+    reference = [record for name, record in sides.items()
+                 if str(name).split(".")[-1] == "reference"]
+    if not target or not reference:
+        failures.append("negative control lacks target or reference side")
+        return
+    for label, records in (("target", target), ("reference", reference)):
+        if any(not isinstance(record, dict)
+               or record.get("status") != "PASS"
+               or record.get("mutation_applied") is not True
+               or not any(record.get(marker) is True for marker in (
+                   "counterexample_marker", "explicit_failure_marker",
+                   "explicit_unproven_cells", "counterexample_detected",
+                   "model_found_marker", "counterexample_or_unproven"))
+               or not (record.get("success_marker_still_present") is False
+                       or record.get("clean_proof_marker_disappeared") is True)
+               for record in records):
+            failures.append(f"negative control {label} side is not decisive")
+
+
 def verify_source(record: Any, label: str, failures: list[str]) -> dict[str, Any]:
     """Verify one source path and digest. / 验证一个来源路径及摘要。"""
 
@@ -53,16 +118,24 @@ def verify_source(record: Any, label: str, failures: list[str]) -> dict[str, Any
         failures.append(f"missing source record: {label}")
         return {"status": "FAIL"}
     relative = str(record.get("path", ""))
-    path = ROOT / relative
+    candidate = Path(relative)
+    path = (ROOT / candidate).resolve() if not candidate.is_absolute() else candidate.resolve()
+    try:
+        path.relative_to(ROOT.resolve())
+        inside_root = True
+    except ValueError:
+        inside_root = False
+        failures.append(f"source outside repository: {label}")
     expected = str(record.get("sha256", ""))
     present = path.is_file()
     observed = sha256(path) if present else None
-    matched = present and bool(expected) and observed == expected
+    matched = inside_root and present and bool(expected) and observed == expected
     if not matched:
         failures.append(f"source digest: {label}")
     return {
         "path": relative,
         "present": present,
+        "inside_repository": inside_root,
         "expected_sha256": expected,
         "observed_sha256": observed,
         "status": "PASS" if matched else "FAIL",
@@ -75,17 +148,22 @@ def locked_reference_names() -> set[str]:
     return {path.stem for path in (ROOT / "validation/reference-sv").glob("*.sv")}
 
 
-def build_locked_members(build_path: Path, locked_names: set[str]) -> set[str]:
-    """Enumerate the locked modules a catalog Build exposes.
+def build_declared_members(build_path: Path) -> list[str]:
+    """Enumerate every module name a catalog Build declares.
 
     Covers ``COVERED_MODULES`` and ``*_MEMBERS`` tuples plus ``*_SPECS`` mapping
     keys and string-compared member selectors, keeping only names that have an
-    exact locked reference file.
+    exact locked reference file. Reference availability is checked separately;
+    silently filtering a missing reference would turn a partial proof into a
+    complete one.
     """
 
     if not build_path.is_file():
-        return set()
+        return []
     text = build_path.read_text(encoding="utf-8")
+    locked = re.search(r'\bLOCKED_VARIANTS[^=]*=\s*([\(\[])(.*?)[\)\]]', text, re.S)
+    if locked is not None:
+        return re.findall(r'"([^"]+)"', locked.group(2))
     candidates: set[str] = set()
     for table in re.finditer(r'\b(?:COVERED_MODULES|[A-Z_]+_MEMBERS)[^=]*=\s*([\(\[])(.*?)[\)\]]',
                              text, re.S):
@@ -96,7 +174,166 @@ def build_locked_members(build_path: Path, locked_names: set[str]) -> set[str]:
             candidates |= set(re.findall(r'^\s{4}"([^"]+)":', block.group(0), re.M))
     candidates |= set(re.findall(
         r'(?:member|module_name|subject|module)\s*==\s*"([A-Za-z_]\w*)"', text))
-    return {item for item in candidates if item in locked_names}
+    return sorted(candidates)
+
+
+def build_declared_scala_paths(build_path: Path) -> set[str]:
+    """Return repository-relative Scala paths named by a Build contract."""
+
+    if not build_path.is_file():
+        return set()
+    return set(re.findall(
+        r'["\'](upstream/[^"\']+\.scala)["\']',
+        build_path.read_text(encoding="utf-8")))
+
+
+def verify_record_map(records: Any, label: str, failures: list[str]) -> dict[str, Any]:
+    """Verify every path/digest entry in a named evidence mapping."""
+
+    if not isinstance(records, dict):
+        return {}
+    return {str(name): verify_source(record, f"{label}.{name}", failures)
+            for name, record in records.items() if isinstance(record, dict) and "path" in record}
+
+
+def verify_reference_lock(payload: dict[str, Any], failures: list[str]) -> dict[str, Any]:
+    """Re-hash every per-module reference claimed by aggregate evidence."""
+
+    lock = payload.get("reference_lock", {})
+    if not isinstance(lock, dict):
+        return {}
+    hashes = lock.get("sha256_by_module", {})
+    result: dict[str, Any] = {}
+    locked_reference = lock.get("locked_reference")
+    if isinstance(locked_reference, dict) and "path" in locked_reference:
+        result["locked_reference"] = verify_source(
+            locked_reference, "reference_lock.locked_reference", failures)
+    elif isinstance(locked_reference, str) and lock.get("locked_reference_sha256"):
+        result["locked_reference"] = verify_source(
+            {"path": locked_reference, "sha256": lock.get("locked_reference_sha256")},
+            "reference_lock.locked_reference", failures)
+    elif isinstance(lock.get("path"), str) and str(lock.get("path")).endswith(".sv") and lock.get("sha256"):
+        result["locked_reference"] = verify_source(
+            {"path": lock.get("path"), "sha256": lock.get("sha256")},
+            "reference_lock.locked_reference", failures)
+    if isinstance(hashes, dict):
+        for module, expected in hashes.items():
+            record = {"path": f"validation/reference-sv/{module}.sv", "sha256": expected}
+            result[str(module)] = verify_source(record, f"reference_lock.{module}", failures)
+    children = lock.get("child_references", {})
+    result.update(verify_record_map(children, "reference_lock.child", failures))
+    return result
+
+
+def verify_declared_scala(payload: dict[str, Any], failures: list[str], counted: bool) -> dict[str, Any]:
+    """Require every declared Scala dependency of a counted Build to be vendored."""
+
+    sources = payload.get("sources", {})
+    declared = sources.get("declared_scala_sources", {}) if isinstance(sources, dict) else {}
+    result: dict[str, Any] = {}
+    if not isinstance(declared, dict):
+        return result
+    for name, record in declared.items():
+        if not isinstance(record, dict):
+            failures.append(f"invalid declared Scala record: {name}")
+            continue
+        if record.get("vendored") is not True:
+            result[str(name)] = {"status": "MISSING", "note": record.get("note")}
+            if counted:
+                failures.append(f"declared Scala source not vendored: {name}")
+            continue
+        path = str(name)
+        digest = record.get("sha256")
+        result[path] = verify_source({"path": path, "sha256": digest},
+                                     f"declared_scala.{name}", failures)
+    dependencies = sources.get("scala_dependencies", {}) if isinstance(sources, dict) else {}
+    result.update(verify_record_map(dependencies, "scala_dependency", failures))
+    return result
+
+
+def verify_variant_scope(payload: dict[str, Any], failures: list[str], counted: bool) -> dict[str, Any]:
+    """Validate every aggregate member rather than trusting only its aggregate marker."""
+
+    scope = payload.get("scope", {})
+    if not isinstance(scope, dict):
+        return {}
+    public = scope.get("public_variants")
+    variants = scope.get("variants")
+    strict_variant_audit = counted and bool(nested(payload, "audit_policy", "scope_source"))
+    if not isinstance(public, list):
+        return {}
+    if not isinstance(variants, dict):
+        if strict_variant_audit and len(public) > 1:
+            failures.append("aggregate public_variants missing per-variant records")
+        return {}
+    public_names = {str(item) for item in public}
+    if strict_variant_audit and public_names != set(variants):
+        failures.append("public_variants and variant records differ")
+    if strict_variant_audit and scope.get("variant_count") not in (None, len(public_names)):
+        failures.append("variant_count mismatch")
+    checked: dict[str, Any] = {}
+    for name, raw in variants.items():
+        member_failures: list[str] = []
+        if not isinstance(raw, dict):
+            member_failures.append("not an object")
+            raw = {}
+        inputs = raw.get("inputs", {})
+        outputs = raw.get("outputs_compared", {})
+        if not isinstance(inputs, dict) or not inputs:
+            member_failures.append("missing inputs")
+        if not isinstance(outputs, dict) or not outputs:
+            member_failures.append("missing outputs")
+        if raw.get("input_bits") not in (None, sum(int(v) for v in inputs.values())):
+            member_failures.append("input bit count")
+        if raw.get("output_bits") not in (None, sum(int(v) for v in outputs.values())):
+            member_failures.append("output bit count")
+        reference = raw.get("locked_reference")
+        digest = raw.get("locked_sha256")
+        if reference or digest:
+            local_failures: list[str] = []
+            verify_source({"path": reference, "sha256": digest},
+                          f"variant.{name}.reference", local_failures)
+            member_failures.extend(local_failures)
+        if raw.get("abi_exact") is not True:
+            member_failures.append("ABI")
+        if raw.get("deterministic") is not True:
+            member_failures.append("deterministic export")
+        if raw.get("miter_selfcheck") is not True:
+            member_failures.append("miter selfcheck")
+        if "view_trusted" in raw and raw.get("view_trusted") is not True:
+            member_failures.append("reference view")
+        if nested(payload, "audit_policy", "require_locked_reference_lint") is True \
+                and raw.get("locked_reference_lint") != "PASS":
+            member_failures.append("locked reference lint")
+        sat = raw.get("sat")
+        if isinstance(sat, dict):
+            if sat.get("returncode") != 0 or sat.get("status") != "PASS":
+                member_failures.append("SAT status")
+            if sat.get("formal_success_marker") is not True or sat.get("unconstrained") is not True:
+                member_failures.append("SAT completeness")
+        elif "method" in raw:
+            if raw.get("verdict") != "PASS" or raw.get("success_marker") is not True:
+                member_failures.append("formal verdict")
+            if raw.get("sequential"):
+                cells = raw.get("unconstrained_or_cells", raw.get("unconstrained_or_equiv_cells"))
+                if not isinstance(cells, int) or isinstance(cells, bool) or cells <= 0:
+                    member_failures.append("zero/missing equivalence cells")
+                if raw.get("unproven_cells") not in (0, None):
+                    member_failures.append("unproven equivalence cells")
+            else:
+                free = raw.get("unconstrained_or_cells", raw.get("unconstrained_or_equiv_cells"))
+                if free is not True:
+                    member_failures.append("constrained SAT")
+        if member_failures and strict_variant_audit:
+            failures.extend(f"variant {name}: {item}" for item in member_failures)
+        checked[str(name)] = {"status": "PASS" if not member_failures else "FAIL",
+                              "failures": member_failures}
+    require_control = bool(nested(payload, "audit_policy", "require_negative_control"))
+    if strict_variant_audit and len(public_names) > 1 and require_control:
+        control = nested(payload, "checks", "negative_control")
+        if not isinstance(control, dict) or control.get("status") != "PASS":
+            failures.append("aggregate negative control")
+    return checked
 
 
 def verify_evidence(path: Path, expected_source_commit: str) -> dict[str, Any]:
@@ -105,6 +342,8 @@ def verify_evidence(path: Path, expected_source_commit: str) -> dict[str, Any]:
     payload = json.loads(path.read_text(encoding="utf-8"))
     failures: list[str] = []
     build_id = str(payload.get("build_id", ""))
+    audit_policy = payload.get("audit_policy")
+    hardened = isinstance(audit_policy, dict)
     if payload.get("kind") != EXPECTED_KIND:
         failures.append("kind")
     declared_status = str(payload.get("status", ""))
@@ -123,6 +362,17 @@ def verify_evidence(path: Path, expected_source_commit: str) -> dict[str, Any]:
             failures.append("strict_complete_count_delta")
     if not build_id:
         failures.append("build_id")
+    validator_path = str(payload.get("validator", ""))
+    if not non_counting and not hardened:
+        failures.append("counted evidence missing audit_policy")
+    validator = (ROOT / validator_path).resolve()
+    try:
+        validator.relative_to(ROOT.resolve())
+        validator_inside = True
+    except ValueError:
+        validator_inside = False
+    if not validator_inside or not validator.is_file():
+        failures.append("validator path")
     source_commit = str(payload.get("source_commit", ""))
     if source_commit != expected_source_commit:
         failures.append("source_commit")
@@ -146,6 +396,40 @@ def verify_evidence(path: Path, expected_source_commit: str) -> dict[str, Any]:
         row_note = None
     else:
         row_note = None
+    source_children = verify_record_map(
+        sources.get("reference_children", {}) if isinstance(sources, dict) else {},
+        "reference_child", failures)
+    reference_lock = verify_reference_lock(payload, failures)
+    declared_scala = verify_declared_scala(payload, failures, counted=not non_counting)
+    variant_checks = verify_variant_scope(payload, failures, counted=not non_counting)
+    checks = payload.get("checks", {})
+    if not isinstance(checks, dict):
+        checks = {}
+        if not non_counting:
+            failures.append("checks object")
+    if not non_counting:
+        declared_failures = payload.get("failures")
+        declared_unclosed = payload.get("unclosed")
+        if declared_failures != []:
+            failures.append("counted evidence declares failures")
+        if declared_unclosed != []:
+            failures.append("counted evidence declares unclosed strict work")
+        require_pass_gate(checks, "py_compile", failures)
+        require_pass_gate(checks, "pyright", failures)
+        for status_path, status in status_paths(checks):
+            if status != "PASS":
+                failures.append(f"gate status {status_path}: {status}")
+        public = payload.get("scope", {}).get("public_variants", [])
+        if not isinstance(public, list) or len(public) <= 1:
+            require_pass_gate(checks, "abi", failures)
+            require_pass_gate(checks, "deterministic_export", failures)
+    if not non_counting:
+        if nested(payload, "audit_policy", "require_negative_control") is not True:
+            failures.append("audit_policy does not require negative control")
+        control = nested(payload, "checks", "negative_control")
+        if not isinstance(control, dict):
+            control = nested(payload, "checks", "formal", "negative_control")
+        verify_two_sided_control(control, failures)
 
     claimed_variants: set[str] = set()
     if isinstance(scope_claim := payload.get("scope"), dict):
@@ -154,12 +438,54 @@ def verify_evidence(path: Path, expected_source_commit: str) -> dict[str, Any]:
         if isinstance(variant_map := scope_claim.get("variants"), dict):
             claimed_variants |= {str(item) for item in variant_map}
     claimed_build = str(verified_sources.get("python_build", {}).get("path", ""))
+    if hardened and claimed_build:
+        expected_build_id = re.sub(r"-Hardware\.py$", "", Path(claimed_build).name)
+        if build_id != expected_build_id:
+            failures.append("build_id does not match python Build filename")
     if not non_counting and claimed_build:
-        members = build_locked_members(ROOT / claimed_build, LOCKED_REFERENCE_NAMES)
+        declared_paths = build_declared_scala_paths(ROOT / claimed_build)
+        recorded_scala = {
+            str(verified_sources.get("scala", {}).get("path", "")),
+            *(str(record.get("path", "")) for record in declared_scala.values()
+              if isinstance(record, dict)),
+        }
+        missing_scala = sorted(declared_paths - recorded_scala)
+        if missing_scala:
+            failures.append(
+                "Build-declared Scala sources are not locked in evidence: "
+                + ", ".join(missing_scala))
+        member_list = build_declared_members(ROOT / claimed_build)
+        members = set(member_list)
+        if len(member_list) != len(members):
+            failures.append("aggregate Build declares duplicate locked members")
+        missing_references = sorted(members - LOCKED_REFERENCE_NAMES)
+        if missing_references:
+            failures.append(
+                "aggregate Build members lack locked references: "
+                + ", ".join(missing_references)
+            )
         if len(members) > 1 and not members <= claimed_variants:
             failures.append(
                 f"aggregate Build exposes {len(members)} locked members but only "
                 f"{len(members & claimed_variants)} are proven here")
+
+    if not non_counting and claimed_variants:
+        locked_reference_names_for_record = {
+            str(name) for name in reference_lock
+            if name != "locked_reference"
+        }
+        locked_reference_names_for_record |= set(source_children)
+        top_reference = str(verified_sources.get("reference_sv", {}).get("path", ""))
+        if top_reference:
+            locked_reference_names_for_record.add(Path(top_reference).stem)
+        for name, raw in (payload.get("scope", {}).get("variants", {}) or {}).items():
+            if isinstance(raw, dict) and raw.get("locked_reference") and raw.get("locked_sha256"):
+                locked_reference_names_for_record.add(str(name))
+        missing_variant_refs = sorted(claimed_variants - locked_reference_names_for_record)
+        if missing_variant_refs:
+            failures.append(
+                "aggregate variants lack verified locked references: "
+                + ", ".join(missing_variant_refs))
 
     proof_method = "sat_miter"
     formal = nested(payload, "checks", "formal", "yosys_formal_miter")
@@ -170,7 +496,6 @@ def verify_evidence(path: Path, expected_source_commit: str) -> dict[str, Any]:
         formal = {}
         if not non_counting:
             failures.append("formal result")
-    formal_output = str(formal.get("output_tail", ""))
     formal_command = formal.get("command", [])
     command_text = " ".join(str(item) for item in formal_command) if isinstance(formal_command, list) else str(formal_command)
     if not non_counting:
@@ -179,14 +504,44 @@ def verify_evidence(path: Path, expected_source_commit: str) -> dict[str, Any]:
         if formal.get("formal_success_marker") is not True:
             failures.append("formal_success_marker")
         if proof_method == "sat_miter":
-            if SUCCESS_MARKER not in formal_output:
-                failures.append("SAT success output")
+            if "yosys" not in command_text or "sat -prove mismatch 0" not in command_text:
+                failures.append("SAT proof command")
+            full_success = any(formal.get(key) is True for key in (
+                "sat_success_marker", "success_marker", "success_marker_in_full_output"))
+            if not full_success:
+                failures.append("SAT full-output success marker")
+            full_unconstrained = any(formal.get(key) is True for key in (
+                "unconstrained", "unconstrained_marker", "free_input_marker_in_full_output"))
+            if not full_unconstrained:
+                failures.append("SAT proof has assumptions or lacks full-output free-input marker")
         else:
             if "equiv_induct" not in command_text or "equiv_status -assert" not in command_text:
                 failures.append("sequential equivalence command")
-            for marker in EQUIV_SUCCESS_MARKERS:
-                if marker not in formal_output:
-                    failures.append(f"sequential equivalence marker: {marker}")
+            markers = formal.get("markers_present")
+            if not isinstance(markers, dict) or not all(
+                    markers.get(marker) is True for marker in EQUIV_SUCCESS_MARKERS):
+                failures.append("sequential equivalence full-output markers")
+            proven = formal.get("proven_cells")
+            unproven = formal.get("unproven_cells")
+            equiv_cells = formal.get("equiv_cells")
+            if (not isinstance(proven, int) or isinstance(proven, bool)
+                    or not isinstance(unproven, int) or isinstance(unproven, bool)
+                    or not isinstance(equiv_cells, int) or isinstance(equiv_cells, bool)):
+                failures.append("sequential equivalence cell summary")
+            elif proven <= 0 or equiv_cells <= 0 or unproven != 0 or proven != equiv_cells:
+                failures.append("sequential equivalence cells not completely proven")
+
+        public = payload.get("scope", {}).get("public_variants", [])
+        variants = payload.get("scope", {}).get("variants", {})
+        if isinstance(public, list) and len(public) > 1 and isinstance(variants, dict):
+            combinational = sum(
+                not bool(record.get("sequential"))
+                for record in variants.values() if isinstance(record, dict) and "method" in record)
+            expected_mitered = combinational if combinational else len(public)
+            observed_mitered = formal.get("mitered_variants")
+            if observed_mitered != expected_mitered:
+                failures.append(
+                    f"aggregate miter covers {observed_mitered}, expected {expected_mitered}")
 
     scope = payload.get("scope", {})
     if not isinstance(scope, dict) or not scope.get("inputs") or not scope.get("outputs_compared"):
@@ -206,6 +561,10 @@ def verify_evidence(path: Path, expected_source_commit: str) -> dict[str, Any]:
         "note": row_note,
         "scope": scope,
         "sources": verified_sources,
+        "source_children": source_children,
+        "reference_lock": reference_lock,
+        "declared_scala_sources": declared_scala,
+        "variant_checks": variant_checks,
         "formal": {
             "proof_method": proof_method,
             "command": formal.get("command"),
@@ -214,6 +573,8 @@ def verify_evidence(path: Path, expected_source_commit: str) -> dict[str, Any]:
             "formal_success_marker": formal.get("formal_success_marker"),
         },
         "failures": failures,
+        "declared_failures": payload.get("failures", []),
+        "declared_unclosed": payload.get("unclosed", []),
     }
 
 
@@ -261,7 +622,10 @@ def main() -> int:
     )
     accepted_rows = [row for row in rows if row["status"] in ("PASS", "NON_COUNTING")]
     non_counting = [{"evidence": row["evidence"], "build_id": row["build_id"],
-                     "declared_status": row["declared_status"], "failures": row["failures"]}
+                     "declared_status": row["declared_status"],
+                     "audit_failures": row["failures"],
+                     "proof_failures": row["declared_failures"],
+                     "unclosed": row["declared_unclosed"]}
                     for row in rows if row["status"] == "NON_COUNTING"]
     payload = {
         "schema_version": 1,

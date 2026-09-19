@@ -43,8 +43,17 @@ EVIDENCE = ROOT / "validation/v2-fauftbway-strict-evidence.json"
 SOURCE_COMMIT = "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af"
 SOURCE_SHA256 = "05960e23660ebb2b44c1b7273c935f1afae39e381e283e2560c222d667d16580"
 REFERENCE_SHA256 = "5bb9be2dc0cd27246b275f621eded9e28203028be17b0ddb1ad957bbef665451"
+TARGET_SHA256 = "0a5b3c73d5f2a7f5a9e6eab8636ad8c467e22283824b3c14c73d7a82f2d9da6d"
 XSTOP_SHA256 = "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d"
 XSTOP_BYTES = 228590583
+BUILD_ID = "Build-Cpu.Frontend.Bpu.FauFTBWay"
+EQUIV_SUCCESS_MARKER = "Equivalence successfully proven!"
+EQUIV_ZERO_UNPROVEN_MARKER = "0 are unproven."
+EQUIV_UNCONSTRAINED_MARKER = "force def on"
+TARGET_RELATIVE = TARGET.relative_to(ROOT).as_posix()
+REFERENCE_RELATIVE = REFERENCE.relative_to(ROOT).as_posix()
+SCALA_RELATIVE = SCALA.relative_to(ROOT).as_posix()
+VALIDATOR_RELATIVE = Path(__file__).relative_to(ROOT).as_posix()
 
 INPUT_WIDTHS = {
     "clock": 1,
@@ -155,6 +164,26 @@ def run_wsl(command: list[str]) -> dict[str, Any]:
         "command": command,
         "returncode": result.returncode,
         "status": "PASS" if result.returncode == 0 else "FAIL",
+        # Formal verdicts are captured from complete output before truncation.
+        # Equiv failures print per-cell diagnostics after the summary.
+        "success_marker": EQUIV_SUCCESS_MARKER in output,
+        "zero_unproven_marker": EQUIV_ZERO_UNPROVEN_MARKER in output,
+        "counterexample_marker": bool(re.search(
+            r"(?:unproven|failed|model found: FAIL!)", output, re.I)),
+        "unconstrained_marker": bool(re.search(
+            r"(?:force def on \d+ initial reg values and \d+ inputs|Final constraint equation: \{ \} = \{ \})",
+            output)),
+        "equiv_cells_marker": (
+            int(re.findall(r"Found (\d+) \$equiv cells in [^:]+:", output)[-1])
+            if re.findall(r"Found (\d+) \$equiv cells in [^:]+:", output) else None),
+        "proven_cells_marker": (
+            tuple(map(int, re.findall(
+                r"Of those cells (\d+) are proven and (\d+) are unproven",
+                output)[-1]))
+            if re.findall(r"Of those cells (\d+) are proven and (\d+) are unproven", output)
+            else None),
+        "equiv_failed_cells_marker": len(re.findall(
+            r"(?:Trying to prove|equiv).*failed", output, re.I)),
         "output_tail": output[-6000:],
         "output_sha256": hashlib.sha256(output.encode()).hexdigest(),
     }
@@ -276,6 +305,53 @@ def locked_source_check() -> dict[str, Any]:
     }
 
 
+def identity_audit() -> dict[str, Any]:
+    """Bind Build ID and every provenance path to this exact validator."""
+
+    checks = {
+        "build_id_exact": BUILD_ID == "Build-Cpu.Frontend.Bpu.FauFTBWay",
+        "validator_path_exact": VALIDATOR_RELATIVE == "validation/v2_fauftbway_strict_validator.py",
+        "target_path_exact": TARGET_RELATIVE == (
+            "python/Program-System/System-Build/Build-Cpu/Cpu-Core/"
+            "Build-Cpu.Frontend.Bpu.FauFTBWay-Hardware.py"),
+        "reference_path_exact": REFERENCE_RELATIVE == "validation/reference-closures/FauFTBWay.sv",
+        "scala_path_exact": SCALA_RELATIVE == "upstream/src/main/scala/xiangshan/frontend/FauFTB.scala",
+        "target_hash_recorded": sha256_file(TARGET) == TARGET_SHA256,
+    }
+    return {"status": "PASS" if all(checks.values()) else "FAIL",
+            "checks": checks, "build_id": BUILD_ID,
+            "validator": VALIDATOR_RELATIVE, "target": TARGET_RELATIVE,
+            "reference": REFERENCE_RELATIVE, "scala": SCALA_RELATIVE,
+            "expected_target_sha256": TARGET_SHA256}
+
+
+def abi_audit(target_rtl: str, reference_rtl: str) -> dict[str, Any]:
+    """Require the exact locked input/output surface on both RTL sides."""
+
+    def names(text: str) -> set[str]:
+        return {name for name in PORT_NAMES if re.search(
+            rf"(?<![A-Za-z0-9_]){re.escape(name)}(?![A-Za-z0-9_])", text)}
+
+    target_ports = names(target_rtl)
+    reference_ports = names(reference_rtl)
+    expected = set(PORT_NAMES)
+    checks = {
+        "target_exact_port_set": target_ports == expected,
+        "reference_exact_port_set": reference_ports == expected,
+        "target_reference_equal": target_ports == reference_ports,
+        "target_module": "module FauFTBWay(" in target_rtl,
+        "reference_module": "module FauFTBWay_ref(" in reference_rtl,
+        "no_removed_write_fire": "io_write_fire" not in target_rtl,
+        "all_outputs_declared": all(name in target_rtl for name in OUTPUT_WIDTHS),
+    }
+    return {"status": "PASS" if all(checks.values()) else "FAIL",
+            "checks": checks, "expected_port_count": len(expected),
+            "target_port_count": len(target_ports), "reference_port_count": len(reference_ports),
+            "target_ports": sorted(target_ports), "reference_ports": sorted(reference_ports),
+            "inputs": INPUT_WIDTHS, "outputs_compared": OUTPUT_WIDTHS,
+            "output_bits_compared": OUTPUT_BITS}
+
+
 def existing_behavior_evidence() -> dict[str, Any]:
     """Require the refreshed bounded direct and locked differential checks."""
 
@@ -331,6 +407,53 @@ def materialize_equivalence(target_rtl: str) -> dict[str, Path]:
     return {"target": target, "reference": reference}
 
 
+def _equiv_proof(paths: dict[str, Path]) -> dict[str, Any]:
+    """Run the complete equiv_induct proof and parse full-output markers."""
+
+    target = wsl_path(paths["target"])
+    reference = wsl_path(paths["reference"])
+    formal_script = (
+        f"read_verilog -sv {shlex.quote(target)} {shlex.quote(reference)}; "
+        "proc; async2sync; memory; opt; "
+        "equiv_make FauFTBWay FauFTBWay_ref FauFTBWay_equiv; "
+        "prep -top FauFTBWay_equiv; equiv_induct -undef; equiv_status -assert"
+    )
+    formal = run_wsl(["yosys", "-Q", "-p", formal_script])
+    output = formal.get("output_tail", "")
+    formal["formal_success_marker"] = bool(formal.get(
+        "success_marker", EQUIV_SUCCESS_MARKER in output))
+    formal["markers_present"] = {
+        EQUIV_ZERO_UNPROVEN_MARKER: formal.get("zero_unproven_marker") is True,
+        EQUIV_SUCCESS_MARKER: formal["formal_success_marker"],
+    }
+    # Parse from the retained tail when available; the complete-output marker
+    # booleans above remain authoritative if a long failure log truncates it.
+    full_cells = formal.get("equiv_cells_marker")
+    full_summary = formal.get("proven_cells_marker")
+    formal["equiv_cells"] = full_cells
+    if full_summary is not None:
+        formal["proven_cells"], formal["unproven_cells"] = full_summary
+    else:
+        failed_value = formal.get("equiv_failed_cells_marker")
+        failed = failed_value if isinstance(failed_value, int) else len(
+            re.findall(r"(?:Trying to prove|equiv).*failed", output, re.I))
+        formal["unproven_cells"] = failed if failed else None
+        if formal["equiv_cells"] is not None and failed:
+            formal["proven_cells"] = formal["equiv_cells"] - failed
+    formal["unconstrained_marker"] = bool(formal.get(
+        "unconstrained_marker", EQUIV_UNCONSTRAINED_MARKER in output))
+    equiv_cells = formal.get("equiv_cells")
+    formal["unconstrained_or_positive_equiv"] = bool(
+        formal["unconstrained_marker"] or
+        (isinstance(equiv_cells, int) and equiv_cells > 0))
+    if (formal.get("returncode") != 0 or not formal["formal_success_marker"]
+            or not formal["unconstrained_or_positive_equiv"]
+            or not isinstance(equiv_cells, int) or equiv_cells <= 0
+            or formal.get("unproven_cells") not in (None, 0)):
+        formal["status"] = "FAIL"
+    return formal
+
+
 def formal_gates(paths: dict[str, Path]) -> dict[str, Any]:
     """Run lint and complete sequential equivalence with Yosys."""
 
@@ -352,19 +475,7 @@ def formal_gates(paths: dict[str, Path]) -> dict[str, Any]:
         f"read_verilog -sv {shlex.quote(reference)}; proc; async2sync; opt; "
         "hierarchy -top FauFTBWay_ref; check; stat",
     ])
-    formal_script = (
-        f"read_verilog -sv {shlex.quote(target)} {shlex.quote(reference)}; "
-        "proc; async2sync; memory; opt; "
-        "equiv_make FauFTBWay FauFTBWay_ref FauFTBWay_equiv; "
-        "prep -top FauFTBWay_equiv; equiv_induct -undef; equiv_status -assert"
-    )
-    formal = run_wsl(["yosys", "-Q", "-p", formal_script])
-    marker = "Equivalence successfully proven!"
-    formal["formal_success_marker"] = marker in formal.get("output_tail", "")
-    if not formal["formal_success_marker"]:
-        formal["status"] = "FAIL"
-    match = re.search(r"Found (\d+) \$equiv cells in [^:]+:", formal.get("output_tail", ""))
-    formal["equiv_cells"] = int(match.group(1)) if match else None
+    formal = _equiv_proof(paths)
     formal["formal_scope"] = {
         "clock": "posedge clock",
         "reset": "async reset normalized with async2sync; only valid is reset",
@@ -387,26 +498,101 @@ def formal_gates(paths: dict[str, Path]) -> dict[str, Any]:
     }
 
 
+def _mutate_output(text: str, module: str, output_name: str) -> tuple[str, bool]:
+    """Force one scalar response output low inside exactly one module body."""
+
+    start = text.find(f"module {module}(")
+    if start < 0:
+        return text, False
+    end = text.find("endmodule", start)
+    if end < 0:
+        return text, False
+    body = text[start:end]
+    mutated, count = re.subn(
+        rf"assign\s+{re.escape(output_name)}\s*=\s*.*?;",
+        f"assign {output_name} = 1'b0;", body, count=1, flags=re.S)
+    if count != 1:
+        return text, False
+    return text[:start] + mutated + text[end:], True
+
+
+def negative_control(paths: dict[str, Path]) -> dict[str, Any]:
+    """Mutate target and reference response logic and require failed proofs."""
+
+    results: dict[str, Any] = {}
+    for side in ("target", "reference"):
+        module = "FauFTBWay" if side == "target" else "FauFTBWay_ref"
+        source = paths[side].read_text(encoding="utf-8")
+        mutated, applied = _mutate_output(source, module, "io_resp_hit")
+        if not applied:
+            results[side] = {"status": "FAIL", "mutation_applied": False}
+            continue
+        mutant = WORK / f"MUTANT_{side}_FauFTBWay.sv"
+        mutant.write_text(mutated, encoding="utf-8", newline="\n")
+        selected = {**paths, side: mutant}
+        verdict = _equiv_proof(selected)
+        unproven = verdict.get("unproven_cells")
+        detected = (isinstance(verdict.get("returncode"), int)
+                    and verdict.get("formal_success_marker") is False
+                    and verdict.get("counterexample_marker") is True
+                    and isinstance(unproven, int) and unproven > 0)
+        results[side] = {
+            "status": "PASS" if detected else "FAIL",
+            "mutation_applied": True,
+            "mutated_output": "io_resp_hit",
+            "counterexample_marker": verdict.get("counterexample_marker"),
+            "explicit_unproven_cells": isinstance(unproven, int) and unproven > 0,
+            "success_marker_still_present": verdict.get("formal_success_marker"),
+            "equiv_cells": verdict.get("equiv_cells"),
+            "proven_cells": verdict.get("proven_cells"),
+            "unproven_cells": verdict.get("unproven_cells"),
+            "output_tail": verdict.get("output_tail", "")[-1500:],
+        }
+    return {"status": "PASS" if all(item["status"] == "PASS"
+                                     for item in results.values()) else "FAIL",
+            "sides": results}
+
+
 def validate() -> dict[str, Any]:
     """Run strict gates and write evidence without optimistic promotion."""
 
     failures: list[str] = []
     lock: dict[str, Any] = {"status": "FAIL"}
+    identity: dict[str, Any] = {"status": "FAIL"}
+    abi: dict[str, Any] = {"status": "FAIL"}
     behavior: dict[str, Any] = {"status": "FAIL"}
     export: dict[str, Any] = {"status": "FAIL"}
     gates: dict[str, Any] = {}
+    control: dict[str, Any] = {"status": "FAIL"}
+    paths: dict[str, Path] = {}
     try:
         lock = locked_source_check()
         if lock["status"] != "PASS":
             failures.append("locked source/reference provenance")
-        behavior = existing_behavior_evidence()
-        if behavior["status"] != "PASS":
-            failures.append("refreshed direct/differential evidence")
+        identity = identity_audit()
+        if identity["status"] != "PASS":
+            failures.append("Build ID/path identity")
+        # Legacy bounded/direct artifacts are contextual only.  Their absence,
+        # stale PENDING status, or parse failure must never become a strict
+        # equivalence failure or contaminate a COMPLETE result.
+        try:
+            behavior = existing_behavior_evidence()
+        except Exception as error:
+            behavior = {"status": "FAIL", "error": repr(error),
+                        "legacy_context_only": True}
         module = load_target()
         py_compile.compile(str(TARGET), doraise=True)
         py_compile.compile(str(Path(__file__)), doraise=True)
         target_rtl, export = deterministic_export(module)
-        gates = formal_gates(materialize_equivalence(target_rtl))
+        paths = materialize_equivalence(target_rtl)
+        reference_rtl = paths["reference"].read_text(encoding="utf-8")
+        abi = abi_audit(target_rtl, reference_rtl)
+        if abi["status"] != "PASS":
+            failures.append("ABI audit")
+        gates = formal_gates(paths)
+        control = negative_control(paths)
+        if control["status"] != "PASS":
+            failures.append("two-sided negative control")
     except Exception as error:
         failures.append(f"exception: {type(error).__name__}: {error}")
     pyright = {
@@ -425,13 +611,20 @@ def validate() -> dict[str, Any]:
     payload: dict[str, Any] = {
         "schema_version": 1,
         "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_COMPLETE_EQUIVALENCE",
-        "build_id": "Build-Cpu.Frontend.Bpu.FauFTBWay",
+        "build_id": BUILD_ID,
         "validator": Path(__file__).relative_to(ROOT).as_posix(),
         "status": status,
         "strict_complete_eligible": status == "COMPLETE_EQUIVALENCE",
         "strict_complete_count_delta": 1 if status == "COMPLETE_EQUIVALENCE" else 0,
         "acceptance_eligible": status == "COMPLETE_EQUIVALENCE",
         "source_commit": SOURCE_COMMIT,
+        "audit_policy": {
+            "require_negative_control": True,
+            "two_sided_negative_control": True,
+            "require_equiv_success_marker": True,
+            "require_unconstrained_or_positive_equiv_cells": True,
+            "scope_source": "locked FauFTBWay closure",
+        },
         "scope": {
             "kind": "sequential_registered_leaf",
             "configuration": "locked V2 FauFTBWay default widths",
@@ -452,6 +645,13 @@ def validate() -> dict[str, Any]:
             "bounded_tests_counted": False,
         },
         "reference_lock": lock,
+        "legacy_context": {
+            "existing_behavior": behavior,
+            "note": (
+                "DIRECT_PASS_BOUNDED/PENDING_COORDINATOR_REVIEW artifacts are retained as "
+                "context only and never gate strict complete equivalence."
+            ),
+        },
         "sources": {
             "scala": {
                 "path": SCALA.relative_to(ROOT).as_posix(),
@@ -479,13 +679,19 @@ def validate() -> dict[str, Any]:
                 ],
             },
             "pyright": pyright,
+            "source_lock": lock,
+            "identity": identity,
+            "abi": abi,
             "deterministic_export": export,
-            "existing_behavior": behavior,
             "tools": tool_versions(),
-            "formal": gates,
+            "formal": {**gates, "negative_control": control},
         },
         "failures": failures,
         "unclosed": [] if not failures else ["strict sequential equivalence gates did not all pass"],
+        "acceptance_unclosed": [
+            "Legacy bounded direct/differential evidence remains contextual and pending coordinator review; "
+            "it is intentionally excluded from strict gate failures."
+        ],
     }
     EVIDENCE.write_text(
         json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
