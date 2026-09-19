@@ -206,6 +206,47 @@ auxiliary repository unless separately approved as a stable test subject.
 `Program-System/System-Output/` stores only controller-generated, ignored
 logic artifacts and does not become a second test or evidence source.
 
+## 5C. Yosys-readable view of a locked reference
+
+`validation/reference-sv/` holds 1976 locked Chisel artifacts. 1204 of them carry
+`automatic`, and the block-local form (`automatic logic [1:0] _GEN_3;` inside an
+`always` block) is rejected by the installed `Yosys 0.52` even under
+`read_verilog -sv`, which prints `Executing Verilog-2005 frontend` and aborts on
+`TOK_AUTOMATIC`. `equiv_make` needs both sides in one design, so without a view
+those modules cannot receive a complete-equivalence proof at all. No lossless
+converter (`sv2v`, `slang`, `surelog`, `verific`) is installed; Verilator 5.032
+does parse the originals.
+
+The accepted workaround is a **synthesizable view** built in an ASCII temporary
+work directory, never written back, limited to:
+
+1. dropping the two non-synthesis conditional regions
+   (`` `ifndef SYNTHESIS `` and `` `ifdef ENABLE_INITIAL_REG_ ``), asserting that
+   no preprocessor directive survives;
+2. hoisting each block-local `automatic` declaration to module scope as a `reg`
+   of identical width and name;
+3. renaming only the reference module for the equivalence pair.
+
+A validator using a view must enforce and record all of the following, and must
+fail the run if any is false:
+
+- `sources.reference_sv` still names the untouched locked file with its real
+  digest, plus a `reference_lock` block carrying the `XSTop` digest;
+- a line-conservation gate: every code line that disappeared is a hoisted
+  declaration, every line that appeared is exactly its module-scope `reg` form,
+  and the locked/view significant-line counts agree;
+- every register update equation survives unchanged;
+- the locked original itself still lints under Verilator, proving the original was
+  valid rather than silently replaced;
+- a negative control that perturbs one target equation and confirms the harness
+  reports it unproven, so a clean success cannot be vacuous.
+
+Equivalence is claimed against that view. This is a frontend workaround, not a
+relaxation of section 6: the locked artifact is never modified, and any
+transformation beyond the three listed above remains prohibited. Where semantics
+cannot be compared through such a view, the record stays `STRICT_PENDING` and the
+central audit inventories it as an attempt rather than progress.
+
 ## 6. Prohibited shortcuts
 
 - No one-Scala/one-Python requirement for external dependencies.
