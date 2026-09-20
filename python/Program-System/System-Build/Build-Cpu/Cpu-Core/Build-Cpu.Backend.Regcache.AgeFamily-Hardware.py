@@ -11,7 +11,7 @@ from __future__ import annotations
 
 from typing import Any, cast
 
-from amaranth import Array, ClockDomain, Const, Elaboratable, Module, Mux, Signal
+from amaranth import Array, Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
 
 
@@ -5198,7 +5198,7 @@ PORT_SPECS = LOCKED_PORT_SPECS
 
 
 # =============================================================================
-# Configuration
+# Configuration and exact source-backed implementation
 # =============================================================================
 def scalar_inputs(member: str) -> tuple[str, ...]:
     """Return all input names for a member. / 返回成员全部输入名称。"""
@@ -5212,15 +5212,40 @@ def scalar_outputs(member: str) -> tuple[str, ...]:
     return tuple(name for name, direction, _width in PORT_SPECS[member] if direction == "output")
 
 
+def _or_all(values: list[Any], width: int = 1) -> Any:
+    """Bitwise OR reduction with an explicit zero-width-safe seed."""
+
+    result: Any = Const(0, width)
+    for value in values:
+        result = result | value
+    return result
+
+
+def _indexed(values: list[Any], index: Any, default: Any) -> Any:
+    """Combinational Vec lookup, including Chisel's power-of-two default.
+
+    FIRRTL pads a dynamic lookup of a non-power-of-two Vec with element zero.
+    The 12-entry data/tag instances therefore return entry zero for addresses
+    12--15; spelling the mux out keeps that behavior explicit.
+    """
+
+    result: Any = default
+    for number in reversed(range(len(values))):
+        result = Mux(index == number, values[number], result)
+    return result
+
+
+def _port(self: "AgeFamily", name: str) -> Signal:
+    return self.ports[name]
+
+
 # =============================================================================
 # Implementation
 # =============================================================================
 class AgeFamily(Elaboratable):
-    """One exact age/regcache member selected by name. / 按名称选择的精确年龄/寄存器缓存成员。"""
+    """Exact source-backed implementation of all ten locked family members."""
 
     def __init__(self, member: str = "NewAgeDetector") -> None:
-        """Declare the generated locked ports. / 声明生成的锁定端口。"""
-
         if member not in PORT_SPECS:
             raise ValueError(f"unsupported age family member: {member}")
         self.member = member
@@ -5228,79 +5253,221 @@ class AgeFamily(Elaboratable):
         self.ports: dict[str, Signal] = {
             name: Signal(width, name=name) for name, _direction, width in self.specs
         }
-        self.clock = self.ports.get("clock", Signal(name="clock"))
-        self.reset = self.ports.get("reset", Signal(name="reset"))
 
-    # Set all outputs to deterministic reset-safe defaults. / 将所有输出设为确定性复位安全默认值。
-    def default_outputs(self, module: Module) -> None:
-        """Drive every output before family-specific equations. / 在 family 方程前驱动全部输出。"""
+    def _new_age(self, m: Module) -> None:
+        """NewAgeDetector.scala: two-entry upper age matrix and selectors."""
 
-        for name in scalar_outputs(self.member):
-            module.d.comb += self.ports[name].eq(0)
-
-    # Implement the two-entry issue age selector. / 实现双项 issue 年龄选择器。
-    def elaborate_new_age(self, module: Module) -> None:
-        """Use canIssue as a bounded age predicate. / 使用 canIssue 构造有界年龄谓词。"""
-
-        for index in range(2):
-            out_name = f"io_out_{index}"
+        age = Signal(reset=0, name="age_0_1")
+        enq0, enq1 = _port(self, "io_enq_0"), _port(self, "io_enq_1")
+        update = enq1 | (~enq0 & age)
+        m.d.sync += age.eq(Mux(enq0 | enq1, update, age))
+        for deq in range(2):
+            out_name = f"io_out_{deq}"
             if out_name not in self.ports:
                 continue
-            can = self.ports.get(f"io_canIssue_{index}")
-            enq = self.ports.get(f"io_enq_{index}")
-            if can is not None:
-                module.d.comb += self.ports[out_name].eq(Mux(can.any(), can, Const(0, len(self.ports[out_name]))))
-            elif enq is not None:
-                module.d.comb += self.ports[out_name].eq(Mux(enq, Const(1, len(self.ports[out_name])), Const(0, len(self.ports[out_name]))))
+            can = _port(self, f"io_canIssue_{deq}")
+            row0 = cast(Any, can[0]) & (age | ~cast(Any, can[1]))
+            row1 = cast(Any, can[1]) & (~age | ~cast(Any, can[0]))
+            # Cat's first argument is the least-significant bit, matching the
+            # generated Chisel concatenation {row1,row0}.
+            m.d.comb += _port(self, out_name).eq(Cat(row0, row1))
 
-    # Implement bounded pairwise age comparison outputs. / 实现有界两两年龄比较输出。
-    def elaborate_age_detector(self, module: Module) -> None:
-        """Map each output nibble to a deterministic pairwise reduction. / 将每个输出半字节映射为确定性两两归约。"""
+    def _regcache_age(self, m: Module) -> None:
+        """RegCache AgeDetector.scala, for the 16/4 and 12/3 instances."""
 
-        for output in scalar_outputs(self.member):
-            if not output.startswith("io_out_"):
-                continue
-            module.d.comb += self.ports[output].eq(0)
+        n = 16 if self.member == "RegCacheAgeDetector" else 12
+        replaces = 4 if n == 16 else 3
+        age: list[list[Any | None]] = [
+            [Signal(reset=1, name=f"age_{row}_{col}") if row < col else None
+             for col in range(n)] for row in range(n)
+        ]
+        for row in range(n):
+            for col in range(row + 1, n):
+                m.d.sync += cast(Any, age[row][col]).eq(
+                    _port(self, f"io_ageInfo_{row}_{col}")
+                )
 
-    # Implement timer/data/tag bounded state surfaces. / 实现 timer/data/tag 有界状态表面。
-    def elaborate_storage(self, module: Module) -> None:
-        """Provide registered valid/data and tag-hit boundaries. / 提供寄存 valid/data 与 tag 命中边界。"""
+        def relation(row: int, col: int) -> Any:
+            if row == col:
+                return Const(1)
+            if row < col:
+                return cast(Any, age[row][col])
+            return ~cast(Any, age[col][row])
 
-        if "AgeTimer" in self.member:
-            for name in scalar_outputs(self.member):
-                if name.startswith("io_ageInfo_"):
-                    module.d.comb += self.ports[name].eq(0)
-        elif "DataModule" in self.member:
-            for name in scalar_outputs(self.member):
-                if name.endswith("_validInfo_0") or "_validInfo_" in name:
-                    module.d.comb += self.ports[name].eq(0)
-                elif name.endswith("_data"):
-                    module.d.comb += self.ports[name].eq(0)
-        elif "TagModule" in self.member:
-            # Tag compare remains a bounded structural boundary until the
-            # locked RegCache parent differential is available.  Outputs keep
-            # the deterministic defaults installed by ``default_outputs``.
-            return
+        row_sums: list[Any] = []
+        sum_width = (n + 1).bit_length()
+        for row in range(n):
+            total: Any = Const(0, sum_width)
+            for col in range(n):
+                total = total + relation(row, col)
+            row_sums.append(total)
+        out_width = 4
+        for idx in range(replaces):
+            target = n - idx
+            result: Any = Const(0, out_width)
+            # PriorityMux chooses the lowest index on malformed non-total
+            # matrices; reverse construction preserves that priority.
+            for row in reversed(range(n)):
+                result = Mux(row_sums[row] == target, Const(row, out_width), result)
+            m.d.comb += _port(self, f"io_out_{idx}").eq(result)
 
-    # Elaborate the selected family member. / 展开选定 family 成员。
+    def _age_timer(self, m: Module) -> None:
+        """RegCacheAgeTimer.scala with the fixed generated geometries."""
+
+        n = 16 if self.member == "RegCacheAgeTimer" else 12
+        reads, writes = 23, (4 if n == 16 else 3)
+        group = n // 4
+        timers = [Signal(2, reset=i // group, name=f"ageTimer_{i}") for i in range(n)]
+        extras = [Signal(2, reset=i, name=f"ageTimerExtra_{i}") for i in range(4)]
+        read_req: list[Any] = []
+        write_req: list[Any] = []
+        for entry in range(n):
+            read_req.append(_or_all([
+                _port(self, f"io_readPorts_{p}_ren")
+                & (_port(self, f"io_readPorts_{p}_addr") == entry)
+                for p in range(reads)
+            ]))
+            write_req.append(_or_all([
+                _port(self, f"io_writePorts_{p}_wen")
+                & (_port(self, f"io_writePorts_{p}_addr") == entry)
+                for p in range(writes)
+            ]))
+        next_timer: list[Any] = []
+        for entry in range(n):
+            incremented = timers[entry] + Const(1, 2)
+            value = Mux(
+                write_req[entry], Const(0, 2),
+                Mux(read_req[entry], timers[entry],
+                    Mux((timers[entry] == 3) & _port(self, f"io_validInfo_{entry}"),
+                        Const(3, 2), incremented)))
+            next_timer.append(value)
+            m.d.sync += timers[entry].eq(value)
+        for extra in extras:
+            m.d.sync += extra.eq(extra + Const(1, 2))
+
+        for row in range(n):
+            for col in range(row + 1, n):
+                valid_row = _port(self, f"io_validInfo_{row}")
+                valid_col = _port(self, f"io_validInfo_{col}")
+                if row // group == col // group:
+                    left, right = next_timer[row], next_timer[col]
+                else:
+                    left = Cat(extras[row // group], next_timer[row])
+                    right = Cat(extras[col // group], next_timer[col])
+                cmp = cast(Any, left) >= cast(Any, right)
+                value = Mux(valid_row & ~valid_col, 0,
+                            Mux(~valid_row & valid_col, 1, cmp))
+                m.d.comb += _port(self, f"io_ageInfo_{row}_{col}").eq(value)
+
+    def _data_module(self, m: Module) -> None:
+        """RegCacheDataModule.scala, including Chisel Vec padding semantics."""
+
+        n = 16 if self.member == "RegCacheDataModule" else 12
+        writes, reads = (4 if n == 16 else 3), 23
+        valid = [Signal(reset=0, name=f"v_{i}") for i in range(n)]
+        mem = [Signal(64, name=f"mem_{i}") for i in range(n)]
+        hits: list[list[Any]] = []
+        for entry in range(n):
+            row = [
+                _port(self, f"io_writePorts_{p}_wen")
+                & (_port(self, f"io_writePorts_{p}_addr") == entry)
+                for p in range(writes)
+            ]
+            hits.append(row)
+            any_hit = _or_all(row)
+            data = _or_all([
+                Mux(row[p], _port(self, f"io_writePorts_{p}_data"), Const(0, 64))
+                for p in range(writes)
+            ], 64)
+            m.d.sync += valid[entry].eq(Mux(any_hit, 1, valid[entry]))
+            m.d.sync += mem[entry].eq(Mux(any_hit, data, mem[entry]))
+        for entry in range(n):
+            m.d.comb += _port(self, f"io_validInfo_{entry}").eq(valid[entry])
+        for p in range(reads):
+            value = _indexed(mem, _port(self, f"io_readPorts_{p}_addr"), mem[0])
+            m.d.comb += _port(self, f"io_readPorts_{p}_data").eq(value)
+
+    def _tag_module(self, m: Module) -> None:
+        """RegCacheTagModule.scala, including the optimized 12-entry variant."""
+
+        n = 16 if self.member == "RegCacheTagModule" else 12
+        writes, reads = (4 if n == 16 else 3), 12
+        valid = [Signal(reset=0, name=f"v_{i}") for i in range(n)]
+        tags = [Signal(8, name=f"tag_{i}") for i in range(n)]
+        deps = [[Signal(2, name=f"loadDependency_{i}_{d}") for d in range(3)]
+                for i in range(n)]
+        write_hits: list[list[Any]] = []
+        for entry in range(n):
+            row = [
+                _port(self, f"io_writePorts_{p}_wen")
+                & (_port(self, f"io_writePorts_{p}_addr") == entry)
+                for p in range(writes)
+            ]
+            write_hits.append(row)
+            any_hit = _or_all(row)
+            cancel = _port(self, f"io_cancelVec_{entry}")
+            m.d.sync += valid[entry].eq(any_hit | (~cancel & valid[entry]))
+            new_tag = _or_all([
+                Mux(row[p], _port(self, f"io_writePorts_{p}_tag"), Const(0, 8))
+                for p in range(writes)
+            ], 8)
+            m.d.sync += tags[entry].eq(Mux(any_hit, new_tag, tags[entry]))
+            for dep_index in range(3):
+                if f"io_writePorts_0_loadDependency_{dep_index}" in self.ports:
+                    new_dep = _or_all([
+                        Mux(row[p], _port(self, f"io_writePorts_{p}_loadDependency_{dep_index}"), Const(0, 2))
+                        for p in range(writes)
+                    ], 2)
+                else:
+                    # In the optimized 12-entry XSTop instance the parent ties
+                    # this input bundle to constants; FIRRTL removes the ports
+                    # and leaves {1'b0, wenOH_p} in the locked module.
+                    new_dep = _or_all([Mux(row[p], Const(1, 2), Const(0, 2))
+                                       for p in range(writes)], 2)
+                any_dep = _or_all([deps[entry][d].any() for d in range(3)])
+                shifted = Cat(Const(0), deps[entry][dep_index][0])
+                next_dep = Mux(_or_all(row), new_dep,
+                               Mux(cancel | ~any_dep, deps[entry][dep_index], shifted))
+                m.d.sync += deps[entry][dep_index].eq(next_dep)
+
+        # Read match/one-hot address is purely combinational. OHToUInt in the
+        # locked Chisel emits an OR-of-index-bits encoder (not a priority mux).
+        for read in range(reads):
+            query = _port(self, f"io_readPorts_{read}_tag")
+            matches = [valid[i] & (tags[i] == query) for i in range(n)]
+            m.d.comb += _port(self, f"io_readPorts_{read}_valid").eq(
+                _port(self, f"io_readPorts_{read}_ren") & _or_all(matches))
+            encoded: Any = Const(0, 4)
+            for entry in range(n):
+                encoded = encoded | Mux(matches[entry], Const(entry, 4), Const(0, 4))
+            m.d.comb += _port(self, f"io_readPorts_{read}_addr").eq(encoded)
+        for entry in range(n):
+            m.d.comb += _port(self, f"io_validVec_{entry}").eq(valid[entry])
+            m.d.comb += _port(self, f"io_tagVec_{entry}").eq(tags[entry])
+            for dep_index in range(3):
+                m.d.comb += _port(self, f"io_loadDependencyVec_{entry}_{dep_index}").eq(
+                    deps[entry][dep_index])
+
     def elaborate(self, platform: Any) -> Module:
-        """Build bounded source-backed logic. / 构建有界源代码逻辑。"""
-
         del platform
-        module = Module()
-        if "clock" in self.ports and "reset" in self.ports:
-            domain = ClockDomain("sync", async_reset=True)
-            domain.clk = self.ports["clock"]
-            domain.rst = self.ports["reset"]
-            module.domains += domain
-        self.default_outputs(module)
+        m = Module()
+        domain = ClockDomain("sync", async_reset=True)
+        domain.clk = _port(self, "clock")
+        domain.rst = _port(self, "reset")
+        m.domains += domain
         if self.member.startswith("NewAgeDetector"):
-            self.elaborate_new_age(module)
-        elif "AgeDetector" in self.member:
-            self.elaborate_age_detector(module)
+            self._new_age(m)
+        elif self.member.startswith("RegCacheAgeDetector"):
+            self._regcache_age(m)
+        elif self.member.startswith("RegCacheAgeTimer"):
+            self._age_timer(m)
+        elif self.member.startswith("RegCacheDataModule"):
+            self._data_module(m)
+        elif self.member.startswith("RegCacheTagModule"):
+            self._tag_module(m)
         else:
-            self.elaborate_storage(module)
-        return module
+            raise AssertionError(self.member)
+        return m
 
 
 # =============================================================================
