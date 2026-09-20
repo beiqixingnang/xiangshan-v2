@@ -124,19 +124,12 @@
       "declared_status": "STRICT_PENDING",
       "audit_failures": [],
       "proof_failures": [
-        "synthesizable view failed conservation: RASStack",
-        "RASStack:verilator",
         "RASStack:yosys_equiv",
-        "RASStack: zero or missing $equiv cells",
-        "synthesizable view failed conservation: RedirectGenerator",
-        "RedirectGenerator:yosys_equiv",
-        "RedirectGenerator: zero or missing $equiv cells",
+        "RASStack: 76 $equiv cells unproven",
         "RegCache:yosys_equiv",
         "RegCache: zero or missing $equiv cells",
-        "synthesizable view failed conservation: VectorCvtTop",
-        "VectorCvtTop:verilator",
         "VectorCvtTop:yosys_equiv",
-        "VectorCvtTop: zero or missing $equiv cells"
+        "VectorCvtTop: 166 $equiv cells unproven"
       ],
       "unclosed": [
         "strict gates did not all pass"
@@ -18673,7 +18666,7 @@
             "abi_exact": true,
             "deterministic": true,
             "miter_selfcheck": true,
-            "view_trusted": false,
+            "view_trusted": true,
             "locked_reference_lint": "PASS",
             "verdict": "FAIL",
             "success_marker": false,
@@ -18681,9 +18674,9 @@
               "0 are unproven.": false,
               "Equivalence successfully proven!": false
             },
-            "unconstrained_or_equiv_cells": null,
-            "proven_cells": null,
-            "unproven_cells": null,
+            "unconstrained_or_equiv_cells": 76,
+            "proven_cells": 0,
+            "unproven_cells": 76,
             "sat_variables": null,
             "sat_clauses": null
           },
@@ -18758,17 +18751,17 @@
             "abi_exact": true,
             "deterministic": true,
             "miter_selfcheck": true,
-            "view_trusted": false,
+            "view_trusted": true,
             "locked_reference_lint": "PASS",
-            "verdict": "FAIL",
-            "success_marker": false,
+            "verdict": "PASS",
+            "success_marker": true,
             "markers_present": {
-              "0 are unproven.": false,
-              "Equivalence successfully proven!": false
+              "0 are unproven.": true,
+              "Equivalence successfully proven!": true
             },
-            "unconstrained_or_equiv_cells": null,
-            "proven_cells": null,
-            "unproven_cells": null,
+            "unconstrained_or_equiv_cells": 210,
+            "proven_cells": 210,
+            "unproven_cells": 0,
             "sat_variables": null,
             "sat_clauses": null
           },
@@ -19098,7 +19091,7 @@
             "abi_exact": true,
             "deterministic": true,
             "miter_selfcheck": true,
-            "view_trusted": false,
+            "view_trusted": true,
             "locked_reference_lint": "PASS",
             "verdict": "FAIL",
             "success_marker": false,
@@ -19106,9 +19099,9 @@
               "0 are unproven.": false,
               "Equivalence successfully proven!": false
             },
-            "unconstrained_or_equiv_cells": null,
-            "proven_cells": null,
-            "unproven_cells": null,
+            "unconstrained_or_equiv_cells": 168,
+            "proven_cells": 2,
+            "unproven_cells": 166,
             "sat_variables": null,
             "sat_clauses": null
           }
@@ -19118,11 +19111,11 @@
       },
       "sources": {
         "validator": {
-          "path": "validation/v2_strict_family_rail.py",
+          "path": "validation/v2_smallcontrol_strict_validator.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
-          "observed_sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
+          "expected_sha256": "9a5850dc201f92bf75067e4c6620242e7d39882f21bbdf19309a533852bada85",
+          "observed_sha256": "9a5850dc201f92bf75067e4c6620242e7d39882f21bbdf19309a533852bada85",
           "status": "PASS"
         },
         "python_build": {
@@ -19456,7 +19449,16 @@
           "status": "PASS"
         }
       },
-      "validator_dependencies": {},
+      "validator_dependencies": {
+        "frozen_family_rail": {
+          "path": "validation/v2_strict_family_rail.py",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
+          "observed_sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
+          "status": "PASS"
+        }
+      },
       "reference_lock": {
         "AddrAddModule": {
           "path": "validation/reference-sv/AddrAddModule.sv",
@@ -19621,24 +19623,15 @@
         "RASStack": {
           "status": "FAIL",
           "failures": [
-            "reference view",
             "formal verdict",
-            "zero/missing equivalence cells",
             "incomplete proven equivalence cells",
             "unproven equivalence cells",
             "sequential equivalence full-output markers"
           ]
         },
         "RedirectGenerator": {
-          "status": "FAIL",
-          "failures": [
-            "reference view",
-            "formal verdict",
-            "zero/missing equivalence cells",
-            "incomplete proven equivalence cells",
-            "unproven equivalence cells",
-            "sequential equivalence full-output markers"
-          ]
+          "status": "PASS",
+          "failures": []
         },
         "RegCache": {
           "status": "FAIL",
@@ -19657,9 +19650,7 @@
         "VectorCvtTop": {
           "status": "FAIL",
           "failures": [
-            "reference view",
             "formal verdict",
-            "zero/missing equivalence cells",
             "incomplete proven equivalence cells",
             "unproven equivalence cells",
             "sequential equivalence full-output markers"
@@ -19680,19 +19671,12 @@
       },
       "failures": [],
       "declared_failures": [
-        "synthesizable view failed conservation: RASStack",
-        "RASStack:verilator",
         "RASStack:yosys_equiv",
-        "RASStack: zero or missing $equiv cells",
-        "synthesizable view failed conservation: RedirectGenerator",
-        "RedirectGenerator:yosys_equiv",
-        "RedirectGenerator: zero or missing $equiv cells",
+        "RASStack: 76 $equiv cells unproven",
         "RegCache:yosys_equiv",
         "RegCache: zero or missing $equiv cells",
-        "synthesizable view failed conservation: VectorCvtTop",
-        "VectorCvtTop:verilator",
         "VectorCvtTop:yosys_equiv",
-        "VectorCvtTop: zero or missing $equiv cells"
+        "VectorCvtTop: 166 $equiv cells unproven"
       ],
       "declared_unclosed": [
         "strict gates did not all pass"

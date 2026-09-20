@@ -2,7 +2,7 @@
   "schema_version": 1,
   "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_COMPLETE_EQUIVALENCE",
   "build_id": "Build-Cpu.Backend.SmallControl.Family",
-  "validator": "validation/v2_strict_family_rail.py",
+  "validator": "validation/v2_smallcontrol_strict_validator.py",
   "status": "STRICT_PENDING",
   "strict_complete_eligible": false,
   "strict_complete_count_delta": 0,
@@ -13,7 +13,9 @@
     "require_two_sided_negative_control": true,
     "require_locked_reference_lint": true,
     "require_validator_hash": true,
-    "scope_source": "Build catalog tables"
+    "scope_source": "Build catalog tables",
+    "validator_dependency_hashes": true,
+    "per_tool_timeout_seconds": 180
   },
   "scope": {
     "kind": "catalog_build_multi_variant",
@@ -630,7 +632,7 @@
         "abi_exact": true,
         "deterministic": true,
         "miter_selfcheck": true,
-        "view_trusted": false,
+        "view_trusted": true,
         "locked_reference_lint": "PASS",
         "verdict": "FAIL",
         "success_marker": false,
@@ -638,9 +640,9 @@
           "0 are unproven.": false,
           "Equivalence successfully proven!": false
         },
-        "unconstrained_or_equiv_cells": null,
-        "proven_cells": null,
-        "unproven_cells": null,
+        "unconstrained_or_equiv_cells": 76,
+        "proven_cells": 0,
+        "unproven_cells": 76,
         "sat_variables": null,
         "sat_clauses": null
       },
@@ -715,17 +717,17 @@
         "abi_exact": true,
         "deterministic": true,
         "miter_selfcheck": true,
-        "view_trusted": false,
+        "view_trusted": true,
         "locked_reference_lint": "PASS",
-        "verdict": "FAIL",
-        "success_marker": false,
+        "verdict": "PASS",
+        "success_marker": true,
         "markers_present": {
-          "0 are unproven.": false,
-          "Equivalence successfully proven!": false
+          "0 are unproven.": true,
+          "Equivalence successfully proven!": true
         },
-        "unconstrained_or_equiv_cells": null,
-        "proven_cells": null,
-        "unproven_cells": null,
+        "unconstrained_or_equiv_cells": 210,
+        "proven_cells": 210,
+        "unproven_cells": 0,
         "sat_variables": null,
         "sat_clauses": null
       },
@@ -1055,7 +1057,7 @@
         "abi_exact": true,
         "deterministic": true,
         "miter_selfcheck": true,
-        "view_trusted": false,
+        "view_trusted": true,
         "locked_reference_lint": "PASS",
         "verdict": "FAIL",
         "success_marker": false,
@@ -1063,9 +1065,9 @@
           "0 are unproven.": false,
           "Equivalence successfully proven!": false
         },
-        "unconstrained_or_equiv_cells": null,
-        "proven_cells": null,
-        "unproven_cells": null,
+        "unconstrained_or_equiv_cells": 168,
+        "proven_cells": 2,
+        "unproven_cells": 166,
         "sat_variables": null,
         "sat_clauses": null
       }
@@ -1090,9 +1092,9 @@
   },
   "sources": {
     "validator": {
-      "path": "validation/v2_strict_family_rail.py",
-      "sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
-      "bytes": 43710
+      "path": "validation/v2_smallcontrol_strict_validator.py",
+      "sha256": "9a5850dc201f92bf75067e4c6620242e7d39882f21bbdf19309a533852bada85",
+      "bytes": 11886
     },
     "python_build": {
       "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.SmallControl.Family-Hardware.py",
@@ -1342,6 +1344,13 @@
         "sha256": "2148cacae850722111036687ccb4f6bff93ba94416b7111a76a466b252995dae",
         "bytes": 13767
       }
+    },
+    "validator_dependencies": {
+      "frozen_family_rail": {
+        "path": "validation/v2_strict_family_rail.py",
+        "sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
+        "bytes": 43710
+      }
     }
   },
   "checks": {
@@ -1356,7 +1365,7 @@
           "/c",
           "pyright",
           "--outputjson",
-          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_w53486h4\\Build-Cpu.Backend.SmallControl.Family-Hardware.py"
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_p5fgstyc\\Build-Cpu.Backend.SmallControl.Family-Hardware.py"
         ],
         "returncode": 0,
         "status": "PASS",
@@ -1372,7 +1381,7 @@
           "/c",
           "pyright",
           "--outputjson",
-          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_u1gfjler\\v2_strict_family_rail.py"
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_vr1znp8v\\v2_strict_family_rail.py"
         ],
         "returncode": 0,
         "status": "PASS",
@@ -1384,7 +1393,7 @@
     },
     "catalog_coverage": {
       "entries": 8,
-      "proven": 4
+      "proven": 5
     },
     "formal": {
       "yosys_formal_miter": {
@@ -1411,8 +1420,8 @@
           2,
           4
         ],
-        "output_tail": "module \\Family_AGG.\nPerformed a total of 0 changes.\n\n7.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\Family_AGG'.\nRemoved a total of 0 cells.\n\n7.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n7.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\Family_AGG..\nRemoved 2 unused cells and 2 unused wires.\n<suppressed ~3 debug messages>\n\n7.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module Family_AGG.\n\n7.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n7.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\Family_AGG..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n7.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\Family_AGG.\nPerformed a total of 0 changes.\n\n7.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\Family_AGG'.\nRemoved a total of 0 cells.\n\n7.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n7.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\Family_AGG..\n\n7.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module Family_AGG.\n\n7.23. Finished OPT passes. (There is nothing left to do.)\n\n8. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 3 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 2 variables and 4 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 3ecbff3505, CPU: user 0.04s system 0.01s, MEM: 13.28 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 23% 7x opt_clean (0 sec), 22% 9x opt_expr (0 sec), ...\n",
-        "output_sha256": "3aef4c66bed80f930d083e018d97cee4f59b947a8e2225f224693bd6a1bf86f0",
+        "output_tail": "module \\Family_AGG.\nPerformed a total of 0 changes.\n\n7.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\Family_AGG'.\nRemoved a total of 0 cells.\n\n7.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n7.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\Family_AGG..\nRemoved 2 unused cells and 2 unused wires.\n<suppressed ~3 debug messages>\n\n7.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module Family_AGG.\n\n7.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n7.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\Family_AGG..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n7.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\Family_AGG.\nPerformed a total of 0 changes.\n\n7.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\Family_AGG'.\nRemoved a total of 0 cells.\n\n7.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n7.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\Family_AGG..\n\n7.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module Family_AGG.\n\n7.23. Finished OPT passes. (There is nothing left to do.)\n\n8. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 3 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 2 variables and 4 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 3ecbff3505, CPU: user 0.03s system 0.01s, MEM: 13.28 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 24% 7x opt_clean (0 sec), 23% 9x opt_expr (0 sec), ...\n",
+        "output_sha256": "475292a6240760dd0d015e3029c4a7db8e02847074bf7d0ce8802eb7b60c3409",
         "formal_success_marker": true,
         "unconstrained": true,
         "mitered_variants": 1,
@@ -1444,8 +1453,8 @@
         2,
         4
       ],
-      "output_tail": "module \\Family_AGG.\nPerformed a total of 0 changes.\n\n7.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\Family_AGG'.\nRemoved a total of 0 cells.\n\n7.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n7.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\Family_AGG..\nRemoved 2 unused cells and 2 unused wires.\n<suppressed ~3 debug messages>\n\n7.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module Family_AGG.\n\n7.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n7.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\Family_AGG..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n7.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\Family_AGG.\nPerformed a total of 0 changes.\n\n7.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\Family_AGG'.\nRemoved a total of 0 cells.\n\n7.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n7.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\Family_AGG..\n\n7.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module Family_AGG.\n\n7.23. Finished OPT passes. (There is nothing left to do.)\n\n8. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 3 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 2 variables and 4 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 3ecbff3505, CPU: user 0.04s system 0.01s, MEM: 13.28 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 23% 7x opt_clean (0 sec), 22% 9x opt_expr (0 sec), ...\n",
-      "output_sha256": "3aef4c66bed80f930d083e018d97cee4f59b947a8e2225f224693bd6a1bf86f0",
+      "output_tail": "module \\Family_AGG.\nPerformed a total of 0 changes.\n\n7.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\Family_AGG'.\nRemoved a total of 0 cells.\n\n7.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n7.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\Family_AGG..\nRemoved 2 unused cells and 2 unused wires.\n<suppressed ~3 debug messages>\n\n7.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module Family_AGG.\n\n7.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n7.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\Family_AGG..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n7.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\Family_AGG.\nPerformed a total of 0 changes.\n\n7.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\Family_AGG'.\nRemoved a total of 0 cells.\n\n7.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n7.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\Family_AGG..\n\n7.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module Family_AGG.\n\n7.23. Finished OPT passes. (There is nothing left to do.)\n\n8. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 3 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 2 variables and 4 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 3ecbff3505, CPU: user 0.03s system 0.01s, MEM: 13.28 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 24% 7x opt_clean (0 sec), 23% 9x opt_expr (0 sec), ...\n",
+      "output_sha256": "475292a6240760dd0d015e3029c4a7db8e02847074bf7d0ce8802eb7b60c3409",
       "formal_success_marker": true,
       "unconstrained": true,
       "mitered_variants": 1,
@@ -1522,8 +1531,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.044 MB sources in 4 modules, into 0.026 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.056 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.009 s on 1 threads; alloced 9.285 MB\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_AddrAddModule.sv:21:29: Operator ADD expects 52 bits on the RHS, but RHS's REPLICATE generates 6 bits.\n                                                                                                                                         : ... note: In instance 'AddrAddModule_MITER.target_i'\n   21 |   assign \\$2  = io_pcExtend + { io_nextPcOffset, 1'h0 };\n      |                             ^\n                      ... For warning description see https://verilator.org/warn/WIDTHEXPAND?v=5.032\n                      ... Use \"/* verilator lint_off WIDTHEXPAND */\" and lint_on around source to disable this message.\n",
-          "output_sha256": "c57fce423cf1a73a0b5b34e7c27e82a8d2aaec8a7fcf1b41859f5f2b1e78aba4"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.044 MB sources in 4 modules, into 0.026 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.138 s (elab=0.001, cvt=0.006, bld=0.000); cpu 0.025 s on 1 threads; alloced 9.281 MB\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_AddrAddModule.sv:21:29: Operator ADD expects 52 bits on the RHS, but RHS's REPLICATE generates 6 bits.\n                                                                                                                                         : ... note: In instance 'AddrAddModule_MITER.target_i'\n   21 |   assign \\$2  = io_pcExtend + { io_nextPcOffset, 1'h0 };\n      |                             ^\n                      ... For warning description see https://verilator.org/warn/WIDTHEXPAND?v=5.032\n                      ... Use \"/* verilator lint_off WIDTHEXPAND */\" and lint_on around source to disable this message.\n",
+          "output_sha256": "1ff6a1247c54d28ffb4a64f2c77b33656363387a08d0b1914fb2cc92126729ed"
         },
         "locked_verilator": {
           "command": [
@@ -1549,8 +1558,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.018 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.031 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.215 MB\n",
-          "output_sha256": "b94cf6dce21efe1698e78bbda408f204aee985454470d99845c9253837ac3ab5"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.018 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.038 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.007 s on 1 threads; alloced 9.219 MB\n",
+          "output_sha256": "f65472525905e6a16beb5001c822288df0e66fd6dfe97d087c5cb0a50041fa69"
         },
         "sat_miter": {
           "command": [
@@ -1576,8 +1585,8 @@
             2,
             4
           ],
-          "output_tail": "_MERGE pass (detect identical cells).\nFinding identical cells in module `\\AddrAddModule_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\AddrAddModule_MITER..\nRemoved 2 unused cells and 2 unused wires.\n<suppressed ~3 debug messages>\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module AddrAddModule_MITER.\n\n6.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\AddrAddModule_MITER..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n6.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\AddrAddModule_MITER.\nPerformed a total of 0 changes.\n\n6.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\AddrAddModule_MITER'.\nRemoved a total of 0 cells.\n\n6.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\AddrAddModule_MITER..\n\n6.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module AddrAddModule_MITER.\n\n6.23. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 2 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 2 variables and 4 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 679013472e, CPU: user 0.06s system 0.02s, MEM: 13.12 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 27% 7x opt_clean (0 sec), 24% 9x opt_expr (0 sec), ...\n",
-          "output_sha256": "ab859d83dd93dfb0327be62e0f5ed1ea22b1fb6a6c09754ccc180be3588cdf98",
+          "output_tail": "_MERGE pass (detect identical cells).\nFinding identical cells in module `\\AddrAddModule_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\AddrAddModule_MITER..\nRemoved 2 unused cells and 2 unused wires.\n<suppressed ~3 debug messages>\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module AddrAddModule_MITER.\n\n6.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\AddrAddModule_MITER..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n6.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\AddrAddModule_MITER.\nPerformed a total of 0 changes.\n\n6.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\AddrAddModule_MITER'.\nRemoved a total of 0 cells.\n\n6.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\AddrAddModule_MITER..\n\n6.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module AddrAddModule_MITER.\n\n6.23. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 2 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 2 variables and 4 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 679013472e, CPU: user 0.03s system 0.01s, MEM: 13.59 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 25% 7x opt_clean (0 sec), 23% 9x opt_expr (0 sec), ...\n",
+          "output_sha256": "12983428e3f6659a67a41a9699fe5e2c06093f8068a1379706ec213e7f9edac1",
           "formal_success_marker": true,
           "unconstrained": true,
           "sat_variables": 2,
@@ -1611,8 +1620,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.092 MB sources in 4 modules, into 0.052 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.059 s (elab=0.001, cvt=0.004, bld=0.000); cpu 0.013 s on 1 threads; alloced 10.047 MB\n",
-          "output_sha256": "ea57c9b6eb3c87652c427845762196ba6a042a1adb7a42c63e96cca8530aa01d"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.092 MB sources in 4 modules, into 0.052 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.065 s (elab=0.002, cvt=0.005, bld=0.000); cpu 0.016 s on 1 threads; alloced 10.043 MB\n",
+          "output_sha256": "8287a480b868df7f4f3ce4ad9d599b7ebe3e4d6f0cb8e184ee0b25dbaab7d016"
         },
         "locked_verilator": {
           "command": [
@@ -1638,8 +1647,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.026 MB sources in 2 modules, into 0.025 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.031 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.008 s on 1 threads; alloced 9.508 MB\n",
-          "output_sha256": "74732d48c59adf44da5a95d1bbc5103b2b318740a4499d2ad8cbd17d09ffe595"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.026 MB sources in 2 modules, into 0.025 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.028 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.007 s on 1 threads; alloced 9.512 MB\n",
+          "output_sha256": "4480508055273c2cf4412c52274f65f32071f7f2a9cd77dbe410a3274e253899"
         },
         "yosys_equiv": {
           "command": [
@@ -1665,8 +1674,8 @@
           ],
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "\nOptimizing module FauFTBWay_EQUIV.\n\n10.7.14. Finished OPT passes. (There is nothing left to do.)\n\n10.8. Executing WREDUCE pass (reducing word size of cells).\n\n10.9. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\FauFTBWay_EQUIV..\n\n10.10. Executing MEMORY_COLLECT pass (generating $mem cells).\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FauFTBWay_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\FauFTBWay_EQUIV'.\nRemoved a total of 0 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\FauFTBWay_EQUIV..\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== FauFTBWay_EQUIV ===\n\n   Number of wires:                194\n   Number of wire bits:            702\n   Number of public wires:         191\n   Number of public wire bits:     699\n   Number of ports:                 46\n   Number of port bits:            173\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                134\n     $and                            4\n     $dffe                          40\n     $eq                             3\n     $equiv                         79\n     $mux                            3\n     $not                            1\n     $or                             2\n     $sdff                           2\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module FauFTBWay_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 77 unproven $equiv cells in module FauFTBWay_EQUIV:\n  Undef modelling: force def on 154 initial reg values and 111 inputs.\n  Proving existence of base case for step 1. (5941 clauses over 2474 variables)\n  Proving induction step 1. (22719 clauses over 8671 variables)\n  Proof for induction step holds. Entire workset of 77 cells proven!\nProved 77 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 79 $equiv cells in FauFTBWay_EQUIV:\n  Of those cells 79 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: 9a0bce0bbc, CPU: user 0.09s system 0.01s, MEM: 20.16 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 36% 1x equiv_induct (0 sec), 17% 9x opt_clean (0 sec), ...\n",
-          "output_sha256": "986466544c78c58e67db985c44c75c85383b8ca29f81922033833ab873f5d803",
+          "output_tail": "\nOptimizing module FauFTBWay_EQUIV.\n\n10.7.14. Finished OPT passes. (There is nothing left to do.)\n\n10.8. Executing WREDUCE pass (reducing word size of cells).\n\n10.9. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\FauFTBWay_EQUIV..\n\n10.10. Executing MEMORY_COLLECT pass (generating $mem cells).\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FauFTBWay_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\FauFTBWay_EQUIV'.\nRemoved a total of 0 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\FauFTBWay_EQUIV..\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== FauFTBWay_EQUIV ===\n\n   Number of wires:                194\n   Number of wire bits:            702\n   Number of public wires:         191\n   Number of public wire bits:     699\n   Number of ports:                 46\n   Number of port bits:            173\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                134\n     $and                            4\n     $dffe                          40\n     $eq                             3\n     $equiv                         79\n     $mux                            3\n     $not                            1\n     $or                             2\n     $sdff                           2\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module FauFTBWay_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 77 unproven $equiv cells in module FauFTBWay_EQUIV:\n  Undef modelling: force def on 154 initial reg values and 111 inputs.\n  Proving existence of base case for step 1. (5941 clauses over 2474 variables)\n  Proving induction step 1. (22719 clauses over 8671 variables)\n  Proof for induction step holds. Entire workset of 77 cells proven!\nProved 77 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 79 $equiv cells in FauFTBWay_EQUIV:\n  Of those cells 79 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: 9a0bce0bbc, CPU: user 0.09s system 0.02s, MEM: 19.84 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 40% 1x equiv_induct (0 sec), 16% 9x opt_clean (0 sec), ...\n",
+          "output_sha256": "9ad575b043dd2613739ea0ef54d82bdda8052a2861b9c813c90129e391862723",
           "markers_present": {
             "0 are unproven.": true,
             "Equivalence successfully proven!": true
@@ -1705,7 +1714,7 @@
           "equiv_failed_full": null,
           "sat_counts_full": null,
           "output_tail": "ackend_smallcontrol_family_family/DUT_GPAMem.sv:4012:7: Case values incompletely covered (example pattern 0x6)\n 4012 |       casez (\\mem.waddr_dup_0_3 [3:0])\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_GPAMem.sv:4032:7: Case values incompletely covered (example pattern 0x7)\n 4032 |       casez (\\mem.waddr_dup_0_3 [3:0])\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_GPAMem.sv:4054:7: Case values incompletely covered (example pattern 0x8)\n 4054 |       casez (\\mem.waddr_dup_0_3 [3:0])\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_GPAMem.sv:4078:7: Case values incompletely covered (example pattern 0x9)\n 4078 |       casez (\\mem.waddr_dup_0_3 [3:0])\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_GPAMem.sv:4104:7: Case values incompletely covered (example pattern 0xa)\n 4104 |       casez (\\mem.waddr_dup_0_3 [3:0])\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_GPAMem.sv:4132:7: Case values incompletely covered (example pattern 0xb)\n 4132 |       casez (\\mem.waddr_dup_0_3 [3:0])\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_GPAMem.sv:4162:7: Case values incompletely covered (example pattern 0xc)\n 4162 |       casez (\\mem.waddr_dup_0_3 [3:0])\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_GPAMem.sv:4194:7: Case values incompletely covered (example pattern 0xd)\n 4194 |       casez (\\mem.waddr_dup_0_3 [3:0])\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_GPAMem.sv:4228:7: Case values incompletely covered (example pattern 0xe)\n 4228 |       casez (\\mem.waddr_dup_0_3 [3:0])\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_GPAMem.sv:4264:7: Case values incompletely covered (example pattern 0xf)\n 4264 |       casez (\\mem.waddr_dup_0_3 [3:0])\n      |       ^~~~~\n",
-          "output_sha256": "61a4d8565031f67d903b90c441bcd4148246da457e5a7f0c999b3b3baae996c5"
+          "output_sha256": "8b5245e6ce987cba425491d895ef2b908913d933f26c7f6674edf16e22bb0e11"
         },
         "locked_verilator": {
           "command": [
@@ -1733,8 +1742,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.075 MB sources in 4 modules, into 0.111 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.051 s (elab=0.001, cvt=0.008, bld=0.000); cpu 0.017 s on 1 threads; alloced 11.012 MB\n",
-          "output_sha256": "de152d2229eeae6748dc890faed4959d8a182fd3232603218b7c1c496cb7b8be"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.075 MB sources in 4 modules, into 0.111 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.053 s (elab=0.001, cvt=0.011, bld=0.000); cpu 0.021 s on 1 threads; alloced 11.020 MB\n",
+          "output_sha256": "955987782fc3f350f2b1ba5bff9850423e3c63c150cd41f03fd25212cfb8a6a4"
         },
         "yosys_equiv": {
           "command": [
@@ -1760,8 +1769,8 @@
           ],
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "ells).\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module GPAMem_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\GPAMem_EQUIV'.\n<suppressed ~9 debug messages>\nRemoved a total of 3 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\GPAMem_EQUIV..\nRemoved 0 unused cells and 1 unused wires.\n<suppressed ~1 debug messages>\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== GPAMem_EQUIV ===\n\n   Number of wires:               1063\n   Number of wire bits:          21271\n   Number of public wires:         647\n   Number of public wire bits:   13650\n   Number of ports:                 11\n   Number of port bits:            134\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:               4531\n     $add                            2\n     $and                          142\n     $dffe                         266\n     $eq                            37\n     $equiv                       3779\n     $logic_not                      4\n     $mux                           88\n     $not                            1\n     $or                           126\n     $pmux                          10\n     $reduce_and                    68\n     $reduce_or                      1\n     $scopeinfo                      5\n     $sdff                           2\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module GPAMem_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 3779 unproven $equiv cells in module GPAMem_EQUIV:\n  Undef modelling: force def on 7444 initial reg values and 77 inputs.\n  Proving existence of base case for step 1. (717693 clauses over 275362 variables)\n  Proving induction step 1. (1985353 clauses over 736602 variables)\n  Proof for induction step holds. Entire workset of 3779 cells proven!\nProved 3779 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 3779 $equiv cells in GPAMem_EQUIV:\n  Of those cells 3779 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: 292feafa6b, CPU: user 41.46s system 0.50s, MEM: 634.07 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 97% 1x equiv_induct (40 sec), 0% 11x opt_clean (0 sec), ...\n",
-          "output_sha256": "f45d46cf75a46b5af1a474f88026c909b26565bd425898e33a31353ceb84161d",
+          "output_tail": "ells).\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module GPAMem_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\GPAMem_EQUIV'.\n<suppressed ~9 debug messages>\nRemoved a total of 3 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\GPAMem_EQUIV..\nRemoved 0 unused cells and 1 unused wires.\n<suppressed ~1 debug messages>\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== GPAMem_EQUIV ===\n\n   Number of wires:               1063\n   Number of wire bits:          21271\n   Number of public wires:         647\n   Number of public wire bits:   13650\n   Number of ports:                 11\n   Number of port bits:            134\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:               4531\n     $add                            2\n     $and                          142\n     $dffe                         266\n     $eq                            37\n     $equiv                       3779\n     $logic_not                      4\n     $mux                           88\n     $not                            1\n     $or                           126\n     $pmux                          10\n     $reduce_and                    68\n     $reduce_or                      1\n     $scopeinfo                      5\n     $sdff                           2\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module GPAMem_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 3779 unproven $equiv cells in module GPAMem_EQUIV:\n  Undef modelling: force def on 7444 initial reg values and 77 inputs.\n  Proving existence of base case for step 1. (717693 clauses over 275362 variables)\n  Proving induction step 1. (1985353 clauses over 736602 variables)\n  Proof for induction step holds. Entire workset of 3779 cells proven!\nProved 3779 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 3779 $equiv cells in GPAMem_EQUIV:\n  Of those cells 3779 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: 292feafa6b, CPU: user 42.83s system 0.41s, MEM: 633.70 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 97% 1x equiv_induct (41 sec), 0% 11x opt_clean (0 sec), ...\n",
+          "output_sha256": "6af35e7e33a3195f1a359d298f62335e5f22335c83c2c27f2e7be69191cdc1df",
           "markers_present": {
             "0 are unproven.": true,
             "Equivalence successfully proven!": true
@@ -1785,8 +1794,8 @@
             "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/REF_RASStack.sv",
             "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/RASStack_MITER.sv"
           ],
-          "returncode": 1,
-          "status": "FAIL",
+          "returncode": 0,
+          "status": "PASS",
           "sat_success_marker": false,
           "sat_counterexample_marker": false,
           "unconstrained_marker": false,
@@ -1799,8 +1808,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "%Error: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/REF_RASStack.sv:1452:1: syntax error, unexpected automatic\n 1452 | automatic logic       _GEN_67 =\n      | ^~~~~~~~~\n%Error: Exiting due to 1 error(s)\n",
-          "output_sha256": "058f34dd808e8ef56859edf89f7aa2e04560c94dedaa1a9c390c08fb562c8bf0"
+          "output_tail": "covered (example pattern 0x5)\n  345 |       casez (ras_top)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_RASStack.sv:363:7: Case values incompletely covered (example pattern 0x6)\n  363 |       casez (ras_top)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_RASStack.sv:383:7: Case values incompletely covered (example pattern 0x7)\n  383 |       casez (ras_top)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_RASStack.sv:405:7: Case values incompletely covered (example pattern 0x8)\n  405 |       casez (ras_top)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_RASStack.sv:429:7: Case values incompletely covered (example pattern 0x9)\n  429 |       casez (ras_top)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_RASStack.sv:455:7: Case values incompletely covered (example pattern 0xa)\n  455 |       casez (ras_top)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_RASStack.sv:483:7: Case values incompletely covered (example pattern 0xb)\n  483 |       casez (ras_top)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_RASStack.sv:513:7: Case values incompletely covered (example pattern 0xc)\n  513 |       casez (ras_top)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_RASStack.sv:545:7: Case values incompletely covered (example pattern 0xd)\n  545 |       casez (ras_top)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_RASStack.sv:579:7: Case values incompletely covered (example pattern 0xe)\n  579 |       casez (ras_top)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_RASStack.sv:615:7: Case values incompletely covered (example pattern 0xf)\n  615 |       casez (ras_top)\n      |       ^~~~~\n",
+          "output_sha256": "e40fd49e3fd35bce94ae12ceb1cc7dc8a00fe1ee8a3a67be12d55cfe9d059a6b"
         },
         "locked_verilator": {
           "command": [
@@ -1826,8 +1835,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.087 MB sources in 2 modules, into 0.229 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.057 s (elab=0.003, cvt=0.017, bld=0.000); cpu 0.033 s on 1 threads; alloced 12.551 MB\n",
-          "output_sha256": "4121ac35d65d57ddec105915f295760ca302b245eba0e676813b05350eb96f20"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.087 MB sources in 2 modules, into 0.229 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.072 s (elab=0.004, cvt=0.023, bld=0.000); cpu 0.044 s on 1 threads; alloced 12.555 MB\n",
+          "output_sha256": "ab001a853d7b57d751b9f35cdc619266f583e33795252580ff7eb03125337af2"
         },
         "yosys_equiv": {
           "command": [
@@ -1845,18 +1854,24 @@
             "0 are unproven.": false,
             "Equivalence successfully proven!": false
           },
-          "equiv_failure_marker": false,
-          "equiv_cells_full": null,
-          "equiv_summary_full": null,
-          "equiv_failed_full": null,
+          "equiv_failure_marker": true,
+          "equiv_cells_full": 76,
+          "equiv_summary_full": [
+            0,
+            76
+          ],
+          "equiv_failed_full": 76,
           "sat_counts_full": null,
-          "output_tail": "\n-- Running command `read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_RASStack.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/REF_RASStack.sv; proc; async2sync; memory; opt; flatten REF_RASStack; flatten DUT_RASStack; equiv_make REF_RASStack DUT_RASStack RASStack_EQUIV; prep -top RASStack_EQUIV; equiv_induct -undef; equiv_status -assert' --\n\n1. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_RASStack.sv\nParsing SystemVerilog input from `/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_RASStack.sv' to AST representation.\nGenerating RTLIL representation for module `\\DUT_RASStack'.\nSuccessfully finished Verilog frontend.\n\n2. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/REF_RASStack.sv\n/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/REF_RASStack.sv:1452: ERROR: syntax error, unexpected TOK_AUTOMATIC\n",
-          "output_sha256": "5ae34018ba3dec75ff4eedff09c533efd1bca2df75b07ed11200053877438b53",
+          "output_tail": "[27] \\io_spec_pop_addr_gate [27]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$3394: \\io_spec_pop_addr_gold [28] \\io_spec_pop_addr_gate [28]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$3395: \\io_spec_pop_addr_gold [29] \\io_spec_pop_addr_gate [29]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$3396: \\io_spec_pop_addr_gold [30] \\io_spec_pop_addr_gate [30]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$3397: \\io_spec_pop_addr_gold [31] \\io_spec_pop_addr_gate [31]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$3398: \\io_spec_pop_addr_gold [32] \\io_spec_pop_addr_gate [32]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$3399: \\io_spec_pop_addr_gold [33] \\io_spec_pop_addr_gate [33]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$3400: \\io_spec_pop_addr_gold [34] \\io_spec_pop_addr_gate [34]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$3401: \\io_spec_pop_addr_gold [35] \\io_spec_pop_addr_gate [35]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$3402: \\io_spec_pop_addr_gold [36] \\io_spec_pop_addr_gate [36]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$3403: \\io_spec_pop_addr_gold [37] \\io_spec_pop_addr_gate [37]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$3404: \\io_spec_pop_addr_gold [38] \\io_spec_pop_addr_gate [38]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$3405: \\io_spec_pop_addr_gold [39] \\io_spec_pop_addr_gate [39]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$3406: \\io_spec_pop_addr_gold [40] \\io_spec_pop_addr_gate [40]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$3407: \\io_spec_pop_addr_gold [41] \\io_spec_pop_addr_gate [41]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$3408: \\io_spec_pop_addr_gold [42] \\io_spec_pop_addr_gate [42]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$3409: \\io_spec_pop_addr_gold [43] \\io_spec_pop_addr_gate [43]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$3410: \\io_spec_pop_addr_gold [44] \\io_spec_pop_addr_gate [44]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$3411: \\io_spec_pop_addr_gold [45] \\io_spec_pop_addr_gate [45]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$3412: \\io_spec_pop_addr_gold [46] \\io_spec_pop_addr_gate [46]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$3413: \\io_spec_pop_addr_gold [47] \\io_spec_pop_addr_gate [47]\n  ERROR: Found 76 unproven $equiv cells in 'equiv_status -assert'.\n",
+          "output_sha256": "73aeb21a7c8ac2b065f13955d2609bcaf31780ad6e16c27895858bbed47e3d4e",
           "markers_present": {
             "0 are unproven.": false,
             "Equivalence successfully proven!": false
           },
-          "formal_success_marker": false
+          "formal_success_marker": false,
+          "equiv_cells": 76,
+          "proven_cells": 0,
+          "unproven_cells": 76
         }
       },
       {
@@ -1886,8 +1901,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.321 MB sources in 4 modules, into 0.118 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.080 s (elab=0.007, cvt=0.012, bld=0.000); cpu 0.035 s on 1 threads; alloced 12.801 MB\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_RedirectGenerator.sv:1890:127: Operator NEQ expects 25 bits on the RHS, but RHS's SIGNED generates 1 bits.\n                                                                                                                                                : ... note: In instance 'RedirectGenerator_MITER.target_i'\n 1890 |   assign \\$756  = $signed({ io_oldestExuRedirect_bits_fullTarget[63:50], io_oldestExuRedirect_bits_cfiUpdate_target[49:39] }) != $signed(io_oldestExuRedirect_bits_cfiUpdate_target[38]);\n      |                                                                                                                               ^~\n                      ... For warning description see https://verilator.org/warn/WIDTHEXPAND?v=5.032\n                      ... Use \"/* verilator lint_off WIDTHEXPAND */\" and lint_on around source to disable this message.\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_RedirectGenerator.sv:1892:127: Operator NEQ expects 16 bits on the RHS, but RHS's SIGNED generates 1 bits.\n                                                                                                                                                : ... note: In instance 'RedirectGenerator_MITER.target_i'\n 1892 |   assign \\$758  = $signed({ io_oldestExuRedirect_bits_fullTarget[63:50], io_oldestExuRedirect_bits_cfiUpdate_target[49:48] }) != $signed(io_oldestExuRedirect_bits_cfiUpdate_target[47]);\n      |                                                                                                                               ^~\n",
-          "output_sha256": "020ea0804e26b5a9fc4a7b960a4be1e312fc2a5b9340135423f3428e4ea89f97"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.322 MB sources in 4 modules, into 0.118 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.089 s (elab=0.007, cvt=0.013, bld=0.000); cpu 0.036 s on 1 threads; alloced 13.449 MB\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_RedirectGenerator.sv:1890:127: Operator NEQ expects 25 bits on the RHS, but RHS's SIGNED generates 1 bits.\n                                                                                                                                                : ... note: In instance 'RedirectGenerator_MITER.target_i'\n 1890 |   assign \\$756  = $signed({ io_oldestExuRedirect_bits_fullTarget[63:50], io_oldestExuRedirect_bits_cfiUpdate_target[49:39] }) != $signed(io_oldestExuRedirect_bits_cfiUpdate_target[38]);\n      |                                                                                                                               ^~\n                      ... For warning description see https://verilator.org/warn/WIDTHEXPAND?v=5.032\n                      ... Use \"/* verilator lint_off WIDTHEXPAND */\" and lint_on around source to disable this message.\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_RedirectGenerator.sv:1892:127: Operator NEQ expects 16 bits on the RHS, but RHS's SIGNED generates 1 bits.\n                                                                                                                                                : ... note: In instance 'RedirectGenerator_MITER.target_i'\n 1892 |   assign \\$758  = $signed({ io_oldestExuRedirect_bits_fullTarget[63:50], io_oldestExuRedirect_bits_cfiUpdate_target[49:48] }) != $signed(io_oldestExuRedirect_bits_cfiUpdate_target[47]);\n      |                                                                                                                               ^~\n",
+          "output_sha256": "15defe1e985e7bf764d080b3b9253eb8df8923f698ae57a9fff64d7dd15aa479"
         },
         "locked_verilator": {
           "command": [
@@ -1913,8 +1928,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.034 MB sources in 2 modules, into 0.047 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.035 s (elab=0.001, cvt=0.004, bld=0.000); cpu 0.010 s on 1 threads; alloced 9.773 MB\n",
-          "output_sha256": "7515bebf064e436f687232b4ec4242f2f1eb2d828bd4f997b434a9ac99b899b7"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.034 MB sources in 2 modules, into 0.047 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.032 s (elab=0.001, cvt=0.004, bld=0.000); cpu 0.011 s on 1 threads; alloced 9.777 MB\n",
+          "output_sha256": "e6a4e21f7af836829d46a440e0e98cedf9a4f25393c53e2f50b2a7f6cb539155"
         },
         "yosys_equiv": {
           "command": [
@@ -1923,27 +1938,33 @@
             "-p",
             "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_RedirectGenerator.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/REF_RedirectGenerator.sv; proc; async2sync; memory; opt; flatten REF_RedirectGenerator; flatten DUT_RedirectGenerator; equiv_make REF_RedirectGenerator DUT_RedirectGenerator RedirectGenerator_EQUIV; prep -top RedirectGenerator_EQUIV; equiv_induct -undef; equiv_status -assert"
           ],
-          "returncode": 1,
-          "status": "FAIL",
+          "returncode": 0,
+          "status": "PASS",
           "sat_success_marker": false,
           "sat_counterexample_marker": false,
           "unconstrained_marker": false,
           "equiv_success_markers": {
-            "0 are unproven.": false,
-            "Equivalence successfully proven!": false
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
           },
           "equiv_failure_marker": false,
-          "equiv_cells_full": null,
-          "equiv_summary_full": null,
+          "equiv_cells_full": 210,
+          "equiv_summary_full": [
+            210,
+            0
+          ],
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "\n-- Running command `read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_RedirectGenerator.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/REF_RedirectGenerator.sv; proc; async2sync; memory; opt; flatten REF_RedirectGenerator; flatten DUT_RedirectGenerator; equiv_make REF_RedirectGenerator DUT_RedirectGenerator RedirectGenerator_EQUIV; prep -top RedirectGenerator_EQUIV; equiv_induct -undef; equiv_status -assert' --\n\n1. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_RedirectGenerator.sv\nParsing SystemVerilog input from `/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_RedirectGenerator.sv' to AST representation.\nGenerating RTLIL representation for module `\\DUT_RedirectGenerator'.\nSuccessfully finished Verilog frontend.\n\n2. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/REF_RedirectGenerator.sv\n/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/REF_RedirectGenerator.sv:147: ERROR: syntax error, unexpected TOK_AUTOMATIC\n",
-          "output_sha256": "d86cf10936f3488c8a727616c90af5694f1da2315f988ada25abc40adeeef2d3",
+          "output_tail": "ells).\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RedirectGenerator_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\RedirectGenerator_EQUIV'.\nRemoved a total of 0 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\RedirectGenerator_EQUIV..\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== RedirectGenerator_EQUIV ===\n\n   Number of wires:               1206\n   Number of wire bits:           3700\n   Number of public wires:        1147\n   Number of public wire bits:    3281\n   Number of ports:                 56\n   Number of port bits:            529\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                398\n     $and                           32\n     $dffe                          23\n     $eq                             2\n     $equiv                        210\n     $gt                             3\n     $mux                           57\n     $ne                             4\n     $not                            6\n     $or                            22\n     $reduce_and                     2\n     $reduce_or                      4\n     $sdff                          16\n     $sdffce                         9\n     $sdffe                          2\n     $xor                            6\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module RedirectGenerator_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 209 unproven $equiv cells in module RedirectGenerator_EQUIV:\n  Undef modelling: force def on 418 initial reg values and 284 inputs.\n  Proving existence of base case for step 1. (57744 clauses over 22157 variables)\n  Proving induction step 1. (148474 clauses over 55448 variables)\n  Proof for induction step holds. Entire workset of 209 cells proven!\nProved 209 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 210 $equiv cells in RedirectGenerator_EQUIV:\n  Of those cells 210 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: d1fee7d8cd, CPU: user 0.51s system 0.03s, MEM: 53.43 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 52% 1x equiv_induct (0 sec), 13% 10x opt_clean (0 sec), ...\n",
+          "output_sha256": "13bb4df35ba5cf1692bdb2ec68a5070a0b4a8f63c9244112d41b4615026668ea",
           "markers_present": {
-            "0 are unproven.": false,
-            "Equivalence successfully proven!": false
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
           },
-          "formal_success_marker": false
+          "formal_success_marker": true,
+          "equiv_cells": 210,
+          "proven_cells": 210,
+          "unproven_cells": 0
         }
       },
       {
@@ -1974,7 +1995,7 @@
           "equiv_failed_full": null,
           "sat_counts_full": null,
           "output_tail": "family_family/DUT_RegCache.sv:8295:7: Case values incompletely covered (example pattern 0x1e)\n 8295 |       casez (io_toWakeupQueueRCIdx_4)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_RegCache.sv:8359:7: Case values incompletely covered (example pattern 0x1e)\n 8359 |       casez (io_toWakeupQueueRCIdx_5)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_RegCache.sv:8423:7: Case values incompletely covered (example pattern 0x1e)\n 8423 |       casez (io_toWakeupQueueRCIdx_6)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_RegCache.sv:8491:7: Case values incompletely covered (example pattern 0x1f)\n 8491 |       casez (io_toWakeupQueueRCIdx_0)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_RegCache.sv:8557:7: Case values incompletely covered (example pattern 0x1f)\n 8557 |       casez (io_toWakeupQueueRCIdx_1)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_RegCache.sv:8623:7: Case values incompletely covered (example pattern 0x1f)\n 8623 |       casez (io_toWakeupQueueRCIdx_2)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_RegCache.sv:8689:7: Case values incompletely covered (example pattern 0x1f)\n 8689 |       casez (io_toWakeupQueueRCIdx_3)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_RegCache.sv:8755:7: Case values incompletely covered (example pattern 0x1f)\n 8755 |       casez (io_toWakeupQueueRCIdx_4)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_RegCache.sv:8821:7: Case values incompletely covered (example pattern 0x1f)\n 8821 |       casez (io_toWakeupQueueRCIdx_5)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_RegCache.sv:8887:7: Case values incompletely covered (example pattern 0x1f)\n 8887 |       casez (io_toWakeupQueueRCIdx_6)\n      |       ^~~~~\n",
-          "output_sha256": "8a8156b6bc168d1e991272be7ce60000691261cff9e8706c1cd29d8986c83674"
+          "output_sha256": "d90dea28136b003a7b97f6eaded8df8b9253d6aa88fe377331bf31f3df88112e"
         },
         "locked_verilator": {
           "command": [
@@ -2006,8 +2027,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 1.072 MB sources in 8 modules, into 1.216 MB in 6 C++ files needing 0.000 MB\n- Verilator: Walltime 0.329 s (elab=0.032, cvt=0.163, bld=0.000); cpu 0.256 s on 1 threads; alloced 22.988 MB\n",
-          "output_sha256": "e87952172c46450c79361bf67de8f285e756d325f19121cf5bd7f83968fdfd73"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 1.072 MB sources in 8 modules, into 1.216 MB in 6 C++ files needing 0.000 MB\n- Verilator: Walltime 0.403 s (elab=0.049, cvt=0.202, bld=0.000); cpu 0.325 s on 1 threads; alloced 22.988 MB\n",
+          "output_sha256": "4c65d1626e3c750d1bb6addff342854801ea4c2317c42a1936b932558c066cc3"
         },
         "yosys_equiv": {
           "command": [
@@ -2019,7 +2040,7 @@
           "returncode": null,
           "status": "FAIL",
           "timed_out": true,
-          "output_tail": "tool call exceeded 60s and was terminated",
+          "output_tail": "tool call exceeded 180s and was terminated",
           "markers_present": {},
           "formal_success_marker": true
         }
@@ -2052,7 +2073,7 @@
           "equiv_failed_full": null,
           "sat_counts_full": null,
           "output_tail": "/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_RegCacheTagTable.sv:39886:56: Operator EQ expects 4 bits on the RHS, but RHS's CONST '3'h7' generates 3 bits.\n39886 |   assign \\$19864  = io_wakeupFromIQ_5_bits_rcDest[3:0] == 3'h7;\n      |                                                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_RegCacheTagTable.sv:39890:56: Operator EQ expects 4 bits on the RHS, but RHS's CONST '3'h7' generates 3 bits.\n39890 |   assign \\$19868  = io_wakeupFromIQ_6_bits_rcDest[3:0] == 3'h7;\n      |                                                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_RegCacheTagTable.sv:39894:56: Operator EQ expects 4 bits on the RHS, but RHS's CONST '3'h7' generates 3 bits.\n39894 |   assign \\$19872  = io_wakeupFromIQ_5_bits_rcDest[3:0] == 3'h7;\n      |                                                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_RegCacheTagTable.sv:39943:56: Operator EQ expects 4 bits on the RHS, but RHS's CONST '3'h7' generates 3 bits.\n39943 |   assign \\$19925  = io_wakeupFromIQ_4_bits_rcDest[3:0] == 3'h7;\n      |                                                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_RegCacheTagTable.sv:39946:56: Operator EQ expects 4 bits on the RHS, but RHS's CONST '3'h7' generates 3 bits.\n39946 |   assign \\$19929  = io_wakeupFromIQ_5_bits_rcDest[3:0] == 3'h7;\n      |                                                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_RegCacheTagTable.sv:39950:56: Operator EQ expects 4 bits on the RHS, but RHS's CONST '3'h7' generates 3 bits.\n39950 |   assign \\$19933  = io_wakeupFromIQ_6_bits_rcDest[3:0] == 3'h7;\n      |                                                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_RegCacheTagTable.sv:39954:56: Operator EQ expects 4 bits on the RHS, but RHS's CONST '3'h7' generates 3 bits.\n39954 |   assign \\$19937  = io_wakeupFromIQ_6_bits_rcDest[3:0] == 3'h7;\n      |                                                        ^~\n",
-          "output_sha256": "499f11d3d57a1d1f3cfb6e8c734fbd5dc98a9df1540ace8197ab98936332139d"
+          "output_sha256": "7b8dcdbf450c4b9f879a52f0ca1c61199b721f2b2df607f83d0d4d8beecd2735"
         },
         "locked_verilator": {
           "command": [
@@ -2080,8 +2101,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.415 MB sources in 4 modules, into 0.861 MB in 6 C++ files needing 0.000 MB\n- Verilator: Walltime 0.206 s (elab=0.020, cvt=0.102, bld=0.000); cpu 0.165 s on 1 threads; alloced 19.641 MB\n",
-          "output_sha256": "1335e8ead5390130d79a0a776167bdb0755dbbbc3e6d3d6df3bdfa303ff823e9"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.415 MB sources in 4 modules, into 0.861 MB in 6 C++ files needing 0.000 MB\n- Verilator: Walltime 0.293 s (elab=0.027, cvt=0.155, bld=0.000); cpu 0.241 s on 1 threads; alloced 19.648 MB\n",
+          "output_sha256": "22e49a5b5a2632706bf1b7ccca2b925a68dc0ab7e8bc739b1cac8c28267fd13f"
         },
         "yosys_equiv": {
           "command": [
@@ -2107,8 +2128,8 @@
           ],
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": ".11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RegCacheTagTable_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\RegCacheTagTable_EQUIV'.\n<suppressed ~1059 debug messages>\nRemoved a total of 353 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\RegCacheTagTable_EQUIV..\nRemoved 0 unused cells and 304 unused wires.\n<suppressed ~1 debug messages>\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== RegCacheTagTable_EQUIV ===\n\n   Number of wires:              23426\n   Number of wire bits:          30033\n   Number of public wires:       22794\n   Number of public wire bits:   29187\n   Number of ports:                111\n   Number of port bits:            374\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:               5759\n     $and                         1041\n     $dffe                         224\n     $eq                           769\n     $equiv                        492\n     $logic_not                      7\n     $mux                         1048\n     $ne                            56\n     $not                          104\n     $or                          1680\n     $reduce_and                     4\n     $reduce_or                    240\n     $scopeinfo                      2\n     $sdff                          56\n     $sdffe                         36\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module RegCacheTagTable_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 480 unproven $equiv cells in module RegCacheTagTable_EQUIV:\n  Undef modelling: force def on 840 initial reg values and 295 inputs.\n  Proving existence of base case for step 1. (594586 clauses over 214824 variables)\n  Proving induction step 1. (1251355 clauses over 450655 variables)\n  Proof for induction step holds. Entire workset of 480 cells proven!\nProved 480 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 492 $equiv cells in RegCacheTagTable_EQUIV:\n  Of those cells 492 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: 5c4586d64f, CPU: user 12.80s system 0.22s, MEM: 358.68 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 50% 1x equiv_induct (6 sec), 15% 10x opt_clean (2 sec), ...\n",
-          "output_sha256": "7a68a1e54e24dea5a2f115fd9d4dc0543e7f63f31de1ae87dc27a32a0c2f552c",
+          "output_tail": ".11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RegCacheTagTable_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\RegCacheTagTable_EQUIV'.\n<suppressed ~1059 debug messages>\nRemoved a total of 353 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\RegCacheTagTable_EQUIV..\nRemoved 0 unused cells and 304 unused wires.\n<suppressed ~1 debug messages>\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== RegCacheTagTable_EQUIV ===\n\n   Number of wires:              23426\n   Number of wire bits:          30033\n   Number of public wires:       22794\n   Number of public wire bits:   29187\n   Number of ports:                111\n   Number of port bits:            374\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:               5759\n     $and                         1041\n     $dffe                         224\n     $eq                           769\n     $equiv                        492\n     $logic_not                      7\n     $mux                         1048\n     $ne                            56\n     $not                          104\n     $or                          1680\n     $reduce_and                     4\n     $reduce_or                    240\n     $scopeinfo                      2\n     $sdff                          56\n     $sdffe                         36\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module RegCacheTagTable_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 480 unproven $equiv cells in module RegCacheTagTable_EQUIV:\n  Undef modelling: force def on 840 initial reg values and 295 inputs.\n  Proving existence of base case for step 1. (594586 clauses over 214824 variables)\n  Proving induction step 1. (1251355 clauses over 450655 variables)\n  Proof for induction step holds. Entire workset of 480 cells proven!\nProved 480 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 492 $equiv cells in RegCacheTagTable_EQUIV:\n  Of those cells 492 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: 5c4586d64f, CPU: user 16.20s system 0.34s, MEM: 358.75 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 48% 1x equiv_induct (7 sec), 17% 10x opt_clean (2 sec), ...\n",
+          "output_sha256": "e84b0103e24746656d9d7f4c982d0946ded3fddc4409046ab9cb12e6f78af6c4",
           "markers_present": {
             "0 are unproven.": true,
             "Equivalence successfully proven!": true
@@ -2132,8 +2153,8 @@
             "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/REF_VectorCvtTop.sv",
             "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/VectorCvtTop_MITER.sv"
           ],
-          "returncode": 1,
-          "status": "FAIL",
+          "returncode": 0,
+          "status": "PASS",
           "sat_success_marker": false,
           "sat_counterexample_marker": false,
           "unconstrained_marker": false,
@@ -2146,8 +2167,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "%Error: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/REF_VectorCvtTop.sv:795:1: syntax error, unexpected automatic\n  795 | automatic logic [1:0] decodeFloatSrcRec =\n      | ^~~~~~~~~\n%Error: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/REF_VectorCvtTop.sv:1258:1: syntax error, unexpected automatic\n 1258 | automatic logic [10:0] fcvtmodShift =\n      | ^~~~~~~~~\n%Error: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/REF_VectorCvtTop.sv:2018:1: syntax error, unexpected automatic\n 2018 | automatic logic [10:0] _minusExp_T_10 =\n      | ^~~~~~~~~\n%Error: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/REF_VectorCvtTop.sv:2030:1: syntax error, unexpected automatic\n 2030 | automatic logic [10:0] _shamtWidth_T_18 =\n      | ^~~~~~~~~\n%Error: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/REF_VectorCvtTop.sv:3259:1: syntax error, unexpected automatic\n 3259 | automatic logic        _is_inf_T_16 =\n      | ^~~~~~~~~\n%Error: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/REF_VectorCvtTop.sv:3534:1: syntax error, unexpected automatic\n 3534 | automatic logic [54:0] _GEN_15 =\n      | ^~~~~~~~~\n%Error: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/REF_VectorCvtTop.sv:3542:1: syntax error, unexpected automatic\n 3542 | automatic logic        rmin =\n      | ^~~~~~~~~\n%Error: Exiting due to 7 error(s)\n",
-          "output_sha256": "662ed5c9fb818380dcbcf34dab3cc8222b9a9429d7b75b5754d69c5b2889650e"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.323 MB sources in 32 modules, into 2.340 MB in 9 C++ files needing 0.000 MB\n- Verilator: Walltime 0.542 s (elab=0.034, cvt=0.390, bld=0.000); cpu 0.483 s on 1 threads; alloced 39.891 MB\n",
+          "output_sha256": "63c84ba8001a049cd0b97d0ea0841f2cf858d845705cb2cecb7d4cd1e95af50f"
         },
         "locked_verilator": {
           "command": [
@@ -2201,8 +2222,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 4.355 MB sources in 30 modules, into 2.374 MB in 9 C++ files needing 0.000 MB\n- Verilator: Walltime 0.644 s (elab=0.027, cvt=0.330, bld=0.000); cpu 0.460 s on 1 threads; alloced 42.168 MB\n",
-          "output_sha256": "d273f59f981a96fe1ec3534136d6d76b12b4c9c5f567a8ec857f252f8101d505"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 4.355 MB sources in 30 modules, into 2.374 MB in 9 C++ files needing 0.000 MB\n- Verilator: Walltime 0.599 s (elab=0.023, cvt=0.317, bld=0.000); cpu 0.410 s on 1 threads; alloced 42.172 MB\n",
+          "output_sha256": "5d0375c88df4f4c312180d58e110496dc59de8284629cbbbeeb44bcb41f95f11"
         },
         "yosys_equiv": {
           "command": [
@@ -2220,36 +2241,59 @@
             "0 are unproven.": false,
             "Equivalence successfully proven!": false
           },
-          "equiv_failure_marker": false,
-          "equiv_cells_full": null,
-          "equiv_summary_full": null,
-          "equiv_failed_full": null,
+          "equiv_failure_marker": true,
+          "equiv_cells_full": 168,
+          "equiv_summary_full": [
+            2,
+            166
+          ],
+          "equiv_failed_full": 166,
           "sat_counts_full": null,
-          "output_tail": "\n-- Running command `read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_VectorCvtTop.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/REF_VectorCvtTop.sv; proc; async2sync; memory; opt; flatten REF_VectorCvtTop; flatten DUT_VectorCvtTop; equiv_make REF_VectorCvtTop DUT_VectorCvtTop VectorCvtTop_EQUIV; prep -top VectorCvtTop_EQUIV; equiv_induct -undef; equiv_status -assert' --\n\n1. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_VectorCvtTop.sv\nParsing SystemVerilog input from `/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_VectorCvtTop.sv' to AST representation.\nGenerating RTLIL representation for module `\\DUT_VectorCvtTop'.\nSuccessfully finished Verilog frontend.\n\n2. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/REF_VectorCvtTop.sv\n/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/REF_VectorCvtTop.sv:795: ERROR: syntax error, unexpected TOK_AUTOMATIC\n",
-          "output_sha256": "859c2cd57f3ec6c58f64eb9b96cf0e45dcc26bc83fa0add640da82d815581f2f",
+          "output_tail": "_same_wires$7139: \\io_result_gold [63] \\io_src_0 [63]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$7140: \\io_result_gold [64] \\io_src_1 [0]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$7141: \\io_result_gold [65] \\io_src_1 [1]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$7142: \\io_result_gold [66] \\io_src_1 [2]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$7143: \\io_result_gold [67] \\io_src_1 [3]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$7144: \\io_result_gold [68] \\io_src_1 [4]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$7145: \\io_result_gold [69] \\io_src_1 [5]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$7146: \\io_result_gold [70] \\io_src_1 [6]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$7147: \\io_result_gold [71] \\io_src_1 [7]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$7148: \\io_result_gold [72] \\io_src_1 [8]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$7149: \\io_result_gold [73] \\io_src_1 [9]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$7150: \\io_result_gold [74] \\io_src_1 [10]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$7151: \\io_result_gold [75] \\io_src_1 [11]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$7152: \\io_result_gold [76] \\io_src_1 [12]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$7153: \\io_result_gold [77] \\io_src_1 [13]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$7154: \\io_result_gold [78] \\io_src_1 [14]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$7155: \\io_result_gold [79] \\io_src_1 [15]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$7156: \\io_result_gold [80] \\io_src_1 [16]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$7157: \\io_result_gold [81] \\io_src_1 [17]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$7158: \\io_result_gold [82] \\io_src_1 [18]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$7159: \\io_result_gold [83] \\io_src_1 [19]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$7160: \\io_result_gold [84] \\io_src_1 [20]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$7161: \\io_result_gold [85] \\io_src_1 [21]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$7162: \\io_result_gold [86] \\io_src_1 [22]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$7163: \\io_result_gold [87] \\io_sERROR: Found 166 unproven $equiv cells in 'equiv_status -assert'.\n",
+          "output_sha256": "bd9d0409ea816983c95641d60389e2a664b089d305f03ff25bb0904cc8fa18d0",
           "markers_present": {
             "0 are unproven.": false,
             "Equivalence successfully proven!": false
           },
-          "formal_success_marker": false
+          "formal_success_marker": false,
+          "equiv_cells": 168,
+          "proven_cells": 2,
+          "unproven_cells": 166
         }
       }
-    ]
+    ],
+    "validator_wrapper": {
+      "status": "PASS",
+      "path": "validation/v2_smallcontrol_strict_validator.py",
+      "sha256": "9a5850dc201f92bf75067e4c6620242e7d39882f21bbdf19309a533852bada85",
+      "py_compile": "PASS",
+      "pyright": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\v2_smallcontrol_strict_validator.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "files_analyzed": 1,
+        "error_count": 0,
+        "warning_count": 0,
+        "stdout_sha256": "3e411d59de10921e9d8be08132f309adb3054c125380e29c08f4e8fb205b4135",
+        "stderr_tail": ""
+      }
+    }
   },
   "failures": [
-    "synthesizable view failed conservation: RASStack",
-    "RASStack:verilator",
     "RASStack:yosys_equiv",
-    "RASStack: zero or missing $equiv cells",
-    "synthesizable view failed conservation: RedirectGenerator",
-    "RedirectGenerator:yosys_equiv",
-    "RedirectGenerator: zero or missing $equiv cells",
+    "RASStack: 76 $equiv cells unproven",
     "RegCache:yosys_equiv",
     "RegCache: zero or missing $equiv cells",
-    "synthesizable view failed conservation: VectorCvtTop",
-    "VectorCvtTop:verilator",
     "VectorCvtTop:yosys_equiv",
-    "VectorCvtTop: zero or missing $equiv cells"
+    "VectorCvtTop: 166 $equiv cells unproven"
   ],
   "unclosed": [
     "strict gates did not all pass"
