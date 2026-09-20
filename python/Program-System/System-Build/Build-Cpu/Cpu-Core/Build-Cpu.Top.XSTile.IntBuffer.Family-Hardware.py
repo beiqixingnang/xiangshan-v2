@@ -3,7 +3,6 @@
 """
 from __future__ import annotations
 
-from dataclasses import dataclass
 from typing import Any
 
 from amaranth import ClockDomain, Elaboratable, Module, Signal
@@ -11,50 +10,52 @@ from amaranth.back import verilog
 
 # Module Contract / 模块契约
 __all__ = [
-    "PortSpec", "COVERED_MODULES", "SOURCE_PATHS", "LOCKED_REFERENCE_SHA256",
-    "LOCKED_PORT_SPECS", "PORT_SPECS", "FamilySpec", "IntBufferFamily",
-    "TopXSTileIntBufferFamily", "family_spec", "build_verilog", "main",
+    'COVERED_MODULES',
+    'PORT_SPECS',
+    'FamilySpec',
+    'IntBufferFamily',
+    'TopXSTileIntBufferFamily',
+    'family_spec',
+    'build_verilog',
+    'main',
 ]
 
 # Configuration / 配置
 COVERED_MODULES: tuple[str, ...] = ("IntBuffer", "IntBuffer_1", "IntBuffer_2")
-SOURCE_PATHS: tuple[str, ...] = (
-    "upstream/utility/src/main/scala/utility/IntBuffer.scala",
-    "upstream/rocket-chip/src/main/scala/diplomacy/LazyModule.scala",
-)
-LOCKED_REFERENCE_SHA256 = "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d"
 
 
-# Implementation / 实现
-@dataclass(frozen=True)
-class PortSpec:
-    """One locked scalar port / 一个锁定的标量端口。"""
+PortSpec = tuple[str, str, int]
 
-    name: str
-    direction: str
-    width: int = 1
-
-
-# This order is copied from validation/v2-locked-hierarchy.json and the
-# extracted reference modules.  IntBuffer_2's reordered interrupt lanes are
-# intentional and must not be normalized alphabetically.
-LOCKED_PORT_SPECS: dict[str, tuple[PortSpec, ...]] = {
-    "IntBuffer": (
-        PortSpec("clock", "input"), PortSpec("reset", "input"),
-        PortSpec("auto_in_0", "input"), PortSpec("auto_out_0", "output"),
+PORT_SPECS: dict[str, tuple[PortSpec, ...]] = {
+    'IntBuffer': (
+        ('clock', 'input', 1),
+        ('reset', 'input', 1),
+        ('auto_in_0', 'input', 1),
+        ('auto_out_0', 'output', 1),
     ),
-    "IntBuffer_1": (
-        PortSpec("clock", "input"), PortSpec("reset", "input"),
-        PortSpec("auto_in_0", "input"), PortSpec("auto_in_1", "input"),
-        PortSpec("auto_out_0", "output"), PortSpec("auto_out_1", "output"),
+    'IntBuffer_1': (
+        ('clock', 'input', 1),
+        ('reset', 'input', 1),
+        ('auto_in_0', 'input', 1),
+        ('auto_in_1', 'input', 1),
+        ('auto_out_0', 'output', 1),
+        ('auto_out_1', 'output', 1),
     ),
-    "IntBuffer_2": (
-        PortSpec("clock", "input"), PortSpec("reset", "input"),
-        PortSpec("auto_in_1_0", "input"), PortSpec("auto_in_0_0", "input"),
-        PortSpec("auto_out_1_0", "output"), PortSpec("auto_out_0_0", "output"),
+    'IntBuffer_2': (
+        ('clock', 'input', 1),
+        ('reset', 'input', 1),
+        ('auto_in_1_0', 'input', 1),
+        ('auto_in_0_0', 'input', 1),
+        ('auto_out_1_0', 'output', 1),
+        ('auto_out_0_0', 'output', 1),
     ),
 }
-PORT_SPECS = LOCKED_PORT_SPECS
+
+
+
+
+
+
 
 
 class FamilySpec:
@@ -62,16 +63,16 @@ class FamilySpec:
 
     # Validate and capture one locked member / 校验并捕获一个锁定成员。
     def __init__(self, module: str) -> None:
-        if module not in LOCKED_PORT_SPECS:
+        if module not in PORT_SPECS:
             raise ValueError(f"unknown IntBuffer member: {module}")
         self.module = module
-        self.ports = LOCKED_PORT_SPECS[module]
+        self.ports = PORT_SPECS[module]
 
     # Return the width of one named port / 返回指定端口的位宽。
     def width(self, name: str) -> int:
-        for port in self.ports:
-            if port.name == name:
-                return port.width
+        for port_name, _direction, width in self.ports:
+            if port_name == name:
+                return width
         raise KeyError(name)
 
 
@@ -88,10 +89,10 @@ class IntBufferFamily(Elaboratable):
         self.member = module
         self.spec = family_spec(module)
         self.ports: dict[str, Signal] = {
-            port.name: Signal(port.width, name=port.name) for port in self.spec.ports
+            name: Signal(width, name=name) for name, _direction, width in self.spec.ports
         }
-        self.input_names = [p.name for p in self.spec.ports if p.name.startswith("auto_in_")]
-        self.output_names = [p.name for p in self.spec.ports if p.name.startswith("auto_out_")]
+        self.input_names = [name for name, _direction, _width in self.spec.ports if name.startswith("auto_in_")]
+        self.output_names = [name for name, _direction, _width in self.spec.ports if name.startswith("auto_out_")]
         self.registers = [Signal(1, name=f"REG_{index}") for index in range(len(self.input_names))]
 
     # Elaborate the one-stage positive-reset register pipeline / 展开一级正复位寄存器流水线。
@@ -123,7 +124,7 @@ def build_verilog(configuration: Any, injected_dependencies: Any) -> str:
     elif isinstance(configuration, str):
         member = configuration
     top = IntBufferFamily(member)
-    return verilog.convert(top, name=member, ports=[top.ports[p.name] for p in top.spec.ports], emit_src=False)
+    return verilog.convert(top, name=member, ports=[top.ports[name] for name, _direction, _width in top.spec.ports], emit_src=False)
 
 
 # Emit the default member for direct invocation / 直接调用时输出默认成员。

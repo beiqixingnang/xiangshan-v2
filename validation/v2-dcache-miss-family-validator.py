@@ -18,6 +18,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from v2_build_provenance import source_paths_for_build
+
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Dcache.MissQueue.Family-Hardware.py"
 HIERARCHY = ROOT / "validation/v2-locked-hierarchy.json"
@@ -121,7 +123,7 @@ def main() -> int:
         "kind": "XIANGSHAN_KUNMINGHU_V2_DCACHE_MISS_QUEUE_FAMILY",
         "batch_id": "V2-MEM-DCACHE-MISS-QUEUE-001",
         "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
-        "scala_sources": list(module.SOURCE_PATHS),
+        "scala_sources": list(source_paths_for_build(TARGET)),
         "covered_modules": list(MEMBERS),
         "covered_module_count": len(MEMBERS),
         "port_surface": port_surface,

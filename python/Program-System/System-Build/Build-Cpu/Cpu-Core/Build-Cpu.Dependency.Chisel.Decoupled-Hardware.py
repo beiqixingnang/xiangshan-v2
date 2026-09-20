@@ -50,46 +50,40 @@ from amaranth.back import verilog
 # 面（clock、reset、io_enq_*、io_deq_*、io_count、io_flush、io_enq_bits_*、
 # io_deq_bits_*），以及构成该 family 的两个结构原语。
 __all__ = [
-    "QueueConfig",
-    "QueueInstanceSpec",
-    "QueueRamSpec",
-    "PipeInstanceSpec",
-    "QUEUE_INSTANCE_ROWS",
-    "QUEUE_RAM_ROWS",
-    "PIPE_INSTANCE_ROWS",
-    "QUEUE_SOURCE_PATHS",
-    "QUEUE_RAM_SOURCE_PATHS",
-    "PIPE_SOURCE_PATHS",
-    "parse_queue_instance",
-    "parse_queue_ram",
-    "parse_pipe_instance",
-    "enqueue_port_name",
-    "dequeue_port_name",
-    "queue_instances",
-    "queue_ram_instances",
-    "pipe_instances",
-    "queue_instance",
-    "queue_ram_instance",
-    "chisel_queue_ports",
-    "bundle_map_payload",
-    "ChiselQueue",
-    "QueueRam",
-    "ChiselPipeWithFlush",
-    "build_verilog",
-    "main",
+    'QueueConfig',
+    'QueueInstanceSpec',
+    'QueueRamSpec',
+    'PipeInstanceSpec',
+    'QUEUE_INSTANCE_ROWS',
+    'QUEUE_RAM_ROWS',
+    'PIPE_INSTANCE_ROWS',
+    'parse_queue_instance',
+    'parse_queue_ram',
+    'parse_pipe_instance',
+    'enqueue_port_name',
+    'dequeue_port_name',
+    'queue_instances',
+    'queue_ram_instances',
+    'pipe_instances',
+    'queue_instance',
+    'queue_ram_instance',
+    'chisel_queue_ports',
+    'bundle_map_payload',
+    'ChiselQueue',
+    'QueueRam',
+    'ChiselPipeWithFlush',
+    'build_verilog',
+    'main',
 ]
 
 
 # Locked behavioural authority for the queue family. / 队列 family 的锁定行为权威来源。
-QUEUE_SOURCE_PATHS: tuple[str, ...] = ("src/main/scala/chisel3/util/Decoupled.scala",)
 
 
 # Locked behavioural authority for the queue memory primitives. / 队列存储器原语的锁定行为权威来源。
-QUEUE_RAM_SOURCE_PATHS: tuple[str, ...] = ("src/main/scala/chisel3/util/Decoupled.scala",)
 
 
 # Locked behavioural authority for the pipeline-with-flush member. / 带 flush 流水线成员的锁定行为权威来源。
-PIPE_SOURCE_PATHS: tuple[str, ...] = ("src/main/scala/utils/PipeWithFlush.scala",)
 
 
 # Handshake presence flags, in the order they occupy the catalog flag field. /

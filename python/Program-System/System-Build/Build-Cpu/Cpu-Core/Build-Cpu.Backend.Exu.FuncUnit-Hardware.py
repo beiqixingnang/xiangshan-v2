@@ -31,11 +31,6 @@ __all__ = [
 ]
 
 # Locked behavioural authority for every covered module. / 每个覆盖模块的锁定行为权威。
-SOURCE_PATHS = (
-    "upstream/src/main/scala/xiangshan/backend/fu/FuncUnit.scala",
-    "upstream/src/main/scala/xiangshan/backend/fu/Bku.scala",
-    "upstream/src/main/scala/xiangshan/backend/exu/ExeUnit.scala",
-)
 
 # Port geometry copied verbatim from validation/v2-locked-hierarchy.json (width "" => 1).
 # 端口几何逐字复制自 validation/v2-locked-hierarchy.json（宽度 "" 视为 1）。

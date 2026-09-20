@@ -22,21 +22,21 @@ from amaranth.hdl.ast import Value
 # Module Contract
 # =============================================================================
 # The family covers the five pinned utility sources. / 此 family 覆盖锁定的五个工具源文件。
-SOURCE_SCALA_ROOT = "fudian/src/main/scala/fudian/utils"
-SOURCE_SCALA_PATHS = (
-    "fudian/src/main/scala/fudian/utils/CLZ.scala",
-    "fudian/src/main/scala/fudian/utils/CSA.scala",
-    "fudian/src/main/scala/fudian/utils/LZA.scala",
-    "fudian/src/main/scala/fudian/utils/Multiplier.scala",
-    "fudian/src/main/scala/fudian/utils/ShiftRightJam.scala",
-)
-SOURCE_SCALA_FILE_COUNT = len(SOURCE_SCALA_PATHS)
 
 __all__ = [
-    "SOURCE_SCALA_ROOT", "SOURCE_SCALA_PATHS", "SOURCE_SCALA_FILE_COUNT",
-    "ArithmeticConfig", "FudianArithmetic", "clz", "lza", "shift_right_jam",
-    "csa", "csa5_3", "multiply_unsigned", "multiply_signed", "round_shift_right",
-    "booth_radix4_digits", "build_verilog", "main",
+    'ArithmeticConfig',
+    'FudianArithmetic',
+    'clz',
+    'lza',
+    'shift_right_jam',
+    'csa',
+    'csa5_3',
+    'multiply_unsigned',
+    'multiply_signed',
+    'round_shift_right',
+    'booth_radix4_digits',
+    'build_verilog',
+    'main',
 ]
 
 

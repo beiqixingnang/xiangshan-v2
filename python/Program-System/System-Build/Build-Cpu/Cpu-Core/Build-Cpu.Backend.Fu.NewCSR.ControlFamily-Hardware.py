@@ -37,16 +37,6 @@ COVERED_MODULES = (
     "TrapTvalMod",
     "PFEvent",
 )
-SOURCE_PATHS = (
-    "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/PMAEntryModule.scala",
-    "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/InterruptFilter.scala",
-    "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/CommitIDModule.scala",
-    "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/SatpFlushMod.scala",
-    "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/TrapHandleModule.scala",
-    "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/TrapInstMod.scala",
-    "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/TrapTvalMod.scala",
-    "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/PFEvent.scala",
-)
 
 
 def _p(name: str, direction: str = "input", width: int = 1) -> tuple[str, str, int]:

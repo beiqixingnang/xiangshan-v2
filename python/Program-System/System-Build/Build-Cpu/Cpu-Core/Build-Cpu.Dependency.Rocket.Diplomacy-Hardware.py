@@ -24,42 +24,47 @@ from amaranth.back import verilog
 # Module Contract
 # =============================================================================
 __all__ = [
-    "AddressSet", "AddressRange", "AddressMapEntry", "IdRange", "TransferSizes",
-    "ResourcePermissions", "ResourceAddress", "ResourceMapping", "ResourceString",
-    "ResourceInt", "ResourceReference", "ResourceAlias", "ResourceMap", "ResourceBinding",
-    "ResourceBindings", "BufferParams", "CreditedDelay", "AsyncQueueParams",
-    "DiplomacyNode", "DiplomacyNodeState", "LazyModuleGraph", "ClockCrossingType", "NoCrossing",
-    "SynchronousCrossing", "RationalCrossing", "AsynchronousCrossing", "CreditedCrossing",
-    "DiplomacyConfig", "DiplomacyAddressRouter", "DiplomacyRouter", "UHSCRocketDiplomacy",
-    "address_decoder", "AddressDecoder", "diplomacy_route_observation", "build_verilog", "main",
-    "SOURCE_SCALA_ROOT", "SOURCE_SCALA_PATHS", "SOURCE_SCALA_FILE_COUNT",
+    'AddressSet',
+    'AddressRange',
+    'AddressMapEntry',
+    'IdRange',
+    'TransferSizes',
+    'ResourcePermissions',
+    'ResourceAddress',
+    'ResourceMapping',
+    'ResourceString',
+    'ResourceInt',
+    'ResourceReference',
+    'ResourceAlias',
+    'ResourceMap',
+    'ResourceBinding',
+    'ResourceBindings',
+    'BufferParams',
+    'CreditedDelay',
+    'AsyncQueueParams',
+    'DiplomacyNode',
+    'DiplomacyNodeState',
+    'LazyModuleGraph',
+    'ClockCrossingType',
+    'NoCrossing',
+    'SynchronousCrossing',
+    'RationalCrossing',
+    'AsynchronousCrossing',
+    'CreditedCrossing',
+    'DiplomacyConfig',
+    'DiplomacyAddressRouter',
+    'DiplomacyRouter',
+    'UHSCRocketDiplomacy',
+    'address_decoder',
+    'AddressDecoder',
+    'diplomacy_route_observation',
+    'build_verilog',
+    'main',
 ]
 
 
 # Keep the inventory paths beside the aggregate boundary for traceability. /
 # 将 inventory 路径保留在聚合边界旁以便追溯。
-SOURCE_SCALA_ROOT = "rocket-chip/src/main/scala/diplomacy"
-SOURCE_SCALA_PATHS = (
-    "rocket-chip/src/main/scala/diplomacy/AddressDecoder.scala",
-    "rocket-chip/src/main/scala/diplomacy/AddressRange.scala",
-    "rocket-chip/src/main/scala/diplomacy/BundleBridge.scala",
-    "rocket-chip/src/main/scala/diplomacy/ClockDomain.scala",
-    "rocket-chip/src/main/scala/diplomacy/Clone.scala",
-    "rocket-chip/src/main/scala/diplomacy/CloneModule.scala",
-    "rocket-chip/src/main/scala/diplomacy/DeviceTree.scala",
-    "rocket-chip/src/main/scala/diplomacy/FixedClockResource.scala",
-    "rocket-chip/src/main/scala/diplomacy/JSON.scala",
-    "rocket-chip/src/main/scala/diplomacy/LazyModule.scala",
-    "rocket-chip/src/main/scala/diplomacy/Main.scala",
-    "rocket-chip/src/main/scala/diplomacy/Nodes.scala",
-    "rocket-chip/src/main/scala/diplomacy/package.scala",
-    "rocket-chip/src/main/scala/diplomacy/Parameters.scala",
-    "rocket-chip/src/main/scala/diplomacy/Resources.scala",
-    "rocket-chip/src/main/scala/diplomacy/SRAM.scala",
-    "rocket-chip/src/main/scala/diplomacy/Unreachable.scala",
-    "rocket-chip/src/main/scala/diplomacy/ValName.scala",
-)
-SOURCE_SCALA_FILE_COUNT = len(SOURCE_SCALA_PATHS)
 
 
 # ``AddressDecoder`` selects an address port while TileLink's Decoupled
@@ -67,10 +72,6 @@ SOURCE_SCALA_FILE_COUNT = len(SOURCE_SCALA_PATHS)
 # is only consumed when both sides fire, not merely when its address matches.
 # / ``AddressDecoder`` 选择地址端口，TileLink 的 Decoupled 边界负责接收；
 # 明确保留两个源位置：路由只有在双方 fire 时才被消费，而非仅地址命中时。
-DIPLOMACY_ROUTER_SOURCE_OBSERVATIONS: tuple[tuple[str, str], ...] = (
-    ("address_selection", "rocket-chip/src/main/scala/diplomacy/AddressDecoder.scala:18-49"),
-    ("decoupled_acceptance", "rocket-chip/src/main/scala/tilelink/Arbiter.scala:59-97"),
-)
 
 
 def diplomacy_route_observation(*, input_valid: bool, output_ready: bool,

@@ -11,6 +11,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from v2_build_provenance import source_paths_for_build
+
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.NewCSR.DebugFamily-Hardware.py"
 HIER = ROOT / "validation/v2-locked-hierarchy.json"
@@ -57,7 +59,7 @@ def main() -> int:
         yosys = tool(["wsl.exe", "-e", "bash", "-lc", f"yosys -Q -p \"read_verilog -sv '{linux_path}'; proc; check\""])
         outputs[member] = {"rtl_bytes": len(rtl.encode()), "rtl_sha256": hashlib.sha256(rtl.encode()).hexdigest(), "verilator": verilator, "yosys": yosys}
         if verilator["status"] != "PASS" or yosys["status"] != "PASS": failures.append(f"tool gate {member}")
-    payload = {"schema_version": 1, "kind": "XIANGSHAN_KUNMINGHU_V2_DEBUG_TRIGGER_FAMILY", "batch_id": "V2-BACKEND-DEBUG-001", "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af", "scala_sources": list(module.SOURCE_PATHS), "covered_modules": list(MEMBERS), "port_surface": ports, "tool_gates": outputs, "gates": {"PYTHON_PRESENT": "PASS", "DIRECT_TEST_PASS_BOUNDED": "PASS_BOUNDED_PORT_AND_EXPORT", "V2_REFERENCE_MATCHED": "PENDING_LOCKED_DEBUG_DIFF", "VERILATOR": "PASS" if not failures else "FAIL", "YOSYS": "PASS" if not failures else "FAIL", "UHSC_LOCALIZED": "PASS_BOUNDED_FAMILY_LOCAL_NAME", "PARENT_CLOSURE_MATCHED": "PENDING", "LICENSE_REVIEW": "PENDING", "ACCEPTED": "NOT_ALLOWED"}, "status": "VALIDATOR_PASS_BOUNDED" if not failures else "VALIDATOR_FAIL", "acceptance_eligible": False, "failures": failures, "unclosed": ["Complete NewCSR parent closure and debug behavioral differential remain pending.", "License review and user approval remain pending."]}
+    payload = {"schema_version": 1, "kind": "XIANGSHAN_KUNMINGHU_V2_DEBUG_TRIGGER_FAMILY", "batch_id": "V2-BACKEND-DEBUG-001", "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af", "scala_sources": list(source_paths_for_build(TARGET)), "covered_modules": list(MEMBERS), "port_surface": ports, "tool_gates": outputs, "gates": {"PYTHON_PRESENT": "PASS", "DIRECT_TEST_PASS_BOUNDED": "PASS_BOUNDED_PORT_AND_EXPORT", "V2_REFERENCE_MATCHED": "PENDING_LOCKED_DEBUG_DIFF", "VERILATOR": "PASS" if not failures else "FAIL", "YOSYS": "PASS" if not failures else "FAIL", "UHSC_LOCALIZED": "PASS_BOUNDED_FAMILY_LOCAL_NAME", "PARENT_CLOSURE_MATCHED": "PENDING", "LICENSE_REVIEW": "PENDING", "ACCEPTED": "NOT_ALLOWED"}, "status": "VALIDATOR_PASS_BOUNDED" if not failures else "VALIDATOR_FAIL", "acceptance_eligible": False, "failures": failures, "unclosed": ["Complete NewCSR parent closure and debug behavioral differential remain pending.", "License review and user approval remain pending."]}
     EVIDENCE.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n"); print(json.dumps({"status": payload["status"], "covered": len(MEMBERS), "failures": failures})); return 0 if not failures else 1
 
 

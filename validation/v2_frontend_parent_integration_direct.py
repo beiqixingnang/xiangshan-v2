@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import Any
 
 from amaranth.sim import Simulator
+from v2_build_provenance import source_paths_for_build
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -102,7 +103,7 @@ def run() -> dict[str, Any]:
     py_compile.compile(str(TARGET), doraise=True)
     rtl_compact = module.build_verilog(None, {})
     rtl_locked = module.build_verilog({"locked_io": True}, {})
-    if "module UHSCTop" not in rtl_locked or len(module.FRONTEND_PARENT_SOURCE_PATHS) < 20:
+    if "module UHSCTop" not in rtl_locked or len(source_paths_for_build(TARGET)) < 20:
         raise AssertionError("frontend integration export is incomplete")
 
     ftq = module.FrontendFtqEngine()
@@ -133,7 +134,7 @@ def run() -> dict[str, Any]:
         "status": "PASS_BOUNDED",
         "target": str(TARGET.relative_to(ROOT)).replace("\\", "/"),
         "source_sha256": hashlib.sha256(source).hexdigest(),
-        "source_path_count": len(module.FRONTEND_PARENT_SOURCE_PATHS),
+        "source_path_count": len(source_paths_for_build(TARGET)),
         "rtl_compact_bytes": len(rtl_compact),
         "rtl_locked_bytes": len(rtl_locked),
         "direct": {"ftq_order": "PASS", "bpu_training": "PASS", "itlb_refill": "PASS"},

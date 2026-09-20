@@ -12,6 +12,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from v2_build_provenance import source_paths_for_build
+
 ROOT = Path(__file__).resolve().parents[1]
 HIERARCHY = ROOT / "validation/v2-locked-hierarchy.json"
 TARGETS = (
@@ -73,7 +75,7 @@ def main() -> int:
             rtl_path.write_text(rtl_one, encoding="utf-8", newline="\n")
             verilator_status = backend_gate("verilator", rtl_path, member)
             yosys_status = backend_gate("yosys", rtl_path, member)
-            item = {"member": member, "ports": len(expected), "port_surface": "PASS" if expected == actual else "FAIL", "deterministic": rtl_one == rtl_two, "verilog_bytes": len(rtl_one.encode()), "verilog_sha256": digest(rtl_one.encode()), "verilator": verilator_status, "yosys": yosys_status, "source_paths": list(module.SOURCE_PATHS)}
+            item = {"member": member, "ports": len(expected), "port_surface": "PASS" if expected == actual else "FAIL", "deterministic": rtl_one == rtl_two, "verilog_bytes": len(rtl_one.encode()), "verilog_sha256": digest(rtl_one.encode()), "verilator": verilator_status, "yosys": yosys_status, "source_paths": list(source_paths_for_build(path))}
             reports.append(item)
             if expected != actual or rtl_one != rtl_two or not rtl_one.strip() or verilator_status != "PASS" or yosys_status != "PASS":
                 failures.append(member)

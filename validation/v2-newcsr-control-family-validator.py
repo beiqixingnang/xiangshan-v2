@@ -22,6 +22,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from v2_build_provenance import source_paths_for_build
+
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.NewCSR.ControlFamily-Hardware.py"
 HIERARCHY = ROOT / "validation/v2-locked-hierarchy.json"
@@ -166,7 +168,7 @@ def main() -> int:
         "kind": "XIANGSHAN_KUNMINGHU_V2_NEWCSR_CONTROL_FAMILY",
         "batch_id": "V2-NEWCSR-CONTROL-001",
         "source_commit": SOURCE_COMMIT,
-        "scala_sources": list(module.SOURCE_PATHS),
+        "scala_sources": list(source_paths_for_build(TARGET)),
         "target": {"path": str(TARGET.relative_to(ROOT)).replace("\\", "/"),
                    "sha256": digest(TARGET.read_bytes()),
                    "line_count": len(TARGET.read_text(encoding="utf-8").splitlines())},

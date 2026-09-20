@@ -20,10 +20,16 @@ from amaranth.back import verilog
 # Module Contract
 # =============================================================================
 __all__ = [
-    "RootConfig", "XSCore", "L2Top", "XSTile", "XSTop",
-    "L2TOP_REQUIRED_CHILDREN", "L2TOP_SOURCE_SCALA_PATHS",
-    "l2top_closure_observation", "root_closure_observation",
-    "build_verilog", "main",
+    'RootConfig',
+    'XSCore',
+    'L2Top',
+    'XSTile',
+    'XSTop',
+    'L2TOP_REQUIRED_CHILDREN',
+    'l2top_closure_observation',
+    'root_closure_observation',
+    'build_verilog',
+    'main',
 ]
 
 
@@ -43,18 +49,6 @@ L2TOP_REQUIRED_CHILDREN: tuple[str, ...] = (
 
 # Source paths are evidence metadata only; the root build never scans or
 # imports them at runtime. / 源路径仅用于证据元数据；root build 运行时不扫描或导入。
-L2TOP_SOURCE_SCALA_PATHS: tuple[str, ...] = (
-    "upstream/src/main/scala/xiangshan/L2Top.scala",
-    "upstream/rocket-chip/src/main/scala/tilelink/Xbar.scala",
-    "upstream/rocket-chip/src/main/scala/tilelink/Buffer.scala",
-    "upstream/rocket-chip/src/main/scala/tilelink/BankBinder.scala",
-    "upstream/utility/src/main/scala/utility/TLUtils/TLClientsMerger.scala",
-    "upstream/rocket-chip/src/main/scala/tilelink/Arbiter.scala",
-    "upstream/rocket-chip/src/main/scala/tilelink/Bundles.scala",
-    "upstream/rocket-chip/src/main/scala/tilelink/Parameters.scala",
-    "upstream/rocket-chip/src/main/scala/tilelink/Nodes.scala",
-    "upstream/rocket-chip/src/main/scala/tilelink/BusWrapper.scala",
-)
 
 # Dependency aliases accepted by the source-backed L2Top adapter.  The
 # validator may inject either source instance names or concise local names;

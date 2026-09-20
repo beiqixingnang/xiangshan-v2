@@ -438,3 +438,28 @@ Vector, Decode.Control, FloatingPoint, PMP, Store, Prefetch.Metadata, and the
 two residual aggregate subjects. `Residual.LeafFamily` remains retired and
 receives no implementation credit; its modules are owned by their source-backed
 replacement families.
+
+## Product/provenance separation amendment (2026-09-20)
+
+Migratable Build Python is a self-contained hardware product artifact. It may
+contain compact public `PORT_SPECS`, configuration values required to elaborate
+the hardware, Python standard-library helpers, and Amaranth implementation
+logic. It may not contain source-tree paths, source commits, locked-reference
+hashes, validator inventories, migration markers, or runtime reads from the
+auxiliary validation tree. Those values belong in frozen inventory and evidence
+JSON under `validation/` and are resolved by validator-only helpers.
+
+Removing provenance or compacting an ABI is representation-only work. Existing
+strict evidence may be rebound after such a change only when every public
+variant in that evidence emits byte-identical RTL, or differs solely in
+Amaranth source-location attributes whose removal makes the RTL byte-identical.
+The rebind operation must be transactional, record before/after Build hashes and
+per-variant RTL hashes, and keep the strict-equivalence count unchanged.
+
+The first provenance-separation wave migrated 55 Build-local metadata sets and
+23 validator consumers. Seventeen existing strict proofs covering 107 public
+variant exports were rebound against baseline `eea8d24` under the rule above;
+the strict rail remained `39/118`. Batch `py_compile`, JSON parsing, exact
+provenance resolution, and the central strict-progress regression passed.
+Repository-wide Pyright remains deferred to the next large milestone as
+previously requested and is not represented as a pass for this wave.

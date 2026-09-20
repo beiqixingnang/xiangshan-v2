@@ -21,24 +21,18 @@ from amaranth.back import verilog
 # Module Contract
 # =============================================================================
 __all__ = [
-    "FrontendBridgeConfig",
-    "FrontendBridge",
-    "ICacheBuffer",
-    "ICacheCtrlBuffer",
-    "InstrUncacheBuffer",
-    "build_verilog",
-    "main",
-    "FRONTEND_BRIDGE_SOURCE_PATHS",
-    "FRONTEND_BRIDGE_SOURCE_FILE_COUNT",
+    'FrontendBridgeConfig',
+    'FrontendBridge',
+    'ICacheBuffer',
+    'ICacheCtrlBuffer',
+    'InstrUncacheBuffer',
+    'build_verilog',
+    'main',
 ]
 
 
 # Frozen V2 source boundary for the frontend bridge aggregate. /
 # 前端桥聚合的冻结 V2 源边界。
-FRONTEND_BRIDGE_SOURCE_PATHS: tuple[str, ...] = (
-    "upstream/src/main/scala/xiangshan/mem/MemBlock.scala",
-)
-FRONTEND_BRIDGE_SOURCE_FILE_COUNT = len(FRONTEND_BRIDGE_SOURCE_PATHS)
 
 
 # Cast Amaranth generator controls to the context-manager protocol. / 将 Amaranth 生成器控制转换为上下文管理器协议。

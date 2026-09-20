@@ -29,9 +29,6 @@ COVERED_MODULES: tuple[str, ...] = (
     "JtagBypassChain",
 )
 
-SOURCE_PATHS: tuple[str, ...] = (
-    "upstream/rocket-chip/src/main/scala/jtag/JtagShifter.scala",
-)
 
 # Exact locked ports, in generated declaration order. / 锁定端口及生成声明顺序。
 PORT_SPECS: dict[str, tuple[tuple[str, str, int], ...]] = {

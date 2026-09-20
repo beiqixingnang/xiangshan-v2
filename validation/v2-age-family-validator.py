@@ -13,6 +13,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from v2_build_provenance import source_paths_for_build
+
 from amaranth.sim import Settle, Simulator, Tick
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -96,7 +98,7 @@ def main() -> int:
         verilator = run_wsl(["verilator", "--lint-only", "-Wno-fatal", wsl]); yosys = run_wsl(["yosys", "-Q", "-p", f"read_verilog -sv {wsl}; hierarchy -top {member}; proc; check"])
         tools[member] = {"rtl_bytes": len(rtl.encode()), "rtl_sha256": digest(rtl.encode()), "verilator": verilator, "yosys": yosys}
         if verilator["status"] != "PASS" or yosys["status"] != "PASS": failures.append(f"tool gate {member}")
-    payload = {"schema_version": 1, "kind": "XIANGSHAN_KUNMINGHU_V2_AGE_REGCACHE_FAMILY", "batch_id": "V2-BACKEND-AGE-REGCACHE-001", "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af", "scala_sources": list(module.SOURCE_PATHS), "covered_modules": list(MEMBERS), "port_surface": surface, "direct": {"status": "PASS" if not failures else "FAIL", "members": direct, "remaining_members": list(MEMBERS[2:])}, "tool_gates": tools, "gates": {"PYTHON_PRESENT": "PASS", "DIRECT_TEST_PASS_BOUNDED": "PASS_BOUNDED_NEW_AGE_ONLY", "V2_REFERENCE_MATCHED": "PENDING_LOCKED_REGCACHE_DIFF", "VERILATOR": "PASS" if not failures else "FAIL", "YOSYS": "PASS" if not failures else "FAIL", "UHSC_LOCALIZED": "PASS_BOUNDED_FAMILY_LOCAL_NAME", "PARENT_CLOSURE_MATCHED": "PENDING", "LICENSE_REVIEW": "PENDING", "ACCEPTED": "NOT_ALLOWED"}, "status": "VALIDATOR_PASS_BOUNDED" if not failures else "VALIDATOR_FAIL", "acceptance_eligible": False, "failures": failures, "unclosed": ["Full RegCache parent and locked XSTop differential remain pending.", "AgeTimer/Data/Tag direct behavior vectors remain to be expanded.", "License review and user approval remain pending."]}
+    payload = {"schema_version": 1, "kind": "XIANGSHAN_KUNMINGHU_V2_AGE_REGCACHE_FAMILY", "batch_id": "V2-BACKEND-AGE-REGCACHE-001", "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af", "scala_sources": list(source_paths_for_build(TARGET)), "covered_modules": list(MEMBERS), "port_surface": surface, "direct": {"status": "PASS" if not failures else "FAIL", "members": direct, "remaining_members": list(MEMBERS[2:])}, "tool_gates": tools, "gates": {"PYTHON_PRESENT": "PASS", "DIRECT_TEST_PASS_BOUNDED": "PASS_BOUNDED_NEW_AGE_ONLY", "V2_REFERENCE_MATCHED": "PENDING_LOCKED_REGCACHE_DIFF", "VERILATOR": "PASS" if not failures else "FAIL", "YOSYS": "PASS" if not failures else "FAIL", "UHSC_LOCALIZED": "PASS_BOUNDED_FAMILY_LOCAL_NAME", "PARENT_CLOSURE_MATCHED": "PENDING", "LICENSE_REVIEW": "PENDING", "ACCEPTED": "NOT_ALLOWED"}, "status": "VALIDATOR_PASS_BOUNDED" if not failures else "VALIDATOR_FAIL", "acceptance_eligible": False, "failures": failures, "unclosed": ["Full RegCache parent and locked XSTop differential remain pending.", "AgeTimer/Data/Tag direct behavior vectors remain to be expanded.", "License review and user approval remain pending."]}
     EVIDENCE.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n"); print(json.dumps({"status": payload["status"], "covered": len(MEMBERS), "failures": failures})); return 0 if not failures else 1
 
 

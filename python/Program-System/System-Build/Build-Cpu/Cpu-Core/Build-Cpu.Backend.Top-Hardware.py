@@ -31,19 +31,18 @@ from amaranth.back import verilog
 # 可见顺序：六条前端通道进入一级 dispatch 寄存器，flush 清除该寄存器；写回仲裁
 # 对每个寄存器文件端口选择优先级最低的有效 EXU。未实现子级必须显式注入。
 __all__ = [
-    "BackendTopConfig",
-    "BackendTop",
-    "UHSCCoreBackend",
-    "BackendParent",
-    "BackendFullTop",
-    "BACKEND_PARENT_SOURCE_PATHS",
-    "backend_parent_contract",
-    "full_backend_port_schema",
-    "backend_decode_pattern_model",
-    "backend_child_observation",
-    "backend_parent_model",
-    "build_verilog",
-    "main",
+    'BackendTopConfig',
+    'BackendTop',
+    'UHSCCoreBackend',
+    'BackendParent',
+    'BackendFullTop',
+    'backend_parent_contract',
+    'full_backend_port_schema',
+    'backend_decode_pattern_model',
+    'backend_child_observation',
+    'backend_parent_model',
+    'build_verilog',
+    'main',
 ]
 
 
@@ -98,23 +97,6 @@ BACKEND_REFERENCE_OUTPUT_COUNT = 687
 # parent-closure readiness inventory.  They cover the parent, datapath,
 # writeback, and decode boundaries without pretending that every inlined
 # backend child is already behaviorally rewritten.
-BACKEND_PARENT_SOURCE_PATHS: tuple[str, ...] = (
-    "upstream/src/main/scala/xiangshan/backend/Backend.scala",
-    "upstream/src/main/scala/xiangshan/backend/datapath/DataPath.scala",
-    "upstream/src/main/scala/xiangshan/backend/datapath/DataSource.scala",
-    "upstream/src/main/scala/xiangshan/backend/datapath/NewPipelineConnect.scala",
-    "upstream/src/main/scala/xiangshan/backend/datapath/WbArbiter.scala",
-    "upstream/src/main/scala/xiangshan/backend/decode/DecodeUnit.scala",
-    "upstream/src/main/scala/xiangshan/backend/decode/DecodeStage.scala",
-    "upstream/src/main/scala/xiangshan/backend/issue/IssueQueue.scala",
-    "upstream/src/main/scala/xiangshan/backend/issue/EnqPolicy.scala",
-    "upstream/src/main/scala/xiangshan/backend/issue/AgeDetector.scala",
-    "upstream/src/main/scala/xiangshan/backend/issue/FuBusyTableRead.scala",
-    "upstream/src/main/scala/xiangshan/backend/exu/ExuBlock.scala",
-    "upstream/src/main/scala/xiangshan/backend/fu/Alu.scala",
-    "upstream/src/main/scala/xiangshan/backend/fu/Branch.scala",
-    "upstream/src/main/scala/xiangshan/backend/fu/Jump.scala",
-)
 
 # The DecodeUnit leaf patterns are kept local so the parent remains import
 # free and can still elaborate when a caller does not inject a child module.
@@ -223,7 +205,6 @@ def backend_parent_contract() -> dict[str, Any]:
     return {
         "closure_root": "core.backend.parent",
         "root_module": "Backend",
-        "source_paths": list(BACKEND_PARENT_SOURCE_PATHS),
         "covered_children": [
             "DataPath",
             "DataSource",

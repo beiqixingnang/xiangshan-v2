@@ -15,25 +15,26 @@ from amaranth import Elaboratable, Module, Signal
 from amaranth.back import verilog
 
 # Module Contract / 模块契约
-__all__ = ["COVERED_MODULES", "SOURCE_PATHS", "SOURCE_SCALA_PATHS",
-           "LOCKED_REFERENCE_SHA256", "PortSpec", "FamilySpec",
-           "PORT_SPECS", "family_spec", "TLChildFamily",
-           "RocketTLChildrenFamily", "relay_observation",
-           "merge_source_ids", "bus_error_observation", "build_verilog", "main"]
+__all__ = [
+    'COVERED_MODULES',
+    'PortSpec',
+    'FamilySpec',
+    'PORT_SPECS',
+    'family_spec',
+    'TLChildFamily',
+    'RocketTLChildrenFamily',
+    'relay_observation',
+    'merge_source_ids',
+    'bus_error_observation',
+    'build_verilog',
+    'main',
+]
 
 COVERED_MODULES = (
     "TLXbar_7", "TLXbar_8", "TLXbar_9", "TLBuffer_27", "TLBuffer_20",
     "TLBuffer_29", "TLBuffer_22", "TLBuffer_16", "TLBuffer_2",
     "TLClientsMerger_1", "BusErrorUnit",
 )
-SOURCE_PATHS = {
-    "TLXbar": ("upstream/rocket-chip/src/main/scala/tilelink/Xbar.scala",),
-    "TLBuffer": ("upstream/rocket-chip/src/main/scala/tilelink/Buffer.scala",),
-    "TLClientsMerger": ("upstream/utility/src/main/scala/utility/TLUtils/TLClientsMerger.scala",),
-    "BusErrorUnit": ("upstream/rocket-chip/src/main/scala/tile/BusErrorUnit.scala",),
-}
-SOURCE_SCALA_PATHS = tuple(path for paths in SOURCE_PATHS.values() for path in paths)
-LOCKED_REFERENCE_SHA256 = "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d"
 
 # Configuration / 配置
 class PortSpec(NamedTuple):

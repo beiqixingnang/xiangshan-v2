@@ -20,6 +20,7 @@ from pathlib import Path
 from typing import Any
 
 from amaranth.sim import Settle, Simulator
+from v2_build_provenance import source_paths_for_build
 
 
 # =============================================================================
@@ -400,7 +401,7 @@ def main() -> int:
         "kind": "XIANGSHAN_KUNMINGHU_V2_XSCORE_PARENT_CONTRACT_AUDIT",
         "batch_id": "TOP-XSCORE-CHILD-002",
         "source_commit": SOURCE_COMMIT,
-        "source_scala": list(target_module.XSCORE_SOURCE_PATHS),
+        "source_scala": list(source_paths_for_build(TARGET)),
         "locked_reference": {"sha256": REFERENCE_SHA256, "immutable": True},
         "target": {"path": TARGET.relative_to(ROOT).as_posix(), "sha256": digest(TARGET)},
         "static_audit": static,
@@ -544,4 +545,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

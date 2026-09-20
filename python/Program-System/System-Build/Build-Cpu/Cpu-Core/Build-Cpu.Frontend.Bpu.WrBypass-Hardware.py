@@ -16,22 +16,17 @@ from amaranth import Array, ClockDomain, Elaboratable, Mux, Module, Signal
 # exposes valid per-way data for same-cycle table read/write bypassing.
 # WrBypass 在小型索引 CAM 中保存最近写入的预测器行，并输出逐路有效数据。
 __all__ = [
-    "COVERED_MODULES",
-    "SOURCE_PATHS",
-    "WrBypassConfig",
-    "WrBypass",
-    "plru_victim_reference",
-    "plru_next_reference",
-    "build_verilog",
-    "main",
+    'COVERED_MODULES',
+    'WrBypassConfig',
+    'WrBypass',
+    'plru_victim_reference',
+    'plru_next_reference',
+    'build_verilog',
+    'main',
 ]
 
 COVERED_MODULES: tuple[str, ...] = ("WrBypass",)
 
-SOURCE_PATHS: tuple[str, ...] = (
-    "upstream/src/main/scala/xiangshan/frontend/WrBypass.scala",
-    "upstream/utility/src/main/scala/utility/IndexableCAMTemplate.scala",
-)
 
 
 # Configuration

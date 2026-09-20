@@ -20,62 +20,97 @@ from amaranth.back import verilog
 __all__ = ["COVERED_MODULES", "RobPtrWrapper", "build_verilog", "main"]
 
 COVERED_MODULES = ("RobEnqPtrWrapper", "NewRobDeqPtrWrapper")
-SOURCE_PATHS = (
-    "upstream/src/main/scala/xiangshan/backend/rob/RobEnqPtrWrapper.scala",
-    "upstream/src/main/scala/xiangshan/backend/rob/RobDeqPtrWrapper.scala",
-    "upstream/src/main/scala/xiangshan/backend/rob/RobBundles.scala",
-    "upstream/utility/src/main/scala/utility/CircularQueuePtr.scala",
-    "upstream/utility/src/main/scala/utility/PriorityMuxDefault.scala",
-)
 
 PortSpec = tuple[str, str, int]
 
-LOCKED_PORT_SPECS: dict[str, tuple[PortSpec, ...]] = {
-    "RobEnqPtrWrapper": (
-        ("clock", "input", 1),
-        ("reset", "input", 1),
-        ("io_redirect_valid", "input", 1),
-        ("io_redirect_bits_robIdx_flag", "input", 1),
-        ("io_redirect_bits_robIdx_value", "input", 8),
-        ("io_redirect_bits_level", "input", 1),
-        ("io_allowEnqueue", "input", 1),
-        ("io_hasBlockBackward", "input", 1),
-        *((f"io_enq_{index}", "input", 1) for index in range(6)),
-        ("io_out_0_flag", "output", 1),
-        *((f"io_out_{index}_value", "output", 8) for index in range(6)),
+PortSpec = tuple[str, str, int]
+
+PORT_SPECS: dict[str, tuple[PortSpec, ...]] = {
+    'RobEnqPtrWrapper': (
+        ('clock', 'input', 1),
+        ('reset', 'input', 1),
+        ('io_redirect_valid', 'input', 1),
+        ('io_redirect_bits_robIdx_flag', 'input', 1),
+        ('io_redirect_bits_robIdx_value', 'input', 8),
+        ('io_redirect_bits_level', 'input', 1),
+        ('io_allowEnqueue', 'input', 1),
+        ('io_hasBlockBackward', 'input', 1),
+        ('io_enq_0', 'input', 1),
+        ('io_enq_1', 'input', 1),
+        ('io_enq_2', 'input', 1),
+        ('io_enq_3', 'input', 1),
+        ('io_enq_4', 'input', 1),
+        ('io_enq_5', 'input', 1),
+        ('io_out_0_flag', 'output', 1),
+        ('io_out_0_value', 'output', 8),
+        ('io_out_1_value', 'output', 8),
+        ('io_out_2_value', 'output', 8),
+        ('io_out_3_value', 'output', 8),
+        ('io_out_4_value', 'output', 8),
+        ('io_out_5_value', 'output', 8),
     ),
-    "NewRobDeqPtrWrapper": (
-        ("clock", "input", 1),
-        ("reset", "input", 1),
-        ("io_state", "input", 2),
-        *((f"io_deq_v_{index}", "input", 1) for index in range(8)),
-        *((f"io_deq_w_{index}", "input", 1) for index in range(8)),
-        *((f"io_hasCommitted_{index}", "input", 1) for index in range(8)),
-        ("io_exception_state_valid", "input", 1),
-        ("io_exception_state_bits_robIdx_flag", "input", 1),
-        ("io_exception_state_bits_robIdx_value", "input", 8),
-        ("io_exception_state_bits_hasException", "input", 1),
-        ("io_exception_state_bits_replayInst", "input", 1),
-        ("io_exception_state_bits_singleStep", "input", 1),
-        ("io_exception_state_bits_trigger", "input", 4),
-        ("io_intrBitSetReg", "input", 1),
-        ("io_allowOnlyOneCommit", "input", 1),
-        ("io_hasNoSpecExec", "input", 1),
-        ("io_interrupt_safe", "input", 1),
-        ("io_blockCommit", "input", 1),
-        *(
-            item
-            for index in range(8)
-            for item in (
-                (f"io_out_{index}_flag", "output", 1),
-                (f"io_out_{index}_value", "output", 8),
-            )
-        ),
-        ("io_next_out_0_flag", "output", 1),
-        ("io_next_out_0_value", "output", 8),
+    'NewRobDeqPtrWrapper': (
+        ('clock', 'input', 1),
+        ('reset', 'input', 1),
+        ('io_state', 'input', 2),
+        ('io_deq_v_0', 'input', 1),
+        ('io_deq_v_1', 'input', 1),
+        ('io_deq_v_2', 'input', 1),
+        ('io_deq_v_3', 'input', 1),
+        ('io_deq_v_4', 'input', 1),
+        ('io_deq_v_5', 'input', 1),
+        ('io_deq_v_6', 'input', 1),
+        ('io_deq_v_7', 'input', 1),
+        ('io_deq_w_0', 'input', 1),
+        ('io_deq_w_1', 'input', 1),
+        ('io_deq_w_2', 'input', 1),
+        ('io_deq_w_3', 'input', 1),
+        ('io_deq_w_4', 'input', 1),
+        ('io_deq_w_5', 'input', 1),
+        ('io_deq_w_6', 'input', 1),
+        ('io_deq_w_7', 'input', 1),
+        ('io_hasCommitted_0', 'input', 1),
+        ('io_hasCommitted_1', 'input', 1),
+        ('io_hasCommitted_2', 'input', 1),
+        ('io_hasCommitted_3', 'input', 1),
+        ('io_hasCommitted_4', 'input', 1),
+        ('io_hasCommitted_5', 'input', 1),
+        ('io_hasCommitted_6', 'input', 1),
+        ('io_hasCommitted_7', 'input', 1),
+        ('io_exception_state_valid', 'input', 1),
+        ('io_exception_state_bits_robIdx_flag', 'input', 1),
+        ('io_exception_state_bits_robIdx_value', 'input', 8),
+        ('io_exception_state_bits_hasException', 'input', 1),
+        ('io_exception_state_bits_replayInst', 'input', 1),
+        ('io_exception_state_bits_singleStep', 'input', 1),
+        ('io_exception_state_bits_trigger', 'input', 4),
+        ('io_intrBitSetReg', 'input', 1),
+        ('io_allowOnlyOneCommit', 'input', 1),
+        ('io_hasNoSpecExec', 'input', 1),
+        ('io_interrupt_safe', 'input', 1),
+        ('io_blockCommit', 'input', 1),
+        ('io_out_0_flag', 'output', 1),
+        ('io_out_0_value', 'output', 8),
+        ('io_out_1_flag', 'output', 1),
+        ('io_out_1_value', 'output', 8),
+        ('io_out_2_flag', 'output', 1),
+        ('io_out_2_value', 'output', 8),
+        ('io_out_3_flag', 'output', 1),
+        ('io_out_3_value', 'output', 8),
+        ('io_out_4_flag', 'output', 1),
+        ('io_out_4_value', 'output', 8),
+        ('io_out_5_flag', 'output', 1),
+        ('io_out_5_value', 'output', 8),
+        ('io_out_6_flag', 'output', 1),
+        ('io_out_6_value', 'output', 8),
+        ('io_out_7_flag', 'output', 1),
+        ('io_out_7_value', 'output', 8),
+        ('io_next_out_0_flag', 'output', 1),
+        ('io_next_out_0_value', 'output', 8),
     ),
 }
-PORT_SPECS = LOCKED_PORT_SPECS
+
+
 
 
 # =============================================================================

@@ -15,13 +15,13 @@ from amaranth import Array, Cat, ClockDomain, Elaboratable, Module, Mux, Signal
 # SetAssocLRU(PseudoLRU) policies, one for each interleaved set bank.  Two hit
 # touches and one delayed victim touch are retained as separate observations.
 COVERED_MODULES = ("ICacheReplacer",)
-SOURCE_PATHS = (
-    "upstream/src/main/scala/xiangshan/frontend/icache/ICache.scala",
-    "upstream/rocket-chip/src/main/scala/util/Replacement.scala",
-)
 __all__ = [
-    "COVERED_MODULES", "SOURCE_PATHS", "ReplacerConfig", "ICacheReplacer",
-    "replacer_request_observation", "build_verilog", "main",
+    'COVERED_MODULES',
+    'ReplacerConfig',
+    'ICacheReplacer',
+    'replacer_request_observation',
+    'build_verilog',
+    'main',
 ]
 
 

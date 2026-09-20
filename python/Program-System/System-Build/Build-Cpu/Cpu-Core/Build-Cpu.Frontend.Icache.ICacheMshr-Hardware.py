@@ -16,12 +16,14 @@ from amaranth import ClockDomain, Const, Elaboratable, Module, Signal
 # same signal.  The Python boundary keeps both signals so one implementation
 # can be exercised against either extracted specialization.
 LOCKED_VARIANTS = ("ICacheMSHR", "ICacheMSHR_4")
-SOURCE_PATHS = (
-    "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala",
-)
 __all__ = [
-    "LOCKED_VARIANTS", "SOURCE_PATHS", "MshrConfig", "ICacheMSHR", "ICacheMshr",
-    "mshr_observation", "build_verilog", "main",
+    'LOCKED_VARIANTS',
+    'MshrConfig',
+    'ICacheMSHR',
+    'ICacheMshr',
+    'mshr_observation',
+    'build_verilog',
+    'main',
 ]
 
 

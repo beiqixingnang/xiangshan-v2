@@ -80,17 +80,15 @@ from amaranth import ClockDomain, Const, Elaboratable, Module, Mux, Signal
 # 照抄；条目载荷按 io_out_<X>/io_in_<X> 配对寄存器化；valid 由入队置位、由
 # flush/cancel/deq 清除；忙表写为 6 入 1 出叶子；唤醒队列处理多源唤醒事件。
 __all__ = [
-    "SOURCE_COMMIT",
-    "LOCKED_SHA256",
-    "COVERED_PORTS",
-    "COVERED_MODULES",
-    "V2IssueEntryModule",
-    "UHSCBackendIssueEntriesFamily",
-    "build_verilog",
-    "main",
+    'LOCKED_SHA256',
+    'COVERED_PORTS',
+    'COVERED_MODULES',
+    'V2IssueEntryModule',
+    'UHSCBackendIssueEntriesFamily',
+    'build_verilog',
+    'main',
 ]
 
-SOURCE_COMMIT = 'd76ee7f8902f86cce8a0b938cf7f7a9a3b8432af'
 LOCKED_SHA256 = '8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d'
 COVERED_PORTS = {
     'BusyTable': [

@@ -25,8 +25,11 @@ from amaranth.hdl.ast import Value
 # HuanCun cache contract: lookup, hit response, miss request, refill, and
 # dirty eviction. / HuanCun 缓存契约：查找、命中响应、缺失请求、回填及脏逐出。
 __all__ = [
-    "HuanCunConfig", "HuanCunCacheBoundary", "cache_transaction_observation",
-    "build_verilog", "main", "HUANCUN_CACHE_SOURCE_PATHS",
+    'HuanCunConfig',
+    'HuanCunCacheBoundary',
+    'cache_transaction_observation',
+    'build_verilog',
+    'main',
 ]
 
 
@@ -35,12 +38,6 @@ __all__ = [
 # not claim to implement a complete banked coherent L2. / 此有界缓存遵循冻结
 # HuanCun 源码的请求缓冲依赖、元数据 victim、回填/写回边界；它不声称实现完整的
 # 分 bank 一致性 L2。
-HUANCUN_CACHE_SOURCE_PATHS: tuple[str, ...] = (
-    "upstream/huancun/src/main/scala/huancun/RequestBuffer.scala",
-    "upstream/huancun/src/main/scala/huancun/MetaData.scala",
-    "upstream/huancun/src/main/scala/huancun/DataStorage.scala",
-    "upstream/huancun/src/main/scala/huancun/HuanCun.scala",
-)
 
 
 def cache_transaction_observation(*, req_valid: bool, req_ready: bool,

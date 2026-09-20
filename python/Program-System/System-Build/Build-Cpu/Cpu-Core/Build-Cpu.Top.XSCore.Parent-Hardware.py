@@ -21,19 +21,18 @@ from amaranth.back import verilog
 # Module Contract
 # =============================================================================
 __all__ = [
-    "XSCoreParentConfig", "XSCoreParent", "UHSCXSCoreParent",
-    "XSCoreBridge", "XSCore", "xs_core_port_specs",
-    "xs_core_parent_observation", "build_verilog", "main",
-    "XSCORE_SOURCE_PATHS", "XSCORE_REFERENCE_PORT_COUNT",
+    'XSCoreParentConfig',
+    'XSCoreParent',
+    'UHSCXSCoreParent',
+    'XSCoreBridge',
+    'XSCore',
+    'xs_core_port_specs',
+    'xs_core_parent_observation',
+    'build_verilog',
+    'main',
+    'XSCORE_REFERENCE_PORT_COUNT',
 ]
 
-XSCORE_SOURCE_PATHS: tuple[str, ...] = (
-    "upstream/src/main/scala/xiangshan/XSCore.scala",
-    "upstream/src/main/scala/xiangshan/frontend/Frontend.scala",
-    "upstream/src/main/scala/xiangshan/backend/Backend.scala",
-    "upstream/src/main/scala/xiangshan/mem/MemBlock.scala",
-    "upstream/src/main/scala/xiangshan/cache/dcache/DCacheWrapper.scala",
-)
 XSCORE_REFERENCE_PORT_COUNT = 308
 
 # Locked XSCore ANSI names/directions/widths from v2-root-port-inventories.json.

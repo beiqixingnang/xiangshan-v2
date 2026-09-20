@@ -23,14 +23,40 @@ from amaranth.hdl.ast import Value
 # The boundary covers LinkLayer.scala and RX/TX REQ/RSP/DAT/SNP converters.
 # 此边界覆盖 LinkLayer.scala 及 RX/TX REQ/RSP/DAT/SNP 转换器。
 __all__ = [
-    "OpenLLCChiConfig", "CHI_REQ", "CHI_RSP", "CHI_DAT", "CHI_SNP",
-    "CHI_REQ_OPCODES", "CHI_RSP_OPCODES", "CHI_DAT_OPCODES", "CHI_SNP_OPCODES",
-    "LINK_STOP", "LINK_ACTIVATE", "LINK_RUN", "LINK_DEACTIVATE", "chi_layout",
-    "pack_fields", "unpack_fields", "next_link_state", "credit_update",
-    "request_from_mmio", "chi_handshake_observation", "OpenLLCLinkLayer", "OpenLLCChannelTransmitter",
-    "OpenLLCChannelReceiver", "LinkLayer", "TXREQ", "TXRSP", "TXDAT", "TXSNP",
-    "RXREQ", "RXRSP", "RXDAT", "OpenLLCBridge", "build_verilog", "main",
-    "SOURCE_SCALA_ROOT", "SOURCE_SCALA_PATHS", "SOURCE_SCALA_FILE_COUNT",
+    'OpenLLCChiConfig',
+    'CHI_REQ',
+    'CHI_RSP',
+    'CHI_DAT',
+    'CHI_SNP',
+    'CHI_REQ_OPCODES',
+    'CHI_RSP_OPCODES',
+    'CHI_DAT_OPCODES',
+    'CHI_SNP_OPCODES',
+    'LINK_STOP',
+    'LINK_ACTIVATE',
+    'LINK_RUN',
+    'LINK_DEACTIVATE',
+    'chi_layout',
+    'pack_fields',
+    'unpack_fields',
+    'next_link_state',
+    'credit_update',
+    'request_from_mmio',
+    'chi_handshake_observation',
+    'OpenLLCLinkLayer',
+    'OpenLLCChannelTransmitter',
+    'OpenLLCChannelReceiver',
+    'LinkLayer',
+    'TXREQ',
+    'TXRSP',
+    'TXDAT',
+    'TXSNP',
+    'RXREQ',
+    'RXRSP',
+    'RXDAT',
+    'OpenLLCBridge',
+    'build_verilog',
+    'main',
 ]
 
 
@@ -58,18 +84,6 @@ def chi_handshake_observation(valid: bool, ready: bool,
 
 # Keep all eight CHI inventory paths on the bridge aggregate. /
 # 在 bridge 聚合中保留 CHI inventory 的全部 8 条路径。
-SOURCE_SCALA_ROOT = "openLLC/src/main/scala/openLLC/chi"
-SOURCE_SCALA_PATHS = (
-    "openLLC/src/main/scala/openLLC/chi/LinkLayer.scala",
-    "openLLC/src/main/scala/openLLC/chi/RXDAT.scala",
-    "openLLC/src/main/scala/openLLC/chi/RXREQ.scala",
-    "openLLC/src/main/scala/openLLC/chi/RXRSP.scala",
-    "openLLC/src/main/scala/openLLC/chi/TXDAT.scala",
-    "openLLC/src/main/scala/openLLC/chi/TXREQ.scala",
-    "openLLC/src/main/scala/openLLC/chi/TXRSP.scala",
-    "openLLC/src/main/scala/openLLC/chi/TXSNP.scala",
-)
-SOURCE_SCALA_FILE_COUNT = len(SOURCE_SCALA_PATHS)
 
 
 # Typed wrapper for conditional DSL contexts. / 条件 DSL 上下文的类型包装。

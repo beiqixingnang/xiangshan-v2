@@ -29,24 +29,19 @@ from amaranth.back import verilog
 # 输出捕获载荷。注入的掩码子模块提供 active/agnostic 字节使能；vlWen 保留原值。
 # 端口有意保持锁定 XSTop 协议不变。
 __all__ = [
-    "COVERED_MODULES",
-    "SOURCE_PATHS",
-    "UHSCCoreVldMergeUnitConfig",
-    "UHSCCoreVldMergeUnit",
-    "VldMergeUnitParentConfig",
-    "VldMergeUnitParent",
-    "VldMergeUnit",
-    "vld_merge_model",
-    "build_verilog",
-    "main",
+    'COVERED_MODULES',
+    'UHSCCoreVldMergeUnitConfig',
+    'UHSCCoreVldMergeUnit',
+    'VldMergeUnitParentConfig',
+    'VldMergeUnitParent',
+    'VldMergeUnit',
+    'vld_merge_model',
+    'build_verilog',
+    'main',
 ]
 
 COVERED_MODULES: tuple[str, ...] = ("VldMergeUnit",)
 
-SOURCE_PATHS: tuple[str, ...] = (
-    "upstream/src/main/scala/xiangshan/backend/datapath/VldMergeUnit.scala",
-    "upstream/src/main/scala/xiangshan/backend/fu/vector/Mgu.scala",
-)
 
 
 # Cast Amaranth's generator control to a context-manager protocol. / 将 Amaranth 生成器控制转换为上下文管理器协议。

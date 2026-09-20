@@ -209,5 +209,29 @@
     "strict_equivalence_fraction": "39/118",
     "note": "No rewritten member is promoted to strict equivalence; prior strict failures remain recorded and changed Build hashes invalidate their old attempts."
   },
+  "representation_migration": {
+    "batch_id": "V2-PRODUCT-PROVENANCE-SEPARATION-003",
+    "status": "PASS_REPRESENTATION_ONLY_STRICT_COUNT_PRESERVED",
+    "build_files_migrated": 55,
+    "provenance_entries": 55,
+    "validator_consumers_migrated": 23,
+    "product_ast_remaining_migratable_provenance_assignments": 0,
+    "strict_proofs_rebound": 17,
+    "strict_public_variants_compared": 107,
+    "strict_equivalence_count_delta": 0,
+    "strict_equivalence_fraction": "39/118",
+    "gates": {
+      "changed_python_py_compile": "PASS_79_FILES",
+      "changed_json_parse": "PASS_18_FILES",
+      "provenance_resolution": "PASS_55_OF_55",
+      "validator_migration_idempotence": "PASS",
+      "strict_progress_regression": "PASS_39_OF_118",
+      "git_diff_check": "PASS",
+      "global_pyright": "DEFERRED_TO_LARGE_MILESTONE"
+    },
+    "evidence": "validation/v2-strict-representation-migration-evidence.json",
+    "provenance_map": "validation/v2-build-provenance-map.json",
+    "note": "This wave removes validation provenance from product Builds and compacts remaining ABI catalogs. It adds no behavior implementation or acceptance credit."
+  },
   "status": "REWRITE_BATCH_BASIC_SMOKE_RECORDED_STRICT_PENDING"
 }

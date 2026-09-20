@@ -18,6 +18,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from v2_build_provenance import source_paths_for_build
+
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.Prefetch.Family-Hardware.py"
 HIERARCHY = ROOT / "validation/v2-locked-hierarchy.json"
@@ -140,7 +142,7 @@ def _run() -> int:
         "batch_id": "V2-FRONTEND-ICACHE-PREFETCH-MISSING-001",
         "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "target": {"path": TARGET.relative_to(ROOT).as_posix(), "sha256": hashlib.sha256(TARGET.read_bytes()).hexdigest()},
-        "scala_sources": list(module.SOURCE_PATHS),
+        "scala_sources": list(source_paths_for_build(TARGET)),
         "covered_modules": list(MEMBERS),
         "port_surface": {"status": "PASS" if not any(not x["match"] for x in port_records) else "FAIL", "modules": port_records},
         "py_compile": "PASS",

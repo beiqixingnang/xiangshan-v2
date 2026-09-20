@@ -16,6 +16,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from v2_build_provenance import source_paths_for_build
+
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = (
     ROOT
@@ -178,7 +180,7 @@ def main() -> int:
         "kind": "XIANGSHAN_KUNMINGHU_V2_BACKEND_VECTOR_DATAPATH_FAMILY",
         "batch_id": "V2-BACKEND-VECTOR-DATAPATH-001",
         "source_commit": SOURCE_COMMIT,
-        "scala_sources": list(module.SOURCE_PATHS),
+        "scala_sources": list(source_paths_for_build(TARGET)),
         "covered_modules": list(MEMBERS),
         "locked_port_catalog": {
             member: [

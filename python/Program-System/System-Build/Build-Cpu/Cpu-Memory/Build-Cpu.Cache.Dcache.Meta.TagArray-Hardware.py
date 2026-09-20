@@ -18,16 +18,16 @@ from amaranth.back import verilog
 # =============================================================================
 # Module Contract
 # =============================================================================
-__all__ = ["COVERED_MODULES", "SOURCE_PATHS", "PORT_SPECS", "TagArray", "build_verilog", "main"]
+__all__ = [
+    'COVERED_MODULES',
+    'PORT_SPECS',
+    'TagArray',
+    'build_verilog',
+    'main',
+]
 
 COVERED_MODULES: tuple[str, ...] = ("TagArray",)
 
-SOURCE_PATHS: tuple[str, ...] = (
-    "upstream/src/main/scala/xiangshan/cache/dcache/meta/TagArray.scala",
-    "upstream/utility/src/main/scala/utility/sram/SRAMTemplate.scala",
-    "upstream/utility/src/main/scala/utility/sram/SramProto.scala",
-    "upstream/utility/src/main/scala/utility/mbist/MbistClockGateCell.scala",
-)
 
 PORT_SPECS: tuple[tuple[str, str, int], ...] = (
     ("clock", "input", 1), ("reset", "input", 1),

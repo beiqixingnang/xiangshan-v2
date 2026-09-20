@@ -44,46 +44,59 @@ from amaranth.back import verilog
 # the coverage manifest. / 该边界覆盖 Chisel 仲裁器 family、Rocket-Chip 异步队列与
 # 复位同步链，以及覆盖清单中列出的 ready/valid 工具叶模块。
 __all__ = [
-    "PayloadLayout", "PackingSegment", "ArbiterSpec", "AsyncQueueSourceSpec",
-    "AsyncQueueSinkSpec", "ShiftRegSpec", "AsyncValidSyncSpec", "ClockCrossingSpec",
-    "RepeaterSpec", "BroadcastSpec", "IdPoolSpec", "BundleQueueSpec", "FamilySubject",
-    "ARBITER_SPECS", "ASYNC_QUEUE_SOURCE_SPECS", "ASYNC_QUEUE_SINK_SPECS",
-    "SHIFT_REG_SPECS", "ASYNC_VALID_SYNC_SPECS", "CLOCK_CROSSING_SPECS",
-    "REPEATER_SPECS", "BROADCAST_SPECS", "ID_POOL_SPECS", "BUNDLE_QUEUE_SPECS",
-    "DEFAULT_SUBJECT_MODULE", "ARBITER_SOURCE_PATHS", "ASYNCHRONOUS_SOURCE_PATHS",
-    "UTILITY_SOURCE_PATHS", "StaticArbiter", "AsyncResetSynchronizerShiftReg",
-    "AsyncValidSync", "ClockCrossingReg", "AsyncQueueSource", "AsyncQueueSink",
-    "Repeater", "ValidIOBroadcast", "IdPool", "BundleMapQueue", "covered_modules",
-    "subject_for", "build_verilog", "main",
+    'PayloadLayout',
+    'PackingSegment',
+    'ArbiterSpec',
+    'AsyncQueueSourceSpec',
+    'AsyncQueueSinkSpec',
+    'ShiftRegSpec',
+    'AsyncValidSyncSpec',
+    'ClockCrossingSpec',
+    'RepeaterSpec',
+    'BroadcastSpec',
+    'IdPoolSpec',
+    'BundleQueueSpec',
+    'FamilySubject',
+    'ARBITER_SPECS',
+    'ASYNC_QUEUE_SOURCE_SPECS',
+    'ASYNC_QUEUE_SINK_SPECS',
+    'SHIFT_REG_SPECS',
+    'ASYNC_VALID_SYNC_SPECS',
+    'CLOCK_CROSSING_SPECS',
+    'REPEATER_SPECS',
+    'BROADCAST_SPECS',
+    'ID_POOL_SPECS',
+    'BUNDLE_QUEUE_SPECS',
+    'DEFAULT_SUBJECT_MODULE',
+    'StaticArbiter',
+    'AsyncResetSynchronizerShiftReg',
+    'AsyncValidSync',
+    'ClockCrossingReg',
+    'AsyncQueueSource',
+    'AsyncQueueSink',
+    'Repeater',
+    'ValidIOBroadcast',
+    'IdPool',
+    'BundleMapQueue',
+    'covered_modules',
+    'subject_for',
+    'build_verilog',
+    'main',
 ]
 
 
 # The Chisel standard-library arbiter is compiled into the V2 top from the
 # chisel3 tree; the vendored snapshot keeps it outside `upstream/`. / Chisel 标准
 # 库仲裁器由 chisel3 树编译进 V2 顶层；vendored 快照不含该目录。
-ARBITER_SOURCE_PATHS: tuple[str, ...] = (
-    "src/main/scala/chisel3/util/Arbiter.scala",
-)
 
 
 # The asynchronous queue family spans Rocket-Chip's queue, synchroniser and
 # shift-register sources. / 异步队列 family 覆盖 Rocket-Chip 的队列、同步器与移位
 # 寄存器源文件。
-ASYNCHRONOUS_SOURCE_PATHS: tuple[str, ...] = (
-    "upstream/rocket-chip/src/main/scala/util/AsyncQueue.scala",
-    "upstream/rocket-chip/src/main/scala/util/SynchronizerReg.scala",
-    "upstream/rocket-chip/src/main/scala/util/ShiftReg.scala",
-)
 
 
 # The utility leaves come from Rocket-Chip and the XiangShan utility package. /
 # 工具叶模块来自 Rocket-Chip 与 XiangShan utility 包。
-UTILITY_SOURCE_PATHS: tuple[str, ...] = (
-    "upstream/rocket-chip/src/main/scala/util/Repeater.scala",
-    "upstream/rocket-chip/src/main/scala/util/IDPool.scala",
-    "upstream/utility/src/main/scala/utility/DiplomacyWidget.scala",
-    "src/main/scala/chisel3/util/Decoupled.scala",
-)
 
 
 # =============================================================================

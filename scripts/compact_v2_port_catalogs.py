@@ -50,9 +50,12 @@ def normalize_catalog(module: Any) -> dict[str, tuple[tuple[str, str, int], ...]
             raise ValueError(f"invalid member name: {member!r}")
         converted: list[tuple[str, str, int]] = []
         for row in rows:
-            if not isinstance(row, (list, tuple)) or len(row) != 3:
+            if isinstance(row, (list, tuple)) and len(row) == 3:
+                name, direction, width = row
+            elif all(hasattr(row, field) for field in ("name", "direction", "width")):
+                name, direction, width = row.name, row.direction, row.width
+            else:
                 raise ValueError(f"{member}: invalid port row {row!r}")
-            name, direction, width = row
             item = (str(name), str(direction), int(width))
             if item[1] not in ("input", "output") or item[2] < 1:
                 raise ValueError(f"{member}: invalid port row {item!r}")
@@ -133,7 +136,13 @@ def replacement_span(text: str) -> tuple[int, int]:
     )
     if preferred.end_lineno is None:
         raise ValueError("catalog assignment has no end position")
-    start = sum(map(len, lines[:preferred.lineno - 1])) + preferred.col_offset
+    aliases = [
+        node
+        for node in tree.body
+        if assigned_name(node) == "PortSpec" and node.lineno < preferred.lineno
+    ]
+    first = min(aliases, key=lambda node: node.lineno) if aliases else preferred
+    start = sum(map(len, lines[:first.lineno - 1])) + first.col_offset
     end_line_text = lines[preferred.end_lineno - 1]
     end = sum(map(len, lines[:preferred.end_lineno - 1])) + len(end_line_text.rstrip("\r\n"))
     return start, end
@@ -150,11 +159,20 @@ def compact(path: Path) -> dict[str, Any]:
     updated = original[:start] + replacement + original[end:]
     updated = updated.replace("PORT_SPECS = LOCKED_PORT_SPECS\n", "")
     updated = updated.replace("PORT_SPECS = LOCKED_PORT_SPECS\r\n", "")
+    updated = re.sub(r"\bLOCKED_PORT_SPECS\b", "PORT_SPECS", updated)
+    while re.search(r"(['\"]PORT_SPECS['\"])\s*,\s*['\"]PORT_SPECS['\"]", updated):
+        updated = re.sub(
+            r"(['\"]PORT_SPECS['\"])\s*,\s*['\"]PORT_SPECS['\"]",
+            r"\1",
+            updated,
+        )
     path.write_text(updated, encoding="utf-8", newline="\n")
     try:
         after = normalize_catalog(load_module(path, "_after"))
         if before != after:
             raise AssertionError("expanded ordered ABI changed")
+        if "LOCKED_PORT_SPECS" in updated or BEGIN_MARKER in updated or END_MARKER in updated:
+            raise AssertionError("migration-only catalog marker remains")
     except BaseException:
         path.write_bytes(original_bytes)
         raise
@@ -176,13 +194,20 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("paths", nargs="+", help="Build paths relative to repository root")
     arguments = parser.parse_args()
-    records = []
-    for value in arguments.paths:
-        path = (ROOT / value).resolve()
+    paths = [(ROOT / value).resolve() for value in arguments.paths]
+    for path in paths:
         path.relative_to(ROOT.resolve())
         if not path.is_file():
             raise FileNotFoundError(path)
-        records.append(compact(path))
+    originals = {path: path.read_bytes() for path in paths}
+    records = []
+    try:
+        for path in paths:
+            records.append(compact(path))
+    except BaseException:
+        for path, original in originals.items():
+            path.write_bytes(original)
+        raise
     print(json.dumps({"status": "PASS", "records": records}, ensure_ascii=False, indent=2))
     return 0
 

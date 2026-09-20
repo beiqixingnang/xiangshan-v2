@@ -46,19 +46,6 @@ __all__ = [
 
 
 # Keep the selected hardware-bearing Scala provenance explicit. / 显式保留选定硬件逻辑的 Scala 来源路径。
-UTILITY_SOURCE_PATHS: tuple[str, ...] = (
-    "BitUtils.scala",
-    "UIntUtils.scala",
-    "PriorityMuxDefault.scala",
-    "CircularQueuePtr.scala",
-    "MultiFlagCircualQueuePtr.scala",
-    "MIMOQueue.scala",
-    "ECC.scala",
-    "CriticalErrorUtils.scala",
-    "PerfCounterUtils.scala",
-    "FastArbiter.scala",
-    "ParallelMux.scala",
-)
 
 
 # Cast Amaranth generator controls to the context-manager protocol. / 将 Amaranth 生成器控制转换为上下文管理器协议。

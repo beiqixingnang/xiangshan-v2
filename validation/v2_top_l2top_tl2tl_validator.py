@@ -20,6 +20,7 @@ from types import ModuleType
 from typing import Any
 
 from amaranth.sim import Settle, Simulator
+from v2_build_provenance import source_paths_for_build
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -186,7 +187,7 @@ def main() -> int:
         "missing_or_pending": len(roots.L2TOP_REQUIRED_CHILDREN),
         "complete": False,
     }
-    source_paths = list(roots.L2TOP_SOURCE_SCALA_PATHS)
+    source_paths = list(source_paths_for_build(ROOTS))
     source_inventory = []
     for relative in source_paths:
         path = ROOT / relative

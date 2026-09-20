@@ -18,6 +18,8 @@ import tempfile
 from pathlib import Path
 from typing import Any
 
+from v2_build_provenance import source_paths_for_build
+
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Rob.Rename.Trace-Family-Hardware.py"
 HIERARCHY = ROOT / "validation/v2-locked-hierarchy.json"
@@ -110,7 +112,7 @@ def main() -> int:
         "locked_reference_sha256": LOCKED_SHA256,
         "build": str(TARGET.relative_to(ROOT)).replace("\\", "/"),
         "covered_modules": list(expected_names),
-        "source_paths": list(module.SOURCE_PATHS),
+        "source_paths": list(source_paths_for_build(TARGET)),
         "port_surface": surfaces,
         "exports": exports,
         "gates": {

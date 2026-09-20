@@ -20,6 +20,8 @@ from pathlib import Path
 from types import ModuleType
 from typing import Any
 
+from v2_build_provenance import provenance_for_build
+
 ROOT = Path(__file__).resolve().parents[1]
 BUILD = ROOT / (
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/"
@@ -277,7 +279,7 @@ def main() -> int:
         failures.append("pyright")
 
     source_inventory = []
-    for paths in module.SOURCE_PATHS.values():
+    for paths in provenance_for_build(TARGET)["SOURCE_PATHS"].values():
         for relative in paths:
             path = ROOT / relative
             if path.is_file():
@@ -364,7 +366,7 @@ def main() -> int:
         "kind": "XIANGSHAN_KUNMINGHU_V2_TOP_L2TOP_TL_CHILDREN_MAPPING",
         "batch_id": payload["batch_id"], "child_batch": payload["child_batch"],
         "target_path": str(BUILD.relative_to(ROOT)).replace("\\", "/"),
-        "source_paths": dict(module.SOURCE_PATHS),
+        "source_paths": dict(provenance_for_build(TARGET)["SOURCE_PATHS"]),
         "reference_modules": list(members), "reference_parent_ports": 441,
         "parent_closure": PARENT_PENDING, "status": payload["status"],
         "accepted": "NOT_ALLOWED", "acceptance_eligible": False,

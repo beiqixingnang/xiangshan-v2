@@ -44,37 +44,24 @@ from amaranth.back import verilog
 # Module Contract
 # =============================================================================
 # Source families of this memory-side aggregate subject. / 本访存侧聚合主题的来源 family。
-FAMILY_SOURCE_PATHS: tuple[str, ...] = (
-    "src/main/scala/xiangshan/mem/lsqueue/LoadQueueUncache.scala",
-    "src/main/scala/xiangshan/mem/lsqueue/FreeList.scala",
-    "src/main/scala/xiangshan/cache/mmu/TLBStorage.scala",
-    "src/main/scala/xiangshan/cache/mmu/MMUBundle.scala",
-    "src/main/scala/xiangshan/mem/vector/VSplit.scala",
-    "src/main/scala/xiangshan/cache/mmu/Repeater.scala",
-    "rocket-chip/src/main/scala/util/Repeater.scala",
-    "utility/src/main/scala/utility/CircularQueuePtr.scala",
-    "utility/src/main/scala/utility/Sort.scala",
-    "utility/src/main/scala/utility/ClockGatedReg.scala",
-)
 
 __all__ = [
-    "FAMILY_SOURCE_PATHS",
-    "CATALOG_ROWS",
-    "FamilySpec",
-    "catalog_specs",
-    "family_spec",
-    "LsqUncacheFreeList",
-    "UncacheEntryModel",
-    "RepeaterModel",
-    "PtwRepeaterNbModel",
-    "TlbFaModel",
-    "TlbStorageWrapperModel",
-    "VSplitPipelineModel",
-    "VSplitBufferModel",
-    "VSplitImpModel",
-    "LsqUncacheBuffer",
-    "build_verilog",
-    "main",
+    'CATALOG_ROWS',
+    'FamilySpec',
+    'catalog_specs',
+    'family_spec',
+    'LsqUncacheFreeList',
+    'UncacheEntryModel',
+    'RepeaterModel',
+    'PtwRepeaterNbModel',
+    'TlbFaModel',
+    'TlbStorageWrapperModel',
+    'VSplitPipelineModel',
+    'VSplitBufferModel',
+    'VSplitImpModel',
+    'LsqUncacheBuffer',
+    'build_verilog',
+    'main',
 ]
 
 

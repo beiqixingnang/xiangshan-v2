@@ -1,10 +1,7 @@
-"""Bounded aggregate for the missing V2 front-end ICache/prefetch leaves.
+"""Bounded aggregate for the V2 front-end ICache and prefetch leaves.
 
-The seven modules in this file are deliberately emitted from one frozen
-aggregate.  Their ANSI surfaces are reconstructed from
-``validation/v2-locked-hierarchy.json`` (the pinned XSTop hierarchy), rather
-than inferred from a local Chisel build.  This keeps port spelling/order and
-widths auditable while allowing each leaf to be selected by ``build_verilog``.
+The seven modules share one exact, self-contained ANSI surface and remain
+selectable through ``build_verilog``.
 
 The implementation is a reset-safe behavioural envelope.  The queue-like
 leaves (WayLookup, L2TlbPrefetch, and L2TlbMissQueue) retain one transaction;
@@ -16,22 +13,17 @@ and cycle-equivalence remain explicit follow-up obligations.
 
 from __future__ import annotations
 
-import hashlib
-import json
-from pathlib import Path
 from typing import Any, cast
 
 from amaranth import Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
 
 __all__ = [
-    "COVERED_MODULES",
-    "SOURCE_PATHS",
-    "LOCKED_PORT_SPECS",
-    "PORT_SPECS",
-    "IcachePrefetchFamily",
-    "build_verilog",
-    "main",
+    'COVERED_MODULES',
+    'PORT_SPECS',
+    'IcachePrefetchFamily',
+    'build_verilog',
+    'main',
 ]
 
 COVERED_MODULES: tuple[str, ...] = (
@@ -44,65 +36,373 @@ COVERED_MODULES: tuple[str, ...] = (
     "PrefetcherMonitor",
 )
 
-SOURCE_PATHS: tuple[str, ...] = (
-    "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMainPipe.scala",
-    "upstream/src/main/scala/xiangshan/frontend/icache/IPrefetch.scala",
-    "upstream/src/main/scala/xiangshan/frontend/icache/WayLookup.scala",
-    "upstream/src/main/scala/xiangshan/frontend/icache/InstrUncache.scala",
-    "upstream/src/main/scala/xiangshan/cache/mmu/L2TlbPrefetch.scala",
-    "upstream/src/main/scala/xiangshan/cache/mmu/L2TLBMissQueue.scala",
-    "upstream/src/main/scala/xiangshan/mem/prefetch/PrefetcherMonitor.scala",
-)
 
-LOCKED_REFERENCE_SHA256 = "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d"
+PortSpec = tuple[str, str, int]
+
+PORT_SPECS: dict[str, tuple[PortSpec, ...]] = {
+    'ICacheMainPipe': (
+        ('clock', 'input', 1),
+        ('reset', 'input', 1),
+        ('io_dataArray_toIData_0_valid', 'output', 1),
+        ('io_dataArray_toIData_0_bits_vSetIdx_0', 'output', 8),
+        ('io_dataArray_toIData_0_bits_vSetIdx_1', 'output', 8),
+        ('io_dataArray_toIData_0_bits_waymask_0_0', 'output', 1),
+        ('io_dataArray_toIData_0_bits_waymask_0_1', 'output', 1),
+        ('io_dataArray_toIData_0_bits_waymask_0_2', 'output', 1),
+        ('io_dataArray_toIData_0_bits_waymask_0_3', 'output', 1),
+        ('io_dataArray_toIData_0_bits_waymask_1_0', 'output', 1),
+        ('io_dataArray_toIData_0_bits_waymask_1_1', 'output', 1),
+        ('io_dataArray_toIData_0_bits_waymask_1_2', 'output', 1),
+        ('io_dataArray_toIData_0_bits_waymask_1_3', 'output', 1),
+        ('io_dataArray_toIData_0_bits_blkOffset', 'output', 6),
+        ('io_dataArray_toIData_1_valid', 'output', 1),
+        ('io_dataArray_toIData_1_bits_vSetIdx_0', 'output', 8),
+        ('io_dataArray_toIData_1_bits_vSetIdx_1', 'output', 8),
+        ('io_dataArray_toIData_2_valid', 'output', 1),
+        ('io_dataArray_toIData_2_bits_vSetIdx_0', 'output', 8),
+        ('io_dataArray_toIData_2_bits_vSetIdx_1', 'output', 8),
+        ('io_dataArray_toIData_3_ready', 'input', 1),
+        ('io_dataArray_toIData_3_valid', 'output', 1),
+        ('io_dataArray_toIData_3_bits_vSetIdx_0', 'output', 8),
+        ('io_dataArray_toIData_3_bits_vSetIdx_1', 'output', 8),
+        ('io_dataArray_fromIData_datas_0', 'input', 64),
+        ('io_dataArray_fromIData_datas_1', 'input', 64),
+        ('io_dataArray_fromIData_datas_2', 'input', 64),
+        ('io_dataArray_fromIData_datas_3', 'input', 64),
+        ('io_dataArray_fromIData_datas_4', 'input', 64),
+        ('io_dataArray_fromIData_datas_5', 'input', 64),
+        ('io_dataArray_fromIData_datas_6', 'input', 64),
+        ('io_dataArray_fromIData_datas_7', 'input', 64),
+        ('io_dataArray_fromIData_codes_0', 'input', 1),
+        ('io_dataArray_fromIData_codes_1', 'input', 1),
+        ('io_dataArray_fromIData_codes_2', 'input', 1),
+        ('io_dataArray_fromIData_codes_3', 'input', 1),
+        ('io_dataArray_fromIData_codes_4', 'input', 1),
+        ('io_dataArray_fromIData_codes_5', 'input', 1),
+        ('io_dataArray_fromIData_codes_6', 'input', 1),
+        ('io_dataArray_fromIData_codes_7', 'input', 1),
+        ('io_metaArrayFlush_0_valid', 'output', 1),
+        ('io_metaArrayFlush_0_bits_virIdx', 'output', 8),
+        ('io_metaArrayFlush_0_bits_waymask', 'output', 4),
+        ('io_metaArrayFlush_1_valid', 'output', 1),
+        ('io_metaArrayFlush_1_bits_virIdx', 'output', 8),
+        ('io_metaArrayFlush_1_bits_waymask', 'output', 4),
+        ('io_touch_0_valid', 'output', 1),
+        ('io_touch_0_bits_vSetIdx', 'output', 8),
+        ('io_touch_0_bits_way', 'output', 2),
+        ('io_touch_1_valid', 'output', 1),
+        ('io_touch_1_bits_vSetIdx', 'output', 8),
+        ('io_touch_1_bits_way', 'output', 2),
+        ('io_wayLookupRead_ready', 'output', 1),
+        ('io_wayLookupRead_valid', 'input', 1),
+        ('io_wayLookupRead_bits_entry_vSetIdx_0', 'input', 8),
+        ('io_wayLookupRead_bits_entry_vSetIdx_1', 'input', 8),
+        ('io_wayLookupRead_bits_entry_waymask_0', 'input', 4),
+        ('io_wayLookupRead_bits_entry_waymask_1', 'input', 4),
+        ('io_wayLookupRead_bits_entry_ptag_0', 'input', 36),
+        ('io_wayLookupRead_bits_entry_ptag_1', 'input', 36),
+        ('io_wayLookupRead_bits_entry_itlb_exception_0', 'input', 2),
+        ('io_wayLookupRead_bits_entry_itlb_exception_1', 'input', 2),
+        ('io_wayLookupRead_bits_entry_itlb_pbmt_0', 'input', 2),
+        ('io_wayLookupRead_bits_entry_itlb_pbmt_1', 'input', 2),
+        ('io_wayLookupRead_bits_entry_meta_codes_0', 'input', 1),
+        ('io_wayLookupRead_bits_entry_meta_codes_1', 'input', 1),
+        ('io_wayLookupRead_bits_gpf_gpaddr', 'input', 56),
+        ('io_wayLookupRead_bits_gpf_isForVSnonLeafPTE', 'input', 1),
+        ('io_mshr_req_ready', 'input', 1),
+        ('io_mshr_req_valid', 'output', 1),
+        ('io_mshr_req_bits_blkPaddr', 'output', 42),
+        ('io_mshr_req_bits_vSetIdx', 'output', 8),
+        ('io_mshr_resp_valid', 'input', 1),
+        ('io_mshr_resp_bits_blkPaddr', 'input', 42),
+        ('io_mshr_resp_bits_vSetIdx', 'input', 8),
+        ('io_mshr_resp_bits_data', 'input', 512),
+        ('io_mshr_resp_bits_corrupt', 'input', 1),
+        ('io_ecc_enable', 'input', 1),
+        ('io_fetch_req_ready', 'output', 1),
+        ('io_fetch_req_valid', 'input', 1),
+        ('io_fetch_req_bits_pcMemRead_0_startAddr', 'input', 50),
+        ('io_fetch_req_bits_pcMemRead_0_nextlineStart', 'input', 50),
+        ('io_fetch_req_bits_pcMemRead_1_startAddr', 'input', 50),
+        ('io_fetch_req_bits_pcMemRead_1_nextlineStart', 'input', 50),
+        ('io_fetch_req_bits_pcMemRead_2_startAddr', 'input', 50),
+        ('io_fetch_req_bits_pcMemRead_2_nextlineStart', 'input', 50),
+        ('io_fetch_req_bits_pcMemRead_3_startAddr', 'input', 50),
+        ('io_fetch_req_bits_pcMemRead_3_nextlineStart', 'input', 50),
+        ('io_fetch_req_bits_pcMemRead_4_startAddr', 'input', 50),
+        ('io_fetch_req_bits_pcMemRead_4_nextlineStart', 'input', 50),
+        ('io_fetch_req_bits_readValid_0', 'input', 1),
+        ('io_fetch_req_bits_readValid_1', 'input', 1),
+        ('io_fetch_req_bits_readValid_2', 'input', 1),
+        ('io_fetch_req_bits_readValid_3', 'input', 1),
+        ('io_fetch_req_bits_readValid_4', 'input', 1),
+        ('io_fetch_req_bits_backendException', 'input', 1),
+        ('io_fetch_req_bits_hasSatpFlush', 'input', 1),
+        ('io_fetch_resp_valid', 'output', 1),
+        ('io_fetch_resp_bits_doubleline', 'output', 1),
+        ('io_fetch_resp_bits_vaddr_0', 'output', 50),
+        ('io_fetch_resp_bits_vaddr_1', 'output', 50),
+        ('io_fetch_resp_bits_data', 'output', 512),
+        ('io_fetch_resp_bits_paddr_0', 'output', 48),
+        ('io_fetch_resp_bits_exception_0', 'output', 2),
+        ('io_fetch_resp_bits_exception_1', 'output', 2),
+        ('io_fetch_resp_bits_pmp_mmio_0', 'output', 1),
+        ('io_fetch_resp_bits_pmp_mmio_1', 'output', 1),
+        ('io_fetch_resp_bits_itlb_pbmt_0', 'output', 2),
+        ('io_fetch_resp_bits_itlb_pbmt_1', 'output', 2),
+        ('io_fetch_resp_bits_backendException', 'output', 1),
+        ('io_fetch_resp_bits_hasSatpFlush', 'output', 1),
+        ('io_fetch_resp_bits_gpaddr', 'output', 56),
+        ('io_fetch_resp_bits_isForVSnonLeafPTE', 'output', 1),
+        ('io_fetch_topdownIcacheMiss', 'output', 1),
+        ('io_flush', 'input', 1),
+        ('io_pmp_0_req_valid', 'output', 1),
+        ('io_pmp_0_req_bits_addr', 'output', 48),
+        ('io_pmp_0_resp_instr', 'input', 1),
+        ('io_pmp_0_resp_mmio', 'input', 1),
+        ('io_pmp_1_req_valid', 'output', 1),
+        ('io_pmp_1_req_bits_addr', 'output', 48),
+        ('io_pmp_1_resp_instr', 'input', 1),
+        ('io_pmp_1_resp_mmio', 'input', 1),
+        ('io_respStall', 'input', 1),
+        ('io_errors_0_valid', 'output', 1),
+        ('io_errors_0_bits_paddr', 'output', 48),
+        ('io_errors_0_bits_report_to_beu', 'output', 1),
+        ('io_errors_1_valid', 'output', 1),
+        ('io_errors_1_bits_paddr', 'output', 48),
+        ('io_errors_1_bits_report_to_beu', 'output', 1),
+        ('io_perfInfo_only_0_hit', 'output', 1),
+        ('io_perfInfo_only_0_miss', 'output', 1),
+        ('io_perfInfo_hit_0_hit_1', 'output', 1),
+        ('io_perfInfo_hit_0_miss_1', 'output', 1),
+        ('io_perfInfo_miss_0_hit_1', 'output', 1),
+        ('io_perfInfo_miss_0_miss_1', 'output', 1),
+        ('io_perfInfo_bank_hit_1', 'output', 1),
+        ('io_perfInfo_hit', 'output', 1),
+    ),
+    'IPrefetchPipe': (
+        ('clock', 'input', 1),
+        ('reset', 'input', 1),
+        ('io_csr_pf_enable', 'input', 1),
+        ('io_flush', 'input', 1),
+        ('io_req_ready', 'output', 1),
+        ('io_req_valid', 'input', 1),
+        ('io_req_bits_startAddr', 'input', 50),
+        ('io_req_bits_nextlineStart', 'input', 50),
+        ('io_req_bits_ftqIdx_flag', 'input', 1),
+        ('io_req_bits_ftqIdx_value', 'input', 6),
+        ('io_req_bits_isSoftPrefetch', 'input', 1),
+        ('io_req_bits_backendException', 'input', 2),
+        ('io_flushFromBpu_s2_valid', 'input', 1),
+        ('io_flushFromBpu_s2_bits_flag', 'input', 1),
+        ('io_flushFromBpu_s2_bits_value', 'input', 6),
+        ('io_flushFromBpu_s3_valid', 'input', 1),
+        ('io_flushFromBpu_s3_bits_flag', 'input', 1),
+        ('io_flushFromBpu_s3_bits_value', 'input', 6),
+        ('io_itlb_0_req_valid', 'output', 1),
+        ('io_itlb_0_req_bits_vaddr', 'output', 50),
+        ('io_itlb_0_resp_bits_paddr_0', 'input', 48),
+        ('io_itlb_0_resp_bits_gpaddr_0', 'input', 64),
+        ('io_itlb_0_resp_bits_pbmt_0', 'input', 2),
+        ('io_itlb_0_resp_bits_miss', 'input', 1),
+        ('io_itlb_0_resp_bits_isForVSnonLeafPTE', 'input', 1),
+        ('io_itlb_0_resp_bits_excp_0_gpf_instr', 'input', 1),
+        ('io_itlb_0_resp_bits_excp_0_pf_instr', 'input', 1),
+        ('io_itlb_0_resp_bits_excp_0_af_instr', 'input', 1),
+        ('io_itlb_1_req_valid', 'output', 1),
+        ('io_itlb_1_req_bits_vaddr', 'output', 50),
+        ('io_itlb_1_resp_bits_paddr_0', 'input', 48),
+        ('io_itlb_1_resp_bits_gpaddr_0', 'input', 64),
+        ('io_itlb_1_resp_bits_pbmt_0', 'input', 2),
+        ('io_itlb_1_resp_bits_miss', 'input', 1),
+        ('io_itlb_1_resp_bits_isForVSnonLeafPTE', 'input', 1),
+        ('io_itlb_1_resp_bits_excp_0_gpf_instr', 'input', 1),
+        ('io_itlb_1_resp_bits_excp_0_pf_instr', 'input', 1),
+        ('io_itlb_1_resp_bits_excp_0_af_instr', 'input', 1),
+        ('io_itlbFlushPipe', 'output', 1),
+        ('io_pmp_0_req_valid', 'output', 1),
+        ('io_pmp_0_req_bits_addr', 'output', 48),
+        ('io_pmp_0_resp_instr', 'input', 1),
+        ('io_pmp_0_resp_mmio', 'input', 1),
+        ('io_pmp_1_req_valid', 'output', 1),
+        ('io_pmp_1_req_bits_addr', 'output', 48),
+        ('io_pmp_1_resp_instr', 'input', 1),
+        ('io_pmp_1_resp_mmio', 'input', 1),
+        ('io_metaRead_toIMeta_ready', 'input', 1),
+        ('io_metaRead_toIMeta_valid', 'output', 1),
+        ('io_metaRead_toIMeta_bits_vSetIdx_0', 'output', 8),
+        ('io_metaRead_toIMeta_bits_vSetIdx_1', 'output', 8),
+        ('io_metaRead_toIMeta_bits_isDoubleLine', 'output', 1),
+        ('io_metaRead_fromIMeta_metas_0_0_tag', 'input', 36),
+        ('io_metaRead_fromIMeta_metas_0_1_tag', 'input', 36),
+        ('io_metaRead_fromIMeta_metas_0_2_tag', 'input', 36),
+        ('io_metaRead_fromIMeta_metas_0_3_tag', 'input', 36),
+        ('io_metaRead_fromIMeta_metas_1_0_tag', 'input', 36),
+        ('io_metaRead_fromIMeta_metas_1_1_tag', 'input', 36),
+        ('io_metaRead_fromIMeta_metas_1_2_tag', 'input', 36),
+        ('io_metaRead_fromIMeta_metas_1_3_tag', 'input', 36),
+        ('io_metaRead_fromIMeta_codes_0_0', 'input', 1),
+        ('io_metaRead_fromIMeta_codes_0_1', 'input', 1),
+        ('io_metaRead_fromIMeta_codes_0_2', 'input', 1),
+        ('io_metaRead_fromIMeta_codes_0_3', 'input', 1),
+        ('io_metaRead_fromIMeta_codes_1_0', 'input', 1),
+        ('io_metaRead_fromIMeta_codes_1_1', 'input', 1),
+        ('io_metaRead_fromIMeta_codes_1_2', 'input', 1),
+        ('io_metaRead_fromIMeta_codes_1_3', 'input', 1),
+        ('io_metaRead_fromIMeta_entryValid_0_0', 'input', 1),
+        ('io_metaRead_fromIMeta_entryValid_0_1', 'input', 1),
+        ('io_metaRead_fromIMeta_entryValid_0_2', 'input', 1),
+        ('io_metaRead_fromIMeta_entryValid_0_3', 'input', 1),
+        ('io_metaRead_fromIMeta_entryValid_1_0', 'input', 1),
+        ('io_metaRead_fromIMeta_entryValid_1_1', 'input', 1),
+        ('io_metaRead_fromIMeta_entryValid_1_2', 'input', 1),
+        ('io_metaRead_fromIMeta_entryValid_1_3', 'input', 1),
+        ('io_MSHRReq_ready', 'input', 1),
+        ('io_MSHRReq_valid', 'output', 1),
+        ('io_MSHRReq_bits_blkPaddr', 'output', 42),
+        ('io_MSHRReq_bits_vSetIdx', 'output', 8),
+        ('io_MSHRResp_valid', 'input', 1),
+        ('io_MSHRResp_bits_blkPaddr', 'input', 42),
+        ('io_MSHRResp_bits_vSetIdx', 'input', 8),
+        ('io_MSHRResp_bits_waymask', 'input', 4),
+        ('io_MSHRResp_bits_corrupt', 'input', 1),
+        ('io_wayLookupWrite_ready', 'input', 1),
+        ('io_wayLookupWrite_valid', 'output', 1),
+        ('io_wayLookupWrite_bits_entry_vSetIdx_0', 'output', 8),
+        ('io_wayLookupWrite_bits_entry_vSetIdx_1', 'output', 8),
+        ('io_wayLookupWrite_bits_entry_waymask_0', 'output', 4),
+        ('io_wayLookupWrite_bits_entry_waymask_1', 'output', 4),
+        ('io_wayLookupWrite_bits_entry_ptag_0', 'output', 36),
+        ('io_wayLookupWrite_bits_entry_ptag_1', 'output', 36),
+        ('io_wayLookupWrite_bits_entry_itlb_exception_0', 'output', 2),
+        ('io_wayLookupWrite_bits_entry_itlb_exception_1', 'output', 2),
+        ('io_wayLookupWrite_bits_entry_itlb_pbmt_0', 'output', 2),
+        ('io_wayLookupWrite_bits_entry_itlb_pbmt_1', 'output', 2),
+        ('io_wayLookupWrite_bits_entry_meta_codes_0', 'output', 1),
+        ('io_wayLookupWrite_bits_entry_meta_codes_1', 'output', 1),
+        ('io_wayLookupWrite_bits_gpf_gpaddr', 'output', 56),
+        ('io_wayLookupWrite_bits_gpf_isForVSnonLeafPTE', 'output', 1),
+    ),
+    'WayLookup': (
+        ('clock', 'input', 1),
+        ('reset', 'input', 1),
+        ('io_flush', 'input', 1),
+        ('io_read_ready', 'input', 1),
+        ('io_read_valid', 'output', 1),
+        ('io_read_bits_entry_vSetIdx_0', 'output', 8),
+        ('io_read_bits_entry_vSetIdx_1', 'output', 8),
+        ('io_read_bits_entry_waymask_0', 'output', 4),
+        ('io_read_bits_entry_waymask_1', 'output', 4),
+        ('io_read_bits_entry_ptag_0', 'output', 36),
+        ('io_read_bits_entry_ptag_1', 'output', 36),
+        ('io_read_bits_entry_itlb_exception_0', 'output', 2),
+        ('io_read_bits_entry_itlb_exception_1', 'output', 2),
+        ('io_read_bits_entry_itlb_pbmt_0', 'output', 2),
+        ('io_read_bits_entry_itlb_pbmt_1', 'output', 2),
+        ('io_read_bits_entry_meta_codes_0', 'output', 1),
+        ('io_read_bits_entry_meta_codes_1', 'output', 1),
+        ('io_read_bits_gpf_gpaddr', 'output', 56),
+        ('io_read_bits_gpf_isForVSnonLeafPTE', 'output', 1),
+        ('io_write_ready', 'output', 1),
+        ('io_write_valid', 'input', 1),
+        ('io_write_bits_entry_vSetIdx_0', 'input', 8),
+        ('io_write_bits_entry_vSetIdx_1', 'input', 8),
+        ('io_write_bits_entry_waymask_0', 'input', 4),
+        ('io_write_bits_entry_waymask_1', 'input', 4),
+        ('io_write_bits_entry_ptag_0', 'input', 36),
+        ('io_write_bits_entry_ptag_1', 'input', 36),
+        ('io_write_bits_entry_itlb_exception_0', 'input', 2),
+        ('io_write_bits_entry_itlb_exception_1', 'input', 2),
+        ('io_write_bits_entry_itlb_pbmt_0', 'input', 2),
+        ('io_write_bits_entry_itlb_pbmt_1', 'input', 2),
+        ('io_write_bits_entry_meta_codes_0', 'input', 1),
+        ('io_write_bits_entry_meta_codes_1', 'input', 1),
+        ('io_write_bits_gpf_gpaddr', 'input', 56),
+        ('io_write_bits_gpf_isForVSnonLeafPTE', 'input', 1),
+        ('io_update_valid', 'input', 1),
+        ('io_update_bits_blkPaddr', 'input', 42),
+        ('io_update_bits_vSetIdx', 'input', 8),
+        ('io_update_bits_waymask', 'input', 4),
+        ('io_update_bits_corrupt', 'input', 1),
+    ),
+    'InstrMMIOEntry': (
+        ('clock', 'input', 1),
+        ('reset', 'input', 1),
+        ('io_req_ready', 'output', 1),
+        ('io_req_valid', 'input', 1),
+        ('io_req_bits_addr', 'input', 48),
+        ('io_req_bits_flush', 'input', 1),
+        ('io_resp_valid', 'output', 1),
+        ('io_resp_bits_data', 'output', 32),
+        ('io_resp_bits_corrupt', 'output', 1),
+        ('io_mmio_acquire_ready', 'input', 1),
+        ('io_mmio_acquire_valid', 'output', 1),
+        ('io_mmio_acquire_bits_address', 'output', 48),
+        ('io_mmio_grant_valid', 'input', 1),
+        ('io_mmio_grant_bits_data', 'input', 64),
+        ('io_mmio_grant_bits_corrupt', 'input', 1),
+        ('io_wfi_wfiReq', 'input', 1),
+        ('io_wfi_wfiSafe', 'output', 1),
+    ),
+    'L2TlbPrefetch': (
+        ('clock', 'input', 1),
+        ('reset', 'input', 1),
+        ('io_sfence_valid', 'input', 1),
+        ('io_csr_satp_changed', 'input', 1),
+        ('io_csr_vsatp_mode', 'input', 4),
+        ('io_csr_vsatp_changed', 'input', 1),
+        ('io_csr_hgatp_mode', 'input', 4),
+        ('io_csr_hgatp_changed', 'input', 1),
+        ('io_csr_priv_virt', 'input', 1),
+        ('io_csr_priv_virt_changed', 'input', 1),
+        ('io_in_valid', 'input', 1),
+        ('io_in_bits_vpn', 'input', 38),
+        ('io_out_ready', 'input', 1),
+        ('io_out_valid', 'output', 1),
+        ('io_out_bits_req_info_vpn', 'output', 38),
+        ('io_out_bits_req_info_s2xlate', 'output', 2),
+    ),
+    'L2TlbMissQueue': (
+        ('clock', 'input', 1),
+        ('reset', 'input', 1),
+        ('io_sfence_valid', 'input', 1),
+        ('io_csr_satp_changed', 'input', 1),
+        ('io_csr_vsatp_changed', 'input', 1),
+        ('io_csr_hgatp_changed', 'input', 1),
+        ('io_csr_priv_virt_changed', 'input', 1),
+        ('io_in_ready', 'output', 1),
+        ('io_in_valid', 'input', 1),
+        ('io_in_bits_req_info_vpn', 'input', 38),
+        ('io_in_bits_req_info_s2xlate', 'input', 2),
+        ('io_in_bits_req_info_source', 'input', 2),
+        ('io_in_bits_isLLptw', 'input', 1),
+        ('io_out_ready', 'input', 1),
+        ('io_out_valid', 'output', 1),
+        ('io_out_bits_req_info_vpn', 'output', 38),
+        ('io_out_bits_req_info_s2xlate', 'output', 2),
+        ('io_out_bits_req_info_source', 'output', 2),
+        ('io_out_bits_isHptwReq', 'output', 1),
+        ('io_out_bits_isLLptw', 'output', 1),
+        ('io_out_bits_hptwId', 'output', 3),
+    ),
+    'PrefetcherMonitor': (
+        ('clock', 'input', 1),
+        ('reset', 'input', 1),
+        ('io_timely_total_prefetch', 'input', 1),
+        ('io_timely_late_hit_prefetch', 'input', 1),
+        ('io_timely_late_miss_prefetch', 'input', 1),
+        ('io_validity_good_prefetch', 'input', 1),
+        ('io_validity_bad_prefetch', 'input', 1),
+        ('io_pf_ctrl_enable', 'output', 1),
+        ('io_pf_ctrl_confidence', 'output', 1),
+    ),
+}
 
 
-def _repo_root() -> Path:
-    """Locate the repository root from this fixed Build-Cpu path."""
-
-    return Path(__file__).resolve().parents[5]
 
 
-def _width(value: Any) -> int:
-    """Convert a locked Verilog range (or scalar) to a bit count."""
-
-    text = str(value or "").strip()
-    if not text:
-        return 1
-    if text.startswith("[") and text.endswith("]") and ":" in text:
-        high, low = text[1:-1].split(":", 1)
-        return abs(int(high) - int(low)) + 1
-    return 1
 
 
-def _load_locked_ports() -> dict[str, tuple[tuple[str, str, int], ...]]:
-    """Load and normalize exactly the seven locked hierarchy port tables.
-
-    Keeping this conversion in the Build makes the source of every port
-    explicit and prevents accidental hand-written width drift.  The validator
-    records the hierarchy digest and rejects a changed locked reference.
-    """
-
-    path = _repo_root() / "validation" / "v2-locked-hierarchy.json"
-    payload = json.loads(path.read_text(encoding="utf-8"))
-    if payload.get("reference_sha256") != LOCKED_REFERENCE_SHA256:
-        raise RuntimeError("locked XSTop hierarchy digest changed")
-    modules = payload.get("modules", {})
-    result: dict[str, tuple[tuple[str, str, int], ...]] = {}
-    for name in COVERED_MODULES:
-        rows = modules.get(name)
-        if not isinstance(rows, dict) or not isinstance(rows.get("ports"), list):
-            raise KeyError(f"missing locked module {name}")
-        result[name] = tuple(
-            (str(port["name"]), str(port["direction"]), _width(port.get("width")))
-            for port in rows["ports"]
-        )
-    return result
-
-
-# Port catalog source: validation/v2-locked-hierarchy.json, digest above.
-LOCKED_PORT_SPECS = _load_locked_ports()
-PORT_SPECS = LOCKED_PORT_SPECS
 
 
 class IcachePrefetchFamily(Elaboratable):

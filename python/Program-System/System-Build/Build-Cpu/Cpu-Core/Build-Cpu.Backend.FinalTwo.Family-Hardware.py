@@ -15,58 +15,98 @@ from amaranth.back import verilog
 # Module Contract
 # =============================================================================
 COVERED_MODULES = ("DatamoduleResultBuffer", "RegionWays")
-SOURCE_PATHS = (
-    "upstream/src/main/scala/xiangshan/mem/sbuffer/DatamoduleResultBuffer.scala",
-    "upstream/src/main/scala/xiangshan/frontend/ITTAGE.scala",
-    "upstream/rocket-chip/src/main/scala/util/Replacement.scala",
-)
-LOCKED_PORT_SPECS: dict[str, tuple[tuple[str, str, int], ...]] = {
-    "DatamoduleResultBuffer": (
-        ("clock", "input", 1), ("reset", "input", 1),
-        ("io_enq_0_ready", "output", 1), ("io_enq_0_valid", "input", 1),
-        ("io_enq_0_bits_addr", "input", 48), ("io_enq_0_bits_vaddr", "input", 50),
-        ("io_enq_0_bits_data", "input", 128), ("io_enq_0_bits_mask", "input", 16),
-        ("io_enq_0_bits_wline", "input", 1), ("io_enq_0_bits_sqPtr_value", "input", 6),
-        ("io_enq_0_bits_vecValid", "input", 1), ("io_enq_0_bits_sqNeedDeq", "input", 1),
-        ("io_enq_1_ready", "output", 1), ("io_enq_1_valid", "input", 1),
-        ("io_enq_1_bits_addr", "input", 48), ("io_enq_1_bits_vaddr", "input", 50),
-        ("io_enq_1_bits_data", "input", 128), ("io_enq_1_bits_mask", "input", 16),
-        ("io_enq_1_bits_wline", "input", 1), ("io_enq_1_bits_sqPtr_value", "input", 6),
-        ("io_enq_1_bits_vecValid", "input", 1),
-        ("io_deq_0_ready", "input", 1), ("io_deq_0_valid", "output", 1),
-        ("io_deq_0_bits_addr", "output", 48), ("io_deq_0_bits_vaddr", "output", 50),
-        ("io_deq_0_bits_data", "output", 128), ("io_deq_0_bits_mask", "output", 16),
-        ("io_deq_0_bits_wline", "output", 1), ("io_deq_0_bits_sqPtr_value", "output", 6),
-        ("io_deq_0_bits_vecValid", "output", 1), ("io_deq_0_bits_sqNeedDeq", "output", 1),
-        ("io_deq_1_ready", "input", 1), ("io_deq_1_valid", "output", 1),
-        ("io_deq_1_bits_addr", "output", 48), ("io_deq_1_bits_vaddr", "output", 50),
-        ("io_deq_1_bits_data", "output", 128), ("io_deq_1_bits_mask", "output", 16),
-        ("io_deq_1_bits_wline", "output", 1), ("io_deq_1_bits_sqPtr_value", "output", 6),
-        ("io_deq_1_bits_vecValid", "output", 1), ("io_deq_1_bits_sqNeedDeq", "output", 1),
+PortSpec = tuple[str, str, int]
+
+PORT_SPECS: dict[str, tuple[PortSpec, ...]] = {
+    'DatamoduleResultBuffer': (
+        ('clock', 'input', 1),
+        ('reset', 'input', 1),
+        ('io_enq_0_ready', 'output', 1),
+        ('io_enq_0_valid', 'input', 1),
+        ('io_enq_0_bits_addr', 'input', 48),
+        ('io_enq_0_bits_vaddr', 'input', 50),
+        ('io_enq_0_bits_data', 'input', 128),
+        ('io_enq_0_bits_mask', 'input', 16),
+        ('io_enq_0_bits_wline', 'input', 1),
+        ('io_enq_0_bits_sqPtr_value', 'input', 6),
+        ('io_enq_0_bits_vecValid', 'input', 1),
+        ('io_enq_0_bits_sqNeedDeq', 'input', 1),
+        ('io_enq_1_ready', 'output', 1),
+        ('io_enq_1_valid', 'input', 1),
+        ('io_enq_1_bits_addr', 'input', 48),
+        ('io_enq_1_bits_vaddr', 'input', 50),
+        ('io_enq_1_bits_data', 'input', 128),
+        ('io_enq_1_bits_mask', 'input', 16),
+        ('io_enq_1_bits_wline', 'input', 1),
+        ('io_enq_1_bits_sqPtr_value', 'input', 6),
+        ('io_enq_1_bits_vecValid', 'input', 1),
+        ('io_deq_0_ready', 'input', 1),
+        ('io_deq_0_valid', 'output', 1),
+        ('io_deq_0_bits_addr', 'output', 48),
+        ('io_deq_0_bits_vaddr', 'output', 50),
+        ('io_deq_0_bits_data', 'output', 128),
+        ('io_deq_0_bits_mask', 'output', 16),
+        ('io_deq_0_bits_wline', 'output', 1),
+        ('io_deq_0_bits_sqPtr_value', 'output', 6),
+        ('io_deq_0_bits_vecValid', 'output', 1),
+        ('io_deq_0_bits_sqNeedDeq', 'output', 1),
+        ('io_deq_1_ready', 'input', 1),
+        ('io_deq_1_valid', 'output', 1),
+        ('io_deq_1_bits_addr', 'output', 48),
+        ('io_deq_1_bits_vaddr', 'output', 50),
+        ('io_deq_1_bits_data', 'output', 128),
+        ('io_deq_1_bits_mask', 'output', 16),
+        ('io_deq_1_bits_wline', 'output', 1),
+        ('io_deq_1_bits_sqPtr_value', 'output', 6),
+        ('io_deq_1_bits_vecValid', 'output', 1),
+        ('io_deq_1_bits_sqNeedDeq', 'output', 1),
     ),
-    "RegionWays": (
-        ("clock", "input", 1), ("reset", "input", 1),
-        ("io_req_pointer_0", "input", 4), ("io_req_pointer_1", "input", 4),
-        ("io_req_pointer_2", "input", 4), ("io_req_pointer_3", "input", 4),
-        ("io_req_pointer_4", "input", 4),
-        ("io_resp_hit_0", "output", 1), ("io_resp_hit_1", "output", 1),
-        ("io_resp_hit_2", "output", 1), ("io_resp_hit_3", "output", 1),
-        ("io_resp_hit_4", "output", 1),
-        ("io_resp_region_0", "output", 30), ("io_resp_region_1", "output", 30),
-        ("io_resp_region_2", "output", 30), ("io_resp_region_3", "output", 30),
-        ("io_resp_region_4", "output", 30),
-        ("io_update_region_0", "input", 30), ("io_update_region_1", "input", 30),
-        ("io_update_hit_0", "output", 1), ("io_update_hit_1", "output", 1),
-        ("io_update_pointer_0", "output", 4), ("io_update_pointer_1", "output", 4),
-        ("io_write_valid", "input", 1), ("io_write_region", "input", 30),
-        ("io_write_pointer", "output", 4),
+    'RegionWays': (
+        ('clock', 'input', 1),
+        ('reset', 'input', 1),
+        ('io_req_pointer_0', 'input', 4),
+        ('io_req_pointer_1', 'input', 4),
+        ('io_req_pointer_2', 'input', 4),
+        ('io_req_pointer_3', 'input', 4),
+        ('io_req_pointer_4', 'input', 4),
+        ('io_resp_hit_0', 'output', 1),
+        ('io_resp_hit_1', 'output', 1),
+        ('io_resp_hit_2', 'output', 1),
+        ('io_resp_hit_3', 'output', 1),
+        ('io_resp_hit_4', 'output', 1),
+        ('io_resp_region_0', 'output', 30),
+        ('io_resp_region_1', 'output', 30),
+        ('io_resp_region_2', 'output', 30),
+        ('io_resp_region_3', 'output', 30),
+        ('io_resp_region_4', 'output', 30),
+        ('io_update_region_0', 'input', 30),
+        ('io_update_region_1', 'input', 30),
+        ('io_update_hit_0', 'output', 1),
+        ('io_update_hit_1', 'output', 1),
+        ('io_update_pointer_0', 'output', 4),
+        ('io_update_pointer_1', 'output', 4),
+        ('io_write_valid', 'input', 1),
+        ('io_write_region', 'input', 30),
+        ('io_write_pointer', 'output', 4),
     ),
 }
-PORT_SPECS = LOCKED_PORT_SPECS
+
+
+
+
+
+
+
+
 
 __all__ = [
-    "COVERED_MODULES", "SOURCE_PATHS", "LOCKED_PORT_SPECS", "PORT_SPECS",
-    "FinalTwoFamily", "plru_next_int", "plru_replace_int", "build_verilog", "main",
+    'COVERED_MODULES',
+    'PORT_SPECS',
+    'FinalTwoFamily',
+    'plru_next_int',
+    'plru_replace_int',
+    'build_verilog',
+    'main',
 ]
 
 

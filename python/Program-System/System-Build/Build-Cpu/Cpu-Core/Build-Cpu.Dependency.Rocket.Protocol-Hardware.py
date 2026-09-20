@@ -25,9 +25,14 @@ from amaranth.back import verilog
 # D-channel response routing, and reset/flush cancellation. / 该边界模型覆盖
 # TileLink A 通道接收、单个未决 source、D 通道响应路由以及复位/flush 取消。
 __all__ = [
-    "RocketProtocolConfig", "RocketProtocolBoundary", "RocketProtocolArbiterState",
-    "protocol_handshake", "protocol_arbiter", "protocol_observation", "build_verilog", "main",
-    "ROCKET_PROTOCOL_SOURCE_PATHS",
+    'RocketProtocolConfig',
+    'RocketProtocolBoundary',
+    'RocketProtocolArbiterState',
+    'protocol_handshake',
+    'protocol_arbiter',
+    'protocol_observation',
+    'build_verilog',
+    'main',
 ]
 
 
@@ -35,11 +40,6 @@ __all__ = [
 # Decoupled channel contract.  They intentionally do not claim to reproduce a
 # whole TLXbar. / 下方有界方程来自可复用 TileLink 仲裁和 Decoupled 通道契约；
 # 它们刻意不声称复现完整 TLXbar。
-ROCKET_PROTOCOL_SOURCE_PATHS: tuple[str, ...] = (
-    "upstream/rocket-chip/src/main/scala/tilelink/Arbiter.scala",
-    "upstream/rocket-chip/src/main/scala/tilelink/Xbar.scala",
-    "upstream/rocket-chip/src/main/scala/tilelink/Bundles.scala",
-)
 
 
 # Return the Decoupled/ready-valid fire condition used by TileLink channels. /

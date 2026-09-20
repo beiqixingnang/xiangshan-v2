@@ -29,57 +29,27 @@ from amaranth.back import verilog
 # 安全状态，流水化 ICache 错误，并输出后端 CF 向量及前端信息；本父级保留这些
 # 方程，并将未完成子级全部声明为显式注入依赖。
 __all__ = [
-    "FrontendTopConfig",
-    "FrontendChildBoundary",
-    "FrontendRvcBoundary",
-    "FrontendBpuBoundary",
-    "FrontendFtqEngine",
-    "FrontendIfuEngine",
-    "FrontendIbufferEngine",
-    "FrontendItlbEngine",
-    "FrontendBpuEngine",
-    "FrontendParent",
-    "UHSCTop",
-    "Frontend",
-    "frontend_port_specs",
-    "frontend_parent_observation",
-    "build_verilog",
-    "main",
-    "FRONTEND_PARENT_SOURCE_PATHS",
-    "FRONTEND_PARENT_SOURCE_FILE_COUNT",
+    'FrontendTopConfig',
+    'FrontendChildBoundary',
+    'FrontendRvcBoundary',
+    'FrontendBpuBoundary',
+    'FrontendFtqEngine',
+    'FrontendIfuEngine',
+    'FrontendIbufferEngine',
+    'FrontendItlbEngine',
+    'FrontendBpuEngine',
+    'FrontendParent',
+    'UHSCTop',
+    'Frontend',
+    'frontend_port_specs',
+    'frontend_parent_observation',
+    'build_verilog',
+    'main',
 ]
 
 
 # Frozen V2 source closure represented by this parent aggregate. /
 # 此父级聚合所表示的冻结 V2 源闭包。
-FRONTEND_PARENT_SOURCE_PATHS: tuple[str, ...] = (
-    "upstream/src/main/scala/xiangshan/frontend/Frontend.scala",
-    "upstream/src/main/scala/xiangshan/frontend/BPU.scala",
-    "upstream/src/main/scala/xiangshan/frontend/Bim.scala",
-    "upstream/src/main/scala/xiangshan/frontend/Composer.scala",
-    "upstream/src/main/scala/xiangshan/frontend/FauFTB.scala",
-    "upstream/src/main/scala/xiangshan/frontend/FTB.scala",
-    "upstream/src/main/scala/xiangshan/frontend/FrontendBundle.scala",
-    "upstream/src/main/scala/xiangshan/frontend/IBuffer.scala",
-    "upstream/src/main/scala/xiangshan/frontend/IFU.scala",
-    "upstream/src/main/scala/xiangshan/frontend/NewFtq.scala",
-    "upstream/src/main/scala/xiangshan/frontend/PreDecode.scala",
-    "upstream/src/main/scala/xiangshan/frontend/ITTAGE.scala",
-    "upstream/src/main/scala/xiangshan/frontend/newRAS.scala",
-    "upstream/src/main/scala/xiangshan/frontend/RAS.scala",
-    "upstream/src/main/scala/xiangshan/frontend/SC.scala",
-    "upstream/src/main/scala/xiangshan/frontend/Tage.scala",
-    "upstream/src/main/scala/xiangshan/frontend/WrBypass.scala",
-    "upstream/src/main/scala/xiangshan/frontend/icache/ICache.scala",
-    "upstream/src/main/scala/xiangshan/frontend/icache/ICacheBundle.scala",
-    "upstream/src/main/scala/xiangshan/frontend/icache/ICacheCtrlUnit.scala",
-    "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala",
-    "upstream/src/main/scala/xiangshan/frontend/icache/InstrUncache.scala",
-    "upstream/src/main/scala/xiangshan/cache/mmu/MMUBundle.scala",
-    "upstream/src/main/scala/xiangshan/cache/mmu/Repeater.scala",
-    "upstream/src/main/scala/xiangshan/cache/mmu/TLB.scala",
-)
-FRONTEND_PARENT_SOURCE_FILE_COUNT = len(FRONTEND_PARENT_SOURCE_PATHS)
 
 
 # These equations are deliberately kept next to the aggregate rather than in
@@ -93,14 +63,6 @@ FRONTEND_PARENT_SOURCE_FILE_COUNT = len(FRONTEND_PARENT_SOURCE_PATHS)
 # 191--224 行延迟 WFI 并连接 FTQ/IFU/ICache，421--451 行连接 IBuffer 以及
 # error/frontend-information 观测。完整 Frontend 仍在此有界闭包之外；本表仅
 # 记录下方已实现的父级关系。
-FRONTEND_PARENT_SOURCE_OBSERVATIONS: tuple[tuple[str, str], ...] = (
-    ("redirect_flush", "Frontend.scala:111-113,423-431"),
-    ("wfi_safe", "Frontend.scala:191-197"),
-    ("ftq_ifu_icache_fire", "Frontend.scala:199-214"),
-    ("rvc_ifu_ibuffer", "Frontend.scala:125-132,226-231"),
-    ("uncache_fire", "Frontend.scala:442-445"),
-    ("ibuffer_frontend_info", "Frontend.scala:439-452"),
-)
 
 
 def frontend_parent_observation(*, need_flush: bool, redirect_valid: bool,

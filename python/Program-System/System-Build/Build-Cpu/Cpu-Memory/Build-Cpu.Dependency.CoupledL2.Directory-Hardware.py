@@ -27,37 +27,21 @@ from amaranth.back import verilog
 # Directory.scala 执行流水化查找并选择命中/无效/LRU 路；本聚合暴露相同的
 # 可观察决策和写端口。
 __all__ = [
-    "CoupledL2DirectoryConfig",
-    "CoupledL2Directory",
-    "Directory",
-    "directory_reference_step",
-    "TL2TLCoupledL2ParentConfig",
-    "TL2TLCoupledL2Parent",
-    "tl2tl_parent_port_contract",
-    "build_verilog",
-    "build_parent_verilog",
-    "main",
-    "SOURCE_SCALA_ROOT", "SOURCE_SCALA_PATHS", "SOURCE_SCALA_FILE_COUNT",
+    'CoupledL2DirectoryConfig',
+    'CoupledL2Directory',
+    'Directory',
+    'directory_reference_step',
+    'TL2TLCoupledL2ParentConfig',
+    'TL2TLCoupledL2Parent',
+    'tl2tl_parent_port_contract',
+    'build_verilog',
+    'build_parent_verilog',
+    'main',
 ]
 
 
 # Keep all eleven inventory paths on the single Directory aggregate. /
 # 在单一 Directory 聚合中保留 inventory 的全部 11 条路径。
-SOURCE_SCALA_ROOT = "coupledL2/src/main/scala/coupledL2/tl2tl"
-SOURCE_SCALA_PATHS = (
-    "coupledL2/src/main/scala/coupledL2/tl2tl/AcquireUnit.scala",
-    "coupledL2/src/main/scala/coupledL2/tl2tl/Bundle.scala",
-    "coupledL2/src/main/scala/coupledL2/tl2tl/MainPipe.scala",
-    "coupledL2/src/main/scala/coupledL2/tl2tl/MSHR.scala",
-    "coupledL2/src/main/scala/coupledL2/tl2tl/MSHRCtl.scala",
-    "coupledL2/src/main/scala/coupledL2/tl2tl/ProbeQueue.scala",
-    "coupledL2/src/main/scala/coupledL2/tl2tl/RefillUnit.scala",
-    "coupledL2/src/main/scala/coupledL2/tl2tl/SinkB.scala",
-    "coupledL2/src/main/scala/coupledL2/tl2tl/Slice.scala",
-    "coupledL2/src/main/scala/coupledL2/tl2tl/SourceC.scala",
-    "coupledL2/src/main/scala/coupledL2/tl2tl/TL2TLCoupledL2.scala",
-)
-SOURCE_SCALA_FILE_COUNT = len(SOURCE_SCALA_PATHS)
 
 
 # Typed wrappers preserve Amaranth's generator-based control contexts. / 类型包装保持 Amaranth 基于生成器的控制上下文。

@@ -44,37 +44,36 @@ from amaranth import Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 # 选通时出现、逐字段 `L ? 保持 : wdata`；读回 `{18'h0, ren&命中 ? 粒度掩码 : addr}`；
 # PMA 条目另有复位初值。
 __all__ = [
-    "XLEN",
-    "PMP_ADDR_BITS",
-    "PMP_OFF_BITS",
-    "PLATFORM_GRAIN",
-    "NUM_PMP_REAL",
-    "NUM_PMA_REAL",
-    "PMP_CFG_BASE",
-    "PMP_CFG_REGISTER_STRIDE",
-    "PMP_CFG_ENTRY_BASES",
-    "PMP_ADDR_BASE",
-    "PMA_CFG_BASE",
-    "PMA_ADDR_BASE",
-    "PMP_CFG_WORD_ADDRESSES",
-    "PMP_ENTRY_ADDRESSES",
-    "PMA_CFG_WORD_ADDRESSES",
-    "PMA_ENTRY_ADDRESSES",
-    "PMA_ENTRY_RESET_ADDRESSES",
-    "HANDLER_MODULE_NAMES",
-    "COVERED_MODULES",
-    "SOURCE_PATHS",
-    "pmp_word_images",
-    "pma_word_images",
-    "cfg_word_selected",
-    "clock_domain",
-    "grain_masked",
-    "PmpEntryHandleModule",
-    "PmaEntryHandleModule",
-    "emitted_module_names",
-    "handler_ports",
-    "build_verilog",
-    "main",
+    'XLEN',
+    'PMP_ADDR_BITS',
+    'PMP_OFF_BITS',
+    'PLATFORM_GRAIN',
+    'NUM_PMP_REAL',
+    'NUM_PMA_REAL',
+    'PMP_CFG_BASE',
+    'PMP_CFG_REGISTER_STRIDE',
+    'PMP_CFG_ENTRY_BASES',
+    'PMP_ADDR_BASE',
+    'PMA_CFG_BASE',
+    'PMA_ADDR_BASE',
+    'PMP_CFG_WORD_ADDRESSES',
+    'PMP_ENTRY_ADDRESSES',
+    'PMA_CFG_WORD_ADDRESSES',
+    'PMA_ENTRY_ADDRESSES',
+    'PMA_ENTRY_RESET_ADDRESSES',
+    'HANDLER_MODULE_NAMES',
+    'COVERED_MODULES',
+    'pmp_word_images',
+    'pma_word_images',
+    'cfg_word_selected',
+    'clock_domain',
+    'grain_masked',
+    'PmpEntryHandleModule',
+    'PmaEntryHandleModule',
+    'emitted_module_names',
+    'handler_ports',
+    'build_verilog',
+    'main',
 ]
 
 
@@ -153,10 +152,6 @@ PMA_ENTRY_RESET_ADDRESSES = (
 # The two locked module names this subject implements. / 本主体实现的锁定模块名。
 HANDLER_MODULE_NAMES: tuple[str, ...] = ("PMPEntryHandleModule", "PMAEntryHandleModule")
 COVERED_MODULES: tuple[str, ...] = HANDLER_MODULE_NAMES
-SOURCE_PATHS: tuple[str, ...] = (
-    "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/PMPEntryModule.scala",
-    "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/PMAEntryModule.scala",
-)
 
 
 # =============================================================================

@@ -24,10 +24,6 @@ from amaranth.back import verilog
 # Every member uses the exact locked ANSI names and widths. / 每个成员使用锁定 ANSI 名称与位宽。
 __all__ = ["COVERED_MODULES", "PermitModule", "build_verilog", "main"]
 
-HIERARCHY = "validation/v2-locked-hierarchy.json"
-SOURCE_PATHS = (
-    "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/CSRPermitModule.scala",
-)
 
 _PORTS: dict[str, tuple[tuple[str, str, int], ...]] = {
     "CSRPermitModule": (

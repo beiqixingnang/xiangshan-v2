@@ -471,6 +471,19 @@
     "strict_equivalence_fraction": "39/118",
     "evidence": "validation/v2-build-compliance-audit.json"
    },
+   "latest_representation_migration": {
+    "batch_id": "V2-PRODUCT-PROVENANCE-SEPARATION-003",
+    "status": "PASS_REPRESENTATION_ONLY_STRICT_COUNT_PRESERVED",
+    "build_files_migrated": 55,
+    "validator_consumers_migrated": 23,
+    "strict_proofs_rebound": 17,
+    "strict_public_variants_compared": 107,
+    "strict_equivalence_count_delta": 0,
+    "strict_equivalence_fraction": "39/118",
+    "evidence": "validation/v2-strict-representation-migration-evidence.json",
+    "provenance_map": "validation/v2-build-provenance-map.json",
+    "pyright": "DEFERRED_TO_LARGE_MILESTONE"
+   },
    "allowed_representation": ["tuple literals for irregular ports", "indexed tuple comprehensions", "small pure Python standard-library helpers", "Amaranth Signal construction from the expanded PORT_SPECS mapping"],
    "forbidden_representation": ["runtime JSON/validation reads", "Scala or upstream source paths in Build code", "raw Verilog/SystemVerilog text", "blind textual replacement", "port-order or ABI inference from unordered mappings"],
    "required_gate": "Before/after expanded ordered (name,direction,width) digest must match for every member; deterministic same-name build_verilog smoke and py_compile must pass.",

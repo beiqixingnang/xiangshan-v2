@@ -19,6 +19,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from v2_build_provenance import source_paths_for_build
+
 from amaranth.sim import Settle, Simulator, Tick
 
 ROOT = Path.cwd() / ".agents" / "xiangshan-v2"
@@ -255,7 +257,7 @@ def main() -> int:
         "kind": "XIANGSHAN_KUNMINGHU_V2_TOP_XSTILE_INTBUFFER_FAMILY",
         "batch_id": "TOP-XSTILE-INTBUFFER-004",
         "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
-        "source_paths": list(module.SOURCE_PATHS),
+        "source_paths": list(source_paths_for_build(TARGET)),
         "target": {"path": str(TARGET.relative_to(ROOT)).replace("\\", "/"), "sha256": digest(TARGET.read_bytes())},
         "locked_reference": {"path": "validation/v2-locked-hierarchy.json", "sha256": LOCKED_SHA256},
         "covered_modules": list(MEMBERS),

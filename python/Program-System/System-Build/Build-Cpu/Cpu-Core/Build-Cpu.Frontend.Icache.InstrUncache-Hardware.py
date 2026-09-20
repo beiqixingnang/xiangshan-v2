@@ -29,9 +29,6 @@ __all__ = [
 ]
 
 COVERED_MODULES: tuple[str, ...] = ("InstrUncache",)
-SOURCE_PATHS: tuple[str, ...] = (
-    "upstream/src/main/scala/xiangshan/frontend/icache/InstrUncache.scala",
-)
 
 
 # =============================================================================

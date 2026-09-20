@@ -21,10 +21,6 @@ __all__ = [
 COVERED_MODULES: tuple[str, ...] = (
     "DeMultiplexer", "DeMultiplexer_1", "MuxBundle", "FIFOReg",
 )
-SOURCE_PATHS: tuple[str, ...] = (
-    "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala",
-    "upstream/src/main/scala/xiangshan/frontend/icache/FIFO.scala",
-)
 
 
 # Configuration

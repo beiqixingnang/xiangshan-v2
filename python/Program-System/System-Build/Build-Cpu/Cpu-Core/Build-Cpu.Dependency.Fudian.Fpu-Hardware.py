@@ -21,30 +21,17 @@ from amaranth.hdl.ast import Value
 # =============================================================================
 # The aggregate covers the fifteen pinned Fudian source files. /
 # 聚合边界覆盖锁定的十五个 Fudian 源文件。
-SOURCE_SCALA_ROOT = "fudian/src/main/scala/fudian"
-SOURCE_SCALA_PATHS = (
-    "fudian/src/main/scala/fudian/FADD.scala",
-    "fudian/src/main/scala/fudian/FCMA.scala",
-    "fudian/src/main/scala/fudian/FCMP.scala",
-    "fudian/src/main/scala/fudian/FDIV.scala",
-    "fudian/src/main/scala/fudian/FMUL.scala",
-    "fudian/src/main/scala/fudian/FPToFP.scala",
-    "fudian/src/main/scala/fudian/FPToInt.scala",
-    "fudian/src/main/scala/fudian/IntToFP.scala",
-    "fudian/src/main/scala/fudian/package.scala",
-    "fudian/src/main/scala/fudian/RoundingUnit.scala",
-    "fudian/src/main/scala/fudian/utils/CLZ.scala",
-    "fudian/src/main/scala/fudian/utils/CSA.scala",
-    "fudian/src/main/scala/fudian/utils/LZA.scala",
-    "fudian/src/main/scala/fudian/utils/Multiplier.scala",
-    "fudian/src/main/scala/fudian/utils/ShiftRightJam.scala",
-)
-SOURCE_SCALA_FILE_COUNT = len(SOURCE_SCALA_PATHS)
 
 __all__ = [
-    "SOURCE_SCALA_ROOT", "SOURCE_SCALA_PATHS", "SOURCE_SCALA_FILE_COUNT",
-    "FpuConfig", "decode_float", "int_to_float", "fp_compare", "fp_multiply",
-    "fp_add", "FudianFpu", "build_verilog", "main",
+    'FpuConfig',
+    'decode_float',
+    'int_to_float',
+    'fp_compare',
+    'fp_multiply',
+    'fp_add',
+    'FudianFpu',
+    'build_verilog',
+    'main',
 ]
 
 

@@ -23,13 +23,11 @@ from amaranth.back import verilog
 # Module Contract
 # =============================================================================
 __all__ = [
-    "COVERED_MODULES",
-    "SOURCE_PATHS",
-    "LOCKED_PORT_SPECS",
-    "PORT_SPECS",
-    "DcacheMissQueueFamily",
-    "build_verilog",
-    "main",
+    'COVERED_MODULES',
+    'PORT_SPECS',
+    'DcacheMissQueueFamily',
+    'build_verilog',
+    'main',
 ]
 
 COVERED_MODULES = (
@@ -42,18 +40,12 @@ COVERED_MODULES = (
     "WritebackEntry_15",
 )
 
-SOURCE_PATHS = (
-    "upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/MissQueue.scala",
-    "upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/Probe.scala",
-    "upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/WritebackQueue.scala",
-    "upstream/src/main/scala/xiangshan/cache/dcache/DCacheWrapper.scala",
-)
 
 
-# BEGIN LOCKED PORT CATALOG
-# Generated from validation/v2-locked-hierarchy.json; do not hand-edit.
-LOCKED_PORT_SPECS: dict[str, tuple[tuple[str, str, int], ...]] = {
-    "CMOUnit": (
+PortSpec = tuple[str, str, int]
+
+PORT_SPECS: dict[str, tuple[PortSpec, ...]] = {
+    'CMOUnit': (
         ('clock', 'input', 1),
         ('reset', 'input', 1),
         ('io_req_ready', 'output', 1),
@@ -75,7 +67,7 @@ LOCKED_PORT_SPECS: dict[str, tuple[tuple[str, str, int], ...]] = {
         ('io_wfi_wfiReq', 'input', 1),
         ('io_wfi_wfiSafe', 'output', 1),
     ),
-    "MissEntry": (
+    'MissEntry': (
         ('clock', 'input', 1),
         ('reset', 'input', 1),
         ('io_id', 'input', 4),
@@ -214,7 +206,7 @@ LOCKED_PORT_SPECS: dict[str, tuple[tuple[str, str, int], ...]] = {
         ('io_wfi_wfiReq', 'input', 1),
         ('io_wfi_wfiSafe', 'output', 1),
     ),
-    "MissReadyGen": (
+    'MissReadyGen': (
         ('io_in_0_ready', 'output', 1),
         ('io_in_0_valid', 'input', 1),
         ('io_in_0_bits_source', 'input', 4),
@@ -251,7 +243,7 @@ LOCKED_PORT_SPECS: dict[str, tuple[tuple[str, str, int], ...]] = {
         ('io_queryMQ_3_req_bits_vaddr', 'output', 50),
         ('io_queryMQ_3_ready', 'input', 1),
     ),
-    "ProbeEntry": (
+    'ProbeEntry': (
         ('clock', 'input', 1),
         ('reset', 'input', 1),
         ('io_req_ready', 'output', 1),
@@ -275,7 +267,7 @@ LOCKED_PORT_SPECS: dict[str, tuple[tuple[str, str, int], ...]] = {
         ('io_block_addr_valid', 'output', 1),
         ('io_block_addr_bits', 'output', 48),
     ),
-    "TreeArbiter": (
+    'TreeArbiter': (
         ('io_in_0_valid', 'input', 1),
         ('io_in_0_bits_source', 'input', 4),
         ('io_in_0_bits_cmd', 'input', 5),
@@ -342,7 +334,7 @@ LOCKED_PORT_SPECS: dict[str, tuple[tuple[str, str, int], ...]] = {
         ('io_out_bits_store_data', 'output', 512),
         ('io_out_bits_store_mask', 'output', 64),
     ),
-    "WritebackEntry": (
+    'WritebackEntry': (
         ('clock', 'input', 1),
         ('reset', 'input', 1),
         ('io_id', 'input', 5),
@@ -368,7 +360,7 @@ LOCKED_PORT_SPECS: dict[str, tuple[tuple[str, str, int], ...]] = {
         ('io_block_addr_valid', 'output', 1),
         ('io_block_addr_bits', 'output', 48),
     ),
-    "WritebackEntry_15": (
+    'WritebackEntry_15': (
         ('clock', 'input', 1),
         ('reset', 'input', 1),
         ('io_id', 'input', 6),
@@ -395,8 +387,11 @@ LOCKED_PORT_SPECS: dict[str, tuple[tuple[str, str, int], ...]] = {
         ('io_block_addr_bits', 'output', 48),
     ),
 }
-PORT_SPECS = LOCKED_PORT_SPECS
-# END LOCKED PORT CATALOG
+
+
+
+
+
 
 
 # =============================================================================

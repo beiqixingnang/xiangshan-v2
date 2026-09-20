@@ -37,58 +37,23 @@ from amaranth.back import verilog
 #     sibling Build-Cpu module is imported by this file.
 # Status / 状态: PASS_BOUNDED_PARENT (full 1326-port Diplomacy behavior remains open)
 __all__ = [
-    "MemBlockParentConfig",
-    "UHSCCacheMainPipe",
-    "UHSCDCacheWrapper",
-    "UHSCMemoryMemBlock",
-    "MainPipeParent",
-    "DCacheWrapperParent",
-    "MemBlockParent",
-    "MainPipe",
-    "DCacheWrapper",
-    "MemBlock",
-    "build_verilog",
-    "main",
-    "MEMBLOCK_PARENT_SOURCE_PATHS",
-    "MEMBLOCK_PARENT_SOURCE_FILE_COUNT",
+    'MemBlockParentConfig',
+    'UHSCCacheMainPipe',
+    'UHSCDCacheWrapper',
+    'UHSCMemoryMemBlock',
+    'MainPipeParent',
+    'DCacheWrapperParent',
+    'MemBlockParent',
+    'MainPipe',
+    'DCacheWrapper',
+    'MemBlock',
+    'build_verilog',
+    'main',
 ]
 
 
 # Frozen V2 source closure represented by this memory parent aggregate. /
 # 此存储器父级聚合所表示的冻结 V2 源闭包。
-MEMBLOCK_PARENT_SOURCE_PATHS: tuple[str, ...] = (
-    "upstream/src/main/scala/xiangshan/mem/MemBlock.scala",
-    "upstream/src/main/scala/xiangshan/cache/dcache/DCacheWrapper.scala",
-    "upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/MainPipe.scala",
-    "upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/AMOALU.scala",
-    "upstream/src/main/scala/xiangshan/cache/dcache/meta/TagArray.scala",
-    # The parent owns these edges in the selected DefaultConfig.  Keeping
-    # them in one frozen tuple makes the aggregate coverage explicit instead
-    # of implying that a five-file shell is a complete MemBlock rewrite.
-    "upstream/src/main/scala/xiangshan/cache/dcache/Uncache.scala",
-    "upstream/src/main/scala/xiangshan/cache/mmu/TLB.scala",
-    "upstream/src/main/scala/xiangshan/cache/mmu/TLBStorage.scala",
-    "upstream/src/main/scala/xiangshan/cache/mmu/MMUBundle.scala",
-    "upstream/src/main/scala/xiangshan/cache/mmu/MMUConst.scala",
-    "upstream/src/main/scala/xiangshan/cache/mmu/L2TLB.scala",
-    "upstream/src/main/scala/xiangshan/cache/mmu/L2TLBMissQueue.scala",
-    "upstream/src/main/scala/xiangshan/cache/mmu/L2TlbPrefetch.scala",
-    "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMainPipe.scala",
-    "upstream/src/main/scala/xiangshan/frontend/icache/InstrUncache.scala",
-    "upstream/src/main/scala/xiangshan/mem/lsqueue/LSQWrapper.scala",
-    "upstream/src/main/scala/xiangshan/mem/lsqueue/LoadQueueUncache.scala",
-    "upstream/src/main/scala/xiangshan/mem/pipeline/LoadUnit.scala",
-    "upstream/src/main/scala/xiangshan/mem/pipeline/StoreUnit.scala",
-    "upstream/src/main/scala/xiangshan/mem/pipeline/HybridUnit.scala",
-    "upstream/src/main/scala/xiangshan/mem/sbuffer/Sbuffer.scala",
-    "upstream/src/main/scala/xiangshan/mem/sbuffer/FakeSbuffer.scala",
-    "upstream/rocket-chip/src/main/scala/tilelink/Buffer.scala",
-    "upstream/rocket-chip/src/main/scala/tilelink/Bundles.scala",
-    "upstream/rocket-chip/src/main/scala/tilelink/Edges.scala",
-    "upstream/rocket-chip/src/main/scala/tilelink/Nodes.scala",
-    "upstream/rocket-chip/src/main/scala/diplomacy/Nodes.scala",
-)
-MEMBLOCK_PARENT_SOURCE_FILE_COUNT = len(MEMBLOCK_PARENT_SOURCE_PATHS)
 
 
 # Cast Amaranth generator controls to the context-manager protocol. / 将 Amaranth 生成器控制转换为上下文管理器协议。

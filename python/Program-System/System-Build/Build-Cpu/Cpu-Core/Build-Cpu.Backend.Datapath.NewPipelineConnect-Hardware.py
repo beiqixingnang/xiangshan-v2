@@ -30,9 +30,6 @@ __all__ = [
 ]
 
 COVERED_MODULES: tuple[str, ...] = ("NewPipelineConnectPipe",)
-SOURCE_PATHS: tuple[str, ...] = (
-    "upstream/src/main/scala/xiangshan/backend/datapath/NewPipelineConnect.scala",
-)
 
 
 # =============================================================================

@@ -27,25 +27,27 @@ from amaranth.hdl.ast import Value
 # 本聚合覆盖 CHIXbar.scala、MMIOBridge.scala、utils/OpenNCB.scala 与
 # TargetBinder.scala，并提供稳定的 banked ready/valid 边界。
 __all__ = [
-    "OpenLLCSramConfig", "route_bank", "is_mmio_transaction", "byte_mask",
-    "sram_reference_update",
-    "OpenLLCSram", "OpenLLCCHIXbar", "OpenLLCMMIOBridge", "OpenLLCTargetBinder",
-    "CHIXbar", "MMIODiverger", "MMIOMerger", "TargetBinder", "OpenNCBUtility",
-    "build_verilog", "main", "SOURCE_SCALA_ROOT", "SOURCE_SCALA_PATHS",
-    "SOURCE_SCALA_FILE_COUNT",
+    'OpenLLCSramConfig',
+    'route_bank',
+    'is_mmio_transaction',
+    'byte_mask',
+    'sram_reference_update',
+    'OpenLLCSram',
+    'OpenLLCCHIXbar',
+    'OpenLLCMMIOBridge',
+    'OpenLLCTargetBinder',
+    'CHIXbar',
+    'MMIODiverger',
+    'MMIOMerger',
+    'TargetBinder',
+    'OpenNCBUtility',
+    'build_verilog',
+    'main',
 ]
 
 
 # Keep all four utility inventory paths on the SRAM aggregate. /
 # 在 SRAM 聚合中保留 utility inventory 的全部 4 条路径。
-SOURCE_SCALA_ROOT = "openLLC/src/main/scala/openLLC/utils"
-SOURCE_SCALA_PATHS = (
-    "openLLC/src/main/scala/openLLC/utils/CHIXbar.scala",
-    "openLLC/src/main/scala/openLLC/utils/MMIOBridge.scala",
-    "openLLC/src/main/scala/openLLC/utils/OpenNCB.scala",
-    "openLLC/src/main/scala/openLLC/utils/TargetBinder.scala",
-)
-SOURCE_SCALA_FILE_COUNT = len(SOURCE_SCALA_PATHS)
 
 
 # Narrow a dynamic conditional context at the Amaranth boundary. /

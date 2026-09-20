@@ -30,6 +30,8 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
+from v2_build_provenance import provenance_for_build
+
 
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = ROOT / (
@@ -160,8 +162,9 @@ def declared_scala(module: Any) -> list[str]:
     """Return every Scala source the catalog Build declares."""
 
     paths: list[str] = []
+    provenance = provenance_for_build(TARGET)
     for attribute in ("ARBITER_SOURCE_PATHS", "ASYNCHRONOUS_SOURCE_PATHS", "UTILITY_SOURCE_PATHS"):
-        paths.extend(str(item) for item in getattr(module, attribute, ()))
+        paths.extend(str(item) for item in provenance.get(attribute, ()))
     return list(dict.fromkeys(paths))
 
 

@@ -31,18 +31,6 @@ __all__ = [
 
 
 # Keep all selected hardware-bearing Difftest source paths auditable. / 显式记录选定的硬件相关 Difftest Scala 路径以便审计。
-DIFFTEST_SOURCE_PATHS: tuple[str, ...] = (
-    "Batch.scala", "Bundles.scala", "common/AXI4.scala", "common/AXI4Lite.scala",
-    "common/AXI4Stream.scala", "common/FileControl.scala", "common/Flash.scala",
-    "common/LogPerfControl.scala", "common/Mem.scala", "common/SDCard.scala",
-    "common/WiringControl.scala", "Coverage.scala", "Delta.scala", "Difftest.scala",
-    "DPIC.scala", "fpga/DifftestMemCtrl.scala", "fpga/Host.scala", "fpga/XDMAConfigBar.scala",
-    "Gateway.scala", "plugin/topdown/TopdownDPI.scala", "plugin/topdown/TopdownIQInfo.scala",
-    "plugin/topdown/TopdownRobInfo.scala", "Preprocess.scala", "Replay.scala", "SimTop.scala",
-    "Squash.scala", "Trace.scala", "util/Compatibility.scala", "util/Delayer.scala",
-    "util/Lookup.scala", "util/PipelineConnect.scala", "util/Profile.scala", "util/Query.scala",
-    "util/SkidBufferConnect.scala", "Validate.scala",
-)
 
 
 # Cast Amaranth generator controls to the context-manager protocol. / 将 Amaranth 生成器控制转换为上下文管理器协议。

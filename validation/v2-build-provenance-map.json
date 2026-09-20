@@ -1,0 +1,792 @@
+{
+  "entries": {
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Datapath.NewPipelineConnect-Hardware.py": {
+      "SOURCE_PATHS": [
+        "upstream/src/main/scala/xiangshan/backend/datapath/NewPipelineConnect.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Datapath.VectorFamily-Hardware.py": {
+      "SOURCE_PATHS": [
+        "upstream/src/main/scala/xiangshan/backend/datapath/Og2ForVector.scala",
+        "upstream/src/main/scala/xiangshan/backend/rob/VTypeBuffer.scala",
+        "upstream/src/main/scala/xiangshan/backend/VecExcpDataMergeModule.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/wrapper/VIAluFix.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/vector/VecSrcTypeModule.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/wrapper/VIMacU.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/wrapper/VPPU.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Datapath.VldMergeUnit-Hardware.py": {
+      "SOURCE_PATHS": [
+        "upstream/src/main/scala/xiangshan/backend/datapath/VldMergeUnit.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/vector/Mgu.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Exu.FuncUnit-Hardware.py": {
+      "SOURCE_PATHS": [
+        "upstream/src/main/scala/xiangshan/backend/fu/FuncUnit.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/Bku.scala",
+        "upstream/src/main/scala/xiangshan/backend/exu/ExeUnit.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.FinalTwo.Family-Hardware.py": {
+      "SOURCE_PATHS": [
+        "upstream/src/main/scala/xiangshan/mem/sbuffer/DatamoduleResultBuffer.scala",
+        "upstream/src/main/scala/xiangshan/frontend/ITTAGE.scala",
+        "upstream/rocket-chip/src/main/scala/util/Replacement.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.NewCSR.CSRLite-Hardware.py": {
+      "SOURCE_PATHS": [
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/PMPEntryModule.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/PMAEntryModule.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.NewCSR.CSRModule-Hardware.py": {
+      "CSR_FAMILY_SOURCE_PATHS": [
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/CSRModule.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/CSRBundle.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/CSRBundles.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/CSRFields.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/CSRDefines.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/InterruptBundle.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/ExceptionBundle.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/StateEnBundle.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/MachineLevel.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/SupervisorLevel.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/HypervisorLevel.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/VirtualSupervisorLevel.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/DebugLevel.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/Unprivileged.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/CSRPMP.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/CSRPMA.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/CSRAIA.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/CSRCustom.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/CSREvents/CSREvent.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/CSREvents/TrapEntryMEvent.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/CSREvents/TrapEntryHSEvent.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/CSREvents/TrapEntryVSEvent.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/CSREvents/TrapEntryDEvent.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/CSREvents/TrapEntryMNEvent.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.NewCSR.CSRPermit-Hardware.py": {
+      "HIERARCHY": "validation/v2-locked-hierarchy.json",
+      "SOURCE_PATHS": [
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/CSRPermitModule.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.NewCSR.ControlFamily-Hardware.py": {
+      "SOURCE_PATHS": [
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/PMAEntryModule.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/InterruptFilter.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/CommitIDModule.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/SatpFlushMod.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/TrapHandleModule.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/TrapInstMod.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/TrapTvalMod.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/PFEvent.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.NewCSR.DebugFamily-Hardware.py": {
+      "SOURCE_PATHS": [
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/Debug.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.SRT16Divider-Hardware.py": {
+      "SOURCE_PATHS": [
+        "upstream/src/main/scala/xiangshan/backend/fu/SRT16Divider.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/SRT4Divider.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Issue.Entries-Hardware.py": {
+      "SOURCE_COMMIT": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af"
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Regcache.AgeFamily-Hardware.py": {
+      "SOURCE_PATHS": [
+        "upstream/src/main/scala/xiangshan/backend/issue/NewAgeDetector.scala",
+        "upstream/src/main/scala/xiangshan/backend/regcache/AgeDetector.scala",
+        "upstream/src/main/scala/xiangshan/backend/regcache/RegCacheAgeTimer.scala",
+        "upstream/src/main/scala/xiangshan/backend/regcache/RegCacheDataModule.scala",
+        "upstream/src/main/scala/xiangshan/backend/regcache/RegCacheTagModule.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Rob.PtrWrappers-Hardware.py": {
+      "SOURCE_PATHS": [
+        "upstream/src/main/scala/xiangshan/backend/rob/RobEnqPtrWrapper.scala",
+        "upstream/src/main/scala/xiangshan/backend/rob/RobDeqPtrWrapper.scala",
+        "upstream/src/main/scala/xiangshan/backend/rob/RobBundles.scala",
+        "upstream/utility/src/main/scala/utility/CircularQueuePtr.scala",
+        "upstream/utility/src/main/scala/utility/PriorityMuxDefault.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Rob.Rename.Trace-Family-Hardware.py": {
+      "LOCKED_REFERENCE_SHA256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+      "SOURCE_PATHS": [
+        "upstream/src/main/scala/xiangshan/backend/rob/ExceptionGen.scala",
+        "upstream/src/main/scala/xiangshan/backend/rob/DiffRatStateBuffer.scala",
+        "upstream/src/main/scala/xiangshan/backend/rob/Rab.scala",
+        "upstream/src/main/scala/xiangshan/backend/rename/CompressUnit.scala",
+        "upstream/src/main/scala/xiangshan/backend/rename/Snapshot.scala",
+        "upstream/src/main/scala/xiangshan/backend/trace/Trace.scala",
+        "upstream/src/main/scala/xiangshan/backend/trace/TraceBuffer.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.SmallControl.Family-Hardware.py": {
+      "LOCKED_REFERENCE_SHA256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+      "SOURCE_PATHS": [
+        "upstream/src/main/scala/xiangshan/backend/fu/wrapper/BranchUnit.scala",
+        "upstream/src/main/scala/xiangshan/mem/sbuffer/DatamoduleResultBuffer.scala",
+        "upstream/src/main/scala/xiangshan/backend/GPAMem.scala",
+        "upstream/src/main/scala/xiangshan/backend/ctrlblock/RedirectGenerator.scala",
+        "upstream/src/main/scala/xiangshan/backend/regcache/RegCache.scala",
+        "upstream/src/main/scala/xiangshan/backend/regcache/RegCacheTagTable.scala",
+        "upstream/src/main/scala/xiangshan/frontend/ITTAGE.scala",
+        "upstream/src/main/scala/xiangshan/frontend/newRAS.scala",
+        "upstream/src/main/scala/xiangshan/frontend/FauFTB.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/wrapper/VCVT.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Top-Hardware.py": {
+      "BACKEND_PARENT_SOURCE_PATHS": [
+        "upstream/src/main/scala/xiangshan/backend/Backend.scala",
+        "upstream/src/main/scala/xiangshan/backend/datapath/DataPath.scala",
+        "upstream/src/main/scala/xiangshan/backend/datapath/DataSource.scala",
+        "upstream/src/main/scala/xiangshan/backend/datapath/NewPipelineConnect.scala",
+        "upstream/src/main/scala/xiangshan/backend/datapath/WbArbiter.scala",
+        "upstream/src/main/scala/xiangshan/backend/decode/DecodeUnit.scala",
+        "upstream/src/main/scala/xiangshan/backend/decode/DecodeStage.scala",
+        "upstream/src/main/scala/xiangshan/backend/issue/IssueQueue.scala",
+        "upstream/src/main/scala/xiangshan/backend/issue/EnqPolicy.scala",
+        "upstream/src/main/scala/xiangshan/backend/issue/AgeDetector.scala",
+        "upstream/src/main/scala/xiangshan/backend/issue/FuBusyTableRead.scala",
+        "upstream/src/main/scala/xiangshan/backend/exu/ExuBlock.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/Alu.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/Branch.scala",
+        "upstream/src/main/scala/xiangshan/backend/fu/Jump.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Chisel.Arbiter-Hardware.py": {
+      "ARBITER_SOURCE_PATHS": [
+        "src/main/scala/chisel3/util/Arbiter.scala"
+      ],
+      "ASYNCHRONOUS_SOURCE_PATHS": [
+        "upstream/rocket-chip/src/main/scala/util/AsyncQueue.scala",
+        "upstream/rocket-chip/src/main/scala/util/SynchronizerReg.scala",
+        "upstream/rocket-chip/src/main/scala/util/ShiftReg.scala"
+      ],
+      "UTILITY_SOURCE_PATHS": [
+        "upstream/rocket-chip/src/main/scala/util/Repeater.scala",
+        "upstream/rocket-chip/src/main/scala/util/IDPool.scala",
+        "upstream/utility/src/main/scala/utility/DiplomacyWidget.scala",
+        "src/main/scala/chisel3/util/Decoupled.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Chisel.Decoupled-Hardware.py": {
+      "PIPE_SOURCE_PATHS": [
+        "src/main/scala/utils/PipeWithFlush.scala"
+      ],
+      "QUEUE_RAM_SOURCE_PATHS": [
+        "src/main/scala/chisel3/util/Decoupled.scala"
+      ],
+      "QUEUE_SOURCE_PATHS": [
+        "src/main/scala/chisel3/util/Decoupled.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.ChiselIOPMP.Interface-Hardware.py": {
+      "SOURCE_SCALA_FILE_COUNT": 3,
+      "SOURCE_SCALA_PATHS": [
+        "ChiselIOPMP/src/main/scala/Iopmp.scala",
+        "ChiselIOPMP/src/main/scala/IopmpBridge.scala",
+        "ChiselIOPMP/src/main/scala/IopmpChecker.scala"
+      ],
+      "SOURCE_SCALA_ROOT": "ChiselIOPMP/src/main/scala"
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Difftest.Interface-Hardware.py": {
+      "DIFFTEST_SOURCE_PATHS": [
+        "Batch.scala",
+        "Bundles.scala",
+        "common/AXI4.scala",
+        "common/AXI4Lite.scala",
+        "common/AXI4Stream.scala",
+        "common/FileControl.scala",
+        "common/Flash.scala",
+        "common/LogPerfControl.scala",
+        "common/Mem.scala",
+        "common/SDCard.scala",
+        "common/WiringControl.scala",
+        "Coverage.scala",
+        "Delta.scala",
+        "Difftest.scala",
+        "DPIC.scala",
+        "fpga/DifftestMemCtrl.scala",
+        "fpga/Host.scala",
+        "fpga/XDMAConfigBar.scala",
+        "Gateway.scala",
+        "plugin/topdown/TopdownDPI.scala",
+        "plugin/topdown/TopdownIQInfo.scala",
+        "plugin/topdown/TopdownRobInfo.scala",
+        "Preprocess.scala",
+        "Replay.scala",
+        "SimTop.scala",
+        "Squash.scala",
+        "Trace.scala",
+        "util/Compatibility.scala",
+        "util/Delayer.scala",
+        "util/Lookup.scala",
+        "util/PipelineConnect.scala",
+        "util/Profile.scala",
+        "util/Query.scala",
+        "util/SkidBufferConnect.scala",
+        "Validate.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Fudian.Arithmetic-Hardware.py": {
+      "SOURCE_SCALA_FILE_COUNT": 5,
+      "SOURCE_SCALA_PATHS": [
+        "fudian/src/main/scala/fudian/utils/CLZ.scala",
+        "fudian/src/main/scala/fudian/utils/CSA.scala",
+        "fudian/src/main/scala/fudian/utils/LZA.scala",
+        "fudian/src/main/scala/fudian/utils/Multiplier.scala",
+        "fudian/src/main/scala/fudian/utils/ShiftRightJam.scala"
+      ],
+      "SOURCE_SCALA_ROOT": "fudian/src/main/scala/fudian/utils"
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Fudian.Fpu-Hardware.py": {
+      "SOURCE_SCALA_FILE_COUNT": 15,
+      "SOURCE_SCALA_PATHS": [
+        "fudian/src/main/scala/fudian/FADD.scala",
+        "fudian/src/main/scala/fudian/FCMA.scala",
+        "fudian/src/main/scala/fudian/FCMP.scala",
+        "fudian/src/main/scala/fudian/FDIV.scala",
+        "fudian/src/main/scala/fudian/FMUL.scala",
+        "fudian/src/main/scala/fudian/FPToFP.scala",
+        "fudian/src/main/scala/fudian/FPToInt.scala",
+        "fudian/src/main/scala/fudian/IntToFP.scala",
+        "fudian/src/main/scala/fudian/package.scala",
+        "fudian/src/main/scala/fudian/RoundingUnit.scala",
+        "fudian/src/main/scala/fudian/utils/CLZ.scala",
+        "fudian/src/main/scala/fudian/utils/CSA.scala",
+        "fudian/src/main/scala/fudian/utils/LZA.scala",
+        "fudian/src/main/scala/fudian/utils/Multiplier.scala",
+        "fudian/src/main/scala/fudian/utils/ShiftRightJam.scala"
+      ],
+      "SOURCE_SCALA_ROOT": "fudian/src/main/scala/fudian"
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Rocket.Diplomacy-Hardware.py": {
+      "DIPLOMACY_ROUTER_SOURCE_OBSERVATIONS": [
+        [
+          "address_selection",
+          "rocket-chip/src/main/scala/diplomacy/AddressDecoder.scala:18-49"
+        ],
+        [
+          "decoupled_acceptance",
+          "rocket-chip/src/main/scala/tilelink/Arbiter.scala:59-97"
+        ]
+      ],
+      "SOURCE_SCALA_FILE_COUNT": 18,
+      "SOURCE_SCALA_PATHS": [
+        "rocket-chip/src/main/scala/diplomacy/AddressDecoder.scala",
+        "rocket-chip/src/main/scala/diplomacy/AddressRange.scala",
+        "rocket-chip/src/main/scala/diplomacy/BundleBridge.scala",
+        "rocket-chip/src/main/scala/diplomacy/ClockDomain.scala",
+        "rocket-chip/src/main/scala/diplomacy/Clone.scala",
+        "rocket-chip/src/main/scala/diplomacy/CloneModule.scala",
+        "rocket-chip/src/main/scala/diplomacy/DeviceTree.scala",
+        "rocket-chip/src/main/scala/diplomacy/FixedClockResource.scala",
+        "rocket-chip/src/main/scala/diplomacy/JSON.scala",
+        "rocket-chip/src/main/scala/diplomacy/LazyModule.scala",
+        "rocket-chip/src/main/scala/diplomacy/Main.scala",
+        "rocket-chip/src/main/scala/diplomacy/Nodes.scala",
+        "rocket-chip/src/main/scala/diplomacy/package.scala",
+        "rocket-chip/src/main/scala/diplomacy/Parameters.scala",
+        "rocket-chip/src/main/scala/diplomacy/Resources.scala",
+        "rocket-chip/src/main/scala/diplomacy/SRAM.scala",
+        "rocket-chip/src/main/scala/diplomacy/Unreachable.scala",
+        "rocket-chip/src/main/scala/diplomacy/ValName.scala"
+      ],
+      "SOURCE_SCALA_ROOT": "rocket-chip/src/main/scala/diplomacy"
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Rocket.Jtag-Hardware.py": {
+      "SOURCE_PATHS": [
+        "upstream/rocket-chip/src/main/scala/jtag/JtagShifter.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Rocket.Protocol-Hardware.py": {
+      "ROCKET_PROTOCOL_SOURCE_PATHS": [
+        "upstream/rocket-chip/src/main/scala/tilelink/Arbiter.scala",
+        "upstream/rocket-chip/src/main/scala/tilelink/Xbar.scala",
+        "upstream/rocket-chip/src/main/scala/tilelink/Bundles.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Rocket.TLChildren.Family-Hardware.py": {
+      "LOCKED_REFERENCE_SHA256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+      "SOURCE_PATHS": {
+        "BusErrorUnit": [
+          "upstream/rocket-chip/src/main/scala/tile/BusErrorUnit.scala"
+        ],
+        "TLBuffer": [
+          "upstream/rocket-chip/src/main/scala/tilelink/Buffer.scala"
+        ],
+        "TLClientsMerger": [
+          "upstream/utility/src/main/scala/utility/TLUtils/TLClientsMerger.scala"
+        ],
+        "TLXbar": [
+          "upstream/rocket-chip/src/main/scala/tilelink/Xbar.scala"
+        ]
+      },
+      "SOURCE_SCALA_PATHS": [
+        "upstream/rocket-chip/src/main/scala/tilelink/Xbar.scala",
+        "upstream/rocket-chip/src/main/scala/tilelink/Buffer.scala",
+        "upstream/utility/src/main/scala/utility/TLUtils/TLClientsMerger.scala",
+        "upstream/rocket-chip/src/main/scala/tile/BusErrorUnit.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Utility-Hardware.py": {
+      "UTILITY_SOURCE_PATHS": [
+        "BitUtils.scala",
+        "UIntUtils.scala",
+        "PriorityMuxDefault.scala",
+        "CircularQueuePtr.scala",
+        "MultiFlagCircualQueuePtr.scala",
+        "MIMOQueue.scala",
+        "ECC.scala",
+        "CriticalErrorUtils.scala",
+        "PerfCounterUtils.scala",
+        "FastArbiter.scala",
+        "ParallelMux.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.YunSuan.Scalar-Hardware.py": {
+      "SOURCE_SCALA_FILE_COUNT": 5,
+      "SOURCE_SCALA_PATHS": [
+        "yunsuan/src/main/scala/yunsuan/scalar/Convert.scala",
+        "yunsuan/src/main/scala/yunsuan/scalar/FPU.scala",
+        "yunsuan/src/main/scala/yunsuan/scalar/IntToFP.scala",
+        "yunsuan/src/main/scala/yunsuan/scalar/RoundingUnit.scala",
+        "yunsuan/src/main/scala/yunsuan/scalar/utils.scala"
+      ],
+      "SOURCE_SCALA_ROOT": "yunsuan/src/main/scala/yunsuan/scalar"
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.WrBypass-Hardware.py": {
+      "SOURCE_PATHS": [
+        "upstream/src/main/scala/xiangshan/frontend/WrBypass.scala",
+        "upstream/utility/src/main/scala/utility/IndexableCAMTemplate.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.ICacheMshr-Hardware.py": {
+      "SOURCE_PATHS": [
+        "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.ICacheReplacer-Hardware.py": {
+      "SOURCE_PATHS": [
+        "upstream/src/main/scala/xiangshan/frontend/icache/ICache.scala",
+        "upstream/rocket-chip/src/main/scala/util/Replacement.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.InstrUncache-Hardware.py": {
+      "SOURCE_PATHS": [
+        "upstream/src/main/scala/xiangshan/frontend/icache/InstrUncache.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.Prefetch.Family-Hardware.py": {
+      "LOCKED_REFERENCE_SHA256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+      "SOURCE_PATHS": [
+        "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMainPipe.scala",
+        "upstream/src/main/scala/xiangshan/frontend/icache/IPrefetch.scala",
+        "upstream/src/main/scala/xiangshan/frontend/icache/WayLookup.scala",
+        "upstream/src/main/scala/xiangshan/frontend/icache/InstrUncache.scala",
+        "upstream/src/main/scala/xiangshan/cache/mmu/L2TlbPrefetch.scala",
+        "upstream/src/main/scala/xiangshan/cache/mmu/L2TLBMissQueue.scala",
+        "upstream/src/main/scala/xiangshan/mem/prefetch/PrefetcherMonitor.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.Utils-Hardware.py": {
+      "SOURCE_PATHS": [
+        "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala",
+        "upstream/src/main/scala/xiangshan/frontend/icache/FIFO.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Top-Hardware.py": {
+      "FRONTEND_PARENT_SOURCE_FILE_COUNT": 25,
+      "FRONTEND_PARENT_SOURCE_OBSERVATIONS": [
+        [
+          "redirect_flush",
+          "Frontend.scala:111-113,423-431"
+        ],
+        [
+          "wfi_safe",
+          "Frontend.scala:191-197"
+        ],
+        [
+          "ftq_ifu_icache_fire",
+          "Frontend.scala:199-214"
+        ],
+        [
+          "rvc_ifu_ibuffer",
+          "Frontend.scala:125-132,226-231"
+        ],
+        [
+          "uncache_fire",
+          "Frontend.scala:442-445"
+        ],
+        [
+          "ibuffer_frontend_info",
+          "Frontend.scala:439-452"
+        ]
+      ],
+      "FRONTEND_PARENT_SOURCE_PATHS": [
+        "upstream/src/main/scala/xiangshan/frontend/Frontend.scala",
+        "upstream/src/main/scala/xiangshan/frontend/BPU.scala",
+        "upstream/src/main/scala/xiangshan/frontend/Bim.scala",
+        "upstream/src/main/scala/xiangshan/frontend/Composer.scala",
+        "upstream/src/main/scala/xiangshan/frontend/FauFTB.scala",
+        "upstream/src/main/scala/xiangshan/frontend/FTB.scala",
+        "upstream/src/main/scala/xiangshan/frontend/FrontendBundle.scala",
+        "upstream/src/main/scala/xiangshan/frontend/IBuffer.scala",
+        "upstream/src/main/scala/xiangshan/frontend/IFU.scala",
+        "upstream/src/main/scala/xiangshan/frontend/NewFtq.scala",
+        "upstream/src/main/scala/xiangshan/frontend/PreDecode.scala",
+        "upstream/src/main/scala/xiangshan/frontend/ITTAGE.scala",
+        "upstream/src/main/scala/xiangshan/frontend/newRAS.scala",
+        "upstream/src/main/scala/xiangshan/frontend/RAS.scala",
+        "upstream/src/main/scala/xiangshan/frontend/SC.scala",
+        "upstream/src/main/scala/xiangshan/frontend/Tage.scala",
+        "upstream/src/main/scala/xiangshan/frontend/WrBypass.scala",
+        "upstream/src/main/scala/xiangshan/frontend/icache/ICache.scala",
+        "upstream/src/main/scala/xiangshan/frontend/icache/ICacheBundle.scala",
+        "upstream/src/main/scala/xiangshan/frontend/icache/ICacheCtrlUnit.scala",
+        "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala",
+        "upstream/src/main/scala/xiangshan/frontend/icache/InstrUncache.scala",
+        "upstream/src/main/scala/xiangshan/cache/mmu/MMUBundle.scala",
+        "upstream/src/main/scala/xiangshan/cache/mmu/Repeater.scala",
+        "upstream/src/main/scala/xiangshan/cache/mmu/TLB.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Top.UHSC.Roots-Hardware.py": {
+      "L2TOP_SOURCE_SCALA_PATHS": [
+        "upstream/src/main/scala/xiangshan/L2Top.scala",
+        "upstream/rocket-chip/src/main/scala/tilelink/Xbar.scala",
+        "upstream/rocket-chip/src/main/scala/tilelink/Buffer.scala",
+        "upstream/rocket-chip/src/main/scala/tilelink/BankBinder.scala",
+        "upstream/utility/src/main/scala/utility/TLUtils/TLClientsMerger.scala",
+        "upstream/rocket-chip/src/main/scala/tilelink/Arbiter.scala",
+        "upstream/rocket-chip/src/main/scala/tilelink/Bundles.scala",
+        "upstream/rocket-chip/src/main/scala/tilelink/Parameters.scala",
+        "upstream/rocket-chip/src/main/scala/tilelink/Nodes.scala",
+        "upstream/rocket-chip/src/main/scala/tilelink/BusWrapper.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Top.XSCore.Parent-Hardware.py": {
+      "XSCORE_SOURCE_PATHS": [
+        "upstream/src/main/scala/xiangshan/XSCore.scala",
+        "upstream/src/main/scala/xiangshan/frontend/Frontend.scala",
+        "upstream/src/main/scala/xiangshan/backend/Backend.scala",
+        "upstream/src/main/scala/xiangshan/mem/MemBlock.scala",
+        "upstream/src/main/scala/xiangshan/cache/dcache/DCacheWrapper.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Top.XSTile.IntBuffer.Family-Hardware.py": {
+      "LOCKED_REFERENCE_SHA256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+      "SOURCE_PATHS": [
+        "upstream/utility/src/main/scala/utility/IntBuffer.scala",
+        "upstream/rocket-chip/src/main/scala/diplomacy/LazyModule.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Cache.Dcache.Meta.TagArray-Hardware.py": {
+      "SOURCE_PATHS": [
+        "upstream/src/main/scala/xiangshan/cache/dcache/meta/TagArray.scala",
+        "upstream/utility/src/main/scala/utility/sram/SRAMTemplate.scala",
+        "upstream/utility/src/main/scala/utility/sram/SramProto.scala",
+        "upstream/utility/src/main/scala/utility/mbist/MbistClockGateCell.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.CoupledL2.Bridge-Hardware.py": {
+      "SOURCE_SCALA_FILE_COUNT": 19,
+      "SOURCE_SCALA_PATHS": [
+        "coupledL2/src/main/scala/coupledL2/tl2chi/Bundle.scala",
+        "coupledL2/src/main/scala/coupledL2/tl2chi/chi/AsyncBridge.scala",
+        "coupledL2/src/main/scala/coupledL2/tl2chi/chi/CHILogger.scala",
+        "coupledL2/src/main/scala/coupledL2/tl2chi/chi/LinkLayer.scala",
+        "coupledL2/src/main/scala/coupledL2/tl2chi/chi/Message.scala",
+        "coupledL2/src/main/scala/coupledL2/tl2chi/chi/NetworkLayer.scala",
+        "coupledL2/src/main/scala/coupledL2/tl2chi/chi/Opcode.scala",
+        "coupledL2/src/main/scala/coupledL2/tl2chi/MainPipe.scala",
+        "coupledL2/src/main/scala/coupledL2/tl2chi/MMIOBridge.scala",
+        "coupledL2/src/main/scala/coupledL2/tl2chi/MSHR.scala",
+        "coupledL2/src/main/scala/coupledL2/tl2chi/MSHRCtl.scala",
+        "coupledL2/src/main/scala/coupledL2/tl2chi/RXDAT.scala",
+        "coupledL2/src/main/scala/coupledL2/tl2chi/RXRSP.scala",
+        "coupledL2/src/main/scala/coupledL2/tl2chi/RXSNP.scala",
+        "coupledL2/src/main/scala/coupledL2/tl2chi/Slice.scala",
+        "coupledL2/src/main/scala/coupledL2/tl2chi/TL2CHICoupledL2.scala",
+        "coupledL2/src/main/scala/coupledL2/tl2chi/TXDAT.scala",
+        "coupledL2/src/main/scala/coupledL2/tl2chi/TXREQ.scala",
+        "coupledL2/src/main/scala/coupledL2/tl2chi/TXRSP.scala"
+      ],
+      "SOURCE_SCALA_ROOT": "coupledL2/src/main/scala/coupledL2/tl2chi"
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.CoupledL2.Directory-Hardware.py": {
+      "SOURCE_SCALA_FILE_COUNT": 11,
+      "SOURCE_SCALA_PATHS": [
+        "coupledL2/src/main/scala/coupledL2/tl2tl/AcquireUnit.scala",
+        "coupledL2/src/main/scala/coupledL2/tl2tl/Bundle.scala",
+        "coupledL2/src/main/scala/coupledL2/tl2tl/MainPipe.scala",
+        "coupledL2/src/main/scala/coupledL2/tl2tl/MSHR.scala",
+        "coupledL2/src/main/scala/coupledL2/tl2tl/MSHRCtl.scala",
+        "coupledL2/src/main/scala/coupledL2/tl2tl/ProbeQueue.scala",
+        "coupledL2/src/main/scala/coupledL2/tl2tl/RefillUnit.scala",
+        "coupledL2/src/main/scala/coupledL2/tl2tl/SinkB.scala",
+        "coupledL2/src/main/scala/coupledL2/tl2tl/Slice.scala",
+        "coupledL2/src/main/scala/coupledL2/tl2tl/SourceC.scala",
+        "coupledL2/src/main/scala/coupledL2/tl2tl/TL2TLCoupledL2.scala"
+      ],
+      "SOURCE_SCALA_ROOT": "coupledL2/src/main/scala/coupledL2/tl2tl"
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.HuanCun.Cache-Hardware.py": {
+      "HUANCUN_CACHE_SOURCE_PATHS": [
+        "upstream/huancun/src/main/scala/huancun/RequestBuffer.scala",
+        "upstream/huancun/src/main/scala/huancun/MetaData.scala",
+        "upstream/huancun/src/main/scala/huancun/DataStorage.scala",
+        "upstream/huancun/src/main/scala/huancun/HuanCun.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.OpenLLC.Bridge-Hardware.py": {
+      "SOURCE_SCALA_FILE_COUNT": 8,
+      "SOURCE_SCALA_PATHS": [
+        "openLLC/src/main/scala/openLLC/chi/LinkLayer.scala",
+        "openLLC/src/main/scala/openLLC/chi/RXDAT.scala",
+        "openLLC/src/main/scala/openLLC/chi/RXREQ.scala",
+        "openLLC/src/main/scala/openLLC/chi/RXRSP.scala",
+        "openLLC/src/main/scala/openLLC/chi/TXDAT.scala",
+        "openLLC/src/main/scala/openLLC/chi/TXREQ.scala",
+        "openLLC/src/main/scala/openLLC/chi/TXRSP.scala",
+        "openLLC/src/main/scala/openLLC/chi/TXSNP.scala"
+      ],
+      "SOURCE_SCALA_ROOT": "openLLC/src/main/scala/openLLC/chi"
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.OpenLLC.Cache-Hardware.py": {
+      "SOURCE_SCALA_FILE_COUNT": 27,
+      "SOURCE_SCALA_PATHS": [
+        "openLLC/src/main/scala/openLLC/chi/LinkLayer.scala",
+        "openLLC/src/main/scala/openLLC/chi/RXDAT.scala",
+        "openLLC/src/main/scala/openLLC/chi/RXREQ.scala",
+        "openLLC/src/main/scala/openLLC/chi/RXRSP.scala",
+        "openLLC/src/main/scala/openLLC/chi/TXDAT.scala",
+        "openLLC/src/main/scala/openLLC/chi/TXREQ.scala",
+        "openLLC/src/main/scala/openLLC/chi/TXRSP.scala",
+        "openLLC/src/main/scala/openLLC/chi/TXSNP.scala",
+        "openLLC/src/main/scala/openLLC/Common.scala",
+        "openLLC/src/main/scala/openLLC/DataStorage.scala",
+        "openLLC/src/main/scala/openLLC/Directory.scala",
+        "openLLC/src/main/scala/openLLC/DummyLLC.scala",
+        "openLLC/src/main/scala/openLLC/LLCParam.scala",
+        "openLLC/src/main/scala/openLLC/MainPipe.scala",
+        "openLLC/src/main/scala/openLLC/MemUnit.scala",
+        "openLLC/src/main/scala/openLLC/OpenLLC.scala",
+        "openLLC/src/main/scala/openLLC/RefillUnit.scala",
+        "openLLC/src/main/scala/openLLC/RequestArb.scala",
+        "openLLC/src/main/scala/openLLC/RequestBuffer.scala",
+        "openLLC/src/main/scala/openLLC/ResponseUnit.scala",
+        "openLLC/src/main/scala/openLLC/Slice.scala",
+        "openLLC/src/main/scala/openLLC/SnoopUnit.scala",
+        "openLLC/src/main/scala/openLLC/TopDownMonitor.scala",
+        "openLLC/src/main/scala/openLLC/utils/CHIXbar.scala",
+        "openLLC/src/main/scala/openLLC/utils/MMIOBridge.scala",
+        "openLLC/src/main/scala/openLLC/utils/OpenNCB.scala",
+        "openLLC/src/main/scala/openLLC/utils/TargetBinder.scala"
+      ],
+      "SOURCE_SCALA_ROOT": "openLLC/src/main/scala/openLLC"
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.OpenLLC.OpenNCB-Hardware.py": {
+      "SOURCE_SCALA_FILE_COUNT": 89,
+      "SOURCE_SCALA_PATHS": [
+        "openLLC/openNCB/src/main/scala/openncb/axi/AXI4Parameters.scala",
+        "openLLC/openNCB/src/main/scala/openncb/axi/bundle/AbstractAXI4Bundle.scala",
+        "openLLC/openNCB/src/main/scala/openncb/axi/bundle/AXI4BundleAR.scala",
+        "openLLC/openNCB/src/main/scala/openncb/axi/bundle/AXI4BundleAW.scala",
+        "openLLC/openNCB/src/main/scala/openncb/axi/bundle/AXI4BundleB.scala",
+        "openLLC/openNCB/src/main/scala/openncb/axi/bundle/AXI4BundleR.scala",
+        "openLLC/openNCB/src/main/scala/openncb/axi/bundle/AXI4BundleW.scala",
+        "openLLC/openNCB/src/main/scala/openncb/axi/channel/AbstractAXI4Channel.scala",
+        "openLLC/openNCB/src/main/scala/openncb/axi/channel/AXI4ChannelAR.scala",
+        "openLLC/openNCB/src/main/scala/openncb/axi/channel/AXI4ChannelAW.scala",
+        "openLLC/openNCB/src/main/scala/openncb/axi/channel/AXI4ChannelB.scala",
+        "openLLC/openNCB/src/main/scala/openncb/axi/channel/AXI4ChannelR.scala",
+        "openLLC/openNCB/src/main/scala/openncb/axi/channel/AXI4ChannelW.scala",
+        "openLLC/openNCB/src/main/scala/openncb/axi/field/AXI4FieldAxBURST.scala",
+        "openLLC/openNCB/src/main/scala/openncb/axi/field/AXI4FieldAxSIZE.scala",
+        "openLLC/openNCB/src/main/scala/openncb/axi/field/AXI4FieldRESP.scala",
+        "openLLC/openNCB/src/main/scala/openncb/axi/field/package.scala",
+        "openLLC/openNCB/src/main/scala/openncb/axi/intf/AbstractAXI4Interface.scala",
+        "openLLC/openNCB/src/main/scala/openncb/axi/intf/AXI4Interface.scala",
+        "openLLC/openNCB/src/main/scala/openncb/axi/WithAXI4Parameters.scala",
+        "openLLC/openNCB/src/main/scala/openncb/chi/bundle/AbstractCHIBundle.scala",
+        "openLLC/openNCB/src/main/scala/openncb/chi/bundle/CHIBundleDAT.scala",
+        "openLLC/openNCB/src/main/scala/openncb/chi/bundle/CHIBundleREQ.scala",
+        "openLLC/openNCB/src/main/scala/openncb/chi/bundle/CHIBundleRSP.scala",
+        "openLLC/openNCB/src/main/scala/openncb/chi/bundle/CHIBundleSNP.scala",
+        "openLLC/openNCB/src/main/scala/openncb/chi/channel/AbstractCHIChannel.scala",
+        "openLLC/openNCB/src/main/scala/openncb/chi/channel/CHIChannel.scala",
+        "openLLC/openNCB/src/main/scala/openncb/chi/channel/CHIChannelDAT.scala",
+        "openLLC/openNCB/src/main/scala/openncb/chi/channel/CHIChannelREQ.scala",
+        "openLLC/openNCB/src/main/scala/openncb/chi/channel/CHIChannelRSP.scala",
+        "openLLC/openNCB/src/main/scala/openncb/chi/channel/CHIChannelSNP.scala",
+        "openLLC/openNCB/src/main/scala/openncb/chi/channel/package.scala",
+        "openLLC/openNCB/src/main/scala/openncb/chi/CHIConstants.scala",
+        "openLLC/openNCB/src/main/scala/openncb/chi/CHIParameters.scala",
+        "openLLC/openNCB/src/main/scala/openncb/chi/EnumCHIChannel.scala",
+        "openLLC/openNCB/src/main/scala/openncb/chi/EnumCHIIssue.scala",
+        "openLLC/openNCB/src/main/scala/openncb/chi/field/CHIField.scala",
+        "openLLC/openNCB/src/main/scala/openncb/chi/field/CHIFieldMemAttr.scala",
+        "openLLC/openNCB/src/main/scala/openncb/chi/field/CHIFieldOrder.scala",
+        "openLLC/openNCB/src/main/scala/openncb/chi/field/CHIFieldRespErr.scala",
+        "openLLC/openNCB/src/main/scala/openncb/chi/field/CHIFieldSize.scala",
+        "openLLC/openNCB/src/main/scala/openncb/chi/field/package.scala",
+        "openLLC/openNCB/src/main/scala/openncb/chi/intf/CHISNFInterface.scala",
+        "openLLC/openNCB/src/main/scala/openncb/chi/intf/package.scala",
+        "openLLC/openNCB/src/main/scala/openncb/chi/opcode/CHIOpcode.scala",
+        "openLLC/openNCB/src/main/scala/openncb/chi/opcode/CHIOpcodeDecoder.scala",
+        "openLLC/openNCB/src/main/scala/openncb/chi/opcode/CHISNFOpcodesDAT.scala",
+        "openLLC/openNCB/src/main/scala/openncb/chi/opcode/CHISNFOpcodesREQ.scala",
+        "openLLC/openNCB/src/main/scala/openncb/chi/opcode/CHISNFOpcodesRSP.scala",
+        "openLLC/openNCB/src/main/scala/openncb/chi/opcode/package.scala",
+        "openLLC/openNCB/src/main/scala/openncb/chi/WithCHIParameters.scala",
+        "openLLC/openNCB/src/main/scala/openncb/debug/DebugBundle.scala",
+        "openLLC/openNCB/src/main/scala/openncb/debug/DebugElement.scala",
+        "openLLC/openNCB/src/main/scala/openncb/debug/DebugSignal.scala",
+        "openLLC/openNCB/src/main/scala/openncb/logical/chi/AbstractCHILinkActiveManager.scala",
+        "openLLC/openNCB/src/main/scala/openncb/logical/chi/AbstractCHILinkCreditManager.scala",
+        "openLLC/openNCB/src/main/scala/openncb/logical/chi/CHILinkActiveBundle.scala",
+        "openLLC/openNCB/src/main/scala/openncb/logical/chi/CHILinkActiveManagerRX.scala",
+        "openLLC/openNCB/src/main/scala/openncb/logical/chi/CHILinkActiveManagerTX.scala",
+        "openLLC/openNCB/src/main/scala/openncb/logical/chi/CHILinkCreditManagerRX.scala",
+        "openLLC/openNCB/src/main/scala/openncb/logical/chi/CHILinkCreditManagerTX.scala",
+        "openLLC/openNCB/src/main/scala/openncb/logical/NCBDownstreamAR.scala",
+        "openLLC/openNCB/src/main/scala/openncb/logical/NCBDownstreamAW.scala",
+        "openLLC/openNCB/src/main/scala/openncb/logical/NCBDownstreamB.scala",
+        "openLLC/openNCB/src/main/scala/openncb/logical/NCBDownstreamR.scala",
+        "openLLC/openNCB/src/main/scala/openncb/logical/NCBDownstreamW.scala",
+        "openLLC/openNCB/src/main/scala/openncb/logical/NCBOrderAddressCAM.scala",
+        "openLLC/openNCB/src/main/scala/openncb/logical/NCBOrderRequestCAM.scala",
+        "openLLC/openNCB/src/main/scala/openncb/logical/NCBTransactionAgeMatrix.scala",
+        "openLLC/openNCB/src/main/scala/openncb/logical/NCBTransactionFreeList.scala",
+        "openLLC/openNCB/src/main/scala/openncb/logical/NCBTransactionIndexFIFO.scala",
+        "openLLC/openNCB/src/main/scala/openncb/logical/NCBTransactionPayload.scala",
+        "openLLC/openNCB/src/main/scala/openncb/logical/NCBTransactionQueue.scala",
+        "openLLC/openNCB/src/main/scala/openncb/logical/NCBUpstreamRXDAT.scala",
+        "openLLC/openNCB/src/main/scala/openncb/logical/NCBUpstreamRXREQ.scala",
+        "openLLC/openNCB/src/main/scala/openncb/logical/NCBUpstreamTXDAT.scala",
+        "openLLC/openNCB/src/main/scala/openncb/logical/NCBUpstreamTXRSP.scala",
+        "openLLC/openNCB/src/main/scala/openncb/logical/shared/RotationalPrioritySelector.scala",
+        "openLLC/openNCB/src/main/scala/openncb/logical/shared/SpillRegister.scala",
+        "openLLC/openNCB/src/main/scala/openncb/NCB200.scala",
+        "openLLC/openNCB/src/main/scala/openncb/NCBParameters.scala",
+        "openLLC/openNCB/src/main/scala/openncb/util/AddressableReadPort.scala",
+        "openLLC/openNCB/src/main/scala/openncb/util/AddressableReadWritePort.scala",
+        "openLLC/openNCB/src/main/scala/openncb/util/AddressableWritePort.scala",
+        "openLLC/openNCB/src/main/scala/openncb/util/CompanionConnection.scala",
+        "openLLC/openNCB/src/main/scala/openncb/util/package.scala",
+        "openLLC/openNCB/src/main/scala/openncb/util/ParallelMux.scala",
+        "openLLC/openNCB/src/main/scala/openncb/util/ValidMux.scala",
+        "openLLC/openNCB/src/main/scala/openncb/WithNCBParameters.scala"
+      ],
+      "SOURCE_SCALA_ROOT": "openLLC/openNCB/src/main/scala/openncb"
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.OpenLLC.Sram-Hardware.py": {
+      "SOURCE_SCALA_FILE_COUNT": 4,
+      "SOURCE_SCALA_PATHS": [
+        "openLLC/src/main/scala/openLLC/utils/CHIXbar.scala",
+        "openLLC/src/main/scala/openLLC/utils/MMIOBridge.scala",
+        "openLLC/src/main/scala/openLLC/utils/OpenNCB.scala",
+        "openLLC/src/main/scala/openLLC/utils/TargetBinder.scala"
+      ],
+      "SOURCE_SCALA_ROOT": "openLLC/src/main/scala/openLLC/utils"
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Dcache.MetaArray-Hardware.py": {
+      "SOURCE_PATHS": [
+        "upstream/src/main/scala/xiangshan/cache/dcache/meta/AsynchronousMetaArray.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Dcache.MissQueue.Family-Hardware.py": {
+      "SOURCE_PATHS": [
+        "upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/MissQueue.scala",
+        "upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/Probe.scala",
+        "upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/WritebackQueue.scala",
+        "upstream/src/main/scala/xiangshan/cache/dcache/DCacheWrapper.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.FrontendBridge-Hardware.py": {
+      "FRONTEND_BRIDGE_SOURCE_FILE_COUNT": 1,
+      "FRONTEND_BRIDGE_SOURCE_PATHS": [
+        "upstream/src/main/scala/xiangshan/mem/MemBlock.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Lsqueue.LoadQueueData-Hardware.py": {
+      "SOURCE_PATHS": [
+        "upstream/src/main/scala/xiangshan/mem/lsqueue/LoadQueueData.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Lsqueue.StoreQueueData-Hardware.py": {
+      "SOURCE_PATHS": [
+        "upstream/src/main/scala/xiangshan/mem/lsqueue/StoreQueueData.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Lsqueue.Uncache-Hardware.py": {
+      "FAMILY_SOURCE_PATHS": [
+        "src/main/scala/xiangshan/mem/lsqueue/LoadQueueUncache.scala",
+        "src/main/scala/xiangshan/mem/lsqueue/FreeList.scala",
+        "src/main/scala/xiangshan/cache/mmu/TLBStorage.scala",
+        "src/main/scala/xiangshan/cache/mmu/MMUBundle.scala",
+        "src/main/scala/xiangshan/mem/vector/VSplit.scala",
+        "src/main/scala/xiangshan/cache/mmu/Repeater.scala",
+        "rocket-chip/src/main/scala/util/Repeater.scala",
+        "utility/src/main/scala/utility/CircularQueuePtr.scala",
+        "utility/src/main/scala/utility/Sort.scala",
+        "utility/src/main/scala/utility/ClockGatedReg.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.MemBlock-Hardware.py": {
+      "MEMBLOCK_PARENT_SOURCE_FILE_COUNT": 27,
+      "MEMBLOCK_PARENT_SOURCE_PATHS": [
+        "upstream/src/main/scala/xiangshan/mem/MemBlock.scala",
+        "upstream/src/main/scala/xiangshan/cache/dcache/DCacheWrapper.scala",
+        "upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/MainPipe.scala",
+        "upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/AMOALU.scala",
+        "upstream/src/main/scala/xiangshan/cache/dcache/meta/TagArray.scala",
+        "upstream/src/main/scala/xiangshan/cache/dcache/Uncache.scala",
+        "upstream/src/main/scala/xiangshan/cache/mmu/TLB.scala",
+        "upstream/src/main/scala/xiangshan/cache/mmu/TLBStorage.scala",
+        "upstream/src/main/scala/xiangshan/cache/mmu/MMUBundle.scala",
+        "upstream/src/main/scala/xiangshan/cache/mmu/MMUConst.scala",
+        "upstream/src/main/scala/xiangshan/cache/mmu/L2TLB.scala",
+        "upstream/src/main/scala/xiangshan/cache/mmu/L2TLBMissQueue.scala",
+        "upstream/src/main/scala/xiangshan/cache/mmu/L2TlbPrefetch.scala",
+        "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMainPipe.scala",
+        "upstream/src/main/scala/xiangshan/frontend/icache/InstrUncache.scala",
+        "upstream/src/main/scala/xiangshan/mem/lsqueue/LSQWrapper.scala",
+        "upstream/src/main/scala/xiangshan/mem/lsqueue/LoadQueueUncache.scala",
+        "upstream/src/main/scala/xiangshan/mem/pipeline/LoadUnit.scala",
+        "upstream/src/main/scala/xiangshan/mem/pipeline/StoreUnit.scala",
+        "upstream/src/main/scala/xiangshan/mem/pipeline/HybridUnit.scala",
+        "upstream/src/main/scala/xiangshan/mem/sbuffer/Sbuffer.scala",
+        "upstream/src/main/scala/xiangshan/mem/sbuffer/FakeSbuffer.scala",
+        "upstream/rocket-chip/src/main/scala/tilelink/Buffer.scala",
+        "upstream/rocket-chip/src/main/scala/tilelink/Bundles.scala",
+        "upstream/rocket-chip/src/main/scala/tilelink/Edges.scala",
+        "upstream/rocket-chip/src/main/scala/tilelink/Nodes.scala",
+        "upstream/rocket-chip/src/main/scala/diplomacy/Nodes.scala"
+      ]
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.MemCommon-Pipeline-Hardware.py": {
+      "SOURCE_PATHS": [
+        "upstream/src/main/scala/xiangshan/mem/MemCommon.scala"
+      ]
+    }
+  },
+  "entry_count": 55,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_BUILD_PROVENANCE",
+  "schema_version": 1,
+  "status": "AUXILIARY_PROVENANCE_ONLY"
+}

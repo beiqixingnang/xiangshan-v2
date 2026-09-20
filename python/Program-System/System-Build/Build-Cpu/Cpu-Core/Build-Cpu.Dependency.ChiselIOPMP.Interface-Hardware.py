@@ -23,21 +23,19 @@ from amaranth.lib.coding import PriorityEncoder
 # Module Contract
 # =============================================================================
 __all__ = [
-    "IOPMPConfig", "IOPMPEntry", "napot_range", "iopmp_reference_check",
-    "UHSCIOPMPInterface", "IOPMPInterface", "build_verilog", "main",
-    "SOURCE_SCALA_ROOT", "SOURCE_SCALA_PATHS", "SOURCE_SCALA_FILE_COUNT",
+    'IOPMPConfig',
+    'IOPMPEntry',
+    'napot_range',
+    'iopmp_reference_check',
+    'UHSCIOPMPInterface',
+    'IOPMPInterface',
+    'build_verilog',
+    'main',
 ]
 
 
 # Keep the three ChiselIOPMP sources at this aggregate boundary. /
 # 在此聚合边界保留三个 ChiselIOPMP 源文件路径。
-SOURCE_SCALA_ROOT = "ChiselIOPMP/src/main/scala"
-SOURCE_SCALA_PATHS = (
-    "ChiselIOPMP/src/main/scala/Iopmp.scala",
-    "ChiselIOPMP/src/main/scala/IopmpBridge.scala",
-    "ChiselIOPMP/src/main/scala/IopmpChecker.scala",
-)
-SOURCE_SCALA_FILE_COUNT = len(SOURCE_SCALA_PATHS)
 
 
 # Cast Amaranth's generator controls to the context-manager protocol. /
