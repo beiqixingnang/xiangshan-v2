@@ -5304,10 +5304,12 @@ class AgeFamily(Elaboratable):
         out_width = 4
         for idx in range(replaces):
             target = n - idx
-            result: Any = Const(0, out_width)
-            # PriorityMux chooses the lowest index on malformed non-total
-            # matrices; reverse construction preserves that priority.
-            for row in reversed(range(n)):
+            # Chisel PriorityMux uses the final value as its fallback and tests
+            # conditions 0..n-2 in order. This distinction is observable for
+            # malformed free states even though the source assertion rejects
+            # them, so the formal transition relation must preserve it.
+            result: Any = Const(n - 1, out_width)
+            for row in reversed(range(n - 1)):
                 result = Mux(row_sums[row] == target, Const(row, out_width), result)
             m.d.comb += _port(self, f"io_out_{idx}").eq(result)
 
@@ -5335,11 +5337,14 @@ class AgeFamily(Elaboratable):
         next_timer: list[Any] = []
         for entry in range(n):
             incremented = timers[entry] + Const(1, 2)
-            value = Mux(
+            value_wide = Mux(
                 write_req[entry], Const(0, 2),
                 Mux(read_req[entry], timers[entry],
                     Mux((timers[entry] == 3) & _port(self, f"io_validInfo_{entry}"),
                         Const(3, 2), incremented)))
+            # ageTimerNext is an explicitly two-bit Wire in Scala. Amaranth
+            # widens addition, so truncate before both comparison and update.
+            value = value_wide[:2]
             next_timer.append(value)
             m.d.sync += timers[entry].eq(value)
         for extra in extras:
@@ -5365,7 +5370,7 @@ class AgeFamily(Elaboratable):
         n = 16 if self.member == "RegCacheDataModule" else 12
         writes, reads = (4 if n == 16 else 3), 23
         valid = [Signal(reset=0, name=f"v_{i}") for i in range(n)]
-        mem = [Signal(64, name=f"mem_{i}") for i in range(n)]
+        mem = [Signal(64, name=f"mem_{i}", reset_less=True) for i in range(n)]
         hits: list[list[Any]] = []
         for entry in range(n):
             row = [
@@ -5393,8 +5398,8 @@ class AgeFamily(Elaboratable):
         n = 16 if self.member == "RegCacheTagModule" else 12
         writes, reads = (4 if n == 16 else 3), 12
         valid = [Signal(reset=0, name=f"v_{i}") for i in range(n)]
-        tags = [Signal(8, name=f"tag_{i}") for i in range(n)]
-        deps = [[Signal(2, name=f"loadDependency_{i}_{d}") for d in range(3)]
+        tags = [Signal(8, name=f"tag_{i}", reset_less=True) for i in range(n)]
+        deps = [[Signal(2, name=f"loadDependency_{i}_{d}", reset_less=True) for d in range(3)]
                 for i in range(n)]
         write_hits: list[list[Any]] = []
         for entry in range(n):
@@ -5421,9 +5426,11 @@ class AgeFamily(Elaboratable):
                 else:
                     # In the optimized 12-entry XSTop instance the parent ties
                     # this input bundle to constants; FIRRTL removes the ports
-                    # and leaves {1'b0, wenOH_p} in the locked module.
-                    new_dep = _or_all([Mux(row[p], Const(1, 2), Const(0, 2))
-                                       for p in range(writes)], 2)
+                    # and leaves {1'b0, wenOH_d} in dependency lane d.  Each
+                    # lane therefore tracks only its matching write port; an
+                    # any-write reduction here would incorrectly duplicate a
+                    # hit into all three dependency lanes.
+                    new_dep = Mux(row[dep_index], Const(1, 2), Const(0, 2))
                 any_dep = _or_all([deps[entry][d].any() for d in range(3)])
                 shifted = Cat(Const(0), deps[entry][dep_index][0])
                 next_dep = Mux(_or_all(row), new_dep,

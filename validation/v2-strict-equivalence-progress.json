@@ -2,11 +2,11 @@
   "schema_version": 1,
   "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_EQUIVALENCE_PROGRESS",
   "build_denominator": 118,
-  "strict_complete_build_count": 36,
-  "fraction": "36/118",
-  "percentage": 30.508475,
+  "strict_complete_build_count": 37,
+  "fraction": "37/118",
+  "percentage": 31.355932,
   "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with the locked source commit, matching source hashes, and either a Yosys SAT no-model miter or fully proven Yosys inductive-equivalence status is counted. STRICT_PENDING and COMPLETE_EQUIVALENCE_VARIANT_ONLY records are inventoried as attempted-but-not-counted instead of failing the rail, and one Build file may not be claimed by several counting proofs.",
-  "non_counting_attempt_count": 12,
+  "non_counting_attempt_count": 11,
   "non_counting_attempts": [
     {
       "evidence": "validation/v2-build-cpu-backend-datapath-vectorfamily-strict-evidence.json",
@@ -88,35 +88,6 @@
       "proof_failures": [
         "SRT16DividerDataModule:yosys_equiv",
         "SRT16DividerDataModule: 326 $equiv cells unproven"
-      ],
-      "unclosed": [
-        "strict gates did not all pass"
-      ]
-    },
-    {
-      "evidence": "validation/v2-build-cpu-backend-regcache-agefamily-strict-evidence.json",
-      "build_id": "Build-Cpu.Backend.Regcache.AgeFamily",
-      "declared_status": "STRICT_PENDING",
-      "audit_failures": [],
-      "proof_failures": [
-        "RegCacheAgeDetector:yosys_equiv",
-        "RegCacheAgeDetector: 16 $equiv cells unproven",
-        "RegCacheAgeDetector: zero or missing $equiv cells",
-        "RegCacheAgeDetector_1:yosys_equiv",
-        "RegCacheAgeDetector_1: 9 $equiv cells unproven",
-        "RegCacheAgeDetector_1: zero or missing $equiv cells",
-        "RegCacheAgeTimer:yosys_equiv",
-        "RegCacheAgeTimer: 120 $equiv cells unproven",
-        "RegCacheAgeTimer_1:yosys_equiv",
-        "RegCacheAgeTimer_1: 66 $equiv cells unproven",
-        "RegCacheDataModule:yosys_equiv",
-        "RegCacheDataModule: 1024 $equiv cells unproven",
-        "RegCacheDataModule_1:yosys_equiv",
-        "RegCacheDataModule_1: 768 $equiv cells unproven",
-        "RegCacheTagModule:yosys_equiv",
-        "RegCacheTagModule: 224 $equiv cells unproven",
-        "RegCacheTagModule_1:yosys_equiv",
-        "RegCacheTagModule_1: 168 $equiv cells unproven"
       ],
       "unclosed": [
         "strict gates did not all pass"
@@ -317,7 +288,7 @@
     }
   ],
   "plan_reconciliation": {
-    "plan_count": 36,
+    "plan_count": 37,
     "plan_denominator": 118,
     "status": "PASS"
   },
@@ -11378,13 +11349,13 @@
     {
       "evidence": "validation/v2-build-cpu-backend-regcache-agefamily-strict-evidence.json",
       "build_id": "Build-Cpu.Backend.Regcache.AgeFamily",
-      "declared_status": "STRICT_PENDING",
+      "declared_status": "COMPLETE_EQUIVALENCE",
       "source_commit": {
         "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "status": "PASS"
       },
-      "status": "NON_COUNTING",
+      "status": "PASS",
       "note": null,
       "scope": {
         "kind": "catalog_build_multi_variant",
@@ -12652,15 +12623,15 @@
             "miter_selfcheck": true,
             "view_trusted": true,
             "locked_reference_lint": "PASS",
-            "verdict": "FAIL",
-            "success_marker": false,
+            "verdict": "PASS",
+            "success_marker": true,
             "markers_present": {
-              "0 are unproven.": false,
-              "Equivalence successfully proven!": false
+              "0 are unproven.": true,
+              "Equivalence successfully proven!": true
             },
-            "unconstrained_or_equiv_cells": null,
-            "proven_cells": null,
-            "unproven_cells": 16,
+            "unconstrained_or_equiv_cells": 136,
+            "proven_cells": 136,
+            "unproven_cells": 0,
             "sat_variables": null,
             "sat_clauses": null
           },
@@ -12752,15 +12723,15 @@
             "miter_selfcheck": true,
             "view_trusted": true,
             "locked_reference_lint": "PASS",
-            "verdict": "FAIL",
-            "success_marker": false,
+            "verdict": "PASS",
+            "success_marker": true,
             "markers_present": {
-              "0 are unproven.": false,
-              "Equivalence successfully proven!": false
+              "0 are unproven.": true,
+              "Equivalence successfully proven!": true
             },
-            "unconstrained_or_equiv_cells": null,
-            "proven_cells": null,
-            "unproven_cells": 9,
+            "unconstrained_or_equiv_cells": 78,
+            "proven_cells": 78,
+            "unproven_cells": 0,
             "sat_variables": null,
             "sat_clauses": null
           },
@@ -12973,15 +12944,15 @@
             "miter_selfcheck": true,
             "view_trusted": true,
             "locked_reference_lint": "PASS",
-            "verdict": "FAIL",
-            "success_marker": false,
+            "verdict": "PASS",
+            "success_marker": true,
             "markers_present": {
               "0 are unproven.": true,
-              "Equivalence successfully proven!": false
+              "Equivalence successfully proven!": true
             },
             "unconstrained_or_equiv_cells": 160,
-            "proven_cells": 40,
-            "unproven_cells": 120,
+            "proven_cells": 160,
+            "unproven_cells": 0,
             "sat_variables": null,
             "sat_clauses": null
           },
@@ -13134,15 +13105,15 @@
             "miter_selfcheck": true,
             "view_trusted": true,
             "locked_reference_lint": "PASS",
-            "verdict": "FAIL",
-            "success_marker": false,
+            "verdict": "PASS",
+            "success_marker": true,
             "markers_present": {
-              "0 are unproven.": false,
-              "Equivalence successfully proven!": false
+              "0 are unproven.": true,
+              "Equivalence successfully proven!": true
             },
             "unconstrained_or_equiv_cells": 98,
-            "proven_cells": 32,
-            "unproven_cells": 66,
+            "proven_cells": 98,
+            "unproven_cells": 0,
             "sat_variables": null,
             "sat_clauses": null
           },
@@ -13262,15 +13233,15 @@
             "miter_selfcheck": true,
             "view_trusted": true,
             "locked_reference_lint": "PASS",
-            "verdict": "FAIL",
-            "success_marker": false,
+            "verdict": "PASS",
+            "success_marker": true,
             "markers_present": {
-              "0 are unproven.": false,
-              "Equivalence successfully proven!": false
+              "0 are unproven.": true,
+              "Equivalence successfully proven!": true
             },
             "unconstrained_or_equiv_cells": 2512,
-            "proven_cells": 1488,
-            "unproven_cells": 1024,
+            "proven_cells": 2512,
+            "unproven_cells": 0,
             "sat_variables": null,
             "sat_clauses": null
           },
@@ -13383,15 +13354,15 @@
             "miter_selfcheck": true,
             "view_trusted": true,
             "locked_reference_lint": "PASS",
-            "verdict": "FAIL",
-            "success_marker": false,
+            "verdict": "PASS",
+            "success_marker": true,
             "markers_present": {
-              "0 are unproven.": false,
-              "Equivalence successfully proven!": false
+              "0 are unproven.": true,
+              "Equivalence successfully proven!": true
             },
             "unconstrained_or_equiv_cells": 2252,
-            "proven_cells": 1484,
-            "unproven_cells": 768,
+            "proven_cells": 2252,
+            "unproven_cells": 0,
             "sat_variables": null,
             "sat_clauses": null
           },
@@ -13582,15 +13553,15 @@
             "miter_selfcheck": true,
             "view_trusted": true,
             "locked_reference_lint": "PASS",
-            "verdict": "FAIL",
-            "success_marker": false,
+            "verdict": "PASS",
+            "success_marker": true,
             "markers_present": {
-              "0 are unproven.": false,
-              "Equivalence successfully proven!": false
+              "0 are unproven.": true,
+              "Equivalence successfully proven!": true
             },
             "unconstrained_or_equiv_cells": 300,
-            "proven_cells": 76,
-            "unproven_cells": 224,
+            "proven_cells": 300,
+            "unproven_cells": 0,
             "sat_variables": null,
             "sat_clauses": null
           },
@@ -13742,15 +13713,15 @@
             "miter_selfcheck": true,
             "view_trusted": true,
             "locked_reference_lint": "PASS",
-            "verdict": "FAIL",
-            "success_marker": false,
+            "verdict": "PASS",
+            "success_marker": true,
             "markers_present": {
-              "0 are unproven.": false,
-              "Equivalence successfully proven!": false
+              "0 are unproven.": true,
+              "Equivalence successfully proven!": true
             },
             "unconstrained_or_equiv_cells": 240,
-            "proven_cells": 72,
-            "unproven_cells": 168,
+            "proven_cells": 240,
+            "unproven_cells": 0,
             "sat_variables": null,
             "sat_clauses": null
           }
@@ -13771,8 +13742,8 @@
           "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Regcache.AgeFamily-Hardware.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "f6919b35e681941ce048080d368734a92dc8db9d60c46a7a57a9dfebb6054972",
-          "observed_sha256": "f6919b35e681941ce048080d368734a92dc8db9d60c46a7a57a9dfebb6054972",
+          "expected_sha256": "d77c192c48fce64877dab69e239358526c2d67a76e92842e99a4caf3c2303338",
+          "observed_sha256": "d77c192c48fce64877dab69e239358526c2d67a76e92842e99a4caf3c2303338",
           "status": "PASS"
         },
         "reference_sv": {
@@ -13928,78 +13899,36 @@
           "failures": []
         },
         "RegCacheAgeDetector": {
-          "status": "FAIL",
-          "failures": [
-            "formal verdict",
-            "zero/missing equivalence cells",
-            "incomplete proven equivalence cells",
-            "unproven equivalence cells",
-            "sequential equivalence full-output markers"
-          ]
+          "status": "PASS",
+          "failures": []
         },
         "RegCacheAgeDetector_1": {
-          "status": "FAIL",
-          "failures": [
-            "formal verdict",
-            "zero/missing equivalence cells",
-            "incomplete proven equivalence cells",
-            "unproven equivalence cells",
-            "sequential equivalence full-output markers"
-          ]
+          "status": "PASS",
+          "failures": []
         },
         "RegCacheAgeTimer": {
-          "status": "FAIL",
-          "failures": [
-            "formal verdict",
-            "incomplete proven equivalence cells",
-            "unproven equivalence cells",
-            "sequential equivalence full-output markers"
-          ]
+          "status": "PASS",
+          "failures": []
         },
         "RegCacheAgeTimer_1": {
-          "status": "FAIL",
-          "failures": [
-            "formal verdict",
-            "incomplete proven equivalence cells",
-            "unproven equivalence cells",
-            "sequential equivalence full-output markers"
-          ]
+          "status": "PASS",
+          "failures": []
         },
         "RegCacheDataModule": {
-          "status": "FAIL",
-          "failures": [
-            "formal verdict",
-            "incomplete proven equivalence cells",
-            "unproven equivalence cells",
-            "sequential equivalence full-output markers"
-          ]
+          "status": "PASS",
+          "failures": []
         },
         "RegCacheDataModule_1": {
-          "status": "FAIL",
-          "failures": [
-            "formal verdict",
-            "incomplete proven equivalence cells",
-            "unproven equivalence cells",
-            "sequential equivalence full-output markers"
-          ]
+          "status": "PASS",
+          "failures": []
         },
         "RegCacheTagModule": {
-          "status": "FAIL",
-          "failures": [
-            "formal verdict",
-            "incomplete proven equivalence cells",
-            "unproven equivalence cells",
-            "sequential equivalence full-output markers"
-          ]
+          "status": "PASS",
+          "failures": []
         },
         "RegCacheTagModule_1": {
-          "status": "FAIL",
-          "failures": [
-            "formal verdict",
-            "incomplete proven equivalence cells",
-            "unproven equivalence cells",
-            "sequential equivalence full-output markers"
-          ]
+          "status": "PASS",
+          "failures": []
         }
       },
       "formal": {
@@ -14010,29 +13939,8 @@
         "formal_success_marker": null
       },
       "failures": [],
-      "declared_failures": [
-        "RegCacheAgeDetector:yosys_equiv",
-        "RegCacheAgeDetector: 16 $equiv cells unproven",
-        "RegCacheAgeDetector: zero or missing $equiv cells",
-        "RegCacheAgeDetector_1:yosys_equiv",
-        "RegCacheAgeDetector_1: 9 $equiv cells unproven",
-        "RegCacheAgeDetector_1: zero or missing $equiv cells",
-        "RegCacheAgeTimer:yosys_equiv",
-        "RegCacheAgeTimer: 120 $equiv cells unproven",
-        "RegCacheAgeTimer_1:yosys_equiv",
-        "RegCacheAgeTimer_1: 66 $equiv cells unproven",
-        "RegCacheDataModule:yosys_equiv",
-        "RegCacheDataModule: 1024 $equiv cells unproven",
-        "RegCacheDataModule_1:yosys_equiv",
-        "RegCacheDataModule_1: 768 $equiv cells unproven",
-        "RegCacheTagModule:yosys_equiv",
-        "RegCacheTagModule: 224 $equiv cells unproven",
-        "RegCacheTagModule_1:yosys_equiv",
-        "RegCacheTagModule_1: 168 $equiv cells unproven"
-      ],
-      "declared_unclosed": [
-        "strict gates did not all pass"
-      ]
+      "declared_failures": [],
+      "declared_unclosed": []
     },
     {
       "evidence": "validation/v2-build-cpu-backend-smallcontrol-family-strict-evidence.json",
