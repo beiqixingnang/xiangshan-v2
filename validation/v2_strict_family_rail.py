@@ -48,11 +48,9 @@ SAT_MARKER = "SAT proof finished - no model found: SUCCESS!"
 EQUIV_MARKERS = ("0 are unproven.", "Equivalence successfully proven!")
 ANSI_PORT = re.compile(r"^(input|output)\s+(?:\[\s*(\d+):0\]\s*)?(.+)$")
 BLOCK_LOCAL = re.compile(
-    r"^([ \t]*)automatic\s+logic\s+((?:\[[^\]]*\][ \t]*)*)([A-Za-z_]\w*(?:\s*,\s*[A-Za-z_]\w*)*)[ \t]*;[ \t]*$", re.M)
-# Match only the declaration prefix so initialized block locals remain valid
-# when CIRCT formats their expression over several following lines.
+    r"^([ \t]*)automatic\s+logic\s+(\[[^\]]*\])?\s*([A-Za-z_]\w*(?:\s*,\s*[A-Za-z_]\w*)*)\s*;[ \t]*$", re.M)
 INIT_DECL = re.compile(
-    r"^([ \t]*)automatic\s+logic\s+((?:\[[^\]]*\][ \t]*)*)([A-Za-z_]\w*)[ \t]*=[ \t]*", re.M)
+    r"^([ \t]*)automatic\s+logic\s+(\[[^\]]*\])?\s*([A-Za-z_]\w*)\s*=\s*(.+);\s*$", re.M)
 # A `function automatic` header is accepted by the installed Yosys, so only a
 # block-local declaration counts as surviving.
 BLOCK_LOCAL_ANY = re.compile(r"\bautomatic\s+(?:logic|reg|bit)\b")
@@ -316,13 +314,13 @@ def synthesizable_view(text: str, top: str, rename: bool) -> tuple[str, dict[str
     residual = [line for line in lines if "`" in line]
     body = "\n".join(lines)
     plain_lines = [m.group(2) for m in BLOCK_LOCAL.finditer(body)]
-    temporaries = [(width.strip(), name.strip())
+    temporaries = [(width, name.strip())
                    for m in BLOCK_LOCAL.finditer(body)
                    for width, name in [(m.group(2), item) for item in m.group(3).split(",")]]
-    initialized = [(m.group(2).strip(), m.group(3)) for m in INIT_DECL.finditer(body)]
-    hoisted = temporaries + initialized
+    initialized = [(m.group(2), m.group(3), m.group(4)) for m in INIT_DECL.finditer(body)]
+    hoisted = temporaries + [(w, n) for w, n, _ in initialized]
     declarations = "".join(f"reg {w} {n};\n" if w else f"reg {n};\n" for w, n in hoisted)
-    rewritten = INIT_DECL.sub(lambda m: f"{m.group(1)}{m.group(3)} = ", body)
+    rewritten = INIT_DECL.sub(lambda m: f"{m.group(3)} = {m.group(4)};", body)
     stripped = BLOCK_LOCAL.sub("", rewritten)
     normalized = stripped if not declarations else insert_declarations(stripped, declarations, top)
     view_lines = [line for line in normalized.split("\n") if line.strip()]
@@ -330,8 +328,7 @@ def synthesizable_view(text: str, top: str, rename: bool) -> tuple[str, dict[str
     view_counts = Counter(view_lines)
     disappeared = list((locked_counts - view_counts).elements())
     expected_declarations = [line.rstrip() for line in declarations.split("\n") if line.strip()]
-    expected_rewrites = [INIT_DECL.sub(lambda m: f"{m.group(1)}{m.group(3)} = ", line)
-                         for line in lines if INIT_DECL.match(line) is not None]
+    expected_rewrites = [f"{n} = {e};" for _, n, e in initialized]
     permitted = expected_declarations + expected_rewrites
     appeared = list((view_counts - locked_counts).elements())
     conserved = (all(BLOCK_LOCAL.match(line) is not None or INIT_DECL.match(line) is not None
@@ -346,7 +343,7 @@ def synthesizable_view(text: str, top: str, rename: bool) -> tuple[str, dict[str
         "renamed_top": rename,
         "regions_removed_lines": removed,
         "block_local_temporaries_hoisted": [n for _, n in temporaries],
-        "initialized_declarations_hoisted": [n for _, n in initialized],
+        "initialized_declarations_hoisted": [n for _, n, _ in initialized],
         "code_lines_locked": len(lines),
         "code_lines_view": len(view_lines),
         "residual_preprocessor_directives": len(residual),
