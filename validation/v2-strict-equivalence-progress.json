@@ -2,11 +2,11 @@
   "schema_version": 1,
   "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_EQUIVALENCE_PROGRESS",
   "build_denominator": 118,
-  "strict_complete_build_count": 37,
-  "fraction": "37/118",
-  "percentage": 31.355932,
+  "strict_complete_build_count": 38,
+  "fraction": "38/118",
+  "percentage": 32.20339,
   "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with the locked source commit, matching source hashes, and either a Yosys SAT no-model miter or fully proven Yosys inductive-equivalence status is counted. STRICT_PENDING and COMPLETE_EQUIVALENCE_VARIANT_ONLY records are inventoried as attempted-but-not-counted instead of failing the rail, and one Build file may not be claimed by several counting proofs.",
-  "non_counting_attempt_count": 16,
+  "non_counting_attempt_count": 15,
   "non_counting_attempts": [
     {
       "evidence": "validation/v2-build-cpu-backend-datapath-bypasspipefamily-strict-evidence.json",
@@ -90,23 +90,6 @@
         "Fence: 92 $equiv cells unproven",
         "MulUnit:yosys_equiv",
         "MulUnit: 64 $equiv cells unproven"
-      ],
-      "unclosed": [
-        "strict gates did not all pass"
-      ]
-    },
-    {
-      "evidence": "validation/v2-build-cpu-backend-fu-newcsr-debugfamily-strict-evidence.json",
-      "build_id": "Build-Cpu.Backend.Fu.NewCSR.DebugFamily",
-      "declared_status": "STRICT_PENDING",
-      "audit_failures": [],
-      "proof_failures": [
-        "Debug:yosys_equiv",
-        "Debug: 96 $equiv cells unproven",
-        "MemTrigger:sat_miter",
-        "MemTrigger_3:sat_miter",
-        "VSegmentTrigger:sat_miter",
-        "aggregate SAT miter"
       ],
       "unclosed": [
         "strict gates did not all pass"
@@ -357,7 +340,7 @@
     }
   ],
   "plan_reconciliation": {
-    "plan_count": 37,
+    "plan_count": 38,
     "plan_denominator": 118,
     "status": "PASS"
   },
@@ -16715,13 +16698,13 @@
     {
       "evidence": "validation/v2-build-cpu-backend-fu-newcsr-debugfamily-strict-evidence.json",
       "build_id": "Build-Cpu.Backend.Fu.NewCSR.DebugFamily",
-      "declared_status": "STRICT_PENDING",
+      "declared_status": "COMPLETE_EQUIVALENCE",
       "source_commit": {
         "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "status": "PASS"
       },
-      "status": "NON_COUNTING",
+      "status": "PASS",
       "note": null,
       "scope": {
         "kind": "catalog_build_multi_variant",
@@ -17020,15 +17003,15 @@
             "miter_selfcheck": true,
             "view_trusted": true,
             "locked_reference_lint": "PASS",
-            "verdict": "FAIL",
-            "success_marker": false,
+            "verdict": "PASS",
+            "success_marker": true,
             "markers_present": {
-              "0 are unproven.": false,
-              "Equivalence successfully proven!": false
+              "0 are unproven.": true,
+              "Equivalence successfully proven!": true
             },
-            "unconstrained_or_equiv_cells": 97,
-            "proven_cells": 1,
-            "unproven_cells": 96,
+            "unconstrained_or_equiv_cells": 99,
+            "proven_cells": 99,
+            "unproven_cells": 0,
             "sat_variables": null,
             "sat_clauses": null
           },
@@ -17090,14 +17073,14 @@
             "miter_selfcheck": true,
             "view_trusted": true,
             "locked_reference_lint": "PASS",
-            "verdict": "FAIL",
-            "success_marker": false,
+            "verdict": "PASS",
+            "success_marker": true,
             "markers_present": null,
             "unconstrained_or_equiv_cells": true,
             "proven_cells": null,
             "unproven_cells": null,
-            "sat_variables": 5810,
-            "sat_clauses": 15762
+            "sat_variables": 7841,
+            "sat_clauses": 21243
           },
           "MemTrigger_3": {
             "method": "sat_miter",
@@ -17156,14 +17139,14 @@
             "miter_selfcheck": true,
             "view_trusted": true,
             "locked_reference_lint": "PASS",
-            "verdict": "FAIL",
-            "success_marker": false,
+            "verdict": "PASS",
+            "success_marker": true,
             "markers_present": null,
             "unconstrained_or_equiv_cells": true,
             "proven_cells": null,
             "unproven_cells": null,
-            "sat_variables": 6352,
-            "sat_clauses": 17612
+            "sat_variables": 8140,
+            "sat_clauses": 22420
           },
           "VSegmentTrigger": {
             "method": "sat_miter",
@@ -17223,14 +17206,14 @@
             "miter_selfcheck": true,
             "view_trusted": true,
             "locked_reference_lint": "PASS",
-            "verdict": "FAIL",
-            "success_marker": false,
+            "verdict": "PASS",
+            "success_marker": true,
             "markers_present": null,
             "unconstrained_or_equiv_cells": true,
             "proven_cells": null,
             "unproven_cells": null,
-            "sat_variables": 2582,
-            "sat_clauses": 6813
+            "sat_variables": 2901,
+            "sat_clauses": 7650
           }
         },
         "why_complete": "Every locked module named by this Build's own tables is proven against its exact-name locked reference on the rail its timing requires, with a conservation-audited 5C view where the installed Yosys cannot read the original.",
@@ -17249,8 +17232,8 @@
           "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.NewCSR.DebugFamily-Hardware.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "bb4adf7f94443ff98253f73425ed696176176febb35ecc3b03e321a8ace39499",
-          "observed_sha256": "bb4adf7f94443ff98253f73425ed696176176febb35ecc3b03e321a8ace39499",
+          "expected_sha256": "0720c5555f51bbe703a8b431700174177f0247c3e0d70731bc6e93c9ad3d8b95",
+          "observed_sha256": "0720c5555f51bbe703a8b431700174177f0247c3e0d70731bc6e93c9ad3d8b95",
           "status": "PASS"
         },
         "reference_sv": {
@@ -17318,31 +17301,20 @@
       },
       "variant_checks": {
         "Debug": {
-          "status": "FAIL",
-          "failures": [
-            "formal verdict",
-            "incomplete proven equivalence cells",
-            "unproven equivalence cells",
-            "sequential equivalence full-output markers"
-          ]
+          "status": "PASS",
+          "failures": []
         },
         "MemTrigger": {
-          "status": "FAIL",
-          "failures": [
-            "formal verdict"
-          ]
+          "status": "PASS",
+          "failures": []
         },
         "MemTrigger_3": {
-          "status": "FAIL",
-          "failures": [
-            "formal verdict"
-          ]
+          "status": "PASS",
+          "failures": []
         },
         "VSegmentTrigger": {
-          "status": "FAIL",
-          "failures": [
-            "formal verdict"
-          ]
+          "status": "PASS",
+          "failures": []
         }
       },
       "formal": {
@@ -17354,21 +17326,12 @@
           "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_debugfamily_family/DUT_MemTrigger.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_debugfamily_family/REF_MemTrigger.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_debugfamily_family/MemTrigger_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_debugfamily_family/DUT_MemTrigger_3.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_debugfamily_family/REF_MemTrigger_3.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_debugfamily_family/MemTrigger_3_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_debugfamily_family/DUT_VSegmentTrigger.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_debugfamily_family/REF_VSegmentTrigger.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_debugfamily_family/VSegmentTrigger_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_newcsr_debugfamily_family/DebugFamily_AGG.sv; prep -top DebugFamily_AGG; flatten; opt; sat -prove mismatch 0"
         ],
         "returncode": 0,
-        "status": "FAIL",
-        "formal_success_marker": false
+        "status": "PASS",
+        "formal_success_marker": true
       },
       "failures": [],
-      "declared_failures": [
-        "Debug:yosys_equiv",
-        "Debug: 96 $equiv cells unproven",
-        "MemTrigger:sat_miter",
-        "MemTrigger_3:sat_miter",
-        "VSegmentTrigger:sat_miter",
-        "aggregate SAT miter"
-      ],
-      "declared_unclosed": [
-        "strict gates did not all pass"
-      ]
+      "declared_failures": [],
+      "declared_unclosed": []
     },
     {
       "evidence": "validation/v2-build-cpu-backend-fu-pmp-family-strict-evidence.json",
