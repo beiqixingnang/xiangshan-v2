@@ -160,6 +160,16 @@ def run_wsl(command: list[str]) -> dict[str, Any]:
     output = (result.stdout + result.stderr).decode("utf-8", "replace")
     return {"command": command, "returncode": result.returncode,
             "status": "PASS" if result.returncode == 0 else "FAIL",
+            "equiv_failure_marker": bool(
+                re.search(
+                    r"ERROR:\s*Found\s+[1-9]\d*\s+unproven\s+\$equiv\s+cells",
+                    output,
+                )
+                or re.search(
+                    r"Of those cells\s+\d+\s+are proven and\s+[1-9]\d*\s+are unproven",
+                    output,
+                )
+            ),
             "output_tail": output[-4000:],
             "output_sha256": hashlib.sha256(output.encode()).hexdigest()}
 
@@ -386,8 +396,19 @@ def negative_control(paths: dict[str, Path], outputs: dict[str, int]) -> dict[st
         mutant.write_text(mutated, encoding="utf-8", newline="\n")
         verdict = equiv_run(mutant if side == "target" else paths["target"],
                             mutant if side == "reference" else paths["reference"])
-        verdicts[side] = {"status": "PASS" if not verdict["formal_success_marker"] else "FAIL",
+        process_ran = (
+            isinstance(verdict.get("returncode"), int)
+            and verdict.get("timed_out") is not True
+        )
+        detected = (
+            process_ran
+            and verdict.get("equiv_failure_marker") is True
+            and not verdict["formal_success_marker"]
+        )
+        verdicts[side] = {"status": "PASS" if detected else "FAIL",
                           "mutation_applied": True, "control_port": port,
+                          "explicit_failure_marker": verdict.get("equiv_failure_marker"),
+                          "success_marker_still_present": verdict["formal_success_marker"],
                           "unproven_cells": verdict.get("unproven_cells"),
                           "markers_present": verdict.get("markers_present")}
     detected = bool(verdicts) and all(item["status"] == "PASS" for item in verdicts.values())
@@ -405,7 +426,7 @@ def validate() -> dict[str, Any]:
     inputs = {name: width for name, (direction, width) in ports.items() if direction == "input"}
     outputs = {name: width for name, (direction, width) in ports.items() if direction == "output"}
     state_bits, state_registers = measured_state(locked_text)
-    sources = {
+    sources: dict[str, Any] = {
         name: {"path": (SCALA if name == "scala" else
                         (TARGET if name == "python_build" else REF_DIR / f"{MODULE_NAME}.sv")
                         ).relative_to(ROOT).as_posix(),
@@ -413,6 +434,24 @@ def validate() -> dict[str, Any]:
                                      (TARGET if name == "python_build"
                                       else REF_DIR / f"{MODULE_NAME}.sv"))}
         for name in ("scala", "reference_sv", "python_build")
+    }
+    validator_path = Path(__file__).resolve()
+    sources["validator"] = {
+        "path": validator_path.relative_to(ROOT).as_posix(),
+        "sha256": sha256_file(validator_path),
+        "bytes": validator_path.stat().st_size,
+    }
+    sources["declared_scala_sources"] = {
+        str(SCALA.relative_to(ROOT)).replace("\\", "/"): {
+            "vendored": True,
+            "sha256": sha256_file(SCALA),
+        },
+        "upstream/utility/src/main/scala/utility/IndexableCAMTemplate.scala": {
+            "vendored": True,
+            "sha256": sha256_file(
+                ROOT / "upstream/utility/src/main/scala/utility/IndexableCAMTemplate.scala"
+            ),
+        },
     }
     module = load_target()
     py_compile.compile(str(TARGET), doraise=True)
@@ -477,8 +516,14 @@ def validate() -> dict[str, Any]:
         "status": status,
         "strict_complete_eligible": status == "COMPLETE_EQUIVALENCE",
         "strict_complete_count_delta": 1 if status == "COMPLETE_EQUIVALENCE" else 0,
-        "acceptance_eligible": status == "COMPLETE_EQUIVALENCE",
+        "acceptance_eligible": False,
         "source_commit": SOURCE_COMMIT,
+        "audit_policy": {
+            "require_negative_control": True,
+            "require_two_sided_negative_control": True,
+            "require_locked_reference_lint": True,
+            "require_validator_hash": True,
+        },
         "scope": {
             "kind": "sequential_registered_leaf",
             "configuration": "locked V2 write bypass CAM check over a locked IndexableCAMTemplate",
@@ -516,6 +561,10 @@ def validate() -> dict[str, Any]:
         },
         "failures": failures,
         "unclosed": [] if not failures else ["strict gates did not all pass"],
+        "acceptance_unclosed": [
+            "Parent closure, full-top differential, final license review, and user approval "
+            "remain outside this Build proof."
+        ],
     }
     EVIDENCE.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
                         encoding="utf-8", newline="\n")

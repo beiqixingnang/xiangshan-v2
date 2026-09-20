@@ -16,6 +16,8 @@ from amaranth import Array, ClockDomain, Elaboratable, Mux, Module, Signal
 # exposes valid per-way data for same-cycle table read/write bypassing.
 # WrBypass 在小型索引 CAM 中保存最近写入的预测器行，并输出逐路有效数据。
 __all__ = [
+    "COVERED_MODULES",
+    "SOURCE_PATHS",
     "WrBypassConfig",
     "WrBypass",
     "plru_victim_reference",
@@ -23,6 +25,13 @@ __all__ = [
     "build_verilog",
     "main",
 ]
+
+COVERED_MODULES: tuple[str, ...] = ("WrBypass",)
+
+SOURCE_PATHS: tuple[str, ...] = (
+    "upstream/src/main/scala/xiangshan/frontend/WrBypass.scala",
+    "upstream/utility/src/main/scala/utility/IndexableCAMTemplate.scala",
+)
 
 
 # Configuration
@@ -138,7 +147,11 @@ class WrBypass(Elaboratable):
         # ever_written gates all observable comparisons until a real enqueue.
         # CAM 标签不复位，与 IndexableCAMTemplate 一致；ever_written 在实际入队前屏蔽比较。
         idx_store = Array(
-            Signal(c.idx_width, name=f"idx_store_{entry}", reset_less=True)
+            Signal(
+                c.idx_width,
+                name=f"idx_tag_cam.array_{entry}",
+                reset_less=True,
+            )
             for entry in range(c.num_entries)
         )
         tag_store = (
@@ -151,14 +164,18 @@ class WrBypass(Elaboratable):
         )
         data_store = [
             Array(
-                Signal(c.data_width, name=f"data_store_{way}_{entry}", reset_less=True)
+                Signal(
+                    c.data_width,
+                    name=f"data_mem_{way}_ext.Memory[{entry}]",
+                    reset_less=True,
+                )
                 for entry in range(c.num_entries)
             )
             for way in range(c.num_ways)
         ]
         valids = [
             [
-                Signal(name=f"valid_{way}_{entry}", reset=0)
+                Signal(name=f"valids_{entry}_{way}", reset=0)
                 for entry in range(c.num_entries)
             ]
             for way in range(c.num_ways)

@@ -2,11 +2,11 @@
   "schema_version": 1,
   "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_EQUIVALENCE_PROGRESS",
   "build_denominator": 118,
-  "strict_complete_build_count": 35,
-  "fraction": "35/118",
-  "percentage": 29.661017,
+  "strict_complete_build_count": 36,
+  "fraction": "36/118",
+  "percentage": 30.508475,
   "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with the locked source commit, matching source hashes, and either a Yosys SAT no-model miter or fully proven Yosys inductive-equivalence status is counted. STRICT_PENDING and COMPLETE_EQUIVALENCE_VARIANT_ONLY records are inventoried as attempted-but-not-counted instead of failing the rail, and one Build file may not be claimed by several counting proofs.",
-  "non_counting_attempt_count": 9,
+  "non_counting_attempt_count": 8,
   "non_counting_attempts": [
     {
       "evidence": "validation/v2-build-cpu-backend-datapath-wbarbiter-strict-evidence.json",
@@ -235,23 +235,10 @@
       "unclosed": [
         "strict gates did not all pass"
       ]
-    },
-    {
-      "evidence": "validation/v2-wrbypass-strict-evidence.json",
-      "build_id": "Build-Cpu.Frontend.Bpu.WrBypass",
-      "declared_status": "STRICT_PENDING",
-      "audit_failures": [],
-      "proof_failures": [
-        "yosys_equiv",
-        "12 $equiv cells remain unproven"
-      ],
-      "unclosed": [
-        "strict gates did not all pass"
-      ]
     }
   ],
   "plan_reconciliation": {
-    "plan_count": 35,
+    "plan_count": 36,
     "plan_denominator": 118,
     "status": "PASS"
   },
@@ -32725,13 +32712,13 @@
     {
       "evidence": "validation/v2-wrbypass-strict-evidence.json",
       "build_id": "Build-Cpu.Frontend.Bpu.WrBypass",
-      "declared_status": "STRICT_PENDING",
+      "declared_status": "COMPLETE_EQUIVALENCE",
       "source_commit": {
         "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "status": "PASS"
       },
-      "status": "NON_COUNTING",
+      "status": "PASS",
       "note": null,
       "scope": {
         "kind": "sequential_registered_leaf",
@@ -32797,8 +32784,16 @@
           "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.WrBypass-Hardware.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "835269d0307122907aacb91f858d57556279e809517e648df8ec21904f892380",
-          "observed_sha256": "835269d0307122907aacb91f858d57556279e809517e648df8ec21904f892380",
+          "expected_sha256": "32a676fe34e990dd9582984b08da5833125b1d3dd66cae8a1a32bb84986c4163",
+          "observed_sha256": "32a676fe34e990dd9582984b08da5833125b1d3dd66cae8a1a32bb84986c4163",
+          "status": "PASS"
+        },
+        "validator": {
+          "path": "validation/v2_wrbypass_strict_validator.py",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "350ef52b0fa5e4e92604c5e498304690166c7f63446658b16684f483692cb13a",
+          "observed_sha256": "350ef52b0fa5e4e92604c5e498304690166c7f63446658b16684f483692cb13a",
           "status": "PASS"
         }
       },
@@ -32814,7 +32809,24 @@
           "status": "PASS"
         }
       },
-      "declared_scala_sources": {},
+      "declared_scala_sources": {
+        "upstream/src/main/scala/xiangshan/frontend/WrBypass.scala": {
+          "path": "upstream/src/main/scala/xiangshan/frontend/WrBypass.scala",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "8eb308c92bb1385fdd225d60acf690a3759e2849baed69aa5408ed0b5590b2c0",
+          "observed_sha256": "8eb308c92bb1385fdd225d60acf690a3759e2849baed69aa5408ed0b5590b2c0",
+          "status": "PASS"
+        },
+        "upstream/utility/src/main/scala/utility/IndexableCAMTemplate.scala": {
+          "path": "upstream/utility/src/main/scala/utility/IndexableCAMTemplate.scala",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "0fe769dfa32efc61823b42e3c14b1a7b171e6ea05549142fe4ac1dea61fe92b4",
+          "observed_sha256": "0fe769dfa32efc61823b42e3c14b1a7b171e6ea05549142fe4ac1dea61fe92b4",
+          "status": "PASS"
+        }
+      },
       "variant_checks": {},
       "formal": {
         "proof_method": "sequential_equivalence",
@@ -32824,18 +32836,13 @@
           "-p",
           "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_wrbypass_strict/WrBypass-target.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_wrbypass_strict/WrBypass-reference.sv; proc; async2sync; memory; opt; flatten REF_WrBypass; flatten DUT_WrBypass; equiv_make REF_WrBypass DUT_WrBypass WrBypass_EQUIV; prep -top WrBypass_EQUIV; equiv_induct -undef; equiv_status -assert"
         ],
-        "returncode": 1,
-        "status": "FAIL",
-        "formal_success_marker": false
+        "returncode": 0,
+        "status": "PASS",
+        "formal_success_marker": true
       },
       "failures": [],
-      "declared_failures": [
-        "yosys_equiv",
-        "12 $equiv cells remain unproven"
-      ],
-      "declared_unclosed": [
-        "strict gates did not all pass"
-      ]
+      "declared_failures": [],
+      "declared_unclosed": []
     }
   ],
   "status": "PASS"
