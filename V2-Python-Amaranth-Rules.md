@@ -19,8 +19,10 @@ legal configurations of the generic Scala class.
 
 - Never modify `upstream/`, the locked V2 snapshot metadata, or generated
   reference artifacts while implementing a target.
-- Every target records its V2 Scala source path(s), source commit, dependency
-  family, closure root, and exact observation points.
+- Validation inventories and evidence record each target's V2 source path(s),
+  source commit, dependency family, closure root, and exact observation points.
+  Migratable Build Python does not carry upstream source paths or source-tree
+  identities as runtime metadata.
 - A target cannot be marked `ACCEPTED` from file presence, AST shape, a direct
   export, or a bounded smoke test. It needs V2 direct test, static checks,
   reference-SV evidence, differential behavior, and a traceable commit.
@@ -74,6 +76,37 @@ return or emit only through the documented build contract. Direct tests may
 load the exact file path, but target modules may not implement their own
 dynamic loader.
 
+### Compact port ABI workstream
+
+Exact flattened port ABI is part of the executable Build contract, but the
+catalog representation is not behavior. Keep it in the Build as compact,
+self-contained Python: use indexed tuple comprehensions and small deterministic
+helpers for repeated lanes, and reserve literal tuples for genuinely irregular
+fields. Remove migration-only `BEGIN LOCKED PORT CATALOG` markers and
+`LOCKED_PORT_SPECS` names from the final Build surface. Do not move the ABI to
+an external JSON file that the Build would need at runtime.
+
+Before and after compaction, a validator must expand every member into the same
+ordered `(name, direction, width)` sequence. The compaction gate fails on any
+member-set, order, spelling, direction, or width change. It also fails if a
+catalog helper creates an unused port, silently deduplicates a duplicate, or
+changes the selected top's public port order. Catalog line reduction is a
+representation change only: it is excluded from effective behavior-line
+progress and cannot be used to claim additional rewrite work.
+
+Exact flattened port ABI remains self-contained in each migratable Build, but
+it must be represented as compact Python rather than generator-expanded line
+bulk. Repeated lanes, channels, records, and indexed fields use deterministic
+Python tuple comprehensions or small standard-library helpers; genuinely
+irregular ports may remain literal one-line tuples. A Build must not retain
+``BEGIN LOCKED PORT CATALOG``, ``LOCKED_PORT_SPECS``, upstream source paths, or
+validation-only lock terminology in its final product-facing form. Port
+compaction is complete only when the expanded ordered sequence of
+``(name, direction, width)`` entries is byte-for-byte identical in meaning to
+the frozen ABI: same member set, port order, names, directions, and widths.
+External JSON is verification authority, not a runtime dependency of the
+migratable Build.
+
 ## 3. Behavioral rewrite rules
 
 - Preserve real ports, widths, signedness, reset polarity, clock domains,
@@ -92,6 +125,11 @@ dynamic loader.
 - Parent closure tests may exercise child implementations, but the manifest
   must name the child instances and prove that each child's externally
   observable contract is covered.
+- Expanded port catalogs, repeated constants, comments, formatting-only lines,
+  unused state, and copied manifest text are not behavioral implementation and
+  do not count as effective rewrite volume. Compression may reduce physical
+  line count substantially without reducing behavioral coverage; no worker may
+  compensate by duplicating equations or adding unconsumed state.
 
 ## 4. UHSC localization and naming
 

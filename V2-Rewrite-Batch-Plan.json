@@ -446,6 +446,7 @@
   "per_batch_done_definition": [
    "final Build-Cpu path implementation",
    "UHSC external-name localization",
+   "compact self-contained port ABI with exact ordered name/direction/width expansion; no mechanically expanded LOCKED port catalog",
    "rewrite-freeze basic gate evidence",
    "machine-readable mapping in the same batch commit"
   ],
@@ -455,12 +456,35 @@
    "contract/license evidence and unclosed-gate inventory",
    "machine-readable evidence in the validation auxiliary repository"
   ],
+  "port_catalog_compaction_workstream": {
+   "status": "ACTIVE",
+   "objective": "Replace mechanically expanded locked-port catalogs in migratable Build Python with compact deterministic helpers while preserving the exact expanded ABI.",
+   "scope": "All Build files containing BEGIN LOCKED PORT CATALOG/LOCKED_PORT_SPECS or equivalent generator-expanded member port tables; prioritize active rewrite batches and catalogs above 60 percent of file lines.",
+   "allowed_representation": ["tuple literals for irregular ports", "indexed tuple comprehensions", "small pure Python standard-library helpers", "Amaranth Signal construction from the expanded PORT_SPECS mapping"],
+   "forbidden_representation": ["runtime JSON/validation reads", "Scala or upstream source paths in Build code", "raw Verilog/SystemVerilog text", "blind textual replacement", "port-order or ABI inference from unordered mappings"],
+   "required_gate": "Before/after expanded ordered (name,direction,width) digest must match for every member; deterministic same-name build_verilog smoke and py_compile must pass.",
+   "progress_accounting": "Catalog formatting and line reduction are not effective behavior lines and do not increase rewrite coverage.",
+   "evidence": "validation/v2-build-compliance-audit.json and per-batch compaction records"
+  },
   "placement_policy": {
    "build_targets": "auxiliary repository final python/Program-System/System-Build/Build-Cpu paths",
    "migration_validators_and_evidence": "auxiliary repository .agents/xiangshan-v2/validation only",
    "direct_tests_after_acceptance": "main repository Program-System/System-Testing/Testing-Cpu with Manifest-Testing-Hardware.py",
    "generated_sv_waveforms_logs_cache": "ignored validation work/output directories",
    "runtime_import_rule": "Build files may not import auxiliary validators or evidence"
+  },
+  "port_catalog_compaction_policy": {
+   "representation": "self-contained compact Python tuples, comprehensions, and small standard-library helpers",
+   "forbidden_in_migratable_build": [
+    "BEGIN LOCKED PORT CATALOG markers",
+    "LOCKED_PORT_SPECS migration-only names",
+    "upstream source paths or source-tree identity metadata",
+    "runtime reads of validation JSON",
+    "raw Verilog or SystemVerilog text"
+   ],
+   "equivalence_gate": "expanded member set and ordered (name,direction,width) sequence must match the pre-compaction frozen ABI exactly",
+   "progress_accounting": "catalog expansion, formatting, comments, repeated constants, unused state, and copied manifests are excluded from effective behavior lines",
+   "external_evidence": "source provenance, locked hashes, and comparison results remain under validation JSON and are not Build runtime dependencies"
   },
   "promotion_rule": "ACCEPTED remains NOT_ALLOWED until parent closure, license, UHSC and user approval gates pass",
   "full_generation_required": true,
