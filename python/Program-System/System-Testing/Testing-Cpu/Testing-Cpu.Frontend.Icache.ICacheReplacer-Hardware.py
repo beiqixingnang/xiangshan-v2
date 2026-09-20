@@ -67,12 +67,12 @@ class ICacheReplacerContractTest(unittest.TestCase):
 
 # Behavior Tests
 class ICacheReplacerBehaviorTest(unittest.TestCase):
-    """Check victim validity latency and deterministic initial PLRU state. / 检查受害者有效延迟与确定性初始 PLRU 状态。"""
+    """Check delayed victim touch and deterministic PLRU state. / 检查延迟受害路触碰与确定性 PLRU 状态。"""
 
-    def test_victim_response_is_registered_for_one_cycle(self) -> None:
+    def test_victim_touch_is_registered_for_one_cycle(self) -> None:
         module = load_subject()
         dut = module.ICacheReplacer()
-        observed: list[tuple[int, int]] = []
+        observed: list[int] = []
 
         # The Build uses the implicit ``sync`` domain; add_clock drives it.
         sim = Simulator(dut)
@@ -82,20 +82,21 @@ class ICacheReplacerBehaviorTest(unittest.TestCase):
             yield dut.victim_req_v_set_idx.eq(0)
             yield dut.victim_req_valid.eq(1)
             yield Settle()
-            observed.append((int((yield dut.victim_resp_valid)), int((yield dut.victim_resp_way))))
+            observed.append(int((yield dut.victim_resp_way)))
             yield Tick()
             yield Settle()
-            observed.append((int((yield dut.victim_resp_valid)), int((yield dut.victim_resp_way))))
+            observed.append(int((yield dut.victim_resp_way)))
             yield dut.victim_req_valid.eq(0)
             yield Tick()
             yield Settle()
-            observed.append((int((yield dut.victim_resp_valid)), int((yield dut.victim_resp_way))))
+            observed.append(int((yield dut.victim_resp_way)))
+            yield Tick()
+            yield Settle()
+            observed.append(int((yield dut.victim_resp_way)))
 
         sim.add_process(sync_process)
         sim.run()
-        self.assertEqual((0, 0), observed[0])
-        self.assertEqual((1, 0), observed[1])
-        self.assertEqual(0, observed[2][0])
+        self.assertEqual([0, 0, 2, 2], observed)
 
 
 if __name__ == "__main__":

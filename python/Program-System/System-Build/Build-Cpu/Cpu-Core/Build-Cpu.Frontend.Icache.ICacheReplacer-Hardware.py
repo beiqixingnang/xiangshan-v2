@@ -6,7 +6,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
-from amaranth import Array, Cat, Elaboratable, Module, Mux, Signal
+from amaranth import Array, Cat, ClockDomain, Elaboratable, Module, Mux, Signal
 
 
 # Module Contract
@@ -14,7 +14,15 @@ from amaranth import Array, Cat, Elaboratable, Module, Mux, Signal
 # V2 places ICacheReplacer in ICache.scala and instantiates two
 # SetAssocLRU(PseudoLRU) policies, one for each interleaved set bank.  Two hit
 # touches and one delayed victim touch are retained as separate observations.
-__all__ = ["ReplacerConfig", "ICacheReplacer", "replacer_request_observation", "build_verilog", "main"]
+COVERED_MODULES = ("ICacheReplacer",)
+SOURCE_PATHS = (
+    "upstream/src/main/scala/xiangshan/frontend/icache/ICache.scala",
+    "upstream/rocket-chip/src/main/scala/util/Replacement.scala",
+)
+__all__ = [
+    "COVERED_MODULES", "SOURCE_PATHS", "ReplacerConfig", "ICacheReplacer",
+    "replacer_request_observation", "build_verilog", "main",
+]
 
 
 # Configuration
@@ -203,6 +211,8 @@ class ICacheReplacer(Elaboratable):
     def __init__(self, cfg: ReplacerConfig | None = None) -> None:
         self.cfg = cfg or ReplacerConfig()
         c = self.cfg
+        self.clock = Signal(name="clock")
+        self.reset = Signal(name="reset")
         self.touch_req_valid = [Signal(name=f"io_touch_{i}_valid") for i in range(2)]
         self.touch_req_v_set_idx = [
             Signal(c.idx_bits, name=f"io_touch_{i}_bits_vSetIdx") for i in range(2)
@@ -213,7 +223,40 @@ class ICacheReplacer(Elaboratable):
         self.victim_req_valid = Signal(name="io_victim_vSetIdx_valid")
         self.victim_req_v_set_idx = Signal(c.idx_bits, name="io_victim_vSetIdx_bits")
         self.victim_resp_way = Signal(c.way_bits, name="io_victim_way")
-        self.victim_resp_valid = Signal(name="io_victim_valid")
+
+    # Return the flattened PLRU victim expression. / 返回扁平化 PLRU victim 表达式。
+    def plru_victim_expr(self, state: Any, tree_ways: int, offset: int = 0) -> Any:
+        if tree_ways <= 1:
+            return 0
+        if tree_ways == 2:
+            return state[offset]
+        right_ways = tree_ways // 2
+        left_ways = tree_ways - right_ways
+        root = state[offset + tree_ways - 2]
+        left = self.plru_victim_expr(state, left_ways, offset + right_ways - 1)
+        right = self.plru_victim_expr(state, right_ways, offset)
+        return Cat(Mux(root, left, right), root)
+
+    # Return the flattened PLRU next-state expression. / 返回扁平化 PLRU 下一状态表达式。
+    def plru_next_expr(self, state: Any, touch_way: Any, tree_ways: int) -> Any:
+        if tree_ways <= 1:
+            return 0
+        if tree_ways == 2:
+            return ~touch_way[0]
+        right_ways = tree_ways // 2
+        left_ways = tree_ways - right_ways
+        root_new = ~touch_way[tree_ways.bit_length() - 2]
+        left_state = state[right_ways - 1 : tree_ways - 2]
+        right_state = state[: right_ways - 1]
+        left_touch = touch_way[: max(1, left_ways.bit_length() - 1)]
+        right_touch = touch_way[: max(1, right_ways.bit_length() - 1)]
+        left_next = self.plru_next_expr(left_state, left_touch, left_ways)
+        right_next = self.plru_next_expr(right_state, right_touch, right_ways)
+        return Cat(
+            Mux(root_new, right_next, right_state),
+            Mux(root_new, left_state, left_next),
+            root_new,
+        )
 
     # Route interleaved touches and delay victim touch-back by one cycle. / 路由交错 touch，并将 victim touch-back 延迟一个周期。
     def elaborate(self, platform) -> Module:
@@ -222,57 +265,74 @@ class ICacheReplacer(Elaboratable):
         # locally dynamic for static checking purposes.
         m: Any = Module()
         c = self.cfg
-        policies = []
-        for bank in range(c.port_number):
-            policy = SetAssocPolicy(c)
-            policies.append(policy)
-            m.submodules[f"replacer_{bank}"] = policy
+        domain = ClockDomain("sync", async_reset=True)
+        domain.clk = self.clock
+        domain.rst = self.reset
+        m.domains += domain
+        half_sets = c.n_sets // c.port_number
+        states = [
+            [
+                Signal(
+                    c.state_bits,
+                    name=(f"state_vec_{index}" if bank == 0 else f"state_vec_1_{index}"),
+                )
+                for index in range(half_sets)
+            ]
+            for bank in range(c.port_number)
+        ]
 
-        # Each policy receives the V2-selected hit touch in slot zero.
-        for bank, policy in enumerate(policies):
+        hit_valid: list[Any] = []
+        hit_set: list[Any] = []
+        hit_way: list[Any] = []
+        for bank in range(c.port_number):
             selector = self.touch_req_v_set_idx[bank][0]
-            selected_valid = Mux(selector, self.touch_req_valid[1], self.touch_req_valid[0])
-            selected_set = Mux(
+            hit_valid.append(Mux(selector, self.touch_req_valid[1], self.touch_req_valid[0]))
+            hit_set.append(Mux(
                 selector,
                 self.touch_req_v_set_idx[1][1:],
                 self.touch_req_v_set_idx[0][1:],
-            )
-            selected_way = Mux(selector, self.touch_req_way[1], self.touch_req_way[0])
-            m.d.comb += [
-                policy.touch_valid[0].eq(selected_valid),
-                policy.touch_set[0].eq(selected_set),
-                policy.touch_way[0].eq(selected_way),
-                policy.victim_set.eq(self.victim_req_v_set_idx[1:]),
-            ]
+            ))
+            hit_way.append(Mux(selector, self.touch_req_way[1], self.touch_req_way[0]))
 
         # Victim output selects the bank using the low set-index bit.
+        victim_set = self.victim_req_v_set_idx[1:]
+        bank_victims = [
+            self.plru_victim_expr(Array(states[bank])[victim_set], c.n_ways)
+            for bank in range(c.port_number)
+        ]
         m.d.comb += self.victim_resp_way.eq(
-            Mux(
-                self.victim_req_v_set_idx[0],
-                policies[1].victim_way,
-                policies[0].victim_way,
-            )
+            Mux(self.victim_req_v_set_idx[0], bank_victims[1], bank_victims[0])
         )
 
         victim_set_reg = Signal(c.idx_bits, name="victim_vSetIdx_reg")
         victim_way_reg = Signal(c.way_bits, name="victim_way_reg")
-        victim_valid_reg = Signal(name="victim_valid_reg", reset=0)
+        victim_valid_reg = [
+            Signal(name=f"touch_ways_{bank}_1_valid_REG", reset_less=True)
+            for bank in range(c.port_number)
+        ]
         with m.If(self.victim_req_valid):
             m.d.sync += [
                 victim_set_reg.eq(self.victim_req_v_set_idx),
                 victim_way_reg.eq(self.victim_resp_way),
             ]
-        m.d.sync += victim_valid_reg.eq(self.victim_req_valid)
-        m.d.comb += self.victim_resp_valid.eq(victim_valid_reg)
+        for valid_reg in victim_valid_reg:
+            m.d.sync += valid_reg.eq(self.victim_req_valid)
 
-        for bank, policy in enumerate(policies):
-            m.d.comb += [
-                policy.touch_valid[1].eq(
-                    victim_valid_reg & (victim_set_reg[0] == bank)
-                ),
-                policy.touch_set[1].eq(victim_set_reg[1:]),
-                policy.touch_way[1].eq(victim_way_reg),
-            ]
+        for bank in range(c.port_number):
+            victim_touch_valid = victim_valid_reg[bank] & (victim_set_reg[0] == bank)
+            for set_index, current in enumerate(states[bank]):
+                next_state: Any = current
+                next_state = Mux(
+                    hit_valid[bank] & (hit_set[bank] == set_index),
+                    self.plru_next_expr(next_state, hit_way[bank], c.n_ways),
+                    next_state,
+                )
+                next_state = Mux(
+                    victim_touch_valid & (victim_set_reg[1:] == set_index),
+                    self.plru_next_expr(next_state, victim_way_reg, c.n_ways),
+                    next_state,
+                )
+                m.d.sync += current.eq(next_state)
         return m
 
 
@@ -292,7 +352,7 @@ def build_verilog(configuration, injected_dependencies):
     else:
         cfg = ReplacerConfig()
     top = ICacheReplacer(cfg)
-    ports = [top.victim_req_valid, top.victim_req_v_set_idx, top.victim_resp_way, top.victim_resp_valid]
+    ports = [top.clock, top.reset, top.victim_req_valid, top.victim_req_v_set_idx, top.victim_resp_way]
     ports += top.touch_req_valid + top.touch_req_v_set_idx + top.touch_req_way
     return verilog.convert(top, name="ICacheReplacer", ports=ports)
 

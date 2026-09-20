@@ -2,9 +2,9 @@
   "schema_version": 1,
   "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_EQUIVALENCE_PROGRESS",
   "build_denominator": 118,
-  "strict_complete_build_count": 31,
-  "fraction": "31/118",
-  "percentage": 26.271186,
+  "strict_complete_build_count": 32,
+  "fraction": "32/118",
+  "percentage": 27.118644,
   "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with the locked source commit, matching source hashes, and either a Yosys SAT no-model miter or fully proven Yosys inductive-equivalence status is counted. STRICT_PENDING and COMPLETE_EQUIVALENCE_VARIANT_ONLY records are inventoried as attempted-but-not-counted instead of failing the rail, and one Build file may not be claimed by several counting proofs.",
   "non_counting_attempt_count": 10,
   "non_counting_attempts": [
@@ -265,7 +265,7 @@
     }
   ],
   "plan_reconciliation": {
-    "plan_count": 31,
+    "plan_count": 32,
     "plan_denominator": 118,
     "status": "PASS"
   },
@@ -12273,6 +12273,185 @@
       "declared_unclosed": [
         "strict gates did not all pass"
       ]
+    },
+    {
+      "evidence": "validation/v2-build-cpu-frontend-icache-icachereplacer-strict-evidence.json",
+      "build_id": "Build-Cpu.Frontend.Icache.ICacheReplacer",
+      "declared_status": "COMPLETE_EQUIVALENCE",
+      "source_commit": {
+        "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+        "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+        "status": "PASS"
+      },
+      "status": "PASS",
+      "note": null,
+      "scope": {
+        "kind": "catalog_build_multi_variant",
+        "public_variants": [
+          "ICacheReplacer"
+        ],
+        "variant_count": 1,
+        "combinational_variants": 0,
+        "sequential_variants": 1,
+        "inputs": {
+          "ICacheReplacer_clock": 1,
+          "ICacheReplacer_reset": 1,
+          "ICacheReplacer_io_touch_0_valid": 1,
+          "ICacheReplacer_io_touch_0_bits_vSetIdx": 8,
+          "ICacheReplacer_io_touch_0_bits_way": 2,
+          "ICacheReplacer_io_touch_1_valid": 1,
+          "ICacheReplacer_io_touch_1_bits_vSetIdx": 8,
+          "ICacheReplacer_io_touch_1_bits_way": 2,
+          "ICacheReplacer_io_victim_vSetIdx_valid": 1,
+          "ICacheReplacer_io_victim_vSetIdx_bits": 8
+        },
+        "outputs_compared": {
+          "ICacheReplacer_io_victim_way": 2
+        },
+        "aggregate_input_bits": 33,
+        "aggregate_compared_output_bits": 2,
+        "variants": {
+          "ICacheReplacer": {
+            "method": "sequential_equivalence",
+            "sequential": true,
+            "locked_reference": "validation/reference-sv/ICacheReplacer.sv",
+            "locked_sha256": "01a8894d0399d429f3d50ed987333494b36072bf7cd569c3ce091a797ffcae6b",
+            "children": [],
+            "inputs": {
+              "clock": 1,
+              "reset": 1,
+              "io_touch_0_valid": 1,
+              "io_touch_0_bits_vSetIdx": 8,
+              "io_touch_0_bits_way": 2,
+              "io_touch_1_valid": 1,
+              "io_touch_1_bits_vSetIdx": 8,
+              "io_touch_1_bits_way": 2,
+              "io_victim_vSetIdx_valid": 1,
+              "io_victim_vSetIdx_bits": 8
+            },
+            "outputs_compared": {
+              "io_victim_way": 2
+            },
+            "input_bits": 33,
+            "output_bits": 2,
+            "abi_exact": true,
+            "deterministic": true,
+            "miter_selfcheck": true,
+            "view_trusted": true,
+            "locked_reference_lint": "PASS",
+            "verdict": "PASS",
+            "success_marker": true,
+            "markers_present": {
+              "0 are unproven.": true,
+              "Equivalence successfully proven!": true
+            },
+            "unconstrained_or_equiv_cells": 781,
+            "proven_cells": 781,
+            "unproven_cells": 0,
+            "sat_variables": null,
+            "sat_clauses": null
+          }
+        },
+        "why_complete": "Every locked module named by this Build's own tables is proven against its exact-name locked reference on the rail its timing requires, with a conservation-audited 5C view where the installed Yosys cannot read the original.",
+        "bounded_tests_counted": false
+      },
+      "sources": {
+        "validator": {
+          "path": "validation/v2_icache_replacer_strict_validator.py",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "c45c79686bfcefa89cd6ad368edca48985dcc663079861860df9cafbd6fdcebd",
+          "observed_sha256": "c45c79686bfcefa89cd6ad368edca48985dcc663079861860df9cafbd6fdcebd",
+          "status": "PASS"
+        },
+        "python_build": {
+          "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.ICacheReplacer-Hardware.py",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "5f0106bf4f9aea8d69191b844807801053a0f8a107ed582b494592ad2c103d4e",
+          "observed_sha256": "5f0106bf4f9aea8d69191b844807801053a0f8a107ed582b494592ad2c103d4e",
+          "status": "PASS"
+        },
+        "reference_sv": {
+          "path": "validation/reference-sv/ICacheReplacer.sv",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "01a8894d0399d429f3d50ed987333494b36072bf7cd569c3ce091a797ffcae6b",
+          "observed_sha256": "01a8894d0399d429f3d50ed987333494b36072bf7cd569c3ce091a797ffcae6b",
+          "status": "PASS"
+        },
+        "scala": {
+          "path": "upstream/src/main/scala/xiangshan/frontend/icache/ICache.scala",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "ce4dbbc64b3e133fdc689eae954a3dca6fa3c001357725bc4baded8d2c812fcb",
+          "observed_sha256": "ce4dbbc64b3e133fdc689eae954a3dca6fa3c001357725bc4baded8d2c812fcb",
+          "status": "PASS"
+        }
+      },
+      "source_children": {},
+      "validator_dependencies": {
+        "strict_family_rail": {
+          "path": "validation/v2_strict_family_rail.py",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
+          "observed_sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
+          "status": "PASS"
+        },
+        "multiline_reference_view": {
+          "path": "validation/v2_funcunit_strict_validator.py",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "ef5018899932061420e780d9c5edc083fa532cf160bd628d9adb990b364b49f8",
+          "observed_sha256": "ef5018899932061420e780d9c5edc083fa532cf160bd628d9adb990b364b49f8",
+          "status": "PASS"
+        }
+      },
+      "reference_lock": {
+        "ICacheReplacer": {
+          "path": "validation/reference-sv/ICacheReplacer.sv",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "01a8894d0399d429f3d50ed987333494b36072bf7cd569c3ce091a797ffcae6b",
+          "observed_sha256": "01a8894d0399d429f3d50ed987333494b36072bf7cd569c3ce091a797ffcae6b",
+          "status": "PASS"
+        }
+      },
+      "declared_scala_sources": {
+        "upstream/src/main/scala/xiangshan/frontend/icache/ICache.scala": {
+          "path": "upstream/src/main/scala/xiangshan/frontend/icache/ICache.scala",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "ce4dbbc64b3e133fdc689eae954a3dca6fa3c001357725bc4baded8d2c812fcb",
+          "observed_sha256": "ce4dbbc64b3e133fdc689eae954a3dca6fa3c001357725bc4baded8d2c812fcb",
+          "status": "PASS"
+        },
+        "upstream/rocket-chip/src/main/scala/util/Replacement.scala": {
+          "path": "upstream/rocket-chip/src/main/scala/util/Replacement.scala",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "811d0fa0fff97d66edc513b4385a5ee821859594282c95f972f5f4b483fac373",
+          "observed_sha256": "811d0fa0fff97d66edc513b4385a5ee821859594282c95f972f5f4b483fac373",
+          "status": "PASS"
+        }
+      },
+      "variant_checks": {
+        "ICacheReplacer": {
+          "status": "PASS",
+          "failures": []
+        }
+      },
+      "formal": {
+        "proof_method": "sequential_variant_set",
+        "command": null,
+        "returncode": null,
+        "status": null,
+        "formal_success_marker": null
+      },
+      "failures": [],
+      "declared_failures": [],
+      "declared_unclosed": []
     },
     {
       "evidence": "validation/v2-build-cpu-frontend-icache-instruncache-strict-evidence.json",
