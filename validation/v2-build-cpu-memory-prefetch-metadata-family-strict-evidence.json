@@ -1,0 +1,455 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_COMPLETE_EQUIVALENCE",
+  "build_id": "Build-Cpu.Memory.Prefetch.Metadata.Family",
+  "validator": "validation/v2_strict_family_rail.py",
+  "status": "STRICT_PENDING",
+  "strict_complete_eligible": false,
+  "strict_complete_count_delta": 0,
+  "acceptance_eligible": false,
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "audit_policy": {
+    "require_negative_control": true,
+    "require_two_sided_negative_control": true,
+    "require_locked_reference_lint": true,
+    "require_validator_hash": true,
+    "scope_source": "Build catalog tables"
+  },
+  "scope": {
+    "kind": "catalog_build_multi_variant",
+    "public_variants": [
+      "StreamBitVectorArray",
+      "StrideMetaArray"
+    ],
+    "variant_count": 2,
+    "combinational_variants": 0,
+    "sequential_variants": 2,
+    "inputs": {
+      "StreamBitVectorArray_clock": 1,
+      "StreamBitVectorArray_reset": 1,
+      "StreamBitVectorArray_io_enable": 1,
+      "StreamBitVectorArray_io_train_req_valid": 1,
+      "StreamBitVectorArray_io_train_req_bits_vaddr": 50,
+      "StreamBitVectorArray_io_train_req_bits_miss": 1,
+      "StreamBitVectorArray_io_train_req_bits_pfHitStream": 1,
+      "StrideMetaArray_clock": 1,
+      "StrideMetaArray_reset": 1,
+      "StrideMetaArray_io_train_req_valid": 1,
+      "StrideMetaArray_io_train_req_bits_vaddr": 50,
+      "StrideMetaArray_io_train_req_bits_pc": 50
+    },
+    "outputs_compared": {
+      "StreamBitVectorArray_io_train_req_ready": 1,
+      "StreamBitVectorArray_io_l1_prefetch_req_valid": 1,
+      "StreamBitVectorArray_io_l1_prefetch_req_bits_region": 40,
+      "StreamBitVectorArray_io_l1_prefetch_req_bits_bit_vec": 16,
+      "StreamBitVectorArray_io_l2_l3_prefetch_req_valid": 1,
+      "StreamBitVectorArray_io_l2_l3_prefetch_req_bits_region": 40,
+      "StreamBitVectorArray_io_l2_l3_prefetch_req_bits_bit_vec": 16,
+      "StreamBitVectorArray_io_l2_l3_prefetch_req_bits_sink": 2,
+      "StrideMetaArray_io_train_req_ready": 1,
+      "StrideMetaArray_io_l1_prefetch_req_valid": 1,
+      "StrideMetaArray_io_l1_prefetch_req_bits_region": 40,
+      "StrideMetaArray_io_l1_prefetch_req_bits_bit_vec": 16,
+      "StrideMetaArray_io_l2_l3_prefetch_req_valid": 1,
+      "StrideMetaArray_io_l2_l3_prefetch_req_bits_region": 40,
+      "StrideMetaArray_io_l2_l3_prefetch_req_bits_bit_vec": 16
+    },
+    "aggregate_input_bits": 159,
+    "aggregate_compared_output_bits": 232,
+    "variants": {
+      "StreamBitVectorArray": {
+        "method": "sequential_equivalence",
+        "sequential": true,
+        "locked_reference": "validation/reference-sv/StreamBitVectorArray.sv",
+        "locked_sha256": "1fc095dc48bf6d02ebf42590214a736f8a449e61527f114ba5f5868544f7cf98",
+        "children": [],
+        "inputs": {
+          "clock": 1,
+          "reset": 1,
+          "io_enable": 1,
+          "io_train_req_valid": 1,
+          "io_train_req_bits_vaddr": 50,
+          "io_train_req_bits_miss": 1,
+          "io_train_req_bits_pfHitStream": 1
+        },
+        "outputs_compared": {
+          "io_train_req_ready": 1,
+          "io_l1_prefetch_req_valid": 1,
+          "io_l1_prefetch_req_bits_region": 40,
+          "io_l1_prefetch_req_bits_bit_vec": 16,
+          "io_l2_l3_prefetch_req_valid": 1,
+          "io_l2_l3_prefetch_req_bits_region": 40,
+          "io_l2_l3_prefetch_req_bits_bit_vec": 16,
+          "io_l2_l3_prefetch_req_bits_sink": 2
+        },
+        "input_bits": 56,
+        "output_bits": 117,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": false,
+        "locked_reference_lint": "PASS",
+        "verdict": "FAIL",
+        "success_marker": false,
+        "markers_present": {
+          "0 are unproven.": false,
+          "Equivalence successfully proven!": false
+        },
+        "unconstrained_or_equiv_cells": null,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "sat_variables": null,
+        "sat_clauses": null
+      },
+      "StrideMetaArray": {
+        "method": "sequential_equivalence",
+        "sequential": true,
+        "locked_reference": "validation/reference-sv/StrideMetaArray.sv",
+        "locked_sha256": "ab757da2a688088466c3fce0df1f369f678f0a3dc690f4330a6266783aa1177f",
+        "children": [],
+        "inputs": {
+          "clock": 1,
+          "reset": 1,
+          "io_train_req_valid": 1,
+          "io_train_req_bits_vaddr": 50,
+          "io_train_req_bits_pc": 50
+        },
+        "outputs_compared": {
+          "io_train_req_ready": 1,
+          "io_l1_prefetch_req_valid": 1,
+          "io_l1_prefetch_req_bits_region": 40,
+          "io_l1_prefetch_req_bits_bit_vec": 16,
+          "io_l2_l3_prefetch_req_valid": 1,
+          "io_l2_l3_prefetch_req_bits_region": 40,
+          "io_l2_l3_prefetch_req_bits_bit_vec": 16
+        },
+        "input_bits": 103,
+        "output_bits": 115,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "FAIL",
+        "success_marker": false,
+        "markers_present": {
+          "0 are unproven.": false,
+          "Equivalence successfully proven!": false
+        },
+        "unconstrained_or_equiv_cells": 115,
+        "proven_cells": 0,
+        "unproven_cells": 115,
+        "sat_variables": null,
+        "sat_clauses": null
+      }
+    },
+    "why_complete": "Every locked module named by this Build's own tables is proven against its exact-name locked reference on the rail its timing requires, with a conservation-audited 5C view where the installed Yosys cannot read the original.",
+    "bounded_tests_counted": false
+  },
+  "reference_lock": {
+    "directory": "validation/reference-sv",
+    "xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "locked_references_written": false,
+    "sha256_by_module": {
+      "StreamBitVectorArray": "1fc095dc48bf6d02ebf42590214a736f8a449e61527f114ba5f5868544f7cf98",
+      "StrideMetaArray": "ab757da2a688088466c3fce0df1f369f678f0a3dc690f4330a6266783aa1177f"
+    }
+  },
+  "sources": {
+    "validator": {
+      "path": "validation/v2_strict_family_rail.py",
+      "sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
+      "bytes": 43710
+    },
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Prefetch.Metadata.Family-Hardware.py",
+      "sha256": "40a3725d044b26a6386c773172bef60b3d6e8903e0294b1d2c66095963103740",
+      "bytes": 10987
+    },
+    "reference_sv": {
+      "path": "validation/reference-sv/StreamBitVectorArray.sv",
+      "sha256": "1fc095dc48bf6d02ebf42590214a736f8a449e61527f114ba5f5868544f7cf98",
+      "bytes": 331389
+    },
+    "declared_scala_sources": {},
+    "reference_children": {}
+  },
+  "checks": {
+    "py_compile": {
+      "status": "PASS"
+    },
+    "pyright": {
+      "build": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_tt46vt21\\Build-Cpu.Memory.Prefetch.Metadata.Family-Hardware.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "error_count": 0,
+        "files_analyzed": 1,
+        "stderr_tail": ""
+      },
+      "rail": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_3al83w1q\\v2_strict_family_rail.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "error_count": 0,
+        "files_analyzed": 1,
+        "stderr_tail": ""
+      }
+    },
+    "catalog_coverage": {
+      "entries": 2,
+      "proven": 0
+    },
+    "formal": {
+      "yosys_formal_miter": {
+        "status": "NOT_APPLICABLE",
+        "mitered_variants": 0
+      }
+    },
+    "aggregate_sat_miter": {
+      "status": "NOT_APPLICABLE",
+      "mitered_variants": 0
+    },
+    "negative_control": {
+      "status": "FAIL",
+      "cases": {
+        "sat": {
+          "status": "PASS",
+          "note": "no representative with outputs"
+        },
+        "sequential.target": {
+          "status": "FAIL",
+          "control_entry": "StreamBitVectorArray",
+          "control_port": "io_train_req_ready",
+          "mutation_applied": true,
+          "explicit_failure_marker": false,
+          "success_marker_still_present": false,
+          "returncode": 1
+        },
+        "sequential.reference": {
+          "status": "FAIL",
+          "control_entry": "StreamBitVectorArray",
+          "control_port": "io_train_req_ready",
+          "mutation_applied": true,
+          "explicit_failure_marker": false,
+          "success_marker_still_present": false,
+          "returncode": 1
+        }
+      },
+      "note": "a reference-side mutation that still proves means the reference never reaches the comparison"
+    },
+    "variants": [
+      {
+        "method": "sequential_equivalence",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "StreamBitVectorArray_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StreamBitVectorArray.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/REF_StreamBitVectorArray.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/StreamBitVectorArray_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.135 MB sources in 4 modules, into 0.309 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.132 s (elab=0.011, cvt=0.037, bld=0.000); cpu 0.056 s on 1 threads; alloced 11.832 MB\n",
+          "output_sha256": "c46088921097632cd6815e90995b0633011b4e1b44bb8e53a38a5ac92586a927"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "StreamBitVectorArray",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/StreamBitVectorArray.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.091 MB sources in 2 modules, into 0.256 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.084 s (elab=0.007, cvt=0.022, bld=0.000); cpu 0.050 s on 1 threads; alloced 12.602 MB\n",
+          "output_sha256": "5c83d827acf0c2fa44a9fedc56c15aa740592859b0aa4c729a30f520cbbeefa7"
+        },
+        "yosys_equiv": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StreamBitVectorArray.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/REF_StreamBitVectorArray.sv; proc; async2sync; memory; opt; flatten REF_StreamBitVectorArray; flatten DUT_StreamBitVectorArray; equiv_make REF_StreamBitVectorArray DUT_StreamBitVectorArray StreamBitVectorArray_EQUIV; prep -top StreamBitVectorArray_EQUIV; equiv_induct -undef; equiv_status -assert"
+          ],
+          "returncode": 1,
+          "status": "FAIL",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "\n-- Running command `read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StreamBitVectorArray.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/REF_StreamBitVectorArray.sv; proc; async2sync; memory; opt; flatten REF_StreamBitVectorArray; flatten DUT_StreamBitVectorArray; equiv_make REF_StreamBitVectorArray DUT_StreamBitVectorArray StreamBitVectorArray_EQUIV; prep -top StreamBitVectorArray_EQUIV; equiv_induct -undef; equiv_status -assert' --\n\n1. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StreamBitVectorArray.sv\nParsing SystemVerilog input from `/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StreamBitVectorArray.sv' to AST representation.\nGenerating RTLIL representation for module `\\DUT_StreamBitVectorArray'.\nSuccessfully finished Verilog frontend.\n\n2. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/REF_StreamBitVectorArray.sv\n/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/REF_StreamBitVectorArray.sv:778: ERROR: syntax error, unexpected TOK_AUTOMATIC\n",
+          "output_sha256": "c38fdf5865136d0c4f4f23f01bbe1d39b31675708ced057d59d9abf35fb3aaf6",
+          "markers_present": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "formal_success_marker": false
+        }
+      },
+      {
+        "method": "sequential_equivalence",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "StrideMetaArray_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StrideMetaArray.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/REF_StrideMetaArray.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/StrideMetaArray_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.076 MB sources in 4 modules, into 0.125 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.091 s (elab=0.003, cvt=0.011, bld=0.000); cpu 0.028 s on 1 threads; alloced 10.441 MB\n",
+          "output_sha256": "63e5cc17212656f15457296af0fd53818e7e1bfccc7a44738d23ea257150643b"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "StrideMetaArray",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/StrideMetaArray.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.047 MB sources in 2 modules, into 0.112 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.058 s (elab=0.002, cvt=0.012, bld=0.000); cpu 0.028 s on 1 threads; alloced 10.984 MB\n",
+          "output_sha256": "b8905a5ed318d431671ff15f05803d030230478486182339393a7f30100db701"
+        },
+        "yosys_equiv": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StrideMetaArray.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/REF_StrideMetaArray.sv; proc; async2sync; memory; opt; flatten REF_StrideMetaArray; flatten DUT_StrideMetaArray; equiv_make REF_StrideMetaArray DUT_StrideMetaArray StrideMetaArray_EQUIV; prep -top StrideMetaArray_EQUIV; equiv_induct -undef; equiv_status -assert"
+          ],
+          "returncode": 1,
+          "status": "FAIL",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": true,
+          "equiv_cells_full": 115,
+          "equiv_summary_full": [
+            0,
+            115
+          ],
+          "equiv_failed_full": 115,
+          "sat_counts_full": null,
+          "output_tail": "rain_req_bits_vaddr [7]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$958: \\s3_l1_pf_req_bits_region_gold [2] \\io_train_req_bits_vaddr [8]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$959: \\s3_l1_pf_req_bits_region_gold [3] \\io_train_req_bits_vaddr [9]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$960: \\s3_l1_pf_req_bits_region_gold [4] \\io_train_req_bits_vaddr [10]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$961: \\s3_l1_pf_req_bits_region_gold [5] \\io_train_req_bits_vaddr [11]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$962: \\s3_l1_pf_req_bits_region_gold [6] \\io_train_req_bits_vaddr [12]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$963: \\s3_l1_pf_req_bits_region_gold [7] \\io_train_req_bits_vaddr [13]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$964: \\s3_l1_pf_req_bits_region_gold [8] \\io_train_req_bits_vaddr [14]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$965: \\s3_l1_pf_req_bits_region_gold [9] \\io_train_req_bits_vaddr [15]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$966: \\s3_l1_pf_req_bits_region_gold [10] \\io_train_req_bits_vaddr [16]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$967: \\s3_l1_pf_req_bits_region_gold [11] \\io_train_req_bits_vaddr [17]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$968: \\s3_l1_pf_req_bits_region_gold [12] \\io_train_req_bits_vaddr [18]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$969: \\s3_l1_pf_req_bits_region_gold [13] \\io_train_req_bits_vaddr [19]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$970: \\s3_l1_pf_req_bits_region_gold [14] \\io_train_req_bits_vaddr [20]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$971: \\s3_l1_pf_req_bits_region_gold [15] \\io_train_req_bits_vaddr [21]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$972: \\s3_l1_pf_req_bits_region_gold [16] \\io_train_req_bits_vaddr [22]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$973: \\s3_l1_pf_req_bits_region_gold [17] \\io_train_req_bits_vaddr [23]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$974: \\s3_l1_pf_req_bits_region_gold [18] \\io_train_req_bits_vaddr [24]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$975: \\s3_l1_pf_req_bits_region_gold [19] \\io_train_req_bits_vaddr [25]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$976: \\s3_l1_pf_req_bits_region_gold [20]ERROR: Found 115 unproven $equiv cells in 'equiv_status -assert'.\n",
+          "output_sha256": "9fad10f337868299852c41a896ec8ee1793f0aa290e406250dd80c3c63cdb653",
+          "markers_present": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "formal_success_marker": false,
+          "equiv_cells": 115,
+          "proven_cells": 0,
+          "unproven_cells": 115
+        }
+      }
+    ]
+  },
+  "failures": [
+    "synthesizable view failed conservation: StreamBitVectorArray",
+    "StreamBitVectorArray:yosys_equiv",
+    "StreamBitVectorArray: zero or missing $equiv cells",
+    "StrideMetaArray:yosys_equiv",
+    "StrideMetaArray: 115 $equiv cells unproven",
+    "negative control did not detect a mutated design"
+  ],
+  "unclosed": [
+    "strict gates did not all pass"
+  ],
+  "acceptance_unclosed": [
+    "Parent closure, full-top differential, final license review, and user approval remain outside this Build proof."
+  ]
+}

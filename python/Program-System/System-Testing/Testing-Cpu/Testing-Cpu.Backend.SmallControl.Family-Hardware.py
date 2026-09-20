@@ -23,16 +23,15 @@ DIRECT: Final = True
 
 MEMBERS: Final = (
     "AddrAddModule",
-    "DatamoduleResultBuffer",
     "GPAMem",
     "RedirectGenerator",
     "RegCache",
     "RegCacheTagTable",
-    "RegionWays",
     "RASStack",
     "FauFTBWay",
     "VectorCvtTop",
 )
+COMPATIBILITY_MEMBERS: Final = ("DatamoduleResultBuffer", "RegionWays")
 
 
 # Subject Contract
@@ -49,9 +48,12 @@ class SmallControlFamilyContractTest(unittest.TestCase):
 
     def test_catalog_is_locked_and_complete(self) -> None:
         self.assertEqual(MEMBERS, tuple(self.module.COVERED_MODULES))
-        self.assertEqual(set(MEMBERS), set(self.module.PORT_SPECS))
+        self.assertEqual(COMPATIBILITY_MEMBERS,
+                         tuple(self.module.COMPATIBILITY_MEMBERS))
+        self.assertEqual(set(MEMBERS) | set(COMPATIBILITY_MEMBERS),
+                         set(self.module.PORT_SPECS))
         self.assertEqual(
-            (5, 41, 11, 56, 92, 111, 26, 47, 46, 14),
+            (5, 11, 56, 92, 111, 47, 46, 14),
             tuple(len(self.module.PORT_SPECS[name]) for name in MEMBERS),
         )
         for name in MEMBERS:

@@ -22,6 +22,7 @@ from amaranth.back import verilog
 __all__ = [
     "PortSpec",
     "COVERED_MODULES",
+    "COMPATIBILITY_MEMBERS",
     "SOURCE_PATHS",
     "LOCKED_REFERENCE_SHA256",
     "LOCKED_PORT_SPECS",
@@ -47,15 +48,20 @@ class PortSpec:
 
 COVERED_MODULES: tuple[str, ...] = (
     "AddrAddModule",
-    "DatamoduleResultBuffer",
     "GPAMem",
     "RedirectGenerator",
     "RegCache",
     "RegCacheTagTable",
-    "RegionWays",
     "RASStack",
     "FauFTBWay",
     "VectorCvtTop",
+)
+
+# These adapters remain import-compatible, but strict ownership belongs to
+# Build-Cpu.Backend.FinalTwo.Family and must not be claimed twice.
+COMPATIBILITY_MEMBERS: tuple[str, ...] = (
+    "DatamoduleResultBuffer",
+    "RegionWays",
 )
 
 SOURCE_PATHS: tuple[str, ...] = (
@@ -349,26 +355,99 @@ class BackendSmallControlFamily(Elaboratable):
             self.ports["io_target"].eq(Cat(target_sum, target_sum[50].replicate(13))),
         ]
 
-# Implement bounded GPA storage. / 实现有界 GPA 存储。
+# Implement the locked banked GPA storage. / 实现锁定的分 bank GPA 存储。
     def _gpa_mem(self, module: Module) -> None:
-        """Implement bounded FTQ-indexed GPA storage. / 实现有界 FTQ 索引 GPA 存储。"""
+        """Mirror SyncDataModuleTemplate's four banks and write pipeline."""
 
-        storage = Array(Signal(57, name=f"gpa_slot_{i}") for i in range(64))
-        read_addr = Signal(6, name="gpa_read_addr")
-        read_offset = Signal(4, name="gpa_read_offset")
-        with module.If(self.ports["io_fromIFU_gpaddrMem_wen"]):
-            module.d.sync += storage[self.ports["io_fromIFU_gpaddrMem_waddr"]].eq(
-                Cat(self.ports["io_fromIFU_gpaddrMem_wdata_gpaddr"], self.ports["io_fromIFU_gpaddrMem_wdata_isForVSnonLeafPTE"])
-            )
+        gpaddr_banks = [
+            Array(Signal(56, name=f"mem.dataBanks_{bank}.data_{entry}_gpaddr",
+                         reset_less=True) for entry in range(16))
+            for bank in range(4)
+        ]
+        pte_banks = [
+            Array(Signal(name=f"mem.dataBanks_{bank}.data_{entry}_isForVSnonLeafPTE",
+                         reset_less=True) for entry in range(16))
+            for bank in range(4)
+        ]
+        read_addrs = [
+            Signal(6, name="mem.raddr_dup_0" if bank == 0 else f"mem.raddr_dup_0_{bank}",
+                   reset_less=True)
+            for bank in range(4)
+        ]
+        read_bank = Signal(6, name="mem.raddr_dup", reset_less=True)
+        read_offset = Signal(4, name="ftqOffset", reset_less=True)
+        write_valid = [
+            Signal(name="mem.wen_dup_last_REG" if bank == 0
+                   else f"mem.wen_dup_last_REG_{bank}")
+            for bank in range(4)
+        ]
+        write_addrs = [
+            Signal(6, name="mem.waddr_dup_0" if bank == 0 else f"mem.waddr_dup_0_{bank}",
+                   reset_less=True)
+            for bank in range(4)
+        ]
+        write_gpaddr = [
+            Signal(56, name="mem.r_gpaddr" if bank == 0 else f"mem.r_{bank}_gpaddr",
+                   reset_less=True)
+            for bank in range(4)
+        ]
+        write_pte = [
+            Signal(name="mem.r_isForVSnonLeafPTE" if bank == 0
+                   else f"mem.r_{bank}_isForVSnonLeafPTE", reset_less=True)
+            for bank in range(4)
+        ]
+
+        for bank in range(4):
+            pending_bank = write_addrs[bank][4:6] == bank
+            with module.If(write_valid[bank] & pending_bank):
+                module.d.sync += [
+                    gpaddr_banks[bank][write_addrs[bank][:4]].eq(write_gpaddr[bank]),
+                    pte_banks[bank][write_addrs[bank][:4]].eq(write_pte[bank]),
+                ]
+            module.d.sync += write_valid[bank].eq(
+                self.ports["io_fromIFU_gpaddrMem_wen"])
+            with module.If(self.ports["io_fromIFU_gpaddrMem_wen"]):
+                module.d.sync += [
+                    write_addrs[bank].eq(self.ports["io_fromIFU_gpaddrMem_waddr"]),
+                    write_gpaddr[bank].eq(
+                        self.ports["io_fromIFU_gpaddrMem_wdata_gpaddr"]),
+                    write_pte[bank].eq(
+                        self.ports["io_fromIFU_gpaddrMem_wdata_isForVSnonLeafPTE"]),
+                ]
         with module.If(self.ports["io_exceptionReadAddr_valid"]):
+            for read_addr in read_addrs:
+                module.d.sync += read_addr.eq(
+                    self.ports["io_exceptionReadAddr_bits_ftqPtr_value"])
             module.d.sync += [
-                read_addr.eq(self.ports["io_exceptionReadAddr_bits_ftqPtr_value"]),
+                read_bank.eq(self.ports["io_exceptionReadAddr_bits_ftqPtr_value"]),
                 read_offset.eq(self.ports["io_exceptionReadAddr_bits_ftqOffset"]),
             ]
-        entry = storage[read_addr]
+        bank_gpaddr = Array(
+            Mux(
+                write_valid[bank]
+                & (write_addrs[bank][4:6] == bank)
+                & (write_addrs[bank][:4] == read_addrs[bank][:4]),
+                write_gpaddr[bank],
+                gpaddr_banks[bank][read_addrs[bank][:4]],
+            )
+            for bank in range(4)
+        )
+        bank_pte = Array(
+            Mux(
+                write_valid[bank]
+                & (write_addrs[bank][4:6] == bank)
+                & (write_addrs[bank][:4] == read_addrs[bank][:4]),
+                write_pte[bank],
+                pte_banks[bank][read_addrs[bank][:4]],
+            )
+            for bank in range(4)
+        )
+        selected_gpaddr = bank_gpaddr[read_bank[4:6]]
+        selected_pte = bank_pte[read_bank[4:6]]
         module.d.comb += [
-            self.ports["io_exceptionReadData_gpaddr"].eq(entry[:56] + (read_offset << 1)),
-            self.ports["io_exceptionReadData_isForVSnonLeafPTE"].eq(entry[56]),
+            self.ports["io_exceptionReadData_gpaddr"].eq(
+                selected_gpaddr + Cat(Const(0, 1), read_offset)),
+            self.ports["io_exceptionReadData_isForVSnonLeafPTE"].eq(selected_pte),
         ]
 
     # Implement two bounded enqueue/dequeue lanes. / 实现两个有界入队/出队通道。
@@ -433,41 +512,132 @@ class BackendSmallControlFamily(Elaboratable):
 
 # Select the oldest redirect. / 选择最老重定向。
     def _redirect(self, module: Module) -> None:
-        """Select the oldest redirect with ROB circular ordering. / 按 ROB 环序选择最老重定向。"""
+        """Implement the registered oldest-redirect and flush-after window."""
 
         p = self.ports
-        exu = p["io_oldestExuRedirect_valid"]
-        load = p["io_loadReplay_valid"]
-        same = p["io_oldestExuRedirect_bits_robIdx_flag"] == p["io_loadReplay_bits_robIdx_flag"]
-        exu_older = Mux(same,
-                        p["io_oldestExuRedirect_bits_robIdx_value"] < p["io_loadReplay_bits_robIdx_value"],
-                        p["io_oldestExuRedirect_bits_robIdx_value"] > p["io_loadReplay_bits_robIdx_value"])
-        choose_exu = exu & (~load | exu_older)
-        choose_load = load & (~exu | ~exu_older)
-        valid = (choose_exu | choose_load) & ~p["io_robFlush_valid"]
-        module.d.comb += [
-            p["io_stage2Redirect_valid"].eq(valid),
-            p["io_stage2oldestOH"].eq(Cat(choose_exu, choose_load)),
-        ]
-        pairs = (
-            ("robIdx_flag", "robIdx_flag"), ("robIdx_value", "robIdx_value"),
-            ("ftqIdx_flag", "ftqIdx_flag"), ("ftqIdx_value", "ftqIdx_value"),
-            ("ftqOffset", "ftqOffset"), ("level", "level"),
-            ("cfiUpdate_pc", "cfiUpdate_pc"), ("cfiUpdate_target", "cfiUpdate_target"),
-            ("cfiUpdate_taken", "cfiUpdate_taken"), ("cfiUpdate_isMisPred", "cfiUpdate_isMisPred"),
-            ("cfiUpdate_backendIGPF", "cfiUpdate_backendIGPF"),
-            ("cfiUpdate_backendIPF", "cfiUpdate_backendIPF"),
-            ("cfiUpdate_backendIAF", "cfiUpdate_backendIAF"),
-            ("fullTarget", "fullTarget"), ("satpFlush", "satpFlush"),
-            ("isVlsException", "isVlsException"),
+        exu_valid = p["io_oldestExuRedirect_valid"]
+        load_valid = p["io_loadReplay_valid"]
+        exu_flag = p["io_oldestExuRedirect_bits_robIdx_flag"]
+        exu_value = p["io_oldestExuRedirect_bits_robIdx_value"]
+        load_flag = p["io_loadReplay_bits_robIdx_flag"]
+        load_value = p["io_loadReplay_bits_robIdx_value"]
+        compare = exu_flag ^ load_flag ^ (exu_value > load_value)
+        choose_exu = exu_valid & (~load_valid | ~compare)
+        choose_load = load_valid & (~exu_valid | compare)
+
+        flush_valid = Signal(name="flushAfter_valid")
+        flush_flag = Signal(name="flushAfter_bits_robIdx_flag")
+        flush_value = Signal(8, name="flushAfter_bits_robIdx_value")
+        flush_level = Signal(name="flushAfter_bits_level")
+        flush_counter = Signal(3, name="flushAfterCounter", reset_less=True)
+
+        def need_flush(flag: Any, value: Any, level: Any) -> Any:
+            pointer_equal = Cat(value, flag) == Cat(flush_value, flush_flag)
+            at_or_after = flag ^ flush_flag ^ (value > flush_value)
+            return flush_valid & ((flush_level & pointer_equal) | at_or_after) \
+                | p["io_robFlush_valid"]
+
+        exu_accept = choose_exu & ~need_flush(
+            exu_flag, exu_value, p["io_oldestExuRedirect_bits_level"])
+        load_accept = choose_load & ~need_flush(
+            load_flag, load_value, p["io_loadReplay_bits_level"])
+        oldest_valid = exu_accept | load_accept
+
+        selected_flag = Mux(choose_exu, exu_flag, Mux(choose_load, load_flag, 0))
+        selected_value = Mux(choose_exu, exu_value, Mux(choose_load, load_value, 0))
+        selected_level = Mux(
+            choose_exu,
+            p["io_oldestExuRedirect_bits_level"],
+            Mux(choose_load, p["io_loadReplay_bits_level"], 0),
         )
-        for suffix, _ in pairs:
-            out = p[f"io_stage2Redirect_bits_{suffix}"]
+        flush_event = oldest_valid | p["io_robFlush_valid"]
+        module.d.sync += flush_valid.eq(
+            flush_event | (flush_counter[0] & flush_valid))
+        with module.If(flush_event):
+            module.d.sync += [
+                flush_flag.eq(Mux(p["io_robFlush_valid"],
+                                  p["io_robFlush_bits_robIdx_flag"], selected_flag)),
+                flush_value.eq(Mux(p["io_robFlush_valid"],
+                                   p["io_robFlush_bits_robIdx_value"], selected_value)),
+                flush_level.eq(Mux(p["io_robFlush_valid"],
+                                   p["io_robFlush_bits_level"], selected_level)),
+                flush_counter.eq(7),
+            ]
+        with module.Elif(flush_counter[0]):
+            module.d.sync += flush_counter.eq(flush_counter >> 1)
+
+        stage_valid = Signal(name="s1_redirect_valid_reg_last_REG")
+        stage_exu = Signal(name="s1_redirect_onehot_last_REG")
+        stage_load = Signal(name="s1_redirect_onehot_last_REG_1")
+        module.d.sync += [
+            stage_valid.eq(oldest_valid),
+            stage_exu.eq(choose_exu),
+            stage_load.eq(choose_load),
+        ]
+
+        exu_target = p["io_oldestExuRedirect_bits_cfiUpdate_target"]
+        exu_full = p["io_oldestExuRedirect_bits_fullTarget"]
+        upper_16 = Cat(exu_target[48:50], exu_full[50:64])
+        noncanonical_39 = Cat(exu_target[39:50], exu_full[50:64]) \
+            != exu_target[38].replicate(25)
+        noncanonical_48 = upper_16 != exu_target[47].replicate(16)
+        csr = p["io_oldestExuRedirectIsCSR"]
+        exu_igpf = Mux(
+            csr,
+            p["io_oldestExuRedirect_bits_cfiUpdate_backendIGPF"],
+            (p["io_instrAddrTransType_sv39x4"]
+             & Cat(exu_target[41:50], exu_full[50:64]).any())
+            | (p["io_instrAddrTransType_sv48x4"] & exu_full[50:64].any()),
+        )
+        exu_ipf = Mux(
+            csr,
+            p["io_oldestExuRedirect_bits_cfiUpdate_backendIPF"],
+            (p["io_instrAddrTransType_sv39"] & noncanonical_39)
+            | (p["io_instrAddrTransType_sv48"] & noncanonical_48),
+        )
+        exu_iaf = Mux(
+            csr,
+            p["io_oldestExuRedirect_bits_cfiUpdate_backendIAF"],
+            p["io_instrAddrTransType_bare"] & upper_16.any(),
+        )
+        special_exu: dict[str, Any] = {
+            "cfiUpdate_backendIGPF": exu_igpf,
+            "cfiUpdate_backendIPF": exu_ipf,
+            "cfiUpdate_backendIAF": exu_iaf,
+            "fullTarget": Cat(exu_target, exu_full[50:64]),
+        }
+        load_fields = {
+            "robIdx_flag", "robIdx_value", "ftqIdx_flag", "ftqIdx_value",
+            "ftqOffset", "level", "cfiUpdate_pc", "cfiUpdate_target",
+        }
+        fields = (
+            "robIdx_flag", "robIdx_value", "ftqIdx_flag", "ftqIdx_value",
+            "ftqOffset", "level", "cfiUpdate_pc", "cfiUpdate_target",
+            "cfiUpdate_taken", "cfiUpdate_isMisPred", "cfiUpdate_backendIGPF",
+            "cfiUpdate_backendIPF", "cfiUpdate_backendIAF", "fullTarget",
+            "satpFlush", "isVlsException",
+        )
+        stage_fields: dict[str, Signal] = {}
+        for suffix in fields:
+            output = p[f"io_stage2Redirect_bits_{suffix}"]
+            register = Signal(len(output), name=f"s1_redirect_bits_reg_{suffix}",
+                              reset_less=True)
+            stage_fields[suffix] = register
             exu_name = f"io_oldestExuRedirect_bits_{suffix}"
+            source_exu = special_exu.get(suffix, p[exu_name])
             load_name = f"io_loadReplay_bits_{suffix}"
-            exu_value = p[exu_name] if exu_name in p else Const(0, len(out))
-            load_value = p[load_name] if load_name in p else Const(0, len(out))
-            module.d.comb += out.eq(Mux(choose_exu, exu_value, Mux(choose_load, load_value, Const(0, len(out)))))
+            source_load: Any = p[load_name] if suffix in load_fields else Const(0, len(output))
+            with module.If(oldest_valid):
+                module.d.sync += register.eq(
+                    Mux(choose_exu, source_exu,
+                        Mux(choose_load, source_load, Const(0, len(output)))))
+            module.d.comb += output.eq(register)
+
+        module.d.comb += [
+            p["io_stage2Redirect_valid"].eq(
+                stage_valid & ~p["io_robFlush_valid"]),
+            p["io_stage2oldestOH"].eq(Cat(stage_exu, stage_load)),
+        ]
 
 # Implement the bounded register cache. / 实现有界寄存缓存。
     def _regcache(self, module: Module) -> None:
@@ -487,35 +657,178 @@ class BackendSmallControlFamily(Elaboratable):
 
 # Implement tag wakeups and probes. / 实现标签唤醒与探针。
     def _tagtable(self, module: Module) -> None:
-        """Track tag wakeups and answer twelve read probes. / 跟踪标签唤醒并响应十二个读探针。"""
+        """Mirror the 16-entry integer and 12-entry memory tag tables."""
 
-        tags = Array(Signal(8, name=f"rct_tag_{i}") for i in range(32))
-        valids = Array(Signal(name=f"rct_valid_{i}") for i in range(32))
-        for i in range(12):
-            hit = Signal(32, name=f"rct_hit_{i}")
-            for entry in range(32):
-                module.d.comb += hit[entry].eq(valids[entry] & (tags[entry] == self.ports[f"io_readPorts_{i}_tag"]))
-            # Priority encode the first matching entry with a small mux tree.
-            addr = Const(0, 5)
-            found = Const(0, 1)
-            for entry in range(31, -1, -1):
-                addr = Mux(hit[entry], Const(entry, 5), addr)
-                found = found | hit[entry]
-            module.d.comb += [
-                self.ports[f"io_readPorts_{i}_valid"].eq(self.ports[f"io_readPorts_{i}_ren"] & found),
-                self.ports[f"io_readPorts_{i}_addr"].eq(addr),
+        p = self.ports
+
+        def or_all(values: list[Any], width: int = 1) -> Any:
+            result: Any = Const(0, width)
+            for value in values:
+                result = result | value
+            return result
+
+        int_write_enable: list[Any] = []
+        for write in range(4):
+            dependency_cancel = or_all([
+                p[f"io_ldCancel_{dep}_ld2Cancel"]
+                & p[f"io_wakeupFromIQ_{write}_bits_loadDependency_{dep}"][1]
+                for dep in range(3)
+            ])
+            og_cancel = p[f"io_og0Cancel_{write * 2}"]
+            if write < 2:
+                og_cancel = og_cancel & p[f"io_wakeupFromIQ_{write}_bits_is0Lat"]
+            int_write_enable.append(
+                p[f"io_wakeupFromIQ_{write}_valid"]
+                & p[f"io_wakeupFromIQ_{write}_bits_rfWen"]
+                & ~dependency_cancel & ~og_cancel
+            )
+        mem_write_enable = [
+            p[f"io_wakeupFromIQ_{write}_valid"]
+            & p[f"io_wakeupFromIQ_{write}_bits_rfWen"]
+            for write in range(4, 7)
+        ]
+
+        int_valid = [Signal(name=f"IntRCTagTable.v_{entry}") for entry in range(16)]
+        int_tags = [Signal(8, name=f"IntRCTagTable.tag_{entry}", reset_less=True)
+                    for entry in range(16)]
+        int_deps = [
+            [Signal(2, name=f"IntRCTagTable.loadDependency_{entry}_{dep}",
+                    reset_less=True) for dep in range(3)]
+            for entry in range(16)
+        ]
+        mem_valid = [Signal(name=f"MemRCTagTable.v_{entry}") for entry in range(12)]
+        mem_tags = [Signal(8, name=f"MemRCTagTable.tag_{entry}", reset_less=True)
+                    for entry in range(12)]
+        mem_deps = [
+            [Signal(2, name=f"MemRCTagTable.loadDependency_{entry}_{dep}",
+                    reset_less=True) for dep in range(3)]
+            for entry in range(12)
+        ]
+
+        for entry in range(16):
+            hits = [
+                int_write_enable[write]
+                & (p[f"io_wakeupFromIQ_{write}_bits_rcDest"][:4] == entry)
+                for write in range(4)
             ]
-        for i in range(7):
-            valid = self.ports[f"io_wakeupFromIQ_{i}_valid"]
-            wen = self.ports[f"io_wakeupFromIQ_{i}_bits_rfWen"]
-            idx = self.ports[f"io_wakeupFromIQ_{i}_bits_rcDest"]
-            with module.If(valid & wen):
-                module.d.sync += [tags[idx].eq(self.ports[f"io_wakeupFromIQ_{i}_bits_pdest"]), valids[idx].eq(1)]
-        for i in range(6):
-            with module.If(self.ports[f"io_allocPregs_{i}_valid"]):
-                for entry in range(32):
-                    with module.If(tags[entry] == self.ports[f"io_allocPregs_{i}_bits"]):
-                        module.d.sync += valids[entry].eq(0)
+            any_hit = or_all(hits)
+            allocation_cancel = or_all([
+                p[f"io_allocPregs_{alloc}_valid"]
+                & (p[f"io_allocPregs_{alloc}_bits"] == int_tags[entry])
+                for alloc in range(6)
+            ])
+            duplicate_cancel = or_all([
+                int_write_enable[write]
+                & (p[f"io_wakeupFromIQ_{write}_bits_pdest"] == int_tags[entry])
+                for write in range(4)
+            ])
+            dependency_cancel = or_all([
+                p[f"io_ldCancel_{dep}_ld2Cancel"] & int_deps[entry][dep][1]
+                for dep in range(3)
+            ])
+            cancel = (allocation_cancel | duplicate_cancel | dependency_cancel) \
+                & int_valid[entry]
+            module.d.sync += int_valid[entry].eq(
+                any_hit | (~cancel & int_valid[entry]))
+            tag_value = or_all([
+                Mux(hits[write], p[f"io_wakeupFromIQ_{write}_bits_pdest"],
+                    Const(0, 8))
+                for write in range(4)
+            ], 8)
+            with module.If(any_hit):
+                module.d.sync += int_tags[entry].eq(tag_value)
+            any_dependency = or_all([
+                int_deps[entry][dep].any() for dep in range(3)
+            ])
+            for dep in range(3):
+                new_dependency = or_all([
+                    Mux(
+                        hits[write],
+                        Cat(Const(0, 1),
+                            p[f"io_wakeupFromIQ_{write}_bits_loadDependency_{dep}"][0]),
+                        Const(0, 2),
+                    )
+                    for write in range(4)
+                ], 2)
+                shifted = Cat(Const(0, 1), int_deps[entry][dep][0])
+                module.d.sync += int_deps[entry][dep].eq(
+                    Mux(any_hit, new_dependency,
+                        Mux(cancel | ~any_dependency,
+                            int_deps[entry][dep], shifted)))
+
+        for entry in range(12):
+            hits = [
+                mem_write_enable[index]
+                & (p[f"io_wakeupFromIQ_{index + 4}_bits_rcDest"][:4] == entry)
+                for index in range(3)
+            ]
+            any_hit = or_all(hits)
+            allocation_cancel = or_all([
+                p[f"io_allocPregs_{alloc}_valid"]
+                & (p[f"io_allocPregs_{alloc}_bits"] == mem_tags[entry])
+                for alloc in range(6)
+            ])
+            duplicate_cancel = or_all([
+                mem_write_enable[index]
+                & (p[f"io_wakeupFromIQ_{index + 4}_bits_pdest"] == mem_tags[entry])
+                for index in range(3)
+            ])
+            dependency_cancel = or_all([
+                p[f"io_ldCancel_{dep}_ld2Cancel"] & mem_deps[entry][dep][1]
+                for dep in range(3)
+            ])
+            cancel = (allocation_cancel | duplicate_cancel | dependency_cancel) \
+                & mem_valid[entry]
+            module.d.sync += mem_valid[entry].eq(
+                any_hit | (~cancel & mem_valid[entry]))
+            tag_value = or_all([
+                Mux(hits[index], p[f"io_wakeupFromIQ_{index + 4}_bits_pdest"],
+                    Const(0, 8))
+                for index in range(3)
+            ], 8)
+            with module.If(any_hit):
+                module.d.sync += mem_tags[entry].eq(tag_value)
+            any_dependency = or_all([
+                mem_deps[entry][dep].any() for dep in range(3)
+            ])
+            for dep in range(3):
+                new_dependency = Mux(
+                    hits[dep], Const(1, 2), Const(0, 2))
+                shifted = Cat(Const(0, 1), mem_deps[entry][dep][0])
+                module.d.sync += mem_deps[entry][dep].eq(
+                    Mux(any_hit, new_dependency,
+                        Mux(cancel | ~any_dependency,
+                            mem_deps[entry][dep], shifted)))
+
+        for read in range(12):
+            query = p[f"io_readPorts_{read}_tag"]
+            int_matches = [int_valid[entry] & (int_tags[entry] == query)
+                           for entry in range(16)]
+            mem_matches = [mem_valid[entry] & (mem_tags[entry] == query)
+                           for entry in range(12)]
+            int_found = p[f"io_readPorts_{read}_ren"] & or_all(int_matches)
+            mem_found = p[f"io_readPorts_{read}_ren"] & or_all(mem_matches)
+            allocated = or_all([
+                p[f"io_allocPregs_{alloc}_valid"]
+                & (query == p[f"io_allocPregs_{alloc}_bits"])
+                for alloc in range(6)
+            ])
+            int_address: Any = Const(0, 4)
+            for entry in range(16):
+                int_address = int_address | Mux(
+                    int_matches[entry], Const(entry, 4), Const(0, 4))
+            mem_address: Any = Const(0, 4)
+            for entry in range(12):
+                mem_address = mem_address | Mux(
+                    mem_matches[entry], Const(entry, 4), Const(0, 4))
+            module.d.comb += [
+                p[f"io_readPorts_{read}_valid"].eq(
+                    (int_found | mem_found) & ~allocated),
+                p[f"io_readPorts_{read}_addr"].eq(
+                    Mux(int_found,
+                        Cat(int_address, Const(0, 1)),
+                        Cat(mem_address, Const(1, 1)))),
+            ]
 
 # Implement the bounded return-address stack. / 实现有界返回地址栈。
     def _ras(self, module: Module) -> None:
