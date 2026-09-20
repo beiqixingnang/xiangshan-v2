@@ -13,7 +13,7 @@ from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Top.XiangShan-Roots-Hardware.py"
+TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Top.UHSC.Roots-Hardware.py"
 INVENTORY = ROOT / "validation/v2-root-port-inventories.json"
 RESULT = ROOT / "validation/v2-top-xstile-parent-results.json"
 WORK = Path("C:/Users/lishuo/AppData/Local/Temp/v2-top-xstile-parent")

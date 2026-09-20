@@ -24,7 +24,7 @@ from amaranth.sim import Settle, Simulator
 ROOT = Path(__file__).resolve().parents[1]
 BUILD_ROOT = ROOT / "python/Program-System/System-Build/Build-Cpu"
 TOP_FILE = BUILD_ROOT / "Cpu-Core/Build-Cpu.Top.UHSCTop-GenerationProbe-Hardware.py"
-ROOTS_FILE = BUILD_ROOT / "Cpu-Core/Build-Cpu.Top.XiangShan-Roots-Hardware.py"
+ROOTS_FILE = BUILD_ROOT / "Cpu-Core/Build-Cpu.Top.UHSC.Roots-Hardware.py"
 WORK_DIR = ROOT / "validation/.work"
 RTL_FILE = WORK_DIR / "uhsc-top-probe.sv"
 INTEGRATED_RTL_FILE = WORK_DIR / "uhsc-top-integrated-probe.sv"
@@ -200,7 +200,7 @@ def main() -> int:
     backend_mod = load_module(BUILD_ROOT / "Cpu-Core/Build-Cpu.Backend.Top-Hardware.py", "v2_backend_top")
     mem_mod = load_module(BUILD_ROOT / "Cpu-Memory/Build-Cpu.Memory.MemBlock-Hardware.py", "v2_memblock")
     l2_mod = load_module(BUILD_ROOT / "Cpu-Memory/Build-Cpu.Dependency.CoupledL2.Slice-Hardware.py", "v2_coupled_l2")
-    roots_mod = load_module(BUILD_ROOT / "Cpu-Core/Build-Cpu.Top.XiangShan-Roots-Hardware.py", "v2_roots")
+    roots_mod = load_module(BUILD_ROOT / "Cpu-Core/Build-Cpu.Top.UHSC.Roots-Hardware.py", "v2_roots")
     xscore_mod = load_module(BUILD_ROOT / "Cpu-Core/Build-Cpu.Top.XSCore.Parent-Hardware.py", "v2_xscore_parent")
     intbuffer_mod = load_module(BUILD_ROOT / "Cpu-Core/Build-Cpu.Top.XSTile.IntBuffer.Family-Hardware.py", "v2_intbuffer_family")
     deps = {
@@ -219,7 +219,7 @@ def main() -> int:
     # hierarchy remains explicitly reduced until child behavior is complete.
     backend_specs_path = ROOT / "validation/backend-port-specs.json"
     mem_specs_path = ROOT / "validation/v2-memblock-port-inventory.json"
-    full_parent_envelopes: dict[str, object] = {}
+    full_parent_envelopes: dict[str, dict[str, object]] = {}
     if backend_specs_path.is_file():
         backend_specs = json.loads(backend_specs_path.read_text(encoding="utf-8"))["ports"]
         backend_full = backend_mod.build_full_verilog({"module": "UHSCBackendEnvelope"}, {})

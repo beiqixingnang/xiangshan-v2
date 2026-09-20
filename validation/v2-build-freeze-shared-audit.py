@@ -2,8 +2,8 @@ import ast, hashlib, importlib.util, json, py_compile, subprocess, sys
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 BUILD=ROOT/'python/Program-System/System-Build/Build-Cpu'; OUT=ROOT/'validation/v2-build-freeze-shared-audit-results.json'
-EXCLUDED={'Build-Cpu.Backend.Datapath.VldMergeUnit-Hardware.py','Build-Cpu.Top.UHSCTop-GenerationProbe-Hardware.py'}
-files=sorted(p for p in BUILD.rglob('*.py') if p.name not in EXCLUDED); rows=[]
+EXCLUDED: set[str] = set()
+files=sorted(BUILD.rglob('Build-*-Hardware.py')); rows=[]
 for p in files:
     src=p.read_bytes(); rec={'path':str(p.relative_to(ROOT)).replace('\\','/'),'gates':{},'errors':[]}
     rec['gates']['utf8_lf']=not src.startswith(b'\xef\xbb\xbf') and b'\r' not in src
@@ -12,7 +12,10 @@ for p in files:
     try: py_compile.compile(str(p),doraise=True); rec['gates']['py_compile']=True
     except Exception as e: rec['gates']['py_compile']=False; rec['errors'].append(f'compile:{e}')
     try:
-      spec=importlib.util.spec_from_file_location('audit_'+hashlib.sha1(str(p).encode()).hexdigest(),p); m=importlib.util.module_from_spec(spec); sys.modules[spec.name]=m; spec.loader.exec_module(m); rec['gates']['exact_import']=True
+      spec=importlib.util.spec_from_file_location('audit_'+hashlib.sha1(str(p).encode()).hexdigest(),p)
+      if spec is None or spec.loader is None:
+        raise ImportError(f'cannot load {p}')
+      m=importlib.util.module_from_spec(spec); sys.modules[spec.name]=m; spec.loader.exec_module(m); rec['gates']['exact_import']=True
       rec['gates']['build_verilog_available']=callable(getattr(m,'build_verilog',None))
       if not rec['gates']['build_verilog_available']: rec['errors'].append('missing build_verilog')
     except Exception as e: rec['gates']['exact_import']=False; rec['gates']['build_verilog_available']=False; rec['errors'].append(f'import:{e}')

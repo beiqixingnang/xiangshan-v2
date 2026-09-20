@@ -23,7 +23,7 @@ BUILD_ROOT = ROOT / "python/Program-System/System-Build/Build-Cpu"
 PROBE_PATH = VALIDATION / "v2-top-generation-probe-results.json"
 HIERARCHY_PATH = VALIDATION / "v2-locked-hierarchy.json"
 COMPACT_XSTOP_PATH = VALIDATION / "reference-sv/XSTop.sv"
-ROOTS_PATH = BUILD_ROOT / "Cpu-Core/Build-Cpu.Top.XiangShan-Roots-Hardware.py"
+ROOTS_PATH = BUILD_ROOT / "Cpu-Core/Build-Cpu.Top.UHSC.Roots-Hardware.py"
 TOP_PATH = BUILD_ROOT / "Cpu-Core/Build-Cpu.Top.UHSCTop-GenerationProbe-Hardware.py"
 EXTRACTOR_PATH = VALIDATION / "v2_locked_hierarchy_extract.py"
 OUTPUT = VALIDATION / "v2-top-closure-audit.json"
@@ -336,7 +336,7 @@ def main() -> int:
                 "priority": "P0",
                 "scope": [
                     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Top.UHSCTop-GenerationProbe-Hardware.py",
-                    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Top.XiangShan-Roots-Hardware.py",
+                    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Top.UHSC.Roots-Hardware.py",
                 ],
                 "mapping": "aggregate xs_core/l2_top/xs_tile closure_missing into UHSCTop closure_missing/count/complete",
                 "current_failure": "root children are bound as objects but remain _RootBoundary tie-offs; UHSCTop reports complete from only four parent injections + 204 ports",
@@ -348,7 +348,7 @@ def main() -> int:
                 "priority": "P1",
                 "scope": [
                     "XSCore <- Frontend/Backend/MemBlock",
-                    "Build-Cpu.Top.XiangShan-Roots-Hardware.py",
+                    "Build-Cpu.Top.UHSC.Roots-Hardware.py",
                 ],
                 "mapping": "FrontendParent(371) + BackendTop(1165) + UHSCMemoryMemBlock(1326) -> XSCore(308)",
                 "available_evidence": [

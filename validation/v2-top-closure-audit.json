@@ -8,7 +8,7 @@
     "complete_gate": "BLOCKED_MISSING_CLOSURES",
     "reference_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
     "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
-    "probe_sha256": "349af75fcbd8d27987e4523cbd8aa0dbd9c45c4be8ea5ebb50b55ed2938dac69"
+    "probe_sha256": "7a40e847ed1371a7c00f40bc44acee07860eef86f5ed06038c7d5295b827486e"
   },
   "root_findings": [
     {
@@ -1159,7 +1159,7 @@
       "priority": "P0",
       "scope": [
         "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Top.UHSCTop-GenerationProbe-Hardware.py",
-        "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Top.XiangShan-Roots-Hardware.py"
+        "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Top.UHSC.Roots-Hardware.py"
       ],
       "mapping": "aggregate xs_core/l2_top/xs_tile closure_missing into UHSCTop closure_missing/count/complete",
       "current_failure": "root children are bound as objects but remain _RootBoundary tie-offs; UHSCTop reports complete from only four parent injections + 204 ports",
@@ -1171,7 +1171,7 @@
       "priority": "P1",
       "scope": [
         "XSCore <- Frontend/Backend/MemBlock",
-        "Build-Cpu.Top.XiangShan-Roots-Hardware.py"
+        "Build-Cpu.Top.UHSC.Roots-Hardware.py"
       ],
       "mapping": "FrontendParent(371) + BackendTop(1165) + UHSCMemoryMemBlock(1326) -> XSCore(308)",
       "available_evidence": [

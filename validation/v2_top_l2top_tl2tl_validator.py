@@ -23,7 +23,7 @@ from amaranth.sim import Settle, Simulator
 
 
 ROOT = Path(__file__).resolve().parents[1]
-ROOTS = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Top.XiangShan-Roots-Hardware.py"
+ROOTS = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Top.UHSC.Roots-Hardware.py"
 L2_PARENT = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.CoupledL2.Directory-Hardware.py"
 INVENTORY = ROOT / "validation/v2-root-port-inventories.json"
 OUT = ROOT / "validation/v2-top-l2top-tl2tl-results.json"
