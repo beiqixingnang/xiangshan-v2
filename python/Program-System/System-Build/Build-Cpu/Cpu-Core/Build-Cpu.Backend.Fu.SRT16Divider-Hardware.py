@@ -17,6 +17,8 @@ from amaranth import Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 # 本模块遵循锁定 V2 SRT16DividerDataModule 接口及七个独热状态序列；算术采用
 # 时序基四递推，并保持相同的有符号特殊结果规则与 finish 握手。
 __all__ = [
+    "COVERED_MODULES",
+    "SOURCE_PATHS",
     "SRT16DividerConfig",
     "SRT16DividerDataModule",
     "SRT16DividerReferenceAdapter",
@@ -26,6 +28,13 @@ __all__ = [
     "build_verilog",
     "main",
 ]
+
+COVERED_MODULES: tuple[str, ...] = ("SRT16DividerDataModule",)
+
+SOURCE_PATHS: tuple[str, ...] = (
+    "upstream/src/main/scala/xiangshan/backend/fu/SRT16Divider.scala",
+    "upstream/src/main/scala/xiangshan/backend/fu/SRT4Divider.scala",
+)
 
 
 # =============================================================================

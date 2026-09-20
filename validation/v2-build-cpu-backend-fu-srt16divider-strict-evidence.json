@@ -1,0 +1,387 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_COMPLETE_EQUIVALENCE",
+  "build_id": "Build-Cpu.Backend.Fu.SRT16Divider",
+  "validator": "validation/v2_srt16divider_strict_validator.py",
+  "status": "STRICT_PENDING",
+  "strict_complete_eligible": false,
+  "strict_complete_count_delta": 0,
+  "acceptance_eligible": false,
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "audit_policy": {
+    "require_negative_control": true,
+    "require_two_sided_negative_control": true,
+    "require_locked_reference_lint": true,
+    "require_validator_hash": true,
+    "scope_source": "Build catalog tables"
+  },
+  "scope": {
+    "kind": "catalog_build_multi_variant",
+    "public_variants": [
+      "SRT16DividerDataModule"
+    ],
+    "variant_count": 1,
+    "combinational_variants": 0,
+    "sequential_variants": 1,
+    "inputs": {
+      "SRT16DividerDataModule_clock": 1,
+      "SRT16DividerDataModule_reset": 1,
+      "SRT16DividerDataModule_io_src_0": 64,
+      "SRT16DividerDataModule_io_src_1": 64,
+      "SRT16DividerDataModule_io_valid": 1,
+      "SRT16DividerDataModule_io_sign": 1,
+      "SRT16DividerDataModule_io_kill_w": 1,
+      "SRT16DividerDataModule_io_kill_r": 1,
+      "SRT16DividerDataModule_io_isHi": 1,
+      "SRT16DividerDataModule_io_isW": 1,
+      "SRT16DividerDataModule_io_out_ready": 1
+    },
+    "outputs_compared": {
+      "SRT16DividerDataModule_io_in_ready": 1,
+      "SRT16DividerDataModule_io_out_valid": 1,
+      "SRT16DividerDataModule_io_out_data": 64
+    },
+    "aggregate_input_bits": 137,
+    "aggregate_compared_output_bits": 66,
+    "variants": {
+      "SRT16DividerDataModule": {
+        "method": "sequential_equivalence",
+        "sequential": true,
+        "locked_reference": "validation/reference-sv/SRT16DividerDataModule.sv",
+        "locked_sha256": "71c183646518dd914a1569392ae993b5f20293579374178f573b1be4c8e15c7c",
+        "children": [
+          "CSA3_2_3956",
+          "CSA3_2_3960",
+          "CSA3_2_3962",
+          "RightShifter"
+        ],
+        "inputs": {
+          "clock": 1,
+          "reset": 1,
+          "io_src_0": 64,
+          "io_src_1": 64,
+          "io_valid": 1,
+          "io_sign": 1,
+          "io_kill_w": 1,
+          "io_kill_r": 1,
+          "io_isHi": 1,
+          "io_isW": 1,
+          "io_out_ready": 1
+        },
+        "outputs_compared": {
+          "io_in_ready": 1,
+          "io_out_valid": 1,
+          "io_out_data": 64
+        },
+        "input_bits": 137,
+        "output_bits": 66,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "FAIL",
+        "success_marker": false,
+        "markers_present": {
+          "0 are unproven.": false,
+          "Equivalence successfully proven!": false
+        },
+        "unconstrained_or_equiv_cells": 394,
+        "proven_cells": 68,
+        "unproven_cells": 326,
+        "sat_variables": null,
+        "sat_clauses": null
+      }
+    },
+    "why_complete": "Every locked module named by this Build's own tables is proven against its exact-name locked reference on the rail its timing requires, with a conservation-audited 5C view where the installed Yosys cannot read the original.",
+    "bounded_tests_counted": false
+  },
+  "reference_lock": {
+    "directory": "validation/reference-sv",
+    "xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "locked_references_written": false,
+    "sha256_by_module": {
+      "SRT16DividerDataModule": "71c183646518dd914a1569392ae993b5f20293579374178f573b1be4c8e15c7c"
+    }
+  },
+  "sources": {
+    "validator": {
+      "path": "validation/v2_srt16divider_strict_validator.py",
+      "sha256": "3f4b6c1a7d3f953db501db6b5ab888c9e75d5a19be9ce88966a75451998fed2d",
+      "bytes": 4324
+    },
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.SRT16Divider-Hardware.py",
+      "sha256": "989a97cbc6d18d8d4abd4925be6a40f6677a49f086b43dccf12f86a9d046b2b5",
+      "bytes": 23337
+    },
+    "reference_sv": {
+      "path": "validation/reference-sv/SRT16DividerDataModule.sv",
+      "sha256": "71c183646518dd914a1569392ae993b5f20293579374178f573b1be4c8e15c7c",
+      "bytes": 146342
+    },
+    "scala": {
+      "path": "upstream/src/main/scala/xiangshan/backend/fu/SRT16Divider.scala",
+      "sha256": "52c9a9d59a0fbd8421e6933040da209cc1437473a98c78eedf19a26ab6656e66",
+      "bytes": 19650
+    },
+    "declared_scala_sources": {
+      "upstream/src/main/scala/xiangshan/backend/fu/SRT16Divider.scala": {
+        "vendored": true,
+        "sha256": "52c9a9d59a0fbd8421e6933040da209cc1437473a98c78eedf19a26ab6656e66"
+      },
+      "upstream/src/main/scala/xiangshan/backend/fu/SRT4Divider.scala": {
+        "vendored": true,
+        "sha256": "84e57dfcd56482ca86ba1a4e274bbd351f79eeceb7696e3cf89a9bd3c1902e07"
+      }
+    },
+    "reference_children": {
+      "CSA3_2_3956": {
+        "path": "validation/reference-sv/CSA3_2_3956.sv",
+        "sha256": "a4238aafb9c18a0ad401f4ed0c9cb559d2e89dc0575ae1cad82f85b02cbe2e89",
+        "bytes": 3195
+      },
+      "CSA3_2_3960": {
+        "path": "validation/reference-sv/CSA3_2_3960.sv",
+        "sha256": "286474a4db5095ff340e7b376468d961bf9969cee4a41667f30dc0774af74f43",
+        "bytes": 16772
+      },
+      "CSA3_2_3962": {
+        "path": "validation/reference-sv/CSA3_2_3962.sv",
+        "sha256": "b99c7c72eea99b4cf0e6dc1cd9d7e3295d77ce2b562d5e37ead8fe0b990f1047",
+        "bytes": 3902
+      },
+      "RightShifter": {
+        "path": "validation/reference-sv/RightShifter.sv",
+        "sha256": "935837a6c16c27a88e63d015e8db7c74f9a98bce2f3ac8b4fa2384492911fb56",
+        "bytes": 1635
+      }
+    },
+    "validator_dependencies": {
+      "strict_family_rail": {
+        "path": "validation/v2_strict_family_rail.py",
+        "sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
+        "bytes": 43710
+      },
+      "multiline_reference_view": {
+        "path": "validation/v2_funcunit_strict_validator.py",
+        "sha256": "ef5018899932061420e780d9c5edc083fa532cf160bd628d9adb990b364b49f8",
+        "bytes": 20462
+      }
+    }
+  },
+  "checks": {
+    "py_compile": {
+      "status": "PASS"
+    },
+    "pyright": {
+      "build": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_dodr397e\\Build-Cpu.Backend.Fu.SRT16Divider-Hardware.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "error_count": 0,
+        "files_analyzed": 1,
+        "stderr_tail": ""
+      },
+      "rail": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_epwk1i7l\\v2_strict_family_rail.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "error_count": 0,
+        "files_analyzed": 1,
+        "stderr_tail": ""
+      },
+      "validator": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "D:/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/v2_srt16divider_strict_validator.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "error_count": 0,
+        "files_analyzed": 1,
+        "diagnostics": [],
+        "stderr_tail": ""
+      }
+    },
+    "catalog_coverage": {
+      "entries": 1,
+      "proven": 0
+    },
+    "formal": {
+      "yosys_formal_miter": {
+        "status": "NOT_APPLICABLE",
+        "mitered_variants": 0
+      }
+    },
+    "aggregate_sat_miter": {
+      "status": "NOT_APPLICABLE",
+      "mitered_variants": 0
+    },
+    "negative_control": {
+      "status": "PASS",
+      "cases": {
+        "sat": {
+          "status": "PASS",
+          "note": "no representative with outputs"
+        },
+        "sequential.target": {
+          "status": "PASS",
+          "control_entry": "SRT16DividerDataModule",
+          "control_port": "io_in_ready",
+          "mutation_applied": true,
+          "explicit_failure_marker": true,
+          "success_marker_still_present": false,
+          "returncode": 1
+        },
+        "sequential.reference": {
+          "status": "PASS",
+          "control_entry": "SRT16DividerDataModule",
+          "control_port": "io_in_ready",
+          "mutation_applied": true,
+          "explicit_failure_marker": true,
+          "success_marker_still_present": false,
+          "returncode": 1
+        }
+      },
+      "note": "a reference-side mutation that still proves means the reference never reaches the comparison"
+    },
+    "variants": [
+      {
+        "method": "sequential_equivalence",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "SRT16DividerDataModule_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_srt16divider_family/DUT_SRT16DividerDataModule.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_srt16divider_family/REF_SRT16DividerDataModule.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_srt16divider_family/SRT16DividerDataModule_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "vider_family/DUT_SRT16DividerDataModule.sv:363:26: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                               : ... note: In instance 'SRT16DividerDataModule_MITER.target_i'\n  363 |   assign \\$132  = \\$131  == 1'h1;\n      |                          ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_srt16divider_family/DUT_SRT16DividerDataModule.sv:369:32: Operator ADD expects 67 bits on the RHS, but RHS's VARREF 'dAbsReg' generates 64 bits.\n                                                                                                                                               : ... note: In instance 'SRT16DividerDataModule_MITER.target_i'\n  369 |   assign \\$141  = \\$140 [65:0] + dAbsReg;\n      |                                ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_srt16divider_family/DUT_SRT16DividerDataModule.sv:374:32: Operator GTE expects 66 bits on the RHS, but RHS's VARREF 'dAbsReg' generates 64 bits.\n                                                                                                                                               : ... note: In instance 'SRT16DividerDataModule_MITER.target_i'\n  374 |   assign \\$149  = \\$148 [65:0] >= dAbsReg;\n      |                                ^~\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_srt16divider_family/DUT_SRT16DividerDataModule.sv:381:19: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'dAbsReg' generates 64 bits.\n                                                                                                                                              : ... note: In instance 'SRT16DividerDataModule_MITER.target_i'\n  381 |   assign \\$157  = ! dAbsReg;\n      |                   ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_srt16divider_family/DUT_SRT16DividerDataModule.sv:394:19: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'dAbsReg' generates 64 bits.\n                                                                                                                                              : ... note: In instance 'SRT16DividerDataModule_MITER.target_i'\n  394 |   assign \\$170  = ! dAbsReg;\n      |                   ^\n",
+          "output_sha256": "3854b638a8e18adfff367845d65ce222239c9aa4c52c71ca2f870a3169dfaa19"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "SRT16DividerDataModule",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/CSA3_2_3956.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/CSA3_2_3960.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/CSA3_2_3962.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/RightShifter.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/SRT16DividerDataModule.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.183 MB sources in 6 modules, into 1.777 MB in 7 C++ files needing 0.000 MB\n- Verilator: Walltime 0.253 s (elab=0.013, cvt=0.128, bld=0.000); cpu 0.193 s on 1 threads; alloced 21.582 MB\n",
+          "output_sha256": "fa58d30c89ad0306f291e796a332e989bcd34f53b3574c9a746619495fb19a49"
+        },
+        "yosys_equiv": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_srt16divider_family/DUT_SRT16DividerDataModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_srt16divider_family/REF_SRT16DividerDataModule.sv; proc; async2sync; memory; opt; flatten REF_SRT16DividerDataModule; flatten DUT_SRT16DividerDataModule; equiv_make REF_SRT16DividerDataModule DUT_SRT16DividerDataModule SRT16DividerDataModule_EQUIV; prep -top SRT16DividerDataModule_EQUIV; equiv_induct -undef; equiv_status -assert"
+          ],
+          "returncode": 1,
+          "status": "FAIL",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": true,
+          "equiv_cells_full": 394,
+          "equiv_summary_full": [
+            68,
+            326
+          ],
+          "equiv_failed_full": 326,
+          "sat_counts_full": null,
+          "output_tail": "quiv_make.cc:294:find_same_wires$2601: \\rFinal_gold [5] \\rFinal_gate [5]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$2602: \\rFinal_gold [6] \\rFinal_gate [6]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$2603: \\rFinal_gold [7] \\rFinal_gate [7]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$2604: \\rFinal_gold [8] \\rFinal_gate [8]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$2605: \\rFinal_gold [9] \\rFinal_gate [9]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$2606: \\rFinal_gold [10] \\rFinal_gate [10]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$2607: \\rFinal_gold [11] \\rFinal_gate [11]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$2608: \\rFinal_gold [12] \\rFinal_gate [12]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$2609: \\rFinal_gold [13] \\rFinal_gate [13]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$2610: \\rFinal_gold [14] \\rFinal_gate [14]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$2611: \\rFinal_gold [15] \\rFinal_gate [15]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$2612: \\rFinal_gold [16] \\rFinal_gate [16]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$2613: \\rFinal_gold [17] \\rFinal_gate [17]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$2614: \\rFinal_gold [18] \\rFinal_gate [18]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$2615: \\rFinal_gold [19] \\rFinal_gate [19]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$2616: \\rFinal_gold [20] \\rFinal_gate [20]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$2617: \\rFinal_gold [21] \\rFinal_gate [21]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$2618: \\rFinal_gold [22] \\rFinal_gate [22]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$2619: \\rFinal_gold [23] \\rFinal_gate [23]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$2620: \\rFinal_gold [24] \\rFinal_gate [24]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$2621: \\rFinal_gold [25] \\rFinal_gate [25]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$2622: \\rFinal_gold [26] \\rFinal_gate [26]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$2623: \\rFinal_gold [27] \\rFinal_gate [27]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$2624: \\rFinal_gold [28] \\rFinal_gate [28]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$2625: \\rFinERROR: Found 326 unproven $equiv cells in 'equiv_status -assert'.\n",
+          "output_sha256": "cd9bc3c97b7efa259ccab44567017b99e50ac6ef7064f86e251e2ca1c57af7d0",
+          "markers_present": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "formal_success_marker": false,
+          "equiv_cells": 394,
+          "proven_cells": 68,
+          "unproven_cells": 326
+        }
+      }
+    ]
+  },
+  "failures": [
+    "SRT16DividerDataModule:yosys_equiv",
+    "SRT16DividerDataModule: 326 $equiv cells unproven"
+  ],
+  "unclosed": [
+    "strict gates did not all pass"
+  ],
+  "acceptance_unclosed": [
+    "Parent closure, full-top differential, final license review, and user approval remain outside this Build proof."
+  ],
+  "view_policy": {
+    "status": "PASS",
+    "kind": "SECTION_5C_MULTILINE_AUTOMATIC_VIEW",
+    "locked_sources_written": false,
+    "line_conservation_required": true,
+    "register_update_equations_required": true
+  }
+}
