@@ -15,7 +15,14 @@ from amaranth import ClockDomain, Const, Elaboratable, Module, Signal
 # are connected with flush tied low by the parent; prefetch entries expose the
 # same signal.  The Python boundary keeps both signals so one implementation
 # can be exercised against either extracted specialization.
-__all__ = ["MshrConfig", "ICacheMSHR", "ICacheMshr", "mshr_observation", "build_verilog", "main"]
+LOCKED_VARIANTS = ("ICacheMSHR", "ICacheMSHR_4")
+SOURCE_PATHS = (
+    "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala",
+)
+__all__ = [
+    "LOCKED_VARIANTS", "SOURCE_PATHS", "MshrConfig", "ICacheMSHR", "ICacheMshr",
+    "mshr_observation", "build_verilog", "main",
+]
 
 
 # Configuration
@@ -84,8 +91,8 @@ class ICacheMSHR(Elaboratable):
 
         # Keep explicit clock/reset handles so the generated standalone
         # module has the same ``clk``/``rst`` boundary as locked Chisel RTL.
-        self.clock = Signal(name="clk")
-        self.reset = Signal(name="rst")
+        self.clock = Signal(name="clock")
+        self.reset = Signal(name="reset")
 
         self.fencei = Signal(name="io_fencei")
         self.flush = Signal(name="io_flush")
@@ -143,8 +150,8 @@ class ICacheMSHR(Elaboratable):
         c = self.cfg
 
         valid = Signal(name="valid")
-        flush_reg = Signal(name="flush_reg")
-        fencei_reg = Signal(name="fencei_reg")
+        flush_reg = Signal(name="flush")
+        fencei_reg = Signal(name="fencei")
         issue = Signal(name="issue")
         blk_paddr = Signal(c.blk_paddr_bits, name="blkPaddr")
         v_set_idx = Signal(c.idx_bits, name="vSetIdx")
@@ -268,16 +275,15 @@ def build_verilog(configuration, injected_dependencies):
         cfg = MshrConfig(**{key: value for key, value in configuration.items() if key in cfg_fields})
     else:
         cfg = MshrConfig()
-    top = ICacheMSHR(
-        entry_id=int(configuration.get("entry_id", 0)) if isinstance(configuration, dict) else 0,
-        is_fetch=bool(configuration.get("is_fetch", True)) if isinstance(configuration, dict) else True,
-        cfg=cfg,
-    )
+    requested_module = str(configuration.get("module", "")) if isinstance(configuration, dict) else ""
+    is_prefetch = requested_module == "ICacheMSHR_4"
+    entry_id = int(configuration.get("entry_id", 4 if is_prefetch else 0)) if isinstance(configuration, dict) else 0
+    is_fetch = bool(configuration.get("is_fetch", not is_prefetch)) if isinstance(configuration, dict) else True
+    top = ICacheMSHR(entry_id=entry_id, is_fetch=is_fetch, cfg=cfg)
     ports = [
         top.clock,
         top.reset,
         top.fencei,
-        top.flush,
         top.wfi_req,
         top.wfi_safe,
         top.invalid,
@@ -287,23 +293,19 @@ def build_verilog(configuration, injected_dependencies):
         top.req_v_set_idx,
         top.acquire_ready,
         top.acquire_valid,
-        top.acquire_opcode,
-        top.acquire_size,
-        top.acquire_source,
         top.acquire_address,
-        top.acquire_alias_tag,
         top.acquire_v_set_idx,
         top.victim_way,
         top.info_valid,
         top.info_blk_paddr,
         top.info_v_set_idx,
         top.info_way,
-        top.perf_latency,
-        top.acquire_fire,
-        top.response_fire,
     ]
-    ports += top.lookup_valid + top.lookup_blk_paddr + top.lookup_v_set_idx + top.lookup_hit
-    return verilog.convert(top, name="ICacheMSHR", ports=ports)
+    if not is_fetch:
+        ports.insert(3, top.flush)
+    ports += top.lookup_blk_paddr + top.lookup_v_set_idx + top.lookup_hit
+    module_name = "ICacheMSHR" if is_fetch else "ICacheMSHR_4"
+    return verilog.convert(top, name=module_name, ports=ports)
 
 
 # Direct Entry
