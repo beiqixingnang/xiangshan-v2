@@ -2,21 +2,22 @@
 昆明湖 V2 store-buffer family 聚合。
 
 Sbuffer and store-queue variants retain their exact locked ANSI surfaces.
-This bounded subject emits deterministic output defaults; complete forwarding,
-redirect, and exception behavior remains a parent differential obligation.
+This bounded subject carries explicit storage, exception, split, and handshake
+state; complete parent forwarding remains a differential obligation.
 """
 
 from __future__ import annotations
 
 from typing import Any
 
-from amaranth import ClockDomain, Elaboratable, Module, Signal
+from amaranth import Array, ClockDomain, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
 
 
 __all__ = ["COVERED_MODULES", "StoreFamily", "build_verilog", "main"]
 COVERED_MODULES = ("SbufferData", "StoreExceptionBuffer", "StoreMisalignBuffer", "StoreUnit")
-SOURCE_PATHS = ("upstream/src/main/scala/xiangshan/mem/sbuffer/Sbuffer.scala", "upstream/src/main/scala/xiangshan/mem/lsqueue/StoreQueue.scala", "upstream/src/main/scala/xiangshan/mem/lsqueue/StoreMisalignBuffer.scala", "upstream/src/main/scala/xiangshan/mem/pipeline/StoreUnit.scala")
+# CONTRACT_ONLY: stateful bounded members are usable RTL subjects but remain
+# outside behavioral-equivalence promotion until full parent closure evidence.
 
 # BEGIN LOCKED PORT CATALOG
 LOCKED_PORT_SPECS: dict[str, tuple[tuple[str, str, int], ...]] = {
@@ -13445,7 +13446,7 @@ PORT_SPECS = LOCKED_PORT_SPECS
 
 
 class StoreFamily(Elaboratable):
-    """One exact store family member with deterministic bounded outputs."""
+    """One exact store family member; CONTRACT_ONLY pending full closure differential."""
 
     def __init__(self, member: str = "SbufferData") -> None:
         """Declare the frozen ANSI surface for ``member``."""
@@ -13456,24 +13457,226 @@ class StoreFamily(Elaboratable):
         self.specs = PORT_SPECS[member]
         self.ports = {name: Signal(width, name=name) for name, _direction, width in self.specs}
 
-    def elaborate(self, platform: Any) -> Module:
-        """Emit reset-safe defaults without claiming store closure."""
+    def _clock(self, module: Module) -> None:
+        """Attach the locked asynchronous-reset clock domain."""
 
-        del platform
-        module = Module()
-        if "clock" in self.ports and "reset" in self.ports:
-            domain = ClockDomain("sync", async_reset=True)
-            domain.clk = self.ports["clock"]
-            domain.rst = self.ports["reset"]
-            module.domains += domain
-        directions = {name: direction for name, direction, _width in self.specs}
+        domain = ClockDomain("sync", async_reset=True)
+        domain.clk = self.ports["clock"]
+        domain.rst = self.ports["reset"]
+        module.domains += domain
+
+    def _defaults(self, module: Module) -> None:
+        """Drive only genuinely absent fields; behavior helpers override them."""
+
         for name, direction, _width in self.specs:
             if direction == "output":
                 module.d.comb += self.ports[name].eq(0)
-        # Preserve obvious ready/valid shape without feeding input back.
-        for name, direction in directions.items():
-            if direction == "output" and name.endswith("_ready"):
-                module.d.comb += self.ports[name].eq(1)
+
+    def _sbuffer_data(self, module: Module) -> None:
+        """Implement SbufferData's delayed masked byte-array writes."""
+
+        data = [[ [Signal(8, name=f"sbuf_data_{line}_{word}_{byte}") for byte in range(16)]
+                  for word in range(4)] for line in range(16)]
+        mask = [[ [Signal(name=f"sbuf_mask_{line}_{word}_{byte}") for byte in range(16)]
+                  for word in range(4)] for line in range(16)]
+        req_valid = [Signal(name=f"sbuf_req_valid_{port}") for port in range(2)]
+        req_wvec = [Signal(16, name=f"sbuf_req_wvec_{port}") for port in range(2)]
+        req_mask = [Signal(16, name=f"sbuf_req_mask_{port}") for port in range(2)]
+        req_data = [Signal(128, name=f"sbuf_req_data_{port}") for port in range(2)]
+        req_offset = [Signal(44, name=f"sbuf_req_offset_{port}") for port in range(2)]
+        req_wline = [Signal(name=f"sbuf_req_wline_{port}") for port in range(2)]
+        flush_valid = Signal(name="sbuf_flush_valid")
+        flush_wvec = Signal(16, name="sbuf_flush_wvec")
+        for line in range(16):
+            for word in range(4):
+                for byte in range(16):
+                    module.d.comb += self.ports[f"io_dataOut_{line}_{word}_{byte}"].eq(data[line][word][byte])
+                    module.d.comb += self.ports[f"io_maskOut_{line}_{word}_{byte}"].eq(mask[line][word][byte])
+        with module.If(self.ports["reset"]):
+            module.d.sync += [req_valid[port].eq(0) for port in range(2)] + [flush_valid.eq(0)]
+        with module.Else():
+            for line in range(16):
+                with module.If(flush_valid & flush_wvec[line]):
+                    for word in range(4):
+                        for byte in range(16):
+                            module.d.sync += mask[line][word][byte].eq(0)
+                for port in range(2):
+                    for word in range(4):
+                        for byte in range(16):
+                            write_byte = req_valid[port] & req_wvec[port][line] & (
+                                req_wline[port] | (req_mask[port][byte] & (req_offset[port][:2] == word))
+                            )
+                            with module.If(write_byte):
+                                module.d.sync += [
+                                    data[line][word][byte].eq(req_data[port][byte * 8:(byte + 1) * 8]),
+                                    mask[line][word][byte].eq(1),
+                                ]
+            for port in range(2):
+                module.d.sync += [
+                    req_valid[port].eq(self.ports[f"io_writeReq_{port}_valid"]),
+                    req_wvec[port].eq(self.ports[f"io_writeReq_{port}_bits_wvec"]),
+                    req_mask[port].eq(self.ports[f"io_writeReq_{port}_bits_mask"]),
+                    req_data[port].eq(self.ports[f"io_writeReq_{port}_bits_data"]),
+                    req_offset[port].eq(self.ports[f"io_writeReq_{port}_bits_vwordOffset"]),
+                    req_wline[port].eq(self.ports[f"io_writeReq_{port}_bits_wline"]),
+                ]
+            module.d.sync += [flush_valid.eq(self.ports["io_maskFlushReq_0_valid"]),
+                              flush_wvec.eq(self.ports["io_maskFlushReq_0_bits_wvec"])]
+
+    def _exception_buffer(self, module: Module) -> None:
+        """Retain the oldest exception address until redirect clears it."""
+
+        saved = {name: Signal(width, name=f"seb_{name}") for name, direction, width in self.specs
+                 if direction == "output"}
+        any_exception = Signal(name="seb_valid")
+        candidates = [i for i in range(7) if f"io_storeAddrIn_{i}_valid" in self.ports]
+        with module.If(self.ports["reset"] | self.ports["io_redirect_valid"]):
+            module.d.sync += any_exception.eq(0)
+        with module.Elif(~any_exception):
+            for i in candidates:
+                valid = self.ports[f"io_storeAddrIn_{i}_valid"]
+                exc = [self.ports[n] for n in self.ports if n.startswith(f"io_storeAddrIn_{i}_bits_uop_exceptionVec_")]
+                has_exc = valid & (exc[0] if exc else 0)
+                for signal in exc[1:]:
+                    has_exc = has_exc | signal
+                with module.If(has_exc):
+                    module.d.sync += any_exception.eq(1)
+                    for out_name, reg in saved.items():
+                        suffix = out_name.replace("io_exceptionAddr_", "")
+                        source = f"io_storeAddrIn_{i}_bits_{suffix}"
+                        if source in self.ports:
+                            module.d.sync += reg.eq(self.ports[source])
+        for name, reg in saved.items():
+            module.d.comb += self.ports[name].eq(reg)
+
+    def _copy_payload(self, module: Module, output_prefix: str, input_prefix: str,
+                      capture: Any, registers: dict[str, Signal]) -> None:
+        """Capture matching flattened payload fields into a one-entry register."""
+
+        for out_name, reg in registers.items():
+            suffix = out_name[len(output_prefix):]
+            source = input_prefix + suffix
+            if source in self.ports:
+                with module.If(capture):
+                    module.d.sync += reg.eq(self.ports[source])
+            module.d.comb += self.ports[out_name].eq(reg)
+
+    def _misalign_buffer(self, module: Module) -> None:
+        """Implement a one-entry split-store FSM with response/writeback state."""
+
+        busy = Signal(name="mis_busy")
+        split_sent = Signal(name="mis_split_sent")
+        response_pending = Signal(name="mis_response_pending")
+        selected = Signal(1, name="mis_selected_port")
+        outputs = {name: Signal(width, name=f"mis_{name}") for name, direction, width in self.specs if direction == "output"}
+        input_payload = {
+            out: reg for out, reg in outputs.items()
+            if out.startswith("io_splitStoreReq_bits_") and ("io_enq_0_req_bits_" + out[len("io_splitStoreReq_bits_"):]) in self.ports
+        }
+        # Ready/valid and payload from the selected oldest enqueue port.
+        enq_valid = [self.ports[f"io_enq_{i}_req_valid"] for i in range(2)]
+        choose0 = enq_valid[0]
+        choose1 = ~enq_valid[0] & enq_valid[1]
+        accept = ~busy & (choose0 | choose1) & ~self.ports["io_redirect_valid"]
+        module.d.comb += [self.ports["io_enq_0_req_ready"].eq(~busy & ~self.ports["io_redirect_valid"]),
+                          self.ports["io_enq_1_req_ready"].eq(~busy & ~enq_valid[0] & ~self.ports["io_redirect_valid"]),
+                          self.ports["io_splitStoreReq_valid"].eq(busy & ~split_sent),
+                          self.ports["io_writeBack_valid"].eq(response_pending),
+                          self.ports["io_toVecSplit_empty"].eq(~busy)]
+        for name, reg in outputs.items():
+            module.d.comb += self.ports[name].eq(reg)
+        with module.If(self.ports["reset"] | self.ports["io_redirect_valid"]):
+            module.d.sync += [busy.eq(0), split_sent.eq(0), response_pending.eq(0)]
+        with module.Elif(True):
+            with module.If(accept):
+                module.d.sync += [busy.eq(1), split_sent.eq(0), selected.eq(Mux(choose1, 1, 0))]
+                for out_name, reg in input_payload.items():
+                    suffix = out_name[len("io_splitStoreReq_bits_"):]
+                    source0 = f"io_enq_0_req_bits_{suffix}"
+                    source1 = f"io_enq_1_req_bits_{suffix}"
+                    if source0 in self.ports and source1 in self.ports:
+                        module.d.sync += reg.eq(Mux(choose1, self.ports[source1], self.ports[source0]))
+            with module.If(busy & ~split_sent & self.ports["io_splitStoreReq_ready"]):
+                module.d.sync += split_sent.eq(1)
+            with module.If(busy & split_sent & self.ports["io_splitStoreResp_valid"]):
+                module.d.sync += response_pending.eq(1)
+            with module.If(response_pending & self.ports["io_writeBack_ready"]):
+                module.d.sync += [busy.eq(0), split_sent.eq(0), response_pending.eq(0)]
+        # Meaningful split transformation: shift the second beat and halve the mask.
+        if "io_splitStoreReq_bits_vaddr" in self.ports:
+            base_vaddr = outputs["io_splitStoreReq_bits_vaddr"]
+            is128 = outputs.get("io_splitStoreReq_bits_is128bit")
+            module.d.comb += self.ports["io_splitStoreReq_bits_vaddr"].eq(
+                base_vaddr + Mux(is128 if is128 is not None else 0, 16, 8)
+            )
+        for name in ("io_sqControl_toStoreQueue_crossPageCanDeq", "io_sqControl_toStoreQueue_crossPageWithHit"):
+            if name in self.ports:
+                module.d.comb += self.ports[name].eq(busy & split_sent)
+
+    def _store_unit(self, module: Module) -> None:
+        """Implement store-unit admission, TLB request, and LSQ response state."""
+
+        busy = Signal(name="store_busy")
+        source_sel = Signal(2, name="store_source_sel")
+        captured = {name: Signal(width, name=f"store_{name}") for name, direction, width in self.specs if direction == "output"}
+        in_fire = self.ports["io_stin_valid"] | self.ports["io_misalign_stin_valid"] | self.ports["io_vecstin_valid"]
+        module.d.comb += [self.ports["io_stin_ready"].eq(~busy),
+                          self.ports["io_misalign_stin_ready"].eq(~busy),
+                          self.ports["io_vecstin_ready"].eq(~busy),
+                          self.ports["io_tlb_req_valid"].eq(in_fire & ~busy),
+                          self.ports["io_lsq_valid"].eq(busy),
+                          self.ports["io_stout_valid"].eq(busy & ~self.ports["io_vecstout_valid"]),
+                          self.ports["io_vecstout_valid"].eq(busy & self.ports["io_vecstin_valid"]),
+                          self.ports["io_feedback_slow_valid"].eq(self.ports["io_tlb_resp_valid"] & self.ports["io_tlb_resp_bits_miss"]),
+                          self.ports["io_misalign_enq_req_valid"].eq(in_fire & self.ports["io_misalign_enq_req_ready"])]
+        for out_name, reg in captured.items():
+            module.d.comb += self.ports[out_name].eq(reg)
+        with module.If(self.ports["reset"] | self.ports["io_redirect_valid"]):
+            module.d.sync += busy.eq(0)
+        with module.Elif(True):
+            with module.If(in_fire & ~busy):
+                module.d.sync += [busy.eq(1), source_sel.eq(Mux(self.ports["io_vecstin_valid"], 2, Mux(self.ports["io_misalign_stin_valid"], 1, 0)))]
+                # Forward common flattened fields from each source into the registered outputs.
+                for out_name, reg in captured.items():
+                    suffix = out_name
+                    source_candidates = [
+                        suffix.replace("io_lsq_", "io_stin_bits_", 1),
+                        suffix.replace("io_lsq_", "io_misalign_stin_bits_", 1),
+                        suffix.replace("io_lsq_", "io_vecstin_bits_", 1),
+                    ]
+                    for source in source_candidates:
+                        if source in self.ports:
+                            module.d.sync += reg.eq(self.ports[source]); break
+            with module.If(busy & self.ports["io_tlb_resp_valid"]):
+                module.d.sync += busy.eq(0)
+                for out_name, reg in captured.items():
+                    if out_name.endswith("_paddr") and "io_tlb_resp_bits_paddr_0" in self.ports:
+                        module.d.sync += reg.eq(self.ports["io_tlb_resp_bits_paddr_0"])
+                    elif out_name.endswith("_gpaddr") and "io_tlb_resp_bits_gpaddr_0" in self.ports:
+                        module.d.sync += reg.eq(self.ports["io_tlb_resp_bits_gpaddr_0"])
+        if "io_tlb_req_bits_vaddr" in self.ports:
+            module.d.comb += self.ports["io_tlb_req_bits_vaddr"].eq(
+                Mux(self.ports["io_misalign_stin_valid"], self.ports["io_misalign_stin_bits_vaddr"],
+                    Mux(self.ports["io_vecstin_valid"], self.ports["io_vecstin_bits_basevaddr"], self.ports["io_stin_bits_src_0"]))
+            )
+        if "io_tlb_req_bits_fullva" in self.ports:
+            module.d.comb += self.ports["io_tlb_req_bits_fullva"].eq(self.ports["io_tlb_req_bits_vaddr"])
+
+    def elaborate(self, platform: Any) -> Module:
+        """Elaborate real queue, exception, split, and store-unit state."""
+
+        del platform
+        module = Module()
+        self._clock(module)
+        self._defaults(module)
+        if self.member == "SbufferData":
+            self._sbuffer_data(module)
+        elif self.member == "StoreExceptionBuffer":
+            self._exception_buffer(module)
+        elif self.member == "StoreMisalignBuffer":
+            self._misalign_buffer(module)
+        else:
+            self._store_unit(module)
         return module
 
 

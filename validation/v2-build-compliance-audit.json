@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_BUILD_COMPLIANCE_BASELINE",
+  "source_commit": "9e7a3b0",
+  "scope": {
+    "build_file_count": 118,
+    "raw_verilog_escape_hatch_files": 0,
+    "high_confidence_constant_or_empty_stub_files": 12,
+    "high_confidence_constant_or_empty_stub_members": 141,
+    "note": "Baseline before the parallel rewrite batch; members are deduplicated by Build file and the list excludes bounded-but-nonempty implementations."
+  },
+  "high_confidence_constant_or_empty_stubs": [
+    {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Datapath.BypassPipeFamily-Hardware.py",
+      "members": ["BypassNetwork", "PipeGroupConnect"],
+      "reason": "all observable outputs are tied to zero in elaborate"
+    },
+    {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Decode.ControlFamily-Hardware.py",
+      "members": ["Backend", "DecodeUnit", "FusionDecoder", "UopInfoGen", "FPDecoder", "VTypeGen", "VecExceptionGen", "VIAluDecoder"],
+      "reason": "family elaborate only emits zero outputs"
+    },
+    {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.FloatingPoint.Family-Hardware.py",
+      "members": ["FloatAdder", "FloatAdderF32F16MixedPipeline", "FloatAdderF64Pipeline", "FloatDivider", "FloatDividerR64", "FloatFMA", "fpdiv_r64_block", "fpsqrt_r16", "BoothEncoderF64F32F16", "ArrayMulDataModule", "IntToFPDataModule"],
+      "reason": "family elaborate only emits zero outputs"
+    },
+    {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.PMP.Family-Hardware.py",
+      "members": ["PMP", "PMPChecker", "PMPChecker_12", "PMPChecker_2", "PMPEntryHandleModule"],
+      "reason": "family elaborate only emits zero outputs"
+    },
+    {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Utility.ResidualFamily-Hardware.py",
+      "members": [],
+      "member_count": 19,
+      "reason": "family members use zero-output fallback branches"
+    },
+    {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Residual.LeafFamily-Hardware.py",
+      "members": [],
+      "member_count": 47,
+      "reason": "family members use zero-output fallback branches"
+    },
+    {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Difftest.StateFamily-Hardware.py",
+      "members": [],
+      "member_count": 21,
+      "reason": "family members use zero-output fallback branches"
+    },
+    {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Store.Family-Hardware.py",
+      "members": ["SbufferData", "StoreExceptionBuffer", "StoreMisalignBuffer", "StoreUnit"],
+      "reason": "members tie outputs to zero and ready to one without consuming inputs"
+    },
+    {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Prefetch.Family-Hardware.py",
+      "members": [],
+      "member_count": 9,
+      "reason": "prefetch tables and training outputs are zero/default only"
+    },
+    {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Vector.Family-Hardware.py",
+      "members": [],
+      "member_count": 5,
+      "reason": "five vector-memory members are ready/valid passthrough or zero-output shells"
+    },
+    {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Mmu.Lsq.Family-Hardware.py",
+      "members": [],
+      "member_count": 8,
+      "reason": "MMU/LSQ members have no queue/table state and default observable outputs"
+    },
+    {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Prefetch.Metadata.Family-Hardware.py",
+      "members": ["StreamBitVectorArray", "StrideMetaArray"],
+      "reason": "metadata arrays lack real training/state behavior"
+    }
+  ],
+  "secondary_findings": [
+    {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.MemBlock-Hardware.py",
+      "status": "BOUNDED_DEPENDENCY_FALLBACK",
+      "reason": "missing AMO/Tag dependencies fall back to simplified local replacements"
+    },
+    {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Rob.Rename.Trace-Family-Hardware.py",
+      "status": "BOUNDED_SRAM_FALLBACK",
+      "reason": "two SRAM leaves are defaulted in the trace family"
+    },
+    {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Parent-Hardware.py",
+      "status": "EMPTY_CHILD",
+      "reason": "BpuNullChild has an empty elaborator"
+    }
+  ],
+  "policy": {
+    "raw_verilog": "Build files must not embed handwritten Verilog; runtime verilog.convert is allowed.",
+    "metadata": "SOURCE_PATHS is auxiliary provenance and is not itself a behavioral implementation; dynamic reads of validation JSON and oversized behavior manifests require a later metadata migration pass.",
+    "promotion": "No item in this baseline is strict-equivalence accepted. CONTRACT_ONLY is required whenever behavior is not implemented."
+  },
+  "rewrite_batch": {
+    "status": "IMPLEMENTATION_LANDED_BASIC_SMOKE_PENDING_STRICT_DIFF",
+    "files_touched": [
+      "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Decode.ControlFamily-Hardware.py",
+      "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.FloatingPoint.Family-Hardware.py",
+      "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.PMP.Family-Hardware.py",
+      "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Prefetch.Metadata.Family-Hardware.py",
+      "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Store.Family-Hardware.py"
+    ],
+    "implemented_members": {
+      "Build-Cpu.Backend.Decode.ControlFamily": ["UopInfoGen", "VTypeGen", "FPDecoder", "VIAluDecoder"],
+      "Build-Cpu.Backend.Fu.FloatingPoint.Family": ["BoothEncoderF64F32F16", "ArrayMulDataModule"],
+      "Build-Cpu.Backend.Fu.PMP.Family": ["PMP", "PMPChecker", "PMPChecker_12", "PMPChecker_2", "PMPEntryHandleModule"],
+      "Build-Cpu.Memory.Prefetch.Metadata.Family": ["StreamBitVectorArray", "StrideMetaArray"],
+      "Build-Cpu.Memory.Store.Family": ["SbufferData", "StoreExceptionBuffer", "StoreMisalignBuffer", "StoreUnit"]
+    },
+    "contract_only_members": {
+      "Build-Cpu.Backend.Decode.ControlFamily": ["Backend", "DecodeUnit", "FusionDecoder", "VecExceptionGen"],
+      "Build-Cpu.Backend.Fu.FloatingPoint.Family": ["FloatAdder", "FloatAdderF32F16MixedPipeline", "FloatAdderF64Pipeline", "FloatDivider", "FloatDividerR64", "FloatFMA", "fpdiv_r64_block", "fpsqrt_r16", "IntToFPDataModule"]
+    },
+    "strict_equivalence_count_delta": 0,
+    "note": "Basic import/export smoke passed for the landed members where reported; no strict behavior evidence was generated in this rewrite batch."
+  },
+  "status": "REWRITE_BATCH_BASIC_SMOKE_RECORDED_STRICT_PENDING"
+}

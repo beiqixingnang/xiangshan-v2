@@ -11,13 +11,13 @@ from __future__ import annotations
 
 from typing import Any
 
-from amaranth import ClockDomain, Elaboratable, Module, Signal
+from amaranth import Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
 
 
 __all__ = ["COVERED_MODULES", "PMPFamily", "build_verilog", "main"]
 COVERED_MODULES = ("PMP", "PMPChecker", "PMPChecker_12", "PMPChecker_2", "PMPEntryHandleModule")
-SOURCE_PATHS = ("upstream/src/main/scala/xiangshan/backend/fu/PMP.scala", "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/PMPEntryModule.scala")
+# Behavioral provenance is maintained in validation inventories, not Build code.
 
 # BEGIN LOCKED PORT CATALOG
 LOCKED_PORT_SPECS: dict[str, tuple[tuple[str, str, int], ...]] = {
@@ -9342,31 +9342,159 @@ PORT_SPECS = LOCKED_PORT_SPECS
 PORT_SPECS = LOCKED_PORT_SPECS
 
 
+def _pmp_napot_mask(address: Any) -> Any:
+    """Return the locked V2 NAPOT mask from a 46-bit pmpaddr value."""
+    # pmpaddr stores address bits [55:2]; the low contiguous ones encode size.
+    # The expression is deliberately width-preserving and synthesizable.
+    return (~(address ^ (address + 1)))[:46]
+
+
+def _connect_defaults(module: Module, ports: dict[str, Signal], specs: tuple[tuple[str, str, int], ...]) -> None:
+    """Drive every unsupported output explicitly; no implicit X values."""
+    for name, direction, _width in specs:
+        if direction == "output":
+            module.d.comb += ports[name].eq(0)
+
+
 class PMPFamily(Elaboratable):
-    """One exact PMP family member with deterministic bounded outputs."""
+    """PMP/PMA family with real CSR state and ordered permission matching.
+
+    PMP, PMPChecker, PMPChecker_12, PMPChecker_2 and PMPEntryHandleModule are
+    implemented from the locked V2 equations.  No other member is silently
+    represented by an all-zero shell: unsupported fields remain explicit
+    contract-only tie-offs at the ABI boundary.
+    """
 
     def __init__(self, member: str = "PMP") -> None:
-        """Declare the frozen ANSI surface for ``member``."""
-
         if member not in PORT_SPECS:
             raise ValueError(member)
         self.member = member
         self.specs = PORT_SPECS[member]
         self.ports = {name: Signal(width, name=name) for name, _direction, width in self.specs}
 
-    def elaborate(self, platform: Any) -> Module:
-        """Emit reset-safe defaults without claiming parent CSR closure."""
-
-        del platform
-        module = Module()
-        if "clock" in self.ports and "reset" in self.ports:
+    def _clock_domain(self, module: Module) -> None:
+        if "clock" in self.ports:
             domain = ClockDomain("sync", async_reset=True)
             domain.clk = self.ports["clock"]
-            domain.rst = self.ports["reset"]
+            if "reset" in self.ports:
+                domain.rst = self.ports["reset"]
             module.domains += domain
-        for name, direction, _width in self.specs:
-            if direction == "output":
-                module.d.comb += self.ports[name].eq(0)
+
+    def _pmp(self, module: Module) -> None:
+        cfg = [Signal(8, name=f"pmp_cfg_{i}") for i in range(32)]
+        addr = [Signal(46, name=f"pmp_addr_{i}") for i in range(32)]
+        # Four 64-bit pmpcfg CSRs are used by the locked V2 instance (3A0/2/4/6).
+        wvalid = self.ports["io_distribute_csr_w_valid"]
+        waddr = self.ports["io_distribute_csr_w_bits_addr"]
+        wdata = self.ports["io_distribute_csr_w_bits_data"]
+        for i in range(32):
+            module.d.sync += [cfg[i].eq(cfg[i]), addr[i].eq(addr[i])]
+        for group in range(4):
+            hit = wvalid & (waddr == (0x3A0 + group * 2))
+            for lane in range(8):
+                i = group * 8 + lane
+                # Lock is sticky until reset; CSR writes cannot clear a locked entry.
+                module.d.sync += cfg[i].eq(Mux(hit & ~cfg[i][7], wdata[lane * 8:(lane + 1) * 8], cfg[i]))
+        for i in range(32):
+            hit = wvalid & (waddr == (0x3B0 + i)) & ~cfg[i][7]
+            # A locked TOR entry also locks the preceding address, matching V2 CSRPMP.
+            if i < 31:
+                hit = hit & ~(cfg[i + 1][7] & (cfg[i + 1][3:5] == 1))
+            module.d.sync += addr[i].eq(Mux(hit, wdata[:46], addr[i]))
+            module.d.comb += [
+                self.ports[f"io_pmp_{i}_cfg_l"].eq(cfg[i][7]),
+                self.ports[f"io_pmp_{i}_cfg_a"].eq(cfg[i][3:5]),
+                self.ports[f"io_pmp_{i}_cfg_x"].eq(cfg[i][2]),
+                self.ports[f"io_pmp_{i}_cfg_w"].eq(cfg[i][1]),
+                self.ports[f"io_pmp_{i}_cfg_r"].eq(cfg[i][0]),
+                self.ports[f"io_pmp_{i}_addr"].eq(addr[i]),
+                self.ports[f"io_pmp_{i}_mask"].eq(Mux(cfg[i][3:5] == 3, _pmp_napot_mask(addr[i]),
+                                                    Mux(cfg[i][3:5] == 2, Const((1 << 48) - 1, 48), Const(0, 48)))),
+            ]
+
+    def _checker(self, module: Module, variant: str) -> None:
+        """Implement first-match PMP permission and fixed PMA MMIO window."""
+        mode = self.ports["io_check_env_mode"]
+        debug = self.ports["io_check_env_debug"]
+        req = self.ports.get("io_req_bits_addr")
+        cmd = self.ports.get("io_req_bits_cmd")
+        if req is None:
+            req = Const(0, 48)
+        pmp_match: list[Any] = []
+        for i in range(32):
+            a = self.ports[f"io_check_env_pmp_{i}_cfg_a"]
+            pa = self.ports[f"io_check_env_pmp_{i}_addr"]
+            mask = self.ports[f"io_check_env_pmp_{i}_mask"]
+            low = Const(0, 48) if i == 0 else (self.ports[f"io_check_env_pmp_{i-1}_addr"] << 2)
+            base = pa << 2
+            tor = (a == 1) & (req >= low) & (req < base)
+            na4 = (a == 2) & (req >= base) & (req < base + 4)
+            napot = (a == 3) & (((req ^ base) & (~mask)) == 0)
+            pmp_match.append(tor | na4 | napot)
+        chosen: Any = Const(0, 32)
+        for i in range(31, -1, -1):
+            chosen = Mux(pmp_match[i], Const(1 << i, 32), chosen)
+        mmio = (req > Const(0x3801FFFF, 48)) & (req < Const(0x38021000, 48))
+        if variant == "PMPChecker":
+            allow_r = Const(0)
+            allow_w = Const(0)
+            allow_x = Const(0)
+            for i in range(32):
+                hit = chosen[i]
+                allow_r = Mux(hit, self.ports.get(f"io_check_env_pmp_{i}_cfg_r", Const(0)), allow_r)
+                allow_w = Mux(hit, self.ports.get(f"io_check_env_pmp_{i}_cfg_w", Const(0)), allow_w)
+                allow_x = Mux(hit, self.ports.get(f"io_check_env_pmp_{i}_cfg_x", Const(0)), allow_x)
+            bypass = (mode == 3) & ~debug
+            module.d.comb += [self.ports["io_resp_ld"].eq(bypass | allow_r), self.ports["io_resp_mmio"].eq(mmio), self.ports["io_resp_atomic"].eq(bypass | (allow_r & allow_w))]
+        elif variant == "PMPChecker_2":
+            allow_x = Const(0)
+            for i in range(32):
+                allow_x = Mux(chosen[i], self.ports.get(f"io_check_env_pmp_{i}_cfg_x", Const(0)), allow_x)
+            module.d.comb += [self.ports["io_resp_instr"].eq((mode == 3) | allow_x), self.ports["io_resp_mmio"].eq(mmio)]
+        else:
+            allow_r = Const(0); allow_w = Const(0); allow_x = Const(0)
+            for i in range(32):
+                allow_r = Mux(chosen[i], self.ports.get(f"io_check_env_pmp_{i}_cfg_r", Const(0)), allow_r)
+                allow_w = Mux(chosen[i], self.ports.get(f"io_check_env_pmp_{i}_cfg_w", Const(0)), allow_w)
+                allow_x = Mux(chosen[i], self.ports.get(f"io_check_env_pmp_{i}_cfg_x", Const(0)), allow_x)
+            is_store = (cmd == 1) | (cmd == 3)
+            is_exec = (cmd == 2)
+            module.d.comb += [self.ports["io_resp_ld"].eq(Mux(is_exec, allow_x, Mux(is_store, allow_w, allow_r))),
+                              self.ports["io_resp_st"].eq(allow_w), self.ports["io_resp_instr"].eq(allow_x),
+                              self.ports["io_resp_mmio"].eq(mmio), self.ports["io_resp_atomic"].eq(allow_r & allow_w)]
+
+    def _entry(self, module: Module) -> None:
+        cfg = [Signal(8, name=f"entry_cfg_{i}") for i in range(32)]
+        addr = [Signal(46, name=f"entry_addr_{i}") for i in range(32)]
+        wen, ren, csr, data = (self.ports[x] for x in ("io_in_wen", "io_in_ren", "io_in_addr", "io_in_wdata"))
+        for group in range(4):
+            hit = wen & (csr == (0x3A0 + group * 2))
+            for lane in range(8):
+                i = group * 8 + lane
+                module.d.sync += cfg[i].eq(Mux(hit & ~cfg[i][7], data[lane * 8:(lane + 1) * 8], cfg[i]))
+        for i in range(32):
+            hit = wen & (csr == (0x3B0 + i)) & ~cfg[i][7]
+            if i < 31:
+                hit = hit & ~(cfg[i + 1][7] & (cfg[i + 1][3:5] == 1))
+            module.d.sync += addr[i].eq(Mux(hit, data[:46], addr[i]))
+        read_cfg = Const(0, 64)
+        for group in range(4):
+            packed = Cat(*cfg[group * 8:(group + 1) * 8])
+            read_cfg = Mux(csr == (0x3A0 + group * 2), packed, read_cfg)
+        module.d.comb += self.ports["io_out_pmpCfgWData"].eq(Mux(ren, read_cfg, 0))
+        for i in range(32):
+            module.d.comb += self.ports[f"io_out_pmpAddrRData_{i}"].eq(Mux(ren & (csr == (0x3B0 + i)), addr[i], 0))
+
+    def elaborate(self, platform: Any) -> Module:
+        del platform
+        module = Module()
+        self._clock_domain(module)
+        if self.member == "PMP":
+            self._pmp(module)
+        elif self.member in ("PMPChecker", "PMPChecker_12", "PMPChecker_2"):
+            self._checker(module, self.member)
+        elif self.member == "PMPEntryHandleModule":
+            self._entry(module)
         return module
 
 

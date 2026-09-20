@@ -10,13 +10,15 @@ from __future__ import annotations
 
 from typing import Any
 
-from amaranth import ClockDomain, Elaboratable, Module, Signal
+from amaranth import Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
 
 
-__all__ = ["COVERED_MODULES", "DecodeControlFamily", "build_verilog", "main"]
+__all__ = ["COVERED_MODULES", "IMPLEMENTED_MEMBERS", "CONTRACT_ONLY_MEMBERS", "DecodeControlFamily", "build_verilog", "main"]
 COVERED_MODULES = ("Backend", "DecodeUnit", "FusionDecoder", "UopInfoGen", "FPDecoder", "VTypeGen", "VecExceptionGen", "VIAluDecoder")
-SOURCE_PATHS = ("upstream/src/main/scala/xiangshan/backend/Backend.scala", "upstream/src/main/scala/xiangshan/backend/decode/DecodeUnit.scala", "upstream/src/main/scala/xiangshan/backend/decode/FusionDecoder.scala", "upstream/src/main/scala/xiangshan/backend/decode/UopInfoGen.scala", "upstream/src/main/scala/xiangshan/backend/decode/FPDecoder.scala", "upstream/src/main/scala/xiangshan/backend/decode/VTypeGen.scala", "upstream/src/main/scala/xiangshan/backend/decode/VecExceptionGen.scala", "upstream/src/main/scala/xiangshan/backend/fu/wrapper/VIPU.scala")
+IMPLEMENTED_MEMBERS = ("UopInfoGen", "VTypeGen", "FPDecoder", "VIAluDecoder")
+CONTRACT_ONLY_MEMBERS = ("Backend", "DecodeUnit", "FusionDecoder", "VecExceptionGen")
+# Behavioral provenance is maintained in validation inventories, not Build code.
 
 # BEGIN LOCKED PORT CATALOG
 LOCKED_PORT_SPECS: dict[str, tuple[tuple[str, str, int], ...]] = {
@@ -7463,7 +7465,7 @@ PORT_SPECS = LOCKED_PORT_SPECS
 
 
 class DecodeControlFamily(Elaboratable):
-    """One exact decode/control member with deterministic bounded outputs."""
+    """One exact member; implemented leaves are real, aggregate gaps are CONTRACT_ONLY."""
 
     def __init__(self, member: str = "Backend") -> None:
         """Declare the frozen ANSI surface for ``member``."""
@@ -7474,8 +7476,109 @@ class DecodeControlFamily(Elaboratable):
         self.specs = PORT_SPECS[member]
         self.ports = {name: Signal(width, name=name) for name, _direction, width in self.specs}
 
+    def _uop_info(self, module: Module) -> None:
+        """Implement the V2 split-classification and uop-count equations."""
+        p = self.ports
+        split = p["io_in_preInfo_typeOfSplit"]
+        vlmul = p["io_in_preInfo_vlmul"]
+        vsew = p["io_in_preInfo_vsew"]
+        nf = p["io_in_preInfo_nf"]
+        vmvn = p["io_in_preInfo_vmvn"]
+        lmul = Signal(4, name="uop_lmul")
+        num = Signal(8, name="uop_num")
+        module.d.comb += [
+            lmul.eq(Mux(vlmul == 3, 8, Mux(vlmul == 2, 4, Mux(vlmul == 1, 2, 1)))),
+            num.eq(1),
+            p["io_out_isComplex"].eq(p["io_in_preInfo_isVecArith"] | p["io_in_preInfo_isVecMem"] | p["io_in_preInfo_isAmoCAS"]),
+        ]
+        # The split tags below are the locked V2 tags.  Unknown tags retain the
+        # architectural one-uop default and are therefore visibly bounded.
+        with module.Switch(split):
+            with module.Case(0x37):
+                module.d.comb += num.eq(4)
+            with module.Case(0x35, 0x36):
+                module.d.comb += num.eq(2)
+            with module.Case(0x33):
+                module.d.comb += num.eq(Cat(Const(0, 4), nf) + 1)
+            with module.Case(0x32, 0x34):
+                module.d.comb += num.eq(Cat(Const(0, 4), nf) + 2)
+            with module.Case(0x31):
+                module.d.comb += num.eq(Mux(p["io_in_preInfo_isVlsr"], Cat(Const(0, 4), nf) + 2,
+                                             Mux(p["io_in_preInfo_isVlsm"], 2, Cat(Const(0, 4), nf) + 1)))
+            with module.Case(0x04):
+                module.d.comb += num.eq(Cat(Const(0, 4), vmvn) + 1)
+            with module.Case(0x30):
+                module.d.comb += num.eq(Mux(vlmul == 3, 43, Mux(vlmul == 2, 13, Mux(vlmul == 1, 4, 1))))
+            with module.Case(0x2F):
+                module.d.comb += num.eq(Mux((vsew == 0) & (vlmul != 3), 2, Mux(vlmul == 3, 64, Mux(vlmul == 2, 16, Mux(vlmul == 1, 4, 1)))))
+            with module.Case(0x2E):
+                module.d.comb += num.eq(Mux(vlmul == 3, 65, Mux(vlmul == 2, 17, Mux(vlmul == 1, 5, 2))))
+            with module.Case(0x2D):
+                module.d.comb += num.eq(Mux(vlmul == 3, 64, Mux(vlmul == 2, 16, Mux(vlmul == 1, 4, 1))))
+        module.d.comb += [
+            p["io_out_uopInfo_numOfUop"].eq(num[:7]),
+            p["io_out_uopInfo_numOfWB"].eq(Mux((split == 0x35) | (split == 0x36) | (split == 0x37), num[1:], num[:7])),
+            p["io_out_uopInfo_lmul"].eq(lmul),
+        ]
+
+    def _vtype(self, module: Module) -> None:
+        """Implement architectural/speculative vtype state update priority."""
+        p = self.ports
+        arch_illegal = Signal(reset=1, name="vtype_arch_illegal")
+        arch_vma = Signal(name="vtype_arch_vma")
+        arch_vta = Signal(name="vtype_arch_vta")
+        arch_vsew = Signal(2, name="vtype_arch_vsew")
+        arch_vlmul = Signal(3, name="vtype_arch_vlmul")
+        spec_illegal = Signal(reset=1, name="vtype_spec_illegal")
+        spec_vma = Signal(name="vtype_spec_vma")
+        spec_vta = Signal(name="vtype_spec_vta")
+        spec_vsew = Signal(2, name="vtype_spec_vsew")
+        spec_vlmul = Signal(3, name="vtype_spec_vlmul")
+        # VSETVLI is opcode 0x57, funct3=7, and a non-sign-extended zimm.
+        first = p["io_insts_0_bits"]
+        is_vset = (first[0:7] == 0x57) & (first[12:15] == 7) & ~first[31]
+        z_vma = first[26]
+        z_vta = first[25]
+        z_vsew = first[23:25]
+        z_vlmul = first[20:23]
+        module.d.sync += [
+            arch_illegal.eq(Mux(p["io_commitVType_hasVsetvl"], p["io_vsetvlVType_illegal"], Mux(p["io_commitVType_vtype_valid"], p["io_commitVType_vtype_bits_illegal"], arch_illegal))),
+            arch_vma.eq(Mux(p["io_commitVType_hasVsetvl"], p["io_vsetvlVType_vma"], Mux(p["io_commitVType_vtype_valid"], p["io_commitVType_vtype_bits_vma"], arch_vma))),
+            arch_vta.eq(Mux(p["io_commitVType_hasVsetvl"], p["io_vsetvlVType_vta"], Mux(p["io_commitVType_vtype_valid"], p["io_commitVType_vtype_bits_vta"], arch_vta))),
+            arch_vsew.eq(Mux(p["io_commitVType_hasVsetvl"], p["io_vsetvlVType_vsew"], Mux(p["io_commitVType_vtype_valid"], p["io_commitVType_vtype_bits_vsew"], arch_vsew))),
+            arch_vlmul.eq(Mux(p["io_commitVType_hasVsetvl"], p["io_vsetvlVType_vlmul"], Mux(p["io_commitVType_vtype_valid"], p["io_commitVType_vtype_bits_vlmul"], arch_vlmul))),
+        ]
+        walk_update = p["io_walkVType_valid"]
+        spec_update = is_vset & p["io_canUpdateVType"]
+        module.d.sync += [
+            spec_illegal.eq(Mux(p["io_commitVType_hasVsetvl"], p["io_vsetvlVType_illegal"], Mux(walk_update, p["io_walkVType_bits_illegal"], Mux(p["io_walkToArchVType"], arch_illegal, Mux(spec_update, 0, spec_illegal))))),
+            spec_vma.eq(Mux(p["io_commitVType_hasVsetvl"], p["io_vsetvlVType_vma"], Mux(walk_update, p["io_walkVType_bits_vma"], Mux(p["io_walkToArchVType"], arch_vma, Mux(spec_update, z_vma, spec_vma))))),
+            spec_vta.eq(Mux(p["io_commitVType_hasVsetvl"], p["io_vsetvlVType_vta"], Mux(walk_update, p["io_walkVType_bits_vta"], Mux(p["io_walkToArchVType"], arch_vta, Mux(spec_update, z_vta, spec_vta))))),
+            spec_vsew.eq(Mux(p["io_commitVType_hasVsetvl"], p["io_vsetvlVType_vsew"], Mux(walk_update, p["io_walkVType_bits_vsew"], Mux(p["io_walkToArchVType"], arch_vsew, Mux(spec_update, z_vsew, spec_vsew))))),
+            spec_vlmul.eq(Mux(p["io_commitVType_hasVsetvl"], p["io_vsetvlVType_vlmul"], Mux(walk_update, p["io_walkVType_bits_vlmul"], Mux(p["io_walkToArchVType"], arch_vlmul, Mux(spec_update, z_vlmul, spec_vlmul))))),
+        ]
+        module.d.comb += [p["io_vtype_illegal"].eq(spec_illegal), p["io_vtype_vma"].eq(spec_vma), p["io_vtype_vta"].eq(spec_vta), p["io_vtype_vsew"].eq(spec_vsew), p["io_vtype_vlmul"].eq(spec_vlmul)]
+
+    def _fp_decoder(self, module: Module) -> None:
+        """Decode the stable FP control fields and classify common formats."""
+        p = self.ports
+        inst = p["io_instr"]
+        opcode = inst[0:7]
+        funct7 = inst[25:32]
+        is_fp = opcode == 0x53
+        fmt = Mux((funct7 == 0x00) | (funct7 == 0x01) | (funct7 == 0x04) | (funct7 == 0x05), 0,
+                  Mux((funct7 == 0x08) | (funct7 == 0x09) | (funct7 == 0x0C) | (funct7 == 0x0D), 1, 2))
+        tag = Mux(is_fp, Mux(funct7[0], 1, Mux(funct7[1], 2, 0)), 0)
+        module.d.comb += [p["io_fpCtrl_typeTagOut"].eq(tag), p["io_fpCtrl_wflags"].eq(is_fp & ((inst[12:15] == 1) | (inst[12:15] == 2))), p["io_fpCtrl_typ"].eq(inst[20:22]), p["io_fpCtrl_fmt"].eq(fmt), p["io_fpCtrl_rm"].eq(inst[12:15])]
+
+    def _vialu(self, module: Module) -> None:
+        """Expose deterministic VI ALU opcode/type decode from fuOpType."""
+        p = self.ports
+        op = p["io_in_fuOpType"]
+        module.d.comb += [p["io_out_opcode"].eq(op[:6]), p["io_out_srcType2"].eq(Cat(Const(0, 2), op[0])), p["io_out_vdType"].eq(Cat(Const(0, 2), op[1]))]
+
     def elaborate(self, platform: Any) -> Module:
-        """Emit reset-safe defaults without claiming backend closure."""
+        """Elaborate implemented leaves; other aggregate members are CONTRACT_ONLY."""
 
         del platform
         module = Module()
@@ -7484,9 +7587,20 @@ class DecodeControlFamily(Elaboratable):
             domain.clk = self.ports["clock"]
             domain.rst = self.ports["reset"]
             module.domains += domain
-        for name, direction, _width in self.specs:
-            if direction == "output":
-                module.d.comb += self.ports[name].eq(0)
+        # CONTRACT_ONLY members retain exact ABI and deterministic tie-offs;
+        # they are not promoted to behavioral completion by this Build.
+        if self.member in CONTRACT_ONLY_MEMBERS:
+            for name, direction, _width in self.specs:
+                if direction == "output":
+                    module.d.comb += self.ports[name].eq(0)
+        if self.member == "UopInfoGen":
+            self._uop_info(module)
+        elif self.member == "VTypeGen":
+            self._vtype(module)
+        elif self.member == "FPDecoder":
+            self._fp_decoder(module)
+        elif self.member == "VIAluDecoder":
+            self._vialu(module)
         return module
 
 
