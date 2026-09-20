@@ -1,0 +1,574 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_COMPLETE_EQUIVALENCE",
+  "build_id": "Build-Cpu.Memory.FrontendBridge",
+  "validator": "validation/v2_strict_family_rail.py",
+  "status": "STRICT_PENDING",
+  "strict_complete_eligible": false,
+  "strict_complete_count_delta": 0,
+  "acceptance_eligible": false,
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "audit_policy": {
+    "require_negative_control": true,
+    "require_two_sided_negative_control": true,
+    "require_locked_reference_lint": true,
+    "require_validator_hash": true,
+    "scope_source": "Build catalog tables"
+  },
+  "scope": {
+    "kind": "catalog_build_multi_variant",
+    "public_variants": [
+      "FrontendBridge"
+    ],
+    "variant_count": 1,
+    "combinational_variants": 0,
+    "sequential_variants": 1,
+    "inputs": {
+      "FrontendBridge_clock": 1,
+      "FrontendBridge_reset": 1,
+      "FrontendBridge_auto_instr_uncache_in_a_valid": 1,
+      "FrontendBridge_auto_instr_uncache_in_a_bits_address": 48,
+      "FrontendBridge_auto_instr_uncache_out_a_ready": 1,
+      "FrontendBridge_auto_instr_uncache_out_d_valid": 1,
+      "FrontendBridge_auto_instr_uncache_out_d_bits_opcode": 4,
+      "FrontendBridge_auto_instr_uncache_out_d_bits_param": 2,
+      "FrontendBridge_auto_instr_uncache_out_d_bits_size": 3,
+      "FrontendBridge_auto_instr_uncache_out_d_bits_source": 1,
+      "FrontendBridge_auto_instr_uncache_out_d_bits_sink": 1,
+      "FrontendBridge_auto_instr_uncache_out_d_bits_denied": 1,
+      "FrontendBridge_auto_instr_uncache_out_d_bits_data": 64,
+      "FrontendBridge_auto_instr_uncache_out_d_bits_corrupt": 1,
+      "FrontendBridge_auto_icachectrl_in_a_valid": 1,
+      "FrontendBridge_auto_icachectrl_in_a_bits_opcode": 4,
+      "FrontendBridge_auto_icachectrl_in_a_bits_param": 3,
+      "FrontendBridge_auto_icachectrl_in_a_bits_size": 2,
+      "FrontendBridge_auto_icachectrl_in_a_bits_source": 5,
+      "FrontendBridge_auto_icachectrl_in_a_bits_address": 30,
+      "FrontendBridge_auto_icachectrl_in_a_bits_mask": 8,
+      "FrontendBridge_auto_icachectrl_in_a_bits_data": 64,
+      "FrontendBridge_auto_icachectrl_in_a_bits_corrupt": 1,
+      "FrontendBridge_auto_icachectrl_in_d_ready": 1,
+      "FrontendBridge_auto_icachectrl_out_a_ready": 1,
+      "FrontendBridge_auto_icachectrl_out_d_valid": 1,
+      "FrontendBridge_auto_icachectrl_out_d_bits_opcode": 4,
+      "FrontendBridge_auto_icachectrl_out_d_bits_size": 2,
+      "FrontendBridge_auto_icachectrl_out_d_bits_source": 5,
+      "FrontendBridge_auto_icachectrl_out_d_bits_data": 64,
+      "FrontendBridge_auto_icache_in_a_valid": 1,
+      "FrontendBridge_auto_icache_in_a_bits_source": 4,
+      "FrontendBridge_auto_icache_in_a_bits_address": 48,
+      "FrontendBridge_auto_icache_out_a_ready": 1,
+      "FrontendBridge_auto_icache_out_d_valid": 1,
+      "FrontendBridge_auto_icache_out_d_bits_opcode": 4,
+      "FrontendBridge_auto_icache_out_d_bits_param": 2,
+      "FrontendBridge_auto_icache_out_d_bits_size": 3,
+      "FrontendBridge_auto_icache_out_d_bits_source": 4,
+      "FrontendBridge_auto_icache_out_d_bits_sink": 10,
+      "FrontendBridge_auto_icache_out_d_bits_denied": 1,
+      "FrontendBridge_auto_icache_out_d_bits_data": 256,
+      "FrontendBridge_auto_icache_out_d_bits_corrupt": 1
+    },
+    "outputs_compared": {
+      "FrontendBridge_auto_instr_uncache_in_a_ready": 1,
+      "FrontendBridge_auto_instr_uncache_in_d_valid": 1,
+      "FrontendBridge_auto_instr_uncache_in_d_bits_source": 1,
+      "FrontendBridge_auto_instr_uncache_in_d_bits_data": 64,
+      "FrontendBridge_auto_instr_uncache_in_d_bits_corrupt": 1,
+      "FrontendBridge_auto_instr_uncache_out_a_valid": 1,
+      "FrontendBridge_auto_instr_uncache_out_a_bits_param": 3,
+      "FrontendBridge_auto_instr_uncache_out_a_bits_address": 48,
+      "FrontendBridge_auto_instr_uncache_out_a_bits_corrupt": 1,
+      "FrontendBridge_auto_instr_uncache_out_d_ready": 1,
+      "FrontendBridge_auto_icachectrl_in_a_ready": 1,
+      "FrontendBridge_auto_icachectrl_in_d_valid": 1,
+      "FrontendBridge_auto_icachectrl_in_d_bits_opcode": 4,
+      "FrontendBridge_auto_icachectrl_in_d_bits_param": 2,
+      "FrontendBridge_auto_icachectrl_in_d_bits_size": 2,
+      "FrontendBridge_auto_icachectrl_in_d_bits_source": 5,
+      "FrontendBridge_auto_icachectrl_in_d_bits_sink": 1,
+      "FrontendBridge_auto_icachectrl_in_d_bits_denied": 1,
+      "FrontendBridge_auto_icachectrl_in_d_bits_data": 64,
+      "FrontendBridge_auto_icachectrl_in_d_bits_corrupt": 1,
+      "FrontendBridge_auto_icachectrl_out_a_valid": 1,
+      "FrontendBridge_auto_icachectrl_out_a_bits_opcode": 4,
+      "FrontendBridge_auto_icachectrl_out_a_bits_size": 2,
+      "FrontendBridge_auto_icachectrl_out_a_bits_source": 5,
+      "FrontendBridge_auto_icachectrl_out_a_bits_address": 30,
+      "FrontendBridge_auto_icachectrl_out_a_bits_mask": 8,
+      "FrontendBridge_auto_icachectrl_out_a_bits_data": 64,
+      "FrontendBridge_auto_icachectrl_out_d_ready": 1,
+      "FrontendBridge_auto_icache_in_a_ready": 1,
+      "FrontendBridge_auto_icache_in_d_valid": 1,
+      "FrontendBridge_auto_icache_in_d_bits_opcode": 4,
+      "FrontendBridge_auto_icache_in_d_bits_size": 3,
+      "FrontendBridge_auto_icache_in_d_bits_source": 4,
+      "FrontendBridge_auto_icache_in_d_bits_data": 256,
+      "FrontendBridge_auto_icache_in_d_bits_corrupt": 1,
+      "FrontendBridge_auto_icache_out_a_valid": 1,
+      "FrontendBridge_auto_icache_out_a_bits_opcode": 4,
+      "FrontendBridge_auto_icache_out_a_bits_param": 3,
+      "FrontendBridge_auto_icache_out_a_bits_size": 3,
+      "FrontendBridge_auto_icache_out_a_bits_source": 4,
+      "FrontendBridge_auto_icache_out_a_bits_address": 48,
+      "FrontendBridge_auto_icache_out_a_bits_user_alias": 2,
+      "FrontendBridge_auto_icache_out_a_bits_user_reqSource": 5,
+      "FrontendBridge_auto_icache_out_a_bits_user_needHint": 1,
+      "FrontendBridge_auto_icache_out_a_bits_mask": 32,
+      "FrontendBridge_auto_icache_out_a_bits_data": 256,
+      "FrontendBridge_auto_icache_out_a_bits_corrupt": 1,
+      "FrontendBridge_auto_icache_out_d_ready": 1
+    },
+    "aggregate_input_bits": 662,
+    "aggregate_compared_output_bits": 950,
+    "variants": {
+      "FrontendBridge": {
+        "method": "sequential_equivalence",
+        "sequential": true,
+        "locked_reference": "validation/reference-sv/FrontendBridge.sv",
+        "locked_sha256": "ee3efd5e55934039e4c60b78a29eee198110c581b1464760c0a138af11dec9d2",
+        "children": [
+          "ICacheBuffer",
+          "ICacheCtrlBuffer",
+          "InstrUncacheBuffer",
+          "Queue2_TLBundleA_16",
+          "Queue2_TLBundleA_22",
+          "Queue2_TLBundleA_26",
+          "Queue2_TLBundleD_19",
+          "Queue2_TLBundleD_23",
+          "Queue2_TLBundleD_29",
+          "ram_2x117",
+          "ram_2x132",
+          "ram_2x281",
+          "ram_2x359",
+          "ram_2x77",
+          "ram_2x80"
+        ],
+        "inputs": {
+          "clock": 1,
+          "reset": 1,
+          "auto_instr_uncache_in_a_valid": 1,
+          "auto_instr_uncache_in_a_bits_address": 48,
+          "auto_instr_uncache_out_a_ready": 1,
+          "auto_instr_uncache_out_d_valid": 1,
+          "auto_instr_uncache_out_d_bits_opcode": 4,
+          "auto_instr_uncache_out_d_bits_param": 2,
+          "auto_instr_uncache_out_d_bits_size": 3,
+          "auto_instr_uncache_out_d_bits_source": 1,
+          "auto_instr_uncache_out_d_bits_sink": 1,
+          "auto_instr_uncache_out_d_bits_denied": 1,
+          "auto_instr_uncache_out_d_bits_data": 64,
+          "auto_instr_uncache_out_d_bits_corrupt": 1,
+          "auto_icachectrl_in_a_valid": 1,
+          "auto_icachectrl_in_a_bits_opcode": 4,
+          "auto_icachectrl_in_a_bits_param": 3,
+          "auto_icachectrl_in_a_bits_size": 2,
+          "auto_icachectrl_in_a_bits_source": 5,
+          "auto_icachectrl_in_a_bits_address": 30,
+          "auto_icachectrl_in_a_bits_mask": 8,
+          "auto_icachectrl_in_a_bits_data": 64,
+          "auto_icachectrl_in_a_bits_corrupt": 1,
+          "auto_icachectrl_in_d_ready": 1,
+          "auto_icachectrl_out_a_ready": 1,
+          "auto_icachectrl_out_d_valid": 1,
+          "auto_icachectrl_out_d_bits_opcode": 4,
+          "auto_icachectrl_out_d_bits_size": 2,
+          "auto_icachectrl_out_d_bits_source": 5,
+          "auto_icachectrl_out_d_bits_data": 64,
+          "auto_icache_in_a_valid": 1,
+          "auto_icache_in_a_bits_source": 4,
+          "auto_icache_in_a_bits_address": 48,
+          "auto_icache_out_a_ready": 1,
+          "auto_icache_out_d_valid": 1,
+          "auto_icache_out_d_bits_opcode": 4,
+          "auto_icache_out_d_bits_param": 2,
+          "auto_icache_out_d_bits_size": 3,
+          "auto_icache_out_d_bits_source": 4,
+          "auto_icache_out_d_bits_sink": 10,
+          "auto_icache_out_d_bits_denied": 1,
+          "auto_icache_out_d_bits_data": 256,
+          "auto_icache_out_d_bits_corrupt": 1
+        },
+        "outputs_compared": {
+          "auto_instr_uncache_in_a_ready": 1,
+          "auto_instr_uncache_in_d_valid": 1,
+          "auto_instr_uncache_in_d_bits_source": 1,
+          "auto_instr_uncache_in_d_bits_data": 64,
+          "auto_instr_uncache_in_d_bits_corrupt": 1,
+          "auto_instr_uncache_out_a_valid": 1,
+          "auto_instr_uncache_out_a_bits_param": 3,
+          "auto_instr_uncache_out_a_bits_address": 48,
+          "auto_instr_uncache_out_a_bits_corrupt": 1,
+          "auto_instr_uncache_out_d_ready": 1,
+          "auto_icachectrl_in_a_ready": 1,
+          "auto_icachectrl_in_d_valid": 1,
+          "auto_icachectrl_in_d_bits_opcode": 4,
+          "auto_icachectrl_in_d_bits_param": 2,
+          "auto_icachectrl_in_d_bits_size": 2,
+          "auto_icachectrl_in_d_bits_source": 5,
+          "auto_icachectrl_in_d_bits_sink": 1,
+          "auto_icachectrl_in_d_bits_denied": 1,
+          "auto_icachectrl_in_d_bits_data": 64,
+          "auto_icachectrl_in_d_bits_corrupt": 1,
+          "auto_icachectrl_out_a_valid": 1,
+          "auto_icachectrl_out_a_bits_opcode": 4,
+          "auto_icachectrl_out_a_bits_size": 2,
+          "auto_icachectrl_out_a_bits_source": 5,
+          "auto_icachectrl_out_a_bits_address": 30,
+          "auto_icachectrl_out_a_bits_mask": 8,
+          "auto_icachectrl_out_a_bits_data": 64,
+          "auto_icachectrl_out_d_ready": 1,
+          "auto_icache_in_a_ready": 1,
+          "auto_icache_in_d_valid": 1,
+          "auto_icache_in_d_bits_opcode": 4,
+          "auto_icache_in_d_bits_size": 3,
+          "auto_icache_in_d_bits_source": 4,
+          "auto_icache_in_d_bits_data": 256,
+          "auto_icache_in_d_bits_corrupt": 1,
+          "auto_icache_out_a_valid": 1,
+          "auto_icache_out_a_bits_opcode": 4,
+          "auto_icache_out_a_bits_param": 3,
+          "auto_icache_out_a_bits_size": 3,
+          "auto_icache_out_a_bits_source": 4,
+          "auto_icache_out_a_bits_address": 48,
+          "auto_icache_out_a_bits_user_alias": 2,
+          "auto_icache_out_a_bits_user_reqSource": 5,
+          "auto_icache_out_a_bits_user_needHint": 1,
+          "auto_icache_out_a_bits_mask": 32,
+          "auto_icache_out_a_bits_data": 256,
+          "auto_icache_out_a_bits_corrupt": 1,
+          "auto_icache_out_d_ready": 1
+        },
+        "input_bits": 662,
+        "output_bits": 950,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "FAIL",
+        "success_marker": false,
+        "markers_present": {
+          "0 are unproven.": false,
+          "Equivalence successfully proven!": false
+        },
+        "unconstrained_or_equiv_cells": 950,
+        "proven_cells": 4,
+        "unproven_cells": 946,
+        "sat_variables": null,
+        "sat_clauses": null
+      }
+    },
+    "why_complete": "Every locked module named by this Build's own tables is proven against its exact-name locked reference on the rail its timing requires, with a conservation-audited 5C view where the installed Yosys cannot read the original.",
+    "bounded_tests_counted": false
+  },
+  "reference_lock": {
+    "directory": "validation/reference-sv",
+    "xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "locked_references_written": false,
+    "sha256_by_module": {
+      "FrontendBridge": "ee3efd5e55934039e4c60b78a29eee198110c581b1464760c0a138af11dec9d2"
+    }
+  },
+  "sources": {
+    "validator": {
+      "path": "validation/v2_strict_family_rail.py",
+      "sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
+      "bytes": 43710
+    },
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.FrontendBridge-Hardware.py",
+      "sha256": "8f1e7890179c2c8aaec5a6fcca9b212d11ae7125e084ca62de423c4734f742e3",
+      "bytes": 40190
+    },
+    "reference_sv": {
+      "path": "validation/reference-sv/FrontendBridge.sv",
+      "sha256": "ee3efd5e55934039e4c60b78a29eee198110c581b1464760c0a138af11dec9d2",
+      "bytes": 18956
+    },
+    "scala": {
+      "path": "upstream/src/main/scala/xiangshan/mem/MemBlock.scala",
+      "sha256": "0eead54237675e85a47b66925e448dcf4459aca1749c393010678d96d631c9db",
+      "bytes": 105308
+    },
+    "declared_scala_sources": {
+      "upstream/src/main/scala/xiangshan/mem/MemBlock.scala": {
+        "vendored": true,
+        "sha256": "0eead54237675e85a47b66925e448dcf4459aca1749c393010678d96d631c9db"
+      }
+    },
+    "reference_children": {
+      "ICacheBuffer": {
+        "path": "validation/reference-sv/ICacheBuffer.sv",
+        "sha256": "c0089d295b9d9e09723364d329b0841119ee1a1dfd57e7f02f25e4928ec46b1a",
+        "bytes": 15348
+      },
+      "ICacheCtrlBuffer": {
+        "path": "validation/reference-sv/ICacheCtrlBuffer.sv",
+        "sha256": "9fc0de9e0f87a64078a3bc2ec1dd693f8d8d0481bf1803cfce07950897d74b87",
+        "bytes": 13026
+      },
+      "InstrUncacheBuffer": {
+        "path": "validation/reference-sv/InstrUncacheBuffer.sv",
+        "sha256": "897f9fd22cab1b48cbb8bcd487f289bba3b1657732fa35c7cf06a0bdab91922a",
+        "bytes": 11970
+      },
+      "Queue2_TLBundleA_16": {
+        "path": "validation/reference-sv/Queue2_TLBundleA_16.sv",
+        "sha256": "5831f2a830ba0a89098126b45dc213b46a66a1f838d49276ca16f09171b4c786",
+        "bytes": 8006
+      },
+      "Queue2_TLBundleA_22": {
+        "path": "validation/reference-sv/Queue2_TLBundleA_22.sv",
+        "sha256": "3db7ec17298d2ab602954f44d8028787bc1398e3204c346fc389462d08e6b35a",
+        "bytes": 9085
+      },
+      "Queue2_TLBundleA_26": {
+        "path": "validation/reference-sv/Queue2_TLBundleA_26.sv",
+        "sha256": "219e56d33d905455ab5e6a2a51db88fe0c4679f31cf631b5200c4608ca481f4c",
+        "bytes": 8004
+      },
+      "Queue2_TLBundleD_19": {
+        "path": "validation/reference-sv/Queue2_TLBundleD_19.sv",
+        "sha256": "0b1fad8ab555565a20ddc608fb6109d507f6486bef23a3c7280c25e9a98f727c",
+        "bytes": 7985
+      },
+      "Queue2_TLBundleD_23": {
+        "path": "validation/reference-sv/Queue2_TLBundleD_23.sv",
+        "sha256": "3bd00cbb991fcea9d919708a535926a629833589469b45925208d5c77348b0c9",
+        "bytes": 8021
+      },
+      "Queue2_TLBundleD_29": {
+        "path": "validation/reference-sv/Queue2_TLBundleD_29.sv",
+        "sha256": "adc77cef41701bf3a2dc6f179589f32d28e08c1d0d205f8d027a0db9ea510d0f",
+        "bytes": 7982
+      },
+      "ram_2x117": {
+        "path": "validation/reference-sv/ram_2x117.sv",
+        "sha256": "ccefb83a497456cfd443d7e88bfd3d9a416af28b81557b87aa56f717523598e7",
+        "bytes": 1703
+      },
+      "ram_2x132": {
+        "path": "validation/reference-sv/ram_2x132.sv",
+        "sha256": "440e69bdf08b9ca8664c2ae678a72bcaa5d31df4fa986acd2174e329a28aeb13",
+        "bytes": 1703
+      },
+      "ram_2x281": {
+        "path": "validation/reference-sv/ram_2x281.sv",
+        "sha256": "697d252c55c99ffa6727dbaf4d1c28b02a469bb800cfeac8e936fe4db47f540a",
+        "bytes": 1704
+      },
+      "ram_2x359": {
+        "path": "validation/reference-sv/ram_2x359.sv",
+        "sha256": "e1717169eba81853842d226cdebb9c18d5390770fd046f875a212a68721ef933",
+        "bytes": 1704
+      },
+      "ram_2x77": {
+        "path": "validation/reference-sv/ram_2x77.sv",
+        "sha256": "6f83b80b660bd30fb1161e54dbb33e48e79898843de969a2bdf868c15e487573",
+        "bytes": 1690
+      },
+      "ram_2x80": {
+        "path": "validation/reference-sv/ram_2x80.sv",
+        "sha256": "92012d5aebd8c3cfdf1a81c8037f17a7887930292ebb3ad6912ee5fd2c344c28",
+        "bytes": 1690
+      }
+    }
+  },
+  "checks": {
+    "py_compile": {
+      "status": "PASS"
+    },
+    "pyright": {
+      "build": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_9z5lvs07\\Build-Cpu.Memory.FrontendBridge-Hardware.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "error_count": 0,
+        "files_analyzed": 1,
+        "stderr_tail": ""
+      },
+      "rail": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_5kvmpgvu\\v2_strict_family_rail.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "error_count": 0,
+        "files_analyzed": 1,
+        "stderr_tail": ""
+      }
+    },
+    "catalog_coverage": {
+      "entries": 1,
+      "proven": 0
+    },
+    "formal": {
+      "yosys_formal_miter": {
+        "status": "NOT_APPLICABLE",
+        "mitered_variants": 0
+      }
+    },
+    "aggregate_sat_miter": {
+      "status": "NOT_APPLICABLE",
+      "mitered_variants": 0
+    },
+    "negative_control": {
+      "status": "FAIL",
+      "cases": {
+        "sat": {
+          "status": "PASS",
+          "note": "no representative with outputs"
+        },
+        "sequential.target": {
+          "status": "PASS",
+          "control_entry": "FrontendBridge",
+          "control_port": "auto_icachectrl_in_d_bits_corrupt",
+          "mutation_applied": true,
+          "explicit_failure_marker": true,
+          "success_marker_still_present": false,
+          "returncode": 1
+        },
+        "sequential.reference": {
+          "status": "FAIL",
+          "mutation_applied": false
+        }
+      },
+      "note": "a reference-side mutation that still proves means the reference never reaches the comparison"
+    },
+    "variants": [
+      {
+        "method": "sequential_equivalence",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "FrontendBridge_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_frontendbridge_family/DUT_FrontendBridge.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_frontendbridge_family/REF_FrontendBridge.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_frontendbridge_family/FrontendBridge_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "_FrontendBridge.sv:3704:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'icachectrl_a_q0_count' generates 2 bits.\n                                                                                                                                     : ... note: In instance 'FrontendBridge_MITER.target_i.icachectrl.a_edge.q0'\n 3704 |   assign \\$10  = ! icachectrl_a_q0_count;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_frontendbridge_family/DUT_FrontendBridge.sv:2907:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'icache_d_q1_count' generates 2 bits.\n                                                                                                                                     : ... note: In instance 'FrontendBridge_MITER.target_i.icache.d_edge.q1'\n 2907 |   assign \\$10  = ! icache_d_q1_count;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_frontendbridge_family/DUT_FrontendBridge.sv:2424:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'icache_d_q0_count' generates 2 bits.\n                                                                                                                                     : ... note: In instance 'FrontendBridge_MITER.target_i.icache.d_edge.q0'\n 2424 |   assign \\$10  = ! icache_d_q0_count;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_frontendbridge_family/DUT_FrontendBridge.sv:1651:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'icache_a_q1_count' generates 2 bits.\n                                                                                                                                     : ... note: In instance 'FrontendBridge_MITER.target_i.icache.a_edge.q1'\n 1651 |   assign \\$10  = ! icache_a_q1_count;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_frontendbridge_family/DUT_FrontendBridge.sv:1004:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'icache_a_q0_count' generates 2 bits.\n                                                                                                                                     : ... note: In instance 'FrontendBridge_MITER.target_i.icache.a_edge.q0'\n 1004 |   assign \\$10  = ! icache_a_q0_count;\n      |                  ^\n",
+          "output_sha256": "99ec65251c617a346987a988454820ade14775a612d6b57f972d61fcc77a88c4"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "FrontendBridge",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ICacheBuffer.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ICacheCtrlBuffer.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/InstrUncacheBuffer.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleA_16.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleA_22.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleA_26.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleD_19.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleD_23.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleD_29.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x117.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x132.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x281.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x359.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x77.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x80.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/FrontendBridge.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.723 MB sources in 17 modules, into 0.121 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.123 s (elab=0.003, cvt=0.011, bld=0.000); cpu 0.034 s on 1 threads; alloced 12.055 MB\n",
+          "output_sha256": "7a6622e31baa06d6e245ec6ebc5fd9f9e28bfc9cd971c8360c595955cf8e08ee"
+        },
+        "yosys_equiv": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_frontendbridge_family/DUT_FrontendBridge.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_frontendbridge_family/REF_FrontendBridge.sv; proc; async2sync; memory; opt; flatten REF_FrontendBridge; flatten DUT_FrontendBridge; equiv_make REF_FrontendBridge DUT_FrontendBridge FrontendBridge_EQUIV; prep -top FrontendBridge_EQUIV; equiv_induct -undef; equiv_status -assert"
+          ],
+          "returncode": 1,
+          "status": "FAIL",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": true,
+          "equiv_cells_full": 950,
+          "equiv_summary_full": [
+            4,
+            946
+          ],
+          "equiv_failed_full": 946,
+          "sat_counts_full": null,
+          "output_tail": "r_uncache_a_q1_deq_1_gate [37]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$20535: \\instr_uncache.nodeOut_a_q_1._ram_ext_R0_data_gold [49] \\instr_uncache.a_edge.q1.instr_uncache_a_q1_deq_1_gate [38]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$20536: \\instr_uncache.nodeOut_a_q_1._ram_ext_R0_data_gold [50] \\instr_uncache.a_edge.q1.instr_uncache_a_q1_deq_1_gate [39]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$20537: \\instr_uncache.nodeOut_a_q_1._ram_ext_R0_data_gold [51] \\instr_uncache.a_edge.q1.instr_uncache_a_q1_deq_1_gate [40]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$20538: \\instr_uncache.nodeOut_a_q_1._ram_ext_R0_data_gold [52] \\instr_uncache.a_edge.q1.instr_uncache_a_q1_deq_1_gate [41]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$20539: \\instr_uncache.nodeOut_a_q_1._ram_ext_R0_data_gold [53] \\instr_uncache.a_edge.q1.instr_uncache_a_q1_deq_1_gate [42]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$20540: \\instr_uncache.nodeOut_a_q_1._ram_ext_R0_data_gold [54] \\instr_uncache.a_edge.q1.instr_uncache_a_q1_deq_1_gate [43]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$20541: \\instr_uncache.nodeOut_a_q_1._ram_ext_R0_data_gold [55] \\instr_uncache.a_edge.q1.instr_uncache_a_q1_deq_1_gate [44]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$20542: \\instr_uncache.nodeOut_a_q_1._ram_ext_R0_data_gold [56] \\instr_uncache.a_edge.q1.instr_uncache_a_q1_deq_1_gate [45]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$20543: \\instr_uncache.nodeOut_a_q_1._ram_ext_R0_data_gold [57] \\instr_uncache.a_edge.q1.instr_uncache_a_q1_deq_1_gate [46]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$20544: \\instr_uncache.nodeOut_a_q_1._ram_ext_R0_data_gold [58] \\instr_uncache.a_edge.q1.instr_uncache_a_q1_deq_1_gate [47]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$20545: \\instr_uncache.nodeOut_a_q_1._ram_ext_R0_data_gold [131] \\instr_uncache.a_edge.q1.instr_uncache_a_q1_deq_2_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$20546: \\instr_uncache.nodeOut_a_q_1._ram_ext_R0_data_gold [4] \\instr_uncache.a_edge.q1.instr_uncache_a_q1_deq_0_gate [0]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$20547: \\instr_uncache.nodeOut_a_q_1._ram_ext_R0_data_gold [5] \\instr_uncache.a_edge.q1.instr_uncache_a_q1_deq_0_gate [1]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$ERROR: Found 946 unproven $equiv cells in 'equiv_status -assert'.\n",
+          "output_sha256": "57d2db0a362d8d9665821c921c69cb7341efe6b1f71e4e8f2165c6022a94c3db",
+          "markers_present": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "formal_success_marker": false,
+          "equiv_cells": 950,
+          "proven_cells": 4,
+          "unproven_cells": 946
+        }
+      }
+    ]
+  },
+  "failures": [
+    "FrontendBridge:yosys_equiv",
+    "FrontendBridge: 946 $equiv cells unproven",
+    "negative control did not detect a mutated design"
+  ],
+  "unclosed": [
+    "strict gates did not all pass"
+  ],
+  "acceptance_unclosed": [
+    "Parent closure, full-top differential, final license review, and user approval remain outside this Build proof."
+  ]
+}
