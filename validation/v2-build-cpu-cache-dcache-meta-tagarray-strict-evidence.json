@@ -1,0 +1,450 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_COMPLETE_EQUIVALENCE",
+  "build_id": "Build-Cpu.Cache.Dcache.Meta.TagArray",
+  "validator": "validation/v2_tagarray_strict_validator.py",
+  "status": "STRICT_PENDING",
+  "strict_complete_eligible": false,
+  "strict_complete_count_delta": 0,
+  "acceptance_eligible": false,
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "audit_policy": {
+    "require_negative_control": true,
+    "require_two_sided_negative_control": true,
+    "require_locked_reference_lint": true,
+    "require_validator_hash": true,
+    "scope_source": "Build catalog tables"
+  },
+  "scope": {
+    "kind": "catalog_build_multi_variant",
+    "public_variants": [
+      "TagArray"
+    ],
+    "variant_count": 1,
+    "combinational_variants": 0,
+    "sequential_variants": 1,
+    "inputs": {
+      "TagArray_clock": 1,
+      "TagArray_reset": 1,
+      "TagArray_io_read_valid": 1,
+      "TagArray_io_read_bits_idx": 8,
+      "TagArray_io_write_valid": 1,
+      "TagArray_io_write_bits_idx": 8,
+      "TagArray_io_write_bits_way_en": 4,
+      "TagArray_io_write_bits_tag": 36,
+      "TagArray_io_write_bits_ecc": 7,
+      "TagArray_boreChildrenBd_bore_addr": 9,
+      "TagArray_boreChildrenBd_bore_addr_rd": 9,
+      "TagArray_boreChildrenBd_bore_wdata": 86,
+      "TagArray_boreChildrenBd_bore_wmask": 2,
+      "TagArray_boreChildrenBd_bore_re": 1,
+      "TagArray_boreChildrenBd_bore_we": 1,
+      "TagArray_boreChildrenBd_bore_ack": 1,
+      "TagArray_boreChildrenBd_bore_selectedOH": 1,
+      "TagArray_boreChildrenBd_bore_array": 6,
+      "TagArray_boreChildrenBd_bore_1_addr": 9,
+      "TagArray_boreChildrenBd_bore_1_addr_rd": 9,
+      "TagArray_boreChildrenBd_bore_1_wdata": 86,
+      "TagArray_boreChildrenBd_bore_1_wmask": 2,
+      "TagArray_boreChildrenBd_bore_1_re": 1,
+      "TagArray_boreChildrenBd_bore_1_we": 1,
+      "TagArray_boreChildrenBd_bore_1_ack": 1,
+      "TagArray_boreChildrenBd_bore_1_selectedOH": 1,
+      "TagArray_boreChildrenBd_bore_1_array": 6,
+      "TagArray_sigFromSrams_bore_ram_hold": 1,
+      "TagArray_sigFromSrams_bore_ram_bypass": 1,
+      "TagArray_sigFromSrams_bore_ram_bp_clken": 1,
+      "TagArray_sigFromSrams_bore_ram_aux_clk": 1,
+      "TagArray_sigFromSrams_bore_ram_aux_ckbp": 1,
+      "TagArray_sigFromSrams_bore_ram_mcp_hold": 1,
+      "TagArray_sigFromSrams_bore_cgen": 1,
+      "TagArray_sigFromSrams_bore_1_ram_hold": 1,
+      "TagArray_sigFromSrams_bore_1_ram_bypass": 1,
+      "TagArray_sigFromSrams_bore_1_ram_bp_clken": 1,
+      "TagArray_sigFromSrams_bore_1_ram_aux_clk": 1,
+      "TagArray_sigFromSrams_bore_1_ram_aux_ckbp": 1,
+      "TagArray_sigFromSrams_bore_1_ram_mcp_hold": 1,
+      "TagArray_sigFromSrams_bore_1_cgen": 1
+    },
+    "outputs_compared": {
+      "TagArray_io_read_ready": 1,
+      "TagArray_io_resp_0": 43,
+      "TagArray_io_resp_1": 43,
+      "TagArray_io_resp_2": 43,
+      "TagArray_io_resp_3": 43,
+      "TagArray_boreChildrenBd_bore_rdata": 86,
+      "TagArray_boreChildrenBd_bore_1_rdata": 86
+    },
+    "aggregate_input_bits": 313,
+    "aggregate_compared_output_bits": 345,
+    "variants": {
+      "TagArray": {
+        "method": "sequential_equivalence",
+        "sequential": true,
+        "locked_reference": "validation/reference-sv/TagArray.sv",
+        "locked_sha256": "24d984641c94512391a2b3b405a8554d580f91ca6355e774e03f3bdcc9eb4faa",
+        "children": [
+          "ClockGate",
+          "MbistClockGateCell",
+          "SRAMTemplate_116",
+          "TagSRAMBank",
+          "array_256x86",
+          "sram_array_1p256x86m43s1h0l1b_dcsh_tag"
+        ],
+        "inputs": {
+          "clock": 1,
+          "reset": 1,
+          "io_read_valid": 1,
+          "io_read_bits_idx": 8,
+          "io_write_valid": 1,
+          "io_write_bits_idx": 8,
+          "io_write_bits_way_en": 4,
+          "io_write_bits_tag": 36,
+          "io_write_bits_ecc": 7,
+          "boreChildrenBd_bore_addr": 9,
+          "boreChildrenBd_bore_addr_rd": 9,
+          "boreChildrenBd_bore_wdata": 86,
+          "boreChildrenBd_bore_wmask": 2,
+          "boreChildrenBd_bore_re": 1,
+          "boreChildrenBd_bore_we": 1,
+          "boreChildrenBd_bore_ack": 1,
+          "boreChildrenBd_bore_selectedOH": 1,
+          "boreChildrenBd_bore_array": 6,
+          "boreChildrenBd_bore_1_addr": 9,
+          "boreChildrenBd_bore_1_addr_rd": 9,
+          "boreChildrenBd_bore_1_wdata": 86,
+          "boreChildrenBd_bore_1_wmask": 2,
+          "boreChildrenBd_bore_1_re": 1,
+          "boreChildrenBd_bore_1_we": 1,
+          "boreChildrenBd_bore_1_ack": 1,
+          "boreChildrenBd_bore_1_selectedOH": 1,
+          "boreChildrenBd_bore_1_array": 6,
+          "sigFromSrams_bore_ram_hold": 1,
+          "sigFromSrams_bore_ram_bypass": 1,
+          "sigFromSrams_bore_ram_bp_clken": 1,
+          "sigFromSrams_bore_ram_aux_clk": 1,
+          "sigFromSrams_bore_ram_aux_ckbp": 1,
+          "sigFromSrams_bore_ram_mcp_hold": 1,
+          "sigFromSrams_bore_cgen": 1,
+          "sigFromSrams_bore_1_ram_hold": 1,
+          "sigFromSrams_bore_1_ram_bypass": 1,
+          "sigFromSrams_bore_1_ram_bp_clken": 1,
+          "sigFromSrams_bore_1_ram_aux_clk": 1,
+          "sigFromSrams_bore_1_ram_aux_ckbp": 1,
+          "sigFromSrams_bore_1_ram_mcp_hold": 1,
+          "sigFromSrams_bore_1_cgen": 1
+        },
+        "outputs_compared": {
+          "io_read_ready": 1,
+          "io_resp_0": 43,
+          "io_resp_1": 43,
+          "io_resp_2": 43,
+          "io_resp_3": 43,
+          "boreChildrenBd_bore_rdata": 86,
+          "boreChildrenBd_bore_1_rdata": 86
+        },
+        "input_bits": 313,
+        "output_bits": 345,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "FAIL",
+        "success_marker": false,
+        "markers_present": {},
+        "unconstrained_or_equiv_cells": null,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "sat_variables": null,
+        "sat_clauses": null
+      }
+    },
+    "why_complete": "Every locked module named by this Build's own tables is proven against its exact-name locked reference on the rail its timing requires, with a conservation-audited 5C view where the installed Yosys cannot read the original.",
+    "bounded_tests_counted": false
+  },
+  "reference_lock": {
+    "directory": "validation/reference-sv",
+    "xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "locked_references_written": false,
+    "sha256_by_module": {
+      "TagArray": "24d984641c94512391a2b3b405a8554d580f91ca6355e774e03f3bdcc9eb4faa"
+    }
+  },
+  "sources": {
+    "validator": {
+      "path": "validation/v2_tagarray_strict_validator.py",
+      "sha256": "c84228508fe5ca789a9131c822988703a307b5c43b7ae1ffd40e600d7da229b6",
+      "bytes": 7621
+    },
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Cache.Dcache.Meta.TagArray-Hardware.py",
+      "sha256": "d97c4ffa166d1636fefebebfdb99790037a5549b5874a2d232dbbd6e715935f4",
+      "bytes": 9735
+    },
+    "reference_sv": {
+      "path": "validation/reference-sv/TagArray.sv",
+      "sha256": "24d984641c94512391a2b3b405a8554d580f91ca6355e774e03f3bdcc9eb4faa",
+      "bytes": 10235
+    },
+    "scala": {
+      "path": "upstream/src/main/scala/xiangshan/cache/dcache/meta/TagArray.scala",
+      "sha256": "b1ec43dbbe10505b6037cae7c8dd2f16d4ea21c491ed8b076ed58ba8162a4ce4",
+      "bytes": 5735
+    },
+    "declared_scala_sources": {
+      "upstream/src/main/scala/xiangshan/cache/dcache/meta/TagArray.scala": {
+        "vendored": true,
+        "sha256": "b1ec43dbbe10505b6037cae7c8dd2f16d4ea21c491ed8b076ed58ba8162a4ce4"
+      },
+      "upstream/utility/src/main/scala/utility/sram/SRAMTemplate.scala": {
+        "vendored": true,
+        "sha256": "072d22eab3c5bc6ab5ea36ea799c5d65b7d3ad94da222b7fb86128164238382a"
+      },
+      "upstream/utility/src/main/scala/utility/sram/SramProto.scala": {
+        "vendored": true,
+        "sha256": "c7ef49a46ac55281fc2ba20f5dd32c2413573c4e6b71c0ec8fef0d4e7b354fdc"
+      },
+      "upstream/utility/src/main/scala/utility/mbist/MbistClockGateCell.scala": {
+        "vendored": true,
+        "sha256": "66571a010353d8af1e2f584d43e19af9ad438c0164878e5ab4ccb6f1f49f4f2b"
+      }
+    },
+    "reference_children": {
+      "array_256x86": {
+        "path": "validation/reference-sv/array_256x86.sv",
+        "sha256": "f517411331c3701b613e1cb4de1a262ca71fcaeaa1b04aabcf839104b11b4fea",
+        "bytes": 4100
+      },
+      "ClockGate": {
+        "path": "validation/reference-sv/ClockGate.sv",
+        "sha256": "b4e6a1a11579276193dc18d2b56d24b04ba79879a32804456ce0116cbe878c97",
+        "bytes": 185
+      },
+      "MbistClockGateCell": {
+        "path": "validation/reference-sv/MbistClockGateCell.sv",
+        "sha256": "b4763f90e3eac5cc80939910617e838f2c65c06a5e5ee22725f9319cd99190aa",
+        "bytes": 1262
+      },
+      "sram_array_1p256x86m43s1h0l1b_dcsh_tag": {
+        "path": "validation/reference-sv/sram_array_1p256x86m43s1h0l1b_dcsh_tag.sv",
+        "sha256": "914c8f355a4421a825b980803107b44e595c9a1126072d2d4bc29e1a46e81cf5",
+        "bytes": 2316
+      },
+      "SRAMTemplate_116": {
+        "path": "validation/reference-sv/SRAMTemplate_116.sv",
+        "sha256": "d8b6b39391baff329601dc3f818ac776fc08800aa2a2033911c4823cd422125f",
+        "bytes": 13357
+      },
+      "TagSRAMBank": {
+        "path": "validation/reference-sv/TagSRAMBank.sv",
+        "sha256": "4ce9ac456a2591005d293363b2a44ec174cfcce1a0b14e310a18fdf865f455ed",
+        "bytes": 9763
+      }
+    },
+    "validator_dependencies": {
+      "strict_family_rail": {
+        "path": "validation/v2_strict_family_rail.py",
+        "sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
+        "bytes": 43710
+      },
+      "multiline_reference_view": {
+        "path": "validation/v2_funcunit_strict_validator.py",
+        "sha256": "ef5018899932061420e780d9c5edc083fa532cf160bd628d9adb990b364b49f8",
+        "bytes": 20462
+      }
+    }
+  },
+  "checks": {
+    "py_compile": {
+      "status": "PASS"
+    },
+    "pyright": {
+      "build": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_n_5j_7em\\Build-Cpu.Cache.Dcache.Meta.TagArray-Hardware.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "error_count": 0,
+        "files_analyzed": 1,
+        "stderr_tail": ""
+      },
+      "rail": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_061xmbeg\\v2_strict_family_rail.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "error_count": 0,
+        "files_analyzed": 1,
+        "stderr_tail": ""
+      },
+      "validator": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "D:/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/v2_tagarray_strict_validator.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "error_count": 0,
+        "files_analyzed": 1,
+        "diagnostics": [],
+        "stderr_tail": ""
+      }
+    },
+    "catalog_coverage": {
+      "entries": 1,
+      "proven": 0
+    },
+    "formal": {
+      "yosys_formal_miter": {
+        "status": "NOT_APPLICABLE",
+        "mitered_variants": 0
+      }
+    },
+    "aggregate_sat_miter": {
+      "status": "NOT_APPLICABLE",
+      "mitered_variants": 0
+    },
+    "negative_control": {
+      "status": "PASS",
+      "cases": {
+        "sequential.target": {
+          "status": "PASS",
+          "control_entry": "TagArray",
+          "control_port": "io_read_ready",
+          "mutation_applied": true,
+          "explicit_failure_marker": true,
+          "success_marker_still_present": false,
+          "returncode": 1
+        },
+        "sequential.reference": {
+          "status": "PASS",
+          "control_entry": "TagArray",
+          "control_port": "io_read_ready",
+          "mutation_applied": true,
+          "explicit_failure_marker": true,
+          "success_marker_still_present": false,
+          "returncode": 1
+        }
+      },
+      "method": "equiv_simple -undef -seq 1 on the flattened full pair",
+      "note": "The baseline uses full equiv_induct; this control only establishes that the same pair rejects a mutation on each side."
+    },
+    "variants": [
+      {
+        "method": "sequential_equivalence",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "TagArray_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_cache_dcache_meta_tagarray_family/DUT_TagArray.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_cache_dcache_meta_tagarray_family/REF_TagArray.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_cache_dcache_meta_tagarray_family/TagArray_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "shuo/AppData/Local/Temp/uhsc_build_cpu_cache_dcache_meta_tagarray_family/DUT_TagArray.sv:275436:11: Case values incompletely covered (example pattern 0x4b)\n275436 |           casez (\\$62 )\n       |           ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_cache_dcache_meta_tagarray_family/DUT_TagArray.sv:275590:11: Case values incompletely covered (example pattern 0x4b)\n275590 |           casez (\\$75 )\n       |           ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_cache_dcache_meta_tagarray_family/DUT_TagArray.sv:275752:11: Case values incompletely covered (example pattern 0x4c)\n275752 |           casez (\\$62 )\n       |           ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_cache_dcache_meta_tagarray_family/DUT_TagArray.sv:275908:11: Case values incompletely covered (example pattern 0x4c)\n275908 |           casez (\\$75 )\n       |           ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_cache_dcache_meta_tagarray_family/DUT_TagArray.sv:276072:11: Case values incompletely covered (example pattern 0x4d)\n276072 |           casez (\\$62 )\n       |           ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_cache_dcache_meta_tagarray_family/DUT_TagArray.sv:276230:11: Case values incompletely covered (example pattern 0x4d)\n276230 |           casez (\\$75 )\n       |           ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_cache_dcache_meta_tagarray_family/DUT_TagArray.sv:276396:11: Case values incompletely covered (example pattern 0x4e)\n276396 |           casez (\\$62 )\n       |           ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_cache_dcache_meta_tagarray_family/DUT_TagArray.sv:276556:11: Case values incompletely covered (example pattern 0x4e)\n276556 |           casez (\\$75 )\n       |           ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_cache_dcache_meta_tagarray_family/DUT_TagArray.sv:276724:11: Case values incompletely covered (example pattern 0x4f)\n276724 |           casez (\\$62 )\n       |           ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_cache_dcache_meta_tagarray_family/DUT_TagArray.sv:276886:11: Case values incompletely covered (example pattern 0x4f)\n276886 |           casez (\\$75 )\n       |           ^~~~~\n",
+          "output_sha256": "52d5d6a1ccad3dbb7ee848269c9ac438f38d09f67eed434d2e1d3774bd302327"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "TagArray",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ClockGate.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/MbistClockGateCell.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/SRAMTemplate_116.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/TagSRAMBank.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/array_256x86.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/sram_array_1p256x86m43s1h0l1b_dcsh_tag.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/TagArray.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.129 MB sources in 8 modules, into 0.064 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.099 s (elab=0.002, cvt=0.009, bld=0.000); cpu 0.026 s on 1 threads; alloced 10.219 MB\n",
+          "output_sha256": "cc5f28e84dad28265db8c07d2f867881857ae09a893d2b4447625a8bec45aa79"
+        },
+        "yosys_equiv": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_cache_dcache_meta_tagarray_family/DUT_TagArray.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_cache_dcache_meta_tagarray_family/REF_TagArray.sv; proc; async2sync; memory; opt; flatten REF_TagArray; flatten DUT_TagArray; equiv_make REF_TagArray DUT_TagArray TagArray_EQUIV; prep -top TagArray_EQUIV; equiv_induct -undef; equiv_status -assert"
+          ],
+          "returncode": null,
+          "status": "FAIL",
+          "timed_out": true,
+          "output_tail": "tool call exceeded 900s and was terminated",
+          "markers_present": {},
+          "formal_success_marker": false
+        }
+      }
+    ]
+  },
+  "failures": [
+    "TagArray:yosys_equiv",
+    "TagArray: zero or missing $equiv cells"
+  ],
+  "unclosed": [
+    "strict gates did not all pass"
+  ],
+  "acceptance_unclosed": [
+    "Parent closure, full-top differential, final license review, and user approval remain outside this Build proof."
+  ],
+  "view_policy": {
+    "status": "PASS",
+    "kind": "SECTION_5C_MULTILINE_AUTOMATIC_AND_SRAM_VIEW",
+    "locked_sources_written": false,
+    "line_conservation_required": true,
+    "register_update_equations_required": true
+  }
+}

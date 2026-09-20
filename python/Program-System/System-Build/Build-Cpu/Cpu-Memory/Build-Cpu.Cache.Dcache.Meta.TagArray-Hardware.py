@@ -1,219 +1,214 @@
-"""V2 data-cache tag array. / V2 数据缓存标签阵列。"""
+"""Locked Kunminghu V2 four-way data-cache tag array.
+锁定昆明湖 V2 四路数据缓存标签阵列。
+
+The public surface includes the two MBIST bore bundles and the two SRAM DFT
+bundles emitted by the locked DefaultConfig XSTop. Internally each two-way
+bank models reset scrub, normal arbitration, MBIST override, masked storage,
+and delayed MBIST readback.
+"""
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-from contextlib import AbstractContextManager
-from typing import Protocol, cast
+from typing import Any, cast
 
-from amaranth import ClockDomain, Module, Mux, Signal
-from amaranth.lib.memory import Memory
-from amaranth.lib.wiring import Component, In, Out
+from amaranth import Array, Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
+from amaranth.back import verilog
 
 
 # =============================================================================
 # Module Contract
 # =============================================================================
-# The V2 TagArray contains two two-way TagSRAMBank instances for the default
-# four-way cache. Each bank clears all 256 sets after reset, blocks reads and
-# writes while clearing, accepts one masked write per cycle, and returns a
-# synchronous read result one cycle after a fire. The adapter keeps a packed
-# ``rdata`` probe while also exposing per-way response signals for differential
-# checks; MBIST/DFT ports are injected dependencies at this leaf.
-# V2 TagArray 默认由两个双路 TagSRAMBank 组成；复位后清零 256 个组，清零期间
-# 屏蔽读写，每周期接受一次按路掩码写入，并在读握手后一个时钟返回同步结果。
-__all__ = ["TagArrayConfig", "TagArray", "tag_lookup", "build_verilog", "main"]
+__all__ = ["COVERED_MODULES", "SOURCE_PATHS", "PORT_SPECS", "TagArray", "build_verilog", "main"]
 
+COVERED_MODULES: tuple[str, ...] = ("TagArray",)
 
-class _MemoryReadPort(Protocol):
-    """Typed view of an Amaranth memory read port. / Amaranth 存储器读端口的类型视图。"""
+SOURCE_PATHS: tuple[str, ...] = (
+    "upstream/src/main/scala/xiangshan/cache/dcache/meta/TagArray.scala",
+    "upstream/utility/src/main/scala/utility/sram/SRAMTemplate.scala",
+    "upstream/utility/src/main/scala/utility/sram/SramProto.scala",
+    "upstream/utility/src/main/scala/utility/mbist/MbistClockGateCell.scala",
+)
 
-    addr: Signal
-    data: Signal
-
-
-class _MemoryWritePort(Protocol):
-    """Typed view of an Amaranth memory write port. / Amaranth 存储器写端口的类型视图。"""
-
-    addr: Signal
-    data: Signal
-    en: Signal
-
-
-# =============================================================================
-# Configuration
-# =============================================================================
-@dataclass(frozen=True)
-class TagArrayConfig:
-    # Serializable V2 tag-array geometry. / 可序列化的 V2 标签阵列几何参数。
-    nSets: int = 256
-    nWays: int = 4
-    tagBits: int = 36
-    tagECCBits: int = 7
-
-    # Validate the SRAM dimensions and source-compatible ECC geometry. / 校验 SRAM 维度及源兼容 ECC 几何参数。
-    def __post_init__(self) -> None:
-        if self.nSets < 1 or self.nWays < 1:
-            raise ValueError("nSets and nWays must be positive")
-        if self.nSets & (self.nSets - 1):
-            raise ValueError("nSets must be a power of two")
-        if self.tagBits < 1 or self.tagECCBits < 0:
-            raise ValueError("tag and ECC widths must be non-negative/positive")
-        if self.nWays & (self.nWays - 1):
-            raise ValueError("nWays must be a power of two")
-
-
-def tag_lookup(tags: list[int], valid: int, probe_tag: int,
-               configuration: TagArrayConfig | None = None) -> dict[str, int]:
-    """Return the lowest-index matching way and one-hot hit mask.
-
-    The Scala tag array resolves duplicate hits with a priority encoder while
-    masking invalid ways.  This pure helper exposes that observation for
-    differential benches without changing the synchronous SRAM ABI. / 以最低路
-    优先编码命中路并屏蔽无效路，供差分测试观察。
-    """
-
-    c = configuration or TagArrayConfig(nWays=max(1, len(tags)))
-    if len(tags) != c.nWays:
-        raise ValueError("tags length must equal configured nWays")
-    tag_mask = (1 << c.tagBits) - 1
-    hits = [index for index, tag in enumerate(tags)
-            if (valid >> index) & 1 and (int(tag) & tag_mask) == (int(probe_tag) & tag_mask)]
-    one_hot = sum(1 << index for index in hits)
-    return {"hit": int(bool(hits)), "way": hits[0] if hits else 0, "way_en": one_hot}
+PORT_SPECS: tuple[tuple[str, str, int], ...] = (
+    ("clock", "input", 1), ("reset", "input", 1),
+    ("io_read_ready", "output", 1), ("io_read_valid", "input", 1),
+    ("io_read_bits_idx", "input", 8),
+    ("io_resp_0", "output", 43), ("io_resp_1", "output", 43),
+    ("io_resp_2", "output", 43), ("io_resp_3", "output", 43),
+    ("io_write_valid", "input", 1), ("io_write_bits_idx", "input", 8),
+    ("io_write_bits_way_en", "input", 4),
+    ("io_write_bits_tag", "input", 36), ("io_write_bits_ecc", "input", 7),
+    ("boreChildrenBd_bore_addr", "input", 9),
+    ("boreChildrenBd_bore_addr_rd", "input", 9),
+    ("boreChildrenBd_bore_wdata", "input", 86),
+    ("boreChildrenBd_bore_wmask", "input", 2),
+    ("boreChildrenBd_bore_re", "input", 1),
+    ("boreChildrenBd_bore_we", "input", 1),
+    ("boreChildrenBd_bore_rdata", "output", 86),
+    ("boreChildrenBd_bore_ack", "input", 1),
+    ("boreChildrenBd_bore_selectedOH", "input", 1),
+    ("boreChildrenBd_bore_array", "input", 6),
+    ("boreChildrenBd_bore_1_addr", "input", 9),
+    ("boreChildrenBd_bore_1_addr_rd", "input", 9),
+    ("boreChildrenBd_bore_1_wdata", "input", 86),
+    ("boreChildrenBd_bore_1_wmask", "input", 2),
+    ("boreChildrenBd_bore_1_re", "input", 1),
+    ("boreChildrenBd_bore_1_we", "input", 1),
+    ("boreChildrenBd_bore_1_rdata", "output", 86),
+    ("boreChildrenBd_bore_1_ack", "input", 1),
+    ("boreChildrenBd_bore_1_selectedOH", "input", 1),
+    ("boreChildrenBd_bore_1_array", "input", 6),
+    ("sigFromSrams_bore_ram_hold", "input", 1),
+    ("sigFromSrams_bore_ram_bypass", "input", 1),
+    ("sigFromSrams_bore_ram_bp_clken", "input", 1),
+    ("sigFromSrams_bore_ram_aux_clk", "input", 1),
+    ("sigFromSrams_bore_ram_aux_ckbp", "input", 1),
+    ("sigFromSrams_bore_ram_mcp_hold", "input", 1),
+    ("sigFromSrams_bore_cgen", "input", 1),
+    ("sigFromSrams_bore_1_ram_hold", "input", 1),
+    ("sigFromSrams_bore_1_ram_bypass", "input", 1),
+    ("sigFromSrams_bore_1_ram_bp_clken", "input", 1),
+    ("sigFromSrams_bore_1_ram_aux_clk", "input", 1),
+    ("sigFromSrams_bore_1_ram_aux_ckbp", "input", 1),
+    ("sigFromSrams_bore_1_ram_mcp_hold", "input", 1),
+    ("sigFromSrams_bore_1_cgen", "input", 1),
+)
 
 
 # =============================================================================
 # Implementation
 # =============================================================================
-class TagArray(Component):
-    # Construct flattened V2 TagArray ports and per-way memories. / 构造扁平化 V2 TagArray 端口及各路存储器。
-    # Resolve Component's runtime-created ports for static type checkers. / 为静态类型检查器解析 Component 运行时创建的端口。
-    def __getattr__(self, name: str) -> Signal:
-        raise AttributeError(name)
+class TagArray(Elaboratable):
+    """Four-way tag array with two exact two-way SRAM banks. / 两个双路 bank 构成的四路标签阵列。"""
 
-    def __init__(self, cfg: TagArrayConfig | None = None):
-        c = cfg or TagArrayConfig()
-        self.cfg = c
-        self.idxBits = max(1, c.nSets.bit_length() - 1)
-        self.wayBits = max(1, c.nWays.bit_length() - 1)
-        self.encodedBits = c.tagBits + c.tagECCBits
-        super().__init__({
-            "clock": In(1),
-            "reset": In(1),
-            "io_read_ready": Out(1),
-            "io_read_valid": In(1),
-            "io_read_bits_idx": In(self.idxBits),
-            "io_read_bits_way_en": In(c.nWays),
-            "io_write_valid": In(1),
-            "io_write_bits_idx": In(self.idxBits),
-            "io_write_bits_way_en": In(c.nWays),
-            "io_write_bits_way": In(self.wayBits),
-            "io_write_bits_tag": In(c.tagBits),
-            "io_write_bits_ecc": In(c.tagECCBits),
-            "io_rdata": Out(c.nWays * self.encodedBits),
-        })
-        self.read_ready = self.io_read_ready
-        self.read_valid = self.io_read_valid
-        self.read_idx = self.io_read_bits_idx
-        self.read_way_en = self.io_read_bits_way_en
-        self.write_valid = self.io_write_valid
-        self.write_idx = self.io_write_bits_idx
-        self.write_way_en = self.io_write_bits_way_en
-        self.write_way = self.io_write_bits_way
-        self.write_tag = self.io_write_bits_tag
-        self.write_ecc = self.io_write_bits_ecc
-        self.rdata = self.io_rdata
-        self.resp = [Signal(self.encodedBits, name=f"io_resp_{i}")
-                     for i in range(c.nWays)]
-        self.read_addr = Signal(self.idxBits, reset=0, name="read_addr_reg")
-        self.reset_count = Signal(max(1, (c.nSets + 1).bit_length()), reset=0)
-        self.banks = [Memory(shape=self.encodedBits, depth=c.nSets,
-                             init=[0] * c.nSets) for _ in range(c.nWays)]
+    def __init__(self) -> None:
+        """Allocate the exact locked public port surface. / 分配精确锁定的公共端口。"""
 
-    # Elaborate reset clearing, masked writes, and synchronous per-way reads. / 展开复位清零、按路写入及同步逐路读取逻辑。
-    def elaborate(self, platform):
+        self.ports: dict[str, Signal] = {
+            name: Signal(width, name=name) for name, _direction, width in PORT_SPECS
+        }
+
+    def _port(self, bank: int, family: str, field: str) -> Signal:
+        """Return one bank-specific MBIST or DFT signal. / 返回 bank 专属 MBIST 或 DFT 信号。"""
+
+        infix = "" if bank == 0 else "_1"
+        return self.ports[f"{family}{infix}_{field}"]
+
+    def _bank(self, module: Module, bank: int) -> tuple[Any, Any, Any]:
+        """Elaborate one locked TagSRAMBank transition relation. / 展开一个 TagSRAMBank 状态转移。"""
+
+        p = self.ports
+        prefix = f"tag_arrays_{bank}"
+        rst_cnt = Signal(9, reset=0, name=f"{prefix}.rst_cnt")
+        resp_reg = Signal(reset=0, name=f"{prefix}.tag_array.respReg")
+        rdata_reg = Signal(86, reset_less=True, name=f"{prefix}.tag_array.rdataReg")
+        read_addr = Signal(8, reset_less=True,
+                           name=f"{prefix}.tag_array.array.array_ext._RW0_raddr_d0")
+        read_enable = Signal(reset_less=True,
+                             name=f"{prefix}.tag_array.array.array_ext._RW0_ren_d0")
+        read_mode = Signal(reset_less=True,
+                           name=f"{prefix}.tag_array.array.array_ext._RW0_rmode_d0")
+        memory = Array(
+            Signal(86, reset_less=True,
+                   name=f"{prefix}.tag_array.array.array_ext.Memory[{index}]")
+            for index in range(256)
+        )
+
+        reset_done = cast(Any, rst_cnt[8])
+        normal_write = ~reset_done | p["io_write_valid"]
+        read_ready = ~normal_write
+        mbist_ack = self._port(bank, "boreChildrenBd_bore", "ack")
+        mbist_read = self._port(bank, "boreChildrenBd_bore", "re")
+        mbist_write = self._port(bank, "boreChildrenBd_bore", "we")
+        read_clock_enable = Mux(mbist_ack, mbist_read,
+                                read_ready & p["io_read_valid"])
+        write_clock_enable = Mux(mbist_ack, mbist_write, normal_write)
+        hold = self._port(bank, "sigFromSrams_bore", "ram_hold")
+        final_write = write_clock_enable & ~hold
+        gate_enable = (
+            self._port(bank, "sigFromSrams_bore", "cgen")
+            | Mux(mbist_ack, mbist_read | mbist_write,
+                  read_clock_enable | write_clock_enable)
+        )
+
+        normal_write_addr = Mux(reset_done, p["io_write_bits_idx"], rst_cnt[:8])
+        selected_addr = Mux(
+            mbist_ack,
+            self._port(bank, "boreChildrenBd_bore", "addr_rd")[:8],
+            Mux(final_write, normal_write_addr, p["io_read_bits_idx"]),
+        )
+        encoded = Cat(p["io_write_bits_tag"], p["io_write_bits_ecc"])
+        normal_data = Mux(reset_done, Cat(encoded, encoded), Const(0, 86))
+        write_data = Mux(mbist_ack,
+                         self._port(bank, "boreChildrenBd_bore", "wdata"),
+                         normal_data)
+        normal_way_mask = Mux(
+            reset_done,
+            p["io_write_bits_way_en"][bank * 2:bank * 2 + 2],
+            Const(3, 2),
+        )
+        mbist_mask = Mux(
+            self._port(bank, "boreChildrenBd_bore", "selectedOH"),
+            self._port(bank, "boreChildrenBd_bore", "wmask"),
+            Const(0, 2),
+        )
+        write_mask = Mux(mbist_ack, mbist_mask, normal_way_mask)
+        memory_output = memory[read_addr]
+
+        with cast(Any, module.If(~reset_done)):
+            module.d.sync += rst_cnt.eq(rst_cnt + 1)
+        module.d.sync += resp_reg.eq(read_clock_enable)
+        with cast(Any, module.If(resp_reg)):
+            module.d.sync += rdata_reg.eq(memory_output)
+        with cast(Any, module.If(gate_enable)):
+            module.d.sync += [read_addr.eq(selected_addr),
+                              read_enable.eq(final_write | read_clock_enable),
+                              read_mode.eq(final_write)]
+            with cast(Any, module.If(final_write)):
+                with cast(Any, module.If(write_mask[0])):
+                    module.d.sync += memory[selected_addr][:43].eq(write_data[:43])
+                with cast(Any, module.If(write_mask[1])):
+                    module.d.sync += memory[selected_addr][43:].eq(write_data[43:])
+
+        module.d.comb += self._port(bank, "boreChildrenBd_bore", "rdata").eq(rdata_reg)
+        return read_ready, memory_output[:43], memory_output[43:]
+
+    def elaborate(self, platform: Any) -> Module:
+        """Elaborate both banks and expose the four-way response. / 展开两个 bank 并导出四路响应。"""
+
         del platform
-        c = self.cfg
-        m = Module()
+        module = Module()
         domain = ClockDomain("sync", async_reset=True)
-        domain.clk = self.clock
-        domain.rst = self.reset
-        m.domains.sync = domain
-
-        initializing = self.reset_count < c.nSets
-        write_active = initializing | self.write_valid
-        read_fire = self.read_valid & ~write_active
-        encoded_write = self.write_tag | (self.write_ecc << c.tagBits)
-
-        m.d.comb += self.read_ready.eq(~write_active)
-        for way, memory in enumerate(self.banks):
-            m.submodules[f"bank{way}"] = memory
-            # The generated SRAM captures an address on a read fire and exposes
-            # the selected row combinationally thereafter. / 生成的 SRAM 在读握手时锁存地址，随后组合输出选中行。
-            read_port = cast(_MemoryReadPort, memory.read_port(domain="comb", transparent_for=()))
-            m.d.comb += [
-                read_port.addr.eq(self.read_addr),
-                self.resp[way].eq(read_port.data),
-            ]
-            write_port = cast(_MemoryWritePort, memory.write_port(domain="sync"))
-            m.d.comb += [
-                write_port.addr.eq(Mux(initializing, self.reset_count,
-                                       self.write_idx)),
-                write_port.data.eq(Mux(initializing, 0, encoded_write)),
-                write_port.en.eq(initializing |
-                                 (self.write_valid & self.write_way_en[way])),
-            ]
-
-        # Pack responses low-way first, matching Chisel Vec flattening. / 按低路优先打包响应，匹配 Chisel Vec 展平顺序。
-        for way in range(c.nWays):
-            lo = way * self.encodedBits
-            m.d.comb += cast(Signal, self.rdata[lo:lo + self.encodedBits]).eq(self.resp[way])
-
-        with cast(AbstractContextManager[None], m.If(initializing)):
-            m.d.sync += self.reset_count.eq(self.reset_count + 1)
-        with cast(AbstractContextManager[None], m.If(read_fire)):
-            m.d.sync += self.read_addr.eq(self.read_idx)
-        return m
+        domain.clk = self.ports["clock"]
+        domain.rst = self.ports["reset"]
+        module.domains.sync = domain
+        _ready0, resp0, resp1 = self._bank(module, 0)
+        ready1, resp2, resp3 = self._bank(module, 1)
+        module.d.comb += [
+            self.ports["io_read_ready"].eq(ready1),
+            self.ports["io_resp_0"].eq(resp0), self.ports["io_resp_1"].eq(resp1),
+            self.ports["io_resp_2"].eq(resp2), self.ports["io_resp_3"].eq(resp3),
+        ]
+        return module
 
 
 # =============================================================================
 # Public Adapter
 # =============================================================================
-# Build deterministic TagArray Verilog for the requested configuration. / 为请求配置构建确定性 TagArray Verilog。
-def build_verilog(configuration, injected_dependencies):
-    # Export a deterministic flattened probe; external MBIST controls are injected at parent closure. / 导出确定性扁平探针，外部 MBIST 控制由父闭包注入。
-    from amaranth.back import verilog
+def build_verilog(configuration: Any = None, injected_dependencies: Any = None) -> str:
+    """Emit the exact locked TagArray top. / 导出精确锁定 TagArray 顶层。"""
 
-    del injected_dependencies
-    if configuration is None:
-        config = TagArrayConfig()
-        name = "TagArray"
-    elif isinstance(configuration, TagArrayConfig):
-        config = configuration
-        name = "TagArray"
-    elif isinstance(configuration, dict):
-        keys = {"nSets", "nWays", "tagBits", "tagECCBits"}
-        config = TagArrayConfig(**{key: value for key, value in configuration.items()
-                                   if key in keys})
-        name = str(configuration.get("name", "TagArray"))
-    else:
-        raise TypeError("configuration must be TagArrayConfig, dict, or None")
-    top = TagArray(config)
-    ports = [top.clock, top.reset, top.read_ready, top.read_valid,
-             top.read_idx, top.read_way_en, top.write_valid, top.write_idx,
-             top.write_way_en, top.write_way, top.write_tag, top.write_ecc,
-             top.rdata]
-    return verilog.convert(top, name=name, ports=ports, emit_src=False)
+    del configuration, injected_dependencies
+    top = TagArray()
+    return verilog.convert(top, name="TagArray",
+                           ports=[top.ports[name] for name, _direction, _width in PORT_SPECS],
+                           emit_src=False)
 
 
-# =============================================================================
-# Direct Entry
-# =============================================================================
-# Print the default deterministic TagArray export. / 打印默认确定性 TagArray 导出。
 def main() -> None:
-    # Print the default deterministic Verilog export. / 打印默认确定性 Verilog 导出。
-    print(build_verilog(None, None))
+    """Print the deterministic locked export. / 打印确定性的锁定导出。"""
+
+    print(build_verilog())
 
 
 if __name__ == "__main__":
