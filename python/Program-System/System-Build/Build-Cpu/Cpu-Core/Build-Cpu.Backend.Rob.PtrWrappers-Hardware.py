@@ -1,224 +1,309 @@
-"""V2 reorder-buffer enqueue and dequeue pointer wrappers.
-V2 重排序缓冲区入队与出队指针封装。
+"""UHSC V2 reorder-buffer circular-pointer wrapper family.
+昆明湖 V2 重排序缓冲区循环指针封装 family。
+
+The locked Kunminghu V2 configuration has a 160-entry ROB, six rename lanes,
+and eight commit lanes.  This catalog exports the two real Chisel/FIRRTL module
+boundaries independently; it deliberately does not invent a combined parent.
 """
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from typing import Any, cast
 
-from amaranth import Array, Cat, Const, Elaboratable, Module, Mux, Signal
+from amaranth import Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
+from amaranth.back import verilog
 
 
 # =============================================================================
 # Module Contract
 # =============================================================================
-# This family aggregates RobEnqPtrWrapper.scala and NewRobDeqPtrWrapper.scala.
-# Pointer arithmetic is modulo the configured ROB size; redirect and commit
-# gates preserve the V2 state-update boundaries.
-# 本 family 聚合两个 Scala 源；指针按 ROB 大小模运算，重定向和提交门控保持
-# V2 状态更新边界。
-__all__ = [
-    "RobPtrConfig",
-    "RobEnqPtrWrapper",
-    "NewRobDeqPtrWrapper",
-    "enq_reference",
-    "deq_reference",
-    "build_verilog",
-    "main",
-]
+__all__ = ["COVERED_MODULES", "RobPtrWrapper", "build_verilog", "main"]
+
+COVERED_MODULES = ("RobEnqPtrWrapper", "NewRobDeqPtrWrapper")
+SOURCE_PATHS = (
+    "upstream/src/main/scala/xiangshan/backend/rob/RobEnqPtrWrapper.scala",
+    "upstream/src/main/scala/xiangshan/backend/rob/RobDeqPtrWrapper.scala",
+    "upstream/src/main/scala/xiangshan/backend/rob/RobBundles.scala",
+    "upstream/utility/src/main/scala/utility/CircularQueuePtr.scala",
+    "upstream/utility/src/main/scala/utility/PriorityMuxDefault.scala",
+)
+
+PortSpec = tuple[str, str, int]
+
+LOCKED_PORT_SPECS: dict[str, tuple[PortSpec, ...]] = {
+    "RobEnqPtrWrapper": (
+        ("clock", "input", 1),
+        ("reset", "input", 1),
+        ("io_redirect_valid", "input", 1),
+        ("io_redirect_bits_robIdx_flag", "input", 1),
+        ("io_redirect_bits_robIdx_value", "input", 8),
+        ("io_redirect_bits_level", "input", 1),
+        ("io_allowEnqueue", "input", 1),
+        ("io_hasBlockBackward", "input", 1),
+        *((f"io_enq_{index}", "input", 1) for index in range(6)),
+        ("io_out_0_flag", "output", 1),
+        *((f"io_out_{index}_value", "output", 8) for index in range(6)),
+    ),
+    "NewRobDeqPtrWrapper": (
+        ("clock", "input", 1),
+        ("reset", "input", 1),
+        ("io_state", "input", 2),
+        *((f"io_deq_v_{index}", "input", 1) for index in range(8)),
+        *((f"io_deq_w_{index}", "input", 1) for index in range(8)),
+        *((f"io_hasCommitted_{index}", "input", 1) for index in range(8)),
+        ("io_exception_state_valid", "input", 1),
+        ("io_exception_state_bits_robIdx_flag", "input", 1),
+        ("io_exception_state_bits_robIdx_value", "input", 8),
+        ("io_exception_state_bits_hasException", "input", 1),
+        ("io_exception_state_bits_replayInst", "input", 1),
+        ("io_exception_state_bits_singleStep", "input", 1),
+        ("io_exception_state_bits_trigger", "input", 4),
+        ("io_intrBitSetReg", "input", 1),
+        ("io_allowOnlyOneCommit", "input", 1),
+        ("io_hasNoSpecExec", "input", 1),
+        ("io_interrupt_safe", "input", 1),
+        ("io_blockCommit", "input", 1),
+        *(
+            item
+            for index in range(8)
+            for item in (
+                (f"io_out_{index}_flag", "output", 1),
+                (f"io_out_{index}_value", "output", 8),
+            )
+        ),
+        ("io_next_out_0_flag", "output", 1),
+        ("io_next_out_0_value", "output", 8),
+    ),
+}
+PORT_SPECS = LOCKED_PORT_SPECS
 
 
 # =============================================================================
-# Configuration
+# Circular-pointer helpers
 # =============================================================================
-@dataclass(frozen=True)
-class RobPtrConfig:
-    """V2 ROB pointer geometry. / V2 ROB 指针几何配置。"""
+ROB_SIZE = 160
 
-    rob_size: int = 64
-    rename_width: int = 4
-    commit_width: int = 4
 
-    # Validate power-of-two ROB size and positive widths. / 校验二次幂 ROB 大小和正宽度。
-    def __post_init__(self) -> None:
-        if self.rob_size < 2 or self.rob_size & (self.rob_size - 1):
-            raise ValueError("V2 ROB size must be a power of two")
-        if self.rename_width < 1 or self.commit_width < 1:
-            raise ValueError("V2 ROB widths must be positive")
+def _wide(value: Any) -> Any:
+    """Zero-extend an eight-bit ROB value for non-power-of-two arithmetic."""
 
-    @property
-    # Return the circular pointer width. / 返回循环指针位宽。
-    def ptr_width(self) -> int:
-        """Return ``log2(rob_size)``. / 返回 ``log2(rob_size)``。"""
+    return Cat(value, Const(0, 1))
 
-        return self.rob_size.bit_length() - 1
+
+def _circular_add(value: Any, flag: Any, amount: Any) -> tuple[Any, Any]:
+    """Add once in the locked 160-entry circular domain."""
+
+    total = cast(Any, _wide(value)) + amount
+    reverse = total >= ROB_SIZE
+    wrapped = Mux(reverse, total - ROB_SIZE, total)
+    return wrapped[:8], flag ^ reverse
+
+
+def _first_priority(conditions: list[Any], choices: list[Any], default: Any) -> Any:
+    """Return Chisel PriorityMuxDefault semantics (lowest index wins)."""
+
+    selected = default
+    for condition, choice in reversed(list(zip(conditions, choices, strict=True))):
+        selected = Mux(condition, choice, selected)
+    return selected
 
 
 # =============================================================================
 # Implementation
 # =============================================================================
-def enq_reference(state: list[int], allow_enqueue: bool, blocked: bool,
-                  enq: list[bool], redirect_valid: bool = False,
-                  redirect_idx: int = 0, flush_itself: bool = False,
-                  configuration: RobPtrConfig = RobPtrConfig()) -> list[int]:
-    """Return next enqueue pointers independently. / 独立返回下一入队指针。"""
+class RobPtrWrapper(Elaboratable):
+    """One exact-name locked V2 ROB pointer-wrapper member."""
 
-    c = configuration
-    mask = c.rob_size - 1
-    current = [value & mask for value in state]
-    if redirect_valid:
-        base = redirect_idx + (0 if flush_itself else 1)
-        return [(base + index) & mask for index in range(c.rename_width)]
-    advance = sum(bool(item) for item in enq) if allow_enqueue and not blocked else 0
-    return [(value + advance) & mask for value in current]
+    def __init__(self, member: str = "RobEnqPtrWrapper") -> None:
+        """Declare the exact flattened ABI for ``member``."""
 
+        if member not in PORT_SPECS:
+            raise ValueError(member)
+        self.member = member
+        self.specs = PORT_SPECS[member]
+        self.ports = {
+            name: Signal(width, name=name)
+            for name, _direction, width in self.specs
+        }
 
-def deq_reference(state: list[int], deq_v: list[bool], deq_w: list[bool],
-                  has_committed: list[bool], allow_only_one: bool,
-                  block_commit: bool, configuration: RobPtrConfig = RobPtrConfig()) -> tuple[list[int], int, bool]:
-    """Return next dequeue pointers, count, and commit enable. / 返回下一出队指针、数量及提交使能。"""
+    def _domain(self, module: Module) -> None:
+        """Bind the emitted clock/reset ports to Chisel's async-reset domain."""
 
-    c = configuration
-    mask = c.rob_size - 1
-    can_commit = [bool(v and w) or bool(h) for v, w, h in zip(deq_v, deq_w, has_committed)]
-    if allow_only_one:
-        count = 1 if can_commit[0] else 0
-    else:
-        count = 0
-        for item in can_commit:
-            if not item:
-                break
-            count += 1
-    enabled = not block_commit
-    advance = count if enabled else 0
-    return [((value + advance) & mask) for value in state], count, enabled
+        domain = ClockDomain("sync", async_reset=True)
+        domain.clk = self.ports["clock"]
+        domain.rst = self.ports["reset"]
+        module.domains += domain
 
+    def _enqueue(self, module: Module) -> None:
+        """Implement six-lane redirect and PopCount-based enqueue movement."""
 
-class RobEnqPtrWrapper(Elaboratable):
-    """Registered V2 ROB enqueue pointer vector. / V2 寄存式 ROB 入队指针向量。"""
+        p = self.ports
+        values = [Signal(8, reset=index, name=f"enqPtrVec_{index}_value")
+                  for index in range(6)]
+        flag = Signal(reset=0, name="enqPtrVec_0_flag")
 
-    # Construct redirect, enqueue, and pointer ports. / 构造重定向、入队及指针端口。
-    def __init__(self, configuration: RobPtrConfig = RobPtrConfig()) -> None:
-        self.configuration = configuration
-        c = configuration
-        self.clock = Signal(name="clock")
-        self.reset = Signal(name="reset")
-        self.redirect_valid = Signal(name="io_redirect_valid")
-        self.redirect_idx = Signal(c.ptr_width, name="io_redirect_robIdx")
-        self.flush_itself = Signal(name="io_redirect_flushItself")
-        self.allow_enqueue = Signal(name="io_allowEnqueue")
-        self.has_block_backward = Signal(name="io_hasBlockBackward")
-        self.enq = [Signal(name=f"io_enq_{index}") for index in range(c.rename_width)]
-        self.out = [Signal(c.ptr_width, name=f"io_out_{index}") for index in range(c.rename_width)]
+        dispatch: Any = Const(0, 4)
+        for index in range(6):
+            dispatch = cast(Any, dispatch) + p[f"io_enq_{index}"]
+        can_accept = p["io_allowEnqueue"] & ~p["io_hasBlockBackward"]
+        advance = Mux(can_accept, dispatch, 0)
+        redirect_offset = Mux(p["io_redirect_bits_level"], 0, 1)
 
-    # Elaborate redirect and circular enqueue increments. / 展开重定向和循环入队增量。
-    def elaborate(self, platform) -> Module:
+        for index, value in enumerate(values):
+            regular_value, regular_flag = _circular_add(value, flag, advance)
+            redirect_value, redirect_flag = _circular_add(
+                p["io_redirect_bits_robIdx_value"],
+                p["io_redirect_bits_robIdx_flag"],
+                cast(Any, redirect_offset) + index,
+            )
+            next_value = Mux(p["io_redirect_valid"], redirect_value, regular_value)
+            module.d.sync += value.eq(next_value)
+            if index == 0:
+                module.d.sync += flag.eq(
+                    Mux(p["io_redirect_valid"], redirect_flag, regular_flag)
+                )
+
+        module.d.comb += p["io_out_0_flag"].eq(flag)
+        for index, value in enumerate(values):
+            module.d.comb += p[f"io_out_{index}_value"].eq(value)
+
+    def _dequeue(self, module: Module) -> None:
+        """Implement the eight-lane V2 commit-pointer selection and gating."""
+
+        p = self.ports
+        values = [Signal(8, reset=index, name=f"deqPtrVec_{index}_value")
+                  for index in range(8)]
+        flags = [Signal(reset=0, name=f"deqPtrVec_{index}_flag")
+                 for index in range(8)]
+
+        position = values[0][:3]
+        can_commit = [
+            (p[f"io_deq_v_{index}"] & p[f"io_deq_w_{index}"])
+            | p[f"io_hasCommitted_{index}"]
+            for index in range(8)
+        ]
+        can_commit_vector = Cat(*can_commit)
+        deq_v_vector = Cat(*(p[f"io_deq_v_{index}"] for index in range(8)))
+        deq_w_vector = Cat(*(p[f"io_deq_w_{index}"] for index in range(8)))
+        can_at_position = cast(Any, can_commit_vector).bit_select(position, 1)
+        deq_v_at_position = cast(Any, deq_v_vector).bit_select(position, 1)
+        deq_w_at_position = cast(Any, deq_w_vector).bit_select(position, 1)
+
+        normal_conditions: list[Any] = [~value for value in can_commit]
+        normal_conditions.append(Const(1))
+        one_conditions: list[Any] = [Const(0)]
+        one_conditions.extend(
+            cast(Any, position == index) & can_at_position for index in range(8)
+        )
+        conditions = [
+            Mux(p["io_allowOnlyOneCommit"], one, normal)
+            for one, normal in zip(one_conditions, normal_conditions, strict=True)
+        ]
+
+        line_head = Cat(Const(0, 3), values[0][3:8], Const(0, 1))
+        candidates = [
+            _circular_add(line_head[:8], flags[0], Const(offset, 5))
+            for offset in range(16)
+        ]
+        selected_values: list[Any] = []
+        selected_flags: list[Any] = []
+        for lane in range(8):
+            selected_values.append(_first_priority(
+                conditions,
+                [candidates[lane + index][0] for index in range(9)],
+                values[lane],
+            ))
+            selected_flags.append(_first_priority(
+                conditions,
+                [candidates[lane + index][1] for index in range(9)],
+                flags[lane],
+            ))
+
+        not_commit = (
+            p["io_exception_state_bits_hasException"]
+            | p["io_exception_state_bits_replayInst"]
+            | p["io_exception_state_bits_singleStep"]
+            | (p["io_exception_state_bits_trigger"] == 1)
+        )
+        pointer_matches = (
+            (p["io_exception_state_bits_robIdx_flag"] == flags[0])
+            & (p["io_exception_state_bits_robIdx_value"] == values[0])
+        )
+        interrupt_enable = (
+            p["io_intrBitSetReg"]
+            & ~p["io_hasNoSpecExec"]
+            & p["io_interrupt_safe"]
+        )
+        exception_enable = (
+            deq_w_at_position
+            & p["io_exception_state_valid"]
+            & not_commit
+            & pointer_matches
+        )
+        state_idle = p["io_state"] == 0
+        redirect = (
+            state_idle
+            & deq_v_at_position
+            & (interrupt_enable | exception_enable)
+        )
+        update = state_idle & ~redirect & ~p["io_blockCommit"]
+
+        for index in range(8):
+            module.d.sync += [
+                values[index].eq(Mux(update, selected_values[index], values[index])),
+                flags[index].eq(Mux(update, selected_flags[index], flags[index])),
+            ]
+            module.d.comb += [
+                p[f"io_out_{index}_flag"].eq(flags[index]),
+                p[f"io_out_{index}_value"].eq(values[index]),
+            ]
+        module.d.comb += [
+            p["io_next_out_0_flag"].eq(Mux(update, selected_flags[0], flags[0])),
+            p["io_next_out_0_value"].eq(Mux(update, selected_values[0], values[0])),
+        ]
+
+    def elaborate(self, platform: Any) -> Module:
+        """Elaborate the selected exact-name member."""
+
         del platform
-        m = Module()
-        c = self.configuration
-        m.d.comb += [self.out[index].eq(self._state[index]) for index in range(c.rename_width)]
-        advance = Const(0, c.ptr_width + 1)
-        for signal in self.enq:
-            advance = advance + signal
-        can_accept = self.allow_enqueue & ~self.has_block_backward
-        for index, state in enumerate(self._state):
-            redirected = self.redirect_idx + index + Mux(self.flush_itself, 0, 1)
-            next_value = Mux(self.redirect_valid, redirected, state + Mux(can_accept, advance, 0))
-            m.d.sync += state.eq(next_value[:c.ptr_width])
-        return m
-
-    @property
-    # Lazily allocate state signals for deterministic reset values. / 延迟分配具有确定复位值的状态信号。
-    def _state(self) -> list[Signal]:
-        if not hasattr(self, "_states"):
-            self._states = [Signal(self.configuration.ptr_width, reset=index, name=f"enqPtr_{index}") for index in range(self.configuration.rename_width)]
-        return self._states
-
-
-class NewRobDeqPtrWrapper(Elaboratable):
-    """Registered V2 ROB commit/dequeue pointer vector. / V2 寄存式 ROB 提交出队指针向量。"""
-
-    # Construct commit controls and pointer outputs. / 构造提交控制及指针输出。
-    def __init__(self, configuration: RobPtrConfig = RobPtrConfig()) -> None:
-        self.configuration = configuration
-        c = configuration
-        self.state = Signal(2, name="io_state")
-        self.deq_v = [Signal(name=f"io_deq_v_{index}") for index in range(c.commit_width)]
-        self.deq_w = [Signal(name=f"io_deq_w_{index}") for index in range(c.commit_width)]
-        self.has_committed = [Signal(name=f"io_hasCommitted_{index}") for index in range(c.commit_width)]
-        self.allow_only_one = Signal(name="io_allowOnlyOneCommit")
-        self.block_commit = Signal(name="io_blockCommit")
-        self.out = [Signal(c.ptr_width, name=f"io_out_{index}") for index in range(c.commit_width)]
-        self.next_out = [Signal(c.ptr_width, name=f"io_next_out_{index}") for index in range(c.commit_width)]
-        self.commit_count = Signal(max(1, (c.commit_width + 1).bit_length()), name="io_commitCnt")
-        self.commit_enable = Signal(name="io_commitEn")
-
-    # Elaborate contiguous commit count and pointer advancement. / 展开连续提交计数和指针推进。
-    def elaborate(self, platform) -> Module:
-        del platform
-        m = Module()
-        c = self.configuration
-        can_commit = [v & w | h for v, w, h in zip(self.deq_v, self.deq_w, self.has_committed)]
-        count = Const(0, max(1, (c.commit_width + 1).bit_length()))
-        for item in can_commit:
-            count = Mux((count == count) & item, count + 1, count)
-        count = Mux(self.allow_only_one, can_commit[0], count)
-        m.d.comb += [self.commit_count.eq(count), self.commit_enable.eq((self.state == 0) & ~self.block_commit)]
-        for index, state in enumerate(self._state):
-            m.d.comb += [self.out[index].eq(state), self.next_out[index].eq(state + Mux(self.commit_enable, count, 0))]
-            m.d.sync += state.eq(self.next_out[index])
-        return m
-
-    @property
-    # Lazily allocate commit pointer state signals. / 延迟分配提交指针状态信号。
-    def _state(self) -> list[Signal]:
-        if not hasattr(self, "_states"):
-            self._states = [Signal(self.configuration.ptr_width, reset=index, name=f"deqPtr_{index}") for index in range(self.configuration.commit_width)]
-        return self._states
-
-
-class RobPtrWrappers(Elaboratable):
-    """Combined emission top for both V2 pointer wrappers. / 两个 V2 指针封装的组合生成顶层。"""
-
-    # Construct both child wrappers. / 构造两个子封装。
-    def __init__(self, configuration: RobPtrConfig = RobPtrConfig()) -> None:
-        self.enq = RobEnqPtrWrapper(configuration)
-        self.deq = NewRobDeqPtrWrapper(configuration)
-
-    # Elaborate both independently visible child boundaries. / 展开两个独立可见的子边界。
-    def elaborate(self, platform) -> Module:
-        m = Module()
-        m.submodules.enq = self.enq
-        m.submodules.deq = self.deq
-        return m
+        module = Module()
+        self._domain(module)
+        if self.member == "RobEnqPtrWrapper":
+            self._enqueue(module)
+        else:
+            self._dequeue(module)
+        return module
 
 
 # =============================================================================
 # Public Adapter
 # =============================================================================
-def build_verilog(configuration=None, injected_dependencies=None) -> str:
-    """Emit combined ROB pointer-wrapper Verilog. / 输出组合 ROB 指针封装 Verilog。"""
+def build_verilog(configuration: Any = None,
+                  injected_dependencies: Any = None) -> str:
+    """Export one deterministic, exact-name locked family member."""
 
     del injected_dependencies
-    from amaranth.back import verilog
-
-    c = configuration or RobPtrConfig()
-    top = RobPtrWrappers(c)
-    ports = [top.enq.clock, top.enq.reset, top.enq.redirect_valid, top.enq.redirect_idx,
-             top.enq.flush_itself, top.enq.allow_enqueue, top.enq.has_block_backward,
-             *top.enq.enq, *top.enq.out, top.deq.state, *top.deq.deq_v, *top.deq.deq_w,
-             *top.deq.has_committed, top.deq.allow_only_one, top.deq.block_commit,
-             *top.deq.out, *top.deq.next_out, top.deq.commit_count, top.deq.commit_enable]
-    return verilog.convert(top, name="RobPtrWrappers", ports=ports)
+    member = "RobEnqPtrWrapper"
+    if isinstance(configuration, dict):
+        member = str(configuration.get("module", member))
+    elif isinstance(configuration, str):
+        member = configuration
+    top = RobPtrWrapper(member)
+    return verilog.convert(
+        top,
+        name=member,
+        ports=[top.ports[name] for name, _direction, _width in top.specs],
+        emit_src=False,
+    )
 
 
 # =============================================================================
 # Direct Entry
 # =============================================================================
 def main() -> None:
-    """Print the generated pointer-wrapper RTL. / 打印生成的指针封装 RTL。"""
+    """Print the default enqueue-wrapper RTL."""
 
-    print(build_verilog(None, {}))
+    print(build_verilog({"module": "RobEnqPtrWrapper"}, {}))
 
 
 if __name__ == "__main__":
