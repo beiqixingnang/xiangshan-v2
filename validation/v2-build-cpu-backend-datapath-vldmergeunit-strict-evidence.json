@@ -1,0 +1,420 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_COMPLETE_EQUIVALENCE",
+  "build_id": "Build-Cpu.Backend.Datapath.VldMergeUnit",
+  "validator": "validation/v2_vldmergeunit_strict_validator.py",
+  "status": "COMPLETE_EQUIVALENCE",
+  "strict_complete_eligible": true,
+  "strict_complete_count_delta": 1,
+  "acceptance_eligible": true,
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "audit_policy": {
+    "require_negative_control": true,
+    "require_two_sided_negative_control": true,
+    "require_locked_reference_lint": true,
+    "require_validator_hash": true,
+    "scope_source": "Build catalog tables",
+    "injected_dependency_hash_locked": true
+  },
+  "scope": {
+    "kind": "catalog_build_multi_variant",
+    "public_variants": [
+      "VldMergeUnit"
+    ],
+    "variant_count": 1,
+    "combinational_variants": 0,
+    "sequential_variants": 1,
+    "inputs": {
+      "VldMergeUnit_clock": 1,
+      "VldMergeUnit_io_flush_valid": 1,
+      "VldMergeUnit_io_flush_bits_robIdx_flag": 1,
+      "VldMergeUnit_io_flush_bits_robIdx_value": 8,
+      "VldMergeUnit_io_flush_bits_level": 1,
+      "VldMergeUnit_io_writeback_valid": 1,
+      "VldMergeUnit_io_writeback_bits_data_0": 128,
+      "VldMergeUnit_io_writeback_bits_pdest": 7,
+      "VldMergeUnit_io_writeback_bits_robIdx_flag": 1,
+      "VldMergeUnit_io_writeback_bits_robIdx_value": 8,
+      "VldMergeUnit_io_writeback_bits_vecWen": 1,
+      "VldMergeUnit_io_writeback_bits_v0Wen": 1,
+      "VldMergeUnit_io_writeback_bits_vlWen": 1,
+      "VldMergeUnit_io_writeback_bits_vls_vpu_vma": 1,
+      "VldMergeUnit_io_writeback_bits_vls_vpu_vta": 1,
+      "VldMergeUnit_io_writeback_bits_vls_vpu_vsew": 2,
+      "VldMergeUnit_io_writeback_bits_vls_vpu_vm": 1,
+      "VldMergeUnit_io_writeback_bits_vls_vpu_vstart": 8,
+      "VldMergeUnit_io_writeback_bits_vls_vpu_vmask": 128,
+      "VldMergeUnit_io_writeback_bits_vls_vpu_vl": 8,
+      "VldMergeUnit_io_writeback_bits_vls_vpu_veew": 2,
+      "VldMergeUnit_io_writeback_bits_vls_vdIdxInField": 3,
+      "VldMergeUnit_io_writeback_bits_vls_isIndexed": 1,
+      "VldMergeUnit_io_writeback_bits_vls_isMasked": 1
+    },
+    "outputs_compared": {
+      "VldMergeUnit_io_writebackAfterMerge_valid": 1,
+      "VldMergeUnit_io_writebackAfterMerge_bits_data_0": 128,
+      "VldMergeUnit_io_writebackAfterMerge_bits_pdest": 7,
+      "VldMergeUnit_io_writebackAfterMerge_bits_vecWen": 1,
+      "VldMergeUnit_io_writebackAfterMerge_bits_v0Wen": 1,
+      "VldMergeUnit_io_writebackAfterMerge_bits_vlWen": 1
+    },
+    "aggregate_input_bits": 316,
+    "aggregate_compared_output_bits": 139,
+    "variants": {
+      "VldMergeUnit": {
+        "method": "sequential_equivalence",
+        "sequential": true,
+        "locked_reference": "validation/reference-sv/VldMergeUnit.sv",
+        "locked_sha256": "bab5b54d41cdadca31a1eda11737332ed568c7f37e672deaaeba363d472ed122",
+        "children": [
+          "ByteMaskTailGen",
+          "MaskExtractor",
+          "UIntToContLow0s",
+          "UIntToContLow1s",
+          "VldMgu"
+        ],
+        "inputs": {
+          "clock": 1,
+          "io_flush_valid": 1,
+          "io_flush_bits_robIdx_flag": 1,
+          "io_flush_bits_robIdx_value": 8,
+          "io_flush_bits_level": 1,
+          "io_writeback_valid": 1,
+          "io_writeback_bits_data_0": 128,
+          "io_writeback_bits_pdest": 7,
+          "io_writeback_bits_robIdx_flag": 1,
+          "io_writeback_bits_robIdx_value": 8,
+          "io_writeback_bits_vecWen": 1,
+          "io_writeback_bits_v0Wen": 1,
+          "io_writeback_bits_vlWen": 1,
+          "io_writeback_bits_vls_vpu_vma": 1,
+          "io_writeback_bits_vls_vpu_vta": 1,
+          "io_writeback_bits_vls_vpu_vsew": 2,
+          "io_writeback_bits_vls_vpu_vm": 1,
+          "io_writeback_bits_vls_vpu_vstart": 8,
+          "io_writeback_bits_vls_vpu_vmask": 128,
+          "io_writeback_bits_vls_vpu_vl": 8,
+          "io_writeback_bits_vls_vpu_veew": 2,
+          "io_writeback_bits_vls_vdIdxInField": 3,
+          "io_writeback_bits_vls_isIndexed": 1,
+          "io_writeback_bits_vls_isMasked": 1
+        },
+        "outputs_compared": {
+          "io_writebackAfterMerge_valid": 1,
+          "io_writebackAfterMerge_bits_data_0": 128,
+          "io_writebackAfterMerge_bits_pdest": 7,
+          "io_writebackAfterMerge_bits_vecWen": 1,
+          "io_writebackAfterMerge_bits_v0Wen": 1,
+          "io_writebackAfterMerge_bits_vlWen": 1
+        },
+        "input_bits": 316,
+        "output_bits": 139,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "PASS",
+        "success_marker": true,
+        "markers_present": {
+          "0 are unproven.": true,
+          "Equivalence successfully proven!": true
+        },
+        "unconstrained_or_equiv_cells": 311,
+        "proven_cells": 311,
+        "unproven_cells": 0,
+        "sat_variables": null,
+        "sat_clauses": null
+      }
+    },
+    "why_complete": "Every locked module named by this Build's own tables is proven against its exact-name locked reference on the rail its timing requires, with a conservation-audited 5C view where the installed Yosys cannot read the original.",
+    "bounded_tests_counted": false,
+    "injected_dependency": {
+      "target": "NewMgu",
+      "reference_child": "VldMgu",
+      "comparison_boundary": "flattened inside VldMergeUnit"
+    }
+  },
+  "reference_lock": {
+    "directory": "validation/reference-sv",
+    "xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "locked_references_written": false,
+    "sha256_by_module": {
+      "VldMergeUnit": "bab5b54d41cdadca31a1eda11737332ed568c7f37e672deaaeba363d472ed122"
+    }
+  },
+  "sources": {
+    "validator": {
+      "path": "validation/v2_vldmergeunit_strict_validator.py",
+      "sha256": "215498ffb4a3b6ae17fb94a40d3f722136b48e5dc5cd3434f62c13612570eddd",
+      "bytes": 5320
+    },
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Datapath.VldMergeUnit-Hardware.py",
+      "sha256": "522c880143613a8c5a4ea33280f11d16c2d21c0368bb8b240cffda9a90a4a9c3",
+      "bytes": 16724
+    },
+    "reference_sv": {
+      "path": "validation/reference-sv/VldMergeUnit.sv",
+      "sha256": "bab5b54d41cdadca31a1eda11737332ed568c7f37e672deaaeba363d472ed122",
+      "bytes": 17690
+    },
+    "scala": {
+      "path": "upstream/src/main/scala/xiangshan/backend/datapath/VldMergeUnit.scala",
+      "sha256": "6ada5b82bf551e1dfe73768f579d84f70263afcac76cba03dca7d431a156d121",
+      "bytes": 2610
+    },
+    "declared_scala_sources": {
+      "upstream/src/main/scala/xiangshan/backend/datapath/VldMergeUnit.scala": {
+        "vendored": true,
+        "sha256": "6ada5b82bf551e1dfe73768f579d84f70263afcac76cba03dca7d431a156d121"
+      },
+      "upstream/src/main/scala/xiangshan/backend/fu/vector/Mgu.scala": {
+        "vendored": true,
+        "sha256": "a62980fb0dcc2c02b014a8a50feec39900ff9a303dd8150d82099e49f0daa6c2"
+      }
+    },
+    "reference_children": {
+      "ByteMaskTailGen": {
+        "path": "validation/reference-sv/ByteMaskTailGen.sv",
+        "sha256": "83a0ebe835eeec55fb729aec16fb93c5432f50130fb86f3b570d26ba727bc2de",
+        "bytes": 10397
+      },
+      "MaskExtractor": {
+        "path": "validation/reference-sv/MaskExtractor.sv",
+        "sha256": "ce0ca7d18915ed4cb27c1766fd8e56c4a19523dfc15bcb4a2add08092092a13a",
+        "bytes": 1329
+      },
+      "UIntToContLow0s": {
+        "path": "validation/reference-sv/UIntToContLow0s.sv",
+        "sha256": "aebda041355c132d9e1b2876dcc0bd719b1cc2efb7199765eb605272258d97ac",
+        "bytes": 17109
+      },
+      "UIntToContLow1s": {
+        "path": "validation/reference-sv/UIntToContLow1s.sv",
+        "sha256": "5db2a1ab3b5234c81d91b19f52caf43d214350a2ad1f6c88e1ef344692914d98",
+        "bytes": 18234
+      },
+      "VldMgu": {
+        "path": "validation/reference-sv/VldMgu.sv",
+        "sha256": "cee3e3148fbf46cb4067508c1915480fee34df886cd2f39dacf5592137dfcc44",
+        "bytes": 4922
+      }
+    },
+    "validator_dependencies": {
+      "strict_family_rail": {
+        "path": "validation/v2_strict_family_rail.py",
+        "sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
+        "bytes": 43710
+      },
+      "injected_new_mgu_build": {
+        "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Vector.NewMgu-Hardware.py",
+        "sha256": "ee42c5e9883d8a5cde302065bfdf158c5d52fbaaeb5e4c7448a0d27cf949f420",
+        "bytes": 9008
+      }
+    }
+  },
+  "checks": {
+    "py_compile": {
+      "status": "PASS"
+    },
+    "pyright": {
+      "build": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_f7x1_gm4\\Build-Cpu.Backend.Datapath.VldMergeUnit-Hardware.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "error_count": 0,
+        "files_analyzed": 1,
+        "stderr_tail": ""
+      },
+      "rail": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_sdrkkmt2\\v2_strict_family_rail.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "error_count": 0,
+        "files_analyzed": 1,
+        "stderr_tail": ""
+      },
+      "validator": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "D:/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/v2_vldmergeunit_strict_validator.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "error_count": 0,
+        "files_analyzed": 1,
+        "diagnostics": [],
+        "stderr_tail": ""
+      }
+    },
+    "catalog_coverage": {
+      "entries": 1,
+      "proven": 1
+    },
+    "formal": {
+      "yosys_formal_miter": {
+        "status": "NOT_APPLICABLE",
+        "mitered_variants": 0
+      }
+    },
+    "aggregate_sat_miter": {
+      "status": "NOT_APPLICABLE",
+      "mitered_variants": 0
+    },
+    "negative_control": {
+      "status": "PASS",
+      "cases": {
+        "sat": {
+          "status": "PASS",
+          "note": "no representative with outputs"
+        },
+        "sequential.target": {
+          "status": "PASS",
+          "control_entry": "VldMergeUnit",
+          "control_port": "io_writebackAfterMerge_bits_data_0",
+          "mutation_applied": true,
+          "explicit_failure_marker": true,
+          "success_marker_still_present": false,
+          "returncode": 1
+        },
+        "sequential.reference": {
+          "status": "PASS",
+          "control_entry": "VldMergeUnit",
+          "control_port": "io_writebackAfterMerge_bits_data_0",
+          "mutation_applied": true,
+          "explicit_failure_marker": true,
+          "success_marker_still_present": false,
+          "returncode": 1
+        }
+      },
+      "note": "a reference-side mutation that still proves means the reference never reaches the comparison"
+    },
+    "variants": [
+      {
+        "method": "sequential_equivalence",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "VldMergeUnit_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_datapath_vldmergeunit_family/DUT_VldMergeUnit.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_datapath_vldmergeunit_family/REF_VldMergeUnit.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_datapath_vldmergeunit_family/VldMergeUnit_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": " the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                                           : ... note: In instance 'VldMergeUnit_MITER.target_i'\n  413 |   assign \\$115  = wbReg_bits_vls_vdIdxInField == 2'h2;\n      |                                               ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_datapath_vldmergeunit_family/DUT_VldMergeUnit.sv:414:47: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                           : ... note: In instance 'VldMergeUnit_MITER.target_i'\n  414 |   assign \\$116  = wbReg_bits_vls_vdIdxInField == 1'h1;\n      |                                               ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_datapath_vldmergeunit_family/DUT_VldMergeUnit.sv:426:47: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                                                                                                                           : ... note: In instance 'VldMergeUnit_MITER.target_i'\n  426 |   assign \\$128  = wbReg_bits_vls_vdIdxInField == 2'h3;\n      |                                               ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_datapath_vldmergeunit_family/DUT_VldMergeUnit.sv:427:47: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                                           : ... note: In instance 'VldMergeUnit_MITER.target_i'\n  427 |   assign \\$129  = wbReg_bits_vls_vdIdxInField == 2'h2;\n      |                                               ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_datapath_vldmergeunit_family/DUT_VldMergeUnit.sv:428:47: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                           : ... note: In instance 'VldMergeUnit_MITER.target_i'\n  428 |   assign \\$130  = wbReg_bits_vls_vdIdxInField == 1'h1;\n      |                                               ^~\n",
+          "output_sha256": "40ecbc2abdea20e67e0161d9a3b797211ed18be25ba45c14da593e6bfe487d5c"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "VldMergeUnit",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ByteMaskTailGen.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/MaskExtractor.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/UIntToContLow0s.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/UIntToContLow1s.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/VldMgu.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/VldMergeUnit.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.227 MB sources in 7 modules, into 0.126 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.070 s (elab=0.003, cvt=0.008, bld=0.000); cpu 0.022 s on 1 threads; alloced 11.383 MB\n",
+          "output_sha256": "6448a217ec36f3c6458b040cce97fb219502b28d8b776dfd44645ee0fa7e2022"
+        },
+        "yosys_equiv": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_datapath_vldmergeunit_family/DUT_VldMergeUnit.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_datapath_vldmergeunit_family/REF_VldMergeUnit.sv; proc; async2sync; memory; opt; flatten REF_VldMergeUnit; flatten DUT_VldMergeUnit; equiv_make REF_VldMergeUnit DUT_VldMergeUnit VldMergeUnit_EQUIV; prep -top VldMergeUnit_EQUIV; equiv_induct -undef; equiv_status -assert"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": 311,
+          "equiv_summary_full": [
+            311,
+            0
+          ],
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": " Executing OPT_EXPR pass (perform const folding).\nOptimizing module VldMergeUnit_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\VldMergeUnit_EQUIV'.\n<suppressed ~12 debug messages>\nRemoved a total of 4 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\VldMergeUnit_EQUIV..\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== VldMergeUnit_EQUIV ===\n\n   Number of wires:                996\n   Number of wire bits:          13494\n   Number of public wires:         900\n   Number of public wire bits:   11417\n   Number of ports:                 30\n   Number of port bits:            455\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:               1138\n     $and                          141\n     $dff                            2\n     $dffe                          32\n     $eq                            11\n     $equiv                        311\n     $ge                             1\n     $gt                           129\n     $le                           256\n     $logic_not                      2\n     $lt                             1\n     $mux                          205\n     $not                            6\n     $or                            28\n     $reduce_and                     2\n     $scopeinfo                      7\n     $shl                            2\n     $xor                            2\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module VldMergeUnit_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 311 unproven $equiv cells in module VldMergeUnit_EQUIV:\n  Undef modelling: force def on 590 initial reg values and 316 inputs.\n  Proving existence of base case for step 1. (493254 clauses over 181387 variables)\n  Proving induction step 1. (1028265 clauses over 377631 variables)\n  Proof for induction step holds. Entire workset of 311 cells proven!\nProved 311 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 311 $equiv cells in VldMergeUnit_EQUIV:\n  Of those cells 311 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: 6f068b8f65, CPU: user 4.14s system 0.18s, MEM: 263.59 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 88% 1x equiv_induct (3 sec), 3% 9x opt_clean (0 sec), ...\n",
+          "output_sha256": "bc5d248ffa719169db734120afa5045a185976172c00d7600c5eef9385bec93d",
+          "markers_present": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "formal_success_marker": true,
+          "equiv_cells": 311,
+          "proven_cells": 311,
+          "unproven_cells": 0
+        }
+      }
+    ]
+  },
+  "failures": [],
+  "unclosed": [],
+  "acceptance_unclosed": [
+    "Parent closure, full-top differential, final license review, and user approval remain outside this Build proof."
+  ]
+}

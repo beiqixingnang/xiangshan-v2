@@ -114,11 +114,19 @@ class InstrUncache(Elaboratable):
         domain.rst = self.reset
         module.domains.sync = domain
 
-        state = Signal(2, reset=self.INVALID, name="state")
-        req_addr_reg = Signal(cfg.paddr_bits, reset=0, name="req_addr")
-        resp_data_reg = Signal(cfg.mmio_bus_width, reset=0, name="respDataReg")
-        resp_corrupt_reg = Signal(reset=0, name="respCorruptReg")
-        need_flush = Signal(reset=0, name="needFlush")
+        # Preserve the locked child-instance state names so the parent proof can
+        # pair the exact InstrMMIOEntry registers after flattening.  req_addr is
+        # a resetless Reg() in Scala; the remaining four are RegInit values.
+        # 保留锁定子实例状态名；req_addr 为无复位 Reg()，其余四项为 RegInit。
+        state = Signal(2, reset=self.INVALID, name="entries_0.state")
+        req_addr_reg = Signal(
+            cfg.paddr_bits, reset_less=True, name="entries_0.req_addr"
+        )
+        resp_data_reg = Signal(
+            cfg.mmio_bus_width, reset=0, name="entries_0.respDataReg"
+        )
+        resp_corrupt_reg = Signal(reset=0, name="entries_0.respCorruptReg")
+        need_flush = Signal(reset=0, name="entries_0.needFlush")
         # Decode the four states bitwise to keep generated comparisons
         # explicitly one-bit and warning-free under Verilator.
         state_0 = cast(Any, state[0])

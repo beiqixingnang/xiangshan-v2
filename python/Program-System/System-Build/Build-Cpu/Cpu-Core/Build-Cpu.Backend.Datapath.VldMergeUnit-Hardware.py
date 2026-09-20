@@ -14,7 +14,7 @@ from contextlib import AbstractContextManager
 from dataclasses import dataclass
 from typing import Any, cast
 
-from amaranth import Cat, ClockDomain, ClockSignal, Const, Elaboratable, Module, Mux, Signal
+from amaranth import Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
 
 
@@ -29,6 +29,8 @@ from amaranth.back import verilog
 # 输出捕获载荷。注入的掩码子模块提供 active/agnostic 字节使能；vlWen 保留原值。
 # 端口有意保持锁定 XSTop 协议不变。
 __all__ = [
+    "COVERED_MODULES",
+    "SOURCE_PATHS",
     "UHSCCoreVldMergeUnitConfig",
     "UHSCCoreVldMergeUnit",
     "VldMergeUnitParentConfig",
@@ -38,6 +40,13 @@ __all__ = [
     "build_verilog",
     "main",
 ]
+
+COVERED_MODULES: tuple[str, ...] = ("VldMergeUnit",)
+
+SOURCE_PATHS: tuple[str, ...] = (
+    "upstream/src/main/scala/xiangshan/backend/datapath/VldMergeUnit.scala",
+    "upstream/src/main/scala/xiangshan/backend/fu/vector/Mgu.scala",
+)
 
 
 # Cast Amaranth's generator control to a context-manager protocol. / 将 Amaranth 生成器控制转换为上下文管理器协议。
@@ -166,6 +175,7 @@ class UHSCCoreVldMergeUnit(Elaboratable):
         if self.mask_generator is None:
             raise ValueError("mask_generator dependency must be injected from the V2 NewMgu leaf")
 
+        self.clock = Signal(name="clock")
         self.flush_valid = Signal(name="io_flush_valid")
         self.flush_rob_flag = Signal(name="io_flush_bits_robIdx_flag")
         self.flush_rob_value = Signal(8, name="io_flush_bits_robIdx_value")
@@ -201,7 +211,9 @@ class UHSCCoreVldMergeUnit(Elaboratable):
     def elaborate(self, platform):
         del platform
         module = Module()
-        module.domains.clock = ClockDomain("clock", reset_less=True)
+        clock_domain = ClockDomain("clock", reset_less=True)
+        clock_domain.clk = self.clock
+        module.domains.clock = clock_domain
         wb_valid = Signal(name="wbReg_valid")
         wb_data = Signal(128, name="wbReg_bits_data_0")
         wb_pdest = Signal(7, name="wbReg_bits_pdest")
@@ -312,7 +324,7 @@ def build_verilog(configuration, injected_dependencies):
     top = UHSCCoreVldMergeUnit(geometry, dependencies)
     module_name = str(config_value.get("module", "UHSCCoreVldMergeUnit"))
     ports = [
-        ClockSignal("clock"), top.flush_valid, top.flush_rob_flag, top.flush_rob_value, top.flush_level,
+        top.clock, top.flush_valid, top.flush_rob_flag, top.flush_rob_value, top.flush_level,
         top.writeback_valid, top.writeback_data, top.writeback_pdest,
         top.writeback_rob_flag, top.writeback_rob_value, top.writeback_vec_wen,
         top.writeback_v0_wen, top.writeback_vl_wen, top.writeback_vma,

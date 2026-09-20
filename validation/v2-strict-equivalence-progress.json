@@ -2,11 +2,11 @@
   "schema_version": 1,
   "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_EQUIVALENCE_PROGRESS",
   "build_denominator": 118,
-  "strict_complete_build_count": 33,
-  "fraction": "33/118",
-  "percentage": 27.966102,
+  "strict_complete_build_count": 35,
+  "fraction": "35/118",
+  "percentage": 29.661017,
   "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with the locked source commit, matching source hashes, and either a Yosys SAT no-model miter or fully proven Yosys inductive-equivalence status is counted. STRICT_PENDING and COMPLETE_EQUIVALENCE_VARIANT_ONLY records are inventoried as attempted-but-not-counted instead of failing the rail, and one Build file may not be claimed by several counting proofs.",
-  "non_counting_attempt_count": 10,
+  "non_counting_attempt_count": 9,
   "non_counting_attempts": [
     {
       "evidence": "validation/v2-build-cpu-backend-datapath-wbarbiter-strict-evidence.json",
@@ -141,20 +141,6 @@
       ]
     },
     {
-      "evidence": "validation/v2-build-cpu-frontend-icache-instruncache-strict-evidence.json",
-      "build_id": "Build-Cpu.Frontend.Icache.InstrUncache",
-      "declared_status": "STRICT_PENDING",
-      "audit_failures": [],
-      "proof_failures": [
-        "InstrUncache:yosys_equiv",
-        "InstrUncache: 78 $equiv cells unproven",
-        "negative control did not detect a mutated design"
-      ],
-      "unclosed": [
-        "strict gates did not all pass"
-      ]
-    },
-    {
       "evidence": "validation/v2-build-cpu-memory-dcache-metaarray-strict-evidence.json",
       "build_id": "Build-Cpu.Memory.Dcache.MetaArray",
       "declared_status": "STRICT_PENDING",
@@ -265,7 +251,7 @@
     }
   ],
   "plan_reconciliation": {
-    "plan_count": 33,
+    "plan_count": 35,
     "plan_denominator": 118,
     "status": "PASS"
   },
@@ -864,6 +850,275 @@
       },
       "variant_checks": {
         "NewPipelineConnectPipe": {
+          "status": "PASS",
+          "failures": []
+        }
+      },
+      "formal": {
+        "proof_method": "sequential_variant_set",
+        "command": null,
+        "returncode": null,
+        "status": null,
+        "formal_success_marker": null
+      },
+      "failures": [],
+      "declared_failures": [],
+      "declared_unclosed": []
+    },
+    {
+      "evidence": "validation/v2-build-cpu-backend-datapath-vldmergeunit-strict-evidence.json",
+      "build_id": "Build-Cpu.Backend.Datapath.VldMergeUnit",
+      "declared_status": "COMPLETE_EQUIVALENCE",
+      "source_commit": {
+        "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+        "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+        "status": "PASS"
+      },
+      "status": "PASS",
+      "note": null,
+      "scope": {
+        "kind": "catalog_build_multi_variant",
+        "public_variants": [
+          "VldMergeUnit"
+        ],
+        "variant_count": 1,
+        "combinational_variants": 0,
+        "sequential_variants": 1,
+        "inputs": {
+          "VldMergeUnit_clock": 1,
+          "VldMergeUnit_io_flush_valid": 1,
+          "VldMergeUnit_io_flush_bits_robIdx_flag": 1,
+          "VldMergeUnit_io_flush_bits_robIdx_value": 8,
+          "VldMergeUnit_io_flush_bits_level": 1,
+          "VldMergeUnit_io_writeback_valid": 1,
+          "VldMergeUnit_io_writeback_bits_data_0": 128,
+          "VldMergeUnit_io_writeback_bits_pdest": 7,
+          "VldMergeUnit_io_writeback_bits_robIdx_flag": 1,
+          "VldMergeUnit_io_writeback_bits_robIdx_value": 8,
+          "VldMergeUnit_io_writeback_bits_vecWen": 1,
+          "VldMergeUnit_io_writeback_bits_v0Wen": 1,
+          "VldMergeUnit_io_writeback_bits_vlWen": 1,
+          "VldMergeUnit_io_writeback_bits_vls_vpu_vma": 1,
+          "VldMergeUnit_io_writeback_bits_vls_vpu_vta": 1,
+          "VldMergeUnit_io_writeback_bits_vls_vpu_vsew": 2,
+          "VldMergeUnit_io_writeback_bits_vls_vpu_vm": 1,
+          "VldMergeUnit_io_writeback_bits_vls_vpu_vstart": 8,
+          "VldMergeUnit_io_writeback_bits_vls_vpu_vmask": 128,
+          "VldMergeUnit_io_writeback_bits_vls_vpu_vl": 8,
+          "VldMergeUnit_io_writeback_bits_vls_vpu_veew": 2,
+          "VldMergeUnit_io_writeback_bits_vls_vdIdxInField": 3,
+          "VldMergeUnit_io_writeback_bits_vls_isIndexed": 1,
+          "VldMergeUnit_io_writeback_bits_vls_isMasked": 1
+        },
+        "outputs_compared": {
+          "VldMergeUnit_io_writebackAfterMerge_valid": 1,
+          "VldMergeUnit_io_writebackAfterMerge_bits_data_0": 128,
+          "VldMergeUnit_io_writebackAfterMerge_bits_pdest": 7,
+          "VldMergeUnit_io_writebackAfterMerge_bits_vecWen": 1,
+          "VldMergeUnit_io_writebackAfterMerge_bits_v0Wen": 1,
+          "VldMergeUnit_io_writebackAfterMerge_bits_vlWen": 1
+        },
+        "aggregate_input_bits": 316,
+        "aggregate_compared_output_bits": 139,
+        "variants": {
+          "VldMergeUnit": {
+            "method": "sequential_equivalence",
+            "sequential": true,
+            "locked_reference": "validation/reference-sv/VldMergeUnit.sv",
+            "locked_sha256": "bab5b54d41cdadca31a1eda11737332ed568c7f37e672deaaeba363d472ed122",
+            "children": [
+              "ByteMaskTailGen",
+              "MaskExtractor",
+              "UIntToContLow0s",
+              "UIntToContLow1s",
+              "VldMgu"
+            ],
+            "inputs": {
+              "clock": 1,
+              "io_flush_valid": 1,
+              "io_flush_bits_robIdx_flag": 1,
+              "io_flush_bits_robIdx_value": 8,
+              "io_flush_bits_level": 1,
+              "io_writeback_valid": 1,
+              "io_writeback_bits_data_0": 128,
+              "io_writeback_bits_pdest": 7,
+              "io_writeback_bits_robIdx_flag": 1,
+              "io_writeback_bits_robIdx_value": 8,
+              "io_writeback_bits_vecWen": 1,
+              "io_writeback_bits_v0Wen": 1,
+              "io_writeback_bits_vlWen": 1,
+              "io_writeback_bits_vls_vpu_vma": 1,
+              "io_writeback_bits_vls_vpu_vta": 1,
+              "io_writeback_bits_vls_vpu_vsew": 2,
+              "io_writeback_bits_vls_vpu_vm": 1,
+              "io_writeback_bits_vls_vpu_vstart": 8,
+              "io_writeback_bits_vls_vpu_vmask": 128,
+              "io_writeback_bits_vls_vpu_vl": 8,
+              "io_writeback_bits_vls_vpu_veew": 2,
+              "io_writeback_bits_vls_vdIdxInField": 3,
+              "io_writeback_bits_vls_isIndexed": 1,
+              "io_writeback_bits_vls_isMasked": 1
+            },
+            "outputs_compared": {
+              "io_writebackAfterMerge_valid": 1,
+              "io_writebackAfterMerge_bits_data_0": 128,
+              "io_writebackAfterMerge_bits_pdest": 7,
+              "io_writebackAfterMerge_bits_vecWen": 1,
+              "io_writebackAfterMerge_bits_v0Wen": 1,
+              "io_writebackAfterMerge_bits_vlWen": 1
+            },
+            "input_bits": 316,
+            "output_bits": 139,
+            "abi_exact": true,
+            "deterministic": true,
+            "miter_selfcheck": true,
+            "view_trusted": true,
+            "locked_reference_lint": "PASS",
+            "verdict": "PASS",
+            "success_marker": true,
+            "markers_present": {
+              "0 are unproven.": true,
+              "Equivalence successfully proven!": true
+            },
+            "unconstrained_or_equiv_cells": 311,
+            "proven_cells": 311,
+            "unproven_cells": 0,
+            "sat_variables": null,
+            "sat_clauses": null
+          }
+        },
+        "why_complete": "Every locked module named by this Build's own tables is proven against its exact-name locked reference on the rail its timing requires, with a conservation-audited 5C view where the installed Yosys cannot read the original.",
+        "bounded_tests_counted": false,
+        "injected_dependency": {
+          "target": "NewMgu",
+          "reference_child": "VldMgu",
+          "comparison_boundary": "flattened inside VldMergeUnit"
+        }
+      },
+      "sources": {
+        "validator": {
+          "path": "validation/v2_vldmergeunit_strict_validator.py",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "215498ffb4a3b6ae17fb94a40d3f722136b48e5dc5cd3434f62c13612570eddd",
+          "observed_sha256": "215498ffb4a3b6ae17fb94a40d3f722136b48e5dc5cd3434f62c13612570eddd",
+          "status": "PASS"
+        },
+        "python_build": {
+          "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Datapath.VldMergeUnit-Hardware.py",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "522c880143613a8c5a4ea33280f11d16c2d21c0368bb8b240cffda9a90a4a9c3",
+          "observed_sha256": "522c880143613a8c5a4ea33280f11d16c2d21c0368bb8b240cffda9a90a4a9c3",
+          "status": "PASS"
+        },
+        "reference_sv": {
+          "path": "validation/reference-sv/VldMergeUnit.sv",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "bab5b54d41cdadca31a1eda11737332ed568c7f37e672deaaeba363d472ed122",
+          "observed_sha256": "bab5b54d41cdadca31a1eda11737332ed568c7f37e672deaaeba363d472ed122",
+          "status": "PASS"
+        },
+        "scala": {
+          "path": "upstream/src/main/scala/xiangshan/backend/datapath/VldMergeUnit.scala",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "6ada5b82bf551e1dfe73768f579d84f70263afcac76cba03dca7d431a156d121",
+          "observed_sha256": "6ada5b82bf551e1dfe73768f579d84f70263afcac76cba03dca7d431a156d121",
+          "status": "PASS"
+        }
+      },
+      "source_children": {
+        "ByteMaskTailGen": {
+          "path": "validation/reference-sv/ByteMaskTailGen.sv",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "83a0ebe835eeec55fb729aec16fb93c5432f50130fb86f3b570d26ba727bc2de",
+          "observed_sha256": "83a0ebe835eeec55fb729aec16fb93c5432f50130fb86f3b570d26ba727bc2de",
+          "status": "PASS"
+        },
+        "MaskExtractor": {
+          "path": "validation/reference-sv/MaskExtractor.sv",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "ce0ca7d18915ed4cb27c1766fd8e56c4a19523dfc15bcb4a2add08092092a13a",
+          "observed_sha256": "ce0ca7d18915ed4cb27c1766fd8e56c4a19523dfc15bcb4a2add08092092a13a",
+          "status": "PASS"
+        },
+        "UIntToContLow0s": {
+          "path": "validation/reference-sv/UIntToContLow0s.sv",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "aebda041355c132d9e1b2876dcc0bd719b1cc2efb7199765eb605272258d97ac",
+          "observed_sha256": "aebda041355c132d9e1b2876dcc0bd719b1cc2efb7199765eb605272258d97ac",
+          "status": "PASS"
+        },
+        "UIntToContLow1s": {
+          "path": "validation/reference-sv/UIntToContLow1s.sv",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "5db2a1ab3b5234c81d91b19f52caf43d214350a2ad1f6c88e1ef344692914d98",
+          "observed_sha256": "5db2a1ab3b5234c81d91b19f52caf43d214350a2ad1f6c88e1ef344692914d98",
+          "status": "PASS"
+        },
+        "VldMgu": {
+          "path": "validation/reference-sv/VldMgu.sv",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "cee3e3148fbf46cb4067508c1915480fee34df886cd2f39dacf5592137dfcc44",
+          "observed_sha256": "cee3e3148fbf46cb4067508c1915480fee34df886cd2f39dacf5592137dfcc44",
+          "status": "PASS"
+        }
+      },
+      "validator_dependencies": {
+        "strict_family_rail": {
+          "path": "validation/v2_strict_family_rail.py",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
+          "observed_sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
+          "status": "PASS"
+        },
+        "injected_new_mgu_build": {
+          "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.Vector.NewMgu-Hardware.py",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "ee42c5e9883d8a5cde302065bfdf158c5d52fbaaeb5e4c7448a0d27cf949f420",
+          "observed_sha256": "ee42c5e9883d8a5cde302065bfdf158c5d52fbaaeb5e4c7448a0d27cf949f420",
+          "status": "PASS"
+        }
+      },
+      "reference_lock": {
+        "VldMergeUnit": {
+          "path": "validation/reference-sv/VldMergeUnit.sv",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "bab5b54d41cdadca31a1eda11737332ed568c7f37e672deaaeba363d472ed122",
+          "observed_sha256": "bab5b54d41cdadca31a1eda11737332ed568c7f37e672deaaeba363d472ed122",
+          "status": "PASS"
+        }
+      },
+      "declared_scala_sources": {
+        "upstream/src/main/scala/xiangshan/backend/datapath/VldMergeUnit.scala": {
+          "path": "upstream/src/main/scala/xiangshan/backend/datapath/VldMergeUnit.scala",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "6ada5b82bf551e1dfe73768f579d84f70263afcac76cba03dca7d431a156d121",
+          "observed_sha256": "6ada5b82bf551e1dfe73768f579d84f70263afcac76cba03dca7d431a156d121",
+          "status": "PASS"
+        },
+        "upstream/src/main/scala/xiangshan/backend/fu/vector/Mgu.scala": {
+          "path": "upstream/src/main/scala/xiangshan/backend/fu/vector/Mgu.scala",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "a62980fb0dcc2c02b014a8a50feec39900ff9a303dd8150d82099e49f0daa6c2",
+          "observed_sha256": "a62980fb0dcc2c02b014a8a50feec39900ff9a303dd8150d82099e49f0daa6c2",
+          "status": "PASS"
+        }
+      },
+      "variant_checks": {
+        "VldMergeUnit": {
           "status": "PASS",
           "failures": []
         }
@@ -12749,13 +13004,13 @@
     {
       "evidence": "validation/v2-build-cpu-frontend-icache-instruncache-strict-evidence.json",
       "build_id": "Build-Cpu.Frontend.Icache.InstrUncache",
-      "declared_status": "STRICT_PENDING",
+      "declared_status": "COMPLETE_EQUIVALENCE",
       "source_commit": {
         "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "status": "PASS"
       },
-      "status": "NON_COUNTING",
+      "status": "PASS",
       "note": null,
       "scope": {
         "kind": "catalog_build_multi_variant",
@@ -12828,15 +13083,15 @@
             "miter_selfcheck": true,
             "view_trusted": true,
             "locked_reference_lint": "PASS",
-            "verdict": "FAIL",
-            "success_marker": false,
+            "verdict": "PASS",
+            "success_marker": true,
             "markers_present": {
-              "0 are unproven.": false,
-              "Equivalence successfully proven!": false
+              "0 are unproven.": true,
+              "Equivalence successfully proven!": true
             },
-            "unconstrained_or_equiv_cells": 83,
-            "proven_cells": 5,
-            "unproven_cells": 78,
+            "unconstrained_or_equiv_cells": 152,
+            "proven_cells": 152,
+            "unproven_cells": 0,
             "sat_variables": null,
             "sat_clauses": null
           }
@@ -12846,19 +13101,19 @@
       },
       "sources": {
         "validator": {
-          "path": "validation/v2_strict_family_rail.py",
+          "path": "validation/v2_instruncache_strict_validator.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
-          "observed_sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
+          "expected_sha256": "883eb28f7ae09201d79e2c5a7e67727d4d229016fee7aac02d23e92a25da7e16",
+          "observed_sha256": "883eb28f7ae09201d79e2c5a7e67727d4d229016fee7aac02d23e92a25da7e16",
           "status": "PASS"
         },
         "python_build": {
           "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.InstrUncache-Hardware.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "29e6aee108966749780a911f659a6125b73bda672e72cf34b9c2dedbae4960eb",
-          "observed_sha256": "29e6aee108966749780a911f659a6125b73bda672e72cf34b9c2dedbae4960eb",
+          "expected_sha256": "4308d9c49f06868dfc339907df51593c7cd29668f14375b69074caf8208d6d23",
+          "observed_sha256": "4308d9c49f06868dfc339907df51593c7cd29668f14375b69074caf8208d6d23",
           "status": "PASS"
         },
         "reference_sv": {
@@ -12896,7 +13151,16 @@
           "status": "PASS"
         }
       },
-      "validator_dependencies": {},
+      "validator_dependencies": {
+        "strict_family_rail": {
+          "path": "validation/v2_strict_family_rail.py",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
+          "observed_sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
+          "status": "PASS"
+        }
+      },
       "reference_lock": {
         "InstrUncache": {
           "path": "validation/reference-sv/InstrUncache.sv",
@@ -12919,13 +13183,8 @@
       },
       "variant_checks": {
         "InstrUncache": {
-          "status": "FAIL",
-          "failures": [
-            "formal verdict",
-            "incomplete proven equivalence cells",
-            "unproven equivalence cells",
-            "sequential equivalence full-output markers"
-          ]
+          "status": "PASS",
+          "failures": []
         }
       },
       "formal": {
@@ -12936,14 +13195,8 @@
         "formal_success_marker": null
       },
       "failures": [],
-      "declared_failures": [
-        "InstrUncache:yosys_equiv",
-        "InstrUncache: 78 $equiv cells unproven",
-        "negative control did not detect a mutated design"
-      ],
-      "declared_unclosed": [
-        "strict gates did not all pass"
-      ]
+      "declared_failures": [],
+      "declared_unclosed": []
     },
     {
       "evidence": "validation/v2-build-cpu-frontend-icache-utils-strict-evidence.json",
