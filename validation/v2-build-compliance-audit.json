@@ -96,7 +96,7 @@
   ],
   "policy": {
     "raw_verilog": "Build files must not embed handwritten Verilog; runtime verilog.convert is allowed.",
-    "metadata": "SOURCE_PATHS is auxiliary provenance and is not itself a behavioral implementation; dynamic reads of validation JSON and oversized behavior manifests require a later metadata migration pass.",
+    "metadata": "Migratable Build files contain no SOURCE_PATHS, upstream identities, or runtime validation JSON reads; provenance and locked hashes stay in auxiliary evidence.",
     "promotion": "No item in this baseline is strict-equivalence accepted. CONTRACT_ONLY is required whenever behavior is not implemented."
   },
   "rewrite_batch": {
@@ -112,15 +112,102 @@
       "Build-Cpu.Backend.Decode.ControlFamily": ["UopInfoGen", "VTypeGen", "FPDecoder", "VIAluDecoder"],
       "Build-Cpu.Backend.Fu.FloatingPoint.Family": ["BoothEncoderF64F32F16", "ArrayMulDataModule"],
       "Build-Cpu.Backend.Fu.PMP.Family": ["PMP", "PMPChecker", "PMPChecker_12", "PMPChecker_2", "PMPEntryHandleModule"],
-      "Build-Cpu.Memory.Prefetch.Metadata.Family": ["StreamBitVectorArray", "StrideMetaArray"],
-      "Build-Cpu.Memory.Store.Family": ["SbufferData", "StoreExceptionBuffer", "StoreMisalignBuffer", "StoreUnit"]
+      "Build-Cpu.Memory.Prefetch.Metadata.Family": [],
+      "Build-Cpu.Memory.Store.Family": []
     },
     "contract_only_members": {
       "Build-Cpu.Backend.Decode.ControlFamily": ["Backend", "DecodeUnit", "FusionDecoder", "VecExceptionGen"],
-      "Build-Cpu.Backend.Fu.FloatingPoint.Family": ["FloatAdder", "FloatAdderF32F16MixedPipeline", "FloatAdderF64Pipeline", "FloatDivider", "FloatDividerR64", "FloatFMA", "fpdiv_r64_block", "fpsqrt_r16", "IntToFPDataModule"]
+      "Build-Cpu.Backend.Fu.FloatingPoint.Family": ["FloatAdder", "FloatAdderF32F16MixedPipeline", "FloatAdderF64Pipeline", "FloatDivider", "FloatDividerR64", "FloatFMA", "fpdiv_r64_block", "fpsqrt_r16", "IntToFPDataModule"],
+      "Build-Cpu.Memory.Prefetch.Metadata.Family": ["StreamBitVectorArray", "StrideMetaArray"],
+      "Build-Cpu.Memory.Store.Family": ["SbufferData", "StoreExceptionBuffer", "StoreMisalignBuffer", "StoreUnit"]
     },
     "strict_equivalence_count_delta": 0,
     "note": "Basic import/export smoke passed for the landed members where reported; no strict behavior evidence was generated in this rewrite batch."
+  },
+  "rewrite_batch_2": {
+    "status": "SOURCE_BACKED_PARTIAL_IMPLEMENTATION_BASIC_SMOKE_STRICT_PENDING",
+    "files_touched": [
+      "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Datapath.BypassPipeFamily-Hardware.py",
+      "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Decode.ControlFamily-Hardware.py",
+      "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.FloatingPoint.Family-Hardware.py",
+      "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.PMP.Family-Hardware.py",
+      "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Difftest.StateFamily-Hardware.py",
+      "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Utility.ResidualFamily-Hardware.py",
+      "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Residual.LeafFamily-Hardware.py",
+      "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Mmu.Lsq.Family-Hardware.py",
+      "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Prefetch.Family-Hardware.py",
+      "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Prefetch.Metadata.Family-Hardware.py",
+      "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Store.Family-Hardware.py",
+      "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Vector.Family-Hardware.py"
+    ],
+    "implemented_members": {
+      "Build-Cpu.Dependency.Utility.ResidualFamily": [
+        "CSA3to2",
+        "CSA3to2_20",
+        "CSA3to2_24",
+        "CSA4to2",
+        "IDPool",
+        "JtagStateMachine",
+        "MaxPeriodFibonacciLFSR",
+        "MaxPeriodFibonacciLFSR_3",
+        "OverrideableQueue",
+        "OverrideableQueue_1",
+        "TimeAsync",
+        "r4_qds_v2",
+        "r4_qds_v2_spec"
+      ],
+      "Build-Cpu.Memory.Vector.Family": ["VldMergeUnit", "VsetModule"]
+    },
+    "contract_only_members": {
+      "Build-Cpu.Backend.Datapath.BypassPipeFamily": ["BypassNetwork", "PipeGroupConnect"],
+      "Build-Cpu.Dependency.Difftest.StateFamily": "all 21 members",
+      "Build-Cpu.Dependency.Utility.ResidualFamily": [
+        "CSA_Nto2With3to2MainPipeline",
+        "ClockGate",
+        "DebugTransportModuleJTAG",
+        "JtagTapController",
+        "skidBufferConnect",
+        "PrintCommitIDModule"
+      ],
+      "Build-Cpu.Memory.Mmu.Lsq.Family": "all 8 members",
+      "Build-Cpu.Memory.Prefetch.Family": "all 9 members",
+      "Build-Cpu.Memory.Prefetch.Metadata.Family": "all 2 members",
+      "Build-Cpu.Memory.Store.Family": "all 4 members",
+      "Build-Cpu.Memory.Vector.Family": ["VLMergeBufferImp", "VSMergeBufferImp", "VSegmentUnit", "VfofBuffer", "VirtualLoadQueue"]
+    },
+    "audited_downgrades": [
+      "Bypass/Pipe equations were heuristic and had prior unproven equivalence cells.",
+      "Difftest input-only keep registers were unobservable invented state.",
+      "MMU/LSQ address passthrough and fixed free-count responses were guessed protocol behavior.",
+      "Prefetch generic port forwarding and folded state were not the locked implementations."
+    ],
+    "retired_subjects": {
+      "Build-Cpu.Residual.LeafFamily": "RETIRED_REPLACED_BY_SOURCE_FAMILIES; catalog/path cleanup only; no implementation or coverage credit"
+    },
+    "port_catalog_compaction": {
+      "status": "PASS_ABI_IDENTICAL",
+      "file_count": 12,
+      "rule": "Exact ordered member/name/direction/width expansion was compared before and after each rewrite; compaction has zero behavior-progress credit.",
+      "notable_records": [
+        {"build": "Build-Cpu.Backend.Datapath.BypassPipeFamily", "ports": 2633, "before_lines": 13352, "after_lines": 2710},
+        {"build": "Build-Cpu.Dependency.Difftest.StateFamily", "ports": 1032, "before_lines": 5296, "after_lines": 1135},
+        {"build": "Build-Cpu.Backend.Decode.ControlFamily", "ports": 1484, "before_lines": 7627, "after_lines": 1688},
+        {"build": "Build-Cpu.Backend.Fu.PMP.Family", "ports": 1861, "before_lines": 9521, "after_lines": 2076},
+        {"build": "Build-Cpu.Memory.Store.Family", "ports": 2682, "before_lines": 13703, "after_lines": 2974}
+      ]
+    },
+    "basic_gates": {
+      "py_compile": "PASS",
+      "all_member_deterministic_export": "PASS",
+      "utility_combinational_direct_vectors": 256,
+      "utility_qds_direct_vectors": 576,
+      "utility_stateful_direct_scenarios": 4,
+      "forbidden_build_metadata_and_raw_hdl_scan": "PASS",
+      "global_pyright": "DEFERRED_TO_LARGE_MILESTONE"
+    },
+    "strict_equivalence_count_delta": 0,
+    "strict_equivalence_fraction": "39/118",
+    "note": "No rewritten member is promoted to strict equivalence; prior strict failures remain recorded and changed Build hashes invalidate their old attempts."
   },
   "status": "REWRITE_BATCH_BASIC_SMOKE_RECORDED_STRICT_PENDING"
 }

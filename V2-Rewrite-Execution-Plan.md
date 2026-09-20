@@ -415,3 +415,26 @@ verified modules, behavior-verified modules, missing modules, current Build
 count, current raw/effective Build Python lines, this-round effective additions,
 new Scala source roots, validation results, and the commit pushed. Coverage is
 never promoted to behavioral equivalence merely because a Build file exists.
+
+## Compact port-ABI rewrite amendment (2026-09-20)
+
+Port-catalog cleanup is part of each active family rewrite, not a separate
+behavioral milestone. Migratable Builds retain their exact public ABI as
+self-contained Python `PORT_SPECS`, but generator-expanded
+`LOCKED_PORT_SPECS` blocks, migration markers, upstream paths, and runtime
+validation-JSON reads are removed. Repeated lanes and records may use compact,
+deterministic Python helpers; irregular ports remain literal tuples.
+
+Every affected Build is snapshotted before modification and re-imported after
+modification. The ordered member set and every `(name, direction, width)` row
+must remain identical. `py_compile` and deterministic same-name export are
+rerun for the owned batch. Any mismatch restores the original file and fails
+the batch. Catalog line removal, formatting changes, and repeated constants
+never count as effective behavior lines or increase rewrite, strict-equivalence,
+or acceptance progress.
+
+The first active wave covers Bypass/Pipe, Difftest.State, MMU/LSQ, Prefetch,
+Vector, Decode.Control, FloatingPoint, PMP, Store, Prefetch.Metadata, and the
+two residual aggregate subjects. `Residual.LeafFamily` remains retired and
+receives no implementation credit; its modules are owned by their source-backed
+replacement families.

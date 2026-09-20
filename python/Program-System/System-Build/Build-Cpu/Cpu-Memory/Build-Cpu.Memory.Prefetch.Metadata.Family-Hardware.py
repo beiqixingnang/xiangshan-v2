@@ -7,11 +7,49 @@ from amaranth import Array, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
 
 # Module Contract
-__all__ = ["COVERED_MODULES", "PORT_SPECS", "FamilySpec", "family_spec", "MemoryFamily", "build_verilog", "main"]
+__all__ = ["COVERED_MODULES", "IMPLEMENTED_MEMBERS", "CONTRACT_ONLY_MEMBERS", "PORT_SPECS", "FamilySpec", "family_spec", "MemoryFamily", "build_verilog", "main"]
 COVERED_MODULES = ('StreamBitVectorArray', 'StrideMetaArray')
+IMPLEMENTED_MEMBERS: tuple[str, ...] = ()
+CONTRACT_ONLY_MEMBERS = COVERED_MODULES
 # CONTRACT_ONLY: these bounded CAMs are not promoted to behavioral equivalence
 # until locked-reference differential evidence covers all replacement/training paths.
-PORT_SPECS = {'StreamBitVectorArray': [['clock', 'input', 1], ['reset', 'input', 1], ['io_enable', 'input', 1], ['io_train_req_ready', 'output', 1], ['io_train_req_valid', 'input', 1], ['io_train_req_bits_vaddr', 'input', 50], ['io_train_req_bits_miss', 'input', 1], ['io_train_req_bits_pfHitStream', 'input', 1], ['io_l1_prefetch_req_valid', 'output', 1], ['io_l1_prefetch_req_bits_region', 'output', 40], ['io_l1_prefetch_req_bits_bit_vec', 'output', 16], ['io_l2_l3_prefetch_req_valid', 'output', 1], ['io_l2_l3_prefetch_req_bits_region', 'output', 40], ['io_l2_l3_prefetch_req_bits_bit_vec', 'output', 16], ['io_l2_l3_prefetch_req_bits_sink', 'output', 2]], 'StrideMetaArray': [['clock', 'input', 1], ['reset', 'input', 1], ['io_train_req_ready', 'output', 1], ['io_train_req_valid', 'input', 1], ['io_train_req_bits_vaddr', 'input', 50], ['io_train_req_bits_pc', 'input', 50], ['io_l1_prefetch_req_valid', 'output', 1], ['io_l1_prefetch_req_bits_region', 'output', 40], ['io_l1_prefetch_req_bits_bit_vec', 'output', 16], ['io_l2_l3_prefetch_req_valid', 'output', 1], ['io_l2_l3_prefetch_req_bits_region', 'output', 40], ['io_l2_l3_prefetch_req_bits_bit_vec', 'output', 16]]}
+PortSpec = tuple[str, str, int]
+
+PORT_SPECS: dict[str, tuple[PortSpec, ...]] = {
+    'StreamBitVectorArray': (
+        ('clock', 'input', 1),
+        ('reset', 'input', 1),
+        ('io_enable', 'input', 1),
+        ('io_train_req_ready', 'output', 1),
+        ('io_train_req_valid', 'input', 1),
+        ('io_train_req_bits_vaddr', 'input', 50),
+        ('io_train_req_bits_miss', 'input', 1),
+        ('io_train_req_bits_pfHitStream', 'input', 1),
+        ('io_l1_prefetch_req_valid', 'output', 1),
+        ('io_l1_prefetch_req_bits_region', 'output', 40),
+        ('io_l1_prefetch_req_bits_bit_vec', 'output', 16),
+        ('io_l2_l3_prefetch_req_valid', 'output', 1),
+        ('io_l2_l3_prefetch_req_bits_region', 'output', 40),
+        ('io_l2_l3_prefetch_req_bits_bit_vec', 'output', 16),
+        ('io_l2_l3_prefetch_req_bits_sink', 'output', 2),
+    ),
+    'StrideMetaArray': (
+        ('clock', 'input', 1),
+        ('reset', 'input', 1),
+        ('io_train_req_ready', 'output', 1),
+        ('io_train_req_valid', 'input', 1),
+        ('io_train_req_bits_vaddr', 'input', 50),
+        ('io_train_req_bits_pc', 'input', 50),
+        ('io_l1_prefetch_req_valid', 'output', 1),
+        ('io_l1_prefetch_req_bits_region', 'output', 40),
+        ('io_l1_prefetch_req_bits_bit_vec', 'output', 16),
+        ('io_l2_l3_prefetch_req_valid', 'output', 1),
+        ('io_l2_l3_prefetch_req_bits_region', 'output', 40),
+        ('io_l2_l3_prefetch_req_bits_bit_vec', 'output', 16),
+    ),
+}
+
+
 
 # Configuration
 class FamilySpec:

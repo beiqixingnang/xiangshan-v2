@@ -460,6 +460,17 @@
    "status": "ACTIVE",
    "objective": "Replace mechanically expanded locked-port catalogs in migratable Build Python with compact deterministic helpers while preserving the exact expanded ABI.",
    "scope": "All Build files containing BEGIN LOCKED PORT CATALOG/LOCKED_PORT_SPECS or equivalent generator-expanded member port tables; prioritize active rewrite batches and catalogs above 60 percent of file lines.",
+   "latest_wave": {
+    "batch_id": "V2-COMPACT-ABI-UTILITY-REWRITE-002",
+    "status": "BASIC_GATES_PASS_STRICT_PENDING",
+    "build_file_count": 12,
+    "source_backed_members_added": 13,
+    "audited_contract_only_downgrades": 40,
+    "retired_scaffold_implementation_credit": 0,
+    "strict_equivalence_count_delta": 0,
+    "strict_equivalence_fraction": "39/118",
+    "evidence": "validation/v2-build-compliance-audit.json"
+   },
    "allowed_representation": ["tuple literals for irregular ports", "indexed tuple comprehensions", "small pure Python standard-library helpers", "Amaranth Signal construction from the expanded PORT_SPECS mapping"],
    "forbidden_representation": ["runtime JSON/validation reads", "Scala or upstream source paths in Build code", "raw Verilog/SystemVerilog text", "blind textual replacement", "port-order or ABI inference from unordered mappings"],
    "required_gate": "Before/after expanded ordered (name,direction,width) digest must match for every member; deterministic same-name build_verilog smoke and py_compile must pass.",

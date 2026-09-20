@@ -17,10 +17,11 @@
         "BypassNetwork:yosys_equiv",
         "BypassNetwork: 10778 $equiv cells unproven",
         "PipeGroupConnect:yosys_equiv",
-        "PipeGroupConnect: 2828 $equiv cells unproven"
+        "PipeGroupConnect: 2828 $equiv cells unproven",
+        "implementation rewritten after prior strict attempt; strict proof must be rerun"
       ],
       "unclosed": [
-        "strict gates did not all pass"
+        "strict proof invalidated by implementation rewrite and exact ABI-preserving catalog compaction; rerun the complete family rail"
       ]
     },
     {
@@ -101,10 +102,10 @@
       "declared_status": "STRICT_PENDING",
       "audit_failures": [],
       "proof_failures": [
-        "implementation rewritten after prior strict attempt; strict proof must be rerun"
+        "implementation rewritten and its exact ABI catalog compacted after prior strict attempt; strict proof must be rerun"
       ],
       "unclosed": [
-        "strict proof invalidated by implementation rewrite; rerun the complete family rail"
+        "strict proof invalidated by implementation rewrite and exact ABI-preserving catalog compaction; rerun the complete family rail"
       ]
     },
     {
@@ -192,10 +193,12 @@
         "skidBufferConnect:yosys_equiv",
         "skidBufferConnect: 583 $equiv cells unproven",
         "aggregate SAT miter",
-        "pyright rail"
+        "pyright rail",
+        "implementation rewritten after prior strict attempt; strict proof must be rerun"
       ],
       "unclosed": [
-        "strict gates did not all pass"
+        "strict gates did not all pass",
+        "six members remain CONTRACT_ONLY and the complete family rail must be rerun"
       ]
     },
     {
@@ -281,10 +284,10 @@
       "declared_status": "STRICT_PENDING",
       "audit_failures": [],
       "proof_failures": [
-        "implementation rewritten after prior strict attempt; strict proof must be rerun"
+        "implementation rewritten and its exact ABI catalog compacted after prior strict attempt; strict proof must be rerun"
       ],
       "unclosed": [
-        "strict proof invalidated by implementation rewrite; rerun the complete family rail"
+        "strict proof invalidated by implementation rewrite and exact ABI-preserving catalog compaction; rerun the complete family rail"
       ]
     },
     {
@@ -314,10 +317,11 @@
         "output-less member, nothing observable to compare: DiffExtTrapEvent",
         "output-less member, nothing observable to compare: DiffExtTriggerCSRState",
         "output-less member, nothing observable to compare: DiffExtVecCSRState",
-        "pyright rail"
+        "pyright rail",
+        "implementation rewritten after prior strict attempt; strict proof must be rerun"
       ],
       "unclosed": [
-        "strict gates did not all pass"
+        "strict proof invalidated by implementation rewrite and exact ABI-preserving catalog compaction; output-less acceptance policy remains unresolved"
       ]
     }
   ],
@@ -6136,8 +6140,8 @@
           "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Datapath.BypassPipeFamily-Hardware.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "19470af5d8c765bf2b98cf49245bca972a9dc7647402759f0d6d5dbc73351305",
-          "observed_sha256": "19470af5d8c765bf2b98cf49245bca972a9dc7647402759f0d6d5dbc73351305",
+          "expected_sha256": "29b895d9cf2bd6216e12d4e8798d55158b4e198d99ef7ccb39254a385b4276bf",
+          "observed_sha256": "29b895d9cf2bd6216e12d4e8798d55158b4e198d99ef7ccb39254a385b4276bf",
           "status": "PASS"
         },
         "reference_sv": {
@@ -6284,10 +6288,11 @@
         "BypassNetwork:yosys_equiv",
         "BypassNetwork: 10778 $equiv cells unproven",
         "PipeGroupConnect:yosys_equiv",
-        "PipeGroupConnect: 2828 $equiv cells unproven"
+        "PipeGroupConnect: 2828 $equiv cells unproven",
+        "implementation rewritten after prior strict attempt; strict proof must be rerun"
       ],
       "declared_unclosed": [
-        "strict gates did not all pass"
+        "strict proof invalidated by implementation rewrite and exact ABI-preserving catalog compaction; rerun the complete family rail"
       ]
     },
     {
@@ -21226,8 +21231,8 @@
           "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.PMP.Family-Hardware.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "73008753c3627de8b8053a7cb2fd2d8e479cf2558a5d39b452bcabe74f0f0cde",
-          "observed_sha256": "73008753c3627de8b8053a7cb2fd2d8e479cf2558a5d39b452bcabe74f0f0cde",
+          "expected_sha256": "81d594241ff56c307dfd2b5752f72761fbb879047cf69bc684bb186ed157852f",
+          "observed_sha256": "81d594241ff56c307dfd2b5752f72761fbb879047cf69bc684bb186ed157852f",
           "status": "PASS"
         },
         "reference_sv": {
@@ -21371,10 +21376,10 @@
       },
       "failures": [],
       "declared_failures": [
-        "implementation rewritten after prior strict attempt; strict proof must be rerun"
+        "implementation rewritten and its exact ABI catalog compacted after prior strict attempt; strict proof must be rerun"
       ],
       "declared_unclosed": [
-        "strict proof invalidated by implementation rewrite; rerun the complete family rail"
+        "strict proof invalidated by implementation rewrite and exact ABI-preserving catalog compaction; rerun the complete family rail"
       ]
     },
     {
@@ -28049,8 +28054,8 @@
           "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Utility.ResidualFamily-Hardware.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "c49dde2347bbd684f188e6b629c6c745fd0249d18134748e3219068ac5744857",
-          "observed_sha256": "c49dde2347bbd684f188e6b629c6c745fd0249d18134748e3219068ac5744857",
+          "expected_sha256": "8864c37fc6221ee32144e1bfd1632969db2a68e6ae9038f2d5ec571b53fd3360",
+          "observed_sha256": "8864c37fc6221ee32144e1bfd1632969db2a68e6ae9038f2d5ec571b53fd3360",
           "status": "PASS"
         },
         "reference_sv": {
@@ -28435,10 +28440,12 @@
         "skidBufferConnect:yosys_equiv",
         "skidBufferConnect: 583 $equiv cells unproven",
         "aggregate SAT miter",
-        "pyright rail"
+        "pyright rail",
+        "implementation rewritten after prior strict attempt; strict proof must be rerun"
       ],
       "declared_unclosed": [
-        "strict gates did not all pass"
+        "strict gates did not all pass",
+        "six members remain CONTRACT_ONLY and the complete family rail must be rerun"
       ]
     },
     {
@@ -34153,8 +34160,8 @@
           "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Prefetch.Metadata.Family-Hardware.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "514a493eac37e24430a792db25cc04cda308b5112eac18389abbbb42914b76d5",
-          "observed_sha256": "514a493eac37e24430a792db25cc04cda308b5112eac18389abbbb42914b76d5",
+          "expected_sha256": "1f8e6e165121bbb08e1966eb5253f7eb1385b2f9f69cf54ef4b2ca2972d65412",
+          "observed_sha256": "1f8e6e165121bbb08e1966eb5253f7eb1385b2f9f69cf54ef4b2ca2972d65412",
           "status": "PASS"
         },
         "reference_sv": {
@@ -34218,10 +34225,10 @@
       },
       "failures": [],
       "declared_failures": [
-        "implementation rewritten after prior strict attempt; strict proof must be rerun"
+        "implementation rewritten and its exact ABI catalog compacted after prior strict attempt; strict proof must be rerun"
       ],
       "declared_unclosed": [
-        "strict proof invalidated by implementation rewrite; rerun the complete family rail"
+        "strict proof invalidated by implementation rewrite and exact ABI-preserving catalog compaction; rerun the complete family rail"
       ]
     },
     {
@@ -45232,8 +45239,8 @@
           "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Difftest.StateFamily-Hardware.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "f5bab0d39157cf5e44daa1c3e8fdb1b632ee4b2117924ae4216ed789e4a58ec9",
-          "observed_sha256": "f5bab0d39157cf5e44daa1c3e8fdb1b632ee4b2117924ae4216ed789e4a58ec9",
+          "expected_sha256": "43dad12808541266f74bd5a5747718f1254bf6260ad01ca5280b4cfc2f39421a",
+          "observed_sha256": "43dad12808541266f74bd5a5747718f1254bf6260ad01ca5280b4cfc2f39421a",
           "status": "PASS"
         },
         "reference_sv": {
@@ -45702,10 +45709,11 @@
         "output-less member, nothing observable to compare: DiffExtTrapEvent",
         "output-less member, nothing observable to compare: DiffExtTriggerCSRState",
         "output-less member, nothing observable to compare: DiffExtVecCSRState",
-        "pyright rail"
+        "pyright rail",
+        "implementation rewritten after prior strict attempt; strict proof must be rerun"
       ],
       "declared_unclosed": [
-        "strict gates did not all pass"
+        "strict proof invalidated by implementation rewrite and exact ABI-preserving catalog compaction; output-less acceptance policy remains unresolved"
       ]
     },
     {

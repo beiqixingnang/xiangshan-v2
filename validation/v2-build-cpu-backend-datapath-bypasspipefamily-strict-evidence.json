@@ -5384,8 +5384,8 @@
     },
     "python_build": {
       "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Datapath.BypassPipeFamily-Hardware.py",
-      "sha256": "19470af5d8c765bf2b98cf49245bca972a9dc7647402759f0d6d5dbc73351305",
-      "bytes": 273910
+      "sha256": "29b895d9cf2bd6216e12d4e8798d55158b4e198d99ef7ccb39254a385b4276bf",
+      "bytes": 149887
     },
     "reference_sv": {
       "path": "validation/reference-sv/BypassNetwork.sv",
@@ -5725,10 +5725,11 @@
     "BypassNetwork:yosys_equiv",
     "BypassNetwork: 10778 $equiv cells unproven",
     "PipeGroupConnect:yosys_equiv",
-    "PipeGroupConnect: 2828 $equiv cells unproven"
+    "PipeGroupConnect: 2828 $equiv cells unproven",
+    "implementation rewritten after prior strict attempt; strict proof must be rerun"
   ],
   "unclosed": [
-    "strict gates did not all pass"
+    "strict proof invalidated by implementation rewrite and exact ABI-preserving catalog compaction; rerun the complete family rail"
   ],
   "acceptance_unclosed": [
     "Parent closure, full-top differential, final license review, and user approval remain outside this Build proof."
