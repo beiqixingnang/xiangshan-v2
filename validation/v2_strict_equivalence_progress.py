@@ -537,6 +537,9 @@ def verify_evidence(path: Path, expected_source_commit: str) -> dict[str, Any]:
     source_children = verify_record_map(
         sources.get("reference_children", {}) if isinstance(sources, dict) else {},
         "reference_child", failures)
+    validator_dependencies = verify_record_map(
+        sources.get("validator_dependencies", {}) if isinstance(sources, dict) else {},
+        "validator_dependency", failures)
     reference_lock = verify_reference_lock(payload, failures)
     declared_scala = verify_declared_scala(payload, failures, counted=not non_counting)
     variant_checks = verify_variant_scope(payload, failures, counted=not non_counting)
@@ -729,6 +732,7 @@ def verify_evidence(path: Path, expected_source_commit: str) -> dict[str, Any]:
         "scope": scope,
         "sources": verified_sources,
         "source_children": source_children,
+        "validator_dependencies": validator_dependencies,
         "reference_lock": reference_lock,
         "declared_scala_sources": declared_scala,
         "variant_checks": variant_checks,

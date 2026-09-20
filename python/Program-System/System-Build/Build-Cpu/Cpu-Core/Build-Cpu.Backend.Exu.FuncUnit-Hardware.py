@@ -32,9 +32,9 @@ __all__ = [
 
 # Locked behavioural authority for every covered module. / 每个覆盖模块的锁定行为权威。
 SOURCE_PATHS = (
-    "xiangshan/backend/fu/FuncUnit.scala",
-    "xiangshan/backend/fu/Bku.scala",
-    "xiangshan/backend/exu/ExeUnit.scala",
+    "upstream/src/main/scala/xiangshan/backend/fu/FuncUnit.scala",
+    "upstream/src/main/scala/xiangshan/backend/fu/Bku.scala",
+    "upstream/src/main/scala/xiangshan/backend/exu/ExeUnit.scala",
 )
 
 # Port geometry copied verbatim from validation/v2-locked-hierarchy.json (width "" => 1).
@@ -1196,7 +1196,7 @@ def alu_result(func, src1, src2):
     pack = Cat(s1[0:32], s2[0:32])
     rev8 = Cat(*[s1[i * 8:i * 8 + 8] for i in range(7, -1, -1)])
     # ShiftResultSelect. / 移位结果选择。
-    simple = (sll, sll, bclr, bset, binv, srl, Cat(Const(0, 63), bext), sra)
+    simple = (sll, sll, bclr, bset, binv, srl, _zext(bext, 64), sra)
     shift_res = Mux(f[3:4], Mux(f[1:2], ror, rol), simple[0])
     for k in range(1, 8):
         shift_res = Mux(~f[3:4] & (f[0:3] == Const(k, 3)), simple[k], shift_res)
@@ -1262,13 +1262,17 @@ def branch_taken(m: Any, func: Value, src1: Value, src2: Value, pred_taken: Valu
     sub_s = Signal(65, name=prefix + "_sub65")
     xor_s = Signal(64, name=prefix + "_xor")
     m.d.comb += [
-        sub_s.eq(cast(Any, Cat(Const(0, 1), s1)) + cast(Any, Cat(Const(0, 1), ~s2)) + Const(1, 65)),
+        sub_s.eq(cast(Any, Cat(s1, Const(0, 1))) + cast(Any, Cat(~s2, Const(0, 1))) + Const(1, 65)),
         xor_s.eq(s1 ^ s2),
     ]
     sltu = cast(Any, ~(cast(Any, sub_s)[64:65]))
     slt = cast(Any, s1[63:64]) ^ cast(Any, s2[63:64]) ^ sltu
     btype = f[1:4]
-    cond = Mux(btype == Const(0, 3), ~_or_reduce(xor_s), Mux(btype == Const(2, 3), slt, sltu))
+    cond = Mux(
+        btype == Const(0, 3),
+        ~_or_reduce(xor_s),
+        Mux(btype == Const(2, 3), slt, Mux(btype == Const(4, 3), sltu, Const(0, 1))),
+    )
     taken = cond ^ f[0:1]
     mispredict = cast(Any, pred_taken) ^ taken
     return taken, mispredict
@@ -1285,7 +1289,7 @@ def addr_add_result(m: Any, pc_extend: Value, taken: Value, imm: Value, next_pc_
     m.d.comb += [
         pc_s.eq(cast(Any, pc_extend)),
         imm_s.eq(_sext(cast(Any, imm)[0:15], 51)),
-        seq.eq(Cat(Const(0, 45), cast(Any, next_pc_offset), Const(0, 1))),
+        seq.eq(Cat(Const(0, 1), cast(Any, next_pc_offset), Const(0, 45))),
         t.eq(Mux(cast(Any, taken), pc_s + imm_s, pc_s + seq)),
         out.eq(_sext(t, 64)),
     ]
@@ -2097,9 +2101,9 @@ def build_jump_unit(self: "ExuFuncModule", m: Any) -> None:
     sext_pc = p["io_instrAddrTransType_sv39"] | p["io_instrAddrTransType_sv48"]
     pc = Mux(sext_pc, _sext(p["io_in_bits_data_pc"], 64), _zext(p["io_in_bits_data_pc"], 64))
     offset = _sext(p["io_in_bits_data_imm"][0:33], 64)
-    snpc = pc + (cast(Any, Cat(Const(0, 59), p["io_in_bits_data_nextPcOffset"])) << 1)
+    snpc = pc + Cat(Const(0, 1), p["io_in_bits_data_nextPcOffset"], Const(0, 58))
     target_raw = Mux(is_jalr, p["io_in_bits_data_src_0"] + offset, pc + offset)
-    target = Cat(target_raw[1:64], Const(0, 1))
+    target = Cat(Const(0, 1), target_raw[1:64])
     jmp_target = p["io_in_bits_ctrl_predictInfo_target"]
     pred_taken = p["io_in_bits_ctrl_predictInfo_taken"]
     mis_pred = (target[0:50] != jmp_target) | ~pred_taken
@@ -2109,7 +2113,7 @@ def build_jump_unit(self: "ExuFuncModule", m: Any) -> None:
         target,
         "jmu",
     )
-    result = Mux(is_auipc, target, snpc)
+    result = Mux(is_auipc, target_raw, snpc)
     rd = "io_out_bits_res_redirect_bits_"
     m.d.comb += [
         p["io_out_valid"].eq(p["io_in_valid"]),

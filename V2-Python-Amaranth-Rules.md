@@ -237,7 +237,12 @@ work directory, never written back, limited to:
    of identical width and name; where the declaration carries an initializer
    (`automatic logic [2:0] x = expr;`), the hoisted `reg` replaces the statement
    and the original line becomes the bare assignment `x = expr;`;
-3. renaming only the reference module for the equivalence pair.
+3. normalizing a positional packed assignment pattern from ``'{a, b, ...}`` to
+   the bit-identical packed concatenation ``{a, b, ...}`` only when the target is
+   a statically sized packed vector or packed array. Keyed, typed, `default:`,
+   unpacked, or otherwise context-dependent assignment patterns remain
+   prohibited;
+4. renaming only the reference module for the equivalence pair.
 
 A validator using a view must enforce and record all of the following, and must
 fail the run if any is false:
@@ -249,7 +254,9 @@ fail the run if any is false:
   its module-scope `reg` form or initializer assignment. The significant-line
   delta must equal the number of initialized declarations, because one
   declaration-with-initializer becomes one `reg` declaration plus one bare
-  assignment;
+  assignment. A positional packed-pattern normalization must replace exactly one
+  significant line by its apostrophe-free counterpart and must not alter the
+  significant-line count;
 - every register update equation survives unchanged;
 - the locked original itself still lints under Verilator in the locked synthesis
   preprocessor context, proving the original was valid rather than silently
@@ -267,7 +274,7 @@ chosen — a bare `flatten` deletes the reference top and `equiv_make` then repo
 
 Equivalence is claimed against that view. This is a frontend workaround, not a
 relaxation of section 6: the locked artifact is never modified, and any
-transformation beyond the three listed above remains prohibited. Where semantics
+transformation beyond the four listed above remains prohibited. Where semantics
 cannot be compared through such a view, the record stays `STRICT_PENDING` and the
 central audit inventories it as an attempt rather than progress.
 
