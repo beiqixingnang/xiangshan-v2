@@ -13,7 +13,7 @@ import json
 import zlib
 from typing import Any, cast
 
-from amaranth import ClockDomain, Elaboratable, Module, Signal
+from amaranth import Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
 
 __all__ = [
@@ -151,6 +151,78 @@ class VectorDatapathFamily(Elaboratable):
             domain.clk = self.ports["clock"]
             domain.rst = self.ports["reset"]
             module.domains += domain
+        # The three source-type leaves are pure combinational decoders.  Keep
+        # their equations explicit (rather than using the old all-zero stub)
+        # so every input valuation is observable in the strict SAT miter.
+        if self.member == "VIAluSrcTypeModule":
+            op = self.ports["io_in_fuOpType"]
+            vsew = self.ports["io_in_vsew"]
+            is_ext = self.ports["io_in_isExt"]
+            is_mask = self.ports["io_in_isDstMask"]
+            fmt = op[7:9]
+            sign = op[6]
+            x2 = (vsew + 1)[:2]
+            f2 = (vsew - 1)[:2]
+            f4 = (vsew - 2)[:2]
+            f8 = (vsew - 3)[:2]
+            # Chisel Cat(a,b,c) places a at the high end.
+            add_vv = Cat(vsew, vsew, vsew)
+            add_vvw = Cat(x2, vsew, vsew)
+            add_wvw = Cat(x2, vsew, x2)
+            add_wvv = Cat(vsew, vsew, x2)
+            add = Mux(fmt == 0, add_vv,
+                      Mux(fmt == 1, add_vvw,
+                          Mux(fmt == 2, add_wvw, add_wvv)))
+            # Mux1H has a zero default for the unsupported fourth format.
+            ext = Mux(fmt == 0, Cat(vsew, f2, f2),
+                      Mux(fmt == 1, Cat(vsew, f4, f4),
+                          Mux(fmt == 2, Cat(vsew, f8, f8), Const(0, 6))))
+            # VVM/VVMM use the signedness bit and current SEW; MMM is all
+            # mask-typed (4'hf) for each operand.
+            mask_type = Mux((fmt == 1) | (fmt == 2),
+                            Cat(vsew, sign, Const(0, 1)),
+                            Mux(fmt == 3, Const(0xF, 4), Const(0, 4)))
+            add_vs2 = Cat(add[4:6], sign, Const(0, 1))
+            add_vs1 = Cat(add[2:4], sign, Const(0, 1))
+            add_vd = Cat(add[0:2], sign, Const(0, 1))
+            ext_vs2 = Cat(ext[4:6], sign, Const(0, 1))
+            ext_vs1 = Cat(ext[2:4], sign, Const(0, 1))
+            ext_vd = Cat(ext[0:2], sign, Const(0, 1))
+            module.d.comb += [
+                self.ports["io_out_vs1Type"].eq(
+                    Mux(is_mask, mask_type,
+                        Mux(is_ext, ext_vs1, add_vs1))),
+                self.ports["io_out_vs2Type"].eq(
+                    Mux(is_mask, mask_type,
+                        Mux(is_ext, ext_vs2, add_vs2))),
+                self.ports["io_out_vdType"].eq(
+                    Mux(is_mask, Mux(fmt == 0, Const(0, 4), Const(0xF, 4)),
+                        Mux(is_ext, ext_vd, add_vd))),
+                self.ports["io_out_isVextF2"].eq((op[:6] == 2) & (fmt == 0)),
+                self.ports["io_out_isVextF4"].eq((op[:6] == 2) & (fmt == 1)),
+                self.ports["io_out_isVextF8"].eq((op[:6] == 2) & (fmt == 2)),
+            ]
+            return module
+        if self.member == "VIMacSrcTypeModule":
+            op = self.ports["io_in_fuOpType"]
+            vsew = self.ports["io_in_vsew"]
+            module.d.comb += [
+                self.ports["io_out_vs1Type"].eq(Cat(vsew, op[5], Const(0, 1))),
+                self.ports["io_out_vs2Type"].eq(Cat(vsew, op[6], Const(0, 1))),
+            ]
+            return module
+        if self.member == "VPermSrcTypeModule":
+            op = self.ports["io_in_fuOpType"]
+            vsew = self.ports["io_in_vsew"]
+            vrgatherei16 = cast(Any, op[5]) & ~cast(Any, op[1])
+            vs1 = Mux(vrgatherei16, Const(1, 4),
+                      Mux(cast(Any, op[5]) & cast(Any, op[1]), Const(0xF, 4),
+                          Cat(vsew, op[6], op[6])))
+            module.d.comb += [
+                self.ports["io_out_vs1Type"].eq(vs1),
+                self.ports["io_out_vs2Type"].eq(Cat(vsew, Const(0, 2))),
+            ]
+            return module
         for name, direction, _width in self.specs:
             if direction == "output":
                 module.d.comb += self.ports[name].eq(0)
