@@ -25,6 +25,7 @@ DIRECT_TEST = ROOT / (
 EVIDENCE = ROOT / "validation/v2-utility-residual-rewrite-wave-results.json"
 MEMBERS = (
     "CSA_Nto2With3to2MainPipeline",
+    "ClockGate",
     "JtagTapController",
     "skidBufferConnect",
 )
@@ -102,7 +103,8 @@ def main() -> int:
         "strict_equivalence_fraction": "39/118",
         "status": (
             "PASS_BOUNDED_PARTIAL_FORMAL"
-            if direct_pass and len(formal_passes) == 2 and formal_pending == ["JtagTapController"]
+            if direct_pass and formal_passes == ["CSA_Nto2With3to2MainPipeline", "skidBufferConnect"]
+            and formal_pending == ["ClockGate", "JtagTapController"]
             else "FAIL"
         ),
         "unclosed": [

@@ -468,14 +468,17 @@ previously requested and is not represented as a pass for this wave.
 
 The residual utility aggregate now has source-backed Amaranth implementations
 for `CSA_Nto2With3to2MainPipeline`, `JtagTapController`, and
-`skidBufferConnect`. Four focused direct tests pass, including a 24-vector
+`skidBufferConnect`, plus a pure-Amaranth `$dlatch` implementation for
+`ClockGate`. Five focused direct tests pass, including a 24-vector
 27-input CSA reduction, skid hold/flush behavior, and TAP reset/state checks.
 The focused locked-reference rail proves the CSA pipeline and skid buffer with
 zero unproven equivalence cells. JTAG is source-level and ABI-correct but its
 multi-clock parent-state relation remains formal-pending; it is not counted as
-strict completion. `ClockGate`, `DebugTransportModuleJTAG`, and
-`PrintCommitIDModule` remain `CONTRACT_ONLY` because their black-box or
-simulation-only semantics are not yet a complete synthesizable V2 closure.
+strict completion. `DebugTransportModuleJTAG` and `PrintCommitIDModule` remain
+`CONTRACT_ONLY` because their black-box or simulation-only semantics are not
+yet a complete synthesizable V2 closure. `ClockGate` is source-backed and
+implemented with an Amaranth `$dlatch`, but remains formal-pending because the
+installed SAT backend cannot import that latch cell.
 
 The same wave audited PMP/PMA: all five prior `IMPLEMENTED` declarations were
 downgraded to `CONTRACT_ONLY` after the locked rail found zero complete proofs

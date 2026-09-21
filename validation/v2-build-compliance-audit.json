@@ -148,6 +148,7 @@
         "CSA3to2_24",
         "CSA4to2",
         "CSA_Nto2With3to2MainPipeline",
+        "ClockGate",
         "IDPool",
         "JtagStateMachine",
         "JtagTapController",
@@ -166,7 +167,6 @@
       "Build-Cpu.Backend.Datapath.BypassPipeFamily": ["BypassNetwork", "PipeGroupConnect"],
       "Build-Cpu.Dependency.Difftest.StateFamily": "all 21 members",
       "Build-Cpu.Dependency.Utility.ResidualFamily": [
-        "ClockGate",
         "DebugTransportModuleJTAG",
         "PrintCommitIDModule"
       ],
@@ -225,9 +225,9 @@
       "JtagTapController",
       "skidBufferConnect"
     ],
-    "formal_equivalent_members": ["CSA_Nto2With3to2MainPipeline", "skidBufferConnect"],
-    "formal_pending_members": ["JtagTapController"],
-    "direct_test": "PASS_4_TESTS",
+      "formal_equivalent_members": ["CSA_Nto2With3to2MainPipeline", "skidBufferConnect"],
+      "formal_pending_members": ["ClockGate", "JtagTapController"],
+      "direct_test": "PASS_5_TESTS",
     "strict_equivalence_count_delta": 0,
     "strict_equivalence_fraction": "39/118",
     "evidence": "validation/v2-utility-residual-rewrite-wave-results.json",

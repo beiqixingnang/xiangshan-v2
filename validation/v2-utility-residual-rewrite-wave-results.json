@@ -5,16 +5,18 @@
   "direct_test": "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu.Dependency.Utility.ResidualFamily-Hardware.py",
   "implemented_members": [
     "CSA_Nto2With3to2MainPipeline",
+    "ClockGate",
     "JtagTapController",
     "skidBufferConnect"
   ],
   "direct_test_status": "PASS",
-  "direct_test_output": "----------------------------------------------------------------------\nRan 4 tests in 8.431s\n\nOK\n",
+  "direct_test_output": "----------------------------------------------------------------------\nRan 5 tests in 8.649s\n\nOK\n",
   "formal_equivalent_members": [
     "CSA_Nto2With3to2MainPipeline",
     "skidBufferConnect"
   ],
   "formal_pending_members": [
+    "ClockGate",
     "JtagTapController"
   ],
   "records": [
@@ -31,7 +33,22 @@
       "formal_success_marker": true,
       "equiv_cells": 214,
       "unproven_cells": 0,
-      "diagnostic_tail": "   $mux                          843\n     $not                            1\n     $or                            38\n     $scopeinfo                     22\n     $xor                         1738\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module CSA_Nto2With3to2MainPipeline_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 213 unproven $equiv cells in module CSA_Nto2With3to2MainPipeline_EQUIV:\n  Undef modelling: force def on 852 initial reg values and 2891 inputs.\n  Proving existence of base case for step 1. (817681 clauses over 312517 variables)\n  Proving induction step 1. (1695820 clauses over 645471 variables)\n  Proof for induction step holds. Entire workset of 213 cells proven!\nProved 213 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 214 $equiv cells in CSA_Nto2With3to2MainPipeline_EQUIV:\n  Of those cells 214 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: 39e78c66ce, CPU: user 5.81s system 0.29s, MEM: 453.36 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 65% 1x equiv_induct (3 sec), 13% 9x opt_clean (0 sec), ...\n"
+      "diagnostic_tail": "   $mux                          843\n     $not                            1\n     $or                            38\n     $scopeinfo                     22\n     $xor                         1738\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module CSA_Nto2With3to2MainPipeline_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 213 unproven $equiv cells in module CSA_Nto2With3to2MainPipeline_EQUIV:\n  Undef modelling: force def on 852 initial reg values and 2891 inputs.\n  Proving existence of base case for step 1. (817681 clauses over 312517 variables)\n  Proving induction step 1. (1695820 clauses over 645471 variables)\n  Proof for induction step holds. Entire workset of 213 cells proven!\nProved 213 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 214 $equiv cells in CSA_Nto2With3to2MainPipeline_EQUIV:\n  Of those cells 214 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: 39e78c66ce, CPU: user 5.27s system 0.39s, MEM: 452.97 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 66% 1x equiv_induct (3 sec), 12% 9x opt_clean (0 sec), ...\n"
+    },
+    {
+      "member": "ClockGate",
+      "abi_exact": true,
+      "deterministic_export": true,
+      "reference_view_trusted": true,
+      "target_verilator": "FAIL",
+      "reference_verilator": "PASS",
+      "formal_method": "sat_miter",
+      "formal_status": "PENDING",
+      "formal_tool_status": "FAIL",
+      "formal_success_marker": false,
+      "equiv_cells": null,
+      "unproven_cells": null,
+      "diagnostic_tail": "mp/uhsc_utilityresidualrewritewave_family/DUT_ClockGate.sv' to AST representation.\nGenerating RTLIL representation for module `\\DUT_ClockGate'.\nSuccessfully finished Verilog frontend.\n\n2. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_utilityresidualrewritewave_family/REF_ClockGate.sv\nParsing SystemVerilog input from `/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_utilityresidualrewritewave_family/REF_ClockGate.sv' to AST representation.\nGenerating RTLIL representation for module `\\REF_ClockGate'.\nSuccessfully finished Verilog frontend.\n\n3. Executing Verilog-2005 frontend: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_utilityresidualrewritewave_family/ClockGate_MITER.sv\nParsing SystemVerilog input from `/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_utilityresidualrewritewave_family/ClockGate_MITER.sv' to AST representation.\nGenerating RTLIL representation for module `\\ClockGate_MITER'.\nSuccessfully finished Verilog frontend.\n\n4. Executing PREP pass.\n\n4.1. Executing HIERARCHY pass (managing design hierarchy).\n\n4.1.1. Analyzing design hierarchy..\nERROR: Module `\\$dlatch' referenced in module `\\DUT_ClockGate' in cell `\\enable_latch$5' is not part of the design.\n"
     },
     {
       "member": "JtagTapController",
@@ -61,7 +78,7 @@
       "formal_success_marker": true,
       "equiv_cells": 584,
       "unproven_cells": 0,
-      "diagnostic_tail": " $dffe                          72\n     $equiv                        584\n     $mux                           76\n     $not                            6\n     $or                             3\n     $sdff                           2\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module skidBufferConnect_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 583 unproven $equiv cells in module skidBufferConnect_EQUIV:\n  Undef modelling: force def on 1153 initial reg values and 575 inputs.\n  Proving existence of base case for step 1. (115704 clauses over 44780 variables)\n  Proving induction step 1. (309322 clauses over 115915 variables)\n  Proof for induction step holds. Entire workset of 583 cells proven!\nProved 583 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 584 $equiv cells in skidBufferConnect_EQUIV:\n  Of those cells 584 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: ccf1088aa9, CPU: user 1.84s system 0.10s, MEM: 92.66 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 87% 1x equiv_induct (1 sec), 3% 9x opt_clean (0 sec), ...\n"
+      "diagnostic_tail": " $dffe                          72\n     $equiv                        584\n     $mux                           76\n     $not                            6\n     $or                             3\n     $sdff                           2\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module skidBufferConnect_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 583 unproven $equiv cells in module skidBufferConnect_EQUIV:\n  Undef modelling: force def on 1153 initial reg values and 575 inputs.\n  Proving existence of base case for step 1. (115704 clauses over 44780 variables)\n  Proving induction step 1. (309322 clauses over 115915 variables)\n  Proof for induction step holds. Entire workset of 583 cells proven!\nProved 583 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 584 $equiv cells in skidBufferConnect_EQUIV:\n  Of those cells 584 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: ccf1088aa9, CPU: user 1.41s system 0.03s, MEM: 92.35 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 88% 1x equiv_induct (1 sec), 3% 9x opt_clean (0 sec), ...\n"
     }
   ],
   "strict_equivalence_count_delta": 0,

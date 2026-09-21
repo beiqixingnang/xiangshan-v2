@@ -6,7 +6,7 @@ import sys
 import unittest
 from pathlib import Path
 from typing import Any
-from amaranth.sim import Simulator
+from amaranth.sim import Delay, Simulator
 ROOT = Path(__file__).resolve().parents[4]; TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Utility.ResidualFamily-Hardware.py"
 def load_subject() -> Any:
     spec = importlib.util.spec_from_file_location("testing_util_res", TARGET)
@@ -117,4 +117,18 @@ class UtilityResidualFamilyTest(unittest.TestCase):
         simulator.add_clock(1e-6, domain="tap_fall", phase=0.5e-6)
         simulator.add_testbench(bench)
         simulator.run()
+
+    def test_clock_gate_latch_equation(self) -> None:
+        module = load_subject()
+        rtl = module.build_verilog({"module": "ClockGate"}, {})
+        self.assertIn("$dlatch", rtl)
+        self.assertIn("assign Q = CK & enable_latch", rtl)
+        enable = 0
+        sequence = ((0, 1, 0), (1, 1, 0), (0, 0, 0), (1, 0, 0))
+        expected_q = []
+        for ck, te, e in sequence:
+            if not ck:
+                enable = te | e
+            expected_q.append(ck & enable)
+        self.assertEqual(expected_q, [0, 1, 0, 0])
 if __name__ == "__main__": unittest.main()

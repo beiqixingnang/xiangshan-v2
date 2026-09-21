@@ -5,7 +5,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from amaranth import Array, Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
+from amaranth import Array, Cat, ClockDomain, Const, Elaboratable, Instance, Module, Mux, Signal
 from amaranth.back import verilog
 
 
@@ -16,6 +16,7 @@ IMPLEMENTED_MEMBERS = (
     'CSA3to2_24',
     'CSA4to2',
     'CSA_Nto2With3to2MainPipeline',
+    'ClockGate',
     'IDPool',
     'JtagStateMachine',
     'JtagTapController',
@@ -110,6 +111,10 @@ PORT_SPECS: dict[str, tuple[PortSpec, ...]] = {
         ('io_out_car', 'output', 107),
     ),
     'ClockGate': (
+        ('TE', 'input', 1),
+        ('E', 'input', 1),
+        ('CK', 'input', 1),
+        ('Q', 'output', 1),
     ),
     'DebugTransportModuleJTAG': (
         ('io_jtag_clock', 'input', 1),
@@ -523,6 +528,18 @@ class UtilityResidualFamily(Elaboratable):
             p["io_out_car"].eq(values[1]),
         ]
 
+    # Implement the source low-level transparent clock-gate latch. / 实现源级低电平透明时钟门控锁存器。
+    def _clock_gate(self, module: Module) -> None:
+        enable_latch = Signal(name="enable_latch")
+        module.submodules.enable_latch = Instance(
+            "$dlatch",
+            p_WIDTH=1,
+            i_D=self.ports["TE"] | self.ports["E"],
+            i_EN=~self.ports["CK"],
+            o_Q=enable_latch,
+        )
+        module.d.comb += self.ports["Q"].eq(self.ports["CK"] & enable_latch)
+
     # Implement the eight-entry irrevocable ID allocator. / 实现八项不可撤销 ID 分配器。
     def _id_pool(self, module: Module) -> None:
         p = self.ports
@@ -749,6 +766,8 @@ class UtilityResidualFamily(Elaboratable):
             self._csa4(module)
         elif self.member == "CSA_Nto2With3to2MainPipeline":
             self._csa_pipeline(module)
+        elif self.member == "ClockGate":
+            self._clock_gate(module)
         elif self.member == "IDPool":
             self._id_pool(module)
         elif self.member == "JtagStateMachine":
