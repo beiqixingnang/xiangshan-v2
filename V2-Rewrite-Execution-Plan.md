@@ -482,3 +482,8 @@ downgraded to `CONTRACT_ONLY` after the locked rail found zero complete proofs
 and the PMA outputs were not behaviorally closed. This correction changes no
 strict progress and prevents partial CSR equations from being promoted as
 equivalent hardware.
+
+The focused FloatingPoint audit likewise found a Booth counterexample and an
+ArrayMul reference closure whose pipelined Wallace tree is not represented by
+the compact boundary. Both leaves are now explicitly `CONTRACT_ONLY`; bounded
+lint success remains evidence of syntax/ABI only and does not count as behavior.

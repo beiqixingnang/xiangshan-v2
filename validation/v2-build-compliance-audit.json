@@ -110,14 +110,14 @@
     ],
     "implemented_members": {
       "Build-Cpu.Backend.Decode.ControlFamily": ["UopInfoGen", "VTypeGen", "FPDecoder", "VIAluDecoder"],
-      "Build-Cpu.Backend.Fu.FloatingPoint.Family": ["BoothEncoderF64F32F16", "ArrayMulDataModule"],
+      "Build-Cpu.Backend.Fu.FloatingPoint.Family": [],
       "Build-Cpu.Backend.Fu.PMP.Family": [],
       "Build-Cpu.Memory.Prefetch.Metadata.Family": [],
       "Build-Cpu.Memory.Store.Family": []
     },
     "contract_only_members": {
       "Build-Cpu.Backend.Decode.ControlFamily": ["Backend", "DecodeUnit", "FusionDecoder", "VecExceptionGen"],
-      "Build-Cpu.Backend.Fu.FloatingPoint.Family": ["FloatAdder", "FloatAdderF32F16MixedPipeline", "FloatAdderF64Pipeline", "FloatDivider", "FloatDividerR64", "FloatFMA", "fpdiv_r64_block", "fpsqrt_r16", "IntToFPDataModule"],
+      "Build-Cpu.Backend.Fu.FloatingPoint.Family": ["FloatAdder", "FloatAdderF32F16MixedPipeline", "FloatAdderF64Pipeline", "FloatDivider", "FloatDividerR64", "FloatFMA", "fpdiv_r64_block", "fpsqrt_r16", "BoothEncoderF64F32F16", "ArrayMulDataModule", "IntToFPDataModule"],
       "Build-Cpu.Backend.Fu.PMP.Family": ["PMP", "PMPChecker", "PMPChecker_12", "PMPChecker_2", "PMPEntryHandleModule"],
       "Build-Cpu.Memory.Prefetch.Metadata.Family": ["StreamBitVectorArray", "StrideMetaArray"],
       "Build-Cpu.Memory.Store.Family": ["SbufferData", "StoreExceptionBuffer", "StoreMisalignBuffer", "StoreUnit"]
@@ -181,7 +181,8 @@
       "Difftest input-only keep registers were unobservable invented state.",
       "MMU/LSQ address passthrough and fixed free-count responses were guessed protocol behavior.",
       "Prefetch generic port forwarding and folded state were not the locked implementations.",
-      "PMP/PMA partial CSR and checker equations failed all five locked-member formal proofs; PMA mapping was not observable in the emitted RTL."
+      "PMP/PMA partial CSR and checker equations failed all five locked-member formal proofs; PMA mapping was not observable in the emitted RTL.",
+      "FloatingPoint BoothEncoder produced a locked-reference counterexample and ArrayMulDataModule still depends on a large pipelined Wallace-tree closure; both leaves are contract-only pending full latency/equation proof."
     ],
     "retired_subjects": {
       "Build-Cpu.Residual.LeafFamily": "RETIRED_REPLACED_BY_SOURCE_FAMILIES; catalog/path cleanup only; no implementation or coverage credit"

@@ -17,8 +17,12 @@ from amaranth.back import verilog
 
 __all__ = ["COVERED_MODULES", "IMPLEMENTED_MEMBERS", "CONTRACT_ONLY_MEMBERS", "FloatingPointFamily", "build_verilog", "main"]
 COVERED_MODULES = ("FloatAdder", "FloatAdderF32F16MixedPipeline", "FloatAdderF64Pipeline", "FloatDivider", "FloatDividerR64", "FloatFMA", "fpdiv_r64_block", "fpsqrt_r16", "BoothEncoderF64F32F16", "ArrayMulDataModule", "IntToFPDataModule")
-IMPLEMENTED_MEMBERS = ("BoothEncoderF64F32F16", "ArrayMulDataModule")
-CONTRACT_ONLY_MEMBERS = tuple(name for name in COVERED_MODULES if name not in IMPLEMENTED_MEMBERS)
+# These leaves have source-shaped datapaths, but the focused locked rail found
+# a Booth counterexample and the ArrayMul reference contains a large pipelined
+# Wallace tree not represented by this compact boundary. Keep them contract-only
+# until their full latency and observable equations are closed.
+IMPLEMENTED_MEMBERS: tuple[str, ...] = ()
+CONTRACT_ONLY_MEMBERS = COVERED_MODULES
 
 PortSpec = tuple[str, str, int]
 
