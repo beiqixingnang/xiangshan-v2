@@ -484,6 +484,22 @@
     "provenance_map": "validation/v2-build-provenance-map.json",
     "pyright": "DEFERRED_TO_LARGE_MILESTONE"
    },
+   "latest_rewrite_wave": {
+    "batch_id": "V2-UTILITY-RESIDUAL-REWRITE-003",
+    "status": "PASS_BOUNDED_PARTIAL_FORMAL",
+    "build_file_count": 1,
+    "implemented_members_added": [
+     "CSA_Nto2With3to2MainPipeline",
+     "JtagTapController",
+     "skidBufferConnect"
+    ],
+    "formal_equivalent_members": ["CSA_Nto2With3to2MainPipeline", "skidBufferConnect"],
+    "formal_pending_members": ["JtagTapController"],
+    "direct_test": "PASS_4_TESTS",
+    "strict_equivalence_count_delta": 0,
+    "strict_equivalence_fraction": "39/118",
+    "evidence": "validation/v2-utility-residual-rewrite-wave-results.json"
+   },
    "allowed_representation": ["tuple literals for irregular ports", "indexed tuple comprehensions", "small pure Python standard-library helpers", "Amaranth Signal construction from the expanded PORT_SPECS mapping"],
    "forbidden_representation": ["runtime JSON/validation reads", "Scala or upstream source paths in Build code", "raw Verilog/SystemVerilog text", "blind textual replacement", "port-order or ABI inference from unordered mappings"],
    "required_gate": "Before/after expanded ordered (name,direction,width) digest must match for every member; deterministic same-name build_verilog smoke and py_compile must pass.",

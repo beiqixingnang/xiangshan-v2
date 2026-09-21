@@ -17,8 +17,11 @@ from amaranth.back import verilog
 
 __all__ = ["COVERED_MODULES", "IMPLEMENTED_MEMBERS", "CONTRACT_ONLY_MEMBERS", "PMPFamily", "build_verilog", "main"]
 COVERED_MODULES = ("PMP", "PMPChecker", "PMPChecker_12", "PMPChecker_2", "PMPEntryHandleModule")
-IMPLEMENTED_MEMBERS = COVERED_MODULES
-CONTRACT_ONLY_MEMBERS: tuple[str, ...] = ()
+# The CSR/PMP equations are source-backed but PMA mapping and locked-reference
+# equivalence are not complete. Keep every member contract-only until the full
+# observable relation is proven; partial RTL is not a behavior claim.
+IMPLEMENTED_MEMBERS: tuple[str, ...] = ()
+CONTRACT_ONLY_MEMBERS = COVERED_MODULES
 # Behavioral provenance is maintained in validation inventories, not Build code.
 
 PortSpec = tuple[str, str, int]
@@ -1966,6 +1969,12 @@ class PMPFamily(Elaboratable):
                 self.ports[f"io_pmp_{i}_mask"].eq(Mux(cfg[i][3:5] == 3, _pmp_napot_mask(addr[i]),
                                                     Mux(cfg[i][3:5] == 2, Const((1 << 48) - 1, 48), Const(0, 48)))),
             ]
+            # PMA mapping is not yet source-complete in this aggregate. Drive
+            # its contract outputs explicitly so the emitted ABI remains exact
+            # without claiming PMA behavior. / PMA 映射尚未完成，显式驱动契约
+            # 输出以保持 ABI 精确，但不声明 PMA 行为等价。
+            for field in ("cfg_c", "cfg_atomic", "cfg_a", "cfg_x", "cfg_w", "cfg_r", "addr", "mask"):
+                module.d.comb += self.ports[f"io_pma_{i}_{field}"].eq(0)
 
     def _checker(self, module: Module, variant: str) -> None:
         """Implement first-match PMP permission and fixed PMA MMIO window."""

@@ -6,7 +6,7 @@
   "fraction": "39/118",
   "percentage": 33.050847,
   "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with the locked source commit, matching source hashes, and either a Yosys SAT no-model miter or fully proven Yosys inductive-equivalence status is counted. STRICT_PENDING and COMPLETE_EQUIVALENCE_VARIANT_ONLY records are inventoried as attempted-but-not-counted instead of failing the rail, and one Build file may not be claimed by several counting proofs.",
-  "non_counting_attempt_count": 6,
+  "non_counting_attempt_count": 4,
   "non_counting_attempts": [
     {
       "evidence": "validation/v2-build-cpu-backend-datapath-bypasspipefamily-strict-evidence.json",
@@ -45,68 +45,6 @@
       ],
       "unclosed": [
         "strict gates did not all pass"
-      ]
-    },
-    {
-      "evidence": "validation/v2-build-cpu-backend-fu-pmp-family-strict-evidence.json",
-      "build_id": "Build-Cpu.Backend.Fu.PMP.Family",
-      "declared_status": "STRICT_PENDING",
-      "audit_failures": [],
-      "proof_failures": [
-        "implementation rewritten and its exact ABI catalog compacted after prior strict attempt; strict proof must be rerun"
-      ],
-      "unclosed": [
-        "strict proof invalidated by implementation rewrite and exact ABI-preserving catalog compaction; rerun the complete family rail"
-      ]
-    },
-    {
-      "evidence": "validation/v2-build-cpu-dependency-utility-residualfamily-strict-evidence.json",
-      "build_id": "Build-Cpu.Dependency.Utility.ResidualFamily",
-      "declared_status": "STRICT_PENDING",
-      "audit_failures": [],
-      "proof_failures": [
-        "CSA3to2:sat_miter",
-        "CSA3to2_20:sat_miter",
-        "CSA3to2_24:sat_miter",
-        "CSA4to2:sat_miter",
-        "CSA_Nto2With3to2MainPipeline:yosys_equiv",
-        "CSA_Nto2With3to2MainPipeline: 212 $equiv cells unproven",
-        "ABI mismatch: ClockGate",
-        "miter drives implicit nets: ClockGate",
-        "ClockGate:verilator",
-        "ClockGate:sat_miter",
-        "ClockGate: SAT ran under assumptions",
-        "synthesizable view failed conservation: DebugTransportModuleJTAG",
-        "DebugTransportModuleJTAG:sat_miter",
-        "DebugTransportModuleJTAG: SAT ran under assumptions",
-        "IDPool:yosys_equiv",
-        "IDPool: 4 $equiv cells unproven",
-        "synthesizable view failed conservation: JtagStateMachine",
-        "JtagStateMachine:yosys_equiv",
-        "synthesizable view failed conservation: JtagTapController",
-        "JtagTapController:yosys_equiv",
-        "MaxPeriodFibonacciLFSR:yosys_equiv",
-        "MaxPeriodFibonacciLFSR: 1 $equiv cells unproven",
-        "MaxPeriodFibonacciLFSR_3:yosys_equiv",
-        "MaxPeriodFibonacciLFSR_3: 1 $equiv cells unproven",
-        "OverrideableQueue:yosys_equiv",
-        "OverrideableQueue: 103 $equiv cells unproven",
-        "OverrideableQueue_1:yosys_equiv",
-        "OverrideableQueue_1: 62 $equiv cells unproven",
-        "output-less member, nothing observable to compare: PrintCommitIDModule",
-        "TimeAsync:yosys_equiv",
-        "TimeAsync: 64 $equiv cells unproven",
-        "r4_qds_v2:sat_miter",
-        "r4_qds_v2_spec:sat_miter",
-        "skidBufferConnect:yosys_equiv",
-        "skidBufferConnect: 583 $equiv cells unproven",
-        "aggregate SAT miter",
-        "pyright rail",
-        "implementation rewritten after prior strict attempt; strict proof must be rerun"
-      ],
-      "unclosed": [
-        "strict gates did not all pass",
-        "six members remain CONTRACT_ONLY and the complete family rail must be rerun"
       ]
     },
     {
@@ -17164,7 +17102,7 @@
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "status": "PASS"
       },
-      "status": "NON_COUNTING",
+      "status": "FAIL",
       "note": null,
       "scope": {
         "kind": "catalog_build_multi_variant",
@@ -21067,8 +21005,8 @@
           "present": true,
           "inside_repository": true,
           "expected_sha256": "81d594241ff56c307dfd2b5752f72761fbb879047cf69bc684bb186ed157852f",
-          "observed_sha256": "81d594241ff56c307dfd2b5752f72761fbb879047cf69bc684bb186ed157852f",
-          "status": "PASS"
+          "observed_sha256": "636924d24ee6a86f9708f4c55772d8e257399afe6c59daba328f1c99099ab678",
+          "status": "FAIL"
         },
         "reference_sv": {
           "path": "validation/reference-sv/PMP.sv",
@@ -21209,7 +21147,9 @@
         "status": "FAIL",
         "formal_success_marker": false
       },
-      "failures": [],
+      "failures": [
+        "source digest: python_build"
+      ],
       "declared_failures": [
         "implementation rewritten and its exact ABI catalog compacted after prior strict attempt; strict proof must be rerun"
       ],
@@ -26815,7 +26755,7 @@
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "status": "PASS"
       },
-      "status": "NON_COUNTING",
+      "status": "FAIL",
       "note": "scala provenance not vendored for this attempt record",
       "scope": {
         "kind": "catalog_build_multi_variant",
@@ -27896,8 +27836,8 @@
           "present": true,
           "inside_repository": true,
           "expected_sha256": "8864c37fc6221ee32144e1bfd1632969db2a68e6ae9038f2d5ec571b53fd3360",
-          "observed_sha256": "8864c37fc6221ee32144e1bfd1632969db2a68e6ae9038f2d5ec571b53fd3360",
-          "status": "PASS"
+          "observed_sha256": "459e7f76b696f7c7dfc966364e3d5b15167b514b8f884bd98df399f0990a8179",
+          "status": "FAIL"
         },
         "reference_sv": {
           "path": "validation/reference-sv/CSA3to2.sv",
@@ -28243,7 +28183,9 @@
         "status": "FAIL",
         "formal_success_marker": false
       },
-      "failures": [],
+      "failures": [
+        "source digest: python_build"
+      ],
       "declared_failures": [
         "CSA3to2:sat_miter",
         "CSA3to2_20:sat_miter",

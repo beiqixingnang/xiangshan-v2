@@ -463,3 +463,22 @@ the strict rail remained `39/118`. Batch `py_compile`, JSON parsing, exact
 provenance resolution, and the central strict-progress regression passed.
 Repository-wide Pyright remains deferred to the next large milestone as
 previously requested and is not represented as a pass for this wave.
+
+## Utility residual rewrite wave (2026-09-21)
+
+The residual utility aggregate now has source-backed Amaranth implementations
+for `CSA_Nto2With3to2MainPipeline`, `JtagTapController`, and
+`skidBufferConnect`. Four focused direct tests pass, including a 24-vector
+27-input CSA reduction, skid hold/flush behavior, and TAP reset/state checks.
+The focused locked-reference rail proves the CSA pipeline and skid buffer with
+zero unproven equivalence cells. JTAG is source-level and ABI-correct but its
+multi-clock parent-state relation remains formal-pending; it is not counted as
+strict completion. `ClockGate`, `DebugTransportModuleJTAG`, and
+`PrintCommitIDModule` remain `CONTRACT_ONLY` because their black-box or
+simulation-only semantics are not yet a complete synthesizable V2 closure.
+
+The same wave audited PMP/PMA: all five prior `IMPLEMENTED` declarations were
+downgraded to `CONTRACT_ONLY` after the locked rail found zero complete proofs
+and the PMA outputs were not behaviorally closed. This correction changes no
+strict progress and prevents partial CSR equations from being promoted as
+equivalent hardware.

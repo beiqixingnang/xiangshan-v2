@@ -111,13 +111,14 @@
     "implemented_members": {
       "Build-Cpu.Backend.Decode.ControlFamily": ["UopInfoGen", "VTypeGen", "FPDecoder", "VIAluDecoder"],
       "Build-Cpu.Backend.Fu.FloatingPoint.Family": ["BoothEncoderF64F32F16", "ArrayMulDataModule"],
-      "Build-Cpu.Backend.Fu.PMP.Family": ["PMP", "PMPChecker", "PMPChecker_12", "PMPChecker_2", "PMPEntryHandleModule"],
+      "Build-Cpu.Backend.Fu.PMP.Family": [],
       "Build-Cpu.Memory.Prefetch.Metadata.Family": [],
       "Build-Cpu.Memory.Store.Family": []
     },
     "contract_only_members": {
       "Build-Cpu.Backend.Decode.ControlFamily": ["Backend", "DecodeUnit", "FusionDecoder", "VecExceptionGen"],
       "Build-Cpu.Backend.Fu.FloatingPoint.Family": ["FloatAdder", "FloatAdderF32F16MixedPipeline", "FloatAdderF64Pipeline", "FloatDivider", "FloatDividerR64", "FloatFMA", "fpdiv_r64_block", "fpsqrt_r16", "IntToFPDataModule"],
+      "Build-Cpu.Backend.Fu.PMP.Family": ["PMP", "PMPChecker", "PMPChecker_12", "PMPChecker_2", "PMPEntryHandleModule"],
       "Build-Cpu.Memory.Prefetch.Metadata.Family": ["StreamBitVectorArray", "StrideMetaArray"],
       "Build-Cpu.Memory.Store.Family": ["SbufferData", "StoreExceptionBuffer", "StoreMisalignBuffer", "StoreUnit"]
     },
@@ -146,15 +147,18 @@
         "CSA3to2_20",
         "CSA3to2_24",
         "CSA4to2",
+        "CSA_Nto2With3to2MainPipeline",
         "IDPool",
         "JtagStateMachine",
+        "JtagTapController",
         "MaxPeriodFibonacciLFSR",
         "MaxPeriodFibonacciLFSR_3",
         "OverrideableQueue",
         "OverrideableQueue_1",
         "TimeAsync",
         "r4_qds_v2",
-        "r4_qds_v2_spec"
+        "r4_qds_v2_spec",
+        "skidBufferConnect"
       ],
       "Build-Cpu.Memory.Vector.Family": ["VldMergeUnit", "VsetModule"]
     },
@@ -162,11 +166,8 @@
       "Build-Cpu.Backend.Datapath.BypassPipeFamily": ["BypassNetwork", "PipeGroupConnect"],
       "Build-Cpu.Dependency.Difftest.StateFamily": "all 21 members",
       "Build-Cpu.Dependency.Utility.ResidualFamily": [
-        "CSA_Nto2With3to2MainPipeline",
         "ClockGate",
         "DebugTransportModuleJTAG",
-        "JtagTapController",
-        "skidBufferConnect",
         "PrintCommitIDModule"
       ],
       "Build-Cpu.Memory.Mmu.Lsq.Family": "all 8 members",
@@ -179,7 +180,8 @@
       "Bypass/Pipe equations were heuristic and had prior unproven equivalence cells.",
       "Difftest input-only keep registers were unobservable invented state.",
       "MMU/LSQ address passthrough and fixed free-count responses were guessed protocol behavior.",
-      "Prefetch generic port forwarding and folded state were not the locked implementations."
+      "Prefetch generic port forwarding and folded state were not the locked implementations.",
+      "PMP/PMA partial CSR and checker equations failed all five locked-member formal proofs; PMA mapping was not observable in the emitted RTL."
     ],
     "retired_subjects": {
       "Build-Cpu.Residual.LeafFamily": "RETIRED_REPLACED_BY_SOURCE_FAMILIES; catalog/path cleanup only; no implementation or coverage credit"
@@ -208,6 +210,25 @@
     "strict_equivalence_count_delta": 0,
     "strict_equivalence_fraction": "39/118",
     "note": "No rewritten member is promoted to strict equivalence; prior strict failures remain recorded and changed Build hashes invalidate their old attempts."
+  },
+  "rewrite_wave_3": {
+    "batch_id": "V2-UTILITY-RESIDUAL-REWRITE-003",
+    "status": "PASS_BOUNDED_PARTIAL_FORMAL",
+    "build_files": [
+      "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Utility.ResidualFamily-Hardware.py"
+    ],
+    "implemented_members_added": [
+      "CSA_Nto2With3to2MainPipeline",
+      "JtagTapController",
+      "skidBufferConnect"
+    ],
+    "formal_equivalent_members": ["CSA_Nto2With3to2MainPipeline", "skidBufferConnect"],
+    "formal_pending_members": ["JtagTapController"],
+    "direct_test": "PASS_4_TESTS",
+    "strict_equivalence_count_delta": 0,
+    "strict_equivalence_fraction": "39/118",
+    "evidence": "validation/v2-utility-residual-rewrite-wave-results.json",
+    "note": "Focused source-backed implementations passed direct tests; only two of three members have complete focused formal evidence. The aggregate family remains outside strict completion."
   },
   "representation_migration": {
     "batch_id": "V2-PRODUCT-PROVENANCE-SEPARATION-003",
