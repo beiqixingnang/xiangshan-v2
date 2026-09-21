@@ -131,4 +131,126 @@ class UtilityResidualFamilyTest(unittest.TestCase):
                 enable = te | e
             expected_q.append(ck & enable)
         self.assertEqual(expected_q, [0, 1, 0, 0])
+
+    def test_id_pool_priority_and_release(self) -> None:
+        """Exercise every allocation and the locked empty-pool encoder value."""
+        module = load_subject()
+        subject = module.UtilityResidualFamily("IDPool")
+
+        async def bench(context: Any) -> None:
+            context.set(subject.ports["reset"], 1)
+            context.set(subject.ports["io_alloc_ready"], 0)
+            context.set(subject.ports["io_free_valid"], 0)
+            await context.tick("sync")
+            context.set(subject.ports["reset"], 0)
+            for expected_id in range(8):
+                self.assertEqual(context.get(subject.ports["io_alloc_valid"]), 1)
+                self.assertEqual(context.get(subject.ports["io_alloc_bits"]), expected_id)
+                context.set(subject.ports["io_alloc_ready"], 1)
+                await context.tick("sync")
+            # The locked priority encoder returns 7 for an empty eight-lane
+            # pool, even while alloc.valid is low; this lane is observable.
+            self.assertEqual(context.get(subject.ports["io_alloc_valid"]), 0)
+            self.assertEqual(context.get(subject.ports["io_alloc_bits"]), 7)
+            context.set(subject.ports["io_alloc_ready"], 0)
+            context.set(subject.ports["io_free_valid"], 1)
+            context.set(subject.ports["io_free_bits"], 3)
+            await context.tick("sync")
+            self.assertEqual(context.get(subject.ports["io_alloc_valid"]), 1)
+            self.assertEqual(context.get(subject.ports["io_alloc_bits"]), 3)
+
+        simulator = Simulator(subject)
+        simulator.add_clock(1e-6)
+        simulator.add_testbench(bench)
+        simulator.run()
+
+    def test_overrideable_queue_variants(self) -> None:
+        """Check all payload fields, wraparound, and simultaneous replace/dequeue."""
+        module = load_subject()
+        for member in ("OverrideableQueue", "OverrideableQueue_1"):
+            subject = module.UtilityResidualFamily(member)
+            input_fields = tuple(
+                name.removeprefix("io_in_bits_")
+                for name in subject.ports
+                if name.startswith("io_in_bits_")
+            )
+
+            async def bench(context: Any, *, fields: tuple[str, ...] = input_fields) -> None:
+                context.set(subject.ports["reset"], 1)
+                context.set(subject.ports["io_in_valid"], 0)
+                context.set(subject.ports["io_out_ready"], 0)
+                await context.tick("sync")
+                context.set(subject.ports["reset"], 0)
+                payloads = [
+                    {field: (entry + 1) * (index + 3) for index, field in enumerate(fields)}
+                    for entry in range(4)
+                ]
+                for payload in payloads:
+                    context.set(subject.ports["io_in_valid"], 1)
+                    for field, value in payload.items():
+                        context.set(subject.ports[f"io_in_bits_{field}"], value)
+                    await context.tick("sync")
+                context.set(subject.ports["io_in_valid"], 0)
+                context.set(subject.ports["io_out_ready"], 1)
+                for payload in payloads:
+                    self.assertEqual(context.get(subject.ports["io_out_valid"]), 1)
+                    for field, value in payload.items():
+                        output = subject.ports[f"io_out_bits_{field}"]
+                        self.assertEqual(context.get(output), value & ((1 << len(output)) - 1))
+                    await context.tick("sync")
+                self.assertEqual(context.get(subject.ports["io_out_valid"]), 0)
+                # A dequeue and enqueue to the same slot in one cycle must
+                # retain the new entry (the Chisel write wins over the clear).
+                first = {field: 0x51 + index for index, field in enumerate(fields)}
+                second = {field: 0xA1 + index for index, field in enumerate(fields)}
+                context.set(subject.ports["io_in_valid"], 1)
+                context.set(subject.ports["io_out_ready"], 0)
+                for field, value in first.items():
+                    context.set(subject.ports[f"io_in_bits_{field}"], value)
+                await context.tick("sync")
+                context.set(subject.ports["io_out_ready"], 1)
+                for field, value in second.items():
+                    context.set(subject.ports[f"io_in_bits_{field}"], value)
+                await context.tick("sync")
+                self.assertEqual(context.get(subject.ports["io_out_valid"]), 1)
+                for field, value in second.items():
+                    output = subject.ports[f"io_out_bits_{field}"]
+                    self.assertEqual(context.get(output), value & ((1 << len(output)) - 1))
+
+            simulator = Simulator(subject)
+            simulator.add_clock(1e-6)
+            simulator.add_testbench(bench)
+            simulator.run()
+
+    def test_time_async_capture_edges(self) -> None:
+        """Model the three-stage valid synchronizer and edge-triggered capture."""
+        module = load_subject()
+        subject = module.UtilityResidualFamily("TimeAsync")
+        vectors = (
+            (0, 0x11), (1, 0x1234), (1, 0x2345), (0, 0x3456),
+            (0, 0x4567), (1, 0x5678), (0, 0x6789), (0, 0x789A),
+            (1, 0x89AB), (1, 0x9ABC), (0, 0xABCD),
+        )
+
+        async def bench(context: Any) -> None:
+            context.set(subject.ports["reset"], 1)
+            context.set(subject.ports["io_i_time_valid"], 0)
+            context.set(subject.ports["io_i_time_bits"], 0)
+            await context.tick("sync")
+            context.set(subject.ports["reset"], 0)
+            stage_0 = stage_1 = stage_2 = delayed = captured = 0
+            for valid, value in vectors:
+                context.set(subject.ports["io_i_time_valid"], valid)
+                context.set(subject.ports["io_i_time_bits"], value)
+                if stage_0 ^ delayed:
+                    captured = value
+                stage_0, stage_1, stage_2, delayed = stage_1, stage_2, valid, stage_0
+                await context.tick("sync")
+                self.assertEqual(context.get(subject.ports["io_o_time_bits"]), captured)
+
+        simulator = Simulator(subject)
+        simulator.add_clock(1e-6)
+        simulator.add_testbench(bench)
+        simulator.run()
+
 if __name__ == "__main__": unittest.main()

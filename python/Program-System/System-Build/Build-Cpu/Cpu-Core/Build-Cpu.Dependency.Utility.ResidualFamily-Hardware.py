@@ -388,7 +388,11 @@ _STATEFUL_MEMBERS = {
 
 # Return the lowest asserted bit index. / 返回最低有效位索引。
 def _priority_index(bits: Any, width: int) -> Any:
-    result: Any = Const(0, max(1, (width - 1).bit_length()))
+    # The locked priority encoder returns the all-ones code when no lane is
+    # asserted (for an eight-lane pool this is ``3'b111``), rather than zero.
+    # Preserve that observable fallback so an exhausted IDPool keeps its last
+    # legal encoder value just like the locked reference RTL.
+    result: Any = Const(width - 1, max(1, (width - 1).bit_length()))
     for index in reversed(range(width)):
         result = Mux(bits[index], index, result)
     return result
@@ -543,9 +547,14 @@ class UtilityResidualFamily(Elaboratable):
     # Implement the eight-entry irrevocable ID allocator. / 实现八项不可撤销 ID 分配器。
     def _id_pool(self, module: Module) -> None:
         p = self.ports
-        bitmap = Signal(8, init=0xFF, name="id_bitmap")
-        selected = Signal(3, init=0, name="id_selected")
-        valid = Signal(init=1, name="id_valid")
+        # Keep the three allocator state elements distinct from their public
+        # aliases.  This preserves the locked bitmap/select/valid state
+        # correspondence for the strict sequential rail (and is also useful
+        # when inspecting an exhausted pool, where the encoder returns 7).
+        state_attrs = {"keep": 1}
+        bitmap = Signal(8, init=0xFF, name="bitmap", attrs=state_attrs)
+        selected = Signal(3, init=0, name="select", attrs=state_attrs)
+        valid = Signal(init=1, name="valid", attrs=state_attrs)
         taken = Mux(p["io_alloc_ready"], Const(1, 8) << selected, 0)
         released = Mux(p["io_free_valid"], Const(1, 8) << p["io_free_bits"], 0)
         next_bitmap = (bitmap & ~taken) | released
@@ -650,42 +659,55 @@ class UtilityResidualFamily(Elaboratable):
         fields = [name.removeprefix("io_in_bits_") for name in p if name.startswith("io_in_bits_")]
         entries = {
             field: Array([
-                Signal(len(p[f"io_in_bits_{field}"]), name=f"queue_{field}_{index}", reset_less=True)
+                Signal(len(p[f"io_in_bits_{field}"]), name=f"entries_{index}_{field}", reset_less=True)
                 for index in range(4)
             ])
             for field in fields
         }
-        valids = Signal(4, init=0, name="queue_valids")
-        read_pointer = Signal(2, init=0, name="queue_read_pointer")
-        write_pointer = Signal(2, init=0, name="queue_write_pointer")
-        out_valid = valids.bit_select(read_pointer, 1)
+        # Keep one state bit per locked reset register.  A packed Amaranth
+        # vector is functionally equivalent, but it prevents Yosys' strict
+        # rail from pairing the four locked ``valids_0..3`` registers.
+        valids = [Signal(init=0, name=f"valids_{index}") for index in range(4)]
+        read_pointer = Signal(2, init=0, name="rd_ptr")
+        write_pointer = Signal(2, init=0, name="wr_ptr")
+        out_valid = Array(valids)[read_pointer]
         fire = out_valid & p["io_out_ready"]
         module.d.comb += p["io_out_valid"].eq(out_valid)
         for field in fields:
             module.d.comb += p[f"io_out_bits_{field}"].eq(entries[field][read_pointer])
         with module.If(fire):
-            module.d.sync += [
-                valids.bit_select(read_pointer, 1).eq(0),
-                read_pointer.eq(read_pointer + 1),
-            ]
+            for index, valid_bit in enumerate(valids):
+                with module.If(read_pointer == index):
+                    module.d.sync += valid_bit.eq(0)
+            module.d.sync += read_pointer.eq(read_pointer + 1)
         with module.If(p["io_in_valid"]):
             for field in fields:
                 module.d.sync += entries[field][write_pointer].eq(p[f"io_in_bits_{field}"])
-            module.d.sync += [
-                valids.bit_select(write_pointer, 1).eq(1),
-                write_pointer.eq(write_pointer + 1),
-            ]
+            for index, valid_bit in enumerate(valids):
+                with module.If(write_pointer == index):
+                    module.d.sync += valid_bit.eq(1)
+            module.d.sync += write_pointer.eq(write_pointer + 1)
 
     # Implement the three-stage time-valid synchronizer and data capture. / 实现三级时间有效同步和数据捕获。
     def _time_async(self, module: Module) -> None:
         p = self.ports
-        valid_chain = Signal(3, init=0, name="time_valid_chain")
-        delayed_valid = Signal(init=0, name="time_valid_delayed")
-        captured_time = Signal(64, init=0, name="time_captured")
-        edge = valid_chain[2] ^ delayed_valid
+        # Spell out the synchronizer stages in the same order as the locked
+        # three-stage reference (sync_0 <- sync_1 <- sync_2 <- input).  A
+        # packed Cat is tempting, but its little-endian
+        # lane order obscures this correspondence and makes strict induction
+        # needlessly fragile.
+        state_attrs = {"keep": 1}
+        valid_stage_0 = Signal(init=0, name="sync_0", attrs=state_attrs)
+        valid_stage_1 = Signal(init=0, name="sync_1", attrs=state_attrs)
+        valid_stage_2 = Signal(init=0, name="sync_2", attrs=state_attrs)
+        delayed_valid = Signal(init=0, name="time_vld_1dly", attrs=state_attrs)
+        captured_time = Signal(64, init=0, name="time_o", attrs=state_attrs)
+        edge = valid_stage_0 ^ delayed_valid
         module.d.sync += [
-            valid_chain.eq(Cat(p["io_i_time_valid"], valid_chain[:2])),
-            delayed_valid.eq(valid_chain[2]),
+            valid_stage_0.eq(valid_stage_1),
+            valid_stage_1.eq(valid_stage_2),
+            valid_stage_2.eq(p["io_i_time_valid"]),
+            delayed_valid.eq(valid_stage_0),
         ]
         with module.If(edge):
             module.d.sync += captured_time.eq(p["io_i_time_bits"])
