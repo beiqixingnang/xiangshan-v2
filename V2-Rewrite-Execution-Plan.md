@@ -494,3 +494,7 @@ reference view is not accepted by the installed formal parser and the others
 have structural counterexamples or unproven cells. They are therefore also
 `CONTRACT_ONLY` until source-backed equations and locked reference behavior
 close together.
+
+The focused vector rail also found no complete proof for `VldMergeUnit` or
+`VsetModule`; both are now `CONTRACT_ONLY` until their merge/set state and
+parent closure are formally matched.

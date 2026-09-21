@@ -26,8 +26,10 @@ COVERED_MODULES: tuple[str, ...] = (
     "VldMergeUnit",
     "VsetModule",
 )
-IMPLEMENTED_MEMBERS: tuple[str, ...] = ("VldMergeUnit", "VsetModule")
-CONTRACT_ONLY_MEMBERS: tuple[str, ...] = ("VLMergeBufferImp", "VSMergeBufferImp", "VSegmentUnit", "VfofBuffer", "VirtualLoadQueue")
+# Bounded merge/set equations are not yet complete locked-reference behavior;
+# keep every vector member contract-only until parent and formal closures pass.
+IMPLEMENTED_MEMBERS: tuple[str, ...] = ()
+CONTRACT_ONLY_MEMBERS = COVERED_MODULES
 
 
 # =============================================================================

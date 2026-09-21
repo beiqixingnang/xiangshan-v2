@@ -160,7 +160,7 @@
         "r4_qds_v2_spec",
         "skidBufferConnect"
       ],
-      "Build-Cpu.Memory.Vector.Family": ["VldMergeUnit", "VsetModule"]
+      "Build-Cpu.Memory.Vector.Family": []
     },
     "contract_only_members": {
       "Build-Cpu.Backend.Datapath.BypassPipeFamily": ["BypassNetwork", "PipeGroupConnect"],
@@ -174,7 +174,7 @@
       "Build-Cpu.Memory.Prefetch.Family": "all 9 members",
       "Build-Cpu.Memory.Prefetch.Metadata.Family": "all 2 members",
       "Build-Cpu.Memory.Store.Family": "all 4 members",
-      "Build-Cpu.Memory.Vector.Family": ["VLMergeBufferImp", "VSMergeBufferImp", "VSegmentUnit", "VfofBuffer", "VirtualLoadQueue"]
+      "Build-Cpu.Memory.Vector.Family": ["VLMergeBufferImp", "VSMergeBufferImp", "VSegmentUnit", "VfofBuffer", "VirtualLoadQueue", "VldMergeUnit", "VsetModule"]
     },
     "audited_downgrades": [
       "Bypass/Pipe equations were heuristic and had prior unproven equivalence cells.",
@@ -183,7 +183,8 @@
       "Prefetch generic port forwarding and folded state were not the locked implementations.",
       "PMP/PMA partial CSR and checker equations failed all five locked-member formal proofs; PMA mapping was not observable in the emitted RTL.",
       "FloatingPoint BoothEncoder produced a locked-reference counterexample and ArrayMulDataModule still depends on a large pipelined Wallace-tree closure; both leaves are contract-only pending full latency/equation proof.",
-      "Decode UopInfoGen, VTypeGen, FPDecoder, and VIAluDecoder all failed the focused locked rail (reference parser/structural counterexamples or unproven cells); bounded port/export checks are not implementation evidence."
+      "Decode UopInfoGen, VTypeGen, FPDecoder, and VIAluDecoder all failed the focused locked rail (reference parser/structural counterexamples or unproven cells); bounded port/export checks are not implementation evidence.",
+      "Vector VldMergeUnit and VsetModule both failed the focused locked rail despite bounded lint/export passing; they remain contract-only pending complete vector parent behavior."
     ],
     "retired_subjects": {
       "Build-Cpu.Residual.LeafFamily": "RETIRED_REPLACED_BY_SOURCE_FAMILIES; catalog/path cleanup only; no implementation or coverage credit"
