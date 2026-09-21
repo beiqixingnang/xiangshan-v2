@@ -1,0 +1,233 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_JTAG_REFERENCE_VIEW_FOCUSED",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "status": "STRICT_PENDING",
+  "strict_complete_count_delta": 0,
+  "acceptance_eligible": false,
+  "build": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Utility.ResidualFamily-Hardware.py",
+  "direct_test": "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu.Dependency.Utility.ResidualFamily-Hardware.py",
+  "members": [
+    "JtagStateMachine",
+    "JtagTapController"
+  ],
+  "direct_test_status": "PASS",
+  "direct_test_output": "----------------------------------------------------------------------\nRan 5 tests in 8.907s\n\nOK\n",
+  "records": [
+    {
+      "member": "JtagStateMachine",
+      "abi_exact": true,
+      "deterministic_export": true,
+      "reference_view_trusted": true,
+      "view_audits": [
+        {
+          "top": "JtagStateMachine",
+          "renamed_top": true,
+          "regions_removed_lines": {
+            "`ifdef ENABLE_INITIAL_REG_": 20
+          },
+          "block_local_temporaries_hoisted": [
+            "_GEN"
+          ],
+          "initialized_declarations_hoisted": [
+            "_GEN"
+          ],
+          "positional_packed_patterns_normalized": 0,
+          "code_lines_locked": 33,
+          "code_lines_view": 34,
+          "residual_preprocessor_directives": 0,
+          "line_conservation_ok": true,
+          "register_update_equations_locked": 0,
+          "register_update_equations_preserved": true,
+          "view_trusted": true
+        }
+      ],
+      "children": [],
+      "target_verilator": "PASS",
+      "locked_reference_verilator": "PASS",
+      "formal_method": "sequential_equivalence",
+      "formal_status": "PASS",
+      "formal_tool_status": "PASS",
+      "formal_success_marker": true,
+      "equiv_cells": 4,
+      "unproven_cells": 0,
+      "diagnostic_tail": "ateMachine_EQUIV'.\n<suppressed ~24 debug messages>\nRemoved a total of 8 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\JtagStateMachine_EQUIV..\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== JtagStateMachine_EQUIV ===\n\n   Number of wires:                 55\n   Number of wire bits:            170\n   Number of public wires:          32\n   Number of public wire bits:      77\n   Number of ports:                  4\n   Number of port bits:              7\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                 38\n     $eq                            15\n     $equiv                          4\n     $logic_not                      1\n     $mux                           10\n     $not                            1\n     $pmux                           1\n     $reduce_or                      3\n     $sdff                           2\n     $shiftx                         1\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module JtagStateMachine_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 4 unproven $equiv cells in module JtagStateMachine_EQUIV:\n  Undef modelling: force def on 8 initial reg values and 3 inputs.\n  Proving existence of base case for step 1. (8756 clauses over 3155 variables)\n  Proving induction step 1. (18007 clauses over 6477 variables)\n  Proof for induction step holds. Entire workset of 4 cells proven!\nProved 4 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 4 $equiv cells in JtagStateMachine_EQUIV:\n  Of those cells 4 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: 8e42220756, CPU: user 0.09s system 0.01s, MEM: 17.81 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 37% 1x equiv_induct (0 sec), 15% 10x opt_clean (0 sec), ...\n"
+    },
+    {
+      "member": "JtagTapController",
+      "abi_exact": true,
+      "deterministic_export": true,
+      "reference_view_trusted": true,
+      "view_audits": [
+        {
+          "top": "CaptureUpdateChain_2",
+          "renamed_top": false,
+          "regions_removed_lines": {
+            "`ifndef SYNTHESIS": 13,
+            "`ifdef ENABLE_INITIAL_REG_": 22
+          },
+          "block_local_temporaries_hoisted": [],
+          "initialized_declarations_hoisted": [],
+          "positional_packed_patterns_normalized": 0,
+          "code_lines_locked": 36,
+          "code_lines_view": 36,
+          "residual_preprocessor_directives": 0,
+          "line_conservation_ok": true,
+          "register_update_equations_locked": 0,
+          "register_update_equations_preserved": true,
+          "view_trusted": true
+        },
+        {
+          "top": "JtagStateMachine",
+          "renamed_top": false,
+          "regions_removed_lines": {
+            "`ifdef ENABLE_INITIAL_REG_": 20
+          },
+          "block_local_temporaries_hoisted": [
+            "_GEN"
+          ],
+          "initialized_declarations_hoisted": [
+            "_GEN"
+          ],
+          "positional_packed_patterns_normalized": 0,
+          "code_lines_locked": 33,
+          "code_lines_view": 34,
+          "residual_preprocessor_directives": 0,
+          "line_conservation_ok": true,
+          "register_update_equations_locked": 0,
+          "register_update_equations_preserved": true,
+          "view_trusted": true
+        },
+        {
+          "top": "JtagTapController",
+          "renamed_top": true,
+          "regions_removed_lines": {
+            "`ifdef ENABLE_INITIAL_REG_": 25
+          },
+          "block_local_temporaries_hoisted": [],
+          "initialized_declarations_hoisted": [],
+          "positional_packed_patterns_normalized": 0,
+          "code_lines_locked": 66,
+          "code_lines_view": 66,
+          "residual_preprocessor_directives": 0,
+          "line_conservation_ok": true,
+          "register_update_equations_locked": 0,
+          "register_update_equations_preserved": true,
+          "view_trusted": true
+        }
+      ],
+      "children": [
+        "CaptureUpdateChain_2",
+        "JtagStateMachine"
+      ],
+      "target_verilator": "PASS",
+      "locked_reference_verilator": "PASS",
+      "formal_method": "sequential_equivalence",
+      "formal_status": "PENDING",
+      "formal_tool_status": "FAIL",
+      "formal_success_marker": false,
+      "equiv_cells": null,
+      "unproven_cells": 11,
+      "diagnostic_tail": "0.13. Executing CHECK pass (checking for obvious problems).\nChecking module JtagTapController_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 11 unproven $equiv cells in module JtagTapController_EQUIV:\n  Undef modelling: force def on 32 initial reg values and 5 inputs.\n  Proving existence of base case for step 1. (11570 clauses over 4216 variables)\n  Proving induction step 1. (25525 clauses over 9237 variables)\n  Proof for induction step failed. Extending to next time step.\n  Proving existence of base case for step 2. (25526 clauses over 9237 variables)\n  Proving induction step 2. (39481 clauses over 14258 variables)\n  Proof for induction step failed. Extending to next time step.\n  Proving existence of base case for step 3. (39482 clauses over 14258 variables)\n  Proving induction step 3. (53437 clauses over 19279 variables)\n  Proof for induction step failed. Extending to next time step.\n  Proving existence of base case for step 4. (53438 clauses over 19279 variables)\n  Proving induction step 4. (67393 clauses over 24300 variables)\n  Proof for induction step failed. Trying to prove individual $equiv from workset.\n  Trying to prove $equiv for \\io_output_instruction [0]: failed.\n  Trying to prove $equiv for \\io_jtag_TDO_driven: failed.\n  Trying to prove $equiv for \\io_output_instruction [2]: failed.\n  Trying to prove $equiv for \\io_output_instruction [3]: failed.\n  Trying to prove $equiv for \\io_output_instruction [4]: failed.\n  Trying to prove $equiv for \\io_dataChainOut_capture: failed.\n  Trying to prove $equiv for \\io_output_instruction [1]: failed.\n  Trying to prove $equiv for \\io_output_tapIsInTestLogicReset: failed.\n  Trying to prove $equiv for \\io_dataChainOut_update: failed.\n  Trying to prove $equiv for \\io_dataChainOut_shift: failed.\n  Trying to prove $equiv for \\io_jtag_TDO_data: failed.\nProved 0 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nERROR: Found 11 unproven $equiv cells in 'equiv_status -assert'.\n"
+    }
+  ],
+  "negative_control": {
+    "status": "PASS",
+    "cases": {
+      "sat": {
+        "status": "PASS",
+        "note": "no representative with outputs"
+      },
+      "sequential.target": {
+        "status": "PASS",
+        "control_entry": "JtagStateMachine",
+        "control_port": "io_currState",
+        "mutation_applied": true,
+        "explicit_failure_marker": true,
+        "success_marker_still_present": false,
+        "returncode": 1
+      },
+      "sequential.reference": {
+        "status": "PASS",
+        "control_entry": "JtagStateMachine",
+        "control_port": "io_currState",
+        "mutation_applied": true,
+        "explicit_failure_marker": true,
+        "success_marker_still_present": false,
+        "returncode": 1
+      }
+    },
+    "note": "a reference-side mutation that still proves means the reference never reaches the comparison"
+  },
+  "checks": {
+    "py_compile": "PASS",
+    "pyright": {
+      "command": [
+        "cmd.exe",
+        "/d",
+        "/c",
+        "pyright",
+        "--outputjson",
+        "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\v2_jtag_reference_view_validator.py"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "error_count": 0,
+      "files_analyzed": 1,
+      "stderr_tail": ""
+    }
+  },
+  "sources": {
+    "validator": {
+      "path": "validation/v2_jtag_reference_view_validator.py",
+      "sha256": "8bbb64f813719263f7dd81f1bf4351901d0b451c72cb8395c4d202f71b088da2",
+      "bytes": 14747
+    },
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Utility.ResidualFamily-Hardware.py",
+      "sha256": "39b33c6923e304f89a4a79a08e760a78639c892961b0a1945d8309277fb5dac7",
+      "bytes": 36529
+    },
+    "shared_rail": {
+      "path": "validation/v2_strict_family_rail.py",
+      "sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
+      "bytes": 43710
+    },
+    "declared_scala_sources": {},
+    "locked_reference": {
+      "JtagStateMachine": {
+        "path": "validation/reference-sv/JtagStateMachine.sv",
+        "sha256": "1fb2105468abbc5c3b85cf7ce9c1bc1e089228e207d2df41a422dc71578ced75",
+        "bytes": 4361
+      },
+      "JtagTapController": {
+        "path": "validation/reference-sv/JtagTapController.sv",
+        "sha256": "df28c071f313abd014e482d3f553a2313512e0ddf35742d1350d8caff7160c78",
+        "bytes": 9128
+      }
+    }
+  },
+  "reference_lock": {
+    "directory": "validation/reference-sv",
+    "xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "locked_references_written": false,
+    "sha256_by_module": {
+      "JtagStateMachine": "1fb2105468abbc5c3b85cf7ce9c1bc1e089228e207d2df41a422dc71578ced75",
+      "JtagTapController": "df28c071f313abd014e482d3f553a2313512e0ddf35742d1350d8caff7160c78"
+    }
+  },
+  "view_policy": {
+    "status": "PASS",
+    "kind": "SECTION_5C_MULTILINE_AUTOMATIC_DECLARATION_ONLY",
+    "line_conservation_required": true,
+    "register_update_equations_required": true,
+    "assignment_patterns": "REJECTED_UNLESS_PROVEN",
+    "locked_sources_written": false
+  },
+  "failures": [
+    "JtagTapController: focused formal gates incomplete"
+  ],
+  "unclosed": [
+    "Focused proof does not cover the remaining catalog members; aggregate Build remains pending."
+  ]
+}
