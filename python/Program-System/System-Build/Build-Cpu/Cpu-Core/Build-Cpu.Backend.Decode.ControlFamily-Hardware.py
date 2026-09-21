@@ -16,8 +16,11 @@ from amaranth.back import verilog
 
 __all__ = ["COVERED_MODULES", "IMPLEMENTED_MEMBERS", "CONTRACT_ONLY_MEMBERS", "DecodeControlFamily", "build_verilog", "main"]
 COVERED_MODULES = ("Backend", "DecodeUnit", "FusionDecoder", "UopInfoGen", "FPDecoder", "VTypeGen", "VecExceptionGen", "VIAluDecoder")
-IMPLEMENTED_MEMBERS = ("UopInfoGen", "VTypeGen", "FPDecoder", "VIAluDecoder")
-CONTRACT_ONLY_MEMBERS = ("Backend", "DecodeUnit", "FusionDecoder", "VecExceptionGen")
+# These leaves have bounded source-shaped equations, but the focused locked
+# rail found reference-view/parser failures or concrete counterexamples. Keep
+# the whole aggregate contract-only until each observable decode relation closes.
+IMPLEMENTED_MEMBERS: tuple[str, ...] = ()
+CONTRACT_ONLY_MEMBERS = COVERED_MODULES
 # Behavioral provenance is maintained in validation inventories, not Build code.
 
 PortSpec = tuple[str, str, int]

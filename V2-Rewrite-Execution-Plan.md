@@ -487,3 +487,10 @@ The focused FloatingPoint audit likewise found a Booth counterexample and an
 ArrayMul reference closure whose pipelined Wallace tree is not represented by
 the compact boundary. Both leaves are now explicitly `CONTRACT_ONLY`; bounded
 lint success remains evidence of syntax/ABI only and does not count as behavior.
+
+The same focused rail found no complete proof for the four previously listed
+Decode leaves (`UopInfoGen`, `VTypeGen`, `FPDecoder`, `VIAluDecoder`): one
+reference view is not accepted by the installed formal parser and the others
+have structural counterexamples or unproven cells. They are therefore also
+`CONTRACT_ONLY` until source-backed equations and locked reference behavior
+close together.
