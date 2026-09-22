@@ -8,7 +8,7 @@ boundaries independently; it deliberately does not invent a combined parent.
 
 from __future__ import annotations
 
-from typing import Any, cast
+from typing import Any, TypeAlias, cast
 
 from amaranth import Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
@@ -21,9 +21,7 @@ __all__ = ["COVERED_MODULES", "RobPtrWrapper", "build_verilog", "main"]
 
 COVERED_MODULES = ("RobEnqPtrWrapper", "NewRobDeqPtrWrapper")
 
-PortSpec = tuple[str, str, int]
-
-PortSpec = tuple[str, str, int]
+PortSpec: TypeAlias = tuple[str, str, int]
 
 PORT_SPECS: dict[str, tuple[PortSpec, ...]] = {
     'RobEnqPtrWrapper': (

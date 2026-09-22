@@ -21,6 +21,7 @@ from typing import Any
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import v2_strict_family_rail as rail  # noqa: E402
+from v2_build_provenance import source_paths_for_build  # noqa: E402
 from v2_smallcontrol_strict_validator import _view  # noqa: E402
 
 
@@ -114,6 +115,25 @@ def main() -> int:
     finally:
         rail.synthesizable_view = original_view
         rail.run_wsl.__defaults__ = original_defaults
+
+    # Build files intentionally contain no upstream identity strings.  Bind
+    # the frozen Scala provenance into evidence from the repository inventory.
+    provenance = {}
+    for source in source_paths_for_build(BUILD):
+        source_path = ROOT / source
+        provenance[source] = {
+            "vendored": source_path.is_file(),
+            "sha256": sha256(source_path) if source_path.is_file() else None,
+        }
+    payload["sources"]["declared_scala_sources"] = provenance
+    if provenance:
+        first = next(iter(provenance))
+        first_path = ROOT / first
+        payload["sources"]["scala"] = {
+            "path": first,
+            "sha256": sha256(first_path) if first_path.is_file() else None,
+            "bytes": first_path.stat().st_size if first_path.is_file() else 0,
+        }
 
     own_path = Path(__file__)
     py_compile.compile(str(own_path), doraise=True)

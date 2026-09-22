@@ -263,23 +263,18 @@
   "sources": {
     "validator": {
       "path": "validation/v2_robptrwrappers_strict_validator.py",
-      "sha256": "0939ceb10a30838536b534758933e8aec6a0f2fb4daca1594538b20033531df5",
-      "bytes": 5553
+      "sha256": "83b6c7fa06de33204e03013120ac85c19cf30988fb0d7dc0bea7c6de0e446ba2",
+      "bytes": 6435
     },
     "python_build": {
       "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Rob.PtrWrappers-Hardware.py",
-      "sha256": "884cdfba9ff67daec46ab7667c0eff7c9f0086f1fe8ea5acb64b14d2b5ddd7ae",
-      "bytes": 12931
+      "sha256": "217f8dc928f8240a1af25bf7d11619a23cce07c719ace6c60e3b7f4566b4533a",
+      "bytes": 12920
     },
     "reference_sv": {
       "path": "validation/reference-sv/NewRobDeqPtrWrapper.sv",
       "sha256": "8501e79211ec3d443c120f56101f5dbec1f5693ce7a5ec6b30ec7f480ccc524c",
       "bytes": 88196
-    },
-    "scala": {
-      "path": "upstream/src/main/scala/xiangshan/backend/rob/RobEnqPtrWrapper.scala",
-      "sha256": "861553cb548410dd6bdbbfceb00800cdaa825d23af3d3824d554dc5c31f27daa",
-      "bytes": 2488
     },
     "declared_scala_sources": {
       "upstream/src/main/scala/xiangshan/backend/rob/RobEnqPtrWrapper.scala": {
@@ -304,11 +299,16 @@
       }
     },
     "reference_children": {},
+    "scala": {
+      "path": "upstream/src/main/scala/xiangshan/backend/rob/RobEnqPtrWrapper.scala",
+      "sha256": "861553cb548410dd6bdbbfceb00800cdaa825d23af3d3824d554dc5c31f27daa",
+      "bytes": 2488
+    },
     "validator_dependencies": {
       "frozen_family_rail": {
         "path": "validation/v2_strict_family_rail.py",
-        "sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
-        "bytes": 43710
+        "sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
+        "bytes": 45980
       },
       "multiline_view_provider": {
         "path": "validation/v2_smallcontrol_strict_validator.py",
@@ -329,7 +329,7 @@
           "/c",
           "pyright",
           "--outputjson",
-          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_ikib78ku\\Build-Cpu.Backend.Rob.PtrWrappers-Hardware.py"
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_utr_euoh\\Build-Cpu.Backend.Rob.PtrWrappers-Hardware.py"
         ],
         "returncode": 0,
         "status": "PASS",
@@ -345,7 +345,7 @@
           "/c",
           "pyright",
           "--outputjson",
-          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_b3paluko\\v2_strict_family_rail.py"
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_qltxh6mx\\v2_strict_family_rail.py"
         ],
         "returncode": 0,
         "status": "PASS",
@@ -426,7 +426,7 @@
           "equiv_failed_full": null,
           "sat_counts_full": null,
           "output_tail": "erates 8 bits.\n                                                                                                                                             : ... note: In instance 'NewRobDeqPtrWrapper_MITER.target_i'\n 9480 |   assign \\$4657  = { io_out_0_value[7:3], 3'h0 } + 4'h8;\n      |                                                  ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_rob_ptrwrappers_family/DUT_NewRobDeqPtrWrapper.sv:9480:50: Operator ADD expects 10 bits on the RHS, but RHS's CONST '4'h8' generates 4 bits.\n                                                                                                                                             : ... note: In instance 'NewRobDeqPtrWrapper_MITER.target_i'\n 9480 |   assign \\$4657  = { io_out_0_value[7:3], 3'h0 } + 4'h8;\n      |                                                  ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_rob_ptrwrappers_family/DUT_NewRobDeqPtrWrapper.sv:9481:28: Operator SUB expects 11 bits on the RHS, but RHS's CONST '8'ha0' generates 8 bits.\n                                                                                                                                             : ... note: In instance 'NewRobDeqPtrWrapper_MITER.target_i'\n 9481 |   assign \\$4658  = \\$4657  - 8'ha0;\n      |                            ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_rob_ptrwrappers_family/DUT_NewRobDeqPtrWrapper.sv:9482:50: Operator ADD expects 10 bits on the LHS, but LHS's REPLICATE generates 8 bits.\n                                                                                                                                             : ... note: In instance 'NewRobDeqPtrWrapper_MITER.target_i'\n 9482 |   assign \\$4659  = { io_out_0_value[7:3], 3'h0 } + 4'h8;\n      |                                                  ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_rob_ptrwrappers_family/DUT_NewRobDeqPtrWrapper.sv:9482:50: Operator ADD expects 10 bits on the RHS, but RHS's CONST '4'h8' generates 4 bits.\n                                                                                                                                             : ... note: In instance 'NewRobDeqPtrWrapper_MITER.target_i'\n 9482 |   assign \\$4659  = { io_out_0_value[7:3], 3'h0 } + 4'h8;\n      |                                                  ^\n",
-          "output_sha256": "3a0186c6d4c7ef34f4a0538ee7ed44206b5378d3c14293ec8168c3794ac9a18f"
+          "output_sha256": "b0b85a866193e78db80f6a3b049e77c6876865a966d6886927c1b432a7ae05a7"
         },
         "locked_verilator": {
           "command": [
@@ -452,8 +452,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.049 MB sources in 2 modules, into 0.158 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.049 s (elab=0.002, cvt=0.009, bld=0.000); cpu 0.021 s on 1 threads; alloced 10.621 MB\n",
-          "output_sha256": "d66b240c50788825a745c3ff7e177895c44d3c0265101a292bb420440f41d322"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.049 MB sources in 2 modules, into 0.158 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.035 s (elab=0.001, cvt=0.007, bld=0.000); cpu 0.016 s on 1 threads; alloced 10.613 MB\n",
+          "output_sha256": "f944edc9343e0e17c364c35228ef299b39ee497a6bf7ddf635294bed553cf5e3"
         },
         "yosys_equiv": {
           "command": [
@@ -479,8 +479,8 @@
           ],
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "rWrapper_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\NewRobDeqPtrWrapper_EQUIV'.\n<suppressed ~57 debug messages>\nRemoved a total of 19 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\NewRobDeqPtrWrapper_EQUIV..\nRemoved 0 unused cells and 11 unused wires.\n<suppressed ~1 debug messages>\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== NewRobDeqPtrWrapper_EQUIV ===\n\n   Number of wires:               5184\n   Number of wire bits:          11419\n   Number of public wires:        4940\n   Number of public wire bits:   10391\n   Number of ports:                 57\n   Number of port bits:            131\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                717\n     $add                           15\n     $and                           43\n     $eq                            11\n     $equiv                         81\n     $ge                            16\n     $gt                            16\n     $logic_not                      2\n     $mux                          399\n     $not                           13\n     $or                            17\n     $reduce_and                     1\n     $sdff                          32\n     $shiftx                         3\n     $shr                            3\n     $sub                           32\n     $xor                           33\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module NewRobDeqPtrWrapper_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 81 unproven $equiv cells in module NewRobDeqPtrWrapper_EQUIV:\n  Undef modelling: force def on 144 initial reg values and 50 inputs.\n  Proving existence of base case for step 1. (170266 clauses over 62034 variables)\n  Proving induction step 1. (349141 clauses over 126985 variables)\n  Proof for induction step holds. Entire workset of 81 cells proven!\nProved 81 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 81 $equiv cells in NewRobDeqPtrWrapper_EQUIV:\n  Of those cells 81 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: b63c7e985b, CPU: user 1.88s system 0.09s, MEM: 104.43 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 37% 1x equiv_induct (0 sec), 17% 9x opt_clean (0 sec), ...\n",
-          "output_sha256": "e08fb6a3ce95b19544866da5459fb39203aecc272c985d91016b8d9bd4ef9381",
+          "output_tail": "rWrapper_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\NewRobDeqPtrWrapper_EQUIV'.\n<suppressed ~57 debug messages>\nRemoved a total of 19 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\NewRobDeqPtrWrapper_EQUIV..\nRemoved 0 unused cells and 11 unused wires.\n<suppressed ~1 debug messages>\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== NewRobDeqPtrWrapper_EQUIV ===\n\n   Number of wires:               5184\n   Number of wire bits:          11419\n   Number of public wires:        4940\n   Number of public wire bits:   10391\n   Number of ports:                 57\n   Number of port bits:            131\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                717\n     $add                           15\n     $and                           43\n     $eq                            11\n     $equiv                         81\n     $ge                            16\n     $gt                            16\n     $logic_not                      2\n     $mux                          399\n     $not                           13\n     $or                            17\n     $reduce_and                     1\n     $sdff                          32\n     $shiftx                         3\n     $shr                            3\n     $sub                           32\n     $xor                           33\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module NewRobDeqPtrWrapper_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 81 unproven $equiv cells in module NewRobDeqPtrWrapper_EQUIV:\n  Undef modelling: force def on 144 initial reg values and 50 inputs.\n  Proving existence of base case for step 1. (170266 clauses over 62034 variables)\n  Proving induction step 1. (349141 clauses over 126985 variables)\n  Proof for induction step holds. Entire workset of 81 cells proven!\nProved 81 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 81 $equiv cells in NewRobDeqPtrWrapper_EQUIV:\n  Of those cells 81 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: b63c7e985b, CPU: user 1.35s system 0.04s, MEM: 104.73 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 42% 1x equiv_induct (0 sec), 16% 9x opt_clean (0 sec), ...\n",
+          "output_sha256": "285ba44ea3264f15d530829e85a2b2831b456e287a634a909e27ef67057a0503",
           "markers_present": {
             "0 are unproven.": true,
             "Equivalence successfully proven!": true
@@ -519,7 +519,7 @@
           "equiv_failed_full": null,
           "sat_counts_full": null,
           "output_tail": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_rob_ptrwrappers_family/DUT_RobEnqPtrWrapper.sv:643:26: Operator ADD expects 7 bits on the RHS, but RHS's VARREF 'io_enq_2' generates 1 bits.\n                                                                                                                                         : ... note: In instance 'RobEnqPtrWrapper_MITER.target_i'\n  643 |   assign \\$287  = \\$286  + io_enq_2;\n      |                          ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_rob_ptrwrappers_family/DUT_RobEnqPtrWrapper.sv:644:26: Operator ADD expects 8 bits on the RHS, but RHS's VARREF 'io_enq_3' generates 1 bits.\n                                                                                                                                         : ... note: In instance 'RobEnqPtrWrapper_MITER.target_i'\n  644 |   assign \\$288  = \\$287  + io_enq_3;\n      |                          ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_rob_ptrwrappers_family/DUT_RobEnqPtrWrapper.sv:645:26: Operator ADD expects 9 bits on the RHS, but RHS's VARREF 'io_enq_4' generates 1 bits.\n                                                                                                                                         : ... note: In instance 'RobEnqPtrWrapper_MITER.target_i'\n  645 |   assign \\$289  = \\$288  + io_enq_4;\n      |                          ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_rob_ptrwrappers_family/DUT_RobEnqPtrWrapper.sv:646:26: Operator ADD expects 10 bits on the RHS, but RHS's VARREF 'io_enq_5' generates 1 bits.\n                                                                                                                                         : ... note: In instance 'RobEnqPtrWrapper_MITER.target_i'\n  646 |   assign \\$290  = \\$289  + io_enq_5;\n      |                          ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_rob_ptrwrappers_family/DUT_RobEnqPtrWrapper.sv:648:34: Operator ADD expects 11 bits on the LHS, but LHS's VARREF 'io_out_5_value' generates 8 bits.\n                                                                                                                                         : ... note: In instance 'RobEnqPtrWrapper_MITER.target_i'\n  648 |   assign \\$292  = io_out_5_value + \\$291 ;\n      |                                  ^\n",
-          "output_sha256": "951f736f044d4ff1fd8f5d33f06743177801a11737065a94060d89cca9feb6bc"
+          "output_sha256": "fa2ec75ee749c67915ae5d7a0f565d04a5d77935e0f089405e565471397647db"
         },
         "locked_verilator": {
           "command": [
@@ -545,8 +545,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.030 MB sources in 2 modules, into 0.036 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.046 s (elab=0.001, cvt=0.005, bld=0.000); cpu 0.016 s on 1 threads; alloced 9.625 MB\n",
-          "output_sha256": "41edfde11691d053856ca89ae6119352ad36681551699b2bea160b9d322d58ab"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.030 MB sources in 2 modules, into 0.036 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.032 s (elab=0.001, cvt=0.002, bld=0.000); cpu 0.008 s on 1 threads; alloced 9.633 MB\n",
+          "output_sha256": "cb9a80018e978b548b13acc31abda26494ad7a852cf08808ee0f7e889308133a"
         },
         "yosys_equiv": {
           "command": [
@@ -572,8 +572,8 @@
           ],
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": " 64 unused wires.\n<suppressed ~1 debug messages>\n\n10.10. Executing MEMORY_COLLECT pass (generating $mem cells).\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RobEnqPtrWrapper_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\RobEnqPtrWrapper_EQUIV'.\n<suppressed ~3 debug messages>\nRemoved a total of 1 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\RobEnqPtrWrapper_EQUIV..\nRemoved 0 unused cells and 1 unused wires.\n<suppressed ~1 debug messages>\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== RobEnqPtrWrapper_EQUIV ===\n\n   Number of wires:                458\n   Number of wire bits:           2548\n   Number of public wires:         371\n   Number of public wire bits:    1982\n   Number of ports:                 21\n   Number of port bits:             70\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                221\n     $add                           38\n     $and                            1\n     $equiv                         49\n     $ge                            12\n     $gt                            13\n     $mux                           63\n     $not                            1\n     $sdff                          14\n     $sub                           25\n     $xor                            5\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module RobEnqPtrWrapper_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 49 unproven $equiv cells in module RobEnqPtrWrapper_EQUIV:\n  Undef modelling: force def on 98 initial reg values and 21 inputs.\n  Proving existence of base case for step 1. (63726 clauses over 23361 variables)\n  Proving induction step 1. (133521 clauses over 48777 variables)\n  Proof for induction step holds. Entire workset of 49 cells proven!\nProved 49 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 49 $equiv cells in RobEnqPtrWrapper_EQUIV:\n  Of those cells 49 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: bb061d6e7e, CPU: user 0.34s system 0.04s, MEM: 48.63 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 63% 1x equiv_induct (0 sec), 10% 9x opt_clean (0 sec), ...\n",
-          "output_sha256": "d76fa0ca64fde980984d971deecf608cf99f590df548cde766e3912463bcabcc",
+          "output_tail": " 64 unused wires.\n<suppressed ~1 debug messages>\n\n10.10. Executing MEMORY_COLLECT pass (generating $mem cells).\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RobEnqPtrWrapper_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\RobEnqPtrWrapper_EQUIV'.\n<suppressed ~3 debug messages>\nRemoved a total of 1 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\RobEnqPtrWrapper_EQUIV..\nRemoved 0 unused cells and 1 unused wires.\n<suppressed ~1 debug messages>\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== RobEnqPtrWrapper_EQUIV ===\n\n   Number of wires:                458\n   Number of wire bits:           2548\n   Number of public wires:         371\n   Number of public wire bits:    1982\n   Number of ports:                 21\n   Number of port bits:             70\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                221\n     $add                           38\n     $and                            1\n     $equiv                         49\n     $ge                            12\n     $gt                            13\n     $mux                           63\n     $not                            1\n     $sdff                          14\n     $sub                           25\n     $xor                            5\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module RobEnqPtrWrapper_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 49 unproven $equiv cells in module RobEnqPtrWrapper_EQUIV:\n  Undef modelling: force def on 98 initial reg values and 21 inputs.\n  Proving existence of base case for step 1. (63726 clauses over 23361 variables)\n  Proving induction step 1. (133521 clauses over 48777 variables)\n  Proof for induction step holds. Entire workset of 49 cells proven!\nProved 49 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 49 $equiv cells in RobEnqPtrWrapper_EQUIV:\n  Of those cells 49 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: bb061d6e7e, CPU: user 0.32s system 0.02s, MEM: 48.29 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 62% 1x equiv_induct (0 sec), 10% 9x opt_clean (0 sec), ...\n",
+          "output_sha256": "6c4363d0bf5a23d558925b6d4d274617da67711d8f97201e8810f150e20d80cb",
           "markers_present": {
             "0 are unproven.": true,
             "Equivalence successfully proven!": true
@@ -588,7 +588,7 @@
     "validator_wrapper": {
       "status": "PASS",
       "path": "validation/v2_robptrwrappers_strict_validator.py",
-      "sha256": "0939ceb10a30838536b534758933e8aec6a0f2fb4daca1594538b20033531df5",
+      "sha256": "83b6c7fa06de33204e03013120ac85c19cf30988fb0d7dc0bea7c6de0e446ba2",
       "py_compile": "PASS",
       "pyright": {
         "command": [
@@ -605,7 +605,7 @@
         "files_analyzed": 1,
         "error_count": 0,
         "warning_count": 0,
-        "stdout_sha256": "ac60c184ece9ba7225426d1073fd79e1a4a42b8b4a8361387ae08d7d9d53e441",
+        "stdout_sha256": "22ef9ecc7e2c7dcb67666aa66cf8fc29e5cab045e593f48d83c7839d5b0d9a34",
         "stderr_tail": ""
       }
     }
