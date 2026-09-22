@@ -5,7 +5,7 @@
   "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
   "target": {
     "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.SmallControl.Family-Hardware.py",
-    "sha256": "6ee5773e63e88368f199c08cd91415eeee45d63b4f3bfe5033bf0fbeee19bc65"
+    "sha256": "e3ca3425d0e59c7296100b345a3007fd4ac3f03fcffea9e6783884c63778830a"
   },
   "covered_modules": [
     "AddrAddModule",
@@ -87,7 +87,7 @@
         ],
         "status": "PASS",
         "returncode": 0,
-        "output_tail": "ilt from 0.021 MB sources in 2 modules, into 0.023 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.017 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.098 MB\n%Warning-WIDTHEXPAND: /mnt/c/backend_small_control_family/AddrAddModule.sv:21:29: Operator ADD expects 52 bits on the RHS, but RHS's REPLICATE generates 6 bits.\n                                                                                : ... note: In instance 'AddrAddModule'\n   21 |   assign \\$2  = io_pcExtend + { io_nextPcOffset, 1'h0 };\n      |                             ^\n                      ... For warning description see https://verilator.org/warn/WIDTHEXPAND?v=5.032\n                      ... Use \"/* verilator lint_off WIDTHEXPAND */\" and lint_on around source to disable this message.\n"
+        "output_tail": "ilt from 0.021 MB sources in 2 modules, into 0.023 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.021 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.102 MB\n%Warning-WIDTHEXPAND: /mnt/c/backend_small_control_family/AddrAddModule.sv:21:29: Operator ADD expects 52 bits on the RHS, but RHS's REPLICATE generates 6 bits.\n                                                                                : ... note: In instance 'AddrAddModule'\n   21 |   assign \\$2  = io_pcExtend + { io_nextPcOffset, 1'h0 };\n      |                             ^\n                      ... For warning description see https://verilator.org/warn/WIDTHEXPAND?v=5.032\n                      ... Use \"/* verilator lint_off WIDTHEXPAND */\" and lint_on around source to disable this message.\n"
       },
       "yosys": {
         "command": [
@@ -100,7 +100,7 @@
         ],
         "status": "PASS",
         "returncode": 0,
-        "output_tail": "_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module AddrAddModule.\n\n3. Executing CHECK pass (checking for obvious problems).\nChecking module AddrAddModule...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: cfa9221e88, CPU: user 0.01s system 0.01s, MEM: 10.94 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 45% 2x read_verilog (0 sec), 20% 1x opt_expr (0 sec), ...\n"
+        "output_tail": "_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module AddrAddModule.\n\n3. Executing CHECK pass (checking for obvious problems).\nChecking module AddrAddModule...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: cfa9221e88, CPU: user 0.01s system 0.00s, MEM: 10.78 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 44% 2x read_verilog (0 sec), 23% 1x opt_expr (0 sec), ...\n"
       }
     },
     "DatamoduleResultBuffer": {
@@ -118,7 +118,7 @@
         ],
         "status": "PASS",
         "returncode": 0,
-        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.032 MB sources in 2 modules, into 0.034 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.020 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.007 s on 1 threads; alloced 9.500 MB\n"
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.032 MB sources in 2 modules, into 0.034 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.020 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.008 s on 1 threads; alloced 9.504 MB\n"
       },
       "yosys": {
         "command": [
@@ -131,12 +131,12 @@
         ],
         "status": "PASS",
         "returncode": 0,
-        "output_tail": "mily/DatamoduleResultBuffer.sv:180$19'.\nRemoving empty process `DatamoduleResultBuffer.$proc$/mnt/c/backend_small_control_family/DatamoduleResultBuffer.sv:177$18'.\nRemoving empty process `DatamoduleResultBuffer.$proc$/mnt/c/backend_small_control_family/DatamoduleResultBuffer.sv:174$17'.\nCleaned up 20 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DatamoduleResultBuffer.\n<suppressed ~18 debug messages>\n\n3. Executing CHECK pass (checking for obvious problems).\nChecking module DatamoduleResultBuffer...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: b009c19abe, CPU: user 0.01s system 0.01s, MEM: 13.28 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 51% 2x read_verilog (0 sec), 15% 1x check (0 sec), ...\n"
+        "output_tail": "mily/DatamoduleResultBuffer.sv:180$19'.\nRemoving empty process `DatamoduleResultBuffer.$proc$/mnt/c/backend_small_control_family/DatamoduleResultBuffer.sv:177$18'.\nRemoving empty process `DatamoduleResultBuffer.$proc$/mnt/c/backend_small_control_family/DatamoduleResultBuffer.sv:174$17'.\nCleaned up 20 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module DatamoduleResultBuffer.\n<suppressed ~18 debug messages>\n\n3. Executing CHECK pass (checking for obvious problems).\nChecking module DatamoduleResultBuffer...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: b009c19abe, CPU: user 0.01s system 0.01s, MEM: 13.12 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 51% 2x read_verilog (0 sec), 15% 1x check (0 sec), ...\n"
       }
     },
     "GPAMem": {
-      "bytes": 125380,
-      "sha256": "bd936b9e9a7d67ec0ca77b534872fc20bfae06c986b88f77bb5e4cd8f9f3c007",
+      "bytes": 116409,
+      "sha256": "e60a32586d7e84b9b007529d2345daeaf1056b1977e66492bd37aecb8215626a",
       "deterministic": true,
       "verilator": {
         "command": [
@@ -149,7 +149,7 @@
         ],
         "status": "PASS",
         "returncode": 0,
-        "output_tail": "EINCOMPLETE: /mnt/c/backend_small_control_family/GPAMem.sv:5198:7: Case values incompletely covered (example pattern 0xa)\n 5198 |       casez (io_fromIFU_gpaddrMem_waddr)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/backend_small_control_family/GPAMem.sv:5226:7: Case values incompletely covered (example pattern 0xb)\n 5226 |       casez (io_fromIFU_gpaddrMem_waddr)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/backend_small_control_family/GPAMem.sv:5256:7: Case values incompletely covered (example pattern 0xc)\n 5256 |       casez (io_fromIFU_gpaddrMem_waddr)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/backend_small_control_family/GPAMem.sv:5288:7: Case values incompletely covered (example pattern 0xd)\n 5288 |       casez (io_fromIFU_gpaddrMem_waddr)\n      |       ^~~~~\n"
+        "output_tail": "ning-CASEINCOMPLETE: /mnt/c/backend_small_control_family/GPAMem.sv:4162:7: Case values incompletely covered (example pattern 0xc)\n 4162 |       casez (\\mem.waddr_dup_0_3 [3:0])\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/backend_small_control_family/GPAMem.sv:4194:7: Case values incompletely covered (example pattern 0xd)\n 4194 |       casez (\\mem.waddr_dup_0_3 [3:0])\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/backend_small_control_family/GPAMem.sv:4228:7: Case values incompletely covered (example pattern 0xe)\n 4228 |       casez (\\mem.waddr_dup_0_3 [3:0])\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/backend_small_control_family/GPAMem.sv:4264:7: Case values incompletely covered (example pattern 0xf)\n 4264 |       casez (\\mem.waddr_dup_0_3 [3:0])\n      |       ^~~~~\n"
       },
       "yosys": {
         "command": [
@@ -162,12 +162,12 @@
         ],
         "status": "PASS",
         "returncode": 0,
-        "output_tail": "ackend_small_control_family/GPAMem.sv:173$4'.\nRemoving empty process `GPAMem.$proc$/mnt/c/backend_small_control_family/GPAMem.sv:170$3'.\nRemoving empty process `GPAMem.$proc$/mnt/c/backend_small_control_family/GPAMem.sv:167$2'.\nRemoving empty process `GPAMem.$proc$/mnt/c/backend_small_control_family/GPAMem.sv:164$1'.\nCleaned up 132 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module GPAMem.\n<suppressed ~70 debug messages>\n\n3. Executing CHECK pass (checking for obvious problems).\nChecking module GPAMem...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: e0b2398734, CPU: user 0.14s system 0.02s, MEM: 32.42 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 38% 1x check (0 sec), 33% 2x read_verilog (0 sec), ...\n"
+        "output_tail": "nd_small_control_family/GPAMem.sv:438$53'.\nRemoving empty process `GPAMem.$proc$/mnt/c/backend_small_control_family/GPAMem.sv:436$52'.\nRemoving empty process `GPAMem.$proc$/mnt/c/backend_small_control_family/GPAMem.sv:434$51'.\nRemoving empty process `GPAMem.$proc$/mnt/c/backend_small_control_family/GPAMem.sv:432$50'.\nCleaned up 284 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module GPAMem.\n<suppressed ~30 debug messages>\n\n3. Executing CHECK pass (checking for obvious problems).\nChecking module GPAMem...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 174fe7998c, CPU: user 0.12s system 0.02s, MEM: 32.81 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 41% 2x read_verilog (0 sec), 23% 1x check (0 sec), ...\n"
       }
     },
     "RedirectGenerator": {
-      "bytes": 30433,
-      "sha256": "1e9aae70eba92d81aaef75d5f5215b65711103d5ef3c6ab3971940028712677d",
+      "bytes": 86938,
+      "sha256": "f38fc3c1d3362a5ee7754cd969c30366acbcca0e4f4ea9667192581fa2db6d42",
       "deterministic": true,
       "verilator": {
         "command": [
@@ -180,7 +180,7 @@
         ],
         "status": "PASS",
         "returncode": 0,
-        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.049 MB sources in 2 modules, into 0.022 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.024 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.009 s on 1 threads; alloced 10.070 MB\n"
+        "output_tail": "n see https://verilator.org/warn/WIDTHEXPAND?v=5.032\n                      ... Use \"/* verilator lint_off WIDTHEXPAND */\" and lint_on around source to disable this message.\n%Warning-WIDTHEXPAND: /mnt/c/backend_small_control_family/RedirectGenerator.sv:1892:127: Operator NEQ expects 16 bits on the RHS, but RHS's SIGNED generates 1 bits.\n                                                                                       : ... note: In instance 'RedirectGenerator'\n 1892 |   assign \\$758  = $signed({ io_oldestExuRedirect_bits_fullTarget[63:50], io_oldestExuRedirect_bits_cfiUpdate_target[49:48] }) != $signed(io_oldestExuRedirect_bits_cfiUpdate_target[47]);\n      |                                                                                                                               ^~\n"
       },
       "yosys": {
         "command": [
@@ -193,7 +193,7 @@
         ],
         "status": "PASS",
         "returncode": 0,
-        "output_tail": " pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RedirectGenerator.\n\n3. Executing CHECK pass (checking for obvious problems).\nChecking module RedirectGenerator...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 64d5bb629e, CPU: user 0.01s system 0.01s, MEM: 12.97 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 71% 2x read_verilog (0 sec), 9% 1x check (0 sec), ...\n"
+        "output_tail": "/c/backend_small_control_family/RedirectGenerator.sv:2104$952'.\nRemoving empty process `RedirectGenerator.$proc$/mnt/c/backend_small_control_family/RedirectGenerator.sv:2101$951'.\nRemoving empty process `RedirectGenerator.$proc$/mnt/c/backend_small_control_family/RedirectGenerator.sv:2098$950'.\nCleaned up 21 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RedirectGenerator.\n<suppressed ~7 debug messages>\n\n3. Executing CHECK pass (checking for obvious problems).\nChecking module RedirectGenerator...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: af9fa80c81, CPU: user 0.04s system 0.01s, MEM: 20.00 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 73% 2x read_verilog (0 sec), 10% 1x opt_expr (0 sec), ...\n"
       }
     },
     "RegCache": {
@@ -224,12 +224,12 @@
         ],
         "status": "PASS",
         "returncode": 0,
-        "output_tail": "amily/RegCache.sv:334$19'.\nRemoving empty process `RegCache.$proc$/mnt/c/backend_small_control_family/RegCache.sv:331$18'.\nRemoving empty process `RegCache.$proc$/mnt/c/backend_small_control_family/RegCache.sv:328$17'.\nRemoving empty process `RegCache.$proc$/mnt/c/backend_small_control_family/RegCache.sv:325$16'.\nCleaned up 478 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RegCache.\n<suppressed ~76 debug messages>\n\n3. Executing CHECK pass (checking for obvious problems).\nChecking module RegCache...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: c7cbcb9f8e, CPU: user 0.43s system 0.02s, MEM: 69.80 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 45% 1x check (0 sec), 24% 2x read_verilog (0 sec), ...\n"
+        "output_tail": "amily/RegCache.sv:334$19'.\nRemoving empty process `RegCache.$proc$/mnt/c/backend_small_control_family/RegCache.sv:331$18'.\nRemoving empty process `RegCache.$proc$/mnt/c/backend_small_control_family/RegCache.sv:328$17'.\nRemoving empty process `RegCache.$proc$/mnt/c/backend_small_control_family/RegCache.sv:325$16'.\nCleaned up 478 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RegCache.\n<suppressed ~76 debug messages>\n\n3. Executing CHECK pass (checking for obvious problems).\nChecking module RegCache...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: c7cbcb9f8e, CPU: user 0.43s system 0.03s, MEM: 69.39 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 45% 1x check (0 sec), 24% 2x read_verilog (0 sec), ...\n"
       }
     },
     "RegCacheTagTable": {
-      "bytes": 515999,
-      "sha256": "024bca1644d50d63a0d4dea9a8db55cc85dc49cf89644b5429cf473302050fd8",
+      "bytes": 1515873,
+      "sha256": "559ee64f3576a039a69f08d5adf880fccec00fe7b781703050c65c96d8fdfc38",
       "deterministic": true,
       "verilator": {
         "command": [
@@ -242,7 +242,7 @@
         ],
         "status": "PASS",
         "returncode": 0,
-        "output_tail": "Table.sv:21019:7: Case values incompletely covered (example pattern 0x1f)\n21019 |       casez (io_wakeupFromIQ_3_bits_rcDest)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/backend_small_control_family/RegCacheTagTable.sv:21085:7: Case values incompletely covered (example pattern 0x1f)\n21085 |       casez (io_wakeupFromIQ_4_bits_rcDest)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/backend_small_control_family/RegCacheTagTable.sv:21151:7: Case values incompletely covered (example pattern 0x1f)\n21151 |       casez (io_wakeupFromIQ_5_bits_rcDest)\n      |       ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/backend_small_control_family/RegCacheTagTable.sv:21217:7: Case values incompletely covered (example pattern 0x1f)\n21217 |       casez (io_wakeupFromIQ_6_bits_rcDest)\n      |       ^~~~~\n"
+        "output_tail": "the RHS, but RHS's CONST '3'h7' generates 3 bits.\n39946 |   assign \\$19929  = io_wakeupFromIQ_5_bits_rcDest[3:0] == 3'h7;\n      |                                                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/backend_small_control_family/RegCacheTagTable.sv:39950:56: Operator EQ expects 4 bits on the RHS, but RHS's CONST '3'h7' generates 3 bits.\n39950 |   assign \\$19933  = io_wakeupFromIQ_6_bits_rcDest[3:0] == 3'h7;\n      |                                                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/backend_small_control_family/RegCacheTagTable.sv:39954:56: Operator EQ expects 4 bits on the RHS, but RHS's CONST '3'h7' generates 3 bits.\n39954 |   assign \\$19937  = io_wakeupFromIQ_6_bits_rcDest[3:0] == 3'h7;\n      |                                                        ^~\n"
       },
       "yosys": {
         "command": [
@@ -255,7 +255,7 @@
         ],
         "status": "PASS",
         "returncode": 0,
-        "output_tail": "nt/c/backend_small_control_family/RegCacheTagTable.sv:3838$1738'.\nRemoving empty process `RegCacheTagTable.$proc$/mnt/c/backend_small_control_family/RegCacheTagTable.sv:3835$1737'.\nRemoving empty process `RegCacheTagTable.$proc$/mnt/c/backend_small_control_family/RegCacheTagTable.sv:3832$1736'.\nCleaned up 1280 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RegCacheTagTable.\n<suppressed ~92 debug messages>\n\n3. Executing CHECK pass (checking for obvious problems).\nChecking module RegCacheTagTable...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 253985667a, CPU: user 0.26s system 0.02s, MEM: 65.33 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 61% 2x read_verilog (0 sec), 9% 1x opt_expr (0 sec), ...\n"
+        "output_tail": "ackend_small_control_family/RegCacheTagTable.sv:41027$19531'.\nRemoving empty process `RegCacheTagTable.$proc$/mnt/c/backend_small_control_family/RegCacheTagTable.sv:41025$19530'.\nRemoving empty process `RegCacheTagTable.$proc$/mnt/c/backend_small_control_family/RegCacheTagTable.sv:41022$19529'.\nCleaned up 28 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RegCacheTagTable.\n<suppressed ~28 debug messages>\n\n3. Executing CHECK pass (checking for obvious problems).\nChecking module RegCacheTagTable...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: c15a2cbf0e, CPU: user 0.94s system 0.07s, MEM: 180.43 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 73% 2x read_verilog (0 sec), 11% 1x opt_expr (0 sec), ...\n"
       }
     },
     "RegionWays": {
@@ -286,7 +286,7 @@
         ],
         "status": "PASS",
         "returncode": 0,
-        "output_tail": "367'.\nRemoving empty process `RegionWays.$proc$/mnt/c/backend_small_control_family/RegionWays.sv:1155$366'.\nRemoving empty process `RegionWays.$proc$/mnt/c/backend_small_control_family/RegionWays.sv:1152$365'.\nRemoving empty process `RegionWays.$proc$/mnt/c/backend_small_control_family/RegionWays.sv:1149$364'.\nCleaned up 65 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RegionWays.\n<suppressed ~37 debug messages>\n\n3. Executing CHECK pass (checking for obvious problems).\nChecking module RegionWays...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 6da1f75c21, CPU: user 0.05s system 0.01s, MEM: 21.43 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 53% 2x read_verilog (0 sec), 18% 1x check (0 sec), ...\n"
+        "output_tail": "367'.\nRemoving empty process `RegionWays.$proc$/mnt/c/backend_small_control_family/RegionWays.sv:1155$366'.\nRemoving empty process `RegionWays.$proc$/mnt/c/backend_small_control_family/RegionWays.sv:1152$365'.\nRemoving empty process `RegionWays.$proc$/mnt/c/backend_small_control_family/RegionWays.sv:1149$364'.\nCleaned up 65 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RegionWays.\n<suppressed ~37 debug messages>\n\n3. Executing CHECK pass (checking for obvious problems).\nChecking module RegionWays...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 6da1f75c21, CPU: user 0.07s system 0.00s, MEM: 21.59 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 50% 2x read_verilog (0 sec), 21% 1x check (0 sec), ...\n"
       }
     },
     "RASStack": {
@@ -317,12 +317,12 @@
         ],
         "status": "PASS",
         "returncode": 0,
-        "output_tail": "rol_family/RASStack.sv:153$8'.\nRemoving empty process `RASStack.$proc$/mnt/c/backend_small_control_family/RASStack.sv:150$7'.\nRemoving empty process `RASStack.$proc$/mnt/c/backend_small_control_family/RASStack.sv:147$6'.\nRemoving empty process `RASStack.$proc$/mnt/c/backend_small_control_family/RASStack.sv:144$5'.\nCleaned up 43 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RASStack.\n<suppressed ~20 debug messages>\n\n3. Executing CHECK pass (checking for obvious problems).\nChecking module RASStack...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: e5031265ea, CPU: user 0.02s system 0.01s, MEM: 15.34 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 38% 2x read_verilog (0 sec), 27% 1x check (0 sec), ...\n"
+        "output_tail": "rol_family/RASStack.sv:153$8'.\nRemoving empty process `RASStack.$proc$/mnt/c/backend_small_control_family/RASStack.sv:150$7'.\nRemoving empty process `RASStack.$proc$/mnt/c/backend_small_control_family/RASStack.sv:147$6'.\nRemoving empty process `RASStack.$proc$/mnt/c/backend_small_control_family/RASStack.sv:144$5'.\nCleaned up 43 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RASStack.\n<suppressed ~20 debug messages>\n\n3. Executing CHECK pass (checking for obvious problems).\nChecking module RASStack...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: e5031265ea, CPU: user 0.03s system 0.00s, MEM: 15.49 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 37% 2x read_verilog (0 sec), 26% 1x check (0 sec), ...\n"
       }
     },
     "FauFTBWay": {
-      "bytes": 13682,
-      "sha256": "1df40326d745447e86a9b27c03473cbac39cc0a6085a24720efa03e041ed789a",
+      "bytes": 12761,
+      "sha256": "85e9678dfe2c75620ce2211eb45c58b0526a09f9539b70a64dda28b0c632af29",
       "deterministic": true,
       "verilator": {
         "command": [
@@ -335,7 +335,7 @@
         ],
         "status": "PASS",
         "returncode": 0,
-        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.033 MB sources in 2 modules, into 0.030 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.018 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.007 s on 1 threads; alloced 9.504 MB\n"
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.032 MB sources in 2 modules, into 0.030 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.019 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.007 s on 1 threads; alloced 9.500 MB\n"
       },
       "yosys": {
         "command": [
@@ -348,7 +348,7 @@
         ],
         "status": "PASS",
         "returncode": 0,
-        "output_tail": "FTBWay.sv:181$11'.\nRemoving empty process `FauFTBWay.$proc$/mnt/c/backend_small_control_family/FauFTBWay.sv:178$10'.\nRemoving empty process `FauFTBWay.$proc$/mnt/c/backend_small_control_family/FauFTBWay.sv:175$9'.\nRemoving empty process `FauFTBWay.$proc$/mnt/c/backend_small_control_family/FauFTBWay.sv:172$8'.\nCleaned up 20 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FauFTBWay.\n<suppressed ~20 debug messages>\n\n3. Executing CHECK pass (checking for obvious problems).\nChecking module FauFTBWay...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 30f349adbd, CPU: user 0.01s system 0.01s, MEM: 12.19 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 55% 2x read_verilog (0 sec), 12% 1x opt_expr (0 sec), ...\n"
+        "output_tail": "TBWay.sv:184$13'.\nRemoving empty process `FauFTBWay.$proc$/mnt/c/backend_small_control_family/FauFTBWay.sv:182$12'.\nRemoving empty process `FauFTBWay.$proc$/mnt/c/backend_small_control_family/FauFTBWay.sv:180$11'.\nRemoving empty process `FauFTBWay.$proc$/mnt/c/backend_small_control_family/FauFTBWay.sv:178$10'.\nCleaned up 21 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FauFTBWay.\n<suppressed ~1 debug messages>\n\n3. Executing CHECK pass (checking for obvious problems).\nChecking module FauFTBWay...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 5b3cec3d38, CPU: user 0.01s system 0.00s, MEM: 12.34 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 64% 2x read_verilog (0 sec), 10% 1x opt_expr (0 sec), ...\n"
       }
     },
     "VectorCvtTop": {
@@ -366,7 +366,7 @@
         ],
         "status": "PASS",
         "returncode": 0,
-        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.016 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.015 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.004 s on 1 threads; alloced 9.156 MB\n"
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.016 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.021 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.004 s on 1 threads; alloced 9.156 MB\n"
       },
       "yosys": {
         "command": [
@@ -379,7 +379,7 @@
         ],
         "status": "PASS",
         "returncode": 0,
-        "output_tail": "OC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module VectorCvtTop.\n\n3. Executing CHECK pass (checking for obvious problems).\nChecking module VectorCvtTop...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 5311467d8d, CPU: user 0.01s system 0.00s, MEM: 10.31 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 43% 2x read_verilog (0 sec), 27% 1x opt_expr (0 sec), ...\n"
+        "output_tail": "OC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module VectorCvtTop.\n\n3. Executing CHECK pass (checking for obvious problems).\nChecking module VectorCvtTop...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 5311467d8d, CPU: user 0.01s system 0.00s, MEM: 10.16 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 44% 2x read_verilog (0 sec), 23% 1x opt_expr (0 sec), ...\n"
       }
     }
   },
