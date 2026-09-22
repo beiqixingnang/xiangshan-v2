@@ -21,6 +21,10 @@ BUILD = ROOT / (
 )
 BUILD_ID = "Build-Cpu.Backend.Fu.SRT16Divider"
 EVIDENCE = ROOT / "validation/v2-build-cpu-backend-fu-srt16divider-strict-evidence.json"
+SCALA_SOURCES = (
+    "upstream/src/main/scala/xiangshan/backend/fu/SRT16Divider.scala",
+    "upstream/src/main/scala/xiangshan/backend/fu/SRT4Divider.scala",
+)
 
 
 def source_record(path: Path) -> dict[str, Any]:
@@ -87,6 +91,14 @@ def main() -> int:
     payload["sources"]["validator_dependencies"] = {
         "strict_family_rail": source_record(shared_rail),
         "multiline_reference_view": source_record(multiline_view),
+    }
+    payload["sources"]["declared_scala_sources"] = {
+        path: {
+            "vendored": True,
+            "sha256": rail.sha256_file(ROOT / path),
+            "bytes": (ROOT / path).stat().st_size,
+        }
+        for path in SCALA_SOURCES
     }
     payload["checks"]["pyright"]["validator"] = validator_pyright
     payload["view_policy"] = {
