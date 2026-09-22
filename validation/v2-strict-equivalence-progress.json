@@ -6,7 +6,7 @@
   "fraction": "39/118",
   "percentage": 33.050847,
   "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with the locked source commit, matching source hashes, and either a Yosys SAT no-model miter or fully proven Yosys inductive-equivalence status is counted. STRICT_PENDING and COMPLETE_EQUIVALENCE_VARIANT_ONLY records are inventoried as attempted-but-not-counted instead of failing the rail, and one Build file may not be claimed by several counting proofs.",
-  "non_counting_attempt_count": 4,
+  "non_counting_attempt_count": 5,
   "non_counting_attempts": [
     {
       "evidence": "validation/v2-build-cpu-backend-fu-pmp-family-strict-evidence.json",
@@ -56,6 +56,21 @@
         "RegCache: zero or missing $equiv cells",
         "VectorCvtTop:yosys_equiv",
         "VectorCvtTop: 166 $equiv cells unproven"
+      ],
+      "unclosed": [
+        "strict gates did not all pass"
+      ]
+    },
+    {
+      "evidence": "validation/v2-build-cpu-memory-prefetch-metadata-family-strict-evidence.json",
+      "build_id": "Build-Cpu.Memory.Prefetch.Metadata.Family",
+      "declared_status": "STRICT_PENDING",
+      "audit_failures": [],
+      "proof_failures": [
+        "StreamBitVectorArray:yosys_equiv",
+        "StreamBitVectorArray: 117 $equiv cells unproven",
+        "StrideMetaArray:yosys_equiv",
+        "StrideMetaArray: 115 $equiv cells unproven"
       ],
       "unclosed": [
         "strict gates did not all pass"
@@ -27656,7 +27671,7 @@
           "present": true,
           "inside_repository": true,
           "expected_sha256": "8864c37fc6221ee32144e1bfd1632969db2a68e6ae9038f2d5ec571b53fd3360",
-          "observed_sha256": "3a658a2b259d93adef32c9bc3ca5c16269ba29e10a0d1084770e016ddabefc90",
+          "observed_sha256": "3fbe96e9f884b11b1696e4848a991be60ade36187745ae1daf0b79553c9425f4",
           "status": "FAIL"
         },
         "reference_sv": {
@@ -33611,8 +33626,8 @@
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "status": "PASS"
       },
-      "status": "FAIL",
-      "note": "scala provenance not vendored for this attempt record",
+      "status": "NON_COUNTING",
+      "note": null,
       "scope": {
         "kind": "catalog_build_multi_variant",
         "public_variants": [
@@ -33686,7 +33701,7 @@
             "abi_exact": true,
             "deterministic": true,
             "miter_selfcheck": true,
-            "view_trusted": false,
+            "view_trusted": true,
             "locked_reference_lint": "PASS",
             "verdict": "FAIL",
             "success_marker": false,
@@ -33694,9 +33709,9 @@
               "0 are unproven.": false,
               "Equivalence successfully proven!": false
             },
-            "unconstrained_or_equiv_cells": null,
-            "proven_cells": null,
-            "unproven_cells": null,
+            "unconstrained_or_equiv_cells": 117,
+            "proven_cells": 0,
+            "unproven_cells": 117,
             "sat_variables": null,
             "sat_clauses": null
           },
@@ -33750,16 +33765,16 @@
           "path": "validation/v2_strict_family_rail.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
+          "expected_sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
           "observed_sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
-          "status": "FAIL"
+          "status": "PASS"
         },
         "python_build": {
           "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Prefetch.Metadata.Family-Hardware.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "1f8e6e165121bbb08e1966eb5253f7eb1385b2f9f69cf54ef4b2ca2972d65412",
-          "observed_sha256": "1f8e6e165121bbb08e1966eb5253f7eb1385b2f9f69cf54ef4b2ca2972d65412",
+          "expected_sha256": "a4c42c60ff4a6fc1d7d354e0f34cdfb4ffe43cdc34d022c2162f5f628eb21eb7",
+          "observed_sha256": "a4c42c60ff4a6fc1d7d354e0f34cdfb4ffe43cdc34d022c2162f5f628eb21eb7",
           "status": "PASS"
         },
         "reference_sv": {
@@ -33768,6 +33783,14 @@
           "inside_repository": true,
           "expected_sha256": "1fc095dc48bf6d02ebf42590214a736f8a449e61527f114ba5f5868544f7cf98",
           "observed_sha256": "1fc095dc48bf6d02ebf42590214a736f8a449e61527f114ba5f5868544f7cf98",
+          "status": "PASS"
+        },
+        "scala": {
+          "path": "upstream/src/main/scala/xiangshan/mem/prefetch/L1StreamPrefetcher.scala",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "a049d941ffd77cbbdb33c39ca93abd25ad85c7c293d533defd81ab16073a619b",
+          "observed_sha256": "a049d941ffd77cbbdb33c39ca93abd25ad85c7c293d533defd81ab16073a619b",
           "status": "PASS"
         }
       },
@@ -33796,9 +33819,7 @@
         "StreamBitVectorArray": {
           "status": "FAIL",
           "failures": [
-            "reference view",
             "formal verdict",
-            "zero/missing equivalence cells",
             "incomplete proven equivalence cells",
             "unproven equivalence cells",
             "sequential equivalence full-output markers"
@@ -33821,14 +33842,15 @@
         "status": null,
         "formal_success_marker": null
       },
-      "failures": [
-        "source digest: validator"
-      ],
+      "failures": [],
       "declared_failures": [
-        "implementation rewritten and its exact ABI catalog compacted after prior strict attempt; strict proof must be rerun"
+        "StreamBitVectorArray:yosys_equiv",
+        "StreamBitVectorArray: 117 $equiv cells unproven",
+        "StrideMetaArray:yosys_equiv",
+        "StrideMetaArray: 115 $equiv cells unproven"
       ],
       "declared_unclosed": [
-        "strict proof invalidated by implementation rewrite and exact ABI-preserving catalog compaction; rerun the complete family rail"
+        "strict gates did not all pass"
       ]
     },
     {
