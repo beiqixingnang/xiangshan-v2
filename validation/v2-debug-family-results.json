@@ -36,8 +36,8 @@
   },
   "tool_gates": {
     "Debug": {
-      "rtl_bytes": 10164,
-      "rtl_sha256": "963d27445c030b2e13843755282cc37ee65874114640413988c6ca8ed72270a8",
+      "rtl_bytes": 28361,
+      "rtl_sha256": "31fed32ff2e307c81783b538160641b3342fa56e2e64e477a527240ce8594696",
       "verilator": {
         "command": [
           "wsl.exe",
@@ -48,7 +48,7 @@
         ],
         "status": "PASS",
         "returncode": 0,
-        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.030 MB sources in 2 modules, into 0.018 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.022 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.406 MB\n"
+        "output_tail": "ut RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                          : ... note: In instance 'Debug'\n  733 |   assign \\$279  = io_in_privState_PRVM == 1'h1;\n      |                                        ^~\n%Warning-WIDTHTRUNC: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-debug-family/Debug.sv:737:19: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'io_in_privState_PRVM' generates 2 bits.\n                                                                                                                                         : ... note: In instance 'Debug'\n  737 |   assign \\$283  = ! io_in_privState_PRVM;\n      |                   ^\n"
       },
       "yosys": {
         "command": [
@@ -60,12 +60,12 @@
         ],
         "status": "PASS",
         "returncode": 0,
-        "output_tail": "nvert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: b537d2ab86, CPU: user 0.01s system 0.01s, MEM: 8.91 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 51% 1x opt_expr (0 sec), 27% 2x read_verilog (0 sec), ...\n"
+        "output_tail": "nvert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: b537d2ab86, CPU: user 0.02s system 0.00s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 47% 2x read_verilog (0 sec), 26% 1x opt_expr (0 sec), ...\n"
       }
     },
     "MemTrigger": {
-      "rtl_bytes": 6583,
-      "rtl_sha256": "91cc46614f83e6a323f9fe453e8c65ea9e197f9404eff81f1abab234f19e1ab4",
+      "rtl_bytes": 746264,
+      "rtl_sha256": "17d8424bfda3a10a5476441138945137c00705ac3c9e36e421808c3670f6325a",
       "verilator": {
         "command": [
           "wsl.exe",
@@ -76,7 +76,7 @@
         ],
         "status": "PASS",
         "returncode": 0,
-        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.027 MB sources in 2 modules, into 0.017 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.021 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.262 MB\n"
+        "output_tail": "Type;\n      |                   ^\n%Warning-WIDTHTRUNC: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-debug-family/MemTrigger.sv:18959:19: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'tdataVec_io_fromCsrTrigger_tdataVec_3_action' generates 4 bits.\n18959 |   assign \\$510  = ! tdataVec_io_fromCsrTrigger_tdataVec_3_action;\n      |                   ^\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-debug-family/MemTrigger.sv:18970:57: Operator EQ expects 60 bits on the LHS, but LHS's SEL generates 46 bits.\n18970 |   assign \\$520  = tdataVec_io_fromLoadStore_vaddr[49:4] == tdataVec_io_fromCsrTrigger_tdataVec_0_tdata2[63:4];\n      |                                                         ^~\n"
       },
       "yosys": {
         "command": [
@@ -88,12 +88,12 @@
         ],
         "status": "PASS",
         "returncode": 0,
-        "output_tail": "nvert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 84c005794f, CPU: user 0.01s system 0.00s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 44% 1x opt_expr (0 sec), 32% 2x read_verilog (0 sec), ...\n"
+        "output_tail": "nvert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 84c005794f, CPU: user 0.01s system 0.00s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 42% 1x opt_expr (0 sec), 41% 2x read_verilog (0 sec), ...\n"
       }
     },
     "MemTrigger_3": {
-      "rtl_bytes": 6399,
-      "rtl_sha256": "82304c6d77596badcb3faa5f14d1567041bbfda99aacbf88ee805305385fe8ea",
+      "rtl_bytes": 603708,
+      "rtl_sha256": "c0391c826374d83b30978d679068893d181c23456cf62a49b54892d85b53f0a5",
       "verilator": {
         "command": [
           "wsl.exe",
@@ -104,7 +104,7 @@
         ],
         "status": "PASS",
         "returncode": 0,
-        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.027 MB sources in 2 modules, into 0.016 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.021 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.266 MB\n"
+        "output_tail": "                  ^\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-debug-family/MemTrigger_3.sv:14508:58: Operator EQ expects 60 bits on the LHS, but LHS's SEL generates 46 bits.\n14508 |   assign \\$2535  = tdataVec_io_fromLoadStore_vaddr[49:4] == tdataVec_io_fromCsrTrigger_tdataVec_0_tdata2[63:4];\n      |                                                          ^~\n%Warning-WIDTHTRUNC: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-debug-family/MemTrigger_3.sv:14523:20: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'tdataVec_io_fromCsrTrigger_tdataVec_0_matchType' generates 2 bits.\n14523 |   assign \\$2550  = ! tdataVec_io_fromCsrTrigger_tdataVec_0_matchType;\n      |                    ^\n"
       },
       "yosys": {
         "command": [
@@ -116,12 +116,12 @@
         ],
         "status": "PASS",
         "returncode": 0,
-        "output_tail": "nvert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 95054e8249, CPU: user 0.01s system 0.01s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 42% 1x opt_expr (0 sec), 31% 2x read_verilog (0 sec), ...\n"
+        "output_tail": "nvert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 95054e8249, CPU: user 0.01s system 0.00s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 42% 1x opt_expr (0 sec), 38% 2x read_verilog (0 sec), ...\n"
       }
     },
     "VSegmentTrigger": {
-      "rtl_bytes": 6493,
-      "rtl_sha256": "3df1fa6edb876b3c476ddc748a083c9f8882cea20aa14a0fc71606f53c32ed63",
+      "rtl_bytes": 32061,
+      "rtl_sha256": "6d9a075407d1381edfebd76fb24ef0eac7ec765dd15e6b647a812be74dbd202d",
       "verilator": {
         "command": [
           "wsl.exe",
@@ -132,7 +132,7 @@
         ],
         "status": "PASS",
         "returncode": 0,
-        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.027 MB sources in 2 modules, into 0.017 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.022 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.258 MB\n"
+        "output_tail": "                                                                                           : ... note: In instance 'VSegmentTrigger'\n  737 |   assign \\$319  = ! tdataVec_io_fromCsrTrigger_tdataVec_3_matchType;\n      |                   ^\n%Warning-WIDTHTRUNC: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-debug-family/VSegmentTrigger.sv:746:19: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'tdataVec_io_fromCsrTrigger_tdataVec_3_action' generates 4 bits.\n                                                                                                                                                   : ... note: In instance 'VSegmentTrigger'\n  746 |   assign \\$328  = ! tdataVec_io_fromCsrTrigger_tdataVec_3_action;\n      |                   ^\n"
       },
       "yosys": {
         "command": [
@@ -144,7 +144,7 @@
         ],
         "status": "PASS",
         "returncode": 0,
-        "output_tail": "nvert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: c20f408865, CPU: user 0.01s system 0.01s, MEM: 8.91 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 41% 1x opt_expr (0 sec), 35% 2x read_verilog (0 sec), ...\n"
+        "output_tail": "nvert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: c20f408865, CPU: user 0.01s system 0.00s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 34% 1x opt_expr (0 sec), 28% 2x read_verilog (0 sec), ...\n"
       }
     }
   },
