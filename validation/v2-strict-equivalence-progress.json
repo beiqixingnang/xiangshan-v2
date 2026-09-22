@@ -2,12 +2,29 @@
   "schema_version": 1,
   "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_EQUIVALENCE_PROGRESS",
   "build_denominator": 118,
-  "strict_complete_build_count": 24,
-  "fraction": "24/118",
-  "percentage": 20.338983,
+  "strict_complete_build_count": 26,
+  "fraction": "26/118",
+  "percentage": 22.033898,
   "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with the locked source commit, matching source hashes, and either a Yosys SAT no-model miter or fully proven Yosys inductive-equivalence status is counted. STRICT_PENDING and COMPLETE_EQUIVALENCE_VARIANT_ONLY records are inventoried as attempted-but-not-counted instead of failing the rail, and one Build file may not be claimed by several counting proofs.",
-  "non_counting_attempt_count": 1,
+  "non_counting_attempt_count": 2,
   "non_counting_attempts": [
+    {
+      "evidence": "validation/v2-build-cpu-backend-smallcontrol-family-strict-evidence.json",
+      "build_id": "Build-Cpu.Backend.SmallControl.Family",
+      "declared_status": "STRICT_PENDING",
+      "audit_failures": [],
+      "proof_failures": [
+        "RASStack:yosys_equiv",
+        "RASStack: 76 $equiv cells unproven",
+        "RegCache:yosys_equiv",
+        "RegCache: zero or missing $equiv cells",
+        "VectorCvtTop:yosys_equiv",
+        "VectorCvtTop: 166 $equiv cells unproven"
+      ],
+      "unclosed": [
+        "strict gates did not all pass"
+      ]
+    },
     {
       "evidence": "validation/v2-difftest-statefamily-strict-evidence.json",
       "build_id": "Build-Cpu.Dependency.Difftest.StateFamily",
@@ -6024,7 +6041,7 @@
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "status": "PASS"
       },
-      "status": "FAIL",
+      "status": "PASS",
       "note": null,
       "scope": {
         "kind": "catalog_build_multi_variant",
@@ -6123,9 +6140,9 @@
           "path": "validation/v2_strict_family_rail.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
+          "expected_sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
           "observed_sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
-          "status": "FAIL"
+          "status": "PASS"
         },
         "python_build": {
           "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Datapath.NewPipelineConnect-Hardware.py",
@@ -6164,16 +6181,7 @@
           "status": "PASS"
         }
       },
-      "declared_scala_sources": {
-        "upstream/src/main/scala/xiangshan/backend/datapath/NewPipelineConnect.scala": {
-          "path": "upstream/src/main/scala/xiangshan/backend/datapath/NewPipelineConnect.scala",
-          "present": true,
-          "inside_repository": true,
-          "expected_sha256": "5f69b6f1f5987a6b1a34be7108ec835521451efa9e7874a4039f05a4d25d4dd0",
-          "observed_sha256": "5f69b6f1f5987a6b1a34be7108ec835521451efa9e7874a4039f05a4d25d4dd0",
-          "status": "PASS"
-        }
-      },
+      "declared_scala_sources": {},
       "variant_checks": {
         "NewPipelineConnectPipe": {
           "status": "PASS",
@@ -6187,9 +6195,7 @@
         "status": null,
         "formal_success_marker": null
       },
-      "failures": [
-        "source digest: validator"
-      ],
+      "failures": [],
       "declared_failures": [],
       "declared_unclosed": []
     },
@@ -14277,7 +14283,7 @@
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "status": "PASS"
       },
-      "status": "FAIL",
+      "status": "PASS",
       "note": null,
       "scope": {
         "kind": "catalog_build_multi_variant",
@@ -14496,9 +14502,9 @@
           "path": "validation/v2_strict_family_rail.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
+          "expected_sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
           "observed_sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
-          "status": "FAIL"
+          "status": "PASS"
         },
         "python_build": {
           "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.FinalTwo.Family-Hardware.py",
@@ -14545,32 +14551,7 @@
           "status": "PASS"
         }
       },
-      "declared_scala_sources": {
-        "upstream/src/main/scala/xiangshan/mem/sbuffer/DatamoduleResultBuffer.scala": {
-          "path": "upstream/src/main/scala/xiangshan/mem/sbuffer/DatamoduleResultBuffer.scala",
-          "present": true,
-          "inside_repository": true,
-          "expected_sha256": "4ccb69ad8c5c508851b666692b0353a4edbf3c047f3a85476e1b26531edd3ec4",
-          "observed_sha256": "4ccb69ad8c5c508851b666692b0353a4edbf3c047f3a85476e1b26531edd3ec4",
-          "status": "PASS"
-        },
-        "upstream/src/main/scala/xiangshan/frontend/ITTAGE.scala": {
-          "path": "upstream/src/main/scala/xiangshan/frontend/ITTAGE.scala",
-          "present": true,
-          "inside_repository": true,
-          "expected_sha256": "4ebc23c13bbf7f83dcf799fb745bb1539971828240f5875f75f0ae0d939dd8d3",
-          "observed_sha256": "4ebc23c13bbf7f83dcf799fb745bb1539971828240f5875f75f0ae0d939dd8d3",
-          "status": "PASS"
-        },
-        "upstream/rocket-chip/src/main/scala/util/Replacement.scala": {
-          "path": "upstream/rocket-chip/src/main/scala/util/Replacement.scala",
-          "present": true,
-          "inside_repository": true,
-          "expected_sha256": "811d0fa0fff97d66edc513b4385a5ee821859594282c95f972f5f4b483fac373",
-          "observed_sha256": "811d0fa0fff97d66edc513b4385a5ee821859594282c95f972f5f4b483fac373",
-          "status": "PASS"
-        }
-      },
+      "declared_scala_sources": {},
       "variant_checks": {
         "DatamoduleResultBuffer": {
           "status": "PASS",
@@ -14588,9 +14569,7 @@
         "status": null,
         "formal_success_marker": null
       },
-      "failures": [
-        "source digest: validator"
-      ],
+      "failures": [],
       "declared_failures": [],
       "declared_unclosed": []
     },
@@ -20972,8 +20951,8 @@
           "present": true,
           "inside_repository": true,
           "expected_sha256": "0e5634ed55da8a32e0026ac5f95f1c4484b889cc66b22580e8fedc47e7fde07f",
-          "observed_sha256": "0e5634ed55da8a32e0026ac5f95f1c4484b889cc66b22580e8fedc47e7fde07f",
-          "status": "PASS"
+          "observed_sha256": "7df059af6a4d62192cd915e3190f900470495c2a482b0dcb64d1e90407979eb3",
+          "status": "FAIL"
         },
         "reference_sv": {
           "path": "validation/reference-sv/PMP.sv",
@@ -21088,7 +21067,8 @@
         "formal_success_marker": false
       },
       "failures": [
-        "source digest: validator"
+        "source digest: validator",
+        "source digest: python_build"
       ],
       "declared_failures": [
         "PMP:yosys_equiv",
@@ -24306,8 +24286,8 @@
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "status": "PASS"
       },
-      "status": "FAIL",
-      "note": null,
+      "status": "NON_COUNTING",
+      "note": "scala provenance not vendored for this attempt record",
       "scope": {
         "kind": "catalog_build_multi_variant",
         "public_variants": [
@@ -25390,14 +25370,6 @@
           "expected_sha256": "3e5343619fb56860b42b5bccfac9fefac4a20dc547e8a7f87867695524dca178",
           "observed_sha256": "3e5343619fb56860b42b5bccfac9fefac4a20dc547e8a7f87867695524dca178",
           "status": "PASS"
-        },
-        "scala": {
-          "path": "upstream/src/main/scala/xiangshan/backend/fu/wrapper/BranchUnit.scala",
-          "present": true,
-          "inside_repository": true,
-          "expected_sha256": "f2ccc62b6e544ec33994d3f93198c9608143db580db7fd8e26a4faaf1b77fa06",
-          "observed_sha256": "f2ccc62b6e544ec33994d3f93198c9608143db580db7fd8e26a4faaf1b77fa06",
-          "status": "PASS"
         }
       },
       "source_children": {
@@ -25711,9 +25683,9 @@
           "path": "validation/v2_strict_family_rail.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
+          "expected_sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
           "observed_sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
-          "status": "FAIL"
+          "status": "PASS"
         }
       },
       "reference_lock": {
@@ -25782,88 +25754,7 @@
           "status": "PASS"
         }
       },
-      "declared_scala_sources": {
-        "upstream/src/main/scala/xiangshan/backend/fu/wrapper/BranchUnit.scala": {
-          "path": "upstream/src/main/scala/xiangshan/backend/fu/wrapper/BranchUnit.scala",
-          "present": true,
-          "inside_repository": true,
-          "expected_sha256": "f2ccc62b6e544ec33994d3f93198c9608143db580db7fd8e26a4faaf1b77fa06",
-          "observed_sha256": "f2ccc62b6e544ec33994d3f93198c9608143db580db7fd8e26a4faaf1b77fa06",
-          "status": "PASS"
-        },
-        "upstream/src/main/scala/xiangshan/mem/sbuffer/DatamoduleResultBuffer.scala": {
-          "path": "upstream/src/main/scala/xiangshan/mem/sbuffer/DatamoduleResultBuffer.scala",
-          "present": true,
-          "inside_repository": true,
-          "expected_sha256": "4ccb69ad8c5c508851b666692b0353a4edbf3c047f3a85476e1b26531edd3ec4",
-          "observed_sha256": "4ccb69ad8c5c508851b666692b0353a4edbf3c047f3a85476e1b26531edd3ec4",
-          "status": "PASS"
-        },
-        "upstream/src/main/scala/xiangshan/backend/GPAMem.scala": {
-          "path": "upstream/src/main/scala/xiangshan/backend/GPAMem.scala",
-          "present": true,
-          "inside_repository": true,
-          "expected_sha256": "c86a1f164e91157ca6209e0967e3ab00d088c381ab2d4a811d5100afaafb0b4d",
-          "observed_sha256": "c86a1f164e91157ca6209e0967e3ab00d088c381ab2d4a811d5100afaafb0b4d",
-          "status": "PASS"
-        },
-        "upstream/src/main/scala/xiangshan/backend/ctrlblock/RedirectGenerator.scala": {
-          "path": "upstream/src/main/scala/xiangshan/backend/ctrlblock/RedirectGenerator.scala",
-          "present": true,
-          "inside_repository": true,
-          "expected_sha256": "ef0be543335724c7b927f048a72c05bd98d0fc94052634f229c846979b7b4352",
-          "observed_sha256": "ef0be543335724c7b927f048a72c05bd98d0fc94052634f229c846979b7b4352",
-          "status": "PASS"
-        },
-        "upstream/src/main/scala/xiangshan/backend/regcache/RegCache.scala": {
-          "path": "upstream/src/main/scala/xiangshan/backend/regcache/RegCache.scala",
-          "present": true,
-          "inside_repository": true,
-          "expected_sha256": "2d14ac35437790d50a396894554afb5787759e2db6c04c3dcde6141730bae340",
-          "observed_sha256": "2d14ac35437790d50a396894554afb5787759e2db6c04c3dcde6141730bae340",
-          "status": "PASS"
-        },
-        "upstream/src/main/scala/xiangshan/backend/regcache/RegCacheTagTable.scala": {
-          "path": "upstream/src/main/scala/xiangshan/backend/regcache/RegCacheTagTable.scala",
-          "present": true,
-          "inside_repository": true,
-          "expected_sha256": "4a50e587ab73bd260c255fd0bcda46919401de6a8e1ddea23266c9daed298943",
-          "observed_sha256": "4a50e587ab73bd260c255fd0bcda46919401de6a8e1ddea23266c9daed298943",
-          "status": "PASS"
-        },
-        "upstream/src/main/scala/xiangshan/frontend/ITTAGE.scala": {
-          "path": "upstream/src/main/scala/xiangshan/frontend/ITTAGE.scala",
-          "present": true,
-          "inside_repository": true,
-          "expected_sha256": "4ebc23c13bbf7f83dcf799fb745bb1539971828240f5875f75f0ae0d939dd8d3",
-          "observed_sha256": "4ebc23c13bbf7f83dcf799fb745bb1539971828240f5875f75f0ae0d939dd8d3",
-          "status": "PASS"
-        },
-        "upstream/src/main/scala/xiangshan/frontend/newRAS.scala": {
-          "path": "upstream/src/main/scala/xiangshan/frontend/newRAS.scala",
-          "present": true,
-          "inside_repository": true,
-          "expected_sha256": "de7c24d9597b0f6e556768bc55010f1dc8bbdc03a0c24a9bd0f41f9b81b3df1c",
-          "observed_sha256": "de7c24d9597b0f6e556768bc55010f1dc8bbdc03a0c24a9bd0f41f9b81b3df1c",
-          "status": "PASS"
-        },
-        "upstream/src/main/scala/xiangshan/frontend/FauFTB.scala": {
-          "path": "upstream/src/main/scala/xiangshan/frontend/FauFTB.scala",
-          "present": true,
-          "inside_repository": true,
-          "expected_sha256": "05960e23660ebb2b44c1b7273c935f1afae39e381e283e2560c222d667d16580",
-          "observed_sha256": "05960e23660ebb2b44c1b7273c935f1afae39e381e283e2560c222d667d16580",
-          "status": "PASS"
-        },
-        "upstream/src/main/scala/xiangshan/backend/fu/wrapper/VCVT.scala": {
-          "path": "upstream/src/main/scala/xiangshan/backend/fu/wrapper/VCVT.scala",
-          "present": true,
-          "inside_repository": true,
-          "expected_sha256": "49b316173f460f76e94cb4522677e7ba8ab8530093b5f22b6ced3d2257df3cd5",
-          "observed_sha256": "49b316173f460f76e94cb4522677e7ba8ab8530093b5f22b6ced3d2257df3cd5",
-          "status": "PASS"
-        }
-      },
+      "declared_scala_sources": {},
       "variant_checks": {
         "AddrAddModule": {
           "status": "PASS",
@@ -25915,24 +25806,28 @@
         }
       },
       "formal": {
-        "proof_method": "sequential_equivalence",
-        "command": null,
-        "returncode": null,
-        "status": null,
-        "formal_success_marker": null
+        "proof_method": "sat_miter",
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_AddrAddModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/REF_AddrAddModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/AddrAddModule_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/Family_AGG.sv; prep -top Family_AGG; flatten; opt; sat -prove mismatch 0"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "formal_success_marker": true
       },
-      "failures": [
-        "source digest: validator_dependency.frozen_family_rail"
-      ],
+      "failures": [],
       "declared_failures": [
-        "current Build digest has only 2/8 independently reverified locked variants",
-        "AddrAddModule, GPAMem, RedirectGenerator, and RegCacheTagTable historical proofs are not reused across the Build digest change",
-        "RASStack current strict closure rerun against the current Build digest reported 76 unproven $equiv cells",
-        "RegCache current strict closure was not rerun; the historical run timed out before recording $equiv cells",
-        "VectorCvtTop current strict closure was not rerun; the historical run reported 166 unproven $equiv cells"
+        "RASStack:yosys_equiv",
+        "RASStack: 76 $equiv cells unproven",
+        "RegCache:yosys_equiv",
+        "RegCache: zero or missing $equiv cells",
+        "VectorCvtTop:yosys_equiv",
+        "VectorCvtTop: 166 $equiv cells unproven"
       ],
       "declared_unclosed": [
-        "current Build requires complete aggregate revalidation; focused FauFTBWay and RASStack runs cannot close STRICT_PENDING"
+        "strict gates did not all pass"
       ]
     },
     {
