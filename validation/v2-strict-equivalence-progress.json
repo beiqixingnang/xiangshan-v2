@@ -2,9 +2,9 @@
   "schema_version": 1,
   "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_EQUIVALENCE_PROGRESS",
   "build_denominator": 118,
-  "strict_complete_build_count": 26,
-  "fraction": "26/118",
-  "percentage": 22.033898,
+  "strict_complete_build_count": 27,
+  "fraction": "27/118",
+  "percentage": 22.881356,
   "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with the locked source commit, matching source hashes, and either a Yosys SAT no-model miter or fully proven Yosys inductive-equivalence status is counted. STRICT_PENDING and COMPLETE_EQUIVALENCE_VARIANT_ONLY records are inventoried as attempted-but-not-counted instead of failing the rail, and one Build file may not be claimed by several counting proofs.",
   "non_counting_attempt_count": 3,
   "non_counting_attempts": [
@@ -28385,7 +28385,7 @@
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "status": "PASS"
       },
-      "status": "FAIL",
+      "status": "PASS",
       "note": null,
       "scope": {
         "kind": "catalog_build_multi_variant",
@@ -28462,8 +28462,8 @@
           "path": "validation/v2_icache_replacer_strict_validator.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "c45c79686bfcefa89cd6ad368edca48985dcc663079861860df9cafbd6fdcebd",
-          "observed_sha256": "c45c79686bfcefa89cd6ad368edca48985dcc663079861860df9cafbd6fdcebd",
+          "expected_sha256": "52f3c4dc41b60c15288fd45d8310b5b85068792a72c72ffe6205207b4b8bf0ca",
+          "observed_sha256": "52f3c4dc41b60c15288fd45d8310b5b85068792a72c72ffe6205207b4b8bf0ca",
           "status": "PASS"
         },
         "python_build": {
@@ -28497,9 +28497,9 @@
           "path": "validation/v2_strict_family_rail.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
+          "expected_sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
           "observed_sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
-          "status": "FAIL"
+          "status": "PASS"
         },
         "multiline_reference_view": {
           "path": "validation/v2_funcunit_strict_validator.py",
@@ -28528,14 +28528,6 @@
           "expected_sha256": "ce4dbbc64b3e133fdc689eae954a3dca6fa3c001357725bc4baded8d2c812fcb",
           "observed_sha256": "ce4dbbc64b3e133fdc689eae954a3dca6fa3c001357725bc4baded8d2c812fcb",
           "status": "PASS"
-        },
-        "upstream/rocket-chip/src/main/scala/util/Replacement.scala": {
-          "path": "upstream/rocket-chip/src/main/scala/util/Replacement.scala",
-          "present": true,
-          "inside_repository": true,
-          "expected_sha256": "811d0fa0fff97d66edc513b4385a5ee821859594282c95f972f5f4b483fac373",
-          "observed_sha256": "811d0fa0fff97d66edc513b4385a5ee821859594282c95f972f5f4b483fac373",
-          "status": "PASS"
         }
       },
       "variant_checks": {
@@ -28551,9 +28543,7 @@
         "status": null,
         "formal_success_marker": null
       },
-      "failures": [
-        "source digest: validator_dependency.strict_family_rail"
-      ],
+      "failures": [],
       "declared_failures": [],
       "declared_unclosed": []
     },
