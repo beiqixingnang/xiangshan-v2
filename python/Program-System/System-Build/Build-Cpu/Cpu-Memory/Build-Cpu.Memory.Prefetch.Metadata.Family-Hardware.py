@@ -110,12 +110,18 @@ def _plru_way(state: Any, ways: int) -> Any:
     """Decode a balanced or unbalanced tree-PLRU state."""
 
     if ways == 16:
-        left_low = Mux(state[12], state[11], state[10])
-        left_mid = Cat(left_low, state[12])
-        left = Cat(left_mid, state[13])
-        right_left = Cat(Cat(Mux(state[5], state[4], state[3]), state[5]), state[6])
-        right_right = Cat(Cat(Mux(state[2], state[1], state[0]), state[2]), state[6])
-        right = Mux(state[6], right_left, right_right)
+        left_inner = Mux(
+            state[13],
+            Cat(Mux(state[12], state[11], state[10]), state[12]),
+            Cat(Mux(state[9], state[8], state[7]), state[9]),
+        )
+        left = Cat(left_inner, state[13])
+        right_inner = Mux(
+            state[6],
+            Cat(Mux(state[5], state[4], state[3]), state[5]),
+            Cat(Mux(state[2], state[1], state[0]), state[2]),
+        )
+        right = Cat(right_inner, state[6])
         return Cat(Mux(state[14], left, right), state[14])
     if ways == 10:
         left = Cat(state[7], Const(0, 2))
@@ -142,6 +148,20 @@ def _plru_way(state: Any, ways: int) -> Any:
 def _plru_next(state: Any, touch: Any, ways: int) -> Any:
     """Update a tree-PLRU state after one way is touched."""
 
+    if ways == 16:
+        root = ~touch[3]
+        left_state = state[7:14]
+        right_state = state[:7]
+        left_next = Mux(touch[3], _plru_next(left_state, touch[:3], 8), left_state)
+        right_next = Mux(touch[3], right_state, _plru_next(right_state, touch[:3], 8))
+        return Cat(right_next, left_next, root)
+    if ways == 10:
+        root = ~touch[3]
+        left_state = state[7:8]
+        right_state = state[:7]
+        left_next = Mux(touch[3], ~touch[0], left_state)
+        right_next = Mux(touch[3], right_state, _plru_next(right_state, touch[:3], 8))
+        return Cat(right_next, left_next, root)
     if ways <= 1:
         return Const(0, 1)
     if ways == 2:
