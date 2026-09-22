@@ -1,5 +1,5 @@
-"""V2 ICache miss-status holding register in Amaranth.
-香山 V2 指令缓存缺失状态保持寄存器的 Amaranth 重写。
+"""Instruction-cache miss-status holding register in Amaranth.
+指令缓存缺失状态保持寄存器的 Amaranth 实现。
 """
 from __future__ import annotations
 
@@ -11,10 +11,9 @@ from amaranth import ClockDomain, Const, Elaboratable, Module, Signal
 
 # Module Contract
 # ---------------------------------------------------------------------------
-# The V2 Scala class is ``ICacheMSHR`` in ICacheMissUnit.scala.  Fetch entries
-# are connected with flush tied low by the parent; prefetch entries expose the
-# same signal.  The Python boundary keeps both signals so one implementation
-# can be exercised against either extracted specialization.
+# The miss-entry boundary exposes fetch and prefetch specializations with
+# shared packed geometry.  Fetch entries tie flush low in their parent while
+# prefetch entries expose the signal; one implementation serves both forms.
 LOCKED_VARIANTS = ("ICacheMSHR", "ICacheMSHR_4")
 __all__ = [
     'LOCKED_VARIANTS',
@@ -31,7 +30,7 @@ __all__ = [
 # ---------------------------------------------------------------------------
 @dataclass(frozen=True)
 class MshrConfig:
-    """Serializable geometry for one V2 MSHR. / 单个 V2 MSHR 的可序列化几何配置。"""
+    """Serializable geometry for one MSHR. / 单个 MSHR 的可序列化几何配置。"""
 
     paddr_bits: int = 48
     block_off_bits: int = 6
@@ -77,9 +76,9 @@ def mshr_observation(req_valid: bool, req_ready: bool, acquire_valid: bool,
 # Implementation
 # ---------------------------------------------------------------------------
 class ICacheMSHR(Elaboratable):
-    """One V2 ICache miss entry. / 一个 V2 指令缓存缺失表项。"""
+    """One instruction-cache miss entry. / 一个指令缓存缺失表项。"""
 
-    # Construct the V2-visible ports. / 构造 V2 可见端口。
+    # Construct the public ports. / 构造公开端口。
     def __init__(
         self,
         entry_id: int = 0,
@@ -92,7 +91,7 @@ class ICacheMSHR(Elaboratable):
         c = self.cfg
 
         # Keep explicit clock/reset handles so the generated standalone
-        # module has the same ``clk``/``rst`` boundary as locked Chisel RTL.
+        # module has the same standalone clock/reset boundary as the reference.
         self.clock = Signal(name="clock")
         self.reset = Signal(name="reset")
 
@@ -142,9 +141,8 @@ class ICacheMSHR(Elaboratable):
         del platform
         # Amaranth's ``If`` branches are decorator-generated context managers.
         m: Any = Module()
-        # Chisel ``RegInit`` in the locked V2 reference uses an active-high
-        # asynchronous reset.  Declare the same reset topology explicitly so
-        # reset assertion between clock edges cannot diverge from XSTop.
+        # The registered state uses an active-high asynchronous reset.  Declare
+        # that topology explicitly so assertion between edges is deterministic.
         domain = ClockDomain("sync", async_reset=True)
         domain.clk = self.clock
         domain.rst = self.reset
@@ -160,10 +158,10 @@ class ICacheMSHR(Elaboratable):
         way = Signal(c.way_bits, name="way")
         latency = Signal(c.latency_bits, name="perf_latency_reg")
 
-        # The parent ties fetch flush low, but the standalone V2 class still
-        # honors its declared flush input; this preserves the source contract
+        # The parent ties fetch flush low, but this standalone class still
+        # honors its declared flush input; this preserves the port contract
         # for both fetch and prefetch specializations.
-        # Fetch entries are wired to ``false.B`` by ICacheMissUnit while
+        # Fetch entries use a fixed inactive flush while
         # prefetch entries receive the parent flush input.  Keep the same
         # specialization in the standalone candidate even though the
         # compatibility boundary exposes ``io_flush`` for both variants.
@@ -179,7 +177,7 @@ class ICacheMSHR(Elaboratable):
                 & (self.lookup_blk_paddr[index] == blk_paddr)
             )
 
-        # Expose the decoupled request readiness exactly as V2 Chisel does.
+        # Expose the decoupled request readiness at the public boundary.
         m.d.comb += self.req_ready.eq(~valid & ~effective_flush & ~self.fencei)
         req_fire = self.req_valid & self.req_ready
 
@@ -247,8 +245,8 @@ class ICacheMSHR(Elaboratable):
         return m
 
 
-# Preserve the source-traceable candidate spelling as a distinct public type.
-# 保留源代码可追溯的候选拼写，并将其作为独立公开类型。
+# Preserve the candidate spelling as a distinct public type.
+# 保留候选拼写，并将其作为独立公开类型。
 class ICacheMshr(ICacheMSHR):
     """Source-spelled ICacheMSHR entry. / 使用候选源拼写的 ICacheMSHR 表项。"""
 
@@ -257,7 +255,7 @@ class ICacheMshr(ICacheMSHR):
 # ---------------------------------------------------------------------------
 # Export a deterministic configured module. / 导出确定性配置模块。
 def build_verilog(configuration, injected_dependencies):
-    """Return Verilog for one V2 MSHR. / 返回单个 V2 MSHR 的 Verilog。"""
+    """Return Verilog for one MSHR. / 返回单个 MSHR 的 Verilog。"""
     from amaranth.back import verilog
 
     del injected_dependencies
