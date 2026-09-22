@@ -21,6 +21,7 @@ BUILD = ROOT / (
 )
 BUILD_ID = "Build-Cpu.Frontend.Icache.ICacheMshr"
 EVIDENCE = ROOT / "validation/v2-build-cpu-frontend-icache-icachemshr-strict-evidence.json"
+SCALA_SOURCE = ROOT / "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala"
 
 
 def source_record(path: Path) -> dict[str, Any]:
@@ -82,6 +83,14 @@ def main() -> int:
     validator_pyright = pyright_check(validator)
     payload["validator"] = validator.relative_to(ROOT).as_posix()
     payload["sources"]["validator"] = source_record(validator)
+    if SCALA_SOURCE.is_file():
+        payload["sources"]["scala"] = source_record(SCALA_SOURCE)
+        payload["sources"]["declared_scala_sources"] = {
+            SCALA_SOURCE.relative_to(ROOT).as_posix(): {
+                "vendored": True,
+                "sha256": rail.sha256_file(SCALA_SOURCE),
+            }
+        }
     payload["sources"]["validator_dependencies"] = {
         "strict_family_rail": source_record(shared_rail),
         "multiline_reference_view": source_record(multiline_view),

@@ -207,8 +207,8 @@
   "sources": {
     "validator": {
       "path": "validation/v2_icache_mshr_strict_validator.py",
-      "sha256": "7bf390f147d7dc375cd56af607c8175817c592e0d0c12e35c3e617b751729f4b",
-      "bytes": 4414
+      "sha256": "64da2592fce76d43d73353924e71b5b2d001b5202d8d79953031866584702181",
+      "bytes": 4836
     },
     "python_build": {
       "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.ICacheMshr-Hardware.py",
@@ -220,8 +220,18 @@
       "sha256": "1982609dddae0f551033bffe4570a3438dfb6e7699f4cde1688dcbb98603f460",
       "bytes": 13740
     },
-    "declared_scala_sources": {},
+    "declared_scala_sources": {
+      "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala": {
+        "vendored": true,
+        "sha256": "12489d704c86b65f6d4bc15e64b659bb2fa94f236eb93350d9dee012a22ba926"
+      }
+    },
     "reference_children": {},
+    "scala": {
+      "path": "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala",
+      "sha256": "12489d704c86b65f6d4bc15e64b659bb2fa94f236eb93350d9dee012a22ba926",
+      "bytes": 20881
+    },
     "validator_dependencies": {
       "strict_family_rail": {
         "path": "validation/v2_strict_family_rail.py",
@@ -247,7 +257,7 @@
           "/c",
           "pyright",
           "--outputjson",
-          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_qvaqi3fd\\Build-Cpu.Frontend.Icache.ICacheMshr-Hardware.py"
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_5cya384g\\Build-Cpu.Frontend.Icache.ICacheMshr-Hardware.py"
         ],
         "returncode": 0,
         "status": "PASS",
@@ -263,7 +273,7 @@
           "/c",
           "pyright",
           "--outputjson",
-          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_w08piye7\\v2_strict_family_rail.py"
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_ctovii4s\\v2_strict_family_rail.py"
         ],
         "returncode": 0,
         "status": "PASS",
@@ -360,8 +370,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.160 MB sources in 4 modules, into 0.051 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.075 s (elab=0.005, cvt=0.013, bld=0.000); cpu 0.014 s on 1 threads; alloced 9.750 MB\n",
-          "output_sha256": "314f751dcb306b6bd9da6287d91dca4d21e695f9d6b3fe887793b5407bd4f298"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.160 MB sources in 4 modules, into 0.051 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.046 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.011 s on 1 threads; alloced 9.746 MB\n",
+          "output_sha256": "f0b54539eb0388bf866dc65e9fc3dac09e2b93c756ff39b661e914b8a954ad4d"
         },
         "locked_verilator": {
           "command": [
@@ -387,8 +397,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.024 MB sources in 2 modules, into 0.026 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.024 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.379 MB\n",
-          "output_sha256": "62888e951c3669d6cde46596a947670902482be9d043b09444633f2e820d8c8e"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.024 MB sources in 2 modules, into 0.026 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.025 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.375 MB\n",
+          "output_sha256": "d9924d620edf1d06b5a608a68400959f4425b7f66357fdf4de21eafc561b7a4d"
         },
         "yosys_equiv": {
           "command": [
@@ -414,8 +424,8 @@
           ],
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "module ICacheMSHR_EQUIV.\n\n10.7.14. Finished OPT passes. (There is nothing left to do.)\n\n10.8. Executing WREDUCE pass (reducing word size of cells).\n\n10.9. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\ICacheMSHR_EQUIV..\n\n10.10. Executing MEMORY_COLLECT pass (generating $mem cells).\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ICacheMSHR_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ICacheMSHR_EQUIV'.\nRemoved a total of 0 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\ICacheMSHR_EQUIV..\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== ICacheMSHR_EQUIV ===\n\n   Number of wires:                176\n   Number of wire bits:           1259\n   Number of public wires:         141\n   Number of public wire bits:    1126\n   Number of ports:                 25\n   Number of port bits:            273\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                142\n     $and                           21\n     $eq                             4\n     $equiv                         63\n     $mux                           24\n     $not                           10\n     $or                             4\n     $reduce_or                      2\n     $sdff                          14\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module ICacheMSHR_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 56 unproven $equiv cells in module ICacheMSHR_EQUIV:\n  Undef modelling: force def on 112 initial reg values and 159 inputs.\n  Proving existence of base case for step 1. (19188 clauses over 7272 variables)\n  Proving induction step 1. (43741 clauses over 16369 variables)\n  Proof for induction step holds. Entire workset of 56 cells proven!\nProved 56 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 63 $equiv cells in ICacheMSHR_EQUIV:\n  Of those cells 63 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: a93f34de5f, CPU: user 0.11s system 0.02s, MEM: 25.25 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 40% 1x equiv_induct (0 sec), 15% 10x opt_clean (0 sec), ...\n",
-          "output_sha256": "8d87eaa9e9cec378e22aeb1760092c62843c6cc2b04e02da9cb39e9ba2382cb6",
+          "output_tail": "module ICacheMSHR_EQUIV.\n\n10.7.14. Finished OPT passes. (There is nothing left to do.)\n\n10.8. Executing WREDUCE pass (reducing word size of cells).\n\n10.9. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\ICacheMSHR_EQUIV..\n\n10.10. Executing MEMORY_COLLECT pass (generating $mem cells).\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ICacheMSHR_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ICacheMSHR_EQUIV'.\nRemoved a total of 0 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\ICacheMSHR_EQUIV..\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== ICacheMSHR_EQUIV ===\n\n   Number of wires:                176\n   Number of wire bits:           1259\n   Number of public wires:         141\n   Number of public wire bits:    1126\n   Number of ports:                 25\n   Number of port bits:            273\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                142\n     $and                           21\n     $eq                             4\n     $equiv                         63\n     $mux                           24\n     $not                           10\n     $or                             4\n     $reduce_or                      2\n     $sdff                          14\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module ICacheMSHR_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 56 unproven $equiv cells in module ICacheMSHR_EQUIV:\n  Undef modelling: force def on 112 initial reg values and 159 inputs.\n  Proving existence of base case for step 1. (19188 clauses over 7272 variables)\n  Proving induction step 1. (43741 clauses over 16369 variables)\n  Proof for induction step holds. Entire workset of 56 cells proven!\nProved 56 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 63 $equiv cells in ICacheMSHR_EQUIV:\n  Of those cells 63 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: a93f34de5f, CPU: user 0.10s system 0.01s, MEM: 25.26 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 39% 1x equiv_induct (0 sec), 15% 10x opt_clean (0 sec), ...\n",
+          "output_sha256": "c91b275f50362093375c6d1df70e2a4cacd5e7ed60a0fafd88278859ba26cded",
           "markers_present": {
             "0 are unproven.": true,
             "Equivalence successfully proven!": true
@@ -453,8 +463,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.167 MB sources in 4 modules, into 0.053 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.054 s (elab=0.001, cvt=0.004, bld=0.000); cpu 0.011 s on 1 threads; alloced 9.773 MB\n",
-          "output_sha256": "b04d441304411f6a6aa6dfda30b5290d45806d413dd6f3184483bc580fac4665"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.167 MB sources in 4 modules, into 0.053 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.047 s (elab=0.001, cvt=0.004, bld=0.000); cpu 0.011 s on 1 threads; alloced 9.773 MB\n",
+          "output_sha256": "a1831caaec34666d1e1e0ac592cf87a142ba97af55ac2acdb63224164c159847"
         },
         "locked_verilator": {
           "command": [
@@ -480,8 +490,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.024 MB sources in 2 modules, into 0.028 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.026 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.007 s on 1 threads; alloced 9.543 MB\n",
-          "output_sha256": "e46a8118bdf8d8536e274a2afa1bc76443ef43601760416d260305cf47359247"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.024 MB sources in 2 modules, into 0.028 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.030 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.535 MB\n",
+          "output_sha256": "3d48a9a05b00ee79fe4350c7a6799983e226f878ac9908bd94ec054148dd39d0"
         },
         "yosys_equiv": {
           "command": [
@@ -507,8 +517,8 @@
           ],
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "4_EQUIV.\n\n10.7.14. Finished OPT passes. (There is nothing left to do.)\n\n10.8. Executing WREDUCE pass (reducing word size of cells).\n\n10.9. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\ICacheMSHR_4_EQUIV..\n\n10.10. Executing MEMORY_COLLECT pass (generating $mem cells).\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ICacheMSHR_4_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ICacheMSHR_4_EQUIV'.\nRemoved a total of 0 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\ICacheMSHR_4_EQUIV..\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== ICacheMSHR_4_EQUIV ===\n\n   Number of wires:                179\n   Number of wire bits:           1262\n   Number of public wires:         144\n   Number of public wire bits:    1129\n   Number of ports:                 26\n   Number of port bits:            274\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                146\n     $and                           23\n     $eq                             4\n     $equiv                         63\n     $mux                           24\n     $not                           11\n     $or                             5\n     $reduce_or                      2\n     $sdff                          14\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module ICacheMSHR_4_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 56 unproven $equiv cells in module ICacheMSHR_4_EQUIV:\n  Undef modelling: force def on 112 initial reg values and 160 inputs.\n  Proving existence of base case for step 1. (19360 clauses over 7339 variables)\n  Proving induction step 1. (44085 clauses over 16503 variables)\n  Proof for induction step holds. Entire workset of 56 cells proven!\nProved 56 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 63 $equiv cells in ICacheMSHR_4_EQUIV:\n  Of those cells 63 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: f00032bbe1, CPU: user 0.10s system 0.02s, MEM: 25.86 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 43% 1x equiv_induct (0 sec), 15% 10x opt_clean (0 sec), ...\n",
-          "output_sha256": "24189ae88ed321d6b4a488daa38fef9a4819647565121a7e4d7ef28bcad6e65f",
+          "output_tail": "4_EQUIV.\n\n10.7.14. Finished OPT passes. (There is nothing left to do.)\n\n10.8. Executing WREDUCE pass (reducing word size of cells).\n\n10.9. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\ICacheMSHR_4_EQUIV..\n\n10.10. Executing MEMORY_COLLECT pass (generating $mem cells).\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ICacheMSHR_4_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ICacheMSHR_4_EQUIV'.\nRemoved a total of 0 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\ICacheMSHR_4_EQUIV..\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== ICacheMSHR_4_EQUIV ===\n\n   Number of wires:                179\n   Number of wire bits:           1262\n   Number of public wires:         144\n   Number of public wire bits:    1129\n   Number of ports:                 26\n   Number of port bits:            274\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                146\n     $and                           23\n     $eq                             4\n     $equiv                         63\n     $mux                           24\n     $not                           11\n     $or                             5\n     $reduce_or                      2\n     $sdff                          14\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module ICacheMSHR_4_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 56 unproven $equiv cells in module ICacheMSHR_4_EQUIV:\n  Undef modelling: force def on 112 initial reg values and 160 inputs.\n  Proving existence of base case for step 1. (19360 clauses over 7339 variables)\n  Proving induction step 1. (44085 clauses over 16503 variables)\n  Proof for induction step holds. Entire workset of 56 cells proven!\nProved 56 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 63 $equiv cells in ICacheMSHR_4_EQUIV:\n  Of those cells 63 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: f00032bbe1, CPU: user 0.12s system 0.01s, MEM: 25.86 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 42% 1x equiv_induct (0 sec), 14% 10x opt_clean (0 sec), ...\n",
+          "output_sha256": "e56e0eae4d26c3829f4b15f99a9d594da94f7faeab829ecd8f9d81bb829fa9b0",
           "markers_present": {
             "0 are unproven.": true,
             "Equivalence successfully proven!": true
