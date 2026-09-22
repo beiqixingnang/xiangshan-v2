@@ -114,8 +114,8 @@
   "sources": {
     "validator": {
       "path": "validation/v2_instruncache_strict_validator.py",
-      "sha256": "883eb28f7ae09201d79e2c5a7e67727d4d229016fee7aac02d23e92a25da7e16",
-      "bytes": 6608
+      "sha256": "3b6a28528022e5f64e419cd9ccc6df771fbc887568ae53b3a167bd45f0bf7fcc",
+      "bytes": 6712
     },
     "python_build": {
       "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.InstrUncache-Hardware.py",
@@ -126,6 +126,11 @@
       "path": "validation/reference-sv/InstrUncache.sv",
       "sha256": "3d48322b0ba063a4798d32ce5df07b01069364b03bb0bf6aa6cbc0268ba550db",
       "bytes": 4824
+    },
+    "scala": {
+      "path": "upstream/src/main/scala/xiangshan/frontend/icache/InstrUncache.scala",
+      "sha256": "e031ec5dfc18d0745cabbfceb814b083818cfdd67961d523132f06a947d1fa40",
+      "bytes": 8638
     },
     "declared_scala_sources": {},
     "reference_children": {
@@ -160,7 +165,7 @@
           "/c",
           "pyright",
           "--outputjson",
-          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_w491hnu0\\Build-Cpu.Frontend.Icache.InstrUncache-Hardware.py"
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_7psqetii\\Build-Cpu.Frontend.Icache.InstrUncache-Hardware.py"
         ],
         "returncode": 0,
         "status": "PASS",
@@ -176,7 +181,7 @@
           "/c",
           "pyright",
           "--outputjson",
-          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_931wblri\\v2_strict_family_rail.py"
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_la65y0lb\\v2_strict_family_rail.py"
         ],
         "returncode": 0,
         "status": "PASS",
@@ -273,8 +278,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.152 MB sources in 6 modules, into 0.052 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.048 s (elab=0.001, cvt=0.004, bld=0.000); cpu 0.011 s on 1 threads; alloced 9.824 MB\n",
-          "output_sha256": "499dd21f914a3f2f0ed1cbe3853f2cb5bb268cea8dd3b2f5f08ed4100752b07b"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.152 MB sources in 6 modules, into 0.052 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.065 s (elab=0.005, cvt=0.012, bld=0.000); cpu 0.017 s on 1 threads; alloced 9.820 MB\n",
+          "output_sha256": "c827b5f5acc2d21343917a4503a921ccb5261c22d7d0d09687035228fd09e7fb"
         },
         "locked_verilator": {
           "command": [
@@ -302,8 +307,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.049 MB sources in 4 modules, into 0.028 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.036 s (elab=0.001, cvt=0.002, bld=0.000); cpu 0.007 s on 1 threads; alloced 9.578 MB\n",
-          "output_sha256": "fed6e13654161ec08512f3bfbc9c344f7490de7fbcdf46b11307eaedf6323e71"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.049 MB sources in 4 modules, into 0.028 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.041 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.010 s on 1 threads; alloced 9.574 MB\n",
+          "output_sha256": "b8bf29b180d3af4dacc2c8f8155863ee3d9ef55f8c93925ccafb56e2428c669b"
         },
         "yosys_equiv": {
           "command": [
@@ -329,8 +334,8 @@
           ],
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "d cells and 1 unused wires.\n<suppressed ~1 debug messages>\n\n10.10. Executing MEMORY_COLLECT pass (generating $mem cells).\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module InstrUncache_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\InstrUncache_EQUIV'.\nRemoved a total of 0 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\InstrUncache_EQUIV..\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== InstrUncache_EQUIV ===\n\n   Number of wires:                182\n   Number of wire bits:           1794\n   Number of public wires:         148\n   Number of public wire bits:    1502\n   Number of ports:                 18\n   Number of port bits:            206\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                235\n     $and                           26\n     $dffe                           2\n     $eq                             2\n     $equiv                        152\n     $mux                           20\n     $ne                             1\n     $not                           13\n     $or                             4\n     $reduce_and                     1\n     $reduce_or                      3\n     $scopeinfo                      2\n     $sdff                           8\n     $shiftx                         1\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module InstrUncache_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 151 unproven $equiv cells in module InstrUncache_EQUIV:\n  Undef modelling: force def on 232 initial reg values and 121 inputs.\n  Proving existence of base case for step 1. (41291 clauses over 15656 variables)\n  Proving induction step 1. (97823 clauses over 36521 variables)\n  Proof for induction step holds. Entire workset of 151 cells proven!\nProved 151 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 152 $equiv cells in InstrUncache_EQUIV:\n  Of those cells 152 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: 0ca6f1a7b5, CPU: user 0.20s system 0.01s, MEM: 39.42 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 62% 1x equiv_induct (0 sec), 10% 9x opt_clean (0 sec), ...\n",
-          "output_sha256": "9ed34f97b09c391bbb609c0ce49302007d7d5e26c00ed474321c71976812d2c1",
+          "output_tail": "d cells and 1 unused wires.\n<suppressed ~1 debug messages>\n\n10.10. Executing MEMORY_COLLECT pass (generating $mem cells).\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module InstrUncache_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\InstrUncache_EQUIV'.\nRemoved a total of 0 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\InstrUncache_EQUIV..\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== InstrUncache_EQUIV ===\n\n   Number of wires:                182\n   Number of wire bits:           1794\n   Number of public wires:         148\n   Number of public wire bits:    1502\n   Number of ports:                 18\n   Number of port bits:            206\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                235\n     $and                           26\n     $dffe                           2\n     $eq                             2\n     $equiv                        152\n     $mux                           20\n     $ne                             1\n     $not                           13\n     $or                             4\n     $reduce_and                     1\n     $reduce_or                      3\n     $scopeinfo                      2\n     $sdff                           8\n     $shiftx                         1\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module InstrUncache_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 151 unproven $equiv cells in module InstrUncache_EQUIV:\n  Undef modelling: force def on 232 initial reg values and 121 inputs.\n  Proving existence of base case for step 1. (41291 clauses over 15656 variables)\n  Proving induction step 1. (97823 clauses over 36521 variables)\n  Proof for induction step holds. Entire workset of 151 cells proven!\nProved 151 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 152 $equiv cells in InstrUncache_EQUIV:\n  Of those cells 152 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: 0ca6f1a7b5, CPU: user 0.19s system 0.03s, MEM: 39.32 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 60% 1x equiv_induct (0 sec), 10% 9x opt_clean (0 sec), ...\n",
+          "output_sha256": "4c2e4d528a1a8e6c7d0b7c3b13dca26ce21b71b75fe653733b15071a6a34a3ec",
           "markers_present": {
             "0 are unproven.": true,
             "Equivalence successfully proven!": true

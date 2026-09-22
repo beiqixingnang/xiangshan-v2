@@ -22,6 +22,7 @@ BUILD = ROOT / (
 )
 BUILD_ID = "Build-Cpu.Frontend.Icache.InstrUncache"
 EVIDENCE = ROOT / "validation/v2-build-cpu-frontend-icache-instruncache-strict-evidence.json"
+SCALA = ROOT / "upstream/src/main/scala/xiangshan/frontend/icache/InstrUncache.scala"
 
 
 def source_record(path: Path) -> dict[str, Any]:
@@ -125,7 +126,7 @@ def reference_child_negative_control(work: Path) -> dict[str, Any]:
 def main() -> int:
     """Run the parent proof and replace only its unsupported child-side control."""
 
-    runner = rail.FamilyRail(BUILD, BUILD_ID, EVIDENCE)
+    runner = rail.FamilyRail(BUILD, BUILD_ID, EVIDENCE, scala_path=SCALA)
     payload = runner.run()
     custom_reference = reference_child_negative_control(runner.work)
     control = payload["checks"]["negative_control"]
