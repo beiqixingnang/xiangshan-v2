@@ -48,8 +48,24 @@
     "verilator_compile_returncode": 0,
     "verilator_run_returncode": 0
   },
+  "reset_seeded_bounded_formal": {
+    "status": "PASS_BOUNDED",
+    "depth": 2,
+    "reset_constraints": {
+      "cycle_1": 1,
+      "cycle_2": 0
+    },
+    "other_inputs_unconstrained": true,
+    "ready_valid_compared_every_cycle": true,
+    "data_bits_compared_when_either_valid": 64,
+    "sat_variables": 308461,
+    "sat_clauses": 826656,
+    "success_marker": "SAT proof finished - no model found: SUCCESS!",
+    "complete_equivalence": false
+  },
   "limitations": [
     "This is a bounded Verilator differential and does not replace complete locked-reference formal.",
+    "The reset-seeded two-cycle SAT miter is bounded and does not replace unbounded induction.",
     "The strict rail remains STRICT_PENDING with 139 unproven internal initial-state equivalence cells."
   ]
 }
