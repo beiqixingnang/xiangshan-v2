@@ -2,9 +2,9 @@
   "schema_version": 1,
   "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_EQUIVALENCE_PROGRESS",
   "build_denominator": 118,
-  "strict_complete_build_count": 30,
-  "fraction": "30/118",
-  "percentage": 25.423729,
+  "strict_complete_build_count": 31,
+  "fraction": "31/118",
+  "percentage": 26.271186,
   "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with the locked source commit, matching source hashes, and either a Yosys SAT no-model miter or fully proven Yosys inductive-equivalence status is counted. STRICT_PENDING and COMPLETE_EQUIVALENCE_VARIANT_ONLY records are inventoried as attempted-but-not-counted instead of failing the rail, and one Build file may not be claimed by several counting proofs.",
   "non_counting_attempt_count": 4,
   "non_counting_attempts": [
@@ -15726,7 +15726,7 @@
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "status": "PASS"
       },
-      "status": "FAIL",
+      "status": "PASS",
       "note": null,
       "scope": {
         "kind": "catalog_build_multi_variant",
@@ -16239,9 +16239,9 @@
           "path": "validation/v2_strict_family_rail.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
+          "expected_sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
           "observed_sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
-          "status": "FAIL"
+          "status": "PASS"
         },
         "python_build": {
           "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.NewCSR.CSRPermit-Hardware.py",
@@ -16377,16 +16377,7 @@
           "status": "PASS"
         }
       },
-      "declared_scala_sources": {
-        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/CSRPermitModule.scala": {
-          "path": "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/CSRPermitModule.scala",
-          "present": true,
-          "inside_repository": true,
-          "expected_sha256": "bd11288ac05ad2ffe42d39a37222ebe750eff6a7a8ddb3cdeec23a16a6861fe6",
-          "observed_sha256": "bd11288ac05ad2ffe42d39a37222ebe750eff6a7a8ddb3cdeec23a16a6861fe6",
-          "status": "PASS"
-        }
-      },
+      "declared_scala_sources": {},
       "variant_checks": {
         "CSRPermitModule": {
           "status": "PASS",
@@ -16429,9 +16420,7 @@
         "status": "PASS",
         "formal_success_marker": true
       },
-      "failures": [
-        "source digest: validator"
-      ],
+      "failures": [],
       "declared_failures": [],
       "declared_unclosed": []
     },
