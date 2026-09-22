@@ -348,8 +348,11 @@ def synthesizable_view(text: str, top: str, rename: bool) -> tuple[str, dict[str
                  and len(disappeared) == len(plain_lines) + len(initialized)
                  and Counter(appeared) == Counter(permitted)
                  and len(view_lines) == len(lines) + len(initialized))
-    registers_before = re.findall(r"^\s*[A-Za-z_]\w*\s*<=\s*.+;$", body, re.M)
-    registers_after = re.findall(r"^\s*[A-Za-z_]\w*\s*<=\s*.+;$", normalized, re.M)
+    # Keep indentation matching on the current physical line.  ``\s`` also
+    # consumes newlines, which made equivalent equations appear different
+    # after declarations were hoisted and produced false untrusted results.
+    registers_before = re.findall(r"^[ \t]*[A-Za-z_]\w*[ \t]*<=[ \t]*.+;$", body, re.M)
+    registers_after = re.findall(r"^[ \t]*[A-Za-z_]\w*[ \t]*<=[ \t]*.+;$", normalized, re.M)
     audit = {
         "top": top,
         "renamed_top": rename,
