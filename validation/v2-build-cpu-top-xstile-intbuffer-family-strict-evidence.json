@@ -168,8 +168,8 @@
   "sources": {
     "validator": {
       "path": "validation/v2_strict_family_rail.py",
-      "sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
-      "bytes": 43710
+      "sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
+      "bytes": 45980
     },
     "python_build": {
       "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Top.XSTile.IntBuffer.Family-Hardware.py",
@@ -181,11 +181,6 @@
       "sha256": "61ecf56b4ae167c6be9633121c904b1d1c0d744f68a9ad68042a487fb1d6ac68",
       "bytes": 3339
     },
-    "scala": {
-      "path": "upstream/utility/src/main/scala/utility/IntBuffer.scala",
-      "sha256": "52deb4ccec49ebb4e1c1aa517c0955c708213c4f4f35a97c8cc97b60806b16e4",
-      "bytes": 900
-    },
     "declared_scala_sources": {
       "upstream/utility/src/main/scala/utility/IntBuffer.scala": {
         "vendored": true,
@@ -196,7 +191,12 @@
         "sha256": "494d2b59ebd76a73a28095976e68f6fc227cbf08df2a8a2fb7e018ba5067ed7f"
       }
     },
-    "reference_children": {}
+    "reference_children": {},
+    "scala": {
+      "path": "upstream/utility/src/main/scala/utility/IntBuffer.scala",
+      "sha256": "52deb4ccec49ebb4e1c1aa517c0955c708213c4f4f35a97c8cc97b60806b16e4",
+      "bytes": 900
+    }
   },
   "checks": {
     "py_compile": {
@@ -210,7 +210,7 @@
           "/c",
           "pyright",
           "--outputjson",
-          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_voahgkvc\\Build-Cpu.Top.XSTile.IntBuffer.Family-Hardware.py"
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_5hvqz6e3\\Build-Cpu.Top.XSTile.IntBuffer.Family-Hardware.py"
         ],
         "returncode": 0,
         "status": "PASS",
@@ -226,7 +226,7 @@
           "/c",
           "pyright",
           "--outputjson",
-          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_51ltd8ns\\v2_strict_family_rail.py"
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_z4j199pz\\v2_strict_family_rail.py"
         ],
         "returncode": 0,
         "status": "PASS",
@@ -306,8 +306,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.041 MB sources in 4 modules, into 0.016 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.123 s (elab=0.009, cvt=0.016, bld=0.000); cpu 0.025 s on 1 threads; alloced 9.164 MB\n",
-          "output_sha256": "592d65341b3b8a7524688a9e4f1166ec2c2e8a1fc332f65caca60a3d06add81a"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.041 MB sources in 4 modules, into 0.016 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.051 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.164 MB\n",
+          "output_sha256": "9550603a4346e4135749a43c4ae342cc5a1fe1e4b4168ff3c08022b00827cb28"
         },
         "locked_verilator": {
           "command": [
@@ -333,8 +333,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.014 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.036 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.008 s on 1 threads; alloced 9.332 MB\n",
-          "output_sha256": "ba5d600bff0b86b9c07e926c2703a2094b7ec11cd5c91c3e935ac46ec6258d59"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.014 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.025 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.004 s on 1 threads; alloced 9.336 MB\n",
+          "output_sha256": "476ac271cff68c72833356ec338f64d96d1f4e403e5a95c65235afd06eacb2cd"
         },
         "yosys_equiv": {
           "command": [
@@ -360,8 +360,8 @@
           ],
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "V'.\nRemoved a total of 0 cells.\n\n10.7.6. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\IntBuffer_EQUIV..\n\n10.7.7. Executing OPT_EXPR pass (perform const folding).\nOptimizing module IntBuffer_EQUIV.\n\n10.7.8. Finished OPT passes. (There is nothing left to do.)\n\n10.8. Executing WREDUCE pass (reducing word size of cells).\n\n10.9. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\IntBuffer_EQUIV..\n\n10.10. Executing MEMORY_COLLECT pass (generating $mem cells).\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module IntBuffer_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\IntBuffer_EQUIV'.\nRemoved a total of 0 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\IntBuffer_EQUIV..\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== IntBuffer_EQUIV ===\n\n   Number of wires:                 16\n   Number of wire bits:             16\n   Number of public wires:          14\n   Number of public wire bits:      14\n   Number of ports:                  4\n   Number of port bits:              4\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                  5\n     $equiv                          1\n     $mux                            2\n     $sdff                           2\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module IntBuffer_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 1 unproven $equiv cells in module IntBuffer_EQUIV:\n  Undef modelling: force def on 2 initial reg values and 3 inputs.\n  Proving existence of base case for step 1. (173 clauses over 71 variables)\n  Proving induction step 1. (434 clauses over 172 variables)\n  Proof for induction step holds. Entire workset of 1 cells proven!\nProved 1 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 1 $equiv cells in IntBuffer_EQUIV:\n  Of those cells 1 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: c129e6e4c1, CPU: user 0.02s system 0.03s, MEM: 13.28 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 24% 8x opt_expr (0 sec), 14% 7x opt_clean (0 sec), ...\n",
-          "output_sha256": "c451ae475712f50616372596528bcb18743209f542dadb97e6e9481c578d661d",
+          "output_tail": "V'.\nRemoved a total of 0 cells.\n\n10.7.6. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\IntBuffer_EQUIV..\n\n10.7.7. Executing OPT_EXPR pass (perform const folding).\nOptimizing module IntBuffer_EQUIV.\n\n10.7.8. Finished OPT passes. (There is nothing left to do.)\n\n10.8. Executing WREDUCE pass (reducing word size of cells).\n\n10.9. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\IntBuffer_EQUIV..\n\n10.10. Executing MEMORY_COLLECT pass (generating $mem cells).\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module IntBuffer_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\IntBuffer_EQUIV'.\nRemoved a total of 0 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\IntBuffer_EQUIV..\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== IntBuffer_EQUIV ===\n\n   Number of wires:                 16\n   Number of wire bits:             16\n   Number of public wires:          14\n   Number of public wire bits:      14\n   Number of ports:                  4\n   Number of port bits:              4\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                  5\n     $equiv                          1\n     $mux                            2\n     $sdff                           2\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module IntBuffer_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 1 unproven $equiv cells in module IntBuffer_EQUIV:\n  Undef modelling: force def on 2 initial reg values and 3 inputs.\n  Proving existence of base case for step 1. (173 clauses over 71 variables)\n  Proving induction step 1. (434 clauses over 172 variables)\n  Proof for induction step holds. Entire workset of 1 cells proven!\nProved 1 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 1 $equiv cells in IntBuffer_EQUIV:\n  Of those cells 1 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: c129e6e4c1, CPU: user 0.02s system 0.01s, MEM: 13.59 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 26% 8x opt_expr (0 sec), 17% 7x opt_clean (0 sec), ...\n",
+          "output_sha256": "986635df0535cb7d24d6f5f4ccdb34d00875713fd09d42d787e5971db6318d8d",
           "markers_present": {
             "0 are unproven.": true,
             "Equivalence successfully proven!": true
@@ -399,8 +399,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.042 MB sources in 4 modules, into 0.017 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.063 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.010 s on 1 threads; alloced 9.195 MB\n",
-          "output_sha256": "19086179487e109da05f11da29750a41ae49174d953af0f20ea0b8d330ce083b"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.042 MB sources in 4 modules, into 0.017 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.042 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.195 MB\n",
+          "output_sha256": "790faefaa81fa3a9268a2a6abe76ff9c23043dd206b4069bda671375278bb137"
         },
         "locked_verilator": {
           "command": [
@@ -426,8 +426,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.015 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.027 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.223 MB\n",
-          "output_sha256": "44eee21323cc650d883a6d17c8180256bccb0ff55bfbd551e75f75eae8b0edf1"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.015 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.034 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.227 MB\n",
+          "output_sha256": "3e1483b5de7d839292e1289436f8b8007940a2e0c5fef2233799059606cd52de"
         },
         "yosys_equiv": {
           "command": [
@@ -453,8 +453,8 @@
           ],
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "f 0 cells.\n\n10.7.6. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\IntBuffer_1_EQUIV..\n\n10.7.7. Executing OPT_EXPR pass (perform const folding).\nOptimizing module IntBuffer_1_EQUIV.\n\n10.7.8. Finished OPT passes. (There is nothing left to do.)\n\n10.8. Executing WREDUCE pass (reducing word size of cells).\n\n10.9. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\IntBuffer_1_EQUIV..\n\n10.10. Executing MEMORY_COLLECT pass (generating $mem cells).\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module IntBuffer_1_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\IntBuffer_1_EQUIV'.\nRemoved a total of 0 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\IntBuffer_1_EQUIV..\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== IntBuffer_1_EQUIV ===\n\n   Number of wires:                 26\n   Number of wire bits:             26\n   Number of public wires:          22\n   Number of public wire bits:      22\n   Number of ports:                  6\n   Number of port bits:              6\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                 10\n     $equiv                          2\n     $mux                            4\n     $sdff                           4\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module IntBuffer_1_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 2 unproven $equiv cells in module IntBuffer_1_EQUIV:\n  Undef modelling: force def on 4 initial reg values and 4 inputs.\n  Proving existence of base case for step 1. (345 clauses over 138 variables)\n  Proving induction step 1. (865 clauses over 337 variables)\n  Proof for induction step holds. Entire workset of 2 cells proven!\nProved 2 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 2 $equiv cells in IntBuffer_1_EQUIV:\n  Of those cells 2 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: ca2fbb0645, CPU: user 0.02s system 0.01s, MEM: 13.44 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 25% 8x opt_expr (0 sec), 19% 7x opt_clean (0 sec), ...\n",
-          "output_sha256": "b99df812f04f16d36934a5319f1449162c28999c38ace51669261de63e6227c0",
+          "output_tail": "f 0 cells.\n\n10.7.6. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\IntBuffer_1_EQUIV..\n\n10.7.7. Executing OPT_EXPR pass (perform const folding).\nOptimizing module IntBuffer_1_EQUIV.\n\n10.7.8. Finished OPT passes. (There is nothing left to do.)\n\n10.8. Executing WREDUCE pass (reducing word size of cells).\n\n10.9. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\IntBuffer_1_EQUIV..\n\n10.10. Executing MEMORY_COLLECT pass (generating $mem cells).\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module IntBuffer_1_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\IntBuffer_1_EQUIV'.\nRemoved a total of 0 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\IntBuffer_1_EQUIV..\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== IntBuffer_1_EQUIV ===\n\n   Number of wires:                 26\n   Number of wire bits:             26\n   Number of public wires:          22\n   Number of public wire bits:      22\n   Number of ports:                  6\n   Number of port bits:              6\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                 10\n     $equiv                          2\n     $mux                            4\n     $sdff                           4\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module IntBuffer_1_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 2 unproven $equiv cells in module IntBuffer_1_EQUIV:\n  Undef modelling: force def on 4 initial reg values and 4 inputs.\n  Proving existence of base case for step 1. (345 clauses over 138 variables)\n  Proving induction step 1. (865 clauses over 337 variables)\n  Proof for induction step holds. Entire workset of 2 cells proven!\nProved 2 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 2 $equiv cells in IntBuffer_1_EQUIV:\n  Of those cells 2 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: ca2fbb0645, CPU: user 0.03s system 0.00s, MEM: 13.75 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 26% 8x opt_expr (0 sec), 17% 7x opt_clean (0 sec), ...\n",
+          "output_sha256": "c260745b834b0ea2afd63045a6b54076f0f1b2eaed44cec1d1a567f71629acf5",
           "markers_present": {
             "0 are unproven.": true,
             "Equivalence successfully proven!": true
@@ -492,8 +492,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.042 MB sources in 4 modules, into 0.017 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.061 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.011 s on 1 threads; alloced 9.074 MB\n",
-          "output_sha256": "41333823d1a368a3a9b12a787800b24b027ab7e57857110b2f4c591d11c73644"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.042 MB sources in 4 modules, into 0.017 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.035 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.074 MB\n",
+          "output_sha256": "d0a398b5f85f5dea37ed4653891904f7fe0b7311af64b3d5ba412a3719748865"
         },
         "locked_verilator": {
           "command": [
@@ -519,8 +519,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.015 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.039 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.009 s on 1 threads; alloced 9.227 MB\n",
-          "output_sha256": "b4fb10991fc3a998b0949e4932fcd047d5c1e33ceba9216cb35256a315fe0238"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.015 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.028 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.223 MB\n",
+          "output_sha256": "5d85296ed1c41f062ef348e16a027cfb97d3cda2560e814ce40c3ab9c2cced3c"
         },
         "yosys_equiv": {
           "command": [
@@ -546,8 +546,8 @@
           ],
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "f 0 cells.\n\n10.7.6. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\IntBuffer_2_EQUIV..\n\n10.7.7. Executing OPT_EXPR pass (perform const folding).\nOptimizing module IntBuffer_2_EQUIV.\n\n10.7.8. Finished OPT passes. (There is nothing left to do.)\n\n10.8. Executing WREDUCE pass (reducing word size of cells).\n\n10.9. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\IntBuffer_2_EQUIV..\n\n10.10. Executing MEMORY_COLLECT pass (generating $mem cells).\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module IntBuffer_2_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\IntBuffer_2_EQUIV'.\nRemoved a total of 0 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\IntBuffer_2_EQUIV..\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== IntBuffer_2_EQUIV ===\n\n   Number of wires:                 26\n   Number of wire bits:             26\n   Number of public wires:          22\n   Number of public wire bits:      22\n   Number of ports:                  6\n   Number of port bits:              6\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                 10\n     $equiv                          2\n     $mux                            4\n     $sdff                           4\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module IntBuffer_2_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 2 unproven $equiv cells in module IntBuffer_2_EQUIV:\n  Undef modelling: force def on 4 initial reg values and 4 inputs.\n  Proving existence of base case for step 1. (345 clauses over 138 variables)\n  Proving induction step 1. (865 clauses over 337 variables)\n  Proof for induction step holds. Entire workset of 2 cells proven!\nProved 2 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 2 $equiv cells in IntBuffer_2_EQUIV:\n  Of those cells 2 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: c56d1a3e68, CPU: user 0.03s system 0.03s, MEM: 13.28 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 27% 8x opt_expr (0 sec), 18% 7x opt_clean (0 sec), ...\n",
-          "output_sha256": "c029519773405a12ef914d7542eeef953f8e8660e0ab6a745fb31666437c4e01",
+          "output_tail": "f 0 cells.\n\n10.7.6. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\IntBuffer_2_EQUIV..\n\n10.7.7. Executing OPT_EXPR pass (perform const folding).\nOptimizing module IntBuffer_2_EQUIV.\n\n10.7.8. Finished OPT passes. (There is nothing left to do.)\n\n10.8. Executing WREDUCE pass (reducing word size of cells).\n\n10.9. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\IntBuffer_2_EQUIV..\n\n10.10. Executing MEMORY_COLLECT pass (generating $mem cells).\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module IntBuffer_2_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\IntBuffer_2_EQUIV'.\nRemoved a total of 0 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\IntBuffer_2_EQUIV..\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== IntBuffer_2_EQUIV ===\n\n   Number of wires:                 26\n   Number of wire bits:             26\n   Number of public wires:          22\n   Number of public wire bits:      22\n   Number of ports:                  6\n   Number of port bits:              6\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                 10\n     $equiv                          2\n     $mux                            4\n     $sdff                           4\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module IntBuffer_2_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 2 unproven $equiv cells in module IntBuffer_2_EQUIV:\n  Undef modelling: force def on 4 initial reg values and 4 inputs.\n  Proving existence of base case for step 1. (345 clauses over 138 variables)\n  Proving induction step 1. (865 clauses over 337 variables)\n  Proof for induction step holds. Entire workset of 2 cells proven!\nProved 2 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 2 $equiv cells in IntBuffer_2_EQUIV:\n  Of those cells 2 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: c56d1a3e68, CPU: user 0.02s system 0.01s, MEM: 13.59 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 26% 8x opt_expr (0 sec), 17% 7x opt_clean (0 sec), ...\n",
+          "output_sha256": "b33396e9b79a781c09230cde45864bdb539f4c612caf7083b9464cfff5895383",
           "markers_present": {
             "0 are unproven.": true,
             "Equivalence successfully proven!": true
