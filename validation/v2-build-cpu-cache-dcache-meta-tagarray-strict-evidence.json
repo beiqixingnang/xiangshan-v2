@@ -157,7 +157,8 @@
         "proven_cells": null,
         "unproven_cells": null,
         "sat_variables": null,
-        "sat_clauses": null
+        "sat_clauses": null,
+        "timed_out": true
       }
     },
     "why_complete": "Every locked module named by this Build's own tables is proven against its exact-name locked reference on the rail its timing requires, with a conservation-audited 5C view where the installed Yosys cannot read the original.",
@@ -179,8 +180,8 @@
     },
     "python_build": {
       "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Cache.Dcache.Meta.TagArray-Hardware.py",
-      "sha256": "d97c4ffa166d1636fefebebfdb99790037a5549b5874a2d232dbbd6e715935f4",
-      "bytes": 9735
+      "sha256": "0978d5e6bbe131c3379897690555af141eba6010c859e61dd51386553d51e697",
+      "bytes": 9415
     },
     "reference_sv": {
       "path": "validation/reference-sv/TagArray.sv",
@@ -245,8 +246,8 @@
     "validator_dependencies": {
       "strict_family_rail": {
         "path": "validation/v2_strict_family_rail.py",
-        "sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
-        "bytes": 43710
+        "sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
+        "bytes": 45980
       },
       "multiline_reference_view": {
         "path": "validation/v2_funcunit_strict_validator.py",
@@ -267,14 +268,15 @@
           "/c",
           "pyright",
           "--outputjson",
-          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_n_5j_7em\\Build-Cpu.Cache.Dcache.Meta.TagArray-Hardware.py"
+          "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Cache.Dcache.Meta.TagArray-Hardware.py"
         ],
         "returncode": 0,
         "status": "PASS",
         "version": "1.1.411",
         "error_count": 0,
         "files_analyzed": 1,
-        "stderr_tail": ""
+        "stderr_tail": "",
+        "diagnostics": []
       },
       "rail": {
         "command": [
@@ -283,14 +285,15 @@
           "/c",
           "pyright",
           "--outputjson",
-          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_061xmbeg\\v2_strict_family_rail.py"
+          "validation/v2_strict_family_rail.py"
         ],
         "returncode": 0,
         "status": "PASS",
         "version": "1.1.411",
         "error_count": 0,
         "files_analyzed": 1,
-        "stderr_tail": ""
+        "stderr_tail": "",
+        "diagnostics": []
       },
       "validator": {
         "command": [
@@ -299,7 +302,7 @@
           "/c",
           "pyright",
           "--outputjson",
-          "D:/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/v2_tagarray_strict_validator.py"
+          "validation/v2_tagarray_strict_validator.py"
         ],
         "returncode": 0,
         "status": "PASS",
@@ -325,29 +328,34 @@
       "mitered_variants": 0
     },
     "negative_control": {
-      "status": "PASS",
+      "status": "FAIL",
+      "completion_status": "NOT_COMPLETED",
       "cases": {
         "sequential.target": {
-          "status": "PASS",
+          "status": "FAIL",
           "control_entry": "TagArray",
           "control_port": "io_read_ready",
           "mutation_applied": true,
-          "explicit_failure_marker": true,
-          "success_marker_still_present": false,
-          "returncode": 1
+          "explicit_failure_marker": null,
+          "success_marker_still_present": null,
+          "returncode": null,
+          "timed_out": true,
+          "timeout_seconds": 900
         },
         "sequential.reference": {
-          "status": "PASS",
+          "status": "FAIL",
           "control_entry": "TagArray",
           "control_port": "io_read_ready",
           "mutation_applied": true,
-          "explicit_failure_marker": true,
-          "success_marker_still_present": false,
-          "returncode": 1
+          "explicit_failure_marker": null,
+          "success_marker_still_present": null,
+          "returncode": null,
+          "timed_out": false,
+          "interrupted_before_completion": true
         }
       },
       "method": "equiv_simple -undef -seq 1 on the flattened full pair",
-      "note": "The baseline uses full equiv_induct; this control only establishes that the same pair rejects a mutation on each side."
+      "note": "The current-digest negative control did not complete within the bounded run; no prior PASS was reused."
     },
     "variants": [
       {
@@ -378,7 +386,7 @@
           "equiv_failed_full": null,
           "sat_counts_full": null,
           "output_tail": "shuo/AppData/Local/Temp/uhsc_build_cpu_cache_dcache_meta_tagarray_family/DUT_TagArray.sv:275436:11: Case values incompletely covered (example pattern 0x4b)\n275436 |           casez (\\$62 )\n       |           ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_cache_dcache_meta_tagarray_family/DUT_TagArray.sv:275590:11: Case values incompletely covered (example pattern 0x4b)\n275590 |           casez (\\$75 )\n       |           ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_cache_dcache_meta_tagarray_family/DUT_TagArray.sv:275752:11: Case values incompletely covered (example pattern 0x4c)\n275752 |           casez (\\$62 )\n       |           ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_cache_dcache_meta_tagarray_family/DUT_TagArray.sv:275908:11: Case values incompletely covered (example pattern 0x4c)\n275908 |           casez (\\$75 )\n       |           ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_cache_dcache_meta_tagarray_family/DUT_TagArray.sv:276072:11: Case values incompletely covered (example pattern 0x4d)\n276072 |           casez (\\$62 )\n       |           ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_cache_dcache_meta_tagarray_family/DUT_TagArray.sv:276230:11: Case values incompletely covered (example pattern 0x4d)\n276230 |           casez (\\$75 )\n       |           ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_cache_dcache_meta_tagarray_family/DUT_TagArray.sv:276396:11: Case values incompletely covered (example pattern 0x4e)\n276396 |           casez (\\$62 )\n       |           ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_cache_dcache_meta_tagarray_family/DUT_TagArray.sv:276556:11: Case values incompletely covered (example pattern 0x4e)\n276556 |           casez (\\$75 )\n       |           ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_cache_dcache_meta_tagarray_family/DUT_TagArray.sv:276724:11: Case values incompletely covered (example pattern 0x4f)\n276724 |           casez (\\$62 )\n       |           ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_cache_dcache_meta_tagarray_family/DUT_TagArray.sv:276886:11: Case values incompletely covered (example pattern 0x4f)\n276886 |           casez (\\$75 )\n       |           ^~~~~\n",
-          "output_sha256": "52d5d6a1ccad3dbb7ee848269c9ac438f38d09f67eed434d2e1d3774bd302327"
+          "output_sha256": "22d2111bd5d36f06c36d2e1a62040217438c81049ebf2d55a3962d18fd1f1c14"
         },
         "locked_verilator": {
           "command": [
@@ -411,7 +419,7 @@
           "equiv_failed_full": null,
           "sat_counts_full": null,
           "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.129 MB sources in 8 modules, into 0.064 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.099 s (elab=0.002, cvt=0.009, bld=0.000); cpu 0.026 s on 1 threads; alloced 10.219 MB\n",
-          "output_sha256": "cc5f28e84dad28265db8c07d2f867881857ae09a893d2b4447625a8bec45aa79"
+          "output_sha256": "978dfb645561e6c2c022fb6adb526c7103d7682d5ec4f37702d31861b0d96cca"
         },
         "yosys_equiv": {
           "command": [
@@ -425,17 +433,25 @@
           "timed_out": true,
           "output_tail": "tool call exceeded 900s and was terminated",
           "markers_present": {},
-          "formal_success_marker": false
-        }
+          "formal_success_marker": false,
+          "timeout_seconds": 900
+        },
+        "verdict": "FAIL",
+        "success_marker": false,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "unconstrained_or_equiv_cells": null
       }
     ]
   },
   "failures": [
     "TagArray:yosys_equiv",
-    "TagArray: zero or missing $equiv cells"
+    "TagArray: zero or missing $equiv cells",
+    "negative control did not complete for the current digest"
   ],
   "unclosed": [
-    "strict gates did not all pass"
+    "strict gates did not all pass",
+    "current-digest negative control was not completed"
   ],
   "acceptance_unclosed": [
     "Parent closure, full-top differential, final license review, and user approval remain outside this Build proof."
@@ -446,5 +462,10 @@
     "locked_sources_written": false,
     "line_conservation_required": true,
     "register_update_equations_required": true
+  },
+  "run_metadata": {
+    "completed": false,
+    "reason": "bounded 900-second full formal timeout; current-digest negative control not completed",
+    "locked_sources_written": false
   }
 }
