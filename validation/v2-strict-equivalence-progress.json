@@ -2,9 +2,9 @@
   "schema_version": 1,
   "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_EQUIVALENCE_PROGRESS",
   "build_denominator": 118,
-  "strict_complete_build_count": 36,
-  "fraction": "36/118",
-  "percentage": 30.508475,
+  "strict_complete_build_count": 37,
+  "fraction": "37/118",
+  "percentage": 31.355932,
   "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with the locked source commit, matching source hashes, and either a Yosys SAT no-model miter or fully proven Yosys inductive-equivalence status is counted. STRICT_PENDING and COMPLETE_EQUIVALENCE_VARIANT_ONLY records are inventoried as attempted-but-not-counted instead of failing the rail, and one Build file may not be claimed by several counting proofs.",
   "non_counting_attempt_count": 4,
   "non_counting_attempts": [
@@ -21322,7 +21322,7 @@
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "status": "PASS"
       },
-      "status": "FAIL",
+      "status": "PASS",
       "note": null,
       "scope": {
         "kind": "catalog_build_multi_variant",
@@ -23720,6 +23720,14 @@
           "expected_sha256": "3630d6b2111168626fb133420d6cf2e1f3e299a019421c8ad2951fdb334c3b26",
           "observed_sha256": "3630d6b2111168626fb133420d6cf2e1f3e299a019421c8ad2951fdb334c3b26",
           "status": "PASS"
+        },
+        "scala": {
+          "path": "upstream/src/main/scala/xiangshan/backend/issue/NewAgeDetector.scala",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "3ab7a16d78ae27e93bc108d1bdfe17123247a491938657338e1dd1a28d6c1076",
+          "observed_sha256": "3ab7a16d78ae27e93bc108d1bdfe17123247a491938657338e1dd1a28d6c1076",
+          "status": "PASS"
         }
       },
       "source_children": {},
@@ -23806,7 +23814,48 @@
           "status": "PASS"
         }
       },
-      "declared_scala_sources": {},
+      "declared_scala_sources": {
+        "upstream/src/main/scala/xiangshan/backend/issue/NewAgeDetector.scala": {
+          "path": "upstream/src/main/scala/xiangshan/backend/issue/NewAgeDetector.scala",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "3ab7a16d78ae27e93bc108d1bdfe17123247a491938657338e1dd1a28d6c1076",
+          "observed_sha256": "3ab7a16d78ae27e93bc108d1bdfe17123247a491938657338e1dd1a28d6c1076",
+          "status": "PASS"
+        },
+        "upstream/src/main/scala/xiangshan/backend/regcache/AgeDetector.scala": {
+          "path": "upstream/src/main/scala/xiangshan/backend/regcache/AgeDetector.scala",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "c373e2c8418068365816fbb7a073e59955380dc077661e316857e49e5e7ad43c",
+          "observed_sha256": "c373e2c8418068365816fbb7a073e59955380dc077661e316857e49e5e7ad43c",
+          "status": "PASS"
+        },
+        "upstream/src/main/scala/xiangshan/backend/regcache/RegCacheAgeTimer.scala": {
+          "path": "upstream/src/main/scala/xiangshan/backend/regcache/RegCacheAgeTimer.scala",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "1b8dc92c9b522349ab1e6e0ac563e0c8fe1eb0bbb32c4f4b856424252bd2126e",
+          "observed_sha256": "1b8dc92c9b522349ab1e6e0ac563e0c8fe1eb0bbb32c4f4b856424252bd2126e",
+          "status": "PASS"
+        },
+        "upstream/src/main/scala/xiangshan/backend/regcache/RegCacheDataModule.scala": {
+          "path": "upstream/src/main/scala/xiangshan/backend/regcache/RegCacheDataModule.scala",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "6c9d41ef0c9c1cd1a0203aeac819dbc0cba9df813961017d3195b3b23387a3a3",
+          "observed_sha256": "6c9d41ef0c9c1cd1a0203aeac819dbc0cba9df813961017d3195b3b23387a3a3",
+          "status": "PASS"
+        },
+        "upstream/src/main/scala/xiangshan/backend/regcache/RegCacheTagModule.scala": {
+          "path": "upstream/src/main/scala/xiangshan/backend/regcache/RegCacheTagModule.scala",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "ea3b47de3859c98ae3052bb5cd7164abcdcd6f2927c56e3a757163c9640b3847",
+          "observed_sha256": "ea3b47de3859c98ae3052bb5cd7164abcdcd6f2927c56e3a757163c9640b3847",
+          "status": "PASS"
+        }
+      },
       "variant_checks": {
         "NewAgeDetector": {
           "status": "PASS",
@@ -23856,9 +23905,7 @@
         "status": null,
         "formal_success_marker": null
       },
-      "failures": [
-        "required source: scala"
-      ],
+      "failures": [],
       "declared_failures": [],
       "declared_unclosed": []
     },
