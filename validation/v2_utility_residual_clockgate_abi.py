@@ -20,6 +20,10 @@ _DECLARATION = re.compile(
     r"(?:\[\s*(\d+)\s*:\s*0\s*\]\s*)?"
     r"([A-Za-z_]\w*(?:\s*,\s*[A-Za-z_]\w*)*)$"
 )
+_CONTINUATION = re.compile(
+    r"^(?:\[\s*(\d+)\s*:\s*0\s*\]\s*)?"
+    r"([A-Za-z_]\w*(?:\s*,\s*[A-Za-z_]\w*)*)$"
+)
 def _strip_comment(line: str) -> str:
     """Remove a line comment while retaining declaration text."""
 
@@ -54,13 +58,28 @@ def parse_module_ports(rtl: str, module: str) -> dict[str, Port]:
         return {}
 
     ports: dict[str, Port] = {}
+    current_direction: str | None = None
+    current_width = 1
     header_lines = [_strip_comment(raw).rstrip(",").strip()
                     for raw in header.group(1).splitlines()]
     for line in header_lines:
         parsed = _declaration(line)
-        if parsed is None:
+        if parsed is not None:
+            direction, width, names = parsed
+            current_direction = direction
+            current_width = width
+        elif current_direction is not None:
+            continuation = _CONTINUATION.match(line)
+            if continuation is None:
+                continue
+            width = (int(continuation.group(1)) + 1
+                     if continuation.group(1) else current_width)
+            direction = current_direction
+            names = [item.strip() for item in continuation.group(2).split(",")
+                     if item.strip()]
+            current_width = width
+        else:
             continue
-        direction, width, names = parsed
         for name in names:
             ports[name] = (direction, width)
 
