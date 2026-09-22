@@ -3,7 +3,7 @@
 """
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, cast
 
 from amaranth import Array, Cat, ClockDomain, Const, Elaboratable, Instance, Module, Mux, Signal
 from amaranth.back import verilog
@@ -501,14 +501,15 @@ class UtilityResidualFamily(Elaboratable):
                     Signal(107, name=f"pipeline_operand_{index}", reset_less=True)
                     for index in range(len(values))
                 ]
-                with module.If(p["io_fire"]):
+                with cast(Any, module.If(p["io_fire"])):
                     module.d.sync += [register.eq(value) for register, value in zip(registers, values)]
                 operands = registers
             next_values: list[Any] = []
             group_index = 0
             if len(operands) in (4, 8):
                 for base in range(0, len(operands), 4):
-                    sum_value, carry_value = _csa4_values(*operands[base:base + 4], 107)
+                    a, b, c, d = operands[base:base + 4]
+                    sum_value, carry_value = _csa4_values(a, b, c, d, 107)
                     sum_signal = Signal(107, name=f"level_{level}_group_{group_index}_sum")
                     carry_signal = Signal(107, name=f"level_{level}_group_{group_index}_carry")
                     module.d.comb += [sum_signal.eq(sum_value), carry_signal.eq(carry_value)]
@@ -518,7 +519,8 @@ class UtilityResidualFamily(Elaboratable):
                 complete = len(operands) // 3
                 for group in range(complete):
                     base = group * 3
-                    sum_value, carry_value = _csa3_values(*operands[base:base + 3], 107)
+                    a, b, c = operands[base:base + 3]
+                    sum_value, carry_value = _csa3_values(a, b, c, 107)
                     sum_signal = Signal(107, name=f"level_{level}_group_{group_index}_sum")
                     carry_signal = Signal(107, name=f"level_{level}_group_{group_index}_carry")
                     module.d.comb += [sum_signal.eq(sum_value), carry_signal.eq(carry_value)]
@@ -558,13 +560,13 @@ class UtilityResidualFamily(Elaboratable):
         taken = Mux(p["io_alloc_ready"], Const(1, 8) << selected, 0)
         released = Mux(p["io_free_valid"], Const(1, 8) << p["io_free_bits"], 0)
         next_bitmap = (bitmap & ~taken) | released
-        count = sum(bitmap[index] for index in range(8))
+        count = sum(cast(Any, bitmap[index]) for index in range(8))
         next_valid = (bitmap.any() & ~((count == 1) & p["io_alloc_ready"])) | p["io_free_valid"]
         update_select = p["io_alloc_ready"] | (~valid & p["io_free_valid"])
         module.d.comb += [p["io_alloc_valid"].eq(valid), p["io_alloc_bits"].eq(selected)]
-        with module.If(p["io_alloc_ready"] | p["io_free_valid"]):
+        with cast(Any, module.If(p["io_alloc_ready"] | p["io_free_valid"])):
             module.d.sync += [bitmap.eq(next_bitmap), valid.eq(next_valid)]
-        with module.If(update_select):
+        with cast(Any, module.If(update_select)):
             module.d.sync += selected.eq(_priority_index(next_bitmap, 8))
 
     # Implement the IEEE 1149.1 TAP state transitions. / 实现 IEEE 1149.1 TAP 状态转移。
@@ -611,9 +613,9 @@ class UtilityResidualFamily(Elaboratable):
         tdo_driven = Signal(init=0, name="tdo_driven")
 
         module.d.tap += state.eq(transitions[state])
-        with module.If(state == 14):
+        with cast(Any, module.If(state == 14)):
             module.d.shift += instruction_shift.eq(1)
-        with module.Elif(state == 10):
+        with cast(Any, module.Elif(state == 10)):
             module.d.shift += instruction_shift.eq(Cat(instruction_shift[1:], p["io_jtag_TDI"]))
 
         selected_tdo = Mux(state == 2, p["io_dataChainIn_data"], instruction_shift[0])
@@ -622,9 +624,9 @@ class UtilityResidualFamily(Elaboratable):
             tdo_data.eq(selected_tdo),
             tdo_driven.eq(selected_drive),
         ]
-        with module.If(state == 15):
+        with cast(Any, module.If(state == 15)):
             module.d.tap_fall += active_instruction.eq(1)
-        with module.Elif(state == 13):
+        with cast(Any, module.Elif(state == 13)):
             module.d.tap_fall += active_instruction.eq(instruction_shift)
 
         module.d.comb += [
@@ -644,11 +646,12 @@ class UtilityResidualFamily(Elaboratable):
         width = 16 if self.member.endswith("_3") else 15
         state = Signal(width, init=1, name="lfsr_state")
         if width == 16:
-            feedback = state[10] ^ state[12] ^ state[13] ^ state[15]
-            with module.If(p["io_increment"]):
+            feedback = (cast(Any, state[10]) ^ cast(Any, state[12]) ^
+                        cast(Any, state[13]) ^ cast(Any, state[15]))
+            with cast(Any, module.If(p["io_increment"])):
                 module.d.sync += state.eq(Cat(feedback, state[:-1]))
         else:
-            feedback = state[13] ^ state[14]
+            feedback = cast(Any, state[13]) ^ cast(Any, state[14])
             module.d.sync += state.eq(Cat(feedback, state[:-1]))
         for index in range(width):
             module.d.comb += p[f"io_out_{index}"].eq(state[index])
@@ -675,16 +678,16 @@ class UtilityResidualFamily(Elaboratable):
         module.d.comb += p["io_out_valid"].eq(out_valid)
         for field in fields:
             module.d.comb += p[f"io_out_bits_{field}"].eq(entries[field][read_pointer])
-        with module.If(fire):
+        with cast(Any, module.If(fire)):
             for index, valid_bit in enumerate(valids):
-                with module.If(read_pointer == index):
+                with cast(Any, module.If(read_pointer == index)):
                     module.d.sync += valid_bit.eq(0)
             module.d.sync += read_pointer.eq(read_pointer + 1)
-        with module.If(p["io_in_valid"]):
+        with cast(Any, module.If(p["io_in_valid"])):
             for field in fields:
                 module.d.sync += entries[field][write_pointer].eq(p[f"io_in_bits_{field}"])
             for index, valid_bit in enumerate(valids):
-                with module.If(write_pointer == index):
+                with cast(Any, module.If(write_pointer == index)):
                     module.d.sync += valid_bit.eq(1)
             module.d.sync += write_pointer.eq(write_pointer + 1)
 
@@ -709,7 +712,7 @@ class UtilityResidualFamily(Elaboratable):
             valid_stage_2.eq(p["io_i_time_valid"]),
             delayed_valid.eq(valid_stage_0),
         ]
-        with module.If(edge):
+        with cast(Any, module.If(edge)):
             module.d.sync += captured_time.eq(p["io_i_time_bits"])
         module.d.comb += p["io_o_time_bits"].eq(captured_time)
 
@@ -754,11 +757,11 @@ class UtilityResidualFamily(Elaboratable):
             for field, signal in input_fields.items()
         }
         capture = ~state & p["io_in_valid"] & ~p["io_out_ready"]
-        with module.If(state):
+        with cast(Any, module.If(state)):
             module.d.sync += state.eq(~(p["io_out_ready"] | p["io_flush"]))
-        with module.Else():
+        with cast(Any, module.Else()):
             module.d.sync += state.eq(capture & ~p["io_flush"])
-        with module.If(capture):
+        with cast(Any, module.If(capture)):
             module.d.sync += [
                 buffers[field].eq(signal)
                 for field, signal in input_fields.items()
