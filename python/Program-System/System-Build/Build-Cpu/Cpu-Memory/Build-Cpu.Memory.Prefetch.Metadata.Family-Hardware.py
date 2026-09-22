@@ -131,7 +131,7 @@ def _plru_way(state: Any, ways: int) -> Any:
     right_ways = power >> 1
     left_ways = ways - right_ways
     root = state[ways - 2]
-    left_state = state[right_ways - 1:ways - 1]
+    left_state = state[right_ways - 1:ways - 2]
     right_state = state[:right_ways - 1]
     left_way = _plru_way(left_state, left_ways)
     right_way = _plru_way(right_state, right_ways)
@@ -155,7 +155,7 @@ def _plru_next(state: Any, touch: Any, ways: int) -> Any:
     elif len(touch) > ceil_log:
         touch = touch[:ceil_log]
     root = ~touch[ceil_log - 1]
-    left_state = state[right_ways - 1:ways - 1]
+    left_state = state[right_ways - 1:ways - 2]
     right_state = state[:right_ways - 1]
     left_touch = touch[:max(1, left_ways.bit_length() - 1)]
     right_touch = touch[:max(1, right_ways.bit_length() - 1)]
