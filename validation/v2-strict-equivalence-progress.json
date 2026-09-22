@@ -6,7 +6,7 @@
   "fraction": "39/118",
   "percentage": 33.050847,
   "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with the locked source commit, matching source hashes, and either a Yosys SAT no-model miter or fully proven Yosys inductive-equivalence status is counted. STRICT_PENDING and COMPLETE_EQUIVALENCE_VARIANT_ONLY records are inventoried as attempted-but-not-counted instead of failing the rail, and one Build file may not be claimed by several counting proofs.",
-  "non_counting_attempt_count": 5,
+  "non_counting_attempt_count": 6,
   "non_counting_attempts": [
     {
       "evidence": "validation/v2-build-cpu-backend-fu-pmp-family-strict-evidence.json",
@@ -59,6 +59,21 @@
       ],
       "unclosed": [
         "strict gates did not all pass"
+      ]
+    },
+    {
+      "evidence": "validation/v2-build-cpu-cache-dcache-meta-tagarray-strict-evidence.json",
+      "build_id": "Build-Cpu.Cache.Dcache.Meta.TagArray",
+      "declared_status": "STRICT_PENDING",
+      "audit_failures": [],
+      "proof_failures": [
+        "TagArray:yosys_equiv",
+        "TagArray: zero or missing $equiv cells",
+        "negative control did not complete for the current digest"
+      ],
+      "unclosed": [
+        "strict gates did not all pass",
+        "current-digest negative control was not completed"
       ]
     },
     {
@@ -25863,7 +25878,7 @@
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "status": "PASS"
       },
-      "status": "FAIL",
+      "status": "NON_COUNTING",
       "note": null,
       "scope": {
         "kind": "catalog_build_multi_variant",
@@ -26007,7 +26022,8 @@
             "proven_cells": null,
             "unproven_cells": null,
             "sat_variables": null,
-            "sat_clauses": null
+            "sat_clauses": null,
+            "timed_out": true
           }
         },
         "why_complete": "Every locked module named by this Build's own tables is proven against its exact-name locked reference on the rail its timing requires, with a conservation-audited 5C view where the installed Yosys cannot read the original.",
@@ -26026,9 +26042,9 @@
           "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Cache.Dcache.Meta.TagArray-Hardware.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "d97c4ffa166d1636fefebebfdb99790037a5549b5874a2d232dbbd6e715935f4",
+          "expected_sha256": "0978d5e6bbe131c3379897690555af141eba6010c859e61dd51386553d51e697",
           "observed_sha256": "0978d5e6bbe131c3379897690555af141eba6010c859e61dd51386553d51e697",
-          "status": "FAIL"
+          "status": "PASS"
         },
         "reference_sv": {
           "path": "validation/reference-sv/TagArray.sv",
@@ -26102,9 +26118,9 @@
           "path": "validation/v2_strict_family_rail.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
+          "expected_sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
           "observed_sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
-          "status": "FAIL"
+          "status": "PASS"
         },
         "multiline_reference_view": {
           "path": "validation/v2_funcunit_strict_validator.py",
@@ -26178,16 +26194,15 @@
         "status": null,
         "formal_success_marker": null
       },
-      "failures": [
-        "source digest: python_build",
-        "source digest: validator_dependency.strict_family_rail"
-      ],
+      "failures": [],
       "declared_failures": [
         "TagArray:yosys_equiv",
-        "TagArray: zero or missing $equiv cells"
+        "TagArray: zero or missing $equiv cells",
+        "negative control did not complete for the current digest"
       ],
       "declared_unclosed": [
-        "strict gates did not all pass"
+        "strict gates did not all pass",
+        "current-digest negative control was not completed"
       ]
     },
     {
