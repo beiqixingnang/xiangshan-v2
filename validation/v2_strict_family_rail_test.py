@@ -50,6 +50,17 @@ endmodule
         self.assertIn("temporary = \ndata + 4'h1;", view)
         self.assertEqual(audit["code_lines_view"], audit["code_lines_locked"] + 1)
 
+    def test_multiline_plain_declaration_catalogs_are_trusted(self) -> None:
+        for name in ("CtrlBlock", "LoadQueueRAW"):
+            reference = Path(__file__).resolve().parent / f"reference-sv/{name}.sv"
+            view, audit = synthesizable_view(
+                reference.read_text(encoding="utf-8"), name, False
+            )
+            self.assertTrue(audit["line_conservation_ok"], name)
+            self.assertTrue(audit["register_update_equations_preserved"], name)
+            self.assertTrue(audit["view_trusted"], name)
+            self.assertNotIn("automatic logic", view)
+
 
 if __name__ == "__main__":
     unittest.main()

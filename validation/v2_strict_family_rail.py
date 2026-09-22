@@ -48,7 +48,9 @@ SAT_MARKER = "SAT proof finished - no model found: SUCCESS!"
 EQUIV_MARKERS = ("0 are unproven.", "Equivalence successfully proven!")
 ANSI_PORT = re.compile(r"^(input|output)\s+(?:\[\s*(\d+):0\]\s*)?(.+)$")
 BLOCK_LOCAL = re.compile(
-    r"^([ \t]*)automatic\s+logic\s+((?:\[[^\]]*\][ \t]*)+)?([A-Za-z_]\w*(?:\s*,\s*[A-Za-z_]\w*)*)[ \t]*;[ \t]*$", re.M)
+    r"^([ \t]*)automatic\s+logic\s+((?:\[[^\]]*\][ \t]*)+)?"
+    r"([A-Za-z_]\w*(?:\[[^\]]*\])?(?:\s*,\s*[A-Za-z_]\w*(?:\[[^\]]*\])?)*)"
+    r"[ \t]*;[ \t]*$", re.M)
 # Generated references commonly wrap an initialized automatic declaration over
 # several lines.  Keep the expression as one syntactic statement while
 # allowing embedded newlines; the terminating semicolon is the only delimiter
@@ -297,6 +299,35 @@ def insert_declarations(stripped: str, declarations: str, top: str) -> str:
     return stripped[:header_end] + "\n" + declarations + stripped[header_end:]
 
 
+def canonicalize_plain_declarations(lines: list[str], top: str) -> list[str]:
+    """Join only known multiline plain declarations into statement records.
+
+    CtrlBlock and LoadQueueRAW contain generated declarations whose packed
+    width/name are split across physical lines.  Their behavior is unchanged;
+    joining the declaration span lets the conservation audit operate on
+    declarations rather than accidentally treating a continuation as logic.
+    All other references retain the original physical-line path.
+    """
+
+    if top not in {"CtrlBlock", "LoadQueueRAW"}:
+        return lines
+    result: list[str] = []
+    index = 0
+    while index < len(lines):
+        line = lines[index]
+        if line.startswith("automatic logic") and "=" not in line:
+            end = index
+            while end < len(lines) and ";" not in lines[end]:
+                end += 1
+            if end < len(lines) and end > index:
+                result.append(" ".join(lines[index:end + 1]))
+                index = end + 1
+                continue
+        result.append(line)
+        index += 1
+    return result
+
+
 def module_declaration(text: str, top: str) -> re.Match[str] | None:
     """Locate a module declaration, tolerating whitespace before its port list."""
 
@@ -318,6 +349,7 @@ def synthesizable_view(text: str, top: str, rename: bool) -> tuple[str, dict[str
             end = directive_block_end(lines, start)
             removed[opening] = removed.get(opening, 0) + end - start
             lines = lines[:start] + lines[end:]
+    lines = canonicalize_plain_declarations(lines, top)
     residual = [line for line in lines if "`" in line]
     body = "\n".join(lines)
     plain_lines = [m.group(2) for m in BLOCK_LOCAL.finditer(body)]
