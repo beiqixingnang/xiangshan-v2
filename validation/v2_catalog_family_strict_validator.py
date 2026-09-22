@@ -53,12 +53,28 @@ def main() -> int:
     parser.add_argument("--build", required=True, help="Build file path or unique name fragment")
     parser.add_argument("--evidence", help="evidence file name under validation/")
     parser.add_argument("--build-id", help="override the derived build_id")
+    parser.add_argument(
+        "--scala", action="append", default=[],
+        help="vendored upstream Scala source used for provenance (repeatable)",
+    )
     arguments = parser.parse_args()
     build_path = resolve_build(arguments.build)
     build_id = arguments.build_id or build_id_for(build_path)
     slug = re.sub(r"\W+", "-", build_id.lower()).strip("-")
     evidence = ROOT / "validation" / (arguments.evidence or f"v2-{slug}-strict-evidence.json")
-    payload = FamilyRail(build_path, build_id, evidence).run()
+    scala_paths = [
+        (ROOT / value).resolve() if not Path(value).is_absolute() else Path(value).resolve()
+        for value in arguments.scala
+    ]
+    missing = [str(path) for path in scala_paths if not path.is_file()]
+    if missing:
+        raise SystemExit(f"Scala provenance path is missing: {', '.join(missing)}")
+    payload = FamilyRail(
+        build_path,
+        build_id,
+        evidence,
+        scala_path=scala_paths[0] if scala_paths else None,
+    ).run()
     scope = payload["scope"]
     print(json.dumps({
         "build": build_path.relative_to(ROOT).as_posix(),
