@@ -2,9 +2,9 @@
   "schema_version": 1,
   "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_EQUIVALENCE_PROGRESS",
   "build_denominator": 118,
-  "strict_complete_build_count": 35,
-  "fraction": "35/118",
-  "percentage": 29.661017,
+  "strict_complete_build_count": 36,
+  "fraction": "36/118",
+  "percentage": 30.508475,
   "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with the locked source commit, matching source hashes, and either a Yosys SAT no-model miter or fully proven Yosys inductive-equivalence status is counted. STRICT_PENDING and COMPLETE_EQUIVALENCE_VARIANT_ONLY records are inventoried as attempted-but-not-counted instead of failing the rail, and one Build file may not be claimed by several counting proofs.",
   "non_counting_attempt_count": 4,
   "non_counting_attempts": [
@@ -23701,9 +23701,9 @@
           "path": "validation/v2_strict_family_rail.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
+          "expected_sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
           "observed_sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
-          "status": "FAIL"
+          "status": "PASS"
         },
         "python_build": {
           "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Regcache.AgeFamily-Hardware.py",
@@ -23719,14 +23719,6 @@
           "inside_repository": true,
           "expected_sha256": "3630d6b2111168626fb133420d6cf2e1f3e299a019421c8ad2951fdb334c3b26",
           "observed_sha256": "3630d6b2111168626fb133420d6cf2e1f3e299a019421c8ad2951fdb334c3b26",
-          "status": "PASS"
-        },
-        "scala": {
-          "path": "upstream/src/main/scala/xiangshan/backend/issue/NewAgeDetector.scala",
-          "present": true,
-          "inside_repository": true,
-          "expected_sha256": "3ab7a16d78ae27e93bc108d1bdfe17123247a491938657338e1dd1a28d6c1076",
-          "observed_sha256": "3ab7a16d78ae27e93bc108d1bdfe17123247a491938657338e1dd1a28d6c1076",
           "status": "PASS"
         }
       },
@@ -23814,48 +23806,7 @@
           "status": "PASS"
         }
       },
-      "declared_scala_sources": {
-        "upstream/src/main/scala/xiangshan/backend/issue/NewAgeDetector.scala": {
-          "path": "upstream/src/main/scala/xiangshan/backend/issue/NewAgeDetector.scala",
-          "present": true,
-          "inside_repository": true,
-          "expected_sha256": "3ab7a16d78ae27e93bc108d1bdfe17123247a491938657338e1dd1a28d6c1076",
-          "observed_sha256": "3ab7a16d78ae27e93bc108d1bdfe17123247a491938657338e1dd1a28d6c1076",
-          "status": "PASS"
-        },
-        "upstream/src/main/scala/xiangshan/backend/regcache/AgeDetector.scala": {
-          "path": "upstream/src/main/scala/xiangshan/backend/regcache/AgeDetector.scala",
-          "present": true,
-          "inside_repository": true,
-          "expected_sha256": "c373e2c8418068365816fbb7a073e59955380dc077661e316857e49e5e7ad43c",
-          "observed_sha256": "c373e2c8418068365816fbb7a073e59955380dc077661e316857e49e5e7ad43c",
-          "status": "PASS"
-        },
-        "upstream/src/main/scala/xiangshan/backend/regcache/RegCacheAgeTimer.scala": {
-          "path": "upstream/src/main/scala/xiangshan/backend/regcache/RegCacheAgeTimer.scala",
-          "present": true,
-          "inside_repository": true,
-          "expected_sha256": "1b8dc92c9b522349ab1e6e0ac563e0c8fe1eb0bbb32c4f4b856424252bd2126e",
-          "observed_sha256": "1b8dc92c9b522349ab1e6e0ac563e0c8fe1eb0bbb32c4f4b856424252bd2126e",
-          "status": "PASS"
-        },
-        "upstream/src/main/scala/xiangshan/backend/regcache/RegCacheDataModule.scala": {
-          "path": "upstream/src/main/scala/xiangshan/backend/regcache/RegCacheDataModule.scala",
-          "present": true,
-          "inside_repository": true,
-          "expected_sha256": "6c9d41ef0c9c1cd1a0203aeac819dbc0cba9df813961017d3195b3b23387a3a3",
-          "observed_sha256": "6c9d41ef0c9c1cd1a0203aeac819dbc0cba9df813961017d3195b3b23387a3a3",
-          "status": "PASS"
-        },
-        "upstream/src/main/scala/xiangshan/backend/regcache/RegCacheTagModule.scala": {
-          "path": "upstream/src/main/scala/xiangshan/backend/regcache/RegCacheTagModule.scala",
-          "present": true,
-          "inside_repository": true,
-          "expected_sha256": "ea3b47de3859c98ae3052bb5cd7164abcdcd6f2927c56e3a757163c9640b3847",
-          "observed_sha256": "ea3b47de3859c98ae3052bb5cd7164abcdcd6f2927c56e3a757163c9640b3847",
-          "status": "PASS"
-        }
-      },
+      "declared_scala_sources": {},
       "variant_checks": {
         "NewAgeDetector": {
           "status": "PASS",
@@ -23906,7 +23857,7 @@
         "formal_success_marker": null
       },
       "failures": [
-        "source digest: validator"
+        "required source: scala"
       ],
       "declared_failures": [],
       "declared_unclosed": []
@@ -23920,7 +23871,7 @@
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "status": "PASS"
       },
-      "status": "FAIL",
+      "status": "PASS",
       "note": null,
       "scope": {
         "kind": "catalog_build_multi_variant",
@@ -24161,16 +24112,16 @@
           "path": "validation/v2_robptrwrappers_strict_validator.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "0939ceb10a30838536b534758933e8aec6a0f2fb4daca1594538b20033531df5",
-          "observed_sha256": "0939ceb10a30838536b534758933e8aec6a0f2fb4daca1594538b20033531df5",
+          "expected_sha256": "83b6c7fa06de33204e03013120ac85c19cf30988fb0d7dc0bea7c6de0e446ba2",
+          "observed_sha256": "83b6c7fa06de33204e03013120ac85c19cf30988fb0d7dc0bea7c6de0e446ba2",
           "status": "PASS"
         },
         "python_build": {
           "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Rob.PtrWrappers-Hardware.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "884cdfba9ff67daec46ab7667c0eff7c9f0086f1fe8ea5acb64b14d2b5ddd7ae",
-          "observed_sha256": "884cdfba9ff67daec46ab7667c0eff7c9f0086f1fe8ea5acb64b14d2b5ddd7ae",
+          "expected_sha256": "217f8dc928f8240a1af25bf7d11619a23cce07c719ace6c60e3b7f4566b4533a",
+          "observed_sha256": "217f8dc928f8240a1af25bf7d11619a23cce07c719ace6c60e3b7f4566b4533a",
           "status": "PASS"
         },
         "reference_sv": {
@@ -24196,9 +24147,9 @@
           "path": "validation/v2_strict_family_rail.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
+          "expected_sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
           "observed_sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
-          "status": "FAIL"
+          "status": "PASS"
         },
         "multiline_view_provider": {
           "path": "validation/v2_smallcontrol_strict_validator.py",
@@ -24286,9 +24237,7 @@
         "status": null,
         "formal_success_marker": null
       },
-      "failures": [
-        "source digest: validator_dependency.frozen_family_rail"
-      ],
+      "failures": [],
       "declared_failures": [],
       "declared_unclosed": []
     },
@@ -28261,8 +28210,8 @@
           "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.ICacheMshr-Hardware.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "ad323e77424c9abfdae2fb5f44c7f76b9c30f0aa90f3d33489b6b687120fa642",
-          "observed_sha256": "ad323e77424c9abfdae2fb5f44c7f76b9c30f0aa90f3d33489b6b687120fa642",
+          "expected_sha256": "3a7436ba2069e37557d2860faa532135a76d5bc05e64d87bcdc0a68a12aaacd2",
+          "observed_sha256": "3a7436ba2069e37557d2860faa532135a76d5bc05e64d87bcdc0a68a12aaacd2",
           "status": "PASS"
         },
         "reference_sv": {
@@ -29091,19 +29040,19 @@
       },
       "sources": {
         "validator": {
-          "path": "validation/v2_strict_family_rail.py",
+          "path": "validation/v2_icache_utils_strict_validator.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
-          "observed_sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
+          "expected_sha256": "437df366a6484d0f263517fb59be6f1c6c3409c30aaf68dafaeaa456404bd9ea",
+          "observed_sha256": "437df366a6484d0f263517fb59be6f1c6c3409c30aaf68dafaeaa456404bd9ea",
           "status": "PASS"
         },
         "python_build": {
           "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.Utils-Hardware.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "1f5867e78f64761d0cecc922a3fe6ce9b15acf117ac3320338f529be14c57b8c",
-          "observed_sha256": "1f5867e78f64761d0cecc922a3fe6ce9b15acf117ac3320338f529be14c57b8c",
+          "expected_sha256": "e18f02bff2cdb6af8e808c1f866158386bcb4e773fc68bb2bf8022a8a7d8af2a",
+          "observed_sha256": "e18f02bff2cdb6af8e808c1f866158386bcb4e773fc68bb2bf8022a8a7d8af2a",
           "status": "PASS"
         },
         "reference_sv": {
@@ -29124,7 +29073,16 @@
         }
       },
       "source_children": {},
-      "validator_dependencies": {},
+      "validator_dependencies": {
+        "strict_family_rail": {
+          "path": "validation/v2_strict_family_rail.py",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
+          "observed_sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
+          "status": "PASS"
+        }
+      },
       "reference_lock": {
         "DeMultiplexer": {
           "path": "validation/reference-sv/DeMultiplexer.sv",
@@ -29159,7 +29117,24 @@
           "status": "PASS"
         }
       },
-      "declared_scala_sources": {},
+      "declared_scala_sources": {
+        "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala": {
+          "path": "upstream/src/main/scala/xiangshan/frontend/icache/ICacheMissUnit.scala",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "12489d704c86b65f6d4bc15e64b659bb2fa94f236eb93350d9dee012a22ba926",
+          "observed_sha256": "12489d704c86b65f6d4bc15e64b659bb2fa94f236eb93350d9dee012a22ba926",
+          "status": "PASS"
+        },
+        "upstream/src/main/scala/xiangshan/frontend/icache/FIFO.scala": {
+          "path": "upstream/src/main/scala/xiangshan/frontend/icache/FIFO.scala",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "31ab7a1ae4a86834bf6fb6d120c19b835111a9e83c49a53d41ec911ea32e9cd1",
+          "observed_sha256": "31ab7a1ae4a86834bf6fb6d120c19b835111a9e83c49a53d41ec911ea32e9cd1",
+          "status": "PASS"
+        }
+      },
       "variant_checks": {
         "DeMultiplexer": {
           "status": "PASS",
