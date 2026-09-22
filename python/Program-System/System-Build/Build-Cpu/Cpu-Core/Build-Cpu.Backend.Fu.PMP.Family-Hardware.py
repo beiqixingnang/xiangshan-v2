@@ -1976,13 +1976,63 @@ class PMPFamily(Elaboratable):
                 module.d.comb += self.ports[f"io_pma_{i}_{field}"].eq(0)
 
     def _checker(self, module: Module, variant: str) -> None:
-        """Implement first-match PMP permission and fixed PMA MMIO window."""
+        """Implement the first-match PMP/PMA checker variants."""
         mode = self.ports["io_check_env_mode"]
         debug = self.ports["io_check_env_debug"]
         req = self.ports.get("io_req_bits_addr")
         cmd = self.ports.get("io_req_bits_cmd")
         if req is None:
             req = Const(0, 48)
+
+        # The read-only checker variant is a specialized V2 read path.  Its
+        # reference does not expose a command or write/execute permissions:
+        # it returns exception bits (not allow bits), and PMA is mandatory.
+        # Keep the first-match equations explicit so every PMA input affects
+        # the generated RTL rather than collapsing to a fixed MMIO window.
+        if variant == "PMPChecker":
+            grain_mask = Const(0x3FFFFFFFFC00, 46)
+            debug_window = (req > Const(0x3801FFFF, 48)) & (req < Const(0x38021000, 48))
+
+            def match_entries(prefix: str) -> list[Any]:
+                matches: list[Any] = []
+                previous_base: Any = Const(0, 48)
+                for index in range(32):
+                    address = self.ports[f"io_check_env_{prefix}_{index}_addr"]
+                    mode_a = self.ports[f"io_check_env_{prefix}_{index}_cfg_a"]
+                    # Concatenation keeps the architectural 48-bit address
+                    # width exact; an arithmetic shift otherwise widens the
+                    # intermediate expression in generated RTL.
+                    entry_base = Cat(address & grain_mask, Const(0, 2))
+                    napot = (mode_a[1] &
+                             (((req & ~self.ports[f"io_check_env_{prefix}_{index}_mask"]) ==
+                               (entry_base & ~self.ports[f"io_check_env_{prefix}_{index}_mask"]))))
+                    tor = ((mode_a == 1) & (req >= previous_base) & (req < entry_base))
+                    matches.append((napot | tor) & (~debug_window | debug))
+                    previous_base = entry_base
+                return matches
+
+            pmp_matches = match_entries("pmp")
+            pma_matches = match_entries("pma")
+
+            pmp_r: Any = mode[1]
+            pma_r: Any = Const(0)
+            pma_c: Any = Const(0)
+            pma_atomic: Any = Const(0)
+            for index in range(31, -1, -1):
+                pmp_r_value = self.ports[f"io_check_env_pmp_{index}_cfg_r"]
+                pmp_r_value = pmp_r_value | (mode[1] & ~self.ports[f"io_check_env_pmp_{index}_cfg_l"])
+                pmp_r = Mux(pmp_matches[index], pmp_r_value, pmp_r)
+                pma_r = Mux(pma_matches[index], self.ports[f"io_check_env_pma_{index}_cfg_r"], pma_r)
+                pma_c = Mux(pma_matches[index], self.ports[f"io_check_env_pma_{index}_cfg_c"], pma_c)
+                pma_atomic = Mux(pma_matches[index], self.ports[f"io_check_env_pma_{index}_cfg_atomic"], pma_atomic)
+
+            module.d.comb += [
+                self.ports["io_resp_ld"].eq(~(pmp_r & pma_r)),
+                self.ports["io_resp_mmio"].eq(~pma_c),
+                self.ports["io_resp_atomic"].eq(pma_atomic),
+            ]
+            return
+
         pmp_match: list[Any] = []
         for i in range(32):
             a = self.ports[f"io_check_env_pmp_{i}_cfg_a"]

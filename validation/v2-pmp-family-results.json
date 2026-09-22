@@ -4,8 +4,8 @@
   "batch_id": "V2-BACKEND-PMP-001",
   "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
   "scala_sources": [
-    "upstream/src/main/scala/xiangshan/backend/fu/PMP.scala",
-    "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/PMPEntryModule.scala"
+    "scala/src/main/scala/xiangshan/backend/fu/PMP.scala",
+    "scala/src/main/scala/xiangshan/backend/fu/NewCSR/PMPEntryModule.scala"
   ],
   "covered_modules": [
     "PMP",
@@ -67,12 +67,12 @@
         ],
         "status": "PASS",
         "returncode": 0,
-        "output_tail": "nvert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 9dfde74d19, CPU: user 0.01s system 0.01s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 38% 1x opt_expr (0 sec), 36% 2x read_verilog (0 sec), ...\n"
+        "output_tail": "nvert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 9dfde74d19, CPU: user 0.01s system 0.01s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 36% 1x opt_expr (0 sec), 31% 2x read_verilog (0 sec), ...\n"
       }
     },
     "PMPChecker": {
-      "rtl_bytes": 5324300,
-      "rtl_sha256": "8497ca302eb45609f92404478f9506a60bfc94dc8962faebc73df493aaa7d3ba",
+      "rtl_bytes": 237306,
+      "rtl_sha256": "2f3b74c511d751c92201f588f7ec475bef56abb11c8a825b70b43a6bb72dbdf0",
       "verilator": {
         "command": [
           "wsl.exe",
@@ -83,7 +83,7 @@
         ],
         "status": "PASS",
         "returncode": 0,
-        "output_tail": "ts/xiangshan-v2/validation/.work/v2-pmp-family/PMPChecker.sv:137770:38: Comparison is constant due to unsigned arithmetic\n137770 |   assign \\$21578  = io_req_bits_addr >= 1'h0;\n       |                                      ^~\n%Warning-UNSIGNED: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-pmp-family/PMPChecker.sv:138410:38: Comparison is constant due to unsigned arithmetic\n138410 |   assign \\$22377  = io_req_bits_addr >= 1'h0;\n       |                                      ^~\n%Warning-UNSIGNED: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-pmp-family/PMPChecker.sv:139050:38: Comparison is constant due to unsigned arithmetic\n139050 |   assign \\$23176  = io_req_bits_addr >= 1'h0;\n       |                                      ^~\n"
+        "output_tail": "cker.sv:4968:37: Comparison is constant due to unsigned arithmetic\n                                                                                                                                           : ... note: In instance 'PMPChecker'\n 4968 |   assign \\$1512  = io_req_bits_addr >= 1'h0;\n      |                                     ^~\n%Warning-UNSIGNED: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-pmp-family/PMPChecker.sv:5577:37: Comparison is constant due to unsigned arithmetic\n                                                                                                                                           : ... note: In instance 'PMPChecker'\n 5577 |   assign \\$2215  = io_req_bits_addr >= 1'h0;\n      |                                     ^~\n"
       },
       "yosys": {
         "command": [
@@ -95,7 +95,7 @@
         ],
         "status": "PASS",
         "returncode": 0,
-        "output_tail": "nvert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: d7313591c8, CPU: user 0.01s system 0.00s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 42% 1x opt_expr (0 sec), 34% 2x read_verilog (0 sec), ...\n"
+        "output_tail": "nvert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: d7313591c8, CPU: user 0.01s system 0.01s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 42% 1x opt_expr (0 sec), 36% 2x read_verilog (0 sec), ...\n"
       }
     },
     "PMPChecker_12": {
@@ -123,7 +123,7 @@
         ],
         "status": "PASS",
         "returncode": 0,
-        "output_tail": "nvert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 4812c5bcc8, CPU: user 0.00s system 0.01s, MEM: 8.91 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 45% 2x read_verilog (0 sec), 38% 1x opt_expr (0 sec), ...\n"
+        "output_tail": "nvert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 4812c5bcc8, CPU: user 0.01s system 0.00s, MEM: 9.22 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 37% 1x opt_expr (0 sec), 27% 2x read_verilog (0 sec), ...\n"
       }
     },
     "PMPChecker_2": {
@@ -151,12 +151,12 @@
         ],
         "status": "PASS",
         "returncode": 0,
-        "output_tail": "nvert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 6d53f68976, CPU: user 0.01s system 0.00s, MEM: 8.91 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 41% 1x opt_expr (0 sec), 23% 2x read_verilog (0 sec), ...\n"
+        "output_tail": "nvert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 6d53f68976, CPU: user 0.01s system 0.01s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 38% 1x opt_expr (0 sec), 33% 2x read_verilog (0 sec), ...\n"
       }
     },
     "PMPEntryHandleModule": {
-      "rtl_bytes": 59647,
-      "rtl_sha256": "b5ffca8135340fb612b197431b727fc20116c7ef14989321905593fd86f7fb72",
+      "rtl_bytes": 95768,
+      "rtl_sha256": "6bbfda95d98e2fdde7d96918cb393ddd8cd90ae630cca093ab07ae0a03a574cf",
       "verilator": {
         "command": [
           "wsl.exe",
@@ -167,7 +167,7 @@
         ],
         "status": "PASS",
         "returncode": 0,
-        "output_tail": "                                                                                                                                                   : ... note: In instance 'PMPEntryHandleModule'\n 1761 |   assign \\$447  = io_in_addr == 10'h3a2;\n      |                              ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-pmp-family/PMPEntryHandleModule.sv:1762:30: Operator EQ expects 12 bits on the RHS, but RHS's CONST '10'h3a0' generates 10 bits.\n                                                                                                                                                        : ... note: In instance 'PMPEntryHandleModule'\n 1762 |   assign \\$448  = io_in_addr == 10'h3a0;\n      |                              ^~\n"
+        "output_tail": "\n                                                                                                                                                        : ... note: In instance 'PMPEntryHandleModule'\n 2406 |   assign \\$1  = io_in_addr == 10'h3a6;\n      |                            ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-pmp-family/PMPEntryHandleModule.sv:2440:29: Operator EQ expects 12 bits on the RHS, but RHS's CONST '10'h3a4' generates 10 bits.\n                                                                                                                                                        : ... note: In instance 'PMPEntryHandleModule'\n 2440 |   assign \\$35  = io_in_addr == 10'h3a4;\n      |                             ^~\n"
       },
       "yosys": {
         "command": [
@@ -179,7 +179,7 @@
         ],
         "status": "PASS",
         "returncode": 0,
-        "output_tail": "nvert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 788129b094, CPU: user 0.01s system 0.00s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 35% 1x opt_expr (0 sec), 26% 2x read_verilog (0 sec), ...\n"
+        "output_tail": "nvert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 788129b094, CPU: user 0.02s system 0.01s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 45% 1x opt_expr (0 sec), 31% 2x read_verilog (0 sec), ...\n"
       }
     }
   },
