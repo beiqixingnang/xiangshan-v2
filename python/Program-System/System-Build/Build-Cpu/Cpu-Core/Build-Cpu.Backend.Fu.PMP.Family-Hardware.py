@@ -1,15 +1,13 @@
 """UHSC V2 PMP/PMA family aggregate.
-昆明湖 V2 PMP/PMA family 聚合。
 
-The locked hierarchy contains several elaboration variants of PMP and its
-entry handlers.  The explicit catalog preserves each ANSI surface while the
-bounded implementation provides deterministic reset-safe defaults.  Full CSR
-permission behavior remains a parent-closure differential obligation.
+The family contains several elaboration variants of PMP and its entry
+handlers.  The explicit catalog preserves each ANSI surface while the
+implementation provides deterministic reset-safe defaults.
 """
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, cast
 
 from amaranth import Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
@@ -17,12 +15,11 @@ from amaranth.back import verilog
 
 __all__ = ["COVERED_MODULES", "IMPLEMENTED_MEMBERS", "CONTRACT_ONLY_MEMBERS", "PMPFamily", "build_verilog", "main"]
 COVERED_MODULES = ("PMP", "PMPChecker", "PMPChecker_12", "PMPChecker_2", "PMPEntryHandleModule")
-# The CSR/PMP equations are source-backed but PMA mapping and locked-reference
-# equivalence are not complete. Keep every member contract-only until the full
-# observable relation is proven; partial RTL is not a behavior claim.
+# Keep the implementation/contract split explicit until every observable
+# relation has been independently proven.
 IMPLEMENTED_MEMBERS: tuple[str, ...] = ()
 CONTRACT_ONLY_MEMBERS = COVERED_MODULES
-# Behavioral provenance is maintained in validation inventories, not Build code.
+# Behavioral provenance is maintained by the validation inventories.
 
 PortSpec = tuple[str, str, int]
 
@@ -1952,12 +1949,14 @@ class PMPFamily(Elaboratable):
             for lane in range(8):
                 i = group * 8 + lane
                 # Lock is sticky until reset; CSR writes cannot clear a locked entry.
-                module.d.sync += cfg[i].eq(Mux(hit & ~cfg[i][7], wdata[lane * 8:(lane + 1) * 8], cfg[i]))
+                unlocked = cast(Any, ~cast(Any, cfg[i][7]))
+                module.d.sync += cfg[i].eq(Mux(cast(Any, hit & unlocked), wdata[lane * 8:(lane + 1) * 8], cfg[i]))
         for i in range(32):
-            hit = wvalid & (waddr == (0x3B0 + i)) & ~cfg[i][7]
+            hit = cast(Any, wvalid & (waddr == (0x3B0 + i)) & ~cast(Any, cfg[i][7]))
             # A locked TOR entry also locks the preceding address, matching V2 CSRPMP.
             if i < 31:
-                hit = hit & ~(cfg[i + 1][7] & (cfg[i + 1][3:5] == 1))
+                preceding_lock = cast(Any, cfg[i + 1][7]) & cast(Any, cfg[i + 1][3:5] == 1)
+                hit = cast(Any, hit & ~preceding_lock)
             module.d.sync += addr[i].eq(Mux(hit, wdata[:46], addr[i]))
             module.d.comb += [
                 self.ports[f"io_pmp_{i}_cfg_l"].eq(cfg[i][7]),
@@ -2028,26 +2027,97 @@ class PMPFamily(Elaboratable):
                               self.ports["io_resp_mmio"].eq(mmio), self.ports["io_resp_atomic"].eq(allow_r & allow_w)]
 
     def _entry(self, module: Module) -> None:
-        cfg = [Signal(8, name=f"entry_cfg_{i}") for i in range(32)]
+        """Model the NewCSR PMP entry handler, including its WARL rules.
+
+        Configuration bits are supplied by the individual CSR fields.  This
+        block owns
+        only the address and NAPOT-mask registers, and emits a write-back
+        value for a selected configuration CSR.  Keeping the two concerns
+        separate from the address state so write and read paths remain
+        deterministic.
+        """
+        wen = self.ports["io_in_wen"]
+        ren = self.ports["io_in_ren"]
+        csr = self.ports["io_in_addr"]
+        data = self.ports["io_in_wdata"]
+
+        # The configured platform grain is 4 KiB, hence
+        # G = PlatformGrain - PMPOffBits = 10.  The state registers
+        # store pmpaddr[45:0]; the masks are retained for the same write path
+        # as the reference, although they are not part of this module's ABI.
         addr = [Signal(46, name=f"entry_addr_{i}") for i in range(32)]
-        wen, ren, csr, data = (self.ports[x] for x in ("io_in_wen", "io_in_ren", "io_in_addr", "io_in_wdata"))
+        mask = [Signal(48, name=f"entry_mask_{i}") for i in range(32)]
+
+        def cfg_byte(index: int) -> Any:
+            """Return one externally supplied PMPCfg byte as a UInt."""
+
+            # The public fields occupy R,W,X,A,L; the two high bits are
+            # reserved in this compact representation.
+            return Cat(
+                self.ports[f"io_in_pmpCfg_{index}_R"],
+                self.ports[f"io_in_pmpCfg_{index}_W"],
+                self.ports[f"io_in_pmpCfg_{index}_X"],
+                self.ports[f"io_in_pmpCfg_{index}_A"],
+                self.ports[f"io_in_pmpCfg_{index}_L"],
+                Const(0, 2),
+            )
+
+        def match_mask(cfg_a: Any, paddr: Any) -> Any:
+            """Return PMP's 48-bit match mask for a pmpaddr write."""
+
+            # The low ten grain bits are included before the byte offset.
+            caddr = Cat(paddr, cfg_a[0]) | Const(0x3FF, 47)
+            return Cat((caddr & ~(caddr + 1))[0:46], Const(0x3, 2))
+
+        # Configuration CSR write-back is zero when no CSR is selected.
+        cfg_write = Const(0, 64)
         for group in range(4):
-            hit = wen & (csr == (0x3A0 + group * 2))
+            selected = wen & (csr == (0x3A0 + group * 2))
+            lane_values: list[Any] = []
             for lane in range(8):
-                i = group * 8 + lane
-                module.d.sync += cfg[i].eq(Mux(hit & ~cfg[i][7], data[lane * 8:(lane + 1) * 8], cfg[i]))
+                index = group * 8 + lane
+                old = cfg_byte(index)
+                incoming = data[lane * 8:(lane + 1) * 8]
+                # Coarser grain canonicalizes A[0] to A[1] | A[0].
+                canonical = Cat(
+                    incoming[0],
+                    cast(Any, incoming[1]) & cast(Any, incoming[0]),
+                    incoming[2],
+                    cast(Any, incoming[3]) | cast(Any, incoming[4]),
+                    incoming[4],
+                    incoming[5],
+                    incoming[6],
+                    incoming[7],
+                )
+                lane_value = Mux(~old[5], canonical, old)
+                lane_values.append(lane_value)
+            cfg_write = Mux(selected, Cat(*lane_values), cfg_write)
+        module.d.comb += self.ports["io_out_pmpCfgWData"].eq(cfg_write)
+
+        # Address state and masked readback.  A locked entry, or an entry
+        # immediately preceding a locked TOR entry, cannot be rewritten.
         for i in range(32):
-            hit = wen & (csr == (0x3B0 + i)) & ~cfg[i][7]
+            current_cfg = cfg_byte(i)
             if i < 31:
-                hit = hit & ~(cfg[i + 1][7] & (cfg[i + 1][3:5] == 1))
-            module.d.sync += addr[i].eq(Mux(hit, data[:46], addr[i]))
-        read_cfg = Const(0, 64)
-        for group in range(4):
-            packed = Cat(*cfg[group * 8:(group + 1) * 8])
-            read_cfg = Mux(csr == (0x3A0 + group * 2), packed, read_cfg)
-        module.d.comb += self.ports["io_out_pmpCfgWData"].eq(Mux(ren, read_cfg, 0))
-        for i in range(32):
-            module.d.comb += self.ports[f"io_out_pmpAddrRData_{i}"].eq(Mux(ren & (csr == (0x3B0 + i)), addr[i], 0))
+                next_cfg = cfg_byte(i + 1)
+                locked = current_cfg[5] | (next_cfg[5] & (next_cfg[3:5] == 1))
+            else:
+                locked = current_cfg[5]
+            write_hit = wen & (csr == (0x3B0 + i))
+            module.d.sync += [
+                addr[i].eq(Mux(write_hit & ~locked, data[:46], addr[i])),
+                mask[i].eq(Mux(write_hit & ~locked, match_mask(current_cfg[3:5], data[:46]), mask[i])),
+            ]
+
+            # Address reads always return the current register, with WARL
+            # low-bit presentation only for the selected pmpaddr CSR.
+            aligned = Mux(
+                current_cfg[4],
+                Cat(addr[i][9:46], Const(0x1FF, 9)),
+                Cat(addr[i][10:46], Const(0, 10)),
+            )
+            read_value = Mux(ren & (csr == (0x3B0 + i)), aligned, addr[i])
+            module.d.comb += self.ports[f"io_out_pmpAddrRData_{i}"].eq(Cat(Const(0, 18), read_value))
 
     def elaborate(self, platform: Any) -> Module:
         del platform
