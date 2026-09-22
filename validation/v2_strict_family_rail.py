@@ -48,9 +48,16 @@ SAT_MARKER = "SAT proof finished - no model found: SUCCESS!"
 EQUIV_MARKERS = ("0 are unproven.", "Equivalence successfully proven!")
 ANSI_PORT = re.compile(r"^(input|output)\s+(?:\[\s*(\d+):0\]\s*)?(.+)$")
 BLOCK_LOCAL = re.compile(
-    r"^([ \t]*)automatic\s+logic\s+(\[[^\]]*\])?\s*([A-Za-z_]\w*(?:\s*,\s*[A-Za-z_]\w*)*)\s*;[ \t]*$", re.M)
+    r"^([ \t]*)automatic\s+logic\s+((?:\[[^\]]*\][ \t]*)+)?([A-Za-z_]\w*(?:\s*,\s*[A-Za-z_]\w*)*)[ \t]*;[ \t]*$", re.M)
+# Generated references commonly wrap an initialized automatic declaration over
+# several lines.  Keep the expression as one syntactic statement while
+# allowing embedded newlines; the terminating semicolon is the only delimiter
+# because comments have already been stripped by ``synthesizable_view``.
 INIT_DECL = re.compile(
-    r"^([ \t]*)automatic\s+logic\s+(\[[^\]]*\])?\s*([A-Za-z_]\w*)\s*=\s*(.+);\s*$", re.M)
+    r"^([ \t]*)automatic[ \t]+logic[ \t]+((?:\[[^\]]*\][ \t]*)+)?([A-Za-z_]\w*)[ \t]*=[ \t]*(.*?);[ \t]*$",
+    re.M | re.S)
+INIT_DECL_START = re.compile(
+    r"^[ \t]*automatic[ \t]+logic[ \t]+(?:\[[^\]]*\][ \t]*)*[A-Za-z_]\w*[ \t]*=")
 # A `function automatic` header is accepted by the installed Yosys, so only a
 # block-local declaration counts as surviving.
 BLOCK_LOCAL_ANY = re.compile(r"\bautomatic\s+(?:logic|reg|bit)\b")
@@ -328,10 +335,15 @@ def synthesizable_view(text: str, top: str, rename: bool) -> tuple[str, dict[str
     view_counts = Counter(view_lines)
     disappeared = list((locked_counts - view_counts).elements())
     expected_declarations = [line.rstrip() for line in declarations.split("\n") if line.strip()]
-    expected_rewrites = [f"{n} = {e};" for _, n, e in initialized]
+    # A wrapped declaration contributes only its first rewritten line to the
+    # multiset delta: continuation lines are already present verbatim in the
+    # locked body and therefore are not "appeared" lines.  This keeps the
+    # conservation check one-for-one while still retaining the full expression
+    # in ``normalized``.
+    expected_rewrites = [f"{n} = {e};".splitlines()[0] for _, n, e in initialized]
     permitted = expected_declarations + expected_rewrites
     appeared = list((view_counts - locked_counts).elements())
-    conserved = (all(BLOCK_LOCAL.match(line) is not None or INIT_DECL.match(line) is not None
+    conserved = (all(BLOCK_LOCAL.match(line) is not None or INIT_DECL_START.match(line) is not None
                      for line in disappeared)
                  and len(disappeared) == len(plain_lines) + len(initialized)
                  and Counter(appeared) == Counter(permitted)
