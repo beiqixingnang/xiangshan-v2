@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_SRT16DIVIDER_CYCLE_DIFFERENTIAL",
+  "status": "PASS_BOUNDED",
+  "acceptance_eligible": false,
+  "build": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.SRT16Divider-Hardware.py",
+    "sha256": "b7a5676f207c895ae4d7c152d04b87e24368560469e5717269f2fe0fb77d2900"
+  },
+  "locked_reference": {
+    "top": "validation/reference-sv/SRT16DividerDataModule.sv",
+    "sha256": "71c183646518dd914a1569392ae993b5f20293579374178f573b1be4c8e15c7c",
+    "children": {
+      "CSA3_2_3956": "a4238aafb9c18a0ad401f4ed0c9cb559d2e89dc0575ae1cad82f85b02cbe2e89",
+      "CSA3_2_3960": "286474a4db5095ff340e7b376468d961bf9969cee4a41667f30dc0774af74f43",
+      "CSA3_2_3962": "b99c7c72eea99b4cf0e6dc1cd9d7e3295d77ce2b562d5e37ead8fe0b990f1047",
+      "RightShifter": "935837a6c16c27a88e63d015e8db7c74f9a98bce2f3ac8b4fa2384492911fb56"
+    }
+  },
+  "coverage": {
+    "reset_cycles": 3,
+    "directed_transactions": 13,
+    "deterministic_random_transactions": 48,
+    "random_seed": "6a09e667f3bcc909",
+    "kill_w_cases": 1,
+    "kill_r_cases": 1,
+    "out_ready_stall_cycles_per_result": 4,
+    "compared_cycles": 685,
+    "completed_cases": 63,
+    "signals_compared_each_clock": [
+      "io_in_ready",
+      "io_out_valid",
+      "io_out_data"
+    ],
+    "latency_cycles": {
+      "3": 11,
+      "5": 35,
+      "6": 13,
+      "12": 2
+    }
+  },
+  "result": {
+    "first_divergence": null,
+    "io_in_ready_divergences": 0,
+    "io_out_valid_divergences": 0,
+    "io_out_data_divergences": 0,
+    "locked_reference_written": false,
+    "verilator_compile_returncode": 0,
+    "verilator_run_returncode": 0
+  },
+  "limitations": [
+    "This is a bounded Verilator differential and does not replace complete locked-reference formal.",
+    "The strict rail remains STRICT_PENDING with 139 unproven internal initial-state equivalence cells."
+  ]
+}
