@@ -6,7 +6,7 @@
   "fraction": "27/118",
   "percentage": 22.881356,
   "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with the locked source commit, matching source hashes, and either a Yosys SAT no-model miter or fully proven Yosys inductive-equivalence status is counted. STRICT_PENDING and COMPLETE_EQUIVALENCE_VARIANT_ONLY records are inventoried as attempted-but-not-counted instead of failing the rail, and one Build file may not be claimed by several counting proofs.",
-  "non_counting_attempt_count": 3,
+  "non_counting_attempt_count": 4,
   "non_counting_attempts": [
     {
       "evidence": "validation/v2-build-cpu-backend-fu-pmp-family-strict-evidence.json",
@@ -26,6 +26,19 @@
         "PMPEntryHandleModule:yosys_equiv",
         "PMPEntryHandleModule: 2064 $equiv cells unproven",
         "aggregate SAT miter"
+      ],
+      "unclosed": [
+        "strict gates did not all pass"
+      ]
+    },
+    {
+      "evidence": "validation/v2-build-cpu-backend-fu-srt16divider-strict-evidence.json",
+      "build_id": "Build-Cpu.Backend.Fu.SRT16Divider",
+      "declared_status": "STRICT_PENDING",
+      "audit_failures": [],
+      "proof_failures": [
+        "SRT16DividerDataModule:yosys_equiv",
+        "SRT16DividerDataModule: 139 $equiv cells unproven"
       ],
       "unclosed": [
         "strict gates did not all pass"
@@ -21125,7 +21138,7 @@
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "status": "PASS"
       },
-      "status": "FAIL",
+      "status": "NON_COUNTING",
       "note": "scala provenance not vendored for this attempt record",
       "scope": {
         "kind": "catalog_build_multi_variant",
@@ -21213,8 +21226,8 @@
           "path": "validation/v2_srt16divider_strict_validator.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "3f4b6c1a7d3f953db501db6b5ab888c9e75d5a19be9ce88966a75451998fed2d",
-          "observed_sha256": "3f4b6c1a7d3f953db501db6b5ab888c9e75d5a19be9ce88966a75451998fed2d",
+          "expected_sha256": "e53dd4484108f6f956421bfd9b909bfe44e8e081dc1e4401f2e88e9c88d15ea2",
+          "observed_sha256": "e53dd4484108f6f956421bfd9b909bfe44e8e081dc1e4401f2e88e9c88d15ea2",
           "status": "PASS"
         },
         "python_build": {
@@ -21273,9 +21286,9 @@
           "path": "validation/v2_strict_family_rail.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
+          "expected_sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
           "observed_sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
-          "status": "FAIL"
+          "status": "PASS"
         },
         "multiline_reference_view": {
           "path": "validation/v2_funcunit_strict_validator.py",
@@ -21296,7 +21309,24 @@
           "status": "PASS"
         }
       },
-      "declared_scala_sources": {},
+      "declared_scala_sources": {
+        "upstream/src/main/scala/xiangshan/backend/fu/SRT16Divider.scala": {
+          "path": "upstream/src/main/scala/xiangshan/backend/fu/SRT16Divider.scala",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "52c9a9d59a0fbd8421e6933040da209cc1437473a98c78eedf19a26ab6656e66",
+          "observed_sha256": "52c9a9d59a0fbd8421e6933040da209cc1437473a98c78eedf19a26ab6656e66",
+          "status": "PASS"
+        },
+        "upstream/src/main/scala/xiangshan/backend/fu/SRT4Divider.scala": {
+          "path": "upstream/src/main/scala/xiangshan/backend/fu/SRT4Divider.scala",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "84e57dfcd56482ca86ba1a4e274bbd351f79eeceb7696e3cf89a9bd3c1902e07",
+          "observed_sha256": "84e57dfcd56482ca86ba1a4e274bbd351f79eeceb7696e3cf89a9bd3c1902e07",
+          "status": "PASS"
+        }
+      },
       "variant_checks": {
         "SRT16DividerDataModule": {
           "status": "FAIL",
@@ -21315,9 +21345,7 @@
         "status": null,
         "formal_success_marker": null
       },
-      "failures": [
-        "source digest: validator_dependency.strict_family_rail"
-      ],
+      "failures": [],
       "declared_failures": [
         "SRT16DividerDataModule:yosys_equiv",
         "SRT16DividerDataModule: 139 $equiv cells unproven"
