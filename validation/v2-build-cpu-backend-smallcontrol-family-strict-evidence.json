@@ -15,7 +15,8 @@
     "historical_full_rail_reused": false,
     "catalog_entries": 8,
     "current_members_independently_reverified": [
-      "FauFTBWay"
+      "FauFTBWay",
+      "RASStack"
     ],
     "members_not_rerun_against_current_build_sha": [
       "AddrAddModule",
@@ -23,13 +24,38 @@
       "RedirectGenerator",
       "RegCache",
       "RegCacheTagTable",
-      "RASStack",
       "VectorCvtTop"
     ],
+    "current_member_results": {
+      "RASStack": {
+        "build_sha256": "e3ca3425d0e59c7296100b345a3007fd4ac3f03fcffea9e6783884c63778830a",
+        "locked_reference_sha256": "17cee45975ecc770c1417f29bdf4237cd5155cdf883784481c0ad754774e066b",
+        "timeout_seconds": 180,
+        "sequential": true,
+        "abi_exact": true,
+        "deterministic": true,
+        "view_trusted": true,
+        "miter_selfcheck": true,
+        "verilator": "PASS",
+        "verilator_output_sha256": "ad9b2c1708ceec7c9abb930bcedcb93ba98fe203c037fabd1864f1cd691aa4c9",
+        "locked_reference_verilator": "PASS",
+        "locked_reference_verilator_output_sha256": "ede3e040f7ab5bb3ba8c990139bdb5edd365dbc28dec26aef68ab598152e7ea4",
+        "yosys_equiv": {
+          "status": "FAIL",
+          "returncode": 1,
+          "timed_out": false,
+          "equiv_cells": 76,
+          "proven_cells": 0,
+          "unproven_cells": 76,
+          "formal_success_marker": false,
+          "output_sha256": "5b435c67bde10059a6ba02db661d537781bb4fd17bb132312cd4f4e852efb77d"
+        }
+      }
+    },
     "aggregate_result": {
       "status": "STRICT_PENDING",
       "strict_complete_count_delta": 0,
-      "reason": "One focused sequential miter is not an aggregate proof; no historical proof result is counted across the Build digest change."
+      "reason": "Focused member miters are not an aggregate proof; no historical proof result is counted across the Build digest change."
     }
   },
   "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
@@ -1419,6 +1445,8 @@
     "catalog_coverage": {
       "entries": 8,
       "proven": 1,
+      "current_members_rerun": 2,
+      "current_members_proven": 1,
       "historical_pre_repair_proven": 5,
       "scope": "current-build focused strict reverification only"
     },
@@ -1457,6 +1485,36 @@
         "proven_cells": 79,
         "unproven_cells": 0,
         "formal_success_marker": true
+      }
+    },
+    "current_build_member_reverification": {
+      "status": "STRICT_PENDING",
+      "scope": "RASStack only; this is not aggregate completion",
+      "member": "RASStack",
+      "build_sha256": "e3ca3425d0e59c7296100b345a3007fd4ac3f03fcffea9e6783884c63778830a",
+      "locked_reference_sha256": "17cee45975ecc770c1417f29bdf4237cd5155cdf883784481c0ad754774e066b",
+      "timeout_seconds": 180,
+      "method": "sequential_equivalence",
+      "abi_exact": true,
+      "deterministic": true,
+      "miter_selfcheck": true,
+      "reference_view_trusted": true,
+      "input_bits": 225,
+      "outputs_compared": 10,
+      "output_bits_compared": 76,
+      "verilator": "PASS",
+      "verilator_output_sha256": "ad9b2c1708ceec7c9abb930bcedcb93ba98fe203c037fabd1864f1cd691aa4c9",
+      "locked_reference_verilator": "PASS",
+      "locked_reference_verilator_output_sha256": "ede3e040f7ab5bb3ba8c990139bdb5edd365dbc28dec26aef68ab598152e7ea4",
+      "yosys_equiv": {
+        "status": "FAIL",
+        "returncode": 1,
+        "timed_out": false,
+        "equiv_cells": 76,
+        "proven_cells": 0,
+        "unproven_cells": 76,
+        "formal_success_marker": false,
+        "output_sha256": "5b435c67bde10059a6ba02db661d537781bb4fd17bb132312cd4f4e852efb77d"
       }
     },
     "historical_formal_before_current_build_sha_change": {
@@ -2352,14 +2410,14 @@
     }
   },
   "failures": [
-    "current Build digest has only 1/8 independently reverified locked variants",
+    "current Build digest has only 2/8 independently reverified locked variants",
     "AddrAddModule, GPAMem, RedirectGenerator, and RegCacheTagTable historical proofs are not reused across the Build digest change",
-    "RASStack current strict closure was not rerun; the historical run reported 76 unproven $equiv cells",
+    "RASStack current strict closure rerun against the current Build digest reported 76 unproven $equiv cells",
     "RegCache current strict closure was not rerun; the historical run timed out before recording $equiv cells",
     "VectorCvtTop current strict closure was not rerun; the historical run reported 166 unproven $equiv cells"
   ],
   "unclosed": [
-    "current Build requires complete aggregate revalidation; focused FauFTBWay proof cannot close STRICT_PENDING"
+    "current Build requires complete aggregate revalidation; focused FauFTBWay and RASStack runs cannot close STRICT_PENDING"
   ],
   "acceptance_unclosed": [
     "Parent closure, full-top differential, final license review, and user approval remain outside this Build proof."
