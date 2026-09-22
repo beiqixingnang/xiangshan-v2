@@ -189,11 +189,11 @@ class MemoryFamily(Elaboratable):
         region_hash = _region_hash(region)
         plus_hash = _region_hash(region + Const(1, 40))
         minus_hash = _region_hash(region - Const(1, 40))
-        hits = [valid[i] & p["io_train_req_valid"] & (_region_hash(tags[i]) == region_hash)
+        hits = [valid[i] & p["io_train_req_valid"] & p["io_train_req_ready"] & (_region_hash(tags[i]) == region_hash)
                 for i in range(16)]
-        plus_hits = [valid[i] & p["io_train_req_valid"] & (_region_hash(tags[i]) == plus_hash)
+        plus_hits = [valid[i] & p["io_train_req_valid"] & p["io_train_req_ready"] & (_region_hash(tags[i]) == plus_hash)
                      for i in range(16)]
-        minus_hits = [valid[i] & p["io_train_req_valid"] & (_region_hash(tags[i]) == minus_hash)
+        minus_hits = [valid[i] & p["io_train_req_valid"] & p["io_train_req_ready"] & (_region_hash(tags[i]) == minus_hash)
                       for i in range(16)]
         hit_any = Const(0, 1)
         plus_any = Const(0, 1)
@@ -321,7 +321,8 @@ class MemoryFamily(Elaboratable):
         vaddr = p["io_train_req_bits_vaddr"]
         pc_tag = _pc_hash(p["io_train_req_bits_pc"])
         vaddr_low = vaddr[:16]
-        hits = [valid[i] & p["io_train_req_valid"] & (pc_hash[i] == pc_tag) for i in range(10)]
+        hits = [valid[i] & p["io_train_req_valid"] & p["io_train_req_ready"] &
+                (pc_hash[i] == pc_tag) for i in range(10)]
         hit_any: Any = Const(0, 1)
         for hit in hits:
             hit_any = hit_any | hit
@@ -331,25 +332,25 @@ class MemoryFamily(Elaboratable):
         s1_valid = Signal(name="stride_s1_valid", reset=0)
         s1_index = Signal(4, name="stride_s1_index", reset_less=True)
         s1_hash = Signal(15, name="stride_s1_hash", reset_less=True)
-        s1_vaddr = Signal(16, name="stride_s1_vaddr", reset_less=True)
+        s1_vaddr = Signal(50, name="stride_s1_vaddr", reset_less=True)
         s1_hit = Signal(name="stride_s1_hit", reset_less=True)
         module.d.comb += p["io_train_req_ready"].eq(~(s1_valid & (s1_hash == pc_tag)))
         module.d.sync += s1_valid.eq(s0_valid)
         with cast(Any, module.If(s0_valid)):
             module.d.sync += [s1_index.eq(s0_index), s1_hash.eq(pc_tag),
-                              s1_vaddr.eq(vaddr_low), s1_hit.eq(hit_any)]
+                              s1_vaddr.eq(vaddr), s1_hit.eq(hit_any)]
         s1_alloc = s1_valid & ~s1_hit
         s1_update = s1_valid & s1_hit
         old_stride = Array(stride)[s1_index]
         old_prev = Array(prev)[s1_index]
         old_conf = Array(confidence)[s1_index]
-        new_delta = s1_vaddr - old_prev
+        new_delta = s1_vaddr[:16] - old_prev
         new_block_delta = new_delta[6:16]
         stride_valid = (new_block_delta != 0) & (new_block_delta != 1) & ~cast(Any, new_delta[15])
         stride_match = new_delta == old_stride
         can_send = s1_update & stride_valid & stride_match & (old_conf == 3)
         s2_valid = Signal(name="stride_s2_valid", reset=0)
-        s2_vaddr = Signal(16, name="stride_s2_vaddr", reset_less=True)
+        s2_vaddr = Signal(50, name="stride_s2_vaddr", reset_less=True)
         s2_stride = Signal(16, name="stride_s2_stride", reset_less=True)
         module.d.sync += s2_valid.eq(can_send)
         with cast(Any, module.If(can_send)):
@@ -383,15 +384,15 @@ class MemoryFamily(Elaboratable):
         for i in range(10):
             alloc = s1_alloc & (s1_index == i)
             update = s1_update & (s1_index == i)
-            delta_i = s1_vaddr - prev[i]
+            delta_i = s1_vaddr[:16] - prev[i]
             block_delta_i = delta_i[6:16]
             valid_i = (delta_i != 0) & (delta_i != 1) & ~cast(Any, delta_i[15])
             match_i = delta_i == stride[i]
             with cast(Any, module.If(alloc)):
-                module.d.sync += [valid[i].eq(1), prev[i].eq(s1_vaddr), stride[i].eq(0),
+                module.d.sync += [valid[i].eq(1), prev[i].eq(s1_vaddr[:16]), stride[i].eq(0),
                                   confidence[i].eq(0), pc_hash[i].eq(s1_hash)]
             with cast(Any, module.If(update)):
-                module.d.sync += prev[i].eq(s1_vaddr)
+                module.d.sync += prev[i].eq(s1_vaddr[:16])
                 with cast(Any, module.If(valid_i & match_i & (confidence[i] != 3))):
                     module.d.sync += confidence[i].eq(confidence[i] + 1)
                 with cast(Any, module.Elif(valid_i & ~match_i)):
