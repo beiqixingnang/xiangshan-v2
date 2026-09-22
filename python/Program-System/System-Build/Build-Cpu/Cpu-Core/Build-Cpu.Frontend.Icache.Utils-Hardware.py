@@ -1,5 +1,5 @@
-"""V2 ICache decoupled utility modules in Amaranth.
-香山 V2 指令缓存解耦工具模块的 Amaranth 重写。
+"""Instruction-cache decoupled utility modules in Amaranth.
+指令缓存解耦工具模块的 Amaranth 实现。
 """
 from __future__ import annotations
 
@@ -10,9 +10,8 @@ from amaranth import Array, ClockDomain, Const, Elaboratable, Module, Mux, Signa
 
 # Module Contract
 # ---------------------------------------------------------------------------
-# This family covers the exact V2 DeMultiplexer and MuxBundle declarations in
-# ICacheMissUnit.scala plus FIFOReg in FIFO.scala.  Payloads are intentionally
-# scalarized at this boundary; callers choose the packed width of their bundle.
+# This family covers four fixed cache utility boundaries.  Payloads are
+# intentionally scalarized at this boundary; callers choose each packed width.
 __all__ = [
     "COVERED_MODULES", "DeMultiplexer", "MuxBundle", "FIFOReg",
     "fifo_observation", "build_verilog", "main",
@@ -80,9 +79,9 @@ class DeMultiplexer(Elaboratable):
             prior_ready = prior_ready | self.out_ready[index]
         m.d.comb += self.in_ready.eq(prior_ready)
 
-        # Chisel PriorityEncoder's generated n=10 specialization has the last
-        # legal index as the all-zero fallback; preserve that deterministic V2
-        # behavior while selecting the lowest asserted ready bit.
+        # The n=10 specialization uses the last legal index as its all-zero
+        # fallback; preserve that deterministic behavior while selecting the
+        # lowest asserted ready bit.
         chosen_value = self.n - 1
         for index in range(self.n - 1, -1, -1):
             chosen_value = Mux(self.out_ready[index], index, chosen_value)
@@ -126,7 +125,7 @@ class MuxBundle(Elaboratable):
 
 
 class _LockedDeMultiplexer(Elaboratable):
-    """Exact flattened ICacheMissReq specialization from the locked hierarchy."""
+    """Exact flattened ICacheMissReq specialization."""
 
     def __init__(self, n: int, expose_chosen: bool) -> None:
         self.n = n
@@ -174,7 +173,7 @@ class _LockedDeMultiplexer(Elaboratable):
 
 
 class _LockedMuxBundle(Elaboratable):
-    """Exact ten-way MSHRAcquire mux emitted by locked Kunminghu V2."""
+    """Exact ten-way MSHRAcquire mux."""
 
     def __init__(self) -> None:
         self.sel = Signal(4, name="io_sel")
@@ -226,8 +225,8 @@ class _LockedMuxBundle(Elaboratable):
 
 
 class FIFOReg(Elaboratable):
-    """Register-file circular FIFO with V2 flush semantics.
-    带 V2 flush 语义的寄存器文件环形 FIFO。
+    """Register-file circular FIFO with flush semantics.
+    带 flush 语义的寄存器文件环形 FIFO。
     """
 
     # Construct FIFO channels and optional controls. / 构造 FIFO 通道及可选控制。
@@ -285,7 +284,7 @@ class FIFOReg(Elaboratable):
         enq_fire = self.enq_valid & self.enq_ready
         deq_fire = self.deq_valid & self.deq_ready
 
-        # The V2 source writes a register independently; flush only wins over
+        # The source writes a register independently; flush only wins over
         # pointer updates, so an enqueue during flush still updates storage.
         with m.If(enq_fire):
             m.d.sync += regs[enq_value].eq(self.enq_bits)
