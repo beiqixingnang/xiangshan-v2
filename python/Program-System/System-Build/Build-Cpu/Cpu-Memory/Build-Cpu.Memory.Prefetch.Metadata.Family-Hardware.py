@@ -3,7 +3,8 @@
 """
 from __future__ import annotations
 from typing import Any, cast
-from amaranth import Array, Const, Elaboratable, Module, Mux, Signal
+from amaranth import (Array, ClockDomain, ClockSignal, Const, Elaboratable,
+                      Module, Mux, ResetSignal, Signal)
 from amaranth.back import verilog
 
 # Module Contract
@@ -60,7 +61,7 @@ class FamilySpec:
         if module not in PORT_SPECS:
             raise ValueError(module)
         self.module = module
-        self.ports = tuple(tuple(row) for row in PORT_SPECS[module])
+        self.ports: tuple[PortSpec, ...] = PORT_SPECS[module]
     # Return width. / 返回位宽。
     def width(self, name: str) -> int:
         # Find catalog row. / 查找 catalog 行。
@@ -127,19 +128,19 @@ class MemoryFamily(Elaboratable):
                           p["io_l1_prefetch_req_bits_bit_vec"].eq(selected_vec | one_hot),
                           p["io_l2_l3_prefetch_req_bits_bit_vec"].eq(selected_vec | one_hot),
                           p["io_l2_l3_prefetch_req_bits_sink"].eq(Mux(fire & selected_active, 1, 0))]
-        with module.If(p["reset"]):
+        with cast(Any, module.If(p["reset"])):
             module.d.sync += replacement.eq(0)
             for i in range(16):
                 module.d.sync += [valid[i].eq(0), tags[i].eq(0), vectors[i].eq(0), counts[i].eq(0)]
-        with module.Elif(fire):
+        with cast(Any, module.Elif(fire)):
             module.d.sync += replacement.eq(Mux(hit_any, replacement, replacement + 1))
             for i in range(16):
                 alloc = ~hit_any & (replacement == i)
                 update = hits[i]
                 new_count = Mux((vectors[i] & one_hot) != 0, counts[i], counts[i] + 1)
-                with module.If(alloc):
+                with cast(Any, module.If(alloc)):
                     module.d.sync += [valid[i].eq(1), tags[i].eq(region), vectors[i].eq(one_hot), counts[i].eq(1)]
-                with module.Elif(update):
+                with cast(Any, module.Elif(update)):
                     module.d.sync += [vectors[i].eq(vectors[i] | one_hot), counts[i].eq(new_count)]
 
     # Implement the ten-entry stride metadata CAM. / 实现十项 stride 元数据 CAM。
@@ -153,7 +154,8 @@ class MemoryFamily(Elaboratable):
         replacement = Signal(4, name="stride_replacement", reset=0)
         fire = p["io_train_req_valid"]
         pc = p["io_train_req_bits_pc"]
-        pc_tag = pc[:5] ^ pc[5:10] ^ pc[10:15]
+        pc_tag = (cast(Any, pc[:5]) ^ cast(Any, pc[5:10]) ^
+                  cast(Any, pc[10:15]))
         vaddr = p["io_train_req_bits_vaddr"][:16]
         hits = [valid[i] & (pc_hash[i] == pc_tag) for i in range(10)]
         hit_any = Const(0, 1)
@@ -164,7 +166,8 @@ class MemoryFamily(Elaboratable):
         sel_stride = Array(stride)[hit_index]
         sel_conf = Array(confidence)[hit_index]
         delta = vaddr - Array(prev)[hit_index]
-        stride_ok = (delta != 0) & (delta != 1) & ~delta[15]
+        stride_ok = ((delta != 0) & (delta != 1) &
+                     ~cast(Any, delta[15]))
         stride_match = delta == sel_stride
         emit = fire & hit_any & stride_ok & stride_match & (sel_conf == 3)
         l1_addr = p["io_train_req_bits_vaddr"] + (sel_stride << 1)
@@ -178,33 +181,37 @@ class MemoryFamily(Elaboratable):
                           p["io_l2_l3_prefetch_req_bits_region"].eq(l2_addr[6:46]),
                           p["io_l1_prefetch_req_bits_bit_vec"].eq(l1_bits),
                           p["io_l2_l3_prefetch_req_bits_bit_vec"].eq(l2_bits)]
-        with module.If(p["reset"]):
+        with cast(Any, module.If(p["reset"])):
             module.d.sync += replacement.eq(0)
             for i in range(10):
                 module.d.sync += [valid[i].eq(0), prev[i].eq(0), stride[i].eq(0), confidence[i].eq(0), pc_hash[i].eq(0)]
-        with module.Elif(fire):
+        with cast(Any, module.Elif(fire)):
             module.d.sync += replacement.eq(Mux(hit_any, replacement, Mux(replacement == 9, 0, replacement + 1)))
             for i in range(10):
                 alloc = ~hit_any & (replacement == i)
                 update = hits[i]
                 new_delta = vaddr - prev[i]
-                valid_delta = (new_delta != 0) & (new_delta != 1) & ~new_delta[15]
+                valid_delta = ((new_delta != 0) & (new_delta != 1) &
+                               ~cast(Any, new_delta[15]))
                 match_delta = new_delta == stride[i]
-                with module.If(alloc):
+                with cast(Any, module.If(alloc)):
                     module.d.sync += [valid[i].eq(1), prev[i].eq(vaddr), stride[i].eq(0), confidence[i].eq(0), pc_hash[i].eq(pc_tag)]
-                with module.Elif(update):
+                with cast(Any, module.Elif(update)):
                     module.d.sync += prev[i].eq(vaddr)
-                    with module.If(valid_delta & match_delta & (confidence[i] != 3)):
+                    with cast(Any, module.If(valid_delta & match_delta & (confidence[i] != 3))):
                         module.d.sync += confidence[i].eq(confidence[i] + 1)
-                    with module.Elif(valid_delta & ~match_delta):
+                    with cast(Any, module.Elif(valid_delta & ~match_delta)):
                         module.d.sync += confidence[i].eq(Mux(confidence[i] == 0, 0, confidence[i] - 1))
-                        with module.If(confidence[i] <= 1):
+                        with cast(Any, module.If(confidence[i] <= 1)):
                             module.d.sync += stride[i].eq(new_delta)
     # Elaborate. / 展开。
     def elaborate(self, platform: Any) -> Module:
         # Elaborate the selected stateful metadata array. / 展开选定的有状态元数据阵列。
         del platform
         module = Module()
+        module.domains.sync = ClockDomain("sync")
+        module.d.comb += [ClockSignal("sync").eq(self.ports["clock"]),
+                          ResetSignal("sync").eq(self.ports["reset"])]
         if self.member == "StreamBitVectorArray":
             self._stream_behavior(module)
         else:
