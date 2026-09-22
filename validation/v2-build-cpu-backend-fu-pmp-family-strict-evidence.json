@@ -2790,8 +2790,8 @@
         "unconstrained_or_equiv_cells": true,
         "proven_cells": null,
         "unproven_cells": null,
-        "sat_variables": 130687,
-        "sat_clauses": 346108
+        "sat_variables": 118055,
+        "sat_clauses": 315453
       },
       "PMPChecker_12": {
         "method": "sequential_equivalence",
@@ -3917,18 +3917,23 @@
   "sources": {
     "validator": {
       "path": "validation/v2_strict_family_rail.py",
-      "sha256": "1c355d41cdd3df3296642917c211e9e39889dcdccaab09482ddd429b5f6b6564",
-      "bytes": 44766
+      "sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
+      "bytes": 45980
     },
     "python_build": {
       "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.PMP.Family-Hardware.py",
-      "sha256": "0e5634ed55da8a32e0026ac5f95f1c4484b889cc66b22580e8fedc47e7fde07f",
-      "bytes": 102512
+      "sha256": "7df059af6a4d62192cd915e3190f900470495c2a482b0dcb64d1e90407979eb3",
+      "bytes": 105261
     },
     "reference_sv": {
       "path": "validation/reference-sv/PMP.sv",
       "sha256": "9db9e24c2094d106039b3c6a0df327523d6cf9706058d2362b641151f83afd77",
       "bytes": 557351
+    },
+    "scala": {
+      "path": "upstream/src/main/scala/xiangshan/backend/fu/PMP.scala",
+      "sha256": "5e1e720b01481614456f26cb6aef089d50453fe645e5ab85b74f8f3de6a43059",
+      "bytes": 23608
     },
     "declared_scala_sources": {},
     "reference_children": {}
@@ -3945,7 +3950,7 @@
           "/c",
           "pyright",
           "--outputjson",
-          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_mfn0oxcq\\Build-Cpu.Backend.Fu.PMP.Family-Hardware.py"
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_drfwwkhl\\Build-Cpu.Backend.Fu.PMP.Family-Hardware.py"
         ],
         "returncode": 0,
         "status": "PASS",
@@ -3961,7 +3966,7 @@
           "/c",
           "pyright",
           "--outputjson",
-          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_bxkp18bb\\v2_strict_family_rail.py"
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_hy9j9pp2\\v2_strict_family_rail.py"
         ],
         "returncode": 0,
         "status": "PASS",
@@ -3997,16 +4002,16 @@
         "equiv_summary_full": null,
         "equiv_failed_full": null,
         "sat_counts_full": [
-          130687,
-          346108
+          118055,
+          315453
         ],
-        "output_tail": "  0\n  \\PMPChecker_io_check_env_pmp_6_mask                        --        --    000000000000000000000000000000000000000000000000\n  \\PMPChecker_io_check_env_pmp_7_addr                        --        --      1100111111011011111111000111111111111111111110\n  \\PMPChecker_io_check_env_pmp_7_cfg_a                        0         0                                                  00\n  \\PMPChecker_io_check_env_pmp_7_cfg_l                        1         1                                                   1\n  \\PMPChecker_io_check_env_pmp_7_cfg_r                        0         0                                                   0\n  \\PMPChecker_io_check_env_pmp_7_mask                        --        --    000000000000000000000000000000000000000000000000\n  \\PMPChecker_io_check_env_pmp_8_addr                        --        --      0111100111011011111111111101100000001101110111\n  \\PMPChecker_io_check_env_pmp_8_cfg_a                        0         0                                                  00\n  \\PMPChecker_io_check_env_pmp_8_cfg_l                        1         1                                                   1\n  \\PMPChecker_io_check_env_pmp_8_cfg_r                        0         0                                                   0\n  \\PMPChecker_io_check_env_pmp_8_mask                        --        --    000000000000000000000000000000000000000000000000\n  \\PMPChecker_io_check_env_pmp_9_addr                        --        --      0010000110011011111001111111000000001110101110\n  \\PMPChecker_io_check_env_pmp_9_cfg_a                        0         0                                                  00\n  \\PMPChecker_io_check_env_pmp_9_cfg_l                        1         1                                                   1\n  \\PMPChecker_io_check_env_pmp_9_cfg_r                        0         0                                                   0\n  \\PMPChecker_io_check_env_pmp_9_mask                        --        --    000000000000000000000000000000000000000000000000\n  \\PMPChecker_io_req_bits_addr                               --        --    000000000010010000000000000000000000000000001000\n  \\mit0.mismatch                                              1         1                                                   1\n\nEnd of script. Logfile hash: c034a620d2, CPU: user 15.31s system 0.56s, MEM: 1173.10 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 33% 7x opt_clean (5 sec), 18% 5x read_verilog (2 sec), ...\n",
-        "output_sha256": "0a41b19f991a41f6807820d6f1f097129ad913aada25b6013a8683794c33d892",
+        "output_tail": "             0\n  \\PMPChecker_io_check_env_pmp_6_mask                        --        --    000000000000000000000000000000000000000000000000\n  \\PMPChecker_io_check_env_pmp_7_addr [45:10]                --        --                111111111111111100011111111111111101\n  \\PMPChecker_io_check_env_pmp_7_cfg_a                        0         0                                                  00\n  \\PMPChecker_io_check_env_pmp_7_cfg_l                        1         1                                                   1\n  \\PMPChecker_io_check_env_pmp_7_cfg_r                        0         0                                                   0\n  \\PMPChecker_io_check_env_pmp_7_mask                        --        --    000000000000000000000000000000000000000000000000\n  \\PMPChecker_io_check_env_pmp_8_addr [45:10]                --        --                111111111111111100011111111101111001\n  \\PMPChecker_io_check_env_pmp_8_cfg_a                        0         0                                                  00\n  \\PMPChecker_io_check_env_pmp_8_cfg_l                        1         1                                                   1\n  \\PMPChecker_io_check_env_pmp_8_cfg_r                        0         0                                                   0\n  \\PMPChecker_io_check_env_pmp_8_mask                        --        --    000000000000000000000000000000000000000000000000\n  \\PMPChecker_io_check_env_pmp_9_addr [45:10]                --        --                111111111111111100011111111101111101\n  \\PMPChecker_io_check_env_pmp_9_cfg_a                        0         0                                                  00\n  \\PMPChecker_io_check_env_pmp_9_cfg_l                        1         1                                                   1\n  \\PMPChecker_io_check_env_pmp_9_cfg_r                        0         0                                                   0\n  \\PMPChecker_io_check_env_pmp_9_mask                        --        --    000000000000000000000000000000000000000000000000\n  \\PMPChecker_io_req_bits_addr                               --        --    000000000000000000111000000000100000101111101111\n  \\mit0.mismatch                                              1         1                                                   1\n\nEnd of script. Logfile hash: 7af0158855, CPU: user 1.75s system 0.05s, MEM: 129.91 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 28% 1x sat (0 sec), 25% 7x opt_clean (0 sec), ...\n",
+        "output_sha256": "a7371ef6d15eced6068bcaf28956f7f03224c63d17d9a253c0b1270e0a1b972a",
         "formal_success_marker": false,
         "unconstrained": true,
         "mitered_variants": 1,
-        "sat_variables": 130687,
-        "sat_clauses": 346108
+        "sat_variables": 118055,
+        "sat_clauses": 315453
       }
     },
     "aggregate_sat_miter": {
@@ -4030,16 +4035,16 @@
       "equiv_summary_full": null,
       "equiv_failed_full": null,
       "sat_counts_full": [
-        130687,
-        346108
+        118055,
+        315453
       ],
-      "output_tail": "  0\n  \\PMPChecker_io_check_env_pmp_6_mask                        --        --    000000000000000000000000000000000000000000000000\n  \\PMPChecker_io_check_env_pmp_7_addr                        --        --      1100111111011011111111000111111111111111111110\n  \\PMPChecker_io_check_env_pmp_7_cfg_a                        0         0                                                  00\n  \\PMPChecker_io_check_env_pmp_7_cfg_l                        1         1                                                   1\n  \\PMPChecker_io_check_env_pmp_7_cfg_r                        0         0                                                   0\n  \\PMPChecker_io_check_env_pmp_7_mask                        --        --    000000000000000000000000000000000000000000000000\n  \\PMPChecker_io_check_env_pmp_8_addr                        --        --      0111100111011011111111111101100000001101110111\n  \\PMPChecker_io_check_env_pmp_8_cfg_a                        0         0                                                  00\n  \\PMPChecker_io_check_env_pmp_8_cfg_l                        1         1                                                   1\n  \\PMPChecker_io_check_env_pmp_8_cfg_r                        0         0                                                   0\n  \\PMPChecker_io_check_env_pmp_8_mask                        --        --    000000000000000000000000000000000000000000000000\n  \\PMPChecker_io_check_env_pmp_9_addr                        --        --      0010000110011011111001111111000000001110101110\n  \\PMPChecker_io_check_env_pmp_9_cfg_a                        0         0                                                  00\n  \\PMPChecker_io_check_env_pmp_9_cfg_l                        1         1                                                   1\n  \\PMPChecker_io_check_env_pmp_9_cfg_r                        0         0                                                   0\n  \\PMPChecker_io_check_env_pmp_9_mask                        --        --    000000000000000000000000000000000000000000000000\n  \\PMPChecker_io_req_bits_addr                               --        --    000000000010010000000000000000000000000000001000\n  \\mit0.mismatch                                              1         1                                                   1\n\nEnd of script. Logfile hash: c034a620d2, CPU: user 15.31s system 0.56s, MEM: 1173.10 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 33% 7x opt_clean (5 sec), 18% 5x read_verilog (2 sec), ...\n",
-      "output_sha256": "0a41b19f991a41f6807820d6f1f097129ad913aada25b6013a8683794c33d892",
+      "output_tail": "             0\n  \\PMPChecker_io_check_env_pmp_6_mask                        --        --    000000000000000000000000000000000000000000000000\n  \\PMPChecker_io_check_env_pmp_7_addr [45:10]                --        --                111111111111111100011111111111111101\n  \\PMPChecker_io_check_env_pmp_7_cfg_a                        0         0                                                  00\n  \\PMPChecker_io_check_env_pmp_7_cfg_l                        1         1                                                   1\n  \\PMPChecker_io_check_env_pmp_7_cfg_r                        0         0                                                   0\n  \\PMPChecker_io_check_env_pmp_7_mask                        --        --    000000000000000000000000000000000000000000000000\n  \\PMPChecker_io_check_env_pmp_8_addr [45:10]                --        --                111111111111111100011111111101111001\n  \\PMPChecker_io_check_env_pmp_8_cfg_a                        0         0                                                  00\n  \\PMPChecker_io_check_env_pmp_8_cfg_l                        1         1                                                   1\n  \\PMPChecker_io_check_env_pmp_8_cfg_r                        0         0                                                   0\n  \\PMPChecker_io_check_env_pmp_8_mask                        --        --    000000000000000000000000000000000000000000000000\n  \\PMPChecker_io_check_env_pmp_9_addr [45:10]                --        --                111111111111111100011111111101111101\n  \\PMPChecker_io_check_env_pmp_9_cfg_a                        0         0                                                  00\n  \\PMPChecker_io_check_env_pmp_9_cfg_l                        1         1                                                   1\n  \\PMPChecker_io_check_env_pmp_9_cfg_r                        0         0                                                   0\n  \\PMPChecker_io_check_env_pmp_9_mask                        --        --    000000000000000000000000000000000000000000000000\n  \\PMPChecker_io_req_bits_addr                               --        --    000000000000000000111000000000100000101111101111\n  \\mit0.mismatch                                              1         1                                                   1\n\nEnd of script. Logfile hash: 7af0158855, CPU: user 1.75s system 0.05s, MEM: 129.91 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 28% 1x sat (0 sec), 25% 7x opt_clean (0 sec), ...\n",
+      "output_sha256": "a7371ef6d15eced6068bcaf28956f7f03224c63d17d9a253c0b1270e0a1b972a",
       "formal_success_marker": false,
       "unconstrained": true,
       "mitered_variants": 1,
-      "sat_variables": 130687,
-      "sat_clauses": 346108
+      "sat_variables": 118055,
+      "sat_clauses": 315453
     },
     "negative_control": {
       "status": "PASS",
@@ -4112,7 +4117,7 @@
           "equiv_failed_full": null,
           "sat_counts_full": null,
           "output_tail": "w_bits_addr == 10'h3c4;\n      |                                                 ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/DUT_PMP.sv:2572:35: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                           : ... note: In instance 'PMP_MITER.target_i'\n 2572 |   assign \\$345  = pmp_cfg_21[4:3] == 1'h1;\n      |                                   ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/DUT_PMP.sv:2577:49: Operator EQ expects 12 bits on the RHS, but RHS's CONST '10'h3c5' generates 10 bits.\n                                                                                                                           : ... note: In instance 'PMP_MITER.target_i'\n 2577 |   assign \\$350  = io_distribute_csr_w_bits_addr == 10'h3c5;\n      |                                                 ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/DUT_PMP.sv:2581:35: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                           : ... note: In instance 'PMP_MITER.target_i'\n 2581 |   assign \\$354  = pmp_cfg_22[4:3] == 1'h1;\n      |                                   ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/DUT_PMP.sv:2586:49: Operator EQ expects 12 bits on the RHS, but RHS's CONST '10'h3c6' generates 10 bits.\n                                                                                                                           : ... note: In instance 'PMP_MITER.target_i'\n 2586 |   assign \\$359  = io_distribute_csr_w_bits_addr == 10'h3c6;\n      |                                                 ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/DUT_PMP.sv:2590:35: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                           : ... note: In instance 'PMP_MITER.target_i'\n 2590 |   assign \\$363  = pmp_cfg_23[4:3] == 1'h1;\n      |                                   ^~\n",
-          "output_sha256": "2e5e8bb62abb7db49cb0e32248e82b14f074d2d6d43522ccf1ab22bbc46e8756"
+          "output_sha256": "3f37de94afd6adb1b6705af6e0ec10bb0d6d87315babc156ef61e7eed27b3026"
         },
         "locked_verilator": {
           "command": [
@@ -4138,8 +4143,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.217 MB sources in 2 modules, into 0.725 MB in 6 C++ files needing 0.000 MB\n- Verilator: Walltime 0.134 s (elab=0.014, cvt=0.065, bld=0.000); cpu 0.108 s on 1 threads; alloced 21.066 MB\n",
-          "output_sha256": "3a2dc7f4a9859ad1907224b5c0bf7100b3fa885c0588972a8c24fd8dea417352"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.217 MB sources in 2 modules, into 0.725 MB in 6 C++ files needing 0.000 MB\n- Verilator: Walltime 0.146 s (elab=0.018, cvt=0.069, bld=0.000); cpu 0.121 s on 1 threads; alloced 21.070 MB\n",
+          "output_sha256": "9830a464511e562d22a7b7a207651d53d74f664a4dfdfffdf2779e7a01234abf"
         },
         "yosys_equiv": {
           "command": [
@@ -4204,8 +4209,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "ild_cpu_backend_fu_pmp_family_family/DUT_PMPChecker.sv:133930:38: Comparison is constant due to unsigned arithmetic\n133930 |   assign \\$16784  = io_req_bits_addr >= 1'h0;\n       |                                      ^~\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/DUT_PMPChecker.sv:134570:38: Comparison is constant due to unsigned arithmetic\n134570 |   assign \\$17583  = io_req_bits_addr >= 1'h0;\n       |                                      ^~\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/DUT_PMPChecker.sv:135210:38: Comparison is constant due to unsigned arithmetic\n135210 |   assign \\$18382  = io_req_bits_addr >= 1'h0;\n       |                                      ^~\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/DUT_PMPChecker.sv:135850:38: Comparison is constant due to unsigned arithmetic\n135850 |   assign \\$19181  = io_req_bits_addr >= 1'h0;\n       |                                      ^~\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/DUT_PMPChecker.sv:136490:38: Comparison is constant due to unsigned arithmetic\n136490 |   assign \\$19980  = io_req_bits_addr >= 1'h0;\n       |                                      ^~\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/DUT_PMPChecker.sv:137130:38: Comparison is constant due to unsigned arithmetic\n137130 |   assign \\$20779  = io_req_bits_addr >= 1'h0;\n       |                                      ^~\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/DUT_PMPChecker.sv:137770:38: Comparison is constant due to unsigned arithmetic\n137770 |   assign \\$21578  = io_req_bits_addr >= 1'h0;\n       |                                      ^~\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/DUT_PMPChecker.sv:138410:38: Comparison is constant due to unsigned arithmetic\n138410 |   assign \\$22377  = io_req_bits_addr >= 1'h0;\n       |                                      ^~\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/DUT_PMPChecker.sv:139050:38: Comparison is constant due to unsigned arithmetic\n139050 |   assign \\$23176  = io_req_bits_addr >= 1'h0;\n       |                                      ^~\n",
-          "output_sha256": "d21ab1139895682090a1ea3be82aca2f2dc83c9f88fdeb2cd8031915df84959b"
+          "output_tail": "        : ... note: In instance 'PMPChecker_MITER.target_i'\n 6140 |   assign \\$2872  = io_req_bits_addr > 30'h3801ffff;\n      |                                     ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/DUT_PMPChecker.sv:6141:37: Operator LT expects 48 bits on the RHS, but RHS's CONST '30'h38021000' generates 30 bits.\n                                                                                                                                  : ... note: In instance 'PMPChecker_MITER.target_i'\n 6141 |   assign \\$2873  = io_req_bits_addr < 30'h38021000;\n      |                                     ^\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/DUT_PMPChecker.sv:3654:34: Comparison is constant due to unsigned arithmetic\n                                                                                                                               : ... note: In instance 'PMPChecker_MITER.target_i'\n 3654 |   assign \\$9  = io_req_bits_addr >= 1'h0;\n      |                                  ^~\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/DUT_PMPChecker.sv:4358:36: Comparison is constant due to unsigned arithmetic\n                                                                                                                               : ... note: In instance 'PMPChecker_MITER.target_i'\n 4358 |   assign \\$808  = io_req_bits_addr >= 1'h0;\n      |                                    ^~\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/DUT_PMPChecker.sv:4968:37: Comparison is constant due to unsigned arithmetic\n                                                                                                                               : ... note: In instance 'PMPChecker_MITER.target_i'\n 4968 |   assign \\$1512  = io_req_bits_addr >= 1'h0;\n      |                                     ^~\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/DUT_PMPChecker.sv:5577:37: Comparison is constant due to unsigned arithmetic\n                                                                                                                               : ... note: In instance 'PMPChecker_MITER.target_i'\n 5577 |   assign \\$2215  = io_req_bits_addr >= 1'h0;\n      |                                     ^~\n",
+          "output_sha256": "a280f2e55930a042867ef8bd07bd7392fee03173f3aa23aadcf69519777b67f9"
         },
         "locked_verilator": {
           "command": [
@@ -4231,8 +4236,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.079 MB sources in 2 modules, into 0.163 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.051 s (elab=0.003, cvt=0.017, bld=0.000); cpu 0.029 s on 1 threads; alloced 12.320 MB\n",
-          "output_sha256": "bcf99c0d268812f8457ae3c2597584cc77bc9aff206c77855c42b753f9788379"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.079 MB sources in 2 modules, into 0.163 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.047 s (elab=0.003, cvt=0.015, bld=0.000); cpu 0.027 s on 1 threads; alloced 12.316 MB\n",
+          "output_sha256": "32e15398265daf05d5cae0ded6ab41e0a75d19d12dc924c002572a87a2b0e265"
         },
         "sat_miter": {
           "command": [
@@ -4255,15 +4260,15 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": [
-            130687,
-            346108
+            118055,
+            315453
           ],
-          "output_tail": "                       0         0                                                   0\n  \\io_check_env_pmp_6_cfg_r                        1         1                                                   1\n  \\io_check_env_pmp_6_mask                        --        --    111111111111110011111111111111111100111111110000\n  \\io_check_env_pmp_7_addr                        --        --      1111111111111111111111111110111111111111111100\n  \\io_check_env_pmp_7_cfg_a                        0         0                                                  00\n  \\io_check_env_pmp_7_cfg_l                        0         0                                                   0\n  \\io_check_env_pmp_7_cfg_r                        1         1                                                   1\n  \\io_check_env_pmp_7_mask                        --        --    111111111111111111111111111011111111111111110000\n  \\io_check_env_pmp_8_addr                        --        --      0111111100000111111001111111111101011111111100\n  \\io_check_env_pmp_8_cfg_a                        0         0                                                  00\n  \\io_check_env_pmp_8_cfg_l                        0         0                                                   0\n  \\io_check_env_pmp_8_cfg_r                        0         0                                                   0\n  \\io_check_env_pmp_8_mask                        --        --    011111110000011111100111111111110101111111110000\n  \\io_check_env_pmp_9_addr                        --        --      0010011111111111111111110001001110011000011100\n  \\io_check_env_pmp_9_cfg_a                        0         0                                                  00\n  \\io_check_env_pmp_9_cfg_l                        0         0                                                   0\n  \\io_check_env_pmp_9_cfg_r                        1         1                                                   1\n  \\io_check_env_pmp_9_mask                        --        --    001001111111111111111111000100111001100001110000\n  \\io_req_bits_addr                               --        --    000000000000000000000000000000000000000000000000\n  \\mismatch                                        1         1                                                   1\n\nEnd of script. Logfile hash: 68f82c27e4, CPU: user 16.09s system 0.65s, MEM: 1172.09 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 34% 7x opt_clean (5 sec), 18% 4x read_verilog (3 sec), ...\n",
-          "output_sha256": "156f506bebe3f2f555b4c0421c23cb9775ea21c16583c1f1c1701614d25c4362",
+          "output_tail": "mp_6_cfg_l                        1         1                                                   1\n  \\io_check_env_pmp_6_cfg_r                        0         0                                                   0\n  \\io_check_env_pmp_6_mask                        --        --    000000000000000000000000000000000000000000000000\n  \\io_check_env_pmp_7_addr [45:10]                --        --                111111111111111111111111111111111111\n  \\io_check_env_pmp_7_cfg_a                        0         0                                                  00\n  \\io_check_env_pmp_7_cfg_l                        1         1                                                   1\n  \\io_check_env_pmp_7_cfg_r                        0         0                                                   0\n  \\io_check_env_pmp_7_mask                        --        --    000000000000000000000000000000000000000000000000\n  \\io_check_env_pmp_8_addr [45:10]                --        --                111111111111111111111111111111111111\n  \\io_check_env_pmp_8_cfg_a                        0         0                                                  00\n  \\io_check_env_pmp_8_cfg_l                        1         1                                                   1\n  \\io_check_env_pmp_8_cfg_r                        0         0                                                   0\n  \\io_check_env_pmp_8_mask                        --        --    000000000000000000000000000000000000000000000000\n  \\io_check_env_pmp_9_addr [45:10]                --        --                111111111111111111111111111111111111\n  \\io_check_env_pmp_9_cfg_a                        0         0                                                  00\n  \\io_check_env_pmp_9_cfg_l                        1         1                                                   1\n  \\io_check_env_pmp_9_cfg_r                        0         0                                                   0\n  \\io_check_env_pmp_9_mask                        --        --    000000000000000000000000000000000000000000000000\n  \\io_req_bits_addr                               --        --    000000000000000000000000000000000000001111111111\n  \\mismatch                                        1         1                                                   1\n\nEnd of script. Logfile hash: 601f1db224, CPU: user 1.79s system 0.05s, MEM: 128.16 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 29% 1x sat (0 sec), 25% 7x opt_clean (0 sec), ...\n",
+          "output_sha256": "ba61c3fccca02fcbd976ec039d3d3359bdc39d65afc2bf5ee5f9aabb02e5ff0d",
           "formal_success_marker": false,
           "unconstrained": true,
-          "sat_variables": 130687,
-          "sat_clauses": 346108
+          "sat_variables": 118055,
+          "sat_clauses": 315453
         }
       },
       {
@@ -4294,7 +4299,7 @@
           "equiv_failed_full": null,
           "sat_counts_full": null,
           "output_tail": "hecker_12.sv:318020:39: Comparison is constant due to unsigned arithmetic\n318020 |   assign \\$171984  = io_req_bits_addr >= 1'h0;\n       |                                       ^~\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/DUT_PMPChecker_12.sv:318660:39: Comparison is constant due to unsigned arithmetic\n318660 |   assign \\$172783  = io_req_bits_addr >= 1'h0;\n       |                                       ^~\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/DUT_PMPChecker_12.sv:319300:39: Comparison is constant due to unsigned arithmetic\n319300 |   assign \\$173582  = io_req_bits_addr >= 1'h0;\n       |                                       ^~\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/DUT_PMPChecker_12.sv:319940:39: Comparison is constant due to unsigned arithmetic\n319940 |   assign \\$174381  = io_req_bits_addr >= 1'h0;\n       |                                       ^~\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/DUT_PMPChecker_12.sv:320580:39: Comparison is constant due to unsigned arithmetic\n320580 |   assign \\$175180  = io_req_bits_addr >= 1'h0;\n       |                                       ^~\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/DUT_PMPChecker_12.sv:321220:39: Comparison is constant due to unsigned arithmetic\n321220 |   assign \\$175979  = io_req_bits_addr >= 1'h0;\n       |                                       ^~\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/DUT_PMPChecker_12.sv:321860:39: Comparison is constant due to unsigned arithmetic\n321860 |   assign \\$176778  = io_req_bits_addr >= 1'h0;\n       |                                       ^~\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/DUT_PMPChecker_12.sv:322500:39: Comparison is constant due to unsigned arithmetic\n322500 |   assign \\$177577  = io_req_bits_addr >= 1'h0;\n       |                                       ^~\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/DUT_PMPChecker_12.sv:323140:39: Comparison is constant due to unsigned arithmetic\n323140 |   assign \\$178376  = io_req_bits_addr >= 1'h0;\n       |                                       ^~\n",
-          "output_sha256": "1310b52a54e6d18cb4a448f78e677713c47c81a0829332cb2215fb84a3684217"
+          "output_sha256": "524935122f46b9d06b0687e0fd504b8c00344413b57e10eb7e6efc9959459de9"
         },
         "locked_verilator": {
           "command": [
@@ -4320,8 +4325,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.129 MB sources in 2 modules, into 0.265 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.073 s (elab=0.005, cvt=0.027, bld=0.000); cpu 0.048 s on 1 threads; alloced 14.531 MB\n",
-          "output_sha256": "45fe8e49189fe2b8a5cd4687a9b8ac68f4bee12c7ffca3c8fc61001ec13cc736"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.129 MB sources in 2 modules, into 0.265 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.066 s (elab=0.006, cvt=0.024, bld=0.000); cpu 0.044 s on 1 threads; alloced 14.539 MB\n",
+          "output_sha256": "424f33b5718b795b778055d98aa821ba3a22eb02f6a59176c11a982aeea54531"
         },
         "yosys_equiv": {
           "command": [
@@ -4382,7 +4387,7 @@
           "equiv_failed_full": null,
           "sat_counts_full": null,
           "output_tail": "p/uhsc_build_cpu_backend_fu_pmp_family_family/DUT_PMPChecker_2.sv:41000:38: Comparison is constant due to unsigned arithmetic\n41000 |   assign \\$18380  = io_req_bits_addr >= 1'h0;\n      |                                      ^~\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/DUT_PMPChecker_2.sv:41640:38: Comparison is constant due to unsigned arithmetic\n41640 |   assign \\$19179  = io_req_bits_addr >= 1'h0;\n      |                                      ^~\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/DUT_PMPChecker_2.sv:42280:38: Comparison is constant due to unsigned arithmetic\n42280 |   assign \\$19978  = io_req_bits_addr >= 1'h0;\n      |                                      ^~\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/DUT_PMPChecker_2.sv:42920:38: Comparison is constant due to unsigned arithmetic\n42920 |   assign \\$20777  = io_req_bits_addr >= 1'h0;\n      |                                      ^~\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/DUT_PMPChecker_2.sv:43560:38: Comparison is constant due to unsigned arithmetic\n43560 |   assign \\$21576  = io_req_bits_addr >= 1'h0;\n      |                                      ^~\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/DUT_PMPChecker_2.sv:44200:38: Comparison is constant due to unsigned arithmetic\n44200 |   assign \\$22375  = io_req_bits_addr >= 1'h0;\n      |                                      ^~\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/DUT_PMPChecker_2.sv:44840:38: Comparison is constant due to unsigned arithmetic\n44840 |   assign \\$23174  = io_req_bits_addr >= 1'h0;\n      |                                      ^~\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/DUT_PMPChecker_2.sv:45480:38: Comparison is constant due to unsigned arithmetic\n45480 |   assign \\$23973  = io_req_bits_addr >= 1'h0;\n      |                                      ^~\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/DUT_PMPChecker_2.sv:46120:38: Comparison is constant due to unsigned arithmetic\n46120 |   assign \\$24772  = io_req_bits_addr >= 1'h0;\n      |                                      ^~\n",
-          "output_sha256": "710b51a75433f33da57c284fd33ee1e2ab8b03479555fd0d273c841d39b6379c"
+          "output_sha256": "826b8e03822251012572b0d031d8cf33c534220815755d0f11a4ce53d4fc2e2a"
         },
         "locked_verilator": {
           "command": [
@@ -4408,8 +4413,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.082 MB sources in 2 modules, into 0.117 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.041 s (elab=0.003, cvt=0.012, bld=0.000); cpu 0.024 s on 1 threads; alloced 12.195 MB\n",
-          "output_sha256": "80899c1fab19661eed1b34c2883066666661e17a79e47a3d5af3e41e970891f3"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.082 MB sources in 2 modules, into 0.117 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.043 s (elab=0.003, cvt=0.012, bld=0.000); cpu 0.025 s on 1 threads; alloced 12.199 MB\n",
+          "output_sha256": "c9dc4b110100e2a5d77e621df9c11371ece3787943ba859232184f473f47359d"
         },
         "yosys_equiv": {
           "command": [
@@ -4470,7 +4475,7 @@
           "equiv_failed_full": null,
           "sat_counts_full": null,
           "output_tail": "_family_family/DUT_PMPEntryHandleModule.sv:2192:37: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                            : ... note: In instance 'PMPEntryHandleModule_MITER.target_i'\n 2192 |   assign \\$908  = io_in_pmpCfg_31_A == 1'h1;\n      |                                     ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/DUT_PMPEntryHandleModule.sv:2201:30: Operator EQ expects 12 bits on the RHS, but RHS's CONST '10'h3cf' generates 10 bits.\n                                                                                                                                            : ... note: In instance 'PMPEntryHandleModule_MITER.target_i'\n 2201 |   assign \\$919  = io_in_addr == 10'h3cf;\n      |                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/DUT_PMPEntryHandleModule.sv:2206:30: Operator EQ expects 12 bits on the RHS, but RHS's CONST '10'h3cf' generates 10 bits.\n                                                                                                                                            : ... note: In instance 'PMPEntryHandleModule_MITER.target_i'\n 2206 |   assign \\$924  = io_in_addr == 10'h3cf;\n      |                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/DUT_PMPEntryHandleModule.sv:2406:28: Operator EQ expects 12 bits on the RHS, but RHS's CONST '10'h3a6' generates 10 bits.\n                                                                                                                                            : ... note: In instance 'PMPEntryHandleModule_MITER.target_i'\n 2406 |   assign \\$1  = io_in_addr == 10'h3a6;\n      |                            ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/DUT_PMPEntryHandleModule.sv:2440:29: Operator EQ expects 12 bits on the RHS, but RHS's CONST '10'h3a4' generates 10 bits.\n                                                                                                                                            : ... note: In instance 'PMPEntryHandleModule_MITER.target_i'\n 2440 |   assign \\$35  = io_in_addr == 10'h3a4;\n      |                             ^~\n",
-          "output_sha256": "1235750a3d3416063c7cff4893ee3f30f5d8cae433a9b3ada962015ba7b8bbaf"
+          "output_sha256": "beea7ca9edc99c07909c1cff40e00884d91343c731bd5adb14b6f5b9cf2a82f0"
         },
         "locked_verilator": {
           "command": [
@@ -4496,8 +4501,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.066 MB sources in 2 modules, into 0.265 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.052 s (elab=0.003, cvt=0.014, bld=0.000); cpu 0.027 s on 1 threads; alloced 12.211 MB\n",
-          "output_sha256": "580426fe442e0bc33a18805798e0959a09682a5ac9a79a314d0c97bad416c5a2"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.066 MB sources in 2 modules, into 0.265 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.047 s (elab=0.003, cvt=0.014, bld=0.000); cpu 0.027 s on 1 threads; alloced 12.207 MB\n",
+          "output_sha256": "f377bf71edaaa87835da0a6ddff7e3a01fe5e1aae3b9aaeaa260241266609cac"
         },
         "yosys_equiv": {
           "command": [
