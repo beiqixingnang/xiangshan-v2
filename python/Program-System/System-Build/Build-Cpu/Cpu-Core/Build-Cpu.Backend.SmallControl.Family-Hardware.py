@@ -277,9 +277,7 @@ def _build_port_specs() -> dict[str, tuple[PortSpec, ...]]:
     }
 
 
-PortSpec = tuple[str, str, int]
-
-PORT_SPECS: dict[str, tuple[PortSpec, ...]] = {
+_PORT_TUPLES: dict[str, tuple[tuple[str, str, int], ...]] = {
     'AddrAddModule': (
         ('io_pcExtend', 'input', 51),
         ('io_taken', 'input', 1),
@@ -749,6 +747,12 @@ PORT_SPECS: dict[str, tuple[PortSpec, ...]] = {
         ('io_result', 'output', 128),
         ('io_fflags', 'output', 40),
     ),
+}
+
+# Materialize the literal port catalog for the public adapter. / 将字面量端口目录规范化为公开适配器记录。
+PORT_SPECS: dict[str, tuple[PortSpec, ...]] = {
+    member: tuple(PortSpec(*entry) for entry in entries)
+    for member, entries in _PORT_TUPLES.items()
 }
 
 

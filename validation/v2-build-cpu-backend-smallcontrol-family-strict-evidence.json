@@ -7,6 +7,31 @@
   "strict_complete_eligible": false,
   "strict_complete_count_delta": 0,
   "acceptance_eligible": false,
+  "current_build_reverification": {
+    "status": "STRICT_PENDING",
+    "previous_evidence_build_sha256": "a1c4ad8564a1ce68ca39abe96043ab8ac5618343bdd5de55249d37b1272bb232",
+    "current_build_sha256": "e3ca3425d0e59c7296100b345a3007fd4ac3f03fcffea9e6783884c63778830a",
+    "source_change": "Restore the public PortSpec record contract after the literal port-catalog refactor left every build_verilog export dereferencing tuple.name.",
+    "historical_full_rail_reused": false,
+    "catalog_entries": 8,
+    "current_members_independently_reverified": [
+      "FauFTBWay"
+    ],
+    "members_not_rerun_against_current_build_sha": [
+      "AddrAddModule",
+      "GPAMem",
+      "RedirectGenerator",
+      "RegCache",
+      "RegCacheTagTable",
+      "RASStack",
+      "VectorCvtTop"
+    ],
+    "aggregate_result": {
+      "status": "STRICT_PENDING",
+      "strict_complete_count_delta": 0,
+      "reason": "One focused sequential miter is not an aggregate proof; no historical proof result is counted across the Build digest change."
+    }
+  },
   "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
   "audit_policy": {
     "require_negative_control": true,
@@ -1098,8 +1123,8 @@
     },
     "python_build": {
       "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.SmallControl.Family-Hardware.py",
-      "sha256": "a1c4ad8564a1ce68ca39abe96043ab8ac5618343bdd5de55249d37b1272bb232",
-      "bytes": 47800
+      "sha256": "e3ca3425d0e59c7296100b345a3007fd4ac3f03fcffea9e6783884c63778830a",
+      "bytes": 68865
     },
     "reference_sv": {
       "path": "validation/reference-sv/AddrAddModule.sv",
@@ -1354,10 +1379,10 @@
     }
   },
   "checks": {
-    "py_compile": {
+    "historical_py_compile_before_current_build_sha_change": {
       "status": "PASS"
     },
-    "pyright": {
+    "historical_pyright_before_current_build_sha_change": {
       "build": {
         "command": [
           "cmd.exe",
@@ -1393,9 +1418,48 @@
     },
     "catalog_coverage": {
       "entries": 8,
-      "proven": 5
+      "proven": 1,
+      "historical_pre_repair_proven": 5,
+      "scope": "current-build focused strict reverification only"
     },
-    "formal": {
+    "current_build_sanity": {
+      "status": "PASS",
+      "py_compile": "PASS",
+      "isolated_pyright": {
+        "status": "PASS",
+        "version": "1.1.411",
+        "files_analyzed": 1,
+        "error_count": 0,
+        "warning_count": 0
+      },
+      "deterministic_exports": {
+        "status": "PASS",
+        "members": 8,
+        "configuration": "build_verilog({'module': member}, {}) twice per COVERED_MODULES member"
+      }
+    },
+    "current_build_focused_strict": {
+      "status": "PASS",
+      "scope": "FauFTBWay only; this is not aggregate completion",
+      "member": "FauFTBWay",
+      "method": "sequential_equivalence",
+      "abi_exact": true,
+      "deterministic": true,
+      "miter_selfcheck": true,
+      "reference_view_trusted": true,
+      "outputs_compared": 21,
+      "output_bits_compared": 62,
+      "verilator": "PASS",
+      "locked_reference_verilator": "PASS",
+      "yosys_equiv": {
+        "status": "PASS",
+        "equiv_cells": 79,
+        "proven_cells": 79,
+        "unproven_cells": 0,
+        "formal_success_marker": true
+      }
+    },
+    "historical_formal_before_current_build_sha_change": {
       "yosys_formal_miter": {
         "command": [
           "yosys",
@@ -1429,7 +1493,7 @@
         "sat_clauses": 4
       }
     },
-    "aggregate_sat_miter": {
+    "historical_aggregate_sat_miter_before_current_build_sha_change": {
       "command": [
         "yosys",
         "-Q",
@@ -1461,7 +1525,7 @@
       "sat_variables": 2,
       "sat_clauses": 4
     },
-    "negative_control": {
+    "historical_negative_control_before_current_build_sha_change": {
       "status": "PASS",
       "cases": {
         "sat.target": {
@@ -1503,7 +1567,7 @@
       },
       "note": "a reference-side mutation that still proves means the reference never reaches the comparison"
     },
-    "variants": [
+    "historical_variants_before_current_build_sha_change": [
       {
         "method": "sat_miter",
         "verilator": {
@@ -2288,15 +2352,14 @@
     }
   },
   "failures": [
-    "RASStack:yosys_equiv",
-    "RASStack: 76 $equiv cells unproven",
-    "RegCache:yosys_equiv",
-    "RegCache: zero or missing $equiv cells",
-    "VectorCvtTop:yosys_equiv",
-    "VectorCvtTop: 166 $equiv cells unproven"
+    "current Build digest has only 1/8 independently reverified locked variants",
+    "AddrAddModule, GPAMem, RedirectGenerator, and RegCacheTagTable historical proofs are not reused across the Build digest change",
+    "RASStack current strict closure was not rerun; the historical run reported 76 unproven $equiv cells",
+    "RegCache current strict closure was not rerun; the historical run timed out before recording $equiv cells",
+    "VectorCvtTop current strict closure was not rerun; the historical run reported 166 unproven $equiv cells"
   ],
   "unclosed": [
-    "strict gates did not all pass"
+    "current Build requires complete aggregate revalidation; focused FauFTBWay proof cannot close STRICT_PENDING"
   ],
   "acceptance_unclosed": [
     "Parent closure, full-top differential, final license review, and user approval remain outside this Build proof."
