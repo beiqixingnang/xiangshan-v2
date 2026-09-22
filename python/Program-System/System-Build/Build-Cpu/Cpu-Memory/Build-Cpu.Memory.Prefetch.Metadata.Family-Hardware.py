@@ -109,6 +109,20 @@ def _pc_hash(pc: Any) -> Any:
 def _plru_way(state: Any, ways: int) -> Any:
     """Decode a balanced or unbalanced tree-PLRU state."""
 
+    if ways == 16:
+        left_low = Mux(state[12], state[11], state[10])
+        left_mid = Cat(left_low, state[12])
+        left = Cat(left_mid, state[13])
+        right_left = Cat(Cat(Mux(state[5], state[4], state[3]), state[5]), state[6])
+        right_right = Cat(Cat(Mux(state[2], state[1], state[0]), state[2]), state[6])
+        right = Mux(state[6], right_left, right_right)
+        return Cat(Mux(state[14], left, right), state[14])
+    if ways == 10:
+        left = Cat(state[7], Const(0, 2))
+        right_low = Mux(state[2], state[1], state[0])
+        right_mid = Cat(right_low, state[2])
+        right = Cat(right_mid, state[6])
+        return Cat(Mux(state[8], left, right), state[8])
     if ways <= 1:
         return Const(0, 1)
     if ways == 2:
