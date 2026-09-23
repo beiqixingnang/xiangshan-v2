@@ -1,0 +1,1386 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_FRONTENDBRIDGE_PUBLIC_QUEUE_STRICT",
+  "build_id": "Build-Cpu.Memory.FrontendBridge",
+  "status": "STRICT_PENDING",
+  "strict_complete_eligible": false,
+  "strict_complete_count_delta": 0,
+  "acceptance_eligible": false,
+  "formal_requested": true,
+  "formal_partition": "instr_uncache_a",
+  "validator": "validation/v2_frontendbridge_public_queue_strict_validator.py",
+  "build": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.FrontendBridge-Hardware.py",
+  "direct_test": "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu.Memory.FrontendBridge-Hardware.py",
+  "scope": {
+    "module": "FrontendBridge",
+    "public_input_count": 43,
+    "public_input_bits": 662,
+    "public_output_count": 48,
+    "public_output_bits": 950,
+    "queue_partition_count": 6,
+    "queue_partitions_cover_every_public_output_exactly_once": true,
+    "queue_partitions": {
+      "instr_uncache_a": {
+        "auto_instr_uncache_in_a_ready": 1,
+        "auto_instr_uncache_out_a_valid": 1,
+        "auto_instr_uncache_out_a_bits_param": 3,
+        "auto_instr_uncache_out_a_bits_address": 48,
+        "auto_instr_uncache_out_a_bits_corrupt": 1
+      },
+      "instr_uncache_d": {
+        "auto_instr_uncache_in_d_valid": 1,
+        "auto_instr_uncache_in_d_bits_source": 1,
+        "auto_instr_uncache_in_d_bits_data": 64,
+        "auto_instr_uncache_in_d_bits_corrupt": 1,
+        "auto_instr_uncache_out_d_ready": 1
+      },
+      "icachectrl_a": {
+        "auto_icachectrl_in_a_ready": 1,
+        "auto_icachectrl_out_a_valid": 1,
+        "auto_icachectrl_out_a_bits_opcode": 4,
+        "auto_icachectrl_out_a_bits_size": 2,
+        "auto_icachectrl_out_a_bits_source": 5,
+        "auto_icachectrl_out_a_bits_address": 30,
+        "auto_icachectrl_out_a_bits_mask": 8,
+        "auto_icachectrl_out_a_bits_data": 64
+      },
+      "icachectrl_d": {
+        "auto_icachectrl_in_d_valid": 1,
+        "auto_icachectrl_in_d_bits_opcode": 4,
+        "auto_icachectrl_in_d_bits_param": 2,
+        "auto_icachectrl_in_d_bits_size": 2,
+        "auto_icachectrl_in_d_bits_source": 5,
+        "auto_icachectrl_in_d_bits_sink": 1,
+        "auto_icachectrl_in_d_bits_denied": 1,
+        "auto_icachectrl_in_d_bits_data": 64,
+        "auto_icachectrl_in_d_bits_corrupt": 1,
+        "auto_icachectrl_out_d_ready": 1
+      },
+      "icache_a": {
+        "auto_icache_in_a_ready": 1,
+        "auto_icache_out_a_valid": 1,
+        "auto_icache_out_a_bits_opcode": 4,
+        "auto_icache_out_a_bits_param": 3,
+        "auto_icache_out_a_bits_size": 3,
+        "auto_icache_out_a_bits_source": 4,
+        "auto_icache_out_a_bits_address": 48,
+        "auto_icache_out_a_bits_user_alias": 2,
+        "auto_icache_out_a_bits_user_reqSource": 5,
+        "auto_icache_out_a_bits_user_needHint": 1,
+        "auto_icache_out_a_bits_mask": 32,
+        "auto_icache_out_a_bits_data": 256,
+        "auto_icache_out_a_bits_corrupt": 1
+      },
+      "icache_d": {
+        "auto_icache_in_d_valid": 1,
+        "auto_icache_in_d_bits_opcode": 4,
+        "auto_icache_in_d_bits_size": 3,
+        "auto_icache_in_d_bits_source": 4,
+        "auto_icache_in_d_bits_data": 256,
+        "auto_icache_in_d_bits_corrupt": 1,
+        "auto_icache_out_d_ready": 1
+      }
+    },
+    "full_public_outputs": {
+      "auto_instr_uncache_in_a_ready": 1,
+      "auto_instr_uncache_in_d_valid": 1,
+      "auto_instr_uncache_in_d_bits_source": 1,
+      "auto_instr_uncache_in_d_bits_data": 64,
+      "auto_instr_uncache_in_d_bits_corrupt": 1,
+      "auto_instr_uncache_out_a_valid": 1,
+      "auto_instr_uncache_out_a_bits_param": 3,
+      "auto_instr_uncache_out_a_bits_address": 48,
+      "auto_instr_uncache_out_a_bits_corrupt": 1,
+      "auto_instr_uncache_out_d_ready": 1,
+      "auto_icachectrl_in_a_ready": 1,
+      "auto_icachectrl_in_d_valid": 1,
+      "auto_icachectrl_in_d_bits_opcode": 4,
+      "auto_icachectrl_in_d_bits_param": 2,
+      "auto_icachectrl_in_d_bits_size": 2,
+      "auto_icachectrl_in_d_bits_source": 5,
+      "auto_icachectrl_in_d_bits_sink": 1,
+      "auto_icachectrl_in_d_bits_denied": 1,
+      "auto_icachectrl_in_d_bits_data": 64,
+      "auto_icachectrl_in_d_bits_corrupt": 1,
+      "auto_icachectrl_out_a_valid": 1,
+      "auto_icachectrl_out_a_bits_opcode": 4,
+      "auto_icachectrl_out_a_bits_size": 2,
+      "auto_icachectrl_out_a_bits_source": 5,
+      "auto_icachectrl_out_a_bits_address": 30,
+      "auto_icachectrl_out_a_bits_mask": 8,
+      "auto_icachectrl_out_a_bits_data": 64,
+      "auto_icachectrl_out_d_ready": 1,
+      "auto_icache_in_a_ready": 1,
+      "auto_icache_in_d_valid": 1,
+      "auto_icache_in_d_bits_opcode": 4,
+      "auto_icache_in_d_bits_size": 3,
+      "auto_icache_in_d_bits_source": 4,
+      "auto_icache_in_d_bits_data": 256,
+      "auto_icache_in_d_bits_corrupt": 1,
+      "auto_icache_out_a_valid": 1,
+      "auto_icache_out_a_bits_opcode": 4,
+      "auto_icache_out_a_bits_param": 3,
+      "auto_icache_out_a_bits_size": 3,
+      "auto_icache_out_a_bits_source": 4,
+      "auto_icache_out_a_bits_address": 48,
+      "auto_icache_out_a_bits_user_alias": 2,
+      "auto_icache_out_a_bits_user_reqSource": 5,
+      "auto_icache_out_a_bits_user_needHint": 1,
+      "auto_icache_out_a_bits_mask": 32,
+      "auto_icache_out_a_bits_data": 256,
+      "auto_icache_out_a_bits_corrupt": 1,
+      "auto_icache_out_d_ready": 1
+    },
+    "full_public_output_bits": 950
+  },
+  "audit_policy": {
+    "wrapper_generated_before_formal": true,
+    "compare_only_public_outputs": true,
+    "equiv_make_before_flatten": true,
+    "same_clock_and_reset_inputs_preserved": true,
+    "require_full_public_output_proof": true,
+    "require_exact_abi": true,
+    "require_conservation_audited_locked_view": true,
+    "require_two_sided_wrapper_output_negative_control": true,
+    "initial_serial_formal_scope": "instr_uncache_a",
+    "bounded_tests_counted": false
+  },
+  "reference_lock": {
+    "directory": "validation/reference-sv",
+    "xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "locked_references_written": false,
+    "sha256_by_module": {
+      "FrontendBridge": "ee3efd5e55934039e4c60b78a29eee198110c581b1464760c0a138af11dec9d2"
+    },
+    "children": [
+      "ICacheBuffer",
+      "ICacheCtrlBuffer",
+      "InstrUncacheBuffer",
+      "Queue2_TLBundleA_16",
+      "Queue2_TLBundleA_22",
+      "Queue2_TLBundleA_26",
+      "Queue2_TLBundleD_19",
+      "Queue2_TLBundleD_23",
+      "Queue2_TLBundleD_29",
+      "ram_2x117",
+      "ram_2x132",
+      "ram_2x281",
+      "ram_2x359",
+      "ram_2x77",
+      "ram_2x80"
+    ]
+  },
+  "checks": {
+    "py_compile": {
+      "status": "PASS"
+    },
+    "build_abi_exact": true,
+    "deterministic_export": true,
+    "locked_view_trusted": true,
+    "locked_view_audits": [
+      {
+        "top": "ram_2x359",
+        "renamed_top": false,
+        "regions_removed_lines": {
+          "`ifdef ENABLE_INITIAL_MEM_": 14
+        },
+        "block_local_temporaries_hoisted": [],
+        "initialized_declarations_hoisted": [],
+        "code_lines_locked": 17,
+        "code_lines_view": 17,
+        "residual_preprocessor_directives": 0,
+        "line_conservation_ok": true,
+        "register_update_equations_locked": 0,
+        "register_update_equations_preserved": true,
+        "view_trusted": true
+      },
+      {
+        "top": "Queue2_TLBundleA_22",
+        "renamed_top": false,
+        "regions_removed_lines": {
+          "`ifdef ENABLE_INITIAL_REG_": 25
+        },
+        "block_local_temporaries_hoisted": [],
+        "initialized_declarations_hoisted": [
+          "do_deq"
+        ],
+        "code_lines_locked": 89,
+        "code_lines_view": 90,
+        "residual_preprocessor_directives": 0,
+        "line_conservation_ok": true,
+        "register_update_equations_locked": 6,
+        "register_update_equations_preserved": true,
+        "view_trusted": true
+      },
+      {
+        "top": "ram_2x281",
+        "renamed_top": false,
+        "regions_removed_lines": {
+          "`ifdef ENABLE_INITIAL_MEM_": 14
+        },
+        "block_local_temporaries_hoisted": [],
+        "initialized_declarations_hoisted": [],
+        "code_lines_locked": 17,
+        "code_lines_view": 17,
+        "residual_preprocessor_directives": 0,
+        "line_conservation_ok": true,
+        "register_update_equations_locked": 0,
+        "register_update_equations_preserved": true,
+        "view_trusted": true
+      },
+      {
+        "top": "Queue2_TLBundleD_23",
+        "renamed_top": false,
+        "regions_removed_lines": {
+          "`ifdef ENABLE_INITIAL_REG_": 25
+        },
+        "block_local_temporaries_hoisted": [],
+        "initialized_declarations_hoisted": [
+          "do_deq"
+        ],
+        "code_lines_locked": 77,
+        "code_lines_view": 78,
+        "residual_preprocessor_directives": 0,
+        "line_conservation_ok": true,
+        "register_update_equations_locked": 6,
+        "register_update_equations_preserved": true,
+        "view_trusted": true
+      },
+      {
+        "top": "ICacheBuffer",
+        "renamed_top": false,
+        "regions_removed_lines": {},
+        "block_local_temporaries_hoisted": [],
+        "initialized_declarations_hoisted": [],
+        "code_lines_locked": 169,
+        "code_lines_view": 169,
+        "residual_preprocessor_directives": 0,
+        "line_conservation_ok": true,
+        "register_update_equations_locked": 0,
+        "register_update_equations_preserved": true,
+        "view_trusted": true
+      },
+      {
+        "top": "ram_2x117",
+        "renamed_top": false,
+        "regions_removed_lines": {
+          "`ifdef ENABLE_INITIAL_MEM_": 14
+        },
+        "block_local_temporaries_hoisted": [],
+        "initialized_declarations_hoisted": [],
+        "code_lines_locked": 17,
+        "code_lines_view": 17,
+        "residual_preprocessor_directives": 0,
+        "line_conservation_ok": true,
+        "register_update_equations_locked": 0,
+        "register_update_equations_preserved": true,
+        "view_trusted": true
+      },
+      {
+        "top": "Queue2_TLBundleA_16",
+        "renamed_top": false,
+        "regions_removed_lines": {
+          "`ifdef ENABLE_INITIAL_REG_": 25
+        },
+        "block_local_temporaries_hoisted": [],
+        "initialized_declarations_hoisted": [
+          "do_deq"
+        ],
+        "code_lines_locked": 77,
+        "code_lines_view": 78,
+        "residual_preprocessor_directives": 0,
+        "line_conservation_ok": true,
+        "register_update_equations_locked": 6,
+        "register_update_equations_preserved": true,
+        "view_trusted": true
+      },
+      {
+        "top": "ram_2x80",
+        "renamed_top": false,
+        "regions_removed_lines": {
+          "`ifdef ENABLE_INITIAL_MEM_": 14
+        },
+        "block_local_temporaries_hoisted": [],
+        "initialized_declarations_hoisted": [],
+        "code_lines_locked": 17,
+        "code_lines_view": 17,
+        "residual_preprocessor_directives": 0,
+        "line_conservation_ok": true,
+        "register_update_equations_locked": 0,
+        "register_update_equations_preserved": true,
+        "view_trusted": true
+      },
+      {
+        "top": "Queue2_TLBundleD_19",
+        "renamed_top": false,
+        "regions_removed_lines": {
+          "`ifdef ENABLE_INITIAL_REG_": 25
+        },
+        "block_local_temporaries_hoisted": [],
+        "initialized_declarations_hoisted": [
+          "do_deq"
+        ],
+        "code_lines_locked": 77,
+        "code_lines_view": 78,
+        "residual_preprocessor_directives": 0,
+        "line_conservation_ok": true,
+        "register_update_equations_locked": 6,
+        "register_update_equations_preserved": true,
+        "view_trusted": true
+      },
+      {
+        "top": "ICacheCtrlBuffer",
+        "renamed_top": false,
+        "regions_removed_lines": {},
+        "block_local_temporaries_hoisted": [],
+        "initialized_declarations_hoisted": [],
+        "code_lines_locked": 155,
+        "code_lines_view": 155,
+        "residual_preprocessor_directives": 0,
+        "line_conservation_ok": true,
+        "register_update_equations_locked": 0,
+        "register_update_equations_preserved": true,
+        "view_trusted": true
+      },
+      {
+        "top": "ram_2x132",
+        "renamed_top": false,
+        "regions_removed_lines": {
+          "`ifdef ENABLE_INITIAL_MEM_": 14
+        },
+        "block_local_temporaries_hoisted": [],
+        "initialized_declarations_hoisted": [],
+        "code_lines_locked": 17,
+        "code_lines_view": 17,
+        "residual_preprocessor_directives": 0,
+        "line_conservation_ok": true,
+        "register_update_equations_locked": 0,
+        "register_update_equations_preserved": true,
+        "view_trusted": true
+      },
+      {
+        "top": "Queue2_TLBundleA_26",
+        "renamed_top": false,
+        "regions_removed_lines": {
+          "`ifdef ENABLE_INITIAL_REG_": 25
+        },
+        "block_local_temporaries_hoisted": [],
+        "initialized_declarations_hoisted": [
+          "do_deq"
+        ],
+        "code_lines_locked": 77,
+        "code_lines_view": 78,
+        "residual_preprocessor_directives": 0,
+        "line_conservation_ok": true,
+        "register_update_equations_locked": 6,
+        "register_update_equations_preserved": true,
+        "view_trusted": true
+      },
+      {
+        "top": "ram_2x77",
+        "renamed_top": false,
+        "regions_removed_lines": {
+          "`ifdef ENABLE_INITIAL_MEM_": 14
+        },
+        "block_local_temporaries_hoisted": [],
+        "initialized_declarations_hoisted": [],
+        "code_lines_locked": 17,
+        "code_lines_view": 17,
+        "residual_preprocessor_directives": 0,
+        "line_conservation_ok": true,
+        "register_update_equations_locked": 0,
+        "register_update_equations_preserved": true,
+        "view_trusted": true
+      },
+      {
+        "top": "Queue2_TLBundleD_29",
+        "renamed_top": false,
+        "regions_removed_lines": {
+          "`ifdef ENABLE_INITIAL_REG_": 25
+        },
+        "block_local_temporaries_hoisted": [],
+        "initialized_declarations_hoisted": [
+          "do_deq"
+        ],
+        "code_lines_locked": 77,
+        "code_lines_view": 78,
+        "residual_preprocessor_directives": 0,
+        "line_conservation_ok": true,
+        "register_update_equations_locked": 6,
+        "register_update_equations_preserved": true,
+        "view_trusted": true
+      },
+      {
+        "top": "InstrUncacheBuffer",
+        "renamed_top": false,
+        "regions_removed_lines": {},
+        "block_local_temporaries_hoisted": [],
+        "initialized_declarations_hoisted": [],
+        "code_lines_locked": 143,
+        "code_lines_view": 143,
+        "residual_preprocessor_directives": 0,
+        "line_conservation_ok": true,
+        "register_update_equations_locked": 0,
+        "register_update_equations_preserved": true,
+        "view_trusted": true
+      },
+      {
+        "top": "FrontendBridge",
+        "renamed_top": true,
+        "regions_removed_lines": {},
+        "block_local_temporaries_hoisted": [],
+        "initialized_declarations_hoisted": [],
+        "code_lines_locked": 195,
+        "code_lines_view": 195,
+        "residual_preprocessor_directives": 0,
+        "line_conservation_ok": true,
+        "register_update_equations_locked": 0,
+        "register_update_equations_preserved": true,
+        "view_trusted": true
+      }
+    ],
+    "static_wrapper_generation": {
+      "status": "PASS",
+      "work_directory": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_frontendbridge_public_queue_strict"
+    },
+    "queue_behavior_partitions": [
+      {
+        "partition": "instr_uncache_a",
+        "outputs": {
+          "auto_instr_uncache_in_a_ready": 1,
+          "auto_instr_uncache_out_a_valid": 1,
+          "auto_instr_uncache_out_a_bits_param": 3,
+          "auto_instr_uncache_out_a_bits_address": 48,
+          "auto_instr_uncache_out_a_bits_corrupt": 1
+        },
+        "output_bits": 54,
+        "static_wrappers": {
+          "reference": {
+            "status": "PASS",
+            "wrapper": "REF_FrontendBridge_Public_instr_uncache_a",
+            "input_count": 43,
+            "selected_output_count": 5,
+            "selected_output_bits": 54,
+            "declared_abi_exact": true,
+            "all_inputs_connected": true,
+            "selected_outputs_connected": true,
+            "unselected_outputs_unconnected": true,
+            "direct_output_assignments": true,
+            "sha256": "670539c414da4cb53aaaf001aa972220bd4ecd8563cef05441ce9fa12a4bd908",
+            "bytes": 5960
+          },
+          "target": {
+            "status": "PASS",
+            "wrapper": "DUT_FrontendBridge_Public_instr_uncache_a",
+            "input_count": 43,
+            "selected_output_count": 5,
+            "selected_output_bits": 54,
+            "declared_abi_exact": true,
+            "all_inputs_connected": true,
+            "selected_outputs_connected": true,
+            "unselected_outputs_unconnected": true,
+            "direct_output_assignments": true,
+            "sha256": "77d5951bdc8d7531d117112ba2cf3bd3202f0214a1e4dbe452ddcfa6a5741841",
+            "bytes": 5960
+          }
+        },
+        "verilator": {
+          "reference": {
+            "command": [
+              "verilator",
+              "--lint-only",
+              "-Wno-fatal",
+              "--top-module",
+              "REF_FrontendBridge_Public_instr_uncache_a",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge.sv",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge_Public_instr_uncache_a.sv"
+            ],
+            "returncode": 0,
+            "status": "PASS",
+            "sat_success_marker": false,
+            "sat_counterexample_marker": false,
+            "unconstrained_marker": false,
+            "equiv_success_markers": {
+              "0 are unproven.": false,
+              "Equivalence successfully proven!": false
+            },
+            "equiv_failure_marker": false,
+            "equiv_cells_full": null,
+            "equiv_summary_full": null,
+            "equiv_failed_full": null,
+            "sat_counts_full": null,
+            "output_tail": "REF_FrontendBridge inner_i(\n      |                      ^~~~~~~\n                     /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge.sv:1134:16: ... Location of port declaration\n 1134 | output         auto_icache_out_a_bits_user_needHint,\n      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n%Warning-PINMISSING: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge_Public_instr_uncache_a.sv:56:22: Cell has missing pin: 'auto_icache_out_a_bits_mask'\n   56 |   REF_FrontendBridge inner_i(\n      |                      ^~~~~~~\n                     /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge.sv:1135:16: ... Location of port declaration\n 1135 | output [31:0]  auto_icache_out_a_bits_mask,\n      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~\n%Warning-PINMISSING: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge_Public_instr_uncache_a.sv:56:22: Cell has missing pin: 'auto_icache_out_a_bits_data'\n   56 |   REF_FrontendBridge inner_i(\n      |                      ^~~~~~~\n                     /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge.sv:1136:16: ... Location of port declaration\n 1136 | output [255:0] auto_icache_out_a_bits_data,\n      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~\n%Warning-PINMISSING: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge_Public_instr_uncache_a.sv:56:22: Cell has missing pin: 'auto_icache_out_a_bits_corrupt'\n   56 |   REF_FrontendBridge inner_i(\n      |                      ^~~~~~~\n                     /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge.sv:1137:16: ... Location of port declaration\n 1137 | output         auto_icache_out_a_bits_corrupt,\n      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n%Warning-PINMISSING: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge_Public_instr_uncache_a.sv:56:22: Cell has missing pin: 'auto_icache_out_d_ready'\n   56 |   REF_FrontendBridge inner_i(\n      |                      ^~~~~~~\n                     /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge.sv:1138:1: ... Location of port declaration\n 1138 | auto_icache_out_d_ready,\n      | ^~~~~~~~~~~~~~~~~~~~~~~\n",
+            "output_sha256": "495a25e4b4ef2de7d08180ce1aaaa0667215708b3c001a43473029ed79f4387d"
+          },
+          "target": {
+            "command": [
+              "verilator",
+              "--lint-only",
+              "-Wno-fatal",
+              "--top-module",
+              "DUT_FrontendBridge_Public_instr_uncache_a",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge.sv",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge_Public_instr_uncache_a.sv"
+            ],
+            "returncode": 0,
+            "status": "PASS",
+            "sat_success_marker": false,
+            "sat_counterexample_marker": false,
+            "unconstrained_marker": false,
+            "equiv_success_markers": {
+              "0 are unproven.": false,
+              "Equivalence successfully proven!": false
+            },
+            "equiv_failure_marker": false,
+            "equiv_cells_full": null,
+            "equiv_summary_full": null,
+            "equiv_failed_full": null,
+            "sat_counts_full": null,
+            "output_tail": "t on the LHS, but LHS's VARREF 'icachectrl_a_q0_count' generates 2 bits.\n                                                                                                                                 : ... note: In instance 'DUT_FrontendBridge_Public_instr_uncache_a.inner_i.icachectrl.a_edge.q0'\n 3704 |   assign \\$10  = ! icachectrl_a_q0_count;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge.sv:2907:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'icache_d_q1_count' generates 2 bits.\n                                                                                                                                 : ... note: In instance 'DUT_FrontendBridge_Public_instr_uncache_a.inner_i.icache.d_edge.q1'\n 2907 |   assign \\$10  = ! icache_d_q1_count;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge.sv:2424:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'icache_d_q0_count' generates 2 bits.\n                                                                                                                                 : ... note: In instance 'DUT_FrontendBridge_Public_instr_uncache_a.inner_i.icache.d_edge.q0'\n 2424 |   assign \\$10  = ! icache_d_q0_count;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge.sv:1651:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'icache_a_q1_count' generates 2 bits.\n                                                                                                                                 : ... note: In instance 'DUT_FrontendBridge_Public_instr_uncache_a.inner_i.icache.a_edge.q1'\n 1651 |   assign \\$10  = ! icache_a_q1_count;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge.sv:1004:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'icache_a_q0_count' generates 2 bits.\n                                                                                                                                 : ... note: In instance 'DUT_FrontendBridge_Public_instr_uncache_a.inner_i.icache.a_edge.q0'\n 1004 |   assign \\$10  = ! icache_a_q0_count;\n      |                  ^\n",
+            "output_sha256": "cd4a6698d4c5e325ca625f28dcb4b863924b9f2a05566c5341656fff4e97aece"
+          }
+        },
+        "yosys_equiv": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge_Public_instr_uncache_a.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge_Public_instr_uncache_a.sv; proc; async2sync; memory; opt; equiv_make REF_FrontendBridge_Public_instr_uncache_a DUT_FrontendBridge_Public_instr_uncache_a FrontendBridge_instr_uncache_a_EQUIV; prep -top FrontendBridge_instr_uncache_a_EQUIV; flatten; opt; equiv_induct -undef; equiv_status -assert"
+          ],
+          "returncode": 1,
+          "status": "FAIL",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": true,
+          "equiv_cells_full": 54,
+          "equiv_summary_full": [
+            0,
+            54
+          ],
+          "equiv_failed_full": 54,
+          "sat_counts_full": null,
+          "output_tail": "eq_1 [27]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$19630: \\inner_i_gold.instr_uncache.nodeOut_a_q_1._ram_ext_R0_data [39] \\inner_i_gate.instr_uncache.a_edge.q1.instr_uncache_a_q1_deq_1 [28]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$19631: \\inner_i_gold.instr_uncache.nodeOut_a_q_1._ram_ext_R0_data [40] \\inner_i_gate.instr_uncache.a_edge.q1.instr_uncache_a_q1_deq_1 [29]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$19632: \\inner_i_gold.instr_uncache.nodeOut_a_q_1._ram_ext_R0_data [41] \\inner_i_gate.instr_uncache.a_edge.q1.instr_uncache_a_q1_deq_1 [30]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$19633: \\inner_i_gold.instr_uncache.nodeOut_a_q_1._ram_ext_R0_data [42] \\inner_i_gate.instr_uncache.a_edge.q1.instr_uncache_a_q1_deq_1 [31]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$19634: \\inner_i_gold.instr_uncache.nodeOut_a_q_1._ram_ext_R0_data [43] \\inner_i_gate.instr_uncache.a_edge.q1.instr_uncache_a_q1_deq_1 [32]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$19635: \\inner_i_gold.instr_uncache.nodeOut_a_q_1._ram_ext_R0_data [44] \\inner_i_gate.instr_uncache.a_edge.q1.instr_uncache_a_q1_deq_1 [33]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$19636: \\inner_i_gold.instr_uncache.nodeOut_a_q_1._ram_ext_R0_data [45] \\inner_i_gate.instr_uncache.a_edge.q1.instr_uncache_a_q1_deq_1 [34]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$19637: \\inner_i_gold.instr_uncache.nodeOut_a_q_1._ram_ext_R0_data [46] \\inner_i_gate.instr_uncache.a_edge.q1.instr_uncache_a_q1_deq_1 [35]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$19638: \\inner_i_gold.instr_uncache.nodeOut_a_q_1._ram_ext_R0_data [47] \\inner_i_gate.instr_uncache.a_edge.q1.instr_uncache_a_q1_deq_1 [36]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$19639: \\inner_i_gold.instr_uncache.nodeOut_a_q_1._ram_ext_R0_data [48] \\inner_i_gate.instr_uncache.a_edge.q1.instr_uncache_a_q1_deq_1 [37]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$19640: \\inner_i_gold.instr_uncache.nodeOut_a_q_1._ram_ext_R0_data [49] \\inner_i_gate.instr_uncache.a_edge.q1.instr_uncache_a_q1_deq_1 [38]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$19641: \\inner_i_gold.instr_uncache.nodeOut_a_q_1._ram_ext_R0_data [50] \\inner_i_gate.instr_uncache.a_edge.q1.instr_uncache_a_q1_deq_1 [39]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$196ERROR: Found 54 unproven $equiv cells in 'equiv_status -assert'.\n",
+          "output_sha256": "8b1ee6ceaf2b2d50be386ca31acfb5013f36976b7750ab5ba6ac2d9f585c3800",
+          "formal_success_marker": false,
+          "equiv_cells": 54,
+          "proven_cells": 0,
+          "unproven_cells": 54,
+          "expected_public_output_bits": 54,
+          "output_only_obligations": true,
+          "script_sha256": "730bd088c5f7f387923758c849f4a955cfac5b51c37a251a72ddc263eff0d6b8"
+        },
+        "status": "STRICT_PENDING"
+      },
+      {
+        "partition": "instr_uncache_d",
+        "outputs": {
+          "auto_instr_uncache_in_d_valid": 1,
+          "auto_instr_uncache_in_d_bits_source": 1,
+          "auto_instr_uncache_in_d_bits_data": 64,
+          "auto_instr_uncache_in_d_bits_corrupt": 1,
+          "auto_instr_uncache_out_d_ready": 1
+        },
+        "output_bits": 68,
+        "static_wrappers": {
+          "reference": {
+            "status": "PASS",
+            "wrapper": "REF_FrontendBridge_Public_instr_uncache_d",
+            "input_count": 43,
+            "selected_output_count": 5,
+            "selected_output_bits": 68,
+            "declared_abi_exact": true,
+            "all_inputs_connected": true,
+            "selected_outputs_connected": true,
+            "unselected_outputs_unconnected": true,
+            "direct_output_assignments": true,
+            "sha256": "e1238f6956c0199325f0d32680c58cd13445c7c2308e51bd33d9843e24914132",
+            "bytes": 5918
+          },
+          "target": {
+            "status": "PASS",
+            "wrapper": "DUT_FrontendBridge_Public_instr_uncache_d",
+            "input_count": 43,
+            "selected_output_count": 5,
+            "selected_output_bits": 68,
+            "declared_abi_exact": true,
+            "all_inputs_connected": true,
+            "selected_outputs_connected": true,
+            "unselected_outputs_unconnected": true,
+            "direct_output_assignments": true,
+            "sha256": "91859da9265082aacb9894b0b111fff17be78de8208a6fe1fb552a322c822414",
+            "bytes": 5918
+          }
+        },
+        "verilator": {
+          "reference": {
+            "command": [
+              "verilator",
+              "--lint-only",
+              "-Wno-fatal",
+              "--top-module",
+              "REF_FrontendBridge_Public_instr_uncache_d",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge.sv",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge_Public_instr_uncache_d.sv"
+            ],
+            "returncode": 0,
+            "status": "PASS",
+            "sat_success_marker": false,
+            "sat_counterexample_marker": false,
+            "unconstrained_marker": false,
+            "equiv_success_markers": {
+              "0 are unproven.": false,
+              "Equivalence successfully proven!": false
+            },
+            "equiv_failure_marker": false,
+            "equiv_cells_full": null,
+            "equiv_summary_full": null,
+            "equiv_failed_full": null,
+            "sat_counts_full": null,
+            "output_tail": "REF_FrontendBridge inner_i(\n      |                      ^~~~~~~\n                     /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge.sv:1134:16: ... Location of port declaration\n 1134 | output         auto_icache_out_a_bits_user_needHint,\n      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n%Warning-PINMISSING: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge_Public_instr_uncache_d.sv:56:22: Cell has missing pin: 'auto_icache_out_a_bits_mask'\n   56 |   REF_FrontendBridge inner_i(\n      |                      ^~~~~~~\n                     /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge.sv:1135:16: ... Location of port declaration\n 1135 | output [31:0]  auto_icache_out_a_bits_mask,\n      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~\n%Warning-PINMISSING: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge_Public_instr_uncache_d.sv:56:22: Cell has missing pin: 'auto_icache_out_a_bits_data'\n   56 |   REF_FrontendBridge inner_i(\n      |                      ^~~~~~~\n                     /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge.sv:1136:16: ... Location of port declaration\n 1136 | output [255:0] auto_icache_out_a_bits_data,\n      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~\n%Warning-PINMISSING: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge_Public_instr_uncache_d.sv:56:22: Cell has missing pin: 'auto_icache_out_a_bits_corrupt'\n   56 |   REF_FrontendBridge inner_i(\n      |                      ^~~~~~~\n                     /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge.sv:1137:16: ... Location of port declaration\n 1137 | output         auto_icache_out_a_bits_corrupt,\n      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n%Warning-PINMISSING: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge_Public_instr_uncache_d.sv:56:22: Cell has missing pin: 'auto_icache_out_d_ready'\n   56 |   REF_FrontendBridge inner_i(\n      |                      ^~~~~~~\n                     /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge.sv:1138:1: ... Location of port declaration\n 1138 | auto_icache_out_d_ready,\n      | ^~~~~~~~~~~~~~~~~~~~~~~\n",
+            "output_sha256": "889beadf50533930a30465611ebb4bca49e6b14054f834dbbd0f10c78d074943"
+          },
+          "target": {
+            "command": [
+              "verilator",
+              "--lint-only",
+              "-Wno-fatal",
+              "--top-module",
+              "DUT_FrontendBridge_Public_instr_uncache_d",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge.sv",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge_Public_instr_uncache_d.sv"
+            ],
+            "returncode": 0,
+            "status": "PASS",
+            "sat_success_marker": false,
+            "sat_counterexample_marker": false,
+            "unconstrained_marker": false,
+            "equiv_success_markers": {
+              "0 are unproven.": false,
+              "Equivalence successfully proven!": false
+            },
+            "equiv_failure_marker": false,
+            "equiv_cells_full": null,
+            "equiv_summary_full": null,
+            "equiv_failed_full": null,
+            "sat_counts_full": null,
+            "output_tail": "t on the LHS, but LHS's VARREF 'icachectrl_a_q0_count' generates 2 bits.\n                                                                                                                                 : ... note: In instance 'DUT_FrontendBridge_Public_instr_uncache_d.inner_i.icachectrl.a_edge.q0'\n 3704 |   assign \\$10  = ! icachectrl_a_q0_count;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge.sv:2907:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'icache_d_q1_count' generates 2 bits.\n                                                                                                                                 : ... note: In instance 'DUT_FrontendBridge_Public_instr_uncache_d.inner_i.icache.d_edge.q1'\n 2907 |   assign \\$10  = ! icache_d_q1_count;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge.sv:2424:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'icache_d_q0_count' generates 2 bits.\n                                                                                                                                 : ... note: In instance 'DUT_FrontendBridge_Public_instr_uncache_d.inner_i.icache.d_edge.q0'\n 2424 |   assign \\$10  = ! icache_d_q0_count;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge.sv:1651:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'icache_a_q1_count' generates 2 bits.\n                                                                                                                                 : ... note: In instance 'DUT_FrontendBridge_Public_instr_uncache_d.inner_i.icache.a_edge.q1'\n 1651 |   assign \\$10  = ! icache_a_q1_count;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge.sv:1004:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'icache_a_q0_count' generates 2 bits.\n                                                                                                                                 : ... note: In instance 'DUT_FrontendBridge_Public_instr_uncache_d.inner_i.icache.a_edge.q0'\n 1004 |   assign \\$10  = ! icache_a_q0_count;\n      |                  ^\n",
+            "output_sha256": "afafa2f61b983637a0b54032163512fcac69bc9662b32c89e53a4cd3540d764f"
+          }
+        },
+        "yosys_equiv": {
+          "status": "NOT_RUN",
+          "expected_public_output_bits": 68,
+          "output_only_obligations": null,
+          "note": "static wrappers were generated before optional WSL formal"
+        },
+        "status": "STRICT_PENDING"
+      },
+      {
+        "partition": "icachectrl_a",
+        "outputs": {
+          "auto_icachectrl_in_a_ready": 1,
+          "auto_icachectrl_out_a_valid": 1,
+          "auto_icachectrl_out_a_bits_opcode": 4,
+          "auto_icachectrl_out_a_bits_size": 2,
+          "auto_icachectrl_out_a_bits_source": 5,
+          "auto_icachectrl_out_a_bits_address": 30,
+          "auto_icachectrl_out_a_bits_mask": 8,
+          "auto_icachectrl_out_a_bits_data": 64
+        },
+        "output_bits": 115,
+        "static_wrappers": {
+          "reference": {
+            "status": "PASS",
+            "wrapper": "REF_FrontendBridge_Public_icachectrl_a",
+            "input_count": 43,
+            "selected_output_count": 8,
+            "selected_output_bits": 115,
+            "declared_abi_exact": true,
+            "all_inputs_connected": true,
+            "selected_outputs_connected": true,
+            "unselected_outputs_unconnected": true,
+            "direct_output_assignments": true,
+            "sha256": "66400f63c120580f5e3710e7bb52e068084b463fb41eec0a2e1c71060721813a",
+            "bytes": 6637
+          },
+          "target": {
+            "status": "PASS",
+            "wrapper": "DUT_FrontendBridge_Public_icachectrl_a",
+            "input_count": 43,
+            "selected_output_count": 8,
+            "selected_output_bits": 115,
+            "declared_abi_exact": true,
+            "all_inputs_connected": true,
+            "selected_outputs_connected": true,
+            "unselected_outputs_unconnected": true,
+            "direct_output_assignments": true,
+            "sha256": "5ff026172196c3ae6dabd75b838e0d8e43dab81eb2b1a95ab2476ca5644b5e50",
+            "bytes": 6637
+          }
+        },
+        "verilator": {
+          "reference": {
+            "command": [
+              "verilator",
+              "--lint-only",
+              "-Wno-fatal",
+              "--top-module",
+              "REF_FrontendBridge_Public_icachectrl_a",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge.sv",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge_Public_icachectrl_a.sv"
+            ],
+            "returncode": 0,
+            "status": "PASS",
+            "sat_success_marker": false,
+            "sat_counterexample_marker": false,
+            "unconstrained_marker": false,
+            "equiv_success_markers": {
+              "0 are unproven.": false,
+              "Equivalence successfully proven!": false
+            },
+            "equiv_failure_marker": false,
+            "equiv_cells_full": null,
+            "equiv_summary_full": null,
+            "equiv_failed_full": null,
+            "sat_counts_full": null,
+            "output_tail": "'\n   62 |   REF_FrontendBridge inner_i(\n      |                      ^~~~~~~\n                     /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge.sv:1134:16: ... Location of port declaration\n 1134 | output         auto_icache_out_a_bits_user_needHint,\n      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n%Warning-PINMISSING: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge_Public_icachectrl_a.sv:62:22: Cell has missing pin: 'auto_icache_out_a_bits_mask'\n   62 |   REF_FrontendBridge inner_i(\n      |                      ^~~~~~~\n                     /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge.sv:1135:16: ... Location of port declaration\n 1135 | output [31:0]  auto_icache_out_a_bits_mask,\n      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~\n%Warning-PINMISSING: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge_Public_icachectrl_a.sv:62:22: Cell has missing pin: 'auto_icache_out_a_bits_data'\n   62 |   REF_FrontendBridge inner_i(\n      |                      ^~~~~~~\n                     /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge.sv:1136:16: ... Location of port declaration\n 1136 | output [255:0] auto_icache_out_a_bits_data,\n      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~\n%Warning-PINMISSING: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge_Public_icachectrl_a.sv:62:22: Cell has missing pin: 'auto_icache_out_a_bits_corrupt'\n   62 |   REF_FrontendBridge inner_i(\n      |                      ^~~~~~~\n                     /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge.sv:1137:16: ... Location of port declaration\n 1137 | output         auto_icache_out_a_bits_corrupt,\n      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n%Warning-PINMISSING: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge_Public_icachectrl_a.sv:62:22: Cell has missing pin: 'auto_icache_out_d_ready'\n   62 |   REF_FrontendBridge inner_i(\n      |                      ^~~~~~~\n                     /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge.sv:1138:1: ... Location of port declaration\n 1138 | auto_icache_out_d_ready,\n      | ^~~~~~~~~~~~~~~~~~~~~~~\n",
+            "output_sha256": "9ba871f4148d48b0e246a73607ab912718827104d69d75becc052f712f16cd73"
+          },
+          "target": {
+            "command": [
+              "verilator",
+              "--lint-only",
+              "-Wno-fatal",
+              "--top-module",
+              "DUT_FrontendBridge_Public_icachectrl_a",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge.sv",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge_Public_icachectrl_a.sv"
+            ],
+            "returncode": 0,
+            "status": "PASS",
+            "sat_success_marker": false,
+            "sat_counterexample_marker": false,
+            "unconstrained_marker": false,
+            "equiv_success_markers": {
+              "0 are unproven.": false,
+              "Equivalence successfully proven!": false
+            },
+            "equiv_failure_marker": false,
+            "equiv_cells_full": null,
+            "equiv_summary_full": null,
+            "equiv_failed_full": null,
+            "sat_counts_full": null,
+            "output_tail": "OT expects 1 bit on the LHS, but LHS's VARREF 'icachectrl_a_q0_count' generates 2 bits.\n                                                                                                                                 : ... note: In instance 'DUT_FrontendBridge_Public_icachectrl_a.inner_i.icachectrl.a_edge.q0'\n 3704 |   assign \\$10  = ! icachectrl_a_q0_count;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge.sv:2907:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'icache_d_q1_count' generates 2 bits.\n                                                                                                                                 : ... note: In instance 'DUT_FrontendBridge_Public_icachectrl_a.inner_i.icache.d_edge.q1'\n 2907 |   assign \\$10  = ! icache_d_q1_count;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge.sv:2424:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'icache_d_q0_count' generates 2 bits.\n                                                                                                                                 : ... note: In instance 'DUT_FrontendBridge_Public_icachectrl_a.inner_i.icache.d_edge.q0'\n 2424 |   assign \\$10  = ! icache_d_q0_count;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge.sv:1651:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'icache_a_q1_count' generates 2 bits.\n                                                                                                                                 : ... note: In instance 'DUT_FrontendBridge_Public_icachectrl_a.inner_i.icache.a_edge.q1'\n 1651 |   assign \\$10  = ! icache_a_q1_count;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge.sv:1004:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'icache_a_q0_count' generates 2 bits.\n                                                                                                                                 : ... note: In instance 'DUT_FrontendBridge_Public_icachectrl_a.inner_i.icache.a_edge.q0'\n 1004 |   assign \\$10  = ! icache_a_q0_count;\n      |                  ^\n",
+            "output_sha256": "94cd0f8942fb00473f05e89ea160e66dca1456e3560760fab0a5080a7761a465"
+          }
+        },
+        "yosys_equiv": {
+          "status": "NOT_RUN",
+          "expected_public_output_bits": 115,
+          "output_only_obligations": null,
+          "note": "static wrappers were generated before optional WSL formal"
+        },
+        "status": "STRICT_PENDING"
+      },
+      {
+        "partition": "icachectrl_d",
+        "outputs": {
+          "auto_icachectrl_in_d_valid": 1,
+          "auto_icachectrl_in_d_bits_opcode": 4,
+          "auto_icachectrl_in_d_bits_param": 2,
+          "auto_icachectrl_in_d_bits_size": 2,
+          "auto_icachectrl_in_d_bits_source": 5,
+          "auto_icachectrl_in_d_bits_sink": 1,
+          "auto_icachectrl_in_d_bits_denied": 1,
+          "auto_icachectrl_in_d_bits_data": 64,
+          "auto_icachectrl_in_d_bits_corrupt": 1,
+          "auto_icachectrl_out_d_ready": 1
+        },
+        "output_bits": 82,
+        "static_wrappers": {
+          "reference": {
+            "status": "PASS",
+            "wrapper": "REF_FrontendBridge_Public_icachectrl_d",
+            "input_count": 43,
+            "selected_output_count": 10,
+            "selected_output_bits": 82,
+            "declared_abi_exact": true,
+            "all_inputs_connected": true,
+            "selected_outputs_connected": true,
+            "unselected_outputs_unconnected": true,
+            "direct_output_assignments": true,
+            "sha256": "f25aa6bd904ac9243bcee01f25146c057ee9259cd4ddb571bfd6b01d6d3c59bc",
+            "bytes": 7073
+          },
+          "target": {
+            "status": "PASS",
+            "wrapper": "DUT_FrontendBridge_Public_icachectrl_d",
+            "input_count": 43,
+            "selected_output_count": 10,
+            "selected_output_bits": 82,
+            "declared_abi_exact": true,
+            "all_inputs_connected": true,
+            "selected_outputs_connected": true,
+            "unselected_outputs_unconnected": true,
+            "direct_output_assignments": true,
+            "sha256": "cc044b0ef60f27eca910a6e845b5e0454730b7f89a9b006fb28a79546d47206b",
+            "bytes": 7073
+          }
+        },
+        "verilator": {
+          "reference": {
+            "command": [
+              "verilator",
+              "--lint-only",
+              "-Wno-fatal",
+              "--top-module",
+              "REF_FrontendBridge_Public_icachectrl_d",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge.sv",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge_Public_icachectrl_d.sv"
+            ],
+            "returncode": 0,
+            "status": "PASS",
+            "sat_success_marker": false,
+            "sat_counterexample_marker": false,
+            "unconstrained_marker": false,
+            "equiv_success_markers": {
+              "0 are unproven.": false,
+              "Equivalence successfully proven!": false
+            },
+            "equiv_failure_marker": false,
+            "equiv_cells_full": null,
+            "equiv_summary_full": null,
+            "equiv_failed_full": null,
+            "sat_counts_full": null,
+            "output_tail": "'\n   66 |   REF_FrontendBridge inner_i(\n      |                      ^~~~~~~\n                     /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge.sv:1134:16: ... Location of port declaration\n 1134 | output         auto_icache_out_a_bits_user_needHint,\n      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n%Warning-PINMISSING: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge_Public_icachectrl_d.sv:66:22: Cell has missing pin: 'auto_icache_out_a_bits_mask'\n   66 |   REF_FrontendBridge inner_i(\n      |                      ^~~~~~~\n                     /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge.sv:1135:16: ... Location of port declaration\n 1135 | output [31:0]  auto_icache_out_a_bits_mask,\n      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~\n%Warning-PINMISSING: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge_Public_icachectrl_d.sv:66:22: Cell has missing pin: 'auto_icache_out_a_bits_data'\n   66 |   REF_FrontendBridge inner_i(\n      |                      ^~~~~~~\n                     /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge.sv:1136:16: ... Location of port declaration\n 1136 | output [255:0] auto_icache_out_a_bits_data,\n      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~\n%Warning-PINMISSING: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge_Public_icachectrl_d.sv:66:22: Cell has missing pin: 'auto_icache_out_a_bits_corrupt'\n   66 |   REF_FrontendBridge inner_i(\n      |                      ^~~~~~~\n                     /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge.sv:1137:16: ... Location of port declaration\n 1137 | output         auto_icache_out_a_bits_corrupt,\n      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n%Warning-PINMISSING: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge_Public_icachectrl_d.sv:66:22: Cell has missing pin: 'auto_icache_out_d_ready'\n   66 |   REF_FrontendBridge inner_i(\n      |                      ^~~~~~~\n                     /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge.sv:1138:1: ... Location of port declaration\n 1138 | auto_icache_out_d_ready,\n      | ^~~~~~~~~~~~~~~~~~~~~~~\n",
+            "output_sha256": "4919efaefd29592964042345c002326373c93d3f923506fe8676f89ed54498bc"
+          },
+          "target": {
+            "command": [
+              "verilator",
+              "--lint-only",
+              "-Wno-fatal",
+              "--top-module",
+              "DUT_FrontendBridge_Public_icachectrl_d",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge.sv",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge_Public_icachectrl_d.sv"
+            ],
+            "returncode": 0,
+            "status": "PASS",
+            "sat_success_marker": false,
+            "sat_counterexample_marker": false,
+            "unconstrained_marker": false,
+            "equiv_success_markers": {
+              "0 are unproven.": false,
+              "Equivalence successfully proven!": false
+            },
+            "equiv_failure_marker": false,
+            "equiv_cells_full": null,
+            "equiv_summary_full": null,
+            "equiv_failed_full": null,
+            "sat_counts_full": null,
+            "output_tail": "OT expects 1 bit on the LHS, but LHS's VARREF 'icachectrl_a_q0_count' generates 2 bits.\n                                                                                                                                 : ... note: In instance 'DUT_FrontendBridge_Public_icachectrl_d.inner_i.icachectrl.a_edge.q0'\n 3704 |   assign \\$10  = ! icachectrl_a_q0_count;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge.sv:2907:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'icache_d_q1_count' generates 2 bits.\n                                                                                                                                 : ... note: In instance 'DUT_FrontendBridge_Public_icachectrl_d.inner_i.icache.d_edge.q1'\n 2907 |   assign \\$10  = ! icache_d_q1_count;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge.sv:2424:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'icache_d_q0_count' generates 2 bits.\n                                                                                                                                 : ... note: In instance 'DUT_FrontendBridge_Public_icachectrl_d.inner_i.icache.d_edge.q0'\n 2424 |   assign \\$10  = ! icache_d_q0_count;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge.sv:1651:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'icache_a_q1_count' generates 2 bits.\n                                                                                                                                 : ... note: In instance 'DUT_FrontendBridge_Public_icachectrl_d.inner_i.icache.a_edge.q1'\n 1651 |   assign \\$10  = ! icache_a_q1_count;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge.sv:1004:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'icache_a_q0_count' generates 2 bits.\n                                                                                                                                 : ... note: In instance 'DUT_FrontendBridge_Public_icachectrl_d.inner_i.icache.a_edge.q0'\n 1004 |   assign \\$10  = ! icache_a_q0_count;\n      |                  ^\n",
+            "output_sha256": "d1b3033bc32449b022805150959fe43688b4fe73a9cd756059786266039f89ac"
+          }
+        },
+        "yosys_equiv": {
+          "status": "NOT_RUN",
+          "expected_public_output_bits": 82,
+          "output_only_obligations": null,
+          "note": "static wrappers were generated before optional WSL formal"
+        },
+        "status": "STRICT_PENDING"
+      },
+      {
+        "partition": "icache_a",
+        "outputs": {
+          "auto_icache_in_a_ready": 1,
+          "auto_icache_out_a_valid": 1,
+          "auto_icache_out_a_bits_opcode": 4,
+          "auto_icache_out_a_bits_param": 3,
+          "auto_icache_out_a_bits_size": 3,
+          "auto_icache_out_a_bits_source": 4,
+          "auto_icache_out_a_bits_address": 48,
+          "auto_icache_out_a_bits_user_alias": 2,
+          "auto_icache_out_a_bits_user_reqSource": 5,
+          "auto_icache_out_a_bits_user_needHint": 1,
+          "auto_icache_out_a_bits_mask": 32,
+          "auto_icache_out_a_bits_data": 256,
+          "auto_icache_out_a_bits_corrupt": 1
+        },
+        "output_bits": 361,
+        "static_wrappers": {
+          "reference": {
+            "status": "PASS",
+            "wrapper": "REF_FrontendBridge_Public_icache_a",
+            "input_count": 43,
+            "selected_output_count": 13,
+            "selected_output_bits": 361,
+            "declared_abi_exact": true,
+            "all_inputs_connected": true,
+            "selected_outputs_connected": true,
+            "unselected_outputs_unconnected": true,
+            "direct_output_assignments": true,
+            "sha256": "87716d14ce38b5736b398ae972307372889845ed2035ae04c6051d0be06307d8",
+            "bytes": 7735
+          },
+          "target": {
+            "status": "PASS",
+            "wrapper": "DUT_FrontendBridge_Public_icache_a",
+            "input_count": 43,
+            "selected_output_count": 13,
+            "selected_output_bits": 361,
+            "declared_abi_exact": true,
+            "all_inputs_connected": true,
+            "selected_outputs_connected": true,
+            "unselected_outputs_unconnected": true,
+            "direct_output_assignments": true,
+            "sha256": "527456551d28901c2d1c488732c5b51e4e4075d6d4f8fb26b024080e3a1fa2af",
+            "bytes": 7735
+          }
+        },
+        "verilator": {
+          "reference": {
+            "command": [
+              "verilator",
+              "--lint-only",
+              "-Wno-fatal",
+              "--top-module",
+              "REF_FrontendBridge_Public_icache_a",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge.sv",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge_Public_icache_a.sv"
+            ],
+            "returncode": 0,
+            "status": "PASS",
+            "sat_success_marker": false,
+            "sat_counterexample_marker": false,
+            "unconstrained_marker": false,
+            "equiv_success_markers": {
+              "0 are unproven.": false,
+              "Equivalence successfully proven!": false
+            },
+            "equiv_failure_marker": false,
+            "equiv_cells_full": null,
+            "equiv_summary_full": null,
+            "equiv_failed_full": null,
+            "sat_counts_full": null,
+            "output_tail": "issing pin: 'auto_icache_in_d_bits_size'\n   72 |   REF_FrontendBridge inner_i(\n      |                      ^~~~~~~\n                     /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge.sv:1121:16: ... Location of port declaration\n 1121 | output [2:0]   auto_icache_in_d_bits_size,\n      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~\n%Warning-PINMISSING: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge_Public_icache_a.sv:72:22: Cell has missing pin: 'auto_icache_in_d_bits_source'\n   72 |   REF_FrontendBridge inner_i(\n      |                      ^~~~~~~\n                     /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge.sv:1122:16: ... Location of port declaration\n 1122 | output [3:0]   auto_icache_in_d_bits_source,\n      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~\n%Warning-PINMISSING: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge_Public_icache_a.sv:72:22: Cell has missing pin: 'auto_icache_in_d_bits_data'\n   72 |   REF_FrontendBridge inner_i(\n      |                      ^~~~~~~\n                     /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge.sv:1123:16: ... Location of port declaration\n 1123 | output [255:0] auto_icache_in_d_bits_data,\n      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~\n%Warning-PINMISSING: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge_Public_icache_a.sv:72:22: Cell has missing pin: 'auto_icache_in_d_bits_corrupt'\n   72 |   REF_FrontendBridge inner_i(\n      |                      ^~~~~~~\n                     /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge.sv:1124:16: ... Location of port declaration\n 1124 | output         auto_icache_in_d_bits_corrupt,\n      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n%Warning-PINMISSING: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge_Public_icache_a.sv:72:22: Cell has missing pin: 'auto_icache_out_d_ready'\n   72 |   REF_FrontendBridge inner_i(\n      |                      ^~~~~~~\n                     /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge.sv:1138:1: ... Location of port declaration\n 1138 | auto_icache_out_d_ready,\n      | ^~~~~~~~~~~~~~~~~~~~~~~\n",
+            "output_sha256": "d77bf843113d4bb6821ecc73060359a889087c30c6aafdf8cdfb216b6ee6734c"
+          },
+          "target": {
+            "command": [
+              "verilator",
+              "--lint-only",
+              "-Wno-fatal",
+              "--top-module",
+              "DUT_FrontendBridge_Public_icache_a",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge.sv",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge_Public_icache_a.sv"
+            ],
+            "returncode": 0,
+            "status": "PASS",
+            "sat_success_marker": false,
+            "sat_counterexample_marker": false,
+            "unconstrained_marker": false,
+            "equiv_success_markers": {
+              "0 are unproven.": false,
+              "Equivalence successfully proven!": false
+            },
+            "equiv_failure_marker": false,
+            "equiv_cells_full": null,
+            "equiv_summary_full": null,
+            "equiv_failed_full": null,
+            "sat_counts_full": null,
+            "output_tail": "ogical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'icachectrl_a_q0_count' generates 2 bits.\n                                                                                                                                 : ... note: In instance 'DUT_FrontendBridge_Public_icache_a.inner_i.icachectrl.a_edge.q0'\n 3704 |   assign \\$10  = ! icachectrl_a_q0_count;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge.sv:2907:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'icache_d_q1_count' generates 2 bits.\n                                                                                                                                 : ... note: In instance 'DUT_FrontendBridge_Public_icache_a.inner_i.icache.d_edge.q1'\n 2907 |   assign \\$10  = ! icache_d_q1_count;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge.sv:2424:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'icache_d_q0_count' generates 2 bits.\n                                                                                                                                 : ... note: In instance 'DUT_FrontendBridge_Public_icache_a.inner_i.icache.d_edge.q0'\n 2424 |   assign \\$10  = ! icache_d_q0_count;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge.sv:1651:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'icache_a_q1_count' generates 2 bits.\n                                                                                                                                 : ... note: In instance 'DUT_FrontendBridge_Public_icache_a.inner_i.icache.a_edge.q1'\n 1651 |   assign \\$10  = ! icache_a_q1_count;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge.sv:1004:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'icache_a_q0_count' generates 2 bits.\n                                                                                                                                 : ... note: In instance 'DUT_FrontendBridge_Public_icache_a.inner_i.icache.a_edge.q0'\n 1004 |   assign \\$10  = ! icache_a_q0_count;\n      |                  ^\n",
+            "output_sha256": "1bd462f32211f6b4b5b3645d4aa679f58697cbd64cc1388dc75e50fa63512d32"
+          }
+        },
+        "yosys_equiv": {
+          "status": "NOT_RUN",
+          "expected_public_output_bits": 361,
+          "output_only_obligations": null,
+          "note": "static wrappers were generated before optional WSL formal"
+        },
+        "status": "STRICT_PENDING"
+      },
+      {
+        "partition": "icache_d",
+        "outputs": {
+          "auto_icache_in_d_valid": 1,
+          "auto_icache_in_d_bits_opcode": 4,
+          "auto_icache_in_d_bits_size": 3,
+          "auto_icache_in_d_bits_source": 4,
+          "auto_icache_in_d_bits_data": 256,
+          "auto_icache_in_d_bits_corrupt": 1,
+          "auto_icache_out_d_ready": 1
+        },
+        "output_bits": 270,
+        "static_wrappers": {
+          "reference": {
+            "status": "PASS",
+            "wrapper": "REF_FrontendBridge_Public_icache_d",
+            "input_count": 43,
+            "selected_output_count": 7,
+            "selected_output_bits": 270,
+            "declared_abi_exact": true,
+            "all_inputs_connected": true,
+            "selected_outputs_connected": true,
+            "unselected_outputs_unconnected": true,
+            "direct_output_assignments": true,
+            "sha256": "d6066d1b4c2e8f9fb49bc3d92f63b5e974324061d84f4a2cb1464afd738addf9",
+            "bytes": 6171
+          },
+          "target": {
+            "status": "PASS",
+            "wrapper": "DUT_FrontendBridge_Public_icache_d",
+            "input_count": 43,
+            "selected_output_count": 7,
+            "selected_output_bits": 270,
+            "declared_abi_exact": true,
+            "all_inputs_connected": true,
+            "selected_outputs_connected": true,
+            "unselected_outputs_unconnected": true,
+            "direct_output_assignments": true,
+            "sha256": "1b41081b3e406dd26d43833daa58d3aa000ee108727b11db9d28006a3f067f53",
+            "bytes": 6171
+          }
+        },
+        "verilator": {
+          "reference": {
+            "command": [
+              "verilator",
+              "--lint-only",
+              "-Wno-fatal",
+              "--top-module",
+              "REF_FrontendBridge_Public_icache_d",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge.sv",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge_Public_icache_d.sv"
+            ],
+            "returncode": 0,
+            "status": "PASS",
+            "sat_success_marker": false,
+            "sat_counterexample_marker": false,
+            "unconstrained_marker": false,
+            "equiv_success_markers": {
+              "0 are unproven.": false,
+              "Equivalence successfully proven!": false
+            },
+            "equiv_failure_marker": false,
+            "equiv_cells_full": null,
+            "equiv_summary_full": null,
+            "equiv_failed_full": null,
+            "sat_counts_full": null,
+            "output_tail": "             ^~~~~~~\n                     /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge.sv:1133:16: ... Location of port declaration\n 1133 | output [4:0]   auto_icache_out_a_bits_user_reqSource,\n      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n%Warning-PINMISSING: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge_Public_icache_d.sv:60:22: Cell has missing pin: 'auto_icache_out_a_bits_user_needHint'\n   60 |   REF_FrontendBridge inner_i(\n      |                      ^~~~~~~\n                     /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge.sv:1134:16: ... Location of port declaration\n 1134 | output         auto_icache_out_a_bits_user_needHint,\n      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n%Warning-PINMISSING: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge_Public_icache_d.sv:60:22: Cell has missing pin: 'auto_icache_out_a_bits_mask'\n   60 |   REF_FrontendBridge inner_i(\n      |                      ^~~~~~~\n                     /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge.sv:1135:16: ... Location of port declaration\n 1135 | output [31:0]  auto_icache_out_a_bits_mask,\n      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~\n%Warning-PINMISSING: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge_Public_icache_d.sv:60:22: Cell has missing pin: 'auto_icache_out_a_bits_data'\n   60 |   REF_FrontendBridge inner_i(\n      |                      ^~~~~~~\n                     /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge.sv:1136:16: ... Location of port declaration\n 1136 | output [255:0] auto_icache_out_a_bits_data,\n      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~\n%Warning-PINMISSING: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge_Public_icache_d.sv:60:22: Cell has missing pin: 'auto_icache_out_a_bits_corrupt'\n   60 |   REF_FrontendBridge inner_i(\n      |                      ^~~~~~~\n                     /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge.sv:1137:16: ... Location of port declaration\n 1137 | output         auto_icache_out_a_bits_corrupt,\n      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n",
+            "output_sha256": "8cecfcea7dd12940f3f25b4290ed4624f4db08700af75bb9c4d464ca5e7545f2"
+          },
+          "target": {
+            "command": [
+              "verilator",
+              "--lint-only",
+              "-Wno-fatal",
+              "--top-module",
+              "DUT_FrontendBridge_Public_icache_d",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge.sv",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge_Public_icache_d.sv"
+            ],
+            "returncode": 0,
+            "status": "PASS",
+            "sat_success_marker": false,
+            "sat_counterexample_marker": false,
+            "unconstrained_marker": false,
+            "equiv_success_markers": {
+              "0 are unproven.": false,
+              "Equivalence successfully proven!": false
+            },
+            "equiv_failure_marker": false,
+            "equiv_cells_full": null,
+            "equiv_summary_full": null,
+            "equiv_failed_full": null,
+            "sat_counts_full": null,
+            "output_tail": "ogical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'icachectrl_a_q0_count' generates 2 bits.\n                                                                                                                                 : ... note: In instance 'DUT_FrontendBridge_Public_icache_d.inner_i.icachectrl.a_edge.q0'\n 3704 |   assign \\$10  = ! icachectrl_a_q0_count;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge.sv:2907:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'icache_d_q1_count' generates 2 bits.\n                                                                                                                                 : ... note: In instance 'DUT_FrontendBridge_Public_icache_d.inner_i.icache.d_edge.q1'\n 2907 |   assign \\$10  = ! icache_d_q1_count;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge.sv:2424:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'icache_d_q0_count' generates 2 bits.\n                                                                                                                                 : ... note: In instance 'DUT_FrontendBridge_Public_icache_d.inner_i.icache.d_edge.q0'\n 2424 |   assign \\$10  = ! icache_d_q0_count;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge.sv:1651:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'icache_a_q1_count' generates 2 bits.\n                                                                                                                                 : ... note: In instance 'DUT_FrontendBridge_Public_icache_d.inner_i.icache.a_edge.q1'\n 1651 |   assign \\$10  = ! icache_a_q1_count;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge.sv:1004:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'icache_a_q0_count' generates 2 bits.\n                                                                                                                                 : ... note: In instance 'DUT_FrontendBridge_Public_icache_d.inner_i.icache.a_edge.q0'\n 1004 |   assign \\$10  = ! icache_a_q0_count;\n      |                  ^\n",
+            "output_sha256": "fbdbae7123b8698fe404615efcd8d82e1b6bea413509569e3a3bf767a837deaf"
+          }
+        },
+        "yosys_equiv": {
+          "status": "NOT_RUN",
+          "expected_public_output_bits": 270,
+          "output_only_obligations": null,
+          "note": "static wrappers were generated before optional WSL formal"
+        },
+        "status": "STRICT_PENDING"
+      }
+    ],
+    "full_public_output_proof": {
+      "partition": "full_public_outputs",
+      "outputs": {
+        "auto_instr_uncache_in_a_ready": 1,
+        "auto_instr_uncache_in_d_valid": 1,
+        "auto_instr_uncache_in_d_bits_source": 1,
+        "auto_instr_uncache_in_d_bits_data": 64,
+        "auto_instr_uncache_in_d_bits_corrupt": 1,
+        "auto_instr_uncache_out_a_valid": 1,
+        "auto_instr_uncache_out_a_bits_param": 3,
+        "auto_instr_uncache_out_a_bits_address": 48,
+        "auto_instr_uncache_out_a_bits_corrupt": 1,
+        "auto_instr_uncache_out_d_ready": 1,
+        "auto_icachectrl_in_a_ready": 1,
+        "auto_icachectrl_in_d_valid": 1,
+        "auto_icachectrl_in_d_bits_opcode": 4,
+        "auto_icachectrl_in_d_bits_param": 2,
+        "auto_icachectrl_in_d_bits_size": 2,
+        "auto_icachectrl_in_d_bits_source": 5,
+        "auto_icachectrl_in_d_bits_sink": 1,
+        "auto_icachectrl_in_d_bits_denied": 1,
+        "auto_icachectrl_in_d_bits_data": 64,
+        "auto_icachectrl_in_d_bits_corrupt": 1,
+        "auto_icachectrl_out_a_valid": 1,
+        "auto_icachectrl_out_a_bits_opcode": 4,
+        "auto_icachectrl_out_a_bits_size": 2,
+        "auto_icachectrl_out_a_bits_source": 5,
+        "auto_icachectrl_out_a_bits_address": 30,
+        "auto_icachectrl_out_a_bits_mask": 8,
+        "auto_icachectrl_out_a_bits_data": 64,
+        "auto_icachectrl_out_d_ready": 1,
+        "auto_icache_in_a_ready": 1,
+        "auto_icache_in_d_valid": 1,
+        "auto_icache_in_d_bits_opcode": 4,
+        "auto_icache_in_d_bits_size": 3,
+        "auto_icache_in_d_bits_source": 4,
+        "auto_icache_in_d_bits_data": 256,
+        "auto_icache_in_d_bits_corrupt": 1,
+        "auto_icache_out_a_valid": 1,
+        "auto_icache_out_a_bits_opcode": 4,
+        "auto_icache_out_a_bits_param": 3,
+        "auto_icache_out_a_bits_size": 3,
+        "auto_icache_out_a_bits_source": 4,
+        "auto_icache_out_a_bits_address": 48,
+        "auto_icache_out_a_bits_user_alias": 2,
+        "auto_icache_out_a_bits_user_reqSource": 5,
+        "auto_icache_out_a_bits_user_needHint": 1,
+        "auto_icache_out_a_bits_mask": 32,
+        "auto_icache_out_a_bits_data": 256,
+        "auto_icache_out_a_bits_corrupt": 1,
+        "auto_icache_out_d_ready": 1
+      },
+      "output_bits": 950,
+      "static_wrappers": {
+        "reference": {
+          "status": "PASS",
+          "wrapper": "REF_FrontendBridge_Public_full_public_outputs",
+          "input_count": 43,
+          "selected_output_count": 48,
+          "selected_output_bits": 950,
+          "declared_abi_exact": true,
+          "all_inputs_connected": true,
+          "selected_outputs_connected": true,
+          "unselected_outputs_unconnected": true,
+          "direct_output_assignments": true,
+          "sha256": "ea6fe18d182daffa8bf686b9840bbc7051dd724311cf46278a1b1678ce2046a9",
+          "bytes": 16238
+        },
+        "target": {
+          "status": "PASS",
+          "wrapper": "DUT_FrontendBridge_Public_full_public_outputs",
+          "input_count": 43,
+          "selected_output_count": 48,
+          "selected_output_bits": 950,
+          "declared_abi_exact": true,
+          "all_inputs_connected": true,
+          "selected_outputs_connected": true,
+          "unselected_outputs_unconnected": true,
+          "direct_output_assignments": true,
+          "sha256": "4158ab29a3fdcc926e662557762879a9fb0499f49ec3964cfa3efa93187e7dbf",
+          "bytes": 16238
+        }
+      },
+      "verilator": {
+        "reference": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "REF_FrontendBridge_Public_full_public_outputs",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/REF_FrontendBridge_Public_full_public_outputs.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.130 MB sources in 18 modules, into 0.165 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.058 s (elab=0.003, cvt=0.012, bld=0.000); cpu 0.027 s on 1 threads; alloced 11.910 MB\n",
+          "output_sha256": "a1ede5d2b8b39fdf6f5a0728da718629a51e5ad6c344573b47d5f77f233a7a35"
+        },
+        "target": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "DUT_FrontendBridge_Public_full_public_outputs",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge_Public_full_public_outputs.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "S's VARREF 'icachectrl_a_q0_count' generates 2 bits.\n                                                                                                                                 : ... note: In instance 'DUT_FrontendBridge_Public_full_public_outputs.inner_i.icachectrl.a_edge.q0'\n 3704 |   assign \\$10  = ! icachectrl_a_q0_count;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge.sv:2907:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'icache_d_q1_count' generates 2 bits.\n                                                                                                                                 : ... note: In instance 'DUT_FrontendBridge_Public_full_public_outputs.inner_i.icache.d_edge.q1'\n 2907 |   assign \\$10  = ! icache_d_q1_count;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge.sv:2424:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'icache_d_q0_count' generates 2 bits.\n                                                                                                                                 : ... note: In instance 'DUT_FrontendBridge_Public_full_public_outputs.inner_i.icache.d_edge.q0'\n 2424 |   assign \\$10  = ! icache_d_q0_count;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge.sv:1651:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'icache_a_q1_count' generates 2 bits.\n                                                                                                                                 : ... note: In instance 'DUT_FrontendBridge_Public_full_public_outputs.inner_i.icache.a_edge.q1'\n 1651 |   assign \\$10  = ! icache_a_q1_count;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_strict/DUT_FrontendBridge.sv:1004:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'icache_a_q0_count' generates 2 bits.\n                                                                                                                                 : ... note: In instance 'DUT_FrontendBridge_Public_full_public_outputs.inner_i.icache.a_edge.q0'\n 1004 |   assign \\$10  = ! icache_a_q0_count;\n      |                  ^\n",
+          "output_sha256": "b35591958fe7d62247aac5893d511995e6c8f8b51667500d0e754d5be8ebab4d"
+        }
+      },
+      "yosys_equiv": {
+        "status": "NOT_RUN",
+        "expected_public_output_bits": 950,
+        "output_only_obligations": null,
+        "note": "static wrappers were generated before optional WSL formal"
+      },
+      "status": "STRICT_PENDING"
+    },
+    "negative_control": {
+      "status": "PASS",
+      "partition": "instr_uncache_a",
+      "cases": {
+        "target": {
+          "status": "PASS",
+          "mutation_applied": true,
+          "control_port": "auto_instr_uncache_in_a_ready",
+          "explicit_failure_marker": true,
+          "success_marker_still_present": false,
+          "returncode": 1,
+          "output_tail": "1._ram_ext_R0_data [45] \\inner_i_gate.instr_uncache.a_edge.q1.instr_uncache_a_q1_deq_1 [34]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$19638: \\inner_i_gold.instr_uncache.nodeOut_a_q_1._ram_ext_R0_data [46] \\inner_i_gate.instr_uncache.a_edge.q1.instr_uncache_a_q1_deq_1 [35]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$19639: \\inner_i_gold.instr_uncache.nodeOut_a_q_1._ram_ext_R0_data [47] \\inner_i_gate.instr_uncache.a_edge.q1.instr_uncache_a_q1_deq_1 [36]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$19640: \\inner_i_gold.instr_uncache.nodeOut_a_q_1._ram_ext_R0_data [48] \\inner_i_gate.instr_uncache.a_edge.q1.instr_uncache_a_q1_deq_1 [37]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$19641: \\inner_i_gold.instr_uncache.nodeOut_a_q_1._ram_ext_R0_data [49] \\inner_i_gate.instr_uncache.a_edge.q1.instr_uncache_a_q1_deq_1 [38]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$19642: \\inner_i_gold.instr_uncache.nodeOut_a_q_1._ram_ext_R0_data [50] \\inner_i_gate.instr_uncache.a_edge.q1.instr_uncache_a_q1_deq_1 [39]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$ERROR: Found 54 unproven $equiv cells in 'equiv_status -assert'.\n",
+          "static_wrappers": {
+            "reference": {
+              "status": "PASS",
+              "wrapper": "REF_FrontendBridge_Negative_target",
+              "input_count": 43,
+              "selected_output_count": 5,
+              "selected_output_bits": 54,
+              "declared_abi_exact": true,
+              "all_inputs_connected": true,
+              "selected_outputs_connected": true,
+              "unselected_outputs_unconnected": true,
+              "direct_output_assignments": true,
+              "sha256": "3b6da8a42a6678a2ba392ecd20c8b652fe88124a476e4f05f5804ce64f5012c6",
+              "bytes": 5953
+            },
+            "target": {
+              "status": "FAIL",
+              "wrapper": "DUT_FrontendBridge_Negative_target",
+              "input_count": 43,
+              "selected_output_count": 5,
+              "selected_output_bits": 54,
+              "declared_abi_exact": true,
+              "all_inputs_connected": true,
+              "selected_outputs_connected": true,
+              "unselected_outputs_unconnected": true,
+              "direct_output_assignments": false,
+              "sha256": "3e850c03723b0885399bfd081b72d5900dcc45c136e208cdc12c78c7ca074521",
+              "bytes": 5954
+            }
+          },
+          "script_sha256": "12f73f8eaf9e2563508da6a1269cba377dff1ba158f1e6014c35ee3bece355d7"
+        },
+        "reference": {
+          "status": "PASS",
+          "mutation_applied": true,
+          "control_port": "auto_instr_uncache_in_a_ready",
+          "explicit_failure_marker": true,
+          "success_marker_still_present": false,
+          "returncode": 1,
+          "output_tail": "same_wires$19638: \\inner_i_gold.instr_uncache.nodeOut_a_q_1._ram_ext_R0_data [46] \\inner_i_gate.instr_uncache.a_edge.q1.instr_uncache_a_q1_deq_1 [35]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$19639: \\inner_i_gold.instr_uncache.nodeOut_a_q_1._ram_ext_R0_data [47] \\inner_i_gate.instr_uncache.a_edge.q1.instr_uncache_a_q1_deq_1 [36]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$19640: \\inner_i_gold.instr_uncache.nodeOut_a_q_1._ram_ext_R0_data [48] \\inner_i_gate.instr_uncache.a_edge.q1.instr_uncache_a_q1_deq_1 [37]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$19641: \\inner_i_gold.instr_uncache.nodeOut_a_q_1._ram_ext_R0_data [49] \\inner_i_gate.instr_uncache.a_edge.q1.instr_uncache_a_q1_deq_1 [38]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$19642: \\inner_i_gold.instr_uncache.nodeOut_a_q_1._ram_ext_R0_data [50] \\inner_i_gate.instr_uncache.a_edge.q1.instr_uncache_a_q1_deq_1 [39]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$19643: \\inner_i_gold.instr_uncache.nodeOut_a_q_1._ram_ext_R0_data [51] \\inner_i_gate.instr_uncache.a_edge.q1.instr_uncache_a_q1_deq_1 [40]\nERROR: Found 53 unproven $equiv cells in 'equiv_status -assert'.\n",
+          "static_wrappers": {
+            "reference": {
+              "status": "FAIL",
+              "wrapper": "REF_FrontendBridge_Negative_reference",
+              "input_count": 43,
+              "selected_output_count": 5,
+              "selected_output_bits": 54,
+              "declared_abi_exact": true,
+              "all_inputs_connected": true,
+              "selected_outputs_connected": true,
+              "unselected_outputs_unconnected": true,
+              "direct_output_assignments": false,
+              "sha256": "00977a556de34b1af5af93deb6551aae9b9ac921364b7a595dd152d67fe11ac4",
+              "bytes": 5957
+            },
+            "target": {
+              "status": "PASS",
+              "wrapper": "DUT_FrontendBridge_Negative_reference",
+              "input_count": 43,
+              "selected_output_count": 5,
+              "selected_output_bits": 54,
+              "declared_abi_exact": true,
+              "all_inputs_connected": true,
+              "selected_outputs_connected": true,
+              "unselected_outputs_unconnected": true,
+              "direct_output_assignments": true,
+              "sha256": "3b57a902c3839f6ac81fc3090c76dd9183913dba39a370e05252a20ea773b9b7",
+              "bytes": 5956
+            }
+          },
+          "script_sha256": "13d538b6c37f0a4187b2559350205db544bd2e5c5992a87a7d2b5c50dbdfe804"
+        }
+      },
+      "note": "Both mutations alter a generated wrapper assignment; no locked reference text is edited."
+    },
+    "direct_test": {
+      "status": "PASS",
+      "returncode": 0,
+      "output_tail": "ware.py:170: UnusedElaboratable: <testing_frontend_bridge.TwoEntryQueue object at 0x0000026B23C22530> created but never used\n  self.second = TwoEntryQueue(self.widths, f\"{prefix}_q1\")\nUnusedElaboratable: Enable tracemalloc to get the object allocation traceback\nD:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Build\\Build-Cpu\\Cpu-Memory\\Build-Cpu.Memory.FrontendBridge-Hardware.py:380: UnusedElaboratable: <testing_frontend_bridge.BufferedEdge object at 0x0000026B23B37C50> created but never used\n  self.d_edge = BufferedEdge((4, 2, 3, 1, 1, 1, 64, 1), \"instr_uncache_d\")\nUnusedElaboratable: Enable tracemalloc to get the object allocation traceback\nD:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Build\\Build-Cpu\\Cpu-Memory\\Build-Cpu.Memory.FrontendBridge-Hardware.py:169: UnusedElaboratable: <testing_frontend_bridge.TwoEntryQueue object at 0x0000026B23C21B30> created but never used\n  self.first = TwoEntryQueue(self.widths, f\"{prefix}_q0\")\nUnusedElaboratable: Enable tracemalloc to get the object allocation traceback\nD:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Build\\Build-Cpu\\Cpu-Memory\\Build-Cpu.Memory.FrontendBridge-Hardware.py:170: UnusedElaboratable: <testing_frontend_bridge.TwoEntryQueue object at 0x0000026B245C3110> created but never used\n  self.second = TwoEntryQueue(self.widths, f\"{prefix}_q1\")\nUnusedElaboratable: Enable tracemalloc to get the object allocation traceback\n----------------------------------------------------------------------\nRan 2 tests in 1.207s\n\nOK\n",
+      "sha256": "cb679635913de6d8732924f306feab67684c41c4387bf8a52d96e011598a8aa1"
+    }
+  },
+  "sources": {
+    "validator": {
+      "path": "validation/v2_frontendbridge_public_queue_strict_validator.py",
+      "sha256": "4ee7522491659aa08dabd005663f5fe2a90abb580e2b722e948a4200f4f3849d",
+      "bytes": 23606
+    },
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.FrontendBridge-Hardware.py",
+      "sha256": "ac094d35a849219e3e4ac5148e162e5e25fc908b5310f06982a7e1899261b0c9",
+      "bytes": 39931
+    },
+    "locked_reference": {
+      "path": "validation/reference-sv/FrontendBridge.sv",
+      "sha256": "ee3efd5e55934039e4c60b78a29eee198110c581b1464760c0a138af11dec9d2"
+    },
+    "shared_rail_read_only": {
+      "path": "validation/v2_strict_family_rail.py",
+      "sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302"
+    }
+  },
+  "failures": [
+    "full public-output sequential proof is pending"
+  ],
+  "unclosed": [
+    "This focused output/queue rail does not change the shared family rail or strict-progress ledger.",
+    "Parent closure, full XSTop differential, license review, and user approval remain outside this Build proof."
+  ]
+}
