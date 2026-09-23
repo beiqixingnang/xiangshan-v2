@@ -192,12 +192,19 @@ class RealWBArbiter(Elaboratable):
     """
 
     # Construct decoupled input and valid output fields. / 构造解耦输入及有效输出字段。
-    def __init__(self, dataWidth: int = 64, n: int = 2, addrWidth: int = 8) -> None:
+    def __init__(
+        self,
+        dataWidth: int = 64,
+        n: int = 2,
+        addrWidth: int = 8,
+        outReadyAlways: bool = False,
+    ) -> None:
         if int(dataWidth) < 1 or int(addrWidth) < 1 or int(n) < 1:
             raise ValueError("dataWidth, addrWidth, and n must be positive")
         self.dataWidth = int(dataWidth)
         self.addrWidth = int(addrWidth)
         self.n = int(n)
+        self.outReadyAlways = bool(outReadyAlways)
         self.in_valid = [Signal(name=f"io_in_{index}_valid") for index in range(self.n)]
         self.in_ready = [Signal(name=f"io_in_{index}_ready") for index in range(self.n)]
         self.in_bits = [Signal(self.dataWidth, name=f"io_in_{index}_bits_data") for index in range(self.n)]
@@ -218,24 +225,13 @@ class RealWBArbiter(Elaboratable):
         self.out_vlWen = Signal(name="io_out_bits_vlWen")
         self.out_fire = Signal(name="io_out_fire")
         self.chosen = Signal(max(1, (self.n - 1).bit_length()), name="io_chosen")
-        # RFWBConflictChecker.WBArbiter uses a separate three-bit starvation
-        # history.  RealWBArbiter remains stateless, but exposing these taps
-        # makes the real source promotion boundary available to parents.
-        # RFWBConflictChecker.WBArbiter 使用独立三位饥饿历史；保留无状态
-        # RealWBArbiter，同时向父级暴露真实源提升边界。
-        self.cancel_counter = [Signal(3, name=f"io_cancelCounter_{index}") for index in range(self.n)]
-        self.is_full = [Signal(name=f"io_isFull_{index}") for index in range(self.n)]
-        self.has_full_request = Signal(name="io_hasFullRequest")
 
     # Elaborate lowest-index priority and ready propagation. / 展开低索引优先级与就绪传播。
     def elaborate(self, platform) -> Module:
         del platform
         module = Module()
         grants = arbiterCtrl(self.in_valid)
-        full_request: Any = Const(0, 1)
-        for valid, full in zip(self.in_valid, self.is_full):
-            full_request = full_request | (valid & full)
-        module.d.comb += self.has_full_request.eq(full_request)
+        output_ready: Any = Const(1, 1) if self.outReadyAlways else self.out_ready
         selected_bits: Any = self.in_bits[-1]
         selected_pdest: Any = self.in_pdest[-1]
         selected_rf: Any = self.in_rfWen[-1]
@@ -260,7 +256,7 @@ class RealWBArbiter(Elaboratable):
             self.out_vecWen.eq(selected_vec),
             self.out_v0Wen.eq(selected_v0),
             self.out_vlWen.eq(selected_vl),
-            self.out_fire.eq(self.out_valid & self.out_ready),
+            self.out_fire.eq(self.out_valid & output_ready),
         ]
         # Chisel's chosen field defaults to n-1 and is overwritten by each
         # valid input in descending order, yielding the lowest valid index.
@@ -269,21 +265,9 @@ class RealWBArbiter(Elaboratable):
             chosen = Mux(self.in_valid[index], index, chosen)
         module.d.comb += self.chosen.eq(chosen)
         for index, grant in enumerate(grants):
-            module.d.comb += self.in_ready[index].eq((grant | ~self.in_valid[index]) & self.out_ready)
-            # The observation state follows the V2 saturation rule; it does
-            # not alter RealWBArbiter priority, whose source implementation is
-            # intentionally stateless.  将观测状态按 V2 饱和规则更新，不改变
-            # 源 RealWBArbiter 固有的无状态优先级。
-            failed = self.in_valid[index] & ~self.in_ready[index]
-            accepted = self.in_valid[index] & self.in_ready[index]
-            next_counter = Mux(failed, Mux(self.cancel_counter[index] == 7,
-                                            7, self.cancel_counter[index] + 1),
-                               Mux(accepted, 0, self.cancel_counter[index]))
-            module.d.sync += [
-                self.cancel_counter[index].eq(next_counter),
-                self.is_full[index].eq(Mux(failed, next_counter == 7,
-                                            Mux(accepted, 0, self.is_full[index]))),
-            ]
+            module.d.comb += self.in_ready[index].eq(
+                (grant | ~self.in_valid[index]) & output_ready
+            )
         return module
 
 
@@ -611,17 +595,27 @@ def build_verilog(configuration, injected_dependencies):
     del injected_dependencies
     module_name = str(config.get("module", "WbArbiterDispatcher"))
     if module_name == "RealWBArbiter":
+        compact_payload = bool(config.get("compact_payload", True))
         top = RealWBArbiter(
             int(config.get("data_width", config.get("dataWidth", 64))),
             int(config.get("n", 3)),
             int(config.get("addr_width", config.get("addrWidth", 8))),
+            compact_payload,
         )
-        ports: list[Any] = [top.out_valid, top.out_bits, top.out_pdest,
-                            top.out_rfWen, top.out_fpWen, top.out_vecWen,
-                            top.out_v0Wen, top.out_vlWen, top.out_ready,
-                            top.chosen]
-        ports += top.in_valid + top.in_ready + top.in_bits + top.in_pdest
-        ports += top.in_rfWen + top.in_fpWen + top.in_vecWen + top.in_v0Wen + top.in_vlWen
+        if compact_payload:
+            ports = []
+            for index in range(top.n):
+                ports += [top.in_valid[index], top.in_rfWen[index],
+                          top.in_pdest[index], top.in_bits[index]]
+            ports += top.in_ready
+            ports += [top.out_valid, top.out_rfWen, top.out_pdest, top.out_bits]
+        else:
+            ports = [top.out_valid, top.out_bits, top.out_pdest,
+                     top.out_rfWen, top.out_fpWen, top.out_vecWen,
+                     top.out_v0Wen, top.out_vlWen, top.out_ready,
+                     top.chosen]
+            ports += top.in_valid + top.in_ready + top.in_bits + top.in_pdest
+            ports += top.in_rfWen + top.in_fpWen + top.in_vecWen + top.in_v0Wen + top.in_vlWen
         return verilog.convert(top, name="RealWBArbiter", ports=ports)
     if module_name == "RealWBCollideChecker":
         ports_cfg = tuple(config.get("in_ports", config.get("inPorts", (0, 0, 1))))
