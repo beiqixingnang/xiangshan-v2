@@ -6,7 +6,7 @@
   "fraction": "39/118",
   "percentage": 33.050847,
   "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with the locked source commit, matching source hashes, and either a Yosys SAT no-model miter or fully proven Yosys inductive-equivalence status is counted. STRICT_PENDING and COMPLETE_EQUIVALENCE_VARIANT_ONLY records are inventoried as attempted-but-not-counted instead of failing the rail, and one Build file may not be claimed by several counting proofs.",
-  "non_counting_attempt_count": 6,
+  "non_counting_attempt_count": 7,
   "non_counting_attempts": [
     {
       "evidence": "validation/v2-build-cpu-backend-fu-pmp-family-strict-evidence.json",
@@ -74,6 +74,25 @@
       "unclosed": [
         "strict gates did not all pass",
         "current-digest negative control was not completed"
+      ]
+    },
+    {
+      "evidence": "validation/v2-build-cpu-dependency-utility-residualfamily-strict-evidence.json",
+      "build_id": "Build-Cpu.Dependency.Utility.ResidualFamily",
+      "declared_status": "STRICT_PENDING",
+      "audit_failures": [],
+      "proof_failures": [
+        "ClockGate:verilator",
+        "ClockGate:sat_miter",
+        "ClockGate: SAT ran under assumptions",
+        "JtagTapController:yosys_equiv",
+        "JtagTapController: 11 $equiv cells unproven",
+        "JtagTapController: zero or missing $equiv cells",
+        "aggregate SAT miter",
+        "negative control did not detect a mutated design"
+      ],
+      "unclosed": [
+        "strict gates did not all pass"
       ]
     },
     {
@@ -26605,7 +26624,7 @@
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "status": "PASS"
       },
-      "status": "FAIL",
+      "status": "NON_COUNTING",
       "note": "scala provenance not vendored for this attempt record",
       "scope": {
         "kind": "catalog_build_multi_variant",
@@ -26616,7 +26635,6 @@
           "CSA4to2",
           "CSA_Nto2With3to2MainPipeline",
           "ClockGate",
-          "DebugTransportModuleJTAG",
           "IDPool",
           "JtagStateMachine",
           "JtagTapController",
@@ -26624,14 +26642,13 @@
           "MaxPeriodFibonacciLFSR_3",
           "OverrideableQueue",
           "OverrideableQueue_1",
-          "PrintCommitIDModule",
           "TimeAsync",
           "r4_qds_v2",
           "r4_qds_v2_spec",
           "skidBufferConnect"
         ],
-        "variant_count": 19,
-        "combinational_variants": 9,
+        "variant_count": 17,
+        "combinational_variants": 7,
         "sequential_variants": 10,
         "inputs": {
           "CSA3to2_io_in_a": 107,
@@ -26676,20 +26693,9 @@
           "CSA_Nto2With3to2MainPipeline_io_in_24": 107,
           "CSA_Nto2With3to2MainPipeline_io_in_25": 107,
           "CSA_Nto2With3to2MainPipeline_io_in_26": 107,
-          "ClockGate_wire TE": 1,
-          "ClockGate_wire E": 1,
-          "ClockGate_wire CK": 1,
-          "DebugTransportModuleJTAG_io_jtag_clock": 1,
-          "DebugTransportModuleJTAG_io_jtag_reset": 1,
-          "DebugTransportModuleJTAG_io_dmi_req_ready": 1,
-          "DebugTransportModuleJTAG_io_dmi_resp_valid": 1,
-          "DebugTransportModuleJTAG_io_dmi_resp_bits_data": 32,
-          "DebugTransportModuleJTAG_io_dmi_resp_bits_resp": 2,
-          "DebugTransportModuleJTAG_io_jtag_TMS": 1,
-          "DebugTransportModuleJTAG_io_jtag_TDI": 1,
-          "DebugTransportModuleJTAG_io_jtag_mfr_id": 11,
-          "DebugTransportModuleJTAG_io_jtag_part_number": 16,
-          "DebugTransportModuleJTAG_io_jtag_version": 4,
+          "ClockGate_TE": 1,
+          "ClockGate_E": 1,
+          "ClockGate_CK": 1,
           "IDPool_clock": 1,
           "IDPool_reset": 1,
           "IDPool_io_free_valid": 1,
@@ -26731,9 +26737,6 @@
           "OverrideableQueue_1_io_in_bits_single_update": 1,
           "OverrideableQueue_1_io_in_bits_has_been_signal_updated": 1,
           "OverrideableQueue_1_io_out_ready": 1,
-          "PrintCommitIDModule_hartID": 6,
-          "PrintCommitIDModule_commitID": 40,
-          "PrintCommitIDModule_dirty": 1,
           "TimeAsync_clock": 1,
           "TimeAsync_reset": 1,
           "TimeAsync_io_i_time_valid": 1,
@@ -26798,14 +26801,7 @@
           "CSA4to2_io_out_car": 107,
           "CSA_Nto2With3to2MainPipeline_io_out_sum": 107,
           "CSA_Nto2With3to2MainPipeline_io_out_car": 107,
-          "ClockGate_wire Q": 1,
-          "DebugTransportModuleJTAG_io_dmi_req_valid": 1,
-          "DebugTransportModuleJTAG_io_dmi_req_bits_addr": 7,
-          "DebugTransportModuleJTAG_io_dmi_req_bits_data": 32,
-          "DebugTransportModuleJTAG_io_dmi_req_bits_op": 2,
-          "DebugTransportModuleJTAG_io_dmi_resp_ready": 1,
-          "DebugTransportModuleJTAG_io_jtag_TDO_data": 1,
-          "DebugTransportModuleJTAG_io_jtag_TDO_driven": 1,
+          "ClockGate_Q": 1,
           "IDPool_io_alloc_valid": 1,
           "IDPool_io_alloc_bits": 3,
           "JtagStateMachine_io_currState": 4,
@@ -26919,8 +26915,8 @@
           "skidBufferConnect_io_out_bits_isVecPartReplay": 1,
           "skidBufferConnect_io_out_bits_vecReplayFlowMask": 16
         },
-        "aggregate_input_bits": 5457,
-        "aggregate_compared_output_bits": 2117,
+        "aggregate_input_bits": 5339,
+        "aggregate_compared_output_bits": 2072,
         "variants": {
           "CSA3to2": {
             "method": "sat_miter",
@@ -26943,13 +26939,15 @@
             "deterministic": true,
             "miter_selfcheck": true,
             "view_trusted": true,
-            "verdict": "FAIL",
-            "success_marker": false,
+            "locked_reference_lint": "PASS",
+            "verdict": "PASS",
+            "success_marker": true,
+            "markers_present": null,
             "unconstrained_or_equiv_cells": true,
             "proven_cells": null,
             "unproven_cells": null,
-            "sat_variables": 4488,
-            "sat_clauses": 11214
+            "sat_variables": 2,
+            "sat_clauses": 4
           },
           "CSA3to2_20": {
             "method": "sat_miter",
@@ -26972,13 +26970,15 @@
             "deterministic": true,
             "miter_selfcheck": true,
             "view_trusted": true,
-            "verdict": "FAIL",
-            "success_marker": false,
+            "locked_reference_lint": "PASS",
+            "verdict": "PASS",
+            "success_marker": true,
+            "markers_present": null,
             "unconstrained_or_equiv_cells": true,
             "proven_cells": null,
             "unproven_cells": null,
-            "sat_variables": 8394,
-            "sat_clauses": 20979
+            "sat_variables": 2,
+            "sat_clauses": 4
           },
           "CSA3to2_24": {
             "method": "sat_miter",
@@ -27001,13 +27001,15 @@
             "deterministic": true,
             "miter_selfcheck": true,
             "view_trusted": true,
-            "verdict": "FAIL",
-            "success_marker": false,
+            "locked_reference_lint": "PASS",
+            "verdict": "PASS",
+            "success_marker": true,
+            "markers_present": null,
             "unconstrained_or_equiv_cells": true,
             "proven_cells": null,
             "unproven_cells": null,
-            "sat_variables": 3018,
-            "sat_clauses": 7539
+            "sat_variables": 2,
+            "sat_clauses": 4
           },
           "CSA4to2": {
             "method": "sat_miter",
@@ -27031,13 +27033,15 @@
             "deterministic": true,
             "miter_selfcheck": true,
             "view_trusted": true,
-            "verdict": "FAIL",
-            "success_marker": false,
+            "locked_reference_lint": "PASS",
+            "verdict": "PASS",
+            "success_marker": true,
+            "markers_present": null,
             "unconstrained_or_equiv_cells": true,
             "proven_cells": null,
             "unproven_cells": null,
-            "sat_variables": 4929,
-            "sat_clauses": 12422
+            "sat_variables": 59,
+            "sat_clauses": 147
           },
           "CSA_Nto2With3to2MainPipeline": {
             "method": "sequential_equivalence",
@@ -27089,11 +27093,16 @@
             "deterministic": true,
             "miter_selfcheck": true,
             "view_trusted": true,
-            "verdict": "FAIL",
-            "success_marker": false,
-            "unconstrained_or_equiv_cells": null,
-            "proven_cells": null,
-            "unproven_cells": 212,
+            "locked_reference_lint": "PASS",
+            "verdict": "PASS",
+            "success_marker": true,
+            "markers_present": {
+              "0 are unproven.": true,
+              "Equivalence successfully proven!": true
+            },
+            "unconstrained_or_equiv_cells": 214,
+            "proven_cells": 214,
+            "unproven_cells": 0,
             "sat_variables": null,
             "sat_clauses": null
           },
@@ -27104,71 +27113,23 @@
             "locked_sha256": "b4e6a1a11579276193dc18d2b56d24b04ba79879a32804456ce0116cbe878c97",
             "children": [],
             "inputs": {
-              "wire TE": 1,
-              "wire E": 1,
-              "wire CK": 1
+              "TE": 1,
+              "E": 1,
+              "CK": 1
             },
             "outputs_compared": {
-              "wire Q": 1
+              "Q": 1
             },
             "input_bits": 3,
             "output_bits": 1,
-            "abi_exact": false,
-            "deterministic": true,
-            "miter_selfcheck": false,
-            "view_trusted": true,
-            "verdict": "FAIL",
-            "success_marker": false,
-            "unconstrained_or_equiv_cells": false,
-            "proven_cells": null,
-            "unproven_cells": null,
-            "sat_variables": null,
-            "sat_clauses": null
-          },
-          "DebugTransportModuleJTAG": {
-            "method": "sat_miter",
-            "sequential": false,
-            "locked_reference": "validation/reference-sv/DebugTransportModuleJTAG.sv",
-            "locked_sha256": "24368231db5960dea7c3665edd8940cd8b736f183980281480964287cbf5f6af",
-            "children": [
-              "CaptureChain",
-              "CaptureUpdateChain",
-              "CaptureUpdateChain_1",
-              "CaptureUpdateChain_2",
-              "JtagBypassChain",
-              "JtagStateMachine",
-              "JtagTapController"
-            ],
-            "inputs": {
-              "io_jtag_clock": 1,
-              "io_jtag_reset": 1,
-              "io_dmi_req_ready": 1,
-              "io_dmi_resp_valid": 1,
-              "io_dmi_resp_bits_data": 32,
-              "io_dmi_resp_bits_resp": 2,
-              "io_jtag_TMS": 1,
-              "io_jtag_TDI": 1,
-              "io_jtag_mfr_id": 11,
-              "io_jtag_part_number": 16,
-              "io_jtag_version": 4
-            },
-            "outputs_compared": {
-              "io_dmi_req_valid": 1,
-              "io_dmi_req_bits_addr": 7,
-              "io_dmi_req_bits_data": 32,
-              "io_dmi_req_bits_op": 2,
-              "io_dmi_resp_ready": 1,
-              "io_jtag_TDO_data": 1,
-              "io_jtag_TDO_driven": 1
-            },
-            "input_bits": 71,
-            "output_bits": 45,
             "abi_exact": true,
             "deterministic": true,
             "miter_selfcheck": true,
-            "view_trusted": false,
+            "view_trusted": true,
+            "locked_reference_lint": "PASS",
             "verdict": "FAIL",
             "success_marker": false,
+            "markers_present": null,
             "unconstrained_or_equiv_cells": false,
             "proven_cells": null,
             "unproven_cells": null,
@@ -27198,11 +27159,16 @@
             "deterministic": true,
             "miter_selfcheck": true,
             "view_trusted": true,
-            "verdict": "FAIL",
-            "success_marker": false,
-            "unconstrained_or_equiv_cells": null,
-            "proven_cells": null,
-            "unproven_cells": 4,
+            "locked_reference_lint": "PASS",
+            "verdict": "PASS",
+            "success_marker": true,
+            "markers_present": {
+              "0 are unproven.": true,
+              "Equivalence successfully proven!": true
+            },
+            "unconstrained_or_equiv_cells": 12,
+            "proven_cells": 12,
+            "unproven_cells": 0,
             "sat_variables": null,
             "sat_clauses": null
           },
@@ -27225,12 +27191,17 @@
             "abi_exact": true,
             "deterministic": true,
             "miter_selfcheck": true,
-            "view_trusted": false,
-            "verdict": "FAIL",
-            "success_marker": false,
-            "unconstrained_or_equiv_cells": null,
-            "proven_cells": null,
-            "unproven_cells": null,
+            "view_trusted": true,
+            "locked_reference_lint": "PASS",
+            "verdict": "PASS",
+            "success_marker": true,
+            "markers_present": {
+              "0 are unproven.": true,
+              "Equivalence successfully proven!": true
+            },
+            "unconstrained_or_equiv_cells": 4,
+            "proven_cells": 4,
+            "unproven_cells": 0,
             "sat_variables": null,
             "sat_clauses": null
           },
@@ -27266,12 +27237,17 @@
             "abi_exact": true,
             "deterministic": true,
             "miter_selfcheck": true,
-            "view_trusted": false,
+            "view_trusted": true,
+            "locked_reference_lint": "PASS",
             "verdict": "FAIL",
             "success_marker": false,
+            "markers_present": {
+              "0 are unproven.": false,
+              "Equivalence successfully proven!": false
+            },
             "unconstrained_or_equiv_cells": null,
             "proven_cells": null,
-            "unproven_cells": null,
+            "unproven_cells": 11,
             "sat_variables": null,
             "sat_clauses": null
           },
@@ -27308,11 +27284,16 @@
             "deterministic": true,
             "miter_selfcheck": true,
             "view_trusted": true,
-            "verdict": "FAIL",
-            "success_marker": false,
-            "unconstrained_or_equiv_cells": null,
-            "proven_cells": null,
-            "unproven_cells": 1,
+            "locked_reference_lint": "PASS",
+            "verdict": "PASS",
+            "success_marker": true,
+            "markers_present": {
+              "0 are unproven.": true,
+              "Equivalence successfully proven!": true
+            },
+            "unconstrained_or_equiv_cells": 15,
+            "proven_cells": 15,
+            "unproven_cells": 0,
             "sat_variables": null,
             "sat_clauses": null
           },
@@ -27351,11 +27332,16 @@
             "deterministic": true,
             "miter_selfcheck": true,
             "view_trusted": true,
-            "verdict": "FAIL",
-            "success_marker": false,
-            "unconstrained_or_equiv_cells": null,
-            "proven_cells": null,
-            "unproven_cells": 1,
+            "locked_reference_lint": "PASS",
+            "verdict": "PASS",
+            "success_marker": true,
+            "markers_present": {
+              "0 are unproven.": true,
+              "Equivalence successfully proven!": true
+            },
+            "unconstrained_or_equiv_cells": 16,
+            "proven_cells": 16,
+            "unproven_cells": 0,
             "sat_variables": null,
             "sat_clauses": null
           },
@@ -27390,11 +27376,16 @@
             "deterministic": true,
             "miter_selfcheck": true,
             "view_trusted": true,
-            "verdict": "FAIL",
-            "success_marker": false,
-            "unconstrained_or_equiv_cells": null,
-            "proven_cells": null,
-            "unproven_cells": 103,
+            "locked_reference_lint": "PASS",
+            "verdict": "PASS",
+            "success_marker": true,
+            "markers_present": {
+              "0 are unproven.": true,
+              "Equivalence successfully proven!": true
+            },
+            "unconstrained_or_equiv_cells": 519,
+            "proven_cells": 519,
+            "unproven_cells": 0,
             "sat_variables": null,
             "sat_clauses": null
           },
@@ -27437,37 +27428,16 @@
             "deterministic": true,
             "miter_selfcheck": true,
             "view_trusted": true,
-            "verdict": "FAIL",
-            "success_marker": false,
-            "unconstrained_or_equiv_cells": null,
-            "proven_cells": null,
-            "unproven_cells": 62,
-            "sat_variables": null,
-            "sat_clauses": null
-          },
-          "PrintCommitIDModule": {
-            "method": "sat_miter",
-            "sequential": false,
-            "locked_reference": "validation/reference-sv/PrintCommitIDModule.sv",
-            "locked_sha256": "d0e8803b425fb09bb5918cc34d33fad744dcc576cafc4bea1a4cfafbd61c89d4",
-            "children": [],
-            "inputs": {
-              "hartID": 6,
-              "commitID": 40,
-              "dirty": 1
+            "locked_reference_lint": "PASS",
+            "verdict": "PASS",
+            "success_marker": true,
+            "markers_present": {
+              "0 are unproven.": true,
+              "Equivalence successfully proven!": true
             },
-            "outputs_compared": {},
-            "input_bits": 47,
-            "output_bits": 0,
-            "abi_exact": true,
-            "deterministic": true,
-            "miter_selfcheck": false,
-            "view_trusted": true,
-            "verdict": "FAIL",
-            "success_marker": false,
-            "unconstrained_or_equiv_cells": false,
-            "proven_cells": null,
-            "unproven_cells": null,
+            "unconstrained_or_equiv_cells": 314,
+            "proven_cells": 314,
+            "unproven_cells": 0,
             "sat_variables": null,
             "sat_clauses": null
           },
@@ -27495,11 +27465,16 @@
             "deterministic": true,
             "miter_selfcheck": true,
             "view_trusted": true,
-            "verdict": "FAIL",
-            "success_marker": false,
-            "unconstrained_or_equiv_cells": null,
-            "proven_cells": null,
-            "unproven_cells": 64,
+            "locked_reference_lint": "PASS",
+            "verdict": "PASS",
+            "success_marker": true,
+            "markers_present": {
+              "0 are unproven.": true,
+              "Equivalence successfully proven!": true
+            },
+            "unconstrained_or_equiv_cells": 65,
+            "proven_cells": 65,
+            "unproven_cells": 0,
             "sat_variables": null,
             "sat_clauses": null
           },
@@ -27521,13 +27496,15 @@
             "deterministic": true,
             "miter_selfcheck": true,
             "view_trusted": true,
-            "verdict": "FAIL",
-            "success_marker": false,
+            "locked_reference_lint": "PASS",
+            "verdict": "PASS",
+            "success_marker": true,
+            "markers_present": null,
             "unconstrained_or_equiv_cells": true,
             "proven_cells": null,
             "unproven_cells": null,
-            "sat_variables": 249,
-            "sat_clauses": 670
+            "sat_variables": 2,
+            "sat_clauses": 4
           },
           "r4_qds_v2_spec": {
             "method": "sat_miter",
@@ -27552,13 +27529,15 @@
             "deterministic": true,
             "miter_selfcheck": true,
             "view_trusted": true,
-            "verdict": "FAIL",
-            "success_marker": false,
+            "locked_reference_lint": "PASS",
+            "verdict": "PASS",
+            "success_marker": true,
+            "markers_present": null,
             "unconstrained_or_equiv_cells": true,
             "proven_cells": null,
             "unproven_cells": null,
-            "sat_variables": 1751,
-            "sat_clauses": 4714
+            "sat_variables": 1988,
+            "sat_clauses": 5343
           },
           "skidBufferConnect": {
             "method": "sequential_equivalence",
@@ -27668,11 +27647,16 @@
             "deterministic": true,
             "miter_selfcheck": true,
             "view_trusted": true,
-            "verdict": "FAIL",
-            "success_marker": false,
-            "unconstrained_or_equiv_cells": null,
-            "proven_cells": null,
-            "unproven_cells": 583,
+            "locked_reference_lint": "PASS",
+            "verdict": "PASS",
+            "success_marker": true,
+            "markers_present": {
+              "0 are unproven.": true,
+              "Equivalence successfully proven!": true
+            },
+            "unconstrained_or_equiv_cells": 584,
+            "proven_cells": 584,
+            "unproven_cells": 0,
             "sat_variables": null,
             "sat_clauses": null
           }
@@ -27681,13 +27665,21 @@
         "bounded_tests_counted": false
       },
       "sources": {
+        "validator": {
+          "path": "validation/v2_strict_family_rail.py",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
+          "observed_sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
+          "status": "PASS"
+        },
         "python_build": {
           "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Utility.ResidualFamily-Hardware.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "8864c37fc6221ee32144e1bfd1632969db2a68e6ae9038f2d5ec571b53fd3360",
+          "expected_sha256": "3fbe96e9f884b11b1696e4848a991be60ade36187745ae1daf0b79553c9425f4",
           "observed_sha256": "3fbe96e9f884b11b1696e4848a991be60ade36187745ae1daf0b79553c9425f4",
-          "status": "FAIL"
+          "status": "PASS"
         },
         "reference_sv": {
           "path": "validation/reference-sv/CSA3to2.sv",
@@ -27698,7 +27690,56 @@
           "status": "PASS"
         }
       },
-      "source_children": {},
+      "source_children": {
+        "AsyncResetSynchronizerPrimitiveShiftReg_d3_i0": {
+          "path": "validation/reference-sv/AsyncResetSynchronizerPrimitiveShiftReg_d3_i0.sv",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "1bb2dea870d95cdd6c2f344afb6cf762b035c496d55fccce261bda89ccd6fff6",
+          "observed_sha256": "1bb2dea870d95cdd6c2f344afb6cf762b035c496d55fccce261bda89ccd6fff6",
+          "status": "PASS"
+        },
+        "AsyncResetSynchronizerShiftReg_w1_d3_i0": {
+          "path": "validation/reference-sv/AsyncResetSynchronizerShiftReg_w1_d3_i0.sv",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "70789313aa603d98b700b838cf242b2df66ade6fdb7d9623c12cb0ed1b117d8c",
+          "observed_sha256": "70789313aa603d98b700b838cf242b2df66ade6fdb7d9623c12cb0ed1b117d8c",
+          "status": "PASS"
+        },
+        "CaptureUpdateChain_2": {
+          "path": "validation/reference-sv/CaptureUpdateChain_2.sv",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "e0842210cbbe524c74f05af081247c26078c0050a6e03d6ffd03063269e96817",
+          "observed_sha256": "e0842210cbbe524c74f05af081247c26078c0050a6e03d6ffd03063269e96817",
+          "status": "PASS"
+        },
+        "CSA3to2": {
+          "path": "validation/reference-sv/CSA3to2.sv",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "0403b850f238fcc251172f155f864c445d5cf419ef16a8b388fa5cc5fa2e1f80",
+          "observed_sha256": "0403b850f238fcc251172f155f864c445d5cf419ef16a8b388fa5cc5fa2e1f80",
+          "status": "PASS"
+        },
+        "CSA4to2": {
+          "path": "validation/reference-sv/CSA4to2.sv",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "9d26b9bc16360d3cd6c37e476ddf45f6ae84ee22298424a43c928b55ab6480bc",
+          "observed_sha256": "9d26b9bc16360d3cd6c37e476ddf45f6ae84ee22298424a43c928b55ab6480bc",
+          "status": "PASS"
+        },
+        "JtagStateMachine": {
+          "path": "validation/reference-sv/JtagStateMachine.sv",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "1fb2105468abbc5c3b85cf7ce9c1bc1e089228e207d2df41a422dc71578ced75",
+          "observed_sha256": "1fb2105468abbc5c3b85cf7ce9c1bc1e089228e207d2df41a422dc71578ced75",
+          "status": "PASS"
+        }
+      },
       "validator_dependencies": {},
       "reference_lock": {
         "CSA3to2": {
@@ -27747,14 +27788,6 @@
           "inside_repository": true,
           "expected_sha256": "b4e6a1a11579276193dc18d2b56d24b04ba79879a32804456ce0116cbe878c97",
           "observed_sha256": "b4e6a1a11579276193dc18d2b56d24b04ba79879a32804456ce0116cbe878c97",
-          "status": "PASS"
-        },
-        "DebugTransportModuleJTAG": {
-          "path": "validation/reference-sv/DebugTransportModuleJTAG.sv",
-          "present": true,
-          "inside_repository": true,
-          "expected_sha256": "24368231db5960dea7c3665edd8940cd8b736f183980281480964287cbf5f6af",
-          "observed_sha256": "24368231db5960dea7c3665edd8940cd8b736f183980281480964287cbf5f6af",
           "status": "PASS"
         },
         "IDPool": {
@@ -27813,14 +27846,6 @@
           "observed_sha256": "b12144af83d3a028eb23b122da535f54695a8b0a3351b8e6428dfe004bdd72bd",
           "status": "PASS"
         },
-        "PrintCommitIDModule": {
-          "path": "validation/reference-sv/PrintCommitIDModule.sv",
-          "present": true,
-          "inside_repository": true,
-          "expected_sha256": "d0e8803b425fb09bb5918cc34d33fad744dcc576cafc4bea1a4cfafbd61c89d4",
-          "observed_sha256": "d0e8803b425fb09bb5918cc34d33fad744dcc576cafc4bea1a4cfafbd61c89d4",
-          "status": "PASS"
-        },
         "TimeAsync": {
           "path": "validation/reference-sv/TimeAsync.sv",
           "present": true,
@@ -27857,81 +27882,43 @@
       "declared_scala_sources": {},
       "variant_checks": {
         "CSA3to2": {
-          "status": "FAIL",
-          "failures": [
-            "formal verdict"
-          ]
+          "status": "PASS",
+          "failures": []
         },
         "CSA3to2_20": {
-          "status": "FAIL",
-          "failures": [
-            "formal verdict"
-          ]
+          "status": "PASS",
+          "failures": []
         },
         "CSA3to2_24": {
-          "status": "FAIL",
-          "failures": [
-            "formal verdict"
-          ]
+          "status": "PASS",
+          "failures": []
         },
         "CSA4to2": {
-          "status": "FAIL",
-          "failures": [
-            "formal verdict"
-          ]
+          "status": "PASS",
+          "failures": []
         },
         "CSA_Nto2With3to2MainPipeline": {
-          "status": "FAIL",
-          "failures": [
-            "formal verdict",
-            "zero/missing equivalence cells",
-            "incomplete proven equivalence cells",
-            "unproven equivalence cells",
-            "sequential equivalence full-output markers"
-          ]
+          "status": "PASS",
+          "failures": []
         },
         "ClockGate": {
           "status": "FAIL",
           "failures": [
-            "ABI",
-            "miter selfcheck",
-            "formal verdict",
-            "constrained SAT"
-          ]
-        },
-        "DebugTransportModuleJTAG": {
-          "status": "FAIL",
-          "failures": [
-            "reference view",
             "formal verdict",
             "constrained SAT"
           ]
         },
         "IDPool": {
-          "status": "FAIL",
-          "failures": [
-            "formal verdict",
-            "zero/missing equivalence cells",
-            "incomplete proven equivalence cells",
-            "unproven equivalence cells",
-            "sequential equivalence full-output markers"
-          ]
+          "status": "PASS",
+          "failures": []
         },
         "JtagStateMachine": {
-          "status": "FAIL",
-          "failures": [
-            "reference view",
-            "formal verdict",
-            "zero/missing equivalence cells",
-            "incomplete proven equivalence cells",
-            "unproven equivalence cells",
-            "sequential equivalence full-output markers"
-          ]
+          "status": "PASS",
+          "failures": []
         },
         "JtagTapController": {
           "status": "FAIL",
           "failures": [
-            "reference view",
             "formal verdict",
             "zero/missing equivalence cells",
             "incomplete proven equivalence cells",
@@ -27940,85 +27927,36 @@
           ]
         },
         "MaxPeriodFibonacciLFSR": {
-          "status": "FAIL",
-          "failures": [
-            "formal verdict",
-            "zero/missing equivalence cells",
-            "incomplete proven equivalence cells",
-            "unproven equivalence cells",
-            "sequential equivalence full-output markers"
-          ]
+          "status": "PASS",
+          "failures": []
         },
         "MaxPeriodFibonacciLFSR_3": {
-          "status": "FAIL",
-          "failures": [
-            "formal verdict",
-            "zero/missing equivalence cells",
-            "incomplete proven equivalence cells",
-            "unproven equivalence cells",
-            "sequential equivalence full-output markers"
-          ]
+          "status": "PASS",
+          "failures": []
         },
         "OverrideableQueue": {
-          "status": "FAIL",
-          "failures": [
-            "formal verdict",
-            "zero/missing equivalence cells",
-            "incomplete proven equivalence cells",
-            "unproven equivalence cells",
-            "sequential equivalence full-output markers"
-          ]
+          "status": "PASS",
+          "failures": []
         },
         "OverrideableQueue_1": {
-          "status": "FAIL",
-          "failures": [
-            "formal verdict",
-            "zero/missing equivalence cells",
-            "incomplete proven equivalence cells",
-            "unproven equivalence cells",
-            "sequential equivalence full-output markers"
-          ]
-        },
-        "PrintCommitIDModule": {
-          "status": "FAIL",
-          "failures": [
-            "missing outputs",
-            "miter selfcheck",
-            "formal verdict",
-            "constrained SAT"
-          ]
+          "status": "PASS",
+          "failures": []
         },
         "TimeAsync": {
-          "status": "FAIL",
-          "failures": [
-            "formal verdict",
-            "zero/missing equivalence cells",
-            "incomplete proven equivalence cells",
-            "unproven equivalence cells",
-            "sequential equivalence full-output markers"
-          ]
+          "status": "PASS",
+          "failures": []
         },
         "r4_qds_v2": {
-          "status": "FAIL",
-          "failures": [
-            "formal verdict"
-          ]
+          "status": "PASS",
+          "failures": []
         },
         "r4_qds_v2_spec": {
-          "status": "FAIL",
-          "failures": [
-            "formal verdict"
-          ]
+          "status": "PASS",
+          "failures": []
         },
         "skidBufferConnect": {
-          "status": "FAIL",
-          "failures": [
-            "formal verdict",
-            "zero/missing equivalence cells",
-            "incomplete proven equivalence cells",
-            "unproven equivalence cells",
-            "sequential equivalence full-output markers"
-          ]
+          "status": "PASS",
+          "failures": []
         }
       },
       "formal": {
@@ -28027,58 +27965,25 @@
           "yosys",
           "-Q",
           "-p",
-          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_CSA3to2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_CSA3to2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/CSA3to2_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_CSA3to2_20.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_CSA3to2_20.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/CSA3to2_20_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_CSA3to2_24.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_CSA3to2_24.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/CSA3to2_24_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_CSA4to2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_CSA4to2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/CSA4to2_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_ClockGate.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_ClockGate.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/ClockGate_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_DebugTransportModuleJTAG.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_DebugTransportModuleJTAG.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DebugTransportModuleJTAG_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_PrintCommitIDModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_PrintCommitIDModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/PrintCommitIDModule_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_r4_qds_v2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_r4_qds_v2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/r4_qds_v2_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_r4_qds_v2_spec.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_r4_qds_v2_spec.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/r4_qds_v2_spec_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/ResidualFamily_AGG.sv; prep -top ResidualFamily_AGG; flatten; opt; sat -prove mismatch 0"
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_CSA3to2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_CSA3to2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/CSA3to2_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_CSA3to2_20.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_CSA3to2_20.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/CSA3to2_20_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_CSA3to2_24.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_CSA3to2_24.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/CSA3to2_24_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_CSA4to2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_CSA4to2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/CSA4to2_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_ClockGate.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_ClockGate.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/ClockGate_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_r4_qds_v2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_r4_qds_v2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/r4_qds_v2_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/DUT_r4_qds_v2_spec.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/REF_r4_qds_v2_spec.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/r4_qds_v2_spec_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_residualfamily_family/ResidualFamily_AGG.sv; prep -top ResidualFamily_AGG; flatten; opt; sat -prove mismatch 0"
         ],
         "returncode": 1,
         "status": "FAIL",
         "formal_success_marker": false
       },
-      "failures": [
-        "source digest: python_build"
-      ],
+      "failures": [],
       "declared_failures": [
-        "CSA3to2:sat_miter",
-        "CSA3to2_20:sat_miter",
-        "CSA3to2_24:sat_miter",
-        "CSA4to2:sat_miter",
-        "CSA_Nto2With3to2MainPipeline:yosys_equiv",
-        "CSA_Nto2With3to2MainPipeline: 212 $equiv cells unproven",
-        "ABI mismatch: ClockGate",
-        "miter drives implicit nets: ClockGate",
         "ClockGate:verilator",
         "ClockGate:sat_miter",
         "ClockGate: SAT ran under assumptions",
-        "synthesizable view failed conservation: DebugTransportModuleJTAG",
-        "DebugTransportModuleJTAG:sat_miter",
-        "DebugTransportModuleJTAG: SAT ran under assumptions",
-        "IDPool:yosys_equiv",
-        "IDPool: 4 $equiv cells unproven",
-        "synthesizable view failed conservation: JtagStateMachine",
-        "JtagStateMachine:yosys_equiv",
-        "synthesizable view failed conservation: JtagTapController",
         "JtagTapController:yosys_equiv",
-        "MaxPeriodFibonacciLFSR:yosys_equiv",
-        "MaxPeriodFibonacciLFSR: 1 $equiv cells unproven",
-        "MaxPeriodFibonacciLFSR_3:yosys_equiv",
-        "MaxPeriodFibonacciLFSR_3: 1 $equiv cells unproven",
-        "OverrideableQueue:yosys_equiv",
-        "OverrideableQueue: 103 $equiv cells unproven",
-        "OverrideableQueue_1:yosys_equiv",
-        "OverrideableQueue_1: 62 $equiv cells unproven",
-        "output-less member, nothing observable to compare: PrintCommitIDModule",
-        "TimeAsync:yosys_equiv",
-        "TimeAsync: 64 $equiv cells unproven",
-        "r4_qds_v2:sat_miter",
-        "r4_qds_v2_spec:sat_miter",
-        "skidBufferConnect:yosys_equiv",
-        "skidBufferConnect: 583 $equiv cells unproven",
+        "JtagTapController: 11 $equiv cells unproven",
+        "JtagTapController: zero or missing $equiv cells",
         "aggregate SAT miter",
-        "pyright rail",
-        "implementation rewritten after prior strict attempt; strict proof must be rerun"
+        "negative control did not detect a mutated design"
       ],
       "declared_unclosed": [
-        "strict gates did not all pass",
-        "six members remain CONTRACT_ONLY and the complete family rail must be rerun"
+        "strict gates did not all pass"
       ]
     },
     {
