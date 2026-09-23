@@ -1,0 +1,330 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_JTAG_TAP_PUBLIC_PARTITION_DIAGNOSTIC",
+  "status": "STRICT_PENDING",
+  "strict_complete_count_delta": 0,
+  "acceptance_eligible": false,
+  "build": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Utility.ResidualFamily-Hardware.py",
+  "direct_test": "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu.Dependency.Utility.ResidualFamily-Hardware.py",
+  "direct_test_status": "PASS",
+  "partition_policy": {
+    "full_output_strict_required": true,
+    "partitioned_results_are_diagnostic_only": true,
+    "locked_sources_written": false
+  },
+  "records": [
+    {
+      "partition": "state_controls",
+      "outputs": {
+        "io_output_tapIsInTestLogicReset": 1,
+        "io_dataChainOut_shift": 1,
+        "io_dataChainOut_capture": 1,
+        "io_dataChainOut_update": 1
+      },
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "--top-module",
+          "DUT_JtagTapController_Public_state_controls",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/REF_JtagTapController.sv",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/DUT_JtagTapController.sv",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/REF_JtagTapController_Public_state_controls.sv",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/DUT_JtagTapController_Public_state_controls.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "sat_success_marker": false,
+        "sat_counterexample_marker": false,
+        "unconstrained_marker": false,
+        "equiv_success_markers": {
+          "0 are unproven.": false,
+          "Equivalence successfully proven!": false
+        },
+        "equiv_failure_marker": false,
+        "equiv_cells_full": null,
+        "equiv_summary_full": null,
+        "equiv_failed_full": null,
+        "sat_counts_full": null,
+        "output_tail": "                                                                                                 : ... note: In instance 'DUT_JtagTapController_Public_state_controls.inner_i'\n   89 |   assign \\$20  = tap_state == 2'h2;\n      |                            ^~\n                      ... For warning description see https://verilator.org/warn/WIDTHEXPAND?v=5.032\n                      ... Use \"/* verilator lint_off WIDTHEXPAND */\" and lint_on around source to disable this message.\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/DUT_JtagTapController.sv:91:28: Operator EQ expects 4 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                       : ... note: In instance 'DUT_JtagTapController_Public_state_controls.inner_i'\n   91 |   assign \\$22  = tap_state == 2'h2;\n      |                            ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/DUT_JtagTapController.sv:97:44: Operator EQ expects 4 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                       : ... note: In instance 'DUT_JtagTapController_Public_state_controls.inner_i'\n   97 |   assign io_dataChainOut_shift = tap_state == 2'h2;\n      |                                            ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/DUT_JtagTapController.sv:98:46: Operator EQ expects 4 bits on the RHS, but RHS's CONST '3'h6' generates 3 bits.\n                                                                                                                       : ... note: In instance 'DUT_JtagTapController_Public_state_controls.inner_i'\n   98 |   assign io_dataChainOut_capture = tap_state == 3'h6;\n      |                                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/DUT_JtagTapController.sv:99:45: Operator EQ expects 4 bits on the RHS, but RHS's CONST '3'h5' generates 3 bits.\n                                                                                                                       : ... note: In instance 'DUT_JtagTapController_Public_state_controls.inner_i'\n   99 |   assign io_dataChainOut_update = tap_state == 3'h5;\n      |                                             ^~\n",
+        "output_sha256": "d7df92096bd03834665d67f5f0228a8667d6e83cbb50d70719d731412d70eaf4"
+      },
+      "yosys_equiv": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/REF_JtagTapController.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/DUT_JtagTapController.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/REF_JtagTapController_Public_state_controls.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/DUT_JtagTapController_Public_state_controls.sv; proc; async2sync; memory; opt; flatten REF_JtagTapController_Public_state_controls; flatten DUT_JtagTapController_Public_state_controls; equiv_make REF_JtagTapController_Public_state_controls DUT_JtagTapController_Public_state_controls state_controls_EQUIV; prep -top state_controls_EQUIV; equiv_induct -undef; equiv_status -assert"
+        ],
+        "returncode": 1,
+        "status": "FAIL",
+        "sat_success_marker": false,
+        "sat_counterexample_marker": false,
+        "unconstrained_marker": false,
+        "equiv_success_markers": {
+          "0 are unproven.": false,
+          "Equivalence successfully proven!": false
+        },
+        "equiv_failure_marker": true,
+        "equiv_cells_full": null,
+        "equiv_summary_full": null,
+        "equiv_failed_full": 4,
+        "sat_counts_full": null,
+        "output_tail": "\n<suppressed ~1 debug messages>\n\n12.11.4. Finished fast OPT passes.\n\n12.12. Printing statistics.\n\n=== state_controls_EQUIV ===\n\n   Number of wires:                112\n   Number of wire bits:            228\n   Number of public wires:          96\n   Number of public wire bits:     140\n   Number of ports:                 10\n   Number of port bits:             10\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                 45\n     $eq                            18\n     $equiv                          4\n     $logic_not                      1\n     $mux                           10\n     $not                            1\n     $pmux                           1\n     $reduce_and                     1\n     $reduce_or                      3\n     $scopeinfo                      3\n     $sdff                           2\n     $shiftx                         1\n\n12.13. Executing CHECK pass (checking for obvious problems).\nChecking module state_controls_EQUIV...\nFound and reported 0 problems.\n\n13. Executing EQUIV_INDUCT pass.\nFound 4 unproven $equiv cells in module state_controls_EQUIV:\n  Undef modelling: force def on 8 initial reg values and 3 inputs.\n  Proving existence of base case for step 1. (9077 clauses over 3264 variables)\n  Proving induction step 1. (18649 clauses over 6695 variables)\n  Proof for induction step failed. Extending to next time step.\n  Proving existence of base case for step 2. (18650 clauses over 6695 variables)\n  Proving induction step 2. (28222 clauses over 10126 variables)\n  Proof for induction step failed. Extending to next time step.\n  Proving existence of base case for step 3. (28223 clauses over 10126 variables)\n  Proving induction step 3. (37795 clauses over 13557 variables)\n  Proof for induction step failed. Extending to next time step.\n  Proving existence of base case for step 4. (37796 clauses over 13557 variables)\n  Proving induction step 4. (47368 clauses over 16988 variables)\n  Proof for induction step failed. Trying to prove individual $equiv from workset.\n  Trying to prove $equiv for \\io_output_tapIsInTestLogicReset: failed.\n  Trying to prove $equiv for \\io_dataChainOut_update: failed.\n  Trying to prove $equiv for \\io_dataChainOut_capture: failed.\n  Trying to prove $equiv for \\io_dataChainOut_shift: failed.\nProved 0 previously unproven $equiv cells.\n\n14. Executing EQUIV_STATUS pass.\nERROR: Found 4 unproven $equiv cells in 'equiv_status -assert'.\n",
+        "output_sha256": "71ab5a831f91b1633014aa1ce5a9564bdffd52db632adddc73e5855a0f3c11b4",
+        "formal_success_marker": false,
+        "unproven_cells": 4
+      },
+      "status": "PENDING"
+    },
+    {
+      "partition": "instruction",
+      "outputs": {
+        "io_output_instruction": 5
+      },
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "--top-module",
+          "DUT_JtagTapController_Public_instruction",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/REF_JtagTapController.sv",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/DUT_JtagTapController.sv",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/REF_JtagTapController_Public_instruction.sv",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/DUT_JtagTapController_Public_instruction.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "sat_success_marker": false,
+        "sat_counterexample_marker": false,
+        "unconstrained_marker": false,
+        "equiv_success_markers": {
+          "0 are unproven.": false,
+          "Equivalence successfully proven!": false
+        },
+        "equiv_failure_marker": false,
+        "equiv_cells_full": null,
+        "equiv_summary_full": null,
+        "equiv_failed_full": null,
+        "sat_counts_full": null,
+        "output_tail": "                                                                                                                : ... note: In instance 'DUT_JtagTapController_Public_instruction.inner_i'\n   89 |   assign \\$20  = tap_state == 2'h2;\n      |                            ^~\n                      ... For warning description see https://verilator.org/warn/WIDTHEXPAND?v=5.032\n                      ... Use \"/* verilator lint_off WIDTHEXPAND */\" and lint_on around source to disable this message.\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/DUT_JtagTapController.sv:91:28: Operator EQ expects 4 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                       : ... note: In instance 'DUT_JtagTapController_Public_instruction.inner_i'\n   91 |   assign \\$22  = tap_state == 2'h2;\n      |                            ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/DUT_JtagTapController.sv:97:44: Operator EQ expects 4 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                       : ... note: In instance 'DUT_JtagTapController_Public_instruction.inner_i'\n   97 |   assign io_dataChainOut_shift = tap_state == 2'h2;\n      |                                            ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/DUT_JtagTapController.sv:98:46: Operator EQ expects 4 bits on the RHS, but RHS's CONST '3'h6' generates 3 bits.\n                                                                                                                       : ... note: In instance 'DUT_JtagTapController_Public_instruction.inner_i'\n   98 |   assign io_dataChainOut_capture = tap_state == 3'h6;\n      |                                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/DUT_JtagTapController.sv:99:45: Operator EQ expects 4 bits on the RHS, but RHS's CONST '3'h5' generates 3 bits.\n                                                                                                                       : ... note: In instance 'DUT_JtagTapController_Public_instruction.inner_i'\n   99 |   assign io_dataChainOut_update = tap_state == 3'h5;\n      |                                             ^~\n",
+        "output_sha256": "dea7d9f0d890e735778c89d0cb6ae034f3f0c5ada686b5564a27ae7f33f08a61"
+      },
+      "yosys_equiv": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/REF_JtagTapController.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/DUT_JtagTapController.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/REF_JtagTapController_Public_instruction.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/DUT_JtagTapController_Public_instruction.sv; proc; async2sync; memory; opt; flatten REF_JtagTapController_Public_instruction; flatten DUT_JtagTapController_Public_instruction; equiv_make REF_JtagTapController_Public_instruction DUT_JtagTapController_Public_instruction instruction_EQUIV; prep -top instruction_EQUIV; equiv_induct -undef; equiv_status -assert"
+        ],
+        "returncode": 1,
+        "status": "FAIL",
+        "sat_success_marker": false,
+        "sat_counterexample_marker": false,
+        "unconstrained_marker": false,
+        "equiv_success_markers": {
+          "0 are unproven.": false,
+          "Equivalence successfully proven!": false
+        },
+        "equiv_failure_marker": true,
+        "equiv_cells_full": null,
+        "equiv_summary_full": null,
+        "equiv_failed_full": 6,
+        "sat_counts_full": null,
+        "output_tail": "blic wires:          92\n   Number of public wire bits:     172\n   Number of ports:                  7\n   Number of port bits:             11\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                 63\n     $eq                            18\n     $equiv                          6\n     $logic_not                      1\n     $mux                           14\n     $not                            2\n     $or                             1\n     $pmux                           1\n     $reduce_and                     1\n     $reduce_or                      5\n     $scopeinfo                      3\n     $sdff                           4\n     $sdffe                          6\n     $shiftx                         1\n\n12.13. Executing CHECK pass (checking for obvious problems).\nChecking module instruction_EQUIV...\nFound and reported 0 problems.\n\n13. Executing EQUIV_INDUCT pass.\nFound 6 unproven $equiv cells in module instruction_EQUIV:\n  Undef modelling: force def on 28 initial reg values and 4 inputs.\n  Proving existence of base case for step 1. (10744 clauses over 3905 variables)\n  Proving induction step 1. (23640 clauses over 8537 variables)\n  Proof for induction step failed. Extending to next time step.\n  Proving existence of base case for step 2. (23641 clauses over 8537 variables)\n  Proving induction step 2. (36537 clauses over 13169 variables)\n  Proof for induction step failed. Extending to next time step.\n  Proving existence of base case for step 3. (36538 clauses over 13169 variables)\n  Proving induction step 3. (49434 clauses over 17801 variables)\n  Proof for induction step failed. Extending to next time step.\n  Proving existence of base case for step 4. (49435 clauses over 17801 variables)\n  Proving induction step 4. (62331 clauses over 22433 variables)\n  Proof for induction step failed. Trying to prove individual $equiv from workset.\n  Trying to prove $equiv for \\io_output_instruction [1]: failed.\n  Trying to prove $equiv for \\io_output_instruction [2]: failed.\n  Trying to prove $equiv for \\io_output_instruction [0]: failed.\n  Trying to prove $equiv for \\inner_i.io_output_tapIsInTestLogicReset: failed.\n  Trying to prove $equiv for \\io_output_instruction [3]: failed.\n  Trying to prove $equiv for \\io_output_instruction [4]: failed.\nProved 0 previously unproven $equiv cells.\n\n14. Executing EQUIV_STATUS pass.\nERROR: Found 6 unproven $equiv cells in 'equiv_status -assert'.\n",
+        "output_sha256": "02ea0b3445d171f220c70b1d4399549c83b1928b6435d9d9caa4fee66683a51e",
+        "formal_success_marker": false,
+        "unproven_cells": 6
+      },
+      "status": "PENDING"
+    },
+    {
+      "partition": "tdo",
+      "outputs": {
+        "io_jtag_TDO_data": 1,
+        "io_jtag_TDO_driven": 1
+      },
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "--top-module",
+          "DUT_JtagTapController_Public_tdo",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/REF_JtagTapController.sv",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/DUT_JtagTapController.sv",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/REF_JtagTapController_Public_tdo.sv",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/DUT_JtagTapController_Public_tdo.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "sat_success_marker": false,
+        "sat_counterexample_marker": false,
+        "unconstrained_marker": false,
+        "equiv_success_markers": {
+          "0 are unproven.": false,
+          "Equivalence successfully proven!": false
+        },
+        "equiv_failure_marker": false,
+        "equiv_cells_full": null,
+        "equiv_summary_full": null,
+        "equiv_failed_full": null,
+        "sat_counts_full": null,
+        "output_tail": "s CONST '2'h2' generates 2 bits.\n                                                                                                                       : ... note: In instance 'DUT_JtagTapController_Public_tdo.inner_i'\n   89 |   assign \\$20  = tap_state == 2'h2;\n      |                            ^~\n                      ... For warning description see https://verilator.org/warn/WIDTHEXPAND?v=5.032\n                      ... Use \"/* verilator lint_off WIDTHEXPAND */\" and lint_on around source to disable this message.\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/DUT_JtagTapController.sv:91:28: Operator EQ expects 4 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                       : ... note: In instance 'DUT_JtagTapController_Public_tdo.inner_i'\n   91 |   assign \\$22  = tap_state == 2'h2;\n      |                            ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/DUT_JtagTapController.sv:97:44: Operator EQ expects 4 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                       : ... note: In instance 'DUT_JtagTapController_Public_tdo.inner_i'\n   97 |   assign io_dataChainOut_shift = tap_state == 2'h2;\n      |                                            ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/DUT_JtagTapController.sv:98:46: Operator EQ expects 4 bits on the RHS, but RHS's CONST '3'h6' generates 3 bits.\n                                                                                                                       : ... note: In instance 'DUT_JtagTapController_Public_tdo.inner_i'\n   98 |   assign io_dataChainOut_capture = tap_state == 3'h6;\n      |                                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/DUT_JtagTapController.sv:99:45: Operator EQ expects 4 bits on the RHS, but RHS's CONST '3'h5' generates 3 bits.\n                                                                                                                       : ... note: In instance 'DUT_JtagTapController_Public_tdo.inner_i'\n   99 |   assign io_dataChainOut_update = tap_state == 3'h5;\n      |                                             ^~\n",
+        "output_sha256": "9b5e21b9dd47d236a5791d48f74102d3dd33412ee9cbe0f184f9584156f10ea7"
+      },
+      "yosys_equiv": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/REF_JtagTapController.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/DUT_JtagTapController.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/REF_JtagTapController_Public_tdo.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/DUT_JtagTapController_Public_tdo.sv; proc; async2sync; memory; opt; flatten REF_JtagTapController_Public_tdo; flatten DUT_JtagTapController_Public_tdo; equiv_make REF_JtagTapController_Public_tdo DUT_JtagTapController_Public_tdo tdo_EQUIV; prep -top tdo_EQUIV; equiv_induct -undef; equiv_status -assert"
+        ],
+        "returncode": 1,
+        "status": "FAIL",
+        "sat_success_marker": false,
+        "sat_counterexample_marker": false,
+        "unconstrained_marker": false,
+        "equiv_success_markers": {
+          "0 are unproven.": false,
+          "Equivalence successfully proven!": false
+        },
+        "equiv_failure_marker": true,
+        "equiv_cells_full": null,
+        "equiv_summary_full": null,
+        "equiv_failed_full": 2,
+        "sat_counts_full": null,
+        "output_tail": "AN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\tdo_EQUIV..\nRemoved 0 unused cells and 5 unused wires.\n<suppressed ~1 debug messages>\n\n12.11.4. Finished fast OPT passes.\n\n12.12. Printing statistics.\n\n=== tdo_EQUIV ===\n\n   Number of wires:                129\n   Number of wire bits:            257\n   Number of public wires:         103\n   Number of public wire bits:     159\n   Number of ports:                  8\n   Number of port bits:              8\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                 63\n     $eq                            19\n     $equiv                          2\n     $logic_not                      1\n     $mux                           16\n     $not                            2\n     $or                             3\n     $pmux                           1\n     $reduce_or                      3\n     $scopeinfo                      3\n     $sdff                           6\n     $sdffe                          6\n     $shiftx                         1\n\n12.13. Executing CHECK pass (checking for obvious problems).\nChecking module tdo_EQUIV...\nFound and reported 0 problems.\n\n13. Executing EQUIV_INDUCT pass.\nFound 2 unproven $equiv cells in module tdo_EQUIV:\n  Undef modelling: force def on 22 initial reg values and 5 inputs.\n  Proving existence of base case for step 1. (9553 clauses over 3457 variables)\n  Proving induction step 1. (20868 clauses over 7525 variables)\n  Proof for induction step failed. Extending to next time step.\n  Proving existence of base case for step 2. (20869 clauses over 7525 variables)\n  Proving induction step 2. (32184 clauses over 11585 variables)\n  Proof for induction step failed. Extending to next time step.\n  Proving existence of base case for step 3. (32185 clauses over 11585 variables)\n  Proving induction step 3. (43500 clauses over 15645 variables)\n  Proof for induction step failed. Extending to next time step.\n  Proving existence of base case for step 4. (43501 clauses over 15645 variables)\n  Proving induction step 4. (54816 clauses over 19705 variables)\n  Proof for induction step failed. Trying to prove individual $equiv from workset.\n  Trying to prove $equiv for \\io_jtag_TDO_data: failed.\n  Trying to prove $equiv for \\io_jtag_TDO_driven: failed.\nProved 0 previously unproven $equiv cells.\n\n14. Executing EQUIV_STATUS pass.\nERROR: Found 2 unproven $equiv cells in 'equiv_status -assert'.\n",
+        "output_sha256": "e03836a6c83203575204e33b2586b73b14ac3bc554c7fde374485f6a488e2829",
+        "formal_success_marker": false,
+        "unproven_cells": 2
+      },
+      "status": "PENDING"
+    },
+    {
+      "partition": "data",
+      "outputs": {
+        "io_dataChainOut_data": 1
+      },
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "--top-module",
+          "DUT_JtagTapController_Public_data",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/REF_JtagTapController.sv",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/DUT_JtagTapController.sv",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/REF_JtagTapController_Public_data.sv",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/DUT_JtagTapController_Public_data.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "sat_success_marker": false,
+        "sat_counterexample_marker": false,
+        "unconstrained_marker": false,
+        "equiv_success_markers": {
+          "0 are unproven.": false,
+          "Equivalence successfully proven!": false
+        },
+        "equiv_failure_marker": false,
+        "equiv_cells_full": null,
+        "equiv_summary_full": null,
+        "equiv_failed_full": null,
+        "sat_counts_full": null,
+        "output_tail": "ST '2'h2' generates 2 bits.\n                                                                                                                       : ... note: In instance 'DUT_JtagTapController_Public_data.inner_i'\n   89 |   assign \\$20  = tap_state == 2'h2;\n      |                            ^~\n                      ... For warning description see https://verilator.org/warn/WIDTHEXPAND?v=5.032\n                      ... Use \"/* verilator lint_off WIDTHEXPAND */\" and lint_on around source to disable this message.\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/DUT_JtagTapController.sv:91:28: Operator EQ expects 4 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                       : ... note: In instance 'DUT_JtagTapController_Public_data.inner_i'\n   91 |   assign \\$22  = tap_state == 2'h2;\n      |                            ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/DUT_JtagTapController.sv:97:44: Operator EQ expects 4 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                       : ... note: In instance 'DUT_JtagTapController_Public_data.inner_i'\n   97 |   assign io_dataChainOut_shift = tap_state == 2'h2;\n      |                                            ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/DUT_JtagTapController.sv:98:46: Operator EQ expects 4 bits on the RHS, but RHS's CONST '3'h6' generates 3 bits.\n                                                                                                                       : ... note: In instance 'DUT_JtagTapController_Public_data.inner_i'\n   98 |   assign io_dataChainOut_capture = tap_state == 3'h6;\n      |                                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/DUT_JtagTapController.sv:99:45: Operator EQ expects 4 bits on the RHS, but RHS's CONST '3'h5' generates 3 bits.\n                                                                                                                       : ... note: In instance 'DUT_JtagTapController_Public_data.inner_i'\n   99 |   assign io_dataChainOut_update = tap_state == 3'h5;\n      |                                             ^~\n",
+        "output_sha256": "9060d35d13e437bab58462aec7b41c9f68c1995ef6ea8eab74f16498876e4f9c"
+      },
+      "yosys_equiv": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/REF_JtagTapController.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/DUT_JtagTapController.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/REF_JtagTapController_Public_data.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_jtag_tap_public_family/DUT_JtagTapController_Public_data.sv; proc; async2sync; memory; opt; flatten REF_JtagTapController_Public_data; flatten DUT_JtagTapController_Public_data; equiv_make REF_JtagTapController_Public_data DUT_JtagTapController_Public_data data_EQUIV; prep -top data_EQUIV; equiv_induct -undef; equiv_status -assert"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "sat_success_marker": false,
+        "sat_counterexample_marker": false,
+        "unconstrained_marker": false,
+        "equiv_success_markers": {
+          "0 are unproven.": true,
+          "Equivalence successfully proven!": true
+        },
+        "equiv_failure_marker": false,
+        "equiv_cells_full": 1,
+        "equiv_summary_full": [
+          1,
+          0
+        ],
+        "equiv_failed_full": null,
+        "sat_counts_full": null,
+        "output_tail": "rnal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n12.7.10. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\data_EQUIV.\nPerformed a total of 0 changes.\n\n12.7.11. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\data_EQUIV'.\nRemoved a total of 0 cells.\n\n12.7.12. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\data_EQUIV..\n\n12.7.13. Executing OPT_EXPR pass (perform const folding).\nOptimizing module data_EQUIV.\n\n12.7.14. Finished OPT passes. (There is nothing left to do.)\n\n12.8. Executing WREDUCE pass (reducing word size of cells).\n\n12.9. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\data_EQUIV..\n\n12.10. Executing MEMORY_COLLECT pass (generating $mem cells).\n\n12.11. Executing OPT pass (performing simple optimizations).\n\n12.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module data_EQUIV.\n\n12.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\data_EQUIV'.\nRemoved a total of 0 cells.\n\n12.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\data_EQUIV..\n\n12.11.4. Finished fast OPT passes.\n\n12.12. Printing statistics.\n\n=== data_EQUIV ===\n\n   Number of wires:                 52\n   Number of wire bits:             64\n   Number of public wires:          52\n   Number of public wire bits:      64\n   Number of ports:                  7\n   Number of port bits:              7\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                  4\n     $equiv                          1\n     $scopeinfo                      3\n\n12.13. Executing CHECK pass (checking for obvious problems).\nChecking module data_EQUIV...\nFound and reported 0 problems.\n\n13. Executing EQUIV_INDUCT pass.\nNo selected unproven $equiv cells found in data_EQUIV.\nProved 0 previously unproven $equiv cells.\n\n14. Executing EQUIV_STATUS pass.\nFound 1 $equiv cells in data_EQUIV:\n  Of those cells 1 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: 7c6e6ff708, CPU: user 0.05s system 0.01s, MEM: 15.31 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 25% 11x opt_expr (0 sec), 17% 10x opt_clean (0 sec), ...\n",
+        "output_sha256": "c25de6ae6e84e456ee0039473a2625ab7706cb1ed65900f2d7fd1ec5dceedcaa",
+        "formal_success_marker": true,
+        "equiv_cells": 1,
+        "proven_cells": 1,
+        "unproven_cells": 0
+      },
+      "status": "PASS"
+    }
+  ],
+  "negative_control": {
+    "status": "PASS",
+    "cases": {
+      "target": {
+        "mutation_applied": true,
+        "returncode": 1,
+        "explicit_failure_marker": true,
+        "success_marker_still_present": false,
+        "status": "PASS",
+        "output_tail": "over 3276 variables)\n  Proving induction step 1. (18709 clauses over 6719 variables)\n  Proof for induction step failed. Extending to next time step.\n  Proving existence of base case for step 2. (18710 clauses over 6719 variables)\n  Proving induction step 2. (28312 clauses over 10162 variables)\n  Proof for induction step failed. Extending to next time step.\n  Proving existence of base case for step 3. (28313 clauses over 10162 variables)\n  Proving induction step 3. (37915 clauses over 13605 variables)\n  Proof for induction step failed. Extending to next time step.\n  Proving existence of base case for step 4. (37916 clauses over 13605 variables)\n  Proving induction step 4. (47518 clauses over 17048 variables)\n  Proof for induction step failed. Trying to prove individual $equiv from workset.\n  Trying to prove $equiv for \\io_dataChainOut_shift: success!\n  Trying to prove $equiv for \\io_dataChainOut_capture: failed.\n  Trying to prove $equiv for \\io_output_tapIsInTestLogicReset: failed.\n  Trying to prove $equiv for \\io_dataChainOut_update: success!\nProved 2 previously unproven $equiv cells.\n\n14. Executing EQUIV_STATUS pass.\nERROR: Found 2 unproven $equiv cells in 'equiv_status -assert'.\n"
+      },
+      "reference": {
+        "mutation_applied": true,
+        "returncode": 1,
+        "explicit_failure_marker": true,
+        "success_marker_still_present": false,
+        "status": "PASS",
+        "output_tail": "\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                 47\n     $eq                            18\n     $equiv                          5\n     $logic_not                      1\n     $mux                           10\n     $not                            2\n     $pmux                           1\n     $reduce_and                     1\n     $reduce_or                      3\n     $scopeinfo                      3\n     $sdff                           2\n     $shiftx                         1\n\n12.13. Executing CHECK pass (checking for obvious problems).\nChecking module state_controls_reference_NEGATIVE_EQUIV...\nFound and reported 0 problems.\n\n13. Executing EQUIV_INDUCT pass.\nFound 5 unproven $equiv cells in module state_controls_reference_NEGATIVE_EQUIV:\n  Undef modelling: force def on 8 initial reg values and 3 inputs.\n  Proving existence of base case for step 1. (9153 clauses over 3293 variables)\n  Proof for base case failed. Circuit inherently diverges!\nProved 0 previously unproven $equiv cells.\n\n14. Executing EQUIV_STATUS pass.\nERROR: Found 5 unproven $equiv cells in 'equiv_status -assert'.\n"
+      }
+    }
+  },
+  "reference_lock": {
+    "directory": "validation/reference-sv",
+    "locked_references_written": false,
+    "sha256_by_module": {
+      "JtagTapController": "df28c071f313abd014e482d3f553a2313512e0ddf35742d1350d8caff7160c78",
+      "JtagStateMachine": "1fb2105468abbc5c3b85cf7ce9c1bc1e089228e207d2df41a422dc71578ced75",
+      "CaptureUpdateChain_2": "e0842210cbbe524c74f05af081247c26078c0050a6e03d6ffd03063269e96817"
+    },
+    "xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d"
+  },
+  "sources": {
+    "validator": {
+      "path": "validation/v2_jtag_tap_public_validator.py",
+      "sha256": "e2cc194c5a73c62c1d85618536a047ba650f369618d0d84e31ca0a3b2a86ed7e",
+      "bytes": 12707
+    },
+    "focused_view_validator": {
+      "path": "validation/v2_jtag_reference_view_validator.py",
+      "sha256": "8bbb64f813719263f7dd81f1bf4351901d0b451c72cb8395c4d202f71b088da2",
+      "bytes": 14747
+    },
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Utility.ResidualFamily-Hardware.py",
+      "sha256": "3fbe96e9f884b11b1696e4848a991be60ade36187745ae1daf0b79553c9425f4",
+      "bytes": 36872
+    }
+  },
+  "failures": [
+    "state_controls",
+    "instruction",
+    "tdo"
+  ],
+  "unclosed": [
+    "The aggregate all-output JtagTapController formal rail remains pending; partition proofs do not increment strict progress."
+  ]
+}
