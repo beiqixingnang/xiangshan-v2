@@ -13,11 +13,12 @@ from amaranth import Const, Elaboratable, Module, Mux, Signal
 # =============================================================================
 # Module Contract
 # =============================================================================
-# WbArbiter.scala contains three connected surfaces.  The dispatcher fans one
-# ExuOutput to accepted destinations; RealWBCollideChecker groups write-back
-# inputs by physical-register port and applies RealWBArbiter priority; and
-# WbDataPath combines integer, floating, vector, v0, vl, and memory EXUs.
-# WbArbiter.scala 包含三个相连表面：分发器按接受条件扇出 ExuOutput；
+# This write-back boundary contains three connected surfaces.  The dispatcher
+# fans one ExuOutput to accepted destinations; RealWBCollideChecker groups
+# write-back inputs by physical-register port and applies RealWBArbiter
+# priority; and WbDataPath combines integer, floating, vector, v0, vl, and
+# memory EXUs.
+# 此写回边界包含三个相连表面：分发器按接受条件扇出 ExuOutput；
 # RealWBCollideChecker 按物理寄存器写口分组并应用 RealWBArbiter 优先级；
 # WbDataPath 合并整数、浮点、向量、v0、vl 及内存 EXU。
 __all__ = [
@@ -258,8 +259,8 @@ class RealWBArbiter(Elaboratable):
             self.out_vlWen.eq(selected_vl),
             self.out_fire.eq(self.out_valid & output_ready),
         ]
-        # Chisel's chosen field defaults to n-1 and is overwritten by each
-        # valid input in descending order, yielding the lowest valid index.
+        # The chosen field defaults to n-1 and is overwritten by each valid
+        # input in descending order, yielding the lowest valid index.
         chosen = self.n - 1
         for index in range(self.n - 1, -1, -1):
             chosen = Mux(self.in_valid[index], index, chosen)
