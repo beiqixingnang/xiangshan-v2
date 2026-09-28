@@ -1,13 +1,9 @@
-"""UHSC V2 backend execution-unit / functional-unit family (FuncUnit, ExeUnit, Bku, Dispatcher).
-UHSC V2 后端执行单元 / 功能单元族（FuncUnit、ExeUnit、Bku、Dispatcher）。
+"""UHSC V2 backend execution-unit / functional-unit family.
+UHSC V2 后端执行单元 / 功能单元族。
 
-Selected Kunminghu V2 locked modules from xiangshan/backend/fu/FuncUnit.scala,
-xiangshan/backend/fu/Bku.scala and xiangshan/backend/exu/ExeUnit.scala.  The integer/
-branch/Bku/dispatch/EXU core is covered; the FP/vector FU leaves (fudian/yunsuan)
-and the NewCSR CSR module are owned by other workers and excluded from this file.
-选定的 Kunminghu V2 锁定模块来自上述三个 Scala 源。本文件覆盖整数/分支/Bku/
-分发/EXU 核心；FP/向量 FU 叶子（fudian/yunsuan）与 NewCSR 的 CSR 模块由其他
-worker 负责，不在本文件范围内。
+The family contains integer dispatch, execution, branch, crypto, and
+functional-unit wrappers with their public handshake and datapath behavior.
+本族包含整数分发、执行、分支、密码和功能单元包装器及其公开握手与数据通路行为。
 """
 
 from __future__ import annotations
@@ -21,19 +17,17 @@ from typing import Any, cast
 # =============================================================================
 # Module Contract
 # =============================================================================
-# Source family: the parameterised XiangShan FuncUnit pipeline, the ExeUnit
-# issue/complete interface, the Bku branch/crypto unit and the issue dispatcher.
-# 来源 family：参数化 XiangShan FuncUnit 流水线、ExeUnit 发射/写回接口、Bku
-# 分支/加密单元与发射分发器。
+# Public family: parameterised execution, branch, crypto, and dispatch units.
+# 公开族：参数化执行、分支、密码和分发单元。
 __all__ = [
     "PortSpec", "PORTS", "COVERED_MODULES", "ExuFuncModule",
     "module_ports", "module_latency", "build_verilog", "main",
 ]
 
-# Locked behavioural authority for every covered module. / 每个覆盖模块的锁定行为权威。
+# Behavioural contract for every covered module. / 每个覆盖模块的行为契约。
 
-# Port geometry copied verbatim from validation/v2-locked-hierarchy.json (width "" => 1).
-# 端口几何逐字复制自 validation/v2-locked-hierarchy.json（宽度 "" 视为 1）。
+# Port geometry uses one bit when a field has no explicit width.
+# 端口字段未显式给出宽度时使用一位。
 PORTS: dict[str, tuple[tuple[str, str, int], ...]] = {
     'Dispatcher': (
         ('io_in_valid', 'input', 1), ('io_in_bits_fuType', 'input', 35), ('io_in_bits_fuOpType', 'input', 9),
@@ -575,7 +569,7 @@ PORTS: dict[str, tuple[tuple[str, str, int], ...]] = {
     ),
 }
 
-# Covered locked module names in declaration order. / 覆盖的锁定模块名（声明序）。
+# Covered module names in declaration order. / 覆盖模块名（声明序）。
 COVERED_MODULES = (
     'Dispatcher',
     'Dispatcher_1',
@@ -612,7 +606,7 @@ COVERED_MODULES = (
 # =============================================================================
 # Configuration
 # =============================================================================
-# One locked port ``(name, direction, width)`` triple. / 一个锁定端口 ``(名称, 方向, 宽度)`` 三元组。
+# One declared port ``(name, direction, width)`` triple. / 一个声明端口 ``(名称, 方向, 宽度)`` 三元组。
 @dataclass(frozen=True)
 class PortSpec:
     name: str
@@ -620,7 +614,7 @@ class PortSpec:
     width: int
 
 
-# Pinned pipeline latency per module, from the FuncUnit cfg.latency geometry.
+# Pipeline latency per module.
 # 每个模块的钉死流水线延迟，来自 FuncUnit cfg.latency 几何。
 LATENCY: dict[str, int] = {
     "Bku": 2, "MulUnit": 2, "DivUnit": 0,
@@ -632,11 +626,11 @@ LATENCY: dict[str, int] = {
 LATENCY.update({k: 0 for k in COVERED_MODULES if k not in LATENCY})
 
 def module_ports(name: str) -> tuple[tuple[str, str, int], ...]:
-    """Return the locked ``(name, direction, width)`` tuples of ``name``. / 返回 ``name`` 的锁定端口三元组。"""
+    """Return the declared ``(name, direction, width)`` tuples of ``name``. / 返回 ``name`` 的声明端口三元组。"""
     return PORTS[name]
 
 def module_latency(name: str) -> int:
-    """Return the pinned pipeline latency of ``name``. / 返回 ``name`` 的钉死流水线延迟。"""
+    """Return the pipeline latency of ``name``. / 返回 ``name`` 的流水线延迟。"""
     return LATENCY.get(name, 0)
 
 
@@ -677,8 +671,8 @@ def _bit_reverse(v: Value, width: int) -> Value:
 def _ror32(x: Value, shamt: int) -> Value:
     # 32-bit rotate encoded like CryptoUtils.ROR32 (low 32 bits valid). / 仿 CryptoUtils.ROR32 的 32 位旋转（低 32 位有效）。
     v = x[0:32]
-    # Chisel's ``Cat(0, bits[shamt-1:0], bits[31:shamt])`` is MSB-first;
-    # Amaranth Cat is LSB-first.  Keep the rotated word in the low half.
+    # Packed concatenation places the first argument at the low bit; keep the
+    # rotated word in the low half.
     return cast(Value, Cat(v[shamt:32], v[0:shamt], Const(0, 32)))
 
 
@@ -697,8 +691,8 @@ def _popcount16(v: Value) -> Value:
 
 def _clz_tree(v: Value, n: int) -> Value:
     # Hierarchical leading-zero count of an n-bit value (n a power of two),
-    # matching Bku.scala clzi/encode.  Result width is n.bit_length() + 1.
-    # 与 Bku.scala clzi/encode 一致的分层前导零计数（n 为 2 的幂），
+    # Match the clzi/encode selector.  Result width is n.bit_length() + 1.
+    # 匹配 clzi/encode 选择器；结果宽度为 n.bit_length() + 1。
     # 结果宽度为 n.bit_length() + 1。
     val = v
     if n == 1:
@@ -719,7 +713,7 @@ def _clz_tree(v: Value, n: int) -> Value:
 def _leading_zero_count(v: Value, width: int) -> Value:
     """Combinational leading-zero count matching CountModule.clzi.
 
-    The Chisel tree encodes a count in ``ceil(log2(width+1))`` bits.  Building
+    The count tree encodes a count in ``ceil(log2(width+1))`` bits.  Building
     the equivalent priority chain directly avoids accidentally treating the
     two-bit ``encode`` leaves as raw Boolean values (the old recursive helper
     returned zero for the ``01`` leaf).
@@ -848,9 +842,9 @@ def sbox_sm4_top(m: Any, byte: Value, prefix: str):
 
 class _SignalDict(dict):
     # Intermediate-term dict that materialises every value as a 1-bit comb
-    # signal, mirroring the Wire(Vec(...)) semantics of the Scala original and
+    # signal, preserving the vector-of-wires semantics and
     # keeping the expression trees linear. / 中间项字典：把每个值落地为 1 位
-    # 组合信号，对应 Scala 原实现的 Wire(Vec(...)) 语义，使表达式树保持线性。
+    # 组合信号，保持向量线网语义，使表达式树保持线性。
     def __init__(self, m, prefix):
         super().__init__()
         self._m = m
@@ -1099,16 +1093,15 @@ def mix_inv(bytes4: list[Value]) -> Value:
 
 
 def alu_result(func, src1, src2):
-    # Faithful AluDataModule datapath (upstream/src/main/scala/xiangshan/backend/fu/Alu.scala:196).
-    # 忠实 AluDataModule 数据通路（upstream/.../fu/Alu.scala:196）。
+    # AluDataModule datapath with the exact operation and width behavior.
+    # AluDataModule 数据通路，保持运算和位宽行为一致。
     f = cast(Any, func)
     s1 = cast(Any, src1)
     s2 = cast(Any, src2)
     shamt = s2[0:6]
     rev_shamt = (~s2[0:6] + Const(1, 6))[0:6]
-    # Chisel Cat places its first argument at the MSB, whereas Amaranth Cat
-    # places its first argument at the LSB.  Keep the low 32 bits all-ones and
-    # select the upper 32-bit half exactly as Alu.scala does.
+    # Packed concatenation places its first argument at the low bit.  Keep the
+    # low 32 bits all-ones and select the upper 32-bit half for word operations.
     sll_mask = Cat(Const(0xffffffff, 32), Mux(f[0:1], Const(0xffffffff, 32), Const(0, 32)))
     sll_src = sll_mask & s1
     sll = sll_src << shamt
@@ -1142,7 +1135,7 @@ def alu_result(func, src1, src2):
     addw = Mux(f[2:3] & ~f[1:2] & ~f[0:1], addw_all[0], addw)
     addw = Mux(f[2:3] & ~f[1:2] & f[0:1], addw_all[1], addw)
     addw = Mux(~f[2:3], _zext(addw_raw, 64), addw)
-    # Scala's ``Cat(0.U, src)`` is {0,src}; Amaranth's Cat is LSB-first.
+    # Cat places the first argument in the low bits in this implementation.
     sub65 = cast(Any, Cat(s1, Const(0, 1))) + cast(Any, Cat(~s2, Const(0, 1))) + Const(1, 65)
     subw = sub65[0:32]
     sllw = (s1[0:32] << s2[0:5])[0:32]
@@ -1274,8 +1267,8 @@ def branch_taken(m: Any, func: Value, src1: Value, src2: Value, pred_taken: Valu
 
 
 def addr_add_result(m: Any, pc_extend: Value, taken: Value, imm: Value, next_pc_offset: Value, prefix: str):
-    # AddrAddModule: branch target / sequential next address (pinned AddrAddModule.sv).
-    # AddrAddModule：分支目标 / 顺序下一地址（钉死的 AddrAddModule.sv）。
+    # AddrAddModule: branch target / sequential next address.
+    # AddrAddModule：分支目标 / 顺序下一地址。
     pc_s = Signal(51, name=prefix + "_pc")
     imm_s = Signal(51, name=prefix + "_imm")
     seq = Signal(51, name=prefix + "_seq")
@@ -1292,7 +1285,7 @@ def addr_add_result(m: Any, pc_extend: Value, taken: Value, imm: Value, next_pc_
 
 
 def check_faults(m: Any, addr_trans: Value, target: Value, prefix: str):
-    # AddrTransType.check*Fault on the full target (Bundle.scala:692-698). / 对全目标地址的 AddrTransType.check*Fault（Bundle.scala:692-698）。
+    # Check instruction-address faults on the full target. / 对完整目标地址检查取指故障。
     t = Signal(64, name=prefix + "_faultT")
     m.d.comb += t.eq(cast(Any, target))
     bare = cast(Any, addr_trans)[0:1]
@@ -1315,7 +1308,7 @@ def _rob_need_flush(flush_valid, flush_flag, flush_value, flush_level, rob_flag,
 
 
 class CountLeaf(Elaboratable):
-    """Bku.scala CountModule core (registered operands, combinational result). / Bku.scala CountModule 核心（寄存操作数，组合输出）。"""
+    """CountModule core (registered operands, combinational result). / CountModule 核心（寄存操作数，组合输出）。"""
 
     def __init__(self) -> None:
         self.clock = Signal(name="clock")
@@ -1356,7 +1349,7 @@ class CountLeaf(Elaboratable):
 
 
 class ClmulLeaf(Elaboratable):
-    """Bku.scala ClmulModule core (registered operands, combinational carry-less product). / Bku.scala ClmulModule 核心（寄存操作数，组合无进位乘积）。"""
+    """ClmulModule core (registered operands, combinational carry-less product). / ClmulModule 核心（寄存操作数，组合无进位乘积）。"""
 
     def __init__(self) -> None:
         self.clock = Signal(name="clock")
@@ -1386,7 +1379,7 @@ class ClmulLeaf(Elaboratable):
 
 
 class MiscLeaf(Elaboratable):
-    """Bku.scala MiscModule core (XPERM.N / XPERM.B). / Bku.scala MiscModule 核心（XPERM.N / XPERM.B）。"""
+    """MiscModule core (XPERM.N / XPERM.B). / MiscModule 核心（XPERM.N / XPERM.B）。"""
 
     def __init__(self) -> None:
         self.clock = Signal(name="clock")
@@ -1402,7 +1395,7 @@ class MiscLeaf(Elaboratable):
         s1 = self.src0
         s2 = self.src1
         # xperm vectors are packed with element 0 in the low lane (Vec.asUInt
-        # in Chisel); reverse the MSB-first Scala Cat order for Amaranth.
+        # Reverse the MSB-first packed-vector order for Amaranth.
         xperm_n = Cat(*[_xperm_lut(s1, s2[i * 4:i * 4 + 4], 4) for i in range(16)])
         xperm_b = Cat(*[
             Mux(_or_reduce(s2[i * 8 + 3:i * 8 + 8]), Const(0, 8), _xperm_lut(s1, s2[i * 8:i * 8 + 3], 8))
@@ -1415,7 +1408,7 @@ class MiscLeaf(Elaboratable):
 
 
 class HashLeaf(Elaboratable):
-    """Bku.scala HashModule core (SHA-256/512, SM3). / Bku.scala HashModule 核心（SHA-256/512、SM3）。"""
+    """HashModule core (SHA-256/512, SM3). / HashModule 核心（SHA-256/512、SM3）。"""
 
     def __init__(self) -> None:
         self.clock = Signal(name="clock")
@@ -1452,7 +1445,7 @@ class HashLeaf(Elaboratable):
 
 
 class BlockCipherLeaf(Elaboratable):
-    """Bku.scala BlockCipherModule core (AES/SM4 with the composite-field S-box network). / Bku.scala BlockCipherModule 核心（含复合域 S-box 网络的 AES/SM4）。"""
+    """BlockCipherModule core (AES/SM4 with the composite-field S-box network). / BlockCipherModule 核心（含复合域 S-box 网络的 AES/SM4）。"""
 
     RCON = (0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01)
 
@@ -1499,7 +1492,7 @@ class BlockCipherLeaf(Elaboratable):
         iaes_out = [_sbox_chain(self._iaes_mid[i], sbox_iaes_out, "iaesSboxInv_%d" % i, "iaesSboxOut_%d" % i) for i in range(8)]
         aes64es = Cat(*aes_out)
         aes64ds = Cat(*iaes_out)
-        # Scala Cat lists the high half first; Amaranth Cat lists the low
+        # Packed vectors list the high half first; Amaranth Cat lists the low
         # half first.
         aes64esm = Cat(mix_fwd(aes_out[0:4]), mix_fwd(aes_out[4:8]))
         aes64dsm = Cat(mix_inv(iaes_out[0:4]), mix_inv(iaes_out[4:8]))
@@ -1579,7 +1572,7 @@ class BlockCipherLeaf(Elaboratable):
 
 
 class CryptoLeaf(Elaboratable):
-    """Bku.scala CryptoModule core (Hash vs BlockCipher mux). / Bku.scala CryptoModule 核心（Hash 与 BlockCipher 选择）。"""
+    """CryptoModule core (Hash vs BlockCipher mux). / CryptoModule 核心（Hash 与 BlockCipher 选择）。"""
 
     def __init__(self) -> None:
         self.clock = Signal(name="clock")
@@ -1611,8 +1604,7 @@ class CryptoLeaf(Elaboratable):
         return m
 
 
-# Per-output fuType compare constants, transcribed from the pinned Dispatcher*.sv bodies.
-# 逐输出 fuType 比较常量，转写自钉死的 Dispatcher*.sv 体。
+# Per-output fuType comparison constants. / 逐输出 fuType 比较常量。
 DISPATCH_MASKS: dict[str, tuple[int, ...]] = {
     "Dispatcher": (0x40, 0x80, 0x400),
     "Dispatcher_1": (0x2, 0x1),
@@ -1658,8 +1650,8 @@ def _passthrough_outputs(self: "ExuFuncModule", m: Any) -> None:
 
 def build_dispatcher(self: "ExuFuncModule", m: Any) -> None:
     # Dispatcher: one-hot fuType compare routes the input to exactly one output
-    # (pinned Dispatcher*.sv: io_out_N_valid = io_in_bits_fuType == 35'hMASK & io_in_valid).
-    # Dispatcher：one-hot fuType 比较将输入路由到唯一输出（钉死的 Dispatcher*.sv）。
+    # Each output is valid only for its one-hot fuType selector.
+    # Dispatcher：每个输出仅在对应 one-hot fuType 选择时有效。
     p = self.ports
     in_valid = p["io_in_valid"]
     fu_type = p["io_in_bits_fuType"]
@@ -1676,7 +1668,7 @@ def build_dispatcher(self: "ExuFuncModule", m: Any) -> None:
 
 
 def _leaf_ports(self: "ExuFuncModule", m: Any, leaf: Any) -> None:
-    # Instantiate a Bku leaf under ``m`` and wire it to the locked port surface. / 在 ``m`` 下实例化 Bku 叶子并连接锁定端口面。
+    # Instantiate a Bku leaf under ``m`` and wire its port surface. / 在 ``m`` 下实例化 Bku 叶子并连接端口面。
     m.submodules.leaf = leaf
     m.d.comb += [
         leaf.clock.eq(self.ports["clock"]),
@@ -1686,42 +1678,42 @@ def _leaf_ports(self: "ExuFuncModule", m: Any, leaf: Any) -> None:
 
 
 def build_count(self: "ExuFuncModule", m: Any) -> None:
-    # CountModule locked leaf: CLZ/CTZ/CPOP with registered stage-0 state. / CountModule 锁定叶子：带寄存一级状态的 CLZ/CTZ/CPOP。
+    # CountModule leaf: CLZ/CTZ/CPOP with registered stage-0 state. / CountModule 叶子：带寄存一级状态的 CLZ/CTZ/CPOP。
     leaf = CountLeaf()
     _leaf_ports(self, m, leaf)
     m.d.comb += [leaf.src.eq(self.ports["io_src"]), leaf.func.eq(self.ports["io_func"])]
 
 
 def build_clmul(self: "ExuFuncModule", m: Any) -> None:
-    # ClmulModule locked leaf: carry-less multiply with registered operands. / ClmulModule 锁定叶子：带寄存操作数的无进位乘法。
+    # ClmulModule leaf: carry-less multiply with registered operands. / ClmulModule 叶子：带寄存操作数的无进位乘法。
     leaf = ClmulLeaf()
     _leaf_ports(self, m, leaf)
     m.d.comb += [leaf.src0.eq(self.ports["io_src_0"]), leaf.src1.eq(self.ports["io_src_1"]), leaf.func.eq(self.ports["io_func"])]
 
 
 def build_misc(self: "ExuFuncModule", m: Any) -> None:
-    # MiscModule locked leaf: XPERM.N / XPERM.B. / MiscModule 锁定叶子：XPERM.N / XPERM.B。
+    # MiscModule leaf: XPERM.N / XPERM.B. / MiscModule 叶子：XPERM.N / XPERM.B。
     leaf = MiscLeaf()
     _leaf_ports(self, m, leaf)
     m.d.comb += [leaf.src0.eq(self.ports["io_src_0"]), leaf.src1.eq(self.ports["io_src_1"]), leaf.func.eq(self.ports["io_func"])]
 
 
 def build_hash(self: "ExuFuncModule", m: Any) -> None:
-    # HashModule locked leaf: SHA-256/512 and SM3 message words. / HashModule 锁定叶子：SHA-256/512 与 SM3 消息字。
+    # HashModule leaf: SHA-256/512 and SM3 message words. / HashModule 叶子：SHA-256/512 与 SM3 消息字。
     leaf = HashLeaf()
     _leaf_ports(self, m, leaf)
     m.d.comb += [leaf.src.eq(self.ports["io_src"]), leaf.func.eq(self.ports["io_func"])]
 
 
 def build_blockcipher(self: "ExuFuncModule", m: Any) -> None:
-    # BlockCipherModule locked leaf: AES/SM4 round functions. / BlockCipherModule 锁定叶子：AES/SM4 轮函数。
+    # BlockCipherModule leaf: AES/SM4 round functions. / BlockCipherModule 叶子：AES/SM4 轮函数。
     leaf = BlockCipherLeaf()
     _leaf_ports(self, m, leaf)
     m.d.comb += [leaf.src0.eq(self.ports["io_src_0"]), leaf.src1.eq(self.ports["io_src_1"]), leaf.func.eq(self.ports["io_func"])]
 
 
 def build_crypto(self: "ExuFuncModule", m: Any) -> None:
-    # CryptoModule locked leaf: hash vs block-cipher selection. / CryptoModule 锁定叶子：哈希与分组密码选择。
+    # CryptoModule leaf: hash vs block-cipher selection. / CryptoModule 叶子：哈希与分组密码选择。
     leaf = CryptoLeaf()
     _leaf_ports(self, m, leaf)
     m.d.comb += [leaf.src0.eq(self.ports["io_src_0"]), leaf.src1.eq(self.ports["io_src_1"]), leaf.func.eq(self.ports["io_func"])]
@@ -1743,8 +1735,8 @@ def build_alu(self: "ExuFuncModule", m: Any) -> None:
 
 def build_bku(self: "ExuFuncModule", m: Any) -> None:
     # Bku: 2-stage FuncUnit (latency 2) muxing the four K-extension leaves
-    # (pinned Bku.sv, FuncUnit.scala HasPipelineReg with latency=2).
-    # Bku：二级 FuncUnit（延迟 2），选择四个 K 扩展叶子（钉死的 Bku.sv）。
+    # Bku: two-stage pipeline selecting one of four crypto/count leaves.
+    # Bku：二级流水线，在四个密码/计数叶子中选择一个。
     p = self.ports
     vvf1 = Signal(name="bku_validVecThisFu_1")
     vvf2 = Signal(name="bku_validVecThisFu_2")
@@ -1839,13 +1831,9 @@ def build_mul(self: "ExuFuncModule", m: Any) -> None:
 
 
 def build_div(self: "ExuFuncModule", m: Any) -> None:
-    # DivUnit: wrapper handshake around the divider core.  The SRT16 core itself
-    # is a separate locked subject; this model restores the identical request/kill
-    # protocol with a one-iteration-per-cycle restoring array and a fixed result
-    # register.  Divider cycle latency is CONTRACT_ONLY.
-    # DivUnit：除法器核心外的握手包装。SRT16 核心本身为另一锁定主体；本模型
-    # 复现相同的请求/kill 协议，采用每周期一次迭代的恢复阵列与固定结果寄存器。
-    # 除法器周期延迟为 CONTRACT_ONLY。
+    # DivUnit: decoupled wrapper around a multi-cycle restoring divider.  Request
+    # control and writeback metadata stay with the transaction until completion.
+    # DivUnit：多周期恢复除法器的解耦包装；请求控制与写回元数据随事务保存到完成。
     p = self.ports
     busy = Signal(name="div_busy")
     valid_r = Signal(name="div_valid_r")
@@ -1855,12 +1843,23 @@ def build_div(self: "ExuFuncModule", m: Any) -> None:
     sign_r = Signal(name="div_sign_r")
     isw_r = Signal(name="div_isw_r")
     ishi_r = Signal(name="div_ishi_r")
+    rob_idx_r_flag = Signal(name="div_rob_idx_r_flag")
+    rob_idx_r_value = Signal(8, name="div_rob_idx_r_value")
+    pdest_r = Signal(8, name="div_pdest_r")
+    rfwen_r = Signal(name="div_rfwen_r")
     func = p["io_in_bits_ctrl_fuOpType"]
     flush_v = p["io_flush_valid"]
     kill_w = _rob_need_flush(flush_v, p["io_flush_bits_robIdx_flag"], p["io_flush_bits_robIdx_value"], p["io_flush_bits_level"], p["io_in_bits_ctrl_robIdx_flag"], p["io_in_bits_ctrl_robIdx_value"])
-    kill_r = Const(0, 1)
-    kill_r = cast(Any, ~(cast(Any, valid_r))) & busy & _rob_need_flush(flush_v, p["io_flush_bits_robIdx_flag"], p["io_flush_bits_robIdx_value"], p["io_flush_bits_level"], p["io_in_bits_ctrl_robIdx_flag"], p["io_in_bits_ctrl_robIdx_value"])
-    fire = p["io_in_valid"] & Mux(cast(Any, busy), 0, 1) & Mux(cast(Any, valid_r), 0, 1) & Mux(cast(Any, kill_w), 0, 1)
+    kill_r = (busy | valid_r) & _rob_need_flush(
+        flush_v,
+        p["io_flush_bits_robIdx_flag"],
+        p["io_flush_bits_robIdx_value"],
+        p["io_flush_bits_level"],
+        rob_idx_r_flag,
+        rob_idx_r_value,
+    )
+    in_fire = p["io_in_valid"] & ~busy & ~valid_r
+    fire = in_fire & ~kill_w
     is_sign = cast(Any, ~(cast(Any, func[1:2])))
     is_w = func[2:3]
     is_hi = func[0:1]
@@ -1868,16 +1867,20 @@ def build_div(self: "ExuFuncModule", m: Any) -> None:
     src1 = p["io_in_bits_data_src_1"]
     cvt0 = Mux(is_w, Mux(is_sign, _sext(src0[0:32], 64), _zext(src0[0:32], 64)), src0)
     cvt1 = Mux(is_w, Mux(is_sign, _sext(src1[0:32], 64), _zext(src1[0:32], 64)), src1)
-    with m.If(fire):
+    with m.If(in_fire):
         m.d.sync += [
-            busy.eq(1),
             a_r.eq(cvt0),
             b_r.eq(cvt1),
             sign_r.eq(is_sign),
             isw_r.eq(is_w),
             ishi_r.eq(is_hi),
-            p["io_out_bits_ctrl_robIdx_flag"].eq(Const(0, 1)),
+            rob_idx_r_flag.eq(p["io_in_bits_ctrl_robIdx_flag"]),
+            rob_idx_r_value.eq(p["io_in_bits_ctrl_robIdx_value"]),
+            pdest_r.eq(p["io_in_bits_ctrl_pdest"]),
+            rfwen_r.eq(p["io_in_bits_ctrl_rfWen"]),
         ]
+    with m.If(fire):
+        m.d.sync += busy.eq(1)
     div_done = Signal(name="div_done")
     m.d.comb += div_done.eq(busy)
     with m.If(div_done & ~kill_r):
@@ -1919,27 +1922,28 @@ def build_div(self: "ExuFuncModule", m: Any) -> None:
     full_res = Mux(ishi_r, r_signed, q_signed)
     result = Mux(isw_r, word_res, full_res)
     with m.If(div_done & ~kill_r):
-        m.d.sync += [data_r.eq(result), p["io_out_bits_ctrl_robIdx_flag"].eq(p["io_in_bits_ctrl_robIdx_flag"]),
-                     p["io_out_bits_ctrl_robIdx_value"].eq(p["io_in_bits_ctrl_robIdx_value"]),
-                     p["io_out_bits_ctrl_pdest"].eq(p["io_in_bits_ctrl_pdest"]),
-                     p["io_out_bits_ctrl_rfWen"].eq(p["io_in_bits_ctrl_rfWen"])]
+        m.d.sync += [data_r.eq(result)]
     m.d.comb += [
         p["io_in_ready"].eq(~busy & ~valid_r),
         p["io_out_valid"].eq(valid_r),
         p["io_out_bits_res_data"].eq(data_r),
+        p["io_out_bits_ctrl_robIdx_flag"].eq(rob_idx_r_flag),
+        p["io_out_bits_ctrl_robIdx_value"].eq(rob_idx_r_value),
+        p["io_out_bits_ctrl_pdest"].eq(pdest_r),
+        p["io_out_bits_ctrl_rfWen"].eq(rfwen_r),
     ]
 
 
 def build_addr_add(self: "ExuFuncModule", m: Any) -> None:
-    # AddrAddModule: branch target / sequential next address (pinned AddrAddModule.sv).
-    # AddrAddModule：分支目标 / 顺序下一地址（钉死的 AddrAddModule.sv）。
+    # AddrAddModule: branch target / sequential next address.
+    # AddrAddModule：分支目标 / 顺序下一地址。
     p = self.ports
     m.d.comb += p["io_target"].eq(addr_add_result(m, p["io_pcExtend"], p["io_taken"], p["io_imm"], p["io_nextPcOffset"], "aam"))
 
 
 def build_std(self: "ExuFuncModule", m: Any) -> None:
-    # Std: store-data pass-through with valid/ready handshake (pinned Std.sv).
-    # Std：带 valid/ready 握手的存储数据透传（钉死的 Std.sv）。
+    # Std: store-data pass-through with valid/ready handshake.
+    # Std：带 valid/ready 握手的存储数据透传。
     p = self.ports
     m.d.comb += [
         p["io_in_ready"].eq(p["io_out_ready"]),
@@ -1950,8 +1954,8 @@ def build_std(self: "ExuFuncModule", m: Any) -> None:
 
 
 def build_mem_exe_unit(self: "ExuFuncModule", m: Any) -> None:
-    # MemExeUnit: store-data pass-through with uop sideband passthrough (pinned MemExeUnit.sv).
-    # MemExeUnit：带 uop 边带透传的存储数据直通（钉死的 MemExeUnit.sv）。
+    # MemExeUnit: store-data pass-through with uop sideband passthrough.
+    # MemExeUnit：带 uop 边带透传的存储数据直通。
     p = self.ports
     m.d.comb += [
         p["io_in_ready"].eq(p["io_out_ready"]),
@@ -1966,8 +1970,8 @@ def build_mem_exe_unit(self: "ExuFuncModule", m: Any) -> None:
 
 
 def build_fence(self: "ExuFuncModule", m: Any) -> None:
-    # Fence: six-state fence FSM driving sfence/fencei/sbuffer (upstream Fence.scala).
-    # Fence：驱动 sfence/fencei/sbuffer 的六态 fence 状态机（upstream Fence.scala）。
+    # Fence: six-state FSM driving sfence/fencei/sbuffer.
+    # Fence：驱动 sfence/fencei/sbuffer 的六态状态机。
     p = self.ports
     s_idle, s_wait, s_tlb, s_icache, s_fence, s_nofence = 0, 1, 2, 3, 4, 5
     state = Signal(3, name="fence_state")
@@ -2033,8 +2037,8 @@ def build_fence(self: "ExuFuncModule", m: Any) -> None:
 
 def build_branch_unit(self: "ExuFuncModule", m: Any) -> None:
     # BranchUnit: 0-latency branch resolution, AddrAddModule target and Redirect
-    # bundle emission (upstream wrapper/BranchUnit.scala).
-    # BranchUnit：0 延迟分支裁决、AddrAddModule 目标与 Redirect 包输出（upstream wrapper/BranchUnit.scala）。
+    # bundle emission.
+    # BranchUnit：零延迟分支裁决、AddrAddModule 目标与 Redirect 包输出。
     p = self.ports
     addr_trans = Cat(
         p["io_instrAddrTransType_bare"], p["io_instrAddrTransType_sv39"],
@@ -2087,8 +2091,8 @@ def build_branch_unit(self: "ExuFuncModule", m: Any) -> None:
 
 def build_jump_unit(self: "ExuFuncModule", m: Any) -> None:
     # JumpUnit: 0-latency jump target computation and Redirect emission
-    # (upstream wrapper/JumpUnit.scala + JumpDataModule).
-    # JumpUnit：0 延迟跳转目标计算与 Redirect 输出（upstream wrapper/JumpUnit.scala）。
+    # JumpUnit: zero-latency target calculation and Redirect output.
+    # JumpUnit：零延迟跳转目标计算与 Redirect 输出。
     p = self.ports
     func = p["io_in_bits_ctrl_fuOpType"]
     is_jalr = func[0:1]
@@ -2149,9 +2153,9 @@ def build_jump_unit(self: "ExuFuncModule", m: Any) -> None:
 
 def build_exe_unit(self: "ExuFuncModule", m: Any) -> None:
     # ExeUnit: Dispatcher + Alu/MulUnit/Bku lanes with clock-gated mul/bku domains,
-    # flush-cancelling inPipe and OR-combined writeback (pinned ExeUnit.sv).
+    # Flush-cancelling input pipeline and OR-combined writeback.
     # ExeUnit：Dispatcher 加 Alu/MulUnit/Bku 三条通路，mul/bku 时钟门控、
-    # 带 flush 取消的 inPipe 与或合并写回（钉死的 ExeUnit.sv）。
+    # 带 flush 取消的 inPipe 与或合并写回。
     p = self.ports
     func = p["io_in_bits_fuOpType"]
     src0 = p["io_in_bits_src_0"]
@@ -2310,7 +2314,7 @@ def build_exe_unit(self: "ExuFuncModule", m: Any) -> None:
     ]
 
 
-# Builder dispatch keyed by locked module name. / 按锁定模块名分派构造器。
+# Builder dispatch keyed by module name. / 按模块名分派构造器。
 BUILDERS: dict[str, Any] = {
     "Dispatcher": build_dispatcher,
     "Dispatcher_1": build_dispatcher,
@@ -2346,9 +2350,9 @@ BUILDERS: dict[str, Any] = {
 
 
 class ExuFuncModule(Elaboratable):
-    """One locked EXU/FuncUnit module with an exact port surface. / 一个端口面精确的锁定 EXU/FuncUnit 模块。"""
+    """One EXU/FuncUnit module with an exact port surface. / 一个端口面精确的 EXU/FuncUnit 模块。"""
 
-    # Construct the locked port surface and bind the module builder. / 构造锁定端口面并绑定构造器。
+    # Construct the declared port surface and bind the module builder. / 构造声明端口面并绑定构造器。
     def __init__(self, module_name: str, top_name: str | None = None) -> None:
         self.module_name = module_name
         self.top_name = top_name or module_name
