@@ -1,17 +1,12 @@
-"""UHSC V2 asynchronous DCache metadata-array family.
-昆明湖 V2 异步 DCache 元数据阵列 family。
-
-Four source specializations share the same four-way array geometry and
-one-cycle registered writes.  This aggregate keeps their locked flattened
-ports while implementing coherent-state, error, flag, and prefetch-source
-storage with per-way write enables and registered read addresses.
+"""DCache asynchronous metadata-array family.
+DCache 异步元数据阵列族。
 """
 
 from __future__ import annotations
 
 from typing import Any, cast
 
-from amaranth import Array, ClockDomain, Elaboratable, Module, Signal
+from amaranth import Array, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
 
 
@@ -24,89 +19,6 @@ COVERED_MODULES: tuple[str, ...] = (
     "L1CohMetaArray", "L1ErrorMetaArray", "L1FlagMetaArray", "L1PrefetchSourceArray",
 )
 
-
-# =============================================================================
-# Configuration
-# =============================================================================
-def read_ports(indices: tuple[int, ...], width: int, fields: tuple[tuple[str, int], ...]) -> list[tuple[str, str, int]]:
-    """Construct flattened read request and response ports. / 构造扁平读取请求与响应端口。"""
-
-    ports: list[tuple[str, str, int]] = []
-    for read in indices:
-        ports.extend(((f"io_read_{read}_valid", "input", 1), (f"io_read_{read}_bits_idx", "input", 8)))
-    for read in indices:
-        for way in range(4):
-            for field, field_width in fields:
-                suffix = f"_{field}" if field else ""
-                ports.append((f"io_resp_{read}_{way}{suffix}", "output", field_width or width))
-    return ports
-
-
-def write_ports(indices: tuple[int, ...], fields: tuple[tuple[str, int], ...]) -> list[tuple[str, str, int]]:
-    """Construct flattened metadata write ports. / 构造扁平元数据写入端口。"""
-
-    ports: list[tuple[str, str, int]] = []
-    for write in indices:
-        ports.extend(((f"io_write_{write}_valid", "input", 1),
-                      (f"io_write_{write}_bits_idx", "input", 8),
-                      (f"io_write_{write}_bits_way_en", "input", 4)))
-        for field, width in fields:
-            ports.append((f"io_write_{write}_bits_{field}", "input", width))
-    return ports
-
-
-def coh_specs() -> tuple[tuple[str, str, int], ...]:
-    """Return coherent metadata ports. / 返回一致性元数据端口。"""
-
-    ports = [("clock", "input", 1), ("reset", "input", 1)]
-    ports += read_ports((0, 1, 2, 3), 2, (("coh_state", 2),))
-    ports += write_ports((0,), (("meta_coh_state", 2),))
-    return tuple(ports)
-
-
-def error_specs() -> tuple[tuple[str, str, int], ...]:
-    """Return TileLink error metadata ports. / 返回 TileLink 错误元数据端口。"""
-
-    ports = [("clock", "input", 1), ("reset", "input", 1)]
-    ports += read_ports((0, 1, 2, 3), 1, (("tl_denied", 1), ("tl_corrupt", 1)))
-    ports += write_ports((0,), (("error_tl_denied", 1), ("error_tl_corrupt", 1)))
-    return tuple(ports)
-
-
-def flag_specs() -> tuple[tuple[str, str, int], ...]:
-    """Return flag metadata ports. / 返回标志元数据端口。"""
-
-    ports = [("clock", "input", 1), ("reset", "input", 1)]
-    ports += read_ports((3, 4), 1, (("", 1),))
-    for write in range(4):
-        ports.extend(((f"io_write_{write}_valid", "input", 1),
-                      (f"io_write_{write}_bits_idx", "input", 8),
-                      (f"io_write_{write}_bits_way_en", "input", 4)))
-        if write == 3:
-            ports.append(("io_write_3_bits_flag", "input", 1))
-    return tuple(ports)
-
-
-def source_specs() -> tuple[tuple[str, str, int], ...]:
-    """Return prefetch-source metadata ports. / 返回预取来源元数据端口。"""
-
-    ports = [("clock", "input", 1), ("reset", "input", 1)]
-    ports += read_ports((0, 1, 2, 3, 4), 3, (("", 3),))
-    for write in range(4):
-        ports.extend(((f"io_write_{write}_valid", "input", 1),
-                      (f"io_write_{write}_bits_idx", "input", 8),
-                      (f"io_write_{write}_bits_way_en", "input", 4)))
-        if write == 3:
-            ports.append(("io_write_3_bits_source", "input", 3))
-    return tuple(ports)
-
-
-PORT_SPECS: dict[str, tuple[tuple[str, str, int], ...]] = {
-    "L1CohMetaArray": coh_specs(),
-    "L1ErrorMetaArray": error_specs(),
-    "L1FlagMetaArray": flag_specs(),
-    "L1PrefetchSourceArray": source_specs(),
-}
 
 PortSpec = tuple[str, str, int]
 
@@ -270,9 +182,18 @@ PORT_SPECS: dict[str, tuple[PortSpec, ...]] = {
     ),
 }
 
-READ_INDICES = {
-    "L1CohMetaArray": (0, 1, 2, 3), "L1ErrorMetaArray": (0, 1, 2, 3),
-    "L1FlagMetaArray": (3, 4), "L1PrefetchSourceArray": (0, 1, 2, 3, 4),
+READ_INDICES: dict[str, tuple[int, ...]] = {
+    "L1CohMetaArray": (0, 1, 2, 3),
+    "L1ErrorMetaArray": (0, 1, 2, 3),
+    "L1FlagMetaArray": (3, 4),
+    "L1PrefetchSourceArray": (0, 1, 2, 3, 4),
+}
+
+WRITE_INDICES: dict[str, tuple[int, ...]] = {
+    "L1CohMetaArray": (0,),
+    "L1ErrorMetaArray": (0,),
+    "L1FlagMetaArray": (0, 1, 2, 3),
+    "L1PrefetchSourceArray": (0, 1, 2, 3),
 }
 
 
@@ -282,8 +203,9 @@ READ_INDICES = {
 class DcacheMetaArrayFamily(Elaboratable):
     """One four-way metadata array specialization. / 一个四路元数据阵列特化。"""
 
+    # Initialize the declared member interface. / 初始化声明的成员接口。
     def __init__(self, member: str = "L1CohMetaArray") -> None:
-        """Declare exact locked ports. / 声明精确锁定端口。"""
+        """Declare the member ports. / 声明成员端口。"""
 
         if member not in PORT_SPECS:
             raise ValueError(f"unsupported DCache metadata member: {member}")
@@ -295,7 +217,7 @@ class DcacheMetaArrayFamily(Elaboratable):
         self.clock = self.ports["clock"]
         self.reset = self.ports["reset"]
 
-    # Return member field layouts. / 返回成员字段布局。
+    # Return the member field layout. / 返回成员字段布局。
     def field_layout(self) -> tuple[tuple[str, int, str], ...]:
         """Map read suffix, width, and write suffix. / 映射读取后缀、位宽与写入后缀。"""
 
@@ -307,9 +229,19 @@ class DcacheMetaArrayFamily(Elaboratable):
             return (("", 1, "flag"),)
         return (("", 3, "source"),)
 
+    # Return the member bypass timing. / 返回成员旁路时序。
+    def bypass_style(self) -> str:
+        """Identify the read-path write stages. / 标识读取路径的写入级。"""
+
+        if self.member in {"L1CohMetaArray", "L1ErrorMetaArray"}:
+            return "s0_s1"
+        if self.member == "L1PrefetchSourceArray":
+            return "s1"
+        return "none"
+
     # Elaborate the four-way storage. / 展开四路存储。
     def elaborate(self, platform: Any) -> Module:
-        """Implement registered reads and per-way writes. / 实现寄存读取及逐路写入。"""
+        """Implement staged writes and member-specific reads. / 实现分级写入和成员专属读取。"""
 
         del platform
         module = Module()
@@ -318,35 +250,154 @@ class DcacheMetaArrayFamily(Elaboratable):
         domain.rst = self.reset
         module.domains += domain
         layouts = self.field_layout()
-        memories: dict[str, list[Array]] = {}
-        for read_suffix, width, _write_suffix in layouts:
-            memories[read_suffix] = [
-                Array(Signal(width, name=f"meta_{read_suffix or 'value'}_{way}_{index}", reset=0)
-                      for index in range(256)) for way in range(4)
-            ]
+        writes = WRITE_INDICES[self.member]
+        style = self.bypass_style()
+        memories = {
+            read_suffix: tuple(
+                Array(
+                    Signal(width, name=f"meta_{read_suffix or 'value'}_{way}_{index}", reset=0)
+                    for index in range(256)
+                )
+                for way in range(4)
+            )
+            for read_suffix, width, _write_suffix in layouts
+        }
+        stage_enable: dict[tuple[int, int], Signal] = {}
+        stage_address: dict[tuple[int, int], Signal] = {}
+        stage_data: dict[tuple[str, int, int], Signal] = {}
 
-        for read in READ_INDICES[self.member]:
-            address = Signal(8, name=f"meta_read_address_{read}")
-            with cast(Any, module.If(self.ports[f"io_read_{read}_valid"])):
-                module.d.sync += address.eq(self.ports[f"io_read_{read}_bits_idx"])
-            for way in range(4):
-                for read_suffix, _width, _write_suffix in layouts:
-                    suffix = f"_{read_suffix}" if read_suffix else ""
-                    module.d.comb += self.ports[f"io_resp_{read}_{way}{suffix}"].eq(
-                        memories[read_suffix][way][address]
-                    )
+        for way in range(4):
+            for write in writes:
+                stage_enable[way, write] = Signal(
+                    name=f"meta_s1_enable_{way}_{write}", reset_less=True
+                )
+                stage_address[way, write] = Signal(
+                    8, name=f"meta_s1_address_{way}_{write}", reset_less=True
+                )
+                for read_suffix, width, write_suffix in layouts:
+                    data_name = f"io_write_{write}_bits_{write_suffix}"
+                    if data_name in self.ports:
+                        stage_data[read_suffix, way, write] = Signal(
+                            width,
+                            name=f"meta_s1_{read_suffix or 'value'}_{way}_{write}",
+                            reset_less=True,
+                        )
 
-        write_indices = (0,) if self.member in {"L1CohMetaArray", "L1ErrorMetaArray"} else (0, 1, 2, 3)
-        for write in write_indices:
+        for write in writes:
             valid = self.ports[f"io_write_{write}_valid"]
             address = self.ports[f"io_write_{write}_bits_idx"]
             enables = self.ports[f"io_write_{write}_bits_way_en"]
             for way in range(4):
-                with cast(Any, module.If(valid & cast(Any, enables[way]))):
-                    for read_suffix, width, write_suffix in layouts:
-                        value_name = f"io_write_{write}_bits_{write_suffix}"
-                        value = self.ports[value_name] if value_name in self.ports else Signal(width, init=0)
-                        module.d.sync += memories[read_suffix][way][address].eq(value)
+                enabled = valid & enables[way]
+                module.d.sync += stage_enable[way, write].eq(enabled)
+                with cast(Any, module.If(enabled)):
+                    module.d.sync += stage_address[way, write].eq(address)
+                    for read_suffix, _width, write_suffix in layouts:
+                        data_name = f"io_write_{write}_bits_{write_suffix}"
+                        data_register = stage_data.get((read_suffix, way, write))
+                        if data_register is not None:
+                            module.d.sync += data_register.eq(self.ports[data_name])
+
+        for read_suffix, width, _write_suffix in layouts:
+            for way in range(4):
+                for index in range(256):
+                    cell = memories[read_suffix][way][index]
+                    next_value = cell
+                    for write in writes:
+                        staged_value = stage_data.get((read_suffix, way, write))
+                        if staged_value is None:
+                            staged_value = Const(1, width)
+                        matches_cell = stage_enable[way, write] & (stage_address[way, write] == index)
+                        next_value = Mux(matches_cell, staged_value, next_value)
+                    module.d.sync += cell.eq(next_value)
+
+        for read in READ_INDICES[self.member]:
+            valid = self.ports[f"io_read_{read}_valid"]
+            address = self.ports[f"io_read_{read}_bits_idx"]
+            for way in range(4):
+                if style == "none":
+                    registered_address = Signal(
+                        8, name=f"meta_read_address_{read}_{way}", reset_less=True
+                    )
+                    with cast(Any, module.If(valid)):
+                        module.d.sync += registered_address.eq(address)
+                    for read_suffix, _width, _write_suffix in layouts:
+                        suffix = f"_{read_suffix}" if read_suffix else ""
+                        module.d.comb += self.ports[f"io_resp_{read}_{way}{suffix}"].eq(
+                            memories[read_suffix][way][registered_address]
+                        )
+                    continue
+
+                bypass_hit = Const(0)
+                bypass_values: dict[str, Any] = {
+                    read_suffix: Const(0, width) for read_suffix, width, _write_suffix in layouts
+                }
+                for write in writes:
+                    staged_match = stage_enable[way, write] & (stage_address[way, write] == address)
+                    bypass_hit = bypass_hit | staged_match
+                    for read_suffix, width, _write_suffix in layouts:
+                        staged_value = stage_data.get((read_suffix, way, write))
+                        if staged_value is None:
+                            staged_value = Const(1, width)
+                        bypass_values[read_suffix] = Mux(
+                            staged_match, staged_value, bypass_values[read_suffix]
+                        )
+                    if style == "s0_s1":
+                        current_match = (
+                            self.ports[f"io_write_{write}_valid"]
+                            & self.ports[f"io_write_{write}_bits_way_en"][way]
+                            & (self.ports[f"io_write_{write}_bits_idx"] == address)
+                        )
+                        bypass_hit = bypass_hit | current_match
+                        for read_suffix, _width, write_suffix in layouts:
+                            current_value = self.ports[f"io_write_{write}_bits_{write_suffix}"]
+                            bypass_values[read_suffix] = Mux(
+                                current_match, current_value, bypass_values[read_suffix]
+                            )
+
+                registered_bypass = Signal(
+                    name=f"meta_read_bypass_{read}_{way}", reset_less=True
+                )
+                with cast(Any, module.If(valid)):
+                    module.d.sync += registered_bypass.eq(bypass_hit)
+                bypass_registers: dict[str, Signal] = {}
+                for read_suffix, width, _write_suffix in layouts:
+                    bypass_registers[read_suffix] = Signal(
+                        width,
+                        name=f"meta_read_bypass_data_{read}_{way}_{read_suffix or 'value'}",
+                        reset_less=True,
+                    )
+                    with cast(Any, module.If(bypass_hit)):
+                        module.d.sync += bypass_registers[read_suffix].eq(bypass_values[read_suffix])
+
+                if style == "s0_s1":
+                    for read_suffix, width, _write_suffix in layouts:
+                        memory_register = Signal(
+                            width,
+                            name=f"meta_read_data_{read}_{way}_{read_suffix or 'value'}",
+                            reset_less=True,
+                        )
+                        with cast(Any, module.If(valid)):
+                            module.d.sync += memory_register.eq(memories[read_suffix][way][address])
+                        suffix = f"_{read_suffix}" if read_suffix else ""
+                        module.d.comb += self.ports[f"io_resp_{read}_{way}{suffix}"].eq(
+                            Mux(registered_bypass, bypass_registers[read_suffix], memory_register)
+                        )
+                else:
+                    registered_address = Signal(
+                        8, name=f"meta_read_address_{read}_{way}", reset_less=True
+                    )
+                    with cast(Any, module.If(valid)):
+                        module.d.sync += registered_address.eq(address)
+                    for read_suffix, _width, _write_suffix in layouts:
+                        suffix = f"_{read_suffix}" if read_suffix else ""
+                        module.d.comb += self.ports[f"io_resp_{read}_{way}{suffix}"].eq(
+                            Mux(
+                                registered_bypass,
+                                bypass_registers[read_suffix],
+                                memories[read_suffix][way][registered_address],
+                            )
+                        )
         return module
 
 

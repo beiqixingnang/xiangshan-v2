@@ -45,6 +45,26 @@ class StoreQueueDataTest(unittest.TestCase):
 
         sim = Simulator(dut); sim.add_clock(1e-6); sim.add_process(process); sim.run(); self.assertEqual([1], result)
 
+    def test_address_read_out_of_range_uses_entry_zero(self) -> None:
+        """Address Vec reads above entry 55 return entry zero. / 地址 Vec 读取超过 55 时返回零号条目。"""
+
+        module = load_subject(); dut = module.StoreQueueDataFamily("SQAddrModule"); result: list[int] = []
+
+        def process():
+            yield dut.ports["io_wen_0"].eq(1)
+            yield dut.ports["io_waddr_0"].eq(0)
+            yield dut.ports["io_wdata_0"].eq(0x123456789ABC)
+            yield dut.ports["io_wmask_0"].eq(0xFFFF)
+            yield dut.ports["io_wlineflag_0"].eq(0)
+            yield Tick()
+            yield dut.ports["io_wen_0"].eq(0)
+            yield dut.ports["io_raddr_0"].eq(63)
+            yield Tick()
+            yield Settle()
+            result.append(int((yield dut.ports["io_rdata_0"])))
+
+        sim = Simulator(dut); sim.add_clock(1e-6); sim.add_process(process); sim.run(); self.assertEqual([0x123456789ABC], result)
+
 
 if __name__ == "__main__":
     unittest.main()

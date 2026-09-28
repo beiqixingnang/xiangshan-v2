@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from typing import Any, cast
 
-from amaranth import Array, ClockDomain, Elaboratable, Module, Mux, Signal
+from amaranth import Array, Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
 
 
@@ -596,6 +596,20 @@ MEMORY_CONFIG: dict[str, tuple[int, int, int]] = {
     "LqVAddrModule": (72, 50, 7),
 }
 
+WRITE_BANK_COUNT: dict[str, int] = {
+    "LqMaskModule": 8,
+    "LqPAddrModule": 8,
+    "LqPAddrModule_1": 8,
+    "LqVAddrModule": 8,
+}
+
+WRITE_DELAY: dict[str, int] = {
+    "LqMaskModule": 2,
+    "LqPAddrModule": 1,
+    "LqPAddrModule_1": 2,
+    "LqVAddrModule": 2,
+}
+
 
 # =============================================================================
 # Implementation
@@ -616,10 +630,8 @@ class LoadQueueDataFamily(Elaboratable):
         self.clock = self.ports["clock"]
         self.reset = self.ports["reset"]
 
-    # Elaborate common writes and specialization-specific observations. /
-    # 展开共用写入和特化观测逻辑。
     def elaborate(self, platform: Any) -> Module:
-        """Build registered reads and CAM equations. / 构建寄存读取与 CAM 方程。"""
+        """Build banked writes, registered reads, and specialization CAMs. / 构建分 bank 写入、寄存读取和特化 CAM。"""
 
         del platform
         module = Module()
@@ -627,22 +639,98 @@ class LoadQueueDataFamily(Elaboratable):
         domain.clk = self.clock
         domain.rst = self.reset
         module.domains += domain
-        entries, data_width, address_width = MEMORY_CONFIG[self.member]
+        entries, data_width, _address_width = MEMORY_CONFIG[self.member]
+        bank_count = WRITE_BANK_COUNT[self.member]
+        write_delay = WRITE_DELAY[self.member]
+        entries_per_bank = entries // bank_count
+        pipeline_cycles = write_delay - 1
         memory = Array(Signal(data_width, name=f"entry_{index}", reset_less=True)
                        for index in range(entries))
 
-        for write in range(3):
-            with cast(Any, module.If(self.ports[f"io_wen_{write}"])):
-                module.d.sync += memory[self.ports[f"io_waddr_{write}"]].eq(
-                    self.ports[f"io_wdata_{write}"]
-                )
+        def read_entry(address: Any) -> Any:
+            """Read one Vec entry, including Chisel's entry-zero fallback. / 读取 Vec 条目并保留 Chisel 的零号条目回退。"""
+
+            return Mux(address < entries, memory[address], memory[0])
+
+        def delay_with_valid(source: Any, valid: Any, width: int, cycles: int, stem: str) -> Any:
+            """Implement DelayNWithValid bits behavior. / 实现 DelayNWithValid 的数据保持行为。"""
+
+            delayed_value = source
+            delayed_valid = valid
+            for stage in range(cycles):
+                next_value = Signal(width, name=f"{stem}_data_{stage}", reset_less=True)
+                next_valid = Signal(name=f"{stem}_valid_{stage}")
+                with cast(Any, module.If(delayed_valid)):
+                    module.d.sync += next_value.eq(delayed_value)
+                module.d.sync += next_valid.eq(delayed_valid)
+                delayed_value = next_value
+                delayed_valid = next_valid
+            return delayed_value
+
+        def delay(source: Any, cycles: int, stem: str) -> Any:
+            """Implement DelayN without a write-valid hold. / 实现无 valid 保持的 DelayN。"""
+
+            delayed_value = source
+            for stage in range(cycles):
+                next_value = Signal(name=f"{stem}_{stage}", reset_less=True)
+                module.d.sync += next_value.eq(delayed_value)
+                delayed_value = next_value
+            return delayed_value
+
+        for bank in range(bank_count):
+            bank_base = bank * entries_per_bank
+            delayed_decodes: list[Any] = []
+            delayed_enables: list[Any] = []
+            delayed_data: list[Any] = []
+            for write in range(3):
+                write_enable = self.ports[f"io_wen_{write}"]
+                write_address = self.ports[f"io_waddr_{write}"]
+                decoder = Signal(entries_per_bank, name=f"s0_bank_decode_{bank}_{write}")
+                decoder_bits = [
+                    write_address == bank_base + entry
+                    for entry in range(entries_per_bank)
+                ]
+                module.d.comb += decoder.eq(Cat(*decoder_bits))
+                delayed_decodes.append(delay_with_valid(
+                    decoder,
+                    write_enable,
+                    entries_per_bank,
+                    pipeline_cycles,
+                    f"sx_bank_decode_{bank}_{write}",
+                ))
+                delayed_enables.append(delay(
+                    write_enable & (decoder != 0),
+                    pipeline_cycles,
+                    f"sx_bank_enable_{bank}_{write}",
+                ))
+                delayed_data.append(delay_with_valid(
+                    self.ports[f"io_wdata_{write}"],
+                    write_enable,
+                    data_width,
+                    pipeline_cycles,
+                    f"sx_write_data_{bank}_{write}",
+                ))
+
+            for entry in range(entries_per_bank):
+                entry_enable: Any = Const(0, 1)
+                entry_data: Any = Const(0, data_width)
+                for write in range(3):
+                    selected = delayed_enables[write] & delayed_decodes[write][entry]
+                    entry_enable = entry_enable | selected
+                    entry_data = entry_data | Mux(
+                        selected,
+                        delayed_data[write],
+                        Const(0, data_width),
+                    )
+                with cast(Any, module.If(entry_enable)):
+                    module.d.sync += memory[bank_base + entry].eq(entry_data)
 
         if self.member == "LqVAddrModule":
             for read in range(3):
-                address = Signal(address_width, name=f"read_address_{read}")
+                read_data = Signal(data_width, name=f"read_data_{read}", reset_less=True)
                 with cast(Any, module.If(self.ports[f"io_ren_{read}"])):
-                    module.d.sync += address.eq(self.ports[f"io_raddr_{read}"])
-                module.d.comb += self.ports[f"io_rdata_{read}"].eq(memory[address])
+                    module.d.sync += read_data.eq(read_entry(self.ports[f"io_raddr_{read}"]))
+                module.d.comb += self.ports[f"io_rdata_{read}"].eq(read_data)
         elif self.member == "LqMaskModule":
             for cam in range(2):
                 query = self.ports[f"io_violationMdata_{cam}"]
@@ -655,10 +743,10 @@ class LoadQueueDataFamily(Elaboratable):
                 query = self.ports[f"io_violationMdata_{cam}"]
                 check_line = self.ports[f"io_violationCheckLine_{cam}"]
                 for entry in range(entries):
-                    exact = query == memory[entry]
-                    cache_line = query[4:data_width] == memory[entry][4:data_width]
+                    cache_line = query[2:data_width] == memory[entry][2:data_width]
+                    low_address = query[:2] == memory[entry][:2]
                     module.d.comb += self.ports[f"io_violationMmask_{cam}_{entry}"].eq(
-                        Mux(check_line, cache_line, exact)
+                        cache_line & (check_line | low_address)
                     )
         else:
             release = self.ports["io_releaseMdata_2"]

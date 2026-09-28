@@ -1,9 +1,5 @@
 """UHSC V2 store-queue address and data families.
 昆明湖 V2 存储队列地址与数据 family。
-
-StoreQueueData.scala contains four generated specializations.  This aggregate
-keeps their flattened ports exact while sharing the source's banked registers,
-registered reads, masked writes, and forwarding CAM equations.
 """
 
 from __future__ import annotations
@@ -17,7 +13,9 @@ from amaranth.back import verilog
 # =============================================================================
 # Module Contract
 # =============================================================================
-__all__ = ["COVERED_MODULES", "StoreQueueDataFamily", "build_verilog", "main"]
+PortSpec = tuple[str, str, int]
+
+__all__ = ["COVERED_MODULES", "PORT_SPECS", "StoreQueueDataFamily", "build_verilog", "main"]
 
 COVERED_MODULES: tuple[str, ...] = (
     "SQAddrModule", "SQAddrModule_1", "SQData8Module", "SQDataModule",
@@ -27,633 +25,112 @@ COVERED_MODULES: tuple[str, ...] = (
 # =============================================================================
 # Configuration
 # =============================================================================
-def addr_specs(data_width: int, include_read_lineflag: bool) -> tuple[tuple[str, str, int], ...]:
-    """Construct an SQAddr port surface. / 构造 SQAddr 端口表面。"""
+ENTRY_COUNT = 56
+ADDRESS_WIDTH = 6
+BANK_COUNT = 8
+BANK_SELECT_WIDTH = 3
+BANK_DEPTH = 7
+BYTE_COUNT = 16
 
-    ports: list[tuple[str, str, int]] = [("clock", "input", 1), ("reset", "input", 1)]
-    for index in range(2):
-        ports.extend(((f"io_raddr_{index}", "input", 6), (f"io_rdata_{index}", "output", data_width)))
+
+# Construct one address-array port surface. / 构造一个地址阵列端口表面。
+def addr_specs(data_width: int, include_read_lineflag: bool) -> tuple[PortSpec, ...]:
+    """Return the ordered address-array ABI. / 返回有序地址阵列 ABI。"""
+
+    ports: list[PortSpec] = [("clock", "input", 1), ("reset", "input", 1)]
+    ports.extend((f"io_raddr_{index}", "input", ADDRESS_WIDTH) for index in range(2))
+    ports.extend((f"io_rdata_{index}", "output", data_width) for index in range(2))
     if include_read_lineflag:
         ports.extend((f"io_rlineflag_{index}", "output", 1) for index in range(2))
-    for index in range(2):
-        ports.extend(((f"io_wen_{index}", "input", 1), (f"io_waddr_{index}", "input", 6),
-                      (f"io_wdata_{index}", "input", data_width), (f"io_wmask_{index}", "input", 16)))
-        ports.append((f"io_wlineflag_{index}", "input", 1))
-    for index in range(3):
-        ports.extend(((f"io_forwardMdata_{index}", "input", data_width),
-                      (f"io_forwardDataMask_{index}", "input", 16)))
-    for forward in range(3):
-        for entry in range(56):
-            ports.append((f"io_forwardMmask_{forward}_{entry}", "output", 1))
+    ports.extend((f"io_wen_{index}", "input", 1) for index in range(2))
+    ports.extend((f"io_waddr_{index}", "input", ADDRESS_WIDTH) for index in range(2))
+    ports.extend((f"io_wdata_{index}", "input", data_width) for index in range(2))
+    ports.extend((f"io_wmask_{index}", "input", BYTE_COUNT) for index in range(2))
+    ports.extend((f"io_wlineflag_{index}", "input", 1) for index in range(2))
+    ports.extend((f"io_forwardMdata_{index}", "input", data_width) for index in range(3))
+    ports.extend((f"io_forwardDataMask_{index}", "input", BYTE_COUNT) for index in range(3))
+    ports.extend(
+        (f"io_forwardMmask_{forward}_{entry}", "output", 1)
+        for forward in range(3)
+        for entry in range(ENTRY_COUNT)
+    )
     return tuple(ports)
 
 
-def data8_specs() -> tuple[tuple[str, str, int], ...]:
-    """Construct the byte data-array port surface. / 构造字节数据阵列端口表面。"""
+# Construct the byte-array port surface. / 构造字节阵列端口表面。
+def data8_specs() -> tuple[PortSpec, ...]:
+    """Return the ordered byte data-array ABI. / 返回有序字节数据阵列 ABI。"""
 
-    ports: list[tuple[str, str, int]] = [("clock", "input", 1), ("reset", "input", 1)]
+    ports: list[PortSpec] = [("clock", "input", 1), ("reset", "input", 1)]
+    ports.extend((f"io_raddr_{index}", "input", ADDRESS_WIDTH) for index in range(2))
     for index in range(2):
-        ports.extend(((f"io_raddr_{index}", "input", 6), (f"io_rdata_{index}_valid", "output", 1),
-                      (f"io_rdata_{index}_data", "output", 8)))
-    for index in range(2):
-        ports.extend(((f"io_data_wen_{index}", "input", 1), (f"io_data_waddr_{index}", "input", 6),
-                      (f"io_data_wdata_{index}", "input", 8), (f"io_mask_wen_{index}", "input", 1),
-                      (f"io_mask_waddr_{index}", "input", 6), (f"io_mask_wdata_{index}", "input", 1)))
-    for forward in range(3):
-        for half in range(2):
-            ports.append((f"io_needForward_{forward}_{half}", "input", 56))
-    for forward in range(3):
-        ports.extend(((f"io_forwardValid_{forward}", "output", 1),
-                      (f"io_forwardData_{forward}", "output", 8)))
+        ports.extend(((f"io_rdata_{index}_valid", "output", 1), (f"io_rdata_{index}_data", "output", 8)))
+    ports.extend((f"io_data_wen_{index}", "input", 1) for index in range(2))
+    ports.extend((f"io_data_waddr_{index}", "input", ADDRESS_WIDTH) for index in range(2))
+    ports.extend((f"io_data_wdata_{index}", "input", 8) for index in range(2))
+    ports.extend((f"io_mask_wen_{index}", "input", 1) for index in range(2))
+    ports.extend((f"io_mask_waddr_{index}", "input", ADDRESS_WIDTH) for index in range(2))
+    ports.extend((f"io_mask_wdata_{index}", "input", 1) for index in range(2))
+    ports.extend(
+        (f"io_needForward_{forward}_{half}", "input", ENTRY_COUNT)
+        for forward in range(3)
+        for half in range(2)
+    )
+    ports.extend((f"io_forwardValid_{forward}", "output", 1) for forward in range(3))
+    ports.extend((f"io_forwardData_{forward}", "output", 8) for forward in range(3))
     return tuple(ports)
 
 
-def data_specs() -> tuple[tuple[str, str, int], ...]:
-    """Construct the 128-bit data-array port surface. / 构造 128 位数据阵列端口表面。"""
+# Construct the wide data-array port surface. / 构造宽数据阵列端口表面。
+def data_specs() -> tuple[PortSpec, ...]:
+    """Return the ordered 128-bit data-array ABI. / 返回有序 128 位数据阵列 ABI。"""
 
-    ports: list[tuple[str, str, int]] = [("clock", "input", 1), ("reset", "input", 1)]
+    ports: list[PortSpec] = [("clock", "input", 1), ("reset", "input", 1)]
+    ports.extend((f"io_raddr_{index}", "input", ADDRESS_WIDTH) for index in range(2))
     for index in range(2):
-        ports.extend(((f"io_raddr_{index}", "input", 6), (f"io_rdata_{index}_mask", "output", 16),
-                      (f"io_rdata_{index}_data", "output", 128)))
-    for index in range(2):
-        ports.extend(((f"io_data_wen_{index}", "input", 1), (f"io_data_waddr_{index}", "input", 6),
-                      (f"io_data_wdata_{index}", "input", 128), (f"io_mask_wen_{index}", "input", 1),
-                      (f"io_mask_waddr_{index}", "input", 6), (f"io_mask_wdata_{index}", "input", 16)))
-    for forward in range(3):
-        for half in range(2):
-            ports.append((f"io_needForward_{forward}_{half}", "input", 56))
-    for forward in range(3):
-        for byte in range(16):
-            ports.append((f"io_forwardMask_{forward}_{byte}", "output", 1))
-        for byte in range(16):
-            ports.append((f"io_forwardData_{forward}_{byte}", "output", 8))
+        ports.extend(((f"io_rdata_{index}_mask", "output", BYTE_COUNT),
+                      (f"io_rdata_{index}_data", "output", BYTE_COUNT * 8)))
+    ports.extend((f"io_data_wen_{index}", "input", 1) for index in range(2))
+    ports.extend((f"io_data_waddr_{index}", "input", ADDRESS_WIDTH) for index in range(2))
+    ports.extend((f"io_data_wdata_{index}", "input", BYTE_COUNT * 8) for index in range(2))
+    ports.extend((f"io_mask_wen_{index}", "input", 1) for index in range(2))
+    ports.extend((f"io_mask_waddr_{index}", "input", ADDRESS_WIDTH) for index in range(2))
+    ports.extend((f"io_mask_wdata_{index}", "input", BYTE_COUNT) for index in range(2))
+    ports.extend(
+        (f"io_needForward_{forward}_{half}", "input", ENTRY_COUNT)
+        for forward in range(3)
+        for half in range(2)
+    )
+    ports.extend(
+        (f"io_forwardMask_{forward}_{byte}", "output", 1)
+        for forward in range(3)
+        for byte in range(BYTE_COUNT)
+    )
+    ports.extend(
+        (f"io_forwardData_{forward}_{byte}", "output", 8)
+        for forward in range(3)
+        for byte in range(BYTE_COUNT)
+    )
     return tuple(ports)
 
 
-PORT_SPECS: dict[str, tuple[tuple[str, str, int], ...]] = {
+PORT_SPECS: dict[str, tuple[PortSpec, ...]] = {
     "SQAddrModule": addr_specs(48, True),
     "SQAddrModule_1": addr_specs(50, False),
     "SQData8Module": data8_specs(),
     "SQDataModule": data_specs(),
 }
 
-PortSpec = tuple[str, str, int]
-
-PORT_SPECS: dict[str, tuple[PortSpec, ...]] = {
-    'SQAddrModule': (
-        ('clock', 'input', 1),
-        ('reset', 'input', 1),
-        ('io_raddr_0', 'input', 6),
-        ('io_raddr_1', 'input', 6),
-        ('io_rdata_0', 'output', 48),
-        ('io_rdata_1', 'output', 48),
-        ('io_rlineflag_0', 'output', 1),
-        ('io_rlineflag_1', 'output', 1),
-        ('io_wen_0', 'input', 1),
-        ('io_wen_1', 'input', 1),
-        ('io_waddr_0', 'input', 6),
-        ('io_waddr_1', 'input', 6),
-        ('io_wdata_0', 'input', 48),
-        ('io_wdata_1', 'input', 48),
-        ('io_wmask_0', 'input', 16),
-        ('io_wmask_1', 'input', 16),
-        ('io_wlineflag_0', 'input', 1),
-        ('io_wlineflag_1', 'input', 1),
-        ('io_forwardMdata_0', 'input', 48),
-        ('io_forwardMdata_1', 'input', 48),
-        ('io_forwardMdata_2', 'input', 48),
-        ('io_forwardDataMask_0', 'input', 16),
-        ('io_forwardDataMask_1', 'input', 16),
-        ('io_forwardDataMask_2', 'input', 16),
-        ('io_forwardMmask_0_0', 'output', 1),
-        ('io_forwardMmask_0_1', 'output', 1),
-        ('io_forwardMmask_0_2', 'output', 1),
-        ('io_forwardMmask_0_3', 'output', 1),
-        ('io_forwardMmask_0_4', 'output', 1),
-        ('io_forwardMmask_0_5', 'output', 1),
-        ('io_forwardMmask_0_6', 'output', 1),
-        ('io_forwardMmask_0_7', 'output', 1),
-        ('io_forwardMmask_0_8', 'output', 1),
-        ('io_forwardMmask_0_9', 'output', 1),
-        ('io_forwardMmask_0_10', 'output', 1),
-        ('io_forwardMmask_0_11', 'output', 1),
-        ('io_forwardMmask_0_12', 'output', 1),
-        ('io_forwardMmask_0_13', 'output', 1),
-        ('io_forwardMmask_0_14', 'output', 1),
-        ('io_forwardMmask_0_15', 'output', 1),
-        ('io_forwardMmask_0_16', 'output', 1),
-        ('io_forwardMmask_0_17', 'output', 1),
-        ('io_forwardMmask_0_18', 'output', 1),
-        ('io_forwardMmask_0_19', 'output', 1),
-        ('io_forwardMmask_0_20', 'output', 1),
-        ('io_forwardMmask_0_21', 'output', 1),
-        ('io_forwardMmask_0_22', 'output', 1),
-        ('io_forwardMmask_0_23', 'output', 1),
-        ('io_forwardMmask_0_24', 'output', 1),
-        ('io_forwardMmask_0_25', 'output', 1),
-        ('io_forwardMmask_0_26', 'output', 1),
-        ('io_forwardMmask_0_27', 'output', 1),
-        ('io_forwardMmask_0_28', 'output', 1),
-        ('io_forwardMmask_0_29', 'output', 1),
-        ('io_forwardMmask_0_30', 'output', 1),
-        ('io_forwardMmask_0_31', 'output', 1),
-        ('io_forwardMmask_0_32', 'output', 1),
-        ('io_forwardMmask_0_33', 'output', 1),
-        ('io_forwardMmask_0_34', 'output', 1),
-        ('io_forwardMmask_0_35', 'output', 1),
-        ('io_forwardMmask_0_36', 'output', 1),
-        ('io_forwardMmask_0_37', 'output', 1),
-        ('io_forwardMmask_0_38', 'output', 1),
-        ('io_forwardMmask_0_39', 'output', 1),
-        ('io_forwardMmask_0_40', 'output', 1),
-        ('io_forwardMmask_0_41', 'output', 1),
-        ('io_forwardMmask_0_42', 'output', 1),
-        ('io_forwardMmask_0_43', 'output', 1),
-        ('io_forwardMmask_0_44', 'output', 1),
-        ('io_forwardMmask_0_45', 'output', 1),
-        ('io_forwardMmask_0_46', 'output', 1),
-        ('io_forwardMmask_0_47', 'output', 1),
-        ('io_forwardMmask_0_48', 'output', 1),
-        ('io_forwardMmask_0_49', 'output', 1),
-        ('io_forwardMmask_0_50', 'output', 1),
-        ('io_forwardMmask_0_51', 'output', 1),
-        ('io_forwardMmask_0_52', 'output', 1),
-        ('io_forwardMmask_0_53', 'output', 1),
-        ('io_forwardMmask_0_54', 'output', 1),
-        ('io_forwardMmask_0_55', 'output', 1),
-        ('io_forwardMmask_1_0', 'output', 1),
-        ('io_forwardMmask_1_1', 'output', 1),
-        ('io_forwardMmask_1_2', 'output', 1),
-        ('io_forwardMmask_1_3', 'output', 1),
-        ('io_forwardMmask_1_4', 'output', 1),
-        ('io_forwardMmask_1_5', 'output', 1),
-        ('io_forwardMmask_1_6', 'output', 1),
-        ('io_forwardMmask_1_7', 'output', 1),
-        ('io_forwardMmask_1_8', 'output', 1),
-        ('io_forwardMmask_1_9', 'output', 1),
-        ('io_forwardMmask_1_10', 'output', 1),
-        ('io_forwardMmask_1_11', 'output', 1),
-        ('io_forwardMmask_1_12', 'output', 1),
-        ('io_forwardMmask_1_13', 'output', 1),
-        ('io_forwardMmask_1_14', 'output', 1),
-        ('io_forwardMmask_1_15', 'output', 1),
-        ('io_forwardMmask_1_16', 'output', 1),
-        ('io_forwardMmask_1_17', 'output', 1),
-        ('io_forwardMmask_1_18', 'output', 1),
-        ('io_forwardMmask_1_19', 'output', 1),
-        ('io_forwardMmask_1_20', 'output', 1),
-        ('io_forwardMmask_1_21', 'output', 1),
-        ('io_forwardMmask_1_22', 'output', 1),
-        ('io_forwardMmask_1_23', 'output', 1),
-        ('io_forwardMmask_1_24', 'output', 1),
-        ('io_forwardMmask_1_25', 'output', 1),
-        ('io_forwardMmask_1_26', 'output', 1),
-        ('io_forwardMmask_1_27', 'output', 1),
-        ('io_forwardMmask_1_28', 'output', 1),
-        ('io_forwardMmask_1_29', 'output', 1),
-        ('io_forwardMmask_1_30', 'output', 1),
-        ('io_forwardMmask_1_31', 'output', 1),
-        ('io_forwardMmask_1_32', 'output', 1),
-        ('io_forwardMmask_1_33', 'output', 1),
-        ('io_forwardMmask_1_34', 'output', 1),
-        ('io_forwardMmask_1_35', 'output', 1),
-        ('io_forwardMmask_1_36', 'output', 1),
-        ('io_forwardMmask_1_37', 'output', 1),
-        ('io_forwardMmask_1_38', 'output', 1),
-        ('io_forwardMmask_1_39', 'output', 1),
-        ('io_forwardMmask_1_40', 'output', 1),
-        ('io_forwardMmask_1_41', 'output', 1),
-        ('io_forwardMmask_1_42', 'output', 1),
-        ('io_forwardMmask_1_43', 'output', 1),
-        ('io_forwardMmask_1_44', 'output', 1),
-        ('io_forwardMmask_1_45', 'output', 1),
-        ('io_forwardMmask_1_46', 'output', 1),
-        ('io_forwardMmask_1_47', 'output', 1),
-        ('io_forwardMmask_1_48', 'output', 1),
-        ('io_forwardMmask_1_49', 'output', 1),
-        ('io_forwardMmask_1_50', 'output', 1),
-        ('io_forwardMmask_1_51', 'output', 1),
-        ('io_forwardMmask_1_52', 'output', 1),
-        ('io_forwardMmask_1_53', 'output', 1),
-        ('io_forwardMmask_1_54', 'output', 1),
-        ('io_forwardMmask_1_55', 'output', 1),
-        ('io_forwardMmask_2_0', 'output', 1),
-        ('io_forwardMmask_2_1', 'output', 1),
-        ('io_forwardMmask_2_2', 'output', 1),
-        ('io_forwardMmask_2_3', 'output', 1),
-        ('io_forwardMmask_2_4', 'output', 1),
-        ('io_forwardMmask_2_5', 'output', 1),
-        ('io_forwardMmask_2_6', 'output', 1),
-        ('io_forwardMmask_2_7', 'output', 1),
-        ('io_forwardMmask_2_8', 'output', 1),
-        ('io_forwardMmask_2_9', 'output', 1),
-        ('io_forwardMmask_2_10', 'output', 1),
-        ('io_forwardMmask_2_11', 'output', 1),
-        ('io_forwardMmask_2_12', 'output', 1),
-        ('io_forwardMmask_2_13', 'output', 1),
-        ('io_forwardMmask_2_14', 'output', 1),
-        ('io_forwardMmask_2_15', 'output', 1),
-        ('io_forwardMmask_2_16', 'output', 1),
-        ('io_forwardMmask_2_17', 'output', 1),
-        ('io_forwardMmask_2_18', 'output', 1),
-        ('io_forwardMmask_2_19', 'output', 1),
-        ('io_forwardMmask_2_20', 'output', 1),
-        ('io_forwardMmask_2_21', 'output', 1),
-        ('io_forwardMmask_2_22', 'output', 1),
-        ('io_forwardMmask_2_23', 'output', 1),
-        ('io_forwardMmask_2_24', 'output', 1),
-        ('io_forwardMmask_2_25', 'output', 1),
-        ('io_forwardMmask_2_26', 'output', 1),
-        ('io_forwardMmask_2_27', 'output', 1),
-        ('io_forwardMmask_2_28', 'output', 1),
-        ('io_forwardMmask_2_29', 'output', 1),
-        ('io_forwardMmask_2_30', 'output', 1),
-        ('io_forwardMmask_2_31', 'output', 1),
-        ('io_forwardMmask_2_32', 'output', 1),
-        ('io_forwardMmask_2_33', 'output', 1),
-        ('io_forwardMmask_2_34', 'output', 1),
-        ('io_forwardMmask_2_35', 'output', 1),
-        ('io_forwardMmask_2_36', 'output', 1),
-        ('io_forwardMmask_2_37', 'output', 1),
-        ('io_forwardMmask_2_38', 'output', 1),
-        ('io_forwardMmask_2_39', 'output', 1),
-        ('io_forwardMmask_2_40', 'output', 1),
-        ('io_forwardMmask_2_41', 'output', 1),
-        ('io_forwardMmask_2_42', 'output', 1),
-        ('io_forwardMmask_2_43', 'output', 1),
-        ('io_forwardMmask_2_44', 'output', 1),
-        ('io_forwardMmask_2_45', 'output', 1),
-        ('io_forwardMmask_2_46', 'output', 1),
-        ('io_forwardMmask_2_47', 'output', 1),
-        ('io_forwardMmask_2_48', 'output', 1),
-        ('io_forwardMmask_2_49', 'output', 1),
-        ('io_forwardMmask_2_50', 'output', 1),
-        ('io_forwardMmask_2_51', 'output', 1),
-        ('io_forwardMmask_2_52', 'output', 1),
-        ('io_forwardMmask_2_53', 'output', 1),
-        ('io_forwardMmask_2_54', 'output', 1),
-        ('io_forwardMmask_2_55', 'output', 1),
-    ),
-    'SQAddrModule_1': (
-        ('clock', 'input', 1),
-        ('reset', 'input', 1),
-        ('io_raddr_0', 'input', 6),
-        ('io_raddr_1', 'input', 6),
-        ('io_rdata_0', 'output', 50),
-        ('io_rdata_1', 'output', 50),
-        ('io_wen_0', 'input', 1),
-        ('io_wen_1', 'input', 1),
-        ('io_waddr_0', 'input', 6),
-        ('io_waddr_1', 'input', 6),
-        ('io_wdata_0', 'input', 50),
-        ('io_wdata_1', 'input', 50),
-        ('io_wmask_0', 'input', 16),
-        ('io_wmask_1', 'input', 16),
-        ('io_wlineflag_0', 'input', 1),
-        ('io_wlineflag_1', 'input', 1),
-        ('io_forwardMdata_0', 'input', 50),
-        ('io_forwardMdata_1', 'input', 50),
-        ('io_forwardMdata_2', 'input', 50),
-        ('io_forwardDataMask_0', 'input', 16),
-        ('io_forwardDataMask_1', 'input', 16),
-        ('io_forwardDataMask_2', 'input', 16),
-        ('io_forwardMmask_0_0', 'output', 1),
-        ('io_forwardMmask_0_1', 'output', 1),
-        ('io_forwardMmask_0_2', 'output', 1),
-        ('io_forwardMmask_0_3', 'output', 1),
-        ('io_forwardMmask_0_4', 'output', 1),
-        ('io_forwardMmask_0_5', 'output', 1),
-        ('io_forwardMmask_0_6', 'output', 1),
-        ('io_forwardMmask_0_7', 'output', 1),
-        ('io_forwardMmask_0_8', 'output', 1),
-        ('io_forwardMmask_0_9', 'output', 1),
-        ('io_forwardMmask_0_10', 'output', 1),
-        ('io_forwardMmask_0_11', 'output', 1),
-        ('io_forwardMmask_0_12', 'output', 1),
-        ('io_forwardMmask_0_13', 'output', 1),
-        ('io_forwardMmask_0_14', 'output', 1),
-        ('io_forwardMmask_0_15', 'output', 1),
-        ('io_forwardMmask_0_16', 'output', 1),
-        ('io_forwardMmask_0_17', 'output', 1),
-        ('io_forwardMmask_0_18', 'output', 1),
-        ('io_forwardMmask_0_19', 'output', 1),
-        ('io_forwardMmask_0_20', 'output', 1),
-        ('io_forwardMmask_0_21', 'output', 1),
-        ('io_forwardMmask_0_22', 'output', 1),
-        ('io_forwardMmask_0_23', 'output', 1),
-        ('io_forwardMmask_0_24', 'output', 1),
-        ('io_forwardMmask_0_25', 'output', 1),
-        ('io_forwardMmask_0_26', 'output', 1),
-        ('io_forwardMmask_0_27', 'output', 1),
-        ('io_forwardMmask_0_28', 'output', 1),
-        ('io_forwardMmask_0_29', 'output', 1),
-        ('io_forwardMmask_0_30', 'output', 1),
-        ('io_forwardMmask_0_31', 'output', 1),
-        ('io_forwardMmask_0_32', 'output', 1),
-        ('io_forwardMmask_0_33', 'output', 1),
-        ('io_forwardMmask_0_34', 'output', 1),
-        ('io_forwardMmask_0_35', 'output', 1),
-        ('io_forwardMmask_0_36', 'output', 1),
-        ('io_forwardMmask_0_37', 'output', 1),
-        ('io_forwardMmask_0_38', 'output', 1),
-        ('io_forwardMmask_0_39', 'output', 1),
-        ('io_forwardMmask_0_40', 'output', 1),
-        ('io_forwardMmask_0_41', 'output', 1),
-        ('io_forwardMmask_0_42', 'output', 1),
-        ('io_forwardMmask_0_43', 'output', 1),
-        ('io_forwardMmask_0_44', 'output', 1),
-        ('io_forwardMmask_0_45', 'output', 1),
-        ('io_forwardMmask_0_46', 'output', 1),
-        ('io_forwardMmask_0_47', 'output', 1),
-        ('io_forwardMmask_0_48', 'output', 1),
-        ('io_forwardMmask_0_49', 'output', 1),
-        ('io_forwardMmask_0_50', 'output', 1),
-        ('io_forwardMmask_0_51', 'output', 1),
-        ('io_forwardMmask_0_52', 'output', 1),
-        ('io_forwardMmask_0_53', 'output', 1),
-        ('io_forwardMmask_0_54', 'output', 1),
-        ('io_forwardMmask_0_55', 'output', 1),
-        ('io_forwardMmask_1_0', 'output', 1),
-        ('io_forwardMmask_1_1', 'output', 1),
-        ('io_forwardMmask_1_2', 'output', 1),
-        ('io_forwardMmask_1_3', 'output', 1),
-        ('io_forwardMmask_1_4', 'output', 1),
-        ('io_forwardMmask_1_5', 'output', 1),
-        ('io_forwardMmask_1_6', 'output', 1),
-        ('io_forwardMmask_1_7', 'output', 1),
-        ('io_forwardMmask_1_8', 'output', 1),
-        ('io_forwardMmask_1_9', 'output', 1),
-        ('io_forwardMmask_1_10', 'output', 1),
-        ('io_forwardMmask_1_11', 'output', 1),
-        ('io_forwardMmask_1_12', 'output', 1),
-        ('io_forwardMmask_1_13', 'output', 1),
-        ('io_forwardMmask_1_14', 'output', 1),
-        ('io_forwardMmask_1_15', 'output', 1),
-        ('io_forwardMmask_1_16', 'output', 1),
-        ('io_forwardMmask_1_17', 'output', 1),
-        ('io_forwardMmask_1_18', 'output', 1),
-        ('io_forwardMmask_1_19', 'output', 1),
-        ('io_forwardMmask_1_20', 'output', 1),
-        ('io_forwardMmask_1_21', 'output', 1),
-        ('io_forwardMmask_1_22', 'output', 1),
-        ('io_forwardMmask_1_23', 'output', 1),
-        ('io_forwardMmask_1_24', 'output', 1),
-        ('io_forwardMmask_1_25', 'output', 1),
-        ('io_forwardMmask_1_26', 'output', 1),
-        ('io_forwardMmask_1_27', 'output', 1),
-        ('io_forwardMmask_1_28', 'output', 1),
-        ('io_forwardMmask_1_29', 'output', 1),
-        ('io_forwardMmask_1_30', 'output', 1),
-        ('io_forwardMmask_1_31', 'output', 1),
-        ('io_forwardMmask_1_32', 'output', 1),
-        ('io_forwardMmask_1_33', 'output', 1),
-        ('io_forwardMmask_1_34', 'output', 1),
-        ('io_forwardMmask_1_35', 'output', 1),
-        ('io_forwardMmask_1_36', 'output', 1),
-        ('io_forwardMmask_1_37', 'output', 1),
-        ('io_forwardMmask_1_38', 'output', 1),
-        ('io_forwardMmask_1_39', 'output', 1),
-        ('io_forwardMmask_1_40', 'output', 1),
-        ('io_forwardMmask_1_41', 'output', 1),
-        ('io_forwardMmask_1_42', 'output', 1),
-        ('io_forwardMmask_1_43', 'output', 1),
-        ('io_forwardMmask_1_44', 'output', 1),
-        ('io_forwardMmask_1_45', 'output', 1),
-        ('io_forwardMmask_1_46', 'output', 1),
-        ('io_forwardMmask_1_47', 'output', 1),
-        ('io_forwardMmask_1_48', 'output', 1),
-        ('io_forwardMmask_1_49', 'output', 1),
-        ('io_forwardMmask_1_50', 'output', 1),
-        ('io_forwardMmask_1_51', 'output', 1),
-        ('io_forwardMmask_1_52', 'output', 1),
-        ('io_forwardMmask_1_53', 'output', 1),
-        ('io_forwardMmask_1_54', 'output', 1),
-        ('io_forwardMmask_1_55', 'output', 1),
-        ('io_forwardMmask_2_0', 'output', 1),
-        ('io_forwardMmask_2_1', 'output', 1),
-        ('io_forwardMmask_2_2', 'output', 1),
-        ('io_forwardMmask_2_3', 'output', 1),
-        ('io_forwardMmask_2_4', 'output', 1),
-        ('io_forwardMmask_2_5', 'output', 1),
-        ('io_forwardMmask_2_6', 'output', 1),
-        ('io_forwardMmask_2_7', 'output', 1),
-        ('io_forwardMmask_2_8', 'output', 1),
-        ('io_forwardMmask_2_9', 'output', 1),
-        ('io_forwardMmask_2_10', 'output', 1),
-        ('io_forwardMmask_2_11', 'output', 1),
-        ('io_forwardMmask_2_12', 'output', 1),
-        ('io_forwardMmask_2_13', 'output', 1),
-        ('io_forwardMmask_2_14', 'output', 1),
-        ('io_forwardMmask_2_15', 'output', 1),
-        ('io_forwardMmask_2_16', 'output', 1),
-        ('io_forwardMmask_2_17', 'output', 1),
-        ('io_forwardMmask_2_18', 'output', 1),
-        ('io_forwardMmask_2_19', 'output', 1),
-        ('io_forwardMmask_2_20', 'output', 1),
-        ('io_forwardMmask_2_21', 'output', 1),
-        ('io_forwardMmask_2_22', 'output', 1),
-        ('io_forwardMmask_2_23', 'output', 1),
-        ('io_forwardMmask_2_24', 'output', 1),
-        ('io_forwardMmask_2_25', 'output', 1),
-        ('io_forwardMmask_2_26', 'output', 1),
-        ('io_forwardMmask_2_27', 'output', 1),
-        ('io_forwardMmask_2_28', 'output', 1),
-        ('io_forwardMmask_2_29', 'output', 1),
-        ('io_forwardMmask_2_30', 'output', 1),
-        ('io_forwardMmask_2_31', 'output', 1),
-        ('io_forwardMmask_2_32', 'output', 1),
-        ('io_forwardMmask_2_33', 'output', 1),
-        ('io_forwardMmask_2_34', 'output', 1),
-        ('io_forwardMmask_2_35', 'output', 1),
-        ('io_forwardMmask_2_36', 'output', 1),
-        ('io_forwardMmask_2_37', 'output', 1),
-        ('io_forwardMmask_2_38', 'output', 1),
-        ('io_forwardMmask_2_39', 'output', 1),
-        ('io_forwardMmask_2_40', 'output', 1),
-        ('io_forwardMmask_2_41', 'output', 1),
-        ('io_forwardMmask_2_42', 'output', 1),
-        ('io_forwardMmask_2_43', 'output', 1),
-        ('io_forwardMmask_2_44', 'output', 1),
-        ('io_forwardMmask_2_45', 'output', 1),
-        ('io_forwardMmask_2_46', 'output', 1),
-        ('io_forwardMmask_2_47', 'output', 1),
-        ('io_forwardMmask_2_48', 'output', 1),
-        ('io_forwardMmask_2_49', 'output', 1),
-        ('io_forwardMmask_2_50', 'output', 1),
-        ('io_forwardMmask_2_51', 'output', 1),
-        ('io_forwardMmask_2_52', 'output', 1),
-        ('io_forwardMmask_2_53', 'output', 1),
-        ('io_forwardMmask_2_54', 'output', 1),
-        ('io_forwardMmask_2_55', 'output', 1),
-    ),
-    'SQData8Module': (
-        ('clock', 'input', 1),
-        ('reset', 'input', 1),
-        ('io_raddr_0', 'input', 6),
-        ('io_raddr_1', 'input', 6),
-        ('io_rdata_0_valid', 'output', 1),
-        ('io_rdata_0_data', 'output', 8),
-        ('io_rdata_1_valid', 'output', 1),
-        ('io_rdata_1_data', 'output', 8),
-        ('io_data_wen_0', 'input', 1),
-        ('io_data_wen_1', 'input', 1),
-        ('io_data_waddr_0', 'input', 6),
-        ('io_data_waddr_1', 'input', 6),
-        ('io_data_wdata_0', 'input', 8),
-        ('io_data_wdata_1', 'input', 8),
-        ('io_mask_wen_0', 'input', 1),
-        ('io_mask_wen_1', 'input', 1),
-        ('io_mask_waddr_0', 'input', 6),
-        ('io_mask_waddr_1', 'input', 6),
-        ('io_mask_wdata_0', 'input', 1),
-        ('io_mask_wdata_1', 'input', 1),
-        ('io_needForward_0_0', 'input', 56),
-        ('io_needForward_0_1', 'input', 56),
-        ('io_needForward_1_0', 'input', 56),
-        ('io_needForward_1_1', 'input', 56),
-        ('io_needForward_2_0', 'input', 56),
-        ('io_needForward_2_1', 'input', 56),
-        ('io_forwardValid_0', 'output', 1),
-        ('io_forwardValid_1', 'output', 1),
-        ('io_forwardValid_2', 'output', 1),
-        ('io_forwardData_0', 'output', 8),
-        ('io_forwardData_1', 'output', 8),
-        ('io_forwardData_2', 'output', 8),
-    ),
-    'SQDataModule': (
-        ('clock', 'input', 1),
-        ('reset', 'input', 1),
-        ('io_raddr_0', 'input', 6),
-        ('io_raddr_1', 'input', 6),
-        ('io_rdata_0_mask', 'output', 16),
-        ('io_rdata_0_data', 'output', 128),
-        ('io_rdata_1_mask', 'output', 16),
-        ('io_rdata_1_data', 'output', 128),
-        ('io_data_wen_0', 'input', 1),
-        ('io_data_wen_1', 'input', 1),
-        ('io_data_waddr_0', 'input', 6),
-        ('io_data_waddr_1', 'input', 6),
-        ('io_data_wdata_0', 'input', 128),
-        ('io_data_wdata_1', 'input', 128),
-        ('io_mask_wen_0', 'input', 1),
-        ('io_mask_wen_1', 'input', 1),
-        ('io_mask_waddr_0', 'input', 6),
-        ('io_mask_waddr_1', 'input', 6),
-        ('io_mask_wdata_0', 'input', 16),
-        ('io_mask_wdata_1', 'input', 16),
-        ('io_needForward_0_0', 'input', 56),
-        ('io_needForward_0_1', 'input', 56),
-        ('io_needForward_1_0', 'input', 56),
-        ('io_needForward_1_1', 'input', 56),
-        ('io_needForward_2_0', 'input', 56),
-        ('io_needForward_2_1', 'input', 56),
-        ('io_forwardMask_0_0', 'output', 1),
-        ('io_forwardMask_0_1', 'output', 1),
-        ('io_forwardMask_0_2', 'output', 1),
-        ('io_forwardMask_0_3', 'output', 1),
-        ('io_forwardMask_0_4', 'output', 1),
-        ('io_forwardMask_0_5', 'output', 1),
-        ('io_forwardMask_0_6', 'output', 1),
-        ('io_forwardMask_0_7', 'output', 1),
-        ('io_forwardMask_0_8', 'output', 1),
-        ('io_forwardMask_0_9', 'output', 1),
-        ('io_forwardMask_0_10', 'output', 1),
-        ('io_forwardMask_0_11', 'output', 1),
-        ('io_forwardMask_0_12', 'output', 1),
-        ('io_forwardMask_0_13', 'output', 1),
-        ('io_forwardMask_0_14', 'output', 1),
-        ('io_forwardMask_0_15', 'output', 1),
-        ('io_forwardMask_1_0', 'output', 1),
-        ('io_forwardMask_1_1', 'output', 1),
-        ('io_forwardMask_1_2', 'output', 1),
-        ('io_forwardMask_1_3', 'output', 1),
-        ('io_forwardMask_1_4', 'output', 1),
-        ('io_forwardMask_1_5', 'output', 1),
-        ('io_forwardMask_1_6', 'output', 1),
-        ('io_forwardMask_1_7', 'output', 1),
-        ('io_forwardMask_1_8', 'output', 1),
-        ('io_forwardMask_1_9', 'output', 1),
-        ('io_forwardMask_1_10', 'output', 1),
-        ('io_forwardMask_1_11', 'output', 1),
-        ('io_forwardMask_1_12', 'output', 1),
-        ('io_forwardMask_1_13', 'output', 1),
-        ('io_forwardMask_1_14', 'output', 1),
-        ('io_forwardMask_1_15', 'output', 1),
-        ('io_forwardMask_2_0', 'output', 1),
-        ('io_forwardMask_2_1', 'output', 1),
-        ('io_forwardMask_2_2', 'output', 1),
-        ('io_forwardMask_2_3', 'output', 1),
-        ('io_forwardMask_2_4', 'output', 1),
-        ('io_forwardMask_2_5', 'output', 1),
-        ('io_forwardMask_2_6', 'output', 1),
-        ('io_forwardMask_2_7', 'output', 1),
-        ('io_forwardMask_2_8', 'output', 1),
-        ('io_forwardMask_2_9', 'output', 1),
-        ('io_forwardMask_2_10', 'output', 1),
-        ('io_forwardMask_2_11', 'output', 1),
-        ('io_forwardMask_2_12', 'output', 1),
-        ('io_forwardMask_2_13', 'output', 1),
-        ('io_forwardMask_2_14', 'output', 1),
-        ('io_forwardMask_2_15', 'output', 1),
-        ('io_forwardData_0_0', 'output', 8),
-        ('io_forwardData_0_1', 'output', 8),
-        ('io_forwardData_0_2', 'output', 8),
-        ('io_forwardData_0_3', 'output', 8),
-        ('io_forwardData_0_4', 'output', 8),
-        ('io_forwardData_0_5', 'output', 8),
-        ('io_forwardData_0_6', 'output', 8),
-        ('io_forwardData_0_7', 'output', 8),
-        ('io_forwardData_0_8', 'output', 8),
-        ('io_forwardData_0_9', 'output', 8),
-        ('io_forwardData_0_10', 'output', 8),
-        ('io_forwardData_0_11', 'output', 8),
-        ('io_forwardData_0_12', 'output', 8),
-        ('io_forwardData_0_13', 'output', 8),
-        ('io_forwardData_0_14', 'output', 8),
-        ('io_forwardData_0_15', 'output', 8),
-        ('io_forwardData_1_0', 'output', 8),
-        ('io_forwardData_1_1', 'output', 8),
-        ('io_forwardData_1_2', 'output', 8),
-        ('io_forwardData_1_3', 'output', 8),
-        ('io_forwardData_1_4', 'output', 8),
-        ('io_forwardData_1_5', 'output', 8),
-        ('io_forwardData_1_6', 'output', 8),
-        ('io_forwardData_1_7', 'output', 8),
-        ('io_forwardData_1_8', 'output', 8),
-        ('io_forwardData_1_9', 'output', 8),
-        ('io_forwardData_1_10', 'output', 8),
-        ('io_forwardData_1_11', 'output', 8),
-        ('io_forwardData_1_12', 'output', 8),
-        ('io_forwardData_1_13', 'output', 8),
-        ('io_forwardData_1_14', 'output', 8),
-        ('io_forwardData_1_15', 'output', 8),
-        ('io_forwardData_2_0', 'output', 8),
-        ('io_forwardData_2_1', 'output', 8),
-        ('io_forwardData_2_2', 'output', 8),
-        ('io_forwardData_2_3', 'output', 8),
-        ('io_forwardData_2_4', 'output', 8),
-        ('io_forwardData_2_5', 'output', 8),
-        ('io_forwardData_2_6', 'output', 8),
-        ('io_forwardData_2_7', 'output', 8),
-        ('io_forwardData_2_8', 'output', 8),
-        ('io_forwardData_2_9', 'output', 8),
-        ('io_forwardData_2_10', 'output', 8),
-        ('io_forwardData_2_11', 'output', 8),
-        ('io_forwardData_2_12', 'output', 8),
-        ('io_forwardData_2_13', 'output', 8),
-        ('io_forwardData_2_14', 'output', 8),
-        ('io_forwardData_2_15', 'output', 8),
-    ),
-}
 
 # =============================================================================
 # Implementation
 # =============================================================================
 class StoreQueueDataFamily(Elaboratable):
-    """One selected StoreQueueData specialization. / 一个选定的存储队列数据特化。"""
+    """One selected store-queue data specialization. / 一个选定的存储队列数据特化。"""
 
+    # Declare the selected public ports. / 声明选定的公开端口。
     def __init__(self, member: str = "SQAddrModule") -> None:
-        """Declare exact locked ports. / 声明精确锁定端口。"""
+        """Create one selected specialization. / 创建一个选定特化。"""
 
         if member not in PORT_SPECS:
             raise ValueError(f"unsupported store-queue member: {member}")
@@ -665,109 +142,193 @@ class StoreQueueDataFamily(Elaboratable):
         self.clock = self.ports["clock"]
         self.reset = self.ports["reset"]
 
+    # Select an entry with the defined out-of-range fallback. / 按定义的越界回退选择条目。
+    def read_entry(self, entries: Array, address: Any) -> Any:
+        """Return a registered-address lookup. / 返回寄存器地址查找。"""
+
+        # Keep the lookup as an ArrayProxy so the simulator does not have to
+        # compile a 56-level Python ``Mux`` expression.  Chisel Vec indexing
+        # uses entry zero as its default for the six-bit addresses above the
+        # 56-entry store queue, so preserve that locked behavior explicitly.
+        return Mux(address < ENTRY_COUNT, entries[address], entries[0])
+
+    # Add one delayed, bank-routed write path. / 添加一个延迟的分 bank 写路径。
+    def add_banked_write_pipeline(self, module: Module, entries: Array, prefix: str, width: int) -> None:
+        """Implement the two-write one-cycle bank pipeline. / 实现双写一周期 bank 流水。"""
+
+        stages: list[list[tuple[Signal, Signal, Signal]]] = []
+        for write in range(2):
+            by_bank: list[tuple[Signal, Signal, Signal]] = []
+            for bank in range(BANK_COUNT):
+                enabled = Signal(name=f"{prefix}_s1_enable_{write}_{bank}")
+                index = Signal(BANK_SELECT_WIDTH, name=f"{prefix}_s1_index_{write}_{bank}", reset_less=True)
+                payload = Signal(width, name=f"{prefix}_s1_payload_{write}_{bank}", reset_less=True)
+                by_bank.append((enabled, index, payload))
+            stages.append(by_bank)
+
+        for bank in range(BANK_COUNT):
+            low_enable, low_index, low_payload = stages[0][bank]
+            high_enable, high_index, high_payload = stages[1][bank]
+            for index in range(BANK_DEPTH):
+                entry = index * BANK_COUNT + bank
+                with cast(Any, module.If(high_enable & (high_index == index))):
+                    module.d.sync += entries[entry].eq(high_payload)
+                with cast(Any, module.Elif(low_enable & (low_index == index))):
+                    module.d.sync += entries[entry].eq(low_payload)
+
+        for write in range(2):
+            address = self.ports[f"{prefix}_waddr_{write}"]
+            payload = self.ports[f"{prefix}_wdata_{write}"]
+            enabled = self.ports[f"{prefix}_wen_{write}"]
+            for bank in range(BANK_COUNT):
+                stage_enable, stage_index, stage_payload = stages[write][bank]
+                route = enabled & (address[:BANK_SELECT_WIDTH] == bank)
+                module.d.sync += stage_enable.eq(route)
+                with cast(Any, module.If(route)):
+                    module.d.sync += [
+                        stage_index.eq(address[BANK_SELECT_WIDTH:]),
+                        stage_payload.eq(payload),
+                    ]
+
+    # Register forward requests for the next cycle. / 为下一周期寄存转发请求。
+    def register_forward_requests(self, module: Module) -> list[tuple[Signal, Signal]]:
+        """Return one delayed request pair per forward port. / 返回每个转发端口的一对延迟请求。"""
+
+        requests: list[tuple[Signal, Signal]] = []
+        for forward in range(3):
+            first = Signal(ENTRY_COUNT, name=f"forward_request_{forward}_0", reset_less=True)
+            second = Signal(ENTRY_COUNT, name=f"forward_request_{forward}_1", reset_less=True)
+            module.d.sync += [
+                first.eq(self.ports[f"io_needForward_{forward}_0"]),
+                second.eq(self.ports[f"io_needForward_{forward}_1"]),
+            ]
+            requests.append((first, second))
+        return requests
+
+    # Resolve one byte-style forward request. / 解析一个字节式转发请求。
+    def select_forward(self, data: Array, valid: Array, request: tuple[Signal, Signal]) -> tuple[Any, Any]:
+        """Return valid and data with half-one priority. / 返回带 half-one 优先级的有效位和数据。"""
+
+        forward_valid: Any = Const(0, 1)
+        forward_data: Any = data[0]
+        for half in range(2):
+            for entry in range(ENTRY_COUNT):
+                match = request[half][entry] & valid[entry]
+                forward_valid = forward_valid | match
+                forward_data = Mux(match, data[entry], forward_data)
+        return forward_valid, forward_data
+
+    # Resolve one byte of a wide forward request. / 解析宽转发请求的一个字节。
+    def select_forward_byte(
+        self,
+        data: Array,
+        mask: Array,
+        request: tuple[Signal, Signal],
+        byte: int,
+    ) -> tuple[Any, Any]:
+        """Return one byte's valid bit and selected data. / 返回一个字节的有效位和选中数据。"""
+
+        forward_valid: Any = Const(0, 1)
+        forward_data: Any = data[0][byte * 8:(byte + 1) * 8]
+        for half in range(2):
+            for entry in range(ENTRY_COUNT):
+                match = request[half][entry] & mask[entry][byte]
+                forward_valid = forward_valid | match
+                forward_data = Mux(match, data[entry][byte * 8:(byte + 1) * 8], forward_data)
+        return forward_valid, forward_data
+
     # Build an address CAM specialization. / 构建地址 CAM 特化。
     def elaborate_addr(self, module: Module) -> None:
-        """Implement SQAddr reads, writes, and line-aware forwarding. / 实现 SQAddr 读写与按 cacheline 转发。"""
+        """Implement synchronous reads, writes, and line forwarding. / 实现同步读写和 cacheline 转发。"""
 
         data_width = 48 if self.member == "SQAddrModule" else 50
-        memory = Array(Signal(data_width, name=f"addr_entry_{i}", reset_less=True) for i in range(56))
-        line_flags = Array(Signal(name=f"lineflag_{i}", reset_less=True) for i in range(56))
-        masks = Array(Signal(16, name=f"addr_mask_{i}", reset_less=True) for i in range(56))
-        for write in range(2):
-            with cast(Any, module.If(self.ports[f"io_wen_{write}"])):
+        data = Array(Signal(data_width, name=f"addr_entry_{entry}", reset_less=True) for entry in range(ENTRY_COUNT))
+        mask = Array(Signal(BYTE_COUNT, name=f"addr_mask_{entry}", reset_less=True) for entry in range(ENTRY_COUNT))
+        lineflag = Array(Signal(name=f"lineflag_{entry}", reset_less=True) for entry in range(ENTRY_COUNT))
+
+        for entry in range(ENTRY_COUNT):
+            with cast(Any, module.If(self.ports["io_wen_1"] & (self.ports["io_waddr_1"] == entry))):
                 module.d.sync += [
-                    memory[self.ports[f"io_waddr_{write}"]].eq(self.ports[f"io_wdata_{write}"]),
-                    masks[self.ports[f"io_waddr_{write}"]].eq(self.ports[f"io_wmask_{write}"]),
+                    data[entry].eq(self.ports["io_wdata_1"]),
+                    mask[entry].eq(self.ports["io_wmask_1"]),
+                    lineflag[entry].eq(self.ports["io_wlineflag_1"]),
                 ]
-                if self.member == "SQAddrModule":
-                    module.d.sync += line_flags[self.ports[f"io_waddr_{write}"]].eq(self.ports[f"io_wlineflag_{write}"])
+            with cast(Any, module.Elif(self.ports["io_wen_0"] & (self.ports["io_waddr_0"] == entry))):
+                module.d.sync += [
+                    data[entry].eq(self.ports["io_wdata_0"]),
+                    mask[entry].eq(self.ports["io_wmask_0"]),
+                    lineflag[entry].eq(self.ports["io_wlineflag_0"]),
+                ]
+
         for read in range(2):
-            address = Signal(6, name=f"addr_read_{read}")
-            with cast(Any, module.If(1)):
-                module.d.sync += address.eq(self.ports[f"io_raddr_{read}"])
-            module.d.comb += self.ports[f"io_rdata_{read}"].eq(memory[address])
+            address = Signal(ADDRESS_WIDTH, name=f"addr_read_{read}", reset_less=True)
+            module.d.sync += address.eq(self.ports[f"io_raddr_{read}"])
+            module.d.comb += self.ports[f"io_rdata_{read}"].eq(self.read_entry(data, address))
             if self.member == "SQAddrModule":
-                module.d.comb += self.ports[f"io_rlineflag_{read}"].eq(line_flags[address])
+                module.d.comb += self.ports[f"io_rlineflag_{read}"].eq(self.read_entry(lineflag, address))
+
         for forward in range(3):
             query = self.ports[f"io_forwardMdata_{forward}"]
             query_mask = self.ports[f"io_forwardDataMask_{forward}"]
-            for entry in range(56):
-                line_hit = query[6:data_width] == memory[entry][6:data_width]
-                word_hit = query[3:6] == memory[entry][3:6]
-                mask_hit = (query_mask & masks[entry]) != 0
-                if self.member == "SQAddrModule":
-                    hit = line_hit & (line_flags[entry] | (word_hit & mask_hit))
-                else:
-                    hit = line_hit & (word_hit & mask_hit)
+            for entry in range(ENTRY_COUNT):
+                line_hit = query[6:data_width] == data[entry][6:data_width]
+                word_hit = query[4:6] == data[entry][4:6]
+                mask_hit = (query_mask & mask[entry]).any()
+                hit = line_hit & (lineflag[entry] | (word_hit & mask_hit))
                 module.d.comb += self.ports[f"io_forwardMmask_{forward}_{entry}"].eq(hit)
 
-    # Build the byte-array specialization. / 构建字节阵列特化。
+    # Build the byte data specialization. / 构建字节数据特化。
     def elaborate_data8(self, module: Module) -> None:
-        """Implement byte writes, registered reads, and forwarding. / 实现字节写入、寄存读取与转发。"""
+        """Implement banked byte storage, reads, and forwarding. / 实现分 bank 字节存储、读取和转发。"""
 
-        data = Array(Signal(8, name=f"byte_data_{i}", reset_less=True) for i in range(56))
-        valid = Array(Signal(name=f"byte_valid_{i}", reset_less=True) for i in range(56))
-        read_addr = [Signal(6, name=f"byte_read_addr_{i}") for i in range(2)]
-        for index in range(2):
-            with cast(Any, module.If(1)):
-                module.d.sync += read_addr[index].eq(self.ports[f"io_raddr_{index}"])
+        data = Array(Signal(8, name=f"byte_data_{entry}", reset_less=True) for entry in range(ENTRY_COUNT))
+        valid = Array(Signal(name=f"byte_valid_{entry}", reset_less=True) for entry in range(ENTRY_COUNT))
+        self.add_banked_write_pipeline(module, data, "io_data", 8)
+        self.add_banked_write_pipeline(module, valid, "io_mask", 1)
+
+        for read in range(2):
+            address = Signal(ADDRESS_WIDTH, name=f"byte_read_{read}", reset_less=True)
+            module.d.sync += address.eq(self.ports[f"io_raddr_{read}"])
             module.d.comb += [
-                self.ports[f"io_rdata_{index}_valid"].eq(valid[read_addr[index]]),
-                self.ports[f"io_rdata_{index}_data"].eq(data[read_addr[index]]),
-            ]
-        for write in range(2):
-            with cast(Any, module.If(self.ports[f"io_data_wen_{write}"])):
-                module.d.sync += data[self.ports[f"io_data_waddr_{write}"]].eq(self.ports[f"io_data_wdata_{write}"])
-            with cast(Any, module.If(self.ports[f"io_mask_wen_{write}"])):
-                module.d.sync += valid[self.ports[f"io_mask_waddr_{write}"]].eq(self.ports[f"io_mask_wdata_{write}"])
-        for forward in range(3):
-            valid_expr: Any = Const(0, 1)
-            selected: Any = Const(0, 8)
-            for entry in range(56):
-                match = (cast(Any, self.ports[f"io_needForward_{forward}_0"][entry]) |
-                         cast(Any, self.ports[f"io_needForward_{forward}_1"][entry])) & valid[entry]
-                valid_expr = valid_expr | match
-                selected = Mux(match, data[entry], selected)
-            module.d.comb += [
-                self.ports[f"io_forwardValid_{forward}"].eq(valid_expr),
-                self.ports[f"io_forwardData_{forward}"].eq(selected),
+                self.ports[f"io_rdata_{read}_valid"].eq(self.read_entry(valid, address)),
+                self.ports[f"io_rdata_{read}_data"].eq(self.read_entry(data, address)),
             ]
 
-    # Build the 128-bit data specialization. / 构建 128 位数据特化。
+        for forward, request in enumerate(self.register_forward_requests(module)):
+            forward_valid, forward_data = self.select_forward(data, valid, request)
+            module.d.comb += [
+                self.ports[f"io_forwardValid_{forward}"].eq(forward_valid),
+                self.ports[f"io_forwardData_{forward}"].eq(forward_data),
+            ]
+
+    # Build the wide data specialization. / 构建宽数据特化。
     def elaborate_data(self, module: Module) -> None:
-        """Implement masked data storage and 16-byte forwarding. / 实现带掩码数据存储及 16 字节转发。"""
+        """Implement banked wide storage, reads, and byte forwarding. / 实现分 bank 宽存储、读取和字节转发。"""
 
-        data = Array(Signal(128, name=f"store_data_{i}", reset_less=True) for i in range(56))
-        masks = Array(Signal(16, name=f"store_mask_{i}", reset_less=True) for i in range(56))
-        read_addr = [Signal(6, name=f"store_read_addr_{i}") for i in range(2)]
-        for index in range(2):
-            module.d.sync += read_addr[index].eq(self.ports[f"io_raddr_{index}"])
+        data = Array(Signal(BYTE_COUNT * 8, name=f"store_data_{entry}", reset_less=True) for entry in range(ENTRY_COUNT))
+        mask = Array(Signal(BYTE_COUNT, name=f"store_mask_{entry}", reset_less=True) for entry in range(ENTRY_COUNT))
+        self.add_banked_write_pipeline(module, data, "io_data", BYTE_COUNT * 8)
+        self.add_banked_write_pipeline(module, mask, "io_mask", BYTE_COUNT)
+
+        for read in range(2):
+            address = Signal(ADDRESS_WIDTH, name=f"store_read_{read}", reset_less=True)
+            module.d.sync += address.eq(self.ports[f"io_raddr_{read}"])
             module.d.comb += [
-                self.ports[f"io_rdata_{index}_mask"].eq(masks[read_addr[index]]),
-                self.ports[f"io_rdata_{index}_data"].eq(data[read_addr[index]]),
+                self.ports[f"io_rdata_{read}_mask"].eq(self.read_entry(mask, address)),
+                self.ports[f"io_rdata_{read}_data"].eq(self.read_entry(data, address)),
             ]
-        for write in range(2):
-            with cast(Any, module.If(self.ports[f"io_data_wen_{write}"])):
-                module.d.sync += data[self.ports[f"io_data_waddr_{write}"]].eq(self.ports[f"io_data_wdata_{write}"])
-            with cast(Any, module.If(self.ports[f"io_mask_wen_{write}"])):
-                module.d.sync += masks[self.ports[f"io_mask_waddr_{write}"]].eq(self.ports[f"io_mask_wdata_{write}"])
-        for forward in range(3):
-            for byte in range(16):
-                valid_expr: Any = Const(0, 1)
-                data_expr: Any = Const(0, 8)
-                for entry in range(56):
-                    match = (cast(Any, self.ports[f"io_needForward_{forward}_0"][entry]) |
-                             cast(Any, self.ports[f"io_needForward_{forward}_1"][entry])) & cast(Any, masks[entry][byte])
-                    valid_expr = valid_expr | match
-                    data_expr = Mux(match, data[entry][byte * 8:(byte + 1) * 8], data_expr)
+
+        for forward, request in enumerate(self.register_forward_requests(module)):
+            for byte in range(BYTE_COUNT):
+                forward_valid, forward_data = self.select_forward_byte(data, mask, request, byte)
                 module.d.comb += [
-                    self.ports[f"io_forwardMask_{forward}_{byte}"].eq(valid_expr),
-                    self.ports[f"io_forwardData_{forward}_{byte}"].eq(data_expr),
+                    self.ports[f"io_forwardMask_{forward}_{byte}"].eq(forward_valid),
+                    self.ports[f"io_forwardData_{forward}_{byte}"].eq(forward_data),
                 ]
 
-    # Select the specialization implementation. / 选择特化实现。
+    # Elaborate the selected specialization. / 展开选定特化。
     def elaborate(self, platform: Any) -> Module:
-        """Elaborate one StoreQueueData member. / 展开一个 StoreQueueData 成员。"""
+        """Return the selected address or data circuit. / 返回选定的地址或数据电路。"""
 
         del platform
         module = Module()
@@ -787,8 +348,9 @@ class StoreQueueDataFamily(Elaboratable):
 # =============================================================================
 # Public Adapter
 # =============================================================================
+# Export one selected specialization. / 导出一个选定特化。
 def build_verilog(configuration: Any, injected_dependencies: Any) -> str:
-    """Export one deterministic same-name StoreQueueData member. / 导出确定性的同名存储队列成员。"""
+    """Return deterministic same-name Verilog. / 返回确定性的同名 Verilog。"""
 
     del injected_dependencies
     member = "SQAddrModule"
@@ -797,14 +359,15 @@ def build_verilog(configuration: Any, injected_dependencies: Any) -> str:
     elif isinstance(configuration, str):
         member = configuration
     top = StoreQueueDataFamily(member)
-    return verilog.convert(top, name=member, ports=[top.ports[n] for n, _d, _w in top.specs], emit_src=False)
+    return verilog.convert(top, name=member, ports=[top.ports[name] for name, _direction, _width in top.specs], emit_src=False)
 
 
 # =============================================================================
 # Direct Entry
 # =============================================================================
+# Print the default specialization. / 打印默认特化。
 def main() -> None:
-    """Print the default SQ address member. / 打印默认 SQ 地址成员。"""
+    """Print the default address specialization. / 打印默认地址特化。"""
 
     print(build_verilog({"module": "SQAddrModule"}, {}))
 
