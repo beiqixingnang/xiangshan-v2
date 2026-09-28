@@ -98,6 +98,26 @@ def signal_declaration(direction: str, port: str, width: int) -> str:
     return f"  {direction} [{width - 1}:0] {port}"
 
 
+def payload_valid_port(port: str, outputs: dict[str, int]) -> str | None:
+    """Return the Decoupled valid lane governing one public payload field."""
+
+    marker = "_bits_"
+    if marker not in port:
+        return None
+    candidate = port.split(marker, 1)[0] + "_valid"
+    return candidate if candidate in outputs else None
+
+
+def output_assignment(port: str, outputs: dict[str, int], *, mutated: bool = False) -> str:
+    """Render a public assignment while ignoring payload when its lane is invalid."""
+
+    valid = payload_valid_port(port, outputs)
+    value = f"~_out_{port}" if mutated else f"_out_{port}"
+    if valid is None:
+        return f"assign {port} = {value};"
+    return f"assign {port} = {valid} ? {value} : '0;"
+
+
 def wrapper_text(
     name: str,
     inner: str,
@@ -121,7 +141,7 @@ def wrapper_text(
     connections = [f".{port}({port})" for port in inputs]
     connections.extend(f".{port}(_out_{port})" for port in selected)
     lines.extend([f"  {inner} inner_i(", "    " + ", ".join(connections), "  );"])
-    lines.extend(f"  assign {port} = _out_{port};" for port in selected)
+    lines.extend(f"  {output_assignment(port, outputs)}" for port in selected)
     lines.append("endmodule")
     return "\n".join(lines) + "\n"
 
@@ -143,9 +163,7 @@ def static_wrapper_record(
     connected_outputs = all(source.count(f".{port}(_out_{port})") == 1 for port in selected)
     omitted_outputs = all(f".{port}(" not in source for port in outputs if port not in selected_set)
     direct_assignments = all(
-        re.search(rf"^\s*assign\s+{re.escape(port)}\s*=\s*_out_{re.escape(port)};\s*$", source, re.MULTILINE)
-        is not None
-        for port in selected
+        output_assignment(port, outputs) in source for port in selected
     )
     output_bits = sum(outputs[port] for port in selected)
     passed = declared == expected and connected_inputs and connected_outputs and omitted_outputs and direct_assignments
@@ -159,7 +177,8 @@ def static_wrapper_record(
         "all_inputs_connected": connected_inputs,
         "selected_outputs_connected": connected_outputs,
         "unselected_outputs_unconnected": omitted_outputs,
-        "direct_output_assignments": direct_assignments,
+        "public_output_assignments": direct_assignments,
+        "valid_gated_payloads": sum(payload_valid_port(port, outputs) is not None for port in selected),
         "sha256": sha256_text(source),
         "bytes": len(source.encode("utf-8")),
     }
@@ -280,12 +299,15 @@ def run_partition(
     }
 
 
-def mutate_wrapper_output(source: str, selected: tuple[str, ...]) -> tuple[str, str]:
+def mutate_wrapper_output(
+    source: str, selected: tuple[str, ...], outputs: dict[str, int]
+) -> tuple[str, str]:
     """Invert one known wrapper assignment without touching a locked source."""
 
     port = selected[0]
-    pattern = rf"assign\s+{re.escape(port)}\s*=\s*_out_{re.escape(port)};"
-    mutated, count = re.subn(pattern, f"assign {port} = ~_out_{port};", source, count=1)
+    expected = output_assignment(port, outputs)
+    replacement = output_assignment(port, outputs, mutated=True)
+    mutated, count = source.replace(expected, replacement, 1), 1 if expected in source else 0
     if count != 1:
         raise AssertionError(f"cannot mutate wrapper output {port}")
     return mutated, port
@@ -309,9 +331,9 @@ def wrapper_negative_control(
         reference_text = wrapper_text(reference_name, "REF_FrontendBridge", inputs, outputs, selected)
         target_text = wrapper_text(target_name, "DUT_FrontendBridge", inputs, outputs, selected)
         if side == "target":
-            target_text, port = mutate_wrapper_output(target_text, selected)
+            target_text, port = mutate_wrapper_output(target_text, selected, outputs)
         else:
-            reference_text, port = mutate_wrapper_output(reference_text, selected)
+            reference_text, port = mutate_wrapper_output(reference_text, selected, outputs)
         reference_wrapper = WORK / f"{reference_name}.sv"
         target_wrapper = WORK / f"{target_name}.sv"
         reference_wrapper.write_text(reference_text, encoding="utf-8", newline="\n")

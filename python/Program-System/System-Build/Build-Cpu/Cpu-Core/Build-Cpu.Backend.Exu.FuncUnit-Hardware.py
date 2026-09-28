@@ -2022,7 +2022,7 @@ def build_fence(self: "ExuFuncModule", m: Any) -> None:
         p["io_fenceio_sfence_bits_rs1"].eq(imm_r[0:5] == Const(0, 5)),
         p["io_fenceio_sfence_bits_rs2"].eq(imm_r[5:10] == Const(0, 5)),
         p["io_fenceio_sfence_bits_addr"].eq(addr_r[0:50]),
-        p["io_fenceio_sfence_bits_id"].eq(Mux(use_vmid, Cat(Const(0, 2), id_r[0:14]), id_r)),
+        p["io_fenceio_sfence_bits_id"].eq(Mux(use_vmid, Cat(id_r[0:14], Const(0, 2)), id_r)),
         p["io_fenceio_sfence_bits_flushPipe"].eq(flush_pipe_r),
         p["io_fenceio_sfence_bits_hv"].eq(func_r == Const(0b10011, 9)),
         p["io_fenceio_sfence_bits_hg"].eq(func_r == Const(0b10100, 9)),

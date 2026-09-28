@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_FUNCUNIT_FENCE_CURRENT_SOURCE_DIAGNOSTIC",
+  "build_id": "Build-Cpu.Backend.Exu.FuncUnit",
+  "member": "Fence",
+  "status": "STRICT_PENDING",
+  "strict_complete_count_delta": 0,
+  "acceptance_eligible": false,
+  "behavior_fix": {
+    "field": "io_fenceio_sfence_bits_id",
+    "old_expression": "Mux(use_vmid, Cat(Const(0, 2), id_r[0:14]), id_r)",
+    "current_expression": "Mux(use_vmid, Cat(id_r[0:14], Const(0, 2)), id_r)",
+    "reason": "locked Fence stores high two bits zero and source ID in low fourteen bits for VMID mode"
+  },
+  "scope": {
+    "catalog_member_rechecked": "Fence",
+    "catalog_members_total": 30,
+    "full_catalog_rechecked": false,
+    "equivalence_cells": 94,
+    "proven_cells": 2,
+    "unproven_cells": 92,
+    "formal_command": "equiv_induct -undef; equiv_status -assert"
+  },
+  "checks": {
+    "abi_exact": true,
+    "deterministic_export": true,
+    "target_verilator_lint": "PASS",
+    "locked_reference_verilator_lint": "PASS",
+    "formal_returncode": 1,
+    "formal_success_marker": false,
+    "negative_control": "NOT_RUN_IN_MEMBER_DIAGNOSTIC"
+  },
+  "sources": {
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Exu.FuncUnit-Hardware.py",
+      "sha256": "c246ba064158a3d9a2706bb8c9820abaadb5a979ae1a15e55caa85fbd60d280e"
+    },
+    "locked_reference": {
+      "path": "validation/reference-sv/Fence.sv",
+      "sha256": "4f324dd92e0f90b492c81898102861b2495f81c60b214beaa0b5307d9a7eb929"
+    },
+    "formal_target": "C:/Temp/uhsc-fence-current-strict/DUT_Fence.sv",
+    "formal_reference": "C:/Temp/uhsc-fence-current-strict/REF_Fence.sv"
+  },
+  "notes": [
+    "The source correction is real but does not establish strict equivalence by itself.",
+    "The current proof still has 92 unproven cells; canonical FuncUnit evidence was not overwritten.",
+    "The remaining catalog and FuncUnit negative controls must be rerun serially before any strict count change."
+  ]
+}
