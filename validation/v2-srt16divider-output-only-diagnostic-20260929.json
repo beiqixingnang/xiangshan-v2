@@ -1,0 +1,186 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_V2_OUTPUT_ONLY_SEQUENTIAL_DIAGNOSTIC",
+  "subject": "SRT16DividerDataModule",
+  "status": "INCONCLUSIVE",
+  "strict_status_delta": 0,
+  "acceptance_eligible": false,
+  "source_commit": "f143374b9d06f8629f2dbfb700b49e7e24a546ec",
+  "generated_at_utc": "2026-09-28T22:01:30Z",
+  "diagnosis": {
+    "result": "OUTPUT_ONLY_PROOF_UNRESOLVED",
+    "interpretation": "The output-only sequential proof did not establish equivalence. It produced no counterexample, so this result does not establish a public-output behavior difference or confirm that the 139 internal failures are only matching limitations.",
+    "strict_pending_remains": true,
+    "strict_unproven_internal_cells_remain": 139
+  },
+  "scope": {
+    "method": "Wrapper-first sequential equivalence with the full public ABI",
+    "input_bits": 137,
+    "inputs": {
+      "clock": 1,
+      "reset": 1,
+      "io_src_0": 64,
+      "io_src_1": 64,
+      "io_valid": 1,
+      "io_sign": 1,
+      "io_kill_w": 1,
+      "io_kill_r": 1,
+      "io_isHi": 1,
+      "io_isW": 1,
+      "io_out_ready": 1
+    },
+    "output_bits": 66,
+    "outputs": {
+      "io_in_ready": 1,
+      "io_out_valid": 1,
+      "io_out_data": 64
+    },
+    "reference_instance": "reference_private",
+    "target_instance": "target_private",
+    "observed_equiv_cells": 66,
+    "expected_output_equiv_cells": 66,
+    "internal_equiv_obligations": 0,
+    "locked_reference_view_trusted": true,
+    "locked_reference_view_policy": "SECTION_5C_MULTILINE_AUTOMATIC_VIEW; line conservation and register-update preservation required"
+  },
+  "inputs": {
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.SRT16Divider-Hardware.py",
+      "sha256": "b7a5676f207c895ae4d7c152d04b87e24368560469e5717269f2fe0fb77d2900",
+      "bytes": 29926
+    },
+    "locked_reference": {
+      "path": "validation/reference-sv/SRT16DividerDataModule.sv",
+      "sha256": "71c183646518dd914a1569392ae993b5f20293579374178f573b1be4c8e15c7c",
+      "bytes": 146342
+    },
+    "locked_children": {
+      "CSA3_2_3956": "a4238aafb9c18a0ad401f4ed0c9cb559d2e89dc0575ae1cad82f85b02cbe2e89",
+      "CSA3_2_3960": "286474a4db5095ff340e7b376468d961bf9969cee4a41667f30dc0774af74f43",
+      "CSA3_2_3962": "b99c7c72eea99b4cf0e6dc1cd9d7e3295d77ce2b562d5e37ead8fe0b990f1047",
+      "RightShifter": "935837a6c16c27a88e63d015e8db7c74f9a98bce2f3ac8b4fa2384492911fb56"
+    },
+    "shared_rail": {
+      "path": "validation/v2_strict_family_rail.py",
+      "sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302"
+    },
+    "multiline_view": {
+      "path": "validation/v2_funcunit_strict_validator.py",
+      "sha256": "ef5018899932061420e780d9c5edc083fa532cf160bd628d9adb990b364b49f8"
+    },
+    "diagnostic_runner": {
+      "path": "validation/v2_srt16divider_output_only_diagnostic.py",
+      "sha256": "54a20eaf167a7791334a2e4b9fa41ead7afa79ec740f24e1dd051b68bb72ae22"
+    },
+    "yosys": "0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)"
+  },
+  "resource_policy": {
+    "formal_execution": "Serial in WSL",
+    "per_run_timeout_seconds": 900,
+    "work_directory": "C:/Temp/uhsc_srt16divider_output_only_20260928T220130Z",
+    "work_directory_ascii": true,
+    "wsl_mem_total_kib_at_start": 24607900,
+    "wsl_mem_available_kib_at_start": 23538576,
+    "wsl_swap_total_kib": 6291456,
+    "wsl_swap_free_kib_at_start": 6291456,
+    "formal_processes_before_start": 0,
+    "formal_processes_after_completion": 0,
+    "overlapping_formal_runs": false
+  },
+  "proof_runs": {
+    "output_only_default_depth": {
+      "yosys_command_tail": "equiv_induct -undef; equiv_status -assert",
+      "default_induction_depth": 4,
+      "returncode": 1,
+      "elapsed_seconds": 25.911,
+      "sampled_peak_rss_kib": 1621516,
+      "equiv_cells": 66,
+      "proven_output_cells": 1,
+      "unproven_output_cells": 65,
+      "counterexample": false,
+      "explicit_equiv_failure_marker": true,
+      "tool_error": false,
+      "timeout": false,
+      "log_sha256": "ebbbecb831a4b7eb5dd3dab4d3e7a110a1eb17f96d50a2a6cfa5324fd0338d51",
+      "status": "UNRESOLVED"
+    },
+    "reference_side_negative_control": {
+      "mutated_public_output": "io_in_ready",
+      "induction_depth": 4,
+      "returncode": 1,
+      "elapsed_seconds": 25.929,
+      "sampled_peak_rss_kib": 1631828,
+      "equiv_cells": 66,
+      "proven_output_cells": 0,
+      "unproven_output_cells": 66,
+      "explicit_equiv_failure_marker": true,
+      "tool_error": false,
+      "negative_control_detected": true,
+      "log_sha256": "9d335d0ea1a45699e469521e01a1f2b8ef41ef8572893741ed880175c51863c7",
+      "status": "PASS_NEGATIVE_CONTROL"
+    },
+    "target_side_negative_control": {
+      "mutated_public_output": "io_in_ready",
+      "induction_depth": 4,
+      "returncode": 1,
+      "elapsed_seconds": 25.872,
+      "sampled_peak_rss_kib": 1633336,
+      "equiv_cells": 66,
+      "proven_output_cells": 0,
+      "unproven_output_cells": 66,
+      "explicit_equiv_failure_marker": true,
+      "tool_error": false,
+      "negative_control_detected": true,
+      "log_sha256": "e1bcec4d8ea0b7c517763b6840e1b4b199811aee44a2b2454cd7eeae7345a452",
+      "status": "PASS_NEGATIVE_CONTROL"
+    },
+    "output_only_depth_16_retry": {
+      "yosys_command_tail": "equiv_induct -undef -seq 16; equiv_status -assert",
+      "induction_depth": 16,
+      "returncode": 1,
+      "elapsed_seconds": 325.302,
+      "sampled_peak_rss_kib": 5396792,
+      "wsl_mem_available_kib_at_300s": 18145172,
+      "equiv_cells": 66,
+      "proven_output_cells": 1,
+      "unproven_output_cells": 65,
+      "counterexample": false,
+      "explicit_equiv_failure_marker": true,
+      "tool_error": false,
+      "timeout": false,
+      "log_sha256": "52138172cad25ecb557698b798e83496606a6eb98f09c6e46f4dd358af4d12bf",
+      "status": "UNRESOLVED"
+    }
+  },
+  "negative_control_policy": {
+    "two_sided_controls_required": true,
+    "two_sided_controls_detected": true,
+    "detection_requires": [
+      "exactly 66 output equivalence cells",
+      "nonzero Yosys return code",
+      "explicit unproven-equivalence marker",
+      "no tool or parse error marker"
+    ]
+  },
+  "excluded_environment_launch_failure": {
+    "work_directory": "C:/Temp/uhsc_srt16divider_output_only_20260928T215753Z",
+    "attempted_cases": 3,
+    "returncode": 127,
+    "yosys_started": false,
+    "reason": "WSL image has no /usr/bin/time; timeout could not launch its requested wrapper",
+    "log_sha256_each_case": "edbe47204943cdd0e2c73b656876576a393789ba9a090b2cef9ce504500c3189",
+    "counted_as_formal_result": false,
+    "resolution": "Use Linux timeout directly and sample Yosys RSS with ps"
+  },
+  "canonical_evidence": {
+    "strict_evidence_path": "validation/v2-build-cpu-backend-fu-srt16divider-strict-evidence.json",
+    "strict_evidence_before_status": "STRICT_PENDING",
+    "strict_evidence_modified": false,
+    "strict_progress_path": "validation/v2-strict-equivalence-progress.json",
+    "strict_progress_modified": false,
+    "diff_check_against_head": "PASS",
+    "strict_complete_count_delta": 0
+  },
+  "formal_logs_retained_outside_repository": true,
+  "formal_log_directory": "C:/Temp/uhsc_srt16divider_output_only_20260928T220130Z"
+}
