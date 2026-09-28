@@ -1,7 +1,7 @@
 """UHSC Kunminghu V2 frontend TileLink bridge closure.
 昆明湖 V2 前端 TileLink 桥闭包。
 
-The V2 ``FrontendBridge`` in ``MemBlock.scala`` is intentionally small: each
+The V2 ``FrontendBridge`` is intentionally small: each
 of its three edges is implemented as two ``BufferParams.default`` queues.
 This aggregate keeps that topology and the width/constant transformations
 visible, without importing another Build file or the generated reference.
