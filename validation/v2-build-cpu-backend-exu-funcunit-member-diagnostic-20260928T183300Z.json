@@ -1,0 +1,269 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_FUNCUNIT_FRESH_MEMBER_DIAGNOSTIC",
+  "build_id": "Build-Cpu.Backend.Exu.FuncUnit",
+  "run_id": "20260928T183300Z",
+  "status": "STRICT_PENDING",
+  "strict_complete_eligible": false,
+  "strict_complete_count_delta": 0,
+  "acceptance_eligible": false,
+  "canonical_evidence_written": false,
+  "scope": {
+    "kind": "current_source_sequential_member_diagnostic",
+    "members_checked": 7,
+    "members_proven": 0,
+    "equivalence_cells": 589,
+    "proven_cells": 41,
+    "unproven_cells": 548,
+    "all_catalog_members_rechecked": false,
+    "acceptance_gates_rechecked": false
+  },
+  "environment": {
+    "repository_head": "8c4ee0adaeb2f1656685c93267541ec6ef376da0",
+    "repository_branch": "main",
+    "wsl_formal_serialized": true,
+    "available_memory_before_run_gib": 22,
+    "yosys_version": "0.52"
+  },
+  "sources": {
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Exu.FuncUnit-Hardware.py",
+      "sha256": "362067ff904bc1c0a0aa37ec2b6d7c79de6f843556d94152881adfb385079a5b",
+      "bytes": 126213
+    },
+    "validator": {
+      "path": "validation/v2_funcunit_strict_validator.py",
+      "sha256": "ef5018899932061420e780d9c5edc083fa532cf160bd628d9adb990b364b49f8",
+      "bytes": 20462
+    },
+    "shared_rail": {
+      "path": "validation/v2_strict_family_rail.py",
+      "sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
+      "bytes": 45980
+    },
+    "canonical_evidence": {
+      "path": "validation/v2-build-cpu-backend-exu-funcunit-strict-evidence.json",
+      "sha256_before": "b2f42127d579e69558ec3fecd49293e99ed19c86a0445e2dc735811b33682bcd",
+      "sha256_after": "b2f42127d579e69558ec3fecd49293e99ed19c86a0445e2dc735811b33682bcd",
+      "changed": false
+    }
+  },
+  "historical_evidence": {
+    "path": "validation/v2-build-cpu-backend-exu-funcunit-strict-evidence.json",
+    "status": "STRICT_PENDING",
+    "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+    "recorded_build_sha256": "22a79c07d456fad4f7cf516270057c037eb7e30b0a42106df3a56620579712fd",
+    "recorded_shared_rail_sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
+    "recorded_aggregate_sat": {
+      "status": "PASS",
+      "combinational_variants": 19,
+      "variables": 87179,
+      "clauses": 238375
+    },
+    "aggregate_does_not_prove_sequential_members": true
+  },
+  "member_results": [
+    {
+      "name": "Bku",
+      "locked_reference_sha256": "b44ddbc8964fca8f64b0beb5cd7c83d7c7c28c49aab92462e8e9649f4dfe7879",
+      "rail_command": "equiv_simple -undef -short -seq 1; equiv_status -assert",
+      "equivalence_cells": 83,
+      "proven_cells": 18,
+      "unproven_cells": 65,
+      "verilator_target_lint": "PASS",
+      "locked_reference_lint": "PASS",
+      "formal_returncode": 1,
+      "timed_out": false,
+      "formal_success_marker": false,
+      "markers_present": {
+        "0 are unproven.": false,
+        "Equivalence successfully proven!": false
+      },
+      "yosys_elapsed_seconds": 12.236,
+      "output_bytes": 2480406,
+      "output_sha256": "103cf289673fde2341bfbca13ca0882011bb589a64d488f0bf4aa9a0701d7005",
+      "output_log": "validation/.work/funcunit-member-diagnostics-20260928T183300Z/logs/03_yosys_-Q_-p.log"
+    },
+    {
+      "name": "BlockCipherModule",
+      "locked_reference_sha256": "d38f0c17fc3083b780e1eab23a27fdbee6dd8b8122cb744738f3551a91fc7679",
+      "rail_command": "equiv_simple -undef -short -seq 1; equiv_status -assert",
+      "equivalence_cells": 64,
+      "proven_cells": 0,
+      "unproven_cells": 64,
+      "verilator_target_lint": "PASS",
+      "locked_reference_lint": "PASS",
+      "formal_returncode": 1,
+      "timed_out": false,
+      "formal_success_marker": false,
+      "markers_present": {
+        "0 are unproven.": false,
+        "Equivalence successfully proven!": false
+      },
+      "yosys_elapsed_seconds": 7.702,
+      "output_bytes": 2257604,
+      "output_sha256": "af8842719a9448ee758fce74b1978a63ba4097a1b08089981d91e6f14e0cc66a",
+      "output_log": "validation/.work/funcunit-member-diagnostics-20260928T183300Z/logs/06_yosys_-Q_-p.log"
+    },
+    {
+      "name": "CryptoModule",
+      "locked_reference_sha256": "d8929781c9accdebb9595c21326995589c34210af5c8efa97b1e313d3ab2dfd1",
+      "rail_command": "equiv_simple -undef -short -seq 1; equiv_status -assert",
+      "equivalence_cells": 64,
+      "proven_cells": 0,
+      "unproven_cells": 64,
+      "verilator_target_lint": "PASS",
+      "locked_reference_lint": "PASS",
+      "formal_returncode": 1,
+      "timed_out": false,
+      "formal_success_marker": false,
+      "markers_present": {
+        "0 are unproven.": false,
+        "Equivalence successfully proven!": false
+      },
+      "yosys_elapsed_seconds": 8.337,
+      "output_bytes": 2194673,
+      "output_sha256": "6b722ff4f536a79f290772467f9f5ca0e4eb2e2fe00d1caf102ae98a6fb25cc5",
+      "output_log": "validation/.work/funcunit-member-diagnostics-20260928T183300Z/logs/09_yosys_-Q_-p.log"
+    },
+    {
+      "name": "DivUnit",
+      "locked_reference_sha256": "fe15d98382e7042d2e92a1b2335d78ab3d283e2280ee5db8803f47539fe5bae7",
+      "rail_command": "equiv_simple -undef -short -seq 1; equiv_status -assert",
+      "equivalence_cells": 84,
+      "proven_cells": 0,
+      "unproven_cells": 84,
+      "verilator_target_lint": "PASS",
+      "locked_reference_lint": "PASS",
+      "formal_returncode": 1,
+      "timed_out": false,
+      "formal_success_marker": false,
+      "markers_present": {
+        "0 are unproven.": false,
+        "Equivalence successfully proven!": false
+      },
+      "yosys_elapsed_seconds": 4.324,
+      "output_bytes": 250143,
+      "output_sha256": "62350769b4cfd14763a67f2625c14381f488e1976aeb11ab97a52b6495a3713f",
+      "output_log": "validation/.work/funcunit-member-diagnostics-20260928T183300Z/logs/12_yosys_-Q_-p.log"
+    },
+    {
+      "name": "ExeUnit",
+      "locked_reference_sha256": "37277bfe08a7894b183efa0c4a92d7167551c58e8155cd6f1aa47bcffa96204d",
+      "rail_command": "equiv_simple -undef -short -seq 1; equiv_status -assert",
+      "equivalence_cells": 117,
+      "proven_cells": 2,
+      "unproven_cells": 115,
+      "verilator_target_lint": "PASS",
+      "locked_reference_lint": "PASS",
+      "formal_returncode": 1,
+      "timed_out": false,
+      "formal_success_marker": false,
+      "markers_present": {
+        "0 are unproven.": false,
+        "Equivalence successfully proven!": false
+      },
+      "yosys_elapsed_seconds": 72.442,
+      "output_bytes": 4590873,
+      "output_sha256": "8650c03b047eb6997b353621ad8e062cd7fcf83b9ec3642157a04749f7247c96",
+      "output_log": "validation/.work/funcunit-member-diagnostics-20260928T183300Z/logs/15_yosys_-Q_-p.log"
+    },
+    {
+      "name": "Fence",
+      "locked_reference_sha256": "4f324dd92e0f90b492c81898102861b2495f81c60b214beaa0b5307d9a7eb929",
+      "rail_command": "equiv_induct -undef; equiv_status -assert",
+      "equivalence_cells": 94,
+      "proven_cells": 2,
+      "unproven_cells": 92,
+      "verilator_target_lint": "PASS",
+      "locked_reference_lint": "PASS",
+      "formal_returncode": 1,
+      "timed_out": false,
+      "formal_success_marker": false,
+      "markers_present": {
+        "0 are unproven.": false,
+        "Equivalence successfully proven!": false
+      },
+      "yosys_elapsed_seconds": 0.437,
+      "output_bytes": 74430,
+      "output_sha256": "560f812c82da06ae5e7b0a6c8dbf6bccffb16c086a168032fb68c96d7af99a83",
+      "output_log": "validation/.work/funcunit-member-diagnostics-20260928T183300Z/logs/18_yosys_-Q_-p.log"
+    },
+    {
+      "name": "MulUnit",
+      "locked_reference_sha256": "88ab679f6000c94848dabeb3791a345c5c95462d313f969470267a9ccfd6f2ee",
+      "rail_command": "equiv_induct -undef; equiv_status -assert",
+      "equivalence_cells": 83,
+      "proven_cells": 19,
+      "unproven_cells": 64,
+      "verilator_target_lint": "PASS",
+      "locked_reference_lint": "PASS",
+      "formal_returncode": 1,
+      "timed_out": false,
+      "formal_success_marker": false,
+      "markers_present": {
+        "0 are unproven.": false,
+        "Equivalence successfully proven!": false
+      },
+      "yosys_elapsed_seconds": 51.704,
+      "output_bytes": 1399619,
+      "output_sha256": "70ffc3ae282c1b5025a92170013ebc867125e68872850de6f73831ffe2fda2d3",
+      "output_log": "validation/.work/funcunit-member-diagnostics-20260928T183300Z/logs/21_yosys_-Q_-p.log"
+    }
+  ],
+  "negative_control": {
+    "status": "PASS",
+    "cases": {
+      "sat.target": {
+        "status": "PASS",
+        "entry": "AddrAddModule",
+        "port": "io_target",
+        "mutation_applied": true,
+        "explicit_failure_marker": true,
+        "success_marker_still_present": false,
+        "returncode": 0
+      },
+      "sat.reference": {
+        "status": "PASS",
+        "entry": "AddrAddModule",
+        "port": "io_target",
+        "mutation_applied": true,
+        "explicit_failure_marker": true,
+        "success_marker_still_present": false,
+        "returncode": 0
+      },
+      "sequential.target": {
+        "status": "PASS",
+        "entry": "HashModule",
+        "port": "io_out",
+        "mutation_applied": true,
+        "explicit_failure_marker": true,
+        "success_marker_still_present": false,
+        "returncode": 1
+      },
+      "sequential.reference": {
+        "status": "PASS",
+        "entry": "HashModule",
+        "port": "io_out",
+        "mutation_applied": true,
+        "explicit_failure_marker": true,
+        "success_marker_still_present": false,
+        "returncode": 1
+      }
+    },
+    "diagnostic_report": "validation/.work/funcunit-member-diagnostics-20260928T183929Z/report.json",
+    "diagnostic_report_sha256": "311aff0c74eaed63c4924b98c2d49098e9c3846dc8efe143cd7055b60e51185",
+    "elapsed_seconds": 6.54
+  },
+  "retained_artifacts": {
+    "member_run_report": "validation/.work/funcunit-member-diagnostics-20260928T183300Z/report.json",
+    "member_run_report_sha256": "e92f8d22fda63c078787dae83986f6848f404e778bb59c581d8d0e0bc204b9ed",
+    "complete_output_logs": "validation/.work/funcunit-member-diagnostics-20260928T183300Z/logs",
+    "formal_inputs_and_mutants": "validation/.work/funcunit-member-diagnostics-20260928T183300Z/formal-work",
+    "invalid_unicode_path_attempt": {
+      "excluded_from_results": true,
+      "report": "validation/.work/funcunit-member-diagnostics-20260928T181906Z/report.json",
+      "cause": "Yosys read_verilog received single-quoted paths containing non-ASCII characters and registered no RTLIL modules; the rerun used an ASCII temporary work path."
+    }
+  }
+}
