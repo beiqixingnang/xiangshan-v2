@@ -1,0 +1,143 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_FRONTENDBRIDGE_PUBLIC_QUEUE_STATIC_DIAGNOSTIC",
+  "created_utc": "2026-09-28T19:14:37Z",
+  "status": "DIAGNOSTIC_ONLY",
+  "strict_count_delta": 0,
+  "formal_run_by_this_diagnostic": false,
+  "scope": {
+    "build_id": "Build-Cpu.Memory.FrontendBridge",
+    "module": "FrontendBridge",
+    "partition": "instr_uncache_a",
+    "selected_outputs": {
+      "auto_instr_uncache_in_a_ready": 1,
+      "auto_instr_uncache_out_a_valid": 1,
+      "auto_instr_uncache_out_a_bits_param": 3,
+      "auto_instr_uncache_out_a_bits_address": 48,
+      "auto_instr_uncache_out_a_bits_corrupt": 1
+    },
+    "selected_output_bits": 54,
+    "existing_result": {
+      "path": "validation/v2-frontendbridge-public-queue-strict-results.json",
+      "sha256": "8cc7c7a0c706d756f4f0343be3c71e36b4791797b3ca8cd637b508cd93406bec",
+      "status": "STRICT_PENDING",
+      "yosys_equiv_returncode": 1,
+      "equiv_cells": 54,
+      "proven_cells": 0,
+      "unproven_cells": 54,
+      "output_only_obligations": true
+    }
+  },
+  "sources": {
+    "build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.FrontendBridge-Hardware.py",
+      "sha256": "ac094d35a849219e3e4ac5148e162e5e25fc908b5310f06982a7e1899261b0c9",
+      "queue_lines": "99-153",
+      "buffered_edge_lines": "156-220",
+      "instr_uncache_lines": "348-402"
+    },
+    "validator": {
+      "path": "validation/v2_frontendbridge_public_queue_strict_validator.py",
+      "sha256": "4ee7522491659aa08dabd005663f5fe2a90abb580e2b722e948a4200f4f3849d",
+      "wrapper_lines": "108-154",
+      "formal_script_lines": "168-185",
+      "partition_runner_lines": "213-281"
+    },
+    "scala": {
+      "path": "upstream/src/main/scala/xiangshan/mem/MemBlock.scala",
+      "lines": "203-218"
+    },
+    "chisel_queue": {
+      "path": "upstream/chisel3/src/main/scala/chisel3/util/Decoupled.scala",
+      "lines": "243-305"
+    },
+    "locked_frontend_bridge": {
+      "path": "validation/reference-sv/FrontendBridge.sv",
+      "sha256": "ee3efd5e55934039e4c60b78a29eee198110c581b1464760c0a138af11dec9d2"
+    },
+    "locked_instr_uncache": {
+      "path": "validation/reference-sv/InstrUncacheBuffer.sv",
+      "sha256": "897f9fd22cab1b48cbb8bcd487f289bba3b1657732fa35c7cf06a0bdab91922a"
+    },
+    "locked_queue": {
+      "path": "validation/reference-sv/Queue2_TLBundleA_26.sv",
+      "sha256": "219e56d33d905455ab5e6a2a51db88fe0c4679f31cf631b5200c4608ca481f4c"
+    },
+    "locked_ram": {
+      "path": "validation/reference-sv/ram_2x132.sv",
+      "sha256": "440e69bdf08b9ca8664c2ae678a72bcaa5d31df4fa986acd2174e329a28aeb13"
+    }
+  },
+  "equation_comparison": {
+    "locked_topology": "two Queue(2, pipe=false, flow=false) stages in series",
+    "target_topology": "two TwoEntryQueue stages in series",
+    "locked_a_constants": {
+      "opcode": 4,
+      "param": 0,
+      "size": 3,
+      "source": 0,
+      "mask": 255,
+      "data": 0,
+      "corrupt": 0
+    },
+    "target_observed_a_fields": {
+      "param": 0,
+      "address": "input address",
+      "corrupt": 0
+    },
+    "valid_handshake": "Equivalent for all reachable Queue(2) states after reset; full queues do not accept same-cycle replacement because pipe=false.",
+    "unreachable_state": "Target count is two bits and permits count=3 under unconstrained initial state; legal reset-reachable states are 0, 1, and 2.",
+    "invalid_payload_difference": "Locked output reads ram[deq_ptr] after each dequeue; target output remains data0. After a one-item enqueue/dequeue, valid=0 and the locked pointer reads the other slot while target still exposes the consumed item."
+  },
+  "deterministic_model_check": {
+    "method": "Python source-level two-stage serial queue model comparison; no WSL/Yosys invocation",
+    "reset_state": "empty queue",
+    "input_space_per_step": {
+      "enq_valid": [0, 1],
+      "deq_ready": [0, 1],
+      "address_samples": [17, 34, 51]
+    },
+    "depth": 12,
+    "reachable_valid_payload_result": "PASS",
+    "invalid_payload_result": "EXPECTED_DIFFERENCE",
+    "example_trace": [
+      "reset",
+      "enqueue address 0x11",
+      "move q0 to q1",
+      "dequeue q1",
+      "observe out_a_valid=0: target retains 0x11; locked queue reads the other RAM slot"
+    ]
+  },
+  "proof_contract_findings": [
+    {
+      "finding": "public payload bits are compared without valid gating",
+      "classification": "dont_care_invalid_payload",
+      "impact": "The 3+48+1 payload bits remain proof obligations when out_a_valid=0, where Decoupled does not define their value."
+    },
+    {
+      "finding": "locked ram_2x132.sv has ENABLE_INITIAL_MEM_ removed in the trusted view",
+      "classification": "arbitrary_initialization",
+      "impact": "Reference memory contents are unconstrained before a write, while target Signal storage exports deterministic zero initialization."
+    },
+    {
+      "finding": "target count encoding has unreachable count=3",
+      "classification": "arbitrary_initial_state",
+      "impact": "equiv_induct -undef can enter a target state with no pointer/full counterpart."
+    }
+  ],
+  "recommended_minimal_fix": {
+    "preferred": "Change the partition miter to compare payload fields only when out_a_valid is asserted, or compare only ready/valid for this diagnostic partition, and document invalid payload as don't-care.",
+    "exact_bit_level_option": "Rewrite TwoEntryQueue with enqueue/dequeue pointers, maybe_full, and storage[deq_ptr] output to match Queue(2) invalid-cycle read timing; an initialization policy or valid-gated proof remains required because locked RAM is intentionally uninitialized.",
+    "build_edit_required": false,
+    "direct_test_edit_required": false,
+    "locked_source_edit_allowed": false
+  },
+  "edits": {
+    "build": false,
+    "direct_test": false,
+    "validator": false,
+    "locked_sources": false,
+    "canonical_evidence": false,
+    "strict_numerator": false
+  }
+}

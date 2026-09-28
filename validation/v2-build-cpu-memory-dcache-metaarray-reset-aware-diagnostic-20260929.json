@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "kind": "DCACHE_METAARRAY_RESET_AWARE_FORMAL_DIAGNOSTIC",
+  "member": "L1FlagMetaArray",
+  "locked_reference_sha256": "272c1e75b3ca59a10c70e190c6e6e849ee51303e37d7eac1366a74d9b5feb54c",
+  "abi_exact": true,
+  "outputs_compared": 8,
+  "reset_sequence": "set-init-zero; reset=1 at timestep 1; reset=0 at timesteps 2 and 3",
+  "bounded_sat": {
+    "status": "PASS",
+    "returncode": 0,
+    "sat_variables": 658418,
+    "sat_clauses": 1941676,
+    "success_marker": "SAT proof finished - no model found: SUCCESS!",
+    "scope": "three-cycle reset-constrained public-output miter"
+  },
+  "unbounded_temporal_induction": {
+    "status": "FAIL_INDUCTION_STEP",
+    "returncode": 1,
+    "base_cases": {"length_1": "PASS", "length_2": "PASS", "length_3": "PASS"},
+    "induction_steps": {"length_1": "FAIL", "length_2": "FAIL", "length_3": "FAIL"},
+    "scope": "tempinduct -maxsteps 3 with the same reset assumptions"
+  },
+  "negative_controls": "PASS",
+  "verdict": "STRICT_PENDING",
+  "strict_complete_count_delta": 0,
+  "acceptance_eligible": false,
+  "build_edit": false,
+  "locked_reference_edit": false,
+  "note": "Bounded reset-aware SAT passes, but induction fails; no unbounded strict equivalence claim is made."
+}
