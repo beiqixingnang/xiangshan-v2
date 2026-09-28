@@ -6,7 +6,7 @@
   "fraction": "39/118",
   "percentage": 33.050847,
   "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with the locked source commit, matching source hashes, and either a Yosys SAT no-model miter or fully proven Yosys inductive-equivalence status is counted. STRICT_PENDING and COMPLETE_EQUIVALENCE_VARIANT_ONLY records are inventoried as attempted-but-not-counted instead of failing the rail, and one Build file may not be claimed by several counting proofs.",
-  "non_counting_attempt_count": 11,
+  "non_counting_attempt_count": 10,
   "non_counting_attempts": [
     {
       "evidence": "validation/v2-build-cpu-backend-exu-funcunit-strict-evidence.json",
@@ -28,29 +28,6 @@
         "Fence: 92 $equiv cells unproven",
         "MulUnit:yosys_equiv",
         "MulUnit: 64 $equiv cells unproven"
-      ],
-      "unclosed": [
-        "strict gates did not all pass"
-      ]
-    },
-    {
-      "evidence": "validation/v2-build-cpu-backend-fu-pmp-family-strict-evidence.json",
-      "build_id": "Build-Cpu.Backend.Fu.PMP.Family",
-      "declared_status": "STRICT_PENDING",
-      "audit_failures": [],
-      "proof_failures": [
-        "PMP:yosys_equiv",
-        "PMP: 6432 $equiv cells unproven",
-        "PMPChecker:sat_miter",
-        "PMPChecker_12:yosys_equiv",
-        "PMPChecker_12: 5 $equiv cells unproven",
-        "PMPChecker_12: zero or missing $equiv cells",
-        "PMPChecker_2:yosys_equiv",
-        "PMPChecker_2: 2 $equiv cells unproven",
-        "PMPChecker_2: zero or missing $equiv cells",
-        "PMPEntryHandleModule:yosys_equiv",
-        "PMPEntryHandleModule: 2064 $equiv cells unproven",
-        "aggregate SAT miter"
       ],
       "unclosed": [
         "strict gates did not all pass"
@@ -17139,7 +17116,7 @@
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "status": "PASS"
       },
-      "status": "NON_COUNTING",
+      "status": "FAIL",
       "note": null,
       "scope": {
         "kind": "catalog_build_multi_variant",
@@ -21042,8 +21019,8 @@
           "present": true,
           "inside_repository": true,
           "expected_sha256": "7df059af6a4d62192cd915e3190f900470495c2a482b0dcb64d1e90407979eb3",
-          "observed_sha256": "7df059af6a4d62192cd915e3190f900470495c2a482b0dcb64d1e90407979eb3",
-          "status": "PASS"
+          "observed_sha256": "686d5bd741cb3a154595091cf6f9202975196ca8b1fc57bfbdf1ee5c0c3bd8b1",
+          "status": "FAIL"
         },
         "reference_sv": {
           "path": "validation/reference-sv/PMP.sv",
@@ -21165,7 +21142,9 @@
         "status": "FAIL",
         "formal_success_marker": false
       },
-      "failures": [],
+      "failures": [
+        "source digest: python_build"
+      ],
       "declared_failures": [
         "PMP:yosys_equiv",
         "PMP: 6432 $equiv cells unproven",

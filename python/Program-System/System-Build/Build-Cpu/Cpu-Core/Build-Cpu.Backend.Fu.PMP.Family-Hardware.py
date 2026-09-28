@@ -17,9 +17,8 @@ __all__ = ["COVERED_MODULES", "IMPLEMENTED_MEMBERS", "CONTRACT_ONLY_MEMBERS", "P
 COVERED_MODULES = ("PMP", "PMPChecker", "PMPChecker_12", "PMPChecker_2", "PMPEntryHandleModule")
 # Keep the implementation/contract split explicit until every observable
 # relation has been independently proven.
-IMPLEMENTED_MEMBERS: tuple[str, ...] = ()
-CONTRACT_ONLY_MEMBERS = COVERED_MODULES
-# Behavioral provenance is maintained by the validation inventories.
+IMPLEMENTED_MEMBERS: tuple[str, ...] = ("PMPChecker_2",)
+CONTRACT_ONLY_MEMBERS = ("PMP", "PMPChecker", "PMPChecker_12", "PMPEntryHandleModule")
 
 PortSpec = tuple[str, str, int]
 
@@ -1929,7 +1928,8 @@ class PMPFamily(Elaboratable):
 
     def _clock_domain(self, module: Module) -> None:
         if "clock" in self.ports:
-            domain = ClockDomain("sync", async_reset=True)
+            domain = (ClockDomain("sync", async_reset=True) if "reset" in self.ports
+                      else ClockDomain("sync", reset_less=True))
             domain.clk = self.ports["clock"]
             if "reset" in self.ports:
                 domain.rst = self.ports["reset"]
@@ -2031,6 +2031,61 @@ class PMPFamily(Elaboratable):
                 self.ports["io_resp_mmio"].eq(~pma_c),
                 self.ports["io_resp_atomic"].eq(pma_atomic),
             ]
+            return
+
+        # This reduced checker instance exposes only execute-denial and PMA
+        # cacheability.  Its response is captured on a valid request, while
+        # both PMP and PMA use the same ordered address-match structure.
+        if variant == "PMPChecker_2":
+            grain_mask = Const(0x3FFFFFFFFC00, 46)
+            debug_window = (req > Const(0x3801FFFF, 48)) & (req < Const(0x38021000, 48))
+            debug_allowed = ~debug_window | debug
+
+            def match_entries(prefix: str) -> list[Any]:
+                matches: list[Any] = []
+                for index in range(32):
+                    address = self.ports[f"io_check_env_{prefix}_{index}_addr"]
+                    mode_a = self.ports[f"io_check_env_{prefix}_{index}_cfg_a"]
+                    entry_base = Cat(Const(0, 2), address & grain_mask)
+                    if index == 0:
+                        previous_base: Any = Const(0, 48)
+                    else:
+                        previous_address = self.ports[f"io_check_env_{prefix}_{index - 1}_addr"]
+                        previous_base = Cat(Const(0, 2), previous_address & grain_mask)
+                    napot = mode_a[1] & (
+                        (req & ~self.ports[f"io_check_env_{prefix}_{index}_mask"])
+                        == (entry_base & ~self.ports[f"io_check_env_{prefix}_{index}_mask"])
+                    )
+                    tor = (mode_a == 1) & (req >= previous_base) & (req < entry_base)
+                    matches.append((napot | tor) & debug_allowed)
+                return matches
+
+            pmp_matches = match_entries("pmp")
+            pma_matches = match_entries("pma")
+            pmp_x: Any = self.ports["io_check_env_mode"][1]
+            pma_x: Any = Const(0)
+            pma_c: Any = Const(0)
+            for index in range(31, -1, -1):
+                pmp_l = self.ports[f"io_check_env_pmp_{index}_cfg_l"]
+                pmp_x_value = self.ports[f"io_check_env_pmp_{index}_cfg_x"]
+                pmp_x_value = pmp_x_value | (self.ports["io_check_env_mode"][1] & ~pmp_l)
+                pmp_x = Mux(pmp_matches[index], pmp_x_value, pmp_x)
+                pma_x = Mux(
+                    pma_matches[index],
+                    self.ports[f"io_check_env_pma_{index}_cfg_x"],
+                    pma_x,
+                )
+                pma_c = Mux(
+                    pma_matches[index],
+                    self.ports[f"io_check_env_pma_{index}_cfg_c"],
+                    pma_c,
+                )
+
+            with module.If(self.ports["io_req_valid"]):
+                module.d.sync += [
+                    self.ports["io_resp_instr"].eq(~(pmp_x & pma_x)),
+                    self.ports["io_resp_mmio"].eq(~pma_c),
+                ]
             return
 
         pmp_match: list[Any] = []
