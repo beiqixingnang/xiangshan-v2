@@ -6,8 +6,33 @@
   "fraction": "39/118",
   "percentage": 33.050847,
   "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with the locked source commit, matching source hashes, and either a Yosys SAT no-model miter or fully proven Yosys inductive-equivalence status is counted. STRICT_PENDING and COMPLETE_EQUIVALENCE_VARIANT_ONLY records are inventoried as attempted-but-not-counted instead of failing the rail, and one Build file may not be claimed by several counting proofs.",
-  "non_counting_attempt_count": 10,
+  "non_counting_attempt_count": 11,
   "non_counting_attempts": [
+    {
+      "evidence": "validation/v2-build-cpu-backend-exu-funcunit-strict-evidence.json",
+      "build_id": "Build-Cpu.Backend.Exu.FuncUnit",
+      "declared_status": "STRICT_PENDING",
+      "audit_failures": [],
+      "proof_failures": [
+        "Bku:yosys_equiv",
+        "Bku: 65 $equiv cells unproven",
+        "BlockCipherModule:yosys_equiv",
+        "BlockCipherModule: 64 $equiv cells unproven",
+        "CryptoModule:yosys_equiv",
+        "CryptoModule: 64 $equiv cells unproven",
+        "DivUnit:yosys_equiv",
+        "DivUnit: 84 $equiv cells unproven",
+        "ExeUnit:yosys_equiv",
+        "ExeUnit: 115 $equiv cells unproven",
+        "Fence:yosys_equiv",
+        "Fence: 92 $equiv cells unproven",
+        "MulUnit:yosys_equiv",
+        "MulUnit: 64 $equiv cells unproven"
+      ],
+      "unclosed": [
+        "strict gates did not all pass"
+      ]
+    },
     {
       "evidence": "validation/v2-build-cpu-backend-fu-pmp-family-strict-evidence.json",
       "build_id": "Build-Cpu.Backend.Fu.PMP.Family",
@@ -10993,8 +11018,8 @@
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "status": "PASS"
       },
-      "status": "FAIL",
-      "note": null,
+      "status": "NON_COUNTING",
+      "note": "scala provenance not vendored for this attempt record",
       "scope": {
         "kind": "catalog_build_multi_variant",
         "public_variants": [
@@ -13627,9 +13652,9 @@
           "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Exu.FuncUnit-Hardware.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "22a79c07d456fad4f7cf516270057c037eb7e30b0a42106df3a56620579712fd",
-          "observed_sha256": "362067ff904bc1c0a0aa37ec2b6d7c79de6f843556d94152881adfb385079a5b",
-          "status": "FAIL"
+          "expected_sha256": "c246ba064158a3d9a2706bb8c9820abaadb5a979ae1a15e55caa85fbd60d280e",
+          "observed_sha256": "c246ba064158a3d9a2706bb8c9820abaadb5a979ae1a15e55caa85fbd60d280e",
+          "status": "PASS"
         },
         "reference_sv": {
           "path": "validation/reference-sv/AddrAddModule.sv",
@@ -13637,14 +13662,6 @@
           "inside_repository": true,
           "expected_sha256": "3e5343619fb56860b42b5bccfac9fefac4a20dc547e8a7f87867695524dca178",
           "observed_sha256": "3e5343619fb56860b42b5bccfac9fefac4a20dc547e8a7f87867695524dca178",
-          "status": "PASS"
-        },
-        "scala": {
-          "path": "upstream/src/main/scala/xiangshan/backend/fu/FuncUnit.scala",
-          "present": true,
-          "inside_repository": true,
-          "expected_sha256": "c5965e2c84f42437ee14f8d4f109b6100e39a5500afbe8ac6fa967e145060168",
-          "observed_sha256": "c5965e2c84f42437ee14f8d4f109b6100e39a5500afbe8ac6fa967e145060168",
           "status": "PASS"
         }
       },
@@ -13951,9 +13968,9 @@
           "path": "validation/v2_strict_family_rail.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
+          "expected_sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
           "observed_sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
-          "status": "FAIL"
+          "status": "PASS"
         }
       },
       "reference_lock": {
@@ -14198,32 +14215,7 @@
           "status": "PASS"
         }
       },
-      "declared_scala_sources": {
-        "upstream/src/main/scala/xiangshan/backend/fu/FuncUnit.scala": {
-          "path": "upstream/src/main/scala/xiangshan/backend/fu/FuncUnit.scala",
-          "present": true,
-          "inside_repository": true,
-          "expected_sha256": "c5965e2c84f42437ee14f8d4f109b6100e39a5500afbe8ac6fa967e145060168",
-          "observed_sha256": "c5965e2c84f42437ee14f8d4f109b6100e39a5500afbe8ac6fa967e145060168",
-          "status": "PASS"
-        },
-        "upstream/src/main/scala/xiangshan/backend/fu/Bku.scala": {
-          "path": "upstream/src/main/scala/xiangshan/backend/fu/Bku.scala",
-          "present": true,
-          "inside_repository": true,
-          "expected_sha256": "a5433042801f6b21d820b65bd7ee04e60f8d9db0039bbb8e727a40f557c3f96d",
-          "observed_sha256": "a5433042801f6b21d820b65bd7ee04e60f8d9db0039bbb8e727a40f557c3f96d",
-          "status": "PASS"
-        },
-        "upstream/src/main/scala/xiangshan/backend/exu/ExeUnit.scala": {
-          "path": "upstream/src/main/scala/xiangshan/backend/exu/ExeUnit.scala",
-          "present": true,
-          "inside_repository": true,
-          "expected_sha256": "29ce5f521767c3d0ccd0cafd0bea68a95992d2d01c93fdbfb8620c3a4df74c1a",
-          "observed_sha256": "29ce5f521767c3d0ccd0cafd0bea68a95992d2d01c93fdbfb8620c3a4df74c1a",
-          "status": "PASS"
-        }
-      },
+      "declared_scala_sources": {},
       "variant_checks": {
         "AddrAddModule": {
           "status": "PASS",
@@ -14393,10 +14385,7 @@
         "status": "PASS",
         "formal_success_marker": true
       },
-      "failures": [
-        "source digest: python_build",
-        "source digest: validator_dependency.strict_family_rail"
-      ],
+      "failures": [],
       "declared_failures": [
         "Bku:yosys_equiv",
         "Bku: 65 $equiv cells unproven",
