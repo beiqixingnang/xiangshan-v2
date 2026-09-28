@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_NEWCSR_CONTROL_FAMILY_PARTIAL_DIAGNOSTIC",
+  "build_id": "Build-Cpu.Backend.Fu.NewCSR.ControlFamily",
+  "status": "STRICT_PENDING",
+  "strict_complete_build_count_delta": 0,
+  "acceptance_eligible": false,
+  "scope": {
+    "catalog_members": 9,
+    "outputless_locked_members": ["CommitIDModule", "PrintCommitIDModule"],
+    "outputless_policy": "The current strict FamilyRail rejects members with no observable outputs; simulation-only side effects need a separate parent/side-effect contract.",
+    "members_modified": ["TrapHandleModule", "TrapInstMod"]
+  },
+  "source_backed_fixes": [
+    "TrapHandleModule preserves the full 8-bit interrupt cause and selects single-step exception code 3.",
+    "TrapHandleModule places the two zero alignment bits in the low end of the vectored PC.",
+    "TrapInstMod packs CSR instruction fields as opcode, rd, funct3, rs1, csr address in low-first Amaranth order."
+  ],
+  "sources": {
+    "python_build": {"path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.NewCSR.ControlFamily-Hardware.py", "sha256": "6166809498e2d03429425a24d52d19b6e5f7e0104b0ae6354baa81a6830ff7f1"},
+    "direct_test": {"path": "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu.Backend.Fu.NewCSR.ControlFamily-Hardware.py", "sha256": "16e6f5870467a4935cc8fa4a9c7f3a1ea6c4655f9b933122bff529c2e3eab423"},
+    "locked_trap_handle": {"path": "validation/reference-sv/TrapHandleModule.sv", "sha256": "2f64c3111b9a643d9791a08454b0de9de8844e50079d9d2ea38946970deaecf9"},
+    "locked_trap_inst": {"path": "validation/reference-sv/TrapInstMod.sv", "sha256": "744bd9d50055ffc772e0c1697a728fb81d641d7a7a37da07a1e767b862717378"}
+  },
+  "checks": {
+    "py_compile": "PASS",
+    "locked_abi_all_members": "PASS",
+    "deterministic_export_all_members": "PASS",
+    "direct_test": "3/3 PASS",
+    "trap_handle_direct_behavior": "NOT_RUN: the existing 64-entry nested priority expression exceeds Amaranth Simulator Python code-generation indentation limit",
+    "focused_trap_inst_formal": "0/33 proven; Yosys exit 1; 33 unproven; no strict claim",
+    "focused_trap_inst_abi_lint_view": "PASS",
+    "full_family_formal": "NOT_RUN",
+    "two_sided_negative_control": "NOT_RUN"
+  },
+  "unclosed": [
+    "TrapHandle delegation/priority and InterruptFilter behavior remain incomplete.",
+    "TrapInst flush-cycle and pointer ordering remain incomplete.",
+    "Two outputless members need an authorized side-effect or parent closure proof policy.",
+    "Full strict rail, parent closure, license review, and user approval remain pending."
+  ]
+}

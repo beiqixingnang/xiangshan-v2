@@ -294,7 +294,8 @@ class ControlFamily(Elaboratable):
             bit = p["io_in_trapInfo_bits_trapVec"][code]
             ex_code = Mux(bit & ~ex_seen, code, ex_code)
             ex_seen = ex_seen | bit
-        cause = Mux(is_interrupt, p["io_in_trapInfo_bits_intrVec"], ex_code)
+        exception_code = Mux(p["io_in_trapInfo_bits_singleStep"], 3, ex_code)
+        cause = Mux(is_interrupt, p["io_in_trapInfo_bits_intrVec"], exception_code)
         # Delegation bits are flattened by exception name; direct bit lookup is
         # sufficient for the common trap causes and keeps all inputs live.
         medeleg_any = Const(0, 1)
@@ -314,7 +315,7 @@ class ControlFamily(Elaboratable):
         mode = Mux(to_vs, p["io_in_vstvec_mode"], Mux(to_hs, p["io_in_stvec_mode"], p["io_in_mtvec_mode"]))
         addr = Mux(to_vs, p["io_in_vstvec_addr"], Mux(to_hs, p["io_in_stvec_addr"], p["io_in_mtvec_addr"]))
         vectored_offset = Mux((mode == 1) & is_interrupt, cause[:6], 0)
-        pc = Cat(addr + vectored_offset, Const(0, 2))
+        pc = Cat(Const(0, 2), (addr + vectored_offset)[:62])
         module.d.comb += [p["io_out_entryPrivState_PRVM"].eq(entry_prvm),
                           p["io_out_entryPrivState_V"].eq(entry_v),
                           p["io_out_causeNO_Interrupt"].eq(is_interrupt),
@@ -338,7 +339,7 @@ class ControlFamily(Elaboratable):
         csr_addr = p["io_faultCsrUop_bits_imm"][0:12]
         rs1 = p["io_faultCsrUop_bits_imm"][12:17]
         rd = p["io_faultCsrUop_bits_imm"][17:22]
-        csr_instr = Cat(csr_addr, rs1, p["io_faultCsrUop_bits_fuOpType"][0:3], rd, Const(0b1110011, 7))
+        csr_instr = Cat(Const(0b1110011, 7), rd, p["io_faultCsrUop_bits_fuOpType"][0:3], rs1, csr_addr)
         compressed = p["io_fromDecode_trapInstInfo_bits_instr"][:2] != 3
         decode_instr = Mux(compressed, p["io_fromDecode_trapInstInfo_bits_instr"][:16], p["io_fromDecode_trapInstInfo_bits_instr"])
         flush = p["io_fromRob_flush_valid"]
