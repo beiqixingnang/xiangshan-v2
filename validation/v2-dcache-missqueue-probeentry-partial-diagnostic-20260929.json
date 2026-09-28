@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_DCACHE_MISSQUEUE_PROBEENTRY_PARTIAL_DIAGNOSTIC",
+  "build_id": "Build-Cpu.Memory.Dcache.MissQueue.Family",
+  "member": "ProbeEntry",
+  "status": "VALIDATOR_PASS_BOUNDED",
+  "strict_complete_build_count_delta": 0,
+  "acceptance_eligible": false,
+  "scope": {"catalog_members": 7, "modified_member": "ProbeEntry"},
+  "source_backed_fix": "Use the incoming address on request fire and the saved address otherwise for LR/SC reservation block comparison; delay the blocked result one resetless cycle before gating io_pipe_req_valid.",
+  "sources": {
+    "python_build": {"path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Dcache.MissQueue.Family-Hardware.py", "sha256": "b0e271f83c4e09e2afc85567505a7a871a6889b88ca704e92274bbb3a1e6cc6d"},
+    "direct_test": {"path": "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu.Memory.Dcache.MissQueue.Family-Hardware.py", "sha256": "b43b3d169e5d125e2e7584c8e12f4c83a1c27c3651a3920e5190229950454c3c"},
+    "locked_probe_entry": {"path": "validation/reference-sv/ProbeEntry.sv", "sha256": "42a8828407446a064e390cc734e00083e1e69b8699cc8af186c2d744100bd4ba"}
+  },
+  "checks": {
+    "py_compile": "PASS",
+    "locked_abi_all_members": "PASS",
+    "deterministic_export_all_members": "PASS",
+    "direct_test": "3/3 PASS, including no reservation, same 64-byte block with delayed release, and different block",
+    "focused_probeentry_formal": "8/111 proven; Yosys exit 1; 103 unproven",
+    "focused_probeentry_abi_lint_view": "PASS",
+    "full_family_formal": "NOT_RUN",
+    "two_sided_negative_control": "NOT_RUN"
+  },
+  "unclosed": [
+    "ProbeEntry still has 103 unproven equivalence cells after the focused source-backed repair.",
+    "MissEntry and WritebackEntry remain major behavior gaps.",
+    "Full strict rail, parent closure, license review, and user approval remain pending."
+  ]
+}

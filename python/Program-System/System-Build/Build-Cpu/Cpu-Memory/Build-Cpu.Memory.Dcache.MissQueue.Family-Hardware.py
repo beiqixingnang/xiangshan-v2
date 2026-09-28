@@ -2,13 +2,10 @@
 
 """UHSC V2 DCache miss, probe, and writeback queue family.
 
-This aggregate owns the exact locked ANSI surfaces for the DCache miss-queue
-and adjacent queue leaves.  The catalog is mechanically frozen from
-``validation/v2-locked-hierarchy.json`` by
-``scripts/generate_dcache_miss_family_port_catalog.py``.  The implementation
-keeps bounded, reset-safe request, response, and arbitration behavior useful
-to direct tests; full TileLink/coherence and parent DCache closure remain
-explicitly outside this leaf-family claim.
+This aggregate exposes fixed interfaces for DCache miss-queue and adjacent
+queue leaves. The implementations provide bounded request, response, and
+arbitration behavior; full TileLink/coherence and parent DCache closure remain
+outside this leaf-family behavior claim.
 """
 
 from __future__ import annotations
@@ -30,6 +27,7 @@ __all__ = [
     'main',
 ]
 
+# Configuration
 COVERED_MODULES = (
     "CMOUnit",
     "MissEntry",
@@ -607,9 +605,23 @@ class DcacheMissQueueFamily(Elaboratable):
         saved_vaddr = Signal(50)
         saved_param = Signal(2)
         saved_need_data = Signal()
+        req_fire = (state == 0) & self.ports["io_req_valid"]
+        lrsc_compare_addr = Mux(
+            req_fire, self.ports["io_req_bits_addr"], saved_addr
+        )
+        lrsc_blocked = self.ports["io_lrsc_locked_block_valid"] & (
+            lrsc_compare_addr[6:]
+            == self.ports["io_lrsc_locked_block_bits"][6:]
+        )
+        lrsc_blocked_delay = Signal(
+            name="io_pipe_req_valid_REG", reset_less=True
+        )
+        module.d.sync += lrsc_blocked_delay.eq(lrsc_blocked)
         module.d.comb += [
             self.ports["io_req_ready"].eq(state == 0),
-            self.ports["io_pipe_req_valid"].eq(state == 1),
+            self.ports["io_pipe_req_valid"].eq(
+                (state == 1) & ~lrsc_blocked_delay
+            ),
             self.ports["io_pipe_req_bits_probe_param"].eq(saved_param),
             self.ports["io_pipe_req_bits_probe_need_data"].eq(saved_need_data),
             self.ports["io_pipe_req_bits_vaddr"].eq(saved_vaddr),
@@ -618,7 +630,7 @@ class DcacheMissQueueFamily(Elaboratable):
             self.ports["io_block_addr_valid"].eq(state != 0),
             self.ports["io_block_addr_bits"].eq(saved_addr),
         ]
-        with module.If((state == 0) & self.ports["io_req_valid"]):
+        with module.If(req_fire):
             module.d.sync += [
                 state.eq(1),
                 saved_addr.eq(self.ports["io_req_bits_addr"]),
