@@ -15,6 +15,7 @@ import unittest
 from pathlib import Path
 from typing import Any
 
+from amaranth import ClockDomain, Elaboratable, Module, Signal
 from amaranth.sim import Simulator
 
 
@@ -151,6 +152,91 @@ class FrontendBridgeTest(unittest.TestCase):
             self.assertEqual(observed, accepted)
 
         simulator = Simulator(bridge)
+        simulator.add_clock(1e-6, domain="sync")
+        simulator.add_testbench(bench)
+        simulator.run()
+
+    def test_two_entry_queue_temporal_contract(self) -> None:
+        """Exercise Queue(2) empty/full, pointer wrap, and invalid payload rules."""
+
+        module = load_subject()
+
+        class QueueHarness(Elaboratable):
+            def __init__(self) -> None:
+                self.reset = Signal()
+                self.queue = module.TwoEntryQueue((8,), "direct_queue")
+
+            def elaborate(self, platform: Any) -> Module:
+                del platform
+                harness = Module()
+                domain = ClockDomain("sync", async_reset=True)
+                domain.rst = self.reset
+                harness.domains.sync = domain
+                harness.submodules.queue = self.queue
+                return harness
+
+        harness = QueueHarness()
+
+        async def bench(ctx: Any) -> None:
+            ctx.set(harness.reset, 1)
+            await ctx.tick("sync")
+            ctx.set(harness.reset, 0)
+            ctx.set(harness.queue.enq_valid, 0)
+            ctx.set(harness.queue.deq_ready, 0)
+
+            # Empty: ready is asserted, valid is deasserted.  The payload is
+            # intentionally not inspected while valid is low.
+            self.assertEqual(int(ctx.get(harness.queue.enq_ready)), 1)
+            self.assertEqual(int(ctx.get(harness.queue.deq_valid)), 0)
+
+            # Fill both entries and observe the full handshake.
+            for value in (0x11, 0x22):
+                ctx.set(harness.queue.enq_bits[0], value)
+                ctx.set(harness.queue.enq_valid, 1)
+                self.assertEqual(int(ctx.get(harness.queue.enq_ready)), 1)
+                await ctx.tick("sync")
+            self.assertEqual(int(ctx.get(harness.queue.enq_ready)), 0)
+            self.assertEqual(int(ctx.get(harness.queue.deq_valid)), 1)
+            self.assertEqual(int(ctx.get(harness.queue.deq_bits[0])), 0x11)
+
+            # pipe=false means a full queue does not accept a replacement
+            # during a dequeue; the next item remains 0x22.
+            ctx.set(harness.queue.enq_bits[0], 0x33)
+            ctx.set(harness.queue.enq_valid, 1)
+            ctx.set(harness.queue.deq_ready, 1)
+            self.assertEqual(int(ctx.get(harness.queue.enq_ready)), 0)
+            await ctx.tick("sync")
+            self.assertEqual(int(ctx.get(harness.queue.enq_ready)), 1)
+            self.assertEqual(int(ctx.get(harness.queue.deq_valid)), 1)
+            self.assertEqual(int(ctx.get(harness.queue.deq_bits[0])), 0x22)
+
+            # Now there is space, so enqueue/dequeue happen together and the
+            # newly accepted item becomes the sole queued value.
+            self.assertEqual(int(ctx.get(harness.queue.enq_ready)), 1)
+            await ctx.tick("sync")
+            self.assertEqual(int(ctx.get(harness.queue.deq_valid)), 1)
+            self.assertEqual(int(ctx.get(harness.queue.deq_bits[0])), 0x33)
+
+            # Drain 0x33, then use the wrapped slots (1 then 0) for 0x44/55.
+            ctx.set(harness.queue.enq_valid, 0)
+            await ctx.tick("sync")
+            self.assertEqual(int(ctx.get(harness.queue.deq_valid)), 0)
+            ctx.set(harness.queue.deq_ready, 0)
+            for value in (0x44, 0x55):
+                ctx.set(harness.queue.enq_bits[0], value)
+                ctx.set(harness.queue.enq_valid, 1)
+                await ctx.tick("sync")
+            self.assertEqual(int(ctx.get(harness.queue.enq_ready)), 0)
+            self.assertEqual(int(ctx.get(harness.queue.deq_bits[0])), 0x44)
+            ctx.set(harness.queue.deq_ready, 1)
+            await ctx.tick("sync")
+            self.assertEqual(int(ctx.get(harness.queue.deq_valid)), 1)
+            self.assertEqual(int(ctx.get(harness.queue.deq_bits[0])), 0x55)
+            ctx.set(harness.queue.enq_valid, 0)
+            await ctx.tick("sync")
+            self.assertEqual(int(ctx.get(harness.queue.deq_valid)), 0)
+
+        simulator = Simulator(harness)
         simulator.add_clock(1e-6, domain="sync")
         simulator.add_testbench(bench)
         simulator.run()

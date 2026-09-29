@@ -13,7 +13,7 @@ from contextlib import AbstractContextManager
 from dataclasses import dataclass
 from typing import Any, Iterable, Sequence, cast
 
-from amaranth import ClockDomain, Elaboratable, Module, ResetSignal, Signal
+from amaranth import ClockDomain, Elaboratable, Module, Mux, ResetSignal, Signal
 from amaranth.back import verilog
 
 
@@ -95,55 +95,55 @@ class TwoEntryQueue(Elaboratable):
         self.deq_bits = [Signal(width, name=f"{prefix}_deq_{index}")
                          for index, width in enumerate(self.widths)]
 
-    # Elaborate count-based storage with simultaneous enqueue/dequeue support. / 展开支持同拍入队出队的计数存储。
+    # Elaborate the pointer-based Queue(2) state machine. / 展开基于指针的 Queue(2) 状态机。
     def elaborate(self, platform: Any) -> Module:
         del platform
         m = Module()
-        count = Signal(2, name=f"{self.prefix}_count")
-        valid = count != 0
-        pop = valid & self.deq_ready
-        # Chisel ``Queue(2)`` exposes ``~full`` on enqueue; it does not
-        # advertise a same-cycle replacement when both slots are occupied.
-        # This detail is observable at the FrontendBridge boundary.
-        push = self.enq_valid & (count < 2)
-        m.d.comb += [self.enq_ready.eq(count < 2),
-                     self.deq_valid.eq(valid)]
-        # The two data registers keep payload widths explicit and deterministic.
-        data0 = [Signal(width, name=f"{self.prefix}_data0_{index}")
-                 for index, width in enumerate(self.widths)]
-        data1 = [Signal(width, name=f"{self.prefix}_data1_{index}")
-                 for index, width in enumerate(self.widths)]
-        for output, source in zip(self.deq_bits, data0):
-            m.d.comb += output.eq(source)
+        enq_ptr = Signal(name=f"{self.prefix}_enq_ptr")
+        deq_ptr = Signal(name=f"{self.prefix}_deq_ptr")
+        maybe_full = Signal(name=f"{self.prefix}_maybe_full")
+        ptr_match = enq_ptr == deq_ptr
+        empty = ptr_match & ~maybe_full
+        full = ptr_match & maybe_full
+        push = self.enq_valid & ~full
+        pop = self.deq_ready & ~empty
 
-        with amaranth_if(m, pop):
-            with amaranth_if(m, count == 2):
-                for dst, src in zip(data0, data1):
+        # Queue(2) with pipe=False/flow=False exposes ready=!full and
+        # valid=!empty.  In particular, a full queue cannot accept a
+        # replacement on the same cycle as a dequeue.
+        m.d.comb += [self.enq_ready.eq(~full), self.deq_valid.eq(~empty)]
+
+        # Queue's payload memory is intentionally not reset.  Only compare
+        # deq_bits when deq_valid is asserted; their value while empty is
+        # unspecified by the source Queue.
+        storage = [
+            [Signal(width, name=f"{self.prefix}_data{slot}_{index}", reset_less=True)
+             for index, width in enumerate(self.widths)]
+            for slot in range(2)
+        ]
+        for output, data0, data1 in zip(self.deq_bits, storage[0], storage[1]):
+            m.d.comb += output.eq(Mux(deq_ptr, data1, data0))
+
+        # The two one-bit pointers wrap naturally.  Enqueue writes only the
+        # selected word; unlike the previous shift-register form, dequeue
+        # never moves the remaining payload.
+        with amaranth_if(m, push):
+            with amaranth_if(m, enq_ptr == 0):
+                for dst, src in zip(storage[0], self.enq_bits):
                     m.d.sync += dst.eq(src)
-                with amaranth_if(m, push):
-                    for dst, src in zip(data1, self.enq_bits):
-                        m.d.sync += dst.eq(src)
-                    m.d.sync += count.eq(2)
-                with amaranth_else(m):
-                    m.d.sync += count.eq(1)
             with amaranth_else(m):
-                with amaranth_if(m, push):
-                    for dst, src in zip(data0, self.enq_bits):
-                        m.d.sync += dst.eq(src)
-                    m.d.sync += count.eq(1)
-                with amaranth_else(m):
-                    m.d.sync += count.eq(0)
-        with amaranth_elif(m, push):
-            with amaranth_if(m, count == 0):
-                for dst, src in zip(data0, self.enq_bits):
+                for dst, src in zip(storage[1], self.enq_bits):
                     m.d.sync += dst.eq(src)
-                m.d.sync += count.eq(1)
-            with amaranth_else(m):
-                for dst, src in zip(data1, self.enq_bits):
-                    m.d.sync += dst.eq(src)
-                m.d.sync += count.eq(2)
+
         with amaranth_if(m, ResetSignal("sync")):
-            m.d.sync += count.eq(0)
+            m.d.sync += [enq_ptr.eq(0), deq_ptr.eq(0), maybe_full.eq(0)]
+        with amaranth_else(m):
+            with amaranth_if(m, push):
+                m.d.sync += enq_ptr.eq(~enq_ptr)
+            with amaranth_if(m, pop):
+                m.d.sync += deq_ptr.eq(~deq_ptr)
+            with amaranth_if(m, push != pop):
+                m.d.sync += maybe_full.eq(push)
         return m
 
 
