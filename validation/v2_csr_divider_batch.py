@@ -384,11 +384,77 @@ def test_csa(module: Any) -> dict[str, Any]:
             "verilog_sha256": hashlib.sha256(verilog.encode()).hexdigest()}
 
 
+# Check the locked leading-zero encoder saturation and bit-zero behavior. / 检查锁定前导零编码器的饱和及 bit0 行为。
+def test_priority_encoder(module: Any) -> dict[str, Any]:
+    """Exercise zero, bit-zero, bit-one, MSB, and ordinary patterns. / 检查零、bit0、bit1、最高位及普通模式。"""
+
+    # Keep the simulation fixture compact; the locked 64-bit boundary is
+    # checked separately below because a deeply nested 64-bit mux exceeds the
+    # bundled Python simulator's generated-function indentation limit.
+    width = 8
+    count_width = max(1, (width - 1).bit_length())
+    locked_width = 64
+    locked_count_width = max(1, (locked_width - 1).bit_length())
+
+    class PriorityEncoderHarness(module.Elaboratable):
+        """Expose the production priority encoder for focused simulation. / 暴露生产前导零编码器以便定向仿真。"""
+
+        def __init__(self) -> None:
+            self.bits = module.Signal(width)
+            self.result = module.Signal(count_width)
+
+        # Connect the production helper without duplicating its equations. / 连接生产辅助函数而不复制其方程。
+        def elaborate(self, platform: Any) -> Any:
+            del platform
+            hardware = module.Module()
+            hardware.d.comb += self.result.eq(module.priority_encoder(self.bits, width))
+            return hardware
+
+    cases = (
+        (0, width - 1),
+        (1, width - 1),
+        (1 << 1, width - 2),
+        (1 << (width - 1), 0),
+        ((1 << 4) | (1 << 1), width - 1 - 4),
+        ((1 << 6) | (1 << 2), width - 1 - 6),
+    )
+    top = PriorityEncoderHarness()
+    observed: list[tuple[int, int]] = []
+
+    async def bench(ctx: Any) -> None:
+        for bits, expected in cases:
+            ctx.set(top.bits, bits)
+            await ctx.delay(1e-9)
+            actual = ctx.get(top.result)
+            if actual != expected:
+                raise AssertionError(
+                    f"priority encoder mismatch bits={bits:#018x}: {actual}!={expected}"
+                )
+            observed.append((bits, actual))
+
+    simulator = Simulator(top)
+    simulator.add_testbench(bench)
+    simulator.run()
+    return {
+        "width": width,
+        "count_width": count_width,
+        "locked_width": locked_width,
+        "locked_count_width": locked_count_width,
+        "locked_count_width_is_six": locked_count_width == 6,
+        "vectors": len(observed),
+        "zero_saturates": observed[0][1] == width - 1,
+        "bit0_saturates": observed[1][1] == width - 1,
+        "bit1_maps_to": observed[2][1],
+        "msb_maps_to_zero": observed[3][1] == 0,
+    }
+
+
 # Check divider corner and randomized transactions. / 检查除法器边界及随机事务。
 def test_divider(module: Any) -> dict[str, Any]:
     """Compare signed/unsigned quotient and remainder at both legal widths. / 比较两种合法位宽的有符号/无符号商余数。"""
 
     otfc_regression = test_otfc_selector_semantics(module)
+    priority_regression = test_priority_encoder(module)
     vectors = [
         (0, 1), (1, 1), (10, 3), (3, 10), (10, 0),
         (0xFFFFFFFFFFFFFFFF, 3), (0x8000000000000000, 2),
@@ -467,6 +533,7 @@ def test_divider(module: Any) -> dict[str, Any]:
     verilog = module.build_verilog(None, {})
     return {"transactions": checks, "max_latency_cycles": max_cycle,
             "otfc_selector_regression": otfc_regression,
+            "priority_encoder_regression": priority_regression,
             "verilog_sha256": hashlib.sha256(verilog.encode()).hexdigest()}
 
 

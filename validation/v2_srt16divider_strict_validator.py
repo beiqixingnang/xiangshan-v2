@@ -88,6 +88,7 @@ def main() -> int:
     validator_pyright = pyright_check(validator)
     payload["validator"] = validator.relative_to(ROOT).as_posix()
     payload["sources"]["validator"] = source_record(validator)
+    payload["sources"]["scala"] = source_record(ROOT / SCALA_SOURCES[0])
     payload["sources"]["validator_dependencies"] = {
         "strict_family_rail": source_record(shared_rail),
         "multiline_reference_view": source_record(multiline_view),

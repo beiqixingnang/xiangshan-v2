@@ -63,14 +63,16 @@ def csa3_2(a: Any, b: Any, cin: Any, w: int) -> tuple[Any, Any]:
 def priority_encoder(bits: Any, w: int) -> Any:
     """Return the first asserted bit when scanning MSB to LSB.
 
-    The encoded result is the leading-zero count, including ``w`` for an
-    all-zero input. Later matches must not overwrite the first match.
+    The locked PriorityEncoder emits ``log2Up(w)`` bits and saturates at
+    ``w - 1``. It observes bits ``w - 1`` down through bit ``1``; bit zero
+    and an all-zero input therefore both retain the saturated result. Later
+    matches must not overwrite the first match.
     """
 
-    count_width = max(1, w.bit_length())
-    result: Any = Const(w, count_width)
+    count_width = max(1, (w - 1).bit_length())
+    result: Any = Const(w - 1, count_width)
     found: Any = Const(0, 1)
-    for index in range(w):
+    for index in range(w - 1):
         bit = bits.bit_select(w - index - 1, 1)
         first = cast(Any, Mux(found, Const(0, 1), Const(1, 1))) & bit
         result = Mux(first, Const(index, count_width), result)
