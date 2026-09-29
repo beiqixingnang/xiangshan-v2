@@ -1,0 +1,210 @@
+{
+  "schema_version": 1,
+  "kind": "TAGARRAY_PUBLIC_OUTPUT_PARTITION_DIAGNOSTIC",
+  "status": "STRICT_PENDING",
+  "strict_complete_eligible": false,
+  "strict_complete_count_delta": 0,
+  "acceptance_eligible": false,
+  "build_id": "Build-Cpu.Cache.Dcache.Meta.TagArray",
+  "timestamp": "2026-09-29",
+  "proof_scope": "io_read_ready only; bank0 and bank1 were not run",
+  "canonical_evidence_modified": false,
+  "partition_outputs": {
+    "ready": {
+      "ports": ["io_read_ready"],
+      "bits": 1,
+      "run": true
+    },
+    "bank0": {
+      "ports": ["io_resp_0", "io_resp_1", "boreChildrenBd_bore_rdata"],
+      "bits": 172,
+      "run": false,
+      "status": "NOT_RUN_PENDING_FOLLOWUP"
+    },
+    "bank1": {
+      "ports": ["io_resp_2", "io_resp_3", "boreChildrenBd_bore_1_rdata"],
+      "bits": 172,
+      "run": false,
+      "status": "NOT_RUN_PENDING_FOLLOWUP"
+    }
+  },
+  "coverage": {
+    "full_input_ports_each_partition": 41,
+    "full_input_bits_each_partition": 313,
+    "public_output_ports": 7,
+    "public_output_bits": 345,
+    "each_public_output_covered_exactly_once": true,
+    "full_build_abi_matches_locked_reference_and_catalog": true,
+    "ready_target_and_reference_wrapper_abi_exact": true
+  },
+  "wrapper_policy": {
+    "proof_obligations_are_selected_public_outputs": true,
+    "full_top_input_surface_is_preserved": true,
+    "internal_state_matches_added": false,
+    "target_and_reference_instance_prefixes": ["dut_i", "ref_i"],
+    "equiv_make_internal_name_matching_enabled": false,
+    "locked_reference_or_children_modified": false
+  },
+  "tool_policy": {
+    "formal_tool": "Yosys equiv_induct -undef",
+    "serial_wsl_runs": true,
+    "ascii_work_directory": "C:/Temp/uhsc_tagarray_ready_diag_fk154ig1",
+    "maximum_seconds_per_run": 900,
+    "run_order": [
+      "ready_baseline",
+      "ready_target_mutation",
+      "ready_reference_mutation"
+    ],
+    "bank_partitions_started": false
+  },
+  "ready_partition_resource": {
+    "target_export_bytes": 6799037,
+    "target_export_lines": 277046,
+    "full_target_export_bytes": 6799294,
+    "full_target_export_lines": 277052,
+    "note": "Amaranth's selected-port export retained almost all internal memory logic; Yosys reduced the ready miter to a small counter cone before induction."
+  },
+  "checks": {
+    "ready_baseline": {
+      "expected_result": "EQUIVALENCE_PASS",
+      "diagnostic_verdict": "FAIL",
+      "raw_status": "FAIL",
+      "returncode": 1,
+      "timed_out": false,
+      "timeout_seconds": 900,
+      "public_output_equiv_cells": 1,
+      "proven_cells": 0,
+      "unproven_cells": 1,
+      "equiv_failure_marker": true,
+      "success_markers_present": false,
+      "induction_steps_observed": [1, 2, 3, 4],
+      "induction_steps_proven": false,
+      "log_observation": "Undef modelling forced 18 initial register values and 3 inputs; the single io_read_ready equivalence cell remained unproven."
+    },
+    "ready_target_mutation": {
+      "expected_result": "MUTATION_REJECTED",
+      "diagnostic_verdict": "INCONCLUSIVE",
+      "raw_status": "FAIL",
+      "returncode": 1,
+      "timed_out": false,
+      "timeout_seconds": 900,
+      "mutation": "invert the DUT wrapper's io_read_ready output assignment",
+      "public_output_equiv_cells": 1,
+      "unproven_cells": 1,
+      "equiv_failure_marker": true,
+      "success_markers_present": false,
+      "mutation_rejection_observed": true,
+      "negative_control_decisive": false,
+      "wrapper_sha256": {
+        "DUT_TagArray_READY": "fade5ab320686a3ad184a80ce2c7b5083a577f5150105f4ff493929750889b3e",
+        "REF_TagArray_READY": "f6dcd93717f33ae5273b2f5caf67a1edb55470e4eb7a77d2c4a0fd2c3780060b"
+      }
+    },
+    "ready_reference_mutation": {
+      "expected_result": "MUTATION_REJECTED",
+      "diagnostic_verdict": "INCONCLUSIVE",
+      "raw_status": "FAIL",
+      "returncode": 1,
+      "timed_out": false,
+      "timeout_seconds": 900,
+      "mutation": "invert the REF wrapper's io_read_ready output assignment",
+      "public_output_equiv_cells": 1,
+      "unproven_cells": 1,
+      "equiv_failure_marker": true,
+      "success_markers_present": false,
+      "mutation_rejection_observed": true,
+      "negative_control_decisive": false,
+      "wrapper_sha256": {
+        "DUT_TagArray_READY": "02553c0fb165879c6360c353db477d0091b7a2db4c6c6cf50cb48b146b237545",
+        "REF_TagArray_READY": "98d977ab5c5d112720a6bd1a1bef84f7d991a879d93ad2d1a0e0e339310d24b5"
+      }
+    }
+  },
+  "negative_control": {
+    "status": "INCONCLUSIVE",
+    "target_mutation_rejection_observed": true,
+    "reference_mutation_rejection_observed": true,
+    "current_digest_control_closed": false,
+    "reason": "The unmutated ready baseline did not prove, so mutation failures cannot establish a decisive two-sided negative control."
+  },
+  "reference_view": {
+    "kind": "SECTION_5C_MULTILINE_AUTOMATIC_AND_SRAM_VIEW",
+    "all_views_trusted": true,
+    "audit_count": 7,
+    "line_conservation": true,
+    "register_update_equations_preserved": true,
+    "modules": [
+      "ClockGate",
+      "MbistClockGateCell",
+      "array_256x86",
+      "sram_array_1p256x86m43s1h0l1b_dcsh_tag",
+      "SRAMTemplate_116",
+      "TagSRAMBank",
+      "TagArray"
+    ]
+  },
+  "sources": {
+    "build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Cache.Dcache.Meta.TagArray-Hardware.py",
+      "sha256": "0978d5e6bbe131c3379897690555af141eba6010c859e61dd51386553d51e697",
+      "bytes": 9415
+    },
+    "diagnostic_runner": {
+      "path": "validation/v2_tagarray_public_partition_diagnostic.py",
+      "sha256_at_archive": "9d414722fb825ebe4a7002f2b2ba09000ee06e6e32ef4505a03622d1caedb981",
+      "note": "The wrapper/Yosys proof body is the one used for these runs; after-run edits only add verdict interpretation and JSON persistence."
+    },
+    "strict_rail": {
+      "path": "validation/v2_strict_family_rail.py",
+      "sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
+      "bytes": 45980
+    },
+    "reference_view_helper": {
+      "path": "validation/v2_funcunit_strict_validator.py",
+      "sha256": "ef5018899932061420e780d9c5edc083fa532cf160bd628d9adb990b364b49f8",
+      "bytes": 20462
+    },
+    "locked_top": {
+      "path": "validation/reference-sv/TagArray.sv",
+      "sha256": "24d984641c94512391a2b3b405a8554d580f91ca6355e774e03f3bdcc9eb4faa",
+      "bytes": 10235
+    },
+    "locked_children": {
+      "ClockGate": {
+        "path": "validation/reference-sv/ClockGate.sv",
+        "sha256": "b4e6a1a11579276193dc18d2b56d24b04ba79879a32804456ce0116cbe878c97",
+        "bytes": 185
+      },
+      "MbistClockGateCell": {
+        "path": "validation/reference-sv/MbistClockGateCell.sv",
+        "sha256": "b4763f90e3eac5cc80939910617e838f2c65c06a5e5ee22725f9319cd99190aa",
+        "bytes": 1262
+      },
+      "SRAMTemplate_116": {
+        "path": "validation/reference-sv/SRAMTemplate_116.sv",
+        "sha256": "d8b6b39391baff329601dc3f818ac776fc08800aa2a2033911c4823cd422125f",
+        "bytes": 13357
+      },
+      "TagSRAMBank": {
+        "path": "validation/reference-sv/TagSRAMBank.sv",
+        "sha256": "4ce9ac456a2591005d293363b2a44ec174cfcce1a0b14e310a18fdf865f455ed",
+        "bytes": 9763
+      },
+      "array_256x86": {
+        "path": "validation/reference-sv/array_256x86.sv",
+        "sha256": "f517411331c3701b613e1cb4de1a262ca71fcaeaa1b04aabcf839104b11b4fea",
+        "bytes": 4100
+      },
+      "sram_array_1p256x86m43s1h0l1b_dcsh_tag": {
+        "path": "validation/reference-sv/sram_array_1p256x86m43s1h0l1b_dcsh_tag.sv",
+        "sha256": "914c8f355a4421a825b980803107b44e595c9a1126072d2d4bc29e1a46e81cf5",
+        "bytes": 2316
+      }
+    }
+  },
+  "unclosed": [
+    "The ready baseline has no proof or counterexample; the 9-bit reset-counter state relation is not established under the current no-internal-match wrapper setup.",
+    "bank0 and bank1 output partitions were not run.",
+    "The complete 345-bit output surface remains STRICT_PENDING and is not ACCEPTED."
+  ]
+}
