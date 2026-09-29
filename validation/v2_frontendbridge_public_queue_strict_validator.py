@@ -1,12 +1,11 @@
 """Audit FrontendBridge through public-output queue wrappers.
 
 The general strict family rail flattens the V2 FrontendBridge before it calls
-``equiv_make``.  Its RAM-backed Chisel queues and the Python count/data queues
-then expose differently named internal state to the matcher.  That is useful
-for an implementation-state proof, but it is not an ABI proof and it made the
-result hard to diagnose.  This focused rail creates wrappers first, calls
-``equiv_make`` while each wrapper exposes only public outputs, and only then
-flattens the pair for sequential reasoning.
+``equiv_make``. Its RAM-backed Chisel queues and Python count/data queues then
+expose differently named internal state to the matcher. This focused rail
+creates public-output wrappers, gives the reference and target inner instances
+unique names, and flattens each wrapper before ``equiv_make``. The resulting
+equivalence problem should contain only the selected public output bits.
 
 The six queue partitions are diagnostic views of the three public TileLink
 edges.  A seventh wrapper covers every public output, so a passing result can
@@ -42,10 +41,12 @@ DIRECT_TEST = ROOT / (
 EVIDENCE = ROOT / "validation/v2-frontendbridge-public-queue-strict-results.json"
 MODULE = "FrontendBridge"
 FORMAL_PARTITION = "instr_uncache_a"
+FORMAL_PARTITION_OUTPUT_BITS = 54
 TEMP_ROOT = Path(tempfile.gettempdir())
 if not str(TEMP_ROOT).isascii():
     TEMP_ROOT = Path("C:/Temp")
-WORK = TEMP_ROOT / "uhsc_frontendbridge_public_queue_strict"
+WORK = TEMP_ROOT / "uhsc_frontendbridge_public_queue_first_partition"
+FOCUSED_EVIDENCE = WORK / "instr_uncache_a_focused_result.json"
 
 if str(ROOT / "validation") not in sys.path:
     sys.path.insert(0, str(ROOT / "validation"))
@@ -131,6 +132,7 @@ def wrapper_text(
     The wrapper has no access to queue registers, RAM ports, or child signals.
     """
 
+    inner_instance = f"{name.lower()}_inner_i"
     lines = [f"module {name}("]
     ports = [signal_declaration("input", port, width) for port, width in inputs.items()]
     ports.extend(signal_declaration("output", port, outputs[port]) for port in selected)
@@ -140,7 +142,7 @@ def wrapper_text(
         lines.append(f"  wire [{width - 1}:0] _out_{port};" if width > 1 else f"  wire _out_{port};")
     connections = [f".{port}({port})" for port in inputs]
     connections.extend(f".{port}(_out_{port})" for port in selected)
-    lines.extend([f"  {inner} inner_i(", "    " + ", ".join(connections), "  );"])
+    lines.extend([f"  {inner} {inner_instance}(", "    " + ", ".join(connections), "  );"])
     lines.extend(f"  {output_assignment(port, outputs)}" for port in selected)
     lines.append("endmodule")
     return "\n".join(lines) + "\n"
@@ -166,13 +168,21 @@ def static_wrapper_record(
         output_assignment(port, outputs) in source for port in selected
     )
     output_bits = sum(outputs[port] for port in selected)
+    inner_instance = f"{name.lower()}_inner_i"
+    unique_inner_instance = (
+        source.count(f" {inner_instance}(") == 1
+        and source.count(" inner_i(") == 0
+    )
     passed = declared == expected and connected_inputs and connected_outputs and omitted_outputs and direct_assignments
+    passed = passed and unique_inner_instance
     return {
         "status": "PASS" if passed else "FAIL",
         "wrapper": name,
         "input_count": len(inputs),
         "selected_output_count": len(selected),
         "selected_output_bits": output_bits,
+        "inner_instance_name": inner_instance,
+        "unique_inner_instance": unique_inner_instance,
         "declared_abi_exact": declared == expected,
         "all_inputs_connected": connected_inputs,
         "selected_outputs_connected": connected_outputs,
@@ -195,13 +205,14 @@ def formal_script(
 
     paths = (target_source, reference_source, reference_wrapper, target_wrapper)
     source_paths = " ".join(rail.wsl_path(path) for path in paths)
-    # ``equiv_make`` intentionally precedes flattening.  At that point the
-    # wrapper has only public outputs, so no differently represented queue
-    # pointers, RAM data, or Amaranth count registers become proof obligations.
+    # Flatten each isolated wrapper before matching. Unique inner instance
+    # names keep implementation state on the two sides from being matched;
+    # equiv_make then sees only the common public ABI and selected outputs.
     return (
         f"read_verilog -sv {source_paths}; proc; async2sync; memory; opt; "
+        f"flatten {reference_wrapper.stem}; flatten {target_wrapper.stem}; "
         f"equiv_make {reference_wrapper.stem} {target_wrapper.stem} {equiv_name}; "
-        f"prep -top {equiv_name}; flatten; opt; "
+        f"prep -top {equiv_name}; opt; "
         "equiv_induct -undef; equiv_status -assert"
     )
 
@@ -261,6 +272,10 @@ def run_partition(
         rail.wsl_path(target_source), rail.wsl_path(target_wrapper),
     ])
     expected_bits = sum(outputs[port] for port in selected)
+    if formal and label == FORMAL_PARTITION and expected_bits != FORMAL_PARTITION_OUTPUT_BITS:
+        raise AssertionError(
+            f"{FORMAL_PARTITION} must compare exactly {FORMAL_PARTITION_OUTPUT_BITS} public output bits, got {expected_bits}"
+        )
     proof: dict[str, Any]
     if formal:
         script = formal_script(
@@ -362,11 +377,17 @@ def wrapper_negative_control(
         explicit_failure = result.get("equiv_failure_marker") is True
         still_success = all(markers.values())
         process_ran = isinstance(result.get("returncode"), int) and result.get("timed_out") is not True
-        detected = process_ran and explicit_failure and not still_success
+        expected_bits = sum(outputs[port] for port in selected)
+        equiv_cells = result.get("equiv_cells_full")
+        output_only_guard = equiv_cells == expected_bits
+        detected = process_ran and explicit_failure and not still_success and output_only_guard
         cases[side] = {
             "status": "PASS" if detected else "FAIL",
             "mutation_applied": True,
             "control_port": port,
+            "equiv_cells": equiv_cells,
+            "expected_public_output_bits": expected_bits,
+            "output_only_cell_guard": output_only_guard,
             "explicit_failure_marker": explicit_failure,
             "success_marker_still_present": still_success,
             "returncode": result.get("returncode"),
@@ -412,6 +433,7 @@ def main() -> int:
     """Write static and optional sequential public-queue strict evidence."""
 
     formal = "--formal" in sys.argv[1:]
+    evidence_path = FOCUSED_EVIDENCE if formal else EVIDENCE
     py_compile.compile(str(BUILD), doraise=True)
     py_compile.compile(str(DIRECT_TEST), doraise=True)
     py_compile.compile(str(Path(__file__)), doraise=True)
@@ -419,7 +441,11 @@ def main() -> int:
     WORK.mkdir(parents=True, exist_ok=True)
 
     module = rail.load_module("frontendbridge_public_queue_validator", BUILD)
-    family = rail.FamilyRail(BUILD, "Build-Cpu.Memory.FrontendBridge.PublicQueue", EVIDENCE)
+    family = rail.FamilyRail(
+        BUILD,
+        "Build-Cpu.Memory.FrontendBridge.PublicQueue.FirstPartition",
+        evidence_path,
+    )
     shutil.rmtree(family.work, ignore_errors=True)
     family.work.mkdir(parents=True, exist_ok=True)
     item = family.prepare(module, MODULE)
@@ -432,6 +458,9 @@ def main() -> int:
     outputs = item["outputs"]
     partitions = queue_partitions(outputs)
     full_selected = tuple(outputs)
+    executed_partitions = (
+        {FORMAL_PARTITION: partitions[FORMAL_PARTITION]} if formal else partitions
+    )
     records = [
         run_partition(
             label,
@@ -442,11 +471,24 @@ def main() -> int:
             reference_source,
             formal and label == FORMAL_PARTITION,
         )
-        for label, selected in partitions.items()
+        for label, selected in executed_partitions.items()
     ]
-    full_record = run_partition(
-        "full_public_outputs", full_selected, inputs, outputs, target_source, reference_source, False
-    )
+    if formal:
+        full_record = {
+            "partition": "full_public_outputs",
+            "outputs": {port: outputs[port] for port in full_selected},
+            "output_bits": sum(outputs.values()),
+            "static_wrappers": {},
+            "yosys_equiv": {
+                "status": "NOT_RUN",
+                "note": "full public-output run is deferred until the first partition is reviewed",
+            },
+            "status": "NOT_RUN",
+        }
+    else:
+        full_record = run_partition(
+            "full_public_outputs", full_selected, inputs, outputs, target_source, reference_source, False
+        )
     negative = wrapper_negative_control(
         partitions[FORMAL_PARTITION],
         FORMAL_PARTITION,
@@ -456,9 +498,18 @@ def main() -> int:
         reference_source,
         formal,
     )
+    if formal and records[0]["yosys_equiv"]["status"] != "PASS":
+        negative["status"] = "INCONCLUSIVE"
+        negative["baseline_proof"] = records[0]["yosys_equiv"]["status"]
+        negative["note"] = (
+            "The unmutated public-output proof is already unproven; a mutation "
+            "that also fails does not establish a decisive negative control."
+        )
+        for case in negative["cases"].values():
+            case["status"] = "NOT_DECISIVE"
     direct = direct_test()
 
-    covered = [port for record in records for port in record["outputs"]]
+    covered = [port for selected in partitions.values() for port in selected]
     complete_public_output_coverage = set(covered) == set(outputs) and len(covered) == len(set(covered))
     static_pass = all(
         wrapper["status"] == "PASS"
@@ -488,10 +539,12 @@ def main() -> int:
         failures.append("queue partitions do not cover every public output exactly once")
     if not static_pass:
         failures.append("static wrapper ABI or connection audit failed")
+    if any(record["status"] != "PASS" for record in records):
+        failures.append("one or more executed queue partitions did not pass")
     if full_record["status"] != "PASS":
         failures.append("full public-output sequential proof is pending")
     if negative["status"] != "PASS":
-        failures.append("two-sided wrapper-output negative control failed")
+        failures.append("two-sided wrapper-output negative control is not decisive")
     if direct["status"] != "PASS":
         failures.append("existing direct test failed")
     payload: dict[str, Any] = {
@@ -513,16 +566,20 @@ def main() -> int:
             "public_input_bits": sum(inputs.values()),
             "public_output_count": len(outputs),
             "public_output_bits": sum(outputs.values()),
-            "queue_partition_count": len(records),
+            "queue_partition_count": len(partitions),
             "queue_partitions_cover_every_public_output_exactly_once": complete_public_output_coverage,
-            "queue_partitions": {record["partition"]: record["outputs"] for record in records},
+            "queue_partitions": {name: list(selected) for name, selected in partitions.items()},
+            "queue_partitions_executed": [record["partition"] for record in records],
             "full_public_outputs": full_record["outputs"],
             "full_public_output_bits": full_record["output_bits"],
+            "full_public_output_status": full_record["status"],
         },
         "audit_policy": {
             "wrapper_generated_before_formal": True,
             "compare_only_public_outputs": True,
-            "equiv_make_before_flatten": True,
+            "unique_reference_target_inner_instances": True,
+            "flatten_wrappers_before_equiv_make": True,
+            "require_54_equiv_cells_for_initial_partition": FORMAL_PARTITION_OUTPUT_BITS,
             "same_clock_and_reset_inputs_preserved": True,
             "require_full_public_output_proof": True,
             "require_exact_abi": True,
@@ -546,6 +603,7 @@ def main() -> int:
             "locked_view_audits": item["view_audits"],
             "static_wrapper_generation": {
                 "status": "PASS" if static_pass else "FAIL",
+                "scope": "first_partition_only" if formal else "all_partitions_and_full_public",
                 "work_directory": str(WORK),
             },
             "queue_behavior_partitions": records,
@@ -579,7 +637,9 @@ def main() -> int:
             "Parent closure, full XSTop differential, license review, and user approval remain outside this Build proof.",
         ],
     }
-    EVIDENCE.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
+    payload["focused_evidence_path"] = str(evidence_path)
+    evidence_path.parent.mkdir(parents=True, exist_ok=True)
+    evidence_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     print(json.dumps({
         "status": payload["status"],
         "formal_requested": formal,

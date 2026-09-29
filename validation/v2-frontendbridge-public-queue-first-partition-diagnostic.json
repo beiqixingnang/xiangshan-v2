@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_FRONTENDBRIDGE_PUBLIC_QUEUE_PARTITION_DIAGNOSTIC",
+  "build_id": "Build-Cpu.Memory.FrontendBridge",
+  "status": "STRICT_PENDING",
+  "strict_complete_eligible": false,
+  "strict_complete_count_delta": 0,
+  "acceptance_eligible": false,
+  "scope": {
+    "partition": "instr_uncache_a",
+    "partition_output_count": 5,
+    "partition_output_bits": 54,
+    "planned_partition_count": 6,
+    "other_partitions": "NOT_RUN",
+    "full_public_output_proof": "NOT_RUN",
+    "valid_gated_payload_outputs": 3
+  },
+  "sources": {
+    "build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.FrontendBridge-Hardware.py",
+      "sha256": "b4a8dab015b3c1dedf1eb2ce12d0a4ad6bf31175310a4b0c28d87def17705a7b",
+      "bytes": 39909
+    },
+    "validator": {
+      "path": "validation/v2_frontendbridge_public_queue_strict_validator.py",
+      "sha256": "582aa8bb88bc174ae13f8648e7e51a96f103521ad4db00a290809345a0a332e4",
+      "bytes": 27462
+    },
+    "locked_reference": {
+      "path": "validation/reference-sv/FrontendBridge.sv",
+      "sha256": "ee3efd5e55934039e4c60b78a29eee198110c581b1464760c0a138af11dec9d2",
+      "locked_references_written": false
+    },
+    "shared_rail": {
+      "path": "validation/v2_strict_family_rail.py",
+      "sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
+      "modified": false
+    }
+  },
+  "public_wrapper": {
+    "reference_wrapper": {
+      "module": "REF_FrontendBridge_Public_instr_uncache_a",
+      "sha256": "62dacd0174f9b8a1da87b989dd3f1f5d9e4d39c673c211731c6c2e800bc7d927",
+      "input_count": 43,
+      "all_inputs_connected": true,
+      "selected_outputs_connected": true,
+      "unselected_outputs_unconnected": true,
+      "abi_exact": true,
+      "inner_instance": "ref_frontendbridge_public_instr_uncache_a_inner_i"
+    },
+    "target_wrapper": {
+      "module": "DUT_FrontendBridge_Public_instr_uncache_a",
+      "sha256": "394c5da3e90af764f881c1a76aa1e0b03d02a39c41b63fdd7d9a5e4d503cae85",
+      "input_count": 43,
+      "all_inputs_connected": true,
+      "selected_outputs_connected": true,
+      "unselected_outputs_unconnected": true,
+      "abi_exact": true,
+      "inner_instance": "dut_frontendbridge_public_instr_uncache_a_inner_i"
+    },
+    "flattened_before_equiv_make": true,
+    "equiv_make_cell_count": 54,
+    "cell_count_guard": "PASS"
+  },
+  "verilator": {
+    "reference_lint": "PASS",
+    "target_lint": "PASS"
+  },
+  "yosys_equiv": {
+    "status": "FAIL",
+    "returncode": 1,
+    "equiv_cells": 54,
+    "expected_public_output_bits": 54,
+    "output_only_cell_guard": true,
+    "proven_cells": 0,
+    "unproven_cells": 54,
+    "equiv_summary": [0, 54],
+    "output_sha256": "aa2c1bd7c449a9bdafbbd238a993af4150e7154afc0d1d319a5be5f0d7591327",
+    "raw_log_persisted": false,
+    "raw_log_path": null,
+    "raw_log_note": "The shared rail captured stdout/stderr in memory; the complete capture digest is above and the retained tail is in the focused temp result JSON.",
+    "focused_temp_result_path": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_frontendbridge_public_queue_first_partition\\instr_uncache_a_focused_result.json",
+    "focused_temp_result_sha256": "e98556ea35aa08e55d2446fcc200605296cf07194e8b14f6c281e7ab5a044a90",
+    "yosys_command": [
+      "yosys",
+      "-Q",
+      "-p",
+      "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_first_partition/DUT_FrontendBridge.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_first_partition/REF_FrontendBridge.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_first_partition/REF_FrontendBridge_Public_instr_uncache_a.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_public_queue_first_partition/DUT_FrontendBridge_Public_instr_uncache_a.sv; proc; async2sync; memory; opt; flatten REF_FrontendBridge_Public_instr_uncache_a; flatten DUT_FrontendBridge_Public_instr_uncache_a; equiv_make REF_FrontendBridge_Public_instr_uncache_a DUT_FrontendBridge_Public_instr_uncache_a FrontendBridge_instr_uncache_a_EQUIV; prep -top FrontendBridge_instr_uncache_a_EQUIV; opt; equiv_induct -undef; equiv_status -assert"
+    ]
+  },
+  "negative_controls": {
+    "status": "INCONCLUSIVE",
+    "reason": "The unmutated baseline is already 0/54 proven; mutation failures with the same 0/54 outcome do not establish decisive sensitivity.",
+    "target_mutation": {
+      "status": "NOT_DECISIVE",
+      "mutation_applied": true,
+      "control_port": "auto_instr_uncache_in_a_ready",
+      "equiv_cells": 54,
+      "output_only_cell_guard": true,
+      "explicit_failure_marker": true,
+      "negative_control_detected": false
+    },
+    "reference_mutation": {
+      "status": "NOT_DECISIVE",
+      "mutation_applied": true,
+      "control_port": "auto_instr_uncache_in_a_ready",
+      "equiv_cells": 54,
+      "output_only_cell_guard": true,
+      "explicit_failure_marker": true,
+      "negative_control_detected": false
+    }
+  },
+  "direct_test": {
+    "status": "PASS",
+    "returncode": 0,
+    "sha256": "8f3ef9768d5df2e7649d0a552672b2a4fed94a6f0062f5d9dd2e0e312957f6a7"
+  },
+  "full_scope": {
+    "other_five_partitions": "NOT_RUN",
+    "full_public_output_proof": "NOT_RUN",
+    "strict_equivalence_claim": false,
+    "canonical_strict_evidence_modified": false,
+    "canonical_progress_modified": false,
+    "status": "STRICT_PENDING"
+  },
+  "failures": [
+    "instr_uncache_a: 0/54 public output bits proven",
+    "remaining five partitions and full public-output proof intentionally not run",
+    "two-sided mutations are not decisive because the baseline proof was already unproven"
+  ]
+}
