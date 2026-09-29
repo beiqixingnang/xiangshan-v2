@@ -255,7 +255,14 @@ class DcacheMetaArrayFamily(Elaboratable):
         memories = {
             read_suffix: tuple(
                 Array(
-                    Signal(width, name=f"meta_{read_suffix or 'value'}_{way}_{index}", reset=0)
+                    Signal(
+                        width,
+                        name=(
+                            f"meta_array_{index}_{way}"
+                            f"{('_' + read_suffix) if read_suffix else ''}"
+                        ),
+                        reset=0,
+                    )
                     for index in range(256)
                 )
                 for way in range(4)
@@ -269,17 +276,20 @@ class DcacheMetaArrayFamily(Elaboratable):
         for way in range(4):
             for write in writes:
                 stage_enable[way, write] = Signal(
-                    name=f"meta_s1_enable_{way}_{write}", reset_less=True
+                    name=f"s1_way_wen_{way}_{write}_REG", reset_less=True
                 )
                 stage_address[way, write] = Signal(
-                    8, name=f"meta_s1_address_{way}_{write}", reset_less=True
+                    8, name=f"s1_way_waddr_{way}_{write}_r", reset_less=True
                 )
                 for read_suffix, width, write_suffix in layouts:
                     data_name = f"io_write_{write}_bits_{write_suffix}"
                     if data_name in self.ports:
                         stage_data[read_suffix, way, write] = Signal(
                             width,
-                            name=f"meta_s1_{read_suffix or 'value'}_{way}_{write}",
+                            name=(
+                                f"s1_way_wdata_{way}_{write}_r"
+                                f"{('_' + read_suffix) if read_suffix else ''}"
+                            ),
                             reset_less=True,
                         )
 
@@ -317,7 +327,7 @@ class DcacheMetaArrayFamily(Elaboratable):
             for way in range(4):
                 if style == "none":
                     registered_address = Signal(
-                        8, name=f"meta_read_address_{read}_{way}", reset_less=True
+                        8, name=f"io_resp_{read}_{way}_r", reset_less=True
                     )
                     with cast(Any, module.If(valid)):
                         module.d.sync += registered_address.eq(address)
@@ -356,7 +366,7 @@ class DcacheMetaArrayFamily(Elaboratable):
                             )
 
                 registered_bypass = Signal(
-                    name=f"meta_read_bypass_{read}_{way}", reset_less=True
+                    name=f"io_resp_{read}_{way}_r", reset_less=True
                 )
                 with cast(Any, module.If(valid)):
                     module.d.sync += registered_bypass.eq(bypass_hit)
@@ -364,7 +374,10 @@ class DcacheMetaArrayFamily(Elaboratable):
                 for read_suffix, width, _write_suffix in layouts:
                     bypass_registers[read_suffix] = Signal(
                         width,
-                        name=f"meta_read_bypass_data_{read}_{way}_{read_suffix or 'value'}",
+                        name=(
+                            f"io_resp_{read}_{way}_r_1"
+                            f"{('_' + read_suffix) if read_suffix else ''}"
+                        ),
                         reset_less=True,
                     )
                     with cast(Any, module.If(bypass_hit)):
@@ -374,7 +387,14 @@ class DcacheMetaArrayFamily(Elaboratable):
                     for read_suffix, width, _write_suffix in layouts:
                         memory_register = Signal(
                             width,
-                            name=f"meta_read_data_{read}_{way}_{read_suffix or 'value'}",
+                            name=(
+                                (
+                                    f"io_resp_{read}_{way}_r_2"
+                                    f"{('_' + read_suffix) if read_suffix else ''}"
+                                )
+                                if self.member != "L1ErrorMetaArray"
+                                else f"meta_read_data_{read}_{way}_{read_suffix or 'value'}"
+                            ),
                             reset_less=True,
                         )
                         with cast(Any, module.If(valid)):
@@ -385,7 +405,7 @@ class DcacheMetaArrayFamily(Elaboratable):
                         )
                 else:
                     registered_address = Signal(
-                        8, name=f"meta_read_address_{read}_{way}", reset_less=True
+                        8, name=f"io_resp_{read}_{way}_r_2", reset_less=True
                     )
                     with cast(Any, module.If(valid)):
                         module.d.sync += registered_address.eq(address)
