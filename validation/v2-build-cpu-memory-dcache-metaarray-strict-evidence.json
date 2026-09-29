@@ -3,10 +3,10 @@
   "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_COMPLETE_EQUIVALENCE",
   "build_id": "Build-Cpu.Memory.Dcache.MetaArray",
   "validator": "validation/v2_strict_family_rail.py",
-  "status": "STRICT_PENDING",
-  "strict_complete_eligible": false,
-  "strict_complete_count_delta": 0,
-  "acceptance_eligible": false,
+  "status": "COMPLETE_EQUIVALENCE",
+  "strict_complete_eligible": true,
+  "strict_complete_count_delta": 1,
+  "acceptance_eligible": true,
   "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
   "audit_policy": {
     "require_negative_control": true,
@@ -229,15 +229,15 @@
         "miter_selfcheck": true,
         "view_trusted": true,
         "locked_reference_lint": "PASS",
-        "verdict": "FAIL",
-        "success_marker": false,
+        "verdict": "PASS",
+        "success_marker": true,
         "markers_present": {
-          "0 are unproven.": false,
-          "Equivalence successfully proven!": false
+          "0 are unproven.": true,
+          "Equivalence successfully proven!": true
         },
-        "unconstrained_or_equiv_cells": 32,
-        "proven_cells": 0,
-        "unproven_cells": 32,
+        "unconstrained_or_equiv_cells": 2204,
+        "proven_cells": 2204,
+        "unproven_cells": 0,
         "sat_variables": null,
         "sat_clauses": null
       },
@@ -305,15 +305,15 @@
         "miter_selfcheck": true,
         "view_trusted": true,
         "locked_reference_lint": "PASS",
-        "verdict": "FAIL",
-        "success_marker": false,
+        "verdict": "PASS",
+        "success_marker": true,
         "markers_present": {
-          "0 are unproven.": false,
-          "Equivalence successfully proven!": false
+          "0 are unproven.": true,
+          "Equivalence successfully proven!": true
         },
-        "unconstrained_or_equiv_cells": null,
-        "proven_cells": null,
-        "unproven_cells": 32,
+        "unconstrained_or_equiv_cells": 2204,
+        "proven_cells": 2204,
+        "unproven_cells": 0,
         "sat_variables": null,
         "sat_clauses": null
       },
@@ -361,15 +361,15 @@
         "miter_selfcheck": true,
         "view_trusted": true,
         "locked_reference_lint": "PASS",
-        "verdict": "FAIL",
-        "success_marker": false,
+        "verdict": "PASS",
+        "success_marker": true,
         "markers_present": {
-          "0 are unproven.": false,
-          "Equivalence successfully proven!": false
+          "0 are unproven.": true,
+          "Equivalence successfully proven!": true
         },
-        "unconstrained_or_equiv_cells": null,
-        "proven_cells": null,
-        "unproven_cells": 8,
+        "unconstrained_or_equiv_cells": 1196,
+        "proven_cells": 1196,
+        "unproven_cells": 0,
         "sat_variables": null,
         "sat_clauses": null
       },
@@ -435,15 +435,15 @@
         "miter_selfcheck": true,
         "view_trusted": true,
         "locked_reference_lint": "PASS",
-        "verdict": "FAIL",
-        "success_marker": false,
+        "verdict": "PASS",
+        "success_marker": true,
         "markers_present": {
           "0 are unproven.": true,
-          "Equivalence successfully proven!": false
+          "Equivalence successfully proven!": true
         },
-        "unconstrained_or_equiv_cells": 60,
-        "proven_cells": 0,
-        "unproven_cells": 60,
+        "unconstrained_or_equiv_cells": 3408,
+        "proven_cells": 3408,
+        "unproven_cells": 0,
         "sat_variables": null,
         "sat_clauses": null
       }
@@ -470,8 +470,8 @@
     },
     "python_build": {
       "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Dcache.MetaArray-Hardware.py",
-      "sha256": "0a0e98de26959157653988786354e72bfa151aac5509216a0236512ed8361d8b",
-      "bytes": 19140
+      "sha256": "f0bb52640746f9cc5063d5c2d4548fe06607386e3c4dbfdd98f0df4efc0e287b",
+      "bytes": 19779
     },
     "reference_sv": {
       "path": "validation/reference-sv/L1CohMetaArray.sv",
@@ -498,7 +498,7 @@
           "/c",
           "pyright",
           "--outputjson",
-          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_bn_3bxak\\Build-Cpu.Memory.Dcache.MetaArray-Hardware.py"
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_8f8qq9rq\\Build-Cpu.Memory.Dcache.MetaArray-Hardware.py"
         ],
         "returncode": 0,
         "status": "PASS",
@@ -514,7 +514,7 @@
           "/c",
           "pyright",
           "--outputjson",
-          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_l3oixuq9\\v2_strict_family_rail.py"
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_g69gh3uu\\v2_strict_family_rail.py"
         ],
         "returncode": 0,
         "status": "PASS",
@@ -526,7 +526,7 @@
     },
     "catalog_coverage": {
       "entries": 4,
-      "proven": 0
+      "proven": 4
     },
     "formal": {
       "yosys_formal_miter": {
@@ -576,9 +576,9 @@
             "-Wno-fatal",
             "--top-module",
             "L1CohMetaArray_MITER",
-            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/DUT_L1CohMetaArray.sv",
-            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/REF_L1CohMetaArray.sv",
-            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/L1CohMetaArray_MITER.sv"
+            "/mnt/c/Temp/uhsc_meta_family/DUT_L1CohMetaArray.sv",
+            "/mnt/c/Temp/uhsc_meta_family/REF_L1CohMetaArray.sv",
+            "/mnt/c/Temp/uhsc_meta_family/L1CohMetaArray_MITER.sv"
           ],
           "returncode": 0,
           "status": "PASS",
@@ -594,8 +594,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "metaarray_family/DUT_L1CohMetaArray.sv:7321:40: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7b' generates 7 bits.\n                                                                                                                                        : ... note: In instance 'L1CohMetaArray_MITER.target_i'\n 7321 |   assign \\$2682  = meta_s1_address_3_0 == 7'h7b;\n      |                                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/DUT_L1CohMetaArray.sv:7324:40: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7c' generates 7 bits.\n                                                                                                                                        : ... note: In instance 'L1CohMetaArray_MITER.target_i'\n 7324 |   assign \\$2685  = meta_s1_address_3_0 == 7'h7c;\n      |                                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/DUT_L1CohMetaArray.sv:7327:40: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7d' generates 7 bits.\n                                                                                                                                        : ... note: In instance 'L1CohMetaArray_MITER.target_i'\n 7327 |   assign \\$2688  = meta_s1_address_3_0 == 7'h7d;\n      |                                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/DUT_L1CohMetaArray.sv:7330:40: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7e' generates 7 bits.\n                                                                                                                                        : ... note: In instance 'L1CohMetaArray_MITER.target_i'\n 7330 |   assign \\$2691  = meta_s1_address_3_0 == 7'h7e;\n      |                                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/DUT_L1CohMetaArray.sv:7333:40: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7f' generates 7 bits.\n                                                                                                                                        : ... note: In instance 'L1CohMetaArray_MITER.target_i'\n 7333 |   assign \\$2694  = meta_s1_address_3_0 == 7'h7f;\n      |                                        ^~\n",
-          "output_sha256": "d08ec5fe8453f77076c527bcf7a47d3443117758e3cc9479a265033a58fe4225"
+          "output_tail": "_way_waddr_3_0_r == 7'h79;\n      |                                       ^~\n%Warning-WIDTHEXPAND: /mnt/c/Temp/uhsc_meta_family/DUT_L1CohMetaArray.sv:7318:39: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7a' generates 7 bits.\n                                                                                : ... note: In instance 'L1CohMetaArray_MITER.target_i'\n 7318 |   assign \\$2679  = s1_way_waddr_3_0_r == 7'h7a;\n      |                                       ^~\n%Warning-WIDTHEXPAND: /mnt/c/Temp/uhsc_meta_family/DUT_L1CohMetaArray.sv:7321:39: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7b' generates 7 bits.\n                                                                                : ... note: In instance 'L1CohMetaArray_MITER.target_i'\n 7321 |   assign \\$2682  = s1_way_waddr_3_0_r == 7'h7b;\n      |                                       ^~\n%Warning-WIDTHEXPAND: /mnt/c/Temp/uhsc_meta_family/DUT_L1CohMetaArray.sv:7324:39: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7c' generates 7 bits.\n                                                                                : ... note: In instance 'L1CohMetaArray_MITER.target_i'\n 7324 |   assign \\$2685  = s1_way_waddr_3_0_r == 7'h7c;\n      |                                       ^~\n%Warning-WIDTHEXPAND: /mnt/c/Temp/uhsc_meta_family/DUT_L1CohMetaArray.sv:7327:39: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7d' generates 7 bits.\n                                                                                : ... note: In instance 'L1CohMetaArray_MITER.target_i'\n 7327 |   assign \\$2688  = s1_way_waddr_3_0_r == 7'h7d;\n      |                                       ^~\n%Warning-WIDTHEXPAND: /mnt/c/Temp/uhsc_meta_family/DUT_L1CohMetaArray.sv:7330:39: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7e' generates 7 bits.\n                                                                                : ... note: In instance 'L1CohMetaArray_MITER.target_i'\n 7330 |   assign \\$2691  = s1_way_waddr_3_0_r == 7'h7e;\n      |                                       ^~\n%Warning-WIDTHEXPAND: /mnt/c/Temp/uhsc_meta_family/DUT_L1CohMetaArray.sv:7333:39: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7f' generates 7 bits.\n                                                                                : ... note: In instance 'L1CohMetaArray_MITER.target_i'\n 7333 |   assign \\$2694  = s1_way_waddr_3_0_r == 7'h7f;\n      |                                       ^~\n",
+          "output_sha256": "db1e52c4a9be44c8860083d6e32545db9b65d91362b34890b08872637c017942"
         },
         "locked_verilator": {
           "command": [
@@ -621,43 +621,43 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.308 MB sources in 2 modules, into 0.576 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.140 s (elab=0.012, cvt=0.065, bld=0.000); cpu 0.112 s on 1 threads; alloced 25.840 MB\n",
-          "output_sha256": "489ced96a792fdc7234f46916a318dbc9b6267c64db638b39d467f8b75d8d492"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.308 MB sources in 2 modules, into 0.576 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.139 s (elab=0.012, cvt=0.067, bld=0.000); cpu 0.114 s on 1 threads; alloced 25.840 MB\n",
+          "output_sha256": "540aee73f076be61769107a51b28d3f7d665919a911bf9c574fb55032646a002"
         },
         "yosys_equiv": {
           "command": [
             "yosys",
             "-Q",
             "-p",
-            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/DUT_L1CohMetaArray.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/REF_L1CohMetaArray.sv; proc; async2sync; memory; opt; flatten REF_L1CohMetaArray; flatten DUT_L1CohMetaArray; equiv_make REF_L1CohMetaArray DUT_L1CohMetaArray L1CohMetaArray_EQUIV; prep -top L1CohMetaArray_EQUIV; equiv_induct -undef; equiv_status -assert"
+            "read_verilog -sv /mnt/c/Temp/uhsc_meta_family/DUT_L1CohMetaArray.sv /mnt/c/Temp/uhsc_meta_family/REF_L1CohMetaArray.sv; proc; async2sync; memory; opt; flatten REF_L1CohMetaArray; flatten DUT_L1CohMetaArray; equiv_make REF_L1CohMetaArray DUT_L1CohMetaArray L1CohMetaArray_EQUIV; prep -top L1CohMetaArray_EQUIV; equiv_induct -undef; equiv_status -assert"
           ],
-          "returncode": 1,
-          "status": "FAIL",
+          "returncode": 0,
+          "status": "PASS",
           "sat_success_marker": false,
           "sat_counterexample_marker": false,
           "unconstrained_marker": false,
           "equiv_success_markers": {
-            "0 are unproven.": false,
-            "Equivalence successfully proven!": false
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
           },
-          "equiv_failure_marker": true,
-          "equiv_cells_full": 32,
+          "equiv_failure_marker": false,
+          "equiv_cells_full": 2204,
           "equiv_summary_full": [
-            0,
-            32
+            2204,
+            0
           ],
-          "equiv_failed_full": 32,
+          "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "iv $auto$equiv_make.cc:257:find_same_wires$24937: \\io_resp_1_2_coh_state_gold [0] \\io_resp_1_2_coh_state_gate [0]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$24938: \\io_resp_1_2_coh_state_gold [1] \\io_resp_1_2_coh_state_gate [1]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$24939: \\io_resp_1_3_coh_state_gold [0] \\io_resp_1_3_coh_state_gate [0]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$24940: \\io_resp_1_3_coh_state_gold [1] \\io_resp_1_3_coh_state_gate [1]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$24941: \\io_resp_2_0_coh_state_gold [0] \\io_resp_2_0_coh_state_gate [0]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$24942: \\io_resp_2_0_coh_state_gold [1] \\io_resp_2_0_coh_state_gate [1]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$24943: \\io_resp_2_1_coh_state_gold [0] \\io_resp_2_1_coh_state_gate [0]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$24944: \\io_resp_2_1_coh_state_gold [1] \\io_resp_2_1_coh_state_gate [1]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$24945: \\io_resp_2_2_coh_state_gold [0] \\io_resp_2_2_coh_state_gate [0]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$24946: \\io_resp_2_2_coh_state_gold [1] \\io_resp_2_2_coh_state_gate [1]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$24947: \\io_resp_2_3_coh_state_gold [0] \\io_resp_2_3_coh_state_gate [0]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$24948: \\io_resp_2_3_coh_state_gold [1] \\io_resp_2_3_coh_state_gate [1]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$24949: \\io_resp_3_0_coh_state_gold [0] \\io_resp_3_0_coh_state_gate [0]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$24950: \\io_resp_3_0_coh_state_gold [1] \\io_resp_3_0_coh_state_gate [1]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$24951: \\io_resp_3_1_coh_state_gold [0] \\io_resp_3_1_coh_state_gate [0]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$24952: \\io_resp_3_1_coh_state_gold [1] \\io_resp_3_1_coh_state_gate [1]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$24953: \\io_resp_3_2_coh_state_gold [0] \\io_resp_3_2_coh_state_gate [0]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$24954: \\io_resp_3_2_coh_state_gold [1] \\io_resp_3_2_coh_state_gate [1]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$24955: \\io_resp_3_3_coh_state_gold [0] \\io_resp_3_3_coh_state_gate [0]ERROR: Found 32 unproven $equiv cells in 'equiv_status -assert'.\n",
-          "output_sha256": "ae9e61e4f3f3d3761dd3fa0bfc7e2a3ac18a45af15f9a4c50843773c089368f8",
+          "output_tail": "ting $mem cells).\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module L1CohMetaArray_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\L1CohMetaArray_EQUIV'.\n<suppressed ~4572 debug messages>\nRemoved a total of 1524 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\L1CohMetaArray_EQUIV..\nRemoved 0 unused cells and 1524 unused wires.\n<suppressed ~1 debug messages>\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== L1CohMetaArray_EQUIV ===\n\n   Number of wires:               9895\n   Number of wire bits:          16480\n   Number of public wires:        6779\n   Number of public wire bits:   11280\n   Number of ports:                 30\n   Number of port bits:             85\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:              10696\n     $and                         1064\n     $dff                            8\n     $dffe                         112\n     $eq                          2060\n     $equiv                       2204\n     $logic_not                      8\n     $mux                         3140\n     $or                            16\n     $pmux                          16\n     $reduce_and                     4\n     $sdff                        2048\n     $shiftx                        16\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module L1CohMetaArray_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 2172 unproven $equiv cells in module L1CohMetaArray_EQUIV:\n  Undef modelling: force def on 4344 initial reg values and 53 inputs.\n  Proving existence of base case for step 1. (2274106 clauses over 796082 variables)\n  Proving induction step 1. (4758523 clauses over 1663719 variables)\n  Proof for induction step holds. Entire workset of 2172 cells proven!\nProved 2172 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 2204 $equiv cells in L1CohMetaArray_EQUIV:\n  Of those cells 2204 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: dbe5909e8f, CPU: user 34.77s system 0.60s, MEM: 1159.84 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 87% 1x equiv_induct (30 sec), 2% 9x opt_clean (1 sec), ...\n",
+          "output_sha256": "d577060223c192858615d8bae96f29227264d2c018bfdac2ec8ee18dd2a6d71d",
           "markers_present": {
-            "0 are unproven.": false,
-            "Equivalence successfully proven!": false
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
           },
-          "formal_success_marker": false,
-          "equiv_cells": 32,
-          "proven_cells": 0,
-          "unproven_cells": 32
+          "formal_success_marker": true,
+          "equiv_cells": 2204,
+          "proven_cells": 2204,
+          "unproven_cells": 0
         }
       },
       {
@@ -669,9 +669,9 @@
             "-Wno-fatal",
             "--top-module",
             "L1ErrorMetaArray_MITER",
-            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/DUT_L1ErrorMetaArray.sv",
-            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/REF_L1ErrorMetaArray.sv",
-            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/L1ErrorMetaArray_MITER.sv"
+            "/mnt/c/Temp/uhsc_meta_family/DUT_L1ErrorMetaArray.sv",
+            "/mnt/c/Temp/uhsc_meta_family/REF_L1ErrorMetaArray.sv",
+            "/mnt/c/Temp/uhsc_meta_family/L1ErrorMetaArray_MITER.sv"
           ],
           "returncode": 0,
           "status": "PASS",
@@ -687,8 +687,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "2092:40: Operator EQ expects 8 bits on the RHS, but RHS's CONST '5'h14' generates 5 bits.\n22092 |   assign \\$3141  = meta_s1_address_0_0 == 5'h14;\n      |                                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/DUT_L1ErrorMetaArray.sv:22095:40: Operator EQ expects 8 bits on the RHS, but RHS's CONST '5'h15' generates 5 bits.\n22095 |   assign \\$3144  = meta_s1_address_0_0 == 5'h15;\n      |                                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/DUT_L1ErrorMetaArray.sv:22098:40: Operator EQ expects 8 bits on the RHS, but RHS's CONST '5'h16' generates 5 bits.\n22098 |   assign \\$3147  = meta_s1_address_0_0 == 5'h16;\n      |                                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/DUT_L1ErrorMetaArray.sv:22101:40: Operator EQ expects 8 bits on the RHS, but RHS's CONST '5'h17' generates 5 bits.\n22101 |   assign \\$3150  = meta_s1_address_0_0 == 5'h17;\n      |                                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/DUT_L1ErrorMetaArray.sv:22104:40: Operator EQ expects 8 bits on the RHS, but RHS's CONST '5'h18' generates 5 bits.\n22104 |   assign \\$3153  = meta_s1_address_0_0 == 5'h18;\n      |                                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/DUT_L1ErrorMetaArray.sv:22107:40: Operator EQ expects 8 bits on the RHS, but RHS's CONST '5'h19' generates 5 bits.\n22107 |   assign \\$3156  = meta_s1_address_0_0 == 5'h19;\n      |                                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/DUT_L1ErrorMetaArray.sv:22110:40: Operator EQ expects 8 bits on the RHS, but RHS's CONST '5'h1a' generates 5 bits.\n22110 |   assign \\$3159  = meta_s1_address_0_0 == 5'h1a;\n      |                                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/DUT_L1ErrorMetaArray.sv:22113:40: Operator EQ expects 8 bits on the RHS, but RHS's CONST '5'h1b' generates 5 bits.\n22113 |   assign \\$3162  = meta_s1_address_0_0 == 5'h1b;\n      |                                        ^~\n",
-          "output_sha256": "9b454c10bc039bfde50bce291f3c6e7a13bbde50d38ac2dbde6fc60cb61cfcb2"
+          "output_tail": "r == 5'h17;\n      |                                       ^~\n%Warning-WIDTHEXPAND: /mnt/c/Temp/uhsc_meta_family/DUT_L1ErrorMetaArray.sv:22024:39: Operator EQ expects 8 bits on the RHS, but RHS's CONST '5'h18' generates 5 bits.\n22024 |   assign \\$3153  = s1_way_waddr_0_0_r == 5'h18;\n      |                                       ^~\n%Warning-WIDTHEXPAND: /mnt/c/Temp/uhsc_meta_family/DUT_L1ErrorMetaArray.sv:22027:39: Operator EQ expects 8 bits on the RHS, but RHS's CONST '5'h19' generates 5 bits.\n22027 |   assign \\$3156  = s1_way_waddr_0_0_r == 5'h19;\n      |                                       ^~\n%Warning-WIDTHEXPAND: /mnt/c/Temp/uhsc_meta_family/DUT_L1ErrorMetaArray.sv:22030:39: Operator EQ expects 8 bits on the RHS, but RHS's CONST '5'h1a' generates 5 bits.\n22030 |   assign \\$3159  = s1_way_waddr_0_0_r == 5'h1a;\n      |                                       ^~\n%Warning-WIDTHEXPAND: /mnt/c/Temp/uhsc_meta_family/DUT_L1ErrorMetaArray.sv:22033:39: Operator EQ expects 8 bits on the RHS, but RHS's CONST '5'h1b' generates 5 bits.\n22033 |   assign \\$3162  = s1_way_waddr_0_0_r == 5'h1b;\n      |                                       ^~\n%Warning-WIDTHEXPAND: /mnt/c/Temp/uhsc_meta_family/DUT_L1ErrorMetaArray.sv:22036:39: Operator EQ expects 8 bits on the RHS, but RHS's CONST '5'h1c' generates 5 bits.\n22036 |   assign \\$3165  = s1_way_waddr_0_0_r == 5'h1c;\n      |                                       ^~\n%Warning-WIDTHEXPAND: /mnt/c/Temp/uhsc_meta_family/DUT_L1ErrorMetaArray.sv:22039:39: Operator EQ expects 8 bits on the RHS, but RHS's CONST '5'h1d' generates 5 bits.\n22039 |   assign \\$3168  = s1_way_waddr_0_0_r == 5'h1d;\n      |                                       ^~\n%Warning-WIDTHEXPAND: /mnt/c/Temp/uhsc_meta_family/DUT_L1ErrorMetaArray.sv:22042:39: Operator EQ expects 8 bits on the RHS, but RHS's CONST '5'h1e' generates 5 bits.\n22042 |   assign \\$3171  = s1_way_waddr_0_0_r == 5'h1e;\n      |                                       ^~\n%Warning-WIDTHEXPAND: /mnt/c/Temp/uhsc_meta_family/DUT_L1ErrorMetaArray.sv:22045:39: Operator EQ expects 8 bits on the RHS, but RHS's CONST '5'h1f' generates 5 bits.\n22045 |   assign \\$3174  = s1_way_waddr_0_0_r == 5'h1f;\n      |                                       ^~\n%Warning-WIDTHEXPAND: /mnt/c/Temp/uhsc_meta_family/DUT_L1ErrorMetaArray.sv:22048:39: Operator EQ expects 8 bits on the RHS, but RHS's CONST '6'h20' generates 6 bits.\n22048 |   assign \\$3177  = s1_way_waddr_0_0_r == 6'h20;\n      |                                       ^~\n",
+          "output_sha256": "edcea5c8a758d982b7492b2606ec7b9fa76516fe099ffe2a6d7b54cbf252d098"
         },
         "locked_verilator": {
           "command": [
@@ -714,38 +714,43 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.544 MB sources in 2 modules, into 1.452 MB in 6 C++ files needing 0.000 MB\n- Verilator: Walltime 0.321 s (elab=0.026, cvt=0.200, bld=0.000); cpu 0.291 s on 1 threads; alloced 38.102 MB\n",
-          "output_sha256": "cca922829e6c90c5fb840a03c300ae6949cc9aeda3f2cc6de8096ee73b9a7ae2"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.544 MB sources in 2 modules, into 1.452 MB in 6 C++ files needing 0.000 MB\n- Verilator: Walltime 0.235 s (elab=0.019, cvt=0.128, bld=0.000); cpu 0.208 s on 1 threads; alloced 38.098 MB\n",
+          "output_sha256": "bf17ca81e0f9b65e6e97d2c34155afd5b4a28d9a42370f5832dfdbc7ed321d9e"
         },
         "yosys_equiv": {
           "command": [
             "yosys",
             "-Q",
             "-p",
-            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/DUT_L1ErrorMetaArray.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/REF_L1ErrorMetaArray.sv; proc; async2sync; memory; opt; flatten REF_L1ErrorMetaArray; flatten DUT_L1ErrorMetaArray; equiv_make REF_L1ErrorMetaArray DUT_L1ErrorMetaArray L1ErrorMetaArray_EQUIV; prep -top L1ErrorMetaArray_EQUIV; equiv_induct -undef; equiv_status -assert"
+            "read_verilog -sv /mnt/c/Temp/uhsc_meta_family/DUT_L1ErrorMetaArray.sv /mnt/c/Temp/uhsc_meta_family/REF_L1ErrorMetaArray.sv; proc; async2sync; memory; opt; flatten REF_L1ErrorMetaArray; flatten DUT_L1ErrorMetaArray; equiv_make REF_L1ErrorMetaArray DUT_L1ErrorMetaArray L1ErrorMetaArray_EQUIV; prep -top L1ErrorMetaArray_EQUIV; equiv_induct -undef; equiv_status -assert"
           ],
-          "returncode": 1,
-          "status": "FAIL",
+          "returncode": 0,
+          "status": "PASS",
           "sat_success_marker": false,
           "sat_counterexample_marker": false,
           "unconstrained_marker": false,
           "equiv_success_markers": {
-            "0 are unproven.": false,
-            "Equivalence successfully proven!": false
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
           },
-          "equiv_failure_marker": true,
-          "equiv_cells_full": null,
-          "equiv_summary_full": null,
-          "equiv_failed_full": 32,
+          "equiv_failure_marker": false,
+          "equiv_cells_full": 2204,
+          "equiv_summary_full": [
+            2204,
+            0
+          ],
+          "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "0972 variables)\n  Proving induction step 3. (10415687 clauses over 3630553 variables)\n  Proof for induction step failed. Extending to next time step.\n  Proving existence of base case for step 4. (10415688 clauses over 3630553 variables)\n  Proving induction step 4. (13084349 clauses over 4560134 variables)\n  Proof for induction step failed. Trying to prove individual $equiv from workset.\n  Trying to prove $equiv for \\io_resp_0_1_tl_denied: failed.\n  Trying to prove $equiv for \\io_resp_3_3_tl_corrupt: failed.\n  Trying to prove $equiv for \\io_resp_3_0_tl_denied: failed.\n  Trying to prove $equiv for \\io_resp_1_3_tl_corrupt: failed.\n  Trying to prove $equiv for \\io_resp_1_0_tl_denied: failed.\n  Trying to prove $equiv for \\io_resp_3_1_tl_denied: failed.\n  Trying to prove $equiv for \\io_resp_0_3_tl_corrupt: failed.\n  Trying to prove $equiv for \\io_resp_3_1_tl_corrupt: failed.\n  Trying to prove $equiv for \\io_resp_2_2_tl_corrupt: failed.\n  Trying to prove $equiv for \\io_resp_3_2_tl_denied: failed.\n  Trying to prove $equiv for \\io_resp_2_0_tl_corrupt: failed.\n  Trying to prove $equiv for \\io_resp_3_3_tl_denied: failed.\n  Trying to prove $equiv for \\io_resp_1_1_tl_corrupt: failed.\n  Trying to prove $equiv for \\io_resp_1_1_tl_denied: failed.\n  Trying to prove $equiv for \\io_resp_1_2_tl_denied: failed.\n  Trying to prove $equiv for \\io_resp_2_1_tl_corrupt: failed.\n  Trying to prove $equiv for \\io_resp_1_3_tl_denied: failed.\n  Trying to prove $equiv for \\io_resp_2_3_tl_denied: failed.\n  Trying to prove $equiv for \\io_resp_0_0_tl_denied: failed.\n  Trying to prove $equiv for \\io_resp_0_0_tl_corrupt: failed.\n  Trying to prove $equiv for \\io_resp_3_0_tl_corrupt: failed.\n  Trying to prove $equiv for \\io_resp_2_3_tl_corrupt: failed.\n  Trying to prove $equiv for \\io_resp_2_0_tl_denied: failed.\n  Trying to prove $equiv for \\io_resp_2_2_tl_denied: failed.\n  Trying to prove $equiv for \\io_resp_1_2_tl_corrupt: failed.\n  Trying to prove $equiv for \\io_resp_2_1_tl_denied: failed.\n  Trying to prove $equiv for \\io_resp_1_0_tl_corrupt: failed.\n  Trying to prove $equiv for \\io_resp_3_2_tl_corrupt: failed.\n  Trying to prove $equiv for \\io_resp_0_1_tl_corrupt: failed.\n  Trying to prove $equiv for \\io_resp_0_3_tl_denied: failed.\n  Trying to prove $equiv for \\io_resp_0_2_tl_denied: failed.\n  Trying to prove $equiv for \\io_resp_0_2_tl_corrupt: failed.\nProved 0 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nERROR: Found 32 unproven $equiv cells in 'equiv_status -assert'.\n",
-          "output_sha256": "1845d16b09ba79ab780ff6246c2bcd7525c3acd685fdc0e98ff8bdb17f5b5471",
+          "output_tail": ").\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module L1ErrorMetaArray_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\L1ErrorMetaArray_EQUIV'.\n<suppressed ~6096 debug messages>\nRemoved a total of 2032 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\L1ErrorMetaArray_EQUIV..\nRemoved 0 unused cells and 2032 unused wires.\n<suppressed ~1 debug messages>\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== L1ErrorMetaArray_EQUIV ===\n\n   Number of wires:              18474\n   Number of wire bits:          20992\n   Number of public wires:       13274\n   Number of public wire bits:   15792\n   Number of ports:                 47\n   Number of port bits:             85\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:              15964\n     $and                         1064\n     $dff                            8\n     $dffe                         128\n     $eq                          2060\n     $equiv                       2204\n     $logic_not                      8\n     $mux                         6312\n     $or                            16\n     $pmux                          32\n     $reduce_and                     4\n     $sdff                        4096\n     $shiftx                        32\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module L1ErrorMetaArray_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 2204 unproven $equiv cells in module L1ErrorMetaArray_EQUIV:\n  Undef modelling: force def on 4344 initial reg values and 53 inputs.\n  Proving existence of base case for step 1. (2257350 clauses over 790542 variables)\n  Proving induction step 1. (4712291 clauses over 1648399 variables)\n  Proof for induction step holds. Entire workset of 2204 cells proven!\nProved 2204 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 2204 $equiv cells in L1ErrorMetaArray_EQUIV:\n  Of those cells 2204 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: 2cc5222282, CPU: user 38.67s system 0.79s, MEM: 1108.75 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 76% 1x equiv_induct (30 sec), 5% 10x opt_clean (2 sec), ...\n",
+          "output_sha256": "a56a0622dc21651f66f4c5db1e5da35ae67ff36eec18ba6ef6802058de8b2742",
           "markers_present": {
-            "0 are unproven.": false,
-            "Equivalence successfully proven!": false
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
           },
-          "formal_success_marker": false,
-          "unproven_cells": 32
+          "formal_success_marker": true,
+          "equiv_cells": 2204,
+          "proven_cells": 2204,
+          "unproven_cells": 0
         }
       },
       {
@@ -757,9 +762,9 @@
             "-Wno-fatal",
             "--top-module",
             "L1FlagMetaArray_MITER",
-            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/DUT_L1FlagMetaArray.sv",
-            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/REF_L1FlagMetaArray.sv",
-            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/L1FlagMetaArray_MITER.sv"
+            "/mnt/c/Temp/uhsc_meta_family/DUT_L1FlagMetaArray.sv",
+            "/mnt/c/Temp/uhsc_meta_family/REF_L1FlagMetaArray.sv",
+            "/mnt/c/Temp/uhsc_meta_family/L1FlagMetaArray_MITER.sv"
           ],
           "returncode": 0,
           "status": "PASS",
@@ -775,8 +780,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7e' generates 7 bits.\n24238 |   assign \\$10761  = meta_s1_address_3_3 == 7'h7e;\n      |                                         ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/DUT_L1FlagMetaArray.sv:24240:41: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7e' generates 7 bits.\n24240 |   assign \\$10763  = meta_s1_address_3_2 == 7'h7e;\n      |                                         ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/DUT_L1FlagMetaArray.sv:24242:41: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7e' generates 7 bits.\n24242 |   assign \\$10765  = meta_s1_address_3_1 == 7'h7e;\n      |                                         ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/DUT_L1FlagMetaArray.sv:24244:41: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7e' generates 7 bits.\n24244 |   assign \\$10767  = meta_s1_address_3_0 == 7'h7e;\n      |                                         ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/DUT_L1FlagMetaArray.sv:24250:41: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7f' generates 7 bits.\n24250 |   assign \\$10773  = meta_s1_address_3_3 == 7'h7f;\n      |                                         ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/DUT_L1FlagMetaArray.sv:24252:41: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7f' generates 7 bits.\n24252 |   assign \\$10775  = meta_s1_address_3_2 == 7'h7f;\n      |                                         ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/DUT_L1FlagMetaArray.sv:24254:41: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7f' generates 7 bits.\n24254 |   assign \\$10777  = meta_s1_address_3_1 == 7'h7f;\n      |                                         ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/DUT_L1FlagMetaArray.sv:24256:41: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7f' generates 7 bits.\n24256 |   assign \\$10779  = meta_s1_address_3_0 == 7'h7f;\n      |                                         ^~\n",
-          "output_sha256": "e6fdd9dc917746320acbbf142d72f4d3047ff38e8e5726c9fed7f6c45769ece4"
+          "output_tail": ";\n      |                                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Temp/uhsc_meta_family/DUT_L1FlagMetaArray.sv:24232:40: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7d' generates 7 bits.\n24232 |   assign \\$10755  = s1_way_waddr_3_0_r == 7'h7d;\n      |                                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Temp/uhsc_meta_family/DUT_L1FlagMetaArray.sv:24238:40: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7e' generates 7 bits.\n24238 |   assign \\$10761  = s1_way_waddr_3_3_r == 7'h7e;\n      |                                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Temp/uhsc_meta_family/DUT_L1FlagMetaArray.sv:24240:40: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7e' generates 7 bits.\n24240 |   assign \\$10763  = s1_way_waddr_3_2_r == 7'h7e;\n      |                                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Temp/uhsc_meta_family/DUT_L1FlagMetaArray.sv:24242:40: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7e' generates 7 bits.\n24242 |   assign \\$10765  = s1_way_waddr_3_1_r == 7'h7e;\n      |                                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Temp/uhsc_meta_family/DUT_L1FlagMetaArray.sv:24244:40: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7e' generates 7 bits.\n24244 |   assign \\$10767  = s1_way_waddr_3_0_r == 7'h7e;\n      |                                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Temp/uhsc_meta_family/DUT_L1FlagMetaArray.sv:24250:40: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7f' generates 7 bits.\n24250 |   assign \\$10773  = s1_way_waddr_3_3_r == 7'h7f;\n      |                                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Temp/uhsc_meta_family/DUT_L1FlagMetaArray.sv:24252:40: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7f' generates 7 bits.\n24252 |   assign \\$10775  = s1_way_waddr_3_2_r == 7'h7f;\n      |                                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Temp/uhsc_meta_family/DUT_L1FlagMetaArray.sv:24254:40: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7f' generates 7 bits.\n24254 |   assign \\$10777  = s1_way_waddr_3_1_r == 7'h7f;\n      |                                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Temp/uhsc_meta_family/DUT_L1FlagMetaArray.sv:24256:40: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7f' generates 7 bits.\n24256 |   assign \\$10779  = s1_way_waddr_3_0_r == 7'h7f;\n      |                                        ^~\n",
+          "output_sha256": "ebf596530a69d151de8f4ae8cbd84de79302e0d5c4b7b1f7d2dc4e52004617c8"
         },
         "locked_verilator": {
           "command": [
@@ -802,38 +807,43 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.488 MB sources in 2 modules, into 1.582 MB in 6 C++ files needing 0.000 MB\n- Verilator: Walltime 0.241 s (elab=0.025, cvt=0.131, bld=0.000); cpu 0.212 s on 1 threads; alloced 34.219 MB\n",
-          "output_sha256": "1ce1891188bc2df3e519650255fa6573624be6a495c745ccf5af993eca680440"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.488 MB sources in 2 modules, into 1.582 MB in 6 C++ files needing 0.000 MB\n- Verilator: Walltime 0.241 s (elab=0.026, cvt=0.127, bld=0.000); cpu 0.210 s on 1 threads; alloced 34.215 MB\n",
+          "output_sha256": "e941811e45f4706c976be0216bef2a0b9072ab1bc25b7e93a9f098625781bfa5"
         },
         "yosys_equiv": {
           "command": [
             "yosys",
             "-Q",
             "-p",
-            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/DUT_L1FlagMetaArray.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/REF_L1FlagMetaArray.sv; proc; async2sync; memory; opt; flatten REF_L1FlagMetaArray; flatten DUT_L1FlagMetaArray; equiv_make REF_L1FlagMetaArray DUT_L1FlagMetaArray L1FlagMetaArray_EQUIV; prep -top L1FlagMetaArray_EQUIV; equiv_induct -undef; equiv_status -assert"
+            "read_verilog -sv /mnt/c/Temp/uhsc_meta_family/DUT_L1FlagMetaArray.sv /mnt/c/Temp/uhsc_meta_family/REF_L1FlagMetaArray.sv; proc; async2sync; memory; opt; flatten REF_L1FlagMetaArray; flatten DUT_L1FlagMetaArray; equiv_make REF_L1FlagMetaArray DUT_L1FlagMetaArray L1FlagMetaArray_EQUIV; prep -top L1FlagMetaArray_EQUIV; equiv_induct -undef; equiv_status -assert"
           ],
-          "returncode": 1,
-          "status": "FAIL",
+          "returncode": 0,
+          "status": "PASS",
           "sat_success_marker": false,
           "sat_counterexample_marker": false,
           "unconstrained_marker": false,
           "equiv_success_markers": {
-            "0 are unproven.": false,
-            "Equivalence successfully proven!": false
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
           },
-          "equiv_failure_marker": true,
-          "equiv_cells_full": null,
-          "equiv_summary_full": null,
-          "equiv_failed_full": 8,
+          "equiv_failure_marker": false,
+          "equiv_cells_full": 1196,
+          "equiv_summary_full": [
+            1196,
+            0
+          ],
+          "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": ":       14542\n   Number of public wire bits:   16060\n   Number of ports:                 27\n   Number of port bits:             81\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:              29300\n     $and                         8208\n     $dff                           32\n     $dffe                          44\n     $eq                          8654\n     $equiv                          8\n     $logic_not                     34\n     $mux                         7168\n     $or                          3072\n     $pmux                           8\n     $reduce_and                    16\n     $sdff                        2048\n     $shiftx                         8\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module L1FlagMetaArray_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 8 unproven $equiv cells in module L1FlagMetaArray_EQUIV:\n  Undef modelling: force def on 2376 initial reg values and 73 inputs.\n  Proving existence of base case for step 1. (1838516 clauses over 640419 variables)\n  Proving induction step 1. (3819783 clauses over 1329264 variables)\n  Proof for induction step failed. Extending to next time step.\n  Proving existence of base case for step 2. (3819784 clauses over 1329264 variables)\n  Proving induction step 2. (5801051 clauses over 2018109 variables)\n  Proof for induction step failed. Extending to next time step.\n  Proving existence of base case for step 3. (5801052 clauses over 2018109 variables)\n  Proving induction step 3. (7782319 clauses over 2706954 variables)\n  Proof for induction step failed. Extending to next time step.\n  Proving existence of base case for step 4. (7782320 clauses over 2706954 variables)\n  Proving induction step 4. (9763587 clauses over 3395799 variables)\n  Proof for induction step failed. Trying to prove individual $equiv from workset.\n  Trying to prove $equiv for \\io_resp_3_0: failed.\n  Trying to prove $equiv for \\io_resp_3_1: failed.\n  Trying to prove $equiv for \\io_resp_3_3: failed.\n  Trying to prove $equiv for \\io_resp_3_2: failed.\n  Trying to prove $equiv for \\io_resp_4_0: failed.\n  Trying to prove $equiv for \\io_resp_4_1: failed.\n  Trying to prove $equiv for \\io_resp_4_3: failed.\n  Trying to prove $equiv for \\io_resp_4_2: failed.\nProved 0 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nERROR: Found 8 unproven $equiv cells in 'equiv_status -assert'.\n",
-          "output_sha256": "3d14d26a81dc3733012d41f7d6079612bb53a7993c71725c8613d70d4eb8ca7f",
+          "output_tail": " cells).\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module L1FlagMetaArray_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\L1FlagMetaArray_EQUIV'.\n<suppressed ~12192 debug messages>\nRemoved a total of 4064 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\L1FlagMetaArray_EQUIV..\nRemoved 0 unused cells and 4064 unused wires.\n<suppressed ~1 debug messages>\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== L1FlagMetaArray_EQUIV ===\n\n   Number of wires:              22294\n   Number of wire bits:          23952\n   Number of public wires:       15606\n   Number of public wire bits:   17264\n   Number of ports:                 27\n   Number of port bits:             81\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:              22328\n     $and                         4128\n     $dff                           32\n     $dffe                          44\n     $eq                          4590\n     $equiv                       1196\n     $logic_not                     18\n     $mux                         7168\n     $or                          3072\n     $pmux                           8\n     $reduce_and                    16\n     $sdff                        2048\n     $shiftx                         8\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module L1FlagMetaArray_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 1196 unproven $equiv cells in module L1FlagMetaArray_EQUIV:\n  Undef modelling: force def on 2376 initial reg values and 73 inputs.\n  Proving existence of base case for step 1. (1490114 clauses over 526301 variables)\n  Proving induction step 1. (3122979 clauses over 1101028 variables)\n  Proof for induction step holds. Entire workset of 1196 cells proven!\nProved 1196 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 1196 $equiv cells in L1FlagMetaArray_EQUIV:\n  Of those cells 1196 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: 6b57c5a240, CPU: user 23.18s system 0.48s, MEM: 821.86 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 58% 1x equiv_induct (13 sec), 10% 10x opt_clean (2 sec), ...\n",
+          "output_sha256": "29cf4d14a5e704a003d5030dfb1583bebbd681c2276c46736435fba85103f695",
           "markers_present": {
-            "0 are unproven.": false,
-            "Equivalence successfully proven!": false
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
           },
-          "formal_success_marker": false,
-          "unproven_cells": 8
+          "formal_success_marker": true,
+          "equiv_cells": 1196,
+          "proven_cells": 1196,
+          "unproven_cells": 0
         }
       },
       {
@@ -845,9 +855,9 @@
             "-Wno-fatal",
             "--top-module",
             "L1PrefetchSourceArray_MITER",
-            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/DUT_L1PrefetchSourceArray.sv",
-            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/REF_L1PrefetchSourceArray.sv",
-            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/L1PrefetchSourceArray_MITER.sv"
+            "/mnt/c/Temp/uhsc_meta_family/DUT_L1PrefetchSourceArray.sv",
+            "/mnt/c/Temp/uhsc_meta_family/REF_L1PrefetchSourceArray.sv",
+            "/mnt/c/Temp/uhsc_meta_family/L1PrefetchSourceArray_MITER.sv"
           ],
           "returncode": 0,
           "status": "PASS",
@@ -863,8 +873,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": " RHS's CONST '7'h7e' generates 7 bits.\n25119 |   assign \\$10761  = meta_s1_address_3_3 == 7'h7e;\n      |                                         ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/DUT_L1PrefetchSourceArray.sv:25121:41: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7e' generates 7 bits.\n25121 |   assign \\$10763  = meta_s1_address_3_2 == 7'h7e;\n      |                                         ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/DUT_L1PrefetchSourceArray.sv:25123:41: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7e' generates 7 bits.\n25123 |   assign \\$10765  = meta_s1_address_3_1 == 7'h7e;\n      |                                         ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/DUT_L1PrefetchSourceArray.sv:25125:41: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7e' generates 7 bits.\n25125 |   assign \\$10767  = meta_s1_address_3_0 == 7'h7e;\n      |                                         ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/DUT_L1PrefetchSourceArray.sv:25131:41: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7f' generates 7 bits.\n25131 |   assign \\$10773  = meta_s1_address_3_3 == 7'h7f;\n      |                                         ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/DUT_L1PrefetchSourceArray.sv:25133:41: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7f' generates 7 bits.\n25133 |   assign \\$10775  = meta_s1_address_3_2 == 7'h7f;\n      |                                         ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/DUT_L1PrefetchSourceArray.sv:25135:41: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7f' generates 7 bits.\n25135 |   assign \\$10777  = meta_s1_address_3_1 == 7'h7f;\n      |                                         ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/DUT_L1PrefetchSourceArray.sv:25137:41: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7f' generates 7 bits.\n25137 |   assign \\$10779  = meta_s1_address_3_0 == 7'h7f;\n      |                                         ^~\n",
-          "output_sha256": "93c7366b56f8b0d30aadac3f0426f5518b716b3b9db0841b6ace7a94a0d59cd4"
+          "output_tail": "arning-WIDTHEXPAND: /mnt/c/Temp/uhsc_meta_family/DUT_L1PrefetchSourceArray.sv:25113:40: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7d' generates 7 bits.\n25113 |   assign \\$10755  = s1_way_waddr_3_0_r == 7'h7d;\n      |                                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Temp/uhsc_meta_family/DUT_L1PrefetchSourceArray.sv:25119:40: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7e' generates 7 bits.\n25119 |   assign \\$10761  = s1_way_waddr_3_3_r == 7'h7e;\n      |                                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Temp/uhsc_meta_family/DUT_L1PrefetchSourceArray.sv:25121:40: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7e' generates 7 bits.\n25121 |   assign \\$10763  = s1_way_waddr_3_2_r == 7'h7e;\n      |                                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Temp/uhsc_meta_family/DUT_L1PrefetchSourceArray.sv:25123:40: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7e' generates 7 bits.\n25123 |   assign \\$10765  = s1_way_waddr_3_1_r == 7'h7e;\n      |                                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Temp/uhsc_meta_family/DUT_L1PrefetchSourceArray.sv:25125:40: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7e' generates 7 bits.\n25125 |   assign \\$10767  = s1_way_waddr_3_0_r == 7'h7e;\n      |                                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Temp/uhsc_meta_family/DUT_L1PrefetchSourceArray.sv:25131:40: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7f' generates 7 bits.\n25131 |   assign \\$10773  = s1_way_waddr_3_3_r == 7'h7f;\n      |                                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Temp/uhsc_meta_family/DUT_L1PrefetchSourceArray.sv:25133:40: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7f' generates 7 bits.\n25133 |   assign \\$10775  = s1_way_waddr_3_2_r == 7'h7f;\n      |                                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Temp/uhsc_meta_family/DUT_L1PrefetchSourceArray.sv:25135:40: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7f' generates 7 bits.\n25135 |   assign \\$10777  = s1_way_waddr_3_1_r == 7'h7f;\n      |                                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Temp/uhsc_meta_family/DUT_L1PrefetchSourceArray.sv:25137:40: Operator EQ expects 8 bits on the RHS, but RHS's CONST '7'h7f' generates 7 bits.\n25137 |   assign \\$10779  = s1_way_waddr_3_0_r == 7'h7f;\n      |                                        ^~\n",
+          "output_sha256": "473457adbcabc992cc9b6bae4e590adc623ac2adcfc1aaaef031830720a23246"
         },
         "locked_verilator": {
           "command": [
@@ -890,62 +900,49 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.500 MB sources in 2 modules, into 1.291 MB in 6 C++ files needing 0.000 MB\n- Verilator: Walltime 0.267 s (elab=0.026, cvt=0.148, bld=0.000); cpu 0.233 s on 1 threads; alloced 46.113 MB\n",
-          "output_sha256": "346dcd6bfacc48fe09e7ecdfa1a26685bf238fb82e6da3c002bf98933c3a5bd9"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.500 MB sources in 2 modules, into 1.291 MB in 6 C++ files needing 0.000 MB\n- Verilator: Walltime 0.289 s (elab=0.029, cvt=0.166, bld=0.000); cpu 0.254 s on 1 threads; alloced 46.113 MB\n",
+          "output_sha256": "8fcf33e5c16642e7178334ef4323bb742f92af06b0dc1c99b8a916228e49a985"
         },
         "yosys_equiv": {
           "command": [
             "yosys",
             "-Q",
             "-p",
-            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/DUT_L1PrefetchSourceArray.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_metaarray_family/REF_L1PrefetchSourceArray.sv; proc; async2sync; memory; opt; flatten REF_L1PrefetchSourceArray; flatten DUT_L1PrefetchSourceArray; equiv_make REF_L1PrefetchSourceArray DUT_L1PrefetchSourceArray L1PrefetchSourceArray_EQUIV; prep -top L1PrefetchSourceArray_EQUIV; equiv_induct -undef; equiv_status -assert"
+            "read_verilog -sv /mnt/c/Temp/uhsc_meta_family/DUT_L1PrefetchSourceArray.sv /mnt/c/Temp/uhsc_meta_family/REF_L1PrefetchSourceArray.sv; proc; async2sync; memory; opt; flatten REF_L1PrefetchSourceArray; flatten DUT_L1PrefetchSourceArray; equiv_make REF_L1PrefetchSourceArray DUT_L1PrefetchSourceArray L1PrefetchSourceArray_EQUIV; prep -top L1PrefetchSourceArray_EQUIV; equiv_induct -undef; equiv_status -assert"
           ],
-          "returncode": 1,
-          "status": "FAIL",
+          "returncode": 0,
+          "status": "PASS",
           "sat_success_marker": false,
           "sat_counterexample_marker": false,
           "unconstrained_marker": false,
           "equiv_success_markers": {
             "0 are unproven.": true,
-            "Equivalence successfully proven!": false
+            "Equivalence successfully proven!": true
           },
-          "equiv_failure_marker": true,
-          "equiv_cells_full": 60,
+          "equiv_failure_marker": false,
+          "equiv_cells_full": 3408,
           "equiv_summary_full": [
-            0,
-            60
+            3408,
+            0
           ],
-          "equiv_failed_full": 60,
+          "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "make.cc:257:find_same_wires$47463: \\io_resp_1_0_gold [2] \\io_resp_1_0_gate [2]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$47464: \\io_resp_1_1_gold [0] \\io_resp_1_1_gate [0]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$47465: \\io_resp_1_1_gold [1] \\io_resp_1_1_gate [1]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$47466: \\io_resp_1_1_gold [2] \\io_resp_1_1_gate [2]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$47467: \\io_resp_1_2_gold [0] \\io_resp_1_2_gate [0]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$47468: \\io_resp_1_2_gold [1] \\io_resp_1_2_gate [1]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$47469: \\io_resp_1_2_gold [2] \\io_resp_1_2_gate [2]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$47470: \\io_resp_1_3_gold [0] \\io_resp_1_3_gate [0]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$47471: \\io_resp_1_3_gold [1] \\io_resp_1_3_gate [1]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$47472: \\io_resp_1_3_gold [2] \\io_resp_1_3_gate [2]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$47473: \\io_resp_2_0_gold [0] \\io_resp_2_0_gate [0]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$47474: \\io_resp_2_0_gold [1] \\io_resp_2_0_gate [1]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$47475: \\io_resp_2_0_gold [2] \\io_resp_2_0_gate [2]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$47476: \\io_resp_2_1_gold [0] \\io_resp_2_1_gate [0]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$47477: \\io_resp_2_1_gold [1] \\io_resp_2_1_gate [1]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$47478: \\io_resp_2_1_gold [2] \\io_resp_2_1_gate [2]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$47479: \\io_resp_2_2_gold [0] \\io_resp_2_2_gate [0]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$47480: \\io_resp_2_2_gold [1] \\io_resp_2_2_gate [1]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$47481: \\io_resp_2_2_gold [2] \\io_resp_2_2_gate [2]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$47482: \\io_resp_2_3_gold [0] \\io_resp_2_3_gate [0]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$47483: \\io_resp_2_3_gold [1] \\io_resp_2_3_gate [1]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$47484: \\io_resp_2_3_gold [2] \\io_resp_2_3_gate [2]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$47485: \\iERROR: Found 60 unproven $equiv cells in 'equiv_status -assert'.\n",
-          "output_sha256": "9de774c9809cd373edf56e5e3408bfa50712a9dbc8f6ab55dabeed16f7adb114",
+          "output_tail": "ng).\nOptimizing module L1PrefetchSourceArray_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\L1PrefetchSourceArray_EQUIV'.\n<suppressed ~12192 debug messages>\nRemoved a total of 4064 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\L1PrefetchSourceArray_EQUIV..\nRemoved 0 unused cells and 4064 unused wires.\n<suppressed ~1 debug messages>\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== L1PrefetchSourceArray_EQUIV ===\n\n   Number of wires:              24093\n   Number of wire bits:          51227\n   Number of public wires:       16550\n   Number of public wire bits:   35293\n   Number of ports:                 45\n   Number of port bits:            162\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:              25823\n     $and                         4208\n     $dff                           32\n     $dffe                         110\n     $eq                          5435\n     $equiv                       3408\n     $logic_not                     21\n     $mul                            5\n     $mux                         8312\n     $or                          2168\n     $pmux                          20\n     $reduce_and                    16\n     $sdff                        2048\n     $sdffce                        20\n     $shiftx                        20\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module L1PrefetchSourceArray_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 3408 unproven $equiv cells in module L1PrefetchSourceArray_EQUIV:\n  Undef modelling: force def on 6696 initial reg values and 102 inputs.\n  Proving existence of base case for step 1. (5862768 clauses over 2053761 variables)\n  Proving induction step 1. (12145919 clauses over 4249921 variables)\n  Proof for induction step holds. Entire workset of 3408 cells proven!\nProved 3408 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 3408 $equiv cells in L1PrefetchSourceArray_EQUIV:\n  Of those cells 3408 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: dbaff5ea9a, CPU: user 189.66s system 1.94s, MEM: 2798.61 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 92% 1x equiv_induct (177 sec), 2% 10x opt_clean (4 sec), ...\n",
+          "output_sha256": "d2516de41e8c5f2882693ac3616b82f5d2a32518abb9718872a2eaa8c8e8f266",
           "markers_present": {
             "0 are unproven.": true,
-            "Equivalence successfully proven!": false
+            "Equivalence successfully proven!": true
           },
-          "formal_success_marker": false,
-          "equiv_cells": 60,
-          "proven_cells": 0,
-          "unproven_cells": 60
+          "formal_success_marker": true,
+          "equiv_cells": 3408,
+          "proven_cells": 3408,
+          "unproven_cells": 0
         }
       }
     ]
   },
-  "failures": [
-    "L1CohMetaArray:yosys_equiv",
-    "L1CohMetaArray: 32 $equiv cells unproven",
-    "L1ErrorMetaArray:yosys_equiv",
-    "L1ErrorMetaArray: 32 $equiv cells unproven",
-    "L1ErrorMetaArray: zero or missing $equiv cells",
-    "L1FlagMetaArray:yosys_equiv",
-    "L1FlagMetaArray: 8 $equiv cells unproven",
-    "L1FlagMetaArray: zero or missing $equiv cells",
-    "L1PrefetchSourceArray:yosys_equiv",
-    "L1PrefetchSourceArray: 60 $equiv cells unproven"
-  ],
-  "unclosed": [
-    "strict gates did not all pass"
-  ],
+  "failures": [],
+  "unclosed": [],
   "acceptance_unclosed": [
     "Parent closure, full-top differential, final license review, and user approval remain outside this Build proof."
   ]
