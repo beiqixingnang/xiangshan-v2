@@ -539,9 +539,9 @@ class UtilityResidualFamily(Elaboratable):
         enable_latch = Signal(name="enable_latch")
         # The source latch is transparent while CK is low and is only
         # observable through Q while CK is high.  Capturing the enable on the
-        # rising CK edge therefore preserves the complete public transition
-        # relation without relying on Yosys' private ``$dlatch`` cell (which
-        # Verilator/Yosys cannot resolve from a standalone Build export).
+        # rising CK edge gives a standalone Amaranth export that the generic
+        # lint tools can elaborate; strict equivalence remains pending because
+        # this approximation does not model mid-low-phase enable changes.
         gate_domain = ClockDomain("gate", reset_less=True)
         gate_domain.clk = self.ports["CK"]
         module.domains += gate_domain
