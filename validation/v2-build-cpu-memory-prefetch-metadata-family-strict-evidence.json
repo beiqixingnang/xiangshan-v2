@@ -164,8 +164,8 @@
     },
     "python_build": {
       "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Prefetch.Metadata.Family-Hardware.py",
-      "sha256": "9ff5fc28393d35a90b12654cba0a5d595e38e62ac130448936311377dda6c06c",
-      "bytes": 24388
+      "sha256": "3a5d9abc22c1c2fd09c59e25707927d266afe8e29c73fc7557efb906d529acec",
+      "bytes": 24482
     },
     "reference_sv": {
       "path": "validation/reference-sv/StreamBitVectorArray.sv",
@@ -173,9 +173,9 @@
       "bytes": 331389
     },
     "scala": {
-      "path": "upstream/src/main/scala/xiangshan/mem/prefetch/L1StreamPrefetcher.scala",
-      "sha256": "a049d941ffd77cbbdb33c39ca93abd25ad85c7c293d533defd81ab16073a619b",
-      "bytes": 21554
+      "path": "upstream/src/main/scala/xiangshan/mem/prefetch/L1StridePrefetcher.scala",
+      "sha256": "2d263b83198c87c208c72f21acbc343c1b2fc31603c6fc95f27332410a41258f",
+      "bytes": 10058
     },
     "declared_scala_sources": {},
     "reference_children": {}
@@ -192,7 +192,7 @@
           "/c",
           "pyright",
           "--outputjson",
-          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_i9mzkixn\\Build-Cpu.Memory.Prefetch.Metadata.Family-Hardware.py"
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_g_m3qhuz\\Build-Cpu.Memory.Prefetch.Metadata.Family-Hardware.py"
         ],
         "returncode": 0,
         "status": "PASS",
@@ -208,7 +208,7 @@
           "/c",
           "pyright",
           "--outputjson",
-          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_rlk1rovz\\v2_strict_family_rail.py"
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_m55kvgv2\\v2_strict_family_rail.py"
         ],
         "returncode": 0,
         "status": "PASS",
@@ -289,7 +289,7 @@
           "equiv_failed_full": null,
           "sat_counts_full": null,
           "output_tail": "/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StreamBitVectorArray.sv:22366:30: Operator GTE expects 6 bits on the RHS, but RHS's CONST '4'hc' generates 4 bits.\n22366 |   assign \\$11151  = \\$11150  >= 4'hc;\n      |                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StreamBitVectorArray.sv:22369:30: Operator GTE expects 5 bits on the RHS, but RHS's CONST '4'hc' generates 4 bits.\n22369 |   assign \\$11156  = \\$11155  >= 4'hc;\n      |                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StreamBitVectorArray.sv:22373:30: Operator GTE expects 5 bits on the RHS, but RHS's CONST '4'hc' generates 4 bits.\n22373 |   assign \\$11162  = \\$11161  >= 4'hc;\n      |                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StreamBitVectorArray.sv:22382:30: Operator GTE expects 5 bits on the RHS, but RHS's CONST '4'hc' generates 4 bits.\n22382 |   assign \\$11173  = \\$11172  >= 4'hc;\n      |                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StreamBitVectorArray.sv:22385:30: Operator GTE expects 5 bits on the RHS, but RHS's CONST '4'hc' generates 4 bits.\n22385 |   assign \\$11178  = \\$11177  >= 4'hc;\n      |                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StreamBitVectorArray.sv:22405:30: Operator GTE expects 6 bits on the RHS, but RHS's CONST '4'hc' generates 4 bits.\n22405 |   assign \\$11198  = \\$11197  >= 4'hc;\n      |                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StreamBitVectorArray.sv:22408:30: Operator GTE expects 5 bits on the RHS, but RHS's CONST '4'hc' generates 4 bits.\n22408 |   assign \\$11203  = \\$11202  >= 4'hc;\n      |                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StreamBitVectorArray.sv:22412:30: Operator GTE expects 5 bits on the RHS, but RHS's CONST '4'hc' generates 4 bits.\n22412 |   assign \\$11209  = \\$11208  >= 4'hc;\n      |                              ^~\n",
-          "output_sha256": "be9dfd1c7aa2f841a09df5a2bd97d5cca49b2c795bc2bdd86259d6526e67c6a9"
+          "output_sha256": "7de71988d3aec3ce8fd963c1f6785c0d5018ca62eb4982542bafdeb611adfe51"
         },
         "locked_verilator": {
           "command": [
@@ -315,8 +315,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.091 MB sources in 2 modules, into 0.256 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.055 s (elab=0.004, cvt=0.016, bld=0.000); cpu 0.032 s on 1 threads; alloced 12.605 MB\n",
-          "output_sha256": "fa588fd8f88514f0bab034ea6051015f9f3a09e3b08841fabe3f12b518a07eb3"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.091 MB sources in 2 modules, into 0.256 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.077 s (elab=0.006, cvt=0.023, bld=0.000); cpu 0.049 s on 1 threads; alloced 12.605 MB\n",
+          "output_sha256": "28fa05892f729d794c4029f68fa9c1d5cf26a8b4e0d5d6ad492e6eb3cddfe597"
         },
         "yosys_equiv": {
           "command": [
@@ -381,8 +381,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "emory_prefetch_metadata_family_family/DUT_StrideMetaArray.sv:6888:5: Case values incompletely covered (example pattern 0xa)\n 6888 |     casez (stride_s1_index)\n      |     ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StrideMetaArray.sv:6914:5: Case values incompletely covered (example pattern 0xa)\n 6914 |     casez (stride_s1_index)\n      |     ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StrideMetaArray.sv:6940:5: Case values incompletely covered (example pattern 0xa)\n 6940 |     casez (stride_s1_index)\n      |     ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StrideMetaArray.sv:6966:5: Case values incompletely covered (example pattern 0xa)\n 6966 |     casez (stride_s1_index)\n      |     ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StrideMetaArray.sv:6992:5: Case values incompletely covered (example pattern 0xa)\n 6992 |     casez (stride_s1_index)\n      |     ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StrideMetaArray.sv:7018:5: Case values incompletely covered (example pattern 0xa)\n 7018 |     casez (stride_s1_index)\n      |     ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StrideMetaArray.sv:7044:5: Case values incompletely covered (example pattern 0xa)\n 7044 |     casez (stride_s1_index)\n      |     ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StrideMetaArray.sv:7070:5: Case values incompletely covered (example pattern 0xa)\n 7070 |     casez (stride_s1_index)\n      |     ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StrideMetaArray.sv:7096:5: Case values incompletely covered (example pattern 0xa)\n 7096 |     casez (stride_s1_index)\n      |     ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StrideMetaArray.sv:7122:5: Case values incompletely covered (example pattern 0xa)\n 7122 |     casez (stride_s1_index)\n      |     ^~~~~\n",
-          "output_sha256": "4ffcad3efbc0916964a673d9cc35088498222bf4fd84913b26fa3ad961f677d0"
+          "output_tail": "emory_prefetch_metadata_family_family/DUT_StrideMetaArray.sv:6996:5: Case values incompletely covered (example pattern 0xa)\n 6996 |     casez (stride_s1_index)\n      |     ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StrideMetaArray.sv:7022:5: Case values incompletely covered (example pattern 0xa)\n 7022 |     casez (stride_s1_index)\n      |     ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StrideMetaArray.sv:7048:5: Case values incompletely covered (example pattern 0xa)\n 7048 |     casez (stride_s1_index)\n      |     ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StrideMetaArray.sv:7074:5: Case values incompletely covered (example pattern 0xa)\n 7074 |     casez (stride_s1_index)\n      |     ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StrideMetaArray.sv:7100:5: Case values incompletely covered (example pattern 0xa)\n 7100 |     casez (stride_s1_index)\n      |     ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StrideMetaArray.sv:7126:5: Case values incompletely covered (example pattern 0xa)\n 7126 |     casez (stride_s1_index)\n      |     ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StrideMetaArray.sv:7152:5: Case values incompletely covered (example pattern 0xa)\n 7152 |     casez (stride_s1_index)\n      |     ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StrideMetaArray.sv:7178:5: Case values incompletely covered (example pattern 0xa)\n 7178 |     casez (stride_s1_index)\n      |     ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StrideMetaArray.sv:7204:5: Case values incompletely covered (example pattern 0xa)\n 7204 |     casez (stride_s1_index)\n      |     ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StrideMetaArray.sv:7230:5: Case values incompletely covered (example pattern 0xa)\n 7230 |     casez (stride_s1_index)\n      |     ^~~~~\n",
+          "output_sha256": "cebd32c382333aa9f269f936ca48b3677dd4566b3d8649519749ff4e5b8431f5"
         },
         "locked_verilator": {
           "command": [
@@ -408,8 +408,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.047 MB sources in 2 modules, into 0.112 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.039 s (elab=0.001, cvt=0.007, bld=0.000); cpu 0.018 s on 1 threads; alloced 10.988 MB\n",
-          "output_sha256": "b56bbd1c575892ceb9c27d442c25ab8ded1dcc2f059c0b3d0da147a000645710"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.047 MB sources in 2 modules, into 0.112 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.037 s (elab=0.001, cvt=0.007, bld=0.000); cpu 0.016 s on 1 threads; alloced 10.984 MB\n",
+          "output_sha256": "499d2ecde48bde5dd3bf0c58dc710ee46c8635606a3b1a4049ce600326744ccd"
         },
         "yosys_equiv": {
           "command": [
@@ -435,8 +435,8 @@
           ],
           "equiv_failed_full": 113,
           "sat_counts_full": null,
-          "output_tail": "_vec_gold [11] \\io_l2_l3_prefetch_req_bits_bit_vec_gate [11]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5685: \\s4_l2_pf_req_bits_bit_vec_gold [12] \\io_l2_l3_prefetch_req_bits_bit_vec_gate [12]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5686: \\s4_l2_pf_req_bits_bit_vec_gold [13] \\io_l2_l3_prefetch_req_bits_bit_vec_gate [13]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5687: \\s4_l2_pf_req_bits_bit_vec_gold [14] \\io_l2_l3_prefetch_req_bits_bit_vec_gate [14]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5688: \\s4_l2_pf_req_bits_bit_vec_gold [15] \\io_l2_l3_prefetch_req_bits_bit_vec_gate [15]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5689: \\s4_l2_pf_req_bits_region_gold [0] \\io_l2_l3_prefetch_req_bits_region_gate [0]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5690: \\s4_l2_pf_req_bits_region_gold [1] \\io_l2_l3_prefetch_req_bits_region_gate [1]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5691: \\s4_l2_pf_req_bits_region_gold [2] \\io_l2_l3_prefetch_req_bits_region_gate [2]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5692: \\s4_l2_pf_req_bits_region_gold [3] \\io_l2_l3_prefetch_req_bits_region_gate [3]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5693: \\s4_l2_pf_req_bits_region_gold [4] \\io_l2_l3_prefetch_req_bits_region_gate [4]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5694: \\s4_l2_pf_req_bits_region_gold [5] \\io_l2_l3_prefetch_req_bits_region_gate [5]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5695: \\s4_l2_pf_req_bits_region_gold [6] \\io_l2_l3_prefetch_req_bits_region_gate [6]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5696: \\s4_l2_pf_req_bits_region_gold [7] \\io_l2_l3_prefetch_req_bits_region_gate [7]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5697: \\s4_l2_pf_req_bits_region_gold [8] \\io_l2_l3_prefetch_req_bits_region_gate [8]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5698: \\s4_l2_pf_req_bits_region_gold [9] \\io_l2_l3_prefetch_req_bits_region_gate [9]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5699: \\s4_l2_pf_req_bits_region_gold [10] \\io_l2_l3_prefetch_req_bits_region_gate [10]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5700: \\s4_l2_pf_req_bits_region_gold [11] \\io_l2_l3_prefetch_req_bits_region_gate [11]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5701: \\ERROR: Found 113 unproven $equiv cells in 'equiv_status -assert'.\n",
-          "output_sha256": "338baf0563582dfbb1aaf8cc31583a4e7d33a34e9b9dc3de8f92c4d78c028989",
+          "output_tail": "_vec_gold [11] \\io_l2_l3_prefetch_req_bits_bit_vec_gate [11]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5739: \\s4_l2_pf_req_bits_bit_vec_gold [12] \\io_l2_l3_prefetch_req_bits_bit_vec_gate [12]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5740: \\s4_l2_pf_req_bits_bit_vec_gold [13] \\io_l2_l3_prefetch_req_bits_bit_vec_gate [13]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5741: \\s4_l2_pf_req_bits_bit_vec_gold [14] \\io_l2_l3_prefetch_req_bits_bit_vec_gate [14]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5742: \\s4_l2_pf_req_bits_bit_vec_gold [15] \\io_l2_l3_prefetch_req_bits_bit_vec_gate [15]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5743: \\s4_l2_pf_req_bits_region_gold [0] \\io_l2_l3_prefetch_req_bits_region_gate [0]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5744: \\s4_l2_pf_req_bits_region_gold [1] \\io_l2_l3_prefetch_req_bits_region_gate [1]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5745: \\s4_l2_pf_req_bits_region_gold [2] \\io_l2_l3_prefetch_req_bits_region_gate [2]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5746: \\s4_l2_pf_req_bits_region_gold [3] \\io_l2_l3_prefetch_req_bits_region_gate [3]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5747: \\s4_l2_pf_req_bits_region_gold [4] \\io_l2_l3_prefetch_req_bits_region_gate [4]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5748: \\s4_l2_pf_req_bits_region_gold [5] \\io_l2_l3_prefetch_req_bits_region_gate [5]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5749: \\s4_l2_pf_req_bits_region_gold [6] \\io_l2_l3_prefetch_req_bits_region_gate [6]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5750: \\s4_l2_pf_req_bits_region_gold [7] \\io_l2_l3_prefetch_req_bits_region_gate [7]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5751: \\s4_l2_pf_req_bits_region_gold [8] \\io_l2_l3_prefetch_req_bits_region_gate [8]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5752: \\s4_l2_pf_req_bits_region_gold [9] \\io_l2_l3_prefetch_req_bits_region_gate [9]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5753: \\s4_l2_pf_req_bits_region_gold [10] \\io_l2_l3_prefetch_req_bits_region_gate [10]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5754: \\s4_l2_pf_req_bits_region_gold [11] \\io_l2_l3_prefetch_req_bits_region_gate [11]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5755: \\ERROR: Found 113 unproven $equiv cells in 'equiv_status -assert'.\n",
+          "output_sha256": "ee8e7ae92a1acb9aa95fd4f313f2688988902d6bcf30a2e5d64e1c080851f7ce",
           "markers_present": {
             "0 are unproven.": false,
             "Equivalence successfully proven!": false

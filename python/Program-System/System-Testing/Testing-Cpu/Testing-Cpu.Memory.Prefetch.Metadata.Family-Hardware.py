@@ -3,6 +3,9 @@ from __future__ import annotations
 import importlib.util
 import unittest
 from pathlib import Path
+from amaranth import Module, Signal
+from amaranth.sim import Simulator
+
 ROOT = Path(__file__).resolve().parents[4]
 TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Prefetch.Metadata.Family-Hardware.py"
 # Load the exact Build subject. / 装载精确 Build 主体。
@@ -18,4 +21,22 @@ class MemoryFamilyTest(unittest.TestCase):
         module = load_subject()
         for member in module.COVERED_MODULES:
             self.assertIn("module " + member, module.build_verilog({"module": member}, {}))
+    # Verify the ten-way PLRU descends through the selected eight-way branch. / 验证十路 PLRU 沿选中八路子树继续译码。
+    def test_ten_way_plru_uses_selected_upper_subtree(self):
+        # Select way six with state bits in the right subtree. / 用右子树状态位选择第六路。
+        subject = load_subject()
+        module = Module()
+        state = Signal(9)
+        way = Signal(4)
+        module.d.comb += way.eq(subject._plru_way(state, 10))
+        simulator = Simulator(module)
+
+        async def bench(ctx):
+            ctx.set(state, 0x61)
+            self.assertEqual(ctx.get(way), 6)
+
+        simulator.add_testbench(bench)
+        simulator.run()
+
+
 if __name__ == "__main__": unittest.main()

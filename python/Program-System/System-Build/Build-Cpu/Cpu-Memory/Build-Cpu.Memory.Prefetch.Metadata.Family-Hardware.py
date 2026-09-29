@@ -125,9 +125,10 @@ def _plru_way(state: Any, ways: int) -> Any:
         return Cat(Mux(state[14], left, right), state[14])
     if ways == 10:
         left = Cat(state[7], Const(0, 2))
-        right_low = Mux(state[2], state[1], state[0])
-        right_mid = Cat(right_low, state[2])
-        right = Cat(right_mid, state[6])
+        right_low = Mux(state[6], Mux(state[5], state[4], state[3]),
+                        Mux(state[2], state[1], state[0]))
+        right_mid = Mux(state[6], state[5], state[2])
+        right = Cat(right_low, right_mid, state[6])
         return Cat(Mux(state[8], left, right), state[8])
     if ways <= 1:
         return Const(0, 1)
