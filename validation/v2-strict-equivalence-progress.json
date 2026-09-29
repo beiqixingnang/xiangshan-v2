@@ -40,7 +40,8 @@
       "audit_failures": [],
       "proof_failures": [
         "SRT16DividerDataModule:yosys_equiv",
-        "SRT16DividerDataModule: 139 $equiv cells unproven"
+        "SRT16DividerDataModule: 13 $equiv cells unproven",
+        "SRT16DividerDataModule: zero or missing $equiv cells"
       ],
       "unclosed": [
         "strict gates did not all pass"
@@ -21191,9 +21192,9 @@
               "0 are unproven.": false,
               "Equivalence successfully proven!": false
             },
-            "unconstrained_or_equiv_cells": 1714,
-            "proven_cells": 1575,
-            "unproven_cells": 139,
+            "unconstrained_or_equiv_cells": null,
+            "proven_cells": null,
+            "unproven_cells": 13,
             "sat_variables": null,
             "sat_clauses": null
           }
@@ -21214,8 +21215,8 @@
           "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.SRT16Divider-Hardware.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "b7a5676f207c895ae4d7c152d04b87e24368560469e5717269f2fe0fb77d2900",
-          "observed_sha256": "b7a5676f207c895ae4d7c152d04b87e24368560469e5717269f2fe0fb77d2900",
+          "expected_sha256": "e1e9db5236aee7e1bad7002fc6b3ae89dd311b4543f8affd94486162eb95b35f",
+          "observed_sha256": "e1e9db5236aee7e1bad7002fc6b3ae89dd311b4543f8affd94486162eb95b35f",
           "status": "PASS"
         },
         "reference_sv": {
@@ -21312,6 +21313,7 @@
           "status": "FAIL",
           "failures": [
             "formal verdict",
+            "zero/missing equivalence cells",
             "incomplete proven equivalence cells",
             "unproven equivalence cells",
             "sequential equivalence full-output markers"
@@ -21328,7 +21330,8 @@
       "failures": [],
       "declared_failures": [
         "SRT16DividerDataModule:yosys_equiv",
-        "SRT16DividerDataModule: 139 $equiv cells unproven"
+        "SRT16DividerDataModule: 13 $equiv cells unproven",
+        "SRT16DividerDataModule: zero or missing $equiv cells"
       ],
       "declared_unclosed": [
         "strict gates did not all pass"
