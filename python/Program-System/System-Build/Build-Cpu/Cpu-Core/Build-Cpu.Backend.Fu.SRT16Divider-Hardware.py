@@ -106,6 +106,29 @@ def mux1h(sels: Any, vals: list[Any]) -> Any:
     return res
 
 
+# Convert a quotient digit with exact Mux1H semantics / 按 Mux1H 语义转换商位
+def on_the_fly_quotient(q: Any, quot: Any, quot_m1: Any,
+                        width: int) -> tuple[Any, Any]:
+    # Preserve zero-hot and multi-hot Mux1H behavior / 保留零热与多热选择语义
+    quot_shifted = quot.bit_select(0, width - 2)
+    quot_m1_shifted = quot_m1.bit_select(0, width - 2)
+    quotient = mux1h(q, [
+        Cat(Const(0b10, 2), quot_m1_shifted),
+        Cat(Const(0b11, 2), quot_m1_shifted),
+        Cat(Const(0b00, 2), quot_shifted),
+        Cat(Const(0b01, 2), quot_shifted),
+        Cat(Const(0b10, 2), quot_shifted),
+    ])
+    quotient_m1 = mux1h(q, [
+        Cat(Const(0b01, 2), quot_m1_shifted),
+        Cat(Const(0b10, 2), quot_m1_shifted),
+        Cat(Const(0b11, 2), quot_m1_shifted),
+        Cat(Const(0b00, 2), quot_shifted),
+        Cat(Const(0b01, 2), quot_shifted),
+    ])
+    return quotient, quotient_m1
+
+
 # Replicate a one-bit expression / 复制单比特表达式
 def replicate(bit: Any, w: int) -> Any:
     return Cat(*[bit for _ in range(w)])
@@ -413,30 +436,9 @@ class SRT16DividerDataModule(Elaboratable):
 
         # OTFC / 商即时转换
         # Convert quotient digit to on-the-fly quotient pair / 将商位转换为即时商及前一商
-        def otfc(q: Any, quot: Any, quotM1: Any) -> tuple[Any, Any]:
-            quot_shifted = quot.bit_select(0, ln - 2)
-            quot_m1_shifted = quotM1.bit_select(0, ln - 2)
-            qn = Mux(q.bit_select(Q_P2, 1),
-                     Cat(Const(0b10, 2), quot_shifted),
-                     Mux(q.bit_select(Q_P1, 1),
-                         Cat(Const(0b01, 2), quot_shifted),
-                         Mux(q.bit_select(Q_0, 1),
-                             Cat(Const(0b00, 2), quot_shifted),
-                             Mux(q.bit_select(Q_N1, 1),
-                                 Cat(Const(0b11, 2), quot_m1_shifted),
-                                 Cat(Const(0b10, 2), quot_m1_shifted)))))
-            qmn = Mux(q.bit_select(Q_P2, 1),
-                      Cat(Const(0b01, 2), quot_shifted),
-                      Mux(q.bit_select(Q_P1, 1),
-                          Cat(Const(0b00, 2), quot_shifted),
-                          Mux(q.bit_select(Q_0, 1),
-                              Cat(Const(0b11, 2), quot_m1_shifted),
-                              Mux(q.bit_select(Q_N1, 1),
-                                  Cat(Const(0b10, 2), quot_m1_shifted),
-                                  Cat(Const(0b01, 2), quot_m1_shifted)))))
-            return qn, qmn
-        quotHalfIter, quotM1HalfIter = otfc(qPrevReg, quotIterReg, quotM1IterReg)
-        qi2, qmi2 = otfc(qNext, quotHalfIter, quotM1HalfIter)
+        quotHalfIter, quotM1HalfIter = on_the_fly_quotient(
+            qPrevReg, quotIterReg, quotM1IterReg, ln)
+        qi2, qmi2 = on_the_fly_quotient(qNext, quotHalfIter, quotM1HalfIter, ln)
         quotIterNext = Mux(~oddIter & finalIter, quotHalfIter, qi2)
         quotM1IterNext = Mux(~oddIter & finalIter, quotM1HalfIter, qmi2)
         m.d.comb += quotIter.eq(Mux(state.bit_select(S_ITER, 1), quotIterNext,

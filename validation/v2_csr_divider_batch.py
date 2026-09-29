@@ -182,6 +182,91 @@ def run_divider_case(module: Any, width: int, dividend: int, divisor: int,
     return result[0]
 
 
+# Check the quotient OTFC truth table for arbitrary selectors / 检查商 OTFC 的任意选择器真值表
+def test_otfc_selector_semantics(module: Any) -> dict[str, Any]:
+    """Exercise zero-hot, one-hot, and multi-hot selectors against locked Mux1H semantics."""
+
+    width = 64
+
+    class OTFCHarness(module.Elaboratable):
+        def __init__(self) -> None:
+            self.selector = module.Signal(5)
+            self.quotient = module.Signal(width)
+            self.quotient_m1 = module.Signal(width)
+            self.out_quotient = module.Signal(width)
+            self.out_quotient_m1 = module.Signal(width)
+
+        # Elaborate the exact production OTFC helper / 展开生产 OTFC 辅助逻辑
+        def elaborate(self, platform: Any) -> Any:
+            m: Any = module.Module()
+            quotient, quotient_m1 = module.on_the_fly_quotient(
+                self.selector, self.quotient, self.quotient_m1, width)
+            m.d.comb += self.out_quotient.eq(quotient)
+            m.d.comb += self.out_quotient_m1.eq(quotient_m1)
+            return m
+
+    top = OTFCHarness()
+    selectors = (0b00000, 0b00001, 0b10000, 0b01001, 0b10110, 0b11111)
+    quotient_value = 0xFEDCBA9876543210
+    quotient_m1_value = 0x0123456789ABCDEF
+    low_mask = (1 << (width - 2)) - 1
+    quotient_low = quotient_value & low_mask
+    quotient_m1_low = quotient_m1_value & low_mask
+    quotient_terms = (
+        (quotient_m1_low << 2) | 0b10,
+        (quotient_m1_low << 2) | 0b11,
+        (quotient_low << 2) | 0b00,
+        (quotient_low << 2) | 0b01,
+        (quotient_low << 2) | 0b10,
+    )
+    quotient_m1_terms = (
+        (quotient_m1_low << 2) | 0b01,
+        (quotient_m1_low << 2) | 0b10,
+        (quotient_m1_low << 2) | 0b11,
+        (quotient_low << 2) | 0b00,
+        (quotient_low << 2) | 0b01,
+    )
+    observed: list[tuple[int, int, int]] = []
+
+    async def bench(ctx: Any) -> None:
+        for selector in selectors:
+            ctx.set(top.selector, selector)
+            ctx.set(top.quotient, quotient_value)
+            ctx.set(top.quotient_m1, quotient_m1_value)
+            await ctx.delay(1e-9)
+            expected_quotient = 0
+            expected_quotient_m1 = 0
+            for index in range(5):
+                if selector & (1 << index):
+                    expected_quotient |= quotient_terms[index]
+                    expected_quotient_m1 |= quotient_m1_terms[index]
+            actual = (ctx.get(top.out_quotient), ctx.get(top.out_quotient_m1))
+            expected = (expected_quotient, expected_quotient_m1)
+            if actual != expected:
+                raise AssertionError(
+                    f"OTFC selector {selector:05b}: {actual!r} != {expected!r}")
+            observed.append((selector, *actual))
+
+    simulator = Simulator(top)
+    simulator.add_testbench(bench)
+    simulator.run()
+    if observed[0][1:] != (0, 0):
+        raise AssertionError("zero-hot Mux1H selector did not return zero")
+    legacy_priority_selectors = (0, 0b01001)
+    for selector in legacy_priority_selectors:
+        selected = next((index for index in (4, 3, 2, 1)
+                         if selector & (1 << index)), 0)
+        legacy = (quotient_terms[selected], quotient_m1_terms[selected])
+        actual = next(row[1:] for row in observed if row[0] == selector)
+        if actual == legacy:
+            raise AssertionError(
+                f"selector {selector:05b} does not distinguish Mux1H from priority")
+    return {"selectors_checked": len(observed),
+            "zero_hot_returns_zero": True,
+            "multi_hot_cases": sum(selector.bit_count() > 1 for selector, *_ in observed),
+            "legacy_priority_counterexamples": 2}
+
+
 # Check the V2 CSR split and custom permission helpers. / 检查 V2 CSR 拆分及自定义权限辅助函数。
 def test_csrs(module: Any) -> dict[str, Any]:
     """Compare all Rocket CSRs and CSRConst boundary cases. / 比较全部 Rocket CSR 及 CSRConst 边界。"""
@@ -303,6 +388,7 @@ def test_csa(module: Any) -> dict[str, Any]:
 def test_divider(module: Any) -> dict[str, Any]:
     """Compare signed/unsigned quotient and remainder at both legal widths. / 比较两种合法位宽的有符号/无符号商余数。"""
 
+    otfc_regression = test_otfc_selector_semantics(module)
     vectors = [
         (0, 1), (1, 1), (10, 3), (3, 10), (10, 0),
         (0xFFFFFFFFFFFFFFFF, 3), (0x8000000000000000, 2),
@@ -380,6 +466,7 @@ def test_divider(module: Any) -> dict[str, Any]:
             checks += 1
     verilog = module.build_verilog(None, {})
     return {"transactions": checks, "max_latency_cycles": max_cycle,
+            "otfc_selector_regression": otfc_regression,
             "verilog_sha256": hashlib.sha256(verilog.encode()).hexdigest()}
 
 
