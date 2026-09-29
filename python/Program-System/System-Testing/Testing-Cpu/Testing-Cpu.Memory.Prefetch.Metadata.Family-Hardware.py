@@ -38,5 +38,25 @@ class MemoryFamilyTest(unittest.TestCase):
         simulator.add_testbench(bench)
         simulator.run()
 
+    # Verify multi-hit encoding follows Chisel OHToUInt's highest-bit priority.
+    def test_one_hot_index_matches_oh_to_uint_priority(self):
+        subject = load_subject()
+        module = Module()
+        matches = Signal(4)
+        index = Signal(2)
+        module.d.comb += index.eq(subject._one_hot_index(
+            [matches[bit] for bit in range(4)], 2))
+        simulator = Simulator(module)
+
+        async def bench(ctx):
+            for pattern in (0, 1, 2, 3, 5, 9, 10, 15):
+                ctx.set(matches, pattern)
+                await ctx.delay(1e-9)
+                expected = pattern.bit_length() - 1 if pattern else 0
+                self.assertEqual(ctx.get(index), expected)
+
+        simulator.add_testbench(bench)
+        simulator.run()
+
 
 if __name__ == "__main__": unittest.main()

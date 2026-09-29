@@ -82,11 +82,17 @@ def family_spec(module: str) -> FamilySpec:
 
 
 def _one_hot_index(matches: list[Any], width: int) -> Any:
-    """Convert a one-hot vector with the generated OR encoding."""
+    """Match Chisel ``OHToUInt`` for one-hot and multi-hot inputs.
+
+    The locked V2 source uses ``OHToUInt``, whose recursive implementation
+    selects the highest asserted bit when a malformed multi-hot vector reaches
+    the encoder.  Folding with a Mux in ascending index order preserves that
+    priority while remaining equivalent for the intended one-hot case.
+    """
 
     result: Any = Const(0, width)
     for index, match in enumerate(matches):
-        result = result | Mux(match, Const(index, width), Const(0, width))
+        result = Mux(match, Const(index, width), result)
     return result
 
 
