@@ -31,8 +31,9 @@ CHILD_PROOF = {
 }
 COMMON_INPUTS = (
     "io_raddr_0", "io_raddr_1", "io_data_wen_0", "io_data_wen_1",
-    "io_data_waddr_0", "io_data_waddr_1", "io_mask_wen_0", "io_mask_wen_1",
-    "io_mask_waddr_0", "io_mask_waddr_1", "io_needForward_0_0",
+    "io_data_waddr_0", "io_data_waddr_1", "io_data_wdata_0", "io_data_wdata_1",
+    "io_mask_wen_0", "io_mask_wen_1", "io_mask_waddr_0", "io_mask_waddr_1",
+    "io_mask_wdata_0", "io_mask_wdata_1", "io_needForward_0_0",
     "io_needForward_0_1", "io_needForward_1_0", "io_needForward_1_1",
     "io_needForward_2_0", "io_needForward_2_1",
 )
@@ -196,6 +197,7 @@ def check_read_assembly(dut: str, ref: str, dut_children: dict[int, dict[str, st
 def validate_composition(dut_path: Path, reference_path: Path, output_path: Path | None = None) -> dict[str, Any]:
     """Return pending compositional evidence. / 返回待定组合证据。"""
 
+    validator_path = Path(__file__).resolve()
     dut_text = dut_path.read_text(encoding="utf-8")
     ref_text = reference_path.read_text(encoding="utf-8")
     dut_top = find_top(dut_text, "DUT_SQDataModule")
@@ -208,7 +210,9 @@ def validate_composition(dut_path: Path, reference_path: Path, output_path: Path
         "schema_version": 1,
         "kind": "XIANGSHAN_KUNMINGHU_V2_STORE_QUEUE_COMPOSITION",
         "status": "COMPOSITIONAL_PENDING",
-        "sources": {"dut": {"path": str(dut_path), "sha256": hash_file(dut_path)},
+        "sources": {"validator": {"path": validator_path.relative_to(validator_path.parents[1]).as_posix(),
+                                   "sha256": hash_file(validator_path)},
+                    "dut": {"path": str(dut_path), "sha256": hash_file(dut_path)},
                     "reference": {"path": str(reference_path), "sha256": hash_file(reference_path)}},
         "abi": {"dut_ports": len(dut_ports), "reference_ports": len(ref_ports), "exact": dut_ports == ref_ports},
         "children": {"dut": check_children(dut_children, False), "reference": check_children(ref_children, True)},
