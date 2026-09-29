@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_FRONTENDBRIDGE_RESET_ENTRY_DIAGNOSTIC",
+  "build_id": "Build-Cpu.Memory.FrontendBridge",
+  "status": "STRICT_PENDING",
+  "strict_complete_count_delta": 0,
+  "acceptance_eligible": false,
+  "scope": {
+    "partition": "instr_uncache_a",
+    "full_public_input_abi_preserved": true,
+    "public_output_bits_compared": 54,
+    "other_five_partitions": "NOT_RUN",
+    "full_public_output_proof": "NOT_RUN",
+    "startup_contract": "Each side has a separately named startup register initialized to one. Internal reset is external reset OR startup through the first rising edge; selected outputs are ignored only during startup. Thereafter external reset and all inputs are unconstrained."
+  },
+  "sources": {
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.FrontendBridge-Hardware.py",
+      "sha256": "873bbbe5132a37a8b1167bd948d4decf3c6af6bb3d3dc3cfd807d864bdd4e285"
+    },
+    "validator": {
+      "path": "validation/v2_frontendbridge_public_queue_strict_validator.py",
+      "sha256": "fdd5c2e7e67d2658f9abcc3cec0e7b178b26ae7460d422a86198bdeddf92c927"
+    },
+    "locked_reference": {
+      "path": "validation/reference-sv/FrontendBridge.sv",
+      "sha256": "ee3efd5e55934039e4c60b78a29eee198110c581b1464760c0a138af11dec9d2"
+    },
+    "shared_rail": {
+      "path": "validation/v2_strict_family_rail.py",
+      "sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302"
+    }
+  },
+  "checks": {
+    "py_compile": "PASS",
+    "wrapper_static_preflight": "PASS",
+    "abi_exact": true,
+    "deterministic_export": true,
+    "locked_reference_view_trusted": true,
+    "target_verilator": "PASS",
+    "locked_verilator": "PASS",
+    "direct_test": "PASS",
+    "yosys_equiv": {
+      "returncode": 1,
+      "equiv_cells": 54,
+      "proven_cells": 0,
+      "unproven_cells": 54,
+      "formal_success_marker": false,
+      "output_capture_sha256": "123d699f33440db07d8236a90f9ac6cc9ecffcc903edbd61b33fcd7e4712e0af",
+      "counterexample": "NOT_REPORTED",
+      "verdict": "UNPROVEN"
+    },
+    "negative_control": "INCONCLUSIVE: the unmutated baseline is already unproven",
+    "canonical_evidence_modified": false,
+    "strict_progress_modified": false
+  },
+  "retained_full_diagnostic": {
+    "path": "C:/Users/lishuo/AppData/Local/Temp/uhsc_frontendbridge_reset_entry_first_partition/instr_uncache_a_focused_result.json",
+    "sha256": "846749e1712e84adc6c54cf2ddf3d868c34e475e397a140b2dc7a0d60b0f471a"
+  },
+  "conclusion": "A common first reset edge alone does not discharge this public-output partition. This run neither proves equivalence nor establishes a concrete behavioral counterexample; a justified state relation or bounded trace is still needed."
+}

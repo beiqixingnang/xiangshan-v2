@@ -42,10 +42,14 @@ EVIDENCE = ROOT / "validation/v2-frontendbridge-public-queue-strict-results.json
 MODULE = "FrontendBridge"
 FORMAL_PARTITION = "instr_uncache_a"
 FORMAL_PARTITION_OUTPUT_BITS = 54
+RESET_ENTRY_DIAGNOSTIC = "--reset-entry" in sys.argv[1:]
 TEMP_ROOT = Path(tempfile.gettempdir())
 if not str(TEMP_ROOT).isascii():
     TEMP_ROOT = Path("C:/Temp")
-WORK = TEMP_ROOT / "uhsc_frontendbridge_public_queue_first_partition"
+WORK = TEMP_ROOT / (
+    "uhsc_frontendbridge_reset_entry_first_partition"
+    if RESET_ENTRY_DIAGNOSTIC else "uhsc_frontendbridge_public_queue_first_partition"
+)
 FOCUSED_EVIDENCE = WORK / "instr_uncache_a_focused_result.json"
 
 if str(ROOT / "validation") not in sys.path:
@@ -119,6 +123,16 @@ def output_assignment(port: str, outputs: dict[str, int], *, mutated: bool = Fal
     return f"assign {port} = {valid} ? {value} : '0;"
 
 
+def wrapper_assignment(name: str, port: str, outputs: dict[str, int], *, mutated: bool = False) -> str:
+    """Observe outputs only after the optional first reset edge."""
+
+    assignment = output_assignment(port, outputs, mutated=mutated)
+    if not RESET_ENTRY_DIAGNOSTIC:
+        return assignment
+    startup = f"_{name.lower()}_startup"
+    return assignment.replace(" = ", f" = {startup} ? '0 : ", 1)
+
+
 def wrapper_text(
     name: str,
     inner: str,
@@ -137,13 +151,26 @@ def wrapper_text(
     ports = [signal_declaration("input", port, width) for port, width in inputs.items()]
     ports.extend(signal_declaration("output", port, outputs[port]) for port in selected)
     lines.extend([",\n".join(ports), ");"])
+    proof_reset = f"_{name.lower()}_proof_reset"
+    if RESET_ENTRY_DIAGNOSTIC:
+        if "clock" not in inputs or "reset" not in inputs:
+            raise AssertionError("reset-entry proof requires clock and reset inputs")
+        startup = f"_{name.lower()}_startup"
+        lines.extend((
+            f"  reg {startup} = 1'b1;",
+            f"  always @(posedge clock) {startup} <= 1'b0;",
+            f"  wire {proof_reset} = reset | {startup};",
+        ))
     for port in selected:
         width = outputs[port]
         lines.append(f"  wire [{width - 1}:0] _out_{port};" if width > 1 else f"  wire _out_{port};")
-    connections = [f".{port}({port})" for port in inputs]
+    connections = [
+        f".{port}({proof_reset if RESET_ENTRY_DIAGNOSTIC and port == 'reset' else port})"
+        for port in inputs
+    ]
     connections.extend(f".{port}(_out_{port})" for port in selected)
     lines.extend([f"  {inner} {inner_instance}(", "    " + ", ".join(connections), "  );"])
-    lines.extend(f"  {output_assignment(port, outputs)}" for port in selected)
+    lines.extend(f"  {wrapper_assignment(name, port, outputs)}" for port in selected)
     lines.append("endmodule")
     return "\n".join(lines) + "\n"
 
@@ -161,11 +188,16 @@ def static_wrapper_record(
     expected = {port: ("input", width) for port, width in inputs.items()}
     expected.update({port: ("output", outputs[port]) for port in selected})
     selected_set = set(selected)
-    connected_inputs = all(source.count(f".{port}({port})") == 1 for port in inputs)
+    connected_inputs = all(
+        source.count(
+            f".{port}(_{name.lower()}_proof_reset)"
+            if RESET_ENTRY_DIAGNOSTIC and port == "reset" else f".{port}({port})"
+        ) == 1 for port in inputs
+    )
     connected_outputs = all(source.count(f".{port}(_out_{port})") == 1 for port in selected)
     omitted_outputs = all(f".{port}(" not in source for port in outputs if port not in selected_set)
     direct_assignments = all(
-        output_assignment(port, outputs) in source for port in selected
+        wrapper_assignment(name, port, outputs) in source for port in selected
     )
     output_bits = sum(outputs[port] for port in selected)
     inner_instance = f"{name.lower()}_inner_i"
@@ -320,8 +352,12 @@ def mutate_wrapper_output(
     """Invert one known wrapper assignment without touching a locked source."""
 
     port = selected[0]
-    expected = output_assignment(port, outputs)
-    replacement = output_assignment(port, outputs, mutated=True)
+    module_name = re.search(r"\bmodule\s+(\w+)\s*\(", source)
+    if module_name is None:
+        raise AssertionError("wrapper module declaration is missing")
+    name = module_name.group(1)
+    expected = wrapper_assignment(name, port, outputs)
+    replacement = wrapper_assignment(name, port, outputs, mutated=True)
     mutated, count = source.replace(expected, replacement, 1), 1 if expected in source else 0
     if count != 1:
         raise AssertionError(f"cannot mutate wrapper output {port}")
@@ -433,6 +469,8 @@ def main() -> int:
     """Write static and optional sequential public-queue strict evidence."""
 
     formal = "--formal" in sys.argv[1:]
+    if RESET_ENTRY_DIAGNOSTIC and not formal:
+        raise ValueError("--reset-entry requires --formal")
     evidence_path = FOCUSED_EVIDENCE if formal else EVIDENCE
     py_compile.compile(str(BUILD), doraise=True)
     py_compile.compile(str(DIRECT_TEST), doraise=True)
@@ -579,6 +617,12 @@ def main() -> int:
             "compare_only_public_outputs": True,
             "unique_reference_target_inner_instances": True,
             "flatten_wrappers_before_equiv_make": True,
+            "reset_entry_diagnostic": RESET_ENTRY_DIAGNOSTIC,
+            "startup_reset_contract": (
+                "Both sides receive reset through the first rising edge, then the full external reset; "
+                "selected outputs are observed after the first reset edge."
+                if RESET_ENTRY_DIAGNOSTIC else None
+            ),
             "require_54_equiv_cells_for_initial_partition": FORMAL_PARTITION_OUTPUT_BITS,
             "same_clock_and_reset_inputs_preserved": True,
             "require_full_public_output_proof": True,
