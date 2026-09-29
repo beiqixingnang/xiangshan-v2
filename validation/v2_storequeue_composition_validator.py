@@ -6,8 +6,11 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.util
 import json
 import re
+import sys
+import tempfile
 from pathlib import Path
 from typing import Any
 
@@ -17,18 +20,15 @@ from typing import Any
 # =============================================================================
 __all__ = ["validate_composition", "main"]
 
+ROOT = Path(__file__).resolve().parents[1]
+BUILD_PATH = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Lsqueue.StoreQueueData-Hardware.py"
+SCALA_PATH = ROOT / "upstream/src/main/scala/xiangshan/mem/lsqueue/StoreQueueData.scala"
+REFERENCE_PARENT_PATH = ROOT / "validation/reference-sv/SQDataModule.sv"
+REFERENCE_CHILD_PATH = ROOT / "validation/reference-sv/SQData8Module.sv"
+PRIOR_STRICT_EVIDENCE_PATH = ROOT / "validation/v2-build-cpu-memory-lsqueue-storequeuedata-strict-evidence.json"
+
 LANE_COUNT = 16
 CHILD_CONNECTION_COUNT = 32
-CHILD_PROOF = {
-    "member": "SQData8Module",
-    "equiv_cells": 1161,
-    "proven_cells": 1161,
-    "unproven_cells": 0,
-    "returncode": 0,
-    "verilator": "PASS",
-    "locked_verilator": "PASS",
-    "scope": "standalone child only; no parent strict count",
-}
 COMMON_INPUTS = (
     "io_raddr_0", "io_raddr_1", "io_data_wen_0", "io_data_wen_1",
     "io_data_waddr_0", "io_data_waddr_1", "io_data_wdata_0", "io_data_wdata_1",
@@ -37,6 +37,12 @@ COMMON_INPUTS = (
     "io_needForward_0_1", "io_needForward_1_0", "io_needForward_1_1",
     "io_needForward_2_0", "io_needForward_2_1",
 )
+CHILD_OUTPUTS = (
+    "io_rdata_0_valid", "io_rdata_0_data", "io_rdata_1_valid", "io_rdata_1_data",
+    *(f"io_forward{kind}_{forward}" for forward in range(3)
+      for kind in ("Valid", "Data")),
+)
+EXPECTED_CHILD_PORTS = frozenset(("clock", "reset", *COMMON_INPUTS, *CHILD_OUTPUTS))
 
 
 # =============================================================================
@@ -46,6 +52,110 @@ def hash_file(path: Path) -> str:
     """Hash one exact file. / 对一个精确文件计算摘要。"""
 
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+# Describe one exact input artifact. / 描述一个精确输入工件。
+def file_record(path: Path) -> dict[str, Any]:
+    """Return a path, byte count, and digest for one source file."""
+
+    resolved = path.resolve()
+    try:
+        display_path = resolved.relative_to(ROOT).as_posix()
+    except ValueError:
+        display_path = str(resolved)
+    return {"path": display_path, "bytes": resolved.stat().st_size,
+            "sha256": hash_file(resolved)}
+
+
+# Rename only the top module in a temporary proof view. / 仅在临时证明视图中重命名顶层模块。
+def rename_top_module(text: str, source: str, destination: str) -> str:
+    """Rename exactly one top module while preserving all other locked text."""
+
+    pattern = re.compile(r"(?m)^module\s+" + re.escape(source) + r"\s*\(")
+    result, count = pattern.subn(f"module {destination}(", text, count=1)
+    if count != 1:
+        raise ValueError(f"expected one module {source}, found {count}")
+    return result
+
+
+# Import the exact current Build without executing its direct entry. / 精确导入当前 Build 且不执行直接入口。
+def load_build(build_path: Path = BUILD_PATH) -> Any:
+    """Load the current StoreQueueData Build through its exact file path."""
+
+    module_name = "_v2_storequeue_composition_build"
+    spec = importlib.util.spec_from_file_location(module_name, build_path)
+    if spec is None or spec.loader is None:
+        raise ImportError(f"cannot import Build: {build_path}")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[module_name] = module
+    try:
+        spec.loader.exec_module(module)
+    finally:
+        sys.modules.pop(module_name, None)
+    return module
+
+
+# Export current target variants and make locked reference views. / 导出当前目标特化并建立锁定参考视图。
+def prepare_current_artifacts(work_dir: Path | None = None) -> dict[str, Path]:
+    """Create current-source RTL views under ignored ``validation/.work``."""
+
+    if work_dir is None:
+        work_root = ROOT / "validation/.work/storequeue-composition"
+        work_root.mkdir(parents=True, exist_ok=True)
+        work_dir = Path(tempfile.mkdtemp(prefix="current-", dir=work_root))
+    else:
+        work_dir.mkdir(parents=True, exist_ok=False)
+
+    build = load_build()
+    artifacts: dict[str, Path] = {}
+    for member, prefix in (("SQDataModule", "parent"), ("SQData8Module", "child")):
+        dut_text = build.build_verilog({"module": member}, {})
+        artifacts[f"dut_{prefix}"] = work_dir / f"DUT_{member}.sv"
+        artifacts[f"dut_{prefix}"].write_text(
+            rename_top_module(dut_text, member, f"DUT_{member}"),
+            encoding="utf-8", newline="\n")
+        locked_path = REFERENCE_PARENT_PATH if prefix == "parent" else REFERENCE_CHILD_PATH
+        locked_text = locked_path.read_text(encoding="utf-8")
+        artifacts[f"reference_{prefix}"] = work_dir / f"REF_{member}.sv"
+        artifacts[f"reference_{prefix}"].write_text(
+            rename_top_module(locked_text, member, f"REF_{member}"),
+            encoding="utf-8", newline="\n")
+    return artifacts
+
+
+# Summarize the last strict attempt without treating stale results as current. / 汇总最近一次严格尝试但不把过期结果当作当前证据。
+def prior_strict_attempt(current_build_sha256: str) -> dict[str, Any]:
+    """Return historical formal details and whether they bind to today's Build."""
+
+    if not PRIOR_STRICT_EVIDENCE_PATH.is_file():
+        return {"status": "MISSING", "path": "validation/v2-build-cpu-memory-lsqueue-storequeuedata-strict-evidence.json"}
+    payload = json.loads(PRIOR_STRICT_EVIDENCE_PATH.read_text(encoding="utf-8"))
+    recorded_build = payload.get("sources", {}).get("python_build", {}).get("sha256")
+    members = payload.get("scope", {}).get("public_variants", [])
+    results = payload.get("checks", {}).get("variants", [])
+    summaries: dict[str, Any] = {}
+    for member, result in zip(members, results):
+        proof = result.get("yosys_equiv") or result.get("sat_miter") or {}
+        summaries[str(member)] = {
+            "status": proof.get("status"),
+            "returncode": proof.get("returncode"),
+            "timed_out": proof.get("timed_out", False),
+            "equiv_cells": proof.get("equiv_cells"),
+            "proven_cells": proof.get("proven_cells"),
+            "unproven_cells": proof.get("unproven_cells"),
+            "output_sha256": proof.get("output_sha256"),
+            "output_tail": proof.get("output_tail"),
+        }
+    fresh = recorded_build == current_build_sha256
+    return {
+        "status": "CURRENT" if fresh else "STALE",
+        "path": file_record(PRIOR_STRICT_EVIDENCE_PATH)["path"],
+        "sha256": hash_file(PRIOR_STRICT_EVIDENCE_PATH),
+        "recorded_build_sha256": recorded_build,
+        "current_build_sha256": current_build_sha256,
+        "fresh_for_current_build": fresh,
+        "member_results": summaries,
+    }
 
 
 # =============================================================================
@@ -130,8 +240,22 @@ def check_children(table: dict[int, dict[str, str]], reference: bool) -> dict[st
     for lane in range(LANE_COUNT):
         row = table.get(lane, {})
         errors: list[str] = []
+        logical_ports = set(row)
+        if not reference:
+            if f"data8_{lane}_sync_clk" in logical_ports:
+                logical_ports.remove(f"data8_{lane}_sync_clk")
+                logical_ports.add("clock")
+            if f"data8_{lane}_sync_rst" in logical_ports:
+                logical_ports.remove(f"data8_{lane}_sync_rst")
+                logical_ports.add("reset")
         if len(row) != CHILD_CONNECTION_COUNT:
             errors.append(f"connection_count={len(row)}")
+        missing_ports = sorted(EXPECTED_CHILD_PORTS - logical_ports)
+        unexpected_ports = sorted(logical_ports - EXPECTED_CHILD_PORTS)
+        if missing_ports:
+            errors.append(f"missing_ports={','.join(missing_ports)}")
+        if unexpected_ports:
+            errors.append(f"unexpected_ports={','.join(unexpected_ports)}")
         for port in COMMON_INPUTS:
             actual = row.get(port)
             expected = port
@@ -158,7 +282,12 @@ def check_children(table: dict[int, dict[str, str]], reference: bool) -> dict[st
             for suffix in ("valid", "data"):
                 if f"io_rdata_{read}_{suffix}" not in row:
                     errors.append(f"missing_read_output:{read}_{suffix}")
-        rows.append({"lane": lane, "connection_count": len(row), "errors": errors})
+        rows.append({"lane": lane, "connection_count": len(row),
+                     "expected_connection_count": CHILD_CONNECTION_COUNT,
+                     "named_ports": sorted(row),
+                     "logical_port_names": sorted(logical_ports),
+                     "port_set_exact": logical_ports == EXPECTED_CHILD_PORTS,
+                     "errors": errors})
     return {"lane_count": len(table), "rows": rows,
             "all_lanes_exact": len(table) == LANE_COUNT and all(not row["errors"] for row in rows)}
 
@@ -193,9 +322,65 @@ def check_read_assembly(dut: str, ref: str, dut_children: dict[int, dict[str, st
     return {"rows": rows, "all_exact": all(row["dut_exact"] and row["reference_exact"] for row in rows)}
 
 
+# Account for every parent output on each implementation side. / 覆盖两侧的每个父级输出。
+def check_output_coverage(
+    dut_ports: dict[str, tuple[str, int]],
+    ref_ports: dict[str, tuple[str, int]],
+    dut_children: dict[int, dict[str, str]],
+    ref_children: dict[int, dict[str, str]],
+    read_assembly: dict[str, Any],
+) -> dict[str, Any]:
+    """Require reads and every lane-forward result to cover all top outputs."""
+
+    declared = {
+        side: {name for name, (direction, _width) in ports_table.items()
+               if direction == "output"}
+        for side, ports_table in (("dut", dut_ports), ("reference", ref_ports))
+    }
+    expected_forward = {
+        f"io_forward{kind}_{forward}_{lane}"
+        for forward in range(3)
+        for kind in ("Mask", "Data")
+        for lane in range(LANE_COUNT)
+    }
+    rows: dict[str, Any] = {}
+    for side, children in (("dut", dut_children), ("reference", ref_children)):
+        mapped_forward: set[str] = set()
+        for lane, table in children.items():
+            for forward in range(3):
+                for kind in ("Valid", "Data"):
+                    port = f"io_forward{kind}_{forward}"
+                    expression = table.get(port)
+                    if expression:
+                        mapped_forward.add(expression.strip())
+        read_key = "dut_exact" if side == "dut" else "reference_exact"
+        covered_reads = {row["output"] for row in read_assembly["rows"]
+                         if row[read_key]}
+        covered = covered_reads | mapped_forward
+        rows[side] = {
+            "declared_output_count": len(declared[side]),
+            "covered_output_count": len(covered),
+            "expected_forward_output_count": len(expected_forward),
+            "forward_outputs_complete": expected_forward <= mapped_forward,
+            "covered_outputs": sorted(covered),
+            "missing_outputs": sorted(declared[side] - covered),
+            "unexpected_outputs": sorted(covered - declared[side]),
+            "all_outputs_covered": declared[side] == covered,
+        }
+    return {"dut": rows["dut"], "reference": rows["reference"],
+            "all_outputs_covered": rows["dut"]["all_outputs_covered"]
+            and rows["reference"]["all_outputs_covered"]}
+
+
 # Run explicit composition validation. / 运行显式组合验证。
-def validate_composition(dut_path: Path, reference_path: Path, output_path: Path | None = None) -> dict[str, Any]:
-    """Return pending compositional evidence. / 返回待定组合证据。"""
+def validate_composition(
+    dut_path: Path,
+    reference_path: Path,
+    output_path: Path | None = None,
+    *,
+    artifacts: dict[str, Path] | None = None,
+) -> dict[str, Any]:
+    """Return hash-bound structural evidence and explicit pending formal gates."""
 
     validator_path = Path(__file__).resolve()
     dut_text = dut_path.read_text(encoding="utf-8")
@@ -206,23 +391,86 @@ def validate_composition(dut_path: Path, reference_path: Path, output_path: Path
     ref_ports = ports(ref_text, "REF_SQDataModule")
     dut_children = child_tables(dut_top, False)
     ref_children = child_tables(ref_top, True)
+    read_assembly = check_read_assembly(dut_top, ref_top, dut_children, ref_children)
+    output_coverage = check_output_coverage(
+        dut_ports, ref_ports, dut_children, ref_children, read_assembly)
+    build_hash = hash_file(BUILD_PATH)
+    artifacts = artifacts or {
+        "dut_parent": dut_path,
+        "reference_parent": reference_path,
+    }
+    sources = {
+        "validator": file_record(validator_path),
+        "python_build": file_record(BUILD_PATH),
+        "scala": file_record(SCALA_PATH),
+        "locked_parent": file_record(REFERENCE_PARENT_PATH),
+        "locked_child": file_record(REFERENCE_CHILD_PATH),
+        "dut_parent_export": file_record(artifacts["dut_parent"]),
+        "reference_parent_view": file_record(artifacts["reference_parent"]),
+    }
+    for key in ("dut_child", "reference_child"):
+        path = artifacts.get(key)
+        if path is not None:
+            sources[f"{key}_view"] = file_record(path)
+    parent_view_hashes = {
+        "target_sha256": sources["dut_parent_export"]["sha256"],
+        "reference_sha256": sources["reference_parent_view"]["sha256"],
+    }
+    child_view_hashes = {
+        "target_sha256": sources.get("dut_child_view", {}).get("sha256"),
+        "reference_sha256": sources.get("reference_child_view", {}).get("sha256"),
+    }
+    prior_attempt = prior_strict_attempt(build_hash)
     payload: dict[str, Any] = {
-        "schema_version": 1,
+        "schema_version": 2,
         "kind": "XIANGSHAN_KUNMINGHU_V2_STORE_QUEUE_COMPOSITION",
         "status": "COMPOSITIONAL_PENDING",
-        "sources": {"validator": {"path": validator_path.relative_to(validator_path.parents[1]).as_posix(),
-                                   "sha256": hash_file(validator_path)},
-                    "dut": {"path": str(dut_path), "sha256": hash_file(dut_path)},
-                    "reference": {"path": str(reference_path), "sha256": hash_file(reference_path)}},
-        "abi": {"dut_ports": len(dut_ports), "reference_ports": len(ref_ports), "exact": dut_ports == ref_ports},
+        "sources": sources,
+        "abi": {
+            "dut_ports": len(dut_ports),
+            "reference_ports": len(ref_ports),
+            "exact": dut_ports == ref_ports,
+            "order_exact": list(dut_ports.items()) == list(ref_ports.items()),
+        },
         "children": {"dut": check_children(dut_children, False), "reference": check_children(ref_children, True)},
-        "read_assembly": check_read_assembly(dut_top, ref_top, dut_children, ref_children),
-        "child_strict_proof": CHILD_PROOF,
-        "parent_strict_proof": {"status": "TIMEOUT", "equiv_cells": None, "proven_cells": None, "unproven_cells": None},
-        "negative_controls": {"target_input_slice_mutation": {"mutation_applied": True, "structure_rejected": True},
-                              "reference_mask_bit_mutation": {"mutation_applied": True, "structure_rejected": True}},
+        "read_assembly": read_assembly,
+        "output_coverage": output_coverage,
+        "formal_gates": {
+            "child_theorem": {
+                "status": "NOT_RUN",
+                "required": True,
+                "member": "SQData8Module",
+                "target_sha256": child_view_hashes["target_sha256"],
+                "locked_reference_sha256": hash_file(REFERENCE_CHILD_PATH),
+                "reference_view_sha256": child_view_hashes["reference_sha256"],
+                "result": None,
+                "log": None,
+            },
+            "parent_glue": {
+                "status": "NOT_RUN",
+                "required": True,
+                "target_sha256": parent_view_hashes["target_sha256"],
+                "locked_reference_sha256": hash_file(REFERENCE_PARENT_PATH),
+                "reference_view_sha256": parent_view_hashes["reference_sha256"],
+                "result": None,
+                "log": None,
+                "coverage_required": {
+                    "lanes": LANE_COUNT,
+                    "named_child_ports_per_lane": CHILD_CONNECTION_COUNT,
+                    "parent_outputs": output_coverage["dut"]["declared_output_count"],
+                },
+            },
+            "negative_controls": {
+                "target_side": {"status": "NOT_RUN", "result": None, "log": None},
+                "reference_side": {"status": "NOT_RUN", "result": None, "log": None},
+                "required_failure_evidence": "explicit SAT counterexample or nonzero final unproven-cell result",
+            },
+            "strict_count_eligible": False,
+            "reason": "This Python-only harness performs structural checks; no current-source formal receipt is attached.",
+        },
+        "prior_strict_attempt": prior_attempt,
         "acceptance": {"strict_parent_countable": False,
-                        "reason": "Structural wrapper evidence plus standalone child proof is not a parent strict proof."},
+                        "reason": "Current-source child theorem, parent glue proof, and decisive two-sided formal negative controls are missing."},
     }
     if output_path is not None:
         output_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
@@ -231,17 +479,24 @@ def validate_composition(dut_path: Path, reference_path: Path, output_path: Path
 
 # Parse CLI arguments and run validation. / 解析命令行参数并运行验证。
 def main(argv: list[str] | None = None) -> int:
-    """Run the composition validator. / 运行组合验证器。"""
+    """Export current sources, inspect composition, and retain pending evidence."""
 
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--dut", type=Path, required=True)
-    parser.add_argument("--reference", type=Path, required=True)
-    parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--output", type=Path,
+                        default=ROOT / "validation/v2-storequeue-composition-results.json")
+    parser.add_argument("--work-dir", type=Path,
+                        help="new ignored work directory; it must not already exist")
     args = parser.parse_args(argv)
-    payload = validate_composition(args.dut, args.reference, args.output)
+    artifacts = prepare_current_artifacts(args.work_dir)
+    payload = validate_composition(
+        artifacts["dut_parent"], artifacts["reference_parent"], args.output,
+        artifacts=artifacts)
     print(json.dumps({"status": payload["status"], "abi_exact": payload["abi"]["exact"],
                       "children_exact": payload["children"]["dut"]["all_lanes_exact"] and payload["children"]["reference"]["all_lanes_exact"],
                       "read_assembly_exact": payload["read_assembly"]["all_exact"],
+                      "all_outputs_covered": payload["output_coverage"]["all_outputs_covered"],
+                      "formal_gates": {name: gate["status"] for name, gate in payload["formal_gates"].items()
+                                       if isinstance(gate, dict) and "status" in gate},
                       "strict_parent_countable": payload["acceptance"]["strict_parent_countable"]}, ensure_ascii=False))
     return 0
 
