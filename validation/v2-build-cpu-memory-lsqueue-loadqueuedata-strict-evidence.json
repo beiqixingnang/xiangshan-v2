@@ -3,10 +3,10 @@
   "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_COMPLETE_EQUIVALENCE",
   "build_id": "Build-Cpu.Memory.Lsqueue.LoadQueueData",
   "validator": "validation/v2_strict_family_rail.py",
-  "status": "STRICT_PENDING",
-  "strict_complete_eligible": false,
-  "strict_complete_count_delta": 0,
-  "acceptance_eligible": false,
+  "status": "COMPLETE_EQUIVALENCE",
+  "strict_complete_eligible": true,
+  "strict_complete_count_delta": 1,
+  "acceptance_eligible": true,
   "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
   "audit_policy": {
     "require_negative_control": true,
@@ -610,15 +610,15 @@
         "miter_selfcheck": true,
         "view_trusted": true,
         "locked_reference_lint": "PASS",
-        "verdict": "FAIL",
-        "success_marker": false,
+        "verdict": "PASS",
+        "success_marker": true,
         "markers_present": {
-          "0 are unproven.": false,
-          "Equivalence successfully proven!": false
+          "0 are unproven.": true,
+          "Equivalence successfully proven!": true
         },
-        "unconstrained_or_equiv_cells": 64,
-        "proven_cells": 0,
-        "unproven_cells": 64,
+        "unconstrained_or_equiv_cells": 744,
+        "proven_cells": 744,
+        "unproven_cells": 0,
         "sat_variables": null,
         "sat_clauses": null
       },
@@ -946,15 +946,15 @@
         "miter_selfcheck": true,
         "view_trusted": true,
         "locked_reference_lint": "PASS",
-        "verdict": "FAIL",
-        "success_marker": false,
+        "verdict": "PASS",
+        "success_marker": true,
         "markers_present": {
-          "0 are unproven.": false,
-          "Equivalence successfully proven!": false
+          "0 are unproven.": true,
+          "Equivalence successfully proven!": true
         },
-        "unconstrained_or_equiv_cells": 288,
-        "proven_cells": 0,
-        "unproven_cells": 288,
+        "unconstrained_or_equiv_cells": 1440,
+        "proven_cells": 1440,
+        "unproven_cells": 0,
         "sat_variables": null,
         "sat_clauses": null
       },
@@ -1058,15 +1058,15 @@
         "miter_selfcheck": true,
         "view_trusted": true,
         "locked_reference_lint": "PASS",
-        "verdict": "FAIL",
-        "success_marker": false,
+        "verdict": "PASS",
+        "success_marker": true,
         "markers_present": {
-          "0 are unproven.": false,
-          "Equivalence successfully proven!": false
+          "0 are unproven.": true,
+          "Equivalence successfully proven!": true
         },
-        "unconstrained_or_equiv_cells": 64,
-        "proven_cells": 0,
-        "unproven_cells": 64,
+        "unconstrained_or_equiv_cells": 1024,
+        "proven_cells": 1024,
+        "unproven_cells": 0,
         "sat_variables": null,
         "sat_clauses": null
       },
@@ -1111,15 +1111,15 @@
         "miter_selfcheck": true,
         "view_trusted": true,
         "locked_reference_lint": "PASS",
-        "verdict": "FAIL",
-        "success_marker": false,
+        "verdict": "PASS",
+        "success_marker": true,
         "markers_present": {
           "0 are unproven.": true,
-          "Equivalence successfully proven!": false
+          "Equivalence successfully proven!": true
         },
-        "unconstrained_or_equiv_cells": 150,
-        "proven_cells": 0,
-        "unproven_cells": 150,
+        "unconstrained_or_equiv_cells": 4140,
+        "proven_cells": 4140,
+        "unproven_cells": 0,
         "sat_variables": null,
         "sat_clauses": null
       }
@@ -1146,8 +1146,8 @@
     },
     "python_build": {
       "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Lsqueue.LoadQueueData-Hardware.py",
-      "sha256": "6a9dc24861ca7f12f24e13c589c8b62e98a250f60230a4f1c3c0d7ce45b96706",
-      "bytes": 37755
+      "sha256": "6768928a68da8e593efc23750e810e31b2ab5e52e7252a786280361210028ec8",
+      "bytes": 41674
     },
     "reference_sv": {
       "path": "validation/reference-sv/LqMaskModule.sv",
@@ -1201,6 +1201,11 @@
         "sha256": "87508afff857ed357ae5a177baa4de89dc8d7928564c5510fd47805042e8e52a",
         "bytes": 433
       }
+    },
+    "scala": {
+      "path": "upstream/src/main/scala/xiangshan/mem/lsqueue/LoadQueueData.scala",
+      "sha256": "a38303a77fac81c655e9761e6d6f5452194aa913f4e057678f134974a672c03a",
+      "bytes": 9347
     }
   },
   "checks": {
@@ -1210,12 +1215,9 @@
     "pyright": {
       "build": {
         "command": [
-          "cmd.exe",
-          "/d",
-          "/c",
           "pyright",
           "--outputjson",
-          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_yuc2rzo4\\Build-Cpu.Memory.Lsqueue.LoadQueueData-Hardware.py"
+          "python\\Program-System\\System-Build\\Build-Cpu\\Cpu-Memory\\Build-Cpu.Memory.Lsqueue.LoadQueueData-Hardware.py"
         ],
         "returncode": 0,
         "status": "PASS",
@@ -1231,7 +1233,7 @@
           "/c",
           "pyright",
           "--outputjson",
-          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_lwn4p5xi\\v2_strict_family_rail.py"
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_nj5xmna9\\v2_strict_family_rail.py"
         ],
         "returncode": 0,
         "status": "PASS",
@@ -1243,7 +1245,7 @@
     },
     "catalog_coverage": {
       "entries": 4,
-      "proven": 0
+      "proven": 4
     },
     "formal": {
       "yosys_formal_miter": {
@@ -1311,8 +1313,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "       ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/DUT_LqMaskModule.sv:1913:29: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'hf' generates 4 bits.\n                                                                                                                                           : ... note: In instance 'LqMaskModule_MITER.target_i'\n 1913 |   assign \\$44  = io_waddr_1 == 4'hf;\n      |                             ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/DUT_LqMaskModule.sv:1914:29: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'hc' generates 4 bits.\n                                                                                                                                           : ... note: In instance 'LqMaskModule_MITER.target_i'\n 1914 |   assign \\$45  = io_waddr_2 == 4'hc;\n      |                             ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/DUT_LqMaskModule.sv:1915:29: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'hd' generates 4 bits.\n                                                                                                                                           : ... note: In instance 'LqMaskModule_MITER.target_i'\n 1915 |   assign \\$46  = io_waddr_2 == 4'hd;\n      |                             ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/DUT_LqMaskModule.sv:1916:29: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'he' generates 4 bits.\n                                                                                                                                           : ... note: In instance 'LqMaskModule_MITER.target_i'\n 1916 |   assign \\$47  = io_waddr_2 == 4'he;\n      |                             ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/DUT_LqMaskModule.sv:1917:29: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'hf' generates 4 bits.\n                                                                                                                                           : ... note: In instance 'LqMaskModule_MITER.target_i'\n 1917 |   assign \\$48  = io_waddr_2 == 4'hf;\n      |                             ^~\n",
-          "output_sha256": "c85ecee5e0d4180536061c79a458b08a9d5222d59946381d9c6b12cef800ea7b"
+          "output_tail": "       ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/DUT_LqMaskModule.sv:1769:29: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'hf' generates 4 bits.\n                                                                                                                                           : ... note: In instance 'LqMaskModule_MITER.target_i'\n 1769 |   assign \\$44  = io_waddr_1 == 4'hf;\n      |                             ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/DUT_LqMaskModule.sv:1770:29: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'hc' generates 4 bits.\n                                                                                                                                           : ... note: In instance 'LqMaskModule_MITER.target_i'\n 1770 |   assign \\$45  = io_waddr_2 == 4'hc;\n      |                             ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/DUT_LqMaskModule.sv:1771:29: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'hd' generates 4 bits.\n                                                                                                                                           : ... note: In instance 'LqMaskModule_MITER.target_i'\n 1771 |   assign \\$46  = io_waddr_2 == 4'hd;\n      |                             ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/DUT_LqMaskModule.sv:1772:29: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'he' generates 4 bits.\n                                                                                                                                           : ... note: In instance 'LqMaskModule_MITER.target_i'\n 1772 |   assign \\$47  = io_waddr_2 == 4'he;\n      |                             ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/DUT_LqMaskModule.sv:1773:29: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'hf' generates 4 bits.\n                                                                                                                                           : ... note: In instance 'LqMaskModule_MITER.target_i'\n 1773 |   assign \\$48  = io_waddr_2 == 4'hf;\n      |                             ^~\n",
+          "output_sha256": "26561924f98f2f727735a15ff1928c02102441ec425ee475380ee8e7e15bb641"
         },
         "locked_verilator": {
           "command": [
@@ -1341,8 +1343,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.108 MB sources in 5 modules, into 0.116 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.053 s (elab=0.002, cvt=0.011, bld=0.000); cpu 0.025 s on 1 threads; alloced 12.051 MB\n",
-          "output_sha256": "6ccd740da5648ba032931f11fb6558417989230ee58cb91306c4544e82c50a5c"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.108 MB sources in 5 modules, into 0.116 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.055 s (elab=0.002, cvt=0.012, bld=0.000); cpu 0.025 s on 1 threads; alloced 12.043 MB\n",
+          "output_sha256": "f9c27c419f81da9eb3f412d3a88cdd00be364b49efae579be97b971059b12a04"
         },
         "yosys_equiv": {
           "command": [
@@ -1351,33 +1353,33 @@
             "-p",
             "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/DUT_LqMaskModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/REF_LqMaskModule.sv; proc; async2sync; memory; opt; flatten REF_LqMaskModule; flatten DUT_LqMaskModule; equiv_make REF_LqMaskModule DUT_LqMaskModule LqMaskModule_EQUIV; prep -top LqMaskModule_EQUIV; equiv_induct -undef; equiv_status -assert"
           ],
-          "returncode": 1,
-          "status": "FAIL",
+          "returncode": 0,
+          "status": "PASS",
           "sat_success_marker": false,
           "sat_counterexample_marker": false,
           "unconstrained_marker": false,
           "equiv_success_markers": {
-            "0 are unproven.": false,
-            "Equivalence successfully proven!": false
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
           },
-          "equiv_failure_marker": true,
-          "equiv_cells_full": 64,
+          "equiv_failure_marker": false,
+          "equiv_cells_full": 744,
           "equiv_summary_full": [
-            0,
-            64
+            744,
+            0
           ],
-          "equiv_failed_full": 64,
+          "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "Mmask_0_2_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$2496: \\io_violationMmask_0_20_gold \\io_violationMmask_0_20_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$2497: \\io_violationMmask_0_21_gold \\io_violationMmask_0_21_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$2498: \\io_violationMmask_0_22_gold \\io_violationMmask_0_22_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$2499: \\io_violationMmask_0_23_gold \\io_violationMmask_0_23_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$2500: \\io_violationMmask_0_24_gold \\io_violationMmask_0_24_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$2501: \\io_violationMmask_0_25_gold \\io_violationMmask_0_25_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$2502: \\io_violationMmask_0_26_gold \\io_violationMmask_0_26_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$2503: \\io_violationMmask_0_27_gold \\io_violationMmask_0_27_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$2504: \\io_violationMmask_0_28_gold \\io_violationMmask_0_28_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$2505: \\io_violationMmask_0_29_gold \\io_violationMmask_0_29_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$2506: \\io_violationMmask_0_3_gold \\io_violationMmask_0_3_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$2507: \\io_violationMmask_0_30_gold \\io_violationMmask_0_30_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$2508: \\io_violationMmask_0_31_gold \\io_violationMmask_0_31_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$2509: \\io_violationMmask_0_4_gold \\io_violationMmask_0_4_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$2510: \\io_violationMmask_0_5_gold \\io_violationMmask_0_5_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$2511: \\io_violationMmask_0_6_gold \\io_violationMmask_0_6_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$2512: \\io_violationMmask_0_7_gold \\io_violationMmask_0_7_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$2513: \\io_violationMmask_0_8_gold \\io_violationMmask_0_8_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$2514: \\io_violationMmask_0_9_gold \\io_violationMmask_0_9_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$2515: \\io_violationMmask_1_0_gold \\io_violationMmask_1_0_gERROR: Found 64 unproven $equiv cells in 'equiv_status -assert'.\n",
-          "output_sha256": "1d88baafcb392222bb20323747b32207eaa7df2f5d4ffabd5b39f1436aa85038",
+          "output_tail": " pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module LqMaskModule_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\LqMaskModule_EQUIV'.\nRemoved a total of 0 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\LqMaskModule_EQUIV..\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== LqMaskModule_EQUIV ===\n\n   Number of wires:               1887\n   Number of wire bits:          12270\n   Number of public wires:        1575\n   Number of public wire bits:    9558\n   Number of ports:                 77\n   Number of port bits:            164\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:               1934\n     $and                          304\n     $dff                           48\n     $dffe                         139\n     $eq                            93\n     $equiv                        744\n     $logic_not                      3\n     $mux                          192\n     $or                           192\n     $reduce_or                    144\n     $scopeinfo                     72\n     $shl                            3\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module LqMaskModule_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 680 unproven $equiv cells in module LqMaskModule_EQUIV:\n  Undef modelling: force def on 1696 initial reg values and 99 inputs.\n  Proving existence of base case for step 1. (394454 clauses over 148039 variables)\n  Proving induction step 1. (909947 clauses over 337037 variables)\n  Proof for induction step failed. Extending to next time step.\n  Proving existence of base case for step 2. (909948 clauses over 337037 variables)\n  Proving induction step 2. (1425441 clauses over 526035 variables)\n  Proof for induction step holds. Entire workset of 680 cells proven!\nProved 680 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 744 $equiv cells in LqMaskModule_EQUIV:\n  Of those cells 744 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: 5b3c9f8917, CPU: user 5.25s system 0.22s, MEM: 351.37 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 90% 1x equiv_induct (4 sec), 2% 10x opt_clean (0 sec), ...\n",
+          "output_sha256": "b76c26347a29ba4b30475d56680e7c8fb96d8f792b3aaab93c81d455eab6fa86",
           "markers_present": {
-            "0 are unproven.": false,
-            "Equivalence successfully proven!": false
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
           },
-          "formal_success_marker": false,
-          "equiv_cells": 64,
-          "proven_cells": 0,
-          "unproven_cells": 64
+          "formal_success_marker": true,
+          "equiv_cells": 744,
+          "proven_cells": 744,
+          "unproven_cells": 0
         }
       },
       {
@@ -1408,7 +1410,7 @@
           "equiv_failed_full": null,
           "sat_counts_full": null,
           "output_tail": "t/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/DUT_LqPAddrModule.sv:3143:30: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3d' generates 6 bits.\n                                                                                                                                            : ... note: In instance 'LqPAddrModule_MITER.target_i'\n 3143 |   assign \\$188  = io_waddr_2 == 6'h3d;\n      |                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/DUT_LqPAddrModule.sv:3144:30: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3e' generates 6 bits.\n                                                                                                                                            : ... note: In instance 'LqPAddrModule_MITER.target_i'\n 3144 |   assign \\$189  = io_waddr_2 == 6'h3e;\n      |                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/DUT_LqPAddrModule.sv:3145:30: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3f' generates 6 bits.\n                                                                                                                                            : ... note: In instance 'LqPAddrModule_MITER.target_i'\n 3145 |   assign \\$190  = io_waddr_0 == 6'h3f;\n      |                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/DUT_LqPAddrModule.sv:3154:30: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3f' generates 6 bits.\n                                                                                                                                            : ... note: In instance 'LqPAddrModule_MITER.target_i'\n 3154 |   assign \\$199  = io_waddr_1 == 6'h3f;\n      |                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/DUT_LqPAddrModule.sv:3163:30: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3f' generates 6 bits.\n                                                                                                                                            : ... note: In instance 'LqPAddrModule_MITER.target_i'\n 3163 |   assign \\$208  = io_waddr_2 == 6'h3f;\n      |                              ^~\n",
-          "output_sha256": "4c84ad69d11d15734d3f4c7667337d44b92ff54192671e6deaad6b737bdde230"
+          "output_sha256": "ea34d05985e5a93fa9fa252eadc641852d478e3e91f67be6a4b6b65e2db69528"
         },
         "locked_verilator": {
           "command": [
@@ -1437,8 +1439,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.165 MB sources in 5 modules, into 0.281 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.072 s (elab=0.005, cvt=0.020, bld=0.000); cpu 0.041 s on 1 threads; alloced 13.953 MB\n",
-          "output_sha256": "fb41bb9b38146f1d95db606f81d6e4a05edad13996f569ced61319b0ab841a6b"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.165 MB sources in 5 modules, into 0.281 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.082 s (elab=0.006, cvt=0.020, bld=0.000); cpu 0.042 s on 1 threads; alloced 13.949 MB\n",
+          "output_sha256": "ecd4c7c11e91ff42f25f0ac7a73bcddccf9b7c874cb40e61e998544fa3888af4"
         },
         "yosys_equiv": {
           "command": [
@@ -1447,33 +1449,33 @@
             "-p",
             "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/DUT_LqPAddrModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/REF_LqPAddrModule.sv; proc; async2sync; memory; opt; flatten REF_LqPAddrModule; flatten DUT_LqPAddrModule; equiv_make REF_LqPAddrModule DUT_LqPAddrModule LqPAddrModule_EQUIV; prep -top LqPAddrModule_EQUIV; equiv_induct -undef; equiv_status -assert"
           ],
-          "returncode": 1,
-          "status": "FAIL",
+          "returncode": 0,
+          "status": "PASS",
           "sat_success_marker": false,
           "sat_counterexample_marker": false,
           "unconstrained_marker": false,
           "equiv_success_markers": {
-            "0 are unproven.": false,
-            "Equivalence successfully proven!": false
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
           },
-          "equiv_failure_marker": true,
-          "equiv_cells_full": 288,
+          "equiv_failure_marker": false,
+          "equiv_cells_full": 1440,
           "equiv_summary_full": [
-            0,
-            288
+            1440,
+            0
           ],
-          "equiv_failed_full": 288,
+          "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "_releaseViolationMmask_2_50_gold \\io_releaseViolationMmask_2_50_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4854: \\io_releaseViolationMmask_2_51_gold \\io_releaseViolationMmask_2_51_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4855: \\io_releaseViolationMmask_2_52_gold \\io_releaseViolationMmask_2_52_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4856: \\io_releaseViolationMmask_2_53_gold \\io_releaseViolationMmask_2_53_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4857: \\io_releaseViolationMmask_2_54_gold \\io_releaseViolationMmask_2_54_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4858: \\io_releaseViolationMmask_2_55_gold \\io_releaseViolationMmask_2_55_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4859: \\io_releaseViolationMmask_2_56_gold \\io_releaseViolationMmask_2_56_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4860: \\io_releaseViolationMmask_2_57_gold \\io_releaseViolationMmask_2_57_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4861: \\io_releaseViolationMmask_2_58_gold \\io_releaseViolationMmask_2_58_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4862: \\io_releaseViolationMmask_2_59_gold \\io_releaseViolationMmask_2_59_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4863: \\io_releaseViolationMmask_2_6_gold \\io_releaseViolationMmask_2_6_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4864: \\io_releaseViolationMmask_2_60_gold \\io_releaseViolationMmask_2_60_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4865: \\io_releaseViolationMmask_2_61_gold \\io_releaseViolationMmask_2_61_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4866: \\io_releaseViolationMmask_2_62_gold \\io_releaseViolationMmask_2_62_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4867: \\io_releaseViolationMmask_2_63_gold \\io_releaseViolationMmask_2_63_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4868: \\io_releaseViolationMmask_2_64_gold \\io_releaseViolationMmask_2_64_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4869: \\io_releaseViolationMmask_2_65_gold \\io_releaseViolationMmask_2_65_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4870: \\io_releaseViolationMmask_2_66_gold \\io_releaseViolationMmask_2_66_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wirERROR: Found 288 unproven $equiv cells in 'equiv_status -assert'.\n",
-          "output_sha256": "163f8aa00149eb90addd64a986aea3bb3e4c24ea756463eb40fe6ca31d23cde7",
+          "output_tail": " cells and wires).\nFinding unused cells or wires in module \\LqPAddrModule_EQUIV..\nRemoved 0 unused cells and 3 unused wires.\n<suppressed ~1 debug messages>\n\n10.10. Executing MEMORY_COLLECT pass (generating $mem cells).\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module LqPAddrModule_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\LqPAddrModule_EQUIV'.\nRemoved a total of 0 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\LqPAddrModule_EQUIV..\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== LqPAddrModule_EQUIV ===\n\n   Number of wires:               4202\n   Number of wire bits:          21752\n   Number of public wires:        3530\n   Number of public wire bits:   15680\n   Number of ports:                303\n   Number of port bits:            426\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:               3627\n     $and                          480\n     $dffe                         144\n     $eq                           501\n     $equiv                       1440\n     $logic_not                      3\n     $mux                          432\n     $or                           432\n     $reduce_or                    120\n     $scopeinfo                     72\n     $shl                            3\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module LqPAddrModule_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 1152 unproven $equiv cells in module LqPAddrModule_EQUIV:\n  Undef modelling: force def on 2304 initial reg values and 137 inputs.\n  Proving existence of base case for step 1. (880980 clauses over 322017 variables)\n  Proving induction step 1. (1932455 clauses over 701633 variables)\n  Proof for induction step holds. Entire workset of 1152 cells proven!\nProved 1152 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 1440 $equiv cells in LqPAddrModule_EQUIV:\n  Of those cells 1440 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: 3a0ac50b0c, CPU: user 31.79s system 0.39s, MEM: 598.84 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 96% 1x equiv_induct (31 sec), 0% 8x opt_clean (0 sec), ...\n",
+          "output_sha256": "c33aacd5936effe0da002768a4af88945b4b97590a91edc369eb74172ebc39c9",
           "markers_present": {
-            "0 are unproven.": false,
-            "Equivalence successfully proven!": false
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
           },
-          "formal_success_marker": false,
-          "equiv_cells": 288,
-          "proven_cells": 0,
-          "unproven_cells": 288
+          "formal_success_marker": true,
+          "equiv_cells": 1440,
+          "proven_cells": 1440,
+          "unproven_cells": 0
         }
       },
       {
@@ -1503,8 +1505,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/DUT_LqPAddrModule_1.sv:2301:29: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'hf' generates 4 bits.\n                                                                                                                                              : ... note: In instance 'LqPAddrModule_1_MITER.target_i'\n 2301 |   assign \\$44  = io_waddr_1 == 4'hf;\n      |                             ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/DUT_LqPAddrModule_1.sv:2302:29: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'hc' generates 4 bits.\n                                                                                                                                              : ... note: In instance 'LqPAddrModule_1_MITER.target_i'\n 2302 |   assign \\$45  = io_waddr_2 == 4'hc;\n      |                             ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/DUT_LqPAddrModule_1.sv:2303:29: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'hd' generates 4 bits.\n                                                                                                                                              : ... note: In instance 'LqPAddrModule_1_MITER.target_i'\n 2303 |   assign \\$46  = io_waddr_2 == 4'hd;\n      |                             ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/DUT_LqPAddrModule_1.sv:2304:29: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'he' generates 4 bits.\n                                                                                                                                              : ... note: In instance 'LqPAddrModule_1_MITER.target_i'\n 2304 |   assign \\$47  = io_waddr_2 == 4'he;\n      |                             ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/DUT_LqPAddrModule_1.sv:2305:29: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'hf' generates 4 bits.\n                                                                                                                                              : ... note: In instance 'LqPAddrModule_1_MITER.target_i'\n 2305 |   assign \\$48  = io_waddr_2 == 4'hf;\n      |                             ^~\n",
-          "output_sha256": "ab934e5ec10238b673b8c0dcc4a97fd0420758a562e2e83353d3e2b568346c53"
+          "output_tail": "lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/DUT_LqPAddrModule_1.sv:2157:29: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'hf' generates 4 bits.\n                                                                                                                                              : ... note: In instance 'LqPAddrModule_1_MITER.target_i'\n 2157 |   assign \\$44  = io_waddr_1 == 4'hf;\n      |                             ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/DUT_LqPAddrModule_1.sv:2158:29: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'hc' generates 4 bits.\n                                                                                                                                              : ... note: In instance 'LqPAddrModule_1_MITER.target_i'\n 2158 |   assign \\$45  = io_waddr_2 == 4'hc;\n      |                             ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/DUT_LqPAddrModule_1.sv:2159:29: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'hd' generates 4 bits.\n                                                                                                                                              : ... note: In instance 'LqPAddrModule_1_MITER.target_i'\n 2159 |   assign \\$46  = io_waddr_2 == 4'hd;\n      |                             ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/DUT_LqPAddrModule_1.sv:2160:29: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'he' generates 4 bits.\n                                                                                                                                              : ... note: In instance 'LqPAddrModule_1_MITER.target_i'\n 2160 |   assign \\$47  = io_waddr_2 == 4'he;\n      |                             ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/DUT_LqPAddrModule_1.sv:2161:29: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'hf' generates 4 bits.\n                                                                                                                                              : ... note: In instance 'LqPAddrModule_1_MITER.target_i'\n 2161 |   assign \\$48  = io_waddr_2 == 4'hf;\n      |                             ^~\n",
+          "output_sha256": "86a83b39e183d6b001f668c6fda888bbf2edd2555197ef687ddd1c1e7b943e80"
         },
         "locked_verilator": {
           "command": [
@@ -1533,8 +1535,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.113 MB sources in 5 modules, into 0.190 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.063 s (elab=0.003, cvt=0.014, bld=0.000); cpu 0.029 s on 1 threads; alloced 12.387 MB\n",
-          "output_sha256": "c000d279a974240a21a6ebd4897fdc633cf982368e0e411ce0a205b6f74e47b8"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.113 MB sources in 5 modules, into 0.190 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.061 s (elab=0.003, cvt=0.014, bld=0.000); cpu 0.028 s on 1 threads; alloced 12.391 MB\n",
+          "output_sha256": "33be277232b7f198cd5fe829d97ea7d2e39bdb128bda6fd171566bd5fd7e7967"
         },
         "yosys_equiv": {
           "command": [
@@ -1543,33 +1545,33 @@
             "-p",
             "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/DUT_LqPAddrModule_1.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/REF_LqPAddrModule_1.sv; proc; async2sync; memory; opt; flatten REF_LqPAddrModule_1; flatten DUT_LqPAddrModule_1; equiv_make REF_LqPAddrModule_1 DUT_LqPAddrModule_1 LqPAddrModule_1_EQUIV; prep -top LqPAddrModule_1_EQUIV; equiv_induct -undef; equiv_status -assert"
           ],
-          "returncode": 1,
-          "status": "FAIL",
+          "returncode": 0,
+          "status": "PASS",
           "sat_success_marker": false,
           "sat_counterexample_marker": false,
           "unconstrained_marker": false,
           "equiv_success_markers": {
-            "0 are unproven.": false,
-            "Equivalence successfully proven!": false
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
           },
-          "equiv_failure_marker": true,
-          "equiv_cells_full": 64,
+          "equiv_failure_marker": false,
+          "equiv_cells_full": 1024,
           "equiv_summary_full": [
-            0,
-            64
+            1024,
+            0
           ],
-          "equiv_failed_full": 64,
+          "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "ionMmask_0_2_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$2752: \\io_violationMmask_0_20_gold \\io_violationMmask_0_20_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$2753: \\io_violationMmask_0_21_gold \\io_violationMmask_0_21_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$2754: \\io_violationMmask_0_22_gold \\io_violationMmask_0_22_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$2755: \\io_violationMmask_0_23_gold \\io_violationMmask_0_23_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$2756: \\io_violationMmask_0_24_gold \\io_violationMmask_0_24_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$2757: \\io_violationMmask_0_25_gold \\io_violationMmask_0_25_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$2758: \\io_violationMmask_0_26_gold \\io_violationMmask_0_26_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$2759: \\io_violationMmask_0_27_gold \\io_violationMmask_0_27_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$2760: \\io_violationMmask_0_28_gold \\io_violationMmask_0_28_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$2761: \\io_violationMmask_0_29_gold \\io_violationMmask_0_29_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$2762: \\io_violationMmask_0_3_gold \\io_violationMmask_0_3_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$2763: \\io_violationMmask_0_30_gold \\io_violationMmask_0_30_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$2764: \\io_violationMmask_0_31_gold \\io_violationMmask_0_31_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$2765: \\io_violationMmask_0_4_gold \\io_violationMmask_0_4_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$2766: \\io_violationMmask_0_5_gold \\io_violationMmask_0_5_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$2767: \\io_violationMmask_0_6_gold \\io_violationMmask_0_6_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$2768: \\io_violationMmask_0_7_gold \\io_violationMmask_0_7_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$2769: \\io_violationMmask_0_8_gold \\io_violationMmask_0_8_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$2770: \\io_violationMmask_0_9_gold \\io_violationMmask_0_9_gate\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$2771: \\io_violationMmask_1_0_gold \\io_violationMmask_1_ERROR: Found 64 unproven $equiv cells in 'equiv_status -assert'.\n",
-          "output_sha256": "851e6b37924e7c5c769426dc66d5b22be814a10073155ce0cd54faa605c26300",
+          "output_tail": "ptimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module LqPAddrModule_1_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\LqPAddrModule_1_EQUIV'.\nRemoved a total of 0 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\LqPAddrModule_1_EQUIV..\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== LqPAddrModule_1_EQUIV ===\n\n   Number of wires:               2021\n   Number of wire bits:          16132\n   Number of public wires:        1709\n   Number of public wire bits:   12140\n   Number of ports:                 79\n   Number of port bits:            206\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:               2342\n     $and                          304\n     $dff                           48\n     $dffe                         139\n     $eq                           221\n     $equiv                       1024\n     $logic_not                      3\n     $mux                          192\n     $or                           256\n     $reduce_or                     80\n     $scopeinfo                     72\n     $shl                            3\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module LqPAddrModule_1_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 960 unproven $equiv cells in module LqPAddrModule_1_EQUIV:\n  Undef modelling: force def on 2424 initial reg values and 141 inputs.\n  Proving existence of base case for step 1. (545306 clauses over 203321 variables)\n  Proving induction step 1. (1264371 clauses over 465441 variables)\n  Proof for induction step failed. Extending to next time step.\n  Proving existence of base case for step 2. (1264372 clauses over 465441 variables)\n  Proving induction step 2. (1983437 clauses over 727561 variables)\n  Proof for induction step holds. Entire workset of 960 cells proven!\nProved 960 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 1024 $equiv cells in LqPAddrModule_1_EQUIV:\n  Of those cells 1024 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: 3943508a7f, CPU: user 9.57s system 0.16s, MEM: 496.24 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 94% 1x equiv_induct (9 sec), 1% 10x opt_clean (0 sec), ...\n",
+          "output_sha256": "a37041631c9f00cd19b5ba53623d5d9bb536127e0ce8ff04427883057f43f96e",
           "markers_present": {
-            "0 are unproven.": false,
-            "Equivalence successfully proven!": false
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
           },
-          "formal_success_marker": false,
-          "equiv_cells": 64,
-          "proven_cells": 0,
-          "unproven_cells": 64
+          "formal_success_marker": true,
+          "equiv_cells": 1024,
+          "proven_cells": 1024,
+          "unproven_cells": 0
         }
       },
       {
@@ -1599,8 +1601,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "                                                                                                : ... note: In instance 'LqVAddrModule_MITER.target_i'\n 1934 |   assign \\$189  = io_waddr_2 == 6'h3e;\n      |                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/DUT_LqVAddrModule.sv:1935:30: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3f' generates 6 bits.\n                                                                                                                                            : ... note: In instance 'LqVAddrModule_MITER.target_i'\n 1935 |   assign \\$190  = io_waddr_0 == 6'h3f;\n      |                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/DUT_LqVAddrModule.sv:1944:30: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3f' generates 6 bits.\n                                                                                                                                            : ... note: In instance 'LqVAddrModule_MITER.target_i'\n 1944 |   assign \\$199  = io_waddr_1 == 6'h3f;\n      |                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/DUT_LqVAddrModule.sv:1953:30: Operator EQ expects 7 bits on the RHS, but RHS's CONST '6'h3f' generates 6 bits.\n                                                                                                                                            : ... note: In instance 'LqVAddrModule_MITER.target_i'\n 1953 |   assign \\$208  = io_waddr_2 == 6'h3f;\n      |                              ^~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/DUT_LqVAddrModule.sv:3345:5: Case values incompletely covered (example pattern 0x48)\n 3345 |     casez (io_raddr_0)\n      |     ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/DUT_LqVAddrModule.sv:3495:5: Case values incompletely covered (example pattern 0x48)\n 3495 |     casez (io_raddr_1)\n      |     ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/DUT_LqVAddrModule.sv:3645:5: Case values incompletely covered (example pattern 0x48)\n 3645 |     casez (io_raddr_2)\n      |     ^~~~~\n",
-          "output_sha256": "860ebce056b144ca81ff21592b958af0d6a010fa25d803128401b16b3ae2d8f6"
+          "output_tail": "                                               : ... note: In instance 'LqVAddrModule_MITER.target_i'\n 1914 |   assign \\$217  = io_rdata_0_r + 1'h0;\n      |                                ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/DUT_LqVAddrModule.sv:1915:32: Operator ADD expects 51 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits.\n                                                                                                                                            : ... note: In instance 'LqVAddrModule_MITER.target_i'\n 1915 |   assign \\$218  = io_rdata_1_r + 1'h0;\n      |                                ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/DUT_LqVAddrModule.sv:1916:32: Operator ADD expects 51 bits on the RHS, but RHS's CONST '1'h0' generates 1 bits.\n                                                                                                                                            : ... note: In instance 'LqVAddrModule_MITER.target_i'\n 1916 |   assign \\$219  = io_rdata_2_r + 1'h0;\n      |                                ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/DUT_LqVAddrModule.sv:2902:18: Operator ASSIGNW expects 50 bits on the Assign RHS, but Assign RHS's SHIFTR generates 6400 bits.\n                                                                                                                                           : ... note: In instance 'LqVAddrModule_MITER.target_i'\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/DUT_LqVAddrModule.sv:2904:18: Operator ASSIGNW expects 50 bits on the Assign RHS, but Assign RHS's SHIFTR generates 6400 bits.\n                                                                                                                                           : ... note: In instance 'LqVAddrModule_MITER.target_i'\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/DUT_LqVAddrModule.sv:2906:18: Operator ASSIGNW expects 50 bits on the Assign RHS, but Assign RHS's SHIFTR generates 6400 bits.\n                                                                                                                                           : ... note: In instance 'LqVAddrModule_MITER.target_i'\n",
+          "output_sha256": "002d56e76813a8ff33b57adffcf326da74a162d7e1446bfd8a31fc905bd218de"
         },
         "locked_verilator": {
           "command": [
@@ -1629,8 +1631,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.142 MB sources in 5 modules, into 0.192 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.072 s (elab=0.004, cvt=0.014, bld=0.000); cpu 0.031 s on 1 threads; alloced 12.926 MB\n",
-          "output_sha256": "d1f5c4fc094c4691c2db699aac374c69fbff297d8e756111a859a8bc3ff1d63a"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.142 MB sources in 5 modules, into 0.192 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.069 s (elab=0.004, cvt=0.016, bld=0.000); cpu 0.034 s on 1 threads; alloced 12.926 MB\n",
+          "output_sha256": "bdbd1fafa7ca55ef0088618858bd60bdd82179c82ed9e540ef5569c3c37df051"
         },
         "yosys_equiv": {
           "command": [
@@ -1639,50 +1641,39 @@
             "-p",
             "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/DUT_LqVAddrModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_lsqueue_loadqueuedata_family/REF_LqVAddrModule.sv; proc; async2sync; memory; opt; flatten REF_LqVAddrModule; flatten DUT_LqVAddrModule; equiv_make REF_LqVAddrModule DUT_LqVAddrModule LqVAddrModule_EQUIV; prep -top LqVAddrModule_EQUIV; equiv_induct -undef; equiv_status -assert"
           ],
-          "returncode": 1,
-          "status": "FAIL",
+          "returncode": 0,
+          "status": "PASS",
           "sat_success_marker": false,
           "sat_counterexample_marker": false,
           "unconstrained_marker": false,
           "equiv_success_markers": {
             "0 are unproven.": true,
-            "Equivalence successfully proven!": false
+            "Equivalence successfully proven!": true
           },
-          "equiv_failure_marker": true,
-          "equiv_cells_full": 150,
+          "equiv_failure_marker": false,
+          "equiv_cells_full": 4140,
           "equiv_summary_full": [
-            0,
-            150
+            4140,
+            0
           ],
-          "equiv_failed_full": 150,
+          "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "_wires$4319: \\io_rdata_2_r_gold [26] \\io_rdata_2_gate [26]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4320: \\io_rdata_2_r_gold [27] \\io_rdata_2_gate [27]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4321: \\io_rdata_2_r_gold [28] \\io_rdata_2_gate [28]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4322: \\io_rdata_2_r_gold [29] \\io_rdata_2_gate [29]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4323: \\io_rdata_2_r_gold [30] \\io_rdata_2_gate [30]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4324: \\io_rdata_2_r_gold [31] \\io_rdata_2_gate [31]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4325: \\io_rdata_2_r_gold [32] \\io_rdata_2_gate [32]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4326: \\io_rdata_2_r_gold [33] \\io_rdata_2_gate [33]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4327: \\io_rdata_2_r_gold [34] \\io_rdata_2_gate [34]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4328: \\io_rdata_2_r_gold [35] \\io_rdata_2_gate [35]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4329: \\io_rdata_2_r_gold [36] \\io_rdata_2_gate [36]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4330: \\io_rdata_2_r_gold [37] \\io_rdata_2_gate [37]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4331: \\io_rdata_2_r_gold [38] \\io_rdata_2_gate [38]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4332: \\io_rdata_2_r_gold [39] \\io_rdata_2_gate [39]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4333: \\io_rdata_2_r_gold [40] \\io_rdata_2_gate [40]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4334: \\io_rdata_2_r_gold [41] \\io_rdata_2_gate [41]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4335: \\io_rdata_2_r_gold [42] \\io_rdata_2_gate [42]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4336: \\io_rdata_2_r_gold [43] \\io_rdata_2_gate [43]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4337: \\io_rdata_2_r_gold [44] \\io_rdata_2_gate [44]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4338: \\io_rdata_2_r_gold [45] \\io_rdata_2_gate [45]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4339: \\io_rdata_2_r_gold [46] \\io_rdata_2_gate [46]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4340: \\io_rdata_2_r_gold [47] \\io_rdata_2_gate [47]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4341: \\ERROR: Found 150 unproven $equiv cells in 'equiv_status -assert'.\n",
-          "output_sha256": "cf2aaf564c8a73cad1c4b84f55af24e3ecc925d7e3064329a5eebbc77ac0fd8a",
+          "output_tail": "_EQUIV'.\n<suppressed ~9 debug messages>\nRemoved a total of 3 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\LqVAddrModule_EQUIV..\nRemoved 0 unused cells and 3 unused wires.\n<suppressed ~1 debug messages>\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== LqVAddrModule_EQUIV ===\n\n   Number of wires:               2870\n   Number of wire bits:          61610\n   Number of public wires:        2195\n   Number of public wire bits:   43148\n   Number of ports:                 20\n   Number of port bits:            350\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:               6177\n     $and                          480\n     $dff                           48\n     $dffe                         225\n     $eq                           213\n     $equiv                       4140\n     $logic_not                      3\n     $mul                            3\n     $mux                          432\n     $or                           432\n     $reduce_or                    120\n     $scopeinfo                     72\n     $shiftx                         3\n     $shl                            3\n     $shr                            3\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module LqVAddrModule_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 4140 unproven $equiv cells in module LqVAddrModule_EQUIV:\n  Undef modelling: force def on 9330 initial reg values and 199 inputs.\n  Proving existence of base case for step 1. (8832534 clauses over 3116883 variables)\n  Proving induction step 1. (18346127 clauses over 6464048 variables)\n  Proof for induction step failed. Extending to next time step.\n  Proving existence of base case for step 2. (18346128 clauses over 6464048 variables)\n  Proving induction step 2. (27859721 clauses over 9811213 variables)\n  Proof for induction step holds. Entire workset of 4140 cells proven!\nProved 4140 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 4140 $equiv cells in LqVAddrModule_EQUIV:\n  Of those cells 4140 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: 531fdaafef, CPU: user 578.89s system 4.17s, MEM: 5684.16 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 99% 1x equiv_induct (580 sec), 0% 9x opt_clean (0 sec), ...\n",
+          "output_sha256": "6802b366a6b997d28af31e1fc76cd8241ae54104c0c0f5d8045e06342df49b89",
           "markers_present": {
             "0 are unproven.": true,
-            "Equivalence successfully proven!": false
+            "Equivalence successfully proven!": true
           },
-          "formal_success_marker": false,
-          "equiv_cells": 150,
-          "proven_cells": 0,
-          "unproven_cells": 150
+          "formal_success_marker": true,
+          "equiv_cells": 4140,
+          "proven_cells": 4140,
+          "unproven_cells": 0
         }
       }
     ]
   },
-  "failures": [
-    "LqMaskModule:yosys_equiv",
-    "LqMaskModule: 64 $equiv cells unproven",
-    "LqPAddrModule:yosys_equiv",
-    "LqPAddrModule: 288 $equiv cells unproven",
-    "LqPAddrModule_1:yosys_equiv",
-    "LqPAddrModule_1: 64 $equiv cells unproven",
-    "LqVAddrModule:yosys_equiv",
-    "LqVAddrModule: 150 $equiv cells unproven"
-  ],
-  "unclosed": [
-    "strict gates did not all pass"
-  ],
+  "failures": [],
+  "unclosed": [],
   "acceptance_unclosed": [
     "Parent closure, full-top differential, final license review, and user approval remain outside this Build proof."
   ]

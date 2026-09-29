@@ -28,6 +28,7 @@ COVERED_MODULES: tuple[str, ...] = (
 # =============================================================================
 # Configuration
 # =============================================================================
+# Build the 32-entry mask-CAM ABI. / 构建 32 项掩码 CAM ABI。
 def lq_mask_specs() -> tuple[tuple[str, str, int], ...]:
     """Return the 32-entry mask-CAM port surface. / 返回 32 项掩码 CAM 端口表面。"""
 
@@ -43,6 +44,7 @@ def lq_mask_specs() -> tuple[tuple[str, str, int], ...]:
     return tuple(ports)
 
 
+# Build the 72-entry release-CAM ABI. / 构建 72 项 release CAM ABI。
 def lq_paddr_large_specs() -> tuple[tuple[str, str, int], ...]:
     """Return the 72-entry release-CAM port surface. / 返回 72 项释放 CAM 端口表面。"""
 
@@ -61,6 +63,7 @@ def lq_paddr_large_specs() -> tuple[tuple[str, str, int], ...]:
     return tuple(ports)
 
 
+# Build the 32-entry physical-address CAM ABI. / 构建 32 项物理地址 CAM ABI。
 def lq_paddr_small_specs() -> tuple[tuple[str, str, int], ...]:
     """Return the 32-entry physical-address CAM surface. / 返回 32 项物理地址 CAM 表面。"""
 
@@ -77,6 +80,7 @@ def lq_paddr_small_specs() -> tuple[tuple[str, str, int], ...]:
     return tuple(ports)
 
 
+# Build the 72-entry virtual-address store ABI. / 构建 72 项虚拟地址存储 ABI。
 def lq_vaddr_specs() -> tuple[tuple[str, str, int], ...]:
     """Return the 72-entry virtual-address store surface. / 返回 72 项虚拟地址存储表面。"""
 
@@ -617,6 +621,7 @@ WRITE_DELAY: dict[str, int] = {
 class LoadQueueDataFamily(Elaboratable):
     """One load-queue data specialization. / 一个加载队列数据特化。"""
 
+    # Declare the selected member and its public ports. / 声明所选成员及其公开端口。
     def __init__(self, member: str = "LqVAddrModule") -> None:
         """Declare the selected locked port surface. / 声明选定的锁定端口表面。"""
 
@@ -630,6 +635,7 @@ class LoadQueueDataFamily(Elaboratable):
         self.clock = self.ports["clock"]
         self.reset = self.ports["reset"]
 
+    # Elaborate banked storage, registered reads, and CAM behavior. / 展开分 bank 存储、寄存读取和 CAM 行为。
     def elaborate(self, platform: Any) -> Module:
         """Build banked writes, registered reads, and specialization CAMs. / 构建分 bank 写入、寄存读取和特化 CAM。"""
 
@@ -649,37 +655,72 @@ class LoadQueueDataFamily(Elaboratable):
         write_delay = WRITE_DELAY[self.member]
         entries_per_bank = entries // bank_count
         pipeline_cycles = write_delay - 1
-        memory = Array(Signal(data_width, name=f"entry_{index}", init=None, reset_less=True)
+        # Keep the state names aligned with the locked generated hierarchy so
+        # Yosys can establish a transparent state correspondence during
+        # induction.  The names are internal and do not change the public ABI.
+        memory = Array(Signal(data_width, name=f"data_{index}", init=None, reset_less=True)
                        for index in range(entries))
 
+        # Select one entry with the generated Vec fallback semantics. / 按生成的 Vec 回退语义选择一个条目。
         def read_entry(address: Any) -> Any:
             """Read one Vec entry, including Chisel's entry-zero fallback. / 读取 Vec 条目并保留 Chisel 的零号条目回退。"""
 
+            if self.member == "LqVAddrModule":
+                # The registered-read specialization uses a 128-word packed
+                # select: 72 live entries followed by entry zero.  Keeping
+                # the select in this form preserves the exact out-of-range
+                # fallback and avoids an extra comparator/case mux layer.
+                packed: Any = Cat(*memory, *([memory[0]] * (128 - entries)))
+                return packed.word_select(address, data_width)
             return Mux(address < entries, memory[address], memory[0])
 
+        # Delay data while holding it when valid is low. / valid 为低时保持数据并延迟。
         def delay_with_valid(source: Any, valid: Any, width: int, cycles: int, stem: str) -> Any:
             """Implement DelayNWithValid bits behavior. / 实现 DelayNWithValid 的数据保持行为。"""
 
             delayed_value = source
             delayed_valid = valid
             for stage in range(cycles):
-                next_value = Signal(width, name=f"{stem}_data_{stage}", init=None,
-                                    reset_less=True)
-                next_valid = Signal(name=f"{stem}_valid_{stage}", init=None,
-                                    reset_less=True)
+                next_name = None
+                if stage == cycles - 1 and stem.startswith("sx_bank_decode_"):
+                    _prefix, bank_text, write_text = stem.rsplit("_", 2)
+                    index = int(bank_text) * 3 + int(write_text)
+                    suffix = "" if index == 0 else f"_{index}"
+                    next_name = f"_sx_bankWriteAddrDec_resp_pipMod{suffix}_io_out_bits"
+                elif stage == cycles - 1 and stem.startswith("sx_write_data_"):
+                    _prefix, bank_text, write_text = stem.rsplit("_", 2)
+                    index = int(bank_text) * 3 + int(write_text)
+                    suffix = "" if index == 0 else f"_{index}"
+                    next_name = f"_sx_writeData_resp_pipMod{suffix}_io_out_bits"
+                next_value = Signal(width, name=next_name or f"{stem}_data_{stage}",
+                                    init=None, reset_less=True)
+                next_valid = None
+                if stage < cycles - 1:
+                    next_valid = Signal(name=f"{stem}_valid_{stage}", init=None,
+                                        reset_less=True)
                 with cast(Any, module.If(delayed_valid)):
                     module.d.sync += next_value.eq(delayed_value)
-                module.d.sync += next_valid.eq(delayed_valid)
+                if next_valid is not None:
+                    module.d.sync += next_valid.eq(delayed_valid)
                 delayed_value = next_value
-                delayed_valid = next_valid
+                if next_valid is not None:
+                    delayed_valid = next_valid
             return delayed_value
 
+        # Delay an enable through the configured write pipeline. / 按配置的写流水线延迟使能信号。
         def delay(source: Any, cycles: int, stem: str) -> Any:
             """Implement DelayN without a write-valid hold. / 实现无 valid 保持的 DelayN。"""
 
             delayed_value = source
             for stage in range(cycles):
-                next_value = Signal(name=f"{stem}_{stage}", init=None, reset_less=True)
+                next_name = None
+                if stage == cycles - 1 and stem.startswith("sx_bank_enable_"):
+                    _prefix, bank_text, write_text = stem.rsplit("_", 2)
+                    index = int(bank_text) * 3 + int(write_text)
+                    suffix = "" if index == 0 else f"_{index}"
+                    next_name = f"_sx_bankWriteEn_delay{suffix}_io_out"
+                next_value = Signal(name=next_name or f"{stem}_{stage}",
+                                    init=None, reset_less=True)
                 module.d.sync += next_value.eq(delayed_value)
                 delayed_value = next_value
             return delayed_value
@@ -734,11 +775,20 @@ class LoadQueueDataFamily(Elaboratable):
 
         if self.member == "LqVAddrModule":
             for read in range(3):
-                read_data = Signal(data_width, name=f"read_data_{read}", init=None,
-                                   reset_less=True)
+                # Preserve each observable Chisel read register as a distinct RTL register.
+                # 将每个可观察的 Chisel 读寄存器保留为独立 RTL 寄存器。
+                read_data = Signal(data_width, name=f"io_rdata_{read}_r", init=None,
+                                   reset_less=True, attrs={"keep": 1})
                 with cast(Any, module.If(self.ports[f"io_ren_{read}"])):
                     module.d.sync += read_data.eq(read_entry(self.ports[f"io_raddr_{read}"]))
-                module.d.comb += self.ports[f"io_rdata_{read}"].eq(read_data)
+                # Keep a zero-width-preserving adapter expression so the exporter
+                # retains the named state register instead of aliasing it into the
+                # public output port.  Use a pure identity equation; no behavior
+                # or timing changes.  用保持位宽的零加法适配式，避免导出器将
+                # 具名状态寄存器折叠到公开输出端口；这是纯恒等方程，不改行为和时序。
+                module.d.comb += self.ports[f"io_rdata_{read}"].eq(
+                    read_data + Const(0, data_width)
+                )
         elif self.member == "LqMaskModule":
             for cam in range(2):
                 query = self.ports[f"io_violationMdata_{cam}"]
@@ -774,6 +824,7 @@ class LoadQueueDataFamily(Elaboratable):
 # =============================================================================
 # Public Adapter
 # =============================================================================
+# Export the selected member under its exact deterministic module name. / 按精确且确定的模块名导出所选成员。
 def build_verilog(configuration: Any, injected_dependencies: Any) -> str:
     """Export one deterministic same-name load-queue member. / 导出确定性的同名加载队列成员。"""
 
@@ -790,6 +841,7 @@ def build_verilog(configuration: Any, injected_dependencies: Any) -> str:
 # =============================================================================
 # Direct Entry
 # =============================================================================
+# Print the default member's Verilog representation. / 输出默认成员的 Verilog 表示。
 def main() -> None:
     """Print the default load-queue member. / 打印默认加载队列成员。"""
 

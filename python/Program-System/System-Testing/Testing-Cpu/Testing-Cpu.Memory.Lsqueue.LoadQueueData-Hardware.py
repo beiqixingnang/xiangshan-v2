@@ -17,6 +17,7 @@ TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-C
 
 
 # Load the exact Build. / 加载精确 Build。
+# Load the exact local Build file for direct testing. / 为直接测试加载精确的本地 Build 文件。
 def load_subject() -> Any:
     """Load the load-queue aggregate. / 加载加载队列聚合。"""
 
@@ -26,6 +27,7 @@ def load_subject() -> Any:
     module = importlib.util.module_from_spec(spec); sys.modules[spec.name] = module; spec.loader.exec_module(module); return module
 
 
+# Drive every public data input inactive. / 将所有公开数据输入驱动为非活动状态。
 def idle_inputs(dut: Any):
     """Drive every public data input inactive. / 将所有公开数据输入置为非活动。"""
 
@@ -37,6 +39,7 @@ def idle_inputs(dut: Any):
 class LoadQueueDataTest(unittest.TestCase):
     """Check exports, banked writes, registered reads, and public CAMs. / 检查导出、分 bank 写、寄存读取和公开 CAM。"""
 
+    # Check that each supported member exports under its public name. / 检查每个受支持成员都按公开名称导出。
     def test_all_members_export(self) -> None:
         """Every selected member exports under its exact public name. / 每个成员按精确公开名称导出。"""
 
@@ -44,6 +47,7 @@ class LoadQueueDataTest(unittest.TestCase):
         for member in module.COVERED_MODULES:
             self.assertIn(f"module {member}", module.build_verilog({"module": member}, {}))
 
+    # Check delayed masked writes and same-address Mux1H OR behavior. / 检查延迟掩码写及同地址 Mux1H 或行为。
     def test_delayed_mask_write_and_mux1h_same_address_or(self) -> None:
         """Delayed bank writes retain valid data and OR simultaneous Mux1H selections. / 延迟 bank 写保持有效数据并对并发 Mux1H 选择按位或。"""
 
@@ -77,6 +81,7 @@ class LoadQueueDataTest(unittest.TestCase):
         sim.run()
         self.assertEqual([0, 1, 1], observations)
 
+    # Check the physical-address line comparison boundary. / 检查物理地址行比较边界。
     def test_paddr_line_cam_uses_bits_23_through_2(self) -> None:
         """Line checks ignore only low bits [1:0], not the wider previous slice. / 行比较只忽略低位 [1:0]，不忽略更宽切片。"""
 
@@ -109,6 +114,7 @@ class LoadQueueDataTest(unittest.TestCase):
         sim.run()
         self.assertEqual([0, 1, 0], observations)
 
+    # Check release CAM results at the final entry. / 检查最后一个条目的 release CAM 结果。
     def test_paddr_release_cams_cover_last_bank_entry(self) -> None:
         """Release and release-violation CAMs compare every public query port. / release 与 release-violation CAM 覆盖每个公开查询端口。"""
 
@@ -139,6 +145,7 @@ class LoadQueueDataTest(unittest.TestCase):
         sim.run()
         self.assertEqual([1, 1, 0, 1], observations)
 
+    # Check enabled read capture and disabled read hold behavior. / 检查读使能捕获及禁用保持行为。
     def test_vaddr_regenable_read_holds_when_ren_is_low(self) -> None:
         """VAddr reads capture old memory at an enabled edge and retain it otherwise. / VAddr 读取在使能边沿捕获旧存储值，并在非使能时保持。"""
 
@@ -173,6 +180,7 @@ class LoadQueueDataTest(unittest.TestCase):
         sim.run()
         self.assertEqual([0, 0x123456789ABCD, 0x123456789ABCD], observations)
 
+    # Check that invalid Vec addresses select entry zero. / 检查超出 Vec 范围的地址选择零号条目。
     def test_vaddr_out_of_range_read_uses_entry_zero(self) -> None:
         """VAddr Vec reads above entry 71 return entry zero. / VAddr Vec 读取超过 71 时返回零号条目。"""
 
@@ -199,6 +207,22 @@ class LoadQueueDataTest(unittest.TestCase):
         sim.add_process(process)
         sim.run()
         self.assertEqual([0x23456789ABCDE], observations)
+
+
+    # Check that exported read state remains as three named registers. / 检查导出读状态保留为三个具名寄存器。
+    def test_vaddr_export_preserves_named_read_registers(self) -> None:
+        module = load_subject()
+        verilog_text = module.build_verilog({"module": "LqVAddrModule"}, {})
+
+        for read in range(3):
+            register_name = f"io_rdata_{read}_r"
+            self.assertRegex(
+                verilog_text,
+                rf"(?m)^\s*(?:reg|wire)\s+\[49:0\]\s+{register_name}\b",
+            )
+            self.assertRegex(verilog_text, rf"(?m)^\s+{register_name}\s*<=")
+            self.assertRegex(verilog_text, rf"(?m)^\s*assign io_rdata_{read}\s*=")
+            self.assertGreaterEqual(verilog_text.count(register_name), 3)
 
 
 if __name__ == "__main__":

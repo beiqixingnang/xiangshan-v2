@@ -6,7 +6,7 @@ from __future__ import annotations
 
 from typing import Any, cast
 
-from amaranth import Array, ClockDomain, Const, Elaboratable, Module, Mux, Signal
+from amaranth import Array, Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
 
 
@@ -153,16 +153,46 @@ class StoreQueueDataFamily(Elaboratable):
         return Mux(address < ENTRY_COUNT, entries[address], entries[0])
 
     # Add one delayed, bank-routed write path. / 添加一个延迟的分 bank 写路径。
-    def add_banked_write_pipeline(self, module: Module, entries: Array, prefix: str, width: int) -> None:
+    def add_banked_write_pipeline(
+        self,
+        module: Module,
+        entries: Array,
+        port_prefix: str,
+        state_prefix: str | None,
+        state_write_offset: int,
+        width: int,
+    ) -> None:
         """Implement the two-write one-cycle bank pipeline. / 实现双写一周期 bank 流水。"""
 
         stages: list[list[tuple[Signal, Signal, Signal]]] = []
         for write in range(2):
             by_bank: list[tuple[Signal, Signal, Signal]] = []
             for bank in range(BANK_COUNT):
-                enabled = Signal(name=f"{prefix}_s1_enable_{write}_{bank}")
-                index = Signal(BANK_SELECT_WIDTH, name=f"{prefix}_s1_index_{write}_{bank}", reset_less=True)
-                payload = Signal(width, name=f"{prefix}_s1_payload_{write}_{bank}", reset_less=True)
+                if state_prefix is None:
+                    enabled = Signal(name=f"{port_prefix}_s1_enable_{write}_{bank}")
+                    index = Signal(
+                        BANK_SELECT_WIDTH,
+                        name=f"{port_prefix}_s1_index_{write}_{bank}",
+                        reset_less=True,
+                    )
+                    payload = Signal(
+                        width,
+                        name=f"{port_prefix}_s1_payload_{write}_{bank}",
+                        reset_less=True,
+                    )
+                else:
+                    state_write = write + state_write_offset
+                    enabled = Signal(name=f"s1_wenVec_r_{state_write}_{bank}")
+                    index = Signal(
+                        BANK_SELECT_WIDTH,
+                        name=f"{state_prefix}_s1_waddr_{write}_bank_{bank}",
+                        reset_less=True,
+                    )
+                    payload = Signal(
+                        width,
+                        name=f"{state_prefix}_s1_wdata_{write}_bank_{bank}",
+                        reset_less=True,
+                    )
                 by_bank.append((enabled, index, payload))
             stages.append(by_bank)
 
@@ -177,9 +207,9 @@ class StoreQueueDataFamily(Elaboratable):
                     module.d.sync += entries[entry].eq(low_payload)
 
         for write in range(2):
-            address = self.ports[f"{prefix}_waddr_{write}"]
-            payload = self.ports[f"{prefix}_wdata_{write}"]
-            enabled = self.ports[f"{prefix}_wen_{write}"]
+            address = self.ports[f"{port_prefix}_waddr_{write}"]
+            payload = self.ports[f"{port_prefix}_wdata_{write}"]
+            enabled = self.ports[f"{port_prefix}_wen_{write}"]
             for bank in range(BANK_COUNT):
                 stage_enable, stage_index, stage_payload = stages[write][bank]
                 route = enabled & (address[:BANK_SELECT_WIDTH] == bank)
@@ -191,22 +221,27 @@ class StoreQueueDataFamily(Elaboratable):
                     ]
 
     # Register forward requests for the next cycle. / 为下一周期寄存转发请求。
-    def register_forward_requests(self, module: Module) -> list[tuple[Signal, Signal]]:
+    def register_forward_requests(self, module: Module) -> list[tuple[Any, Any]]:
         """Return one delayed request pair per forward port. / 返回每个转发端口的一对延迟请求。"""
 
-        requests: list[tuple[Signal, Signal]] = []
+        requests: list[tuple[Any, Any]] = []
         for forward in range(3):
-            first = Signal(ENTRY_COUNT, name=f"forward_request_{forward}_0", reset_less=True)
-            second = Signal(ENTRY_COUNT, name=f"forward_request_{forward}_1", reset_less=True)
-            module.d.sync += [
-                first.eq(self.ports[f"io_needForward_{forward}_0"]),
-                second.eq(self.ports[f"io_needForward_{forward}_1"]),
-            ]
-            requests.append((first, second))
+            first_bits: list[Signal] = []
+            second_bits: list[Signal] = []
+            for entry in range(ENTRY_COUNT):
+                state_index = forward * ENTRY_COUNT + entry
+                suffix = f"_{state_index}" if state_index else ""
+                first_bits.append(Signal(name=f"needCheck0Reg{suffix}", reset_less=True))
+                second_bits.append(Signal(name=f"needCheck1Reg{suffix}", reset_less=True))
+                module.d.sync += [
+                    first_bits[entry].eq(self.ports[f"io_needForward_{forward}_0"][entry]),
+                    second_bits[entry].eq(self.ports[f"io_needForward_{forward}_1"][entry]),
+                ]
+            requests.append((Cat(*first_bits), Cat(*second_bits)))
         return requests
 
     # Resolve one byte-style forward request. / 解析一个字节式转发请求。
-    def select_forward(self, data: Array, valid: Array, request: tuple[Signal, Signal]) -> tuple[Any, Any]:
+    def select_forward(self, data: Array, valid: Array, request: tuple[Any, Any]) -> tuple[Any, Any]:
         """Return valid and data with half-one priority. / 返回带 half-one 优先级的有效位和数据。"""
 
         forward_valid: Any = Const(0, 1)
@@ -223,7 +258,7 @@ class StoreQueueDataFamily(Elaboratable):
         self,
         data: Array,
         mask: Array,
-        request: tuple[Signal, Signal],
+        request: tuple[Any, Any],
         byte: int,
     ) -> tuple[Any, Any]:
         """Return one byte's valid bit and selected data. / 返回一个字节的有效位和选中数据。"""
@@ -242,8 +277,8 @@ class StoreQueueDataFamily(Elaboratable):
         """Implement synchronous reads, writes, and line forwarding. / 实现同步读写和 cacheline 转发。"""
 
         data_width = 48 if self.member == "SQAddrModule" else 50
-        data = Array(Signal(data_width, name=f"addr_entry_{entry}", reset_less=True) for entry in range(ENTRY_COUNT))
-        mask = Array(Signal(BYTE_COUNT, name=f"addr_mask_{entry}", reset_less=True) for entry in range(ENTRY_COUNT))
+        data = Array(Signal(data_width, name=f"data_{entry}", reset_less=True) for entry in range(ENTRY_COUNT))
+        mask = Array(Signal(BYTE_COUNT, name=f"mask_{entry}", reset_less=True) for entry in range(ENTRY_COUNT))
         lineflag = Array(Signal(name=f"lineflag_{entry}", reset_less=True) for entry in range(ENTRY_COUNT))
 
         for entry in range(ENTRY_COUNT):
@@ -261,13 +296,20 @@ class StoreQueueDataFamily(Elaboratable):
                 ]
 
         for read in range(2):
-            # Keep the read pipeline resettable so post-reset behavior is
-            # deterministic.
-            address = Signal(ADDRESS_WIDTH, name=f"addr_read_{read}")
-            module.d.sync += address.eq(self.ports[f"io_raddr_{read}"])
-            module.d.comb += self.ports[f"io_rdata_{read}"].eq(self.read_entry(data, address))
+            data_address = Signal(ADDRESS_WIDTH, name=f"io_rdata_{read}_next_r")
+            data_address_input = self.ports[f"io_raddr_{read}"]
+            with cast(Any, module.If(data_address_input != data_address)):
+                module.d.sync += data_address.eq(data_address_input)
+            module.d.comb += self.ports[f"io_rdata_{read}"].eq(
+                self.read_entry(data, data_address)
+            )
             if self.member == "SQAddrModule":
-                module.d.comb += self.ports[f"io_rlineflag_{read}"].eq(self.read_entry(lineflag, address))
+                lineflag_address = Signal(ADDRESS_WIDTH, name=f"io_rlineflag_{read}_next_r")
+                with cast(Any, module.If(data_address_input != lineflag_address)):
+                    module.d.sync += lineflag_address.eq(data_address_input)
+                module.d.comb += self.ports[f"io_rlineflag_{read}"].eq(
+                    self.read_entry(lineflag, lineflag_address)
+                )
 
         for forward in range(3):
             query = self.ports[f"io_forwardMdata_{forward}"]
@@ -283,13 +325,13 @@ class StoreQueueDataFamily(Elaboratable):
     def elaborate_data8(self, module: Module) -> None:
         """Implement banked byte storage, reads, and forwarding. / 实现分 bank 字节存储、读取和转发。"""
 
-        data = Array(Signal(8, name=f"byte_data_{entry}", reset_less=True) for entry in range(ENTRY_COUNT))
-        valid = Array(Signal(name=f"byte_valid_{entry}", reset_less=True) for entry in range(ENTRY_COUNT))
-        self.add_banked_write_pipeline(module, data, "io_data", 8)
-        self.add_banked_write_pipeline(module, valid, "io_mask", 1)
+        data = Array(Signal(8, name=f"data_{entry}_data", reset_less=True) for entry in range(ENTRY_COUNT))
+        valid = Array(Signal(name=f"data_{entry}_valid", reset_less=True) for entry in range(ENTRY_COUNT))
+        self.add_banked_write_pipeline(module, data, "io_data", "data", 0, 8)
+        self.add_banked_write_pipeline(module, valid, "io_mask", "mask", 2, 1)
 
         for read in range(2):
-            address = Signal(ADDRESS_WIDTH, name=f"byte_read_{read}", reset_less=True)
+            address = Signal(ADDRESS_WIDTH, name=f"io_rdata_{read}_REG", reset_less=True)
             module.d.sync += address.eq(self.ports[f"io_raddr_{read}"])
             module.d.comb += [
                 self.ports[f"io_rdata_{read}_valid"].eq(self.read_entry(valid, address)),
@@ -307,25 +349,54 @@ class StoreQueueDataFamily(Elaboratable):
     def elaborate_data(self, module: Module) -> None:
         """Implement banked wide storage, reads, and byte forwarding. / 实现分 bank 宽存储、读取和字节转发。"""
 
-        data = Array(Signal(BYTE_COUNT * 8, name=f"store_data_{entry}", reset_less=True) for entry in range(ENTRY_COUNT))
-        mask = Array(Signal(BYTE_COUNT, name=f"store_mask_{entry}", reset_less=True) for entry in range(ENTRY_COUNT))
-        self.add_banked_write_pipeline(module, data, "io_data", BYTE_COUNT * 8)
-        self.add_banked_write_pipeline(module, mask, "io_mask", BYTE_COUNT)
+        # Scala SQDataModule is a sixteen-lane SQData8Module wrapper. /
+        # Scala SQDataModule 是十六个 SQData8Module 的封装。
+        lanes: list[StoreQueueDataFamily] = []
+        for byte in range(BYTE_COUNT):
+            lane = StoreQueueDataFamily("SQData8Module")
+            module.submodules[f"data8_{byte}"] = lane
+            lanes.append(lane)
+            module.d.comb += [lane.ports["clock"].eq(self.clock), lane.ports["reset"].eq(self.reset)]
+
+            for write in range(2):
+                module.d.comb += [
+                    lane.ports[f"io_data_wen_{write}"].eq(self.ports[f"io_data_wen_{write}"]),
+                    lane.ports[f"io_data_waddr_{write}"].eq(self.ports[f"io_data_waddr_{write}"]),
+                    lane.ports[f"io_data_wdata_{write}"].eq(
+                        self.ports[f"io_data_wdata_{write}"][byte * 8:(byte + 1) * 8]
+                    ),
+                    lane.ports[f"io_mask_wen_{write}"].eq(self.ports[f"io_mask_wen_{write}"]),
+                    lane.ports[f"io_mask_waddr_{write}"].eq(self.ports[f"io_mask_waddr_{write}"]),
+                    lane.ports[f"io_mask_wdata_{write}"].eq(
+                        self.ports[f"io_mask_wdata_{write}"][byte]
+                    ),
+                ]
+            for read in range(2):
+                module.d.comb += lane.ports[f"io_raddr_{read}"].eq(self.ports[f"io_raddr_{read}"])
+            for forward in range(3):
+                for half in range(2):
+                    module.d.comb += lane.ports[f"io_needForward_{forward}_{half}"].eq(
+                        self.ports[f"io_needForward_{forward}_{half}"]
+                    )
 
         for read in range(2):
-            address = Signal(ADDRESS_WIDTH, name=f"store_read_{read}", reset_less=True)
-            module.d.sync += address.eq(self.ports[f"io_raddr_{read}"])
             module.d.comb += [
-                self.ports[f"io_rdata_{read}_mask"].eq(self.read_entry(mask, address)),
-                self.ports[f"io_rdata_{read}_data"].eq(self.read_entry(data, address)),
+                self.ports[f"io_rdata_{read}_mask"].eq(
+                    Cat(*(lane.ports[f"io_rdata_{read}_valid"] for lane in lanes))
+                ),
+                self.ports[f"io_rdata_{read}_data"].eq(
+                    Cat(*(lane.ports[f"io_rdata_{read}_data"] for lane in lanes))
+                ),
             ]
-
-        for forward, request in enumerate(self.register_forward_requests(module)):
-            for byte in range(BYTE_COUNT):
-                forward_valid, forward_data = self.select_forward_byte(data, mask, request, byte)
+        for forward in range(3):
+            for byte, lane in enumerate(lanes):
                 module.d.comb += [
-                    self.ports[f"io_forwardMask_{forward}_{byte}"].eq(forward_valid),
-                    self.ports[f"io_forwardData_{forward}_{byte}"].eq(forward_data),
+                    self.ports[f"io_forwardMask_{forward}_{byte}"].eq(
+                        lane.ports[f"io_forwardValid_{forward}"]
+                    ),
+                    self.ports[f"io_forwardData_{forward}_{byte}"].eq(
+                        lane.ports[f"io_forwardData_{forward}"]
+                    ),
                 ]
 
     # Elaborate the selected specialization. / 展开选定特化。
