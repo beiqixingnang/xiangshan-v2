@@ -1,0 +1,369 @@
+{
+  "schema_version": 1,
+  "kind": "TAGARRAY_PUBLIC_OUTPUT_PARTITION_DIAGNOSTIC",
+  "status": "STRICT_PENDING",
+  "strict_complete_eligible": false,
+  "strict_complete_count_delta": 0,
+  "acceptance_eligible": false,
+  "build_id": "Build-Cpu.Cache.Dcache.Meta.TagArray",
+  "previous_diagnostic": {
+    "path": "validation/v2-tagarray-public-partition-diagnostic-20260929.json",
+    "status": "STRICT_PENDING",
+    "runner_sha256_at_archive": "9d414722fb825ebe4a7002f2b2ba09000ee06e6e32ef4505a03622d1caedb981",
+    "note": "The reset-entry runner is a later revision; the previous record is preserved unchanged."
+  },
+  "proof_scope": "reset-entry io_read_ready partition only; bank0/bank1 not run",
+  "partition_outputs": {
+    "ready": [
+      "io_read_ready"
+    ],
+    "bank0": [
+      "io_resp_0",
+      "io_resp_1",
+      "boreChildrenBd_bore_rdata"
+    ],
+    "bank1": [
+      "io_resp_2",
+      "io_resp_3",
+      "boreChildrenBd_bore_1_rdata"
+    ]
+  },
+  "coverage": {
+    "full_input_ports": 41,
+    "full_input_bits": 313,
+    "all_public_output_ports": 7,
+    "covered_output_bits": 345,
+    "output_bits_per_partition": {
+      "ready": 1,
+      "bank0": 172,
+      "bank1": 172
+    },
+    "every_output_exactly_once": true
+  },
+  "wrapper_policy": {
+    "full_input_abi_each_partition": true,
+    "public_output_obligations_only": true,
+    "internal_name_matching_enabled": false,
+    "side_instance_prefixes": [
+      "dut_i",
+      "ref_i"
+    ],
+    "reset_entry_contract": "both instances see reset high through the first rising edge; later reset follows the full external reset input",
+    "counter_equality_assumed": false,
+    "locked_sources_modified": false,
+    "canonical_evidence_modified": false
+  },
+  "counter_transition_audit": {
+    "status": "PASS_STATIC_SOURCE_AUDIT",
+    "counter_width_bits": 9,
+    "reset_value": 0,
+    "build_next_state": "reset ? 0 : (rst_cnt[8] ? rst_cnt : rst_cnt + 1)",
+    "reference_next_state": "reset ? 0 : (rst_cnt[8] ? rst_cnt : rst_cnt + 1)",
+    "build_public_ready": "~(~rst_cnt[8] | io_write_valid)",
+    "reference_public_ready": "~(~rst_cnt[8] | io_write_valid)",
+    "source_equations_match": true,
+    "reset_entry_harness": "assert reset through the first rising edge; then preserve the external reset input unchanged",
+    "state_equality_assumed": false
+  },
+  "abi": {
+    "full_build_matches_locked_and_catalog": true,
+    "ready_partition_build_ports_exact": true,
+    "full_inputs": {
+      "clock": 1,
+      "reset": 1,
+      "io_read_valid": 1,
+      "io_read_bits_idx": 8,
+      "io_write_valid": 1,
+      "io_write_bits_idx": 8,
+      "io_write_bits_way_en": 4,
+      "io_write_bits_tag": 36,
+      "io_write_bits_ecc": 7,
+      "boreChildrenBd_bore_addr": 9,
+      "boreChildrenBd_bore_addr_rd": 9,
+      "boreChildrenBd_bore_wdata": 86,
+      "boreChildrenBd_bore_wmask": 2,
+      "boreChildrenBd_bore_re": 1,
+      "boreChildrenBd_bore_we": 1,
+      "boreChildrenBd_bore_ack": 1,
+      "boreChildrenBd_bore_selectedOH": 1,
+      "boreChildrenBd_bore_array": 6,
+      "boreChildrenBd_bore_1_addr": 9,
+      "boreChildrenBd_bore_1_addr_rd": 9,
+      "boreChildrenBd_bore_1_wdata": 86,
+      "boreChildrenBd_bore_1_wmask": 2,
+      "boreChildrenBd_bore_1_re": 1,
+      "boreChildrenBd_bore_1_we": 1,
+      "boreChildrenBd_bore_1_ack": 1,
+      "boreChildrenBd_bore_1_selectedOH": 1,
+      "boreChildrenBd_bore_1_array": 6,
+      "sigFromSrams_bore_ram_hold": 1,
+      "sigFromSrams_bore_ram_bypass": 1,
+      "sigFromSrams_bore_ram_bp_clken": 1,
+      "sigFromSrams_bore_ram_aux_clk": 1,
+      "sigFromSrams_bore_ram_aux_ckbp": 1,
+      "sigFromSrams_bore_ram_mcp_hold": 1,
+      "sigFromSrams_bore_cgen": 1,
+      "sigFromSrams_bore_1_ram_hold": 1,
+      "sigFromSrams_bore_1_ram_bypass": 1,
+      "sigFromSrams_bore_1_ram_bp_clken": 1,
+      "sigFromSrams_bore_1_ram_aux_clk": 1,
+      "sigFromSrams_bore_1_ram_aux_ckbp": 1,
+      "sigFromSrams_bore_1_ram_mcp_hold": 1,
+      "sigFromSrams_bore_1_cgen": 1
+    },
+    "ready_output_width": 1,
+    "full_input_bits": 313,
+    "full_output_bits": 345
+  },
+  "reference_view": {
+    "kind": "SECTION_5C_MULTILINE_AUTOMATIC_AND_SRAM_VIEW",
+    "all_views_trusted": true,
+    "audit_count": 7,
+    "audits": [
+      {
+        "top": "ClockGate",
+        "renamed_top": false,
+        "regions_removed_lines": {},
+        "block_local_temporaries_hoisted": [],
+        "initialized_declarations_hoisted": [],
+        "positional_packed_patterns_normalized": 0,
+        "code_lines_locked": 12,
+        "code_lines_view": 12,
+        "residual_preprocessor_directives": 0,
+        "line_conservation_ok": true,
+        "register_update_equations_locked": 0,
+        "register_update_equations_preserved": true,
+        "view_trusted": true
+      },
+      {
+        "top": "MbistClockGateCell",
+        "renamed_top": false,
+        "regions_removed_lines": {},
+        "block_local_temporaries_hoisted": [],
+        "initialized_declarations_hoisted": [],
+        "positional_packed_patterns_normalized": 0,
+        "code_lines_locked": 16,
+        "code_lines_view": 16,
+        "residual_preprocessor_directives": 0,
+        "line_conservation_ok": true,
+        "register_update_equations_locked": 0,
+        "register_update_equations_preserved": true,
+        "view_trusted": true
+      },
+      {
+        "top": "array_256x86",
+        "renamed_top": false,
+        "regions_removed_lines": {
+          "`ifdef ENABLE_INITIAL_MEM_": 23
+        },
+        "block_local_temporaries_hoisted": [],
+        "initialized_declarations_hoisted": [],
+        "positional_packed_patterns_normalized": 0,
+        "code_lines_locked": 24,
+        "code_lines_view": 24,
+        "residual_preprocessor_directives": 0,
+        "line_conservation_ok": true,
+        "register_update_equations_locked": 3,
+        "register_update_equations_preserved": true,
+        "view_trusted": true
+      },
+      {
+        "top": "sram_array_1p256x86m43s1h0l1b_dcsh_tag",
+        "renamed_top": false,
+        "regions_removed_lines": {},
+        "block_local_temporaries_hoisted": [],
+        "initialized_declarations_hoisted": [],
+        "positional_packed_patterns_normalized": 0,
+        "code_lines_locked": 25,
+        "code_lines_view": 25,
+        "residual_preprocessor_directives": 0,
+        "line_conservation_ok": true,
+        "register_update_equations_locked": 0,
+        "register_update_equations_preserved": true,
+        "view_trusted": true
+      },
+      {
+        "top": "SRAMTemplate_116",
+        "renamed_top": false,
+        "regions_removed_lines": {
+          "`ifdef ENABLE_INITIAL_REG_": 23
+        },
+        "block_local_temporaries_hoisted": [],
+        "initialized_declarations_hoisted": [],
+        "positional_packed_patterns_normalized": 0,
+        "code_lines_locked": 89,
+        "code_lines_view": 89,
+        "residual_preprocessor_directives": 0,
+        "line_conservation_ok": true,
+        "register_update_equations_locked": 3,
+        "register_update_equations_preserved": true,
+        "view_trusted": true
+      },
+      {
+        "top": "TagSRAMBank",
+        "renamed_top": false,
+        "regions_removed_lines": {
+          "`ifdef ENABLE_INITIAL_REG_": 20
+        },
+        "block_local_temporaries_hoisted": [],
+        "initialized_declarations_hoisted": [],
+        "positional_packed_patterns_normalized": 0,
+        "code_lines_locked": 75,
+        "code_lines_view": 75,
+        "residual_preprocessor_directives": 0,
+        "line_conservation_ok": true,
+        "register_update_equations_locked": 2,
+        "register_update_equations_preserved": true,
+        "view_trusted": true
+      },
+      {
+        "top": "TagArray",
+        "renamed_top": true,
+        "regions_removed_lines": {},
+        "block_local_temporaries_hoisted": [],
+        "initialized_declarations_hoisted": [],
+        "positional_packed_patterns_normalized": 0,
+        "code_lines_locked": 113,
+        "code_lines_view": 113,
+        "residual_preprocessor_directives": 0,
+        "line_conservation_ok": true,
+        "register_update_equations_locked": 0,
+        "register_update_equations_preserved": true,
+        "view_trusted": true
+      }
+    ]
+  },
+  "sources": {
+    "diagnostic_runner": {
+      "path": "validation/v2_tagarray_public_partition_diagnostic.py",
+      "sha256": "4516ce3d33ee2547f10bed2d269c485b71bd7d394f486565d0df426f8c8e54dc",
+      "bytes": 22739,
+      "note": "The final parser-only interpretation update occurred after the formal run; the reset-entry wrapper and Yosys command were unchanged."
+    },
+    "build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Cache.Dcache.Meta.TagArray-Hardware.py",
+      "sha256": "0978d5e6bbe131c3379897690555af141eba6010c859e61dd51386553d51e697",
+      "bytes": 9415
+    },
+    "strict_rail": {
+      "path": "validation/v2_strict_family_rail.py",
+      "sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
+      "bytes": 45980
+    },
+    "reference_view_helper": {
+      "path": "validation/v2_funcunit_strict_validator.py",
+      "sha256": "ef5018899932061420e780d9c5edc083fa532cf160bd628d9adb990b364b49f8",
+      "bytes": 20462
+    },
+    "locked_top": {
+      "path": "validation/reference-sv/TagArray.sv",
+      "sha256": "24d984641c94512391a2b3b405a8554d580f91ca6355e774e03f3bdcc9eb4faa",
+      "bytes": 10235
+    },
+    "locked_children": {
+      "ClockGate": {
+        "path": "validation/reference-sv/ClockGate.sv",
+        "sha256": "b4e6a1a11579276193dc18d2b56d24b04ba79879a32804456ce0116cbe878c97",
+        "bytes": 185
+      },
+      "MbistClockGateCell": {
+        "path": "validation/reference-sv/MbistClockGateCell.sv",
+        "sha256": "b4763f90e3eac5cc80939910617e838f2c65c06a5e5ee22725f9319cd99190aa",
+        "bytes": 1262
+      },
+      "SRAMTemplate_116": {
+        "path": "validation/reference-sv/SRAMTemplate_116.sv",
+        "sha256": "d8b6b39391baff329601dc3f818ac776fc08800aa2a2033911c4823cd422125f",
+        "bytes": 13357
+      },
+      "TagSRAMBank": {
+        "path": "validation/reference-sv/TagSRAMBank.sv",
+        "sha256": "4ce9ac456a2591005d293363b2a44ec174cfcce1a0b14e310a18fdf865f455ed",
+        "bytes": 9763
+      },
+      "array_256x86": {
+        "path": "validation/reference-sv/array_256x86.sv",
+        "sha256": "f517411331c3701b613e1cb4de1a262ca71fcaeaa1b04aabcf839104b11b4fea",
+        "bytes": 4100
+      },
+      "sram_array_1p256x86m43s1h0l1b_dcsh_tag": {
+        "path": "validation/reference-sv/sram_array_1p256x86m43s1h0l1b_dcsh_tag.sv",
+        "sha256": "914c8f355a4421a825b980803107b44e595c9a1126072d2d4bc29e1a46e81cf5",
+        "bytes": 2316
+      }
+    }
+  },
+  "tool_policy": {
+    "serial_wsl_formal": true,
+    "maximum_seconds_per_run": 900,
+    "ascii_temp_root": "C:\\Temp\\uhsc_tagarray_ready_diag_3kna61my",
+    "formal_runs": ["ready_baseline"],
+    "not_run_after_baseline_failure": [
+      "ready_target_mutation",
+      "ready_reference_mutation"
+    ],
+    "bank0_run": "NOT_RUN_PENDING_FOLLOWUP",
+    "bank1_run": "NOT_RUN_PENDING_FOLLOWUP"
+  },
+  "checks": {
+    "ready_baseline": {
+      "stage": "ready_baseline",
+      "target_wrapper_sha256": "10f3524af7a794e5fc39a2e4bd9ef568d3b4980f2a4008885ef14a0c93d5da55",
+      "reference_wrapper_sha256": "44a57b108aff061d45922783535bccc69b2e05ccf1671a250b46008de64fcff8",
+      "command": [
+        "yosys",
+        "-Q",
+        "-p",
+        "read_verilog -sv /mnt/c/Temp/uhsc_tagarray_ready_diag_3kna61my/DUT_TagArray_READY_IMPL.sv /mnt/c/Temp/uhsc_tagarray_ready_diag_3kna61my/REF_TagArray.sv /mnt/c/Temp/uhsc_tagarray_ready_diag_3kna61my/ready_baseline/DUT_TagArray_READY.sv /mnt/c/Temp/uhsc_tagarray_ready_diag_3kna61my/ready_baseline/REF_TagArray_READY.sv; proc; async2sync; memory; opt; flatten REF_TagArray_READY; flatten DUT_TagArray_READY; opt_clean; equiv_make REF_TagArray_READY DUT_TagArray_READY TAGARRAY_READY_EQ; prep -top TAGARRAY_READY_EQ; equiv_induct -undef; equiv_status -assert"
+      ],
+      "status": "FAIL",
+      "returncode": 1,
+      "timed_out": false,
+      "timeout_seconds": 900,
+      "equiv_cells": null,
+      "equiv_cells_observed_in_stats": 1,
+      "expected_public_output_equiv_cells": 1,
+      "one_public_output_obligation": true,
+      "unproven_equiv_cells": 1,
+      "equiv_summary": null,
+      "equiv_failure_marker": true,
+      "equiv_success_markers": {
+        "0 are unproven.": false,
+        "Equivalence successfully proven!": false
+      },
+      "output_sha256": "6522db01fb26ecd8af7f1558c16db5127dbae9f3fa74517f05683f46818c145f",
+      "output_tail": "3.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module TAGARRAY_READY_EQ.\n\n13.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\TAGARRAY_READY_EQ'.\nRemoved a total of 0 cells.\n\n13.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\TAGARRAY_READY_EQ..\n\n13.11.4. Finished fast OPT passes.\n\n13.12. Printing statistics.\n\n=== TAGARRAY_READY_EQ ===\n\n   Number of wires:                400\n   Number of wire bits:           5050\n   Number of public wires:         395\n   Number of public wire bits:    5013\n   Number of ports:                 42\n   Number of port bits:            314\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                 31\n     $add                            2\n     $dff                            1\n     $equiv                          1\n     $mux                            4\n     $not                            4\n     $or                             3\n     $scopeinfo                     14\n     $sdff                           2\n\n13.13. Executing CHECK pass (checking for obvious problems).\nChecking module TAGARRAY_READY_EQ...\nFound and reported 0 problems.\n\n14. Executing EQUIV_INDUCT pass.\nFound 1 unproven $equiv cells in module TAGARRAY_READY_EQ:\n  Undef modelling: force def on 19 initial reg values and 3 inputs.\n  Proving existence of base case for step 1. (3693 clauses over 1387 variables)\n  Proving induction step 1. (8525 clauses over 3159 variables)\n  Proof for induction step failed. Extending to next time step.\n  Proving existence of base case for step 2. (8526 clauses over 3159 variables)\n  Proving induction step 2. (13358 clauses over 4931 variables)\n  Proof for induction step failed. Extending to next time step.\n  Proving existence of base case for step 3. (13359 clauses over 4931 variables)\n  Proving induction step 3. (18191 clauses over 6703 variables)\n  Proof for induction step failed. Extending to next time step.\n  Proving existence of base case for step 4. (18192 clauses over 6703 variables)\n  Proving induction step 4. (23024 clauses over 8475 variables)\n  Proof for induction step failed. Trying to prove individual $equiv from workset.\n  Trying to prove $equiv for \\io_read_ready: failed.\nProved 0 previously unproven $equiv cells.\n\n15. Executing EQUIV_STATUS pass.\nERROR: Found 1 unproven $equiv cells in 'equiv_status -assert'.\n",
+      "expected_result": "EQUIVALENCE_PASS",
+      "one_public_output_obligation": true,
+      "baseline_proven": false,
+      "diagnostic_verdict": "FAIL"
+    },
+    "ready_target_mutation": {
+      "stage": "ready_target_mutation",
+      "status": "NOT_RUN_BASELINE_FAILED",
+      "expected_result": "MUTATION_REJECTED",
+      "diagnostic_verdict": "INCONCLUSIVE",
+      "mutation_side": "target",
+      "negative_control_decisive": false
+    },
+    "ready_reference_mutation": {
+      "stage": "ready_reference_mutation",
+      "status": "NOT_RUN_BASELINE_FAILED",
+      "expected_result": "MUTATION_REJECTED",
+      "diagnostic_verdict": "INCONCLUSIVE",
+      "mutation_side": "reference",
+      "negative_control_decisive": false
+    }
+  },
+  "negative_control": {
+    "status": "INCONCLUSIVE",
+    "target_mutation_rejection_observed": null,
+    "reference_mutation_rejection_observed": null,
+    "current_digest_control_closed": false,
+    "reason": "Negative controls run only after the reset-entry baseline proves; otherwise both are marked NOT_RUN_BASELINE_FAILED."
+  },
+  "unclosed": [
+    "Only io_read_ready was run; bank0 and bank1 public output partitions remain unproven.",
+    "The complete 345-bit output surface has not been formally proven by this diagnostic."
+  ]
+}
