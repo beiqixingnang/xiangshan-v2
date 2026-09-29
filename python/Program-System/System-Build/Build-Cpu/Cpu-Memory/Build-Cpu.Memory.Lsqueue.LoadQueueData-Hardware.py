@@ -635,16 +635,21 @@ class LoadQueueDataFamily(Elaboratable):
 
         del platform
         module = Module()
-        domain = ClockDomain("sync", async_reset=True)
+        # The locked V2 LoadQueueData storage has no reset path.  ``reset`` is
+        # present only for the generated assertion context; DelayN/Vec
+        # registers and the entry array retain state across reset exactly as
+        # in the reference.  Using an async-reset domain here silently added
+        # reset behavior to every pipeline register and made the unbounded
+        # equivalence rail fail even though reset-constrained vectors passed.
+        domain = ClockDomain("sync")
         domain.clk = self.clock
-        domain.rst = self.reset
         module.domains += domain
         entries, data_width, _address_width = MEMORY_CONFIG[self.member]
         bank_count = WRITE_BANK_COUNT[self.member]
         write_delay = WRITE_DELAY[self.member]
         entries_per_bank = entries // bank_count
         pipeline_cycles = write_delay - 1
-        memory = Array(Signal(data_width, name=f"entry_{index}", reset_less=True)
+        memory = Array(Signal(data_width, name=f"entry_{index}", init=None, reset_less=True)
                        for index in range(entries))
 
         def read_entry(address: Any) -> Any:
@@ -658,8 +663,10 @@ class LoadQueueDataFamily(Elaboratable):
             delayed_value = source
             delayed_valid = valid
             for stage in range(cycles):
-                next_value = Signal(width, name=f"{stem}_data_{stage}", reset_less=True)
-                next_valid = Signal(name=f"{stem}_valid_{stage}")
+                next_value = Signal(width, name=f"{stem}_data_{stage}", init=None,
+                                    reset_less=True)
+                next_valid = Signal(name=f"{stem}_valid_{stage}", init=None,
+                                    reset_less=True)
                 with cast(Any, module.If(delayed_valid)):
                     module.d.sync += next_value.eq(delayed_value)
                 module.d.sync += next_valid.eq(delayed_valid)
@@ -672,7 +679,7 @@ class LoadQueueDataFamily(Elaboratable):
 
             delayed_value = source
             for stage in range(cycles):
-                next_value = Signal(name=f"{stem}_{stage}", reset_less=True)
+                next_value = Signal(name=f"{stem}_{stage}", init=None, reset_less=True)
                 module.d.sync += next_value.eq(delayed_value)
                 delayed_value = next_value
             return delayed_value
@@ -727,7 +734,8 @@ class LoadQueueDataFamily(Elaboratable):
 
         if self.member == "LqVAddrModule":
             for read in range(3):
-                read_data = Signal(data_width, name=f"read_data_{read}", reset_less=True)
+                read_data = Signal(data_width, name=f"read_data_{read}", init=None,
+                                   reset_less=True)
                 with cast(Any, module.If(self.ports[f"io_ren_{read}"])):
                     module.d.sync += read_data.eq(read_entry(self.ports[f"io_raddr_{read}"]))
                 module.d.comb += self.ports[f"io_rdata_{read}"].eq(read_data)

@@ -5,7 +5,7 @@ from __future__ import annotations
 
 from typing import Any, cast
 
-from amaranth import Array, Cat, ClockDomain, Const, Elaboratable, Instance, Module, Mux, Signal
+from amaranth import Array, Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
 
 
@@ -537,13 +537,15 @@ class UtilityResidualFamily(Elaboratable):
     # Implement the source low-level transparent clock-gate latch. / 实现源级低电平透明时钟门控锁存器。
     def _clock_gate(self, module: Module) -> None:
         enable_latch = Signal(name="enable_latch")
-        module.submodules.enable_latch = Instance(
-            "$dlatch",
-            p_WIDTH=1,
-            i_D=self.ports["TE"] | self.ports["E"],
-            i_EN=~self.ports["CK"],
-            o_Q=enable_latch,
-        )
+        # The source latch is transparent while CK is low and is only
+        # observable through Q while CK is high.  Capturing the enable on the
+        # rising CK edge therefore preserves the complete public transition
+        # relation without relying on Yosys' private ``$dlatch`` cell (which
+        # Verilator/Yosys cannot resolve from a standalone Build export).
+        gate_domain = ClockDomain("gate", reset_less=True)
+        gate_domain.clk = self.ports["CK"]
+        module.domains += gate_domain
+        module.d.gate += enable_latch.eq(self.ports["TE"] | self.ports["E"])
         module.d.comb += self.ports["Q"].eq(self.ports["CK"] & enable_latch)
 
     # Implement the eight-entry irrevocable ID allocator. / 实现八项不可撤销 ID 分配器。
