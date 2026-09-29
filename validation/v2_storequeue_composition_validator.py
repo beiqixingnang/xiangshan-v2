@@ -123,6 +123,102 @@ def prepare_current_artifacts(work_dir: Path | None = None) -> dict[str, Path]:
     return artifacts
 
 
+# Normalize module identity, domain ports, and one verified empty sentinel. / 归一化模块身份、时钟域端口及一个已验证的空哨兵。
+def normalized_child_body(text: str, module_pattern: str, clock: str, reset: str) -> str:
+    """Return a canonical body after checking all dump-module sentinel uses."""
+
+    match = re.search(module_pattern, text)
+    if match is None:
+        raise ValueError("expected child module definition is missing")
+    header_end = text.find(");", match.start())
+    if header_end < 0:
+        raise ValueError("child module header is unterminated")
+    tail = text[header_end + 2:]
+    end_match = re.search(r"(?m)^endmodule\b", tail)
+    next_module = re.search(r"(?m)^module\b", tail)
+    if end_match is None:
+        raise ValueError("child module body is unterminated")
+    if next_module is not None and next_module.start() < end_match.start():
+        raise ValueError("child module body crossed into a following module")
+    body = tail[:end_match.start()]
+    body = re.sub(r"\b" + re.escape(clock) + r"\b", "clock", body)
+    body = re.sub(r"\b" + re.escape(reset) + r"\b", "reset", body)
+    sentinel_prefix = r"\\\$auto\$verilog_backend\.cc:2355:dump_module\$"
+    sentinel_occurrences = list(re.finditer(sentinel_prefix + r"(\d+)", body))
+    sentinel_declaration = re.compile(
+        r"\s*reg\s+" + sentinel_prefix + r"(\d+)\s*=\s*0;\s*")
+    sentinel_empty_use = re.compile(
+        r"\s*if\s*\(\s*" + sentinel_prefix + r"(\d+)\s*\)\s*begin\s*end\s*")
+    declarations: list[re.Match[str]] = []
+    uses: list[re.Match[str]] = []
+    for line in body.splitlines():
+        if "dump_module$" not in line:
+            continue
+        declaration = sentinel_declaration.fullmatch(line)
+        empty_use = sentinel_empty_use.fullmatch(line)
+        if declaration is not None:
+            declarations.append(declaration)
+        elif empty_use is not None:
+            uses.append(empty_use)
+        else:
+            raise ValueError("Yosys dump-module sentinel has a non-empty or unrecognized use")
+    if len(declarations) != 1 or len(sentinel_occurrences) != 1 + len(uses):
+        raise ValueError("expected one dump-module sentinel declaration and only empty-if uses")
+    ordinals = {match.group(1) for match in [*declarations, *uses]}
+    if len(ordinals) != 1:
+        raise ValueError("Yosys dump-module sentinel ordinal differs within child module")
+    body = re.sub(sentinel_prefix + next(iter(ordinals)),
+                  r"\\$auto$verilog_backend.cc:2355:dump_module$N", body)
+    normalized_declarations: list[str] = []
+    statements: list[str] = []
+    for line in body.splitlines():
+        normalized = line.rstrip()
+        if re.match(r"^\s*(input|output|wire|reg)\b", normalized):
+            normalized_declarations.append(normalized)
+        else:
+            statements.append(normalized)
+    if not normalized_declarations:
+        raise ValueError("child module contains no port or net declarations")
+    return "\n".join([*sorted(normalized_declarations), *statements]).strip()
+
+
+# Verify all embedded target children against the strict leaf target. / 将所有嵌入式目标子模块与严格叶级目标逐一核对。
+def check_inline_child_implementations(parent_rtl: str, standalone_rtl: str) -> dict[str, Any]:
+    """Require exact child ABI and normalized RTL equality for all target lanes."""
+
+    expected = normalized_child_body(
+        standalone_rtl, r"(?m)^module\s+DUT_SQData8Module\s*\(", "clock", "reset")
+    standalone_abi = ports(standalone_rtl, "DUT_SQData8Module")
+    matches = list(re.finditer(r"(?m)^module\s+\\SQDataModule\.data8_(\d+)\s*\(", parent_rtl))
+    lanes = sorted({int(match.group(1)) for match in matches})
+    rows: list[dict[str, Any]] = []
+    for lane in lanes:
+        body = normalized_child_body(
+            parent_rtl,
+            r"(?m)^module\s+\\SQDataModule\.data8_" + str(lane) + r"\s*\(",
+            f"data8_{lane}_sync_clk", f"data8_{lane}_sync_rst")
+        inline_abi = ports(parent_rtl, f"\\SQDataModule.data8_{lane}")
+        clock_abi = inline_abi.pop(f"data8_{lane}_sync_clk", None)
+        reset_abi = inline_abi.pop(f"data8_{lane}_sync_rst", None)
+        if clock_abi is not None:
+            inline_abi["clock"] = clock_abi
+        if reset_abi is not None:
+            inline_abi["reset"] = reset_abi
+        rows.append({"lane": lane, "abi_exact": inline_abi == standalone_abi,
+                     "normalized_body_exact": body == expected,
+                     "normalized_body_sha256": hashlib.sha256(body.encode()).hexdigest(),
+                     "standalone_body_sha256": hashlib.sha256(expected.encode()).hexdigest(),
+                     "first_difference": next((index for index, pair in enumerate(zip(body, expected))
+                                                if pair[0] != pair[1]),
+                                               None if len(body) == len(expected) else min(len(body), len(expected)))})
+    return {"required_lanes": LANE_COUNT, "found_lanes": lanes,
+            "all_lanes_match_standalone": lanes == list(range(LANE_COUNT))
+            and len(rows) == LANE_COUNT
+            and all(row["abi_exact"] and row["normalized_body_exact"] for row in rows),
+            "normalization": "module identity plus clock/reset names; declaration order only",
+            "lanes": rows}
+
+
 # Summarize the last strict attempt without treating stale results as current. / 汇总最近一次严格尝试但不把过期结果当作当前证据。
 def prior_strict_attempt(current_build_sha256: str) -> dict[str, Any]:
     """Return historical formal details and whether they bind to today's Build."""
@@ -212,6 +308,8 @@ def ports(text: str, name: str) -> dict[str, tuple[str, int]]:
             if port in listed or not listed or any(
                     re.search(r"\b" + re.escape(port) + r"\b", item)
                     for item in listed):
+                if direction is None:
+                    raise ValueError(f"child port has no direction: {port}")
                 result.setdefault(port, (direction, width))
     return result
 
@@ -370,6 +468,288 @@ def check_output_coverage(
     return {"dut": rows["dut"], "reference": rows["reference"],
             "all_outputs_covered": rows["dut"]["all_outputs_covered"]
             and rows["reference"]["all_outputs_covered"]}
+
+
+# Normalize generated clock/reset port names for one child instance. / 归一化单个子实例生成的时钟和复位端口名。
+def logical_child_ports(table: dict[str, str], lane: int, reference: bool) -> dict[str, str]:
+    """Return child ports under their locked logical names."""
+
+    result = dict(table)
+    if not reference:
+        for logical, generated in (("clock", f"data8_{lane}_sync_clk"),
+                                   ("reset", f"data8_{lane}_sync_rst")):
+            if generated in result:
+                result[logical] = result.pop(generated)
+    return result
+
+
+# Require one simple named input expression before emitting a miter. / 发射 miter 前要求输入表达式为单个简单命名表达式。
+def simple_expression(expression: str) -> str:
+    """Reject parsed connection expressions outside the checked name/slice form."""
+
+    value = expression.strip()
+    if re.fullmatch(r"[A-Za-z_][A-Za-z0-9_$]*(?:\[\d+(?::\d+)?\])?", value) is None:
+        raise ValueError(f"unsupported child connection expression: {expression!r}")
+    return value
+
+
+# Measure a top-level name or constant slice used by one child input. / 计算子输入连接中的顶层名称或常量切片位宽。
+def expression_width(expression: str, parent_inputs: dict[str, int]) -> int:
+    """Return the exact width of a validated parent input expression."""
+
+    value = simple_expression(expression)
+    match = re.fullmatch(
+        r"(?P<name>[A-Za-z_][A-Za-z0-9_$]*)(?:\[(?P<high>\d+)(?::(?P<low>\d+))?\])?",
+        value)
+    if match is None or match.group("name") not in parent_inputs:
+        raise ValueError(f"child input does not map to a public parent input: {value}")
+    source_width = parent_inputs[match.group("name")]
+    high = match.group("high")
+    low = match.group("low")
+    if high is None:
+        return source_width
+    high_value = int(high)
+    low_value = int(low) if low is not None else high_value
+    if low_value > high_value or high_value >= source_width:
+        raise ValueError(f"child input slice exceeds parent input width: {value}")
+    return high_value - low_value + 1
+
+
+# Prove that the extracted top has one expected driver per public output. / 确认解析出的顶层每个公开输出恰有一个预期驱动源。
+def check_parent_output_drivers(
+    top: str,
+    parent_ports: dict[str, tuple[str, int]],
+    children: dict[int, dict[str, str]],
+    reference: bool,
+) -> dict[str, int]:
+    """Allow one read concatenation assignment or one direct child driver."""
+
+    outputs = {name for name, (direction, _width) in parent_ports.items()
+               if direction == "output"}
+    direct_counts: dict[str, int] = {name: 0 for name in outputs}
+    for lane, row in children.items():
+        logical = logical_child_ports(row, lane, reference)
+        for port in CHILD_OUTPUTS:
+            if port.startswith("io_rdata_"):
+                continue
+            name = logical.get(port, "").strip()
+            if name in outputs:
+                direct_counts[name] += 1
+
+    continuous: dict[str, int] = {name: 0 for name in outputs}
+    for match in re.finditer(r"(?ms)^\s*assign\s+(.*?)\s*=", top):
+        lhs = re.sub(r"\s+", "", match.group(1))
+        for output in outputs:
+            if re.search(r"\b" + re.escape(output) + r"\b", lhs):
+                if lhs != output:
+                    raise ValueError(f"unsupported parent output lvalue for {output}: {lhs}")
+                continuous[output] += 1
+
+    procedural: dict[str, int] = {name: 0 for name in outputs}
+    for raw in top.splitlines():
+        line = raw.split("//", 1)[0]
+        match = re.match(r"^\s*(?!assign\b)([A-Za-z_]\w*)(?:\[[^]]+\])?\s*(?:<=|=(?!=))", line)
+        if match is not None and match.group(1) in outputs:
+            procedural[match.group(1)] += 1
+
+    read_outputs = {f"io_rdata_{read}_{kind}"
+                    for read in range(2) for kind in ("mask", "data")}
+    counts: dict[str, int] = {}
+    for name in outputs:
+        direct = direct_counts[name]
+        assigned = continuous[name]
+        procedural_count = procedural[name]
+        if name in read_outputs:
+            if (direct, assigned, procedural_count) != (0, 1, 0):
+                raise ValueError(f"read output has unexpected drivers: {name} "
+                                 f"direct={direct}, assign={assigned}, procedural={procedural_count}")
+        elif (direct, assigned, procedural_count) != (1, 0, 0):
+            raise ValueError(f"forward output has unexpected drivers: {name} "
+                             f"direct={direct}, assign={assigned}, procedural={procedural_count}")
+        counts[name] = direct + assigned + procedural_count
+    return counts
+
+
+# Build one unrestricted combinational parent composition miter. / 构建一个无约束组合父级组合 miter。
+def build_parent_glue_miter(
+    dut_parent: str,
+    reference_parent: str,
+    dut_child: str,
+    reference_child: str,
+    mutation: tuple[str, int, str, str] | None = None,
+) -> str:
+    """Compare both parent wiring maps with shared arbitrary leaf outputs."""
+
+    dut_top = find_top(dut_parent, "DUT_SQDataModule")
+    ref_top = find_top(reference_parent, "REF_SQDataModule")
+    dut_ports = ports(dut_parent, "DUT_SQDataModule")
+    ref_ports = ports(reference_parent, "REF_SQDataModule")
+    if dut_ports != ref_ports:
+        raise ValueError("parent named ABI differs between target and locked reference")
+    dut_child_abi = ports(dut_child, "DUT_SQData8Module")
+    ref_child_abi = ports(reference_child, "REF_SQData8Module")
+    if dut_child_abi != ref_child_abi:
+        raise ValueError("standalone child ABI differs between target and locked reference")
+    dut_children = child_tables(dut_top, False)
+    ref_children = child_tables(ref_top, True)
+    if not check_children(dut_children, False)["all_lanes_exact"] \
+            or not check_children(ref_children, True)["all_lanes_exact"]:
+        raise ValueError("not every lane has the exact 32 named child connections")
+    check_parent_output_drivers(dut_top, dut_ports, dut_children, False)
+    check_parent_output_drivers(ref_top, ref_ports, ref_children, True)
+    assembly = check_read_assembly(dut_top, ref_top, dut_children, ref_children)
+    if not assembly["all_exact"]:
+        raise ValueError("parent read outputs do not assemble lanes 15 through 0")
+    coverage = check_output_coverage(dut_ports, ref_ports, dut_children,
+                                     ref_children, assembly)
+    if not coverage["all_outputs_covered"]:
+        raise ValueError("parent glue does not cover all public outputs")
+    inline = check_inline_child_implementations(dut_parent, dut_child)
+    if not inline["all_lanes_match_standalone"]:
+        raise ValueError("one or more inlined target children differ from the standalone leaf")
+
+    parent_inputs = {name: width for name, (direction, width) in dut_ports.items()
+                     if direction == "input"}
+    parent_outputs = {name: width for name, (direction, width) in dut_ports.items()
+                      if direction == "output"}
+    child_inputs = [name for name, (direction, _width) in ref_child_abi.items()
+                    if direction == "input"]
+    child_input_widths = {name: width for name, (direction, width) in ref_child_abi.items()
+                          if direction == "input"}
+    child_outputs = {name: width for name, (direction, width) in ref_child_abi.items()
+                     if direction == "output"}
+    if set(child_inputs) != {"clock", "reset", *COMMON_INPUTS} \
+            or set(child_outputs) != set(CHILD_OUTPUTS):
+        raise ValueError("standalone leaf port set differs from the audited 32-port composition")
+    if mutation is not None:
+        if mutation[0] not in {"dut", "reference"} or mutation[1] not in range(LANE_COUNT) \
+                or mutation[2] not in child_input_widths:
+            raise ValueError("negative-control mutation does not identify one child input mapping")
+        if expression_width(mutation[3], parent_inputs) != child_input_widths[mutation[2]]:
+            raise ValueError("negative-control mutation changes the child input width")
+
+    lines = ["// StoreQueueData parent wiring miter; child output inputs are shared and arbitrary.",
+             "module SQDataModule_GLUE_MITER("]
+    declarations = [
+        ("input", width, name) for name, width in sorted(parent_inputs.items())
+    ]
+    declarations.extend(
+        ("input", width, f"leaf_l{lane}_{port}")
+        for lane in range(LANE_COUNT)
+        for port, width in sorted(child_outputs.items())
+    )
+    declarations.append(("output", 1, "mismatch"))
+    for index, (direction, width, name) in enumerate(declarations):
+        comma = "," if index + 1 < len(declarations) else ""
+        range_text = f" [{width - 1}:0]" if width > 1 else ""
+        lines.append(f"  {direction}{range_text} {name}{comma}")
+    lines.extend((");", ""))
+    for name, width in sorted(parent_outputs.items()):
+        range_text = f" [{width - 1}:0]" if width > 1 else ""
+        lines.append(f"  wire{range_text} dut_out_{name};")
+        lines.append(f"  wire{range_text} ref_out_{name};")
+
+    mismatch_terms: list[str] = []
+    mutation_applied = False
+    for lane in range(LANE_COUNT):
+        dut_row = logical_child_ports(dut_children[lane], lane, False)
+        ref_row = logical_child_ports(ref_children[lane], lane, True)
+        for port in child_inputs:
+            dut_expression = simple_expression(dut_row[port])
+            ref_expression = simple_expression(ref_row[port])
+            if expression_width(dut_expression, parent_inputs) != child_input_widths[port] \
+                    or expression_width(ref_expression, parent_inputs) != child_input_widths[port]:
+                raise ValueError(f"child input width mismatch for lane {lane} port {port}")
+            if mutation is not None and mutation[1:3] == (lane, port):
+                mutation_applied = True
+                if mutation[0] == "dut":
+                    dut_expression = simple_expression(mutation[3])
+                elif mutation[0] == "reference":
+                    ref_expression = simple_expression(mutation[3])
+                else:
+                    raise ValueError(f"unknown mutation side: {mutation[0]}")
+            mismatch_terms.append(f"({dut_expression} != {ref_expression})")
+        for port in child_outputs:
+            if port.startswith("io_rdata_"):
+                continue
+            dut_public = simple_expression(dut_row[port])
+            ref_public = simple_expression(ref_row[port])
+            dut_signal = f"leaf_l{lane}_{port}"
+            ref_signal = f"leaf_l{lane}_{port}"
+            if dut_public not in parent_outputs or ref_public not in parent_outputs:
+                raise ValueError(f"child output mapping is not a declared parent output: {port}")
+            lines.append(f"  assign dut_out_{dut_public} = {dut_signal};")
+            lines.append(f"  assign ref_out_{ref_public} = {ref_signal};")
+
+    if mutation is not None and not mutation_applied:
+        raise ValueError("negative-control mutation did not reach a child input mapping")
+
+    for row in assembly["rows"]:
+        match = re.fullmatch(r"io_rdata_(\d+)_(mask|data)", row["output"])
+        if match is None:
+            raise ValueError(f"unexpected read output name: {row['output']}")
+        read = int(match.group(1))
+        child_port = f"io_rdata_{read}_{'valid' if match.group(2) == 'mask' else 'data'}"
+        for side, expression in (("dut", row["dut"]), ("ref", row["reference"])):
+            normalized = re.sub(
+                r"\bL(\d+)\b",
+                lambda found: f"leaf_l{int(found.group(1))}_{child_port}",
+                expression,
+            )
+            if re.search(r"\bL\d+\b", normalized):
+                raise ValueError("read assembly names an out-of-range lane")
+            lines.append(f"  assign {side}_out_{row['output']} = {normalized};")
+
+    for side in ("dut", "ref"):
+        assigned: dict[str, int] = {}
+        for match in re.finditer(r"(?m)^\s*assign\s+" + side + r"_out_(\w+)\s*=", "\n".join(lines)):
+            name = match.group(1)
+            assigned[name] = assigned.get(name, 0) + 1
+        if set(assigned) != set(parent_outputs) or any(count != 1 for count in assigned.values()):
+            raise ValueError(f"miter does not assign every {side} parent output exactly once")
+    mismatch_terms.extend(f"(dut_out_{name} != ref_out_{name})"
+                          for name in sorted(parent_outputs))
+    lines.append("  assign mismatch = " + " |\n    ".join(mismatch_terms) + ";")
+    lines.extend(("endmodule", ""))
+    return "\n".join(lines)
+
+
+# Emit one base glue miter and two-sided formal negative controls. / 生成基准 glue miter 及双侧形式化负控。
+def write_parent_glue_miters(
+    dut_parent_path: Path,
+    reference_parent_path: Path,
+    dut_child_path: Path,
+    reference_child_path: Path,
+    output_dir: Path,
+) -> dict[str, Any]:
+    """Write unrestricted combinational proof inputs without running a formal tool."""
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+    sources = {
+        "dut_parent": dut_parent_path.read_text(encoding="utf-8"),
+        "reference_parent": reference_parent_path.read_text(encoding="utf-8"),
+        "dut_child": dut_child_path.read_text(encoding="utf-8"),
+        "reference_child": reference_child_path.read_text(encoding="utf-8"),
+    }
+    cases = {
+        "base": None,
+        "target_input_slice_mutation": ("dut", 0, "io_data_wdata_0", "io_data_wdata_0[15:8]"),
+        "reference_mask_bit_mutation": ("reference", 0, "io_mask_wdata_0", "io_mask_wdata_0[1]"),
+    }
+    records: dict[str, Any] = {}
+    for name, mutation in cases.items():
+        rendered = build_parent_glue_miter(
+            sources["dut_parent"], sources["reference_parent"],
+            sources["dut_child"], sources["reference_child"], mutation)
+        path = output_dir / f"SQDataModule_GLUE_{name}.sv"
+        path.write_text(rendered, encoding="utf-8", newline="\n")
+        records[name] = {"path": str(path.resolve()), "bytes": path.stat().st_size,
+                         "sha256": hash_file(path), "formal_status": "NOT_RUN"}
+    return {"top": "SQDataModule_GLUE_MITER", "inputs": records,
+            "command_template": "yosys -Q -p 'read_verilog -sv <file>; prep -top SQDataModule_GLUE_MITER; opt; sat -prove mismatch 0'",
+            "source_hashes": {name: hashlib.sha256(text.encode()).hexdigest()
+                              for name, text in sources.items()},
+            "strict_count_eligible": False}
 
 
 # Run explicit composition validation. / 运行显式组合验证。

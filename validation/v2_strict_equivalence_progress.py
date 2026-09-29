@@ -26,6 +26,40 @@ EQUIV_SUCCESS_MARKERS = (
     "0 are unproven.",
     "Equivalence successfully proven!",
 )
+STOREQUEUE_BUILD_ID = "Build-Cpu.Memory.Lsqueue.StoreQueueData"
+STOREQUEUE_BUILD_PATH = (
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/"
+    "Build-Cpu.Memory.Lsqueue.StoreQueueData-Hardware.py"
+)
+STOREQUEUE_VALIDATOR_PATH = "validation/v2_storequeue_strict_validator.py"
+STOREQUEUE_COMPOSITION_VALIDATOR_PATH = "validation/v2_storequeue_composition_validator.py"
+STOREQUEUE_RAIL_PATH = "validation/v2_strict_family_rail.py"
+STOREQUEUE_PROFILE = "storequeue_child_theorem_parent_glue_v1"
+STOREQUEUE_COMPOSED_METHOD = "compositional_sequential_equivalence"
+STOREQUEUE_GLUE_METHOD = "compositional_unrestricted_sat"
+STOREQUEUE_MEMBERS = (
+    "SQAddrModule", "SQAddrModule_1", "SQData8Module", "SQDataModule",
+)
+STOREQUEUE_LEAF_MEMBERS = STOREQUEUE_MEMBERS[:3]
+STOREQUEUE_LANES = tuple(range(16))
+STOREQUEUE_ARTIFACTS = (
+    "dut_parent_export", "reference_parent_view",
+    "dut_child_export", "reference_child_view",
+    "base_glue_miter", "target_input_slice_mutation_miter",
+    "reference_mask_bit_mutation_miter",
+)
+STOREQUEUE_NEGATIVE_CONTROLS = {
+    "target_input_slice_mutation": {
+        "side": "dut", "lane": 0, "port": "io_data_wdata_0",
+        "expression": "io_data_wdata_0[15:8]",
+        "miter": "target_input_slice_mutation_miter",
+    },
+    "reference_mask_bit_mutation": {
+        "side": "reference", "lane": 0, "port": "io_mask_wdata_0",
+        "expression": "io_mask_wdata_0[1]",
+        "miter": "reference_mask_bit_mutation_miter",
+    },
+}
 
 
 def sha256(path: Path) -> str:
@@ -110,8 +144,425 @@ def verify_two_sided_control(control: Any, failures: list[str]) -> None:
                    "model_found_marker", "counterexample_or_unproven"))
                or not (record.get("success_marker_still_present") is False
                        or record.get("clean_proof_marker_disappeared") is True)
-               for record in records):
+             for record in records):
             failures.append(f"negative control {label} side is not decisive")
+
+
+def valid_sha256(value: Any) -> bool:
+    """Return whether a value is a lowercase SHA-256 digest."""
+
+    return isinstance(value, str) and re.fullmatch(r"[0-9a-f]{64}", value) is not None
+
+
+def _load_module(path: Path, name: str) -> Any:
+    """Import one exact, already hash-checked Python source path."""
+
+    validation_dir = str(ROOT / "validation")
+    if validation_dir not in sys.path:
+        sys.path.insert(0, validation_dir)
+    spec = importlib.util.spec_from_file_location(name, path)
+    if spec is None or spec.loader is None:
+        raise ImportError(f"cannot load module from {path}")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[name] = module
+    try:
+        spec.loader.exec_module(module)
+    finally:
+        sys.modules.pop(name, None)
+    return module
+
+
+def render_storequeue_composition_artifacts(build_path: Path) -> dict[str, str]:
+    """Re-export and rebuild the three StoreQueue glue miters in memory.
+
+    This performs deterministic Python/Amaranth export and string rendering only;
+    it does not write files or invoke Yosys. Rebuilding the proof inputs lets the
+    central rail compare the recorded hashes to the current Build and locked refs
+    even after ignored ``validation/.work`` artifacts have disappeared.
+    """
+
+    validator = _load_module(
+        ROOT / STOREQUEUE_COMPOSITION_VALIDATOR_PATH,
+        "_v2_progress_storequeue_renderer")
+    build = validator.load_build(build_path)
+
+    def exported(member: str, dut_name: str) -> str:
+        raw = build.build_verilog({"module": member}, {})
+        if not isinstance(raw, str):
+            raise TypeError(f"Build export for {member} is not text")
+        return validator.rename_top_module(raw, member, dut_name)
+
+    dut_parent = exported("SQDataModule", "DUT_SQDataModule")
+    dut_child = exported("SQData8Module", "DUT_SQData8Module")
+    ref_parent = validator.rename_top_module(
+        (ROOT / "validation/reference-sv/SQDataModule.sv").read_text(encoding="utf-8"),
+        "SQDataModule", "REF_SQDataModule")
+    ref_child = validator.rename_top_module(
+        (ROOT / "validation/reference-sv/SQData8Module.sv").read_text(encoding="utf-8"),
+        "SQData8Module", "REF_SQData8Module")
+    return {
+        "dut_parent_export": dut_parent,
+        "reference_parent_view": ref_parent,
+        "dut_child_export": dut_child,
+        "reference_child_view": ref_child,
+        "base_glue_miter": validator.build_parent_glue_miter(
+            dut_parent, ref_parent, dut_child, ref_child),
+        "target_input_slice_mutation_miter": validator.build_parent_glue_miter(
+            dut_parent, ref_parent, dut_child, ref_child,
+            ("dut", 0, "io_data_wdata_0", "io_data_wdata_0[15:8]")),
+        "reference_mask_bit_mutation_miter": validator.build_parent_glue_miter(
+            dut_parent, ref_parent, dut_child, ref_child,
+            ("reference", 0, "io_mask_wdata_0", "io_mask_wdata_0[1]")),
+    }
+
+
+def _check_source_binding(binding: Any, verified: Any, label: str,
+                          failures: list[str], expected_path: str | None = None) -> None:
+    """Require a duplicated binding to match an independently rehashed source."""
+
+    if not isinstance(binding, dict) or not isinstance(verified, dict):
+        failures.append(f"StoreQueue source binding missing: {label}")
+        return
+    if verified.get("status") != "PASS":
+        failures.append(f"StoreQueue bound source is not current: {label}")
+    if binding.get("path") != verified.get("path"):
+        failures.append(f"StoreQueue source binding path: {label}")
+    if binding.get("sha256") != verified.get("observed_sha256"):
+        failures.append(f"StoreQueue source binding digest: {label}")
+    size = binding.get("bytes")
+    if not isinstance(size, int) or isinstance(size, bool) or size <= 0:
+        failures.append(f"StoreQueue source binding byte count: {label}")
+    else:
+        source_path = ROOT / str(binding.get("path", ""))
+        if not source_path.is_file() or source_path.stat().st_size != size:
+            failures.append(f"StoreQueue source binding current size: {label}")
+    if expected_path is not None and binding.get("path") != expected_path:
+        failures.append(f"StoreQueue source binding identity: {label}")
+
+
+def _check_storequeue_formal_receipt(receipt: Any, label: str,
+                                     failures: list[str], *, sat: bool,
+                                     expected_miter_sha256: str | None = None) -> None:
+    """Check a StoreQueue proof receipt without trusting its status field alone."""
+
+    if not isinstance(receipt, dict):
+        failures.append(f"StoreQueue formal receipt missing: {label}")
+        return
+    if receipt.get("status") != "PASS":
+        failures.append(f"StoreQueue formal status: {label}")
+    returncode = receipt.get("returncode")
+    if not isinstance(returncode, int) or isinstance(returncode, bool):
+        failures.append(f"StoreQueue formal returncode: {label}")
+    if receipt.get("timed_out") is not False:
+        failures.append(f"StoreQueue formal timeout: {label}")
+    if not isinstance(receipt.get("command"), (list, str)):
+        failures.append(f"StoreQueue formal command missing: {label}")
+    command = receipt.get("command", [])
+    command_text = " ".join(str(item) for item in command) if isinstance(command, list) else str(command)
+    if "yosys" not in command_text:
+        failures.append(f"StoreQueue formal command is not Yosys: {label}")
+    if sat and "sat -prove mismatch 0" not in command_text:
+        failures.append(f"StoreQueue glue SAT command: {label}")
+    output_hash = receipt.get("output_sha256")
+    if not valid_sha256(output_hash):
+        failures.append(f"StoreQueue full-output digest: {label}")
+    output_tail = receipt.get("output_tail")
+    if not isinstance(output_tail, str) or not output_tail:
+        failures.append(f"StoreQueue formal output tail missing: {label}")
+    if sat:
+        if returncode != 0:
+            failures.append(f"StoreQueue SAT proof returncode: {label}")
+        if receipt.get("formal_success_marker") is not True:
+            failures.append(f"StoreQueue SAT success marker: {label}")
+        if not any(receipt.get(key) is True for key in (
+                "sat_success_marker", "success_marker", "success_marker_in_full_output")):
+            failures.append(f"StoreQueue SAT complete-output success marker: {label}")
+        if not any(receipt.get(key) is True for key in (
+                "unconstrained", "unconstrained_marker", "free_input_marker_in_full_output")):
+            failures.append(f"StoreQueue SAT no-assumption marker: {label}")
+    if expected_miter_sha256 is not None:
+        if receipt.get("miter_sha256") != expected_miter_sha256:
+            failures.append(f"StoreQueue formal miter binding: {label}")
+
+
+def verify_storequeue_composition(
+    payload: dict[str, Any],
+    verified_sources: dict[str, Any],
+    reference_lock: dict[str, Any],
+    validator_dependencies: dict[str, Any],
+    rendered_artifacts: dict[str, str] | None,
+    failures: list[str],
+) -> bool:
+    """Fail-closed audit for StoreQueue's leaf-theorem plus parent-glue proof."""
+
+    if payload.get("build_id") != STOREQUEUE_BUILD_ID:
+        failures.append("StoreQueue composition Build identity")
+    if nested(payload, "audit_policy", "proof_decomposition") != STOREQUEUE_PROFILE:
+        failures.append("StoreQueue composition profile")
+    if payload.get("validator") != STOREQUEUE_VALIDATOR_PATH:
+        failures.append("StoreQueue composition validator identity")
+    if nested(payload, "audit_policy", "require_negative_control") is not True \
+            or nested(payload, "audit_policy", "require_two_sided_negative_control") is not True:
+        failures.append("StoreQueue profile must require both negative controls")
+
+    source_bindings = nested(payload, "checks", "parent_composition", "bindings")
+    if not isinstance(source_bindings, dict):
+        failures.append("StoreQueue source bindings missing")
+        source_bindings = {}
+    _check_source_binding(
+        source_bindings.get("python_build"), verified_sources.get("python_build"),
+        "python_build", failures, STOREQUEUE_BUILD_PATH)
+    _check_source_binding(
+        source_bindings.get("validator"), verified_sources.get("validator"),
+        "validator", failures, STOREQUEUE_VALIDATOR_PATH)
+    _check_source_binding(
+        source_bindings.get("locked_parent"), reference_lock.get("SQDataModule"),
+        "SQDataModule", failures, "validation/reference-sv/SQDataModule.sv")
+    _check_source_binding(
+        source_bindings.get("locked_child"), reference_lock.get("SQData8Module"),
+        "SQData8Module", failures, "validation/reference-sv/SQData8Module.sv")
+
+    sources = payload.get("sources", {})
+    dependency_records = sources.get("validator_dependencies", {}) if isinstance(sources, dict) else {}
+    if isinstance(dependency_records, dict):
+        for name, record in dependency_records.items():
+            relative = str(record.get("path", "")).replace("\\", "/") \
+                if isinstance(record, dict) else ""
+            if ".work/" in relative or relative.startswith("validation/.work"):
+                failures.append(f"StoreQueue counted dependency is transient: {name}")
+    for dependency_name, dependency_path in (
+            ("composition_validator", STOREQUEUE_COMPOSITION_VALIDATOR_PATH),
+            ("strict_family_rail", STOREQUEUE_RAIL_PATH)):
+        dependency = validator_dependencies.get(dependency_name)
+        if not isinstance(dependency, dict) or dependency.get("status") != "PASS":
+            failures.append(f"StoreQueue validator dependency missing: {dependency_name}")
+        elif dependency.get("path") != dependency_path:
+            failures.append(f"StoreQueue validator dependency identity: {dependency_name}")
+
+    scope = payload.get("scope", {})
+    if not isinstance(scope, dict):
+        scope = {}
+    public = scope.get("public_variants")
+    variants = scope.get("variants")
+    if public != list(STOREQUEUE_MEMBERS):
+        failures.append("StoreQueue member list must match all four Build variants")
+    if scope.get("variant_count") != len(STOREQUEUE_MEMBERS):
+        failures.append("StoreQueue variant_count")
+    if not isinstance(variants, dict) or set(variants) != set(STOREQUEUE_MEMBERS):
+        failures.append("StoreQueue variant records must cover exactly four members")
+        variants = variants if isinstance(variants, dict) else {}
+    build_sha256 = verified_sources.get("python_build", {}).get("observed_sha256") \
+        if isinstance(verified_sources.get("python_build"), dict) else None
+    for member in STOREQUEUE_MEMBERS:
+        raw = variants.get(member)
+        if not isinstance(raw, dict):
+            failures.append(f"StoreQueue variant record missing: {member}")
+            continue
+        if raw.get("source_build_sha256") != build_sha256 or not valid_sha256(build_sha256):
+            failures.append(f"StoreQueue variant is not bound to current Build: {member}")
+        locked = reference_lock.get(member)
+        if not isinstance(locked, dict) or locked.get("status") != "PASS":
+            failures.append(f"StoreQueue locked reference is not current: {member}")
+        else:
+            expected_ref = f"validation/reference-sv/{member}.sv"
+            if raw.get("locked_reference") != expected_ref:
+                failures.append(f"StoreQueue variant reference path: {member}")
+            if raw.get("locked_sha256") != locked.get("observed_sha256"):
+                failures.append(f"StoreQueue variant reference digest: {member}")
+        expected_method = (STOREQUEUE_COMPOSED_METHOD if member == "SQDataModule"
+                           else "sequential_equivalence")
+        if raw.get("method") != expected_method or raw.get("sequential") is not True:
+            failures.append(f"StoreQueue variant proof method: {member}")
+
+    parent = variants.get("SQDataModule") if isinstance(variants, dict) else None
+    if isinstance(parent, dict):
+        if not isinstance(parent.get("sat"), dict):
+            failures.append("StoreQueue parent member lacks its glue SAT receipt")
+        if parent.get("verdict") != "PASS" or parent.get("success_marker") is not True:
+            failures.append("StoreQueue parent member verdict")
+
+    receipt = nested(payload, "checks", "parent_composition")
+    if not isinstance(receipt, dict):
+        failures.append("StoreQueue parent composition receipt missing")
+        receipt = {}
+    if receipt.get("status") != "PASS":
+        failures.append("StoreQueue parent composition status")
+    if receipt.get("method") != STOREQUEUE_GLUE_METHOD:
+        failures.append("StoreQueue parent composition method")
+
+    coverage = receipt.get("coverage")
+    if not isinstance(coverage, dict):
+        failures.append("StoreQueue composition coverage missing")
+        coverage = {}
+    lane_list = list(STOREQUEUE_LANES)
+    ports_per_lane = [32] * len(STOREQUEUE_LANES)
+    coverage_equalities = {
+        "required_lanes": len(STOREQUEUE_LANES),
+        "dut_lanes": lane_list,
+        "reference_lanes": lane_list,
+        "inline_child_lanes": lane_list,
+        "named_child_ports_per_lane": 32,
+        "dut_child_ports_by_lane": ports_per_lane,
+        "reference_child_ports_by_lane": ports_per_lane,
+        "dut_child_ports_exact": True,
+        "reference_child_ports_exact": True,
+        "inline_children_match_standalone": True,
+        "expected_parent_output_names": 100,
+        "dut_parent_output_names_covered": 100,
+        "reference_parent_output_names_covered": 100,
+        "expected_dut_parent_output_bits": 720,
+        "covered_dut_parent_output_bits": 720,
+        "expected_reference_parent_output_bits": 720,
+        "covered_reference_parent_output_bits": 720,
+        "expected_shared_child_output_bits": 720,
+        "covered_shared_child_output_bits": 720,
+        "all_outputs_covered": True,
+    }
+    for field, expected in coverage_equalities.items():
+        if coverage.get(field) != expected:
+            failures.append(f"StoreQueue composition coverage: {field}")
+    parent_outputs = parent.get("outputs_compared", {}) if isinstance(parent, dict) else {}
+    output_widths_valid = isinstance(parent_outputs, dict) and all(
+        isinstance(width, int) and not isinstance(width, bool) and width > 0
+        for width in parent_outputs.values())
+    if (not output_widths_valid or len(parent_outputs) != 100
+            or sum(parent_outputs.values()) != 720):
+        failures.append("StoreQueue parent scope must compare all 100 outputs / 720 bits")
+
+    artifacts = source_bindings.get("artifacts")
+    if not isinstance(artifacts, dict):
+        failures.append("StoreQueue generated artifact bindings missing")
+        artifacts = {}
+    if rendered_artifacts is None:
+        failures.append("StoreQueue deterministic miter regeneration failed")
+    else:
+        for name in STOREQUEUE_ARTIFACTS:
+            record = artifacts.get(name)
+            rendered = rendered_artifacts.get(name)
+            if not isinstance(record, dict) or not isinstance(rendered, str):
+                failures.append(f"StoreQueue generated artifact receipt missing: {name}")
+                continue
+            expected_sha256 = hashlib.sha256(rendered.encode("utf-8")).hexdigest()
+            expected_bytes = len(rendered.encode("utf-8"))
+            if record.get("sha256") != expected_sha256:
+                failures.append(f"StoreQueue regenerated artifact digest: {name}")
+            if record.get("bytes") != expected_bytes:
+                failures.append(f"StoreQueue regenerated artifact byte count: {name}")
+            if not isinstance(record.get("path"), str) or not record.get("path"):
+                failures.append(f"StoreQueue generated artifact provenance path: {name}")
+
+    formal = receipt.get("formal")
+    if not isinstance(formal, dict):
+        failures.append("StoreQueue parent composition formal receipts missing")
+        formal = {}
+    base_sat = formal.get("base_sat")
+    base_miter_sha = artifacts.get("base_glue_miter", {}).get("sha256") \
+        if isinstance(artifacts.get("base_glue_miter"), dict) else None
+    _check_storequeue_formal_receipt(base_sat, "base parent glue", failures,
+                                     sat=True, expected_miter_sha256=base_miter_sha)
+    raw_sat = parent.get("sat") if isinstance(parent, dict) else None
+    if isinstance(base_sat, dict) and isinstance(raw_sat, dict):
+        for field in ("status", "returncode", "command", "formal_success_marker",
+                      "sat_success_marker", "unconstrained", "output_sha256", "miter_sha256"):
+            if raw_sat.get(field) != base_sat.get(field):
+                failures.append(f"StoreQueue parent SAT receipt mismatch: {field}")
+    top_sat = nested(payload, "checks", "formal", "yosys_formal_miter")
+    if not isinstance(top_sat, dict):
+        failures.append("StoreQueue top-level glue SAT receipt missing")
+    else:
+        if top_sat.get("mitered_variants") != 1:
+            failures.append("StoreQueue glue SAT must cover exactly one parent member")
+        if isinstance(base_sat, dict):
+            for field in ("status", "returncode", "command", "formal_success_marker",
+                          "sat_success_marker", "unconstrained", "output_sha256"):
+                if top_sat.get(field) != base_sat.get(field):
+                    failures.append(f"StoreQueue top-level SAT receipt mismatch: {field}")
+
+    if rendered_artifacts is not None:
+        for name, expected in STOREQUEUE_NEGATIVE_CONTROLS.items():
+            control = formal.get(name)
+            if not isinstance(control, dict):
+                failures.append(f"StoreQueue negative-control receipt missing: {name}")
+                continue
+            if control.get("status") != "PASS":
+                failures.append(f"StoreQueue negative-control status: {name}")
+            if control.get("mutation_applied") is not True:
+                failures.append(f"StoreQueue negative-control mutation not applied: {name}")
+            if control.get("mutation") != {key: expected[key]
+                                             for key in ("side", "lane", "port", "expression")}:
+                failures.append(f"StoreQueue negative-control mutation identity: {name}")
+            if not any(control.get(marker) is True
+                       for marker in ("model_found", "model_found_marker")):
+                failures.append(f"StoreQueue negative-control lacks explicit model: {name}")
+            if control.get("success_marker_still_present") is not False \
+                    and control.get("clean_proof_marker_disappeared") is not True:
+                failures.append(f"StoreQueue negative-control retained clean proof: {name}")
+            returncode = control.get("returncode")
+            if not isinstance(returncode, int) or isinstance(returncode, bool):
+                failures.append(f"StoreQueue negative-control returncode: {name}")
+            if control.get("timed_out") is not False:
+                failures.append(f"StoreQueue negative-control timeout: {name}")
+            command = control.get("command", [])
+            command_text = " ".join(str(item) for item in command) \
+                if isinstance(command, list) else str(command)
+            if "yosys" not in command_text or "sat -prove mismatch 0" not in command_text:
+                failures.append(f"StoreQueue negative-control command: {name}")
+            if not valid_sha256(control.get("output_sha256")):
+                failures.append(f"StoreQueue negative-control full-output digest: {name}")
+            if not isinstance(control.get("output_tail"), str) or not control.get("output_tail"):
+                failures.append(f"StoreQueue negative-control output tail: {name}")
+            miter_name = expected["miter"]
+            expected_miter = artifacts.get(miter_name, {}).get("sha256") \
+                if isinstance(artifacts.get(miter_name), dict) else None
+            if control.get("miter_sha256") != expected_miter:
+                failures.append(f"StoreQueue negative-control miter binding: {name}")
+
+    detailed = nested(payload, "checks", "variants")
+    if not isinstance(detailed, list) or len(detailed) != len(STOREQUEUE_MEMBERS):
+        failures.append("StoreQueue detailed proof receipts must cover all four members")
+    else:
+        for member, detail in zip(STOREQUEUE_MEMBERS, detailed, strict=True):
+            if member not in STOREQUEUE_LEAF_MEMBERS:
+                continue
+            proof = detail.get("yosys_equiv") if isinstance(detail, dict) else None
+            if not isinstance(proof, dict):
+                failures.append(f"StoreQueue leaf proof receipt missing: {member}")
+                continue
+            if proof.get("status") != "PASS" or proof.get("returncode") != 0 \
+                    or proof.get("timed_out") is not False:
+                failures.append(f"StoreQueue leaf proof did not complete: {member}")
+            if proof.get("formal_success_marker") is not True:
+                failures.append(f"StoreQueue leaf formal marker: {member}")
+            markers = proof.get("markers_present")
+            if not isinstance(markers, dict) or not all(
+                    markers.get(marker) is True for marker in EQUIV_SUCCESS_MARKERS):
+                failures.append(f"StoreQueue leaf full-output markers: {member}")
+            total = proof.get("equiv_cells")
+            proven = proof.get("proven_cells")
+            unproven = proof.get("unproven_cells")
+            if (not isinstance(total, int) or isinstance(total, bool) or total <= 0
+                    or proven != total or unproven != 0):
+                failures.append(f"StoreQueue leaf cells are not fully proven: {member}")
+            if not valid_sha256(proof.get("output_sha256")):
+                failures.append(f"StoreQueue leaf full-output digest: {member}")
+            if not isinstance(proof.get("output_tail"), str) or not proof.get("output_tail"):
+                failures.append(f"StoreQueue leaf output tail: {member}")
+            command = proof.get("command", [])
+            command_text = " ".join(str(item) for item in command) \
+                if isinstance(command, list) else str(command)
+            if "yosys" not in command_text or "equiv_induct" not in command_text \
+                    or "equiv_status -assert" not in command_text:
+                failures.append(f"StoreQueue leaf proof command: {member}")
+            raw = variants.get(member, {})
+            if isinstance(raw, dict):
+                raw_cells = raw.get("unconstrained_or_cells", raw.get("unconstrained_or_equiv_cells"))
+                if raw_cells != total or raw.get("proven_cells") != proven \
+                        or raw.get("unproven_cells") != unproven:
+                    failures.append(f"StoreQueue leaf scope/detail proof mismatch: {member}")
+                if raw.get("markers_present") != markers:
+                    failures.append(f"StoreQueue leaf scope/detail marker mismatch: {member}")
+
+    return not failures
 
 
 def verify_source(record: Any, label: str, failures: list[str]) -> dict[str, Any]:
@@ -365,7 +816,8 @@ def verify_declared_scala(payload: dict[str, Any], failures: list[str], counted:
     return result
 
 
-def verify_variant_scope(payload: dict[str, Any], failures: list[str], counted: bool) -> dict[str, Any]:
+def verify_variant_scope(payload: dict[str, Any], failures: list[str], counted: bool,
+                         storequeue_composition: bool = False) -> dict[str, Any]:
     """Validate every aggregate member rather than trusting only its aggregate marker."""
 
     scope = payload.get("scope", {})
@@ -427,6 +879,12 @@ def verify_variant_scope(payload: dict[str, Any], failures: list[str], counted: 
         if nested(payload, "audit_policy", "require_locked_reference_lint") is True \
                 and raw.get("locked_reference_lint") != "PASS":
             member_failures.append("locked reference lint")
+        if raw.get("method") == STOREQUEUE_COMPOSED_METHOD:
+            if (not storequeue_composition or str(name) != "SQDataModule"
+                    or raw.get("sequential") is not True):
+                member_failures.append("invalid StoreQueue compositional member proof")
+        elif storequeue_composition and str(name) == "SQDataModule":
+            member_failures.append("StoreQueue parent must use compositional member proof")
         sat = raw.get("sat")
         if isinstance(sat, dict):
             if sat.get("returncode") != 0 or sat.get("status") != "PASS":
@@ -437,22 +895,28 @@ def verify_variant_scope(payload: dict[str, Any], failures: list[str], counted: 
             if raw.get("verdict") != "PASS" or raw.get("success_marker") is not True:
                 member_failures.append("formal verdict")
             if raw.get("sequential"):
-                cells = raw.get("unconstrained_or_cells", raw.get("unconstrained_or_equiv_cells"))
-                if not isinstance(cells, int) or isinstance(cells, bool) or cells <= 0:
-                    member_failures.append("zero/missing equivalence cells")
-                proven = raw.get("proven_cells")
-                if not isinstance(proven, int) or isinstance(proven, bool) or proven != cells:
-                    member_failures.append("incomplete proven equivalence cells")
-                if raw.get("unproven_cells") != 0:
-                    member_failures.append("unproven equivalence cells")
-                markers = raw.get("markers_present")
-                if not isinstance(markers, dict):
-                    detail = detailed_by_name.get(str(name), {})
-                    markers = detail.get("yosys_equiv", {}).get("markers_present") \
-                        if isinstance(detail, dict) else None
-                if not isinstance(markers, dict) or not all(
-                        markers.get(marker) is True for marker in EQUIV_SUCCESS_MARKERS):
-                    member_failures.append("sequential equivalence full-output markers")
+                if raw.get("method") == STOREQUEUE_COMPOSED_METHOD and isinstance(sat, dict):
+                    # The specialized receipt is checked against the exact generated
+                    # glue miter below; do not mislabel its SAT result as an inductive
+                    # cell proof for the physically sequential parent.
+                    pass
+                else:
+                    cells = raw.get("unconstrained_or_cells", raw.get("unconstrained_or_equiv_cells"))
+                    if not isinstance(cells, int) or isinstance(cells, bool) or cells <= 0:
+                        member_failures.append("zero/missing equivalence cells")
+                    proven = raw.get("proven_cells")
+                    if not isinstance(proven, int) or isinstance(proven, bool) or proven != cells:
+                        member_failures.append("incomplete proven equivalence cells")
+                    if raw.get("unproven_cells") != 0:
+                        member_failures.append("unproven equivalence cells")
+                    markers = raw.get("markers_present")
+                    if not isinstance(markers, dict):
+                        detail = detailed_by_name.get(str(name), {})
+                        markers = detail.get("yosys_equiv", {}).get("markers_present") \
+                            if isinstance(detail, dict) else None
+                    if not isinstance(markers, dict) or not all(
+                            markers.get(marker) is True for marker in EQUIV_SUCCESS_MARKERS):
+                        member_failures.append("sequential equivalence full-output markers")
             else:
                 free = raw.get("unconstrained_or_cells", raw.get("unconstrained_or_equiv_cells"))
                 if free is not True:
@@ -542,7 +1006,38 @@ def verify_evidence(path: Path, expected_source_commit: str) -> dict[str, Any]:
         "validator_dependency", failures)
     reference_lock = verify_reference_lock(payload, failures)
     declared_scala = verify_declared_scala(payload, failures, counted=not non_counting)
-    variant_checks = verify_variant_scope(payload, failures, counted=not non_counting)
+    scope_variants = nested(payload, "scope", "variants")
+    has_composed_member = isinstance(scope_variants, dict) and any(
+        isinstance(record, dict)
+        and record.get("method") == STOREQUEUE_COMPOSED_METHOD
+        for record in scope_variants.values())
+    declared_storequeue_profile = nested(
+        payload, "audit_policy", "proof_decomposition") == STOREQUEUE_PROFILE
+    storequeue_composition = (
+        build_id == STOREQUEUE_BUILD_ID and declared_storequeue_profile)
+    if not non_counting and (declared_storequeue_profile or has_composed_member) \
+            and not storequeue_composition:
+        failures.append("StoreQueue composition profile is not bound to its exact Build")
+    variant_checks = verify_variant_scope(
+        payload, failures, counted=not non_counting,
+        storequeue_composition=storequeue_composition)
+    if not non_counting and storequeue_composition:
+        rendered_artifacts: dict[str, str] | None = None
+        if (validator_path == STOREQUEUE_VALIDATOR_PATH
+                and verified_sources.get("validator", {}).get("status") == "PASS"
+                and verified_sources.get("python_build", {}).get("status") == "PASS"):
+            try:
+                rendered_artifacts = render_storequeue_composition_artifacts(
+                    ROOT / STOREQUEUE_BUILD_PATH)
+            except Exception as error:  # A failed re-render must make the record non-counting.
+                failures.append(
+                    "StoreQueue proof-input regeneration failed: "
+                    f"{type(error).__name__}: {error}")
+        else:
+            failures.append("StoreQueue proof-input sources are not current")
+        verify_storequeue_composition(
+            payload, verified_sources, reference_lock, validator_dependencies,
+            rendered_artifacts, failures)
     checks = payload.get("checks", {})
     if not isinstance(checks, dict):
         checks = {}
@@ -707,7 +1202,8 @@ def verify_evidence(path: Path, expected_source_commit: str) -> dict[str, Any]:
             combinational = sum(
                 not bool(record.get("sequential"))
                 for record in variants.values() if isinstance(record, dict) and "method" in record)
-            expected_mitered = combinational if combinational else len(public)
+            expected_mitered = (1 if storequeue_composition
+                                else combinational if combinational else len(public))
             observed_mitered = formal.get("mitered_variants")
             if observed_mitered != expected_mitered:
                 failures.append(

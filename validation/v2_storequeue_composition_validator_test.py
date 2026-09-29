@@ -8,7 +8,10 @@ from v2_storequeue_composition_validator import (
     COMMON_INPUTS,
     EXPECTED_CHILD_PORTS,
     check_children,
+    check_parent_output_drivers,
     check_output_coverage,
+    expression_width,
+    normalized_child_body,
 )
 
 
@@ -88,6 +91,49 @@ class StoreQueueCompositionTests(unittest.TestCase):
         result = check_output_coverage(ports, ports, mutated, children, read_assembly)
         self.assertFalse(result["dut"]["all_outputs_covered"])
         self.assertIn("io_forwardData_2_7", result["dut"]["missing_outputs"])
+
+    def test_child_body_guard_normalizes_only_verified_empty_sentinel(self) -> None:
+        def body(ordinal: int) -> str:
+            return (
+                "module DUT_SQData8Module(clock, reset);\n"
+                "  input clock;\n"
+                "  input reset;\n"
+                f"  reg \\$auto$verilog_backend.cc:2355:dump_module${ordinal}  = 0;\n"
+                "  always @* begin\n"
+                f"    if (\\$auto$verilog_backend.cc:2355:dump_module${ordinal} ) begin end\n"
+                "  end\n"
+                "endmodule\n"
+            )
+
+        pattern = r"(?m)^module\s+DUT_SQData8Module\s*\("
+        first = normalized_child_body(body(1), pattern, "clock", "reset")
+        second = normalized_child_body(body(2), pattern, "clock", "reset")
+        self.assertEqual(first, second)
+
+        with self.assertRaisesRegex(ValueError, "unrecognized use"):
+            normalized_child_body(
+                body(1).replace("begin end", "begin output_x = 0; end"),
+                pattern, "clock", "reset")
+
+    def test_output_driver_gate_rejects_extra_assignment(self) -> None:
+        ports = {"io_rdata_0_mask": ("output", 16)}
+        children = {0: {}}
+        self.assertEqual(
+            check_parent_output_drivers(
+                "assign io_rdata_0_mask = mask;", ports, children, reference=True),
+            {"io_rdata_0_mask": 1},
+        )
+        with self.assertRaisesRegex(ValueError, "unexpected drivers"):
+            check_parent_output_drivers(
+                "assign io_rdata_0_mask = mask;\nassign io_rdata_0_mask = other;",
+                ports, children, reference=True)
+
+    def test_child_input_expression_width_checks_slices(self) -> None:
+        widths = {"io_data_wdata_0": 128, "io_mask_wdata_0": 16}
+        self.assertEqual(expression_width("io_data_wdata_0[15:8]", widths), 8)
+        self.assertEqual(expression_width("io_mask_wdata_0[1]", widths), 1)
+        with self.assertRaisesRegex(ValueError, "exceeds"):
+            expression_width("io_mask_wdata_0[16]", widths)
 
 
 if __name__ == "__main__":
