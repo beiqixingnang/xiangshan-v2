@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_V2_FORMAL_EVIDENCE_MARKER_AUDIT",
+  "status": "AUDIT_FINDING",
+  "strict_complete_count_delta": 0,
+  "scope": {
+    "producer": "validation/v2_strict_family_rail.py",
+    "issue": "formal_success_marker uses all(markers.values()) without requiring a non-empty marker map or returncode=0",
+    "affected_records": 2
+  },
+  "findings": [
+    {
+      "evidence": "validation/v2-build-cpu-backend-smallcontrol-family-strict-evidence.json",
+      "variant": "RegCache",
+      "returncode": null,
+      "timed_out": true,
+      "markers_present": {},
+      "formal_success_marker_recorded": true,
+      "actual_interpretation": "timeout / no proof marker; FAIL"
+    },
+    {
+      "evidence": "validation/v2-build-cpu-memory-lsqueue-storequeuedata-strict-evidence.json",
+      "variant": "SQDataModule",
+      "returncode": null,
+      "timed_out": true,
+      "markers_present": {},
+      "formal_success_marker_recorded": true,
+      "actual_interpretation": "timeout / no proof marker; FAIL"
+    }
+  ],
+  "policy": [
+    "these records are not counted as strict passes",
+    "canonical evidence and progress were not rewritten",
+    "shared rail was not changed in this audit because its digest is part of existing evidence locks"
+  ],
+  "next_action": "Patch the producer in a coordinated evidence migration, then rerun affected family rails and refresh their source hashes before accepting the validator change."
+}
