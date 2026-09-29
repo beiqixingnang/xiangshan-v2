@@ -261,7 +261,9 @@ class StoreQueueDataFamily(Elaboratable):
                 ]
 
         for read in range(2):
-            address = Signal(ADDRESS_WIDTH, name=f"addr_read_{read}", reset_less=True)
+            # Keep the read pipeline resettable so post-reset behavior is
+            # deterministic.
+            address = Signal(ADDRESS_WIDTH, name=f"addr_read_{read}")
             module.d.sync += address.eq(self.ports[f"io_raddr_{read}"])
             module.d.comb += self.ports[f"io_rdata_{read}"].eq(self.read_entry(data, address))
             if self.member == "SQAddrModule":
