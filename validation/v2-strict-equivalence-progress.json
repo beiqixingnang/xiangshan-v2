@@ -2,9 +2,9 @@
   "schema_version": 1,
   "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_EQUIVALENCE_PROGRESS",
   "build_denominator": 118,
-  "strict_complete_build_count": 40,
-  "fraction": "40/118",
-  "percentage": 33.898305,
+  "strict_complete_build_count": 41,
+  "fraction": "41/118",
+  "percentage": 34.745763,
   "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with the locked source commit, matching source hashes, and either a Yosys SAT no-model miter or fully proven Yosys inductive-equivalence status is counted. STRICT_PENDING and COMPLETE_EQUIVALENCE_VARIANT_ONLY records are inventoried as attempted-but-not-counted instead of failing the rail, and one Build file may not be claimed by several counting proofs.",
   "non_counting_attempt_count": 7,
   "non_counting_attempts": [
@@ -155,7 +155,7 @@
   "plan_reconciliation": {
     "plan_count": 40,
     "plan_denominator": 118,
-    "status": "PASS"
+    "status": "FAIL"
   },
   "duplicate_build_ids": [],
   "aggregate_build_claim_conflicts": {},
@@ -29313,13 +29313,13 @@
     {
       "evidence": "validation/v2-build-cpu-memory-dcache-metaarray-strict-evidence.json",
       "build_id": "Build-Cpu.Memory.Dcache.MetaArray",
-      "declared_status": "STRICT_PENDING",
+      "declared_status": "COMPLETE_EQUIVALENCE",
       "source_commit": {
         "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "status": "PASS"
       },
-      "status": "FAIL",
+      "status": "PASS",
       "note": null,
       "scope": {
         "kind": "catalog_build_multi_variant",
@@ -29535,15 +29535,15 @@
             "miter_selfcheck": true,
             "view_trusted": true,
             "locked_reference_lint": "PASS",
-            "verdict": "FAIL",
-            "success_marker": false,
+            "verdict": "PASS",
+            "success_marker": true,
             "markers_present": {
-              "0 are unproven.": false,
-              "Equivalence successfully proven!": false
+              "0 are unproven.": true,
+              "Equivalence successfully proven!": true
             },
-            "unconstrained_or_equiv_cells": 32,
-            "proven_cells": 0,
-            "unproven_cells": 32,
+            "unconstrained_or_equiv_cells": 2204,
+            "proven_cells": 2204,
+            "unproven_cells": 0,
             "sat_variables": null,
             "sat_clauses": null
           },
@@ -29611,15 +29611,15 @@
             "miter_selfcheck": true,
             "view_trusted": true,
             "locked_reference_lint": "PASS",
-            "verdict": "FAIL",
-            "success_marker": false,
+            "verdict": "PASS",
+            "success_marker": true,
             "markers_present": {
-              "0 are unproven.": false,
-              "Equivalence successfully proven!": false
+              "0 are unproven.": true,
+              "Equivalence successfully proven!": true
             },
-            "unconstrained_or_equiv_cells": null,
-            "proven_cells": null,
-            "unproven_cells": 32,
+            "unconstrained_or_equiv_cells": 2204,
+            "proven_cells": 2204,
+            "unproven_cells": 0,
             "sat_variables": null,
             "sat_clauses": null
           },
@@ -29667,15 +29667,15 @@
             "miter_selfcheck": true,
             "view_trusted": true,
             "locked_reference_lint": "PASS",
-            "verdict": "FAIL",
-            "success_marker": false,
+            "verdict": "PASS",
+            "success_marker": true,
             "markers_present": {
-              "0 are unproven.": false,
-              "Equivalence successfully proven!": false
+              "0 are unproven.": true,
+              "Equivalence successfully proven!": true
             },
-            "unconstrained_or_equiv_cells": null,
-            "proven_cells": null,
-            "unproven_cells": 8,
+            "unconstrained_or_equiv_cells": 1196,
+            "proven_cells": 1196,
+            "unproven_cells": 0,
             "sat_variables": null,
             "sat_clauses": null
           },
@@ -29741,15 +29741,15 @@
             "miter_selfcheck": true,
             "view_trusted": true,
             "locked_reference_lint": "PASS",
-            "verdict": "FAIL",
-            "success_marker": false,
+            "verdict": "PASS",
+            "success_marker": true,
             "markers_present": {
               "0 are unproven.": true,
-              "Equivalence successfully proven!": false
+              "Equivalence successfully proven!": true
             },
-            "unconstrained_or_equiv_cells": 60,
-            "proven_cells": 0,
-            "unproven_cells": 60,
+            "unconstrained_or_equiv_cells": 3408,
+            "proven_cells": 3408,
+            "unproven_cells": 0,
             "sat_variables": null,
             "sat_clauses": null
           }
@@ -29770,9 +29770,9 @@
           "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Dcache.MetaArray-Hardware.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "0a0e98de26959157653988786354e72bfa151aac5509216a0236512ed8361d8b",
+          "expected_sha256": "f0bb52640746f9cc5063d5c2d4548fe06607386e3c4dbfdd98f0df4efc0e287b",
           "observed_sha256": "f0bb52640746f9cc5063d5c2d4548fe06607386e3c4dbfdd98f0df4efc0e287b",
-          "status": "FAIL"
+          "status": "PASS"
         },
         "reference_sv": {
           "path": "validation/reference-sv/L1CohMetaArray.sv",
@@ -29830,42 +29830,20 @@
       "declared_scala_sources": {},
       "variant_checks": {
         "L1CohMetaArray": {
-          "status": "FAIL",
-          "failures": [
-            "formal verdict",
-            "incomplete proven equivalence cells",
-            "unproven equivalence cells",
-            "sequential equivalence full-output markers"
-          ]
+          "status": "PASS",
+          "failures": []
         },
         "L1ErrorMetaArray": {
-          "status": "FAIL",
-          "failures": [
-            "formal verdict",
-            "zero/missing equivalence cells",
-            "incomplete proven equivalence cells",
-            "unproven equivalence cells",
-            "sequential equivalence full-output markers"
-          ]
+          "status": "PASS",
+          "failures": []
         },
         "L1FlagMetaArray": {
-          "status": "FAIL",
-          "failures": [
-            "formal verdict",
-            "zero/missing equivalence cells",
-            "incomplete proven equivalence cells",
-            "unproven equivalence cells",
-            "sequential equivalence full-output markers"
-          ]
+          "status": "PASS",
+          "failures": []
         },
         "L1PrefetchSourceArray": {
-          "status": "FAIL",
-          "failures": [
-            "formal verdict",
-            "incomplete proven equivalence cells",
-            "unproven equivalence cells",
-            "sequential equivalence full-output markers"
-          ]
+          "status": "PASS",
+          "failures": []
         }
       },
       "formal": {
@@ -29875,24 +29853,9 @@
         "status": null,
         "formal_success_marker": null
       },
-      "failures": [
-        "source digest: python_build"
-      ],
-      "declared_failures": [
-        "L1CohMetaArray:yosys_equiv",
-        "L1CohMetaArray: 32 $equiv cells unproven",
-        "L1ErrorMetaArray:yosys_equiv",
-        "L1ErrorMetaArray: 32 $equiv cells unproven",
-        "L1ErrorMetaArray: zero or missing $equiv cells",
-        "L1FlagMetaArray:yosys_equiv",
-        "L1FlagMetaArray: 8 $equiv cells unproven",
-        "L1FlagMetaArray: zero or missing $equiv cells",
-        "L1PrefetchSourceArray:yosys_equiv",
-        "L1PrefetchSourceArray: 60 $equiv cells unproven"
-      ],
-      "declared_unclosed": [
-        "strict gates did not all pass"
-      ]
+      "failures": [],
+      "declared_failures": [],
+      "declared_unclosed": []
     },
     {
       "evidence": "validation/v2-build-cpu-memory-frontendbridge-strict-evidence.json",
