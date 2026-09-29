@@ -383,7 +383,7 @@ class DcacheMetaArrayFamily(Elaboratable):
                     with cast(Any, module.If(bypass_hit)):
                         module.d.sync += bypass_registers[read_suffix].eq(bypass_values[read_suffix])
 
-                if style == "s0_s1":
+                if style == "s0_s1" and self.member != "L1ErrorMetaArray":
                     for read_suffix, width, _write_suffix in layouts:
                         memory_register = Signal(
                             width,
@@ -392,8 +392,6 @@ class DcacheMetaArrayFamily(Elaboratable):
                                     f"io_resp_{read}_{way}_r_2"
                                     f"{('_' + read_suffix) if read_suffix else ''}"
                                 )
-                                if self.member != "L1ErrorMetaArray"
-                                else f"meta_read_data_{read}_{way}_{read_suffix or 'value'}"
                             ),
                             reset_less=True,
                         )
