@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_LQMASK_RESET_AWARE_BOUNDED_DIAGNOSTIC",
+  "build_id": "Build-Cpu.Memory.Lsqueue.LoadQueueData",
+  "member": "LqMaskModule",
+  "status": "BOUNDED_RESET_PASS",
+  "strict_complete_count_delta": 0,
+  "acceptance_eligible": false,
+  "scope": {
+    "input_bits": 100,
+    "public_output_bits": 64,
+    "all_public_outputs_compared": true,
+    "cycles": 3,
+    "reset_constraints": {
+      "cycle_1": 1,
+      "cycle_2": 0,
+      "cycle_3": 0
+    },
+    "other_inputs": "unconstrained",
+    "locked_reference_view_trusted": true
+  },
+  "sources": {
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Lsqueue.LoadQueueData-Hardware.py",
+      "sha256": "6e906949118c2fb0b23dd18a366e37c18213de631d515f6a99bc78ee203e7d1b"
+    },
+    "locked_reference": {
+      "path": "validation/reference-sv/LqMaskModule.sv",
+      "sha256": "1c3a0691ad02b097a22f4bef2f135e2566770489828df4de2f5d8da7d35444f7"
+    },
+    "shared_rail": {
+      "path": "validation/v2_strict_family_rail.py",
+      "sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302"
+    }
+  },
+  "formal": {
+    "method": "Yosys SAT miter after flattened locked closure",
+    "command_tail": "sat -seq 3 -set-init-zero -set-at 1 reset 1 -set-at 2 reset 0 -set-at 3 reset 0 -prove mismatch 0 -show-inputs -show-outputs -verify",
+    "returncode": 0,
+    "sat_success_marker": true,
+    "counterexample": false,
+    "sat_variables": 159323,
+    "sat_clauses": 425524,
+    "elapsed_seconds": 2.623,
+    "resource_limit_seconds": 900,
+    "interpretation": "Three-cycle reset-constrained bounded equivalence only; not an inductive strict proof."
+  },
+  "negative_controls": {
+    "target_mutation": {
+      "status": "PASS_NEGATIVE_CONTROL",
+      "returncode": 1,
+      "counterexample": true,
+      "elapsed_seconds": 0.969,
+      "output_sha256": "32731797f3a86b270034d9c963142482f6a8924f3d26386f754730bb2531fa5e"
+    },
+    "reference_mutation": {
+      "status": "PASS_NEGATIVE_CONTROL",
+      "returncode": 1,
+      "counterexample": true,
+      "elapsed_seconds": 0.991,
+      "output_sha256": "a494d7b6a609c01c6dc2b1419457bd6e159bbf85ca042733906b2d561e1804a3"
+    },
+    "baseline_required_before_controls": true
+  },
+  "unclosed": [
+    "The result is bounded and reset-constrained; the LoadQueueData Build remains STRICT_PENDING.",
+    "The other LqPAddrModule, LqPAddrModule_1, and LqVAddrModule members remain unproven.",
+    "No strict numerator or ACCEPTED status is claimed; parent closure, license review, and user approval remain pending."
+  ]
+}
