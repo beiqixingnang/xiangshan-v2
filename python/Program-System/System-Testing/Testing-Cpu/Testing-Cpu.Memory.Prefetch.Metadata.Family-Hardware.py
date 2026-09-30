@@ -59,5 +59,27 @@ class MemoryFamilyTest(unittest.TestCase):
         simulator.add_testbench(bench)
         simulator.run()
 
+    def test_ten_entry_index_encodes_all_input_patterns(self):
+        subject = load_subject()
+        module = Module()
+        matches = Signal(10)
+        index = Signal(4)
+        module.d.comb += index.eq(subject._one_hot_index(
+            [matches[bit] for bit in range(10)], 4))
+        simulator = Simulator(module)
+
+        async def bench(ctx):
+            for pattern in range(1 << 10):
+                ctx.set(matches, pattern)
+                await ctx.delay(1e-9)
+                expected = (8 if pattern & 0x300 else 0)
+                expected |= 4 if pattern & 0x0F0 else 0
+                expected |= 2 if pattern & 0x0CC else 0
+                expected |= 1 if pattern & 0x2AA else 0
+                self.assertEqual(ctx.get(index), expected, pattern)
+
+        simulator.add_testbench(bench)
+        simulator.run()
+
 
 if __name__ == "__main__": unittest.main()

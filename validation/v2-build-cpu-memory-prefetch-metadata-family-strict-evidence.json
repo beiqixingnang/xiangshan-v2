@@ -2,10 +2,10 @@
   "schema_version": 1,
   "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_COMPLETE_EQUIVALENCE",
   "build_id": "Build-Cpu.Memory.Prefetch.Metadata.Family",
-  "validator": "validation/v2_strict_family_rail.py",
-  "status": "STRICT_PENDING",
-  "strict_complete_eligible": false,
-  "strict_complete_count_delta": 0,
+  "validator": "validation/v2_prefetch_metadata_strict_validator.py",
+  "status": "COMPLETE_EQUIVALENCE",
+  "strict_complete_eligible": true,
+  "strict_complete_count_delta": 1,
   "acceptance_eligible": false,
   "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
   "audit_policy": {
@@ -90,15 +90,15 @@
         "miter_selfcheck": true,
         "view_trusted": true,
         "locked_reference_lint": "PASS",
-        "verdict": "FAIL",
-        "success_marker": false,
+        "verdict": "PASS",
+        "success_marker": true,
         "markers_present": {
-          "0 are unproven.": false,
-          "Equivalence successfully proven!": false
+          "0 are unproven.": true,
+          "Equivalence successfully proven!": true
         },
-        "unconstrained_or_equiv_cells": null,
-        "proven_cells": null,
-        "unproven_cells": 24,
+        "unconstrained_or_equiv_cells": 1256,
+        "proven_cells": 1256,
+        "unproven_cells": 0,
         "sat_variables": null,
         "sat_clauses": null
       },
@@ -131,15 +131,15 @@
         "miter_selfcheck": true,
         "view_trusted": true,
         "locked_reference_lint": "PASS",
-        "verdict": "FAIL",
-        "success_marker": false,
+        "verdict": "PASS",
+        "success_marker": true,
         "markers_present": {
-          "0 are unproven.": false,
-          "Equivalence successfully proven!": false
+          "0 are unproven.": true,
+          "Equivalence successfully proven!": true
         },
         "unconstrained_or_equiv_cells": 818,
-        "proven_cells": 571,
-        "unproven_cells": 247,
+        "proven_cells": 818,
+        "unproven_cells": 0,
         "sat_variables": null,
         "sat_clauses": null
       }
@@ -158,14 +158,14 @@
   },
   "sources": {
     "validator": {
-      "path": "validation/v2_strict_family_rail.py",
-      "sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
-      "bytes": 45980
+      "path": "validation/v2_prefetch_metadata_strict_validator.py",
+      "sha256": "59dad20a4503ff0aa67cbfde6a77d7fb62de4a9fa66a27609d1fb70eeccaec24",
+      "bytes": 3786
     },
     "python_build": {
       "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Prefetch.Metadata.Family-Hardware.py",
-      "sha256": "c5c08e968d6287af47e166f20c2b62227c800263551324845fd4fa9b732d457d",
-      "bytes": 25227
+      "sha256": "39cb89eeb86624acbe247e5e5e0f8485cb9503ec5370bedc7bb34d56233edc7b",
+      "bytes": 25588
     },
     "reference_sv": {
       "path": "validation/reference-sv/StreamBitVectorArray.sv",
@@ -177,8 +177,29 @@
       "sha256": "a049d941ffd77cbbdb33c39ca93abd25ad85c7c293d533defd81ab16073a619b",
       "bytes": 21554
     },
-    "declared_scala_sources": {},
-    "reference_children": {}
+    "declared_scala_sources": {
+      "upstream/src/main/scala/xiangshan/mem/prefetch/L1StreamPrefetcher.scala": {
+        "vendored": true,
+        "sha256": "a049d941ffd77cbbdb33c39ca93abd25ad85c7c293d533defd81ab16073a619b"
+      },
+      "upstream/src/main/scala/xiangshan/mem/prefetch/L1StridePrefetcher.scala": {
+        "vendored": true,
+        "sha256": "2d263b83198c87c208c72f21acbc343c1b2fc31603c6fc95f27332410a41258f"
+      }
+    },
+    "reference_children": {},
+    "validator_dependencies": {
+      "strict_family_rail": {
+        "path": "validation/v2_strict_family_rail.py",
+        "sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
+        "bytes": 45980
+      },
+      "direct_test": {
+        "path": "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu.Memory.Prefetch.Metadata.Family-Hardware.py",
+        "sha256": "3afde1e7ea358317ece7fb7c4ed223c156a459092dde520717f4708d2335ad45",
+        "bytes": 3629
+      }
+    }
   },
   "checks": {
     "py_compile": {
@@ -192,7 +213,7 @@
           "/c",
           "pyright",
           "--outputjson",
-          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_jq9x64bv\\Build-Cpu.Memory.Prefetch.Metadata.Family-Hardware.py"
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_k0956bgv\\Build-Cpu.Memory.Prefetch.Metadata.Family-Hardware.py"
         ],
         "returncode": 0,
         "status": "PASS",
@@ -208,7 +229,7 @@
           "/c",
           "pyright",
           "--outputjson",
-          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_m0ap7knl\\v2_strict_family_rail.py"
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_jbme437o\\v2_strict_family_rail.py"
         ],
         "returncode": 0,
         "status": "PASS",
@@ -220,7 +241,7 @@
     },
     "catalog_coverage": {
       "entries": 2,
-      "proven": 0
+      "proven": 2
     },
     "formal": {
       "yosys_formal_miter": {
@@ -288,8 +309,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StreamBitVectorArray.sv:22453:30: Operator GTE expects 6 bits on the RHS, but RHS's CONST '4'hc' generates 4 bits.\n22453 |   assign \\$11200  = \\$11199  >= 4'hc;\n      |                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StreamBitVectorArray.sv:22456:30: Operator GTE expects 5 bits on the RHS, but RHS's CONST '4'hc' generates 4 bits.\n22456 |   assign \\$11205  = \\$11204  >= 4'hc;\n      |                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StreamBitVectorArray.sv:22460:30: Operator GTE expects 5 bits on the RHS, but RHS's CONST '4'hc' generates 4 bits.\n22460 |   assign \\$11211  = \\$11210  >= 4'hc;\n      |                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StreamBitVectorArray.sv:22469:30: Operator GTE expects 5 bits on the RHS, but RHS's CONST '4'hc' generates 4 bits.\n22469 |   assign \\$11222  = \\$11221  >= 4'hc;\n      |                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StreamBitVectorArray.sv:22472:30: Operator GTE expects 5 bits on the RHS, but RHS's CONST '4'hc' generates 4 bits.\n22472 |   assign \\$11227  = \\$11226  >= 4'hc;\n      |                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StreamBitVectorArray.sv:22492:30: Operator GTE expects 6 bits on the RHS, but RHS's CONST '4'hc' generates 4 bits.\n22492 |   assign \\$11247  = \\$11246  >= 4'hc;\n      |                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StreamBitVectorArray.sv:22495:30: Operator GTE expects 5 bits on the RHS, but RHS's CONST '4'hc' generates 4 bits.\n22495 |   assign \\$11252  = \\$11251  >= 4'hc;\n      |                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StreamBitVectorArray.sv:22499:30: Operator GTE expects 5 bits on the RHS, but RHS's CONST '4'hc' generates 4 bits.\n22499 |   assign \\$11258  = \\$11257  >= 4'hc;\n      |                              ^~\n",
-          "output_sha256": "f15bad6195c82446d1c90428ceb58f089574168ba6dfb6a1ebb51d8d9a910d7a"
+          "output_tail": " |   assign \\$69758  = \\$69757  >= 4'hc;\n       |                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StreamBitVectorArray.sv:109589:30: Operator GTE expects 5 bits on the RHS, but RHS's CONST '4'hc' generates 4 bits.\n109589 |   assign \\$69763  = \\$69762  >= 4'hc;\n       |                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StreamBitVectorArray.sv:109609:30: Operator GTE expects 5 bits on the RHS, but RHS's CONST '4'hc' generates 4 bits.\n109609 |   assign \\$69783  = \\$69782  >= 4'hc;\n       |                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StreamBitVectorArray.sv:109612:30: Operator GTE expects 5 bits on the RHS, but RHS's CONST '4'hc' generates 4 bits.\n109612 |   assign \\$69788  = \\$69787  >= 4'hc;\n       |                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StreamBitVectorArray.sv:109616:30: Operator GTE expects 5 bits on the RHS, but RHS's CONST '4'hc' generates 4 bits.\n109616 |   assign \\$69794  = \\$69793  >= 4'hc;\n       |                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StreamBitVectorArray.sv:118309:54: Operator ADD expects 45 bits on the RHS, but RHS's CONST '7'h40' generates 7 bits.\n118309 |   assign \\$8443  = { s1_region_tag, s1_region_bits } + 7'h40;\n       |                                                      ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StreamBitVectorArray.sv:118310:54: Operator ADD expects 45 bits on the RHS, but RHS's CONST '10'h280' generates 10 bits.\n118310 |   assign \\$8444  = { s1_region_tag, s1_region_bits } + 10'h280;\n       |                                                      ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StreamBitVectorArray.sv:118311:54: Operator ADD expects 45 bits on the RHS, but RHS's CONST '10'h280' generates 10 bits.\n118311 |   assign \\$8445  = { s1_region_tag, s1_region_bits } + 10'h280;\n       |                                                      ^\n",
+          "output_sha256": "ea70edfe529de9adc61a8ba6a5fad2814bf631fdd98ab3da433ccf404bd9c952"
         },
         "locked_verilator": {
           "command": [
@@ -315,8 +336,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.091 MB sources in 2 modules, into 0.256 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.062 s (elab=0.004, cvt=0.017, bld=0.000); cpu 0.035 s on 1 threads; alloced 12.602 MB\n",
-          "output_sha256": "93002452cf1df2a12b068eb58a4866ea0aecf3542997dae2f5979247c32dd0b7"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.091 MB sources in 2 modules, into 0.256 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.051 s (elab=0.004, cvt=0.015, bld=0.000); cpu 0.032 s on 1 threads; alloced 12.605 MB\n",
+          "output_sha256": "21142821565483ee0f007315d921ed348c412adf0b6002e184062918e72a4115"
         },
         "yosys_equiv": {
           "command": [
@@ -325,28 +346,33 @@
             "-p",
             "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StreamBitVectorArray.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/REF_StreamBitVectorArray.sv; proc; async2sync; memory; opt; flatten REF_StreamBitVectorArray; flatten DUT_StreamBitVectorArray; equiv_make REF_StreamBitVectorArray DUT_StreamBitVectorArray StreamBitVectorArray_EQUIV; prep -top StreamBitVectorArray_EQUIV; equiv_induct -undef; equiv_status -assert"
           ],
-          "returncode": 1,
-          "status": "FAIL",
+          "returncode": 0,
+          "status": "PASS",
           "sat_success_marker": false,
           "sat_counterexample_marker": false,
           "unconstrained_marker": false,
           "equiv_success_markers": {
-            "0 are unproven.": false,
-            "Equivalence successfully proven!": false
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
           },
-          "equiv_failure_marker": true,
-          "equiv_cells_full": null,
-          "equiv_summary_full": null,
-          "equiv_failed_full": 24,
+          "equiv_failure_marker": false,
+          "equiv_cells_full": 1256,
+          "equiv_summary_full": [
+            1256,
+            0
+          ],
+          "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "ss!\n  Trying to prove $equiv for \\array_9_tag [24]: success!\n  Trying to prove $equiv for \\s3_pf_l2_bits_region [15]: success!\n  Trying to prove $equiv for \\s3_pf_l2_bits_region [16]: success!\n  Trying to prove $equiv for \\s4_pf_l2_bits_bit_vec [5]: success!\n  Trying to prove $equiv for \\array_14_bit_vec [6]: success!\n  Trying to prove $equiv for \\array_14_bit_vec [7]: success!\n  Trying to prove $equiv for \\array_4_tag [15]: success!\n  Trying to prove $equiv for \\array_4_tag [16]: success!\n  Trying to prove $equiv for \\io_l1_prefetch_req_bits_bit_vec [12]: success!\n  Trying to prove $equiv for \\io_l1_prefetch_req_bits_bit_vec [13]: success!\n  Trying to prove $equiv for \\array_0_bit_vec [2]: success!\n  Trying to prove $equiv for \\s4_pf_l2_bits_region [21]: success!\n  Trying to prove $equiv for \\s4_pf_l2_bits_region [22]: success!\n  Trying to prove $equiv for \\array_10_bit_vec [4]: success!\n  Trying to prove $equiv for \\array_9_tag [12]: success!\n  Trying to prove $equiv for \\array_9_tag [13]: success!\n  Trying to prove $equiv for \\array_11_tag [18]: success!\n  Trying to prove $equiv for \\array_5_bit_vec [3]: success!\n  Trying to prove $equiv for \\array_5_bit_vec [4]: success!\n  Trying to prove $equiv for \\array_14_tag [8]: success!\n  Trying to prove $equiv for \\array_14_tag [9]: success!\n  Trying to prove $equiv for \\array_7_tag [23]: success!\n  Trying to prove $equiv for \\array_7_tag [24]: success!\n  Trying to prove $equiv for \\array_5_tag [21]: success!\n  Trying to prove $equiv for \\array_5_tag [22]: success!\n  Trying to prove $equiv for \\array_0_tag [23]: success!\n  Trying to prove $equiv for \\array_10_tag [7]: success!\n  Trying to prove $equiv for \\array_5_bit_vec [14]: success!\n  Trying to prove $equiv for \\array_5_bit_vec [15]: success!\n  Trying to prove $equiv for \\array_5_tag [18]: success!\n  Trying to prove $equiv for \\array_5_tag [19]: success!\n  Trying to prove $equiv for \\array_13_cnt [0]: success!\n  Trying to prove $equiv for \\array_13_cnt [1]: success!\n  Trying to prove $equiv for \\s5_pf_l3_bits_region [33]: success!\n  Trying to prove $equiv for \\s5_pf_l3_bits_region [34]: success!\n  Trying to prove $equiv for \\valids_9: success!\n  Trying to prove $equiv for \\array_0_active: failed.\n  Trying to prove $equiv for \\array_0_bit_vec [0]: success!\n  Trying to prove $equiv for \\array_0_bit_vec [1]: success!\nProved 1173 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nERROR: Found 24 unproven $equiv cells in 'equiv_status -assert'.\n",
-          "output_sha256": "aaff46bf2206c91cbdcf7ead08c1d68dc36eb7f2a911fffcbacb1fcc2cad5cf8",
+          "output_tail": "d cells or wires in module \\StreamBitVectorArray_EQUIV..\nRemoved 0 unused cells and 45 unused wires.\n<suppressed ~1 debug messages>\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== StreamBitVectorArray_EQUIV ===\n\n   Number of wires:              39186\n   Number of wire bits:         166576\n   Number of public wires:       38671\n   Number of public wire bits:  164614\n   Number of ports:                 15\n   Number of port bits:            173\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:               2642\n     $add                           20\n     $and                          232\n     $dffe                         176\n     $eq                           109\n     $equiv                       1256\n     $ge                            18\n     $gt                             3\n     $logic_not                      7\n     $mul                            3\n     $mux                          374\n     $ne                            16\n     $not                           12\n     $or                           212\n     $pmux                           6\n     $reduce_and                    33\n     $reduce_bool                   33\n     $reduce_or                     38\n     $sdff                          42\n     $shiftx                         7\n     $shl                            4\n     $sub                            1\n     $xor                           40\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module StreamBitVectorArray_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 1197 unproven $equiv cells in module StreamBitVectorArray_EQUIV:\n  Undef modelling: force def on 2394 initial reg values and 50 inputs.\n  Proving existence of base case for step 1. (414721 clauses over 154184 variables)\n  Proving induction step 1. (1001425 clauses over 366514 variables)\n  Proof for induction step holds. Entire workset of 1197 cells proven!\nProved 1197 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 1256 $equiv cells in StreamBitVectorArray_EQUIV:\n  Of those cells 1256 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: d227b90eef, CPU: user 16.39s system 0.46s, MEM: 993.91 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 26% 1x equiv_induct (4 sec), 22% 3x read_verilog (3 sec), 21% 10x opt_clean (3 sec), ...\n",
+          "output_sha256": "3305b058db72f097b62ddb840f5b13fddfc220a16620f16968f22fdf91122766",
           "markers_present": {
-            "0 are unproven.": false,
-            "Equivalence successfully proven!": false
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
           },
-          "formal_success_marker": false,
-          "unproven_cells": 24
+          "formal_success_marker": true,
+          "equiv_cells": 1256,
+          "proven_cells": 1256,
+          "unproven_cells": 0
         }
       },
       {
@@ -376,8 +402,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "ASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StrideMetaArray.sv:6996:5: Case values incompletely covered (example pattern 0xa)\n 6996 |     casez (s1_index)\n      |     ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StrideMetaArray.sv:7022:5: Case values incompletely covered (example pattern 0xa)\n 7022 |     casez (s1_index)\n      |     ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StrideMetaArray.sv:7048:5: Case values incompletely covered (example pattern 0xa)\n 7048 |     casez (s1_index)\n      |     ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StrideMetaArray.sv:7074:5: Case values incompletely covered (example pattern 0xa)\n 7074 |     casez (s1_index)\n      |     ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StrideMetaArray.sv:7100:5: Case values incompletely covered (example pattern 0xa)\n 7100 |     casez (s1_index)\n      |     ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StrideMetaArray.sv:7126:5: Case values incompletely covered (example pattern 0xa)\n 7126 |     casez (s1_index)\n      |     ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StrideMetaArray.sv:7152:5: Case values incompletely covered (example pattern 0xa)\n 7152 |     casez (s1_index)\n      |     ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StrideMetaArray.sv:7178:5: Case values incompletely covered (example pattern 0xa)\n 7178 |     casez (s1_index)\n      |     ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StrideMetaArray.sv:7204:5: Case values incompletely covered (example pattern 0xa)\n 7204 |     casez (s1_index)\n      |     ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StrideMetaArray.sv:7230:5: Case values incompletely covered (example pattern 0xa)\n 7230 |     casez (s1_index)\n      |     ^~~~~\n",
-          "output_sha256": "c0468097f15dccb80c6a62e6ae9e0ee453a675e819640c6d2a6616e0c9523600"
+          "output_tail": "Operator NEQ expects 10 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n36778 |   assign \\$18290  = \\$18289 [15:6] != 1'h1;\n      |                                    ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StrideMetaArray.sv:36791:36: Operator NEQ expects 10 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n36791 |   assign \\$18303  = \\$18302 [15:6] != 1'h1;\n      |                                    ^~\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StrideMetaArray.sv:36801:21: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'array_8_confidence' generates 2 bits.\n36801 |   assign \\$18313  = ! array_8_confidence;\n      |                     ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StrideMetaArray.sv:36804:40: Operator LTE expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n36804 |   assign \\$18316  = array_8_confidence <= 1'h1;\n      |                                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StrideMetaArray.sv:36816:36: Operator NEQ expects 10 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n36816 |   assign \\$18328  = \\$18327 [15:6] != 1'h1;\n      |                                    ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StrideMetaArray.sv:36829:36: Operator NEQ expects 10 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n36829 |   assign \\$18341  = \\$18340 [15:6] != 1'h1;\n      |                                    ^~\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StrideMetaArray.sv:36839:21: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'array_9_confidence' generates 2 bits.\n36839 |   assign \\$18351  = ! array_9_confidence;\n      |                     ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StrideMetaArray.sv:36842:40: Operator LTE expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n36842 |   assign \\$18354  = array_9_confidence <= 1'h1;\n      |                                        ^~\n",
+          "output_sha256": "68c0194b3ecdcc476f8622c1df08158c2b488c2e1afa7db6d1ff3e58131e6843"
         },
         "locked_verilator": {
           "command": [
@@ -403,8 +429,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.047 MB sources in 2 modules, into 0.112 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.031 s (elab=0.001, cvt=0.006, bld=0.000); cpu 0.016 s on 1 threads; alloced 10.984 MB\n",
-          "output_sha256": "4458d147efd77a99520585f8cefaea9a1814567758cb9c70dcc1391103d7b48d"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.047 MB sources in 2 modules, into 0.112 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.032 s (elab=0.001, cvt=0.007, bld=0.000); cpu 0.015 s on 1 threads; alloced 10.980 MB\n",
+          "output_sha256": "5090878dc90e6800243482e482d98d59ab97416618993b759f826cfdea8995b6"
         },
         "yosys_equiv": {
           "command": [
@@ -413,47 +439,49 @@
             "-p",
             "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/DUT_StrideMetaArray.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_prefetch_metadata_family_family/REF_StrideMetaArray.sv; proc; async2sync; memory; opt; flatten REF_StrideMetaArray; flatten DUT_StrideMetaArray; equiv_make REF_StrideMetaArray DUT_StrideMetaArray StrideMetaArray_EQUIV; prep -top StrideMetaArray_EQUIV; equiv_induct -undef; equiv_status -assert"
           ],
-          "returncode": 1,
-          "status": "FAIL",
+          "returncode": 0,
+          "status": "PASS",
           "sat_success_marker": false,
           "sat_counterexample_marker": false,
           "unconstrained_marker": false,
           "equiv_success_markers": {
-            "0 are unproven.": false,
-            "Equivalence successfully proven!": false
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
           },
-          "equiv_failure_marker": true,
+          "equiv_failure_marker": false,
           "equiv_cells_full": 818,
           "equiv_summary_full": [
-            571,
-            247
+            818,
+            0
           ],
-          "equiv_failed_full": 247,
+          "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "de_gate [11]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$6358: \\s2_stride_gold [12] \\s2_stride_gate [12]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$6359: \\s2_stride_gold [13] \\s2_stride_gate [13]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$6360: \\s2_stride_gold [14] \\s2_stride_gate [14]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$6361: \\s2_stride_gold [15] \\s2_stride_gate [15]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$6362: \\s2_vaddr_gold [0] \\s2_vaddr_gate [0]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$6363: \\s2_vaddr_gold [1] \\s2_vaddr_gate [1]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$6364: \\s2_vaddr_gold [2] \\s2_vaddr_gate [2]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$6365: \\s2_vaddr_gold [3] \\s2_vaddr_gate [3]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$6366: \\s2_vaddr_gold [4] \\s2_vaddr_gate [4]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$6367: \\s2_vaddr_gold [5] \\s2_vaddr_gate [5]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$6368: \\s2_vaddr_gold [6] \\s2_vaddr_gate [6]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$6369: \\s2_vaddr_gold [7] \\s2_vaddr_gate [7]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$6370: \\s2_vaddr_gold [8] \\s2_vaddr_gate [8]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$6371: \\s2_vaddr_gold [9] \\s2_vaddr_gate [9]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$6372: \\s2_vaddr_gold [10] \\s2_vaddr_gate [10]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$6373: \\s2_vaddr_gold [11] \\s2_vaddr_gate [11]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$6374: \\s2_vaddr_gold [12] \\s2_vaddr_gate [12]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$6375: \\s2_vaddr_gold [13] \\s2_vaddr_gate [13]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$6376: \\s2_vaddr_gold [14] \\s2_vaddr_gate [14]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$6377: \\s2_vaddr_gold [15] \\s2_vaddr_gate [15]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$6378: \\s2_vaddr_gold [16] \\s2_vaddr_gate [16]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$6379: \\s2_vaddr_gold [17] \\s2_vaddr_gate [17]\n  Unproven $equiv $auto$equiv_make.cc:294:find_same_wires$6380: \\s2_vaddr_gold [18] \\s2_vaddr_gate [18]\n  Unproven $equiv $auto$equiv_make.cc:294ERROR: Found 247 unproven $equiv cells in 'equiv_status -assert'.\n",
-          "output_sha256": "97cca21207c276a2b2fe71abd23e1f546b7ba75f1a8b1a2e4e2f22d0aa321d45",
+          "output_tail": "dule `\\StrideMetaArray_EQUIV'.\n<suppressed ~42 debug messages>\nRemoved a total of 14 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\StrideMetaArray_EQUIV..\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== StrideMetaArray_EQUIV ===\n\n   Number of wires:              10681\n   Number of wire bits:          31425\n   Number of public wires:       10260\n   Number of public wire bits:   29207\n   Number of ports:                 12\n   Number of port bits:            218\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:               1734\n     $add                           15\n     $and                          177\n     $dff                           20\n     $dffe                          84\n     $eq                            39\n     $equiv                        818\n     $le                            10\n     $logic_not                     12\n     $mux                          280\n     $ne                            42\n     $not                           45\n     $or                            46\n     $pmux                           3\n     $reduce_and                    31\n     $reduce_bool                   30\n     $reduce_or                     20\n     $sdff                          30\n     $shiftx                         3\n     $shl                            4\n     $sub                           23\n     $xor                            2\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module StrideMetaArray_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 817 unproven $equiv cells in module StrideMetaArray_EQUIV:\n  Undef modelling: force def on 1634 initial reg values and 78 inputs.\n  Proving existence of base case for step 1. (320688 clauses over 119141 variables)\n  Proving induction step 1. (752373 clauses over 275875 variables)\n  Proof for induction step holds. Entire workset of 817 cells proven!\nProved 817 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 818 $equiv cells in StrideMetaArray_EQUIV:\n  Of those cells 818 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: dceab54d9f, CPU: user 5.84s system 0.09s, MEM: 239.64 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 57% 1x equiv_induct (3 sec), 14% 3x read_verilog (0 sec), ...\n",
+          "output_sha256": "21ae7c3e6cdaab18f79d7559dced069d487a7f99a6942f3289ddc45dd05f74c6",
           "markers_present": {
-            "0 are unproven.": false,
-            "Equivalence successfully proven!": false
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
           },
-          "formal_success_marker": false,
+          "formal_success_marker": true,
           "equiv_cells": 818,
-          "proven_cells": 571,
-          "unproven_cells": 247
+          "proven_cells": 818,
+          "unproven_cells": 0
         }
       }
-    ]
+    ],
+    "direct_test": {
+      "status": "PASS",
+      "returncode": 0,
+      "command": [
+        "C:\\Program Files\\Python313\\python.exe",
+        "-B",
+        "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu.Memory.Prefetch.Metadata.Family-Hardware.py"
+      ],
+      "output_tail": "C:\\Users\\lishuo\\AppData\\Roaming\\Python\\Python313\\site-packages\\amaranth\\hdl\\_ast.py:1973: DeprecationWarning: `reset=` is deprecated, use `init=` instead\n  signal = super().__call__(shape, **kwargs, src_loc_at=src_loc_at + 1)\n....\n----------------------------------------------------------------------\nRan 4 tests in 12.831s\n\nOK\n"
+    }
   },
-  "failures": [
-    "StreamBitVectorArray:yosys_equiv",
-    "StreamBitVectorArray: 24 $equiv cells unproven",
-    "StreamBitVectorArray: zero or missing $equiv cells",
-    "StrideMetaArray:yosys_equiv",
-    "StrideMetaArray: 247 $equiv cells unproven"
-  ],
-  "unclosed": [
-    "strict gates did not all pass"
-  ],
+  "failures": [],
+  "unclosed": [],
   "acceptance_unclosed": [
     "Parent closure, full-top differential, final license review, and user approval remain outside this Build proof."
   ]

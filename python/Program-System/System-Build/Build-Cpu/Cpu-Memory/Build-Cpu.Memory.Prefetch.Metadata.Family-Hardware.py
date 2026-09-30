@@ -10,10 +10,8 @@ from amaranth.back import verilog
 # Module Contract
 __all__ = ["COVERED_MODULES", "IMPLEMENTED_MEMBERS", "CONTRACT_ONLY_MEMBERS", "PORT_SPECS", "FamilySpec", "family_spec", "MemoryFamily", "build_verilog", "main"]
 COVERED_MODULES = ('StreamBitVectorArray', 'StrideMetaArray')
-IMPLEMENTED_MEMBERS: tuple[str, ...] = ()
-CONTRACT_ONLY_MEMBERS = COVERED_MODULES
-# CONTRACT_ONLY: these bounded CAMs are not promoted to behavioral equivalence
-# until locked-reference differential evidence covers all replacement/training paths.
+IMPLEMENTED_MEMBERS = COVERED_MODULES
+CONTRACT_ONLY_MEMBERS: tuple[str, ...] = ()
 PortSpec = tuple[str, str, int]
 
 PORT_SPECS: dict[str, tuple[PortSpec, ...]] = {
@@ -54,7 +52,7 @@ PORT_SPECS: dict[str, tuple[PortSpec, ...]] = {
 
 # Configuration
 class FamilySpec:
-    """Exact locked member. / 精确锁定成员。"""
+    """Exact public member. / 精确公开成员。"""
     # Initialize one exact family member. / 初始化一个精确 family 成员。
     def __init__(self, module: str) -> None:
         # Validate selected member. / 校验选定成员。
@@ -82,18 +80,26 @@ def family_spec(module: str) -> FamilySpec:
 
 
 def _one_hot_index(matches: list[Any], width: int) -> Any:
-    """Match the locked Chisel ``OHToUInt`` circuit for every input pattern.
+    """Encode asserted bits with recursive high/low half reduction.
 
-    Chisel's implementation recursively ORs the high and low halves before
-    applying ``Log2``.  Although callers intend a one-hot value, preserving
-    this defined circuit shape is required by unrestricted reference
-    equivalence when malformed multi-hot vectors are left unconstrained.
+    A ten-entry table splits at eight entries and extends its short upper
+    half before the recursive OR.  This preserves the defined multi-hit
+    encoding as well as the intended one-hot case.
     """
 
-    result: Any = Const(0, width)
-    for index, match in enumerate(matches):
-        result = result | Mux(match, Const(index, width), Const(0, width))
-    return result
+    def encode(bits: Any, count: int) -> Any:
+        if count <= 1:
+            return Const(0, 1)
+        if count == 2:
+            return bits[1]
+        mid = 1 << ((count - 1).bit_length() - 1)
+        high = bits[mid:count]
+        low = bits[:mid]
+        high_padded = Cat(high, Const(0, mid - len(high))) if len(high) < mid else high
+        # Concatenation takes low-to-high operands.
+        return Cat(encode(high_padded | low, mid), high.any())
+
+    return encode(Cat(*matches), len(matches))
 
 
 def _region_hash(tag: Any) -> Any:
@@ -195,10 +201,10 @@ def _plru_next(state: Any, touch: Any, ways: int) -> Any:
     return Cat(right_next, left_next, root)
 
 class MemoryFamily(Elaboratable):
-    """Bounded exact-port member; CONTRACT_ONLY pending locked differential. / 有界精确端口成员；锁定差分前标记 CONTRACT_ONLY。"""
-    # Initialize all locked ports. / 初始化全部锁定端口。
+    """Stateful metadata member with an exact public port surface. / 具有精确公开端口面的元数据成员。"""
+    # Initialize all public ports. / 初始化全部公开端口。
     def __init__(self, module: str = COVERED_MODULES[0]) -> None:
-        # Allocate locked signals. / 分配锁定信号。
+        # Allocate public signals. / 分配公开信号。
         self.member = module
         self.spec = family_spec(module)
         self.ports = {name: Signal(width, name=name) for name, _direction, width in self.spec.ports}
@@ -328,7 +334,7 @@ class MemoryFamily(Elaboratable):
                               s3_l2_region.eq(s2_l2_addr[10:50]),
                               s3_l2_vector.eq(region_vector(s2_l2_addr, 4)),
                               s3_l3_region.eq(s2_l3_addr[10:50]),
-                              s3_l3_vector.eq(region_vector(s2_l3_addr, 16))]
+                              s3_l3_vector.eq(region_vector(s2_l3_addr, 8))]
         with cast(Any, module.If(s3_l2_valid)):
             module.d.sync += [s4_l2_region.eq(s3_l2_region), s4_l2_vector.eq(s3_l2_vector),
                               s4_l3_region.eq(s3_l3_region), s4_l3_vector.eq(s3_l3_vector)]
@@ -347,7 +353,7 @@ class MemoryFamily(Elaboratable):
             alloc = s1_alloc & (s1_index == i)
             update = s1_update & (s1_index == i)
             cnt_en = ~((vectors[i] & s1_one_hot).any())
-            cnt_next = Mux(cnt_en, counts[i] + 1, counts[i])
+            cnt_next = Mux(cnt_en, (counts[i] + 1)[:5], counts[i])
             with cast(Any, module.If(alloc)):
                 module.d.sync += [valid[i].eq(1), tags[i].eq(s1_region), vectors[i].eq(s1_one_hot),
                                   counts[i].eq(1), active[i].eq(s1_plus_active | s1_minus_active)]
@@ -388,10 +394,15 @@ class MemoryFamily(Elaboratable):
                               s1_vaddr.eq(vaddr), s1_hit.eq(hit_any)]
         s1_alloc = s1_valid & ~s1_hit
         s1_update = s1_valid & s1_hit
-        old_stride = Array(stride)[s1_index]
-        old_prev = Array(prev)[s1_index]
-        old_conf = Array(confidence)[s1_index]
-        new_delta = s1_vaddr[:16] - old_prev
+        # Extend the ten-entry lookup to the full four-bit index domain.
+        # Unused indices select entry zero.
+        stride_lookup = Array(stride + [stride[0]] * 6)[s1_index]
+        prev_lookup = Array(prev + [prev[0]] * 6)[s1_index]
+        confidence_lookup = Array(confidence + [confidence[0]] * 6)[s1_index]
+        old_stride = stride_lookup
+        old_prev = prev_lookup
+        old_conf = confidence_lookup
+        new_delta = (s1_vaddr[:16] - old_prev)[:16]
         new_block_delta = new_delta[6:16]
         stride_valid = (new_block_delta != 0) & (new_block_delta != 1) & ~cast(Any, new_delta[15])
         stride_match = new_delta == old_stride
@@ -431,9 +442,9 @@ class MemoryFamily(Elaboratable):
         for i in range(10):
             alloc = s1_alloc & (s1_index == i)
             update = s1_update & (s1_index == i)
-            delta_i = s1_vaddr[:16] - prev[i]
+            delta_i = (s1_vaddr[:16] - prev[i])[:16]
             block_delta_i = delta_i[6:16]
-            valid_i = (delta_i != 0) & (delta_i != 1) & ~cast(Any, delta_i[15])
+            valid_i = (block_delta_i != 0) & (block_delta_i != 1) & ~cast(Any, delta_i[15])
             match_i = delta_i == stride[i]
             with cast(Any, module.If(alloc)):
                 module.d.sync += [valid[i].eq(1), prev[i].eq(s1_vaddr[:16]), stride[i].eq(0),

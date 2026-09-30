@@ -2,11 +2,11 @@
   "schema_version": 1,
   "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_EQUIVALENCE_PROGRESS",
   "build_denominator": 118,
-  "strict_complete_build_count": 43,
-  "fraction": "43/118",
-  "percentage": 36.440678,
+  "strict_complete_build_count": 44,
+  "fraction": "44/118",
+  "percentage": 37.288136,
   "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with the locked source commit, matching source hashes, and either a Yosys SAT no-model miter or fully proven Yosys inductive-equivalence status is counted. STRICT_PENDING and COMPLETE_EQUIVALENCE_VARIANT_ONLY records are inventoried as attempted-but-not-counted instead of failing the rail, and one Build file may not be claimed by several counting proofs.",
-  "non_counting_attempt_count": 6,
+  "non_counting_attempt_count": 5,
   "non_counting_attempts": [
     {
       "evidence": "validation/v2-build-cpu-backend-exu-funcunit-strict-evidence.json",
@@ -84,22 +84,6 @@
         "output-less member, nothing observable to compare: PrintCommitIDModule",
         "aggregate SAT miter",
         "negative control did not detect a mutated design"
-      ],
-      "unclosed": [
-        "strict gates did not all pass"
-      ]
-    },
-    {
-      "evidence": "validation/v2-build-cpu-memory-prefetch-metadata-family-strict-evidence.json",
-      "build_id": "Build-Cpu.Memory.Prefetch.Metadata.Family",
-      "declared_status": "STRICT_PENDING",
-      "audit_failures": [],
-      "proof_failures": [
-        "StreamBitVectorArray:yosys_equiv",
-        "StreamBitVectorArray: 24 $equiv cells unproven",
-        "StreamBitVectorArray: zero or missing $equiv cells",
-        "StrideMetaArray:yosys_equiv",
-        "StrideMetaArray: 247 $equiv cells unproven"
       ],
       "unclosed": [
         "strict gates did not all pass"
@@ -33575,13 +33559,13 @@
     {
       "evidence": "validation/v2-build-cpu-memory-prefetch-metadata-family-strict-evidence.json",
       "build_id": "Build-Cpu.Memory.Prefetch.Metadata.Family",
-      "declared_status": "STRICT_PENDING",
+      "declared_status": "COMPLETE_EQUIVALENCE",
       "source_commit": {
         "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "status": "PASS"
       },
-      "status": "NON_COUNTING",
+      "status": "PASS",
       "note": null,
       "scope": {
         "kind": "catalog_build_multi_variant",
@@ -33658,15 +33642,15 @@
             "miter_selfcheck": true,
             "view_trusted": true,
             "locked_reference_lint": "PASS",
-            "verdict": "FAIL",
-            "success_marker": false,
+            "verdict": "PASS",
+            "success_marker": true,
             "markers_present": {
-              "0 are unproven.": false,
-              "Equivalence successfully proven!": false
+              "0 are unproven.": true,
+              "Equivalence successfully proven!": true
             },
-            "unconstrained_or_equiv_cells": null,
-            "proven_cells": null,
-            "unproven_cells": 24,
+            "unconstrained_or_equiv_cells": 1256,
+            "proven_cells": 1256,
+            "unproven_cells": 0,
             "sat_variables": null,
             "sat_clauses": null
           },
@@ -33699,15 +33683,15 @@
             "miter_selfcheck": true,
             "view_trusted": true,
             "locked_reference_lint": "PASS",
-            "verdict": "FAIL",
-            "success_marker": false,
+            "verdict": "PASS",
+            "success_marker": true,
             "markers_present": {
-              "0 are unproven.": false,
-              "Equivalence successfully proven!": false
+              "0 are unproven.": true,
+              "Equivalence successfully proven!": true
             },
             "unconstrained_or_equiv_cells": 818,
-            "proven_cells": 571,
-            "unproven_cells": 247,
+            "proven_cells": 818,
+            "unproven_cells": 0,
             "sat_variables": null,
             "sat_clauses": null
           }
@@ -33717,19 +33701,19 @@
       },
       "sources": {
         "validator": {
-          "path": "validation/v2_strict_family_rail.py",
+          "path": "validation/v2_prefetch_metadata_strict_validator.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
-          "observed_sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
+          "expected_sha256": "59dad20a4503ff0aa67cbfde6a77d7fb62de4a9fa66a27609d1fb70eeccaec24",
+          "observed_sha256": "59dad20a4503ff0aa67cbfde6a77d7fb62de4a9fa66a27609d1fb70eeccaec24",
           "status": "PASS"
         },
         "python_build": {
           "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Prefetch.Metadata.Family-Hardware.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "c5c08e968d6287af47e166f20c2b62227c800263551324845fd4fa9b732d457d",
-          "observed_sha256": "c5c08e968d6287af47e166f20c2b62227c800263551324845fd4fa9b732d457d",
+          "expected_sha256": "39cb89eeb86624acbe247e5e5e0f8485cb9503ec5370bedc7bb34d56233edc7b",
+          "observed_sha256": "39cb89eeb86624acbe247e5e5e0f8485cb9503ec5370bedc7bb34d56233edc7b",
           "status": "PASS"
         },
         "reference_sv": {
@@ -33750,7 +33734,24 @@
         }
       },
       "source_children": {},
-      "validator_dependencies": {},
+      "validator_dependencies": {
+        "strict_family_rail": {
+          "path": "validation/v2_strict_family_rail.py",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
+          "observed_sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
+          "status": "PASS"
+        },
+        "direct_test": {
+          "path": "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu.Memory.Prefetch.Metadata.Family-Hardware.py",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "3afde1e7ea358317ece7fb7c4ed223c156a459092dde520717f4708d2335ad45",
+          "observed_sha256": "3afde1e7ea358317ece7fb7c4ed223c156a459092dde520717f4708d2335ad45",
+          "status": "PASS"
+        }
+      },
       "reference_lock": {
         "StreamBitVectorArray": {
           "path": "validation/reference-sv/StreamBitVectorArray.sv",
@@ -33769,26 +33770,32 @@
           "status": "PASS"
         }
       },
-      "declared_scala_sources": {},
+      "declared_scala_sources": {
+        "upstream/src/main/scala/xiangshan/mem/prefetch/L1StreamPrefetcher.scala": {
+          "path": "upstream/src/main/scala/xiangshan/mem/prefetch/L1StreamPrefetcher.scala",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "a049d941ffd77cbbdb33c39ca93abd25ad85c7c293d533defd81ab16073a619b",
+          "observed_sha256": "a049d941ffd77cbbdb33c39ca93abd25ad85c7c293d533defd81ab16073a619b",
+          "status": "PASS"
+        },
+        "upstream/src/main/scala/xiangshan/mem/prefetch/L1StridePrefetcher.scala": {
+          "path": "upstream/src/main/scala/xiangshan/mem/prefetch/L1StridePrefetcher.scala",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "2d263b83198c87c208c72f21acbc343c1b2fc31603c6fc95f27332410a41258f",
+          "observed_sha256": "2d263b83198c87c208c72f21acbc343c1b2fc31603c6fc95f27332410a41258f",
+          "status": "PASS"
+        }
+      },
       "variant_checks": {
         "StreamBitVectorArray": {
-          "status": "FAIL",
-          "failures": [
-            "formal verdict",
-            "zero/missing equivalence cells",
-            "incomplete proven equivalence cells",
-            "unproven equivalence cells",
-            "sequential equivalence full-output markers"
-          ]
+          "status": "PASS",
+          "failures": []
         },
         "StrideMetaArray": {
-          "status": "FAIL",
-          "failures": [
-            "formal verdict",
-            "incomplete proven equivalence cells",
-            "unproven equivalence cells",
-            "sequential equivalence full-output markers"
-          ]
+          "status": "PASS",
+          "failures": []
         }
       },
       "formal": {
@@ -33799,16 +33806,8 @@
         "formal_success_marker": null
       },
       "failures": [],
-      "declared_failures": [
-        "StreamBitVectorArray:yosys_equiv",
-        "StreamBitVectorArray: 24 $equiv cells unproven",
-        "StreamBitVectorArray: zero or missing $equiv cells",
-        "StrideMetaArray:yosys_equiv",
-        "StrideMetaArray: 247 $equiv cells unproven"
-      ],
-      "declared_unclosed": [
-        "strict gates did not all pass"
-      ]
+      "declared_failures": [],
+      "declared_unclosed": []
     },
     {
       "evidence": "validation/v2-build-cpu-top-xstile-intbuffer-family-strict-evidence.json",
