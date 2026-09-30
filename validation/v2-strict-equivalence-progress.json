@@ -96,9 +96,10 @@
       "audit_failures": [],
       "proof_failures": [
         "StreamBitVectorArray:yosys_equiv",
-        "StreamBitVectorArray: 69 $equiv cells unproven",
+        "StreamBitVectorArray: 24 $equiv cells unproven",
+        "StreamBitVectorArray: zero or missing $equiv cells",
         "StrideMetaArray:yosys_equiv",
-        "StrideMetaArray: 113 $equiv cells unproven"
+        "StrideMetaArray: 247 $equiv cells unproven"
       ],
       "unclosed": [
         "strict gates did not all pass"
@@ -33663,9 +33664,9 @@
               "0 are unproven.": false,
               "Equivalence successfully proven!": false
             },
-            "unconstrained_or_equiv_cells": 117,
-            "proven_cells": 48,
-            "unproven_cells": 69,
+            "unconstrained_or_equiv_cells": null,
+            "proven_cells": null,
+            "unproven_cells": 24,
             "sat_variables": null,
             "sat_clauses": null
           },
@@ -33704,9 +33705,9 @@
               "0 are unproven.": false,
               "Equivalence successfully proven!": false
             },
-            "unconstrained_or_equiv_cells": 115,
-            "proven_cells": 2,
-            "unproven_cells": 113,
+            "unconstrained_or_equiv_cells": 818,
+            "proven_cells": 571,
+            "unproven_cells": 247,
             "sat_variables": null,
             "sat_clauses": null
           }
@@ -33727,8 +33728,8 @@
           "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Prefetch.Metadata.Family-Hardware.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "dd2189ee6d649daf3d2ef3fa26e83f6eb5226bb8ca8da1bb0ebc88ec6a71ae76",
-          "observed_sha256": "dd2189ee6d649daf3d2ef3fa26e83f6eb5226bb8ca8da1bb0ebc88ec6a71ae76",
+          "expected_sha256": "c5c08e968d6287af47e166f20c2b62227c800263551324845fd4fa9b732d457d",
+          "observed_sha256": "c5c08e968d6287af47e166f20c2b62227c800263551324845fd4fa9b732d457d",
           "status": "PASS"
         },
         "reference_sv": {
@@ -33740,11 +33741,11 @@
           "status": "PASS"
         },
         "scala": {
-          "path": "upstream/src/main/scala/xiangshan/mem/prefetch/L1StridePrefetcher.scala",
+          "path": "upstream/src/main/scala/xiangshan/mem/prefetch/L1StreamPrefetcher.scala",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "2d263b83198c87c208c72f21acbc343c1b2fc31603c6fc95f27332410a41258f",
-          "observed_sha256": "2d263b83198c87c208c72f21acbc343c1b2fc31603c6fc95f27332410a41258f",
+          "expected_sha256": "a049d941ffd77cbbdb33c39ca93abd25ad85c7c293d533defd81ab16073a619b",
+          "observed_sha256": "a049d941ffd77cbbdb33c39ca93abd25ad85c7c293d533defd81ab16073a619b",
           "status": "PASS"
         }
       },
@@ -33774,6 +33775,7 @@
           "status": "FAIL",
           "failures": [
             "formal verdict",
+            "zero/missing equivalence cells",
             "incomplete proven equivalence cells",
             "unproven equivalence cells",
             "sequential equivalence full-output markers"
@@ -33799,9 +33801,10 @@
       "failures": [],
       "declared_failures": [
         "StreamBitVectorArray:yosys_equiv",
-        "StreamBitVectorArray: 69 $equiv cells unproven",
+        "StreamBitVectorArray: 24 $equiv cells unproven",
+        "StreamBitVectorArray: zero or missing $equiv cells",
         "StrideMetaArray:yosys_equiv",
-        "StrideMetaArray: 113 $equiv cells unproven"
+        "StrideMetaArray: 247 $equiv cells unproven"
       ],
       "declared_unclosed": [
         "strict gates did not all pass"
