@@ -228,8 +228,7 @@ class Queue2Relay(Elaboratable):
         domain.clk = self.clock
         domain.rst = self.reset
         module.domains += domain
-        # Match the generated Queue RAM's state-table identity so Yosys can
-        # establish the same two-word memory correspondence after flattening.
+        # Keep the packed RAM width explicit and stable for each Queue2 bundle.
         width = sum(width for _, width in self.fields)
         memory = Memory(width=width, depth=2, name="ram_ext")
         read_port = memory.read_port(domain="comb")
