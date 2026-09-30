@@ -154,7 +154,12 @@ def main() -> int:
     if not scala_paths:
         provenance = json.loads((ROOT / "validation/v2-build-provenance-map.json").read_text(encoding="utf-8"))
         record = provenance["entries"].get(build_path.relative_to(ROOT).as_posix(), {})
-        scala_paths = [ROOT / relative for relative in record.get("SOURCE_PATHS", [])]
+        declared_paths = record.get("SOURCE_SCALA_PATHS", [])
+        if not declared_paths:
+            source_map = record.get("SOURCE_PATHS", {})
+            declared_paths = [relative for values in source_map.values()
+                              for relative in (values if isinstance(values, list) else [values])]
+        scala_paths = [ROOT / relative for relative in declared_paths]
     runner = FamilyRail(build_path, build_id, evidence,
                         scala_path=scala_paths[0] if scala_paths else None)
     if direct_path is None:

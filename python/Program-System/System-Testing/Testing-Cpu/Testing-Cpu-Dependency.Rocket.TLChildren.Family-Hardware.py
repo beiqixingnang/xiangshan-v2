@@ -84,6 +84,29 @@ class TLChildrenFamilyTest(unittest.TestCase):
                                               [True, False], [False, True]),
         )
 
+    def test_tlbuffer_queue_backpressure_and_reset_model(self) -> None:
+        # A depth-two Queue accepts two requests, holds the head under
+        # backpressure, blocks the third request while full, and resumes in
+        # FIFO order.  The reset event clears both entries immediately.
+        events = [
+            {"valid": True, "ready": False, "payload": "a"},
+            {"valid": True, "ready": False, "payload": "b"},
+            {"valid": True, "ready": False, "payload": "c"},
+            {"valid": False, "ready": True},
+            {"valid": False, "ready": True},
+            {"reset": True, "valid": False, "ready": False},
+            {"valid": True, "ready": True, "payload": "d"},
+            {"valid": False, "ready": True},
+        ]
+        observations = self.module.tlbuffer_model(events)
+        self.assertEqual([1, 1, 0, 0, 1, 1, 1, 1],
+                         [row["ready"] for row in observations])
+        self.assertEqual([None, "a", "a", "a", "b", None, None, "d"],
+                         [row["payload"] for row in observations])
+        self.assertEqual([0, 0, 0, 1, 1, 0, 0, 1],
+                         [row["fire_out"] for row in observations])
+        self.assertEqual(1, observations[5]["reset"])
+
     def test_unknown_member_rejected(self) -> None:
         with self.assertRaises(ValueError):
             self.module.build_verilog({"module": "NotATLChild"}, {})

@@ -15,7 +15,7 @@ from __future__ import annotations
 
 from typing import Any, cast
 
-from amaranth import Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
+from amaranth import Array, Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
 
 __all__ = [
@@ -555,6 +555,81 @@ class IcachePrefetchFamily(Elaboratable):
             expressions["io_out_bits_isHptwReq"] = p["io_out_bits_isHptwReq"]
             expressions["io_out_bits_hptwId"] = p["io_out_bits_hptwId"]
 
+    def _miss_queue(self, module: Module, expressions: dict[str, Any]) -> None:
+        """Model the locked ``Queue(io.in, MissQueueSize)`` implementation.
+
+        ``MissQueueSize`` is the sum of the instruction and data filter sizes
+        (8 + 32) in the pinned V2 configuration.  The top level only exposes
+        the request fields that are consumed by the queue; ``isHptwReq`` and
+        ``hptwId`` are supplied by the surrounding L2 TLB arbiter and are
+        constant false/zero for this miss queue input path.
+        """
+
+        p = self.ports
+        depth = 40
+        ptr_width = 6
+        count = Signal(ptr_width, reset=0, name="miss_count")
+        read_ptr = Signal(ptr_width, reset=0, name="miss_read_ptr")
+        write_ptr = Signal(ptr_width, reset=0, name="miss_write_ptr")
+        fields = (
+            ("io_in_bits_req_info_vpn", "io_out_bits_req_info_vpn"),
+            ("io_in_bits_req_info_s2xlate", "io_out_bits_req_info_s2xlate"),
+            ("io_in_bits_req_info_source", "io_out_bits_req_info_source"),
+            ("io_in_bits_isLLptw", "io_out_bits_isLLptw"),
+        )
+        storage = {
+            output: Array(
+                Signal(len(p[output]), reset=0, name=f"miss_{output}_{index}")
+                for index in range(depth)
+            )
+            for _input, output in fields
+        }
+        full = count == depth
+        empty = count == 0
+        enq = p["io_in_valid"] & ~full
+        deq = p["io_out_ready"] & ~empty
+        flush = (
+            p["io_sfence_valid"]
+            | p["io_csr_satp_changed"]
+            | p["io_csr_vsatp_changed"]
+            | p["io_csr_hgatp_changed"]
+            | p["io_csr_priv_virt_changed"]
+        )
+
+        module.d.comb += [
+            p["io_in_ready"].eq(~full),
+            p["io_out_valid"].eq(~empty),
+        ]
+        for _input, output in fields:
+            module.d.comb += p[output].eq(storage[output][read_ptr])
+        expressions.update({
+            "io_in_ready": p["io_in_ready"],
+            "io_out_valid": p["io_out_valid"],
+            **{output: p[output] for _input, output in fields},
+            "io_out_bits_isHptwReq": Const(0, 1),
+            "io_out_bits_hptwId": Const(0, 3),
+        })
+
+        def next_ptr(pointer: Signal) -> Any:
+            return Mux(pointer == depth - 1, Const(0, ptr_width), pointer + 1)
+
+        # Chisel Queue performs enqueue/dequeue writes for the current cycle,
+        # then applies flush to the pointers and occupancy register.  Thus a
+        # transaction coincident with flush is consumed immediately and the
+        # queue is empty on the following cycle.
+        with cast(Any, module).If(enq):
+            for input_name, output_name in fields:
+                module.d.sync += storage[output_name][write_ptr].eq(p[input_name])
+            module.d.sync += write_ptr.eq(next_ptr(write_ptr))
+        with cast(Any, module).If(deq):
+            module.d.sync += read_ptr.eq(next_ptr(read_ptr))
+        with cast(Any, module).If(enq & ~deq):
+            module.d.sync += count.eq(count + 1)
+        with cast(Any, module).Elif(deq & ~enq):
+            module.d.sync += count.eq(count - 1)
+        with cast(Any, module).If(flush):
+            module.d.sync += [count.eq(0), read_ptr.eq(0), write_ptr.eq(0)]
+
     def _monitor(self, module: Module, expressions: dict[str, Any]) -> None:
         p = self.ports
         total = Signal(16, reset=0, name="pf_total")
@@ -595,7 +670,7 @@ class IcachePrefetchFamily(Elaboratable):
         elif self.member == "L2TlbPrefetch":
             self._single_queue(module, expressions, "prefetch")
         elif self.member == "L2TlbMissQueue":
-            self._single_queue(module, expressions, "miss")
+            self._miss_queue(module, expressions)
         elif self.member == "PrefetcherMonitor":
             self._monitor(module, expressions)
         elif self.member in ("ICacheMainPipe", "IPrefetchPipe"):

@@ -10,8 +10,9 @@ import json
 import re
 import zlib
 from dataclasses import dataclass
-from typing import Any, Iterable, Mapping, NamedTuple
-from amaranth import Elaboratable, Module, Signal
+from typing import Any, Iterable, Mapping, NamedTuple, cast
+from amaranth import (ClockDomain, ClockSignal, Elaboratable, Module,
+                      ResetSignal, Signal)
 from amaranth.back import verilog
 
 # Module Contract / 模块契约
@@ -24,6 +25,7 @@ __all__ = [
     'TLChildFamily',
     'RocketTLChildrenFamily',
     'relay_observation',
+    'tlbuffer_model',
     'merge_source_ids',
     'bus_error_observation',
     'build_verilog',
@@ -108,10 +110,79 @@ class TLChildFamily(Elaboratable):
         return [self.ports[port.name] for port in self.spec.ports
                 if port.direction == "input" and port.width == output.width
                 and _tail(port.name) == tail]
+
+    # Elaborate one depth-two Chisel Queue used by the selected TLBuffer
+    # members.  The queue deliberately uses a non-bypass ready signal: when
+    # both entries are occupied, enqueue is blocked even if dequeue is ready,
+    # matching Queue(..., entries=2) in the locked Rocket output.
+    def _queue_channel(self, module: Module, enqueue_prefix: str,
+                       dequeue_prefix: str) -> None:
+        enqueue_valid = self.ports[f"{enqueue_prefix}_valid"]
+        enqueue_ready = self.ports[f"{enqueue_prefix}_ready"]
+        dequeue_valid = self.ports[f"{dequeue_prefix}_valid"]
+        dequeue_ready = self.ports[f"{dequeue_prefix}_ready"]
+        enqueue_fields = [
+            port.name[len(enqueue_prefix) + 1:]
+            for port in self.spec.ports
+            if port.direction == "input"
+            and port.name.startswith(enqueue_prefix + "_")
+            and port.name != f"{enqueue_prefix}_valid"
+            and port.name != f"{enqueue_prefix}_ready"
+        ]
+        # The corresponding output payload names are identical after the
+        # channel prefix (for example, bits_opcode), preserving all ABI bits.
+        storage = {
+            field: (Signal(self.spec.width(f"{enqueue_prefix}_{field}"),
+                           name=f"{self.member}_{enqueue_prefix}_{field}_q0"),
+                    Signal(self.spec.width(f"{enqueue_prefix}_{field}"),
+                           name=f"{self.member}_{enqueue_prefix}_{field}_q1"))
+            for field in enqueue_fields
+        }
+        count = Signal(2, name=f"{self.member}_{enqueue_prefix}_count")
+        enq_fire = Signal(name=f"{self.member}_{enqueue_prefix}_enq_fire")
+        deq_fire = Signal(name=f"{self.member}_{dequeue_prefix}_deq_fire")
+        module.d.comb += [
+            enqueue_ready.eq(count != 2),
+            dequeue_valid.eq(count != 0),
+            enq_fire.eq(enqueue_valid & enqueue_ready),
+            deq_fire.eq(dequeue_valid & dequeue_ready),
+        ]
+        for field, (slot0, slot1) in storage.items():
+            output = self.ports[f"{dequeue_prefix}_{field}"]
+            module.d.comb += output.eq(slot0)
+            with cast(Any, module.If(enq_fire & (count == 0))):
+                module.d.sync += slot0.eq(self.ports[f"{enqueue_prefix}_{field}"])
+            with cast(Any, module.Elif(enq_fire & (count == 1) & deq_fire)):
+                # A simultaneous pop/push at one occupied entry leaves the
+                # new item at the head of the queue.
+                module.d.sync += slot0.eq(self.ports[f"{enqueue_prefix}_{field}"])
+            with cast(Any, module.Elif(enq_fire)):
+                module.d.sync += slot1.eq(self.ports[f"{enqueue_prefix}_{field}"])
+            with cast(Any, module.If(deq_fire & (count == 2))):
+                module.d.sync += slot0.eq(slot1)
+        with cast(Any, module.If(self.ports["reset"])):
+            module.d.sync += count.eq(0)
+        with cast(Any, module.Elif(enq_fire & ~deq_fire)):
+            module.d.sync += count.eq(count + 1)
+        with cast(Any, module.Elif(deq_fire & ~enq_fire)):
+            module.d.sync += count.eq(count - 1)
     # Elaborate bounded ready-valid relay / 展开有界 ready-valid 中继。
     def elaborate(self, platform: Any) -> Module:
         del platform
         module = Module()
+        if self.member in {"TLBuffer_20", "TLBuffer_29", "TLBuffer_22",
+                           "TLBuffer_16", "TLBuffer_2"}:
+            # Locked Rocket queues use ``always @(posedge clock or posedge
+            # reset)``.  Bind an asynchronous sync domain to the frozen ABI
+            # clock/reset ports so reset clears queue state immediately.
+            module.domains += ClockDomain("sync", async_reset=True)
+            module.d.comb += [
+                ClockSignal("sync").eq(self.ports["clock"]),
+                ResetSignal("sync").eq(self.ports["reset"]),
+            ]
+            self._queue_channel(module, "auto_in_a", "auto_out_a")
+            self._queue_channel(module, "auto_out_d", "auto_in_d")
+            return module
         for output in (port for port in self.spec.ports if port.direction == "output"):
             signal, candidates = self.ports[output.name], self._candidates(output)
             if self.member == "BusErrorUnit" and output.name == "io_interrupt":
@@ -139,6 +210,44 @@ class TLChildFamily(Elaboratable):
         return module
 
 RocketTLChildrenFamily = TLChildFamily
+
+
+def tlbuffer_model(events: Iterable[Mapping[str, Any]], *, depth: int = 2
+                   ) -> list[dict[str, Any]]:
+    """Reference model for directed TLBuffer queue/backpressure checks.
+
+    Each event contains ``reset``, ``valid``, ``ready`` and ``payload`` for
+    one Decoupled channel.  Observations are sampled before the clock edge;
+    reset clears state immediately, as in the asynchronous reset of Chisel's
+    Queue.  Payload values are intentionally opaque Python objects.
+    """
+    if depth < 1:
+        raise ValueError("queue depth must be positive")
+    queue: list[Any] = []
+    observations: list[dict[str, Any]] = []
+    for event in events:
+        reset = bool(event.get("reset", False))
+        if reset:
+            queue.clear()
+        valid = bool(event.get("valid", False)) and not reset
+        ready = len(queue) < depth
+        output_valid = bool(queue) and not reset
+        output_payload = queue[0] if queue else None
+        enq_fire = valid and ready
+        deq_fire = output_valid and bool(event.get("ready", False))
+        observations.append({
+            "ready": int(ready),
+            "valid": int(output_valid),
+            "fire_in": int(enq_fire),
+            "fire_out": int(deq_fire),
+            "payload": output_payload,
+            "reset": int(reset),
+        })
+        if deq_fire:
+            queue.pop(0)
+        if enq_fire:
+            queue.append(event.get("payload"))
+    return observations
 
 # Return one bounded Decoupled observation / 返回一个有界 Decoupled 观测。
 def relay_observation(*, valid: bool, ready: bool, reset: bool = False) -> dict[str, int]:
