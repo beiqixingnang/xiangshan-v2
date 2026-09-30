@@ -12,6 +12,7 @@ import zlib
 from dataclasses import dataclass
 from typing import Any, Iterable, Mapping, NamedTuple, cast
 from amaranth import (Cat, ClockDomain, ClockSignal, Elaboratable, Memory, Module,
+                      Mux,
                       ResetSignal, Signal)
 from amaranth.back import verilog
 
@@ -189,7 +190,12 @@ class TLChildFamily(Elaboratable):
             return module
         for output in (port for port in self.spec.ports if port.direction == "output"):
             signal, candidates = self.ports[output.name], self._candidates(output)
-            if self.member == "BusErrorUnit" and output.name == "io_interrupt":
+            if self.member == "TLClientsMerger_1" and output.name == "auto_in_b_bits_source":
+                selector = self.ports["auto_out_b_bits_address"][6:8]
+                expression = Mux(selector == 0, 0,
+                                  Mux(selector == 1, 0x100,
+                                      Mux(selector == 2, 0x200, 0x300)))
+            elif self.member == "BusErrorUnit" and output.name == "io_interrupt":
                 errors = [self.ports[port.name] for port in self.spec.ports
                           if port.direction == "input" and port.name.startswith("io_errors_")
                           and port.name.endswith("_valid") and port.width == 1]

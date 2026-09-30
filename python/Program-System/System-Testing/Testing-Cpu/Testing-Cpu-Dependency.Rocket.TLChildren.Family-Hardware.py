@@ -84,6 +84,14 @@ class TLChildrenFamilyTest(unittest.TestCase):
                                               [True, False], [False, True]),
         )
 
+    def test_tlclients_merger_source_id_remap(self) -> None:
+        """Preserve the locked four-way address-to-source mapping."""
+
+        rtl = self.module.build_verilog({"module": "TLClientsMerger_1"}, {})
+        self.assertIn("auto_in_b_bits_source", rtl)
+        for constant in ("10'h100", "10'h200", "10'h300"):
+            self.assertIn(constant, rtl)
+
     def test_tlbuffer_queue_backpressure_and_reset_model(self) -> None:
         # A depth-two Queue accepts two requests, holds the head under
         # backpressure, blocks the third request while full, and resumes in
