@@ -80,6 +80,7 @@ def field_values(value: int) -> dict[str, int]:
     }
 
 
+# Decode DCSR and apply the effective halt request. / 解码 DCSR 并应用有效停机请求。
 def debug_csr_observation(value: int, halt_request: bool = False) -> dict[str, int]:
     """Return decoded fields and effective halt request. / 返回 DCSR 字段与有效停机请求。"""
 

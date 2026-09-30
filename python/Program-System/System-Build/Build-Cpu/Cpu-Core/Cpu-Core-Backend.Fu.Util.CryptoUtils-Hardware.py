@@ -52,6 +52,7 @@ def is_integer(value: Any) -> bool:
     return isinstance(value, int)
 
 
+# Return one deterministic integer rotate-right result. / 返回确定性的整数循环右移结果。
 def crypto_rotate_integer(value: int, amount: int, width: int = 64) -> int:
     """Return the source rotate-right primitive in integer form. / 返回整数循环右移。"""
 
