@@ -82,17 +82,17 @@ def family_spec(module: str) -> FamilySpec:
 
 
 def _one_hot_index(matches: list[Any], width: int) -> Any:
-    """Match Chisel ``OHToUInt`` for one-hot and multi-hot inputs.
+    """Match the locked Chisel ``OHToUInt`` circuit for every input pattern.
 
-    The locked V2 source uses ``OHToUInt``, whose recursive implementation
-    selects the highest asserted bit when a malformed multi-hot vector reaches
-    the encoder.  Folding with a Mux in ascending index order preserves that
-    priority while remaining equivalent for the intended one-hot case.
+    Chisel's implementation recursively ORs the high and low halves before
+    applying ``Log2``.  Although callers intend a one-hot value, preserving
+    this defined circuit shape is required by unrestricted reference
+    equivalence when malformed multi-hot vectors are left unconstrained.
     """
 
     result: Any = Const(0, width)
     for index, match in enumerate(matches):
-        result = Mux(match, Const(index, width), result)
+        result = result | Mux(match, Const(index, width), Const(0, width))
     return result
 
 
@@ -217,12 +217,12 @@ class MemoryFamily(Elaboratable):
     # Implement the stream metadata CAM. / 实现 stream 元数据 CAM。
     def _stream_behavior(self, module: Module) -> None:
         p = self.ports
-        valid = [Signal(name=f"stream_valid_{i}", reset=0) for i in range(16)]
-        tags = [Signal(40, name=f"stream_tag_{i}", reset_less=True) for i in range(16)]
-        vectors = [Signal(16, name=f"stream_bits_{i}", reset_less=True) for i in range(16)]
-        active = [Signal(name=f"stream_active_{i}", reset_less=True) for i in range(16)]
-        counts = [Signal(5, name=f"stream_count_{i}", reset_less=True) for i in range(16)]
-        replacement = Signal(15, name="stream_replacement", reset=0)
+        valid = [Signal(name=f"valids_{i}", reset=0) for i in range(16)]
+        tags = [Signal(40, name=f"array_{i}_tag", reset_less=True) for i in range(16)]
+        vectors = [Signal(16, name=f"array_{i}_bit_vec", reset_less=True) for i in range(16)]
+        active = [Signal(name=f"array_{i}_active", reset_less=True) for i in range(16)]
+        counts = [Signal(5, name=f"array_{i}_cnt", reset_less=True) for i in range(16)]
+        replacement = Signal(15, name="state_reg", reset=0)
         vaddr = p["io_train_req_bits_vaddr"]
         region = vaddr[10:50]
         region_bits = vaddr[6:10]
@@ -252,17 +252,17 @@ class MemoryFamily(Elaboratable):
         minus_index = _one_hot_index(minus_hits, 4)
         s0_index = Mux(hit_any, hit_index, replace_way)
         s0_valid = p["io_train_req_valid"] & p["io_train_req_ready"]
-        s1_valid = Signal(name="stream_s1_valid", reset=0)
-        s1_index = Signal(4, name="stream_s1_index", reset_less=True)
-        s1_miss = Signal(name="stream_s1_miss", reset_less=True)
-        s1_pf_hit = Signal(name="stream_s1_pf_hit", reset_less=True)
-        s1_plus_index = Signal(4, name="stream_s1_plus_index", reset_less=True)
-        s1_minus_index = Signal(4, name="stream_s1_minus_index", reset_less=True)
-        s1_hit = Signal(name="stream_s1_hit", reset_less=True)
-        s1_plus_hit = Signal(name="stream_s1_plus_hit", reset_less=True)
-        s1_minus_hit = Signal(name="stream_s1_minus_hit", reset_less=True)
-        s1_region = Signal(40, name="stream_s1_region", reset_less=True)
-        s1_region_bits = Signal(4, name="stream_s1_region_bits", reset_less=True)
+        s1_valid = Signal(name="s1_valid_last_REG", reset=0)
+        s1_index = Signal(4, name="s1_index", reset_less=True)
+        s1_miss = Signal(name="s1_miss", reset_less=True)
+        s1_pf_hit = Signal(name="s1_pfHit", reset_less=True)
+        s1_plus_index = Signal(4, name="s1_plus_one_index", reset_less=True)
+        s1_minus_index = Signal(4, name="s1_minus_one_index", reset_less=True)
+        s1_hit = Signal(name="s1_hit", reset_less=True)
+        s1_plus_hit = Signal(name="s1_plus_one_hit_r", reset_less=True)
+        s1_minus_hit = Signal(name="s1_minus_one_hit_r", reset_less=True)
+        s1_region = Signal(40, name="s1_region_tag", reset_less=True)
+        s1_region_bits = Signal(4, name="s1_region_bits", reset_less=True)
         s1_hash = _region_hash(s1_region)
         current_ready = ~(s1_valid & (s1_hash == region_hash))
         module.d.comb += p["io_train_req_ready"].eq(current_ready)
@@ -284,16 +284,18 @@ class MemoryFamily(Elaboratable):
         s1_one_hot = Const(1, 16) << s1_region_bits
         s1_can_send = Mux(s1_update, ~((selected_vector & s1_one_hot).any()), Const(1, 1)) & (s1_miss | s1_pf_hit)
         s1_l1_base = Cat(s1_region_bits, s1_region)
-        s2_valid = Signal(name="stream_s2_valid", reset=0)
-        s2_index = Signal(4, name="stream_s2_index", reset_less=True)
-        s2_l1_addr = Signal(50, name="stream_s2_l1_addr", reset_less=True)
-        s2_l2_addr = Signal(50, name="stream_s2_l2_addr", reset_less=True)
-        s2_can_send = Signal(name="stream_s2_can_send", reset_less=True)
+        s2_valid = Signal(name="s2_valid_last_REG", reset=0)
+        s2_index = Signal(4, name="s2_index", reset_less=True)
+        s2_l1_addr = Signal(50, name="s2_pf_l1_incr_vaddr", reset_less=True)
+        s2_l2_addr = Signal(50, name="s2_pf_l2_incr_vaddr", reset_less=True)
+        s2_l3_addr = Signal(50, name="s2_pf_l3_incr_vaddr", reset_less=True)
+        s2_can_send = Signal(name="s2_can_send_pf", reset_less=True)
         module.d.sync += s2_valid.eq(s1_valid)
         with cast(Any, module.If(s1_valid)):
             module.d.sync += [s2_index.eq(s1_index),
                               s2_l1_addr.eq(Cat(Const(0, 6), s1_l1_base + Const(0x40, 44))),
                               s2_l2_addr.eq(Cat(Const(0, 6), s1_l1_base + Const(0x280, 44))),
+                              s2_l3_addr.eq(Cat(Const(0, 6), s1_l1_base + Const(0x280, 44))),
                               s2_can_send.eq(s1_can_send)]
         s2_active = Array(active)[s2_index]
         s2_pf_valid = s2_valid & s2_active & s2_can_send & p["io_enable"]
@@ -303,29 +305,33 @@ class MemoryFamily(Elaboratable):
             for offset in range(width):
                 result = result | (base << offset)
             return result
-        s3_l1_valid = Signal(name="stream_s3_l1_valid", reset=0)
-        s3_l2_valid = Signal(name="stream_s3_l2_valid", reset=0)
-        s3_l1_region = Signal(40, name="stream_s3_l1_region", reset_less=True)
-        s3_l1_vector = Signal(16, name="stream_s3_l1_vector", reset_less=True)
-        s3_l2_region = Signal(40, name="stream_s3_l2_region", reset_less=True)
-        s3_l2_vector = Signal(16, name="stream_s3_l2_vector", reset_less=True)
-        s4_l2_valid = Signal(name="stream_s4_l2_valid", reset=0)
-        s4_l2_region = Signal(40, name="stream_s4_l2_region", reset_less=True)
-        s4_l2_vector = Signal(16, name="stream_s4_l2_vector", reset_less=True)
-        s4_l3_region = Signal(40, name="stream_s4_l3_region", reset_less=True)
-        s4_l3_vector = Signal(16, name="stream_s4_l3_vector", reset_less=True)
-        s5_l3_region = Signal(40, name="stream_s5_l3_region", reset_less=True)
-        s5_l3_vector = Signal(16, name="stream_s5_l3_vector", reset_less=True)
+        s3_l1_valid = Signal(name="s3_pf_l1_valid_last_REG", reset=0)
+        s3_l2_valid = Signal(name="s3_pf_l2_valid_last_REG", reset=0)
+        s3_l1_region = Signal(40, name="s3_pf_l1_bits_region", reset_less=True)
+        s3_l1_vector = Signal(16, name="s3_pf_l1_bits_bit_vec", reset_less=True)
+        s3_l2_region = Signal(40, name="s3_pf_l2_bits_region", reset_less=True)
+        s3_l2_vector = Signal(16, name="s3_pf_l2_bits_bit_vec", reset_less=True)
+        s3_l3_region = Signal(40, name="s3_pf_l3_bits_region", reset_less=True)
+        s3_l3_vector = Signal(16, name="s3_pf_l3_bits_bit_vec", reset_less=True)
+        s4_l2_valid = Signal(name="s4_pf_l2_valid_last_REG", reset=0)
+        s4_l2_region = Signal(40, name="s4_pf_l2_bits_region", reset_less=True)
+        s4_l2_vector = Signal(16, name="s4_pf_l2_bits_bit_vec", reset_less=True)
+        s4_l3_region = Signal(40, name="s4_pf_l3_bits_region", reset_less=True)
+        s4_l3_vector = Signal(16, name="s4_pf_l3_bits_bit_vec", reset_less=True)
+        s5_l3_region = Signal(40, name="s5_pf_l3_bits_region", reset_less=True)
+        s5_l3_vector = Signal(16, name="s5_pf_l3_bits_bit_vec", reset_less=True)
         module.d.sync += [s3_l1_valid.eq(s2_pf_valid), s3_l2_valid.eq(s2_pf_valid),
                           s4_l2_valid.eq(s3_l2_valid)]
         with cast(Any, module.If(s2_pf_valid)):
             module.d.sync += [s3_l1_region.eq(s2_l1_addr[10:50]),
                               s3_l1_vector.eq(region_vector(s2_l1_addr, 2)),
                               s3_l2_region.eq(s2_l2_addr[10:50]),
-                              s3_l2_vector.eq(region_vector(s2_l2_addr, 4))]
+                              s3_l2_vector.eq(region_vector(s2_l2_addr, 4)),
+                              s3_l3_region.eq(s2_l3_addr[10:50]),
+                              s3_l3_vector.eq(region_vector(s2_l3_addr, 16))]
         with cast(Any, module.If(s3_l2_valid)):
             module.d.sync += [s4_l2_region.eq(s3_l2_region), s4_l2_vector.eq(s3_l2_vector),
-                              s4_l3_region.eq(s3_l2_region), s4_l3_vector.eq(s3_l2_vector)]
+                              s4_l3_region.eq(s3_l3_region), s4_l3_vector.eq(s3_l3_vector)]
         with cast(Any, module.If(s4_l2_valid)):
             module.d.sync += [s5_l3_region.eq(s4_l3_region), s5_l3_vector.eq(s4_l3_vector)]
         module.d.comb += [p["io_l1_prefetch_req_valid"].eq(s3_l1_valid),
@@ -353,12 +359,12 @@ class MemoryFamily(Elaboratable):
     # Implement the ten-entry stride metadata CAM. / 实现十项 stride 元数据 CAM。
     def _stride_behavior(self, module: Module) -> None:
         p = self.ports
-        valid = [Signal(name=f"stride_valid_{i}", reset=0) for i in range(10)]
-        prev = [Signal(16, name=f"stride_prev_{i}", reset_less=True) for i in range(10)]
-        stride = [Signal(16, name=f"stride_value_{i}", reset_less=True) for i in range(10)]
-        confidence = [Signal(2, name=f"stride_conf_{i}", reset_less=True) for i in range(10)]
-        pc_hash = [Signal(15, name=f"stride_pc_hash_{i}", reset_less=True) for i in range(10)]
-        replacement = Signal(9, name="stride_replacement", reset=0)
+        valid = [Signal(name=f"valids_{i}", reset=0) for i in range(10)]
+        prev = [Signal(16, name=f"array_{i}_pre_vaddr", reset_less=True) for i in range(10)]
+        stride = [Signal(16, name=f"array_{i}_stride", reset_less=True) for i in range(10)]
+        confidence = [Signal(2, name=f"array_{i}_confidence", reset_less=True) for i in range(10)]
+        pc_hash = [Signal(15, name=f"array_{i}_hash_pc", reset_less=True) for i in range(10)]
+        replacement = Signal(9, name="state_reg", reset=0)
         vaddr = p["io_train_req_bits_vaddr"]
         pc_tag = _pc_hash(p["io_train_req_bits_pc"])
         vaddr_low = vaddr[:16]
@@ -370,11 +376,11 @@ class MemoryFamily(Elaboratable):
         hit_index = _one_hot_index(hits, 4)
         s0_index = Mux(hit_any, hit_index, _plru_way(replacement, 10))
         s0_valid = p["io_train_req_valid"] & p["io_train_req_ready"]
-        s1_valid = Signal(name="stride_s1_valid", reset=0)
-        s1_index = Signal(4, name="stride_s1_index", reset_less=True)
-        s1_hash = Signal(15, name="stride_s1_hash", reset_less=True)
-        s1_vaddr = Signal(50, name="stride_s1_vaddr", reset_less=True)
-        s1_hit = Signal(name="stride_s1_hit", reset_less=True)
+        s1_valid = Signal(name="s1_valid_last_REG", reset=0)
+        s1_index = Signal(4, name="s1_index", reset_less=True)
+        s1_hash = Signal(15, name="s1_pc_hash", reset_less=True)
+        s1_vaddr = Signal(50, name="s1_vaddr", reset_less=True)
+        s1_hit = Signal(name="s1_hit", reset_less=True)
         module.d.comb += p["io_train_req_ready"].eq(~(s1_valid & (s1_hash == pc_tag)))
         module.d.sync += s1_valid.eq(s0_valid)
         with cast(Any, module.If(s0_valid)):
@@ -390,22 +396,22 @@ class MemoryFamily(Elaboratable):
         stride_valid = (new_block_delta != 0) & (new_block_delta != 1) & ~cast(Any, new_delta[15])
         stride_match = new_delta == old_stride
         can_send = s1_update & stride_valid & stride_match & (old_conf == 3)
-        s2_valid = Signal(name="stride_s2_valid", reset=0)
-        s2_vaddr = Signal(50, name="stride_s2_vaddr", reset_less=True)
-        s2_stride = Signal(16, name="stride_s2_stride", reset_less=True)
+        s2_valid = Signal(name="s2_valid_last_REG", reset=0)
+        s2_vaddr = Signal(50, name="s2_vaddr", reset_less=True)
+        s2_stride = Signal(16, name="s2_stride", reset_less=True)
         module.d.sync += s2_valid.eq(can_send)
         with cast(Any, module.If(can_send)):
             module.d.sync += [s2_vaddr.eq(s1_vaddr), s2_stride.eq(old_stride)]
         s2_l1_addr = s2_vaddr + (s2_stride << 2)
         s2_l2_addr = s2_vaddr + (s2_stride << 5)
-        s3_valid = Signal(name="stride_s3_valid", reset=0)
-        s3_l1_region = Signal(40, name="stride_s3_l1_region", reset_less=True)
-        s3_l1_vector = Signal(16, name="stride_s3_l1_vector", reset_less=True)
-        s3_l2_region = Signal(40, name="stride_s3_l2_region", reset_less=True)
-        s3_l2_vector = Signal(16, name="stride_s3_l2_vector", reset_less=True)
-        s4_valid = Signal(name="stride_s4_valid", reset=0)
-        s4_l2_region = Signal(40, name="stride_s4_l2_region", reset_less=True)
-        s4_l2_vector = Signal(16, name="stride_s4_l2_vector", reset_less=True)
+        s3_valid = Signal(name="s3_valid_last_REG", reset=0)
+        s3_l1_region = Signal(40, name="s3_l1_pf_req_bits_region", reset_less=True)
+        s3_l1_vector = Signal(16, name="s3_l1_pf_req_bits_bit_vec", reset_less=True)
+        s3_l2_region = Signal(40, name="s3_l2_pf_req_bits_region", reset_less=True)
+        s3_l2_vector = Signal(16, name="s3_l2_pf_req_bits_bit_vec", reset_less=True)
+        s4_valid = Signal(name="s4_valid_last_REG", reset=0)
+        s4_l2_region = Signal(40, name="s4_l2_pf_req_bits_region", reset_less=True)
+        s4_l2_vector = Signal(16, name="s4_l2_pf_req_bits_bit_vec", reset_less=True)
         module.d.sync += [s3_valid.eq(s2_valid), s4_valid.eq(s3_valid)]
         with cast(Any, module.If(s2_valid)):
             module.d.sync += [s3_l1_region.eq(s2_l1_addr[10:50]),
