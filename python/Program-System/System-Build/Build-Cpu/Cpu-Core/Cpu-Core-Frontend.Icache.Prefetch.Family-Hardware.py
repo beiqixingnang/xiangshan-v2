@@ -3,8 +3,8 @@
 The seven modules share one exact, self-contained ANSI surface and remain
 selectable through ``build_verilog``.
 
-The implementation is a reset-safe behavioural envelope.  The queue-like
-leaves (WayLookup, L2TlbPrefetch, and L2TlbMissQueue) retain one transaction;
+WayLookup and L2TlbPrefetch retain a bounded one-transaction envelope;
+L2TlbMissQueue implements a depth-40 packed FIFO with pointer wrap and flush.
 InstrMMIOEntry retains the four-state request/grant handshake.  The larger
 pipeline leaves expose deterministic ready/valid and address propagation,
 which is sufficient for bounded direct/tool validation.  Full parent closure
@@ -15,7 +15,7 @@ from __future__ import annotations
 
 from typing import Any, cast
 
-from amaranth import Array, Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
+from amaranth import Array, Cat, ClockDomain, Const, Elaboratable, Memory, Module, Mux, Signal
 from amaranth.back import verilog
 
 __all__ = [
@@ -405,6 +405,88 @@ PORT_SPECS: dict[str, tuple[PortSpec, ...]] = {
 
 
 
+class Queue40_L2TlbMQBundle(Elaboratable):
+    """Packed depth-40 queue matching the locked Queue40_L2TlbMQBundle.
+
+    The Queue stores one 47-bit record.  The three high bits are the
+    surrounding L2 TLB's HPTW fields and are zero for this input path; keeping
+    them in the packed record preserves the locked RAM width and bit slices.
+    """
+
+    def __init__(self) -> None:
+        self.clock = Signal(name="clock")
+        self.reset = Signal(name="reset")
+        self.io_enq_ready = Signal(name="io_enq_ready")
+        self.io_enq_valid = Signal(name="io_enq_valid")
+        self.io_enq_bits_req_info_vpn = Signal(38, name="io_enq_bits_req_info_vpn")
+        self.io_enq_bits_req_info_s2xlate = Signal(2, name="io_enq_bits_req_info_s2xlate")
+        self.io_enq_bits_req_info_source = Signal(2, name="io_enq_bits_req_info_source")
+        self.io_enq_bits_isLLptw = Signal(name="io_enq_bits_isLLptw")
+        self.io_deq_ready = Signal(name="io_deq_ready")
+        self.io_deq_valid = Signal(name="io_deq_valid")
+        self.io_deq_bits_req_info_vpn = Signal(38, name="io_deq_bits_req_info_vpn")
+        self.io_deq_bits_req_info_s2xlate = Signal(2, name="io_deq_bits_req_info_s2xlate")
+        self.io_deq_bits_req_info_source = Signal(2, name="io_deq_bits_req_info_source")
+        self.io_deq_bits_isHptwReq = Signal(name="io_deq_bits_isHptwReq")
+        self.io_deq_bits_isLLptw = Signal(name="io_deq_bits_isLLptw")
+        self.io_deq_bits_hptwId = Signal(3, name="io_deq_bits_hptwId")
+        self.io_flush = Signal(name="io_flush")
+
+    def elaborate(self, platform: Any) -> Module:
+        del platform
+        module = Module()
+        depth = 40
+        ptr_width = 6
+        enq_ptr_value = Signal(ptr_width, reset=0, name="enq_ptr_value")
+        deq_ptr_value = Signal(ptr_width, reset=0, name="deq_ptr_value")
+        maybe_full = Signal(reset=0, name="maybe_full")
+        packed_in = Cat(
+            self.io_enq_bits_req_info_vpn,
+            self.io_enq_bits_req_info_s2xlate,
+            self.io_enq_bits_req_info_source,
+            Const(0, 1), self.io_enq_bits_isLLptw, Const(0, 3),
+        )
+        ram_ext = Memory(width=47, depth=depth, name="ram_ext")
+        read_port = ram_ext.read_port(domain="comb")
+        write_port = ram_ext.write_port(domain="sync")
+        # Match the locked RAM word identity when Yosys maps the memory.
+        module.submodules["ram_ext.Memory"] = ram_ext
+        ram_read_data = Signal(47, name="_ram_ext_R0_data")
+
+        ptr_match = enq_ptr_value == deq_ptr_value
+        empty = ptr_match & ~maybe_full
+        full = ptr_match & maybe_full
+        do_enq = ~full & self.io_enq_valid
+        do_deq = self.io_deq_ready & ~empty
+        next_enq = Mux(enq_ptr_value == depth - 1, 0, enq_ptr_value + 1)
+        next_deq = Mux(deq_ptr_value == depth - 1, 0, deq_ptr_value + 1)
+        module.d.comb += [
+            self.io_enq_ready.eq(~full),
+            self.io_deq_valid.eq(~empty),
+            read_port.addr.eq(deq_ptr_value),
+            write_port.addr.eq(enq_ptr_value),
+            write_port.en.eq(do_enq),
+            write_port.data.eq(packed_in),
+            ram_read_data.eq(read_port.data),
+            self.io_deq_bits_req_info_vpn.eq(ram_read_data[0:38]),
+            self.io_deq_bits_req_info_s2xlate.eq(ram_read_data[38:40]),
+            self.io_deq_bits_req_info_source.eq(ram_read_data[40:42]),
+            self.io_deq_bits_isHptwReq.eq(ram_read_data[42]),
+            self.io_deq_bits_isLLptw.eq(ram_read_data[43]),
+            self.io_deq_bits_hptwId.eq(ram_read_data[44:47]),
+        ]
+        with cast(Any, module).If(self.io_flush):
+            module.d.sync += [enq_ptr_value.eq(0), deq_ptr_value.eq(0), maybe_full.eq(0)]
+        with cast(Any, module).Else():
+            with cast(Any, module).If(do_enq):
+                module.d.sync += enq_ptr_value.eq(next_enq)
+            with cast(Any, module).If(do_deq):
+                module.d.sync += deq_ptr_value.eq(next_deq)
+            with cast(Any, module).If(do_enq != do_deq):
+                module.d.sync += maybe_full.eq(do_enq)
+        return module
+
+
 class IcachePrefetchFamily(Elaboratable):
     """One exact locked member selected by name."""
 
@@ -566,28 +648,6 @@ class IcachePrefetchFamily(Elaboratable):
         """
 
         p = self.ports
-        depth = 40
-        ptr_width = 6
-        count = Signal(ptr_width, reset=0, name="miss_count")
-        read_ptr = Signal(ptr_width, reset=0, name="miss_read_ptr")
-        write_ptr = Signal(ptr_width, reset=0, name="miss_write_ptr")
-        fields = (
-            ("io_in_bits_req_info_vpn", "io_out_bits_req_info_vpn"),
-            ("io_in_bits_req_info_s2xlate", "io_out_bits_req_info_s2xlate"),
-            ("io_in_bits_req_info_source", "io_out_bits_req_info_source"),
-            ("io_in_bits_isLLptw", "io_out_bits_isLLptw"),
-        )
-        storage = {
-            output: Array(
-                Signal(len(p[output]), reset=0, name=f"miss_{output}_{index}")
-                for index in range(depth)
-            )
-            for _input, output in fields
-        }
-        full = count == depth
-        empty = count == 0
-        enq = p["io_in_valid"] & ~full
-        deq = p["io_out_ready"] & ~empty
         flush = (
             p["io_sfence_valid"]
             | p["io_csr_satp_changed"]
@@ -596,39 +656,35 @@ class IcachePrefetchFamily(Elaboratable):
             | p["io_csr_priv_virt_changed"]
         )
 
+        queue = Queue40_L2TlbMQBundle()
+        module.submodules.io_out_q = queue
         module.d.comb += [
-            p["io_in_ready"].eq(~full),
-            p["io_out_valid"].eq(~empty),
+            queue.clock.eq(p["clock"]), queue.reset.eq(p["reset"]),
+            queue.io_flush.eq(flush), queue.io_enq_valid.eq(p["io_in_valid"]),
+            queue.io_enq_bits_req_info_vpn.eq(p["io_in_bits_req_info_vpn"]),
+            queue.io_enq_bits_req_info_s2xlate.eq(p["io_in_bits_req_info_s2xlate"]),
+            queue.io_enq_bits_req_info_source.eq(p["io_in_bits_req_info_source"]),
+            queue.io_enq_bits_isLLptw.eq(p["io_in_bits_isLLptw"]),
+            queue.io_deq_ready.eq(p["io_out_ready"]),
+            p["io_in_ready"].eq(queue.io_enq_ready),
+            p["io_out_valid"].eq(queue.io_deq_valid),
+            p["io_out_bits_req_info_vpn"].eq(queue.io_deq_bits_req_info_vpn),
+            p["io_out_bits_req_info_s2xlate"].eq(queue.io_deq_bits_req_info_s2xlate),
+            p["io_out_bits_req_info_source"].eq(queue.io_deq_bits_req_info_source),
+            p["io_out_bits_isHptwReq"].eq(queue.io_deq_bits_isHptwReq),
+            p["io_out_bits_isLLptw"].eq(queue.io_deq_bits_isLLptw),
+            p["io_out_bits_hptwId"].eq(queue.io_deq_bits_hptwId),
         ]
-        for _input, output in fields:
-            module.d.comb += p[output].eq(storage[output][read_ptr])
         expressions.update({
             "io_in_ready": p["io_in_ready"],
             "io_out_valid": p["io_out_valid"],
-            **{output: p[output] for _input, output in fields},
-            "io_out_bits_isHptwReq": Const(0, 1),
-            "io_out_bits_hptwId": Const(0, 3),
+            "io_out_bits_req_info_vpn": p["io_out_bits_req_info_vpn"],
+            "io_out_bits_req_info_s2xlate": p["io_out_bits_req_info_s2xlate"],
+            "io_out_bits_req_info_source": p["io_out_bits_req_info_source"],
+            "io_out_bits_isHptwReq": p["io_out_bits_isHptwReq"],
+            "io_out_bits_isLLptw": p["io_out_bits_isLLptw"],
+            "io_out_bits_hptwId": p["io_out_bits_hptwId"],
         })
-
-        def next_ptr(pointer: Signal) -> Any:
-            return Mux(pointer == depth - 1, Const(0, ptr_width), pointer + 1)
-
-        # Chisel Queue performs enqueue/dequeue writes for the current cycle,
-        # then applies flush to the pointers and occupancy register.  Thus a
-        # transaction coincident with flush is consumed immediately and the
-        # queue is empty on the following cycle.
-        with cast(Any, module).If(enq):
-            for input_name, output_name in fields:
-                module.d.sync += storage[output_name][write_ptr].eq(p[input_name])
-            module.d.sync += write_ptr.eq(next_ptr(write_ptr))
-        with cast(Any, module).If(deq):
-            module.d.sync += read_ptr.eq(next_ptr(read_ptr))
-        with cast(Any, module).If(enq & ~deq):
-            module.d.sync += count.eq(count + 1)
-        with cast(Any, module).Elif(deq & ~enq):
-            module.d.sync += count.eq(count - 1)
-        with cast(Any, module).If(flush):
-            module.d.sync += [count.eq(0), read_ptr.eq(0), write_ptr.eq(0)]
 
     def _monitor(self, module: Module, expressions: dict[str, Any]) -> None:
         p = self.ports

@@ -1,0 +1,1951 @@
+{
+  "schema_version": 1,
+  "kind": "V2_QUEUE_STATE_FOCUSED_DIAGNOSTIC",
+  "build_id": "Build-Cpu.Dependency.Rocket.TLChildren.Family",
+  "status": "PASS_MEMBER_PROOFS_NON_COUNTING",
+  "strict_complete_eligible": false,
+  "strict_complete_count_delta": 0,
+  "acceptance_eligible": false,
+  "members": [
+    "TLBuffer_2",
+    "TLBuffer_16",
+    "TLBuffer_20",
+    "TLBuffer_22",
+    "TLBuffer_29"
+  ],
+  "family_members": [
+    "BusErrorUnit",
+    "TLBuffer_16",
+    "TLBuffer_2",
+    "TLBuffer_20",
+    "TLBuffer_22",
+    "TLBuffer_27",
+    "TLBuffer_29",
+    "TLClientsMerger_1",
+    "TLXbar_7",
+    "TLXbar_8",
+    "TLXbar_9"
+  ],
+  "full_family_covered": false,
+  "sources": {
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Rocket.TLChildren.Family-Hardware.py",
+      "sha256": "9ac5e12fa860c81af67db349098510f0fc47219acead1fe6a7cf6285193cfb06",
+      "bytes": 20774
+    },
+    "validator": {
+      "path": "validation/v2_queue_state_correspondence_validator.py",
+      "sha256": "269625409756672a036515a0f1530cffce12cd2fff3eb14dcb7191d05b4f49c5",
+      "bytes": 5436
+    },
+    "rail": {
+      "path": "validation/v2_strict_family_rail.py",
+      "sha256": "11d54ff599053463ed76f91233cb331c13848ba6626fce6c9a2b9dfd81b39f48",
+      "bytes": 72639
+    },
+    "direct_test": {
+      "path": "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Dependency.Rocket.TLChildren.Family-Hardware.py",
+      "sha256": "ce14af421dcfb535b571f76b2b9c97db81199fd8fe89c5c9a0594c8fce287480",
+      "bytes": 5184
+    }
+  },
+  "checks": {
+    "direct": {
+      "command": [
+        "C:\\Program Files\\Python313\\python.exe",
+        "-B",
+        "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu-Dependency.Rocket.TLChildren.Family-Hardware.py"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "output_tail": "D:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Build\\Build-Cpu\\Cpu-Core\\Cpu-Core-Dependency.Rocket.TLChildren.Family-Hardware.py:233: DeprecationWarning: `amaranth.hdl.Memory` is deprecated, use `amaranth.lib.memory.Memory` instead\n  memory = Memory(width=width, depth=2, name=\"ram_ext\")\n......\n----------------------------------------------------------------------\nRan 6 tests in 6.930s\n\nOK\n"
+    },
+    "pyright": {
+      "command": [
+        "cmd.exe",
+        "/d",
+        "/c",
+        "pyright",
+        "--outputjson",
+        "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_s_p2z37q\\Cpu-Core-Dependency.Rocket.TLChildren.Family-Hardware.py"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "version": "1.1.411",
+      "error_count": 0,
+      "files_analyzed": 1,
+      "stderr_tail": ""
+    }
+  },
+  "results": [
+    {
+      "member": "TLBuffer_2",
+      "status": "PASS",
+      "formal_cache_hit": false,
+      "static_failures": [],
+      "prepared": {
+        "name": "TLBuffer_2",
+        "inputs": {
+          "clock": 1,
+          "reset": 1,
+          "auto_in_a_valid": 1,
+          "auto_in_a_bits_opcode": 4,
+          "auto_in_a_bits_param": 3,
+          "auto_in_a_bits_size": 3,
+          "auto_in_a_bits_source": 5,
+          "auto_in_a_bits_address": 48,
+          "auto_in_a_bits_mask": 8,
+          "auto_in_a_bits_data": 64,
+          "auto_in_a_bits_corrupt": 1,
+          "auto_in_d_ready": 1,
+          "auto_out_a_ready": 1,
+          "auto_out_d_valid": 1,
+          "auto_out_d_bits_opcode": 4,
+          "auto_out_d_bits_param": 2,
+          "auto_out_d_bits_size": 3,
+          "auto_out_d_bits_source": 5,
+          "auto_out_d_bits_sink": 1,
+          "auto_out_d_bits_denied": 1,
+          "auto_out_d_bits_data": 64,
+          "auto_out_d_bits_corrupt": 1
+        },
+        "outputs": {
+          "auto_in_a_ready": 1,
+          "auto_in_d_valid": 1,
+          "auto_in_d_bits_opcode": 4,
+          "auto_in_d_bits_param": 2,
+          "auto_in_d_bits_size": 3,
+          "auto_in_d_bits_source": 5,
+          "auto_in_d_bits_sink": 1,
+          "auto_in_d_bits_denied": 1,
+          "auto_in_d_bits_data": 64,
+          "auto_in_d_bits_corrupt": 1,
+          "auto_out_a_valid": 1,
+          "auto_out_a_bits_opcode": 4,
+          "auto_out_a_bits_param": 3,
+          "auto_out_a_bits_size": 3,
+          "auto_out_a_bits_source": 5,
+          "auto_out_a_bits_address": 48,
+          "auto_out_a_bits_mask": 8,
+          "auto_out_a_bits_data": 64,
+          "auto_out_a_bits_corrupt": 1,
+          "auto_out_d_ready": 1
+        },
+        "children": [
+          "Queue2_TLBundleA_2",
+          "Queue2_TLBundleD_4",
+          "ram_2x136",
+          "ram_2x81"
+        ],
+        "sequential": true,
+        "abi_exact": true,
+        "deterministic": true,
+        "output_less": false,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "view_audits": [
+          {
+            "top": "ram_2x136",
+            "renamed_top": false,
+            "regions_removed_lines": {
+              "`ifdef ENABLE_INITIAL_MEM_": 14
+            },
+            "block_local_temporaries_hoisted": [],
+            "initialized_declarations_hoisted": [],
+            "code_lines_locked": 17,
+            "code_lines_view": 17,
+            "residual_preprocessor_directives": 0,
+            "line_conservation_ok": true,
+            "register_update_equations_locked": 0,
+            "register_update_equations_preserved": true,
+            "view_projection": null,
+            "view_trusted": true
+          },
+          {
+            "top": "Queue2_TLBundleA_2",
+            "renamed_top": false,
+            "regions_removed_lines": {
+              "`ifdef ENABLE_INITIAL_REG_": 25
+            },
+            "block_local_temporaries_hoisted": [],
+            "initialized_declarations_hoisted": [
+              "do_deq"
+            ],
+            "code_lines_locked": 77,
+            "code_lines_view": 78,
+            "residual_preprocessor_directives": 0,
+            "line_conservation_ok": true,
+            "register_update_equations_locked": 6,
+            "register_update_equations_preserved": true,
+            "view_projection": null,
+            "view_trusted": true
+          },
+          {
+            "top": "ram_2x81",
+            "renamed_top": false,
+            "regions_removed_lines": {
+              "`ifdef ENABLE_INITIAL_MEM_": 14
+            },
+            "block_local_temporaries_hoisted": [],
+            "initialized_declarations_hoisted": [],
+            "code_lines_locked": 17,
+            "code_lines_view": 17,
+            "residual_preprocessor_directives": 0,
+            "line_conservation_ok": true,
+            "register_update_equations_locked": 0,
+            "register_update_equations_preserved": true,
+            "view_projection": null,
+            "view_trusted": true
+          },
+          {
+            "top": "Queue2_TLBundleD_4",
+            "renamed_top": false,
+            "regions_removed_lines": {
+              "`ifdef ENABLE_INITIAL_REG_": 25
+            },
+            "block_local_temporaries_hoisted": [],
+            "initialized_declarations_hoisted": [
+              "do_deq"
+            ],
+            "code_lines_locked": 77,
+            "code_lines_view": 78,
+            "residual_preprocessor_directives": 0,
+            "line_conservation_ok": true,
+            "register_update_equations_locked": 6,
+            "register_update_equations_preserved": true,
+            "view_projection": null,
+            "view_trusted": true
+          },
+          {
+            "top": "TLBuffer_2",
+            "renamed_top": true,
+            "regions_removed_lines": {},
+            "block_local_temporaries_hoisted": [],
+            "initialized_declarations_hoisted": [],
+            "code_lines_locked": 93,
+            "code_lines_view": 93,
+            "residual_preprocessor_directives": 0,
+            "line_conservation_ok": true,
+            "register_update_equations_locked": 0,
+            "register_update_equations_preserved": true,
+            "view_projection": null,
+            "view_trusted": true
+          }
+        ],
+        "locked_sha256": "a5bf6d533f2d6c142074f9150008920abe69ec470d29558851dea6c599258721",
+        "locked_sources": [
+          {
+            "__path__": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\reference-sv\\Queue2_TLBundleA_2.sv"
+          },
+          {
+            "__path__": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\reference-sv\\Queue2_TLBundleD_4.sv"
+          },
+          {
+            "__path__": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\reference-sv\\ram_2x136.sv"
+          },
+          {
+            "__path__": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\reference-sv\\ram_2x81.sv"
+          },
+          {
+            "__path__": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\reference-sv\\TLBuffer_2.sv"
+          }
+        ],
+        "target": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_dependency_rocket_tlchildren_family_family\\DUT_TLBuffer_2.sv"
+        },
+        "reference": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_dependency_rocket_tlchildren_family_family\\REF_TLBuffer_2.sv"
+        },
+        "miter": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_dependency_rocket_tlchildren_family_family\\TLBuffer_2_MITER.sv"
+        },
+        "wsl": {
+          "target": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/DUT_TLBuffer_2.sv",
+          "reference": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/REF_TLBuffer_2.sv",
+          "miter": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/TLBuffer_2_MITER.sv",
+          "locked_sources": [
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleA_2.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleD_4.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x136.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x81.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/TLBuffer_2.sv"
+          ]
+        },
+        "cache_key": "2896fa3efb6348263aaa24982e6e3d4c03e804cb2ade170f88889b5302ae5b24",
+        "cache_hit": false,
+        "tool_versions": {
+          "python": "3.13.12",
+          "python_implementation": "CPython",
+          "host": "Windows-11-10.0.26300-SP0",
+          "amaranth": "0.5.8",
+          "yosys": "Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)",
+          "verilator": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)"
+        },
+        "prepared_hashes": {
+          "target": "7ebffb82f7d157a0544846cf4ea44aa06465c0e981342021c1df79c49252361a",
+          "reference": "377e17932ce8f0e226f5282ff670ae6bb58e2b180007fb7833bd28c6a7579073",
+          "miter": "61e94ef6774b8c3aac096a4ff770cbd846a5acf098a12446783ad97a9b43cb2d"
+        },
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "TLBuffer_2_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/DUT_TLBuffer_2.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/REF_TLBuffer_2.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/TLBuffer_2_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.127 MB sources in 10 modules, into 0.085 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.107 s (elab=0.008, cvt=0.018, bld=0.000); cpu 0.020 s on 1 threads; alloced 10.660 MB\n",
+          "output_sha256": "a402341bb9bb4682c95903c9d7e652b1f602aa55b909999640f5eaa50a859c77"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "TLBuffer_2",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleA_2.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleD_4.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x136.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x81.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/TLBuffer_2.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.091 MB sources in 6 modules, into 0.040 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.046 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.010 s on 1 threads; alloced 9.816 MB\n",
+          "output_sha256": "a2071aa4d8f12d3f7b54b717914d1d5c86bcfe2c8c0a64ad57eb3ee025114204"
+        },
+        "static_blocked": false
+      },
+      "formal": {
+        "method": "sequential_equivalence",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "TLBuffer_2_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/DUT_TLBuffer_2.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/REF_TLBuffer_2.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/TLBuffer_2_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.127 MB sources in 10 modules, into 0.085 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.107 s (elab=0.008, cvt=0.018, bld=0.000); cpu 0.020 s on 1 threads; alloced 10.660 MB\n",
+          "output_sha256": "a402341bb9bb4682c95903c9d7e652b1f602aa55b909999640f5eaa50a859c77"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "TLBuffer_2",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleA_2.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleD_4.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x136.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x81.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/TLBuffer_2.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.091 MB sources in 6 modules, into 0.040 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.046 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.010 s on 1 threads; alloced 9.816 MB\n",
+          "output_sha256": "a2071aa4d8f12d3f7b54b717914d1d5c86bcfe2c8c0a64ad57eb3ee025114204"
+        },
+        "yosys_equiv": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/DUT_TLBuffer_2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/REF_TLBuffer_2.sv; proc; async2sync; memory; opt; flatten REF_TLBuffer_2; flatten DUT_TLBuffer_2; equiv_make REF_TLBuffer_2 DUT_TLBuffer_2 TLBuffer_2_EQUIV; prep -top TLBuffer_2_EQUIV; equiv_induct -undef; equiv_status -assert"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": 661,
+          "equiv_summary_full": [
+            661,
+            0
+          ],
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "sed cells and wires).\nFinding unused cells or wires in module \\TLBuffer_2_EQUIV..\n\n10.10. Executing MEMORY_COLLECT pass (generating $mem cells).\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module TLBuffer_2_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\TLBuffer_2_EQUIV'.\n<suppressed ~24 debug messages>\nRemoved a total of 8 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\TLBuffer_2_EQUIV..\nRemoved 0 unused cells and 8 unused wires.\n<suppressed ~1 debug messages>\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== TLBuffer_2_EQUIV ===\n\n   Number of wires:                812\n   Number of wire bits:           6453\n   Number of public wires:         354\n   Number of public wire bits:    5565\n   Number of ports:                 42\n   Number of port bits:            444\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:               2033\n     $and                          442\n     $dffe                         868\n     $eq                             4\n     $equiv                        661\n     $mux                           28\n     $ne                             2\n     $not                            8\n     $scopeinfo                      4\n     $sdff                          12\n     $sub                            4\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module TLBuffer_2_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 440 unproven $equiv cells in module TLBuffer_2_EQUIV:\n  Undef modelling: force def on 880 initial reg values and 223 inputs.\n  Proving existence of base case for step 1. (88413 clauses over 34970 variables)\n  Proving induction step 1. (236437 clauses over 90103 variables)\n  Proof for induction step holds. Entire workset of 440 cells proven!\nProved 440 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 661 $equiv cells in TLBuffer_2_EQUIV:\n  Of those cells 661 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: 8a074a33d2, CPU: user 0.90s system 0.06s, MEM: 86.88 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 64% 1x equiv_induct (0 sec), 10% 10x opt_clean (0 sec), ...\n",
+          "output_sha256": "49a230997d2e4b84be34eb435bac0b460116acc313266ac40ba9ee7c0ce783d2",
+          "markers_present": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "formal_success_marker": true,
+          "equiv_cells": 661,
+          "proven_cells": 661,
+          "unproven_cells": 0
+        }
+      }
+    },
+    {
+      "member": "TLBuffer_16",
+      "status": "PASS",
+      "formal_cache_hit": false,
+      "static_failures": [],
+      "prepared": {
+        "name": "TLBuffer_16",
+        "inputs": {
+          "clock": 1,
+          "reset": 1,
+          "auto_in_a_valid": 1,
+          "auto_in_a_bits_opcode": 4,
+          "auto_in_a_bits_param": 3,
+          "auto_in_a_bits_size": 2,
+          "auto_in_a_bits_source": 5,
+          "auto_in_a_bits_address": 30,
+          "auto_in_a_bits_mask": 8,
+          "auto_in_a_bits_data": 64,
+          "auto_in_a_bits_corrupt": 1,
+          "auto_in_d_ready": 1,
+          "auto_out_a_ready": 1,
+          "auto_out_d_valid": 1,
+          "auto_out_d_bits_opcode": 4,
+          "auto_out_d_bits_param": 2,
+          "auto_out_d_bits_size": 2,
+          "auto_out_d_bits_source": 5,
+          "auto_out_d_bits_sink": 1,
+          "auto_out_d_bits_denied": 1,
+          "auto_out_d_bits_data": 64,
+          "auto_out_d_bits_corrupt": 1
+        },
+        "outputs": {
+          "auto_in_a_ready": 1,
+          "auto_in_d_valid": 1,
+          "auto_in_d_bits_opcode": 4,
+          "auto_in_d_bits_param": 2,
+          "auto_in_d_bits_size": 2,
+          "auto_in_d_bits_source": 5,
+          "auto_in_d_bits_sink": 1,
+          "auto_in_d_bits_denied": 1,
+          "auto_in_d_bits_data": 64,
+          "auto_in_d_bits_corrupt": 1,
+          "auto_out_a_valid": 1,
+          "auto_out_a_bits_opcode": 4,
+          "auto_out_a_bits_param": 3,
+          "auto_out_a_bits_size": 2,
+          "auto_out_a_bits_source": 5,
+          "auto_out_a_bits_address": 30,
+          "auto_out_a_bits_mask": 8,
+          "auto_out_a_bits_data": 64,
+          "auto_out_a_bits_corrupt": 1,
+          "auto_out_d_ready": 1
+        },
+        "children": [
+          "Queue2_TLBundleA_16",
+          "Queue2_TLBundleD_19",
+          "ram_2x117",
+          "ram_2x80"
+        ],
+        "sequential": true,
+        "abi_exact": true,
+        "deterministic": true,
+        "output_less": false,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "view_audits": [
+          {
+            "top": "ram_2x117",
+            "renamed_top": false,
+            "regions_removed_lines": {
+              "`ifdef ENABLE_INITIAL_MEM_": 14
+            },
+            "block_local_temporaries_hoisted": [],
+            "initialized_declarations_hoisted": [],
+            "code_lines_locked": 17,
+            "code_lines_view": 17,
+            "residual_preprocessor_directives": 0,
+            "line_conservation_ok": true,
+            "register_update_equations_locked": 0,
+            "register_update_equations_preserved": true,
+            "view_projection": null,
+            "view_trusted": true
+          },
+          {
+            "top": "Queue2_TLBundleA_16",
+            "renamed_top": false,
+            "regions_removed_lines": {
+              "`ifdef ENABLE_INITIAL_REG_": 25
+            },
+            "block_local_temporaries_hoisted": [],
+            "initialized_declarations_hoisted": [
+              "do_deq"
+            ],
+            "code_lines_locked": 77,
+            "code_lines_view": 78,
+            "residual_preprocessor_directives": 0,
+            "line_conservation_ok": true,
+            "register_update_equations_locked": 6,
+            "register_update_equations_preserved": true,
+            "view_projection": null,
+            "view_trusted": true
+          },
+          {
+            "top": "ram_2x80",
+            "renamed_top": false,
+            "regions_removed_lines": {
+              "`ifdef ENABLE_INITIAL_MEM_": 14
+            },
+            "block_local_temporaries_hoisted": [],
+            "initialized_declarations_hoisted": [],
+            "code_lines_locked": 17,
+            "code_lines_view": 17,
+            "residual_preprocessor_directives": 0,
+            "line_conservation_ok": true,
+            "register_update_equations_locked": 0,
+            "register_update_equations_preserved": true,
+            "view_projection": null,
+            "view_trusted": true
+          },
+          {
+            "top": "Queue2_TLBundleD_19",
+            "renamed_top": false,
+            "regions_removed_lines": {
+              "`ifdef ENABLE_INITIAL_REG_": 25
+            },
+            "block_local_temporaries_hoisted": [],
+            "initialized_declarations_hoisted": [
+              "do_deq"
+            ],
+            "code_lines_locked": 77,
+            "code_lines_view": 78,
+            "residual_preprocessor_directives": 0,
+            "line_conservation_ok": true,
+            "register_update_equations_locked": 6,
+            "register_update_equations_preserved": true,
+            "view_projection": null,
+            "view_trusted": true
+          },
+          {
+            "top": "TLBuffer_16",
+            "renamed_top": true,
+            "regions_removed_lines": {},
+            "block_local_temporaries_hoisted": [],
+            "initialized_declarations_hoisted": [],
+            "code_lines_locked": 93,
+            "code_lines_view": 93,
+            "residual_preprocessor_directives": 0,
+            "line_conservation_ok": true,
+            "register_update_equations_locked": 0,
+            "register_update_equations_preserved": true,
+            "view_projection": null,
+            "view_trusted": true
+          }
+        ],
+        "locked_sha256": "ac8f851ad92d6b4b119c0dd65b3ca6fd08a8c861aba358ef3942478bd3ac8310",
+        "locked_sources": [
+          {
+            "__path__": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\reference-sv\\Queue2_TLBundleA_16.sv"
+          },
+          {
+            "__path__": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\reference-sv\\Queue2_TLBundleD_19.sv"
+          },
+          {
+            "__path__": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\reference-sv\\ram_2x117.sv"
+          },
+          {
+            "__path__": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\reference-sv\\ram_2x80.sv"
+          },
+          {
+            "__path__": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\reference-sv\\TLBuffer_16.sv"
+          }
+        ],
+        "target": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_dependency_rocket_tlchildren_family_family\\DUT_TLBuffer_16.sv"
+        },
+        "reference": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_dependency_rocket_tlchildren_family_family\\REF_TLBuffer_16.sv"
+        },
+        "miter": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_dependency_rocket_tlchildren_family_family\\TLBuffer_16_MITER.sv"
+        },
+        "wsl": {
+          "target": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/DUT_TLBuffer_16.sv",
+          "reference": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/REF_TLBuffer_16.sv",
+          "miter": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/TLBuffer_16_MITER.sv",
+          "locked_sources": [
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleA_16.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleD_19.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x117.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x80.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/TLBuffer_16.sv"
+          ]
+        },
+        "cache_key": "d426c804ab2f82caa68db67f0b9851bc0f544e1ccfc411dde0f462edb40441ab",
+        "cache_hit": false,
+        "tool_versions": {
+          "python": "3.13.12",
+          "python_implementation": "CPython",
+          "host": "Windows-11-10.0.26300-SP0",
+          "amaranth": "0.5.8",
+          "yosys": "Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)",
+          "verilator": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)"
+        },
+        "prepared_hashes": {
+          "target": "6efffe8188cbe524d2a3008f3aff58fc7963a958a89756edbd5c1b707952cd7f",
+          "reference": "4f2fac6ec69f18139c099dc57d213e86aa7331b0649a4080d63c95fb22fd8649",
+          "miter": "1a0dcc75d7822c4cb7c09f29de65f3359fe07ff719482c5bb709e5b58df99973"
+        },
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "TLBuffer_16_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/DUT_TLBuffer_16.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/REF_TLBuffer_16.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/TLBuffer_16_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.127 MB sources in 10 modules, into 0.085 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.046 s (elab=0.002, cvt=0.006, bld=0.000); cpu 0.017 s on 1 threads; alloced 10.648 MB\n",
+          "output_sha256": "97cfa109e4d7b1541eb27056ab388540f12eddf016d7bb1a18e411399f384c66"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "TLBuffer_16",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleA_16.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleD_19.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x117.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x80.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/TLBuffer_16.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.091 MB sources in 6 modules, into 0.040 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.052 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.010 s on 1 threads; alloced 9.809 MB\n",
+          "output_sha256": "4f446a57757ee82c3aadddc284ea817c91421a89888d57b7c6635ff8faf29d6b"
+        },
+        "static_blocked": false
+      },
+      "formal": {
+        "method": "sequential_equivalence",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "TLBuffer_16_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/DUT_TLBuffer_16.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/REF_TLBuffer_16.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/TLBuffer_16_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.127 MB sources in 10 modules, into 0.085 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.046 s (elab=0.002, cvt=0.006, bld=0.000); cpu 0.017 s on 1 threads; alloced 10.648 MB\n",
+          "output_sha256": "97cfa109e4d7b1541eb27056ab388540f12eddf016d7bb1a18e411399f384c66"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "TLBuffer_16",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleA_16.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleD_19.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x117.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x80.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/TLBuffer_16.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.091 MB sources in 6 modules, into 0.040 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.052 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.010 s on 1 threads; alloced 9.809 MB\n",
+          "output_sha256": "4f446a57757ee82c3aadddc284ea817c91421a89888d57b7c6635ff8faf29d6b"
+        },
+        "yosys_equiv": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/DUT_TLBuffer_16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/REF_TLBuffer_16.sv; proc; async2sync; memory; opt; flatten REF_TLBuffer_16; flatten DUT_TLBuffer_16; equiv_make REF_TLBuffer_16 DUT_TLBuffer_16 TLBuffer_16_EQUIV; prep -top TLBuffer_16_EQUIV; equiv_induct -undef; equiv_status -assert"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": 601,
+          "equiv_summary_full": [
+            601,
+            0
+          ],
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "s and wires).\nFinding unused cells or wires in module \\TLBuffer_16_EQUIV..\n\n10.10. Executing MEMORY_COLLECT pass (generating $mem cells).\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module TLBuffer_16_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\TLBuffer_16_EQUIV'.\n<suppressed ~24 debug messages>\nRemoved a total of 8 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\TLBuffer_16_EQUIV..\nRemoved 0 unused cells and 8 unused wires.\n<suppressed ~1 debug messages>\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== TLBuffer_16_EQUIV ===\n\n   Number of wires:                772\n   Number of wire bits:           5873\n   Number of public wires:         354\n   Number of public wire bits:    5065\n   Number of ports:                 42\n   Number of port bits:            404\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:               1853\n     $and                          402\n     $dffe                         788\n     $eq                             4\n     $equiv                        601\n     $mux                           28\n     $ne                             2\n     $not                            8\n     $scopeinfo                      4\n     $sdff                          12\n     $sub                            4\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module TLBuffer_16_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 400 unproven $equiv cells in module TLBuffer_16_EQUIV:\n  Undef modelling: force def on 800 initial reg values and 203 inputs.\n  Proving existence of base case for step 1. (80533 clauses over 31850 variables)\n  Proving induction step 1. (215237 clauses over 82023 variables)\n  Proof for induction step holds. Entire workset of 400 cells proven!\nProved 400 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 601 $equiv cells in TLBuffer_16_EQUIV:\n  Of those cells 601 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: e073536972, CPU: user 0.79s system 0.04s, MEM: 79.85 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 61% 1x equiv_induct (0 sec), 10% 10x opt_clean (0 sec), ...\n",
+          "output_sha256": "3bb206d3fbb6ccebb49f782402c956dbbae2c2872c478decf31f5fec2337f9f7",
+          "markers_present": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "formal_success_marker": true,
+          "equiv_cells": 601,
+          "proven_cells": 601,
+          "unproven_cells": 0
+        }
+      }
+    },
+    {
+      "member": "TLBuffer_20",
+      "status": "PASS",
+      "formal_cache_hit": false,
+      "static_failures": [],
+      "prepared": {
+        "name": "TLBuffer_20",
+        "inputs": {
+          "clock": 1,
+          "reset": 1,
+          "auto_in_a_valid": 1,
+          "auto_in_a_bits_opcode": 4,
+          "auto_in_a_bits_param": 3,
+          "auto_in_a_bits_size": 3,
+          "auto_in_a_bits_source": 4,
+          "auto_in_a_bits_address": 48,
+          "auto_in_a_bits_user_reqSource": 5,
+          "auto_in_a_bits_mask": 32,
+          "auto_in_a_bits_data": 256,
+          "auto_in_a_bits_corrupt": 1,
+          "auto_in_d_ready": 1,
+          "auto_out_a_ready": 1,
+          "auto_out_d_valid": 1,
+          "auto_out_d_bits_opcode": 4,
+          "auto_out_d_bits_param": 2,
+          "auto_out_d_bits_size": 3,
+          "auto_out_d_bits_source": 4,
+          "auto_out_d_bits_sink": 10,
+          "auto_out_d_bits_denied": 1,
+          "auto_out_d_bits_data": 256,
+          "auto_out_d_bits_corrupt": 1
+        },
+        "outputs": {
+          "auto_in_a_ready": 1,
+          "auto_in_d_valid": 1,
+          "auto_in_d_bits_opcode": 4,
+          "auto_in_d_bits_param": 2,
+          "auto_in_d_bits_size": 3,
+          "auto_in_d_bits_source": 4,
+          "auto_in_d_bits_sink": 10,
+          "auto_in_d_bits_denied": 1,
+          "auto_in_d_bits_data": 256,
+          "auto_in_d_bits_corrupt": 1,
+          "auto_out_a_valid": 1,
+          "auto_out_a_bits_opcode": 4,
+          "auto_out_a_bits_param": 3,
+          "auto_out_a_bits_size": 3,
+          "auto_out_a_bits_source": 4,
+          "auto_out_a_bits_address": 48,
+          "auto_out_a_bits_user_reqSource": 5,
+          "auto_out_a_bits_mask": 32,
+          "auto_out_a_bits_data": 256,
+          "auto_out_a_bits_corrupt": 1,
+          "auto_out_d_ready": 1
+        },
+        "children": [
+          "Queue2_TLBundleA_20",
+          "Queue2_TLBundleD_23",
+          "ram_2x281",
+          "ram_2x356"
+        ],
+        "sequential": true,
+        "abi_exact": true,
+        "deterministic": true,
+        "output_less": false,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "view_audits": [
+          {
+            "top": "ram_2x356",
+            "renamed_top": false,
+            "regions_removed_lines": {
+              "`ifdef ENABLE_INITIAL_MEM_": 14
+            },
+            "block_local_temporaries_hoisted": [],
+            "initialized_declarations_hoisted": [],
+            "code_lines_locked": 17,
+            "code_lines_view": 17,
+            "residual_preprocessor_directives": 0,
+            "line_conservation_ok": true,
+            "register_update_equations_locked": 0,
+            "register_update_equations_preserved": true,
+            "view_projection": null,
+            "view_trusted": true
+          },
+          {
+            "top": "Queue2_TLBundleA_20",
+            "renamed_top": false,
+            "regions_removed_lines": {
+              "`ifdef ENABLE_INITIAL_REG_": 25
+            },
+            "block_local_temporaries_hoisted": [],
+            "initialized_declarations_hoisted": [
+              "do_deq"
+            ],
+            "code_lines_locked": 81,
+            "code_lines_view": 82,
+            "residual_preprocessor_directives": 0,
+            "line_conservation_ok": true,
+            "register_update_equations_locked": 6,
+            "register_update_equations_preserved": true,
+            "view_projection": null,
+            "view_trusted": true
+          },
+          {
+            "top": "ram_2x281",
+            "renamed_top": false,
+            "regions_removed_lines": {
+              "`ifdef ENABLE_INITIAL_MEM_": 14
+            },
+            "block_local_temporaries_hoisted": [],
+            "initialized_declarations_hoisted": [],
+            "code_lines_locked": 17,
+            "code_lines_view": 17,
+            "residual_preprocessor_directives": 0,
+            "line_conservation_ok": true,
+            "register_update_equations_locked": 0,
+            "register_update_equations_preserved": true,
+            "view_projection": null,
+            "view_trusted": true
+          },
+          {
+            "top": "Queue2_TLBundleD_23",
+            "renamed_top": false,
+            "regions_removed_lines": {
+              "`ifdef ENABLE_INITIAL_REG_": 25
+            },
+            "block_local_temporaries_hoisted": [],
+            "initialized_declarations_hoisted": [
+              "do_deq"
+            ],
+            "code_lines_locked": 77,
+            "code_lines_view": 78,
+            "residual_preprocessor_directives": 0,
+            "line_conservation_ok": true,
+            "register_update_equations_locked": 6,
+            "register_update_equations_preserved": true,
+            "view_projection": null,
+            "view_trusted": true
+          },
+          {
+            "top": "TLBuffer_20",
+            "renamed_top": true,
+            "regions_removed_lines": {},
+            "block_local_temporaries_hoisted": [],
+            "initialized_declarations_hoisted": [],
+            "code_lines_locked": 97,
+            "code_lines_view": 97,
+            "residual_preprocessor_directives": 0,
+            "line_conservation_ok": true,
+            "register_update_equations_locked": 0,
+            "register_update_equations_preserved": true,
+            "view_projection": null,
+            "view_trusted": true
+          }
+        ],
+        "locked_sha256": "1014e1b5b1f76015fa83bd8facf971317e0ea5591d2901ce68382bcc0b656f2e",
+        "locked_sources": [
+          {
+            "__path__": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\reference-sv\\Queue2_TLBundleA_20.sv"
+          },
+          {
+            "__path__": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\reference-sv\\Queue2_TLBundleD_23.sv"
+          },
+          {
+            "__path__": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\reference-sv\\ram_2x281.sv"
+          },
+          {
+            "__path__": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\reference-sv\\ram_2x356.sv"
+          },
+          {
+            "__path__": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\reference-sv\\TLBuffer_20.sv"
+          }
+        ],
+        "target": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_dependency_rocket_tlchildren_family_family\\DUT_TLBuffer_20.sv"
+        },
+        "reference": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_dependency_rocket_tlchildren_family_family\\REF_TLBuffer_20.sv"
+        },
+        "miter": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_dependency_rocket_tlchildren_family_family\\TLBuffer_20_MITER.sv"
+        },
+        "wsl": {
+          "target": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/DUT_TLBuffer_20.sv",
+          "reference": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/REF_TLBuffer_20.sv",
+          "miter": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/TLBuffer_20_MITER.sv",
+          "locked_sources": [
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleA_20.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleD_23.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x281.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x356.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/TLBuffer_20.sv"
+          ]
+        },
+        "cache_key": "47fe37518ac1e63064f60d1c98d396d4df697b290678b245718fe11181510ccc",
+        "cache_hit": false,
+        "tool_versions": {
+          "python": "3.13.12",
+          "python_implementation": "CPython",
+          "host": "Windows-11-10.0.26300-SP0",
+          "amaranth": "0.5.8",
+          "yosys": "Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)",
+          "verilator": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)"
+        },
+        "prepared_hashes": {
+          "target": "51cadb6a93ea457986b0b6cd20c5cdc04fa83774ff047c9cc97cfbe2640ff864",
+          "reference": "b5a24d551419cf100b55dfa7e46b29ea5f183d3c92946ab04398748cb4ee103c",
+          "miter": "a00973ea873cfa877e7d7efa22cf3b7ae5ef42e4af3a0ce1d9c4edcf54fcf628"
+        },
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "TLBuffer_20_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/DUT_TLBuffer_20.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/REF_TLBuffer_20.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/TLBuffer_20_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.133 MB sources in 10 modules, into 0.086 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.052 s (elab=0.003, cvt=0.006, bld=0.000); cpu 0.018 s on 1 threads; alloced 10.621 MB\n",
+          "output_sha256": "d5ebbedcc15f639ae62f135c866eba4583dc2076067ad2eea1ee66379650051c"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "TLBuffer_20",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleA_20.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleD_23.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x281.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x356.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/TLBuffer_20.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.093 MB sources in 6 modules, into 0.040 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.051 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.010 s on 1 threads; alloced 9.840 MB\n",
+          "output_sha256": "3bcacf1e4d2c2fba51cf9ce686e21e2f340b210005a8947005357b4a172e1f47"
+        },
+        "static_blocked": false
+      },
+      "formal": {
+        "method": "sequential_equivalence",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "TLBuffer_20_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/DUT_TLBuffer_20.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/REF_TLBuffer_20.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/TLBuffer_20_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.133 MB sources in 10 modules, into 0.086 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.052 s (elab=0.003, cvt=0.006, bld=0.000); cpu 0.018 s on 1 threads; alloced 10.621 MB\n",
+          "output_sha256": "d5ebbedcc15f639ae62f135c866eba4583dc2076067ad2eea1ee66379650051c"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "TLBuffer_20",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleA_20.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleD_23.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x281.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x356.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/TLBuffer_20.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.093 MB sources in 6 modules, into 0.040 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.051 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.010 s on 1 threads; alloced 9.840 MB\n",
+          "output_sha256": "3bcacf1e4d2c2fba51cf9ce686e21e2f340b210005a8947005357b4a172e1f47"
+        },
+        "yosys_equiv": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/DUT_TLBuffer_20.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/REF_TLBuffer_20.sv; proc; async2sync; memory; opt; flatten REF_TLBuffer_20; flatten DUT_TLBuffer_20; equiv_make REF_TLBuffer_20 DUT_TLBuffer_20 TLBuffer_20_EQUIV; prep -top TLBuffer_20_EQUIV; equiv_induct -undef; equiv_status -assert"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": 1921,
+          "equiv_summary_full": [
+            1921,
+            0
+          ],
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "es).\nFinding unused cells or wires in module \\TLBuffer_20_EQUIV..\n\n10.10. Executing MEMORY_COLLECT pass (generating $mem cells).\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module TLBuffer_20_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\TLBuffer_20_EQUIV'.\n<suppressed ~24 debug messages>\nRemoved a total of 8 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\TLBuffer_20_EQUIV..\nRemoved 0 unused cells and 8 unused wires.\n<suppressed ~1 debug messages>\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== TLBuffer_20_EQUIV ===\n\n   Number of wires:               1664\n   Number of wire bits:          18633\n   Number of public wires:         366\n   Number of public wire bits:   16065\n   Number of ports:                 44\n   Number of port bits:           1284\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:               5813\n     $and                         1282\n     $dffe                        2548\n     $eq                             4\n     $equiv                       1921\n     $mux                           28\n     $ne                             2\n     $not                            8\n     $scopeinfo                      4\n     $sdff                          12\n     $sub                            4\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module TLBuffer_20_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 1280 unproven $equiv cells in module TLBuffer_20_EQUIV:\n  Undef modelling: force def on 2560 initial reg values and 643 inputs.\n  Proving existence of base case for step 1. (253893 clauses over 100490 variables)\n  Proving induction step 1. (681637 clauses over 259783 variables)\n  Proof for induction step holds. Entire workset of 1280 cells proven!\nProved 1280 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 1921 $equiv cells in TLBuffer_20_EQUIV:\n  Of those cells 1921 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: 6de5ddd6a7, CPU: user 5.60s system 0.14s, MEM: 213.54 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 83% 1x equiv_induct (4 sec), 4% 10x opt_clean (0 sec), ...\n",
+          "output_sha256": "d4eafd1a6bab617a3ff86bd75cddeb39936aa60887665d308306db4aba6d1015",
+          "markers_present": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "formal_success_marker": true,
+          "equiv_cells": 1921,
+          "proven_cells": 1921,
+          "unproven_cells": 0
+        }
+      }
+    },
+    {
+      "member": "TLBuffer_22",
+      "status": "PASS",
+      "formal_cache_hit": false,
+      "static_failures": [],
+      "prepared": {
+        "name": "TLBuffer_22",
+        "inputs": {
+          "clock": 1,
+          "reset": 1,
+          "auto_in_a_valid": 1,
+          "auto_in_a_bits_opcode": 4,
+          "auto_in_a_bits_param": 3,
+          "auto_in_a_bits_size": 3,
+          "auto_in_a_bits_source": 4,
+          "auto_in_a_bits_address": 48,
+          "auto_in_a_bits_mask": 8,
+          "auto_in_a_bits_data": 64,
+          "auto_in_a_bits_corrupt": 1,
+          "auto_in_d_ready": 1,
+          "auto_out_a_ready": 1,
+          "auto_out_d_valid": 1,
+          "auto_out_d_bits_opcode": 4,
+          "auto_out_d_bits_param": 2,
+          "auto_out_d_bits_size": 3,
+          "auto_out_d_bits_source": 4,
+          "auto_out_d_bits_sink": 1,
+          "auto_out_d_bits_denied": 1,
+          "auto_out_d_bits_data": 64,
+          "auto_out_d_bits_corrupt": 1
+        },
+        "outputs": {
+          "auto_in_a_ready": 1,
+          "auto_in_d_valid": 1,
+          "auto_in_d_bits_opcode": 4,
+          "auto_in_d_bits_param": 2,
+          "auto_in_d_bits_size": 3,
+          "auto_in_d_bits_source": 4,
+          "auto_in_d_bits_sink": 1,
+          "auto_in_d_bits_denied": 1,
+          "auto_in_d_bits_data": 64,
+          "auto_in_d_bits_corrupt": 1,
+          "auto_out_a_valid": 1,
+          "auto_out_a_bits_opcode": 4,
+          "auto_out_a_bits_param": 3,
+          "auto_out_a_bits_size": 3,
+          "auto_out_a_bits_source": 4,
+          "auto_out_a_bits_address": 48,
+          "auto_out_a_bits_mask": 8,
+          "auto_out_a_bits_data": 64,
+          "auto_out_a_bits_corrupt": 1,
+          "auto_out_d_ready": 1
+        },
+        "children": [
+          "Queue2_TLBundleA_28",
+          "Queue2_TLBundleD_31",
+          "ram_2x135",
+          "ram_2x80"
+        ],
+        "sequential": true,
+        "abi_exact": true,
+        "deterministic": true,
+        "output_less": false,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "view_audits": [
+          {
+            "top": "ram_2x135",
+            "renamed_top": false,
+            "regions_removed_lines": {
+              "`ifdef ENABLE_INITIAL_MEM_": 14
+            },
+            "block_local_temporaries_hoisted": [],
+            "initialized_declarations_hoisted": [],
+            "code_lines_locked": 17,
+            "code_lines_view": 17,
+            "residual_preprocessor_directives": 0,
+            "line_conservation_ok": true,
+            "register_update_equations_locked": 0,
+            "register_update_equations_preserved": true,
+            "view_projection": null,
+            "view_trusted": true
+          },
+          {
+            "top": "Queue2_TLBundleA_28",
+            "renamed_top": false,
+            "regions_removed_lines": {
+              "`ifdef ENABLE_INITIAL_REG_": 25
+            },
+            "block_local_temporaries_hoisted": [],
+            "initialized_declarations_hoisted": [
+              "do_deq"
+            ],
+            "code_lines_locked": 77,
+            "code_lines_view": 78,
+            "residual_preprocessor_directives": 0,
+            "line_conservation_ok": true,
+            "register_update_equations_locked": 6,
+            "register_update_equations_preserved": true,
+            "view_projection": null,
+            "view_trusted": true
+          },
+          {
+            "top": "ram_2x80",
+            "renamed_top": false,
+            "regions_removed_lines": {
+              "`ifdef ENABLE_INITIAL_MEM_": 14
+            },
+            "block_local_temporaries_hoisted": [],
+            "initialized_declarations_hoisted": [],
+            "code_lines_locked": 17,
+            "code_lines_view": 17,
+            "residual_preprocessor_directives": 0,
+            "line_conservation_ok": true,
+            "register_update_equations_locked": 0,
+            "register_update_equations_preserved": true,
+            "view_projection": null,
+            "view_trusted": true
+          },
+          {
+            "top": "Queue2_TLBundleD_31",
+            "renamed_top": false,
+            "regions_removed_lines": {
+              "`ifdef ENABLE_INITIAL_REG_": 25
+            },
+            "block_local_temporaries_hoisted": [],
+            "initialized_declarations_hoisted": [
+              "do_deq"
+            ],
+            "code_lines_locked": 77,
+            "code_lines_view": 78,
+            "residual_preprocessor_directives": 0,
+            "line_conservation_ok": true,
+            "register_update_equations_locked": 6,
+            "register_update_equations_preserved": true,
+            "view_projection": null,
+            "view_trusted": true
+          },
+          {
+            "top": "TLBuffer_22",
+            "renamed_top": true,
+            "regions_removed_lines": {},
+            "block_local_temporaries_hoisted": [],
+            "initialized_declarations_hoisted": [],
+            "code_lines_locked": 93,
+            "code_lines_view": 93,
+            "residual_preprocessor_directives": 0,
+            "line_conservation_ok": true,
+            "register_update_equations_locked": 0,
+            "register_update_equations_preserved": true,
+            "view_projection": null,
+            "view_trusted": true
+          }
+        ],
+        "locked_sha256": "085e0db7f8ee6a88312f261633b27d002d11ad69f80d360e989bbc7232db54be",
+        "locked_sources": [
+          {
+            "__path__": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\reference-sv\\Queue2_TLBundleA_28.sv"
+          },
+          {
+            "__path__": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\reference-sv\\Queue2_TLBundleD_31.sv"
+          },
+          {
+            "__path__": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\reference-sv\\ram_2x135.sv"
+          },
+          {
+            "__path__": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\reference-sv\\ram_2x80.sv"
+          },
+          {
+            "__path__": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\reference-sv\\TLBuffer_22.sv"
+          }
+        ],
+        "target": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_dependency_rocket_tlchildren_family_family\\DUT_TLBuffer_22.sv"
+        },
+        "reference": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_dependency_rocket_tlchildren_family_family\\REF_TLBuffer_22.sv"
+        },
+        "miter": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_dependency_rocket_tlchildren_family_family\\TLBuffer_22_MITER.sv"
+        },
+        "wsl": {
+          "target": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/DUT_TLBuffer_22.sv",
+          "reference": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/REF_TLBuffer_22.sv",
+          "miter": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/TLBuffer_22_MITER.sv",
+          "locked_sources": [
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleA_28.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleD_31.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x135.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x80.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/TLBuffer_22.sv"
+          ]
+        },
+        "cache_key": "c734f41de1971bb1061da47d7a646f878101e3abe8d4ca313ab73e27eb341139",
+        "cache_hit": false,
+        "tool_versions": {
+          "python": "3.13.12",
+          "python_implementation": "CPython",
+          "host": "Windows-11-10.0.26300-SP0",
+          "amaranth": "0.5.8",
+          "yosys": "Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)",
+          "verilator": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)"
+        },
+        "prepared_hashes": {
+          "target": "318f915bd7dc06261321871c8af9f7de6cbbacfb8dfd7cae2aec0e0653901c48",
+          "reference": "63b637e1570a804785aa8e34b3ec943fe781cf9ff164fb594312ce135ff97e7a",
+          "miter": "4423aaf298414db2d00551f9046b52b38faf18050d00587fa96e02550c3bd750"
+        },
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "TLBuffer_22_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/DUT_TLBuffer_22.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/REF_TLBuffer_22.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/TLBuffer_22_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.127 MB sources in 10 modules, into 0.085 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.053 s (elab=0.002, cvt=0.006, bld=0.000); cpu 0.015 s on 1 threads; alloced 10.652 MB\n",
+          "output_sha256": "9b4d7c65cc225b3d83dde3fdadf94558747a3089007bf62e01af88990a19c433"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "TLBuffer_22",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleA_28.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleD_31.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x135.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x80.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/TLBuffer_22.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.091 MB sources in 6 modules, into 0.040 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.039 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.011 s on 1 threads; alloced 9.812 MB\n",
+          "output_sha256": "2e2442227884396b1b45598d5dfff748528decb3e0a5a2dc7be2825d1183f8ac"
+        },
+        "static_blocked": false
+      },
+      "formal": {
+        "method": "sequential_equivalence",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "TLBuffer_22_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/DUT_TLBuffer_22.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/REF_TLBuffer_22.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/TLBuffer_22_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.127 MB sources in 10 modules, into 0.085 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.053 s (elab=0.002, cvt=0.006, bld=0.000); cpu 0.015 s on 1 threads; alloced 10.652 MB\n",
+          "output_sha256": "9b4d7c65cc225b3d83dde3fdadf94558747a3089007bf62e01af88990a19c433"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "TLBuffer_22",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleA_28.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleD_31.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x135.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x80.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/TLBuffer_22.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.091 MB sources in 6 modules, into 0.040 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.039 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.011 s on 1 threads; alloced 9.812 MB\n",
+          "output_sha256": "2e2442227884396b1b45598d5dfff748528decb3e0a5a2dc7be2825d1183f8ac"
+        },
+        "yosys_equiv": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/DUT_TLBuffer_22.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/REF_TLBuffer_22.sv; proc; async2sync; memory; opt; flatten REF_TLBuffer_22; flatten DUT_TLBuffer_22; equiv_make REF_TLBuffer_22 DUT_TLBuffer_22 TLBuffer_22_EQUIV; prep -top TLBuffer_22_EQUIV; equiv_induct -undef; equiv_status -assert"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": 655,
+          "equiv_summary_full": [
+            655,
+            0
+          ],
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "ls and wires).\nFinding unused cells or wires in module \\TLBuffer_22_EQUIV..\n\n10.10. Executing MEMORY_COLLECT pass (generating $mem cells).\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module TLBuffer_22_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\TLBuffer_22_EQUIV'.\n<suppressed ~24 debug messages>\nRemoved a total of 8 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\TLBuffer_22_EQUIV..\nRemoved 0 unused cells and 8 unused wires.\n<suppressed ~1 debug messages>\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== TLBuffer_22_EQUIV ===\n\n   Number of wires:                808\n   Number of wire bits:           6395\n   Number of public wires:         354\n   Number of public wire bits:    5515\n   Number of ports:                 42\n   Number of port bits:            440\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:               2015\n     $and                          438\n     $dffe                         860\n     $eq                             4\n     $equiv                        655\n     $mux                           28\n     $ne                             2\n     $not                            8\n     $scopeinfo                      4\n     $sdff                          12\n     $sub                            4\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module TLBuffer_22_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 436 unproven $equiv cells in module TLBuffer_22_EQUIV:\n  Undef modelling: force def on 872 initial reg values and 221 inputs.\n  Proving existence of base case for step 1. (87625 clauses over 34658 variables)\n  Proving induction step 1. (234317 clauses over 89295 variables)\n  Proof for induction step holds. Entire workset of 436 cells proven!\nProved 436 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 655 $equiv cells in TLBuffer_22_EQUIV:\n  Of those cells 655 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: e0705e29dc, CPU: user 0.90s system 0.05s, MEM: 86.42 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 64% 1x equiv_induct (0 sec), 9% 10x opt_clean (0 sec), ...\n",
+          "output_sha256": "7531f76114d731eb111c191b54e23453a2351aa22cac45576ff1e65ba5221a10",
+          "markers_present": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "formal_success_marker": true,
+          "equiv_cells": 655,
+          "proven_cells": 655,
+          "unproven_cells": 0
+        }
+      }
+    },
+    {
+      "member": "TLBuffer_29",
+      "status": "PASS",
+      "formal_cache_hit": false,
+      "static_failures": [],
+      "prepared": {
+        "name": "TLBuffer_29",
+        "inputs": {
+          "clock": 1,
+          "reset": 1,
+          "auto_in_a_valid": 1,
+          "auto_in_a_bits_opcode": 4,
+          "auto_in_a_bits_param": 3,
+          "auto_in_a_bits_size": 3,
+          "auto_in_a_bits_source": 1,
+          "auto_in_a_bits_address": 48,
+          "auto_in_a_bits_mask": 8,
+          "auto_in_a_bits_data": 64,
+          "auto_in_a_bits_corrupt": 1,
+          "auto_in_d_ready": 1,
+          "auto_out_a_ready": 1,
+          "auto_out_d_valid": 1,
+          "auto_out_d_bits_opcode": 4,
+          "auto_out_d_bits_param": 2,
+          "auto_out_d_bits_size": 3,
+          "auto_out_d_bits_source": 1,
+          "auto_out_d_bits_sink": 1,
+          "auto_out_d_bits_denied": 1,
+          "auto_out_d_bits_data": 64,
+          "auto_out_d_bits_corrupt": 1
+        },
+        "outputs": {
+          "auto_in_a_ready": 1,
+          "auto_in_d_valid": 1,
+          "auto_in_d_bits_opcode": 4,
+          "auto_in_d_bits_param": 2,
+          "auto_in_d_bits_size": 3,
+          "auto_in_d_bits_source": 1,
+          "auto_in_d_bits_sink": 1,
+          "auto_in_d_bits_denied": 1,
+          "auto_in_d_bits_data": 64,
+          "auto_in_d_bits_corrupt": 1,
+          "auto_out_a_valid": 1,
+          "auto_out_a_bits_opcode": 4,
+          "auto_out_a_bits_param": 3,
+          "auto_out_a_bits_size": 3,
+          "auto_out_a_bits_source": 1,
+          "auto_out_a_bits_address": 48,
+          "auto_out_a_bits_mask": 8,
+          "auto_out_a_bits_data": 64,
+          "auto_out_a_bits_corrupt": 1,
+          "auto_out_d_ready": 1
+        },
+        "children": [
+          "Queue2_TLBundleA_26",
+          "Queue2_TLBundleD_29",
+          "ram_2x132",
+          "ram_2x77"
+        ],
+        "sequential": true,
+        "abi_exact": true,
+        "deterministic": true,
+        "output_less": false,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "view_audits": [
+          {
+            "top": "ram_2x132",
+            "renamed_top": false,
+            "regions_removed_lines": {
+              "`ifdef ENABLE_INITIAL_MEM_": 14
+            },
+            "block_local_temporaries_hoisted": [],
+            "initialized_declarations_hoisted": [],
+            "code_lines_locked": 17,
+            "code_lines_view": 17,
+            "residual_preprocessor_directives": 0,
+            "line_conservation_ok": true,
+            "register_update_equations_locked": 0,
+            "register_update_equations_preserved": true,
+            "view_projection": null,
+            "view_trusted": true
+          },
+          {
+            "top": "Queue2_TLBundleA_26",
+            "renamed_top": false,
+            "regions_removed_lines": {
+              "`ifdef ENABLE_INITIAL_REG_": 25
+            },
+            "block_local_temporaries_hoisted": [],
+            "initialized_declarations_hoisted": [
+              "do_deq"
+            ],
+            "code_lines_locked": 77,
+            "code_lines_view": 78,
+            "residual_preprocessor_directives": 0,
+            "line_conservation_ok": true,
+            "register_update_equations_locked": 6,
+            "register_update_equations_preserved": true,
+            "view_projection": null,
+            "view_trusted": true
+          },
+          {
+            "top": "ram_2x77",
+            "renamed_top": false,
+            "regions_removed_lines": {
+              "`ifdef ENABLE_INITIAL_MEM_": 14
+            },
+            "block_local_temporaries_hoisted": [],
+            "initialized_declarations_hoisted": [],
+            "code_lines_locked": 17,
+            "code_lines_view": 17,
+            "residual_preprocessor_directives": 0,
+            "line_conservation_ok": true,
+            "register_update_equations_locked": 0,
+            "register_update_equations_preserved": true,
+            "view_projection": null,
+            "view_trusted": true
+          },
+          {
+            "top": "Queue2_TLBundleD_29",
+            "renamed_top": false,
+            "regions_removed_lines": {
+              "`ifdef ENABLE_INITIAL_REG_": 25
+            },
+            "block_local_temporaries_hoisted": [],
+            "initialized_declarations_hoisted": [
+              "do_deq"
+            ],
+            "code_lines_locked": 77,
+            "code_lines_view": 78,
+            "residual_preprocessor_directives": 0,
+            "line_conservation_ok": true,
+            "register_update_equations_locked": 6,
+            "register_update_equations_preserved": true,
+            "view_projection": null,
+            "view_trusted": true
+          },
+          {
+            "top": "TLBuffer_29",
+            "renamed_top": true,
+            "regions_removed_lines": {},
+            "block_local_temporaries_hoisted": [],
+            "initialized_declarations_hoisted": [],
+            "code_lines_locked": 93,
+            "code_lines_view": 93,
+            "residual_preprocessor_directives": 0,
+            "line_conservation_ok": true,
+            "register_update_equations_locked": 0,
+            "register_update_equations_preserved": true,
+            "view_projection": null,
+            "view_trusted": true
+          }
+        ],
+        "locked_sha256": "59b667487d176e78ffa337949724c0d709360fee8d5beedcbeee164484b0a529",
+        "locked_sources": [
+          {
+            "__path__": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\reference-sv\\Queue2_TLBundleA_26.sv"
+          },
+          {
+            "__path__": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\reference-sv\\Queue2_TLBundleD_29.sv"
+          },
+          {
+            "__path__": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\reference-sv\\ram_2x132.sv"
+          },
+          {
+            "__path__": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\reference-sv\\ram_2x77.sv"
+          },
+          {
+            "__path__": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\reference-sv\\TLBuffer_29.sv"
+          }
+        ],
+        "target": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_dependency_rocket_tlchildren_family_family\\DUT_TLBuffer_29.sv"
+        },
+        "reference": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_dependency_rocket_tlchildren_family_family\\REF_TLBuffer_29.sv"
+        },
+        "miter": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_dependency_rocket_tlchildren_family_family\\TLBuffer_29_MITER.sv"
+        },
+        "wsl": {
+          "target": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/DUT_TLBuffer_29.sv",
+          "reference": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/REF_TLBuffer_29.sv",
+          "miter": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/TLBuffer_29_MITER.sv",
+          "locked_sources": [
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleA_26.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleD_29.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x132.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x77.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/TLBuffer_29.sv"
+          ]
+        },
+        "cache_key": "f5e241888308336aafcb9d7f284b6a51ac30fa5a6c74ff74affd7264e88c638d",
+        "cache_hit": false,
+        "tool_versions": {
+          "python": "3.13.12",
+          "python_implementation": "CPython",
+          "host": "Windows-11-10.0.26300-SP0",
+          "amaranth": "0.5.8",
+          "yosys": "Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)",
+          "verilator": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)"
+        },
+        "prepared_hashes": {
+          "target": "8b1ee8f0e7e1410ab26389626c2ff68cbbab460cfe5f4d27db0c192698870a2d",
+          "reference": "5f7e7861e6fe5bc885a65cfebb3be008bcc6fcc7be88cc4d7fce5348a69344ca",
+          "miter": "c335885c457bc55ba61bff619ceb0a864f6b5f5b14d25aa3db975aa7462b4f2d"
+        },
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "TLBuffer_29_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/DUT_TLBuffer_29.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/REF_TLBuffer_29.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/TLBuffer_29_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.127 MB sources in 10 modules, into 0.085 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.053 s (elab=0.002, cvt=0.006, bld=0.000); cpu 0.016 s on 1 threads; alloced 10.703 MB\n",
+          "output_sha256": "39ca8fbb4656585b2f9683b00957bffb30b722cc875366dda380727742a3f6f0"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "TLBuffer_29",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleA_26.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleD_29.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x132.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x77.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/TLBuffer_29.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.091 MB sources in 6 modules, into 0.040 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.037 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.011 s on 1 threads; alloced 9.812 MB\n",
+          "output_sha256": "69a4f340397bea0f3754d8680759e746f16db18b3aeda1be0305039b185361b8"
+        },
+        "static_blocked": false
+      },
+      "formal": {
+        "method": "sequential_equivalence",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "TLBuffer_29_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/DUT_TLBuffer_29.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/REF_TLBuffer_29.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/TLBuffer_29_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.127 MB sources in 10 modules, into 0.085 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.053 s (elab=0.002, cvt=0.006, bld=0.000); cpu 0.016 s on 1 threads; alloced 10.703 MB\n",
+          "output_sha256": "39ca8fbb4656585b2f9683b00957bffb30b722cc875366dda380727742a3f6f0"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "TLBuffer_29",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleA_26.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleD_29.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x132.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x77.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/TLBuffer_29.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.091 MB sources in 6 modules, into 0.040 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.037 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.011 s on 1 threads; alloced 9.812 MB\n",
+          "output_sha256": "69a4f340397bea0f3754d8680759e746f16db18b3aeda1be0305039b185361b8"
+        },
+        "yosys_equiv": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/DUT_TLBuffer_29.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/REF_TLBuffer_29.sv; proc; async2sync; memory; opt; flatten REF_TLBuffer_29; flatten DUT_TLBuffer_29; equiv_make REF_TLBuffer_29 DUT_TLBuffer_29 TLBuffer_29_EQUIV; prep -top TLBuffer_29_EQUIV; equiv_induct -undef; equiv_status -assert"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": 637,
+          "equiv_summary_full": [
+            637,
+            0
+          ],
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "ls and wires).\nFinding unused cells or wires in module \\TLBuffer_29_EQUIV..\n\n10.10. Executing MEMORY_COLLECT pass (generating $mem cells).\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module TLBuffer_29_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\TLBuffer_29_EQUIV'.\n<suppressed ~24 debug messages>\nRemoved a total of 8 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\TLBuffer_29_EQUIV..\nRemoved 0 unused cells and 8 unused wires.\n<suppressed ~1 debug messages>\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== TLBuffer_29_EQUIV ===\n\n   Number of wires:                796\n   Number of wire bits:           6221\n   Number of public wires:         354\n   Number of public wire bits:    5365\n   Number of ports:                 42\n   Number of port bits:            428\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:               1961\n     $and                          426\n     $dffe                         836\n     $eq                             4\n     $equiv                        637\n     $mux                           28\n     $ne                             2\n     $not                            8\n     $scopeinfo                      4\n     $sdff                          12\n     $sub                            4\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module TLBuffer_29_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 424 unproven $equiv cells in module TLBuffer_29_EQUIV:\n  Undef modelling: force def on 848 initial reg values and 215 inputs.\n  Proving existence of base case for step 1. (85261 clauses over 33722 variables)\n  Proving induction step 1. (227957 clauses over 86871 variables)\n  Proof for induction step holds. Entire workset of 424 cells proven!\nProved 424 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 637 $equiv cells in TLBuffer_29_EQUIV:\n  Of those cells 637 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: 8c3b66a87c, CPU: user 0.88s system 0.04s, MEM: 83.37 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 64% 1x equiv_induct (0 sec), 9% 10x opt_clean (0 sec), ...\n",
+          "output_sha256": "8013155b4703ac0ad764c5b0b9d442d84185d0cc753ce4ed93b8c087cf51236f",
+          "markers_present": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "formal_success_marker": true,
+          "equiv_cells": 637,
+          "proven_cells": 637,
+          "unproven_cells": 0
+        }
+      }
+    }
+  ],
+  "negative_control": {
+    "status": "PASS",
+    "cases": {
+      "sat": {
+        "status": "PASS",
+        "note": "no representative with outputs"
+      },
+      "sequential.target": {
+        "status": "PASS",
+        "control_entry": "TLBuffer_2",
+        "control_port": "auto_in_a_ready",
+        "mutation_applied": true,
+        "explicit_failure_marker": true,
+        "success_marker_still_present": false,
+        "returncode": 1
+      },
+      "sequential.reference": {
+        "status": "PASS",
+        "control_entry": "TLBuffer_2",
+        "control_port": "auto_in_d_bits_corrupt",
+        "mutation_applied": true,
+        "explicit_failure_marker": true,
+        "success_marker_still_present": false,
+        "returncode": 1
+      }
+    },
+    "note": "a reference-side mutation that still proves means the reference never reaches the comparison"
+  },
+  "elapsed_seconds": 29.582,
+  "unclosed": [
+    "Full Build catalog, parent closure, license and acceptance remain pending."
+  ]
+}

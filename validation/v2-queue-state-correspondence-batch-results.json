@@ -1,0 +1,157 @@
+{
+  "schema_version": 1,
+  "kind": "V2_QUEUE_STATE_CORRESPONDENCE_BATCH",
+  "timestamp": "2026-10-01T01:45:52.066564+08:00",
+  "baseline_commit": "99152a4",
+  "status": "PASS_MEMBER_PROOFS_NON_COUNTING",
+  "strict": "44/118",
+  "strict_delta": 0,
+  "accepted": 0,
+  "build_files": 118,
+  "behavior_verified_builds": "44/118",
+  "pending_builds": 74,
+  "scala_source_associated_hierarchy_coverage": "1976/1976; subject mapping includes bounded/contract-only; not strict equivalence",
+  "python_lines": {
+    "raw": 93878,
+    "nonblank": 86781,
+    "raw_delta": 72,
+    "nonblank_delta": 68
+  },
+  "compile_utf8_lf": "PASS",
+  "rocket": {
+    "members": [
+      {
+        "name": "TLBuffer_2",
+        "cells": 661,
+        "unproven": 0
+      },
+      {
+        "name": "TLBuffer_16",
+        "cells": 601,
+        "unproven": 0
+      },
+      {
+        "name": "TLBuffer_20",
+        "cells": 1921,
+        "unproven": 0
+      },
+      {
+        "name": "TLBuffer_22",
+        "cells": 655,
+        "unproven": 0
+      },
+      {
+        "name": "TLBuffer_29",
+        "cells": 637,
+        "unproven": 0
+      }
+    ],
+    "negative_control": {
+      "status": "PASS",
+      "cases": {
+        "sat": {
+          "status": "PASS",
+          "note": "no representative with outputs"
+        },
+        "sequential.target": {
+          "status": "PASS",
+          "control_entry": "TLBuffer_2",
+          "control_port": "auto_in_a_ready",
+          "mutation_applied": true,
+          "explicit_failure_marker": true,
+          "success_marker_still_present": false,
+          "returncode": 1
+        },
+        "sequential.reference": {
+          "status": "PASS",
+          "control_entry": "TLBuffer_2",
+          "control_port": "auto_in_d_bits_corrupt",
+          "mutation_applied": true,
+          "explicit_failure_marker": true,
+          "success_marker_still_present": false,
+          "returncode": 1
+        }
+      },
+      "note": "a reference-side mutation that still proves means the reference never reaches the comparison"
+    },
+    "elapsed_seconds": 29.582,
+    "evidence": "validation/v2-rocket-queue-state-focused-results.json"
+  },
+  "icache": {
+    "member": "L2TlbMissQueue",
+    "cells": 1942,
+    "negative_control": {
+      "status": "PASS",
+      "cases": {
+        "sat": {
+          "status": "PASS",
+          "note": "no representative with outputs"
+        },
+        "sequential.target": {
+          "status": "PASS",
+          "control_entry": "L2TlbMissQueue",
+          "control_port": "io_in_ready",
+          "mutation_applied": true,
+          "explicit_failure_marker": true,
+          "success_marker_still_present": false,
+          "returncode": 1
+        },
+        "sequential.reference": {
+          "status": "PASS",
+          "control_entry": "L2TlbMissQueue",
+          "control_port": "io_out_bits_hptwId",
+          "mutation_applied": true,
+          "explicit_failure_marker": true,
+          "success_marker_still_present": false,
+          "returncode": 1
+        }
+      },
+      "note": "a reference-side mutation that still proves means the reference never reaches the comparison"
+    },
+    "elapsed_seconds": 107.783,
+    "evidence": "validation/v2-icache-missqueue-state-focused-results.json"
+  },
+  "regression": {
+    "rail": "13/13 PASS",
+    "progress": "11/11 PASS",
+    "pyright": "0 errors",
+    "direct_rocket": "6/6 PASS",
+    "direct_icache": "2/2 PASS"
+  },
+  "proof_refresh": {
+    "IntBuffer": "COMPLETE_EQUIVALENCE 3/3; direct PASS; negative controls PASS",
+    "PrefetchMetadata": "COMPLETE_EQUIVALENCE 2/2; direct PASS; negative controls PASS",
+    "reason": "updated rail producer digest invalidated old current-hash receipts; full proofs rerun"
+  },
+  "audit": {
+    "status": "FAIL",
+    "failures": 6,
+    "non_counting": 5
+  },
+  "locked_sources_diff": [],
+  "unrun_gates": [
+    "remaining Rocket TLBuffer_27/TLXbar/BusErrorUnit members",
+    "other six Icache family members",
+    "full family aggregate acceptance",
+    "power-up/reset-entry acceptance",
+    "parent/full-top differential",
+    "license/user acceptance"
+  ],
+  "sources": {
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Rocket.TLChildren.Family-Hardware.py": {
+      "sha256": "9ac5e12fa860c81af67db349098510f0fc47219acead1fe6a7cf6285193cfb06"
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Frontend.Icache.Prefetch.Family-Hardware.py": {
+      "sha256": "76db5cfb9fce678288c9dacc196b615afedabf5d3c1da8dbfeb2f70feb33076e"
+    },
+    "validation/v2_strict_family_rail.py": {
+      "sha256": "11d54ff599053463ed76f91233cb331c13848ba6626fce6c9a2b9dfd81b39f48"
+    },
+    "validation/v2_strict_family_rail_test.py": {
+      "sha256": "8d86d2635b8b9a25a43f3cdec5930f46eaa613a21c74779221cc8dc9d50ce1bd"
+    },
+    "validation/v2_queue_state_correspondence_validator.py": {
+      "sha256": "269625409756672a036515a0f1530cffce12cd2fff3eb14dcb7191d05b4f49c5"
+    }
+  }
+}

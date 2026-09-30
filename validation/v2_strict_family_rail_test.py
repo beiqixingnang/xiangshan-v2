@@ -70,6 +70,36 @@ endmodule
 class StrictFamilyRailCheckpointTest(unittest.TestCase):
     """Checkpoint reuse must be source-checked and strict-pass-only."""
 
+    def test_hierarchy_outputs_receive_two_sided_negative_controls(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            runner = rail.FamilyRail(root / "unused.py", "Build.Test", root / "out.json",
+                                     root / "unused.scala")
+            runner.work = root
+            paths = {side: root / f"{side}.sv" for side in ("target", "reference")}
+            for side, prefix in (("target", "DUT"), ("reference", "REF")):
+                paths[side].write_text(
+                    f"module {prefix}_Demo(input clock, output [3:0] out);\n"
+                    "Child child(.out(out));\nendmodule\n", encoding="utf-8")
+            item = {"name": "Demo", "outputs": {"out": 4}, "sequential": True, **paths}
+
+            def reject_mutant(command: list[str]) -> dict[str, object]:
+                mutant = next(root.glob("MUTANT_sequential_*.sv"))
+                # Both generated files are checked after the control below.
+                self.assertIn("assign out = ~negative_control_out;", mutant.read_text())
+                return {"status": "FAIL", "returncode": 1,
+                        "equiv_failure_marker": True,
+                        "equiv_success_markers": {marker: False for marker in rail.EQUIV_MARKERS}}
+
+            with patch.object(rail, "wsl_path", side_effect=lambda path: path.as_posix()), \
+                    patch.object(rail, "run_wsl", side_effect=reject_mutant):
+                result = runner.negative_control([item])
+            self.assertTrue(runner.controls_result_pass(result, [item]))
+            for side in ("target", "reference"):
+                mutant = (root / f"MUTANT_sequential_{side}.sv").read_text()
+                self.assertIn(".out(negative_control_out)", mutant)
+                self.assertIn("wire [3:0] negative_control_out;", mutant)
+
     def test_aggregate_cache_rechecks_proof_and_member_coverage(self) -> None:
         items = [{"sequential": False}]
         receipt = {"status": "PASS", "returncode": 0,

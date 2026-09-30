@@ -236,7 +236,9 @@ class Queue2Relay(Elaboratable):
         # Keep the read-data cutpoint named like Chisel's generated Queue RAM.
         ram_read_data = Signal(width, name="_ram_ext_R0_data",
                                attrs={"keep": "true"})
-        module.submodules.ram_ext = memory
+        # Preserve the RAM state path after Yosys memory mapping.  This name
+        # provides a proof correspondence; it does not change any equation.
+        module.submodules["ram_ext.Memory"] = memory
         wrap = Signal(name="wrap")
         wrap_1 = Signal(name="wrap_1")
         maybe_full = Signal(name="maybe_full")

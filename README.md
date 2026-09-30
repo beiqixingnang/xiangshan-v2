@@ -68,3 +68,18 @@ The catalog runner reads exact identities from UHSC-Naming-Manifest.json,
 requires the registered direct test before full formal, and stores reusable
 checkpoints under ignored validation/.cache/strict-family. A missing direct
 subject or ABI mismatch is a prerequisite failure, never a strict pass.
+
+For focused Queue state repair, use the same strict gates on an explicit
+member subset before retrying a full family:
+
+```powershell
+py -B validation/v2_queue_state_correspondence_validator.py --build Rocket.TLChildren.Family --member TLBuffer_2 --evidence v2-rocket-queue-state-focused-results.json
+```
+
+This diagnostic always records a zero Build-count delta and uses a separate
+evidence filename. Complete member receipts share the full family's cache.
+The negative-control rail also mutates outputs driven directly by child
+instances; both DUT and reference mutations must fail the proof. Queue RAM
+words preserve their `ram_ext.Memory` identity through memory mapping so
+induction can establish state correspondence without assumptions or payload
+masking. These proofs do not replace reset-entry or parent/system acceptance.

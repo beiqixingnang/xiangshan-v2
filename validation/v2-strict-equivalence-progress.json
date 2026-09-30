@@ -6,7 +6,7 @@
   "fraction": "44/118",
   "percentage": 37.288136,
   "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with the locked source commit, matching source hashes, and either a Yosys SAT no-model miter or fully proven Yosys inductive-equivalence status is counted. STRICT_PENDING and COMPLETE_EQUIVALENCE_VARIANT_ONLY records are inventoried as attempted-but-not-counted instead of failing the rail, and one Build file may not be claimed by several counting proofs.",
-  "non_counting_attempt_count": 6,
+  "non_counting_attempt_count": 5,
   "non_counting_attempts": [
     {
       "evidence": "validation/v2-build-cpu-backend-exu-funcunit-strict-evidence.json",
@@ -82,34 +82,6 @@
         "JtagTapController: 11 $equiv cells unproven",
         "JtagTapController: zero or missing $equiv cells",
         "output-less member, nothing observable to compare: PrintCommitIDModule",
-        "aggregate SAT miter",
-        "negative control did not detect a mutated design"
-      ],
-      "unclosed": [
-        "strict gates did not all pass"
-      ]
-    },
-    {
-      "evidence": "validation/v2-build-cpu-frontend-icache-prefetch-family-strict-evidence.json",
-      "build_id": "Build-Cpu.Frontend.Icache.Prefetch.Family",
-      "declared_status": "STRICT_PENDING",
-      "audit_failures": [],
-      "proof_failures": [
-        "ICacheMainPipe:yosys_equiv",
-        "ICacheMainPipe: 1109 $equiv cells unproven",
-        "IPrefetchPipe:yosys_equiv",
-        "IPrefetchPipe: 419 $equiv cells unproven",
-        "InstrMMIOEntry:yosys_equiv",
-        "InstrMMIOEntry: 81 $equiv cells unproven",
-        "L2TlbMissQueue:yosys_equiv",
-        "L2TlbMissQueue: 49 $equiv cells unproven",
-        "L2TlbPrefetch:yosys_equiv",
-        "L2TlbPrefetch: 41 $equiv cells unproven",
-        "PrefetcherMonitor:yosys_equiv",
-        "PrefetcherMonitor: 2 $equiv cells unproven",
-        "PrefetcherMonitor: zero or missing $equiv cells",
-        "WayLookup:yosys_equiv",
-        "WayLookup: 165 $equiv cells unproven",
         "aggregate SAT miter",
         "negative control did not detect a mutated design"
       ],
@@ -5988,7 +5960,7 @@
           "present": true,
           "inside_repository": true,
           "expected_sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
-          "observed_sha256": "433e8f9ae0e43466d6052a0c049c6a66c3e3c8281278d113a5359c1e8538ea16",
+          "observed_sha256": "11d54ff599053463ed76f91233cb331c13848ba6626fce6c9a2b9dfd81b39f48",
           "producer_snapshot": null,
           "status": "FAIL"
         },
@@ -8150,9 +8122,9 @@
           "present": true,
           "inside_repository": true,
           "expected_sha256": "433e8f9ae0e43466d6052a0c049c6a66c3e3c8281278d113a5359c1e8538ea16",
-          "observed_sha256": "433e8f9ae0e43466d6052a0c049c6a66c3e3c8281278d113a5359c1e8538ea16",
+          "observed_sha256": "11d54ff599053463ed76f91233cb331c13848ba6626fce6c9a2b9dfd81b39f48",
           "producer_snapshot": null,
-          "status": "PASS"
+          "status": "FAIL"
         },
         "direct_test": {
           "path": "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Backend.Datapath.VectorFamily-Hardware.py",
@@ -8337,7 +8309,8 @@
       },
       "failures": [
         "historical receipt is missing its pinned proof origin",
-        "source digest: validator"
+        "source digest: validator",
+        "source digest: validator_dependency.strict_family_rail"
       ],
       "declared_failures": [
         "Og2ForVector:yosys_equiv",
@@ -10775,7 +10748,7 @@
           "present": true,
           "inside_repository": true,
           "expected_sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
-          "observed_sha256": "433e8f9ae0e43466d6052a0c049c6a66c3e3c8281278d113a5359c1e8538ea16",
+          "observed_sha256": "11d54ff599053463ed76f91233cb331c13848ba6626fce6c9a2b9dfd81b39f48",
           "producer_snapshot": null,
           "status": "FAIL"
         },
@@ -29405,7 +29378,7 @@
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "status": "PASS"
       },
-      "status": "NON_COUNTING",
+      "status": "FAIL",
       "note": null,
       "scope": {
         "kind": "catalog_build_multi_variant",
@@ -30341,9 +30314,9 @@
           "present": true,
           "inside_repository": true,
           "expected_sha256": "81f2027bf999e89a9dcefe84773855c7cb5bb325cadff1f1ba33338a48829d19",
-          "observed_sha256": "81f2027bf999e89a9dcefe84773855c7cb5bb325cadff1f1ba33338a48829d19",
+          "observed_sha256": "df7030b72afd74e3b04992e4406da6b7d8e4ed4ba4b99b2da2c19488af51fbbf",
           "producer_snapshot": null,
-          "status": "PASS"
+          "status": "FAIL"
         },
         "reference_sv": {
           "path": "validation/reference-sv/ICacheMainPipe.sv",
@@ -30399,9 +30372,9 @@
           "present": true,
           "inside_repository": true,
           "expected_sha256": "433e8f9ae0e43466d6052a0c049c6a66c3e3c8281278d113a5359c1e8538ea16",
-          "observed_sha256": "433e8f9ae0e43466d6052a0c049c6a66c3e3c8281278d113a5359c1e8538ea16",
+          "observed_sha256": "11d54ff599053463ed76f91233cb331c13848ba6626fce6c9a2b9dfd81b39f48",
           "producer_snapshot": null,
-          "status": "PASS"
+          "status": "FAIL"
         },
         "direct_test": {
           "path": "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Frontend.Icache.Prefetch.Family-Hardware.py",
@@ -30616,7 +30589,10 @@
         "status": null,
         "formal_success_marker": null
       },
-      "failures": [],
+      "failures": [
+        "source digest: python_build",
+        "source digest: validator_dependency.strict_family_rail"
+      ],
       "declared_failures": [
         "ICacheMainPipe:yosys_equiv",
         "ICacheMainPipe: 1109 $equiv cells unproven",
@@ -31998,7 +31974,7 @@
           "present": true,
           "inside_repository": true,
           "expected_sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
-          "observed_sha256": "433e8f9ae0e43466d6052a0c049c6a66c3e3c8281278d113a5359c1e8538ea16",
+          "observed_sha256": "11d54ff599053463ed76f91233cb331c13848ba6626fce6c9a2b9dfd81b39f48",
           "producer_snapshot": null,
           "status": "FAIL"
         },
@@ -35736,8 +35712,8 @@
           "path": "validation/v2_strict_family_rail.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "433e8f9ae0e43466d6052a0c049c6a66c3e3c8281278d113a5359c1e8538ea16",
-          "observed_sha256": "433e8f9ae0e43466d6052a0c049c6a66c3e3c8281278d113a5359c1e8538ea16",
+          "expected_sha256": "11d54ff599053463ed76f91233cb331c13848ba6626fce6c9a2b9dfd81b39f48",
+          "observed_sha256": "11d54ff599053463ed76f91233cb331c13848ba6626fce6c9a2b9dfd81b39f48",
           "producer_snapshot": null,
           "status": "PASS"
         },
@@ -36008,8 +35984,8 @@
           "path": "validation/v2_strict_family_rail.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "433e8f9ae0e43466d6052a0c049c6a66c3e3c8281278d113a5359c1e8538ea16",
-          "observed_sha256": "433e8f9ae0e43466d6052a0c049c6a66c3e3c8281278d113a5359c1e8538ea16",
+          "expected_sha256": "11d54ff599053463ed76f91233cb331c13848ba6626fce6c9a2b9dfd81b39f48",
+          "observed_sha256": "11d54ff599053463ed76f91233cb331c13848ba6626fce6c9a2b9dfd81b39f48",
           "producer_snapshot": null,
           "status": "PASS"
         },

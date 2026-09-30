@@ -1053,7 +1053,21 @@ class FamilyRail:
                             lambda match: f"{candidate} <= ~({match.group('rhs')});",
                             body, count=1)
                     if count != 1:
-                        continue
+                        # A hierarchy-only top can expose an output solely
+                        # through a child's named connection.  Split that net
+                        # and invert it in the mutant top so reference-side
+                        # controls actually reach these exported outputs too.
+                        temporary_net = f"negative_control_{candidate}"
+                        pattern = rf"(\.\w+\s*\()\s*{re.escape(candidate)}\s*(\))"
+                        mutated_body, count = re.subn(
+                            pattern,
+                            lambda match: f"{match.group(1)}{temporary_net}{match.group(2)}",
+                            body)
+                        if count != 1 or re.search(rf"\b{temporary_net}\b", body):
+                            continue
+                        width = int(sample["outputs"][candidate])
+                        mutated_body += (f"\nwire [{width - 1}:0] {temporary_net};\n"
+                                         f"assign {candidate} = ~{temporary_net};\n")
                     attempted = True
                     mutated = (source[:module_start.start()] + mutated_body
                                + source[module_end:])
