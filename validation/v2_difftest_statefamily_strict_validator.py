@@ -19,7 +19,7 @@ from v2_strict_family_rail import ROOT, FamilyRail, REF_DIR  # noqa: E402
 
 BUILD = ROOT / (
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/"
-    "Build-Cpu.Dependency.Difftest.StateFamily-Hardware.py"
+    "Cpu-Core-Dependency.Difftest.StateFamily-Hardware.py"
 )
 EVIDENCE = ROOT / "validation/v2-difftest-statefamily-strict-evidence.json"
 SCALA_CANDIDATES = tuple(

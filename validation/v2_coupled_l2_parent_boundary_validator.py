@@ -36,7 +36,7 @@ from amaranth.sim import Simulator
 # Configuration
 # =============================================================================
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.CoupledL2.Bridge-Hardware.py"
+TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Dependency.CoupledL2.Bridge-Hardware.py"
 REFERENCE = ROOT / "validation/reference-closures/TL2CHICoupledL2-Eb.sv"
 OUT = ROOT / "validation/v2-coupledL2-parent-boundary-results.json"
 COVERAGE = ROOT / "validation/v2-coupledL2-parent-boundary-coverage-manifest.json"

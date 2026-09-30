@@ -23,18 +23,24 @@ from amaranth.sim import Settle, Simulator
 
 ROOT = Path(__file__).resolve().parents[1]
 BUILD_ROOT = ROOT / "python/Program-System/System-Build/Build-Cpu"
-TOP_FILE = BUILD_ROOT / "Cpu-Core/Build-Cpu.Top.UHSCTop-GenerationProbe-Hardware.py"
-ROOTS_FILE = BUILD_ROOT / "Cpu-Core/Build-Cpu.Top.UHSC.Roots-Hardware.py"
+TOP_FILE = BUILD_ROOT / "Cpu-Core/Cpu-Core-Top.UHSCTop-GenerationProbe-Hardware.py"
+ROOTS_FILE = BUILD_ROOT / "Cpu-Core/Cpu-Core-Top.UHSC.Roots-Hardware.py"
 WORK_DIR = ROOT / "validation/.work"
 RTL_FILE = WORK_DIR / "uhsc-top-probe.sv"
 INTEGRATED_RTL_FILE = WORK_DIR / "uhsc-top-integrated-probe.sv"
 ROOT_ENVELOPE_RTL_FILE = WORK_DIR / "uhsc-xstop-envelope.sv"
 EVIDENCE = ROOT / "validation/v2-top-generation-probe-results.json"
-XSTOP_INVENTORY = ROOT / "validation/v2-xstop-port-inventory.json"
+XSTOP_INVENTORY = ROOT / "validation/v2-uhsctop-port-inventory.json"
 ROOT_INVENTORIES = ROOT / "validation/v2-root-port-inventories.json"
 TL2TL_PARENT_EVIDENCE = ROOT / "validation/v2-coupledL2-tl2tl-parent-results.json"
 EXPECTED_REFERENCE = "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d"
 EXPECTED_SOURCE = "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af"
+SOURCE_ROOT_TO_PRODUCT_ROOT = {
+    "XSCore": "UHSCore",
+    "L2Top": "L2Top",
+    "XSTile": "UHSTile",
+    "XSTop": "UHSCTop",
+}
 
 # Locked XSTop module inventory (named ANSI ports) captured from the pinned
 # artifact.  These counts are the target of the eventual full differential;
@@ -196,13 +202,13 @@ def main() -> int:
     # targets and inject them into UHSCTop.  The Build file itself remains free
     # of sibling imports, while this check proves that one hierarchy can
     # elaborate through the current closure boundaries.
-    frontend_mod = load_module(BUILD_ROOT / "Cpu-Core/Build-Cpu.Frontend.Top-Hardware.py", "v2_frontend_top")
-    backend_mod = load_module(BUILD_ROOT / "Cpu-Core/Build-Cpu.Backend.Top-Hardware.py", "v2_backend_top")
-    mem_mod = load_module(BUILD_ROOT / "Cpu-Memory/Build-Cpu.Memory.MemBlock-Hardware.py", "v2_memblock")
-    l2_mod = load_module(BUILD_ROOT / "Cpu-Memory/Build-Cpu.Dependency.CoupledL2.Slice-Hardware.py", "v2_coupled_l2")
-    roots_mod = load_module(BUILD_ROOT / "Cpu-Core/Build-Cpu.Top.UHSC.Roots-Hardware.py", "v2_roots")
-    xscore_mod = load_module(BUILD_ROOT / "Cpu-Core/Build-Cpu.Top.XSCore.Parent-Hardware.py", "v2_xscore_parent")
-    intbuffer_mod = load_module(BUILD_ROOT / "Cpu-Core/Build-Cpu.Top.XSTile.IntBuffer.Family-Hardware.py", "v2_intbuffer_family")
+    frontend_mod = load_module(BUILD_ROOT / "Cpu-Core/Cpu-Core-Frontend.Top-Hardware.py", "v2_frontend_top")
+    backend_mod = load_module(BUILD_ROOT / "Cpu-Core/Cpu-Core-Backend.Top-Hardware.py", "v2_backend_top")
+    mem_mod = load_module(BUILD_ROOT / "Cpu-Memory/Cpu-Memory-Memory.MemBlock-Hardware.py", "v2_memblock")
+    l2_mod = load_module(BUILD_ROOT / "Cpu-Memory/Cpu-Memory-Dependency.CoupledL2.Slice-Hardware.py", "v2_coupled_l2")
+    roots_mod = load_module(BUILD_ROOT / "Cpu-Core/Cpu-Core-Top.UHSC.Roots-Hardware.py", "v2_roots")
+    uhs_core_mod = load_module(BUILD_ROOT / "Cpu-Core/Cpu-Core-Top.UHSCore.Parent-Hardware.py", "v2_uhscore_parent")
+    intbuffer_mod = load_module(BUILD_ROOT / "Cpu-Core/Cpu-Core-Top.UHSTile.IntBuffer.Family-Hardware.py", "v2_uhstile_intbuffer_family")
     deps = {
         "frontend": frontend_mod.FrontendParent(),
         "backend": backend_mod.BackendTop(),
@@ -303,12 +309,13 @@ def main() -> int:
                 "status": "PENDING_ROOT_INVENTORY",
             }
             continue
-        module_name = f"UHSC{root_name}Envelope"
+        product_root = SOURCE_ROOT_TO_PRODUCT_ROOT[root_name]
+        module_name = f"{product_root}Envelope"
         root_full = roots_mod.build_verilog(
-            {"root": root_name, "module": module_name},
+            {"root": product_root, "module": module_name},
             {"full_port_specs": root_specs},
         )
-        root_path = WORK_DIR / f"uhsc-{root_name.lower()}-envelope.sv"
+        root_path = WORK_DIR / f"uhsc-{product_root.lower()}-envelope.sv"
         root_path.write_text(root_full, encoding="utf-8", newline="\n")
         root_actual = generated_port_schema(root_full, module_name)
         root_expected = inventory_schema(root_specs)
@@ -334,7 +341,7 @@ def main() -> int:
         }
 
     # Emit one reproducible hierarchy that binds the executable parent
-    # adapters and all four source-named root boundaries beneath a single
+    # adapters and all four localized root boundaries beneath a single
     # UHSCTop envelope.  This is still structurally bounded (child outputs are
     # deterministic ties), but unlike separate wrappers it exercises one
     # Amaranth elaboration path end-to-end.
@@ -342,18 +349,18 @@ def main() -> int:
     module_inventory: dict[str, object] = {"status": "PENDING"}
     if "XSTop" in root_specs_by_name:
         root_children = {
-            # Use the landed source-backed XSCore parent bridge in the
+            # Use the landed source-backed UHSCore parent bridge in the
             # integrated hierarchy.  Its three injected core children remain
             # explicitly pending, so this improves binding evidence without
             # changing the complete-gate semantics.
-            "xs_core": xscore_mod.XSCoreParent(
+            "uhs_core": uhs_core_mod.UHSCoreParent(
                 injected_dependencies={"full_port_specs": root_specs_by_name["XSCore"]}
             ),
             "l2_top": roots_mod.L2Top(injected_dependencies={"full_port_specs": root_specs_by_name["L2Top"]}),
-            "xs_tile": roots_mod.XSTile(
+            "uhs_tile": roots_mod.UHSTile(
                 injected_dependencies={
                     "full_port_specs": root_specs_by_name["XSTile"],
-                    "xs_core": xscore_mod.XSCoreParent(
+                    "uhs_core": uhs_core_mod.UHSCoreParent(
                         injected_dependencies={"full_port_specs": root_specs_by_name["XSCore"]}
                     ),
                     "l2_top": roots_mod.L2Top(
@@ -424,7 +431,7 @@ def main() -> int:
             "path": str(hierarchy_path.relative_to(ROOT)).replace("\\", "/"),
             "verilator": run_lint("verilator", hierarchy_path, "UHSCFullKunminghuV2"),
             "yosys": run_lint("yosys", hierarchy_path, "UHSCFullKunminghuV2"),
-            "bound_children": ["Frontend", "Backend", "MemBlock", "CoupledL2", "XSCore", "L2Top", "XSTile"],
+            "bound_children": ["Frontend", "Backend", "MemBlock", "CoupledL2", "UHSCore", "L2Top", "UHSTile"],
             "semantic_status": "PENDING_FULL_CHILD_BEHAVIORAL_DIFFERENTIAL",
         }
     # The localized UHSCTop adapter must expose the same exact XSTop envelope
@@ -489,14 +496,15 @@ def main() -> int:
     sim.add_process(sample_direct)
     sim.run()
 
-    # These are the mandatory V2 hierarchy roots identified from Top.scala.
-    required_roots = ["XSCore", "L2Top", "XSTile", "XSTop"]
+    # These locked source roots map explicitly to the public Python API names.
+    required_roots = list(SOURCE_ROOT_TO_PRODUCT_ROOT)
+    product_roots = [SOURCE_ROOT_TO_PRODUCT_ROOT[root] for root in required_roots]
     present_build_text = "\n".join(path.read_text(encoding="utf-8", errors="replace") for path in builds)
     defined_classes = set(re.findall(r"^class\s+([A-Za-z_][A-Za-z0-9_]*)\b", present_build_text, re.MULTILINE))
     # Match actual class definitions, not prose/docstrings that mention the
     # names of still-unimplemented Scala roots.
-    missing_build_roots = [root for root in required_roots if root not in defined_classes]
-    reduced_boundary_roots = [root for root in required_roots if root in defined_classes]
+    missing_build_roots = [root for root in product_roots if root not in defined_classes]
+    reduced_boundary_roots = [root for root in product_roots if root in defined_classes]
     generated_top = "UHSCTop" in modules
 
     verilator_status = run_lint("verilator", INTEGRATED_RTL_FILE)
@@ -551,8 +559,9 @@ def main() -> int:
                 for name in required_roots
             },
         },
+        "root_api_mapping": SOURCE_ROOT_TO_PRODUCT_ROOT,
         "blocking_reasons": [
-            "source-named XSCore/L2Top/XSTile/XSTop roots are reduced boundaries, not complete closures",
+            "localized UHSCore/L2Top/UHSTile/UHSCTop roots are reduced boundaries, not complete closures",
             "probe drives quiescent outputs and asserts io_closure_missing",
             "complete XSTop module/port inventory differential has not run",
         ],

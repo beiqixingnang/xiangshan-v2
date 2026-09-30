@@ -35,7 +35,7 @@ from amaranth.sim import Simulator
 # Configuration
 # =============================================================================
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Memory" / "Build-Cpu.Dependency.CoupledL2.Directory-Hardware.py"
+TARGET = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Memory" / "Cpu-Memory-Dependency.CoupledL2.Directory-Hardware.py"
 OUT = ROOT / "validation" / "v2-coupledL2-directory-family-results.json"
 SOURCE_COMMIT = "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af"
 REFERENCE = Path("/home/lishuo/xs-v2-local/build/rtl/XSTop.sv")

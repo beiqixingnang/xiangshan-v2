@@ -1,6 +1,6 @@
 """Strict complete-equivalence proof for the whole Chisel dependency catalog Build.
 
-``Build-Cpu.Dependency.Chisel.Arbiter-Hardware.py`` is a catalog Build: its
+``Cpu-Core-Dependency.Chisel.Arbiter-Hardware.py`` is a catalog Build: its
 ``*_SPECS`` tables name 57 locked utility modules, each with an exact-name file
 under ``validation/reference-sv``.  The Build file only counts when every one of
 them closes, so this validator enumerates the tables from the Build itself and
@@ -36,7 +36,7 @@ from v2_build_provenance import provenance_for_build
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = ROOT / (
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/"
-    "Build-Cpu.Dependency.Chisel.Arbiter-Hardware.py"
+    "Cpu-Core-Dependency.Chisel.Arbiter-Hardware.py"
 )
 REF_DIR = ROOT / "validation/reference-sv"
 EVIDENCE = ROOT / "validation/v2-chisel-arbiter-family-strict-evidence.json"

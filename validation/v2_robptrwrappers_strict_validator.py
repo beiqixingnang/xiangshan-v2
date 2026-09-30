@@ -28,7 +28,7 @@ from v2_smallcontrol_strict_validator import _view  # noqa: E402
 ROOT = rail.ROOT
 BUILD = ROOT / (
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/"
-    "Build-Cpu.Backend.Rob.PtrWrappers-Hardware.py"
+    "Cpu-Core-Backend.Rob.PtrWrappers-Hardware.py"
 )
 EVIDENCE = ROOT / (
     "validation/v2-build-cpu-backend-rob-ptrwrappers-strict-evidence.json"

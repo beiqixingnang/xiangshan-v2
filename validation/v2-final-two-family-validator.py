@@ -3,7 +3,7 @@ from __future__ import annotations
 import importlib.util, json, py_compile, re, subprocess, sys
 from pathlib import Path
 from typing import Any
-ROOT=Path(__file__).resolve().parents[1]; TARGET=ROOT/'python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.FinalTwo.Family-Hardware.py'; HIER=ROOT/'validation/v2-locked-hierarchy.json'; OUT=ROOT/'validation/v2-final-two-family-results.json'; WORK=ROOT/'validation/.work/v2-final-two-family'
+ROOT=Path(__file__).resolve().parents[1]; TARGET=ROOT/'python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.FinalTwo.Family-Hardware.py'; HIER=ROOT/'validation/v2-locked-hierarchy.json'; OUT=ROOT/'validation/v2-final-two-family-results.json'; WORK=ROOT/'validation/.work/v2-final-two-family'
 def main()->int:
  spec=importlib.util.spec_from_file_location('final_two',TARGET)
  if spec is None or spec.loader is None: raise RuntimeError(TARGET)

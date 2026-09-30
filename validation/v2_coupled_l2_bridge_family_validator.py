@@ -39,7 +39,7 @@ from amaranth.sim import Simulator
 # Configuration
 # =============================================================================
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Memory" / "Build-Cpu.Dependency.CoupledL2.Bridge-Hardware.py"
+TARGET = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Memory" / "Cpu-Memory-Dependency.CoupledL2.Bridge-Hardware.py"
 OUT = ROOT / "validation" / "v2-coupledL2-bridge-family-results.json"
 COVERAGE = ROOT / "validation" / "v2-coupledL2-bridge-family-coverage-manifest.json"
 AUDIT = ROOT / "validation" / "v2-coupledL2-bridge-family-contract-audit.json"

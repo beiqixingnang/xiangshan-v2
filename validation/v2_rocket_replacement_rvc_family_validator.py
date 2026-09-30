@@ -26,11 +26,11 @@ ROCKET_RVC_SHA256 = "76b2a895ee9d29a1d65d5e14be267c6ebbc8c9c4d315acc9d0665e99445
 UTILITY_REPLACEMENT_SHA256 = "ec8dcaab0a5bf90b9bb86452f4d4f9290dc29761ee6d0d38f6855937d27ea296"
 
 REPLACEMENT_TARGETS = {
-    "LruStateGen": BUILD_CORE / "Build-Cpu.Frontend.Bpu.Replacer.LruStateGen-Hardware.py",
-    "PlruStateGen": BUILD_CORE / "Build-Cpu.Frontend.Bpu.Replacer.PlruStateGen-Hardware.py",
-    "ReplacerState": BUILD_CORE / "Build-Cpu.Frontend.Bpu.Replacer.ReplacerState-Hardware.py",
+    "LruStateGen": BUILD_CORE / "Cpu-Core-Frontend.Bpu.Replacer.LruStateGen-Hardware.py",
+    "PlruStateGen": BUILD_CORE / "Cpu-Core-Frontend.Bpu.Replacer.PlruStateGen-Hardware.py",
+    "ReplacerState": BUILD_CORE / "Cpu-Core-Frontend.Bpu.Replacer.ReplacerState-Hardware.py",
 }
-RVC_TARGET = BUILD_CORE / "Build-Cpu.Frontend.Ifu.RvcExpander-Hardware.py"
+RVC_TARGET = BUILD_CORE / "Cpu-Core-Frontend.Ifu.RvcExpander-Hardware.py"
 
 
 # Load one exact-path target without modifying the target module. / 按精确路径加载目标且不修改目标模块。

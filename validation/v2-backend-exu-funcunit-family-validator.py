@@ -32,7 +32,7 @@ ROOT = Path(__file__).resolve().parents[1]
 TARGET = (
     ROOT
     / "python/Program-System/System-Build/Build-Cpu/Cpu-Core"
-    / "Build-Cpu.Backend.Exu.FuncUnit-Hardware.py"
+    / "Cpu-Core-Backend.Exu.FuncUnit-Hardware.py"
 )
 HIERARCHY = ROOT / "validation/v2-locked-hierarchy.json"
 LOCKED_WSL = "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv"

@@ -21,7 +21,7 @@ from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.NewCSR.CSRPermit-Hardware.py"
+TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Fu.NewCSR.CSRPermit-Hardware.py"
 HIERARCHY = ROOT / "validation/v2-locked-hierarchy.json"
 WORK = ROOT / "validation/.work/v2-newcsr-csrpermit"
 EVIDENCE = ROOT / "validation/v2-newcsr-csrpermit-family-results.json"

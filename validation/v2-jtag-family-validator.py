@@ -23,7 +23,7 @@ from amaranth.sim import Settle, Simulator, Tick
 
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Rocket.Jtag-Hardware.py"
+TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Rocket.Jtag-Hardware.py"
 HIERARCHY = ROOT / "validation/v2-locked-hierarchy.json"
 WORK = ROOT / "validation/.work/v2-jtag-family"
 EVIDENCE = ROOT / "validation/v2-jtag-family-results.json"

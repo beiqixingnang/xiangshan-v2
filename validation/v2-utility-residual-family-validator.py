@@ -3,7 +3,7 @@ from __future__ import annotations
 import importlib.util, json, py_compile, subprocess, sys
 from pathlib import Path
 from typing import Any
-ROOT = Path(__file__).resolve().parents[1]; TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Utility.ResidualFamily-Hardware.py"; OUT = ROOT / "validation/v2-utility-residual-family-results.json"; WORK = ROOT / "validation/.work/v2-utility-residual-family"
+ROOT = Path(__file__).resolve().parents[1]; TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.ResidualFamily-Hardware.py"; OUT = ROOT / "validation/v2-utility-residual-family-results.json"; WORK = ROOT / "validation/.work/v2-utility-residual-family"
 def main() -> int:
     spec = importlib.util.spec_from_file_location("util_res", TARGET)
     if spec is None or spec.loader is None: raise RuntimeError(TARGET)

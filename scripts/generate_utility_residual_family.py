@@ -7,7 +7,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Utility.ResidualFamily-Hardware.py"
+TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.ResidualFamily-Hardware.py"
 MEMBERS = ("CSA3to2", "CSA3to2_20", "CSA3to2_24", "CSA4to2", "CSA_Nto2With3to2MainPipeline", "ClockGate", "DebugTransportModuleJTAG", "IDPool", "JtagStateMachine", "JtagTapController", "MaxPeriodFibonacciLFSR", "MaxPeriodFibonacciLFSR_3", "OverrideableQueue", "OverrideableQueue_1", "TimeAsync", "r4_qds_v2", "r4_qds_v2_spec", "skidBufferConnect", "PrintCommitIDModule")
 
 

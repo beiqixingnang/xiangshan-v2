@@ -16,11 +16,11 @@ from v2_strict_family_rail import FamilyRail, load_module
 ROOT = Path(__file__).resolve().parents[1]
 BUILD = ROOT / (
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/"
-    "Build-Cpu.Dependency.Utility.ResidualFamily-Hardware.py"
+    "Cpu-Core-Dependency.Utility.ResidualFamily-Hardware.py"
 )
 DIRECT_TEST = ROOT / (
     "python/Program-System/System-Testing/Testing-Cpu/"
-    "Testing-Cpu.Dependency.Utility.ResidualFamily-Hardware.py"
+    "Testing-Cpu-Dependency.Utility.ResidualFamily-Hardware.py"
 )
 EVIDENCE = ROOT / "validation/v2-utility-residual-rewrite-wave-results.json"
 MEMBERS = (

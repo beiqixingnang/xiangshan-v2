@@ -26,7 +26,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = ROOT / (
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/"
-    "Build-Cpu.Backend.Issue.EnqPolicy-Hardware.py"
+    "Cpu-Core-Backend.Issue.EnqPolicy-Hardware.py"
 )
 SCALA = ROOT / "upstream/src/main/scala/xiangshan/backend/issue/EnqPolicy.scala"
 SCALA_PARAMS = ROOT / "upstream/src/main/scala/xiangshan/backend/issue/IssueBlockParams.scala"

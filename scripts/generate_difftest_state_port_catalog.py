@@ -6,7 +6,7 @@ import json
 import re
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]; TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Difftest.StateFamily-Hardware.py"
+ROOT = Path(__file__).resolve().parents[1]; TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Difftest.StateFamily-Hardware.py"
 MEMBERS = ("DiffExtArchEvent", "DiffExtArchFpRenameTable", "DiffExtArchIntRenameTable", "DiffExtArchVecRenameTable", "DiffExtCSRState", "DiffExtCriticalErrorEvent", "DiffExtDebugMode", "DiffExtFpCSRState", "DiffExtHCSRState", "DiffExtInstrCommit", "DiffExtLrScEvent", "DiffExtMhpmeventOverflowEvent", "DiffExtNonRegInterruptPendingEvent", "DiffExtPhyFpRegState", "DiffExtPhyIntRegState", "DiffExtPhyVecRegState", "DiffExtSyncAIAEvent", "DiffExtSyncCustomMflushpwrEvent", "DiffExtTrapEvent", "DiffExtTriggerCSRState", "DiffExtVecCSRState")
 
 

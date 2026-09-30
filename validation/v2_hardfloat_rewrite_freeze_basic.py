@@ -37,7 +37,7 @@ from amaranth.back import verilog as _amaranth_verilog
 # Module Contract
 # =============================================================================
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Core" / "Build-Cpu.Dependency.Rocket.Hardfloat-Hardware.py"
+TARGET = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Core" / "Cpu-Core-Dependency.Rocket.Hardfloat-Hardware.py"
 OUT = ROOT / "validation" / "v2-hardfloat-rewrite-freeze-basic-results.json"
 MAPPING = ROOT / "validation" / "v2-hardfloat-rewrite-freeze-mapping.json"
 CACHE_ROOT = ROOT / "validation" / ".cache"

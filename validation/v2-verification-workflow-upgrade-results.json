@@ -1,0 +1,220 @@
+{
+  "kind": "V2_VERIFICATION_WORKFLOW_UPGRADE_RESULTS",
+  "baseline_auxiliary": "8ddf8d6609e653e313d6d8924f16335a973bc80a",
+  "strict_fraction": "44/118",
+  "strict_build_delta": 0,
+  "accepted_count": 0,
+  "locked_reference_modules_verified": "1976/1976",
+  "strict_public_reference_modules": 185,
+  "formal_renames": 155,
+  "validation_renames": 17,
+  "python_lines": {
+    "raw": 93280,
+    "nonblank": 86254,
+    "baseline_raw": 93153,
+    "baseline_nonblank": 86145,
+    "delta_raw": 127,
+    "delta_nonblank": 109,
+    "scope": "python/**/*.py; physical splitlines and strip-nonblank counted separately"
+  },
+  "build_files": 118,
+  "direct_scripts": {
+    "passed": 36,
+    "total": 37,
+    "existing_failure": "ClockGate latch equation; reproduced against baseline revision"
+  },
+  "checks": {
+    "rail_regression_tests": "12/12 PASS",
+    "central_audit_regression_tests": "11/11 PASS",
+    "focused_pyright": "0 errors",
+    "in_memory_compile": 362,
+    "text_and_diff_check": "PASS",
+    "locked_reference_verify_only": "PASS; 1976 verified; written 0"
+  },
+  "timing_runs": [
+    {
+      "family": "IntBuffer",
+      "mode": "cold",
+      "command": [
+        "C:\\Program Files\\Python313\\python.exe",
+        "-B",
+        "validation/v2_uhstile_intbuffer_strict_validator.py"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 10.401,
+      "status": "COMPLETE_EQUIVALENCE",
+      "resume": {
+        "checkpoint": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\.cache\\strict-family\\build_cpu_top_uhstile_intbuffer_family\\rail-checkpoint.json",
+        "prepared_cache_hits": 0,
+        "formal_cache_hits": 0,
+        "member_count": 3
+      },
+      "proven_members": {
+        "entries": 3,
+        "proven": 3
+      },
+      "producer_sha256": "604c52415ce2cff145ae4efaa31ab6f290dc39c10ca7643a7402fb5bff7e75f2",
+      "rail_sha256": "433e8f9ae0e43466d6052a0c049c6a66c3e3c8281278d113a5359c1e8538ea16",
+      "output_sha256": "d22d037cf40b843c39a75204cf2c7b8857ea183160d70ec81fe08c35716b3e5c",
+      "output_tail": "{\"build_id\": \"Build-Cpu.Top.UHSTile.IntBuffer.Family\", \"status\": \"COMPLETE_EQUIVALENCE\", \"strict_complete_count_delta\": 1, \"proven_members\": 3, \"direct\": \"PASS\", \"validator_sha256\": \"604c52415ce2cff145ae4efaa31ab6f290dc39c10ca7643a7402fb5bff7e75f2\", \"failures\": []}\n"
+    },
+    {
+      "family": "PrefetchMetadata",
+      "mode": "cold",
+      "command": [
+        "C:\\Program Files\\Python313\\python.exe",
+        "-B",
+        "validation/v2_prefetch_metadata_strict_validator.py"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 101.852,
+      "status": "COMPLETE_EQUIVALENCE",
+      "resume": {
+        "checkpoint": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\.cache\\strict-family\\build_cpu_memory_prefetch_metadata_family\\rail-checkpoint.json",
+        "prepared_cache_hits": 0,
+        "formal_cache_hits": 0,
+        "member_count": 2
+      },
+      "proven_members": {
+        "entries": 2,
+        "proven": 2
+      },
+      "producer_sha256": "2b05356f8cb7afe319f7f791cb41ec36c819cdc50fc6f35feea12a6a6ce566c7",
+      "rail_sha256": "433e8f9ae0e43466d6052a0c049c6a66c3e3c8281278d113a5359c1e8538ea16",
+      "output_sha256": "691c67b268b435ebbb3f97c14e5603aec46156acbb562a8fac24de211b34568a",
+      "output_tail": "{\"build_id\": \"Build-Cpu.Memory.Prefetch.Metadata.Family\", \"status\": \"COMPLETE_EQUIVALENCE\", \"strict_complete_count_delta\": 1, \"proven_members\": 2, \"direct\": \"PASS\", \"failures\": []}\n"
+    },
+    {
+      "family": "PrefetchMetadata",
+      "mode": "warm",
+      "command": [
+        "C:\\Program Files\\Python313\\python.exe",
+        "-B",
+        "validation/v2_prefetch_metadata_strict_validator.py"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 42.665,
+      "status": "COMPLETE_EQUIVALENCE",
+      "resume": {
+        "checkpoint": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\.cache\\strict-family\\build_cpu_memory_prefetch_metadata_family\\rail-checkpoint.json",
+        "prepared_cache_hits": 2,
+        "formal_cache_hits": 2,
+        "member_count": 2
+      },
+      "proven_members": {
+        "entries": 2,
+        "proven": 2
+      },
+      "producer_sha256": "2b05356f8cb7afe319f7f791cb41ec36c819cdc50fc6f35feea12a6a6ce566c7",
+      "rail_sha256": "433e8f9ae0e43466d6052a0c049c6a66c3e3c8281278d113a5359c1e8538ea16",
+      "output_sha256": "691c67b268b435ebbb3f97c14e5603aec46156acbb562a8fac24de211b34568a",
+      "output_tail": "{\"build_id\": \"Build-Cpu.Memory.Prefetch.Metadata.Family\", \"status\": \"COMPLETE_EQUIVALENCE\", \"strict_complete_count_delta\": 1, \"proven_members\": 2, \"direct\": \"PASS\", \"failures\": []}\n"
+    },
+    {
+      "family": "IntBuffer",
+      "mode": "warm",
+      "command": [
+        "C:\\Program Files\\Python313\\python.exe",
+        "-B",
+        "validation/v2_uhstile_intbuffer_strict_validator.py"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 5.938,
+      "status": "COMPLETE_EQUIVALENCE",
+      "resume": {
+        "checkpoint": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\.cache\\strict-family\\build_cpu_top_uhstile_intbuffer_family\\rail-checkpoint.json",
+        "prepared_cache_hits": 3,
+        "formal_cache_hits": 3,
+        "member_count": 3
+      },
+      "proven_members": {
+        "entries": 3,
+        "proven": 3
+      },
+      "producer_sha256": "604c52415ce2cff145ae4efaa31ab6f290dc39c10ca7643a7402fb5bff7e75f2",
+      "rail_sha256": "433e8f9ae0e43466d6052a0c049c6a66c3e3c8281278d113a5359c1e8538ea16",
+      "output_sha256": "d22d037cf40b843c39a75204cf2c7b8857ea183160d70ec81fe08c35716b3e5c",
+      "output_tail": "{\"build_id\": \"Build-Cpu.Top.UHSTile.IntBuffer.Family\", \"status\": \"COMPLETE_EQUIVALENCE\", \"strict_complete_count_delta\": 1, \"proven_members\": 3, \"direct\": \"PASS\", \"validator_sha256\": \"604c52415ce2cff145ae4efaa31ab6f290dc39c10ca7643a7402fb5bff7e75f2\", \"failures\": []}\n"
+    },
+    {
+      "family": "VectorFamily",
+      "mode": "pending-wave",
+      "command": [
+        "C:\\Program Files\\Python313\\python.exe",
+        "-B",
+        "validation/v2_catalog_family_strict_validator.py",
+        "--build",
+        "Cpu-Core-Backend.Datapath.VectorFamily-Hardware.py"
+      ],
+      "returncode": 1,
+      "elapsed_seconds": 34.001,
+      "status": "STRICT_PENDING",
+      "resume": {
+        "checkpoint": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\.cache\\strict-family\\build_cpu_backend_datapath_vectorfamily\\rail-checkpoint.json",
+        "prepared_cache_hits": 0,
+        "formal_cache_hits": 0,
+        "member_count": 6
+      },
+      "proven_members": {
+        "entries": 6,
+        "proven": 2
+      },
+      "producer_sha256": "c12cdc9926aa93d3cbb3591611d0afceb33689677081bc6f501cedc28f5ad15f",
+      "rail_sha256": "433e8f9ae0e43466d6052a0c049c6a66c3e3c8281278d113a5359c1e8538ea16",
+      "output_sha256": "70fae4a59ff08e51bad6de7c9262b071f9cf373f50fce27f574751f31a0119f8",
+      "output_tail": "{\"build\": \"python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Datapath.VectorFamily-Hardware.py\", \"build_id\": \"Build-Cpu.Backend.Datapath.VectorFamily\", \"evidence\": \"validation/v2-build-cpu-backend-datapath-vectorfamily-strict-evidence.json\", \"status\": \"STRICT_PENDING\", \"strict_complete_count_delta\": 0, \"entries\": 6, \"combinational\": 3, \"sequential\": 3, \"aggregate_input_bits\": 7147, \"proven\": 2, \"negative_control\": \"NOT_RUN\", \"failure_count\": 10, \"first_failures\": [\"Og2ForVector:yosys_equiv\", \"Og2ForVector: 5670 $equiv cells unproven\", \"VIAluSrcTypeModule:sat_miter\", \"VTypeBuffer:yosys_equiv\", \"VTypeBuffer: 14 $equiv cells unproven\", \"VTypeBuffer: zero or missing $equiv cells\"]}\n"
+    }
+  ],
+  "vector_family": {
+    "status": "STRICT_PENDING",
+    "proven_members": 3,
+    "member_count": 6,
+    "formal_cache_hits": 2,
+    "direct_vectors": 8192,
+    "repaired_member": "VIAluSrcTypeModule",
+    "member_proof": "unrestricted SAT + two-sided decisive negative controls PASS",
+    "strict_build_delta": 0
+  },
+  "pending_non_counting_records": 6,
+  "historical_source_audit_failures": [
+    {
+      "build_id": "Build-Cpu.Backend.Datapath.BypassPipeFamily",
+      "failures": [
+        "source digest: validator"
+      ]
+    },
+    {
+      "build_id": "Build-Cpu.Backend.Datapath.WbArbiter",
+      "failures": [
+        "source digest: validator",
+        "source digest: python_build"
+      ]
+    },
+    {
+      "build_id": "Build-Cpu.Backend.Fu.PMP.Family",
+      "failures": [
+        "source digest: python_build"
+      ]
+    },
+    {
+      "build_id": "Build-Cpu.Memory.FrontendBridge",
+      "failures": [
+        "source digest: validator",
+        "source digest: python_build"
+      ]
+    }
+  ],
+  "unrun_or_incomplete": [
+    "remaining 74 Build strict closures",
+    "parent/top CPU closure",
+    "reset-startup and architectural system acceptance",
+    "full XSTop differential",
+    "license review",
+    "main product migration and user acceptance"
+  ],
+  "main_plan_governance": {
+    "status": "EXISTING_FAILURE",
+    "event": "HW-EVENT-0574 missing Supersedes",
+    "new_append_byte_preservation_and_field_order": "PASS"
+  }
+}

@@ -15,8 +15,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 BUILD = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core"
-ALU_TARGET = BUILD / "Build-Cpu.Backend.Fu.AluDataModule-Hardware.py"
-JUMP_TARGET = BUILD / "Build-Cpu.Backend.Fu.JumpDataModule-Hardware.py"
+ALU_TARGET = BUILD / "Cpu-Core-Backend.Fu.AluDataModule-Hardware.py"
+JUMP_TARGET = BUILD / "Cpu-Core-Backend.Fu.JumpDataModule-Hardware.py"
 LOCKED = Path(r"\\wsl$\Debian\home\lishuo\xs-v2-local\build\rtl\XSTop.sv")
 WORK = ROOT / "validation/.work/v2-backend-alu-jump-child"
 EVIDENCE = ROOT / "validation/v2-backend-alu-jump-child-differential-results.json"

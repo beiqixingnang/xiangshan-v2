@@ -29,7 +29,7 @@ ROOT = Path(__file__).resolve().parents[1]
 TARGET = (
     ROOT
     / "python/Program-System/System-Build/Build-Cpu/Cpu-Core"
-    / "Build-Cpu.Dependency.Chisel.Decoupled-Hardware.py"
+    / "Cpu-Core-Dependency.Chisel.Decoupled-Hardware.py"
 )
 HIERARCHY = ROOT / "validation/v2-locked-hierarchy.json"
 LOCKED = Path(r"\\wsl$\Debian\home\lishuo\xs-v2-local\build\rtl\XSTop.sv")

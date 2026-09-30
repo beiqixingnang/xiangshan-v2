@@ -27,8 +27,10 @@ STANDARD_FILES = (
     "v2-floating-point-family-validator.py",
     "v2-newcsr-control-family-validator.py",
     "v2-intbuffer-family-validator.py",
+    "v2_top_uhstile_parent_validator.py",
+    "v2_top_uhstile_intbuffer_validator.py",
     "v2_frontend_icache_prefetch_family_validator.py",
-    "v2_top_xstile_intbuffer_validator.py",
+    "v2_top_uhstile_intbuffer_validator.py",
 )
 MEMORY_FILE = "v2-memory-mmu-lsq-family-validator.py"
 TL_CHILDREN_FILE = "v2_top_l2top_tl_children_validator.py"

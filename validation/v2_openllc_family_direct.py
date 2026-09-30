@@ -21,10 +21,10 @@ from typing import Any, Callable
 ROOT = Path(__file__).resolve().parents[1]
 BUILD = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory"
 TARGETS = {
-    "cache": BUILD / "Build-Cpu.Dependency.OpenLLC.Cache-Hardware.py",
-    "sram": BUILD / "Build-Cpu.Dependency.OpenLLC.Sram-Hardware.py",
-    "bridge": BUILD / "Build-Cpu.Dependency.OpenLLC.Bridge-Hardware.py",
-    "ncb": BUILD / "Build-Cpu.Dependency.OpenLLC.OpenNCB-Hardware.py",
+    "cache": BUILD / "Cpu-Memory-Dependency.OpenLLC.Cache-Hardware.py",
+    "sram": BUILD / "Cpu-Memory-Dependency.OpenLLC.Sram-Hardware.py",
+    "bridge": BUILD / "Cpu-Memory-Dependency.OpenLLC.Bridge-Hardware.py",
+    "ncb": BUILD / "Cpu-Memory-Dependency.OpenLLC.OpenNCB-Hardware.py",
 }
 OUT = ROOT / "validation/v2-openllc-family-direct-results.json"
 

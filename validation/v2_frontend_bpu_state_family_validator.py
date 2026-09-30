@@ -32,13 +32,13 @@ LOCKED_SHA256 = "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731
 LOCKED_BYTES = 228590583
 
 TARGETS = {
-    "CompareMatrix": BUILD / "Build-Cpu.Frontend.Bpu.CompareMatrix-Hardware.py",
-    "FallThroughPredictor": BUILD / "Build-Cpu.Frontend.Bpu.FallThroughPredictor-Hardware.py",
-    "SaturateCounter": BUILD / "Build-Cpu.Frontend.Bpu.SaturateCounter-Hardware.py",
-    "SignedSaturateCounter": BUILD / "Build-Cpu.Frontend.Bpu.SignedSaturateCounter-Hardware.py",
-    "LruStateGen": BUILD / "Build-Cpu.Frontend.Bpu.Replacer.LruStateGen-Hardware.py",
-    "PlruStateGen": BUILD / "Build-Cpu.Frontend.Bpu.Replacer.PlruStateGen-Hardware.py",
-    "ReplacerState": BUILD / "Build-Cpu.Frontend.Bpu.Replacer.ReplacerState-Hardware.py",
+    "CompareMatrix": BUILD / "Cpu-Core-Frontend.Bpu.CompareMatrix-Hardware.py",
+    "FallThroughPredictor": BUILD / "Cpu-Core-Frontend.Bpu.FallThroughPredictor-Hardware.py",
+    "SaturateCounter": BUILD / "Cpu-Core-Frontend.Bpu.SaturateCounter-Hardware.py",
+    "SignedSaturateCounter": BUILD / "Cpu-Core-Frontend.Bpu.SignedSaturateCounter-Hardware.py",
+    "LruStateGen": BUILD / "Cpu-Core-Frontend.Bpu.Replacer.LruStateGen-Hardware.py",
+    "PlruStateGen": BUILD / "Cpu-Core-Frontend.Bpu.Replacer.PlruStateGen-Hardware.py",
+    "ReplacerState": BUILD / "Cpu-Core-Frontend.Bpu.Replacer.ReplacerState-Hardware.py",
 }
 
 SOURCE_PATHS = {

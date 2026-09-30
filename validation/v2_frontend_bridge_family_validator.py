@@ -20,7 +20,7 @@ from amaranth.sim import Simulator
 
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.FrontendBridge-Hardware.py"
+TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Memory.FrontendBridge-Hardware.py"
 WORK = ROOT / "validation/.work/v2-frontend-bridge"
 EVIDENCE = ROOT / "validation/v2-frontend-bridge-family-results.json"
 REFERENCE = Path(r"\\wsl$\Debian\home\lishuo\xs-v2-local\build\rtl\XSTop.sv")

@@ -14,9 +14,9 @@ from v2_strict_family_rail import FamilyRail, ROOT
 
 BUILD_ID = "Build-Cpu.Memory.Prefetch.Metadata.Family"
 BUILD = (ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory"
-         / "Build-Cpu.Memory.Prefetch.Metadata.Family-Hardware.py")
+         / "Cpu-Memory-Memory.Prefetch.Metadata.Family-Hardware.py")
 DIRECT = (ROOT / "python/Program-System/System-Testing/Testing-Cpu"
-          / "Testing-Cpu.Memory.Prefetch.Metadata.Family-Hardware.py")
+          / "Testing-Cpu-Memory.Prefetch.Metadata.Family-Hardware.py")
 EVIDENCE = ROOT / "validation/v2-build-cpu-memory-prefetch-metadata-family-strict-evidence.json"
 SCALA_SOURCES = (
     ROOT / "upstream/src/main/scala/xiangshan/mem/prefetch/L1StreamPrefetcher.scala",
@@ -35,33 +35,35 @@ def source_record(path: Path) -> dict[str, Any]:
     }
 
 
-def main() -> int:
-    """Run both complete member proofs and independently audit their sources."""
-
-    for path in (BUILD, DIRECT, *SCALA_SOURCES, RAIL):
-        if not path.is_file():
-            raise FileNotFoundError(path)
-    payload = FamilyRail(BUILD, BUILD_ID, EVIDENCE, SCALA_SOURCES[0]).run()
-    if payload["scope"]["public_variants"] != ["StreamBitVectorArray", "StrideMetaArray"]:
-        raise AssertionError("prefetch metadata member catalog changed")
+def run_direct() -> dict[str, Any]:
+    """Reject direct-test failures before starting formal."""
 
     direct = subprocess.run(
         [sys.executable, "-B", str(DIRECT)], cwd=ROOT, capture_output=True,
         text=True, encoding="utf-8", errors="replace", check=False,
     )
     direct_pass = direct.returncode == 0 and "Ran 4 tests" in direct.stderr
-    payload["checks"]["direct_test"] = {
+    return {
         "status": "PASS" if direct_pass else "FAIL",
         "returncode": direct.returncode,
         "command": [sys.executable, "-B", DIRECT.relative_to(ROOT).as_posix()],
         "output_tail": (direct.stdout + direct.stderr)[-1500:],
     }
-    if not direct_pass:
-        payload["failures"].append("direct test")
-        payload["unclosed"] = ["strict gates did not all pass"]
-        payload["status"] = "STRICT_PENDING"
-        payload["strict_complete_eligible"] = False
-        payload["strict_complete_count_delta"] = 0
+
+
+def main() -> int:
+    """Run both complete member proofs and independently audit their sources."""
+
+    for path in (BUILD, DIRECT, *SCALA_SOURCES, RAIL):
+        if not path.is_file():
+            raise FileNotFoundError(path)
+    direct = run_direct()
+    if direct["status"] != "PASS":
+        raise RuntimeError("direct test failed; strict formal was not started")
+    payload = FamilyRail(BUILD, BUILD_ID, EVIDENCE, SCALA_SOURCES[0]).run()
+    if payload["scope"]["public_variants"] != ["StreamBitVectorArray", "StrideMetaArray"]:
+        raise AssertionError("prefetch metadata member catalog changed")
+    payload["checks"]["direct_test"] = direct
 
     payload["validator"] = Path(__file__).resolve().relative_to(ROOT).as_posix()
     payload["sources"]["validator"] = source_record(Path(__file__).resolve())

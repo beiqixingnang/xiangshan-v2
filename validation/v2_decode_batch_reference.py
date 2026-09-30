@@ -191,9 +191,9 @@ def main() -> int:
     """Generate wrappers and report pass/fail facts. / 生成包装器并报告结果。"""
 
     modules = {
-        "FliTable": load_target("ref_fli", BUILD_CORE / "Build-Cpu.Backend.Fu.Fpu.FliTable-Hardware.py"),
-        "CSA": load_target("ref_csa", BUILD_CORE / "Build-Cpu.Backend.Fu.Util.CSA-Hardware.py"),
-        "SstcInterruptGen": load_target("ref_sstc", BUILD_CORE / "Build-Cpu.Backend.Fu.NewCSR.SstcInterruptGen-Hardware.py"),
+        "FliTable": load_target("ref_fli", BUILD_CORE / "Cpu-Core-Backend.Fu.Fpu.FliTable-Hardware.py"),
+        "CSA": load_target("ref_csa", BUILD_CORE / "Cpu-Core-Backend.Fu.Util.CSA-Hardware.py"),
+        "SstcInterruptGen": load_target("ref_sstc", BUILD_CORE / "Cpu-Core-Backend.Fu.NewCSR.SstcInterruptGen-Hardware.py"),
     }
     temp = Path(tempfile.mkdtemp(prefix="v2_ref_diff_"))
     try:

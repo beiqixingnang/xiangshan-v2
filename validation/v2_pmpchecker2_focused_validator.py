@@ -22,11 +22,11 @@ import v2_strict_family_rail as rail
 ROOT = Path(__file__).resolve().parents[1]
 BUILD = ROOT / (
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/"
-    "Build-Cpu.Backend.Fu.PMP.Family-Hardware.py"
+    "Cpu-Core-Backend.Fu.PMP.Family-Hardware.py"
 )
 DIRECT_TEST = ROOT / (
     "python/Program-System/System-Testing/Testing-Cpu/"
-    "Testing-Cpu.Backend.Fu.PMP.Family-Hardware.py"
+    "Testing-Cpu-Backend.Fu.PMP.Family-Hardware.py"
 )
 EVIDENCE = ROOT / "validation/v2-pmpchecker2-focused-strict-diagnostic.json"
 MEMBER = "PMPChecker_2"

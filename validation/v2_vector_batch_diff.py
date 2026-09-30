@@ -30,15 +30,15 @@ NAMING_RESULT = ROOT / "validation" / "v2-vector-batch-uhsc-naming-map.json"
 
 TARGET_ROOT = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Core"
 TARGETS = {
-    "ByteMaskTailGen": (TARGET_ROOT / "Build-Cpu.Backend.Fu.Vector.ByteMaskTailGen-Hardware.py", "ByteMaskTailGen"),
-    "DstMgu": (TARGET_ROOT / "Build-Cpu.Backend.Fu.Vector.DstMgu-Hardware.py", "DstMgu"),
-    "Mgtu": (TARGET_ROOT / "Build-Cpu.Backend.Fu.Vector.Mgtu-Hardware.py", "Mgtu"),
-    "NewMgu": (TARGET_ROOT / "Build-Cpu.Backend.Fu.Vector.NewMgu-Hardware.py", "NewMgu"),
-    "MaskExtrator": (TARGET_ROOT / "Build-Cpu.Backend.Fu.Vector.Utils.MaskExtrator-Hardware.py", "MaskExtractor"),
-    "ScalaDupToVector": (TARGET_ROOT / "Build-Cpu.Backend.Fu.Vector.Utils.ScalaDupToVector-Hardware.py", "ScalaDupToVector"),
-    "UIntToCont0s": (TARGET_ROOT / "Build-Cpu.Backend.Fu.Vector.Utils.UIntToCont0s-Hardware.py", "UIntToContLow0s"),
-    "UIntToCont1s": (TARGET_ROOT / "Build-Cpu.Backend.Fu.Vector.Utils.UIntToCont1s-Hardware.py", "UIntToContLow1s"),
-    "VecDataSplitModule": (TARGET_ROOT / "Build-Cpu.Backend.Fu.Vector.Utils.VecDataSplitModule-Hardware.py", "VecDataSplitModule"),
+    "ByteMaskTailGen": (TARGET_ROOT / "Cpu-Core-Backend.Fu.Vector.ByteMaskTailGen-Hardware.py", "ByteMaskTailGen"),
+    "DstMgu": (TARGET_ROOT / "Cpu-Core-Backend.Fu.Vector.DstMgu-Hardware.py", "DstMgu"),
+    "Mgtu": (TARGET_ROOT / "Cpu-Core-Backend.Fu.Vector.Mgtu-Hardware.py", "Mgtu"),
+    "NewMgu": (TARGET_ROOT / "Cpu-Core-Backend.Fu.Vector.NewMgu-Hardware.py", "NewMgu"),
+    "MaskExtrator": (TARGET_ROOT / "Cpu-Core-Backend.Fu.Vector.Utils.MaskExtrator-Hardware.py", "MaskExtractor"),
+    "ScalaDupToVector": (TARGET_ROOT / "Cpu-Core-Backend.Fu.Vector.Utils.ScalaDupToVector-Hardware.py", "ScalaDupToVector"),
+    "UIntToCont0s": (TARGET_ROOT / "Cpu-Core-Backend.Fu.Vector.Utils.UIntToCont0s-Hardware.py", "UIntToContLow0s"),
+    "UIntToCont1s": (TARGET_ROOT / "Cpu-Core-Backend.Fu.Vector.Utils.UIntToCont1s-Hardware.py", "UIntToContLow1s"),
+    "VecDataSplitModule": (TARGET_ROOT / "Cpu-Core-Backend.Fu.Vector.Utils.VecDataSplitModule-Hardware.py", "VecDataSplitModule"),
 }
 SCALA = {
     "ByteMaskTailGen": ROOT / "upstream" / "src/main/scala/xiangshan/backend/fu/vector/ByteMaskTailGen.scala",

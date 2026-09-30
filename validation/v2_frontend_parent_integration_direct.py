@@ -18,7 +18,7 @@ from v2_build_provenance import source_paths_for_build
 
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Core" / "Build-Cpu.Frontend.Top-Hardware.py"
+TARGET = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Core" / "Cpu-Core-Frontend.Top-Hardware.py"
 
 
 def load_target() -> Any:

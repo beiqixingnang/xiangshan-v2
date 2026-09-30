@@ -25,7 +25,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = ROOT / (
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/"
-    "Build-Cpu.Backend.Fu.BranchModule-Hardware.py"
+    "Cpu-Core-Backend.Fu.BranchModule-Hardware.py"
 )
 SCALA = ROOT / "upstream/src/main/scala/xiangshan/backend/fu/Branch.scala"
 SCALA_SUB = ROOT / "upstream/src/main/scala/xiangshan/backend/fu/Alu.scala"
@@ -299,7 +299,7 @@ def identity_audit() -> dict[str, Any]:
         "validator_path_exact": VALIDATOR_RELATIVE == "validation/v2_branchmodule_strict_validator.py",
         "target_path_exact": TARGET_RELATIVE == (
             "python/Program-System/System-Build/Build-Cpu/Cpu-Core/"
-            "Build-Cpu.Backend.Fu.BranchModule-Hardware.py"),
+            "Cpu-Core-Backend.Fu.BranchModule-Hardware.py"),
         "reference_path_exact": REFERENCE_RELATIVE == "validation/reference-closures/BranchModule-v2.sv",
         "scala_path_exact": SCALA_RELATIVE == "upstream/src/main/scala/xiangshan/backend/fu/Branch.scala",
         "scala_dependency_path_exact": SCALA_SUB_RELATIVE == "upstream/src/main/scala/xiangshan/backend/fu/Alu.scala",

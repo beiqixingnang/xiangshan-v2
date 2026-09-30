@@ -25,11 +25,11 @@ from v2_build_provenance import provenance_for_build
 ROOT = Path(__file__).resolve().parents[1]
 BUILD = ROOT / (
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/"
-    "Build-Cpu.Dependency.Rocket.TLChildren.Family-Hardware.py"
+    "Cpu-Core-Dependency.Rocket.TLChildren.Family-Hardware.py"
 )
 TEST = ROOT / (
     "python/Program-System/System-Testing/Testing-Cpu/"
-    "Testing-Cpu.Dependency.Rocket.TLChildren.Family-Hardware.py"
+    "Testing-Cpu-Dependency.Rocket.TLChildren.Family-Hardware.py"
 )
 HIERARCHY = ROOT / "validation/v2-locked-hierarchy.json"
 WORK = ROOT / "validation/.work/v2-top-l2top-tl-children"

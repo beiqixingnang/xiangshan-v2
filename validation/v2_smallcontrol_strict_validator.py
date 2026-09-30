@@ -213,7 +213,7 @@ def main() -> int:
     parser.add_argument(
         "--build",
         default="python/Program-System/System-Build/Build-Cpu/Cpu-Core/"
-                "Build-Cpu.Backend.SmallControl.Family-Hardware.py",
+                "Cpu-Core-Backend.SmallControl.Family-Hardware.py",
     )
     parser.add_argument(
         "--evidence",

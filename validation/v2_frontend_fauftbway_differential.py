@@ -16,7 +16,7 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.FauFTBWay-Hardware.py"
+TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Frontend.Bpu.FauFTBWay-Hardware.py"
 DIRECT = ROOT / "validation/v2_frontend_fauftbway_direct.py"
 HARNESS = ROOT / "validation/fauftb_way_v2_diff_tb.cpp"
 WORK = ROOT / "validation/.work/v2-frontend-fauftbway"

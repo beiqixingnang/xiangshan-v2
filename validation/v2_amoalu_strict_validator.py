@@ -25,7 +25,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = ROOT / (
     "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/"
-    "Build-Cpu.Cache.Dcache.Mainpipe.AMOALU-Hardware.py"
+    "Cpu-Memory-Cache.Dcache.Mainpipe.AMOALU-Hardware.py"
 )
 SCALA = ROOT / "upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/AMOALU.scala"
 REFERENCE = ROOT / "validation/reference-closures/AMOALU-dcache-v2.sv"
@@ -325,7 +325,7 @@ def identity_audit() -> dict[str, Any]:
         "validator_path_exact": VALIDATOR_RELATIVE == "validation/v2_amoalu_strict_validator.py",
         "target_path_exact": TARGET_RELATIVE == (
             "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/"
-            "Build-Cpu.Cache.Dcache.Mainpipe.AMOALU-Hardware.py"),
+            "Cpu-Memory-Cache.Dcache.Mainpipe.AMOALU-Hardware.py"),
         "reference_path_exact": REFERENCE_RELATIVE == "validation/reference-closures/AMOALU-dcache-v2.sv",
         "scala_path_exact": SCALA_RELATIVE == "upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/AMOALU.scala",
     }

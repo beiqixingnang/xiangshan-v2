@@ -19,7 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 REFERENCE = ROOT / "validation/reference-sv/ClockGate.sv"
 BUILD = ROOT / (
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/"
-    "Build-Cpu.Dependency.Utility.ResidualFamily-Hardware.py"
+    "Cpu-Core-Dependency.Utility.ResidualFamily-Hardware.py"
 )
 
 

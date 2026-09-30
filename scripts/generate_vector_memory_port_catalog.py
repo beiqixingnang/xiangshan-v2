@@ -8,7 +8,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Vector.Family-Hardware.py"
+TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Memory.Vector.Family-Hardware.py"
 MEMBERS = (
     "VLMergeBufferImp",
     "VSMergeBufferImp",

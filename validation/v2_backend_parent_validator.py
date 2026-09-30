@@ -28,7 +28,7 @@ from amaranth.back import verilog
 
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Top-Hardware.py"
+TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Top-Hardware.py"
 REF_PATH = Path(r"\\wsl$\Debian\home\lishuo\xs-v2-local\build\rtl\XSTop.sv")
 SOURCE_COMMIT = "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af"
 REFERENCE_SHA256 = "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d"
@@ -305,9 +305,9 @@ def child_boundary_differential(module: Any) -> dict[str, Any]:
     64 deterministic instructions and issue masks.  This proves child
     attachment and signal flow without promoting the incomplete full parent.
     """
-    decode_path = TARGET.parent / "Build-Cpu.Backend.Decode.Instructions-Hardware.py"
-    issue_path = TARGET.parent / "Build-Cpu.Backend.Issue.EnqPolicy-Hardware.py"
-    wb_path = TARGET.parent / "Build-Cpu.Backend.Datapath.WbArbiter-Hardware.py"
+    decode_path = TARGET.parent / "Cpu-Core-Backend.Decode.Instructions-Hardware.py"
+    issue_path = TARGET.parent / "Cpu-Core-Backend.Issue.EnqPolicy-Hardware.py"
+    wb_path = TARGET.parent / "Cpu-Core-Backend.Datapath.WbArbiter-Hardware.py"
     decode = load_exact(decode_path, "v2_backend_child_decode")
     issue = load_exact(issue_path, "v2_backend_child_issue")
     writeback = load_exact(wb_path, "v2_backend_child_wb")

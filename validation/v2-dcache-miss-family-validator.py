@@ -21,7 +21,7 @@ from typing import Any
 from v2_build_provenance import source_paths_for_build
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Dcache.MissQueue.Family-Hardware.py"
+TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Memory.Dcache.MissQueue.Family-Hardware.py"
 HIERARCHY = ROOT / "validation/v2-locked-hierarchy.json"
 WORK = ROOT / "validation/.work/v2-dcache-miss-family"
 EVIDENCE = ROOT / "validation/v2-dcache-miss-family-results.json"

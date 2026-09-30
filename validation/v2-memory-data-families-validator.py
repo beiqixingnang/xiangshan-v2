@@ -28,10 +28,10 @@ HIERARCHY = ROOT / "validation/v2-locked-hierarchy.json"
 WORK = ROOT / "validation/.work/v2-memory-data-families"
 EVIDENCE = ROOT / "validation/v2-memory-data-families-results.json"
 SOURCE_COMMIT = "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af"
-LOAD_TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Lsqueue.LoadQueueData-Hardware.py"
-STORE_TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Lsqueue.StoreQueueData-Hardware.py"
-PIPE_TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.MemCommon-Pipeline-Hardware.py"
-META_TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Dcache.MetaArray-Hardware.py"
+LOAD_TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Memory.Lsqueue.LoadQueueData-Hardware.py"
+STORE_TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Memory.Lsqueue.StoreQueueData-Hardware.py"
+PIPE_TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Memory.MemCommon-Pipeline-Hardware.py"
+META_TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Memory.Dcache.MetaArray-Hardware.py"
 
 
 # Hash exact bytes. / 对原始字节计算摘要。

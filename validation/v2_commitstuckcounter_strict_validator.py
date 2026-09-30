@@ -24,7 +24,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = ROOT / (
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/"
-    "Build-Cpu.Backend.Rob.CommitStuckCounter-Hardware.py"
+    "Cpu-Core-Backend.Rob.CommitStuckCounter-Hardware.py"
 )
 SCALA = ROOT / "upstream/src/main/scala/xiangshan/backend/rob/CommitStuckCounter.scala"
 REFERENCE = ROOT / "validation/reference-closures/CommitStuckCounter-v2.sv"

@@ -186,9 +186,9 @@ def tool_gate(path: Path, top_name: str) -> dict[str, Any]:
 
 
 def main() -> int:
-    commit = load(CPU / "Build-Cpu.Backend.Rob.CommitStuckCounter-Hardware.py", "rob_commit_batch")
-    rob = load(CPU / "Build-Cpu.Backend.Rob.PtrWrappers-Hardware.py", "rob_ptr_batch")
-    csr = load(CPU / "Build-Cpu.Backend.Decode.Isa.CSRs-Hardware.py", "csr_batch")
+    commit = load(CPU / "Cpu-Core-Backend.Rob.CommitStuckCounter-Hardware.py", "rob_commit_batch")
+    rob = load(CPU / "Cpu-Core-Backend.Rob.PtrWrappers-Hardware.py", "rob_ptr_batch")
+    csr = load(CPU / "Cpu-Core-Backend.Decode.Isa.CSRs-Hardware.py", "csr_batch")
     direct = {"commit_stuck_counter": direct_commit(commit), "ptr_wrappers": direct_ptr(rob), "csrs": direct_csr(csr), "rename_ready_flush": direct_rename()}
     sim = rename_sim()
     WORK.mkdir(parents=True, exist_ok=True)

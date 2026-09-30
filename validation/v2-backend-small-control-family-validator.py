@@ -23,7 +23,7 @@ ROOT = Path.cwd() / ".agents" / "xiangshan-v2"
 if not (ROOT / "V2-Snapshot.json").exists():
     ROOT = Path(__file__).resolve().parents[1]
 WORKSPACE = ROOT
-TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.SmallControl.Family-Hardware.py"
+TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.SmallControl.Family-Hardware.py"
 LOCKED = ROOT / "validation/v2-locked-hierarchy.json"
 RESULT = ROOT / "validation/v2-backend-small-control-family-results.json"
 WORK = ROOT / "validation/.work/v2-backend-small-control-family"

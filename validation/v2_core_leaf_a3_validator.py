@@ -16,7 +16,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 BUILD = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core"
 OUT = ROOT / "validation/v2-core-leaf-a3-validator-results.json"
-TARGETS = {"DeqPolicy": BUILD / "Build-Cpu.Backend.Issue.DeqPolicy-Hardware.py", "DataArray": BUILD / "Build-Cpu.Backend.Issue.DataArray-Hardware.py"}
+TARGETS = {"DeqPolicy": BUILD / "Cpu-Core-Backend.Issue.DeqPolicy-Hardware.py", "DataArray": BUILD / "Cpu-Core-Backend.Issue.DataArray-Hardware.py"}
 SOURCES = {"DeqPolicy": ROOT / "upstream/src/main/scala/xiangshan/backend/issue/DeqPolicy.scala", "DataArray": ROOT / "upstream/src/main/scala/xiangshan/backend/issue/DataArray.scala"}
 
 

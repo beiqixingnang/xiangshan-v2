@@ -25,12 +25,12 @@ OUT = ROOT / "validation/v2-core-leaf-a1-validator-results.json"
 SOURCE_COMMIT = "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af"
 
 TARGETS = {
-    "ImmExtractor": BUILD / "Build-Cpu.Backend.Issue.ImmExtractor-Hardware.py",
-    "AluDataModule": BUILD / "Build-Cpu.Backend.Fu.AluDataModule-Hardware.py",
-    "CommitStuckCounter": BUILD / "Build-Cpu.Backend.Rob.CommitStuckCounter-Hardware.py",
-    "EnqPolicy": BUILD / "Build-Cpu.Backend.Issue.EnqPolicy-Hardware.py",
-    "AgeDetector": BUILD / "Build-Cpu.Backend.Issue.AgeDetector-Hardware.py",
-    "PreDecodeInst": BUILD / "Build-Cpu.Backend.Decode.Isa.Predecode.PreDecodeInst-Hardware.py",
+    "ImmExtractor": BUILD / "Cpu-Core-Backend.Issue.ImmExtractor-Hardware.py",
+    "AluDataModule": BUILD / "Cpu-Core-Backend.Fu.AluDataModule-Hardware.py",
+    "CommitStuckCounter": BUILD / "Cpu-Core-Backend.Rob.CommitStuckCounter-Hardware.py",
+    "EnqPolicy": BUILD / "Cpu-Core-Backend.Issue.EnqPolicy-Hardware.py",
+    "AgeDetector": BUILD / "Cpu-Core-Backend.Issue.AgeDetector-Hardware.py",
+    "PreDecodeInst": BUILD / "Cpu-Core-Backend.Decode.Isa.Predecode.PreDecodeInst-Hardware.py",
 }
 
 SOURCES = {

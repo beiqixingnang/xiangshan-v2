@@ -19,7 +19,7 @@ import v2_strict_family_rail as rail  # noqa: E402
 ROOT = Path(__file__).resolve().parents[1]
 BUILD = ROOT / (
     "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/"
-    "Build-Cpu.Cache.Dcache.Meta.TagArray-Hardware.py"
+    "Cpu-Memory-Cache.Dcache.Meta.TagArray-Hardware.py"
 )
 BUILD_ID = "Build-Cpu.Cache.Dcache.Meta.TagArray"
 RESULT = ROOT / "validation/v2-tagarray-reset-entry-ready-diagnostic-20260929-r2.json"

@@ -26,7 +26,7 @@ import v2_strict_family_rail as rail  # noqa: E402
 ROOT = Path(__file__).resolve().parents[1]
 BUILD = ROOT / (
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/"
-    "Build-Cpu.Backend.Exu.FuncUnit-Hardware.py"
+    "Cpu-Core-Backend.Exu.FuncUnit-Hardware.py"
 )
 EVIDENCE = ROOT / "validation/v2-build-cpu-backend-exu-funcunit-strict-evidence.json"
 BUILD_ID = "Build-Cpu.Backend.Exu.FuncUnit"

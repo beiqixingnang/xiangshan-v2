@@ -20,7 +20,7 @@ from amaranth.sim import Simulator
 # Module Contract
 # ---------------------------------------------------------------------------
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.ICacheMshr-Hardware.py"
+TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Frontend.Icache.ICacheMshr-Hardware.py"
 REF_FETCH = ROOT / "validation/reference-closures/ICacheMSHR.sv"
 REF_PREFETCH = ROOT / "validation/reference-closures/ICacheMSHR_4.sv"
 HARNESS = ROOT / "validation/icache_mshr_full_diff_tb.cpp"

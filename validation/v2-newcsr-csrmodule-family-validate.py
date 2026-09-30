@@ -1,6 +1,6 @@
 """Focused validator for the V2 NewCSR ``CSRModule`` family Build subject.
 
-Loads ``Build-Cpu.Backend.Fu.NewCSR.CSRModule-Hardware.py`` by exact path,
+Loads ``Cpu-Core-Backend.Fu.NewCSR.CSRModule-Hardware.py`` by exact path,
 checks every covered locked module's port list against
 ``validation/v2-locked-hierarchy.json``, emits deterministic Amaranth Verilog
 per covered module, lints it with Verilator through WSL, and records two
@@ -26,7 +26,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = (ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core"
-          / "Build-Cpu.Backend.Fu.NewCSR.CSRModule-Hardware.py")
+          / "Cpu-Core-Backend.Fu.NewCSR.CSRModule-Hardware.py")
 LOCKED = ROOT / "validation/v2-locked-hierarchy.json"
 OUT = ROOT / "validation/v2-newcsr-csrmodule-family-results.json"
 CACHE = ROOT / "validation/.cache/newcsr-csrmodule-family"

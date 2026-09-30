@@ -7,7 +7,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Prefetch.Family-Hardware.py"
+TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Memory.Prefetch.Family-Hardware.py"
 MEMBERS = ("ActiveGenerationTable", "PrefetchFilter", "SMSTrainFilter", "StridePF", "MutiLevelPrefetchFilter", "TrainFilter", "TrainFilter_1", "BloomFilter", "CounterFilter")
 
 

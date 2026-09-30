@@ -139,13 +139,11 @@ for user-facing reports and cannot be promoted by structure-only coverage.
   harness, evidence JSON, and mapping fragment only.
 - The coordinator owns manifests, naming policy, top-level adapters, plan
   events, conflict resolution, and pushes.
-- Workers use Terra for all implementation batches. The coordinator may set
-  `max` (or `xhigh` when a shorter bounded pass is sufficient) for file-writing
-  and repair work so that each aggregate Build is completed in one focused
-  transaction; `high` remains acceptable only for mechanical leaf batches.
-  Parent and milestone closures should use `max` by default.
-  They must return a commit hash, changed paths, evidence paths, exact
-  commands, and unclosed gates.
+- Workers use `gpt-6-luna` with `xhigh` reasoning, as explicitly requested
+  on 2026-09-30. The coordinator takes over tasks with repeated failures or
+  unresolved proof semantics. Workers return changed paths, exact commands,
+  evidence paths and unclosed gates; the coordinator owns the batch commit
+  and push after reviewing the shared worktree.
 - Existing carried candidates may contain V3-era contract debt (missing
   bilingual function comments, leading-underscore helpers, compatibility
   aliases, or imports outside the allowed band). Workers must repair that debt
@@ -342,10 +340,10 @@ aggregate Build subjects that implement these families:
 
 | new Build subject | covered family | representative locked modules |
 | --- | --- | --- |
-| `Cpu-Core/Build-Cpu.Backend.Fu.NewCSR.CSRModule-Hardware.py` | `CSRModule` register family | 364 |
-| `Cpu-Core/Build-Cpu.Backend.Fu.NewCSR.CSRLite-Hardware.py` | CSR level/map modules (`MachineLevel`, `Unprivileged`, `HypervisorLevel`, `DebugLevel`, `CSRPMP`, `CSRPMA`, `CSRAIA`) | ~230 |
-| `Cpu-Core/Build-Cpu.Dependency.Chisel.Decoupled-Hardware.py` | Chisel `Queue1_*`/`Queue2_*`/`Queue68_*` | ~208 |
-| `Cpu-Core/Build-Cpu.Dependency.Chisel.Arbiter-Hardware.py` | Chisel `Arbiter*`, `AsyncQueue*`, `Repeater`, `ValidIOBroadcast` | ~70 |
+| `Cpu-Core/Cpu-Core-Backend.Fu.NewCSR.CSRModule-Hardware.py` | `CSRModule` register family | 364 |
+| `Cpu-Core/Cpu-Core-Backend.Fu.NewCSR.CSRLite-Hardware.py` | CSR level/map modules (`MachineLevel`, `Unprivileged`, `HypervisorLevel`, `DebugLevel`, `CSRPMP`, `CSRPMA`, `CSRAIA`) | ~230 |
+| `Cpu-Core/Cpu-Core-Dependency.Chisel.Decoupled-Hardware.py` | Chisel `Queue1_*`/`Queue2_*`/`Queue68_*` | ~208 |
+| `Cpu-Core/Cpu-Core-Dependency.Chisel.Arbiter-Hardware.py` | Chisel `Arbiter*`, `AsyncQueue*`, `Repeater`, `ValidIOBroadcast` | ~70 |
 
 Wave 1 landed all four subjects and moved locked-module coverage from
 156 core + 722 family + 1098 missing to **521 core + 973 family + 482 missing**
@@ -354,10 +352,10 @@ clusters:
 
 | wave-2 Build subject | covered family | representative locked modules |
 | --- | --- | --- |
-| `Cpu-Core/Build-Cpu.Backend.Issue.Entries-Hardware.py` | issue/rename entries, busy tables, wakeup queues | `OthersEntry*`, `EnqEntry`, `Entries`, `IssueQueue`, `FuBusyTableWrite`, `BusyTable`, `MultiWakeupQueue` |
-| `Cpu-Core/Build-Cpu.Backend.Exu.FuncUnit-Hardware.py` | execution-unit and functional-unit leaves | `FuncUnit`, `ExeUnit`, `Bku`, `Dispatcher` |
-| `Cpu-Core/Build-Cpu.Backend.Regfile.Regfile-Hardware.py` | register file, rename snapshot, writeback arbitration | `Regfile`, `SnapshotGenerator`, `FreeList`, `RenameTable`, `RFReadArbiter`, `RealWBArbiter`, `RFWBConflictChecker` |
-| `Cpu-Memory/Build-Cpu.Memory.Lsqueue.Uncache-Hardware.py` | uncache load-queue entries, TLB storage, vector split leaves | `UncacheEntry*`, `LoadQueueUncache`, `TLBStorage`, `VSplit*`, `indexedLSUopTable` |
+| `Cpu-Core/Cpu-Core-Backend.Issue.Entries-Hardware.py` | issue/rename entries, busy tables, wakeup queues | `OthersEntry*`, `EnqEntry`, `Entries`, `IssueQueue`, `FuBusyTableWrite`, `BusyTable`, `MultiWakeupQueue` |
+| `Cpu-Core/Cpu-Core-Backend.Exu.FuncUnit-Hardware.py` | execution-unit and functional-unit leaves | `FuncUnit`, `ExeUnit`, `Bku`, `Dispatcher` |
+| `Cpu-Core/Cpu-Core-Backend.Regfile.Regfile-Hardware.py` | register file, rename snapshot, writeback arbitration | `Regfile`, `SnapshotGenerator`, `FreeList`, `RenameTable`, `RFReadArbiter`, `RealWBArbiter`, `RFWBConflictChecker` |
+| `Cpu-Memory/Cpu-Memory-Memory.Lsqueue.Uncache-Hardware.py` | uncache load-queue entries, TLB storage, vector split leaves | `UncacheEntry*`, `LoadQueueUncache`, `TLBStorage`, `VSplit*`, `indexedLSUopTable` |
 
 Rules for this wave, in addition to the existing contract:
 
@@ -501,3 +499,28 @@ close together.
 The focused vector rail also found no complete proof for `VldMergeUnit` or
 `VsetModule`; both are now `CONTRACT_ONLY` until their merge/set state and
 parent closure are formally matched.
+
+
+## 2026-09-30 strict verification workflow
+
+This section governs strict verification work and supersedes any earlier
+suggestion to use spot checks or bounded results as a complete-equivalence gate.
+Strict completion still requires every current public member and every required
+output; direct, lint, variant-only and bounded results remain non-counting.
+
+Prepare and check all cheap source, ABI, determinism and reference-view gates
+before formal. Run Pyright and both-side lint before admitting a member to the
+serialized Yosys queue. A failed prerequisite emits NOT_RUN for its downstream
+proof. A failed baseline prevents aggregate and negative-control execution.
+Persist a PASS receipt after each completed member. Retry failures instead of
+replaying every passing member, and validate the current generated proof inputs,
+producer dependencies and tool/runtime identities before accepting a cache hit.
+Every cache hit remains an old proof execution, never a fabricated fresh log.
+
+Path relocation has a separate receipt in UHSC-Naming-Manifest.json. Preserve
+historical proof commands, logs, counters and conclusions. Git-bound text
+snapshots preserve original proof-producer identities; the current independent
+audit verifies those snapshots and the current DUT/locked-source digests.
+A rename does not contribute to the strict numerator. A local API change that
+alters emitted RTL requires a new proof or an explicit audited representation
+identity; upstream and locked reference module names remain untouched.

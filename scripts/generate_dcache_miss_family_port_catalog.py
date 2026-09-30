@@ -17,7 +17,7 @@ HIERARCHY = ROOT / "validation/v2-locked-hierarchy.json"
 TARGET = (
     ROOT
     / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory"
-    / "Build-Cpu.Memory.Dcache.MissQueue.Family-Hardware.py"
+    / "Cpu-Memory-Memory.Dcache.MissQueue.Family-Hardware.py"
 )
 MEMBERS = (
     "CMOUnit",

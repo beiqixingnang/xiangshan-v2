@@ -33,7 +33,7 @@ ROOT = Path(__file__).resolve().parents[1]
 TARGET = (
     ROOT
     / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory"
-    / "Build-Cpu.Memory.Lsqueue.Uncache-Hardware.py"
+    / "Cpu-Memory-Memory.Lsqueue.Uncache-Hardware.py"
 )
 HIERARCHY = ROOT / "validation/v2-locked-hierarchy.json"
 LOCKED_WSL = "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv"

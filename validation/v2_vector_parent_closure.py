@@ -46,9 +46,9 @@ WORK = ROOT / "validation" / ".work" / "v2-vector-parent"
 # Validate the搬运-ready Build-Cpu parent, not the historical validation-only
 # harness.  The harness remains available as provenance but is not a target.
 # 验证可搬运的 Build-Cpu 父级，而不是历史 validation-only harness；后者仅作溯源。
-PARENT_TARGET = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Core" / "Build-Cpu.Backend.Datapath.VldMergeUnit-Hardware.py"
-NEW_MGU_TARGET = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Core" / "Build-Cpu.Backend.Fu.Vector.NewMgu-Hardware.py"
-WB_TARGET = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Core" / "Build-Cpu.Backend.Datapath.WbArbiter-Hardware.py"
+PARENT_TARGET = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Core" / "Cpu-Core-Backend.Datapath.VldMergeUnit-Hardware.py"
+NEW_MGU_TARGET = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Core" / "Cpu-Core-Backend.Fu.Vector.NewMgu-Hardware.py"
+WB_TARGET = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Core" / "Cpu-Core-Backend.Datapath.WbArbiter-Hardware.py"
 READINESS = ROOT / "validation" / "v2-parent-closure-readiness.json"
 LEAF_DIRECT = ROOT / "validation" / "v2-vector-batch-direct-results.json"
 LEAF_DIFF = ROOT / "validation" / "v2-vector-batch-differential-results.json"

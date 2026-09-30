@@ -374,11 +374,11 @@ def synth_checks(loaded: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]
 # Execute the batch and persist machine-readable evidence. / 执行批次并写入机器证据。
 def main() -> int:
     targets = {
-        "CompareMatrix": BUILD_CORE / "Build-Cpu.Frontend.Bpu.CompareMatrix-Hardware.py",
-        "FallThroughPredictor": BUILD_CORE / "Build-Cpu.Frontend.Bpu.FallThroughPredictor-Hardware.py",
-        "SaturateCounter": BUILD_CORE / "Build-Cpu.Frontend.Bpu.SaturateCounter-Hardware.py",
-        "SignedSaturateCounter": BUILD_CORE / "Build-Cpu.Frontend.Bpu.SignedSaturateCounter-Hardware.py",
-        "RvcExpander": BUILD_CORE / "Build-Cpu.Frontend.Ifu.RvcExpander-Hardware.py",
+        "CompareMatrix": BUILD_CORE / "Cpu-Core-Frontend.Bpu.CompareMatrix-Hardware.py",
+        "FallThroughPredictor": BUILD_CORE / "Cpu-Core-Frontend.Bpu.FallThroughPredictor-Hardware.py",
+        "SaturateCounter": BUILD_CORE / "Cpu-Core-Frontend.Bpu.SaturateCounter-Hardware.py",
+        "SignedSaturateCounter": BUILD_CORE / "Cpu-Core-Frontend.Bpu.SignedSaturateCounter-Hardware.py",
+        "RvcExpander": BUILD_CORE / "Cpu-Core-Frontend.Ifu.RvcExpander-Hardware.py",
     }
     loaded = {name: load_target(f"v2_frontend_{name}", path) for name, path in targets.items()}
     audits = {name: audit_target(path) for name, path in targets.items()}

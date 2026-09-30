@@ -31,12 +31,12 @@ REFERENCE_SHA256 = "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4
 
 
 TARGETS = {
-    "ImmExtractor": BUILD / "Build-Cpu.Backend.Issue.ImmExtractor-Hardware.py",
-    "AluDataModule": BUILD / "Build-Cpu.Backend.Fu.AluDataModule-Hardware.py",
-    "CommitStuckCounter": BUILD / "Build-Cpu.Backend.Rob.CommitStuckCounter-Hardware.py",
-    "EnqPolicy": BUILD / "Build-Cpu.Backend.Issue.EnqPolicy-Hardware.py",
-    "AgeDetector": BUILD / "Build-Cpu.Backend.Issue.AgeDetector-Hardware.py",
-    "PreDecodeInst": BUILD / "Build-Cpu.Backend.Decode.Isa.Predecode.PreDecodeInst-Hardware.py",
+    "ImmExtractor": BUILD / "Cpu-Core-Backend.Issue.ImmExtractor-Hardware.py",
+    "AluDataModule": BUILD / "Cpu-Core-Backend.Fu.AluDataModule-Hardware.py",
+    "CommitStuckCounter": BUILD / "Cpu-Core-Backend.Rob.CommitStuckCounter-Hardware.py",
+    "EnqPolicy": BUILD / "Cpu-Core-Backend.Issue.EnqPolicy-Hardware.py",
+    "AgeDetector": BUILD / "Cpu-Core-Backend.Issue.AgeDetector-Hardware.py",
+    "PreDecodeInst": BUILD / "Cpu-Core-Backend.Decode.Isa.Predecode.PreDecodeInst-Hardware.py",
 }
 
 

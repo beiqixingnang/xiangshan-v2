@@ -26,7 +26,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = ROOT / (
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/"
-    "Build-Cpu.Frontend.Ifu.RvcExpander-Hardware.py"
+    "Cpu-Core-Frontend.Ifu.RvcExpander-Hardware.py"
 )
 SCALA = ROOT / "upstream/src/main/scala/xiangshan/frontend/PreDecode.scala"
 REFERENCE = ROOT / "validation/reference-closures/RVCExpander-v2.sv"

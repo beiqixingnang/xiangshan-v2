@@ -21,8 +21,8 @@ from amaranth.sim import Simulator
 ROOT = Path(__file__).resolve().parents[1]
 BUILD_CORE = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Core"
 TARGETS = {
-    "CryptoUtils": BUILD_CORE / "Build-Cpu.Backend.Fu.Util.CryptoUtils-Hardware.py",
-    "DebugCSR": BUILD_CORE / "Build-Cpu.Backend.Fu.Util.DebugCSR-Hardware.py",
+    "CryptoUtils": BUILD_CORE / "Cpu-Core-Backend.Fu.Util.CryptoUtils-Hardware.py",
+    "DebugCSR": BUILD_CORE / "Cpu-Core-Backend.Fu.Util.DebugCSR-Hardware.py",
 }
 SOURCES = {
     "CryptoUtils": ROOT / "upstream/src/main/scala/xiangshan/backend/fu/util/CryptoUtils.scala",

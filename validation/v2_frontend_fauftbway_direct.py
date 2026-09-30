@@ -16,7 +16,7 @@ from amaranth.sim import Settle, Simulator, Tick
 
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.FauFTBWay-Hardware.py"
+TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Frontend.Bpu.FauFTBWay-Hardware.py"
 SOURCE = ROOT / "upstream/src/main/scala/xiangshan/frontend/FauFTB.scala"
 RESULT = ROOT / "validation/v2-frontend-fauftbway-direct-results.json"
 SOURCE_COMMIT = "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af"

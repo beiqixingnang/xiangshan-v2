@@ -46,10 +46,10 @@ from amaranth.sim import Simulator
 # Configuration
 # =============================================================================
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Memory" / "Build-Cpu.Memory.MemBlock-Hardware.py"
-AMO_TARGET = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Memory" / "Build-Cpu.Cache.Dcache.Mainpipe.AMOALU-Hardware.py"
-TAG_TARGET = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Memory" / "Build-Cpu.Cache.Dcache.Meta.TagArray-Hardware.py"
-FRONTEND_TARGET = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Memory" / "Build-Cpu.Memory.FrontendBridge-Hardware.py"
+TARGET = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Memory" / "Cpu-Memory-Memory.MemBlock-Hardware.py"
+AMO_TARGET = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Memory" / "Cpu-Memory-Cache.Dcache.Mainpipe.AMOALU-Hardware.py"
+TAG_TARGET = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Memory" / "Cpu-Memory-Cache.Dcache.Meta.TagArray-Hardware.py"
+FRONTEND_TARGET = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Memory" / "Cpu-Memory-Memory.FrontendBridge-Hardware.py"
 REFERENCE = Path(r"\\wsl$\Debian\home\lishuo\xs-v2-local\build\rtl\XSTop.sv")
 REFERENCE_CANONICAL = "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv"
 REFERENCE_SHA256 = "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d"

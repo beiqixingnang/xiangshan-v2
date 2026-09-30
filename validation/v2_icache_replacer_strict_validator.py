@@ -17,7 +17,7 @@ import v2_strict_family_rail as rail  # noqa: E402
 ROOT = Path(__file__).resolve().parents[1]
 BUILD = ROOT / (
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/"
-    "Build-Cpu.Frontend.Icache.ICacheReplacer-Hardware.py"
+    "Cpu-Core-Frontend.Icache.ICacheReplacer-Hardware.py"
 )
 BUILD_ID = "Build-Cpu.Frontend.Icache.ICacheReplacer"
 EVIDENCE = ROOT / "validation/v2-build-cpu-frontend-icache-icachereplacer-strict-evidence.json"

@@ -26,7 +26,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = ROOT / (
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/"
-    "Build-Cpu.Backend.SmallControl.Family-Hardware.py"
+    "Cpu-Core-Backend.SmallControl.Family-Hardware.py"
 )
 SCALA = ROOT / "upstream/src/main/scala/xiangshan/backend/fu/wrapper/BranchUnit.scala"
 REFERENCE = ROOT / "validation/reference-closures/AddrAddModule-v2.sv"

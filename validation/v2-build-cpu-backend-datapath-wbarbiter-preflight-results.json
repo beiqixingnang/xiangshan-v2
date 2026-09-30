@@ -1,0 +1,47 @@
+{
+  "kind": "V2_STRICT_PREFLIGHT_DIAGNOSTIC",
+  "build_id": "Build-Cpu.Backend.Datapath.WbArbiter",
+  "strict_count_delta": 0,
+  "formal": "NOT_RUN",
+  "direct_test": {
+    "status": "MISSING_DIRECT_TEST",
+    "returncode": null
+  },
+  "members": [
+    {
+      "member": "RealWBArbiter",
+      "status": "BLOCKED",
+      "failures": [
+        "direct test is missing or failed"
+      ],
+      "abi_exact": true,
+      "deterministic": true,
+      "view_trusted": true
+    },
+    {
+      "member": "RealWBCollideChecker",
+      "status": "BLOCKED",
+      "failures": [
+        "ABI mismatch: RealWBCollideChecker",
+        "direct test is missing or failed"
+      ],
+      "abi_exact": false,
+      "deterministic": true,
+      "view_trusted": true
+    },
+    {
+      "member": "WbDataPath",
+      "status": "BLOCKED",
+      "failures": [
+        "ABI mismatch: WbDataPath",
+        "direct test is missing or failed"
+      ],
+      "abi_exact": false,
+      "deterministic": true,
+      "view_trusted": true
+    }
+  ],
+  "ready_members": 0,
+  "member_count": 3,
+  "status": "PREFLIGHT_COMPLETE"
+}

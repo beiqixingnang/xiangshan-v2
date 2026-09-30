@@ -36,7 +36,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = ROOT / (
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/"
-    "Build-Cpu.Backend.Fu.AluDataModule-Hardware.py"
+    "Cpu-Core-Backend.Fu.AluDataModule-Hardware.py"
 )
 SCALA = ROOT / "upstream/src/main/scala/xiangshan/backend/fu/Alu.scala"
 REFERENCE_DIR = ROOT / "validation/reference-sv"

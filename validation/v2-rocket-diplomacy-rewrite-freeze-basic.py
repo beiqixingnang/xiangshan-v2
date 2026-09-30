@@ -34,7 +34,7 @@ from amaranth.back import verilog as _amaranth_verilog
 # Module Contract
 # =============================================================================
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Core" / "Build-Cpu.Dependency.Rocket.Diplomacy-Hardware.py"
+TARGET = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Core" / "Cpu-Core-Dependency.Rocket.Diplomacy-Hardware.py"
 OUT = ROOT / "validation" / "v2-rocket-diplomacy-rewrite-freeze-basic-results.json"
 MAPPING = ROOT / "validation" / "v2-rocket-diplomacy-rewrite-freeze-mapping.json"
 CACHE_ROOT = ROOT / "validation" / ".cache"
@@ -172,7 +172,7 @@ def static_audit() -> dict[str, Any]:
 def py_compile_gate() -> dict[str, Any]:
     try:
         with TemporaryDirectory(prefix="v2_rocket_diplomacy_compile_") as temporary:
-            cfile = Path(temporary) / "Build-Cpu.Dependency.Rocket.Diplomacy-Hardware.pyc"
+            cfile = Path(temporary) / "Cpu-Core-Dependency.Rocket.Diplomacy-Hardware.pyc"
             py_compile.compile(str(TARGET), cfile=str(cfile), doraise=True)
             return {"status": "PASS", "bytecode_bytes": cfile.stat().st_size}
     except Exception as error:

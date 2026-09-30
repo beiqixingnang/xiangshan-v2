@@ -15,7 +15,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 BUILD = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core"
-TARGET = BUILD / "Build-Cpu.Backend.Rob.PtrWrappers-Hardware.py"
+TARGET = BUILD / "Cpu-Core-Backend.Rob.PtrWrappers-Hardware.py"
 OUT = ROOT / "validation/v2-core-leaf-a5-validator-results.json"
 SOURCES = [ROOT / "upstream/src/main/scala/xiangshan/backend/rob/RobEnqPtrWrapper.scala", ROOT / "upstream/src/main/scala/xiangshan/backend/rob/RobDeqPtrWrapper.scala"]
 

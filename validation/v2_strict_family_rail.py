@@ -22,9 +22,12 @@ Callers supply three paths and a build_id; everything else is derived.
 from __future__ import annotations
 
 import hashlib
+import inspect
 import importlib.util
+import importlib.metadata as importlib_metadata
 import json
 import py_compile
+import platform
 import re
 import shlex
 import shutil
@@ -41,6 +44,19 @@ REF_DIR = ROOT / "validation/reference-sv"
 TEMP_ROOT = Path(tempfile.gettempdir())
 if not str(TEMP_ROOT).isascii():
     TEMP_ROOT = Path("C:/Temp")
+
+# Formal proofs are expensive and the previous rail discarded all progress at
+# the start of every run.  Keep a small content addressed checkpoint beside
+# the generated pair files so a retry resumes at the first incomplete stage.
+CACHE_SCHEMA = 4
+WSL_PATH_CACHE: dict[str, str] = {}
+TOOL_VERSION_CACHE: dict[str, str] | None = None
+
+
+def path_cache_key(path: Path) -> str:
+    """Return one stable key for a path conversion cache entry."""
+
+    return str(path.resolve())
 
 SOURCE_COMMIT = "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af"
 XSTOP_SHA256 = "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d"
@@ -201,9 +217,15 @@ def enumerate_members(module: Any, build_path: Path) -> list[str]:
 def wsl_path(path: Path) -> str:
     """Convert a Windows path into an absolute WSL path."""
 
-    result = subprocess.run(["wsl.exe", "-e", "wslpath", "-a", str(path)],
+    key = path_cache_key(path)
+    cached = WSL_PATH_CACHE.get(key)
+    if cached is not None:
+        return cached
+    result = subprocess.run(["wsl.exe", "-e", "wslpath", "-a", key],
                             capture_output=True, check=True)
-    return result.stdout.decode("utf-8", "replace").strip()
+    converted = result.stdout.decode("utf-8", "replace").strip()
+    WSL_PATH_CACHE[key] = converted
+    return converted
 
 
 GATE_TIMEOUT_SECONDS = 900
@@ -248,6 +270,47 @@ def run_wsl(command: list[str],
                                 if sat_counts else None),
             "output_tail": output[-2500:],
             "output_sha256": hashlib.sha256(output.encode()).hexdigest()}
+
+
+def validation_tool_versions() -> dict[str, str]:
+    """Return tool versions that affect deterministic export and formal results."""
+
+    global TOOL_VERSION_CACHE
+    if TOOL_VERSION_CACHE is not None:
+        return dict(TOOL_VERSION_CACHE)
+    try:
+        amaranth_version = importlib_metadata.version("amaranth")
+    except importlib_metadata.PackageNotFoundError:
+        amaranth_version = "unavailable"
+    try:
+        result = subprocess.run(
+            ["wsl.exe", "-e", "bash", "-lc", "yosys -V; verilator --version"],
+            capture_output=True, check=False, timeout=30,
+        )
+        tool_text = (result.stdout + result.stderr).decode("utf-8", "replace")
+        yosys_match = re.search(r"Yosys\s+[^\r\n]+", tool_text)
+        verilator_match = re.search(r"Verilator\s+[^\r\n]+", tool_text)
+        yosys_version = yosys_match.group(0).strip() if yosys_match else "unavailable"
+        verilator_version = verilator_match.group(0).strip() if verilator_match else "unavailable"
+    except (OSError, subprocess.TimeoutExpired):
+        yosys_version = "unavailable"
+        verilator_version = "unavailable"
+    TOOL_VERSION_CACHE = {
+        "python": platform.python_version(),
+        "python_implementation": platform.python_implementation(),
+        "host": platform.platform(),
+        "amaranth": amaranth_version,
+        "yosys": yosys_version,
+        "verilator": verilator_version,
+    }
+    return dict(TOOL_VERSION_CACHE)
+
+
+def tool_versions_complete(versions: dict[str, str]) -> bool:
+    """Return whether the fingerprint identified every proof-critical runtime."""
+
+    return all(versions.get(name) not in (None, "", "unavailable")
+               for name in ("python", "amaranth", "yosys", "verilator"))
 
 
 def pyright_check(source: Path) -> dict[str, Any]:
@@ -517,22 +580,142 @@ class FamilyRail:
         self.evidence_path = evidence_path
         self.scala_path = scala_path if scala_path is not None else declared_scala(build_path)
         self.work = TEMP_ROOT / ("uhsc_" + re.sub(r"\W+", "_", build_id).strip("_").lower() + "_family")
+        self.cache_path = (ROOT / "validation/.cache/strict-family"
+                           / re.sub(r"\W+", "_", build_id).strip("_").lower()
+                           / "rail-checkpoint.json")
+        self._cache: dict[str, Any] = {}
+        self._cache_loaded = False
+
+    def load_cache(self) -> None:
+        """Load a checkpoint if it has the current schema and source identity."""
+
+        if self._cache_loaded:
+            return
+        self._cache_loaded = True
+        try:
+            payload = json.loads(self.cache_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            payload = {}
+        if isinstance(payload, dict) and payload.get("schema_version") == CACHE_SCHEMA:
+            self._cache = payload
+        else:
+            self._cache = {"schema_version": CACHE_SCHEMA, "members": {}, "stages": {}}
+
+    def save_cache(self) -> None:
+        """Atomically persist the checkpoint without touching locked inputs."""
+
+        self.work.mkdir(parents=True, exist_ok=True)
+        self.cache_path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = self.cache_path.with_suffix(".tmp")
+        temporary.write_text(json.dumps(self._cache, ensure_ascii=False, indent=2) + "\n",
+                             encoding="utf-8", newline="\n")
+        temporary.replace(self.cache_path)
+
+    def member_cache_key(self, name: str, children: list[str], target_rtl: str,
+                         reference_view: str, miter: str) -> str:
+        """Build a content key that invalidates on any relevant source change."""
+
+        records: list[tuple[str, str]] = [
+            ("rail", sha256_file(Path(__file__))),
+            ("target_rtl", hashlib.sha256(target_rtl.encode()).hexdigest()),
+            ("reference_view", hashlib.sha256(reference_view.encode()).hexdigest()),
+            ("miter", hashlib.sha256(miter.encode()).hexdigest()),
+        ]
+        producer_paths: set[Path] = set()
+        for producer_type in type(self).__mro__:
+            producer_module = sys.modules.get(producer_type.__module__)
+            producer_path = Path(str(getattr(producer_module, "__file__", "")))
+            if producer_path.is_file():
+                producer_paths.add(producer_path.resolve())
+        for producer_path in sorted(producer_paths):
+            records.append(("producer_mro:" + producer_path.as_posix(), sha256_file(producer_path)))
+        caller_path: Path | None = None
+        for frame in inspect.stack()[1:]:
+            frame_path = Path(frame.filename).resolve()
+            if frame_path != Path(__file__).resolve() and frame_path.is_file():
+                caller_path = frame_path
+                break
+        if caller_path is not None:
+            records.append(("caller_validator", sha256_file(caller_path)))
+        for child in sorted(set(children) | {name}):
+            path = REF_DIR / f"{child}.sv"
+            records.append((child, sha256_file(path)))
+        if self.scala_path is not None and self.scala_path.is_file():
+            records.append(("scala", sha256_file(self.scala_path)))
+        versions = validation_tool_versions()
+        records.append(("tool_versions", hashlib.sha256(
+            json.dumps(versions, sort_keys=True).encode()).hexdigest()))
+        records.append(("build_id", self.build_id))
+        return hashlib.sha256(json.dumps(records, sort_keys=True).encode()).hexdigest()
+
+    @staticmethod
+    def path_value(value: Any) -> Any:
+        """Convert Paths to JSON-safe strings recursively."""
+
+        if isinstance(value, Path):
+            return {"__path__": str(value)}
+        if isinstance(value, dict):
+            return {str(k): FamilyRail.path_value(v) for k, v in value.items()}
+        if isinstance(value, list):
+            return [FamilyRail.path_value(v) for v in value]
+        return value
+
+    @staticmethod
+    def restore_paths(value: Any) -> Any:
+        """Restore Paths from a checkpoint value."""
+
+        if isinstance(value, dict):
+            if set(value) == {"__path__"}:
+                return Path(str(value["__path__"]))
+            return {k: FamilyRail.restore_paths(v) for k, v in value.items()}
+        if isinstance(value, list):
+            return [FamilyRail.restore_paths(v) for v in value]
+        return value
+
+    def cached_item(self, key: str) -> dict[str, Any] | None:
+        self.load_cache()
+        raw = self._cache.get("members", {}).get(key)
+        if not isinstance(raw, dict):
+            return None
+        item = self.restore_paths(raw.get("item"))
+        if not isinstance(item, dict):
+            return None
+        paths = [item.get(name) for name in ("target", "reference", "miter")]
+        if any(not isinstance(path, Path) or not path.is_file() for path in paths):
+            return None
+        expected = item.get("prepared_hashes")
+        if not isinstance(expected, dict):
+            return None
+        for label, path in zip(("target", "reference", "miter"), paths):
+            if not isinstance(path, Path) or expected.get(label) != sha256_file(path):
+                return None
+        return item
 
     def prepare(self, module: Any, name: str) -> dict[str, Any]:
-        target_rtl = export_member(module, name)
         locked_text = (REF_DIR / f"{name}.sv").read_text(encoding="utf-8")
         ports = declared_ports(locked_text, name)
         closure, children, audits = locked_closure(name)
+        target_rtl = export_member(module, name)
+        deterministic_rtl = export_member(module, name)
         inputs = {p: w for p, (d, w) in ports.items() if d == "input"}
         outputs = {p: w for p, (d, w) in ports.items() if d == "output"}
         miter = miter_text(name, inputs, outputs)
+        cache_key = self.member_cache_key(name, children, target_rtl, closure, miter)
+        cached = self.cached_item(cache_key)
+        if cached is not None:
+            cached["cache_key"] = cache_key
+            cached["cache_hit"] = True
+            cached["deterministic"] = deterministic_rtl == target_rtl
+            cached["abi_exact"] = declared_ports(target_rtl, f"DUT_{name}") == ports
+            return cached
+
         target_path = self.work / f"DUT_{name}.sv"
         reference_path = self.work / f"REF_{name}.sv"
         miter_path = self.work / f"{name}_MITER.sv"
         target_path.write_text(target_rtl, encoding="utf-8", newline="\n")
         reference_path.write_text(closure, encoding="utf-8", newline="\n")
         miter_path.write_text(miter, encoding="utf-8", newline="\n")
-        return {
+        item = {
             "name": name, "inputs": inputs, "outputs": outputs, "children": children,
             "sequential": any(
                 direction == "input"
@@ -540,7 +723,7 @@ class FamilyRail:
                      or port.endswith("_clock") or port.endswith("_clk"))
                 for port, (direction, _width) in ports.items()),
             "abi_exact": declared_ports(target_rtl, f"DUT_{name}") == ports,
-            "deterministic": export_member(module, name) == target_rtl,
+            "deterministic": deterministic_rtl == target_rtl,
             "output_less": not outputs,
             "miter_selfcheck": bool(outputs) and nets_declared(miter),
             "view_trusted": all(audit["view_trusted"] for audit in audits),
@@ -549,24 +732,72 @@ class FamilyRail:
             "locked_sources": [REF_DIR / f"{child}.sv" for child in children]
                               + [REF_DIR / f"{name}.sv"],
             "target": target_path, "reference": reference_path, "miter": miter_path,
+            "wsl": {
+                "target": wsl_path(target_path),
+                "reference": wsl_path(reference_path),
+                "miter": wsl_path(miter_path),
+                "locked_sources": [wsl_path(path) for path in
+                                    ([REF_DIR / f"{child}.sv" for child in children]
+                                     + [REF_DIR / f"{name}.sv"])],
+            },
+            "cache_key": cache_key,
+            "cache_hit": False,
+            "tool_versions": validation_tool_versions(),
+            "prepared_hashes": {
+                "target": sha256_file(target_path),
+                "reference": sha256_file(reference_path),
+                "miter": sha256_file(miter_path),
+            },
         }
+        self.load_cache()
+        self._cache.setdefault("members", {})[cache_key] = {
+            "name": name,
+            "item": self.path_value(item),
+        }
+        self.save_cache()
+        return item
 
     def prove(self, item: dict[str, Any]) -> dict[str, Any]:
         name = item["name"]
-        pair = " ".join(shlex.quote(wsl_path(path))
-                        for path in (item["target"], item["reference"]))
-        files = pair + " " + shlex.quote(wsl_path(item["miter"]))
-        lint = run_wsl(["verilator", "--lint-only", "-Wno-fatal", "--top-module",
-                        f"{name}_MITER", wsl_path(item["target"]), wsl_path(item["reference"]),
-                        wsl_path(item["miter"])])
-        locked_lint = run_wsl(
-            ["verilator", "--lint-only", "-Wno-fatal", "-DSYNTHESIS", "--top-module", name]
-            + [wsl_path(path) for path in item["locked_sources"]])
+        if item.get("static_blocked"):
+            return {"method": "sequential_equivalence" if item["sequential"] else "sat_miter",
+                    "status": "NOT_RUN", "reason": "static gate failed",
+                    "verilator": item.get("verilator", {"status": "NOT_RUN"}),
+                    "locked_verilator": item.get("locked_verilator", {"status": "NOT_RUN"}),
+                    "sat_miter": {"status": "NOT_RUN"} if not item["sequential"] else None,
+                    "yosys_equiv": {"status": "NOT_RUN"} if item["sequential"] else None}
+        wsl = item.get("wsl", {})
+        target_wsl = str(wsl["target"]) if "target" in wsl else wsl_path(item["target"])
+        reference_wsl = str(wsl["reference"]) if "reference" in wsl else wsl_path(item["reference"])
+        miter_wsl = str(wsl["miter"]) if "miter" in wsl else wsl_path(item["miter"])
+        locked_wsl = [str(value) for value in wsl.get("locked_sources", [])]
+        pair = " ".join(shlex.quote(value) for value in (target_wsl, reference_wsl))
+        files = pair + " " + shlex.quote(miter_wsl)
+        lint = item.get("verilator")
+        locked_lint = item.get("locked_verilator")
+        if not isinstance(lint, dict) or not isinstance(locked_lint, dict):
+            lint, locked_lint = self.lint_gate(item)
+        item["verilator"] = lint
+        item["locked_verilator"] = locked_lint
+        if lint.get("status") != "PASS" or locked_lint.get("status") != "PASS":
+            result = {"method": "sequential_equivalence" if item["sequential"] else "sat_miter",
+                      "verilator": lint, "locked_verilator": locked_lint,
+                      "sat_miter": {"status": "NOT_RUN", "reason": "lint gate failed"}
+                      if not item["sequential"] else None,
+                      "yosys_equiv": {"status": "NOT_RUN", "reason": "lint gate failed"}
+                      if item["sequential"] else None}
+            return result
         if not item["sequential"]:
             script = (f"read_verilog -sv {files}; prep -top {name}_MITER; flatten; opt; "
                       "sat -prove mismatch 0")
             proof = run_wsl(["yosys", "-Q", "-p", script])
-            proof["formal_success_marker"] = proof.get("sat_success_marker") is True
+            proof["formal_success_marker"] = (
+                isinstance(proof.get("returncode"), int)
+                and not isinstance(proof.get("returncode"), bool)
+                and proof.get("returncode") == 0
+                and proof.get("status") == "PASS"
+                and proof.get("sat_success_marker") is True
+            )
             proof["unconstrained"] = proof.get("unconstrained_marker") is True
             counts = proof.get("sat_counts_full")
             if isinstance(counts, list) and len(counts) == 2:
@@ -582,7 +813,14 @@ class FamilyRail:
         proof = run_wsl(["yosys", "-Q", "-p", script])
         markers = proof.get("equiv_success_markers", {})
         proof["markers_present"] = markers
-        proof["formal_success_marker"] = all(markers.values())
+        proof["formal_success_marker"] = (
+            isinstance(proof.get("returncode"), int)
+            and not isinstance(proof.get("returncode"), bool)
+            and proof.get("returncode") == 0
+            and proof.get("status") == "PASS"
+            and isinstance(markers, dict)
+            and all(markers.get(marker) is True for marker in EQUIV_MARKERS)
+        )
         if isinstance(proof.get("equiv_cells_full"), int):
             proof["equiv_cells"] = proof["equiv_cells_full"]
         summary = proof.get("equiv_summary_full")
@@ -590,10 +828,119 @@ class FamilyRail:
             proof["proven_cells"], proof["unproven_cells"] = summary
         if isinstance(proof.get("equiv_failed_full"), int):
             proof["unproven_cells"] = proof["equiv_failed_full"]
-        if proof["returncode"] != 0 or not proof["formal_success_marker"]:
+        if proof.get("returncode") != 0 or not proof["formal_success_marker"]:
             proof["status"] = "FAIL"
         return {"method": "sequential_equivalence", "verilator": lint,
                 "locked_verilator": locked_lint, "yosys_equiv": proof}
+
+    @staticmethod
+    def formal_result_pass(result: dict[str, Any], item: dict[str, Any]) -> bool:
+        """Recheck the full formal success contract before accepting a cache hit."""
+
+        if (item.get("abi_exact") is not True
+                or item.get("deterministic") is not True
+                or item.get("view_trusted") is not True
+                or not tool_versions_complete(item.get("tool_versions", {}))
+                or result.get("verilator", {}).get("status") != "PASS"
+                or result.get("locked_verilator", {}).get("status") != "PASS"):
+            return False
+        proof = result.get("sat_miter") or result.get("yosys_equiv")
+        if not isinstance(proof, dict) or proof.get("status") != "PASS" \
+                or not isinstance(proof.get("returncode"), int) \
+                or isinstance(proof.get("returncode"), bool) \
+                or proof.get("returncode") != 0 or proof.get("timed_out") is True \
+                or proof.get("formal_success_marker") is not True:
+            return False
+        command = proof.get("command", [])
+        command_text = " ".join(str(value) for value in command) \
+            if isinstance(command, list) else str(command)
+        if not item.get("sequential"):
+            return (proof.get("sat_success_marker") is True
+                    and proof.get("unconstrained") is True
+                    and "sat -prove mismatch 0" in command_text)
+        markers = proof.get("markers_present", {})
+        return (
+            isinstance(markers, dict)
+            and all(markers.get(marker) is True for marker in EQUIV_MARKERS)
+            and isinstance(proof.get("equiv_cells"), int)
+            and not isinstance(proof.get("equiv_cells"), bool)
+            and proof.get("equiv_cells", 0) > 0
+            and isinstance(proof.get("proven_cells"), int)
+            and not isinstance(proof.get("proven_cells"), bool)
+            and proof.get("proven_cells") == proof.get("equiv_cells")
+            and isinstance(proof.get("unproven_cells"), int)
+            and not isinstance(proof.get("unproven_cells"), bool)
+            and proof.get("unproven_cells") == 0
+            and "equiv_induct -undef" in command_text
+            and "equiv_status -assert" in command_text
+        )
+
+    def remember_formal(self, cache_key: str, result: dict[str, Any],
+                         proof: dict[str, Any], item: dict[str, Any]) -> None:
+        """Record a completed formal attempt for resumable member execution."""
+
+        if not cache_key:
+            return
+        self.load_cache()
+        reusable = self.formal_result_pass(result, item)
+        self._cache.setdefault("formal", {})[cache_key] = {
+            "reusable": reusable,
+            "result": self.path_value(result),
+        }
+        self.save_cache()
+
+    def cached_formal(self, cache_key: str, item: dict[str, Any]) -> dict[str, Any] | None:
+        """Return the original full-PASS receipt only when its proof still matches."""
+
+        self.load_cache()
+        formal = self._cache.get("formal", {})
+        cached = formal.get(cache_key) if isinstance(formal, dict) else None
+        if not isinstance(cached, dict) or cached.get("reusable") is not True:
+            return None
+        result = self.restore_paths(cached.get("result"))
+        if not isinstance(result, dict) or not self.formal_result_pass(result, item):
+            return None
+        return result
+
+    @staticmethod
+    def aggregate_result_pass(result: dict[str, Any], items: list[dict[str, Any]]) -> bool:
+        """Require a complete aggregate SAT receipt, including output coverage."""
+
+        combinational = sum(not item["sequential"] for item in items)
+        if not combinational:
+            return result.get("status") == "NOT_APPLICABLE" \
+                and result.get("mitered_variants") == 0
+        command = result.get("command", [])
+        command_text = " ".join(str(value) for value in command) \
+            if isinstance(command, list) else str(command)
+        return (result.get("status") == "PASS"
+                and type(result.get("returncode")) is int
+                and result["returncode"] == 0
+                and result.get("timed_out") is not True
+                and result.get("formal_success_marker") is True
+                and result.get("sat_success_marker") is True
+                and result.get("unconstrained") is True
+                and result.get("mitered_variants") == combinational
+                and "sat -prove mismatch 0" in command_text)
+
+    @staticmethod
+    def controls_result_pass(result: dict[str, Any], items: list[dict[str, Any]]) -> bool:
+        """Require applied, decisive mutations on both sides of each used rail."""
+
+        cases = result.get("cases")
+        if result.get("status") != "PASS" or not isinstance(cases, dict):
+            return False
+        kinds = {"sequential" if item["sequential"] else "sat" for item in items}
+        for kind in kinds:
+            for side in ("target", "reference"):
+                case = cases.get(f"{kind}.{side}")
+                if (not isinstance(case, dict) or case.get("status") != "PASS"
+                        or case.get("mutation_applied") is not True
+                        or case.get("explicit_failure_marker") is not True
+                        or case.get("success_marker_still_present") is not False
+                        or type(case.get("returncode")) is not int):
+                    return False
+        return True
 
     def aggregate(self, items: list[dict[str, Any]]) -> dict[str, Any]:
         subset = [item for item in items if not item["sequential"]]
@@ -630,7 +977,13 @@ class FamilyRail:
         script = (f"read_verilog -sv {sources} {shlex.quote(wsl_path(glue))}; "
                   f"prep -top {glue.stem}; flatten; opt; sat -prove mismatch 0")
         proof = run_wsl(["yosys", "-Q", "-p", script])
-        proof["formal_success_marker"] = proof.get("sat_success_marker") is True
+        proof["formal_success_marker"] = (
+            isinstance(proof.get("returncode"), int)
+            and not isinstance(proof.get("returncode"), bool)
+            and proof.get("returncode") == 0
+            and proof.get("status") == "PASS"
+            and proof.get("sat_success_marker") is True
+        )
         proof["unconstrained"] = proof.get("unconstrained_marker") is True
         proof["mitered_variants"] = len(subset)
         counts = proof.get("sat_counts_full")
@@ -728,41 +1081,163 @@ class FamilyRail:
                 "note": "a reference-side mutation that still proves means the reference never "
                         "reaches the comparison"}
 
+    @staticmethod
+    def cheap_static_failures(item: dict[str, Any]) -> list[str]:
+        """Return failures that are known without invoking Verilator/Yosys."""
+
+        name = str(item["name"])
+        failures: list[str] = []
+        if not item.get("abi_exact"):
+            failures.append(f"ABI mismatch: {name}")
+        if not item.get("deterministic"):
+            failures.append(f"non-deterministic export: {name}")
+        if item.get("output_less"):
+            failures.append(f"output-less member, nothing observable to compare: {name}")
+        if not item.get("miter_selfcheck"):
+            failures.append(f"miter drives implicit nets: {name}")
+        if not item.get("view_trusted"):
+            failures.append(f"synthesizable view failed conservation: {name}")
+        return failures
+
+    def lint_gate(self, item: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
+        """Run or restore both Verilator lint gates before any formal command."""
+
+        self.load_cache()
+        cache_key = str(item.get("cache_key", ""))
+        static = self._cache.setdefault("static", {})
+        cached = static.get(cache_key) if isinstance(static, dict) else None
+        if isinstance(cached, dict) and isinstance(cached.get("verilator"), dict):
+            lint = self.restore_paths(cached["verilator"])
+            locked = self.restore_paths(cached.get("locked_verilator", {"status": "NOT_RUN"}))
+            if (tool_versions_complete(validation_tool_versions())
+                    and lint.get("status") == "PASS" and locked.get("status") == "PASS"):
+                item["verilator"], item["locked_verilator"] = lint, locked
+                return lint, locked
+        wsl = item.get("wsl", {})
+        target_wsl = str(wsl["target"]) if "target" in wsl else wsl_path(item["target"])
+        reference_wsl = str(wsl["reference"]) if "reference" in wsl else wsl_path(item["reference"])
+        miter_wsl = str(wsl["miter"]) if "miter" in wsl else wsl_path(item["miter"])
+        locked_wsl = [str(value) for value in wsl.get("locked_sources", [])]
+        lint = run_wsl(["verilator", "--lint-only", "-Wno-fatal", "--top-module",
+                        f"{item['name']}_MITER", target_wsl, reference_wsl, miter_wsl])
+        locked = run_wsl(
+            ["verilator", "--lint-only", "-Wno-fatal", "-DSYNTHESIS", "--top-module",
+             item["name"]] + (locked_wsl or [wsl_path(path) for path in item["locked_sources"]]))
+        item["verilator"], item["locked_verilator"] = lint, locked
+        if cache_key:
+            static[cache_key] = {"verilator": self.path_value(lint),
+                                 "locked_verilator": self.path_value(locked)}
+            self.save_cache()
+        return lint, locked
+
     def run(self) -> dict[str, Any]:
         """Prove every member and persist the evidence."""
 
-        failures: list[str] = []
         module = load_module("rail_" + re.sub(r"\W+", "_", self.build_id), self.build_path)
         members = enumerate_members(module, self.build_path)
         py_compile.compile(str(self.build_path), doraise=True)
         py_compile.compile(str(Path(__file__)), doraise=True)
-        shutil.rmtree(self.work, ignore_errors=True)
         self.work.mkdir(parents=True, exist_ok=True)
+        self.load_cache()
         items = [self.prepare(module, name) for name in members]
-        results = [self.prove(item) for item in items]
-        aggregate = self.aggregate(items)
-        control = self.negative_control(items)
         pyright = {"build": pyright_check(self.build_path), "rail": pyright_check(Path(__file__))}
-        for item, result in zip(items, results):
+        failures: list[str] = []
+        for item in items:
+            item_failures = self.cheap_static_failures(item)
+            if not item_failures and all(check.get("status") == "PASS" for check in pyright.values()):
+                lint, locked_lint = self.lint_gate(item)
+                if lint.get("status") != "PASS":
+                    item_failures.append(f"{item['name']}:verilator")
+                if locked_lint.get("status") != "PASS":
+                    item_failures.append(f"{item['name']}:locked reference verilator")
+            item["static_failures"] = item_failures
+            item["static_blocked"] = bool(item_failures) or any(
+                check.get("status") != "PASS" for check in pyright.values())
+            failures.extend(item_failures)
+        for gate, check in pyright.items():
+            if check["status"] != "PASS":
+                failures.append(f"pyright {gate}")
+
+        # Formal is strictly downstream of the cheap gates.  A failed static
+        # member is emitted as NOT_RUN and does not consume a 900 second gate.
+        results: list[dict[str, Any]] = []
+        for item in items:
+            cache_key = str(item.get("cache_key", ""))
+            cached_formal = None if item.get("static_blocked") else self.cached_formal(cache_key, item)
+            item["formal_cache_hit"] = cached_formal is not None
+            candidate: Any = (cached_formal if cached_formal is not None else
+                              FamilyRail.prove(self, item) if item.get("static_blocked")
+                              else self.prove(item))
+            if not isinstance(candidate, dict):
+                candidate = {
+                    "method": "sequential_equivalence" if item["sequential"] else "sat_miter",
+                    "status": "FAIL", "reason": "validator returned a non-object result",
+                }
+            proof_result: Any = candidate
+            proof = proof_result.get("sat_miter") or proof_result.get("yosys_equiv")
+            if isinstance(proof, dict) and proof.get("status") not in (None, "NOT_RUN"):
+                self.remember_formal(cache_key, proof_result, proof, item)
+            results.append(proof_result)
+        member_formal_pass = all(
+            not item.get("static_blocked")
+            and (proof_result.get("sat_miter") or proof_result.get("yosys_equiv") or {}).get("status") == "PASS"
+            and proof_result.get("verilator", {}).get("status") == "PASS"
+            and proof_result.get("locked_verilator", {}).get("status") == "PASS"
+            and self.formal_result_pass(proof_result, item)
+            for item, proof_result in zip(items, results)
+        )
+        stage_key = hashlib.sha256(json.dumps([
+            item.get("cache_key") for item in items
+        ] + [
+            (result.get("sat_miter") or result.get("yosys_equiv") or {}).get("output_sha256")
+            for result in results
+        ], sort_keys=True).encode()).hexdigest()
+        stages = self._cache.setdefault("stages", {})
+        cached_aggregate = stages.get("aggregate") if isinstance(stages, dict) else None
+        if member_formal_pass and isinstance(cached_aggregate, dict) \
+                and cached_aggregate.get("key") == stage_key \
+                and isinstance(cached_aggregate.get("result"), dict) \
+                and self.aggregate_result_pass(cached_aggregate["result"], items):
+            aggregate = self.restore_paths(cached_aggregate["result"])
+        elif member_formal_pass:
+            aggregate = self.aggregate(items)
+            if not self.aggregate_result_pass(aggregate, items):
+                aggregate["status"] = "FAIL"
+            if isinstance(stages, dict):
+                stages["aggregate"] = {"key": stage_key, "result": self.path_value(aggregate)}
+                self.save_cache()
+        else:
+            aggregate = {"status": "NOT_RUN", "mitered_variants": 0,
+                         "reason": "member static/formal gate failed"}
+        cached_control = stages.get("negative_control") if isinstance(stages, dict) else None
+        if self.aggregate_result_pass(aggregate, items) and isinstance(cached_control, dict) \
+                and cached_control.get("key") == stage_key \
+                and isinstance(cached_control.get("result"), dict) \
+                and self.controls_result_pass(cached_control["result"], items):
+            control = self.restore_paths(cached_control["result"])
+        elif self.aggregate_result_pass(aggregate, items):
+            control = self.negative_control(items)
+            if not self.controls_result_pass(control, items):
+                control["status"] = "FAIL"
+            if isinstance(stages, dict):
+                stages["negative_control"] = {"key": stage_key, "result": self.path_value(control)}
+                self.save_cache()
+        else:
+            control = {"status": "NOT_RUN", "cases": {},
+                       "reason": "aggregate gate failed"}
+        for item, proof_result in zip(items, results):
             name = item["name"]
-            if not item["abi_exact"]:
-                failures.append(f"ABI mismatch: {name}")
-            if not item["deterministic"]:
-                failures.append(f"non-deterministic export: {name}")
-            if item["output_less"]:
-                failures.append(f"output-less member, nothing observable to compare: {name}")
+            proof = proof_result.get("sat_miter") or proof_result.get("yosys_equiv") or {}
+            if item.get("static_blocked"):
                 continue
-            if not item["miter_selfcheck"]:
-                failures.append(f"miter drives implicit nets: {name}")
-            if not item["view_trusted"]:
-                failures.append(f"synthesizable view failed conservation: {name}")
-            proof = result.get("sat_miter") or result.get("yosys_equiv") or {}
-            if result.get("verilator", {}).get("status") != "PASS":
+            if proof_result.get("verilator", {}).get("status") != "PASS":
                 failures.append(f"{name}:verilator")
-            if result.get("locked_verilator", {}).get("status") != "PASS":
+            if proof_result.get("locked_verilator", {}).get("status") != "PASS":
                 failures.append(f"{name}:locked reference verilator")
             if proof.get("status") != "PASS":
-                failures.append(f"{name}:{'sat_miter' if 'sat_miter' in result and result['method'] == 'sat_miter' else 'yosys_equiv'}")
+                failures.append(f"{name}:{'sat_miter' if 'sat_miter' in proof_result and proof_result['method'] == 'sat_miter' else 'yosys_equiv'}")
+            elif not self.formal_result_pass(proof_result, item):
+                failures.append(f"{name}:strict formal contract")
             if "unproven_cells" in proof and proof.get("unproven_cells"):
                 failures.append(f"{name}: {proof['unproven_cells']} $equiv cells unproven")
             if item["sequential"] and (
@@ -775,9 +1250,6 @@ class FamilyRail:
             failures.append("aggregate SAT miter")
         if control["status"] != "PASS":
             failures.append("negative control did not detect a mutated design")
-        for gate, result in pyright.items():
-            if result["status"] != "PASS":
-                failures.append(f"pyright {gate}")
         status = "COMPLETE_EQUIVALENCE" if not failures else "STRICT_PENDING"
         variants: dict[str, Any] = {}
         for index, item in enumerate(items):
@@ -834,6 +1306,7 @@ class FamilyRail:
         payload: dict[str, Any] = {
             "schema_version": 1,
             "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_COMPLETE_EQUIVALENCE",
+            "proof_execution_profile": "RECOVERABLE_STRICT_FAMILY_V2",
             "build_id": self.build_id,
             "validator": Path(__file__).relative_to(ROOT).as_posix(),
             "status": status,
@@ -875,6 +1348,19 @@ class FamilyRail:
             "checks": {
                 "py_compile": {"status": "PASS"},
                 "pyright": pyright,
+                "stages": {
+                    "static_preflight": "PASS" if not any(item.get("static_blocked") for item in items) else "FAIL",
+                    "formal_members": "PASS" if member_formal_pass else "NOT_RUN_OR_FAIL",
+                    "aggregate": aggregate.get("status"),
+                    "negative_control": control.get("status"),
+                    "resume": {
+                        "checkpoint": str(self.cache_path),
+                        "prepared_cache_hits": sum(bool(item.get("cache_hit")) for item in items),
+                        "formal_cache_hits": sum(bool(item.get("formal_cache_hit")) for item in items),
+                        "member_count": len(items),
+                    },
+                    "tool_versions": validation_tool_versions(),
+                },
                 "catalog_coverage": {"entries": len(members),
                                      "proven": sum(1 for v in variants.values() if v["verdict"] == "PASS")},
                 "formal": {"yosys_formal_miter": aggregate},

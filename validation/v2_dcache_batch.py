@@ -26,8 +26,8 @@ REFERENCE_SHA256 = "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4
 REFERENCE_BYTES = 228590583
 SOURCE_COMMIT = "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af"
 TARGETS = {
-    "AMOALU": BUILD_MEMORY / "Build-Cpu.Cache.Dcache.Mainpipe.AMOALU-Hardware.py",
-    "TagArray": BUILD_MEMORY / "Build-Cpu.Cache.Dcache.Meta.TagArray-Hardware.py",
+    "AMOALU": BUILD_MEMORY / "Cpu-Memory-Cache.Dcache.Mainpipe.AMOALU-Hardware.py",
+    "TagArray": BUILD_MEMORY / "Cpu-Memory-Cache.Dcache.Meta.TagArray-Hardware.py",
 }
 SOURCE_PATHS = {
     "AMOALU": ["upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/AMOALU.scala"],

@@ -21,7 +21,7 @@ from typing import Any
 from v2_build_provenance import source_paths_for_build
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Rob.Rename.Trace-Family-Hardware.py"
+TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Rob.Rename.Trace-Family-Hardware.py"
 HIERARCHY = ROOT / "validation/v2-locked-hierarchy.json"
 EVIDENCE = ROOT / "validation/v2-backend-rob-rename-trace-family-results.json"
 LOCKED_SHA256 = "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d"

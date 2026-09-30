@@ -17,8 +17,8 @@ from amaranth.sim import Simulator
 # Module Contract
 # =============================================================================
 ROOT = Path(__file__).resolve().parents[1]
-ARITH = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Fudian.Arithmetic-Hardware.py"
-FPU = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Fudian.Fpu-Hardware.py"
+ARITH = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Fudian.Arithmetic-Hardware.py"
+FPU = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Fudian.Fpu-Hardware.py"
 SOURCE_COMMIT = "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af"
 
 

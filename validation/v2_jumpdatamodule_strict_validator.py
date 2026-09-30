@@ -25,7 +25,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = ROOT / (
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/"
-    "Build-Cpu.Backend.Fu.JumpDataModule-Hardware.py"
+    "Cpu-Core-Backend.Fu.JumpDataModule-Hardware.py"
 )
 SCALA = ROOT / "upstream/src/main/scala/xiangshan/backend/fu/Jump.scala"
 REFERENCE = ROOT / "validation/reference-closures/JumpDataModule-v2.sv"

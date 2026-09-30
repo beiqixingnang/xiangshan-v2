@@ -48,7 +48,7 @@ __all__ = [
 # Configuration
 # =============================================================================
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Core" / "Build-Cpu.Frontend.Top-Hardware.py"
+TARGET = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Core" / "Cpu-Core-Frontend.Top-Hardware.py"
 REFERENCE = Path(r"\\wsl$\Debian\home\lishuo\xs-v2-local\build\rtl\XSTop.sv")
 REFERENCE_CANONICAL = "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv"
 SOURCE = ROOT / "upstream" / "src" / "main" / "scala" / "xiangshan" / "frontend" / "Frontend.scala"
@@ -670,10 +670,10 @@ def injected_child_probe(target_module: Any) -> dict[str, Any]:
 
     build_root = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Core"
     child_specs = {
-        "rvc": (build_root / "Build-Cpu.Frontend.Ifu.RvcExpander-Hardware.py", "RvcExpander"),
-        "bpu": (build_root / "Build-Cpu.Frontend.Bpu.FallThroughPredictor-Hardware.py", "FallThroughPredictor"),
-        "icache_mshr": (build_root / "Build-Cpu.Frontend.Icache.ICacheMshr-Hardware.py", "ICacheMSHR"),
-        "icache_replacer": (build_root / "Build-Cpu.Frontend.Icache.ICacheReplacer-Hardware.py", "ICacheReplacer"),
+        "rvc": (build_root / "Cpu-Core-Frontend.Ifu.RvcExpander-Hardware.py", "RvcExpander"),
+        "bpu": (build_root / "Cpu-Core-Frontend.Bpu.FallThroughPredictor-Hardware.py", "FallThroughPredictor"),
+        "icache_mshr": (build_root / "Cpu-Core-Frontend.Icache.ICacheMshr-Hardware.py", "ICacheMSHR"),
+        "icache_replacer": (build_root / "Cpu-Core-Frontend.Icache.ICacheReplacer-Hardware.py", "ICacheReplacer"),
     }
     dependencies: dict[str, Any] = {}
     loaded: list[str] = []

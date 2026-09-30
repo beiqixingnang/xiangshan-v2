@@ -16,7 +16,7 @@ from amaranth.sim import Simulator
 
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.WrBypass-Hardware.py"
+TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Frontend.Bpu.WrBypass-Hardware.py"
 WORK = ROOT / "validation/.work/v2-wrbypass"
 EVIDENCE = ROOT / "validation/v2-wrbypass-family-results.json"
 

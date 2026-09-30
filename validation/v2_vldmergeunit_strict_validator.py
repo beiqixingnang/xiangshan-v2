@@ -22,11 +22,11 @@ import v2_strict_family_rail as rail  # noqa: E402
 ROOT = Path(__file__).resolve().parents[1]
 BUILD = ROOT / (
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/"
-    "Build-Cpu.Backend.Datapath.VldMergeUnit-Hardware.py"
+    "Cpu-Core-Backend.Datapath.VldMergeUnit-Hardware.py"
 )
 NEW_MGU = ROOT / (
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/"
-    "Build-Cpu.Backend.Fu.Vector.NewMgu-Hardware.py"
+    "Cpu-Core-Backend.Fu.Vector.NewMgu-Hardware.py"
 )
 BUILD_ID = "Build-Cpu.Backend.Datapath.VldMergeUnit"
 EVIDENCE = ROOT / "validation/v2-build-cpu-backend-datapath-vldmergeunit-strict-evidence.json"

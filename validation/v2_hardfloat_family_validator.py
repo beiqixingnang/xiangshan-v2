@@ -13,7 +13,7 @@ from pathlib import Path
 from amaranth.sim import Simulator
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Rocket.Hardfloat-Hardware.py"
+TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Rocket.Hardfloat-Hardware.py"
 OUT = ROOT / "validation/v2-hardfloat-family-results.json"
 
 

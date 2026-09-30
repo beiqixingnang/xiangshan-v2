@@ -31,7 +31,7 @@ NAME = "SRT16DividerDataModule"
 BUILD_ID = "Build-Cpu.Backend.Fu.SRT16Divider"
 BUILD = ROOT / (
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/"
-    "Build-Cpu.Backend.Fu.SRT16Divider-Hardware.py"
+    "Cpu-Core-Backend.Fu.SRT16Divider-Hardware.py"
 )
 REFERENCE = ROOT / f"validation/reference-sv/{NAME}.sv"
 EXPECTED_BUILD_SHA256 = "b7a5676f207c895ae4d7c152d04b87e24368560469e5717269f2fe0fb77d2900"

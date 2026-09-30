@@ -27,7 +27,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = ROOT / (
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/"
-    "Build-Cpu.Frontend.Bpu.FauFTBWay-Hardware.py"
+    "Cpu-Core-Frontend.Bpu.FauFTBWay-Hardware.py"
 )
 SCALA = ROOT / "upstream/src/main/scala/xiangshan/frontend/FauFTB.scala"
 REFERENCE = ROOT / "validation/reference-closures/FauFTBWay.sv"
@@ -313,7 +313,7 @@ def identity_audit() -> dict[str, Any]:
         "validator_path_exact": VALIDATOR_RELATIVE == "validation/v2_fauftbway_strict_validator.py",
         "target_path_exact": TARGET_RELATIVE == (
             "python/Program-System/System-Build/Build-Cpu/Cpu-Core/"
-            "Build-Cpu.Frontend.Bpu.FauFTBWay-Hardware.py"),
+            "Cpu-Core-Frontend.Bpu.FauFTBWay-Hardware.py"),
         "reference_path_exact": REFERENCE_RELATIVE == "validation/reference-closures/FauFTBWay.sv",
         "scala_path_exact": SCALA_RELATIVE == "upstream/src/main/scala/xiangshan/frontend/FauFTB.scala",
         "target_hash_recorded": sha256_file(TARGET) == TARGET_SHA256,

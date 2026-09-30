@@ -23,7 +23,7 @@ CORE_ADDITIONS = [
     {
         "id": "CSRModule",
         "source_scala": "scala/src/main/scala/xiangshan/backend/fu/NewCSR/CSRModule.scala",
-        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.NewCSR.CSRModule-Hardware.py",
+        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Fu.NewCSR.CSRModule-Hardware.py",
         "family_id": "core.backend.newcsr",
         "closure_root": "core.backend.newcsr",
         "classification": "REWRITTEN",
@@ -39,7 +39,7 @@ CORE_ADDITIONS = [
     {
         "id": "CSRLite",
         "source_scala": "scala/src/main/scala/xiangshan/backend/fu/NewCSR/CSRPMP.scala",
-        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.NewCSR.CSRLite-Hardware.py",
+        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Fu.NewCSR.CSRLite-Hardware.py",
         "family_id": "core.backend.newcsr",
         "closure_root": "core.backend.newcsr",
         "classification": "REWRITTEN",
@@ -56,7 +56,7 @@ FAMILY_ADDITIONS = [
     {
         "family_id": "dependency.chisel.decoupled",
         "kind": "dependency",
-        "plan_build_file": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Chisel.Decoupled-Hardware.py",
+        "plan_build_file": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Chisel.Decoupled-Hardware.py",
         "source_roots": ["chisel3"],
         "scala_source_count": 2,
         "source_paths": [
@@ -71,7 +71,7 @@ FAMILY_ADDITIONS = [
     {
         "family_id": "dependency.chisel.arbiter",
         "kind": "dependency",
-        "plan_build_file": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Chisel.Arbiter-Hardware.py",
+        "plan_build_file": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Chisel.Arbiter-Hardware.py",
         "source_roots": ["chisel3", "rocket-chip"],
         "scala_source_count": 3,
         "source_paths": [

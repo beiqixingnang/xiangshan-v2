@@ -12,7 +12,7 @@ NEW = [
     {
         "id": "DebugTriggerFamily",
         "source_scala": ["scala/src/main/scala/xiangshan/backend/fu/NewCSR/Debug.scala"],
-        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.NewCSR.DebugFamily-Hardware.py",
+        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Fu.NewCSR.DebugFamily-Hardware.py",
         "family_id": "core.backend.newcsr.debug",
         "closure_root": "core.backend.newcsr",
         "classification": "REWRITTEN",
@@ -23,7 +23,7 @@ NEW = [
     {
         "id": "PrefetchFamily",
         "source_scala": ["scala/src/main/scala/xiangshan/mem/prefetch/SMSPrefetcher.scala", "scala/src/main/scala/xiangshan/mem/prefetch/L1PrefetchComponent.scala", "scala/src/main/scala/xiangshan/mem/prefetch/FDP.scala"],
-        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Prefetch.Family-Hardware.py",
+        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Memory.Prefetch.Family-Hardware.py",
         "family_id": "core.memory.prefetch",
         "closure_root": "core.memory.prefetch",
         "classification": "REWRITTEN",
@@ -34,7 +34,7 @@ NEW = [
     {
         "id": "PMPFamily",
         "source_scala": ["scala/src/main/scala/xiangshan/backend/fu/PMP.scala", "scala/src/main/scala/xiangshan/backend/fu/NewCSR/PMPEntryModule.scala"],
-        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.PMP.Family-Hardware.py",
+        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Fu.PMP.Family-Hardware.py",
         "family_id": "core.backend.newcsr.pmp",
         "closure_root": "core.backend.newcsr",
         "classification": "REWRITTEN",
@@ -45,7 +45,7 @@ NEW = [
     {
         "id": "StoreFamily",
         "source_scala": ["scala/src/main/scala/xiangshan/mem/sbuffer/Sbuffer.scala", "scala/src/main/scala/xiangshan/mem/lsqueue/StoreQueue.scala", "scala/src/main/scala/xiangshan/mem/lsqueue/StoreMisalignBuffer.scala", "scala/src/main/scala/xiangshan/mem/pipeline/StoreUnit.scala"],
-        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Store.Family-Hardware.py",
+        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Memory.Store.Family-Hardware.py",
         "family_id": "core.memory.store",
         "closure_root": "core.memory",
         "classification": "REWRITTEN",
@@ -56,7 +56,7 @@ NEW = [
     {
         "id": "DecodeControlFamily",
         "source_scala": ["scala/src/main/scala/xiangshan/backend/Backend.scala", "scala/src/main/scala/xiangshan/backend/decode/DecodeUnit.scala", "scala/src/main/scala/xiangshan/backend/decode/FusionDecoder.scala", "scala/src/main/scala/xiangshan/backend/decode/UopInfoGen.scala", "scala/src/main/scala/xiangshan/backend/decode/FPDecoder.scala", "scala/src/main/scala/xiangshan/backend/decode/VTypeGen.scala", "scala/src/main/scala/xiangshan/backend/decode/VecExceptionGen.scala", "scala/src/main/scala/xiangshan/backend/fu/wrapper/VIPU.scala"],
-        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Decode.ControlFamily-Hardware.py",
+        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Decode.ControlFamily-Hardware.py",
         "family_id": "core.backend.decode.control",
         "closure_root": "core.backend",
         "classification": "REWRITTEN",
@@ -67,7 +67,7 @@ NEW = [
     {
         "id": "BypassPipeFamily",
         "source_scala": ["scala/src/main/scala/xiangshan/backend/datapath/BypassNetwork.scala", "scala/src/main/scala/xiangshan/backend/PipeGroupConnect.scala"],
-        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Datapath.BypassPipeFamily-Hardware.py",
+        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Datapath.BypassPipeFamily-Hardware.py",
         "family_id": "core.backend.datapath.bypass_pipe",
         "closure_root": "core.backend.datapath",
         "classification": "REWRITTEN",
@@ -78,7 +78,7 @@ NEW = [
     {
         "id": "DcacheMissQueueFamily",
         "source_scala": ["scala/src/main/scala/xiangshan/cache/dcache/mainpipe/MissQueue.scala", "scala/src/main/scala/xiangshan/cache/dcache/DCacheWrapper.scala", "scala/src/main/scala/xiangshan/cache/dcache/mainpipe/Probe.scala", "scala/src/main/scala/xiangshan/cache/dcache/mainpipe/WritebackQueue.scala"],
-        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Dcache.MissQueue.Family-Hardware.py",
+        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Memory.Dcache.MissQueue.Family-Hardware.py",
         "family_id": "core.memory.dcache.miss_queue",
         "closure_root": "core.memory.dcache",
         "classification": "REWRITTEN",
@@ -89,7 +89,7 @@ NEW = [
     {
         "id": "CSRControlFamily",
         "source_scala": ["scala/src/main/scala/xiangshan/backend/fu/NewCSR/PMAEntryModule.scala", "scala/src/main/scala/xiangshan/backend/fu/NewCSR/InterruptFilter.scala", "scala/src/main/scala/xiangshan/backend/fu/NewCSR/CommitIDModule.scala", "scala/src/main/scala/xiangshan/backend/fu/NewCSR/SatpFlushMod.scala", "scala/src/main/scala/xiangshan/backend/fu/NewCSR/TrapHandleModule.scala", "scala/src/main/scala/xiangshan/backend/fu/NewCSR/TrapInstMod.scala", "scala/src/main/scala/xiangshan/backend/fu/NewCSR/TrapTvalMod.scala", "scala/src/main/scala/xiangshan/backend/fu/NewCSR/PFEvent.scala"],
-        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.NewCSR.ControlFamily-Hardware.py",
+        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Fu.NewCSR.ControlFamily-Hardware.py",
         "family_id": "core.backend.newcsr.control",
         "closure_root": "core.backend.newcsr",
         "classification": "REWRITTEN",
@@ -100,7 +100,7 @@ NEW = [
     {
         "id": "VectorMemoryFamily",
         "source_scala": ["scala/src/main/scala/xiangshan/mem/vector/VMergeBuffer.scala", "scala/src/main/scala/xiangshan/mem/vector/VSegmentUnit.scala", "scala/src/main/scala/xiangshan/mem/vector/VfofBuffer.scala", "scala/src/main/scala/xiangshan/mem/lsqueue/VirtualLoadQueue.scala", "scala/src/main/scala/xiangshan/backend/datapath/VldMergeUnit.scala", "scala/src/main/scala/xiangshan/backend/fu/Vsetu.scala"],
-        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Vector.Family-Hardware.py",
+        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Memory.Vector.Family-Hardware.py",
         "family_id": "core.memory.vector",
         "closure_root": "core.memory.vector",
         "classification": "REWRITTEN",
@@ -111,7 +111,7 @@ NEW = [
     {
         "id": "FloatingPointFamily",
         "source_scala": ["scala/src/main/scala/yunsuan/fpu/FloatAdder.scala", "scala/src/main/scala/yunsuan/fpu/FloatDivider.scala", "scala/src/main/scala/yunsuan/fpu/FloatFMA.scala", "scala/src/main/scala/yunsuan/fpu/fqrt/fpsqrt_r16.scala", "scala/src/main/scala/xiangshan/backend/fu/Multiplier.scala", "scala/src/main/scala/xiangshan/backend/fu/fpu/IntToFP.scala"],
-        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.FloatingPoint.Family-Hardware.py",
+        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Fu.FloatingPoint.Family-Hardware.py",
         "family_id": "core.backend.fu.floating_point",
         "closure_root": "core.backend.fu",
         "classification": "REWRITTEN",
@@ -122,7 +122,7 @@ NEW = [
     {
         "id": "VectorDatapathFamily",
         "source_scala": ["scala/src/main/scala/xiangshan/backend/datapath/Og2ForVector.scala", "scala/src/main/scala/xiangshan/backend/rob/VTypeBuffer.scala", "scala/src/main/scala/xiangshan/backend/VecExcpDataMergeModule.scala"],
-        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Datapath.VectorFamily-Hardware.py",
+        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Datapath.VectorFamily-Hardware.py",
         "family_id": "core.backend.datapath.vector",
         "closure_root": "core.backend.datapath",
         "classification": "REWRITTEN",
@@ -133,7 +133,7 @@ NEW = [
     {
         "id": "IcachePrefetchFamily",
         "source_scala": ["scala/src/main/scala/xiangshan/frontend/icache/ICacheMainPipe.scala", "scala/src/main/scala/xiangshan/frontend/icache/IPrefetch.scala", "scala/src/main/scala/xiangshan/frontend/icache/WayLookup.scala", "scala/src/main/scala/xiangshan/frontend/icache/InstrUncache.scala", "scala/src/main/scala/xiangshan/cache/mmu/L2TlbPrefetch.scala", "scala/src/main/scala/xiangshan/cache/mmu/L2TLBMissQueue.scala", "scala/src/main/scala/xiangshan/mem/prefetch/PrefetcherMonitor.scala"],
-        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.Prefetch.Family-Hardware.py",
+        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Frontend.Icache.Prefetch.Family-Hardware.py",
         "family_id": "core.frontend.icache.prefetch",
         "closure_root": "core.frontend.icache",
         "classification": "REWRITTEN",
@@ -144,7 +144,7 @@ NEW = [
     {
         "id": "DifftestStateFamily",
         "source_scala": ["scala/src/main/scala/difftest/ArchEvent.scala", "scala/src/main/scala/difftest/CSRState.scala", "scala/src/main/scala/difftest/InstrCommit.scala", "scala/src/main/scala/difftest/TrapEvent.scala"],
-        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Difftest.StateFamily-Hardware.py",
+        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Difftest.StateFamily-Hardware.py",
         "family_id": "dependency.difftest.state",
         "closure_root": "dependency.difftest",
         "classification": "REWRITTEN",
@@ -156,7 +156,7 @@ NEW = [
     {
         "id": "ResidualLeafFamily",
         "source_scala": ["validation/v2-locked-hierarchy.json"],
-        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Residual.LeafFamily-Hardware.py",
+        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Residual.LeafFamily-Hardware.py",
         "family_id": "residual.locked.leaves",
         "closure_root": "residual.locked.leaves",
         "classification": "REWRITTEN_STRUCTURAL_ONLY",
@@ -167,7 +167,7 @@ NEW = [
     {
         "id": "UtilityResidualFamily",
         "source_scala": ["upstream/rocket-chip/src/main/scala/util", "upstream/rocket-chip/src/main/scala/jtag", "upstream/src/main/scala/utils", "upstream/yunsuan/src/main/scala"],
-        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Utility.ResidualFamily-Hardware.py",
+        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.ResidualFamily-Hardware.py",
         "family_id": "dependency.utility.residual",
         "closure_root": "dependency.utility",
         "classification": "REWRITTEN_STRUCTURAL_BOUNDED",
@@ -178,7 +178,7 @@ NEW = [
     {
         "id": "FinalTwoFamily",
         "source_scala": ["scala/src/main/scala/xiangshan/mem/sbuffer/DatamoduleResultBuffer.scala", "scala/src/main/scala/xiangshan/frontend/ITTAGE.scala"],
-        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.FinalTwo.Family-Hardware.py",
+        "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.FinalTwo.Family-Hardware.py",
         "family_id": "core.backend.final_two",
         "closure_root": "core.backend",
         "classification": "REWRITTEN",

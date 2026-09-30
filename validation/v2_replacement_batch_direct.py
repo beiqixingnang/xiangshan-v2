@@ -34,9 +34,9 @@ DEPENDENCY_COMMITS = {
 }
 
 TARGET_PATHS = {
-    "LruStateGen": BUILD_CORE / "Build-Cpu.Frontend.Bpu.Replacer.LruStateGen-Hardware.py",
-    "PlruStateGen": BUILD_CORE / "Build-Cpu.Frontend.Bpu.Replacer.PlruStateGen-Hardware.py",
-    "ReplacerState": BUILD_CORE / "Build-Cpu.Frontend.Bpu.Replacer.ReplacerState-Hardware.py",
+    "LruStateGen": BUILD_CORE / "Cpu-Core-Frontend.Bpu.Replacer.LruStateGen-Hardware.py",
+    "PlruStateGen": BUILD_CORE / "Cpu-Core-Frontend.Bpu.Replacer.PlruStateGen-Hardware.py",
+    "ReplacerState": BUILD_CORE / "Cpu-Core-Frontend.Bpu.Replacer.ReplacerState-Hardware.py",
 }
 
 

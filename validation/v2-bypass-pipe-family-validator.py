@@ -15,7 +15,7 @@ from typing import Any
 from v2_build_provenance import source_paths_for_build
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Datapath.BypassPipeFamily-Hardware.py"
+TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Datapath.BypassPipeFamily-Hardware.py"
 HIER = ROOT / "validation/v2-locked-hierarchy.json"
 WORK = ROOT / "validation/.work/v2-bypass-pipe-family"
 EVIDENCE = ROOT / "validation/v2-bypass-pipe-family-results.json"

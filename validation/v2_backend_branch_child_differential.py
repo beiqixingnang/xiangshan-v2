@@ -14,7 +14,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.BranchModule-Hardware.py"
+TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Fu.BranchModule-Hardware.py"
 LOCKED = Path(r"\\wsl$\Debian\home\lishuo\xs-v2-local\build\rtl\XSTop.sv")
 WORK = ROOT / "validation/.work/v2-backend-branch-child"
 EVIDENCE = ROOT / "validation/v2-backend-branch-child-differential-results.json"

@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-BUILD = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Rob.Rename.Trace-Family-Hardware.py"
+BUILD = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Rob.Rename.Trace-Family-Hardware.py"
 MANIFEST = ROOT / "validation/v2-backend-rob-rename-trace-family-manifest.json"
 EVIDENCE = ROOT / "validation/v2-backend-rob-rename-trace-family-results.json"
 

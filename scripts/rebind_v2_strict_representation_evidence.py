@@ -19,7 +19,7 @@ VALIDATION = ROOT / "validation"
 MIGRATION_EVIDENCE = VALIDATION / "v2-strict-representation-migration-evidence.json"
 NEW_MGU = ROOT / (
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/"
-    "Build-Cpu.Backend.Fu.Vector.NewMgu-Hardware.py"
+    "Cpu-Core-Backend.Fu.Vector.NewMgu-Hardware.py"
 )
 
 

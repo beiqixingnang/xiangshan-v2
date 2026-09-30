@@ -162,7 +162,7 @@ def source_evidence() -> dict[str, Any]:
 # Run reference extraction and persist machine-readable evidence. / 运行参考提取并持久化机器证据。
 def main() -> int:
     module = load_target("v2_frontend_reference_rvc",
-                         BUILD_CORE / "Build-Cpu.Frontend.Ifu.RvcExpander-Hardware.py")
+                         BUILD_CORE / "Cpu-Core-Frontend.Ifu.RvcExpander-Hardware.py")
     temp = Path(tempfile.mkdtemp(prefix="v2_frontend_ref_"))
     try:
         rvc_result = compare_rvc(module, temp / "rvc")

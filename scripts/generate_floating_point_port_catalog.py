@@ -7,7 +7,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.FloatingPoint.Family-Hardware.py"
+TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Fu.FloatingPoint.Family-Hardware.py"
 MEMBERS = ("FloatAdder", "FloatAdderF32F16MixedPipeline", "FloatAdderF64Pipeline", "FloatDivider", "FloatDividerR64", "FloatFMA", "fpdiv_r64_block", "fpsqrt_r16", "BoothEncoderF64F32F16", "ArrayMulDataModule", "IntToFPDataModule")
 
 

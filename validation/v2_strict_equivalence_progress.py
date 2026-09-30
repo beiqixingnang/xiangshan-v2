@@ -9,6 +9,7 @@ import hashlib
 import importlib.util
 import json
 import re
+import subprocess
 import sys
 from pathlib import Path
 from typing import Any
@@ -18,6 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 BUILD_ROOT = ROOT / "python/Program-System/System-Build/Build-Cpu"
 PLAN = ROOT / "V2-Rewrite-Batch-Plan.json"
 OUTPUT = ROOT / "validation/v2-strict-equivalence-progress.json"
+RELOCATION_BASELINE = "8ddf8d6609e653e313d6d8924f16335a973bc80a"
 EXPECTED_KIND = "XIANGSHAN_KUNMINGHU_V2_STRICT_COMPLETE_EQUIVALENCE"
 NON_COUNTING_STATUSES = ("STRICT_PENDING", "COMPLETE_EQUIVALENCE_VARIANT_ONLY")
 LOCKED_REFERENCE_NAMES = {path.stem for path in (ROOT / "validation/reference-sv").glob("*.sv")}
@@ -29,7 +31,7 @@ EQUIV_SUCCESS_MARKERS = (
 STOREQUEUE_BUILD_ID = "Build-Cpu.Memory.Lsqueue.StoreQueueData"
 STOREQUEUE_BUILD_PATH = (
     "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/"
-    "Build-Cpu.Memory.Lsqueue.StoreQueueData-Hardware.py"
+    "Cpu-Memory-Memory.Lsqueue.StoreQueueData-Hardware.py"
 )
 STOREQUEUE_VALIDATOR_PATH = "validation/v2_storequeue_strict_validator.py"
 STOREQUEUE_COMPOSITION_VALIDATOR_PATH = "validation/v2_storequeue_composition_validator.py"
@@ -565,7 +567,157 @@ def verify_storequeue_composition(
     return not failures
 
 
-def verify_source(record: Any, label: str, failures: list[str]) -> dict[str, Any]:
+def current_flow_receipt(payload: dict[str, Any]) -> bool:
+    """Recognize a new flow execution by its current producer and direct gates."""
+
+    if payload.get("proof_execution_profile") != "RECOVERABLE_STRICT_FAMILY_V2":
+        return False
+    checks = payload.get("checks", {})
+    stages = checks.get("stages") if isinstance(checks, dict) else None
+    if not isinstance(stages, dict) or not isinstance(stages.get("tool_versions"), dict):
+        return False
+    direct = checks.get("direct_test", {})
+    if (not isinstance(direct, dict) or direct.get("status") != "PASS"
+            or type(direct.get("returncode")) is not int or direct["returncode"] != 0):
+        return False
+    sources = payload.get("sources", {})
+    if not isinstance(sources, dict):
+        return False
+    dependencies = sources.get("validator_dependencies", {})
+    if not isinstance(dependencies, dict):
+        return False
+    records = [sources.get("python_build"), sources.get("validator"),
+               dependencies.get("strict_family_rail"), dependencies.get("direct_test")]
+    for record in records:
+        if not isinstance(record, dict) or record.get("producer_snapshot") is not None:
+            return False
+        path = (ROOT / str(record.get("path", ""))).resolve()
+        try:
+            path.relative_to(ROOT.resolve())
+        except ValueError:
+            return False
+        if not path.is_file() or sha256(path) != record.get("sha256"):
+            return False
+    return True
+
+
+def verify_proof_origin(payload: dict[str, Any], evidence_path: Path,
+                        failures: list[str]) -> bool:
+    """Check a relocation against its exact Git receipt, preserving proof data."""
+
+    origin = payload.get("proof_origin")
+    if origin is None:
+        naming = json.loads((ROOT / "UHSC-Naming-Manifest.json").read_text(encoding="utf-8"))
+        historical_paths = {item["new_path"] for item in
+                            naming["path_rename_transaction"]["evidence_rebindings"]}
+        if (evidence_path.relative_to(ROOT).as_posix() in historical_paths
+                and not current_flow_receipt(payload)):
+            failures.append("historical receipt is missing its pinned proof origin")
+        return False
+    if not isinstance(origin, dict):
+        failures.append("invalid proof origin")
+        return False
+    revision = str(origin.get("revision", ""))
+    original_path = str(origin.get("path", ""))
+    if re.fullmatch(r"[0-9a-f]{40}", revision) is None \
+            or not original_path.startswith("validation/") \
+            or ".." in Path(original_path).parts:
+        failures.append("unsafe proof origin")
+        return False
+    try:
+        naming = json.loads((ROOT / "UHSC-Naming-Manifest.json").read_text(encoding="utf-8"))
+        transaction = naming["path_rename_transaction"]
+        mapping = {item["old_path"]: item["new_path"] for item in transaction["renames"]}
+        if revision != RELOCATION_BASELINE or transaction.get("baseline_revision") != revision:
+            raise ValueError("proof origin differs from the relocation baseline")
+        result = subprocess.run(["git", "show", f"{revision}:{original_path}"],
+                                cwd=ROOT, capture_output=True, check=True)
+        raw = result.stdout
+        if hashlib.sha256(raw).hexdigest() != origin.get("sha256"):
+            raise ValueError("original proof receipt digest")
+        if evidence_path.relative_to(ROOT).as_posix() != mapping.get(original_path, original_path):
+            raise ValueError("original proof receipt path")
+        expected = json.loads(raw)
+        relocation_records = [item for item in transaction["evidence_rebindings"]
+                              if item["old_path"] == original_path]
+        if (len(relocation_records) != 1
+                or relocation_records[0].get("origin_sha256") != origin.get("sha256")
+                or relocation_records[0].get("status") != expected.get("status")
+                or relocation_records[0].get("new_path") != evidence_path.relative_to(ROOT).as_posix()):
+            raise ValueError("proof origin differs from its relocation receipt")
+        expected["proof_origin"] = origin
+        expected["validator"] = mapping.get(expected["validator"], expected["validator"])
+        sources = expected.get("sources", {})
+        records = [(name, record) for name, record in sources.items()
+                   if name in {"python_build", "validator", "scala", "reference_sv"}
+                   and isinstance(record, dict)]
+        dependencies = sources.get("validator_dependencies", {})
+        if isinstance(dependencies, dict):
+            records.extend(("validator_dependency." + name, record)
+                           for name, record in dependencies.items() if isinstance(record, dict))
+        for label, record in records:
+            old_path = str(record.get("path", ""))
+            record["path"] = mapping.get(old_path, old_path)
+            actual = (payload.get("sources", {}).get(label)
+                      if not label.startswith("validator_dependency.") else
+                      payload.get("sources", {}).get("validator_dependencies", {}).get(
+                          label.removeprefix("validator_dependency.")))
+            snapshot = actual.get("producer_snapshot") if isinstance(actual, dict) else None
+            representation = actual.get("representation_rebinding") if isinstance(actual, dict) else None
+            if representation is not None:
+                if label != "python_build" or not isinstance(representation, dict):
+                    raise ValueError("representation rebinding is only valid for DUT sources")
+                original_source = subprocess.run(
+                    ["git", "show", f"{revision}:{old_path}"], cwd=ROOT,
+                    capture_output=True, check=True).stdout
+                current_source = (ROOT / record["path"]).read_bytes()
+                if hashlib.sha256(original_source).hexdigest() != record.get("sha256"):
+                    raise ValueError("DUT source was already stale at relocation baseline")
+                original_ast = ast.dump(ast.parse(original_source), include_attributes=False)
+                current_ast = ast.dump(ast.parse(current_source), include_attributes=False)
+                if original_ast != current_ast:
+                    raise ValueError("DUT representation rebinding changed its executable AST")
+                ast_hash = hashlib.sha256(current_ast.encode("utf-8")).hexdigest()
+                expected_representation = {
+                    "method": "EXECUTABLE_AST_IDENTICAL",
+                    "before_sha256": record["sha256"],
+                    "after_sha256": hashlib.sha256(current_source).hexdigest(),
+                    "executable_ast_sha256": ast_hash,
+                }
+                if representation != expected_representation:
+                    raise ValueError("DUT representation rebinding receipt")
+                record["sha256"] = expected_representation["after_sha256"]
+                record["bytes"] = len(current_source)
+                record["representation_rebinding"] = expected_representation
+            if snapshot is not None:
+                if label != "validator" and not label.startswith("validator_dependency."):
+                    raise ValueError("producer archive cannot replace DUT or locked sources")
+                producer = subprocess.run(["git", "show", f"{revision}:{old_path}"],
+                                          cwd=ROOT, capture_output=True, check=True).stdout
+                if hashlib.sha256(producer).hexdigest() != record.get("sha256"):
+                    raise ValueError("producer was stale before the relocation")
+                digest = record["sha256"]
+                archive_path = ("validation/validation-Proof.Producer/"
+                                f"validation-Proof.Producer-{digest}.txt")
+                expected_snapshot = {"path": archive_path, "revision": revision,
+                                     "origin_path": old_path, "sha256": digest}
+                if snapshot != expected_snapshot:
+                    raise ValueError("producer archive origin or digest")
+                record["producer_snapshot"] = expected_snapshot
+        bindings = expected.get("checks", {}).get("parent_composition", {}).get("bindings", {})
+        for record in bindings.values():
+            if isinstance(record, dict) and isinstance(record.get("path"), str):
+                record["path"] = mapping.get(record["path"], record["path"])
+        if payload != expected:
+            raise ValueError("relocation changed proof conclusions, commands, logs or coverage")
+    except (OSError, KeyError, ValueError, TypeError, subprocess.CalledProcessError) as error:
+        failures.append(f"proof origin: {error}")
+        return False
+    return True
+
+
+def verify_source(record: Any, label: str, failures: list[str], *,
+                  proof_origin_verified: bool = False) -> dict[str, Any]:
     """Verify one source path and digest. / 验证一个来源路径及摘要。"""
 
     if not isinstance(record, dict):
@@ -581,6 +733,19 @@ def verify_source(record: Any, label: str, failures: list[str]) -> dict[str, Any
         inside_root = False
         failures.append(f"source outside repository: {label}")
     expected = str(record.get("sha256", ""))
+    producer = record.get("producer_snapshot")
+    if producer is not None:
+        if (not proof_origin_verified or not isinstance(producer, dict)
+                or (label != "validator" and not label.startswith("validator_dependency."))):
+            failures.append(f"unauthorized producer snapshot: {label}")
+        else:
+            snapshot_path = (ROOT / str(producer.get("path", ""))).resolve()
+            try:
+                snapshot_path.relative_to((ROOT / "validation/validation-Proof.Producer").resolve())
+                path = snapshot_path
+            except ValueError:
+                failures.append(f"producer snapshot outside archive: {label}")
+                inside_root = False
     present = path.is_file()
     observed = sha256(path) if present else None
     matched = inside_root and present and bool(expected) and observed == expected
@@ -592,6 +757,7 @@ def verify_source(record: Any, label: str, failures: list[str]) -> dict[str, Any
         "inside_repository": inside_root,
         "expected_sha256": expected,
         "observed_sha256": observed,
+        "producer_snapshot": producer,
         "status": "PASS" if matched else "FAIL",
     }
 
@@ -752,12 +918,14 @@ def build_declared_scala_paths(build_path: Path) -> set[str]:
         build_path.read_text(encoding="utf-8")))
 
 
-def verify_record_map(records: Any, label: str, failures: list[str]) -> dict[str, Any]:
+def verify_record_map(records: Any, label: str, failures: list[str], *,
+                      proof_origin_verified: bool = False) -> dict[str, Any]:
     """Verify every path/digest entry in a named evidence mapping."""
 
     if not isinstance(records, dict):
         return {}
-    return {str(name): verify_source(record, f"{label}.{name}", failures)
+    return {str(name): verify_source(record, f"{label}.{name}", failures,
+                                    proof_origin_verified=proof_origin_verified)
             for name, record in records.items() if isinstance(record, dict) and "path" in record}
 
 
@@ -887,7 +1055,8 @@ def verify_variant_scope(payload: dict[str, Any], failures: list[str], counted: 
             member_failures.append("StoreQueue parent must use compositional member proof")
         sat = raw.get("sat")
         if isinstance(sat, dict):
-            if sat.get("returncode") != 0 or sat.get("status") != "PASS":
+            if type(sat.get("returncode")) is not int or sat.get("returncode") != 0 \
+                    or sat.get("status") != "PASS":
                 member_failures.append("SAT status")
             if sat.get("formal_success_marker") is not True or sat.get("unconstrained") is not True:
                 member_failures.append("SAT completeness")
@@ -907,7 +1076,7 @@ def verify_variant_scope(payload: dict[str, Any], failures: list[str], counted: 
                     proven = raw.get("proven_cells")
                     if not isinstance(proven, int) or isinstance(proven, bool) or proven != cells:
                         member_failures.append("incomplete proven equivalence cells")
-                    if raw.get("unproven_cells") != 0:
+                    if type(raw.get("unproven_cells")) is not int or raw.get("unproven_cells") != 0:
                         member_failures.append("unproven equivalence cells")
                     markers = raw.get("markers_present")
                     if not isinstance(markers, dict):
@@ -921,6 +1090,18 @@ def verify_variant_scope(payload: dict[str, Any], failures: list[str], counted: 
                 free = raw.get("unconstrained_or_cells", raw.get("unconstrained_or_equiv_cells"))
                 if free is not True:
                     member_failures.append("constrained SAT")
+        if (counted and payload.get("proof_execution_profile") == "RECOVERABLE_STRICT_FAMILY_V2"
+                and raw.get("method") != STOREQUEUE_COMPOSED_METHOD):
+            detail = detailed_by_name.get(str(name), {})
+            member_proof = (detail.get("yosys_equiv") if raw.get("sequential")
+                            else detail.get("sat_miter")) if isinstance(detail, dict) else None
+            if (not isinstance(member_proof, dict) or member_proof.get("status") != "PASS"
+                    or type(member_proof.get("returncode")) is not int
+                    or member_proof.get("returncode") != 0
+                    or member_proof.get("timed_out") is True
+                    or member_proof.get("formal_success_marker") is not True
+                    or not valid_sha256(member_proof.get("output_sha256"))):
+                member_failures.append("current member proof receipt is incomplete")
         if member_failures and strict_variant_audit:
             failures.extend(f"variant {name}: {item}" for item in member_failures)
         checked[str(name)] = {"status": "PASS" if not member_failures else "FAIL",
@@ -938,6 +1119,7 @@ def verify_evidence(path: Path, expected_source_commit: str) -> dict[str, Any]:
 
     payload = json.loads(path.read_text(encoding="utf-8"))
     failures: list[str] = []
+    proof_origin_verified = verify_proof_origin(payload, path, failures)
     build_id = str(payload.get("build_id", ""))
     audit_policy = payload.get("audit_policy")
     hardened = isinstance(audit_policy, dict)
@@ -976,7 +1158,8 @@ def verify_evidence(path: Path, expected_source_commit: str) -> dict[str, Any]:
 
     sources = payload.get("sources", {})
     verified_sources = {
-        name: verify_source(record, name, failures)
+        name: verify_source(record, name, failures,
+                            proof_origin_verified=proof_origin_verified)
         for name, record in sources.items()
         if name in {"validator", "python_build", "scala", "reference_sv"}
     } if isinstance(sources, dict) else {}
@@ -1003,7 +1186,7 @@ def verify_evidence(path: Path, expected_source_commit: str) -> dict[str, Any]:
         "reference_child", failures)
     validator_dependencies = verify_record_map(
         sources.get("validator_dependencies", {}) if isinstance(sources, dict) else {},
-        "validator_dependency", failures)
+        "validator_dependency", failures, proof_origin_verified=proof_origin_verified)
     reference_lock = verify_reference_lock(payload, failures)
     declared_scala = verify_declared_scala(payload, failures, counted=not non_counting)
     scope_variants = nested(payload, "scope", "variants")
@@ -1103,7 +1286,12 @@ def verify_evidence(path: Path, expected_source_commit: str) -> dict[str, Any]:
             claimed_variants |= {str(item) for item in variant_map}
     claimed_build = str(verified_sources.get("python_build", {}).get("path", ""))
     if hardened and claimed_build:
-        expected_build_id = re.sub(r"-Hardware\.py$", "", Path(claimed_build).name)
+        build_name = Path(claimed_build).name
+        for prefix in ("Cpu-Core-", "Cpu-Memory-"):
+            if build_name.startswith(prefix):
+                build_name = "Build-Cpu." + build_name.removeprefix(prefix)
+                break
+        expected_build_id = re.sub(r"-Hardware\.py$", "", build_name)
         if build_id != expected_build_id:
             failures.append("build_id does not match python Build filename")
     if not non_counting and claimed_build:
@@ -1164,7 +1352,8 @@ def verify_evidence(path: Path, expected_source_commit: str) -> dict[str, Any]:
     formal_command = formal.get("command", [])
     command_text = " ".join(str(item) for item in formal_command) if isinstance(formal_command, list) else str(formal_command)
     if not non_counting and not all_sequential_variants:
-        if formal.get("returncode") != 0 or formal.get("status") != "PASS":
+        if type(formal.get("returncode")) is not int or formal.get("returncode") != 0 \
+                or formal.get("status") != "PASS":
             failures.append("formal status")
         if formal.get("formal_success_marker") is not True:
             failures.append("formal_success_marker")
@@ -1217,6 +1406,7 @@ def verify_evidence(path: Path, expected_source_commit: str) -> dict[str, Any]:
         "evidence": str(path.relative_to(ROOT)).replace("\\", "/"),
         "build_id": build_id,
         "declared_status": declared_status,
+        "proof_origin_verified": proof_origin_verified,
         "source_commit": {
             "expected": expected_source_commit,
             "observed": source_commit,

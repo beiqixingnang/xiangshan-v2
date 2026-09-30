@@ -23,8 +23,8 @@ BUILD_ROOT = ROOT / "python/Program-System/System-Build/Build-Cpu"
 PROBE_PATH = VALIDATION / "v2-top-generation-probe-results.json"
 HIERARCHY_PATH = VALIDATION / "v2-locked-hierarchy.json"
 COMPACT_XSTOP_PATH = VALIDATION / "reference-sv/XSTop.sv"
-ROOTS_PATH = BUILD_ROOT / "Cpu-Core/Build-Cpu.Top.UHSC.Roots-Hardware.py"
-TOP_PATH = BUILD_ROOT / "Cpu-Core/Build-Cpu.Top.UHSCTop-GenerationProbe-Hardware.py"
+ROOTS_PATH = BUILD_ROOT / "Cpu-Core/Cpu-Core-Top.UHSC.Roots-Hardware.py"
+TOP_PATH = BUILD_ROOT / "Cpu-Core/Cpu-Core-Top.UHSCTop-GenerationProbe-Hardware.py"
 EXTRACTOR_PATH = VALIDATION / "v2_locked_hierarchy_extract.py"
 OUTPUT = VALIDATION / "v2-top-closure-audit.json"
 
@@ -138,7 +138,7 @@ def mapping_catalog() -> dict[str, dict[str, Any]]:
         "Frontend": {
             "local_symbols": ["FrontendParent"],
             "build_files": [
-                "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Top-Hardware.py"
+                "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Frontend.Top-Hardware.py"
             ],
             "port_envelope": 371,
             "mapping_kind": "parent_boundary_available",
@@ -147,7 +147,7 @@ def mapping_catalog() -> dict[str, dict[str, Any]]:
         "Backend": {
             "local_symbols": ["BackendTop", "BackendParent"],
             "build_files": [
-                "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Top-Hardware.py"
+                "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Top-Hardware.py"
             ],
             "port_envelope": 1165,
             "mapping_kind": "parent_boundary_available",
@@ -156,7 +156,7 @@ def mapping_catalog() -> dict[str, dict[str, Any]]:
         "MemBlock": {
             "local_symbols": ["UHSCMemoryMemBlock", "MemBlockParent"],
             "build_files": [
-                "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.MemBlock-Hardware.py"
+                "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Memory.MemBlock-Hardware.py"
             ],
             "port_envelope": 1326,
             "mapping_kind": "parent_boundary_available",
@@ -165,7 +165,7 @@ def mapping_catalog() -> dict[str, dict[str, Any]]:
         "TL2TLCoupledL2": {
             "local_symbols": ["TL2TLCoupledL2Parent"],
             "build_files": [
-                "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.CoupledL2.Directory-Hardware.py"
+                "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Dependency.CoupledL2.Directory-Hardware.py"
             ],
             "port_envelope": 540,
             "mapping_kind": "selected_parent_boundary_available",
@@ -178,9 +178,9 @@ def mapping_catalog() -> dict[str, dict[str, Any]]:
                 "HuanCunBridgeBoundary",
             ],
             "build_files": [
-                "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.HuanCun.Cache-Hardware.py",
-                "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.HuanCun.Inclusive-Mshr-Hardware.py",
-                "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.HuanCun.Noninclusive-Bridge-Hardware.py",
+                "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Dependency.HuanCun.Cache-Hardware.py",
+                "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Dependency.HuanCun.Inclusive-Mshr-Hardware.py",
+                "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Dependency.HuanCun.Noninclusive-Bridge-Hardware.py",
             ],
             "port_envelope": 328,
             "mapping_kind": "family_boundaries_only; no exact HuanCun parent",
@@ -193,7 +193,7 @@ def mapping_catalog() -> dict[str, dict[str, Any]]:
         "ValidIOBroadcast": {
             "local_symbols": ["ValidIOBroadcast"],
             "build_files": [
-                "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Chisel.Arbiter-Hardware.py"
+                "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Chisel.Arbiter-Hardware.py"
             ],
             "port_envelope": 28,
             "mapping_kind": "family_subject_available",
@@ -202,7 +202,7 @@ def mapping_catalog() -> dict[str, dict[str, Any]]:
         "AsyncQueueSink_3": {
             "local_symbols": ["AsyncQueueSink"],
             "build_files": [
-                "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Chisel.Arbiter-Hardware.py"
+                "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Chisel.Arbiter-Hardware.py"
             ],
             "port_envelope": 18,
             "mapping_kind": "family_subject_available",
@@ -335,8 +335,8 @@ def main() -> int:
                 "id": "TOP-ROOT-STATUS-001",
                 "priority": "P0",
                 "scope": [
-                    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Top.UHSCTop-GenerationProbe-Hardware.py",
-                    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Top.UHSC.Roots-Hardware.py",
+                    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Top.UHSCTop-GenerationProbe-Hardware.py",
+                    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Top.UHSC.Roots-Hardware.py",
                 ],
                 "mapping": "aggregate xs_core/l2_top/xs_tile closure_missing into UHSCTop closure_missing/count/complete",
                 "current_failure": "root children are bound as objects but remain _RootBoundary tie-offs; UHSCTop reports complete from only four parent injections + 204 ports",
@@ -348,7 +348,7 @@ def main() -> int:
                 "priority": "P1",
                 "scope": [
                     "XSCore <- Frontend/Backend/MemBlock",
-                    "Build-Cpu.Top.UHSC.Roots-Hardware.py",
+                    "Cpu-Core-Top.UHSC.Roots-Hardware.py",
                 ],
                 "mapping": "FrontendParent(371) + BackendTop(1165) + UHSCMemoryMemBlock(1326) -> XSCore(308)",
                 "available_evidence": [
@@ -363,7 +363,7 @@ def main() -> int:
                 "priority": "P1",
                 "scope": [
                     "L2Top <- TL2TLCoupledL2 + TLXbar_7/8/9 + TLClientsMerger_1 + BusErrorUnit + buffers",
-                    "Build-Cpu.Dependency.CoupledL2.Directory-Hardware.py",
+                    "Cpu-Memory-Dependency.CoupledL2.Directory-Hardware.py",
                 ],
                 "mapping": "TL2TLCoupledL2Parent is a 540-port selected parent boundary; Rocket protocol/Chisel families supply bounded relay primitives",
                 "available_evidence": [
@@ -388,8 +388,8 @@ def main() -> int:
                 },
                 "available_evidence": [
                     "validation/v2-intbuffer-family-results.json",
-                    "validation/v2-top-xstile-intbuffer-family-results.json",
-                    "validation/v2-top-xstile-parent-results.json",
+                    "validation/v2-top-uhstile-intbuffer-family-results.json",
+                    "validation/v2-top-uhstile-parent-results.json",
                 ],
                 "blocker": "153-port XSTile parent bridge and six explicit child slots are tool-clean; XSCore/L2Top/IntBuffer child behavior and full XSTile differential remain pending",
             },
@@ -403,7 +403,7 @@ def main() -> int:
                     "validation/v2-chisel-aia-interface-family-results.json",
                     "validation/v2-chisel-arbiter-family-results.json",
                     "validation/v2-huancun-cache-family-results.json",
-                    "validation/v2-top-xstop-io-aia-results.json",
+                    "validation/v2-top-uhsctop-io-aia-results.json",
                 ],
                 "blocker": "UHSC naming manifest is still PLANNED/non-atomic and AIA explicitly defers TL/AXI/multi-hart wrapper closure",
             },

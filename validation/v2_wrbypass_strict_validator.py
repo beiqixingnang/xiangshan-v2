@@ -32,7 +32,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = ROOT / (
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/"
-    "Build-Cpu.Frontend.Bpu.WrBypass-Hardware.py"
+    "Cpu-Core-Frontend.Bpu.WrBypass-Hardware.py"
 )
 SCALA = ROOT / "upstream/src/main/scala/xiangshan/frontend/WrBypass.scala"
 REF_DIR = ROOT / "validation/reference-sv"

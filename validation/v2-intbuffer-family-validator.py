@@ -10,7 +10,7 @@ from pathlib import Path
 from v2_build_provenance import source_paths_for_build
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Top.XSTile.IntBuffer.Family-Hardware.py"
+TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Top.UHSTile.IntBuffer.Family-Hardware.py"
 OUT = ROOT / "validation/v2-intbuffer-family-results.json"
 WORK = ROOT / "validation/.work/v2-intbuffer-family"
 

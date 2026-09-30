@@ -13,7 +13,7 @@ from pathlib import Path
 from amaranth.sim import Simulator
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Difftest.Interface-Hardware.py"
+TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Difftest.Interface-Hardware.py"
 OUT = ROOT / "validation/v2-difftest-interface-family-results.json"
 
 

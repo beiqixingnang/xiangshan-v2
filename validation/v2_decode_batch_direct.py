@@ -314,11 +314,11 @@ def main() -> int:
     """Execute direct checks and persist pending-gate evidence. / 执行检查并持久化证据。"""
 
     targets = {
-        "Instructions": BUILD_CORE / "Build-Cpu.Backend.Decode.Instructions-Hardware.py",
-        "RiscvInst": BUILD_CORE / "Build-Cpu.Backend.Decode.Isa.Bitfield.RiscvInst-Hardware.py",
-        "FliTable": BUILD_CORE / "Build-Cpu.Backend.Fu.Fpu.FliTable-Hardware.py",
-        "CSA": BUILD_CORE / "Build-Cpu.Backend.Fu.Util.CSA-Hardware.py",
-        "SstcInterruptGen": BUILD_CORE / "Build-Cpu.Backend.Fu.NewCSR.SstcInterruptGen-Hardware.py",
+        "Instructions": BUILD_CORE / "Cpu-Core-Backend.Decode.Instructions-Hardware.py",
+        "RiscvInst": BUILD_CORE / "Cpu-Core-Backend.Decode.Isa.Bitfield.RiscvInst-Hardware.py",
+        "FliTable": BUILD_CORE / "Cpu-Core-Backend.Fu.Fpu.FliTable-Hardware.py",
+        "CSA": BUILD_CORE / "Cpu-Core-Backend.Fu.Util.CSA-Hardware.py",
+        "SstcInterruptGen": BUILD_CORE / "Cpu-Core-Backend.Fu.NewCSR.SstcInterruptGen-Hardware.py",
     }
     loaded = {name: load_target(f"v2_batch_{name}", path) for name, path in targets.items()}
     audits = {name: audit_target(path) for name, path in targets.items()}

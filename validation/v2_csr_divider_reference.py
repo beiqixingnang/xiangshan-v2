@@ -326,11 +326,11 @@ def main() -> int:
     """Generate differential JSON while keeping acceptance closed. / 生成差分 JSON 并明确保持验收关闭。"""
 
     modules = {
-        "CSRs": load_target("ref_csr_divider_csrs", BUILD_CORE / "Build-Cpu.Backend.Decode.Isa.CSRs-Hardware.py"),
-        "SstcInterruptGen": load_target("ref_csr_divider_sst", BUILD_CORE / "Build-Cpu.Backend.Fu.NewCSR.SstcInterruptGen-Hardware.py"),
-        "SRT16Divider": load_target("ref_csr_divider_srt", BUILD_CORE / "Build-Cpu.Backend.Fu.SRT16Divider-Hardware.py"),
-        "FliTable": load_target("ref_csr_divider_fli", BUILD_CORE / "Build-Cpu.Backend.Fu.Fpu.FliTable-Hardware.py"),
-        "CSA": load_target("ref_csr_divider_csa", BUILD_CORE / "Build-Cpu.Backend.Fu.Util.CSA-Hardware.py"),
+        "CSRs": load_target("ref_csr_divider_csrs", BUILD_CORE / "Cpu-Core-Backend.Decode.Isa.CSRs-Hardware.py"),
+        "SstcInterruptGen": load_target("ref_csr_divider_sst", BUILD_CORE / "Cpu-Core-Backend.Fu.NewCSR.SstcInterruptGen-Hardware.py"),
+        "SRT16Divider": load_target("ref_csr_divider_srt", BUILD_CORE / "Cpu-Core-Backend.Fu.SRT16Divider-Hardware.py"),
+        "FliTable": load_target("ref_csr_divider_fli", BUILD_CORE / "Cpu-Core-Backend.Fu.Fpu.FliTable-Hardware.py"),
+        "CSA": load_target("ref_csr_divider_csa", BUILD_CORE / "Cpu-Core-Backend.Fu.Util.CSA-Hardware.py"),
     }
     results = {
         "CSRs": compare_csrs(modules["CSRs"]),

@@ -17,8 +17,8 @@ ROOT = Path(__file__).resolve().parents[1]
 BUILD = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core"
 OUT = ROOT / "validation/v2-core-leaf-a2-validator-results.json"
 TARGETS = {
-    "BranchModule": BUILD / "Build-Cpu.Backend.Fu.BranchModule-Hardware.py",
-    "JumpDataModule": BUILD / "Build-Cpu.Backend.Fu.JumpDataModule-Hardware.py",
+    "BranchModule": BUILD / "Cpu-Core-Backend.Fu.BranchModule-Hardware.py",
+    "JumpDataModule": BUILD / "Cpu-Core-Backend.Fu.JumpDataModule-Hardware.py",
 }
 SOURCES = {
     "BranchModule": ROOT / "upstream/src/main/scala/xiangshan/backend/fu/Branch.scala",

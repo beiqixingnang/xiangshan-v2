@@ -16,7 +16,7 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.FTBEntryGen-Hardware.py"
+TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Frontend.Bpu.FTBEntryGen-Hardware.py"
 DIRECT_RESULT = ROOT / "validation/v2-frontend-ftb-entry-gen-direct-results.json"
 REFERENCE = ROOT / "validation/.work/FTBEntryGen.sv"
 WORK = ROOT / "validation/.work/ftb-entry-gen-differential"

@@ -22,7 +22,7 @@ ROOT = Path(__file__).resolve().parents[1]
 TARGET = (
     ROOT
     / "python/Program-System/System-Build/Build-Cpu/Cpu-Core"
-    / "Build-Cpu.Backend.Datapath.VectorFamily-Hardware.py"
+    / "Cpu-Core-Backend.Datapath.VectorFamily-Hardware.py"
 )
 HIERARCHY = ROOT / "validation/v2-locked-hierarchy.json"
 WORK = ROOT / "validation/.work/v2-backend-vector-datapath-family"

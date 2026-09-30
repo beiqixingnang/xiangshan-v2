@@ -7,7 +7,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Residual.LeafFamily-Hardware.py"
+TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Residual.LeafFamily-Hardware.py"
 HIER = ROOT / "validation/v2-locked-hierarchy.json"
 COVERAGE = ROOT / "validation/v2-hierarchy-coverage.json"
 

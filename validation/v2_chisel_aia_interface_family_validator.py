@@ -13,7 +13,7 @@ from pathlib import Path
 from amaranth.sim import Simulator
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.ChiselAIA.Interface-Hardware.py"
+TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.ChiselAIA.Interface-Hardware.py"
 OUT = ROOT / "validation/v2-chisel-aia-interface-family-results.json"
 
 

@@ -14,7 +14,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Icache.InstrUncache-Hardware.py"
+TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Frontend.Icache.InstrUncache-Hardware.py"
 LOCKED = Path(r"\\wsl$\Debian\home\lishuo\xs-v2-local\build\rtl\XSTop.sv")
 WORK = ROOT / "validation/.work/v2-frontend-instr-uncache-parent"
 EVIDENCE = ROOT / "validation/v2-frontend-instr-uncache-parent-closure-results.json"

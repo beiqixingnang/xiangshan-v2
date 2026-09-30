@@ -15,7 +15,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 BUILD = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core"
-TARGET = BUILD / "Build-Cpu.Backend.Issue.FuBusyTableRead-Hardware.py"
+TARGET = BUILD / "Cpu-Core-Backend.Issue.FuBusyTableRead-Hardware.py"
 SOURCE = ROOT / "upstream/src/main/scala/xiangshan/backend/issue/FuBusyTableRead.scala"
 OUT = ROOT / "validation/v2-core-leaf-a4-validator-results.json"
 

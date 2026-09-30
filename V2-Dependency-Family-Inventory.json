@@ -38,7 +38,7 @@
   {
    "family_id": "dependency.rocket.protocol",
    "kind": "dependency",
-   "plan_build_file": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Rocket.Protocol-Hardware.py",
+   "plan_build_file": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Rocket.Protocol-Hardware.py",
    "source_roots": [
     "rocket-chip/src/main/scala"
    ],
@@ -190,9 +190,9 @@
    "reachability_status": "REACHABLE_SELECTED_OR_CONDITIONAL",
    "implementation_eligibility": "REUSED_BOUNDED",
    "satisfied_by_existing_build_files": [
-    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.LruStateGen-Hardware.py",
-    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.PlruStateGen-Hardware.py",
-    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Bpu.Replacer.ReplacerState-Hardware.py"
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Frontend.Bpu.Replacer.LruStateGen-Hardware.py",
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Frontend.Bpu.Replacer.PlruStateGen-Hardware.py",
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Frontend.Bpu.Replacer.ReplacerState-Hardware.py"
    ],
    "evidence": "validation/v2-rocket-replacement-rvc-family-results.json",
    "family_batch": "V2-DEPENDENCY-ROCKET-REPLACEMENT-RVC-001",
@@ -215,7 +215,7 @@
    "reachability_status": "REACHABLE_SELECTED_OR_CONDITIONAL",
    "implementation_eligibility": "REUSED_BOUNDED",
    "satisfied_by_existing_build_files": [
-    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Frontend.Ifu.RvcExpander-Hardware.py"
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Frontend.Ifu.RvcExpander-Hardware.py"
    ],
    "evidence": "validation/v2-rocket-replacement-rvc-family-results.json",
    "family_batch": "V2-DEPENDENCY-ROCKET-REPLACEMENT-RVC-001",
@@ -224,7 +224,7 @@
   {
    "family_id": "dependency.rocket.diplomacy",
    "kind": "dependency",
-   "plan_build_file": "Build-Cpu.Dependency.Rocket.Diplomacy-Hardware.py",
+   "plan_build_file": "Cpu-Core-Dependency.Rocket.Diplomacy-Hardware.py",
    "source_roots": [
     "rocket-chip/src/main/scala/diplomacy"
    ],
@@ -262,7 +262,7 @@
   {
    "family_id": "dependency.utility",
    "kind": "dependency",
-   "plan_build_file": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Utility-Hardware.py",
+   "plan_build_file": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility-Hardware.py",
    "source_roots": [
     "utility/src/main/scala"
    ],
@@ -341,7 +341,7 @@
   {
    "family_id": "dependency.fudian.fpu",
    "kind": "dependency",
-   "plan_build_file": "Build-Cpu.Dependency.Fudian.Fpu-Hardware.py",
+   "plan_build_file": "Cpu-Core-Dependency.Fudian.Fpu-Hardware.py",
    "source_roots": [
     "fudian/src/main/scala/fudian"
    ],
@@ -376,7 +376,7 @@
   {
    "family_id": "dependency.fudian.arithmetic",
    "kind": "dependency",
-   "plan_build_file": "Build-Cpu.Dependency.Fudian.Arithmetic-Hardware.py",
+   "plan_build_file": "Cpu-Core-Dependency.Fudian.Arithmetic-Hardware.py",
    "source_roots": [
     "fudian/src/main/scala/fudian/utils"
    ],
@@ -401,7 +401,7 @@
   {
    "family_id": "dependency.yunsuan.scalar",
    "kind": "dependency",
-   "plan_build_file": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.YunSuan.Scalar-Hardware.py",
+   "plan_build_file": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.YunSuan.Scalar-Hardware.py",
    "source_roots": [
     "yunsuan/src/main/scala/yunsuan/scalar"
    ],
@@ -426,7 +426,7 @@
   {
    "family_id": "dependency.yunsuan.vector",
    "kind": "dependency",
-   "plan_build_file": "Build-Cpu.Dependency.YunSuan.Vector-Hardware.py",
+   "plan_build_file": "Cpu-Core-Dependency.YunSuan.Vector-Hardware.py",
    "source_roots": [
     "yunsuan/src/main/scala/yunsuan/vector"
    ],
@@ -497,7 +497,7 @@
   {
    "family_id": "dependency.huancun.cache",
    "kind": "dependency",
-   "plan_build_file": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.HuanCun.Cache-Hardware.py",
+   "plan_build_file": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Dependency.HuanCun.Cache-Hardware.py",
    "source_roots": [
     "huancun/src/main/scala/huancun"
    ],
@@ -558,7 +558,7 @@
   {
    "family_id": "dependency.huancun.mshr",
    "kind": "dependency",
-   "plan_build_file": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.HuanCun.Inclusive-Mshr-Hardware.py",
+   "plan_build_file": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Dependency.HuanCun.Inclusive-Mshr-Hardware.py",
    "source_roots": [
     "huancun/src/main/scala/huancun/inclusive"
    ],
@@ -579,7 +579,7 @@
   {
    "family_id": "dependency.huancun.bridge",
    "kind": "dependency",
-   "plan_build_file": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.HuanCun.Noninclusive-Bridge-Hardware.py",
+   "plan_build_file": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Dependency.HuanCun.Noninclusive-Bridge-Hardware.py",
    "source_roots": [
     "huancun/src/main/scala/huancun/noninclusive"
    ],
@@ -602,7 +602,7 @@
   {
    "family_id": "dependency.coupledL2.slice",
    "kind": "dependency",
-   "plan_build_file": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.CoupledL2.Slice-Hardware.py",
+   "plan_build_file": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Dependency.CoupledL2.Slice-Hardware.py",
    "source_roots": [
     "coupledL2/src/main/scala/coupledL2"
    ],
@@ -681,7 +681,7 @@
   {
    "family_id": "dependency.coupledL2.directory",
    "kind": "dependency",
-   "plan_build_file": "Build-Cpu.Dependency.CoupledL2.Directory-Hardware.py",
+   "plan_build_file": "Cpu-Memory-Dependency.CoupledL2.Directory-Hardware.py",
    "source_roots": [
     "coupledL2/src/main/scala/coupledL2/tl2tl"
    ],
@@ -712,7 +712,7 @@
   {
    "family_id": "dependency.coupledL2.bridge",
    "kind": "dependency",
-   "plan_build_file": "Build-Cpu.Dependency.CoupledL2.Bridge-Hardware.py",
+   "plan_build_file": "Cpu-Memory-Dependency.CoupledL2.Bridge-Hardware.py",
    "source_roots": [
     "coupledL2/src/main/scala/coupledL2/tl2chi"
    ],
@@ -751,7 +751,7 @@
   {
    "family_id": "dependency.openLLC.cache",
    "kind": "dependency",
-   "plan_build_file": "Build-Cpu.Dependency.OpenLLC.Cache-Hardware.py",
+   "plan_build_file": "Cpu-Memory-Dependency.OpenLLC.Cache-Hardware.py",
    "source_roots": [
     "openLLC/src/main/scala/openLLC"
    ],
@@ -800,7 +800,7 @@
   {
    "family_id": "dependency.openLLC.sram",
    "kind": "dependency",
-   "plan_build_file": "Build-Cpu.Dependency.OpenLLC.Sram-Hardware.py",
+   "plan_build_file": "Cpu-Memory-Dependency.OpenLLC.Sram-Hardware.py",
    "source_roots": [
     "openLLC/src/main/scala/openLLC/utils"
    ],
@@ -826,7 +826,7 @@
   {
    "family_id": "dependency.openLLC.bridge",
    "kind": "dependency",
-   "plan_build_file": "Build-Cpu.Dependency.OpenLLC.Bridge-Hardware.py",
+   "plan_build_file": "Cpu-Memory-Dependency.OpenLLC.Bridge-Hardware.py",
    "source_roots": [
     "openLLC/src/main/scala/openLLC/chi"
    ],
@@ -856,7 +856,7 @@
   {
    "family_id": "dependency.openLLC.ncb",
    "kind": "dependency",
-   "plan_build_file": "Build-Cpu.Dependency.OpenLLC.OpenNCB-Hardware.py",
+   "plan_build_file": "Cpu-Memory-Dependency.OpenLLC.OpenNCB-Hardware.py",
    "source_roots": [
     "openLLC/openNCB/src/main/scala/openncb"
    ],
@@ -967,7 +967,7 @@
   {
    "family_id": "dependency.aia.interface",
    "kind": "dependency",
-   "plan_build_file": "Build-Cpu.Dependency.ChiselAIA.Interface-Hardware.py",
+   "plan_build_file": "Cpu-Core-Dependency.ChiselAIA.Interface-Hardware.py",
    "source_roots": [
     "ChiselAIA/src/main/scala"
    ],
@@ -994,7 +994,7 @@
   {
    "family_id": "dependency.iopmp.interface",
    "kind": "dependency",
-   "plan_build_file": "Build-Cpu.Dependency.ChiselIOPMP.Interface-Hardware.py",
+   "plan_build_file": "Cpu-Core-Dependency.ChiselIOPMP.Interface-Hardware.py",
    "source_roots": [
     "ChiselIOPMP/src/main/scala"
    ],
@@ -1018,7 +1018,7 @@
   {
    "family_id": "dependency.difftest.interface",
    "kind": "dependency",
-   "plan_build_file": "Build-Cpu.Dependency.Difftest.Interface-Hardware.py",
+   "plan_build_file": "Cpu-Core-Dependency.Difftest.Interface-Hardware.py",
    "source_roots": [
     "difftest/src/main/scala"
    ],
@@ -1074,7 +1074,7 @@
   {
    "family_id": "dependency.hardfloat",
    "kind": "dependency",
-   "plan_build_file": "Build-Cpu.Dependency.Rocket.Hardfloat-Hardware.py",
+   "plan_build_file": "Cpu-Core-Dependency.Rocket.Hardfloat-Hardware.py",
    "source_roots": [
     "rocket-chip/hardfloat/hardfloat/src/main/scala"
    ],
@@ -1115,7 +1115,7 @@
   {
    "family_id": "dependency.chisel.decoupled",
    "kind": "dependency",
-   "plan_build_file": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Chisel.Decoupled-Hardware.py",
+   "plan_build_file": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Chisel.Decoupled-Hardware.py",
    "source_roots": [
     "chisel3"
    ],
@@ -1133,7 +1133,7 @@
   {
    "family_id": "dependency.chisel.arbiter",
    "kind": "dependency",
-   "plan_build_file": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Chisel.Arbiter-Hardware.py",
+   "plan_build_file": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Chisel.Arbiter-Hardware.py",
    "source_roots": [
     "chisel3",
     "rocket-chip"
@@ -1154,7 +1154,7 @@
   {
    "family_id": "dependency.rocket.jtag",
    "kind": "dependency",
-   "plan_build_file": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Rocket.Jtag-Hardware.py",
+   "plan_build_file": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Rocket.Jtag-Hardware.py",
    "source_roots": [
     "rocket-chip/src/main/scala/jtag"
    ],

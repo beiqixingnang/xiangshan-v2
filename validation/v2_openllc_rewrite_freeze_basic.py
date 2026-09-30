@@ -29,10 +29,10 @@ ROOT = Path(__file__).resolve().parents[1]
 BUILD = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory"
 OUT = ROOT / "validation/v2-openllc-rewrite-freeze-basic-results.json"
 TARGETS = tuple(BUILD / name for name in (
-    "Build-Cpu.Dependency.OpenLLC.Cache-Hardware.py",
-    "Build-Cpu.Dependency.OpenLLC.Sram-Hardware.py",
-    "Build-Cpu.Dependency.OpenLLC.Bridge-Hardware.py",
-    "Build-Cpu.Dependency.OpenLLC.OpenNCB-Hardware.py",
+    "Cpu-Memory-Dependency.OpenLLC.Cache-Hardware.py",
+    "Cpu-Memory-Dependency.OpenLLC.Sram-Hardware.py",
+    "Cpu-Memory-Dependency.OpenLLC.Bridge-Hardware.py",
+    "Cpu-Memory-Dependency.OpenLLC.OpenNCB-Hardware.py",
 ))
 
 

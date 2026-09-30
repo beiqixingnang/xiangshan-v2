@@ -7,7 +7,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Regcache.AgeFamily-Hardware.py"
+TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Regcache.AgeFamily-Hardware.py"
 HIER = ROOT / "validation/v2-locked-hierarchy.json"
 MEMBERS = ("NewAgeDetector", "NewAgeDetector_6", "RegCacheAgeDetector", "RegCacheAgeDetector_1", "RegCacheAgeTimer", "RegCacheAgeTimer_1", "RegCacheDataModule", "RegCacheDataModule_1", "RegCacheTagModule", "RegCacheTagModule_1")
 

@@ -37,8 +37,8 @@ from amaranth.sim import Simulator
 # Configuration
 # =============================================================================
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.CoupledL2.Directory-Hardware.py"
-SLICE_TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.CoupledL2.Slice-Hardware.py"
+TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Dependency.CoupledL2.Directory-Hardware.py"
+SLICE_TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Dependency.CoupledL2.Slice-Hardware.py"
 REFERENCE = Path(r"\\wsl$\Debian\home\lishuo\xs-v2-local\build\rtl\XSTop.sv")
 OUT = ROOT / "validation/v2-coupledL2-tl2tl-parent-results.json"
 COVERAGE = ROOT / "validation/v2-coupledL2-tl2tl-parent-coverage-manifest.json"

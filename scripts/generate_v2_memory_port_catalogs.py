@@ -14,16 +14,16 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 HIERARCHY = ROOT / "validation/v2-locked-hierarchy.json"
 TARGETS = {
-    "Build-Cpu.Memory.MemCommon-Pipeline-Hardware.py": (
+    "Cpu-Memory-Memory.MemCommon-Pipeline-Hardware.py": (
         "PipelineRegModule", "PipelineRegModule_1", "PipelineRegModule_2", "PipelineRegModule_6",
     ),
-    "Build-Cpu.Memory.Lsqueue.LoadQueueData-Hardware.py": (
+    "Cpu-Memory-Memory.Lsqueue.LoadQueueData-Hardware.py": (
         "LqMaskModule", "LqPAddrModule", "LqPAddrModule_1", "LqVAddrModule",
     ),
-    "Build-Cpu.Memory.Lsqueue.StoreQueueData-Hardware.py": (
+    "Cpu-Memory-Memory.Lsqueue.StoreQueueData-Hardware.py": (
         "SQAddrModule", "SQAddrModule_1", "SQData8Module", "SQDataModule",
     ),
-    "Build-Cpu.Memory.Dcache.MetaArray-Hardware.py": (
+    "Cpu-Memory-Memory.Dcache.MetaArray-Hardware.py": (
         "L1CohMetaArray", "L1ErrorMetaArray", "L1FlagMetaArray", "L1PrefetchSourceArray",
     ),
 }

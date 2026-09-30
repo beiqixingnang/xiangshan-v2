@@ -14,8 +14,8 @@ from pathlib import Path
 from amaranth.sim import Simulator
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.NewCSR.CSRLite-Hardware.py"
-SIBLING = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Fu.NewCSR.CSRModule-Hardware.py"
+TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Fu.NewCSR.CSRLite-Hardware.py"
+SIBLING = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Fu.NewCSR.CSRModule-Hardware.py"
 LOCKED = ROOT / "validation/v2-locked-hierarchy.json"
 CSRS_SOURCE = ROOT / "upstream/rocket-chip/src/main/scala/rocket/Instructions.scala"
 CSRCONST_SOURCE = ROOT / "upstream/src/main/scala/xiangshan/backend/fu/util/CSRConst.scala"

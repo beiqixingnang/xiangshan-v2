@@ -7,7 +7,7 @@ from typing import Any
 
 from v2_build_provenance import source_paths_for_build
 
-ROOT = Path(__file__).resolve().parents[1]; TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Dependency.Difftest.StateFamily-Hardware.py"; HIER = ROOT / "validation/v2-locked-hierarchy.json"; WORK = ROOT / "validation/.work/v2-difftest-state-family"; OUT = ROOT / "validation/v2-difftest-state-family-results.json"
+ROOT = Path(__file__).resolve().parents[1]; TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Difftest.StateFamily-Hardware.py"; HIER = ROOT / "validation/v2-locked-hierarchy.json"; WORK = ROOT / "validation/.work/v2-difftest-state-family"; OUT = ROOT / "validation/v2-difftest-state-family-results.json"
 
 
 def main() -> int:

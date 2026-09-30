@@ -18,7 +18,7 @@ from v2_build_provenance import source_paths_for_build
 from amaranth.sim import Settle, Simulator, Tick
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Regcache.AgeFamily-Hardware.py"
+TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Regcache.AgeFamily-Hardware.py"
 HIER = ROOT / "validation/v2-locked-hierarchy.json"
 WORK = ROOT / "validation/.work/v2-age-family"
 EVIDENCE = ROOT / "validation/v2-age-family-results.json"

@@ -158,7 +158,7 @@ instead of one file per Scala source:
   manifest, and all references are updated atomically.
 - Core auxiliary paths follow `python/Program-System/System-Build/Build-Cpu/`
   and the corresponding source-traceable Build basename, for example
-  `Build-Cpu.Backend.Fu.SRT16Divider-Hardware.py`.
+  `Cpu-Core-Backend.Fu.SRT16Divider-Hardware.py`.
 - A temporary path under `python/ported/` is allowed only during an active
   relocation transaction. It must be removed in the same commit as the Build
   path creation, and all evidence/manifests must point to the Build path.
@@ -354,3 +354,21 @@ pass.
 - No changing the locked source to make a comparison pass.
 - No marking `ACCEPTED` when a reference, differential, integration, license,
   or parent-closure gate is missing.
+
+
+## 5E. Recoverable strict verification (2026-09-30)
+
+For COMPLETE_EQUIVALENCE, cheap prerequisites and both-side lint precede
+formal. Every required member must have a complete positive-cell, zero-unproven
+receipt or an unrestricted SAT success. Empty success-marker dictionaries,
+nonzero exits, timeouts, missing artifacts and negative-control failure cannot
+be cached as PASS. Shared member outputs can reuse a receipt only when all
+proof inputs, tool/runtime versions and producer dependencies remain bound.
+Changed sources are independently audited even when emitted RTL is unchanged.
+
+A reusable receipt does not discharge reset-startup assumptions or parent/top
+acceptance. Record the initial-state/reset boundary explicitly; induction is
+never described as arbitrary unknown-power-up equivalence. Keep source and
+reference names in auxiliary evidence while exposing local UHSCore, UHSTile
+and UHSCTop product APIs. Formal Build and Testing basenames must start with
+their direct parent followed by a hyphen and end in -Hardware.py.

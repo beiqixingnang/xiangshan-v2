@@ -40,9 +40,9 @@ from amaranth.sim import Settle, Simulator
 ROOT = Path(__file__).resolve().parents[1]
 VALIDATION = ROOT / "validation"
 WORK = VALIDATION / ".work" / "v2-full-top-contract"
-TOP_BUILD = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Top.UHSCTop-GenerationProbe-Hardware.py"
-ROOT_BUILD = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Top.UHSC.Roots-Hardware.py"
-INVENTORY = VALIDATION / "v2-xstop-port-inventory.json"
+TOP_BUILD = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Top.UHSCTop-GenerationProbe-Hardware.py"
+ROOT_BUILD = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Top.UHSC.Roots-Hardware.py"
+INVENTORY = VALIDATION / "v2-uhsctop-port-inventory.json"
 NORMALIZED_METRICS = VALIDATION / "v2-top-generation-normalized-metrics.json"
 OUTPUT = VALIDATION / "v2-full-top-contract-comparison-results.json"
 

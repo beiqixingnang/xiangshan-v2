@@ -25,7 +25,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = (ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Core"
-          / "Build-Cpu.Dependency.Chisel.Arbiter-Hardware.py")
+          / "Cpu-Core-Dependency.Chisel.Arbiter-Hardware.py")
 HIERARCHY = ROOT / "validation" / "v2-locked-hierarchy.json"
 EXTRACTED = ROOT / "validation" / ".work" / "arbiter-family" / "extracted"
 NAMES = EXTRACTED / "names.txt"

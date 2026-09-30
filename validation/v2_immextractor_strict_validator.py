@@ -27,7 +27,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = ROOT / (
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/"
-    "Build-Cpu.Backend.Issue.ImmExtractor-Hardware.py"
+    "Cpu-Core-Backend.Issue.ImmExtractor-Hardware.py"
 )
 SCALA = ROOT / "upstream/src/main/scala/xiangshan/backend/issue/ImmExtractor.scala"
 REFERENCE = ROOT / "validation/reference-closures/ImmExtractor-v2.sv"

@@ -20,7 +20,7 @@ from pathlib import Path
 from amaranth.sim import Simulator
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Backend.Decode.Isa.Bitfield.RiscvInst-Hardware.py"
+TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Decode.Isa.Bitfield.RiscvInst-Hardware.py"
 WORK = ROOT / "validation/.work/v2-backend-decode-child"
 EVIDENCE = ROOT / "validation/v2-backend-decode-child-differential-results.json"
 LOCKED = Path(r"\\wsl$\Debian\home\lishuo\xs-v2-local\build\rtl\XSTop.sv")

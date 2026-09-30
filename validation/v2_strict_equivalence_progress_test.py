@@ -20,7 +20,7 @@ class BuildCatalogEnumerationTests(unittest.TestCase):
         # This catalog is computed from embedded JSON and cannot be resolved by AST literals alone.
         build = Path(
             "python/Program-System/System-Build/Build-Cpu/Cpu-Core/"
-            "Build-Cpu.Backend.Regfile.Regfile-Hardware.py"
+            "Cpu-Core-Backend.Regfile.Regfile-Hardware.py"
         )
         failures: list[str] = []
 
@@ -53,6 +53,76 @@ class BuildCatalogEnumerationTests(unittest.TestCase):
         self.assertEqual("PASS", result["status"], result["failures"])
 
 
+class ProofRelocationAuditTests(unittest.TestCase):
+    """Relocation must preserve every historical proof conclusion and log."""
+
+    @classmethod
+    def fixture(cls):
+        path = progress.ROOT / (
+            "validation/v2-build-cpu-backend-datapath-newpipelineconnect-strict-evidence.json"
+        )
+        return path, json.loads(path.read_text(encoding="utf-8"))
+
+    def test_original_receipt_and_producer_are_pinned(self) -> None:
+        path, payload = self.fixture()
+        failures: list[str] = []
+        self.assertTrue(progress.verify_proof_origin(payload, path, failures), failures)
+        self.assertEqual([], failures)
+
+    def test_historical_receipt_cannot_drop_its_origin(self) -> None:
+        path, payload = self.fixture()
+        payload.pop("proof_origin")
+        failures: list[str] = []
+        self.assertFalse(progress.verify_proof_origin(payload, path, failures))
+        self.assertTrue(any("missing its pinned proof origin" in item for item in failures))
+
+    def test_origin_is_bound_to_the_fixed_git_baseline(self) -> None:
+        path, payload = self.fixture()
+        payload["proof_origin"]["revision"] = "1" * 40
+        failures: list[str] = []
+        self.assertFalse(progress.verify_proof_origin(payload, path, failures))
+        self.assertTrue(failures)
+
+    def test_relocation_rejects_changed_result_or_coverage(self) -> None:
+        path, payload = self.fixture()
+        mutations = (
+            lambda data: data.__setitem__("strict_complete_count_delta", 2),
+            lambda data: data["scope"].__setitem__("aggregate_compared_output_bits", 1),
+            lambda data: data["proof_origin"].__setitem__("sha256", "0" * 64),
+            lambda data: data["sources"]["validator"]["producer_snapshot"].__setitem__(
+                "origin_path", "validation/not-the-producer.py"),
+        )
+        for mutate in mutations:
+            with self.subTest(mutation=mutate):
+                altered = copy.deepcopy(payload)
+                mutate(altered)
+                failures: list[str] = []
+                self.assertFalse(progress.verify_proof_origin(altered, path, failures))
+                self.assertTrue(failures)
+
+    def test_producer_snapshot_needs_verified_origin(self) -> None:
+        _path, payload = self.fixture()
+        failures: list[str] = []
+        progress.verify_source(payload["sources"]["validator"], "validator", failures)
+        self.assertTrue(any("unauthorized producer snapshot" in item for item in failures))
+
+    def test_dut_cannot_use_an_archived_producer(self) -> None:
+        _path, payload = self.fixture()
+        record = copy.deepcopy(payload["sources"]["python_build"])
+        record["producer_snapshot"] = payload["sources"]["validator"]["producer_snapshot"]
+        failures: list[str] = []
+        progress.verify_source(record, "python_build", failures, proof_origin_verified=True)
+        self.assertTrue(any("unauthorized producer snapshot" in item for item in failures))
+
+    def test_boolean_zero_is_not_an_equivalence_cell_count(self) -> None:
+        _path, payload = self.fixture()
+        for record in payload["scope"]["variants"].values():
+            record["unproven_cells"] = False
+        failures: list[str] = []
+        progress.verify_variant_scope(payload, failures, counted=True)
+        self.assertTrue(any("unproven equivalence cells" in item for item in failures))
+
+
 class StoreQueueCompositionAuditTests(unittest.TestCase):
     """Keep the specialized sequential-parent proof decomposition fail-closed."""
 
@@ -79,10 +149,10 @@ class StoreQueueCompositionAuditTests(unittest.TestCase):
                           "bytes": validator_path.stat().st_size},
             "locked_parent": {"path": lock["SQDataModule"]["path"],
                               "sha256": lock["SQDataModule"]["observed_sha256"],
-                              "bytes": (progress.ROOT / lock["SQDataModule"]["path"]).stat().st_size},
+                              "bytes": (progress.ROOT / str(lock["SQDataModule"]["path"])).stat().st_size},
             "locked_child": {"path": lock["SQData8Module"]["path"],
                              "sha256": lock["SQData8Module"]["observed_sha256"],
-                             "bytes": (progress.ROOT / lock["SQData8Module"]["path"]).stat().st_size},
+                             "bytes": (progress.ROOT / str(lock["SQData8Module"]["path"])).stat().st_size},
         }
         rendered = {name: f"deterministic {name}\n" for name in progress.STOREQUEUE_ARTIFACTS}
         bindings["artifacts"] = {

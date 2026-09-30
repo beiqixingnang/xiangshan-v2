@@ -67,7 +67,7 @@ ROOT = Path(__file__).resolve().parents[1]
 MODULE_NAME = "AgeDetector"
 TARGET = ROOT / (
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/"
-    "Build-Cpu.Backend.Issue.AgeDetector-Hardware.py"
+    "Cpu-Core-Backend.Issue.AgeDetector-Hardware.py"
 )
 SCALA = ROOT / "upstream/src/main/scala/xiangshan/backend/issue/AgeDetector.scala"
 REFERENCE = ROOT / "validation/reference-sv/AgeDetector.sv"

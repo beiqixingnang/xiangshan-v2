@@ -21,7 +21,7 @@ from typing import Any
 __all__ = ["validate_composition", "main"]
 
 ROOT = Path(__file__).resolve().parents[1]
-BUILD_PATH = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Lsqueue.StoreQueueData-Hardware.py"
+BUILD_PATH = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Memory.Lsqueue.StoreQueueData-Hardware.py"
 SCALA_PATH = ROOT / "upstream/src/main/scala/xiangshan/mem/lsqueue/StoreQueueData.scala"
 REFERENCE_PARENT_PATH = ROOT / "validation/reference-sv/SQDataModule.sv"
 REFERENCE_CHILD_PATH = ROOT / "validation/reference-sv/SQData8Module.sv"

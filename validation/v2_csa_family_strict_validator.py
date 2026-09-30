@@ -32,7 +32,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = ROOT / (
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/"
-    "Build-Cpu.Backend.Fu.Util.CSA-Hardware.py"
+    "Cpu-Core-Backend.Fu.Util.CSA-Hardware.py"
 )
 SCALA = ROOT / "upstream/src/main/scala/xiangshan/backend/fu/util/CSA.scala"
 YUNSUAN_SCALA = ROOT / "upstream/yunsuan/src/main/scala/yunsuan/vector/VectorIdiv/SRT16Divint.scala"

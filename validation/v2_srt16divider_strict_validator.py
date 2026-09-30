@@ -17,7 +17,7 @@ import v2_strict_family_rail as rail  # noqa: E402
 ROOT = Path(__file__).resolve().parents[1]
 BUILD = ROOT / (
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/"
-    "Build-Cpu.Backend.Fu.SRT16Divider-Hardware.py"
+    "Cpu-Core-Backend.Fu.SRT16Divider-Hardware.py"
 )
 BUILD_ID = "Build-Cpu.Backend.Fu.SRT16Divider"
 EVIDENCE = ROOT / "validation/v2-build-cpu-backend-fu-srt16divider-strict-evidence.json"

@@ -38,3 +38,33 @@ and UHSC rename planning are authoritative in:
 - [`V2-Dependency-License-Inventory.json`](V2-Dependency-License-Inventory.json)
 - [`V2-Ported-Contract-Audit.json`](V2-Ported-Contract-Audit.json)
 - [`UHSC-Naming-Manifest.json`](UHSC-Naming-Manifest.json)
+
+
+## Verification workflow and local paths
+
+Formal Build files use their Cpu-Core/Cpu-Memory parent prefix; direct tests
+use Testing-Cpu-. The path transaction and immutable proof origins are recorded
+in UHSC-Naming-Manifest.json. Local processor APIs use UHSCore, UHSTile and
+UHSCTop; locked source/reference identities stay unchanged in evidence.
+
+The shared family rail runs static gates and lint before serialized formal,
+retains member checkpoints, and reuses only complete PASS receipts with matching
+proof inputs, tool/runtime versions and producer dependencies. Historical
+producer snapshots are inert text under validation/validation-Proof.Producer;
+product code never loads them. The independent progress audit checks current
+DUTs, locked references, original receipt integrity and snapshot hashes.
+
+GPT-6-Luna workers use xhigh reasoning; the coordinator reviews and takes over
+repeated failures. Full CPU replacement, Vortex verification/video upgrade and
+controller integration remain subsequent milestones after V2 acceptance.
+
+Run a cheap, non-counting diagnostic before sending a family to formal:
+
+```powershell
+py -B validation/v2_catalog_family_strict_validator.py --build Cpu-Core-Backend.Datapath.VectorFamily-Hardware.py --preflight-only
+```
+
+The catalog runner reads exact identities from UHSC-Naming-Manifest.json,
+requires the registered direct test before full formal, and stores reusable
+checkpoints under ignored validation/.cache/strict-family. A missing direct
+subject or ABI mismatch is a prerequisite failure, never a strict pass.

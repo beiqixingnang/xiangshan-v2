@@ -20,12 +20,12 @@ ROOT = Path(__file__).resolve().parents[1]
 BUILD = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core"
 OUT = ROOT / "validation/v2-backend-rewrite-freeze-basic-results.json"
 TARGETS = {
-    "BackendTop": (BUILD / "Build-Cpu.Backend.Top-Hardware.py", "UHSCBackendTop"),
-    "Instructions": (BUILD / "Build-Cpu.Backend.Decode.Instructions-Hardware.py", "Instructions"),
-    "DeqPolicy": (BUILD / "Build-Cpu.Backend.Issue.DeqPolicy-Hardware.py", "DeqPolicy"),
-    "DataArray": (BUILD / "Build-Cpu.Backend.Issue.DataArray-Hardware.py", "DataArray"),
-    "FuBusyTableRead": (BUILD / "Build-Cpu.Backend.Issue.FuBusyTableRead-Hardware.py", "FuBusyTableRead"),
-    "RobPtrWrappers": (BUILD / "Build-Cpu.Backend.Rob.PtrWrappers-Hardware.py", "RobPtrWrappers"),
+    "BackendTop": (BUILD / "Cpu-Core-Backend.Top-Hardware.py", "UHSCBackendTop"),
+    "Instructions": (BUILD / "Cpu-Core-Backend.Decode.Instructions-Hardware.py", "Instructions"),
+    "DeqPolicy": (BUILD / "Cpu-Core-Backend.Issue.DeqPolicy-Hardware.py", "DeqPolicy"),
+    "DataArray": (BUILD / "Cpu-Core-Backend.Issue.DataArray-Hardware.py", "DataArray"),
+    "FuBusyTableRead": (BUILD / "Cpu-Core-Backend.Issue.FuBusyTableRead-Hardware.py", "FuBusyTableRead"),
+    "RobPtrWrappers": (BUILD / "Cpu-Core-Backend.Rob.PtrWrappers-Hardware.py", "RobPtrWrappers"),
 }
 
 

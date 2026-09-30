@@ -32,11 +32,11 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 BUILD = ROOT / (
     "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/"
-    "Build-Cpu.Memory.FrontendBridge-Hardware.py"
+    "Cpu-Memory-Memory.FrontendBridge-Hardware.py"
 )
 DIRECT_TEST = ROOT / (
     "python/Program-System/System-Testing/Testing-Cpu/"
-    "Testing-Cpu.Memory.FrontendBridge-Hardware.py"
+    "Testing-Cpu-Memory.FrontendBridge-Hardware.py"
 )
 EVIDENCE = ROOT / "validation/v2-frontendbridge-public-queue-strict-results.json"
 MODULE = "FrontendBridge"

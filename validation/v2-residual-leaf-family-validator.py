@@ -5,7 +5,7 @@ import hashlib, importlib.util, json, py_compile, re, subprocess, sys
 from pathlib import Path
 from typing import Any
 
-ROOT = Path(__file__).resolve().parents[1]; TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Build-Cpu.Residual.LeafFamily-Hardware.py"; HIER = ROOT / "validation/v2-locked-hierarchy.json"; WORK = ROOT / "validation/.work/v2-residual-leaf-family"; OUT = ROOT / "validation/v2-residual-leaf-family-results.json"
+ROOT = Path(__file__).resolve().parents[1]; TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Residual.LeafFamily-Hardware.py"; HIER = ROOT / "validation/v2-locked-hierarchy.json"; WORK = ROOT / "validation/.work/v2-residual-leaf-family"; OUT = ROOT / "validation/v2-residual-leaf-family-results.json"
 
 
 def main() -> int:

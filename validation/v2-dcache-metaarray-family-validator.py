@@ -23,7 +23,7 @@ from amaranth.sim import Settle, Simulator, Tick
 
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Dcache.MetaArray-Hardware.py"
+TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Memory.Dcache.MetaArray-Hardware.py"
 HIERARCHY = ROOT / "validation/v2-locked-hierarchy.json"
 WORK = ROOT / "validation/.work/v2-dcache-metaarray"
 EVIDENCE = ROOT / "validation/v2-dcache-metaarray-family-results.json"

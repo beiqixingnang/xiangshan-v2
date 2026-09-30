@@ -19,7 +19,7 @@ from amaranth.sim import Simulator
 # Module Contract
 # =============================================================================
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Dependency.HuanCun.Noninclusive-Bridge-Hardware.py"
+TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Dependency.HuanCun.Noninclusive-Bridge-Hardware.py"
 
 
 # =============================================================================

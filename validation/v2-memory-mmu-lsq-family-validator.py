@@ -17,8 +17,8 @@ from v2_build_provenance import source_paths_for_build
 ROOT = Path(__file__).resolve().parents[1]
 HIERARCHY = ROOT / "validation/v2-locked-hierarchy.json"
 TARGETS = (
-    ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Mmu.Lsq.Family-Hardware.py",
-    ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Memory.Prefetch.Metadata.Family-Hardware.py",
+    ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Memory.Mmu.Lsq.Family-Hardware.py",
+    ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Memory.Prefetch.Metadata.Family-Hardware.py",
 )
 EVIDENCE = ROOT / "validation/v2-memory-mmu-lsq-family-results.json"
 

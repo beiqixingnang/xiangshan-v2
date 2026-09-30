@@ -25,10 +25,10 @@ from amaranth.back import verilog
 
 ROOT = Path(__file__).resolve().parents[1]
 CPU = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core"
-TARGET = CPU / "Build-Cpu.Backend.Top-Hardware.py"
-DECODE_PATH = CPU / "Build-Cpu.Backend.Decode.Instructions-Hardware.py"
-ISSUE_PATH = CPU / "Build-Cpu.Backend.Issue.EnqPolicy-Hardware.py"
-WB_PATH = CPU / "Build-Cpu.Backend.Datapath.WbArbiter-Hardware.py"
+TARGET = CPU / "Cpu-Core-Backend.Top-Hardware.py"
+DECODE_PATH = CPU / "Cpu-Core-Backend.Decode.Instructions-Hardware.py"
+ISSUE_PATH = CPU / "Cpu-Core-Backend.Issue.EnqPolicy-Hardware.py"
+WB_PATH = CPU / "Cpu-Core-Backend.Datapath.WbArbiter-Hardware.py"
 WORK = ROOT / "validation/.work/v2-backend-parent-closure-round"
 RESULT = ROOT / "validation/v2-backend-parent-closure-round-results.json"
 MAPPING = ROOT / "validation/v2-backend-parent-closure-round-mapping.json"

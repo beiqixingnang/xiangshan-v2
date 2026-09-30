@@ -21,7 +21,7 @@ from amaranth.sim import Simulator
 # This validator owns only the scalar family evidence and temporary work area.
 # 本验证器仅负责标量 family 证据及临时工作区。
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Core" / "Build-Cpu.Dependency.YunSuan.Scalar-Hardware.py"
+TARGET = ROOT / "python" / "Program-System" / "System-Build" / "Build-Cpu" / "Cpu-Core" / "Cpu-Core-Dependency.YunSuan.Scalar-Hardware.py"
 SOURCE_ROOT = ROOT / "upstream" / "yunsuan" / "src" / "main" / "scala" / "yunsuan" / "scalar"
 SOURCE_COMMIT = "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af"
 REFERENCE_SHA256 = "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d"
