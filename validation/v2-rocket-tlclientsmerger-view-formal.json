@@ -1,0 +1,466 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_COMPLETE_EQUIVALENCE",
+  "proof_execution_profile": "RECOVERABLE_STRICT_FAMILY_V2",
+  "build_id": "Build-Cpu.Dependency.Rocket.TLChildren.TLClientsMergerView",
+  "validator": "validation/v2_strict_family_rail.py",
+  "status": "STRICT_PENDING",
+  "strict_complete_eligible": false,
+  "strict_complete_count_delta": 0,
+  "acceptance_eligible": false,
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "audit_policy": {
+    "require_negative_control": true,
+    "require_two_sided_negative_control": true,
+    "require_locked_reference_lint": true,
+    "require_validator_hash": true,
+    "scope_source": "Build catalog tables"
+  },
+  "scope": {
+    "kind": "catalog_build_multi_variant",
+    "public_variants": [
+      "TLClientsMerger_1"
+    ],
+    "variant_count": 1,
+    "combinational_variants": 1,
+    "sequential_variants": 0,
+    "inputs": {
+      "TLClientsMerger_1_auto_in_a_valid": 1,
+      "TLClientsMerger_1_auto_in_a_bits_opcode": 4,
+      "TLClientsMerger_1_auto_in_a_bits_param": 3,
+      "TLClientsMerger_1_auto_in_a_bits_size": 3,
+      "TLClientsMerger_1_auto_in_a_bits_source": 10,
+      "TLClientsMerger_1_auto_in_a_bits_address": 48,
+      "TLClientsMerger_1_auto_in_a_bits_user_reqSource": 5,
+      "TLClientsMerger_1_auto_in_a_bits_echo_blockisdirty": 1,
+      "TLClientsMerger_1_auto_in_a_bits_mask": 32,
+      "TLClientsMerger_1_auto_in_a_bits_data": 256,
+      "TLClientsMerger_1_auto_in_a_bits_corrupt": 1,
+      "TLClientsMerger_1_auto_in_b_ready": 1,
+      "TLClientsMerger_1_auto_in_c_valid": 1,
+      "TLClientsMerger_1_auto_in_c_bits_opcode": 3,
+      "TLClientsMerger_1_auto_in_c_bits_param": 3,
+      "TLClientsMerger_1_auto_in_c_bits_size": 3,
+      "TLClientsMerger_1_auto_in_c_bits_source": 10,
+      "TLClientsMerger_1_auto_in_c_bits_address": 48,
+      "TLClientsMerger_1_auto_in_c_bits_user_reqSource": 5,
+      "TLClientsMerger_1_auto_in_c_bits_echo_blockisdirty": 1,
+      "TLClientsMerger_1_auto_in_c_bits_data": 256,
+      "TLClientsMerger_1_auto_in_c_bits_corrupt": 1,
+      "TLClientsMerger_1_auto_in_d_ready": 1,
+      "TLClientsMerger_1_auto_in_e_valid": 1,
+      "TLClientsMerger_1_auto_in_e_bits_sink": 6,
+      "TLClientsMerger_1_auto_out_a_ready": 1,
+      "TLClientsMerger_1_auto_out_b_valid": 1,
+      "TLClientsMerger_1_auto_out_b_bits_opcode": 3,
+      "TLClientsMerger_1_auto_out_b_bits_param": 2,
+      "TLClientsMerger_1_auto_out_b_bits_size": 3,
+      "TLClientsMerger_1_auto_out_b_bits_address": 48,
+      "TLClientsMerger_1_auto_out_b_bits_mask": 32,
+      "TLClientsMerger_1_auto_out_b_bits_data": 256,
+      "TLClientsMerger_1_auto_out_b_bits_corrupt": 1,
+      "TLClientsMerger_1_auto_out_c_ready": 1,
+      "TLClientsMerger_1_auto_out_d_valid": 1,
+      "TLClientsMerger_1_auto_out_d_bits_opcode": 4,
+      "TLClientsMerger_1_auto_out_d_bits_param": 2,
+      "TLClientsMerger_1_auto_out_d_bits_size": 3,
+      "TLClientsMerger_1_auto_out_d_bits_source": 10,
+      "TLClientsMerger_1_auto_out_d_bits_sink": 6,
+      "TLClientsMerger_1_auto_out_d_bits_denied": 1,
+      "TLClientsMerger_1_auto_out_d_bits_echo_blockisdirty": 1,
+      "TLClientsMerger_1_auto_out_d_bits_data": 256,
+      "TLClientsMerger_1_auto_out_d_bits_corrupt": 1,
+      "TLClientsMerger_1_auto_out_e_ready": 1
+    },
+    "outputs_compared": {
+      "TLClientsMerger_1_auto_in_a_ready": 1,
+      "TLClientsMerger_1_auto_in_b_valid": 1,
+      "TLClientsMerger_1_auto_in_b_bits_opcode": 3,
+      "TLClientsMerger_1_auto_in_b_bits_param": 2,
+      "TLClientsMerger_1_auto_in_b_bits_size": 3,
+      "TLClientsMerger_1_auto_in_b_bits_source": 10,
+      "TLClientsMerger_1_auto_in_b_bits_address": 48,
+      "TLClientsMerger_1_auto_in_b_bits_mask": 32,
+      "TLClientsMerger_1_auto_in_b_bits_data": 256,
+      "TLClientsMerger_1_auto_in_b_bits_corrupt": 1,
+      "TLClientsMerger_1_auto_in_c_ready": 1,
+      "TLClientsMerger_1_auto_in_d_valid": 1,
+      "TLClientsMerger_1_auto_in_d_bits_opcode": 4,
+      "TLClientsMerger_1_auto_in_d_bits_param": 2,
+      "TLClientsMerger_1_auto_in_d_bits_size": 3,
+      "TLClientsMerger_1_auto_in_d_bits_source": 10,
+      "TLClientsMerger_1_auto_in_d_bits_sink": 6,
+      "TLClientsMerger_1_auto_in_d_bits_denied": 1,
+      "TLClientsMerger_1_auto_in_d_bits_echo_blockisdirty": 1,
+      "TLClientsMerger_1_auto_in_d_bits_data": 256,
+      "TLClientsMerger_1_auto_in_d_bits_corrupt": 1,
+      "TLClientsMerger_1_auto_in_e_ready": 1,
+      "TLClientsMerger_1_auto_out_a_valid": 1,
+      "TLClientsMerger_1_auto_out_a_bits_opcode": 4,
+      "TLClientsMerger_1_auto_out_a_bits_param": 3,
+      "TLClientsMerger_1_auto_out_a_bits_size": 3,
+      "TLClientsMerger_1_auto_out_a_bits_source": 10,
+      "TLClientsMerger_1_auto_out_a_bits_address": 48,
+      "TLClientsMerger_1_auto_out_a_bits_user_reqSource": 5,
+      "TLClientsMerger_1_auto_out_a_bits_echo_blockisdirty": 1,
+      "TLClientsMerger_1_auto_out_a_bits_mask": 32,
+      "TLClientsMerger_1_auto_out_a_bits_data": 256,
+      "TLClientsMerger_1_auto_out_a_bits_corrupt": 1,
+      "TLClientsMerger_1_auto_out_b_ready": 1,
+      "TLClientsMerger_1_auto_out_c_valid": 1,
+      "TLClientsMerger_1_auto_out_c_bits_opcode": 3,
+      "TLClientsMerger_1_auto_out_c_bits_param": 3,
+      "TLClientsMerger_1_auto_out_c_bits_size": 3,
+      "TLClientsMerger_1_auto_out_c_bits_source": 10,
+      "TLClientsMerger_1_auto_out_c_bits_address": 48,
+      "TLClientsMerger_1_auto_out_c_bits_user_reqSource": 5,
+      "TLClientsMerger_1_auto_out_c_bits_echo_blockisdirty": 1,
+      "TLClientsMerger_1_auto_out_c_bits_data": 256,
+      "TLClientsMerger_1_auto_out_c_bits_corrupt": 1,
+      "TLClientsMerger_1_auto_out_d_ready": 1,
+      "TLClientsMerger_1_auto_out_e_valid": 1,
+      "TLClientsMerger_1_auto_out_e_bits_sink": 6
+    },
+    "aggregate_input_bits": 1338,
+    "aggregate_compared_output_bits": 1348,
+    "variants": {
+      "TLClientsMerger_1": {
+        "method": "sat_miter",
+        "sequential": false,
+        "locked_reference": "validation/reference-sv/TLClientsMerger_1.sv",
+        "locked_sha256": "3bd35b5d3836bfb4ae03a3257421bd2b91f84d107afcb574cfa3dd7b79d83548",
+        "children": [],
+        "inputs": {
+          "auto_in_a_valid": 1,
+          "auto_in_a_bits_opcode": 4,
+          "auto_in_a_bits_param": 3,
+          "auto_in_a_bits_size": 3,
+          "auto_in_a_bits_source": 10,
+          "auto_in_a_bits_address": 48,
+          "auto_in_a_bits_user_reqSource": 5,
+          "auto_in_a_bits_echo_blockisdirty": 1,
+          "auto_in_a_bits_mask": 32,
+          "auto_in_a_bits_data": 256,
+          "auto_in_a_bits_corrupt": 1,
+          "auto_in_b_ready": 1,
+          "auto_in_c_valid": 1,
+          "auto_in_c_bits_opcode": 3,
+          "auto_in_c_bits_param": 3,
+          "auto_in_c_bits_size": 3,
+          "auto_in_c_bits_source": 10,
+          "auto_in_c_bits_address": 48,
+          "auto_in_c_bits_user_reqSource": 5,
+          "auto_in_c_bits_echo_blockisdirty": 1,
+          "auto_in_c_bits_data": 256,
+          "auto_in_c_bits_corrupt": 1,
+          "auto_in_d_ready": 1,
+          "auto_in_e_valid": 1,
+          "auto_in_e_bits_sink": 6,
+          "auto_out_a_ready": 1,
+          "auto_out_b_valid": 1,
+          "auto_out_b_bits_opcode": 3,
+          "auto_out_b_bits_param": 2,
+          "auto_out_b_bits_size": 3,
+          "auto_out_b_bits_address": 48,
+          "auto_out_b_bits_mask": 32,
+          "auto_out_b_bits_data": 256,
+          "auto_out_b_bits_corrupt": 1,
+          "auto_out_c_ready": 1,
+          "auto_out_d_valid": 1,
+          "auto_out_d_bits_opcode": 4,
+          "auto_out_d_bits_param": 2,
+          "auto_out_d_bits_size": 3,
+          "auto_out_d_bits_source": 10,
+          "auto_out_d_bits_sink": 6,
+          "auto_out_d_bits_denied": 1,
+          "auto_out_d_bits_echo_blockisdirty": 1,
+          "auto_out_d_bits_data": 256,
+          "auto_out_d_bits_corrupt": 1,
+          "auto_out_e_ready": 1
+        },
+        "outputs_compared": {
+          "auto_in_a_ready": 1,
+          "auto_in_b_valid": 1,
+          "auto_in_b_bits_opcode": 3,
+          "auto_in_b_bits_param": 2,
+          "auto_in_b_bits_size": 3,
+          "auto_in_b_bits_source": 10,
+          "auto_in_b_bits_address": 48,
+          "auto_in_b_bits_mask": 32,
+          "auto_in_b_bits_data": 256,
+          "auto_in_b_bits_corrupt": 1,
+          "auto_in_c_ready": 1,
+          "auto_in_d_valid": 1,
+          "auto_in_d_bits_opcode": 4,
+          "auto_in_d_bits_param": 2,
+          "auto_in_d_bits_size": 3,
+          "auto_in_d_bits_source": 10,
+          "auto_in_d_bits_sink": 6,
+          "auto_in_d_bits_denied": 1,
+          "auto_in_d_bits_echo_blockisdirty": 1,
+          "auto_in_d_bits_data": 256,
+          "auto_in_d_bits_corrupt": 1,
+          "auto_in_e_ready": 1,
+          "auto_out_a_valid": 1,
+          "auto_out_a_bits_opcode": 4,
+          "auto_out_a_bits_param": 3,
+          "auto_out_a_bits_size": 3,
+          "auto_out_a_bits_source": 10,
+          "auto_out_a_bits_address": 48,
+          "auto_out_a_bits_user_reqSource": 5,
+          "auto_out_a_bits_echo_blockisdirty": 1,
+          "auto_out_a_bits_mask": 32,
+          "auto_out_a_bits_data": 256,
+          "auto_out_a_bits_corrupt": 1,
+          "auto_out_b_ready": 1,
+          "auto_out_c_valid": 1,
+          "auto_out_c_bits_opcode": 3,
+          "auto_out_c_bits_param": 3,
+          "auto_out_c_bits_size": 3,
+          "auto_out_c_bits_source": 10,
+          "auto_out_c_bits_address": 48,
+          "auto_out_c_bits_user_reqSource": 5,
+          "auto_out_c_bits_echo_blockisdirty": 1,
+          "auto_out_c_bits_data": 256,
+          "auto_out_c_bits_corrupt": 1,
+          "auto_out_d_ready": 1,
+          "auto_out_e_valid": 1,
+          "auto_out_e_bits_sink": 6
+        },
+        "input_bits": 1338,
+        "output_bits": 1348,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "FAIL",
+        "success_marker": false,
+        "markers_present": null,
+        "unconstrained_or_equiv_cells": true,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "sat_variables": 195,
+        "sat_clauses": 519
+      }
+    },
+    "why_complete": "Every locked module named by this Build's own tables is proven against its exact-name locked reference on the rail its timing requires, with a conservation-audited 5C view where the installed Yosys cannot read the original.",
+    "bounded_tests_counted": false
+  },
+  "reference_lock": {
+    "directory": "validation/reference-sv",
+    "xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "locked_references_written": false,
+    "sha256_by_module": {
+      "TLClientsMerger_1": "3bd35b5d3836bfb4ae03a3257421bd2b91f84d107afcb574cfa3dd7b79d83548"
+    }
+  },
+  "sources": {
+    "validator": {
+      "path": "validation/v2_strict_family_rail.py",
+      "sha256": "2e65c26af25a4e36d23b76ef717b877e239a39bdf88749f489d81f6d08a275c3",
+      "bytes": 71632
+    },
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Rocket.TLChildren.Family-Hardware.py",
+      "sha256": "a945349d693da7a0a7bd6d6f36aa2a0a929d7f370475d1883b792ec441628f37",
+      "bytes": 18323
+    },
+    "reference_sv": {
+      "path": "validation/reference-sv/TLClientsMerger_1.sv",
+      "sha256": "3bd35b5d3836bfb4ae03a3257421bd2b91f84d107afcb574cfa3dd7b79d83548",
+      "bytes": 19241
+    },
+    "scala": {
+      "path": "upstream/utility/src/main/scala/utility/TLUtils/TLClientsMerger.scala",
+      "sha256": "700724eda2922e608aceadcfeead9f60d3eb09ab0c1f91ad35a42797e7bcebf0",
+      "bytes": 2212
+    },
+    "declared_scala_sources": {},
+    "reference_children": {}
+  },
+  "checks": {
+    "py_compile": {
+      "status": "PASS"
+    },
+    "pyright": {
+      "build": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_t42ifw5s\\Cpu-Core-Dependency.Rocket.TLChildren.Family-Hardware.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "error_count": 0,
+        "files_analyzed": 1,
+        "stderr_tail": ""
+      },
+      "rail": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_jns_eki6\\v2_strict_family_rail.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "error_count": 0,
+        "files_analyzed": 1,
+        "stderr_tail": ""
+      }
+    },
+    "stages": {
+      "static_preflight": "PASS",
+      "formal_members": "NOT_RUN_OR_FAIL",
+      "aggregate": "NOT_RUN",
+      "negative_control": "NOT_RUN",
+      "resume": {
+        "checkpoint": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\.cache\\strict-family\\build_cpu_dependency_rocket_tlchildren_tlclientsmergerview\\rail-checkpoint.json",
+        "prepared_cache_hits": 0,
+        "formal_cache_hits": 0,
+        "member_count": 1
+      },
+      "tool_versions": {
+        "python": "3.13.12",
+        "python_implementation": "CPython",
+        "host": "Windows-11-10.0.26300-SP0",
+        "amaranth": "0.5.8",
+        "yosys": "Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)",
+        "verilator": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)"
+      }
+    },
+    "catalog_coverage": {
+      "entries": 1,
+      "proven": 0
+    },
+    "formal": {
+      "yosys_formal_miter": {
+        "status": "NOT_RUN",
+        "mitered_variants": 0,
+        "reason": "member static/formal gate failed"
+      }
+    },
+    "aggregate_sat_miter": {
+      "status": "NOT_RUN",
+      "mitered_variants": 0,
+      "reason": "member static/formal gate failed"
+    },
+    "negative_control": {
+      "status": "NOT_RUN",
+      "cases": {},
+      "reason": "aggregate gate failed"
+    },
+    "variants": [
+      {
+        "method": "sat_miter",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "TLClientsMerger_1_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_tlclientsmergerview_family/DUT_TLClientsMerger_1.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_tlclientsmergerview_family/REF_TLClientsMerger_1.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_tlclientsmergerview_family/TLClientsMerger_1_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.099 MB sources in 4 modules, into 0.018 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.082 s (elab=0.007, cvt=0.015, bld=0.000); cpu 0.018 s on 1 threads; alloced 10.258 MB\n",
+          "output_sha256": "d9da5a1142adcb3adaffb5fdd744564ac0bec9fb57fa1bb8b12d90d2acd9cdf3"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "TLClientsMerger_1",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/TLClientsMerger_1.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.027 MB sources in 2 modules, into 0.021 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.028 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.007 s on 1 threads; alloced 9.625 MB\n",
+          "output_sha256": "d4df901fa108a940f47d2339b68ccc9d7fdac1124f66c5d73651d201a3db19b9"
+        },
+        "sat_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_tlclientsmergerview_family/DUT_TLClientsMerger_1.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_tlclientsmergerview_family/REF_TLClientsMerger_1.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_tlclientsmergerview_family/TLClientsMerger_1_MITER.sv; prep -top TLClientsMerger_1_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "FAIL",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": true,
+          "unconstrained_marker": true,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": [
+            195,
+            519
+          ],
+          "output_tail": "lientsMerger_1_MITER..\nRemoved 0 unused cells and 92 unused wires.\n<suppressed ~1 debug messages>\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module TLClientsMerger_1_MITER.\n\n6.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\TLClientsMerger_1_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~1 debug messages>\n\n6.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\TLClientsMerger_1_MITER.\nPerformed a total of 0 changes.\n\n6.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\TLClientsMerger_1_MITER'.\nRemoved a total of 0 cells.\n\n6.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\TLClientsMerger_1_MITER..\n\n6.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module TLClientsMerger_1_MITER.\n\n6.23. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 9 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 195 variables and 519 clauses..\nSAT proof finished - model found: FAIL!\n\n   ______                   ___       ___       _ _            _ _ \n  (_____ \\                 / __)     / __)     (_) |          | | |\n   _____) )___ ___   ___ _| |__    _| |__ _____ _| | _____  __| | |\n  |  ____/ ___) _ \\ / _ (_   __)  (_   __|____ | | || ___ |/ _  |_|\n  | |   | |  | |_| | |_| || |       | |  / ___ | | || ____( (_| |_ \n  |_|   |_|   \\___/ \\___/ |_|       |_|  \\_____|_|\\_)_____)\\____|_|\n\n\n  Signal Name                                 Dec       Hex           Bin\n  ----------------------------------- ----------- --------- -------------\n  \\auto_out_b_bits_address [7:6]                2         2            10\n  \\mismatch                                     1         1             1\n\nEnd of script. Logfile hash: 6f4383ec08, CPU: user 0.09s system 0.01s, MEM: 17.64 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 39% 7x opt_clean (0 sec), 13% 9x opt_expr (0 sec), ...\n",
+          "output_sha256": "4b0e579063c31757e44c0d14041eadb65a65bb2506585015f203a4add8d69ce9",
+          "formal_success_marker": false,
+          "unconstrained": true,
+          "sat_variables": 195,
+          "sat_clauses": 519
+        }
+      }
+    ]
+  },
+  "failures": [
+    "TLClientsMerger_1:sat_miter",
+    "aggregate SAT miter",
+    "negative control did not detect a mutated design"
+  ],
+  "unclosed": [
+    "strict gates did not all pass"
+  ],
+  "acceptance_unclosed": [
+    "Parent closure, full-top differential, final license review, and user approval remain outside this Build proof."
+  ],
+  "strict_count_delta": 0,
+  "elapsed_seconds": 5.151
+}

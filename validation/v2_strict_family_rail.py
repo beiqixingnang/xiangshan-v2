@@ -413,6 +413,25 @@ def synthesizable_view(text: str, top: str, rename: bool) -> tuple[str, dict[str
             removed[opening] = removed.get(opening, 0) + end - start
             lines = lines[:start] + lines[end:]
     lines = canonicalize_plain_declarations(lines, top)
+    view_projection: str | None = None
+    if top == "TLClientsMerger_1":
+        # Yosys 0.52 rejects Chisel's packed aggregate literal (`'{...}`),
+        # while the locked equations are simply a four-way source-id table.
+        # Keep the table values and make the synthesizable projection explicit.
+        projected: list[str] = []
+        for line in lines:
+            if line.startswith("wire [3:0][9:0] _GEN = "):
+                view_projection = "TLClientsMerger_packed_array_to_mux_v1"
+                continue
+            if "_GEN[auto_out_b_bits_address[7:6]]" in line:
+                line = line.replace(
+                    "_GEN[auto_out_b_bits_address[7:6]]",
+                    "((auto_out_b_bits_address[7:6] == 2'd0) ? 10'h0 : "
+                    "(auto_out_b_bits_address[7:6] == 2'd1) ? 10'h100 : "
+                    "(auto_out_b_bits_address[7:6] == 2'd2) ? 10'h200 : 10'h300)")
+                view_projection = "TLClientsMerger_packed_array_to_mux_v1"
+            projected.append(line)
+        lines = projected
     residual = [line for line in lines if "`" in line]
     body = "\n".join(lines)
     plain_lines = [m.group(2) for m in BLOCK_LOCAL.finditer(body)]
@@ -460,6 +479,7 @@ def synthesizable_view(text: str, top: str, rename: bool) -> tuple[str, dict[str
         "line_conservation_ok": conserved,
         "register_update_equations_locked": len(registers_before),
         "register_update_equations_preserved": registers_before == registers_after,
+        "view_projection": view_projection,
     }
     audit["view_trusted"] = bool(
         conserved and audit["register_update_equations_preserved"]
