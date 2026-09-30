@@ -1,0 +1,172 @@
+{
+  "schema_version": 1,
+  "kind": "V2_TLBUFFER2_FOCUSED_DIAGNOSTIC",
+  "build_id": "Build-Cpu.Dependency.Rocket.TLChildren.TLBuffer2Attrs",
+  "status": "STRICT_PENDING",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "member": "TLBuffer_2",
+  "checks": {
+    "static_failures": [],
+    "verilator": {
+      "command": [
+        "verilator",
+        "--lint-only",
+        "-Wno-fatal",
+        "--top-module",
+        "TLBuffer_2_MITER",
+        "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_tlbuffer2attrs_family/DUT_TLBuffer_2.sv",
+        "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_tlbuffer2attrs_family/REF_TLBuffer_2.sv",
+        "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_tlbuffer2attrs_family/TLBuffer_2_MITER.sv"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "sat_success_marker": false,
+      "sat_counterexample_marker": false,
+      "unconstrained_marker": false,
+      "equiv_success_markers": {
+        "0 are unproven.": false,
+        "Equivalence successfully proven!": false
+      },
+      "equiv_failure_marker": false,
+      "equiv_cells_full": null,
+      "equiv_summary_full": null,
+      "equiv_failed_full": null,
+      "sat_counts_full": null,
+      "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.127 MB sources in 10 modules, into 0.084 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.055 s (elab=0.002, cvt=0.006, bld=0.000); cpu 0.018 s on 1 threads; alloced 10.668 MB\n",
+      "output_sha256": "a6cb69f6a89a20f0377881c93a645ce995a7ae0c6c4ddce73ab44c8d255d0385"
+    },
+    "locked_verilator": {
+      "command": [
+        "verilator",
+        "--lint-only",
+        "-Wno-fatal",
+        "-DSYNTHESIS",
+        "--top-module",
+        "TLBuffer_2",
+        "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleA_2.sv",
+        "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleD_4.sv",
+        "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x136.sv",
+        "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x81.sv",
+        "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/TLBuffer_2.sv"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "sat_success_marker": false,
+      "sat_counterexample_marker": false,
+      "unconstrained_marker": false,
+      "equiv_success_markers": {
+        "0 are unproven.": false,
+        "Equivalence successfully proven!": false
+      },
+      "equiv_failure_marker": false,
+      "equiv_cells_full": null,
+      "equiv_summary_full": null,
+      "equiv_failed_full": null,
+      "sat_counts_full": null,
+      "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.091 MB sources in 6 modules, into 0.040 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.042 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.011 s on 1 threads; alloced 9.816 MB\n",
+      "output_sha256": "f10cd7919f3ec9a0dc8a88866dd81cf9f88e88a586e4edc8baaf38d7da9a9dd2"
+    },
+    "formal": {
+      "method": "sequential_equivalence",
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "--top-module",
+          "TLBuffer_2_MITER",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_tlbuffer2attrs_family/DUT_TLBuffer_2.sv",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_tlbuffer2attrs_family/REF_TLBuffer_2.sv",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_tlbuffer2attrs_family/TLBuffer_2_MITER.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "sat_success_marker": false,
+        "sat_counterexample_marker": false,
+        "unconstrained_marker": false,
+        "equiv_success_markers": {
+          "0 are unproven.": false,
+          "Equivalence successfully proven!": false
+        },
+        "equiv_failure_marker": false,
+        "equiv_cells_full": null,
+        "equiv_summary_full": null,
+        "equiv_failed_full": null,
+        "sat_counts_full": null,
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.127 MB sources in 10 modules, into 0.084 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.055 s (elab=0.002, cvt=0.006, bld=0.000); cpu 0.018 s on 1 threads; alloced 10.668 MB\n",
+        "output_sha256": "a6cb69f6a89a20f0377881c93a645ce995a7ae0c6c4ddce73ab44c8d255d0385"
+      },
+      "locked_verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "-DSYNTHESIS",
+          "--top-module",
+          "TLBuffer_2",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleA_2.sv",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleD_4.sv",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x136.sv",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x81.sv",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/TLBuffer_2.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "sat_success_marker": false,
+        "sat_counterexample_marker": false,
+        "unconstrained_marker": false,
+        "equiv_success_markers": {
+          "0 are unproven.": false,
+          "Equivalence successfully proven!": false
+        },
+        "equiv_failure_marker": false,
+        "equiv_cells_full": null,
+        "equiv_summary_full": null,
+        "equiv_failed_full": null,
+        "sat_counts_full": null,
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.091 MB sources in 6 modules, into 0.040 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.042 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.011 s on 1 threads; alloced 9.816 MB\n",
+        "output_sha256": "f10cd7919f3ec9a0dc8a88866dd81cf9f88e88a586e4edc8baaf38d7da9a9dd2"
+      },
+      "yosys_equiv": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_tlbuffer2attrs_family/DUT_TLBuffer_2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_tlbuffer2attrs_family/REF_TLBuffer_2.sv; proc; async2sync; memory; opt; flatten REF_TLBuffer_2; flatten DUT_TLBuffer_2; equiv_make REF_TLBuffer_2 DUT_TLBuffer_2 TLBuffer_2_EQUIV; prep -top TLBuffer_2_EQUIV; equiv_induct -undef; equiv_status -assert"
+        ],
+        "returncode": 1,
+        "status": "FAIL",
+        "sat_success_marker": false,
+        "sat_counterexample_marker": false,
+        "unconstrained_marker": false,
+        "equiv_success_markers": {
+          "0 are unproven.": false,
+          "Equivalence successfully proven!": false
+        },
+        "equiv_failure_marker": true,
+        "equiv_cells_full": 227,
+        "equiv_summary_full": [
+          10,
+          217
+        ],
+        "equiv_failed_full": 217,
+        "sat_counts_full": null,
+        "output_tail": "deOut_a_q._ram_ext_R0_data_gold [123] \\nodeOut_a_q._ram_ext_R0_data_gate [123]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5591: \\nodeOut_a_q._ram_ext_R0_data_gold [124] \\nodeOut_a_q._ram_ext_R0_data_gate [124]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5592: \\nodeOut_a_q._ram_ext_R0_data_gold [125] \\nodeOut_a_q._ram_ext_R0_data_gate [125]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5593: \\nodeOut_a_q._ram_ext_R0_data_gold [126] \\nodeOut_a_q._ram_ext_R0_data_gate [126]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5594: \\nodeOut_a_q._ram_ext_R0_data_gold [127] \\nodeOut_a_q._ram_ext_R0_data_gate [127]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5595: \\nodeOut_a_q._ram_ext_R0_data_gold [128] \\nodeOut_a_q._ram_ext_R0_data_gate [128]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5596: \\nodeOut_a_q._ram_ext_R0_data_gold [129] \\nodeOut_a_q._ram_ext_R0_data_gate [129]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5597: \\nodeOut_a_q._ram_ext_R0_data_gold [130] \\nodeOut_a_q._ram_ext_R0_data_gate [130]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5598: \\nodeOut_a_q._ram_ext_R0_data_gold [131] \\nodeOut_a_q._ram_ext_R0_data_gate [131]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5599: \\nodeOut_a_q._ram_ext_R0_data_gold [132] \\nodeOut_a_q._ram_ext_R0_data_gate [132]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5600: \\nodeOut_a_q._ram_ext_R0_data_gold [133] \\nodeOut_a_q._ram_ext_R0_data_gate [133]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5601: \\nodeOut_a_q._ram_ext_R0_data_gold [134] \\nodeOut_a_q._ram_ext_R0_data_gate [134]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5602: \\nodeOut_a_q._ram_ext_R0_data_gold [63] \\nodeOut_a_q._ram_ext_R0_data_gate [63]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5603: \\nodeOut_a_q._ram_ext_R0_data_gold [64] \\nodeOut_a_q._ram_ext_R0_data_gate [64]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5604: \\nodeOut_a_q._ram_ext_R0_data_gold [65] \\nodeOut_a_q._ram_ext_R0_data_gate [65]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5605: \\nodeOut_a_q._ram_ext_R0_data_gold [66] \\nodeOut_a_q._ram_ext_R0_data_gate [66]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$5606: \\nodeOut_a_q._ram_ext_R0_data_gold [67] \\nodeOut_a_q._ram_ext_R0_data_gate [67]\n  Unproven $equiv $auto$equivERROR: Found 217 unproven $equiv cells in 'equiv_status -assert'.\n",
+        "output_sha256": "f40f72bf7a83ec4a865c97fcc3ffad11cbc696af419144b11abeedc827d133b5",
+        "markers_present": {
+          "0 are unproven.": false,
+          "Equivalence successfully proven!": false
+        },
+        "formal_success_marker": false,
+        "equiv_cells": 227,
+        "proven_cells": 10,
+        "unproven_cells": 217
+      }
+    }
+  },
+  "strict_complete_count_delta": 0,
+  "acceptance_eligible": false,
+  "unclosed": [
+    "Family aggregate and negative controls not run; parent closure/user acceptance pending"
+  ]
+}

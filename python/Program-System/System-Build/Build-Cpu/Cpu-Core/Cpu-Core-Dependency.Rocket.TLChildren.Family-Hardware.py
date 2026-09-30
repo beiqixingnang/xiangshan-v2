@@ -207,10 +207,19 @@ class Queue2Relay(Elaboratable):
         self.enq_ready = Signal(name="io_enq_ready")
         self.deq_valid = Signal(name="io_deq_valid")
         self.deq_ready = Signal(name="io_deq_ready")
-        self.enq_bits = {name: Signal(width, name=f"io_enq_bits_{name}")
+        self.enq_bits = {name: Signal(width, name=f"io_enq_bits_{name}",
+                                       attrs={"keep": "true"})
                          for name, width in fields}
-        self.deq_bits = {name: Signal(width, name=f"io_deq_bits_{name}")
+        self.deq_bits = {name: Signal(width, name=f"io_deq_bits_{name}",
+                                       attrs={"keep": "true"})
                          for name, width in fields}
+        # Expose every queue field as a real child interface.  Keeping these
+        # signals only in dictionaries makes Amaranth lift the RAM read bus to
+        # the parent module, which destroys the locked Queue2 hierarchy.
+        for name, signal in self.enq_bits.items():
+            setattr(self, f"io_enq_bits_{name}", signal)
+        for name, signal in self.deq_bits.items():
+            setattr(self, f"io_deq_bits_{name}", signal)
 
     def elaborate(self, platform: Any) -> Module:
         del platform
@@ -219,10 +228,15 @@ class Queue2Relay(Elaboratable):
         domain.clk = self.clock
         domain.rst = self.reset
         module.domains += domain
-        memory = Memory(width=sum(width for _, width in self.fields), depth=2,
-                        name="ram_ext")
+        # Match the generated Queue RAM's state-table identity so Yosys can
+        # establish the same two-word memory correspondence after flattening.
+        width = sum(width for _, width in self.fields)
+        memory = Memory(width=width, depth=2, name="ram_ext")
         read_port = memory.read_port(domain="comb")
         write_port = memory.write_port(domain="sync")
+        # Keep the read-data cutpoint named like Chisel's generated Queue RAM.
+        ram_read_data = Signal(width, name="_ram_ext_R0_data",
+                               attrs={"keep": "true"})
         module.submodules.ram_ext = memory
         wrap = Signal(name="wrap")
         wrap_1 = Signal(name="wrap_1")
@@ -239,10 +253,11 @@ class Queue2Relay(Elaboratable):
             write_port.addr.eq(wrap),
             write_port.en.eq(do_enq),
             write_port.data.eq(Cat(*(self.enq_bits[name] for name, _ in self.fields))),
+            ram_read_data.eq(read_port.data),
         ]
         offset = 0
         for name, width in self.fields:
-            module.d.comb += self.deq_bits[name].eq(read_port.data[offset:offset + width])
+            module.d.comb += self.deq_bits[name].eq(ram_read_data[offset:offset + width])
             offset += width
         with cast(Any, module.If(do_enq)):
             module.d.sync += wrap.eq(wrap - 1)
