@@ -88,6 +88,7 @@ def source_record(path: Path) -> dict[str, object]:
 def preflight_only(runner: FamilyRail, direct: dict[str, object], output: Path) -> int:
     """Diagnose prerequisites without launching any formal or changing strict evidence."""
 
+    runner.work.mkdir(parents=True, exist_ok=True)
     module = load_module("catalog_preflight", runner.build_path)
     members = enumerate_members(module, runner.build_path)
     pyright = pyright_check(runner.build_path)
@@ -157,8 +158,11 @@ def main() -> int:
         declared_paths = record.get("SOURCE_SCALA_PATHS", [])
         if not declared_paths:
             source_map = record.get("SOURCE_PATHS", {})
-            declared_paths = [relative for values in source_map.values()
-                              for relative in (values if isinstance(values, list) else [values])]
+            if isinstance(source_map, dict):
+                declared_paths = [relative for values in source_map.values()
+                                  for relative in (values if isinstance(values, list) else [values])]
+            elif isinstance(source_map, list):
+                declared_paths = source_map
         scala_paths = [ROOT / relative for relative in declared_paths]
     runner = FamilyRail(build_path, build_id, evidence,
                         scala_path=scala_paths[0] if scala_paths else None)
