@@ -118,10 +118,6 @@ class TLChildFamily(Elaboratable):
     # matching Queue(..., entries=2) in the locked Rocket output.
     def _queue_channel(self, module: Module, enqueue_prefix: str,
                        dequeue_prefix: str) -> None:
-        enqueue_valid = self.ports[f"{enqueue_prefix}_valid"]
-        enqueue_ready = self.ports[f"{enqueue_prefix}_ready"]
-        dequeue_valid = self.ports[f"{dequeue_prefix}_valid"]
-        dequeue_ready = self.ports[f"{dequeue_prefix}_ready"]
         enqueue_fields = [
             port.name[len(enqueue_prefix) + 1:]
             for port in self.spec.ports
@@ -130,47 +126,25 @@ class TLChildFamily(Elaboratable):
             and port.name != f"{enqueue_prefix}_valid"
             and port.name != f"{enqueue_prefix}_ready"
         ]
-        # The corresponding output payload names are identical after the
-        # channel prefix (for example, bits_opcode), preserving all ABI bits.
-        widths = [self.spec.width(f"{enqueue_prefix}_{field}") for field in enqueue_fields]
-        payload_width = sum(widths)
-        memory = Memory(width=payload_width, depth=2,
-                        name=f"{self.member}_{enqueue_prefix}_ram")
-        read_port = memory.read_port(domain="comb")
-        write_port = memory.write_port(domain="sync")
-        module.submodules[f"{self.member}_{enqueue_prefix}_ram"] = memory
-        write_ptr = Signal(name=f"{self.member}_{enqueue_prefix}_wrap")
-        read_ptr = Signal(name=f"{self.member}_{enqueue_prefix}_wrap_1")
-        maybe_full = Signal(name=f"{self.member}_{enqueue_prefix}_maybe_full")
-        ptr_match = write_ptr == read_ptr
-        empty = ptr_match & ~maybe_full
-        full = ptr_match & maybe_full
-        enq_fire = ~full & enqueue_valid
-        deq_fire = dequeue_ready & ~empty
+        fields = tuple((field.removeprefix("bits_"),
+                        self.spec.width(f"{enqueue_prefix}_{field}"))
+                       for field in enqueue_fields)
+        queue = Queue2Relay(fields)
+        queue_name = "nodeOut_a_q" if enqueue_prefix == "auto_in_a" else "nodeIn_d_q"
+        module.submodules[queue_name] = queue
         module.d.comb += [
-            enqueue_ready.eq(~full),
-            dequeue_valid.eq(~empty),
+            queue.clock.eq(self.ports["clock"]),
+            queue.reset.eq(self.ports["reset"]),
+            queue.enq_valid.eq(self.ports[f"{enqueue_prefix}_valid"]),
+            self.ports[f"{enqueue_prefix}_ready"].eq(queue.enq_ready),
+            queue.deq_ready.eq(self.ports[f"{dequeue_prefix}_ready"]),
+            self.ports[f"{dequeue_prefix}_valid"].eq(queue.deq_valid),
         ]
-        packed_in = Cat(*(self.ports[f"{enqueue_prefix}_{field}"]
-                          for field in enqueue_fields))
-        module.d.comb += [read_port.addr.eq(read_ptr),
-                          write_port.addr.eq(write_ptr),
-                          write_port.data.eq(packed_in),
-                          write_port.en.eq(enq_fire)]
-        offset = 0
-        for field, width in zip(enqueue_fields, widths):
-            output = self.ports[f"{dequeue_prefix}_{field}"]
-            module.d.comb += output.eq(read_port.data[offset:offset + width])
-            offset += width
-
-        with cast(Any, module.If(enq_fire)):
-            module.d.sync += write_ptr.eq(write_ptr - 1)
-        with cast(Any, module.If(deq_fire)):
-            module.d.sync += read_ptr.eq(read_ptr - 1)
-        with cast(Any, module.If(enq_fire != deq_fire)):
-            module.d.sync += maybe_full.eq(enq_fire)
-        with cast(Any, module.If(self.ports["reset"])):
-            module.d.sync += [write_ptr.eq(0), read_ptr.eq(0), maybe_full.eq(0)]
+        for field, _width in fields:
+            module.d.comb += [
+                queue.enq_bits[field].eq(self.ports[f"{enqueue_prefix}_bits_{field}"]),
+                self.ports[f"{dequeue_prefix}_bits_{field}"].eq(queue.deq_bits[field]),
+            ]
     # Elaborate bounded ready-valid relay / 展开有界 ready-valid 中继。
     def elaborate(self, platform: Any) -> Module:
         del platform
@@ -220,6 +194,63 @@ class TLChildFamily(Elaboratable):
         return module
 
 RocketTLChildrenFamily = TLChildFamily
+
+
+class Queue2Relay(Elaboratable):
+    """A named Queue2 state island matching the locked Rocket hierarchy."""
+
+    def __init__(self, fields: tuple[tuple[str, int], ...]) -> None:
+        self.fields = fields
+        self.clock = Signal(name="clock")
+        self.reset = Signal(name="reset")
+        self.enq_valid = Signal(name="io_enq_valid")
+        self.enq_ready = Signal(name="io_enq_ready")
+        self.deq_valid = Signal(name="io_deq_valid")
+        self.deq_ready = Signal(name="io_deq_ready")
+        self.enq_bits = {name: Signal(width, name=f"io_enq_bits_{name}")
+                         for name, width in fields}
+        self.deq_bits = {name: Signal(width, name=f"io_deq_bits_{name}")
+                         for name, width in fields}
+
+    def elaborate(self, platform: Any) -> Module:
+        del platform
+        module = Module()
+        domain = ClockDomain("sync", async_reset=True)
+        domain.clk = self.clock
+        domain.rst = self.reset
+        module.domains += domain
+        memory = Memory(width=sum(width for _, width in self.fields), depth=2,
+                        name="ram_ext")
+        read_port = memory.read_port(domain="comb")
+        write_port = memory.write_port(domain="sync")
+        module.submodules.ram_ext = memory
+        wrap = Signal(name="wrap")
+        wrap_1 = Signal(name="wrap_1")
+        maybe_full = Signal(name="maybe_full")
+        ptr_match = wrap == wrap_1
+        empty = ptr_match & ~maybe_full
+        full = ptr_match & maybe_full
+        do_enq = ~full & self.enq_valid
+        do_deq = self.deq_ready & ~empty
+        module.d.comb += [
+            self.enq_ready.eq(~full),
+            self.deq_valid.eq(~empty),
+            read_port.addr.eq(wrap_1),
+            write_port.addr.eq(wrap),
+            write_port.en.eq(do_enq),
+            write_port.data.eq(Cat(*(self.enq_bits[name] for name, _ in self.fields))),
+        ]
+        offset = 0
+        for name, width in self.fields:
+            module.d.comb += self.deq_bits[name].eq(read_port.data[offset:offset + width])
+            offset += width
+        with cast(Any, module.If(do_enq)):
+            module.d.sync += wrap.eq(wrap - 1)
+        with cast(Any, module.If(do_deq)):
+            module.d.sync += wrap_1.eq(wrap_1 - 1)
+        with cast(Any, module.If(do_enq != do_deq)):
+            module.d.sync += maybe_full.eq(do_enq)
+        return module
 
 
 def tlbuffer_model(events: Iterable[Mapping[str, Any]], *, depth: int = 2
@@ -314,9 +345,10 @@ def build_verilog(configuration: Any,
     if member not in PORT_SPECS:
         raise ValueError(f"unknown TL child: {member}")
     family = TLChildFamily(member)
-    return verilog.convert(family, name=member,
-                           ports=[family.ports[port.name] for port in family.spec.ports],
-                           emit_src=False)
+    rtl = verilog.convert(family, name=member,
+                          ports=[family.ports[port.name] for port in family.spec.ports],
+                          emit_src=False)
+    return rtl
 
 # Emit the default selected member / 输出默认选定成员。
 def main() -> None:
