@@ -11,7 +11,7 @@ import re
 import zlib
 from dataclasses import dataclass
 from typing import Any, Iterable, Mapping, NamedTuple, cast
-from amaranth import (ClockDomain, ClockSignal, Elaboratable, Module,
+from amaranth import (Cat, ClockDomain, ClockSignal, Elaboratable, Memory, Module,
                       ResetSignal, Signal)
 from amaranth.back import verilog
 
@@ -131,41 +131,45 @@ class TLChildFamily(Elaboratable):
         ]
         # The corresponding output payload names are identical after the
         # channel prefix (for example, bits_opcode), preserving all ABI bits.
-        storage = {
-            field: (Signal(self.spec.width(f"{enqueue_prefix}_{field}"),
-                           name=f"{self.member}_{enqueue_prefix}_{field}_q0"),
-                    Signal(self.spec.width(f"{enqueue_prefix}_{field}"),
-                           name=f"{self.member}_{enqueue_prefix}_{field}_q1"))
-            for field in enqueue_fields
-        }
-        count = Signal(2, name=f"{self.member}_{enqueue_prefix}_count")
-        enq_fire = Signal(name=f"{self.member}_{enqueue_prefix}_enq_fire")
-        deq_fire = Signal(name=f"{self.member}_{dequeue_prefix}_deq_fire")
+        widths = [self.spec.width(f"{enqueue_prefix}_{field}") for field in enqueue_fields]
+        payload_width = sum(widths)
+        memory = Memory(width=payload_width, depth=2,
+                        name=f"{self.member}_{enqueue_prefix}_ram")
+        read_port = memory.read_port(domain="comb")
+        write_port = memory.write_port(domain="sync")
+        module.submodules[f"{self.member}_{enqueue_prefix}_ram"] = memory
+        write_ptr = Signal(name=f"{self.member}_{enqueue_prefix}_wrap")
+        read_ptr = Signal(name=f"{self.member}_{enqueue_prefix}_wrap_1")
+        maybe_full = Signal(name=f"{self.member}_{enqueue_prefix}_maybe_full")
+        ptr_match = write_ptr == read_ptr
+        empty = ptr_match & ~maybe_full
+        full = ptr_match & maybe_full
+        enq_fire = ~full & enqueue_valid
+        deq_fire = dequeue_ready & ~empty
         module.d.comb += [
-            enqueue_ready.eq(count != 2),
-            dequeue_valid.eq(count != 0),
-            enq_fire.eq(enqueue_valid & enqueue_ready),
-            deq_fire.eq(dequeue_valid & dequeue_ready),
+            enqueue_ready.eq(~full),
+            dequeue_valid.eq(~empty),
         ]
-        for field, (slot0, slot1) in storage.items():
+        packed_in = Cat(*(self.ports[f"{enqueue_prefix}_{field}"]
+                          for field in enqueue_fields))
+        module.d.comb += [read_port.addr.eq(read_ptr),
+                          write_port.addr.eq(write_ptr),
+                          write_port.data.eq(packed_in),
+                          write_port.en.eq(enq_fire)]
+        offset = 0
+        for field, width in zip(enqueue_fields, widths):
             output = self.ports[f"{dequeue_prefix}_{field}"]
-            module.d.comb += output.eq(slot0)
-            with cast(Any, module.If(enq_fire & (count == 0))):
-                module.d.sync += slot0.eq(self.ports[f"{enqueue_prefix}_{field}"])
-            with cast(Any, module.Elif(enq_fire & (count == 1) & deq_fire)):
-                # A simultaneous pop/push at one occupied entry leaves the
-                # new item at the head of the queue.
-                module.d.sync += slot0.eq(self.ports[f"{enqueue_prefix}_{field}"])
-            with cast(Any, module.Elif(enq_fire)):
-                module.d.sync += slot1.eq(self.ports[f"{enqueue_prefix}_{field}"])
-            with cast(Any, module.If(deq_fire & (count == 2))):
-                module.d.sync += slot0.eq(slot1)
+            module.d.comb += output.eq(read_port.data[offset:offset + width])
+            offset += width
+
+        with cast(Any, module.If(enq_fire)):
+            module.d.sync += write_ptr.eq(write_ptr - 1)
+        with cast(Any, module.If(deq_fire)):
+            module.d.sync += read_ptr.eq(read_ptr - 1)
+        with cast(Any, module.If(enq_fire != deq_fire)):
+            module.d.sync += maybe_full.eq(enq_fire)
         with cast(Any, module.If(self.ports["reset"])):
-            module.d.sync += count.eq(0)
-        with cast(Any, module.Elif(enq_fire & ~deq_fire)):
-            module.d.sync += count.eq(count + 1)
-        with cast(Any, module.Elif(deq_fire & ~enq_fire)):
-            module.d.sync += count.eq(count - 1)
+            module.d.sync += [write_ptr.eq(0), read_ptr.eq(0), maybe_full.eq(0)]
     # Elaborate bounded ready-valid relay / 展开有界 ready-valid 中继。
     def elaborate(self, platform: Any) -> Module:
         del platform

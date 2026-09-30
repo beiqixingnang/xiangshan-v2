@@ -1,0 +1,402 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_COMPLETE_EQUIVALENCE",
+  "proof_execution_profile": "RECOVERABLE_STRICT_FAMILY_V2",
+  "build_id": "Build-Cpu.Dependency.Rocket.TLChildren.TLBuffer2Memory",
+  "validator": "validation/v2_strict_family_rail.py",
+  "status": "STRICT_PENDING",
+  "strict_complete_eligible": false,
+  "strict_complete_count_delta": 0,
+  "acceptance_eligible": false,
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "audit_policy": {
+    "require_negative_control": true,
+    "require_two_sided_negative_control": true,
+    "require_locked_reference_lint": true,
+    "require_validator_hash": true,
+    "scope_source": "Build catalog tables"
+  },
+  "scope": {
+    "kind": "catalog_build_multi_variant",
+    "public_variants": [
+      "TLBuffer_2"
+    ],
+    "variant_count": 1,
+    "combinational_variants": 0,
+    "sequential_variants": 1,
+    "inputs": {
+      "TLBuffer_2_clock": 1,
+      "TLBuffer_2_reset": 1,
+      "TLBuffer_2_auto_in_a_valid": 1,
+      "TLBuffer_2_auto_in_a_bits_opcode": 4,
+      "TLBuffer_2_auto_in_a_bits_param": 3,
+      "TLBuffer_2_auto_in_a_bits_size": 3,
+      "TLBuffer_2_auto_in_a_bits_source": 5,
+      "TLBuffer_2_auto_in_a_bits_address": 48,
+      "TLBuffer_2_auto_in_a_bits_mask": 8,
+      "TLBuffer_2_auto_in_a_bits_data": 64,
+      "TLBuffer_2_auto_in_a_bits_corrupt": 1,
+      "TLBuffer_2_auto_in_d_ready": 1,
+      "TLBuffer_2_auto_out_a_ready": 1,
+      "TLBuffer_2_auto_out_d_valid": 1,
+      "TLBuffer_2_auto_out_d_bits_opcode": 4,
+      "TLBuffer_2_auto_out_d_bits_param": 2,
+      "TLBuffer_2_auto_out_d_bits_size": 3,
+      "TLBuffer_2_auto_out_d_bits_source": 5,
+      "TLBuffer_2_auto_out_d_bits_sink": 1,
+      "TLBuffer_2_auto_out_d_bits_denied": 1,
+      "TLBuffer_2_auto_out_d_bits_data": 64,
+      "TLBuffer_2_auto_out_d_bits_corrupt": 1
+    },
+    "outputs_compared": {
+      "TLBuffer_2_auto_in_a_ready": 1,
+      "TLBuffer_2_auto_in_d_valid": 1,
+      "TLBuffer_2_auto_in_d_bits_opcode": 4,
+      "TLBuffer_2_auto_in_d_bits_param": 2,
+      "TLBuffer_2_auto_in_d_bits_size": 3,
+      "TLBuffer_2_auto_in_d_bits_source": 5,
+      "TLBuffer_2_auto_in_d_bits_sink": 1,
+      "TLBuffer_2_auto_in_d_bits_denied": 1,
+      "TLBuffer_2_auto_in_d_bits_data": 64,
+      "TLBuffer_2_auto_in_d_bits_corrupt": 1,
+      "TLBuffer_2_auto_out_a_valid": 1,
+      "TLBuffer_2_auto_out_a_bits_opcode": 4,
+      "TLBuffer_2_auto_out_a_bits_param": 3,
+      "TLBuffer_2_auto_out_a_bits_size": 3,
+      "TLBuffer_2_auto_out_a_bits_source": 5,
+      "TLBuffer_2_auto_out_a_bits_address": 48,
+      "TLBuffer_2_auto_out_a_bits_mask": 8,
+      "TLBuffer_2_auto_out_a_bits_data": 64,
+      "TLBuffer_2_auto_out_a_bits_corrupt": 1,
+      "TLBuffer_2_auto_out_d_ready": 1
+    },
+    "aggregate_input_bits": 223,
+    "aggregate_compared_output_bits": 221,
+    "variants": {
+      "TLBuffer_2": {
+        "method": "sequential_equivalence",
+        "sequential": true,
+        "locked_reference": "validation/reference-sv/TLBuffer_2.sv",
+        "locked_sha256": "a5bf6d533f2d6c142074f9150008920abe69ec470d29558851dea6c599258721",
+        "children": [
+          "Queue2_TLBundleA_2",
+          "Queue2_TLBundleD_4",
+          "ram_2x136",
+          "ram_2x81"
+        ],
+        "inputs": {
+          "clock": 1,
+          "reset": 1,
+          "auto_in_a_valid": 1,
+          "auto_in_a_bits_opcode": 4,
+          "auto_in_a_bits_param": 3,
+          "auto_in_a_bits_size": 3,
+          "auto_in_a_bits_source": 5,
+          "auto_in_a_bits_address": 48,
+          "auto_in_a_bits_mask": 8,
+          "auto_in_a_bits_data": 64,
+          "auto_in_a_bits_corrupt": 1,
+          "auto_in_d_ready": 1,
+          "auto_out_a_ready": 1,
+          "auto_out_d_valid": 1,
+          "auto_out_d_bits_opcode": 4,
+          "auto_out_d_bits_param": 2,
+          "auto_out_d_bits_size": 3,
+          "auto_out_d_bits_source": 5,
+          "auto_out_d_bits_sink": 1,
+          "auto_out_d_bits_denied": 1,
+          "auto_out_d_bits_data": 64,
+          "auto_out_d_bits_corrupt": 1
+        },
+        "outputs_compared": {
+          "auto_in_a_ready": 1,
+          "auto_in_d_valid": 1,
+          "auto_in_d_bits_opcode": 4,
+          "auto_in_d_bits_param": 2,
+          "auto_in_d_bits_size": 3,
+          "auto_in_d_bits_source": 5,
+          "auto_in_d_bits_sink": 1,
+          "auto_in_d_bits_denied": 1,
+          "auto_in_d_bits_data": 64,
+          "auto_in_d_bits_corrupt": 1,
+          "auto_out_a_valid": 1,
+          "auto_out_a_bits_opcode": 4,
+          "auto_out_a_bits_param": 3,
+          "auto_out_a_bits_size": 3,
+          "auto_out_a_bits_source": 5,
+          "auto_out_a_bits_address": 48,
+          "auto_out_a_bits_mask": 8,
+          "auto_out_a_bits_data": 64,
+          "auto_out_a_bits_corrupt": 1,
+          "auto_out_d_ready": 1
+        },
+        "input_bits": 223,
+        "output_bits": 221,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "FAIL",
+        "success_marker": false,
+        "markers_present": {
+          "0 are unproven.": false,
+          "Equivalence successfully proven!": false
+        },
+        "unconstrained_or_equiv_cells": 221,
+        "proven_cells": 4,
+        "unproven_cells": 217,
+        "sat_variables": null,
+        "sat_clauses": null
+      }
+    },
+    "why_complete": "Every locked module named by this Build's own tables is proven against its exact-name locked reference on the rail its timing requires, with a conservation-audited 5C view where the installed Yosys cannot read the original.",
+    "bounded_tests_counted": false
+  },
+  "reference_lock": {
+    "directory": "validation/reference-sv",
+    "xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "locked_references_written": false,
+    "sha256_by_module": {
+      "TLBuffer_2": "a5bf6d533f2d6c142074f9150008920abe69ec470d29558851dea6c599258721"
+    }
+  },
+  "sources": {
+    "validator": {
+      "path": "validation/v2_strict_family_rail.py",
+      "sha256": "433e8f9ae0e43466d6052a0c049c6a66c3e3c8281278d113a5359c1e8538ea16",
+      "bytes": 70541
+    },
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Rocket.TLChildren.Family-Hardware.py",
+      "sha256": "a945349d693da7a0a7bd6d6f36aa2a0a929d7f370475d1883b792ec441628f37",
+      "bytes": 18323
+    },
+    "reference_sv": {
+      "path": "validation/reference-sv/TLBuffer_2.sv",
+      "sha256": "a5bf6d533f2d6c142074f9150008920abe69ec470d29558851dea6c599258721",
+      "bytes": 7622
+    },
+    "scala": {
+      "path": "upstream/rocket-chip/src/main/scala/tilelink/Buffer.scala",
+      "sha256": "62819b9d9e81eddda2e9ca39691d5713058d925300e6caddd93e6a26c9efcdb2",
+      "bytes": 2918
+    },
+    "declared_scala_sources": {},
+    "reference_children": {
+      "Queue2_TLBundleA_2": {
+        "path": "validation/reference-sv/Queue2_TLBundleA_2.sv",
+        "sha256": "07173849ced90cfe1026e485dc4ba8ce300bf5642bf20e1cdc9fd9ae64d715ab",
+        "bytes": 8006
+      },
+      "Queue2_TLBundleD_4": {
+        "path": "validation/reference-sv/Queue2_TLBundleD_4.sv",
+        "sha256": "781c059c89c888d7bebb19adbcc3e6ed11911f5d5f1cf3bdd5a10e2d9c805d6e",
+        "bytes": 7984
+      },
+      "ram_2x136": {
+        "path": "validation/reference-sv/ram_2x136.sv",
+        "sha256": "d79cf4e99ee9ea4ead9752f99bec8a39b0745b1deef4155f427b32e061de882c",
+        "bytes": 1703
+      },
+      "ram_2x81": {
+        "path": "validation/reference-sv/ram_2x81.sv",
+        "sha256": "31e09141e33a75f2e3fff774ab049de59d1d2cdec2790bdc26a614d59985b5eb",
+        "bytes": 1690
+      }
+    }
+  },
+  "checks": {
+    "py_compile": {
+      "status": "PASS"
+    },
+    "pyright": {
+      "build": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_mop7nvyt\\Cpu-Core-Dependency.Rocket.TLChildren.Family-Hardware.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "error_count": 0,
+        "files_analyzed": 1,
+        "stderr_tail": ""
+      },
+      "rail": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_d88w9kb0\\v2_strict_family_rail.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "error_count": 0,
+        "files_analyzed": 1,
+        "stderr_tail": ""
+      }
+    },
+    "stages": {
+      "static_preflight": "PASS",
+      "formal_members": "NOT_RUN_OR_FAIL",
+      "aggregate": "NOT_RUN",
+      "negative_control": "NOT_RUN",
+      "resume": {
+        "checkpoint": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\.cache\\strict-family\\build_cpu_dependency_rocket_tlchildren_tlbuffer2memory\\rail-checkpoint.json",
+        "prepared_cache_hits": 0,
+        "formal_cache_hits": 0,
+        "member_count": 1
+      },
+      "tool_versions": {
+        "python": "3.13.12",
+        "python_implementation": "CPython",
+        "host": "Windows-11-10.0.26300-SP0",
+        "amaranth": "0.5.8",
+        "yosys": "Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)",
+        "verilator": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)"
+      }
+    },
+    "catalog_coverage": {
+      "entries": 1,
+      "proven": 0
+    },
+    "formal": {
+      "yosys_formal_miter": {
+        "status": "NOT_RUN",
+        "mitered_variants": 0,
+        "reason": "member static/formal gate failed"
+      }
+    },
+    "aggregate_sat_miter": {
+      "status": "NOT_RUN",
+      "mitered_variants": 0,
+      "reason": "member static/formal gate failed"
+    },
+    "negative_control": {
+      "status": "NOT_RUN",
+      "cases": {},
+      "reason": "aggregate gate failed"
+    },
+    "variants": [
+      {
+        "method": "sequential_equivalence",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "TLBuffer_2_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_tlbuffer2memory_family/DUT_TLBuffer_2.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_tlbuffer2memory_family/REF_TLBuffer_2.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_tlbuffer2memory_family/TLBuffer_2_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.104 MB sources in 8 modules, into 0.084 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.081 s (elab=0.008, cvt=0.018, bld=0.000); cpu 0.020 s on 1 threads; alloced 10.328 MB\n",
+          "output_sha256": "d65323e2383de490815ef01dd4e3f701b1d1650b4fd55a65e112ead4583207f9"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "TLBuffer_2",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleA_2.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue2_TLBundleD_4.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x136.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_2x81.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/TLBuffer_2.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.091 MB sources in 6 modules, into 0.040 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.042 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.009 s on 1 threads; alloced 9.816 MB\n",
+          "output_sha256": "f23b36d6feb3920b0eb2992d98911aa75573fa1927f6faa4355044a5aff43289"
+        },
+        "yosys_equiv": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_tlbuffer2memory_family/DUT_TLBuffer_2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_tlbuffer2memory_family/REF_TLBuffer_2.sv; proc; async2sync; memory; opt; flatten REF_TLBuffer_2; flatten DUT_TLBuffer_2; equiv_make REF_TLBuffer_2 DUT_TLBuffer_2 TLBuffer_2_EQUIV; prep -top TLBuffer_2_EQUIV; equiv_induct -undef; equiv_status -assert"
+          ],
+          "returncode": 1,
+          "status": "FAIL",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": true,
+          "equiv_cells_full": 221,
+          "equiv_summary_full": [
+            4,
+            217
+          ],
+          "equiv_failed_full": 217,
+          "sat_counts_full": null,
+          "output_tail": "\\TLBuffer_2_auto_in_a_ram_r_data_gate [118]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4947: \\nodeOut_a_q._ram_ext_R0_data_gold [119] \\TLBuffer_2_auto_in_a_ram_r_data_gate [119]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4948: \\nodeOut_a_q._ram_ext_R0_data_gold [120] \\TLBuffer_2_auto_in_a_ram_r_data_gate [120]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4949: \\nodeOut_a_q._ram_ext_R0_data_gold [121] \\TLBuffer_2_auto_in_a_ram_r_data_gate [121]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4950: \\nodeOut_a_q._ram_ext_R0_data_gold [122] \\TLBuffer_2_auto_in_a_ram_r_data_gate [122]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4951: \\nodeOut_a_q._ram_ext_R0_data_gold [123] \\TLBuffer_2_auto_in_a_ram_r_data_gate [123]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4952: \\nodeOut_a_q._ram_ext_R0_data_gold [124] \\TLBuffer_2_auto_in_a_ram_r_data_gate [124]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4953: \\nodeOut_a_q._ram_ext_R0_data_gold [125] \\TLBuffer_2_auto_in_a_ram_r_data_gate [125]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4954: \\nodeOut_a_q._ram_ext_R0_data_gold [126] \\TLBuffer_2_auto_in_a_ram_r_data_gate [126]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4955: \\nodeOut_a_q._ram_ext_R0_data_gold [127] \\TLBuffer_2_auto_in_a_ram_r_data_gate [127]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4956: \\nodeOut_a_q._ram_ext_R0_data_gold [128] \\TLBuffer_2_auto_in_a_ram_r_data_gate [128]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4957: \\nodeOut_a_q._ram_ext_R0_data_gold [129] \\TLBuffer_2_auto_in_a_ram_r_data_gate [129]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4958: \\nodeOut_a_q._ram_ext_R0_data_gold [130] \\TLBuffer_2_auto_in_a_ram_r_data_gate [130]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4959: \\nodeOut_a_q._ram_ext_R0_data_gold [131] \\TLBuffer_2_auto_in_a_ram_r_data_gate [131]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4960: \\nodeOut_a_q._ram_ext_R0_data_gold [132] \\TLBuffer_2_auto_in_a_ram_r_data_gate [132]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4961: \\nodeOut_a_q._ram_ext_R0_data_gold [133] \\TLBuffer_2_auto_in_a_ram_r_data_gate [133]\n  Unproven $equiv $auto$equiv_make.cc:257:find_same_wires$4962: \\nodeOut_a_q._ram_ext_R0_data_gold [134] \\TLBuffer_2_auto_in_a_ram_r_data_gate [134]\n  UnprERROR: Found 217 unproven $equiv cells in 'equiv_status -assert'.\n",
+          "output_sha256": "8a35b4f4c5574820f84b7b21acb9ebc7d5ece0861cc2efd3645bef75b66e2c93",
+          "markers_present": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "formal_success_marker": false,
+          "equiv_cells": 221,
+          "proven_cells": 4,
+          "unproven_cells": 217
+        }
+      }
+    ]
+  },
+  "failures": [
+    "TLBuffer_2:yosys_equiv",
+    "TLBuffer_2: 217 $equiv cells unproven",
+    "aggregate SAT miter",
+    "negative control did not detect a mutated design"
+  ],
+  "unclosed": [
+    "strict gates did not all pass"
+  ],
+  "acceptance_unclosed": [
+    "Parent closure, full-top differential, final license review, and user approval remain outside this Build proof."
+  ],
+  "strict_count_delta": 0,
+  "elapsed_seconds": 9.694
+}
