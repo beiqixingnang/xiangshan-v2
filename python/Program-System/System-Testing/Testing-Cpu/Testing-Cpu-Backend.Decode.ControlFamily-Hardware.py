@@ -27,7 +27,7 @@ class DecodeControlFamilyTest(unittest.TestCase):
 
     def test_uop_info_amaranth_outputs(self) -> None:
         module = load_subject()
-        self.assertEqual(("UopInfoGen",), tuple(module.IMPLEMENTED_MEMBERS))
+        self.assertEqual(("UopInfoGen", "VTypeGen", "FPDecoder", "VIAluDecoder"), tuple(module.IMPLEMENTED_MEMBERS))
         self.assertFalse(hasattr(module, "uop_info_reference"))
         dut = module.DecodeControlFamily("UopInfoGen")
         vectors = (
@@ -60,6 +60,128 @@ class DecodeControlFamilyTest(unittest.TestCase):
                     ctx.get(dut.ports["io_out_isComplex"]),
                 )
                 self.assertEqual(expected, actual, split)
+
+        simulator = Simulator(dut)
+        simulator.add_testbench(bench)
+        simulator.run()
+
+    def test_vtypegen_amaranth_state_priority(self) -> None:
+        module = load_subject()
+        self.assertIn("VTypeGen", module.IMPLEMENTED_MEMBERS)
+        dut = module.DecodeControlFamily("VTypeGen")
+        simulator = Simulator(dut)
+        simulator.add_clock(1e-6)
+
+        def vset(vlmul: int, vsew: int, vta: int = 0, vma: int = 0, ivli: bool = False, reserved: int = 0) -> int:
+            immediate = vlmul | (vsew << 3) | (vta << 6) | (vma << 7)
+            return (0xC0000000 if ivli else 0) | (reserved << 28) | (immediate << 20) | 0x7057
+
+        async def bench(ctx: Any) -> None:
+            p = dut.ports
+            ctx.set(p["reset"], 1)
+            await ctx.delay(1e-8)
+            self.assertEqual(1, ctx.get(p["io_vtype_illegal"]))
+            ctx.set(p["reset"], 0)
+            await ctx.delay(1e-8)
+
+            ctx.set(p["io_insts_0_valid"], 1)
+            ctx.set(p["io_insts_0_bits"], vset(1, 1, vta=1, vma=1))
+            ctx.set(p["io_canUpdateVType"], 1)
+            await ctx.tick()
+            self.assertEqual(
+                (0, 1, 1, 1, 1),
+                tuple(ctx.get(p[name]) for name in (
+                    "io_vtype_illegal", "io_vtype_vma", "io_vtype_vta",
+                    "io_vtype_vsew", "io_vtype_vlmul",
+                )),
+            )
+
+            ctx.set(p["io_insts_0_valid"], 0)
+            ctx.set(p["io_canUpdateVType"], 0)
+            ctx.set(p["io_commitVType_vtype_valid"], 1)
+            ctx.set(p["io_commitVType_vtype_bits_illegal"], 0)
+            ctx.set(p["io_commitVType_vtype_bits_vma"], 0)
+            ctx.set(p["io_commitVType_vtype_bits_vta"], 1)
+            ctx.set(p["io_commitVType_vtype_bits_vsew"], 3)
+            ctx.set(p["io_commitVType_vtype_bits_vlmul"], 2)
+            await ctx.tick()
+            # Commit updates architectural state; speculative output changes on walk-to-arch.
+            self.assertEqual(1, ctx.get(p["io_vtype_vma"]))
+            ctx.set(p["io_commitVType_vtype_valid"], 0)
+            ctx.set(p["io_walkToArchVType"], 1)
+            await ctx.tick()
+            self.assertEqual(
+                (0, 0, 1, 3, 2),
+                tuple(ctx.get(p[name]) for name in (
+                    "io_vtype_illegal", "io_vtype_vma", "io_vtype_vta",
+                    "io_vtype_vsew", "io_vtype_vlmul",
+                )),
+            )
+
+            ctx.set(p["io_walkToArchVType"], 0)
+            ctx.set(p["io_walkVType_valid"], 1)
+            ctx.set(p["io_walkVType_bits_illegal"], 0)
+            ctx.set(p["io_walkVType_bits_vma"], 0)
+            ctx.set(p["io_walkVType_bits_vta"], 0)
+            ctx.set(p["io_walkVType_bits_vsew"], 0)
+            ctx.set(p["io_walkVType_bits_vlmul"], 1)
+            ctx.set(p["io_commitVType_hasVsetvl"], 1)
+            ctx.set(p["io_vsetvlVType_illegal"], 1)
+            ctx.set(p["io_vsetvlVType_vma"], 1)
+            ctx.set(p["io_vsetvlVType_vta"], 0)
+            ctx.set(p["io_vsetvlVType_vsew"], 0)
+            ctx.set(p["io_vsetvlVType_vlmul"], 0)
+            await ctx.tick()
+            self.assertEqual(
+                (1, 1, 0, 0, 0),
+                tuple(ctx.get(p[name]) for name in (
+                    "io_vtype_illegal", "io_vtype_vma", "io_vtype_vta",
+                    "io_vtype_vsew", "io_vtype_vlmul",
+                )),
+            )
+
+            ctx.set(p["io_commitVType_hasVsetvl"], 0)
+            ctx.set(p["io_walkVType_valid"], 0)
+            ctx.set(p["io_insts_0_valid"], 1)
+            ctx.set(p["io_insts_0_bits"], vset(4, 1, vta=1, vma=1, ivli=True, reserved=1))
+            ctx.set(p["io_canUpdateVType"], 1)
+            await ctx.tick()
+            self.assertEqual(
+                (1, 0, 0, 0, 0),
+                tuple(ctx.get(p[name]) for name in (
+                    "io_vtype_illegal", "io_vtype_vma", "io_vtype_vta",
+                    "io_vtype_vsew", "io_vtype_vlmul",
+                )),
+            )
+
+        simulator.add_testbench(bench)
+        simulator.run()
+
+    def test_fpdecoder_amaranth_controls(self) -> None:
+        module = load_subject()
+        self.assertIn("FPDecoder", module.IMPLEMENTED_MEMBERS)
+        first = module.build_verilog({"module": "FPDecoder"}, {})
+        second = module.build_verilog({"module": "FPDecoder"}, {})
+        self.assertEqual(first, second)
+        self.assertIn("module FPDecoder", first)
+
+    def test_vialu_decoder_all_opcode_values(self) -> None:
+        module = load_subject()
+        self.assertIn("VIAluDecoder", module.IMPLEMENTED_MEMBERS)
+        dut = module.DecodeControlFamily("VIAluDecoder")
+        expected = {opcode: (opcode_value, src_type2, vd_type)
+                    for opcode, opcode_value, src_type2, vd_type in module._VI_ALU_SPECS}
+
+        async def bench(ctx: Any) -> None:
+            for opcode in range(256):
+                ctx.set(dut.ports["io_in_fuOpType"], opcode)
+                await ctx.delay(1e-9)
+                actual = (
+                    ctx.get(dut.ports["io_out_opcode"]),
+                    ctx.get(dut.ports["io_out_srcType2"]),
+                    ctx.get(dut.ports["io_out_vdType"]),
+                )
+                self.assertEqual(expected.get(opcode, (0, 0, 0)), actual, opcode)
 
         simulator = Simulator(dut)
         simulator.add_testbench(bench)

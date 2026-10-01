@@ -26,7 +26,7 @@ COVERED_MODULES = ("Backend", "DecodeUnit", "FusionDecoder", "UopInfoGen", "FPDe
 # Backend/Decode wrappers remain contract-only until their parent interfaces
 # close. / UopInfoGen 是自包含组合叶子；其完整拆分表和两个访存查表如下，
 # Backend/Decode 聚合包装器仍待父级接口闭合。
-IMPLEMENTED_MEMBERS: tuple[str, ...] = ("UopInfoGen",)
+IMPLEMENTED_MEMBERS: tuple[str, ...] = ("UopInfoGen", "VTypeGen", "FPDecoder", "VIAluDecoder")
 CONTRACT_ONLY_MEMBERS = tuple(name for name in COVERED_MODULES if name not in IMPLEMENTED_MEMBERS)
 # Behavioral provenance is maintained in validation inventories, not Build code.
 
@@ -82,6 +82,127 @@ _UOP_SPLIT_CODES: dict[str, int] = {
     "VEC_VFREDOSUM": 0b111101,
     "VEC_MVNR": 0b000100,
 }
+
+# Integer instruction patterns decoded by FPDecoder. Each row stores a masked
+# instruction value, mask, output type tag, flag write enable, and format-class
+# bits (H/S/D, conversion-to-32, conversion-to-16).
+# FPDecoder 的整数指令匹配表：掩码值、掩码、输出类型标签、标志写使能及格式分类位。
+_FP_CONTROL_SPECS: tuple[tuple[int, int, int, int, int], ...] = (
+    (0xF0000053, 0xFFF0707F, 0, 0, 0),
+    (0xD0000053, 0xFFF0007F, 0, 1, 0),
+    (0xD0100053, 0xFFF0007F, 0, 1, 0),
+    (0xD0200053, 0xFFF0007F, 0, 1, 0),
+    (0xD0300053, 0xFFF0007F, 0, 1, 0),
+    (0xE0000053, 0xFFF0707F, 1, 0, 8),
+    (0xE0001053, 0xFFF0707F, 1, 0, 2),
+    (0xC0000053, 0xFFF0007F, 1, 1, 8),
+    (0xC0100053, 0xFFF0007F, 1, 1, 8),
+    (0xC0200053, 0xFFF0007F, 1, 1, 8),
+    (0xC0300053, 0xFFF0007F, 1, 1, 8),
+    (0xA0002053, 0xFE00707F, 1, 1, 2),
+    (0xA0001053, 0xFE00707F, 1, 1, 2),
+    (0xA0000053, 0xFE00707F, 1, 1, 2),
+    (0x20000053, 0xFE00707F, 0, 0, 2),
+    (0x20001053, 0xFE00707F, 0, 0, 2),
+    (0x20002053, 0xFE00707F, 0, 0, 2),
+    (0x28000053, 0xFE00707F, 0, 1, 2),
+    (0x28001053, 0xFE00707F, 0, 1, 2),
+    (0x00000053, 0xFE00007F, 0, 1, 2),
+    (0x08000053, 0xFE00007F, 0, 1, 2),
+    (0x10000053, 0xFE00007F, 0, 1, 2),
+    (0x00000043, 0x0600007F, 0, 1, 2),
+    (0x00000047, 0x0600007F, 0, 1, 2),
+    (0x0000004F, 0x0600007F, 0, 1, 2),
+    (0x0000004B, 0x0600007F, 0, 1, 2),
+    (0x18000053, 0xFE00007F, 0, 1, 2),
+    (0x58000053, 0xFFF0007F, 0, 1, 2),
+    (0xF2000053, 0xFFF0707F, 1, 0, 0),
+    (0xD2000053, 0xFFF0007F, 1, 1, 0),
+    (0xD2100053, 0xFFF0007F, 1, 1, 0),
+    (0xD2200053, 0xFFF0007F, 1, 1, 0),
+    (0xD2300053, 0xFFF0007F, 1, 1, 0),
+    (0xE2000053, 0xFFF0707F, 1, 0, 0),
+    (0xE2001053, 0xFFF0707F, 1, 0, 4),
+    (0xC2000053, 0xFFF0007F, 1, 1, 8),
+    (0xC2100053, 0xFFF0007F, 1, 1, 8),
+    (0xC2200053, 0xFFF0007F, 1, 1, 0),
+    (0xC2300053, 0xFFF0007F, 1, 1, 0),
+    (0x40100053, 0xFFF0007F, 0, 1, 8),
+    (0x42000053, 0xFFF0007F, 1, 1, 8),
+    (0xA2002053, 0xFE00707F, 1, 1, 4),
+    (0xA2001053, 0xFE00707F, 1, 1, 4),
+    (0xA2000053, 0xFE00707F, 1, 1, 4),
+    (0x22000053, 0xFE00707F, 1, 0, 4),
+    (0x22001053, 0xFE00707F, 1, 0, 4),
+    (0x22002053, 0xFE00707F, 1, 0, 4),
+    (0x2A000053, 0xFE00707F, 1, 1, 4),
+    (0x2A001053, 0xFE00707F, 1, 1, 4),
+    (0x02000053, 0xFE00007F, 1, 1, 4),
+    (0x0A000053, 0xFE00007F, 1, 1, 4),
+    (0x12000053, 0xFE00007F, 1, 1, 4),
+    (0x02000043, 0x0600007F, 1, 1, 4),
+    (0x02000047, 0x0600007F, 1, 1, 4),
+    (0x0200004F, 0x0600007F, 1, 1, 4),
+    (0x0200004B, 0x0600007F, 1, 1, 4),
+    (0x1A000053, 0xFE00007F, 1, 1, 4),
+    (0x5A000053, 0xFFF0007F, 1, 1, 4),
+    (0xF4000053, 0xFFF0707F, 2, 0, 0),
+    (0xD4000053, 0xFFF0007F, 2, 1, 16),
+    (0xD4100053, 0xFFF0007F, 2, 1, 16),
+    (0xD4200053, 0xFFF0007F, 2, 1, 16),
+    (0xD4300053, 0xFFF0007F, 2, 1, 16),
+    (0xE4000053, 0xFFF0707F, 1, 0, 16),
+    (0xE4001053, 0xFFF0707F, 1, 0, 1),
+    (0xC4000053, 0xFFF0007F, 1, 1, 16),
+    (0xC4100053, 0xFFF0007F, 1, 1, 16),
+    (0xC4200053, 0xFFF0007F, 1, 1, 16),
+    (0xC4300053, 0xFFF0007F, 1, 1, 16),
+    (0xA4002053, 0xFE00707F, 1, 1, 1),
+    (0xA4001053, 0xFE00707F, 1, 1, 1),
+    (0xA4000053, 0xFE00707F, 1, 1, 1),
+    (0x24000053, 0xFE00707F, 2, 0, 1),
+    (0x24001053, 0xFE00707F, 2, 0, 1),
+    (0x24002053, 0xFE00707F, 2, 0, 1),
+    (0x2C000053, 0xFE00707F, 2, 1, 1),
+    (0x2C001053, 0xFE00707F, 2, 1, 1),
+    (0x04000053, 0xFE00007F, 2, 1, 1),
+    (0x0C000053, 0xFE00007F, 2, 1, 1),
+    (0x14000053, 0xFE00007F, 2, 1, 1),
+    (0x04000043, 0x0600007F, 2, 1, 1),
+    (0x04000047, 0x0600007F, 2, 1, 1),
+    (0x0400004F, 0x0600007F, 2, 1, 1),
+    (0x0400004B, 0x0600007F, 2, 1, 1),
+    (0x1C000053, 0xFE00007F, 2, 1, 1),
+    (0x5C000053, 0xFFF0007F, 2, 1, 1),
+    (0xA4004053, 0xFE00707F, 0, 0, 1),
+    (0xA4005053, 0xFE00707F, 0, 0, 1),
+    (0x2C002053, 0xFE00707F, 0, 0, 1),
+    (0x2C003053, 0xFE00707F, 0, 0, 1),
+    (0x44400053, 0xFFF0007F, 0, 0, 1),
+    (0x44500053, 0xFFF0007F, 0, 0, 1),
+    (0xA0004053, 0xFE00707F, 0, 0, 2),
+    (0xA0005053, 0xFE00707F, 0, 0, 2),
+    (0x28002053, 0xFE00707F, 0, 0, 2),
+    (0x28003053, 0xFE00707F, 0, 0, 2),
+    (0x40400053, 0xFFF0007F, 0, 0, 2),
+    (0x40500053, 0xFFF0007F, 0, 0, 2),
+    (0xC2801053, 0xFFF0707F, 0, 0, 8),
+    (0x40200053, 0xFFF0007F, 0, 0, 16),
+    (0x44000053, 0xFFF0007F, 0, 0, 16),
+    (0x42200053, 0xFFF0007F, 0, 0, 16),
+)
+
+_VI_ALU_SPECS: tuple[tuple[int, int, int, int], ...] = (
+    (0x39, 33, 0, 0), (0x3A, 34, 0, 0),
+    (0x3B, 34, 2, 2), (0x3C, 35, 0, 0),
+    (0x3D, 35, 2, 2), (0x3E, 36, 0, 0),
+    (0x3F, 37, 0, 0), (0x40, 38, 0, 0),
+    (0x41, 33, 0, 1), (0x42, 33, 2, 3),
+    (0x4B, 39, 4, 0), (0x4C, 40, 4, 0),
+    (0x4D, 41, 4, 4), (0x4E, 42, 4, 4),
+    (0x4F, 43, 4, 4), (0x50, 44, 0, 0),
+    (0x51, 45, 0, 0), (0x53, 47, 0, 0),
+)
 
 
 def _strided_uops(simple_emul: int, nf: int) -> int:
@@ -1799,8 +1920,10 @@ class DecodeControlFamily(Elaboratable):
         # locked V2 configuration. / 锁定 V2 配置为 VLEN=128、ELEN=64。
         log2_vsew = Signal(3, name="vtype_new_log2_vsew")
         log2_vsew_max = Signal(3, name="vtype_new_log2_vsew_max")
+        # Preserve the result width while bridging Amaranth's Cat overload typing.
+        # 转换仅用于 Amaranth Cat 的类型边界，不改变表达式位宽。
         module.d.comb += [
-            log2_vsew.eq(Cat(z_vsew, Const(0, 1)) + 3),
+            log2_vsew.eq(cast(Any, Cat(z_vsew, Const(0, 1))) + 3),
             log2_vsew_max.eq(Mux(z_vlmul[2], z_vlmul - 2, 6)),
         ]
         new_illegal = (
@@ -1853,22 +1976,51 @@ class DecodeControlFamily(Elaboratable):
         module.d.comb += [p["io_vtype_illegal"].eq(spec_illegal), p["io_vtype_vma"].eq(spec_vma), p["io_vtype_vta"].eq(spec_vta), p["io_vtype_vsew"].eq(spec_vsew), p["io_vtype_vlmul"].eq(spec_vlmul)]
 
     def _fp_decoder(self, module: Module) -> None:
-        """Decode the stable FP control fields and classify common formats."""
+        """Decode floating-point control tags, flag writes, and output format."""
+
         p = self.ports
         inst = p["io_instr"]
-        opcode = inst[0:7]
-        funct7 = inst[25:32]
-        is_fp = opcode == 0x53
-        fmt = Mux((funct7 == 0x00) | (funct7 == 0x01) | (funct7 == 0x04) | (funct7 == 0x05), 0,
-                  Mux((funct7 == 0x08) | (funct7 == 0x09) | (funct7 == 0x0C) | (funct7 == 0x0D), 1, 2))
-        tag = Mux(is_fp, Mux(funct7[0], 1, Mux(funct7[1], 2, 0)), 0)
-        module.d.comb += [p["io_fpCtrl_typeTagOut"].eq(tag), p["io_fpCtrl_wflags"].eq(is_fp & ((inst[12:15] == 1) | (inst[12:15] == 2))), p["io_fpCtrl_typ"].eq(inst[20:22]), p["io_fpCtrl_fmt"].eq(fmt), p["io_fpCtrl_rm"].eq(inst[12:15])]
+        type_tag = Const(0, 2)
+        writes_flags = Const(0, 1)
+        is_fp32 = Const(0, 1)
+        is_fp16 = Const(0, 1)
+        for value, mask, tag_value, flag_value, fmt_flags in _FP_CONTROL_SPECS:
+            # The masked equality is the executable instruction-pattern table.
+            # 掩码相等式构成实际参与逻辑的指令匹配表。
+            match = (cast(Any, inst) & mask) == value
+            type_tag = Mux(match, tag_value, type_tag)
+            writes_flags = Mux(match, flag_value, writes_flags)
+            if fmt_flags & ((1 << 1) | (1 << 3)):
+                is_fp32 = is_fp32 | cast(Any, match)
+            if fmt_flags & ((1 << 0) | (1 << 4)):
+                is_fp16 = is_fp16 | cast(Any, match)
+        fmt = Mux(is_fp32, 2, Mux(is_fp16, 1, 3))
+        module.d.comb += [
+            p["io_fpCtrl_typeTagOut"].eq(type_tag),
+            p["io_fpCtrl_wflags"].eq(writes_flags),
+            p["io_fpCtrl_typ"].eq(inst[20:22]),
+            p["io_fpCtrl_fmt"].eq(fmt),
+            p["io_fpCtrl_rm"].eq(inst[12:15]),
+        ]
 
     def _vialu(self, module: Module) -> None:
-        """Expose deterministic VI ALU opcode/type decode from fuOpType."""
+        """Decode the integer vector operation table into opcode/type fields."""
+
         p = self.ports
         op = p["io_in_fuOpType"]
-        module.d.comb += [p["io_out_opcode"].eq(op[:6]), p["io_out_srcType2"].eq(Cat(Const(0, 2), op[0])), p["io_out_vdType"].eq(Cat(Const(0, 2), op[1]))]
+        module.d.comb += [
+            p["io_out_opcode"].eq(0),
+            p["io_out_srcType2"].eq(0),
+            p["io_out_vdType"].eq(0),
+        ]
+        with module.Switch(op):
+            for fu_op, opcode, src_type2, vd_type in _VI_ALU_SPECS:
+                with module.Case(fu_op):
+                    module.d.comb += [
+                        p["io_out_opcode"].eq(opcode),
+                        p["io_out_srcType2"].eq(src_type2),
+                        p["io_out_vdType"].eq(vd_type),
+                    ]
 
     def elaborate(self, platform: Any) -> Module:
         """Elaborate implemented leaves; other aggregate members are CONTRACT_ONLY."""

@@ -1,0 +1,172 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_BACKEND_CLOSURE_WAVE_DECODE_LEAVES",
+  "batch_id": "V2-BACKEND-CLOSURE-WAVE-003",
+  "members": [
+    "FPDecoder",
+    "VIAluDecoder"
+  ],
+  "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Decode.ControlFamily-Hardware.py",
+  "build_sha256": "29890daed163e26f6ca692ceab7f0f8a44451909dff62a4ee0ae54572a8c32f4",
+  "locked_xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+  "source_scala_sha256": {
+    "upstream/src/main/scala/xiangshan/backend/decode/FPDecoder.scala": "7fe4ee3912cd991ead64ff5fd079f6c3d6efea41f7bae752a08578555b1fbdee",
+    "upstream/src/main/scala/xiangshan/backend/fu/wrapper/VIPU.scala": "77a3278b113234e51f4704f7a94be7fdbccd9cf04d23cd55e2e8e76a88cbc0f7",
+    "upstream/yunsuan/src/main/scala/yunsuan/package.scala": "3520b4a3cdf8e41b6e3143d358aa7dc864bb2a47ea052e0531e6534e95966a04",
+    "upstream/yunsuan/src/main/scala/yunsuan/vector/VectorALU/VAluDecode.scala": "1275661120347f2d1664e78ba24d00441d97305bb9ac3dcd172ab6930b6c215f"
+  },
+  "reference_sha256": {
+    "FPDecoder": "b3c09a537b0138703a61a469002b73e91f293ea91d5d8d367f3070f0541d18a5",
+    "VIAluDecoder": "08ef04abb637e934e1cb6f007c71aaf28bc1b75579dbd479f392b34b21106e60"
+  },
+  "member_results": {
+    "FPDecoder": {
+      "status": "PASS",
+      "abi": {
+        "locked_ports": 6,
+        "candidate_ports": 6,
+        "match": true
+      },
+      "export": {
+        "deterministic": true,
+        "bytes": 74799,
+        "sha256": "c6649ef3a69741fb573b895b11c2a759d112a3dc818250b70d59e3fea19ee9e9"
+      },
+      "vectors": 612,
+      "reference_sha256": "b3c09a537b0138703a61a469002b73e91f293ea91d5d8d367f3070f0541d18a5",
+      "reference_differential": {
+        "compile": {
+          "command": [
+            "verilator",
+            "--binary",
+            "--timing",
+            "-Wno-fatal",
+            "--top-module",
+            "fpdecoder_diff_tb",
+            "--Mdir",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-decode-leaves/obj-fpdecoder-c6649ef3a6",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-decode-leaves/FPDecoder_DUT.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-decode-leaves/FPDecoder_reference.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-decode-leaves/fpdecoder_diff_tb.sv"
+          ],
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "ents/xiangshan-v2/validation/.work/v2-backend-closure-wave-decode-leaves/FPDecoder_DUT.sv:1377:26: Operator EQ expects 32 bits on the RHS, but RHS's CONST '30'h20002053' generates 30 bits.\n                                                                                                                                                                         : ... note: In instance 'fpdecoder_diff_tb.dut'\n 1377 |   assign \\$172  = \\$171  == 30'h20002053;\n      |                          ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-decode-leaves/FPDecoder_DUT.sv:1378:26: Operator EQ expects 32 bits on the RHS, but RHS's CONST '30'h20001053' generates 30 bits.\n                                                                                                                                                                         : ... note: In instance 'fpdecoder_diff_tb.dut'\n 1378 |   assign \\$174  = \\$173  == 30'h20001053;\n      |                          ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-decode-leaves/FPDecoder_DUT.sv:1379:26: Operator EQ expects 32 bits on the RHS, but RHS's CONST '30'h20000053' generates 30 bits.\n                                                                                                                                                                         : ... note: In instance 'fpdecoder_diff_tb.dut'\n 1379 |   assign \\$176  = \\$175  == 30'h20000053;\n      |                          ^~\n",
+          "output_sha256": "3ea939b8fa9defd319af677a131fce9084e87762812080c95788934046ab9b60"
+        },
+        "run": {
+          "command": [
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-decode-leaves/obj-fpdecoder-c6649ef3a6/Vfpdecoder_diff_tb"
+          ],
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "FPDECODER_LOCKED_DIFF_PASS cases=612\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-decode-leaves/fpdecoder_diff_tb.sv:2467: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 612ps; walltime 0.003 s; speed 368.853 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n",
+          "output_sha256": "56c431b84549a2cf32bbab0a6062f774e86875f7fce31db0d06c0d40219d8814"
+        }
+      },
+      "verilator_lint": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-decode-leaves/FPDecoder.sv"
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "arning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-decode-leaves/FPDecoder.sv:1377:26: Operator EQ expects 32 bits on the RHS, but RHS's CONST '30'h20002053' generates 30 bits.\n                                                                                                                                                                     : ... note: In instance 'FPDecoder'\n 1377 |   assign \\$172  = \\$171  == 30'h20002053;\n      |                          ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-decode-leaves/FPDecoder.sv:1378:26: Operator EQ expects 32 bits on the RHS, but RHS's CONST '30'h20001053' generates 30 bits.\n                                                                                                                                                                     : ... note: In instance 'FPDecoder'\n 1378 |   assign \\$174  = \\$173  == 30'h20001053;\n      |                          ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-decode-leaves/FPDecoder.sv:1379:26: Operator EQ expects 32 bits on the RHS, but RHS's CONST '30'h20000053' generates 30 bits.\n                                                                                                                                                                     : ... note: In instance 'FPDecoder'\n 1379 |   assign \\$176  = \\$175  == 30'h20000053;\n      |                          ^~\n",
+        "output_sha256": "46c3513afd6a172e854095efddb471a20287100f747a0625c51f95381bf07e4f"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv \"/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-decode-leaves/FPDecoder.sv\"; hierarchy -check -top FPDecoder; proc; stat; check"
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "oted 0 assignments to connections.\n\n3.4. Executing PROC_INIT pass (extract init attributes).\n\n3.5. Executing PROC_ARST pass (detect async resets in processes).\n\n3.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module FPDecoder.\n\n4. Printing statistics.\n\n=== FPDecoder ===\n\n   Number of wires:               1369\n   Number of wire bits:          10100\n   Number of public wires:         827\n   Number of public wire bits:    9459\n   Number of ports:                  6\n   Number of port bits:             42\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                542\n     $eq                           274\n     $mux                          200\n     $or                            68\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module FPDecoder...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 5648e8dd7f, CPU: user 0.04s system 0.02s, MEM: 25.62 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 78% 2x read_verilog (0 sec), 7% 1x check (0 sec), ...\n",
+        "output_sha256": "c3a2474e499d834c5af87591950fba637a1b69a6cca5dc4f251a28e3af444b01"
+      }
+    },
+    "VIAluDecoder": {
+      "status": "PASS",
+      "abi": {
+        "locked_ports": 4,
+        "candidate_ports": 4,
+        "match": true
+      },
+      "export": {
+        "deterministic": true,
+        "bytes": 3467,
+        "sha256": "921108a242a2fb687dd2345afe3ae1a637399b3f535c0aebb22e568b26cfaa07"
+      },
+      "vectors": 256,
+      "reference_sha256": "08ef04abb637e934e1cb6f007c71aaf28bc1b75579dbd479f392b34b21106e60",
+      "reference_differential": {
+        "compile": {
+          "command": [
+            "verilator",
+            "--binary",
+            "--timing",
+            "-Wno-fatal",
+            "--top-module",
+            "vialudecoder_diff_tb",
+            "--Mdir",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-decode-leaves/obj-vialudecoder-921108a242",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-decode-leaves/VIAluDecoder_DUT.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-decode-leaves/VIAluDecoder_reference.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-decode-leaves/vialudecoder_diff_tb.sv"
+          ],
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "                                                                                      : ... note: In instance 'vialudecoder_diff_tb'\n 1030 |       io_in_fuOpType = 32'h000000fe; #1;\n      |                      ^\n%Warning-WIDTHTRUNC: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-decode-leaves/vialudecoder_diff_tb.sv:1034:22: Operator ASSIGN expects 8 bits on the Assign RHS, but Assign RHS's CONST '32'hff' generates 32 bits.\n                                                                                                                                                                               : ... note: In instance 'vialudecoder_diff_tb'\n 1034 |       io_in_fuOpType = 32'h000000ff; #1;\n      |                      ^\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-decode-leaves/VIAluDecoder_DUT.sv:18:5: Case values incompletely covered (example pattern 0x0)\n   18 |     casez (io_in_fuOpType)\n      |     ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-decode-leaves/VIAluDecoder_DUT.sv:60:5: Case values incompletely covered (example pattern 0x0)\n   60 |     casez (io_in_fuOpType)\n      |     ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-decode-leaves/VIAluDecoder_DUT.sv:102:5: Case values incompletely covered (example pattern 0x0)\n  102 |     casez (io_in_fuOpType)\n      |     ^~~~~\n",
+          "output_sha256": "7e8eb53c49f3a4feda7f6915e683b1e1cf0d63c7b3e32137bf7f135552f341b7"
+        },
+        "run": {
+          "command": [
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-decode-leaves/obj-vialudecoder-921108a242/Vvialudecoder_diff_tb"
+          ],
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "VIALUDECODER_LOCKED_DIFF_PASS cases=256\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-decode-leaves/vialudecoder_diff_tb.sv:1039: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 256ps; walltime 0.001 s; speed 198.014 ns/s\n- Verilator: cpu 0.001 s on 1 threads; alloced 153 MB\n",
+          "output_sha256": "2f118e28b53dc664da131799706b5526c3bf1e374a33aa5e44298236a6b148a1"
+        }
+      },
+      "verilator_lint": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-decode-leaves/VIAluDecoder.sv"
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.024 MB sources in 2 modules, into 0.027 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.021 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.434 MB\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-decode-leaves/VIAluDecoder.sv:18:5: Case values incompletely covered (example pattern 0x0)\n   18 |     casez (io_in_fuOpType)\n      |     ^~~~~\n                         ... For warning description see https://verilator.org/warn/CASEINCOMPLETE?v=5.032\n                         ... Use \"/* verilator lint_off CASEINCOMPLETE */\" and lint_on around source to disable this message.\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-decode-leaves/VIAluDecoder.sv:60:5: Case values incompletely covered (example pattern 0x0)\n   60 |     casez (io_in_fuOpType)\n      |     ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-decode-leaves/VIAluDecoder.sv:102:5: Case values incompletely covered (example pattern 0x0)\n  102 |     casez (io_in_fuOpType)\n      |     ^~~~~\n",
+        "output_sha256": "18d56b1e551beba6ce8e53071da3bcfde9cd90c41845fe816645485ae2b63a95"
+      },
+      "yosys": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv \"/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-decode-leaves/VIAluDecoder.sv\"; hierarchy -check -top VIAluDecoder; proc; stat; check"
+        ],
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-decode-leaves/VIAluDecoder.sv:57$2'.\nFound and cleaned up 1 empty switch in `\\VIAluDecoder.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-decode-leaves/VIAluDecoder.sv:15$1'.\nRemoving empty process `VIAluDecoder.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-decode-leaves/VIAluDecoder.sv:15$1'.\nCleaned up 3 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module VIAluDecoder.\n\n4. Printing statistics.\n\n=== VIAluDecoder ===\n\n   Number of wires:                 48\n   Number of wire bits:             91\n   Number of public wires:           5\n   Number of public wire bits:      21\n   Number of ports:                  4\n   Number of port bits:             20\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                 36\n     $eq                            33\n     $pmux                           3\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module VIAluDecoder...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 14c34efc5e, CPU: user 0.01s system 0.00s, MEM: 11.88 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 49% 2x read_verilog (0 sec), 13% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "53a8b2b88616a7fe23b015660d889afda91612bc12f1741d40c1b7b61ff45088"
+      }
+    }
+  },
+  "gates": {
+    "DIRECT_TEST_PASS_BOUNDED": "PASS_BOUNDED",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED_REFERENCE_DIFFERENTIAL",
+    "FORMAL": "PENDING_ROOT_SERIAL_RAIL",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "DIRECT_TEST_PASS_BOUNDED",
+  "strict_delta": 0,
+  "acceptance_eligible": false,
+  "failures": []
+}

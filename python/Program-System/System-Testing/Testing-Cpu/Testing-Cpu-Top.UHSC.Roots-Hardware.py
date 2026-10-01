@@ -43,6 +43,22 @@ class UHSTileParentContractTest(unittest.TestCase):
         self.assertEqual(len(tile.uhstile_children), 6)
         self.assertIsNone(tile.uhstile_children["uhs_core"])
 
+    def test_bound_children_need_explicit_complete_status(self) -> None:
+        """A complete binding inventory alone stays behavior-pending. / 仅接线齐全仍保持行为 pending。"""
+        module = load_subject()
+        expected = ("frontend", "backend", "mem_block")
+        bound = module.root_closure_observation(expected, expected, 308, 308)
+        self.assertEqual(1, bound["binding_complete"])
+        self.assertEqual(3, bound["pending_children"])
+        self.assertEqual(0, bound["complete"])
+
+        closed = module.root_closure_observation(
+            expected, expected, 308, 308,
+            {name: "PASS_COMPLETE" for name in expected},
+        )
+        self.assertEqual(0, closed["pending_children"])
+        self.assertEqual(1, closed["complete"])
+
 
 if __name__ == "__main__":
     unittest.main()

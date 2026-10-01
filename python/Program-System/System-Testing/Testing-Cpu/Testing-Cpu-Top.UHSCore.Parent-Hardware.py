@@ -16,6 +16,7 @@ from pathlib import Path
 from types import ModuleType
 from typing import TYPE_CHECKING, Any, Final
 
+from amaranth import Elaboratable, Module
 from amaranth.sim import Settle, Simulator
 
 ROOT: Final = Path(__file__).resolve().parents[4]
@@ -122,6 +123,42 @@ class UHSCoreParentContractTest(unittest.TestCase):
         self.assertEqual(1, result["mem_a_fire"])
         self.assertEqual(1, result["mem_d_fire"])
         self.assertEqual(0, result["closure_complete"])
+
+    def test_complete_children_do_not_hide_rejected_pin_edges(self) -> None:
+        """A missing exact endpoint keeps closure pending after child status passes. / 子级状态通过仍不能掩盖缺失 pin。"""
+
+        class EmptyChild(Elaboratable):
+            def elaborate(self, platform):
+                del platform
+                return Module()
+
+        dut = self.module.UHSCoreParent(injected_dependencies={
+            "frontend": EmptyChild(), "backend": EmptyChild(), "mem_block": EmptyChild(),
+            "child_status": {"frontend": "PASS_COMPLETE", "backend": "PASS_COMPLETE",
+                             "mem_block": "PASS_COMPLETE"},
+            "verified_pin_audit": {"pin_table_complete": True, "unsupported_pin_count": 0},
+            "verified_pin_edges": [{
+                "source": {"kind": "child", "child": "frontend", "port": "missing_pin"},
+                "destinations": [{"kind": "parent", "port": "io_msiAck"}],
+                "width": 1,
+            }],
+        })
+        observed: dict[str, int] = {}
+
+        def process():
+            yield Settle()
+            observed.update({
+                "child_missing_count": (yield dut.child_missing_count),
+                "edge_missing_count": (yield dut.verified_edge_missing_count),
+                "closure_missing": (yield dut.closure_missing),
+                "closure_complete": (yield dut.closure_complete),
+            })
+
+        simulator = Simulator(dut)
+        simulator.add_process(process)
+        simulator.run()
+        self.assertEqual({"child_missing_count": 0, "edge_missing_count": 1,
+                          "closure_missing": 1, "closure_complete": 0}, observed)
 
 
 if __name__ == "__main__":

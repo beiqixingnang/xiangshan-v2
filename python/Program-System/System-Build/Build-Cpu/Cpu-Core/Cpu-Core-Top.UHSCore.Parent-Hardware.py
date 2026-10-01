@@ -1,11 +1,9 @@
-"""Source-backed XSCore parent/bridge boundary for Kunminghu V2.
+"""Core parent/bridge boundary for Kunminghu V2.
 
-This aggregate implements the parent-visible wiring documented by
-XSCore.scala. Frontend, Backend, and MemBlock remain explicit injected
-children; absent or bounded children are reported through child_missing and
-never promoted to a complete closure. The 308-port contract is copied from
-the locked XSCore inventory and is materialized without reading the reference
-artifact at build time.
+This aggregate implements the parent-visible wiring between Frontend,
+Backend, and MemBlock. Children remain explicit injections; absent or bounded
+children are reported through child_missing and never promoted to a complete
+closure. The 308-port interface is materialized as product-owned Python data.
 """
 
 from __future__ import annotations
@@ -13,7 +11,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Iterable, Mapping
 
-from amaranth import Cat, ClockDomain, Const, Elaboratable, Module, Signal
+from amaranth import ClockDomain, Const, Elaboratable, Module, Signal
 from amaranth.back import verilog
 
 
@@ -25,14 +23,15 @@ __all__ = [
     'UHSCoreParent',
     'uhs_core_port_specs',
     'uhs_core_parent_observation',
+    'uhs_core_child_binding_observation',
     'build_verilog',
     'main',
-    'UHSCORE_REFERENCE_PORT_COUNT',
+    'UHSCORE_PORT_COUNT',
 ]
 
-UHSCORE_REFERENCE_PORT_COUNT = 308
+UHSCORE_PORT_COUNT = 308
 
-# Locked XSCore ANSI names/directions/widths from v2-root-port-inventories.json.
+# Fixed core interface names, directions, and widths.
 _UHSCORE_PORT_SPECS: tuple[tuple[str, str, int], ...] = (
     ("clock", "input", 1),
     ("reset", "input", 1),
@@ -358,7 +357,7 @@ class UHSCoreParentConfig:
     fetch_width: int = 6
     strict_inventory: bool = True
 
-    # Reject geometry that diverges from the locked DefaultConfig. / 拒绝偏离锁定 DefaultConfig 的几何配置。
+    # Keep the supported core interface geometry stable. / 保持处理器接口几何稳定。
     def __post_init__(self) -> None:
         if self.xlen != 64:
             raise ValueError("UHSCore requires XLEN=64")
@@ -404,8 +403,8 @@ def uhs_core_parent_observation(
 ) -> dict[str, int]:
     """Evaluate UHSCore parent handshakes for one cycle.
 
-    The equations correspond to the Frontend/Backend admission and MemBlock
-    TileLink A/D edges in XSCoreImp. They are deliberately bounded to
+    The equations cover Frontend/Backend admission and MemBlock TileLink A/D
+    edges. They are deliberately bounded to
     parent-owned observations and do not imply complete child behavior.
     """
 
@@ -417,6 +416,40 @@ def uhs_core_parent_observation(
         "mem_d_fire": int(bool(mem_d_valid) and bool(mem_d_ready) and not blocked),
         "child_missing": missing,
         "closure_complete": int(missing == 0 and not blocked),
+    }
+
+
+def uhs_core_child_binding_observation(
+    bound_edges: Mapping[str, Iterable[str]],
+    missing_edges: Mapping[str, Iterable[str]],
+    child_status: Mapping[str, str] | None = None,
+) -> dict[str, Any]:
+    """Summarize concrete core child edges without promoting closure.
+
+    A child is ``BOUND_BOUNDED`` when at least one real edge is present but
+    its explicit status is not ``PASS_COMPLETE``.  Missing edge names stay in
+    the report so a parent validator can diagnose unavailable children.
+    / 汇总真实 core 子级接线但不提升闭环状态。
+    """
+
+    status = child_status if isinstance(child_status, Mapping) else {}
+    rows: dict[str, dict[str, Any]] = {}
+    for key in ("frontend", "backend", "mem_block"):
+        bound = sorted(str(item) for item in bound_edges.get(key, ()))
+        missing = sorted(str(item) for item in missing_edges.get(key, ()))
+        state = str(status.get(key, "PENDING_CHILD_STATUS"))
+        rows[key] = {
+            "bound_edges": bound,
+            "bound_edge_count": len(bound),
+            "missing_edges": missing,
+            "missing_edge_count": len(missing),
+            "status": "PASS_COMPLETE" if state in {"PASS_COMPLETE", "COMPLETE"} else "BOUND_BOUNDED" if bound else "MISSING",
+            "child_status": state,
+        }
+    return {
+        "children": rows,
+        "all_children_complete": int(all(row["status"] == "PASS_COMPLETE" for row in rows.values())),
+        "acceptance_eligible": False,
     }
 
 
@@ -452,10 +485,20 @@ class UHSCoreParent(Elaboratable):
         self.child_missing_count = Signal(3, name="uhs_core_child_missing_count")
         self.closure_missing = Signal(name="uhs_core_closure_missing")
         self.closure_complete = Signal(name="uhs_core_closure_complete")
+        self.closure_missing_count = Signal(16, name="uhs_core_closure_missing_count")
+        self.verified_edge_missing_count = Signal(16, name="uhs_core_verified_edge_missing_count")
         self.inventory: dict[str, Signal] = {}
         self.inventory_inputs: list[Signal] = []
         self.inventory_outputs: list[Signal] = []
         self._bound_outputs: set[str] = set()
+        # Explicit edge inventory is evidence metadata only.  It records
+        # which concrete injected child Signals were connected during
+        # elaboration, while ``child_missing`` remains the behavioral gate.
+        # 仅作为证据元数据记录真实注入 child Signal 接线；child_missing
+        # 仍是行为闭环门禁。
+        self.bound_child_edges: dict[str, list[str]] = {}
+        self.missing_child_edges: dict[str, list[dict[str, str]]] = {}
+        self._verified_unsupported_pin_count = 0
         specs = tuple(
             item for item in deps.get("full_port_specs", ())
             if isinstance(item, Mapping) and item.get("name")
@@ -463,7 +506,7 @@ class UHSCoreParent(Elaboratable):
         if not specs:
             specs = tuple({"name": name, "direction": direction, "width": width}
                           for name, direction, width in uhs_core_port_specs())
-        if self.configuration.strict_inventory and len(specs) != UHSCORE_REFERENCE_PORT_COUNT:
+        if self.configuration.strict_inventory and len(specs) != UHSCORE_PORT_COUNT:
             raise ValueError("UHSCore inventory must contain exactly 308 ports")
         self.full_port_specs = specs
         self._install_inventory(specs)
@@ -499,36 +542,126 @@ class UHSCoreParent(Elaboratable):
         return value if isinstance(value, Signal) else None
 
     def _wire(self, module: Module, destination: Any, source: Any) -> bool:
-        """Connect compatible Amaranth values and report whether bound. / 连接兼容值并返回是否成功。"""
+        """Connect equal-width Amaranth signals only. / 仅连接同宽 Amaranth 信号。"""
 
         if not isinstance(destination, Signal) or not isinstance(source, Signal):
             return False
-        if len(destination) == len(source):
-            value: Any = source
-        elif len(destination) < len(source):
-            value = source[:len(destination)]
-        else:
-            value = Cat(source, Const(0, len(destination) - len(source)))
-        module.d.comb += destination.eq(value)
+        if len(destination) != len(source):
+            return False
+        module.d.comb += destination.eq(source)
         return True
 
-    def _wire_output(self, module: Module, port_name: str, child: Any, child_name: str) -> None:
-        """Drive one UHSCore output from a child alias. / 用子级别名驱动一个 UHSCore 输出。"""
+    def _pin_signal(self, endpoint: Mapping[str, Any]) -> Signal | None:
+        """Resolve an explicit port endpoint on the parent or injected child.
+        解析父级或注入子级上的显式端口 endpoint。
+        """
 
-        port = self.inventory.get(port_name)
-        child_signal = self._signal(child, child_name)
-        if port is not None and self._wire(module, port, child_signal):
-            self._bound_outputs.add(port_name)
+        kind = endpoint.get("kind")
+        port_name = str(endpoint.get("port", ""))
+        if kind == "parent":
+            return self.inventory.get(port_name)
+        child_key = str(endpoint.get("child", ""))
+        child = {"frontend": self.frontend, "backend": self.backend,
+                 "mem_block": self.mem_block}.get(child_key)
+        if child is None:
+            return None
+        ports = getattr(child, "frontend_ports", None)
+        if isinstance(ports, Mapping) and port_name in ports:
+            value = ports[port_name]
+            return value if isinstance(value, Signal) else None
+        ports = getattr(child, "full_inventory", None)
+        if isinstance(ports, Mapping) and port_name in ports:
+            value = ports[port_name]
+            return value if isinstance(value, Signal) else None
+        named_ports = getattr(child, "_by_name", None)
+        if isinstance(named_ports, Mapping):
+            value = named_ports.get(port_name)
+            if isinstance(value, Signal):
+                return value
+        for _direction, signal in getattr(child, "locked_ports", ()):
+            if isinstance(signal, Signal) and signal.name == port_name:
+                return signal
+        return self._signal(child, port_name)
 
-    def _wire_input(self, module: Module, port_name: str, child: Any, child_name: str) -> None:
-        """Forward one UHSCore input into a child alias. / 将 UHSCore 输入转发到子级别名。"""
+    def _wire_verified_edges(self, module: Module) -> None:
+        """Apply only exact, equal-width pin edges supplied by the validator.
 
-        self._wire(module, self._signal(child, child_name), self.inventory.get(port_name))
+        The validator owns the full pin map. The Build accepts only individual
+        edges whose endpoints resolve and whose widths agree; it does not infer
+        aliases from names or prefixes. / 完整 pin map 由验证器提供；Build 仅
+        接受 endpoint 存在且位宽一致的单条接线，不从名称或前缀推断别名。
+        """
+
+        edges = self.injected_dependencies.get("verified_pin_edges", ())
+        audit = self.injected_dependencies.get("verified_pin_audit", {})
+        if isinstance(audit, Mapping):
+            self._verified_unsupported_pin_count += max(0, int(audit.get("unsupported_pin_count", 0)))
+            if not bool(audit.get("pin_table_complete", False)):
+                self._verified_unsupported_pin_count += 1
+
+        def label(endpoint: Any) -> str:
+            if not isinstance(endpoint, Mapping):
+                return "<invalid-endpoint>"
+            return f"{endpoint.get('child', endpoint.get('kind'))}.{endpoint.get('port')}"
+
+        def reject(edge: Mapping[str, Any], destination: Any, reason: str) -> None:
+            participants = {str(item.get("child")) for item in (edge.get("source"), destination)
+                            if isinstance(item, Mapping) and item.get("kind") == "child"}
+            if not participants:
+                participants = {"parent"}
+            issue = {"source": label(edge.get("source")), "destination": label(destination),
+                     "reason": reason}
+            for child_key in participants:
+                self.missing_child_edges.setdefault(child_key, []).append(issue)
+
+        if not isinstance(edges, Iterable):
+            self._verified_unsupported_pin_count += 1
+            return
+        for edge in edges:
+            if not isinstance(edge, Mapping):
+                self._verified_unsupported_pin_count += 1
+                continue
+            source_spec = edge.get("source")
+            destinations = edge.get("destinations", ())
+            if not isinstance(source_spec, Mapping) or not isinstance(destinations, Iterable):
+                reject(edge, None, "invalid edge record")
+                continue
+            source = self._pin_signal(source_spec)
+            if source is None:
+                for destination_spec in destinations:
+                    reject(edge, destination_spec, "source endpoint unavailable")
+                continue
+            if len(source) != int(edge.get("width", len(source))):
+                for destination_spec in destinations:
+                    reject(edge, destination_spec, "source width differs from verified width")
+                continue
+            for destination_spec in destinations:
+                if not isinstance(destination_spec, Mapping):
+                    reject(edge, destination_spec, "invalid destination endpoint")
+                    continue
+                destination = self._pin_signal(destination_spec)
+                if destination is None:
+                    reject(edge, destination_spec, "destination endpoint unavailable")
+                    continue
+                if len(destination) != len(source):
+                    reject(edge, destination_spec, "endpoint width mismatch")
+                    continue
+                if self._wire(module, destination, source):
+                    if destination_spec.get("kind") == "parent":
+                        self._bound_outputs.add(str(destination_spec.get("port", "")))
+                    source_name = f"{source_spec.get('child', source_spec.get('kind'))}.{source_spec.get('port')}"
+                    destination_name = f"{destination_spec.get('child', destination_spec.get('kind'))}.{destination_spec.get('port')}"
+                    child_key = str(destination_spec.get("child") or source_spec.get("child") or "parent")
+                    self.bound_child_edges.setdefault(child_key, []).append(f"{source_name}->{destination_name}")
 
     def elaborate(self, platform: Any) -> Module:
         """Elaborate parent wiring and explicit missing-child diagnostics. / 展开父级接线及显式缺子级诊断。"""
 
         del platform
+        self.bound_child_edges = {}
+        self.missing_child_edges = {}
+        self._verified_unsupported_pin_count = 0
+        self._bound_outputs = set()
         module = Module()
         domain = ClockDomain("uhs_core_sync", async_reset=True)
         domain.clk = self.clock
@@ -539,59 +672,9 @@ class UHSCoreParent(Elaboratable):
         for name, child in children:
             if child is not None:
                 setattr(module.submodules, name, child)
-                self._wire(module, self._signal(child, "clock"), self.clock)
-                self._wire(module, self._signal(child, "reset"), self.reset)
-
-        f, b, mem = self.frontend, self.backend, self.mem_block
-
-        # UHSCore top-level fanout and Frontend/Backend handshake.
-        for child in (f, b, mem):
-            self._wire(module, self._signal(child, "reset_vector"), self.inventory.get("io_reset_vector"))
-            self._wire(module, self._signal(child, "hart_id"), self.inventory.get("io_hartId"))
-        for child_name, port_name in (
-            ("msi_valid", "io_msiInfo_valid"), ("msi_bits", "io_msiInfo_bits"),
-            ("clint_time_valid", "io_clintTime_valid"), ("clint_time", "io_clintTime_bits"),
-            ("l2_flush_done", "io_l2_flush_done"),
-        ):
-            self._wire(module, self._signal(mem, child_name), self.inventory.get(port_name))
-        self._wire(module, self._signal(b, "frontend_valid"), self._signal(f, "cf_valid"))
-        self._wire(module, self._signal(b, "frontend_instr"), self._signal(f, "cf_instr"))
-        self._wire(module, self._signal(b, "frontend_pc"), self._signal(f, "cf_pc"))
-        self._wire(module, self._signal(b, "frontend_exception"), self._signal(f, "cf_exception"))
-        self._wire(module, self._signal(f, "backend_can_accept"), self._signal(b, "frontend_can_accept"))
-        self._wire(module, self._signal(f, "redirect_valid"), self._signal(b, "redirect_valid"))
-        self._wire(module, self._signal(f, "redirect_pc"), self._signal(b, "redirect_pc"))
-
-        # Parent-facing observable outputs from Backend/MemBlock.
-        for port_name, child_name, child in (
-            ("io_msiAck", "msi_ack", b), ("io_cpu_halt", "cpu_halted", b),
-            ("io_cpu_critical_error", "cpu_critical_error", b),
-            ("io_resetInFrontend", "reset_in_frontend", mem),
-            ("io_power_down_en", "power_down_en", mem),
-            ("io_l2_flush_en", "l2_flush_en", mem),
-            ("io_l2_pmp_resp_ld", "l2_pmp_resp_ld", mem),
-            ("io_l2_pmp_resp_mmio", "l2_pmp_resp_mmio", mem),
-        ):
-            self._wire_output(module, port_name, child, child_name)
-
-        # MemBlock TileLink A/D edge at the UHSCore boundary.
-        for port_name, child_name in (
-            ("auto_memBlock_inner_buffers_out_a_valid", "tl_a_valid"),
-            ("auto_memBlock_inner_buffers_out_a_bits_opcode", "tl_a_opcode"),
-            ("auto_memBlock_inner_buffers_out_a_bits_source", "tl_a_source"),
-            ("auto_memBlock_inner_buffers_out_a_bits_address", "tl_a_address"),
-            ("auto_memBlock_inner_buffers_out_a_bits_data", "tl_a_data"),
-            ("auto_memBlock_inner_buffers_out_a_bits_mask", "tl_a_mask"),
-        ):
-            self._wire_output(module, port_name, mem, child_name)
-        for port_name, child_name in (
-            ("auto_memBlock_inner_buffers_out_a_ready", "tl_a_ready"),
-            ("auto_memBlock_inner_buffers_out_d_valid", "tl_d_valid"),
-            ("auto_memBlock_inner_buffers_out_d_bits_source", "tl_d_source"),
-            ("auto_memBlock_inner_buffers_out_d_bits_data", "tl_d_data"),
-        ):
-            self._wire_input(module, port_name, mem, child_name)
-        self._wire_output(module, "auto_memBlock_inner_buffers_out_d_ready", mem, "refill_ready")
+        # Pin-level edges arrive only from the independent validator's exact
+        # net table. / pin 级接线只来自独立验证器生成的精确 net 表。
+        self._wire_verified_edges(module)
 
         # Unimplemented source edges are deterministic tie-offs; inputs are
         # consumed by private sinks so direction remains visible in RTL.
@@ -610,13 +693,19 @@ class UHSCoreParent(Elaboratable):
         missing_bits = []
         for index, name in enumerate(("frontend", "backend", "mem_block")):
             value = status.get(name) if isinstance(status, Mapping) else None
-            child = (f, b, mem)[index]
+            child = (self.frontend, self.backend, self.mem_block)[index]
             missing_bits.append(0 if child is not None and value in {"PASS_COMPLETE", "COMPLETE"} else 1)
+        edge_missing_count = self._verified_unsupported_pin_count + sum(
+            len(edges) for edges in self.missing_child_edges.values()
+        )
+        child_missing_count = sum(missing_bits)
         module.d.comb += [
             self.child_missing.eq(sum(bit << index for index, bit in enumerate(missing_bits))),
-            self.child_missing_count.eq(sum(missing_bits)),
-            self.closure_missing.eq(self.child_missing_count != 0),
-            self.closure_complete.eq(self.child_missing_count == 0),
+            self.child_missing_count.eq(child_missing_count),
+            self.verified_edge_missing_count.eq(edge_missing_count),
+            self.closure_missing_count.eq(child_missing_count + edge_missing_count),
+            self.closure_missing.eq((child_missing_count != 0) | (edge_missing_count != 0)),
+            self.closure_complete.eq((child_missing_count == 0) & (edge_missing_count == 0)),
         ]
         return module
 

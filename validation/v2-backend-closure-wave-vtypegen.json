@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_BACKEND_CLOSURE_WAVE_VTYPEGEN",
+  "batch_id": "V2-BACKEND-CLOSURE-WAVE-002",
+  "member": "VTypeGen",
+  "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Decode.ControlFamily-Hardware.py",
+  "build_sha256": "8b6ac3ee579e6b879e804029c4be8a501cdeeb71e1adc3702eee0a01ef996fb8",
+  "locked_reference": {
+    "xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "expected_xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "module": "VTypeGen",
+    "module_sha256": "a98add4e587bcd7c0affe6f0d27509b9c8e4a2cd7fba0693d8e68b7254310f5f",
+    "helper_module": "VsetModule",
+    "helper_module_sha256": "b509ebe18af260ff013739ae03a5395494d8a749175f89e233b0accf41a4fe95"
+  },
+  "port_abi": {
+    "locked": 39,
+    "candidate": 39,
+    "match": true
+  },
+  "export": {
+    "deterministic": true,
+    "bytes": 408031,
+    "sha256": "77907fbf83eac7df962824fa5e21c3acf95046d4934729e5d2b3e65030b765e7"
+  },
+  "reference_differential": {
+    "status": "PASS",
+    "case_dimensions": {
+      "single_lane_vsets": 24576,
+      "priority_combinations": 32,
+      "lane_pairs": 15
+    },
+    "cases": 24624,
+    "compile": {
+      "command": [
+        "verilator",
+        "--binary",
+        "--timing",
+        "-Wno-fatal",
+        "--top-module",
+        "vtypegen_diff_tb",
+        "--Mdir",
+        "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-vtypegen/obj-77907fbf83ea",
+        "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-vtypegen/VTypeGen_DUT.sv",
+        "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-vtypegen/VTypeGen_reference.sv",
+        "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-vtypegen/VsetModule.sv",
+        "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-vtypegen/vtypegen_diff_tb.sv"
+      ],
+      "status": "PASS",
+      "returncode": 0,
+      "output_tail": "nerates 2 bits.\n11039 |   assign \\$605  = \\$604 [22:20] - 2'h2;\n      |                                 ^\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-vtypegen/vtypegen_diff_tb.sv:169:44: Operator SHIFTL expects 32 bits on the LHS, but LHS's CONST '8'h81' generates 8 bits.\n                                                                                                                                                                      : ... note: In instance 'vtypegen_diff_tb'\n  169 |         inst_value = 32'h00007057 | (8'h81 << 20);\n      |                                            ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-vtypegen/vtypegen_diff_tb.sv:195:44: Operator SHIFTL expects 32 bits on the LHS, but LHS's CONST '8'h52' generates 8 bits.\n                                                                                                                                                                      : ... note: In instance 'vtypegen_diff_tb'\n  195 |         inst_value = 32'h00007057 | (8'h52 << 20);\n      |                                            ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-vtypegen/vtypegen_diff_tb.sv:256:42: Operator SHIFTL expects 32 bits on the LHS, but LHS's CONST '8'hc5' generates 8 bits.\n                                                                                                                                                                      : ... note: In instance 'vtypegen_diff_tb'\n  256 |       inst_value = 32'h00007057 | (8'hC5 << 20);\n      |                                          ^~\n",
+      "output_sha256": "4a4f21457917b82f12feaa98c0a1f9e19c2c7069e41bd731a90668c25e092007"
+    },
+    "run": {
+      "command": [
+        "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-vtypegen/obj-77907fbf83ea/Vvtypegen_diff_tb"
+      ],
+      "status": "PASS",
+      "returncode": 0,
+      "output_tail": "VTYPEGEN_LOCKED_DIFF_PASS cases=24624\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-vtypegen/vtypegen_diff_tb.sv:285: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 74ns; walltime 0.010 s; speed 7.253 us/s\n- Verilator: cpu 0.010 s on 1 threads; alloced 153 MB\n",
+      "output_sha256": "bce893edfbc051510d1dbbe99fec82554c6825e19cc8e98d8eb895953de2ea32"
+    }
+  },
+  "tool_gates": {
+    "py_compile": "PASS",
+    "verilator_lint": {
+      "command": [
+        "verilator",
+        "--lint-only",
+        "-Wno-fatal",
+        "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-vtypegen/VTypeGen.sv"
+      ],
+      "status": "PASS",
+      "returncode": 0,
+      "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.410 MB sources in 2 modules, into 0.044 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.184 s (elab=0.052, cvt=0.071, bld=0.000); cpu 0.167 s on 1 threads; alloced 37.137 MB\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-vtypegen/VTypeGen.sv:10650:33: Operator ADD expects 4 bits on the LHS, but LHS's SEL generates 2 bits.\n10650 |   assign \\$202  = \\$201 [24:23] + 2'h3;\n      |                                 ^\n                      ... For warning description see https://verilator.org/warn/WIDTHEXPAND?v=5.032\n                      ... Use \"/* verilator lint_off WIDTHEXPAND */\" and lint_on around source to disable this message.\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-vtypegen/VTypeGen.sv:10650:33: Operator ADD expects 4 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n10650 |   assign \\$202  = \\$201 [24:23] + 2'h3;\n      |                                 ^\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-vtypegen/VTypeGen.sv:11039:33: Operator SUB expects 4 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n11039 |   assign \\$605  = \\$604 [22:20] - 2'h2;\n      |                                 ^\n",
+      "output_sha256": "31f366fefdac22b1e754d4b544d0dc7c3844b4f0321e6de5d1a867fd7b023819"
+    },
+    "yosys": {
+      "command": [
+        "yosys",
+        "-Q",
+        "-p",
+        "read_verilog -sv \"/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-vtypegen/VTypeGen.sv\"; hierarchy -check -top VTypeGen; proc; stat; check"
+      ],
+      "status": "PASS",
+      "returncode": 0,
+      "output_tail": "n/.work/v2-backend-closure-wave-vtypegen/VTypeGen.sv:10432$3511'.\nRemoving empty process `VTypeGen.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-vtypegen/VTypeGen.sv:10429$3510'.\nRemoving empty process `VTypeGen.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-vtypegen/VTypeGen.sv:10426$3509'.\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module VTypeGen.\n<suppressed ~10 debug messages>\n\n4. Printing statistics.\n\n=== VTypeGen ===\n\n   Number of wires:              13484\n   Number of wire bits:          23808\n   Number of public wires:        6867\n   Number of public wire bits:   12127\n   Number of ports:                 39\n   Number of port bits:            237\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:               6597\n     $add                            1\n     $adff                          10\n     $and                         2273\n     $eq                          2111\n     $gt                             5\n     $mux                          230\n     $not                          894\n     $or                          1062\n     $reduce_or                     10\n     $sub                            1\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module VTypeGen...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 763f618b5a, CPU: user 0.31s system 0.05s, MEM: 79.08 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 71% 2x read_verilog (0 sec), 11% 1x opt_expr (0 sec), ...\n",
+      "output_sha256": "2594ae64105ee5e38197bde842622e4eaac4197a47c89165f2f3c2521b1a645c"
+    }
+  },
+  "gates": {
+    "DIRECT_TEST_PASS_BOUNDED": "PASS_BOUNDED",
+    "V2_REFERENCE_MATCHED": "PASS_BOUNDED_STATEFUL_DIFFERENTIAL",
+    "FORMAL": "PENDING_ROOT_SERIAL_RAIL",
+    "PARENT_CLOSURE_MATCHED": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "DIRECT_TEST_PASS_BOUNDED",
+  "strict_delta": 0,
+  "acceptance_eligible": false,
+  "failures": []
+}

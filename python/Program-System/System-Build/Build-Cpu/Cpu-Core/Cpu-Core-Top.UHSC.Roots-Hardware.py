@@ -1,10 +1,9 @@
-"""UHSC source-named Kunminghu V2 root boundaries.
-昆明湖 V2 源命名根层级边界。
+"""UHSC Kunminghu V2 root boundaries.
+昆明湖 V2 根层级边界。
 
-The four classes in this aggregate make the mandatory Scala root names
-explicit in the Python build inventory.  They are deliberately diagnostic
-boundaries: ``closure_missing`` remains asserted until the complete child
-closures and locked XSTop port inventory are connected.
+The four classes expose the processor-core, cache, tile, and system-top
+interfaces. ``closure_missing`` remains asserted until every injected child
+reports explicit completion and the complete parent wiring is present.
 """
 
 from __future__ import annotations
@@ -32,51 +31,15 @@ __all__ = [
     'main',
 ]
 
-
-# The L2Top source creates these children in L2TopInlined.  Keep the list
-# explicit so a validator can distinguish an absent child from a bounded
-# child whose own closure is still pending. / L2TopInlined 创建以下 child；显式
-# 保留清单，使验证器能区分缺失 child 与自身闭环仍 pending 的 bounded child。
+# Local cache-parent role slots required to report pending closure.
 L2TOP_REQUIRED_CHILDREN: tuple[str, ...] = (
     "tlxbar_7", "tlxbar_8", "bus_error_unit", "tlbuffer_inner_buffer",
     "tlbuffer_ptw_to_l2", "tlbuffer_i_mmio", "intbuffer", "tl2tl_parent",
     "bank_binder", "tlclients_merger", "tlxbar_9", "tlbuffer_inner_buffers",
-    "tlbuffer_inner_buffers_1", "tlbuffer_inner_buffers_2",
-    "tlbuffer_inner_buffers_3", "tlbuffer_inner_buffers_4",
-    "tlbuffer_inner_buffers_5", "tlbuffer_inner_buffer_1",
+    "tlbuffer_inner_buffers_1", "tlbuffer_inner_buffers_2", "tlbuffer_inner_buffers_3",
+    "tlbuffer_inner_buffers_4", "tlbuffer_inner_buffers_5", "tlbuffer_inner_buffer_1",
     "reset_delay", "clint_time_delay",
 )
-
-# Source paths are evidence metadata only; the root build never scans or
-# imports them at runtime. / 源路径仅用于证据元数据；root build 运行时不扫描或导入。
-
-# Dependency aliases accepted by the source-backed L2Top adapter.  The
-# validator may inject either source instance names or concise local names;
-# no alias is treated as a child unless it is explicitly supplied. /
-# source-backed L2Top adapter 接受 source instance 名或简短本地名；只有显式注入
-# 的 alias 才算 child，不会凭名称臆造实例。
-_L2TOP_CHILD_ALIASES: dict[str, tuple[str, ...]] = {
-    "tlxbar_7": ("tlxbar_7", "inner_xbar", "TLXbar_7"),
-    "tlxbar_8": ("tlxbar_8", "inner_xbar_1", "TLXbar_8"),
-    "bus_error_unit": ("bus_error_unit", "inner_beu", "BusErrorUnit"),
-    "tlbuffer_inner_buffer": ("tlbuffer_inner_buffer", "inner_buffer", "TLBuffer_27"),
-    "tlbuffer_ptw_to_l2": ("tlbuffer_ptw_to_l2", "inner_ptw_to_l2_buffer", "TLBuffer_20"),
-    "tlbuffer_i_mmio": ("tlbuffer_i_mmio", "inner_i_mmio_buffer", "TLBuffer_29"),
-    "intbuffer": ("intbuffer", "inner_intBuffer", "IntBuffer"),
-    "tl2tl_parent": ("tl2tl_parent", "coupled_l2", "l2cache", "inner_l2cache", "TL2TLCoupledL2"),
-    "bank_binder": ("bank_binder", "inner_binder", "BankBinder_1"),
-    "tlclients_merger": ("tlclients_merger", "inner_merger", "TLClientsMerger_1"),
-    "tlxbar_9": ("tlxbar_9", "inner_xbar_2", "TLXbar_9"),
-    "tlbuffer_inner_buffers": ("tlbuffer_inner_buffers", "inner_buffers", "TLBuffer_29_a"),
-    "tlbuffer_inner_buffers_1": ("tlbuffer_inner_buffers_1", "inner_buffers_1", "TLBuffer_29_b"),
-    "tlbuffer_inner_buffers_2": ("tlbuffer_inner_buffers_2", "inner_buffers_2", "TLBuffer_22_a"),
-    "tlbuffer_inner_buffers_3": ("tlbuffer_inner_buffers_3", "inner_buffers_3", "TLBuffer_22_b"),
-    "tlbuffer_inner_buffers_4": ("tlbuffer_inner_buffers_4", "inner_buffers_4", "TLBuffer_16_a"),
-    "tlbuffer_inner_buffers_5": ("tlbuffer_inner_buffers_5", "inner_buffers_5", "TLBuffer_16_b"),
-    "tlbuffer_inner_buffer_1": ("tlbuffer_inner_buffer_1", "inner_buffer_1", "TLBuffer_2"),
-    "reset_delay": ("reset_delay", "inner_resetDelayN", "DelayN_334"),
-    "clint_time_delay": ("clint_time_delay", "inner_io_clintTime_toCore_pipMod", "DelayNWithValid_203"),
-}
 
 
 # =============================================================================
@@ -97,16 +60,40 @@ class RootConfig:
 
 
 def root_closure_observation(bound_children: Iterable[str], expected_children: Iterable[str],
-                             inventory_ports: int, expected_inventory_ports: int) -> dict[str, int]:
-    """Return explicit root child/inventory closure status. / 返回根层级显式闭包状态。"""
+                             inventory_ports: int, expected_inventory_ports: int,
+                             child_status: Mapping[str, str] | None = None) -> dict[str, Any]:
+    """Separate bound child inventory from explicit behavioral closure.
 
-    expected = tuple(expected_children)
-    bound = set(bound_children)
-    missing_children = sum(name not in bound for name in expected)
+    Binding every child and matching the port count proves wiring presence
+    only. ``complete`` requires explicit COMPLETE status for each expected
+    child. / 区分 child 接线和显式行为闭环；仅 child 齐全且端口数匹配只证明接线。
+    """
+
+    expected = tuple(str(name) for name in expected_children)
+    bound = {str(name) for name in bound_children}
+    status = child_status if isinstance(child_status, Mapping) else {}
+    missing_names = tuple(name for name in expected if name not in bound)
+    pending_names = tuple(
+        name for name in expected
+        if name in bound and str(status.get(name, "PENDING")) not in {"PASS_COMPLETE", "COMPLETE"}
+    )
+    missing_children = len(missing_names)
     missing_inventory = int(inventory_ports != expected_inventory_ports)
-    missing = missing_children + missing_inventory
-    return {"missing_children": missing_children, "missing_inventory": missing_inventory,
-            "missing_count": missing, "complete": int(missing == 0)}
+    binding_missing = missing_children + missing_inventory
+    missing = binding_missing + len(pending_names)
+    return {
+        "expected_children": len(expected),
+        "bound_children": len(expected) - missing_children,
+        "missing_children": missing_children,
+        "missing_child_names": list(missing_names),
+        "pending_children": len(pending_names),
+        "pending_child_names": list(pending_names),
+        "missing_inventory": missing_inventory,
+        "binding_missing_count": binding_missing,
+        "binding_complete": int(binding_missing == 0),
+        "missing_count": missing,
+        "complete": int(missing == 0),
+    }
 
 
 def l2top_closure_observation(
@@ -116,7 +103,7 @@ def l2top_closure_observation(
     expected_inventory_ports: int = 441,
     pending_children: Iterable[str] = (),
 ) -> dict[str, Any]:
-    """Report source-backed L2Top child and inventory closure.
+    """Report cache-parent child and inventory closure.
 
     Presence alone is deliberately insufficient: an injected child with no
     explicit ``closure_complete`` evidence is represented in
@@ -126,15 +113,8 @@ def l2top_closure_observation(
     """
 
     expected = tuple(str(name) for name in expected_children)
-    # Accept source instance/class spellings in evidence while normalizing
-    # them to the stable local child keys. / 证据可使用 source instance/class
-    # 拼写，但统一为稳定的本地 child key。
-    source_to_local = {
-        alias: local for local, aliases in _L2TOP_CHILD_ALIASES.items()
-        for alias in aliases
-    }
-    bound = {source_to_local.get(str(name), str(name)) for name in bound_children}
-    pending = {source_to_local.get(str(name), str(name)) for name in pending_children}
+    bound = {str(name) for name in bound_children}
+    pending = {str(name) for name in pending_children}
     missing_names = tuple(name for name in expected if name not in bound)
     pending_names = tuple(name for name in expected if name in pending)
     missing_inventory = int(int(inventory_ports) != int(expected_inventory_ports))
@@ -166,13 +146,22 @@ class _RootBoundary(Elaboratable):
         self.root_name = root_name
         deps = injected_dependencies if isinstance(injected_dependencies, dict) else {}
         c = self.config
-        # Keep the reduced probe source-compatible while using the exact
-        # ``clock``/``reset`` names required by the locked root inventories.
-        # Hierarchical instances are still scoped by Amaranth, so this does
+        # Keep the reduced probe interface while using the explicit
+        # ``clock``/``reset`` names in injected port inventories. Hierarchical
+        # instances are scoped by Amaranth, so this does
         # not create collisions when several roots are bound together.
         self.clock = Signal(name="clock")
         self.reset = Signal(name="reset")
         self.injected_dependencies = deps
+        self.expected_children = tuple(str(name) for name in deps.get("expected_children", ()))
+        # Machine-readable binding diagnostics are populated during
+        # elaboration.  They are intentionally plain Python metadata so a
+        # validator can report exact edge names without widening frozen IO.
+        # 展开时填充机器可读接线诊断；保持纯 Python 元数据，不扩大冻结 IO。
+        self.bound_child_edges: dict[str, list[str]] = {}
+        self.missing_child_edges: dict[str, list[dict[str, str]]] = {}
+        self._bound_inventory_ids: set[int] = set()
+        self._verified_unsupported_pin_count = 0
         self.cf_valid = Signal(c.fetch_width, name=f"{root_name}_cf_valid")
         self.mem_a_valid = Signal(name=f"{root_name}_mem_a_valid")
         self.mem_a_address = Signal(c.paddr_bits, name=f"{root_name}_mem_a_address")
@@ -184,11 +173,12 @@ class _RootBoundary(Elaboratable):
         # adapters aggregate real child status without changing frozen port
         # inventories. / 这些诊断默认是 compact root 内部信号，除非调用者显式请求，
         # 因此不会改变冻结端口清单；父级可据此聚合真实 child 状态。
-        self.closure_missing_count = Signal(8, name=f"{root_name}_closure_missing_count")
+        self.closure_missing_count = Signal(16, name=f"{root_name}_closure_missing_count")
         self.closure_complete = Signal(name=f"{root_name}_closure_complete")
         self.child_missing = Signal(name=f"{root_name}_child_missing")
-        # Full root envelopes are installed only from explicit coordinator
-        # metadata.  The target never reads the locked SV or scans files.
+        self.verified_edge_missing_count = Signal(16, name=f"{root_name}_verified_edge_missing_count")
+        # Full root envelopes are installed only from explicit port metadata.
+        # The target never scans directories or discovers dependencies.
         self.full_port_specs: tuple[Mapping[str, Any], ...] = tuple(
             item for item in deps.get("full_port_specs", ())
             if isinstance(item, Mapping) and item.get("name")
@@ -199,6 +189,148 @@ class _RootBoundary(Elaboratable):
         self.full_inventory: dict[str, Signal] = {}
         self._full_inventory_new_ids: set[int] = set()
         self._install_full_inventory(self.full_port_specs)
+
+    @staticmethod
+    def _child_signal(child: Any, name: str) -> Any:
+        """Return one child Signal without guessing a concrete class. /
+        按明确属性返回子级 Signal，不猜测具体实现类。
+        """
+
+        value = getattr(child, name, None) if child is not None else None
+        return value if isinstance(value, Signal) else None
+
+    def _record_edge(self, child_key: str, edge: str) -> None:
+        """Record one concrete parent/child edge for evidence. / 记录具体父子边。"""
+
+        self.bound_child_edges.setdefault(child_key, []).append(edge)
+
+    def _register_children(self, module: Module, children: Mapping[str, Any]) -> None:
+        """Install injected children without inferring signal connections. / 注册子级但不推断接线。"""
+
+        seen: set[int] = set()
+        for child_key, child in children.items():
+            if child is None:
+                continue
+            if id(child) not in seen:
+                setattr(module.submodules, f"{self.root_name}_{child_key}", child)
+                seen.add(id(child))
+
+    @staticmethod
+    def _endpoint_signal(endpoint: Mapping[str, Any], parent: Any,
+                         children: Mapping[str, Any]) -> Signal | None:
+        """Resolve one explicit endpoint without matching names heuristically.
+        解析显式 endpoint，不按相似名称猜测。
+        """
+
+        port_name = str(endpoint.get("port", ""))
+        if endpoint.get("kind") == "parent":
+            ports = getattr(parent, "full_inventory", {})
+            signal = ports.get(port_name) if isinstance(ports, Mapping) else None
+            return signal if isinstance(signal, Signal) else None
+        child_key = str(endpoint.get("child", ""))
+        child = children.get(child_key)
+        if child is None:
+            return None
+        for attribute in ("full_inventory", "frontend_ports", "ports"):
+            ports = getattr(child, attribute, None)
+            if isinstance(ports, Mapping):
+                signal = ports.get(port_name)
+                if isinstance(signal, Signal):
+                    return signal
+        named_ports = getattr(child, "_by_name", None)
+        if isinstance(named_ports, Mapping):
+            signal = named_ports.get(port_name)
+            if isinstance(signal, Signal):
+                return signal
+        for _direction, signal in getattr(child, "locked_ports", ()):
+            if isinstance(signal, Signal) and signal.name == port_name:
+                return signal
+        return None
+
+    def _wire_verified_pin_edges(self, module: Module, children: Mapping[str, Any]) -> None:
+        """Apply validator-supplied exact, equal-width port connections.
+        应用验证器提供的精确同宽端口接线。
+        """
+
+        edges = self.injected_dependencies.get("verified_pin_edges", ())
+        audit = self.injected_dependencies.get("verified_pin_audit", {})
+        if isinstance(audit, Mapping):
+            self._verified_unsupported_pin_count += max(0, int(audit.get("unsupported_pin_count", 0)))
+            if not bool(audit.get("pin_table_complete", False)):
+                self._verified_unsupported_pin_count += 1
+
+        def label(endpoint: Any) -> str:
+            if not isinstance(endpoint, Mapping):
+                return "<invalid-endpoint>"
+            return f"{endpoint.get('child', endpoint.get('kind'))}.{endpoint.get('port')}"
+
+        def reject(edge: Mapping[str, Any], destination: Any, reason: str) -> None:
+            participants = {str(item.get("child")) for item in (edge.get("source"), destination)
+                            if isinstance(item, Mapping) and item.get("kind") == "child"}
+            if not participants:
+                participants = {"parent"}
+            issue = {"source": label(edge.get("source")), "destination": label(destination),
+                     "reason": reason}
+            for child_key in participants:
+                self.missing_child_edges.setdefault(child_key, []).append(issue)
+
+        if not isinstance(edges, Iterable):
+            self._verified_unsupported_pin_count += 1
+            return
+        for edge in edges:
+            if not isinstance(edge, Mapping):
+                self._verified_unsupported_pin_count += 1
+                continue
+            source_spec = edge.get("source")
+            destinations = edge.get("destinations", ())
+            if not isinstance(source_spec, Mapping) or not isinstance(destinations, Iterable):
+                reject(edge, None, "invalid edge record")
+                continue
+            source = self._endpoint_signal(source_spec, self, children)
+            if source is None:
+                for destination_spec in destinations:
+                    reject(edge, destination_spec, "source endpoint unavailable")
+                continue
+            if len(source) != int(edge.get("width", len(source))):
+                for destination_spec in destinations:
+                    reject(edge, destination_spec, "source width differs from verified width")
+                continue
+            for destination_spec in destinations:
+                if not isinstance(destination_spec, Mapping):
+                    reject(edge, destination_spec, "invalid destination endpoint")
+                    continue
+                destination = self._endpoint_signal(destination_spec, self, children)
+                if destination is None:
+                    reject(edge, destination_spec, "destination endpoint unavailable")
+                    continue
+                if len(destination) != len(source):
+                    reject(edge, destination_spec, "endpoint width mismatch")
+                    continue
+                module.d.comb += destination.eq(source)
+                if destination_spec.get("kind") == "parent":
+                    self._bound_inventory_ids.add(id(destination))
+                source_label = label(source_spec)
+                destination_label = label(destination_spec)
+                child_key = str(destination_spec.get("child") or source_spec.get("child") or "parent")
+                self._record_edge(child_key, f"{source_label}->{destination_label}")
+
+    def _child_missing_term(self, child: Any, child_key: str) -> Any:
+        """Resolve explicit child closure status; absent children stay missing.
+        解析显式子级闭环状态；缺失子级始终保持 missing。
+        """
+
+        if child is None:
+            return Const(1)
+        missing = getattr(child, "closure_missing", None)
+        if missing is not None:
+            return Const(int(missing)) if isinstance(missing, bool) else missing
+        complete = getattr(child, "closure_complete", None)
+        if complete is not None:
+            return Const(0 if complete else 1) if isinstance(complete, bool) else ~complete
+        status = self.injected_dependencies.get("child_status", {})
+        explicit_complete = status.get(child_key) in {"PASS_COMPLETE", "COMPLETE"} if isinstance(status, Mapping) else False
+        closed = explicit_complete or child_key in set(self.injected_dependencies.get("closed_children", ()))
+        return Const(0 if closed else 1)
 
     def _install_full_inventory(self, specs: Iterable[Mapping[str, Any]]) -> None:
         """Create exact-name root ports from injected frozen metadata."""
@@ -240,52 +372,63 @@ class _RootBoundary(Elaboratable):
 
     def elaborate(self, platform: Any) -> Module:
         del platform
+        self.bound_child_edges = {}
+        self.missing_child_edges = {}
+        self._verified_unsupported_pin_count = 0
+        self._bound_inventory_ids = set()
         m = Module()
         domain = ClockDomain(f"{self.root_name}_sync", async_reset=True)
         domain.clk = self.clock
         domain.rst = self.reset
         setattr(m.domains, f"{self.root_name}_sync", domain)
-        uhstile_missing_terms: list[Any] = []
-        if self.root_name == "uhs_tile":
-            # UHSTile child instances are injected by the validator; no sibling
-            # Build import is performed here. / UHSTile 子实例由验证器注入，
-            # 此处不导入 sibling Build。
+        # Resolve explicit child slots for every root.  The earlier
+        # implementation registered only tile children, so other roots looked
+        # tied off even when real child objects were supplied. / 为所有 root
+        # 解析显式 child slot；旧实现只注册 tile 子级，其他根即使注入真实子级也像 tie-off。
+        if self.root_name == "uhs_core":
+            children = getattr(self, "uhs_core_children", {})
+        elif self.root_name == "uhs_tile":
             children = getattr(self, "uhstile_children", {})
-            for child_name, child in children.items():
-                if child is None:
-                    uhstile_missing_terms.append(Const(1))
-                    continue
-                setattr(m.submodules, f"uhstile_{child_name}", child)
-                child_clock = getattr(child, "clock", None)
-                child_reset = getattr(child, "reset", None)
-                if child_clock is None and isinstance(getattr(child, "ports", None), dict):
-                    child_clock = child.ports.get("clock")
-                    child_reset = child.ports.get("reset")
-                if child_clock is not None:
-                    m.d.comb += child_clock.eq(self.clock)
-                if child_reset is not None:
-                    m.d.comb += child_reset.eq(self.reset)
-                child_missing = getattr(child, "closure_missing", None)
-                child_count = getattr(child, "closure_missing_count", None)
-                if child_count is not None:
-                    uhstile_missing_terms.append(child_count)
-                elif child_missing is not None:
-                    uhstile_missing_terms.append(child_missing)
-                else:
-                    uhstile_missing_terms.append(Const(1))
-            inventory_missing = int(len(self.full_port_specs) != 153)
-            uhstile_missing_count: Any = Const(inventory_missing, 8)
-            uhstile_missing_any: Any = Const(inventory_missing)
-            for term in uhstile_missing_terms:
-                uhstile_missing_count = uhstile_missing_count + term
-                uhstile_missing_any = uhstile_missing_any | (term != 0)
-            closure_missing_expr: Any = uhstile_missing_any
-            closure_count_expr: Any = uhstile_missing_count
-            closure_complete_expr: Any = ~uhstile_missing_any
+        elif self.root_name == "uhsc_top":
+            children = getattr(self, "uhsctop_children", {})
         else:
-            closure_missing_expr = Const(1)
-            closure_count_expr = Const(1, 8)
-            closure_complete_expr = Const(0)
+            children = {}
+        if children:
+            self._register_children(m, children)
+            self._wire_verified_pin_edges(m, children)
+
+        # Child injection remains structural until a validator supplies exact
+        # width-matched pin bindings extracted from the independent edge table.
+        # 子级保持结构性注入；验证器按独立 pin 边表提供精确同宽接线后才连接。
+
+        # Explicit per-child status is the closure gate.  Presence and a few
+        # bound wires never promote a bounded child to complete behavior.
+        expected_port_count = {
+            "uhs_core": 308, "l2_top": 441, "uhs_tile": 153, "uhsc_top": 204,
+        }.get(self.root_name, 0)
+        missing_terms: list[Any] = []
+        child_keys = self.expected_children or tuple(children)
+        for child_key in child_keys:
+            missing_terms.append(self._child_missing_term(children.get(child_key), child_key))
+        inventory_missing = int(len(self.full_port_specs) != expected_port_count and expected_port_count != 0)
+        missing_count: Any = Const(inventory_missing, 16)
+        missing_any: Any = Const(inventory_missing)
+        for term in missing_terms:
+            missing_count = missing_count + term
+            missing_any = missing_any | (term != 0)
+        if child_keys and len(children) != len(child_keys):
+            # An absent slot is counted by the explicit map above; retain a
+            # separate inventory diagnostic for malformed child manifests.
+            missing_count = missing_count + (len(child_keys) - len(children))
+            missing_any = missing_any | Const(int(len(child_keys) - len(children) > 0))
+        edge_missing_count = self._verified_unsupported_pin_count + sum(
+            len(edges) for edges in self.missing_child_edges.values()
+        )
+        missing_count = missing_count + edge_missing_count
+        missing_any = missing_any | Const(int(edge_missing_count > 0))
+        closure_missing_expr: Any = missing_any
+        closure_count_expr: Any = missing_count
+        closure_complete_expr: Any = ~missing_any if child_keys else Const(0)
         m.d.comb += [
             self.mem_a_valid.eq(self.cf_valid.any() & ~self.reset),
             self.mem_a_address.eq(0),
@@ -294,32 +437,48 @@ class _RootBoundary(Elaboratable):
             self.closure_missing_count.eq(closure_count_expr),
             self.closure_complete.eq(closure_complete_expr),
             self.child_missing.eq(closure_missing_expr),
+            self.verified_edge_missing_count.eq(edge_missing_count),
         ]
         # Full-envelope outputs are deterministic tie-offs until the actual
         # UHSCore/L2Top/UHSTile/UHSCTop child closures are connected.  This is a
         # structural generation aid, never a behavioral-equivalence claim.
         for signal in self.full_inventory_outputs:
-            if id(signal) in self._full_inventory_new_ids:
+            if id(signal) in self._full_inventory_new_ids and id(signal) not in self._bound_inventory_ids:
                 m.d.comb += signal.eq(0)
         return m
 
 
 class UHSCore(_RootBoundary):
-    """Localized UHSCore boundary; internal Frontend/Backend/LSU pending."""
+    """Localized 308-port core parent with explicit child wiring."""
 
     def __init__(self, configuration: RootConfig | None = None,
                  injected_dependencies: dict[str, Any] | None = None) -> None:
         super().__init__(configuration, "uhs_core", injected_dependencies)
+        deps = self.injected_dependencies
+        nested = deps.get("children", deps.get("uhscore_children", {}))
+        if isinstance(nested, Mapping):
+            deps = {**deps, **dict(nested)}
+        self.uhs_core_children: dict[str, Any] = {
+            "frontend": deps.get("frontend") or deps.get("Frontend"),
+            "backend": deps.get("backend") or deps.get("Backend"),
+            "mem_block": deps.get("mem_block") or deps.get("memblock") or deps.get("MemBlock"),
+        }
+        self.child_aliases = {
+            key: next((alias for alias in aliases if deps.get(alias) is not None), None)
+            for key, aliases in {
+                "frontend": ("frontend", "Frontend"),
+                "backend": ("backend", "Backend"),
+                "mem_block": ("mem_block", "memblock", "MemBlock"),
+            }.items()
+        }
 
 
 class L2Top(_RootBoundary):
-    """Source-backed 441-port L2Top bridge with honest child diagnostics.
+    """441-port cache parent with explicit child diagnostics.
 
-    The selected DefaultConfig path is TL2TL.  When a validator injects a
-    ``TL2TLCoupledL2Parent`` object, this adapter relays one bank's complete
-    A/B/C/D/E path between the locked L2Top xbar and memory-facing ports.  All
-    other Rocket Diplomacy children are explicit dependency slots; absent
-    children, or children lacking explicit closure evidence, remain pending.
+    When a validator injects a bounded CoupledL2 parent, the adapter may relay
+    one A/B/C/D/E bank after supplying exact pin-edge evidence. All other
+    child roles remain explicit dependency slots and pending until closure.
     """
 
     def __init__(self, configuration: RootConfig | None = None,
@@ -328,35 +487,24 @@ class L2Top(_RootBoundary):
         deps = self.injected_dependencies
         nested = deps.get("children", deps.get("l2top_children", deps.get("child_dependencies", {})))
         if isinstance(nested, Mapping):
-            # Nested child maps are metadata/injection conveniences only; copy
-            # them into the same explicit namespace used by direct aliases.
+            # Nested children use the local role names declared at this API.
             deps = {**deps, **dict(nested)}
-        self.l2top_children: dict[str, Any] = {}
-        self.l2top_child_aliases: dict[str, str | None] = {}
-        for key in L2TOP_REQUIRED_CHILDREN:
-            child = None
-            alias_used: str | None = None
-            for alias in _L2TOP_CHILD_ALIASES.get(key, (key,)):
-                candidate = deps.get(alias)
-                if candidate is not None:
-                    child = candidate
-                    alias_used = alias
-                    break
-            self.l2top_children[key] = child
-            self.l2top_child_aliases[key] = alias_used
-        # A compact parent alias is convenient for validators and is also
-        # retained as a source-instance spelling for review tooling. /
-        # validator 可使用 compact alias，同时保留 source instance 拼写供审查工具使用。
-        self.tl2tl_parent = self.l2top_children["tl2tl_parent"]
+        self.l2top_expected_children = tuple(
+            str(name) for name in deps.get("expected_children", L2TOP_REQUIRED_CHILDREN)
+        )
+        self.l2top_children: dict[str, Any] = {
+            key: deps.get(key) for key in self.l2top_expected_children
+        }
+        self.tl2tl_parent = self.l2top_children.get("tl2tl_parent")
         self.l2top_bound_child_count = sum(child is not None for child in self.l2top_children.values())
         self.l2top_pending_child_count = sum(
             child is None or not hasattr(child, "closure_missing") and not hasattr(child, "closure_complete")
             for child in self.l2top_children.values()
         )
         self.l2top_child_missing_vector = Signal(
-            len(L2TOP_REQUIRED_CHILDREN), name="l2_top_child_missing_vector"
+            max(1, len(self.l2top_expected_children)), name="l2_top_child_missing_vector"
         )
-        self.l2top_child_missing_count = Signal(8, name="l2_top_child_missing_count")
+        self.l2top_child_missing_count = Signal(16, name="l2_top_child_missing_count")
         self.l2top_pending = Signal(name="l2_top_pending")
         self.l2top_bridge_active = Signal(name="l2_top_tl2tl_bridge_active")
 
@@ -366,11 +514,8 @@ class L2Top(_RootBoundary):
     def _adapt_signal(value: Any, width: int) -> Any:
         if value is None:
             return Const(0, max(1, width))
-        source_width = len(value)
-        if source_width == width:
-            return value
-        if source_width > width:
-            return value[:width]
+        if len(value) != width:
+            return None
         return value
 
     # Connect one signal while adapting widths and preserving missing lanes. /
@@ -380,13 +525,8 @@ class L2Top(_RootBoundary):
         if destination is None or source is None:
             return False
         try:
-            source_width = len(source)
-            destination_width = len(destination)
-            if source_width < destination_width:
-                from amaranth import Cat
-                source = Cat(source, Const(0, destination_width - source_width))
-            elif source_width > destination_width:
-                source = source[:destination_width]
+            if len(source) != len(destination):
+                return False
             module.d.comb += destination.eq(source)
             return True
         except (AttributeError, TypeError, ValueError):
@@ -406,21 +546,22 @@ class L2Top(_RootBoundary):
             return ~Const(int(complete)) if isinstance(complete, bool) else ~complete
         return Const(0 if closed else 1)
 
-    # Elaborate the bounded source-backed L2Top bridge and diagnostics. /
-    # 展开有界 source-backed L2Top bridge 与闭环诊断。
+    # Elaborate the bounded cache-parent bridge and diagnostics. /
+    # 展开有界缓存父级桥接与闭环诊断。
     def elaborate(self, platform: Any) -> Module:
         del platform
+        self.bound_child_edges = {}
+        self.missing_child_edges = {}
+        self._verified_unsupported_pin_count = 0
+        self._bound_inventory_ids = set()
         m = Module()
         domain = ClockDomain("l2_top_sync", async_reset=True)
         domain.clk = self.clock
         domain.rst = self.reset
         m.domains.l2_top_sync = domain
 
-        # Every supplied child is a real dependency object.  We only fan out
-        # clock/reset here unless the object is the selected TL2TL parent;
-        # arbitrary locked modules are never replaced by tie-off stand-ins. /
-        # 每个 supplied child 都是真实依赖对象；除选定 TL2TL parent 外这里只分发
-        # clock/reset，绝不以 tie-off 冒充任意 locked module。
+        # Register injected child objects without inferring clock, reset, or
+        # data connections. / 注册注入子级，但不推断时钟、复位或数据接线。
         unique_children: dict[int, tuple[str, Any]] = {}
         for key, child in self.l2top_children.items():
             if child is not None:
@@ -428,114 +569,25 @@ class L2Top(_RootBoundary):
         for child_id, (key, child) in unique_children.items():
             del child_id
             setattr(m.submodules, f"l2top_{key}", child)
-            child_clock = getattr(child, "clock", None)
-            child_reset = getattr(child, "reset", None)
-            if child_clock is not None:
-                self._connect_signal(m, child_clock, self.clock)
-            if child_reset is not None:
-                self._connect_signal(m, child_reset, self.reset)
+        self._wire_verified_pin_edges(m, self.l2top_children)
 
         # Start every source-shaped output at a deterministic quiescent value;
-        # explicit bridge assignments below override only lanes with a real
-        # selected child. / 所有 source-shaped 输出先置为确定静默值；下方仅由真实
-        # selected child 覆盖显式 bridge lane。
+        # verified pin edges below drive only exact matched lanes.
+        # 所有输出先保持确定静默值；下方仅由精确核验的 pin 边驱动匹配端口。
         for signal in self.full_inventory_outputs:
-            m.d.comb += signal.eq(0)
+            if id(signal) not in self._bound_inventory_ids:
+                m.d.comb += signal.eq(0)
         for index, signal in enumerate(self.full_inventory_inputs):
             sink = Signal(len(signal), name=f"l2top_input_sink_{index}")
             m.d.comb += sink.eq(signal)
 
-        parent = self.tl2tl_parent
-        bridge_connections = 0
+        bridge_connections = sum(len(edges) for edges in self.bound_child_edges.values())
 
-        # Relay one source-backed TL2TL bank between the L2Top xbar input and
-        # memory port.  This is intentionally bounded to bank zero; the
-        # remaining bank/mux/merger behavior stays pending until child closure.
-        # 将一个有源 TL2TL bank 在 L2Top xbar 输入与 memory port 之间中继；其余
-        # bank/mux/merger 行为在 child 闭环前保持 pending。
-        if parent is not None:
-            inner = "auto_inner_xbar_in_0_"
-            child_in = "auto_in_0_"
-            outer = "auto_inner_memory_port_out_"
-            child_out = "auto_out_0_"
-
-            def bridge(dst_name: str, src_name: str) -> None:
-                nonlocal bridge_connections
-                if self._connect_signal(m, getattr(parent, dst_name, None), getattr(self, src_name, None)):
-                    bridge_connections += 1
-
-            def bridge_back(dst_name: str, src_name: str) -> None:
-                nonlocal bridge_connections
-                if self._connect_signal(m, getattr(self, dst_name, None), getattr(parent, src_name, None)):
-                    bridge_connections += 1
-
-            # L1/xbar -> TL2TL inner A/C/E and ready/response back. /
-            # L1/xbar → TL2TL 内侧 A/C/E，并回传 ready/response。
-            for channel, fields in {
-                "a": ("valid", "bits_opcode", "bits_param", "bits_size", "bits_source",
-                       "bits_address", "bits_user_reqSource", "bits_user_alias", "bits_user_vaddr",
-                       "bits_user_needHint", "bits_echo_isKeyword", "bits_mask", "bits_data", "bits_corrupt"),
-                "c": ("valid", "bits_opcode", "bits_param", "bits_size", "bits_source",
-                       "bits_address", "bits_user_reqSource", "bits_user_alias", "bits_user_vaddr",
-                       "bits_user_needHint", "bits_echo_isKeyword", "bits_data", "bits_corrupt"),
-                "e": ("valid", "bits_sink"),
-            }.items():
-                for field in fields:
-                    bridge(f"{child_in}{channel}_{field}", f"{inner}{channel}_{field}")
-            for channel in ("a", "c", "e"):
-                bridge_back(f"{inner}{channel}_ready", f"{child_in}{channel}_ready")
-
-            # TL2TL inner B/D responses -> L2Top xbar. /
-            # TL2TL 内侧 B/D 响应 → L2Top xbar。
-            for channel, fields in {
-                "b": ("valid", "bits_opcode", "bits_param", "bits_size", "bits_source",
-                       "bits_address", "bits_mask", "bits_data", "bits_corrupt"),
-                "d": ("valid", "bits_opcode", "bits_param", "bits_size", "bits_source",
-                       "bits_sink", "bits_denied", "bits_echo_isKeyword", "bits_data", "bits_corrupt"),
-            }.items():
-                for field in fields:
-                    bridge_back(f"{inner}{channel}_{field}", f"{child_in}{channel}_{field}")
-            for channel in ("b", "d"):
-                bridge(f"{child_in}{channel}_ready", f"{inner}{channel}_ready")
-
-            # TL2TL outer A/C/E -> memory port and memory B/D -> TL2TL. /
-            # TL2TL 外侧 A/C/E → memory port，memory B/D → TL2TL。
-            for channel, fields in {
-                "a": ("valid", "bits_opcode", "bits_param", "bits_size", "bits_source",
-                       "bits_address", "bits_user_reqSource", "bits_echo_blockisdirty",
-                       "bits_mask", "bits_data", "bits_corrupt"),
-                "c": ("valid", "bits_opcode", "bits_param", "bits_size", "bits_source",
-                       "bits_address", "bits_user_reqSource", "bits_echo_blockisdirty",
-                       "bits_data", "bits_corrupt"),
-                "e": ("valid", "bits_sink"),
-            }.items():
-                for field in fields:
-                    bridge_back(f"{outer}{channel}_{field}", f"{child_out}{channel}_{field}")
-            for channel in ("a", "c", "e"):
-                bridge(f"{child_out}{channel}_ready", f"{outer}{channel}_ready")
-            for field in ("valid", "bits_opcode", "bits_param", "bits_size", "bits_source",
-                          "bits_address", "bits_mask", "bits_data", "bits_corrupt"):
-                bridge(f"{child_out}b_{field}", f"{outer}b_{field}")
-            for field in ("valid", "bits_opcode", "bits_param", "bits_size", "bits_source",
-                          "bits_sink", "bits_denied", "bits_echo_blockisdirty", "bits_data", "bits_corrupt"):
-                bridge(f"{child_out}d_{field}", f"{outer}d_{field}")
-            bridge_back(f"{outer}b_ready", f"{child_out}b_ready")
-            bridge_back(f"{outer}d_ready", f"{child_out}d_ready")
-
-        # Source-level status taps remain explicit and quiet when no child
-        # provides them. / 源级状态 tap 保持显式；无 child 提供时保持静默。
-        l2_child = self.l2top_children["tl2tl_parent"]
-        l2_miss = getattr(l2_child, "l2Miss", None) if l2_child is not None else None
-        l2_error = getattr(l2_child, "error_valid", None) if l2_child is not None else None
-        l2_miss_output = getattr(self, "io_l2Miss", None)
-        l2_error_output = getattr(self, "io_error_valid", None)
         error_address_output = getattr(self, "io_error_address", None)
         tlb_valid_output = getattr(self, "io_l2_tlb_req_req_valid", None)
         hint_valid_output = getattr(self, "io_l2_hint_valid", None)
-        if l2_miss is not None and l2_miss_output is not None:
-            self._connect_signal(m, l2_miss_output, l2_miss)
-        if l2_error is not None and l2_error_output is not None:
-            self._connect_signal(m, l2_error_output, l2_error)
+        # Child status taps stay quiescent until their exact instance-pin edges
+        # are included in a verified connection table.
         if error_address_output is not None:
             m.d.comb += cast(Any, error_address_output).eq(0)
         if tlb_valid_output is not None:
@@ -548,30 +600,36 @@ class L2Top(_RootBoundary):
         # blocker. / 聚合 child 状态：没有显式状态信号的 child 按定义 pending；
         # inventory 不匹配是独立 blocker。
         missing_terms: list[Any] = []
-        for index, key in enumerate(L2TOP_REQUIRED_CHILDREN):
+        for index, key in enumerate(self.l2top_expected_children):
             child = self.l2top_children[key]
             closed_hint = key in set(self.injected_dependencies.get("closed_children", ()))
             term = self._child_missing(child, closed_hint)
             missing_terms.append(term)
             m.d.comb += cast(Any, self.l2top_child_missing_vector[index]).eq(term)
-        missing_count: Any = Const(0, 8)
+        missing_count: Any = Const(0, 16)
         missing_any: Any = Const(0)
         for term in missing_terms:
             missing_count = missing_count + term
             missing_any = missing_any | term
         inventory_missing = Const(int(len(self.full_port_specs) != 441))
         missing_count = missing_count + inventory_missing
-        bridge_missing = Const(int(parent is None or bridge_connections == 0))
+        bridge_missing = Const(int(bridge_connections == 0))
         missing_count = missing_count + bridge_missing
         missing_any = missing_any | inventory_missing | bridge_missing
+        edge_missing_count = self._verified_unsupported_pin_count + sum(
+            len(edges) for edges in self.missing_child_edges.values()
+        )
+        missing_count = missing_count + edge_missing_count
+        missing_any = missing_any | Const(int(edge_missing_count > 0))
         m.d.comb += [
             self.l2top_child_missing_count.eq(missing_count),
             self.l2top_pending.eq(missing_any),
-            self.l2top_bridge_active.eq(int(parent is not None and bridge_connections > 0)),
+            self.l2top_bridge_active.eq(int(bridge_connections > 0)),
             self.closure_missing_count.eq(missing_count),
             self.closure_missing.eq(missing_any),
             self.child_missing.eq(missing_any),
             self.closure_complete.eq(~missing_any),
+            self.verified_edge_missing_count.eq(edge_missing_count),
         ]
         return m
 
@@ -581,28 +639,70 @@ class UHSTile(_RootBoundary):
 
     def __init__(self, configuration: RootConfig | None = None,
                  injected_dependencies: dict[str, Any] | None = None) -> None:
-        super().__init__(configuration, "xs_tile", injected_dependencies)
+        super().__init__(configuration, "uhs_tile", injected_dependencies)
         deps = self.injected_dependencies
         nested = deps.get("children", deps.get("uhstile_children", {}))
         if not isinstance(nested, Mapping):
             nested = {}
         merged = {**deps, **dict(nested)}
-        self.uhstile_children: dict[str, Any] = {
-            "uhs_core": merged.get("uhs_core") or merged.get("core"),
-            "l2_top": merged.get("l2_top") or merged.get("l2top"),
-            "intbuffer": merged.get("intbuffer") or merged.get("int_buffer"),
-            "intbuffer_1": merged.get("intbuffer_1") or merged.get("intBuffer_1"),
-            "intbuffer_2": merged.get("intbuffer_2") or merged.get("intBuffer_2"),
-            "intbuffer_3": merged.get("intbuffer_3") or merged.get("intBuffer_3") or merged.get("intbuffer_1") or merged.get("intBuffer_1"),
+        if "expected_children" in deps:
+            self.uhstile_children = {str(key): merged.get(str(key)) for key in self.expected_children}
+        else:
+            self.uhstile_children: dict[str, Any] = {
+                "uhs_core": merged.get("uhs_core") or merged.get("core"),
+                "l2_top": merged.get("l2_top") or merged.get("l2top"),
+                "intbuffer": merged.get("intbuffer") or merged.get("int_buffer"),
+                "intbuffer_1": merged.get("intbuffer_1") or merged.get("intBuffer_1"),
+                "intbuffer_2": merged.get("intbuffer_2") or merged.get("intBuffer_2"),
+                "intbuffer_3": merged.get("intbuffer_3") or merged.get("intBuffer_3") or merged.get("intbuffer_1") or merged.get("intBuffer_1"),
+            }
+        self.child_aliases = {
+            key: next((alias for alias in aliases if merged.get(alias) is not None), None)
+            for key, aliases in {
+                "uhs_core": ("uhs_core", "core"),
+                "l2_top": ("l2_top", "l2top"),
+                "intbuffer": ("intbuffer", "int_buffer"),
+                "intbuffer_1": ("intbuffer_1", "intBuffer_1"),
+                "intbuffer_2": ("intbuffer_2", "intBuffer_2"),
+                "intbuffer_3": ("intbuffer_3", "intBuffer_3"),
+            }.items()
         }
 
 
 class UHSCTop(_RootBoundary):
-    """Localized UHSCTop wrapper; complete 204-port top pending."""
+    """Localized 204-port system wrapper with explicit child slots."""
 
     def __init__(self, configuration: RootConfig | None = None,
                  injected_dependencies: dict[str, Any] | None = None) -> None:
         super().__init__(configuration, "uhsc_top", injected_dependencies)
+        deps = self.injected_dependencies
+        nested = deps.get("children", deps.get("system_children", {}))
+        if isinstance(nested, Mapping):
+            deps = {**deps, **dict(nested)}
+        default_children: dict[str, Any] = {
+            "soc_misc": deps.get("soc_misc") or deps.get("socMisc"),
+            "xstile": deps.get("xstile") or deps.get("tile"),
+            "huan_cun": deps.get("huan_cun") or deps.get("l3cacheOpt") or deps.get("HuanCun"),
+            "imsic_bus_top": deps.get("imsic_bus_top") or deps.get("imsic_bus_tops"),
+            "axi4_map": deps.get("axi4_map") or deps.get("map"),
+            "axi4_buffer": deps.get("axi4_buffer") or deps.get("axi4buf"),
+            "axi4_user_yanker": deps.get("axi4_user_yanker") or deps.get("axi4yank"),
+            "tl_to_axi4": deps.get("tl_to_axi4") or deps.get("tl2axi4"),
+            "tl_fragmenter": deps.get("tl_fragmenter") or deps.get("fragmenter"),
+            "tl_width_widget": deps.get("tl_width_widget") or deps.get("widget"),
+            "intbuffer": deps.get("intbuffer") or deps.get("intBuffer"),
+            "intbuffer_1": deps.get("intbuffer_1") or deps.get("intBuffer_1"),
+            "valid_io_broadcast": deps.get("valid_io_broadcast") or deps.get("broadcast"),
+            "reset_gen": deps.get("reset_gen") or deps.get("reset_sync_resetSync"),
+            "jtag_reset_gen": deps.get("jtag_reset_gen") or deps.get("jtag_reset_sync_resetSync"),
+            "ref_reset_gen": deps.get("ref_reset_gen") or deps.get("ref_reset_sync_resetSync"),
+            "async_queue_sink": deps.get("async_queue_sink") or deps.get("time_sink"),
+        }
+        self.uhsctop_children = (
+            {str(key): deps.get(str(key)) for key in self.expected_children}
+            if "expected_children" in deps else default_children
+        )
+        self.child_aliases = {key: key for key, child in self.uhsctop_children.items() if child is not None}
 
 
 # =============================================================================
