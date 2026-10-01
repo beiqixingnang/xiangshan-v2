@@ -1,128 +1,110 @@
 {
   "schema_version": 1,
   "kind": "V2_VALIDATION_EXPANSION_BATCH",
-  "timestamp": "2026-10-01T12:20:22.056937+08:00",
-  "baseline_commit": "578a778",
-  "strict": "45/118",
-  "strict_delta": 0,
+  "timestamp": "2026-10-01T13:08:27.131146+08:00",
+  "baseline_commit": "6d6abba",
+  "strict": "46/118",
+  "strict_delta": 1,
   "accepted": 0,
   "build_files": 118,
-  "behavior_verified_builds": "45/118",
-  "pending_builds": 73,
+  "behavior_verified_builds": "46/118",
+  "pending_builds": 72,
   "scala_source_associated_reference_modules": {
     "mapped": 1976,
     "total": 1976,
     "semantics": "source association/subject mapping only; includes bounded and contract-only subjects; not all strictly equivalent"
   },
   "python_lines": {
-    "raw": 95334,
-    "nonblank": 88141,
-    "raw_delta": 196,
-    "nonblank_delta": 189
-  },
-  "rocket": {
-    "Status": "COMPLETE_EQUIVALENCE",
-    "PassedMembers": 11,
-    "FamilyMembers": 11,
-    "Receipt": "validation/v2-build-cpu-dependency-rocket-tlchildren-family-strict-evidence.json",
-    "SourceAndCellReceiptRecheck": "PASS; coordinator takeover after subagent connection failure"
+    "raw": 96122,
+    "nonblank": 88899,
+    "raw_delta": 788,
+    "nonblank_delta": 758
   },
   "icache": {
-    "Status": "PASS_MEMBER_PROOFS_NON_COUNTING",
-    "PassedMembers": 5,
+    "Status": "COMPLETE_EQUIVALENCE",
+    "PassedMembers": 7,
     "FamilyMembers": 7,
     "Cells": {
-      "L2TlbMissQueue": 1942,
-      "PrefetcherMonitor": 94,
+      "ICacheMainPipe": 1967,
+      "IPrefetchPipe": 894,
       "InstrMMIOEntry": 152,
+      "L2TlbMissQueue": 1942,
       "L2TlbPrefetch": 185,
+      "PrefetcherMonitor": 94,
       "WayLookup": 3636
     },
-    "Unproven": 0,
-    "NegativeControl": "PASS",
-    "ElapsedSeconds": 102.289,
-    "FormalCacheHits": 5,
-    "Direct": "6/6 PASS",
-    "Pyright": "PASS",
-    "Receipt": "validation/v2-icache-five-members-focused-results.json",
-    "StrictCountDelta": 0
-  },
-  "waylookup": {
-    "Status": "PASS_MEMBER_PROOFS_NON_COUNTING",
-    "Cells": 3636,
+    "TotalEquivalenceCells": 8870,
     "Unproven": 0,
     "TwoSidedNegativeControl": "PASS",
-    "ElapsedSeconds": 82.33,
-    "BehaviorCases": [
-      "32-slot full and wrap",
-      "empty bypass",
-      "two-lane refill update and parity",
-      "same-slot whole-write priority",
-      "GPF stall/consume/bypass/flush priority",
-      "500 deterministic random cycles"
-    ],
-    "Receipt": "validation/v2-icache-waylookup-focused-results.json"
-  },
-  "workflow_triage": {
-    "BypassPipeFamily": {
-      "Status": "BLOCKED_CONTRACT_ONLY",
-      "ContractOnlyMembers": [
-        "BypassNetwork",
-        "PipeGroupConnect"
-      ],
-      "Formal": "NOT_RUN",
-      "Receipt": "validation/v2-build-cpu-backend-datapath-bypasspipefamily-behavior-preflight-results.json"
+    "Direct": "8/8 PASS",
+    "Pyright": "PASS; zero errors",
+    "Receipt": "validation/v2-build-cpu-frontend-icache-prefetch-family-strict-evidence.json",
+    "Resume": {
+      "checkpoint": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\.cache\\strict-family\\build_cpu_frontend_icache_prefetch_family\\rail-checkpoint.json",
+      "prepared_cache_hits": 7,
+      "formal_cache_hits": 7,
+      "member_count": 7
     },
-    "WbArbiter": {
-      "Status": "BLOCKED",
-      "Direct": "MISSING_DIRECT_TEST",
-      "Abi": {
-        "RealWBArbiter": "19/19 exact",
-        "RealWBCollideChecker": "43 vs 108; locked specialization config missing",
-        "WbDataPath": "16 vs 861; locked specialization config missing"
-      },
-      "Formal": "NOT_RUN",
-      "Receipt": "validation/v2-build-cpu-backend-datapath-wbarbiter-preflight-results.json"
+    "AcceptanceEligible": false
+  },
+  "initial_member_diagnostics": {
+    "profile": "before final five-section comment normalization; superseded by current complete-family receipt",
+    "IPrefetchPipe": {
+      "Cells": 894,
+      "ElapsedSeconds": 17.916,
+      "TwoSidedNegativeControl": "PASS"
+    },
+    "ICacheMainPipe": {
+      "Cells": 1967,
+      "ElapsedSeconds": 20.574,
+      "TwoSidedNegativeControl": "PASS"
     }
   },
+  "behavior_cases": {
+    "IPrefetchPipe": [
+      "S0 CSR/BPU/soft semantics",
+      "dual TLB miss completion and Meta retries",
+      "WayLookup/refill backpressure and guest fault fields",
+      "fixed-priority miss arbitration and duplicate prevention",
+      "PMP/PBMT/exception suppression"
+    ],
+    "ICacheMainPipe": [
+      "all eight bank offsets and held data under response stalls",
+      "wait for two refills after requests are sent",
+      "bank concatenation and corrupt-refill access fault",
+      "metadata multihit/data parity flush masks and BEU reports",
+      "delayed L2 error priority and non-BEU reporting",
+      "exception/PBMT/flush semantics"
+    ]
+  },
   "regression": {
-    "FocusedPyright": "3 implementation/test/workflow files; 0 errors",
+    "FocusedPyright": "2 changed files; 0 errors",
     "Utf8LfCompileDiff": "PASS",
-    "RailAndProgressUnitTests": "NOT_RUN; shared rail/progress code unchanged; prior 13/13 and 11/11 at 578a778"
+    "SharedRailAndProgressTests": "NOT_RUN; shared code unchanged, prior 13/13 and 11/11 remain recorded"
   },
   "central_audit": {
     "status": "FAIL",
-    "failure_records": 6,
-    "non_counting_attempts": 5
+    "failure_records": 5,
+    "non_counting_attempts": 5,
+    "IcacheCurrentRecord": "PASS"
   },
   "sources": {
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Frontend.Icache.Prefetch.Family-Hardware.py": {
       "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Frontend.Icache.Prefetch.Family-Hardware.py",
-      "sha256": "5a399703bd2b2f347d170613c46476070492a4cef8b82e106cd6b579ea090542",
-      "bytes": 44789
+      "sha256": "35ab84f982a4fdfee03985602a059a3d6bffd61ae1bae998bb1838e7a7fe3d1a",
+      "bytes": 74467
     },
     "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Frontend.Icache.Prefetch.Family-Hardware.py": {
       "path": "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Frontend.Icache.Prefetch.Family-Hardware.py",
-      "sha256": "7f3cf7ca8ab87d4868fb9b3d428a6a20c60936faf5091999efe2e9e822542b85",
-      "bytes": 19888
-    },
-    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Datapath.BypassPipeFamily-Hardware.py": {
-      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Datapath.BypassPipeFamily-Hardware.py",
-      "sha256": "500dc912a0b2aa696426554a562438b94f770ef9a791d268ac024662a1a1b6e8",
-      "bytes": 149781
-    },
-    "validation/v2_catalog_behavior_preflight.py": {
-      "path": "validation/v2_catalog_behavior_preflight.py",
-      "sha256": "1854bcd73f5d2832d45002ba94b650fe1cfec28a0435f60fcd2dfbfa5a7e6d09",
-      "bytes": 3013
+      "sha256": "e0aa15a0375617cbfa76d2bbf72692e51d2e34b33cbe9bfdf04ab3307a00bfcc",
+      "bytes": 37255
     }
   },
   "remaining_gates": [
-    "IPrefetchPipe and ICacheMainPipe remain Icache implementation/proof work",
-    "73 Builds lack complete strict proofs; CONTRACT_ONLY/bounded subjects are not accepted",
-    "6 source/origin failures include unresolved behavioral/ABI proofs; hashes alone cannot repair them",
-    "5 non-counting attempts remain open",
-    "Reset/initial-state gates, executable Verilator differential/wave review, parent/full-top closure, license and user acceptance remain pending"
+    "72 Builds lack complete strict proofs; CONTRACT_ONLY/bounded subjects are not accepted",
+    "5 source/origin audit failures with unresolved implementation/ABI/formal gaps",
+    "5 non-counting attempts remain pending",
+    "Reset/initial-state entry, executable Verilator differential/wave review, parent/full-top closure, license and user acceptance remain pending"
   ],
   "acceptance_eligible": false
 }

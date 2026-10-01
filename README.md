@@ -104,8 +104,8 @@ the 900-second timeout, while the partitioned Yosys proof took about 34 seconds
 and 332 MB. Both mutant sides use the same proof script. A missing partition
 or any remaining unproven cell blocks success.
 
-The Rocket TLChildren Build now has a complete 11/11 strict receipt, raising
-the audited Build count to 45/118. Its dedicated full-catalog producer is:
+The Rocket TLChildren Build has a complete 11/11 strict receipt.
+Its dedicated full-catalog producer is:
 
 ```powershell
 py -B validation/v2_rocket_tlchildren_strict_validator.py
@@ -115,12 +115,21 @@ The producer uses the same full-cone partitions for queues and crossbar
 arbiters, then asserts the entire design, checks every catalog member and
 records two-sided negative controls. Its receipt binds the partition policy,
 catalog resolver, common rail and registered direct test to current hashes.
+Icache Prefetch now has a complete 7/7 strict receipt, bringing the audited
+Build count to 46/118. Both pipelines implement their stage control, retries,
+two-lane miss arbitration and data/exception paths. All 8,870 equivalence cells
+prove, and both negative-control sides fail the mutated designs. Run:
+
+```powershell
+py -B validation/v2_catalog_family_strict_validator.py --build Frontend.Icache.Prefetch.Family
+```
+
+The full catalog rerun after normalizing the Build's five sections reused all
+7/7 member proofs under the exact RTL/reference/tool/producer cache keys.
 Acceptance remains pending for reset-entry, executable differential, parent
-closure and system gates. Icache Prefetch covers 5/7 members in non-counting
-focused receipts. WayLookup passes all 3,636 cells and both negative-control
-sides; the two pipeline members remain pending. TLXbar_8 preserves the full finite
+closure and system gates. TLXbar_8 preserves the full finite
 manager address mask union, including the 0x31110000 hole found by SAT;
 random route samples could not justify replacing that union with a complement.
 See validation/v2-build-cpu-dependency-rocket-tlchildren-family-strict-evidence.json and
-validation/v2-icache-five-members-focused-results.json for current source hashes,
+validation/v2-build-cpu-frontend-icache-prefetch-family-strict-evidence.json for current source hashes,
 commands, lint, complete cell counts and two-sided controls.

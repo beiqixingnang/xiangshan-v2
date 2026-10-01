@@ -250,6 +250,311 @@ class IcachePrefetchFamilyTest(unittest.TestCase):
         sim.run()
 
 
+    def test_main_pipe_banks_refill_wait_and_error_reporting(self) -> None:
+        module = load_subject()
+        dut = module.IcachePrefetchFamily("ICacheMainPipe")
+        p = dut.ports
+        tags = (0x123456789, 0x987654321)
+        banks = [0x1020304050607000 + bank for bank in range(8)]
+        refill0 = [0xA001000000000000 + bank for bank in range(8)]
+        refill1 = [0xB002000000000000 + bank for bank in range(8)]
+
+        def packed(values):
+            return sum(value << (64 * bank) for bank, value in enumerate(values))
+
+        async def bench(ctx):
+            async def reset(ecc=False):
+                for name, direction, _width in dut.specs:
+                    if direction == "input" and name != "clock":
+                        ctx.set(p[name], 0)
+                ctx.set(p["reset"], 1)
+                ctx.set(p["io_wayLookupRead_valid"], 1)
+                ctx.set(p["io_dataArray_toIData_3_ready"], 1)
+                ctx.set(p["io_mshr_req_ready"], 1)
+                ctx.set(p["io_ecc_enable"], int(ecc))
+                await ctx.tick()
+                ctx.set(p["reset"], 0)
+
+            async def accept(offset=0, masks=(1, 2), bad_bank=-1, exc=(0, 0), pbmt=(0, 0)):
+                ctx.set(p["io_fetch_req_bits_pcMemRead_4_startAddr"], 0x1000 + offset)
+                ctx.set(p["io_fetch_req_bits_pcMemRead_4_nextlineStart"], 0x1040)
+                ctx.set(p["io_fetch_req_bits_readValid_4"], 1)
+                ctx.set(p["io_fetch_req_bits_hasSatpFlush"], 1)
+                ctx.set(p["io_wayLookupRead_bits_gpf_gpaddr"], 0x5566778899)
+                ctx.set(p["io_wayLookupRead_bits_gpf_isForVSnonLeafPTE"], 1)
+                for lane in range(2):
+                    ctx.set(p[f"io_wayLookupRead_bits_entry_vSetIdx_{lane}"], ((0x1040 if lane else 0x1000 + offset) >> 6) & 255)
+                    ctx.set(p[f"io_wayLookupRead_bits_entry_ptag_{lane}"], tags[lane])
+                    ctx.set(p[f"io_wayLookupRead_bits_entry_waymask_{lane}"], masks[lane])
+                    ctx.set(p[f"io_wayLookupRead_bits_entry_meta_codes_{lane}"], tags[lane].bit_count() % 2)
+                    ctx.set(p[f"io_wayLookupRead_bits_entry_itlb_exception_{lane}"], exc[lane])
+                    ctx.set(p[f"io_wayLookupRead_bits_entry_itlb_pbmt_{lane}"], pbmt[lane])
+                for index in range(4):
+                    ctx.set(p[f"io_fetch_req_bits_readValid_{index}"], index & 1)
+                    ctx.set(p[f"io_fetch_req_bits_pcMemRead_{index}_startAddr"], 0x4000 + index * 64)
+                    ctx.set(p[f"io_fetch_req_bits_pcMemRead_{index}_nextlineStart"], 0x4040 + index * 64)
+                    self.assertEqual(index & 1, ctx.get(p[f"io_dataArray_toIData_{index}_valid"]))
+                    self.assertEqual(index, ctx.get(p[f"io_dataArray_toIData_{index}_bits_vSetIdx_0"]))
+                ctx.set(p["io_fetch_req_valid"], 1)
+                self.assertEqual(1, ctx.get(p["io_fetch_req_ready"]))
+                self.assertEqual(1, ctx.get(p["io_wayLookupRead_ready"]))
+                await ctx.tick()
+                ctx.set(p["io_fetch_req_valid"], 0)
+                self.assertEqual(int(masks[0] != 0), ctx.get(p["io_touch_0_valid"]))
+                for bank, data in enumerate(banks):
+                    ctx.set(p[f"io_dataArray_fromIData_datas_{bank}"], data)
+                    ctx.set(p[f"io_dataArray_fromIData_codes_{bank}"], (data.bit_count() % 2) ^ int(bank == bad_bank))
+                await ctx.tick()
+
+            for offset in range(0, 64, 8):
+                await reset(ecc=True)
+                await accept(offset)
+                self.assertEqual(1, ctx.get(p["io_fetch_resp_valid"]))
+                self.assertEqual(packed(banks), ctx.get(p["io_fetch_resp_bits_data"]))
+                self.assertEqual((tags[0] << 12) | offset, ctx.get(p["io_fetch_resp_bits_paddr_0"]))
+                self.assertEqual(int(offset >= 32), ctx.get(p["io_fetch_resp_bits_doubleline"]))
+                self.assertEqual(0x5566778899, ctx.get(p["io_fetch_resp_bits_gpaddr"]))
+                self.assertEqual(1, ctx.get(p["io_fetch_resp_bits_hasSatpFlush"]))
+                ctx.set(p["io_respStall"], 1)
+                for _ in range(2):
+                    self.assertEqual(0, ctx.get(p["io_fetch_resp_valid"]))
+                    self.assertEqual(packed(banks), ctx.get(p["io_fetch_resp_bits_data"]))
+                    await ctx.tick()
+                ctx.set(p["io_respStall"], 0)
+                await ctx.tick()
+                self.assertEqual(0, ctx.get(p["io_fetch_resp_valid"]))
+
+            await reset()
+            await accept(offset=40, masks=(0, 0))
+            sent = []
+            for _ in range(5):
+                if ctx.get(p["io_mshr_req_valid"]):
+                    sent.append(ctx.get(p["io_mshr_req_bits_blkPaddr"]))
+                self.assertEqual(0, ctx.get(p["io_fetch_resp_valid"]))
+                self.assertEqual(1, ctx.get(p["io_fetch_topdownIcacheMiss"]))
+                await ctx.tick()
+            self.assertEqual([tags[0] << 6, (tags[1] << 6) | 1], sent)
+            for lane, values in enumerate((refill0, refill1)):
+                ctx.set(p["io_mshr_resp_valid"], 1)
+                ctx.set(p["io_mshr_resp_bits_vSetIdx"], 64 + lane)
+                ctx.set(p["io_mshr_resp_bits_blkPaddr"], (tags[lane] << 6) | lane)
+                ctx.set(p["io_mshr_resp_bits_data"], packed(values))
+                ctx.set(p["io_mshr_resp_bits_corrupt"], lane)
+                await ctx.tick()
+            ctx.set(p["io_mshr_resp_valid"], 0)
+            self.assertEqual(1, ctx.get(p["io_fetch_resp_valid"]))
+            self.assertEqual(packed(refill1[:5] + refill0[5:]), ctx.get(p["io_fetch_resp_bits_data"]))
+            self.assertEqual(3, ctx.get(p["io_fetch_resp_bits_exception_1"]))
+            await ctx.tick()
+            self.assertEqual(1, ctx.get(p["io_errors_1_valid"]))
+            self.assertEqual(0, ctx.get(p["io_errors_1_bits_report_to_beu"]))
+            self.assertEqual((tags[1] << 12) | 64, ctx.get(p["io_errors_1_bits_paddr"]))
+            self.assertEqual(0, ctx.get(p["io_metaArrayFlush_1_valid"]))
+
+            # Metadata multihit flushes every way; data-only parity corruption
+            # flushes its hit way, and banks outside the fetch window are ignored.
+            for mask, bad_bank, error, expected_flush in ((3, -1, True, 15),
+                                                         (4, 2, True, 4), (4, 0, False, 0)):
+                await reset(ecc=True)
+                await accept(offset=8, masks=(mask, 0), bad_bank=bad_bank)
+                self.assertEqual(int(error), ctx.get(p["io_errors_0_valid"]))
+                self.assertEqual(int(error), ctx.get(p["io_errors_0_bits_report_to_beu"]))
+                self.assertEqual(int(error), ctx.get(p["io_metaArrayFlush_0_valid"]))
+                if error:
+                    self.assertEqual(expected_flush, ctx.get(p["io_metaArrayFlush_0_bits_waymask"]))
+                    self.assertEqual(1, ctx.get(p["io_mshr_req_valid"]))
+                    self.assertEqual(0, ctx.get(p["io_fetch_resp_valid"]))
+                else:
+                    self.assertEqual(1, ctx.get(p["io_fetch_resp_valid"]))
+
+            for exc, pbmt in (((1, 0), (0, 0)), ((0, 0), (1, 0))):
+                await reset()
+                await accept(offset=40, masks=(0, 0), exc=exc, pbmt=pbmt)
+                self.assertEqual(0, ctx.get(p["io_mshr_req_valid"]))
+                self.assertEqual(1, ctx.get(p["io_fetch_resp_valid"]))
+                self.assertEqual(exc[0], ctx.get(p["io_fetch_resp_bits_exception_0"]))
+                self.assertEqual(pbmt[0], ctx.get(p["io_fetch_resp_bits_itlb_pbmt_0"]))
+            ctx.set(p["io_flush"], 1)
+            self.assertEqual(0, ctx.get(p["io_fetch_resp_valid"]))
+            ctx.set(p["io_fetch_req_valid"], 1)
+            self.assertEqual(1, ctx.get(p["io_fetch_req_ready"]))
+            self.assertEqual(0, ctx.get(p["io_wayLookupRead_ready"]))
+
+        sim = Simulator(dut)
+        sim.add_clock(1e-6)
+        sim.add_testbench(bench)
+        sim.run()
+
+    def test_prefetch_pipe_translation_retries_and_miss_policy(self) -> None:
+        module = load_subject()
+        dut = module.IcachePrefetchFamily("IPrefetchPipe")
+        p = dut.ports
+        physical = (0x12345000, 0xABCDE040)
+        guest = (0x9876543210, 0x9988776600)
+
+        async def bench(ctx):
+            async def reset():
+                for name, direction, _width in dut.specs:
+                    if direction == "input" and name != "clock":
+                        ctx.set(p[name], 0)
+                ctx.set(p["reset"], 1)
+                ctx.set(p["io_csr_pf_enable"], 1)
+                ctx.set(p["io_metaRead_toIMeta_ready"], 1)
+                await ctx.tick()
+                ctx.set(p["reset"], 0)
+
+            async def accept(double=True, soft=False, exceptions=(0, 0), pbmt=(0, 0),
+                             masks=(0, 0), backend=0):
+                ctx.set(p["io_req_bits_startAddr"], 0x4120 if double else 0x4100)
+                ctx.set(p["io_req_bits_nextlineStart"], 0x4140)
+                ctx.set(p["io_req_bits_ftqIdx_value"], 7)
+                ctx.set(p["io_req_bits_isSoftPrefetch"], int(soft))
+                ctx.set(p["io_req_bits_backendException"], backend)
+                for lane in range(2):
+                    stem = f"io_itlb_{lane}_resp_bits_"
+                    ctx.set(p[stem + "paddr_0"], physical[lane])
+                    ctx.set(p[stem + "gpaddr_0"], guest[lane])
+                    ctx.set(p[stem + "pbmt_0"], pbmt[lane])
+                    ctx.set(p[stem + "isForVSnonLeafPTE"], lane)
+                    for tag, code in (("pf", 1), ("gpf", 2), ("af", 3)):
+                        ctx.set(p[stem + f"excp_0_{tag}_instr"], int(exceptions[lane] == code))
+                    for way in range(4):
+                        ctx.set(p[f"io_metaRead_fromIMeta_entryValid_{lane}_{way}"],
+                                int(bool(masks[lane] & (1 << way))))
+                        ctx.set(p[f"io_metaRead_fromIMeta_metas_{lane}_{way}_tag"], physical[lane] >> 12)
+                        ctx.set(p[f"io_metaRead_fromIMeta_codes_{lane}_{way}"], way & 1)
+                ctx.set(p["io_req_valid"], 1)
+                self.assertEqual(1, ctx.get(p["io_req_ready"]))
+                self.assertEqual(1, ctx.get(p["io_itlb_0_req_valid"]))
+                self.assertEqual(int(double), ctx.get(p["io_itlb_1_req_valid"]))
+                self.assertEqual(int(double), ctx.get(p["io_metaRead_toIMeta_bits_isDoubleLine"]))
+                await ctx.tick()
+                ctx.set(p["io_req_valid"], 0)
+
+            # A late second translation forces a Meta reread; WayLookup then
+            # owns its result across backpressure before either miss is sent.
+            await reset()
+            ctx.set(p["io_itlb_1_resp_bits_miss"], 1)
+            await accept()
+            self.assertEqual(0, ctx.get(p["io_wayLookupWrite_valid"]))
+            self.assertEqual(1, ctx.get(p["io_itlb_1_req_valid"]))
+            await ctx.tick()
+            ctx.set(p["io_itlb_1_resp_bits_miss"], 0)
+            ctx.set(p["io_metaRead_toIMeta_ready"], 0)
+            self.assertEqual(1, ctx.get(p["io_metaRead_toIMeta_valid"]))
+            self.assertEqual(0, ctx.get(p["io_req_ready"]))
+            await ctx.tick()
+            ctx.set(p["io_metaRead_toIMeta_ready"], 1)
+            await ctx.tick()
+            for _ in range(3):
+                self.assertEqual(1, ctx.get(p["io_wayLookupWrite_valid"]))
+                self.assertEqual(physical[0] >> 12, ctx.get(p["io_wayLookupWrite_bits_entry_ptag_0"]))
+                self.assertEqual(physical[1] >> 12, ctx.get(p["io_wayLookupWrite_bits_entry_ptag_1"]))
+                self.assertEqual(0, ctx.get(p["io_MSHRReq_valid"]))
+                await ctx.tick()
+            ctx.set(p["io_wayLookupWrite_ready"], 1)
+            await ctx.tick()
+            for _ in range(2):
+                self.assertEqual(1, ctx.get(p["io_MSHRReq_valid"]))
+                self.assertEqual(physical[0] >> 6, ctx.get(p["io_MSHRReq_bits_blkPaddr"]))
+                await ctx.tick()
+            ctx.set(p["io_MSHRReq_ready"], 1)
+            await ctx.tick()
+            self.assertEqual(physical[1] >> 6, ctx.get(p["io_MSHRReq_bits_blkPaddr"]))
+            await ctx.tick()
+            for _ in range(3):
+                self.assertEqual(0, ctx.get(p["io_MSHRReq_valid"]))
+                await ctx.tick()
+
+            # Cache hits, guest faults, access checks and non-cacheable PBMT
+            # determine which lines may issue. Lane-zero failure suppresses both.
+            cases = [((0, 0), (0, 0), (0, 0), (0, 0), [0, 1]),
+                     ((0, 0), (0, 0), (4, 8), (0, 0), []),
+                     ((1, 0), (0, 0), (0, 0), (0, 0), []),
+                     ((0, 2), (0, 0), (0, 0), (0, 0), [0]),
+                     ((0, 0), (1, 0), (0, 0), (0, 0), []),
+                     ((0, 0), (0, 2), (0, 0), (0, 0), [0]),
+                     ((0, 0), (0, 0), (0, 0), (1, 0), []),
+                     ((0, 0), (0, 0), (0, 0), (0, 1), [0])]
+            for exc, pbmt, masks, pmp, expected in cases:
+                await reset()
+                await accept(exceptions=exc, pbmt=pbmt, masks=masks)
+                self.assertEqual(exc[0], ctx.get(p["io_wayLookupWrite_bits_entry_itlb_exception_0"]))
+                self.assertEqual(exc[1], ctx.get(p["io_wayLookupWrite_bits_entry_itlb_exception_1"]))
+                for lane in range(2):
+                    self.assertEqual(masks[lane], ctx.get(p[f"io_wayLookupWrite_bits_entry_waymask_{lane}"]))
+                    ctx.set(p[f"io_pmp_{lane}_resp_instr"], pmp[lane])
+                if exc[1] == 2:
+                    self.assertEqual(guest[1] - 64, ctx.get(p["io_wayLookupWrite_bits_gpf_gpaddr"]))
+                ctx.set(p["io_wayLookupWrite_ready"], 1)
+                ctx.set(p["io_MSHRReq_ready"], 1)
+                await ctx.tick()
+                sent = []
+                for _ in range(7):
+                    if ctx.get(p["io_MSHRReq_valid"]):
+                        sent.append(ctx.get(p["io_MSHRReq_bits_blkPaddr"]))
+                    await ctx.tick()
+                self.assertEqual([physical[lane] >> 6 for lane in expected], sent)
+
+            await reset()
+            ctx.set(p["io_csr_pf_enable"], 0)
+            await accept(double=False, backend=2)
+            self.assertEqual(1, ctx.get(p["io_wayLookupWrite_valid"]))
+            self.assertEqual(2, ctx.get(p["io_wayLookupWrite_bits_entry_itlb_exception_0"]))
+            self.assertEqual(0, ctx.get(p["io_wayLookupWrite_bits_entry_itlb_exception_1"]))
+            self.assertEqual(guest[0], ctx.get(p["io_wayLookupWrite_bits_gpf_gpaddr"]))
+            ctx.set(p["io_wayLookupWrite_ready"], 1)
+            for _ in range(5):
+                await ctx.tick()
+                self.assertEqual(0, ctx.get(p["io_MSHRReq_valid"]))
+
+            # Refill response stalls WayLookup, including corrupt responses.
+            await reset()
+            await accept(masks=(4, 0))
+            ctx.set(p["io_MSHRResp_valid"], 1)
+            ctx.set(p["io_MSHRResp_bits_vSetIdx"], (0x4120 >> 6) & 255)
+            ctx.set(p["io_MSHRResp_bits_blkPaddr"], physical[0] >> 6)
+            ctx.set(p["io_MSHRResp_bits_waymask"], 8)
+            ctx.set(p["io_MSHRResp_bits_corrupt"], 1)
+            self.assertEqual(0, ctx.get(p["io_wayLookupWrite_valid"]))
+            self.assertEqual(4, ctx.get(p["io_wayLookupWrite_bits_entry_waymask_0"]))
+            await ctx.tick()
+            ctx.set(p["io_MSHRResp_bits_corrupt"], 0)
+            self.assertEqual(8, ctx.get(p["io_wayLookupWrite_bits_entry_waymask_0"]))
+            self.assertEqual((physical[0] >> 12).bit_count() % 2,
+                             ctx.get(p["io_wayLookupWrite_bits_entry_meta_codes_0"]))
+            await ctx.tick()
+            ctx.set(p["io_MSHRResp_valid"], 0)
+            self.assertEqual(1, ctx.get(p["io_wayLookupWrite_valid"]))
+            self.assertEqual(8, ctx.get(p["io_wayLookupWrite_bits_entry_waymask_0"]))
+            for flag, value, flush in ((0, 8, 0), (1, 8, 1), (1, 7, 0), (0, 7, 1)):
+                ctx.set(p["io_flushFromBpu_s3_valid"], 1)
+                ctx.set(p["io_flushFromBpu_s3_bits_flag"], flag)
+                ctx.set(p["io_flushFromBpu_s3_bits_value"], value)
+                self.assertEqual(flush, ctx.get(p["io_itlbFlushPipe"]))
+                self.assertEqual(1 - flush, ctx.get(p["io_wayLookupWrite_valid"]))
+
+            await reset()
+            ctx.set(p["io_flushFromBpu_s2_valid"], 1)
+            ctx.set(p["io_flushFromBpu_s3_valid"], 1)
+            ctx.set(p["io_flushFromBpu_s2_bits_value"], 7)
+            ctx.set(p["io_flushFromBpu_s3_bits_value"], 7)
+            await accept(double=False, soft=True)
+            self.assertEqual(0, ctx.get(p["io_itlbFlushPipe"]))
+            ctx.set(p["io_MSHRReq_ready"], 1)
+            sent = []
+            for _ in range(7):
+                self.assertEqual(0, ctx.get(p["io_wayLookupWrite_valid"]))
+                if ctx.get(p["io_MSHRReq_valid"]):
+                    sent.append(ctx.get(p["io_MSHRReq_bits_blkPaddr"]))
+                await ctx.tick()
+            self.assertEqual([physical[0] >> 6], sent)
+
+        sim = Simulator(dut)
+        sim.add_clock(1e-6)
+        sim.add_testbench(bench)
+        sim.run()
+
     def test_waylookup_ring_refill_updates_and_guest_faults(self) -> None:
         module = load_subject()
         dut = module.IcachePrefetchFamily("WayLookup")
