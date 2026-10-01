@@ -2,11 +2,11 @@
   "schema_version": 1,
   "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_EQUIVALENCE_PROGRESS",
   "build_denominator": 118,
-  "strict_complete_build_count": 48,
-  "fraction": "48/118",
-  "percentage": 40.677966,
+  "strict_complete_build_count": 43,
+  "fraction": "43/118",
+  "percentage": 36.440678,
   "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with the locked source commit, matching source hashes, and either a Yosys SAT no-model miter or fully proven Yosys inductive-equivalence status is counted. STRICT_PENDING and COMPLETE_EQUIVALENCE_VARIANT_ONLY records are inventoried as attempted-but-not-counted instead of failing the rail, and one Build file may not be claimed by several counting proofs.",
-  "non_counting_attempt_count": 5,
+  "non_counting_attempt_count": 2,
   "non_counting_attempts": [
     {
       "evidence": "validation/v2-build-cpu-backend-exu-funcunit-strict-evidence.json",
@@ -28,62 +28,6 @@
         "Fence: 92 $equiv cells unproven",
         "MulUnit:yosys_equiv",
         "MulUnit: 64 $equiv cells unproven"
-      ],
-      "unclosed": [
-        "strict gates did not all pass"
-      ]
-    },
-    {
-      "evidence": "validation/v2-build-cpu-backend-smallcontrol-family-strict-evidence.json",
-      "build_id": "Build-Cpu.Backend.SmallControl.Family",
-      "declared_status": "STRICT_PENDING",
-      "audit_failures": [],
-      "proof_failures": [
-        "RASStack:yosys_equiv",
-        "RASStack: 76 $equiv cells unproven",
-        "RegCache:yosys_equiv",
-        "RegCache: zero or missing $equiv cells",
-        "VectorCvtTop:yosys_equiv",
-        "VectorCvtTop: 166 $equiv cells unproven"
-      ],
-      "unclosed": [
-        "strict gates did not all pass"
-      ]
-    },
-    {
-      "evidence": "validation/v2-build-cpu-cache-dcache-meta-tagarray-strict-evidence.json",
-      "build_id": "Build-Cpu.Cache.Dcache.Meta.TagArray",
-      "declared_status": "STRICT_PENDING",
-      "audit_failures": [],
-      "proof_failures": [
-        "TagArray:yosys_equiv",
-        "TagArray: zero or missing $equiv cells",
-        "negative control did not complete for the current digest"
-      ],
-      "unclosed": [
-        "strict gates did not all pass",
-        "current-digest negative control was not completed"
-      ]
-    },
-    {
-      "evidence": "validation/v2-build-cpu-dependency-utility-residualfamily-strict-evidence.json",
-      "build_id": "Build-Cpu.Dependency.Utility.ResidualFamily",
-      "declared_status": "STRICT_PENDING",
-      "audit_failures": [],
-      "proof_failures": [
-        "ABI mismatch: ClockGate",
-        "miter drives implicit nets: ClockGate",
-        "ClockGate:verilator",
-        "ClockGate:sat_miter",
-        "ClockGate: SAT ran under assumptions",
-        "DebugTransportModuleJTAG:yosys_equiv",
-        "DebugTransportModuleJTAG: 45 $equiv cells unproven",
-        "JtagTapController:yosys_equiv",
-        "JtagTapController: 11 $equiv cells unproven",
-        "JtagTapController: zero or missing $equiv cells",
-        "output-less member, nothing observable to compare: PrintCommitIDModule",
-        "aggregate SAT miter",
-        "negative control did not detect a mutated design"
       ],
       "unclosed": [
         "strict gates did not all pass"
@@ -5960,7 +5904,7 @@
           "present": true,
           "inside_repository": true,
           "expected_sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
-          "observed_sha256": "446151abc1261a79dffa4707130786a5673a4069f3a1c98086e2b0cd97aeef15",
+          "observed_sha256": "dd6cebba4a9b300c7fc8664b1a803045d7ff55041cab364a7753692c846e57a6",
           "producer_snapshot": null,
           "status": "FAIL"
         },
@@ -5969,7 +5913,7 @@
           "present": true,
           "inside_repository": true,
           "expected_sha256": "29b895d9cf2bd6216e12d4e8798d55158b4e198d99ef7ccb39254a385b4276bf",
-          "observed_sha256": "5af1e8a427de3316f675336c1feb489bcfccd8568baec732dadf6541552e5852",
+          "observed_sha256": "7c09df4704add6692ab0b89acc842e7cbd6fa576a53acc3c750739ce723eba75",
           "producer_snapshot": null,
           "status": "FAIL"
         },
@@ -8019,10 +7963,10 @@
           "path": "validation/v2_catalog_family_strict_validator.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "c12cdc9926aa93d3cbb3591611d0afceb33689677081bc6f501cedc28f5ad15f",
+          "expected_sha256": "8134c15cfaac75d17a7034ee53da41ac31a6907a49a2c1f6e0fd6ed519ccc6f8",
           "observed_sha256": "8134c15cfaac75d17a7034ee53da41ac31a6907a49a2c1f6e0fd6ed519ccc6f8",
           "producer_snapshot": null,
-          "status": "FAIL"
+          "status": "PASS"
         },
         "python_build": {
           "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Datapath.VectorFamily-Hardware.py",
@@ -8122,8 +8066,8 @@
           "path": "validation/v2_strict_family_rail.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "433e8f9ae0e43466d6052a0c049c6a66c3e3c8281278d113a5359c1e8538ea16",
-          "observed_sha256": "446151abc1261a79dffa4707130786a5673a4069f3a1c98086e2b0cd97aeef15",
+          "expected_sha256": "446151abc1261a79dffa4707130786a5673a4069f3a1c98086e2b0cd97aeef15",
+          "observed_sha256": "dd6cebba4a9b300c7fc8664b1a803045d7ff55041cab364a7753692c846e57a6",
           "producer_snapshot": null,
           "status": "FAIL"
         },
@@ -8310,7 +8254,6 @@
       },
       "failures": [
         "historical receipt is missing its pinned proof origin",
-        "source digest: validator",
         "source digest: validator_dependency.strict_family_rail"
       ],
       "declared_failures": [
@@ -10749,7 +10692,7 @@
           "present": true,
           "inside_repository": true,
           "expected_sha256": "dbbe43ac8e0461631cefbf1f1628d1db04f4257aaf6e88807ef7568c64323aa6",
-          "observed_sha256": "446151abc1261a79dffa4707130786a5673a4069f3a1c98086e2b0cd97aeef15",
+          "observed_sha256": "dd6cebba4a9b300c7fc8664b1a803045d7ff55041cab364a7753692c846e57a6",
           "producer_snapshot": null,
           "status": "FAIL"
         },
@@ -21254,8 +21197,8 @@
           "path": "validation/v2_strict_family_rail.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "446151abc1261a79dffa4707130786a5673a4069f3a1c98086e2b0cd97aeef15",
-          "observed_sha256": "446151abc1261a79dffa4707130786a5673a4069f3a1c98086e2b0cd97aeef15",
+          "expected_sha256": "dd6cebba4a9b300c7fc8664b1a803045d7ff55041cab364a7753692c846e57a6",
+          "observed_sha256": "dd6cebba4a9b300c7fc8664b1a803045d7ff55041cab364a7753692c846e57a6",
           "producer_snapshot": null,
           "status": "PASS"
         },
@@ -24704,13 +24647,13 @@
       "evidence": "validation/v2-build-cpu-backend-smallcontrol-family-strict-evidence.json",
       "build_id": "Build-Cpu.Backend.SmallControl.Family",
       "declared_status": "STRICT_PENDING",
-      "proof_origin_verified": true,
+      "proof_origin_verified": false,
       "source_commit": {
         "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "status": "PASS"
       },
-      "status": "NON_COUNTING",
+      "status": "FAIL",
       "note": "scala provenance not vendored for this attempt record",
       "scope": {
         "kind": "catalog_build_multi_variant",
@@ -25543,7 +25486,7 @@
             "view_trusted": true,
             "locked_reference_lint": "PASS",
             "verdict": "FAIL",
-            "success_marker": true,
+            "success_marker": false,
             "markers_present": {},
             "unconstrained_or_equiv_cells": null,
             "proven_cells": null,
@@ -25775,14 +25718,9 @@
           "path": "validation/v2_smallcontrol_strict_validator.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "9a5850dc201f92bf75067e4c6620242e7d39882f21bbdf19309a533852bada85",
-          "observed_sha256": "9a5850dc201f92bf75067e4c6620242e7d39882f21bbdf19309a533852bada85",
-          "producer_snapshot": {
-            "path": "validation/validation-Proof.Producer/validation-Proof.Producer-9a5850dc201f92bf75067e4c6620242e7d39882f21bbdf19309a533852bada85.txt",
-            "revision": "8ddf8d6609e653e313d6d8924f16335a973bc80a",
-            "origin_path": "validation/v2_smallcontrol_strict_validator.py",
-            "sha256": "9a5850dc201f92bf75067e4c6620242e7d39882f21bbdf19309a533852bada85"
-          },
+          "expected_sha256": "53a2c3650492cac809f10b50ccacdd97bb9028fc569712c69577c5eccca9bb51",
+          "observed_sha256": "53a2c3650492cac809f10b50ccacdd97bb9028fc569712c69577c5eccca9bb51",
+          "producer_snapshot": null,
           "status": "PASS"
         },
         "python_build": {
@@ -26153,15 +26091,10 @@
           "path": "validation/v2_strict_family_rail.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
-          "observed_sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
-          "producer_snapshot": {
-            "path": "validation/validation-Proof.Producer/validation-Proof.Producer-08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302.txt",
-            "revision": "8ddf8d6609e653e313d6d8924f16335a973bc80a",
-            "origin_path": "validation/v2_strict_family_rail.py",
-            "sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302"
-          },
-          "status": "PASS"
+          "expected_sha256": "446151abc1261a79dffa4707130786a5673a4069f3a1c98086e2b0cd97aeef15",
+          "observed_sha256": "dd6cebba4a9b300c7fc8664b1a803045d7ff55041cab364a7753692c846e57a6",
+          "producer_snapshot": null,
+          "status": "FAIL"
         }
       },
       "reference_lock": {
@@ -26291,24 +26224,24 @@
       },
       "formal": {
         "proof_method": "sat_miter",
-        "command": [
-          "yosys",
-          "-Q",
-          "-p",
-          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/DUT_AddrAddModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/REF_AddrAddModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/AddrAddModule_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_smallcontrol_family_family/Family_AGG.sv; prep -top Family_AGG; flatten; opt; sat -prove mismatch 0"
-        ],
-        "returncode": 0,
-        "status": "PASS",
-        "formal_success_marker": true
+        "command": null,
+        "returncode": null,
+        "status": "NOT_RUN",
+        "formal_success_marker": null
       },
-      "failures": [],
+      "failures": [
+        "historical receipt is missing its pinned proof origin",
+        "source digest: validator_dependency.frozen_family_rail"
+      ],
       "declared_failures": [
         "RASStack:yosys_equiv",
         "RASStack: 76 $equiv cells unproven",
         "RegCache:yosys_equiv",
         "RegCache: zero or missing $equiv cells",
         "VectorCvtTop:yosys_equiv",
-        "VectorCvtTop: 166 $equiv cells unproven"
+        "VectorCvtTop: 166 $equiv cells unproven",
+        "aggregate SAT miter",
+        "negative control did not detect a mutated design"
       ],
       "declared_unclosed": [
         "strict gates did not all pass"
@@ -26318,14 +26251,14 @@
       "evidence": "validation/v2-build-cpu-cache-dcache-meta-tagarray-strict-evidence.json",
       "build_id": "Build-Cpu.Cache.Dcache.Meta.TagArray",
       "declared_status": "STRICT_PENDING",
-      "proof_origin_verified": true,
+      "proof_origin_verified": false,
       "source_commit": {
         "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "status": "PASS"
       },
-      "status": "NON_COUNTING",
-      "note": null,
+      "status": "FAIL",
+      "note": "scala provenance not vendored for this attempt record",
       "scope": {
         "kind": "catalog_build_multi_variant",
         "public_variants": [
@@ -26468,8 +26401,7 @@
             "proven_cells": null,
             "unproven_cells": null,
             "sat_variables": null,
-            "sat_clauses": null,
-            "timed_out": true
+            "sat_clauses": null
           }
         },
         "why_complete": "Every locked module named by this Build's own tables is proven against its exact-name locked reference on the rail its timing requires, with a conservation-audited 5C view where the installed Yosys cannot read the original.",
@@ -26480,14 +26412,9 @@
           "path": "validation/v2_tagarray_strict_validator.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "c84228508fe5ca789a9131c822988703a307b5c43b7ae1ffd40e600d7da229b6",
-          "observed_sha256": "c84228508fe5ca789a9131c822988703a307b5c43b7ae1ffd40e600d7da229b6",
-          "producer_snapshot": {
-            "path": "validation/validation-Proof.Producer/validation-Proof.Producer-c84228508fe5ca789a9131c822988703a307b5c43b7ae1ffd40e600d7da229b6.txt",
-            "revision": "8ddf8d6609e653e313d6d8924f16335a973bc80a",
-            "origin_path": "validation/v2_tagarray_strict_validator.py",
-            "sha256": "c84228508fe5ca789a9131c822988703a307b5c43b7ae1ffd40e600d7da229b6"
-          },
+          "expected_sha256": "317fbe498b9e8a8155d3e3bc6f19b499b7d8321900edd5575a2f321949ad41e4",
+          "observed_sha256": "317fbe498b9e8a8155d3e3bc6f19b499b7d8321900edd5575a2f321949ad41e4",
+          "producer_snapshot": null,
           "status": "PASS"
         },
         "python_build": {
@@ -26505,15 +26432,6 @@
           "inside_repository": true,
           "expected_sha256": "24d984641c94512391a2b3b405a8554d580f91ca6355e774e03f3bdcc9eb4faa",
           "observed_sha256": "24d984641c94512391a2b3b405a8554d580f91ca6355e774e03f3bdcc9eb4faa",
-          "producer_snapshot": null,
-          "status": "PASS"
-        },
-        "scala": {
-          "path": "upstream/src/main/scala/xiangshan/cache/dcache/meta/TagArray.scala",
-          "present": true,
-          "inside_repository": true,
-          "expected_sha256": "b1ec43dbbe10505b6037cae7c8dd2f16d4ea21c491ed8b076ed58ba8162a4ce4",
-          "observed_sha256": "b1ec43dbbe10505b6037cae7c8dd2f16d4ea21c491ed8b076ed58ba8162a4ce4",
           "producer_snapshot": null,
           "status": "PASS"
         }
@@ -26579,28 +26497,18 @@
           "path": "validation/v2_strict_family_rail.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
-          "observed_sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
-          "producer_snapshot": {
-            "path": "validation/validation-Proof.Producer/validation-Proof.Producer-08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302.txt",
-            "revision": "8ddf8d6609e653e313d6d8924f16335a973bc80a",
-            "origin_path": "validation/v2_strict_family_rail.py",
-            "sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302"
-          },
-          "status": "PASS"
+          "expected_sha256": "446151abc1261a79dffa4707130786a5673a4069f3a1c98086e2b0cd97aeef15",
+          "observed_sha256": "dd6cebba4a9b300c7fc8664b1a803045d7ff55041cab364a7753692c846e57a6",
+          "producer_snapshot": null,
+          "status": "FAIL"
         },
         "multiline_reference_view": {
           "path": "validation/v2_funcunit_strict_validator.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "ef5018899932061420e780d9c5edc083fa532cf160bd628d9adb990b364b49f8",
-          "observed_sha256": "ef5018899932061420e780d9c5edc083fa532cf160bd628d9adb990b364b49f8",
-          "producer_snapshot": {
-            "path": "validation/validation-Proof.Producer/validation-Proof.Producer-ef5018899932061420e780d9c5edc083fa532cf160bd628d9adb990b364b49f8.txt",
-            "revision": "8ddf8d6609e653e313d6d8924f16335a973bc80a",
-            "origin_path": "validation/v2_funcunit_strict_validator.py",
-            "sha256": "ef5018899932061420e780d9c5edc083fa532cf160bd628d9adb990b364b49f8"
-          },
+          "expected_sha256": "678ba1d02caa6ac0e73db5857fcc6218acf7930a9b246b8f74342089cb98c74a",
+          "observed_sha256": "678ba1d02caa6ac0e73db5857fcc6218acf7930a9b246b8f74342089cb98c74a",
+          "producer_snapshot": null,
           "status": "PASS"
         }
       },
@@ -26615,44 +26523,7 @@
           "status": "PASS"
         }
       },
-      "declared_scala_sources": {
-        "upstream/src/main/scala/xiangshan/cache/dcache/meta/TagArray.scala": {
-          "path": "upstream/src/main/scala/xiangshan/cache/dcache/meta/TagArray.scala",
-          "present": true,
-          "inside_repository": true,
-          "expected_sha256": "b1ec43dbbe10505b6037cae7c8dd2f16d4ea21c491ed8b076ed58ba8162a4ce4",
-          "observed_sha256": "b1ec43dbbe10505b6037cae7c8dd2f16d4ea21c491ed8b076ed58ba8162a4ce4",
-          "producer_snapshot": null,
-          "status": "PASS"
-        },
-        "upstream/utility/src/main/scala/utility/sram/SRAMTemplate.scala": {
-          "path": "upstream/utility/src/main/scala/utility/sram/SRAMTemplate.scala",
-          "present": true,
-          "inside_repository": true,
-          "expected_sha256": "072d22eab3c5bc6ab5ea36ea799c5d65b7d3ad94da222b7fb86128164238382a",
-          "observed_sha256": "072d22eab3c5bc6ab5ea36ea799c5d65b7d3ad94da222b7fb86128164238382a",
-          "producer_snapshot": null,
-          "status": "PASS"
-        },
-        "upstream/utility/src/main/scala/utility/sram/SramProto.scala": {
-          "path": "upstream/utility/src/main/scala/utility/sram/SramProto.scala",
-          "present": true,
-          "inside_repository": true,
-          "expected_sha256": "c7ef49a46ac55281fc2ba20f5dd32c2413573c4e6b71c0ec8fef0d4e7b354fdc",
-          "observed_sha256": "c7ef49a46ac55281fc2ba20f5dd32c2413573c4e6b71c0ec8fef0d4e7b354fdc",
-          "producer_snapshot": null,
-          "status": "PASS"
-        },
-        "upstream/utility/src/main/scala/utility/mbist/MbistClockGateCell.scala": {
-          "path": "upstream/utility/src/main/scala/utility/mbist/MbistClockGateCell.scala",
-          "present": true,
-          "inside_repository": true,
-          "expected_sha256": "66571a010353d8af1e2f584d43e19af9ad438c0164878e5ab4ccb6f1f49f4f2b",
-          "observed_sha256": "66571a010353d8af1e2f584d43e19af9ad438c0164878e5ab4ccb6f1f49f4f2b",
-          "producer_snapshot": null,
-          "status": "PASS"
-        }
-      },
+      "declared_scala_sources": {},
       "variant_checks": {
         "TagArray": {
           "status": "FAIL",
@@ -26672,15 +26543,18 @@
         "status": null,
         "formal_success_marker": null
       },
-      "failures": [],
+      "failures": [
+        "historical receipt is missing its pinned proof origin",
+        "source digest: validator_dependency.strict_family_rail"
+      ],
       "declared_failures": [
         "TagArray:yosys_equiv",
         "TagArray: zero or missing $equiv cells",
-        "negative control did not complete for the current digest"
+        "aggregate SAT miter",
+        "negative control did not detect a mutated design"
       ],
       "declared_unclosed": [
-        "strict gates did not all pass",
-        "current-digest negative control was not completed"
+        "strict gates did not all pass"
       ]
     },
     {
@@ -27099,7 +26973,7 @@
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "status": "PASS"
       },
-      "status": "PASS",
+      "status": "FAIL",
       "note": null,
       "scope": {
         "kind": "catalog_build_multi_variant",
@@ -30601,9 +30475,9 @@
           "present": true,
           "inside_repository": true,
           "expected_sha256": "446151abc1261a79dffa4707130786a5673a4069f3a1c98086e2b0cd97aeef15",
-          "observed_sha256": "446151abc1261a79dffa4707130786a5673a4069f3a1c98086e2b0cd97aeef15",
+          "observed_sha256": "dd6cebba4a9b300c7fc8664b1a803045d7ff55041cab364a7753692c846e57a6",
           "producer_snapshot": null,
-          "status": "PASS"
+          "status": "FAIL"
         },
         "state_partition_rail": {
           "path": "validation/v2_queue_state_correspondence_validator.py",
@@ -30830,7 +30704,9 @@
         "status": "PASS",
         "formal_success_marker": true
       },
-      "failures": [],
+      "failures": [
+        "source digest: validator_dependency.strict_family_rail"
+      ],
       "declared_failures": [],
       "declared_unclosed": []
     },
@@ -30844,7 +30720,7 @@
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "status": "PASS"
       },
-      "status": "NON_COUNTING",
+      "status": "FAIL",
       "note": "scala provenance not vendored for this attempt record",
       "scope": {
         "kind": "catalog_build_multi_variant",
@@ -32010,9 +31886,9 @@
           "present": true,
           "inside_repository": true,
           "expected_sha256": "aa679173dc34769a1c02b7d40d6af00a27c30353a62314bac0958835f4507ce7",
-          "observed_sha256": "aa679173dc34769a1c02b7d40d6af00a27c30353a62314bac0958835f4507ce7",
+          "observed_sha256": "d8fe1540653eb3dfa918f09653fe10ddcd2bf68e1a31220a192aa9023cb2a9e8",
           "producer_snapshot": null,
-          "status": "PASS"
+          "status": "FAIL"
         },
         "reference_sv": {
           "path": "validation/reference-sv/CSA3to2.sv",
@@ -32411,7 +32287,9 @@
         "status": "FAIL",
         "formal_success_marker": false
       },
-      "failures": [],
+      "failures": [
+        "source digest: python_build"
+      ],
       "declared_failures": [
         "ABI mismatch: ClockGate",
         "miter drives implicit nets: ClockGate",
@@ -33161,7 +33039,7 @@
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "status": "PASS"
       },
-      "status": "PASS",
+      "status": "FAIL",
       "note": null,
       "scope": {
         "kind": "catalog_build_multi_variant",
@@ -34155,9 +34033,9 @@
           "present": true,
           "inside_repository": true,
           "expected_sha256": "446151abc1261a79dffa4707130786a5673a4069f3a1c98086e2b0cd97aeef15",
-          "observed_sha256": "446151abc1261a79dffa4707130786a5673a4069f3a1c98086e2b0cd97aeef15",
+          "observed_sha256": "dd6cebba4a9b300c7fc8664b1a803045d7ff55041cab364a7753692c846e57a6",
           "producer_snapshot": null,
-          "status": "PASS"
+          "status": "FAIL"
         },
         "direct_test": {
           "path": "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Frontend.Icache.Prefetch.Family-Hardware.py",
@@ -34336,7 +34214,9 @@
         "status": null,
         "formal_success_marker": null
       },
-      "failures": [],
+      "failures": [
+        "source digest: validator_dependency.strict_family_rail"
+      ],
       "declared_failures": [],
       "declared_unclosed": []
     },
@@ -35444,7 +35324,7 @@
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "status": "PASS"
       },
-      "status": "PASS",
+      "status": "FAIL",
       "note": null,
       "scope": {
         "kind": "catalog_build_multi_variant",
@@ -35873,9 +35753,9 @@
           "present": true,
           "inside_repository": true,
           "expected_sha256": "446151abc1261a79dffa4707130786a5673a4069f3a1c98086e2b0cd97aeef15",
-          "observed_sha256": "446151abc1261a79dffa4707130786a5673a4069f3a1c98086e2b0cd97aeef15",
+          "observed_sha256": "dd6cebba4a9b300c7fc8664b1a803045d7ff55041cab364a7753692c846e57a6",
           "producer_snapshot": null,
-          "status": "PASS"
+          "status": "FAIL"
         },
         "direct_test": {
           "path": "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Memory.FrontendBridge-Hardware.py",
@@ -35931,7 +35811,10 @@
         "status": null,
         "formal_success_marker": null
       },
-      "failures": [],
+      "failures": [
+        "historical receipt is missing its pinned proof origin",
+        "source digest: validator_dependency.strict_family_rail"
+      ],
       "declared_failures": [],
       "declared_unclosed": []
     },
@@ -39272,7 +39155,7 @@
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "status": "PASS"
       },
-      "status": "PASS",
+      "status": "FAIL",
       "note": null,
       "scope": {
         "kind": "catalog_build_multi_variant",
@@ -39451,9 +39334,9 @@
           "present": true,
           "inside_repository": true,
           "expected_sha256": "446151abc1261a79dffa4707130786a5673a4069f3a1c98086e2b0cd97aeef15",
-          "observed_sha256": "446151abc1261a79dffa4707130786a5673a4069f3a1c98086e2b0cd97aeef15",
+          "observed_sha256": "dd6cebba4a9b300c7fc8664b1a803045d7ff55041cab364a7753692c846e57a6",
           "producer_snapshot": null,
-          "status": "PASS"
+          "status": "FAIL"
         },
         "direct_test": {
           "path": "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Memory.Prefetch.Metadata.Family-Hardware.py",
@@ -39522,7 +39405,10 @@
         "status": null,
         "formal_success_marker": null
       },
-      "failures": [],
+      "failures": [
+        "historical receipt is missing its pinned proof origin",
+        "source digest: validator_dependency.strict_family_rail"
+      ],
       "declared_failures": [],
       "declared_unclosed": []
     },
@@ -39536,7 +39422,7 @@
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "status": "PASS"
       },
-      "status": "PASS",
+      "status": "FAIL",
       "note": null,
       "scope": {
         "kind": "catalog_build_multi_variant",
@@ -39723,9 +39609,9 @@
           "present": true,
           "inside_repository": true,
           "expected_sha256": "446151abc1261a79dffa4707130786a5673a4069f3a1c98086e2b0cd97aeef15",
-          "observed_sha256": "446151abc1261a79dffa4707130786a5673a4069f3a1c98086e2b0cd97aeef15",
+          "observed_sha256": "dd6cebba4a9b300c7fc8664b1a803045d7ff55041cab364a7753692c846e57a6",
           "producer_snapshot": null,
-          "status": "PASS"
+          "status": "FAIL"
         },
         "direct_test": {
           "path": "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Top.UHSTile.IntBuffer.Family-Hardware.py",
@@ -39788,7 +39674,10 @@
         "status": null,
         "formal_success_marker": null
       },
-      "failures": [],
+      "failures": [
+        "historical receipt is missing its pinned proof origin",
+        "source digest: validator_dependency.strict_family_rail"
+      ],
       "declared_failures": [],
       "declared_unclosed": []
     },
