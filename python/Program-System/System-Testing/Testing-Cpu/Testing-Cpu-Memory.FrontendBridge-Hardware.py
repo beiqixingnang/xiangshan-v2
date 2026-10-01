@@ -9,9 +9,11 @@ edge; it does not import a sibling Build or regenerate the locked reference.
 from __future__ import annotations
 
 import importlib.util
+import random
 import re
 import sys
 import unittest
+from collections import deque
 from pathlib import Path
 from typing import Any
 
@@ -150,6 +152,71 @@ class FrontendBridgeTest(unittest.TestCase):
                     observed.append(int(ctx.get(bridge.auto_icache_out_a_bits_source)))
                 await ctx.tick("sync")
             self.assertEqual(observed, accepted)
+
+        simulator = Simulator(bridge)
+        simulator.add_clock(1e-6, domain="sync")
+        simulator.add_testbench(bench)
+        simulator.run()
+
+    def test_all_six_channels_against_independent_fifo_scoreboards(self) -> None:
+        module = load_subject()
+        bridge = module.FrontendBridge()
+        widths = dict(module.port_schema())
+        rng = random.Random(0xB12D)
+        channels = []
+        for edge in ("icache", "icachectrl", "instr_uncache"):
+            for channel in ("a", "d"):
+                source_side, sink_side = ("in", "out") if channel == "a" else ("out", "in")
+                source = f"auto_{edge}_{source_side}_{channel}"
+                sink = f"auto_{edge}_{sink_side}_{channel}"
+                fields = {name.removeprefix(source + "_bits_"): width for name, width in widths.items()
+                          if name.startswith(source + "_bits_")}
+                channels.append((edge, channel, source, sink, fields, deque(), deque()))
+
+        async def bench(ctx):
+            for cycle in range(450):
+                reset = cycle in (0, 211)
+                ctx.set(bridge.reset, int(reset))
+                if reset:
+                    for _edge, _channel, _source, _sink, _fields, q0, q1 in channels:
+                        q0.clear()
+                        q1.clear()
+                transfers = []
+                for edge, channel, source, sink, fields, q0, q1 in channels:
+                    valid = rng.randrange(4) != 0
+                    consumer_ready = rng.randrange(3) != 0 if sink + "_ready" in widths else True
+                    incoming = {field: rng.getrandbits(width) for field, width in fields.items()}
+                    ctx.set(getattr(bridge, source + "_valid"), int(valid))
+                    if sink + "_ready" in widths:
+                        ctx.set(getattr(bridge, sink + "_ready"), int(consumer_ready))
+                    for field, value in incoming.items():
+                        ctx.set(getattr(bridge, source + "_bits_" + field), value)
+                    if channel == "a" and edge == "icache":
+                        incoming.update(opcode=4, param=0, size=6, user_alias=0, user_reqSource=1,
+                                        user_needHint=0, mask=(1 << 32) - 1, data=0, corrupt=0)
+                    elif channel == "a" and edge == "instr_uncache":
+                        incoming.update(param=0, corrupt=0)
+                    elif channel == "d" and edge == "icachectrl":
+                        incoming.update(param=0, sink=0, denied=0, corrupt=0)
+                    self.assertEqual(int(len(q0) < 2), ctx.get(getattr(bridge, source + "_ready")), (edge, channel, cycle))
+                    self.assertEqual(int(bool(q1)), ctx.get(getattr(bridge, sink + "_valid")), (edge, channel, cycle))
+                    if q1:
+                        for name in widths:
+                            if name.startswith(sink + "_bits_"):
+                                field = name.removeprefix(sink + "_bits_")
+                                self.assertEqual(q1[0][field], ctx.get(getattr(bridge, name)), (name, cycle))
+                    transfers.append((incoming if valid and len(q0) < 2 else None,
+                                      bool(q1) and consumer_ready, bool(q0) and len(q1) < 2))
+                await ctx.tick("sync")
+                if not reset:
+                    for row, (incoming, pop, move) in zip(channels, transfers):
+                        q0, q1 = row[-2:]
+                        if pop:
+                            q1.popleft()
+                        if move:
+                            q1.append(q0.popleft())
+                        if incoming is not None:
+                            q0.append(incoming)
 
         simulator = Simulator(bridge)
         simulator.add_clock(1e-6, domain="sync")

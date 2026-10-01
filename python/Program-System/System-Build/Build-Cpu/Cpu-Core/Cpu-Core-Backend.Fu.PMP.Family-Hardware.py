@@ -7,6 +7,7 @@ implementation provides deterministic reset-safe defaults.
 
 from __future__ import annotations
 
+from contextlib import AbstractContextManager
 from typing import Any, cast
 
 from amaranth import Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
@@ -17,8 +18,8 @@ __all__ = ["COVERED_MODULES", "IMPLEMENTED_MEMBERS", "CONTRACT_ONLY_MEMBERS", "P
 COVERED_MODULES = ("PMP", "PMPChecker", "PMPChecker_12", "PMPChecker_2", "PMPEntryHandleModule")
 # Keep the implementation/contract split explicit until every observable
 # relation has been independently proven.
-IMPLEMENTED_MEMBERS: tuple[str, ...] = ("PMPChecker_2",)
-CONTRACT_ONLY_MEMBERS = ("PMP", "PMPChecker", "PMPChecker_12", "PMPEntryHandleModule")
+IMPLEMENTED_MEMBERS: tuple[str, ...] = ("PMPChecker_2", "PMPEntryHandleModule")
+CONTRACT_ONLY_MEMBERS = ("PMP", "PMPChecker", "PMPChecker_12")
 
 PortSpec = tuple[str, str, int]
 
@@ -2081,7 +2082,7 @@ class PMPFamily(Elaboratable):
                     pma_c,
                 )
 
-            with module.If(self.ports["io_req_valid"]):
+            with cast(AbstractContextManager[None], module.If(self.ports["io_req_valid"])):
                 module.d.sync += [
                     self.ports["io_resp_instr"].eq(~(pmp_x & pma_x)),
                     self.ports["io_resp_mmio"].eq(~pma_c),
@@ -2135,11 +2136,9 @@ class PMPFamily(Elaboratable):
         """Model the NewCSR PMP entry handler, including its WARL rules.
 
         Configuration bits are supplied by the individual CSR fields.  This
-        block owns
-        only the address and NAPOT-mask registers, and emits a write-back
-        value for a selected configuration CSR.  Keeping the two concerns
-        separate from the address state so write and read paths remain
-        deterministic.
+        block owns the address registers and emits a write-back value for a
+        selected configuration CSR. Readback presents the WARL grain bits
+        only when the corresponding address CSR is read.
         """
         wen = self.ports["io_in_wen"]
         ren = self.ports["io_in_ren"]
@@ -2148,31 +2147,24 @@ class PMPFamily(Elaboratable):
 
         # The configured platform grain is 4 KiB, hence
         # G = PlatformGrain - PMPOffBits = 10.  The state registers
-        # store pmpaddr[45:0]; the masks are retained for the same write path
-        # as the reference, although they are not part of this module's ABI.
-        addr = [Signal(46, name=f"entry_addr_{i}") for i in range(32)]
-        mask = [Signal(48, name=f"entry_mask_{i}") for i in range(32)]
+        # store pmpaddr[45:0] under the reference's address-state identities.
+        addr = [Signal(46, name=f"pmpAddr_{i}_ADDRESS") for i in range(32)]
 
         def cfg_byte(index: int) -> Any:
             """Return one externally supplied PMPCfg byte as a UInt."""
 
-            # The public fields occupy R,W,X,A,L; the two high bits are
-            # reserved in this compact representation.
+            # PMPCfg uses R/W/X/A in bits 0..4, read-only ATOMIC/C in bits
+            # 5..6, and L in bit 7.  The read-only fields are constant zero
+            # on this interface, so preserve the architectural byte layout.
             return Cat(
                 self.ports[f"io_in_pmpCfg_{index}_R"],
                 self.ports[f"io_in_pmpCfg_{index}_W"],
                 self.ports[f"io_in_pmpCfg_{index}_X"],
-                self.ports[f"io_in_pmpCfg_{index}_A"],
-                self.ports[f"io_in_pmpCfg_{index}_L"],
+                self.ports[f"io_in_pmpCfg_{index}_A"][0],
+                self.ports[f"io_in_pmpCfg_{index}_A"][1],
                 Const(0, 2),
+                self.ports[f"io_in_pmpCfg_{index}_L"],
             )
-
-        def match_mask(cfg_a: Any, paddr: Any) -> Any:
-            """Return PMP's 48-bit match mask for a pmpaddr write."""
-
-            # The low ten grain bits are included before the byte offset.
-            caddr = Cat(paddr, cfg_a[0]) | Const(0x3FF, 47)
-            return Cat((caddr & ~(caddr + 1))[0:46], Const(0x3, 2))
 
         # Configuration CSR write-back is zero when no CSR is selected.
         cfg_write = Const(0, 64)
@@ -2194,7 +2186,7 @@ class PMPFamily(Elaboratable):
                     incoming[6],
                     incoming[7],
                 )
-                lane_value = Mux(~old[5], canonical, old)
+                lane_value = Mux(~old[7], canonical, old)
                 lane_values.append(lane_value)
             cfg_write = Mux(selected, Cat(*lane_values), cfg_write)
         module.d.comb += self.ports["io_out_pmpCfgWData"].eq(cfg_write)
@@ -2205,24 +2197,21 @@ class PMPFamily(Elaboratable):
             current_cfg = cfg_byte(i)
             if i < 31:
                 next_cfg = cfg_byte(i + 1)
-                locked = current_cfg[5] | (next_cfg[5] & (next_cfg[3:5] == 1))
+                locked = current_cfg[7] | (next_cfg[7] & (next_cfg[3:5] == 1))
             else:
-                locked = current_cfg[5]
+                locked = current_cfg[7]
             write_hit = wen & (csr == (0x3B0 + i))
-            module.d.sync += [
-                addr[i].eq(Mux(write_hit & ~locked, data[:46], addr[i])),
-                mask[i].eq(Mux(write_hit & ~locked, match_mask(current_cfg[3:5], data[:46]), mask[i])),
-            ]
+            module.d.sync += addr[i].eq(Mux(write_hit & ~locked, data[:46], addr[i]))
 
             # Address reads always return the current register, with WARL
             # low-bit presentation only for the selected pmpaddr CSR.
             aligned = Mux(
                 current_cfg[4],
-                Cat(addr[i][9:46], Const(0x1FF, 9)),
-                Cat(addr[i][10:46], Const(0, 10)),
+                Cat(Const(0x1FF, 9), addr[i][9:46]),
+                Cat(Const(0, 10), addr[i][10:46]),
             )
             read_value = Mux(ren & (csr == (0x3B0 + i)), aligned, addr[i])
-            module.d.comb += self.ports[f"io_out_pmpAddrRData_{i}"].eq(Cat(Const(0, 18), read_value))
+            module.d.comb += self.ports[f"io_out_pmpAddrRData_{i}"].eq(Cat(read_value, Const(0, 18)))
 
     def elaborate(self, platform: Any) -> Module:
         del platform

@@ -1,109 +1,117 @@
 {
   "schema_version": 1,
   "kind": "V2_VALIDATION_EXPANSION_BATCH",
-  "timestamp": "2026-10-01T13:08:27.131146+08:00",
-  "baseline_commit": "6d6abba",
-  "strict": "46/118",
+  "timestamp": "2026-10-01T14:16:53.985241+08:00",
+  "baseline_commit": "142d448",
+  "strict": "47/118",
   "strict_delta": 1,
   "accepted": 0,
   "build_files": 118,
-  "behavior_verified_builds": "46/118",
-  "pending_builds": 72,
+  "behavior_verified_builds": "47/118",
+  "pending_builds": 71,
   "scala_source_associated_reference_modules": {
     "mapped": 1976,
     "total": 1976,
     "semantics": "source association/subject mapping only; includes bounded and contract-only subjects; not all strictly equivalent"
   },
   "python_lines": {
-    "raw": 96122,
-    "nonblank": 88899,
-    "raw_delta": 788,
-    "nonblank_delta": 758
+    "raw": 96329,
+    "nonblank": 89093,
+    "raw_delta": 207,
+    "nonblank_delta": 194
   },
-  "icache": {
+  "frontend_bridge": {
     "Status": "COMPLETE_EQUIVALENCE",
-    "PassedMembers": 7,
-    "FamilyMembers": 7,
-    "Cells": {
-      "ICacheMainPipe": 1967,
-      "IPrefetchPipe": 894,
-      "InstrMMIOEntry": 152,
-      "L2TlbMissQueue": 1942,
-      "L2TlbPrefetch": 185,
-      "PrefetcherMonitor": 94,
-      "WayLookup": 3636
-    },
-    "TotalEquivalenceCells": 8870,
+    "Members": "1/1 aggregate; 3 paths, 6 channels, 12 Queue(2) instances",
+    "Cells": 6228,
     "Unproven": 0,
     "TwoSidedNegativeControl": "PASS",
-    "Direct": "8/8 PASS",
+    "Direct": "4/4 PASS",
     "Pyright": "PASS; zero errors",
-    "Receipt": "validation/v2-build-cpu-frontend-icache-prefetch-family-strict-evidence.json",
-    "Resume": {
-      "checkpoint": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\.cache\\strict-family\\build_cpu_frontend_icache_prefetch_family\\rail-checkpoint.json",
-      "prepared_cache_hits": 7,
-      "formal_cache_hits": 7,
-      "member_count": 7
-    },
-    "AcceptanceEligible": false
+    "Receipt": "validation/v2-build-cpu-memory-frontendbridge-strict-evidence.json",
+    "Implementation": "packed 359/281,117/80,132/77-bit queues; exact wrap/wrap_1, parent placement and ram_ext.Memory identity",
+    "OutputCoverage": "all public outputs, no valid payload masking",
+    "BaselineYosysCpuSeconds": 174.53,
+    "BaselineYosysPeakMb": 736.57,
+    "Provenance": "canonical SOURCE_SCALA_PATHS added for MemBlock.scala and Buffer.scala; proof rerun with Scala binding"
   },
-  "initial_member_diagnostics": {
-    "profile": "before final five-section comment normalization; superseded by current complete-family receipt",
-    "IPrefetchPipe": {
-      "Cells": 894,
-      "ElapsedSeconds": 17.916,
-      "TwoSidedNegativeControl": "PASS"
+  "pmp": {
+    "Status": "PASS_MEMBER_PROOFS_NON_COUNTING",
+    "Members": "2/5",
+    "Cells": {
+      "PMPChecker_2": 2,
+      "PMPEntryHandleModule": 3009
     },
-    "ICacheMainPipe": {
-      "Cells": 1967,
-      "ElapsedSeconds": 20.574,
-      "TwoSidedNegativeControl": "PASS"
-    }
-  },
-  "behavior_cases": {
-    "IPrefetchPipe": [
-      "S0 CSR/BPU/soft semantics",
-      "dual TLB miss completion and Meta retries",
-      "WayLookup/refill backpressure and guest fault fields",
-      "fixed-priority miss arbitration and duplicate prevention",
-      "PMP/PBMT/exception suppression"
+    "Unproven": 0,
+    "TwoSidedNegativeControl": "PASS",
+    "Direct": "3/3 PASS",
+    "Pyright": "PASS; zero errors",
+    "Receipt": "validation/v2-pmp-two-members-focused-results.json",
+    "StrictCountDelta": 0,
+    "RemainingContractOnly": [
+      "PMP",
+      "PMPChecker",
+      "PMPChecker_12"
     ],
-    "ICacheMainPipe": [
-      "all eight bank offsets and held data under response stalls",
-      "wait for two refills after requests are sent",
-      "bank concatenation and corrupt-refill access fault",
-      "metadata multihit/data parity flush masks and BEU reports",
-      "delayed L2 error priority and non-BEU reporting",
-      "exception/PBMT/flush semantics"
-    ]
+    "EntryHandleChanges": [
+      "L bit7 and current/next-TOR lock",
+      "Cat zero-extension and WARL low-bit order",
+      "pmpAddr_*_ADDRESS state correspondence",
+      "removed unused mask state"
+    ],
+    "EntryHandleNegativeControls": "PASS",
+    "EntryHandleWarmCacheHit": true,
+    "EntryHandleWarmSeconds": 7.816
+  },
+  "workflow_performance": {
+    "PmpDirectBeforeSeconds": 102.556,
+    "BeforeTests": 2,
+    "PmpDirectAfterSeconds": 0.416,
+    "AfterTests": 3,
+    "Policy": "direct ABI checks no longer perform five exports for a module-name assertion; strict rail still requires actual deterministic RTL exports, ABI, lint and complete proofs"
   },
   "regression": {
-    "FocusedPyright": "2 changed files; 0 errors",
+    "FocusedPyright": "4 changed Build/Test files; 0 errors",
     "Utf8LfCompileDiff": "PASS",
-    "SharedRailAndProgressTests": "NOT_RUN; shared code unchanged, prior 13/13 and 11/11 remain recorded"
+    "SharedRailAndProgressTests": "NOT_RUN; shared code unchanged; prior 13/13 and 11/11 remain recorded"
   },
   "central_audit": {
     "status": "FAIL",
-    "failure_records": 5,
+    "failure_records": 4,
     "non_counting_attempts": 5,
-    "IcacheCurrentRecord": "PASS"
+    "FrontendBridgeCurrentRecord": "PASS"
   },
   "sources": {
-    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Frontend.Icache.Prefetch.Family-Hardware.py": {
-      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Frontend.Icache.Prefetch.Family-Hardware.py",
-      "sha256": "35ab84f982a4fdfee03985602a059a3d6bffd61ae1bae998bb1838e7a7fe3d1a",
-      "bytes": 74467
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Memory.FrontendBridge-Hardware.py": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Memory.FrontendBridge-Hardware.py",
+      "sha256": "9071b4cea9c1c902c23bec1423c797f99587cf3204695b611909d170bf544bc4",
+      "bytes": 39109
     },
-    "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Frontend.Icache.Prefetch.Family-Hardware.py": {
-      "path": "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Frontend.Icache.Prefetch.Family-Hardware.py",
-      "sha256": "e0aa15a0375617cbfa76d2bbf72692e51d2e34b33cbe9bfdf04ab3307a00bfcc",
-      "bytes": 37255
+    "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Memory.FrontendBridge-Hardware.py": {
+      "path": "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Memory.FrontendBridge-Hardware.py",
+      "sha256": "7715a19e007d76ca49a201cc0e9bac9fc159e13d1a8c52a647cba0e2e13a8f68",
+      "bytes": 13887
+    },
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Fu.PMP.Family-Hardware.py": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Fu.PMP.Family-Hardware.py",
+      "sha256": "e54be70fe0cc5777ad0e57ae99f5c84abd16eceebc61f9453b825360d07518f0",
+      "bytes": 107666
+    },
+    "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Backend.Fu.PMP.Family-Hardware.py": {
+      "path": "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Backend.Fu.PMP.Family-Hardware.py",
+      "sha256": "98878209ca827d00f660f3fb46f1b453e57e0c1396e3666a8a8f563cca96c851",
+      "bytes": 12941
+    },
+    "validation/v2-build-provenance-map.json": {
+      "path": "validation/v2-build-provenance-map.json",
+      "sha256": "a68d5b6a435679b487829b9d2f8ee2b69fc7928d9be4468c3e2a1f818d0836ef",
+      "bytes": 44696
     }
   },
   "remaining_gates": [
-    "72 Builds lack complete strict proofs; CONTRACT_ONLY/bounded subjects are not accepted",
-    "5 source/origin audit failures with unresolved implementation/ABI/formal gaps",
-    "5 non-counting attempts remain pending",
+    "71 Builds lack complete strict proofs; CONTRACT_ONLY/bounded subjects are not accepted",
+    "PMP PMA mapping, Checker and Checker_12 behavior/formal remain pending",
+    "4 source/origin audit failures and 5 non-counting attempts",
     "Reset/initial-state entry, executable Verilator differential/wave review, parent/full-top closure, license and user acceptance remain pending"
   ],
   "acceptance_eligible": false

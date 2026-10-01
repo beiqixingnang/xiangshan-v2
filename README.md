@@ -116,7 +116,7 @@ arbiters, then asserts the entire design, checks every catalog member and
 records two-sided negative controls. Its receipt binds the partition policy,
 catalog resolver, common rail and registered direct test to current hashes.
 Icache Prefetch now has a complete 7/7 strict receipt, bringing the audited
-Build count to 46/118. Both pipelines implement their stage control, retries,
+Build count to 46/118 at its integration milestone. Both pipelines implement their stage control, retries,
 two-lane miss arbitration and data/exception paths. All 8,870 equivalence cells
 prove, and both negative-control sides fail the mutated designs. Run:
 
@@ -133,3 +133,23 @@ random route samples could not justify replacing that union with a complement.
 See validation/v2-build-cpu-dependency-rocket-tlchildren-family-strict-evidence.json and
 validation/v2-build-cpu-frontend-icache-prefetch-family-strict-evidence.json for current source hashes,
 commands, lint, complete cell counts and two-sided controls.
+
+FrontendBridge now has a complete strict receipt for its 91-port aggregate:
+all 6,228 cells and both negative controls pass. Its twelve Queue(2) instances
+retain the packed fields, `wrap`/`wrap_1` state, `nodeOut_a_q`/`nodeIn_d_q`
+placement and `ram_ext.Memory` correspondence. Dequeue payloads remain in the
+unrestricted proof even when valid is low. Six-channel FIFO scoreboards cover
+450 deterministic random cycles and reset/backpressure cases.
+
+This brings the current audited Build count to 47/118. The canonical receipt
+is validation/v2-build-cpu-memory-frontendbridge-strict-evidence.json; its
+Scala source binding is declared in the auxiliary provenance map.
+
+PMP currently has 2/5 proven members, retaining non-counting focused evidence:
+Checker_2 and EntryHandleModule. EntryHandle corrects lock-bit positions,
+zero-extension and WARL bit order, and preserves address-state identities for
+induction through masked reads. Its 3,009 cells and both controls pass.
+The direct suite now checks the locked ABI and actual behavior in about
+0.4 seconds; the former module-name-only test exported all five designs and
+took about 103 seconds. RTL export, determinism, ABI and formal remain required
+in the strict rail. The three remaining PMP members are still CONTRACT_ONLY.
