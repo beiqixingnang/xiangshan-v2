@@ -826,10 +826,7 @@ class FamilyRail:
                 proof["status"] = "FAIL"
             return {"method": "sat_miter", "verilator": lint,
                     "locked_verilator": locked_lint, "sat_miter": proof}
-        script = (f"read_verilog -sv {pair}; proc; async2sync; memory; opt; "
-                  f"flatten REF_{name}; flatten DUT_{name}; "
-                  f"equiv_make REF_{name} DUT_{name} {name}_EQUIV; "
-                  f"prep -top {name}_EQUIV; equiv_induct -undef; equiv_status -assert")
+        script = self.sequential_script(name, pair)
         proof = run_wsl(["yosys", "-Q", "-p", script])
         markers = proof.get("equiv_success_markers", {})
         proof["markers_present"] = markers
@@ -852,6 +849,20 @@ class FamilyRail:
             proof["status"] = "FAIL"
         return {"method": "sequential_equivalence", "verilator": lint,
                 "locked_verilator": locked_lint, "yosys_equiv": proof}
+
+    def sequential_script(self, name: str, pair: str) -> str:
+        """Build one complete inductive proof, with a reusable partition hook."""
+
+        return (f"read_verilog -sv {pair}; proc; async2sync; memory; opt; "
+                f"flatten REF_{name}; flatten DUT_{name}; "
+                f"equiv_make REF_{name} DUT_{name} {name}_EQUIV; "
+                f"prep -top {name}_EQUIV; {self.inductive_steps(name)}; equiv_status -assert")
+
+    def inductive_steps(self, name: str) -> str:
+        """Prove unrestricted state transitions before the all-cell status gate."""
+
+        del name
+        return "equiv_induct -undef"
 
     @staticmethod
     def formal_result_pass(result: dict[str, Any], item: dict[str, Any]) -> bool:
@@ -1077,11 +1088,8 @@ class FamilyRail:
                     if sample["sequential"]:
                         files = ([mutant, sample["reference"]] if side == "target"
                                  else [sample["target"], mutant])
-                        script = ("read_verilog -sv "
-                                  + " ".join(shlex.quote(wsl_path(entry)) for entry in files)
-                                  + f"; proc; async2sync; memory; opt; flatten REF_{name}; flatten DUT_{name}; "
-                                    f"equiv_make REF_{name} DUT_{name} {name}_EQUIV; prep -top {name}_EQUIV; "
-                                    "equiv_induct -undef; equiv_status -assert")
+                        script = self.sequential_script(
+                            name, " ".join(shlex.quote(wsl_path(entry)) for entry in files))
                     else:
                         files = ([mutant, sample["reference"], sample["miter"]] if side == "target"
                                  else [sample["target"], mutant, sample["miter"]])

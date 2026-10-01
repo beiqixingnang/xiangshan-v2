@@ -1,0 +1,1138 @@
+{
+  "schema_version": 1,
+  "kind": "V2_QUEUE_STATE_FOCUSED_DIAGNOSTIC",
+  "build_id": "Build-Cpu.Frontend.Icache.Prefetch.Family",
+  "status": "PASS_MEMBER_PROOFS_NON_COUNTING",
+  "strict_complete_eligible": false,
+  "strict_complete_count_delta": 0,
+  "acceptance_eligible": false,
+  "members": [
+    "L2TlbMissQueue",
+    "PrefetcherMonitor",
+    "InstrMMIOEntry",
+    "L2TlbPrefetch"
+  ],
+  "family_members": [
+    "ICacheMainPipe",
+    "IPrefetchPipe",
+    "InstrMMIOEntry",
+    "L2TlbMissQueue",
+    "L2TlbPrefetch",
+    "PrefetcherMonitor",
+    "WayLookup"
+  ],
+  "full_family_covered": false,
+  "sources": {
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Frontend.Icache.Prefetch.Family-Hardware.py",
+      "sha256": "00b24000b0a6b8693f4be18f3dd1f7d9f535f0778787b8410c8618ee51667410",
+      "bytes": 41357
+    },
+    "validator": {
+      "path": "validation/v2_queue_state_correspondence_validator.py",
+      "sha256": "0a3b3ccc40f53874f869f3623146c3bf4a62f7ef08a3a7d98ec3442358147d15",
+      "bytes": 7620
+    },
+    "rail": {
+      "path": "validation/v2_strict_family_rail.py",
+      "sha256": "446151abc1261a79dffa4707130786a5673a4069f3a1c98086e2b0cd97aeef15",
+      "bytes": 72724
+    },
+    "direct_test": {
+      "path": "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Frontend.Icache.Prefetch.Family-Hardware.py",
+      "sha256": "926de7f026e50c657ce7b200d2b5289350c7b33fcb5b9fb4edbeeef02939ac3b",
+      "bytes": 11743
+    }
+  },
+  "checks": {
+    "direct": {
+      "command": [
+        "C:\\Program Files\\Python313\\python.exe",
+        "-B",
+        "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu-Frontend.Icache.Prefetch.Family-Hardware.py"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "output_tail": "C:\\Users\\lishuo\\AppData\\Roaming\\Python\\Python313\\site-packages\\amaranth\\hdl\\_ast.py:1973: DeprecationWarning: `reset=` is deprecated, use `init=` instead\n  signal = super().__call__(shape, **kwargs, src_loc_at=src_loc_at + 1)\nD:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Build\\Build-Cpu\\Cpu-Core\\Cpu-Core-Frontend.Icache.Prefetch.Family-Hardware.py:450: DeprecationWarning: `amaranth.hdl.Memory` is deprecated, use `amaranth.lib.memory.Memory` instead\n  ram_ext = Memory(width=47, depth=depth, name=\"ram_ext\")\n.D:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Build\\Build-Cpu\\Cpu-Core\\Cpu-Core-Frontend.Icache.Prefetch.Family-Hardware.py:450: DeprecationWarning: `amaranth.hdl.Memory` is deprecated, use `amaranth.lib.memory.Memory` instead\n  ram_ext = Memory(width=47, depth=depth, name=\"ram_ext\")\nC:\\Users\\lishuo\\AppData\\Roaming\\Python\\Python313\\site-packages\\amaranth\\sim\\core.py:257: DeprecationWarning: Generator-based processes are deprecated per RFC 36. Use async processes instead.\n  warnings.warn(\nD:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu-Frontend.Icache.Prefetch.Family-Hardware.py:47: DeprecationWarning: The `Settle` command is deprecated per RFC 27. Use `add_testbench` to write testbenches; there, an equivalent of `yield Settle()` is performed automatically after each `ctx.set()`.\n  yield Settle()\nD:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu-Frontend.Icache.Prefetch.Family-Hardware.py:59: DeprecationWarning: The `Settle` command is deprecated per RFC 27. Use `add_testbench` to write testbenches; there, an equivalent of `yield Settle()` is performed automatically after each `ctx.set()`.\n  yield Settle()\nD:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu-Frontend.Icache.Prefetch.Family-Hardware.py:69: DeprecationWarning: The `Settle` command is deprecated per RFC 27. Use `add_testbench` to write testbenches; there, an equivalent of `yield Settle()` is performed automatically after each `ctx.set()`.\n  yield Settle()\n....\n----------------------------------------------------------------------\nRan 5 tests in 4.622s\n\nOK\n"
+    },
+    "pyright": {
+      "command": [
+        "cmd.exe",
+        "/d",
+        "/c",
+        "pyright",
+        "--outputjson",
+        "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_8q8whuyd\\Cpu-Core-Frontend.Icache.Prefetch.Family-Hardware.py"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "version": "1.1.411",
+      "error_count": 0,
+      "files_analyzed": 1,
+      "stderr_tail": ""
+    }
+  },
+  "results": [
+    {
+      "member": "L2TlbMissQueue",
+      "status": "PASS",
+      "formal_cache_hit": false,
+      "static_failures": [],
+      "prepared": {
+        "name": "L2TlbMissQueue",
+        "inputs": {
+          "clock": 1,
+          "reset": 1,
+          "io_sfence_valid": 1,
+          "io_csr_satp_changed": 1,
+          "io_csr_vsatp_changed": 1,
+          "io_csr_hgatp_changed": 1,
+          "io_csr_priv_virt_changed": 1,
+          "io_in_valid": 1,
+          "io_in_bits_req_info_vpn": 38,
+          "io_in_bits_req_info_s2xlate": 2,
+          "io_in_bits_req_info_source": 2,
+          "io_in_bits_isLLptw": 1,
+          "io_out_ready": 1
+        },
+        "outputs": {
+          "io_in_ready": 1,
+          "io_out_valid": 1,
+          "io_out_bits_req_info_vpn": 38,
+          "io_out_bits_req_info_s2xlate": 2,
+          "io_out_bits_req_info_source": 2,
+          "io_out_bits_isHptwReq": 1,
+          "io_out_bits_isLLptw": 1,
+          "io_out_bits_hptwId": 3
+        },
+        "children": [
+          "Queue40_L2TlbMQBundle",
+          "ram_40x47"
+        ],
+        "sequential": true,
+        "abi_exact": true,
+        "deterministic": true,
+        "output_less": false,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "view_audits": [
+          {
+            "top": "ram_40x47",
+            "renamed_top": false,
+            "regions_removed_lines": {
+              "`ifdef ENABLE_INITIAL_MEM_": 14
+            },
+            "block_local_temporaries_hoisted": [],
+            "initialized_declarations_hoisted": [],
+            "code_lines_locked": 17,
+            "code_lines_view": 17,
+            "residual_preprocessor_directives": 0,
+            "line_conservation_ok": true,
+            "register_update_equations_locked": 0,
+            "register_update_equations_preserved": true,
+            "view_projection": null,
+            "view_trusted": true
+          },
+          {
+            "top": "Queue40_L2TlbMQBundle",
+            "renamed_top": false,
+            "regions_removed_lines": {
+              "`ifdef ENABLE_INITIAL_REG_": 25
+            },
+            "block_local_temporaries_hoisted": [
+              "do_deq"
+            ],
+            "initialized_declarations_hoisted": [],
+            "code_lines_locked": 82,
+            "code_lines_view": 82,
+            "residual_preprocessor_directives": 0,
+            "line_conservation_ok": true,
+            "register_update_equations_locked": 10,
+            "register_update_equations_preserved": true,
+            "view_projection": null,
+            "view_trusted": true
+          },
+          {
+            "top": "L2TlbMissQueue",
+            "renamed_top": true,
+            "regions_removed_lines": {},
+            "block_local_temporaries_hoisted": [],
+            "initialized_declarations_hoisted": [],
+            "code_lines_locked": 45,
+            "code_lines_view": 45,
+            "residual_preprocessor_directives": 0,
+            "line_conservation_ok": true,
+            "register_update_equations_locked": 0,
+            "register_update_equations_preserved": true,
+            "view_projection": null,
+            "view_trusted": true
+          }
+        ],
+        "locked_sha256": "1b9f5200d945deb50d97dc6da927742e06c571b49dbe2fd1e530f0b7d64d4b37",
+        "locked_sources": [
+          {
+            "__path__": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\reference-sv\\Queue40_L2TlbMQBundle.sv"
+          },
+          {
+            "__path__": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\reference-sv\\ram_40x47.sv"
+          },
+          {
+            "__path__": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\reference-sv\\L2TlbMissQueue.sv"
+          }
+        ],
+        "target": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_frontend_icache_prefetch_family_family\\DUT_L2TlbMissQueue.sv"
+        },
+        "reference": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_frontend_icache_prefetch_family_family\\REF_L2TlbMissQueue.sv"
+        },
+        "miter": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_frontend_icache_prefetch_family_family\\L2TlbMissQueue_MITER.sv"
+        },
+        "wsl": {
+          "target": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_L2TlbMissQueue.sv",
+          "reference": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/REF_L2TlbMissQueue.sv",
+          "miter": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/L2TlbMissQueue_MITER.sv",
+          "locked_sources": [
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue40_L2TlbMQBundle.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_40x47.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/L2TlbMissQueue.sv"
+          ]
+        },
+        "cache_key": "a66da4d2626c0f607e71145de8341455d64df9127e25e33c251046798da70c1b",
+        "cache_hit": false,
+        "tool_versions": {
+          "python": "3.13.12",
+          "python_implementation": "CPython",
+          "host": "Windows-11-10.0.26300-SP0",
+          "amaranth": "0.5.8",
+          "yosys": "Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)",
+          "verilator": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)"
+        },
+        "prepared_hashes": {
+          "target": "a798bfcad5dc648ed6852f60be5b7ad7677d82609f40bda66230ccc7fa10a50d",
+          "reference": "dd18b373e06298e78538ea7834647138c4a2f143b7ff7feac752bcf4a8eeb8d2",
+          "miter": "d270564aaf77178c9cb7284b8f44ef527290224a5d6538bc3f700d2e5dce3007"
+        },
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "L2TlbMissQueue_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_L2TlbMissQueue.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/REF_L2TlbMissQueue.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/L2TlbMissQueue_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.084 MB sources in 7 modules, into 0.054 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.044 s (elab=0.001, cvt=0.004, bld=0.000); cpu 0.012 s on 1 threads; alloced 9.930 MB\n",
+          "output_sha256": "9157d3ec6d7fc42dae0b0500a45542d12bafaa54d931eea00e67f22cfc3c6d16"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "L2TlbMissQueue",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue40_L2TlbMQBundle.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_40x47.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/L2TlbMissQueue.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.051 MB sources in 4 modules, into 0.030 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.030 s (elab=0.001, cvt=0.002, bld=0.000); cpu 0.008 s on 1 threads; alloced 9.586 MB\n",
+          "output_sha256": "c37204f7482e48a108390b123c58895dce597f5dda5835d1e5beb9ab1231c005"
+        },
+        "static_blocked": false
+      },
+      "formal": {
+        "method": "sequential_equivalence",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "L2TlbMissQueue_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_L2TlbMissQueue.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/REF_L2TlbMissQueue.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/L2TlbMissQueue_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.084 MB sources in 7 modules, into 0.054 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.044 s (elab=0.001, cvt=0.004, bld=0.000); cpu 0.012 s on 1 threads; alloced 9.930 MB\n",
+          "output_sha256": "9157d3ec6d7fc42dae0b0500a45542d12bafaa54d931eea00e67f22cfc3c6d16"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "L2TlbMissQueue",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Queue40_L2TlbMQBundle.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ram_40x47.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/L2TlbMissQueue.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.051 MB sources in 4 modules, into 0.030 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.030 s (elab=0.001, cvt=0.002, bld=0.000); cpu 0.008 s on 1 threads; alloced 9.586 MB\n",
+          "output_sha256": "c37204f7482e48a108390b123c58895dce597f5dda5835d1e5beb9ab1231c005"
+        },
+        "yosys_equiv": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_L2TlbMissQueue.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/REF_L2TlbMissQueue.sv; proc; async2sync; memory; opt; flatten REF_L2TlbMissQueue; flatten DUT_L2TlbMissQueue; equiv_make REF_L2TlbMissQueue DUT_L2TlbMissQueue L2TlbMissQueue_EQUIV; prep -top L2TlbMissQueue_EQUIV; equiv_induct -undef; equiv_status -assert"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": 1942,
+          "equiv_summary_full": [
+            1942,
+            0
+          ],
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": " pass (generating $mem cells).\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module L2TlbMissQueue_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\L2TlbMissQueue_EQUIV'.\n<suppressed ~18 debug messages>\nRemoved a total of 6 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\L2TlbMissQueue_EQUIV..\nRemoved 0 unused cells and 6 unused wires.\n<suppressed ~1 debug messages>\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== L2TlbMissQueue_EQUIV ===\n\n   Number of wires:               2282\n   Number of wire bits:          10645\n   Number of public wires:         279\n   Number of public wire bits:    6675\n   Number of ports:                 21\n   Number of port bits:            101\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:               7733\n     $add                            2\n     $and                         1945\n     $dffe                        3760\n     $eq                             4\n     $equiv                       1942\n     $mux                           56\n     $ne                             1\n     $not                           10\n     $or                             4\n     $reduce_or                      1\n     $scopeinfo                      2\n     $sdff                           6\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module L2TlbMissQueue_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 1893 unproven $equiv cells in module L2TlbMissQueue_EQUIV:\n  Undef modelling: force def on 3786 initial reg values and 52 inputs.\n  Proving existence of base case for step 1. (329177 clauses over 127624 variables)\n  Proving induction step 1. (915282 clauses over 342152 variables)\n  Proof for induction step holds. Entire workset of 1893 cells proven!\nProved 1893 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 1942 $equiv cells in L2TlbMissQueue_EQUIV:\n  Of those cells 1942 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: 2dc9aebae3, CPU: user 9.01s system 0.14s, MEM: 285.70 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 86% 1x equiv_induct (7 sec), 3% 10x opt_clean (0 sec), ...\n",
+          "output_sha256": "8d74bb85d7b2b20572b49949ecb7e69e12d31ed7c92e06e8f4b6abae05275ee6",
+          "markers_present": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "formal_success_marker": true,
+          "equiv_cells": 1942,
+          "proven_cells": 1942,
+          "unproven_cells": 0
+        }
+      }
+    },
+    {
+      "member": "PrefetcherMonitor",
+      "status": "PASS",
+      "formal_cache_hit": false,
+      "static_failures": [],
+      "prepared": {
+        "name": "PrefetcherMonitor",
+        "inputs": {
+          "clock": 1,
+          "reset": 1,
+          "io_timely_total_prefetch": 1,
+          "io_timely_late_hit_prefetch": 1,
+          "io_timely_late_miss_prefetch": 1,
+          "io_validity_good_prefetch": 1,
+          "io_validity_bad_prefetch": 1
+        },
+        "outputs": {
+          "io_pf_ctrl_enable": 1,
+          "io_pf_ctrl_confidence": 1
+        },
+        "children": [],
+        "sequential": true,
+        "abi_exact": true,
+        "deterministic": true,
+        "output_less": false,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "view_audits": [
+          {
+            "top": "PrefetcherMonitor",
+            "renamed_top": true,
+            "regions_removed_lines": {
+              "`ifdef ENABLE_INITIAL_REG_": 39
+            },
+            "block_local_temporaries_hoisted": [
+              "timely_reset",
+              "validity_reset",
+              "back_off_reset",
+              "conf_reset",
+              "trigger_disable",
+              "_enable_T",
+              "_confidence_T",
+              "_GEN"
+            ],
+            "initialized_declarations_hoisted": [],
+            "code_lines_locked": 90,
+            "code_lines_view": 90,
+            "residual_preprocessor_directives": 0,
+            "line_conservation_ok": true,
+            "register_update_equations_locked": 25,
+            "register_update_equations_preserved": true,
+            "view_projection": null,
+            "view_trusted": true
+          }
+        ],
+        "locked_sha256": "97262791dae609ce474325bf24203c1e0ad1107f497d45b6b39b3fab374dfadb",
+        "locked_sources": [
+          {
+            "__path__": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\reference-sv\\PrefetcherMonitor.sv"
+          }
+        ],
+        "target": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_frontend_icache_prefetch_family_family\\DUT_PrefetcherMonitor.sv"
+        },
+        "reference": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_frontend_icache_prefetch_family_family\\REF_PrefetcherMonitor.sv"
+        },
+        "miter": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_frontend_icache_prefetch_family_family\\PrefetcherMonitor_MITER.sv"
+        },
+        "wsl": {
+          "target": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_PrefetcherMonitor.sv",
+          "reference": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/REF_PrefetcherMonitor.sv",
+          "miter": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/PrefetcherMonitor_MITER.sv",
+          "locked_sources": [
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/PrefetcherMonitor.sv"
+          ]
+        },
+        "cache_key": "a315cd9b56215d2e08f26c0a0d41918ab29be69cff0b716680bd9dd17e2f03ce",
+        "cache_hit": false,
+        "tool_versions": {
+          "python": "3.13.12",
+          "python_implementation": "CPython",
+          "host": "Windows-11-10.0.26300-SP0",
+          "amaranth": "0.5.8",
+          "yosys": "Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)",
+          "verilator": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)"
+        },
+        "prepared_hashes": {
+          "target": "18d6d058c2cf41eb7a1acbb39ab75d24b328b78b04ef68b9741e9b033f238a33",
+          "reference": "2f81a58225c465ef36dcac0f47e2f59c8a5eda3cfd5da8d070bfe86d05695814",
+          "miter": "ac62e3ffdf0b9c8bd66d3765e67690983a9b3e7605a5ac70cd49d792f50aae7a"
+        },
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "PrefetcherMonitor_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_PrefetcherMonitor.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/REF_PrefetcherMonitor.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/PrefetcherMonitor_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "HS's CONST '10'h3e8' generates 10 bits.\n                                                                                                                                                  : ... note: In instance 'PrefetcherMonitor_MITER.target_i'\n  195 |   assign \\$14  = late_hit_prefetch_cnt >= 10'h3e8;\n      |                                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_PrefetcherMonitor.sv:197:40: Operator GTE expects 11 bits on the RHS, but RHS's CONST '10'h384' generates 10 bits.\n                                                                                                                                                  : ... note: In instance 'PrefetcherMonitor_MITER.target_i'\n  197 |   assign \\$16  = late_hit_prefetch_cnt >= 10'h384;\n      |                                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_PrefetcherMonitor.sv:203:31: Operator EQ expects 19 bits on the RHS, but RHS's CONST '18'h30d40' generates 18 bits.\n                                                                                                                                                  : ... note: In instance 'PrefetcherMonitor_MITER.target_i'\n  203 |   assign \\$22  = low_conf_cnt == 18'h30d40;\n      |                               ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_PrefetcherMonitor.sv:206:30: Operator EQ expects 11 bits on the RHS, but RHS's CONST '10'h3e8' generates 10 bits.\n                                                                                                                                                  : ... note: In instance 'PrefetcherMonitor_MITER.target_i'\n  206 |   assign \\$25  = \\$24 [10:0] == 10'h3e8;\n      |                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_PrefetcherMonitor.sv:207:35: Operator GTE expects 11 bits on the RHS, but RHS's CONST '10'h384' generates 10 bits.\n                                                                                                                                                  : ... note: In instance 'PrefetcherMonitor_MITER.target_i'\n  207 |   assign \\$26  = bad_prefetch_cnt >= 10'h384;\n      |                                   ^~\n",
+          "output_sha256": "15cd93a03dadb7ae9f5cdcef817ad4821da0215f59b16942c92b6a2a2b838ee0"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "PrefetcherMonitor",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/PrefetcherMonitor.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.024 MB sources in 2 modules, into 0.024 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.024 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.375 MB\n",
+          "output_sha256": "cd407aaa8965d07cc50b5772a856fbc927e3a7593fe92d6e983f6122ac0ef549"
+        },
+        "static_blocked": false
+      },
+      "formal": {
+        "method": "sequential_equivalence",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "PrefetcherMonitor_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_PrefetcherMonitor.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/REF_PrefetcherMonitor.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/PrefetcherMonitor_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "HS's CONST '10'h3e8' generates 10 bits.\n                                                                                                                                                  : ... note: In instance 'PrefetcherMonitor_MITER.target_i'\n  195 |   assign \\$14  = late_hit_prefetch_cnt >= 10'h3e8;\n      |                                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_PrefetcherMonitor.sv:197:40: Operator GTE expects 11 bits on the RHS, but RHS's CONST '10'h384' generates 10 bits.\n                                                                                                                                                  : ... note: In instance 'PrefetcherMonitor_MITER.target_i'\n  197 |   assign \\$16  = late_hit_prefetch_cnt >= 10'h384;\n      |                                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_PrefetcherMonitor.sv:203:31: Operator EQ expects 19 bits on the RHS, but RHS's CONST '18'h30d40' generates 18 bits.\n                                                                                                                                                  : ... note: In instance 'PrefetcherMonitor_MITER.target_i'\n  203 |   assign \\$22  = low_conf_cnt == 18'h30d40;\n      |                               ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_PrefetcherMonitor.sv:206:30: Operator EQ expects 11 bits on the RHS, but RHS's CONST '10'h3e8' generates 10 bits.\n                                                                                                                                                  : ... note: In instance 'PrefetcherMonitor_MITER.target_i'\n  206 |   assign \\$25  = \\$24 [10:0] == 10'h3e8;\n      |                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_PrefetcherMonitor.sv:207:35: Operator GTE expects 11 bits on the RHS, but RHS's CONST '10'h384' generates 10 bits.\n                                                                                                                                                  : ... note: In instance 'PrefetcherMonitor_MITER.target_i'\n  207 |   assign \\$26  = bad_prefetch_cnt >= 10'h384;\n      |                                   ^~\n",
+          "output_sha256": "15cd93a03dadb7ae9f5cdcef817ad4821da0215f59b16942c92b6a2a2b838ee0"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "PrefetcherMonitor",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/PrefetcherMonitor.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.024 MB sources in 2 modules, into 0.024 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.024 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.375 MB\n",
+          "output_sha256": "cd407aaa8965d07cc50b5772a856fbc927e3a7593fe92d6e983f6122ac0ef549"
+        },
+        "yosys_equiv": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_PrefetcherMonitor.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/REF_PrefetcherMonitor.sv; proc; async2sync; memory; opt; flatten REF_PrefetcherMonitor; flatten DUT_PrefetcherMonitor; equiv_make REF_PrefetcherMonitor DUT_PrefetcherMonitor PrefetcherMonitor_EQUIV; prep -top PrefetcherMonitor_EQUIV; equiv_induct -undef; equiv_status -assert"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": 94,
+          "equiv_summary_full": [
+            94,
+            0
+          ],
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "\n\n10.10. Executing MEMORY_COLLECT pass (generating $mem cells).\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module PrefetcherMonitor_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\PrefetcherMonitor_EQUIV'.\n<suppressed ~51 debug messages>\nRemoved a total of 17 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\PrefetcherMonitor_EQUIV..\nRemoved 0 unused cells and 17 unused wires.\n<suppressed ~1 debug messages>\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== PrefetcherMonitor_EQUIV ===\n\n   Number of wires:                158\n   Number of wire bits:            711\n   Number of public wires:         118\n   Number of public wire bits:     501\n   Number of ports:                  9\n   Number of port bits:              9\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                182\n     $add                            8\n     $and                           13\n     $eq                             4\n     $equiv                         94\n     $ge                             4\n     $gt                             4\n     $mux                           20\n     $not                            6\n     $or                             6\n     $reduce_or                      5\n     $sdff                          18\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module PrefetcherMonitor_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 94 unproven $equiv cells in module PrefetcherMonitor_EQUIV:\n  Undef modelling: force def on 188 initial reg values and 7 inputs.\n  Proving existence of base case for step 1. (25719 clauses over 9662 variables)\n  Proving induction step 1. (61029 clauses over 22583 variables)\n  Proof for induction step holds. Entire workset of 94 cells proven!\nProved 94 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 94 $equiv cells in PrefetcherMonitor_EQUIV:\n  Of those cells 94 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: 2b7d1e83a7, CPU: user 0.13s system 0.01s, MEM: 29.25 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 52% 1x equiv_induct (0 sec), 13% 10x opt_clean (0 sec), ...\n",
+          "output_sha256": "52c8de660d86f4fe4323503c84adb72ef20f129af813971a0e0ea842f5892408",
+          "markers_present": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "formal_success_marker": true,
+          "equiv_cells": 94,
+          "proven_cells": 94,
+          "unproven_cells": 0
+        }
+      }
+    },
+    {
+      "member": "InstrMMIOEntry",
+      "status": "PASS",
+      "formal_cache_hit": false,
+      "static_failures": [],
+      "prepared": {
+        "name": "InstrMMIOEntry",
+        "inputs": {
+          "clock": 1,
+          "reset": 1,
+          "io_req_valid": 1,
+          "io_req_bits_addr": 48,
+          "io_req_bits_flush": 1,
+          "io_mmio_acquire_ready": 1,
+          "io_mmio_grant_valid": 1,
+          "io_mmio_grant_bits_data": 64,
+          "io_mmio_grant_bits_corrupt": 1,
+          "io_wfi_wfiReq": 1
+        },
+        "outputs": {
+          "io_req_ready": 1,
+          "io_resp_valid": 1,
+          "io_resp_bits_data": 32,
+          "io_resp_bits_corrupt": 1,
+          "io_mmio_acquire_valid": 1,
+          "io_mmio_acquire_bits_address": 48,
+          "io_wfi_wfiSafe": 1
+        },
+        "children": [],
+        "sequential": true,
+        "abi_exact": true,
+        "deterministic": true,
+        "output_less": false,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "view_audits": [
+          {
+            "top": "InstrMMIOEntry",
+            "renamed_top": true,
+            "regions_removed_lines": {
+              "`ifdef ENABLE_INITIAL_REG_": 30
+            },
+            "block_local_temporaries_hoisted": [
+              "_GEN_2"
+            ],
+            "initialized_declarations_hoisted": [],
+            "code_lines_locked": 71,
+            "code_lines_view": 71,
+            "residual_preprocessor_directives": 0,
+            "line_conservation_ok": true,
+            "register_update_equations_locked": 11,
+            "register_update_equations_preserved": true,
+            "view_projection": null,
+            "view_trusted": true
+          }
+        ],
+        "locked_sha256": "86989112566f2ddc77d2f4502007a36f33e6e7158990fbd8556f8bd1aefe7eb8",
+        "locked_sources": [
+          {
+            "__path__": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\reference-sv\\InstrMMIOEntry.sv"
+          }
+        ],
+        "target": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_frontend_icache_prefetch_family_family\\DUT_InstrMMIOEntry.sv"
+        },
+        "reference": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_frontend_icache_prefetch_family_family\\REF_InstrMMIOEntry.sv"
+        },
+        "miter": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_frontend_icache_prefetch_family_family\\InstrMMIOEntry_MITER.sv"
+        },
+        "wsl": {
+          "target": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_InstrMMIOEntry.sv",
+          "reference": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/REF_InstrMMIOEntry.sv",
+          "miter": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/InstrMMIOEntry_MITER.sv",
+          "locked_sources": [
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/InstrMMIOEntry.sv"
+          ]
+        },
+        "cache_key": "cc047bd2faf00b24c4513abd15ca88963bb8378c970989327f9a76590ed5db8e",
+        "cache_hit": false,
+        "tool_versions": {
+          "python": "3.13.12",
+          "python_implementation": "CPython",
+          "host": "Windows-11-10.0.26300-SP0",
+          "amaranth": "0.5.8",
+          "yosys": "Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)",
+          "verilator": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)"
+        },
+        "prepared_hashes": {
+          "target": "d4edf9e1c6b6ea021e9f7f25536895ae9713f9bec42c9d91a1499ce85b351e5c",
+          "reference": "f99d9ec22ad55f6aefa72b80bd06ecf8ee150fd4397fd89b25388ddcc05a2cf3",
+          "miter": "0c072ace29cbeaae1c2db5cd2be4ee05a71794d086eaa8200b41b510601dc611"
+        },
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "InstrMMIOEntry_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_InstrMMIOEntry.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/REF_InstrMMIOEntry.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/InstrMMIOEntry_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "his message.\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_InstrMMIOEntry.sv:79:23: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                              : ... note: In instance 'InstrMMIOEntry_MITER.target_i'\n   79 |   assign \\$1  = state == 1'h1;\n      |                       ^~\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_InstrMMIOEntry.sv:85:17: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 2 bits.\n                                                                                                                                             : ... note: In instance 'InstrMMIOEntry_MITER.target_i'\n   85 |   assign \\$5  = ! req_addr[2:1];\n      |                 ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_InstrMMIOEntry.sv:86:31: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                              : ... note: In instance 'InstrMMIOEntry_MITER.target_i'\n   86 |   assign \\$6  = req_addr[2:1] == 1'h1;\n      |                               ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_InstrMMIOEntry.sv:102:24: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                               : ... note: In instance 'InstrMMIOEntry_MITER.target_i'\n  102 |   assign \\$20  = state == 1'h1;\n      |                        ^~\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_InstrMMIOEntry.sv:106:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'state' generates 2 bits.\n                                                                                                                                              : ... note: In instance 'InstrMMIOEntry_MITER.target_i'\n  106 |   assign \\$24  = ! state;\n      |                  ^\n",
+          "output_sha256": "1a5e6114ac60fc160de780b878a7d8498956c74b134f7e9492ce39df503b2b75"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "InstrMMIOEntry",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/InstrMMIOEntry.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.023 MB sources in 2 modules, into 0.028 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.024 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.379 MB\n",
+          "output_sha256": "9026ef8c03d7e6854dab587420f838a3217d1b42adae2354ccafabdf9827dd06"
+        },
+        "static_blocked": false
+      },
+      "formal": {
+        "method": "sequential_equivalence",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "InstrMMIOEntry_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_InstrMMIOEntry.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/REF_InstrMMIOEntry.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/InstrMMIOEntry_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "his message.\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_InstrMMIOEntry.sv:79:23: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                              : ... note: In instance 'InstrMMIOEntry_MITER.target_i'\n   79 |   assign \\$1  = state == 1'h1;\n      |                       ^~\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_InstrMMIOEntry.sv:85:17: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 2 bits.\n                                                                                                                                             : ... note: In instance 'InstrMMIOEntry_MITER.target_i'\n   85 |   assign \\$5  = ! req_addr[2:1];\n      |                 ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_InstrMMIOEntry.sv:86:31: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                              : ... note: In instance 'InstrMMIOEntry_MITER.target_i'\n   86 |   assign \\$6  = req_addr[2:1] == 1'h1;\n      |                               ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_InstrMMIOEntry.sv:102:24: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                               : ... note: In instance 'InstrMMIOEntry_MITER.target_i'\n  102 |   assign \\$20  = state == 1'h1;\n      |                        ^~\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_InstrMMIOEntry.sv:106:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'state' generates 2 bits.\n                                                                                                                                              : ... note: In instance 'InstrMMIOEntry_MITER.target_i'\n  106 |   assign \\$24  = ! state;\n      |                  ^\n",
+          "output_sha256": "1a5e6114ac60fc160de780b878a7d8498956c74b134f7e9492ce39df503b2b75"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "InstrMMIOEntry",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/InstrMMIOEntry.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.023 MB sources in 2 modules, into 0.028 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.024 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.379 MB\n",
+          "output_sha256": "9026ef8c03d7e6854dab587420f838a3217d1b42adae2354ccafabdf9827dd06"
+        },
+        "yosys_equiv": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_InstrMMIOEntry.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/REF_InstrMMIOEntry.sv; proc; async2sync; memory; opt; flatten REF_InstrMMIOEntry; flatten DUT_InstrMMIOEntry; equiv_make REF_InstrMMIOEntry DUT_InstrMMIOEntry InstrMMIOEntry_EQUIV; prep -top InstrMMIOEntry_EQUIV; equiv_induct -undef; equiv_status -assert"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": 152,
+          "equiv_summary_full": [
+            152,
+            0
+          ],
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "ug messages>\n\n10.10. Executing MEMORY_COLLECT pass (generating $mem cells).\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module InstrMMIOEntry_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\InstrMMIOEntry_EQUIV'.\n<suppressed ~6 debug messages>\nRemoved a total of 2 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\InstrMMIOEntry_EQUIV..\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== InstrMMIOEntry_EQUIV ===\n\n   Number of wires:                131\n   Number of wire bits:           1352\n   Number of public wires:         101\n   Number of public wire bits:    1189\n   Number of ports:                 17\n   Number of port bits:            205\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                221\n     $and                           15\n     $dffe                           2\n     $eq                             5\n     $equiv                        152\n     $logic_not                      2\n     $mux                           18\n     $ne                             2\n     $not                            8\n     $or                             3\n     $reduce_and                     2\n     $reduce_or                      3\n     $sdff                           8\n     $shiftx                         1\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module InstrMMIOEntry_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 149 unproven $equiv cells in module InstrMMIOEntry_EQUIV:\n  Undef modelling: force def on 232 initial reg values and 120 inputs.\n  Proving existence of base case for step 1. (37037 clauses over 14085 variables)\n  Proving induction step 1. (87653 clauses over 32825 variables)\n  Proof for induction step holds. Entire workset of 149 cells proven!\nProved 149 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 152 $equiv cells in InstrMMIOEntry_EQUIV:\n  Of those cells 152 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: eaf1ca9a33, CPU: user 0.15s system 0.02s, MEM: 36.31 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 61% 1x equiv_induct (0 sec), 11% 10x opt_clean (0 sec), ...\n",
+          "output_sha256": "3e7f6233bb710a3f86beb20e4df45fc2c9b95273167fdd1a79f489fbca7aad64",
+          "markers_present": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "formal_success_marker": true,
+          "equiv_cells": 152,
+          "proven_cells": 152,
+          "unproven_cells": 0
+        }
+      }
+    },
+    {
+      "member": "L2TlbPrefetch",
+      "status": "PASS",
+      "formal_cache_hit": false,
+      "static_failures": [],
+      "prepared": {
+        "name": "L2TlbPrefetch",
+        "inputs": {
+          "clock": 1,
+          "reset": 1,
+          "io_sfence_valid": 1,
+          "io_csr_satp_changed": 1,
+          "io_csr_vsatp_mode": 4,
+          "io_csr_vsatp_changed": 1,
+          "io_csr_hgatp_mode": 4,
+          "io_csr_hgatp_changed": 1,
+          "io_csr_priv_virt": 1,
+          "io_csr_priv_virt_changed": 1,
+          "io_in_valid": 1,
+          "io_in_bits_vpn": 38,
+          "io_out_ready": 1
+        },
+        "outputs": {
+          "io_out_valid": 1,
+          "io_out_bits_req_info_vpn": 38,
+          "io_out_bits_req_info_s2xlate": 2
+        },
+        "children": [],
+        "sequential": true,
+        "abi_exact": true,
+        "deterministic": true,
+        "output_less": false,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "view_audits": [
+          {
+            "top": "L2TlbPrefetch",
+            "renamed_top": true,
+            "regions_removed_lines": {
+              "`ifdef ENABLE_INITIAL_REG_": 38
+            },
+            "block_local_temporaries_hoisted": [],
+            "initialized_declarations_hoisted": [
+              "flush"
+            ],
+            "code_lines_locked": 88,
+            "code_lines_view": 89,
+            "residual_preprocessor_directives": 0,
+            "line_conservation_ok": true,
+            "register_update_equations_locked": 17,
+            "register_update_equations_preserved": true,
+            "view_projection": null,
+            "view_trusted": true
+          }
+        ],
+        "locked_sha256": "383982f094dafeacb4929ee849440ece9179610dfb2b23b087463195270335d4",
+        "locked_sources": [
+          {
+            "__path__": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\reference-sv\\L2TlbPrefetch.sv"
+          }
+        ],
+        "target": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_frontend_icache_prefetch_family_family\\DUT_L2TlbPrefetch.sv"
+        },
+        "reference": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_frontend_icache_prefetch_family_family\\REF_L2TlbPrefetch.sv"
+        },
+        "miter": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_frontend_icache_prefetch_family_family\\L2TlbPrefetch_MITER.sv"
+        },
+        "wsl": {
+          "target": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_L2TlbPrefetch.sv",
+          "reference": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/REF_L2TlbPrefetch.sv",
+          "miter": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/L2TlbPrefetch_MITER.sv",
+          "locked_sources": [
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/L2TlbPrefetch.sv"
+          ]
+        },
+        "cache_key": "773854b27586a8eb5b90132292099f60988fae4b6761ebd5c66eeea177334723",
+        "cache_hit": false,
+        "tool_versions": {
+          "python": "3.13.12",
+          "python_implementation": "CPython",
+          "host": "Windows-11-10.0.26300-SP0",
+          "amaranth": "0.5.8",
+          "yosys": "Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)",
+          "verilator": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)"
+        },
+        "prepared_hashes": {
+          "target": "b3f9d18c1359156815046f42e5d9dd3c749cbfa067dabccf240ca5513ff74714",
+          "reference": "6484bb7277b7a2e74346aaf2e9e76276b3a69ffe3b46528277847c652013ee95",
+          "miter": "54b3098df03af49009bd05406e60e583ec7db8af10f7394006a2669d58a80d79"
+        },
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "L2TlbPrefetch_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_L2TlbPrefetch.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/REF_L2TlbPrefetch.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/L2TlbPrefetch_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": " R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.070 MB sources in 4 modules, into 0.049 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.044 s (elab=0.001, cvt=0.004, bld=0.000); cpu 0.012 s on 1 threads; alloced 9.805 MB\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_L2TlbPrefetch.sv:172:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'old_index' generates 2 bits.\n                                                                                                                                             : ... note: In instance 'L2TlbPrefetch_MITER.target_i'\n  172 |   assign \\$35  = ! old_index;\n      |                  ^\n                     ... For warning description see https://verilator.org/warn/WIDTHTRUNC?v=5.032\n                     ... Use \"/* verilator lint_off WIDTHTRUNC */\" and lint_on around source to disable this message.\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_L2TlbPrefetch.sv:180:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'old_index' generates 2 bits.\n                                                                                                                                             : ... note: In instance 'L2TlbPrefetch_MITER.target_i'\n  180 |   assign \\$43  = ! old_index;\n      |                  ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_L2TlbPrefetch.sv:185:28: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                              : ... note: In instance 'L2TlbPrefetch_MITER.target_i'\n  185 |   assign \\$48  = old_index == 1'h1;\n      |                            ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_L2TlbPrefetch.sv:193:28: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                              : ... note: In instance 'L2TlbPrefetch_MITER.target_i'\n  193 |   assign \\$56  = old_index == 1'h1;\n      |                            ^~\n",
+          "output_sha256": "4a0d40257022ca63ece8a64cb12ed74f723cf3942292eddf2db9651cc781b3a3"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "L2TlbPrefetch",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/L2TlbPrefetch.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.024 MB sources in 2 modules, into 0.033 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.023 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.007 s on 1 threads; alloced 9.562 MB\n",
+          "output_sha256": "173a9f9375f5f11739182b18578315a0bd168aad83c9acf70888ac84b6b3f302"
+        },
+        "static_blocked": false
+      },
+      "formal": {
+        "method": "sequential_equivalence",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "L2TlbPrefetch_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_L2TlbPrefetch.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/REF_L2TlbPrefetch.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/L2TlbPrefetch_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": " R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.070 MB sources in 4 modules, into 0.049 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.044 s (elab=0.001, cvt=0.004, bld=0.000); cpu 0.012 s on 1 threads; alloced 9.805 MB\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_L2TlbPrefetch.sv:172:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'old_index' generates 2 bits.\n                                                                                                                                             : ... note: In instance 'L2TlbPrefetch_MITER.target_i'\n  172 |   assign \\$35  = ! old_index;\n      |                  ^\n                     ... For warning description see https://verilator.org/warn/WIDTHTRUNC?v=5.032\n                     ... Use \"/* verilator lint_off WIDTHTRUNC */\" and lint_on around source to disable this message.\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_L2TlbPrefetch.sv:180:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'old_index' generates 2 bits.\n                                                                                                                                             : ... note: In instance 'L2TlbPrefetch_MITER.target_i'\n  180 |   assign \\$43  = ! old_index;\n      |                  ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_L2TlbPrefetch.sv:185:28: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                              : ... note: In instance 'L2TlbPrefetch_MITER.target_i'\n  185 |   assign \\$48  = old_index == 1'h1;\n      |                            ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_L2TlbPrefetch.sv:193:28: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                              : ... note: In instance 'L2TlbPrefetch_MITER.target_i'\n  193 |   assign \\$56  = old_index == 1'h1;\n      |                            ^~\n",
+          "output_sha256": "4a0d40257022ca63ece8a64cb12ed74f723cf3942292eddf2db9651cc781b3a3"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "L2TlbPrefetch",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/L2TlbPrefetch.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.024 MB sources in 2 modules, into 0.033 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.023 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.007 s on 1 threads; alloced 9.562 MB\n",
+          "output_sha256": "173a9f9375f5f11739182b18578315a0bd168aad83c9acf70888ac84b6b3f302"
+        },
+        "yosys_equiv": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_L2TlbPrefetch.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/REF_L2TlbPrefetch.sv; proc; async2sync; memory; opt; flatten REF_L2TlbPrefetch; flatten DUT_L2TlbPrefetch; equiv_make REF_L2TlbPrefetch DUT_L2TlbPrefetch L2TlbPrefetch_EQUIV; prep -top L2TlbPrefetch_EQUIV; equiv_induct -undef; equiv_status -assert"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": 185,
+          "equiv_summary_full": [
+            185,
+            0
+          ],
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "g MEMORY_COLLECT pass (generating $mem cells).\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module L2TlbPrefetch_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\L2TlbPrefetch_EQUIV'.\n<suppressed ~42 debug messages>\nRemoved a total of 14 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\L2TlbPrefetch_EQUIV..\nRemoved 0 unused cells and 12 unused wires.\n<suppressed ~1 debug messages>\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== L2TlbPrefetch_EQUIV ===\n\n   Number of wires:                200\n   Number of wire bits:           1212\n   Number of public wires:         176\n   Number of public wire bits:    1183\n   Number of ports:                 16\n   Number of port bits:             97\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                279\n     $add                            2\n     $and                           24\n     $dffe                          10\n     $eq                             7\n     $equiv                        185\n     $logic_not                      2\n     $mux                           17\n     $not                            3\n     $or                            14\n     $reduce_and                     1\n     $reduce_or                      2\n     $sdff                          12\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module L2TlbPrefetch_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 184 unproven $equiv cells in module L2TlbPrefetch_EQUIV:\n  Undef modelling: force def on 364 initial reg values and 53 inputs.\n  Proving existence of base case for step 1. (19005 clauses over 7407 variables)\n  Proving induction step 1. (63817 clauses over 23537 variables)\n  Proof for induction step holds. Entire workset of 184 cells proven!\nProved 184 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 185 $equiv cells in L2TlbPrefetch_EQUIV:\n  Of those cells 185 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: c54379b397, CPU: user 0.16s system 0.01s, MEM: 30.38 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 55% 1x equiv_induct (0 sec), 13% 10x opt_clean (0 sec), ...\n",
+          "output_sha256": "e17a469fae40db87e707b26dd82765599fc5bf6b18c661c2347f2a0e106da14e",
+          "markers_present": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "formal_success_marker": true,
+          "equiv_cells": 185,
+          "proven_cells": 185,
+          "unproven_cells": 0
+        }
+      }
+    }
+  ],
+  "negative_control": {
+    "status": "PASS",
+    "cases": {
+      "sat": {
+        "status": "PASS",
+        "note": "no representative with outputs"
+      },
+      "sequential.target": {
+        "status": "PASS",
+        "control_entry": "L2TlbMissQueue",
+        "control_port": "io_in_ready",
+        "mutation_applied": true,
+        "explicit_failure_marker": true,
+        "success_marker_still_present": false,
+        "returncode": 1
+      },
+      "sequential.reference": {
+        "status": "PASS",
+        "control_entry": "L2TlbMissQueue",
+        "control_port": "io_out_bits_hptwId",
+        "mutation_applied": true,
+        "explicit_failure_marker": true,
+        "success_marker_still_present": false,
+        "returncode": 1
+      }
+    },
+    "note": "a reference-side mutation that still proves means the reference never reaches the comparison"
+  },
+  "elapsed_seconds": 110.804,
+  "unclosed": [
+    "Full Build catalog, parent closure, license and acceptance remain pending."
+  ]
+}

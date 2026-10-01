@@ -1,0 +1,454 @@
+{
+  "schema_version": 1,
+  "kind": "V2_QUEUE_STATE_FOCUSED_DIAGNOSTIC",
+  "build_id": "Build-Cpu.Dependency.Rocket.TLChildren.Family",
+  "status": "PASS_MEMBER_PROOFS_NON_COUNTING",
+  "strict_complete_eligible": false,
+  "strict_complete_count_delta": 0,
+  "acceptance_eligible": false,
+  "members": [
+    "TLXbar_8"
+  ],
+  "family_members": [
+    "BusErrorUnit",
+    "TLBuffer_16",
+    "TLBuffer_2",
+    "TLBuffer_20",
+    "TLBuffer_22",
+    "TLBuffer_27",
+    "TLBuffer_29",
+    "TLClientsMerger_1",
+    "TLXbar_7",
+    "TLXbar_8",
+    "TLXbar_9"
+  ],
+  "full_family_covered": false,
+  "sources": {
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Rocket.TLChildren.Family-Hardware.py",
+      "sha256": "396a8bc72033bd866460e5226c8aae00ff5f5a158ea8392ab37648ed31f7d3b3",
+      "bytes": 38399
+    },
+    "validator": {
+      "path": "validation/v2_queue_state_correspondence_validator.py",
+      "sha256": "0a3b3ccc40f53874f869f3623146c3bf4a62f7ef08a3a7d98ec3442358147d15",
+      "bytes": 7620
+    },
+    "rail": {
+      "path": "validation/v2_strict_family_rail.py",
+      "sha256": "446151abc1261a79dffa4707130786a5673a4069f3a1c98086e2b0cd97aeef15",
+      "bytes": 72724
+    },
+    "direct_test": {
+      "path": "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Dependency.Rocket.TLChildren.Family-Hardware.py",
+      "sha256": "5b979f0c19841e5df18ffa65f05ffa6f8463f7612e06d959e1eb4c4c019087b6",
+      "bytes": 19025
+    }
+  },
+  "checks": {
+    "direct": {
+      "command": [
+        "C:\\Program Files\\Python313\\python.exe",
+        "-B",
+        "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu-Dependency.Rocket.TLChildren.Family-Hardware.py"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "output_tail": ".D:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Build\\Build-Cpu\\Cpu-Core\\Cpu-Core-Dependency.Rocket.TLChildren.Family-Hardware.py:612: DeprecationWarning: `amaranth.hdl.Memory` is deprecated, use `amaranth.lib.memory.Memory` instead\n  memory = Memory(width=width, depth=2, name=self.memory_name)\n...D:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Build\\Build-Cpu\\Cpu-Core\\Cpu-Core-Dependency.Rocket.TLChildren.Family-Hardware.py:612: DeprecationWarning: `amaranth.hdl.Memory` is deprecated, use `amaranth.lib.memory.Memory` instead\n  memory = Memory(width=width, depth=2, name=self.memory_name)\n.....\n----------------------------------------------------------------------\nRan 9 tests in 10.419s\n\nOK\n"
+    },
+    "pyright": {
+      "command": [
+        "cmd.exe",
+        "/d",
+        "/c",
+        "pyright",
+        "--outputjson",
+        "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_u0ro8whc\\Cpu-Core-Dependency.Rocket.TLChildren.Family-Hardware.py"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "version": "1.1.411",
+      "error_count": 0,
+      "files_analyzed": 1,
+      "stderr_tail": ""
+    }
+  },
+  "results": [
+    {
+      "member": "TLXbar_8",
+      "status": "PASS",
+      "formal_cache_hit": false,
+      "static_failures": [],
+      "prepared": {
+        "name": "TLXbar_8",
+        "inputs": {
+          "clock": 1,
+          "reset": 1,
+          "auto_in_1_a_valid": 1,
+          "auto_in_1_a_bits_opcode": 4,
+          "auto_in_1_a_bits_param": 3,
+          "auto_in_1_a_bits_size": 3,
+          "auto_in_1_a_bits_source": 4,
+          "auto_in_1_a_bits_address": 48,
+          "auto_in_1_a_bits_mask": 8,
+          "auto_in_1_a_bits_data": 64,
+          "auto_in_1_a_bits_corrupt": 1,
+          "auto_in_1_d_ready": 1,
+          "auto_in_0_a_valid": 1,
+          "auto_in_0_a_bits_opcode": 4,
+          "auto_in_0_a_bits_param": 3,
+          "auto_in_0_a_bits_size": 3,
+          "auto_in_0_a_bits_source": 1,
+          "auto_in_0_a_bits_address": 48,
+          "auto_in_0_a_bits_mask": 8,
+          "auto_in_0_a_bits_data": 64,
+          "auto_in_0_a_bits_corrupt": 1,
+          "auto_in_0_d_ready": 1,
+          "auto_out_2_a_ready": 1,
+          "auto_out_2_d_valid": 1,
+          "auto_out_2_d_bits_opcode": 4,
+          "auto_out_2_d_bits_param": 2,
+          "auto_out_2_d_bits_size": 3,
+          "auto_out_2_d_bits_source": 5,
+          "auto_out_2_d_bits_sink": 1,
+          "auto_out_2_d_bits_denied": 1,
+          "auto_out_2_d_bits_data": 64,
+          "auto_out_2_d_bits_corrupt": 1,
+          "auto_out_1_a_ready": 1,
+          "auto_out_1_d_valid": 1,
+          "auto_out_1_d_bits_opcode": 4,
+          "auto_out_1_d_bits_param": 2,
+          "auto_out_1_d_bits_size": 2,
+          "auto_out_1_d_bits_source": 5,
+          "auto_out_1_d_bits_sink": 1,
+          "auto_out_1_d_bits_denied": 1,
+          "auto_out_1_d_bits_data": 64,
+          "auto_out_1_d_bits_corrupt": 1,
+          "auto_out_0_a_ready": 1,
+          "auto_out_0_d_valid": 1,
+          "auto_out_0_d_bits_opcode": 4,
+          "auto_out_0_d_bits_param": 2,
+          "auto_out_0_d_bits_size": 2,
+          "auto_out_0_d_bits_source": 5,
+          "auto_out_0_d_bits_sink": 1,
+          "auto_out_0_d_bits_denied": 1,
+          "auto_out_0_d_bits_data": 64,
+          "auto_out_0_d_bits_corrupt": 1
+        },
+        "outputs": {
+          "auto_in_1_a_ready": 1,
+          "auto_in_1_d_valid": 1,
+          "auto_in_1_d_bits_opcode": 4,
+          "auto_in_1_d_bits_param": 2,
+          "auto_in_1_d_bits_size": 3,
+          "auto_in_1_d_bits_source": 4,
+          "auto_in_1_d_bits_sink": 1,
+          "auto_in_1_d_bits_denied": 1,
+          "auto_in_1_d_bits_data": 64,
+          "auto_in_1_d_bits_corrupt": 1,
+          "auto_in_0_a_ready": 1,
+          "auto_in_0_d_valid": 1,
+          "auto_in_0_d_bits_opcode": 4,
+          "auto_in_0_d_bits_param": 2,
+          "auto_in_0_d_bits_size": 3,
+          "auto_in_0_d_bits_sink": 1,
+          "auto_in_0_d_bits_denied": 1,
+          "auto_in_0_d_bits_data": 64,
+          "auto_in_0_d_bits_corrupt": 1,
+          "auto_out_2_a_valid": 1,
+          "auto_out_2_a_bits_opcode": 4,
+          "auto_out_2_a_bits_param": 3,
+          "auto_out_2_a_bits_size": 3,
+          "auto_out_2_a_bits_source": 5,
+          "auto_out_2_a_bits_address": 48,
+          "auto_out_2_a_bits_mask": 8,
+          "auto_out_2_a_bits_data": 64,
+          "auto_out_2_a_bits_corrupt": 1,
+          "auto_out_2_d_ready": 1,
+          "auto_out_1_a_valid": 1,
+          "auto_out_1_a_bits_opcode": 4,
+          "auto_out_1_a_bits_param": 3,
+          "auto_out_1_a_bits_size": 2,
+          "auto_out_1_a_bits_source": 5,
+          "auto_out_1_a_bits_address": 30,
+          "auto_out_1_a_bits_mask": 8,
+          "auto_out_1_a_bits_data": 64,
+          "auto_out_1_a_bits_corrupt": 1,
+          "auto_out_1_d_ready": 1,
+          "auto_out_0_a_valid": 1,
+          "auto_out_0_a_bits_opcode": 4,
+          "auto_out_0_a_bits_param": 3,
+          "auto_out_0_a_bits_size": 2,
+          "auto_out_0_a_bits_source": 5,
+          "auto_out_0_a_bits_address": 30,
+          "auto_out_0_a_bits_mask": 8,
+          "auto_out_0_a_bits_data": 64,
+          "auto_out_0_a_bits_corrupt": 1,
+          "auto_out_0_d_ready": 1
+        },
+        "children": [],
+        "sequential": true,
+        "abi_exact": true,
+        "deterministic": true,
+        "output_less": false,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "view_audits": [
+          {
+            "top": "TLXbar_8",
+            "renamed_top": true,
+            "regions_removed_lines": {
+              "`ifndef SYNTHESIS": 72,
+              "`ifdef ENABLE_INITIAL_REG_": 65
+            },
+            "block_local_temporaries_hoisted": [],
+            "initialized_declarations_hoisted": [
+              "_beatsAI_decode_T",
+              "_beatsAI_decode_T_3",
+              "_beatsDO_decode_T_6",
+              "latch",
+              "latch_1",
+              "latch_2",
+              "latch_3",
+              "latch_4",
+              "_readys_mask_T",
+              "_readys_mask_T_5",
+              "_readys_mask_T_10",
+              "_readys_mask_T_15",
+              "_readys_mask_T_18",
+              "_readys_mask_T_23",
+              "_readys_mask_T_26"
+            ],
+            "code_lines_locked": 685,
+            "code_lines_view": 700,
+            "residual_preprocessor_directives": 0,
+            "line_conservation_ok": true,
+            "register_update_equations_locked": 44,
+            "register_update_equations_preserved": true,
+            "view_projection": null,
+            "view_trusted": true
+          }
+        ],
+        "locked_sha256": "09411c29ac6ae125fe3c7f7d2ad146f468655b968965949d497c55bdf19db7a9",
+        "locked_sources": [
+          {
+            "__path__": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\reference-sv\\TLXbar_8.sv"
+          }
+        ],
+        "target": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_dependency_rocket_tlchildren_family_family\\DUT_TLXbar_8.sv"
+        },
+        "reference": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_dependency_rocket_tlchildren_family_family\\REF_TLXbar_8.sv"
+        },
+        "miter": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_dependency_rocket_tlchildren_family_family\\TLXbar_8_MITER.sv"
+        },
+        "wsl": {
+          "target": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/DUT_TLXbar_8.sv",
+          "reference": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/REF_TLXbar_8.sv",
+          "miter": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/TLXbar_8_MITER.sv",
+          "locked_sources": [
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/TLXbar_8.sv"
+          ]
+        },
+        "cache_key": "fd25b189fd70632d3abbfdcfbe2ea3d6da57651d3ba738878ad1067b25056a58",
+        "cache_hit": false,
+        "tool_versions": {
+          "python": "3.13.12",
+          "python_implementation": "CPython",
+          "host": "Windows-11-10.0.26300-SP0",
+          "amaranth": "0.5.8",
+          "yosys": "Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)",
+          "verilator": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)"
+        },
+        "prepared_hashes": {
+          "target": "6af2b6e34f6a5dd4060cd61edc4815110bb619829d8e53192b86b5310fab703f",
+          "reference": "51bc2bd179285203797e30e5daf900f2163ec8d231bab675e3155bfa150dad26",
+          "miter": "1e916c56f37218f5b202306cc2d069afc408774849343e7dbf2d1564231b2e83"
+        },
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "TLXbar_8_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/DUT_TLXbar_8.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/REF_TLXbar_8.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/TLXbar_8_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "u_dependency_rocket_tlchildren_family_family/DUT_TLXbar_8.sv:3726:32: Operator SUB expects 4 bits on the RHS, but RHS's VARREF '$1731' generates 1 bits.\n                                                                                                                                              : ... note: In instance 'TLXbar_8_MITER.target_i'\n 3726 |   assign \\$1732  = beatsLeft_3 - \\$1731 ;\n      |                                ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/DUT_TLXbar_8.sv:3766:26: Operator SHIFTL expects 20 bits on the LHS, but LHS's CONST '6'h3f' generates 6 bits.\n                                                                                                                                              : ... note: In instance 'TLXbar_8_MITER.target_i'\n 3766 |   assign \\$1777  = 6'h3f << auto_out_0_d_bits_size;\n      |                          ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/DUT_TLXbar_8.sv:3770:26: Operator SHIFTL expects 20 bits on the LHS, but LHS's CONST '6'h3f' generates 6 bits.\n                                                                                                                                              : ... note: In instance 'TLXbar_8_MITER.target_i'\n 3770 |   assign \\$1781  = 6'h3f << auto_out_1_d_bits_size;\n      |                          ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/DUT_TLXbar_8.sv:3775:26: Operator SHIFTL expects 20 bits on the LHS, but LHS's CONST '6'h3f' generates 6 bits.\n                                                                                                                                              : ... note: In instance 'TLXbar_8_MITER.target_i'\n 3775 |   assign \\$1786  = 6'h3f << auto_out_2_d_bits_size;\n      |                          ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/DUT_TLXbar_8.sv:3788:32: Operator SUB expects 4 bits on the RHS, but RHS's VARREF '$1798' generates 1 bits.\n                                                                                                                                              : ... note: In instance 'TLXbar_8_MITER.target_i'\n 3788 |   assign \\$1799  = beatsLeft_4 - \\$1798 ;\n      |                                ^\n",
+          "output_sha256": "58b25be78bca8f75ff6449a8a854644858a7ba23ea18db7c22ed3b429ea67e41"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "TLXbar_8",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/TLXbar_8.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.055 MB sources in 2 modules, into 0.340 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.044 s (elab=0.003, cvt=0.013, bld=0.000); cpu 0.026 s on 1 threads; alloced 11.988 MB\n",
+          "output_sha256": "f4a1a2bb2f45cf5dea32a6ab4c1a8a01f90d961a7cde1aa0789c6c10fe80e861"
+        },
+        "static_blocked": false
+      },
+      "formal": {
+        "method": "sequential_equivalence",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "TLXbar_8_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/DUT_TLXbar_8.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/REF_TLXbar_8.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/TLXbar_8_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "u_dependency_rocket_tlchildren_family_family/DUT_TLXbar_8.sv:3726:32: Operator SUB expects 4 bits on the RHS, but RHS's VARREF '$1731' generates 1 bits.\n                                                                                                                                              : ... note: In instance 'TLXbar_8_MITER.target_i'\n 3726 |   assign \\$1732  = beatsLeft_3 - \\$1731 ;\n      |                                ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/DUT_TLXbar_8.sv:3766:26: Operator SHIFTL expects 20 bits on the LHS, but LHS's CONST '6'h3f' generates 6 bits.\n                                                                                                                                              : ... note: In instance 'TLXbar_8_MITER.target_i'\n 3766 |   assign \\$1777  = 6'h3f << auto_out_0_d_bits_size;\n      |                          ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/DUT_TLXbar_8.sv:3770:26: Operator SHIFTL expects 20 bits on the LHS, but LHS's CONST '6'h3f' generates 6 bits.\n                                                                                                                                              : ... note: In instance 'TLXbar_8_MITER.target_i'\n 3770 |   assign \\$1781  = 6'h3f << auto_out_1_d_bits_size;\n      |                          ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/DUT_TLXbar_8.sv:3775:26: Operator SHIFTL expects 20 bits on the LHS, but LHS's CONST '6'h3f' generates 6 bits.\n                                                                                                                                              : ... note: In instance 'TLXbar_8_MITER.target_i'\n 3775 |   assign \\$1786  = 6'h3f << auto_out_2_d_bits_size;\n      |                          ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/DUT_TLXbar_8.sv:3788:32: Operator SUB expects 4 bits on the RHS, but RHS's VARREF '$1798' generates 1 bits.\n                                                                                                                                              : ... note: In instance 'TLXbar_8_MITER.target_i'\n 3788 |   assign \\$1799  = beatsLeft_4 - \\$1798 ;\n      |                                ^\n",
+          "output_sha256": "58b25be78bca8f75ff6449a8a854644858a7ba23ea18db7c22ed3b429ea67e41"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "TLXbar_8",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/TLXbar_8.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.055 MB sources in 2 modules, into 0.340 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.044 s (elab=0.003, cvt=0.013, bld=0.000); cpu 0.026 s on 1 threads; alloced 11.988 MB\n",
+          "output_sha256": "f4a1a2bb2f45cf5dea32a6ab4c1a8a01f90d961a7cde1aa0789c6c10fe80e861"
+        },
+        "yosys_equiv": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/DUT_TLXbar_8.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_rocket_tlchildren_family_family/REF_TLXbar_8.sv; proc; async2sync; memory; opt; flatten REF_TLXbar_8; flatten DUT_TLXbar_8; equiv_make REF_TLXbar_8 DUT_TLXbar_8 TLXbar_8_EQUIV; prep -top TLXbar_8_EQUIV; select -set xbar0 w:beatsLeft w:readys_mask w:state_0 w:state_1 %x t:$equiv %i %ci*; select -assert-any @xbar0; equiv_induct -undef @xbar0; select -set xbar1 w:beatsLeft_1 w:readys_mask_1 w:state_1_0 w:state_1_1 %x t:$equiv %i %ci*; select -assert-any @xbar1; equiv_induct -undef @xbar1; select -set xbar2 w:beatsLeft_2 w:readys_mask_2 w:state_2_0 w:state_2_1 %x t:$equiv %i %ci*; select -assert-any @xbar2; equiv_induct -undef @xbar2; select -set xbar3 w:beatsLeft_3 w:readys_mask_3 w:state_3_0 w:state_3_1 w:state_3_2 %x t:$equiv %i %ci*; select -assert-any @xbar3; equiv_induct -undef @xbar3; select -set xbar4 w:beatsLeft_4 w:readys_mask_4 w:state_4_0 w:state_4_1 w:state_4_2 %x t:$equiv %i %ci*; select -assert-any @xbar4; equiv_induct -undef @xbar4; select -clear; equiv_induct -undef; equiv_status -assert"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": 586,
+          "equiv_summary_full": [
+            586,
+            0
+          ],
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "y unproven $equiv cells.\n\n12. Executing EQUIV_INDUCT pass.\nFound 9 unproven $equiv cells in module TLXbar_8_EQUIV:\n  Undef modelling: force def on 14 initial reg values and 93 inputs.\n  Proving existence of base case for step 1. (9333 clauses over 3419 variables)\n  Proving induction step 1. (19521 clauses over 7127 variables)\n  Proof for induction step holds. Entire workset of 9 cells proven!\nProved 9 previously unproven $equiv cells.\n\n13. Executing EQUIV_INDUCT pass.\nFound 9 unproven $equiv cells in module TLXbar_8_EQUIV:\n  Undef modelling: force def on 14 initial reg values and 93 inputs.\n  Proving existence of base case for step 1. (46229 clauses over 13403 variables)\n  Proving induction step 1. (93313 clauses over 27095 variables)\n  Proof for induction step holds. Entire workset of 9 cells proven!\nProved 9 previously unproven $equiv cells.\n\n14. Executing EQUIV_INDUCT pass.\nFound 9 unproven $equiv cells in module TLXbar_8_EQUIV:\n  Undef modelling: force def on 18 initial reg values and 31 inputs.\n  Proving existence of base case for step 1. (9148 clauses over 3469 variables)\n  Proving induction step 1. (19393 clauses over 7309 variables)\n  Proof for induction step holds. Entire workset of 9 cells proven!\nProved 9 previously unproven $equiv cells.\n\n15. Executing EQUIV_INDUCT pass.\nFound 9 unproven $equiv cells in module TLXbar_8_EQUIV:\n  Undef modelling: force def on 18 initial reg values and 19 inputs.\n  Proving existence of base case for step 1. (8794 clauses over 3340 variables)\n  Proving induction step 1. (18685 clauses over 7051 variables)\n  Proof for induction step holds. Entire workset of 9 cells proven!\nProved 9 previously unproven $equiv cells.\n\n16. Executing EQUIV_INDUCT pass.\nFound 531 unproven $equiv cells in module TLXbar_8_EQUIV:\n  Undef modelling: force def on 78 initial reg values and 520 inputs.\n  Proving existence of base case for step 1. (306200 clauses over 110329 variables)\n  Proving induction step 1. (617145 clauses over 222265 variables)\n  Proof for induction step holds. Entire workset of 531 cells proven!\nProved 531 previously unproven $equiv cells.\n\n17. Executing EQUIV_STATUS pass.\nFound 586 $equiv cells in TLXbar_8_EQUIV:\n  Of those cells 586 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: 1ed940a40a, CPU: user 2.26s system 0.09s, MEM: 174.77 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 72% 6x equiv_induct (1 sec), 6% 9x opt_clean (0 sec), ...\n",
+          "output_sha256": "6d2c2644d0174d7893c86d939e2151ec9bbeb447c416279bce8005678e47fec5",
+          "markers_present": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "formal_success_marker": true,
+          "equiv_cells": 586,
+          "proven_cells": 586,
+          "unproven_cells": 0
+        }
+      }
+    }
+  ],
+  "negative_control": {
+    "status": "PASS",
+    "cases": {
+      "sat": {
+        "status": "PASS",
+        "note": "no representative with outputs"
+      },
+      "sequential.target": {
+        "status": "PASS",
+        "control_entry": "TLXbar_8",
+        "control_port": "auto_in_0_a_ready",
+        "mutation_applied": true,
+        "explicit_failure_marker": true,
+        "success_marker_still_present": false,
+        "returncode": 1
+      },
+      "sequential.reference": {
+        "status": "PASS",
+        "control_entry": "TLXbar_8",
+        "control_port": "auto_in_0_a_ready",
+        "mutation_applied": true,
+        "explicit_failure_marker": true,
+        "success_marker_still_present": false,
+        "returncode": 1
+      }
+    },
+    "note": "a reference-side mutation that still proves means the reference never reaches the comparison"
+  },
+  "elapsed_seconds": 20.096,
+  "unclosed": [
+    "Full Build catalog, parent closure, license and acceptance remain pending."
+  ]
+}

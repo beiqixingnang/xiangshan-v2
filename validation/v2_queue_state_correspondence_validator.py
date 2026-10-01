@@ -20,6 +20,46 @@ from v2_catalog_family_strict_validator import (
 )
 
 
+class QueueStateRail(rail.FamilyRail):
+    """Prove independent Queue2 islands without constructing one huge SAT set."""
+
+    def inductive_steps(self, name: str) -> str:
+        if name == "TLXbar_8":
+            commands: list[str] = []
+            groups = [
+                ["beatsLeft", "readys_mask", "state_0", "state_1"],
+                ["beatsLeft_1", "readys_mask_1", "state_1_0", "state_1_1"],
+                ["beatsLeft_2", "readys_mask_2", "state_2_0", "state_2_1"],
+                ["beatsLeft_3", "readys_mask_3", "state_3_0", "state_3_1", "state_3_2"],
+                ["beatsLeft_4", "readys_mask_4", "state_4_0", "state_4_1", "state_4_2"],
+            ]
+            for index, wires in enumerate(groups):
+                selector = " ".join(f"w:{wire}" for wire in wires)
+                commands += [f"select -set xbar{index} {selector} %x t:$equiv %i %ci*",
+                             f"select -assert-any @xbar{index}",
+                             f"equiv_induct -undef @xbar{index}"]
+            commands += ["select -clear", "equiv_induct -undef"]
+            return "; ".join(commands)
+        if name != "TLBuffer_27":
+            return super().inductive_steps(name)
+        commands: list[str] = []
+        for bank in range(4):
+            for channel in "abcde":
+                direction = "In" if channel in "bd" else "Out"
+                island = f"node{direction}_{channel}_q" + (f"_{bank}" if bank else "")
+                group = f"queue{bank}{channel}"
+                # Expand the full driver cone, including sequential logic.
+                # Selecting just the equiv cells would discard their drivers.
+                commands += [f"select -set {group} w:{island}.* %x t:$equiv %i %ci*",
+                             f"select -assert-any @{group}",
+                             f"equiv_induct -undef @{group}"]
+        # Any cell not reached by the partition selectors must still prove.
+        # The caller always finishes with equiv_status -assert for the whole
+        # design; no cutpoint is assumed, removed, or omitted from coverage.
+        commands += ["select -clear", "equiv_induct -undef"]
+        return "; ".join(commands)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--build", required=True)
@@ -36,7 +76,7 @@ def main() -> int:
     members = list(dict.fromkeys(args.member))
     if set(members) - set(catalog):
         raise ValueError("selected members must belong to the Build catalog")
-    runner = rail.FamilyRail(build, build_id_for(build), evidence)
+    runner = QueueStateRail(build, build_id_for(build), evidence)
     runner.work.mkdir(parents=True, exist_ok=True)
     started = time.monotonic()
     direct_command = [sys.executable, "-B", str(direct_path)]

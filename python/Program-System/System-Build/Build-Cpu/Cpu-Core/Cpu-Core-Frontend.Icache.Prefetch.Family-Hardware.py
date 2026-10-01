@@ -3,9 +3,10 @@
 The seven modules share one exact, self-contained ANSI surface and remain
 selectable through ``build_verilog``.
 
-WayLookup and L2TlbPrefetch retain a bounded one-transaction envelope;
-L2TlbMissQueue implements a depth-40 packed FIFO with pointer wrap and flush.
-InstrMMIOEntry retains the four-state request/grant handshake.  The larger
+WayLookup retains a bounded one-transaction envelope. L2TlbPrefetch implements
+next-line generation and four recent request records; L2TlbMissQueue implements
+a depth-40 packed FIFO. InstrMMIOEntry implements its four-state handshake and
+PrefetcherMonitor implements quality windows and timed recovery. The larger
 pipeline leaves expose deterministic ready/valid and address propagation,
 which is sufficient for bounded direct/tool validation.  Full parent closure
 and cycle-equivalence remain explicit follow-up obligations.
@@ -514,14 +515,14 @@ class IcachePrefetchFamily(Elaboratable):
                 expressions[name] = Const(0, len(self.ports[name]))
 
     def _instr_mmio(self, module: Module, expressions: dict[str, Any]) -> None:
-        """Four-state MMIO request/grant/response envelope."""
+        """Four-state MMIO request/grant/response with latched flush."""
 
         p = self.ports
-        state = Signal(2, reset=0, name="mmio_state")
-        addr = Signal(48, reset=0, name="mmio_addr")
-        data = Signal(64, reset=0, name="mmio_data")
-        corrupt = Signal(reset=0, name="mmio_corrupt")
-        flush_pending = Signal(reset=0, name="mmio_flush_pending")
+        state = Signal(2, init=0, name="state")
+        addr = Signal(48, reset_less=True, name="req_addr")
+        data = Signal(64, init=0, name="respDataReg")
+        corrupt = Signal(init=0, name="respCorruptReg")
+        flush_pending = Signal(init=0, name="needFlush")
         idle, acquire, grant, response = (0, 1, 2, 3)
         req_fire = p["io_req_valid"] & (state == idle)
         acquire_valid = (state == acquire) & ~p["io_wfi_wfiReq"]
@@ -529,7 +530,7 @@ class IcachePrefetchFamily(Elaboratable):
         module.d.comb += [
             p["io_req_ready"].eq(state == idle),
             p["io_mmio_acquire_valid"].eq(acquire_valid),
-            p["io_mmio_acquire_bits_address"].eq(addr),
+            p["io_mmio_acquire_bits_address"].eq(Cat(Const(0, 3), addr[3:])),
             p["io_resp_valid"].eq((state == response) & ~flush_pending),
             p["io_resp_bits_corrupt"].eq(corrupt),
             p["io_resp_bits_data"].eq(
@@ -539,10 +540,9 @@ class IcachePrefetchFamily(Elaboratable):
             ),
             p["io_wfi_wfiSafe"].eq(state != grant),
         ]
-        with cast(Any, module).If(p["io_req_bits_flush"] & (state != idle)):
-            module.d.sync += flush_pending.eq(1)
-        with cast(Any, module).Elif(state == response):
-            module.d.sync += flush_pending.eq(0)
+        module.d.sync += flush_pending.eq(
+            (p["io_req_bits_flush"] & (state != idle) & (state != response))
+            | (flush_pending & (state != response)))
         with cast(Any, module).If(state == response):
             module.d.sync += state.eq(idle)
         with cast(Any, module).Elif(grant_fire):
@@ -587,55 +587,43 @@ class IcachePrefetchFamily(Elaboratable):
             if out_name in p:
                 expressions[out_name] = p[out_name]
 
-    def _single_queue(self, module: Module, expressions: dict[str, Any], prefix: str) -> None:
-        """One-entry queue helper for L2 TLB prefetch/miss requests."""
+    def _tlb_prefetch(self, module: Module, expressions: dict[str, Any]) -> None:
+        """Prefetch the next VPN line and suppress four recent sent requests."""
 
         p = self.ports
-        if prefix == "prefetch":
-            in_valid, in_ready, out_valid, out_ready = "io_in_valid", None, "io_out_valid", "io_out_ready"
-            payload_names = ("vpn", "s2xlate")
-            out_names = ("io_out_bits_req_info_vpn", "io_out_bits_req_info_s2xlate")
-            in_names = ("io_in_bits_vpn", None)
-            flushes = ("io_sfence_valid", "io_csr_satp_changed", "io_csr_vsatp_changed", "io_csr_hgatp_changed", "io_csr_priv_virt_changed")
-        else:
-            in_valid, in_ready, out_valid, out_ready = "io_in_valid", "io_in_ready", "io_out_valid", "io_out_ready"
-            payload_names = ("vpn", "s2xlate", "source", "isLLptw")
-            in_names = ("io_in_bits_req_info_vpn", "io_in_bits_req_info_s2xlate", "io_in_bits_req_info_source", "io_in_bits_isLLptw")
-            out_names = ("io_out_bits_req_info_vpn", "io_out_bits_req_info_s2xlate", "io_out_bits_req_info_source", "io_out_bits_isLLptw")
-            flushes = ("io_sfence_valid", "io_csr_satp_changed", "io_csr_vsatp_changed", "io_csr_hgatp_changed", "io_csr_priv_virt_changed")
-        full = Signal(reset=0, name=prefix + "_full")
-        regs = [Signal(len(p[out]), reset=0, name=prefix + "_" + out) for out in out_names]
-        pop = p[out_ready] & full
-        if in_ready is not None:
-            module.d.comb += p[in_ready].eq(~full | pop)
-            push = p[in_valid] & p[in_ready]
-            expressions[in_ready] = p[in_ready]
-        else:
-            push = p[in_valid] & ~full
-        module.d.comb += p[out_valid].eq(full)
-        expressions[out_valid] = p[out_valid]
-        for out, reg in zip(out_names, regs):
-            module.d.comb += p[out].eq(reg)
-            expressions[out] = p[out]
-        clear = Const(0)
-        for name in flushes:
-            if name in p:
-                clear = clear | p[name]
-        with cast(Any, module).If(clear):
-            module.d.sync += full.eq(0)
-        with cast(Any, module).Elif(pop):
-            module.d.sync += full.eq(0)
-        with cast(Any, module).Elif(push):
-            module.d.sync += full.eq(1)
-            if prefix == "prefetch":
-                module.d.sync += [regs[0].eq(p["io_in_bits_vpn"]), regs[1].eq(p["io_csr_vsatp_mode"][:2])]
-            else:
-                for reg, name in zip(regs, in_names):
-                    if name is not None:
-                        module.d.sync += reg.eq(p[name])
-        if prefix == "miss":
-            expressions["io_out_bits_isHptwReq"] = p["io_out_bits_isHptwReq"]
-            expressions["io_out_bits_hptwId"] = p["io_out_bits_hptwId"]
+        valid = Signal(name="v")
+        next_req = Signal(38, reset_less=True, name="next_req")
+        old_index = Signal(2, name="old_index")
+        old_reqs = [Signal(38, reset_less=True, name=f"old_reqs_{i}") for i in range(4)]
+        old_valid = [Signal(name=f"old_v_{i}") for i in range(4)]
+        next_line = (cast(Any, p["io_in_bits_vpn"][3:38]) + 1)[:35]
+        flush = (p["io_sfence_valid"] | p["io_csr_satp_changed"]
+                 | p["io_csr_vsatp_changed"] | p["io_csr_hgatp_changed"]
+                 | p["io_csr_priv_virt_changed"])
+        duplicate: Any = Const(0)
+        for record, record_valid in zip(old_reqs, old_valid):
+            duplicate = duplicate | ((record[3:38] == next_line) & record_valid)
+        fire = p["io_out_ready"] & valid
+        module.d.comb += [
+            p["io_out_valid"].eq(valid),
+            p["io_out_bits_req_info_vpn"].eq(next_req),
+            p["io_out_bits_req_info_s2xlate"].eq(Cat(
+                p["io_csr_priv_virt"] & (p["io_csr_vsatp_mode"] != 0),
+                p["io_csr_priv_virt"] & (p["io_csr_hgatp_mode"] != 0))),
+        ]
+        module.d.sync += valid.eq(~flush & (
+            (p["io_in_valid"] & ~duplicate) | (~fire & valid)))
+        with cast(Any, module.If(p["io_in_valid"])):
+            module.d.sync += next_req.eq(Cat(Const(0, 3), next_line))
+        for i, (record, record_valid) in enumerate(zip(old_reqs, old_valid)):
+            selected = fire & (old_index == i)
+            with cast(Any, module.If(selected)):
+                module.d.sync += record.eq(next_req)
+            module.d.sync += record_valid.eq(~flush & (selected | record_valid))
+        with cast(Any, module.If(fire)):
+            module.d.sync += old_index.eq(old_index + 1)
+        for output in ("io_out_valid", "io_out_bits_req_info_vpn", "io_out_bits_req_info_s2xlate"):
+            expressions[output] = p[output]
 
     def _miss_queue(self, module: Module, expressions: dict[str, Any]) -> None:
         """Model the locked ``Queue(io.in, MissQueueSize)`` implementation.
@@ -687,16 +675,39 @@ class IcachePrefetchFamily(Elaboratable):
         })
 
     def _monitor(self, module: Module, expressions: dict[str, Any]) -> None:
+        """Track prefetch quality windows and independently timed recovery."""
+
         p = self.ports
-        total = Signal(16, reset=0, name="pf_total")
-        good = Signal(16, reset=0, name="pf_good")
-        with cast(Any, module).If(p["io_timely_total_prefetch"]):
-            module.d.sync += total.eq(total + 1)
-        with cast(Any, module).If(p["io_validity_good_prefetch"]):
-            module.d.sync += good.eq(good + 1)
-        with cast(Any, module).If(p["io_validity_bad_prefetch"] & (good != 0)):
-            module.d.sync += good.eq(good - 1)
-        module.d.comb += [p["io_pf_ctrl_enable"].eq(1), p["io_pf_ctrl_confidence"].eq(good >= total)]
+        enable = Signal(init=1, name="enable")
+        confidence = Signal(init=1, name="confidence")
+        total = Signal(11, name="total_prefetch_cnt")
+        late_hit = Signal(11, name="late_hit_prefetch_cnt")
+        late_miss = Signal(11, name="late_miss_prefetch_cnt")
+        good = Signal(11, name="good_prefetch_cnt")
+        bad = Signal(11, name="bad_prefetch_cnt")
+        back_off = Signal(18, name="back_off_cnt")
+        low_conf = Signal(19, name="low_conf_cnt")
+        timely_reset = (total == 1000) | (late_hit >= 1000)
+        validity_reset = (good + bad)[:11] == 1000
+        back_off_reset = back_off == 100000
+        conf_reset = low_conf == 200000
+        trigger_disable = validity_reset & (bad >= 900)
+        trigger_late_miss = timely_reset & (late_miss >= 200)
+        trigger_late_hit = timely_reset & (late_hit >= 900)
+        disable = trigger_disable | (~trigger_late_miss & trigger_late_hit)
+        module.d.comb += [p["io_pf_ctrl_enable"].eq(enable),
+                          p["io_pf_ctrl_confidence"].eq(confidence)]
+        module.d.sync += [
+            enable.eq((back_off_reset | enable) & ~disable),
+            confidence.eq((conf_reset | confidence) & ~disable),
+            total.eq(Mux(timely_reset, 0, total + p["io_timely_total_prefetch"])),
+            late_hit.eq(Mux(timely_reset, 0, late_hit + p["io_timely_late_hit_prefetch"])),
+            late_miss.eq(Mux(timely_reset, 0, late_miss + p["io_timely_late_miss_prefetch"])),
+            good.eq(Mux(validity_reset, 0, good + p["io_validity_good_prefetch"])),
+            bad.eq(Mux(validity_reset, 0, bad + p["io_validity_bad_prefetch"])),
+            back_off.eq(Mux(back_off_reset, 0, back_off + ~enable)),
+            low_conf.eq(Mux(conf_reset, 0, low_conf + ~confidence)),
+        ]
         expressions.update({"io_pf_ctrl_enable": p["io_pf_ctrl_enable"], "io_pf_ctrl_confidence": p["io_pf_ctrl_confidence"]})
 
     def _pipeline(self, module: Module, expressions: dict[str, Any]) -> None:
@@ -724,7 +735,7 @@ class IcachePrefetchFamily(Elaboratable):
         elif self.member == "WayLookup":
             self._way_lookup(module, expressions)
         elif self.member == "L2TlbPrefetch":
-            self._single_queue(module, expressions, "prefetch")
+            self._tlb_prefetch(module, expressions)
         elif self.member == "L2TlbMissQueue":
             self._miss_queue(module, expressions)
         elif self.member == "PrefetcherMonitor":

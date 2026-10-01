@@ -1,8 +1,9 @@
 """Source-backed Rocket TileLink child family for TOP-L2TOP-TL2TL-003.
 
-The selected TLXbar/TLBuffer, TLClientsMerger and BusErrorUnit children keep
-their exact frozen ANSI inventories. Behavior is bounded relay only; complete
-Diplomacy and the 441-port parent closure remain pending.
+The selected children keep their exact frozen interfaces. TLBuffers implement
+real FIFO channels; TLXbar_8 implements address/source routing and beat-locked
+arbitration; BusErrorUnit implements the MMIO and sticky error state. TLXbar_7
+and TLXbar_9 still require behavior repair. Complete parent closure is pending.
 """
 from __future__ import annotations
 import base64
@@ -10,8 +11,8 @@ import json
 import re
 import zlib
 from dataclasses import dataclass
-from typing import Any, Iterable, Mapping, NamedTuple, cast
-from amaranth import (Cat, ClockDomain, ClockSignal, Elaboratable, Memory, Module,
+from typing import Any, Iterable, Mapping, NamedTuple, Sequence, cast
+from amaranth import (Array, Cat, ClockDomain, ClockSignal, Const, Elaboratable, Memory, Module,
                       Mux,
                       ResetSignal, Signal)
 from amaranth.back import verilog
@@ -96,8 +97,296 @@ def family_spec(module: str) -> FamilySpec:
 def _tail(name: str) -> str:
     return re.sub(r"^auto_(?:in|out)(?:_[0-9]+)?_", "", name)
 
+
+def _tlxbar8_or(values: Sequence[Any]) -> Any:
+    """Reduce one non-empty sequence with the locked one-hot OR mux form."""
+
+    if not values:
+        raise ValueError("TLXbar_8 reductions must contain at least one value")
+    result = values[0]
+    for value in values[1:]:
+        result = result | value
+    return result
+
+
+TLXBAR8_MANAGER2_ADDRESS_MASKS = (
+    (0xffffe0000000, 0x000000000000),
+    (0xfffff0000000, 0x000020000000),
+    (0xffffff000000, 0x000030000000),
+    (0xfffffff00000, 0x000031000000),
+    (0xfffffffd8000, 0x000031100000),
+    (0xfffffffc0000, 0x000031140000),
+    (0xfffffff80000, 0x000031180000),
+    (0xffffffe00000, 0x000031200000),
+    (0xffffffc00000, 0x000031400000),
+    (0xffffff800000, 0x000031800000),
+    (0xfffff6000000, 0x000032000000),
+    (0xfffff4000000, 0x000034000000),
+    (0xffffffff0000, 0x000038000000),
+    (0xfffffffff000, 0x000038011000),
+    (0xffffffffe000, 0x000038012000),
+    (0xffffffffc000, 0x000038014000),
+    (0xffffffff8000, 0x000038018000),
+    (0xffffffffe000, 0x000038020000),
+    (0xffffffffff00, 0x000038022100),
+    (0xfffffffffe00, 0x000038022200),
+    (0xfffffffffc00, 0x000038022400),
+    (0xfffffffff800, 0x000038022800),
+    (0xfffffffff000, 0x000038023000),
+    (0xffffffffc000, 0x000038024000),
+    (0xffffffff8000, 0x000038028000),
+    (0xffffffff0000, 0x000038030000),
+    (0xfffffffc0000, 0x000038040000),
+    (0xfffffff80000, 0x000038080000),
+    (0xfffffff00000, 0x000038100000),
+    (0xffffffe00000, 0x000038200000),
+    (0xffffffc00000, 0x000038400000),
+    (0xffffff800000, 0x000038800000),
+    (0xffffff000000, 0x000039000000),)
+
+def _tlxbar8_route(address: Any) -> tuple[Any, Any, Any]:
+    """Decode the three locked TLXbar_8 manager address sets."""
+
+    # These are the exact address-set unions in requestAIO_0_0 / _0_1 of the
+    # locked module: [0x38010000, 0x38011000) and [0x38022000, 0x38022100).
+    route_0 = address[12:48] == 0x38010
+    route_1 = address[8:48] == 0x380220
+    route_2: Any = address[30:48] != 0
+    for mask, value in TLXBAR8_MANAGER2_ADDRESS_MASKS:
+        route_2 = route_2 | ((address & Const(mask, 48)) == Const(value, 48))
+    return route_0, route_1, route_2
+
+
+def _tlxbar8_round_robin_readys(valids: Sequence[Any], mask: Any) -> list[Any]:
+    """Match Rocket ``TLArbiter.roundRobin`` including idle ready behavior."""
+
+    count = len(valids)
+    # Rocket's ``Cat(valids.reverse)`` puts source 0 in the low bit; Amaranth
+    # Cat arguments are already ordered low-to-high for this vector.
+    valid_reversed = Cat(*valids)
+    filtered = valid_reversed & ~mask
+    policy_filter = Cat(valid_reversed, filtered)
+    suffix: list[Any] = [Const(0, 1) for _ in range(2 * count + 1)]
+    for index in reversed(range(2 * count)):
+        suffix[index] = suffix[index + 1] | policy_filter[index]
+    right_or = Cat(*suffix[:-1])
+    unready = cast(Any, cast(Any, right_or) >> 1) | cast(Any, Cat(Const(0, count), mask))
+    ready_reversed = ~(cast(Any, unready[count:]) & cast(Any, unready[:count]))
+    return [ready_reversed[index] for index in range(count)]
+
+
+def _tlxbar8_left_or(value: Any, width: int) -> list[Any]:
+    """Return Rocket util.leftOR(value): low bits propagate toward high bits."""
+
+    prefix: list[Any] = []
+    accumulated: Any = Const(0, 1)
+    for index in range(width):
+        accumulated = accumulated | value[index]
+        prefix.append(accumulated)
+    return prefix
+
+
+def _tlxbar8_beats_left(size: Any) -> Any:
+    """Match ``~((13'h3f << size)[5:3])`` from Rocket's numBeats1 path."""
+
+    shifted = Const(0x3F, 13) << size
+    return ~shifted[3:6]
+
+
+def _elaborate_tlxbar8(family: Any, module: Module) -> Module:
+    """Elaborate exact A/D routing and five Rocket arbiters into ``module``.
+
+    The caller invokes this from ``TLChildFamily.elaborate`` only for member
+    ``TLXbar_8``. The generated candidate has three two-input A arbiters and
+    two three-input D arbiters, with 22 state registers in the signal layout
+    above (39 state bits total).
+    """
+
+    ports = family.ports
+    domain = ClockDomain("sync", async_reset=True)
+    domain.clk = ports["clock"]
+    domain.rst = ports["reset"]
+    module.domains += domain
+
+    # Bind each generated Rocket arbiter directly into the parent module so
+    # the state identifiers remain beatsLeft[_N], readys_mask[_N], state_*.
+
+    def add_arbiter(
+        index: int,
+        valids: Sequence[Any],
+        sink_ready: Any,
+        sizes: Sequence[Any],
+        data_beats: Sequence[Any],
+    ) -> dict[str, Any]:
+        suffix = "" if index == 0 else f"_{index}"
+        beat_count = Signal(3, name=f"beatsLeft{suffix}")
+        mask = Signal(
+            len(valids),
+            init=(1 << len(valids)) - 1,
+            name=f"readys_mask{suffix}",
+        )
+        if index == 0:
+            state_names = ("state_0", "state_1")
+        else:
+            state_names = tuple(f"state_{index}_{slot}" for slot in range(len(valids)))
+        states = [Signal(name=name) for name in state_names]
+
+        idle = Signal(name=f"idle{suffix}")
+        readys = [Signal(name=f"arb{index}_ready_{slot}") for slot in range(len(valids))]
+        winners = [Signal(name=f"arb{index}_winner_{slot}") for slot in range(len(valids))]
+        mux_state = [Signal(name=f"arb{index}_mux_{slot}") for slot in range(len(valids))]
+        allowed = [Signal(name=f"arb{index}_allowed_{slot}") for slot in range(len(valids))]
+        module.d.comb += idle.eq(beat_count == 0)
+        ready_expressions = _tlxbar8_round_robin_readys(valids, mask)
+        for slot, (ready, winner, mux, permit) in enumerate(zip(readys, winners, mux_state, allowed)):
+            module.d.comb += [ready.eq(ready_expressions[slot]),
+                              winner.eq(ready & valids[slot]),
+                              mux.eq(Mux(idle, winner, states[slot])),
+                              permit.eq(Mux(idle, ready, states[slot]))]
+        any_valid = _tlxbar8_or(valids)
+        locked_valid = _tlxbar8_or(
+            [state & valid for state, valid in zip(states, valids)]
+        )
+        output_valid = Mux(idle, any_valid, locked_valid)
+        latch = idle & sink_ready
+        fire = sink_ready & output_valid
+
+        selected_bits = Cat(*(winner & valid for winner, valid in zip(readys, valids)))
+        prefix = _tlxbar8_left_or(selected_bits, len(valids))
+        next_mask = cast(Any, Cat(
+            *(prefix[bit - 1] if bit else Const(0, 1) for bit in range(len(valids)))
+        )) | cast(Any, Cat(*prefix))
+
+        init_beats = _tlxbar8_or(
+            [Mux(winner & has_data, _tlxbar8_beats_left(size), 0)
+             for winner, has_data, size in zip(winners, data_beats, sizes)]
+        )
+        with cast(Any, module.If(latch & any_valid)):
+            module.d.sync += mask.eq(next_mask)
+        module.d.sync += [
+            beat_count.eq(Mux(latch, init_beats, beat_count - fire)),
+            *(state.eq(selected) for state, selected in zip(states, mux_state)),
+        ]
+
+        result = {
+            "idle": idle,
+            "valids": tuple(valids),
+            "readys": tuple(readys),
+            "winners": tuple(winners),
+            "mux_state": tuple(mux_state),
+            "allowed": tuple(allowed),
+            "valid": output_valid,
+        }
+        return result
+
+    # A-channel fanout: each input source is decoded against the exact same
+    # three manager regions; each manager independently arbitrates two inputs.
+    input_routes = [[Signal(name=f"requestAIO_{client}_{manager}") for manager in range(3)]
+                    for client in range(2)]
+    for client in range(2):
+        expressions = _tlxbar8_route(ports[f"auto_in_{client}_a_bits_address"])
+        for route, expression in zip(input_routes[client], expressions):
+            module.d.comb += route.eq(expression)
+    a_arbiters: list[dict[str, Any]] = []
+    for manager in range(3):
+        valids = [Signal(name=f"arb{manager}_valid_{client}") for client in range(2)]
+        for client, valid in enumerate(valids):
+            module.d.comb += valid.eq(ports[f"auto_in_{client}_a_valid"]
+                                      & input_routes[client][manager])
+        arb = add_arbiter(
+            manager,
+            valids,
+            ports[f"auto_out_{manager}_a_ready"],
+            [ports[f"auto_in_{client}_a_bits_size"] for client in range(2)],
+            [~ports[f"auto_in_{client}_a_bits_opcode"][2] for client in range(2)],
+        )
+        a_arbiters.append(arb)
+        module.d.comb += ports[f"auto_out_{manager}_a_valid"].eq(arb["valid"])
+
+        for field in ("opcode", "param", "size", "source", "address", "mask", "data", "corrupt"):
+            output = ports[f"auto_out_{manager}_a_bits_{field}"]
+            selected: list[Any] = []
+            for client in range(2):
+                source = ports[f"auto_in_{client}_a_bits_{field}"]
+                if field == "source":
+                    source = Cat(
+                        ports[f"auto_in_{client}_a_bits_source"],
+                        Const(0x8 if client == 0 else 0, 4 if client == 0 else 1),
+                    )
+                elif field == "size" and manager < 2:
+                    source = source[:2]
+                elif field == "address" and manager < 2:
+                    source = source[:30]
+                selected.append(Mux(arb["mux_state"][client], source, 0))
+            module.d.comb += output.eq(_tlxbar8_or(selected))
+
+    for client in range(2):
+        input_ready_terms = [
+            input_routes[client][manager]
+            & ports[f"auto_out_{manager}_a_ready"]
+            & a_arbiters[manager]["allowed"][client]
+            for manager in range(3)
+        ]
+        module.d.comb += ports[f"auto_in_{client}_a_ready"].eq(
+            _tlxbar8_or(input_ready_terms)
+        )
+
+    # D-channel demultiplexing: source 0x10 belongs to client 0; source 0..15
+    # belongs to client 1. The source high bit rejects every other ID.
+    d_arbiters: list[dict[str, Any]] = []
+    for client in range(2):
+        request_valids = []
+        for manager in range(3):
+            source = ports[f"auto_out_{manager}_d_bits_source"]
+            source_matches = source == 0x10 if client == 0 else ~source[4]
+            routed = Signal(name=f"arb{3 + client}_valid_{manager}")
+            module.d.comb += routed.eq(ports[f"auto_out_{manager}_d_valid"] & source_matches)
+            request_valids.append(routed)
+        input_size: list[Any] = []
+        for manager in range(3):
+            size = ports[f"auto_out_{manager}_d_bits_size"]
+            input_size.append(Cat(size, Const(0, 1)) if manager < 2 else size)
+        arb = add_arbiter(
+            3 + client,
+            request_valids,
+            ports[f"auto_in_{client}_d_ready"],
+            input_size,
+            [ports[f"auto_out_{manager}_d_bits_opcode"][0] for manager in range(3)],
+        )
+        d_arbiters.append(arb)
+        module.d.comb += ports[f"auto_in_{client}_d_valid"].eq(arb["valid"])
+
+        for field in ("opcode", "param", "size", "source", "sink", "denied", "data", "corrupt"):
+            if f"auto_in_{client}_d_bits_{field}" not in ports:
+                continue
+            output = ports[f"auto_in_{client}_d_bits_{field}"]
+            selected = []
+            for manager in range(3):
+                source = ports[f"auto_out_{manager}_d_bits_{field}"]
+                if field == "size" and manager < 2:
+                    source = Cat(source, Const(0, 1))
+                elif field == "source":
+                    source = source[:1] if client == 0 else source[:4]
+                selected.append(Mux(arb["mux_state"][manager], source, 0))
+            module.d.comb += output.eq(_tlxbar8_or(selected))
+
+    for manager in range(3):
+        source = ports[f"auto_out_{manager}_d_bits_source"]
+        to_client_0 = source == 0x10
+        to_client_1 = ~source[4]
+        module.d.comb += ports[f"auto_out_{manager}_d_ready"].eq(
+            (to_client_0
+             & ports["auto_in_0_d_ready"]
+             & d_arbiters[0]["allowed"][manager])
+            | (to_client_1
+               & ports["auto_in_1_d_ready"]
+               & d_arbiters[1]["allowed"][manager])
+        )
+
+    return module
+
 class TLChildFamily(Elaboratable):
-    """Exact-port bounded child relay with deterministic inactive defaults."""
+    """Selected child behavior with an exact frozen interface."""
     # Allocate exact frozen signals / 分配精确冻结信号。
     def __init__(self, module: str = COVERED_MODULES[0]) -> None:
         self.spec, self.member = family_spec(module), module
@@ -129,8 +418,13 @@ class TLChildFamily(Elaboratable):
         fields = tuple((field.removeprefix("bits_"),
                         self.spec.width(f"{enqueue_prefix}_{field}"))
                        for field in enqueue_fields)
-        queue = Queue2Relay(fields)
-        queue_name = "nodeOut_a_q" if enqueue_prefix == "auto_in_a" else "nodeIn_d_q"
+        channel = enqueue_prefix.rsplit("_", 1)[1]
+        bank_match = re.fullmatch(r"auto_(?:in|out)_(\d+)_[abcde]", enqueue_prefix)
+        bank = int(bank_match.group(1)) if bank_match is not None else 0
+        suffix = f"_{bank}" if bank else ""
+        direction = "In" if channel in {"b", "d"} else "Out"
+        queue_name = f"node{direction}_{channel}_q{suffix}"
+        queue = Queue2Relay(fields, memory_name="ram_sink_ext" if channel == "e" else "ram_ext")
         module.submodules[queue_name] = queue
         module.d.comb += [
             queue.clock.eq(self.ports["clock"]),
@@ -149,7 +443,12 @@ class TLChildFamily(Elaboratable):
     def elaborate(self, platform: Any) -> Module:
         del platform
         module = Module()
-        if self.member in {"TLBuffer_20", "TLBuffer_29", "TLBuffer_22",
+        if self.member == "TLXbar_8":
+            return _elaborate_tlxbar8(self, module)
+        if self.member == "BusErrorUnit":
+            self._bus_error_unit(module)
+            return module
+        if self.member in {"TLBuffer_27", "TLBuffer_20", "TLBuffer_29", "TLBuffer_22",
                            "TLBuffer_16", "TLBuffer_2"}:
             # Locked Rocket queues use ``always @(posedge clock or posedge
             # reset)``.  Bind an asynchronous sync domain to the frozen ABI
@@ -159,8 +458,15 @@ class TLChildFamily(Elaboratable):
                 ClockSignal("sync").eq(self.ports["clock"]),
                 ResetSignal("sync").eq(self.ports["reset"]),
             ]
-            self._queue_channel(module, "auto_in_a", "auto_out_a")
-            self._queue_channel(module, "auto_out_d", "auto_in_d")
+            if self.member == "TLBuffer_27":
+                for bank in range(4):
+                    for channel in "abcde":
+                        source, sink = ("out", "in") if channel in "bd" else ("in", "out")
+                        self._queue_channel(module, f"auto_{source}_{bank}_{channel}",
+                                            f"auto_{sink}_{bank}_{channel}")
+            else:
+                self._queue_channel(module, "auto_in_a", "auto_out_a")
+                self._queue_channel(module, "auto_out_d", "auto_in_d")
             return module
         for output in (port for port in self.spec.ports if port.direction == "output"):
             signal, candidates = self.ports[output.name], self._candidates(output)
@@ -169,17 +475,6 @@ class TLChildFamily(Elaboratable):
                 expression = Mux(selector == 0, 0,
                                   Mux(selector == 1, 0x100,
                                       Mux(selector == 2, 0x200, 0x300)))
-            elif self.member == "BusErrorUnit" and output.name == "io_interrupt":
-                errors = [self.ports[port.name] for port in self.spec.ports
-                          if port.direction == "input" and port.name.startswith("io_errors_")
-                          and port.name.endswith("_valid") and port.width == 1]
-                expression: Any = errors[0] if errors else 0
-                for error in errors[1:]:
-                    expression = expression | error
-            elif self.member == "BusErrorUnit" and output.name == "auto_in_a_ready":
-                expression = 1
-            elif self.member == "BusErrorUnit" and output.name == "auto_in_d_valid":
-                expression = self.ports.get("auto_in_a_valid", 0)
             elif output.name.endswith("_ready"):
                 expression = candidates[0] if candidates else 1
             elif output.name.endswith("_valid") and candidates:
@@ -193,14 +488,83 @@ class TLChildFamily(Elaboratable):
             module.d.comb += signal.eq(expression)
         return module
 
+    def _bus_error_unit(self, module: Module) -> None:
+        """Expose the six error registers and sticky interrupt state."""
+
+        p = self.ports
+        domain = ClockDomain("sync", async_reset=True)
+        domain.clk = p["clock"]
+        domain.rst = p["reset"]
+        module.domains += domain
+        cause = Signal(2, name="cause_reg")
+        value = Signal(48, reset_less=True, name="pad_1")
+        enable = [Signal(init=1, name=f"enable_{i}") for i in range(4)]
+        global_irq = [Signal(name=f"global_interrupt_{i}") for i in range(4)]
+        accrued = [Signal(name=f"accrued_{i}") for i in range(4)]
+        local_irq = [Signal(name=f"local_interrupt_{i}") for i in range(4)]
+        errors = [p[f"io_errors_{name}_ecc_error_valid"]
+                  for name in ("icache", "dcache", "uncache", "l2")]
+        error_values = [p[f"io_errors_{name}_ecc_error_bits"]
+                        for name in ("icache", "dcache", "uncache", "l2")]
+        eligible = [error & enabled for error, enabled in zip(errors, enable)]
+        capture = (cause == 0) & (eligible[0] | eligible[1] | eligible[2] | eligible[3])
+        selected_cause = Mux(eligible[3], 3, Mux(eligible[2], 2,
+                                             Mux(eligible[1], 1, 0)))
+        selected_value = Mux(eligible[3], error_values[3],
+                             Mux(eligible[2], error_values[2],
+                                 Mux(eligible[1], error_values[1], error_values[0])))
+        index = p["auto_in_a_bits_address"][3:6]
+        decoded = p["auto_in_a_bits_address"][6:12] == 0
+        read = p["auto_in_a_bits_opcode"] == 4
+        write = p["auto_in_a_valid"] & p["auto_in_d_ready"] & ~read & decoded
+        data = p["auto_in_a_bits_data"]
+        mask = p["auto_in_a_bits_mask"]
+        registers = Array([Cat(cause, Const(0, 46)), value,
+                           Cat(*enable, Const(0, 44)), Cat(*global_irq, Const(0, 44)),
+                           Cat(*accrued, Const(0, 44)), Cat(*local_irq, Const(0, 44)),
+                           Const(0, 48), Const(0, 48)])
+        module.d.comb += [
+            p["auto_in_a_ready"].eq(p["auto_in_d_ready"]),
+            p["auto_in_d_valid"].eq(p["auto_in_a_valid"]),
+            p["auto_in_d_bits_opcode"].eq(read),
+            p["auto_in_d_bits_size"].eq(p["auto_in_a_bits_size"]),
+            p["auto_in_d_bits_source"].eq(p["auto_in_a_bits_source"]),
+            p["auto_in_d_bits_data"].eq(Mux(decoded, registers[index], 0)),
+            p["auto_int_out_0"].eq((accrued[0] & global_irq[0]) | (accrued[1] & global_irq[1])
+                                    | (accrued[2] & global_irq[2]) | (accrued[3] & global_irq[3])),
+            p["io_interrupt"].eq((accrued[0] & local_irq[0]) | (accrued[1] & local_irq[1])
+                                  | (accrued[2] & local_irq[2]) | (accrued[3] & local_irq[3])),
+        ]
+        with cast(Any, module.If(write & (index == 0) & mask[0])):
+            module.d.sync += cause.eq(data[:2])
+        with cast(Any, module.Elif(capture)):
+            module.d.sync += cause.eq(selected_cause)
+        # The value register has no reset.  A partial software write has
+        # priority over error capture, including when reset is asserted.
+        with cast(Any, module.If(write & (index == 1) & (mask[:6] != 0))):
+            for lane in range(6):
+                with cast(Any, module.If(mask[lane])):
+                    module.d.sync += cast(Any, value[lane * 8:(lane + 1) * 8]).eq(
+                        data[lane * 8:(lane + 1) * 8])
+        with cast(Any, module.Elif(capture)):
+            module.d.sync += value.eq(selected_value)
+        for group, address in ((enable, 2), (global_irq, 3), (local_irq, 5)):
+            with cast(Any, module.If(write & (index == address) & mask[0])):
+                for i, bit in enumerate(group):
+                    module.d.sync += bit.eq(data[i])
+        for i, bit in enumerate(accrued):
+            module.d.sync += bit.eq(Mux(write & (index == 4) & mask[0],
+                                       data[i], bit | errors[i]))
+
 RocketTLChildrenFamily = TLChildFamily
 
 
 class Queue2Relay(Elaboratable):
     """A named Queue2 state island matching the locked Rocket hierarchy."""
 
-    def __init__(self, fields: tuple[tuple[str, int], ...]) -> None:
+    def __init__(self, fields: tuple[tuple[str, int], ...], *, memory_name: str = "ram_ext") -> None:
         self.fields = fields
+        self.memory_name = memory_name
         self.clock = Signal(name="clock")
         self.reset = Signal(name="reset")
         self.enq_valid = Signal(name="io_enq_valid")
@@ -230,7 +594,7 @@ class Queue2Relay(Elaboratable):
         module.domains += domain
         # Keep the packed RAM width explicit and stable for each Queue2 bundle.
         width = sum(width for _, width in self.fields)
-        memory = Memory(width=width, depth=2, name="ram_ext")
+        memory = Memory(width=width, depth=2, name=self.memory_name)
         read_port = memory.read_port(domain="comb")
         write_port = memory.write_port(domain="sync")
         # Keep the read-data cutpoint named like Chisel's generated Queue RAM.
@@ -238,7 +602,7 @@ class Queue2Relay(Elaboratable):
                                attrs={"keep": "true"})
         # Preserve the RAM state path after Yosys memory mapping.  This name
         # provides a proof correspondence; it does not change any equation.
-        module.submodules["ram_ext.Memory"] = memory
+        module.submodules[f"{self.memory_name}.Memory"] = memory
         wrap = Signal(name="wrap")
         wrap_1 = Signal(name="wrap_1")
         maybe_full = Signal(name="maybe_full")

@@ -83,3 +83,18 @@ instances; both DUT and reference mutations must fail the proof. Queue RAM
 words preserve their `ram_ext.Memory` identity through memory mapping so
 induction can establish state correspondence without assumptions or payload
 masking. These proofs do not replace reset-entry or parent/system acceptance.
+
+Large independent queue banks use complete driver-cone partitions before the
+final unrestricted induction and whole-design `equiv_status -assert`. The
+TLBuffer_27 proof now covers all 17,188 cells; the original single workset hit
+the 900-second timeout, while the partitioned Yosys proof took about 34 seconds
+and 332 MB. Both mutant sides use the same proof script. A missing partition
+or any remaining unproven cell blocks success.
+
+The current member receipts cover 9/11 Rocket children and 4/7 Icache Prefetch
+members, with a zero Build-count delta. TLXbar_8 preserves the full finite
+manager address mask union, including the 0x31110000 hole found by SAT;
+random route samples could not justify replacing that union with a complement.
+See validation/v2-rocket-nine-members-focused-results.json and
+validation/v2-icache-four-members-focused-results.json for current source hashes,
+commands, lint, complete cell counts and two-sided controls.
