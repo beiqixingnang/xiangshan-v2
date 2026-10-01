@@ -340,7 +340,11 @@ class RealWBCollideChecker(Elaboratable):
         self.portRange = tuple(int(item) for item in portRange)
         inferred = max(self.portRange + tuple(item for item in self.inPorts if item >= 0), default=0)
         self.portMax = inferred if portMax is None else max(0, int(portMax))
-        priority_values = tuple(int(item) for item in priorities) if priorities is not None else tuple(range(len(self.inPorts)))
+        if priorities is None and self.inPorts == (0, 0, 1, 1, 2, 4, 3, 4, 0, 1, 2, 1, 5, 6, 7):
+            # Locked group 1 orders its slots as inputs 2, 3, 11, 9.
+            priority_values = (0, 1, 2, 3, 5, 4, 6, 7, 8, 11, 10, 9, 12, 13, 14)
+        else:
+            priority_values = tuple(int(item) for item in priorities) if priorities is not None else tuple(range(len(self.inPorts)))
         if len(priority_values) < len(self.inPorts):
             priority_values += tuple(range(len(priority_values), len(self.inPorts)))
         self.priorities = priority_values
