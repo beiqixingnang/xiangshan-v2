@@ -10,7 +10,7 @@
     "skidBufferConnect"
   ],
   "direct_test_status": "PASS",
-  "direct_test_output": "----------------------------------------------------------------------\nRan 8 tests in 7.519s\n\nOK\n",
+  "direct_test_output": "----------------------------------------------------------------------\nRan 8 tests in 7.589s\n\nOK\n",
   "formal_equivalent_members": [
     "CSA_Nto2With3to2MainPipeline",
     "skidBufferConnect"
@@ -33,22 +33,22 @@
       "formal_success_marker": true,
       "equiv_cells": 214,
       "unproven_cells": 0,
-      "diagnostic_tail": "   $mux                          843\n     $not                            1\n     $or                            38\n     $scopeinfo                     22\n     $xor                         1738\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module CSA_Nto2With3to2MainPipeline_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 213 unproven $equiv cells in module CSA_Nto2With3to2MainPipeline_EQUIV:\n  Undef modelling: force def on 852 initial reg values and 2891 inputs.\n  Proving existence of base case for step 1. (817681 clauses over 312517 variables)\n  Proving induction step 1. (1695820 clauses over 645471 variables)\n  Proof for induction step holds. Entire workset of 213 cells proven!\nProved 213 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 214 $equiv cells in CSA_Nto2With3to2MainPipeline_EQUIV:\n  Of those cells 214 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: 39e78c66ce, CPU: user 4.35s system 0.26s, MEM: 453.04 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 62% 1x equiv_induct (2 sec), 14% 9x opt_clean (0 sec), ...\n"
+      "diagnostic_tail": "   $mux                          843\n     $not                            1\n     $or                            38\n     $scopeinfo                     22\n     $xor                         1738\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module CSA_Nto2With3to2MainPipeline_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 213 unproven $equiv cells in module CSA_Nto2With3to2MainPipeline_EQUIV:\n  Undef modelling: force def on 852 initial reg values and 2891 inputs.\n  Proving existence of base case for step 1. (817681 clauses over 312517 variables)\n  Proving induction step 1. (1695820 clauses over 645471 variables)\n  Proof for induction step holds. Entire workset of 213 cells proven!\nProved 213 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 214 $equiv cells in CSA_Nto2With3to2MainPipeline_EQUIV:\n  Of those cells 214 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: 39e78c66ce, CPU: user 4.38s system 0.27s, MEM: 453.35 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 61% 1x equiv_induct (2 sec), 14% 9x opt_clean (0 sec), ...\n"
     },
     {
       "member": "ClockGate",
-      "abi_exact": false,
+      "abi_exact": true,
       "deterministic_export": true,
       "reference_view_trusted": true,
-      "target_verilator": "FAIL",
+      "target_verilator": "PASS",
       "reference_verilator": "PASS",
       "formal_method": "sat_miter",
       "formal_status": "PENDING",
-      "formal_tool_status": "NOT_RUN",
-      "formal_success_marker": null,
+      "formal_tool_status": "FAIL",
+      "formal_success_marker": false,
       "equiv_cells": null,
       "unproven_cells": null,
-      "diagnostic_tail": ""
+      "diagnostic_tail": "es>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ClockGate_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\ClockGate_MITER..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\ClockGate_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\ClockGate_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\ClockGate_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module ClockGate_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\nERROR: Failed to import cell $flatten\\reference_i.$auto$proc_dlatch.cc:432:proc_dlatch$23 (type $dlatch) to SAT database.\n"
     },
     {
       "member": "JtagTapController",
@@ -78,7 +78,7 @@
       "formal_success_marker": true,
       "equiv_cells": 584,
       "unproven_cells": 0,
-      "diagnostic_tail": " $dffe                          72\n     $equiv                        584\n     $mux                           76\n     $not                            6\n     $or                             3\n     $sdff                           2\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module skidBufferConnect_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 583 unproven $equiv cells in module skidBufferConnect_EQUIV:\n  Undef modelling: force def on 1153 initial reg values and 575 inputs.\n  Proving existence of base case for step 1. (115704 clauses over 44780 variables)\n  Proving induction step 1. (309322 clauses over 115915 variables)\n  Proof for induction step holds. Entire workset of 583 cells proven!\nProved 583 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 584 $equiv cells in skidBufferConnect_EQUIV:\n  Of those cells 584 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: ccf1088aa9, CPU: user 1.20s system 0.03s, MEM: 92.37 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 88% 1x equiv_induct (1 sec), 3% 9x opt_clean (0 sec), ...\n"
+      "diagnostic_tail": " $dffe                          72\n     $equiv                        584\n     $mux                           76\n     $not                            6\n     $or                             3\n     $sdff                           2\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module skidBufferConnect_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 583 unproven $equiv cells in module skidBufferConnect_EQUIV:\n  Undef modelling: force def on 1153 initial reg values and 575 inputs.\n  Proving existence of base case for step 1. (115704 clauses over 44780 variables)\n  Proving induction step 1. (309322 clauses over 115915 variables)\n  Proof for induction step holds. Entire workset of 583 cells proven!\nProved 583 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 584 $equiv cells in skidBufferConnect_EQUIV:\n  Of those cells 584 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: ccf1088aa9, CPU: user 1.19s system 0.05s, MEM: 92.66 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 88% 1x equiv_induct (1 sec), 3% 9x opt_clean (0 sec), ...\n"
     }
   ],
   "strict_equivalence_count_delta": 0,
