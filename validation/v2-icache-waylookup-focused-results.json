@@ -1,0 +1,505 @@
+{
+  "schema_version": 1,
+  "kind": "V2_QUEUE_STATE_FOCUSED_DIAGNOSTIC",
+  "build_id": "Build-Cpu.Frontend.Icache.Prefetch.Family",
+  "status": "PASS_MEMBER_PROOFS_NON_COUNTING",
+  "strict_complete_eligible": false,
+  "strict_complete_count_delta": 0,
+  "acceptance_eligible": false,
+  "members": [
+    "WayLookup"
+  ],
+  "family_members": [
+    "ICacheMainPipe",
+    "IPrefetchPipe",
+    "InstrMMIOEntry",
+    "L2TlbMissQueue",
+    "L2TlbPrefetch",
+    "PrefetcherMonitor",
+    "WayLookup"
+  ],
+  "full_family_covered": false,
+  "sources": {
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Frontend.Icache.Prefetch.Family-Hardware.py",
+      "sha256": "5a399703bd2b2f347d170613c46476070492a4cef8b82e106cd6b579ea090542",
+      "bytes": 44789
+    },
+    "validator": {
+      "path": "validation/v2_queue_state_correspondence_validator.py",
+      "sha256": "62b0d04b729d7edeebd72214093d54e448d4aa2048c87337517cabadef6ee4d3",
+      "bytes": 7725
+    },
+    "rail": {
+      "path": "validation/v2_strict_family_rail.py",
+      "sha256": "446151abc1261a79dffa4707130786a5673a4069f3a1c98086e2b0cd97aeef15",
+      "bytes": 72724
+    },
+    "direct_test": {
+      "path": "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Frontend.Icache.Prefetch.Family-Hardware.py",
+      "sha256": "7f3cf7ca8ab87d4868fb9b3d428a6a20c60936faf5091999efe2e9e822542b85",
+      "bytes": 19888
+    }
+  },
+  "checks": {
+    "direct": {
+      "command": [
+        "C:\\Program Files\\Python313\\python.exe",
+        "-B",
+        "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu-Frontend.Icache.Prefetch.Family-Hardware.py"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "output_tail": "C:\\Users\\lishuo\\AppData\\Roaming\\Python\\Python313\\site-packages\\amaranth\\hdl\\_ast.py:1973: DeprecationWarning: `reset=` is deprecated, use `init=` instead\n  signal = super().__call__(shape, **kwargs, src_loc_at=src_loc_at + 1)\nD:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Build\\Build-Cpu\\Cpu-Core\\Cpu-Core-Frontend.Icache.Prefetch.Family-Hardware.py:451: DeprecationWarning: `amaranth.hdl.Memory` is deprecated, use `amaranth.lib.memory.Memory` instead\n  ram_ext = Memory(width=47, depth=depth, name=\"ram_ext\")\n.D:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Build\\Build-Cpu\\Cpu-Core\\Cpu-Core-Frontend.Icache.Prefetch.Family-Hardware.py:451: DeprecationWarning: `amaranth.hdl.Memory` is deprecated, use `amaranth.lib.memory.Memory` instead\n  ram_ext = Memory(width=47, depth=depth, name=\"ram_ext\")\nC:\\Users\\lishuo\\AppData\\Roaming\\Python\\Python313\\site-packages\\amaranth\\sim\\core.py:257: DeprecationWarning: Generator-based processes are deprecated per RFC 36. Use async processes instead.\n  warnings.warn(\nD:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu-Frontend.Icache.Prefetch.Family-Hardware.py:47: DeprecationWarning: The `Settle` command is deprecated per RFC 27. Use `add_testbench` to write testbenches; there, an equivalent of `yield Settle()` is performed automatically after each `ctx.set()`.\n  yield Settle()\nD:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu-Frontend.Icache.Prefetch.Family-Hardware.py:59: DeprecationWarning: The `Settle` command is deprecated per RFC 27. Use `add_testbench` to write testbenches; there, an equivalent of `yield Settle()` is performed automatically after each `ctx.set()`.\n  yield Settle()\nD:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu-Frontend.Icache.Prefetch.Family-Hardware.py:69: DeprecationWarning: The `Settle` command is deprecated per RFC 27. Use `add_testbench` to write testbenches; there, an equivalent of `yield Settle()` is performed automatically after each `ctx.set()`.\n  yield Settle()\n.....\n----------------------------------------------------------------------\nRan 6 tests in 5.404s\n\nOK\n"
+    },
+    "pyright": {
+      "command": [
+        "cmd.exe",
+        "/d",
+        "/c",
+        "pyright",
+        "--outputjson",
+        "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_xp13vthy\\Cpu-Core-Frontend.Icache.Prefetch.Family-Hardware.py"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "version": "1.1.411",
+      "error_count": 0,
+      "files_analyzed": 1,
+      "stderr_tail": ""
+    }
+  },
+  "results": [
+    {
+      "member": "WayLookup",
+      "status": "PASS",
+      "formal_cache_hit": false,
+      "static_failures": [],
+      "prepared": {
+        "name": "WayLookup",
+        "inputs": {
+          "clock": 1,
+          "reset": 1,
+          "io_flush": 1,
+          "io_read_ready": 1,
+          "io_write_valid": 1,
+          "io_write_bits_entry_vSetIdx_0": 8,
+          "io_write_bits_entry_vSetIdx_1": 8,
+          "io_write_bits_entry_waymask_0": 4,
+          "io_write_bits_entry_waymask_1": 4,
+          "io_write_bits_entry_ptag_0": 36,
+          "io_write_bits_entry_ptag_1": 36,
+          "io_write_bits_entry_itlb_exception_0": 2,
+          "io_write_bits_entry_itlb_exception_1": 2,
+          "io_write_bits_entry_itlb_pbmt_0": 2,
+          "io_write_bits_entry_itlb_pbmt_1": 2,
+          "io_write_bits_entry_meta_codes_0": 1,
+          "io_write_bits_entry_meta_codes_1": 1,
+          "io_write_bits_gpf_gpaddr": 56,
+          "io_write_bits_gpf_isForVSnonLeafPTE": 1,
+          "io_update_valid": 1,
+          "io_update_bits_blkPaddr": 42,
+          "io_update_bits_vSetIdx": 8,
+          "io_update_bits_waymask": 4,
+          "io_update_bits_corrupt": 1
+        },
+        "outputs": {
+          "io_read_valid": 1,
+          "io_read_bits_entry_vSetIdx_0": 8,
+          "io_read_bits_entry_vSetIdx_1": 8,
+          "io_read_bits_entry_waymask_0": 4,
+          "io_read_bits_entry_waymask_1": 4,
+          "io_read_bits_entry_ptag_0": 36,
+          "io_read_bits_entry_ptag_1": 36,
+          "io_read_bits_entry_itlb_exception_0": 2,
+          "io_read_bits_entry_itlb_exception_1": 2,
+          "io_read_bits_entry_itlb_pbmt_0": 2,
+          "io_read_bits_entry_itlb_pbmt_1": 2,
+          "io_read_bits_entry_meta_codes_0": 1,
+          "io_read_bits_entry_meta_codes_1": 1,
+          "io_read_bits_gpf_gpaddr": 56,
+          "io_read_bits_gpf_isForVSnonLeafPTE": 1,
+          "io_write_ready": 1
+        },
+        "children": [],
+        "sequential": true,
+        "abi_exact": true,
+        "deterministic": true,
+        "output_less": false,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "view_audits": [
+          {
+            "top": "WayLookup",
+            "renamed_top": true,
+            "regions_removed_lines": {
+              "`ifdef ENABLE_INITIAL_REG_": 808
+            },
+            "block_local_temporaries_hoisted": [
+              "_GEN_11",
+              "_writePtr_new_ptr_T_1",
+              "_GEN_12",
+              "_readPtr_new_ptr_T_1",
+              "vset_same",
+              "ptag_same",
+              "vset_same_1",
+              "ptag_same_1",
+              "vset_same_2",
+              "ptag_same_2",
+              "vset_same_3",
+              "ptag_same_3",
+              "vset_same_4",
+              "ptag_same_4",
+              "vset_same_5",
+              "ptag_same_5",
+              "vset_same_6",
+              "ptag_same_6",
+              "vset_same_7",
+              "ptag_same_7",
+              "vset_same_8",
+              "ptag_same_8",
+              "vset_same_9",
+              "ptag_same_9",
+              "vset_same_10",
+              "ptag_same_10",
+              "vset_same_11",
+              "ptag_same_11",
+              "vset_same_12",
+              "ptag_same_12",
+              "vset_same_13",
+              "ptag_same_13",
+              "vset_same_14",
+              "ptag_same_14",
+              "vset_same_15",
+              "ptag_same_15",
+              "vset_same_16",
+              "ptag_same_16",
+              "vset_same_17",
+              "ptag_same_17",
+              "vset_same_18",
+              "ptag_same_18",
+              "vset_same_19",
+              "ptag_same_19",
+              "vset_same_20",
+              "ptag_same_20",
+              "vset_same_21",
+              "ptag_same_21",
+              "vset_same_22",
+              "ptag_same_22",
+              "vset_same_23",
+              "ptag_same_23",
+              "vset_same_24",
+              "ptag_same_24",
+              "vset_same_25",
+              "ptag_same_25",
+              "vset_same_26",
+              "ptag_same_26",
+              "vset_same_27",
+              "ptag_same_27",
+              "vset_same_28",
+              "ptag_same_28",
+              "vset_same_29",
+              "ptag_same_29",
+              "vset_same_30",
+              "ptag_same_30",
+              "vset_same_31",
+              "ptag_same_31",
+              "vset_same_32",
+              "ptag_same_32",
+              "vset_same_33",
+              "ptag_same_33",
+              "vset_same_34",
+              "ptag_same_34",
+              "vset_same_35",
+              "ptag_same_35",
+              "vset_same_36",
+              "ptag_same_36",
+              "vset_same_37",
+              "ptag_same_37",
+              "vset_same_38",
+              "ptag_same_38",
+              "vset_same_39",
+              "ptag_same_39",
+              "vset_same_40",
+              "ptag_same_40",
+              "vset_same_41",
+              "ptag_same_41",
+              "vset_same_42",
+              "ptag_same_42",
+              "vset_same_43",
+              "ptag_same_43",
+              "vset_same_44",
+              "ptag_same_44",
+              "vset_same_45",
+              "ptag_same_45",
+              "vset_same_46",
+              "ptag_same_46",
+              "vset_same_47",
+              "ptag_same_47",
+              "vset_same_48",
+              "ptag_same_48",
+              "vset_same_49",
+              "ptag_same_49",
+              "vset_same_50",
+              "ptag_same_50",
+              "vset_same_51",
+              "ptag_same_51",
+              "vset_same_52",
+              "ptag_same_52",
+              "vset_same_53",
+              "ptag_same_53",
+              "vset_same_54",
+              "ptag_same_54",
+              "vset_same_55",
+              "ptag_same_55",
+              "vset_same_56",
+              "ptag_same_56",
+              "vset_same_57",
+              "ptag_same_57",
+              "vset_same_58",
+              "ptag_same_58",
+              "vset_same_59",
+              "ptag_same_59",
+              "vset_same_60",
+              "ptag_same_60",
+              "vset_same_61",
+              "ptag_same_61",
+              "vset_same_62",
+              "ptag_same_62",
+              "vset_same_63",
+              "ptag_same_63"
+            ],
+            "initialized_declarations_hoisted": [],
+            "code_lines_locked": 2719,
+            "code_lines_view": 2719,
+            "residual_preprocessor_directives": 0,
+            "line_conservation_ok": true,
+            "register_update_equations_locked": 984,
+            "register_update_equations_preserved": true,
+            "view_projection": null,
+            "view_trusted": true
+          }
+        ],
+        "locked_sha256": "b06ea3a9296b7d8793c1c29e7272bae90d89fc2645f1226150ebdc1901d605e9",
+        "locked_sources": [
+          {
+            "__path__": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\reference-sv\\WayLookup.sv"
+          }
+        ],
+        "target": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_frontend_icache_prefetch_family_family\\DUT_WayLookup.sv"
+        },
+        "reference": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_frontend_icache_prefetch_family_family\\REF_WayLookup.sv"
+        },
+        "miter": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_frontend_icache_prefetch_family_family\\WayLookup_MITER.sv"
+        },
+        "wsl": {
+          "target": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_WayLookup.sv",
+          "reference": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/REF_WayLookup.sv",
+          "miter": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/WayLookup_MITER.sv",
+          "locked_sources": [
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/WayLookup.sv"
+          ]
+        },
+        "cache_key": "0b954fcce038538339e873c87964302c1f9fa950722df9f5757875bd90e41bab",
+        "cache_hit": false,
+        "tool_versions": {
+          "python": "3.13.12",
+          "python_implementation": "CPython",
+          "host": "Windows-11-10.0.26300-SP0",
+          "amaranth": "0.5.8",
+          "yosys": "Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)",
+          "verilator": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)"
+        },
+        "prepared_hashes": {
+          "target": "926132159ea8f18deef7a03c85c71d6205b69d1276042355ed60fa08706e5a48",
+          "reference": "8aa18afe196408e6965c51b14968c84641bc8e3ea1eaf98fd182fe6e8946d2f6",
+          "miter": "4d0acab25c2937cfaa71ffc05b07f933737b7432521c3e135f7d6e7c1097e0ed"
+        },
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "WayLookup_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_WayLookup.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/REF_WayLookup.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/WayLookup_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "t/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_WayLookup.sv:1670:34: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'hb' generates 4 bits.\n                                                                                                                                           : ... note: In instance 'WayLookup_MITER.target_i'\n 1670 |   assign \\$214  = writePtr_value == 4'hb;\n      |                                  ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_WayLookup.sv:1687:34: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'hc' generates 4 bits.\n                                                                                                                                           : ... note: In instance 'WayLookup_MITER.target_i'\n 1687 |   assign \\$231  = writePtr_value == 4'hc;\n      |                                  ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_WayLookup.sv:1704:34: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'hd' generates 4 bits.\n                                                                                                                                           : ... note: In instance 'WayLookup_MITER.target_i'\n 1704 |   assign \\$248  = writePtr_value == 4'hd;\n      |                                  ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_WayLookup.sv:1721:34: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'he' generates 4 bits.\n                                                                                                                                           : ... note: In instance 'WayLookup_MITER.target_i'\n 1721 |   assign \\$265  = writePtr_value == 4'he;\n      |                                  ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_WayLookup.sv:1738:34: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'hf' generates 4 bits.\n                                                                                                                                           : ... note: In instance 'WayLookup_MITER.target_i'\n 1738 |   assign \\$282  = writePtr_value == 4'hf;\n      |                                  ^~\n",
+          "output_sha256": "45c211607cfd6ab24c50380a93e7e2cf33fc298f529b4bf1e306ae4b35386487"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "WayLookup",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/WayLookup.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.145 MB sources in 2 modules, into 0.412 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.076 s (elab=0.005, cvt=0.032, bld=0.000); cpu 0.055 s on 1 threads; alloced 14.809 MB\n",
+          "output_sha256": "9e72a676ed5e117e8d25fb6f488d3ec2cc7d52957f541c36f3f6e5dc64eb3e26"
+        },
+        "static_blocked": false
+      },
+      "formal": {
+        "method": "sequential_equivalence",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "WayLookup_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_WayLookup.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/REF_WayLookup.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/WayLookup_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "t/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_WayLookup.sv:1670:34: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'hb' generates 4 bits.\n                                                                                                                                           : ... note: In instance 'WayLookup_MITER.target_i'\n 1670 |   assign \\$214  = writePtr_value == 4'hb;\n      |                                  ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_WayLookup.sv:1687:34: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'hc' generates 4 bits.\n                                                                                                                                           : ... note: In instance 'WayLookup_MITER.target_i'\n 1687 |   assign \\$231  = writePtr_value == 4'hc;\n      |                                  ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_WayLookup.sv:1704:34: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'hd' generates 4 bits.\n                                                                                                                                           : ... note: In instance 'WayLookup_MITER.target_i'\n 1704 |   assign \\$248  = writePtr_value == 4'hd;\n      |                                  ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_WayLookup.sv:1721:34: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'he' generates 4 bits.\n                                                                                                                                           : ... note: In instance 'WayLookup_MITER.target_i'\n 1721 |   assign \\$265  = writePtr_value == 4'he;\n      |                                  ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_WayLookup.sv:1738:34: Operator EQ expects 5 bits on the RHS, but RHS's CONST '4'hf' generates 4 bits.\n                                                                                                                                           : ... note: In instance 'WayLookup_MITER.target_i'\n 1738 |   assign \\$282  = writePtr_value == 4'hf;\n      |                                  ^~\n",
+          "output_sha256": "45c211607cfd6ab24c50380a93e7e2cf33fc298f529b4bf1e306ae4b35386487"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "WayLookup",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/WayLookup.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.145 MB sources in 2 modules, into 0.412 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.076 s (elab=0.005, cvt=0.032, bld=0.000); cpu 0.055 s on 1 threads; alloced 14.809 MB\n",
+          "output_sha256": "9e72a676ed5e117e8d25fb6f488d3ec2cc7d52957f541c36f3f6e5dc64eb3e26"
+        },
+        "yosys_equiv": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/DUT_WayLookup.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_frontend_icache_prefetch_family_family/REF_WayLookup.sv; proc; async2sync; memory; opt; flatten REF_WayLookup; flatten DUT_WayLookup; equiv_make REF_WayLookup DUT_WayLookup WayLookup_EQUIV; prep -top WayLookup_EQUIV; equiv_induct -undef; equiv_status -assert"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": 3636,
+          "equiv_summary_full": [
+            3636,
+            0
+          ],
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "ayLookup_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\WayLookup_EQUIV'.\n<suppressed ~468 debug messages>\nRemoved a total of 156 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\WayLookup_EQUIV..\nRemoved 0 unused cells and 156 unused wires.\n<suppressed ~1 debug messages>\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== WayLookup_EQUIV ===\n\n   Number of wires:               3933\n   Number of wire bits:          28203\n   Number of public wires:        2303\n   Number of public wire bits:   19187\n   Number of ports:                 40\n   Number of port bits:            389\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:               6899\n     $add                            2\n     $and                          310\n     $eq                           259\n     $equiv                       3636\n     $logic_not                      2\n     $mul                            1\n     $mux                         1795\n     $ne                             1\n     $not                           12\n     $or                             4\n     $pmux                          12\n     $reduce_and                     1\n     $reduce_or                      1\n     $reduce_xor                    64\n     $sdff                         786\n     $shiftx                        12\n     $xor                            1\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module WayLookup_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 3575 unproven $equiv cells in module WayLookup_EQUIV:\n  Undef modelling: force def on 6936 initial reg values and 218 inputs.\n  Proving existence of base case for step 1. (1775960 clauses over 640439 variables)\n  Proving induction step 1. (3890100 clauses over 1395916 variables)\n  Proof for induction step holds. Entire workset of 3575 cells proven!\nProved 3575 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 3636 $equiv cells in WayLookup_EQUIV:\n  Of those cells 3636 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: f08d31f1b0, CPU: user 60.55s system 0.52s, MEM: 951.31 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 96% 1x equiv_induct (58 sec), 1% 10x opt_clean (0 sec), ...\n",
+          "output_sha256": "fae1a378982f5122725ee190799845fa511120f89b7e098b113da27d898e1dba",
+          "markers_present": {
+            "0 are unproven.": true,
+            "Equivalence successfully proven!": true
+          },
+          "formal_success_marker": true,
+          "equiv_cells": 3636,
+          "proven_cells": 3636,
+          "unproven_cells": 0
+        }
+      }
+    }
+  ],
+  "negative_control": {
+    "status": "PASS",
+    "cases": {
+      "sat": {
+        "status": "PASS",
+        "note": "no representative with outputs"
+      },
+      "sequential.target": {
+        "status": "PASS",
+        "control_entry": "WayLookup",
+        "control_port": "io_read_bits_entry_itlb_exception_0",
+        "mutation_applied": true,
+        "explicit_failure_marker": true,
+        "success_marker_still_present": false,
+        "returncode": 1
+      },
+      "sequential.reference": {
+        "status": "PASS",
+        "control_entry": "WayLookup",
+        "control_port": "io_read_bits_entry_itlb_exception_0",
+        "mutation_applied": true,
+        "explicit_failure_marker": true,
+        "success_marker_still_present": false,
+        "returncode": 1
+      }
+    },
+    "note": "a reference-side mutation that still proves means the reference never reaches the comparison"
+  },
+  "elapsed_seconds": 82.33,
+  "unclosed": [
+    "Full Build catalog, parent closure, license and acceptance remain pending."
+  ]
+}

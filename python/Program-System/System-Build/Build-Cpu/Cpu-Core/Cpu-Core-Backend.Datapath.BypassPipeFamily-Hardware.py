@@ -1,9 +1,8 @@
-"""Backend bypass and pipe-connect family with executable ready/valid wiring.
+"""Contract-only backend bypass and pipe-connect family.
 
-Both locked members are implemented as source-shaped combinational channels:
-``BypassNetwork`` forwards datapath uops, applies writeback priority, and
-selects matching bypass values; ``PipeGroupConnect`` relays six decoupled
-lanes while honoring flush.  The ABI catalog remains the sole port contract.
+Both locked members expose the frozen ABI and currently drive constant
+outputs. Bypass selection, writeback priority, lane state and flush behavior
+require implementation and behavioral tests before a strict attempt.
 """
 
 from __future__ import annotations

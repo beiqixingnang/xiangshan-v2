@@ -3,7 +3,8 @@
 The seven modules share one exact, self-contained ANSI surface and remain
 selectable through ``build_verilog``.
 
-WayLookup retains a bounded one-transaction envelope. L2TlbPrefetch implements
+WayLookup implements a 32-entry dual-lane queue, refill updates and a guest-page
+fault record. L2TlbPrefetch implements
 next-line generation and four recent request records; L2TlbMissQueue implements
 a depth-40 packed FIFO. InstrMMIOEntry implements its four-state handshake and
 PrefetcherMonitor implements quality windows and timed recovery. The larger
@@ -16,7 +17,7 @@ from __future__ import annotations
 
 from typing import Any, cast
 
-from amaranth import Array, Cat, ClockDomain, Const, Elaboratable, Memory, Module, Mux, Signal
+from amaranth import Array, Cat, ClockDomain, Const, Elaboratable, Memory, Module, Mux, Signal, Value
 from amaranth.back import verilog
 
 __all__ = [
@@ -558,34 +559,86 @@ class IcachePrefetchFamily(Elaboratable):
             expressions[name] = p[name]
 
     def _way_lookup(self, module: Module, expressions: dict[str, Any]) -> None:
-        """One-entry WayLookup queue with flush/update handling."""
+        """Store 32 dual-lane lookup entries and one pending guest-page fault."""
 
         p = self.ports
-        full = Signal(reset=0, name="way_full")
-        regs = {name: Signal(len(signal), reset=0, name="way_" + name) for name, signal in p.items()
-                if name.startswith("io_write_bits_")}
-        pop = p["io_read_ready"] & full
-        push = p["io_write_valid"] & (p["io_write_ready"] | pop)
-        module.d.comb += [p["io_write_ready"].eq(~full | pop), p["io_read_valid"].eq(full)]
-        for source, reg in regs.items():
-            out_name = source.replace("io_write_bits_", "io_read_bits_")
-            if out_name in p:
-                module.d.comb += p[out_name].eq(reg)
+        fields = ("vSetIdx", "waymask", "ptag", "itlb_exception", "itlb_pbmt", "meta_codes")
+        entries = [{f"{field}_{lane}": Signal(
+            len(p[f"io_write_bits_entry_{field}_{lane}"]), name=f"entries_{slot}_{field}_{lane}")
+            for field in fields for lane in range(2)} for slot in range(32)]
+        read_value = Signal(5, name="readPtr_value")
+        read_flag = Signal(name="readPtr_flag")
+        write_value = Signal(5, name="writePtr_value")
+        write_flag = Signal(name="writePtr_flag")
+        gpf_value = Signal(5, name="gpfPtr_value")
+        gpf_flag = Signal(name="gpfPtr_flag")
+        gpf_valid = Signal(name="gpf_entry_valid")
+        gpf_addr = Signal(56, name="gpf_entry_bits_gpaddr")
+        gpf_nonleaf = Signal(name="gpf_entry_bits_isForVSnonLeafPTE")
+        read_ptr = cast(Value, Cat(read_value, read_flag))
+        write_ptr = cast(Value, Cat(write_value, write_flag))
+        empty = Signal(name="empty")
+        bypass = Signal(name="can_bypass")
+        gpf_hit = Signal(name="gpf_hit")
+        module.d.comb += [empty.eq(read_ptr == write_ptr),
+                          bypass.eq(empty & p["io_write_valid"]),
+                          gpf_hit.eq(gpf_valid & (Cat(gpf_value, gpf_flag) == read_ptr)),
+                          p["io_read_valid"].eq(~empty | p["io_write_valid"])]
+        read_fire = p["io_read_ready"] & p["io_read_valid"]
+        full = (read_value == write_value) & (read_flag != write_flag)
+        module.d.comb += p["io_write_ready"].eq(~full & ~(gpf_valid & ~(read_fire & gpf_hit)))
+        write_fire = p["io_write_valid"] & p["io_write_ready"]
+        for field in fields:
+            for lane in range(2):
+                key = f"{field}_{lane}"
+                output = f"io_read_bits_entry_{key}"
+                module.d.comb += p[output].eq(Mux(bypass, p[f"io_write_bits_entry_{key}"],
+                                                Array(entry[key] for entry in entries)[read_value]))
+                expressions[output] = p[output]
+        module.d.comb += [
+            p["io_read_bits_gpf_gpaddr"].eq(Mux(bypass, p["io_write_bits_gpf_gpaddr"],
+                                                Mux(gpf_hit, gpf_addr, 0))),
+            p["io_read_bits_gpf_isForVSnonLeafPTE"].eq(Mux(
+                bypass, p["io_write_bits_gpf_isForVSnonLeafPTE"], gpf_hit & gpf_nonleaf)),
+        ]
+        for slot, entry in enumerate(entries):
+            with cast(Any, module.If(write_fire & (write_value == slot))):
+                module.d.sync += [reg.eq(p[f"io_write_bits_entry_{key}"]) for key, reg in entry.items()]
+            with cast(Any, module.Else()):
+                for lane in range(2):
+                    tag = entry[f"ptag_{lane}"]
+                    waymask = entry[f"waymask_{lane}"]
+                    update = (p["io_update_valid"] & ~p["io_update_bits_corrupt"]
+                              & (p["io_update_bits_vSetIdx"] == entry[f"vSetIdx_{lane}"]))
+                    with cast(Any, module.If(update)):
+                        with cast(Any, module.If(p["io_update_bits_blkPaddr"][6:42] == tag)):
+                            module.d.sync += [waymask.eq(p["io_update_bits_waymask"]),
+                                              entry[f"meta_codes_{lane}"].eq(tag.xor())]
+                        with cast(Any, module.Elif(p["io_update_bits_waymask"] == waymask)):
+                            module.d.sync += waymask.eq(0)
         with cast(Any, module).If(p["io_flush"]):
-            module.d.sync += full.eq(0)
-        with cast(Any, module).Elif(push):
-            module.d.sync += full.eq(1)
-            for name, reg in regs.items():
-                module.d.sync += reg.eq(p[name])
-        with cast(Any, module).If(p["io_update_valid"]):
-            # A refill update invalidates the oldest entry's way mask only when
-            # its set matches; this preserves deterministic queue semantics.
-            module.d.sync += full.eq(full)
-        expressions.update({"io_write_ready": p["io_write_ready"], "io_read_valid": p["io_read_valid"]})
-        for name in regs:
-            out_name = name.replace("io_write_bits_", "io_read_bits_")
-            if out_name in p:
-                expressions[out_name] = p[out_name]
+            module.d.sync += [read_ptr.eq(0), write_ptr.eq(0)]
+        with cast(Any, module.Else()):
+            with cast(Any, module.If(read_fire)):
+                module.d.sync += read_ptr.eq(read_ptr + 1)
+            with cast(Any, module.If(write_fire)):
+                module.d.sync += write_ptr.eq(write_ptr + 1)
+        guest_fault = ((p["io_write_bits_entry_itlb_exception_0"] == 2)
+                       | (p["io_write_bits_entry_itlb_exception_1"] == 2))
+        with cast(Any, module.If(write_fire & guest_fault)):
+            module.d.sync += [
+                gpf_valid.eq(~(bypass & read_fire)),
+                gpf_addr.eq(p["io_write_bits_gpf_gpaddr"]),
+                gpf_nonleaf.eq(p["io_write_bits_gpf_isForVSnonLeafPTE"]),
+                cast(Value, Cat(gpf_value, gpf_flag)).eq(write_ptr),
+            ]
+        with cast(Any, module.Else()):
+            module.d.sync += gpf_valid.eq(~p["io_flush"] & gpf_valid & ~(read_fire & gpf_hit & ~bypass))
+            with cast(Any, module.If(p["io_flush"])):
+                module.d.sync += [gpf_addr.eq(0), gpf_nonleaf.eq(0)]
+        for output in ("io_write_ready", "io_read_valid", "io_read_bits_gpf_gpaddr",
+                       "io_read_bits_gpf_isForVSnonLeafPTE"):
+            expressions[output] = p[output]
 
     def _tlb_prefetch(self, module: Module, expressions: dict[str, Any]) -> None:
         """Prefetch the next VPN line and suppress four recent sent requests."""

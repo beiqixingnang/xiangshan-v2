@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "kind": "V2_DECLARED_BEHAVIOR_PREFLIGHT",
+  "build_id": "Build-Cpu.Backend.Datapath.BypassPipeFamily",
+  "strict_complete_count_delta": 0,
+  "acceptance_eligible": false,
+  "formal": "NOT_RUN",
+  "tool_preparation": "NOT_RUN",
+  "status": "BLOCKED_CONTRACT_ONLY",
+  "members": [
+    "BypassNetwork",
+    "PipeGroupConnect"
+  ],
+  "contract_only_members": [
+    "BypassNetwork",
+    "PipeGroupConnect"
+  ],
+  "declaration_present": true,
+  "ready_for_formal": false,
+  "remaining_gates": [
+    "Implement the declared contract-only members and behavioral direct tests."
+  ],
+  "sources": {
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Datapath.BypassPipeFamily-Hardware.py",
+      "sha256": "500dc912a0b2aa696426554a562438b94f770ef9a791d268ac024662a1a1b6e8",
+      "bytes": 149781
+    },
+    "validator": {
+      "path": "validation/v2_catalog_behavior_preflight.py",
+      "sha256": "1854bcd73f5d2832d45002ba94b650fe1cfec28a0435f60fcd2dfbfa5a7e6d09",
+      "bytes": 3013
+    },
+    "validator_dependencies": {
+      "catalog_resolver": {
+        "path": "validation/v2_catalog_family_strict_validator.py",
+        "sha256": "314e3d4d2ff95e52729309fb3bfe232de3334932e1d5f6aa751809b3899d0ff8",
+        "bytes": 10755
+      },
+      "strict_family_rail": {
+        "path": "validation/v2_strict_family_rail.py",
+        "sha256": "446151abc1261a79dffa4707130786a5673a4069f3a1c98086e2b0cd97aeef15",
+        "bytes": 72724
+      }
+    }
+  }
+}

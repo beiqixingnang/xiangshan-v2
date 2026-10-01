@@ -58,7 +58,19 @@ GPT-6-Luna workers use xhigh reasoning; the coordinator reviews and takes over
 repeated failures. Full CPU replacement, Vortex verification/video upgrade and
 controller integration remain subsequent milestones after V2 acceptance.
 
-Run a cheap, non-counting diagnostic before sending a family to formal:
+Check explicit implementation declarations before preparing tools or formal:
+
+```powershell
+py -B validation/v2_catalog_behavior_preflight.py --build Backend.Datapath.BypassPipeFamily
+```
+
+Declared `CONTRACT_ONLY` members block the Build and return exit code 1 without
+exporting RTL or running formal. A declaration check never marks a Build ready
+for formal; behavioral direct tests and the ABI/tool gates are still required.
+The current Bypass/Pipe family has two such members. WbArbiter also needs its
+registered direct test and two ABI repairs before a strict attempt.
+
+Run a cheap, non-counting ABI/tool diagnostic for an implemented family:
 
 ```powershell
 py -B validation/v2_catalog_family_strict_validator.py --build Cpu-Core-Backend.Datapath.VectorFamily-Hardware.py --preflight-only
@@ -104,10 +116,11 @@ arbiters, then asserts the entire design, checks every catalog member and
 records two-sided negative controls. Its receipt binds the partition policy,
 catalog resolver, common rail and registered direct test to current hashes.
 Acceptance remains pending for reset-entry, executable differential, parent
-closure and system gates. Icache Prefetch covers 4/7 members in non-counting
-focused receipts. TLXbar_8 preserves the full finite
+closure and system gates. Icache Prefetch covers 5/7 members in non-counting
+focused receipts. WayLookup passes all 3,636 cells and both negative-control
+sides; the two pipeline members remain pending. TLXbar_8 preserves the full finite
 manager address mask union, including the 0x31110000 hole found by SAT;
 random route samples could not justify replacing that union with a complement.
 See validation/v2-build-cpu-dependency-rocket-tlchildren-family-strict-evidence.json and
-validation/v2-icache-four-members-focused-results.json for current source hashes,
+validation/v2-icache-five-members-focused-results.json for current source hashes,
 commands, lint, complete cell counts and two-sided controls.

@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "kind": "V2_VALIDATION_EXPANSION_BATCH",
-  "timestamp": "2026-10-01T11:52:13.226903+08:00",
-  "baseline_commit": "f21007e",
+  "timestamp": "2026-10-01T12:20:22.056937+08:00",
+  "baseline_commit": "578a778",
   "strict": "45/118",
-  "strict_delta": 1,
+  "strict_delta": 0,
   "accepted": 0,
   "build_files": 118,
   "behavior_verified_builds": "45/118",
@@ -15,112 +15,113 @@
     "semantics": "source association/subject mapping only; includes bounded and contract-only subjects; not all strictly equivalent"
   },
   "python_lines": {
-    "raw": 95138,
-    "nonblank": 87952,
-    "raw_delta": 453,
-    "nonblank_delta": 428
+    "raw": 95334,
+    "nonblank": 88141,
+    "raw_delta": 196,
+    "nonblank_delta": 189
   },
   "rocket": {
     "Status": "COMPLETE_EQUIVALENCE",
     "PassedMembers": 11,
     "FamilyMembers": 11,
-    "Cells": {
-      "BusErrorUnit": 127,
-      "TLBuffer_16": 601,
-      "TLBuffer_2": 661,
-      "TLBuffer_20": 1921,
-      "TLBuffer_22": 655,
-      "TLBuffer_27": 17188,
-      "TLBuffer_29": 637,
-      "TLClientsMerger_1": null,
-      "TLXbar_7": 3317,
-      "TLXbar_8": 586,
-      "TLXbar_9": 1392
-    },
-    "Unproven": 0,
-    "TwoSidedNegativeControl": "PASS",
-    "Direct": "11/11 PASS",
-    "Pyright": "PASS",
     "Receipt": "validation/v2-build-cpu-dependency-rocket-tlchildren-family-strict-evidence.json",
-    "Resume": {
-      "checkpoint": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\.cache\\strict-family\\build_cpu_dependency_rocket_tlchildren_family\\rail-checkpoint.json",
-      "prepared_cache_hits": 0,
-      "formal_cache_hits": 0,
-      "member_count": 11
-    },
-    "AcceptanceEligible": false
+    "SourceAndCellReceiptRecheck": "PASS; coordinator takeover after subagent connection failure"
   },
   "icache": {
     "Status": "PASS_MEMBER_PROOFS_NON_COUNTING",
-    "PassedMembers": 4,
+    "PassedMembers": 5,
     "FamilyMembers": 7,
     "Cells": {
       "L2TlbMissQueue": 1942,
       "PrefetcherMonitor": 94,
       "InstrMMIOEntry": 152,
-      "L2TlbPrefetch": 185
+      "L2TlbPrefetch": 185,
+      "WayLookup": 3636
     },
+    "Unproven": 0,
     "NegativeControl": "PASS",
-    "ElapsedSeconds": 116.177,
-    "Direct": "5/5 PASS",
+    "ElapsedSeconds": 102.289,
+    "FormalCacheHits": 5,
+    "Direct": "6/6 PASS",
     "Pyright": "PASS",
-    "Receipt": "validation/v2-icache-four-members-focused-results.json",
+    "Receipt": "validation/v2-icache-five-members-focused-results.json",
     "StrictCountDelta": 0
   },
-  "partition_negative_controls": {
-    "Status": "PASS",
-    "Members": [
-      "TLXbar_7",
-      "TLXbar_9"
+  "waylookup": {
+    "Status": "PASS_MEMBER_PROOFS_NON_COUNTING",
+    "Cells": 3636,
+    "Unproven": 0,
+    "TwoSidedNegativeControl": "PASS",
+    "ElapsedSeconds": 82.33,
+    "BehaviorCases": [
+      "32-slot full and wrap",
+      "empty bypass",
+      "two-lane refill update and parity",
+      "same-slot whole-write priority",
+      "GPF stall/consume/bypass/flush priority",
+      "500 deterministic random cycles"
     ],
-    "Receipt": "validation/v2-rocket-partition-negative-controls-results.json",
-    "StrictCountDelta": 0
+    "Receipt": "validation/v2-icache-waylookup-focused-results.json"
+  },
+  "workflow_triage": {
+    "BypassPipeFamily": {
+      "Status": "BLOCKED_CONTRACT_ONLY",
+      "ContractOnlyMembers": [
+        "BypassNetwork",
+        "PipeGroupConnect"
+      ],
+      "Formal": "NOT_RUN",
+      "Receipt": "validation/v2-build-cpu-backend-datapath-bypasspipefamily-behavior-preflight-results.json"
+    },
+    "WbArbiter": {
+      "Status": "BLOCKED",
+      "Direct": "MISSING_DIRECT_TEST",
+      "Abi": {
+        "RealWBArbiter": "19/19 exact",
+        "RealWBCollideChecker": "43 vs 108; locked specialization config missing",
+        "WbDataPath": "16 vs 861; locked specialization config missing"
+      },
+      "Formal": "NOT_RUN",
+      "Receipt": "validation/v2-build-cpu-backend-datapath-wbarbiter-preflight-results.json"
+    }
   },
   "regression": {
-    "Rail": "13/13 PASS",
-    "Progress": "11/11 PASS",
-    "FocusedPyright": "4 changed Python files; 0 errors",
-    "Utf8LfCompileDiff": "PASS"
-  },
-  "locked_reference_verification": {
-    "status": "PASS",
-    "verified": 1976,
-    "total": 1976,
-    "written": 0,
-    "xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d"
+    "FocusedPyright": "3 implementation/test/workflow files; 0 errors",
+    "Utf8LfCompileDiff": "PASS",
+    "RailAndProgressUnitTests": "NOT_RUN; shared rail/progress code unchanged; prior 13/13 and 11/11 at 578a778"
   },
   "central_audit": {
     "status": "FAIL",
     "failure_records": 6,
-    "non_counting_attempts": 5,
-    "new_rocket_record": "PASS"
+    "non_counting_attempts": 5
   },
   "sources": {
-    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Rocket.TLChildren.Family-Hardware.py": {
-      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Rocket.TLChildren.Family-Hardware.py",
-      "sha256": "2c4e255c8f465e3968cb13c57f6aa669d680ccc4b0dfd87cf8a14689110a3b2d",
-      "bytes": 49566
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Frontend.Icache.Prefetch.Family-Hardware.py": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Frontend.Icache.Prefetch.Family-Hardware.py",
+      "sha256": "5a399703bd2b2f347d170613c46476070492a4cef8b82e106cd6b579ea090542",
+      "bytes": 44789
     },
-    "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Dependency.Rocket.TLChildren.Family-Hardware.py": {
-      "path": "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Dependency.Rocket.TLChildren.Family-Hardware.py",
-      "sha256": "8af0c6a39917d435a7bf714d2b365f7f41a19a2414eedb6027d5d2a46c3c00ad",
-      "bytes": 31481
+    "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Frontend.Icache.Prefetch.Family-Hardware.py": {
+      "path": "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Frontend.Icache.Prefetch.Family-Hardware.py",
+      "sha256": "7f3cf7ca8ab87d4868fb9b3d428a6a20c60936faf5091999efe2e9e822542b85",
+      "bytes": 19888
     },
-    "validation/v2_queue_state_correspondence_validator.py": {
-      "path": "validation/v2_queue_state_correspondence_validator.py",
-      "sha256": "62b0d04b729d7edeebd72214093d54e448d4aa2048c87337517cabadef6ee4d3",
-      "bytes": 7725
+    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Datapath.BypassPipeFamily-Hardware.py": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Datapath.BypassPipeFamily-Hardware.py",
+      "sha256": "500dc912a0b2aa696426554a562438b94f770ef9a791d268ac024662a1a1b6e8",
+      "bytes": 149781
     },
-    "validation/v2_rocket_tlchildren_strict_validator.py": {
-      "path": "validation/v2_rocket_tlchildren_strict_validator.py",
-      "sha256": "fb6b52bd6d10947b47956b3edb684be6256c1dc6c8ee49fbca59b75191e39ac6",
-      "bytes": 3419
+    "validation/v2_catalog_behavior_preflight.py": {
+      "path": "validation/v2_catalog_behavior_preflight.py",
+      "sha256": "1854bcd73f5d2832d45002ba94b650fe1cfec28a0435f60fcd2dfbfa5a7e6d09",
+      "bytes": 3013
     }
   },
   "remaining_gates": [
+    "IPrefetchPipe and ICacheMainPipe remain Icache implementation/proof work",
     "73 Builds lack complete strict proofs; CONTRACT_ONLY/bounded subjects are not accepted",
-    "6 source/origin audit failures and 5 non-counting attempts",
-    "WayLookup, IPrefetchPipe and ICacheMainPipe remain implementation/proof work",
+    "6 source/origin failures include unresolved behavioral/ABI proofs; hashes alone cannot repair them",
+    "5 non-counting attempts remain open",
     "Reset/initial-state gates, executable Verilator differential/wave review, parent/full-top closure, license and user acceptance remain pending"
   ],
   "acceptance_eligible": false
