@@ -33,6 +33,17 @@ class DcacheMissQueueFamilyTest(unittest.TestCase):
         self.assertEqual(7, len(module.COVERED_MODULES))
         for member in module.COVERED_MODULES:
             self.assertIn(f"module {member}", module.build_verilog({"module": member}, {}))
+        self.assertEqual(
+            {
+                "CMOUnit",
+                "MissEntry",
+                "MissReadyGen",
+                "ProbeEntry",
+                "TreeArbiter",
+                "WritebackEntry_15",
+            },
+            set(module.CONTRACT_ONLY_MEMBERS),
+        )
 
     def test_probe_entry_round_trip(self) -> None:
         module = load_subject()
@@ -98,6 +109,130 @@ class DcacheMissQueueFamilyTest(unittest.TestCase):
                 sim.add_process(process)
                 sim.run()
                 self.assertEqual(expected, tuple(observed))
+
+    def test_writeback_entry_probe_ack_streams_two_beats(self) -> None:
+        """A dirty ProbeAck emits low then high 256-bit beats and frees."""
+
+        module = load_subject()
+        dut = module.DcacheMissQueueFamily("WritebackEntry")
+        low = int("0123456789abcdef" * 4, 16)
+        high = int("fedcba9876543210" * 4, 16)
+        payload = low | (high << 256)
+        observed: list[tuple[int, int, int, int, int, int]] = []
+
+        def process():
+            yield dut.ports["reset"].eq(1)
+            yield Tick()
+            yield dut.ports["reset"].eq(0)
+            yield dut.ports["io_id"].eq(3)
+            yield dut.ports["io_req_valid"].eq(1)
+            yield dut.ports["io_primary_valid"].eq(1)
+            yield dut.ports["io_req_bits_param"].eq(5)
+            yield dut.ports["io_req_bits_voluntary"].eq(0)
+            yield dut.ports["io_req_bits_hasData"].eq(1)
+            yield dut.ports["io_req_bits_corrupt"].eq(1)
+            yield dut.ports["io_req_bits_dirty"].eq(1)
+            yield dut.ports["io_req_bits_addr"].eq(0x123456789ABC)
+            yield dut.ports["io_req_data_data"].eq(payload)
+            yield dut.ports["io_mem_release_ready"].eq(0)
+            yield Tick()
+            yield dut.ports["io_req_valid"].eq(0)
+            yield dut.ports["io_primary_valid"].eq(0)
+            yield dut.ports["io_mem_release_ready"].eq(1)
+            # The locked data path intentionally inserts one cycle before the
+            # first release beat is visible.
+            yield Settle()
+            self.assertEqual(0, (yield dut.ports["io_mem_release_valid"]))
+            yield Tick()
+            yield Settle()
+            observed.append(
+                (
+                    int((yield dut.ports["io_mem_release_valid"])),
+                    int((yield dut.ports["io_mem_release_bits_opcode"])),
+                    int((yield dut.ports["io_mem_release_bits_param"])),
+                    int((yield dut.ports["io_mem_release_bits_source"])),
+                    int((yield dut.ports["io_mem_release_bits_address"])),
+                    int((yield dut.ports["io_mem_release_bits_data"])),
+                )
+            )
+            yield Tick()
+            yield Settle()
+            observed.append(
+                (
+                    int((yield dut.ports["io_mem_release_valid"])),
+                    int((yield dut.ports["io_mem_release_bits_opcode"])),
+                    int((yield dut.ports["io_mem_release_bits_param"])),
+                    int((yield dut.ports["io_mem_release_bits_source"])),
+                    int((yield dut.ports["io_mem_release_bits_address"])),
+                    int((yield dut.ports["io_mem_release_bits_data"])),
+                )
+            )
+            yield Tick()
+            yield Settle()
+            self.assertEqual(0, (yield dut.ports["io_mem_release_valid"]))
+            self.assertEqual(1, (yield dut.ports["io_primary_ready"]))
+            self.assertEqual(0, (yield dut.ports["io_block_addr_valid"]))
+
+        sim = Simulator(dut)
+        sim.add_clock(1e-6)
+        sim.add_process(process)
+        sim.run()
+        self.assertEqual(
+            [
+                (1, 5, 5, 3, 0x123456789ABC, low),
+                (1, 5, 5, 3, 0x123456789ABC, high),
+            ],
+            observed,
+        )
+
+    def test_writeback_entry_voluntary_release_waits_for_grant(self) -> None:
+        """A no-data voluntary release waits in response state for grant."""
+
+        module = load_subject()
+        dut = module.DcacheMissQueueFamily("WritebackEntry")
+        observed: list[tuple[int, int, int, int]] = []
+
+        def process():
+            yield dut.ports["reset"].eq(1)
+            yield Tick()
+            yield dut.ports["reset"].eq(0)
+            yield dut.ports["io_id"].eq(17)
+            yield dut.ports["io_req_valid"].eq(1)
+            yield dut.ports["io_primary_valid"].eq(1)
+            yield dut.ports["io_req_bits_param"].eq(2)
+            yield dut.ports["io_req_bits_voluntary"].eq(1)
+            yield dut.ports["io_req_bits_hasData"].eq(0)
+            yield dut.ports["io_req_bits_addr"].eq(0x4000)
+            yield Tick()
+            yield dut.ports["io_req_valid"].eq(0)
+            yield dut.ports["io_primary_valid"].eq(0)
+            yield dut.ports["io_mem_release_ready"].eq(1)
+            yield Tick()
+            yield Settle()
+            observed.append(
+                (
+                    int((yield dut.ports["io_mem_release_valid"])),
+                    int((yield dut.ports["io_mem_release_bits_opcode"])),
+                    int((yield dut.ports["io_mem_release_bits_data"])),
+                    int((yield dut.ports["io_block_addr_valid"])),
+                )
+            )
+            yield Tick()
+            yield Settle()
+            self.assertEqual(0, (yield dut.ports["io_mem_release_valid"]))
+            self.assertEqual(0, (yield dut.ports["io_primary_ready"]))
+            self.assertEqual(1, (yield dut.ports["io_block_addr_valid"]))
+            yield dut.ports["io_mem_grant_valid"].eq(1)
+            yield Tick()
+            yield Settle()
+            self.assertEqual(1, (yield dut.ports["io_primary_ready"]))
+            self.assertEqual(0, (yield dut.ports["io_block_addr_valid"]))
+
+        sim = Simulator(dut)
+        sim.add_clock(1e-6)
+        sim.add_process(process)
+        sim.run()
+        self.assertEqual([(1, 6, 0, 1)], observed)
 
 
 if __name__ == "__main__":

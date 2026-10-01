@@ -1,0 +1,263 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_DCACHE_MISS_WRITEBACKENTRY_FOCUSED",
+  "build_id": "Build-Cpu.Memory.Dcache.MissQueue.Family",
+  "member": "WritebackEntry",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "strict_complete_build_count_delta": 0,
+  "acceptance_eligible": false,
+  "contract_only_members": [
+    "CMOUnit",
+    "MissEntry",
+    "MissReadyGen",
+    "ProbeEntry",
+    "TreeArbiter",
+    "WritebackEntry_15"
+  ],
+  "sources": {
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Memory.Dcache.MissQueue.Family-Hardware.py",
+      "sha256": "e94c857da719c37b7976373d846656f88634800ee53587290403464471e74652",
+      "bytes": 39307
+    },
+    "direct_test": {
+      "path": "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Memory.Dcache.MissQueue.Family-Hardware.py",
+      "sha256": "37e01ab136823e55d708290b9293e6b755c1964f0572d43c8a521c848576e0b4",
+      "bytes": 9837
+    },
+    "locked_writeback_entry": {
+      "path": "validation/reference-sv/WritebackEntry.sv",
+      "sha256": "00054094efb22c020262ff8ba26f4d2c62c68291e784f82b63caad3495f3a0ce",
+      "bytes": 22509
+    },
+    "scala": {
+      "path": "upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/WritebackQueue.scala",
+      "sha256": "63038a2f55415d00915fb5cc77155df05e7762586ae67bb369d5b9e919674851",
+      "bytes": 15251
+    },
+    "validator": {
+      "path": "validation/v2-dcache-miss-writebackentry-focused.py",
+      "sha256": "a1511c038e16b74246d030ad1770bd9932c88fdea46f3cd6e4c64c5009674a0e",
+      "bytes": 6207
+    },
+    "strict_family_rail": {
+      "path": "validation/v2_strict_family_rail.py",
+      "sha256": "dd6cebba4a9b300c7fc8664b1a803045d7ff55041cab364a7753692c846e57a6",
+      "bytes": 72764
+    }
+  },
+  "checks": {
+    "py_compile": "PASS",
+    "pyright": {
+      "command": [
+        "cmd.exe",
+        "/d",
+        "/c",
+        "pyright",
+        "--outputjson",
+        "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_y8j376zs\\Cpu-Memory-Memory.Dcache.MissQueue.Family-Hardware.py"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "version": "1.1.411",
+      "error_count": 0,
+      "files_analyzed": 1,
+      "stderr_tail": ""
+    },
+    "direct_test": {
+      "command": [
+        "C:\\Program Files\\Python313\\python.exe",
+        "-B",
+        "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Memory.Dcache.MissQueue.Family-Hardware.py"
+      ],
+      "status": "PASS",
+      "returncode": 0,
+      "output_tail": "precated per RFC 27. Use `add_testbench` to write testbenches; there, an equivalent of `yield Settle()` is performed automatically after each `ctx.set()`.\n  yield Settle()\nD:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu-Memory.Dcache.MissQueue.Family-Hardware.py:171: DeprecationWarning: The `Settle` command is deprecated per RFC 27. Use `add_testbench` to write testbenches; there, an equivalent of `yield Settle()` is performed automatically after each `ctx.set()`.\n  yield Settle()\n.D:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu-Memory.Dcache.MissQueue.Family-Hardware.py:211: DeprecationWarning: The `Settle` command is deprecated per RFC 27. Use `add_testbench` to write testbenches; there, an equivalent of `yield Settle()` is performed automatically after each `ctx.set()`.\n  yield Settle()\nD:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu-Memory.Dcache.MissQueue.Family-Hardware.py:221: DeprecationWarning: The `Settle` command is deprecated per RFC 27. Use `add_testbench` to write testbenches; there, an equivalent of `yield Settle()` is performed automatically after each `ctx.set()`.\n  yield Settle()\nD:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu-Memory.Dcache.MissQueue.Family-Hardware.py:227: DeprecationWarning: The `Settle` command is deprecated per RFC 27. Use `add_testbench` to write testbenches; there, an equivalent of `yield Settle()` is performed automatically after each `ctx.set()`.\n  yield Settle()\n.\n----------------------------------------------------------------------\nRan 5 tests in 2.139s\n\nOK\n"
+    },
+    "abi_exact": true,
+    "deterministic_export": true,
+    "reference_view_trusted": true,
+    "dut_verilator": {
+      "command": [
+        "verilator",
+        "--lint-only",
+        "-Wno-fatal",
+        "--top-module",
+        "WritebackEntry_MITER",
+        "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_missqueue_family_writebackentry_family/DUT_WritebackEntry.sv",
+        "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_missqueue_family_writebackentry_family/REF_WritebackEntry.sv",
+        "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_missqueue_family_writebackentry_family/WritebackEntry_MITER.sv"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "sat_success_marker": false,
+      "sat_counterexample_marker": false,
+      "unconstrained_marker": false,
+      "equiv_success_markers": {
+        "0 are unproven.": false,
+        "Equivalence successfully proven!": false
+      },
+      "equiv_failure_marker": false,
+      "equiv_cells_full": null,
+      "equiv_summary_full": null,
+      "equiv_failed_full": null,
+      "sat_counts_full": null,
+      "output_tail": "kEntry.sv:192:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'state' generates 2 bits.\n                                                                                                                                                            : ... note: In instance 'WritebackEntry_MITER.target_i'\n  192 |   assign \\$54  = ! state;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_missqueue_family_writebackentry_family/DUT_WritebackEntry.sv:199:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'state' generates 2 bits.\n                                                                                                                                                            : ... note: In instance 'WritebackEntry_MITER.target_i'\n  199 |   assign \\$61  = ! state;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_missqueue_family_writebackentry_family/DUT_WritebackEntry.sv:205:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'state' generates 2 bits.\n                                                                                                                                                            : ... note: In instance 'WritebackEntry_MITER.target_i'\n  205 |   assign \\$67  = ! state;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_missqueue_family_writebackentry_family/DUT_WritebackEntry.sv:245:29: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'state' generates 2 bits.\n                                                                                                                                                            : ... note: In instance 'WritebackEntry_MITER.target_i'\n  245 |   assign io_primary_ready = ! state;\n      |                             ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_missqueue_family_writebackentry_family/DUT_WritebackEntry.sv:253:17: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'state' generates 2 bits.\n                                                                                                                                                            : ... note: In instance 'WritebackEntry_MITER.target_i'\n  253 |   assign \\$4  = ! state;\n      |                 ^\n",
+      "output_sha256": "d110e05ac68cc7cf991b032c6e0648ddde9502316d534def833dbf48d671bf4d"
+    },
+    "locked_verilator": {
+      "command": [
+        "verilator",
+        "--lint-only",
+        "-Wno-fatal",
+        "-DSYNTHESIS",
+        "--top-module",
+        "WritebackEntry",
+        "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/WritebackEntry.sv"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "sat_success_marker": false,
+      "sat_counterexample_marker": false,
+      "unconstrained_marker": false,
+      "equiv_success_markers": {
+        "0 are unproven.": false,
+        "Equivalence successfully proven!": false
+      },
+      "equiv_failure_marker": false,
+      "equiv_cells_full": null,
+      "equiv_summary_full": null,
+      "equiv_failed_full": null,
+      "sat_counts_full": null,
+      "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.025 MB sources in 2 modules, into 0.032 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.023 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.007 s on 1 threads; alloced 9.500 MB\n",
+      "output_sha256": "960eb91657383af1ed8777e16c8009479445e4cffdaad33a7b236d6da2dd7aa7"
+    },
+    "formal": {
+      "method": "sequential_equivalence",
+      "verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "--top-module",
+          "WritebackEntry_MITER",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_missqueue_family_writebackentry_family/DUT_WritebackEntry.sv",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_missqueue_family_writebackentry_family/REF_WritebackEntry.sv",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_missqueue_family_writebackentry_family/WritebackEntry_MITER.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "sat_success_marker": false,
+        "sat_counterexample_marker": false,
+        "unconstrained_marker": false,
+        "equiv_success_markers": {
+          "0 are unproven.": false,
+          "Equivalence successfully proven!": false
+        },
+        "equiv_failure_marker": false,
+        "equiv_cells_full": null,
+        "equiv_summary_full": null,
+        "equiv_failed_full": null,
+        "sat_counts_full": null,
+        "output_tail": "kEntry.sv:192:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'state' generates 2 bits.\n                                                                                                                                                            : ... note: In instance 'WritebackEntry_MITER.target_i'\n  192 |   assign \\$54  = ! state;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_missqueue_family_writebackentry_family/DUT_WritebackEntry.sv:199:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'state' generates 2 bits.\n                                                                                                                                                            : ... note: In instance 'WritebackEntry_MITER.target_i'\n  199 |   assign \\$61  = ! state;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_missqueue_family_writebackentry_family/DUT_WritebackEntry.sv:205:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'state' generates 2 bits.\n                                                                                                                                                            : ... note: In instance 'WritebackEntry_MITER.target_i'\n  205 |   assign \\$67  = ! state;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_missqueue_family_writebackentry_family/DUT_WritebackEntry.sv:245:29: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'state' generates 2 bits.\n                                                                                                                                                            : ... note: In instance 'WritebackEntry_MITER.target_i'\n  245 |   assign io_primary_ready = ! state;\n      |                             ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_missqueue_family_writebackentry_family/DUT_WritebackEntry.sv:253:17: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'state' generates 2 bits.\n                                                                                                                                                            : ... note: In instance 'WritebackEntry_MITER.target_i'\n  253 |   assign \\$4  = ! state;\n      |                 ^\n",
+        "output_sha256": "d110e05ac68cc7cf991b032c6e0648ddde9502316d534def833dbf48d671bf4d"
+      },
+      "locked_verilator": {
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "-DSYNTHESIS",
+          "--top-module",
+          "WritebackEntry",
+          "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/WritebackEntry.sv"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "sat_success_marker": false,
+        "sat_counterexample_marker": false,
+        "unconstrained_marker": false,
+        "equiv_success_markers": {
+          "0 are unproven.": false,
+          "Equivalence successfully proven!": false
+        },
+        "equiv_failure_marker": false,
+        "equiv_cells_full": null,
+        "equiv_summary_full": null,
+        "equiv_failed_full": null,
+        "sat_counts_full": null,
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.025 MB sources in 2 modules, into 0.032 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.023 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.007 s on 1 threads; alloced 9.500 MB\n",
+        "output_sha256": "960eb91657383af1ed8777e16c8009479445e4cffdaad33a7b236d6da2dd7aa7"
+      },
+      "yosys_equiv": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_missqueue_family_writebackentry_family/DUT_WritebackEntry.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_memory_dcache_missqueue_family_writebackentry_family/REF_WritebackEntry.sv; proc; async2sync; memory; opt; flatten REF_WritebackEntry; flatten DUT_WritebackEntry; equiv_make REF_WritebackEntry DUT_WritebackEntry WritebackEntry_EQUIV; prep -top WritebackEntry_EQUIV; equiv_induct -undef; equiv_status -assert"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "sat_success_marker": false,
+        "sat_counterexample_marker": false,
+        "unconstrained_marker": false,
+        "equiv_success_markers": {
+          "0 are unproven.": true,
+          "Equivalence successfully proven!": true
+        },
+        "equiv_failure_marker": false,
+        "equiv_cells_full": 843,
+        "equiv_summary_full": [
+          843,
+          0
+        ],
+        "equiv_failed_full": null,
+        "sat_counts_full": null,
+        "output_tail": "_COLLECT pass (generating $mem cells).\n\n10.11. Executing OPT pass (performing simple optimizations).\n\n10.11.1. Executing OPT_EXPR pass (perform const folding).\nOptimizing module WritebackEntry_EQUIV.\n\n10.11.2. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\WritebackEntry_EQUIV'.\n<suppressed ~24 debug messages>\nRemoved a total of 8 cells.\n\n10.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\WritebackEntry_EQUIV..\nRemoved 0 unused cells and 8 unused wires.\n<suppressed ~1 debug messages>\n\n10.11.4. Finished fast OPT passes.\n\n10.12. Printing statistics.\n\n=== WritebackEntry_EQUIV ===\n\n   Number of wires:                205\n   Number of wire bits:           5085\n   Number of public wires:         188\n   Number of public wire bits:    5058\n   Number of ports:                 24\n   Number of port bits:            946\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                920\n     $and                           11\n     $dff                            2\n     $dffe                          12\n     $eq                             2\n     $equiv                        843\n     $logic_not                      1\n     $mux                           21\n     $not                            4\n     $or                             5\n     $reduce_or                      4\n     $sdff                          14\n     $sub                            1\n\n10.13. Executing CHECK pass (checking for obvious problems).\nChecking module WritebackEntry_EQUIV...\nFound and reported 0 problems.\n\n11. Executing EQUIV_INDUCT pass.\nFound 577 unproven $equiv cells in module WritebackEntry_EQUIV:\n  Undef modelling: force def on 1154 initial reg values and 577 inputs.\n  Proving existence of base case for step 1. (75207 clauses over 30040 variables)\n  Proving induction step 1. (231741 clauses over 88138 variables)\n  Proof for induction step holds. Entire workset of 577 cells proven!\nProved 577 previously unproven $equiv cells.\n\n12. Executing EQUIV_STATUS pass.\nFound 843 $equiv cells in WritebackEntry_EQUIV:\n  Of those cells 843 are proven and 0 are unproven.\n  Equivalence successfully proven!\n\nEnd of script. Logfile hash: 722508fe29, CPU: user 0.80s system 0.04s, MEM: 75.23 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 79% 1x equiv_induct (0 sec), 7% 11x opt_clean (0 sec), ...\n",
+        "output_sha256": "795607723e9aad69de46c0c80620310862042164ec6580319ea81598389ffbce",
+        "markers_present": {
+          "0 are unproven.": true,
+          "Equivalence successfully proven!": true
+        },
+        "formal_success_marker": true,
+        "equiv_cells": 843,
+        "proven_cells": 843,
+        "unproven_cells": 0
+      }
+    },
+    "formal_pass_contract": true,
+    "two_sided_negative_control": {
+      "status": "PASS",
+      "cases": {
+        "sat": {
+          "status": "PASS",
+          "note": "no representative with outputs"
+        },
+        "sequential.target": {
+          "status": "PASS",
+          "control_entry": "WritebackEntry",
+          "control_port": "io_block_addr_bits",
+          "mutation_applied": true,
+          "explicit_failure_marker": true,
+          "success_marker_still_present": false,
+          "returncode": 1
+        },
+        "sequential.reference": {
+          "status": "PASS",
+          "control_entry": "WritebackEntry",
+          "control_port": "io_block_addr_bits",
+          "mutation_applied": true,
+          "explicit_failure_marker": true,
+          "success_marker_still_present": false,
+          "returncode": 1
+        }
+      },
+      "note": "a reference-side mutation that still proves means the reference never reaches the comparison"
+    }
+  },
+  "status": "COMPLETE_EQUIVALENCE_MEMBER_NONCOUNTING",
+  "unclosed": [
+    "Six neighboring MissQueue members remain CONTRACT_ONLY.",
+    "Family aggregate, parent DCache closure, reset-entry review, license review, and user approval remain pending."
+  ]
+}

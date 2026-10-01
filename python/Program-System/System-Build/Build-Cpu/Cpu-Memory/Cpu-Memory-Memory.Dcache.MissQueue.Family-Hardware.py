@@ -12,7 +12,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from amaranth import ClockDomain, Elaboratable, Module, Mux, Signal
+from amaranth import Cat, ClockDomain, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
 
 
@@ -21,6 +21,7 @@ from amaranth.back import verilog
 # =============================================================================
 __all__ = [
     'COVERED_MODULES',
+    'CONTRACT_ONLY_MEMBERS',
     'PORT_SPECS',
     'DcacheMissQueueFamily',
     'build_verilog',
@@ -35,6 +36,19 @@ COVERED_MODULES = (
     "ProbeEntry",
     "TreeArbiter",
     "WritebackEntry",
+    "WritebackEntry_15",
+)
+
+# This wave closes one leaf against the locked WritebackEntry equations.  The
+# remaining family members retain their exact ABI and bounded implementations,
+# but are deliberately held at contract level until their own source-backed
+# behavior work is complete.
+CONTRACT_ONLY_MEMBERS = (
+    "CMOUnit",
+    "MissEntry",
+    "MissReadyGen",
+    "ProbeEntry",
+    "TreeArbiter",
     "WritebackEntry_15",
 )
 
@@ -672,40 +686,120 @@ class DcacheMissQueueFamily(Elaboratable):
             module.d.comb += self.ports[output].eq(result)
 
     def _elaborate_writeback(self, module: Module) -> None:
-        """Model bounded writeback allocation, release beats, and completion."""
+        """Implement the locked two-beat WritebackEntry state machine.
 
-        active = Signal(reset=0)
-        saved_addr = Signal(48)
-        saved_param = Signal(3)
-        saved_corrupt = Signal()
-        saved_data = Signal(512)
-        sent = Signal(reset=0)
-        alloc = self.ports["io_primary_valid"] & self.ports["io_req_valid"] & ~active
+        The V2 reference keeps a two-bit ``remain`` mask (one bit for each
+        256-bit release beat), duplicates that mask for payload selection and
+        clearing, and delays the incoming data by one cycle through
+        ``s_data_override``/``REG``.  Voluntary releases wait in state 2 for a
+        grant acknowledgement; ProbeAck entries return directly to state 0.
+        """
+
+        # s_invalid, s_release_req, s_release_resp in WritebackQueue.scala.
+        state = Signal(2, reset=0, name="state")
+        remain = Signal(2, reset=0, name="remain")
+        remain_dup_0 = Signal(2, reset=0, name="remain_dup_0")
+        remain_dup_1 = Signal(2, reset=0, name="remain_dup_1")
+
+        # These registers are intentionally reset-less, matching the locked
+        # Chisel output.  They are captured before any externally observable
+        # release beat after reset.
+        data = Signal(512, reset_less=True, name="data")
+        paddr_dup_1 = Signal(48, reset_less=True, name="paddr_dup_1")
+        paddr_dup_2 = Signal(48, reset_less=True, name="paddr_dup_2")
+        req_param = Signal(3, reset_less=True, name="req_param")
+        req_voluntary = Signal(reset_less=True, name="req_voluntary")
+        req_has_data = Signal(reset_less=True, name="req_hasData")
+        req_corrupt = Signal(reset_less=True, name="req_corrupt")
+        req_dirty = Signal(reset_less=True, name="req_dirty")
+        req_addr = Signal(48, reset_less=True, name="req_addr")
+        s_data_override = Signal(reset=1, name="s_data_override")
+        r_counter = Signal(reset=0, name="r_counter")
+        reg_alloc = Signal(reset_less=True, name="REG")
+
+        primary_ready = state == 0
+        alloc = (
+            self.ports["io_req_valid"]
+            & self.ports["io_primary_valid"]
+            & primary_ready
+        )
+        busy = (remain != 0) & s_data_override
+        release_fire = busy & self.ports["io_mem_release_ready"]
+
+        # ``{1'h1, voluntary, hasData}`` and ``{1'h0, io_id}`` in the locked
+        # TileLink C-channel projection.  Cat arguments are listed least
+        # significant bit first in Amaranth.
+        opcode = Cat(req_has_data, req_voluntary, 1)
+        source = Cat(self.ports["io_id"], 0)
+        release_data = Mux(
+            req_has_data,
+            Mux(remain_dup_0[0], data[:256], data[256:512]),
+            0,
+        )
+        remain_set = Mux(alloc, Cat(1, self.ports["io_req_bits_hasData"]), 0)
+        remain_clear = Mux(
+            release_fire,
+            Mux(remain_dup_1[0], 1, Cat(0, remain_dup_1[1])),
+            0,
+        )
+
         module.d.comb += [
-            self.ports["io_primary_ready"].eq(~active),
-            self.ports["io_mem_release_valid"].eq(active & ~sent),
-            self.ports["io_mem_release_bits_opcode"].eq(0),
-            self.ports["io_mem_release_bits_param"].eq(saved_param),
-            self.ports["io_mem_release_bits_source"].eq(self.ports["io_id"]),
-            self.ports["io_mem_release_bits_address"].eq(saved_addr),
-            self.ports["io_mem_release_bits_data"].eq(saved_data[:256]),
-            self.ports["io_mem_release_bits_corrupt"].eq(saved_corrupt),
-            self.ports["io_block_addr_valid"].eq(active),
-            self.ports["io_block_addr_bits"].eq(saved_addr),
+            self.ports["io_primary_ready"].eq(primary_ready),
+            self.ports["io_mem_release_valid"].eq(busy),
+            self.ports["io_mem_release_bits_opcode"].eq(opcode),
+            self.ports["io_mem_release_bits_param"].eq(req_param),
+            self.ports["io_mem_release_bits_source"].eq(source),
+            self.ports["io_mem_release_bits_address"].eq(
+                Mux(req_voluntary, paddr_dup_2, paddr_dup_1)
+            ),
+            self.ports["io_mem_release_bits_data"].eq(release_data),
+            self.ports["io_mem_release_bits_corrupt"].eq(req_corrupt),
+            self.ports["io_block_addr_valid"].eq(state != 0),
+            self.ports["io_block_addr_bits"].eq(req_addr),
         ]
+
+        # Main sequential state/mask updates.  The ordering matches the
+        # generated reference: a grant acknowledgement has priority over a
+        # release completion, which has priority over a new allocation.
+        module.d.sync += [
+            remain.eq((remain | remain_set) & ~remain_clear),
+            remain_dup_0.eq((remain_dup_0 | remain_set) & ~remain_clear),
+            remain_dup_1.eq((remain_dup_1 | remain_set) & ~remain_clear),
+            s_data_override.eq(~alloc),
+        ]
+        with module.If((state == 2) & self.ports["io_mem_grant_valid"]):
+            module.d.sync += state.eq(0)
+        with module.Elif(
+            (state == 1)
+            & (r_counter | ~req_has_data)
+            & release_fire
+        ):
+            module.d.sync += state.eq(Cat(0, req_voluntary))
+        with module.Elif(alloc):
+            module.d.sync += state.eq(1)
+
+        with module.If(release_fire):
+            with module.If(r_counter):
+                module.d.sync += r_counter.eq(r_counter - 1)
+            with module.Else():
+                module.d.sync += r_counter.eq(req_has_data)
+
+        # Request metadata and the one-cycle delayed writeback data capture.
+        # ``REG`` is the previous-cycle allocation marker in the locked RTL.
         with module.If(alloc):
             module.d.sync += [
-                active.eq(1),
-                sent.eq(0),
-                saved_addr.eq(self.ports["io_req_bits_addr"]),
-                saved_param.eq(self.ports["io_req_bits_param"]),
-                saved_corrupt.eq(self.ports["io_req_bits_corrupt"]),
-                saved_data.eq(self.ports["io_req_data_data"]),
+                paddr_dup_1.eq(self.ports["io_req_bits_addr"]),
+                paddr_dup_2.eq(self.ports["io_req_bits_addr"]),
+                req_param.eq(self.ports["io_req_bits_param"]),
+                req_voluntary.eq(self.ports["io_req_bits_voluntary"]),
+                req_has_data.eq(self.ports["io_req_bits_hasData"]),
+                req_corrupt.eq(self.ports["io_req_bits_corrupt"]),
+                req_dirty.eq(self.ports["io_req_bits_dirty"]),
+                req_addr.eq(self.ports["io_req_bits_addr"]),
             ]
-        with module.If(active & ~sent & self.ports["io_mem_release_ready"]):
-            module.d.sync += sent.eq(1)
-        with module.If(active & sent & self.ports["io_mem_grant_valid"]):
-            module.d.sync += [active.eq(0), sent.eq(0)]
+        with module.If((~s_data_override) & (req_has_data | reg_alloc)):
+            module.d.sync += data.eq(self.ports["io_req_data_data"])
+        module.d.sync += reg_alloc.eq(alloc)
 
     def elaborate(self, platform: Any) -> Module:
         """Elaborate the requested member's bounded behavior and exact ports."""
