@@ -62,7 +62,10 @@ SOURCE_COMMIT = "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af"
 XSTOP_SHA256 = "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d"
 SAT_MARKER = "SAT proof finished - no model found: SUCCESS!"
 EQUIV_MARKERS = ("0 are unproven.", "Equivalence successfully proven!")
-ANSI_PORT = re.compile(r"^(input|output)\s+(?:\[\s*(\d+):0\]\s*)?(.+)$")
+ANSI_PORT = re.compile(
+    r"^(input|output)\s+(?:(?:wire|reg|logic)\s+)?"
+    r"(?:\[\s*(\d+):0\]\s*)?(.+)$"
+)
 BLOCK_LOCAL = re.compile(
     r"^([ \t]*)automatic\s+logic\s+((?:\[[^\]]*\][ \t]*)+)?"
     r"([A-Za-z_]\w*(?:\[[^\]]*\])?(?:\s*,\s*[A-Za-z_]\w*(?:\[[^\]]*\])?)*)"
