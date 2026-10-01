@@ -4,28 +4,28 @@
   "strict_count_delta": 0,
   "formal": "NOT_RUN",
   "direct_test": {
-    "status": "MISSING_DIRECT_TEST",
-    "returncode": null
+    "status": "PASS",
+    "returncode": 0,
+    "command": [
+      "C:\\Program Files\\Python313\\python.exe",
+      "-B",
+      "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Backend.Datapath.WbArbiter-Hardware.py"
+    ]
   },
   "members": [
     {
       "member": "RealWBArbiter",
-      "status": "BLOCKED",
-      "failures": [
-        "direct test is missing or failed"
-      ],
+      "status": "READY_FOR_FORMAL",
+      "failures": [],
       "abi_exact": true,
       "deterministic": true,
       "view_trusted": true
     },
     {
       "member": "RealWBCollideChecker",
-      "status": "BLOCKED",
-      "failures": [
-        "ABI mismatch: RealWBCollideChecker",
-        "direct test is missing or failed"
-      ],
-      "abi_exact": false,
+      "status": "READY_FOR_FORMAL",
+      "failures": [],
+      "abi_exact": true,
       "deterministic": true,
       "view_trusted": true
     },
@@ -33,15 +33,14 @@
       "member": "WbDataPath",
       "status": "BLOCKED",
       "failures": [
-        "ABI mismatch: WbDataPath",
-        "direct test is missing or failed"
+        "ABI mismatch: WbDataPath"
       ],
       "abi_exact": false,
       "deterministic": true,
       "view_trusted": true
     }
   ],
-  "ready_members": 0,
+  "ready_members": 2,
   "member_count": 3,
   "status": "PREFLIGHT_COMPLETE"
 }

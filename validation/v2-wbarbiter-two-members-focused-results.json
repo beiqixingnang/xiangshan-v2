@@ -1,0 +1,735 @@
+{
+  "schema_version": 1,
+  "kind": "V2_QUEUE_STATE_FOCUSED_DIAGNOSTIC",
+  "build_id": "Build-Cpu.Backend.Datapath.WbArbiter",
+  "status": "STRICT_PENDING",
+  "strict_complete_eligible": false,
+  "strict_complete_count_delta": 0,
+  "acceptance_eligible": false,
+  "members": [
+    "RealWBArbiter",
+    "RealWBCollideChecker"
+  ],
+  "family_members": [
+    "RealWBArbiter",
+    "RealWBCollideChecker",
+    "WbDataPath"
+  ],
+  "full_family_covered": false,
+  "sources": {
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Datapath.WbArbiter-Hardware.py",
+      "sha256": "0dcef609497980e5d393dbebc7bdaeb7e9d4b42a50a0f731a5c575ee4fa5c0cb",
+      "bytes": 33787
+    },
+    "validator": {
+      "path": "validation/v2_queue_state_correspondence_validator.py",
+      "sha256": "62b0d04b729d7edeebd72214093d54e448d4aa2048c87337517cabadef6ee4d3",
+      "bytes": 7725
+    },
+    "rail": {
+      "path": "validation/v2_strict_family_rail.py",
+      "sha256": "446151abc1261a79dffa4707130786a5673a4069f3a1c98086e2b0cd97aeef15",
+      "bytes": 72724
+    },
+    "direct_test": {
+      "path": "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Backend.Datapath.WbArbiter-Hardware.py",
+      "sha256": "32de35e03d588b7d8adb42ba5c483626df98dbfeed9e88c30672eefa03455adf",
+      "bytes": 1181
+    }
+  },
+  "checks": {
+    "direct": {
+      "command": [
+        "C:\\Program Files\\Python313\\python.exe",
+        "-B",
+        "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu-Backend.Datapath.WbArbiter-Hardware.py"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "output_tail": "Build-Cpu\\Cpu-Core\\Cpu-Core-Backend.Datapath.WbArbiter-Hardware.py:357: UnusedElaboratable: <testing_wb_profile.RealWBArbiter object at 0x000001F8FF9D75C0> created but never used\n  port: RealWBArbiter(self.dataWidth, len(indices), self.addrWidth)\nUnusedElaboratable: Enable tracemalloc to get the object allocation traceback\nD:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Build\\Build-Cpu\\Cpu-Core\\Cpu-Core-Backend.Datapath.WbArbiter-Hardware.py:357: UnusedElaboratable: <testing_wb_profile.RealWBArbiter object at 0x000001F8FF9D7490> created but never used\n  port: RealWBArbiter(self.dataWidth, len(indices), self.addrWidth)\nUnusedElaboratable: Enable tracemalloc to get the object allocation traceback\nD:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Build\\Build-Cpu\\Cpu-Core\\Cpu-Core-Backend.Datapath.WbArbiter-Hardware.py:357: UnusedElaboratable: <testing_wb_profile.RealWBArbiter object at 0x000001F8FF9D69E0> created but never used\n  port: RealWBArbiter(self.dataWidth, len(indices), self.addrWidth)\nUnusedElaboratable: Enable tracemalloc to get the object allocation traceback\nD:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Build\\Build-Cpu\\Cpu-Core\\Cpu-Core-Backend.Datapath.WbArbiter-Hardware.py:357: UnusedElaboratable: <testing_wb_profile.RealWBArbiter object at 0x000001F8FF9D6EA0> created but never used\n  port: RealWBArbiter(self.dataWidth, len(indices), self.addrWidth)\nUnusedElaboratable: Enable tracemalloc to get the object allocation traceback\nD:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Build\\Build-Cpu\\Cpu-Core\\Cpu-Core-Backend.Datapath.WbArbiter-Hardware.py:357: UnusedElaboratable: <testing_wb_profile.RealWBArbiter object at 0x000001F8FF9D7230> created but never used\n  port: RealWBArbiter(self.dataWidth, len(indices), self.addrWidth)\nUnusedElaboratable: Enable tracemalloc to get the object allocation traceback\nD:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Build\\Build-Cpu\\Cpu-Core\\Cpu-Core-Backend.Datapath.WbArbiter-Hardware.py:357: UnusedElaboratable: <testing_wb_profile.RealWBArbiter object at 0x000001F8FF9D7360> created but never used\n  port: RealWBArbiter(self.dataWidth, len(indices), self.addrWidth)\nUnusedElaboratable: Enable tracemalloc to get the object allocation traceback\n"
+    },
+    "pyright": {
+      "command": [
+        "cmd.exe",
+        "/d",
+        "/c",
+        "pyright",
+        "--outputjson",
+        "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_58ut0jij\\Cpu-Core-Backend.Datapath.WbArbiter-Hardware.py"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "version": "1.1.411",
+      "error_count": 0,
+      "files_analyzed": 1,
+      "stderr_tail": ""
+    }
+  },
+  "results": [
+    {
+      "member": "RealWBArbiter",
+      "status": "PASS",
+      "formal_cache_hit": false,
+      "static_failures": [],
+      "prepared": {
+        "name": "RealWBArbiter",
+        "inputs": {
+          "io_in_0_valid": 1,
+          "io_in_0_bits_rfWen": 1,
+          "io_in_0_bits_pdest": 8,
+          "io_in_0_bits_data": 64,
+          "io_in_1_valid": 1,
+          "io_in_1_bits_rfWen": 1,
+          "io_in_1_bits_pdest": 8,
+          "io_in_1_bits_data": 64,
+          "io_in_2_valid": 1,
+          "io_in_2_bits_rfWen": 1,
+          "io_in_2_bits_pdest": 8,
+          "io_in_2_bits_data": 64
+        },
+        "outputs": {
+          "io_in_0_ready": 1,
+          "io_in_1_ready": 1,
+          "io_in_2_ready": 1,
+          "io_out_valid": 1,
+          "io_out_bits_rfWen": 1,
+          "io_out_bits_pdest": 8,
+          "io_out_bits_data": 64
+        },
+        "children": [],
+        "sequential": false,
+        "abi_exact": true,
+        "deterministic": true,
+        "output_less": false,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "view_audits": [
+          {
+            "top": "RealWBArbiter",
+            "renamed_top": true,
+            "regions_removed_lines": {},
+            "block_local_temporaries_hoisted": [],
+            "initialized_declarations_hoisted": [],
+            "code_lines_locked": 39,
+            "code_lines_view": 39,
+            "residual_preprocessor_directives": 0,
+            "line_conservation_ok": true,
+            "register_update_equations_locked": 0,
+            "register_update_equations_preserved": true,
+            "view_projection": null,
+            "view_trusted": true
+          }
+        ],
+        "locked_sha256": "34c468d3f94ee6c8ab137f29e580ebdb6307de19da478dd57693f7365570f9d6",
+        "locked_sources": [
+          {
+            "__path__": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\reference-sv\\RealWBArbiter.sv"
+          }
+        ],
+        "target": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_backend_datapath_wbarbiter_family\\DUT_RealWBArbiter.sv"
+        },
+        "reference": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_backend_datapath_wbarbiter_family\\REF_RealWBArbiter.sv"
+        },
+        "miter": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_backend_datapath_wbarbiter_family\\RealWBArbiter_MITER.sv"
+        },
+        "wsl": {
+          "target": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_datapath_wbarbiter_family/DUT_RealWBArbiter.sv",
+          "reference": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_datapath_wbarbiter_family/REF_RealWBArbiter.sv",
+          "miter": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_datapath_wbarbiter_family/RealWBArbiter_MITER.sv",
+          "locked_sources": [
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/RealWBArbiter.sv"
+          ]
+        },
+        "cache_key": "7a98056043e878cf7e4047c41ebb639ad97e075d1da282b033b19c2fea686d47",
+        "cache_hit": false,
+        "tool_versions": {
+          "python": "3.13.12",
+          "python_implementation": "CPython",
+          "host": "Windows-11-10.0.26300-SP0",
+          "amaranth": "0.5.8",
+          "yosys": "Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)",
+          "verilator": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)"
+        },
+        "prepared_hashes": {
+          "target": "86f6d1ea60d51d4e7e693637114a188972b5b4526275fb848cfbb2fb844bc077",
+          "reference": "fd5cd3bff38c5f3538a42d2504ba0222f6e6a9d6a30e60d280a668ad316e1aa5",
+          "miter": "51fae1c58817f06f8dccf2512b5550b5fcc894e911552d8039dc858b498359d8"
+        },
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "RealWBArbiter_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_datapath_wbarbiter_family/DUT_RealWBArbiter.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_datapath_wbarbiter_family/REF_RealWBArbiter.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_datapath_wbarbiter_family/RealWBArbiter_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.114 MB sources in 4 modules, into 0.018 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.043 s (elab=0.001, cvt=0.002, bld=0.000); cpu 0.008 s on 1 threads; alloced 9.535 MB\n",
+          "output_sha256": "25b148a0a4ba8dacc8fd0e7242081b18116ca0e5ded8336048e4f40f3e2c7027"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "RealWBArbiter",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/RealWBArbiter.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.022 MB sources in 2 modules, into 0.018 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.024 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.379 MB\n",
+          "output_sha256": "5b4a9a1c077d6828a667437535d7cd84e69cdab3f6fb17811ea4ff04b52ff92b"
+        },
+        "static_blocked": false
+      },
+      "formal": {
+        "method": "sat_miter",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "RealWBArbiter_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_datapath_wbarbiter_family/DUT_RealWBArbiter.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_datapath_wbarbiter_family/REF_RealWBArbiter.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_datapath_wbarbiter_family/RealWBArbiter_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.114 MB sources in 4 modules, into 0.018 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.043 s (elab=0.001, cvt=0.002, bld=0.000); cpu 0.008 s on 1 threads; alloced 9.535 MB\n",
+          "output_sha256": "25b148a0a4ba8dacc8fd0e7242081b18116ca0e5ded8336048e4f40f3e2c7027"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "RealWBArbiter",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/RealWBArbiter.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.022 MB sources in 2 modules, into 0.018 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.024 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.379 MB\n",
+          "output_sha256": "5b4a9a1c077d6828a667437535d7cd84e69cdab3f6fb17811ea4ff04b52ff92b"
+        },
+        "sat_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_datapath_wbarbiter_family/DUT_RealWBArbiter.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_datapath_wbarbiter_family/REF_RealWBArbiter.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_datapath_wbarbiter_family/RealWBArbiter_MITER.sv; prep -top RealWBArbiter_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": true,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": true,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": [
+            2,
+            4
+          ],
+          "output_tail": "ERGE pass (detect identical cells).\nFinding identical cells in module `\\RealWBArbiter_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\RealWBArbiter_MITER..\nRemoved 8 unused cells and 43 unused wires.\n<suppressed ~35 debug messages>\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RealWBArbiter_MITER.\n\n6.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\RealWBArbiter_MITER..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n6.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\RealWBArbiter_MITER.\nPerformed a total of 0 changes.\n\n6.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\RealWBArbiter_MITER'.\nRemoved a total of 0 cells.\n\n6.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\RealWBArbiter_MITER..\n\n6.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RealWBArbiter_MITER.\n\n6.23. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 2 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 2 variables and 4 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: bb498cb55f, CPU: user 0.04s system 0.01s, MEM: 13.91 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 26% 7x opt_clean (0 sec), 20% 9x opt_expr (0 sec), ...\n",
+          "output_sha256": "c91b9826774f313a068f671b6d574c724a40dd1d50ca15492e6e7198bbb9071c",
+          "formal_success_marker": true,
+          "unconstrained": true,
+          "sat_variables": 2,
+          "sat_clauses": 4
+        }
+      }
+    },
+    {
+      "member": "RealWBCollideChecker",
+      "status": "STRICT_PENDING",
+      "formal_cache_hit": false,
+      "static_failures": [],
+      "prepared": {
+        "name": "RealWBCollideChecker",
+        "inputs": {
+          "io_in_14_valid": 1,
+          "io_in_14_bits_rfWen": 1,
+          "io_in_14_bits_fpWen": 1,
+          "io_in_14_bits_pdest": 8,
+          "io_in_14_bits_data": 64,
+          "io_in_13_valid": 1,
+          "io_in_13_bits_rfWen": 1,
+          "io_in_13_bits_fpWen": 1,
+          "io_in_13_bits_pdest": 8,
+          "io_in_13_bits_data": 64,
+          "io_in_12_valid": 1,
+          "io_in_12_bits_rfWen": 1,
+          "io_in_12_bits_fpWen": 1,
+          "io_in_12_bits_pdest": 8,
+          "io_in_12_bits_data": 64,
+          "io_in_11_valid": 1,
+          "io_in_11_bits_rfWen": 1,
+          "io_in_11_bits_pdest": 8,
+          "io_in_11_bits_data": 64,
+          "io_in_10_valid": 1,
+          "io_in_10_bits_rfWen": 1,
+          "io_in_10_bits_fpWen": 1,
+          "io_in_10_bits_pdest": 8,
+          "io_in_10_bits_data": 64,
+          "io_in_9_valid": 1,
+          "io_in_9_bits_rfWen": 1,
+          "io_in_9_bits_pdest": 8,
+          "io_in_9_bits_data": 64,
+          "io_in_8_valid": 1,
+          "io_in_8_bits_rfWen": 1,
+          "io_in_8_bits_pdest": 8,
+          "io_in_8_bits_data": 64,
+          "io_in_7_valid": 1,
+          "io_in_7_bits_rfWen": 1,
+          "io_in_7_bits_pdest": 8,
+          "io_in_7_bits_data": 64,
+          "io_in_6_valid": 1,
+          "io_in_6_bits_rfWen": 1,
+          "io_in_6_bits_pdest": 8,
+          "io_in_6_bits_data": 64,
+          "io_in_5_valid": 1,
+          "io_in_5_bits_rfWen": 1,
+          "io_in_5_bits_fpWen": 1,
+          "io_in_5_bits_pdest": 8,
+          "io_in_5_bits_data": 64,
+          "io_in_4_valid": 1,
+          "io_in_4_bits_rfWen": 1,
+          "io_in_4_bits_pdest": 8,
+          "io_in_4_bits_data": 64,
+          "io_in_3_valid": 1,
+          "io_in_3_bits_rfWen": 1,
+          "io_in_3_bits_pdest": 8,
+          "io_in_3_bits_data": 64,
+          "io_in_2_valid": 1,
+          "io_in_2_bits_rfWen": 1,
+          "io_in_2_bits_pdest": 8,
+          "io_in_2_bits_data": 64,
+          "io_in_1_valid": 1,
+          "io_in_1_bits_rfWen": 1,
+          "io_in_1_bits_pdest": 8,
+          "io_in_1_bits_data": 64,
+          "io_in_0_valid": 1,
+          "io_in_0_bits_rfWen": 1,
+          "io_in_0_bits_pdest": 8,
+          "io_in_0_bits_data": 64
+        },
+        "outputs": {
+          "io_in_11_ready": 1,
+          "io_in_10_ready": 1,
+          "io_in_9_ready": 1,
+          "io_in_8_ready": 1,
+          "io_in_7_ready": 1,
+          "io_in_5_ready": 1,
+          "io_in_4_ready": 1,
+          "io_in_3_ready": 1,
+          "io_in_2_ready": 1,
+          "io_in_1_ready": 1,
+          "io_in_0_ready": 1,
+          "io_out_7_valid": 1,
+          "io_out_7_bits_rfWen": 1,
+          "io_out_7_bits_pdest": 8,
+          "io_out_7_bits_data": 64,
+          "io_out_6_valid": 1,
+          "io_out_6_bits_rfWen": 1,
+          "io_out_6_bits_pdest": 8,
+          "io_out_6_bits_data": 64,
+          "io_out_5_valid": 1,
+          "io_out_5_bits_rfWen": 1,
+          "io_out_5_bits_pdest": 8,
+          "io_out_5_bits_data": 64,
+          "io_out_4_valid": 1,
+          "io_out_4_bits_rfWen": 1,
+          "io_out_4_bits_pdest": 8,
+          "io_out_4_bits_data": 64,
+          "io_out_3_valid": 1,
+          "io_out_3_bits_rfWen": 1,
+          "io_out_3_bits_pdest": 8,
+          "io_out_3_bits_data": 64,
+          "io_out_2_valid": 1,
+          "io_out_2_bits_rfWen": 1,
+          "io_out_2_bits_pdest": 8,
+          "io_out_2_bits_data": 64,
+          "io_out_1_valid": 1,
+          "io_out_1_bits_rfWen": 1,
+          "io_out_1_bits_pdest": 8,
+          "io_out_1_bits_data": 64,
+          "io_out_0_valid": 1,
+          "io_out_0_bits_rfWen": 1,
+          "io_out_0_bits_pdest": 8,
+          "io_out_0_bits_data": 64
+        },
+        "children": [
+          "RealWBArbiter",
+          "RealWBArbiter_1",
+          "RealWBArbiter_2",
+          "RealWBArbiter_3"
+        ],
+        "sequential": false,
+        "abi_exact": true,
+        "deterministic": true,
+        "output_less": false,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "view_audits": [
+          {
+            "top": "RealWBArbiter",
+            "renamed_top": false,
+            "regions_removed_lines": {},
+            "block_local_temporaries_hoisted": [],
+            "initialized_declarations_hoisted": [],
+            "code_lines_locked": 39,
+            "code_lines_view": 39,
+            "residual_preprocessor_directives": 0,
+            "line_conservation_ok": true,
+            "register_update_equations_locked": 0,
+            "register_update_equations_preserved": true,
+            "view_projection": null,
+            "view_trusted": true
+          },
+          {
+            "top": "RealWBArbiter_1",
+            "renamed_top": false,
+            "regions_removed_lines": {},
+            "block_local_temporaries_hoisted": [],
+            "initialized_declarations_hoisted": [],
+            "code_lines_locked": 52,
+            "code_lines_view": 52,
+            "residual_preprocessor_directives": 0,
+            "line_conservation_ok": true,
+            "register_update_equations_locked": 0,
+            "register_update_equations_preserved": true,
+            "view_projection": null,
+            "view_trusted": true
+          },
+          {
+            "top": "RealWBArbiter_2",
+            "renamed_top": false,
+            "regions_removed_lines": {},
+            "block_local_temporaries_hoisted": [],
+            "initialized_declarations_hoisted": [],
+            "code_lines_locked": 27,
+            "code_lines_view": 27,
+            "residual_preprocessor_directives": 0,
+            "line_conservation_ok": true,
+            "register_update_equations_locked": 0,
+            "register_update_equations_preserved": true,
+            "view_projection": null,
+            "view_trusted": true
+          },
+          {
+            "top": "RealWBArbiter_3",
+            "renamed_top": false,
+            "regions_removed_lines": {},
+            "block_local_temporaries_hoisted": [],
+            "initialized_declarations_hoisted": [],
+            "code_lines_locked": 18,
+            "code_lines_view": 18,
+            "residual_preprocessor_directives": 0,
+            "line_conservation_ok": true,
+            "register_update_equations_locked": 0,
+            "register_update_equations_preserved": true,
+            "view_projection": null,
+            "view_trusted": true
+          },
+          {
+            "top": "RealWBCollideChecker",
+            "renamed_top": true,
+            "regions_removed_lines": {},
+            "block_local_temporaries_hoisted": [],
+            "initialized_declarations_hoisted": [],
+            "code_lines_locked": 244,
+            "code_lines_view": 244,
+            "residual_preprocessor_directives": 0,
+            "line_conservation_ok": true,
+            "register_update_equations_locked": 0,
+            "register_update_equations_preserved": true,
+            "view_projection": null,
+            "view_trusted": true
+          }
+        ],
+        "locked_sha256": "fd01824542ced753c6f5f5092c6c0f322e5dffdb6c85d16de2e4dcbe0657a20d",
+        "locked_sources": [
+          {
+            "__path__": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\reference-sv\\RealWBArbiter.sv"
+          },
+          {
+            "__path__": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\reference-sv\\RealWBArbiter_1.sv"
+          },
+          {
+            "__path__": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\reference-sv\\RealWBArbiter_2.sv"
+          },
+          {
+            "__path__": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\reference-sv\\RealWBArbiter_3.sv"
+          },
+          {
+            "__path__": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\reference-sv\\RealWBCollideChecker.sv"
+          }
+        ],
+        "target": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_backend_datapath_wbarbiter_family\\DUT_RealWBCollideChecker.sv"
+        },
+        "reference": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_backend_datapath_wbarbiter_family\\REF_RealWBCollideChecker.sv"
+        },
+        "miter": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_backend_datapath_wbarbiter_family\\RealWBCollideChecker_MITER.sv"
+        },
+        "wsl": {
+          "target": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_datapath_wbarbiter_family/DUT_RealWBCollideChecker.sv",
+          "reference": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_datapath_wbarbiter_family/REF_RealWBCollideChecker.sv",
+          "miter": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_datapath_wbarbiter_family/RealWBCollideChecker_MITER.sv",
+          "locked_sources": [
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/RealWBArbiter.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/RealWBArbiter_1.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/RealWBArbiter_2.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/RealWBArbiter_3.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/RealWBCollideChecker.sv"
+          ]
+        },
+        "cache_key": "571e8c8652ac1b515be2f1da3072af4c6d73638ea5ac8e92f7c1bcb5a8c91e30",
+        "cache_hit": false,
+        "tool_versions": {
+          "python": "3.13.12",
+          "python_implementation": "CPython",
+          "host": "Windows-11-10.0.26300-SP0",
+          "amaranth": "0.5.8",
+          "yosys": "Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)",
+          "verilator": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)"
+        },
+        "prepared_hashes": {
+          "target": "904d730e483d5be8e0df0aabb7596f216ee6dd06ce8f439a281eb37cc83ad0e1",
+          "reference": "d0284d58b5dff62f7f34f91715aecbafe92c65051285dcac444bcc3b42cd8d77",
+          "miter": "d0111b1a5bae61ef4d35b667d9d4feaffe09b7cc14bd7f3751a4a65900a1b5e6"
+        },
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "RealWBCollideChecker_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_datapath_wbarbiter_family/DUT_RealWBCollideChecker.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_datapath_wbarbiter_family/REF_RealWBCollideChecker.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_datapath_wbarbiter_family/RealWBCollideChecker_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 1.001 MB sources in 16 modules, into 0.026 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.068 s (elab=0.005, cvt=0.010, bld=0.000); cpu 0.031 s on 1 threads; alloced 13.395 MB\n",
+          "output_sha256": "4d0b3a1730784b8e6ed6dc952c30cc72d1b4659c2f2713741cdaab3549f52be5"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "RealWBCollideChecker",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/RealWBArbiter.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/RealWBArbiter_1.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/RealWBArbiter_2.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/RealWBArbiter_3.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/RealWBCollideChecker.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.089 MB sources in 6 modules, into 0.025 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.036 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.011 s on 1 threads; alloced 10.047 MB\n",
+          "output_sha256": "84d853167ad246b95d58bb08f55b998b70759580aecbdda1fc270e0e57b1acb7"
+        },
+        "static_blocked": false
+      },
+      "formal": {
+        "method": "sat_miter",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "RealWBCollideChecker_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_datapath_wbarbiter_family/DUT_RealWBCollideChecker.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_datapath_wbarbiter_family/REF_RealWBCollideChecker.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_datapath_wbarbiter_family/RealWBCollideChecker_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 1.001 MB sources in 16 modules, into 0.026 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.068 s (elab=0.005, cvt=0.010, bld=0.000); cpu 0.031 s on 1 threads; alloced 13.395 MB\n",
+          "output_sha256": "4d0b3a1730784b8e6ed6dc952c30cc72d1b4659c2f2713741cdaab3549f52be5"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "RealWBCollideChecker",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/RealWBArbiter.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/RealWBArbiter_1.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/RealWBArbiter_2.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/RealWBArbiter_3.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/RealWBCollideChecker.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.089 MB sources in 6 modules, into 0.025 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.036 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.011 s on 1 threads; alloced 10.047 MB\n",
+          "output_sha256": "84d853167ad246b95d58bb08f55b998b70759580aecbdda1fc270e0e57b1acb7"
+        },
+        "sat_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_datapath_wbarbiter_family/DUT_RealWBCollideChecker.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_datapath_wbarbiter_family/REF_RealWBCollideChecker.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_datapath_wbarbiter_family/RealWBCollideChecker_MITER.sv; prep -top RealWBCollideChecker_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "FAIL",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": true,
+          "unconstrained_marker": true,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": [
+            3564,
+            8944
+          ],
+          "output_tail": "_|  \\_____|_|\\_)_____)\\____|_|\n\n\n  Signal Name                       Dec       Hex                                                                 Bin\n  ------------------------- ----------- --------- -------------------------------------------------------------------\n  \\io_in_11_bits_data                --        --    0000000000000000000000000000000000000000000000000000000000000000\n  \\io_in_11_bits_pdest                0         0                                                            00000000\n  \\io_in_11_bits_rfWen                0         0                                                                   0\n  \\io_in_11_valid                     0         0                                                                   0\n  \\io_in_2_bits_data                 --        --    0000000000000000000000000000000000000000000000000000000000000000\n  \\io_in_2_bits_pdest                 0         0                                                            00000000\n  \\io_in_2_bits_rfWen                 0         0                                                                   0\n  \\io_in_2_valid                      0         0                                                                   0\n  \\io_in_3_bits_data                 --        --    0000000000000000000000000000000000000000000000000000000000000000\n  \\io_in_3_bits_pdest                 0         0                                                            00000000\n  \\io_in_3_bits_rfWen                 0         0                                                                   0\n  \\io_in_3_valid                      0         0                                                                   0\n  \\io_in_9_bits_data                 --        --    1111111111111111111111111111111111111111111111111111111111111111\n  \\io_in_9_bits_pdest                 0         0                                                            00000000\n  \\io_in_9_bits_rfWen                 0         0                                                                   0\n  \\io_in_9_valid                      0         0                                                                   0\n  \\mismatch                           1         1                                                                   1\n\nEnd of script. Logfile hash: 3d09e1c224, CPU: user 0.19s system 0.00s, MEM: 21.88 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 28% 7x opt_clean (0 sec), 25% 4x read_verilog (0 sec), ...\n",
+          "output_sha256": "6bb81682e92c1266a6c3bd444da1bd4b5adf7e8e95e5735a2eba6f79e0b336c4",
+          "formal_success_marker": false,
+          "unconstrained": true,
+          "sat_variables": 3564,
+          "sat_clauses": 8944
+        }
+      }
+    }
+  ],
+  "negative_control": {
+    "status": "NOT_RUN",
+    "reason": "member gate failed"
+  },
+  "elapsed_seconds": 7.56,
+  "unclosed": [
+    "Full Build catalog, parent closure, license and acceptance remain pending."
+  ]
+}
