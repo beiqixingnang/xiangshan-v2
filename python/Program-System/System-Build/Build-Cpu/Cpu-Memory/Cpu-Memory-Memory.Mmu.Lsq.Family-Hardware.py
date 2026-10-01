@@ -1593,7 +1593,13 @@ def _bitmap(module: Module, ports: dict[str, Signal]) -> None:
             & ports["io_mem_resp_valid"]
             & (ports["io_mem_resp_bits_id"][0:3] == Const(index, 3))
         )
-    request_wait_id: Any = select_expr(wait_id, Const(0, 3), 3)
+    # A newly allocated entry uses its own slot as the memory response ID.
+    # ``wait_id`` is only inherited when this request coalesces with an
+    # existing waiter or with the request selected by the memory arbiter.
+    # The old default selected entry zero, which made every independent miss
+    # wait for slot zero's response and diverged from ``Mux(to_wait,
+    # wait_id, enq_ptr)`` in BitmapCheck.scala.
+    request_wait_id: Any = enq_ptr
     for index in reversed(range(entries)):
         request_wait_id = Mux(duplicate_wait[index], wait_id[index], request_wait_id)
     request_wait_id = Mux(duplicate_request, memory_ptr, request_wait_id)
@@ -1736,6 +1742,24 @@ def _bitmap(module: Module, ports: dict[str, Signal]) -> None:
         field_napot = Mux(enq_here, request_n, field_napot)
         for bit in range(8):
             cfs_next[bit] = Mux(enq_here, Mux(duplicate_response, request_cfs[bit], Const(0, 1)), cfs_next[bit])
+
+        # A cache miss may join an existing memory waiter (or the request
+        # selected for this cycle).  BitmapCheck updates the entry's wait ID
+        # at that cache response, and updates every coalesced mem request at
+        # the later arbiter fire.  Preserve those two assignments here so a
+        # response for slot N reaches every coalesced entry.
+        field_wait = Mux(
+            cache_matches[index] & ~cache_hit & cache_to_wait,
+            cache_wait_id,
+            field_wait,
+        )
+        field_wait = Mux(
+            memory_fire
+            & memory_request[index]
+            & (ppn[index][5:36] == memory_selected_ppn[5:36]),
+            memory_ptr,
+            field_wait,
+        )
         field_fault = Mux(pmp_matches[index], access_fault, field_fault)
         for bit in range(8):
             cfs_next[bit] = Mux(pmp_matches[index], access_fault, cfs_next[bit])

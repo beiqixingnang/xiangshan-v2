@@ -211,4 +211,65 @@ class MemoryFamilyTest(unittest.TestCase):
         simulator.add_clock(1e-6, domain="bitmap")
         simulator.add_process(process)
         simulator.run()
+
+    def test_bitmap_memory_arbiter_preserves_slot_id(self):
+        """A masked slot must not rewrite the selected slot's response ID."""
+
+        subject = load_subject()
+        dut = subject.MemoryFamily("Bitmap")
+        p = dut.ports
+
+        def process():
+            for name, direction, _width in subject.PORT_SPECS["Bitmap"]:
+                if direction == "input" and name not in ("clock", "reset"):
+                    yield p[name].eq(0)
+            yield p["reset"].eq(1)
+            yield Tick("bitmap")
+            yield p["reset"].eq(0)
+            yield p["io_resp_ready"].eq(0)
+            yield p["io_cache_req_ready"].eq(1)
+            yield p["io_mem_req_mask_0"].eq(1)
+
+            # Fill slot zero through a cache miss and leave its memory request
+            # pending.  The masked slot must be skipped by the RR arbiter.
+            yield p["io_req_bits_bmppn"].eq(0x100)
+            yield p["io_req_bits_vpn"].eq(0x1000)
+            yield p["io_req_bits_hptw_bypassed"].eq(1)
+            yield p["io_req_valid"].eq(1)
+            yield Tick("bitmap")
+            yield p["io_req_valid"].eq(0)
+            yield Tick("bitmap")
+            yield Tick("bitmap")
+            yield p["io_cache_resp_valid"].eq(1)
+            yield p["io_cache_resp_bits_order"].eq(0)
+            yield p["io_cache_resp_bits_hit"].eq(0)
+            yield Tick("bitmap")
+            yield p["io_cache_resp_valid"].eq(0)
+            yield Settle()
+            self.assertEqual((yield p["io_mem_req_valid"]), 0)
+
+            # The second miss occupies slot one.  With slot zero masked, its
+            # memory request must carry the zero-extended slot-one ID (9).
+            yield p["io_req_bits_bmppn"].eq(0x200)
+            yield p["io_req_bits_vpn"].eq(0x2000)
+            yield p["io_req_valid"].eq(1)
+            yield Tick("bitmap")
+            yield p["io_req_valid"].eq(0)
+            yield Tick("bitmap")
+            yield Tick("bitmap")
+            yield p["io_cache_resp_valid"].eq(1)
+            yield p["io_cache_resp_bits_order"].eq(1)
+            yield p["io_cache_resp_bits_hit"].eq(0)
+            yield Tick("bitmap")
+            yield p["io_cache_resp_valid"].eq(0)
+            yield p["io_mem_req_ready"].eq(1)
+            yield Settle()
+            self.assertEqual((yield p["io_mem_req_valid"]), 1)
+            self.assertEqual((yield p["io_mem_req_bits_id"]), 9)
+            yield Tick("bitmap")
+
+        simulator = Simulator(dut)
+        simulator.add_clock(1e-6, domain="bitmap")
+        simulator.add_process(process)
+        simulator.run()
 if __name__ == "__main__": unittest.main()
