@@ -75,6 +75,21 @@ class BypassPipeFamilyTest(unittest.TestCase):
             await context.delay(1e-9)
             self.assertEqual(context.get(ports["io_toExus_mem_0_0_bits_src_0"]), 0x55AA)
 
+            # DataSource.bypass (2) uses the one-cycle registered result.
+            # The register updates only on a valid EXU result and holds its
+            # previous value while the source is idle.
+            context.set(ports["io_fromDataPath_mem_0_0_bits_dataSources_0_value"], 2)
+            context.set(ports["io_fromDataPath_mem_0_0_bits_exuSources_0_value"], 1)
+            context.set(ports["io_fromExus_int_0_0_bits_data"], 0xBEEF)
+            context.set(ports["io_fromExus_int_0_0_valid"], 1)
+            await context.tick(domain="bypass")
+            context.set(ports["io_fromExus_int_0_0_valid"], 0)
+            await context.tick(domain="bypass")
+            self.assertEqual(context.get(ports["io_toExus_mem_0_0_bits_src_0"]), 0xBEEF)
+            context.set(ports["io_fromExus_int_0_0_bits_data"], 0x1234)
+            await context.delay(1e-9)
+            self.assertEqual(context.get(ports["io_toExus_mem_0_0_bits_src_0"]), 0xBEEF)
+
             # A zero exuSources code is the explicit no-hit case.
             context.set(ports["io_fromDataPath_mem_0_0_bits_exuSources_0_value"], 0)
             await context.delay(1e-9)
@@ -97,6 +112,7 @@ class BypassPipeFamilyTest(unittest.TestCase):
             self.assertEqual(context.get(ports["io_toExus_mem_0_0_valid"]), 0)
 
         simulator = Simulator(subject)
+        simulator.add_clock(1e-6, domain="bypass")
         simulator.add_testbench(bench)
         simulator.run()
 

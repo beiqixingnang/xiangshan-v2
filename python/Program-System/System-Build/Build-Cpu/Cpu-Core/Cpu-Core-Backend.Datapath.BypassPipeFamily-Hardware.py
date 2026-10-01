@@ -8,7 +8,7 @@ proved against the frozen reference.
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, cast
 
 from amaranth import Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
@@ -2691,8 +2691,9 @@ class BypassPipeFamily(Elaboratable):
         ``fromDataPath`` ready is the matching ``toExus`` ready and every
         ``fromDataPath`` valid/control field is copied to ``toExus``.  Source
         selection covers the locked zero, register, immediate and same-cycle
-        forward rails in this slice; bypass2, v0 and regcache remain explicit
-        follow-up layers.
+        forward rails plus the first registered bypass rail.  Bypass
+        registers are reset-less, matching the Chisel ``RegNext`` /
+        ``RegEnable`` state in the frozen reference.
         """
 
         ports = self.ports
@@ -2758,6 +2759,26 @@ class BypassPipeFamily(Elaboratable):
             "fp": ("fp_0_0", "fp_1_0", "fp_2_0"),
         }
 
+        # ``bypassDataVec`` is a reset-less ``RegEnable(data, valid)`` bank
+        # in the locked Scala. Keep one register per source and update it
+        # only when that EXU presents a valid result. The frozen build has no
+        # active readBypass2 sink, so selector 3 remains pending evidence.
+        bypass_domain = ClockDomain("bypass", reset_less=True)
+        bypass_domain.clk = ports["clock"]
+        module.domains.bypass = bypass_domain
+        bypass_registers: dict[str, Signal] = {}
+        for source_exu in tuple(dict.fromkeys(forward_sources["int"] + forward_sources["fp"])):
+            data_name = f"io_fromExus_{source_exu}_bits_data"
+            valid_name = f"io_fromExus_{source_exu}_valid"
+            if directions.get(data_name) != "input" or directions.get(valid_name) != "input":
+                continue
+            data = ports[data_name]
+            state = Signal(len(data), name=f"bypassDataVec_{source_exu}_r",
+                           init=None, reset_less=True)
+            bypass_registers[source_exu] = state
+            with cast(Any, module.If(ports[valid_name])):
+                module.d.bypass += state.eq(data)
+
         def forward_value(exu: str, selector: Any, width: int) -> Any | None:
             """Select one same-cycle forward source for a scalar sink."""
 
@@ -2775,6 +2796,23 @@ class BypassPipeFamily(Elaboratable):
                 if directions.get(data_name) != "input":
                     continue
                 data = ports[data_name]
+                if len(data) > width:
+                    data = data[:width]
+                elif len(data) < width:
+                    data = Cat(data, Const(0, width - len(data)))
+                result = Mux(selector == Const(index, len(selector)), data, result)
+            return result
+
+        def registered_value(selector: Any, width: int,
+                            sources: tuple[str, ...]) -> Any:
+            """Select one delayed source value for DataSource.bypass."""
+
+            result: Any = Const(0, width)
+            for index, source_exu in enumerate(sources, start=1):
+                state = bypass_registers.get(source_exu)
+                if state is None:
+                    continue
+                data: Any = state
                 if len(data) > width:
                     data = data[:width]
                 elif len(data) < width:
@@ -2840,6 +2878,14 @@ class BypassPipeFamily(Elaboratable):
                     )
                     if forward is not None:
                         selected = Mux(selector == Const(1, len(selector)), forward, selected)
+                        selected = Mux(
+                            selector == Const(2, len(selector)),
+                            registered_value(
+                                ports[exu_selector_name], width,
+                                forward_sources["fp"] if exu.startswith("fp_") else forward_sources["int"],
+                            ),
+                            selected,
+                        )
                     module.d.comb += ports[name].eq(
                         selected
                     )
@@ -2847,9 +2893,8 @@ class BypassPipeFamily(Elaboratable):
             if directions.get(input_name) == "input":
                 module.d.comb += ports[name].eq(ports[input_name])
 
-        # ``clock``/``reset`` exist in the ABI for the pending registered
-        # bypass rails; the combinational slice above deliberately does not
-        # infer a clock domain or mutate those signals.
+        # ``reset`` remains unused by the reset-less bypass register bank;
+        # the ABI still carries it for the surrounding datapath contract.
 
     def elaborate(self, platform: Any) -> Module:
         del platform
