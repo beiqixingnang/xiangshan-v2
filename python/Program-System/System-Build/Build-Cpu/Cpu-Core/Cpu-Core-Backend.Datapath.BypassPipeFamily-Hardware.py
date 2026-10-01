@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from amaranth import ClockDomain, Const, Elaboratable, Module, Signal
+from amaranth import Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
 
 
@@ -2684,9 +2684,137 @@ class BypassPipeFamily(Elaboratable):
             if direction == "output":
                 module.d.comb += self.ports[name].eq(Const(0, width))
 
+    def _bypass_network(self, module: Module) -> None:
+        """Drive the first behavioral slice of ``BypassNetwork``.
+
+        The locked datapath has a transparent Decoupled boundary: every
+        ``fromDataPath`` ready is the matching ``toExus`` ready and every
+        ``fromDataPath`` valid/control field is copied to ``toExus``.  Source
+        selection is intentionally limited to the proved zero, register and
+        immediate rails in this slice; forwarding, bypass2, v0 and regcache
+        remain explicit follow-up layers.
+        """
+
+        ports = self.ports
+        directions = {name: direction for name, direction, _width in self.specs}
+
+        # Immediate-bearing issue entries in the locked build.  These indices
+        # are the flattened Exu order used by ``immInfo`` in the reference.
+        imm_index = {
+            "int_0_0": 0,
+            "int_0_1": 1,
+            "int_1_0": 2,
+            "int_1_1": 3,
+            "int_2_0": 4,
+            "int_2_1": 5,
+            "int_3_0": 6,
+            "vf_0_1": 14,
+            "mem_0_0": 18,
+            "mem_1_0": 19,
+        }
+
+        def fit_immediate(value: Any, bits: int, width: int, signed: bool) -> Any:
+            """Match ImmExtractor's 64-bit intermediate and wider fit."""
+
+            base_width = min(width, 64)
+            source = value[:bits]
+            if bits > base_width:
+                source = value[:base_width]
+            elif bits < base_width:
+                if signed:
+                    source = Cat(source, *[value[bits - 1] for _ in range(base_width - bits)])
+                else:
+                    source = Cat(source, Const(0, base_width - bits))
+            if width > base_width:
+                source = Cat(source, Const(0, width - base_width))
+            return source[:width]
+
+        def immediate_value(imm: Any, imm_type: Any, width: int) -> Any:
+            """Implement the locked ImmUnion selector for source ``imm``."""
+
+            values = (
+                (1, fit_immediate(Cat(Const(0, 1), imm[:12]), 13, width, True)),  # SB
+                (2, fit_immediate(Cat(Const(0, 12), imm[:20]), 32, width, True)),  # U
+                (3, fit_immediate(Cat(Const(0, 1), imm[:20]), 21, width, True)),  # UJ
+                (4, fit_immediate(imm, 12, width, True)),  # I
+                (5, fit_immediate(imm, 22, width, True)),  # Z
+                (8, fit_immediate(imm, 6, width, False)),  # B6
+                (9, fit_immediate(imm, 5, width, True)),  # OPIVIS
+                (10, fit_immediate(imm, 5, width, False)),  # OPIVIU
+                (11, fit_immediate(imm, 32, width, True)),  # LUI32
+                (12, fit_immediate(imm, 11, width, True)),  # VSETVLI
+                (13, fit_immediate(imm, 15, width, True)),  # VSETIVLI
+                (15, fit_immediate(imm, 6, width, False)),  # VRORVI
+            )
+            result: Any = Const(0, width)
+            for selector, value in values:
+                result = Mux(imm_type == Const(selector, len(imm_type)), value, result)
+            return result
+
+        # Ready is a direct Decoupled pass-through.  There are no ready
+        # outputs for occupied input entries in the frozen ABI.
+        for name, direction, _width in self.specs:
+            if direction != "output" or not name.startswith("io_fromDataPath_"):
+                continue
+            if not name.endswith("_ready"):
+                continue
+            exu = name[len("io_fromDataPath_"):-len("_ready")]
+            ready_name = f"io_toExus_{exu}_ready"
+            if directions.get(ready_name) == "input":
+                module.d.comb += ports[name].eq(ports[ready_name])
+
+        # Every non-source output field is a same-name bundle connection.
+        for name, direction, width in self.specs:
+            if direction != "output" or not name.startswith("io_toExus_"):
+                continue
+            tail = name[len("io_toExus_"):]
+            input_name = f"io_fromDataPath_{tail}"
+            if "_bits_src_" in tail:
+                exu, source_text = tail.split("_bits_src_", 1)
+                try:
+                    source_index = int(source_text)
+                except ValueError:
+                    source_index = -1
+                source_name = input_name
+                selector_name = (
+                    f"io_fromDataPath_{exu}_bits_dataSources_{source_index}_value"
+                )
+                if directions.get(source_name) == "input" and directions.get(selector_name) == "input":
+                    source = ports[source_name]
+                    selector = ports[selector_name]
+                    imm_value = Const(0, width)
+                    info_idx = imm_index.get(exu)
+                    if info_idx is not None:
+                        imm_name = f"io_fromDataPath_immInfo_{info_idx}_imm"
+                        imm_type_name = f"io_fromDataPath_immInfo_{info_idx}_immType"
+                        if directions.get(imm_name) == "input" and directions.get(imm_type_name) == "input":
+                            imm = ports[imm_name]
+                            imm_value = immediate_value(imm, ports[imm_type_name], width)
+                    # A few memory entries carry a prebuilt immediate on the
+                    # Exu input instead of an immInfo slot.
+                    elif directions.get(f"io_fromDataPath_{exu}_bits_imm") == "input":
+                        raw_imm = ports[f"io_fromDataPath_{exu}_bits_imm"]
+                        imm_value = raw_imm[:width]
+                    module.d.comb += ports[name].eq(
+                        Mux(selector == Const(0, len(selector)), Const(0, width),
+                            Mux(selector == Const(4, len(selector)), imm_value,
+                                Mux(selector == Const(8, len(selector)), source, Const(0, width))))
+                    )
+                    continue
+            if directions.get(input_name) == "input":
+                module.d.comb += ports[name].eq(ports[input_name])
+
+        # ``clock``/``reset`` exist in the ABI for the pending registered
+        # bypass rails; the combinational slice above deliberately does not
+        # infer a clock domain or mutate those signals.
+
     def elaborate(self, platform: Any) -> Module:
         del platform
         module: Any = Module()
+        if self.member == "BypassNetwork":
+            self._defaults(module)
+            self._bypass_network(module)
+            return module
         if self.member != "PipeGroupConnect":
             self._defaults(module)
             return module

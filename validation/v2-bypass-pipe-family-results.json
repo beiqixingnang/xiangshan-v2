@@ -2,7 +2,7 @@
   "schema_version": 1,
   "kind": "XIANGSHAN_KUNMINGHU_V2_BYPASS_PIPE_FAMILY",
   "batch_id": "V2-BACKEND-DATAPATH-BYPASS-001",
-  "source_commit": "58fc83a617c0a8fc17cc3c91dcd070d70f0b3e9f",
+  "source_commit": "42652da8adbe704a33bcbaa985ac70060e674a74",
   "scala_sources": [
     "scala/src/main/scala/xiangshan/backend/datapath/BypassNetwork.scala",
     "scala/src/main/scala/xiangshan/backend/PipeGroupConnect.scala"
@@ -31,12 +31,12 @@
     ],
     "status": "PASS",
     "returncode": 0,
-    "output_tail": "..\r\n----------------------------------------------------------------------\r\nRan 2 tests in 1.707s\r\n\r\nOK\r\n"
+    "output_tail": "...\r\n----------------------------------------------------------------------\r\nRan 3 tests in 1.880s\r\n\r\nOK\r\n"
   },
   "tool_gates": {
     "BypassNetwork": {
-      "rtl_bytes": 203091,
-      "rtl_sha256": "cdb6957e3eae137db5611668d5ee78b8539b00fbb59e0404eaae63edeb15cd65",
+      "rtl_bytes": 288117,
+      "rtl_sha256": "a3d45732db73f957709b4fe25b6f3ef06fac882ac69696a9ca2197e27115cc10",
       "verilator": {
         "command": [
           "wsl.exe",
@@ -47,7 +47,7 @@
         ],
         "status": "PASS",
         "returncode": 0,
-        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.214 MB sources in 2 modules, into 0.038 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.094 s (elab=0.013, cvt=0.033, bld=0.000); cpu 0.056 s on 1 threads; alloced 15.777 MB\n"
+        "output_tail": "                                                                          : ... note: In instance 'BypassNetwork'\n 3432 |   assign \\$351  = ! io_fromDataPath_mem_0_0_bits_dataSources_0_value;\n      |                   ^\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-bypass-pipe-family/BypassNetwork.sv:3433:68: Operator EQ expects 4 bits on the RHS, but RHS's CONST '3'h4' generates 3 bits.\n                                                                                                                                                         : ... note: In instance 'BypassNetwork'\n 3433 |   assign \\$352  = io_fromDataPath_mem_0_0_bits_dataSources_0_value == 3'h4;\n      |                                                                    ^~\n"
       },
       "yosys": {
         "command": [
@@ -59,7 +59,7 @@
         ],
         "status": "PASS",
         "returncode": 0,
-        "output_tail": "nvert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: a619670176, CPU: user 0.01s system 0.01s, MEM: 8.75 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 48% 2x read_verilog (0 sec), 26% 1x opt_expr (0 sec), ...\n"
+        "output_tail": "nvert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: a619670176, CPU: user 0.01s system 0.00s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 48% 1x opt_expr (0 sec), 33% 2x read_verilog (0 sec), ...\n"
       }
     },
     "PipeGroupConnect": {
@@ -75,7 +75,7 @@
         ],
         "status": "PASS",
         "returncode": 0,
-        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.725 MB sources in 3 modules, into 1.046 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.298 s (elab=0.048, cvt=0.156, bld=0.000); cpu 0.280 s on 1 threads; alloced 33.664 MB\n"
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.725 MB sources in 3 modules, into 1.046 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.273 s (elab=0.040, cvt=0.140, bld=0.000); cpu 0.252 s on 1 threads; alloced 33.664 MB\n"
       },
       "yosys": {
         "command": [
@@ -87,7 +87,7 @@
         ],
         "status": "PASS",
         "returncode": 0,
-        "output_tail": "nvert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: ea9f32c06b, CPU: user 0.00s system 0.01s, MEM: 8.91 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 50% 1x opt_expr (0 sec), 26% 2x read_verilog (0 sec), ...\n"
+        "output_tail": "nvert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: ea9f32c06b, CPU: user 0.01s system 0.00s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 44% 1x opt_expr (0 sec), 31% 2x read_verilog (0 sec), ...\n"
       }
     }
   },

@@ -25,6 +25,60 @@ class BypassPipeFamilyTest(unittest.TestCase):
         module = load_subject()
         for member in module.COVERED_MODULES: self.assertIn(f"module {member}", module.build_verilog({"module": member}, {}))
 
+    def test_bypass_network_ready_valid_zero_reg_and_imm_slice(self) -> None:
+        """Exercise the first bounded BypassNetwork behavior slice.
+
+        Forward, bypass2, v0, regcache and writeback rails remain pending;
+        this vector only checks the transparent Decoupled boundary together
+        with the zero, register and immediate source selectors.
+        """
+
+        module = load_subject()
+        subject = module.BypassPipeFamily("BypassNetwork")
+        ports = subject.ports
+
+        def clear_inputs(context: Any) -> None:
+            for name, direction, _width in subject.specs:
+                if direction == "input" and name not in ("clock", "reset"):
+                    context.set(ports[name], 0)
+
+        async def bench(context: Any) -> None:
+            clear_inputs(context)
+            context.set(ports["io_toExus_mem_0_0_ready"], 1)
+            context.set(ports["io_fromDataPath_mem_0_0_valid"], 1)
+            context.set(ports["io_fromDataPath_mem_0_0_bits_src_0"], 0xDEAD)
+
+            # DataSource.zero (0) must override the register-file payload.
+            context.set(ports["io_fromDataPath_mem_0_0_bits_dataSources_0_value"], 0)
+            await context.delay(1e-9)
+            await context.delay(1e-9)
+            self.assertEqual(context.get(ports["io_fromDataPath_mem_0_0_ready"]), 1)
+            self.assertEqual(context.get(ports["io_toExus_mem_0_0_valid"]), 1)
+            self.assertEqual(context.get(ports["io_toExus_mem_0_0_bits_src_0"]), 0)
+
+            # DataSource.reg (8) remains a transparent source for comparison.
+            context.set(ports["io_fromDataPath_mem_0_0_bits_dataSources_0_value"], 8)
+            await context.delay(1e-9)
+            self.assertEqual(context.get(ports["io_toExus_mem_0_0_bits_src_0"]), 0xDEAD)
+
+            # DataSource.imm (4) uses the flattened immInfo slot for this EXU.
+            context.set(ports["io_fromDataPath_mem_0_0_bits_dataSources_0_value"], 4)
+            context.set(ports["io_fromDataPath_immInfo_18_imm"], 0xFFFFF800)
+            context.set(ports["io_fromDataPath_immInfo_18_immType"], 4)  # IMM_I
+            await context.delay(1e-9)
+            self.assertEqual(context.get(ports["io_toExus_mem_0_0_bits_src_0"]), 0xFFFFFFFFFFFFF800)
+
+            # Ready and valid follow their opposite Decoupled edges.
+            context.set(ports["io_toExus_mem_0_0_ready"], 0)
+            context.set(ports["io_fromDataPath_mem_0_0_valid"], 0)
+            await context.delay(1e-9)
+            self.assertEqual(context.get(ports["io_fromDataPath_mem_0_0_ready"]), 0)
+            self.assertEqual(context.get(ports["io_toExus_mem_0_0_valid"]), 0)
+
+        simulator = Simulator(subject)
+        simulator.add_testbench(bench)
+        simulator.run()
+
     def test_pipe_group_connect_capture_hold_flush_and_replace(self) -> None:
         module = load_subject()
         subject = module.BypassPipeFamily("PipeGroupConnect")
