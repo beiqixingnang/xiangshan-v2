@@ -2,8 +2,8 @@
 具有精确冻结端口 ABI 的有界 MMU/LSQ family 聚合。
 """
 from __future__ import annotations
-from typing import Any
-from amaranth import ClockDomain, Const, Elaboratable, Module, Mux, Signal
+from typing import Any, cast
+from amaranth import Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal, Value
 from amaranth.back import verilog
 
 # Module Contract
@@ -12,7 +12,7 @@ COVERED_MODULES = ('AtomicsUnit', 'Bitmap', 'HPTW', 'TLBNonBlock_2', 'LoadMisali
 # AgeDetector_38 is the first behaviorally closed LSQ leaf in this aggregate.
 # The remaining large MMU/LSQ blocks retain an explicit contract-only status
 # until their complete locked-parent differential proofs are available.
-IMPLEMENTED_MEMBERS: tuple[str, ...] = ('AgeDetector_38',)
+IMPLEMENTED_MEMBERS: tuple[str, ...] = ('AgeDetector_38', 'Bitmap')
 CONTRACT_ONLY_MEMBERS = tuple(member for member in COVERED_MODULES if member not in IMPLEMENTED_MEMBERS)
 # The Build carries only executable behavior and its public port contract.
 PortSpec = tuple[str, str, int]
@@ -1295,7 +1295,7 @@ class FamilySpec:
         if module not in PORT_SPECS:
             raise ValueError(module)
         self.module = module
-        self.ports = tuple(tuple(row) for row in PORT_SPECS[module])
+        self.ports: tuple[PortSpec, ...] = PORT_SPECS[module]
     # Return width. / 返回位宽。
     def width(self, name: str) -> int:
         # Find catalog row. / 查找 catalog 行。
@@ -1356,7 +1356,7 @@ def _age_detector_38(module: Module, ports: dict[str, Signal]) -> None:
         return ~upper[(col, row)]
 
     def enqueued(index: int) -> Any:
-        return (enq[0][index] | enq[1][index] | enq[2][index]) & ~deq[index]
+        return (cast(Any, enq[0][index]) | enq[1][index] | enq[2][index]) & ~cast(Any, deq[index])
 
     def previous_port_enqueued(index: int, port_count: int) -> Any:
         # ``isEnqueued(index, 0)`` is false; port k sees only ports before k.
@@ -1365,7 +1365,7 @@ def _age_detector_38(module: Module, ports: dict[str, Signal]) -> None:
         value: Any = Const(0, 1)
         for port in range(port_count):
             value = value | enq[port][index]
-        return value & ~deq[index]
+        return value & ~cast(Any, deq[index])
 
     def parallel_mux(row: int, col: int) -> Any:
         # The selector result[k] is the prefix enqueue state of the other
@@ -1411,10 +1411,371 @@ def _age_detector_38(module: Module, ports: dict[str, Signal]) -> None:
                 relation: Any = Const(1, 1)
             else:
                 relation = age_value(row, col)
-            older_than_ready = older_than_ready & (~ready[col] | relation)
+            older_than_ready = older_than_ready & (~cast(Any, ready[col]) | relation)
         selected = ready[row] & older_than_ready
         result = Mux(selected, Const(1 << row, entries), result)
     module.d.comb += out.eq(result)
+
+
+def _bitmap(module: Module, ports: dict[str, Signal]) -> None:
+    """Elaborate the eight-entry bitmap translation checker.
+
+    The checker accepts translated PPN requests, performs the PMP stage, then
+    arbitrates a small bitmap cache and the backing memory.  Entries sharing a
+    PPN block coalesce behind one memory response; each completed entry carries
+    the selected fault bit and the eight contiguous fault bits to the caller.
+    """
+
+    entries = 8
+    state_idle = 0
+    state_addr_check = 1
+    state_cache_req = 2
+    state_cache_resp = 3
+    state_mem_req = 4
+    state_mem_waiting = 5
+    state_mem_out = 6
+
+    # The generated Chisel block has an active-high asynchronous reset on its
+    # entry/state registers.  Keep an independent domain so the public clock
+    # remains an ordinary ABI port.
+    clock_domain = ClockDomain("bitmap", async_reset=True)
+    clock_domain.clk = ports["clock"]
+    clock_domain.rst = ports["reset"]
+    module.domains += clock_domain
+
+    state = [Signal(3, reset=0, name=f"bitmap_state_{index}") for index in range(entries)]
+    ppn = [Signal(36, reset=0, name=f"bitmap_ppn_{index}") for index in range(entries)]
+    vpn = [Signal(38, reset=0, name=f"bitmap_vpn_{index}") for index in range(entries)]
+    s2xlate = [Signal(2, reset=0, name=f"bitmap_s2xlate_{index}") for index in range(entries)]
+    request_id = [Signal(3, reset=0, name=f"bitmap_id_{index}") for index in range(entries)]
+    wait_id = [Signal(3, reset=0, name=f"bitmap_wait_id_{index}") for index in range(entries)]
+    fault = [Signal(reset=0, name=f"bitmap_cf_{index}") for index in range(entries)]
+    hit = [Signal(reset=0, name=f"bitmap_hit_{index}") for index in range(entries)]
+    contiguous = [
+        [Signal(reset=0, name=f"bitmap_cfs_{index}_{bit}") for bit in range(8)]
+        for index in range(entries)
+    ]
+    level = [Signal(2, reset=0, name=f"bitmap_level_{index}") for index in range(entries)]
+    way_info = [Signal(4, reset=0, name=f"bitmap_way_{index}") for index in range(entries)]
+    hptw_bypassed = [Signal(reset=0, name=f"bitmap_bypassed_{index}") for index in range(entries)]
+    napot = [Signal(reset=0, name=f"bitmap_napot_{index}") for index in range(entries)]
+    data = [Signal(64, reset=0, name=f"bitmap_data_{index}") for index in range(entries)]
+
+    enq_ptr_reg = Signal(3, name="bitmap_enq_ptr_reg")
+    need_addr_check = Signal(name="bitmap_need_addr_check")
+    pmp_addr_reg = Signal(64, name="bitmap_pmp_addr_reg")
+    wakeup_stall = Signal(reset=0, name="bitmap_wakeup_stall")
+    wakeup_set_index_reg = Signal(6, reset=0, name="bitmap_wakeup_set_index")
+    wakeup_tag_reg = Signal(38, reset=0, name="bitmap_wakeup_tag")
+    wakeup_way_reg = Signal(4, reset=0, name="bitmap_wakeup_way")
+    wakeup_pte_index_reg = Signal(3, reset=0, name="bitmap_wakeup_pte_index")
+    wakeup_success_reg = Signal(reset=0, name="bitmap_wakeup_success")
+    wakeup_s2xlate_reg = Signal(2, reset=0, name="bitmap_wakeup_s2xlate")
+    memory_last_grant = Signal(3, reset=0, name="bitmap_memory_last_grant")
+
+    def select_expr(values: list[Any], selector: Any, width: int) -> Any:
+        """Priority mux indexed by a three-bit slot selector."""
+
+        result: Any = Const(0, width)
+        for index in reversed(range(len(values))):
+            result = Mux(selector == Const(index, len(selector)), values[index], result)
+        return result
+
+    def _or_reduce(values: list[Any]) -> Any:
+        result: Any = Const(0, 1)
+        for value in values:
+            result = result | value
+        return result
+
+    flush = (
+        ports["io_sfence_valid"]
+        | ports["io_csr_satp_changed"]
+        | ports["io_csr_vsatp_changed"]
+        | ports["io_csr_hgatp_changed"]
+        | ports["io_csr_priv_virt_changed"]
+    )
+    idle = [state[index] == Const(state_idle, 3) for index in range(entries)]
+    cache_request = [state[index] == Const(state_cache_req, 3) for index in range(entries)]
+    cache_response = [state[index] == Const(state_cache_resp, 3) for index in range(entries)]
+    memory_request = [state[index] == Const(state_mem_req, 3) for index in range(entries)]
+    waiting = [state[index] == Const(state_mem_waiting, 3) for index in range(entries)]
+    having = [state[index] == Const(state_mem_out, 3) for index in range(entries)]
+
+    idle_any: Any = Const(0, 1)
+    enq_ptr: Any = Const(entries - 1, 3)
+    for index in range(entries):
+        idle_any = idle_any | idle[index]
+    for index in reversed(range(entries)):
+        enq_ptr = Mux(idle[index], Const(index, 3), enq_ptr)
+
+    cache_any: Any = Const(0, 1)
+    cache_ptr: Any = Const(entries - 1, 3)
+    for index in range(entries):
+        cache_any = cache_any | cache_request[index]
+    for index in reversed(range(entries)):
+        cache_ptr = Mux(cache_request[index], Const(index, 3), cache_ptr)
+
+    mask_inputs = [ports[f"io_mem_req_mask_{index}"] for index in range(entries)]
+    memory_valid: list[Any] = [memory_request[index] & ~mask_inputs[index] for index in range(entries)]
+    memory_any: Any = Const(0, 1)
+    memory_ptr: Any = Const(entries - 1, 3)
+    memory_after_valid = [
+        memory_valid[index] & (Const(index, 3) > memory_last_grant)
+        for index in range(entries)
+    ]
+    memory_after_any: Any = Const(0, 1)
+    memory_after_ptr: Any = Const(entries - 1, 3)
+    for index in range(entries):
+        memory_any = memory_any | memory_valid[index]
+        memory_after_any = memory_after_any | memory_after_valid[index]
+    for index in reversed(range(entries)):
+        memory_ptr = Mux(memory_valid[index], Const(index, 3), memory_ptr)
+        memory_after_ptr = Mux(memory_after_valid[index], Const(index, 3), memory_after_ptr)
+    memory_ptr = Mux(memory_after_any, memory_after_ptr, memory_ptr)
+
+    having_any: Any = Const(0, 1)
+    response_ptr: Any = Const(entries - 1, 3)
+    for index in range(entries):
+        having_any = having_any | having[index]
+    for index in reversed(range(entries)):
+        response_ptr = Mux(having[index], Const(index, 3), response_ptr)
+
+    # Effective PPN is the level-specific superpage reconstruction used by
+    # bitmap addressing.  The locked configuration has no key-ID enable port,
+    # so the incoming PPN is used directly.
+    request_level = ports["io_req_bits_level"]
+    request_bmppn = ports["io_req_bits_bmppn"]
+    request_vpn = ports["io_req_bits_vpn"]
+    request_n = ports["io_req_bits_n"]
+    effective_ppn: Any = Mux(
+        request_level == Const(3, 2),
+        Cat(request_vpn[0:27], request_bmppn[27:36]),
+        Mux(
+            request_level == Const(2, 2),
+            Cat(request_vpn[0:18], request_bmppn[18:36]),
+            Mux(
+                request_level == Const(1, 2),
+                Cat(request_vpn[0:9], request_bmppn[9:36]),
+                Mux(request_n, Cat(request_vpn[0:4], request_bmppn[4:36]), request_bmppn),
+            ),
+        ),
+    )
+
+    def bitmap_address(ppn_value: Any) -> Any:
+        # BMA is a 58-bit page base; the public address is the low 48 bits.
+        base = Cat(Const(0, 6), ports["io_csr_mbmc_BMA"][0:42])
+        offset = Cat(Const(0, 3), ppn_value[6:36], Const(0, 15))
+        return cast(Any, base) + offset
+
+    request_address = bitmap_address(effective_ppn)
+    request_fire = ports["io_req_valid"] & idle_any
+
+    # Memory and waiting duplicate detection use the 32-bit bitmap block tag.
+    request_block = effective_ppn[5:36]
+    memory_selected_ppn = select_expr(ppn, memory_ptr, 36)
+    memory_fire = memory_any & ports["io_mem_req_ready"]
+    duplicate_wait = [waiting[index] & (request_block == ppn[index][5:36]) for index in range(entries)]
+    duplicate_wait_any: Any = Const(0, 1)
+    for value in duplicate_wait:
+        duplicate_wait_any = duplicate_wait_any | value
+    duplicate_request = memory_fire & (request_block == memory_selected_ppn[5:36])
+
+    memory_resp_waiting = [
+        waiting[index]
+        & (ports["io_mem_resp_bits_id"] == (Cat(wait_id[index], Const(0, 1)) + Const(8, 4)))
+        for index in range(entries)
+    ]
+    memory_resp_fire = ports["io_mem_resp_valid"] & _or_reduce(waiting)
+    duplicate_response: Any = Const(0, 1)
+    for index in range(entries):
+        duplicate_response = duplicate_response | (
+            duplicate_wait[index]
+            & ports["io_mem_resp_valid"]
+            & (ports["io_mem_resp_bits_id"][0:3] == Const(index, 3))
+        )
+    request_wait_id: Any = select_expr(wait_id, Const(0, 3), 3)
+    for index in reversed(range(entries)):
+        request_wait_id = Mux(duplicate_wait[index], wait_id[index], request_wait_id)
+    request_wait_id = Mux(duplicate_request, memory_ptr, request_wait_id)
+    request_to_wait = duplicate_wait_any | duplicate_request
+    request_state: Any = Mux(duplicate_response, Const(state_mem_out, 3), Mux(request_to_wait, Const(state_mem_waiting, 3), Const(state_addr_check, 3)))
+
+    # Memory response payload is eight little-endian 64-bit words.  Each word
+    # supplies one selected fault bit and eight contiguous byte fault bits.
+    response_words = [ports["io_mem_resp_bits_value"][index * 64:(index + 1) * 64] for index in range(8)]
+
+    def decode_faults(ppn_value: Any, source_value: Any) -> tuple[Any, list[Any], Any]:
+        word = select_expr(response_words, ppn_value[6:9], 64)
+        byte_shift = Cat(Const(0, 3), ppn_value[3:6])
+        byte_window = word >> byte_shift
+        cfs = [byte_window[index * 8] for index in range(8)]
+        cf_value = (word >> ppn_value[0:6])[0]
+        return cf_value, cfs, word
+
+    request_cf, request_cfs, request_word = decode_faults(effective_ppn, ports["io_mem_resp_bits_value"])
+    del request_word
+
+    # Public output arbitration and handshake surfaces.
+    module.d.comb += ports["io_req_ready"].eq(idle_any)
+    module.d.comb += ports["io_mem_req_valid"].eq(memory_any & ~flush)
+    module.d.comb += ports["io_mem_req_bits_addr"].eq(bitmap_address(memory_selected_ppn))
+    module.d.comb += ports["io_mem_req_bits_id"].eq(Cat(memory_ptr, Const(0, 1)) + Const(8, 4))
+    module.d.comb += ports["io_cache_req_valid"].eq(cache_any & ~flush)
+    module.d.comb += ports["io_cache_req_bits_order"].eq(cache_ptr)
+    module.d.comb += ports["io_cache_req_bits_tag"].eq(select_expr(ppn, cache_ptr, 36))
+    module.d.comb += ports["io_cache_resp_ready"].eq((Const(0, 1) | _or_reduce(cache_response)) & ~flush)
+    module.d.comb += ports["io_pmp_req_bits_addr"].eq(pmp_addr_reg[0:48])
+
+    cache_response_fire = (Const(0, 1) | _or_reduce(cache_response)) & ports["io_cache_resp_valid"] & ~flush
+    cache_matches = [cache_response_fire & cache_response[index] & (ports["io_cache_resp_bits_order"] == Const(index, 8)) for index in range(entries)]
+    cache_hit = cache_response_fire & ports["io_cache_resp_bits_hit"]
+
+    # Completion output, wakeup hold, and refill payload.
+    response_valid = having_any & ~wakeup_stall
+    response_fire = response_valid & ports["io_resp_ready"]
+    selected_fault = select_expr(fault, response_ptr, 1)
+    selected_hit = select_expr(hit, response_ptr, 1)
+    selected_ppn = select_expr(ppn, response_ptr, 36)
+    selected_vpn = select_expr(vpn, response_ptr, 38)
+    selected_level = select_expr(level, response_ptr, 2)
+    selected_napot = select_expr(napot, response_ptr, 1)
+    selected_bypassed = select_expr(hptw_bypassed, response_ptr, 1)
+    selected_s2xlate = select_expr(s2xlate, response_ptr, 2)
+    selected_way = select_expr(way_info, response_ptr, 4)
+    selected_request_id = select_expr(request_id, response_ptr, 3)
+    selected_data = select_expr(data, response_ptr, 64)
+    selected_cfs = [select_expr([contiguous[index][bit] for index in range(entries)], response_ptr, 1) for bit in range(8)]
+    wakeup_one = response_valid & ~selected_bypassed & (selected_level == Const(0, 2)) & ~selected_napot
+    wakeup_fire = (wakeup_stall | wakeup_one) & ports["io_wakeup_ready"]
+    module.d.comb += ports["io_resp_valid"].eq(response_valid)
+    module.d.comb += ports["io_resp_bits_cf"].eq(selected_fault)
+    module.d.comb += ports["io_resp_bits_id"].eq(selected_request_id)
+    for bit in range(8):
+        module.d.comb += ports[f"io_resp_bits_cfs_{bit}"].eq(selected_cfs[bit])
+    module.d.comb += ports["io_wakeup_valid"].eq(wakeup_stall | wakeup_one)
+    module.d.comb += ports["io_wakeup_bits_setIndex"].eq(Mux(wakeup_one, selected_vpn[3:9], wakeup_set_index_reg))
+    module.d.comb += ports["io_wakeup_bits_tag"].eq(Mux(wakeup_one, selected_vpn, wakeup_tag_reg))
+    module.d.comb += ports["io_wakeup_bits_way_info"].eq(Mux(wakeup_one, selected_way, wakeup_way_reg))
+    module.d.comb += ports["io_wakeup_bits_pte_index"].eq(Mux(wakeup_one, selected_vpn[0:3], wakeup_pte_index_reg))
+    module.d.comb += ports["io_wakeup_bits_check_success"].eq(Mux(wakeup_one, ~selected_fault, wakeup_success_reg))
+    module.d.comb += ports["io_wakeup_bits_s2xlate"].eq(Mux(wakeup_one, selected_s2xlate, wakeup_s2xlate_reg))
+    module.d.comb += ports["io_refill_valid"].eq(response_valid & ~selected_hit)
+    module.d.comb += ports["io_refill_bits_tag"].eq(selected_ppn)
+    module.d.comb += ports["io_refill_bits_data"].eq(selected_data)
+
+    # The PMP request is a one-cycle delayed side effect of an accepted entry.
+    pmp_fire = need_addr_check
+    access_fault = ports["io_pmp_resp_ld"] | ports["io_pmp_resp_mmio"]
+    pmp_matches = [pmp_fire & (enq_ptr_reg == Const(index, 3)) for index in range(entries)]
+
+    # Register updates.  The order mirrors the source state machine: enqueue,
+    # PMP response, cache handshake, cache response, memory request/response,
+    # output dequeue, and finally flush.
+    for index in range(entries):
+        next_state: Any = state[index]
+        next_state = Mux(request_fire & (enq_ptr == Const(index, 3)), request_state, next_state)
+        next_state = Mux(pmp_matches[index], Mux(access_fault, Const(state_mem_out, 3), Const(state_cache_req, 3)), next_state)
+        next_state = Mux(cache_request_fire := (cache_any & ports["io_cache_req_ready"] & ~flush) & (cache_ptr == Const(index, 3)), Const(state_cache_resp, 3), next_state)
+
+        # A cache miss either joins an existing memory request, joins a newly
+        # issued one, or starts a fresh request of its own.
+        cache_duplicate_wait = [
+            waiting[other] & (ppn[index][5:36] == ppn[other][5:36])
+            for other in range(entries)
+        ]
+        cache_duplicate_any: Any = Const(0, 1)
+        for value in cache_duplicate_wait:
+            cache_duplicate_any = cache_duplicate_any | value
+        cache_duplicate_response: Any = Const(0, 1)
+        for other in range(entries):
+            cache_duplicate_response = cache_duplicate_response | (
+                cache_duplicate_wait[other]
+                & (ports["io_mem_resp_bits_id"][0:3] == Const(other, 3))
+                & ports["io_mem_resp_valid"]
+            )
+        cache_duplicate_request = memory_fire & (ppn[index][5:36] == memory_selected_ppn[5:36])
+        cache_wait_id: Any = Const(0, 3)
+        for other in reversed(range(entries)):
+            cache_wait_id = Mux(cache_duplicate_wait[other], wait_id[other], cache_wait_id)
+        cache_wait_id = Mux(cache_duplicate_request, memory_ptr, cache_wait_id)
+        cache_to_wait = cache_duplicate_any | cache_duplicate_request
+        cache_next_state = Mux(cache_duplicate_response, Const(state_mem_out, 3), Mux(cache_to_wait, Const(state_mem_waiting, 3), Const(state_mem_req, 3)))
+        next_state = Mux(cache_matches[index] & ~cache_hit, cache_next_state, next_state)
+        next_state = Mux(cache_matches[index] & cache_hit, Const(state_mem_out, 3), next_state)
+        next_state = Mux(memory_fire & memory_request[index] & (ppn[index][5:36] == memory_selected_ppn[5:36]), Const(state_mem_waiting, 3), next_state)
+        next_state = Mux(memory_resp_waiting[index], Const(state_mem_out, 3), next_state)
+        next_state = Mux(response_fire & (response_ptr == Const(index, 3)), Const(state_idle, 3), next_state)
+        next_state = Mux(flush, Const(state_idle, 3), next_state)
+        module.d.bitmap += state[index].eq(next_state)
+
+        # Entry field updates follow the same event priority.
+        field_ppn: Any = ppn[index]
+        field_vpn: Any = vpn[index]
+        field_s2: Any = s2xlate[index]
+        field_id: Any = request_id[index]
+        field_wait: Any = wait_id[index]
+        field_fault: Any = fault[index]
+        field_hit: Any = hit[index]
+        field_level: Any = level[index]
+        field_way: Any = way_info[index]
+        field_bypassed: Any = hptw_bypassed[index]
+        field_napot: Any = napot[index]
+        field_data: Any = data[index]
+        cfs_next: list[Value] = list(contiguous[index])
+        enq_here = request_fire & (enq_ptr == Const(index, 3))
+        field_ppn = Mux(enq_here, effective_ppn, field_ppn)
+        field_vpn = Mux(enq_here, request_vpn, field_vpn)
+        field_s2 = Mux(enq_here, ports["io_req_bits_s2xlate"], field_s2)
+        field_id = Mux(enq_here, ports["io_req_bits_id"], field_id)
+        field_wait = Mux(enq_here, request_wait_id, field_wait)
+        field_fault = Mux(enq_here, Mux(duplicate_response, request_cf, Const(0, 1)), field_fault)
+        field_hit = Mux(enq_here, request_to_wait | duplicate_response, field_hit)
+        field_level = Mux(enq_here, request_level, field_level)
+        field_way = Mux(enq_here, ports["io_req_bits_way_info"], field_way)
+        field_bypassed = Mux(enq_here, ports["io_req_bits_hptw_bypassed"], field_bypassed)
+        field_napot = Mux(enq_here, request_n, field_napot)
+        for bit in range(8):
+            cfs_next[bit] = Mux(enq_here, Mux(duplicate_response, request_cfs[bit], Const(0, 1)), cfs_next[bit])
+        field_fault = Mux(pmp_matches[index], access_fault, field_fault)
+        for bit in range(8):
+            cfs_next[bit] = Mux(pmp_matches[index], access_fault, cfs_next[bit])
+        cache_cfs = [ports[f"io_cache_resp_bits_cfs_{bit}"] for bit in range(8)]
+        cache_fault = select_expr(cache_cfs, ppn[index][0:3], 1)
+        field_fault = Mux(cache_matches[index] & cache_hit, cache_fault, field_fault)
+        for bit in range(8):
+            cfs_next[bit] = Mux(cache_matches[index] & cache_hit, cache_cfs[bit], cfs_next[bit])
+        field_hit = Mux(cache_matches[index] & cache_hit, Const(1, 1), field_hit)
+        memory_fault, memory_cfs, memory_word = decode_faults(ppn[index], ports["io_mem_resp_bits_value"])
+        field_fault = Mux(memory_resp_waiting[index], memory_fault, field_fault)
+        field_data = Mux(memory_resp_waiting[index], memory_word, field_data)
+        for bit in range(8):
+            cfs_next[bit] = Mux(memory_resp_waiting[index], memory_cfs[bit], cfs_next[bit])
+        module.d.bitmap += ppn[index].eq(field_ppn)
+        module.d.bitmap += vpn[index].eq(field_vpn)
+        module.d.bitmap += s2xlate[index].eq(field_s2)
+        module.d.bitmap += request_id[index].eq(field_id)
+        module.d.bitmap += wait_id[index].eq(field_wait)
+        module.d.bitmap += fault[index].eq(field_fault)
+        module.d.bitmap += hit[index].eq(field_hit)
+        module.d.bitmap += level[index].eq(field_level)
+        module.d.bitmap += way_info[index].eq(field_way)
+        module.d.bitmap += hptw_bypassed[index].eq(field_bypassed)
+        module.d.bitmap += napot[index].eq(field_napot)
+        module.d.bitmap += data[index].eq(field_data)
+        for bit in range(8):
+            module.d.bitmap += contiguous[index][bit].eq(cfs_next[bit])
+
+    module.d.bitmap += enq_ptr_reg.eq(enq_ptr)
+    module.d.bitmap += need_addr_check.eq(request_fire & (request_state == Const(state_addr_check, 3)) & ~flush)
+    module.d.bitmap += pmp_addr_reg.eq(Mux(request_fire, request_address, pmp_addr_reg))
+    module.d.bitmap += memory_last_grant.eq(Mux(memory_fire, memory_ptr, memory_last_grant))
+    module.d.bitmap += wakeup_stall.eq(Mux(wakeup_fire, Const(0, 1), Mux(wakeup_one, Const(1, 1), wakeup_stall)))
+    module.d.bitmap += wakeup_set_index_reg.eq(Mux(wakeup_one, selected_vpn[3:9], wakeup_set_index_reg))
+    module.d.bitmap += wakeup_tag_reg.eq(Mux(wakeup_one, selected_vpn, wakeup_tag_reg))
+    module.d.bitmap += wakeup_way_reg.eq(Mux(wakeup_one, selected_way, wakeup_way_reg))
+    module.d.bitmap += wakeup_pte_index_reg.eq(Mux(wakeup_one, selected_vpn[0:3], wakeup_pte_index_reg))
+    module.d.bitmap += wakeup_success_reg.eq(Mux(wakeup_one, ~selected_fault, wakeup_success_reg))
+    module.d.bitmap += wakeup_s2xlate_reg.eq(Mux(wakeup_one, selected_s2xlate, wakeup_s2xlate_reg))
 
 class MemoryFamily(Elaboratable):
     """Bounded exact-port member. / 有界精确端口成员。"""
@@ -1432,6 +1793,8 @@ class MemoryFamily(Elaboratable):
         module = Module()
         if self.member == "AgeDetector_38":
             _age_detector_38(module, self.ports)
+        elif self.member == "Bitmap":
+            _bitmap(module, self.ports)
         else:
             for name, direction, width in self.spec.ports:
                 if direction == "output":

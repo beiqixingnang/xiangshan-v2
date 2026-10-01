@@ -4,61 +4,164 @@
   "batch_id": "V2-BACKEND-CLOSURE-WAVE-001",
   "member": "UopInfoGen",
   "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Decode.ControlFamily-Hardware.py",
-  "build_sha256": "af73efd18768c90807d0070bb657d79438af413f7897922fb0d39a912315180d",
-  "scala_source": "upstream/src/main/scala/xiangshan/backend/decode/UopInfoGen.scala",
-  "scala_source_sha256": "c72f31b669d70f6fa50f2be254b1b1488c48e1dc45fb994a3c322ee0209541ca",
+  "build_sha256": "0999e9d9c1fb93b8058e9ed79256a48efd3d018b382c9aa0db45978dd36bf80e",
   "locked_reference": {
     "canonical_path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
-    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d"
+    "xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "expected_xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "module": "UopInfoGen",
+    "module_sha256": "062e2e6c46e9cb960597ad65bb5f74e9564b11a38d609300afa9b474144d4c75",
+    "expected_module_sha256": "062e2e6c46e9cb960597ad65bb5f74e9564b11a38d609300afa9b474144d4c75",
+    "helper_modules": [
+      {
+        "path": "validation/reference-sv/strdiedLSNumOfUopTable.sv",
+        "sha256": "ca943e5018de4f49ecc2d3e021b686cd0c2feefc9872e69957b2e7d92b257ba9",
+        "expected_sha256": "ca943e5018de4f49ecc2d3e021b686cd0c2feefc9872e69957b2e7d92b257ba9"
+      },
+      {
+        "path": "validation/reference-sv/indexedLSNumOfUopTable.sv",
+        "sha256": "79de7e9bad88c911664172dfb9b58cb08cbd565e79f7aed06d5fc38967eecbf2",
+        "expected_sha256": "79de7e9bad88c911664172dfb9b58cb08cbd565e79f7aed06d5fc38967eecbf2"
+      }
+    ]
   },
   "port_abi": {
     "locked": 15,
     "emitted": 15,
     "match": true
   },
-  "direct_test": {
-    "status": "PASS_BOUNDED",
-    "vectors": 5
-  },
   "export": {
     "status": "PASS",
-    "bytes": 18036,
-    "sha256": "a108cfd85e86be619c6cd0cbc10f2550d37ee6cb4ae1d1526c7707e7ea55a3e8"
+    "bytes": 18114,
+    "sha256": "24025fc72366e553b4a8036e137479537593560ef221b1b8e6c9fe41d7c8c8be"
+  },
+  "direct_test": {
+    "status": "PASS",
+    "vectors": 6,
+    "mismatches": []
+  },
+  "reference_differential": {
+    "status": "PASS",
+    "candidate_rtl_source": "Amaranth build_verilog(UopInfoGen)",
+    "reference_source": "validation/reference-sv/UopInfoGen.sv",
+    "reference_module_sha256": "062e2e6c46e9cb960597ad65bb5f74e9564b11a38d609300afa9b474144d4c75",
+    "case_dimensions": {
+      "split": 64,
+      "vlmul": 8,
+      "vsew": 4,
+      "vwidth": 8,
+      "nf": 8,
+      "vmvn": 8,
+      "vlsr_vlsm_modes": 4,
+      "complex_flags": 8
+    },
+    "cases": 4194312,
+    "reused_prior_execution": false,
+    "compile": {
+      "command": [
+        "verilator",
+        "--binary",
+        "--timing",
+        "-Wno-fatal",
+        "--top-module",
+        "uopinfo_diff_tb",
+        "--Mdir",
+        "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-uopinfo/obj-24025fc72366",
+        "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-uopinfo/UopInfoGen_DUT.sv",
+        "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-uopinfo/UopInfoGen_reference.sv",
+        "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-uopinfo/strdiedLSNumOfUopTable.sv",
+        "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-uopinfo/indexedLSNumOfUopTable.sv",
+        "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-uopinfo/uopinfo_diff_tb.sv"
+      ],
+      "status": "PASS",
+      "returncode": 0,
+      "output_tail": "                                                                                                                                : ... note: In instance 'uopinfo_diff_tb'\n   43 |                     io_in_preInfo_vsew = vsew_value;\n      |                                        ^\n%Warning-WIDTHTRUNC: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-uopinfo/uopinfo_diff_tb.sv:44:42: Operator ASSIGN expects 3 bits on the Assign RHS, but Assign RHS's VARREF 'width_value' generates 32 bits.\n                                                                                                                                                                  : ... note: In instance 'uopinfo_diff_tb'\n   44 |                     io_in_preInfo_vwidth = width_value;\n      |                                          ^\n%Warning-WIDTHTRUNC: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-uopinfo/uopinfo_diff_tb.sv:45:38: Operator ASSIGN expects 3 bits on the Assign RHS, but Assign RHS's VARREF 'nf_value' generates 32 bits.\n                                                                                                                                                                  : ... note: In instance 'uopinfo_diff_tb'\n   45 |                     io_in_preInfo_nf = nf_value;\n      |                                      ^\n%Warning-WIDTHTRUNC: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-uopinfo/uopinfo_diff_tb.sv:46:40: Operator ASSIGN expects 3 bits on the Assign RHS, but Assign RHS's VARREF 'vmvn_value' generates 32 bits.\n                                                                                                                                                                  : ... note: In instance 'uopinfo_diff_tb'\n   46 |                     io_in_preInfo_vmvn = vmvn_value;\n      |                                        ^\n",
+      "output_sha256": "5cfab6a89cee5eaffe6e81493636e705060039a765f6488ff9131bece487cffd"
+    },
+    "run": {
+      "command": [
+        "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-uopinfo/obj-24025fc72366/Vuopinfo_diff_tb"
+      ],
+      "status": "PASS",
+      "returncode": 0,
+      "output_tail": "UOPINFO_LOCKED_DIFF_PASS cases=4194312\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-uopinfo/uopinfo_diff_tb.sv:74: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 4us; walltime 0.455 s; speed 9.215 us/s\n- Verilator: cpu 0.455 s on 1 threads; alloced 153 MB\n",
+      "output_sha256": "244aca9f017fa4bb8efa8bbf1b317fb8ab99a8763c7112b6951b977d1ff9ff6e"
+    }
   },
   "tool_gates": {
     "py_compile": "PASS",
-    "verilator": {
+    "pyright": {
       "command": [
-        "wsl.exe",
-        "-e",
-        "bash",
-        "-lc",
-        "verilator --lint-only -Wno-fatal '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-uopinfo/UopInfoGen.sv'"
+        "cmd.exe",
+        "/d",
+        "/c",
+        "pyright --outputjson <byte-identical temporary copy>"
       ],
       "status": "PASS",
       "returncode": 0,
-      "output_tail": "                              : ... note: In instance 'UopInfoGen'\n  248 |   assign \\$86  = io_in_preInfo_nf + 2'h2;\n      |                                   ^\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-uopinfo/UopInfoGen.sv:252:30: Operator ADD expects 5 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                                                               : ... note: In instance 'UopInfoGen'\n  252 |   assign \\$90  = uop_strided + 2'h2;\n      |                              ^\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-uopinfo/UopInfoGen.sv:262:37: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                               : ... note: In instance 'UopInfoGen'\n  262 |   assign \\$1  = io_in_preInfo_vlmul == 1'h1;\n      |                                     ^~\n"
+      "copied_file_sha256": "a24a9b6cf8f1f365e507593594fff17a7fa7b0be59442b299f89ec247162ef2d",
+      "target_file_sha256": "a24a9b6cf8f1f365e507593594fff17a7fa7b0be59442b299f89ec247162ef2d",
+      "files_analyzed": 1,
+      "error_count": 0,
+      "warning_count": 0,
+      "errors": [],
+      "stderr_tail": ""
+    },
+    "verilator_lint": {
+      "command": [
+        "verilator",
+        "--lint-only",
+        "-Wno-fatal",
+        "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-uopinfo/UopInfoGen.sv"
+      ],
+      "status": "PASS",
+      "returncode": 0,
+      "output_tail": "osure-wave-uopinfo/UopInfoGen.sv:250:37: Operator ADD expects 8 bits on the LHS, but LHS's VARREF 'io_in_preInfo_vmvn' generates 3 bits.\n                                                                                                                                                               : ... note: In instance 'UopInfoGen'\n  250 |   assign \\$87  = io_in_preInfo_vmvn + 1'h1;\n      |                                     ^\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-uopinfo/UopInfoGen.sv:251:35: Operator ADD expects 8 bits on the LHS, but LHS's VARREF 'io_in_preInfo_nf' generates 3 bits.\n                                                                                                                                                               : ... note: In instance 'UopInfoGen'\n  251 |   assign \\$88  = io_in_preInfo_nf + 2'h2;\n      |                                   ^\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-uopinfo/UopInfoGen.sv:251:35: Operator ADD expects 8 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                                                               : ... note: In instance 'UopInfoGen'\n  251 |   assign \\$88  = io_in_preInfo_nf + 2'h2;\n      |                                   ^\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-uopinfo/UopInfoGen.sv:255:30: Operator ADD expects 5 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                                                               : ... note: In instance 'UopInfoGen'\n  255 |   assign \\$92  = uop_strided + 2'h2;\n      |                              ^\n",
+      "output_sha256": "e8a1ce4891a278a6ae481874c198836402ffdee9007de658b92fcba92081ec8c"
     },
     "yosys": {
       "command": [
-        "wsl.exe",
-        "-e",
-        "bash",
-        "-lc",
-        "yosys -Q -p \"read_verilog -sv '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-uopinfo/UopInfoGen.sv'; proc; check\""
+        "yosys",
+        "-Q",
+        "-p",
+        "read_verilog -sv \"/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-uopinfo/UopInfoGen.sv\"; hierarchy -check -top UopInfoGen; proc; stat; check"
       ],
       "status": "PASS",
       "returncode": 0,
-      "output_tail": "ROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: f04277ed21, CPU: user 0.01s system 0.00s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 35% 2x read_verilog (0 sec), 35% 1x opt_expr (0 sec), ...\n"
+      "output_tail": "angshan-v2/validation/.work/v2-backend-closure-wave-uopinfo/UopInfoGen.sv:315$110'.\nFound and cleaned up 1 empty switch in `\\UopInfoGen.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-uopinfo/UopInfoGen.sv:265$109'.\nRemoving empty process `UopInfoGen.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-uopinfo/UopInfoGen.sv:265$109'.\nCleaned up 3 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module UopInfoGen.\n\n4. Printing statistics.\n\n=== UopInfoGen ===\n\n   Number of wires:                284\n   Number of wire bits:            931\n   Number of public wires:         136\n   Number of public wire bits:     468\n   Number of ports:                 15\n   Number of port bits:             44\n   Number of memories:               2\n   Number of memory bits:         1024\n   Number of processes:              0\n   Number of cells:                164\n     $add                           14\n     $and                            1\n     $eq                            78\n     $logic_not                      3\n     $meminit                        2\n     $memrd_v2                       2\n     $mux                           42\n     $ne                             1\n     $not                            2\n     $or                             4\n     $pmux                           1\n     $reduce_or                     10\n     $shl                            1\n     $shr                            1\n     $sub                            2\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module UopInfoGen...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 11a6605872, CPU: user 0.01s system 0.01s, MEM: 14.69 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 68% 2x read_verilog (0 sec), 8% 1x check (0 sec), ...\n",
+      "output_sha256": "cb465a1ffca5bf171270a035a3bd4820a464613d98ecc78ce9907d65c3432187",
+      "yosys_design_check": {
+        "frontend_completed": true,
+        "top_module_present": true,
+        "port_count": 15,
+        "expected_port_count": 15,
+        "positive_cell_count": 164
+      }
     }
   },
   "gates": {
     "DIRECT_TEST_PASS_BOUNDED": "PASS_BOUNDED",
-    "V2_REFERENCE_MATCHED": "STRICT_PENDING",
+    "V2_REFERENCE_MATCHED": "PASS_EXHAUSTIVE_COMBINATIONAL_DIFFERENTIAL",
+    "FORMAL": "PENDING_ROOT_SERIAL_RAIL",
     "PARENT_CLOSURE_MATCHED": "PENDING",
     "ACCEPTED": "NOT_ALLOWED"
   },
   "status": "DIRECT_TEST_PASS_BOUNDED",
   "acceptance_eligible": false,
-  "failures": []
+  "strict_delta": 0,
+  "failures": [],
+  "representation_rebindings": [
+    {
+      "previous_build_sha256": "a24a9b6cf8f1f365e507593594fff17a7fa7b0be59442b299f89ec247162ef2d",
+      "current_build_sha256": "0999e9d9c1fb93b8058e9ed79256a48efd3d018b382c9aa0db45978dd36bf80e",
+      "member": "UopInfoGen",
+      "expected_rtl_sha256": "24025fc72366e553b4a8036e137479537593560ef221b1b8e6c9fe41d7c8c8be",
+      "current_rtl_sha256": "24025fc72366e553b4a8036e137479537593560ef221b1b8e6c9fe41d7c8c8be",
+      "rtl_byte_identical": true,
+      "producer": "validation/v2_closure_representation_rebind.py",
+      "producer_sha256": "adc10b47804d145a2a6bd7e1f43d4e0f6dfe6e86dc12d9ab951cb9665ecf0631",
+      "strict_build_count_delta": 0
+    }
+  ],
+  "original_execution_build_sha256": "a24a9b6cf8f1f365e507593594fff17a7fa7b0be59442b299f89ec247162ef2d"
 }

@@ -20,6 +20,8 @@ import tempfile
 from pathlib import Path
 from typing import Any
 
+from v2_strict_family_rail import synthesizable_view as audited_view
+
 
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Memory.Mmu.Lsq.Family-Hardware.py"
@@ -35,6 +37,7 @@ MODULE = "AgeDetector_38"
 SOURCE_COMMIT = "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af"
 XSTOP_SHA256 = "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d"
 EQUIV_MARKERS = ("0 are unproven.", "Equivalence successfully proven!")
+SAT_SUCCESS = "SAT proof finished - no model found: SUCCESS!"
 
 
 def sha256_file(path: Path) -> str:
@@ -71,8 +74,9 @@ def run_wsl(command: list[str]) -> dict[str, Any]:
             ["wsl.exe", "-e", "bash", "-lc", rendered],
             capture_output=True,
             check=False,
+            timeout=120,
         )
-    except OSError as error:
+    except (OSError, subprocess.TimeoutExpired) as error:
         return {"status": "FAIL", "returncode": None, "error": repr(error)}
     output = (result.stdout + result.stderr).decode("utf-8", "replace")
     return {
@@ -81,6 +85,9 @@ def run_wsl(command: list[str]) -> dict[str, Any]:
         "output_tail": output[-6000:],
         "output_sha256": hashlib.sha256(output.encode("utf-8")).hexdigest(),
         "command": command,
+        "sat_success_marker": SAT_SUCCESS in output,
+        "full_equiv_totals": re.findall(r"Found (\d+) \$equiv cells in", output),
+        "full_equiv_summaries": re.findall(r"Of those cells (\d+) are proven and (\d+) are unproven", output),
     }
 
 
@@ -157,45 +164,42 @@ def drop_initial_region(text: str) -> tuple[str, int]:
 
 
 def synthesizable_view(locked: str) -> tuple[str, dict[str, Any]]:
-    """Remove random initialization and hoist local temporaries mechanically."""
+    """Use the shared view's line conservation and register-equation audit."""
 
-    body, removed_bytes = drop_initial_region(locked)
-    body = "\n".join(line.split("//", 1)[0].rstrip() for line in body.splitlines())
-    pattern = re.compile(
-        r"(?ms)^[ \t]*automatic\s+logic\s+(?:(\[[^\]]+\])\s+)?"
-        r"([A-Za-z_]\w*)(?:\s*=\s*(.*?))?;[ \t]*$"
-    )
-    declarations: list[tuple[str | None, str]] = []
-
-    def replace(match: re.Match[str]) -> str:
-        width, name, initial = match.group(1), match.group(2), match.group(3)
-        declarations.append((width, name))
-        if initial is None:
-            return ""
-        return "      " + name + " = " + initial + ";"
-
-    body = pattern.sub(replace, body)
-    unique: list[tuple[str | None, str]] = []
-    seen: set[str] = set()
-    for width, name in declarations:
-        if name not in seen:
-            seen.add(name)
-            unique.append((width, name))
-    header_end = body.index(");") + 2
-    hoisted = "\n" + "".join(
-        "  reg " + ((width + " ") if width else "") + name + ";\n"
-        for width, name in unique
-    )
-    view = body[:header_end] + hoisted + body[header_end:]
+    view, audit = audited_view(locked, MODULE, False)
+    if audit.get("view_trusted") is not True:
+        raise AssertionError("reference view failed conservation audit")
     view = view.replace(f"module {MODULE}(", f"module {MODULE}_ref(", 1)
-    audit = {
-        "initial_region_removed_bytes": removed_bytes,
-        "block_local_declarations_hoisted": len(unique),
-        "automatic_declarations_remaining": view.count("automatic"),
-        "module_renamed_only": view.count(f"module {MODULE}_ref(") == 1,
-        "equations_preserved_by_mechanical_view": view.count("age_") > 0,
-    }
+    audit["renamed_top"] = f"{MODULE}_ref"
     return view, audit
+
+
+def reset_entry_proof(target: Path, reference: Path) -> dict[str, Any]:
+    """Compare every matched state/output from a common reset, with free data."""
+
+    name = MODULE + "_reset_entry"
+    script = (
+        f"read_verilog -sv {wsl_path(target)} {wsl_path(reference)}; "
+        "proc; async2sync; memory; opt; "
+        f"equiv_make {MODULE}_ref {MODULE} {MODULE}_reset_equiv; "
+        f"prep -top {MODULE}_reset_equiv; equiv_miter -trigger {name}; "
+        f"hierarchy -top {name}; flatten; opt; dffunmap; "
+        "setattr -unset init w:*; "
+        "sat -seq 5 -set-init-def -set-def-inputs -set reset 0 "
+        "-set-at 1 reset 1 -prove trigger 0 -prove-skip 1 -verify -timeout 30"
+    )
+    result = run_wsl(["yosys", "-Q", "-p", script])
+    result["status"] = "PASS" if result.get("returncode") == 0 \
+        and result.get("sat_success_marker") is True else "FAIL"
+    result["scope"] = {
+        "initial_state": "arbitrary independently defined state; no forced zero initialization",
+        "reset": "asserted at step 1; released at steps 2..5",
+        "inputs": "all non-reset input values unconstrained and defined at each step",
+        "comparison": "all unproven equiv_make state/output cells before induction",
+        "clock_model": "one Yosys sequential step per active clock edge after async2sync",
+        "bounded_startup_only": True,
+    }
+    return result
 
 
 def formal_run(target: Path, reference: Path, top_ref: str = f"{MODULE}_ref") -> dict[str, Any]:
@@ -297,21 +301,34 @@ def main() -> int:
     target_yosys = backend_gate("yosys", target_path, MODULE)
     reference_verilator = backend_gate("verilator", reference_path, f"{MODULE}_ref")
     reference_yosys = backend_gate("yosys", reference_path, f"{MODULE}_ref")
-    clean_formal = formal_run(target_path, reference_path)
-    negatives = negative_control(target_path, reference_path, first, view)
+    original_lint = run_wsl(["verilator", "--lint-only", "-Wno-fatal", "-DSYNTHESIS",
+                             "--top-module", MODULE, wsl_path(REFERENCE)])
+    static_pass = all(abi.values()) and first == second and direct_gate["status"] == "PASS"
+    backend_pass = all(item.get("status") == "PASS" for item in
+                       (target_verilator, target_yosys, reference_verilator, reference_yosys, original_lint))
+    prerequisite = static_pass and backend_pass and view_audit.get("view_trusted") is True
+    clean_formal = formal_run(target_path, reference_path) if prerequisite else {"status": "NOT_RUN"}
+    startup = reset_entry_proof(target_path, reference_path) if prerequisite else {"status": "NOT_RUN"}
+    negatives = negative_control(target_path, reference_path, first, view) \
+        if clean_formal.get("status") == "PASS" else {}
     locks_after = {
         "reference": sha256_file(REFERENCE),
         "scala": sha256_file(SCALA),
     }
-    all_negative = all(item.get("status") == "PASS" for item in negatives.values())
+    all_negative = set(negatives) == {"target", "reference"} \
+        and all(item.get("status") == "PASS" for item in negatives.values())
     formal_pass = clean_formal.get("status") == "PASS"
-    static_pass = all(abi.values()) and first == second and direct_gate["status"] == "PASS"
-    backend_pass = all(item.get("status") == "PASS" for item in (target_verilator, target_yosys, reference_verilator, reference_yosys))
+    leaf_pass = formal_pass and all_negative and static_pass and backend_pass \
+        and startup.get("status") == "PASS"
     payload = {
         "schema_version": 1,
         "kind": "XIANGSHAN_KUNMINGHU_V2_MEMBLOCK_CLOSURE_WAVE",
         "batch_id": "V2-MEMBLOCK-CLOSURE-WAVE-AGE38",
         "module": MODULE,
+        "validator": {"path": Path(__file__).relative_to(ROOT).as_posix(),
+                      "sha256": sha256_file(Path(__file__)),
+                      "reference_view_producer": "validation/v2_strict_family_rail.py",
+                      "reference_view_producer_sha256": sha256_file(ROOT / "validation/v2_strict_family_rail.py")},
         "build": {
             "path": TARGET.relative_to(ROOT).as_posix(),
             "sha256": sha256_file(TARGET),
@@ -339,22 +356,26 @@ def main() -> int:
             "target_yosys": target_yosys,
             "reference_view_verilator": reference_verilator,
             "reference_view_yosys": reference_yosys,
+            "locked_original_verilator": original_lint,
             "reference_view_audit": view_audit,
             "formal": clean_formal,
+            "reset_entry": startup,
             "negative_control": negatives,
         },
         "formal_status": "PASS" if formal_pass else "FAIL",
-        "strict_leaf_proof": formal_pass and all_negative and static_pass and backend_pass,
+        "strict_leaf_proof": leaf_pass,
         "strict_complete_eligible": False,
         "acceptance_eligible": False,
-        "status": "PASS_FORMAL_LEAF_PENDING_PARENT_CLOSURE" if formal_pass and all_negative and static_pass and backend_pass else "FAIL",
+        "status": "PASS_FORMAL_LEAF_PENDING_PARENT_CLOSURE" if leaf_pass else "FAIL",
         "unclosed": [
             "Family parent closure and full XSTop integration remain pending.",
             "Central strict-equivalence progress is intentionally unchanged by this evidence artifact.",
         ],
     }
     EVIDENCE.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
-    print(json.dumps({"status": payload["status"], "formal": clean_formal.get("status"), "negative": negatives, "abi": abi}))
+    print(json.dumps({"status": payload["status"], "formal": clean_formal.get("status"),
+                      "reset_entry": startup.get("status"),
+                      "negative": {side: record["status"] for side, record in negatives.items()}, "abi": abi}))
     return 0 if payload["status"].startswith("PASS_") else 1
 
 

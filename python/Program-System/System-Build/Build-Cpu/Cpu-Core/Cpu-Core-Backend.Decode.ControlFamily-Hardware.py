@@ -1,5 +1,5 @@
-"""UHSC V2 backend decode/control family aggregate.
-昆明湖 V2 后端解码与控制 family 聚合。
+"""UHSC processor decode/control family aggregate.
+UHSC 处理器解码与控制家族聚合。
 
 The largest Backend and decode variants retain exact frozen ANSI surfaces.
 This bounded implementation emits deterministic output defaults while the
@@ -8,17 +8,18 @@ complete issue/rename/decode behavior remains a parent differential gate.
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, cast
 
 from amaranth import Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
 
 
+# Module Contract
 __all__ = [
     "COVERED_MODULES", "IMPLEMENTED_MEMBERS", "CONTRACT_ONLY_MEMBERS",
-    "UOP_SPLIT_CODES", "uop_info_reference", "DecodeControlFamily",
-    "build_verilog", "main",
+    "DecodeControlFamily", "build_verilog", "main",
 ]
+# Configuration
 COVERED_MODULES = ("Backend", "DecodeUnit", "FusionDecoder", "UopInfoGen", "FPDecoder", "VTypeGen", "VecExceptionGen", "VIAluDecoder")
 # UopInfoGen is a self-contained combinational leaf.  Its complete split table
 # and the two load/store lookup tables are implemented below; the aggregate
@@ -35,7 +36,7 @@ PortSpec = tuple[str, str, int]
 # the implementation remains executable without reading the auxiliary
 # inventory at run time. / 锁定的 V2 UopSplitType 编码；表格保留在 Build 内，
 # 运行时无需读取辅助清单。
-UOP_SPLIT_CODES: dict[str, int] = {
+_UOP_SPLIT_CODES: dict[str, int] = {
     "SCA_SIM": 0b000000,
     "VSET": 0b010001,
     "VEC_VVV": 0b010010,
@@ -83,27 +84,6 @@ UOP_SPLIT_CODES: dict[str, int] = {
 }
 
 
-def _uop_lmul(vlmul: int) -> int:
-    """Decode the source ``lmul`` lookup (fractional encodings default 1)."""
-
-    return {0b001: 2, 0b010: 4, 0b011: 8}.get(vlmul & 0x7, 1)
-
-
-def _simple_lmul(vlmul: int) -> int:
-    """Decode the source two-bit simple LMUL exponent."""
-
-    return {0b001: 1, 0b010: 2, 0b011: 3}.get(vlmul & 0x7, 0)
-
-
-def _simple_emul(vwidth: int, vlmul: int, vsew: int) -> int:
-    """Return the source ``simple_emul`` exponent (0, 1, or 2)."""
-
-    veew = vwidth & 0x3
-    # Keep the three-bit intermediate width used by the packed control bundle.
-    vemul = (veew + 1 + (vlmul & 0x7) + ((~(vsew & 0x3)) & 0x7)) & 0x7
-    return {0b001: 0, 0b010: 1, 0b011: 2}.get(vemul, 0)
-
-
 def _strided_uops(simple_emul: int, nf: int) -> int:
     """Mirror ``strdiedLSNumOfUopTable``."""
 
@@ -121,99 +101,6 @@ def _indexed_uops(simple_emul: int, simple_lmul: int, nf: int) -> int:
     value = max(lmul_value * ((nf & 0x7) + 1), emul_value)
     return value if lmul_value * ((nf & 0x7) + 1) <= 8 else 0
 
-
-def uop_info_reference(
-    type_of_split: int,
-    vsew: int,
-    vlmul: int,
-    vwidth: int,
-    nf: int,
-    vmvn: int,
-    is_vlsr: bool = False,
-    is_vlsm: bool = False,
-) -> tuple[int, int, int]:
-    """Evaluate the locked UopInfoGen equations in Python.
-
-    The tuple is ``(numOfUop, numOfWB, lmul)``.  This reference helper is
-    intentionally independent of Amaranth signals and is used by direct
-    vector tests before the generated RTL is linted.
-    """
-
-    split = int(type_of_split) & 0x3F
-    vlmul &= 0x7
-    nf &= 0x7
-    vmvn &= 0x7
-    lmul = _uop_lmul(vlmul)
-    simple_lmul = _simple_lmul(vlmul)
-    simple_emul = _simple_emul(vwidth, vlmul, vsew)
-    vsew &= 0x3
-    num_vslide = {0b001: 3, 0b010: 10, 0b011: 36}.get(vlmul, 1)
-    num_vrgather = {0b001: 4, 0b010: 16, 0b011: 64}.get(vlmul, 1)
-    num_vrgatherei16 = num_vrgather * 2 if vsew == 0 and vlmul != 0b011 else num_vrgather
-    num_vcompress = {0b001: 4, 0b010: 13, 0b011: 43}.get(vlmul, 1)
-    add_time = {0b001: 2, 0b010: 4, 0b011: 8}.get(vlmul, 1)
-    fold_last = {1: 0b101, 2: 0b110, 3: 0b111}.get(vsew, 0)
-    fold_time = (vlmul if (vlmul & 0b100) else 0) - fold_last
-    num_vfred = (add_time + fold_time) & 0xF
-    num_vfred = num_vfred if num_vfred else 1
-    uvl_max = {1: 8, 2: 4, 3: 2}.get(vsew, 1)
-    if vlmul & 0b100:
-        vl_max = uvl_max >> ((-vlmul) & 0x3)
-    else:
-        vl_max = uvl_max << (vlmul & 0x3)
-    num_vfredosum = vl_max if vl_max else 1
-    num_wv = {0b000: 2, 0b001: 4, 0b010: 8}.get(vlmul, 1)
-    num_wx = {0b000: 3, 0b001: 5, 0b010: 9}.get(vlmul, 2)
-    strided = _strided_uops(simple_emul, nf)
-    indexed = _indexed_uops(simple_emul, simple_lmul, nf)
-    by_split = {
-        UOP_SPLIT_CODES["VSET"]: 2,
-        UOP_SPLIT_CODES["VEC_0XV"]: 2,
-        UOP_SPLIT_CODES["VEC_VVV"]: lmul,
-        UOP_SPLIT_CODES["VEC_VFV"]: lmul + 1,
-        UOP_SPLIT_CODES["VEC_EXT2"]: lmul,
-        UOP_SPLIT_CODES["VEC_EXT4"]: lmul,
-        UOP_SPLIT_CODES["VEC_EXT8"]: lmul,
-        UOP_SPLIT_CODES["VEC_VVM"]: lmul,
-        UOP_SPLIT_CODES["VEC_VFM"]: lmul + 1,
-        UOP_SPLIT_CODES["VEC_VFRED"]: num_vfred,
-        UOP_SPLIT_CODES["VEC_VFREDOSUM"]: num_vfredosum,
-        UOP_SPLIT_CODES["VEC_VXM"]: lmul + 1,
-        UOP_SPLIT_CODES["VEC_VXV"]: lmul + 1,
-        UOP_SPLIT_CODES["VEC_VFW"]: num_wx,
-        UOP_SPLIT_CODES["VEC_WFW"]: num_wx,
-        UOP_SPLIT_CODES["VEC_VVW"]: num_wv,
-        UOP_SPLIT_CODES["VEC_WVW"]: num_wv,
-        UOP_SPLIT_CODES["VEC_VXW"]: num_wx,
-        UOP_SPLIT_CODES["VEC_WXW"]: num_wx,
-        UOP_SPLIT_CODES["VEC_WVV"]: num_wv,
-        UOP_SPLIT_CODES["VEC_WXV"]: num_wx,
-        UOP_SPLIT_CODES["VEC_SLIDE1UP"]: lmul + 1,
-        UOP_SPLIT_CODES["VEC_FSLIDE1UP"]: lmul + 1,
-        UOP_SPLIT_CODES["VEC_SLIDE1DOWN"]: lmul * 2,
-        UOP_SPLIT_CODES["VEC_FSLIDE1DOWN"]: lmul * 2,
-        UOP_SPLIT_CODES["VEC_VRED"]: lmul,
-        UOP_SPLIT_CODES["VEC_SLIDEUP"]: num_vslide + 1,
-        UOP_SPLIT_CODES["VEC_SLIDEDOWN"]: num_vslide + 1,
-        UOP_SPLIT_CODES["VEC_M0X"]: lmul,
-        UOP_SPLIT_CODES["VEC_MVV"]: (lmul * 2) - 1,
-        UOP_SPLIT_CODES["VEC_VWW"]: lmul * 2,
-        UOP_SPLIT_CODES["VEC_RGATHER"]: num_vrgather,
-        UOP_SPLIT_CODES["VEC_RGATHER_VX"]: num_vrgather + 1,
-        UOP_SPLIT_CODES["VEC_RGATHEREI16"]: num_vrgatherei16,
-        UOP_SPLIT_CODES["VEC_COMPRESS"]: num_vcompress,
-        UOP_SPLIT_CODES["VEC_MVNR"]: vmvn + 1,
-        UOP_SPLIT_CODES["VEC_US_LDST"]: nf + 2 if is_vlsr else 2 if is_vlsm else strided + 1,
-        UOP_SPLIT_CODES["VEC_US_FF_LD"]: strided + 2,
-        UOP_SPLIT_CODES["VEC_S_LDST"]: strided + 2,
-        UOP_SPLIT_CODES["VEC_I_LDST"]: indexed + 1,
-        UOP_SPLIT_CODES["AMO_CAS_W"]: 2,
-        UOP_SPLIT_CODES["AMO_CAS_D"]: 2,
-        UOP_SPLIT_CODES["AMO_CAS_Q"]: 4,
-    }
-    num = by_split.get(split, 1)
-    num_wb = num >> 1 if split in {UOP_SPLIT_CODES["AMO_CAS_W"], UOP_SPLIT_CODES["AMO_CAS_D"], UOP_SPLIT_CODES["AMO_CAS_Q"]} else num
-    return num, num_wb, lmul
 
 PORT_SPECS: dict[str, tuple[PortSpec, ...]] = {
     'Backend': (
@@ -1718,6 +1605,7 @@ PORT_SPECS: dict[str, tuple[PortSpec, ...]] = {
     ),
 }
 
+# Implementation
 class DecodeControlFamily(Elaboratable):
     """One exact member; implemented leaves are real, aggregate gaps are CONTRACT_ONLY."""
 
@@ -1762,13 +1650,16 @@ class DecodeControlFamily(Elaboratable):
         module.d.comb += [
             lmul.eq(Mux(vlmul == 0b001, 2, Mux(vlmul == 0b010, 4, Mux(vlmul == 0b011, 8, 1)))),
             simple_lmul.eq(Mux(vlmul == 0b001, 1, Mux(vlmul == 0b010, 2, Mux(vlmul == 0b011, 3, 0)))),
-            vemul.eq(veew3 + 1 + vlmul + ~vsew3),
-            simple_emul.eq(Mux(vemul == 0b001, 0, Mux(vemul == 0b010, 1, Mux(vemul == 0b011, 2, 0)))),
+            # Amaranth's dynamic Cat/Slice overloads lose arithmetic typing;
+            # keep this cast local to the hardware expression boundary.
+            # Amaranth 动态 Cat/Slice 重载无法保留算术类型；转换仅限硬件表达式边界。
+            vemul.eq(cast(Any, veew3) + 1 + cast(Any, vlmul) + ~cast(Any, vsew3)),
+            simple_emul.eq(Mux(vemul == 0b001, 1, Mux(vemul == 0b010, 2, Mux(vemul == 0b011, 3, 0)))),
             num.eq(1),
             p["io_out_isComplex"].eq(p["io_in_preInfo_isVecArith"] | p["io_in_preInfo_isVecMem"] | p["io_in_preInfo_isAmoCAS"]),
             num_vslide.eq(Mux(vlmul == 0b001, 3, Mux(vlmul == 0b010, 10, Mux(vlmul == 0b011, 36, 1)))),
             num_vrgather.eq(Mux(vlmul == 0b001, 4, Mux(vlmul == 0b010, 16, Mux(vlmul == 0b011, 64, 1)))),
-            num_vrgatherei16.eq(Mux((vsew == 0) & (vlmul != 0b011), Cat(Const(0, 1), num_vrgather), num_vrgather)),
+            num_vrgatherei16.eq(Mux((vsew == 0) & (vlmul != 0b011), num_vrgather << 1, num_vrgather)),
             num_vcompress.eq(Mux(vlmul == 0b001, 4, Mux(vlmul == 0b010, 13, Mux(vlmul == 0b011, 43, 1)))),
             num_wv.eq(Mux(vlmul == 0b000, 2, Mux(vlmul == 0b001, 4, Mux(vlmul == 0b010, 8, 1)))),
             num_wx.eq(Mux(vlmul == 0b000, 3, Mux(vlmul == 0b001, 5, Mux(vlmul == 0b010, 9, 2)))),
@@ -1801,7 +1692,7 @@ class DecodeControlFamily(Elaboratable):
         # Fold timing follows the source's unsigned arithmetic. / 折叠时序遵循源代码无符号运算。
         add_time = Signal(4, name="uop_vfred_add_time")
         fold_last = Signal(3, name="uop_vfred_fold_last")
-        fold_time = Signal(4, name="uop_vfred_fold_time")
+        fold_time = Signal(3, name="uop_vfred_fold_time")
         module.d.comb += [
             add_time.eq(Mux(vlmul == 0b001, 2, Mux(vlmul == 0b010, 4, Mux(vlmul == 0b011, 8, 1)))),
             fold_last.eq(Mux(vsew == 1, 0b101, Mux(vsew == 2, 0b110, Mux(vsew == 3, 0b111, 0)))),
@@ -1816,58 +1707,58 @@ class DecodeControlFamily(Elaboratable):
             num_vfredosum.eq(Mux(vl_max != 0, vl_max, 1)),
         ]
         with module.Switch(split):
-            with module.Case(UOP_SPLIT_CODES["VSET"]):
+            with module.Case(_UOP_SPLIT_CODES["VSET"]):
                 module.d.comb += num.eq(2)
-            with module.Case(UOP_SPLIT_CODES["VEC_0XV"]):
+            with module.Case(_UOP_SPLIT_CODES["VEC_0XV"]):
                 module.d.comb += num.eq(2)
-            with module.Case(UOP_SPLIT_CODES["VEC_VVV"], UOP_SPLIT_CODES["VEC_EXT2"], UOP_SPLIT_CODES["VEC_EXT4"], UOP_SPLIT_CODES["VEC_EXT8"], UOP_SPLIT_CODES["VEC_VVM"], UOP_SPLIT_CODES["VEC_VRED"], UOP_SPLIT_CODES["VEC_M0X"]):
+            with module.Case(_UOP_SPLIT_CODES["VEC_VVV"], _UOP_SPLIT_CODES["VEC_EXT2"], _UOP_SPLIT_CODES["VEC_EXT4"], _UOP_SPLIT_CODES["VEC_EXT8"], _UOP_SPLIT_CODES["VEC_VVM"], _UOP_SPLIT_CODES["VEC_VRED"], _UOP_SPLIT_CODES["VEC_M0X"]):
                 module.d.comb += num.eq(lmul)
-            with module.Case(UOP_SPLIT_CODES["VEC_VFV"], UOP_SPLIT_CODES["VEC_VFM"], UOP_SPLIT_CODES["VEC_VXM"], UOP_SPLIT_CODES["VEC_VXV"], UOP_SPLIT_CODES["VEC_SLIDE1UP"], UOP_SPLIT_CODES["VEC_FSLIDE1UP"]):
+            with module.Case(_UOP_SPLIT_CODES["VEC_VFV"], _UOP_SPLIT_CODES["VEC_VFM"], _UOP_SPLIT_CODES["VEC_VXM"], _UOP_SPLIT_CODES["VEC_VXV"], _UOP_SPLIT_CODES["VEC_SLIDE1UP"], _UOP_SPLIT_CODES["VEC_FSLIDE1UP"]):
                 module.d.comb += num.eq(lmul + 1)
-            with module.Case(UOP_SPLIT_CODES["VEC_VFRED"]):
+            with module.Case(_UOP_SPLIT_CODES["VEC_VFRED"]):
                 module.d.comb += num.eq(num_vfred)
-            with module.Case(UOP_SPLIT_CODES["VEC_VFREDOSUM"]):
+            with module.Case(_UOP_SPLIT_CODES["VEC_VFREDOSUM"]):
                 module.d.comb += num.eq(num_vfredosum)
-            with module.Case(UOP_SPLIT_CODES["VEC_VFW"], UOP_SPLIT_CODES["VEC_WFW"], UOP_SPLIT_CODES["VEC_VXW"], UOP_SPLIT_CODES["VEC_WXW"], UOP_SPLIT_CODES["VEC_WXV"]):
+            with module.Case(_UOP_SPLIT_CODES["VEC_VFW"], _UOP_SPLIT_CODES["VEC_WFW"], _UOP_SPLIT_CODES["VEC_VXW"], _UOP_SPLIT_CODES["VEC_WXW"], _UOP_SPLIT_CODES["VEC_WXV"]):
                 module.d.comb += num.eq(num_wx)
-            with module.Case(UOP_SPLIT_CODES["VEC_VVW"], UOP_SPLIT_CODES["VEC_WVW"], UOP_SPLIT_CODES["VEC_WVV"]):
+            with module.Case(_UOP_SPLIT_CODES["VEC_VVW"], _UOP_SPLIT_CODES["VEC_WVW"], _UOP_SPLIT_CODES["VEC_WVV"]):
                 module.d.comb += num.eq(num_wv)
-            with module.Case(UOP_SPLIT_CODES["VEC_SLIDE1DOWN"], UOP_SPLIT_CODES["VEC_FSLIDE1DOWN"]):
+            with module.Case(_UOP_SPLIT_CODES["VEC_SLIDE1DOWN"], _UOP_SPLIT_CODES["VEC_FSLIDE1DOWN"]):
                 module.d.comb += num.eq(lmul << 1)
-            with module.Case(UOP_SPLIT_CODES["VEC_SLIDEUP"], UOP_SPLIT_CODES["VEC_SLIDEDOWN"]):
+            with module.Case(_UOP_SPLIT_CODES["VEC_SLIDEUP"], _UOP_SPLIT_CODES["VEC_SLIDEDOWN"]):
                 module.d.comb += num.eq(num_vslide + 1)
-            with module.Case(UOP_SPLIT_CODES["VEC_MVV"]):
+            with module.Case(_UOP_SPLIT_CODES["VEC_MVV"]):
                 module.d.comb += num.eq((lmul << 1) - 1)
-            with module.Case(UOP_SPLIT_CODES["VEC_VWW"]):
+            with module.Case(_UOP_SPLIT_CODES["VEC_VWW"]):
                 module.d.comb += num.eq(lmul << 1)
-            with module.Case(UOP_SPLIT_CODES["VEC_RGATHER"]):
+            with module.Case(_UOP_SPLIT_CODES["VEC_RGATHER"]):
                 module.d.comb += num.eq(num_vrgather)
-            with module.Case(UOP_SPLIT_CODES["VEC_RGATHER_VX"]):
+            with module.Case(_UOP_SPLIT_CODES["VEC_RGATHER_VX"]):
                 module.d.comb += num.eq(num_vrgather + 1)
-            with module.Case(UOP_SPLIT_CODES["VEC_RGATHEREI16"]):
+            with module.Case(_UOP_SPLIT_CODES["VEC_RGATHEREI16"]):
                 module.d.comb += num.eq(num_vrgatherei16)
-            with module.Case(UOP_SPLIT_CODES["VEC_COMPRESS"]):
+            with module.Case(_UOP_SPLIT_CODES["VEC_COMPRESS"]):
                 module.d.comb += num.eq(num_vcompress)
-            with module.Case(UOP_SPLIT_CODES["VEC_MVNR"]):
-                module.d.comb += num.eq(Cat(vmvn, Const(0, 4)) + 1)
-            with module.Case(UOP_SPLIT_CODES["VEC_US_LDST"]):
-                module.d.comb += num.eq(Mux(is_vlsr, Cat(nf, Const(0, 4)) + 2, Mux(is_vlsm, 2, strided + 1)))
-            with module.Case(UOP_SPLIT_CODES["VEC_US_FF_LD"], UOP_SPLIT_CODES["VEC_S_LDST"]):
+            with module.Case(_UOP_SPLIT_CODES["VEC_MVNR"]):
+                module.d.comb += num.eq(cast(Any, Cat(vmvn, Const(0, 4))) + 1)
+            with module.Case(_UOP_SPLIT_CODES["VEC_US_LDST"]):
+                module.d.comb += num.eq(Mux(is_vlsr, cast(Any, Cat(nf, Const(0, 4))) + 2, Mux(is_vlsm, 2, strided + 1)))
+            with module.Case(_UOP_SPLIT_CODES["VEC_US_FF_LD"], _UOP_SPLIT_CODES["VEC_S_LDST"]):
                 module.d.comb += num.eq(strided + 2)
-            with module.Case(UOP_SPLIT_CODES["VEC_I_LDST"]):
+            with module.Case(_UOP_SPLIT_CODES["VEC_I_LDST"]):
                 module.d.comb += num.eq(indexed + 1)
-            with module.Case(UOP_SPLIT_CODES["AMO_CAS_W"], UOP_SPLIT_CODES["AMO_CAS_D"], UOP_SPLIT_CODES["AMO_CAS_Q"]):
-                module.d.comb += num.eq(Mux(split == UOP_SPLIT_CODES["AMO_CAS_Q"], 4, 2))
+            with module.Case(_UOP_SPLIT_CODES["AMO_CAS_W"], _UOP_SPLIT_CODES["AMO_CAS_D"], _UOP_SPLIT_CODES["AMO_CAS_Q"]):
+                module.d.comb += num.eq(Mux(split == _UOP_SPLIT_CODES["AMO_CAS_Q"], 4, 2))
             with module.Default():
                 module.d.comb += num.eq(1)
         module.d.comb += [
             p["io_out_uopInfo_numOfUop"].eq(num[:7]),
-            p["io_out_uopInfo_numOfWB"].eq(Mux((split == UOP_SPLIT_CODES["AMO_CAS_W"]) | (split == UOP_SPLIT_CODES["AMO_CAS_D"]) | (split == UOP_SPLIT_CODES["AMO_CAS_Q"]), num[1:], num[:7])),
+            p["io_out_uopInfo_numOfWB"].eq(Mux((split == _UOP_SPLIT_CODES["AMO_CAS_W"]) | (split == _UOP_SPLIT_CODES["AMO_CAS_D"]) | (split == _UOP_SPLIT_CODES["AMO_CAS_Q"]), num[1:], num[:7])),
             p["io_out_uopInfo_lmul"].eq(lmul),
         ]
 
     def _vtype(self, module: Module) -> None:
-        """Implement architectural/speculative vtype state update priority."""
+        """Implement the six-lane vset decode and vtype state priorities."""
         p = self.ports
         arch_illegal = Signal(reset=1, name="vtype_arch_illegal")
         arch_vma = Signal(name="vtype_arch_vma")
@@ -1879,28 +1770,85 @@ class DecodeControlFamily(Elaboratable):
         spec_vta = Signal(name="vtype_spec_vta")
         spec_vsew = Signal(2, name="vtype_spec_vsew")
         spec_vlmul = Signal(3, name="vtype_spec_vlmul")
-        # VSETVLI is opcode 0x57, funct3=7, and a non-sign-extended zimm.
-        first = p["io_insts_0_bits"]
-        is_vset = (first[0:7] == 0x57) & (first[12:15] == 7) & ~first[31]
-        z_vma = first[26]
-        z_vta = first[25]
-        z_vsew = first[23:25]
-        z_vlmul = first[20:23]
-        module.d.sync += [
-            arch_illegal.eq(Mux(p["io_commitVType_hasVsetvl"], p["io_vsetvlVType_illegal"], Mux(p["io_commitVType_vtype_valid"], p["io_commitVType_vtype_bits_illegal"], arch_illegal))),
-            arch_vma.eq(Mux(p["io_commitVType_hasVsetvl"], p["io_vsetvlVType_vma"], Mux(p["io_commitVType_vtype_valid"], p["io_commitVType_vtype_bits_vma"], arch_vma))),
-            arch_vta.eq(Mux(p["io_commitVType_hasVsetvl"], p["io_vsetvlVType_vta"], Mux(p["io_commitVType_vtype_valid"], p["io_commitVType_vtype_bits_vta"], arch_vta))),
-            arch_vsew.eq(Mux(p["io_commitVType_hasVsetvl"], p["io_vsetvlVType_vsew"], Mux(p["io_commitVType_vtype_valid"], p["io_commitVType_vtype_bits_vsew"], arch_vsew))),
-            arch_vlmul.eq(Mux(p["io_commitVType_hasVsetvl"], p["io_vsetvlVType_vlmul"], Mux(p["io_commitVType_vtype_valid"], p["io_commitVType_vtype_bits_vlmul"], arch_vlmul))),
+
+        valid_lanes = []
+        first_inst: Any = Const(0, 32)
+        first_is_vsetvli: Any = Const(0, 1)
+        found_vset: Any = Const(0, 1)
+        for lane in range(6):
+            inst = p[f"io_insts_{lane}_bits"]
+            valid = p[f"io_insts_{lane}_valid"]
+            is_vset = valid & (inst[:7] == 0x57) & (inst[12:15] == 0b111)
+            is_vset = is_vset & (~cast(Any, inst[31]) | (inst[30:32] == 0b11))
+            valid_lanes.append(is_vset)
+            choose = is_vset & ~cast(Any, found_vset)
+            first_inst = Mux(choose, inst, first_inst)
+            first_is_vsetvli = Mux(choose, ~cast(Any, inst[31]), first_is_vsetvli)
+            found_vset = found_vset | cast(Any, is_vset)
+
+        z_vma = first_inst[27]
+        z_vta = first_inst[26]
+        z_vsew_wide = first_inst[23:26]
+        z_vsew = z_vsew_wide[:2]
+        z_vlmul = first_inst[20:23]
+        reserved_vsetvli = first_inst[28:31] != 0
+        reserved_vsetivli = first_inst[28:30] != 0
+        reserved = Mux(first_is_vsetvli, reserved_vsetvli, reserved_vsetivli)
+
+        # The instantiated VSet operation uses VLEN=128 and ELEN=64 in this
+        # locked V2 configuration. / 锁定 V2 配置为 VLEN=128、ELEN=64。
+        log2_vsew = Signal(3, name="vtype_new_log2_vsew")
+        log2_vsew_max = Signal(3, name="vtype_new_log2_vsew_max")
+        module.d.comb += [
+            log2_vsew.eq(Cat(z_vsew, Const(0, 1)) + 3),
+            log2_vsew_max.eq(Mux(z_vlmul[2], z_vlmul - 2, 6)),
         ]
-        walk_update = p["io_walkVType_valid"]
-        spec_update = is_vset & p["io_canUpdateVType"]
+        new_illegal = (
+            (z_vlmul == 0b100)
+            | z_vsew_wide[2]
+            | (log2_vsew > log2_vsew_max)
+            | reserved
+        )
+        new_vma = z_vma & ~cast(Any, new_illegal)
+        new_vta = z_vta & ~cast(Any, new_illegal)
+        new_vsew = Mux(new_illegal, 0, z_vsew)
+        new_vlmul = Mux(new_illegal, 0, z_vlmul)
+
+        commit_has_vsetvl = p["io_commitVType_hasVsetvl"]
+        commit_valid = p["io_commitVType_vtype_valid"]
+        arch_commit_values = (
+            (arch_illegal, p["io_vsetvlVType_illegal"], p["io_commitVType_vtype_bits_illegal"]),
+            (arch_vma, p["io_vsetvlVType_vma"], p["io_commitVType_vtype_bits_vma"]),
+            (arch_vta, p["io_vsetvlVType_vta"], p["io_commitVType_vtype_bits_vta"]),
+            (arch_vsew, p["io_vsetvlVType_vsew"], p["io_commitVType_vtype_bits_vsew"]),
+            (arch_vlmul, p["io_vsetvlVType_vlmul"], p["io_commitVType_vtype_bits_vlmul"]),
+        )
         module.d.sync += [
-            spec_illegal.eq(Mux(p["io_commitVType_hasVsetvl"], p["io_vsetvlVType_illegal"], Mux(walk_update, p["io_walkVType_bits_illegal"], Mux(p["io_walkToArchVType"], arch_illegal, Mux(spec_update, 0, spec_illegal))))),
-            spec_vma.eq(Mux(p["io_commitVType_hasVsetvl"], p["io_vsetvlVType_vma"], Mux(walk_update, p["io_walkVType_bits_vma"], Mux(p["io_walkToArchVType"], arch_vma, Mux(spec_update, z_vma, spec_vma))))),
-            spec_vta.eq(Mux(p["io_commitVType_hasVsetvl"], p["io_vsetvlVType_vta"], Mux(walk_update, p["io_walkVType_bits_vta"], Mux(p["io_walkToArchVType"], arch_vta, Mux(spec_update, z_vta, spec_vta))))),
-            spec_vsew.eq(Mux(p["io_commitVType_hasVsetvl"], p["io_vsetvlVType_vsew"], Mux(walk_update, p["io_walkVType_bits_vsew"], Mux(p["io_walkToArchVType"], arch_vsew, Mux(spec_update, z_vsew, spec_vsew))))),
-            spec_vlmul.eq(Mux(p["io_commitVType_hasVsetvl"], p["io_vsetvlVType_vlmul"], Mux(walk_update, p["io_walkVType_bits_vlmul"], Mux(p["io_walkToArchVType"], arch_vlmul, Mux(spec_update, z_vlmul, spec_vlmul))))),
+            *[
+                current.eq(Mux(commit_has_vsetvl, vsetvl_value, Mux(commit_valid, committed_value, current)))
+                for current, vsetvl_value, committed_value in arch_commit_values
+            ],
+        ]
+        walk_valid = p["io_walkVType_valid"]
+        spec_update = cast(Any, found_vset) & p["io_canUpdateVType"]
+        spec_values = (
+            (spec_illegal, p["io_vsetvlVType_illegal"], p["io_walkVType_bits_illegal"], arch_illegal, new_illegal),
+            (spec_vma, p["io_vsetvlVType_vma"], p["io_walkVType_bits_vma"], arch_vma, new_vma),
+            (spec_vta, p["io_vsetvlVType_vta"], p["io_walkVType_bits_vta"], arch_vta, new_vta),
+            (spec_vsew, p["io_vsetvlVType_vsew"], p["io_walkVType_bits_vsew"], arch_vsew, new_vsew),
+            (spec_vlmul, p["io_vsetvlVType_vlmul"], p["io_walkVType_bits_vlmul"], arch_vlmul, new_vlmul),
+        )
+        module.d.sync += [
+            *[
+                current.eq(Mux(
+                    commit_has_vsetvl,
+                    vsetvl_value,
+                    Mux(walk_valid, walk_value,
+                        Mux(p["io_walkToArchVType"], arch_value,
+                            Mux(spec_update, new_value, current))),
+                ))
+                for current, vsetvl_value, walk_value, arch_value, new_value in spec_values
+            ],
         ]
         module.d.comb += [p["io_vtype_illegal"].eq(spec_illegal), p["io_vtype_vma"].eq(spec_vma), p["io_vtype_vta"].eq(spec_vta), p["io_vtype_vsew"].eq(spec_vsew), p["io_vtype_vlmul"].eq(spec_vlmul)]
 
@@ -1949,6 +1897,7 @@ class DecodeControlFamily(Elaboratable):
         return module
 
 
+# Public Adapter
 def build_verilog(configuration: Any, injected_dependencies: Any) -> str:
     """Export deterministic Verilog for one same-name decode/control member."""
 
@@ -1962,6 +1911,7 @@ def build_verilog(configuration: Any, injected_dependencies: Any) -> str:
     return verilog.convert(top, name=member, ports=[top.ports[name] for name, _direction, _width in top.specs], emit_src=False)
 
 
+# Direct Entry
 def main() -> None:
     """Print the default backend RTL."""
 

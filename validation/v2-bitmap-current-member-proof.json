@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "kind": "V2_QUEUE_STATE_FOCUSED_DIAGNOSTIC",
+  "build_id": "Build-Cpu.Memory.Mmu.Lsq.Family",
+  "status": "STRICT_PENDING",
+  "strict_complete_eligible": false,
+  "strict_complete_count_delta": 0,
+  "acceptance_eligible": false,
+  "members": [
+    "Bitmap"
+  ],
+  "family_members": [
+    "AgeDetector_38",
+    "AtomicsUnit",
+    "Bitmap",
+    "HPTW",
+    "LoadMisalignBuffer",
+    "LqExceptionBuffer",
+    "LsqEnqCtrl",
+    "TLBNonBlock_2"
+  ],
+  "full_family_covered": false,
+  "sources": {
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Memory.Mmu.Lsq.Family-Hardware.py",
+      "sha256": "78235ad1b54250b1a9547dc9f1678c528b964fc2178eccda65174c37631a63d4",
+      "bytes": 97338
+    },
+    "validator": {
+      "path": "validation/v2_queue_state_correspondence_validator.py",
+      "sha256": "62b0d04b729d7edeebd72214093d54e448d4aa2048c87337517cabadef6ee4d3",
+      "bytes": 7725
+    },
+    "rail": {
+      "path": "validation/v2_strict_family_rail.py",
+      "sha256": "dd6cebba4a9b300c7fc8664b1a803045d7ff55041cab364a7753692c846e57a6",
+      "bytes": 72764
+    },
+    "direct_test": {
+      "path": "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Memory.Mmu.Lsq.Family-Hardware.py",
+      "sha256": "7951b8a48a79bcce93c98062740de7b2a93062d139e74cad85b8158052d137f8",
+      "bytes": 8627
+    }
+  },
+  "checks": {
+    "direct": {
+      "command": [
+        "C:\\Program Files\\Python313\\python.exe",
+        "-B",
+        "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu-Memory.Mmu.Lsq.Family-Hardware.py"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "output_tail": "ormed automatically after each `ctx.set()`.\n  yield Settle()\nD:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu-Memory.Mmu.Lsq.Family-Hardware.py:61: DeprecationWarning: The `Settle` command is deprecated per RFC 27. Use `add_testbench` to write testbenches; there, an equivalent of `yield Settle()` is performed automatically after each `ctx.set()`.\n  yield Settle()\nD:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu-Memory.Mmu.Lsq.Family-Hardware.py:67: DeprecationWarning: The `Settle` command is deprecated per RFC 27. Use `add_testbench` to write testbenches; there, an equivalent of `yield Settle()` is performed automatically after each `ctx.set()`.\n  yield Settle()\n.D:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu-Memory.Mmu.Lsq.Family-Hardware.py:179: DeprecationWarning: The `Settle` command is deprecated per RFC 27. Use `add_testbench` to write testbenches; there, an equivalent of `yield Settle()` is performed automatically after each `ctx.set()`.\n  yield Settle()\nD:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu-Memory.Mmu.Lsq.Family-Hardware.py:189: DeprecationWarning: The `Settle` command is deprecated per RFC 27. Use `add_testbench` to write testbenches; there, an equivalent of `yield Settle()` is performed automatically after each `ctx.set()`.\n  yield Settle()\nD:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu-Memory.Mmu.Lsq.Family-Hardware.py:201: DeprecationWarning: The `Settle` command is deprecated per RFC 27. Use `add_testbench` to write testbenches; there, an equivalent of `yield Settle()` is performed automatically after each `ctx.set()`.\n  yield Settle()\n.D:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu-Memory.Mmu.Lsq.Family-Hardware.py:133: DeprecationWarning: The `Settle` command is deprecated per RFC 27. Use `add_testbench` to write testbenches; there, an equivalent of `yield Settle()` is performed automatically after each `ctx.set()`.\n  yield Settle()\n..\n----------------------------------------------------------------------\nRan 5 tests in 25.947s\n\nOK\n"
+    },
+    "pyright": {
+      "command": [
+        "cmd.exe",
+        "/d",
+        "/c",
+        "pyright",
+        "--outputjson",
+        "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_cnqe4s3a\\Cpu-Memory-Memory.Mmu.Lsq.Family-Hardware.py"
+      ],
+      "returncode": 1,
+      "status": "FAIL",
+      "version": "1.1.411",
+      "error_count": 16,
+      "files_analyzed": 1,
+      "stderr_tail": ""
+    }
+  },
+  "results": [],
+  "negative_control": {
+    "status": "NOT_RUN",
+    "reason": "member gate failed"
+  },
+  "elapsed_seconds": 27.529,
+  "unclosed": [
+    "Full Build catalog, parent closure, license and acceptance remain pending."
+  ]
+}

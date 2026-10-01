@@ -1,0 +1,167 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_MEMBLOCK_CLOSURE_WAVE",
+  "batch_id": "V2-MEMBLOCK-CLOSURE-WAVE-BITMAP",
+  "module": "Bitmap",
+  "status": "IMPLEMENTED_UNVERIFIED_STRICT_PENDING",
+  "build": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Memory.Mmu.Lsq.Family-Hardware.py",
+    "sha256": "2000015ffa6d55d11943bb5b766f2562eba0a4ecf72d4a5ee45a92049b8a3317",
+    "line_count": 1822,
+    "implemented_members": [
+      "AgeDetector_38",
+      "Bitmap"
+    ],
+    "contract_only_members": [
+      "AtomicsUnit",
+      "HPTW",
+      "TLBNonBlock_2",
+      "LoadMisalignBuffer",
+      "LqExceptionBuffer",
+      "LsqEnqCtrl"
+    ],
+    "verilog_bytes": 6051939,
+    "verilog_sha256": "ce6e2cd1c8821967d6bcfc21dd057b4014ef14350fca527d43ea7e488dd99f8f"
+  },
+  "direct_test": {
+    "path": "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Memory.Mmu.Lsq.Family-Hardware.py",
+    "sha256": "7951b8a48a79bcce93c98062740de7b2a93062d139e74cad85b8158052d137f8",
+    "line_count": 214
+  },
+  "reference_lock": {
+    "scala_path": "upstream/src/main/scala/xiangshan/cache/mmu/BitmapCheck.scala",
+    "scala_sha256": "a5ca9b1492e15208a50d1d548ba14a26ddb78b38d79caf2ba83460634da8b139",
+    "reference_sv_path": "validation/reference-sv/Bitmap.sv",
+    "reference_sv_sha256": "a57b450479f6f2df11c956777611640615e7ba3fc88edd253a69838b0c59a8d7",
+    "support_sv": [
+      "validation/reference-sv/RRArbiterInit.sv",
+      "validation/reference-sv/Arbiter8_bitmapCacheReqBundle.sv"
+    ],
+    "upstream_source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+    "xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "reference_unchanged": true,
+    "scala_unchanged": true
+  },
+  "checks": {
+    "py_compile": "PASS",
+    "deterministic_same_name_verilog": "PASS",
+    "abi": {
+      "build_catalog_equals_locked_hierarchy": true,
+      "target_equals_locked_hierarchy": true,
+      "reference_equals_locked_hierarchy": true,
+      "port_count": 75
+    },
+    "direct_test": {
+      "status": "PASS",
+      "returncode": 0,
+      "output_tail": "C:\\Users\\lishuo\\AppData\\Roaming\\Python\\Python313\\site-packages\\amaranth\\hdl\\_ast.py:1973: DeprecationWarning: `reset=` is deprecated, use `init=` instead\r\n  signal = super().__call__(shape, **kwargs, src_loc_at=src_loc_at + 1)\r\nC:\\Users\\lishuo\\AppData\\Roaming\\Python\\Python313\\site-packages\\amaranth\\sim\\core.py:257: DeprecationWarning: Generator-based processes are deprecated per RFC 36. Use async processes instead.\r\n  warnings.warn(\r\nD:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu-Memory.Mmu.Lsq.Family-Hardware.py:98: DeprecationWarning: The `Settle` command is deprecated per RFC 27. Use `add_testbench` to write testbenches; there, an equivalent of `yield Settle()` is performed automatically after each `ctx.set()`.\r\n  yield Settle()\r\n.D:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu-Memory.Mmu.Lsq.Family-Hardware.py:47: DeprecationWarning: The `Settle` command is deprecated per RFC 27. Use `add_testbench` to write testbenches; there, an equivalent of `yield Settle()` is performed automatically after each `ctx.set()`.\r\n  yield Settle()\r\nD:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu-Memory.Mmu.Lsq.Family-Hardware.py:54: DeprecationWarning: The `Settle` command is deprecated per RFC 27. Use `add_testbench` to write testbenches; there, an equivalent of `yield Settle()` is performed automatically after each `ctx.set()`.\r\n  yield Settle()\r\nD:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu-Memory.Mmu.Lsq.Family-Hardware.py:61: DeprecationWarning: The `Settle` command is deprecated per RFC 27. Use `add_testbench` to write testbenches; there, an equivalent of `yield Settle()` is performed automatically after each `ctx.set()`.\r\n  yield Settle()\r\nD:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu-Memory.Mmu.Lsq.Family-Hardware.py:67: DeprecationWarning: The `Settle` command is deprecated per RFC 27. Use `add_testbench` to write testbenches; there, an equivalent of `yield Settle()` is performed automatically after each `ctx.set()`.\r\n  yield Settle()\r\n.D:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu-Memory.Mmu.Lsq.Family-Hardware.py:179: DeprecationWarning: The `Settle` command is deprecated per RFC 27. Use `add_testbench` to write testbenches; there, an equivalent of `yield Settle()` is performed automatically after each `ctx.set()`.\r\n  yield Settle()\r\nD:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu-Memory.Mmu.Lsq.Family-Hardware.py:189: DeprecationWarning: The `Settle` command is deprecated per RFC 27. Use `add_testbench` to write testbenches; there, an equivalent of `yield Settle()` is performed automatically after each `ctx.set()`.\r\n  yield Settle()\r\nD:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu-Memory.Mmu.Lsq.Family-Hardware.py:201: DeprecationWarning: The `Settle` command is deprecated per RFC 27. Use `add_testbench` to write testbenches; there, an equivalent of `yield Settle()` is performed automatically after each `ctx.set()`.\r\n  yield Settle()\r\n.D:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu-Memory.Mmu.Lsq.Family-Hardware.py:133: DeprecationWarning: The `Settle` command is deprecated per RFC 27. Use `add_testbench` to write testbenches; there, an equivalent of `yield Settle()` is performed automatically after each `ctx.set()`.\r\n  yield Settle()\r\n..\r\n----------------------------------------------------------------------\r\nRan 5 tests in 25.409s\r\n\r\nOK\r\n",
+      "output_sha256": "f5f349eae73a8bbc12e2a1515b2fdca8f09afef5cb9fb146b861fb0a95989cf8",
+      "behavior_cases": [
+        "PMP fault completion",
+        "cache miss, memory read, response and refill"
+      ]
+    },
+    "target_verilator": {
+      "status": "PASS",
+      "returncode": 0,
+      "output_tail": "ry_last_grant;\n       |                         ^\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_memblock_closure_wave_bitmap_fs5f7l11/Bitmap-target.sv:178273:25: Comparison is constant due to unsigned arithmetic\n178273 |   assign \\$7860  = 1'h0 > bitmap_memory_last_grant;\n       |                         ^\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_memblock_closure_wave_bitmap_fs5f7l11/Bitmap-target.sv:178320:25: Comparison is constant due to unsigned arithmetic\n178320 |   assign \\$7908  = 1'h0 > bitmap_memory_last_grant;\n       |                         ^\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_memblock_closure_wave_bitmap_fs5f7l11/Bitmap-target.sv:178400:25: Comparison is constant due to unsigned arithmetic\n178400 |   assign \\$7990  = 1'h0 > bitmap_memory_last_grant;\n       |                         ^\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_memblock_closure_wave_bitmap_fs5f7l11/Bitmap-target.sv:178447:25: Comparison is constant due to unsigned arithmetic\n178447 |   assign \\$8038  = 1'h0 > bitmap_memory_last_grant;\n       |                         ^\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_memblock_closure_wave_bitmap_fs5f7l11/Bitmap-target.sv:178527:25: Comparison is constant due to unsigned arithmetic\n178527 |   assign \\$8120  = 1'h0 > bitmap_memory_last_grant;\n       |                         ^\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_memblock_closure_wave_bitmap_fs5f7l11/Bitmap-target.sv:178574:25: Comparison is constant due to unsigned arithmetic\n178574 |   assign \\$8168  = 1'h0 > bitmap_memory_last_grant;\n       |                         ^\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_memblock_closure_wave_bitmap_fs5f7l11/Bitmap-target.sv:178654:25: Comparison is constant due to unsigned arithmetic\n178654 |   assign \\$8250  = 1'h0 > bitmap_memory_last_grant;\n       |                         ^\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_memblock_closure_wave_bitmap_fs5f7l11/Bitmap-target.sv:178701:25: Comparison is constant due to unsigned arithmetic\n178701 |   assign \\$8298  = 1'h0 > bitmap_memory_last_grant;\n       |                         ^\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_memblock_closure_wave_bitmap_fs5f7l11/Bitmap-target.sv:178781:25: Comparison is constant due to unsigned arithmetic\n178781 |   assign \\$8380  = 1'h0 > bitmap_memory_last_grant;\n       |                         ^\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_memblock_closure_wave_bitmap_fs5f7l11/Bitmap-target.sv:178828:25: Comparison is constant due to unsigned arithmetic\n178828 |   assign \\$8428  = 1'h0 > bitmap_memory_last_grant;\n       |                         ^\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_memblock_closure_wave_bitmap_fs5f7l11/Bitmap-target.sv:179133:25: Comparison is constant due to unsigned arithmetic\n179133 |   assign \\$8750  = 1'h0 > bitmap_memory_last_grant;\n       |                         ^\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_memblock_closure_wave_bitmap_fs5f7l11/Bitmap-target.sv:179180:25: Comparison is constant due to unsigned arithmetic\n179180 |   assign \\$8798  = 1'h0 > bitmap_memory_last_grant;\n       |                         ^\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_memblock_closure_wave_bitmap_fs5f7l11/Bitmap-target.sv:179260:25: Comparison is constant due to unsigned arithmetic\n179260 |   assign \\$8880  = 1'h0 > bitmap_memory_last_grant;\n       |                         ^\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_memblock_closure_wave_bitmap_fs5f7l11/Bitmap-target.sv:179307:25: Comparison is constant due to unsigned arithmetic\n179307 |   assign \\$8928  = 1'h0 > bitmap_memory_last_grant;\n       |                         ^\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_memblock_closure_wave_bitmap_fs5f7l11/Bitmap-target.sv:179387:25: Comparison is constant due to unsigned arithmetic\n179387 |   assign \\$9010  = 1'h0 > bitmap_memory_last_grant;\n       |                         ^\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_memblock_closure_wave_bitmap_fs5f7l11/Bitmap-target.sv:179434:25: Comparison is constant due to unsigned arithmetic\n179434 |   assign \\$9058  = 1'h0 > bitmap_memory_last_grant;\n       |                         ^\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_memblock_closure_wave_bitmap_fs5f7l11/Bitmap-target.sv:179514:25: Comparison is constant due to unsigned arithmetic\n179514 |   assign \\$9140  = 1'h0 > bitmap_memory_last_grant;\n       |                         ^\n%Warning-UNSIGNED: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_memblock_closure_wave_bitmap_fs5f7l11/Bitmap-target.sv:179561:25: Comparison is constant due to unsigned arithmetic\n179561 |   assign \\$9188  = 1'h0 > bitmap_memory_last_grant;\n       |                         ^\n",
+      "output_sha256": "5525bbdf00bcaf6e922fd6776c8dd3164d999b7096341833d6bb067b12a06257",
+      "command": [
+        "verilator",
+        "--lint-only",
+        "-Wno-fatal",
+        "--top-module",
+        "Bitmap",
+        "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_memblock_closure_wave_bitmap_fs5f7l11/Bitmap-target.sv"
+      ]
+    },
+    "target_yosys": {
+      "status": "PASS",
+      "returncode": 0,
+      "output_tail": "rom module Bitmap (D = \\$11178 [0], Q = $auto$async2sync.cc:228:execute$89298 [0], rval = 1'0).\nAdding SRST signal on $auto$ff.cc:266:slice$89306 ($sdff) from module Bitmap (D = \\$11179 [2:1], Q = $auto$async2sync.cc:228:execute$89298 [2:1], rval = 2'00).\nAdding SRST signal on $auto$ff.cc:266:slice$89300 ($sdff) from module Bitmap (D = \\$69138 [0], Q = $auto$async2sync.cc:228:execute$89088 [0], rval = 1'0).\nAdding SRST signal on $auto$ff.cc:266:slice$89300 ($sdff) from module Bitmap (D = \\$69139 [2:1], Q = $auto$async2sync.cc:228:execute$89088 [2:1], rval = 2'00).\n\n5.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\Bitmap..\nRemoved 8 unused cells and 15 unused wires.\n<suppressed ~17 debug messages>\n\n5.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module Bitmap.\n\n5.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n5.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\Bitmap..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~403 debug messages>\n\n5.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\Bitmap.\n    New input vector for $reduce_or cell $auto$opt_dff.cc:254:combine_resets$89383: { \\reset \\$65387 \\$17050 }\n    New input vector for $reduce_or cell $auto$opt_dff.cc:254:combine_resets$89377: { \\reset \\$7427 \\$17050 }\n    New input vector for $reduce_or cell $auto$opt_dff.cc:254:combine_resets$89374: { \\reset \\$7427 \\$17050 \\$12696 }\n    New input vector for $reduce_or cell $auto$opt_dff.cc:254:combine_resets$89371: { \\reset \\$46067 \\$17050 }\n    New input vector for $reduce_or cell $auto$opt_dff.cc:254:combine_resets$89368: { \\reset \\$46071 \\$46067 \\$17050 }\n    New input vector for $reduce_or cell $auto$opt_dff.cc:254:combine_resets$89365: { \\reset \\$75047 \\$17050 }\n    New input vector for $reduce_or cell $auto$opt_dff.cc:254:combine_resets$89362: { \\reset \\$75051 \\$75047 \\$17050 }\n    New input vector for $reduce_or cell $auto$opt_dff.cc:254:combine_resets$89359: { \\reset \\$36407 \\$17050 }\n    New input vector for $reduce_or cell $auto$opt_dff.cc:254:combine_resets$89356: { \\reset \\$36411 \\$36407 \\$17050 }\n    New input vector for $reduce_or cell $auto$opt_dff.cc:254:combine_resets$89353: { \\reset \\$26747 \\$17050 }\n    New input vector for $reduce_or cell $auto$opt_dff.cc:254:combine_resets$89350: { \\reset \\$26751 \\$26747 \\$17050 }\n    New input vector for $reduce_or cell $auto$opt_dff.cc:254:combine_resets$89347: { \\reset \\$55727 \\$17050 }\n    New input vector for $reduce_or cell $auto$opt_dff.cc:254:combine_resets$89344: { \\reset \\$55731 \\$55727 \\$17050 }\n    New input vector for $reduce_or cell $auto$opt_dff.cc:254:combine_resets$89341: { \\reset \\$17087 \\$17050 }\n    New input vector for $reduce_or cell $auto$opt_dff.cc:254:combine_resets$89338: { \\reset \\$17091 \\$17087 \\$17050 }\n    New input vector for $reduce_or cell $auto$opt_dff.cc:254:combine_resets$89380: { \\reset \\$65391 \\$65387 \\$17050 }\n  Optimizing cells in module \\Bitmap.\nPerformed a total of 16 changes.\n\n5.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\Bitmap'.\nRemoved a total of 0 cells.\n\n5.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n5.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\Bitmap..\nRemoved 1 unused cells and 1 unused wires.\n<suppressed ~2 debug messages>\n\n5.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module Bitmap.\n\n5.23. Rerunning OPT passes. (Maybe there is more to do..)\n\n5.24. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\Bitmap..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~403 debug messages>\n\n5.25. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\Bitmap.\nPerformed a total of 0 changes.\n\n5.26. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\Bitmap'.\nRemoved a total of 0 cells.\n\n5.27. Executing OPT_DFF pass (perform DFF optimizations).\n\n5.28. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\Bitmap..\n\n5.29. Executing OPT_EXPR pass (perform const folding).\nOptimizing module Bitmap.\n\n5.30. Finished OPT passes. (There is nothing left to do.)\n\n6. Executing CHECK pass (checking for obvious problems).\nChecking module Bitmap...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 4d8ed81678, CPU: user 13.62s system 0.40s, MEM: 906.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 25% 2x read_verilog (3 sec), 19% 4x opt_clean (2 sec), ...\n",
+      "output_sha256": "cd41398baf44252a9531a49dfd86cd0c6f82ca3c6c201345e127b465713fa1d8",
+      "command": [
+        "yosys",
+        "-Q",
+        "-p",
+        "read_verilog -sv \"/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_memblock_closure_wave_bitmap_fs5f7l11/Bitmap-target.sv\"; hierarchy -top Bitmap; proc; async2sync; opt; check"
+      ]
+    },
+    "reference_structure_verilator": {
+      "status": "PASS",
+      "returncode": 0,
+      "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.432 MB sources in 4 modules, into 0.451 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.107 s (elab=0.009, cvt=0.047, bld=0.000); cpu 0.077 s on 1 threads; alloced 16.633 MB\n",
+      "output_sha256": "8240b510e67df821184c21755d1ba23946b3f64f0ff3c03ed173b4be06b8c296",
+      "command": [
+        "verilator",
+        "--lint-only",
+        "-Wno-fatal",
+        "--top-module",
+        "Bitmap",
+        "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Bitmap.sv",
+        "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/RRArbiterInit.sv",
+        "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Arbiter8_bitmapCacheReqBundle.sv"
+      ]
+    },
+    "reference_structure_yosys": {
+      "status": "PASS",
+      "returncode": 0,
+      "output_tail": "ural.sv:1364$341_Y, Q = \\_GEN_65).\nAdding EN signal on $procdff$5441 ($dff) from module Bitmap (D = $and$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_memblock_closure_wave_bitmap_fs5f7l11/Bitmap-reference-structural.sv:1366$343_Y, Q = \\cm_dup_req_fire_4).\nAdding EN signal on $procdff$5446 ($dff) from module Bitmap (D = $and$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_memblock_closure_wave_bitmap_fs5f7l11/Bitmap-reference-structural.sv:1367$345_Y, Q = \\cm_dup_vec_wait_0_4).\nAdding EN signal on $procdff$5451 ($dff) from module Bitmap (D = $and$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_memblock_closure_wave_bitmap_fs5f7l11/Bitmap-reference-structural.sv:1368$347_Y, Q = \\cm_dup_vec_wait_1_4).\nAdding EN signal on $procdff$5456 ($dff) from module Bitmap (D = $and$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_memblock_closure_wave_bitmap_fs5f7l11/Bitmap-reference-structural.sv:1369$349_Y, Q = \\cm_dup_vec_wait_2_4).\nAdding EN signal on $procdff$6351 ($dff) from module Bitmap (D = $and$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_memblock_closure_wave_bitmap_fs5f7l11/Bitmap-reference-structural.sv:2823$823_Y, Q = \\_GEN_182).\nAdding EN signal on $procdff$5461 ($dff) from module Bitmap (D = $and$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_memblock_closure_wave_bitmap_fs5f7l11/Bitmap-reference-structural.sv:1370$351_Y, Q = \\cm_dup_vec_wait_3_4).\nAdding EN signal on $procdff$5466 ($dff) from module Bitmap (D = $and$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_memblock_closure_wave_bitmap_fs5f7l11/Bitmap-reference-structural.sv:1371$353_Y, Q = \\cm_dup_vec_wait_5_4).\nAdding EN signal on $procdff$5471 ($dff) from module Bitmap (D = $and$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_memblock_closure_wave_bitmap_fs5f7l11/Bitmap-reference-structural.sv:1372$355_Y, Q = \\cm_dup_vec_wait_6_4).\nAdding EN signal on $procdff$5476 ($dff) from module Bitmap (D = $and$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_memblock_closure_wave_bitmap_fs5f7l11/Bitmap-reference-structural.sv:1373$357_Y, Q = \\cm_dup_vec_wait_7_4).\nSetting constant 0-bit at position 0 on $auto$ff.cc:266:slice$8386 ($dffe) from module Bitmap.\nSetting constant 1-bit at position 1 on $auto$ff.cc:266:slice$8386 ($dffe) from module Bitmap.\nSetting constant 0-bit at position 3 on $auto$ff.cc:266:slice$8356 ($dffe) from module Bitmap.\n\n7.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\Arbiter8_bitmapCacheReqBundle..\nFinding unused cells or wires in module \\RRArbiterInit..\nFinding unused cells or wires in module \\Bitmap..\nRemoved 1233 unused cells and 4905 unused wires.\n<suppressed ~1529 debug messages>\n\n7.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module Arbiter8_bitmapCacheReqBundle.\nOptimizing module Bitmap.\nOptimizing module RRArbiterInit.\n\n7.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n7.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\Arbiter8_bitmapCacheReqBundle..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRunning muxtree optimizer on module \\Bitmap..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRunning muxtree optimizer on module \\RRArbiterInit..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~507 debug messages>\n\n7.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\Arbiter8_bitmapCacheReqBundle.\n  Optimizing cells in module \\Bitmap.\n  Optimizing cells in module \\RRArbiterInit.\nPerformed a total of 0 changes.\n\n7.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\Arbiter8_bitmapCacheReqBundle'.\nFinding identical cells in module `\\Bitmap'.\nFinding identical cells in module `\\RRArbiterInit'.\nRemoved a total of 0 cells.\n\n7.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n7.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\Arbiter8_bitmapCacheReqBundle..\nFinding unused cells or wires in module \\Bitmap..\nFinding unused cells or wires in module \\RRArbiterInit..\n\n7.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module Arbiter8_bitmapCacheReqBundle.\nOptimizing module Bitmap.\nOptimizing module RRArbiterInit.\n\n7.16. Finished OPT passes. (There is nothing left to do.)\n\n8. Executing CHECK pass (checking for obvious problems).\nChecking module Arbiter8_bitmapCacheReqBundle...\nChecking module Bitmap...\nChecking module RRArbiterInit...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 5117f49a0a, CPU: user 0.75s system 0.02s, MEM: 54.66 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 16% 4x read_verilog (0 sec), 16% 4x opt_expr (0 sec), ...\n",
+      "output_sha256": "d03ea3339df521e646107f447d79facb7cbfff1425216c76536eeb7a89e6c069",
+      "command": [
+        "yosys",
+        "-Q",
+        "-p",
+        "read_verilog -sv \"/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_memblock_closure_wave_bitmap_fs5f7l11/Bitmap-reference-structural.sv\" \"/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/RRArbiterInit.sv\" \"/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/Arbiter8_bitmapCacheReqBundle.sv\"; hierarchy -top Bitmap; proc; async2sync; opt; check"
+      ]
+    },
+    "reference_structure_view_audit": {
+      "initial_region_removed": 1,
+      "local_temporaries_hoisted": 292,
+      "automatic_declarations_remaining": 0,
+      "module_identity_preserved": true
+    },
+    "reference_differential": "NOT_RUN_ROOT_SERIAL_RAIL",
+    "formal": "NOT_RUN_ROOT_SERIAL_RAIL"
+  },
+  "strict_leaf_proof": false,
+  "strict_complete_eligible": false,
+  "acceptance_eligible": false,
+  "unclosed": [
+    "Reference differential and formal equivalence are reserved for the root task's serial rail.",
+    "Bitmap remains IMPLEMENTED_UNVERIFIED_STRICT_PENDING until that locked-reference proof closes.",
+    "MemBlock family parent closure and full core integration remain pending."
+  ],
+  "representation_rebindings": [
+    {
+      "previous_build_sha256": "78235ad1b54250b1a9547dc9f1678c528b964fc2178eccda65174c37631a63d4",
+      "current_build_sha256": "2000015ffa6d55d11943bb5b766f2562eba0a4ecf72d4a5ee45a92049b8a3317",
+      "member": "Bitmap",
+      "expected_rtl_sha256": "ce6e2cd1c8821967d6bcfc21dd057b4014ef14350fca527d43ea7e488dd99f8f",
+      "current_rtl_sha256": "ce6e2cd1c8821967d6bcfc21dd057b4014ef14350fca527d43ea7e488dd99f8f",
+      "rtl_byte_identical": true,
+      "producer": "validation/v2_closure_representation_rebind.py",
+      "producer_sha256": "adc10b47804d145a2a6bd7e1f43d4e0f6dfe6e86dc12d9ab951cb9665ecf0631",
+      "strict_build_count_delta": 0
+    }
+  ],
+  "original_execution_build": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Memory.Mmu.Lsq.Family-Hardware.py",
+    "sha256": "78235ad1b54250b1a9547dc9f1678c528b964fc2178eccda65174c37631a63d4",
+    "line_count": 1822,
+    "implemented_members": [
+      "AgeDetector_38",
+      "Bitmap"
+    ],
+    "contract_only_members": [
+      "AtomicsUnit",
+      "HPTW",
+      "TLBNonBlock_2",
+      "LoadMisalignBuffer",
+      "LqExceptionBuffer",
+      "LsqEnqCtrl"
+    ],
+    "verilog_bytes": 6051939,
+    "verilog_sha256": "ce6e2cd1c8821967d6bcfc21dd057b4014ef14350fca527d43ea7e488dd99f8f"
+  }
+}
