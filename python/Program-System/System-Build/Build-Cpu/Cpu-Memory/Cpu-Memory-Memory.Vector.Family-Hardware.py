@@ -11,7 +11,7 @@ from __future__ import annotations
 
 from typing import Any, cast
 
-from amaranth import ClockDomain, Elaboratable, Module, Mux, Signal
+from amaranth import Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
 
 
@@ -26,10 +26,11 @@ COVERED_MODULES: tuple[str, ...] = (
     "VldMergeUnit",
     "VsetModule",
 )
-# Bounded merge/set equations are not yet complete locked-reference behavior;
-# keep every vector member contract-only until parent and formal closures pass.
-IMPLEMENTED_MEMBERS: tuple[str, ...] = ()
-CONTRACT_ONLY_MEMBERS = COVERED_MODULES
+# VfofBuffer is a complete single-entry fault-only-first buffer closure.  The
+# remaining family members retain their exact ABI while their behavior stays
+# contract-only until their own locked-reference closures are complete.
+IMPLEMENTED_MEMBERS: tuple[str, ...] = ("VfofBuffer",)
+CONTRACT_ONLY_MEMBERS = tuple(member for member in COVERED_MODULES if member not in IMPLEMENTED_MEMBERS)
 
 
 # =============================================================================
@@ -900,6 +901,163 @@ class VectorMemoryFamily(Elaboratable):
             self.ports["io_writebackAfterMerge_bits_vlWen"].eq(self.ports["io_writeback_bits_vlWen"]),
         ]
 
+    def _drive_vfof(self, module: Module) -> None:
+        """Implement the locked VfofBuffer single-entry state machine.
+
+        The Chisel source stores one fault-only-first instruction, updates its
+        VL from matching merge writebacks, and emits the final uop once its
+        ``lastUop`` marker arrives.  This keeps the flattened ABI while
+        preserving those state and redirect equations in Amaranth.
+        """
+
+        p = self.ports
+        field_widths = {
+            "uop_fuOpType": 9,
+            "uop_vecWen": 1,
+            "uop_v0Wen": 1,
+            "uop_vlWen": 1,
+            "uop_vpu_vma": 1,
+            "uop_vpu_vta": 1,
+            "uop_vpu_vsew": 2,
+            "uop_vpu_vlmul": 3,
+            "uop_vpu_vm": 1,
+            "uop_vpu_vstart": 8,
+            "uop_vpu_vuopIdx": 7,
+            "uop_vpu_nf": 3,
+            "uop_vpu_veew": 2,
+            "uop_pdest": 8,
+            "uop_robIdx_flag": 1,
+            "uop_robIdx_value": 8,
+        }
+        entries = {
+            suffix: Signal(width, name=f"entries_{suffix}", reset=0)
+            for suffix, width in field_widths.items()
+        }
+        entries_last_uop = Signal(name="entries_uop_vpu_lastUop", reset=0)
+        entries_is_vleff = Signal(name="entries_uop_vpu_isVleff", reset=0)
+        entries_vl = Signal(8, name="entries_vl", reset=0)
+        entries_has_exception = Signal(name="entries_hasException", reset=0)
+        valid = Signal(name="valid", reset=0)
+
+        # ParallelPriorityMux(enqIsfof, io.in.bits): input 0 wins when both
+        # ports carry a VLEFF uop.
+        enq0 = p["io_in_0_valid"] & p["io_in_0_bits_uop_vpu_isVleff"]
+        enq1 = p["io_in_1_valid"] & p["io_in_1_bits_uop_vpu_isVleff"]
+        enq_valid = enq0 | enq1
+
+        def selected_input(suffix: str) -> Any:
+            return Mux(enq0, p[f"io_in_0_bits_{suffix}"], p[f"io_in_1_bits_{suffix}"])
+
+        enq_is_vleff = selected_input("uop_vpu_isVleff")
+        enq_last_uop = selected_input("uop_vpu_lastUop")
+        enq_fix_vl = enq_is_vleff & enq_last_uop
+        enq_rob_flag = selected_input("uop_robIdx_flag")
+        enq_rob_value = selected_input("uop_robIdx_value")
+
+        def need_redirect(rob_flag: Any, rob_value: Any) -> Any:
+            """Mirror RobPtr.needFlush and CircularQueuePtr.isAfter."""
+
+            equal = (rob_flag == p["io_redirect_bits_robIdx_flag"]) & (
+                rob_value == p["io_redirect_bits_robIdx_value"]
+            )
+            is_after = (
+                (rob_flag ^ p["io_redirect_bits_robIdx_flag"])
+                ^ (rob_value > p["io_redirect_bits_robIdx_value"])
+            )
+            return p["io_redirect_valid"] & (
+                (p["io_redirect_bits_level"] & equal) | is_after
+            )
+
+        enq_need_cancel = need_redirect(enq_rob_flag, enq_rob_value)
+        entries_need_redirect = need_redirect(
+            entries["uop_robIdx_flag"], entries["uop_robIdx_value"]
+        )
+
+        # Match merge writebacks by ROB pointer and choose the oldest matching
+        # port.  An exception wins over a younger non-exception writeback.
+        wb0_match = p["io_mergeUopWriteback_0_valid"] & (
+            p["io_mergeUopWriteback_0_bits_robidx_flag"] == entries["uop_robIdx_flag"]
+        ) & (
+            p["io_mergeUopWriteback_0_bits_robidx_value"] == entries["uop_robIdx_value"]
+        )
+        wb1_match = p["io_mergeUopWriteback_1_valid"] & (
+            p["io_mergeUopWriteback_1_bits_robidx_flag"] == entries["uop_robIdx_flag"]
+        ) & (
+            p["io_mergeUopWriteback_1_bits_robidx_value"] == entries["uop_robIdx_value"]
+        )
+        wb0_exception = cast(Any, Cat(
+            *(p[f"io_mergeUopWriteback_0_bits_exceptionVec_{number}"] for number in (3, 4, 5, 13, 19, 21))
+        )).any()
+        wb1_exception = cast(Any, Cat(
+            *(p[f"io_mergeUopWriteback_1_bits_exceptionVec_{number}"] for number in (3, 4, 5, 13, 19, 21))
+        )).any()
+        choose_wb0 = wb0_match & (
+            ~wb1_match
+            | (
+                wb1_match
+                & ((p["io_mergeUopWriteback_1_bits_vl"] > p["io_mergeUopWriteback_0_bits_vl"]) | wb0_exception)
+                & ~wb1_exception
+            )
+        )
+        selected_wb_vl = Mux(
+            choose_wb0,
+            p["io_mergeUopWriteback_0_bits_vl"],
+            p["io_mergeUopWriteback_1_bits_vl"],
+        )
+        selected_wb_exception = Mux(choose_wb0, wb0_exception, wb1_exception)
+        wb_valid = wb0_match | wb1_match
+        wb_update_valid = (
+            wb_valid
+            & ((selected_wb_vl < entries_vl) | selected_wb_exception)
+            & valid
+            & ~entries_need_redirect
+            & ~entries_has_exception
+        )
+
+        # Output is the final VLEFF uop, with the current stored VL packed in
+        # both the uop field and the low byte of the 128-bit data result.
+        writeback_valid = valid & entries_last_uop & entries_is_vleff & ~entries_need_redirect
+        module.d.comb += [
+            p["io_uopWriteback_valid"].eq(writeback_valid),
+            p["io_uopWriteback_bits_uop_vpu_vl"].eq(entries_vl),
+            p["io_uopWriteback_bits_data"].eq(Cat(entries_vl, Const(0, 120))),
+        ]
+        for suffix, register in entries.items():
+            module.d.comb += p[f"io_uopWriteback_bits_{suffix}"].eq(register)
+
+        # Register the first VLEFF uop, or replace only the uop on the final
+        # segment while preserving the accumulated VL and exception marker.
+        with cast(Any, module.If(enq_valid & ~enq_need_cancel)):
+            with cast(Any, module.If(~valid)):
+                for suffix, register in entries.items():
+                    module.d.sync += register.eq(selected_input(suffix))
+                module.d.sync += [
+                    entries_last_uop.eq(enq_last_uop),
+                    entries_is_vleff.eq(enq_is_vleff),
+                    entries_vl.eq(selected_input("src_4")[:8]),
+                    entries_has_exception.eq(0),
+                ]
+            with cast(Any, module.Elif(valid & enq_fix_vl)):
+                for suffix, register in entries.items():
+                    module.d.sync += register.eq(selected_input(suffix))
+                module.d.sync += [
+                    entries_last_uop.eq(enq_last_uop),
+                    entries_is_vleff.eq(enq_is_vleff),
+                ]
+
+        with cast(Any, module.If(wb_update_valid)):
+            module.d.sync += [
+                entries_vl.eq(selected_wb_vl),
+                entries_has_exception.eq(selected_wb_exception),
+            ]
+
+        # uopWriteback has no ready port in this ABI, so a valid output fires
+        # at the following clock edge.
+        module.d.sync += valid.eq(
+            ~(writeback_valid | entries_need_redirect)
+            & (enq_valid & ~enq_need_cancel | valid)
+        )
+
     def _drive_passthrough(self, module: Module) -> None:
         """Copy obvious same-suffix input fields to outputs. / 将同后缀输入字段复制到输出。"""
 
@@ -923,8 +1081,11 @@ class VectorMemoryFamily(Elaboratable):
             if "reset" in self.ports:
                 domain.rst = self.ports["reset"]
             module.domains += domain
-        self._drive_common(module)
-        self._drive_passthrough(module)
+        if self.member == "VfofBuffer":
+            self._drive_vfof(module)
+        else:
+            self._drive_common(module)
+            self._drive_passthrough(module)
         if self.member == "VsetModule":
             self._drive_vset(module)
         elif self.member == "VldMergeUnit":
