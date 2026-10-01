@@ -77,7 +77,8 @@ py -B validation/v2_queue_state_correspondence_validator.py --build Rocket.TLChi
 ```
 
 This diagnostic always records a zero Build-count delta and uses a separate
-evidence filename. Complete member receipts share the full family's cache.
+evidence filename. Complete member receipts use the same checkpoint directory;
+reuse requires matching RTL, locked references, tools and producer hashes.
 The negative-control rail also mutates outputs driven directly by child
 instances; both DUT and reference mutations must fail the proof. Queue RAM
 words preserve their `ram_ext.Memory` identity through memory mapping so
@@ -91,10 +92,22 @@ the 900-second timeout, while the partitioned Yosys proof took about 34 seconds
 and 332 MB. Both mutant sides use the same proof script. A missing partition
 or any remaining unproven cell blocks success.
 
-The current member receipts cover 9/11 Rocket children and 4/7 Icache Prefetch
-members, with a zero Build-count delta. TLXbar_8 preserves the full finite
+The Rocket TLChildren Build now has a complete 11/11 strict receipt, raising
+the audited Build count to 45/118. Its dedicated full-catalog producer is:
+
+```powershell
+py -B validation/v2_rocket_tlchildren_strict_validator.py
+```
+
+The producer uses the same full-cone partitions for queues and crossbar
+arbiters, then asserts the entire design, checks every catalog member and
+records two-sided negative controls. Its receipt binds the partition policy,
+catalog resolver, common rail and registered direct test to current hashes.
+Acceptance remains pending for reset-entry, executable differential, parent
+closure and system gates. Icache Prefetch covers 4/7 members in non-counting
+focused receipts. TLXbar_8 preserves the full finite
 manager address mask union, including the 0x31110000 hole found by SAT;
 random route samples could not justify replacing that union with a complement.
-See validation/v2-rocket-nine-members-focused-results.json and
+See validation/v2-build-cpu-dependency-rocket-tlchildren-family-strict-evidence.json and
 validation/v2-icache-four-members-focused-results.json for current source hashes,
 commands, lint, complete cell counts and two-sided controls.

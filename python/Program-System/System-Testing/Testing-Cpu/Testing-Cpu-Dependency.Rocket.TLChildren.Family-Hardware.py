@@ -376,5 +376,231 @@ class TLChildrenFamilyTest(unittest.TestCase):
         sim.run()
 
 
+    def test_tlxbar7_stripes_tags_and_return_arbitration(self) -> None:
+        dut = self.module.TLChildFamily("TLXbar_7")
+        p = dut.ports
+        rng = random.Random(0x7B4A)
+
+        async def bench(ctx):
+            def verify_payload(output_stem, input_stem, source_value=None, sink_tag=None):
+                for port in dut.spec.ports:
+                    if port.direction != "output" or not port.name.startswith(output_stem):
+                        continue
+                    field = port.name[len(output_stem):]
+                    signal = p.get(input_stem + field)
+                    expected = ctx.get(signal) if signal is not None else 0
+                    if field == "source" and source_value is not None:
+                        expected = source_value
+                    if field == "sink" and sink_tag is not None:
+                        expected |= sink_tag << 8
+                    self.assertEqual(expected, ctx.get(p[port.name]), port.name)
+
+            for port in dut.spec.ports:
+                if port.direction == "input" and "_bits_" in port.name:
+                    ctx.set(p[port.name], rng.getrandbits(port.width))
+            ctx.set(p["reset"], 1)
+            await ctx.tick()
+            ctx.set(p["reset"], 0)
+            for client in range(3):
+                ctx.set(p[f"auto_in_{client}_a_valid"], 1)
+                ctx.set(p[f"auto_in_{client}_a_bits_opcode"], 4)
+            for manager in range(4):
+                ctx.set(p[f"auto_out_{manager}_a_ready"], 1)
+            for manager in range(4):
+                for client in range(3):
+                    ctx.set(p[f"auto_in_{client}_a_bits_address"], (1 << 47) | manager * 64 | 0x25)
+                for winner in (2, 1, 0, 2, 1, 0):
+                    for lane in range(4):
+                        self.assertEqual(int(lane == manager), ctx.get(p[f"auto_out_{lane}_a_valid"]))
+                    for client in range(3):
+                        self.assertEqual(int(client == winner), ctx.get(p[f"auto_in_{client}_a_ready"]))
+                    source = ctx.get(p[f"auto_in_{winner}_a_bits_source"])
+                    if winner:
+                        source |= (6 - winner) << 4
+                    verify_payload(f"auto_out_{manager}_a_bits_", f"auto_in_{winner}_a_bits_", source)
+                    await ctx.tick()
+            for client in range(3):
+                ctx.set(p[f"auto_in_{client}_a_valid"], 0)
+
+            for channel in "ce":
+                for manager in range(4):
+                    ctx.set(p[f"auto_out_{manager}_{channel}_ready"], 1)
+                for manager in range(4):
+                    if channel == "c":
+                        ctx.set(p["auto_in_0_c_bits_address"], manager * 64)
+                    else:
+                        ctx.set(p["auto_in_0_e_bits_sink"], ((3 - manager) << 8) | 0xA5)
+                    for valid in (0, 1):
+                        ctx.set(p[f"auto_in_0_{channel}_valid"], valid)
+                        for lane in range(4):
+                            self.assertEqual(valid * int(lane == manager), ctx.get(p[f"auto_out_{lane}_{channel}_valid"]))
+                            for port in dut.spec.ports:
+                                stem = f"auto_out_{lane}_{channel}_bits_"
+                                if port.direction == "output" and port.name.startswith(stem):
+                                    field = port.name[len(stem):]
+                                    value = ctx.get(p[f"auto_in_0_{channel}_bits_{field}"])
+                                    self.assertEqual(value & ((1 << port.width) - 1), ctx.get(p[port.name]))
+                        self.assertEqual(1, ctx.get(p[f"auto_in_0_{channel}_ready"]))
+                        ctx.set(p[f"auto_out_{manager}_{channel}_ready"], 0)
+                        self.assertEqual(0, ctx.get(p[f"auto_in_0_{channel}_ready"]))
+                        ctx.set(p[f"auto_out_{manager}_{channel}_ready"], 1)
+
+            ctx.set(p["auto_in_0_b_ready"], 1)
+            for client in range(3):
+                ctx.set(p[f"auto_in_{client}_d_ready"], 1)
+                ctx.set(p["reset"], 1)
+                await ctx.tick()
+                ctx.set(p["reset"], 0)
+                for manager in range(4):
+                    ctx.set(p[f"auto_out_{manager}_b_valid"], 1)
+                    ctx.set(p[f"auto_out_{manager}_b_bits_source"], manager + 1)
+                    ctx.set(p[f"auto_out_{manager}_d_valid"], 1)
+                    ctx.set(p[f"auto_out_{manager}_d_bits_opcode"], 0)
+                    ctx.set(p[f"auto_out_{manager}_d_bits_source"], (0 if client == 0 else (6 - client) << 4) | 0xB)
+                for winner in (3, 2, 1, 0, 3):
+                    verify_payload("auto_in_0_b_bits_", f"auto_out_{winner}_b_bits_")
+                    verify_payload(f"auto_in_{client}_d_bits_", f"auto_out_{winner}_d_bits_", 0xB, 3 - winner)
+                    for lane in range(4):
+                        self.assertEqual(int(lane == winner), ctx.get(p[f"auto_out_{lane}_b_ready"]))
+                        self.assertEqual(int(lane == winner), ctx.get(p[f"auto_out_{lane}_d_ready"]))
+                    for lane in range(3):
+                        self.assertEqual(int(lane == client), ctx.get(p[f"auto_in_{lane}_d_valid"]))
+                    await ctx.tick()
+            for manager in range(4):
+                ctx.set(p[f"auto_out_{manager}_b_bits_source"], 0x60)
+                ctx.set(p[f"auto_out_{manager}_d_bits_source"], 0x60)
+            self.assertEqual(0, ctx.get(p["auto_in_0_b_valid"]))
+            for client in range(3):
+                self.assertEqual(0, ctx.get(p[f"auto_in_{client}_d_valid"]))
+
+            # A and D own both beats of a data transfer despite backpressure.
+            ctx.set(p["reset"], 1)
+            await ctx.tick()
+            ctx.set(p["reset"], 0)
+            for client in range(3):
+                ctx.set(p[f"auto_in_{client}_a_valid"], 1)
+                ctx.set(p[f"auto_in_{client}_a_bits_address"], 0)
+                ctx.set(p[f"auto_in_{client}_a_bits_opcode"], 0)
+                ctx.set(p[f"auto_in_{client}_a_bits_size"], 7)
+            for manager in range(4):
+                ctx.set(p[f"auto_out_{manager}_d_bits_source"], 0xB)
+                ctx.set(p[f"auto_out_{manager}_d_bits_opcode"], 1)
+                ctx.set(p[f"auto_out_{manager}_d_bits_size"], 6)
+            await ctx.tick()
+            ctx.set(p["auto_out_0_a_ready"], 0)
+            ctx.set(p["auto_in_0_d_ready"], 0)
+            for _ in range(3):
+                verify_payload("auto_in_0_d_bits_", "auto_out_3_d_bits_", 0xB, 0)
+                self.assertEqual(0, ctx.get(p["auto_in_2_a_ready"]))
+                await ctx.tick()
+            ctx.set(p["auto_out_0_a_ready"], 1)
+            ctx.set(p["auto_in_0_d_ready"], 1)
+            await ctx.tick()
+            self.assertEqual(1, ctx.get(p["auto_in_1_a_ready"]))
+            verify_payload("auto_in_0_d_bits_", "auto_out_2_d_bits_", 0xB, 1)
+
+        sim = Simulator(dut)
+        sim.add_clock(1e-6)
+        sim.add_testbench(bench)
+        sim.run()
+
+    def test_tlxbar9_coherent_routing_and_beat_ownership(self) -> None:
+        dut = self.module.TLChildFamily("TLXbar_9")
+        p = dut.ports
+        rng = random.Random(0x9B4A)
+
+        async def bench(ctx):
+            ctx.set(p["reset"], 1)
+            await ctx.tick()
+            ctx.set(p["reset"], 0)
+            # Payload fields and source tags survive four independent clients.
+            payloads = {}
+            for channel in "ace":
+                ctx.set(p[f"auto_out_{channel}_ready"], 1)
+                for client in range(4):
+                    ctx.set(p[f"auto_in_{client}_{channel}_valid"], 1)
+                    for port in dut.spec.ports:
+                        stem = f"auto_in_{client}_{channel}_bits_"
+                        if port.direction == "input" and port.name.startswith(stem):
+                            value = rng.getrandbits(port.width)
+                            if port.name.endswith("_opcode"):
+                                value = 4 if channel == "a" else 0
+                            ctx.set(p[port.name], value)
+                            payloads[port.name] = value
+            for winner in (3, 2, 1, 0, 3, 2, 1, 0):
+                for channel in "ace":
+                    self.assertEqual(1, ctx.get(p[f"auto_out_{channel}_valid"]))
+                    for client in range(4):
+                        self.assertEqual(int(client == winner),
+                                         ctx.get(p[f"auto_in_{client}_{channel}_ready"]))
+                    for port in dut.spec.ports:
+                        stem = f"auto_out_{channel}_bits_"
+                        if port.direction != "output" or not port.name.startswith(stem):
+                            continue
+                        field = port.name[len(stem):]
+                        expected = payloads[f"auto_in_{winner}_{channel}_bits_{field}"]
+                        if field == "source":
+                            expected |= (3 - winner) << 8
+                        self.assertEqual(expected, ctx.get(p[port.name]), port.name)
+                await ctx.tick()
+
+            # A and C independently hold ownership through a stalled second
+            # data beat, then return to round robin. E continues every cycle.
+            ctx.set(p["reset"], 1)
+            await ctx.tick()
+            ctx.set(p["reset"], 0)
+            for channel in "ac":
+                for client in range(4):
+                    ctx.set(p[f"auto_in_{client}_{channel}_bits_opcode"], 0 if channel == "a" else 1)
+                    ctx.set(p[f"auto_in_{client}_{channel}_bits_size"], 6)
+            await ctx.tick()
+            for channel in "ac":
+                ctx.set(p[f"auto_out_{channel}_ready"], 0)
+            for _ in range(3):
+                for channel in "ac":
+                    for client in range(4):
+                        self.assertEqual(0, ctx.get(p[f"auto_in_{client}_{channel}_ready"]))
+                    self.assertEqual(payloads[f"auto_in_3_{channel}_bits_source"],
+                                     ctx.get(p[f"auto_out_{channel}_bits_source"]))
+                await ctx.tick()
+            for channel in "ac":
+                ctx.set(p[f"auto_out_{channel}_ready"], 1)
+            await ctx.tick()
+            for channel in "ac":
+                self.assertEqual(0x100 | payloads[f"auto_in_2_{channel}_bits_source"],
+                                 ctx.get(p[f"auto_out_{channel}_bits_source"]))
+
+            # Probe and response source tags cover all ranges; their payload
+            # remains broadcast when valid is low and ready follows the tag.
+            for channel in "bd":
+                for port in dut.spec.ports:
+                    if port.direction == "input" and port.name.startswith(f"auto_out_{channel}_bits_"):
+                        ctx.set(p[port.name], rng.getrandbits(port.width))
+                for tag in range(4):
+                    for valid in (0, 1):
+                        ctx.set(p[f"auto_out_{channel}_valid"], valid)
+                        ctx.set(p[f"auto_out_{channel}_bits_source"], (tag << 8) | 0xA5)
+                        for client in range(4):
+                            ctx.set(p[f"auto_in_{client}_{channel}_ready"], int(client == 3 - tag))
+                        self.assertEqual(1, ctx.get(p[f"auto_out_{channel}_ready"]))
+                        for client in range(4):
+                            self.assertEqual(valid * int(client == 3 - tag),
+                                             ctx.get(p[f"auto_in_{client}_{channel}_valid"]))
+                            for port in dut.spec.ports:
+                                stem = f"auto_in_{client}_{channel}_bits_"
+                                if port.direction != "output" or not port.name.startswith(stem):
+                                    continue
+                                field = port.name[len(stem):]
+                                expected = 0xA5 if field == "source" else ctx.get(p[f"auto_out_{channel}_bits_{field}"])
+                                self.assertEqual(expected, ctx.get(p[port.name]), port.name)
+                        ctx.set(p[f"auto_in_{3 - tag}_{channel}_ready"], 0)
+                        self.assertEqual(0, ctx.get(p[f"auto_out_{channel}_ready"]))
+
+        sim = Simulator(dut)
+        sim.add_clock(1e-6)
+        sim.add_testbench(bench)
+        sim.run()
+
+
 if __name__ == "__main__":
     unittest.main()

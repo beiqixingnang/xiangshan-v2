@@ -1,44 +1,54 @@
 {
   "schema_version": 1,
   "kind": "V2_VALIDATION_EXPANSION_BATCH",
-  "timestamp": "2026-10-01T10:07:07.247017+08:00",
-  "baseline_commit": "5f5c211",
-  "strict": "44/118",
-  "strict_delta": 0,
+  "timestamp": "2026-10-01T11:52:13.226903+08:00",
+  "baseline_commit": "f21007e",
+  "strict": "45/118",
+  "strict_delta": 1,
   "accepted": 0,
   "build_files": 118,
-  "behavior_verified_builds": "44/118",
-  "pending_builds": 74,
+  "behavior_verified_builds": "45/118",
+  "pending_builds": 73,
   "scala_source_associated_reference_modules": {
     "mapped": 1976,
     "total": 1976,
     "semantics": "source association/subject mapping only; includes bounded and contract-only subjects; not all strictly equivalent"
   },
   "python_lines": {
-    "raw": 94685,
-    "nonblank": 87524,
-    "raw_delta": 807,
-    "nonblank_delta": 743
+    "raw": 95138,
+    "nonblank": 87952,
+    "raw_delta": 453,
+    "nonblank_delta": 428
   },
   "rocket": {
-    "Status": "PASS_MEMBER_PROOFS_NON_COUNTING",
-    "PassedMembers": 9,
+    "Status": "COMPLETE_EQUIVALENCE",
+    "PassedMembers": 11,
     "FamilyMembers": 11,
     "Cells": {
-      "TLBuffer_2": 661,
+      "BusErrorUnit": 127,
       "TLBuffer_16": 601,
+      "TLBuffer_2": 661,
       "TLBuffer_20": 1921,
       "TLBuffer_22": 655,
-      "TLBuffer_29": 637,
       "TLBuffer_27": 17188,
+      "TLBuffer_29": 637,
       "TLClientsMerger_1": null,
-      "BusErrorUnit": 127,
-      "TLXbar_8": 586
+      "TLXbar_7": 3317,
+      "TLXbar_8": 586,
+      "TLXbar_9": 1392
     },
-    "NegativeControl": "PASS",
-    "ElapsedSeconds": 78.467,
-    "Direct": "PASS",
-    "Pyright": "PASS"
+    "Unproven": 0,
+    "TwoSidedNegativeControl": "PASS",
+    "Direct": "11/11 PASS",
+    "Pyright": "PASS",
+    "Receipt": "validation/v2-build-cpu-dependency-rocket-tlchildren-family-strict-evidence.json",
+    "Resume": {
+      "checkpoint": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\.cache\\strict-family\\build_cpu_dependency_rocket_tlchildren_family\\rail-checkpoint.json",
+      "prepared_cache_hits": 0,
+      "formal_cache_hits": 0,
+      "member_count": 11
+    },
+    "AcceptanceEligible": false
   },
   "icache": {
     "Status": "PASS_MEMBER_PROOFS_NON_COUNTING",
@@ -51,89 +61,67 @@
       "L2TlbPrefetch": 185
     },
     "NegativeControl": "PASS",
-    "ElapsedSeconds": 110.804,
-    "Direct": "PASS",
-    "Pyright": "PASS"
+    "ElapsedSeconds": 116.177,
+    "Direct": "5/5 PASS",
+    "Pyright": "PASS",
+    "Receipt": "validation/v2-icache-four-members-focused-results.json",
+    "StrictCountDelta": 0
   },
-  "benchmark": {
-    "rocket_initial_batch_seconds": 78.467,
-    "initial_batch_cache_hits": 1,
-    "rocket_warm_batch_seconds": 23.943,
-    "warm_cache_hits": 9,
-    "members": 9,
-    "negative_controls_rerun": true,
-    "tlbuffer27_single_workset": "TIMEOUT 900s; validation/v2-rocket-tlbuffer27-state-focused-results.json",
-    "tlbuffer27_partition_yosys_seconds": 34.17,
-    "tlbuffer27_partition_yosys_peak_mb": 332.41,
-    "partition_policy": "full driver cones, no assumptions or blackboxes, final clear/full induction/equiv_status -assert"
-  },
-  "repair_findings": [
-    "TLBuffer_27 was a relay; now four A/B/C/D/E lanes of real Queue2 FIFOs with exact RAM identity",
-    "BusErrorUnit now has masked MMIO RW registers, highest-enabled-error capture, sticky accrued IRQs and resetless value register",
-    "TLXbar_8 mask union preserves special address holes; complement claim was falsified by unrestricted SAT",
-    "PrefetcherMonitor quality windows and separately timed enable/confidence recovery",
-    "InstrMMIOEntry aligned bus address and SEND_RESP flush clearing",
-    "L2TlbPrefetch next-line VPN, four recent sent requests, flush and current CSR translation modes"
-  ],
-  "checks": {
-    "direct_rocket": "9/9 PASS; 30 Queue channels x100 cycles, 600 MMIO/error scoreboard cycles and Xbar routes/beat locking",
-    "direct_icache": "5/5 PASS; monitor 200001-cycle recovery, MMIO four halfword lanes and flush, 350-cycle TLB prefetch scoreboard",
-    "pyright": "6 changed files 0 errors",
-    "rail_regression": "13/13 PASS",
-    "progress_regression": "11/11 PASS",
-    "utf8_lf_compile": "PASS",
-    "diff_check": "PASS",
-    "locked_reference": "1976/1976 PASS; written 0; complete XSTop SHA256 8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
-    "ref_verify_command": [
-      "wsl",
-      "-e",
-      "bash",
-      "-lc",
-      "python3 /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/scripts/rebuild-v2-reference-sv.py --xstop /home/lishuo/xs-v2-local/build/rtl-offline-fixed/XSTop.sv --verify-only"
+  "partition_negative_controls": {
+    "Status": "PASS",
+    "Members": [
+      "TLXbar_7",
+      "TLXbar_9"
     ],
-    "ref_verify_exit": 0,
-    "IntBuffer": "COMPLETE_EQUIVALENCE 3/3 refreshed current rail hash",
-    "PrefetchMetadata": "COMPLETE_EQUIVALENCE 2/2 refreshed current rail hash",
-    "central_progress_exit": 1
+    "Receipt": "validation/v2-rocket-partition-negative-controls-results.json",
+    "StrictCountDelta": 0
   },
-  "audit": {
+  "regression": {
+    "Rail": "13/13 PASS",
+    "Progress": "11/11 PASS",
+    "FocusedPyright": "4 changed Python files; 0 errors",
+    "Utf8LfCompileDiff": "PASS"
+  },
+  "locked_reference_verification": {
+    "status": "PASS",
+    "verified": 1976,
+    "total": 1976,
+    "written": 0,
+    "xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d"
+  },
+  "central_audit": {
     "status": "FAIL",
     "failure_records": 6,
-    "non_counting_attempts": 5
+    "non_counting_attempts": 5,
+    "new_rocket_record": "PASS"
   },
-  "evidence": [
-    "validation/v2-rocket-nine-members-focused-results.json",
-    "validation/v2-rocket-nine-members-warm-results.json",
-    "validation/v2-icache-four-members-focused-results.json"
-  ],
   "sources": {
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Rocket.TLChildren.Family-Hardware.py": {
-      "sha256": "8f472c8fcbac34fdd6a8ae81f7a8dba23c7b9a0b2a42a1811566cd01808bf67e"
-    },
-    "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Frontend.Icache.Prefetch.Family-Hardware.py": {
-      "sha256": "00b24000b0a6b8693f4be18f3dd1f7d9f535f0778787b8410c8618ee51667410"
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Rocket.TLChildren.Family-Hardware.py",
+      "sha256": "2c4e255c8f465e3968cb13c57f6aa669d680ccc4b0dfd87cf8a14689110a3b2d",
+      "bytes": 49566
     },
     "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Dependency.Rocket.TLChildren.Family-Hardware.py": {
-      "sha256": "5b979f0c19841e5df18ffa65f05ffa6f8463f7612e06d959e1eb4c4c019087b6"
-    },
-    "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Frontend.Icache.Prefetch.Family-Hardware.py": {
-      "sha256": "926de7f026e50c657ce7b200d2b5289350c7b33fcb5b9fb4edbeeef02939ac3b"
+      "path": "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Dependency.Rocket.TLChildren.Family-Hardware.py",
+      "sha256": "8af0c6a39917d435a7bf714d2b365f7f41a19a2414eedb6027d5d2a46c3c00ad",
+      "bytes": 31481
     },
     "validation/v2_queue_state_correspondence_validator.py": {
-      "sha256": "0a3b3ccc40f53874f869f3623146c3bf4a62f7ef08a3a7d98ec3442358147d15"
+      "path": "validation/v2_queue_state_correspondence_validator.py",
+      "sha256": "62b0d04b729d7edeebd72214093d54e448d4aa2048c87337517cabadef6ee4d3",
+      "bytes": 7725
     },
-    "validation/v2_strict_family_rail.py": {
-      "sha256": "446151abc1261a79dffa4707130786a5673a4069f3a1c98086e2b0cd97aeef15"
+    "validation/v2_rocket_tlchildren_strict_validator.py": {
+      "path": "validation/v2_rocket_tlchildren_strict_validator.py",
+      "sha256": "fb6b52bd6d10947b47956b3edb684be6256c1dc6c8ee49fbca59b75191e39ac6",
+      "bytes": 3419
     }
   },
-  "unrun_gates": [
-    "TLXbar_7/TLXbar_9 real implementation and proof",
-    "WayLookup/IPrefetchPipe/ICacheMainPipe real behavior repair",
-    "full family acceptance",
-    "standalone Verilator executable differential and waveform review for newly repaired paths",
-    "initial-state/reset-entry formal acceptance",
-    "parent/full-top differential",
-    "license/user acceptance"
+  "remaining_gates": [
+    "73 Builds lack complete strict proofs; CONTRACT_ONLY/bounded subjects are not accepted",
+    "6 source/origin audit failures and 5 non-counting attempts",
+    "WayLookup, IPrefetchPipe and ICacheMainPipe remain implementation/proof work",
+    "Reset/initial-state gates, executable Verilator differential/wave review, parent/full-top closure, license and user acceptance remain pending"
   ],
   "acceptance_eligible": false
 }

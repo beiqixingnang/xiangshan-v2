@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "kind": "V2_PARTITION_NEGATIVE_CONTROLS_DIAGNOSTIC",
+  "strict_complete_count_delta": 0,
+  "acceptance_eligible": false,
+  "sources": {
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Rocket.TLChildren.Family-Hardware.py",
+      "sha256": "2c4e255c8f465e3968cb13c57f6aa669d680ccc4b0dfd87cf8a14689110a3b2d",
+      "bytes": 49566
+    },
+    "partition_policy": {
+      "path": "validation/v2_queue_state_correspondence_validator.py",
+      "sha256": "62b0d04b729d7edeebd72214093d54e448d4aa2048c87337517cabadef6ee4d3",
+      "bytes": 7725
+    },
+    "rail": {
+      "path": "validation/v2_strict_family_rail.py",
+      "sha256": "446151abc1261a79dffa4707130786a5673a4069f3a1c98086e2b0cd97aeef15",
+      "bytes": 72724
+    }
+  },
+  "results": {
+    "TLXbar_7": {
+      "status": "PASS",
+      "controls": {
+        "status": "PASS",
+        "cases": {
+          "sat": {
+            "status": "PASS",
+            "note": "no representative with outputs"
+          },
+          "sequential.target": {
+            "status": "PASS",
+            "control_entry": "TLXbar_7",
+            "control_port": "auto_in_0_a_ready",
+            "mutation_applied": true,
+            "explicit_failure_marker": true,
+            "success_marker_still_present": false,
+            "returncode": 1
+          },
+          "sequential.reference": {
+            "status": "PASS",
+            "control_entry": "TLXbar_7",
+            "control_port": "auto_in_0_a_ready",
+            "mutation_applied": true,
+            "explicit_failure_marker": true,
+            "success_marker_still_present": false,
+            "returncode": 1
+          }
+        },
+        "note": "a reference-side mutation that still proves means the reference never reaches the comparison"
+      },
+      "elapsed_seconds": 15.286
+    },
+    "TLXbar_9": {
+      "status": "PASS",
+      "controls": {
+        "status": "PASS",
+        "cases": {
+          "sat": {
+            "status": "PASS",
+            "note": "no representative with outputs"
+          },
+          "sequential.target": {
+            "status": "PASS",
+            "control_entry": "TLXbar_9",
+            "control_port": "auto_in_0_a_ready",
+            "mutation_applied": true,
+            "explicit_failure_marker": true,
+            "success_marker_still_present": false,
+            "returncode": 1
+          },
+          "sequential.reference": {
+            "status": "PASS",
+            "control_entry": "TLXbar_9",
+            "control_port": "auto_in_0_a_ready",
+            "mutation_applied": true,
+            "explicit_failure_marker": true,
+            "success_marker_still_present": false,
+            "returncode": 1
+          }
+        },
+        "note": "a reference-side mutation that still proves means the reference never reaches the comparison"
+      },
+      "elapsed_seconds": 5.375
+    }
+  }
+}

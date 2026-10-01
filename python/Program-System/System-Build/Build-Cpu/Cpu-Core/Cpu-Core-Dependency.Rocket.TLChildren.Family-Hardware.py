@@ -2,8 +2,9 @@
 
 The selected children keep their exact frozen interfaces. TLBuffers implement
 real FIFO channels; TLXbar_8 implements address/source routing and beat-locked
-arbitration; BusErrorUnit implements the MMIO and sticky error state. TLXbar_7
-and TLXbar_9 still require behavior repair. Complete parent closure is pending.
+arbitration; TLXbar_9 implements coherent four-client arbitration and source
+demultiplexing; BusErrorUnit implements the MMIO and sticky error state.
+TLXbar_7 implements striped manager routing. Complete parent closure is pending.
 """
 from __future__ import annotations
 import base64
@@ -385,6 +386,228 @@ def _elaborate_tlxbar8(family: Any, module: Module) -> Module:
 
     return module
 
+def _coherent_arbiter(module: Module, index: int, valids: Sequence[Any],
+                      sink_ready: Any, sizes: Sequence[Any],
+                      has_data: Sequence[Any]) -> dict[str, Any]:
+    """Elaborate a round-robin arbiter with a one-bit remaining-beat counter."""
+
+    count = len(valids)
+    suffix = f"_{index}" if index else ""
+    beats = Signal(name=f"beatsLeft{suffix}")
+    mask = Signal(count, init=(1 << count) - 1, name=f"readys_mask{suffix}")
+    states = [Signal(name=f"state_{index}_{slot}" if index else f"state_{slot}")
+              for slot in range(count)]
+    readys = [Signal(name=f"arb{index}_ready_{slot}") for slot in range(count)]
+    winners = [Signal(name=f"arb{index}_winner_{slot}") for slot in range(count)]
+    muxes = [Signal(name=f"arb{index}_mux_{slot}") for slot in range(count)]
+    permits = [Signal(name=f"arb{index}_permit_{slot}") for slot in range(count)]
+    ready_expressions = _tlxbar8_round_robin_readys(valids, mask)
+    for slot in range(count):
+        module.d.comb += [
+            readys[slot].eq(ready_expressions[slot]),
+            winners[slot].eq(readys[slot] & valids[slot]),
+            muxes[slot].eq(Mux(beats, states[slot], winners[slot])),
+            permits[slot].eq(Mux(beats, states[slot], readys[slot])),
+        ]
+    any_valid = _tlxbar8_or(valids)
+    output_valid = Signal(name=f"arb{index}_valid")
+    module.d.comb += output_valid.eq(Mux(
+        beats, _tlxbar8_or([state & valid for state, valid in zip(states, valids)]), any_valid))
+    latch = ~beats & sink_ready
+    fire = sink_ready & output_valid
+    prefix = _tlxbar8_left_or(Cat(*winners), count)
+    with cast(Any, module.If(latch & any_valid)):
+        module.d.sync += mask.eq(Cat(*prefix))
+    module.d.sync += [state.eq(selected) for state, selected in zip(states, muxes)]
+    initial_terms = []
+    for winner, size, data in zip(winners, sizes, has_data):
+        shifted = Const(0x3F, 13) << size
+        initial_terms.append(winner & data & ~shifted[5])
+    initial_beats = _tlxbar8_or(initial_terms) if initial_terms else Const(0, 1)
+    module.d.sync += beats.eq(Mux(latch, initial_beats, beats - fire))
+    return {"valid": output_valid, "allowed": permits, "mux_state": muxes}
+
+
+def _elaborate_tlxbar7(family: Any, module: Module) -> Module:
+    """Route three clients to four striped managers with eight arbiters."""
+
+    ports = family.ports
+    domain = ClockDomain("sync", async_reset=True)
+    domain.clk = ports["clock"]
+    domain.rst = ports["reset"]
+    module.domains += domain
+    a_routes = [[Signal(name=f"requestAIO_{client}_{manager}") for manager in range(4)]
+                for client in range(3)]
+    a_arbiters = []
+    for manager in range(4):
+        valids = [Signal(name=f"arb{manager}_input_{client}") for client in range(3)]
+        for client in range(3):
+            module.d.comb += [
+                a_routes[client][manager].eq(ports[f"auto_in_{client}_a_bits_address"][6:8] == manager),
+                valids[client].eq(ports[f"auto_in_{client}_a_valid"] & a_routes[client][manager]),
+            ]
+        arb = _coherent_arbiter(module, manager, valids, ports[f"auto_out_{manager}_a_ready"],
+                                [ports[f"auto_in_{client}_a_bits_size"] for client in range(3)],
+                                [~ports[f"auto_in_{client}_a_bits_opcode"][2] for client in range(3)])
+        a_arbiters.append(arb)
+        module.d.comb += ports[f"auto_out_{manager}_a_valid"].eq(arb["valid"])
+        stem = f"auto_out_{manager}_a_bits_"
+        for port in family.spec.ports:
+            if port.direction != "output" or not port.name.startswith(stem):
+                continue
+            field = port.name[len(stem):]
+            values = []
+            for client in range(3):
+                input_name = f"auto_in_{client}_a_bits_{field}"
+                value: Any = ports.get(input_name, Const(0, port.width))
+                if field == "source":
+                    value = Cat(value, Const(0 if client == 0 else 6 - client, 1 if client == 0 else 3))
+                values.append(Mux(arb["mux_state"][client], value, 0))
+            module.d.comb += ports[port.name].eq(_tlxbar8_or(values))
+    for client in range(3):
+        module.d.comb += ports[f"auto_in_{client}_a_ready"].eq(_tlxbar8_or([
+            a_routes[client][manager] & ports[f"auto_out_{manager}_a_ready"]
+            & a_arbiters[manager]["allowed"][client] for manager in range(4)]))
+
+    d_routes = []
+    for client in range(3):
+        routes = [Signal(name=f"requestDOI_{manager}_{client}") for manager in range(4)]
+        valids = [Signal(name=f"arb{5 + client}_input_{manager}") for manager in range(4)]
+        for manager in range(4):
+            source = ports[f"auto_out_{manager}_d_bits_source"]
+            route = ~source[6] if client == 0 else source[4:7] == 6 - client
+            module.d.comb += [routes[manager].eq(route), valids[manager].eq(
+                ports[f"auto_out_{manager}_d_valid"] & routes[manager])]
+        arb = _coherent_arbiter(module, 5 + client, valids, ports[f"auto_in_{client}_d_ready"],
+                                [ports[f"auto_out_{manager}_d_bits_size"] for manager in range(4)],
+                                [ports[f"auto_out_{manager}_d_bits_opcode"][0] for manager in range(4)])
+        d_routes.append((routes, arb))
+        module.d.comb += ports[f"auto_in_{client}_d_valid"].eq(arb["valid"])
+        stem = f"auto_in_{client}_d_bits_"
+        for port in family.spec.ports:
+            if port.direction != "output" or not port.name.startswith(stem):
+                continue
+            field = port.name[len(stem):]
+            values = []
+            for manager in range(4):
+                value = ports[f"auto_out_{manager}_d_bits_{field}"]
+                if field == "source":
+                    value = value[:6] if client == 0 else value[:4]
+                elif field == "sink":
+                    value = Cat(value, Const(3 - manager, 2))
+                values.append(Mux(arb["mux_state"][manager], value, 0))
+            module.d.comb += ports[port.name].eq(_tlxbar8_or(values))
+    for manager in range(4):
+        module.d.comb += ports[f"auto_out_{manager}_d_ready"].eq(_tlxbar8_or([
+            routes[manager] & ports[f"auto_in_{client}_d_ready"] & arb["allowed"][manager]
+            for client, (routes, arb) in enumerate(d_routes)]))
+
+    b_routes = [Signal(name=f"requestBOI_{manager}_0") for manager in range(4)]
+    b_valids = [Signal(name=f"arb4_input_{manager}") for manager in range(4)]
+    for manager in range(4):
+        module.d.comb += [b_routes[manager].eq(~ports[f"auto_out_{manager}_b_bits_source"][6]),
+                          b_valids[manager].eq(ports[f"auto_out_{manager}_b_valid"] & b_routes[manager])]
+    b_arb = _coherent_arbiter(module, 4, b_valids, ports["auto_in_0_b_ready"], (), ())
+    module.d.comb += ports["auto_in_0_b_valid"].eq(b_arb["valid"])
+    for port in family.spec.ports:
+        stem = "auto_in_0_b_bits_"
+        if port.direction != "output" or not port.name.startswith(stem):
+            continue
+        field = port.name[len(stem):]
+        values = []
+        for manager in range(4):
+            value = ports[f"auto_out_{manager}_b_bits_{field}"]
+            if field == "source":
+                value = value[:6]
+            values.append(Mux(b_arb["mux_state"][manager], value, 0))
+        module.d.comb += ports[port.name].eq(_tlxbar8_or(values))
+    for channel in "ce":
+        routes = []
+        for manager in range(4):
+            route = (ports["auto_in_0_c_bits_address"][6:8] == manager if channel == "c"
+                     else ports["auto_in_0_e_bits_sink"][8:10] == 3 - manager)
+            routes.append(route)
+            module.d.comb += ports[f"auto_out_{manager}_{channel}_valid"].eq(
+                ports[f"auto_in_0_{channel}_valid"] & route)
+            stem = f"auto_out_{manager}_{channel}_bits_"
+            for port in family.spec.ports:
+                if port.direction != "output" or not port.name.startswith(stem):
+                    continue
+                field = port.name[len(stem):]
+                value = ports[f"auto_in_0_{channel}_bits_{field}"]
+                if field == "source":
+                    value = Cat(value, Const(0, 1))
+                elif field == "sink":
+                    value = value[:8]
+                module.d.comb += ports[port.name].eq(value)
+        module.d.comb += ports[f"auto_in_0_{channel}_ready"].eq(_tlxbar8_or([
+            route & ports[f"auto_out_{manager}_{channel}_ready"]
+            for manager, route in enumerate(routes)]))
+    for manager in range(4):
+        module.d.comb += ports[f"auto_out_{manager}_b_ready"].eq(
+            b_routes[manager] & ports["auto_in_0_b_ready"] & b_arb["allowed"][manager])
+    return module
+
+
+def _elaborate_tlxbar9(family: Any, module: Module) -> Module:
+    """Implement four coherent clients sharing one manager, with 27 state bits."""
+
+    ports = family.ports
+    domain = ClockDomain("sync", async_reset=True)
+    domain.clk = ports["clock"]
+    domain.rst = ports["reset"]
+    module.domains += domain
+    for index, channel in enumerate("ace"):
+        valids = [ports[f"auto_in_{client}_{channel}_valid"] for client in range(4)]
+        sink_ready = ports[f"auto_out_{channel}_ready"]
+        sizes = []
+        data_beats = []
+        if channel != "e":
+            for client in range(4):
+                opcode = ports[f"auto_in_{client}_{channel}_bits_opcode"]
+                sizes.append(ports[f"auto_in_{client}_{channel}_bits_size"])
+                data_beats.append(~opcode[2] if channel == "a" else opcode[0])
+        arb = _coherent_arbiter(module, index, valids, sink_ready, sizes, data_beats)
+        muxes = arb["mux_state"]
+        module.d.comb += ports[f"auto_out_{channel}_valid"].eq(arb["valid"])
+        for client in range(4):
+            module.d.comb += ports[f"auto_in_{client}_{channel}_ready"].eq(
+                sink_ready & arb["allowed"][client])
+        for port in family.spec.ports:
+            stem = f"auto_out_{channel}_bits_"
+            if port.direction != "output" or not port.name.startswith(stem):
+                continue
+            field = port.name[len(stem):]
+            values = []
+            for client in range(4):
+                value = ports[f"auto_in_{client}_{channel}_bits_{field}"]
+                if field == "source":
+                    value = Cat(value, Const(3 - client, 2))
+                values.append(Mux(muxes[client], value, 0))
+            module.d.comb += ports[port.name].eq(_tlxbar8_or(values))
+
+    for channel in "bd":
+        global_source = ports[f"auto_out_{channel}_bits_source"]
+        routes = [Signal(name=f"request{channel.upper()}OI_0_{client}")
+                  for client in range(4)]
+        for client, route in enumerate(routes):
+            module.d.comb += [route.eq(global_source[8:10] == 3 - client),
+                              ports[f"auto_in_{client}_{channel}_valid"].eq(
+                                  ports[f"auto_out_{channel}_valid"] & route)]
+            stem = f"auto_in_{client}_{channel}_bits_"
+            for port in family.spec.ports:
+                if port.direction != "output" or not port.name.startswith(stem):
+                    continue
+                field = port.name[len(stem):]
+                value = ports[f"auto_out_{channel}_bits_{field}"]
+                # Payload is broadcast even when its tagged valid is low.
+                module.d.comb += ports[port.name].eq(value[:8] if field == "source" else value)
+        module.d.comb += ports[f"auto_out_{channel}_ready"].eq(_tlxbar8_or([
+            route & ports[f"auto_in_{client}_{channel}_ready"]
+            for client, route in enumerate(routes)]))
+    return module
+
+
 class TLChildFamily(Elaboratable):
     """Selected child behavior with an exact frozen interface."""
     # Allocate exact frozen signals / 分配精确冻结信号。
@@ -445,6 +668,10 @@ class TLChildFamily(Elaboratable):
         module = Module()
         if self.member == "TLXbar_8":
             return _elaborate_tlxbar8(self, module)
+        if self.member == "TLXbar_9":
+            return _elaborate_tlxbar9(self, module)
+        if self.member == "TLXbar_7":
+            return _elaborate_tlxbar7(self, module)
         if self.member == "BusErrorUnit":
             self._bus_error_unit(module)
             return module

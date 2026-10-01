@@ -24,15 +24,17 @@ class QueueStateRail(rail.FamilyRail):
     """Prove independent Queue2 islands without constructing one huge SAT set."""
 
     def inductive_steps(self, name: str) -> str:
-        if name == "TLXbar_8":
+        if name in {"TLXbar_7", "TLXbar_8", "TLXbar_9"}:
             commands: list[str] = []
-            groups = [
-                ["beatsLeft", "readys_mask", "state_0", "state_1"],
-                ["beatsLeft_1", "readys_mask_1", "state_1_0", "state_1_1"],
-                ["beatsLeft_2", "readys_mask_2", "state_2_0", "state_2_1"],
-                ["beatsLeft_3", "readys_mask_3", "state_3_0", "state_3_1", "state_3_2"],
-                ["beatsLeft_4", "readys_mask_4", "state_4_0", "state_4_1", "state_4_2"],
-            ]
+            arities = {"TLXbar_7": (3, 3, 3, 3, 4, 4, 4, 4),
+                       "TLXbar_8": (2, 2, 2, 3, 3),
+                       "TLXbar_9": (4, 4, 4)}[name]
+            groups = []
+            for index, arity in enumerate(arities):
+                suffix = f"_{index}" if index else ""
+                states = [f"state_{index}_{slot}" if index else f"state_{slot}"
+                          for slot in range(arity)]
+                groups.append([f"beatsLeft{suffix}", f"readys_mask{suffix}", *states])
             for index, wires in enumerate(groups):
                 selector = " ".join(f"w:{wire}" for wire in wires)
                 commands += [f"select -set xbar{index} {selector} %x t:$equiv %i %ci*",
