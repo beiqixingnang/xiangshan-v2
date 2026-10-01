@@ -91,11 +91,19 @@ def preflight_only(runner: FamilyRail, direct: dict[str, object], output: Path) 
     runner.work.mkdir(parents=True, exist_ok=True)
     module = load_module("catalog_preflight", runner.build_path)
     members = enumerate_members(module, runner.build_path)
+    declared = getattr(module, "CONTRACT_ONLY_MEMBERS", None)
+    if declared is not None and (not isinstance(declared, (tuple, list))
+                                 or any(not isinstance(name, str) for name in declared)
+                                 or not set(declared).issubset(members)):
+        raise ValueError("contract-only declaration must be a subset of the Build catalog")
+    contract_only = set(declared or ())
     pyright = pyright_check(runner.build_path)
     results = []
     for name in members:
         item = runner.prepare(module, name)
         failures = runner.cheap_static_failures(item)
+        if name in contract_only:
+            failures.append("declared CONTRACT_ONLY member")
         if direct["status"] != "PASS":
             failures.append("direct test is missing or failed")
         if pyright.get("status") != "PASS":
@@ -109,8 +117,10 @@ def preflight_only(runner: FamilyRail, direct: dict[str, object], output: Path) 
                         "deterministic": item["deterministic"], "view_trusted": item["view_trusted"]})
     payload = {"kind": "V2_STRICT_PREFLIGHT_DIAGNOSTIC", "build_id": runner.build_id,
                "strict_count_delta": 0, "formal": "NOT_RUN", "direct_test": direct,
-               "members": results, "ready_members": sum(not row["failures"] for row in results),
-               "member_count": len(results), "status": "PREFLIGHT_COMPLETE"}
+               "members": results, "contract_only_members": sorted(contract_only),
+               "ready_members": sum(not row["failures"] for row in results),
+               "member_count": len(results),
+               "status": "BLOCKED_CONTRACT_ONLY" if contract_only else "PREFLIGHT_COMPLETE"}
     output.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
                       encoding="utf-8", newline="\n")
     print(json.dumps(payload, ensure_ascii=False))

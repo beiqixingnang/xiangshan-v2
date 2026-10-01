@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_BYPASS_PIPEGROUP_FOCUSED_STRICT",
+  "build_id": "Build-Cpu.Backend.Datapath.BypassPipeFamily",
+  "member": "PipeGroupConnect",
+  "strict_count_delta": 0,
+  "acceptance_eligible": false,
+  "status": "COMPLETE_EQUIVALENCE_FOCUSED",
+  "sources": {
+    "build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Datapath.BypassPipeFamily-Hardware.py",
+      "sha256": "3d60329a07f31dbb9f3ac2c6e43912191c46425783dce0d3b00a5ccc232c198f",
+      "bytes": 154957
+    },
+    "direct_test": {
+      "path": "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Backend.Datapath.BypassPipeFamily-Hardware.py",
+      "sha256": "c11a69dd9a124a5b7f0fa76dd51bc756c7c3ea8fe2e7e51b1a5613e6215c2511",
+      "bytes": 5802
+    },
+    "focused_validator": {
+      "path": "validation/v2_strict_family_rail.py",
+      "sha256": "446151abc1261a79dffa4707130786a5673a4069f3a1c98086e2b0cd97aeef15",
+      "bytes": 72724
+    }
+  },
+  "direct_test": {
+    "status": "PASS",
+    "command": [
+      "C:\\Program Files\\Python313\\python.exe",
+      "-B",
+      "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Backend.Datapath.BypassPipeFamily-Hardware.py"
+    ]
+  },
+  "formal": {
+    "method": "sequential_equivalence",
+    "status": "PASS",
+    "returncode": 0,
+    "equiv_cells": 2828,
+    "proven_cells": 2828,
+    "unproven_cells": 0,
+    "output_sha256": "ee1db322e07689512f60d8b73a8dd3bd5112bc5e4638f3d8e5aec7e9001acaf1"
+  },
+  "negative_control": {
+    "status": "PASS",
+    "cases": {
+      "sat": {
+        "status": "PASS",
+        "note": "no representative with outputs"
+      },
+      "sequential.target": {
+        "status": "PASS",
+        "control_entry": "PipeGroupConnect",
+        "control_port": "io_in_0_ready",
+        "mutation_applied": true,
+        "explicit_failure_marker": true,
+        "success_marker_still_present": false,
+        "returncode": 1
+      },
+      "sequential.reference": {
+        "status": "PASS",
+        "control_entry": "PipeGroupConnect",
+        "control_port": "io_in_0_ready",
+        "mutation_applied": true,
+        "explicit_failure_marker": true,
+        "success_marker_still_present": false,
+        "returncode": 1
+      }
+    },
+    "note": "a reference-side mutation that still proves means the reference never reaches the comparison"
+  },
+  "family_note": "Focused member evidence only; BypassNetwork remains CONTRACT_ONLY, so the family and global strict ledger remain unchanged."
+}

@@ -1,0 +1,41 @@
+{
+  "kind": "V2_STRICT_PREFLIGHT_DIAGNOSTIC",
+  "build_id": "Build-Cpu.Backend.Datapath.BypassPipeFamily",
+  "strict_count_delta": 0,
+  "formal": "NOT_RUN",
+  "direct_test": {
+    "status": "PASS",
+    "returncode": 0,
+    "command": [
+      "C:\\Program Files\\Python313\\python.exe",
+      "-B",
+      "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Backend.Datapath.BypassPipeFamily-Hardware.py"
+    ]
+  },
+  "members": [
+    {
+      "member": "BypassNetwork",
+      "status": "BLOCKED",
+      "failures": [
+        "declared CONTRACT_ONLY member"
+      ],
+      "abi_exact": true,
+      "deterministic": true,
+      "view_trusted": true
+    },
+    {
+      "member": "PipeGroupConnect",
+      "status": "READY_FOR_FORMAL",
+      "failures": [],
+      "abi_exact": true,
+      "deterministic": true,
+      "view_trusted": true
+    }
+  ],
+  "contract_only_members": [
+    "BypassNetwork"
+  ],
+  "ready_members": 1,
+  "member_count": 2,
+  "status": "BLOCKED_CONTRACT_ONLY"
+}

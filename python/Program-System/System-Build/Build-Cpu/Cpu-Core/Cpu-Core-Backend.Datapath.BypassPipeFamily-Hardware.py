@@ -1,22 +1,23 @@
-"""Contract-only backend bypass and pipe-connect family.
+"""Backend bypass and pipe-connect family.
 
-Both locked members expose the frozen ABI and currently drive constant
-outputs. Bypass selection, writeback priority, lane state and flush behavior
-require implementation and behavioral tests before a strict attempt.
+``PipeGroupConnect`` is implemented from the locked six-lane ready/valid
+state machine. ``BypassNetwork`` remains contract-only until its source
+selection and bypass-register behavior are transcribed and differentially
+proved against the frozen reference.
 """
 
 from __future__ import annotations
 
 from typing import Any
 
-from amaranth import Const, Elaboratable, Module, Signal
+from amaranth import ClockDomain, Const, Elaboratable, Module, Signal
 from amaranth.back import verilog
 
 
 __all__ = ["COVERED_MODULES", "IMPLEMENTED_MEMBERS", "CONTRACT_ONLY_MEMBERS", "BypassPipeFamily", "build_verilog", "main"]
 COVERED_MODULES = ("BypassNetwork", "PipeGroupConnect")
-IMPLEMENTED_MEMBERS: tuple[str, ...] = ()
-CONTRACT_ONLY_MEMBERS = COVERED_MODULES
+IMPLEMENTED_MEMBERS: tuple[str, ...] = ("PipeGroupConnect",)
+CONTRACT_ONLY_MEMBERS = ("BypassNetwork",)
 
 PortSpec = tuple[str, str, int]
 
@@ -2670,7 +2671,11 @@ class BypassPipeFamily(Elaboratable):
             raise ValueError(member)
         self.member = member
         self.specs = PORT_SPECS[member]
-        self.ports = {name: Signal(width, name=name) for name, _direction, width in self.specs}
+        self.ports = {
+            name: Signal(width, name=name, init=None, reset_less=True)
+            if direction == "output" else Signal(width, name=name)
+            for name, direction, width in self.specs
+        }
 
     def _defaults(self, module: Module) -> None:
         """Keep every output deterministic before a member-specific drive."""
@@ -2681,8 +2686,113 @@ class BypassPipeFamily(Elaboratable):
 
     def elaborate(self, platform: Any) -> Module:
         del platform
-        module = Module()
-        self._defaults(module)
+        module: Any = Module()
+        if self.member != "PipeGroupConnect":
+            self._defaults(module)
+            return module
+
+        core = _PipeGroupConnectCore(self.specs, self.ports["clock"], self.ports["reset"])
+        module.submodules.pipe_group_connect = core
+        module.d.comb += [
+            core.ports[name].eq(self.ports[name])
+            for name, direction, _width in self.specs
+            if direction == "input" and name not in ("clock", "reset")
+        ]
+        module.d.comb += [
+            self.ports[name].eq(core.ports[name])
+            for name, direction, _width in self.specs
+            if direction == "output"
+        ]
+        return module
+
+
+class _PipeGroupConnectCore(Elaboratable):
+    """Six-lane state machine kept as a child so payload state stays explicit."""
+
+    def __init__(self, specs: tuple[PortSpec, ...], clock: Signal, reset: Signal) -> None:
+        self.specs = specs
+        self.clock = clock
+        self.reset = reset
+        self.ports = {
+            name: Signal(width, name=name, init=None, reset_less=True)
+            if direction == "output" else Signal(width, name=name)
+            for name, direction, width in specs
+            if name not in ("clock", "reset")
+        }
+
+    def elaborate(self, platform: Any) -> Module:
+        del platform
+        module: Any = Module()
+
+        # The reference uses an asynchronously reset ``sync`` clock domain;
+        # dataVec registers intentionally remain reset-less and are only
+        # written when their lane accepts an input transaction.
+        domain = ClockDomain("sync", async_reset=True)
+        domain.clk = self.clock
+        domain.rst = self.reset
+        module.domains.sync = domain
+
+        valid_vec = [Signal(name=f"validVec_{lane}") for lane in range(6)]
+        any_valid = Signal(name="any_valid")
+        can_acc = Signal(name="canAcc")
+        module.d.comb += [
+            any_valid.eq(valid_vec[0] | valid_vec[1] | valid_vec[2] |
+                         valid_vec[3] | valid_vec[4] | valid_vec[5]),
+            can_acc.eq(self.ports["io_outAllFire"] | ~any_valid),
+        ]
+
+        for lane in range(6):
+            in_prefix = f"io_in_{lane}_"
+            out_prefix = f"io_out_{lane}_"
+            module.d.comb += self.ports[f"io_in_{lane}_ready"].eq(can_acc)
+            # Keep the public output as a combinational wire. A direct alias
+            # lets Yosys fold the payload register into the output port and
+            # add an initializer that the locked unreset reference lacks.
+            module.d.comb += self.ports[f"io_out_{lane}_valid"].eq(
+                valid_vec[lane] ^ Const(0)
+            )
+
+            # The input/output payload schemas are identical for each lane.
+            # Keep one reset-less register per locked field so the exported
+            # RTL preserves the reference's uninitialised payload semantics.
+            data_fields: list[tuple[str, Signal]] = []
+            for name, direction, width in self.specs:
+                if direction != "input" or not name.startswith(in_prefix + "bits_"):
+                    continue
+                field = name[len(in_prefix):]
+                output_name = out_prefix + field
+                output_port = self.ports.get(output_name)
+                if output_port is None:
+                    raise ValueError(f"missing PipeGroupConnect output {output_name}")
+                # ``init=None`` is required here: the locked reference's
+                # payload registers have no reset or declaration initializer.
+                # Chisel's Bundle flattening omits the public ``bits_``
+                # wrapper in its state names (``dataVec_0_instr``), while
+                # the ports retain it. Match that locked state naming so the
+                # inductive rail can pair every register directly.
+                state_field = field.removeprefix("bits_")
+                data = Signal(width, name=f"dataVec_{lane}_{state_field}",
+                               init=None, reset_less=True)
+                data_fields.append((field, data))
+                module.d.comb += output_port.eq(data ^ Const(0, width))
+
+            input_valid = self.ports[f"io_in_{lane}_valid"]
+            output_ready = self.ports[f"io_out_{lane}_ready"]
+            capture = input_valid & can_acc
+            with module.If(self.ports["io_flush"]):
+                module.d.sync += valid_vec[lane].eq(0)
+            with module.Elif(capture):
+                module.d.sync += valid_vec[lane].eq(1)
+            with module.Elif(output_ready):
+                module.d.sync += valid_vec[lane].eq(0)
+            # The locked reference writes payload registers in a separate
+            # clocked block, so a capture still updates data during flush;
+            # only the valid state gives flush priority.
+            with module.If(capture):
+                module.d.sync += [
+                    data.eq(self.ports[f"io_in_{lane}_{field}"])
+                    for field, data in data_fields
+                ]
         return module
 
 
