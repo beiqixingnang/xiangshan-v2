@@ -1,6 +1,7 @@
 {
   "schema_version": 1,
   "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_COMPLETE_EQUIVALENCE",
+  "proof_execution_profile": "RECOVERABLE_STRICT_FAMILY_V2",
   "build_id": "Build-Cpu.Cache.Dcache.Meta.TagArray",
   "validator": "validation/v2_tagarray_strict_validator.py",
   "status": "STRICT_PENDING",
@@ -157,8 +158,7 @@
         "proven_cells": null,
         "unproven_cells": null,
         "sat_variables": null,
-        "sat_clauses": null,
-        "timed_out": true
+        "sat_clauses": null
       }
     },
     "why_complete": "Every locked module named by this Build's own tables is proven against its exact-name locked reference on the rail its timing requires, with a conservation-audited 5C view where the installed Yosys cannot read the original.",
@@ -175,14 +175,8 @@
   "sources": {
     "validator": {
       "path": "validation/v2_tagarray_strict_validator.py",
-      "sha256": "c84228508fe5ca789a9131c822988703a307b5c43b7ae1ffd40e600d7da229b6",
-      "bytes": 7621,
-      "producer_snapshot": {
-        "path": "validation/validation-Proof.Producer/validation-Proof.Producer-c84228508fe5ca789a9131c822988703a307b5c43b7ae1ffd40e600d7da229b6.txt",
-        "revision": "8ddf8d6609e653e313d6d8924f16335a973bc80a",
-        "origin_path": "validation/v2_tagarray_strict_validator.py",
-        "sha256": "c84228508fe5ca789a9131c822988703a307b5c43b7ae1ffd40e600d7da229b6"
-      }
+      "sha256": "317fbe498b9e8a8155d3e3bc6f19b499b7d8321900edd5575a2f321949ad41e4",
+      "bytes": 7622
     },
     "python_build": {
       "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Cache.Dcache.Meta.TagArray-Hardware.py",
@@ -194,29 +188,7 @@
       "sha256": "24d984641c94512391a2b3b405a8554d580f91ca6355e774e03f3bdcc9eb4faa",
       "bytes": 10235
     },
-    "scala": {
-      "path": "upstream/src/main/scala/xiangshan/cache/dcache/meta/TagArray.scala",
-      "sha256": "b1ec43dbbe10505b6037cae7c8dd2f16d4ea21c491ed8b076ed58ba8162a4ce4",
-      "bytes": 5735
-    },
-    "declared_scala_sources": {
-      "upstream/src/main/scala/xiangshan/cache/dcache/meta/TagArray.scala": {
-        "vendored": true,
-        "sha256": "b1ec43dbbe10505b6037cae7c8dd2f16d4ea21c491ed8b076ed58ba8162a4ce4"
-      },
-      "upstream/utility/src/main/scala/utility/sram/SRAMTemplate.scala": {
-        "vendored": true,
-        "sha256": "072d22eab3c5bc6ab5ea36ea799c5d65b7d3ad94da222b7fb86128164238382a"
-      },
-      "upstream/utility/src/main/scala/utility/sram/SramProto.scala": {
-        "vendored": true,
-        "sha256": "c7ef49a46ac55281fc2ba20f5dd32c2413573c4e6b71c0ec8fef0d4e7b354fdc"
-      },
-      "upstream/utility/src/main/scala/utility/mbist/MbistClockGateCell.scala": {
-        "vendored": true,
-        "sha256": "66571a010353d8af1e2f584d43e19af9ad438c0164878e5ab4ccb6f1f49f4f2b"
-      }
-    },
+    "declared_scala_sources": {},
     "reference_children": {
       "array_256x86": {
         "path": "validation/reference-sv/array_256x86.sv",
@@ -252,25 +224,13 @@
     "validator_dependencies": {
       "strict_family_rail": {
         "path": "validation/v2_strict_family_rail.py",
-        "sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
-        "bytes": 45980,
-        "producer_snapshot": {
-          "path": "validation/validation-Proof.Producer/validation-Proof.Producer-08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302.txt",
-          "revision": "8ddf8d6609e653e313d6d8924f16335a973bc80a",
-          "origin_path": "validation/v2_strict_family_rail.py",
-          "sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302"
-        }
+        "sha256": "446151abc1261a79dffa4707130786a5673a4069f3a1c98086e2b0cd97aeef15",
+        "bytes": 72724
       },
       "multiline_reference_view": {
         "path": "validation/v2_funcunit_strict_validator.py",
-        "sha256": "ef5018899932061420e780d9c5edc083fa532cf160bd628d9adb990b364b49f8",
-        "bytes": 20462,
-        "producer_snapshot": {
-          "path": "validation/validation-Proof.Producer/validation-Proof.Producer-ef5018899932061420e780d9c5edc083fa532cf160bd628d9adb990b364b49f8.txt",
-          "revision": "8ddf8d6609e653e313d6d8924f16335a973bc80a",
-          "origin_path": "validation/v2_funcunit_strict_validator.py",
-          "sha256": "ef5018899932061420e780d9c5edc083fa532cf160bd628d9adb990b364b49f8"
-        }
+        "sha256": "678ba1d02caa6ac0e73db5857fcc6218acf7930a9b246b8f74342089cb98c74a",
+        "bytes": 20461
       }
     }
   },
@@ -286,15 +246,14 @@
           "/c",
           "pyright",
           "--outputjson",
-          "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Build-Cpu.Cache.Dcache.Meta.TagArray-Hardware.py"
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_6_i_db3z\\Cpu-Memory-Cache.Dcache.Meta.TagArray-Hardware.py"
         ],
         "returncode": 0,
         "status": "PASS",
         "version": "1.1.411",
         "error_count": 0,
         "files_analyzed": 1,
-        "stderr_tail": "",
-        "diagnostics": []
+        "stderr_tail": ""
       },
       "rail": {
         "command": [
@@ -303,15 +262,14 @@
           "/c",
           "pyright",
           "--outputjson",
-          "validation/v2_strict_family_rail.py"
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_fds5cyh3\\v2_strict_family_rail.py"
         ],
         "returncode": 0,
         "status": "PASS",
         "version": "1.1.411",
         "error_count": 0,
         "files_analyzed": 1,
-        "stderr_tail": "",
-        "diagnostics": []
+        "stderr_tail": ""
       },
       "validator": {
         "command": [
@@ -320,7 +278,7 @@
           "/c",
           "pyright",
           "--outputjson",
-          "validation/v2_tagarray_strict_validator.py"
+          "D:/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/v2_tagarray_strict_validator.py"
         ],
         "returncode": 0,
         "status": "PASS",
@@ -331,49 +289,46 @@
         "stderr_tail": ""
       }
     },
+    "stages": {
+      "static_preflight": "PASS",
+      "formal_members": "NOT_RUN_OR_FAIL",
+      "aggregate": "NOT_RUN",
+      "negative_control": "NOT_RUN",
+      "resume": {
+        "checkpoint": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\.cache\\strict-family\\build_cpu_cache_dcache_meta_tagarray\\rail-checkpoint.json",
+        "prepared_cache_hits": 0,
+        "formal_cache_hits": 0,
+        "member_count": 1
+      },
+      "tool_versions": {
+        "python": "3.13.12",
+        "python_implementation": "CPython",
+        "host": "Windows-11-10.0.26300-SP0",
+        "amaranth": "0.5.8",
+        "yosys": "Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)",
+        "verilator": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)"
+      }
+    },
     "catalog_coverage": {
       "entries": 1,
       "proven": 0
     },
     "formal": {
       "yosys_formal_miter": {
-        "status": "NOT_APPLICABLE",
-        "mitered_variants": 0
+        "status": "NOT_RUN",
+        "mitered_variants": 0,
+        "reason": "member static/formal gate failed"
       }
     },
     "aggregate_sat_miter": {
-      "status": "NOT_APPLICABLE",
-      "mitered_variants": 0
+      "status": "NOT_RUN",
+      "mitered_variants": 0,
+      "reason": "member static/formal gate failed"
     },
     "negative_control": {
-      "status": "FAIL",
-      "completion_status": "NOT_COMPLETED",
-      "cases": {
-        "sequential.target": {
-          "status": "FAIL",
-          "control_entry": "TagArray",
-          "control_port": "io_read_ready",
-          "mutation_applied": true,
-          "explicit_failure_marker": null,
-          "success_marker_still_present": null,
-          "returncode": null,
-          "timed_out": true,
-          "timeout_seconds": 900
-        },
-        "sequential.reference": {
-          "status": "FAIL",
-          "control_entry": "TagArray",
-          "control_port": "io_read_ready",
-          "mutation_applied": true,
-          "explicit_failure_marker": null,
-          "success_marker_still_present": null,
-          "returncode": null,
-          "timed_out": false,
-          "interrupted_before_completion": true
-        }
-      },
-      "method": "equiv_simple -undef -seq 1 on the flattened full pair",
-      "note": "The current-digest negative control did not complete within the bounded run; no prior PASS was reused."
+      "status": "NOT_RUN",
+      "cases": {},
+      "reason": "aggregate gate failed"
     },
     "variants": [
       {
@@ -404,7 +359,7 @@
           "equiv_failed_full": null,
           "sat_counts_full": null,
           "output_tail": "shuo/AppData/Local/Temp/uhsc_build_cpu_cache_dcache_meta_tagarray_family/DUT_TagArray.sv:275436:11: Case values incompletely covered (example pattern 0x4b)\n275436 |           casez (\\$62 )\n       |           ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_cache_dcache_meta_tagarray_family/DUT_TagArray.sv:275590:11: Case values incompletely covered (example pattern 0x4b)\n275590 |           casez (\\$75 )\n       |           ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_cache_dcache_meta_tagarray_family/DUT_TagArray.sv:275752:11: Case values incompletely covered (example pattern 0x4c)\n275752 |           casez (\\$62 )\n       |           ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_cache_dcache_meta_tagarray_family/DUT_TagArray.sv:275908:11: Case values incompletely covered (example pattern 0x4c)\n275908 |           casez (\\$75 )\n       |           ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_cache_dcache_meta_tagarray_family/DUT_TagArray.sv:276072:11: Case values incompletely covered (example pattern 0x4d)\n276072 |           casez (\\$62 )\n       |           ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_cache_dcache_meta_tagarray_family/DUT_TagArray.sv:276230:11: Case values incompletely covered (example pattern 0x4d)\n276230 |           casez (\\$75 )\n       |           ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_cache_dcache_meta_tagarray_family/DUT_TagArray.sv:276396:11: Case values incompletely covered (example pattern 0x4e)\n276396 |           casez (\\$62 )\n       |           ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_cache_dcache_meta_tagarray_family/DUT_TagArray.sv:276556:11: Case values incompletely covered (example pattern 0x4e)\n276556 |           casez (\\$75 )\n       |           ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_cache_dcache_meta_tagarray_family/DUT_TagArray.sv:276724:11: Case values incompletely covered (example pattern 0x4f)\n276724 |           casez (\\$62 )\n       |           ^~~~~\n%Warning-CASEINCOMPLETE: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_cache_dcache_meta_tagarray_family/DUT_TagArray.sv:276886:11: Case values incompletely covered (example pattern 0x4f)\n276886 |           casez (\\$75 )\n       |           ^~~~~\n",
-          "output_sha256": "22d2111bd5d36f06c36d2e1a62040217438c81049ebf2d55a3962d18fd1f1c14"
+          "output_sha256": "c4346a05a2836e2768490434a09b60a9de7291b8f2db3193b354e0c2d55845e0"
         },
         "locked_verilator": {
           "command": [
@@ -436,8 +391,8 @@
           "equiv_summary_full": null,
           "equiv_failed_full": null,
           "sat_counts_full": null,
-          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.129 MB sources in 8 modules, into 0.064 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.099 s (elab=0.002, cvt=0.009, bld=0.000); cpu 0.026 s on 1 threads; alloced 10.219 MB\n",
-          "output_sha256": "978dfb645561e6c2c022fb6adb526c7103d7682d5ec4f37702d31861b0d96cca"
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.129 MB sources in 8 modules, into 0.064 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.054 s (elab=0.001, cvt=0.005, bld=0.000); cpu 0.013 s on 1 threads; alloced 10.219 MB\n",
+          "output_sha256": "87a9152ee3e34beb89080c37e3adb062b88de79f1cf5fcebf4a4ed7caf069f8b"
         },
         "yosys_equiv": {
           "command": [
@@ -451,25 +406,19 @@
           "timed_out": true,
           "output_tail": "tool call exceeded 900s and was terminated",
           "markers_present": {},
-          "formal_success_marker": false,
-          "timeout_seconds": 900
-        },
-        "verdict": "FAIL",
-        "success_marker": false,
-        "proven_cells": null,
-        "unproven_cells": null,
-        "unconstrained_or_equiv_cells": null
+          "formal_success_marker": false
+        }
       }
     ]
   },
   "failures": [
     "TagArray:yosys_equiv",
     "TagArray: zero or missing $equiv cells",
-    "negative control did not complete for the current digest"
+    "aggregate SAT miter",
+    "negative control did not detect a mutated design"
   ],
   "unclosed": [
-    "strict gates did not all pass",
-    "current-digest negative control was not completed"
+    "strict gates did not all pass"
   ],
   "acceptance_unclosed": [
     "Parent closure, full-top differential, final license review, and user approval remain outside this Build proof."
@@ -480,15 +429,5 @@
     "locked_sources_written": false,
     "line_conservation_required": true,
     "register_update_equations_required": true
-  },
-  "run_metadata": {
-    "completed": false,
-    "reason": "bounded 900-second full formal timeout; current-digest negative control not completed",
-    "locked_sources_written": false
-  },
-  "proof_origin": {
-    "revision": "8ddf8d6609e653e313d6d8924f16335a973bc80a",
-    "path": "validation/v2-build-cpu-cache-dcache-meta-tagarray-strict-evidence.json",
-    "sha256": "d2652d80c584bf337cd0d9a31a1a01c322086fd48f6bd1a101fdaecb0af569d4"
   }
 }
