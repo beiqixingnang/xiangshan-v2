@@ -609,18 +609,18 @@ class UtilityResidualFamily(Elaboratable):
             Mux(p["io_jtag_TMS"], 7, 12), Mux(p["io_jtag_TMS"], 7, 12),
             Mux(p["io_jtag_TMS"], 9, 10), Mux(p["io_jtag_TMS"], 15, 12),
         ])
-        instruction_shift = Signal(5, name="instruction_shift", reset_less=True)
+        # Match the locked CaptureUpdateChain_2 state explicitly: regs_0 is
+        # the chain head/TDO source, regs_4 is the shift tail, and update
+        # exposes Cat(regs_0..regs_4) as the packed instruction value.
+        instruction_regs = [
+            Signal(name=f"regs_{index}", reset_less=True) for index in range(5)
+        ]
         active_instruction = Signal(5, init=1, name="active_instruction")
         tdo_data = Signal(init=0, name="tdo_data")
         tdo_driven = Signal(init=0, name="tdo_driven")
 
         module.d.tap += state.eq(transitions[state])
-        with cast(Any, module.If(state == 14)):
-            module.d.shift += instruction_shift.eq(1)
-        with cast(Any, module.Elif(state == 10)):
-            module.d.shift += instruction_shift.eq(Cat(instruction_shift[1:], p["io_jtag_TDI"]))
-
-        selected_tdo = Mux(state == 2, p["io_dataChainIn_data"], instruction_shift[0])
+        selected_tdo = Mux(state == 2, p["io_dataChainIn_data"], instruction_regs[0])
         selected_drive = (state == 2) | (state == 10)
         module.d.tap_fall += [
             tdo_data.eq(selected_tdo),
@@ -629,7 +629,24 @@ class UtilityResidualFamily(Elaboratable):
         with cast(Any, module.If(state == 15)):
             module.d.tap_fall += active_instruction.eq(1)
         with cast(Any, module.Elif(state == 13)):
-            module.d.tap_fall += active_instruction.eq(instruction_shift)
+            module.d.tap_fall += active_instruction.eq(Cat(*instruction_regs))
+
+        with cast(Any, module.If(state == 14)):
+            module.d.shift += [
+                instruction_regs[0].eq(1),
+                instruction_regs[1].eq(0),
+                instruction_regs[2].eq(0),
+                instruction_regs[3].eq(0),
+                instruction_regs[4].eq(0),
+            ]
+        with cast(Any, module.Elif(state == 10)):
+            module.d.shift += [
+                instruction_regs[0].eq(instruction_regs[1]),
+                instruction_regs[1].eq(instruction_regs[2]),
+                instruction_regs[2].eq(instruction_regs[3]),
+                instruction_regs[3].eq(instruction_regs[4]),
+                instruction_regs[4].eq(p["io_jtag_TDI"]),
+            ]
 
         module.d.comb += [
             p["io_jtag_TDO_data"].eq(tdo_data),
