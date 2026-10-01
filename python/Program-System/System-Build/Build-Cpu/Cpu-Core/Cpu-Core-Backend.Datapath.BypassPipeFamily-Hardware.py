@@ -2690,9 +2690,9 @@ class BypassPipeFamily(Elaboratable):
         The locked datapath has a transparent Decoupled boundary: every
         ``fromDataPath`` ready is the matching ``toExus`` ready and every
         ``fromDataPath`` valid/control field is copied to ``toExus``.  Source
-        selection is intentionally limited to the proved zero, register and
-        immediate rails in this slice; forwarding, bypass2, v0 and regcache
-        remain explicit follow-up layers.
+        selection covers the locked zero, register, immediate and same-cycle
+        forward rails in this slice; bypass2, v0 and regcache remain explicit
+        follow-up layers.
         """
 
         ports = self.ports
@@ -2751,6 +2751,37 @@ class BypassPipeFamily(Elaboratable):
                 result = Mux(imm_type == Const(selector, len(imm_type)), value, result)
             return result
 
+        # Locked forward source filters. The encoded exuSources value starts
+        # at one; value zero is the no-hit case.
+        forward_sources = {
+            "int": ("int_0_0", "int_1_0", "int_2_0", "int_3_0", "mem_2_0", "mem_3_0", "mem_4_0"),
+            "fp": ("fp_0_0", "fp_1_0", "fp_2_0"),
+        }
+
+        def forward_value(exu: str, selector: Any, width: int) -> Any | None:
+            """Select one same-cycle forward source for a scalar sink."""
+
+            if exu.startswith("fp_"):
+                sources = forward_sources["fp"]
+            elif exu.startswith("int_") or exu in {
+                "mem_0_0", "mem_1_0", "mem_2_0", "mem_3_0", "mem_4_0", "mem_7_0", "mem_8_0",
+            }:
+                sources = forward_sources["int"]
+            else:
+                return None
+            result: Any = Const(0, width)
+            for index, source_exu in enumerate(sources, start=1):
+                data_name = f"io_fromExus_{source_exu}_bits_data"
+                if directions.get(data_name) != "input":
+                    continue
+                data = ports[data_name]
+                if len(data) > width:
+                    data = data[:width]
+                elif len(data) < width:
+                    data = Cat(data, Const(0, width - len(data)))
+                result = Mux(selector == Const(index, len(selector)), data, result)
+            return result
+
         # Ready is a direct Decoupled pass-through.  There are no ready
         # outputs for occupied input entries in the frozen ABI.
         for name, direction, _width in self.specs:
@@ -2795,10 +2826,22 @@ class BypassPipeFamily(Elaboratable):
                     elif directions.get(f"io_fromDataPath_{exu}_bits_imm") == "input":
                         raw_imm = ports[f"io_fromDataPath_{exu}_bits_imm"]
                         imm_value = raw_imm[:width]
+                    exu_selector_name = (
+                        f"io_fromDataPath_{exu}_bits_exuSources_{source_index}_value"
+                    )
+                    forward = (
+                        forward_value(exu, ports[exu_selector_name], width)
+                        if directions.get(exu_selector_name) == "input" else None
+                    )
+                    selected = Mux(
+                        selector == Const(0, len(selector)), Const(0, width),
+                        Mux(selector == Const(4, len(selector)), imm_value,
+                            Mux(selector == Const(8, len(selector)), source, Const(0, width)))
+                    )
+                    if forward is not None:
+                        selected = Mux(selector == Const(1, len(selector)), forward, selected)
                     module.d.comb += ports[name].eq(
-                        Mux(selector == Const(0, len(selector)), Const(0, width),
-                            Mux(selector == Const(4, len(selector)), imm_value,
-                                Mux(selector == Const(8, len(selector)), source, Const(0, width))))
+                        selected
                     )
                     continue
             if directions.get(input_name) == "input":

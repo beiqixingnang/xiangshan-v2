@@ -68,6 +68,27 @@ class BypassPipeFamilyTest(unittest.TestCase):
             await context.delay(1e-9)
             self.assertEqual(context.get(ports["io_toExus_mem_0_0_bits_src_0"]), 0xFFFFFFFFFFFFF800)
 
+            # DataSource.forward (1) follows the int/mem one-hot source map.
+            context.set(ports["io_fromDataPath_mem_0_0_bits_dataSources_0_value"], 1)
+            context.set(ports["io_fromDataPath_mem_0_0_bits_exuSources_0_value"], 1)
+            context.set(ports["io_fromExus_int_0_0_bits_data"], 0x55AA)
+            await context.delay(1e-9)
+            self.assertEqual(context.get(ports["io_toExus_mem_0_0_bits_src_0"]), 0x55AA)
+
+            # A zero exuSources code is the explicit no-hit case.
+            context.set(ports["io_fromDataPath_mem_0_0_bits_exuSources_0_value"], 0)
+            await context.delay(1e-9)
+            self.assertEqual(context.get(ports["io_toExus_mem_0_0_bits_src_0"]), 0)
+
+            # FP source value one maps to fp_0_0 and truncates its 128-bit
+            # result to the scalar 64-bit source width in the locked RTL.
+            context.set(ports["io_fromDataPath_fp_0_0_valid"], 1)
+            context.set(ports["io_fromDataPath_fp_0_0_bits_dataSources_0_value"], 1)
+            context.set(ports["io_fromDataPath_fp_0_0_bits_exuSources_0_value"], 1)
+            context.set(ports["io_fromExus_fp_0_0_bits_data"], (0xBEEF << 64) | 0xCAFE)
+            await context.delay(1e-9)
+            self.assertEqual(context.get(ports["io_toExus_fp_0_0_bits_src_0"]), 0xCAFE)
+
             # Ready and valid follow their opposite Decoupled edges.
             context.set(ports["io_toExus_mem_0_0_ready"], 0)
             context.set(ports["io_fromDataPath_mem_0_0_valid"], 0)
