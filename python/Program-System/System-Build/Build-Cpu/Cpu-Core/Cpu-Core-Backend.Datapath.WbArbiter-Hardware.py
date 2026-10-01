@@ -630,10 +630,18 @@ def build_verilog(configuration, injected_dependencies):
             int(config.get("addr_width", config.get("addrWidth", 8))),
             config.get("priorities"),
         )
-        ports = top.in_valid + top.in_ready + top.in_bits + top.in_pdest
-        ports += top.in_rfWen + top.in_fpWen + top.in_vecWen + top.in_v0Wen + top.in_vlWen
-        ports += top.out_valid + top.out_bits + top.out_pdest + top.out_rfWen
-        ports += top.out_fpWen + top.out_vecWen + top.out_v0Wen + top.out_vlWen
+        visible = []
+        fp_inputs = {5, 10, 12, 13, 14}
+        ready_inputs = set(range(12)) - {6}
+        for index in range(15):
+            visible += [top.in_valid[index], top.in_rfWen[index], top.in_pdest[index], top.in_bits[index]]
+            if index in fp_inputs:
+                visible.append(top.in_fpWen[index])
+            if index in ready_inputs:
+                visible.append(top.in_ready[index])
+        for index in range(8):
+            visible += [top.out_valid[index], top.out_rfWen[index], top.out_pdest[index], top.out_bits[index]]
+        ports = visible
         return verilog.convert(top, name="RealWBCollideChecker", ports=ports)
     if module_name == "WbDataPath":
         cfg = config.get("config", config)
