@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "kind": "V2_BITMAP_REPAIR_WAVE",
+  "build_id": "Build-Cpu.Memory.Mmu.Lsq.Family",
+  "member": "Bitmap",
+  "source_commit": "c3268e12da1ff5f0225204c20e8a24673ed18364",
+  "status": "IMPLEMENTED_UNVERIFIED",
+  "strict": "STRICT_PENDING",
+  "acceptance_eligible": false,
+  "changes": [
+    "Independent memory misses initialize wait_id from enq_ptr.",
+    "Cache misses and coalesced memory requests propagate the selected wait_id to every matching entry."
+  ],
+  "sources": {
+    "build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Memory.Mmu.Lsq.Family-Hardware.py",
+      "sha256": "c23e32ae0b52a74814c0eb29f93c5b60d35eab08b0c1cfa1c132beab85b24d36"
+    },
+    "direct_test": {
+      "path": "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Memory.Mmu.Lsq.Family-Hardware.py",
+      "sha256": "e0e42c8dd2d371b4613590ca6b665dd489fb60cd6d9aa3dcb10c0ee98ad6f6ed"
+    }
+  },
+  "checks": {
+    "py_compile": {
+      "status": "PASS",
+      "command": "py -B -m py_compile Build-Cpu-Memory.Mmu.Lsq.Family-Hardware.py Testing-Cpu-Memory.Mmu.Lsq.Family-Hardware.py"
+    },
+    "abi": {
+      "status": "PASS",
+      "ports": 75,
+      "deterministic_export_sha256": "5d5cb7cbf028e95f230d353ef4746c5edd8dab098e14cc024b97767d54abe234"
+    },
+    "direct": {
+      "status": "PASS",
+      "tests": 6,
+      "command": "py -B python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Memory.Mmu.Lsq.Family-Hardware.py"
+    },
+    "verilator": {
+      "status": "PASS",
+      "version": "Verilator 5.032",
+      "command": "verilator --lint-only -Wno-fatal --top-module Bitmap DUT_Bitmap.sv"
+    },
+    "yosys": {
+      "status": "PASS",
+      "version": "Yosys 0.52",
+      "command": "read_verilog -sv DUT_Bitmap.sv; proc; async2sync; memory; opt; hierarchy -top Bitmap; stat"
+    },
+    "formal": {
+      "status": "PENDING_SERIALIZED",
+      "baseline_equiv_cells": 317,
+      "baseline_proven": 9,
+      "baseline_unproven": 308,
+      "note": "Run the strict rail after this repair wave; do not promote IMPLEMENTED_UNVERIFIED."
+    }
+  }
+}
