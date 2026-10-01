@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "kind": "V2_XRET_PERMIT_LEAF_WAVE",
+  "member": "XRetPermitModule",
+  "build": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Fu.NewCSR.XRetPermit-Hardware.py",
+    "sha256": "fec9ad25f14cd1cddd4aa00dbc5871c981635466c7cc3bd2bedc129988da33c3",
+    "rtl_sha256": "2404f91f92de8b5863ca7d032c676b025784542fdb8d9db729f5e858584c0689",
+    "rtl_bytes": 4379
+  },
+  "reference": {
+    "path": "validation/reference-sv/XRetPermitModule.sv",
+    "sha256": "a043d390d51c08e25de7a5928b4f824f523ed463ecbe4e073dd692dbe659dab9"
+  },
+  "abi_port_count": 15,
+  "deterministic": true,
+  "direct": {
+    "status": "PASS",
+    "returncode": 0,
+    "output_tail": ".C:\\Users\\lishuo\\AppData\\Roaming\\Python\\Python313\\site-packages\\amaranth\\sim\\core.py:257: DeprecationWarning: Generator-based processes are deprecated per RFC 36. Use async processes instead.\n  warnings.warn(\nD:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu-Backend.Fu.NewCSR.XRetPermit-Hardware.py:43: DeprecationWarning: The `Settle` command is deprecated per RFC 27. Use `add_testbench` to write testbenches; there, an equivalent of `yield Settle()` is performed automatically after each `ctx.set()`.\n  yield Settle()\n.\n----------------------------------------------------------------------\nRan 2 tests in 0.545s\n\nOK\n"
+  },
+  "verilator": {
+    "status": "PASS",
+    "returncode": 0,
+    "output_tail": "ation/.work/xret-permit-leaf-wave/XRetPermitModule.sv:127:39: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                           : ... note: In instance 'XRetPermitModule'\n  127 |   assign \\$22  = io_in_privState_PRVM == 1'h1;\n      |                                       ^~\n%Warning-WIDTHTRUNC: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/xret-permit-leaf-wave/XRetPermitModule.sv:142:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'io_in_privState_PRVM' generates 2 bits.\n                                                                                                                                                          : ... note: In instance 'XRetPermitModule'\n  142 |   assign \\$34  = ! io_in_privState_PRVM;\n      |                  ^\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/xret-permit-leaf-wave/XRetPermitModule.sv:145:39: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                           : ... note: In instance 'XRetPermitModule'\n  145 |   assign \\$37  = io_in_privState_PRVM == 1'h1;\n      |                                       ^~\n"
+  },
+  "yosys": {
+    "status": "PASS",
+    "returncode": 0,
+    "output_tail": "ches to ROMs).\nConverted 0 switches.\n\n3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n3.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n3.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module XRetPermitModule.\n\n4. Printing statistics.\n\n=== XRetPermitModule ===\n\n   Number of wires:                129\n   Number of wire bits:            130\n   Number of public wires:          69\n   Number of public wire bits:      70\n   Number of ports:                 15\n   Number of port bits:             16\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                 60\n     $and                           26\n     $eq                             8\n     $logic_not                      4\n     $not                           14\n     $or                             8\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module XRetPermitModule...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: f49f4e1688, CPU: user 0.02s system 0.00s, MEM: 11.56 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 38% 2x read_verilog (0 sec), 20% 1x opt_expr (0 sec), ...\n"
+  },
+  "status": "IMPLEMENTED_UNVERIFIED_STRICT_PENDING",
+  "strict_delta": 0,
+  "acceptance_eligible": false,
+  "unclosed": [
+    "Locked reference differential/formal, parent closure, license and acceptance remain pending."
+  ]
+}
