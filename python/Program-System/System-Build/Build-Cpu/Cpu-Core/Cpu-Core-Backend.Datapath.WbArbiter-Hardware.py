@@ -619,13 +619,14 @@ def build_verilog(configuration, injected_dependencies):
             ports += top.in_rfWen + top.in_fpWen + top.in_vecWen + top.in_v0Wen + top.in_vlWen
         return verilog.convert(top, name="RealWBArbiter", ports=ports)
     if module_name == "RealWBCollideChecker":
-        ports_cfg = tuple(config.get("in_ports", config.get("inPorts", (0, 0, 1))))
-        range_cfg = tuple(config.get("port_range", config.get("portRange", range(max(ports_cfg, default=0) + 1))))
+        ports_cfg = tuple(config.get("in_ports", config.get("inPorts",
+            (0, 0, 1, 1, 2, 4, 3, 4, 0, 1, 2, 1, 5, 6, 7))))
+        range_cfg = tuple(config.get("port_range", config.get("portRange", range(8))))
         top = RealWBCollideChecker(
             int(config.get("data_width", config.get("dataWidth", 64))),
             ports_cfg,
             range_cfg,
-            int(config.get("port_max", config.get("portMax", max(range_cfg, default=0)))),
+            int(config.get("port_max", config.get("portMax", 7))),
             int(config.get("addr_width", config.get("addrWidth", 8))),
             config.get("priorities"),
         )
