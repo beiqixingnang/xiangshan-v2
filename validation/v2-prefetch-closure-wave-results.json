@@ -1,0 +1,242 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_PREFETCH_CLOSURE_WAVE",
+  "batch_id": "V2-PREFETCH-CLOSURE-WAVE-001",
+  "target": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Memory.Prefetch.Family-Hardware.py",
+  "build_sha256": "545f5f1d9ff337c3bfa5ba0236b46d5531f033c357a79e3f67ede49d1719aace",
+  "members": [
+    {
+      "member": "ActiveGenerationTable",
+      "implemented": false,
+      "status": "CONTRACT_ONLY",
+      "strict_status": "STRICT_PENDING"
+    },
+    {
+      "member": "PrefetchFilter",
+      "implemented": false,
+      "status": "CONTRACT_ONLY",
+      "strict_status": "STRICT_PENDING"
+    },
+    {
+      "member": "SMSTrainFilter",
+      "implemented": true,
+      "deterministic": true,
+      "bytes": 7169658,
+      "rtl_sha256": "1fb0550f2d7b645371693ed91110edccc180297e0f7e1a8c4fd36482a828463b",
+      "abi": true,
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "--top-module",
+          "SMSTrainFilter",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/SMSTrainFilter.sv"
+        ],
+        "output_tail": "gn \\$17680  = 1'h0 + \\$17679 ;\n       |                          ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/SMSTrainFilter.sv:160285:30: Operator ADD expects 4 bits on the RHS, but RHS's VARREF '$17748' generates 2 bits.\n160285 |   assign \\$17749  = \\$17680  + \\$17748 ;\n       |                              ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/SMSTrainFilter.sv:160286:30: Operator EQ expects 4 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n160286 |   assign \\$17750  = \\$17749  == 2'h2;\n       |                              ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/SMSTrainFilter.sv:160349:26: Operator ADD expects 3 bits on the LHS, but LHS's CONST '1'h0' generates 1 bits.\n160349 |   assign \\$17816  = 1'h0 + \\$17815 ;\n       |                          ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/SMSTrainFilter.sv:160416:30: Operator ADD expects 4 bits on the RHS, but RHS's VARREF '$17884' generates 2 bits.\n160416 |   assign \\$17885  = \\$17816  + \\$17884 ;\n       |                              ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/SMSTrainFilter.sv:160417:21: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF '$17885' generates 4 bits.\n160417 |   assign \\$17886  = ! \\$17885 ;\n       |                     ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/SMSTrainFilter.sv:160476:26: Operator ADD expects 3 bits on the LHS, but LHS's CONST '1'h0' generates 1 bits.\n160476 |   assign \\$17948  = 1'h0 + \\$17947 ;\n       |                          ^\n",
+        "output_sha256": "251aada08617b9a2b130caa023d1efd26b85db0f081ee9173a533a892c3d92cb"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/SMSTrainFilter.sv; hierarchy -check -top SMSTrainFilter; proc; stat; check"
+        ],
+        "output_tail": "empty process `SMSTrainFilter.$proc$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/SMSTrainFilter.sv:143127$60925'.\nRemoving empty process `SMSTrainFilter.$proc$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/SMSTrainFilter.sv:143124$60924'.\nRemoving empty process `SMSTrainFilter.$proc$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/SMSTrainFilter.sv:143121$60923'.\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module SMSTrainFilter.\n<suppressed ~94 debug messages>\n\n4. Printing statistics.\n\n=== SMSTrainFilter ===\n\n   Number of wires:             160447\n   Number of wire bits:         515347\n   Number of public wires:       82168\n   Number of public wire bits:  258806\n   Number of ports:                 24\n   Number of port bits:            625\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:              78091\n     $add                         1106\n     $adff                          94\n     $and                        12244\n     $eq                         10857\n     $ge                           132\n     $logic_not                    267\n     $lt                            36\n     $mux                         1990\n     $not                         1660\n     $or                          8617\n     $xor                        41088\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module SMSTrainFilter...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 57ffe60782, CPU: user 5.86s system 0.36s, MEM: 1039.11 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 68% 2x read_verilog (4 sec), 8% 1x check (0 sec), ...\n",
+        "output_sha256": "779f1963827a0d2b63b1fe699c9510e3fb5d6f68177ed745a7ede5bb0530e95f"
+      },
+      "status": "IMPLEMENTED_UNVERIFIED"
+    },
+    {
+      "member": "StridePF",
+      "implemented": false,
+      "status": "CONTRACT_ONLY",
+      "strict_status": "STRICT_PENDING"
+    },
+    {
+      "member": "MutiLevelPrefetchFilter",
+      "implemented": false,
+      "status": "CONTRACT_ONLY",
+      "strict_status": "STRICT_PENDING"
+    },
+    {
+      "member": "TrainFilter",
+      "implemented": true,
+      "deterministic": true,
+      "bytes": 4162691,
+      "rtl_sha256": "fb70573de2bb383a1e6a193d73b20dd3db907394c27135f1467f25b1f4958b80",
+      "abi": true,
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "--top-module",
+          "TrainFilter",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/TrainFilter.sv"
+        ],
+        "output_tail": "al/Temp/uhsc_prefetch_closure_a079com1/TrainFilter.sv:95861:43: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n95861 |   assign \\$49343  = TrainFilter_deq_value == 2'h2;\n      |                                           ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/TrainFilter.sv:95862:43: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n95862 |   assign \\$49344  = TrainFilter_deq_value == 2'h3;\n      |                                           ^~\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/TrainFilter.sv:95871:21: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'TrainFilter_deq_value' generates 3 bits.\n95871 |   assign \\$49352  = ! TrainFilter_deq_value;\n      |                     ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/TrainFilter.sv:95872:43: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n95872 |   assign \\$49353  = TrainFilter_deq_value == 1'h1;\n      |                                           ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/TrainFilter.sv:95873:43: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n95873 |   assign \\$49354  = TrainFilter_deq_value == 2'h2;\n      |                                           ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/TrainFilter.sv:95874:43: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n95874 |   assign \\$49355  = TrainFilter_deq_value == 2'h3;\n      |                                           ^~\n",
+        "output_sha256": "13178271132b936da839a0017cbda24cabc1ae91bfe85832662ba90b57b9371f"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/TrainFilter.sv; hierarchy -check -top TrainFilter; proc; stat; check"
+        ],
+        "output_tail": "ocess `TrainFilter.$proc$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/TrainFilter.sv:95889$46401'.\nRemoving empty process `TrainFilter.$proc$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/TrainFilter.sv:95886$46400'.\nRemoving empty process `TrainFilter.$proc$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/TrainFilter.sv:95883$46399'.\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module TrainFilter.\n<suppressed ~72 debug messages>\n\n4. Printing statistics.\n\n=== TrainFilter ===\n\n   Number of wires:              96070\n   Number of wire bits:         302920\n   Number of public wires:       49456\n   Number of public wire bits:  152430\n   Number of ports:                 22\n   Number of port bits:            435\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:              46470\n     $add                          862\n     $adff                          72\n     $and                         7553\n     $eq                          6351\n     $ge                           116\n     $logic_not                    201\n     $lt                            30\n     $mux                         1514\n     $not                         1260\n     $or                          4683\n     $sub                            4\n     $xor                        23824\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module TrainFilter...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: edbdcb687a, CPU: user 3.31s system 0.19s, MEM: 616.08 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 68% 2x read_verilog (2 sec), 9% 1x check (0 sec), ...\n",
+        "output_sha256": "153a0604cdbfcb470f4b90be771e280f176d36ceed6a6ec40364a5453289f7cb"
+      },
+      "status": "IMPLEMENTED_UNVERIFIED"
+    },
+    {
+      "member": "TrainFilter_1",
+      "implemented": true,
+      "deterministic": true,
+      "bytes": 2430537,
+      "rtl_sha256": "84b7e245d464ca0561e2a01a2e2e6add91fc9839d8943da8e41642f201f902d2",
+      "abi": true,
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "--top-module",
+          "TrainFilter_1",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/TrainFilter_1.sv"
+        ],
+        "output_tail": "om1/TrainFilter_1.sv:55987:21: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'TrainFilter_1_deq_value' generates 2 bits.\n55987 |   assign \\$29099  = ! TrainFilter_1_deq_value;\n      |                     ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/TrainFilter_1.sv:55988:45: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n55988 |   assign \\$29100  = TrainFilter_1_deq_value == 1'h1;\n      |                                             ^~\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/TrainFilter_1.sv:55995:21: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'TrainFilter_1_deq_value' generates 2 bits.\n55995 |   assign \\$29106  = ! TrainFilter_1_deq_value;\n      |                     ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/TrainFilter_1.sv:55996:45: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n55996 |   assign \\$29107  = TrainFilter_1_deq_value == 1'h1;\n      |                                             ^~\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/TrainFilter_1.sv:56003:21: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'TrainFilter_1_deq_value' generates 2 bits.\n56003 |   assign \\$29113  = ! TrainFilter_1_deq_value;\n      |                     ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/TrainFilter_1.sv:56004:45: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n56004 |   assign \\$29114  = TrainFilter_1_deq_value == 1'h1;\n      |                                             ^~\n",
+        "output_sha256": "45690af41bd774b17f461385a08658083bd58a3fa6d7948bb3425442f0591034"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/TrainFilter_1.sv; hierarchy -check -top TrainFilter_1; proc; stat; check"
+        ],
+        "output_tail": "\nRemoving empty process `TrainFilter_1.$proc$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/TrainFilter_1.sv:56017$26757'.\nRemoving empty process `TrainFilter_1.$proc$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/TrainFilter_1.sv:56014$26756'.\nRemoving empty process `TrainFilter_1.$proc$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/TrainFilter_1.sv:56011$26755'.\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module TrainFilter_1.\n<suppressed ~79 debug messages>\n\n4. Printing statistics.\n\n=== TrainFilter_1 ===\n\n   Number of wires:              56215\n   Number of wire bits:         169327\n   Number of public wires:       29224\n   Number of public wire bits:   85572\n   Number of ports:                 26\n   Number of port bits:            249\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:              26833\n     $add                          674\n     $adff                          79\n     $and                         4565\n     $eq                          3597\n     $ge                            84\n     $logic_not                    167\n     $lt                            36\n     $mux                         1218\n     $not                         1004\n     $or                          2257\n     $xor                        13152\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module TrainFilter_1...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 1a3deb2eda, CPU: user 1.78s system 0.18s, MEM: 359.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 69% 2x read_verilog (1 sec), 9% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "0c328209d1302068ea4954125aa39da38b7abc2a4e6eb28c3d88cc73a2ea7ae5"
+      },
+      "status": "IMPLEMENTED_UNVERIFIED"
+    },
+    {
+      "member": "BloomFilter",
+      "implemented": true,
+      "deterministic": true,
+      "bytes": 8292,
+      "rtl_sha256": "7346a5a72e1dee1a17f4f1491c3001a955e769dc9f4cc7eac2c5c2a49e11dfd4",
+      "abi": true,
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "--top-module",
+          "BloomFilter",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/BloomFilter.sv"
+        ],
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.028 MB sources in 2 modules, into 0.008 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.025 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.148 MB\n",
+        "output_sha256": "c926925efb4d5aec74e1c31e6f9990844f7ffbea1f8e0c252c4e598fed8cf0ea"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/BloomFilter.sv; hierarchy -check -top BloomFilter; proc; stat; check"
+        ],
+        "output_tail": "ter_bits' using process `\\BloomFilter.$proc$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/BloomFilter.sv:31$6'.\n  created $adff cell `$procdff$12' with positive edge clock and positive level reset.\n\n3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nRemoving empty process `BloomFilter.$proc$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/BloomFilter.sv:13$9'.\nRemoving empty process `BloomFilter.$proc$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/BloomFilter.sv:31$6'.\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BloomFilter.\n<suppressed ~1 debug messages>\n\n4. Printing statistics.\n\n=== BloomFilter ===\n\n   Number of wires:                 24\n   Number of wire bits:         126991\n   Number of public wires:          14\n   Number of public wire bits:   61461\n   Number of ports:                  6\n   Number of port bits:             28\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                  8\n     $adff                           1\n     $and                            1\n     $mux                            2\n     $not                            1\n     $or                             1\n     $shl                            2\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module BloomFilter...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 4a14e63817, CPU: user 1.53s system 0.04s, MEM: 69.16 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 93% 1x check (1 sec), 2% 1x proc_dlatch (0 sec), ...\n",
+        "output_sha256": "69ea243e2d98b1b020f75300954079c0e0cb46ff89b41aa2dc6ab9a72c623143"
+      },
+      "status": "IMPLEMENTED_UNVERIFIED"
+    },
+    {
+      "member": "CounterFilter",
+      "implemented": true,
+      "deterministic": true,
+      "bytes": 515926,
+      "rtl_sha256": "70a6b588fabf551b842a480d8ca6aac8d5c75764c4e44f1ed10670edb6c1e699",
+      "abi": true,
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "command": [
+          "verilator",
+          "--lint-only",
+          "-Wno-fatal",
+          "--top-module",
+          "CounterFilter",
+          "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/CounterFilter.sv"
+        ],
+        "output_tail": " the LHS, but LHS's CONST '1'h0' generates 1 bits.\n15164 |   assign \\$2022  = 1'h0 + \\$2021 ;\n      |                         ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/CounterFilter.sv:15165:20: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF '$2022' generates 3 bits.\n15165 |   assign \\$2023  = ! \\$2022 ;\n      |                    ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/CounterFilter.sv:15167:25: Operator ADD expects 3 bits on the LHS, but LHS's CONST '1'h0' generates 1 bits.\n15167 |   assign \\$2025  = 1'h0 + \\$2024 ;\n      |                         ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/CounterFilter.sv:15168:28: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n15168 |   assign \\$2026  = \\$2025  == 1'h1;\n      |                            ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/CounterFilter.sv:15170:25: Operator ADD expects 3 bits on the LHS, but LHS's CONST '1'h0' generates 1 bits.\n15170 |   assign \\$2028  = 1'h0 + \\$2027 ;\n      |                         ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/CounterFilter.sv:15171:28: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n15171 |   assign \\$2029  = \\$2028  == 2'h2;\n      |                            ^~\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/CounterFilter.sv:15175:20: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF '$2032' generates 4 bits.\n15175 |   assign \\$2033  = ! \\$2032 ;\n      |                    ^\n",
+        "output_sha256": "b03ec313ea693bac32387a0fc45576ac1c9572226c9b979cc805ea9835fce63b"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/CounterFilter.sv; hierarchy -check -top CounterFilter; proc; stat; check"
+        ],
+        "output_tail": "46'.\nRemoving empty process `CounterFilter.$proc$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/CounterFilter.sv:13224$5145'.\nRemoving empty process `CounterFilter.$proc$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/CounterFilter.sv:13221$5144'.\nRemoving empty process `CounterFilter.$proc$/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_prefetch_closure_a079com1/CounterFilter.sv:13218$5143'.\nCleaned up 0 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module CounterFilter.\n<suppressed ~61 debug messages>\n\n4. Printing statistics.\n\n=== CounterFilter ===\n\n   Number of wires:              15147\n   Number of wire bits:          32412\n   Number of public wires:        8046\n   Number of public wire bits:   17122\n   Number of ports:                 23\n   Number of port bits:             71\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:               6979\n     $add                         1620\n     $adff                          61\n     $and                          465\n     $eq                           950\n     $ge                           204\n     $logic_not                    358\n     $lt                            45\n     $mux                         2826\n     $or                            54\n     $sub                            6\n     $xor                          390\n\n5. Executing CHECK pass (checking for obvious problems).\nChecking module CounterFilter...\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 7e85aa6858, CPU: user 0.34s system 0.03s, MEM: 85.98 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 70% 2x read_verilog (0 sec), 9% 1x opt_expr (0 sec), ...\n",
+        "output_sha256": "7d49f3a05383d5ff6b902f639c59ca5bae1d62f722c07a3f903df8d61ec0fc95"
+      },
+      "status": "IMPLEMENTED_UNVERIFIED"
+    }
+  ],
+  "implemented_members": [
+    "SMSTrainFilter",
+    "TrainFilter",
+    "TrainFilter_1",
+    "BloomFilter",
+    "CounterFilter"
+  ],
+  "contract_only_members": [
+    "ActiveGenerationTable",
+    "PrefetchFilter",
+    "StridePF",
+    "MutiLevelPrefetchFilter"
+  ],
+  "direct": {
+    "status": "PASS",
+    "returncode": 0,
+    "output_tail": "g: The `Settle` command is deprecated per RFC 27. Use `add_testbench` to write testbenches; there, an equivalent of `yield Settle()` is performed automatically after each `ctx.set()`.\n  yield Settle()\n.D:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu-Memory.Prefetch.Family-Hardware.py:250: DeprecationWarning: The `Settle` command is deprecated per RFC 27. Use `add_testbench` to write testbenches; there, an equivalent of `yield Settle()` is performed automatically after each `ctx.set()`.\n  yield Settle()\nD:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu-Memory.Prefetch.Family-Hardware.py:260: DeprecationWarning: The `Settle` command is deprecated per RFC 27. Use `add_testbench` to write testbenches; there, an equivalent of `yield Settle()` is performed automatically after each `ctx.set()`.\n  yield Settle()\n.D:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu-Memory.Prefetch.Family-Hardware.py:191: DeprecationWarning: The `Settle` command is deprecated per RFC 27. Use `add_testbench` to write testbenches; there, an equivalent of `yield Settle()` is performed automatically after each `ctx.set()`.\n  yield Settle()\nD:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu-Memory.Prefetch.Family-Hardware.py:211: DeprecationWarning: The `Settle` command is deprecated per RFC 27. Use `add_testbench` to write testbenches; there, an equivalent of `yield Settle()` is performed automatically after each `ctx.set()`.\n  yield Settle()\n.\n----------------------------------------------------------------------\nRan 6 tests in 124.527s\n\nOK\n"
+  },
+  "gates": {
+    "PY_COMPILE": "PASS",
+    "DIRECT": "PASS",
+    "IMPLEMENTED_ABI_BACKENDS": "PASS",
+    "LOCKED_REFERENCE_DIFFERENTIAL": "STRICT_PENDING",
+    "FORMAL": "PENDING_ROOT_SERIAL_RAIL",
+    "PARENT_CLOSURE": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "IMPLEMENTED_UNVERIFIED_STRICT_PENDING",
+  "strict_delta": 0,
+  "acceptance_eligible": false,
+  "unclosed": [
+    "Locked reference differential/formal, full family, parent closure, license and acceptance remain pending."
+  ],
+  "failures": []
+}
