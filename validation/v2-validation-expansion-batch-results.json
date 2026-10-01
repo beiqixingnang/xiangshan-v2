@@ -3,22 +3,22 @@
   "kind": "V2_VALIDATION_EXPANSION_BATCH",
   "timestamp": "2026-10-01T14:16:53.985241+08:00",
   "baseline_commit": "142d448",
-  "strict": "47/118",
+  "strict": "48/118",
   "strict_delta": 1,
   "accepted": 0,
   "build_files": 118,
-  "behavior_verified_builds": "47/118",
-  "pending_builds": 71,
+  "behavior_verified_builds": "48/118",
+  "pending_builds": 70,
   "scala_source_associated_reference_modules": {
     "mapped": 1976,
     "total": 1976,
     "semantics": "source association/subject mapping only; includes bounded and contract-only subjects; not all strictly equivalent"
   },
   "python_lines": {
-    "raw": 96329,
-    "nonblank": 89093,
-    "raw_delta": 207,
-    "nonblank_delta": 194
+    "raw": 96717,
+    "nonblank": 89454,
+    "raw_delta": 0,
+    "nonblank_delta": 0
   },
   "frontend_bridge": {
     "Status": "COMPLETE_EQUIVALENCE",
@@ -79,7 +79,8 @@
     "status": "FAIL",
     "failure_records": 4,
     "non_counting_attempts": 5,
-    "FrontendBridgeCurrentRecord": "PASS"
+    "FrontendBridgeCurrentRecord": "PASS",
+    "pmp_current": "PASS"
   },
   "sources": {
     "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Memory.FrontendBridge-Hardware.py": {
@@ -114,5 +115,13 @@
     "4 source/origin audit failures and 5 non-counting attempts",
     "Reset/initial-state entry, executable Verilator differential/wave review, parent/full-top closure, license and user acceptance remain pending"
   ],
-  "acceptance_eligible": false
+  "acceptance_eligible": false,
+  "pmp_family": {
+    "status": "COMPLETE_EQUIVALENCE",
+    "members": "5/5",
+    "strict_cells": "see validation/v2-build-cpu-backend-fu-pmp-family-strict-evidence.json",
+    "negative_control": "PASS",
+    "source_commit": "current auxiliary after 1b74ad2",
+    "acceptance_eligible": false
+  }
 }

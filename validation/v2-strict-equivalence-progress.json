@@ -2,9 +2,9 @@
   "schema_version": 1,
   "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_EQUIVALENCE_PROGRESS",
   "build_denominator": 118,
-  "strict_complete_build_count": 47,
-  "fraction": "47/118",
-  "percentage": 39.830508,
+  "strict_complete_build_count": 48,
+  "fraction": "48/118",
+  "percentage": 40.677966,
   "policy": "Only independently reverified COMPLETE_EQUIVALENCE evidence with the locked source commit, matching source hashes, and either a Yosys SAT no-model miter or fully proven Yosys inductive-equivalence status is counted. STRICT_PENDING and COMPLETE_EQUIVALENCE_VARIANT_ONLY records are inventoried as attempted-but-not-counted instead of failing the rail, and one Build file may not be claimed by several counting proofs.",
   "non_counting_attempt_count": 5,
   "non_counting_attempts": [
@@ -17314,14 +17314,14 @@
     {
       "evidence": "validation/v2-build-cpu-backend-fu-pmp-family-strict-evidence.json",
       "build_id": "Build-Cpu.Backend.Fu.PMP.Family",
-      "declared_status": "STRICT_PENDING",
-      "proof_origin_verified": true,
+      "declared_status": "COMPLETE_EQUIVALENCE",
+      "proof_origin_verified": false,
       "source_commit": {
         "expected": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "observed": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
         "status": "PASS"
       },
-      "status": "FAIL",
+      "status": "PASS",
       "note": null,
       "scope": {
         "kind": "catalog_build_multi_variant",
@@ -19705,15 +19705,15 @@
             "miter_selfcheck": true,
             "view_trusted": true,
             "locked_reference_lint": "PASS",
-            "verdict": "FAIL",
-            "success_marker": false,
+            "verdict": "PASS",
+            "success_marker": true,
             "markers_present": {
-              "0 are unproven.": false,
-              "Equivalence successfully proven!": false
+              "0 are unproven.": true,
+              "Equivalence successfully proven!": true
             },
-            "unconstrained_or_equiv_cells": 6432,
-            "proven_cells": 0,
-            "unproven_cells": 6432,
+            "unconstrained_or_equiv_cells": 6664,
+            "proven_cells": 6664,
+            "unproven_cells": 0,
             "sat_variables": null,
             "sat_clauses": null
           },
@@ -20092,14 +20092,14 @@
             "miter_selfcheck": true,
             "view_trusted": true,
             "locked_reference_lint": "PASS",
-            "verdict": "FAIL",
-            "success_marker": false,
+            "verdict": "PASS",
+            "success_marker": true,
             "markers_present": null,
             "unconstrained_or_equiv_cells": true,
             "proven_cells": null,
             "unproven_cells": null,
-            "sat_variables": 118055,
-            "sat_clauses": 315453
+            "sat_variables": 78597,
+            "sat_clauses": 200907
           },
           "PMPChecker_12": {
             "method": "sequential_equivalence",
@@ -20610,15 +20610,15 @@
             "miter_selfcheck": true,
             "view_trusted": true,
             "locked_reference_lint": "PASS",
-            "verdict": "FAIL",
-            "success_marker": false,
+            "verdict": "PASS",
+            "success_marker": true,
             "markers_present": {
-              "0 are unproven.": false,
-              "Equivalence successfully proven!": false
+              "0 are unproven.": true,
+              "Equivalence successfully proven!": true
             },
-            "unconstrained_or_equiv_cells": null,
-            "proven_cells": null,
-            "unproven_cells": 5,
+            "unconstrained_or_equiv_cells": 330,
+            "proven_cells": 330,
+            "unproven_cells": 0,
             "sat_variables": null,
             "sat_clauses": null
           },
@@ -20966,15 +20966,15 @@
             "miter_selfcheck": true,
             "view_trusted": true,
             "locked_reference_lint": "PASS",
-            "verdict": "FAIL",
-            "success_marker": false,
+            "verdict": "PASS",
+            "success_marker": true,
             "markers_present": {
-              "0 are unproven.": false,
-              "Equivalence successfully proven!": false
+              "0 are unproven.": true,
+              "Equivalence successfully proven!": true
             },
-            "unconstrained_or_equiv_cells": null,
-            "proven_cells": null,
-            "unproven_cells": 2,
+            "unconstrained_or_equiv_cells": 2,
+            "proven_cells": 2,
+            "unproven_cells": 0,
             "sat_variables": null,
             "sat_clauses": null
           },
@@ -21194,15 +21194,15 @@
             "miter_selfcheck": true,
             "view_trusted": true,
             "locked_reference_lint": "PASS",
-            "verdict": "FAIL",
-            "success_marker": false,
+            "verdict": "PASS",
+            "success_marker": true,
             "markers_present": {
-              "0 are unproven.": false,
-              "Equivalence successfully proven!": false
+              "0 are unproven.": true,
+              "Equivalence successfully proven!": true
             },
-            "unconstrained_or_equiv_cells": 2112,
-            "proven_cells": 48,
-            "unproven_cells": 2064,
+            "unconstrained_or_equiv_cells": 3009,
+            "proven_cells": 3009,
+            "unproven_cells": 0,
             "sat_variables": null,
             "sat_clauses": null
           }
@@ -21212,27 +21212,22 @@
       },
       "sources": {
         "validator": {
-          "path": "validation/v2_strict_family_rail.py",
+          "path": "validation/v2_catalog_family_strict_validator.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
-          "observed_sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302",
-          "producer_snapshot": {
-            "path": "validation/validation-Proof.Producer/validation-Proof.Producer-08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302.txt",
-            "revision": "8ddf8d6609e653e313d6d8924f16335a973bc80a",
-            "origin_path": "validation/v2_strict_family_rail.py",
-            "sha256": "08c703d2ee1a9354e0322932c560ad2d98577b6985f80cc933bc06a85c91e302"
-          },
+          "expected_sha256": "314e3d4d2ff95e52729309fb3bfe232de3334932e1d5f6aa751809b3899d0ff8",
+          "observed_sha256": "314e3d4d2ff95e52729309fb3bfe232de3334932e1d5f6aa751809b3899d0ff8",
+          "producer_snapshot": null,
           "status": "PASS"
         },
         "python_build": {
           "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Fu.PMP.Family-Hardware.py",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "7df059af6a4d62192cd915e3190f900470495c2a482b0dcb64d1e90407979eb3",
-          "observed_sha256": "e54be70fe0cc5777ad0e57ae99f5c84abd16eceebc61f9453b825360d07518f0",
+          "expected_sha256": "eda8fadae398520f9acef42eafaa6dead6e5aa0e7471ba1abe0cec0254cea1d4",
+          "observed_sha256": "eda8fadae398520f9acef42eafaa6dead6e5aa0e7471ba1abe0cec0254cea1d4",
           "producer_snapshot": null,
-          "status": "FAIL"
+          "status": "PASS"
         },
         "reference_sv": {
           "path": "validation/reference-sv/PMP.sv",
@@ -21244,17 +21239,36 @@
           "status": "PASS"
         },
         "scala": {
-          "path": "upstream/src/main/scala/xiangshan/backend/fu/PMP.scala",
+          "path": "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/CSRBundle.scala",
           "present": true,
           "inside_repository": true,
-          "expected_sha256": "5e1e720b01481614456f26cb6aef089d50453fe645e5ab85b74f8f3de6a43059",
-          "observed_sha256": "5e1e720b01481614456f26cb6aef089d50453fe645e5ab85b74f8f3de6a43059",
+          "expected_sha256": "44a1a262de48fec4a039019f3d66db4a01950a2047f528c2a0b881e0e37a9932",
+          "observed_sha256": "44a1a262de48fec4a039019f3d66db4a01950a2047f528c2a0b881e0e37a9932",
           "producer_snapshot": null,
           "status": "PASS"
         }
       },
       "source_children": {},
-      "validator_dependencies": {},
+      "validator_dependencies": {
+        "strict_family_rail": {
+          "path": "validation/v2_strict_family_rail.py",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "446151abc1261a79dffa4707130786a5673a4069f3a1c98086e2b0cd97aeef15",
+          "observed_sha256": "446151abc1261a79dffa4707130786a5673a4069f3a1c98086e2b0cd97aeef15",
+          "producer_snapshot": null,
+          "status": "PASS"
+        },
+        "direct_test": {
+          "path": "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Backend.Fu.PMP.Family-Hardware.py",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "a5b5241736263d448083e71d6afe165a19a51487667fe767316ccebded711761",
+          "observed_sha256": "a5b5241736263d448083e71d6afe165a19a51487667fe767316ccebded711761",
+          "producer_snapshot": null,
+          "status": "PASS"
+        }
+      },
       "reference_lock": {
         "PMP": {
           "path": "validation/reference-sv/PMP.sv",
@@ -21302,51 +21316,91 @@
           "status": "PASS"
         }
       },
-      "declared_scala_sources": {},
+      "declared_scala_sources": {
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/CSRBundle.scala": {
+          "path": "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/CSRBundle.scala",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "44a1a262de48fec4a039019f3d66db4a01950a2047f528c2a0b881e0e37a9932",
+          "observed_sha256": "44a1a262de48fec4a039019f3d66db4a01950a2047f528c2a0b881e0e37a9932",
+          "producer_snapshot": null,
+          "status": "PASS"
+        },
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/CSRFields.scala": {
+          "path": "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/CSRFields.scala",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "f04214614f0fa7e1e846c10dfec7300a4df909785f36714e8f9a82e30417b4e0",
+          "observed_sha256": "f04214614f0fa7e1e846c10dfec7300a4df909785f36714e8f9a82e30417b4e0",
+          "producer_snapshot": null,
+          "status": "PASS"
+        },
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/CSRPMP.scala": {
+          "path": "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/CSRPMP.scala",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "483c4c98909016fd30329588229c3688c21da94045d20d969145fe38ba2145e2",
+          "observed_sha256": "483c4c98909016fd30329588229c3688c21da94045d20d969145fe38ba2145e2",
+          "producer_snapshot": null,
+          "status": "PASS"
+        },
+        "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/PMPEntryModule.scala": {
+          "path": "upstream/src/main/scala/xiangshan/backend/fu/NewCSR/PMPEntryModule.scala",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "35bb4cff60caacc2d371cfe19e13886c88fc0f98fcb9f077ad37ee8af498da35",
+          "observed_sha256": "35bb4cff60caacc2d371cfe19e13886c88fc0f98fcb9f077ad37ee8af498da35",
+          "producer_snapshot": null,
+          "status": "PASS"
+        },
+        "upstream/src/main/scala/xiangshan/backend/fu/PMA.scala": {
+          "path": "upstream/src/main/scala/xiangshan/backend/fu/PMA.scala",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "f12dd0625ef4278473c51883cdc911fb25f3acbe707b5bbf9ed619a9e953968f",
+          "observed_sha256": "f12dd0625ef4278473c51883cdc911fb25f3acbe707b5bbf9ed619a9e953968f",
+          "producer_snapshot": null,
+          "status": "PASS"
+        },
+        "upstream/src/main/scala/xiangshan/backend/fu/PMP.scala": {
+          "path": "upstream/src/main/scala/xiangshan/backend/fu/PMP.scala",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "5e1e720b01481614456f26cb6aef089d50453fe645e5ab85b74f8f3de6a43059",
+          "observed_sha256": "5e1e720b01481614456f26cb6aef089d50453fe645e5ab85b74f8f3de6a43059",
+          "producer_snapshot": null,
+          "status": "PASS"
+        },
+        "upstream/src/main/scala/xiangshan/cache/mmu/MMUBundle.scala": {
+          "path": "upstream/src/main/scala/xiangshan/cache/mmu/MMUBundle.scala",
+          "present": true,
+          "inside_repository": true,
+          "expected_sha256": "e5334b098c84295f65e145d7f0f3bc6e059e47317c1433208802e1851b3422ed",
+          "observed_sha256": "e5334b098c84295f65e145d7f0f3bc6e059e47317c1433208802e1851b3422ed",
+          "producer_snapshot": null,
+          "status": "PASS"
+        }
+      },
       "variant_checks": {
         "PMP": {
-          "status": "FAIL",
-          "failures": [
-            "formal verdict",
-            "incomplete proven equivalence cells",
-            "unproven equivalence cells",
-            "sequential equivalence full-output markers"
-          ]
+          "status": "PASS",
+          "failures": []
         },
         "PMPChecker": {
-          "status": "FAIL",
-          "failures": [
-            "formal verdict"
-          ]
+          "status": "PASS",
+          "failures": []
         },
         "PMPChecker_12": {
-          "status": "FAIL",
-          "failures": [
-            "formal verdict",
-            "zero/missing equivalence cells",
-            "incomplete proven equivalence cells",
-            "unproven equivalence cells",
-            "sequential equivalence full-output markers"
-          ]
+          "status": "PASS",
+          "failures": []
         },
         "PMPChecker_2": {
-          "status": "FAIL",
-          "failures": [
-            "formal verdict",
-            "zero/missing equivalence cells",
-            "incomplete proven equivalence cells",
-            "unproven equivalence cells",
-            "sequential equivalence full-output markers"
-          ]
+          "status": "PASS",
+          "failures": []
         },
         "PMPEntryHandleModule": {
-          "status": "FAIL",
-          "failures": [
-            "formal verdict",
-            "incomplete proven equivalence cells",
-            "unproven equivalence cells",
-            "sequential equivalence full-output markers"
-          ]
+          "status": "PASS",
+          "failures": []
         }
       },
       "formal": {
@@ -21358,29 +21412,12 @@
           "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/DUT_PMPChecker.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/REF_PMPChecker.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/PMPChecker_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_pmp_family_family/Family_AGG.sv; prep -top Family_AGG; flatten; opt; sat -prove mismatch 0"
         ],
         "returncode": 0,
-        "status": "FAIL",
-        "formal_success_marker": false
+        "status": "PASS",
+        "formal_success_marker": true
       },
-      "failures": [
-        "source digest: python_build"
-      ],
-      "declared_failures": [
-        "PMP:yosys_equiv",
-        "PMP: 6432 $equiv cells unproven",
-        "PMPChecker:sat_miter",
-        "PMPChecker_12:yosys_equiv",
-        "PMPChecker_12: 5 $equiv cells unproven",
-        "PMPChecker_12: zero or missing $equiv cells",
-        "PMPChecker_2:yosys_equiv",
-        "PMPChecker_2: 2 $equiv cells unproven",
-        "PMPChecker_2: zero or missing $equiv cells",
-        "PMPEntryHandleModule:yosys_equiv",
-        "PMPEntryHandleModule: 2064 $equiv cells unproven",
-        "aggregate SAT miter"
-      ],
-      "declared_unclosed": [
-        "strict gates did not all pass"
-      ]
+      "failures": [],
+      "declared_failures": [],
+      "declared_unclosed": []
     },
     {
       "evidence": "validation/v2-build-cpu-backend-fu-srt16divider-strict-evidence.json",
