@@ -5,7 +5,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, cast
 
 from amaranth import Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
@@ -14,13 +14,11 @@ from amaranth.back import verilog
 # =============================================================================
 # Module Contract
 # =============================================================================
-# InstrUncache.scala's InstrMMIOEntry is the single-entry transaction engine
-# used by the selected V2 top.  The locked XSTop specialization prunes the
-# source-id, memory-type, response-ready, and grant-ready fields: those are
-# driven by constants or the one-entry arbiter.  The public boundary below is
-# therefore the exact ten-signal observable specialization in XSTop.sv.
-# InstrUncache.scala 中的 InstrMMIOEntry 是 V2 顶层实际使用的单项事务引擎。
-# 锁定 XSTop 特化会删除由常量或单项仲裁器驱动的字段，因此保留其十个可观察端口。
+# The V2 instruction MMIO entry is a single outstanding transaction engine.
+# Its selected deployment removes unused metadata and ready signals, leaving
+# the finite request, refill, response, and WFI boundary declared below.
+# V2 指令 MMIO 表项只允许一个未完成事务；部署特化删除未使用元数据和 ready
+# 信号，下面保留有限的请求、填充、响应与 WFI 边界。
 __all__ = ["InstrMMIOEntryConfig", "InstrMMIOEntry", "build_verilog", "main"]
 
 
@@ -38,12 +36,12 @@ class InstrMMIOEntryConfig:
 
     # Validate the finite V2 geometry. / 校验有限的 V2 几何参数。
     def __post_init__(self) -> None:
-        if self.paddr_bits < 4:
-            raise ValueError("paddr_bits must be at least four")
+        if self.paddr_bits != 48:
+            raise ValueError("the V2 MMIO entry uses 48-bit physical addresses")
         if self.mmio_bus_width != 64:
-            raise ValueError("the locked V2 entry uses a 64-bit MMIO bus")
+            raise ValueError("the V2 entry uses a 64-bit MMIO bus")
         if self.max_instr_len != 32:
-            raise ValueError("the locked V2 entry returns 32-bit instructions")
+            raise ValueError("the V2 entry returns 32-bit instructions")
         if self.mmio_bus_bytes != self.mmio_bus_width // 8:
             raise ValueError("mmio_bus_bytes must match mmio_bus_width")
 
@@ -59,7 +57,8 @@ class InstrMMIOEntry(Elaboratable):
     REFILL_RESP = 2
     SEND_RESP = 3
 
-    # Construct the locked XSTop observable ports. / 构造锁定 XSTop 可观察端口。
+    # Construct the finite request, refill, response, and WFI ports.
+    # 构造有限的请求、填充、响应与 WFI 端口。
     def __init__(self, configuration: InstrMMIOEntryConfig | None = None) -> None:
         self.configuration = configuration or InstrMMIOEntryConfig()
         cfg = self.configuration
@@ -95,33 +94,38 @@ class InstrMMIOEntry(Elaboratable):
         # The Amaranth DSL context manager is generated dynamically.
         module: Any = Module()
 
-        # Match Chisel RegInit's active-high asynchronous reset topology.
-        # 对齐 Chisel RegInit 的高有效异步复位拓扑。
+        # Use an active-high asynchronous reset for the state-bearing signals.
+        # 为状态信号使用高有效异步复位。
         domain = ClockDomain("sync", async_reset=True)
         domain.clk = self.clock
         domain.rst = self.reset
         module.domains.sync = domain
 
         state = Signal(2, reset=self.INVALID, name="state")
-        # ``req_addr`` is a resetless Reg() in the locked reference; every other
-        # register here is a RegInit(0) inside the reset-bearing block.
-        # req_addr 在锁定参考中是无复位 Reg()，其余寄存器为 RegInit(0)。
+        # Keep the request address resetless while clearing response metadata.
+        # 请求地址保持无复位，响应元数据在复位时清零。
         req_addr_reg = Signal(cfg.paddr_bits, name="req_addr", reset_less=True)
         resp_data_reg = Signal(cfg.mmio_bus_width, reset=0, name="respDataReg")
         resp_corrupt_reg = Signal(reset=0, name="respCorruptReg")
         need_flush = Signal(reset=0, name="needFlush")
 
-        state_invalid = state == self.INVALID
-        state_refill_req = state == self.REFILL_REQ
-        state_refill_resp = state == self.REFILL_RESP
-        state_send_resp = state == self.SEND_RESP
+        # Decode the four state values as one-bit equations.  Keeping the
+        # reductions explicit avoids treating a two-bit vector as a Boolean.
+        # 将四个状态值展开为单比特方程，避免把两位向量直接当布尔值。
+        state_bit_0 = cast(Any, state[0])
+        state_bit_1 = cast(Any, state[1])
+        state_invalid = ~(state_bit_0 | state_bit_1)
+        state_refill_req = state_bit_0 & ~state_bit_1
+        state_refill_resp = ~state_bit_0 & state_bit_1
+        state_send_resp = state_bit_0 & state_bit_1
 
         req_fire = self.req_valid & state_invalid
         acquire_valid = state_refill_req & ~self.wfi_req
         acquire_fire = acquire_valid & self.mmio_acquire_ready
         grant_fire = state_refill_resp & self.mmio_grant_valid
-        # The one-entry parent arbiter has ready permanently high in XSTop.
-        # XSTop 中单项父仲裁器的 ready 永久为高，因此 grant_fire 只需 valid。
+        # The selected one-entry response arbiter accepts every response, so
+        # grant_fire is qualified by valid alone.
+        # 单项响应仲裁器始终接受响应，因此 grant_fire 只由 valid 门控。
         response_done = state_send_resp
 
         module.d.comb += [
@@ -135,17 +139,24 @@ class InstrMMIOEntry(Elaboratable):
             self.wfi_safe.eq(~state_refill_resp),
         ]
 
-        # Select the instruction lane exactly as getDataFromBus in Scala.
-        # 按 Scala 的 getDataFromBus 精确选择指令所在的总线字节道。
+        # Select the instruction lane from the aligned 64-bit refill word.
+        # 从对齐的 64 位填充字中选择指令所在的字道。
+        addr_bit_1 = cast(Any, req_addr_reg[1])
+        addr_bit_2 = cast(Any, req_addr_reg[2])
+        lane_0 = ~addr_bit_1 & ~addr_bit_2
+        lane_1 = addr_bit_1 & ~addr_bit_2
+        lane_2 = ~addr_bit_1 & addr_bit_2
+        lane_3 = addr_bit_1 & addr_bit_2
+        lane_3_data = cast(Any, Cat(resp_data_reg[48:64], Const(0, 16)))
         module.d.comb += self.resp_data.eq(
-            Mux(req_addr_reg[1:3] == 0, resp_data_reg[0:32],
-                Mux(req_addr_reg[1:3] == 1, resp_data_reg[16:48],
-                    Mux(req_addr_reg[1:3] == 2, resp_data_reg[32:64],
-                        Cat(resp_data_reg[48:64], Const(0, 16)))))
+            Mux(lane_0, resp_data_reg[0:32],
+                Mux(lane_1, resp_data_reg[16:48],
+                    Mux(lane_2, resp_data_reg[32:64],
+                        Mux(lane_3, lane_3_data, Const(0, cfg.max_instr_len)))))
         )
 
-        # Update needFlush with the source's ordered when/elsewhen equation.
-        # 按源代码 when/elsewhen 顺序更新 needFlush。
+        # Update needFlush with the ordered request and response conditions.
+        # 按请求与响应条件的既定顺序更新 needFlush。
         module.d.sync += [
             need_flush.eq(
                 (self.req_flush & ~state_invalid & ~state_send_resp)
@@ -180,8 +191,8 @@ class InstrMMIOEntry(Elaboratable):
 # =============================================================================
 # Public Adapter
 # =============================================================================
-# Export deterministic Verilog for the exact XSTop specialization.
-# 为锁定 XSTop 特化导出确定性的 Verilog。
+# Export deterministic Verilog for the finite deployment boundary.
+# 为有限部署边界导出确定性的 Verilog。
 def build_verilog(configuration, injected_dependencies):
     """Return the standalone InstrMMIOEntry Verilog. / 返回独立 InstrMMIOEntry Verilog。"""
     del injected_dependencies

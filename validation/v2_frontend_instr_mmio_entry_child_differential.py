@@ -13,6 +13,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+from amaranth.sim import Simulator
+
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Frontend.Icache.InstrMMIOEntry-Hardware.py"
 LOCKED = Path(r"\\wsl$\Debian\home\lishuo\xs-v2-local\build\rtl\XSTop.sv")
@@ -78,47 +80,103 @@ def extract(name: str) -> bytes:
     raise RuntimeError(name)
 
 
-def direct_model_check() -> dict[str, int | str]:
-    """Check the four-state equations independently of generated RTL."""
-    rng = random.Random(0x1AA10)
-    state = 0
-    addr = 0
-    data = 0
-    corrupt = 0
-    need_flush = 0
+def direct_model_check(module) -> dict[str, int | str]:
+    """Drive the real Amaranth state machine against a source-backed oracle."""
+    dut = module.InstrMMIOEntry(module.InstrMMIOEntryConfig())
+    stimulus = vectors()
     checks = 0
-    for _ in range(4096):
-        req_valid = rng.randrange(2)
-        req_addr = rng.getrandbits(48)
-        req_flush = rng.randrange(2)
-        acquire_ready = rng.randrange(2)
-        grant_valid = rng.randrange(2)
-        grant_data = rng.getrandbits(64)
-        grant_corrupt = rng.randrange(2)
-        wfi_req = rng.randrange(2)
-        old_state = state
-        req_ready = old_state == 0
-        acquire_valid = old_state == 1 and not wfi_req
-        resp_valid = old_state == 3 and not need_flush
-        wfi_safe = old_state != 2
-        if req_valid and req_ready:
-            addr = req_addr
-        if old_state == 2 and grant_valid:
-            data, corrupt = grant_data, grant_corrupt
-        if old_state == 3:
-            state = 0
-        elif old_state == 2 and grant_valid:
-            state = 3
-        elif old_state == 1 and acquire_valid and acquire_ready:
-            state = 2
-        elif old_state == 0 and req_valid:
-            state = 1
-        need_flush = ((req_flush and old_state != 0 and old_state != 3)
-                      or (need_flush and old_state != 3))
-        assert acquire_valid in (False, True) and resp_valid in (False, True)
-        assert 0 <= addr < (1 << 48) and 0 <= data < (1 << 64)
-        checks += 1
-    return {"status": "PASS", "cycles": checks, "checks": checks * 8}
+    model = {"state": 0, "addr": 0, "data": 0, "corrupt": 0, "need_flush": 0}
+
+    def expected_outputs() -> dict[str, int]:
+        state = model["state"]
+        addr = model["addr"]
+        data = model["data"]
+        lane = (addr >> 1) & 0x3
+        words = (data & 0xFFFFFFFF, (data >> 16) & 0xFFFFFFFF,
+                 (data >> 32) & 0xFFFFFFFF, (data >> 48) & 0xFFFF)
+        return {
+            "req_ready": int(state == 0),
+            "acquire_valid": int(state == 1 and not model["wfi_req"]),
+            "acquire_address": addr & ~0x7,
+            "resp_valid": int(state == 3 and not model["need_flush"]),
+            "resp_data": words[lane],
+            "resp_corrupt": model["corrupt"],
+            "wfi_safe": int(state != 2),
+        }
+
+    def update_model(event: tuple[int, int, int, int, int, int, int, int]) -> None:
+        req_valid, req_addr, req_flush, acquire_ready, grant_valid, grant_data, grant_corrupt, wfi_req = event
+        state = model["state"]
+        model["wfi_req"] = wfi_req
+        req_fire = bool(req_valid and state == 0)
+        acquire_fire = bool(state == 1 and not wfi_req and acquire_ready)
+        grant_fire = bool(state == 2 and grant_valid)
+        if req_fire:
+            model["addr"] = req_addr
+        if grant_fire:
+            model["data"] = grant_data
+            model["corrupt"] = grant_corrupt
+        if state == 3:
+            model["state"] = 0
+        elif grant_fire:
+            model["state"] = 3
+        elif acquire_fire:
+            model["state"] = 2
+        elif req_fire:
+            model["state"] = 1
+        model["need_flush"] = int(
+            (req_flush and state not in (0, 3))
+            or (model["need_flush"] and state != 3)
+        )
+
+    async def bench(ctx) -> None:
+        nonlocal checks
+        ctx.set(dut.reset, 1)
+        ctx.set(dut.req_valid, 0)
+        ctx.set(dut.req_flush, 0)
+        ctx.set(dut.mmio_acquire_ready, 0)
+        ctx.set(dut.mmio_grant_valid, 0)
+        ctx.set(dut.mmio_grant_data, 0)
+        ctx.set(dut.mmio_grant_corrupt, 0)
+        ctx.set(dut.wfi_req, 0)
+        await ctx.tick()
+        await ctx.tick()
+        ctx.set(dut.reset, 0)
+        model.update({"state": 0, "addr": 0, "data": 0, "corrupt": 0, "need_flush": 0})
+        model["wfi_req"] = 0
+        for event in stimulus:
+            req_valid, req_addr, req_flush, acquire_ready, grant_valid, grant_data, grant_corrupt, wfi_req = event
+            ctx.set(dut.req_valid, req_valid)
+            ctx.set(dut.req_addr, req_addr)
+            ctx.set(dut.req_flush, req_flush)
+            ctx.set(dut.mmio_acquire_ready, acquire_ready)
+            ctx.set(dut.mmio_grant_valid, grant_valid)
+            ctx.set(dut.mmio_grant_data, grant_data)
+            ctx.set(dut.mmio_grant_corrupt, grant_corrupt)
+            ctx.set(dut.wfi_req, wfi_req)
+            model["wfi_req"] = wfi_req
+            await ctx.delay(1e-9)
+            wanted = expected_outputs()
+            observed = {
+                "req_ready": int(ctx.get(dut.req_ready)),
+                "acquire_valid": int(ctx.get(dut.mmio_acquire_valid)),
+                "acquire_address": int(ctx.get(dut.mmio_acquire_address)),
+                "resp_valid": int(ctx.get(dut.resp_valid)),
+                "resp_data": int(ctx.get(dut.resp_data)),
+                "resp_corrupt": int(ctx.get(dut.resp_corrupt)),
+                "wfi_safe": int(ctx.get(dut.wfi_safe)),
+            }
+            if observed != wanted:
+                raise AssertionError({"event": event, "observed": observed, "expected": wanted, "model": dict(model)})
+            checks += len(wanted)
+            await ctx.tick()
+            update_model(event)
+
+    simulator = Simulator(dut)
+    simulator.add_clock(1e-6)
+    simulator.add_testbench(bench)
+    simulator.run()
+    return {"status": "PASS", "cycles": len(stimulus), "checks": checks}
 
 
 def vectors() -> list[tuple[int, int, int, int, int, int, int, int]]:
@@ -173,7 +231,7 @@ def main() -> int:
     yosys = run_wsl(["yosys", "-Q", "-p", f"read_verilog -sv {wsl_path(target_rtl)}; hierarchy -top InstrMMIOEntry; proc; check; stat"])
     passed = compile_result["returncode"] == 0 and run.get("returncode") == 0 and "FRONTEND_INSTR_MMIO_ENTRY_DIFF_PASS" in str(run.get("output_tail", ""))
     locked_ok = LOCKED.is_file() and LOCKED.stat().st_size == 228590583 and digest(LOCKED.read_bytes()) == LOCKED_SHA256
-    direct = direct_model_check()
+    direct = direct_model_check(target)
     payload = {
         "schema_version": 1,
         "kind": "XIANGSHAN_KUNMINGHU_V2_FRONTEND_INSTR_MMIO_ENTRY_CHILD_DIFFERENTIAL",

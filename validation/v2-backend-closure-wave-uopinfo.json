@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_BACKEND_CLOSURE_WAVE_UOPINFO",
+  "batch_id": "V2-BACKEND-CLOSURE-WAVE-001",
+  "member": "UopInfoGen",
+  "build_path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Decode.ControlFamily-Hardware.py",
+  "build_sha256": "af73efd18768c90807d0070bb657d79438af413f7897922fb0d39a912315180d",
+  "scala_source": "upstream/src/main/scala/xiangshan/backend/decode/UopInfoGen.scala",
+  "scala_source_sha256": "c72f31b669d70f6fa50f2be254b1b1488c48e1dc45fb994a3c322ee0209541ca",
+  "locked_reference": {
+    "canonical_path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d"
+  },
+  "port_abi": {
+    "locked": 15,
+    "emitted": 15,
+    "match": true
+  },
+  "direct_test": {
+    "status": "PASS_BOUNDED",
+    "vectors": 5
+  },
+  "export": {
+    "status": "PASS",
+    "bytes": 18036,
+    "sha256": "a108cfd85e86be619c6cd0cbc10f2550d37ee6cb4ae1d1526c7707e7ea55a3e8"
+  },
+  "tool_gates": {
+    "py_compile": "PASS",
+    "verilator": {
+      "command": [
+        "wsl.exe",
+        "-e",
+        "bash",
+        "-lc",
+        "verilator --lint-only -Wno-fatal '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-uopinfo/UopInfoGen.sv'"
+      ],
+      "status": "PASS",
+      "returncode": 0,
+      "output_tail": "                              : ... note: In instance 'UopInfoGen'\n  248 |   assign \\$86  = io_in_preInfo_nf + 2'h2;\n      |                                   ^\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-uopinfo/UopInfoGen.sv:252:30: Operator ADD expects 5 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                                                               : ... note: In instance 'UopInfoGen'\n  252 |   assign \\$90  = uop_strided + 2'h2;\n      |                              ^\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-uopinfo/UopInfoGen.sv:262:37: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                               : ... note: In instance 'UopInfoGen'\n  262 |   assign \\$1  = io_in_preInfo_vlmul == 1'h1;\n      |                                     ^~\n"
+    },
+    "yosys": {
+      "command": [
+        "wsl.exe",
+        "-e",
+        "bash",
+        "-lc",
+        "yosys -Q -p \"read_verilog -sv '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-backend-closure-wave-uopinfo/UopInfoGen.sv'; proc; check\""
+      ],
+      "status": "PASS",
+      "returncode": 0,
+      "output_tail": "ROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: f04277ed21, CPU: user 0.01s system 0.00s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 35% 2x read_verilog (0 sec), 35% 1x opt_expr (0 sec), ...\n"
+    }
+  },
+  "gates": {
+    "DIRECT_TEST_PASS_BOUNDED": "PASS_BOUNDED",
+    "V2_REFERENCE_MATCHED": "STRICT_PENDING",
+    "PARENT_CLOSURE_MATCHED": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "status": "DIRECT_TEST_PASS_BOUNDED",
+  "acceptance_eligible": false,
+  "failures": []
+}

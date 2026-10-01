@@ -1,0 +1,477 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_FRONTEND_CLOSURE_WAVE_INSTR_MMIO",
+  "batch_id": "V2-FRONTEND-CLOSURE-WAVE-INSTR-MMIO-001",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "validator": {
+    "path": "validation/v2_frontend_closure_wave_instrmmio.py",
+    "sha256": "fe5aac841fc083f6768ced08bc3ffac00edd0c179b001dada46e63a42a948aa6",
+    "bytes": 11254
+  },
+  "target": {
+    "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Frontend.Icache.InstrMMIOEntry-Hardware.py",
+    "sha256": "dd3b299232e5b2fcf985e09c88575311760b61875b4af090aee2a4c019d2377e",
+    "bytes": 10351
+  },
+  "implementation_status": "IMPLEMENTED",
+  "strict_status": "STRICT_PENDING",
+  "acceptance_eligible": false,
+  "locked_xstop": {
+    "canonical_path": "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv",
+    "expected_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "observed_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "expected_bytes": 228590583,
+    "observed_bytes": 228590583,
+    "sha256_command": {
+      "command": [
+        "sha256sum",
+        "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "output_sha256": "06480bb38e0fe7de22153c5d238ec2f87832d36c526003615d5a807c43aaac7c",
+      "output_tail": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d  /home/lishuo/xs-v2-local/build/rtl/XSTop.sv\n"
+    },
+    "size_command": {
+      "command": [
+        "stat",
+        "-c%s",
+        "/home/lishuo/xs-v2-local/build/rtl/XSTop.sv"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "output_sha256": "94ca2d3b4322d528f8cf160200a6f57d6798d0a089512584c21cf5ea73ac20cd",
+      "output_tail": "228590583\n"
+    },
+    "status": "PASS"
+  },
+  "sources": {
+    "scala_path": "upstream/src/main/scala/xiangshan/frontend/icache/InstrUncache.scala",
+    "scala_sha256": "e031ec5dfc18d0745cabbfceb814b083818cfdd67961d523132f06a947d1fa40",
+    "reference_path": "validation/reference-sv/InstrMMIOEntry.sv",
+    "reference_sha256": "86989112566f2ddc77d2f4502007a36f33e6e7158990fbd8556f8bd1aefe7eb8",
+    "status": "PASS"
+  },
+  "gates": {
+    "PY_COMPILE": "PASS",
+    "DETERMINISTIC_SAME_NAME_EXPORT": {
+      "status": "PASS",
+      "bytes": 34905,
+      "sha256": "db7cbd4d53802c16ae8f0bf8a869f714382ea9f4ae0ffd655cb366344e8be45d",
+      "repeat_sha256": "db7cbd4d53802c16ae8f0bf8a869f714382ea9f4ae0ffd655cb366344e8be45d",
+      "byte_equal": true,
+      "abi": {
+        "status": "PASS",
+        "target_ports": {
+          "clock": [
+            "input",
+            1
+          ],
+          "io_mmio_acquire_bits_address": [
+            "output",
+            48
+          ],
+          "io_mmio_acquire_ready": [
+            "input",
+            1
+          ],
+          "io_mmio_acquire_valid": [
+            "output",
+            1
+          ],
+          "io_mmio_grant_bits_corrupt": [
+            "input",
+            1
+          ],
+          "io_mmio_grant_bits_data": [
+            "input",
+            64
+          ],
+          "io_mmio_grant_valid": [
+            "input",
+            1
+          ],
+          "io_req_bits_addr": [
+            "input",
+            48
+          ],
+          "io_req_bits_flush": [
+            "input",
+            1
+          ],
+          "io_req_ready": [
+            "output",
+            1
+          ],
+          "io_req_valid": [
+            "input",
+            1
+          ],
+          "io_resp_bits_corrupt": [
+            "output",
+            1
+          ],
+          "io_resp_bits_data": [
+            "output",
+            32
+          ],
+          "io_resp_valid": [
+            "output",
+            1
+          ],
+          "io_wfi_wfiReq": [
+            "input",
+            1
+          ],
+          "io_wfi_wfiSafe": [
+            "output",
+            1
+          ],
+          "reset": [
+            "input",
+            1
+          ]
+        },
+        "reference_ports": {
+          "clock": [
+            "input",
+            1
+          ],
+          "io_mmio_acquire_bits_address": [
+            "output",
+            48
+          ],
+          "io_mmio_acquire_ready": [
+            "input",
+            1
+          ],
+          "io_mmio_acquire_valid": [
+            "output",
+            1
+          ],
+          "io_mmio_grant_bits_corrupt": [
+            "input",
+            1
+          ],
+          "io_mmio_grant_bits_data": [
+            "input",
+            64
+          ],
+          "io_mmio_grant_valid": [
+            "input",
+            1
+          ],
+          "io_req_bits_addr": [
+            "input",
+            48
+          ],
+          "io_req_bits_flush": [
+            "input",
+            1
+          ],
+          "io_req_ready": [
+            "output",
+            1
+          ],
+          "io_req_valid": [
+            "input",
+            1
+          ],
+          "io_resp_bits_corrupt": [
+            "output",
+            1
+          ],
+          "io_resp_bits_data": [
+            "output",
+            32
+          ],
+          "io_resp_valid": [
+            "output",
+            1
+          ],
+          "io_wfi_wfiReq": [
+            "input",
+            1
+          ],
+          "io_wfi_wfiSafe": [
+            "output",
+            1
+          ],
+          "reset": [
+            "input",
+            1
+          ]
+        },
+        "exact_surface": true
+      }
+    },
+    "ABI": {
+      "status": "PASS",
+      "target_ports": {
+        "clock": [
+          "input",
+          1
+        ],
+        "io_mmio_acquire_bits_address": [
+          "output",
+          48
+        ],
+        "io_mmio_acquire_ready": [
+          "input",
+          1
+        ],
+        "io_mmio_acquire_valid": [
+          "output",
+          1
+        ],
+        "io_mmio_grant_bits_corrupt": [
+          "input",
+          1
+        ],
+        "io_mmio_grant_bits_data": [
+          "input",
+          64
+        ],
+        "io_mmio_grant_valid": [
+          "input",
+          1
+        ],
+        "io_req_bits_addr": [
+          "input",
+          48
+        ],
+        "io_req_bits_flush": [
+          "input",
+          1
+        ],
+        "io_req_ready": [
+          "output",
+          1
+        ],
+        "io_req_valid": [
+          "input",
+          1
+        ],
+        "io_resp_bits_corrupt": [
+          "output",
+          1
+        ],
+        "io_resp_bits_data": [
+          "output",
+          32
+        ],
+        "io_resp_valid": [
+          "output",
+          1
+        ],
+        "io_wfi_wfiReq": [
+          "input",
+          1
+        ],
+        "io_wfi_wfiSafe": [
+          "output",
+          1
+        ],
+        "reset": [
+          "input",
+          1
+        ]
+      },
+      "reference_ports": {
+        "clock": [
+          "input",
+          1
+        ],
+        "io_mmio_acquire_bits_address": [
+          "output",
+          48
+        ],
+        "io_mmio_acquire_ready": [
+          "input",
+          1
+        ],
+        "io_mmio_acquire_valid": [
+          "output",
+          1
+        ],
+        "io_mmio_grant_bits_corrupt": [
+          "input",
+          1
+        ],
+        "io_mmio_grant_bits_data": [
+          "input",
+          64
+        ],
+        "io_mmio_grant_valid": [
+          "input",
+          1
+        ],
+        "io_req_bits_addr": [
+          "input",
+          48
+        ],
+        "io_req_bits_flush": [
+          "input",
+          1
+        ],
+        "io_req_ready": [
+          "output",
+          1
+        ],
+        "io_req_valid": [
+          "input",
+          1
+        ],
+        "io_resp_bits_corrupt": [
+          "output",
+          1
+        ],
+        "io_resp_bits_data": [
+          "output",
+          32
+        ],
+        "io_resp_valid": [
+          "output",
+          1
+        ],
+        "io_wfi_wfiReq": [
+          "input",
+          1
+        ],
+        "io_wfi_wfiSafe": [
+          "output",
+          1
+        ],
+        "reset": [
+          "input",
+          1
+        ]
+      },
+      "exact_surface": true
+    },
+    "DIRECT": {
+      "command": [
+        "C:\\Program Files\\Python313\\python.exe",
+        "-B",
+        "validation\\v2_frontend_instr_mmio_entry_child_differential.py"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "stdout_tail": "{\"ACCEPTED\": \"NOT_ALLOWED\", \"status\": \"PASS_BOUNDED_INSTR_MMIO_ENTRY_CHILD\", \"vectors\": 1024}\r\n",
+      "stderr_tail": "",
+      "result_status": "PASS_BOUNDED_INSTR_MMIO_ENTRY_CHILD",
+      "direct": {
+        "status": "PASS",
+        "cycles": 1024,
+        "checks": 7168
+      },
+      "differential": {
+        "status": "PASS",
+        "vectors": 1024,
+        "compile": {
+          "command": [
+            "verilator",
+            "--binary",
+            "--timing",
+            "-Wno-fatal",
+            "--top-module",
+            "tb",
+            "--Mdir",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-instr-mmio-entry-child/obj",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-instr-mmio-entry-child/InstrMMIOEntry-target.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-instr-mmio-entry-child/InstrMMIOEntry-reference.sv",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-instr-mmio-entry-child/instr-mmio-entry-child-tb.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "clude Vtb__pch.h.slow -c -o Vtb___024root__DepSet_hfe20aad3__0__Slow.o Vtb___024root__DepSet_hfe20aad3__0__Slow.cpp\ng++   -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -include Vtb__pch.h.slow -c -o Vtb___024root__DepSet_ha183790c__0__Slow.o Vtb___024root__DepSet_ha183790c__0__Slow.cpp\ng++   -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -include Vtb__pch.h.slow -c -o Vtb__Syms.o Vtb__Syms.cpp\necho \"\" > Vtb__ALL.verilator_deplist.tmp\ng++    verilated.o verilated_timing.o verilated_threads.o Vtb__ALL.a    -pthread -lpthread -latomic   -o Vtb\nrm Vtb__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-instr-mmio-entry-child/obj'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.351 MB sources in 4 modules, into 26.435 MB in 27 C++ files needing 0.000 MB\n- Verilator: Walltime 69.458 s (elab=0.014, cvt=1.132, bld=67.610); cpu 1.448 s on 1 threads; alloced 237.781 MB\n",
+          "output_sha256": "c1b05a5e2bcded4bb5c52da9a6567d83c70088abee3aaa7b44729821a9cde507"
+        },
+        "run": {
+          "command": [
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-instr-mmio-entry-child/obj/Vtb"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "FRONTEND_INSTR_MMIO_ENTRY_DIFF_PASS 1024\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-instr-mmio-entry-child/instr-mmio-entry-child-tb.sv:1036: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 10ns; walltime 0.011 s; speed 3.312 us/s\n- Verilator: cpu 0.003 s on 1 threads; alloced 154 MB\n",
+          "output_sha256": "abddb54021bedc765d0579d2544d81cea9ed5dc5284f3f42769c0718023e20d8"
+        }
+      },
+      "tool_gates": {
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-instr-mmio-entry-child/InstrMMIOEntry-target.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.054 MB sources in 2 modules, into 0.036 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.024 s (elab=0.001, cvt=0.002, bld=0.000); cpu 0.007 s on 1 threads; alloced 9.543 MB\n",
+          "output_sha256": "db1113da6eed9dd223d47569e5646ad2036b19080239d2c67b4999114542ac42"
+        },
+        "yosys": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-instr-mmio-entry-child/InstrMMIOEntry-target.sv; hierarchy -top InstrMMIOEntry; proc; check; stat"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "output_tail": "7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-instr-mmio-entry-child/InstrMMIOEntry-target.sv:137$9'.\nRemoving empty process `InstrMMIOEntry.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-instr-mmio-entry-child/InstrMMIOEntry-target.sv:133$8'.\nRemoving empty process `InstrMMIOEntry.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-instr-mmio-entry-child/InstrMMIOEntry-target.sv:129$7'.\nCleaned up 7 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module InstrMMIOEntry.\n<suppressed ~4 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module InstrMMIOEntry...\nFound and reported 0 problems.\n\n5. Printing statistics.\n\n=== InstrMMIOEntry ===\n\n   Number of wires:                179\n   Number of wire bits:           1373\n   Number of public wires:          75\n   Number of public wire bits:     578\n   Number of ports:                 17\n   Number of port bits:            205\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                 70\n     $adff                           4\n     $and                           24\n     $dff                            1\n     $mux                           17\n     $not                           19\n     $or                             5\n\nEnd of script. Logfile hash: 3ee669a139, CPU: user 0.01s system 0.01s, MEM: 12.97 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 67% 2x read_verilog (0 sec), 9% 1x opt_expr (0 sec), ...\n",
+          "output_sha256": "e8615d911640e3bee5f75ec13785d3fd5864d337ce4f503dd37faf0d846f2c23"
+        }
+      }
+    },
+    "VERILATOR": {
+      "command": [
+        "verilator",
+        "--lint-only",
+        "-Wno-fatal",
+        "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-closure-wave-instrmmio/InstrMMIOEntry-target.sv"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "output_sha256": "21c3b4712359b484ee0f58193d1f9dd1a3882f87f184ce045562f31509839ee9",
+      "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.054 MB sources in 2 modules, into 0.036 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.022 s (elab=0.001, cvt=0.002, bld=0.000); cpu 0.007 s on 1 threads; alloced 9.543 MB\n"
+    },
+    "YOSYS": {
+      "command": [
+        "yosys",
+        "-Q",
+        "-p",
+        "read_verilog -sv /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-closure-wave-instrmmio/InstrMMIOEntry-target.sv; hierarchy -top InstrMMIOEntry; proc; check; stat"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "output_sha256": "2c480cb2f5af927733b3ae6f680caaf398c4d833d40d97cfc658542d60729adf",
+      "output_tail": "bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-closure-wave-instrmmio/InstrMMIOEntry-target.sv:140$10'.\nRemoving empty process `InstrMMIOEntry.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-closure-wave-instrmmio/InstrMMIOEntry-target.sv:137$9'.\nRemoving empty process `InstrMMIOEntry.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-closure-wave-instrmmio/InstrMMIOEntry-target.sv:133$8'.\nRemoving empty process `InstrMMIOEntry.$proc$/mnt/d/$e7$9f$a5$e8$af$86$e5$ba$93$e5$bc$80$e5$8f$91/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-frontend-closure-wave-instrmmio/InstrMMIOEntry-target.sv:129$7'.\nCleaned up 7 empty switches.\n\n3.12. Executing OPT_EXPR pass (perform const folding).\nOptimizing module InstrMMIOEntry.\n<suppressed ~4 debug messages>\n\n4. Executing CHECK pass (checking for obvious problems).\nChecking module InstrMMIOEntry...\nFound and reported 0 problems.\n\n5. Printing statistics.\n\n=== InstrMMIOEntry ===\n\n   Number of wires:                179\n   Number of wire bits:           1373\n   Number of public wires:          75\n   Number of public wire bits:     578\n   Number of ports:                 17\n   Number of port bits:            205\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                 70\n     $adff                           4\n     $and                           24\n     $dff                            1\n     $mux                           17\n     $not                           19\n     $or                             5\n\nEnd of script. Logfile hash: eea610a3a7, CPU: user 0.02s system 0.01s, MEM: 13.12 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 71% 2x read_verilog (0 sec), 8% 1x opt_expr (0 sec), ...\n"
+    },
+    "STRICT_FORMAL": "STRICT_PENDING_COORDINATOR_RAIL",
+    "PARENT_CLOSURE": "STRICT_PENDING",
+    "LICENSE_REVIEW": "PENDING",
+    "ACCEPTED": "NOT_ALLOWED"
+  },
+  "behavior_scope": {
+    "states": {
+      "INVALID": 0,
+      "REFILL_REQ": 1,
+      "REFILL_RESP": 2,
+      "SEND_RESP": 3
+    },
+    "transactions": [
+      "request accepted only in INVALID",
+      "A-channel valid waits for WFI and ready",
+      "D-channel grant captures data/corrupt",
+      "response lane selected by req_addr[2:1]",
+      "flush suppresses response and clears on send state"
+    ],
+    "direct_vectors": 1024,
+    "direct_checks": 7168
+  },
+  "unclosed": [
+    "Coordinator strict formal rail was not rerun in this focused wave.",
+    "InstrUncache/Frontend parent closure, license review, and user approval remain pending."
+  ]
+}

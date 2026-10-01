@@ -23,5 +23,23 @@ class DecodeControlFamilyTest(unittest.TestCase):
         module = load_subject()
         for member in module.COVERED_MODULES: self.assertIn(f"module {member}", module.build_verilog({"module": member}, {}))
 
+    def test_uop_info_real_equations(self) -> None:
+        module = load_subject()
+        self.assertEqual(("UopInfoGen",), tuple(module.IMPLEMENTED_MEMBERS))
+        vectors = (
+            ("VEC_VVV", 1, 0, 0, 0, 0, False, False, (2, 2, 2)),
+            ("VEC_RGATHER", 3, 0, 0, 0, 0, False, False, (64, 64, 8)),
+            ("VEC_I_LDST", 1, 0, 0, 1, 0, False, False, (5, 5, 2)),
+            ("AMO_CAS_Q", 0, 0, 0, 0, 0, False, False, (4, 2, 1)),
+            ("VEC_US_LDST", 1, 0, 0, 0, 0, True, False, (2, 2, 2)),
+        )
+        for name, vlmul, vsew, vwidth, nf, vmvn, is_vlsr, is_vlsm, expected in vectors:
+            with self.subTest(name=name):
+                actual = module.uop_info_reference(
+                    module.UOP_SPLIT_CODES[name], vsew, vlmul, vwidth,
+                    nf, vmvn, is_vlsr, is_vlsm,
+                )
+                self.assertEqual(expected, actual)
+
 
 if __name__ == "__main__": unittest.main()

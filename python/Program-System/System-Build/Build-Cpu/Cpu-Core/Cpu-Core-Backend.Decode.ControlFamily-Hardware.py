@@ -14,16 +14,206 @@ from amaranth import Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
 
 
-__all__ = ["COVERED_MODULES", "IMPLEMENTED_MEMBERS", "CONTRACT_ONLY_MEMBERS", "DecodeControlFamily", "build_verilog", "main"]
+__all__ = [
+    "COVERED_MODULES", "IMPLEMENTED_MEMBERS", "CONTRACT_ONLY_MEMBERS",
+    "UOP_SPLIT_CODES", "uop_info_reference", "DecodeControlFamily",
+    "build_verilog", "main",
+]
 COVERED_MODULES = ("Backend", "DecodeUnit", "FusionDecoder", "UopInfoGen", "FPDecoder", "VTypeGen", "VecExceptionGen", "VIAluDecoder")
-# These leaves have bounded source-shaped equations, but the focused locked
-# rail found reference-view/parser failures or concrete counterexamples. Keep
-# the whole aggregate contract-only until each observable decode relation closes.
-IMPLEMENTED_MEMBERS: tuple[str, ...] = ()
-CONTRACT_ONLY_MEMBERS = COVERED_MODULES
+# UopInfoGen is a self-contained combinational leaf.  Its complete split table
+# and the two load/store lookup tables are implemented below; the aggregate
+# Backend/Decode wrappers remain contract-only until their parent interfaces
+# close. / UopInfoGen 是自包含组合叶子；其完整拆分表和两个访存查表如下，
+# Backend/Decode 聚合包装器仍待父级接口闭合。
+IMPLEMENTED_MEMBERS: tuple[str, ...] = ("UopInfoGen",)
+CONTRACT_ONLY_MEMBERS = tuple(name for name in COVERED_MODULES if name not in IMPLEMENTED_MEMBERS)
 # Behavioral provenance is maintained in validation inventories, not Build code.
 
 PortSpec = tuple[str, str, int]
+
+# The frozen V2 UopSplitType encoding.  Keep this table local to the Build so
+# the implementation remains executable without reading the auxiliary
+# inventory at run time. / 锁定的 V2 UopSplitType 编码；表格保留在 Build 内，
+# 运行时无需读取辅助清单。
+UOP_SPLIT_CODES: dict[str, int] = {
+    "SCA_SIM": 0b000000,
+    "VSET": 0b010001,
+    "VEC_VVV": 0b010010,
+    "VEC_VXV": 0b010011,
+    "VEC_0XV": 0b010100,
+    "VEC_VVW": 0b010101,
+    "VEC_WVW": 0b010110,
+    "VEC_VXW": 0b010111,
+    "VEC_WXW": 0b011000,
+    "VEC_WVV": 0b011001,
+    "VEC_WXV": 0b011010,
+    "VEC_EXT2": 0b011011,
+    "VEC_EXT4": 0b011100,
+    "VEC_EXT8": 0b011101,
+    "VEC_VVM": 0b011110,
+    "VEC_VXM": 0b011111,
+    "VEC_SLIDE1UP": 0b100000,
+    "VEC_FSLIDE1UP": 0b100001,
+    "VEC_SLIDE1DOWN": 0b100010,
+    "VEC_FSLIDE1DOWN": 0b100011,
+    "VEC_VRED": 0b100100,
+    "VEC_SLIDEUP": 0b100101,
+    "VEC_SLIDEDOWN": 0b100111,
+    "VEC_M0X": 0b101001,
+    "VEC_MVV": 0b101010,
+    "VEC_VWW": 0b101100,
+    "VEC_RGATHER": 0b101101,
+    "VEC_RGATHER_VX": 0b101110,
+    "VEC_RGATHEREI16": 0b101111,
+    "VEC_COMPRESS": 0b110000,
+    "VEC_US_LDST": 0b110001,
+    "VEC_S_LDST": 0b110010,
+    "VEC_I_LDST": 0b110011,
+    "VEC_US_FF_LD": 0b110100,
+    "AMO_CAS_W": 0b110101,
+    "AMO_CAS_D": 0b110110,
+    "AMO_CAS_Q": 0b110111,
+    "VEC_VFV": 0b111000,
+    "VEC_VFW": 0b111001,
+    "VEC_WFW": 0b111010,
+    "VEC_VFM": 0b111011,
+    "VEC_VFRED": 0b111100,
+    "VEC_VFREDOSUM": 0b111101,
+    "VEC_MVNR": 0b000100,
+}
+
+
+def _uop_lmul(vlmul: int) -> int:
+    """Decode the source ``lmul`` lookup (fractional encodings default 1)."""
+
+    return {0b001: 2, 0b010: 4, 0b011: 8}.get(vlmul & 0x7, 1)
+
+
+def _simple_lmul(vlmul: int) -> int:
+    """Decode the source two-bit simple LMUL exponent."""
+
+    return {0b001: 1, 0b010: 2, 0b011: 3}.get(vlmul & 0x7, 0)
+
+
+def _simple_emul(vwidth: int, vlmul: int, vsew: int) -> int:
+    """Return the source ``simple_emul`` exponent (0, 1, or 2)."""
+
+    veew = vwidth & 0x3
+    # Keep the three-bit intermediate width used by the packed control bundle.
+    vemul = (veew + 1 + (vlmul & 0x7) + ((~(vsew & 0x3)) & 0x7)) & 0x7
+    return {0b001: 0, 0b010: 1, 0b011: 2}.get(vemul, 0)
+
+
+def _strided_uops(simple_emul: int, nf: int) -> int:
+    """Mirror ``strdiedLSNumOfUopTable``."""
+
+    value = (1 << simple_emul) * ((nf & 0x7) + 1)
+    return value if value <= 8 else 0
+
+
+def _indexed_uops(simple_emul: int, simple_lmul: int, nf: int) -> int:
+    """Mirror ``indexedLSNumOfUopTable``."""
+
+    emul_value = 1 << simple_emul
+    lmul_value = 1 << simple_lmul
+    if nf == 0:
+        return max(lmul_value, emul_value) if lmul_value <= 8 else 0
+    value = max(lmul_value * ((nf & 0x7) + 1), emul_value)
+    return value if lmul_value * ((nf & 0x7) + 1) <= 8 else 0
+
+
+def uop_info_reference(
+    type_of_split: int,
+    vsew: int,
+    vlmul: int,
+    vwidth: int,
+    nf: int,
+    vmvn: int,
+    is_vlsr: bool = False,
+    is_vlsm: bool = False,
+) -> tuple[int, int, int]:
+    """Evaluate the locked UopInfoGen equations in Python.
+
+    The tuple is ``(numOfUop, numOfWB, lmul)``.  This reference helper is
+    intentionally independent of Amaranth signals and is used by direct
+    vector tests before the generated RTL is linted.
+    """
+
+    split = int(type_of_split) & 0x3F
+    vlmul &= 0x7
+    nf &= 0x7
+    vmvn &= 0x7
+    lmul = _uop_lmul(vlmul)
+    simple_lmul = _simple_lmul(vlmul)
+    simple_emul = _simple_emul(vwidth, vlmul, vsew)
+    vsew &= 0x3
+    num_vslide = {0b001: 3, 0b010: 10, 0b011: 36}.get(vlmul, 1)
+    num_vrgather = {0b001: 4, 0b010: 16, 0b011: 64}.get(vlmul, 1)
+    num_vrgatherei16 = num_vrgather * 2 if vsew == 0 and vlmul != 0b011 else num_vrgather
+    num_vcompress = {0b001: 4, 0b010: 13, 0b011: 43}.get(vlmul, 1)
+    add_time = {0b001: 2, 0b010: 4, 0b011: 8}.get(vlmul, 1)
+    fold_last = {1: 0b101, 2: 0b110, 3: 0b111}.get(vsew, 0)
+    fold_time = (vlmul if (vlmul & 0b100) else 0) - fold_last
+    num_vfred = (add_time + fold_time) & 0xF
+    num_vfred = num_vfred if num_vfred else 1
+    uvl_max = {1: 8, 2: 4, 3: 2}.get(vsew, 1)
+    if vlmul & 0b100:
+        vl_max = uvl_max >> ((-vlmul) & 0x3)
+    else:
+        vl_max = uvl_max << (vlmul & 0x3)
+    num_vfredosum = vl_max if vl_max else 1
+    num_wv = {0b000: 2, 0b001: 4, 0b010: 8}.get(vlmul, 1)
+    num_wx = {0b000: 3, 0b001: 5, 0b010: 9}.get(vlmul, 2)
+    strided = _strided_uops(simple_emul, nf)
+    indexed = _indexed_uops(simple_emul, simple_lmul, nf)
+    by_split = {
+        UOP_SPLIT_CODES["VSET"]: 2,
+        UOP_SPLIT_CODES["VEC_0XV"]: 2,
+        UOP_SPLIT_CODES["VEC_VVV"]: lmul,
+        UOP_SPLIT_CODES["VEC_VFV"]: lmul + 1,
+        UOP_SPLIT_CODES["VEC_EXT2"]: lmul,
+        UOP_SPLIT_CODES["VEC_EXT4"]: lmul,
+        UOP_SPLIT_CODES["VEC_EXT8"]: lmul,
+        UOP_SPLIT_CODES["VEC_VVM"]: lmul,
+        UOP_SPLIT_CODES["VEC_VFM"]: lmul + 1,
+        UOP_SPLIT_CODES["VEC_VFRED"]: num_vfred,
+        UOP_SPLIT_CODES["VEC_VFREDOSUM"]: num_vfredosum,
+        UOP_SPLIT_CODES["VEC_VXM"]: lmul + 1,
+        UOP_SPLIT_CODES["VEC_VXV"]: lmul + 1,
+        UOP_SPLIT_CODES["VEC_VFW"]: num_wx,
+        UOP_SPLIT_CODES["VEC_WFW"]: num_wx,
+        UOP_SPLIT_CODES["VEC_VVW"]: num_wv,
+        UOP_SPLIT_CODES["VEC_WVW"]: num_wv,
+        UOP_SPLIT_CODES["VEC_VXW"]: num_wx,
+        UOP_SPLIT_CODES["VEC_WXW"]: num_wx,
+        UOP_SPLIT_CODES["VEC_WVV"]: num_wv,
+        UOP_SPLIT_CODES["VEC_WXV"]: num_wx,
+        UOP_SPLIT_CODES["VEC_SLIDE1UP"]: lmul + 1,
+        UOP_SPLIT_CODES["VEC_FSLIDE1UP"]: lmul + 1,
+        UOP_SPLIT_CODES["VEC_SLIDE1DOWN"]: lmul * 2,
+        UOP_SPLIT_CODES["VEC_FSLIDE1DOWN"]: lmul * 2,
+        UOP_SPLIT_CODES["VEC_VRED"]: lmul,
+        UOP_SPLIT_CODES["VEC_SLIDEUP"]: num_vslide + 1,
+        UOP_SPLIT_CODES["VEC_SLIDEDOWN"]: num_vslide + 1,
+        UOP_SPLIT_CODES["VEC_M0X"]: lmul,
+        UOP_SPLIT_CODES["VEC_MVV"]: (lmul * 2) - 1,
+        UOP_SPLIT_CODES["VEC_VWW"]: lmul * 2,
+        UOP_SPLIT_CODES["VEC_RGATHER"]: num_vrgather,
+        UOP_SPLIT_CODES["VEC_RGATHER_VX"]: num_vrgather + 1,
+        UOP_SPLIT_CODES["VEC_RGATHEREI16"]: num_vrgatherei16,
+        UOP_SPLIT_CODES["VEC_COMPRESS"]: num_vcompress,
+        UOP_SPLIT_CODES["VEC_MVNR"]: vmvn + 1,
+        UOP_SPLIT_CODES["VEC_US_LDST"]: nf + 2 if is_vlsr else 2 if is_vlsm else strided + 1,
+        UOP_SPLIT_CODES["VEC_US_FF_LD"]: strided + 2,
+        UOP_SPLIT_CODES["VEC_S_LDST"]: strided + 2,
+        UOP_SPLIT_CODES["VEC_I_LDST"]: indexed + 1,
+        UOP_SPLIT_CODES["AMO_CAS_W"]: 2,
+        UOP_SPLIT_CODES["AMO_CAS_D"]: 2,
+        UOP_SPLIT_CODES["AMO_CAS_Q"]: 4,
+    }
+    num = by_split.get(split, 1)
+    num_wb = num >> 1 if split in {UOP_SPLIT_CODES["AMO_CAS_W"], UOP_SPLIT_CODES["AMO_CAS_D"], UOP_SPLIT_CODES["AMO_CAS_Q"]} else num
+    return num, num_wb, lmul
 
 PORT_SPECS: dict[str, tuple[PortSpec, ...]] = {
     'Backend': (
@@ -1541,47 +1731,138 @@ class DecodeControlFamily(Elaboratable):
         self.ports = {name: Signal(width, name=name) for name, _direction, width in self.specs}
 
     def _uop_info(self, module: Module) -> None:
-        """Implement the V2 split-classification and uop-count equations."""
+        """Implement the complete V2 UopInfoGen lookup and split equations."""
         p = self.ports
         split = p["io_in_preInfo_typeOfSplit"]
         vlmul = p["io_in_preInfo_vlmul"]
         vsew = p["io_in_preInfo_vsew"]
+        vwidth = p["io_in_preInfo_vwidth"]
         nf = p["io_in_preInfo_nf"]
         vmvn = p["io_in_preInfo_vmvn"]
+        is_vlsr = p["io_in_preInfo_isVlsr"]
+        is_vlsm = p["io_in_preInfo_isVlsm"]
         lmul = Signal(4, name="uop_lmul")
+        simple_lmul = Signal(2, name="uop_simple_lmul")
+        simple_emul = Signal(2, name="uop_simple_emul")
         num = Signal(8, name="uop_num")
+        vsew3 = Cat(vsew, Const(0, 1))
+        veew3 = Cat(vwidth[:2], Const(0, 1))
+        # This is the source UInt expression (all operands are three bits).
+        vemul = Signal(3, name="uop_vemul")
+        num_vslide = Signal(7, name="uop_num_vslide")
+        num_vrgather = Signal(7, name="uop_num_vrgather")
+        num_vrgatherei16 = Signal(7, name="uop_num_vrgatherei16")
+        num_vcompress = Signal(7, name="uop_num_vcompress")
+        num_vfred = Signal(8, name="uop_num_vfred")
+        num_vfredosum = Signal(8, name="uop_num_vfredosum")
+        num_wv = Signal(4, name="uop_num_wv")
+        num_wx = Signal(4, name="uop_num_wx")
+        strided = Signal(4, name="uop_strided")
+        indexed = Signal(7, name="uop_indexed")
         module.d.comb += [
-            lmul.eq(Mux(vlmul == 3, 8, Mux(vlmul == 2, 4, Mux(vlmul == 1, 2, 1)))),
+            lmul.eq(Mux(vlmul == 0b001, 2, Mux(vlmul == 0b010, 4, Mux(vlmul == 0b011, 8, 1)))),
+            simple_lmul.eq(Mux(vlmul == 0b001, 1, Mux(vlmul == 0b010, 2, Mux(vlmul == 0b011, 3, 0)))),
+            vemul.eq(veew3 + 1 + vlmul + ~vsew3),
+            simple_emul.eq(Mux(vemul == 0b001, 0, Mux(vemul == 0b010, 1, Mux(vemul == 0b011, 2, 0)))),
             num.eq(1),
             p["io_out_isComplex"].eq(p["io_in_preInfo_isVecArith"] | p["io_in_preInfo_isVecMem"] | p["io_in_preInfo_isAmoCAS"]),
+            num_vslide.eq(Mux(vlmul == 0b001, 3, Mux(vlmul == 0b010, 10, Mux(vlmul == 0b011, 36, 1)))),
+            num_vrgather.eq(Mux(vlmul == 0b001, 4, Mux(vlmul == 0b010, 16, Mux(vlmul == 0b011, 64, 1)))),
+            num_vrgatherei16.eq(Mux((vsew == 0) & (vlmul != 0b011), Cat(Const(0, 1), num_vrgather), num_vrgather)),
+            num_vcompress.eq(Mux(vlmul == 0b001, 4, Mux(vlmul == 0b010, 13, Mux(vlmul == 0b011, 43, 1)))),
+            num_wv.eq(Mux(vlmul == 0b000, 2, Mux(vlmul == 0b001, 4, Mux(vlmul == 0b010, 8, 1)))),
+            num_wx.eq(Mux(vlmul == 0b000, 3, Mux(vlmul == 0b001, 5, Mux(vlmul == 0b010, 9, 2)))),
+            strided.eq(0),
+            indexed.eq(0),
         ]
-        # The split tags below are the locked V2 tags.  Unknown tags retain the
-        # architectural one-uop default and are therefore visibly bounded.
+        # The two source lookup tables are expanded as deterministic case
+        # equations. / 两个源查表展开为确定性的 case 方程。
+        with module.Switch(Cat(nf, simple_emul)):
+            for emul_code in range(4):
+                for nf_code in range(8):
+                    value = _strided_uops(emul_code, nf_code)
+                    with module.Case((emul_code << 3) | nf_code):
+                        module.d.comb += strided.eq(value)
+        with module.Switch(Cat(nf, simple_lmul, simple_emul)):
+            for emul_code in range(4):
+                for lmul_code in range(4):
+                    for nf_code in range(8):
+                        value = _indexed_uops(emul_code, lmul_code, nf_code)
+                        with module.Case((emul_code << 5) | (lmul_code << 3) | nf_code):
+                            module.d.comb += indexed.eq(value)
+        module.d.comb += [num_vfred.eq(1), num_vfredosum.eq(1)]
+        with module.Switch(vlmul):
+            with module.Case(0b001):
+                module.d.comb += num_vfred.eq(2)
+            with module.Case(0b010):
+                module.d.comb += num_vfred.eq(4)
+            with module.Case(0b011):
+                module.d.comb += num_vfred.eq(8)
+        # Fold timing follows the source's unsigned arithmetic. / 折叠时序遵循源代码无符号运算。
+        add_time = Signal(4, name="uop_vfred_add_time")
+        fold_last = Signal(3, name="uop_vfred_fold_last")
+        fold_time = Signal(4, name="uop_vfred_fold_time")
+        module.d.comb += [
+            add_time.eq(Mux(vlmul == 0b001, 2, Mux(vlmul == 0b010, 4, Mux(vlmul == 0b011, 8, 1)))),
+            fold_last.eq(Mux(vsew == 1, 0b101, Mux(vsew == 2, 0b110, Mux(vsew == 3, 0b111, 0)))),
+            fold_time.eq(Mux(vlmul[2], vlmul, 0) - fold_last),
+            num_vfred.eq(Mux((add_time + fold_time) != 0, add_time + fold_time, 1)),
+        ]
+        uvl_max = Signal(4, name="uop_vfred_uvl_max")
+        vl_max = Signal(8, name="uop_vfred_vl_max")
+        module.d.comb += [
+            uvl_max.eq(Mux(vsew == 1, 8, Mux(vsew == 2, 4, Mux(vsew == 3, 2, 1)))),
+            vl_max.eq(Mux(vlmul[2], uvl_max >> ((~vlmul + 1)[:2]), uvl_max << vlmul[:2])),
+            num_vfredosum.eq(Mux(vl_max != 0, vl_max, 1)),
+        ]
         with module.Switch(split):
-            with module.Case(0x37):
-                module.d.comb += num.eq(4)
-            with module.Case(0x35, 0x36):
+            with module.Case(UOP_SPLIT_CODES["VSET"]):
                 module.d.comb += num.eq(2)
-            with module.Case(0x33):
-                module.d.comb += num.eq(Cat(Const(0, 4), nf) + 1)
-            with module.Case(0x32, 0x34):
-                module.d.comb += num.eq(Cat(Const(0, 4), nf) + 2)
-            with module.Case(0x31):
-                module.d.comb += num.eq(Mux(p["io_in_preInfo_isVlsr"], Cat(Const(0, 4), nf) + 2,
-                                             Mux(p["io_in_preInfo_isVlsm"], 2, Cat(Const(0, 4), nf) + 1)))
-            with module.Case(0x04):
-                module.d.comb += num.eq(Cat(Const(0, 4), vmvn) + 1)
-            with module.Case(0x30):
-                module.d.comb += num.eq(Mux(vlmul == 3, 43, Mux(vlmul == 2, 13, Mux(vlmul == 1, 4, 1))))
-            with module.Case(0x2F):
-                module.d.comb += num.eq(Mux((vsew == 0) & (vlmul != 3), 2, Mux(vlmul == 3, 64, Mux(vlmul == 2, 16, Mux(vlmul == 1, 4, 1)))))
-            with module.Case(0x2E):
-                module.d.comb += num.eq(Mux(vlmul == 3, 65, Mux(vlmul == 2, 17, Mux(vlmul == 1, 5, 2))))
-            with module.Case(0x2D):
-                module.d.comb += num.eq(Mux(vlmul == 3, 64, Mux(vlmul == 2, 16, Mux(vlmul == 1, 4, 1))))
+            with module.Case(UOP_SPLIT_CODES["VEC_0XV"]):
+                module.d.comb += num.eq(2)
+            with module.Case(UOP_SPLIT_CODES["VEC_VVV"], UOP_SPLIT_CODES["VEC_EXT2"], UOP_SPLIT_CODES["VEC_EXT4"], UOP_SPLIT_CODES["VEC_EXT8"], UOP_SPLIT_CODES["VEC_VVM"], UOP_SPLIT_CODES["VEC_VRED"], UOP_SPLIT_CODES["VEC_M0X"]):
+                module.d.comb += num.eq(lmul)
+            with module.Case(UOP_SPLIT_CODES["VEC_VFV"], UOP_SPLIT_CODES["VEC_VFM"], UOP_SPLIT_CODES["VEC_VXM"], UOP_SPLIT_CODES["VEC_VXV"], UOP_SPLIT_CODES["VEC_SLIDE1UP"], UOP_SPLIT_CODES["VEC_FSLIDE1UP"]):
+                module.d.comb += num.eq(lmul + 1)
+            with module.Case(UOP_SPLIT_CODES["VEC_VFRED"]):
+                module.d.comb += num.eq(num_vfred)
+            with module.Case(UOP_SPLIT_CODES["VEC_VFREDOSUM"]):
+                module.d.comb += num.eq(num_vfredosum)
+            with module.Case(UOP_SPLIT_CODES["VEC_VFW"], UOP_SPLIT_CODES["VEC_WFW"], UOP_SPLIT_CODES["VEC_VXW"], UOP_SPLIT_CODES["VEC_WXW"], UOP_SPLIT_CODES["VEC_WXV"]):
+                module.d.comb += num.eq(num_wx)
+            with module.Case(UOP_SPLIT_CODES["VEC_VVW"], UOP_SPLIT_CODES["VEC_WVW"], UOP_SPLIT_CODES["VEC_WVV"]):
+                module.d.comb += num.eq(num_wv)
+            with module.Case(UOP_SPLIT_CODES["VEC_SLIDE1DOWN"], UOP_SPLIT_CODES["VEC_FSLIDE1DOWN"]):
+                module.d.comb += num.eq(lmul << 1)
+            with module.Case(UOP_SPLIT_CODES["VEC_SLIDEUP"], UOP_SPLIT_CODES["VEC_SLIDEDOWN"]):
+                module.d.comb += num.eq(num_vslide + 1)
+            with module.Case(UOP_SPLIT_CODES["VEC_MVV"]):
+                module.d.comb += num.eq((lmul << 1) - 1)
+            with module.Case(UOP_SPLIT_CODES["VEC_VWW"]):
+                module.d.comb += num.eq(lmul << 1)
+            with module.Case(UOP_SPLIT_CODES["VEC_RGATHER"]):
+                module.d.comb += num.eq(num_vrgather)
+            with module.Case(UOP_SPLIT_CODES["VEC_RGATHER_VX"]):
+                module.d.comb += num.eq(num_vrgather + 1)
+            with module.Case(UOP_SPLIT_CODES["VEC_RGATHEREI16"]):
+                module.d.comb += num.eq(num_vrgatherei16)
+            with module.Case(UOP_SPLIT_CODES["VEC_COMPRESS"]):
+                module.d.comb += num.eq(num_vcompress)
+            with module.Case(UOP_SPLIT_CODES["VEC_MVNR"]):
+                module.d.comb += num.eq(Cat(vmvn, Const(0, 4)) + 1)
+            with module.Case(UOP_SPLIT_CODES["VEC_US_LDST"]):
+                module.d.comb += num.eq(Mux(is_vlsr, Cat(nf, Const(0, 4)) + 2, Mux(is_vlsm, 2, strided + 1)))
+            with module.Case(UOP_SPLIT_CODES["VEC_US_FF_LD"], UOP_SPLIT_CODES["VEC_S_LDST"]):
+                module.d.comb += num.eq(strided + 2)
+            with module.Case(UOP_SPLIT_CODES["VEC_I_LDST"]):
+                module.d.comb += num.eq(indexed + 1)
+            with module.Case(UOP_SPLIT_CODES["AMO_CAS_W"], UOP_SPLIT_CODES["AMO_CAS_D"], UOP_SPLIT_CODES["AMO_CAS_Q"]):
+                module.d.comb += num.eq(Mux(split == UOP_SPLIT_CODES["AMO_CAS_Q"], 4, 2))
+            with module.Default():
+                module.d.comb += num.eq(1)
         module.d.comb += [
             p["io_out_uopInfo_numOfUop"].eq(num[:7]),
-            p["io_out_uopInfo_numOfWB"].eq(Mux((split == 0x35) | (split == 0x36) | (split == 0x37), num[1:], num[:7])),
+            p["io_out_uopInfo_numOfWB"].eq(Mux((split == UOP_SPLIT_CODES["AMO_CAS_W"]) | (split == UOP_SPLIT_CODES["AMO_CAS_D"]) | (split == UOP_SPLIT_CODES["AMO_CAS_Q"]), num[1:], num[:7])),
             p["io_out_uopInfo_lmul"].eq(lmul),
         ]
 

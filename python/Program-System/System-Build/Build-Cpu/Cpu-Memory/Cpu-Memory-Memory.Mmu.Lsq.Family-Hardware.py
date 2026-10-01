@@ -3,15 +3,18 @@
 """
 from __future__ import annotations
 from typing import Any
-from amaranth import Const, Elaboratable, Module, Signal
+from amaranth import ClockDomain, Const, Elaboratable, Module, Mux, Signal
 from amaranth.back import verilog
 
 # Module Contract
 __all__ = ["COVERED_MODULES", "IMPLEMENTED_MEMBERS", "CONTRACT_ONLY_MEMBERS", "PORT_SPECS", "FamilySpec", "family_spec", "MemoryFamily", "build_verilog", "main"]
 COVERED_MODULES = ('AtomicsUnit', 'Bitmap', 'HPTW', 'TLBNonBlock_2', 'LoadMisalignBuffer', 'LqExceptionBuffer', 'LsqEnqCtrl', 'AgeDetector_38')
-IMPLEMENTED_MEMBERS: tuple[str, ...] = ()
-CONTRACT_ONLY_MEMBERS = COVERED_MODULES
-# Behavioral provenance is kept in validation inventories; this Build contains no source-path metadata.
+# AgeDetector_38 is the first behaviorally closed LSQ leaf in this aggregate.
+# The remaining large MMU/LSQ blocks retain an explicit contract-only status
+# until their complete locked-parent differential proofs are available.
+IMPLEMENTED_MEMBERS: tuple[str, ...] = ('AgeDetector_38',)
+CONTRACT_ONLY_MEMBERS = tuple(member for member in COVERED_MODULES if member not in IMPLEMENTED_MEMBERS)
+# The Build carries only executable behavior and its public port contract.
 PortSpec = tuple[str, str, int]
 
 PORT_SPECS: dict[str, tuple[PortSpec, ...]] = {
@@ -1311,6 +1314,108 @@ def family_spec(module: str) -> FamilySpec:
     # Construct exact spec. / 构造精确规格。
     return FamilySpec(module)
 
+
+def _age_detector_38(module: Module, ports: dict[str, Signal]) -> None:
+    """Elaborate the locked 24-entry LSQ age detector.
+
+    The implementation stores the upper triangular pairwise age matrix
+    (including the diagonal validity bits).  A dequeue clears an entry, a
+    dequeue of the other endpoint revalidates the column from the current
+    entry state, and an enqueue inserts the entry after all entries enqueued
+    by an earlier enqueue port.  The other family members continue to use the
+    contract adapter below until their behavior is closed.
+    """
+
+    entries = 24
+    enq = [ports[f"io_enq_{port}"] for port in range(3)]
+    deq = ports["io_deq"]
+    ready = ports["io_ready"]
+    out = ports["io_out"]
+
+    # The locked module uses an active-high asynchronous reset and a dedicated
+    # clock.  Keep the domain explicit so the generated RTL has the same
+    # reset edge semantics as the frozen Chisel output.
+    clock_domain = ClockDomain("age", async_reset=True)
+    clock_domain.clk = ports["clock"]
+    clock_domain.rst = ports["reset"]
+    module.domains += clock_domain
+
+    diagonal = [Signal(reset=0, name=f"age_{index}_{index}") for index in range(entries)]
+    upper = {
+        (row, col): Signal(reset=0, name=f"age_{row}_{col}")
+        for row in range(entries)
+        for col in range(row + 1, entries)
+    }
+
+    def age_value(row: int, col: int) -> Any:
+        if row == col:
+            return diagonal[row]
+        if row < col:
+            return upper[(row, col)]
+        # Lower-triangular queries read the transposed upper bit and invert it.
+        return ~upper[(col, row)]
+
+    def enqueued(index: int) -> Any:
+        return (enq[0][index] | enq[1][index] | enq[2][index]) & ~deq[index]
+
+    def previous_port_enqueued(index: int, port_count: int) -> Any:
+        # ``isEnqueued(index, 0)`` is false; port k sees only ports before k.
+        if port_count == 0:
+            return Const(0, 1)
+        value: Any = Const(0, 1)
+        for port in range(port_count):
+            value = value | enq[port][index]
+        return value & ~deq[index]
+
+    def parallel_mux(row: int, col: int) -> Any:
+        # The selector result[k] is the prefix enqueue state of the other
+        # endpoint.  The first port has an empty prefix.
+        value: Any = Const(0, 1)
+        for port in range(3):
+            value = value | (enq[port][row] & previous_port_enqueued(col, port))
+        return value
+
+    for row in range(entries):
+        row_valid = enqueued(row)
+        for col in range(row, entries):
+            current = diagonal[row] if row == col else upper[(row, col)]
+            if row == col:
+                # The diagonal is the validity bit.  Dequeue wins over a
+                # same-cycle enqueue, exactly as in the locked ternary chain.
+                next_value = Mux(
+                    deq[row],
+                    Const(0, 1),
+                    Mux(row_valid, ~diagonal[row] & ~parallel_mux(row, col), diagonal[row]),
+                )
+            else:
+                this_valid = age_value(row, row) | row_valid
+                next_value = Mux(
+                    deq[row],
+                    Const(0, 1),
+                    Mux(
+                        deq[col],
+                        this_valid,
+                        Mux(row_valid, ~age_value(col, col) & ~parallel_mux(row, col), current),
+                    ),
+                )
+            module.d.age += current.eq(next_value)
+
+    # The output is a combinational oldest-ready one-hot mask evaluated against
+    # the registered age matrix, so enqueues become visible after their clock
+    # edge.
+    result: Any = Const(0, entries)
+    for row in range(entries):
+        older_than_ready: Any = Const(1, 1)
+        for col in range(entries):
+            if row == col:
+                relation: Any = Const(1, 1)
+            else:
+                relation = age_value(row, col)
+            older_than_ready = older_than_ready & (~ready[col] | relation)
+        selected = ready[row] & older_than_ready
+        result = Mux(selected, Const(1 << row, entries), result)
+    module.d.comb += out.eq(result)
+
 class MemoryFamily(Elaboratable):
     """Bounded exact-port member. / 有界精确端口成员。"""
     # Initialize all locked ports. / 初始化全部锁定端口。
@@ -1321,12 +1426,16 @@ class MemoryFamily(Elaboratable):
         self.ports = {name: Signal(width, name=name) for name, _direction, width in self.spec.ports}
     # Elaborate. / 展开。
     def elaborate(self, platform: Any) -> Module:
-        # Return an ABI-only contract without guessed protocol behavior. / 返回不猜测协议行为的 ABI 合约。
+        # Elaborate the one closed LSQ leaf; keep the other surfaces explicit
+        # until their locked behavioral proofs are complete.
         del platform
         module = Module()
-        for name, direction, width in self.spec.ports:
-            if direction == "output":
-                module.d.comb += self.ports[name].eq(Const(0, width))
+        if self.member == "AgeDetector_38":
+            _age_detector_38(module, self.ports)
+        else:
+            for name, direction, width in self.spec.ports:
+                if direction == "output":
+                    module.d.comb += self.ports[name].eq(Const(0, width))
         return module
 
 # Public Adapter
