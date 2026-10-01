@@ -10,7 +10,7 @@ from __future__ import annotations
 from contextlib import AbstractContextManager
 from typing import Any, cast
 
-from amaranth import Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal
+from amaranth import Cat, ClockDomain, Const, Elaboratable, Module, Mux, Signal, Value
 from amaranth.back import verilog
 
 
@@ -18,8 +18,8 @@ __all__ = ["COVERED_MODULES", "IMPLEMENTED_MEMBERS", "CONTRACT_ONLY_MEMBERS", "P
 COVERED_MODULES = ("PMP", "PMPChecker", "PMPChecker_12", "PMPChecker_2", "PMPEntryHandleModule")
 # Keep the implementation/contract split explicit until every observable
 # relation has been independently proven.
-IMPLEMENTED_MEMBERS: tuple[str, ...] = ("PMPChecker_2", "PMPEntryHandleModule")
-CONTRACT_ONLY_MEMBERS = ("PMP", "PMPChecker", "PMPChecker_12")
+IMPLEMENTED_MEMBERS: tuple[str, ...] = COVERED_MODULES
+CONTRACT_ONLY_MEMBERS: tuple[str, ...] = ()
 
 PortSpec = tuple[str, str, int]
 
@@ -1937,44 +1937,242 @@ class PMPFamily(Elaboratable):
             module.domains += domain
 
     def _pmp(self, module: Module) -> None:
-        cfg = [Signal(8, name=f"pmp_cfg_{i}") for i in range(32)]
-        addr = [Signal(46, name=f"pmp_addr_{i}") for i in range(32)]
-        # Four 64-bit pmpcfg CSRs are used by the locked V2 instance (3A0/2/4/6).
-        wvalid = self.ports["io_distribute_csr_w_valid"]
-        waddr = self.ports["io_distribute_csr_w_bits_addr"]
-        wdata = self.ports["io_distribute_csr_w_bits_data"]
-        for i in range(32):
-            module.d.sync += [cfg[i].eq(cfg[i]), addr[i].eq(addr[i])]
-        for group in range(4):
-            hit = wvalid & (waddr == (0x3A0 + group * 2))
-            for lane in range(8):
-                i = group * 8 + lane
-                # Lock is sticky until reset; CSR writes cannot clear a locked entry.
-                unlocked = cast(Any, ~cast(Any, cfg[i][7]))
-                module.d.sync += cfg[i].eq(Mux(cast(Any, hit & unlocked), wdata[lane * 8:(lane + 1) * 8], cfg[i]))
-        for i in range(32):
-            hit = cast(Any, wvalid & (waddr == (0x3B0 + i)) & ~cast(Any, cfg[i][7]))
-            # A locked TOR entry also locks the preceding address, matching V2 CSRPMP.
-            if i < 31:
-                preceding_lock = cast(Any, cfg[i + 1][7]) & cast(Any, cfg[i + 1][3:5] == 1)
-                hit = cast(Any, hit & ~preceding_lock)
-            module.d.sync += addr[i].eq(Mux(hit, wdata[:46], addr[i]))
-            module.d.comb += [
-                self.ports[f"io_pmp_{i}_cfg_l"].eq(cfg[i][7]),
-                self.ports[f"io_pmp_{i}_cfg_a"].eq(cfg[i][3:5]),
-                self.ports[f"io_pmp_{i}_cfg_x"].eq(cfg[i][2]),
-                self.ports[f"io_pmp_{i}_cfg_w"].eq(cfg[i][1]),
-                self.ports[f"io_pmp_{i}_cfg_r"].eq(cfg[i][0]),
-                self.ports[f"io_pmp_{i}_addr"].eq(addr[i]),
-                self.ports[f"io_pmp_{i}_mask"].eq(Mux(cfg[i][3:5] == 3, _pmp_napot_mask(addr[i]),
-                                                    Mux(cfg[i][3:5] == 2, Const((1 << 48) - 1, 48), Const(0, 48)))),
+        """Hold PMP/PMA CSR state and apply distributed writes one cycle later."""
+
+        p = self.ports
+        write_addresses = (
+            0x7DE, 0x3C9, 0x3CE, 0x3B4, 0x3B7, 0x7CB, 0x3C2, 0x7CF,
+            0x7C4, 0x3B1, 0x3A2, 0x7E4, 0x3CD, 0x7DA, 0x3A6, 0x7C8,
+            0x3B5, 0x7D7, 0x3C6, 0x7E1, 0x3BC, 0x7D2, 0x7DB, 0x7D0,
+            0x3BD, 0x3B8, 0x7DF, 0x7E7, 0x3CA, 0x7D6, 0x7C0, 0x3B9,
+            0x7CC, 0x7D1, 0x3C5, 0x3CF, 0x7E0, 0x3BE, 0x7CD, 0x3B3,
+            0x7C9, 0x3C4, 0x3A4, 0x3BF, 0x7E6, 0x7D5, 0x3B0, 0x7C6,
+            0x3C8, 0x3CB, 0x7DC, 0x3BA, 0x7DD, 0x7CE, 0x3C1, 0x3C3,
+            0x3B2, 0x7D4, 0x7D9, 0x7CA, 0x7E3, 0x7D3, 0x3C7, 0x3B6,
+            0x7D8, 0x7C2, 0x3C0, 0x3BB, 0x7E5, 0x3A0, 0x7E2, 0x3CC,
+        )
+        delayed = {address: Signal(name="wen_reg_last_REG" + (f"_{index}" if index else ""))
+                   for index, address in enumerate(write_addresses)}
+        wdata = Signal(64, name="wdata_reg", reset_less=True)
+        module.d.sync += [signal.eq(p["io_distribute_csr_w_valid"]
+                                   & (p["io_distribute_csr_w_bits_addr"] == address))
+                          for address, signal in delayed.items()]
+        with cast(AbstractContextManager[None], module.If(p["io_distribute_csr_w_valid"])):
+            module.d.sync += wdata.eq(p["io_distribute_csr_w_bits_data"])
+        pma_cfg = (0, 0, 0x0B0B0B0F0B000000, 0x186F0B080B0B0B0F)
+        pma_addr = (0,) * 19 + (0x4000000, 0x8000000, 0xC004000, 0xC014000,
+                    0xE008000, 0xE008400, 0xE008800, 0xE400000, 0xE400800,
+                    0xE800000, 0x20000000, 0x20000000000, 0x1FFFFFFFFFFF)
+        config_first = {
+            "pmp": (True,) * 8 + (False,) * 10 + (True, False, True, True, True,
+                    False, False, True, False, False, False, True, True, False),
+            "pma": (True, False, False, True, False, False, False, True, True, True,
+                    True, True, True, True, True, True, False, False, False, False,
+                    False, False, True, False, True, True, False, False, True, False, True, True),
+        }
+
+        def matching_mask(name: str, address: Any, mode_low: Any) -> Any:
+            packed = Signal(46, name=name + "_packed")
+            mask = Signal(48, name=name)
+            module.d.comb += [packed.eq(cast(Any, Cat(mode_low, address[:45])) | Const(0x3FF, 46)),
+                              mask.eq(Cat(Const(3, 2), (packed & ~(packed + 1))[:46]))]
+            return mask
+
+        def bit(value: Value, index: int) -> Value:
+            return cast(Value, value[index])
+
+        for kind, cfg_base, addr_base in (("pmp", 0x3A0, 0x3B0), ("pma", 0x7C0, 0x7C8)):
+            cfg = [Signal(64, name=f"{kind}Mapping_cfgMerged_{group}",
+                          init=pma_cfg[group] if kind == "pma" else 0) for group in range(4)]
+            addresses = [Signal(46, name=f"{kind}Mapping_addr_{index}",
+                                init=pma_addr[index] if kind == "pma" else 0) for index in range(32)]
+            masks = [Signal(48, name=f"{kind}Mapping_mask_{index}",
+                            init=((1 << 48) - 1 if index == 31 else 0xFFF) if kind == "pma" else 0)
+                     for index in range(32)]
+            bytes_old = [cast(Value, cfg[index // 8][8 * (index % 8):8 * (index % 8) + 8]) for index in range(32)]
+            for group in range(4):
+                new_bytes = []
+                for lane in range(8):
+                    old = bytes_old[group * 8 + lane]
+                    incoming = cast(Value, wdata[8 * lane:8 * lane + 8])
+                    canonical = Cat(bit(incoming, 0), bit(incoming, 1) & bit(incoming, 0), bit(incoming, 2),
+                                    bit(incoming, 3) | bit(incoming, 4), bit(incoming, 4),
+                                    bit(incoming, 5), bit(incoming, 6), bit(incoming, 7))
+                    new_bytes.append(Mux(old[7], old, canonical))
+                with cast(AbstractContextManager[None], module.If(delayed[cfg_base + group * 2])):
+                    module.d.sync += cfg[group].eq(Cat(*new_bytes))
+            for index, old in enumerate(bytes_old):
+                incoming = cast(Value, wdata[8 * (index % 8):8 * (index % 8) + 8])
+                cfg_flag = delayed[cfg_base + (index // 8) * 2]
+                addr_flag = delayed[addr_base + index]
+                locked = bit(old, 7)
+                if index < 31:
+                    following = bytes_old[index + 1]
+                    locked = locked | (bit(following, 7) & (cast(Value, following[3:5]) == 1))
+                address_write = addr_flag & ~locked
+                with cast(AbstractContextManager[None], module.If(address_write)):
+                    module.d.sync += addresses[index].eq(wdata[:46])
+                new_mode = Signal(2, name=f"{kind}_new_mode_{index}")
+                module.d.comb += new_mode.eq(Mux(bit(old, 7), old[3:5],
+                                               Cat(bit(incoming, 3) | bit(incoming, 4), bit(incoming, 4))))
+                cfg_mask_write = cfg_flag & ~bit(old, 7) & new_mode[1]
+                cfg_mask = matching_mask(f"{kind}_cfg_mask_{index}", addresses[index], new_mode[0])
+                addr_mask = matching_mask(f"{kind}_addr_mask_{index}", wdata[:46], old[3])
+                if config_first[kind][index]:
+                    with cast(AbstractContextManager[None], module.If(cfg_mask_write)):
+                        module.d.sync += masks[index].eq(cfg_mask)
+                    with cast(AbstractContextManager[None], module.Elif(address_write)):
+                        module.d.sync += masks[index].eq(addr_mask)
+                else:
+                    with cast(AbstractContextManager[None], module.If(addr_flag)):
+                        with cast(AbstractContextManager[None], module.If(~locked)):
+                            module.d.sync += masks[index].eq(addr_mask)
+                    with cast(AbstractContextManager[None], module.Elif(cfg_mask_write)):
+                        module.d.sync += masks[index].eq(cfg_mask)
+                fields = {"cfg_a": old[3:5], "cfg_x": old[2], "cfg_w": old[1], "cfg_r": old[0],
+                          "addr": addresses[index], "mask": masks[index]}
+                if kind == "pmp":
+                    fields["cfg_l"] = old[7]
+                else:
+                    fields.update(cfg_c=old[6], cfg_atomic=old[5])
+                module.d.comb += [p[f"io_{kind}_{index}_{field}"].eq(value) for field, value in fields.items()]
+
+    def _checker12(self, module: Module) -> None:
+        """Implement locked PMPChecker_12 capture, matching and response equations."""
+        request_valid = self.ports["io_req_valid"]
+        request_address = self.ports["io_req_bits_addr"]
+        request_command = self.ports["io_req_bits_cmd"]
+        mode = self.ports["io_check_env_mode"]
+        debug = self.ports["io_check_env_debug"]
+        grain_mask = Const(0x3FFFFFFFFC00, 46)
+        debug_window = ((request_address > Const(0x3801FFFF, 48)) &
+                        (request_address < Const(0x38021000, 48)))
+        match_enable = ~debug_window | debug
+
+        def state_name(base: str, index: int) -> str:
+            return base if index == 0 else f"{base}_{index}"
+
+        # These exact names correspond to the locked match registers. They are
+        # asynchronously cleared and only capture a new comparison on valid.
+        pmp_match = [
+            Signal(name=state_name("res_pmp_r", index)) for index in range(32)
+        ]
+        pma_match = [
+            Signal(name=state_name("res_pma_r", index)) for index in range(32)
+        ]
+
+        def match_equations(prefix: str) -> list[Any]:
+            matches: list[Any] = []
+            previous_base: Any = Const(0, 48)
+            for index in range(32):
+                address = self.ports[f"io_check_env_{prefix}_{index}_addr"]
+                mask = self.ports[f"io_check_env_{prefix}_{index}_mask"]
+                mode_a = self.ports[f"io_check_env_{prefix}_{index}_cfg_a"]
+                entry_base = Cat(Const(0, 2), address & grain_mask)
+                napot_match = mode_a[1] & (
+                    (request_address & ~mask) == (entry_base & ~mask)
+                )
+                tor_match = mode_a == 1
+                if index == 0:
+                    tor_match = tor_match & (request_address < entry_base)
+                else:
+                    tor_match = (tor_match & (request_address >= previous_base) &
+                                 (request_address < entry_base))
+                matches.append((napot_match | tor_match) & match_enable)
+                previous_base = entry_base
+            return matches
+
+        pmp_hit_next = match_equations("pmp")
+        pma_hit_next = match_equations("pma")
+
+        # Captured cfg/command registers have no reset in the reference clock
+        # block. Keep them reset-less and uninitialized until the first valid.
+        pmp_cfg = {
+            field: [
+                Signal(name=f"res_pmp_r_33_{index}_cfg_{field}",
+                       reset_less=True, init=None)
+                for index in range(33)
             ]
-            # PMA mapping is not yet source-complete in this aggregate. Drive
-            # its contract outputs explicitly so the emitted ABI remains exact
-            # without claiming PMA behavior. / PMA 映射尚未完成，显式驱动契约
-            # 输出以保持 ABI 精确，但不声明 PMA 行为等价。
-            for field in ("cfg_c", "cfg_atomic", "cfg_a", "cfg_x", "cfg_w", "cfg_r", "addr", "mask"):
-                module.d.comb += self.ports[f"io_pma_{i}_{field}"].eq(0)
+            for field in ("x", "w", "r")
+        }
+        pma_cfg = {
+            field: [
+                Signal(name=f"res_pma_r_33_{index}_cfg_{field}",
+                       reset_less=True, init=None)
+                for index in range(32)
+            ]
+            for field in ("c", "atomic", "x", "w", "r")
+        }
+        command = Signal(3, name="cmd", reset_less=True, init=None)
+
+        with cast(AbstractContextManager[None], module.If(request_valid)):
+            module.d.sync += [
+                *(pmp_match[index].eq(pmp_hit_next[index]) for index in range(32)),
+                *(pma_match[index].eq(pma_hit_next[index]) for index in range(32)),
+            ]
+            for index in range(32):
+                ignore_pmp = mode[1] & ~self.ports[f"io_check_env_pmp_{index}_cfg_l"]
+                for field in ("x", "w", "r"):
+                    source = self.ports[f"io_check_env_pmp_{index}_cfg_{field}"]
+                    module.d.sync += pmp_cfg[field][index].eq(source | ignore_pmp)
+                    pma_source = self.ports[f"io_check_env_pma_{index}_cfg_{field}"]
+                    module.d.sync += pma_cfg[field][index].eq(pma_source)
+                for field in ("c", "atomic"):
+                    module.d.sync += pma_cfg[field][index].eq(
+                        self.ports[f"io_check_env_pma_{index}_cfg_{field}"]
+                    )
+            # PMP's slot 32 is the no-match default; PMA has a zero default.
+            for field in ("x", "w", "r"):
+                module.d.sync += pmp_cfg[field][32].eq(mode[1])
+            module.d.sync += command.eq(request_command)
+
+        def first_match(hits: list[Any], values: list[Any], default: Any) -> Any:
+            selected = default
+            # Build from high to low so slot 0 has highest priority.
+            for index in range(len(hits) - 1, -1, -1):
+                selected = Mux(hits[index], values[index], selected)
+            return selected
+
+        selected_pmp = {
+            field: Signal(name=f"selected_pmp_{field}") for field in ("x", "w", "r")
+        }
+        selected_pma = {
+            field: Signal(name=("res_pma_cfg_w" if field == "w" else
+                               "resp_atomic" if field == "atomic" else
+                               f"selected_pma_{field}"))
+            for field in ("c", "atomic", "x", "w", "r")
+        }
+        for field in ("x", "w", "r"):
+            module.d.comb += selected_pmp[field].eq(
+                first_match(pmp_match, pmp_cfg[field][:32], pmp_cfg[field][32])
+            )
+        for field in ("c", "atomic", "x", "w", "r"):
+            module.d.comb += selected_pma[field].eq(
+                first_match(pma_match, pma_cfg[field], Const(0, 1))
+            )
+        load_or_misc = (command[:2] == 0) | (command == 7)
+        load_error = (
+            (load_or_misc & (command != 5) & ~selected_pmp["r"])
+            | (load_or_misc & ~selected_pma["r"])
+            | ((command == 4) & ~selected_pma["atomic"])
+        )
+        store_error = (
+            (((command[:2] == 1) | (command == 5)) & ~selected_pmp["w"])
+            | (((command == 5) & (~selected_pma["atomic"] | ~selected_pma["w"]))
+               | ((command != 5) & (command[:2] == 1) & ~selected_pma["w"]))
+        )
+        instruction_error = (
+            ((command[:2] == 2) | (command == 7))
+            & (~selected_pmp["x"] | ~selected_pma["x"])
+        )
+        module.d.comb += [
+            self.ports["io_resp_ld"].eq(load_error),
+            self.ports["io_resp_st"].eq(store_error),
+            self.ports["io_resp_instr"].eq(instruction_error),
+            self.ports["io_resp_mmio"].eq(~selected_pma["c"]),
+            self.ports["io_resp_atomic"].eq(selected_pma["atomic"]),
+        ]
+
 
     def _checker(self, module: Module, variant: str) -> None:
         """Implement the first-match PMP/PMA checker variants."""
@@ -2003,12 +2201,15 @@ class PMPFamily(Elaboratable):
                     # Concatenation keeps the architectural 48-bit address
                     # width exact; an arithmetic shift otherwise widens the
                     # intermediate expression in generated RTL.
-                    entry_base = Cat(address & grain_mask, Const(0, 2))
+                    entry_base = Signal(48, name=f"read_{prefix}_base_{index}")
+                    module.d.comb += entry_base.eq(Cat(Const(0, 2), address & grain_mask))
                     napot = (mode_a[1] &
                              (((req & ~self.ports[f"io_check_env_{prefix}_{index}_mask"]) ==
                                (entry_base & ~self.ports[f"io_check_env_{prefix}_{index}_mask"]))))
                     tor = ((mode_a == 1) & (req >= previous_base) & (req < entry_base))
-                    matches.append((napot | tor) & (~debug_window | debug))
+                    matched = Signal(name=f"read_{prefix}_match_{index}")
+                    module.d.comb += matched.eq(Mux(mode_a[1], napot, tor) & (~debug_window | debug))
+                    matches.append(matched)
                     previous_base = entry_base
                 return matches
 
@@ -2089,48 +2290,7 @@ class PMPFamily(Elaboratable):
                 ]
             return
 
-        pmp_match: list[Any] = []
-        for i in range(32):
-            a = self.ports[f"io_check_env_pmp_{i}_cfg_a"]
-            pa = self.ports[f"io_check_env_pmp_{i}_addr"]
-            mask = self.ports[f"io_check_env_pmp_{i}_mask"]
-            low = Const(0, 48) if i == 0 else (self.ports[f"io_check_env_pmp_{i-1}_addr"] << 2)
-            base = pa << 2
-            tor = (a == 1) & (req >= low) & (req < base)
-            na4 = (a == 2) & (req >= base) & (req < base + 4)
-            napot = (a == 3) & (((req ^ base) & (~mask)) == 0)
-            pmp_match.append(tor | na4 | napot)
-        chosen: Any = Const(0, 32)
-        for i in range(31, -1, -1):
-            chosen = Mux(pmp_match[i], Const(1 << i, 32), chosen)
-        mmio = (req > Const(0x3801FFFF, 48)) & (req < Const(0x38021000, 48))
-        if variant == "PMPChecker":
-            allow_r = Const(0)
-            allow_w = Const(0)
-            allow_x = Const(0)
-            for i in range(32):
-                hit = chosen[i]
-                allow_r = Mux(hit, self.ports.get(f"io_check_env_pmp_{i}_cfg_r", Const(0)), allow_r)
-                allow_w = Mux(hit, self.ports.get(f"io_check_env_pmp_{i}_cfg_w", Const(0)), allow_w)
-                allow_x = Mux(hit, self.ports.get(f"io_check_env_pmp_{i}_cfg_x", Const(0)), allow_x)
-            bypass = (mode == 3) & ~debug
-            module.d.comb += [self.ports["io_resp_ld"].eq(bypass | allow_r), self.ports["io_resp_mmio"].eq(mmio), self.ports["io_resp_atomic"].eq(bypass | (allow_r & allow_w))]
-        elif variant == "PMPChecker_2":
-            allow_x = Const(0)
-            for i in range(32):
-                allow_x = Mux(chosen[i], self.ports.get(f"io_check_env_pmp_{i}_cfg_x", Const(0)), allow_x)
-            module.d.comb += [self.ports["io_resp_instr"].eq((mode == 3) | allow_x), self.ports["io_resp_mmio"].eq(mmio)]
-        else:
-            allow_r = Const(0); allow_w = Const(0); allow_x = Const(0)
-            for i in range(32):
-                allow_r = Mux(chosen[i], self.ports.get(f"io_check_env_pmp_{i}_cfg_r", Const(0)), allow_r)
-                allow_w = Mux(chosen[i], self.ports.get(f"io_check_env_pmp_{i}_cfg_w", Const(0)), allow_w)
-                allow_x = Mux(chosen[i], self.ports.get(f"io_check_env_pmp_{i}_cfg_x", Const(0)), allow_x)
-            is_store = (cmd == 1) | (cmd == 3)
-            is_exec = (cmd == 2)
-            module.d.comb += [self.ports["io_resp_ld"].eq(Mux(is_exec, allow_x, Mux(is_store, allow_w, allow_r))),
-                              self.ports["io_resp_st"].eq(allow_w), self.ports["io_resp_instr"].eq(allow_x),
-                              self.ports["io_resp_mmio"].eq(mmio), self.ports["io_resp_atomic"].eq(allow_r & allow_w)]
+        raise ValueError("unsupported checker variant")
 
     def _entry(self, module: Module) -> None:
         """Model the NewCSR PMP entry handler, including its WARL rules.
@@ -2219,7 +2379,9 @@ class PMPFamily(Elaboratable):
         self._clock_domain(module)
         if self.member == "PMP":
             self._pmp(module)
-        elif self.member in ("PMPChecker", "PMPChecker_12", "PMPChecker_2"):
+        elif self.member == "PMPChecker_12":
+            self._checker12(module)
+        elif self.member in ("PMPChecker", "PMPChecker_2"):
             self._checker(module, self.member)
         elif self.member == "PMPEntryHandleModule":
             self._entry(module)
