@@ -1,0 +1,1651 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_DCACHE_COMPLETION_WAVE",
+  "build_id": "Build-Cpu.Memory.Dcache.MissQueue.Family",
+  "direct_test_id": "Build-Cpu.Memory.Dcache.MissQueue.Family",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "status": "PASS_BOUNDED",
+  "strict_complete_build_count_delta": 0,
+  "acceptance_eligible": false,
+  "formal_run": false,
+  "sources": {
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Memory.Dcache.MissQueue.Family-Hardware.py",
+      "sha256": "39950e9e119e8362d6d6f5a610ef8a2891bc2dd9893c2f3a21a081e2b0b6a461",
+      "bytes": 39367
+    },
+    "direct_test": {
+      "path": "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Memory.Dcache.MissQueue.Family-Hardware.py",
+      "sha256": "6f9eb991ef20bffce5766c14ddc01603656525e060c8d30b43ecfdf0f7735491",
+      "bytes": 19288
+    },
+    "direct_test_runner": {
+      "path": "validation/v2_direct_test_runner.py",
+      "sha256": "36550022d56b6e631bb7c6dd4299a8b91cf833d8574f1515ec0b157fff5bc01d",
+      "bytes": 1773
+    },
+    "validator": {
+      "path": "validation/v2-dcache-completion-wave.py",
+      "sha256": "d618e4990368b217ad1dd63caf37feb42e3a8a0fb29377ca328fb751e7f223ba",
+      "bytes": 31305
+    },
+    "scala": [
+      {
+        "path": "upstream/src/main/scala/xiangshan/cache/dcache/DCacheWrapper.scala",
+        "sha256": "262fdcaf91f9e3ead9e5e242b4e70dfdc3c78e28c6aa13a95f37628356afdfd0",
+        "bytes": 71938
+      },
+      {
+        "path": "upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/Probe.scala",
+        "sha256": "5daa96752b4d42fafe31e27b51f3ea6e0faff4fae90521c654c4a40ca13ad4ac",
+        "bytes": 9013
+      },
+      {
+        "path": "upstream/src/main/scala/xiangshan/cache/dcache/mainpipe/WritebackQueue.scala",
+        "sha256": "63038a2f55415d00915fb5cc77155df05e7762586ae67bb369d5b9e919674851",
+        "bytes": 15251
+      }
+    ],
+    "locked_references": [
+      {
+        "path": "validation/reference-sv/MissReadyGen.sv",
+        "sha256": "26485f382cd14dfa3e86431098b0dd5446c5ee980e5d7b83c24781059873428d",
+        "bytes": 7188
+      },
+      {
+        "path": "validation/reference-sv/ProbeEntry.sv",
+        "sha256": "42a8828407446a064e390cc734e00083e1e69b8699cc8af186c2d744100bd4ba",
+        "bytes": 11162
+      },
+      {
+        "path": "validation/reference-sv/TreeArbiter.sv",
+        "sha256": "13cee5287dace86c53e33f6aa952cd8f9d956a94c4eaf51a4609683199696647",
+        "bytes": 13279
+      },
+      {
+        "path": "validation/reference-sv/WritebackEntry.sv",
+        "sha256": "00054094efb22c020262ff8ba26f4d2c62c68291e784f82b63caad3495f3a0ce",
+        "bytes": 22509
+      },
+      {
+        "path": "validation/reference-sv/WritebackEntry_15.sv",
+        "sha256": "4ee52a644ce1af56b87e498651ccedd7bcab56ceaf99c9e7cb2acff1cc1e1d03",
+        "bytes": 22415
+      }
+    ]
+  },
+  "checks": {
+    "py_compile": {
+      "command": [
+        "C:\\Program Files\\Python313\\python.exe",
+        "-B",
+        "-m",
+        "py_compile",
+        "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Build\\Build-Cpu\\Cpu-Memory\\Cpu-Memory-Memory.Dcache.MissQueue.Family-Hardware.py",
+        "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu-Memory.Dcache.MissQueue.Family-Hardware.py",
+        "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\v2-dcache-completion-wave.py"
+      ],
+      "status": "PASS",
+      "returncode": 0
+    },
+    "direct_test": {
+      "command": [
+        "C:\\Program Files\\Python313\\python.exe",
+        "-B",
+        "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\v2_direct_test_runner.py",
+        "--test",
+        "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Memory.Dcache.MissQueue.Family-Hardware.py",
+        "--minimum-tests",
+        "9"
+      ],
+      "status": "PASS",
+      "returncode": 0,
+      "tests_run": 9,
+      "output_tail": "......D:\\֪ʶ�⿪��\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Build\\Build-Cpu\\Cpu-Memory\\Cpu-Memory-Memory.Dcache.MissQueue.Family-Hardware.py:846: UnusedElaboratable: <testing_dcache_miss_family_subject.DcacheMissQueueFamily object at 0x0000024DA9D223C0> created but never used\n  top = DcacheMissQueueFamily(member)\nUnusedElaboratable: Enable tracemalloc to get the object allocation traceback\n...\n----------------------------------------------------------------------\nRan 9 tests in 4.856s\n\nOK\n"
+    },
+    "pyright": {
+      "command": [
+        "pyright.cmd",
+        "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Build\\Build-Cpu\\Cpu-Memory\\Cpu-Memory-Memory.Dcache.MissQueue.Family-Hardware.py",
+        "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\python\\Program-System\\System-Testing\\Testing-Cpu\\Testing-Cpu-Memory.Dcache.MissQueue.Family-Hardware.py",
+        "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\v2-dcache-completion-wave.py"
+      ],
+      "status": "PASS",
+      "returncode": 0,
+      "output_tail": "0 errors, 0 warnings, 0 informations\n"
+    },
+    "verilator": {
+      "command": [
+        "wsl.exe",
+        "-d",
+        "Debian",
+        "--",
+        "verilator",
+        "--version"
+      ],
+      "status": "PASS",
+      "returncode": 0,
+      "version": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)"
+    }
+  },
+  "implementation_declarations": {
+    "implemented_members": [
+      "MissReadyGen",
+      "TreeArbiter",
+      "WritebackEntry",
+      "WritebackEntry_15"
+    ],
+    "contract_only_members": [
+      "CMOUnit",
+      "MissEntry",
+      "ProbeEntry"
+    ]
+  },
+  "members": {
+    "MissReadyGen": {
+      "status": "PASS",
+      "abi": {
+        "status": "PASS",
+        "port_count": 35,
+        "input_count": 19,
+        "output_count": 16,
+        "ports": [
+          {
+            "name": "io_in_0_bits_addr",
+            "direction": "input",
+            "width": 48
+          },
+          {
+            "name": "io_in_0_bits_source",
+            "direction": "input",
+            "width": 4
+          },
+          {
+            "name": "io_in_0_bits_vaddr",
+            "direction": "input",
+            "width": 50
+          },
+          {
+            "name": "io_in_0_ready",
+            "direction": "output",
+            "width": 1
+          },
+          {
+            "name": "io_in_0_valid",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_in_1_bits_addr",
+            "direction": "input",
+            "width": 48
+          },
+          {
+            "name": "io_in_1_bits_source",
+            "direction": "input",
+            "width": 4
+          },
+          {
+            "name": "io_in_1_bits_vaddr",
+            "direction": "input",
+            "width": 50
+          },
+          {
+            "name": "io_in_1_ready",
+            "direction": "output",
+            "width": 1
+          },
+          {
+            "name": "io_in_1_valid",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_in_2_bits_addr",
+            "direction": "input",
+            "width": 48
+          },
+          {
+            "name": "io_in_2_bits_source",
+            "direction": "input",
+            "width": 4
+          },
+          {
+            "name": "io_in_2_bits_vaddr",
+            "direction": "input",
+            "width": 50
+          },
+          {
+            "name": "io_in_2_ready",
+            "direction": "output",
+            "width": 1
+          },
+          {
+            "name": "io_in_2_valid",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_in_3_bits_addr",
+            "direction": "input",
+            "width": 48
+          },
+          {
+            "name": "io_in_3_bits_source",
+            "direction": "input",
+            "width": 4
+          },
+          {
+            "name": "io_in_3_bits_vaddr",
+            "direction": "input",
+            "width": 50
+          },
+          {
+            "name": "io_in_3_ready",
+            "direction": "output",
+            "width": 1
+          },
+          {
+            "name": "io_queryMQ_0_ready",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_queryMQ_0_req_bits_addr",
+            "direction": "output",
+            "width": 48
+          },
+          {
+            "name": "io_queryMQ_0_req_bits_source",
+            "direction": "output",
+            "width": 4
+          },
+          {
+            "name": "io_queryMQ_0_req_bits_vaddr",
+            "direction": "output",
+            "width": 50
+          },
+          {
+            "name": "io_queryMQ_1_ready",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_queryMQ_1_req_bits_addr",
+            "direction": "output",
+            "width": 48
+          },
+          {
+            "name": "io_queryMQ_1_req_bits_source",
+            "direction": "output",
+            "width": 4
+          },
+          {
+            "name": "io_queryMQ_1_req_bits_vaddr",
+            "direction": "output",
+            "width": 50
+          },
+          {
+            "name": "io_queryMQ_2_ready",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_queryMQ_2_req_bits_addr",
+            "direction": "output",
+            "width": 48
+          },
+          {
+            "name": "io_queryMQ_2_req_bits_source",
+            "direction": "output",
+            "width": 4
+          },
+          {
+            "name": "io_queryMQ_2_req_bits_vaddr",
+            "direction": "output",
+            "width": 50
+          },
+          {
+            "name": "io_queryMQ_3_ready",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_queryMQ_3_req_bits_addr",
+            "direction": "output",
+            "width": 48
+          },
+          {
+            "name": "io_queryMQ_3_req_bits_source",
+            "direction": "output",
+            "width": 4
+          },
+          {
+            "name": "io_queryMQ_3_req_bits_vaddr",
+            "direction": "output",
+            "width": 50
+          }
+        ],
+        "build_matches_locked_reference": true,
+        "amaranth_export_matches_locked_reference": true,
+        "deterministic_export": true
+      },
+      "executable_differential": {
+        "status": "PASS_BOUNDED",
+        "sample_count": 193,
+        "unknown_output_samples": 0,
+        "all_public_outputs_compared": true,
+        "outputs_compared": [
+          "io_in_0_ready",
+          "io_in_1_ready",
+          "io_in_2_ready",
+          "io_in_3_ready",
+          "io_queryMQ_0_req_bits_source",
+          "io_queryMQ_0_req_bits_addr",
+          "io_queryMQ_0_req_bits_vaddr",
+          "io_queryMQ_1_req_bits_source",
+          "io_queryMQ_1_req_bits_addr",
+          "io_queryMQ_1_req_bits_vaddr",
+          "io_queryMQ_2_req_bits_source",
+          "io_queryMQ_2_req_bits_addr",
+          "io_queryMQ_2_req_bits_vaddr",
+          "io_queryMQ_3_req_bits_source",
+          "io_queryMQ_3_req_bits_addr",
+          "io_queryMQ_3_req_bits_vaddr"
+        ],
+        "payloads_compared_when_valid_is_low": true,
+        "resetless_startup_unclaimed": false,
+        "resetless_startup_outputs": [],
+        "trace_sha256": "022e736ff25a5dafb301353ab5f842b58c3f854ccddac28969b1c34b0c07be19",
+        "reference": {
+          "source": {
+            "path": "validation/reference-sv/MissReadyGen.sv",
+            "sha256": "26485f382cd14dfa3e86431098b0dd5446c5ee980e5d7b83c24781059873428d",
+            "bytes": 7188
+          },
+          "rtl_sha256": "26485f382cd14dfa3e86431098b0dd5446c5ee980e5d7b83c24781059873428d",
+          "sample_sha256": "8863da3e2c82c9071f35e8ad7d8bd6529368e2bb22cf2e6ecd1070e40eaa06fa",
+          "compile": {
+            "command": [
+              "wsl.exe",
+              "-d",
+              "Debian",
+              "--",
+              "verilator",
+              "--binary",
+              "--timing",
+              "-Wno-fatal",
+              "-DSYNTHESIS",
+              "--top-module",
+              "tb",
+              "--Mdir",
+              "/tmp/v2-dcache-completion-wave.hRr2Gp/MissReadyGen_reference_obj",
+              "-o",
+              "/tmp/v2-dcache-completion-wave.hRr2Gp/MissReadyGen_reference",
+              "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/MissReadyGen.sv",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/v2_dcache_completion_wave_w8078mis/MissReadyGen_tb.sv"
+            ],
+            "status": "PASS",
+            "returncode": 0,
+            "output_tail": "Set_ha183790c__0__Slow.o Vtb___024root__DepSet_ha183790c__0__Slow.cpp\ng++   -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -include Vtb__pch.h.slow -c -o Vtb__Syms.o Vtb__Syms.cpp\necho \"\" > Vtb__ALL.verilator_deplist.tmp\ng++    verilated.o verilated_timing.o verilated_threads.o Vtb__ALL.a    -pthread -lpthread -latomic   -o /tmp/v2-dcache-completion-wave.hRr2Gp/MissReadyGen_reference\nrm Vtb__ALL.verilator_deplist.tmp\nmake: Leaving directory '/tmp/v2-dcache-completion-wave.hRr2Gp/MissReadyGen_reference_obj'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.159 MB sources in 3 modules, into 0.455 MB in 9 C++ files needing 0.002 MB\n- Verilator: Walltime 11.246 s (elab=0.006, cvt=0.029, bld=11.153); cpu 0.055 s on 1 threads; alloced 16.383 MB\n"
+          },
+          "simulation": {
+            "command": [
+              "wsl.exe",
+              "-d",
+              "Debian",
+              "--",
+              "/tmp/v2-dcache-completion-wave.hRr2Gp/MissReadyGen_reference"
+            ],
+            "status": "PASS",
+            "returncode": 0,
+            "output_tail": "352bc2e283d2 e ccae8517f299 38808570920c0 f 4dc03ec745d2 338c9865108db c bebcb0773deb 10514c1fe04a3\nV:186:0 0 0 0 0 f 9913ca0278f3 10f0237de761d f 184734e89d43 1c153fa4b59ff e b44101003cb1 2b1087854f470 4 6e147fc085c1 25b3802c5977c\nV:187:0 1 1 0 0 5 7ec3bdad5f8d 3823d4c010bb6 0 ec2c07f6ee14 03ad09395e870 5 9b27d6c2fea7 245298104c011 6 f49656e837b1 3025daa5c3a8e\nV:188:0 0 0 0 0 7 587792019e4c 0a3cd1f1e0142 3 91cded46d698 0c9c338717493 d e677743af027 26951400cddf1 c 0208b7ba6072 00f363dcdfbb0\nV:189:0 0 1 1 0 6 cab5bbdb1e90 3a7a68dcde36d 2 230ea1e63520 167d119c6a2be 8 2f19f7a6b85f 03339f27466bb 5 aeae23b6a9ee 0c94864553396\nV:190:0 0 1 0 1 d 192f0a50466a 29198f42d61f9 0 52de747f9223 057570f5c37b6 b 109fbc3c0cc1 3aa9bbebf7ed9 9 f6e7261df0d1 16a3c4e649b64\nV:191:0 0 1 0 0 f d3baef0f6dd3 17315290e566d 6 e1d224e58edb 14b238f674731 a bcefb17376a8 01a51804929c6 4 6823d77c22ec 30c83eec09c57\nPASS\n- /mnt/c/Users/lishuo/AppData/Local/Temp/v2_dcache_completion_wave_w8078mis/MissReadyGen_tb.sv:4137: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 193ps; walltime 0.001 s; speed 110.087 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n",
+            "stderr_tail": ""
+          }
+        },
+        "amaranth_export": {
+          "rtl_sha256": "919e94f55b3cfd113cbca3b0806e9876abd557809e40fddc7d2dc2b50b377aad",
+          "sample_sha256": "8863da3e2c82c9071f35e8ad7d8bd6529368e2bb22cf2e6ecd1070e40eaa06fa",
+          "compile": {
+            "command": [
+              "wsl.exe",
+              "-d",
+              "Debian",
+              "--",
+              "verilator",
+              "--binary",
+              "--timing",
+              "-Wno-fatal",
+              "-DSYNTHESIS",
+              "--top-module",
+              "tb",
+              "--Mdir",
+              "/tmp/v2-dcache-completion-wave.hRr2Gp/MissReadyGen_amaranth_obj",
+              "-o",
+              "/tmp/v2-dcache-completion-wave.hRr2Gp/MissReadyGen_amaranth",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/v2_dcache_completion_wave_w8078mis/MissReadyGen_amaranth.sv",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/v2_dcache_completion_wave_w8078mis/MissReadyGen_tb.sv"
+            ],
+            "status": "PASS",
+            "returncode": 0,
+            "output_tail": "epSet_ha183790c__0__Slow.o Vtb___024root__DepSet_ha183790c__0__Slow.cpp\ng++   -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -include Vtb__pch.h.slow -c -o Vtb__Syms.o Vtb__Syms.cpp\necho \"\" > Vtb__ALL.verilator_deplist.tmp\ng++    verilated.o verilated_timing.o verilated_threads.o Vtb__ALL.a    -pthread -lpthread -latomic   -o /tmp/v2-dcache-completion-wave.hRr2Gp/MissReadyGen_amaranth\nrm Vtb__ALL.verilator_deplist.tmp\nmake: Leaving directory '/tmp/v2-dcache-completion-wave.hRr2Gp/MissReadyGen_amaranth_obj'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.163 MB sources in 3 modules, into 0.455 MB in 9 C++ files needing 0.002 MB\n- Verilator: Walltime 11.543 s (elab=0.005, cvt=0.027, bld=11.451); cpu 0.053 s on 1 threads; alloced 16.234 MB\n"
+          },
+          "simulation": {
+            "command": [
+              "wsl.exe",
+              "-d",
+              "Debian",
+              "--",
+              "/tmp/v2-dcache-completion-wave.hRr2Gp/MissReadyGen_amaranth"
+            ],
+            "status": "PASS",
+            "returncode": 0,
+            "output_tail": "0352bc2e283d2 e ccae8517f299 38808570920c0 f 4dc03ec745d2 338c9865108db c bebcb0773deb 10514c1fe04a3\nV:186:0 0 0 0 0 f 9913ca0278f3 10f0237de761d f 184734e89d43 1c153fa4b59ff e b44101003cb1 2b1087854f470 4 6e147fc085c1 25b3802c5977c\nV:187:0 1 1 0 0 5 7ec3bdad5f8d 3823d4c010bb6 0 ec2c07f6ee14 03ad09395e870 5 9b27d6c2fea7 245298104c011 6 f49656e837b1 3025daa5c3a8e\nV:188:0 0 0 0 0 7 587792019e4c 0a3cd1f1e0142 3 91cded46d698 0c9c338717493 d e677743af027 26951400cddf1 c 0208b7ba6072 00f363dcdfbb0\nV:189:0 0 1 1 0 6 cab5bbdb1e90 3a7a68dcde36d 2 230ea1e63520 167d119c6a2be 8 2f19f7a6b85f 03339f27466bb 5 aeae23b6a9ee 0c94864553396\nV:190:0 0 1 0 1 d 192f0a50466a 29198f42d61f9 0 52de747f9223 057570f5c37b6 b 109fbc3c0cc1 3aa9bbebf7ed9 9 f6e7261df0d1 16a3c4e649b64\nV:191:0 0 1 0 0 f d3baef0f6dd3 17315290e566d 6 e1d224e58edb 14b238f674731 a bcefb17376a8 01a51804929c6 4 6823d77c22ec 30c83eec09c57\nPASS\n- /mnt/c/Users/lishuo/AppData/Local/Temp/v2_dcache_completion_wave_w8078mis/MissReadyGen_tb.sv:4137: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 193ps; walltime 0.002 s; speed 62.919 ns/s\n- Verilator: cpu 0.003 s on 1 threads; alloced 153 MB\n",
+            "stderr_tail": ""
+          }
+        }
+      }
+    },
+    "ProbeEntry": {
+      "status": "PASS_BOUNDED_CLOSURE_PENDING",
+      "abi": {
+        "status": "PASS",
+        "port_count": 22,
+        "input_count": 13,
+        "output_count": 9,
+        "ports": [
+          {
+            "name": "clock",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_block_addr_bits",
+            "direction": "output",
+            "width": 48
+          },
+          {
+            "name": "io_block_addr_valid",
+            "direction": "output",
+            "width": 1
+          },
+          {
+            "name": "io_id",
+            "direction": "input",
+            "width": 3
+          },
+          {
+            "name": "io_lrsc_locked_block_bits",
+            "direction": "input",
+            "width": 48
+          },
+          {
+            "name": "io_lrsc_locked_block_valid",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_pipe_req_bits_addr",
+            "direction": "output",
+            "width": 48
+          },
+          {
+            "name": "io_pipe_req_bits_id",
+            "direction": "output",
+            "width": 6
+          },
+          {
+            "name": "io_pipe_req_bits_probe_need_data",
+            "direction": "output",
+            "width": 1
+          },
+          {
+            "name": "io_pipe_req_bits_probe_param",
+            "direction": "output",
+            "width": 2
+          },
+          {
+            "name": "io_pipe_req_bits_vaddr",
+            "direction": "output",
+            "width": 50
+          },
+          {
+            "name": "io_pipe_req_ready",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_pipe_req_valid",
+            "direction": "output",
+            "width": 1
+          },
+          {
+            "name": "io_pipe_resp_bits_id",
+            "direction": "input",
+            "width": 3
+          },
+          {
+            "name": "io_pipe_resp_valid",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_req_bits_addr",
+            "direction": "input",
+            "width": 48
+          },
+          {
+            "name": "io_req_bits_needData",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_req_bits_param",
+            "direction": "input",
+            "width": 2
+          },
+          {
+            "name": "io_req_bits_vaddr",
+            "direction": "input",
+            "width": 50
+          },
+          {
+            "name": "io_req_ready",
+            "direction": "output",
+            "width": 1
+          },
+          {
+            "name": "io_req_valid",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "reset",
+            "direction": "input",
+            "width": 1
+          }
+        ],
+        "build_matches_locked_reference": true,
+        "amaranth_export_matches_locked_reference": true,
+        "deterministic_export": true
+      },
+      "executable_differential": {
+        "status": "PASS_BOUNDED",
+        "sample_count": 144,
+        "unknown_output_samples": 0,
+        "all_public_outputs_compared": true,
+        "outputs_compared": [
+          "io_req_ready",
+          "io_pipe_req_valid",
+          "io_pipe_req_bits_probe_param",
+          "io_pipe_req_bits_probe_need_data",
+          "io_pipe_req_bits_vaddr",
+          "io_pipe_req_bits_addr",
+          "io_pipe_req_bits_id",
+          "io_block_addr_valid",
+          "io_block_addr_bits"
+        ],
+        "payloads_compared_when_valid_is_low": true,
+        "resetless_startup_unclaimed": true,
+        "resetless_startup_outputs": [
+          "io_pipe_req_bits_probe_param",
+          "io_pipe_req_bits_probe_need_data",
+          "io_pipe_req_bits_vaddr",
+          "io_pipe_req_bits_addr",
+          "io_block_addr_bits"
+        ],
+        "trace_sha256": "18db0bd58b39a1f4c71db6dc817890da1ed0ae0fc27cd1c8b963d3f873c978c1",
+        "reference": {
+          "source": {
+            "path": "validation/reference-sv/ProbeEntry.sv",
+            "sha256": "42a8828407446a064e390cc734e00083e1e69b8699cc8af186c2d744100bd4ba",
+            "bytes": 11162
+          },
+          "rtl_sha256": "42a8828407446a064e390cc734e00083e1e69b8699cc8af186c2d744100bd4ba",
+          "sample_sha256": "7604e620d81fee82178833c71ace1029d880cea0839b48221d34ecc3be4aa632",
+          "compile": {
+            "command": [
+              "wsl.exe",
+              "-d",
+              "Debian",
+              "--",
+              "verilator",
+              "--binary",
+              "--timing",
+              "-Wno-fatal",
+              "-DSYNTHESIS",
+              "--top-module",
+              "tb",
+              "--Mdir",
+              "/tmp/v2-dcache-completion-wave.hRr2Gp/ProbeEntry_reference_obj",
+              "-o",
+              "/tmp/v2-dcache-completion-wave.hRr2Gp/ProbeEntry_reference",
+              "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/ProbeEntry.sv",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/v2_dcache_completion_wave_w8078mis/ProbeEntry_tb.sv"
+            ],
+            "status": "PASS",
+            "returncode": 0,
+            "output_tail": "et_hfe20aad3__0__Slow.cpp Vtb___024root__DepSet_ha183790c__0__Slow.cpp Vtb__Syms.cpp > Vtb__ALL.cpp\ng++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -c -o Vtb__ALL.o Vtb__ALL.cpp\necho \"\" > Vtb__ALL.verilator_deplist.tmp\ng++    verilated.o verilated_timing.o verilated_threads.o Vtb__ALL.a    -pthread -lpthread -latomic   -o /tmp/v2-dcache-completion-wave.hRr2Gp/ProbeEntry_reference\nrm Vtb__ALL.verilator_deplist.tmp\nmake: Leaving directory '/tmp/v2-dcache-completion-wave.hRr2Gp/ProbeEntry_reference_obj'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.071 MB sources in 3 modules, into 0.288 MB in 8 C++ files needing 0.001 MB\n- Verilator: Walltime 8.340 s (elab=0.005, cvt=0.031, bld=8.234); cpu 0.062 s on 1 threads; alloced 12.434 MB\n"
+          },
+          "simulation": {
+            "command": [
+              "wsl.exe",
+              "-d",
+              "Debian",
+              "--",
+              "/tmp/v2-dcache-completion-wave.hRr2Gp/ProbeEntry_reference"
+            ],
+            "status": "PASS",
+            "returncode": 0,
+            "output_tail": " 0 0 2 1 08684714bf0df 1f6cc35ec715 07 1 1f6cc35ec715\nV:64:0 0 0 2 1 08684714bf0df 1f6cc35ec715 06 1 1f6cc35ec715\nV:64:1 0 0 2 1 08684714bf0df 1f6cc35ec715 06 1 1f6cc35ec715\nV:65:0 0 0 2 1 08684714bf0df 1f6cc35ec715 05 1 1f6cc35ec715\nV:65:1 0 0 2 1 08684714bf0df 1f6cc35ec715 05 1 1f6cc35ec715\nV:66:0 0 0 2 1 08684714bf0df 1f6cc35ec715 07 1 1f6cc35ec715\nV:66:1 0 0 2 1 08684714bf0df 1f6cc35ec715 07 1 1f6cc35ec715\nV:67:0 0 0 2 1 08684714bf0df 1f6cc35ec715 03 1 1f6cc35ec715\nV:67:1 1 0 2 1 08684714bf0df 1f6cc35ec715 03 0 1f6cc35ec715\nV:68:0 1 0 2 1 08684714bf0df 1f6cc35ec715 02 0 1f6cc35ec715\nV:68:1 1 0 2 1 08684714bf0df 1f6cc35ec715 02 0 1f6cc35ec715\nV:69:0 1 0 2 1 08684714bf0df 1f6cc35ec715 07 0 1f6cc35ec715\nV:69:1 1 0 2 1 08684714bf0df 1f6cc35ec715 07 0 1f6cc35ec715\nV:70:0 1 0 2 1 08684714bf0df 1f6cc35ec715 03 0 1f6cc35ec715\nV:70:1 0 1 0 1 351bdc562c66a 8e27894143f1 03 1 8e27894143f1\nPASS\n- /mnt/c/Users/lishuo/AppData/Local/Temp/v2_dcache_completion_wave_w8078mis/ProbeEntry_tb.sv:1430: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 217ps; walltime 0.001 s; speed 116.405 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n",
+            "stderr_tail": ""
+          }
+        },
+        "amaranth_export": {
+          "rtl_sha256": "cf95ebad8529f701a403a75f628903c7e9a7550888e46c516c7dab38a7705cba",
+          "sample_sha256": "7604e620d81fee82178833c71ace1029d880cea0839b48221d34ecc3be4aa632",
+          "compile": {
+            "command": [
+              "wsl.exe",
+              "-d",
+              "Debian",
+              "--",
+              "verilator",
+              "--binary",
+              "--timing",
+              "-Wno-fatal",
+              "-DSYNTHESIS",
+              "--top-module",
+              "tb",
+              "--Mdir",
+              "/tmp/v2-dcache-completion-wave.hRr2Gp/ProbeEntry_amaranth_obj",
+              "-o",
+              "/tmp/v2-dcache-completion-wave.hRr2Gp/ProbeEntry_amaranth",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/v2_dcache_completion_wave_w8078mis/ProbeEntry_amaranth.sv",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/v2_dcache_completion_wave_w8078mis/ProbeEntry_tb.sv"
+            ],
+            "status": "PASS",
+            "returncode": 0,
+            "output_tail": "th.sv:90:17: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'state' generates 2 bits.\n                                                                                                                           : ... note: In instance 'tb.target'\n   90 |   assign \\$3  = ! state;\n      |                 ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_dcache_completion_wave_w8078mis/ProbeEntry_amaranth.sv:95:17: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'state' generates 2 bits.\n                                                                                                                           : ... note: In instance 'tb.target'\n   95 |   assign \\$8  = ! state;\n      |                 ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_dcache_completion_wave_w8078mis/ProbeEntry_amaranth.sv:97:24: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                            : ... note: In instance 'tb.target'\n   97 |   assign \\$10  = state == 1'h1;\n      |                        ^~\n"
+          },
+          "simulation": {
+            "command": [
+              "wsl.exe",
+              "-d",
+              "Debian",
+              "--",
+              "/tmp/v2-dcache-completion-wave.hRr2Gp/ProbeEntry_amaranth"
+            ],
+            "status": "PASS",
+            "returncode": 0,
+            "output_tail": " 0 0 2 1 08684714bf0df 1f6cc35ec715 07 1 1f6cc35ec715\nV:64:0 0 0 2 1 08684714bf0df 1f6cc35ec715 06 1 1f6cc35ec715\nV:64:1 0 0 2 1 08684714bf0df 1f6cc35ec715 06 1 1f6cc35ec715\nV:65:0 0 0 2 1 08684714bf0df 1f6cc35ec715 05 1 1f6cc35ec715\nV:65:1 0 0 2 1 08684714bf0df 1f6cc35ec715 05 1 1f6cc35ec715\nV:66:0 0 0 2 1 08684714bf0df 1f6cc35ec715 07 1 1f6cc35ec715\nV:66:1 0 0 2 1 08684714bf0df 1f6cc35ec715 07 1 1f6cc35ec715\nV:67:0 0 0 2 1 08684714bf0df 1f6cc35ec715 03 1 1f6cc35ec715\nV:67:1 1 0 2 1 08684714bf0df 1f6cc35ec715 03 0 1f6cc35ec715\nV:68:0 1 0 2 1 08684714bf0df 1f6cc35ec715 02 0 1f6cc35ec715\nV:68:1 1 0 2 1 08684714bf0df 1f6cc35ec715 02 0 1f6cc35ec715\nV:69:0 1 0 2 1 08684714bf0df 1f6cc35ec715 07 0 1f6cc35ec715\nV:69:1 1 0 2 1 08684714bf0df 1f6cc35ec715 07 0 1f6cc35ec715\nV:70:0 1 0 2 1 08684714bf0df 1f6cc35ec715 03 0 1f6cc35ec715\nV:70:1 0 1 0 1 351bdc562c66a 8e27894143f1 03 1 8e27894143f1\nPASS\n- /mnt/c/Users/lishuo/AppData/Local/Temp/v2_dcache_completion_wave_w8078mis/ProbeEntry_tb.sv:1430: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 217ps; walltime 0.001 s; speed 133.619 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n",
+            "stderr_tail": ""
+          }
+        }
+      }
+    },
+    "TreeArbiter": {
+      "status": "PASS",
+      "abi": {
+        "status": "PASS",
+        "port_count": 65,
+        "input_count": 47,
+        "output_count": 18,
+        "ports": [
+          {
+            "name": "io_in_0_bits_addr",
+            "direction": "input",
+            "width": 48
+          },
+          {
+            "name": "io_in_0_bits_amo_cmp",
+            "direction": "input",
+            "width": 128
+          },
+          {
+            "name": "io_in_0_bits_amo_data",
+            "direction": "input",
+            "width": 128
+          },
+          {
+            "name": "io_in_0_bits_amo_mask",
+            "direction": "input",
+            "width": 16
+          },
+          {
+            "name": "io_in_0_bits_cancel",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_in_0_bits_cmd",
+            "direction": "input",
+            "width": 5
+          },
+          {
+            "name": "io_in_0_bits_full_overwrite",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_in_0_bits_id",
+            "direction": "input",
+            "width": 6
+          },
+          {
+            "name": "io_in_0_bits_isBtoT",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_in_0_bits_occupy_way",
+            "direction": "input",
+            "width": 4
+          },
+          {
+            "name": "io_in_0_bits_req_coh_state",
+            "direction": "input",
+            "width": 2
+          },
+          {
+            "name": "io_in_0_bits_source",
+            "direction": "input",
+            "width": 4
+          },
+          {
+            "name": "io_in_0_bits_store_data",
+            "direction": "input",
+            "width": 512
+          },
+          {
+            "name": "io_in_0_bits_store_mask",
+            "direction": "input",
+            "width": 64
+          },
+          {
+            "name": "io_in_0_bits_vaddr",
+            "direction": "input",
+            "width": 50
+          },
+          {
+            "name": "io_in_0_bits_word_idx",
+            "direction": "input",
+            "width": 3
+          },
+          {
+            "name": "io_in_0_valid",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_in_1_bits_addr",
+            "direction": "input",
+            "width": 48
+          },
+          {
+            "name": "io_in_1_bits_cancel",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_in_1_bits_cmd",
+            "direction": "input",
+            "width": 5
+          },
+          {
+            "name": "io_in_1_bits_isBtoT",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_in_1_bits_occupy_way",
+            "direction": "input",
+            "width": 4
+          },
+          {
+            "name": "io_in_1_bits_pf_source",
+            "direction": "input",
+            "width": 3
+          },
+          {
+            "name": "io_in_1_bits_req_coh_state",
+            "direction": "input",
+            "width": 2
+          },
+          {
+            "name": "io_in_1_bits_source",
+            "direction": "input",
+            "width": 4
+          },
+          {
+            "name": "io_in_1_bits_vaddr",
+            "direction": "input",
+            "width": 50
+          },
+          {
+            "name": "io_in_1_valid",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_in_2_bits_addr",
+            "direction": "input",
+            "width": 48
+          },
+          {
+            "name": "io_in_2_bits_cancel",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_in_2_bits_cmd",
+            "direction": "input",
+            "width": 5
+          },
+          {
+            "name": "io_in_2_bits_isBtoT",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_in_2_bits_occupy_way",
+            "direction": "input",
+            "width": 4
+          },
+          {
+            "name": "io_in_2_bits_pf_source",
+            "direction": "input",
+            "width": 3
+          },
+          {
+            "name": "io_in_2_bits_req_coh_state",
+            "direction": "input",
+            "width": 2
+          },
+          {
+            "name": "io_in_2_bits_source",
+            "direction": "input",
+            "width": 4
+          },
+          {
+            "name": "io_in_2_bits_vaddr",
+            "direction": "input",
+            "width": 50
+          },
+          {
+            "name": "io_in_2_valid",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_in_3_bits_addr",
+            "direction": "input",
+            "width": 48
+          },
+          {
+            "name": "io_in_3_bits_cancel",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_in_3_bits_cmd",
+            "direction": "input",
+            "width": 5
+          },
+          {
+            "name": "io_in_3_bits_isBtoT",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_in_3_bits_occupy_way",
+            "direction": "input",
+            "width": 4
+          },
+          {
+            "name": "io_in_3_bits_pf_source",
+            "direction": "input",
+            "width": 3
+          },
+          {
+            "name": "io_in_3_bits_req_coh_state",
+            "direction": "input",
+            "width": 2
+          },
+          {
+            "name": "io_in_3_bits_source",
+            "direction": "input",
+            "width": 4
+          },
+          {
+            "name": "io_in_3_bits_vaddr",
+            "direction": "input",
+            "width": 50
+          },
+          {
+            "name": "io_in_3_valid",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_out_bits_addr",
+            "direction": "output",
+            "width": 48
+          },
+          {
+            "name": "io_out_bits_amo_cmp",
+            "direction": "output",
+            "width": 128
+          },
+          {
+            "name": "io_out_bits_amo_data",
+            "direction": "output",
+            "width": 128
+          },
+          {
+            "name": "io_out_bits_amo_mask",
+            "direction": "output",
+            "width": 16
+          },
+          {
+            "name": "io_out_bits_cancel",
+            "direction": "output",
+            "width": 1
+          },
+          {
+            "name": "io_out_bits_cmd",
+            "direction": "output",
+            "width": 5
+          },
+          {
+            "name": "io_out_bits_full_overwrite",
+            "direction": "output",
+            "width": 1
+          },
+          {
+            "name": "io_out_bits_id",
+            "direction": "output",
+            "width": 6
+          },
+          {
+            "name": "io_out_bits_isBtoT",
+            "direction": "output",
+            "width": 1
+          },
+          {
+            "name": "io_out_bits_occupy_way",
+            "direction": "output",
+            "width": 4
+          },
+          {
+            "name": "io_out_bits_pf_source",
+            "direction": "output",
+            "width": 3
+          },
+          {
+            "name": "io_out_bits_req_coh_state",
+            "direction": "output",
+            "width": 2
+          },
+          {
+            "name": "io_out_bits_source",
+            "direction": "output",
+            "width": 4
+          },
+          {
+            "name": "io_out_bits_store_data",
+            "direction": "output",
+            "width": 512
+          },
+          {
+            "name": "io_out_bits_store_mask",
+            "direction": "output",
+            "width": 64
+          },
+          {
+            "name": "io_out_bits_vaddr",
+            "direction": "output",
+            "width": 50
+          },
+          {
+            "name": "io_out_bits_word_idx",
+            "direction": "output",
+            "width": 3
+          },
+          {
+            "name": "io_out_valid",
+            "direction": "output",
+            "width": 1
+          }
+        ],
+        "build_matches_locked_reference": true,
+        "amaranth_export_matches_locked_reference": true,
+        "deterministic_export": true
+      },
+      "executable_differential": {
+        "status": "PASS_BOUNDED",
+        "sample_count": 81,
+        "unknown_output_samples": 0,
+        "all_public_outputs_compared": true,
+        "outputs_compared": [
+          "io_out_valid",
+          "io_out_bits_source",
+          "io_out_bits_pf_source",
+          "io_out_bits_cmd",
+          "io_out_bits_addr",
+          "io_out_bits_vaddr",
+          "io_out_bits_full_overwrite",
+          "io_out_bits_word_idx",
+          "io_out_bits_amo_data",
+          "io_out_bits_amo_mask",
+          "io_out_bits_amo_cmp",
+          "io_out_bits_req_coh_state",
+          "io_out_bits_id",
+          "io_out_bits_isBtoT",
+          "io_out_bits_occupy_way",
+          "io_out_bits_cancel",
+          "io_out_bits_store_data",
+          "io_out_bits_store_mask"
+        ],
+        "payloads_compared_when_valid_is_low": true,
+        "resetless_startup_unclaimed": false,
+        "resetless_startup_outputs": [],
+        "trace_sha256": "4272e282423b6db15d3343cdfae37d99f7020b1bb73a73ddb3d3be977f0973f7",
+        "reference": {
+          "source": {
+            "path": "validation/reference-sv/TreeArbiter.sv",
+            "sha256": "13cee5287dace86c53e33f6aa952cd8f9d956a94c4eaf51a4609683199696647",
+            "bytes": 13279
+          },
+          "rtl_sha256": "13cee5287dace86c53e33f6aa952cd8f9d956a94c4eaf51a4609683199696647",
+          "sample_sha256": "8675774d435a819cfbb23982d04894ab724cac5e88364c01dd2de42005cab3ae",
+          "compile": {
+            "command": [
+              "wsl.exe",
+              "-d",
+              "Debian",
+              "--",
+              "verilator",
+              "--binary",
+              "--timing",
+              "-Wno-fatal",
+              "-DSYNTHESIS",
+              "--top-module",
+              "tb",
+              "--Mdir",
+              "/tmp/v2-dcache-completion-wave.hRr2Gp/TreeArbiter_reference_obj",
+              "-o",
+              "/tmp/v2-dcache-completion-wave.hRr2Gp/TreeArbiter_reference",
+              "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/TreeArbiter.sv",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/v2_dcache_completion_wave_w8078mis/TreeArbiter_tb.sv"
+            ],
+            "status": "PASS",
+            "returncode": 0,
+            "output_tail": "pSet_ha183790c__0__Slow.o Vtb___024root__DepSet_ha183790c__0__Slow.cpp\ng++   -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -include Vtb__pch.h.slow -c -o Vtb__Syms.o Vtb__Syms.cpp\necho \"\" > Vtb__ALL.verilator_deplist.tmp\ng++    verilated.o verilated_timing.o verilated_threads.o Vtb__ALL.a    -pthread -lpthread -latomic   -o /tmp/v2-dcache-completion-wave.hRr2Gp/TreeArbiter_reference\nrm Vtb__ALL.verilator_deplist.tmp\nmake: Leaving directory '/tmp/v2-dcache-completion-wave.hRr2Gp/TreeArbiter_reference_obj'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.187 MB sources in 3 modules, into 0.543 MB in 10 C++ files needing 0.001 MB\n- Verilator: Walltime 12.070 s (elab=0.005, cvt=0.027, bld=11.984); cpu 0.055 s on 1 threads; alloced 17.453 MB\n"
+          },
+          "simulation": {
+            "command": [
+              "wsl.exe",
+              "-d",
+              "Debian",
+              "--",
+              "/tmp/v2-dcache-completion-wave.hRr2Gp/TreeArbiter_reference"
+            ],
+            "status": "PASS",
+            "returncode": 0,
+            "output_tail": "0000000000000000000000000000000000000000000000000000 0000000000000000\nV:77:0 1 4 3 12 9c25c3af7cbc 3632193b74dd3 0 0 00000000000000000000000000000000 0000 00000000000000000000000000000000 2 00 0 e 0 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 0000000000000000\nV:78:0 1 3 0 13 08841550f645 29e15b5562c9c 0 0 2dac4088ea78b0c929df51c0ebbaa169 651c 759154bc9148d02464f3b315497b7755 2 17 1 5 0 16650257685ea0baaecf04168a9f5129ccf9d71a1cb3e532440f30245cb68eea96402c6faf42f219c4ad6ed45e5462e9e2e1eef44191e8d5e89f5da806ee5782 f92ed3a1d50ee39f\nV:79:0 1 d 6 02 5d08a46b63a2 3824fac13f9b4 0 0 00000000000000000000000000000000 0000 00000000000000000000000000000000 2 00 1 4 1 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 0000000000000000\nPASS\n- /mnt/c/Users/lishuo/AppData/Local/Temp/v2_dcache_completion_wave_w8078mis/TreeArbiter_tb.sv:4113: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 81ps; walltime 0.001 s; speed 44.869 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n",
+            "stderr_tail": ""
+          }
+        },
+        "amaranth_export": {
+          "rtl_sha256": "73f9bf7ad492a3468557075dbcacfbab9a5c1c93e787e1b42cad65e2104867a2",
+          "sample_sha256": "8675774d435a819cfbb23982d04894ab724cac5e88364c01dd2de42005cab3ae",
+          "compile": {
+            "command": [
+              "wsl.exe",
+              "-d",
+              "Debian",
+              "--",
+              "verilator",
+              "--binary",
+              "--timing",
+              "-Wno-fatal",
+              "-DSYNTHESIS",
+              "--top-module",
+              "tb",
+              "--Mdir",
+              "/tmp/v2-dcache-completion-wave.hRr2Gp/TreeArbiter_amaranth_obj",
+              "-o",
+              "/tmp/v2-dcache-completion-wave.hRr2Gp/TreeArbiter_amaranth",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/v2_dcache_completion_wave_w8078mis/TreeArbiter_amaranth.sv",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/v2_dcache_completion_wave_w8078mis/TreeArbiter_tb.sv"
+            ],
+            "status": "PASS",
+            "returncode": 0,
+            "output_tail": "2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                              : ... note: In instance 'tb.target'\n  293 |   assign \\$12  = selected == 1'h1;\n      |                           ^~\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_dcache_completion_wave_w8078mis/TreeArbiter_amaranth.sv:299:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'selected' generates 2 bits.\n                                                                                                                             : ... note: In instance 'tb.target'\n  299 |   assign \\$17  = ! selected;\n      |                  ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_dcache_completion_wave_w8078mis/TreeArbiter_amaranth.sv:300:27: Operator EQ expects 2 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                              : ... note: In instance 'tb.target'\n  300 |   assign \\$18  = selected == 1'h1;\n      |                           ^~\n"
+          },
+          "simulation": {
+            "command": [
+              "wsl.exe",
+              "-d",
+              "Debian",
+              "--",
+              "/tmp/v2-dcache-completion-wave.hRr2Gp/TreeArbiter_amaranth"
+            ],
+            "status": "PASS",
+            "returncode": 0,
+            "output_tail": "0000000000000000000000000000000000000000000000000000 0000000000000000\nV:77:0 1 4 3 12 9c25c3af7cbc 3632193b74dd3 0 0 00000000000000000000000000000000 0000 00000000000000000000000000000000 2 00 0 e 0 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 0000000000000000\nV:78:0 1 3 0 13 08841550f645 29e15b5562c9c 0 0 2dac4088ea78b0c929df51c0ebbaa169 651c 759154bc9148d02464f3b315497b7755 2 17 1 5 0 16650257685ea0baaecf04168a9f5129ccf9d71a1cb3e532440f30245cb68eea96402c6faf42f219c4ad6ed45e5462e9e2e1eef44191e8d5e89f5da806ee5782 f92ed3a1d50ee39f\nV:79:0 1 d 6 02 5d08a46b63a2 3824fac13f9b4 0 0 00000000000000000000000000000000 0000 00000000000000000000000000000000 2 00 1 4 1 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 0000000000000000\nPASS\n- /mnt/c/Users/lishuo/AppData/Local/Temp/v2_dcache_completion_wave_w8078mis/TreeArbiter_tb.sv:4113: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 81ps; walltime 0.001 s; speed 42.090 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n",
+            "stderr_tail": ""
+          }
+        }
+      }
+    },
+    "WritebackEntry": {
+      "status": "PASS_BOUNDED_RESETLESS_STARTUP_UNCLAIMED",
+      "abi": {
+        "status": "PASS",
+        "port_count": 24,
+        "input_count": 14,
+        "output_count": 10,
+        "ports": [
+          {
+            "name": "clock",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_block_addr_bits",
+            "direction": "output",
+            "width": 48
+          },
+          {
+            "name": "io_block_addr_valid",
+            "direction": "output",
+            "width": 1
+          },
+          {
+            "name": "io_id",
+            "direction": "input",
+            "width": 5
+          },
+          {
+            "name": "io_mem_grant_valid",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_mem_release_bits_address",
+            "direction": "output",
+            "width": 48
+          },
+          {
+            "name": "io_mem_release_bits_corrupt",
+            "direction": "output",
+            "width": 1
+          },
+          {
+            "name": "io_mem_release_bits_data",
+            "direction": "output",
+            "width": 256
+          },
+          {
+            "name": "io_mem_release_bits_opcode",
+            "direction": "output",
+            "width": 3
+          },
+          {
+            "name": "io_mem_release_bits_param",
+            "direction": "output",
+            "width": 3
+          },
+          {
+            "name": "io_mem_release_bits_source",
+            "direction": "output",
+            "width": 6
+          },
+          {
+            "name": "io_mem_release_ready",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_mem_release_valid",
+            "direction": "output",
+            "width": 1
+          },
+          {
+            "name": "io_primary_ready",
+            "direction": "output",
+            "width": 1
+          },
+          {
+            "name": "io_primary_valid",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_req_bits_addr",
+            "direction": "input",
+            "width": 48
+          },
+          {
+            "name": "io_req_bits_corrupt",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_req_bits_dirty",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_req_bits_hasData",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_req_bits_param",
+            "direction": "input",
+            "width": 3
+          },
+          {
+            "name": "io_req_bits_voluntary",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_req_data_data",
+            "direction": "input",
+            "width": 512
+          },
+          {
+            "name": "io_req_valid",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "reset",
+            "direction": "input",
+            "width": 1
+          }
+        ],
+        "build_matches_locked_reference": true,
+        "amaranth_export_matches_locked_reference": true,
+        "deterministic_export": true
+      },
+      "executable_differential": {
+        "status": "PASS_BOUNDED",
+        "sample_count": 146,
+        "unknown_output_samples": 0,
+        "all_public_outputs_compared": true,
+        "outputs_compared": [
+          "io_mem_release_valid",
+          "io_mem_release_bits_opcode",
+          "io_mem_release_bits_param",
+          "io_mem_release_bits_source",
+          "io_mem_release_bits_address",
+          "io_mem_release_bits_data",
+          "io_mem_release_bits_corrupt",
+          "io_primary_ready",
+          "io_block_addr_valid",
+          "io_block_addr_bits"
+        ],
+        "payloads_compared_when_valid_is_low": true,
+        "resetless_startup_unclaimed": true,
+        "resetless_startup_outputs": [
+          "io_mem_release_bits_opcode",
+          "io_mem_release_bits_param",
+          "io_mem_release_bits_address",
+          "io_mem_release_bits_data",
+          "io_mem_release_bits_corrupt",
+          "io_block_addr_bits"
+        ],
+        "trace_sha256": "55e7b5c24797e9fbae9ba23c85c579b23e74c4a3d5d1c9146dfe554442c43da0",
+        "reference": {
+          "source": {
+            "path": "validation/reference-sv/WritebackEntry.sv",
+            "sha256": "00054094efb22c020262ff8ba26f4d2c62c68291e784f82b63caad3495f3a0ce",
+            "bytes": 22509
+          },
+          "rtl_sha256": "00054094efb22c020262ff8ba26f4d2c62c68291e784f82b63caad3495f3a0ce",
+          "sample_sha256": "05070064ce7f7bff5b37bcc6054e721364bc0fc98f4526c0ce24d2464cf0865d",
+          "compile": {
+            "command": [
+              "wsl.exe",
+              "-d",
+              "Debian",
+              "--",
+              "verilator",
+              "--binary",
+              "--timing",
+              "-Wno-fatal",
+              "-DSYNTHESIS",
+              "--top-module",
+              "tb",
+              "--Mdir",
+              "/tmp/v2-dcache-completion-wave.hRr2Gp/WritebackEntry_reference_obj",
+              "-o",
+              "/tmp/v2-dcache-completion-wave.hRr2Gp/WritebackEntry_reference",
+              "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/WritebackEntry.sv",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/v2_dcache_completion_wave_w8078mis/WritebackEntry_tb.sv"
+            ],
+            "status": "PASS",
+            "returncode": 0,
+            "output_tail": "a183790c__0__Slow.o Vtb___024root__DepSet_ha183790c__0__Slow.cpp\ng++   -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -include Vtb__pch.h.slow -c -o Vtb__Syms.o Vtb__Syms.cpp\necho \"\" > Vtb__ALL.verilator_deplist.tmp\ng++    verilated.o verilated_timing.o verilated_threads.o Vtb__ALL.a    -pthread -lpthread -latomic   -o /tmp/v2-dcache-completion-wave.hRr2Gp/WritebackEntry_reference\nrm Vtb__ALL.verilator_deplist.tmp\nmake: Leaving directory '/tmp/v2-dcache-completion-wave.hRr2Gp/WritebackEntry_reference_obj'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.083 MB sources in 3 modules, into 0.693 MB in 10 C++ files needing 0.006 MB\n- Verilator: Walltime 18.051 s (elab=0.003, cvt=0.048, bld=17.940); cpu 0.074 s on 1 threads; alloced 24.836 MB\n"
+          },
+          "simulation": {
+            "command": [
+              "wsl.exe",
+              "-d",
+              "Debian",
+              "--",
+              "/tmp/v2-dcache-completion-wave.hRr2Gp/WritebackEntry_reference"
+            ],
+            "status": "PASS",
+            "returncode": 0,
+            "output_tail": "0c 1538854b621d 8da174e7730ec40a5aae5d6b7a1e22e80d7f7bf9b2e6cd27d38d04d0c15f8901 0 1 0 1538854b621d\nV:68:1 0 7 4 0c 1538854b621d 8da174e7730ec40a5aae5d6b7a1e22e80d7f7bf9b2e6cd27d38d04d0c15f8901 0 1 0 1538854b621d\nV:69:0 0 7 4 16 1538854b621d 8da174e7730ec40a5aae5d6b7a1e22e80d7f7bf9b2e6cd27d38d04d0c15f8901 0 1 0 1538854b621d\nV:69:1 0 7 4 16 1538854b621d 8da174e7730ec40a5aae5d6b7a1e22e80d7f7bf9b2e6cd27d38d04d0c15f8901 0 1 0 1538854b621d\nV:70:0 0 7 4 00 1538854b621d 8da174e7730ec40a5aae5d6b7a1e22e80d7f7bf9b2e6cd27d38d04d0c15f8901 0 1 0 1538854b621d\nV:70:1 0 5 3 00 22166941b152 04da239e8f058751a7f9c092e13fa38cca7d26ae7c10a9e6f4469ef46ca5356c 1 0 1 22166941b152\nV:71:0 0 5 3 01 22166941b152 04da239e8f058751a7f9c092e13fa38cca7d26ae7c10a9e6f4469ef46ca5356c 1 0 1 22166941b152\nV:71:1 1 5 3 01 22166941b152 5184b871d6b8224fe1f7bcfe920a27991bcb70c5c77496f746ed4d29f7f81636 1 0 1 22166941b152\nPASS\n- /mnt/c/Users/lishuo/AppData/Local/Temp/v2_dcache_completion_wave_w8078mis/WritebackEntry_tb.sv:1526: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 220ps; walltime 0.003 s; speed 56.861 ns/s\n- Verilator: cpu 0.004 s on 1 threads; alloced 153 MB\n",
+            "stderr_tail": ""
+          }
+        },
+        "amaranth_export": {
+          "rtl_sha256": "02796245fd1c329ff3b128486f47696e0094a34c784941abd51d8ba77b38f84b",
+          "sample_sha256": "05070064ce7f7bff5b37bcc6054e721364bc0fc98f4526c0ce24d2464cf0865d",
+          "compile": {
+            "command": [
+              "wsl.exe",
+              "-d",
+              "Debian",
+              "--",
+              "verilator",
+              "--binary",
+              "--timing",
+              "-Wno-fatal",
+              "-DSYNTHESIS",
+              "--top-module",
+              "tb",
+              "--Mdir",
+              "/tmp/v2-dcache-completion-wave.hRr2Gp/WritebackEntry_amaranth_obj",
+              "-o",
+              "/tmp/v2-dcache-completion-wave.hRr2Gp/WritebackEntry_amaranth",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/v2_dcache_completion_wave_w8078mis/WritebackEntry_amaranth.sv",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/v2_dcache_completion_wave_w8078mis/WritebackEntry_tb.sv"
+            ],
+            "status": "PASS",
+            "returncode": 0,
+            "output_tail": "bit on the LHS, but LHS's VARREF 'state' generates 2 bits.\n                                                                                                                                : ... note: In instance 'tb.target'\n  205 |   assign \\$67  = ! state;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_dcache_completion_wave_w8078mis/WritebackEntry_amaranth.sv:245:29: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'state' generates 2 bits.\n                                                                                                                                : ... note: In instance 'tb.target'\n  245 |   assign io_primary_ready = ! state;\n      |                             ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_dcache_completion_wave_w8078mis/WritebackEntry_amaranth.sv:253:17: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'state' generates 2 bits.\n                                                                                                                                : ... note: In instance 'tb.target'\n  253 |   assign \\$4  = ! state;\n      |                 ^\n"
+          },
+          "simulation": {
+            "command": [
+              "wsl.exe",
+              "-d",
+              "Debian",
+              "--",
+              "/tmp/v2-dcache-completion-wave.hRr2Gp/WritebackEntry_amaranth"
+            ],
+            "status": "PASS",
+            "returncode": 0,
+            "output_tail": "c 1538854b621d 8da174e7730ec40a5aae5d6b7a1e22e80d7f7bf9b2e6cd27d38d04d0c15f8901 0 1 0 1538854b621d\nV:68:1 0 7 4 0c 1538854b621d 8da174e7730ec40a5aae5d6b7a1e22e80d7f7bf9b2e6cd27d38d04d0c15f8901 0 1 0 1538854b621d\nV:69:0 0 7 4 16 1538854b621d 8da174e7730ec40a5aae5d6b7a1e22e80d7f7bf9b2e6cd27d38d04d0c15f8901 0 1 0 1538854b621d\nV:69:1 0 7 4 16 1538854b621d 8da174e7730ec40a5aae5d6b7a1e22e80d7f7bf9b2e6cd27d38d04d0c15f8901 0 1 0 1538854b621d\nV:70:0 0 7 4 00 1538854b621d 8da174e7730ec40a5aae5d6b7a1e22e80d7f7bf9b2e6cd27d38d04d0c15f8901 0 1 0 1538854b621d\nV:70:1 0 5 3 00 22166941b152 04da239e8f058751a7f9c092e13fa38cca7d26ae7c10a9e6f4469ef46ca5356c 1 0 1 22166941b152\nV:71:0 0 5 3 01 22166941b152 04da239e8f058751a7f9c092e13fa38cca7d26ae7c10a9e6f4469ef46ca5356c 1 0 1 22166941b152\nV:71:1 1 5 3 01 22166941b152 5184b871d6b8224fe1f7bcfe920a27991bcb70c5c77496f746ed4d29f7f81636 1 0 1 22166941b152\nPASS\n- /mnt/c/Users/lishuo/AppData/Local/Temp/v2_dcache_completion_wave_w8078mis/WritebackEntry_tb.sv:1526: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 220ps; walltime 0.002 s; speed 105.390 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n",
+            "stderr_tail": ""
+          }
+        }
+      }
+    },
+    "WritebackEntry_15": {
+      "status": "PASS_BOUNDED_RESETLESS_STARTUP_UNCLAIMED",
+      "abi": {
+        "status": "PASS",
+        "port_count": 24,
+        "input_count": 14,
+        "output_count": 10,
+        "ports": [
+          {
+            "name": "clock",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_block_addr_bits",
+            "direction": "output",
+            "width": 48
+          },
+          {
+            "name": "io_block_addr_valid",
+            "direction": "output",
+            "width": 1
+          },
+          {
+            "name": "io_id",
+            "direction": "input",
+            "width": 6
+          },
+          {
+            "name": "io_mem_grant_valid",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_mem_release_bits_address",
+            "direction": "output",
+            "width": 48
+          },
+          {
+            "name": "io_mem_release_bits_corrupt",
+            "direction": "output",
+            "width": 1
+          },
+          {
+            "name": "io_mem_release_bits_data",
+            "direction": "output",
+            "width": 256
+          },
+          {
+            "name": "io_mem_release_bits_opcode",
+            "direction": "output",
+            "width": 3
+          },
+          {
+            "name": "io_mem_release_bits_param",
+            "direction": "output",
+            "width": 3
+          },
+          {
+            "name": "io_mem_release_bits_source",
+            "direction": "output",
+            "width": 6
+          },
+          {
+            "name": "io_mem_release_ready",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_mem_release_valid",
+            "direction": "output",
+            "width": 1
+          },
+          {
+            "name": "io_primary_ready",
+            "direction": "output",
+            "width": 1
+          },
+          {
+            "name": "io_primary_valid",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_req_bits_addr",
+            "direction": "input",
+            "width": 48
+          },
+          {
+            "name": "io_req_bits_corrupt",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_req_bits_dirty",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_req_bits_hasData",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_req_bits_param",
+            "direction": "input",
+            "width": 3
+          },
+          {
+            "name": "io_req_bits_voluntary",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_req_data_data",
+            "direction": "input",
+            "width": 512
+          },
+          {
+            "name": "io_req_valid",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "reset",
+            "direction": "input",
+            "width": 1
+          }
+        ],
+        "build_matches_locked_reference": true,
+        "amaranth_export_matches_locked_reference": true,
+        "deterministic_export": true
+      },
+      "executable_differential": {
+        "status": "PASS_BOUNDED",
+        "sample_count": 146,
+        "unknown_output_samples": 0,
+        "all_public_outputs_compared": true,
+        "outputs_compared": [
+          "io_mem_release_valid",
+          "io_mem_release_bits_opcode",
+          "io_mem_release_bits_param",
+          "io_mem_release_bits_source",
+          "io_mem_release_bits_address",
+          "io_mem_release_bits_data",
+          "io_mem_release_bits_corrupt",
+          "io_primary_ready",
+          "io_block_addr_valid",
+          "io_block_addr_bits"
+        ],
+        "payloads_compared_when_valid_is_low": true,
+        "resetless_startup_unclaimed": true,
+        "resetless_startup_outputs": [
+          "io_mem_release_bits_opcode",
+          "io_mem_release_bits_param",
+          "io_mem_release_bits_address",
+          "io_mem_release_bits_data",
+          "io_mem_release_bits_corrupt",
+          "io_block_addr_bits"
+        ],
+        "trace_sha256": "da8225917e36b4bac0559ca73bb2dd1d03e962adf707dbbc37f038ba57d418d6",
+        "reference": {
+          "source": {
+            "path": "validation/reference-sv/WritebackEntry_15.sv",
+            "sha256": "4ee52a644ce1af56b87e498651ccedd7bcab56ceaf99c9e7cb2acff1cc1e1d03",
+            "bytes": 22415
+          },
+          "rtl_sha256": "4ee52a644ce1af56b87e498651ccedd7bcab56ceaf99c9e7cb2acff1cc1e1d03",
+          "sample_sha256": "60324b6aa72f68e0ae8e802f9fba82b25573f3a7af602a6fa013a6c96975fd82",
+          "compile": {
+            "command": [
+              "wsl.exe",
+              "-d",
+              "Debian",
+              "--",
+              "verilator",
+              "--binary",
+              "--timing",
+              "-Wno-fatal",
+              "-DSYNTHESIS",
+              "--top-module",
+              "tb",
+              "--Mdir",
+              "/tmp/v2-dcache-completion-wave.hRr2Gp/WritebackEntry_15_reference_obj",
+              "-o",
+              "/tmp/v2-dcache-completion-wave.hRr2Gp/WritebackEntry_15_reference",
+              "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/WritebackEntry_15.sv",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/v2_dcache_completion_wave_w8078mis/WritebackEntry_15_tb.sv"
+            ],
+            "status": "PASS",
+            "returncode": 0,
+            "output_tail": "0c__0__Slow.o Vtb___024root__DepSet_ha183790c__0__Slow.cpp\ng++   -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -include Vtb__pch.h.slow -c -o Vtb__Syms.o Vtb__Syms.cpp\necho \"\" > Vtb__ALL.verilator_deplist.tmp\ng++    verilated.o verilated_timing.o verilated_threads.o Vtb__ALL.a    -pthread -lpthread -latomic   -o /tmp/v2-dcache-completion-wave.hRr2Gp/WritebackEntry_15_reference\nrm Vtb__ALL.verilator_deplist.tmp\nmake: Leaving directory '/tmp/v2-dcache-completion-wave.hRr2Gp/WritebackEntry_15_reference_obj'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.083 MB sources in 3 modules, into 0.688 MB in 10 C++ files needing 0.006 MB\n- Verilator: Walltime 14.377 s (elab=0.003, cvt=0.044, bld=14.262); cpu 0.070 s on 1 threads; alloced 24.832 MB\n"
+          },
+          "simulation": {
+            "command": [
+              "wsl.exe",
+              "-d",
+              "Debian",
+              "--",
+              "/tmp/v2-dcache-completion-wave.hRr2Gp/WritebackEntry_15_reference"
+            ],
+            "status": "PASS",
+            "returncode": 0,
+            "output_tail": "f5898797a399 0000000000000000000000000000000000000000000000000000000000000000 1 0 1 f5898797a399\nV:68:1 1 4 1 30 f5898797a399 0000000000000000000000000000000000000000000000000000000000000000 1 0 1 f5898797a399\nV:69:0 1 4 1 2e f5898797a399 0000000000000000000000000000000000000000000000000000000000000000 1 0 1 f5898797a399\nV:69:1 1 4 1 2e f5898797a399 0000000000000000000000000000000000000000000000000000000000000000 1 0 1 f5898797a399\nV:70:0 1 4 1 03 f5898797a399 0000000000000000000000000000000000000000000000000000000000000000 1 0 1 f5898797a399\nV:70:1 1 4 1 03 f5898797a399 0000000000000000000000000000000000000000000000000000000000000000 1 0 1 f5898797a399\nV:71:0 1 4 1 31 f5898797a399 0000000000000000000000000000000000000000000000000000000000000000 1 0 1 f5898797a399\nV:71:1 1 4 1 31 f5898797a399 0000000000000000000000000000000000000000000000000000000000000000 1 0 1 f5898797a399\nPASS\n- /mnt/c/Users/lishuo/AppData/Local/Temp/v2_dcache_completion_wave_w8078mis/WritebackEntry_15_tb.sv:1526: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 220ps; walltime 0.002 s; speed 96.133 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n",
+            "stderr_tail": ""
+          }
+        },
+        "amaranth_export": {
+          "rtl_sha256": "cfb52a5d88169eb6891fc540f58c705478e151024feab3133f0eeb5aafed80b4",
+          "sample_sha256": "60324b6aa72f68e0ae8e802f9fba82b25573f3a7af602a6fa013a6c96975fd82",
+          "compile": {
+            "command": [
+              "wsl.exe",
+              "-d",
+              "Debian",
+              "--",
+              "verilator",
+              "--binary",
+              "--timing",
+              "-Wno-fatal",
+              "-DSYNTHESIS",
+              "--top-module",
+              "tb",
+              "--Mdir",
+              "/tmp/v2-dcache-completion-wave.hRr2Gp/WritebackEntry_15_amaranth_obj",
+              "-o",
+              "/tmp/v2-dcache-completion-wave.hRr2Gp/WritebackEntry_15_amaranth",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/v2_dcache_completion_wave_w8078mis/WritebackEntry_15_amaranth.sv",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/v2_dcache_completion_wave_w8078mis/WritebackEntry_15_tb.sv"
+            ],
+            "status": "PASS",
+            "returncode": 0,
+            "output_tail": " but LHS's VARREF 'state' generates 2 bits.\n                                                                                                                                   : ... note: In instance 'tb.target'\n  205 |   assign \\$67  = ! state;\n      |                  ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_dcache_completion_wave_w8078mis/WritebackEntry_15_amaranth.sv:245:29: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'state' generates 2 bits.\n                                                                                                                                   : ... note: In instance 'tb.target'\n  245 |   assign io_primary_ready = ! state;\n      |                             ^\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/v2_dcache_completion_wave_w8078mis/WritebackEntry_15_amaranth.sv:253:17: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'state' generates 2 bits.\n                                                                                                                                   : ... note: In instance 'tb.target'\n  253 |   assign \\$4  = ! state;\n      |                 ^\n"
+          },
+          "simulation": {
+            "command": [
+              "wsl.exe",
+              "-d",
+              "Debian",
+              "--",
+              "/tmp/v2-dcache-completion-wave.hRr2Gp/WritebackEntry_15_amaranth"
+            ],
+            "status": "PASS",
+            "returncode": 0,
+            "output_tail": "5898797a399 0000000000000000000000000000000000000000000000000000000000000000 1 0 1 f5898797a399\nV:68:1 1 4 1 30 f5898797a399 0000000000000000000000000000000000000000000000000000000000000000 1 0 1 f5898797a399\nV:69:0 1 4 1 2e f5898797a399 0000000000000000000000000000000000000000000000000000000000000000 1 0 1 f5898797a399\nV:69:1 1 4 1 2e f5898797a399 0000000000000000000000000000000000000000000000000000000000000000 1 0 1 f5898797a399\nV:70:0 1 4 1 03 f5898797a399 0000000000000000000000000000000000000000000000000000000000000000 1 0 1 f5898797a399\nV:70:1 1 4 1 03 f5898797a399 0000000000000000000000000000000000000000000000000000000000000000 1 0 1 f5898797a399\nV:71:0 1 4 1 31 f5898797a399 0000000000000000000000000000000000000000000000000000000000000000 1 0 1 f5898797a399\nV:71:1 1 4 1 31 f5898797a399 0000000000000000000000000000000000000000000000000000000000000000 1 0 1 f5898797a399\nPASS\n- /mnt/c/Users/lishuo/AppData/Local/Temp/v2_dcache_completion_wave_w8078mis/WritebackEntry_15_tb.sv:1526: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 220ps; walltime 0.001 s; speed 116.738 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n",
+            "stderr_tail": ""
+          }
+        }
+      }
+    }
+  },
+  "unclosed": [
+    "CMOUnit and MissEntry remain CONTRACT_ONLY pending complete state, data, and TileLink behavior.",
+    "ProbeEntry remains CONTRACT_ONLY; its differential is bounded and its reset-less startup state is unclaimed.",
+    "WritebackEntry and WritebackEntry_15 reset-less startup state is unclaimed by bounded simulation.",
+    "Formal equivalence, reset-entry proof, full MissQueue aggregate, and parent DCache closure remain pending.",
+    "The prior WritebackEntry 843/843 receipt was bound to the pre-wave Build hash; the coordinator must decide whether the current source-key requires a serial focused rerun."
+  ]
+}

@@ -1,9 +1,4 @@
-"""Standalone XRet CSR permission leaf for the V2 NewCSR control family.
-
-The port names and equations are taken from the locked
-``XRetPermitModule.scala`` semantics.  The sibling CSR permit members stay in
-their aggregate Build and are intentionally outside this focused leaf.
-"""
+"""Combinational privilege checks for exception-return instructions."""
 
 from __future__ import annotations
 
@@ -40,14 +35,14 @@ __all__ = ["COVERED_MODULES", "PORT_SPECS", "PermitModule", "build_verilog", "ma
 # =============================================================================
 # Configuration
 # =============================================================================
-# XRetPermitModule is fixed-width by the locked V2 hierarchy.
+# Privilege has two bits; all request and permission fields have one bit.
 
 
 # =============================================================================
 # Implementation
 # =============================================================================
 class PermitModule(Elaboratable):
-    """Combinational XRet legality equations from CSRPermitModule.scala."""
+    """Evaluate return legality, illegal instructions and virtual traps."""
 
     def __init__(self, name: str = "XRetPermitModule") -> None:
         if name != COVERED_MODULES[0]:

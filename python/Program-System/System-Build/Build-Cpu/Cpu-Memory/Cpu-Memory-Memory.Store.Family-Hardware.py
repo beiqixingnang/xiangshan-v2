@@ -1,27 +1,56 @@
+#!/usr/bin/env python3
+# Module Contract
 """UHSC V2 store-buffer family aggregate.
 昆明湖 V2 store-buffer family 聚合。
 
 Sbuffer and store-queue variants retain their exact locked ANSI surfaces.
-This bounded subject carries explicit storage, exception, split, and handshake
-state; complete parent forwarding remains a differential obligation.
+Store data arrays and the exception-address queue implement their locked leaf
+behavior. Misaligned-store transformation and StoreUnit remain contract-only
+until their complete state, forwarding, and exception behavior is verified.
 """
 
 from __future__ import annotations
 
-from typing import Any
+from contextlib import AbstractContextManager
+from typing import Any, cast
 
-from amaranth import Array, ClockDomain, Elaboratable, Module, Mux, Signal
+from amaranth import Array, ClockDomain, Elaboratable, Module, Mux, Signal, Value
 from amaranth.back import verilog
 
 
-__all__ = ["COVERED_MODULES", "IMPLEMENTED_MEMBERS", "CONTRACT_ONLY_MEMBERS", "StoreFamily", "build_verilog", "main"]
+# Configuration
+__all__ = [
+    "COVERED_MODULES",
+    "IMPLEMENTED_MEMBERS",
+    "CONTRACT_ONLY_MEMBERS",
+    "PORT_SPECS",
+    "StoreFamily",
+    "build_verilog",
+    "main",
+]
 COVERED_MODULES = ("SbufferData", "StoreExceptionBuffer", "StoreMisalignBuffer", "StoreUnit")
-IMPLEMENTED_MEMBERS: tuple[str, ...] = ()
-CONTRACT_ONLY_MEMBERS = COVERED_MODULES
-# CONTRACT_ONLY: stateful bounded members are usable RTL subjects but remain
-# outside behavioral-equivalence promotion until full parent closure evidence.
+IMPLEMENTED_MEMBERS: tuple[str, ...] = ("SbufferData", "StoreExceptionBuffer")
+CONTRACT_ONLY_MEMBERS = ("StoreMisalignBuffer", "StoreUnit")
 
 PortSpec = tuple[str, str, int]
+
+
+def _if(module: Module, condition: Any) -> AbstractContextManager[None]:
+    """Expose Amaranth's generator-backed conditional as a typed context manager."""
+
+    return cast(AbstractContextManager[None], module.If(condition))
+
+
+def _elif(module: Module, condition: Any) -> AbstractContextManager[None]:
+    """Expose Amaranth's generator-backed elif as a typed context manager."""
+
+    return cast(AbstractContextManager[None], module.Elif(condition))
+
+
+def _else(module: Module) -> AbstractContextManager[None]:
+    """Expose Amaranth's generator-backed else as a typed context manager."""
+
+    return cast(AbstractContextManager[None], module.Else())
 
 PORT_SPECS: dict[str, tuple[PortSpec, ...]] = {
     'SbufferData': (
@@ -2716,6 +2745,7 @@ PORT_SPECS: dict[str, tuple[PortSpec, ...]] = {
     ),
 }
 
+# Implementation
 class StoreFamily(Elaboratable):
     """One exact store family member; CONTRACT_ONLY pending full closure differential."""
 
@@ -2744,81 +2774,279 @@ class StoreFamily(Elaboratable):
                 module.d.comb += self.ports[name].eq(0)
 
     def _sbuffer_data(self, module: Module) -> None:
-        """Implement SbufferData's delayed masked byte-array writes."""
+        """Implement two-cycle per-line byte writes and delayed line-mask flushes."""
 
-        data = [[ [Signal(8, name=f"sbuf_data_{line}_{word}_{byte}") for byte in range(16)]
-                  for word in range(4)] for line in range(16)]
-        mask = [[ [Signal(name=f"sbuf_mask_{line}_{word}_{byte}") for byte in range(16)]
-                  for word in range(4)] for line in range(16)]
-        req_valid = [Signal(name=f"sbuf_req_valid_{port}") for port in range(2)]
-        req_wvec = [Signal(16, name=f"sbuf_req_wvec_{port}") for port in range(2)]
-        req_mask = [Signal(16, name=f"sbuf_req_mask_{port}") for port in range(2)]
-        req_data = [Signal(128, name=f"sbuf_req_data_{port}") for port in range(2)]
-        req_offset = [Signal(44, name=f"sbuf_req_offset_{port}") for port in range(2)]
-        req_wline = [Signal(name=f"sbuf_req_wline_{port}") for port in range(2)]
-        flush_valid = Signal(name="sbuf_flush_valid")
-        flush_wvec = Signal(16, name="sbuf_flush_wvec")
+        data = [
+            [
+                [
+                    Signal(8, reset_less=True, name=f"sbuf_data_{line}_{word}_{byte}")
+                    for byte in range(16)
+                ]
+                for word in range(4)
+            ]
+            for line in range(16)
+        ]
+        mask = [
+            [
+                [Signal(name=f"sbuf_mask_{line}_{word}_{byte}") for byte in range(16)]
+                for word in range(4)
+            ]
+            for line in range(16)
+        ]
+        line_write = [
+            [
+                Signal(reset=0, name=f"sbuf_s2_wen_{port}_{line}")
+                for line in range(16)
+            ]
+            for port in range(2)
+        ]
+        flush_line = [
+            Signal(reset=0, name=f"sbuf_flush_{line}") for line in range(16)
+        ]
+        write_buffer = [
+            [
+                {
+                    "mask": Signal(16, reset_less=True, name=f"sbuf_mask_reg_{port}_{line}"),
+                    "data": Signal(128, reset_less=True, name=f"sbuf_data_reg_{port}_{line}"),
+                    "offset": Signal(2, reset_less=True, name=f"sbuf_offset_reg_{port}_{line}"),
+                    "wline": Signal(reset_less=True, name=f"sbuf_wline_reg_{port}_{line}"),
+                }
+                for line in range(16)
+            ]
+            for port in range(2)
+        ]
+
         for line in range(16):
+            module.d.sync += flush_line[line].eq(
+                self.ports["io_maskFlushReq_0_valid"]
+                & self.ports["io_maskFlushReq_0_bits_wvec"][line]
+            )
+            for port in range(2):
+                prefix = f"io_writeReq_{port}"
+                s1_write = (
+                    self.ports[f"{prefix}_valid"]
+                    & self.ports[f"{prefix}_bits_wvec"][line]
+                )
+                module.d.sync += line_write[port][line].eq(s1_write)
+                with _if(module, s1_write):
+                    module.d.sync += [
+                        write_buffer[port][line]["mask"].eq(
+                            self.ports[f"{prefix}_bits_mask"]
+                        ),
+                        write_buffer[port][line]["data"].eq(
+                            self.ports[f"{prefix}_bits_data"]
+                        ),
+                        write_buffer[port][line]["offset"].eq(
+                            self.ports[f"{prefix}_bits_vwordOffset"][:2]
+                        ),
+                        write_buffer[port][line]["wline"].eq(
+                            self.ports[f"{prefix}_bits_wline"]
+                        ),
+                    ]
+
             for word in range(4):
                 for byte in range(16):
-                    module.d.comb += self.ports[f"io_dataOut_{line}_{word}_{byte}"].eq(data[line][word][byte])
-                    module.d.comb += self.ports[f"io_maskOut_{line}_{word}_{byte}"].eq(mask[line][word][byte])
-        with module.If(self.ports["reset"]):
-            module.d.sync += [req_valid[port].eq(0) for port in range(2)] + [flush_valid.eq(0)]
-        with module.Else():
-            for line in range(16):
-                with module.If(flush_valid & flush_wvec[line]):
-                    for word in range(4):
-                        for byte in range(16):
-                            module.d.sync += mask[line][word][byte].eq(0)
-                for port in range(2):
-                    for word in range(4):
-                        for byte in range(16):
-                            write_byte = req_valid[port] & req_wvec[port][line] & (
-                                req_wline[port] | (req_mask[port][byte] & (req_offset[port][:2] == word))
+                    write_enables = []
+                    write_bytes = []
+                    for port in range(2):
+                        fields = write_buffer[port][line]
+                        write_enable = line_write[port][line] & (
+                            fields["wline"]
+                            | (
+                                fields["mask"][byte]
+                                & (fields["offset"] == word)
                             )
-                            with module.If(write_byte):
-                                module.d.sync += [
-                                    data[line][word][byte].eq(req_data[port][byte * 8:(byte + 1) * 8]),
-                                    mask[line][word][byte].eq(1),
-                                ]
-            for port in range(2):
-                module.d.sync += [
-                    req_valid[port].eq(self.ports[f"io_writeReq_{port}_valid"]),
-                    req_wvec[port].eq(self.ports[f"io_writeReq_{port}_bits_wvec"]),
-                    req_mask[port].eq(self.ports[f"io_writeReq_{port}_bits_mask"]),
-                    req_data[port].eq(self.ports[f"io_writeReq_{port}_bits_data"]),
-                    req_offset[port].eq(self.ports[f"io_writeReq_{port}_bits_vwordOffset"]),
-                    req_wline[port].eq(self.ports[f"io_writeReq_{port}_bits_wline"]),
-                ]
-            module.d.sync += [flush_valid.eq(self.ports["io_maskFlushReq_0_valid"]),
-                              flush_wvec.eq(self.ports["io_maskFlushReq_0_bits_wvec"])]
+                        )
+                        write_enables.append(write_enable)
+                        write_bytes.append(fields["data"][byte * 8:(byte + 1) * 8])
+
+                    module.d.sync += mask[line][word][byte].eq(
+                        write_enables[0]
+                        | write_enables[1]
+                        | (~flush_line[line] & mask[line][word][byte])
+                    )
+                    with _if(module, write_enables[0]):
+                        module.d.sync += data[line][word][byte].eq(write_bytes[0])
+                    with _if(module, write_enables[1]):
+                        module.d.sync += data[line][word][byte].eq(write_bytes[1])
+
+                    module.d.comb += [
+                        self.ports[f"io_dataOut_{line}_{word}_{byte}"].eq(
+                            data[line][word][byte]
+                        ),
+                        self.ports[f"io_maskOut_{line}_{word}_{byte}"].eq(
+                            mask[line][word][byte]
+                        ),
+                    ]
 
     def _exception_buffer(self, module: Module) -> None:
-        """Retain the oldest exception address until redirect clears it."""
+        """Delay all eligible store exceptions, then retain the oldest ROB/uop."""
 
-        saved = {name: Signal(width, name=f"seb_{name}") for name, direction, width in self.specs
-                 if direction == "output"}
-        any_exception = Signal(name="seb_valid")
-        candidates = [i for i in range(7) if f"io_storeAddrIn_{i}_valid" in self.ports]
-        with module.If(self.ports["reset"] | self.ports["io_redirect_valid"]):
-            module.d.sync += any_exception.eq(0)
-        with module.Elif(~any_exception):
-            for i in candidates:
-                valid = self.ports[f"io_storeAddrIn_{i}_valid"]
-                exc = [self.ports[n] for n in self.ports if n.startswith(f"io_storeAddrIn_{i}_bits_uop_exceptionVec_")]
-                has_exc = valid & (exc[0] if exc else 0)
-                for signal in exc[1:]:
-                    has_exc = has_exc | signal
-                with module.If(has_exc):
-                    module.d.sync += any_exception.eq(1)
-                    for out_name, reg in saved.items():
-                        suffix = out_name.replace("io_exceptionAddr_", "")
-                        source = f"io_storeAddrIn_{i}_bits_{suffix}"
-                        if source in self.ports:
-                            module.d.sync += reg.eq(self.ports[source])
-        for name, reg in saved.items():
-            module.d.comb += self.ports[name].eq(reg)
+        candidate_count = 7
+        exception_bits = (3, 6, 7, 15, 19, 23)
+        payload_sources = {
+            "io_exceptionAddr_vaddr": "fullva",
+            "io_exceptionAddr_vaNeedExt": "vaNeedExt",
+            "io_exceptionAddr_isHyper": "isHyper",
+            "io_exceptionAddr_gpaddr": "gpaddr",
+            "io_exceptionAddr_isForVSnonLeafPTE": "isForVSnonLeafPTE",
+        }
+        payload_widths = {
+            name: width
+            for name, direction, width in self.specs
+            if direction == "output"
+        }
+        req_valid = Signal(reset=0, name="req_valid")
+        req_uop_idx = Signal(7, reset_less=True, name="req_uop_uopIdx")
+        req_rob_flag = Signal(reset_less=True, name="req_uop_robIdx_flag")
+        req_rob_value = Signal(8, reset_less=True, name="req_uop_robIdx_value")
+        req_payload = {
+            name: Signal(width, reset_less=True, name=f"req_{name}")
+            for name, width in payload_widths.items()
+        }
+        s2_valid = [
+            Signal(reset_less=True, name=f"s2_valid_REG_{index}")
+            for index in range(candidate_count)
+        ]
+        s2_uop_idx = [
+            Signal(7, reset_less=True, name=f"s2_req_{index}_uopIdx")
+            for index in range(candidate_count)
+        ]
+        s2_rob_flag = [
+            Signal(reset_less=True, name=f"s2_req_{index}_robIdx_flag")
+            for index in range(candidate_count)
+        ]
+        s2_rob_value = [
+            Signal(8, reset_less=True, name=f"s2_req_{index}_robIdx_value")
+            for index in range(candidate_count)
+        ]
+        s2_payload = {
+            name: [
+                Signal(width, reset_less=True, name=f"s2_req_{index}_{name}")
+                for index in range(candidate_count)
+            ]
+            for name, width in payload_widths.items()
+        }
+
+        def need_flush(flag: Value, value: Value) -> Value:
+            redirect_valid = self.ports["io_redirect_valid"]
+            redirect_flag = self.ports["io_redirect_bits_robIdx_flag"]
+            redirect_value = self.ports["io_redirect_bits_robIdx_value"]
+            equal = cast(Value, flag == redirect_flag) & cast(
+                Value, value == redirect_value
+            )
+            after = (flag ^ redirect_flag) ^ cast(
+                Value, value > redirect_value
+            )
+            return cast(Value, redirect_valid) & (
+                (cast(Value, self.ports["io_redirect_bits_level"]) & equal) | after
+            )
+
+        s1_valid = []
+        for index in range(candidate_count):
+            prefix = f"io_storeAddrIn_{index}"
+            exception_terms = [
+                self.ports[f"{prefix}_bits_uop_exceptionVec_{bit}"]
+                for bit in exception_bits
+                if f"{prefix}_bits_uop_exceptionVec_{bit}" in self.ports
+            ]
+            exception_valid = exception_terms[0]
+            for term in exception_terms[1:]:
+                exception_valid = exception_valid | term
+            ptr_flag = self.ports[f"{prefix}_bits_uop_robIdx_flag"]
+            ptr_value = self.ports[f"{prefix}_bits_uop_robIdx_value"]
+            eligible = (
+                self.ports[f"{prefix}_valid"]
+                & exception_valid
+                & ~need_flush(ptr_flag, ptr_value)
+            )
+            s1_valid.append(eligible)
+            module.d.sync += s2_valid[index].eq(eligible)
+            with _if(module, eligible):
+                module.d.sync += [
+                    s2_uop_idx[index].eq(self.ports[f"{prefix}_bits_uop_uopIdx"]),
+                    s2_rob_flag[index].eq(ptr_flag),
+                    s2_rob_value[index].eq(ptr_value),
+                ]
+                for output_name, source_suffix in payload_sources.items():
+                    source = f"{prefix}_bits_{source_suffix}"
+                    if source in self.ports:
+                        module.d.sync += s2_payload[output_name][index].eq(
+                            self.ports[source]
+                        )
+                    else:
+                        # The non-data error request has an extended address.
+                        constant = int(index == 6 and output_name == "io_exceptionAddr_vaNeedExt")
+                        module.d.sync += s2_payload[output_name][index].eq(constant)
+
+        item_valid = [
+            s2_valid[index] & ~need_flush(s2_rob_flag[index], s2_rob_value[index])
+            for index in range(candidate_count)
+        ]
+        item_valid.append(req_valid & ~need_flush(req_rob_flag, req_rob_value))
+        item_uop_idx = [*s2_uop_idx, req_uop_idx]
+        item_rob_flag = [*s2_rob_flag, req_rob_flag]
+        item_rob_value = [*s2_rob_value, req_rob_value]
+        item_payload = {
+            name: [*values, req_payload[name]]
+            for name, values in s2_payload.items()
+        }
+
+        def oldest_tree(
+            valid: list[Any],
+            uop_idx: list[Any],
+            rob_flag: list[Any],
+            rob_value: list[Any],
+            payload: dict[str, list[Any]],
+        ) -> tuple[Any, Any, Any, Any, dict[str, Any]]:
+            if len(valid) == 1:
+                return valid[0], uop_idx[0], rob_flag[0], rob_value[0], {
+                    name: values[0] for name, values in payload.items()
+                }
+            half = len(valid) // 2
+            left = oldest_tree(
+                valid[:half], uop_idx[:half], rob_flag[:half], rob_value[:half],
+                {name: values[:half] for name, values in payload.items()},
+            )
+            right = oldest_tree(
+                valid[half:], uop_idx[half:], rob_flag[half:], rob_value[half:],
+                {name: values[half:] for name, values in payload.items()},
+            )
+            both = left[0] & right[0]
+            left_after_right = (
+                (left[2] ^ right[2]) ^ (left[3] > right[3])
+            ) | (
+                (left[2] == right[2])
+                & (left[3] == right[3])
+                & (left[1] > right[1])
+            )
+            choose_right = (both & left_after_right) | ~left[0]
+            selected_payload = {
+                name: Mux(choose_right, right[4][name], left[4][name])
+                for name in payload
+            }
+            return (
+                left[0] | right[0],
+                Mux(choose_right, right[1], left[1]),
+                Mux(choose_right, right[2], left[2]),
+                Mux(choose_right, right[3], left[3]),
+                selected_payload,
+            )
+
+        selected = oldest_tree(
+            item_valid, item_uop_idx, item_rob_flag, item_rob_value, item_payload
+        )
+        module.d.comb += [
+            self.ports[name].eq(req_payload[name]) for name in req_payload
+        ]
+        module.d.sync += [
+            req_valid.eq(selected[0]),
+            req_uop_idx.eq(selected[1]),
+            req_rob_flag.eq(selected[2]),
+            req_rob_value.eq(selected[3]),
+        ]
+        for name, reg in req_payload.items():
+            module.d.sync += reg.eq(selected[4][name])
 
     def _copy_payload(self, module: Module, output_prefix: str, input_prefix: str,
                       capture: Any, registers: dict[str, Signal]) -> None:
@@ -2828,7 +3056,7 @@ class StoreFamily(Elaboratable):
             suffix = out_name[len(output_prefix):]
             source = input_prefix + suffix
             if source in self.ports:
-                with module.If(capture):
+                with _if(module, capture):
                     module.d.sync += reg.eq(self.ports[source])
             module.d.comb += self.ports[out_name].eq(reg)
 
@@ -2856,10 +3084,10 @@ class StoreFamily(Elaboratable):
                           self.ports["io_toVecSplit_empty"].eq(~busy)]
         for name, reg in outputs.items():
             module.d.comb += self.ports[name].eq(reg)
-        with module.If(self.ports["reset"] | self.ports["io_redirect_valid"]):
+        with _if(module, self.ports["reset"] | self.ports["io_redirect_valid"]):
             module.d.sync += [busy.eq(0), split_sent.eq(0), response_pending.eq(0)]
-        with module.Elif(True):
-            with module.If(accept):
+        with _elif(module, True):
+            with _if(module, accept):
                 module.d.sync += [busy.eq(1), split_sent.eq(0), selected.eq(Mux(choose1, 1, 0))]
                 for out_name, reg in input_payload.items():
                     suffix = out_name[len("io_splitStoreReq_bits_"):]
@@ -2867,11 +3095,11 @@ class StoreFamily(Elaboratable):
                     source1 = f"io_enq_1_req_bits_{suffix}"
                     if source0 in self.ports and source1 in self.ports:
                         module.d.sync += reg.eq(Mux(choose1, self.ports[source1], self.ports[source0]))
-            with module.If(busy & ~split_sent & self.ports["io_splitStoreReq_ready"]):
+            with _if(module, busy & ~split_sent & self.ports["io_splitStoreReq_ready"]):
                 module.d.sync += split_sent.eq(1)
-            with module.If(busy & split_sent & self.ports["io_splitStoreResp_valid"]):
+            with _if(module, busy & split_sent & self.ports["io_splitStoreResp_valid"]):
                 module.d.sync += response_pending.eq(1)
-            with module.If(response_pending & self.ports["io_writeBack_ready"]):
+            with _if(module, response_pending & self.ports["io_writeBack_ready"]):
                 module.d.sync += [busy.eq(0), split_sent.eq(0), response_pending.eq(0)]
         # Meaningful split transformation: shift the second beat and halve the mask.
         if "io_splitStoreReq_bits_vaddr" in self.ports:
@@ -2902,10 +3130,10 @@ class StoreFamily(Elaboratable):
                           self.ports["io_misalign_enq_req_valid"].eq(in_fire & self.ports["io_misalign_enq_req_ready"])]
         for out_name, reg in captured.items():
             module.d.comb += self.ports[out_name].eq(reg)
-        with module.If(self.ports["reset"] | self.ports["io_redirect_valid"]):
+        with _if(module, self.ports["reset"] | self.ports["io_redirect_valid"]):
             module.d.sync += busy.eq(0)
-        with module.Elif(True):
-            with module.If(in_fire & ~busy):
+        with _elif(module, True):
+            with _if(module, in_fire & ~busy):
                 module.d.sync += [busy.eq(1), source_sel.eq(Mux(self.ports["io_vecstin_valid"], 2, Mux(self.ports["io_misalign_stin_valid"], 1, 0)))]
                 # Forward common flattened fields from each source into the registered outputs.
                 for out_name, reg in captured.items():
@@ -2918,7 +3146,7 @@ class StoreFamily(Elaboratable):
                     for source in source_candidates:
                         if source in self.ports:
                             module.d.sync += reg.eq(self.ports[source]); break
-            with module.If(busy & self.ports["io_tlb_resp_valid"]):
+            with _if(module, busy & self.ports["io_tlb_resp_valid"]):
                 module.d.sync += busy.eq(0)
                 for out_name, reg in captured.items():
                     if out_name.endswith("_paddr") and "io_tlb_resp_bits_paddr_0" in self.ports:
@@ -2951,6 +3179,7 @@ class StoreFamily(Elaboratable):
         return module
 
 
+# Public Adapter
 def build_verilog(configuration: Any, injected_dependencies: Any) -> str:
     """Export deterministic Verilog for one same-name store member."""
 
@@ -2964,6 +3193,7 @@ def build_verilog(configuration: Any, injected_dependencies: Any) -> str:
     return verilog.convert(top, name=member, ports=[top.ports[name] for name, _direction, _width in top.specs], emit_src=False)
 
 
+# Direct Entry
 def main() -> None:
     """Print the default store RTL."""
 

@@ -11,6 +11,8 @@ import subprocess
 import sys
 import shlex
 
+from v2_strict_family_rail import declared_ports
+
 ROOT = Path(__file__).resolve().parents[1]
 BUILD = ROOT / "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Fu.NewCSR.XRetPermit-Hardware.py"
 DIRECT = ROOT / "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Backend.Fu.NewCSR.XRetPermit-Hardware.py"
@@ -46,7 +48,8 @@ def main() -> int:
     py_compile.compile(str(DIRECT), doraise=True)
     rtl = module.build_verilog({"module": "XRetPermitModule"}, {})
     rtl2 = module.build_verilog({"module": "XRetPermitModule"}, {})
-    direct = subprocess.run([sys.executable, "-B", str(DIRECT.relative_to(ROOT))], cwd=ROOT,
+    direct = subprocess.run([sys.executable, "-B", "validation/v2_direct_test_runner.py", "--test",
+                             DIRECT.relative_to(ROOT).as_posix(), "--minimum-tests", "2"], cwd=ROOT,
                             capture_output=True, text=True, encoding="utf-8", errors="replace", check=False)
     work = ROOT / "validation/.work/xret-permit-leaf-wave"
     work.mkdir(parents=True, exist_ok=True)
@@ -56,16 +59,19 @@ def main() -> int:
     verilator = run_wsl(["verilator", "--lint-only", "-Wno-fatal", target_wsl])
     yosys = run_wsl(["yosys", "-Q", "-p", f"read_verilog -sv {target_wsl}; hierarchy -check -top XRetPermitModule; proc; stat; check"])
     expected = module.PORT_SPECS
+    expected_ports = {name: (direction, width) for name, direction, width in expected}
+    abi_exact = (declared_ports(rtl, "XRetPermitModule") == expected_ports
+                 == declared_ports(REFERENCE.read_text(encoding="utf-8"), "XRetPermitModule"))
     payload = {"schema_version": 1, "kind": "V2_XRET_PERMIT_LEAF_WAVE", "member": "XRetPermitModule",
                "build": {"path": BUILD.relative_to(ROOT).as_posix(), "sha256": digest(BUILD.read_bytes()),
                          "rtl_sha256": digest(rtl.encode()), "rtl_bytes": len(rtl.encode())},
                "reference": {"path": REFERENCE.relative_to(ROOT).as_posix(),
                              "sha256": digest(REFERENCE.read_bytes()) if REFERENCE.is_file() else None},
-               "abi_port_count": len(expected), "deterministic": rtl == rtl2,
+               "abi_port_count": len(expected), "abi_exact": abi_exact, "deterministic": rtl == rtl2,
                "direct": {"status": "PASS" if direct.returncode == 0 else "FAIL", "returncode": direct.returncode,
                           "output_tail": (direct.stdout + direct.stderr)[-1200:]},
                "verilator": verilator, "yosys": yosys,
-               "status": "IMPLEMENTED_UNVERIFIED_STRICT_PENDING" if direct.returncode == 0 and rtl == rtl2 and verilator["status"] == yosys["status"] == "PASS" else "FAIL",
+               "status": "IMPLEMENTED_UNVERIFIED_STRICT_PENDING" if direct.returncode == 0 and abi_exact and rtl == rtl2 and verilator["status"] == yosys["status"] == "PASS" else "FAIL",
                "strict_delta": 0, "acceptance_eligible": False,
                "unclosed": ["Locked reference differential/formal, parent closure, license and acceptance remain pending."]}
     EVIDENCE.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")

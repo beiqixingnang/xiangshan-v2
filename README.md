@@ -54,7 +54,7 @@ producer snapshots are inert text under validation/validation-Proof.Producer;
 product code never loads them. The independent progress audit checks current
 DUTs, locked references, original receipt integrity and snapshot hashes.
 
-GPT-6-Luna workers use xhigh reasoning; the coordinator reviews and takes over
+GPT-6-Luna workers use max reasoning; the coordinator reviews and takes over
 repeated failures. Full CPU replacement, Vortex verification/video upgrade and
 controller integration remain subsequent milestones after V2 acceptance.
 
@@ -141,15 +141,16 @@ placement and `ram_ext.Memory` correspondence. Dequeue payloads remain in the
 unrestricted proof even when valid is low. Six-channel FIFO scoreboards cover
 450 deterministic random cycles and reset/backpressure cases.
 
-This brings the current audited Build count to 47/118. The canonical receipt
+The current audited Build count comes from the dynamic strict-progress JSON,
+rather than these historical milestone examples. The FrontendBridge receipt
 is validation/v2-build-cpu-memory-frontendbridge-strict-evidence.json; its
 Scala source binding is declared in the auxiliary provenance map.
 
-PMP currently has 2/5 proven members, retaining non-counting focused evidence:
-Checker_2 and EntryHandleModule. EntryHandle corrects lock-bit positions,
+PMP has a current complete 5/5 family formal receipt with two-sided controls;
+reset/startup and parent acceptance remain separate. EntryHandle corrects lock-bit positions,
 zero-extension and WARL bit order, and preserves address-state identities for
 induction through masked reads. Its 3,009 cells and both controls pass.
 The direct suite now checks the locked ABI and actual behavior in about
 0.4 seconds; the former module-name-only test exported all five designs and
 took about 103 seconds. RTL export, determinism, ABI and formal remain required
-in the strict rail. The three remaining PMP members are still CONTRACT_ONLY.
+in the strict rail. All five PMP members have executable implementations.

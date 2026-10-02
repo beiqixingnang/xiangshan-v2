@@ -10,6 +10,15 @@ from typing import Any
 from amaranth.sim import Settle, Simulator
 
 
+# Module Contract
+# Direct import, export and executable privilege-return checks.
+
+# Fixtures And Support
+TEST_ID = "Build-Cpu.Backend.Fu.NewCSR.XRetPermit"
+SUBJECT_TYPE = "build"
+SUBJECT_ID = "Build-Cpu.Backend.Fu.NewCSR.XRetPermit"
+DIRECT = True
+
 ROOT = Path(__file__).resolve().parents[4]
 TARGET = ROOT / (
     "python/Program-System/System-Build/Build-Cpu/Cpu-Core/"
@@ -51,15 +60,29 @@ def observe(module: Any, values: dict[str, int]) -> dict[str, int]:
     return outputs
 
 
-class XRetPermitLeafTest(unittest.TestCase):
-    """Check all privilege, virtualization, and debug gates."""
+# Subject Contract
+class BuildSubjectContractTest(unittest.TestCase):
+    """Check the explicit standalone subject and its public export."""
 
-    def test_exact_export_and_abi(self) -> None:
+    def test_subject_contract(self) -> None:
         module = load_subject()
+        self.assertEqual(module.COVERED_MODULES, ("XRetPermitModule",))
+        self.assertEqual(len(module.__all__), len(set(module.__all__)))
+        for name in module.__all__:
+            self.assertTrue(hasattr(module, name), name)
+        source = TARGET.read_text(encoding="utf-8")
+        positions = [source.index("# " + zone) for zone in (
+            "Module Contract", "Configuration", "Implementation", "Public Adapter", "Direct Entry")]
+        self.assertEqual(positions, sorted(positions))
         first = module.build_verilog({"module": "XRetPermitModule"}, {})
         second = module.build_verilog({"module": "XRetPermitModule"}, {})
         self.assertEqual(first, second)
         self.assertIn("module XRetPermitModule", first)
+
+
+# Behavior Tests
+class XRetPermitLeafTest(unittest.TestCase):
+    """Check privilege, virtualization, and debug gates."""
 
     def test_return_permission_vectors(self) -> None:
         module = load_subject()
@@ -92,7 +115,3 @@ class XRetPermitLeafTest(unittest.TestCase):
             "io_in_xRet_dret": 1,
         })
         self.assertEqual(debug_dret["io_out_hasLegalDret"], 1)
-
-
-if __name__ == "__main__":
-    unittest.main()

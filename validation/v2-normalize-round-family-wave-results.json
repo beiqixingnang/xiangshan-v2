@@ -1,0 +1,1493 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_FPU_NORMALIZE_ROUND_FAMILY_WAVE",
+  "status": "VALIDATOR_PASS_BOUNDED",
+  "acceptance_eligible": false,
+  "formal": "NOT_RUN_BY_REQUEST",
+  "base_commit": "04205060c9c67df2d83e1d1ad2e8708847a615f9",
+  "candidate_hashes": {
+    "build_sha256": "1d172aa58693b2a456d16aefbef459cb5e935ce682c461f5b38be65c97f3757d",
+    "direct_test_sha256": "5a5d78101956932e26c1b9028c3b3f27e0b3d6074e7a547106d10bfa2de711d5",
+    "direct_runner_sha256": "36550022d56b6e631bb7c6dd4299a8b91cf833d8574f1515ec0b157fff5bc01d",
+    "validator_sha256": "290536f609394647fc6679f21c4a12a263070ac4ca28b676b146b715a52b24d2"
+  },
+  "frozen_family": {
+    "locked_module_count": 1976,
+    "clz_members": [
+      "CLZ",
+      "CLZ_6",
+      "CLZ_7",
+      "CLZ_9",
+      "CLZ_11",
+      "CLZ_28",
+      "CLZ_29",
+      "CLZ_30",
+      "CLZ_31"
+    ],
+    "rounding_members": [
+      "RoundingUnit",
+      "RoundingUnit_1",
+      "RoundingUnit_2",
+      "RoundingUnit_3",
+      "RoundingUnit_4",
+      "RoundingUnit_8",
+      "RoundingUnit_9",
+      "RoundingUnit_11"
+    ],
+    "members": {
+      "CLZ": {
+        "reachable_from_XSTop": true,
+        "closure_status_at_freeze": "EXPLICIT_CATALOG_BEHAVIOR_PENDING",
+        "family_subjects": [
+          "dependency.yunsuan.scalar"
+        ],
+        "children": [],
+        "ports": [
+          {
+            "name": "io_in",
+            "direction": "input",
+            "width": 64
+          },
+          {
+            "name": "io_out",
+            "direction": "output",
+            "width": 6
+          }
+        ],
+        "clock_or_reset_ports": [],
+        "scala_sources": [
+          {
+            "source": "home/lishuo/xs-v2-local/yunsuan/src/main/scala/yunsuan/scalar/utils.scala:54",
+            "sha256": "bc4a04a0fe55ac6fd9bbded04569b44cb55228402c897162d7c5e776a66af07b"
+          },
+          {
+            "source": "home/lishuo/xs-v2-local/yunsuan/src/main/scala/yunsuan/scalar/utils.scala:59",
+            "sha256": "bc4a04a0fe55ac6fd9bbded04569b44cb55228402c897162d7c5e776a66af07b"
+          }
+        ],
+        "reference_file": "CLZ.sv",
+        "reference_sha256": "4c877380fa08ba1123bd7f39c8c6f6e8088dc06ad74134daa599b57d103d1772",
+        "locked_module_port_count": 2,
+        "locked_instances": [
+          {
+            "reference_file": "IntToFP_prenorm.sv",
+            "parent_module": "IntToFP_prenorm",
+            "instance": "pos_lzc_clz",
+            "line": 91
+          },
+          {
+            "reference_file": "IntToFP_prenorm.sv",
+            "parent_module": "IntToFP_prenorm",
+            "instance": "neg_lzc_clz",
+            "line": 95
+          }
+        ]
+      },
+      "CLZ_6": {
+        "reachable_from_XSTop": true,
+        "closure_status_at_freeze": "EXPLICIT_CATALOG_BEHAVIOR_PENDING",
+        "family_subjects": [
+          "dependency.yunsuan.vector"
+        ],
+        "children": [],
+        "ports": [
+          {
+            "name": "io_in",
+            "direction": "input",
+            "width": 64
+          },
+          {
+            "name": "io_out",
+            "direction": "output",
+            "width": 7
+          }
+        ],
+        "clock_or_reset_ports": [],
+        "scala_sources": [
+          {
+            "source": "home/lishuo/xs-v2-local/yunsuan/src/main/scala/yunsuan/vector/VectorConvert/util/CLZ.scala:6",
+            "sha256": "314c9eb8975e09fd2750043ecbfaa233b5074829bf781c396a0656082a3521d5"
+          },
+          {
+            "source": "home/lishuo/xs-v2-local/yunsuan/src/main/scala/yunsuan/vector/VectorConvert/util/CLZ.scala:11",
+            "sha256": "314c9eb8975e09fd2750043ecbfaa233b5074829bf781c396a0656082a3521d5"
+          }
+        ],
+        "reference_file": "CLZ_6.sv",
+        "reference_sha256": "25c91b81713fc5f41999752197dd20298c0db7c3ac0d467a5fddc6ffb704a0fb",
+        "locked_module_port_count": 2,
+        "locked_instances": [
+          {
+            "reference_file": "Estimate7.sv",
+            "parent_module": "Estimate7",
+            "instance": "leadZerosNext_clz",
+            "line": 290
+          },
+          {
+            "reference_file": "FP_INCVT.sv",
+            "parent_module": "FP_INCVT",
+            "instance": "leadZerosNext_clz",
+            "line": 1058
+          },
+          {
+            "reference_file": "INT2FP.sv",
+            "parent_module": "INT2FP",
+            "instance": "leadZerosNext_clz",
+            "line": 170
+          },
+          {
+            "reference_file": "VIntMisc64b.sv",
+            "parent_module": "VIntMisc64b",
+            "instance": "cnt64_tmp_clz",
+            "line": 4173
+          }
+        ]
+      },
+      "CLZ_7": {
+        "reachable_from_XSTop": true,
+        "closure_status_at_freeze": "EXPLICIT_CATALOG_BEHAVIOR_PENDING",
+        "family_subjects": [
+          "dependency.yunsuan.vector"
+        ],
+        "children": [],
+        "ports": [
+          {
+            "name": "io_in",
+            "direction": "input",
+            "width": 16
+          },
+          {
+            "name": "io_out",
+            "direction": "output",
+            "width": 5
+          }
+        ],
+        "clock_or_reset_ports": [],
+        "scala_sources": [
+          {
+            "source": "home/lishuo/xs-v2-local/yunsuan/src/main/scala/yunsuan/vector/VectorConvert/util/CLZ.scala:6",
+            "sha256": "314c9eb8975e09fd2750043ecbfaa233b5074829bf781c396a0656082a3521d5"
+          },
+          {
+            "source": "home/lishuo/xs-v2-local/yunsuan/src/main/scala/yunsuan/vector/VectorConvert/util/CLZ.scala:11",
+            "sha256": "314c9eb8975e09fd2750043ecbfaa233b5074829bf781c396a0656082a3521d5"
+          }
+        ],
+        "reference_file": "CLZ_7.sv",
+        "reference_sha256": "d6c47ac82b4a5a08202bb2c5f083ad2b69d93e952fa53993d1444ee49bccc776",
+        "locked_module_port_count": 2,
+        "locked_instances": [
+          {
+            "reference_file": "CVT16.sv",
+            "parent_module": "CVT16",
+            "instance": "int2fp_clz_clz",
+            "line": 524
+          },
+          {
+            "reference_file": "CVT32.sv",
+            "parent_module": "CVT32",
+            "instance": "int2fp_clz_clz_1",
+            "line": 1043
+          },
+          {
+            "reference_file": "VIntMisc64b.sv",
+            "parent_module": "VIntMisc64b",
+            "instance": "cnt16_0_tmp_clz",
+            "line": 4025
+          },
+          {
+            "reference_file": "VIntMisc64b.sv",
+            "parent_module": "VIntMisc64b",
+            "instance": "cnt16_1_tmp_clz",
+            "line": 4062
+          }
+        ]
+      },
+      "CLZ_9": {
+        "reachable_from_XSTop": true,
+        "closure_status_at_freeze": "EXPLICIT_CATALOG_BEHAVIOR_PENDING",
+        "family_subjects": [
+          "dependency.yunsuan.vector"
+        ],
+        "children": [],
+        "ports": [
+          {
+            "name": "io_in",
+            "direction": "input",
+            "width": 32
+          },
+          {
+            "name": "io_out",
+            "direction": "output",
+            "width": 6
+          }
+        ],
+        "clock_or_reset_ports": [],
+        "scala_sources": [
+          {
+            "source": "home/lishuo/xs-v2-local/yunsuan/src/main/scala/yunsuan/vector/VectorConvert/util/CLZ.scala:6",
+            "sha256": "314c9eb8975e09fd2750043ecbfaa233b5074829bf781c396a0656082a3521d5"
+          },
+          {
+            "source": "home/lishuo/xs-v2-local/yunsuan/src/main/scala/yunsuan/vector/VectorConvert/util/CLZ.scala:11",
+            "sha256": "314c9eb8975e09fd2750043ecbfaa233b5074829bf781c396a0656082a3521d5"
+          }
+        ],
+        "reference_file": "CLZ_9.sv",
+        "reference_sha256": "3f89d33ebe502280b4291f33ef6695449c018d17ec844c75fb98c0ac023fab9d",
+        "locked_module_port_count": 2,
+        "locked_instances": [
+          {
+            "reference_file": "CVT32.sv",
+            "parent_module": "CVT32",
+            "instance": "int2fp_clz_clz",
+            "line": 1039
+          },
+          {
+            "reference_file": "VIntMisc64b.sv",
+            "parent_module": "VIntMisc64b",
+            "instance": "cnt32_tmp_clz",
+            "line": 4099
+          }
+        ]
+      },
+      "CLZ_11": {
+        "reachable_from_XSTop": true,
+        "closure_status_at_freeze": "EXPLICIT_CATALOG_BEHAVIOR_PENDING",
+        "family_subjects": [
+          "dependency.yunsuan.vector"
+        ],
+        "children": [],
+        "ports": [
+          {
+            "name": "io_in",
+            "direction": "input",
+            "width": 8
+          },
+          {
+            "name": "io_out",
+            "direction": "output",
+            "width": 4
+          }
+        ],
+        "clock_or_reset_ports": [],
+        "scala_sources": [
+          {
+            "source": "home/lishuo/xs-v2-local/yunsuan/src/main/scala/yunsuan/vector/VectorConvert/util/CLZ.scala:6",
+            "sha256": "314c9eb8975e09fd2750043ecbfaa233b5074829bf781c396a0656082a3521d5"
+          },
+          {
+            "source": "home/lishuo/xs-v2-local/yunsuan/src/main/scala/yunsuan/vector/VectorConvert/util/CLZ.scala:11",
+            "sha256": "314c9eb8975e09fd2750043ecbfaa233b5074829bf781c396a0656082a3521d5"
+          }
+        ],
+        "reference_file": "CLZ_11.sv",
+        "reference_sha256": "7a492bb6c6b4a5eaeb081c10a6c3871418544ec2eb5ad95e0a8c934377fb8063",
+        "locked_module_port_count": 2,
+        "locked_instances": [
+          {
+            "reference_file": "VIntMisc64b.sv",
+            "parent_module": "VIntMisc64b",
+            "instance": "cnt8_0_clz",
+            "line": 4316
+          },
+          {
+            "reference_file": "VIntMisc64b.sv",
+            "parent_module": "VIntMisc64b",
+            "instance": "cnt8_1_clz",
+            "line": 4330
+          },
+          {
+            "reference_file": "VIntMisc64b.sv",
+            "parent_module": "VIntMisc64b",
+            "instance": "cnt8_2_clz",
+            "line": 4344
+          },
+          {
+            "reference_file": "VIntMisc64b.sv",
+            "parent_module": "VIntMisc64b",
+            "instance": "cnt8_3_clz",
+            "line": 4358
+          }
+        ]
+      },
+      "CLZ_28": {
+        "reachable_from_XSTop": true,
+        "closure_status_at_freeze": "EXPLICIT_CATALOG_BEHAVIOR_PENDING",
+        "family_subjects": [
+          "dependency.yunsuan.vector"
+        ],
+        "children": [],
+        "ports": [
+          {
+            "name": "io_in",
+            "direction": "input",
+            "width": 10
+          },
+          {
+            "name": "io_out",
+            "direction": "output",
+            "width": 4
+          }
+        ],
+        "clock_or_reset_ports": [],
+        "scala_sources": [
+          {
+            "source": "home/lishuo/xs-v2-local/yunsuan/src/main/scala/yunsuan/vector/VectorConvert/util/CLZ.scala:6",
+            "sha256": "314c9eb8975e09fd2750043ecbfaa233b5074829bf781c396a0656082a3521d5"
+          },
+          {
+            "source": "home/lishuo/xs-v2-local/yunsuan/src/main/scala/yunsuan/vector/VectorConvert/util/CLZ.scala:11",
+            "sha256": "314c9eb8975e09fd2750043ecbfaa233b5074829bf781c396a0656082a3521d5"
+          }
+        ],
+        "reference_file": "CLZ_28.sv",
+        "reference_sha256": "c1cad4a2ce82d568ef662a42fcd36b51d726369aec0df1eee2096be7f59ca3a0",
+        "locked_module_port_count": 2,
+        "locked_instances": [
+          {
+            "reference_file": "CVT16.sv",
+            "parent_module": "CVT16",
+            "instance": "zero_minus_lzc_clz",
+            "line": 528
+          },
+          {
+            "reference_file": "CVT16.sv",
+            "parent_module": "CVT16",
+            "instance": "out_exp_clz",
+            "line": 536
+          },
+          {
+            "reference_file": "CVT32.sv",
+            "parent_module": "CVT32",
+            "instance": "zero_minus_lzc_f16_clz",
+            "line": 1047
+          },
+          {
+            "reference_file": "CVT32.sv",
+            "parent_module": "CVT32",
+            "instance": "out_exp_fp16_clz",
+            "line": 1063
+          },
+          {
+            "reference_file": "CVT32.sv",
+            "parent_module": "CVT32",
+            "instance": "subnor_shamt_clz",
+            "line": 1077
+          }
+        ]
+      },
+      "CLZ_29": {
+        "reachable_from_XSTop": true,
+        "closure_status_at_freeze": "EXPLICIT_CATALOG_BEHAVIOR_PENDING",
+        "family_subjects": [
+          "dependency.yunsuan.vector"
+        ],
+        "children": [],
+        "ports": [
+          {
+            "name": "io_in",
+            "direction": "input",
+            "width": 23
+          },
+          {
+            "name": "io_out",
+            "direction": "output",
+            "width": 5
+          }
+        ],
+        "clock_or_reset_ports": [],
+        "scala_sources": [
+          {
+            "source": "home/lishuo/xs-v2-local/yunsuan/src/main/scala/yunsuan/vector/VectorConvert/util/CLZ.scala:6",
+            "sha256": "314c9eb8975e09fd2750043ecbfaa233b5074829bf781c396a0656082a3521d5"
+          },
+          {
+            "source": "home/lishuo/xs-v2-local/yunsuan/src/main/scala/yunsuan/vector/VectorConvert/util/CLZ.scala:11",
+            "sha256": "314c9eb8975e09fd2750043ecbfaa233b5074829bf781c396a0656082a3521d5"
+          }
+        ],
+        "reference_file": "CLZ_29.sv",
+        "reference_sha256": "53e0ee314e8835a1a929a88f4e13ea9fae01da9f286fae6af81ffcdb90995ee0",
+        "locked_module_port_count": 2,
+        "locked_instances": [
+          {
+            "reference_file": "CVT32.sv",
+            "parent_module": "CVT32",
+            "instance": "zero_minus_lzc_f32_clz",
+            "line": 1051
+          },
+          {
+            "reference_file": "CVT32.sv",
+            "parent_module": "CVT32",
+            "instance": "out_exp_fp32_clz",
+            "line": 1067
+          }
+        ]
+      },
+      "CLZ_30": {
+        "reachable_from_XSTop": true,
+        "closure_status_at_freeze": "EXPLICIT_CATALOG_BEHAVIOR_PENDING",
+        "family_subjects": [
+          "dependency.yunsuan.vector"
+        ],
+        "children": [],
+        "ports": [
+          {
+            "name": "io_in",
+            "direction": "input",
+            "width": 11
+          },
+          {
+            "name": "io_out",
+            "direction": "output",
+            "width": 4
+          }
+        ],
+        "clock_or_reset_ports": [],
+        "scala_sources": [
+          {
+            "source": "home/lishuo/xs-v2-local/yunsuan/src/main/scala/yunsuan/vector/VectorConvert/util/CLZ.scala:6",
+            "sha256": "314c9eb8975e09fd2750043ecbfaa233b5074829bf781c396a0656082a3521d5"
+          },
+          {
+            "source": "home/lishuo/xs-v2-local/yunsuan/src/main/scala/yunsuan/vector/VectorConvert/util/CLZ.scala:11",
+            "sha256": "314c9eb8975e09fd2750043ecbfaa233b5074829bf781c396a0656082a3521d5"
+          }
+        ],
+        "reference_file": "CLZ_30.sv",
+        "reference_sha256": "2e3173619dae8323080874ff3e7ccf0dd31a50be8740855409c6b31df542871c",
+        "locked_module_port_count": 2,
+        "locked_instances": [
+          {
+            "reference_file": "CVT16.sv",
+            "parent_module": "CVT16",
+            "instance": "clz_sig_clz",
+            "line": 532
+          },
+          {
+            "reference_file": "CVT32.sv",
+            "parent_module": "CVT32",
+            "instance": "clz_fp16_clz",
+            "line": 1055
+          }
+        ]
+      },
+      "CLZ_31": {
+        "reachable_from_XSTop": true,
+        "closure_status_at_freeze": "EXPLICIT_CATALOG_BEHAVIOR_PENDING",
+        "family_subjects": [
+          "dependency.yunsuan.vector"
+        ],
+        "children": [],
+        "ports": [
+          {
+            "name": "io_in",
+            "direction": "input",
+            "width": 24
+          },
+          {
+            "name": "io_out",
+            "direction": "output",
+            "width": 5
+          }
+        ],
+        "clock_or_reset_ports": [],
+        "scala_sources": [
+          {
+            "source": "home/lishuo/xs-v2-local/yunsuan/src/main/scala/yunsuan/vector/VectorConvert/util/CLZ.scala:6",
+            "sha256": "314c9eb8975e09fd2750043ecbfaa233b5074829bf781c396a0656082a3521d5"
+          },
+          {
+            "source": "home/lishuo/xs-v2-local/yunsuan/src/main/scala/yunsuan/vector/VectorConvert/util/CLZ.scala:11",
+            "sha256": "314c9eb8975e09fd2750043ecbfaa233b5074829bf781c396a0656082a3521d5"
+          }
+        ],
+        "reference_file": "CLZ_31.sv",
+        "reference_sha256": "8979b0b69c6079abcfd587d2322629ec7fffcb9f2be6ca2eaa8411f597b659fa",
+        "locked_module_port_count": 2,
+        "locked_instances": [
+          {
+            "reference_file": "CVT32.sv",
+            "parent_module": "CVT32",
+            "instance": "clz_fp32_clz",
+            "line": 1059
+          }
+        ]
+      },
+      "RoundingUnit": {
+        "reachable_from_XSTop": true,
+        "closure_status_at_freeze": "EXPLICIT_CATALOG_BEHAVIOR_PENDING",
+        "family_subjects": [
+          "dependency.yunsuan.scalar"
+        ],
+        "children": [],
+        "ports": [
+          {
+            "name": "io_in",
+            "direction": "input",
+            "width": 23
+          },
+          {
+            "name": "io_roundIn",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_stickyIn",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_signIn",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_rm",
+            "direction": "input",
+            "width": 3
+          },
+          {
+            "name": "io_out",
+            "direction": "output",
+            "width": 23
+          },
+          {
+            "name": "io_inexact",
+            "direction": "output",
+            "width": 1
+          },
+          {
+            "name": "io_cout",
+            "direction": "output",
+            "width": 1
+          }
+        ],
+        "clock_or_reset_ports": [],
+        "scala_sources": [
+          {
+            "source": "home/lishuo/xs-v2-local/yunsuan/src/main/scala/yunsuan/scalar/RoundingUnit.scala:6",
+            "sha256": "fb7c8263a646beed7d070d7c53a81db26d85284dde1516171544a6962dca6ad9"
+          },
+          {
+            "source": "home/lishuo/xs-v2-local/yunsuan/src/main/scala/yunsuan/scalar/RoundingUnit.scala:7",
+            "sha256": "fb7c8263a646beed7d070d7c53a81db26d85284dde1516171544a6962dca6ad9"
+          }
+        ],
+        "reference_file": "RoundingUnit.sv",
+        "reference_sha256": "c190e1f6488b1b69430b25c122fc33fe973a19709d0e1f87267b74614bbf0cee",
+        "locked_module_port_count": 8,
+        "locked_instances": [
+          {
+            "reference_file": "IntToFP_postnorm.sv",
+            "parent_module": "IntToFP_postnorm",
+            "instance": "rounder",
+            "line": 17
+          }
+        ]
+      },
+      "RoundingUnit_1": {
+        "reachable_from_XSTop": true,
+        "closure_status_at_freeze": "EXPLICIT_CATALOG_BEHAVIOR_PENDING",
+        "family_subjects": [
+          "dependency.yunsuan.scalar"
+        ],
+        "children": [],
+        "ports": [
+          {
+            "name": "io_in",
+            "direction": "input",
+            "width": 52
+          },
+          {
+            "name": "io_roundIn",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_stickyIn",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_signIn",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_rm",
+            "direction": "input",
+            "width": 3
+          },
+          {
+            "name": "io_out",
+            "direction": "output",
+            "width": 52
+          },
+          {
+            "name": "io_inexact",
+            "direction": "output",
+            "width": 1
+          },
+          {
+            "name": "io_cout",
+            "direction": "output",
+            "width": 1
+          }
+        ],
+        "clock_or_reset_ports": [],
+        "scala_sources": [
+          {
+            "source": "home/lishuo/xs-v2-local/yunsuan/src/main/scala/yunsuan/scalar/RoundingUnit.scala:6",
+            "sha256": "fb7c8263a646beed7d070d7c53a81db26d85284dde1516171544a6962dca6ad9"
+          },
+          {
+            "source": "home/lishuo/xs-v2-local/yunsuan/src/main/scala/yunsuan/scalar/RoundingUnit.scala:7",
+            "sha256": "fb7c8263a646beed7d070d7c53a81db26d85284dde1516171544a6962dca6ad9"
+          }
+        ],
+        "reference_file": "RoundingUnit_1.sv",
+        "reference_sha256": "9b4332b5990e4ddde2f94d7f480d4943eb9ae728dff78ce52fc6908197260026",
+        "locked_module_port_count": 8,
+        "locked_instances": [
+          {
+            "reference_file": "IntToFP_postnorm_1.sv",
+            "parent_module": "IntToFP_postnorm_1",
+            "instance": "rounder",
+            "line": 16
+          }
+        ]
+      },
+      "RoundingUnit_2": {
+        "reachable_from_XSTop": true,
+        "closure_status_at_freeze": "EXPLICIT_CATALOG_BEHAVIOR_PENDING",
+        "family_subjects": [
+          "dependency.yunsuan.scalar"
+        ],
+        "children": [],
+        "ports": [
+          {
+            "name": "io_in",
+            "direction": "input",
+            "width": 10
+          },
+          {
+            "name": "io_roundIn",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_stickyIn",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_signIn",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_rm",
+            "direction": "input",
+            "width": 3
+          },
+          {
+            "name": "io_out",
+            "direction": "output",
+            "width": 10
+          },
+          {
+            "name": "io_inexact",
+            "direction": "output",
+            "width": 1
+          },
+          {
+            "name": "io_cout",
+            "direction": "output",
+            "width": 1
+          }
+        ],
+        "clock_or_reset_ports": [],
+        "scala_sources": [
+          {
+            "source": "home/lishuo/xs-v2-local/yunsuan/src/main/scala/yunsuan/scalar/RoundingUnit.scala:6",
+            "sha256": "fb7c8263a646beed7d070d7c53a81db26d85284dde1516171544a6962dca6ad9"
+          },
+          {
+            "source": "home/lishuo/xs-v2-local/yunsuan/src/main/scala/yunsuan/scalar/RoundingUnit.scala:7",
+            "sha256": "fb7c8263a646beed7d070d7c53a81db26d85284dde1516171544a6962dca6ad9"
+          }
+        ],
+        "reference_file": "RoundingUnit_2.sv",
+        "reference_sha256": "e326009325a10d1fddef7be22c9142e0139e7c54a448682f6602af4d1ebb825d",
+        "locked_module_port_count": 8,
+        "locked_instances": [
+          {
+            "reference_file": "IntToFP_postnorm_2.sv",
+            "parent_module": "IntToFP_postnorm_2",
+            "instance": "rounder",
+            "line": 17
+          }
+        ]
+      },
+      "RoundingUnit_3": {
+        "reachable_from_XSTop": true,
+        "closure_status_at_freeze": "EXPLICIT_CATALOG_BEHAVIOR_PENDING",
+        "family_subjects": [
+          "dependency.yunsuan.vector"
+        ],
+        "children": [],
+        "ports": [
+          {
+            "name": "io_in",
+            "direction": "input",
+            "width": 64
+          },
+          {
+            "name": "io_roundIn",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_stickyIn",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_signIn",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_rm",
+            "direction": "input",
+            "width": 3
+          },
+          {
+            "name": "io_inexact",
+            "direction": "output",
+            "width": 1
+          },
+          {
+            "name": "io_r_up",
+            "direction": "output",
+            "width": 1
+          }
+        ],
+        "clock_or_reset_ports": [],
+        "scala_sources": [
+          {
+            "source": "home/lishuo/xs-v2-local/yunsuan/src/main/scala/yunsuan/vector/VectorConvert/util/Rounding.scala:7",
+            "sha256": "6cc7b3d8aed9856d1354a90959123a1373ef2786535e72ab811ec970e0691259"
+          },
+          {
+            "source": "home/lishuo/xs-v2-local/yunsuan/src/main/scala/yunsuan/vector/VectorConvert/util/Rounding.scala:8",
+            "sha256": "6cc7b3d8aed9856d1354a90959123a1373ef2786535e72ab811ec970e0691259"
+          }
+        ],
+        "reference_file": "RoundingUnit_3.sv",
+        "reference_sha256": "71c91454bf13ba13e70ab9e3fc2b9cfaa3dd40d1d286a4d2afac89f8a4fbe04f",
+        "locked_module_port_count": 7,
+        "locked_instances": [
+          {
+            "reference_file": "FP_INCVT.sv",
+            "parent_module": "FP_INCVT",
+            "instance": "rounder",
+            "line": 1068
+          },
+          {
+            "reference_file": "INT2FP.sv",
+            "parent_module": "INT2FP",
+            "instance": "rounder",
+            "line": 174
+          }
+        ]
+      },
+      "RoundingUnit_4": {
+        "reachable_from_XSTop": true,
+        "closure_status_at_freeze": "EXPLICIT_CATALOG_BEHAVIOR_PENDING",
+        "family_subjects": [
+          "dependency.yunsuan.vector"
+        ],
+        "children": [],
+        "ports": [
+          {
+            "name": "io_in",
+            "direction": "input",
+            "width": 23
+          },
+          {
+            "name": "io_roundIn",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_stickyIn",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_signIn",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_rm",
+            "direction": "input",
+            "width": 3
+          },
+          {
+            "name": "io_inexact",
+            "direction": "output",
+            "width": 1
+          },
+          {
+            "name": "io_r_up",
+            "direction": "output",
+            "width": 1
+          }
+        ],
+        "clock_or_reset_ports": [],
+        "scala_sources": [
+          {
+            "source": "home/lishuo/xs-v2-local/yunsuan/src/main/scala/yunsuan/vector/VectorConvert/util/Rounding.scala:7",
+            "sha256": "6cc7b3d8aed9856d1354a90959123a1373ef2786535e72ab811ec970e0691259"
+          },
+          {
+            "source": "home/lishuo/xs-v2-local/yunsuan/src/main/scala/yunsuan/vector/VectorConvert/util/Rounding.scala:8",
+            "sha256": "6cc7b3d8aed9856d1354a90959123a1373ef2786535e72ab811ec970e0691259"
+          }
+        ],
+        "reference_file": "RoundingUnit_4.sv",
+        "reference_sha256": "7185db716165ae90e5c6d9d927f1fd6c6b9b09d36e7d6b1d0e99c09abe8d2c33",
+        "locked_module_port_count": 7,
+        "locked_instances": [
+          {
+            "reference_file": "FP_INCVT.sv",
+            "parent_module": "FP_INCVT",
+            "instance": "subRounder",
+            "line": 1085
+          }
+        ]
+      },
+      "RoundingUnit_8": {
+        "reachable_from_XSTop": true,
+        "closure_status_at_freeze": "EXPLICIT_CATALOG_BEHAVIOR_PENDING",
+        "family_subjects": [
+          "dependency.yunsuan.vector"
+        ],
+        "children": [],
+        "ports": [
+          {
+            "name": "io_in",
+            "direction": "input",
+            "width": 24
+          },
+          {
+            "name": "io_roundIn",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_stickyIn",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_signIn",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_rm",
+            "direction": "input",
+            "width": 3
+          },
+          {
+            "name": "io_inexact",
+            "direction": "output",
+            "width": 1
+          },
+          {
+            "name": "io_r_up",
+            "direction": "output",
+            "width": 1
+          }
+        ],
+        "clock_or_reset_ports": [],
+        "scala_sources": [
+          {
+            "source": "home/lishuo/xs-v2-local/yunsuan/src/main/scala/yunsuan/vector/VectorConvert/util/Rounding.scala:7",
+            "sha256": "6cc7b3d8aed9856d1354a90959123a1373ef2786535e72ab811ec970e0691259"
+          },
+          {
+            "source": "home/lishuo/xs-v2-local/yunsuan/src/main/scala/yunsuan/vector/VectorConvert/util/Rounding.scala:8",
+            "sha256": "6cc7b3d8aed9856d1354a90959123a1373ef2786535e72ab811ec970e0691259"
+          }
+        ],
+        "reference_file": "RoundingUnit_8.sv",
+        "reference_sha256": "4fbe939c72780bafcb42725a0cc20cea1af38cedd743aed6bda24799280c6d13",
+        "locked_module_port_count": 7,
+        "locked_instances": [
+          {
+            "reference_file": "CVT32.sv",
+            "parent_module": "CVT32",
+            "instance": "rounder",
+            "line": 1081
+          }
+        ]
+      },
+      "RoundingUnit_9": {
+        "reachable_from_XSTop": true,
+        "closure_status_at_freeze": "EXPLICIT_CATALOG_BEHAVIOR_PENDING",
+        "family_subjects": [
+          "dependency.yunsuan.vector"
+        ],
+        "children": [],
+        "ports": [
+          {
+            "name": "io_in",
+            "direction": "input",
+            "width": 10
+          },
+          {
+            "name": "io_roundIn",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_stickyIn",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_signIn",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_rm",
+            "direction": "input",
+            "width": 3
+          },
+          {
+            "name": "io_inexact",
+            "direction": "output",
+            "width": 1
+          },
+          {
+            "name": "io_r_up",
+            "direction": "output",
+            "width": 1
+          }
+        ],
+        "clock_or_reset_ports": [],
+        "scala_sources": [
+          {
+            "source": "home/lishuo/xs-v2-local/yunsuan/src/main/scala/yunsuan/vector/VectorConvert/util/Rounding.scala:7",
+            "sha256": "6cc7b3d8aed9856d1354a90959123a1373ef2786535e72ab811ec970e0691259"
+          },
+          {
+            "source": "home/lishuo/xs-v2-local/yunsuan/src/main/scala/yunsuan/vector/VectorConvert/util/Rounding.scala:8",
+            "sha256": "6cc7b3d8aed9856d1354a90959123a1373ef2786535e72ab811ec970e0691259"
+          }
+        ],
+        "reference_file": "RoundingUnit_9.sv",
+        "reference_sha256": "200199c999e8a3513870854fc640ede58a784d65b20e1ac0263e73671e6894bd",
+        "locked_module_port_count": 7,
+        "locked_instances": [
+          {
+            "reference_file": "CVT32.sv",
+            "parent_module": "CVT32",
+            "instance": "nor_rounder",
+            "line": 1110
+          },
+          {
+            "reference_file": "CVT32.sv",
+            "parent_module": "CVT32",
+            "instance": "subnor_rounder",
+            "line": 1119
+          }
+        ]
+      },
+      "RoundingUnit_11": {
+        "reachable_from_XSTop": true,
+        "closure_status_at_freeze": "EXPLICIT_CATALOG_BEHAVIOR_PENDING",
+        "family_subjects": [
+          "dependency.yunsuan.vector"
+        ],
+        "children": [],
+        "ports": [
+          {
+            "name": "io_in",
+            "direction": "input",
+            "width": 11
+          },
+          {
+            "name": "io_roundIn",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_stickyIn",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_signIn",
+            "direction": "input",
+            "width": 1
+          },
+          {
+            "name": "io_rm",
+            "direction": "input",
+            "width": 3
+          },
+          {
+            "name": "io_inexact",
+            "direction": "output",
+            "width": 1
+          },
+          {
+            "name": "io_r_up",
+            "direction": "output",
+            "width": 1
+          }
+        ],
+        "clock_or_reset_ports": [],
+        "scala_sources": [
+          {
+            "source": "home/lishuo/xs-v2-local/yunsuan/src/main/scala/yunsuan/vector/VectorConvert/util/Rounding.scala:7",
+            "sha256": "6cc7b3d8aed9856d1354a90959123a1373ef2786535e72ab811ec970e0691259"
+          },
+          {
+            "source": "home/lishuo/xs-v2-local/yunsuan/src/main/scala/yunsuan/vector/VectorConvert/util/Rounding.scala:8",
+            "sha256": "6cc7b3d8aed9856d1354a90959123a1373ef2786535e72ab811ec970e0691259"
+          }
+        ],
+        "reference_file": "RoundingUnit_11.sv",
+        "reference_sha256": "5ce370cda235dc6065dfcfce1580f268ab41498d1063806521bcbf21c37cde0e",
+        "locked_module_port_count": 7,
+        "locked_instances": [
+          {
+            "reference_file": "CVT16.sv",
+            "parent_module": "CVT16",
+            "instance": "rounder",
+            "line": 540
+          }
+        ]
+      }
+    },
+    "scala_source_hashes": {
+      "yunsuan/scalar/utils.scala": "bc4a04a0fe55ac6fd9bbded04569b44cb55228402c897162d7c5e776a66af07b",
+      "yunsuan/vector/VectorConvert/util/CLZ.scala": "314c9eb8975e09fd2750043ecbfaa233b5074829bf781c396a0656082a3521d5",
+      "yunsuan/scalar/RoundingUnit.scala": "fb7c8263a646beed7d070d7c53a81db26d85284dde1516171544a6962dca6ad9",
+      "yunsuan/vector/VectorConvert/util/Rounding.scala": "6cc7b3d8aed9856d1354a90959123a1373ef2786535e72ab811ec970e0691259"
+    },
+    "hierarchy_sha256": "bdf68f29f322a5a9163c5bbd9a535f5fcbbb179c6e12713d386588763becb257",
+    "complete_closure_inventory_sha256": "693c7c433d72b08a326c4c20f3b39b853461aedbab85c6ef59848a8d6030a64e",
+    "hierarchy_coverage_sha256": "c754e72042994673be6b89d53d29fc363d2401759b13e3b3db2aa4f0c66651ef"
+  },
+  "existing_generic_family_overlap": {
+    "scalar_build_sha256": "2f8d6ca80d366e56e587b881b620400d9c216222318b01e6e4e425c1dc934a09",
+    "scalar_build": "provides generic CLZ and scalar-rounding behavior APIs; its selected standalone mode does not emit all frozen exact-name ABI variants",
+    "vector_build_sha256": "3e6a4f02db7d8f3ad2980d06b41fcf5dbb638bce0cc53c31f238a19358907af4",
+    "vector_build": "provides VCLZ instruction behavior but not independent CLZ_n/RoundingUnit_n ABI variants"
+  },
+  "tool_gates": {
+    "PY_COMPILE": "PASS",
+    "PYRIGHT": {
+      "status": "PASS",
+      "returncode": 0,
+      "output_tail": "0 errors, 0 warnings, 0 informations\n"
+    },
+    "DIRECT_TEST": {
+      "status": "PASS",
+      "returncode": 0,
+      "output_tail": "...\r\n----------------------------------------------------------------------\r\nRan 3 tests in 0.228s\r\n\r\nOK\r\n",
+      "tests_run": 3
+    },
+    "ALL_MEMBER_ABI_DETERMINISTIC_VERILATOR_YOSYS_LOCKED_DIFF": {
+      "CLZ": {
+        "abi_exact": true,
+        "deterministic": true,
+        "rtl_bytes": 7060,
+        "rtl_sha256": "b77938d5745e390ced897c7f0c2cda7bca81e4d745f8423e887db1fb3c6652c2",
+        "verilator_lint": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.027 MB sources in 3 modules, into 0.028 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.026 s (elab=0.001, cvt=0.004, bld=0.000); cpu 0.010 s on 1 threads; alloced 9.816 MB\n%Warning-WIDTHTRUNC: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/CLZ.sv:32:14: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's REPLICATE generates 64 bits.\n                                                                                                                                                     : ... note: In instance 'CLZ.encoder'\n                     ... For warning description see https://verilator.org/warn/WIDTHTRUNC?v=5.032\n                     ... Use \"/* verilator lint_off WIDTHTRUNC */\" and lint_on around source to disable this message.\n"
+        },
+        "yosys_check": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "LZ.sv'\nParsing SystemVerilog input from `'/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/CLZ.sv'' to AST representation.\nSuccessfully finished Verilog frontend.\n\n2. Executing PROC pass (convert processes to netlists).\n\n2.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 7119d05fff, CPU: user 0.01s system 0.01s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 39% 1x opt_expr (0 sec), 31% 2x read_verilog (0 sec), ...\n"
+        },
+        "locked_executable_diff": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "NORMALIZE_ROUND_DIFF_PASS member=CLZ\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/CLZ.tb.sv:29: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 578ps; walltime 0.001 s; speed 271.195 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n"
+        },
+        "diff_testbench_sha256": "9db72295cc740245b1299db7bfbaa65ca4a0ef778506ddcf7d8332506e95747b"
+      },
+      "CLZ_6": {
+        "abi_exact": true,
+        "deterministic": true,
+        "rtl_bytes": 6021,
+        "rtl_sha256": "b888a56c8e88fc3dec66ec16ff19879091a79cf94492eb629df5cbb90c7a3cfc",
+        "verilator_lint": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.026 MB sources in 3 modules, into 0.021 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.031 s (elab=0.001, cvt=0.004, bld=0.000); cpu 0.011 s on 1 threads; alloced 9.605 MB\n"
+        },
+        "yosys_check": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": ".sv'\nParsing SystemVerilog input from `'/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/CLZ_6.sv'' to AST representation.\nSuccessfully finished Verilog frontend.\n\n2. Executing PROC pass (convert processes to netlists).\n\n2.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 7ce27335db, CPU: user 0.01s system 0.00s, MEM: 8.91 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 43% 1x opt_expr (0 sec), 32% 2x read_verilog (0 sec), ...\n"
+        },
+        "locked_executable_diff": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "NORMALIZE_ROUND_DIFF_PASS member=CLZ_6\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/CLZ_6.tb.sv:29: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 578ps; walltime 0.001 s; speed 287.210 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n"
+        },
+        "diff_testbench_sha256": "543261dfb5ff95904009bc7de176494a712fa8a79fb253393f1fac809d4fff56"
+      },
+      "CLZ_7": {
+        "abi_exact": true,
+        "deterministic": true,
+        "rtl_bytes": 2085,
+        "rtl_sha256": "79b82ac52eeb3248ccbe2d2dfeccbb6ab81b99f4aeb789fa58a9ef4dc4dd9cf1",
+        "verilator_lint": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.023 MB sources in 3 modules, into 0.017 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.023 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.117 MB\n"
+        },
+        "yosys_check": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": ".sv'\nParsing SystemVerilog input from `'/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/CLZ_7.sv'' to AST representation.\nSuccessfully finished Verilog frontend.\n\n2. Executing PROC pass (convert processes to netlists).\n\n2.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 7d2b34c760, CPU: user 0.00s system 0.01s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 42% 1x opt_expr (0 sec), 31% 2x read_verilog (0 sec), ...\n"
+        },
+        "locked_executable_diff": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "NORMALIZE_ROUND_DIFF_PASS member=CLZ_7\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/CLZ_7.tb.sv:29: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 530ps; walltime 0.001 s; speed 340.966 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 152 MB\n"
+        },
+        "diff_testbench_sha256": "140df37310d09e9fcf1dff6778e5dafcd0d82cf54bce8f8c7ceeb10faaf46e7e"
+      },
+      "CLZ_9": {
+        "abi_exact": true,
+        "deterministic": true,
+        "rtl_bytes": 3397,
+        "rtl_sha256": "927fd2054f0e56c35739baf07596ae946d817337b6333e17fe31cdb16f89ef85",
+        "verilator_lint": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.024 MB sources in 3 modules, into 0.018 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.026 s (elab=0.001, cvt=0.002, bld=0.000); cpu 0.008 s on 1 threads; alloced 9.375 MB\n"
+        },
+        "yosys_check": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": ".sv'\nParsing SystemVerilog input from `'/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/CLZ_9.sv'' to AST representation.\nSuccessfully finished Verilog frontend.\n\n2. Executing PROC pass (convert processes to netlists).\n\n2.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: d849d5cb23, CPU: user 0.01s system 0.00s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 44% 1x opt_expr (0 sec), 31% 2x read_verilog (0 sec), ...\n"
+        },
+        "locked_executable_diff": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "NORMALIZE_ROUND_DIFF_PASS member=CLZ_9\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/CLZ_9.tb.sv:29: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 546ps; walltime 0.001 s; speed 347.943 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n"
+        },
+        "diff_testbench_sha256": "7deff7d98fbb16f1c893daf6a294b7b4111e5ca7599ae7ab5d890b7a1c786daf"
+      },
+      "CLZ_11": {
+        "abi_exact": true,
+        "deterministic": true,
+        "rtl_bytes": 1423,
+        "rtl_sha256": "459d91466226f6d5eed10ab7cec64c1f3841383afe16e036a4cb0dbe9ee20746",
+        "verilator_lint": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.022 MB sources in 3 modules, into 0.016 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.025 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.195 MB\n"
+        },
+        "yosys_check": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "sv'\nParsing SystemVerilog input from `'/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/CLZ_11.sv'' to AST representation.\nSuccessfully finished Verilog frontend.\n\n2. Executing PROC pass (convert processes to netlists).\n\n2.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: b73267d849, CPU: user 0.01s system 0.01s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 38% 2x read_verilog (0 sec), 37% 1x opt_expr (0 sec), ...\n"
+        },
+        "locked_executable_diff": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "NORMALIZE_ROUND_DIFF_PASS member=CLZ_11\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/CLZ_11.tb.sv:29: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 522ps; walltime 0.001 s; speed 346.151 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 152 MB\n"
+        },
+        "diff_testbench_sha256": "31fccf61f73263954a6874cf2b6daf8bccdcc3265aa5eea9abe84ad0bfd8225b"
+      },
+      "CLZ_28": {
+        "abi_exact": true,
+        "deterministic": true,
+        "rtl_bytes": 1581,
+        "rtl_sha256": "602674e0e8e0c22da48e008c69cd3c133d3345304b3834752a8cf338926bbfbb",
+        "verilator_lint": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.022 MB sources in 3 modules, into 0.016 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.021 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.078 MB\n"
+        },
+        "yosys_check": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "sv'\nParsing SystemVerilog input from `'/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/CLZ_28.sv'' to AST representation.\nSuccessfully finished Verilog frontend.\n\n2. Executing PROC pass (convert processes to netlists).\n\n2.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: e1732dd533, CPU: user 0.01s system 0.00s, MEM: 9.22 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 36% 2x read_verilog (0 sec), 31% 1x opt_expr (0 sec), ...\n"
+        },
+        "locked_executable_diff": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "NORMALIZE_ROUND_DIFF_PASS member=CLZ_28\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/CLZ_28.tb.sv:29: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 524ps; walltime 0.001 s; speed 296.629 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 152 MB\n"
+        },
+        "diff_testbench_sha256": "85c297f9767b9dbf62a61fa3fb3f072076598f1700d9937832f97b57682bde17"
+      },
+      "CLZ_29": {
+        "abi_exact": true,
+        "deterministic": true,
+        "rtl_bytes": 2662,
+        "rtl_sha256": "a00c0c7ab9b22f8453145538a80f88f6ff4672a2d8527cce407a21b3c2a029bf",
+        "verilator_lint": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.023 MB sources in 3 modules, into 0.018 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.025 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.293 MB\n"
+        },
+        "yosys_check": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "sv'\nParsing SystemVerilog input from `'/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/CLZ_29.sv'' to AST representation.\nSuccessfully finished Verilog frontend.\n\n2. Executing PROC pass (convert processes to netlists).\n\n2.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: c76f5f8f11, CPU: user 0.01s system 0.01s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 46% 1x opt_expr (0 sec), 21% 2x read_verilog (0 sec), ...\n"
+        },
+        "locked_executable_diff": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "NORMALIZE_ROUND_DIFF_PASS member=CLZ_29\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/CLZ_29.tb.sv:29: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 537ps; walltime 0.001 s; speed 345.606 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 152 MB\n"
+        },
+        "diff_testbench_sha256": "b741836e3601138d1d533bb2539ea1604f1d403438403a399894f9d968c919c8"
+      },
+      "CLZ_30": {
+        "abi_exact": true,
+        "deterministic": true,
+        "rtl_bytes": 1666,
+        "rtl_sha256": "f426ee89fa50da29a175372ab0e0c7bb6f0796c80c7a22f3dc75b2186435b446",
+        "verilator_lint": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.022 MB sources in 3 modules, into 0.016 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.026 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.008 s on 1 threads; alloced 9.086 MB\n"
+        },
+        "yosys_check": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "sv'\nParsing SystemVerilog input from `'/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/CLZ_30.sv'' to AST representation.\nSuccessfully finished Verilog frontend.\n\n2. Executing PROC pass (convert processes to netlists).\n\n2.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 134958e3cd, CPU: user 0.01s system 0.01s, MEM: 8.91 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 36% 1x opt_expr (0 sec), 25% 2x read_verilog (0 sec), ...\n"
+        },
+        "locked_executable_diff": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "NORMALIZE_ROUND_DIFF_PASS member=CLZ_30\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/CLZ_30.tb.sv:29: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 525ps; walltime 0.002 s; speed 186.059 ns/s\n- Verilator: cpu 0.003 s on 1 threads; alloced 152 MB\n"
+        },
+        "diff_testbench_sha256": "5efed8b3c2d1a07cc983b85ec5b1763c226962e2263f97723720808e430da1f3"
+      },
+      "CLZ_31": {
+        "abi_exact": true,
+        "deterministic": true,
+        "rtl_bytes": 2744,
+        "rtl_sha256": "e0d961e221bc8d08f4f85e243c5278135236f4d4817143500b9462754e01cf0c",
+        "verilator_lint": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.023 MB sources in 3 modules, into 0.018 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.021 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.007 s on 1 threads; alloced 9.305 MB\n"
+        },
+        "yosys_check": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "sv'\nParsing SystemVerilog input from `'/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/CLZ_31.sv'' to AST representation.\nSuccessfully finished Verilog frontend.\n\n2. Executing PROC pass (convert processes to netlists).\n\n2.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: c7b93af086, CPU: user 0.00s system 0.02s, MEM: 8.91 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 45% 1x opt_expr (0 sec), 28% 2x read_verilog (0 sec), ...\n"
+        },
+        "locked_executable_diff": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "NORMALIZE_ROUND_DIFF_PASS member=CLZ_31\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/CLZ_31.tb.sv:29: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 538ps; walltime 0.001 s; speed 326.184 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 152 MB\n"
+        },
+        "diff_testbench_sha256": "e2471b2ae7919ea079d40c5044a3db337ff1664efdd7d42a873589bb8c35168b"
+      },
+      "RoundingUnit": {
+        "abi_exact": true,
+        "deterministic": true,
+        "rtl_bytes": 2527,
+        "rtl_sha256": "96ab7dad74e1d89c5505ecb5a888c7e99600f9271b2e1e8020c94f66bc5fc075",
+        "verilator_lint": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "e: In instance 'RoundingUnit'\n   79 |   assign \\$20  = ! io_rm;\n      |                  ^\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/RoundingUnit.sv:82:24: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                               : ... note: In instance 'RoundingUnit'\n   82 |   assign \\$23  = io_rm == 1'h1;\n      |                        ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/RoundingUnit.sv:83:24: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                                                               : ... note: In instance 'RoundingUnit'\n   83 |   assign \\$24  = io_rm == 2'h2;\n      |                        ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/RoundingUnit.sv:86:24: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                                                                                                                                               : ... note: In instance 'RoundingUnit'\n   86 |   assign \\$27  = io_rm == 2'h3;\n      |                        ^~\n"
+        },
+        "yosys_check": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "rsing SystemVerilog input from `'/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/RoundingUnit.sv'' to AST representation.\nSuccessfully finished Verilog frontend.\n\n2. Executing PROC pass (convert processes to netlists).\n\n2.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: a4e7580f70, CPU: user 0.01s system 0.00s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 41% 1x opt_expr (0 sec), 37% 2x read_verilog (0 sec), ...\n"
+        },
+        "locked_executable_diff": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "NORMALIZE_ROUND_DIFF_PASS member=RoundingUnit\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/RoundingUnit.tb.sv:40: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 384ps; walltime 0.001 s; speed 232.536 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n"
+        },
+        "diff_testbench_sha256": "86251b39a5b7d34fe924d9ff44b4a9a8d6de82919e8b80886887721a9231f78d"
+      },
+      "RoundingUnit_1": {
+        "abi_exact": true,
+        "deterministic": true,
+        "rtl_bytes": 2529,
+        "rtl_sha256": "274feb3ab65c2c6db81e64ac3f0edf3d9aacd35e2c63737f0b77241e8f6eba26",
+        "verilator_lint": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "dingUnit_1'\n   79 |   assign \\$20  = ! io_rm;\n      |                  ^\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/RoundingUnit_1.sv:82:24: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                                 : ... note: In instance 'RoundingUnit_1'\n   82 |   assign \\$23  = io_rm == 1'h1;\n      |                        ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/RoundingUnit_1.sv:83:24: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                                                                 : ... note: In instance 'RoundingUnit_1'\n   83 |   assign \\$24  = io_rm == 2'h2;\n      |                        ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/RoundingUnit_1.sv:86:24: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                                                                                                                                                 : ... note: In instance 'RoundingUnit_1'\n   86 |   assign \\$27  = io_rm == 2'h3;\n      |                        ^~\n"
+        },
+        "yosys_check": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "ing SystemVerilog input from `'/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/RoundingUnit_1.sv'' to AST representation.\nSuccessfully finished Verilog frontend.\n\n2. Executing PROC pass (convert processes to netlists).\n\n2.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 25f0215ac9, CPU: user 0.01s system 0.01s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 38% 1x opt_expr (0 sec), 36% 2x read_verilog (0 sec), ...\n"
+        },
+        "locked_executable_diff": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "NORMALIZE_ROUND_DIFF_PASS member=RoundingUnit_1\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/RoundingUnit_1.tb.sv:40: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 384ps; walltime 0.001 s; speed 171.918 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n"
+        },
+        "diff_testbench_sha256": "a29328cc615337bc0fe62456fc75d520ad436c26cea8e67c92c22b75caf75411"
+      },
+      "RoundingUnit_2": {
+        "abi_exact": true,
+        "deterministic": true,
+        "rtl_bytes": 2524,
+        "rtl_sha256": "06543b4318a7912e63156106fe1638d056d3874795c735c0164f4d57b514d80b",
+        "verilator_lint": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "dingUnit_2'\n   79 |   assign \\$20  = ! io_rm;\n      |                  ^\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/RoundingUnit_2.sv:82:24: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                                 : ... note: In instance 'RoundingUnit_2'\n   82 |   assign \\$23  = io_rm == 1'h1;\n      |                        ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/RoundingUnit_2.sv:83:24: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                                                                 : ... note: In instance 'RoundingUnit_2'\n   83 |   assign \\$24  = io_rm == 2'h2;\n      |                        ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/RoundingUnit_2.sv:86:24: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                                                                                                                                                 : ... note: In instance 'RoundingUnit_2'\n   86 |   assign \\$27  = io_rm == 2'h3;\n      |                        ^~\n"
+        },
+        "yosys_check": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "ing SystemVerilog input from `'/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/RoundingUnit_2.sv'' to AST representation.\nSuccessfully finished Verilog frontend.\n\n2. Executing PROC pass (convert processes to netlists).\n\n2.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: aaed420079, CPU: user 0.02s system 0.00s, MEM: 9.22 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 36% 1x opt_expr (0 sec), 29% 2x read_verilog (0 sec), ...\n"
+        },
+        "locked_executable_diff": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "NORMALIZE_ROUND_DIFF_PASS member=RoundingUnit_2\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/RoundingUnit_2.tb.sv:40: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 384ps; walltime 0.001 s; speed 218.355 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n"
+        },
+        "diff_testbench_sha256": "1a69effe88ebcb0772c0724161ae5c35e1c3ee1d0dacad62a56690729574f5ab"
+      },
+      "RoundingUnit_3": {
+        "abi_exact": true,
+        "deterministic": true,
+        "rtl_bytes": 1624,
+        "rtl_sha256": "2ca628b2bf742971924a4aa417c0504ffac5f158867be2cd2d3842e852d94a29",
+        "verilator_lint": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "tor lint_off WIDTHTRUNC */\" and lint_on around source to disable this message.\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/RoundingUnit_3.sv:45:23: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                                 : ... note: In instance 'RoundingUnit_3'\n   45 |   assign \\$4  = io_rm == 1'h1;\n      |                       ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/RoundingUnit_3.sv:46:23: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                                                                 : ... note: In instance 'RoundingUnit_3'\n   46 |   assign \\$5  = io_rm == 2'h2;\n      |                       ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/RoundingUnit_3.sv:49:23: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                                                                                                                                                 : ... note: In instance 'RoundingUnit_3'\n   49 |   assign \\$8  = io_rm == 2'h3;\n      |                       ^~\n"
+        },
+        "yosys_check": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "ing SystemVerilog input from `'/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/RoundingUnit_3.sv'' to AST representation.\nSuccessfully finished Verilog frontend.\n\n2. Executing PROC pass (convert processes to netlists).\n\n2.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: d458fe28cd, CPU: user 0.00s system 0.01s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 42% 2x read_verilog (0 sec), 38% 1x opt_expr (0 sec), ...\n"
+        },
+        "locked_executable_diff": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "NORMALIZE_ROUND_DIFF_PASS member=RoundingUnit_3\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/RoundingUnit_3.tb.sv:40: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 384ps; walltime 0.001 s; speed 196.831 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n"
+        },
+        "diff_testbench_sha256": "1a0782c60d8df25a7fb3d1295c33636b81305d633bdb81d996d1a21e864674d0"
+      },
+      "RoundingUnit_4": {
+        "abi_exact": true,
+        "deterministic": true,
+        "rtl_bytes": 1624,
+        "rtl_sha256": "b6beae4d65d8c889086d5727b6ca50d070956bdb5bb21b910db0517b82050885",
+        "verilator_lint": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "tor lint_off WIDTHTRUNC */\" and lint_on around source to disable this message.\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/RoundingUnit_4.sv:45:23: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                                 : ... note: In instance 'RoundingUnit_4'\n   45 |   assign \\$4  = io_rm == 1'h1;\n      |                       ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/RoundingUnit_4.sv:46:23: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                                                                 : ... note: In instance 'RoundingUnit_4'\n   46 |   assign \\$5  = io_rm == 2'h2;\n      |                       ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/RoundingUnit_4.sv:49:23: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                                                                                                                                                 : ... note: In instance 'RoundingUnit_4'\n   49 |   assign \\$8  = io_rm == 2'h3;\n      |                       ^~\n"
+        },
+        "yosys_check": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "ing SystemVerilog input from `'/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/RoundingUnit_4.sv'' to AST representation.\nSuccessfully finished Verilog frontend.\n\n2. Executing PROC pass (convert processes to netlists).\n\n2.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: f6e834c99a, CPU: user 0.01s system 0.01s, MEM: 8.91 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 46% 1x opt_expr (0 sec), 30% 2x read_verilog (0 sec), ...\n"
+        },
+        "locked_executable_diff": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "NORMALIZE_ROUND_DIFF_PASS member=RoundingUnit_4\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/RoundingUnit_4.tb.sv:40: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 384ps; walltime 0.002 s; speed 147.437 ns/s\n- Verilator: cpu 0.003 s on 1 threads; alloced 153 MB\n"
+        },
+        "diff_testbench_sha256": "822d1928ea250327a647c3f14f525efd96a349233f189b866a838d4ca20a1080"
+      },
+      "RoundingUnit_8": {
+        "abi_exact": true,
+        "deterministic": true,
+        "rtl_bytes": 1624,
+        "rtl_sha256": "a45be08bfbc2de6e7a248817e8732dc840c2a5f721a303c02dd95f20958e3b2a",
+        "verilator_lint": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "tor lint_off WIDTHTRUNC */\" and lint_on around source to disable this message.\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/RoundingUnit_8.sv:45:23: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                                 : ... note: In instance 'RoundingUnit_8'\n   45 |   assign \\$4  = io_rm == 1'h1;\n      |                       ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/RoundingUnit_8.sv:46:23: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                                                                 : ... note: In instance 'RoundingUnit_8'\n   46 |   assign \\$5  = io_rm == 2'h2;\n      |                       ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/RoundingUnit_8.sv:49:23: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                                                                                                                                                 : ... note: In instance 'RoundingUnit_8'\n   49 |   assign \\$8  = io_rm == 2'h3;\n      |                       ^~\n"
+        },
+        "yosys_check": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "ing SystemVerilog input from `'/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/RoundingUnit_8.sv'' to AST representation.\nSuccessfully finished Verilog frontend.\n\n2. Executing PROC pass (convert processes to netlists).\n\n2.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 2ff9e191bf, CPU: user 0.01s system 0.01s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 46% 1x opt_expr (0 sec), 29% 2x read_verilog (0 sec), ...\n"
+        },
+        "locked_executable_diff": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "NORMALIZE_ROUND_DIFF_PASS member=RoundingUnit_8\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/RoundingUnit_8.tb.sv:40: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 384ps; walltime 0.001 s; speed 193.553 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n"
+        },
+        "diff_testbench_sha256": "4304a7baac4f2671b62c3aaf2fed165f2568e9ece80b89c0dcb8006fb5fffec4"
+      },
+      "RoundingUnit_9": {
+        "abi_exact": true,
+        "deterministic": true,
+        "rtl_bytes": 1622,
+        "rtl_sha256": "412c46bc3f68e449f52399ab12e721827d427afd20d6e03004dd9ce40a842cb7",
+        "verilator_lint": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "tor lint_off WIDTHTRUNC */\" and lint_on around source to disable this message.\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/RoundingUnit_9.sv:45:23: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                                 : ... note: In instance 'RoundingUnit_9'\n   45 |   assign \\$4  = io_rm == 1'h1;\n      |                       ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/RoundingUnit_9.sv:46:23: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                                                                 : ... note: In instance 'RoundingUnit_9'\n   46 |   assign \\$5  = io_rm == 2'h2;\n      |                       ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/RoundingUnit_9.sv:49:23: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                                                                                                                                                 : ... note: In instance 'RoundingUnit_9'\n   49 |   assign \\$8  = io_rm == 2'h3;\n      |                       ^~\n"
+        },
+        "yosys_check": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "ing SystemVerilog input from `'/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/RoundingUnit_9.sv'' to AST representation.\nSuccessfully finished Verilog frontend.\n\n2. Executing PROC pass (convert processes to netlists).\n\n2.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: ffe63179f6, CPU: user 0.01s system 0.01s, MEM: 8.91 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 41% 1x opt_expr (0 sec), 33% 2x read_verilog (0 sec), ...\n"
+        },
+        "locked_executable_diff": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "NORMALIZE_ROUND_DIFF_PASS member=RoundingUnit_9\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/RoundingUnit_9.tb.sv:40: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 384ps; walltime 0.001 s; speed 176.447 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n"
+        },
+        "diff_testbench_sha256": "4f604576f23f4c2b3b740460fd7e83dba1ea7b38560ae84888291611cd11e07c"
+      },
+      "RoundingUnit_11": {
+        "abi_exact": true,
+        "deterministic": true,
+        "rtl_bytes": 1625,
+        "rtl_sha256": "fc6c60db1d398a498add5413e1a43c32021fc8ae329fd7e8ca8a87b6345c609d",
+        "verilator_lint": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "off WIDTHTRUNC */\" and lint_on around source to disable this message.\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/RoundingUnit_11.sv:45:23: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                                  : ... note: In instance 'RoundingUnit_11'\n   45 |   assign \\$4  = io_rm == 1'h1;\n      |                       ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/RoundingUnit_11.sv:46:23: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                                                                  : ... note: In instance 'RoundingUnit_11'\n   46 |   assign \\$5  = io_rm == 2'h2;\n      |                       ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/RoundingUnit_11.sv:49:23: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                                                                                                                                                  : ... note: In instance 'RoundingUnit_11'\n   49 |   assign \\$8  = io_rm == 2'h3;\n      |                       ^~\n"
+        },
+        "yosys_check": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "ng SystemVerilog input from `'/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/RoundingUnit_11.sv'' to AST representation.\nSuccessfully finished Verilog frontend.\n\n2. Executing PROC pass (convert processes to netlists).\n\n2.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 0495eadfe9, CPU: user 0.00s system 0.01s, MEM: 9.22 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 42% 2x read_verilog (0 sec), 37% 1x opt_expr (0 sec), ...\n"
+        },
+        "locked_executable_diff": {
+          "status": "PASS",
+          "returncode": 0,
+          "output_tail": "NORMALIZE_ROUND_DIFF_PASS member=RoundingUnit_11\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-normalize-round-family-wave/RoundingUnit_11.tb.sv:40: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 384ps; walltime 0.001 s; speed 195.414 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n"
+        },
+        "diff_testbench_sha256": "c993a38f984d416ea624f367d5ef8857c1eaed80e1f42f0fad98f28039bd7973"
+      }
+    }
+  },
+  "failures": [],
+  "remaining": [
+    "SAT/formal and negative controls remain for the serialized coordinator rail.",
+    "Parent-level closure and license review remain pending."
+  ]
+}

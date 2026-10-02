@@ -1,0 +1,1251 @@
+{
+  "kind": "V2_IMPLEMENTED_MEMBER_FORMAL_DIAGNOSTIC",
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "build_id": "Build-Cpu.Backend.Fu.FloatingPoint.Family",
+  "members": [
+    "BoothEncoderF64F32F16"
+  ],
+  "family_members": [
+    "ArrayMulDataModule",
+    "BoothEncoderF64F32F16",
+    "FloatAdder",
+    "FloatAdderF32F16MixedPipeline",
+    "FloatAdderF64Pipeline",
+    "FloatDivider",
+    "FloatDividerR64",
+    "FloatFMA",
+    "IntToFPDataModule",
+    "fpdiv_r64_block",
+    "fpsqrt_r16"
+  ],
+  "status": "PASS_MEMBER_PROOFS_NON_COUNTING",
+  "strict_complete_build_count_delta": 0,
+  "acceptance_eligible": false,
+  "sources": {
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Fu.FloatingPoint.Family-Hardware.py",
+      "sha256": "c86663719665102b2359c344b9e70bde03e150154ec8e2a209cd4d56d86feb12",
+      "bytes": 20973
+    },
+    "direct_test": {
+      "path": "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Backend.Fu.FloatingPoint.Family-Hardware.py",
+      "sha256": "809da86595070efa42b8fd203d64bc069f55e34530d256b9167f846c81519abf",
+      "bytes": 5396
+    },
+    "direct_runner": {
+      "path": "validation/v2_direct_test_runner.py",
+      "sha256": "36550022d56b6e631bb7c6dd4299a8b91cf833d8574f1515ec0b157fff5bc01d",
+      "bytes": 1773
+    },
+    "validator": {
+      "path": "validation/v2_member_implementation_rail.py",
+      "sha256": "38a113616188de95d39e3cc08eada7427e9c1816c425f749e32310a875a8b8d7",
+      "bytes": 11863
+    },
+    "rail": {
+      "path": "validation/v2_strict_family_rail.py",
+      "sha256": "dd6cebba4a9b300c7fc8664b1a803045d7ff55041cab364a7753692c846e57a6",
+      "bytes": 72764
+    },
+    "scala": [
+      {
+        "path": "upstream/yunsuan/src/main/scala/yunsuan/fpu/FloatFMA.scala",
+        "sha256": "f67aaa3046854919e346b0f41785334fe6f640c30cb4246339f8141fcd139b31",
+        "bytes": 64125
+      }
+    ]
+  },
+  "direct": {
+    "status": "PASS",
+    "full_subject_suite": false,
+    "selected_cases": [
+      "BuildSubjectContractTest.test_subject_contract",
+      "FloatingPointBehaviorTest.test_booth_member_has_input_dependent_partial_products"
+    ],
+    "tests_run": 2
+  },
+  "sources_stable_during_run": true,
+  "results": [
+    {
+      "member": "BoothEncoderF64F32F16",
+      "status": "PASS",
+      "prepared": {
+        "name": "BoothEncoderF64F32F16",
+        "inputs": {
+          "io_in_a": 53,
+          "io_in_b": 53,
+          "io_is_fp64": 1,
+          "io_is_fp32": 1
+        },
+        "outputs": {
+          "io_out_pp_0": 107,
+          "io_out_pp_1": 107,
+          "io_out_pp_2": 107,
+          "io_out_pp_3": 107,
+          "io_out_pp_4": 107,
+          "io_out_pp_5": 107,
+          "io_out_pp_6": 107,
+          "io_out_pp_7": 107,
+          "io_out_pp_8": 107,
+          "io_out_pp_9": 107,
+          "io_out_pp_10": 107,
+          "io_out_pp_11": 107,
+          "io_out_pp_12": 107,
+          "io_out_pp_13": 107,
+          "io_out_pp_14": 107,
+          "io_out_pp_15": 107,
+          "io_out_pp_16": 107,
+          "io_out_pp_17": 107,
+          "io_out_pp_18": 107,
+          "io_out_pp_19": 107,
+          "io_out_pp_20": 107,
+          "io_out_pp_21": 107,
+          "io_out_pp_22": 107,
+          "io_out_pp_23": 107,
+          "io_out_pp_24": 107,
+          "io_out_pp_25": 107,
+          "io_out_pp_26": 107
+        },
+        "children": [],
+        "sequential": false,
+        "abi_exact": true,
+        "deterministic": true,
+        "output_less": false,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "view_audits": [
+          {
+            "top": "BoothEncoderF64F32F16",
+            "renamed_top": true,
+            "regions_removed_lines": {},
+            "block_local_temporaries_hoisted": [],
+            "initialized_declarations_hoisted": [],
+            "code_lines_locked": 728,
+            "code_lines_view": 728,
+            "residual_preprocessor_directives": 0,
+            "line_conservation_ok": true,
+            "register_update_equations_locked": 0,
+            "register_update_equations_preserved": true,
+            "view_projection": null,
+            "view_trusted": true
+          }
+        ],
+        "locked_sha256": "6bc0d7090531e6f1dc68167d5737f3e880c31b3bdce254cf0944f20abb254569",
+        "locked_sources": [
+          {
+            "__path__": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\reference-sv\\BoothEncoderF64F32F16.sv"
+          }
+        ],
+        "target": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family\\DUT_BoothEncoderF64F32F16.sv"
+        },
+        "reference": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family\\REF_BoothEncoderF64F32F16.sv"
+        },
+        "miter": {
+          "__path__": "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family\\BoothEncoderF64F32F16_MITER.sv"
+        },
+        "wsl": {
+          "target": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/DUT_BoothEncoderF64F32F16.sv",
+          "reference": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/REF_BoothEncoderF64F32F16.sv",
+          "miter": "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/BoothEncoderF64F32F16_MITER.sv",
+          "locked_sources": [
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/BoothEncoderF64F32F16.sv"
+          ]
+        },
+        "cache_key": "cc9cbf5bf404999f6b135ab87ece61689fa6645864705df7e4be97133cfbabd5",
+        "cache_hit": true,
+        "tool_versions": {
+          "python": "3.13.12",
+          "python_implementation": "CPython",
+          "host": "Windows-11-10.0.26300-SP0",
+          "amaranth": "0.5.8",
+          "yosys": "Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)",
+          "verilator": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)"
+        },
+        "prepared_hashes": {
+          "target": "8435f6b88f8420abf05a85b720ad7edbb28ada1fe3f911ef1089e12623293abc",
+          "reference": "4bb5a89b5bc4cc19f2ee0f33504e99571656a661043616bb88771e69c2a26443",
+          "miter": "dcd26efe2a045feb3f05de6df9dc4c21b06b512d53adb5923d55bd0f30df1017"
+        },
+        "static_blocked": false
+      },
+      "static_failures": [],
+      "formal": {
+        "method": "sat_miter",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "BoothEncoderF64F32F16_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/DUT_BoothEncoderF64F32F16.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/REF_BoothEncoderF64F32F16.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/BoothEncoderF64F32F16_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": " bits.\n17704 |   assign \\$1104  = \\$1103 [5:3] == 2'h2;\n      |                                 ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/DUT_BoothEncoderF64F32F16.sv:17708:33: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n17708 |   assign \\$1108  = \\$1107 [5:3] == 2'h3;\n      |                                 ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/DUT_BoothEncoderF64F32F16.sv:17727:33: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n17727 |   assign \\$1127  = \\$1126 [3:1] == 1'h1;\n      |                                 ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/DUT_BoothEncoderF64F32F16.sv:17730:33: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n17730 |   assign \\$1130  = \\$1129 [3:1] == 2'h2;\n      |                                 ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/DUT_BoothEncoderF64F32F16.sv:17734:33: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n17734 |   assign \\$1134  = \\$1133 [3:1] == 2'h3;\n      |                                 ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/DUT_BoothEncoderF64F32F16.sv:17751:33: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n17751 |   assign \\$1151  = \\$1150 [3:1] == 1'h1;\n      |                                 ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/DUT_BoothEncoderF64F32F16.sv:17754:33: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n17754 |   assign \\$1154  = \\$1153 [3:1] == 2'h2;\n      |                                 ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/DUT_BoothEncoderF64F32F16.sv:17758:33: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n17758 |   assign \\$1158  = \\$1157 [3:1] == 2'h3;\n      |                                 ^~\n",
+          "output_sha256": "b212393a3f2719eaf9fe5abeca0d9b8c0bb0cd4da335921218ea5b1e6795a1d2"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "BoothEncoderF64F32F16",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/BoothEncoderF64F32F16.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.047 MB sources in 2 modules, into 0.158 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.047 s (elab=0.003, cvt=0.015, bld=0.000); cpu 0.027 s on 1 threads; alloced 12.426 MB\n",
+          "output_sha256": "e2ec8ae0acdac56d93a0d07b1e8093bb5e0a4ddc80a0054c7b3e6f138578eb9c"
+        },
+        "sat_miter": {
+          "status": "PASS",
+          "returncode": 0,
+          "formal_success_marker": true,
+          "unconstrained": true,
+          "sat_variables": 183479,
+          "sat_clauses": 481461,
+          "proof_decomposition": "all_public_output_cones_no_input_assumptions",
+          "outputs_expected": {
+            "io_out_pp_0": 107,
+            "io_out_pp_1": 107,
+            "io_out_pp_2": 107,
+            "io_out_pp_3": 107,
+            "io_out_pp_4": 107,
+            "io_out_pp_5": 107,
+            "io_out_pp_6": 107,
+            "io_out_pp_7": 107,
+            "io_out_pp_8": 107,
+            "io_out_pp_9": 107,
+            "io_out_pp_10": 107,
+            "io_out_pp_11": 107,
+            "io_out_pp_12": 107,
+            "io_out_pp_13": 107,
+            "io_out_pp_14": 107,
+            "io_out_pp_15": 107,
+            "io_out_pp_16": 107,
+            "io_out_pp_17": 107,
+            "io_out_pp_18": 107,
+            "io_out_pp_19": 107,
+            "io_out_pp_20": 107,
+            "io_out_pp_21": 107,
+            "io_out_pp_22": 107,
+            "io_out_pp_23": 107,
+            "io_out_pp_24": 107,
+            "io_out_pp_25": 107,
+            "io_out_pp_26": 107
+          },
+          "partitions": [
+            {
+              "output": "io_out_pp_0",
+              "width": 107,
+              "status": "PASS",
+              "miter": {
+                "sha256": "c6c03679ca9f6ca0c5b8239a577ba3e6a3a6fe1cef941a4c2033044e0e212111"
+              },
+              "proof": {
+                "command": [
+                  "yosys",
+                  "-Q",
+                  "-p",
+                  "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/DUT_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/REF_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/BoothEncoderF64F32F16_CONE_io_out_pp_0.sv; prep -top BoothEncoderF64F32F16_MITER; flatten; opt; sat -prove mismatch 0"
+                ],
+                "returncode": 0,
+                "status": "PASS",
+                "sat_success_marker": true,
+                "sat_counterexample_marker": false,
+                "unconstrained_marker": true,
+                "equiv_success_markers": {
+                  "0 are unproven.": false,
+                  "Equivalence successfully proven!": false
+                },
+                "equiv_failure_marker": false,
+                "equiv_cells_full": null,
+                "equiv_summary_full": null,
+                "equiv_failed_full": null,
+                "sat_counts_full": [
+                  7838,
+                  20527
+                ],
+                "output_tail": "F pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\nRemoved 783 unused cells and 9464 unused wires.\n<suppressed ~833 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\BoothEncoderF64F32F16_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~5 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\BoothEncoderF64F32F16_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\BoothEncoderF64F32F16_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 57 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 7838 variables and 20527 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 6910f7817a, CPU: user 5.76s system 0.26s, MEM: 320.30 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 33% 7x opt_clean (2 sec), 12% 2x check (0 sec), ...\n",
+                "output_sha256": "239223778f323c9a8c29459ea5836450f14ca36dd8d082c2d44ddc8b3201da24"
+              }
+            },
+            {
+              "output": "io_out_pp_1",
+              "width": 107,
+              "status": "PASS",
+              "miter": {
+                "sha256": "894b3a61ec304d1d124eb75d9ff66f8a2660c33b3997daa9581d9c0e8112d43e"
+              },
+              "proof": {
+                "command": [
+                  "yosys",
+                  "-Q",
+                  "-p",
+                  "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/DUT_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/REF_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/BoothEncoderF64F32F16_CONE_io_out_pp_1.sv; prep -top BoothEncoderF64F32F16_MITER; flatten; opt; sat -prove mismatch 0"
+                ],
+                "returncode": 0,
+                "status": "PASS",
+                "sat_success_marker": true,
+                "sat_counterexample_marker": false,
+                "unconstrained_marker": true,
+                "equiv_success_markers": {
+                  "0 are unproven.": false,
+                  "Equivalence successfully proven!": false
+                },
+                "equiv_failure_marker": false,
+                "equiv_cells_full": null,
+                "equiv_summary_full": null,
+                "equiv_failed_full": null,
+                "sat_counts_full": [
+                  8018,
+                  21014
+                ],
+                "output_tail": "F pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\nRemoved 766 unused cells and 9448 unused wires.\n<suppressed ~815 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\BoothEncoderF64F32F16_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~7 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\BoothEncoderF64F32F16_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\BoothEncoderF64F32F16_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 74 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 8018 variables and 21014 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: eca4331c72, CPU: user 6.01s system 0.25s, MEM: 320.35 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 33% 7x opt_clean (2 sec), 15% 2x check (0 sec), ...\n",
+                "output_sha256": "016585bcdb66acfa156c3ee6911d1ccd5cf5c98998f36092bd36d4c5ad1c4ce0"
+              }
+            },
+            {
+              "output": "io_out_pp_2",
+              "width": 107,
+              "status": "PASS",
+              "miter": {
+                "sha256": "65d2803158cc37e3b1f35c03bc8a7e69f80cbd746d239c83596b02130a2d1eaa"
+              },
+              "proof": {
+                "command": [
+                  "yosys",
+                  "-Q",
+                  "-p",
+                  "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/DUT_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/REF_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/BoothEncoderF64F32F16_CONE_io_out_pp_2.sv; prep -top BoothEncoderF64F32F16_MITER; flatten; opt; sat -prove mismatch 0"
+                ],
+                "returncode": 0,
+                "status": "PASS",
+                "sat_success_marker": true,
+                "sat_counterexample_marker": false,
+                "unconstrained_marker": true,
+                "equiv_success_markers": {
+                  "0 are unproven.": false,
+                  "Equivalence successfully proven!": false
+                },
+                "equiv_failure_marker": false,
+                "equiv_cells_full": null,
+                "equiv_summary_full": null,
+                "equiv_failed_full": null,
+                "sat_counts_full": [
+                  8109,
+                  21265
+                ],
+                "output_tail": "F pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\nRemoved 759 unused cells and 9438 unused wires.\n<suppressed ~808 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\BoothEncoderF64F32F16_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~7 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\BoothEncoderF64F32F16_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\BoothEncoderF64F32F16_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 81 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 8109 variables and 21265 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: b3e2f4faa6, CPU: user 5.92s system 0.25s, MEM: 320.34 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 32% 7x opt_clean (2 sec), 16% 2x check (1 sec), ...\n",
+                "output_sha256": "e381808227c241e07ea45669d05e2627be5bbc9474a5738d9ee4623ec7de76b7"
+              }
+            },
+            {
+              "output": "io_out_pp_3",
+              "width": 107,
+              "status": "PASS",
+              "miter": {
+                "sha256": "7bf5f3e1823c09384a897a6fd8ab32f13c3aa8d80652246f01fd18849a27bf70"
+              },
+              "proof": {
+                "command": [
+                  "yosys",
+                  "-Q",
+                  "-p",
+                  "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/DUT_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/REF_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/BoothEncoderF64F32F16_CONE_io_out_pp_3.sv; prep -top BoothEncoderF64F32F16_MITER; flatten; opt; sat -prove mismatch 0"
+                ],
+                "returncode": 0,
+                "status": "PASS",
+                "sat_success_marker": true,
+                "sat_counterexample_marker": false,
+                "unconstrained_marker": true,
+                "equiv_success_markers": {
+                  "0 are unproven.": false,
+                  "Equivalence successfully proven!": false
+                },
+                "equiv_failure_marker": false,
+                "equiv_cells_full": null,
+                "equiv_summary_full": null,
+                "equiv_failed_full": null,
+                "sat_counts_full": [
+                  8133,
+                  21331
+                ],
+                "output_tail": "F pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\nRemoved 759 unused cells and 9435 unused wires.\n<suppressed ~808 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\BoothEncoderF64F32F16_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~7 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\BoothEncoderF64F32F16_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\BoothEncoderF64F32F16_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 81 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 8133 variables and 21331 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: f30fd82052, CPU: user 4.92s system 0.14s, MEM: 320.46 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 34% 7x opt_clean (1 sec), 12% 2x check (0 sec), ...\n",
+                "output_sha256": "dbcd60f875e6c3f94aab077d97c445f663e6210c3b8c25281ec04b4ef6e2cc9c"
+              }
+            },
+            {
+              "output": "io_out_pp_4",
+              "width": 107,
+              "status": "PASS",
+              "miter": {
+                "sha256": "2d22f76dffd3245ce5c50e9521aefbe4417b9ae935567d9f90dedf7dfdc47d0b"
+              },
+              "proof": {
+                "command": [
+                  "yosys",
+                  "-Q",
+                  "-p",
+                  "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/DUT_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/REF_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/BoothEncoderF64F32F16_CONE_io_out_pp_4.sv; prep -top BoothEncoderF64F32F16_MITER; flatten; opt; sat -prove mismatch 0"
+                ],
+                "returncode": 0,
+                "status": "PASS",
+                "sat_success_marker": true,
+                "sat_counterexample_marker": false,
+                "unconstrained_marker": true,
+                "equiv_success_markers": {
+                  "0 are unproven.": false,
+                  "Equivalence successfully proven!": false
+                },
+                "equiv_failure_marker": false,
+                "equiv_cells_full": null,
+                "equiv_summary_full": null,
+                "equiv_failed_full": null,
+                "sat_counts_full": [
+                  8157,
+                  21397
+                ],
+                "output_tail": "F pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\nRemoved 759 unused cells and 9435 unused wires.\n<suppressed ~808 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\BoothEncoderF64F32F16_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~7 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\BoothEncoderF64F32F16_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\BoothEncoderF64F32F16_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 81 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 8157 variables and 21397 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: b6bdfbc33a, CPU: user 4.52s system 0.18s, MEM: 320.68 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 32% 7x opt_clean (1 sec), 13% 2x check (0 sec), ...\n",
+                "output_sha256": "0d160e0e3b94b24af9bf16d52d54ab62f15af57a817f607027fd7296f09b3130"
+              }
+            },
+            {
+              "output": "io_out_pp_5",
+              "width": 107,
+              "status": "PASS",
+              "miter": {
+                "sha256": "9a4e7de6310247801ac885a88bd006873bec6ec7a53d7ecfa143d33b8daa4d37"
+              },
+              "proof": {
+                "command": [
+                  "yosys",
+                  "-Q",
+                  "-p",
+                  "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/DUT_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/REF_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/BoothEncoderF64F32F16_CONE_io_out_pp_5.sv; prep -top BoothEncoderF64F32F16_MITER; flatten; opt; sat -prove mismatch 0"
+                ],
+                "returncode": 0,
+                "status": "PASS",
+                "sat_success_marker": true,
+                "sat_counterexample_marker": false,
+                "unconstrained_marker": true,
+                "equiv_success_markers": {
+                  "0 are unproven.": false,
+                  "Equivalence successfully proven!": false
+                },
+                "equiv_failure_marker": false,
+                "equiv_cells_full": null,
+                "equiv_summary_full": null,
+                "equiv_failed_full": null,
+                "sat_counts_full": [
+                  8179,
+                  21457
+                ],
+                "output_tail": "F pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\nRemoved 759 unused cells and 9437 unused wires.\n<suppressed ~807 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\BoothEncoderF64F32F16_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~7 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\BoothEncoderF64F32F16_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\BoothEncoderF64F32F16_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 81 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 8179 variables and 21457 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: f249f593d3, CPU: user 4.43s system 0.15s, MEM: 320.43 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 31% 7x opt_clean (1 sec), 13% 2x check (0 sec), ...\n",
+                "output_sha256": "38aa496d44af618616db41a0d8e9b698d19ec9a857e27a589c7c3d86b2d32416"
+              }
+            },
+            {
+              "output": "io_out_pp_6",
+              "width": 107,
+              "status": "PASS",
+              "miter": {
+                "sha256": "4b0fde4da83c58c9e31a5bd4b116a8a2fc4aa35b70a68894d726e2203f06650e"
+              },
+              "proof": {
+                "command": [
+                  "yosys",
+                  "-Q",
+                  "-p",
+                  "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/DUT_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/REF_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/BoothEncoderF64F32F16_CONE_io_out_pp_6.sv; prep -top BoothEncoderF64F32F16_MITER; flatten; opt; sat -prove mismatch 0"
+                ],
+                "returncode": 0,
+                "status": "PASS",
+                "sat_success_marker": true,
+                "sat_counterexample_marker": false,
+                "unconstrained_marker": true,
+                "equiv_success_markers": {
+                  "0 are unproven.": false,
+                  "Equivalence successfully proven!": false
+                },
+                "equiv_failure_marker": false,
+                "equiv_cells_full": null,
+                "equiv_summary_full": null,
+                "equiv_failed_full": null,
+                "sat_counts_full": [
+                  7577,
+                  19883
+                ],
+                "output_tail": "F pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\nRemoved 767 unused cells and 9451 unused wires.\n<suppressed ~814 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\BoothEncoderF64F32F16_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~7 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\BoothEncoderF64F32F16_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\BoothEncoderF64F32F16_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 69 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 7577 variables and 19883 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 9b4426570e, CPU: user 4.53s system 0.19s, MEM: 320.30 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 33% 7x opt_clean (1 sec), 12% 2x check (0 sec), ...\n",
+                "output_sha256": "0c2e936f10f31910338b26d88906411a9fa3e04cc8497a5bda75054deea0f0f0"
+              }
+            },
+            {
+              "output": "io_out_pp_7",
+              "width": 107,
+              "status": "PASS",
+              "miter": {
+                "sha256": "bdf9a31f78b43691e8734c3686971959302bcdb9702ef96c801f3981d5ac98af"
+              },
+              "proof": {
+                "command": [
+                  "yosys",
+                  "-Q",
+                  "-p",
+                  "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/DUT_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/REF_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/BoothEncoderF64F32F16_CONE_io_out_pp_7.sv; prep -top BoothEncoderF64F32F16_MITER; flatten; opt; sat -prove mismatch 0"
+                ],
+                "returncode": 0,
+                "status": "PASS",
+                "sat_success_marker": true,
+                "sat_counterexample_marker": false,
+                "unconstrained_marker": true,
+                "equiv_success_markers": {
+                  "0 are unproven.": false,
+                  "Equivalence successfully proven!": false
+                },
+                "equiv_failure_marker": false,
+                "equiv_cells_full": null,
+                "equiv_summary_full": null,
+                "equiv_failed_full": null,
+                "sat_counts_full": [
+                  7623,
+                  20007
+                ],
+                "output_tail": "F pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\nRemoved 767 unused cells and 9448 unused wires.\n<suppressed ~814 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\BoothEncoderF64F32F16_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~7 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\BoothEncoderF64F32F16_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\BoothEncoderF64F32F16_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 69 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 7623 variables and 20007 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: b8f1941cd7, CPU: user 4.39s system 0.21s, MEM: 320.55 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 31% 7x opt_clean (1 sec), 14% 2x check (0 sec), ...\n",
+                "output_sha256": "3212e85a2eea3e656d581028939acc895ad43f994163677ea8187d5675378c49"
+              }
+            },
+            {
+              "output": "io_out_pp_8",
+              "width": 107,
+              "status": "PASS",
+              "miter": {
+                "sha256": "af87b4c4ea2a8844b197b58c842a33a63663fb12ad5ec5e4c0c644f97d567e0b"
+              },
+              "proof": {
+                "command": [
+                  "yosys",
+                  "-Q",
+                  "-p",
+                  "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/DUT_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/REF_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/BoothEncoderF64F32F16_CONE_io_out_pp_8.sv; prep -top BoothEncoderF64F32F16_MITER; flatten; opt; sat -prove mismatch 0"
+                ],
+                "returncode": 0,
+                "status": "PASS",
+                "sat_success_marker": true,
+                "sat_counterexample_marker": false,
+                "unconstrained_marker": true,
+                "equiv_success_markers": {
+                  "0 are unproven.": false,
+                  "Equivalence successfully proven!": false
+                },
+                "equiv_failure_marker": false,
+                "equiv_cells_full": null,
+                "equiv_summary_full": null,
+                "equiv_failed_full": null,
+                "sat_counts_full": [
+                  7688,
+                  20182
+                ],
+                "output_tail": "F pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\nRemoved 767 unused cells and 9445 unused wires.\n<suppressed ~814 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\BoothEncoderF64F32F16_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~7 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\BoothEncoderF64F32F16_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\BoothEncoderF64F32F16_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 69 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 7688 variables and 20182 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 55135b9961, CPU: user 4.30s system 0.14s, MEM: 320.12 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 32% 7x opt_clean (1 sec), 13% 2x check (0 sec), ...\n",
+                "output_sha256": "7fb4f8ff0d2d29038ab051fa72fe032355b565fcd89a85d074e0da4d36479760"
+              }
+            },
+            {
+              "output": "io_out_pp_9",
+              "width": 107,
+              "status": "PASS",
+              "miter": {
+                "sha256": "461a3fef596438893af2fa22860710f3f3d351b015b210bc3a0bcd85771c807b"
+              },
+              "proof": {
+                "command": [
+                  "yosys",
+                  "-Q",
+                  "-p",
+                  "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/DUT_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/REF_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/BoothEncoderF64F32F16_CONE_io_out_pp_9.sv; prep -top BoothEncoderF64F32F16_MITER; flatten; opt; sat -prove mismatch 0"
+                ],
+                "returncode": 0,
+                "status": "PASS",
+                "sat_success_marker": true,
+                "sat_counterexample_marker": false,
+                "unconstrained_marker": true,
+                "equiv_success_markers": {
+                  "0 are unproven.": false,
+                  "Equivalence successfully proven!": false
+                },
+                "equiv_failure_marker": false,
+                "equiv_cells_full": null,
+                "equiv_summary_full": null,
+                "equiv_failed_full": null,
+                "sat_counts_full": [
+                  7734,
+                  20306
+                ],
+                "output_tail": "F pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\nRemoved 767 unused cells and 9445 unused wires.\n<suppressed ~814 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\BoothEncoderF64F32F16_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~7 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\BoothEncoderF64F32F16_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\BoothEncoderF64F32F16_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 69 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 7734 variables and 20306 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: d426d85e92, CPU: user 4.27s system 0.20s, MEM: 320.66 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 32% 7x opt_clean (1 sec), 13% 2x check (0 sec), ...\n",
+                "output_sha256": "b522b4309ecee0860c159e960818c88bf8dce9484c5fb912d77276201eae7ae5"
+              }
+            },
+            {
+              "output": "io_out_pp_10",
+              "width": 107,
+              "status": "PASS",
+              "miter": {
+                "sha256": "42dcb2a908c1bf50e0ba7313b8b8e585007078b275351cc7a7a4a441ee60a833"
+              },
+              "proof": {
+                "command": [
+                  "yosys",
+                  "-Q",
+                  "-p",
+                  "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/DUT_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/REF_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/BoothEncoderF64F32F16_CONE_io_out_pp_10.sv; prep -top BoothEncoderF64F32F16_MITER; flatten; opt; sat -prove mismatch 0"
+                ],
+                "returncode": 0,
+                "status": "PASS",
+                "sat_success_marker": true,
+                "sat_counterexample_marker": false,
+                "unconstrained_marker": true,
+                "equiv_success_markers": {
+                  "0 are unproven.": false,
+                  "Equivalence successfully proven!": false
+                },
+                "equiv_failure_marker": false,
+                "equiv_cells_full": null,
+                "equiv_summary_full": null,
+                "equiv_failed_full": null,
+                "sat_counts_full": [
+                  7761,
+                  20379
+                ],
+                "output_tail": "F pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\nRemoved 767 unused cells and 9445 unused wires.\n<suppressed ~814 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\BoothEncoderF64F32F16_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~7 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\BoothEncoderF64F32F16_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\BoothEncoderF64F32F16_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 69 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 7761 variables and 20379 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 23b49163ee, CPU: user 4.66s system 0.20s, MEM: 319.59 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 32% 7x opt_clean (1 sec), 12% 2x check (0 sec), ...\n",
+                "output_sha256": "84d3a5019748627fa02729aded69ad7382025238509a5adb375ae0be013e056f"
+              }
+            },
+            {
+              "output": "io_out_pp_11",
+              "width": 107,
+              "status": "PASS",
+              "miter": {
+                "sha256": "d4698de6289e2aee33f251ab34187ce8e3cdf59c83f8d46673e84c89027339b3"
+              },
+              "proof": {
+                "command": [
+                  "yosys",
+                  "-Q",
+                  "-p",
+                  "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/DUT_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/REF_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/BoothEncoderF64F32F16_CONE_io_out_pp_11.sv; prep -top BoothEncoderF64F32F16_MITER; flatten; opt; sat -prove mismatch 0"
+                ],
+                "returncode": 0,
+                "status": "PASS",
+                "sat_success_marker": true,
+                "sat_counterexample_marker": false,
+                "unconstrained_marker": true,
+                "equiv_success_markers": {
+                  "0 are unproven.": false,
+                  "Equivalence successfully proven!": false
+                },
+                "equiv_failure_marker": false,
+                "equiv_cells_full": null,
+                "equiv_summary_full": null,
+                "equiv_failed_full": null,
+                "sat_counts_full": [
+                  7807,
+                  20503
+                ],
+                "output_tail": "F pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\nRemoved 767 unused cells and 9444 unused wires.\n<suppressed ~814 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\BoothEncoderF64F32F16_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~7 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\BoothEncoderF64F32F16_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\BoothEncoderF64F32F16_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 69 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 7807 variables and 20503 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: a9d72a983e, CPU: user 5.22s system 0.20s, MEM: 319.80 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 29% 7x opt_clean (1 sec), 17% 2x check (0 sec), ...\n",
+                "output_sha256": "837c34a4f944aa238f07e0bfada80d42a16ec975a578c441eec2b498cb698581"
+              }
+            },
+            {
+              "output": "io_out_pp_12",
+              "width": 107,
+              "status": "PASS",
+              "miter": {
+                "sha256": "3a672f93bd0e6f06fb137635a8d7aebef9b20fa8288e8be7b87665822d653f9b"
+              },
+              "proof": {
+                "command": [
+                  "yosys",
+                  "-Q",
+                  "-p",
+                  "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/DUT_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/REF_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/BoothEncoderF64F32F16_CONE_io_out_pp_12.sv; prep -top BoothEncoderF64F32F16_MITER; flatten; opt; sat -prove mismatch 0"
+                ],
+                "returncode": 0,
+                "status": "PASS",
+                "sat_success_marker": true,
+                "sat_counterexample_marker": false,
+                "unconstrained_marker": true,
+                "equiv_success_markers": {
+                  "0 are unproven.": false,
+                  "Equivalence successfully proven!": false
+                },
+                "equiv_failure_marker": false,
+                "equiv_cells_full": null,
+                "equiv_summary_full": null,
+                "equiv_failed_full": null,
+                "sat_counts_full": [
+                  7850,
+                  20606
+                ],
+                "output_tail": "F pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\nRemoved 766 unused cells and 9446 unused wires.\n<suppressed ~813 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\BoothEncoderF64F32F16_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~7 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\BoothEncoderF64F32F16_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\BoothEncoderF64F32F16_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 70 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 7850 variables and 20606 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 7743f10bdc, CPU: user 4.91s system 0.20s, MEM: 319.48 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 34% 7x opt_clean (1 sec), 12% 2x check (0 sec), ...\n",
+                "output_sha256": "0a7a51ec39469e62c697c4ef154be5360e9c379c49687327cca61bf7c5504b4a"
+              }
+            },
+            {
+              "output": "io_out_pp_13",
+              "width": 107,
+              "status": "PASS",
+              "miter": {
+                "sha256": "ac6310b5ac7d6c9eaa1e29a6fb95ec7295c55bc603ad42ef7453e0146101869d"
+              },
+              "proof": {
+                "command": [
+                  "yosys",
+                  "-Q",
+                  "-p",
+                  "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/DUT_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/REF_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/BoothEncoderF64F32F16_CONE_io_out_pp_13.sv; prep -top BoothEncoderF64F32F16_MITER; flatten; opt; sat -prove mismatch 0"
+                ],
+                "returncode": 0,
+                "status": "PASS",
+                "sat_success_marker": true,
+                "sat_counterexample_marker": false,
+                "unconstrained_marker": true,
+                "equiv_success_markers": {
+                  "0 are unproven.": false,
+                  "Equivalence successfully proven!": false
+                },
+                "equiv_failure_marker": false,
+                "equiv_cells_full": null,
+                "equiv_summary_full": null,
+                "equiv_failed_full": null,
+                "sat_counts_full": [
+                  5668,
+                  14868
+                ],
+                "output_tail": "F pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\nRemoved 775 unused cells and 9464 unused wires.\n<suppressed ~822 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\BoothEncoderF64F32F16_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~7 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\BoothEncoderF64F32F16_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\BoothEncoderF64F32F16_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 55 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 5668 variables and 14868 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: fb5c5e85bf, CPU: user 4.94s system 0.19s, MEM: 319.50 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 31% 7x opt_clean (1 sec), 13% 2x check (0 sec), ...\n",
+                "output_sha256": "d1945980863195cdb5bdbf332f4def7b06eff1f25d7684554f79d180ab96134f"
+              }
+            },
+            {
+              "output": "io_out_pp_14",
+              "width": 107,
+              "status": "PASS",
+              "miter": {
+                "sha256": "0c0dd5a35b26fab45a07b147f356a5ec173169e02817bad1c653ac0ff162288d"
+              },
+              "proof": {
+                "command": [
+                  "yosys",
+                  "-Q",
+                  "-p",
+                  "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/DUT_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/REF_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/BoothEncoderF64F32F16_CONE_io_out_pp_14.sv; prep -top BoothEncoderF64F32F16_MITER; flatten; opt; sat -prove mismatch 0"
+                ],
+                "returncode": 0,
+                "status": "PASS",
+                "sat_success_marker": true,
+                "sat_counterexample_marker": false,
+                "unconstrained_marker": true,
+                "equiv_success_markers": {
+                  "0 are unproven.": false,
+                  "Equivalence successfully proven!": false
+                },
+                "equiv_failure_marker": false,
+                "equiv_cells_full": null,
+                "equiv_summary_full": null,
+                "equiv_failed_full": null,
+                "sat_counts_full": [
+                  5690,
+                  14928
+                ],
+                "output_tail": "(perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\nRemoved 775 unused cells and 9465 unused wires.\n<suppressed ~822 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\BoothEncoderF64F32F16_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~7 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\BoothEncoderF64F32F16_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\BoothEncoderF64F32F16_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 55 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 5690 variables and 14928 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: cc5dabc491, CPU: user 4.47s system 0.18s, MEM: 319.66 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 30% 7x opt_clean (1 sec), 15% 4x read_verilog (0 sec), ...\n",
+                "output_sha256": "0ff23a13216f0ed583eb86c44b481409d2edef1bf3f31ab1d6f61f68500de7f1"
+              }
+            },
+            {
+              "output": "io_out_pp_15",
+              "width": 107,
+              "status": "PASS",
+              "miter": {
+                "sha256": "97b40122eb37268a8b6da630f0f3f4f29960b042fea1f96c5f8b551e95e6a87d"
+              },
+              "proof": {
+                "command": [
+                  "yosys",
+                  "-Q",
+                  "-p",
+                  "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/DUT_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/REF_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/BoothEncoderF64F32F16_CONE_io_out_pp_15.sv; prep -top BoothEncoderF64F32F16_MITER; flatten; opt; sat -prove mismatch 0"
+                ],
+                "returncode": 0,
+                "status": "PASS",
+                "sat_success_marker": true,
+                "sat_counterexample_marker": false,
+                "unconstrained_marker": true,
+                "equiv_success_markers": {
+                  "0 are unproven.": false,
+                  "Equivalence successfully proven!": false
+                },
+                "equiv_failure_marker": false,
+                "equiv_cells_full": null,
+                "equiv_summary_full": null,
+                "equiv_failed_full": null,
+                "sat_counts_full": [
+                  5712,
+                  14988
+                ],
+                "output_tail": "F pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\nRemoved 775 unused cells and 9463 unused wires.\n<suppressed ~822 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\BoothEncoderF64F32F16_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~7 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\BoothEncoderF64F32F16_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\BoothEncoderF64F32F16_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 55 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 5712 variables and 14988 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 3d34e73cd5, CPU: user 4.37s system 0.14s, MEM: 319.81 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 32% 7x opt_clean (1 sec), 12% 2x check (0 sec), ...\n",
+                "output_sha256": "1ce9cb13fc059ab50aa486632d3ac892930e270c3b6fdf0e6dc0560fae5b16f7"
+              }
+            },
+            {
+              "output": "io_out_pp_16",
+              "width": 107,
+              "status": "PASS",
+              "miter": {
+                "sha256": "6880d1bd8406d90a366d3cc8e7048b61a533726a94e01653b81d5a7827861f0e"
+              },
+              "proof": {
+                "command": [
+                  "yosys",
+                  "-Q",
+                  "-p",
+                  "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/DUT_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/REF_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/BoothEncoderF64F32F16_CONE_io_out_pp_16.sv; prep -top BoothEncoderF64F32F16_MITER; flatten; opt; sat -prove mismatch 0"
+                ],
+                "returncode": 0,
+                "status": "PASS",
+                "sat_success_marker": true,
+                "sat_counterexample_marker": false,
+                "unconstrained_marker": true,
+                "equiv_success_markers": {
+                  "0 are unproven.": false,
+                  "Equivalence successfully proven!": false
+                },
+                "equiv_failure_marker": false,
+                "equiv_cells_full": null,
+                "equiv_summary_full": null,
+                "equiv_failed_full": null,
+                "sat_counts_full": [
+                  5734,
+                  15048
+                ],
+                "output_tail": "F pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\nRemoved 775 unused cells and 9463 unused wires.\n<suppressed ~822 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\BoothEncoderF64F32F16_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~7 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\BoothEncoderF64F32F16_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\BoothEncoderF64F32F16_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 55 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 5734 variables and 15048 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: dbb33af408, CPU: user 4.48s system 0.15s, MEM: 319.34 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 33% 7x opt_clean (1 sec), 13% 2x check (0 sec), ...\n",
+                "output_sha256": "052790cea1d9f15c2c744e5b3fcf578a82818368387f45ea443048595bf2d35f"
+              }
+            },
+            {
+              "output": "io_out_pp_17",
+              "width": 107,
+              "status": "PASS",
+              "miter": {
+                "sha256": "11213267193a90aff0ad75905c52974751348027748ab5c53fcb81aca5dccfe9"
+              },
+              "proof": {
+                "command": [
+                  "yosys",
+                  "-Q",
+                  "-p",
+                  "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/DUT_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/REF_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/BoothEncoderF64F32F16_CONE_io_out_pp_17.sv; prep -top BoothEncoderF64F32F16_MITER; flatten; opt; sat -prove mismatch 0"
+                ],
+                "returncode": 0,
+                "status": "PASS",
+                "sat_success_marker": true,
+                "sat_counterexample_marker": false,
+                "unconstrained_marker": true,
+                "equiv_success_markers": {
+                  "0 are unproven.": false,
+                  "Equivalence successfully proven!": false
+                },
+                "equiv_failure_marker": false,
+                "equiv_cells_full": null,
+                "equiv_summary_full": null,
+                "equiv_failed_full": null,
+                "sat_counts_full": [
+                  5756,
+                  15108
+                ],
+                "output_tail": "F pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\nRemoved 775 unused cells and 9465 unused wires.\n<suppressed ~822 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\BoothEncoderF64F32F16_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~7 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\BoothEncoderF64F32F16_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\BoothEncoderF64F32F16_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 55 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 5756 variables and 15108 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: f6871cbf27, CPU: user 4.36s system 0.15s, MEM: 319.32 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 31% 7x opt_clean (1 sec), 13% 2x check (0 sec), ...\n",
+                "output_sha256": "140073f564f980e90a3cd56b4ba20b4d8c5237cd067b199025ba084692b551df"
+              }
+            },
+            {
+              "output": "io_out_pp_18",
+              "width": 107,
+              "status": "PASS",
+              "miter": {
+                "sha256": "7516516723355807355c98af25f537d9402a4410927426bc295381ce96705af7"
+              },
+              "proof": {
+                "command": [
+                  "yosys",
+                  "-Q",
+                  "-p",
+                  "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/DUT_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/REF_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/BoothEncoderF64F32F16_CONE_io_out_pp_18.sv; prep -top BoothEncoderF64F32F16_MITER; flatten; opt; sat -prove mismatch 0"
+                ],
+                "returncode": 0,
+                "status": "PASS",
+                "sat_success_marker": true,
+                "sat_counterexample_marker": false,
+                "unconstrained_marker": true,
+                "equiv_success_markers": {
+                  "0 are unproven.": false,
+                  "Equivalence successfully proven!": false
+                },
+                "equiv_failure_marker": false,
+                "equiv_cells_full": null,
+                "equiv_summary_full": null,
+                "equiv_failed_full": null,
+                "sat_counts_full": [
+                  5778,
+                  15168
+                ],
+                "output_tail": "F pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\nRemoved 775 unused cells and 9465 unused wires.\n<suppressed ~822 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\BoothEncoderF64F32F16_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~7 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\BoothEncoderF64F32F16_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\BoothEncoderF64F32F16_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 55 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 5778 variables and 15168 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 44d326a130, CPU: user 4.60s system 0.18s, MEM: 319.50 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 31% 7x opt_clean (1 sec), 13% 2x check (0 sec), ...\n",
+                "output_sha256": "6459b397d569c00049a6ffc683aa60a3e894432f903866f96ac11d7af6ae835a"
+              }
+            },
+            {
+              "output": "io_out_pp_19",
+              "width": 107,
+              "status": "PASS",
+              "miter": {
+                "sha256": "418ffa2d6d3058811e17324f52394569ba80c4a8daea96877b17db86cec99a0c"
+              },
+              "proof": {
+                "command": [
+                  "yosys",
+                  "-Q",
+                  "-p",
+                  "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/DUT_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/REF_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/BoothEncoderF64F32F16_CONE_io_out_pp_19.sv; prep -top BoothEncoderF64F32F16_MITER; flatten; opt; sat -prove mismatch 0"
+                ],
+                "returncode": 0,
+                "status": "PASS",
+                "sat_success_marker": true,
+                "sat_counterexample_marker": false,
+                "unconstrained_marker": true,
+                "equiv_success_markers": {
+                  "0 are unproven.": false,
+                  "Equivalence successfully proven!": false
+                },
+                "equiv_failure_marker": false,
+                "equiv_cells_full": null,
+                "equiv_summary_full": null,
+                "equiv_failed_full": null,
+                "sat_counts_full": [
+                  5800,
+                  15228
+                ],
+                "output_tail": "F pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\nRemoved 775 unused cells and 9465 unused wires.\n<suppressed ~822 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\BoothEncoderF64F32F16_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~7 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\BoothEncoderF64F32F16_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\BoothEncoderF64F32F16_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 55 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 5800 variables and 15228 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: af08733737, CPU: user 4.53s system 0.15s, MEM: 319.70 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 32% 7x opt_clean (1 sec), 13% 2x check (0 sec), ...\n",
+                "output_sha256": "f5d084a1335ab1441d5389035cc0860a31682878679b419285119fbd1b1bf4cb"
+              }
+            },
+            {
+              "output": "io_out_pp_20",
+              "width": 107,
+              "status": "PASS",
+              "miter": {
+                "sha256": "6233c2039e2cfa0ab91c7b81f4ae8659bcb880264b81425bdcae702c446881c3"
+              },
+              "proof": {
+                "command": [
+                  "yosys",
+                  "-Q",
+                  "-p",
+                  "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/DUT_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/REF_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/BoothEncoderF64F32F16_CONE_io_out_pp_20.sv; prep -top BoothEncoderF64F32F16_MITER; flatten; opt; sat -prove mismatch 0"
+                ],
+                "returncode": 0,
+                "status": "PASS",
+                "sat_success_marker": true,
+                "sat_counterexample_marker": false,
+                "unconstrained_marker": true,
+                "equiv_success_markers": {
+                  "0 are unproven.": false,
+                  "Equivalence successfully proven!": false
+                },
+                "equiv_failure_marker": false,
+                "equiv_cells_full": null,
+                "equiv_summary_full": null,
+                "equiv_failed_full": null,
+                "sat_counts_full": [
+                  5822,
+                  15288
+                ],
+                "output_tail": "F pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\nRemoved 775 unused cells and 9465 unused wires.\n<suppressed ~822 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\BoothEncoderF64F32F16_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~7 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\BoothEncoderF64F32F16_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\BoothEncoderF64F32F16_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 55 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 5822 variables and 15288 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 3e7505d8b3, CPU: user 4.53s system 0.12s, MEM: 319.40 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 30% 7x opt_clean (1 sec), 14% 2x check (0 sec), ...\n",
+                "output_sha256": "751082e8bcb769fb525747c7a588154fcd01f750431d54cc306954e6295a7edd"
+              }
+            },
+            {
+              "output": "io_out_pp_21",
+              "width": 107,
+              "status": "PASS",
+              "miter": {
+                "sha256": "8b45f9eb767aa18934bc201a9a996a70a0461963ee5f0213853243f3228e173e"
+              },
+              "proof": {
+                "command": [
+                  "yosys",
+                  "-Q",
+                  "-p",
+                  "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/DUT_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/REF_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/BoothEncoderF64F32F16_CONE_io_out_pp_21.sv; prep -top BoothEncoderF64F32F16_MITER; flatten; opt; sat -prove mismatch 0"
+                ],
+                "returncode": 0,
+                "status": "PASS",
+                "sat_success_marker": true,
+                "sat_counterexample_marker": false,
+                "unconstrained_marker": true,
+                "equiv_success_markers": {
+                  "0 are unproven.": false,
+                  "Equivalence successfully proven!": false
+                },
+                "equiv_failure_marker": false,
+                "equiv_cells_full": null,
+                "equiv_summary_full": null,
+                "equiv_failed_full": null,
+                "sat_counts_full": [
+                  5844,
+                  15348
+                ],
+                "output_tail": "F pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\nRemoved 775 unused cells and 9465 unused wires.\n<suppressed ~822 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\BoothEncoderF64F32F16_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~7 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\BoothEncoderF64F32F16_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\BoothEncoderF64F32F16_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 55 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 5844 variables and 15348 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: ce8f0922bb, CPU: user 4.49s system 0.15s, MEM: 319.50 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 33% 7x opt_clean (1 sec), 13% 2x check (0 sec), ...\n",
+                "output_sha256": "d84529817284c6c9104c20c864607925bd303e2189c18785e3adfe7cf6155c7a"
+              }
+            },
+            {
+              "output": "io_out_pp_22",
+              "width": 107,
+              "status": "PASS",
+              "miter": {
+                "sha256": "ab645ddae92c91e3f0b9df9ac9707d78d2765aa0ef22d11cb9cde184769b4b6e"
+              },
+              "proof": {
+                "command": [
+                  "yosys",
+                  "-Q",
+                  "-p",
+                  "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/DUT_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/REF_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/BoothEncoderF64F32F16_CONE_io_out_pp_22.sv; prep -top BoothEncoderF64F32F16_MITER; flatten; opt; sat -prove mismatch 0"
+                ],
+                "returncode": 0,
+                "status": "PASS",
+                "sat_success_marker": true,
+                "sat_counterexample_marker": false,
+                "unconstrained_marker": true,
+                "equiv_success_markers": {
+                  "0 are unproven.": false,
+                  "Equivalence successfully proven!": false
+                },
+                "equiv_failure_marker": false,
+                "equiv_cells_full": null,
+                "equiv_summary_full": null,
+                "equiv_failed_full": null,
+                "sat_counts_full": [
+                  5866,
+                  15408
+                ],
+                "output_tail": "F pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\nRemoved 775 unused cells and 9465 unused wires.\n<suppressed ~822 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\BoothEncoderF64F32F16_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~7 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\BoothEncoderF64F32F16_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\BoothEncoderF64F32F16_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 55 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 5866 variables and 15408 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 2b357d9226, CPU: user 4.48s system 0.16s, MEM: 319.42 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 32% 7x opt_clean (1 sec), 12% 2x check (0 sec), ...\n",
+                "output_sha256": "165850ced54372fc11ee6c85823245798abb038651661ac5c186c68000221635"
+              }
+            },
+            {
+              "output": "io_out_pp_23",
+              "width": 107,
+              "status": "PASS",
+              "miter": {
+                "sha256": "cef6e77ae7ba29ff4fd63249bce73ddd5b158095154281e2108320aa40f08ea2"
+              },
+              "proof": {
+                "command": [
+                  "yosys",
+                  "-Q",
+                  "-p",
+                  "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/DUT_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/REF_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/BoothEncoderF64F32F16_CONE_io_out_pp_23.sv; prep -top BoothEncoderF64F32F16_MITER; flatten; opt; sat -prove mismatch 0"
+                ],
+                "returncode": 0,
+                "status": "PASS",
+                "sat_success_marker": true,
+                "sat_counterexample_marker": false,
+                "unconstrained_marker": true,
+                "equiv_success_markers": {
+                  "0 are unproven.": false,
+                  "Equivalence successfully proven!": false
+                },
+                "equiv_failure_marker": false,
+                "equiv_cells_full": null,
+                "equiv_summary_full": null,
+                "equiv_failed_full": null,
+                "sat_counts_full": [
+                  5888,
+                  15468
+                ],
+                "output_tail": "(perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\nRemoved 775 unused cells and 9465 unused wires.\n<suppressed ~822 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\BoothEncoderF64F32F16_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~7 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\BoothEncoderF64F32F16_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\BoothEncoderF64F32F16_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 55 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 5888 variables and 15468 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 2db4d11f4d, CPU: user 5.11s system 0.21s, MEM: 319.21 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 29% 7x opt_clean (1 sec), 14% 4x read_verilog (0 sec), ...\n",
+                "output_sha256": "ec0e3d2fbd052b8962c33de10e8b56c668f79011ea9b6b745e59341f4205b463"
+              }
+            },
+            {
+              "output": "io_out_pp_24",
+              "width": 107,
+              "status": "PASS",
+              "miter": {
+                "sha256": "ffa1bc451ef8da6b99317ce4d0019ba4833a0160eed978f6a4679dfb3b5542e8"
+              },
+              "proof": {
+                "command": [
+                  "yosys",
+                  "-Q",
+                  "-p",
+                  "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/DUT_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/REF_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/BoothEncoderF64F32F16_CONE_io_out_pp_24.sv; prep -top BoothEncoderF64F32F16_MITER; flatten; opt; sat -prove mismatch 0"
+                ],
+                "returncode": 0,
+                "status": "PASS",
+                "sat_success_marker": true,
+                "sat_counterexample_marker": false,
+                "unconstrained_marker": true,
+                "equiv_success_markers": {
+                  "0 are unproven.": false,
+                  "Equivalence successfully proven!": false
+                },
+                "equiv_failure_marker": false,
+                "equiv_cells_full": null,
+                "equiv_summary_full": null,
+                "equiv_failed_full": null,
+                "sat_counts_full": [
+                  5910,
+                  15528
+                ],
+                "output_tail": "F pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\nRemoved 775 unused cells and 9465 unused wires.\n<suppressed ~822 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\BoothEncoderF64F32F16_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~7 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\BoothEncoderF64F32F16_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\BoothEncoderF64F32F16_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 55 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 5910 variables and 15528 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 6c0cf62873, CPU: user 4.93s system 0.20s, MEM: 319.55 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 33% 7x opt_clean (1 sec), 16% 2x check (0 sec), ...\n",
+                "output_sha256": "e9f006779d7b579f08707df53b74660e07bf1a612938b6a8525d643a7cb716f3"
+              }
+            },
+            {
+              "output": "io_out_pp_25",
+              "width": 107,
+              "status": "PASS",
+              "miter": {
+                "sha256": "f4ca5f3288a78168f67a16b73065ac1b4648737350d2ca73ca9318ed556bac17"
+              },
+              "proof": {
+                "command": [
+                  "yosys",
+                  "-Q",
+                  "-p",
+                  "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/DUT_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/REF_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/BoothEncoderF64F32F16_CONE_io_out_pp_25.sv; prep -top BoothEncoderF64F32F16_MITER; flatten; opt; sat -prove mismatch 0"
+                ],
+                "returncode": 0,
+                "status": "PASS",
+                "sat_success_marker": true,
+                "sat_counterexample_marker": false,
+                "unconstrained_marker": true,
+                "equiv_success_markers": {
+                  "0 are unproven.": false,
+                  "Equivalence successfully proven!": false
+                },
+                "equiv_failure_marker": false,
+                "equiv_cells_full": null,
+                "equiv_summary_full": null,
+                "equiv_failed_full": null,
+                "sat_counts_full": [
+                  5932,
+                  15588
+                ],
+                "output_tail": "F pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\nRemoved 775 unused cells and 9465 unused wires.\n<suppressed ~822 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\BoothEncoderF64F32F16_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~7 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\BoothEncoderF64F32F16_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\BoothEncoderF64F32F16_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 55 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 5932 variables and 15588 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 9c9282979b, CPU: user 5.40s system 0.18s, MEM: 319.66 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 32% 7x opt_clean (1 sec), 11% 2x check (0 sec), ...\n",
+                "output_sha256": "2cb5e88759dcdbcd5c08fcbafea6273a488d16472bd9d8e4b8f340df06021862"
+              }
+            },
+            {
+              "output": "io_out_pp_26",
+              "width": 107,
+              "status": "PASS",
+              "miter": {
+                "sha256": "166e2aafb4b3b730af898b411189fa5e5cad0274c0ac78313c232b4cd61f947d"
+              },
+              "proof": {
+                "command": [
+                  "yosys",
+                  "-Q",
+                  "-p",
+                  "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/DUT_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/REF_BoothEncoderF64F32F16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_backend_fu_floatingpoint_family_memberdiagnostic_family/BoothEncoderF64F32F16_CONE_io_out_pp_26.sv; prep -top BoothEncoderF64F32F16_MITER; flatten; opt; sat -prove mismatch 0"
+                ],
+                "returncode": 0,
+                "status": "PASS",
+                "sat_success_marker": true,
+                "sat_counterexample_marker": false,
+                "unconstrained_marker": true,
+                "equiv_success_markers": {
+                  "0 are unproven.": false,
+                  "Equivalence successfully proven!": false
+                },
+                "equiv_failure_marker": false,
+                "equiv_cells_full": null,
+                "equiv_summary_full": null,
+                "equiv_failed_full": null,
+                "sat_counts_full": [
+                  5605,
+                  14640
+                ],
+                "output_tail": "F pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\nRemoved 788 unused cells and 9476 unused wires.\n<suppressed ~834 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\BoothEncoderF64F32F16_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~6 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\BoothEncoderF64F32F16_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\BoothEncoderF64F32F16_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\BoothEncoderF64F32F16_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module BoothEncoderF64F32F16_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 42 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 5605 variables and 14640 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 9f9580e14a, CPU: user 5.00s system 0.14s, MEM: 319.63 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 34% 7x opt_clean (1 sec), 12% 2x check (0 sec), ...\n",
+                "output_sha256": "bdb08e7e3ad85494d4ab4ea2d2f20234d1542ecb3449d453d36dd50335ec9863"
+              }
+            }
+          ],
+          "output_sha256": "6532d6f6a7fa98a6d6a90afcf641be6fa42cefa5bf03a11ef6290dd918208fe5"
+        }
+      }
+    }
+  ],
+  "negative_control": {
+    "status": "PASS",
+    "cases": {
+      "sat.target": {
+        "status": "PASS",
+        "control_entry": "BoothEncoderF64F32F16",
+        "control_port": "io_out_pp_0",
+        "mutation_applied": true,
+        "explicit_failure_marker": true,
+        "success_marker_still_present": false,
+        "returncode": 0
+      },
+      "sat.reference": {
+        "status": "PASS",
+        "control_entry": "BoothEncoderF64F32F16",
+        "control_port": "io_out_pp_0",
+        "mutation_applied": true,
+        "explicit_failure_marker": true,
+        "success_marker_still_present": false,
+        "returncode": 0
+      },
+      "sequential": {
+        "status": "PASS",
+        "note": "no representative with outputs"
+      }
+    },
+    "note": "a reference-side mutation that still proves means the reference never reaches the comparison"
+  },
+  "unclosed": [
+    "Complete family, reset/startup correspondence, parent/top closure and acceptance remain separate gates."
+  ]
+}

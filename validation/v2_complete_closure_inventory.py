@@ -83,8 +83,9 @@ def module_declarations(tree: ast.Module, locked: set[str]) -> dict[str, list[st
     # implemented set.  It is evaluated structurally, never through eval().
     if "CONTRACT_ONLY_MEMBERS" not in values:
         for statement in tree.body:
-            names = (statement.targets if isinstance(statement, ast.Assign)
-                     else [statement.target] if isinstance(statement, ast.AnnAssign) else [])
+            if not isinstance(statement, (ast.Assign, ast.AnnAssign)):
+                continue
+            names = statement.targets if isinstance(statement, ast.Assign) else [statement.target]
             if any(isinstance(name, ast.Name) and name.id == "CONTRACT_ONLY_MEMBERS"
                    for name in names):
                 if isinstance(statement.value, ast.Call) and isinstance(statement.value.func, ast.Name) \
@@ -165,7 +166,10 @@ def inventory() -> dict[str, Any]:
         for child in modules[name]["children"]:
             walk(child["module"])
     walk("XSTop")
-    transaction = naming["path_rename_transaction"]["renames"]
+    transaction = naming["path_rename_transaction"]["renames"] + naming.get("candidate_additions", [])
+    paths = [row["new_path"] for row in transaction]
+    if len(paths) != len(set(paths)):
+        raise ValueError("duplicate candidate identity paths")
     tests = {row["new_path"] for row in transaction if row["kind"] == "testing-script"}
     builds = [row for row in transaction if row["kind"] == "build-script"]
     declared: dict[str, list[dict[str, str]]] = defaultdict(list)
@@ -251,6 +255,46 @@ def inventory() -> dict[str, Any]:
                      "source_mapping_candidates_not_implementation": mapped,
                      "fresh_audited_build_scopes": sorted(proven_modules[name]),
                      "requires_parent_and_reset_acceptance": True})
+    if {row["module"] for row in rows} != locked or len(rows) != len(locked):
+        raise ValueError("module inventory is not an exact partition of the locked closure")
+    pending_packages: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
+    for row in rows:
+        if row["status"] == "AUDITED_FORMAL_BUILD_SCOPE":
+            continue
+        family = re.sub(r"_\d+$", "", row["module"])
+        sources = sorted({source_key(value) for value in row["scala_sources"]})
+        primary = sources[0] if sources else "NO_SOURCE_LOCATION"
+        pending_packages[(primary, family)].append(row)
+    work_packages = [{
+        "source_family": source, "module_family": family,
+        "modules": [row["module"] for row in package],
+        "member_count": len(package),
+        "status_counts": dict(Counter(row["status"] for row in package)),
+        "registered_catalog_candidates": sorted({item["build"] for row in package
+                                                 for item in row["exact_catalog_candidates"]}),
+        "source_mapping_candidates_not_implementation": sorted({candidate for row in package
+                                                                 for candidate in row["source_mapping_candidates_not_implementation"]}),
+        "next_gate": "READ_EXACT_REFERENCE_AND_AUDIT_OR_IMPLEMENT_EVERY_VARIANT",
+    } for (source, family), package in sorted(pending_packages.items())]
+    pending_members = [name for package in work_packages for name in package["modules"]]
+    expected_pending = {row["module"] for row in rows if row["status"] != "AUDITED_FORMAL_BUILD_SCOPE"}
+    if len(pending_members) != len(set(pending_members)) or set(pending_members) != expected_pending:
+        raise ValueError("pending work packages omit or duplicate locked modules")
+    registered_builds = {row["new_path"] for row in builds}
+    observed_builds = {path.relative_to(ROOT).as_posix()
+                       for path in (ROOT / "python/Program-System/System-Build/Build-Cpu").rglob("*.py")}
+    registered_tests = tests
+    observed_tests = {path.relative_to(ROOT).as_posix()
+                      for path in (ROOT / "python/Program-System/System-Testing/Testing-Cpu").glob("*.py")}
+    registration_audit = {
+        "unregistered_builds": sorted(observed_builds - registered_builds),
+        "missing_registered_builds": sorted(registered_builds - observed_builds),
+        "unregistered_tests": sorted(observed_tests - registered_tests),
+        "missing_registered_tests": sorted(registered_tests - observed_tests),
+        "policy": "Filesystem enumeration audits omissions only; it never assigns identity or executable ownership.",
+    }
+    registration_audit["status"] = "FAIL" if any(registration_audit[key] for key in (
+        "unregistered_builds", "missing_registered_builds", "unregistered_tests", "missing_registered_tests")) else "PASS"
     git = subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT,
                          capture_output=True, text=True, check=True).stdout.strip()
     working = subprocess.run(["git", "status", "--short"], cwd=ROOT,
@@ -259,9 +303,14 @@ def inventory() -> dict[str, Any]:
             "git_commit": git, "worktree_status_at_snapshot": working,
             "inputs_sha256": input_hashes, "locked_xstop_sha256": EXPECTED_HASH,
             "policy": "Static exact catalogs and broad source mappings do not establish behavior; saved audited proofs with changed sources are excluded; reset/parent/top acceptance is separate.",
+            "candidate_registration_audit": registration_audit,
+            "pending_work_packages": work_packages,
             "summary": {"locked_modules": len(rows), "reachable_modules": len(reachable),
                         "module_status_counts": dict(Counter(row["status"] for row in rows)),
                         "build_files": len(build_rows),
+                        "observed_build_files": len(observed_builds),
+                        "pending_work_packages": len(work_packages),
+                        "pending_modules_in_work_packages": len(pending_members),
                         "historical_ledger_fraction": progress["fraction"],
                         "saved_pass_builds_current_sources": sum(row["saved_pass_sources_still_match"] for row in build_rows),
                         "build_raw_lines": sum(row["lines_total"] for row in build_rows),

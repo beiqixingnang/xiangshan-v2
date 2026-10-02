@@ -1,0 +1,223 @@
+{
+  "kind": "V2_REVIEWED_COMPLETE_IMPLEMENTATION_WAVE",
+  "baseline": "04205060c9c67df2d83e1d1ad2e8708847a615f9",
+  "status": "REAL_IMPLEMENTATION_PROGRESS_ACCEPTANCE_PENDING",
+  "strict_formal_builds": "48/122",
+  "strict_formal_delta": 5,
+  "full_build_acceptance": "0/122",
+  "accepted": 0,
+  "central_audit_status": "FAIL",
+  "historical_failed_receipts": [
+    "Build-Cpu.Backend.Datapath.BypassPipeFamily",
+    "Build-Cpu.Backend.Datapath.VectorFamily",
+    "Build-Cpu.Backend.Datapath.WbArbiter",
+    "Build-Cpu.Backend.SmallControl.Family",
+    "Build-Cpu.Cache.Dcache.Meta.TagArray",
+    "Build-Cpu.Dependency.Utility.ResidualFamily",
+    "Build-Cpu.Memory.FrontendBridge",
+    "Build-Cpu.Memory.Prefetch.Metadata.Family",
+    "Build-Cpu.Top.UHSTile.IntBuffer.Family",
+    "Build-Cpu.Frontend.Icache.InstrMMIOEntry"
+  ],
+  "new_or_revalidated_complete_builds": [
+    "Build-Cpu.Backend.Fu.NewCSR.XRetPermit",
+    "Build-Cpu.Dependency.Rocket.TLChildren.Family",
+    "Build-Cpu.Dependency.Fpu.NormalizeRoundFamily",
+    "Build-Cpu.Dependency.Utility.DelayFamily",
+    "Build-Cpu.Dependency.Utility.BitSelectFamily"
+  ],
+  "new_aggregate_builds": {
+    "NormalizeRoundFamily": 17,
+    "DelayFamily": 48,
+    "BitSelectFamily": 10
+  },
+  "new_exact_member_ownership": 75,
+  "locked_module_definitions": 1976,
+  "formal_build_scope_modules": 265,
+  "unknown_exact_owner": 1517,
+  "contract_only_modules": 56,
+  "catalog_pending_modules": 138,
+  "coverage_policy": "1976 elaborated module definitions, not Scala file or instance counts; catalog ownership is not behavior acceptance.",
+  "python_size": {
+    "baseline": "04205060c9c67df2d83e1d1ad2e8708847a615f9",
+    "scope": "candidate Build Python only; size never establishes implementation",
+    "before_files": 119,
+    "current_files": 122,
+    "before": {
+      "raw": 94251,
+      "nonempty": 87503,
+      "code": 78906
+    },
+    "current": {
+      "raw": 95536,
+      "nonempty": 88639,
+      "code": 80016
+    },
+    "delta": {
+      "raw": 1285,
+      "nonempty": 1136,
+      "code": 1110
+    },
+    "changed": {
+      "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Fu.FloatingPoint.Family-Hardware.py": {
+        "raw": -145,
+        "nonempty": -138,
+        "code": -102
+      },
+      "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Fu.NewCSR.XRetPermit-Hardware.py": {
+        "raw": -5,
+        "nonempty": -4,
+        "code": 0
+      },
+      "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Fpu.NormalizeRoundFamily-Hardware.py": {
+        "raw": 186,
+        "nonempty": 165,
+        "code": 157
+      },
+      "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.BitSelectFamily-Hardware.py": {
+        "raw": 299,
+        "nonempty": 252,
+        "code": 232
+      },
+      "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.DelayFamily-Hardware.py": {
+        "raw": 712,
+        "nonempty": 642,
+        "code": 609
+      },
+      "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Memory.Dcache.MissQueue.Family-Hardware.py": {
+        "raw": 8,
+        "nonempty": 7,
+        "code": 11
+      },
+      "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Memory.Store.Family-Hardware.py": {
+        "raw": 230,
+        "nonempty": 212,
+        "code": 203
+      }
+    }
+  },
+  "static_review": [
+    {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Fu.FloatingPoint.Family-Hardware.py",
+      "sha256": "c86663719665102b2359c344b9e70bde03e150154ec8e2a209cd4d56d86feb12",
+      "syntax": "PASS",
+      "five_zone_order": "PASS",
+      "provenance_separation": "PASS"
+    },
+    {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Backend.Fu.NewCSR.XRetPermit-Hardware.py",
+      "sha256": "1064edf6d6c31ec0a3beb385f7198d72d4441c5361d4dcc5ed2b53c829660735",
+      "syntax": "PASS",
+      "five_zone_order": "PASS",
+      "provenance_separation": "PASS"
+    },
+    {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Fpu.NormalizeRoundFamily-Hardware.py",
+      "sha256": "1d172aa58693b2a456d16aefbef459cb5e935ce682c461f5b38be65c97f3757d",
+      "syntax": "PASS",
+      "five_zone_order": "PASS",
+      "provenance_separation": "PASS"
+    },
+    {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.DelayFamily-Hardware.py",
+      "sha256": "ccf51618a4fea2e7f96606913d475c9631977669629b1a64eb01cc3de9f8dfc4",
+      "syntax": "PASS",
+      "five_zone_order": "PASS",
+      "provenance_separation": "PASS"
+    },
+    {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.BitSelectFamily-Hardware.py",
+      "sha256": "e19984c9f1ed72202320de1d1cce93e53785e6019067ba418c552fd1a787bd56",
+      "syntax": "PASS",
+      "five_zone_order": "PASS",
+      "provenance_separation": "PASS"
+    },
+    {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Memory.Dcache.MissQueue.Family-Hardware.py",
+      "sha256": "39950e9e119e8362d6d6f5a610ef8a2891bc2dd9893c2f3a21a081e2b0b6a461",
+      "syntax": "PASS",
+      "five_zone_order": "PASS",
+      "provenance_separation": "PASS"
+    },
+    {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Memory.Store.Family-Hardware.py",
+      "sha256": "865b4bb9f402ab4d60096ae1c043eb46f14e6ab199dd4f3b63ef5e05fbd0f940",
+      "syntax": "PASS",
+      "five_zone_order": "PASS",
+      "provenance_separation": "PASS"
+    }
+  ],
+  "receipt_sources": [
+    {
+      "path": "validation/v2-build-cpu-backend-fu-newcsr-xretpermit-strict-evidence.json",
+      "sha256": "031727c3ef5c1082df28aa457bb5f85858deede05af14e29cca2e24bb3642ad3"
+    },
+    {
+      "path": "validation/v2-build-cpu-dependency-rocket-tlchildren-family-strict-evidence.json",
+      "sha256": "6c3f60e90e13986c533090bf299c5c393ebc82f4c52acb161575ccc2b64a944b"
+    },
+    {
+      "path": "validation/v2-build-cpu-dependency-fpu-normalizeroundfamily-strict-evidence.json",
+      "sha256": "ce89bec13ee3ee7ae5ec18b3037ba43280ace4f2d44764d910c0ce30ed722e43"
+    },
+    {
+      "path": "validation/v2-build-cpu-dependency-utility-delayfamily-strict-evidence.json",
+      "sha256": "1e6cf36c715e70bb420a2429b05b44e05e66602f6ad8efa2151912bf5b23922e"
+    },
+    {
+      "path": "validation/v2-build-cpu-dependency-utility-bitselectfamily-strict-evidence.json",
+      "sha256": "4059ccf47a755ccba19e12a284de28901dc5bc788afafd5579fd5a00246a7a93"
+    },
+    {
+      "path": "validation/v2-floating-point-leaf-wave-results.json",
+      "sha256": "d2b925f85a3a8408a52a0ac06aa2eb859f79b37e7d06e783cd6e274fdbaca99d"
+    },
+    {
+      "path": "validation/v2-floating-booth-cone-focused-results.json",
+      "sha256": "bcc9ca150d979cb468cd67d486b25d451119a0708775c68cd2099f3cfc9f779a"
+    },
+    {
+      "path": "validation/v2-normalize-round-family-wave-results.json",
+      "sha256": "acb29a1db4fd30ef0b3c878bc23bc2192ce0b3002343c780ae98bf9a6239af2e"
+    },
+    {
+      "path": "validation/v2-utility-delay-wave-results.json",
+      "sha256": "f28f102e91e33ce6a55578085ce45ae5dd3d9d350b17af23caa55fd7232992a1"
+    },
+    {
+      "path": "validation/v2-bitselect-family-wave-results.json",
+      "sha256": "72319513ad8490b9389b3d42fc48c8e4e58256d95b65be09cd3d2edec767ae80"
+    },
+    {
+      "path": "validation/v2-dcache-completion-wave-results.json",
+      "sha256": "b64d7103f9fa3627a3b0c458e1e26d8571f6eca89344b6f982fca45eb446428c"
+    },
+    {
+      "path": "validation/v2-dcache-completion-focused-formal-results.json",
+      "sha256": "5bcf2cd6fd4dec491e82ce99b96cde6d14c9b8ce7f30c1a9acc2c114186db033"
+    },
+    {
+      "path": "validation/v2-store-two-member-focused-results.json",
+      "sha256": "f7885bbb5141649d192e37c576269f47c69e3fd0292898dc228f96662253b905"
+    }
+  ],
+  "partial_family_proofs": {
+    "DcacheMissQueueFamily": "4/7 focused formal and two-sided controls; not a complete Build",
+    "FloatingPointFamily": "Booth 27/27 unconstrained output cones; ArrayMul 69-vector locked-closure differential only",
+    "StoreFamily": "2/4 implementation and locked-output differential; formal and remaining members pending"
+  },
+  "resource_policy": "WSL formal serialized; complete-output cone proofs replace oversized worksets without input assumptions",
+  "unrun_or_unclosed": [
+    "global Pyright milestone",
+    "historical receipt repairs",
+    "reset/startup acceptance beyond recorded proof relations",
+    "remaining exact implementations and direct tests",
+    "all parent/top closures",
+    "full CPU transactions",
+    "license acceptance",
+    "user approval and preview integration"
+  ],
+  "main_product_changes": false,
+  "locked_reference_changes": false,
+  "acceptance_eligible": false
+}

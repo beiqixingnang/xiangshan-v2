@@ -2,10 +2,10 @@
 
 """UHSC V2 DCache miss, probe, and writeback queue family.
 
-This aggregate exposes fixed interfaces for DCache miss-queue and adjacent
-queue leaves. The implementations provide bounded request, response, and
-arbitration behavior; full TileLink/coherence and parent DCache closure remain
-outside this leaf-family behavior claim.
+Miss-ready arbitration, tree arbitration, and both writeback-entry variants
+implement their locked leaf behavior. ProbeEntry has bounded equations but
+remains contract-only pending its full state and reset proof; CMOUnit and
+MissEntry also remain contract-only. Parent DCache closure is separate.
 """
 
 from __future__ import annotations
@@ -22,6 +22,7 @@ from amaranth.back import verilog
 __all__ = [
     'COVERED_MODULES',
     'CONTRACT_ONLY_MEMBERS',
+    'IMPLEMENTED_MEMBERS',
     'PORT_SPECS',
     'DcacheMissQueueFamily',
     'build_verilog',
@@ -39,16 +40,16 @@ COVERED_MODULES = (
     "WritebackEntry_15",
 )
 
-# This wave closes one leaf against the locked WritebackEntry equations.  The
-# remaining family members retain their exact ABI and bounded implementations,
-# but are deliberately held at contract level until their own source-backed
-# behavior work is complete.
 CONTRACT_ONLY_MEMBERS = (
     "CMOUnit",
     "MissEntry",
-    "MissReadyGen",
     "ProbeEntry",
+)
+
+IMPLEMENTED_MEMBERS = (
+    "MissReadyGen",
     "TreeArbiter",
+    "WritebackEntry",
     "WritebackEntry_15",
 )
 
@@ -586,10 +587,8 @@ class DcacheMissQueueFamily(Elaboratable):
             module.d.sync += active.eq(0)
 
     def _elaborate_ready_gen(self, module: Module) -> None:
-        """Implement fixed-priority miss-ready generation and query forwarding."""
+        """Forward each query and suppress lower-priority simultaneous fires."""
 
-        earlier = Signal(reset=0)
-        del earlier
         for index in range(4):
             prefix = f"io_in_{index}"
             query = f"io_queryMQ_{index}"
@@ -615,10 +614,10 @@ class DcacheMissQueueFamily(Elaboratable):
         """Model one probe entry from enqueue through pipe response."""
 
         state = Signal(2, reset=0)
-        saved_addr = Signal(48)
-        saved_vaddr = Signal(50)
-        saved_param = Signal(2)
-        saved_need_data = Signal()
+        saved_addr = Signal(48, reset_less=True)
+        saved_vaddr = Signal(50, reset_less=True)
+        saved_param = Signal(2, reset_less=True)
+        saved_need_data = Signal(reset_less=True)
         req_fire = (state == 0) & self.ports["io_req_valid"]
         lrsc_compare_addr = Mux(
             req_fire, self.ports["io_req_bits_addr"], saved_addr
@@ -652,7 +651,12 @@ class DcacheMissQueueFamily(Elaboratable):
                 saved_param.eq(self.ports["io_req_bits_param"]),
                 saved_need_data.eq(self.ports["io_req_bits_needData"]),
             ]
-        with module.Elif((state == 1) & self.ports["io_pipe_req_ready"]):
+        pipe_req_fire = (
+            (state == 1)
+            & self.ports["io_pipe_req_ready"]
+            & ~lrsc_blocked_delay
+        )
+        with module.Elif(pipe_req_fire):
             module.d.sync += state.eq(2)
         with module.Elif((state == 2) & self.ports["io_pipe_resp_valid"] & (self.ports["io_pipe_resp_bits_id"] == self.ports["io_id"])):
             module.d.sync += state.eq(0)
@@ -695,7 +699,7 @@ class DcacheMissQueueFamily(Elaboratable):
         grant acknowledgement; ProbeAck entries return directly to state 0.
         """
 
-        # s_invalid, s_release_req, s_release_resp in WritebackQueue.scala.
+        # Invalid, release-request and release-response states.
         state = Signal(2, reset=0, name="state")
         remain = Signal(2, reset=0, name="remain")
         remain_dup_0 = Signal(2, reset=0, name="remain_dup_0")
@@ -730,7 +734,11 @@ class DcacheMissQueueFamily(Elaboratable):
         # TileLink C-channel projection.  Cat arguments are listed least
         # significant bit first in Amaranth.
         opcode = Cat(req_has_data, req_voluntary, 1)
-        source = Cat(self.ports["io_id"], 0)
+        source = (
+            self.ports["io_id"]
+            if self.member == "WritebackEntry_15"
+            else Cat(self.ports["io_id"], 0)
+        )
         release_data = Mux(
             req_has_data,
             Mux(remain_dup_0[0], data[:256], data[256:512]),

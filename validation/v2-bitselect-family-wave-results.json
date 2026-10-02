@@ -1,0 +1,1454 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_BITSELECT_FAMILY_BEHAVIORAL_WAVE",
+  "status": "DIRECT_ABI_AND_EXECUTABLE_DIFF_PASS_FORMAL_PENDING",
+  "strict_complete_count_delta": 0,
+  "strict_equivalence_credit": "NOT_CLAIMED",
+  "formal": "NOT_RUN_BY_IMPLEMENTATION_WORKER",
+  "scope": {
+    "module_definitions": 10,
+    "locked_hierarchy_module_count": 1976,
+    "instance_total": 450,
+    "instance_counts": {
+      "PriorityMuxModule": 4,
+      "PriorityMuxModule_4": 2,
+      "PriorityMuxModule_8": 4,
+      "PriorityMuxModule_12": 2,
+      "PriorityMuxModule_16": 2,
+      "PriorityMuxModule_20": 256,
+      "UIntCompressor_27_000011100000000000001010101": 54,
+      "UIntCompressor_27_000000000000001010100000000": 54,
+      "UIntExtractor_27_000011100000000000001010101": 46,
+      "UIntExtractor_27_000000000000001010100000000": 26
+    },
+    "covered_modules": [
+      "PriorityMuxModule",
+      "PriorityMuxModule_4",
+      "PriorityMuxModule_8",
+      "PriorityMuxModule_12",
+      "PriorityMuxModule_16",
+      "PriorityMuxModule_20",
+      "UIntCompressor_27_000011100000000000001010101",
+      "UIntCompressor_27_000000000000001010100000000",
+      "UIntExtractor_27_000011100000000000001010101",
+      "UIntExtractor_27_000000000000001010100000000"
+    ]
+  },
+  "sources": {
+    "build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.BitSelectFamily-Hardware.py",
+      "sha256": "e19984c9f1ed72202320de1d1cce93e53785e6019067ba418c552fd1a787bd56",
+      "bytes": 11807
+    },
+    "direct_test": {
+      "path": "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Dependency.Utility.BitSelectFamily-Hardware.py",
+      "sha256": "b555381ac090e3dedd2d0fedcd42f4a0d9bc86dd3c2e286d91384c470a748c8e",
+      "bytes": 12558
+    },
+    "validator": {
+      "path": "validation/v2-bitselect-family-wave.py",
+      "sha256": "be96d2caa75998f37a1b7dc9836439ac2b7aba186742c158170e6db74fa3eec5",
+      "bytes": 14766
+    },
+    "direct_runner": {
+      "path": "validation/v2_direct_test_runner.py",
+      "sha256": "36550022d56b6e631bb7c6dd4299a8b91cf833d8574f1515ec0b157fff5bc01d",
+      "bytes": 1773
+    },
+    "locked_scala_sources": [
+      {
+        "path": "upstream/utility/src/main/scala/utility/PriorityMuxGen.scala",
+        "sha256": "c9c6e04b1ebc0d0dd50861283c647bb6597891504e199bdc1b2fc386094f255a",
+        "bytes": 5216
+      },
+      {
+        "path": "upstream/utility/src/main/scala/utility/UIntUtils.scala",
+        "sha256": "3f6dcf159f2261389dd90453462c92a737fd47aa84f9529a67551566ed34aba9",
+        "bytes": 2466
+      }
+    ]
+  },
+  "checks": {
+    "py_compile": {
+      "status": "PASS"
+    },
+    "direct_test": {
+      "status": "PASS",
+      "returncode": 0,
+      "command": [
+        "C:\\Program Files\\Python313\\python.exe",
+        "-B",
+        "validation/v2_direct_test_runner.py",
+        "--test",
+        "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Dependency.Utility.BitSelectFamily-Hardware.py",
+        "--minimum-tests",
+        "4"
+      ],
+      "output_tail": "....\n----------------------------------------------------------------------\nRan 4 tests in 0.558s\n\nOK\n"
+    },
+    "pyright": {
+      "command": [
+        "cmd.exe",
+        "/d",
+        "/c",
+        "pyright",
+        "--outputjson",
+        "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_vmm8u813\\Cpu-Core-Dependency.Utility.BitSelectFamily-Hardware.py"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "version": "1.1.411",
+      "error_count": 0,
+      "files_analyzed": 1,
+      "stderr_tail": ""
+    },
+    "source_stability": {
+      "status": "PASS"
+    },
+    "all_members": {
+      "PriorityMuxModule": {
+        "module_definition": true,
+        "locked_reference_sha256": "24ec0486520105551ba8b7d45aec78256139f795d76be44153a00cac6264ed8d",
+        "instances_in_locked_reference_tree": 4,
+        "abi_exact": true,
+        "deterministic_export": true,
+        "static_failures": [],
+        "verilator_dut_and_miter_lint": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "PriorityMuxModule_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/DUT_PriorityMuxModule.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/REF_PriorityMuxModule.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/PriorityMuxModule_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.045 MB sources in 4 modules, into 0.010 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.038 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.199 MB\n",
+          "output_sha256": "250bf19c11b2d82d0d897d3df07f27029b067e156932032904fcee11999cdfca"
+        },
+        "verilator_locked_reference_lint": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "PriorityMuxModule",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/PriorityMuxModule.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.017 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.023 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.004 s on 1 threads; alloced 9.215 MB\n",
+          "output_sha256": "8735a7a62f063fd8be905aeb281260644277d675ff9a74ed16f13ad9161cd8d8"
+        },
+        "yosys_structural_check": {
+          "status": "PASS",
+          "returncode": 0,
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/DUT_PriorityMuxModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/REF_PriorityMuxModule.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/PriorityMuxModule_MITER.sv; hierarchy -check -top PriorityMuxModule_MITER; proc; flatten; opt; check; stat"
+          ],
+          "output_tail": " 8 multiplexer ports.\n\n7.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\PriorityMuxModule_MITER.\nPerformed a total of 0 changes.\n\n7.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\PriorityMuxModule_MITER'.\nRemoved a total of 0 cells.\n\n7.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n7.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\PriorityMuxModule_MITER..\nRemoved 0 unused cells and 8 unused wires.\n<suppressed ~8 debug messages>\n\n7.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module PriorityMuxModule_MITER.\n\n7.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n7.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\PriorityMuxModule_MITER..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n7.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\PriorityMuxModule_MITER.\nPerformed a total of 0 changes.\n\n7.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\PriorityMuxModule_MITER'.\nRemoved a total of 0 cells.\n\n7.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n7.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\PriorityMuxModule_MITER..\n\n7.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module PriorityMuxModule_MITER.\n\n7.23. Finished OPT passes. (There is nothing left to do.)\n\n8. Executing CHECK pass (checking for obvious problems).\nChecking module PriorityMuxModule_MITER...\nFound and reported 0 problems.\n\n9. Printing statistics.\n\n=== PriorityMuxModule_MITER ===\n\n   Number of wires:                 28\n   Number of wire bits:            763\n   Number of public wires:          28\n   Number of public wire bits:     763\n   Number of ports:                 10\n   Number of port bits:            255\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                  2\n     $scopeinfo                      2\n\nEnd of script. Logfile hash: c0d3d8338a, CPU: user 0.01s system 0.01s, MEM: 12.66 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 23% 5x opt_expr (0 sec), 22% 3x opt_clean (0 sec), ...\n"
+        },
+        "locked_executable_differential": {
+          "status": "PASS",
+          "vectors_per_member": 128,
+          "compared_outputs": 1,
+          "compile": {
+            "command": [
+              "verilator",
+              "--binary",
+              "--timing",
+              "-Wno-fatal",
+              "--Mdir",
+              "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule/obj_dir",
+              "--top-module",
+              "v2_bitselect_wave_prioritymuxmodule",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/DUT_PriorityMuxModule.sv",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/REF_PriorityMuxModule.sv",
+              "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule/PriorityMuxModule_wave.sv"
+            ],
+            "returncode": 0,
+            "status": "PASS",
+            "sat_success_marker": false,
+            "sat_counterexample_marker": false,
+            "unconstrained_marker": false,
+            "equiv_success_markers": {
+              "0 are unproven.": false,
+              "Equivalence successfully proven!": false
+            },
+            "equiv_failure_marker": false,
+            "equiv_cells_full": null,
+            "equiv_summary_full": null,
+            "equiv_failed_full": null,
+            "sat_counts_full": null,
+            "output_tail": " -fcoroutines -c -o Vv2_bitselect_wave_prioritymuxmodule__ALL.o Vv2_bitselect_wave_prioritymuxmodule__ALL.cpp\necho \"\" > Vv2_bitselect_wave_prioritymuxmodule__ALL.verilator_deplist.tmp\ng++    verilated.o verilated_timing.o verilated_threads.o Vv2_bitselect_wave_prioritymuxmodule__ALL.a    -pthread -lpthread -latomic   -o Vv2_bitselect_wave_prioritymuxmodule\nrm Vv2_bitselect_wave_prioritymuxmodule__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule/obj_dir'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.048 MB sources in 4 modules, into 0.027 MB in 7 C++ files needing 0.000 MB\n- Verilator: Walltime 5.363 s (elab=0.000, cvt=0.023, bld=5.222); cpu 0.014 s on 1 threads; alloced 9.320 MB\n%Warning-TIMESCALEMOD: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/DUT_PriorityMuxModule.sv:3:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)\n    3 | module DUT_PriorityMuxModule(s2_target_src, s1_target_sel, s1_target_src, s3_target_sel, s3_target_src, redirect_target_sel, redirect_target_src, stallPC_src, out_res, s2_target_sel);\n      |        ^~~~~~~~~~~~~~~~~~~~~\n                       /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule/PriorityMuxModule_wave.sv:2:8: ... Location of module with timescale\n    2 | module v2_bitselect_wave_prioritymuxmodule;\n      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n                       ... For warning description see https://verilator.org/warn/TIMESCALEMOD?v=5.032\n                       ... Use \"/* verilator lint_off TIMESCALEMOD */\" and lint_on around source to disable this message.\n%Warning-TIMESCALEMOD: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/REF_PriorityMuxModule.sv:1:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)\n    1 | module REF_PriorityMuxModule(\n      |        ^~~~~~~~~~~~~~~~~~~~~\n                       /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule/PriorityMuxModule_wave.sv:2:8: ... Location of module with timescale\n    2 | module v2_bitselect_wave_prioritymuxmodule;\n      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n",
+            "output_sha256": "1e091a189805e2bed42de78df415815e82857e97316c03ddf7291f4bff10ba91"
+          },
+          "execution": {
+            "command": [
+              "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule/obj_dir/Vv2_bitselect_wave_prioritymuxmodule"
+            ],
+            "returncode": 0,
+            "status": "PASS",
+            "sat_success_marker": false,
+            "sat_counterexample_marker": false,
+            "unconstrained_marker": false,
+            "equiv_success_markers": {
+              "0 are unproven.": false,
+              "Equivalence successfully proven!": false
+            },
+            "equiv_failure_marker": false,
+            "equiv_cells_full": null,
+            "equiv_summary_full": null,
+            "equiv_failed_full": null,
+            "sat_counts_full": null,
+            "output_tail": "PASS PriorityMuxModule vectors=128\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule/PriorityMuxModule_wave.sv:57: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 128ns; walltime 0.001 s; speed 86.234 us/s\n- Verilator: cpu 0.001 s on 1 threads; alloced 152 MB\n",
+            "output_sha256": "fe93f2288a7837638ab9ee4b8a93b64e387082a8eefc19107e5c73421a1cfde9"
+          },
+          "testbench": "validation/.cache/v2-bitselect-family-wave/PriorityMuxModule/PriorityMuxModule_wave.sv"
+        }
+      },
+      "PriorityMuxModule_12": {
+        "module_definition": true,
+        "locked_reference_sha256": "35cefec60925192546f73e40e380978f478b30512d1f1031a1798886fd22f2d8",
+        "instances_in_locked_reference_tree": 2,
+        "abi_exact": true,
+        "deterministic_export": true,
+        "static_failures": [],
+        "verilator_dut_and_miter_lint": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "PriorityMuxModule_12_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/DUT_PriorityMuxModule_12.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/REF_PriorityMuxModule_12.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/PriorityMuxModule_12_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.182 MB sources in 4 modules, into 0.010 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.064 s (elab=0.002, cvt=0.005, bld=0.000); cpu 0.016 s on 1 threads; alloced 10.977 MB\n",
+          "output_sha256": "46c9787a9fc868d7dfd5a1c5ec480e00a3ed3a21bb549840aa32f199d2dcd4b7"
+        },
+        "verilator_locked_reference_lint": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "PriorityMuxModule_12",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/PriorityMuxModule_12.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.034 MB sources in 2 modules, into 0.035 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.027 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.008 s on 1 threads; alloced 9.859 MB\n",
+          "output_sha256": "36bf968a895f5049c52343b956fed14c12606970933c0eae42e10c02f2ffc2ef"
+        },
+        "yosys_structural_check": {
+          "status": "PASS",
+          "returncode": 0,
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/DUT_PriorityMuxModule_12.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/REF_PriorityMuxModule_12.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/PriorityMuxModule_12_MITER.sv; hierarchy -check -top PriorityMuxModule_12_MITER; proc; flatten; opt; check; stat"
+          ],
+          "output_tail": "PT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\PriorityMuxModule_12_MITER.\nPerformed a total of 0 changes.\n\n7.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\PriorityMuxModule_12_MITER'.\nRemoved a total of 0 cells.\n\n7.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n7.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\PriorityMuxModule_12_MITER..\nRemoved 0 unused cells and 228 unused wires.\n<suppressed ~185 debug messages>\n\n7.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module PriorityMuxModule_12_MITER.\n\n7.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n7.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\PriorityMuxModule_12_MITER..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n7.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\PriorityMuxModule_12_MITER.\nPerformed a total of 0 changes.\n\n7.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\PriorityMuxModule_12_MITER'.\nRemoved a total of 0 cells.\n\n7.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n7.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\PriorityMuxModule_12_MITER..\n\n7.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module PriorityMuxModule_12_MITER.\n\n7.23. Finished OPT passes. (There is nothing left to do.)\n\n8. Executing CHECK pass (checking for obvious problems).\nChecking module PriorityMuxModule_12_MITER...\nFound and reported 0 problems.\n\n9. Printing statistics.\n\n=== PriorityMuxModule_12_MITER ===\n\n   Number of wires:                358\n   Number of wire bits:            358\n   Number of public wires:         358\n   Number of public wire bits:     358\n   Number of ports:                120\n   Number of port bits:            120\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                  2\n     $scopeinfo                      2\n\nEnd of script. Logfile hash: a9b2546db0, CPU: user 0.03s system 0.02s, MEM: 15.31 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 44% 4x read_verilog (0 sec), 15% 5x opt_expr (0 sec), ...\n"
+        },
+        "locked_executable_differential": {
+          "status": "PASS",
+          "vectors_per_member": 128,
+          "compared_outputs": 23,
+          "compile": {
+            "command": [
+              "verilator",
+              "--binary",
+              "--timing",
+              "-Wno-fatal",
+              "--Mdir",
+              "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule_12/obj_dir",
+              "--top-module",
+              "v2_bitselect_wave_prioritymuxmodule_12",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/DUT_PriorityMuxModule_12.sv",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/REF_PriorityMuxModule_12.sv",
+              "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule_12/PriorityMuxModule_12_wave.sv"
+            ],
+            "returncode": 0,
+            "status": "PASS",
+            "sat_success_marker": false,
+            "sat_counterexample_marker": false,
+            "unconstrained_marker": false,
+            "equiv_success_markers": {
+              "0 are unproven.": false,
+              "Equivalence successfully proven!": false
+            },
+            "equiv_failure_marker": false,
+            "equiv_cells_full": null,
+            "equiv_summary_full": null,
+            "equiv_failed_full": null,
+            "sat_counts_full": null,
+            "output_tail": "e -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -c -o Vv2_bitselect_wave_prioritymuxmodule_12__ALL.o Vv2_bitselect_wave_prioritymuxmodule_12__ALL.cpp\necho \"\" > Vv2_bitselect_wave_prioritymuxmodule_12__ALL.verilator_deplist.tmp\ng++    verilated.o verilated_timing.o verilated_threads.o Vv2_bitselect_wave_prioritymuxmodule_12__ALL.a    -pthread -lpthread -latomic   -o Vv2_bitselect_wave_prioritymuxmodule_12\nrm Vv2_bitselect_wave_prioritymuxmodule_12__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule_12/obj_dir'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.191 MB sources in 4 modules, into 0.028 MB in 7 C++ files needing 0.000 MB\n- Verilator: Walltime 5.250 s (elab=0.003, cvt=0.031, bld=5.083); cpu 0.025 s on 1 threads; alloced 11.273 MB\n%Warning-TIMESCALEMOD: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/DUT_PriorityMuxModule_12.sv:3:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)\n                       /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule_12/PriorityMuxModule_12_wave.sv:2:8: ... Location of module with timescale\n    2 | module v2_bitselect_wave_prioritymuxmodule_12;\n      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n                       ... For warning description see https://verilator.org/warn/TIMESCALEMOD?v=5.032\n                       ... Use \"/* verilator lint_off TIMESCALEMOD */\" and lint_on around source to disable this message.\n%Warning-TIMESCALEMOD: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/REF_PriorityMuxModule_12.sv:1:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)\n    1 | module REF_PriorityMuxModule_12(\n      |        ^~~~~~~~~~~~~~~~~~~~~~~~\n                       /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule_12/PriorityMuxModule_12_wave.sv:2:8: ... Location of module with timescale\n    2 | module v2_bitselect_wave_prioritymuxmodule_12;\n      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n",
+            "output_sha256": "685fee00381ba014f4c471ae2ff0e72376f51c5738c6a69ad9ea0d1e9e535a69"
+          },
+          "execution": {
+            "command": [
+              "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule_12/obj_dir/Vv2_bitselect_wave_prioritymuxmodule_12"
+            ],
+            "returncode": 0,
+            "status": "PASS",
+            "sat_success_marker": false,
+            "sat_counterexample_marker": false,
+            "unconstrained_marker": false,
+            "equiv_success_markers": {
+              "0 are unproven.": false,
+              "Equivalence successfully proven!": false
+            },
+            "equiv_failure_marker": false,
+            "equiv_cells_full": null,
+            "equiv_summary_full": null,
+            "equiv_failed_full": null,
+            "sat_counts_full": null,
+            "output_tail": "PASS PriorityMuxModule_12 vectors=128\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule_12/PriorityMuxModule_12_wave.sv:607: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 128ns; walltime 0.001 s; speed 84.156 us/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 152 MB\n",
+            "output_sha256": "773895cf83f85d94ec45f233253119079509eeb3452159eac1b14b46e1256247"
+          },
+          "testbench": "validation/.cache/v2-bitselect-family-wave/PriorityMuxModule_12/PriorityMuxModule_12_wave.sv"
+        }
+      },
+      "PriorityMuxModule_16": {
+        "module_definition": true,
+        "locked_reference_sha256": "9f638426cd53d52b4e0025b6fefc3b461ab48a058f576161a1a23c37e2976b20",
+        "instances_in_locked_reference_tree": 2,
+        "abi_exact": true,
+        "deterministic_export": true,
+        "static_failures": [],
+        "verilator_dut_and_miter_lint": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "PriorityMuxModule_16_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/DUT_PriorityMuxModule_16.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/REF_PriorityMuxModule_16.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/PriorityMuxModule_16_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.045 MB sources in 4 modules, into 0.010 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.056 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.199 MB\n",
+          "output_sha256": "2134fc3e8b1110b2e4be543166418f013c59df2d34eb99fa37b0502de03bb83a"
+        },
+        "verilator_locked_reference_lint": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "PriorityMuxModule_16",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/PriorityMuxModule_16.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.018 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.024 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.004 s on 1 threads; alloced 9.211 MB\n",
+          "output_sha256": "d5d84bc59af6f2ec48131240e30fb3b8d2d7436e23cbbe21bd8ba3bab54919de"
+        },
+        "yosys_structural_check": {
+          "status": "PASS",
+          "returncode": 0,
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/DUT_PriorityMuxModule_16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/REF_PriorityMuxModule_16.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/PriorityMuxModule_16_MITER.sv; hierarchy -check -top PriorityMuxModule_16_MITER; proc; flatten; opt; check; stat"
+          ],
+          "output_tail": "ng OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\PriorityMuxModule_16_MITER.\nPerformed a total of 0 changes.\n\n7.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\PriorityMuxModule_16_MITER'.\nRemoved a total of 0 cells.\n\n7.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n7.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\PriorityMuxModule_16_MITER..\nRemoved 0 unused cells and 8 unused wires.\n<suppressed ~8 debug messages>\n\n7.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module PriorityMuxModule_16_MITER.\n\n7.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n7.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\PriorityMuxModule_16_MITER..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n7.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\PriorityMuxModule_16_MITER.\nPerformed a total of 0 changes.\n\n7.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\PriorityMuxModule_16_MITER'.\nRemoved a total of 0 cells.\n\n7.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n7.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\PriorityMuxModule_16_MITER..\n\n7.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module PriorityMuxModule_16_MITER.\n\n7.23. Finished OPT passes. (There is nothing left to do.)\n\n8. Executing CHECK pass (checking for obvious problems).\nChecking module PriorityMuxModule_16_MITER...\nFound and reported 0 problems.\n\n9. Printing statistics.\n\n=== PriorityMuxModule_16_MITER ===\n\n   Number of wires:                 28\n   Number of wire bits:             58\n   Number of public wires:          28\n   Number of public wire bits:      58\n   Number of ports:                 10\n   Number of port bits:             20\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                  2\n     $scopeinfo                      2\n\nEnd of script. Logfile hash: 28071e0b8e, CPU: user 0.02s system 0.00s, MEM: 12.19 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 29% 5x opt_expr (0 sec), 26% 4x read_verilog (0 sec), ...\n"
+        },
+        "locked_executable_differential": {
+          "status": "PASS",
+          "vectors_per_member": 128,
+          "compared_outputs": 1,
+          "compile": {
+            "command": [
+              "verilator",
+              "--binary",
+              "--timing",
+              "-Wno-fatal",
+              "--Mdir",
+              "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule_16/obj_dir",
+              "--top-module",
+              "v2_bitselect_wave_prioritymuxmodule_16",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/DUT_PriorityMuxModule_16.sv",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/REF_PriorityMuxModule_16.sv",
+              "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule_16/PriorityMuxModule_16_wave.sv"
+            ],
+            "returncode": 0,
+            "status": "PASS",
+            "sat_success_marker": false,
+            "sat_counterexample_marker": false,
+            "unconstrained_marker": false,
+            "equiv_success_markers": {
+              "0 are unproven.": false,
+              "Equivalence successfully proven!": false
+            },
+            "equiv_failure_marker": false,
+            "equiv_cells_full": null,
+            "equiv_summary_full": null,
+            "equiv_failed_full": null,
+            "sat_counts_full": null,
+            "output_tail": "lect_wave_prioritymuxmodule_16__ALL.cpp\necho \"\" > Vv2_bitselect_wave_prioritymuxmodule_16__ALL.verilator_deplist.tmp\ng++    verilated.o verilated_timing.o verilated_threads.o Vv2_bitselect_wave_prioritymuxmodule_16__ALL.a    -pthread -lpthread -latomic   -o Vv2_bitselect_wave_prioritymuxmodule_16\nrm Vv2_bitselect_wave_prioritymuxmodule_16__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule_16/obj_dir'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.048 MB sources in 4 modules, into 0.028 MB in 7 C++ files needing 0.000 MB\n- Verilator: Walltime 5.329 s (elab=0.000, cvt=0.021, bld=5.188); cpu 0.015 s on 1 threads; alloced 9.316 MB\n%Warning-TIMESCALEMOD: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/DUT_PriorityMuxModule_16.sv:3:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)\n    3 | module DUT_PriorityMuxModule_16(s2_BrNumOH_src, s1_BrNumOH_sel, s1_BrNumOH_src, s3_BrNumOH_sel, s3_BrNumOH_src, redirect_BrNumOH_sel, redirect_BrNumOH_src, stallBrNumOH_src, out_res, s2_BrNumOH_sel);\n      |        ^~~~~~~~~~~~~~~~~~~~~~~~\n                       /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule_16/PriorityMuxModule_16_wave.sv:2:8: ... Location of module with timescale\n    2 | module v2_bitselect_wave_prioritymuxmodule_16;\n      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n                       ... For warning description see https://verilator.org/warn/TIMESCALEMOD?v=5.032\n                       ... Use \"/* verilator lint_off TIMESCALEMOD */\" and lint_on around source to disable this message.\n%Warning-TIMESCALEMOD: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/REF_PriorityMuxModule_16.sv:1:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)\n    1 | module REF_PriorityMuxModule_16(\n      |        ^~~~~~~~~~~~~~~~~~~~~~~~\n                       /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule_16/PriorityMuxModule_16_wave.sv:2:8: ... Location of module with timescale\n    2 | module v2_bitselect_wave_prioritymuxmodule_16;\n      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n",
+            "output_sha256": "eef036b139a056ed77bd0a7af93bd5e7e139d413ede93e1649e9b28fa659e446"
+          },
+          "execution": {
+            "command": [
+              "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule_16/obj_dir/Vv2_bitselect_wave_prioritymuxmodule_16"
+            ],
+            "returncode": 0,
+            "status": "PASS",
+            "sat_success_marker": false,
+            "sat_counterexample_marker": false,
+            "unconstrained_marker": false,
+            "equiv_success_markers": {
+              "0 are unproven.": false,
+              "Equivalence successfully proven!": false
+            },
+            "equiv_failure_marker": false,
+            "equiv_cells_full": null,
+            "equiv_summary_full": null,
+            "equiv_failed_full": null,
+            "sat_counts_full": null,
+            "output_tail": "PASS PriorityMuxModule_16 vectors=128\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule_16/PriorityMuxModule_16_wave.sv:57: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 128ns; walltime 0.001 s; speed 99.980 us/s\n- Verilator: cpu 0.001 s on 1 threads; alloced 152 MB\n",
+            "output_sha256": "ceec16c6c19bdf4cafd381a2b78f481d3bb6e5803af4b3e910fb6b503ed52d10"
+          },
+          "testbench": "validation/.cache/v2-bitselect-family-wave/PriorityMuxModule_16/PriorityMuxModule_16_wave.sv"
+        }
+      },
+      "PriorityMuxModule_20": {
+        "module_definition": true,
+        "locked_reference_sha256": "dc53e70401a1525ce15e79c75a9ebce331be601ae62f8094bb5731f154e641c9",
+        "instances_in_locked_reference_tree": 256,
+        "abi_exact": true,
+        "deterministic_export": true,
+        "static_failures": [],
+        "verilator_dut_and_miter_lint": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "PriorityMuxModule_20_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/DUT_PriorityMuxModule_20.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/REF_PriorityMuxModule_20.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/PriorityMuxModule_20_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.044 MB sources in 4 modules, into 0.010 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.047 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.007 s on 1 threads; alloced 9.152 MB\n",
+          "output_sha256": "760a397bb31792613008d50428c104966dd47f6b3013dffcbb49567dbaa9aa3f"
+        },
+        "verilator_locked_reference_lint": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "PriorityMuxModule_20",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/PriorityMuxModule_20.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.018 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.028 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.332 MB\n",
+          "output_sha256": "77000351a984e6e12a7786b96164246c4e934d622500c26305684ba85ee285a0"
+        },
+        "yosys_structural_check": {
+          "status": "PASS",
+          "returncode": 0,
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/DUT_PriorityMuxModule_20.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/REF_PriorityMuxModule_20.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/PriorityMuxModule_20_MITER.sv; hierarchy -check -top PriorityMuxModule_20_MITER; proc; flatten; opt; check; stat"
+          ],
+          "output_tail": "ng OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\PriorityMuxModule_20_MITER.\nPerformed a total of 0 changes.\n\n7.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\PriorityMuxModule_20_MITER'.\nRemoved a total of 0 cells.\n\n7.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n7.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\PriorityMuxModule_20_MITER..\nRemoved 0 unused cells and 7 unused wires.\n<suppressed ~7 debug messages>\n\n7.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module PriorityMuxModule_20_MITER.\n\n7.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n7.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\PriorityMuxModule_20_MITER..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n7.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\PriorityMuxModule_20_MITER.\nPerformed a total of 0 changes.\n\n7.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\PriorityMuxModule_20_MITER'.\nRemoved a total of 0 cells.\n\n7.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n7.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\PriorityMuxModule_20_MITER..\n\n7.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module PriorityMuxModule_20_MITER.\n\n7.23. Finished OPT passes. (There is nothing left to do.)\n\n8. Executing CHECK pass (checking for obvious problems).\nChecking module PriorityMuxModule_20_MITER...\nFound and reported 0 problems.\n\n9. Printing statistics.\n\n=== PriorityMuxModule_20_MITER ===\n\n   Number of wires:                 22\n   Number of wire bits:             22\n   Number of public wires:          22\n   Number of public wire bits:      22\n   Number of ports:                  8\n   Number of port bits:              8\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                  2\n     $scopeinfo                      2\n\nEnd of script. Logfile hash: c3b45473e9, CPU: user 0.01s system 0.01s, MEM: 12.19 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 31% 4x read_verilog (0 sec), 28% 5x opt_expr (0 sec), ...\n"
+        },
+        "locked_executable_differential": {
+          "status": "PASS",
+          "vectors_per_member": 128,
+          "compared_outputs": 1,
+          "compile": {
+            "command": [
+              "verilator",
+              "--binary",
+              "--timing",
+              "-Wno-fatal",
+              "--Mdir",
+              "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule_20/obj_dir",
+              "--top-module",
+              "v2_bitselect_wave_prioritymuxmodule_20",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/DUT_PriorityMuxModule_20.sv",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/REF_PriorityMuxModule_20.sv",
+              "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule_20/PriorityMuxModule_20_wave.sv"
+            ],
+            "returncode": 0,
+            "status": "PASS",
+            "sat_success_marker": false,
+            "sat_counterexample_marker": false,
+            "unconstrained_marker": false,
+            "equiv_success_markers": {
+              "0 are unproven.": false,
+              "Equivalence successfully proven!": false
+            },
+            "equiv_failure_marker": false,
+            "equiv_cells_full": null,
+            "equiv_summary_full": null,
+            "equiv_failed_full": null,
+            "sat_counts_full": null,
+            "output_tail": "module_20__ALL.o Vv2_bitselect_wave_prioritymuxmodule_20__ALL.cpp\necho \"\" > Vv2_bitselect_wave_prioritymuxmodule_20__ALL.verilator_deplist.tmp\ng++    verilated.o verilated_timing.o verilated_threads.o Vv2_bitselect_wave_prioritymuxmodule_20__ALL.a    -pthread -lpthread -latomic   -o Vv2_bitselect_wave_prioritymuxmodule_20\nrm Vv2_bitselect_wave_prioritymuxmodule_20__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule_20/obj_dir'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.047 MB sources in 4 modules, into 0.028 MB in 7 C++ files needing 0.000 MB\n- Verilator: Walltime 5.391 s (elab=0.000, cvt=0.030, bld=5.222); cpu 0.016 s on 1 threads; alloced 9.266 MB\n%Warning-TIMESCALEMOD: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/DUT_PriorityMuxModule_20.sv:3:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)\n    3 | module DUT_PriorityMuxModule_20(s2_new_bit_0_src, s1_new_bit_0_sel, s1_new_bit_0_src, s3_new_bit_0_sel, s3_new_bit_0_src, redirect_new_bit_0_src, out_res, s2_new_bit_0_sel);\n      |        ^~~~~~~~~~~~~~~~~~~~~~~~\n                       /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule_20/PriorityMuxModule_20_wave.sv:2:8: ... Location of module with timescale\n    2 | module v2_bitselect_wave_prioritymuxmodule_20;\n      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n                       ... For warning description see https://verilator.org/warn/TIMESCALEMOD?v=5.032\n                       ... Use \"/* verilator lint_off TIMESCALEMOD */\" and lint_on around source to disable this message.\n%Warning-TIMESCALEMOD: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/REF_PriorityMuxModule_20.sv:1:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)\n    1 | module REF_PriorityMuxModule_20(\n      |        ^~~~~~~~~~~~~~~~~~~~~~~~\n                       /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule_20/PriorityMuxModule_20_wave.sv:2:8: ... Location of module with timescale\n    2 | module v2_bitselect_wave_prioritymuxmodule_20;\n      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n",
+            "output_sha256": "f2e8d019c13cbd196313b88508647496d0eccb833df8a447c6fb5f092a8a63dd"
+          },
+          "execution": {
+            "command": [
+              "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule_20/obj_dir/Vv2_bitselect_wave_prioritymuxmodule_20"
+            ],
+            "returncode": 0,
+            "status": "PASS",
+            "sat_success_marker": false,
+            "sat_counterexample_marker": false,
+            "unconstrained_marker": false,
+            "equiv_success_markers": {
+              "0 are unproven.": false,
+              "Equivalence successfully proven!": false
+            },
+            "equiv_failure_marker": false,
+            "equiv_cells_full": null,
+            "equiv_summary_full": null,
+            "equiv_failed_full": null,
+            "sat_counts_full": null,
+            "output_tail": "PASS PriorityMuxModule_20 vectors=128\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule_20/PriorityMuxModule_20_wave.sv:49: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 128ns; walltime 0.001 s; speed 98.045 us/s\n- Verilator: cpu 0.001 s on 1 threads; alloced 152 MB\n",
+            "output_sha256": "cd25709f8b996a5133ad41a975aa24f17e5a35ad0c07391b4ecd6a93266af421"
+          },
+          "testbench": "validation/.cache/v2-bitselect-family-wave/PriorityMuxModule_20/PriorityMuxModule_20_wave.sv"
+        }
+      },
+      "PriorityMuxModule_4": {
+        "module_definition": true,
+        "locked_reference_sha256": "a7e4b88074865cb59aed37102b7f0d260dd88c8987bcc1e0a5b73f4e14b2289d",
+        "instances_in_locked_reference_tree": 2,
+        "abi_exact": true,
+        "deterministic_export": true,
+        "static_failures": [],
+        "verilator_dut_and_miter_lint": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "PriorityMuxModule_4_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/DUT_PriorityMuxModule_4.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/REF_PriorityMuxModule_4.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/PriorityMuxModule_4_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.160 MB sources in 4 modules, into 0.010 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.047 s (elab=0.002, cvt=0.004, bld=0.000); cpu 0.014 s on 1 threads; alloced 10.953 MB\n",
+          "output_sha256": "173298d96e7175274dd0ecfe62da037fc41152ef4a0014de30ab6761aad0891b"
+        },
+        "verilator_locked_reference_lint": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "PriorityMuxModule_4",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/PriorityMuxModule_4.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.032 MB sources in 2 modules, into 0.031 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.026 s (elab=0.001, cvt=0.002, bld=0.000); cpu 0.007 s on 1 threads; alloced 9.738 MB\n",
+          "output_sha256": "e7e0abc77c7e92af76f633a8cb08b583753654ad05466c3e13dd4be77eddebb5"
+        },
+        "yosys_structural_check": {
+          "status": "PASS",
+          "returncode": 0,
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/DUT_PriorityMuxModule_4.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/REF_PriorityMuxModule_4.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/PriorityMuxModule_4_MITER.sv; hierarchy -check -top PriorityMuxModule_4_MITER; proc; flatten; opt; check; stat"
+          ],
+          "output_tail": "xecuting OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\PriorityMuxModule_4_MITER.\nPerformed a total of 0 changes.\n\n7.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\PriorityMuxModule_4_MITER'.\nRemoved a total of 0 cells.\n\n7.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n7.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\PriorityMuxModule_4_MITER..\nRemoved 0 unused cells and 168 unused wires.\n<suppressed ~137 debug messages>\n\n7.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module PriorityMuxModule_4_MITER.\n\n7.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n7.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\PriorityMuxModule_4_MITER..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n7.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\PriorityMuxModule_4_MITER.\nPerformed a total of 0 changes.\n\n7.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\PriorityMuxModule_4_MITER'.\nRemoved a total of 0 cells.\n\n7.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n7.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\PriorityMuxModule_4_MITER..\n\n7.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module PriorityMuxModule_4_MITER.\n\n7.23. Finished OPT passes. (There is nothing left to do.)\n\n8. Executing CHECK pass (checking for obvious problems).\nChecking module PriorityMuxModule_4_MITER...\nFound and reported 0 problems.\n\n9. Printing statistics.\n\n=== PriorityMuxModule_4_MITER ===\n\n   Number of wires:                268\n   Number of wire bits:           2113\n   Number of public wires:         268\n   Number of public wire bits:    2113\n   Number of ports:                 90\n   Number of port bits:            705\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                  2\n     $scopeinfo                      2\n\nEnd of script. Logfile hash: 9471b19dd3, CPU: user 0.04s system 0.01s, MEM: 15.31 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 33% 4x read_verilog (0 sec), 22% 3x opt_clean (0 sec), ...\n"
+        },
+        "locked_executable_differential": {
+          "status": "PASS",
+          "vectors_per_member": 128,
+          "compared_outputs": 17,
+          "compile": {
+            "command": [
+              "verilator",
+              "--binary",
+              "--timing",
+              "-Wno-fatal",
+              "--Mdir",
+              "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule_4/obj_dir",
+              "--top-module",
+              "v2_bitselect_wave_prioritymuxmodule_4",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/DUT_PriorityMuxModule_4.sv",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/REF_PriorityMuxModule_4.sv",
+              "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule_4/PriorityMuxModule_4_wave.sv"
+            ],
+            "returncode": 0,
+            "status": "PASS",
+            "sat_success_marker": false,
+            "sat_counterexample_marker": false,
+            "unconstrained_marker": false,
+            "equiv_success_markers": {
+              "0 are unproven.": false,
+              "Equivalence successfully proven!": false
+            },
+            "equiv_failure_marker": false,
+            "equiv_cells_full": null,
+            "equiv_summary_full": null,
+            "equiv_failed_full": null,
+            "sat_counts_full": null,
+            "output_tail": "ow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -c -o Vv2_bitselect_wave_prioritymuxmodule_4__ALL.o Vv2_bitselect_wave_prioritymuxmodule_4__ALL.cpp\necho \"\" > Vv2_bitselect_wave_prioritymuxmodule_4__ALL.verilator_deplist.tmp\ng++    verilated.o verilated_timing.o verilated_threads.o Vv2_bitselect_wave_prioritymuxmodule_4__ALL.a    -pthread -lpthread -latomic   -o Vv2_bitselect_wave_prioritymuxmodule_4\nrm Vv2_bitselect_wave_prioritymuxmodule_4__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule_4/obj_dir'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.168 MB sources in 4 modules, into 0.027 MB in 7 C++ files needing 0.000 MB\n- Verilator: Walltime 5.367 s (elab=0.003, cvt=0.030, bld=5.217); cpu 0.023 s on 1 threads; alloced 11.191 MB\n%Warning-TIMESCALEMOD: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/DUT_PriorityMuxModule_4.sv:3:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)\n                       /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule_4/PriorityMuxModule_4_wave.sv:2:8: ... Location of module with timescale\n    2 | module v2_bitselect_wave_prioritymuxmodule_4;\n      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n                       ... For warning description see https://verilator.org/warn/TIMESCALEMOD?v=5.032\n                       ... Use \"/* verilator lint_off TIMESCALEMOD */\" and lint_on around source to disable this message.\n%Warning-TIMESCALEMOD: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/REF_PriorityMuxModule_4.sv:1:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)\n    1 | module REF_PriorityMuxModule_4(\n      |        ^~~~~~~~~~~~~~~~~~~~~~~\n                       /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule_4/PriorityMuxModule_4_wave.sv:2:8: ... Location of module with timescale\n    2 | module v2_bitselect_wave_prioritymuxmodule_4;\n      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n",
+            "output_sha256": "beb96a8ad8613a711d6c5036a669ee52b19d55295bc4249dc889fa8529b21879"
+          },
+          "execution": {
+            "command": [
+              "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule_4/obj_dir/Vv2_bitselect_wave_prioritymuxmodule_4"
+            ],
+            "returncode": 0,
+            "status": "PASS",
+            "sat_success_marker": false,
+            "sat_counterexample_marker": false,
+            "unconstrained_marker": false,
+            "equiv_success_markers": {
+              "0 are unproven.": false,
+              "Equivalence successfully proven!": false
+            },
+            "equiv_failure_marker": false,
+            "equiv_cells_full": null,
+            "equiv_summary_full": null,
+            "equiv_failed_full": null,
+            "sat_counts_full": null,
+            "output_tail": "PASS PriorityMuxModule_4 vectors=128\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule_4/PriorityMuxModule_4_wave.sv:457: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 128ns; walltime 0.001 s; speed 91.390 us/s\n- Verilator: cpu 0.001 s on 1 threads; alloced 152 MB\n",
+            "output_sha256": "dca4abb7e4fa847abc83cc0dbb42970470ccad2b0e96ba4f8b32bec40840646b"
+          },
+          "testbench": "validation/.cache/v2-bitselect-family-wave/PriorityMuxModule_4/PriorityMuxModule_4_wave.sv"
+        }
+      },
+      "PriorityMuxModule_8": {
+        "module_definition": true,
+        "locked_reference_sha256": "46ba0d86fc1ff60f8148070c70e3b4a7a397a22c67e0c0dfdd7d4229221cab75",
+        "instances_in_locked_reference_tree": 4,
+        "abi_exact": true,
+        "deterministic_export": true,
+        "static_failures": [],
+        "verilator_dut_and_miter_lint": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "PriorityMuxModule_8_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/DUT_PriorityMuxModule_8.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/REF_PriorityMuxModule_8.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/PriorityMuxModule_8_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.050 MB sources in 4 modules, into 0.010 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.071 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.281 MB\n",
+          "output_sha256": "85d17de297faf7242114f19af0a87ab91164627a09e667b30eff3f0aa8069b8b"
+        },
+        "verilator_locked_reference_lint": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "PriorityMuxModule_8",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/PriorityMuxModule_8.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.022 MB sources in 2 modules, into 0.018 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.022 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.238 MB\n",
+          "output_sha256": "3645400b1589bfd5d19bd96ea582461180b43ae1b4cfd0751c954ffbc599def0"
+        },
+        "yosys_structural_check": {
+          "status": "PASS",
+          "returncode": 0,
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/DUT_PriorityMuxModule_8.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/REF_PriorityMuxModule_8.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/PriorityMuxModule_8_MITER.sv; hierarchy -check -top PriorityMuxModule_8_MITER; proc; flatten; opt; check; stat"
+          ],
+          "output_tail": ". Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\PriorityMuxModule_8_MITER.\nPerformed a total of 0 changes.\n\n7.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\PriorityMuxModule_8_MITER'.\nRemoved a total of 0 cells.\n\n7.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n7.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\PriorityMuxModule_8_MITER..\nRemoved 0 unused cells and 18 unused wires.\n<suppressed ~17 debug messages>\n\n7.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module PriorityMuxModule_8_MITER.\n\n7.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n7.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\PriorityMuxModule_8_MITER..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n7.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\PriorityMuxModule_8_MITER.\nPerformed a total of 0 changes.\n\n7.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\PriorityMuxModule_8_MITER'.\nRemoved a total of 0 cells.\n\n7.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n7.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\PriorityMuxModule_8_MITER..\n\n7.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module PriorityMuxModule_8_MITER.\n\n7.23. Finished OPT passes. (There is nothing left to do.)\n\n8. Executing CHECK pass (checking for obvious problems).\nChecking module PriorityMuxModule_8_MITER...\nFound and reported 0 problems.\n\n9. Printing statistics.\n\n=== PriorityMuxModule_8_MITER ===\n\n   Number of wires:                 43\n   Number of wire bits:            148\n   Number of public wires:          43\n   Number of public wire bits:     148\n   Number of ports:                 15\n   Number of port bits:             50\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                  2\n     $scopeinfo                      2\n\nEnd of script. Logfile hash: 8df7ac4ced, CPU: user 0.01s system 0.01s, MEM: 12.66 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 28% 4x read_verilog (0 sec), 26% 5x opt_expr (0 sec), ...\n"
+        },
+        "locked_executable_differential": {
+          "status": "PASS",
+          "vectors_per_member": 128,
+          "compared_outputs": 2,
+          "compile": {
+            "command": [
+              "verilator",
+              "--binary",
+              "--timing",
+              "-Wno-fatal",
+              "--Mdir",
+              "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule_8/obj_dir",
+              "--top-module",
+              "v2_bitselect_wave_prioritymuxmodule_8",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/DUT_PriorityMuxModule_8.sv",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/REF_PriorityMuxModule_8.sv",
+              "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule_8/PriorityMuxModule_8_wave.sv"
+            ],
+            "returncode": 0,
+            "status": "PASS",
+            "sat_success_marker": false,
+            "sat_counterexample_marker": false,
+            "unconstrained_marker": false,
+            "equiv_success_markers": {
+              "0 are unproven.": false,
+              "Equivalence successfully proven!": false
+            },
+            "equiv_failure_marker": false,
+            "equiv_cells_full": null,
+            "equiv_summary_full": null,
+            "equiv_failed_full": null,
+            "sat_counts_full": null,
+            "output_tail": "g++    verilated.o verilated_timing.o verilated_threads.o Vv2_bitselect_wave_prioritymuxmodule_8__ALL.a    -pthread -lpthread -latomic   -o Vv2_bitselect_wave_prioritymuxmodule_8\nrm Vv2_bitselect_wave_prioritymuxmodule_8__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule_8/obj_dir'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.053 MB sources in 4 modules, into 0.027 MB in 7 C++ files needing 0.000 MB\n- Verilator: Walltime 5.794 s (elab=0.001, cvt=0.029, bld=5.624); cpu 0.014 s on 1 threads; alloced 9.410 MB\n%Warning-TIMESCALEMOD: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/DUT_PriorityMuxModule_8.sv:3:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)\n    3 | module DUT_PriorityMuxModule_8(s2_GHPtr_src_flag, s2_GHPtr_src_value, s1_GHPtr_sel, s1_GHPtr_src_flag, s1_GHPtr_src_value, s3_GHPtr_sel, s3_GHPtr_src_flag, s3_GHPtr_src_value, redirect_GHPtr_sel, redirect_GHPtr_src_flag, redirect_GHPtr_src_value, stallGHPtr_src_flag, stallGHPtr_src_value, out_res_flag, out_res_value, s2_GHPtr_sel);\n      |        ^~~~~~~~~~~~~~~~~~~~~~~\n                       /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule_8/PriorityMuxModule_8_wave.sv:2:8: ... Location of module with timescale\n    2 | module v2_bitselect_wave_prioritymuxmodule_8;\n      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n                       ... For warning description see https://verilator.org/warn/TIMESCALEMOD?v=5.032\n                       ... Use \"/* verilator lint_off TIMESCALEMOD */\" and lint_on around source to disable this message.\n%Warning-TIMESCALEMOD: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/REF_PriorityMuxModule_8.sv:1:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)\n    1 | module REF_PriorityMuxModule_8(\n      |        ^~~~~~~~~~~~~~~~~~~~~~~\n                       /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule_8/PriorityMuxModule_8_wave.sv:2:8: ... Location of module with timescale\n    2 | module v2_bitselect_wave_prioritymuxmodule_8;\n      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n",
+            "output_sha256": "e06238acc1665513fbb68bc00cda7d7aca0ff44790a426cd65cb4df44cc7c239"
+          },
+          "execution": {
+            "command": [
+              "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule_8/obj_dir/Vv2_bitselect_wave_prioritymuxmodule_8"
+            ],
+            "returncode": 0,
+            "status": "PASS",
+            "sat_success_marker": false,
+            "sat_counterexample_marker": false,
+            "unconstrained_marker": false,
+            "equiv_success_markers": {
+              "0 are unproven.": false,
+              "Equivalence successfully proven!": false
+            },
+            "equiv_failure_marker": false,
+            "equiv_cells_full": null,
+            "equiv_summary_full": null,
+            "equiv_failed_full": null,
+            "sat_counts_full": null,
+            "output_tail": "PASS PriorityMuxModule_8 vectors=128\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/PriorityMuxModule_8/PriorityMuxModule_8_wave.sv:82: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 128ns; walltime 0.001 s; speed 83.483 us/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 152 MB\n",
+            "output_sha256": "5fa4e447fb0ad640225ec95ccab43bef3900ebfad34b6fe1f7992612bb57239b"
+          },
+          "testbench": "validation/.cache/v2-bitselect-family-wave/PriorityMuxModule_8/PriorityMuxModule_8_wave.sv"
+        }
+      },
+      "UIntCompressor_27_000000000000001010100000000": {
+        "module_definition": true,
+        "locked_reference_sha256": "3a1156357692c4a2e8328ac7fbf62f45adeebbb6c269e9121b78c497ec999f01",
+        "instances_in_locked_reference_tree": 54,
+        "abi_exact": true,
+        "deterministic_export": true,
+        "static_failures": [],
+        "verilator_dut_and_miter_lint": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "UIntCompressor_27_000000000000001010100000000_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/DUT_UIntCompressor_27_000000000000001010100000000.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/REF_UIntCompressor_27_000000000000001010100000000.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/UIntCompressor_27_000000000000001010100000000_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.041 MB sources in 4 modules, into 0.013 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.048 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.007 s on 1 threads; alloced 9.109 MB\n",
+          "output_sha256": "115421dcc8b5ec854fe7cb80a2a125a3d6d238f1ac89d917edacbb0740b2cc2a"
+        },
+        "verilator_locked_reference_lint": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "UIntCompressor_27_000000000000001010100000000",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/UIntCompressor_27_000000000000001010100000000.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.022 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.027 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.207 MB\n",
+          "output_sha256": "39bac13a7ee579a68b7fd8cab061c417be3d0681cdcbe52dedb3db6558921390"
+        },
+        "yosys_structural_check": {
+          "status": "PASS",
+          "returncode": 0,
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/DUT_UIntCompressor_27_000000000000001010100000000.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/REF_UIntCompressor_27_000000000000001010100000000.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/UIntCompressor_27_000000000000001010100000000_MITER.sv; hierarchy -check -top UIntCompressor_27_000000000000001010100000000_MITER; proc; flatten; opt; check; stat"
+          ],
+          "output_tail": "1010100000000_MITER'.\nRemoved a total of 0 cells.\n\n7.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n7.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\UIntCompressor_27_000000000000001010100000000_MITER..\nRemoved 0 unused cells and 1 unused wires.\n<suppressed ~1 debug messages>\n\n7.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module UIntCompressor_27_000000000000001010100000000_MITER.\n<suppressed ~1 debug messages>\n\n7.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n7.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\UIntCompressor_27_000000000000001010100000000_MITER..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n7.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\UIntCompressor_27_000000000000001010100000000_MITER.\nPerformed a total of 0 changes.\n\n7.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\UIntCompressor_27_000000000000001010100000000_MITER'.\nRemoved a total of 0 cells.\n\n7.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n7.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\UIntCompressor_27_000000000000001010100000000_MITER..\n\n7.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module UIntCompressor_27_000000000000001010100000000_MITER.\n\n7.16. Finished OPT passes. (There is nothing left to do.)\n\n8. Executing CHECK pass (checking for obvious problems).\nChecking module UIntCompressor_27_000000000000001010100000000_MITER...\nFound and reported 0 problems.\n\n9. Printing statistics.\n\n=== UIntCompressor_27_000000000000001010100000000_MITER ===\n\n   Number of wires:                  8\n   Number of wire bits:             94\n   Number of public wires:           8\n   Number of public wire bits:      94\n   Number of ports:                  2\n   Number of port bits:             28\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                  2\n     $scopeinfo                      2\n\nEnd of script. Logfile hash: 50f21980da, CPU: user 0.01s system 0.01s, MEM: 12.19 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 37% 4x read_verilog (0 sec), 24% 4x opt_expr (0 sec), ...\n"
+        },
+        "locked_executable_differential": {
+          "status": "PASS",
+          "vectors_per_member": 91,
+          "compared_outputs": 1,
+          "compile": {
+            "command": [
+              "verilator",
+              "--binary",
+              "--timing",
+              "-Wno-fatal",
+              "--Mdir",
+              "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/UIntCompressor_27_000000000000001010100000000/obj_dir",
+              "--top-module",
+              "v2_bitselect_wave_uintcompressor_27_000000000000001010100000000",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/DUT_UIntCompressor_27_000000000000001010100000000.sv",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/REF_UIntCompressor_27_000000000000001010100000000.sv",
+              "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/UIntCompressor_27_000000000000001010100000000/UIntCompressor_27_000000000000001010100000000_wave.sv"
+            ],
+            "returncode": 0,
+            "status": "PASS",
+            "sat_success_marker": false,
+            "sat_counterexample_marker": false,
+            "unconstrained_marker": false,
+            "equiv_success_markers": {
+              "0 are unproven.": false,
+              "Equivalence successfully proven!": false
+            },
+            "equiv_failure_marker": false,
+            "equiv_cells_full": null,
+            "equiv_summary_full": null,
+            "equiv_failed_full": null,
+            "sat_counts_full": null,
+            "output_tail": "ave_uintcompressor_27_000000000000001010100000000\nrm Vv2_bitselect_wave_uintcompressor_27_000000000000001010100000000__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/UIntCompressor_27_000000000000001010100000000/obj_dir'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.044 MB sources in 4 modules, into 0.063 MB in 7 C++ files needing 0.000 MB\n- Verilator: Walltime 6.051 s (elab=0.000, cvt=0.029, bld=5.872); cpu 0.018 s on 1 threads; alloced 9.516 MB\n%Warning-TIMESCALEMOD: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/DUT_UIntCompressor_27_000000000000001010100000000.sv:3:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)\n    3 | module DUT_UIntCompressor_27_000000000000001010100000000(io_out, io_in);\n      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n                       /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/UIntCompressor_27_000000000000001010100000000/UIntCompressor_27_000000000000001010100000000_wave.sv:2:8: ... Location of module with timescale\n    2 | module v2_bitselect_wave_uintcompressor_27_000000000000001010100000000;\n      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n                       ... For warning description see https://verilator.org/warn/TIMESCALEMOD?v=5.032\n                       ... Use \"/* verilator lint_off TIMESCALEMOD */\" and lint_on around source to disable this message.\n%Warning-TIMESCALEMOD: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/REF_UIntCompressor_27_000000000000001010100000000.sv:1:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)\n    1 | module REF_UIntCompressor_27_000000000000001010100000000(\n      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n                       /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/UIntCompressor_27_000000000000001010100000000/UIntCompressor_27_000000000000001010100000000_wave.sv:2:8: ... Location of module with timescale\n    2 | module v2_bitselect_wave_uintcompressor_27_000000000000001010100000000;\n      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n",
+            "output_sha256": "d7a211e7d58c319d572ee16d355136c279c9d267469c16071082a0b39033ad0a"
+          },
+          "execution": {
+            "command": [
+              "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/UIntCompressor_27_000000000000001010100000000/obj_dir/Vv2_bitselect_wave_uintcompressor_27_000000000000001010100000000"
+            ],
+            "returncode": 0,
+            "status": "PASS",
+            "sat_success_marker": false,
+            "sat_counterexample_marker": false,
+            "unconstrained_marker": false,
+            "equiv_success_markers": {
+              "0 are unproven.": false,
+              "Equivalence successfully proven!": false
+            },
+            "equiv_failure_marker": false,
+            "equiv_cells_full": null,
+            "equiv_summary_full": null,
+            "equiv_failed_full": null,
+            "sat_counts_full": null,
+            "output_tail": "PASS UIntCompressor_27_000000000000001010100000000 vectors=91\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/UIntCompressor_27_000000000000001010100000000/UIntCompressor_27_000000000000001010100000000_wave.sv:31: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 91ns; walltime 0.001 s; speed 60.120 us/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n",
+            "output_sha256": "ade47dc6787699297b18c2e7dc90d10284393b7e48355a239e6de4026c5d664b"
+          },
+          "testbench": "validation/.cache/v2-bitselect-family-wave/UIntCompressor_27_000000000000001010100000000/UIntCompressor_27_000000000000001010100000000_wave.sv"
+        }
+      },
+      "UIntCompressor_27_000011100000000000001010101": {
+        "module_definition": true,
+        "locked_reference_sha256": "c77d9f63f3a2db382661cb2356154f2a3e2fc28f51f50dd5389041fcf7f1c068",
+        "instances_in_locked_reference_tree": 54,
+        "abi_exact": true,
+        "deterministic_export": true,
+        "static_failures": [],
+        "verilator_dut_and_miter_lint": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "UIntCompressor_27_000011100000000000001010101_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/DUT_UIntCompressor_27_000011100000000000001010101.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/REF_UIntCompressor_27_000011100000000000001010101.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/UIntCompressor_27_000011100000000000001010101_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.041 MB sources in 4 modules, into 0.013 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.071 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.007 s on 1 threads; alloced 9.113 MB\n",
+          "output_sha256": "ece7706d5478f907d3839afba4a543f3adab2b73749cf407e44c51f3de650770"
+        },
+        "verilator_locked_reference_lint": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "UIntCompressor_27_000011100000000000001010101",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/UIntCompressor_27_000011100000000000001010101.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.022 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.032 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.336 MB\n",
+          "output_sha256": "780390c7985791ccf3e93f3f244adc7d2b8830ff0c00ed0d819c030204c9968c"
+        },
+        "yosys_structural_check": {
+          "status": "PASS",
+          "returncode": 0,
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/DUT_UIntCompressor_27_000011100000000000001010101.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/REF_UIntCompressor_27_000011100000000000001010101.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/UIntCompressor_27_000011100000000000001010101_MITER.sv; hierarchy -check -top UIntCompressor_27_000011100000000000001010101_MITER; proc; flatten; opt; check; stat"
+          ],
+          "output_tail": "0000001010101_MITER'.\nRemoved a total of 0 cells.\n\n7.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n7.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\UIntCompressor_27_000011100000000000001010101_MITER..\nRemoved 0 unused cells and 1 unused wires.\n<suppressed ~1 debug messages>\n\n7.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module UIntCompressor_27_000011100000000000001010101_MITER.\n<suppressed ~1 debug messages>\n\n7.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n7.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\UIntCompressor_27_000011100000000000001010101_MITER..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n7.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\UIntCompressor_27_000011100000000000001010101_MITER.\nPerformed a total of 0 changes.\n\n7.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\UIntCompressor_27_000011100000000000001010101_MITER'.\nRemoved a total of 0 cells.\n\n7.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n7.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\UIntCompressor_27_000011100000000000001010101_MITER..\n\n7.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module UIntCompressor_27_000011100000000000001010101_MITER.\n\n7.16. Finished OPT passes. (There is nothing left to do.)\n\n8. Executing CHECK pass (checking for obvious problems).\nChecking module UIntCompressor_27_000011100000000000001010101_MITER...\nFound and reported 0 problems.\n\n9. Printing statistics.\n\n=== UIntCompressor_27_000011100000000000001010101_MITER ===\n\n   Number of wires:                  8\n   Number of wire bits:            110\n   Number of public wires:           8\n   Number of public wire bits:     110\n   Number of ports:                  2\n   Number of port bits:             28\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                  2\n     $scopeinfo                      2\n\nEnd of script. Logfile hash: 33d0412f88, CPU: user 0.02s system 0.00s, MEM: 12.19 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 30% 4x opt_expr (0 sec), 27% 4x read_verilog (0 sec), ...\n"
+        },
+        "locked_executable_differential": {
+          "status": "PASS",
+          "vectors_per_member": 91,
+          "compared_outputs": 1,
+          "compile": {
+            "command": [
+              "verilator",
+              "--binary",
+              "--timing",
+              "-Wno-fatal",
+              "--Mdir",
+              "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/UIntCompressor_27_000011100000000000001010101/obj_dir",
+              "--top-module",
+              "v2_bitselect_wave_uintcompressor_27_000011100000000000001010101",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/DUT_UIntCompressor_27_000011100000000000001010101.sv",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/REF_UIntCompressor_27_000011100000000000001010101.sv",
+              "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/UIntCompressor_27_000011100000000000001010101/UIntCompressor_27_000011100000000000001010101_wave.sv"
+            ],
+            "returncode": 0,
+            "status": "PASS",
+            "sat_success_marker": false,
+            "sat_counterexample_marker": false,
+            "unconstrained_marker": false,
+            "equiv_success_markers": {
+              "0 are unproven.": false,
+              "Equivalence successfully proven!": false
+            },
+            "equiv_failure_marker": false,
+            "equiv_cells_full": null,
+            "equiv_summary_full": null,
+            "equiv_failed_full": null,
+            "sat_counts_full": null,
+            "output_tail": "ave_uintcompressor_27_000011100000000000001010101\nrm Vv2_bitselect_wave_uintcompressor_27_000011100000000000001010101__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/UIntCompressor_27_000011100000000000001010101/obj_dir'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.044 MB sources in 4 modules, into 0.063 MB in 7 C++ files needing 0.000 MB\n- Verilator: Walltime 6.402 s (elab=0.000, cvt=0.032, bld=6.222); cpu 0.016 s on 1 threads; alloced 9.516 MB\n%Warning-TIMESCALEMOD: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/DUT_UIntCompressor_27_000011100000000000001010101.sv:3:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)\n    3 | module DUT_UIntCompressor_27_000011100000000000001010101(io_out, io_in);\n      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n                       /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/UIntCompressor_27_000011100000000000001010101/UIntCompressor_27_000011100000000000001010101_wave.sv:2:8: ... Location of module with timescale\n    2 | module v2_bitselect_wave_uintcompressor_27_000011100000000000001010101;\n      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n                       ... For warning description see https://verilator.org/warn/TIMESCALEMOD?v=5.032\n                       ... Use \"/* verilator lint_off TIMESCALEMOD */\" and lint_on around source to disable this message.\n%Warning-TIMESCALEMOD: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/REF_UIntCompressor_27_000011100000000000001010101.sv:1:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)\n    1 | module REF_UIntCompressor_27_000011100000000000001010101(\n      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n                       /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/UIntCompressor_27_000011100000000000001010101/UIntCompressor_27_000011100000000000001010101_wave.sv:2:8: ... Location of module with timescale\n    2 | module v2_bitselect_wave_uintcompressor_27_000011100000000000001010101;\n      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n",
+            "output_sha256": "32d10926bc26a97575f651a1859e937ec60eee5105312d1207c478baadf3db65"
+          },
+          "execution": {
+            "command": [
+              "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/UIntCompressor_27_000011100000000000001010101/obj_dir/Vv2_bitselect_wave_uintcompressor_27_000011100000000000001010101"
+            ],
+            "returncode": 0,
+            "status": "PASS",
+            "sat_success_marker": false,
+            "sat_counterexample_marker": false,
+            "unconstrained_marker": false,
+            "equiv_success_markers": {
+              "0 are unproven.": false,
+              "Equivalence successfully proven!": false
+            },
+            "equiv_failure_marker": false,
+            "equiv_cells_full": null,
+            "equiv_summary_full": null,
+            "equiv_failed_full": null,
+            "sat_counts_full": null,
+            "output_tail": "PASS UIntCompressor_27_000011100000000000001010101 vectors=91\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/UIntCompressor_27_000011100000000000001010101/UIntCompressor_27_000011100000000000001010101_wave.sv:31: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 91ns; walltime 0.001 s; speed 57.820 us/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n",
+            "output_sha256": "02f5c917e71c27f59b25878a3b2ac781c212e5c030c69666f5171212eb2cde59"
+          },
+          "testbench": "validation/.cache/v2-bitselect-family-wave/UIntCompressor_27_000011100000000000001010101/UIntCompressor_27_000011100000000000001010101_wave.sv"
+        }
+      },
+      "UIntExtractor_27_000000000000001010100000000": {
+        "module_definition": true,
+        "locked_reference_sha256": "a5f4976b0f786e386a309c8c7aedc7d5dda04d7d633addd932998592dd054c99",
+        "instances_in_locked_reference_tree": 26,
+        "abi_exact": true,
+        "deterministic_export": true,
+        "static_failures": [],
+        "verilator_dut_and_miter_lint": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "UIntExtractor_27_000000000000001010100000000_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/DUT_UIntExtractor_27_000000000000001010100000000.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/REF_UIntExtractor_27_000000000000001010100000000.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/UIntExtractor_27_000000000000001010100000000_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.041 MB sources in 4 modules, into 0.012 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.048 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.121 MB\n",
+          "output_sha256": "022e2dededcb638ad03a956a4c4a3f78a7ec31b8d307d8f83a6d64ec06d9df56"
+        },
+        "verilator_locked_reference_lint": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "UIntExtractor_27_000000000000001010100000000",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/UIntExtractor_27_000000000000001010100000000.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.022 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.036 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.332 MB\n",
+          "output_sha256": "0547a4217dd99649e99a9a128f789e0775528bfa31faa6cfddfa7f589e6c93dc"
+        },
+        "yosys_structural_check": {
+          "status": "PASS",
+          "returncode": 0,
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/DUT_UIntExtractor_27_000000000000001010100000000.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/REF_UIntExtractor_27_000000000000001010100000000.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/UIntExtractor_27_000000000000001010100000000_MITER.sv; hierarchy -check -top UIntExtractor_27_000000000000001010100000000_MITER; proc; flatten; opt; check; stat"
+          ],
+          "output_tail": "0000000001010100000000_MITER'.\nRemoved a total of 0 cells.\n\n7.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n7.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\UIntExtractor_27_000000000000001010100000000_MITER..\nRemoved 0 unused cells and 1 unused wires.\n<suppressed ~1 debug messages>\n\n7.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module UIntExtractor_27_000000000000001010100000000_MITER.\n<suppressed ~1 debug messages>\n\n7.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n7.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\UIntExtractor_27_000000000000001010100000000_MITER..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n7.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\UIntExtractor_27_000000000000001010100000000_MITER.\nPerformed a total of 0 changes.\n\n7.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\UIntExtractor_27_000000000000001010100000000_MITER'.\nRemoved a total of 0 cells.\n\n7.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n7.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\UIntExtractor_27_000000000000001010100000000_MITER..\n\n7.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module UIntExtractor_27_000000000000001010100000000_MITER.\n\n7.16. Finished OPT passes. (There is nothing left to do.)\n\n8. Executing CHECK pass (checking for obvious problems).\nChecking module UIntExtractor_27_000000000000001010100000000_MITER...\nFound and reported 0 problems.\n\n9. Printing statistics.\n\n=== UIntExtractor_27_000000000000001010100000000_MITER ===\n\n   Number of wires:                  8\n   Number of wire bits:            118\n   Number of public wires:           8\n   Number of public wire bits:     118\n   Number of ports:                  2\n   Number of port bits:              4\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                  2\n     $scopeinfo                      2\n\nEnd of script. Logfile hash: f84b8d3cc3, CPU: user 0.02s system 0.01s, MEM: 12.50 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 31% 4x opt_expr (0 sec), 26% 4x read_verilog (0 sec), ...\n"
+        },
+        "locked_executable_differential": {
+          "status": "PASS",
+          "vectors_per_member": 8,
+          "compared_outputs": 1,
+          "compile": {
+            "command": [
+              "verilator",
+              "--binary",
+              "--timing",
+              "-Wno-fatal",
+              "--Mdir",
+              "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/UIntExtractor_27_000000000000001010100000000/obj_dir",
+              "--top-module",
+              "v2_bitselect_wave_uintextractor_27_000000000000001010100000000",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/DUT_UIntExtractor_27_000000000000001010100000000.sv",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/REF_UIntExtractor_27_000000000000001010100000000.sv",
+              "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/UIntExtractor_27_000000000000001010100000000/UIntExtractor_27_000000000000001010100000000_wave.sv"
+            ],
+            "returncode": 0,
+            "status": "PASS",
+            "sat_success_marker": false,
+            "sat_counterexample_marker": false,
+            "unconstrained_marker": false,
+            "equiv_success_markers": {
+              "0 are unproven.": false,
+              "Equivalence successfully proven!": false
+            },
+            "equiv_failure_marker": false,
+            "equiv_cells_full": null,
+            "equiv_summary_full": null,
+            "equiv_failed_full": null,
+            "sat_counts_full": null,
+            "output_tail": "o Vv2_bitselect_wave_uintextractor_27_000000000000001010100000000\nrm Vv2_bitselect_wave_uintextractor_27_000000000000001010100000000__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/UIntExtractor_27_000000000000001010100000000/obj_dir'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.043 MB sources in 4 modules, into 0.034 MB in 7 C++ files needing 0.000 MB\n- Verilator: Walltime 5.920 s (elab=0.000, cvt=0.037, bld=5.734); cpu 0.015 s on 1 threads; alloced 9.094 MB\n%Warning-TIMESCALEMOD: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/DUT_UIntExtractor_27_000000000000001010100000000.sv:3:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)\n    3 | module DUT_UIntExtractor_27_000000000000001010100000000(io_out, io_in);\n      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n                       /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/UIntExtractor_27_000000000000001010100000000/UIntExtractor_27_000000000000001010100000000_wave.sv:2:8: ... Location of module with timescale\n    2 | module v2_bitselect_wave_uintextractor_27_000000000000001010100000000;\n      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n                       ... For warning description see https://verilator.org/warn/TIMESCALEMOD?v=5.032\n                       ... Use \"/* verilator lint_off TIMESCALEMOD */\" and lint_on around source to disable this message.\n%Warning-TIMESCALEMOD: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/REF_UIntExtractor_27_000000000000001010100000000.sv:1:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)\n    1 | module REF_UIntExtractor_27_000000000000001010100000000(\n      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n                       /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/UIntExtractor_27_000000000000001010100000000/UIntExtractor_27_000000000000001010100000000_wave.sv:2:8: ... Location of module with timescale\n    2 | module v2_bitselect_wave_uintextractor_27_000000000000001010100000000;\n      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n",
+            "output_sha256": "8411182b1254b84c54cc519d88b493a886b8935b0a3349e9a98c084d3aef8bd3"
+          },
+          "execution": {
+            "command": [
+              "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/UIntExtractor_27_000000000000001010100000000/obj_dir/Vv2_bitselect_wave_uintextractor_27_000000000000001010100000000"
+            ],
+            "returncode": 0,
+            "status": "PASS",
+            "sat_success_marker": false,
+            "sat_counterexample_marker": false,
+            "unconstrained_marker": false,
+            "equiv_success_markers": {
+              "0 are unproven.": false,
+              "Equivalence successfully proven!": false
+            },
+            "equiv_failure_marker": false,
+            "equiv_cells_full": null,
+            "equiv_summary_full": null,
+            "equiv_failed_full": null,
+            "sat_counts_full": null,
+            "output_tail": "PASS UIntExtractor_27_000000000000001010100000000 vectors=8\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/UIntExtractor_27_000000000000001010100000000/UIntExtractor_27_000000000000001010100000000_wave.sv:25: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 8ns; walltime 0.001 s; speed 5.264 us/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 152 MB\n",
+            "output_sha256": "809311bcfdf633911cd7eb263850c2d33746f1ea466b60a4df78d74eeb21ea01"
+          },
+          "testbench": "validation/.cache/v2-bitselect-family-wave/UIntExtractor_27_000000000000001010100000000/UIntExtractor_27_000000000000001010100000000_wave.sv"
+        }
+      },
+      "UIntExtractor_27_000011100000000000001010101": {
+        "module_definition": true,
+        "locked_reference_sha256": "ff7f7f6028ffb402c09f28b72523907ca06f94c33e50e7170ca70fbea5972aa9",
+        "instances_in_locked_reference_tree": 46,
+        "abi_exact": true,
+        "deterministic_export": true,
+        "static_failures": [],
+        "verilator_dut_and_miter_lint": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "UIntExtractor_27_000011100000000000001010101_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/DUT_UIntExtractor_27_000011100000000000001010101.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/REF_UIntExtractor_27_000011100000000000001010101.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/UIntExtractor_27_000011100000000000001010101_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.041 MB sources in 4 modules, into 0.012 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.060 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.009 s on 1 threads; alloced 9.125 MB\n",
+          "output_sha256": "606fc56f8fb147062db5bfde43d6aae84dac575baa9057d06469c90ed3b843cf"
+        },
+        "verilator_locked_reference_lint": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "UIntExtractor_27_000011100000000000001010101",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/UIntExtractor_27_000011100000000000001010101.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.023 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.031 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.008 s on 1 threads; alloced 9.340 MB\n",
+          "output_sha256": "7f976a55d1d1c41f832d3cc45bfab64ed1984d365e6a9136547b93bcec48a531"
+        },
+        "yosys_structural_check": {
+          "status": "PASS",
+          "returncode": 0,
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/DUT_UIntExtractor_27_000011100000000000001010101.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/REF_UIntExtractor_27_000011100000000000001010101.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/UIntExtractor_27_000011100000000000001010101_MITER.sv; hierarchy -check -top UIntExtractor_27_000011100000000000001010101_MITER; proc; flatten; opt; check; stat"
+          ],
+          "output_tail": "1100000000000001010101_MITER'.\nRemoved a total of 0 cells.\n\n7.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n7.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\UIntExtractor_27_000011100000000000001010101_MITER..\nRemoved 0 unused cells and 1 unused wires.\n<suppressed ~1 debug messages>\n\n7.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module UIntExtractor_27_000011100000000000001010101_MITER.\n<suppressed ~1 debug messages>\n\n7.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n7.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\UIntExtractor_27_000011100000000000001010101_MITER..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n7.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\UIntExtractor_27_000011100000000000001010101_MITER.\nPerformed a total of 0 changes.\n\n7.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\UIntExtractor_27_000011100000000000001010101_MITER'.\nRemoved a total of 0 cells.\n\n7.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n7.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\UIntExtractor_27_000011100000000000001010101_MITER..\n\n7.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module UIntExtractor_27_000011100000000000001010101_MITER.\n\n7.16. Finished OPT passes. (There is nothing left to do.)\n\n8. Executing CHECK pass (checking for obvious problems).\nChecking module UIntExtractor_27_000011100000000000001010101_MITER...\nFound and reported 0 problems.\n\n9. Printing statistics.\n\n=== UIntExtractor_27_000011100000000000001010101_MITER ===\n\n   Number of wires:                  8\n   Number of wire bits:            130\n   Number of public wires:           8\n   Number of public wire bits:     130\n   Number of ports:                  2\n   Number of port bits:              8\n   Number of memories:               0\n   Number of memory bits:            0\n   Number of processes:              0\n   Number of cells:                  2\n     $scopeinfo                      2\n\nEnd of script. Logfile hash: 60fca81603, CPU: user 0.02s system 0.00s, MEM: 12.19 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 30% 4x read_verilog (0 sec), 30% 4x opt_expr (0 sec), ...\n"
+        },
+        "locked_executable_differential": {
+          "status": "PASS",
+          "vectors_per_member": 128,
+          "compared_outputs": 1,
+          "compile": {
+            "command": [
+              "verilator",
+              "--binary",
+              "--timing",
+              "-Wno-fatal",
+              "--Mdir",
+              "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/UIntExtractor_27_000011100000000000001010101/obj_dir",
+              "--top-module",
+              "v2_bitselect_wave_uintextractor_27_000011100000000000001010101",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/DUT_UIntExtractor_27_000011100000000000001010101.sv",
+              "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/REF_UIntExtractor_27_000011100000000000001010101.sv",
+              "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/UIntExtractor_27_000011100000000000001010101/UIntExtractor_27_000011100000000000001010101_wave.sv"
+            ],
+            "returncode": 0,
+            "status": "PASS",
+            "sat_success_marker": false,
+            "sat_counterexample_marker": false,
+            "unconstrained_marker": false,
+            "equiv_success_markers": {
+              "0 are unproven.": false,
+              "Equivalence successfully proven!": false
+            },
+            "equiv_failure_marker": false,
+            "equiv_cells_full": null,
+            "equiv_summary_full": null,
+            "equiv_failed_full": null,
+            "sat_counts_full": null,
+            "output_tail": "o Vv2_bitselect_wave_uintextractor_27_000011100000000000001010101\nrm Vv2_bitselect_wave_uintextractor_27_000011100000000000001010101__ALL.verilator_deplist.tmp\nmake: Leaving directory '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/UIntExtractor_27_000011100000000000001010101/obj_dir'\n- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.043 MB sources in 4 modules, into 0.032 MB in 7 C++ files needing 0.000 MB\n- Verilator: Walltime 5.933 s (elab=0.000, cvt=0.041, bld=5.712); cpu 0.021 s on 1 threads; alloced 9.098 MB\n%Warning-TIMESCALEMOD: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/DUT_UIntExtractor_27_000011100000000000001010101.sv:3:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)\n    3 | module DUT_UIntExtractor_27_000011100000000000001010101(io_out, io_in);\n      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n                       /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/UIntExtractor_27_000011100000000000001010101/UIntExtractor_27_000011100000000000001010101_wave.sv:2:8: ... Location of module with timescale\n    2 | module v2_bitselect_wave_uintextractor_27_000011100000000000001010101;\n      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n                       ... For warning description see https://verilator.org/warn/TIMESCALEMOD?v=5.032\n                       ... Use \"/* verilator lint_off TIMESCALEMOD */\" and lint_on around source to disable this message.\n%Warning-TIMESCALEMOD: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_utility_bitselectfamily_family/REF_UIntExtractor_27_000011100000000000001010101.sv:1:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)\n    1 | module REF_UIntExtractor_27_000011100000000000001010101(\n      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n                       /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/UIntExtractor_27_000011100000000000001010101/UIntExtractor_27_000011100000000000001010101_wave.sv:2:8: ... Location of module with timescale\n    2 | module v2_bitselect_wave_uintextractor_27_000011100000000000001010101;\n      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n",
+            "output_sha256": "2238c32756aeaccf19d0a5cecf120a3fa5bb2b5d1c442358e7b6c33f806d8efb"
+          },
+          "execution": {
+            "command": [
+              "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/UIntExtractor_27_000011100000000000001010101/obj_dir/Vv2_bitselect_wave_uintextractor_27_000011100000000000001010101"
+            ],
+            "returncode": 0,
+            "status": "PASS",
+            "sat_success_marker": false,
+            "sat_counterexample_marker": false,
+            "unconstrained_marker": false,
+            "equiv_success_markers": {
+              "0 are unproven.": false,
+              "Equivalence successfully proven!": false
+            },
+            "equiv_failure_marker": false,
+            "equiv_cells_full": null,
+            "equiv_summary_full": null,
+            "equiv_failed_full": null,
+            "sat_counts_full": null,
+            "output_tail": "PASS UIntExtractor_27_000011100000000000001010101 vectors=128\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.cache/v2-bitselect-family-wave/UIntExtractor_27_000011100000000000001010101/UIntExtractor_27_000011100000000000001010101_wave.sv:25: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 128ns; walltime 0.002 s; speed 55.234 us/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 152 MB\n",
+            "output_sha256": "d6b2fc78bd726a121489066b4faa1db0724c1677e57c9027fd7747f69926b688"
+          },
+          "testbench": "validation/.cache/v2-bitselect-family-wave/UIntExtractor_27_000011100000000000001010101/UIntExtractor_27_000011100000000000001010101_wave.sv"
+        }
+      }
+    },
+    "member_checks_pass": true
+  },
+  "remaining_gates": [
+    "serialized Yosys SAT/formal and negative controls",
+    "parent/family closure and system-level acceptance"
+  ],
+  "metadata_refresh": {
+    "reason": "Direct-test section header was added without changing Build behavior.",
+    "command": [
+      "py",
+      "-B",
+      "validation/v2_direct_test_runner.py",
+      "--test",
+      "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Dependency.Utility.BitSelectFamily-Hardware.py",
+      "--minimum-tests",
+      "4"
+    ],
+    "returncode": 0,
+    "refreshed": [
+      "sources.direct_test.sha256",
+      "sources.direct_test.bytes",
+      "checks.direct_test.output_tail"
+    ]
+  }
+}

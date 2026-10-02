@@ -1,0 +1,2430 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_STRICT_COMPLETE_EQUIVALENCE",
+  "proof_execution_profile": "RECOVERABLE_STRICT_FAMILY_V2",
+  "build_id": "Build-Cpu.Dependency.Fpu.NormalizeRoundFamily",
+  "validator": "validation/v2_registered_family_strict_validator.py",
+  "status": "COMPLETE_EQUIVALENCE",
+  "strict_complete_eligible": true,
+  "strict_complete_count_delta": 1,
+  "acceptance_eligible": false,
+  "source_commit": "d76ee7f8902f86cce8a0b938cf7f7a9a3b8432af",
+  "audit_policy": {
+    "require_negative_control": true,
+    "require_two_sided_negative_control": true,
+    "require_locked_reference_lint": true,
+    "require_validator_hash": true,
+    "scope_source": "Build catalog tables"
+  },
+  "scope": {
+    "kind": "catalog_build_multi_variant",
+    "public_variants": [
+      "CLZ",
+      "CLZ_11",
+      "CLZ_28",
+      "CLZ_29",
+      "CLZ_30",
+      "CLZ_31",
+      "CLZ_6",
+      "CLZ_7",
+      "CLZ_9",
+      "RoundingUnit",
+      "RoundingUnit_1",
+      "RoundingUnit_11",
+      "RoundingUnit_2",
+      "RoundingUnit_3",
+      "RoundingUnit_4",
+      "RoundingUnit_8",
+      "RoundingUnit_9"
+    ],
+    "variant_count": 17,
+    "combinational_variants": 17,
+    "sequential_variants": 0,
+    "inputs": {
+      "CLZ_io_in": 64,
+      "CLZ_11_io_in": 8,
+      "CLZ_28_io_in": 10,
+      "CLZ_29_io_in": 23,
+      "CLZ_30_io_in": 11,
+      "CLZ_31_io_in": 24,
+      "CLZ_6_io_in": 64,
+      "CLZ_7_io_in": 16,
+      "CLZ_9_io_in": 32,
+      "RoundingUnit_io_in": 23,
+      "RoundingUnit_io_roundIn": 1,
+      "RoundingUnit_io_stickyIn": 1,
+      "RoundingUnit_io_signIn": 1,
+      "RoundingUnit_io_rm": 3,
+      "RoundingUnit_1_io_in": 52,
+      "RoundingUnit_1_io_roundIn": 1,
+      "RoundingUnit_1_io_stickyIn": 1,
+      "RoundingUnit_1_io_signIn": 1,
+      "RoundingUnit_1_io_rm": 3,
+      "RoundingUnit_11_io_in": 11,
+      "RoundingUnit_11_io_roundIn": 1,
+      "RoundingUnit_11_io_stickyIn": 1,
+      "RoundingUnit_11_io_signIn": 1,
+      "RoundingUnit_11_io_rm": 3,
+      "RoundingUnit_2_io_in": 10,
+      "RoundingUnit_2_io_roundIn": 1,
+      "RoundingUnit_2_io_stickyIn": 1,
+      "RoundingUnit_2_io_signIn": 1,
+      "RoundingUnit_2_io_rm": 3,
+      "RoundingUnit_3_io_in": 64,
+      "RoundingUnit_3_io_roundIn": 1,
+      "RoundingUnit_3_io_stickyIn": 1,
+      "RoundingUnit_3_io_signIn": 1,
+      "RoundingUnit_3_io_rm": 3,
+      "RoundingUnit_4_io_in": 23,
+      "RoundingUnit_4_io_roundIn": 1,
+      "RoundingUnit_4_io_stickyIn": 1,
+      "RoundingUnit_4_io_signIn": 1,
+      "RoundingUnit_4_io_rm": 3,
+      "RoundingUnit_8_io_in": 24,
+      "RoundingUnit_8_io_roundIn": 1,
+      "RoundingUnit_8_io_stickyIn": 1,
+      "RoundingUnit_8_io_signIn": 1,
+      "RoundingUnit_8_io_rm": 3,
+      "RoundingUnit_9_io_in": 10,
+      "RoundingUnit_9_io_roundIn": 1,
+      "RoundingUnit_9_io_stickyIn": 1,
+      "RoundingUnit_9_io_signIn": 1,
+      "RoundingUnit_9_io_rm": 3
+    },
+    "outputs_compared": {
+      "CLZ_io_out": 6,
+      "CLZ_11_io_out": 4,
+      "CLZ_28_io_out": 4,
+      "CLZ_29_io_out": 5,
+      "CLZ_30_io_out": 4,
+      "CLZ_31_io_out": 5,
+      "CLZ_6_io_out": 7,
+      "CLZ_7_io_out": 5,
+      "CLZ_9_io_out": 6,
+      "RoundingUnit_io_out": 23,
+      "RoundingUnit_io_inexact": 1,
+      "RoundingUnit_io_cout": 1,
+      "RoundingUnit_1_io_out": 52,
+      "RoundingUnit_1_io_inexact": 1,
+      "RoundingUnit_1_io_cout": 1,
+      "RoundingUnit_11_io_inexact": 1,
+      "RoundingUnit_11_io_r_up": 1,
+      "RoundingUnit_2_io_out": 10,
+      "RoundingUnit_2_io_inexact": 1,
+      "RoundingUnit_2_io_cout": 1,
+      "RoundingUnit_3_io_inexact": 1,
+      "RoundingUnit_3_io_r_up": 1,
+      "RoundingUnit_4_io_inexact": 1,
+      "RoundingUnit_4_io_r_up": 1,
+      "RoundingUnit_8_io_inexact": 1,
+      "RoundingUnit_8_io_r_up": 1,
+      "RoundingUnit_9_io_inexact": 1,
+      "RoundingUnit_9_io_r_up": 1
+    },
+    "aggregate_input_bits": 517,
+    "aggregate_compared_output_bits": 147,
+    "variants": {
+      "CLZ": {
+        "method": "sat_miter",
+        "sequential": false,
+        "locked_reference": "validation/reference-sv/CLZ.sv",
+        "locked_sha256": "4c877380fa08ba1123bd7f39c8c6f6e8088dc06ad74134daa599b57d103d1772",
+        "children": [],
+        "inputs": {
+          "io_in": 64
+        },
+        "outputs_compared": {
+          "io_out": 6
+        },
+        "input_bits": 64,
+        "output_bits": 6,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "PASS",
+        "success_marker": true,
+        "markers_present": null,
+        "unconstrained_or_equiv_cells": true,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "sat_variables": 4408,
+        "sat_clauses": 11670
+      },
+      "CLZ_11": {
+        "method": "sat_miter",
+        "sequential": false,
+        "locked_reference": "validation/reference-sv/CLZ_11.sv",
+        "locked_sha256": "7a492bb6c6b4a5eaeb081c10a6c3871418544ec2eb5ad95e0a8c934377fb8063",
+        "children": [],
+        "inputs": {
+          "io_in": 8
+        },
+        "outputs_compared": {
+          "io_out": 4
+        },
+        "input_bits": 8,
+        "output_bits": 4,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "PASS",
+        "success_marker": true,
+        "markers_present": null,
+        "unconstrained_or_equiv_cells": true,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "sat_variables": 2,
+        "sat_clauses": 4
+      },
+      "CLZ_28": {
+        "method": "sat_miter",
+        "sequential": false,
+        "locked_reference": "validation/reference-sv/CLZ_28.sv",
+        "locked_sha256": "c1cad4a2ce82d568ef662a42fcd36b51d726369aec0df1eee2096be7f59ca3a0",
+        "children": [],
+        "inputs": {
+          "io_in": 10
+        },
+        "outputs_compared": {
+          "io_out": 4
+        },
+        "input_bits": 10,
+        "output_bits": 4,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "PASS",
+        "success_marker": true,
+        "markers_present": null,
+        "unconstrained_or_equiv_cells": true,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "sat_variables": 466,
+        "sat_clauses": 1222
+      },
+      "CLZ_29": {
+        "method": "sat_miter",
+        "sequential": false,
+        "locked_reference": "validation/reference-sv/CLZ_29.sv",
+        "locked_sha256": "53e0ee314e8835a1a929a88f4e13ea9fae01da9f286fae6af81ffcdb90995ee0",
+        "children": [],
+        "inputs": {
+          "io_in": 23
+        },
+        "outputs_compared": {
+          "io_out": 5
+        },
+        "input_bits": 23,
+        "output_bits": 5,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "PASS",
+        "success_marker": true,
+        "markers_present": null,
+        "unconstrained_or_equiv_cells": true,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "sat_variables": 1307,
+        "sat_clauses": 3435
+      },
+      "CLZ_30": {
+        "method": "sat_miter",
+        "sequential": false,
+        "locked_reference": "validation/reference-sv/CLZ_30.sv",
+        "locked_sha256": "2e3173619dae8323080874ff3e7ccf0dd31a50be8740855409c6b31df542871c",
+        "children": [],
+        "inputs": {
+          "io_in": 11
+        },
+        "outputs_compared": {
+          "io_out": 4
+        },
+        "input_bits": 11,
+        "output_bits": 4,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "PASS",
+        "success_marker": true,
+        "markers_present": null,
+        "unconstrained_or_equiv_cells": true,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "sat_variables": 503,
+        "sat_clauses": 1318
+      },
+      "CLZ_31": {
+        "method": "sat_miter",
+        "sequential": false,
+        "locked_reference": "validation/reference-sv/CLZ_31.sv",
+        "locked_sha256": "8979b0b69c6079abcfd587d2322629ec7fffcb9f2be6ca2eaa8411f597b659fa",
+        "children": [],
+        "inputs": {
+          "io_in": 24
+        },
+        "outputs_compared": {
+          "io_out": 5
+        },
+        "input_bits": 24,
+        "output_bits": 5,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "PASS",
+        "success_marker": true,
+        "markers_present": null,
+        "unconstrained_or_equiv_cells": true,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "sat_variables": 1419,
+        "sat_clauses": 3730
+      },
+      "CLZ_6": {
+        "method": "sat_miter",
+        "sequential": false,
+        "locked_reference": "validation/reference-sv/CLZ_6.sv",
+        "locked_sha256": "25c91b81713fc5f41999752197dd20298c0db7c3ac0d467a5fddc6ffb704a0fb",
+        "children": [],
+        "inputs": {
+          "io_in": 64
+        },
+        "outputs_compared": {
+          "io_out": 7
+        },
+        "input_bits": 64,
+        "output_bits": 7,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "PASS",
+        "success_marker": true,
+        "markers_present": null,
+        "unconstrained_or_equiv_cells": true,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "sat_variables": 2,
+        "sat_clauses": 4
+      },
+      "CLZ_7": {
+        "method": "sat_miter",
+        "sequential": false,
+        "locked_reference": "validation/reference-sv/CLZ_7.sv",
+        "locked_sha256": "d6c47ac82b4a5a08202bb2c5f083ad2b69d93e952fa53993d1444ee49bccc776",
+        "children": [],
+        "inputs": {
+          "io_in": 16
+        },
+        "outputs_compared": {
+          "io_out": 5
+        },
+        "input_bits": 16,
+        "output_bits": 5,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "PASS",
+        "success_marker": true,
+        "markers_present": null,
+        "unconstrained_or_equiv_cells": true,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "sat_variables": 2,
+        "sat_clauses": 4
+      },
+      "CLZ_9": {
+        "method": "sat_miter",
+        "sequential": false,
+        "locked_reference": "validation/reference-sv/CLZ_9.sv",
+        "locked_sha256": "3f89d33ebe502280b4291f33ef6695449c018d17ec844c75fb98c0ac023fab9d",
+        "children": [],
+        "inputs": {
+          "io_in": 32
+        },
+        "outputs_compared": {
+          "io_out": 6
+        },
+        "input_bits": 32,
+        "output_bits": 6,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "PASS",
+        "success_marker": true,
+        "markers_present": null,
+        "unconstrained_or_equiv_cells": true,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "sat_variables": 2,
+        "sat_clauses": 4
+      },
+      "RoundingUnit": {
+        "method": "sat_miter",
+        "sequential": false,
+        "locked_reference": "validation/reference-sv/RoundingUnit.sv",
+        "locked_sha256": "c190e1f6488b1b69430b25c122fc33fe973a19709d0e1f87267b74614bbf0cee",
+        "children": [],
+        "inputs": {
+          "io_in": 23,
+          "io_roundIn": 1,
+          "io_stickyIn": 1,
+          "io_signIn": 1,
+          "io_rm": 3
+        },
+        "outputs_compared": {
+          "io_out": 23,
+          "io_inexact": 1,
+          "io_cout": 1
+        },
+        "input_bits": 29,
+        "output_bits": 25,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "PASS",
+        "success_marker": true,
+        "markers_present": null,
+        "unconstrained_or_equiv_cells": true,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "sat_variables": 836,
+        "sat_clauses": 2262
+      },
+      "RoundingUnit_1": {
+        "method": "sat_miter",
+        "sequential": false,
+        "locked_reference": "validation/reference-sv/RoundingUnit_1.sv",
+        "locked_sha256": "9b4332b5990e4ddde2f94d7f480d4943eb9ae728dff78ce52fc6908197260026",
+        "children": [],
+        "inputs": {
+          "io_in": 52,
+          "io_roundIn": 1,
+          "io_stickyIn": 1,
+          "io_signIn": 1,
+          "io_rm": 3
+        },
+        "outputs_compared": {
+          "io_out": 52,
+          "io_inexact": 1,
+          "io_cout": 1
+        },
+        "input_bits": 58,
+        "output_bits": 54,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "PASS",
+        "success_marker": true,
+        "markers_present": null,
+        "unconstrained_or_equiv_cells": true,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "sat_variables": 1648,
+        "sat_clauses": 4495
+      },
+      "RoundingUnit_11": {
+        "method": "sat_miter",
+        "sequential": false,
+        "locked_reference": "validation/reference-sv/RoundingUnit_11.sv",
+        "locked_sha256": "5ce370cda235dc6065dfcfce1580f268ab41498d1063806521bcbf21c37cde0e",
+        "children": [],
+        "inputs": {
+          "io_in": 11,
+          "io_roundIn": 1,
+          "io_stickyIn": 1,
+          "io_signIn": 1,
+          "io_rm": 3
+        },
+        "outputs_compared": {
+          "io_inexact": 1,
+          "io_r_up": 1
+        },
+        "input_bits": 17,
+        "output_bits": 2,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "PASS",
+        "success_marker": true,
+        "markers_present": null,
+        "unconstrained_or_equiv_cells": true,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "sat_variables": 202,
+        "sat_clauses": 523
+      },
+      "RoundingUnit_2": {
+        "method": "sat_miter",
+        "sequential": false,
+        "locked_reference": "validation/reference-sv/RoundingUnit_2.sv",
+        "locked_sha256": "e326009325a10d1fddef7be22c9142e0139e7c54a448682f6602af4d1ebb825d",
+        "children": [],
+        "inputs": {
+          "io_in": 10,
+          "io_roundIn": 1,
+          "io_stickyIn": 1,
+          "io_signIn": 1,
+          "io_rm": 3
+        },
+        "outputs_compared": {
+          "io_out": 10,
+          "io_inexact": 1,
+          "io_cout": 1
+        },
+        "input_bits": 16,
+        "output_bits": 12,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "PASS",
+        "success_marker": true,
+        "markers_present": null,
+        "unconstrained_or_equiv_cells": true,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "sat_variables": 472,
+        "sat_clauses": 1261
+      },
+      "RoundingUnit_3": {
+        "method": "sat_miter",
+        "sequential": false,
+        "locked_reference": "validation/reference-sv/RoundingUnit_3.sv",
+        "locked_sha256": "71c91454bf13ba13e70ab9e3fc2b9cfaa3dd40d1d286a4d2afac89f8a4fbe04f",
+        "children": [],
+        "inputs": {
+          "io_in": 64,
+          "io_roundIn": 1,
+          "io_stickyIn": 1,
+          "io_signIn": 1,
+          "io_rm": 3
+        },
+        "outputs_compared": {
+          "io_inexact": 1,
+          "io_r_up": 1
+        },
+        "input_bits": 70,
+        "output_bits": 2,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "PASS",
+        "success_marker": true,
+        "markers_present": null,
+        "unconstrained_or_equiv_cells": true,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "sat_variables": 202,
+        "sat_clauses": 523
+      },
+      "RoundingUnit_4": {
+        "method": "sat_miter",
+        "sequential": false,
+        "locked_reference": "validation/reference-sv/RoundingUnit_4.sv",
+        "locked_sha256": "7185db716165ae90e5c6d9d927f1fd6c6b9b09d36e7d6b1d0e99c09abe8d2c33",
+        "children": [],
+        "inputs": {
+          "io_in": 23,
+          "io_roundIn": 1,
+          "io_stickyIn": 1,
+          "io_signIn": 1,
+          "io_rm": 3
+        },
+        "outputs_compared": {
+          "io_inexact": 1,
+          "io_r_up": 1
+        },
+        "input_bits": 29,
+        "output_bits": 2,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "PASS",
+        "success_marker": true,
+        "markers_present": null,
+        "unconstrained_or_equiv_cells": true,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "sat_variables": 202,
+        "sat_clauses": 523
+      },
+      "RoundingUnit_8": {
+        "method": "sat_miter",
+        "sequential": false,
+        "locked_reference": "validation/reference-sv/RoundingUnit_8.sv",
+        "locked_sha256": "4fbe939c72780bafcb42725a0cc20cea1af38cedd743aed6bda24799280c6d13",
+        "children": [],
+        "inputs": {
+          "io_in": 24,
+          "io_roundIn": 1,
+          "io_stickyIn": 1,
+          "io_signIn": 1,
+          "io_rm": 3
+        },
+        "outputs_compared": {
+          "io_inexact": 1,
+          "io_r_up": 1
+        },
+        "input_bits": 30,
+        "output_bits": 2,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "PASS",
+        "success_marker": true,
+        "markers_present": null,
+        "unconstrained_or_equiv_cells": true,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "sat_variables": 202,
+        "sat_clauses": 523
+      },
+      "RoundingUnit_9": {
+        "method": "sat_miter",
+        "sequential": false,
+        "locked_reference": "validation/reference-sv/RoundingUnit_9.sv",
+        "locked_sha256": "200199c999e8a3513870854fc640ede58a784d65b20e1ac0263e73671e6894bd",
+        "children": [],
+        "inputs": {
+          "io_in": 10,
+          "io_roundIn": 1,
+          "io_stickyIn": 1,
+          "io_signIn": 1,
+          "io_rm": 3
+        },
+        "outputs_compared": {
+          "io_inexact": 1,
+          "io_r_up": 1
+        },
+        "input_bits": 16,
+        "output_bits": 2,
+        "abi_exact": true,
+        "deterministic": true,
+        "miter_selfcheck": true,
+        "view_trusted": true,
+        "locked_reference_lint": "PASS",
+        "verdict": "PASS",
+        "success_marker": true,
+        "markers_present": null,
+        "unconstrained_or_equiv_cells": true,
+        "proven_cells": null,
+        "unproven_cells": null,
+        "sat_variables": 202,
+        "sat_clauses": 523
+      }
+    },
+    "why_complete": "Every locked module named by this Build's own tables is proven against its exact-name locked reference on the rail its timing requires, with a conservation-audited 5C view where the installed Yosys cannot read the original.",
+    "bounded_tests_counted": false
+  },
+  "reference_lock": {
+    "directory": "validation/reference-sv",
+    "xstop_sha256": "8f279a5251a1d6818bc38c476e300aa4f9fe5ae1918cb6f98f67dc8603b4731d",
+    "locked_references_written": false,
+    "sha256_by_module": {
+      "CLZ": "4c877380fa08ba1123bd7f39c8c6f6e8088dc06ad74134daa599b57d103d1772",
+      "CLZ_11": "7a492bb6c6b4a5eaeb081c10a6c3871418544ec2eb5ad95e0a8c934377fb8063",
+      "CLZ_28": "c1cad4a2ce82d568ef662a42fcd36b51d726369aec0df1eee2096be7f59ca3a0",
+      "CLZ_29": "53e0ee314e8835a1a929a88f4e13ea9fae01da9f286fae6af81ffcdb90995ee0",
+      "CLZ_30": "2e3173619dae8323080874ff3e7ccf0dd31a50be8740855409c6b31df542871c",
+      "CLZ_31": "8979b0b69c6079abcfd587d2322629ec7fffcb9f2be6ca2eaa8411f597b659fa",
+      "CLZ_6": "25c91b81713fc5f41999752197dd20298c0db7c3ac0d467a5fddc6ffb704a0fb",
+      "CLZ_7": "d6c47ac82b4a5a08202bb2c5f083ad2b69d93e952fa53993d1444ee49bccc776",
+      "CLZ_9": "3f89d33ebe502280b4291f33ef6695449c018d17ec844c75fb98c0ac023fab9d",
+      "RoundingUnit": "c190e1f6488b1b69430b25c122fc33fe973a19709d0e1f87267b74614bbf0cee",
+      "RoundingUnit_1": "9b4332b5990e4ddde2f94d7f480d4943eb9ae728dff78ce52fc6908197260026",
+      "RoundingUnit_11": "5ce370cda235dc6065dfcfce1580f268ab41498d1063806521bcbf21c37cde0e",
+      "RoundingUnit_2": "e326009325a10d1fddef7be22c9142e0139e7c54a448682f6602af4d1ebb825d",
+      "RoundingUnit_3": "71c91454bf13ba13e70ab9e3fc2b9cfaa3dd40d1d286a4d2afac89f8a4fbe04f",
+      "RoundingUnit_4": "7185db716165ae90e5c6d9d927f1fd6c6b9b09d36e7d6b1d0e99c09abe8d2c33",
+      "RoundingUnit_8": "4fbe939c72780bafcb42725a0cc20cea1af38cedd743aed6bda24799280c6d13",
+      "RoundingUnit_9": "200199c999e8a3513870854fc640ede58a784d65b20e1ac0263e73671e6894bd"
+    }
+  },
+  "sources": {
+    "validator": {
+      "path": "validation/v2_registered_family_strict_validator.py",
+      "sha256": "b64196d6386da066554c60ab55ae9dd51297dc7a3209680a97374204939fba6e",
+      "bytes": 5068
+    },
+    "python_build": {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Fpu.NormalizeRoundFamily-Hardware.py",
+      "sha256": "1d172aa58693b2a456d16aefbef459cb5e935ce682c461f5b38be65c97f3757d",
+      "bytes": 6300
+    },
+    "reference_sv": {
+      "path": "validation/reference-sv/CLZ.sv",
+      "sha256": "4c877380fa08ba1123bd7f39c8c6f6e8088dc06ad74134daa599b57d103d1772",
+      "bytes": 17840
+    },
+    "scala": {
+      "path": "upstream/yunsuan/src/main/scala/yunsuan/scalar/utils.scala",
+      "sha256": "bc4a04a0fe55ac6fd9bbded04569b44cb55228402c897162d7c5e776a66af07b",
+      "bytes": 1612
+    },
+    "declared_scala_sources": {
+      "upstream/yunsuan/src/main/scala/yunsuan/scalar/utils.scala": {
+        "vendored": true,
+        "sha256": "bc4a04a0fe55ac6fd9bbded04569b44cb55228402c897162d7c5e776a66af07b"
+      },
+      "upstream/yunsuan/src/main/scala/yunsuan/scalar/RoundingUnit.scala": {
+        "vendored": true,
+        "sha256": "fb7c8263a646beed7d070d7c53a81db26d85284dde1516171544a6962dca6ad9"
+      },
+      "upstream/yunsuan/src/main/scala/yunsuan/vector/VectorConvert/util/CLZ.scala": {
+        "vendored": true,
+        "sha256": "314c9eb8975e09fd2750043ecbfaa233b5074829bf781c396a0656082a3521d5"
+      },
+      "upstream/yunsuan/src/main/scala/yunsuan/vector/VectorConvert/util/Rounding.scala": {
+        "vendored": true,
+        "sha256": "6cc7b3d8aed9856d1354a90959123a1373ef2786535e72ab811ec970e0691259"
+      }
+    },
+    "reference_children": {},
+    "validator_dependencies": {
+      "strict_family_rail": {
+        "path": "validation/v2_strict_family_rail.py",
+        "sha256": "dd6cebba4a9b300c7fc8664b1a803045d7ff55041cab364a7753692c846e57a6",
+        "bytes": 72764
+      },
+      "direct_test": {
+        "path": "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Dependency.Fpu.NormalizeRoundFamily-Hardware.py",
+        "sha256": "5a5d78101956932e26c1b9028c3b3f27e0b3d6074e7a547106d10bfa2de711d5",
+        "bytes": 6775
+      },
+      "direct_runner": {
+        "path": "validation/v2_direct_test_runner.py",
+        "sha256": "36550022d56b6e631bb7c6dd4299a8b91cf833d8574f1515ec0b157fff5bc01d",
+        "bytes": 1773
+      }
+    }
+  },
+  "checks": {
+    "py_compile": {
+      "status": "PASS"
+    },
+    "pyright": {
+      "build": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_ofg6gyek\\Cpu-Core-Dependency.Fpu.NormalizeRoundFamily-Hardware.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "error_count": 0,
+        "files_analyzed": 1,
+        "stderr_tail": ""
+      },
+      "rail": {
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/c",
+          "pyright",
+          "--outputjson",
+          "C:\\Users\\lishuo\\AppData\\Local\\Temp\\uhsc_family_rail_pyright_wuu1dj2c\\v2_strict_family_rail.py"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "version": "1.1.411",
+        "error_count": 0,
+        "files_analyzed": 1,
+        "stderr_tail": ""
+      }
+    },
+    "stages": {
+      "static_preflight": "PASS",
+      "formal_members": "PASS",
+      "aggregate": "PASS",
+      "negative_control": "PASS",
+      "resume": {
+        "checkpoint": "D:\\知识库开发\\Unifier-Hardware-System\\.agents\\xiangshan-v2\\validation\\.cache\\strict-family\\build_cpu_dependency_fpu_normalizeroundfamily\\rail-checkpoint.json",
+        "prepared_cache_hits": 17,
+        "formal_cache_hits": 0,
+        "member_count": 17
+      },
+      "tool_versions": {
+        "python": "3.13.12",
+        "python_implementation": "CPython",
+        "host": "Windows-11-10.0.26300-SP0",
+        "amaranth": "0.5.8",
+        "yosys": "Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)",
+        "verilator": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)"
+      }
+    },
+    "catalog_coverage": {
+      "entries": 17,
+      "proven": 17
+    },
+    "formal": {
+      "yosys_formal_miter": {
+        "command": [
+          "yosys",
+          "-Q",
+          "-p",
+          "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_CLZ.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_CLZ.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/CLZ_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_CLZ_11.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_CLZ_11.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/CLZ_11_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_CLZ_28.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_CLZ_28.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/CLZ_28_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_CLZ_29.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_CLZ_29.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/CLZ_29_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_CLZ_30.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_CLZ_30.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/CLZ_30_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_CLZ_31.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_CLZ_31.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/CLZ_31_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_CLZ_6.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_CLZ_6.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/CLZ_6_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_CLZ_7.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_CLZ_7.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/CLZ_7_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_CLZ_9.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_CLZ_9.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/CLZ_9_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_RoundingUnit.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/RoundingUnit_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_1.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_RoundingUnit_1.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/RoundingUnit_1_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_11.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_RoundingUnit_11.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/RoundingUnit_11_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_RoundingUnit_2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/RoundingUnit_2_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_3.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_RoundingUnit_3.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/RoundingUnit_3_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_4.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_RoundingUnit_4.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/RoundingUnit_4_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_8.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_RoundingUnit_8.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/RoundingUnit_8_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_9.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_RoundingUnit_9.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/RoundingUnit_9_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/NormalizeRoundFamily_AGG.sv; prep -top NormalizeRoundFamily_AGG; flatten; opt; sat -prove mismatch 0"
+        ],
+        "returncode": 0,
+        "status": "PASS",
+        "sat_success_marker": true,
+        "sat_counterexample_marker": false,
+        "unconstrained_marker": true,
+        "equiv_success_markers": {
+          "0 are unproven.": false,
+          "Equivalence successfully proven!": false
+        },
+        "equiv_failure_marker": false,
+        "equiv_cells_full": null,
+        "equiv_summary_full": null,
+        "equiv_failed_full": null,
+        "sat_counts_full": [
+          12081,
+          32044
+        ],
+        "output_tail": "PT_DFF pass (perform DFF optimizations).\n\n55.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\NormalizeRoundFamily_AGG..\nRemoved 0 unused cells and 160 unused wires.\n<suppressed ~25 debug messages>\n\n55.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module NormalizeRoundFamily_AGG.\n\n55.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n55.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\NormalizeRoundFamily_AGG..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~34 debug messages>\n\n55.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\NormalizeRoundFamily_AGG.\nPerformed a total of 0 changes.\n\n55.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\NormalizeRoundFamily_AGG'.\nRemoved a total of 0 cells.\n\n55.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n55.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\NormalizeRoundFamily_AGG..\n\n55.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module NormalizeRoundFamily_AGG.\n\n55.23. Finished OPT passes. (There is nothing left to do.)\n\n56. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 613 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 12081 variables and 32044 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 4b4816b5f0, CPU: user 0.50s system 0.02s, MEM: 27.81 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 20% 8x opt_merge (0 sec), 16% 10x opt_expr (0 sec), ...\n",
+        "output_sha256": "92c12f29e902fa097bb11423f3d8c04884cac2d18ef5582d785402f5f64a0d0b",
+        "formal_success_marker": true,
+        "unconstrained": true,
+        "mitered_variants": 17,
+        "sat_variables": 12081,
+        "sat_clauses": 32044
+      }
+    },
+    "aggregate_sat_miter": {
+      "command": [
+        "yosys",
+        "-Q",
+        "-p",
+        "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_CLZ.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_CLZ.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/CLZ_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_CLZ_11.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_CLZ_11.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/CLZ_11_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_CLZ_28.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_CLZ_28.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/CLZ_28_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_CLZ_29.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_CLZ_29.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/CLZ_29_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_CLZ_30.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_CLZ_30.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/CLZ_30_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_CLZ_31.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_CLZ_31.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/CLZ_31_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_CLZ_6.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_CLZ_6.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/CLZ_6_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_CLZ_7.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_CLZ_7.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/CLZ_7_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_CLZ_9.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_CLZ_9.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/CLZ_9_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_RoundingUnit.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/RoundingUnit_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_1.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_RoundingUnit_1.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/RoundingUnit_1_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_11.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_RoundingUnit_11.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/RoundingUnit_11_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_RoundingUnit_2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/RoundingUnit_2_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_3.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_RoundingUnit_3.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/RoundingUnit_3_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_4.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_RoundingUnit_4.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/RoundingUnit_4_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_8.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_RoundingUnit_8.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/RoundingUnit_8_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_9.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_RoundingUnit_9.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/RoundingUnit_9_MITER.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/NormalizeRoundFamily_AGG.sv; prep -top NormalizeRoundFamily_AGG; flatten; opt; sat -prove mismatch 0"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "sat_success_marker": true,
+      "sat_counterexample_marker": false,
+      "unconstrained_marker": true,
+      "equiv_success_markers": {
+        "0 are unproven.": false,
+        "Equivalence successfully proven!": false
+      },
+      "equiv_failure_marker": false,
+      "equiv_cells_full": null,
+      "equiv_summary_full": null,
+      "equiv_failed_full": null,
+      "sat_counts_full": [
+        12081,
+        32044
+      ],
+      "output_tail": "PT_DFF pass (perform DFF optimizations).\n\n55.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\NormalizeRoundFamily_AGG..\nRemoved 0 unused cells and 160 unused wires.\n<suppressed ~25 debug messages>\n\n55.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module NormalizeRoundFamily_AGG.\n\n55.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n55.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\NormalizeRoundFamily_AGG..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~34 debug messages>\n\n55.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\NormalizeRoundFamily_AGG.\nPerformed a total of 0 changes.\n\n55.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\NormalizeRoundFamily_AGG'.\nRemoved a total of 0 cells.\n\n55.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n55.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\NormalizeRoundFamily_AGG..\n\n55.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module NormalizeRoundFamily_AGG.\n\n55.23. Finished OPT passes. (There is nothing left to do.)\n\n56. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 613 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 12081 variables and 32044 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 4b4816b5f0, CPU: user 0.50s system 0.02s, MEM: 27.81 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 20% 8x opt_merge (0 sec), 16% 10x opt_expr (0 sec), ...\n",
+      "output_sha256": "92c12f29e902fa097bb11423f3d8c04884cac2d18ef5582d785402f5f64a0d0b",
+      "formal_success_marker": true,
+      "unconstrained": true,
+      "mitered_variants": 17,
+      "sat_variables": 12081,
+      "sat_clauses": 32044
+    },
+    "negative_control": {
+      "status": "PASS",
+      "cases": {
+        "sat.target": {
+          "status": "PASS",
+          "control_entry": "CLZ",
+          "control_port": "io_out",
+          "mutation_applied": true,
+          "explicit_failure_marker": true,
+          "success_marker_still_present": false,
+          "returncode": 0
+        },
+        "sat.reference": {
+          "status": "PASS",
+          "control_entry": "CLZ",
+          "control_port": "io_out",
+          "mutation_applied": true,
+          "explicit_failure_marker": true,
+          "success_marker_still_present": false,
+          "returncode": 0
+        },
+        "sequential": {
+          "status": "PASS",
+          "note": "no representative with outputs"
+        }
+      },
+      "note": "a reference-side mutation that still proves means the reference never reaches the comparison"
+    },
+    "variants": [
+      {
+        "method": "sat_miter",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "CLZ_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_CLZ.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_CLZ.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/CLZ_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.062 MB sources in 5 modules, into 0.051 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.047 s (elab=0.001, cvt=0.005, bld=0.000); cpu 0.012 s on 1 threads; alloced 10.086 MB\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_CLZ.sv:32:14: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's REPLICATE generates 64 bits.\n                                                                                                                                      : ... note: In instance 'CLZ_MITER.target_i.encoder'\n                     ... For warning description see https://verilator.org/warn/WIDTHTRUNC?v=5.032\n                     ... Use \"/* verilator lint_off WIDTHTRUNC */\" and lint_on around source to disable this message.\n",
+          "output_sha256": "439337bec7af1dcead3abab0885fe98598e31b875452e002a5a768c24c1b7272"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "CLZ",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/CLZ.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.037 MB sources in 2 modules, into 0.036 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.024 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.484 MB\n",
+          "output_sha256": "7dd377b433dbadcb2c1126713447ec6d2a51901d2a7e7c1b40ecd68dbc5cf31b"
+        },
+        "sat_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_CLZ.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_CLZ.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/CLZ_MITER.sv; prep -top CLZ_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": true,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": true,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": [
+            4408,
+            11670
+          ],
+          "output_tail": "_MERGE pass (detect identical cells).\nFinding identical cells in module `\\CLZ_MITER'.\nRemoved a total of 0 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\CLZ_MITER..\nRemoved 0 unused cells and 1 unused wires.\n<suppressed ~1 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module CLZ_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\CLZ_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\CLZ_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\CLZ_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\CLZ_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module CLZ_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 133 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 4408 variables and 11670 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: b6499a1e39, CPU: user 0.06s system 0.01s, MEM: 17.95 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 24% 1x sat (0 sec), 15% 8x opt_expr (0 sec), ...\n",
+          "output_sha256": "33347110a4e7b0d43a49fb0b28e4775b3f7f497f402dada4e9be14b214252e01",
+          "formal_success_marker": true,
+          "unconstrained": true,
+          "sat_variables": 4408,
+          "sat_clauses": 11670
+        }
+      },
+      {
+        "method": "sat_miter",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "CLZ_11_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_CLZ_11.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_CLZ_11.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/CLZ_11_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.044 MB sources in 5 modules, into 0.019 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.042 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.117 MB\n",
+          "output_sha256": "d0ce8e45709f036b16f91d60702ae47bec4e0de46e2e425e7c59247e16461d07"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "CLZ_11",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/CLZ_11.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.017 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.022 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.004 s on 1 threads; alloced 9.219 MB\n",
+          "output_sha256": "61794e7cae177a90a2e531f0c94a95e69733415a4bef099c0db00b8b04e5ee54"
+        },
+        "sat_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_CLZ_11.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_CLZ_11.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/CLZ_11_MITER.sv; prep -top CLZ_11_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": true,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": true,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": [
+            2,
+            4
+          ],
+          "output_tail": "R.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\CLZ_11_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\CLZ_11_MITER..\nRemoved 0 unused cells and 13 unused wires.\n<suppressed ~7 debug messages>\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module CLZ_11_MITER.\n\n6.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\CLZ_11_MITER..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n6.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\CLZ_11_MITER.\nPerformed a total of 0 changes.\n\n6.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\CLZ_11_MITER'.\nRemoved a total of 0 cells.\n\n6.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\CLZ_11_MITER..\n\n6.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module CLZ_11_MITER.\n\n6.23. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 3 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 2 variables and 4 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 599c94af0b, CPU: user 0.02s system 0.01s, MEM: 13.59 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 29% 9x opt_expr (0 sec), 16% 7x opt_clean (0 sec), ...\n",
+          "output_sha256": "9806065c6b7c2aca2e5eb579299da507c1b74e622f12e5aa885d376f7ee40154",
+          "formal_success_marker": true,
+          "unconstrained": true,
+          "sat_variables": 2,
+          "sat_clauses": 4
+        }
+      },
+      {
+        "method": "sat_miter",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "CLZ_28_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_CLZ_28.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_CLZ_28.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/CLZ_28_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.044 MB sources in 5 modules, into 0.019 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.043 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.258 MB\n",
+          "output_sha256": "13e3a711645711cd148fc7f8cd6363511688b378e2e4e003e1b23aca01ad8537"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "CLZ_28",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/CLZ_28.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.017 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.030 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.223 MB\n",
+          "output_sha256": "8fc021e5ebe6688b5eaf6a5d35e902cf1e81eeaf3a2e61316456046cac428327"
+        },
+        "sat_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_CLZ_28.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_CLZ_28.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/CLZ_28_MITER.sv; prep -top CLZ_28_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": true,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": true,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": [
+            466,
+            1222
+          ],
+          "output_tail": "lls in module `\\CLZ_28_MITER'.\n<suppressed ~3 debug messages>\nRemoved a total of 1 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\CLZ_28_MITER..\nRemoved 0 unused cells and 2 unused wires.\n<suppressed ~1 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module CLZ_28_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\CLZ_28_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~3 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\CLZ_28_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\CLZ_28_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\CLZ_28_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module CLZ_28_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 23 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 466 variables and 1222 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 95c3957bdf, CPU: user 0.02s system 0.01s, MEM: 13.44 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 25% 8x opt_expr (0 sec), 16% 6x opt_clean (0 sec), ...\n",
+          "output_sha256": "9e076a6ac36d5f8bdd6db78dbc72d8b0bac57a6fe4f84ebf2a356efac6d56744",
+          "formal_success_marker": true,
+          "unconstrained": true,
+          "sat_variables": 466,
+          "sat_clauses": 1222
+        }
+      },
+      {
+        "method": "sat_miter",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "CLZ_29_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_CLZ_29.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_CLZ_29.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/CLZ_29_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.048 MB sources in 5 modules, into 0.025 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.044 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.007 s on 1 threads; alloced 9.418 MB\n",
+          "output_sha256": "b668563f76b995c986c8501b5486fc5d2d8b7cb06cf4c1d54b09868a27109bb7"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "CLZ_29",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/CLZ_29.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.023 MB sources in 2 modules, into 0.021 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.022 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.391 MB\n",
+          "output_sha256": "634497984a5b56f0263356bbbf4d7e75d6be2e157c91e12506ecdb3f057ac56c"
+        },
+        "sat_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_CLZ_29.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_CLZ_29.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/CLZ_29_MITER.sv; prep -top CLZ_29_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": true,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": true,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": [
+            1307,
+            3435
+          ],
+          "output_tail": "l cells).\nFinding identical cells in module `\\CLZ_29_MITER'.\nRemoved a total of 0 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\CLZ_29_MITER..\nRemoved 0 unused cells and 1 unused wires.\n<suppressed ~1 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module CLZ_29_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\CLZ_29_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\CLZ_29_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\CLZ_29_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\CLZ_29_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module CLZ_29_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 50 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 1307 variables and 3435 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 8ae2a43e22, CPU: user 0.03s system 0.01s, MEM: 14.69 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 22% 8x opt_expr (0 sec), 16% 6x opt_clean (0 sec), ...\n",
+          "output_sha256": "9fb391298dbc07a44a134a5e39fb120a8959d3a49c3bd89def6078fecd160a57",
+          "formal_success_marker": true,
+          "unconstrained": true,
+          "sat_variables": 1307,
+          "sat_clauses": 3435
+        }
+      },
+      {
+        "method": "sat_miter",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "CLZ_30_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_CLZ_30.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_CLZ_30.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/CLZ_30_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.045 MB sources in 5 modules, into 0.020 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.041 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.007 s on 1 threads; alloced 9.266 MB\n",
+          "output_sha256": "d3213dfbaae5798cba9c08b32039f4a99089802d85455fa2c29aa248e133dffd"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "CLZ_30",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/CLZ_30.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.018 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.022 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.230 MB\n",
+          "output_sha256": "0eaa20b66f96e8671a10e280bbd871c6b1bab2b6d307caeace0815014a6a4920"
+        },
+        "sat_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_CLZ_30.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_CLZ_30.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/CLZ_30_MITER.sv; prep -top CLZ_30_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": true,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": true,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": [
+            503,
+            1318
+          ],
+          "output_tail": "al cells).\nFinding identical cells in module `\\CLZ_30_MITER'.\nRemoved a total of 0 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\CLZ_30_MITER..\nRemoved 0 unused cells and 1 unused wires.\n<suppressed ~1 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module CLZ_30_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\CLZ_30_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\CLZ_30_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\CLZ_30_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\CLZ_30_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module CLZ_30_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 26 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 503 variables and 1318 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: bda143546e, CPU: user 0.02s system 0.01s, MEM: 13.91 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 26% 8x opt_expr (0 sec), 16% 6x opt_clean (0 sec), ...\n",
+          "output_sha256": "aaa36635244eae2be58f9e4beb15c5418e3e972bea2ee4a7ba67674819d61dc6",
+          "formal_success_marker": true,
+          "unconstrained": true,
+          "sat_variables": 503,
+          "sat_clauses": 1318
+        }
+      },
+      {
+        "method": "sat_miter",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "CLZ_31_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_CLZ_31.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_CLZ_31.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/CLZ_31_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.048 MB sources in 5 modules, into 0.026 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.038 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.008 s on 1 threads; alloced 9.305 MB\n",
+          "output_sha256": "e91f187863d24eb66ff3b0c4d526581dad873c0f051d97b0c6ead760cffc813c"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "CLZ_31",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/CLZ_31.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.023 MB sources in 2 modules, into 0.022 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.024 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.406 MB\n",
+          "output_sha256": "53492503e79536e19ee4287f32cbe7867984111c2727cf5f2c7b15bb648dcdc2"
+        },
+        "sat_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_CLZ_31.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_CLZ_31.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/CLZ_31_MITER.sv; prep -top CLZ_31_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": true,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": true,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": [
+            1419,
+            3730
+          ],
+          "output_tail": "ls in module `\\CLZ_31_MITER'.\n<suppressed ~3 debug messages>\nRemoved a total of 1 cells.\n\n6.6. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.7. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\CLZ_31_MITER..\nRemoved 0 unused cells and 2 unused wires.\n<suppressed ~1 debug messages>\n\n6.8. Executing OPT_EXPR pass (perform const folding).\nOptimizing module CLZ_31_MITER.\n\n6.9. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\CLZ_31_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~3 debug messages>\n\n6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\CLZ_31_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\CLZ_31_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\CLZ_31_MITER..\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module CLZ_31_MITER.\n\n6.16. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 51 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 1419 variables and 3730 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 743ee497e6, CPU: user 0.04s system 0.00s, MEM: 15.00 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 21% 8x opt_expr (0 sec), 16% 6x opt_clean (0 sec), ...\n",
+          "output_sha256": "fd0a929d215207d0d4b3a106e8fb194a1d14e369d66cb799399086276ffd812c",
+          "formal_success_marker": true,
+          "unconstrained": true,
+          "sat_variables": 1419,
+          "sat_clauses": 3730
+        }
+      },
+      {
+        "method": "sat_miter",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "CLZ_6_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_CLZ_6.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_CLZ_6.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/CLZ_6_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.059 MB sources in 5 modules, into 0.044 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.049 s (elab=0.001, cvt=0.003, bld=0.000); cpu 0.010 s on 1 threads; alloced 9.898 MB\n",
+          "output_sha256": "3ccea843c04be8b5757c5c1725aa174af3df3ab3fba6ee615cb58a0a783ff972"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "CLZ_6",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/CLZ_6.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.038 MB sources in 2 modules, into 0.036 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.023 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.496 MB\n",
+          "output_sha256": "3e7b3c484730addaa9a5e51e4f046021d81a03f6857c6d24537ca5675024f0fc"
+        },
+        "sat_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_CLZ_6.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_CLZ_6.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/CLZ_6_MITER.sv; prep -top CLZ_6_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": true,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": true,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": [
+            2,
+            4
+          ],
+          "output_tail": "_6_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\CLZ_6_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\CLZ_6_MITER..\nRemoved 0 unused cells and 69 unused wires.\n<suppressed ~7 debug messages>\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module CLZ_6_MITER.\n\n6.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\CLZ_6_MITER..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n6.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\CLZ_6_MITER.\nPerformed a total of 0 changes.\n\n6.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\CLZ_6_MITER'.\nRemoved a total of 0 cells.\n\n6.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\CLZ_6_MITER..\n\n6.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module CLZ_6_MITER.\n\n6.23. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 3 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 2 variables and 4 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: de5af32b92, CPU: user 0.05s system 0.01s, MEM: 14.84 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 18% 7x opt_merge (0 sec), 18% 7x opt_clean (0 sec), ...\n",
+          "output_sha256": "ec7caa7607942aee708dafcae8359b9f5731aed742ddf5f67cf431fc5a2bd5fd",
+          "formal_success_marker": true,
+          "unconstrained": true,
+          "sat_variables": 2,
+          "sat_clauses": 4
+        }
+      },
+      {
+        "method": "sat_miter",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "CLZ_7_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_CLZ_7.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_CLZ_7.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/CLZ_7_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.046 MB sources in 5 modules, into 0.022 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.045 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.207 MB\n",
+          "output_sha256": "21c7083bb4a9d105a337d6c1f70b6ad2c7b2584c2ecb19103328b8a8497a3f82"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "CLZ_7",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/CLZ_7.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.022 MB sources in 2 modules, into 0.019 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.027 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.371 MB\n",
+          "output_sha256": "4f945db090e409ad0c5fb7a4549fd8eb60ef14727bdfcadf2b9c1395aca1ed99"
+        },
+        "sat_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_CLZ_7.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_CLZ_7.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/CLZ_7_MITER.sv; prep -top CLZ_7_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": true,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": true,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": [
+            2,
+            4
+          ],
+          "output_tail": "Z_7_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\CLZ_7_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\CLZ_7_MITER..\nRemoved 0 unused cells and 21 unused wires.\n<suppressed ~7 debug messages>\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module CLZ_7_MITER.\n\n6.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\CLZ_7_MITER..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n6.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\CLZ_7_MITER.\nPerformed a total of 0 changes.\n\n6.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\CLZ_7_MITER'.\nRemoved a total of 0 cells.\n\n6.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\CLZ_7_MITER..\n\n6.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module CLZ_7_MITER.\n\n6.23. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 3 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 2 variables and 4 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 9c1df3bfb3, CPU: user 0.02s system 0.02s, MEM: 13.28 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 28% 9x opt_expr (0 sec), 17% 7x opt_clean (0 sec), ...\n",
+          "output_sha256": "45d76324ca6ea241b1cbd098bb6d0f76a19ac34e09a3e7225db2161fb98a6946",
+          "formal_success_marker": true,
+          "unconstrained": true,
+          "sat_variables": 2,
+          "sat_clauses": 4
+        }
+      },
+      {
+        "method": "sat_miter",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "CLZ_9_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_CLZ_9.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_CLZ_9.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/CLZ_9_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.050 MB sources in 5 modules, into 0.029 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.043 s (elab=0.001, cvt=0.002, bld=0.000); cpu 0.009 s on 1 threads; alloced 9.414 MB\n",
+          "output_sha256": "2789d244e83a108ed3ed930a37fbfbbb6a60e6bae723ea5a80173ab781027eed"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "CLZ_9",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/CLZ_9.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.025 MB sources in 2 modules, into 0.024 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.022 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.441 MB\n",
+          "output_sha256": "dac7eb90d8c58add433251f224a15e6ae2100753acea208af62c17814748734d"
+        },
+        "sat_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_CLZ_9.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_CLZ_9.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/CLZ_9_MITER.sv; prep -top CLZ_9_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": true,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": true,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": [
+            2,
+            4
+          ],
+          "output_tail": "Z_9_MITER.\nPerformed a total of 0 changes.\n\n6.12. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\CLZ_9_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\CLZ_9_MITER..\nRemoved 0 unused cells and 37 unused wires.\n<suppressed ~7 debug messages>\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module CLZ_9_MITER.\n\n6.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\CLZ_9_MITER..\n  Creating internal representation of mux trees.\n  No muxes found in this module.\nRemoved 0 multiplexer ports.\n\n6.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\CLZ_9_MITER.\nPerformed a total of 0 changes.\n\n6.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\CLZ_9_MITER'.\nRemoved a total of 0 cells.\n\n6.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\CLZ_9_MITER..\n\n6.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module CLZ_9_MITER.\n\n6.23. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 3 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 2 variables and 4 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: a335d8e67b, CPU: user 0.02s system 0.02s, MEM: 13.91 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 23% 9x opt_expr (0 sec), 18% 7x opt_clean (0 sec), ...\n",
+          "output_sha256": "7179cbb2fb01c6ba8b8abe1a2a343b70b97e92844bef1ff8dbb21c90a7058c84",
+          "formal_success_marker": true,
+          "unconstrained": true,
+          "sat_variables": 2,
+          "sat_clauses": 4
+        }
+      },
+      {
+        "method": "sat_miter",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "RoundingUnit_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_RoundingUnit.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/RoundingUnit_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "           ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit.sv:67:23: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                                                                                                                                : ... note: In instance 'RoundingUnit_MITER.target_i'\n   67 |   assign \\$8  = io_rm == 2'h3;\n      |                       ^~\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit.sv:79:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'io_rm' generates 3 bits.\n                                                                                                                                               : ... note: In instance 'RoundingUnit_MITER.target_i'\n   79 |   assign \\$20  = ! io_rm;\n      |                  ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit.sv:82:24: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                : ... note: In instance 'RoundingUnit_MITER.target_i'\n   82 |   assign \\$23  = io_rm == 1'h1;\n      |                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit.sv:83:24: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                                                : ... note: In instance 'RoundingUnit_MITER.target_i'\n   83 |   assign \\$24  = io_rm == 2'h2;\n      |                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit.sv:86:24: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                                                                                                                                : ... note: In instance 'RoundingUnit_MITER.target_i'\n   86 |   assign \\$27  = io_rm == 2'h3;\n      |                        ^~\n",
+          "output_sha256": "ac5f6d4aeab223a268ea04eba0c10ae64c3df6559311c2f47e442743f6607a47"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "RoundingUnit",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/RoundingUnit.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.017 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.025 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.238 MB\n",
+          "output_sha256": "07cb6a3a73644b827be9016773121e190db7de02d5dd5c2718d6676d67f1e5e4"
+        },
+        "sat_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_RoundingUnit.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/RoundingUnit_MITER.sv; prep -top RoundingUnit_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": true,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": true,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": [
+            836,
+            2262
+          ],
+          "output_tail": "ngUnit_MITER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\RoundingUnit_MITER..\nRemoved 0 unused cells and 2 unused wires.\n<suppressed ~1 debug messages>\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RoundingUnit_MITER.\n\n6.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\RoundingUnit_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~4 debug messages>\n\n6.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\RoundingUnit_MITER.\nPerformed a total of 0 changes.\n\n6.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\RoundingUnit_MITER'.\nRemoved a total of 0 cells.\n\n6.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\RoundingUnit_MITER..\n\n6.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RoundingUnit_MITER.\n\n6.23. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 38 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 836 variables and 2262 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 788e167e47, CPU: user 0.04s system 0.01s, MEM: 14.22 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 25% 10x opt_expr (0 sec), 19% 8x opt_clean (0 sec), ...\n",
+          "output_sha256": "2ee3cc84b4b094122789a3e71ed5277bca8bf976ef9bf8e8be4d7598b2b514a0",
+          "formal_success_marker": true,
+          "unconstrained": true,
+          "sat_variables": 836,
+          "sat_clauses": 2262
+        }
+      },
+      {
+        "method": "sat_miter",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "RoundingUnit_1_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_1.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_RoundingUnit_1.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/RoundingUnit_1_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "PAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_1.sv:67:23: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                                                                                                                                  : ... note: In instance 'RoundingUnit_1_MITER.target_i'\n   67 |   assign \\$8  = io_rm == 2'h3;\n      |                       ^~\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_1.sv:79:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'io_rm' generates 3 bits.\n                                                                                                                                                 : ... note: In instance 'RoundingUnit_1_MITER.target_i'\n   79 |   assign \\$20  = ! io_rm;\n      |                  ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_1.sv:82:24: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                  : ... note: In instance 'RoundingUnit_1_MITER.target_i'\n   82 |   assign \\$23  = io_rm == 1'h1;\n      |                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_1.sv:83:24: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                                                  : ... note: In instance 'RoundingUnit_1_MITER.target_i'\n   83 |   assign \\$24  = io_rm == 2'h2;\n      |                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_1.sv:86:24: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                                                                                                                                  : ... note: In instance 'RoundingUnit_1_MITER.target_i'\n   86 |   assign \\$27  = io_rm == 2'h3;\n      |                        ^~\n",
+          "output_sha256": "2ee3942092f695522218e248e1bbdb44753f060d9c052929da0990e2d1e1d972"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "RoundingUnit_1",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/RoundingUnit_1.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.018 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.025 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.234 MB\n",
+          "output_sha256": "c528a0ff9fa2e5ed5e41c557656ca0a9409cce379f84b1ee9e5020af64c7ae38"
+        },
+        "sat_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_1.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_RoundingUnit_1.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/RoundingUnit_1_MITER.sv; prep -top RoundingUnit_1_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": true,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": true,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": [
+            1648,
+            4495
+          ],
+          "output_tail": "TER'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\RoundingUnit_1_MITER..\nRemoved 0 unused cells and 2 unused wires.\n<suppressed ~1 debug messages>\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RoundingUnit_1_MITER.\n\n6.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\RoundingUnit_1_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~4 debug messages>\n\n6.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\RoundingUnit_1_MITER.\nPerformed a total of 0 changes.\n\n6.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\RoundingUnit_1_MITER'.\nRemoved a total of 0 cells.\n\n6.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\RoundingUnit_1_MITER..\n\n6.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RoundingUnit_1_MITER.\n\n6.23. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 38 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 1648 variables and 4495 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 9760e4f11f, CPU: user 0.04s system 0.01s, MEM: 15.31 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 21% 1x sat (0 sec), 20% 10x opt_expr (0 sec), ...\n",
+          "output_sha256": "06bf997afa12e46a0a538899b32931998f54a208d3712e28d36741508c2e3f6b",
+          "formal_success_marker": true,
+          "unconstrained": true,
+          "sat_variables": 1648,
+          "sat_clauses": 4495
+        }
+      },
+      {
+        "method": "sat_miter",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "RoundingUnit_11_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_11.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_RoundingUnit_11.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/RoundingUnit_11_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": " t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.045 MB sources in 4 modules, into 0.020 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.053 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.007 s on 1 threads; alloced 9.258 MB\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_11.sv:42:17: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'io_rm' generates 3 bits.\n                                                                                                                                                  : ... note: In instance 'RoundingUnit_11_MITER.target_i'\n   42 |   assign \\$1  = ! io_rm;\n      |                 ^\n                     ... For warning description see https://verilator.org/warn/WIDTHTRUNC?v=5.032\n                     ... Use \"/* verilator lint_off WIDTHTRUNC */\" and lint_on around source to disable this message.\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_11.sv:45:23: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                   : ... note: In instance 'RoundingUnit_11_MITER.target_i'\n   45 |   assign \\$4  = io_rm == 1'h1;\n      |                       ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_11.sv:46:23: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                                                   : ... note: In instance 'RoundingUnit_11_MITER.target_i'\n   46 |   assign \\$5  = io_rm == 2'h2;\n      |                       ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_11.sv:49:23: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                                                                                                                                   : ... note: In instance 'RoundingUnit_11_MITER.target_i'\n   49 |   assign \\$8  = io_rm == 2'h3;\n      |                       ^~\n",
+          "output_sha256": "51b4632feb1c0423ef8e96fe6a1ead758a93f1adb3d7bdeb7fa9618ef461dd51"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "RoundingUnit_11",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/RoundingUnit_11.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.018 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.024 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.230 MB\n",
+          "output_sha256": "d94cd07d04a953e038697b2f98ea3a8ccce950b036fdde66a8cb9a9c885a5794"
+        },
+        "sat_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_11.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_RoundingUnit_11.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/RoundingUnit_11_MITER.sv; prep -top RoundingUnit_11_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": true,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": true,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": [
+            202,
+            523
+          ],
+          "output_tail": "ved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\RoundingUnit_11_MITER..\nRemoved 0 unused cells and 2 unused wires.\n<suppressed ~1 debug messages>\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RoundingUnit_11_MITER.\n\n6.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\RoundingUnit_11_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\RoundingUnit_11_MITER.\nPerformed a total of 0 changes.\n\n6.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\RoundingUnit_11_MITER'.\nRemoved a total of 0 cells.\n\n6.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\RoundingUnit_11_MITER..\n\n6.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RoundingUnit_11_MITER.\n\n6.23. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 35 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 202 variables and 523 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 2930266648, CPU: user 0.03s system 0.00s, MEM: 13.91 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 29% 9x opt_expr (0 sec), 17% 7x opt_clean (0 sec), ...\n",
+          "output_sha256": "69b9b141e9dd4bb0705f2cdc1afc46343267584c6a2e344e3565acf00ddefd38",
+          "formal_success_marker": true,
+          "unconstrained": true,
+          "sat_variables": 202,
+          "sat_clauses": 523
+        }
+      },
+      {
+        "method": "sat_miter",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "RoundingUnit_2_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_2.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_RoundingUnit_2.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/RoundingUnit_2_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "PAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_2.sv:67:23: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                                                                                                                                  : ... note: In instance 'RoundingUnit_2_MITER.target_i'\n   67 |   assign \\$8  = io_rm == 2'h3;\n      |                       ^~\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_2.sv:79:18: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'io_rm' generates 3 bits.\n                                                                                                                                                 : ... note: In instance 'RoundingUnit_2_MITER.target_i'\n   79 |   assign \\$20  = ! io_rm;\n      |                  ^\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_2.sv:82:24: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                  : ... note: In instance 'RoundingUnit_2_MITER.target_i'\n   82 |   assign \\$23  = io_rm == 1'h1;\n      |                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_2.sv:83:24: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                                                  : ... note: In instance 'RoundingUnit_2_MITER.target_i'\n   83 |   assign \\$24  = io_rm == 2'h2;\n      |                        ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_2.sv:86:24: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                                                                                                                                  : ... note: In instance 'RoundingUnit_2_MITER.target_i'\n   86 |   assign \\$27  = io_rm == 2'h3;\n      |                        ^~\n",
+          "output_sha256": "1cb7d75ebb24bd38eab5937026575b86caef150fcc185f4b0d7c1491fa3a8cd9"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "RoundingUnit_2",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/RoundingUnit_2.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.018 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.023 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.238 MB\n",
+          "output_sha256": "4488984a5d691497151783b5f6dc38975803fce38fcb313b8caa608b3346bcbe"
+        },
+        "sat_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_RoundingUnit_2.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/RoundingUnit_2_MITER.sv; prep -top RoundingUnit_2_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": true,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": true,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": [
+            472,
+            1261
+          ],
+          "output_tail": "\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\RoundingUnit_2_MITER..\nRemoved 0 unused cells and 2 unused wires.\n<suppressed ~1 debug messages>\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RoundingUnit_2_MITER.\n\n6.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\RoundingUnit_2_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~4 debug messages>\n\n6.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\RoundingUnit_2_MITER.\nPerformed a total of 0 changes.\n\n6.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\RoundingUnit_2_MITER'.\nRemoved a total of 0 cells.\n\n6.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\RoundingUnit_2_MITER..\n\n6.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RoundingUnit_2_MITER.\n\n6.23. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 38 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 472 variables and 1261 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 4086581f78, CPU: user 0.03s system 0.01s, MEM: 13.75 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 27% 10x opt_expr (0 sec), 18% 8x opt_clean (0 sec), ...\n",
+          "output_sha256": "a7134c8a54fa055e0066b6ad1e1102afd69fa4bff4b8bd3f434bbfd425360480",
+          "formal_success_marker": true,
+          "unconstrained": true,
+          "sat_variables": 472,
+          "sat_clauses": 1261
+        }
+      },
+      {
+        "method": "sat_miter",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "RoundingUnit_3_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_3.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_RoundingUnit_3.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/RoundingUnit_3_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.045 MB sources in 4 modules, into 0.020 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.042 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.262 MB\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_3.sv:42:17: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'io_rm' generates 3 bits.\n                                                                                                                                                 : ... note: In instance 'RoundingUnit_3_MITER.target_i'\n   42 |   assign \\$1  = ! io_rm;\n      |                 ^\n                     ... For warning description see https://verilator.org/warn/WIDTHTRUNC?v=5.032\n                     ... Use \"/* verilator lint_off WIDTHTRUNC */\" and lint_on around source to disable this message.\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_3.sv:45:23: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                  : ... note: In instance 'RoundingUnit_3_MITER.target_i'\n   45 |   assign \\$4  = io_rm == 1'h1;\n      |                       ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_3.sv:46:23: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                                                  : ... note: In instance 'RoundingUnit_3_MITER.target_i'\n   46 |   assign \\$5  = io_rm == 2'h2;\n      |                       ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_3.sv:49:23: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                                                                                                                                  : ... note: In instance 'RoundingUnit_3_MITER.target_i'\n   49 |   assign \\$8  = io_rm == 2'h3;\n      |                       ^~\n",
+          "output_sha256": "12626b621204ce10a4ba6518b18f6d262f47f699661718869c5392b2c5665998"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "RoundingUnit_3",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/RoundingUnit_3.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.018 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.025 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.234 MB\n",
+          "output_sha256": "c528a0ff9fa2e5ed5e41c557656ca0a9409cce379f84b1ee9e5020af64c7ae38"
+        },
+        "sat_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_3.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_RoundingUnit_3.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/RoundingUnit_3_MITER.sv; prep -top RoundingUnit_3_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": true,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": true,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": [
+            202,
+            523
+          ],
+          "output_tail": "'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\RoundingUnit_3_MITER..\nRemoved 0 unused cells and 2 unused wires.\n<suppressed ~1 debug messages>\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RoundingUnit_3_MITER.\n\n6.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\RoundingUnit_3_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\RoundingUnit_3_MITER.\nPerformed a total of 0 changes.\n\n6.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\RoundingUnit_3_MITER'.\nRemoved a total of 0 cells.\n\n6.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\RoundingUnit_3_MITER..\n\n6.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RoundingUnit_3_MITER.\n\n6.23. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 35 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 202 variables and 523 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 277513fa4c, CPU: user 0.02s system 0.02s, MEM: 13.75 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 28% 9x opt_expr (0 sec), 18% 7x opt_clean (0 sec), ...\n",
+          "output_sha256": "7c30ccba80b8c091ceee0b4fc763407f801adcb377ac2c757792eb5a43ce5d2d",
+          "formal_success_marker": true,
+          "unconstrained": true,
+          "sat_variables": 202,
+          "sat_clauses": 523
+        }
+      },
+      {
+        "method": "sat_miter",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "RoundingUnit_4_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_4.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_RoundingUnit_4.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/RoundingUnit_4_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.045 MB sources in 4 modules, into 0.020 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.034 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.007 s on 1 threads; alloced 9.270 MB\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_4.sv:42:17: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'io_rm' generates 3 bits.\n                                                                                                                                                 : ... note: In instance 'RoundingUnit_4_MITER.target_i'\n   42 |   assign \\$1  = ! io_rm;\n      |                 ^\n                     ... For warning description see https://verilator.org/warn/WIDTHTRUNC?v=5.032\n                     ... Use \"/* verilator lint_off WIDTHTRUNC */\" and lint_on around source to disable this message.\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_4.sv:45:23: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                  : ... note: In instance 'RoundingUnit_4_MITER.target_i'\n   45 |   assign \\$4  = io_rm == 1'h1;\n      |                       ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_4.sv:46:23: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                                                  : ... note: In instance 'RoundingUnit_4_MITER.target_i'\n   46 |   assign \\$5  = io_rm == 2'h2;\n      |                       ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_4.sv:49:23: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                                                                                                                                  : ... note: In instance 'RoundingUnit_4_MITER.target_i'\n   49 |   assign \\$8  = io_rm == 2'h3;\n      |                       ^~\n",
+          "output_sha256": "edf1cf108e44f30fb8d9407490303c319cdeeda6fd924856f7b86a3acde5db02"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "RoundingUnit_4",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/RoundingUnit_4.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.018 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.023 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.227 MB\n",
+          "output_sha256": "6d277fb0094160d390252b0e20bea6b2f4dbe48db18657f80e58fca88a8c0eaa"
+        },
+        "sat_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_4.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_RoundingUnit_4.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/RoundingUnit_4_MITER.sv; prep -top RoundingUnit_4_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": true,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": true,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": [
+            202,
+            523
+          ],
+          "output_tail": "'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\RoundingUnit_4_MITER..\nRemoved 0 unused cells and 2 unused wires.\n<suppressed ~1 debug messages>\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RoundingUnit_4_MITER.\n\n6.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\RoundingUnit_4_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\RoundingUnit_4_MITER.\nPerformed a total of 0 changes.\n\n6.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\RoundingUnit_4_MITER'.\nRemoved a total of 0 cells.\n\n6.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\RoundingUnit_4_MITER..\n\n6.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RoundingUnit_4_MITER.\n\n6.23. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 35 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 202 variables and 523 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: b267e82e9f, CPU: user 0.03s system 0.01s, MEM: 13.44 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 30% 9x opt_expr (0 sec), 22% 7x opt_clean (0 sec), ...\n",
+          "output_sha256": "51cfb55712836a8184e705cbf05b654fa8b7600c869921fdde20d36040436e1a",
+          "formal_success_marker": true,
+          "unconstrained": true,
+          "sat_variables": 202,
+          "sat_clauses": 523
+        }
+      },
+      {
+        "method": "sat_miter",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "RoundingUnit_8_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_8.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_RoundingUnit_8.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/RoundingUnit_8_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.045 MB sources in 4 modules, into 0.020 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.042 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.006 s on 1 threads; alloced 9.266 MB\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_8.sv:42:17: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'io_rm' generates 3 bits.\n                                                                                                                                                 : ... note: In instance 'RoundingUnit_8_MITER.target_i'\n   42 |   assign \\$1  = ! io_rm;\n      |                 ^\n                     ... For warning description see https://verilator.org/warn/WIDTHTRUNC?v=5.032\n                     ... Use \"/* verilator lint_off WIDTHTRUNC */\" and lint_on around source to disable this message.\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_8.sv:45:23: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                  : ... note: In instance 'RoundingUnit_8_MITER.target_i'\n   45 |   assign \\$4  = io_rm == 1'h1;\n      |                       ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_8.sv:46:23: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                                                  : ... note: In instance 'RoundingUnit_8_MITER.target_i'\n   46 |   assign \\$5  = io_rm == 2'h2;\n      |                       ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_8.sv:49:23: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                                                                                                                                  : ... note: In instance 'RoundingUnit_8_MITER.target_i'\n   49 |   assign \\$8  = io_rm == 2'h3;\n      |                       ^~\n",
+          "output_sha256": "5da92d982114220546715c6aa5c655b62194cb67280c0466ef12001247eb43f7"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "RoundingUnit_8",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/RoundingUnit_8.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.018 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.040 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.230 MB\n",
+          "output_sha256": "c843c74209b18e4e85c897bd2fa8cb1c6b07d0b80c3cf07af223e06ea6e3c0b7"
+        },
+        "sat_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_8.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_RoundingUnit_8.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/RoundingUnit_8_MITER.sv; prep -top RoundingUnit_8_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": true,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": true,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": [
+            202,
+            523
+          ],
+          "output_tail": "'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\RoundingUnit_8_MITER..\nRemoved 0 unused cells and 2 unused wires.\n<suppressed ~1 debug messages>\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RoundingUnit_8_MITER.\n\n6.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\RoundingUnit_8_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\RoundingUnit_8_MITER.\nPerformed a total of 0 changes.\n\n6.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\RoundingUnit_8_MITER'.\nRemoved a total of 0 cells.\n\n6.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\RoundingUnit_8_MITER..\n\n6.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RoundingUnit_8_MITER.\n\n6.23. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 35 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 202 variables and 523 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 2ef9b6bce4, CPU: user 0.02s system 0.01s, MEM: 13.44 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 29% 9x opt_expr (0 sec), 18% 7x opt_clean (0 sec), ...\n",
+          "output_sha256": "6b92554df52895abfbbf5d88239950b1374c392c0ac86f948e1e23d9a2dae86f",
+          "formal_success_marker": true,
+          "unconstrained": true,
+          "sat_variables": 202,
+          "sat_clauses": 523
+        }
+      },
+      {
+        "method": "sat_miter",
+        "verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "--top-module",
+            "RoundingUnit_9_MITER",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_9.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_RoundingUnit_9.sv",
+            "/mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/RoundingUnit_9_MITER.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.045 MB sources in 4 modules, into 0.020 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.035 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.007 s on 1 threads; alloced 9.270 MB\n%Warning-WIDTHTRUNC: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_9.sv:42:17: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'io_rm' generates 3 bits.\n                                                                                                                                                 : ... note: In instance 'RoundingUnit_9_MITER.target_i'\n   42 |   assign \\$1  = ! io_rm;\n      |                 ^\n                     ... For warning description see https://verilator.org/warn/WIDTHTRUNC?v=5.032\n                     ... Use \"/* verilator lint_off WIDTHTRUNC */\" and lint_on around source to disable this message.\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_9.sv:45:23: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n                                                                                                                                                  : ... note: In instance 'RoundingUnit_9_MITER.target_i'\n   45 |   assign \\$4  = io_rm == 1'h1;\n      |                       ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_9.sv:46:23: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n                                                                                                                                                  : ... note: In instance 'RoundingUnit_9_MITER.target_i'\n   46 |   assign \\$5  = io_rm == 2'h2;\n      |                       ^~\n%Warning-WIDTHEXPAND: /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_9.sv:49:23: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n                                                                                                                                                  : ... note: In instance 'RoundingUnit_9_MITER.target_i'\n   49 |   assign \\$8  = io_rm == 2'h3;\n      |                       ^~\n",
+          "output_sha256": "81fb8629e882d733f8134a7b053b4954c58a65a6d7f902c88332bab4ac60c80b"
+        },
+        "locked_verilator": {
+          "command": [
+            "verilator",
+            "--lint-only",
+            "-Wno-fatal",
+            "-DSYNTHESIS",
+            "--top-module",
+            "RoundingUnit_9",
+            "/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/reference-sv/RoundingUnit_9.sv"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": false,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": false,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": null,
+          "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.018 MB in 5 C++ files needing 0.000 MB\n- Verilator: Walltime 0.024 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.230 MB\n",
+          "output_sha256": "d94cd07d04a953e038697b2f98ea3a8ccce950b036fdde66a8cb9a9c885a5794"
+        },
+        "sat_miter": {
+          "command": [
+            "yosys",
+            "-Q",
+            "-p",
+            "read_verilog -sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/DUT_RoundingUnit_9.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/REF_RoundingUnit_9.sv /mnt/c/Users/lishuo/AppData/Local/Temp/uhsc_build_cpu_dependency_fpu_normalizeroundfamily_family/RoundingUnit_9_MITER.sv; prep -top RoundingUnit_9_MITER; flatten; opt; sat -prove mismatch 0"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "sat_success_marker": true,
+          "sat_counterexample_marker": false,
+          "unconstrained_marker": true,
+          "equiv_success_markers": {
+            "0 are unproven.": false,
+            "Equivalence successfully proven!": false
+          },
+          "equiv_failure_marker": false,
+          "equiv_cells_full": null,
+          "equiv_summary_full": null,
+          "equiv_failed_full": null,
+          "sat_counts_full": [
+            202,
+            523
+          ],
+          "output_tail": "'.\nRemoved a total of 0 cells.\n\n6.13. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.14. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\RoundingUnit_9_MITER..\nRemoved 0 unused cells and 2 unused wires.\n<suppressed ~1 debug messages>\n\n6.15. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RoundingUnit_9_MITER.\n\n6.16. Rerunning OPT passes. (Maybe there is more to do..)\n\n6.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).\nRunning muxtree optimizer on module \\RoundingUnit_9_MITER..\n  Creating internal representation of mux trees.\n  Evaluating internal representation of mux trees.\n  Analyzing evaluation results.\nRemoved 0 multiplexer ports.\n<suppressed ~2 debug messages>\n\n6.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).\n  Optimizing cells in module \\RoundingUnit_9_MITER.\nPerformed a total of 0 changes.\n\n6.19. Executing OPT_MERGE pass (detect identical cells).\nFinding identical cells in module `\\RoundingUnit_9_MITER'.\nRemoved a total of 0 cells.\n\n6.20. Executing OPT_DFF pass (perform DFF optimizations).\n\n6.21. Executing OPT_CLEAN pass (remove unused cells and wires).\nFinding unused cells or wires in module \\RoundingUnit_9_MITER..\n\n6.22. Executing OPT_EXPR pass (perform const folding).\nOptimizing module RoundingUnit_9_MITER.\n\n6.23. Finished OPT passes. (There is nothing left to do.)\n\n7. Executing SAT pass (solving SAT problems in the circuit).\n\nSetting up SAT problem:\nFinal constraint equation: { } = { }\nImported 35 cells to SAT database.\nImport proof-constraint: \\mismatch = 1'0\nFinal proof equation: \\mismatch = 1'0\n\nSolving problem with 202 variables and 523 clauses..\nSAT proof finished - no model found: SUCCESS!\n\n                  /$$$$$$      /$$$$$$$$     /$$$$$$$    \n                 /$$__  $$    | $$_____/    | $$__  $$   \n                | $$  \\ $$    | $$          | $$  \\ $$   \n                | $$  | $$    | $$$$$       | $$  | $$   \n                | $$  | $$    | $$__/       | $$  | $$   \n                | $$/$$ $$    | $$          | $$  | $$   \n                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$\n                 \\____ $$$|__/|________/|__/|_______/|__/\n                       \\__/                              \n\nEnd of script. Logfile hash: 13f08fd6df, CPU: user 0.02s system 0.01s, MEM: 13.44 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 29% 9x opt_expr (0 sec), 17% 7x opt_clean (0 sec), ...\n",
+          "output_sha256": "f1dc3a222c7e6f5ea854b4816dc33ae547575ad342db7ef4829d847e24edf0e2",
+          "formal_success_marker": true,
+          "unconstrained": true,
+          "sat_variables": 202,
+          "sat_clauses": 523
+        }
+      }
+    ],
+    "direct_test": {
+      "status": "PASS",
+      "returncode": 0,
+      "command": [
+        "C:\\Program Files\\Python313\\python.exe",
+        "-B",
+        "validation/v2_direct_test_runner.py",
+        "--test",
+        "python/Program-System/System-Testing/Testing-Cpu/Testing-Cpu-Dependency.Fpu.NormalizeRoundFamily-Hardware.py"
+      ],
+      "output_tail": "...\n----------------------------------------------------------------------\nRan 3 tests in 0.218s\n\nOK\n"
+    },
+    "reset_entry": {
+      "status": "PASS",
+      "applicable": false,
+      "state_bits": 0,
+      "reason": "All public members are combinational."
+    },
+    "sources_stable_during_run": {
+      "status": "PASS"
+    }
+  },
+  "failures": [],
+  "unclosed": [],
+  "acceptance_unclosed": [
+    "Parent closure, full-top differential, final license review, and user approval remain outside this Build proof."
+  ]
+}

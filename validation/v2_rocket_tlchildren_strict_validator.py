@@ -27,7 +27,8 @@ def main() -> int:
     scala_paths = [rail.ROOT / relative for relative in declared]
     if not scala_paths or any(not path.is_file() for path in scala_paths):
         raise ValueError("the complete Rocket source provenance must be present")
-    command = [sys.executable, "-B", str(direct_path)]
+    command = [sys.executable, "-B", "validation/v2_direct_test_runner.py", "--test",
+               direct_path.relative_to(rail.ROOT).as_posix()]
     direct = subprocess.run(command, cwd=rail.ROOT, capture_output=True,
                             text=True, encoding="utf-8", errors="replace")
     if direct.returncode != 0:
@@ -42,6 +43,7 @@ def main() -> int:
         "state_partition_rail": source_record(rail.ROOT / "validation/v2_queue_state_correspondence_validator.py"),
         "catalog_resolver": source_record(rail.ROOT / "validation/v2_catalog_family_strict_validator.py"),
         "direct_test": source_record(direct_path),
+        "direct_runner": source_record(rail.ROOT / "validation/v2_direct_test_runner.py"),
     }
     payload["sources"]["declared_scala_sources"] = {
         path.relative_to(rail.ROOT).as_posix(): {

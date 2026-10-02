@@ -1,0 +1,469 @@
+{
+  "schema_version": 1,
+  "kind": "XIANGSHAN_KUNMINGHU_V2_FLOATING_POINT_LEAF_WAVE",
+  "status": "VALIDATOR_PASS_BOUNDED",
+  "acceptance_eligible": false,
+  "formal": "NOT_RUN_COORDINATOR_SERIAL",
+  "base_commit": "04205060c9c67df2d83e1d1ad2e8708847a615f9",
+  "candidate_hashes": {
+    "build_sha256": "c86663719665102b2359c344b9e70bde03e150154ec8e2a209cd4d56d86feb12",
+    "direct_test_sha256": "809da86595070efa42b8fd203d64bc069f55e34530d256b9167f846c81519abf",
+    "direct_runner_sha256": "36550022d56b6e631bb7c6dd4299a8b91cf833d8574f1515ec0b157fff5bc01d",
+    "validator_sha256": "4fcbc06d717df048731b0160ad91dac42902a13a3849e315b320c7897cc2944d"
+  },
+  "tool_gates": {
+    "PY_COMPILE": "PASS",
+    "PYRIGHT": {
+      "status": "PASS",
+      "returncode": 0,
+      "output_tail": "0 errors, 0 warnings, 0 informations\n"
+    },
+    "DIRECT_TEST": {
+      "status": "PASS",
+      "returncode": 0,
+      "output_tail": "....\r\n----------------------------------------------------------------------\r\nRan 4 tests in 4.141s\r\n\r\nOK\r\n",
+      "tests_run": 4
+    }
+  },
+  "members": {
+    "FloatAdder": {
+      "abi_exact": true,
+      "deterministic": true,
+      "rtl_bytes": 943,
+      "rtl_sha256": "0dbad36e16223ee65464187aecfb5f4bae2f70f77f8922917f4bc090579f096a",
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.009 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.016 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.004 s on 1 threads; alloced 9.141 MB\n"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "\n-- Running command `read_verilog -sv '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/FloatAdder.sv'; proc; check' --\n\n1. Executing Verilog-2005 frontend: '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/FloatAdder.sv'\nParsing SystemVerilog input from `'/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/FloatAdder.sv'' to AST representation.\nSuccessfully finished Verilog frontend.\n\n2. Executing PROC pass (convert processes to netlists).\n\n2.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 6fb7783790, CPU: user 0.00s system 0.01s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 44% 2x read_verilog (0 sec), 36% 1x opt_expr (0 sec), ...\n"
+      }
+    },
+    "FloatAdderF32F16MixedPipeline": {
+      "abi_exact": true,
+      "deterministic": true,
+      "rtl_bytes": 975,
+      "rtl_sha256": "57537fab36701f5bb5d3926e87fa13d01f5aef7707c3b9c3ee7909f1fdaab588",
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.011 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.020 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.004 s on 1 threads; alloced 9.152 MB\n"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "\n-- Running command `read_verilog -sv '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/FloatAdderF32F16MixedPipeline.sv'; proc; check' --\n\n1. Executing Verilog-2005 frontend: '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/FloatAdderF32F16MixedPipeline.sv'\nParsing SystemVerilog input from `'/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/FloatAdderF32F16MixedPipeline.sv'' to AST representation.\nSuccessfully finished Verilog frontend.\n\n2. Executing PROC pass (convert processes to netlists).\n\n2.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: cff5249f3e, CPU: user 0.00s system 0.01s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 41% 1x opt_expr (0 sec), 35% 2x read_verilog (0 sec), ...\n"
+      }
+    },
+    "FloatAdderF64Pipeline": {
+      "abi_exact": true,
+      "deterministic": true,
+      "rtl_bytes": 913,
+      "rtl_sha256": "a7d29b7e698231707782aa5ca14c2ea1a7840da07772ebfdf10fde15ed4cb13f",
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.010 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.019 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.004 s on 1 threads; alloced 9.145 MB\n"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "\n-- Running command `read_verilog -sv '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/FloatAdderF64Pipeline.sv'; proc; check' --\n\n1. Executing Verilog-2005 frontend: '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/FloatAdderF64Pipeline.sv'\nParsing SystemVerilog input from `'/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/FloatAdderF64Pipeline.sv'' to AST representation.\nSuccessfully finished Verilog frontend.\n\n2. Executing PROC pass (convert processes to netlists).\n\n2.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: c91366996b, CPU: user 0.01s system 0.00s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 32% 2x read_verilog (0 sec), 29% 1x opt_expr (0 sec), ...\n"
+      }
+    },
+    "FloatDivider": {
+      "abi_exact": true,
+      "deterministic": true,
+      "rtl_bytes": 1347,
+      "rtl_sha256": "dacf2747f179a116f02d8cbb3b60555e86d30409e14b5cd9d44a655af0718ee2",
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.022 MB sources in 2 modules, into 0.009 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.018 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.004 s on 1 threads; alloced 9.156 MB\n"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "\n-- Running command `read_verilog -sv '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/FloatDivider.sv'; proc; check' --\n\n1. Executing Verilog-2005 frontend: '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/FloatDivider.sv'\nParsing SystemVerilog input from `'/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/FloatDivider.sv'' to AST representation.\nSuccessfully finished Verilog frontend.\n\n2. Executing PROC pass (convert processes to netlists).\n\n2.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: eacabd93c0, CPU: user 0.00s system 0.01s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 36% 1x opt_expr (0 sec), 28% 2x read_verilog (0 sec), ...\n"
+      }
+    },
+    "FloatDividerR64": {
+      "abi_exact": true,
+      "deterministic": true,
+      "rtl_bytes": 1293,
+      "rtl_sha256": "5044c4965ba4d08bff4d525cecd5c88ccad7d5112f50c00e293fb7e977d1ce1a",
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.022 MB sources in 2 modules, into 0.009 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.027 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.004 s on 1 threads; alloced 9.156 MB\n"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "\n-- Running command `read_verilog -sv '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/FloatDividerR64.sv'; proc; check' --\n\n1. Executing Verilog-2005 frontend: '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/FloatDividerR64.sv'\nParsing SystemVerilog input from `'/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/FloatDividerR64.sv'' to AST representation.\nSuccessfully finished Verilog frontend.\n\n2. Executing PROC pass (convert processes to netlists).\n\n2.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 96fc59168c, CPU: user 0.01s system 0.01s, MEM: 8.91 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 41% 1x check (0 sec), 25% 1x opt_expr (0 sec), ...\n"
+      }
+    },
+    "FloatFMA": {
+      "abi_exact": true,
+      "deterministic": true,
+      "rtl_bytes": 1123,
+      "rtl_sha256": "3c8a7678b25a0fbca05317edc81d9c027249de3fab91390b3f69ac923ace5eb1",
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.022 MB sources in 2 modules, into 0.009 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.023 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.148 MB\n"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "\n-- Running command `read_verilog -sv '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/FloatFMA.sv'; proc; check' --\n\n1. Executing Verilog-2005 frontend: '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/FloatFMA.sv'\nParsing SystemVerilog input from `'/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/FloatFMA.sv'' to AST representation.\nSuccessfully finished Verilog frontend.\n\n2. Executing PROC pass (convert processes to netlists).\n\n2.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: ee6940f8f2, CPU: user 0.01s system 0.00s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 35% 1x opt_expr (0 sec), 23% 2x read_verilog (0 sec), ...\n"
+      }
+    },
+    "fpdiv_r64_block": {
+      "abi_exact": true,
+      "deterministic": true,
+      "rtl_bytes": 1725,
+      "rtl_sha256": "8654069ee26795985abea20e442dacb3b704df9049c0d904a8595a9230be3272",
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.022 MB sources in 2 modules, into 0.010 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.020 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.005 s on 1 threads; alloced 9.121 MB\n"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "\n-- Running command `read_verilog -sv '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/fpdiv_r64_block.sv'; proc; check' --\n\n1. Executing Verilog-2005 frontend: '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/fpdiv_r64_block.sv'\nParsing SystemVerilog input from `'/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/fpdiv_r64_block.sv'' to AST representation.\nSuccessfully finished Verilog frontend.\n\n2. Executing PROC pass (convert processes to netlists).\n\n2.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: c0e266b0b4, CPU: user 0.01s system 0.00s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 41% 1x opt_expr (0 sec), 33% 2x read_verilog (0 sec), ...\n"
+      }
+    },
+    "fpsqrt_r16": {
+      "abi_exact": true,
+      "deterministic": true,
+      "rtl_bytes": 1029,
+      "rtl_sha256": "1a012f89c1b935efef6c6054e43a0f65f1b052c37c2dd51aec0f981e920c816d",
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.009 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.019 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.004 s on 1 threads; alloced 9.148 MB\n"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "\n-- Running command `read_verilog -sv '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/fpsqrt_r16.sv'; proc; check' --\n\n1. Executing Verilog-2005 frontend: '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/fpsqrt_r16.sv'\nParsing SystemVerilog input from `'/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/fpsqrt_r16.sv'' to AST representation.\nSuccessfully finished Verilog frontend.\n\n2. Executing PROC pass (convert processes to netlists).\n\n2.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 0043587bbf, CPU: user 0.00s system 0.01s, MEM: 8.91 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 43% 1x opt_expr (0 sec), 35% 2x read_verilog (0 sec), ...\n"
+      }
+    },
+    "BoothEncoderF64F32F16": {
+      "abi_exact": true,
+      "deterministic": true,
+      "rtl_bytes": 726403,
+      "rtl_sha256": "87c5774fa6a824a6030e27233f8ae24ca0b8300364519948443b3af6acbcc8ae",
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "     ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/BoothEncoderF64F32F16.sv:17727:33: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n17727 |   assign \\$1127  = \\$1126 [3:1] == 1'h1;\n      |                                 ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/BoothEncoderF64F32F16.sv:17730:33: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n17730 |   assign \\$1130  = \\$1129 [3:1] == 2'h2;\n      |                                 ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/BoothEncoderF64F32F16.sv:17734:33: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n17734 |   assign \\$1134  = \\$1133 [3:1] == 2'h3;\n      |                                 ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/BoothEncoderF64F32F16.sv:17751:33: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n17751 |   assign \\$1151  = \\$1150 [3:1] == 1'h1;\n      |                                 ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/BoothEncoderF64F32F16.sv:17754:33: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n17754 |   assign \\$1154  = \\$1153 [3:1] == 2'h2;\n      |                                 ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/BoothEncoderF64F32F16.sv:17758:33: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n17758 |   assign \\$1158  = \\$1157 [3:1] == 2'h3;\n      |                                 ^~\n"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "\n-- Running command `read_verilog -sv '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/BoothEncoderF64F32F16.sv'; proc; check' --\n\n1. Executing Verilog-2005 frontend: '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/BoothEncoderF64F32F16.sv'\nParsing SystemVerilog input from `'/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/BoothEncoderF64F32F16.sv'' to AST representation.\nSuccessfully finished Verilog frontend.\n\n2. Executing PROC pass (convert processes to netlists).\n\n2.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: ab027d0909, CPU: user 0.00s system 0.01s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 44% 1x opt_expr (0 sec), 31% 2x read_verilog (0 sec), ...\n"
+      }
+    },
+    "ArrayMulDataModule": {
+      "abi_exact": true,
+      "deterministic": true,
+      "rtl_bytes": 1527848,
+      "rtl_sha256": "801a631f48ec21ce2a272e1d908cf84e4b33e1965145f61c2c2bf077da8ebd7b",
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "gned(io_a[64:63]) == $signed(3'h5);\n      |                                        ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/ArrayMulDataModule.sv:38615:28: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n38615 |   assign \\$22  = io_a[3:1] == 1'h1;\n      |                            ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/ArrayMulDataModule.sv:38616:28: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n38616 |   assign \\$23  = io_a[3:1] == 2'h2;\n      |                            ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/ArrayMulDataModule.sv:38618:28: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n38618 |   assign \\$25  = io_a[3:1] == 2'h3;\n      |                            ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/ArrayMulDataModule.sv:38634:28: Operator EQ expects 3 bits on the RHS, but RHS's CONST '1'h1' generates 1 bits.\n38634 |   assign \\$43  = io_a[5:3] == 1'h1;\n      |                            ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/ArrayMulDataModule.sv:38635:28: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.\n38635 |   assign \\$44  = io_a[5:3] == 2'h2;\n      |                            ^~\n%Warning-WIDTHEXPAND: /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/ArrayMulDataModule.sv:38637:28: Operator EQ expects 3 bits on the RHS, but RHS's CONST '2'h3' generates 2 bits.\n38637 |   assign \\$46  = io_a[5:3] == 2'h3;\n      |                            ^~\n"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "\n-- Running command `read_verilog -sv '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/ArrayMulDataModule.sv'; proc; check' --\n\n1. Executing Verilog-2005 frontend: '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/ArrayMulDataModule.sv'\nParsing SystemVerilog input from `'/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/ArrayMulDataModule.sv'' to AST representation.\nSuccessfully finished Verilog frontend.\n\n2. Executing PROC pass (convert processes to netlists).\n\n2.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 6d65d332f5, CPU: user 0.01s system 0.01s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 42% 2x read_verilog (0 sec), 38% 1x opt_expr (0 sec), ...\n"
+      }
+    },
+    "IntToFPDataModule": {
+      "abi_exact": true,
+      "deterministic": true,
+      "rtl_bytes": 1002,
+      "rtl_sha256": "4a3c7b2f38ad6b26a2e5bd90011f9f60df26a5c8ee6728c3bf7a742d09c82c3b",
+      "verilator": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)\n- Verilator: Built from 0.021 MB sources in 2 modules, into 0.010 MB in 4 C++ files needing 0.000 MB\n- Verilator: Walltime 0.019 s (elab=0.000, cvt=0.001, bld=0.000); cpu 0.004 s on 1 threads; alloced 9.145 MB\n"
+      },
+      "yosys": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "\n-- Running command `read_verilog -sv '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/IntToFPDataModule.sv'; proc; check' --\n\n1. Executing Verilog-2005 frontend: '/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/IntToFPDataModule.sv'\nParsing SystemVerilog input from `'/mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/.work/v2-floating-point-leaf-wave/IntToFPDataModule.sv'' to AST representation.\nSuccessfully finished Verilog frontend.\n\n2. Executing PROC pass (convert processes to netlists).\n\n2.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).\nRemoved a total of 0 dead cases.\n\n2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).\nRemoved 0 redundant assignments.\nPromoted 0 assignments to connections.\n\n2.4. Executing PROC_INIT pass (extract init attributes).\n\n2.5. Executing PROC_ARST pass (detect async resets in processes).\n\n2.6. Executing PROC_ROM pass (convert switches to ROMs).\nConverted 0 switches.\n\n2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).\n\n2.8. Executing PROC_DLATCH pass (convert process syncs to latches).\n\n2.9. Executing PROC_DFF pass (convert process syncs to FFs).\n\n2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).\n\n2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).\nCleaned up 0 empty switches.\n\n2.12. Executing OPT_EXPR pass (perform const folding).\n\n3. Executing CHECK pass (checking for obvious problems).\nFound and reported 0 problems.\n\nEnd of script. Logfile hash: 1308e35409, CPU: user 0.01s system 0.00s, MEM: 9.06 MB peak\nYosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)\nTime spent: 42% 1x opt_expr (0 sec), 37% 2x read_verilog (0 sec), ...\n"
+      }
+    }
+  },
+  "locked_behavior": {
+    "BoothEncoderF64F32F16": {
+      "status": "PASS_BOUNDED",
+      "vectors": 256,
+      "selectors": [
+        "f16",
+        "f32",
+        "f64",
+        "f64_priority_when_both_selectors_set"
+      ],
+      "reference_sha256": "6bc0d7090531e6f1dc68167d5737f3e880c31b3bdce254cf0944f20abb254569",
+      "testbench_sha256": "979bf6fb7093170c9cac874c8c6c33ad8e02705e93176d1fad76c2667f502af7",
+      "result": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "BOOTH_DIFF_PASS\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/v2-floating-point-booth-diff-tb.sv:52: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 256ps; walltime 0.001 s; speed 131.872 ns/s\n- Verilator: cpu 0.002 s on 1 threads; alloced 153 MB\n"
+      }
+    },
+    "ArrayMulDataModule": {
+      "status": "PASS_BOUNDED",
+      "vectors": 69,
+      "children": [
+        "C22",
+        "C32",
+        "C53",
+        "CSA3_2"
+      ],
+      "closure_sha256": "5be8197e1e2bc0692c96c24e93f0d3d4704894c2647a7ba64b80c2acabb4c3d9",
+      "closure_view_trusted": true,
+      "closure_audits": [
+        {
+          "top": "C22",
+          "renamed_top": false,
+          "regions_removed_lines": {},
+          "block_local_temporaries_hoisted": [],
+          "initialized_declarations_hoisted": [],
+          "code_lines_locked": 9,
+          "code_lines_view": 9,
+          "residual_preprocessor_directives": 0,
+          "line_conservation_ok": true,
+          "register_update_equations_locked": 0,
+          "register_update_equations_preserved": true,
+          "view_projection": null,
+          "view_trusted": true
+        },
+        {
+          "top": "C32",
+          "renamed_top": false,
+          "regions_removed_lines": {},
+          "block_local_temporaries_hoisted": [],
+          "initialized_declarations_hoisted": [],
+          "code_lines_locked": 11,
+          "code_lines_view": 11,
+          "residual_preprocessor_directives": 0,
+          "line_conservation_ok": true,
+          "register_update_equations_locked": 0,
+          "register_update_equations_preserved": true,
+          "view_projection": null,
+          "view_trusted": true
+        },
+        {
+          "top": "CSA3_2",
+          "renamed_top": false,
+          "regions_removed_lines": {},
+          "block_local_temporaries_hoisted": [],
+          "initialized_declarations_hoisted": [],
+          "code_lines_locked": 11,
+          "code_lines_view": 11,
+          "residual_preprocessor_directives": 0,
+          "line_conservation_ok": true,
+          "register_update_equations_locked": 0,
+          "register_update_equations_preserved": true,
+          "view_projection": null,
+          "view_trusted": true
+        },
+        {
+          "top": "C53",
+          "renamed_top": false,
+          "regions_removed_lines": {},
+          "block_local_temporaries_hoisted": [],
+          "initialized_declarations_hoisted": [],
+          "code_lines_locked": 26,
+          "code_lines_view": 26,
+          "residual_preprocessor_directives": 0,
+          "line_conservation_ok": true,
+          "register_update_equations_locked": 0,
+          "register_update_equations_preserved": true,
+          "view_projection": null,
+          "view_trusted": true
+        },
+        {
+          "top": "ArrayMulDataModule",
+          "renamed_top": true,
+          "regions_removed_lines": {
+            "`ifdef ENABLE_INITIAL_REG_": 2581
+          },
+          "block_local_temporaries_hoisted": [],
+          "initialized_declarations_hoisted": [
+            "b_sext",
+            "bx2",
+            "neg_b",
+            "neg_bx2",
+            "_GEN",
+            "pp_temp",
+            "_t_T_10",
+            "_GEN_0",
+            "pp_temp_1",
+            "t_1",
+            "_t_T_15",
+            "_GEN_1",
+            "pp_temp_2",
+            "t_2",
+            "_t_T_20",
+            "_GEN_2",
+            "pp_temp_3",
+            "t_3",
+            "_t_T_25",
+            "_GEN_3",
+            "pp_temp_4",
+            "t_4",
+            "_t_T_30",
+            "_GEN_4",
+            "pp_temp_5",
+            "t_5",
+            "_t_T_35",
+            "_GEN_5",
+            "pp_temp_6",
+            "t_6",
+            "_t_T_40",
+            "_GEN_6",
+            "pp_temp_7",
+            "t_7",
+            "_t_T_45",
+            "_GEN_7",
+            "pp_temp_8",
+            "t_8",
+            "_t_T_50",
+            "_GEN_8",
+            "pp_temp_9",
+            "t_9",
+            "_t_T_55",
+            "_GEN_9",
+            "pp_temp_10",
+            "t_10",
+            "_t_T_60",
+            "_GEN_10",
+            "pp_temp_11",
+            "t_11",
+            "_t_T_65",
+            "_GEN_11",
+            "pp_temp_12",
+            "t_12",
+            "_t_T_70",
+            "_GEN_12",
+            "pp_temp_13",
+            "t_13",
+            "_t_T_75",
+            "_GEN_13",
+            "pp_temp_14",
+            "t_14",
+            "_t_T_80",
+            "_GEN_14",
+            "pp_temp_15",
+            "t_15",
+            "_t_T_85",
+            "_GEN_15",
+            "pp_temp_16",
+            "t_16",
+            "_t_T_90",
+            "_GEN_16",
+            "pp_temp_17",
+            "t_17",
+            "_t_T_95",
+            "_GEN_17",
+            "pp_temp_18",
+            "t_18",
+            "_t_T_100",
+            "_GEN_18",
+            "pp_temp_19",
+            "t_19",
+            "_t_T_105",
+            "_GEN_19",
+            "pp_temp_20",
+            "t_20",
+            "_t_T_110",
+            "_GEN_20",
+            "pp_temp_21",
+            "t_21",
+            "_t_T_115",
+            "_GEN_21",
+            "pp_temp_22",
+            "t_22",
+            "_t_T_120",
+            "_GEN_22",
+            "pp_temp_23",
+            "t_23",
+            "_t_T_125",
+            "_GEN_23",
+            "pp_temp_24",
+            "t_24",
+            "_t_T_130",
+            "_GEN_24",
+            "pp_temp_25",
+            "t_25",
+            "_t_T_135",
+            "_GEN_25",
+            "pp_temp_26",
+            "t_26",
+            "_t_T_140",
+            "_GEN_26",
+            "pp_temp_27",
+            "t_27",
+            "_t_T_145",
+            "_GEN_27",
+            "pp_temp_28",
+            "t_28",
+            "_t_T_150",
+            "_GEN_28",
+            "pp_temp_29",
+            "t_29",
+            "_t_T_155",
+            "_GEN_29",
+            "pp_temp_30",
+            "t_30",
+            "_t_T_160",
+            "_GEN_30",
+            "pp_temp_31",
+            "t_31",
+            "x_32",
+            "pp_temp_32",
+            "t_32"
+          ],
+          "code_lines_locked": 21703,
+          "code_lines_view": 21836,
+          "residual_preprocessor_directives": 0,
+          "line_conservation_ok": true,
+          "register_update_equations_locked": 2562,
+          "register_update_equations_preserved": true,
+          "view_projection": null,
+          "view_trusted": true
+        }
+      ],
+      "reference_file_hashes": {
+        "ArrayMulDataModule.sv": "052c4e65f35cb715eadc6f18dbe2349d14e41afe174360a28a06a5b989978f68",
+        "C22.sv": "462b4ba7f06e486abe2dd750b2c2676ecd5063f72440e4f6413e8115e4bf207e",
+        "C32.sv": "51b5fc100d016e4acf155f425840bd270af58428863fd6629f0114d61c106b18",
+        "C53.sv": "30e7db7c70220a425a09bef7290380dc8c9f23e0a37a008d292afae7866ebc24",
+        "CSA3_2.sv": "a0bee4720d459f9382a8323442e8b7d2eb962fc3a80f0fd0c2b75dc876f74a21"
+      },
+      "testbench_sha256": "a1b6e89e7d6529c805afce13d18055804d0396c19e1b3e8d722a13d158d78ca4",
+      "result": {
+        "status": "PASS",
+        "returncode": 0,
+        "output_tail": "ARRAY_LOCKED_DIFF_PASS\n- /mnt/d/知识库开发/Unifier-Hardware-System/.agents/xiangshan-v2/validation/v2-floating-point-array-diff-tb.sv:33: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01\n- Verilator: $finish at 1ns; walltime 0.004 s; speed 356.264 ns/s\n- Verilator: cpu 0.004 s on 1 threads; alloced 154 MB\n"
+      }
+    }
+  },
+  "failures": [],
+  "remaining": [
+    "SAT/formal equivalence and negative controls remain for the serialized coordinator rail.",
+    "Complete floating-point family still contains CONTRACT_ONLY members.",
+    "Parent closure, license review, and acceptance remain pending."
+  ]
+}
