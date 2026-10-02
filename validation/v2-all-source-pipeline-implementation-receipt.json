@@ -1,0 +1,813 @@
+{
+  "kind": "V2_ALL_SOURCE_IMPLEMENTATION_REVIEW_RECEIPT",
+  "source_plan_sha256": "0c03f4e6de94acaa4fd70ed176788d7d152889d6a8de53f3217857c0c01e8a1b",
+  "phase": "SOURCE_FIRST_REWRITE_NATIVE_EXPORT_ONLY",
+  "builds": [
+    {
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+      "sha256": "2008798bfd2bb6de6dbfeaa90be4c5b09d9dea3a84c4261a2ea96d72b07e5df1",
+      "native_export_pass": true,
+      "export_receipt": {
+        "path": "validation/v2-all-source-pipeline-export-receipt.json",
+        "sha256": "c428bc8fe6951627336fa2b45db2c5fc78660dd7146651142d454c8e4c9cea85"
+      }
+    }
+  ],
+  "sources": [
+    {
+      "path": "upstream/chisel3/src/main/scala/chisel3/util/Valid.scala",
+      "sha256": "ea66bd51742ad0fa041907d5df23852ee1d5131a427b35804b13692faacfb7f4",
+      "complete_feature_review": true,
+      "declaration_disposition": "Executable bundle geometry, compile-time adapters, and state equations are aggregated in the target; source tests are translated to the same-function direct test and are not product RTL.",
+      "feature_implementations": [
+        {
+          "obligation": "Preserve each valid/data state register, enable condition, reset value, and cycle latency.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_valid_pipe",
+          "supporting_symbols": [
+            "ValidInterface.fire",
+            "ValidInterface.type_name",
+            "ValidInterface.map",
+            "build_verilog"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        },
+        {
+          "obligation": "Retain input/output ready-valid or shift-register field ordering and legal depth branches.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_valid_pipe",
+          "supporting_symbols": [
+            "ValidInterface.fire",
+            "ValidInterface.type_name",
+            "ValidInterface.map",
+            "build_verilog"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        },
+        {
+          "obligation": "Source functions whose behavior/parameters must be accounted for: apply, desiredName, fire, map, typeName.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_valid_pipe",
+          "supporting_symbols": [
+            "ValidInterface.fire",
+            "ValidInterface.type_name",
+            "ValidInterface.map",
+            "build_verilog"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        },
+        {
+          "obligation": "Observed storage/state declarations to preserve: v via RegNext; b via RegEnable.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_valid_pipe",
+          "supporting_symbols": [
+            "ValidInterface.fire",
+            "ValidInterface.type_name",
+            "ValidInterface.map",
+            "build_verilog"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        },
+        {
+          "obligation": "Exact source parameter/legal-range constraints: require(latency >= 0, \"Pipe latency must be greater than or equal to zero!\").",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipelineConfiguration.__post_init__",
+          "supporting_symbols": [
+            "ValidInterface.fire",
+            "ValidInterface.type_name",
+            "ValidInterface.map",
+            "build_verilog"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        },
+        {
+          "obligation": "Seed hardware markers are annotations only; source-level hardware ownership retains: Bool, Bundle, IO, Module, RegEnable, RegNext.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_valid_pipe",
+          "supporting_symbols": [
+            "ValidInterface.fire",
+            "ValidInterface.type_name",
+            "ValidInterface.map",
+            "build_verilog"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        }
+      ],
+      "unimplemented_features": [],
+      "behavior_validation": "NOT_RUN_PHASE_DEFERRED"
+    },
+    {
+      "path": "upstream/rocket-chip/src/main/scala/util/Broadcaster.scala",
+      "sha256": "28880b5196a244114640556e322d04b2b19608781c79c4b0dd42166f7af167cf",
+      "complete_feature_review": true,
+      "declaration_disposition": "Executable bundle geometry, compile-time adapters, and state equations are aggregated in the target; source tests are translated to the same-function direct test and are not product RTL.",
+      "feature_implementations": [
+        {
+          "obligation": "Preserve enqueue/dequeue pointers, occupancy, wraparound, full/empty and simultaneous transfer priority.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_broadcaster",
+          "supporting_symbols": [
+            "SourcePipeline.__init__",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        },
+        {
+          "obligation": "Retain payload lane/port/width ordering, memory/register storage choice, and read/write latency.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_broadcaster",
+          "supporting_symbols": [
+            "SourcePipeline.__init__",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        },
+        {
+          "obligation": "Keep flow/pipe/flush/credit configuration and all backpressure branches.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_broadcaster",
+          "supporting_symbols": [
+            "SourcePipeline.__init__",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        },
+        {
+          "obligation": "Source functions whose behavior/parameters must be accounted for: apply.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_broadcaster",
+          "supporting_symbols": [
+            "SourcePipeline.__init__",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        },
+        {
+          "obligation": "Observed storage/state declarations to preserve: idx via RegInit; save via Reg.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_broadcaster",
+          "supporting_symbols": [
+            "SourcePipeline.__init__",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        },
+        {
+          "obligation": "Exact source parameter/legal-range constraints: require(n > 0).",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipelineConfiguration.__post_init__",
+          "supporting_symbols": [
+            "SourcePipeline.__init__",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        },
+        {
+          "obligation": "Observed priority/control branches (source order retained): when (io.in.fire) { save := io.in.bits } | when (io.out(idx).fire) { | when (idx === (n - 1).U) { idx := 0.U } | .otherwise { idx := idx + 1.U }.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_broadcaster",
+          "supporting_symbols": [
+            "SourcePipeline.__init__",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        },
+        {
+          "obligation": "Seed hardware markers are annotations only; source-level hardware ownership retains: Bundle, IO, Module, Reg, RegInit, Vec.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_broadcaster",
+          "supporting_symbols": [
+            "SourcePipeline.__init__",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        }
+      ],
+      "unimplemented_features": [],
+      "behavior_validation": "NOT_RUN_PHASE_DEFERRED"
+    },
+    {
+      "path": "upstream/rocket-chip/src/main/scala/util/CreditedIO.scala",
+      "sha256": "52158355806bae20427a3c2d9dc2418c4b2dc8c64f29a7019b7ea61b4c5a2bf8",
+      "complete_feature_review": true,
+      "declaration_disposition": "Executable bundle geometry, compile-time adapters, and state equations are aggregated in the target; source tests are translated to the same-function direct test and are not product RTL.",
+      "feature_implementations": [
+        {
+          "obligation": "Preserve enqueue/dequeue pointers, occupancy, wraparound, full/empty and simultaneous transfer priority.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_credit_pipeline",
+          "supporting_symbols": [
+            "CreditedDelay",
+            "SourcePipeline.credit_counter",
+            "SourcePipeline.elaborate_credit_receiver",
+            "SourcePipeline.elaborate",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        },
+        {
+          "obligation": "Retain payload lane/port/width ordering, memory/register storage choice, and read/write latency.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_credit_pipeline",
+          "supporting_symbols": [
+            "CreditedDelay",
+            "SourcePipeline.credit_counter",
+            "SourcePipeline.elaborate_credit_receiver",
+            "SourcePipeline.elaborate",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        },
+        {
+          "obligation": "Keep flow/pipe/flush/credit configuration and all backpressure branches.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_credit_pipeline",
+          "supporting_symbols": [
+            "CreditedDelay",
+            "SourcePipeline.credit_counter",
+            "SourcePipeline.elaborate_credit_receiver",
+            "SourcePipeline.elaborate",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        },
+        {
+          "obligation": "Source functions whose behavior/parameters must be accounted for: apply, empty, flip, fromReceiver, fromSender, full, genType, pipeline, toReceiver, toSender, toString, update.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_credit_pipeline",
+          "supporting_symbols": [
+            "CreditedDelay",
+            "SourcePipeline.credit_counter",
+            "SourcePipeline.elaborate_credit_receiver",
+            "SourcePipeline.elaborate",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        },
+        {
+          "obligation": "Observed storage/state declarations to preserve: counter via Counter; res via Queue; v via RegInit.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_credit_pipeline",
+          "supporting_symbols": [
+            "CreditedDelay",
+            "SourcePipeline.credit_counter",
+            "SourcePipeline.elaborate_credit_receiver",
+            "SourcePipeline.elaborate",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        },
+        {
+          "obligation": "Exact source parameter/legal-range constraints: require(debit >= 0) | require(credit >= 0) | require(depth >= 1) | require(0 <= init) | require(init <= depth).",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipelineConfiguration.__post_init__",
+          "supporting_symbols": [
+            "CreditedDelay",
+            "SourcePipeline.credit_counter",
+            "SourcePipeline.elaborate_credit_receiver",
+            "SourcePipeline.elaborate",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        },
+        {
+          "obligation": "Exact source behavioral assertions/invariants: assert(!enq.valid || enq.ready) | assert((!(credit && full) || debit) && (!(debit && empty) || credit)).",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_credit_pipeline",
+          "supporting_symbols": [
+            "CreditedDelay",
+            "SourcePipeline.credit_counter",
+            "SourcePipeline.elaborate_credit_receiver",
+            "SourcePipeline.elaborate",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        },
+        {
+          "obligation": "Observed priority/control branches (source order retained): when (credit =/= debit) {.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_credit_pipeline",
+          "supporting_symbols": [
+            "CreditedDelay",
+            "SourcePipeline.credit_counter",
+            "SourcePipeline.elaborate_credit_receiver",
+            "SourcePipeline.elaborate",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        },
+        {
+          "obligation": "Seed hardware markers are annotations only; source-level hardware ownership retains: Bool, Bundle, RegEnable, RegInit, RegNext.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_credit_pipeline",
+          "supporting_symbols": [
+            "CreditedDelay",
+            "SourcePipeline.credit_counter",
+            "SourcePipeline.elaborate_credit_receiver",
+            "SourcePipeline.elaborate",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        }
+      ],
+      "unimplemented_features": [],
+      "behavior_validation": "NOT_RUN_PHASE_DEFERRED"
+    },
+    {
+      "path": "upstream/rocket-chip/src/main/scala/util/LatencyPipe.scala",
+      "sha256": "fc8159c9233076d2d9638b43d640a59d2054b05c0008f2a4ee16ca788ec1dc2a",
+      "complete_feature_review": true,
+      "declaration_disposition": "Executable bundle geometry, compile-time adapters, and state equations are aggregated in the target; source tests are translated to the same-function direct test and are not product RTL.",
+      "feature_implementations": [
+        {
+          "obligation": "Preserve enqueue/dequeue pointers, occupancy, wraparound, full/empty and simultaneous transfer priority.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_latency_pipe",
+          "supporting_symbols": [
+            "SourcePipeline.__init__",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        },
+        {
+          "obligation": "Retain payload lane/port/width ordering, memory/register storage choice, and read/write latency.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_latency_pipe",
+          "supporting_symbols": [
+            "SourcePipeline.__init__",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        },
+        {
+          "obligation": "Keep flow/pipe/flush/credit configuration and all backpressure branches.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_latency_pipe",
+          "supporting_symbols": [
+            "SourcePipeline.__init__",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        },
+        {
+          "obligation": "Source functions whose behavior/parameters must be accounted for: apply, doN.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_latency_pipe",
+          "supporting_symbols": [
+            "SourcePipeline.__init__",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        },
+        {
+          "obligation": "Seed hardware markers are annotations only; source-level hardware ownership retains: Bundle, IO, Module.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_latency_pipe",
+          "supporting_symbols": [
+            "SourcePipeline.__init__",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        }
+      ],
+      "unimplemented_features": [],
+      "behavior_validation": "NOT_RUN_PHASE_DEFERRED"
+    },
+    {
+      "path": "upstream/rocket-chip/src/main/scala/util/MultiWidthFifo.scala",
+      "sha256": "7176637827a9cbe1f72a8ade04fadb939fe6875e14198e9836a224f107b909a0",
+      "complete_feature_review": true,
+      "declaration_disposition": "Executable bundle geometry, compile-time adapters, and state equations are aggregated in the target; source tests are translated to the same-function direct test and are not product RTL.",
+      "feature_implementations": [
+        {
+          "obligation": "Preserve enqueue/dequeue pointers, occupancy, wraparound, full/empty and simultaneous transfer priority.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_width_fifo",
+          "supporting_symbols": [
+            "SourcePipeline.__init__",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "The equal/split/join storage and binary pointer/count branches are executable. Unit-test-only states and original 0..7 packing/count assertions are translated to PipelineFamilyBehaviorTests.test_multi_width_fifo_split_join_and_equal_width; tests are authored but not run during the export-only phase."
+        },
+        {
+          "obligation": "Retain payload lane/port/width ordering, memory/register storage choice, and read/write latency.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_width_fifo",
+          "supporting_symbols": [
+            "SourcePipeline.__init__",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "The equal/split/join storage and binary pointer/count branches are executable. Unit-test-only states and original 0..7 packing/count assertions are translated to PipelineFamilyBehaviorTests.test_multi_width_fifo_split_join_and_equal_width; tests are authored but not run during the export-only phase."
+        },
+        {
+          "obligation": "Keep flow/pipe/flush/credit configuration and all backpressure branches.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_width_fifo",
+          "supporting_symbols": [
+            "SourcePipeline.__init__",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "The equal/split/join storage and binary pointer/count branches are executable. Unit-test-only states and original 0..7 packing/count assertions are translated to PipelineFamilyBehaviorTests.test_multi_width_fifo_split_join_and_equal_width; tests are authored but not run during the export-only phase."
+        },
+        {
+          "obligation": "Observed storage/state declarations to preserve: q via Queue; wdata via Reg; head via RegInit; tail via RegInit; size via RegInit; bl_send via RegInit; lb_send via RegInit; bl_recv via RegInit; lb_recv via RegInit; bl_finished via RegInit; lb_finished via RegInit; bl_start_recv via RegNext; lb_start_recv via RegNext.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_width_fifo",
+          "supporting_symbols": [
+            "SourcePipeline.__init__",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "The equal/split/join storage and binary pointer/count branches are executable. Unit-test-only states and original 0..7 packing/count assertions are translated to PipelineFamilyBehaviorTests.test_multi_width_fifo_split_join_and_equal_width; tests are authored but not run during the export-only phase."
+        },
+        {
+          "obligation": "Exact source parameter/legal-range constraints: require(inW % outW == 0, s\"MultiWidthFifo: in: $inW not divisible by out: $outW\") | require(n % nBeats == 0, s\"Cannot store $n output words when output beats is $nBeats\") | require(outW % inW == 0, s\"MultiWidthFifo: out: $outW not divisible by in: $inW\").",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipelineConfiguration.__post_init__",
+          "supporting_symbols": [
+            "SourcePipeline.__init__",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "The equal/split/join storage and binary pointer/count branches are executable. Unit-test-only states and original 0..7 packing/count assertions are translated to PipelineFamilyBehaviorTests.test_multi_width_fifo_split_join_and_equal_width; tests are authored but not run during the export-only phase."
+        },
+        {
+          "obligation": "Exact source behavioral assertions/invariants: assert(!little2big.io.out.valid || little2big.io.out.bits === lb_recv_data, \"Little to Big data mismatch\") | assert(!big2little.io.out.valid || big2little.io.out.bits === bl_recv_data, \"Bit to Little data mismatch\") | assert(!lb_start_recv || little2big.io.count === 4.U, \"Little to Big count incorrect\") | assert(!bl_start_recv || big2little.io.count === 8.U, \"Big to Little count incorrect\").",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_width_fifo",
+          "supporting_symbols": [
+            "SourcePipeline.__init__",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "The equal/split/join storage and binary pointer/count branches are executable. Unit-test-only states and original 0..7 packing/count assertions are translated to PipelineFamilyBehaviorTests.test_multi_width_fifo_split_join_and_equal_width; tests are authored but not run during the export-only phase."
+        },
+        {
+          "obligation": "Observed priority/control branches (source order retained): require(n % nBeats == 0, s\"Cannot store $n output words when output beats is $nBeats\") | when (io.in.fire) { | when (io.out.fire) { tail := tail + 1.U } | when (io.start) { | when (bl_send_done) { | when (lb_send_done) { | when (bl_recv_done) { | when (lb_recv_done) {.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_width_fifo",
+          "supporting_symbols": [
+            "SourcePipeline.__init__",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "The equal/split/join storage and binary pointer/count branches are executable. Unit-test-only states and original 0..7 packing/count assertions are translated to PipelineFamilyBehaviorTests.test_multi_width_fifo_split_join_and_equal_width; tests are authored but not run during the export-only phase."
+        },
+        {
+          "obligation": "Seed hardware markers are annotations only; source-level hardware ownership retains: Bundle, IO, Module, Reg, RegInit, RegNext, UInt, Vec.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_width_fifo",
+          "supporting_symbols": [
+            "SourcePipeline.__init__",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "The equal/split/join storage and binary pointer/count branches are executable. Unit-test-only states and original 0..7 packing/count assertions are translated to PipelineFamilyBehaviorTests.test_multi_width_fifo_split_join_and_equal_width; tests are authored but not run during the export-only phase."
+        }
+      ],
+      "unimplemented_features": [],
+      "behavior_validation": "NOT_RUN_PHASE_DEFERRED"
+    },
+    {
+      "path": "upstream/rocket-chip/src/main/scala/util/ReorderQueue.scala",
+      "sha256": "5329e8cfdc209a4dcd180a5a1314fe5dd45212c6e5e30862a3a6ca035f590acf",
+      "complete_feature_review": true,
+      "declaration_disposition": "Executable bundle geometry, compile-time adapters, and state equations are aggregated in the target; source tests are translated to the same-function direct test and are not product RTL.",
+      "feature_implementations": [
+        {
+          "obligation": "Preserve enqueue/dequeue pointers, occupancy, wraparound, full/empty and simultaneous transfer priority.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_reorder_queue",
+          "supporting_symbols": [
+            "SourcePipeline.__init__",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        },
+        {
+          "obligation": "Retain payload lane/port/width ordering, memory/register storage choice, and read/write latency.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_reorder_queue",
+          "supporting_symbols": [
+            "SourcePipeline.__init__",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        },
+        {
+          "obligation": "Keep flow/pipe/flush/credit configuration and all backpressure branches.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_reorder_queue",
+          "supporting_symbols": [
+            "SourcePipeline.__init__",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        },
+        {
+          "obligation": "Observed storage/state declarations to preserve: roq_data via Reg; roq_tags via Reg; roq_free via RegInit; roq_data via Mem.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_reorder_queue",
+          "supporting_symbols": [
+            "SourcePipeline.__init__",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        },
+        {
+          "obligation": "Observed priority/control branches (source order retained): when (io.enq.valid && io.enq.ready) { | when (io.deq.valid) {.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_reorder_queue",
+          "supporting_symbols": [
+            "SourcePipeline.__init__",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        },
+        {
+          "obligation": "Seed hardware markers are annotations only; source-level hardware ownership retains: Bool, Bundle, IO, Mem, Module, Reg, RegInit, UInt, Vec.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_reorder_queue",
+          "supporting_symbols": [
+            "SourcePipeline.__init__",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        }
+      ],
+      "unimplemented_features": [],
+      "behavior_validation": "NOT_RUN_PHASE_DEFERRED"
+    },
+    {
+      "path": "upstream/rocket-chip/src/main/scala/util/Repeater.scala",
+      "sha256": "4b585d54c43ac1388713c31e2a9531eef36a74f93943a776a2c12ae07d21922d",
+      "complete_feature_review": true,
+      "declaration_disposition": "Executable bundle geometry, compile-time adapters, and state equations are aggregated in the target; source tests are translated to the same-function direct test and are not product RTL.",
+      "feature_implementations": [
+        {
+          "obligation": "Preserve enqueue/dequeue pointers, occupancy, wraparound, full/empty and simultaneous transfer priority.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_repeater",
+          "supporting_symbols": [
+            "SourcePipeline.__init__",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        },
+        {
+          "obligation": "Retain payload lane/port/width ordering, memory/register storage choice, and read/write latency.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_repeater",
+          "supporting_symbols": [
+            "SourcePipeline.__init__",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        },
+        {
+          "obligation": "Keep flow/pipe/flush/credit configuration and all backpressure branches.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_repeater",
+          "supporting_symbols": [
+            "SourcePipeline.__init__",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        },
+        {
+          "obligation": "Source functions whose behavior/parameters must be accounted for: apply.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_repeater",
+          "supporting_symbols": [
+            "SourcePipeline.__init__",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        },
+        {
+          "obligation": "Observed storage/state declarations to preserve: full via RegInit; saved via Reg.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_repeater",
+          "supporting_symbols": [
+            "SourcePipeline.__init__",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        },
+        {
+          "obligation": "Observed priority/control branches (source order retained): when (io.enq.fire &&  io.repeat) { full := true.B; saved := io.enq.bits } | when (io.deq.fire && !io.repeat) { full := false.B }.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_repeater",
+          "supporting_symbols": [
+            "SourcePipeline.__init__",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        },
+        {
+          "obligation": "Seed hardware markers are annotations only; source-level hardware ownership retains: Bool, Bundle, IO, Module, Reg, RegInit.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_repeater",
+          "supporting_symbols": [
+            "SourcePipeline.__init__",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        }
+      ],
+      "unimplemented_features": [],
+      "behavior_validation": "NOT_RUN_PHASE_DEFERRED"
+    },
+    {
+      "path": "upstream/rocket-chip/src/main/scala/util/ShiftQueue.scala",
+      "sha256": "5f0f518c42b07b6166f7b109f35879e880611f6fd226ddc583932a246210a107",
+      "complete_feature_review": true,
+      "declaration_disposition": "Executable bundle geometry, compile-time adapters, and state equations are aggregated in the target; source tests are translated to the same-function direct test and are not product RTL.",
+      "feature_implementations": [
+        {
+          "obligation": "Preserve enqueue/dequeue pointers, occupancy, wraparound, full/empty and simultaneous transfer priority.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_shift_queue",
+          "supporting_symbols": [
+            "SourcePipeline.__init__",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        },
+        {
+          "obligation": "Retain payload lane/port/width ordering, memory/register storage choice, and read/write latency.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_shift_queue",
+          "supporting_symbols": [
+            "SourcePipeline.__init__",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        },
+        {
+          "obligation": "Keep flow/pipe/flush/credit configuration and all backpressure branches.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_shift_queue",
+          "supporting_symbols": [
+            "SourcePipeline.__init__",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        },
+        {
+          "obligation": "Source functions whose behavior/parameters must be accounted for: apply, paddedValid.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_shift_queue",
+          "supporting_symbols": [
+            "SourcePipeline.__init__",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        },
+        {
+          "obligation": "Observed storage/state declarations to preserve: valid via RegInit; elts via Reg; q via Queue.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_shift_queue",
+          "supporting_symbols": [
+            "SourcePipeline.__init__",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        },
+        {
+          "obligation": "Observed priority/control branches (source order retained): when (wen) { elts(i) := wdata } | when (io.enq.valid) { io.deq.valid := true.B } | when (!valid(0)) { io.deq.bits := io.enq.bits } | when (io.deq.ready) { io.enq.ready := true.B }.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_shift_queue",
+          "supporting_symbols": [
+            "SourcePipeline.__init__",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        },
+        {
+          "obligation": "Seed hardware markers are annotations only; source-level hardware ownership retains: IO, Module, Reg, RegInit, UInt, Vec.",
+          "python_target": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+          "python_symbol": "SourcePipeline.elaborate_shift_queue",
+          "supporting_symbols": [
+            "SourcePipeline.__init__",
+            "SourcePipelineConfiguration.__post_init__"
+          ],
+          "review_status": "IMPLEMENTED_REVIEWED",
+          "reviewed_by": "coordinator",
+          "review_note": "Reviewed against the complete source file for state updates, valid/data gating, source-order priority, reset, and supported parameter branches. Elaboration-time names adapt to the selected public export identity. Annotation-only markers do not add separate RTL behavior."
+        }
+      ],
+      "unimplemented_features": [],
+      "behavior_validation": "NOT_RUN_PHASE_DEFERRED"
+    }
+  ],
+  "remaining_aggregate_scope": "Only the eight reviewed source files are claimed. HellaQueue, lane/port-positioned queues, and the remaining utility/MBIST source obligations are pending.",
+  "strict_complete_count_delta": 0,
+  "acceptance_eligible": false,
+  "behavior_validation": "NOT_RUN_PHASE_DEFERRED"
+}

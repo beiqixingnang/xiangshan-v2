@@ -3,10 +3,11 @@
   "source_plan_sha256": "0c03f4e6de94acaa4fd70ed176788d7d152889d6a8de53f3217857c0c01e8a1b",
   "all_scala_files": 1736,
   "hardware_and_configuration_sources_required": 1129,
-  "implemented_export_pass_sources": 0,
+  "implemented_export_pass_sources": 8,
   "status_counts": {
-    "IMPLEMENTATION_REVIEW_PENDING": 1129,
-    "REVIEWED_NON_RTL_DISPOSITION": 607
+    "IMPLEMENTATION_REVIEW_PENDING": 1121,
+    "REVIEWED_NON_RTL_DISPOSITION": 607,
+    "IMPLEMENTED_EXPORT_PASS_BEHAVIOR_UNVERIFIED": 8
   },
   "files": [
     {
@@ -3608,16 +3609,12 @@
         "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py"
       ],
       "implementation_required": true,
-      "status": "IMPLEMENTATION_REVIEW_PENDING",
-      "receipt": null,
-      "remaining_feature_obligations": [
-        "Preserve each valid/data state register, enable condition, reset value, and cycle latency.",
-        "Retain input/output ready-valid or shift-register field ordering and legal depth branches.",
-        "Source functions whose behavior/parameters must be accounted for: apply, desiredName, fire, map, typeName.",
-        "Observed storage/state declarations to preserve: v via RegNext; b via RegEnable.",
-        "Exact source parameter/legal-range constraints: require(latency >= 0, \"Pipe latency must be greater than or equal to zero!\").",
-        "Seed hardware markers are annotations only; source-level hardware ownership retains: Bool, Bundle, IO, Module, RegEnable, RegNext."
-      ]
+      "status": "IMPLEMENTED_EXPORT_PASS_BEHAVIOR_UNVERIFIED",
+      "receipt": {
+        "path": "validation/v2-all-source-pipeline-implementation-receipt.json",
+        "sha256": "8e2a5e2c9c47ca3ca29577bb1d7cd8d7506d23ad460f904aca93a9663dbfc7df"
+      },
+      "remaining_feature_obligations": []
     },
     {
       "path": "upstream/chisel3/src/main/scala/chisel3/util/circt/ClockGate.scala",
@@ -16672,18 +16669,12 @@
         "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py"
       ],
       "implementation_required": true,
-      "status": "IMPLEMENTATION_REVIEW_PENDING",
-      "receipt": null,
-      "remaining_feature_obligations": [
-        "Preserve enqueue/dequeue pointers, occupancy, wraparound, full/empty and simultaneous transfer priority.",
-        "Retain payload lane/port/width ordering, memory/register storage choice, and read/write latency.",
-        "Keep flow/pipe/flush/credit configuration and all backpressure branches.",
-        "Source functions whose behavior/parameters must be accounted for: apply.",
-        "Observed storage/state declarations to preserve: idx via RegInit; save via Reg.",
-        "Exact source parameter/legal-range constraints: require(n > 0).",
-        "Observed priority/control branches (source order retained): when (io.in.fire) { save := io.in.bits } | when (io.out(idx).fire) { | when (idx === (n - 1).U) { idx := 0.U } | .otherwise { idx := idx + 1.U }.",
-        "Seed hardware markers are annotations only; source-level hardware ownership retains: Bundle, IO, Module, Reg, RegInit, Vec."
-      ]
+      "status": "IMPLEMENTED_EXPORT_PASS_BEHAVIOR_UNVERIFIED",
+      "receipt": {
+        "path": "validation/v2-all-source-pipeline-implementation-receipt.json",
+        "sha256": "8e2a5e2c9c47ca3ca29577bb1d7cd8d7506d23ad460f904aca93a9663dbfc7df"
+      },
+      "remaining_feature_obligations": []
     },
     {
       "path": "upstream/rocket-chip/src/main/scala/util/BundleMap.scala",
@@ -16793,19 +16784,12 @@
         "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py"
       ],
       "implementation_required": true,
-      "status": "IMPLEMENTATION_REVIEW_PENDING",
-      "receipt": null,
-      "remaining_feature_obligations": [
-        "Preserve enqueue/dequeue pointers, occupancy, wraparound, full/empty and simultaneous transfer priority.",
-        "Retain payload lane/port/width ordering, memory/register storage choice, and read/write latency.",
-        "Keep flow/pipe/flush/credit configuration and all backpressure branches.",
-        "Source functions whose behavior/parameters must be accounted for: apply, empty, flip, fromReceiver, fromSender, full, genType, pipeline, toReceiver, toSender, toString, update.",
-        "Observed storage/state declarations to preserve: counter via Counter; res via Queue; v via RegInit.",
-        "Exact source parameter/legal-range constraints: require(debit >= 0) | require(credit >= 0) | require(depth >= 1) | require(0 <= init) | require(init <= depth).",
-        "Exact source behavioral assertions/invariants: assert(!enq.valid || enq.ready) | assert((!(credit && full) || debit) && (!(debit && empty) || credit)).",
-        "Observed priority/control branches (source order retained): when (credit =/= debit) {.",
-        "Seed hardware markers are annotations only; source-level hardware ownership retains: Bool, Bundle, RegEnable, RegInit, RegNext."
-      ]
+      "status": "IMPLEMENTED_EXPORT_PASS_BEHAVIOR_UNVERIFIED",
+      "receipt": {
+        "path": "validation/v2-all-source-pipeline-implementation-receipt.json",
+        "sha256": "8e2a5e2c9c47ca3ca29577bb1d7cd8d7506d23ad460f904aca93a9663dbfc7df"
+      },
+      "remaining_feature_obligations": []
     },
     {
       "path": "upstream/rocket-chip/src/main/scala/util/Crossing.scala",
@@ -17020,15 +17004,12 @@
         "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py"
       ],
       "implementation_required": true,
-      "status": "IMPLEMENTATION_REVIEW_PENDING",
-      "receipt": null,
-      "remaining_feature_obligations": [
-        "Preserve enqueue/dequeue pointers, occupancy, wraparound, full/empty and simultaneous transfer priority.",
-        "Retain payload lane/port/width ordering, memory/register storage choice, and read/write latency.",
-        "Keep flow/pipe/flush/credit configuration and all backpressure branches.",
-        "Source functions whose behavior/parameters must be accounted for: apply, doN.",
-        "Seed hardware markers are annotations only; source-level hardware ownership retains: Bundle, IO, Module."
-      ]
+      "status": "IMPLEMENTED_EXPORT_PASS_BEHAVIOR_UNVERIFIED",
+      "receipt": {
+        "path": "validation/v2-all-source-pipeline-implementation-receipt.json",
+        "sha256": "8e2a5e2c9c47ca3ca29577bb1d7cd8d7506d23ad460f904aca93a9663dbfc7df"
+      },
+      "remaining_feature_obligations": []
     },
     {
       "path": "upstream/rocket-chip/src/main/scala/util/Location.scala",
@@ -17110,18 +17091,12 @@
         "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py"
       ],
       "implementation_required": true,
-      "status": "IMPLEMENTATION_REVIEW_PENDING",
-      "receipt": null,
-      "remaining_feature_obligations": [
-        "Preserve enqueue/dequeue pointers, occupancy, wraparound, full/empty and simultaneous transfer priority.",
-        "Retain payload lane/port/width ordering, memory/register storage choice, and read/write latency.",
-        "Keep flow/pipe/flush/credit configuration and all backpressure branches.",
-        "Observed storage/state declarations to preserve: q via Queue; wdata via Reg; head via RegInit; tail via RegInit; size via RegInit; bl_send via RegInit; lb_send via RegInit; bl_recv via RegInit; lb_recv via RegInit; bl_finished via RegInit; lb_finished via RegInit; bl_start_recv via RegNext; lb_start_recv via RegNext.",
-        "Exact source parameter/legal-range constraints: require(inW % outW == 0, s\"MultiWidthFifo: in: $inW not divisible by out: $outW\") | require(n % nBeats == 0, s\"Cannot store $n output words when output beats is $nBeats\") | require(outW % inW == 0, s\"MultiWidthFifo: out: $outW not divisible by in: $inW\").",
-        "Exact source behavioral assertions/invariants: assert(!little2big.io.out.valid || little2big.io.out.bits === lb_recv_data, \"Little to Big data mismatch\") | assert(!big2little.io.out.valid || big2little.io.out.bits === bl_recv_data, \"Bit to Little data mismatch\") | assert(!lb_start_recv || little2big.io.count === 4.U, \"Little to Big count incorrect\") | assert(!bl_start_recv || big2little.io.count === 8.U, \"Big to Little count incorrect\").",
-        "Observed priority/control branches (source order retained): require(n % nBeats == 0, s\"Cannot store $n output words when output beats is $nBeats\") | when (io.in.fire) { | when (io.out.fire) { tail := tail + 1.U } | when (io.start) { | when (bl_send_done) { | when (lb_send_done) { | when (bl_recv_done) { | when (lb_recv_done) {.",
-        "Seed hardware markers are annotations only; source-level hardware ownership retains: Bundle, IO, Module, Reg, RegInit, RegNext, UInt, Vec."
-      ]
+      "status": "IMPLEMENTED_EXPORT_PASS_BEHAVIOR_UNVERIFIED",
+      "receipt": {
+        "path": "validation/v2-all-source-pipeline-implementation-receipt.json",
+        "sha256": "8e2a5e2c9c47ca3ca29577bb1d7cd8d7506d23ad460f904aca93a9663dbfc7df"
+      },
+      "remaining_feature_obligations": []
     },
     {
       "path": "upstream/rocket-chip/src/main/scala/util/MuxLiteral.scala",
@@ -17273,16 +17248,12 @@
         "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py"
       ],
       "implementation_required": true,
-      "status": "IMPLEMENTATION_REVIEW_PENDING",
-      "receipt": null,
-      "remaining_feature_obligations": [
-        "Preserve enqueue/dequeue pointers, occupancy, wraparound, full/empty and simultaneous transfer priority.",
-        "Retain payload lane/port/width ordering, memory/register storage choice, and read/write latency.",
-        "Keep flow/pipe/flush/credit configuration and all backpressure branches.",
-        "Observed storage/state declarations to preserve: roq_data via Reg; roq_tags via Reg; roq_free via RegInit; roq_data via Mem.",
-        "Observed priority/control branches (source order retained): when (io.enq.valid && io.enq.ready) { | when (io.deq.valid) {.",
-        "Seed hardware markers are annotations only; source-level hardware ownership retains: Bool, Bundle, IO, Mem, Module, Reg, RegInit, UInt, Vec."
-      ]
+      "status": "IMPLEMENTED_EXPORT_PASS_BEHAVIOR_UNVERIFIED",
+      "receipt": {
+        "path": "validation/v2-all-source-pipeline-implementation-receipt.json",
+        "sha256": "8e2a5e2c9c47ca3ca29577bb1d7cd8d7506d23ad460f904aca93a9663dbfc7df"
+      },
+      "remaining_feature_obligations": []
     },
     {
       "path": "upstream/rocket-chip/src/main/scala/util/Repeater.scala",
@@ -17291,17 +17262,12 @@
         "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py"
       ],
       "implementation_required": true,
-      "status": "IMPLEMENTATION_REVIEW_PENDING",
-      "receipt": null,
-      "remaining_feature_obligations": [
-        "Preserve enqueue/dequeue pointers, occupancy, wraparound, full/empty and simultaneous transfer priority.",
-        "Retain payload lane/port/width ordering, memory/register storage choice, and read/write latency.",
-        "Keep flow/pipe/flush/credit configuration and all backpressure branches.",
-        "Source functions whose behavior/parameters must be accounted for: apply.",
-        "Observed storage/state declarations to preserve: full via RegInit; saved via Reg.",
-        "Observed priority/control branches (source order retained): when (io.enq.fire &&  io.repeat) { full := true.B; saved := io.enq.bits } | when (io.deq.fire && !io.repeat) { full := false.B }.",
-        "Seed hardware markers are annotations only; source-level hardware ownership retains: Bool, Bundle, IO, Module, Reg, RegInit."
-      ]
+      "status": "IMPLEMENTED_EXPORT_PASS_BEHAVIOR_UNVERIFIED",
+      "receipt": {
+        "path": "validation/v2-all-source-pipeline-implementation-receipt.json",
+        "sha256": "8e2a5e2c9c47ca3ca29577bb1d7cd8d7506d23ad460f904aca93a9663dbfc7df"
+      },
+      "remaining_feature_obligations": []
     },
     {
       "path": "upstream/rocket-chip/src/main/scala/util/Replacement.scala",
@@ -17399,17 +17365,12 @@
         "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py"
       ],
       "implementation_required": true,
-      "status": "IMPLEMENTATION_REVIEW_PENDING",
-      "receipt": null,
-      "remaining_feature_obligations": [
-        "Preserve enqueue/dequeue pointers, occupancy, wraparound, full/empty and simultaneous transfer priority.",
-        "Retain payload lane/port/width ordering, memory/register storage choice, and read/write latency.",
-        "Keep flow/pipe/flush/credit configuration and all backpressure branches.",
-        "Source functions whose behavior/parameters must be accounted for: apply, paddedValid.",
-        "Observed storage/state declarations to preserve: valid via RegInit; elts via Reg; q via Queue.",
-        "Observed priority/control branches (source order retained): when (wen) { elts(i) := wdata } | when (io.enq.valid) { io.deq.valid := true.B } | when (!valid(0)) { io.deq.bits := io.enq.bits } | when (io.deq.ready) { io.enq.ready := true.B }.",
-        "Seed hardware markers are annotations only; source-level hardware ownership retains: IO, Module, Reg, RegInit, UInt, Vec."
-      ]
+      "status": "IMPLEMENTED_EXPORT_PASS_BEHAVIOR_UNVERIFIED",
+      "receipt": {
+        "path": "validation/v2-all-source-pipeline-implementation-receipt.json",
+        "sha256": "8e2a5e2c9c47ca3ca29577bb1d7cd8d7506d23ad460f904aca93a9663dbfc7df"
+      },
+      "remaining_feature_obligations": []
     },
     {
       "path": "upstream/rocket-chip/src/main/scala/util/ShiftReg.scala",

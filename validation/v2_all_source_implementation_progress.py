@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections import Counter
+import ast
 import hashlib
 import json
 from pathlib import Path
@@ -15,6 +16,45 @@ OUTPUT = ROOT / "validation/v2-all-source-implementation-progress.json"
 
 def checksum(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def bound_symbols(target: str) -> set[str]:
+    tree = ast.parse((ROOT / target).read_text(encoding="utf-8"))
+    symbols: set[str] = set()
+    for node in tree.body:
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+            symbols.add(node.name)
+        if isinstance(node, ast.ClassDef):
+            for child in node.body:
+                if isinstance(child, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                    symbols.add(node.name + "." + child.name)
+                elif isinstance(child, ast.AnnAssign) and isinstance(child.target, ast.Name):
+                    symbols.add(node.name + "." + child.target.id)
+    return symbols
+
+
+def bound_export(binding: dict, kind: str) -> bool:
+    key = "export_receipt" if kind == "build" else "runtime_import_receipt"
+    record = binding.get(key)
+    if not isinstance(record, dict) or not isinstance(record.get("path"), str):
+        return False
+    path = (ROOT / record["path"]).resolve()
+    if not path.is_relative_to((ROOT / "validation").resolve()) or not path.is_file() or record.get("sha256") != checksum(path):
+        return False
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if payload.get("source_plan_sha256") != checksum(PLAN):
+        return False
+    expected = "EXPORT_PASS_BEHAVIOR_UNVERIFIED" if kind == "build" else "RUNTIME_IMPORT_PASS_BEHAVIOR_UNVERIFIED"
+    matching = [row for row in payload.get("results", []) if row.get("path") == binding["path"]]
+    if len(matching) != 1 or matching[0].get("sha256") != binding.get("sha256") or matching[0].get("status") != expected:
+        return False
+    if kind == "build":
+        if not matching[0].get("exports") or matching[0].get("contract_only_members"):
+            return False
+    test = matching[0].get("direct_test_structure", {})
+    test_path = ROOT / test.get("path", "")
+    return (test.get("status") == "STATIC_TEST_PASS_BEHAVIOR_NOT_RUN" and test_path.is_file()
+            and test.get("sha256") == checksum(test_path))
 
 
 def main() -> int:
@@ -44,10 +84,20 @@ def main() -> int:
                 target in bindings and (ROOT / target).is_file()
                 and bindings[target].get("sha256") == checksum(ROOT / target)
                 and bindings[target].get("native_export_pass" if target_kinds[target] == "build" else "runtime_import_pass") is True
+                and bound_export(bindings[target], target_kinds[target])
                 for target in row["python_targets"])
             obligations = entry.get("feature_implementations", [])
             planned_obligations = row.get("feature_obligations", [])
-            reviewed = {item.get("obligation") for item in obligations if item.get("python_symbol") and item.get("review_status") == "IMPLEMENTED_REVIEWED"}
+            symbols = {target: bound_symbols(target) for target in row["python_targets"] if (ROOT / target).is_file()}
+            reviewed = set()
+            for item in obligations:
+                target = item.get("python_target")
+                if target is None and len(row["python_targets"]) == 1:
+                    target = row["python_targets"][0]
+                if (item.get("python_symbol") in symbols.get(target, set())
+                        and item.get("review_status") == "IMPLEMENTED_REVIEWED"
+                        and item.get("reviewed_by") == "coordinator"):
+                    reviewed.add(item.get("obligation"))
             full_review = set(planned_obligations).issubset(reviewed) and not entry.get("unimplemented_features")
             if required and source_ok and build_ok and full_review:
                 result["status"] = "IMPLEMENTED_EXPORT_PASS_BEHAVIOR_UNVERIFIED"

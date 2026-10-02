@@ -1,0 +1,33 @@
+{
+  "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py": [
+    {"module": "Pipe", "width": 13, "latency": 0},
+    {"module": "Pipe", "width": 0, "latency": 2},
+    {"module": "Pipe", "width": 13, "latency": 3},
+    {"module": "LatencyPipe", "width": 13, "latency": 0},
+    {"module": "LatencyPipe", "width": 13, "latency": 4},
+    {"module": "Broadcaster", "width": 13, "targets": 1},
+    {"module": "Broadcaster", "width": 0, "targets": 2},
+    {"module": "Broadcaster", "width": 13, "targets": 5},
+    {"module": "Repeater", "width": 13},
+    {"module": "ShiftQueue", "width": 13, "entries": 1, "pipe": false, "flow": false},
+    {"module": "ShiftQueue", "width": 13, "entries": 3, "pipe": false, "flow": true},
+    {"module": "ShiftQueue", "width": 13, "entries": 3, "pipe": true, "flow": false},
+    {"module": "ShiftQueue", "width": 13, "entries": 3, "pipe": true, "flow": true},
+    {"module": "ReorderQueue", "width": 13, "tag_width": 3, "reorder_size": 3},
+    {"module": "ReorderQueue", "width": 13, "tag_width": 2},
+    {"module": "ReorderQueue", "width": 13, "tag_width": 0},
+    {"module": "MultiWidthFifo", "input_width": 8, "output_width": 8, "entries": 3},
+    {"module": "MultiWidthFifo", "input_width": 0, "output_width": 0, "entries": 2},
+    {"module": "MultiWidthFifo", "input_width": 24, "output_width": 8, "entries": 6},
+    {"module": "MultiWidthFifo", "input_width": 8, "output_width": 24, "entries": 3},
+    {"module": "CreditedIOCounter", "entries": 1, "initial_credits": 0},
+    {"module": "CreditedIOCounter", "entries": 0, "initial_credits": 0},
+    {"module": "CreditedIOCounter", "entries": 5, "initial_credits": 3},
+    {"module": "CreditedIOPipeline", "width": 13, "debit_delay": 0, "credit_delay": 0},
+    {"module": "CreditedIOPipeline", "width": 13, "debit_delay": 3, "credit_delay": 2},
+    {"module": "CreditedIOSender", "width": 13, "entries": 3, "pipe": false},
+    {"module": "CreditedIOSender", "width": 13, "entries": 3, "pipe": true},
+    {"module": "CreditedIOReceiver", "width": 13, "entries": 1, "flow": false},
+    {"module": "CreditedIOReceiver", "width": 13, "entries": 3, "flow": true}
+  ]
+}
