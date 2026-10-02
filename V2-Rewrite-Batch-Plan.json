@@ -1,7 +1,23 @@
 {
   "schema_version": 1,
   "kind": "XIANGSHAN_KUNMINGHU_V2_REWRITE_BATCH_PLAN",
-  "authority": "V2-Core-Rewrite-Inventory.json + V2-Dependency-Family-Inventory.json + V2-Rewrite-Freeze-Manifest.json",
+  "authority": "validation/v2-all-source-rewrite-plan.json; previous inventories retain historical mapping and proof provenance",
+  "current_execution_phase": "ALL_SOURCE_BULK_REWRITE_NATIVE_EXPORT_THEN_BEHAVIOR_VALIDATION",
+  "all_source_plan": {
+    "path": "validation/v2-all-source-rewrite-plan.json",
+    "scala_files": 1736,
+    "scala_lines": 392557,
+    "declarations_assigned": 10846,
+    "current_candidate_build_files": 123,
+    "new_build_files_planned": 16,
+    "new_runtime_files_planned": 1,
+    "planned_build_files": 139,
+    "planned_runtime_files": 1,
+    "missing_direct_test_files": 95,
+    "behavior_validation_during_rewrite": "DEFERRED",
+    "implementation_complete": false,
+    "acceptance_eligible": false
+  },
   "worker_model": "gpt-6-luna",
   "reasoning_effort": "max",
   "validator_model": "gpt-6-luna",
@@ -572,19 +588,19 @@
     "bounded_parent_pass_count": 7,
     "bounded_dependency_family_pass_count": 21,
     "strict_complete_equivalence_build_count": 48,
-    "strict_complete_equivalence_build_denominator": 122,
+    "strict_complete_equivalence_build_denominator": 123,
     "strict_complete_equivalence_policy": "Count only a Build with complete locked-DefaultConfig-XSTop input/state-space or formal/reference equivalence evidence under Rules section 5D. Every counting record must use a repository-contained validator, lock the Build plus all declared Scala/reference/child sources, recursively pass static/ABI/deterministic gates, carry complete-output formal markers, and pass decisive target-side and reference-side negative controls; strict failures and unclosed lists must be empty. Aggregate Builds bind their exact LOCKED_VARIANTS/catalog scope and every variant/reference. Scala fields or legal configurations removed by locked elaboration are explicit non-claims. Older schemas, PASS_BOUNDED, structural ports, tool lint, and reduced parent probes do not increment this rail.",
     "validated_batch_count": 54,
     "count_reconciliation": {
       "source": "validation/v2-strict-equivalence-progress.json",
-      "fraction": "48/122",
+      "fraction": "48/123",
       "historical_pending_audit_failures": 10,
       "note": "Count regenerated from independent evidence audit; audit failures remain visible."
     },
     "planned_build_file_count": 78,
-    "current_build_file_count": 122,
+    "current_build_file_count": 123,
     "tracked_build_file_count": 122,
-    "draft_build_file_count": 0,
+    "draft_build_file_count": 1,
     "rewrite_freeze_basic_gate_status": "ACTIVE",
     "exact_parent_envelopes": {
       "Frontend": {

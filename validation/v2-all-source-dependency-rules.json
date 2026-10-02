@@ -1,0 +1,308 @@
+{
+  "schema_version": 1,
+  "kind": "V2_ALL_SOURCE_DEPENDENCY_SCAN_RULES",
+  "status": "PLANNING_ONLY",
+  "authority": "Reviewed source responsibilities for the 461 selected Scala files. The seed supplies hashes and declaration inventory; historical rewrite/provenance mappings are routing hints only and grant no implementation credit.",
+  "classification_definitions": {
+    "HARDWARE_BEHAVIOR": "Sequential or combinational hardware behavior to be represented by Python/Amaranth and later behavior-verified.",
+    "ELABORATION_CONFIG": "A source-owned legal parameter, protocol selection, wrapper topology, or generated hardware mode. Every named mode remains planned even when unused by DefaultConfig.",
+    "HOST_TOOL": "Build, code-generation, logging, test, or simulation host behavior that has no standalone hardware implementation. Its environment contract is recorded explicitly.",
+    "TEST_ONLY": "A test, agent, scoreboard, or vector generator. It is a later direct-test obligation and receives no Build implementation credit.",
+    "DECLARATION_SUPPORT": "Bundle, enum, parameter, or helper declarations that shape a hardware family ABI or equations and must be consumed by that family.",
+    "MIXED_HARDWARE_SUPPORT": "A source combines hardware, elaboration, test, or host behavior; the row records each obligation and does not discard the file."
+  },
+  "selected_roots": [
+    {"name": "yunsuan", "file_count": 92},
+    {"name": "utility", "file_count": 62},
+    {"name": "openLLC", "file_count": 118},
+    {"name": "huancun", "file_count": 57},
+    {"name": "fudian", "file_count": 18},
+    {"name": "difftest", "file_count": 37},
+    {"name": "coupledL2", "file_count": 68},
+    {"name": "ChiselIOPMP", "file_count": 3},
+    {"name": "ChiselAIA", "file_count": 6}
+  ],
+  "targets": [
+    {
+      "id": "yun_scalar",
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.YunSuan.Scalar-Hardware.py",
+      "existing_expected": true,
+      "responsibility": "Scalar YunSuan conversion, format selection, rounding, and scalar FPU control. Current file presence does not establish full source coverage or behavior.",
+      "required_configuration_modes": ["integer-to-floating formats and signedness", "floating-to-integer rounding/saturation modes", "f16/f32/f64 format selection", "full versus lite helper selection where consumed"],
+      "companions": ["utility_bitselect", "utility_delay", "yun_fpu"]
+    },
+    {
+      "id": "yun_vector",
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.YunSuan.Vector-Hardware.py",
+      "existing_expected": true,
+      "responsibility": "Vector integer/floating arithmetic, conversion, reductions, permutation, iterative divide/square-root, and vector control support. The vector source set remains pending a source-derived behavior inventory.",
+      "required_configuration_modes": ["SEW 8/16/32/64 and lane count", "mask/vstart/vl and tail policy", "integer ALU/fixed-point/reduction", "floating add/FMA/divide/square-root and rounding", "permutation gather/slide/compress and FSM", "SRT radix-4/radix-16 divide modes"],
+      "companions": ["utility_bitselect", "utility_delay", "utility_pipeline", "yun_fpu"]
+    },
+    {
+      "id": "yun_fpu",
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.YunSuan.FpuFamily-Hardware.py",
+      "existing_expected": false,
+      "responsibility": "New aggregate for the distinct YunSuan full-FPU and fpulite source families; preserve each implementation variant and its own latency/rounding behavior instead of folding them into a generic vector boundary.",
+      "required_configuration_modes": ["fpu versus fpulite implementation", "f16/f32/f64 operation selection", "pipeline enable/valid timing", "rounding, exceptional values, divide and square-root iterations"],
+      "companions": ["utility_bitselect", "utility_delay", "utility_residual"]
+    },
+    {
+      "id": "utility_base",
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility-Hardware.py",
+      "existing_expected": true,
+      "responsibility": "Shared utility API and configuration records used by the external families; this target is not blanket credit for the 62 Utility source files.",
+      "required_configuration_modes": ["explicit width/depth parameters", "FPGA versus ASIC/DFT mode", "optional debug/performance/trace instrumentation"],
+      "companions": []
+    },
+    {
+      "id": "utility_bitselect",
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.BitSelectFamily-Hardware.py",
+      "existing_expected": true,
+      "responsibility": "Bit extraction, masks, one-hot/prefix selection, priority/parallel mux, lookup, and signed/unsigned field helpers.",
+      "required_configuration_modes": ["input width and element count", "priority order and default/no-hit result", "signedness and out-of-range behavior"],
+      "companions": ["utility_base"]
+    },
+    {
+      "id": "utility_delay",
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.DelayFamily-Hardware.py",
+      "existing_expected": true,
+      "responsibility": "Hold, delay, pipeline, register-slice, latency, and valid/ready state helpers.",
+      "required_configuration_modes": ["zero/one/multiple cycle delay", "valid and ready backpressure", "flow/pipe and reset initialization", "flush/hold and simultaneous enqueue/dequeue"],
+      "companions": ["utility_base"]
+    },
+    {
+      "id": "utility_pipeline",
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.PipelineFamily-Hardware.py",
+      "existing_expected": true,
+      "responsibility": "Queue, circular pointer, arbitration, SRAM-backed queue and MBIST pipeline/control families.",
+      "required_configuration_modes": ["queue depth and pointer wrap", "round-robin/fixed priority", "single/dual-port SRAM and read latency", "MBIST/SRAM control enabled and disabled", "reset and simultaneous operations"],
+      "companions": ["utility_base", "utility_delay", "utility_residual"]
+    },
+    {
+      "id": "utility_residual",
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Utility.ResidualFamily-Hardware.py",
+      "existing_expected": true,
+      "responsibility": "Remaining source-backed utility behavior including ECC, memory templates, CAM, clock/reset control, replacement, register maps, and performance counter state. Host macros and generated files are separately classified.",
+      "required_configuration_modes": ["SEC/SECDED and error injection", "clock gating and test enable", "ECC/MBIST/SRAM mode", "reset polarity and reset-scrub length", "replacement policy selection", "performance counter enable/overflow"],
+      "companions": ["utility_base", "utility_delay", "difftest_runtime"]
+    },
+    {
+      "id": "openllc_cache",
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Dependency.OpenLLC.Cache-Hardware.py",
+      "existing_expected": true,
+      "responsibility": "OpenLLC CHI cache pipeline: request classification, directory/coherence transitions, refill/data storage, memory/response/snoop units, multi-bank parent wiring and sideband status.",
+      "required_configuration_modes": ["ways/sets/blockBytes/beatBytes/banks", "inclusive versus non-inclusive client-cache count", "MSHR counts for refill/response/snoop/memory", "replacement policy and address SAM", "CHI issue variant and RN/SN counts", "FPGA/performance/top-down/logging modes"],
+      "companions": ["openllc_bridge", "openllc_ncb", "openllc_sram", "coupled_bridge", "utility_pipeline", "utility_residual"]
+    },
+    {
+      "id": "openllc_bridge",
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Dependency.OpenLLC.Bridge-Hardware.py",
+      "existing_expected": true,
+      "responsibility": "OpenLLC CHI TX/RX channel adapters, flit packing, ready/valid transfers, link activation, and credit accounting.",
+      "required_configuration_modes": ["REQ/RSP/DAT/SNP channel presence", "link STOP/ACTIVATE/RUN/DEACTIVATE", "credit depth and return timing", "blocking and bypass conversion"],
+      "companions": ["coupled_bridge", "utility_pipeline"]
+    },
+    {
+      "id": "openllc_ncb",
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Dependency.OpenLLC.OpenNCB-Hardware.py",
+      "existing_expected": true,
+      "responsibility": "The 89-file OpenNCB family: AXI4 and CHI channel ABI, transaction ID/order/age/free-list state, request/data/response queues, burst conversion, and link-credit control.",
+      "required_configuration_modes": ["AXI4 widths/IDs/outstanding count", "CHI Issue encoding and flit widths", "transaction pool/queue depth", "AXI read/write ordering and burst lengths", "credit depth/backpressure/reset"],
+      "companions": ["openllc_bridge", "openllc_sram", "utility_bitselect", "utility_pipeline"]
+    },
+    {
+      "id": "openllc_sram",
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Dependency.OpenLLC.Sram-Hardware.py",
+      "existing_expected": true,
+      "responsibility": "OpenLLC bank routing, MMIO transaction-ID divergence/merge, TargetBinder elaboration, and synchronous SRAM read/write forwarding.",
+      "required_configuration_modes": ["bank count/address decode", "MMIO ID and ordering behavior", "SRAM depth/width/latency", "read/write collision and byte mask"],
+      "companions": ["utility_pipeline", "utility_residual"]
+    },
+    {
+      "id": "huancun_cache",
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Dependency.HuanCun.Cache-Hardware.py",
+      "existing_expected": true,
+      "responsibility": "Shared HuanCun cache path: TileLink A-E traffic, directory/data storage, source/sink control, refill, prefetch, ECC/DFT and shared queue helpers.",
+      "required_configuration_modes": ["sets/ways/block/beat and MSHR counts", "prefetcher and source metadata variants", "inclusive/non-inclusive mode selection", "tag/data ECC and data-check/poison", "MBIST/SRAM control", "perf/debug/top-down/FPGA"],
+      "companions": ["huancun_inclusive", "huancun_noninclusive", "utility_pipeline", "utility_residual"]
+    },
+    {
+      "id": "huancun_inclusive",
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Dependency.HuanCun.Inclusive-Mshr-Hardware.py",
+      "existing_expected": true,
+      "responsibility": "Inclusive HuanCun directory/MSHR/SinkC transaction family, including allocation, retained source/address, refill completion, release/probe and cancellation.",
+      "required_configuration_modes": ["inclusive directory and client metadata", "MSHR depth and source matching", "SinkC response/flush behavior"],
+      "companions": ["utility_pipeline"]
+    },
+    {
+      "id": "huancun_noninclusive",
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Dependency.HuanCun.Noninclusive-Bridge-Hardware.py",
+      "existing_expected": true,
+      "responsibility": "Non-inclusive HuanCun directory/MSHR/probe helper/slice control bridge, with probe/snoop ordering and TileLink handshakes.",
+      "required_configuration_modes": ["non-inclusive metadata and probe tracking", "MSHR depth/source/address matching", "request/probe backpressure and flush"],
+      "companions": ["utility_pipeline"]
+    },
+    {
+      "id": "fudian_fpu",
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Fudian.Fpu-Hardware.py",
+      "existing_expected": true,
+      "responsibility": "Fudian floating-point add/compare/multiply/FMA/divide/square-root/conversion and rounding family.",
+      "required_configuration_modes": ["f16/f32/f64 and legal operand formats", "rounding modes and exception flags", "normal/subnormal/NaN/Inf/zero cases", "iterative divide/square-root state and pipeline latency", "FCMA mode"],
+      "companions": ["fudian_arithmetic", "utility_bitselect", "utility_delay"]
+    },
+    {
+      "id": "fudian_arithmetic",
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Fudian.Arithmetic-Hardware.py",
+      "existing_expected": true,
+      "responsibility": "Fudian shared CLZ, carry-save adder, leading-zero anticipation, multiplier and shift-right-jam arithmetic helpers.",
+      "required_configuration_modes": ["operand width and signedness", "multi-operand CSA geometry", "normalization leading-zero cases", "sticky-bit/jam shifts and truncation"],
+      "companions": ["utility_bitselect", "utility_delay"]
+    },
+    {
+      "id": "difftest_interface",
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Difftest.Interface-Hardware.py",
+      "existing_expected": true,
+      "responsibility": "Difftest hardware-facing ABI and real trace/control transactions. DPI software callbacks require the separate Runtime-Hdl contract and cannot be represented by an output-less or zero-value RTL shell.",
+      "required_configuration_modes": ["architectural commit/event payload variants", "trace FIFO depth, overflow, reset and backpressure", "AXI/AXI-lite interface widths and outstanding transactions", "FPGA host/memory/flash/SD-card branches", "optional top-down trace endpoints"],
+      "companions": ["difftest_runtime", "utility_delay", "utility_pipeline"]
+    },
+    {
+      "id": "difftest_state",
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.Difftest.StateFamily-Hardware.py",
+      "existing_expected": true,
+      "responsibility": "Difftest commit, architectural state, event, batching, delta, replay, squash, trace, and top-down stateful endpoints. Current CONTRACT_ONLY members remain pending real state equations and direct/reference evidence.",
+      "required_configuration_modes": ["each locked event payload/enable mode", "reset and register hold/update semantics", "batch and delta ordering", "trace overflow/backpressure", "replay/squash state and top-down collection"],
+      "companions": ["difftest_interface", "difftest_runtime", "utility_delay", "utility_pipeline"]
+    },
+    {
+      "id": "coupled_slice",
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Dependency.CoupledL2.Slice-Hardware.py",
+      "existing_expected": true,
+      "responsibility": "Shared source-backed CoupledL2 transaction records, storage/prefetch/monitor helpers and common slice behavior. It is a reusable child family; parent topology and the TL2TL/CHI protocol engines have separate Build targets.",
+      "required_configuration_modes": ["sets/ways/block/beat/bank and MSHR counts", "ECC/data-check/poison and MBIST/SRAM control", "prefetch selection and metadata", "L2 flush and async source-ready", "EnableCHI false/true", "perf/debug/top-down/FPGA/logging"],
+      "companions": ["huancun_cache", "utility_pipeline", "utility_residual"]
+    },
+    {
+      "id": "coupled_top",
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Dependency.CoupledL2.Top-Hardware.py",
+      "existing_expected": false,
+      "responsibility": "New CoupledL2 parent Build for the BaseSlice/CoupledL2 wrapper path; selects and wires the common, Directory, TL2TL and CHI family APIs through controller injection.",
+      "required_configuration_modes": ["EnableCHI=false TileLink parent", "EnableCHI=true CHI parent", "bank count/slice ID and L1 client geometry", "L2 flush, async source-ready and optional monitor/DFT wiring"],
+      "companions": ["coupled_slice", "coupled_directory", "coupled_tl2tl", "coupled_bridge"]
+    },
+    {
+      "id": "coupled_directory",
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Dependency.CoupledL2.Directory-Hardware.py",
+      "existing_expected": true,
+      "responsibility": "CoupledL2 tag/meta directory lookup, replacement selection, reset scrub, refill retry/occupied-way exclusion, ECC and MBIST/DFT access.",
+      "required_configuration_modes": ["set/way count and replacement policy", "meta state/clients/alias/prefetch flags", "MSHR occupied-way retry", "tag/data ECC", "MBIST/SRAM control", "CMO way/all behavior"],
+      "companions": ["coupled_slice", "utility_residual", "utility_pipeline"]
+    },
+    {
+      "id": "coupled_bridge",
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Dependency.CoupledL2.Bridge-Hardware.py",
+      "existing_expected": true,
+      "responsibility": "CoupledL2 CHI message layouts and TL2CHI adapter, link activation/credit accounting, CHI RX/TX channel state, MMIO bridge, MSHR, snoop and slice behavior.",
+      "required_configuration_modes": ["EnableCHI selected and unselected", "CHI message/field/opcode variants", "L-Credit depth/link states/async crossing", "MMIO request and response ordering", "CHI RXDAT/RXRSP/RXSNP and TXREQ/TXDAT/TXRSP backpressure"],
+      "companions": ["coupled_slice", "coupled_directory", "utility_pipeline", "utility_delay"]
+    },
+    {
+      "id": "coupled_tl2tl",
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Memory/Cpu-Memory-Dependency.CoupledL2.TL2TLFamily-Hardware.py",
+      "existing_expected": false,
+      "responsibility": "New TileLink-to-TileLink CoupledL2 protocol family aggregate; separates Acquire/MainPipe/MSHR/ProbeQueue/Refill/SinkB/SourceC state from the broad common Slice boundary.",
+      "required_configuration_modes": ["EnableCHI=false TileLink branch", "TileLink A-E opcode/size/source and beat geometry", "MSHR/probe/refill queue depth and ordering", "SinkB probe backpressure and SourceC release beats", "directory retry, flush and refill response"],
+      "companions": ["coupled_slice", "coupled_directory", "utility_pipeline", "utility_delay", "huancun_cache"]
+    },
+    {
+      "id": "iopmp",
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.ChiselIOPMP.Interface-Hardware.py",
+      "existing_expected": true,
+      "responsibility": "ChiselIOPMP register/config table, request checking and AXI bridge; preserve APB setup/access, range matching, permission/error reports and interrupt behavior despite absence from the selected top.",
+      "required_configuration_modes": ["one and multiple bridges", "AXI IDs/outstanding count/beat/address width", "APB register widths and write-one semantics", "NA4/NAPOT range modes and partial/full address overlap", "read/write/supervisor policy and priority/partial match", "disabled and enabled bypass/error FSM"],
+      "companions": ["utility_bitselect", "utility_pipeline"]
+    },
+    {
+      "id": "aia",
+      "path": "python/Program-System/System-Build/Build-Cpu/Cpu-Core/Cpu-Core-Dependency.ChiselAIA.Interface-Hardware.py",
+      "existing_expected": true,
+      "responsibility": "APLIC/IMSIC hardware and both source-owned TileLink and AXI4 topologies. The existing compact register boundary is only a starting candidate; it does not cover the six Scala files by itself.",
+      "required_configuration_modes": ["TLAIA TileLink topology", "AXI4AIA topology and AXI4-to-AXI4-lite/TL bridges", "groups/members/hart index/address stride", "IMSIC M/S/guest files and TEE enabled/disabled", "IMSIC async bridge enabled/disabled", "APLIC source modes/priority/threshold/delegation/MSI"],
+      "companions": ["utility_bitselect", "utility_delay", "utility_pipeline"]
+    }
+  ],
+  "runtime_targets": [
+    {
+      "id": "difftest_runtime",
+      "path": "python/Program-System/System-Runtime/Runtime-Hdl/Runtime-Hdl-UHSC.Trace-Hardware.py",
+      "existing_expected": false,
+      "kind": "runtime",
+      "responsibility": "Pure-standard-library deterministic trace/DPI endpoint contract: event schema, callback registration/dispatch, reset and enable gates, event order, bounded queues/backpressure and explicit missing-endpoint errors. It does not rewrite or claim compatibility with external C++ implementations.",
+      "required_configuration_modes": ["enabled/disabled simulation tracing", "posedge/negedge callback schedule", "reset/enable/comb-output endpoint shape", "bounded trace queue and overflow policy", "external C++/DPI function names remain an explicit environment contract"],
+      "source_patterns": [
+        "^upstream/difftest/src/main/scala/DPIC\\.scala$",
+        "^upstream/difftest/src/main/scala/Trace\\.scala$",
+        "^upstream/difftest/src/main/scala/Replay\\.scala$",
+        "^upstream/difftest/src/main/scala/plugin/topdown/TopdownDPI\\.scala$",
+        "^upstream/utility/src/main/scala/utility/ChiselTaggedTrace\\.scala$",
+        "^upstream/utility/src/main/scala/utility/ChiselDB\\.scala$",
+        "^upstream/utility/src/main/scala/utility/chiron/CLog\\.scala$"
+      ],
+      "direct_test": "python/Program-System/System-Testing/Testing-Hdl/Testing-Hdl-UHSC.Trace-Hardware.py"
+    }
+  ],
+  "routes": [
+    {"id":"yun_test","pattern":"^upstream/yunsuan/src/test/scala/","classification":"AUTO_TEST","targets":["yun_vector","yun_scalar","yun_fpu"],"reason":"YunSuan Scala test vectors, wrappers and test tops are retained as explicit Python direct-test cases; any Chisel helper in the same source remains a separate fixture obligation.","features":["Preserve conversion, arithmetic, permutation, divide and pipeline test scenarios as deterministic direct Python cases; retain full-FPU versus fpulite and all selected vector operation families."],"disposition":"TEST_ONLY_CASES_TO_DIRECT_PYTHON_TEST"},
+    {"id":"yun_encoding","pattern":"^upstream/yunsuan/src/main/scala/yunsuan/(encoding/|package\\.scala$)","classification":"ELABORATION_CONFIG","targets":["yun_scalar","yun_vector","yun_fpu"],"reason":"Opcode, vector element format, operand type and operation tables define legal hardware modes and bundle ABI consumed by the YunSuan families.","features":["Preserve every opcode/type encoding, f16/f32/f64 format, signedness, lane/SEW selection and bundle field width; configuration tables must affect generated equations."],"disposition":"CONFIGURATION_SCHEMA_PLANNED_PENDING_MODE_VALIDATION"},
+    {"id":"yun_scalar","pattern":"^upstream/yunsuan/src/main/scala/yunsuan/scalar/","classification":"HARDWARE_BEHAVIOR","targets":["yun_scalar"],"reason":"Scalar conversion, rounding and format helpers contain source-owned data paths and control used by the scalar floating-point family.","features":["IntToFP and FP conversion sign/width/normalization paths; rounding mode and exceptional-value handling; valid/enable timing."],"disposition":"AMARANTH_BEHAVIOR_PLANNED_PENDING_VERIFICATION"},
+    {"id":"yun_fpu","pattern":"^upstream/yunsuan/src/main/scala/yunsuan/(fpu/|fpulite/)","classification":"HARDWARE_BEHAVIOR","targets":["yun_fpu"],"reason":"The full and fpulite packages contain separate adder, divider, FMA and square-root modules with source-defined pipeline state.","features":["Keep fpu and fpulite variants distinct; preserve floating formats, iterative quotient/root selection, rounding/flags and each register-enable/latency boundary."],"disposition":"AMARANTH_BEHAVIOR_PLANNED_PENDING_VERIFICATION"},
+    {"id":"yun_vector","pattern":"^upstream/yunsuan/src/main/scala/yunsuan/vector/","classification":"HARDWARE_BEHAVIOR","targets":["yun_vector"],"reason":"Vector source packages implement ALU, conversion, floating arithmetic, integer divide, permutation, and vector control datapaths.","features":["Preserve SEW/lane and mask/vstart/vl branches; ALU/reduction carry and saturation; conversion rounding; gather/slide/compress overlap; iterative divider/root state and backpressure."],"disposition":"AMARANTH_BEHAVIOR_PLANNED_PENDING_VERIFICATION"},
+    {"id":"yun_util","pattern":"^upstream/yunsuan/src/main/scala/yunsuan/util/","classification":"DECLARATION_SUPPORT","targets":["yun_scalar","yun_vector","yun_fpu"],"reason":"Shared bit, mask, selection, lookup and clock-enable helpers feed several YunSuan families and therefore belong to their explicit injected support closure.","features":["Preserve width/signedness, one-hot and priority order, mask boundaries, clock-enable holds, and each consuming family’s exact helper subset."],"disposition":"FAMILY_SUPPORT_API_PLANNED_PENDING_CONSUMER_COVERAGE"},
+    {"id":"utility_test","pattern":"^upstream/utility/src/test/","classification":"AUTO_TEST","targets":["utility_base","utility_bitselect","utility_delay","utility_pipeline","utility_residual"],"reason":"The SRAMTemplate Scala test source defines host test cases and possible hardware fixtures; retain fixture versus oracle responsibilities separately.","features":["Preserve single/dual-port and folded SRAM transaction vectors, read latency, write masks, collision behavior and test topology as direct Python tests."],"disposition":"TEST_ONLY_CASES_TO_DIRECT_PYTHON_TEST"},
+    {"id":"utility_host","pattern":"^upstream/utility/src/main/scala/utility/(ExtractVerilogModules|FileRegisters|mbist/MbistCsvGen)\\.scala$","classification":"HOST_TOOL","targets":[],"reason":"These sources parse/extract emitted Verilog, register/write generated files, or emit MBIST CSV metadata. They do not define standalone hardware and must not be copied into a Build or treated as RTL coverage.","features":["Record CLI/file/output naming and generated metadata needs in the auxiliary/controller contract; Amaranth same-name export and explicit Build configuration replace product-side HDL extraction; MBIST functional bus/pipeline remains in Utility Build families."],"disposition":"HOST_TOOL_REPLACE_OR_KEEP_IN_AUXILIARY"},
+    {"id":"utility_trace","pattern":"^upstream/utility/src/main/scala/utility/(ChiselTaggedTrace|ChiselDB)\\.scala$|^upstream/utility/src/main/scala/utility/chiron/CLog\\.scala$","classification":"MIXED_HARDWARE_SUPPORT","targets":["utility_base","utility_residual"],"reason":"These files combine event/record bundle and trigger logic with DPI-C, C++/SQLite, file or CHI-log host endpoints.","features":["Preserve hardware event fields, clock/reset/en/negedge and record ordering in Build/runtime contracts; keep C++/SQLite implementations outside this rewrite scope and raise an explicit missing-endpoint error instead of returning fake values."],"disposition":"HARDWARE_OWNER_WITH_SEPARATE_HOST_ENDPOINT_CONTRACT"},
+    {"id":"utility_bitselect","pattern":"^upstream/utility/src/main/scala/utility/(BitUtils|LookupTree|ParallelMux|PriorityMuxDefault|Select|SubVec|UIntUtils)\\.scala$","classification":"HARDWARE_BEHAVIOR","targets":["utility_bitselect"],"reason":"These utility modules provide combinational bit/mask extraction, lookup, parallel and priority selection used by dependent families.","features":["Preserve index boundaries, priority versus parallel selection, default/no-hit behavior, unsigned/signed widths and zero-width corner cases."],"disposition":"AMARANTH_BEHAVIOR_PLANNED_PENDING_VERIFICATION"},
+    {"id":"utility_delay","pattern":"^upstream/utility/src/main/scala/utility/(Hold|LatencyPipe|Pipeline|PipelineConnect|RegisterSlice|StopWatch)\\.scala$","classification":"HARDWARE_BEHAVIOR","targets":["utility_delay"],"reason":"These helpers implement cycle delay, hold/bypass, pipeline and registered ready/valid state.","features":["Preserve flow/pipe behavior, ready/valid backpressure, simultaneous transfer, reset values, requested latency and hold semantics."],"disposition":"AMARANTH_BEHAVIOR_PLANNED_PENDING_VERIFICATION"},
+    {"id":"utility_pipeline","pattern":"^upstream/utility/src/main/scala/utility/(BinaryArbiterNode|CircularQueuePtr|FastArbiter|MIMOQueue|Misc|MultiFlagCircualQueuePtr|PriorityMuxGen|Sort)\\.scala$|^upstream/utility/src/main/scala/utility/mbist/(Mbist|MbistBus|MbistClockGateCell|MbistPipeline)\\.scala$","classification":"HARDWARE_BEHAVIOR","targets":["utility_pipeline"],"reason":"These sources define arbiter/queue/pointer or MBIST control state and sequencing.","features":["Preserve pointer wrap/full-empty distinctions, enqueue/dequeue collision, arbitration fairness/priority and held grants; MBIST request routing, pipeline latency and clock-gate test control."],"disposition":"AMARANTH_BEHAVIOR_PLANNED_PENDING_VERIFICATION"},
+    {"id":"utility_support","pattern":"^upstream/utility/src/main/scala/utility/Compatibility\\.scala$|^upstream/utility/src/main/scala/utility/package\\.scala$","classification":"DECLARATION_SUPPORT","targets":["utility_base"],"reason":"Package and compatibility declarations are compile-time/public support used by utility clients and must be represented explicitly without porting Scala runtime identity.","features":["Preserve only consumed public fields, names, parameter defaults and type relationships; validate all dependent family consumers."],"disposition":"FAMILY_SUPPORT_API_PLANNED_PENDING_CONSUMER_COVERAGE"},
+    {"id":"utility_pipeline_state","pattern":"^upstream/utility/src/main/scala/utility/(ClockGate|ClockGatedReg|ClockMux|CriticalErrorUtils|GTimer|HardwarePerfMonitor|PerfCounterUtils|ResetGen|Xstatistics)\\.scala$","classification":"MIXED_HARDWARE_SUPPORT","targets":["utility_pipeline","utility_residual"],"reason":"The group mixes counters, error/reset/clock control hardware with compile-time/debug/measurement helpers.","features":["Preserve counter increment/clear/saturation, reset and clock/test-enable behavior; classify compile-time log/measurement macros as non-RTL host support with Amaranth-side replacement notes."],"disposition":"HARDWARE_OWNER_WITH_HOST_COMPILE_SUPPORT_SPLIT"},
+    {"id":"utility_residual","pattern":"^upstream/utility/src/main/scala/utility/","classification":"MIXED_HARDWARE_SUPPORT","targets":["utility_residual"],"reason":"Remaining Utility modules are mapped to the residual source-backed family; each declaration still receives its own owner and its own hardware/config/host feature obligations.","features":["Review actual source equations for ECC, SRAM/DataModuleTemplate, CAM, RegMap, replacement, logging/perf helper and Diplomacy/TileLink boundary; do not infer completion from this aggregate name."],"disposition":"MIXED_REVIEW_PENDING"},
+    {"id":"openllc_test","pattern":"^upstream/openLLC/(?:.*/)?src/test/scala/","classification":"AUTO_TEST","targets":["openllc_cache","openllc_bridge","openllc_ncb","openllc_sram"],"reason":"OpenLLC/OpenNCB test tops are host elaboration and test fixtures; any module declared in the test source remains fixture-only and cannot become product behavior by inclusion.","features":["Retain OpenLLC L3/SoC topology, NCB200 AXI/CHI branch, IDs/addresses and test modes as direct-test configurations; separate generator App behavior from Build."],"disposition":"TEST_ONLY_CASES_TO_DIRECT_PYTHON_TEST"},
+    {"id":"openllc_ncb","pattern":"^upstream/openLLC/openNCB/src/main/scala/","classification":"HARDWARE_BEHAVIOR","targets":["openllc_ncb"],"reason":"The nested OpenNCB source closure declares AXI/CHI data shapes and stateful transaction/ordering/channel machinery.","features":["AXI AR/AW/W/B/R handshake and burst conversion; CHI REQ/RSP/DAT/SNP flit packing; transaction ID allocation/free/order/age/payload; link-active and L-Credit pool state; backpressure and reset."],"disposition":"AMARANTH_BEHAVIOR_PLANNED_PENDING_VERIFICATION"},
+    {"id":"openllc_chi","pattern":"^upstream/openLLC/src/main/scala/openLLC/chi/","classification":"HARDWARE_BEHAVIOR","targets":["openllc_bridge","openllc_cache"],"reason":"OpenLLC CHI channel files define RN/SN flit boundaries and per-channel link/valid/credit behavior consumed by the cache parent.","features":["Preserve TX/RX channel direction, flit width, reset/link-active state, credit return and channel backpressure; Cache consumes this public family by controller injection."],"disposition":"AMARANTH_BEHAVIOR_PLANNED_PENDING_VERIFICATION"},
+    {"id":"openllc_util","pattern":"^upstream/openLLC/src/main/scala/openLLC/utils/","classification":"MIXED_HARDWARE_SUPPORT","targets":["openllc_sram","openllc_cache"],"reason":"OpenLLC routing/MMIO helper sources contain hardware routing plus topology/elaboration support consumed by the cache parent.","features":["Preserve bank/address routing, MMIO ID separation/merge, request ordering, SRAM timing and TargetBinder-selected node topology."],"disposition":"FAMILY_SUPPORT_API_PLANNED_PENDING_CONSUMER_COVERAGE"},
+    {"id":"openllc_cache","pattern":"^upstream/openLLC/src/main/scala/openLLC/","classification":"HARDWARE_BEHAVIOR","targets":["openllc_cache"],"reason":"OpenLLC cache sources implement a multi-stage CHI LLC, directory, data/refill/memory/response/snoop units, and configurable parent composition.","features":["Five-stage MainPipe CHI opcode/coherence updates; valid/dirty/client directory and replacement; refill beats/data storage; MSHR/transaction-ID matching; snoop conflict/CompAck ordering; 4-bank xbar/MMIO/link integration and l3Miss/top-down status."],"disposition":"AMARANTH_BEHAVIOR_PLANNED_PENDING_VERIFICATION"},
+    {"id":"huancun_test","pattern":"^upstream/huancun/src/test/scala/","classification":"AUTO_TEST","targets":["huancun_cache","huancun_inclusive","huancun_noninclusive"],"reason":"HuanCun tests include TileLink agents, fake clients, system tops and generators; source hardware helpers must remain explicit fixtures, not be dropped with test classification.","features":["Retain acquire/release/probe/refill, directory conflict, allocator/data storage, inclusive/non-inclusive and ExampleSystem configurations as direct Python cases."],"disposition":"TEST_ONLY_CASES_TO_DIRECT_PYTHON_TEST"},
+    {"id":"huancun_inclusive","pattern":"^upstream/huancun/src/main/scala/huancun/inclusive/","classification":"HARDWARE_BEHAVIOR","targets":["huancun_inclusive","huancun_cache"],"reason":"Inclusive Directory/MSHR/SinkC sources implement stateful directory and release/refill response handling.","features":["Allocate and retain request source/address; source-matched refill/release completion; valid/dirty/client state; probe/flush and response backpressure."],"disposition":"AMARANTH_BEHAVIOR_PLANNED_PENDING_VERIFICATION"},
+    {"id":"huancun_noninclusive","pattern":"^upstream/huancun/src/main/scala/huancun/noninclusive/","classification":"HARDWARE_BEHAVIOR","targets":["huancun_noninclusive","huancun_cache"],"reason":"Non-inclusive Directory/MSHR/ProbeHelper/SinkC/SliceCtrl files own a separate probe/snoop transaction path.","features":["Probe conflict and source match, non-inclusive metadata, request/probe ordering, valid/ready hold, retry/flush and returned response state."],"disposition":"AMARANTH_BEHAVIOR_PLANNED_PENDING_VERIFICATION"},
+    {"id":"huancun_config","pattern":"^upstream/huancun/src/main/scala/huancun/(HCCacheParameters|Common|utils/CustomAnnotations)\\.scala$","classification":"ELABORATION_CONFIG","targets":["huancun_cache","huancun_inclusive","huancun_noninclusive"],"reason":"These files define HuanCun cache geometry, shared metadata/field records and SRAM annotations which select generated hardware variants.","features":["Preserve legal cache geometry, inclusion mode, ECC/data-check, SRAM/MBIST selection and annotation-to-generated-memory contract."],"disposition":"CONFIGURATION_SCHEMA_PLANNED_PENDING_MODE_VALIDATION"},
+    {"id":"huancun_shared","pattern":"^upstream/huancun/src/main/scala/huancun/","classification":"HARDWARE_BEHAVIOR","targets":["huancun_cache"],"reason":"Shared HuanCun source modules define TileLink channel, cache storage, refill, arbitration, prefetch, monitoring and shared helpers.","features":["TileLink A-E handshake/order; directory and data memory timing; refill/evict/probe transactions; prefetch valid/metadata; performance/debug outputs; ECC/poison/MBIST options."],"disposition":"AMARANTH_BEHAVIOR_PLANNED_PENDING_VERIFICATION"},
+    {"id":"fudian_test","pattern":"^upstream/fudian/src/test/scala/","classification":"AUTO_TEST","targets":["fudian_fpu","fudian_arithmetic"],"reason":"Fudian source tests include FCMA vectors, argument parsing and a generation top; test and elaboration behavior stay explicit.","features":["Retain FCMA and arithmetic corner vectors, command/config options, format and generated-top modes as Python direct tests."],"disposition":"TEST_ONLY_CASES_TO_DIRECT_PYTHON_TEST"},
+    {"id":"fudian_arithmetic","pattern":"^upstream/fudian/src/main/scala/fudian/utils/","classification":"HARDWARE_BEHAVIOR","targets":["fudian_arithmetic","fudian_fpu"],"reason":"The shared utility sources contain real normalizer, CSA, multiplier and sticky-shift arithmetic used by Fudian operations.","features":["Preserve carry propagation, leading-zero detection/anticipation, multiplier products, sticky/jam shift and exact widths; FPU consumes helper behavior through injection."],"disposition":"AMARANTH_BEHAVIOR_PLANNED_PENDING_VERIFICATION"},
+    {"id":"fudian_fpu","pattern":"^upstream/fudian/src/main/scala/fudian/","classification":"HARDWARE_BEHAVIOR","targets":["fudian_fpu"],"reason":"Fudian main sources contain pipelined FADD/FCMA/FCMP/FDIV/FMUL/conversion and rounding modules plus their public data shapes.","features":["Preserve f16/f32/f64 datapaths, exception flags, rounding/tininess, normal/subnormal/NaN/Inf/zero paths, FMA and iterative divide/sqrt latency."],"disposition":"AMARANTH_BEHAVIOR_PLANNED_PENDING_VERIFICATION"},
+    {"id":"difftest_test","pattern":"^upstream/difftest/src/test/scala/","classification":"AUTO_TEST","targets":["difftest_interface","difftest_state"],"reason":"DifftestTop/Main are simulation/elaboration fixtures and must become explicit tests without turning simulator plumbing into zero-output product hardware.","features":["Preserve trace/commit and host-control top configurations; external DPI/C++ callback implementations remain an environment contract."],"disposition":"TEST_ONLY_CASES_TO_DIRECT_PYTHON_TEST"},
+    {"id":"difftest_host","pattern":"^upstream/difftest/src/main/scala/(Coverage|common/FileControl|util/Compatibility|util/Profile|util/Query|Validate)\\.scala$|^upstream/difftest/src/main/scala/common/WiringControl\\.scala$","classification":"HOST_TOOL","targets":[],"reason":"These sources are coverage/validation, file, profile/query or elaboration wiring utilities. They are host-side responsibilities, not standalone RTL Build behavior.","features":["Keep command/file/environment behavior explicit in auxiliary validation or controller configuration; do not add an empty Amaranth module or claim CPU functionality from host code."],"disposition":"HOST_TOOL_REPLACE_OR_KEEP_IN_AUXILIARY"},
+    {"id":"difftest_payload","pattern":"^upstream/difftest/src/main/scala/(Bundles|Difftest|Batch|Delta|Squash)\\.scala$","classification":"MIXED_HARDWARE_SUPPORT","targets":["difftest_state","difftest_interface"],"reason":"Architectural payload definitions and Difftest/Batch/Delta/Squash endpoints mix exact data contracts with stateful queues/register behavior.","features":["Enumerate every event/state payload field and core/index/stamp/enable variant; preserve capture enables, batch/delta ordering, squash state and exact reset/hold semantics."],"disposition":"HARDWARE_OWNER_WITH_SEPARATE_HOST_ENDPOINT_CONTRACT"},
+    {"id":"difftest_abi","pattern":"^upstream/difftest/src/main/scala/common/(AXI4|AXI4Lite|AXI4Stream|Flash|Mem|SDCard)\\.scala$|^upstream/difftest/src/main/scala/(SimTop|Preprocess|Gateway)\\.scala$|^upstream/difftest/src/main/scala/fpga/","classification":"MIXED_HARDWARE_SUPPORT","targets":["difftest_interface"],"reason":"These sources define memory/AXI/FPGA/top interfaces with simulation-host configuration and external-device boundaries.","features":["Preserve AXI/AXI-lite/stream directions and IDs, burst/response ordering, memory initialization/read/write semantics, flash/SD-card endpoint ABI and FPGA versus simulation topology."],"disposition":"HARDWARE_OWNER_WITH_HOST_ENVIRONMENT_CONTRACT"},
+    {"id":"difftest_dpi","pattern":"^upstream/difftest/src/main/scala/(DPIC|Replay|Trace)\\.scala$|^upstream/difftest/src/main/scala/common/LogPerfControl\\.scala$|^upstream/difftest/src/main/scala/plugin/topdown/","classification":"MIXED_HARDWARE_SUPPORT","targets":["difftest_interface","difftest_state"],"reason":"These sources contain real trace/replay/top-down port/state contracts and simulator DPI/host callbacks. Runtime duties are separated into Runtime-Hdl-UHSC.Trace.","features":["Keep the RTL payload/clock/reset/enable and handshake contract; Runtime-Hdl preserves deterministic callback registration/order and explicit missing-handler errors; external C++ implementations stay out of this rewrite scope."],"disposition":"HARDWARE_AND_RUNTIME_CONTRACT_SPLIT_PENDING"},
+    {"id":"difftest_delay","pattern":"^upstream/difftest/src/main/scala/util/(Delayer|Lookup|PipelineConnect|SkidBufferConnect)\\.scala$","classification":"HARDWARE_BEHAVIOR","targets":["difftest_state"],"reason":"Difftest utility sources implement timing, lookup and decoupled skid/pipeline state supporting endpoint families.","features":["Preserve configured delay, data/valid alignment, reset, same-cycle bypass, skid full/empty and ready/valid backpressure."],"disposition":"AMARANTH_BEHAVIOR_PLANNED_PENDING_VERIFICATION"},
+    {"id":"difftest_remaining","pattern":"^upstream/difftest/src/main/scala/","classification":"MIXED_HARDWARE_SUPPORT","targets":["difftest_interface","difftest_state"],"reason":"Remaining Difftest source declarations are explicitly mapped to the interface/state families pending per-symbol review; their host/debug use is not product behavior by default.","features":["Classify each declared module/bundle/helper by actual state and observable ports; preserve mode-specific behavior and retain any unproven member as pending, never as zero-output RTL."],"disposition":"MIXED_REVIEW_PENDING"},
+    {"id":"coupled_test","pattern":"^upstream/coupledL2/src/test/scala/","classification":"AUTO_TEST","targets":["coupled_top","coupled_slice","coupled_directory","coupled_bridge","coupled_tl2tl"],"reason":"CoupledL2 tests include A-E protocol agents, queue/SRAM fixtures and TL/CHI generation tops; every hardware helper remains a separate fixture obligation.","features":["Retain Acquire/Release/Probe/Grant, SourceC beats, queue conflicts, SRAM behavior, bank/config and both TL2TL and CHI parent modes as direct tests."],"disposition":"TEST_ONLY_CASES_TO_DIRECT_PYTHON_TEST"},
+    {"id":"coupled_chi","pattern":"^upstream/coupledL2/src/main/scala/coupledL2/tl2chi/","classification":"HARDWARE_BEHAVIOR","targets":["coupled_bridge"],"reason":"The CHI branch has independent message/opcode, link, credit, RX/TX, MSHR, snoop, MMIO and slice state; it remains required although DefaultConfig may select TL2TL.","features":["CHI REQ/RSP/DAT/SNP field/opcode encodings; STOP/ACTIVATE/RUN/DEACTIVATE; L-Credit pool/return; async crossing; channel backpressure, MSHR/snoop and MMIO completion."],"disposition":"AMARANTH_BEHAVIOR_PLANNED_PENDING_VERIFICATION"},
+    {"id":"coupled_tl2tl","pattern":"^upstream/coupledL2/src/main/scala/coupledL2/tl2tl/","classification":"HARDWARE_BEHAVIOR","targets":["coupled_tl2tl"],"reason":"The TileLink implementation is a separate protocol family; its Acquire, MainPipe, MSHR/control, ProbeQueue, refill, SinkB, SourceC and wrapper files are not covered by the Directory target.","features":["A-E request/release/probe/grant handshakes; MSHR allocation/selection; retry/refill and dirty metadata; probe queue backpressure; SourceC multi-beat release and SinkB conflict; reset/flush."],"disposition":"AMARANTH_BEHAVIOR_PLANNED_PENDING_VERIFICATION"},
+    {"id":"coupled_directory","pattern":"^upstream/coupledL2/src/main/scala/coupledL2/Directory\\.scala$","classification":"HARDWARE_BEHAVIOR","targets":["coupled_directory"],"reason":"This source implements set/way tag and metadata directory lookup, replacement, reset scrub, occupied-way and refill retry behavior.","features":["Tag/meta read latency, valid/state/client/alias/prefetch/error fields, invalid-way/replacement select, MSHR occupancy exclusion, refill retry, CMO and ECC/MBIST writes."],"disposition":"AMARANTH_BEHAVIOR_PLANNED_PENDING_VERIFICATION"},
+    {"id":"coupled_config","pattern":"^upstream/coupledL2/src/main/scala/coupledL2/(L2Param|Common|Consts)\\.scala$","classification":"ELABORATION_CONFIG","targets":["coupled_slice"],"reason":"Common parameter and transaction records are source-backed shared inputs to the Slice/Directory/TL2TL/CHI families, provided through explicit configuration/API contracts.","features":["sets/ways/beat/bank/MSHR, ECC/data-check, MBIST, prefetch, flush, monitor and EnableCHI branches; preserve all selected public fields and legal parameter ranges."],"disposition":"CONFIGURATION_SCHEMA_PLANNED_PENDING_MODE_VALIDATION"},
+    {"id":"coupled_top","pattern":"^upstream/coupledL2/src/main/scala/coupledL2/(CoupledL2|BaseSlice)\\.scala$","classification":"MIXED_HARDWARE_SUPPORT","targets":["coupled_top"],"reason":"BaseSlice and CoupledL2 define the parent wrapper/hierarchy and choose the TileLink or CHI implementation branch.","features":["Preserve BaseSlice public A-E and optional prefetch/error/flush/status ports; instantiate the selected TL2TL or TL2CHI family and keep bank/slice IDs, reset and config wiring explicit."],"disposition":"HARDWARE_OWNER_WITH_CONFIGURATION_BRANCHES_PENDING_VERIFICATION"},
+    {"id":"coupled_shared","pattern":"^upstream/coupledL2/src/main/scala/coupledL2/","classification":"MIXED_HARDWARE_SUPPORT","targets":["coupled_slice"],"reason":"Shared CoupledL2 storage, request, sink/source, prefetch, debug and SRAM/replacement helpers form a source-backed reusable support family.","features":["Preserve data/metadata ECC and SRAM read/write collision behavior, prefetch training/metadata, request/source queues, monitor/debug counters, throttle and replacement modes."],"disposition":"HARDWARE_OWNER_WITH_FAMILY_SUPPORT_CONSUMERS"},
+    {"id":"iopmp_checker","pattern":"^upstream/ChiselIOPMP/src/main/scala/IopmpChecker\\.scala$","classification":"HARDWARE_BEHAVIOR","targets":["iopmp"],"reason":"IopmpChecker is a stateful register/table and access-checking datapath, not just an interface declaration.","features":["Register read/write/W1C semantics; source/domain config tables; NA4/NAPOT address match/full/partial/no match and entry priority; read/write permission and no-write checks; error capture/address/id/type, stall/flush, enable and interrupt."],"disposition":"AMARANTH_BEHAVIOR_PLANNED_PENDING_VERIFICATION"},
+    {"id":"iopmp_bridge","pattern":"^upstream/ChiselIOPMP/src/main/scala/IopmpBridge\\.scala$","classification":"HARDWARE_BEHAVIOR","targets":["iopmp"],"reason":"IopmpBridge implements APB-to-register setup/access and AXI request filtering/error response state.","features":["AR/AW outstanding queues, fair read/write checker polling, length/address/id retention, pass-through disable path, error R/B FSM, outstanding-ahead counters and response-channel backpressure."],"disposition":"AMARANTH_BEHAVIOR_PLANNED_PENDING_VERIFICATION"},
+    {"id":"iopmp_top","pattern":"^upstream/ChiselIOPMP/src/main/scala/Iopmp\\.scala$","classification":"MIXED_HARDWARE_SUPPORT","targets":["iopmp"],"reason":"The source combines Req/Rsp arbiters, LazyModule wrappers/AXI nodes and an App-style Verilog generator.","features":["Preserve one/multi-bridge arbitration and node topology; keep the generator as auxiliary configuration tooling and implement the checker/bridge behavior as actual Amaranth logic."],"disposition":"HARDWARE_OWNER_WITH_ELABORATION_TOOL_SPLIT"},
+    {"id":"aia_parameters","pattern":"^upstream/ChiselAIA/src/main/scala/IMSICParameters\\.scala$","classification":"ELABORATION_CONFIG","targets":["aia"],"reason":"IMSIC parameters select hart/group mapping and interrupt-file geometry consumed by both topologies.","features":["Preserve M/S/guest file enable, base addresses, group/member/hart index mapping, stride and legal geometry."],"disposition":"CONFIGURATION_SCHEMA_PLANNED_PENDING_MODE_VALIDATION"},
+    {"id":"aia_common","pattern":"^upstream/ChiselAIA/src/main/scala/common\\.scala$","classification":"HARDWARE_BEHAVIOR","targets":["aia"],"reason":"Common bridges contain AXI4-to-lite burst/state control, AXI4Map, AXI4-to-TileLink ordering and TL/AXI register-mapper behavior.","features":["Preserve AW/W split arrival, burst last/count, ID/echo retention, illegal transfer handling, read/write arbitration, TL source/size restore, denied/corrupt response and backpressure."],"disposition":"AMARANTH_BEHAVIOR_PLANNED_PENDING_VERIFICATION"},
+    {"id":"aia_imsic","pattern":"^upstream/ChiselAIA/src/main/scala/IMSIC\\.scala$","classification":"HARDWARE_BEHAVIOR","targets":["aia"],"reason":"IMSIC defines register decoding, interrupt-file storage/gateway and TileLink/AXI wrappers with optional security and asynchronous support.","features":["M/S/guest pending-enable-claim-complete state, privilege/operation decode, gateway pending/edge behavior, multi-hart files, TEE/security gates, reset and bus transaction ordering."],"disposition":"AMARANTH_BEHAVIOR_PLANNED_PENDING_VERIFICATION"},
+    {"id":"aia_aplic","pattern":"^upstream/ChiselAIA/src/main/scala/APLIC\\.scala$","classification":"HARDWARE_BEHAVIOR","targets":["aia"],"reason":"APLIC source implements source configuration/synchronization/delegation, per-source pending and target programming, domain logic and MSI delivery.","features":["Edge/level polarity and synchronization, domain enable, sourcecfg/target/priority/threshold, pending/enable/claim, group/member routing and MSI address/EIID generation."],"disposition":"AMARANTH_BEHAVIOR_PLANNED_PENDING_VERIFICATION"},
+    {"id":"aia_tl_top","pattern":"^upstream/ChiselAIA/src/main/scala/Example\\.scala$","classification":"ELABORATION_CONFIG","targets":["aia"],"reason":"TLAIA is a real TileLink example hierarchy with two IMSIC groups, two members per group, address maps and APLIC wiring.","features":["Retain TLAIA node topology, four-hart map, IMSIC/APLIC parameters, CSR ports, intSrcs and reset/clock wiring; generator App stays out of Build."],"disposition":"CONFIGURATION_SCHEMA_PLANNED_PENDING_MODE_VALIDATION"},
+    {"id":"aia_axi_top","pattern":"^upstream/ChiselAIA/src/main/scala/Example-axi\\.scala$","classification":"ELABORATION_CONFIG","targets":["aia"],"reason":"AXI4AIA is a separate AXI4 hierarchy and selects the asynchronous IMSIC bridge; it is required independently of the TL example.","features":["Retain AXI4Xbar/address maps, async bridge, four IMSIC members, APLIC path, TEE/security wires and CSR/external interrupt wiring; do not mark unsupported or replace with all-zero outputs."],"disposition":"CONFIGURATION_SCHEMA_PLANNED_PENDING_MODE_VALIDATION"}
+  ]
+}

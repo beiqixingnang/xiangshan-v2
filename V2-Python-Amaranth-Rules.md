@@ -372,3 +372,46 @@ never described as arbitrary unknown-power-up equivalence. Keep source and
 reference names in auxiliary evidence while exposing local UHSCore, UHSTile
 and UHSCTop product APIs. Formal Build and Testing basenames must start with
 their direct parent followed by a hyphen and end in -Hardware.py.
+
+## 5F. All-source bulk rewrite before behavior validation (2026-10-02)
+
+The current user-authorized execution order supersedes per-leaf or per-family
+behavior validation during rewriting. First inventory every vendored Scala
+file, including unused hardware, parameter branches, tests, configuration,
+generators and compiler support. Every declaration and hardware feature gets
+an explicit aggregate owner or a reviewed non-hardware disposition. Source
+mapping alone never means the feature has been implemented.
+
+Freeze the exact Scala-to-Python mapping and existing/new Build counts before
+bulk implementation. Use coherent parameterized families per real
+responsibility; do not generate one Python file per Scala file or one empty
+wrapper per symbol. An unselected hardware configuration remains a required
+implementation obligation, not an implicit exclusion. Tool/compiler and test
+sources have documented dispositions; Amaranth supplies HDL construction and
+backend services rather than a new Scala compiler embedded in product RTL.
+
+Workers bulk implement disjoint Build batches using Python standard library
+and Amaranth, with source paths, hashes, feature lists and migration identities
+kept in auxiliary JSON. Product Build files obey the current specification:
+five zones, correctly named scripts, accurate public API, letter-led function
+names, explicit injected dependencies and native Verilog export. Test files
+retain the exact same functional basename with their Testing-Cpu prefix and
+the four-zone contract. No embedded HDL, postprocessed RTL, provenance arrays,
+fake state, fixed-output substitutes or unused catalog bulk may stand in for
+hardware behavior.
+
+During this phase run only structural/source checks, syntax, exact import,
+batch static analysis and native Verilog export for the declared executable
+members/configuration modes. Keep reusable export tools and export receipts
+in validation; do not build a new differential/formal harness for each file.
+The receipt is EXPORT_PASS_BEHAVIOR_UNVERIFIED, never ACCEPTED. Contract-only
+members or unsupported legal configurations remain implementation gaps even
+if their placeholder exports succeed.
+
+After every required source feature is implemented and the complete planned
+set passes basic export, perform a separate coverage audit to find omissions.
+Only then proceed to behavioral direct tests, locked-reference differential,
+formal/negative controls, reset-startup, parent/top and license/acceptance
+gates. Changed implementations invalidate their old receipts; preserve old
+proof history without reporting it as proof of the new code. Completion and
+preview integration requirements are unchanged.
